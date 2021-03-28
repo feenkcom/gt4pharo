@@ -34,6 +34,11 @@ GtPharoMessageNode >> isUnary [
 	^ false
 ]
 
+{ #category : #testing }
+GtPharoMessageNode >> needsParenthesisForKeyword [
+	^ true
+]
+
 { #category : #accessing }
 GtPharoMessageNode >> selector [
 	^ self subclassResponsibility

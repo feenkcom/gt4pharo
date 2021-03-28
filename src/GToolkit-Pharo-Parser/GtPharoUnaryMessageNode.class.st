@@ -23,6 +23,11 @@ GtPharoUnaryMessageNode >> isUnary [
 ]
 
 { #category : #accessing }
+GtPharoUnaryMessageNode >> messageReceiver [
+	^ parent
+]
+
+{ #category : #accessing }
 GtPharoUnaryMessageNode >> selector [
 	^ self selectorPart value asSymbol
 ]

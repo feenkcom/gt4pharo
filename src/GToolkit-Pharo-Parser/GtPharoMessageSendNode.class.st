@@ -37,6 +37,18 @@ GtPharoMessageSendNode >> message: aGtPharoMessageNode [
 		ifTrue: [ self message parent: self ]
 ]
 
+{ #category : #accessing }
+GtPharoMessageSendNode >> messageReceiver [
+	leftParens notEmpty
+		ifTrue: [ ^ self ].
+	^ message messageReceiver
+]
+
+{ #category : #testing }
+GtPharoMessageSendNode >> needsParenthesisForKeyword [
+	^ true
+]
+
 { #category : #generated }
 GtPharoMessageSendNode >> nodeVariables [
 	^ #(#receiver #message)

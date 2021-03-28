@@ -21,6 +21,11 @@ GtPharoSequenceNode >> compositeNodeVariables [
 	^ #(#statements #variables)
 ]
 
+{ #category : #testing }
+GtPharoSequenceNode >> defines: aString [
+	^ variables anySatisfy: [ :each | each name value = aString ]
+]
+
 { #category : #generated }
 GtPharoSequenceNode >> ignoredCompositeTokenVariables [
 	^ #(#periods)
@@ -52,6 +57,12 @@ GtPharoSequenceNode >> leftBar [
 { #category : #generated }
 GtPharoSequenceNode >> leftBar: aSmaCCToken [
 	leftBar := aSmaCCToken
+]
+
+{ #category : #accessing }
+GtPharoSequenceNode >> localVariablesInto: aCollection [
+	variables do: [ :each | aCollection add: each name value ].
+	super localVariablesInto: aCollection
 ]
 
 { #category : #generated }

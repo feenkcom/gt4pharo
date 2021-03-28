@@ -28,8 +28,18 @@ GtPharoMethodNode >> body: aGtPharoSequenceNode [
 ]
 
 { #category : #testing }
+GtPharoMethodNode >> defines: aString [
+	^ self variables anySatisfy: [ :each | each name value = aString ]
+]
+
+{ #category : #testing }
 GtPharoMethodNode >> isMethod [
 	^ true
+]
+
+{ #category : #accessing }
+GtPharoMethodNode >> localVariablesInto: aCollection [
+	self variables do: [ :each | aCollection add: each name value ]
 ]
 
 { #category : #accessing }
@@ -76,6 +86,11 @@ GtPharoMethodNode >> selectorDo: aBlock [
 
 	pattern isErrorNode
 		ifFalse: [ aBlock value: pattern selector ]
+]
+
+{ #category : #acccessing }
+GtPharoMethodNode >> selectorParts [
+	^ pattern selectorParts
 ]
 
 { #category : #accessing }

@@ -13,6 +13,13 @@ GtPharoNumberLiteralNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
+GtPharoNumberLiteralNode >> guessType: completionStrategy [
+	^ [ (Number readFrom: value source) class ]
+		on: Error
+		do: [ :ex | ex return: Number ]
+]
+
+{ #category : #accessing }
 GtPharoNumberLiteralNode >> literalValue [
 	^ Number
 		readFrom: self value value

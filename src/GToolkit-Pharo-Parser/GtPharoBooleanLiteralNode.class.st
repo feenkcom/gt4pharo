@@ -13,6 +13,11 @@ GtPharoBooleanLiteralNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
+GtPharoBooleanLiteralNode >> guessType: completionStrategy [
+	^ Boolean
+]
+
+{ #category : #accessing }
 GtPharoBooleanLiteralNode >> literalValue [
 
 	^ self value value = 'true'

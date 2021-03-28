@@ -56,6 +56,16 @@ GtPharoBlockNode >> compositeNodeVariables [
 	^ #(#variables)
 ]
 
+{ #category : #testing }
+GtPharoBlockNode >> defines: aString [
+	^ variables anySatisfy: [ :each | each name value = aString ]
+]
+
+{ #category : #accessing }
+GtPharoBlockNode >> guessType: completionStrategy [
+	^ [  ] class
+]
+
 { #category : #generated }
 GtPharoBlockNode >> ignoredCompositeTokenVariables [
 	^ #(#colons #leftParens #rightParens)
@@ -81,6 +91,12 @@ GtPharoBlockNode >> leftBracket [
 { #category : #generated }
 GtPharoBlockNode >> leftBracket: aSmaCCToken [
 	leftBracket := aSmaCCToken
+]
+
+{ #category : #accessing }
+GtPharoBlockNode >> localVariablesInto: aCollection [
+	variables do: [ :each | aCollection add: each name value ].
+	super localVariablesInto: aCollection
 ]
 
 { #category : #generated }

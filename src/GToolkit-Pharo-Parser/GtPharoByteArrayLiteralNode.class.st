@@ -10,6 +10,11 @@ GtPharoByteArrayLiteralNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
+GtPharoByteArrayLiteralNode >> guessType: completionStrategy [
+	^ ByteArray
+]
+
+{ #category : #accessing }
 GtPharoByteArrayLiteralNode >> literalValue [
 	^ self values collect: [ :eachValue | eachValue literalValue ] as: ByteArray
 ]

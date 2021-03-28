@@ -39,6 +39,11 @@ GtPharoArrayLiteralNode >> compositeNodeVariables [
 	^ #(#values)
 ]
 
+{ #category : #accessing }
+GtPharoArrayLiteralNode >> guessType: completionStrategy [
+	^ Array
+]
+
 { #category : #'generated-initialize-release' }
 GtPharoArrayLiteralNode >> initialize [
 	super initialize.

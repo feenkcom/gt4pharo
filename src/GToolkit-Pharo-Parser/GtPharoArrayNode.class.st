@@ -20,6 +20,11 @@ GtPharoArrayNode >> compositeNodeVariables [
 	^ #(#values)
 ]
 
+{ #category : #accessing }
+GtPharoArrayNode >> guessType: completionStrategy [
+	^ Array
+]
+
 { #category : #generated }
 GtPharoArrayNode >> ignoredCompositeTokenVariables [
 	^ #(#periods #leftParens #rightParens)

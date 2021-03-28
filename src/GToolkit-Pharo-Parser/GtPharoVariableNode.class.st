@@ -18,6 +18,16 @@ GtPharoVariableNode >> findVariableNodeAt: anInteger [
 		ifTrue: [ self ]
 ]
 
+{ #category : #accessing }
+GtPharoVariableNode >> guessType: completionStrategy [
+	^ (completionStrategy typeOfVariable: name value) ifNil: [ super guessType: completionStrategy ]
+]
+
+{ #category : #testing }
+GtPharoVariableNode >> isLocallyDefined [
+	^ self allParents anySatisfy: [ :each | each defines: name value ]
+]
+
 { #category : #testing }
 GtPharoVariableNode >> isSelf [
 	^ false
@@ -73,4 +83,9 @@ GtPharoVariableNode >> variableName [
 	<return: #Symbol>
 
 	^ self name value asSymbol
+]
+
+{ #category : #accessing }
+GtPharoVariableNode >> whoDefines [
+	^ self allParents detect: [ :each | each defines: name value ] ifNone: [  ]
 ]

@@ -13,6 +13,11 @@ GtPharoReturnNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitReturn: self
 ]
 
+{ #category : #accessing }
+GtPharoReturnNode >> messageReceiver [
+	^ value messageReceiver
+]
+
 { #category : #generated }
 GtPharoReturnNode >> nodeVariables [
 	^ #(#value)

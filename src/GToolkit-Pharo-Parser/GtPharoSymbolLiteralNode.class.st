@@ -24,6 +24,11 @@ GtPharoSymbolLiteralNode >> asSymbol [
 ]
 
 { #category : #accessing }
+GtPharoSymbolLiteralNode >> guessType: completionStrategy [
+	^ Symbol
+]
+
+{ #category : #accessing }
 GtPharoSymbolLiteralNode >> literalValue [
 	^ self symbol
 ]

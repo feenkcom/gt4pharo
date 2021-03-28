@@ -41,6 +41,11 @@ GtPharoKeywordMessageNode >> isKeyword [
 ]
 
 { #category : #accessing }
+GtPharoKeywordMessageNode >> messageReceiver [
+	^ values last messageReceiver
+]
+
+{ #category : #accessing }
 GtPharoKeywordMessageNode >> selector [
 	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each value ] ]) asSymbol
 ]

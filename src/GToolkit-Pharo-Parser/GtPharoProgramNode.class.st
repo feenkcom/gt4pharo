@@ -76,6 +76,11 @@ GtPharoProgramNode >> containedBy: anInterval [
 	^ anInterval first <= self startPosition and: [ anInterval last >= self stopPosition ]
 ]
 
+{ #category : #testing }
+GtPharoProgramNode >> defines: aString [
+	^ false
+]
+
 { #category : #accessing }
 GtPharoProgramNode >> findVariableNodeAt: anInteger [
 	self
@@ -166,8 +171,18 @@ GtPharoProgramNode >> localVariablesInto: aCollection [
 ]
 
 { #category : #accessing }
+GtPharoProgramNode >> messageReceiver [
+	^ self
+]
+
+{ #category : #accessing }
 GtPharoProgramNode >> methodNode [
 	^ parent ifNotNil: [ parent methodNode ]
+]
+
+{ #category : #testing }
+GtPharoProgramNode >> needsParenthesisForKeyword [
+	^ false
 ]
 
 { #category : #accessing }

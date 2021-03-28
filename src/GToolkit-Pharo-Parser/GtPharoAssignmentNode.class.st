@@ -24,6 +24,13 @@ GtPharoAssignmentNode >> assignmentToken: aSmaCCToken [
 	assignmentToken := aSmaCCToken
 ]
 
+{ #category : #accessing }
+GtPharoAssignmentNode >> messageReceiver [
+	leftParens notEmpty
+		ifTrue: [ ^ self ].
+	^ value messageReceiver
+]
+
 { #category : #generated }
 GtPharoAssignmentNode >> nodeVariables [
 	^ #(#variable #value)

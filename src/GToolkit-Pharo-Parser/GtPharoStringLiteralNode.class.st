@@ -13,6 +13,11 @@ GtPharoStringLiteralNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
+GtPharoStringLiteralNode >> guessType: completionStrategy [
+	^ String
+]
+
+{ #category : #accessing }
 GtPharoStringLiteralNode >> literalValue [
 	| aString |
 	aString := self value value.

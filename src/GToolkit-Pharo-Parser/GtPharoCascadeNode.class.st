@@ -43,6 +43,11 @@ GtPharoCascadeNode >> messages: anOrderedCollection [
 	self setParents: self messages to: self
 ]
 
+{ #category : #testing }
+GtPharoCascadeNode >> needsParenthesisForKeyword [
+	^ true
+]
+
 { #category : #generated }
 GtPharoCascadeNode >> nodeVariables [
 	^ #(#receiver)

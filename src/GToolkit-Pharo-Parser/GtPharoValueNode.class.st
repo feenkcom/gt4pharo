@@ -13,6 +13,11 @@ GtPharoValueNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitValue: self
 ]
 
+{ #category : #accessing }
+GtPharoValueNode >> guessType: completionStrategy [
+	^ nil
+]
+
 { #category : #generated }
 GtPharoValueNode >> ignoredCompositeTokenVariables [
 	^ #(#leftParens #rightParens)

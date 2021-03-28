@@ -23,6 +23,11 @@ GtPharoBinaryMessageNode >> isBinary [
 	^ true
 ]
 
+{ #category : #accessing }
+GtPharoBinaryMessageNode >> messageReceiver [
+	^ value messageReceiver
+]
+
 { #category : #generated }
 GtPharoBinaryMessageNode >> nodeVariables [
 	^ #(#value)
