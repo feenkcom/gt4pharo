@@ -265,7 +265,7 @@ GtPharoCompletionStrategy >> parseSource: aString [
 GtPharoCompletionStrategy >> pragmas [
 	pragmas isNil
 		ifTrue: [ pragmas := GtPrefixTree new.
-			Smalltalk image
+			GtPharoSystemTraverser default
 				allClassesAndTraitsDo: [ :each | 
 					[ :cls | cls selectors do: [ :sel | (cls >> sel) pragmas do: [ :pragma | pragmas add: pragma selector ] ] ]
 						value: each;

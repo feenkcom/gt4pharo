@@ -13,8 +13,7 @@ GtSearchImageMethodsFilter >> = anObject [
 
 { #category : #enumerating }
 GtSearchImageMethodsFilter >> classesDo: aBlock [
-	Smalltalk allClassesAndTraitsDo: [ :each | 
-		aBlock value: each ]
+	GtPharoSystemTraverser default allClassesAndTraitsDo: aBlock
 ]
 
 { #category : #accessing }
