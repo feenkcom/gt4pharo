@@ -35,11 +35,6 @@ GtSubstringFilter >> hash [
 	^ self class hash bitXor: self substring asLowercase hash
 ]
 
-{ #category : #'as yet unclassified' }
-GtSubstringFilter >> highlighter [
-	^ GtPharoSubstringHighlighter substring: self substring
-]
-
 { #category : #testing }
 GtSubstringFilter >> includesMethod: aCompiledMethod [
 	^ (aCompiledMethod sourceCode

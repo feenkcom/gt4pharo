@@ -42,11 +42,6 @@ GtSearchInstanceVariableReferenceFilter >> hash [
 	^ super hash bitXor: self variableName
 ]
 
-{ #category : #'as yet unclassified' }
-GtSearchInstanceVariableReferenceFilter >> highlighter [
-	^ GtPharoVariableReferenceHighlighter forVariableName: variableName
-]
-
 { #category : #testing }
 GtSearchInstanceVariableReferenceFilter >> includesMethod: aCompiledMethod [
 	| index |

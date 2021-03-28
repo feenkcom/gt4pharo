@@ -141,14 +141,6 @@ GtPharoBlockClosureCoder >> initialize [
 	super initialize
 ]
 
-{ #category : #'initialize-release' }
-GtPharoBlockClosureCoder >> initializeAddOns: addOns [
-	super initializeAddOns: addOns.
-	
-	addOns addStyler: GtPharoStyler new.
-	addOns addStyler: GtPharoDeprecationStyler new.
-]
-
 { #category : #private }
 GtPharoBlockClosureCoder >> newCompletionStrategy [
 	^ super newCompletionStrategy

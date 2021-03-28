@@ -73,13 +73,6 @@ GtSearchLiteralStringFilter >> hash [
 	^ self class hash bitXor: self substring asLowercase hash
 ]
 
-{ #category : #'as yet unclassified' }
-GtSearchLiteralStringFilter >> highlighter [
-	^ GtPharoSubstringLiteralHighlighter 
-		substring: self substring
-		caseSensitive: self caseSensitive
-]
-
 { #category : #testing }
 GtSearchLiteralStringFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod hasLiteralSuchThat: [ :aLiteralNode |

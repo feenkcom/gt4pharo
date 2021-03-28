@@ -36,11 +36,6 @@ GtSearchPragmasFilter >> hash [
 	^ self class hash bitXor: self symbol hash
 ]
 
-{ #category : #'as yet unclassified' }
-GtSearchPragmasFilter >> highlighter [
-	^ GtPharoPragmaHighlighter forPragma: symbol
-]
-
 { #category : #testing }
 GtSearchPragmasFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod hasPragmaNamed: symbol

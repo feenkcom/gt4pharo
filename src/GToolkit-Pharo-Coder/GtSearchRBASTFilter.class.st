@@ -66,11 +66,6 @@ GtSearchRBASTFilter >> hash [
 	^ self class hash bitXor: self ast hash
 ]
 
-{ #category : #'as yet unclassified' }
-GtSearchRBASTFilter >> highlighter [
-	^ GtPharoEmptyHighlighter new
-]
-
 { #category : #testing }
 GtSearchRBASTFilter >> includesMethod: aCompiledMethod [
 	| methodAst |

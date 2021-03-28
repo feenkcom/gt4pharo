@@ -599,13 +599,6 @@ GtPharoMethodCoder >> highlightNode: aNode [
 ]
 
 { #category : #accessing }
-GtPharoMethodCoder >> highlighter [
-	<return: #GtSourceReferenceHighlighter>
-
-	^ self attributeNamed: #highlighter
-]
-
-{ #category : #accessing }
 GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
 	"Set a source reference highlighter thhat should be used tp highlight or mark some parts
 	of the source code. If a given highlighter is nil, it means that no highlighter should be used"

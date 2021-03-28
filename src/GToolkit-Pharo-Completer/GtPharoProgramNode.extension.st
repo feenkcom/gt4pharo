@@ -30,3 +30,13 @@ GtPharoProgramNode >> completionActionsFor: aStrategy [
 				ifTrue: [ ^ each completionActionsFor: aStrategy ] ].
 	^ #()
 ]
+
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoProgramNode >> localVariables [
+	| variables |
+
+	variables := GtPrefixTree new.
+	self localVariablesInto: variables.
+
+	^ variables
+]

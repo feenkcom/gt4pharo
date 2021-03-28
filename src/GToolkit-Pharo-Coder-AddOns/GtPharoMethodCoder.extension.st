@@ -253,6 +253,13 @@ GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> highlighter [
+	<return: #GtSourceReferenceHighlighter>
+
+	^ self attributeNamed: #highlighter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 	self highlighter notNil

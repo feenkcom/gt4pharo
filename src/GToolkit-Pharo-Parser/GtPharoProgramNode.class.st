@@ -152,14 +152,6 @@ GtPharoProgramNode >> isVariable [
 ]
 
 { #category : #accessing }
-GtPharoProgramNode >> localVariables [
-	| variables |
-	variables := GtPrefixTree new.
-	self localVariablesInto: variables.
-	^ variables
-]
-
-{ #category : #accessing }
 GtPharoProgramNode >> localVariablesInto: aCollection [
 	parent isNil
 		ifTrue: [ ^ self ].
