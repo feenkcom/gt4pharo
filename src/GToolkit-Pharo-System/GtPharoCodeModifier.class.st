@@ -1,4 +1,5 @@
 "
+! Pharo code modifier
 Pharo does not support code modification from multiple threads, although it is not forbidden.
 ${class:GtPharoCodeModifier}$ allows synchronisation of code modifications via a mutex.
 
@@ -13,7 +14,7 @@ Class {
 	#classInstVars : [
 		'current'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-System'
 }
 
 { #category : #'api - method' }
