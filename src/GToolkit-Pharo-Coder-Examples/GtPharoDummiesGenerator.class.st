@@ -326,9 +326,9 @@ GtPharoDummiesGenerator >> generate [
 	| aDummyEnvironment |
 	
 	aDummyEnvironment := GtPharoDummyEnvironment new.
-	
-	SourceFiles deferFlushDuring: [
-		EpMonitor disableDuring: [
+
+	EpMonitor disableDuring: [
+		GtPharoCodeModifier current deferFlushDuring: [
 			self addDummyPackagesToEnvironment: aDummyEnvironment ] ]. 
 
 	^ aDummyEnvironment

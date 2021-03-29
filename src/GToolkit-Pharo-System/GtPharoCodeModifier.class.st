@@ -106,6 +106,11 @@ GtPharoCodeModifier >> critical: aBlock [
 				anException pass ] ]
 ]
 
+{ #category : #'mutual exclusion' }
+GtPharoCodeModifier >> deferFlushDuring: aBlock [
+	^ self critical: [ SourceFiles deferFlushDuring: aBlock ]
+]
+
 { #category : #initialization }
 GtPharoCodeModifier >> initialize [
 	super initialize.
@@ -115,7 +120,16 @@ GtPharoCodeModifier >> initialize [
 
 { #category : #'api - refactoring' }
 GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange [
-	^ self critical: [ RBRefactoryChangeManager instance performChange: aRefactoryChange ]
+	^ self deferFlushDuring: [ RBRefactoryChangeManager instance performChange: aRefactoryChange ]
+]
+
+{ #category : #'api - refactoring' }
+GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange andAddUndoPointer: aNumber [
+
+	^ self deferFlushDuring: [
+		RBRefactoryChangeManager instance
+			performChange: aRefactoryChange;
+			addUndoPointer: 1 ]
 ]
 
 { #category : #'api - package' }

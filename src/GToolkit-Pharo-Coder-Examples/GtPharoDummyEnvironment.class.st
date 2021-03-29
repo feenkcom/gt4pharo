@@ -87,7 +87,7 @@ GtPharoDummyEnvironment >> initialize [
 
 { #category : #initialization }
 GtPharoDummyEnvironment >> removeFromSystem [
-	SourceFiles deferFlushDuring: [
-		EpMonitor disableDuring: [
+	EpMonitor disableDuring: [
+		GtPharoCodeModifier current deferFlushDuring: [
 			self dummyPackages do: [ :each | each removeFromSystem ] ] ]
 ]
