@@ -17,6 +17,11 @@ Class {
 	#category : #'GToolkit-Pharo-System'
 }
 
+{ #category : #'api - class' }
+GtPharoCodeModifier class >> classComment: aString of: aBehavior [
+	^ self current classComment: aString of: aBehavior
+]
+
 { #category : #'api - method' }
 GtPharoCodeModifier class >> compileMethodSource: aSourceCode in: aClass protocol: aMethodProtocol [
 	^ self current compileMethodSource: aSourceCode in: aClass protocol: aMethodProtocol
@@ -62,6 +67,11 @@ GtPharoCodeModifier class >> unregisterPackage: aPackage [
 	^ self current unregisterPackage: aPackage
 ]
 
+{ #category : #'api - class' }
+GtPharoCodeModifier >> classComment: aString of: aBehavior [
+	^ self critical: [ aBehavior comment: aString ]
+]
+
 { #category : #'api - method' }
 GtPharoCodeModifier >> compileMethodSource: aSourceCode in: aClass protocol: aMethodProtocol [
 	^ self critical: [
@@ -92,6 +102,15 @@ GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName in
 		named: aSubclassName
 		instanceVariableNames: instVarNameList
 		classVariableNames: ''
+		package: aPackageSymbol
+]
+
+{ #category : #'api - class' }
+GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName package: aPackageSymbol [
+	^ self 
+		createSubclassOf: anExistingClass
+		named: aSubclassName
+		instanceVariableNames: ''
 		package: aPackageSymbol
 ]
 
