@@ -32,6 +32,14 @@ GtPharoCodeModifier class >> createPackageNamed: aPackageName [
 	^ self current createPackageNamed: aPackageName
 ]
 
+{ #category : #'api - class' }
+GtPharoCodeModifier class >> createSubclassOf: anExistingClass named: aSubclassName package: aPackageSymbol [
+	^ self current
+		createSubclassOf: anExistingClass
+		named: aSubclassName
+		package: aPackageSymbol
+]
+
 { #category : #accessing }
 GtPharoCodeModifier class >> current [
 	^ current ifNil: [ current := self new ]
