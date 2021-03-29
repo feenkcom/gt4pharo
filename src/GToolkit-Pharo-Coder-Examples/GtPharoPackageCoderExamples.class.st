@@ -13,7 +13,7 @@ GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	aDummyPackage := anEnvironment anyDummyPackage.
 	aPackage := aDummyPackage realPackage.
 
-	aPackageCoder := GtPackageCoder forPackage: aPackage.
+	aPackageCoder := GtPharoPackageCoder forPackage: aPackage.
 	aPackageCoder attributeNamed: #dummyEnvironment put: anEnvironment.
 	aPackageCoder attributeNamed: #dummyPackage put: aDummyPackage.
 
@@ -35,7 +35,7 @@ GtPharoPackageCoderExamples >> coderOnUnregisteredPackage [
 	aPackage := aDummyPackage realPackage.
 	GtPharoCodeModifier unregisterPackage: aPackage.
 
-	aPackageCoder := GtPackageCoder forPackage: aPackage.
+	aPackageCoder := GtPharoPackageCoder forPackage: aPackage.
 	aPackageCoder attributeNamed: #dummyEnvironment put: anEnvironment.
 	aPackageCoder attributeNamed: #dummyPackage put: aDummyPackage.
 

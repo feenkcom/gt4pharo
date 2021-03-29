@@ -8,7 +8,7 @@ GtPackageDefinition >> browseFrom: anEvent [
 		packageNamed: self name
 		ifAbsent: [ ^ self ].
 
-	aPackageCoder := GtPackageCoder forPackage: aRealPackage.
+	aPackageCoder := GtPharoPackageCoder forPackage: aRealPackage.
 	aCoderEvent := GtCoderToSpawn new coder: aPackageCoder.
 	anEvent currentTarget fireEvent: aCoderEvent.
 	aCoderEvent isConsumed
@@ -60,7 +60,7 @@ GtPackageDefinition >> replaceFrom: anEvent [
 		packageNamed: self name
 		ifAbsent: [ ^ self ].
 
-	aPackageCoder := GtPackageCoder forPackage: aRealPackage.
+	aPackageCoder := GtPharoPackageCoder forPackage: aRealPackage.
 	aCoderEvent := GtCoderToReplace new coder: aPackageCoder.
 	anEvent currentTarget fireEvent: aCoderEvent.
 	aCoderEvent isConsumed

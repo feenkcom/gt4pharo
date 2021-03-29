@@ -55,6 +55,11 @@ GtPharoCodeModifier class >> removeBehavior: aBehavior [
 	^ self current removeBehavior: aBehavior
 ]
 
+{ #category : #'api - class' }
+GtPharoCodeModifier class >> removeBehaviorNamed: aBehaviorName [
+	^ self current removeBehaviorNamed: aBehaviorName
+]
+
 { #category : #'api - method' }
 GtPharoCodeModifier class >> removeMethod: aCompiledMethod [
 	^ self current removeMethod: aCompiledMethod
@@ -170,8 +175,18 @@ GtPharoCodeModifier >> removeBehavior: aBehavior [
 ]
 
 { #category : #'api - class' }
+GtPharoCodeModifier >> removeBehaviorNamed: aBehaviorName [
+	^ self critical: [ (self class environment at: aBehaviorName ifAbsent: [ ^ self ]) removeFromSystem ]
+]
+
+{ #category : #'api - class' }
 GtPharoCodeModifier >> removeClass: aClass [
 	^ self critical: [ aClass removeFromSystem ]
+]
+
+{ #category : #'api - class' }
+GtPharoCodeModifier >> removeClassNamed: aClassName [
+	^ self removeBehaviorNamed: aClassName
 ]
 
 { #category : #'api - method' }

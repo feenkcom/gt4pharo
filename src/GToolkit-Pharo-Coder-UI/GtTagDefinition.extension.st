@@ -12,8 +12,8 @@ GtTagDefinition >> browseFrom: anEvent [
 		classTagNamed: self name
 		ifPresent: [ :aTag |
 			| aPackageTagCoder aCoderEvent |
-			aPackageTagCoder := (GtPackageTagCoder forPackageTag: aTag)
-				packageCoder: (GtPackageCoder forPackage: aRealPackage).
+			aPackageTagCoder := (GtPharoPackageTagCoder forPackageTag: aTag)
+				packageCoder: (GtPharoPackageCoder forPackage: aRealPackage).
 			aCoderEvent := GtCoderToSpawn new coder: aPackageTagCoder.
 			anEvent currentTarget fireEvent: aCoderEvent.
 			aCoderEvent isConsumed
@@ -42,8 +42,8 @@ GtTagDefinition >> replaceFrom: anEvent [
 		classTagNamed: self name
 		ifPresent: [ :aTag |
 			| aPackageTagCoder aCoderEvent |
-			aPackageTagCoder := (GtPackageTagCoder forPackageTag: aTag)
-				packageCoder: (GtPackageCoder forPackage: aRealPackage).
+			aPackageTagCoder := (GtPharoPackageTagCoder forPackageTag: aTag)
+				packageCoder: (GtPharoPackageCoder forPackage: aRealPackage).
 			aCoderEvent := GtCoderToReplace new coder: aPackageTagCoder.
 			anEvent currentTarget fireEvent: aCoderEvent.
 			aCoderEvent isConsumed

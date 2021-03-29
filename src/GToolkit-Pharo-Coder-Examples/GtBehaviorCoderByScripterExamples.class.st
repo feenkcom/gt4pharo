@@ -14,7 +14,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	anEnvironment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
 	aDummyClass := anEnvironment anyDummyClass.
 
-	aBehaviorCoder := GtBehaviorCoder forClass: aDummyClass realClass.
+	aBehaviorCoder := GtPharoBehaviorCoder forClass: aDummyClass realClass.
 	aBehaviorCoder attributeNamed: #dummyEnvironment put: anEnvironment.
 	aBehaviorCoder attributeNamed: #dummyClass put: aDummyClass.
 
@@ -42,7 +42,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_add_method [
 		do: [ :aStep |
 			aStep click
 				label: 'Click add method button';
-				id: GtBehaviorCoder addNewMethodButtonName.
+				id: GtPharoBehaviorCoder addNewMethodButtonName.
 			aStep wait forEmptySpaceTaskQueue.
 			
 			aStep check

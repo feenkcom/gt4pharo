@@ -8,7 +8,7 @@ Class {
 GtCreateBehaviorElementByScripterExamples >> behaviorCreatorForClass [
 	<gtExample>
 	
-	^ GtCreateBehaviorElement new
+	^ GtPharoCreateBehaviorElement new
 		forClassDefinition;
 		constraintsDo: [ :c |
 			c horizontal fitContent.
@@ -70,7 +70,7 @@ GtCreateBehaviorElementByScripterExamples >> checkDefaultCreatorForClass [
 		aStep check
 			label: 'Check save button is disabled';
 			satisfies: [ :aButton | aButton isDisabled ];
-			onChildNamed: GtCreateBehaviorElement saveButtonName ].
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -121,7 +121,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithName [
 	
 	aScripter substep: 'Save class with just name' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCreateBehaviorElement saveButtonName.
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 		
@@ -144,7 +144,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackage [
 	
 	aScripter substep: 'Save class with name and package' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCreateBehaviorElement saveButtonName.
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName.
 		
 		aStep wait forEmptySpaceTaskQueue.
 		
@@ -191,7 +191,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackageTag [
 	
 	aScripter substep: 'Save class with name, package and tag' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCreateBehaviorElement saveButtonName.
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName.
 		
 		aStep wait forEmptySpaceTaskQueue.
 		
@@ -312,7 +312,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 		aStep check
 			label: 'Check save button is disabled';
 			satisfies: [ :aButton | aButton isDisabled ];
-			onChildNamed: GtCreateBehaviorElement saveButtonName ].
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -386,7 +386,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 		aStep check
 			label: 'Check save button is enabled';
 			satisfies: [ :aButton | aButton isEnabled ];
-			onChildNamed: GtCreateBehaviorElement saveButtonName ].
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -460,7 +460,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 		aStep check
 			label: 'Check save button is enabled';
 			satisfies: [ :aButton | aButton isEnabled ];
-			onChildNamed: GtCreateBehaviorElement saveButtonName ].
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -528,7 +528,7 @@ GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 		aStep check
 			label: 'Check save button is enabled';
 			satisfies: [ :aButton | aButton isEnabled not ];
-			onChildNamed: GtCreateBehaviorElement saveButtonName ].
+			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]

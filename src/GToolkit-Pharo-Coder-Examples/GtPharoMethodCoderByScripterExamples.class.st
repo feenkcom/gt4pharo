@@ -903,7 +903,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	
 	"there is no create behavior element before clicking on the menu"
 	aScripter check
-		onBreadthFirstChildOfClass: GtCreateBehaviorElement;
+		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
 		notExists.
 	
 	aScripter click
@@ -914,7 +914,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	
 	"now it appeared"
 	aScripter check
-		onBreadthFirstChildOfClass: GtCreateBehaviorElement;
+		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
 		exists.
 	
 	"context menu should disappear"
