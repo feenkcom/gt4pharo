@@ -17,8 +17,6 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					spec repository: 'github://feenkcom/gtoolkit-coder/src' ];
 				baseline: 'GToolkitCompleter' with: [
 					spec repository: 'github://feenkcom/gtoolkit-completer/src' ];
-				baseline: 'GToolkitVariableBindings' with: [
-					spec repository: 'github://feenkcom/gtoolkit-playground/src' ];
 				baseline: 'SmaCC' with: [
 					spec repository: 'github://j-brant/SmaCC/src' ];
 				
@@ -40,7 +38,6 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 						'GToolkit-Pharo-Completer') ];
 				package: 'GToolkit-Pharo-Coder-UI' with: [
 					spec requires: #(
-						#GToolkitVariableBindings
 						'GToolkit-Pharo-Coder'
 						'GToolkit-Pharo-Metamodels') ];
 				package: 'GToolkit-Pharo-Coder-AddOns' with: [ spec requires: #('GToolkit-Pharo-Coder-UI') ];
