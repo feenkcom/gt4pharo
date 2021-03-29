@@ -173,7 +173,7 @@ GtSearchMethodFilterExamples >> methodsInPackageFilter [
 	<gtExample>
 	| filter |
 	
-	filter := GtSearchMethodsInPackageFilter new package: ('GToolkit-Coder-Examples' asPackage).
+	filter := GtSearchMethodsInPackageFilter new package: (thisContext method package).
 	
 	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
