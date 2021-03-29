@@ -4,11 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'as yet unclassified' }
-GtPharoClassesCoder >> asCoderUIModel [
-	^ GtClassesCoderUIModel new coder: self
-]
-
 { #category : #accessing }
 GtPharoClassesCoder >> coderForClass: aClass [
 	^ self coders

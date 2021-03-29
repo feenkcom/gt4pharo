@@ -37,16 +37,6 @@ GtPharoBehaviorCoder class >> forObject: anObject [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoBehaviorCoder >> asCardElement [
-	^ GtClassCardElement new coder: self
-]
-
-{ #category : #'as yet unclassified' }
-GtPharoBehaviorCoder >> asCoderUIModel [
-	^ GtPharoBehaviorCoderViewModel new coder: self
-]
-
 { #category : #'api - converting' }
 GtPharoBehaviorCoder >> asNewCoderModelWithSameSubject [
 	"Return new coder model with same subject (e.g., package, class, method)"

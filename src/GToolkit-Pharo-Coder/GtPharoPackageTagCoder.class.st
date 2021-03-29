@@ -18,16 +18,6 @@ GtPharoPackageTagCoder class >> forPackageTag: aPackageTag [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoPackageTagCoder >> asCardElement [
-	^ GtPackageTagCardElement new coder: self
-]
-
-{ #category : #'as yet unclassified' }
-GtPharoPackageTagCoder >> asElement [
-	^ GtPharoPackageTagCoderElement new packageTagCoder: self
-]
-
 { #category : #'api - converting' }
 GtPharoPackageTagCoder >> asNewCoderModelWithSameSubject [
 	"Return new coder model with same subject (e.g., package, class, method)"

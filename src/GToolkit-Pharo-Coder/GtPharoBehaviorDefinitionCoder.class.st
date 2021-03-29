@@ -15,11 +15,6 @@ GtPharoBehaviorDefinitionCoder class >> forBehavior: aBehavior [
 	^ self new forBehavior: aBehavior
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoBehaviorDefinitionCoder >> asCoderUIModel [
-	^ GtBehaviorDefinitionCoderUIModel new coder: self
-]
-
 { #category : #accessing }
 GtPharoBehaviorDefinitionCoder >> behavior [
 	<return: #Behavior>

@@ -21,11 +21,6 @@ GtProcessCoder class >> forProcess: aProcess [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
-GtProcessCoder >> asCoderUIModel [
-	^ GtPharoProcessCoderViewModel new coder: self
-]
-
 { #category : #'initialize-release' }
 GtProcessCoder >> forDebugSession: aDebugSession [
 	session := aDebugSession.
