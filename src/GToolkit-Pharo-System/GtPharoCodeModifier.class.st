@@ -71,6 +71,11 @@ GtPharoCodeModifier class >> removePackage: aPackage [
 ]
 
 { #category : #'api - package' }
+GtPharoCodeModifier class >> removePackageNamed: aPackageName [
+	^ self current removePackageNamed: aPackageName
+]
+
+{ #category : #'api - package' }
 GtPharoCodeModifier class >> renamePackage: aPackage to: aNewPackageName [
 	^ self current renamePackage: aPackage to: aNewPackageName
 ]
@@ -205,6 +210,14 @@ GtPharoCodeModifier >> removeMethodFrom: aBehavior selector: aSelector [
 { #category : #'api - package' }
 GtPharoCodeModifier >> removePackage: aPackage [
 	^ self critical: [ aPackage removeFromSystem ]
+]
+
+{ #category : #'api - package' }
+GtPharoCodeModifier >> removePackageNamed: aPackageName [
+	^ self critical: [
+		(RPackage organizer
+			packageNamed: aPackageName
+			ifAbsent: [ ^ self ]) removeFromSystem ]
 ]
 
 { #category : #'api - package' }
