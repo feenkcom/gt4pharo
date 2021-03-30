@@ -135,6 +135,9 @@ GtPharoCodeModifier >> critical: aBlock [
 			do: [ :anException |
 				"it is very important that the monitor is not locked when an exception happens"
 				monitor exit.
+				"after an #exit call the monitor is open for another process, so if users start to compile code
+				from within the debugger. If debugger code compilation is not wrapped in this critical block,
+				there might be a problem of code modification from multiple processes. The chance of this, however, is very slim."
 				anException pass ] ]
 ]
 
