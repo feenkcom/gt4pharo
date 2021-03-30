@@ -91,9 +91,9 @@ GtCreateBehaviorElementByScripterExamples >> cleanUp [
 	
 	self class environment
 		at: self newClassName
-		ifPresent: [ :aClass | aClass removeFromSystem ].
-		
-	(RPackageOrganizer default packageNamed: self newPackageName ifAbsent: [ ^ self ]) removeFromSystem
+		ifPresent: [ :aClass | GtPharoCodeModifier removeBehavior: aClass ].
+	
+	GtPharoCodeModifier removeBehaviorNamed: self newPackageName
 ]
 
 { #category : #'private - setup' }
