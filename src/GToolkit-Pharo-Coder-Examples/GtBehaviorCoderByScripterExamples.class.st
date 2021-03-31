@@ -3,19 +3,23 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
+	#instVars : [
+		'environment'
+	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	<gtExample>
-	| anEnvironment aDummyClass aBehaviorCoder |
+	<after: #cleanUp>
+	| aDummyClass aBehaviorCoder |
 	
-	anEnvironment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyClass := anEnvironment anyDummyClass.
+	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
+	aDummyClass := environment anyDummyClass.
 
 	aBehaviorCoder := GtPharoBehaviorCoder forClass: aDummyClass realClass.
-	aBehaviorCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aBehaviorCoder attributeNamed: #dummyEnvironment put: environment.
 	aBehaviorCoder attributeNamed: #dummyClass put: aDummyClass.
 
 	^ aBehaviorCoder
@@ -220,4 +224,9 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_03_click_r
 	].
 		
 	^ aScripter syncContinue
+]
+
+{ #category : #utilities }
+GtBehaviorCoderByScripterExamples >> cleanUp [
+	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]

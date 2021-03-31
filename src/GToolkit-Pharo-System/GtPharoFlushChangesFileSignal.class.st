@@ -20,10 +20,24 @@ GtPharoFlushChangesFileSignal class >> emitIfOutsideModifier [
 ]
 
 { #category : #'instance creation' }
-GtPharoFlushChangesFileSignal class >> signalIfOutsideModifier [
+GtPharoFlushChangesFileSignal class >> signalIfOutsideModifier: anObject [
 	thisContext stack
 		detect: [ :each | each method methodClass = GtPharoCodeModifier ]
-		ifNone: [ Error signal: 'Tried to modify pharo code outside of the ', GtPharoCodeModifier name, ' critical: block' ]
+		ifNone: [
+			((anObject isKindOf: BinaryFileStream)
+				and: [ (anObject name endsWith: '.changes') not ])
+					ifTrue: [ ^ self ].
+			
+			NonInteractiveTranscript stdout
+				nextPutAll: 'Tried to modify pharo code outside of the ', GtPharoCodeModifier name, ' critical: block';
+				cr.
+			
+			thisContext stack do: [ :each |
+				NonInteractiveTranscript stdout
+					print: each;
+					cr. ].
+			
+			Error signal: 'Tried to modify pharo code outside of the ', GtPharoCodeModifier name, ' critical: block' ]
 ]
 
 { #category : #inspecting }

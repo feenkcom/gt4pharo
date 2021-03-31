@@ -3,6 +3,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
+	#instVars : [
+		'environment'
+	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
@@ -484,6 +487,11 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExpandAttr
 	^ aScripterOrStep
 ]
 
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> cleanUp [
+	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
+]
+
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> clickFixItActionFor: aScripter id: aBlElementId [
 	"An utility method to open and click on the fixIt action with id.
@@ -693,9 +701,14 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	self selectTextFor: aScripter from: 38 to: 45 andCheck: '196@400'.
 	
 	Clipboard clipboardText: ''.
@@ -708,9 +721,14 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuCut [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	self selectTextFor: aScripter from: 38 to: 45 andCheck: '196@400'.
 	
 	Clipboard clipboardText: ''.
@@ -726,9 +744,14 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCut [
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	self selectTextFor: aScripter from: 38 to: 45 andCheck: '196@400'.
 	
 	Clipboard clipboardText: '400@196'.

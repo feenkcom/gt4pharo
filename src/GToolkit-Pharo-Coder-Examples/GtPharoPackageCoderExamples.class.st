@@ -1,20 +1,29 @@
 Class {
 	#name : #GtPharoPackageCoderExamples,
 	#superclass : #Object,
+	#instVars : [
+		'environment'
+	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
+
+{ #category : #'private - set up' }
+GtPharoPackageCoderExamples >> cleanUp [
+	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
+]
 
 { #category : #'examples - instance creation' }
 GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	<gtExample>
-	| anEnvironment aDummyPackage aPackage aPackageCoder |
+	<after: #cleanUp>
+	| aDummyPackage aPackage aPackageCoder |
 
-	anEnvironment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
-	aDummyPackage := anEnvironment anyDummyPackage.
+	environment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
+	aDummyPackage := environment anyDummyPackage.
 	aPackage := aDummyPackage realPackage.
 
 	aPackageCoder := GtPharoPackageCoder forPackage: aPackage.
-	aPackageCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aPackageCoder attributeNamed: #dummyEnvironment put: environment.
 	aPackageCoder attributeNamed: #dummyPackage put: aDummyPackage.
 
 	self assert: aPackageCoder package equals: aPackage.
@@ -28,15 +37,16 @@ GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 { #category : #'examples - instance creation' }
 GtPharoPackageCoderExamples >> coderOnUnregisteredPackage [
 	<gtExample>
-	| anEnvironment aDummyPackage aPackage aPackageCoder |
+	<after: #cleanUp>
+	| aDummyPackage aPackage aPackageCoder |
 
-	anEnvironment := GtPharoDummyEnvironment withPackages: 1 classes: 0.
-	aDummyPackage := anEnvironment anyDummyPackage.
+	environment := GtPharoDummyEnvironment withPackages: 1 classes: 0.
+	aDummyPackage := environment anyDummyPackage.
 	aPackage := aDummyPackage realPackage.
 	GtPharoCodeModifier unregisterPackage: aPackage.
 
 	aPackageCoder := GtPharoPackageCoder forPackage: aPackage.
-	aPackageCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aPackageCoder attributeNamed: #dummyEnvironment put: environment.
 	aPackageCoder attributeNamed: #dummyPackage put: aDummyPackage.
 
 	self assert: aPackageCoder package equals: aPackage.

@@ -3,6 +3,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtPharoCoderExamplesWithDummies',
 	#classTraits : 'TGtPharoCoderExamplesWithDummies classTrait',
+	#instVars : [
+		'environment'
+	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
@@ -26,6 +29,11 @@ GtPharoMethodCoderExamples >> a: arg1 a: arg2 a: arg3 a: arg4 [
 GtPharoMethodCoderExamples >> b [
 	<gtExample>
 	^ self a * self notAnExample
+]
+
+{ #category : #'private - set up' }
+GtPharoMethodCoderExamples >> cleanUp [
+	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]
 
 { #category : #'examples - instance creation' }
@@ -715,16 +723,17 @@ GtPharoMethodCoderExamples >> forExampleMethodCoder [
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forKeywordMethodInPackagedClass [
 	<gtExample>
-	| anEnvironment aDummyMethod aMethod aClass aMethodCoder |
+	<after: #cleanUp>
+	| aDummyMethod aMethod aClass aMethodCoder |
 
-	anEnvironment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyMethod := anEnvironment anyDummyKeywordMethod.
+	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
+	aDummyMethod := environment anyDummyKeywordMethod.
 
 	aMethod := aDummyMethod realMethod.
 	aClass := aDummyMethod realClass.
 	
 	aMethodCoder := GtPharoMethodCoder forMethod: aMethod.
-	aMethodCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aMethodCoder attributeNamed: #dummyEnvironment put: environment.
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
@@ -756,17 +765,18 @@ GtPharoMethodCoderExamples >> forKeywordSelectorMethodCoder [
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forNewMethod [
 	<gtExample>
-	| anEnvironment aDummyMethod aMethodCoder aClass |
+	<after: #cleanUp>
+	| aDummyMethod aMethodCoder aClass |
 	
-	anEnvironment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyMethod := anEnvironment anyDummyUnaryMethod.
+	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
+	aDummyMethod := environment anyDummyUnaryMethod.
 	
 	GtPharoCodeModifier removeMethod: aDummyMethod realMethod.
 
 	aClass := aDummyMethod realClass.
 	
 	aMethodCoder := GtPharoMethodCoder forNewMethod: aClass.
-	aMethodCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aMethodCoder attributeNamed: #dummyEnvironment put: environment.
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
@@ -833,13 +843,14 @@ GtPharoMethodCoderExamples >> forThisObjectMethodCoder [
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forUnaryClassMethod [
 	<gtExample>
-	| anEnvironment aDummyMethod aMethodCoder |
+	<after: #cleanUp>
+	| aDummyMethod aMethodCoder |
 
-	anEnvironment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyMethod := anEnvironment anyDummyUnaryClassMethod.
+	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
+	aDummyMethod := environment anyDummyUnaryClassMethod.
 
 	aMethodCoder := GtPharoMethodCoder forMethod: aDummyMethod realMethod.
-	aMethodCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aMethodCoder attributeNamed: #dummyEnvironment put: environment.
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aDummyMethod realClass class.
@@ -856,16 +867,17 @@ GtPharoMethodCoderExamples >> forUnaryClassMethod [
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	<gtExample>
-	| anEnvironment aDummyMethod aMethod aClass aMethodCoder |
+	<after: #cleanUp>
+	| aDummyMethod aMethod aClass aMethodCoder |
 
-	anEnvironment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyMethod := anEnvironment anyDummyUnaryMethod.
+	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
+	aDummyMethod := environment anyDummyUnaryMethod.
 
 	aMethod := aDummyMethod realMethod.
 	aClass := aDummyMethod realClass.
 	
 	aMethodCoder := GtPharoMethodCoder forMethod: aMethod.
-	aMethodCoder attributeNamed: #dummyEnvironment put: anEnvironment.
+	aMethodCoder attributeNamed: #dummyEnvironment put: environment.
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
