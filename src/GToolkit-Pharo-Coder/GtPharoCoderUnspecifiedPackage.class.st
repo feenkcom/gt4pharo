@@ -51,3 +51,7 @@ GtPharoCoderUnspecifiedPackage >> packageNameDo: aBlock [
 GtPharoCoderUnspecifiedPackage >> realPackageDo: aBlock [
 	^ nil
 ]
+
+{ #category : #accessing }
+GtPharoCoderUnspecifiedPackage >> renamePackageTo: aNewName [
+]

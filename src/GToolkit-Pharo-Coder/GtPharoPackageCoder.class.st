@@ -35,7 +35,10 @@ GtPharoPackageCoder >> asNewCoderModelWithSameSubject [
 
 { #category : #accessing }
 GtPharoPackageCoder >> classes [
-	^ self package classes
+	<return: #Collection of: #Behavior>
+
+	self packageDo: [ :aRPackage | ^ aRPackage classes ].
+	^ #()
 ]
 
 { #category : #accessing }
@@ -86,7 +89,7 @@ GtPharoPackageCoder >> isRegistered [
 	"Return true if the package is registered in the system, false otherwise"
 	<return: #Boolean>
 	
-	^ self package organizer includesPackage: self package
+	^ package exists
 ]
 
 { #category : #accessing }
@@ -162,6 +165,14 @@ GtPharoPackageCoder >> package: aRPackage [
 ]
 
 { #category : #accessing }
+GtPharoPackageCoder >> packageDo: aBlock [
+	"Evaluate a given Block with an RPackage if it is registered in the system,
+	do nothing otherwise"
+
+	package realPackageDo: aBlock
+]
+
+{ #category : #accessing }
 GtPharoPackageCoder >> packageName [
 	^ package packageNameDo: [ :aPackageName | ^ aPackageName ]
 ]
@@ -201,7 +212,7 @@ GtPharoPackageCoder >> primitiveRemovePackage [
 
 { #category : #'private - actions' }
 GtPharoPackageCoder >> primitiveRenamePackageTo: aNewPackageName [
-	GtPharoCodeModifier renamePackage: self package to: aNewPackageName
+	package renamePackageTo: aNewPackageName
 ]
 
 { #category : #'private - actions' }

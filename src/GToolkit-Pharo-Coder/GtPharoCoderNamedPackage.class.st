@@ -42,13 +42,16 @@ GtPharoCoderNamedPackage >> affectByPackageUnregistered: aRPackageUnregistered [
 
 { #category : #testing }
 GtPharoCoderNamedPackage >> affectedByPackageRegistered: aRPackageRegistered [
-	^ self packageName = aRPackageRegistered package name
+	self packageNameDo: [ :aPackageName | ^ aPackageName = aRPackageRegistered package name ].
+	^ false
 ]
 
 { #category : #testing }
 GtPharoCoderNamedPackage >> affectedByPackageRenamed: aRPackageRenamed [
-	^ self packageName = aRPackageRenamed oldName
-		or: [ self packageName = aRPackageRenamed newName ]
+	self packageNameDo: [ :aPackageName |
+		^ (aPackageName = aRPackageRenamed oldName)
+			or: [ aPackageName = aRPackageRenamed newName ] ].
+	^ false
 ]
 
 { #category : #testing }
@@ -79,6 +82,11 @@ GtPharoCoderNamedPackage >> package [
 ]
 
 { #category : #accessing }
+GtPharoCoderNamedPackage >> package: anObject [
+	package := anObject
+]
+
+{ #category : #accessing }
 GtPharoCoderNamedPackage >> packageName [
 	^ packageName
 ]
@@ -98,12 +106,24 @@ GtPharoCoderNamedPackage >> packageName: aPackageName [
 
 { #category : #accessing }
 GtPharoCoderNamedPackage >> packageNameDo: aBlock [
-	^ aBlock value: self packageName
+	| aRealPackage |
+
+	aRealPackage := RPackage organizer
+		packageNamed: packageName
+		ifAbsent: [ package ifNil: [ nil ] ].
+
+	^ aBlock value: (aRealPackage ifNil: [ packageName ] ifNotNil: [ :aPackage | aPackage name ] )
 ]
 
 { #category : #accessing }
 GtPharoCoderNamedPackage >> realPackageDo: aBlock [
 	^ aBlock value: (RPackage organizer
 		packageNamed: packageName
-		ifAbsent: [ ^ nil ])
+		ifAbsent: [ package ifNil: [ ^ nil ] ])
+]
+
+{ #category : #accessing }
+GtPharoCoderNamedPackage >> renamePackageTo: aNewName [
+	packageName := aNewName asSymbol.
+	self realPackageDo: [ :aPackage | GtPharoCodeModifier renamePackage: aPackage to: aNewName ]
 ]

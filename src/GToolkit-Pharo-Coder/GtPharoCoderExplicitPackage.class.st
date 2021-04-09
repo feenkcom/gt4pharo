@@ -36,7 +36,7 @@ GtPharoCoderExplicitPackage >> affectByPackageRenamed: aRPackageRenamed [
 { #category : #transformation }
 GtPharoCoderExplicitPackage >> affectByPackageUnregistered: aRPackageUnregistered [
 	^ (self affectedByPackageUnregistered: aRPackageUnregistered)
-		ifTrue: [ self class named: aRPackageUnregistered package name ]
+		ifTrue: [ (self class named: aRPackageUnregistered package name) package: self package ]
 		ifFalse: [ self ]
 ]
 
@@ -96,17 +96,16 @@ GtPharoCoderExplicitPackage >> packageName [
 
 { #category : #accessing }
 GtPharoCoderExplicitPackage >> packageNameDo: aBlock [
-	^ self exists
-		ifTrue: [ aBlock value: package name ]
-		ifFalse: [
-			packageName
-				ifNotNil: [ :aName | aBlock value: aName ]
-				ifNil: [ nil ] ]
+	^ aBlock value: package name
 ]
 
 { #category : #accessing }
 GtPharoCoderExplicitPackage >> realPackageDo: aBlock [
-	^ self exists
-		ifTrue: [ aBlock value: self package ]
-		ifFalse: [ nil ]
+	^ aBlock value: self package
+]
+
+{ #category : #accessing }
+GtPharoCoderExplicitPackage >> renamePackageTo: aNewName [
+	packageName := aNewName asSymbol.
+	GtPharoCodeModifier renamePackage: package to: aNewName
 ]

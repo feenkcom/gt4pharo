@@ -78,3 +78,8 @@ GtPharoCoderPackage >> realPackageDo: aBlock ifAbsent: anAbsentBlock [
 	self realPackageDo: [ :aBehavior | ^ aBlock value: aBehavior ].
 	^ anAbsentBlock value
 ]
+
+{ #category : #accessing }
+GtPharoCoderPackage >> renamePackageTo: aNewName [
+	self subclassResponsibility
+]
