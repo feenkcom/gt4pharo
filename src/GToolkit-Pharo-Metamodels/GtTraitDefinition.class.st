@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'slots',
 		'traits',
-		'category'
+		'category',
+		'methods'
 	],
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Definitions'
 }
@@ -17,6 +18,11 @@ GtTraitDefinition class >> forNew [
 { #category : #'instance creation' }
 GtTraitDefinition class >> fromTrait: aTrait [
 	^ self new fromTrait: aTrait
+]
+
+{ #category : #'instance creation' }
+GtTraitDefinition class >> fromTrait: aTrait in: anEnvironment [
+	^ self new fromTrait: aTrait in: anEnvironment
 ]
 
 { #category : #converting }
@@ -61,6 +67,29 @@ GtTraitDefinition >> createBehaviorChange [
 	^ RBAddTraitChange definition: self asDefinitionString
 ]
 
+{ #category : #'api - accepting' }
+GtTraitDefinition >> createChange [
+	| aCompositeChange |
+
+	aCompositeChange := (RBCompositeRefactoryChange named: 'Define trait').
+	self category isValidForCreation
+		ifTrue: [
+			aCompositeChange addChange: self category createPackageChange ].
+	
+	aCompositeChange addChange: self createBehaviorChange.
+	
+	methods ifNotNil: [ :theMethods |
+		| theMethodsChange |
+		theMethodsChange := theMethods createChange.
+		theMethodsChange changes do: [ :eachMethodChange |
+			eachMethodChange
+				behaviorName: self name;
+				isMeta: false ].
+		aCompositeChange addChange: theMethodsChange ].
+
+	^ aCompositeChange
+]
+
 { #category : #initialization }
 GtTraitDefinition >> defaultNewTraitName [
 	^ #TNameOfTrait
@@ -98,7 +127,7 @@ GtTraitDefinition >> differenceWith: aTraitDefinition [
 
 { #category : #testing }
 GtTraitDefinition >> exists [
-	^ Smalltalk globals includesKey: self name asSymbol
+	^ self class environment includesKey: self name asSymbol
 ]
 
 { #category : #initialization }
@@ -112,13 +141,26 @@ GtTraitDefinition >> forNew [
 
 { #category : #initialization }
 GtTraitDefinition >> fromTrait: aTrait [
+	self fromTrait: aTrait in: self environment
+]
+
+{ #category : #initialization }
+GtTraitDefinition >> fromTrait: aTrait in: anEnvironment [
+	self
+		assert: [ (aTrait isKindOf: self class) not ]
+		description: [ 'Can not create definition from a definition' ].
+	
 	name := aTrait name.
 	originalName := name.
+	
+	self environment: anEnvironment.
+	"register me in the environment if I do not exist"
+	self environment registerBehavior: self.	
 	
 	category := (GtCategoryDefinition fromBehavior: aTrait) parent: self.
 
 	slots := (GtSlotsDefinition fromTrait: aTrait) parent: self.
-	traits := (GtTraitsDefinition fromTrait: aTrait) parent: self
+	traits := (GtTraitsDefinition fromTrait: aTrait in: anEnvironment) parent: self
 ]
 
 { #category : #testing }
@@ -143,6 +185,11 @@ GtTraitDefinition >> isValidForCreation [
 ]
 
 { #category : #accessing }
+GtTraitDefinition >> methods [
+	^ methods
+]
+
+{ #category : #accessing }
 GtTraitDefinition >> slots [
 	<return: #GtSlotsDefinition>
 
@@ -154,4 +201,11 @@ GtTraitDefinition >> traits [
 	<return: #GtTraitsDefinition>
 	
 	^ traits
+]
+
+{ #category : #initialization }
+GtTraitDefinition >> withMethodsFromTrait: aTrait [
+	"Initialize methods from a given real Trait"
+	
+	methods := (GtPharoMethodsDefinition fromTrait: aTrait) parent: self
 ]

@@ -83,7 +83,7 @@ GtPharoPackageCoderElement >> buildPackageTagsList [
 	^ BrSimpleList new
 		itemStencil: [ GtPackageTagCardElement new ];
 		itemDataBinder: [ :eachTagCard :eachTagCoder | eachTagCard coder: eachTagCoder ];
-		items: (packageCoder packageTagCoders asSortedCollection: [ :a :b | a name < b name ])
+		items: (packageCoder packageTagsCoder coders asSortedCollection: [ :a :b | a packageTagName < b packageTagName ])
 ]
 
 { #category : #'private - ui' }
@@ -110,7 +110,7 @@ GtPharoPackageCoderElement >> buildParentLink [
 			fitContent;
 			action: [
 				| aCoderToReplace |
-				aCoderToReplace := (GtCoderToReplace new coder: GtPharoPackagesCoder new).
+				aCoderToReplace := (GtCoderToReplace new coder: GtPharoPackagesCoder forAllPackages).
 				self fireEvent: aCoderToReplace.
 				aCoderToReplace isConsumed
 					ifFalse: [ self phlow spawnObject: aCoderToReplace coder ] ]).
@@ -185,5 +185,5 @@ GtPharoPackageCoderElement >> packageViewItems [
 GtPharoPackageCoderElement >> unloadPackage [
 	packageCoder unload.
 
-	self fireEvent: (GtCoderToReplace new coder: GtPharoPackagesCoder new)
+	self fireEvent: (GtCoderToReplace new coder: GtPharoPackagesCoder forAllPackages)
 ]

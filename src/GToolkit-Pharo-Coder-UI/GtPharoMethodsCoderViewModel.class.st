@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoMethodsCoderViewModel,
-	#superclass : #GtCodersUIModel,
+	#superclass : #GtMultipleCodersViewModel,
 	#instVars : [
 		'focusedCoderUIModel'
 	],
@@ -56,7 +56,7 @@ GtPharoMethodsCoderViewModel >> focusCoderUIModel: aCoderUIModel [
 
 { #category : #accessing }
 GtPharoMethodsCoderViewModel >> focusedCoderUIModel [
-	<return: #GtCoderUIModel>
+	<return: #GtSingleCoderViewModel>
 
 	^ focusedCoderUIModel
 ]

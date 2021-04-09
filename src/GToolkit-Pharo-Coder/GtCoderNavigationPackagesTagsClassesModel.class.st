@@ -8,7 +8,7 @@ Class {
 		'packages',
 		'coder'
 	],
-	#category : #'GToolkit-Pharo-Coder'
+	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
 
 { #category : #'instance creation' }
@@ -103,7 +103,7 @@ GtCoderNavigationPackagesTagsClassesModel >> hasSelectedTag [
 { #category : #initialization }
 GtCoderNavigationPackagesTagsClassesModel >> initialize [
 	super initialize.
-	self coder: GtPharoPackagesCoder new
+	self coder: GtPharoPackagesCoder forAllPackages
 ]
 
 { #category : #initialization }

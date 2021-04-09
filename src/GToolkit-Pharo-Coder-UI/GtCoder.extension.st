@@ -33,5 +33,5 @@ GtCoder class >> forPackage: anRPackage [
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtCoder class >> new [
-	^ self forCoder: GtPharoPackagesCoder new
+	^ self forCoder: GtPharoPackagesCoder forAllPackages
 ]

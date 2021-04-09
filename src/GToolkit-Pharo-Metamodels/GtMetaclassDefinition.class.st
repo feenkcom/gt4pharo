@@ -13,14 +13,21 @@ GtMetaclassDefinition class >> fromMetaclass: aMetaclass [
 	^ self new fromMetaclass: aMetaclass
 ]
 
+{ #category : #'instance creation' }
+GtMetaclassDefinition class >> fromMetaclass: aMetaclass in: anEnvironment [
+	^ self new fromMetaclass: aMetaclass in: anEnvironment
+]
+
 { #category : #converting }
 GtMetaclassDefinition >> asDefinitionString [
 	^ String streamContents: [:stream |
-		stream print: self.
 		stream
+			nextPutAll: self name;
+			space;
+			nextPutAll: 'class';
 			crtab;
 			nextPutAll: 'slots: ';
-			store: self slots asDefinitionString ]
+			nextPutAll: self slots asDefinitionString ]
 ]
 
 { #category : #accessing }
@@ -38,6 +45,11 @@ GtMetaclassDefinition >> classOrMetaClass [
 		ifTrue: [ instanceName := instanceName allButLast: 6 ].
 	^ (self class environment at: instanceName asSymbol ifAbsent: [  ])
 		ifNotNil: [ :cls | cls class ]
+]
+
+{ #category : #'api - accepting' }
+GtMetaclassDefinition >> createBehaviorChange [
+	^ RBAddMetaclassWithSlotsChange definition: self asDefinitionString
 ]
 
 { #category : #'api - accepting' }
@@ -72,6 +84,18 @@ GtMetaclassDefinition >> differenceWith: aMetaclassDefinition [
 GtMetaclassDefinition >> fromMetaclass: aMetaclass [
 	"Initialize me from a given real Metaclass"
 
+	self fromMetaclass: aMetaclass in: self environment
+]
+
+{ #category : #initialization }
+GtMetaclassDefinition >> fromMetaclass: aMetaclass in: anEnvironment [
+	"Initialize me from a given real Metaclass"
+	self
+		assert: [ anEnvironment notNil ]
+		description: [ 'Environment must not be nil' ].
+
+	self environment: anEnvironment.
+	
 	name := aMetaclass name.
 	originalName := name.
 	

@@ -70,6 +70,11 @@ GtCompositeDefinition >> isEmpty [
 ]
 
 { #category : #accessing }
+GtCompositeDefinition >> name [
+	^ self shouldNotImplement
+]
+
+{ #category : #accessing }
 GtCompositeDefinition >> names [
 	<return: #Collection of: #Symbol>
 	

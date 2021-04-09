@@ -40,7 +40,7 @@ GtPharoBehaviorProtocolCoder >> forBehavior: aBehavior protocol: aProtocol [
 		assert: [ aProtocol notNil ]
 		description: [ 'Protocol must not be nil' ].
 
-	protocolBehavior := GtMethodCoderExplicitBehavior new behavior: aBehavior.
+	protocolBehavior := GtPharoCoderBehavior explicit: aBehavior.
 	protocol := aProtocol.
 
 	methodCoders removeAll.
@@ -84,7 +84,7 @@ GtPharoBehaviorProtocolCoder >> gtMethodsFor: aView [
 GtPharoBehaviorProtocolCoder >> initialize [
 	super initialize.
 	
-	protocolBehavior := GtMethodCoderUnspecifiedBehavior new.
+	protocolBehavior := GtPharoCoderBehavior unspecified.
 	methodCoders := OrderedCollection new
 ]
 

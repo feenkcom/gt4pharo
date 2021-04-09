@@ -21,6 +21,18 @@ GtBehaviorDefinition class >> fromBehavior: aBehavior [
 ]
 
 { #category : #'instance creation' }
+GtBehaviorDefinition class >> fromBehavior: aBehavior in: anEnvironment [
+	"Create a definition for editing the given behaviour and add it and its dependents in a given environment."
+	^ aBehavior isClass
+		ifTrue: [ aBehavior isMeta
+			ifTrue: [ GtMetaclassDefinition fromMetaclass: aBehavior in: anEnvironment ]
+			ifFalse: [ GtFullClassDefinition fromClass: aBehavior in: anEnvironment ] ]
+		ifFalse: [ aBehavior isTrait
+			ifTrue: [ GtTraitDefinition fromTrait: aBehavior in: anEnvironment ]
+			ifFalse: [ self error: 'Unknown entity' ] ]
+]
+
+{ #category : #'instance creation' }
 GtBehaviorDefinition class >> targetDefinitionForBehavior: aBehavior [
 	"Create a definition for exactly the type of the give behaviour. 
 	I differ from ${method:GtBehaviorDefinition class>>#fromBehaviour:}$ 

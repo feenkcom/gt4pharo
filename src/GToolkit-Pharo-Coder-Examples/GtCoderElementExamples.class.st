@@ -91,7 +91,7 @@ GtCoderElementExamples >> contentElementWithPackages [
 { #category : #'examples - coders' }
 GtCoderElementExamples >> packagesCoder [
 	<gtExample>
-	^ GtPharoPackagesCoder new
+	^ GtPharoPackagesCoder forAllPackages
 ]
 
 { #category : #'examples - playground' }

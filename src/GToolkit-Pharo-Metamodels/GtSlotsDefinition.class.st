@@ -117,6 +117,15 @@ GtSlotsDefinition >> notifySlotRenamed: aGtSlotDefinition from: anOldName to: aN
 ]
 
 { #category : #'api - slots' }
+GtSlotsDefinition >> removeAllSlots [
+	| theRemovedSlots |
+	
+	theRemovedSlots := definitions copy.
+	definitions := #().
+	theRemovedSlots do: [ :eachSlot | self notifySlotRemoved: eachSlot ]
+]
+
+{ #category : #'api - slots' }
 GtSlotsDefinition >> removeSlotNamed: aSymbol [
 	| aRemovedSlot |
 	
