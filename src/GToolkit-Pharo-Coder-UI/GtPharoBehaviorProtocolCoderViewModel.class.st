@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoBehaviorProtocolCoderViewModel,
-	#superclass : #GtCoderUIModel,
+	#superclass : #GtSingleCoderViewModel,
 	#instVars : [
 		'methodViewModels'
 	],

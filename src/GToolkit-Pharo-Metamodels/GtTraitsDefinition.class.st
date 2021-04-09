@@ -10,8 +10,32 @@ GtTraitsDefinition class >> fromClass: aClass [
 ]
 
 { #category : #'instance creation' }
+GtTraitsDefinition class >> fromClass: aClass in: anEnvironment [
+	^ self new fromClass: aClass in: anEnvironment
+]
+
+{ #category : #'instance creation' }
 GtTraitsDefinition class >> fromTrait: aTrait [
 	^ self new fromTrait: aTrait
+]
+
+{ #category : #'instance creation' }
+GtTraitsDefinition class >> fromTrait: aTrait in: anEnvironment [
+	^ self new fromTrait: aTrait in: anEnvironment
+]
+
+{ #category : #'api - traits' }
+GtTraitsDefinition >> addTrait: aTraitDefinition [
+	| aTraitName |
+	
+	aTraitName := aTraitDefinition name.
+	
+	(self hasDefinitionNamed: aTraitName)
+		ifTrue: [ self errorTraitAlreadyAdded: aTraitName ].
+
+	definitions := definitions copyWith: aTraitDefinition.
+
+	self notifyTraitAdded: aTraitDefinition
 ]
 
 { #category : #'api - traits' }
@@ -22,12 +46,15 @@ GtTraitsDefinition >> addTraitNamed: aSymbolOrString [
 	
 	(self hasDefinitionNamed: aTraitName)
 		ifTrue: [ self errorTraitAlreadyAdded: aTraitName ].
-		
+
 	(self doesTraitExist: aTraitName)
 		ifFalse: [ self errorTraitDoesNotExist: aTraitName ].
-	
-	aTrait := self class environment at: aTraitName.
-	aTraitDefinition := GtTraitDefinition fromTrait: aTrait.
+
+	aTrait := self environment at: aTraitName.
+	aTraitDefinition := (aTrait isKindOf: GtTraitDefinition)
+		ifTrue: [ aTrait ]
+		ifFalse: [ GtTraitDefinition fromTrait: aTrait ].
+
 	definitions := definitions copyWith: aTraitDefinition.
 
 	self notifyTraitAdded: aTraitDefinition
@@ -64,9 +91,9 @@ GtTraitsDefinition >> differenceWith: aGtTraitsDefinition [
 GtTraitsDefinition >> doesTraitExist: aTraitName [
 	<return: #Boolean>
 
-	^ self class environment
+	^ self environment
 		at: aTraitName
-		ifPresent: [ :aGlobal | aGlobal isTrait ]
+		ifPresent: [ :aGlobal | aGlobal isTrait or: [ aGlobal isKindOf: GtTraitDefinition ] ]
 		ifAbsent: [ false ]
 ]
 
@@ -98,12 +125,22 @@ GtTraitsDefinition >> exists [
 
 { #category : #initialization }
 GtTraitsDefinition >> fromClass: aClass [
-	definitions := aClass traitComposition traits collect: [ :eachTrait | (GtTraitDefinition fromTrait: eachTrait) parent: self ]
+	self fromClass: aClass in: self environment
+]
+
+{ #category : #initialization }
+GtTraitsDefinition >> fromClass: aClass in: anEnvironment [
+	definitions := aClass traitComposition traits collect: [ :eachTrait | (GtTraitDefinition fromTrait: eachTrait in: anEnvironment) parent: self ]
 ]
 
 { #category : #initialization }
 GtTraitsDefinition >> fromTrait: aTrait [
-	definitions := aTrait traitComposition traits collect: [ :eachTrait | (GtTraitDefinition fromTrait: eachTrait) parent: self ]
+	self fromTrait: aTrait in: self environment
+]
+
+{ #category : #initialization }
+GtTraitsDefinition >> fromTrait: aTrait in: anEnvironment [
+	definitions := aTrait traitComposition traits collect: [ :eachTrait | (GtTraitDefinition fromTrait: eachTrait in: anEnvironment) parent: self ]
 ]
 
 { #category : #'private - notifying' }

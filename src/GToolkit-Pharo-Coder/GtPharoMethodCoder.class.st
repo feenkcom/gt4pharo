@@ -119,7 +119,7 @@ GtPharoMethodCoder >> behavior [
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> behavior: aBehavior [
-	self methodBehavior: (GtMethodCoderExplicitBehavior new behavior: aBehavior)
+	self methodBehavior: (GtPharoCoderBehavior explicit: aBehavior)
 ]
 
 { #category : #testing }
@@ -528,7 +528,7 @@ GtPharoMethodCoder >> forExample: anExampleWithResult [
 
 { #category : #initialize }
 GtPharoMethodCoder >> forMethod: aCompiledMethod [
-	self methodBehavior:(GtMethodCoderExplicitBehavior new behavior: aCompiledMethod methodClass).
+	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
 	self selector: aCompiledMethod selector.
 	self sourceCode: (GtCoderCompiledMethodSourceCode new compiledMethod: aCompiledMethod).
 	self protocol: aCompiledMethod category
@@ -730,7 +730,7 @@ GtPharoMethodCoder >> isOverriding [
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> methodBehavior [
-	<return: #GtMethodCoderBehavior>
+	<return: #GtPharoCoderBehavior>
 
 	^ methodBehavior
 ]
@@ -738,7 +738,7 @@ GtPharoMethodCoder >> methodBehavior [
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 	self
-		assert: [ aGtMethodCoderBehavior isKindOf: GtMethodCoderBehavior ]
+		assert: [ aGtMethodCoderBehavior isKindOf: GtPharoCoderBehavior ]
 		description: [ 'Behavior must be reifined as an object' ].
 
 	methodBehavior := aGtMethodCoderBehavior
@@ -1117,7 +1117,7 @@ GtPharoMethodCoder >> renameProtocol: aString [
 { #category : #initialize }
 GtPharoMethodCoder >> reset [
 	super reset.
-	methodBehavior := GtMethodCoderUnspecifiedBehavior new.
+	methodBehavior := GtPharoCoderBehavior unspecified.
 	selector := nil.
 	self protocol: nil
 ]

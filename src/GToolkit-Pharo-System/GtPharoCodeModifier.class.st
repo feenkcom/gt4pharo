@@ -222,7 +222,10 @@ GtPharoCodeModifier >> removePackageNamed: aPackageName [
 
 { #category : #'api - package' }
 GtPharoCodeModifier >> renamePackage: aPackage to: aNewPackageName [
-	^ self critical: [ aPackage renameTo: aNewPackageName ]
+	^ self critical: [
+		(aPackage organizer includesPackageNamed: aPackage name)
+			ifTrue: [ aPackage renameTo: aNewPackageName ]
+			ifFalse: [ aPackage name: aNewPackageName ] ]
 ]
 
 { #category : #'api - package' }

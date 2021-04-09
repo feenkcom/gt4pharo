@@ -85,6 +85,11 @@ GtPharoDummyEnvironment >> initialize [
 	self class finalizationRegistry add: self
 ]
 
+{ #category : #'api - packages' }
+GtPharoDummyEnvironment >> realPackages [
+	^ self dummyPackages collect: [ :eachDummyPackage | eachDummyPackage realPackage ]
+]
+
 { #category : #initialization }
 GtPharoDummyEnvironment >> removeFromSystem [
 	EpMonitor disableDuring: [

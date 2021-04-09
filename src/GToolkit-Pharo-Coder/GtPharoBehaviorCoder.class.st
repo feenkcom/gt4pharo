@@ -54,6 +54,11 @@ GtPharoBehaviorCoder >> behavior [
 ]
 
 { #category : #accessing }
+GtPharoBehaviorCoder >> coderName [
+	^ self theClass name
+]
+
+{ #category : #accessing }
 GtPharoBehaviorCoder >> definitionCoder [
 	<return: #GtPharoBehaviorDefinitionCoder>
 

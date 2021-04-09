@@ -3,8 +3,8 @@ Class {
 	#superclass : #GtPackageCoder,
 	#instVars : [
 		'package',
-		'packageTagCoders',
-		'classesCoder'
+		'classesCoder',
+		'packageTagsCoder'
 	],
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
@@ -12,7 +12,7 @@ Class {
 { #category : #'instance creation' }
 GtPharoPackageCoder class >> forPackage: anRPackage [
 	^ self new
-		package: anRPackage;
+		forPackage: anRPackage;
 		yourself
 ]
 
@@ -21,7 +21,7 @@ GtPharoPackageCoder >> addMissingPackageTag: aPackageTag [
 	<return: #GtPharoPackageTagCoder>
 	| aCoder |
 	aCoder := self newPackageTagCoderFor: aPackageTag.
-	self packageTagCoders add: aCoder.
+	self packageTagsCoder addCoder: aCoder.
 	^ aCoder
 ]
 
@@ -35,18 +35,17 @@ GtPharoPackageCoder >> asNewCoderModelWithSameSubject [
 
 { #category : #accessing }
 GtPharoPackageCoder >> classes [
-	^ self package classes
+	<return: #Collection of: #Behavior>
+
+	self packageDo: [ :aRPackage | ^ aRPackage classes ].
+	^ #()
 ]
 
 { #category : #accessing }
 GtPharoPackageCoder >> classesCoder [
 	<return: #GtPharoClassesCoder>
 
-	^ classesCoder
-		ifNil: [
-			classesCoder := GtPharoClassesCoder new.
-			classesCoder forPackage: self package.
-			classesCoder ]
+	^ classesCoder ifNil: [ classesCoder := GtPharoClassesCoder new forPackage: self package ]
 ]
 
 { #category : #accessing }
@@ -55,8 +54,20 @@ GtPharoPackageCoder >> coderForClass: aClass [
 ]
 
 { #category : #accessing }
+GtPharoPackageCoder >> coderName [
+	^ self packageName
+]
+
+{ #category : #accessing }
 GtPharoPackageCoder >> coders [
 	^ self classesCoder coders
+]
+
+{ #category : #initialization }
+GtPharoPackageCoder >> forPackage: aRPackage [
+	package := GtPharoCoderPackage explicit: aRPackage.
+	packageTagsCoder ifNotNil: [ :aPackageTagsCoder | aPackageTagsCoder forPackage: aRPackage ].
+	classesCoder ifNotNil: [ :aClassesCoder | aClassesCoder forPackage: aRPackage ]
 ]
 
 { #category : #accessing }
@@ -64,19 +75,32 @@ GtPharoPackageCoder >> icon [
 	^ BrGlamorousIcons packageicon asElement
 ]
 
+{ #category : #initialization }
+GtPharoPackageCoder >> initialize [
+	super initialize.
+	
+	package := GtPharoCoderPackage unspecified.
+	packageTagsCoder := nil.
+	classesCoder := nil
+]
+
 { #category : #testing }
 GtPharoPackageCoder >> isRegistered [
 	"Return true if the package is registered in the system, false otherwise"
 	<return: #Boolean>
 	
-	^ self package organizer includesPackage: self package
+	^ package exists
 ]
 
 { #category : #accessing }
 GtPharoPackageCoder >> name [
 	<return: #String>
 
-	^ package name
+	self
+		deprecated: 'Use #packageName instead.'
+		transformWith: '`@receiver name' -> '`@receiver packageName'.
+
+	^ self packageName
 ]
 
 { #category : #'private - instance creation' }
@@ -88,33 +112,37 @@ GtPharoPackageCoder >> newPackageTagCoderFor: aPackageTag [
 ]
 
 { #category : #'private - instance creation' }
-GtPharoPackageCoder >> newPackageTagCoders [
-	^ (package classTags
-			collect: [ :eachTag | self newPackageTagCoderFor: eachTag ])
-				asSortedCollection: [ :a :b | a name < b name ]
+GtPharoPackageCoder >> newPackageTagsCoder [
+	^ package
+		realPackageDo: [ :aRPackage |
+			GtPharoPackageTagCoders forPackage: aRPackage ]
+		ifAbsent: [ GtPharoPackageTagCoders new ]
 ]
 
-{ #category : #'event handling' }
-GtPharoPackageCoder >> onPackageRegistered: anAnnouncement [
-	anAnnouncement package name = self name
+{ #category : #'private - event handling' }
+GtPharoPackageCoder >> onSystemPackageRegistered: anAnnouncement [
+	(package affectedByPackageRegistered: anAnnouncement)
 		ifFalse: [ ^ self ].
-		
+
+	package := package affectByPackageRegistered: anAnnouncement.
 	self notifyPackageRegistered
 ]
 
-{ #category : #'event handling' }
-GtPharoPackageCoder >> onPackageRenamed: anAnnouncement [
-	anAnnouncement oldName = self name
+{ #category : #'private - event handling' }
+GtPharoPackageCoder >> onSystemPackageRenamed: anAnnouncement [
+	(package affectedByPackageRenamed: anAnnouncement)
 		ifFalse: [ ^ self ].
-	
+
+	package := package affectByPackageRenamed: anAnnouncement.
 	self notifyPackageRenamed
 ]
 
-{ #category : #'event handling' }
-GtPharoPackageCoder >> onPackageUnregistered: anAnnouncement [
-	anAnnouncement package name = self name
+{ #category : #'private - event handling' }
+GtPharoPackageCoder >> onSystemPackageUnregistered: anAnnouncement [
+	(package affectedByPackageUnregistered: anAnnouncement)
 		ifFalse: [ ^ self ].
-		
+
+	package := package affectByPackageUnregistered: anAnnouncement.
 	self notifyPackageUnregistered
 ]
 
@@ -122,45 +150,54 @@ GtPharoPackageCoder >> onPackageUnregistered: anAnnouncement [
 GtPharoPackageCoder >> package [
 	<return: #RPackage>
 
-	^ package
+	^ package realPackageDo: [ :aRPackage | ^ aRPackage ]
 ]
 
 { #category : #accessing }
 GtPharoPackageCoder >> package: aRPackage [
 	self
-		assert: [ aRPackage notNil ]
-		description: [ 'Package must not be nil' ].
+		deprecated: 'Please use forPackage: methods instead.'
+		transformWith:
+			'`@receiver package: `@statements1'
+				-> '`@receiver forPackage: `@statements1'.
+				
+	^ self forPackage: aRPackage
+]
 
-	package := aRPackage.
-	classesCoder ifNotNil: [ :aClassesCoder | aClassesCoder forPackage: aRPackage ]
+{ #category : #accessing }
+GtPharoPackageCoder >> packageDo: aBlock [
+	"Evaluate a given Block with an RPackage if it is registered in the system,
+	do nothing otherwise"
+
+	package realPackageDo: aBlock
+]
+
+{ #category : #accessing }
+GtPharoPackageCoder >> packageName [
+	^ package packageNameDo: [ :aPackageName | ^ aPackageName ]
 ]
 
 { #category : #accessing }
 GtPharoPackageCoder >> packageTagCoderFor: aPackageTag [
-	^ self packageTagCoders
+	^ self packageTagsCoder coders
 		detect: [ :each | each packageTag = aPackageTag ]
 		ifNone: [ self addMissingPackageTag: aPackageTag ]
-]
-
-{ #category : #accessing }
-GtPharoPackageCoder >> packageTagCoders [
-	^ packageTagCoders
-		ifNil:
-			[ packageTagCoders := self newPackageTagCoders ]
 ]
 
 { #category : #accessing }
 GtPharoPackageCoder >> packageTagForClass: aClass [
 	^ (package classTagForClass: aClass)
 		ifNotNil: [ :tag | 
-			self packageTagCoders
+			self packageTagsCoder coders
 				detect: [ :each | each packageTag = tag ]
 				ifNone: [  ] ]
 ]
 
 { #category : #accessing }
-GtPharoPackageCoder >> packageTreeCoders [
-	^ self coders
+GtPharoPackageCoder >> packageTagsCoder [
+	<return: #GtPharoPackageTagCoders>
+
+	^ packageTagsCoder ifNil: [ packageTagsCoder := self newPackageTagsCoder ]
 ]
 
 { #category : #'private - actions' }
@@ -175,7 +212,7 @@ GtPharoPackageCoder >> primitiveRemovePackage [
 
 { #category : #'private - actions' }
 GtPharoPackageCoder >> primitiveRenamePackageTo: aNewPackageName [
-	GtPharoCodeModifier renamePackage: self package to: aNewPackageName
+	package renamePackageTo: aNewPackageName
 ]
 
 { #category : #'private - actions' }
@@ -183,10 +220,20 @@ GtPharoPackageCoder >> primitiveUnregisterPackage [
 	GtPharoCodeModifier unregisterPackage: self package
 ]
 
+{ #category : #printing }
+GtPharoPackageCoder >> printOn: aStream [
+	aStream
+		nextPutAll: 'Package Coder';
+		space;
+		nextPut: $(;
+		print: self packageName;
+		nextPut: $)
+]
+
 { #category : #subscriptions }
 GtPharoPackageCoder >> subscribeToSystem [	
 	SystemAnnouncer uniqueInstance weak
-		when: RPackageRegistered send: #onPackageRegistered: to: self;
-		when: RPackageRenamed send: #onPackageRenamed: to: self;
-		when: RPackageUnregistered send: #onPackageUnregistered: to: self
+		when: RPackageRegistered send: #onSystemPackageRegistered: to: self;
+		when: RPackageRenamed send: #onSystemPackageRenamed: to: self;
+		when: RPackageUnregistered send: #onSystemPackageUnregistered: to: self
 ]

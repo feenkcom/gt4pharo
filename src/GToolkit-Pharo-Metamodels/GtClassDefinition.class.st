@@ -8,7 +8,8 @@ Class {
 		'classVariables',
 		'traits',
 		'pools',
-		'superclass'
+		'superclass',
+		'methods'
 	],
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Definitions'
 }
@@ -21,6 +22,11 @@ GtClassDefinition class >> forNew [
 { #category : #'instance creation' }
 GtClassDefinition class >> fromClass: aClass [
 	^ self new fromClass: aClass
+]
+
+{ #category : #'instance creation' }
+GtClassDefinition class >> fromClass: aClass in: anEnvironment [
+	^ self new fromClass: aClass in: anEnvironment
 ]
 
 { #category : #converting }
@@ -65,6 +71,32 @@ GtClassDefinition >> asDefinitionString [
 	^ aStream contents
 ]
 
+{ #category : #converting }
+GtClassDefinition >> asMethodsDefinitionString [
+	<return: #String>
+	| aStream |
+
+	aStream := (String new: 800) writeStream.
+	
+	methods ifNotNil: [ :theMethods |
+		| anIndex |
+		anIndex := 0.
+		theMethods do: [ :eachMethod |
+			anIndex := anIndex + 1.
+			
+			anIndex > 1
+				ifTrue: [ aStream cr; cr ].
+			
+			aStream
+				nextPutAll: self name; cr; tab; nextPutAll: 'compile:'; space;
+				print: eachMethod sourceCode;
+				cr; tab; nextPutAll: 'classified:'; space;
+				print: eachMethod protocol;
+				nextPut: $. ] ].
+
+	^ aStream contents
+]
+
 { #category : #accessing }
 GtClassDefinition >> category [
 	<return: #GtCategoryDefinition>
@@ -82,6 +114,29 @@ GtClassDefinition >> classVariables [
 { #category : #'api - accepting' }
 GtClassDefinition >> createBehaviorChange [
 	^ RBAddClassWithSlotsChange definition: self asDefinitionString
+]
+
+{ #category : #'api - accepting' }
+GtClassDefinition >> createChange [
+	| aCompositeChange |
+
+	aCompositeChange := (RBCompositeRefactoryChange named: 'Define class').
+	self category isValidForCreation
+		ifTrue: [
+			aCompositeChange addChange: self category createPackageChange ].
+	
+	aCompositeChange addChange: self createBehaviorChange.
+	
+	methods ifNotNil: [ :theMethods |
+		| theMethodsChange |
+		theMethodsChange := theMethods createChange.
+		theMethodsChange changes do: [ :eachMethodChange |
+			eachMethodChange
+				behaviorName: self name;
+				isMeta: false ].
+		aCompositeChange addChange: theMethodsChange ].
+	
+	^ aCompositeChange
 ]
 
 { #category : #initialization }
@@ -149,23 +204,36 @@ GtClassDefinition >> forNew [
 
 { #category : #initialization }
 GtClassDefinition >> fromClass: aClass [
-	| anEnvironment |
+	self fromClass: aClass in: self environment
+]
+
+{ #category : #initialization }
+GtClassDefinition >> fromClass: aClass in: anEnvironment [
+	| anEnvironmentForLayout |
 	"Initialize me from a given real Class"
 	
+	self
+		assert: [ anEnvironment notNil ]
+		description: [ 'Environment must not be nil' ].
+
 	name := aClass name.
 	originalName := aClass name.
+
+	self environment: anEnvironment.
+	"register me in the environment if I do not exist"
+	self environment registerBehavior: self.
 	
-	anEnvironment := RGEnvironment new.
-	anEnvironment backend: (RGReadOnlyImageBackend for: anEnvironment).
+	anEnvironmentForLayout := RGEnvironment new.
+	anEnvironmentForLayout backend: (RGReadOnlyImageBackend for: anEnvironmentForLayout).
 	
-	layout := aClass classLayout asRingMinimalDefinitionIn: anEnvironment.
+	layout := aClass classLayout asRingMinimalDefinitionIn: anEnvironmentForLayout.
 	
 	superclass := (GtClassSuperclassDefinition fromClass: aClass) parent: self.
 	category := (GtCategoryDefinition fromBehavior: aClass) parent: self.
 	slots := (GtSlotsDefinition fromClass: aClass) parent: self.
 	classVariables := (GtClassVariablesDefinition fromClass: aClass) parent: self.
 	
-	traits := (GtTraitsDefinition fromClass: aClass) parent: self.
+	traits := (GtTraitsDefinition fromClass: aClass in: anEnvironment) parent: self.
 	pools := (GtPoolsDefinition fromClass: aClass) parent: self
 ]
 
@@ -201,6 +269,11 @@ GtClassDefinition >> layout [
 ]
 
 { #category : #accessing }
+GtClassDefinition >> methods [
+	^ methods
+]
+
+{ #category : #accessing }
 GtClassDefinition >> pools [
 	<return: #GtPoolsDefinition>
 	
@@ -226,4 +299,11 @@ GtClassDefinition >> traits [
 	<return: #GtTraitsDefinition>
 	
 	^ traits
+]
+
+{ #category : #initialization }
+GtClassDefinition >> withMethodsFromClass: aClass [
+	"Initialize methods from a given real Class"
+	
+	methods := (GtPharoMethodsDefinition fromClass: aClass) parent: self
 ]

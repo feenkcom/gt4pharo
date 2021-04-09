@@ -737,7 +737,7 @@ GtPharoMethodCoderExamples >> forKeywordMethodInPackagedClass [
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
-	self assert: aMethodCoder methodBehavior equals: (GtMethodCoderBehavior explicit: aClass).
+	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aClass).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
 	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
@@ -854,7 +854,7 @@ GtPharoMethodCoderExamples >> forUnaryClassMethod [
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aDummyMethod realClass class.
-	self assert: aMethodCoder methodBehavior equals: (GtMethodCoderBehavior explicit: aDummyMethod realClass class).
+	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aDummyMethod realClass class).
 	self assert: aMethodCoder selector equals: aDummyMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aDummyMethod realMethod.
 	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
@@ -881,7 +881,7 @@ GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
-	self assert: aMethodCoder methodBehavior equals: (GtMethodCoderBehavior explicit: aClass).
+	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aClass).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
 	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
@@ -1048,7 +1048,7 @@ GtPharoMethodCoderExamples >> removeClassWhenSubscribedToSystem [
 		aMethodCoder unsubscribeFromSystem ].
 
 	self assert: aMethodCoder behavior equals: UndefinedObject.
-	self assert: aMethodCoder methodBehavior equals: (GtMethodCoderBehavior named: (aMethodCoder attributeNamed: #dummyMethod) className).
+	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior named: (aMethodCoder attributeNamed: #dummyMethod) className).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: nil.
 	self assert: aMethodCoder existsInTheSystem not.
@@ -1079,7 +1079,7 @@ GtPharoMethodCoderExamples >> removeMethodWithCoderWhenSubscribedToSystem [
 
 	"when the method is removed using coder's api we reset the state of the coder"
 	self assert: aMethodCoder behavior equals: UndefinedObject.
-	self assert: aMethodCoder methodBehavior equals: GtMethodCoderBehavior unspecified.
+	self assert: aMethodCoder methodBehavior equals: GtPharoCoderBehavior unspecified.
 	self assert: aMethodCoder selector equals: nil.
 	self assert: aMethodCoder protocol equals: nil.
 	self assert: aMethodCoder compiledMethod equals: nil.
@@ -1113,7 +1113,7 @@ GtPharoMethodCoderExamples >> removeMethodWithoutCoderWhenSubscribedToSystem [
 	"when the method is removed not via coder's api we do not reset the state of the coder,
 	allowing users to maybe re-install the method"
 	self assert: aMethodCoder behavior equals: aMethod methodClass.
-	self assert: aMethodCoder methodBehavior equals: (GtMethodCoderBehavior explicit: (aMethodCoder attributeNamed: #dummyMethod) realClass).
+	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: (aMethodCoder attributeNamed: #dummyMethod) realClass).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocol.
 	self assert: aMethodCoder compiledMethod equals: nil.
@@ -1145,7 +1145,7 @@ GtPharoMethodCoderExamples >> removePackageWhenSubscribedToSystem [
 		aMethodCoder unsubscribeFromSystem ].
 
 	self assert: aMethodCoder behavior equals: UndefinedObject.
-	self assert: aMethodCoder methodBehavior equals: (GtMethodCoderBehavior named: (aMethodCoder attributeNamed: #dummyMethod) className).
+	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior named: (aMethodCoder attributeNamed: #dummyMethod) className).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: nil.
 	self assert: aMethodCoder existsInTheSystem not.

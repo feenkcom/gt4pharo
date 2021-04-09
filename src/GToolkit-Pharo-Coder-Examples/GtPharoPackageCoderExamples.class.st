@@ -17,20 +17,18 @@ GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	<gtExample>
 	<after: #cleanUp>
 	| aDummyPackage aPackage aPackageCoder |
-
 	environment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
 	aDummyPackage := environment anyDummyPackage.
 	aPackage := aDummyPackage realPackage.
-
 	aPackageCoder := GtPharoPackageCoder forPackage: aPackage.
 	aPackageCoder attributeNamed: #dummyEnvironment put: environment.
 	aPackageCoder attributeNamed: #dummyPackage put: aDummyPackage.
-
 	self assert: aPackageCoder package equals: aPackage.
-	self assert: aPackageCoder name equals: aPackage name.
+	self assert: aPackageCoder packageName equals: aPackage name.
 	self assert: aPackageCoder isRegistered.
-	self assert: aPackageCoder classes size equals: aDummyPackage amountOfClasses.
-
+	self
+		assert: aPackageCoder classes size
+		equals: aDummyPackage amountOfClasses.
 	^ aPackageCoder
 ]
 
@@ -50,7 +48,7 @@ GtPharoPackageCoderExamples >> coderOnUnregisteredPackage [
 	aPackageCoder attributeNamed: #dummyPackage put: aDummyPackage.
 
 	self assert: aPackageCoder package equals: aPackage.
-	self assert: aPackageCoder name equals: aPackage name.
+	self assert: aPackageCoder packageName equals: aPackage name.
 	self assert: aPackageCoder isRegistered not.
 	self assert: aPackageCoder classes size equals: 0.
 
@@ -223,27 +221,26 @@ GtPharoPackageCoderExamples >> registerUnregisteredPackageWithoutCoderWhenUnsubs
 GtPharoPackageCoderExamples >> renameRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
-
 	anEventsRecoder := self eventsRecorder.
-
 	aPackageCoder := self coderOnRegisteredPackage.
 	aPackageCoder subscribeToSystem.
-
-	aPackageCoder when: GtCoderPackageRenamed send: #record: to: anEventsRecoder.
-
-	aNewName := aPackageCoder name, 'New'.
-
-	[ aPackageCoder renameTo: aNewName ] ensure: [
-		aPackageCoder unsubscribeFromSystem ].
-
+	aPackageCoder
+		when: GtCoderPackageRenamed
+		send: #record:
+		to: anEventsRecoder.
+	aNewName := aPackageCoder packageName , 'New'.
+	[ aPackageCoder renameTo: aNewName ]
+		ensure: [ aPackageCoder unsubscribeFromSystem ].
 	self assert: aPackageCoder isRegistered.
-	self assert: aPackageCoder name equals: aNewName.
-	self assert: aPackageCoder classes size equals: (aPackageCoder attributeNamed: #dummyPackage) amountOfClasses.
-
+	self assert: aPackageCoder packageName equals: aNewName.
+	self
+		assert: aPackageCoder classes size
+		equals: (aPackageCoder attributeNamed: #dummyPackage) amountOfClasses.
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderPackageRenamed.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderPackageRenamed.
 	self assert: anEventsRecoder first coder equals: aPackageCoder.
-	
 	^ aPackageCoder
 ]
 
@@ -251,27 +248,24 @@ GtPharoPackageCoderExamples >> renameRegisteredPackageWhenSubscribedToSystem [
 GtPharoPackageCoderExamples >> renameUnloadedPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
-
 	anEventsRecoder := self eventsRecorder.
-
 	aPackageCoder := self unloadRegisteredPackageWhenSubscribedToSystem.
 	aPackageCoder subscribeToSystem.
-
-	aPackageCoder when: GtCoderPackageRenamed send: #record: to: anEventsRecoder.
-	
-	aNewName := aPackageCoder name, 'New'.
-	
-	[ aPackageCoder renameTo: aNewName ] ensure: [
-		aPackageCoder unsubscribeFromSystem ].
-
+	aPackageCoder
+		when: GtCoderPackageRenamed
+		send: #record:
+		to: anEventsRecoder.
+	aNewName := aPackageCoder packageName , 'New'.
+	[ aPackageCoder renameTo: aNewName ]
+		ensure: [ aPackageCoder unsubscribeFromSystem ].
 	self assert: aPackageCoder isRegistered not.
-	self assert: aPackageCoder name equals: aNewName.
+	self assert: aPackageCoder packageName equals: aNewName.
 	self assert: aPackageCoder classes size equals: 0.
-	
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderPackageRenamed.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderPackageRenamed.
 	self assert: anEventsRecoder first coder equals: aPackageCoder.
-	
 	^ aPackageCoder
 ]
 
@@ -279,27 +273,24 @@ GtPharoPackageCoderExamples >> renameUnloadedPackageWhenSubscribedToSystem [
 GtPharoPackageCoderExamples >> renameUnregisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
-
 	anEventsRecoder := self eventsRecorder.
-
 	aPackageCoder := self coderOnUnregisteredPackage.
 	aPackageCoder subscribeToSystem.
-
-	aPackageCoder when: GtCoderPackageRenamed send: #record: to: anEventsRecoder.
-	
-	aNewName := aPackageCoder name, 'New'.
-	
-	[ aPackageCoder renameTo: aNewName ] ensure: [
-		aPackageCoder unsubscribeFromSystem ].
-
+	aPackageCoder
+		when: GtCoderPackageRenamed
+		send: #record:
+		to: anEventsRecoder.
+	aNewName := aPackageCoder packageName , 'New'.
+	[ aPackageCoder renameTo: aNewName ]
+		ensure: [ aPackageCoder unsubscribeFromSystem ].
 	self assert: aPackageCoder isRegistered not.
-	self assert: aPackageCoder name equals: aNewName.
+	self assert: aPackageCoder packageName equals: aNewName.
 	self assert: aPackageCoder classes size equals: 0.
-
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderPackageRenamed.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderPackageRenamed.
 	self assert: anEventsRecoder first coder equals: aPackageCoder.
-	
 	^ aPackageCoder
 ]
 
@@ -307,25 +298,28 @@ GtPharoPackageCoderExamples >> renameUnregisteredPackageWhenSubscribedToSystem [
 GtPharoPackageCoderExamples >> renameUnregisteredRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
-
 	anEventsRecoder := self eventsRecorder.
-
+	
 	aPackageCoder := self unregisterRegisteredPackageWhenSubscribedToSystem.
 	aPackageCoder subscribeToSystem.
-
-	aPackageCoder when: GtCoderPackageRenamed send: #record: to: anEventsRecoder.
+	aPackageCoder
+		when: GtCoderPackageRenamed
+		send: #record:
+		to: anEventsRecoder.
+	aNewName := aPackageCoder packageName , 'New'.
 	
-	aNewName := aPackageCoder name, 'New'.
-	
-	[ aPackageCoder renameTo: aNewName ] ensure: [
-		aPackageCoder unsubscribeFromSystem ].
-
+	[ aPackageCoder renameTo: aNewName ]
+		ensure: [ aPackageCoder unsubscribeFromSystem ].
+		
 	self assert: aPackageCoder isRegistered not.
-	self assert: aPackageCoder name equals: aNewName.
-	self assert: aPackageCoder classes size equals: (aPackageCoder attributeNamed: #dummyPackage) amountOfClasses.
-	
+	self assert: aPackageCoder packageName equals: aNewName.
+	self
+		assert: aPackageCoder classes size
+		equals: (aPackageCoder attributeNamed: #dummyPackage) amountOfClasses.
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderPackageRenamed.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderPackageRenamed.
 	self assert: anEventsRecoder first coder equals: aPackageCoder.
 	
 	^ aPackageCoder

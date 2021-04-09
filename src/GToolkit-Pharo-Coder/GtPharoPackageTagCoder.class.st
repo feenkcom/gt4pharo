@@ -47,6 +47,11 @@ GtPharoPackageTagCoder >> coderForClass: aClass [
 ]
 
 { #category : #accessing }
+GtPharoPackageTagCoder >> coderName [
+	^ self packageTagName
+]
+
+{ #category : #accessing }
 GtPharoPackageTagCoder >> coders [
 	^ self classesCoder coders
 ]
@@ -101,6 +106,11 @@ GtPharoPackageTagCoder >> packageTag [
 { #category : #accessing }
 GtPharoPackageTagCoder >> packageTag: anObject [
 	packageTag := anObject
+]
+
+{ #category : #accessing }
+GtPharoPackageTagCoder >> packageTagName [
+	^ packageTag name
 ]
 
 { #category : #actions }
