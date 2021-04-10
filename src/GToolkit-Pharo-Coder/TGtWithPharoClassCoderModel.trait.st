@@ -1,3 +1,15 @@
+"
+!! Generation
+${class:TGtWithPharoClassCoderModel}$ was automatically generated with the following code:
+[[[
+GtWithDomainModelTraitGenerator new
+	modelName 'pharoClassCoder';
+	projectPrefix: 'Gt';
+	packageName: 'GToolkit-Pharo-Coder-Coders';
+	generate
+]]] 
+
+"
 Trait {
 	#name : #TGtWithPharoClassCoderModel,
 	#instVars : [
@@ -17,13 +29,12 @@ TGtWithPharoClassCoderModel >> hasPharoClassCoder [
 { #category : #'api - pharo class coder model' }
 TGtWithPharoClassCoderModel >> onPharoClassCoderModelChanged [
 	"Is sent when a new pharoClassCoder model is assigned to the view model"
-	
-	self explicitRequirement
 ]
 
 { #category : #'api - pharo class coder model' }
 TGtWithPharoClassCoderModel >> pharoClassCoderModel [
 	"Return a not-null pharoClassCoder model assigned to the receiver view model"
+	<modelGetter>
 	self
 		assert: [ pharoClassCoderModel notNil ]
 		description: [ 'pharoClassCoder model should be initialized' ].
@@ -34,6 +45,7 @@ TGtWithPharoClassCoderModel >> pharoClassCoderModel [
 { #category : #'api - pharo class coder model' }
 TGtWithPharoClassCoderModel >> pharoClassCoderModel: aPharoClassCoderModel [
 	"Set a not-null pharoClassCoder domain model assigned to the receiver view model"
+	<modelSetter>
 	self
 		assert: [ aPharoClassCoderModel notNil ]
 		description: [ 'pharoClassCoder model must not be nil' ].

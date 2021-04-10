@@ -211,7 +211,7 @@ GtClassDefinition >> fromClass: aClass [
 GtClassDefinition >> fromClass: aClass in: anEnvironment [
 	| anEnvironmentForLayout |
 	"Initialize me from a given real Class"
-	
+
 	self
 		assert: [ anEnvironment notNil ]
 		description: [ 'Environment must not be nil' ].
@@ -222,19 +222,20 @@ GtClassDefinition >> fromClass: aClass in: anEnvironment [
 	self environment: anEnvironment.
 	"register me in the environment if I do not exist"
 	self environment registerBehavior: self.
-	
+
 	anEnvironmentForLayout := RGEnvironment new.
 	anEnvironmentForLayout backend: (RGReadOnlyImageBackend for: anEnvironmentForLayout).
-	
+
 	layout := aClass classLayout asRingMinimalDefinitionIn: anEnvironmentForLayout.
-	
+
 	superclass := (GtClassSuperclassDefinition fromClass: aClass) parent: self.
 	category := (GtCategoryDefinition fromBehavior: aClass) parent: self.
 	slots := (GtSlotsDefinition fromClass: aClass) parent: self.
 	classVariables := (GtClassVariablesDefinition fromClass: aClass) parent: self.
-	
+
 	traits := (GtTraitsDefinition fromClass: aClass in: anEnvironment) parent: self.
-	pools := (GtPoolsDefinition fromClass: aClass) parent: self
+	pools := (GtPoolsDefinition fromClass: aClass) parent: self.
+	methods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #testing }

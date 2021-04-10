@@ -14,6 +14,14 @@ GtPharoMethodDefinition class >> fromCompiledMethod: aCompiledMethod [
 	^ self new fromCompiledMethod: aCompiledMethod
 ]
 
+{ #category : #accessing }
+GtPharoMethodDefinition >> arguments [
+	^ (GtPharoParser
+		parse: self sourceCode
+		startingAt: GtPharoParser startingStateForMethod)
+			variables collect: [ :eachVariableNode | eachVariableNode variableName ]
+]
+
 { #category : #converting }
 GtPharoMethodDefinition >> asDefinitionString [
 	^ self sourceCode
