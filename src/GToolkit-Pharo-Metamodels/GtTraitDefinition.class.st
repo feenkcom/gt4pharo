@@ -160,7 +160,8 @@ GtTraitDefinition >> fromTrait: aTrait in: anEnvironment [
 	category := (GtCategoryDefinition fromBehavior: aTrait) parent: self.
 
 	slots := (GtSlotsDefinition fromTrait: aTrait) parent: self.
-	traits := (GtTraitsDefinition fromTrait: aTrait in: anEnvironment) parent: self
+	traits := (GtTraitsDefinition fromTrait: aTrait in: anEnvironment) parent: self.
+	methods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #testing }

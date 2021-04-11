@@ -113,6 +113,16 @@ GtPharoPackageTagCoder >> packageTagName [
 	^ packageTag name
 ]
 
+{ #category : #printing }
+GtPharoPackageTagCoder >> printOn: aStream [
+	aStream
+		nextPutAll: 'Package Tag Coder';
+		space;
+		nextPut: $(;
+		print: self packageTagName;
+		nextPut: $)
+]
+
 { #category : #actions }
 GtPharoPackageTagCoder >> unload [
 	self packageTag classes do: [ :each | each removeFromSystem ].
