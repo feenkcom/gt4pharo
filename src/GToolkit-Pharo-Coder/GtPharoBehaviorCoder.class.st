@@ -171,6 +171,16 @@ GtPharoBehaviorCoder >> packageTag [
 	^ self package classTagForClass: self theClass
 ]
 
+{ #category : #printing }
+GtPharoBehaviorCoder >> printOn: aStream [
+	aStream
+		nextPutAll: 'Behavior Coder';
+		space;
+		nextPut: $(;
+		print: self name;
+		nextPut: $)
+]
+
 { #category : #actions }
 GtPharoBehaviorCoder >> removeClass [
 	self theClass removeFromSystem

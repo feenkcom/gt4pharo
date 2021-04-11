@@ -199,7 +199,8 @@ GtClassDefinition >> forNew [
 	classVariables := GtClassVariablesDefinition empty parent: self.
 	
 	traits := GtTraitsDefinition empty parent: self.
-	pools := GtPoolsDefinition empty parent: self
+	pools := GtPoolsDefinition empty parent: self.
+	methods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #initialization }

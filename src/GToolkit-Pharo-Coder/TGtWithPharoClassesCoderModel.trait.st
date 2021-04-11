@@ -3,7 +3,7 @@
 ${class:TGtWithPharoClassesCoderModel}$ was automatically generated with the following code:
 [[[
 GtWithDomainModelTraitGenerator new
-	modelName 'pharoClassesCoder';
+	modelName: 'pharoClassesCoder';
 	projectPrefix: 'Gt';
 	packageName: 'GToolkit-Pharo-Coder-Coders';
 	generate
@@ -22,6 +22,7 @@ Trait {
 TGtWithPharoClassesCoderModel >> hasPharoClassesCoder [
 	"Return a true if pharoClassesCoder model is assigned to the receiver, false otherwise"
 	<return: #Boolean>
+	<modelTester>
 
 	^ pharoClassesCoderModel notNil
 ]
