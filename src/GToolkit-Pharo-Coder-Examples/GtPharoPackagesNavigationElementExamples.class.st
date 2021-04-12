@@ -20,7 +20,7 @@ GtPharoPackagesNavigationElementExamples >> packagesNavigationView [
 	
 	aPackagesNavigationViewModel := GtPharoPackagesNavigationViewModelExamples new packagesNavigationViewModel.
 	environment := aPackagesNavigationViewModel pharoPackagesCoderModel optionAt: #dummyEnvironment.
-	
+
 	aPackagesNavigationElement := GtPharoPackagesNavigationElement new
 		pharoPackagesNavigationViewModel: aPackagesNavigationViewModel.
 

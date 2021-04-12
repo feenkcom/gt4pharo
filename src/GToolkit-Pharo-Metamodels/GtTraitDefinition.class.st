@@ -2,6 +2,7 @@ Class {
 	#name : #GtTraitDefinition,
 	#superclass : #GtBehaviorDefinition,
 	#instVars : [
+		'comment',
 		'slots',
 		'traits',
 		'category',
@@ -62,6 +63,13 @@ GtTraitDefinition >> category [
 	^ category
 ]
 
+{ #category : #accessing }
+GtTraitDefinition >> comment [
+	<return: #GtCommentDefinition>
+	
+	^ comment
+]
+
 { #category : #'api - accepting' }
 GtTraitDefinition >> createBehaviorChange [
 	^ RBAddTraitChange definition: self asDefinitionString
@@ -69,7 +77,7 @@ GtTraitDefinition >> createBehaviorChange [
 
 { #category : #'api - accepting' }
 GtTraitDefinition >> createChange [
-	| aCompositeChange |
+	| aCompositeChange theMethodsChange |
 
 	aCompositeChange := (RBCompositeRefactoryChange named: 'Define trait').
 	self category isValidForCreation
@@ -77,15 +85,15 @@ GtTraitDefinition >> createChange [
 			aCompositeChange addChange: self category createPackageChange ].
 	
 	aCompositeChange addChange: self createBehaviorChange.
+
+	theMethodsChange := self methods createChange.
+	theMethodsChange changes do: [ :eachMethodChange |
+		eachMethodChange
+			behaviorName: self name;
+			isMeta: false ].
+	aCompositeChange addChange: theMethodsChange.
 	
-	methods ifNotNil: [ :theMethods |
-		| theMethodsChange |
-		theMethodsChange := theMethods createChange.
-		theMethodsChange changes do: [ :eachMethodChange |
-			eachMethodChange
-				behaviorName: self name;
-				isMeta: false ].
-		aCompositeChange addChange: theMethodsChange ].
+	aCompositeChange addChange: (self comment createChange behaviorName: self name).
 
 	^ aCompositeChange
 ]
@@ -134,6 +142,7 @@ GtTraitDefinition >> exists [
 GtTraitDefinition >> forNew [
 	name := self defaultNewTraitName.
 	originalName := name.
+	comment := GtCommentDefinition new parent: self.
 	category := GtCategoryDefinition empty parent: self.
 	slots := GtSlotsDefinition empty parent: self.
 	traits := GtTraitsDefinition empty parent: self
@@ -158,7 +167,7 @@ GtTraitDefinition >> fromTrait: aTrait in: anEnvironment [
 	self environment registerBehavior: self.	
 	
 	category := (GtCategoryDefinition fromBehavior: aTrait) parent: self.
-
+	comment := (GtCommentDefinition fromBehavior: aTrait) parent: self.
 	slots := (GtSlotsDefinition fromTrait: aTrait) parent: self.
 	traits := (GtTraitsDefinition fromTrait: aTrait in: anEnvironment) parent: self.
 	methods := GtPharoMethodsDefinition new parent: self

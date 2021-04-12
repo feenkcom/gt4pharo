@@ -28,6 +28,13 @@ GtFullClassDefinition >> classSideDefinition [
 	^ classSideDefinition
 ]
 
+{ #category : #accessing }
+GtFullClassDefinition >> comment [
+	<return: #GtCommentDefinition>
+	
+	^ self instanceSideDefinition comment
+]
+
 { #category : #'api - accepting' }
 GtFullClassDefinition >> createChange [
 	| aCompositeChange |

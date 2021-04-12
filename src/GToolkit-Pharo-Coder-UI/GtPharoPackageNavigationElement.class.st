@@ -27,27 +27,12 @@ GtPharoPackageNavigationElement >> initialize [
 	
 	packageNameLabel := self createPackageNameLabel.
 	self addChild: packageNameLabel.
-	
+
 	self
 		when: BlClickEvent
 		do: [ :anEvent |
 			anEvent consumed: true.
-			anEvent currentTarget pharoPackageNavigationViewModel selectPackageWithoutTag ]
-]
-
-{ #category : #'private - event handling' }
-GtPharoPackageNavigationElement >> onPackageTagsViewModelSelectionChnaged [
-	self updatePackageSelection
-]
-
-{ #category : #'private - event handling' }
-GtPharoPackageNavigationElement >> onPackageViewModelDeselected [
-	self updatePackageSelection
-]
-
-{ #category : #'private - event handling' }
-GtPharoPackageNavigationElement >> onPackageViewModelSelected [
-	self updatePackageSelection
+			anEvent currentTarget pharoPackageNavigationViewModel selectPackageWithoutOtherEntities ]
 ]
 
 { #category : #'api - pharo package navigation view model' }
@@ -58,7 +43,7 @@ GtPharoPackageNavigationElement >> onPharoPackageNavigationViewModelChanged [
 	didn't get a chance to subscribe to any announcement. Override #onPostPharoPackageNavigationViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 
-	packageNameLabel text: self pharoPackageNavigationViewModel displayLabel.
+	packageNameLabel text: self pharoPackageNavigationViewModel pharoPackageCoderModel packageName.
 	
 	self updatePackageSelection
 ]
@@ -69,17 +54,14 @@ GtPharoPackageNavigationElement >> subscribeToPharoPackageNavigationViewModel [
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromPharoPackageNavigationViewModel if elements subscribe to them"
 	
-	self pharoPackageNavigationViewModel weak
-		when: GtPharoPackageViewModelSelected
-			send: #onPackageViewModelSelected
-			to: self;
-		when: GtPharoPackageViewModelDeselected
-			send: #onPackageViewModelDeselected
+	self pharoPackageNavigationViewModel
+		when: GtPharoPackageNavigationViewModelSelected, GtPharoPackageNavigationViewModelDeselected
+			send: #updatePackageSelection
 			to: self.
-			
-	self pharoPackageNavigationViewModel pharoPackageTagsViewModel weak
-		when: GtPharoNavigationSelectedPackageTagViewModelChanged
-			send: #onPackageTagsViewModelSelectionChnaged
+
+	self pharoPackageNavigationViewModel pharoTagsNavigationViewModel
+		when: GtPharoNavigationSelectedTagViewModelChanged
+			send: #updatePackageSelection
 			to: self
 ]
 
@@ -89,14 +71,14 @@ GtPharoPackageNavigationElement >> unsubscribeFromPharoPackageNavigationViewMode
 	Elements that subscribe to pharoPackageNavigation view model in domain model are required to implement this methods."
 	
 	self pharoPackageNavigationViewModel unsubscribe: self.
-	self pharoPackageNavigationViewModel pharoPackageTagsViewModel unsubscribe: self
+	self pharoPackageNavigationViewModel pharoTagsNavigationViewModel unsubscribe: self
 ]
 
 { #category : #'private - update' }
 GtPharoPackageNavigationElement >> updatePackageSelection [
 	"A package is rendered visually selected when a package is selected and none of its tags is selected"
 	
-	self pharoPackageNavigationViewModel isOnlyPackageSelected
+	self pharoPackageNavigationViewModel isOnlySelectedPackage
 		ifTrue: [ self states addState: BlElementState selected ]
 		ifFalse: [ self states removeState: BlElementState selected ]
 ]
