@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'layout',
 		'category',
+		'comment',
 		'slots',
 		'classVariables',
 		'traits',
@@ -111,6 +112,13 @@ GtClassDefinition >> classVariables [
 	^ classVariables
 ]
 
+{ #category : #accessing }
+GtClassDefinition >> comment [
+	<return: #GtCommentDefinition>
+	
+	^ comment
+]
+
 { #category : #'api - accepting' }
 GtClassDefinition >> createBehaviorChange [
 	^ RBAddClassWithSlotsChange definition: self asDefinitionString
@@ -118,7 +126,7 @@ GtClassDefinition >> createBehaviorChange [
 
 { #category : #'api - accepting' }
 GtClassDefinition >> createChange [
-	| aCompositeChange |
+	| aCompositeChange theMethodsChange |
 
 	aCompositeChange := (RBCompositeRefactoryChange named: 'Define class').
 	self category isValidForCreation
@@ -127,15 +135,15 @@ GtClassDefinition >> createChange [
 	
 	aCompositeChange addChange: self createBehaviorChange.
 	
-	methods ifNotNil: [ :theMethods |
-		| theMethodsChange |
-		theMethodsChange := theMethods createChange.
-		theMethodsChange changes do: [ :eachMethodChange |
-			eachMethodChange
-				behaviorName: self name;
-				isMeta: false ].
-		aCompositeChange addChange: theMethodsChange ].
-	
+	theMethodsChange := self methods createChange.
+	theMethodsChange changes do: [ :eachMethodChange |
+		eachMethodChange
+			behaviorName: self name;
+			isMeta: false ].
+	aCompositeChange addChange: theMethodsChange.
+
+	aCompositeChange addChange: (self comment createChange behaviorName: self name).
+
 	^ aCompositeChange
 ]
 
@@ -193,6 +201,8 @@ GtClassDefinition >> forNew [
 	
 	layout := Object classLayout asRingMinimalDefinitionIn: anEnvironment.
 	
+	comment := GtCommentDefinition new parent: self.
+	
 	superclass := (GtClassSuperclassDefinition named: Object name) parent: self.
 	category := GtCategoryDefinition empty parent: self.
 	slots := GtSlotsDefinition empty parent: self.
@@ -228,6 +238,8 @@ GtClassDefinition >> fromClass: aClass in: anEnvironment [
 	anEnvironmentForLayout backend: (RGReadOnlyImageBackend for: anEnvironmentForLayout).
 
 	layout := aClass classLayout asRingMinimalDefinitionIn: anEnvironmentForLayout.
+
+	comment := (GtCommentDefinition fromBehavior: aClass) parent: self.
 
 	superclass := (GtClassSuperclassDefinition fromClass: aClass) parent: self.
 	category := (GtCategoryDefinition fromBehavior: aClass) parent: self.
