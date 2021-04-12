@@ -4,8 +4,8 @@ Navigation is generated from:
 @project Gt
 @prefix Pharo
 @suffix Navigation
-@package ''GToolkit-Pharo-Coder-UI''
-@tag ''Navigation''
+@package 'GToolkit-Pharo-Coder-UI'
+@tag 'Navigation'
 
 @derive notify
 @derive selection
