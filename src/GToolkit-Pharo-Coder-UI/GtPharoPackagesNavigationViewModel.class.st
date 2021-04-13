@@ -43,16 +43,16 @@ GtPharoPackagesNavigationViewModel >> gtPackagesListViewFor: aView [
 ]
 
 { #category : #'api - testing' }
-GtPharoPackagesNavigationViewModel >> isPharoClassNavigationViewModel [
-	"Return true if this is a view model of Class, false otherwise"
+GtPharoPackagesNavigationViewModel >> isPharoBehaviorNavigationViewModel [
+	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
 
 	^ false
 ]
 
 { #category : #'api - testing' }
-GtPharoPackagesNavigationViewModel >> isPharoClassesNavigationViewModel [
-	"Return true if this is a view model of Classes, false otherwise"
+GtPharoPackagesNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
+	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
 
 	^ false

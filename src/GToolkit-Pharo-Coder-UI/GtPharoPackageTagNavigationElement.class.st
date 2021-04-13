@@ -57,11 +57,6 @@ GtPharoPackageTagNavigationElement >> subscribeToPharoTagNavigationViewModel [
 	self pharoTagNavigationViewModel
 		when: GtPharoTagNavigationViewModelSelected, GtPharoTagNavigationViewModelDeselected
 			send: #updateTagSelection
-			to: self.
-
-	self pharoTagNavigationViewModel pharoClassesNavigationViewModel
-		when: GtPharoNavigationSelectedClassViewModelChanged
-			send: #updateTagSelection
 			to: self
 ]
 
@@ -77,7 +72,7 @@ GtPharoPackageTagNavigationElement >> unsubscribeFromPharoTagNavigationViewModel
 GtPharoPackageTagNavigationElement >> updateTagSelection [
 	"A tag is rendered visually selected when a tag is selected and none of its child entities is selected"
 	
-	self pharoTagNavigationViewModel isOnlySelectedTag
+	self pharoTagNavigationViewModel isSelectedTag
 		ifTrue: [ self states addState: BlElementState selected ]
 		ifFalse: [ self states removeState: BlElementState selected ]
 ]

@@ -1,8 +1,8 @@
 "
 ! GtPharoPackageTagCoder View Model
 !! Accessing a view model for ==classesCoder== domain model
-${class:GtPharoTagNavigationViewModel}$ is a view model for a ==pharoPackageTagCoderModel== domain model which in turn contains ==classesCoder== domain model. To accomodate that child domain model, a corresponding ${class:GtPharoClassesNavigationViewModel}$ is created and assigned as the child view model of ${class:GtPharoTagNavigationViewModel}$.
-That child view model is instantiated lazily by ${method:GtPharoTagNavigationViewModel>>#createPharoClassesNavigationViewModel}$ and can be accessed with the help of ${method:GtPharoTagNavigationViewModel>>#pharoClassesNavigationViewModel}$.
+${class:GtPharoTagNavigationViewModel}$ is a view model for a ==pharoPackageTagCoderModel== domain model which in turn contains ==classesCoder== domain model. To accomodate that child domain model, a corresponding ${class:GtPharoBehaviorsNavigationViewModel}$ is created and assigned as the child view model of ${class:GtPharoTagNavigationViewModel}$.
+That child view model is instantiated lazily by ${method:GtPharoTagNavigationViewModel>>#createPharoBehaviorsNavigationViewModel}$ and can be accessed with the help of ${method:GtPharoTagNavigationViewModel>>#pharoBehaviorsNavigationViewModel}$.
 !! Accessing parent view model
 In addition to the parent -> child view model navigation, each child view model knows its parent view model. It is very useful because is allows cchild view models to access various state properties of its parent, for example parent view model may be responsible for knowing a selected child view model. In order for the child to know if it is selected, that child should know the parent view model.
 A view model that knows its parent view model implements the following api:
@@ -25,7 +25,7 @@ Class {
 	#classTraits : 'TGtWithPharoPackageTagCoderModel classTrait',
 	#instVars : [
 		'announcer',
-		'pharoClassesNavigationViewModel',
+		'pharoBehaviorsNavigationViewModel',
 		'parentPharoTagsNavigationViewModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
@@ -37,16 +37,16 @@ GtPharoTagNavigationViewModel >> announce: anAnnouncement [
 
 	"Dispatch an event to the parent view model if it is assigned"
 	self hasParentPharoTagsNavigationViewModel
-		ifTrue: [ self parentPharoTagsNavigationViewModel announce: anAnnouncement ]
+		ifTrue: [ self parentPharoTagsNavigationViewModel announce: anAnnouncement ].
 ]
 
 { #category : #'private - instance creation' }
-GtPharoTagNavigationViewModel >> createPharoClassesNavigationViewModel [
+GtPharoTagNavigationViewModel >> createPharoBehaviorsNavigationViewModel [
 	"Create a composite view model for a collection of children and return the result"
-	<return: #GtPharoClassesNavigationViewModel>
+	<return: #GtPharoBehaviorsNavigationViewModel>
 	| childrenViewModel |
 
-	childrenViewModel := GtPharoClassesNavigationViewModel new.
+	childrenViewModel := GtPharoBehaviorsNavigationViewModel new.
 	childrenViewModel parentPharoTagNavigationViewModel: self.
 	childrenViewModel pharoClassesCoderModel: self pharoPackageTagCoderModel classesCoder.
 	^ childrenViewModel
@@ -57,17 +57,17 @@ GtPharoTagNavigationViewModel >> deselectOtherEntities [
 	"deselect any selected child"
 	<propertyUnsetOthers: #selectedTagViewModel>
 
-	self pharoClassesNavigationViewModel deselectClassViewModel.
+	self pharoBehaviorsNavigationViewModel deselectBehaviorViewModel.
 ]
 
 { #category : #'gt-extentions' }
-GtPharoTagNavigationViewModel >> gtClassesListViewFor: aView [
+GtPharoTagNavigationViewModel >> gtBehaviorsListViewFor: aView [
 	<gtView>
 	
 	^ aView list
 		priority: 5;
-		title: 'Classes';
-		items: [ self pharoClassesNavigationViewModel pharoClassNavigationViewModels]
+		title: 'Behaviors';
+		items: [ self pharoBehaviorsNavigationViewModel pharoBehaviorNavigationViewModels]
 ]
 
 { #category : #'api - selection' }
@@ -76,14 +76,14 @@ GtPharoTagNavigationViewModel >> hasOtherSelectedEntities [
 	<return: #Boolean>
 	<propertyTestOthers: #selectedTagViewModel>
 
-	^ self pharoClassesNavigationViewModel hasSelectedClassViewModel
+	^ self pharoBehaviorsNavigationViewModel hasSelectedBehaviorViewModel
 ]
 
 { #category : #'api - accessing' }
 GtPharoTagNavigationViewModel >> hasParentPharoTagsNavigationViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
-	<parentViewModelTester>
+	<parentViewModelTester: #tags>
 
 	^ parentPharoTagsNavigationViewModel notNil
 ]
@@ -97,16 +97,16 @@ GtPharoTagNavigationViewModel >> isOnlySelectedTag [
 ]
 
 { #category : #'api - testing' }
-GtPharoTagNavigationViewModel >> isPharoClassNavigationViewModel [
-	"Return true if this is a view model of Class, false otherwise"
+GtPharoTagNavigationViewModel >> isPharoBehaviorNavigationViewModel [
+	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
 
 	^ false
 ]
 
 { #category : #'api - testing' }
-GtPharoTagNavigationViewModel >> isPharoClassesNavigationViewModel [
-	"Return true if this is a view model of Classes, false otherwise"
+GtPharoTagNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
+	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
 
 	^ false
@@ -173,7 +173,7 @@ GtPharoTagNavigationViewModel >> parentPharoTagsNavigationViewModel [
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model."
 	<return: #GtPharoTagsNavigationViewModel>
-	<parentViewModelGetter>
+	<parentViewModelGetter: #tags>
 
 	self
 		assert: [ parentPharoTagsNavigationViewModel notNil ]
@@ -187,6 +187,7 @@ GtPharoTagNavigationViewModel >> parentPharoTagsNavigationViewModel: aGtPharoTag
 	"Assign a parent view model (${class:GtPharoTagsNavigationViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model"
+	<parentViewModelSetter: #tags>
 
 	self
 		assert: [ aGtPharoTagsNavigationViewModel notNil ]
@@ -196,12 +197,12 @@ GtPharoTagNavigationViewModel >> parentPharoTagsNavigationViewModel: aGtPharoTag
 ]
 
 { #category : #'api - accessing' }
-GtPharoTagNavigationViewModel >> pharoClassesNavigationViewModel [
-	"Return a composite view model (${class:GtPharoClassesNavigationViewModel}$) created for a collection of children from the domain model.
+GtPharoTagNavigationViewModel >> pharoBehaviorsNavigationViewModel [
+	"Return a composite view model (${class:GtPharoBehaviorsNavigationViewModel}$) created for a collection of children from the domain model.
 	Note: The view model is lazily instantiated."
-	<return: #GtPharoClassesNavigationViewModel>
+	<return: #GtPharoBehaviorsNavigationViewModel>
 
-	^  pharoClassesNavigationViewModel ifNil: [ pharoClassesNavigationViewModel := self createPharoClassesNavigationViewModel ]
+	^  pharoBehaviorsNavigationViewModel ifNil: [ pharoBehaviorsNavigationViewModel := self createPharoBehaviorsNavigationViewModel ]
 ]
 
 { #category : #printing }
