@@ -161,6 +161,11 @@ TGtPharoProgramNodeVisitor >> visitSymbolLiteral: aSymbolLiteral [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitTemplate: aTemplate [
+	^ self visitValue: aTemplate
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitThisContextVariable: aThisContextVariable [
 	^ self visitVariable: aThisContextVariable
 ]
