@@ -55,6 +55,11 @@ GtPharoArrayLiteralNode >> literalValue [
 	^ self values collect: [ :eachValue | eachValue literalValue ] as: Array
 ]
 
+{ #category : #accessing }
+GtPharoArrayLiteralNode >> nestingLevel [
+	^ 1 + super nestingLevel
+]
+
 { #category : #generated }
 GtPharoArrayLiteralNode >> tokenVariables [
 	^ #(#arrayStart #arrayStop)
