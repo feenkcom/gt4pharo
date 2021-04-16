@@ -178,6 +178,13 @@ GtPharoProgramNode >> needsParenthesisForKeyword [
 ]
 
 { #category : #accessing }
+GtPharoProgramNode >> nestingLevel [
+	^ parent 
+		ifNil: [ 0 ] 
+		ifNotNil: [ parent nestingLevel ]
+]
+
+{ #category : #accessing }
 GtPharoProgramNode >> whoDefines: aName [ 
 	^ (self defines: aName) 
 		ifTrue: [ self ]

@@ -47,6 +47,11 @@ GtPharoArrayNode >> leftBrace: aSmaCCToken [
 	leftBrace := aSmaCCToken
 ]
 
+{ #category : #accessing }
+GtPharoArrayNode >> nestingLevel [
+	^ 1 + super nestingLevel
+]
+
 { #category : #generated }
 GtPharoArrayNode >> periods [
 	^ periods

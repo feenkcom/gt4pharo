@@ -28,7 +28,7 @@ GtPharoTagsNavigationViewModel >> announce: anAnnouncement [
 
 	"Dispatch an event to the parent view model if it is assigned"
 	self hasParentPharoPackageNavigationViewModel
-		ifTrue: [ self parentPharoPackageNavigationViewModel announce: anAnnouncement ]
+		ifTrue: [ self parentPharoPackageNavigationViewModel announce: anAnnouncement ].
 ]
 
 { #category : #'private - instance creation' }
@@ -57,22 +57,22 @@ GtPharoTagsNavigationViewModel >> gtTagsListViewFor: aView [
 GtPharoTagsNavigationViewModel >> hasParentPharoPackageNavigationViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
-	<parentViewModelTester>
+	<parentViewModelTester: #package>
 
 	^ parentPharoPackageNavigationViewModel notNil
 ]
 
 { #category : #'api - testing' }
-GtPharoTagsNavigationViewModel >> isPharoClassNavigationViewModel [
-	"Return true if this is a view model of Class, false otherwise"
+GtPharoTagsNavigationViewModel >> isPharoBehaviorNavigationViewModel [
+	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
 
 	^ false
 ]
 
 { #category : #'api - testing' }
-GtPharoTagsNavigationViewModel >> isPharoClassesNavigationViewModel [
-	"Return true if this is a view model of Classes, false otherwise"
+GtPharoTagsNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
+	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
 
 	^ false
@@ -123,7 +123,8 @@ GtPharoTagsNavigationViewModel >> onNewSelectedTagViewModelSet: aNewSelectedTagV
 	"Is sent after a new value of the selectedTagViewModel is assigned"
 	<propertySetHook: #selectedTagViewModel>
 
-	self parentPharoPackageNavigationViewModel selectPackage.
+	self hasParentPharoPackageNavigationViewModel
+		ifTrue: [ self parentPharoPackageNavigationViewModel selectPackage ].
 	aNewSelectedTagViewModel notifyTagSelected
 ]
 
@@ -142,7 +143,7 @@ GtPharoTagsNavigationViewModel >> parentPharoPackageNavigationViewModel [
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model."
 	<return: #GtPharoPackageNavigationViewModel>
-	<parentViewModelGetter>
+	<parentViewModelGetter: #package>
 
 	self
 		assert: [ parentPharoPackageNavigationViewModel notNil ]
@@ -156,6 +157,7 @@ GtPharoTagsNavigationViewModel >> parentPharoPackageNavigationViewModel: aGtPhar
 	"Assign a parent view model (${class:GtPharoPackageNavigationViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model"
+	<parentViewModelSetter: #package>
 
 	self
 		assert: [ aGtPharoPackageNavigationViewModel notNil ]

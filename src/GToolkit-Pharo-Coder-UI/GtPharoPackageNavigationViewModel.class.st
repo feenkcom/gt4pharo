@@ -1,5 +1,8 @@
 "
 ! GtPharoPackageCoder View Model
+!! Accessing a view model for ==classesCoder== domain model
+${class:GtPharoPackageNavigationViewModel}$ is a view model for a ==pharoPackageCoderModel== domain model which in turn contains ==classesCoder== domain model. To accomodate that child domain model, a corresponding ${class:GtPharoBehaviorsNavigationViewModel}$ is created and assigned as the child view model of ${class:GtPharoPackageNavigationViewModel}$.
+That child view model is instantiated lazily by ${method:GtPharoPackageNavigationViewModel>>#createPharoBehaviorsNavigationViewModel}$ and can be accessed with the help of ${method:GtPharoPackageNavigationViewModel>>#pharoBehaviorsNavigationViewModel}$.
 !! Accessing a view model for ==packageTagsCoder== domain model
 ${class:GtPharoPackageNavigationViewModel}$ is a view model for a ==pharoPackageCoderModel== domain model which in turn contains ==packageTagsCoder== domain model. To accomodate that child domain model, a corresponding ${class:GtPharoTagsNavigationViewModel}$ is created and assigned as the child view model of ${class:GtPharoPackageNavigationViewModel}$.
 That child view model is instantiated lazily by ${method:GtPharoPackageNavigationViewModel>>#createPharoTagsNavigationViewModel}$ and can be accessed with the help of ${method:GtPharoPackageNavigationViewModel>>#pharoTagsNavigationViewModel}$.
@@ -25,6 +28,7 @@ Class {
 	#classTraits : 'TGtWithPharoPackageCoderModel classTrait',
 	#instVars : [
 		'announcer',
+		'pharoBehaviorsNavigationViewModel',
 		'pharoTagsNavigationViewModel',
 		'parentPharoPackagesNavigationViewModel'
 	],
@@ -37,7 +41,19 @@ GtPharoPackageNavigationViewModel >> announce: anAnnouncement [
 
 	"Dispatch an event to the parent view model if it is assigned"
 	self hasParentPharoPackagesNavigationViewModel
-		ifTrue: [ self parentPharoPackagesNavigationViewModel announce: anAnnouncement ]
+		ifTrue: [ self parentPharoPackagesNavigationViewModel announce: anAnnouncement ].
+]
+
+{ #category : #'private - instance creation' }
+GtPharoPackageNavigationViewModel >> createPharoBehaviorsNavigationViewModel [
+	"Create a composite view model for a collection of children and return the result"
+	<return: #GtPharoBehaviorsNavigationViewModel>
+	| childrenViewModel |
+
+	childrenViewModel := GtPharoBehaviorsNavigationViewModel new.
+	childrenViewModel parentPharoPackageNavigationViewModel: self.
+	childrenViewModel pharoClassesCoderModel: self pharoPackageCoderModel classesCoder.
+	^ childrenViewModel
 ]
 
 { #category : #'private - instance creation' }
@@ -57,7 +73,18 @@ GtPharoPackageNavigationViewModel >> deselectOtherEntities [
 	"deselect any selected child"
 	<propertyUnsetOthers: #selectedPackageViewModel>
 
+	self pharoBehaviorsNavigationViewModel deselectBehaviorViewModel.
 	self pharoTagsNavigationViewModel deselectTagViewModel.
+]
+
+{ #category : #'gt-extentions' }
+GtPharoPackageNavigationViewModel >> gtBehaviorsListViewFor: aView [
+	<gtView>
+	
+	^ aView list
+		priority: 5;
+		title: 'Behaviors';
+		items: [ self pharoBehaviorsNavigationViewModel pharoBehaviorNavigationViewModels]
 ]
 
 { #category : #'gt-extentions' }
@@ -76,14 +103,14 @@ GtPharoPackageNavigationViewModel >> hasOtherSelectedEntities [
 	<return: #Boolean>
 	<propertyTestOthers: #selectedPackageViewModel>
 
-	^ self pharoTagsNavigationViewModel hasSelectedTagViewModel
+	^ self pharoBehaviorsNavigationViewModel hasSelectedBehaviorViewModel or: [ self pharoTagsNavigationViewModel hasSelectedTagViewModel ]
 ]
 
 { #category : #'api - accessing' }
 GtPharoPackageNavigationViewModel >> hasParentPharoPackagesNavigationViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
-	<parentViewModelTester>
+	<parentViewModelTester: #packages>
 
 	^ parentPharoPackagesNavigationViewModel notNil
 ]
@@ -97,16 +124,16 @@ GtPharoPackageNavigationViewModel >> isOnlySelectedPackage [
 ]
 
 { #category : #'api - testing' }
-GtPharoPackageNavigationViewModel >> isPharoClassNavigationViewModel [
-	"Return true if this is a view model of Class, false otherwise"
+GtPharoPackageNavigationViewModel >> isPharoBehaviorNavigationViewModel [
+	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
 
 	^ false
 ]
 
 { #category : #'api - testing' }
-GtPharoPackageNavigationViewModel >> isPharoClassesNavigationViewModel [
-	"Return true if this is a view model of Classes, false otherwise"
+GtPharoPackageNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
+	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
 
 	^ false
@@ -173,7 +200,7 @@ GtPharoPackageNavigationViewModel >> parentPharoPackagesNavigationViewModel [
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model."
 	<return: #GtPharoPackagesNavigationViewModel>
-	<parentViewModelGetter>
+	<parentViewModelGetter: #packages>
 
 	self
 		assert: [ parentPharoPackagesNavigationViewModel notNil ]
@@ -187,12 +214,22 @@ GtPharoPackageNavigationViewModel >> parentPharoPackagesNavigationViewModel: aGt
 	"Assign a parent view model (${class:GtPharoPackagesNavigationViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model"
+	<parentViewModelSetter: #packages>
 
 	self
 		assert: [ aGtPharoPackagesNavigationViewModel notNil ]
 		description: [ 'Parent view model must not be nil' ].
 
 	parentPharoPackagesNavigationViewModel := aGtPharoPackagesNavigationViewModel
+]
+
+{ #category : #'api - accessing' }
+GtPharoPackageNavigationViewModel >> pharoBehaviorsNavigationViewModel [
+	"Return a composite view model (${class:GtPharoBehaviorsNavigationViewModel}$) created for a collection of children from the domain model.
+	Note: The view model is lazily instantiated."
+	<return: #GtPharoBehaviorsNavigationViewModel>
+
+	^  pharoBehaviorsNavigationViewModel ifNil: [ pharoBehaviorsNavigationViewModel := self createPharoBehaviorsNavigationViewModel ]
 ]
 
 { #category : #'api - accessing' }

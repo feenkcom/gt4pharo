@@ -5,7 +5,7 @@ Navigation is generated from:
 @prefix Pharo
 @suffix Navigation
 @package 'GToolkit-Pharo-Coder-UI'
-@tag 'Navigation'
+@tag Navigation
 
 @derive notify
 @derive selection
@@ -15,24 +15,26 @@ Navigation is generated from:
 @derive print
 @derive phlowList
 
-package(s) => tag(s) => class(es).
+package(s) => behavior(s) and tag(s).
+tag => behavior(s).
 
 package(s) <GtPharoPackagesCoder::TGtWithPharoPackagesCoderModel> {
 	items: #coders
 }.
 package <GtPharoPackageCoder::TGtWithPharoPackageCoderModel> { 
-	tag(s): #packageTagsCoder
+	tag(s): #packageTagsCoder,
+	behavior(s): #classesCoder
 }.
 tag(s) <GtPharoPackageTagCoders::TGtWithPharoPackageTagsCoderModel> {
 	items: #coders
 }.
 tag <GtPharoPackageTagCoder::TGtWithPharoPackageTagCoderModel> {
-	class(es): #classesCoder
+	behavior(s): #classesCoder
 }.
-class(es) <GtPharoClassesCoder::TGtWithPharoClassesCoderModel> {
+behavior(s) <GtPharoClassesCoder::TGtWithPharoClassesCoderModel> {
 	items: #coders
 }.
-class <GtPharoBehaviorCoder::TGtWithPharoBehaviorCoderModel>
+behavior <GtPharoBehaviorCoder::TGtWithPharoBehaviorCoderModel>
 "
 Class {
 	#name : #ManifestGToolkitPharoCoderUI,

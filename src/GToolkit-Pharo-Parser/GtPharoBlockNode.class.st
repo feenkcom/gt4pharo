@@ -99,6 +99,11 @@ GtPharoBlockNode >> localVariablesInto: aCollection [
 	super localVariablesInto: aCollection
 ]
 
+{ #category : #accessing }
+GtPharoBlockNode >> nestingLevel [
+	^ 1 + super nestingLevel
+]
+
 { #category : #generated }
 GtPharoBlockNode >> nodeVariables [
 	^ #(#body)

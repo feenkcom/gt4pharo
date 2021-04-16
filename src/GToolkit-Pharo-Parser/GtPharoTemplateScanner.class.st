@@ -1,11 +1,11 @@
 Class {
-	#name : #GtPharoScanner,
+	#name : #GtPharoTemplateScanner,
 	#superclass : #SmaCCScanner,
 	#category : #'GToolkit-Pharo-Parser'
 }
 
 { #category : #'generated-initialization' }
-GtPharoScanner class >> initializeKeywordMap [
+GtPharoTemplateScanner class >> initializeKeywordMap [
 	keywordMap := Dictionary new.
 	#(#(4 'false' 2) #(4 'nil' 3) #(4 'self' 33) #(4 'super' 34) #(4 'thisContext' 35) #(4 'true' 1))
 		do: [ :each | 
@@ -16,64 +16,52 @@ GtPharoScanner class >> initializeKeywordMap [
 ]
 
 { #category : #generated }
-GtPharoScanner >> barId [
+GtPharoTemplateScanner >> barId [
 	^ 6
 ]
 
 { #category : #generated }
-GtPharoScanner >> binaryId [
+GtPharoTemplateScanner >> binaryId [
 	^ 26
 ]
 
 { #category : #generated }
-GtPharoScanner >> emptySymbolTokenId [
-	^ 101
+GtPharoTemplateScanner >> emptySymbolTokenId [
+	^ 104
 ]
 
 { #category : #generated }
-GtPharoScanner >> errorTokenId [
-	^ 102
+GtPharoTemplateScanner >> errorTokenId [
+	^ 105
 ]
 
 { #category : #generated }
-GtPharoScanner >> keywordId [
+GtPharoTemplateScanner >> keywordId [
 	^ 25
 ]
 
 { #category : #generated }
-GtPharoScanner >> nameAssignmentId [
+GtPharoTemplateScanner >> nameAssignmentId [
 	^ 5
 ]
 
 { #category : #generated }
-GtPharoScanner >> nameId [
+GtPharoTemplateScanner >> nameId [
 	^ 4
 ]
 
-{ #category : #scanning }
-GtPharoScanner >> negativeNumber [
-	stream position: stream position - 2.
-	^ self scanNumber: self negativeNumberId
-]
-
 { #category : #generated }
-GtPharoScanner >> negativeNumberId [
+GtPharoTemplateScanner >> negativeNumberId [
 	^ 11
 ]
 
-{ #category : #scanning }
-GtPharoScanner >> number [
-	stream position: stream position - 1.
-	^ self scanNumber: self numberId
-]
-
 { #category : #generated }
-GtPharoScanner >> numberId [
+GtPharoTemplateScanner >> numberId [
 	^ 10
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan1 [
+GtPharoTemplateScanner >> scan1 [
 	self step.
 	currentCharacter == $"
 		ifTrue: [ ^ self scan2 ].
@@ -91,11 +79,11 @@ GtPharoScanner >> scan1 [
 		ifTrue: [ ^ self scan10 ].
 	currentCharacter == $.
 		ifTrue: [ ^ self recordAndReportMatch: #(29) ].
-	^ self scan1X10
+	^ self scan1X12
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan10 [
+GtPharoTemplateScanner >> scan10 [
 	self recordMatch: #(26).
 	self step.
 	currentCharacter isDigit
@@ -123,7 +111,7 @@ GtPharoScanner >> scan10 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan11 [
+GtPharoTemplateScanner >> scan11 [
 	[ self step.
 	currentCharacter == $`
 		ifTrue: [ self recordMatch: #(32).
@@ -135,7 +123,7 @@ GtPharoScanner >> scan11 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan12 [
+GtPharoTemplateScanner >> scan12 [
 	self recordMatch: #(12).
 	self step.
 	(currentCharacter isLetter or: [ currentCharacter == $_ ])
@@ -148,7 +136,7 @@ GtPharoScanner >> scan12 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan1X1 [
+GtPharoTemplateScanner >> scan1X1 [
 	self recordMatch: #(6 26).
 	self step.
 	(currentCharacter == $!
@@ -171,129 +159,7 @@ GtPharoScanner >> scan1X1 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan1X10 [
-	currentCharacter == $:
-		ifTrue:
-			[ ^ self scan1X7 ].
-	currentCharacter == $;
-		ifTrue: [ ^ self recordAndReportMatch: #(27) ].
-	currentCharacter == $<
-		ifTrue:
-			[ ^ self scan1X3 ].
-	currentCharacter == $>
-		ifTrue:
-			[ ^ self scan1X2 ].
-	currentCharacter == $[
-		ifTrue: [ ^ self recordAndReportMatch: #(17) ].
-	currentCharacter == $]
-		ifTrue: [ ^ self recordAndReportMatch: #(23) ].
-	currentCharacter == $^
-		ifTrue: [ ^ self recordAndReportMatch: #(13) ].
-	currentCharacter == $`
-		ifTrue: [ ^ self scan11 ].
-	currentCharacter == ${
-		ifTrue: [ ^ self recordAndReportMatch: #(16) ].
-	currentCharacter == $|
-		ifTrue:
-			[ ^ self scan1X1 ].
-	currentCharacter == $}
-		ifTrue: [ ^ self recordAndReportMatch: #(24) ].
-	currentCharacter isDigit
-		ifTrue:
-			[ ^ self scan1X8 ].
-	^ self scan1X9
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X2 [
-	self recordMatch: #(15 26).
-	self step.
-	(currentCharacter == $!
-		or: [ (currentCharacter between: $% and: $&)
-				or: [ (currentCharacter between: $* and: $-)
-						or: [ currentCharacter == $/
-								or: [ (currentCharacter between: $< and: $@)
-										or:
-											[ '\|~' includes: currentCharacter ] ] ] ] ])
-		ifTrue: [ [ self recordMatch: #(26).
-			self step.
-			currentCharacter == $!
-				or: [ (currentCharacter between: $% and: $&)
-						or: [ (currentCharacter between: $* and: $-)
-								or: [ currentCharacter == $/
-										or: [ (currentCharacter between: $< and: $@)
-												or:
-													[ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue ].
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X3 [
-	self recordMatch: #(14 26).
-	self step.
-	(currentCharacter == $!
-		or: [ (currentCharacter between: $% and: $&)
-				or: [ (currentCharacter between: $* and: $-)
-						or: [ currentCharacter == $/
-								or: [ (currentCharacter between: $< and: $@)
-										or:
-											[ '\|~' includes: currentCharacter ] ] ] ] ])
-		ifTrue: [ [ self recordMatch: #(26).
-			self step.
-			currentCharacter == $!
-				or: [ (currentCharacter between: $% and: $&)
-						or: [ (currentCharacter between: $* and: $-)
-								or: [ currentCharacter == $/
-										or: [ (currentCharacter between: $< and: $@)
-												or:
-													[ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue ].
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X4 [
-	[ self recordMatch: #(26).
-	self step.
-	currentCharacter == $!
-		or: [ (currentCharacter between: $% and: $&)
-				or: [ (currentCharacter between: $* and: $-)
-						or: [ currentCharacter == $/
-								or: [ (currentCharacter between: $< and: $@)
-										or:
-											[ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue.
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X5 [
-	[ self recordMatch: #(31).
-	self step.
-	currentCharacter isSeparator
-		or: [ currentCharacter == Character null
-				or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X6 [
-	self recordMatch: #(25).
-	self step.
-	currentCharacter == $=
-		ifTrue: [ ^ self recordAndReportMatch: #(5) ].
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X7 [
-	self recordMatch: #(18).
-	self step.
-	currentCharacter == $=
-		ifTrue: [ ^ self recordAndReportMatch: #(28) ].
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scan1X8 [
+GtPharoTemplateScanner >> scan1X10 [
 	[ self recordMatch: #(10).
 	self step.
 	currentCharacter isDigit ] whileTrue.
@@ -301,7 +167,7 @@ GtPharoScanner >> scan1X8 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan1X9 [
+GtPharoTemplateScanner >> scan1X11 [
 	(currentCharacter isSeparator
 		or: [ currentCharacter == Character null
 				or: [ currentCharacter == Character pageUp ] ])
@@ -327,7 +193,149 @@ GtPharoScanner >> scan1X9 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan2 [
+GtPharoTemplateScanner >> scan1X12 [
+	currentCharacter == $:
+		ifTrue:
+			[ ^ self scan1X9 ].
+	currentCharacter == $;
+		ifTrue: [ ^ self recordAndReportMatch: #(27) ].
+	currentCharacter == $<
+		ifTrue:
+			[ ^ self scan1X3 ].
+	currentCharacter == $>
+		ifTrue:
+			[ ^ self scan1X2 ].
+	currentCharacter == $[
+		ifTrue: [ ^ self recordAndReportMatch: #(17) ].
+	currentCharacter == $]
+		ifTrue: [ ^ self recordAndReportMatch: #(23) ].
+	currentCharacter == $^
+		ifTrue: [ ^ self recordAndReportMatch: #(13) ].
+	currentCharacter == $`
+		ifTrue: [ ^ self scan11 ].
+	currentCharacter == ${
+		ifTrue:
+			[ ^ self scan1X8 ].
+	currentCharacter == $|
+		ifTrue:
+			[ ^ self scan1X1 ].
+	currentCharacter == $}
+		ifTrue:
+			[ ^ self scan1X7 ].
+	currentCharacter isDigit
+		ifTrue:
+			[ ^ self scan1X10 ].
+	^ self scan1X11
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X2 [
+	self recordMatch: #(15 26).
+	self step.
+	(currentCharacter == $!
+		or: [ (currentCharacter between: $% and: $&)
+				or: [ (currentCharacter between: $* and: $-)
+						or: [ currentCharacter == $/
+								or: [ (currentCharacter between: $< and: $@)
+										or:
+											[ '\|~' includes: currentCharacter ] ] ] ] ])
+		ifTrue: [ [ self recordMatch: #(26).
+			self step.
+			currentCharacter == $!
+				or: [ (currentCharacter between: $% and: $&)
+						or: [ (currentCharacter between: $* and: $-)
+								or: [ currentCharacter == $/
+										or: [ (currentCharacter between: $< and: $@)
+												or:
+													[ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X3 [
+	self recordMatch: #(14 26).
+	self step.
+	(currentCharacter == $!
+		or: [ (currentCharacter between: $% and: $&)
+				or: [ (currentCharacter between: $* and: $-)
+						or: [ currentCharacter == $/
+								or: [ (currentCharacter between: $< and: $@)
+										or:
+											[ '\|~' includes: currentCharacter ] ] ] ] ])
+		ifTrue: [ [ self recordMatch: #(26).
+			self step.
+			currentCharacter == $!
+				or: [ (currentCharacter between: $% and: $&)
+						or: [ (currentCharacter between: $* and: $-)
+								or: [ currentCharacter == $/
+										or: [ (currentCharacter between: $< and: $@)
+												or:
+													[ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X4 [
+	[ self recordMatch: #(26).
+	self step.
+	currentCharacter == $!
+		or: [ (currentCharacter between: $% and: $&)
+				or: [ (currentCharacter between: $* and: $-)
+						or: [ currentCharacter == $/
+								or: [ (currentCharacter between: $< and: $@)
+										or:
+											[ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X5 [
+	[ self recordMatch: #(31).
+	self step.
+	currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X6 [
+	self recordMatch: #(25).
+	self step.
+	currentCharacter == $=
+		ifTrue: [ ^ self recordAndReportMatch: #(5) ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X7 [
+	self recordMatch: #(24).
+	self step.
+	currentCharacter == $}
+		ifTrue: [ ^ self recordAndReportMatch: #(37) ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X8 [
+	self recordMatch: #(16).
+	self step.
+	currentCharacter == ${
+		ifTrue: [ ^ self recordAndReportMatch: #(36) ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan1X9 [
+	self recordMatch: #(18).
+	self step.
+	currentCharacter == $=
+		ifTrue: [ ^ self recordAndReportMatch: #(28) ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoTemplateScanner >> scan2 [
 	[ self step.
 	currentCharacter == $"
 		ifTrue: [ ^ self recordAndReportMatch: #(30) ].
@@ -335,7 +343,7 @@ GtPharoScanner >> scan2 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan3 [
+GtPharoTemplateScanner >> scan3 [
 	self step.
 	currentCharacter == $#
 		ifTrue: [ self step.
@@ -391,7 +399,7 @@ GtPharoScanner >> scan3 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan4 [
+GtPharoTemplateScanner >> scan4 [
 	[ self step.
 	currentCharacter == $'
 		ifTrue: [ self recordMatch: #(8).
@@ -403,7 +411,7 @@ GtPharoScanner >> scan4 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan5 [
+GtPharoTemplateScanner >> scan5 [
 	[ self recordMatch: #(8).
 	self step.
 	currentCharacter == $:
@@ -420,7 +428,7 @@ GtPharoScanner >> scan5 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan6 [
+GtPharoTemplateScanner >> scan6 [
 	self step.
 	(currentCharacter isLetter or: [ currentCharacter == $_ ])
 		ifTrue: [ [ self recordMatch: #(8).
@@ -436,7 +444,7 @@ GtPharoScanner >> scan6 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan7 [
+GtPharoTemplateScanner >> scan7 [
 	[ self step.
 	currentCharacter == $:
 		ifTrue: [ self recordMatch: #(8).
@@ -450,13 +458,13 @@ GtPharoScanner >> scan7 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan8 [
+GtPharoTemplateScanner >> scan8 [
 	self step.
 	^ self recordAndReportMatch: #(9)
 ]
 
 { #category : #generated }
-GtPharoScanner >> scan9 [
+GtPharoTemplateScanner >> scan9 [
 	[ self step.
 	currentCharacter == $'
 		ifTrue: [ self recordMatch: #(7).
@@ -468,7 +476,7 @@ GtPharoScanner >> scan9 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scanForToken [
+GtPharoTemplateScanner >> scanForToken [
 	scope == #literalArray
 		ifTrue:
 			[ ^ self scanForTokenX1 ].
@@ -478,7 +486,7 @@ GtPharoScanner >> scanForToken [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scanForTokenX1 [
+GtPharoTemplateScanner >> scanForTokenX1 [
 	self step.
 	currentCharacter == $"
 		ifTrue: [ ^ self scan2 ].
@@ -509,7 +517,7 @@ GtPharoScanner >> scanForTokenX1 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scanForTokenX1X1 [
+GtPharoTemplateScanner >> scanForTokenX1X1 [
 	[ self recordMatch: #(26).
 	self step.
 	currentCharacter == $!
@@ -523,7 +531,7 @@ GtPharoScanner >> scanForTokenX1X1 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scanForTokenX1X2 [
+GtPharoTemplateScanner >> scanForTokenX1X2 [
 	[ self recordMatch: #(31).
 	self step.
 	currentCharacter isSeparator
@@ -533,7 +541,7 @@ GtPharoScanner >> scanForTokenX1X2 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scanForTokenX1X3 [
+GtPharoTemplateScanner >> scanForTokenX1X3 [
 	[ self recordMatch: #(10).
 	self step.
 	currentCharacter isDigit ] whileTrue.
@@ -541,7 +549,7 @@ GtPharoScanner >> scanForTokenX1X3 [
 ]
 
 { #category : #generated }
-GtPharoScanner >> scanForTokenX1X4 [
+GtPharoTemplateScanner >> scanForTokenX1X4 [
 	(currentCharacter isSeparator
 		or: [ currentCharacter == Character null
 				or: [ currentCharacter == Character pageUp ] ])
@@ -566,20 +574,7 @@ GtPharoScanner >> scanForTokenX1X4 [
 	^ self reportLastMatch
 ]
 
-{ #category : #scanning }
-GtPharoScanner >> scanNumber: anInteger [
-	| end |
-	matchActions := Array with: anInteger.
-	[ Number readFrom: stream ]
-		on: Error
-		do: [ :ex | matchActions := #(0) ].
-	outputStream reset.
-	end := stream position.
-	stream position: start.
-	^ self createTokenFor: (stream next: end - start)
-]
-
 { #category : #generated }
-GtPharoScanner >> tokenActions [
-	^ #(nil nil nil nil nil nil nil nil nil #number #negativeNumber nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil #comment #whitespace #patternToken)
+GtPharoTemplateScanner >> tokenActions [
+	^ #(nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil #comment #whitespace #patternToken)
 ]

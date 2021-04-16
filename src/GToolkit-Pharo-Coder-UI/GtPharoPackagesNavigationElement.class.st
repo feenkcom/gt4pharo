@@ -1,39 +1,3 @@
-"
-Navigation is generated from:
-
-@project Gt
-@prefix Pharo
-@suffix Navigation
-@package ''GToolkit-Pharo-Coder-UI''
-@tag ''Navigation''
-
-@derive notify
-@derive selection
-@derive api
-@derive name
-@derive typeTest
-@derive print
-@derive phlowList
-
-package(s) => tag(s) => class(es).
-
-package(s) <GtPharoPackagesCoder::TGtWithPharoPackagesCoderModel> {
-	items: #coders
-}.
-package <GtPharoPackageCoder::TGtWithPharoPackageCoderModel> { 
-	tag(s): #packageTagsCoder
-}.
-tag(s) <GtPharoPackageTagCoders::TGtWithPharoPackageTagsCoderModel> {
-	items: #coders
-}.
-tag <GtPharoPackageTagCoder::TGtWithPharoPackageTagCoderModel> {
-	class(es): #classesCoder
-}.
-class(es) <GtPharoClassesCoder::TGtWithPharoClassesCoderModel> {
-	items: #coders
-}.
-class <GtPharoBehaviorCoder::TGtWithPharoBehaviorCoderModel>
-"
 Class {
 	#name : #GtPharoPackagesNavigationElement,
 	#superclass : #BrSimpleTree,
@@ -52,7 +16,6 @@ GtPharoPackagesNavigationElement >> initialize [
 		{
 			#package -> GtPharoPackageNavigationElement.
 			#tag -> GtPharoPackageTagNavigationElement.
-			#class -> GtPharoPackageClassNavigationElement
 		} asDictionary at: aTreeNode value viewModelName ].
 
 	self nodeStencil: [ :anElementClass | anElementClass new ].
@@ -62,7 +25,6 @@ GtPharoPackagesNavigationElement >> initialize [
 		aViewModelSetter := {
 			#package -> #pharoPackageNavigationViewModel:.
 			#tag -> #pharoTagNavigationViewModel:.
-			#class -> #pharoClassNavigationViewModel:
 		} asDictionary at: eachTreeNode value viewModelName.
 		eachNodeElement perform: aViewModelSetter with: eachTreeNode value ]
 ]
@@ -78,8 +40,7 @@ GtPharoPackagesNavigationElement >> onPharoPackagesNavigationViewModelChanged [
 
 	theItems := {
 		#package -> [ :aViewModel | aViewModel pharoTagsNavigationViewModel pharoTagNavigationViewModels ].
-		#tag -> [ :aViewModel | aViewModel pharoClassesNavigationViewModel pharoClassNavigationViewModels ].
-		#class -> [ :aViewModel | #() ]
+		#tag -> [ :aViewModel | #() ].
 	} asDictionary.
 
 	self

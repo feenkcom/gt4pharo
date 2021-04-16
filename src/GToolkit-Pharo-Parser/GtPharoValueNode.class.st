@@ -40,6 +40,11 @@ GtPharoValueNode >> leftParens: anOrderedCollection [
 	leftParens := anOrderedCollection
 ]
 
+{ #category : #accessing }
+GtPharoValueNode >> nestingLevel [
+	^ self leftParens size + super nestingLevel
+]
+
 { #category : #generated }
 GtPharoValueNode >> rightParens [
 	^ rightParens

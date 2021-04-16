@@ -4,8 +4,121 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Styler'
 }
 
+{ #category : #private }
+GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
+	self 
+		highlightParenthesesLeft: aLeftIndex
+		right: aRightIndex.
+	self 
+		colorParenthesesLeft: aLeftIndex
+		right: aRightIndex
+		atNestingLevel: aNestingLevel
+]
+
+{ #category : #private }
+GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
+	| color |
+	color := self parenthesesColorAt: aNestingLevel.
+	(text
+		from: aLeftIndex
+		to: aLeftIndex)
+		foreground: color.
+	(text
+		from: aRightIndex
+		to: aRightIndex)
+		foreground: color
+]
+
+{ #category : #private }
+GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
+	| theParanthesesMarker cursorEnterAction cursorLeaveAction |
+	
+	theParanthesesMarker := BrTextInvisibleMarkerAttribute new.
+	text
+		attribute: theParanthesesMarker
+		from: aLeftIndex
+		to: aRightIndex.
+
+	cursorEnterAction := [ :aTextEditor |
+		aTextEditor text
+			findAttribute: theParanthesesMarker
+			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
+				aTextEditor text
+					attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor)
+					from: aParanthesesStart
+					to: aParanthesesEnd ] ].
+
+	cursorLeaveAction := [ :aTextEditor | 
+		aTextEditor text
+			findAttribute: theParanthesesMarker
+			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
+				(aTextEditor text
+					from: aParanthesesStart
+					to: aParanthesesEnd)
+						clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ] ].
+
+	(text
+		from: aLeftIndex
+		to: aLeftIndex)
+		onCursorEnter: cursorEnterAction
+		leave: cursorLeaveAction.
+
+	(text
+		from: aRightIndex
+		to: aRightIndex)
+		onCursorEnter: cursorEnterAction
+		leave: cursorLeaveAction
+]
+
+{ #category : #private }
+GtPharoStyler >> parenthesesColorAt: anIndex [
+	| colors |
+	colors := self parenthesesColors.
+	^ colors at: (anIndex - 1) \\ colors size + 1
+]
+
+{ #category : #private }
+GtPharoStyler >> parenthesesColors [
+	| colors |
+	colors := BrGlamorousColors distinctTenStrongColors allButFirst
+		collect: [ :each | each twiceDarker ].
+	^ colors
+]
+
+{ #category : #accessing }
+GtPharoStyler >> visitArray: anArray [
+	super visitArray: anArray.
+	self 
+		colorParenthesesLeft: anArray leftBrace startPosition 
+		right: anArray rightBrace startPosition 
+		atNestingLevel: anArray nestingLevel
+]
+
+{ #category : #accessing }
+GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
+	| color |
+	super visitArrayLiteral: anArrayLiteral.
+	self 
+		colorParenthesesLeft: anArrayLiteral arrayStart startPosition
+		right: anArrayLiteral arrayStop startPosition
+		atNestingLevel: anArrayLiteral nestingLevel.
+]
+
+{ #category : #visiting }
+GtPharoStyler >> visitBlock: aBlock [
+	super visitBlock: aBlock.
+	self 
+		highlightParenthesesLeft: aBlock leftBracket startPosition
+		right: aBlock rightBracket startPosition.
+	self 
+		colorParenthesesLeft: aBlock leftBracket startPosition
+		right: aBlock rightBracket startPosition
+		atNestingLevel: aBlock nestingLevel.
+]
+
 { #category : #visiting }
 GtPharoStyler >> visitBooleanLiteral: aBooleanLiteral [
+	super visitBooleanLiteral: aBooleanLiteral.
 	self
 		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
 		from: aBooleanLiteral value startPosition
@@ -14,6 +127,7 @@ GtPharoStyler >> visitBooleanLiteral: aBooleanLiteral [
 
 { #category : #visiting }
 GtPharoStyler >> visitCharacterLiteral: aCharacterLiteral [
+	super visitCharacterLiteral: aCharacterLiteral.
 	self
 		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
 		from: aCharacterLiteral value startPosition
@@ -35,7 +149,6 @@ GtPharoStyler >> visitDeclaredGlobalVariable: aNamedVariable [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
-
 	self
 		attributes: { BlTextForegroundAttribute color: Color blue muchDarker }
 		from: aNamedVariable name startPosition
@@ -57,6 +170,7 @@ GtPharoStyler >> visitErrorToken: anErrorToken [
 
 { #category : #visiting }
 GtPharoStyler >> visitMethodPattern: aMethodPattern [
+	super visitMethodPattern: aMethodPattern.
 	aMethodPattern selectorParts do: [ :eachSelectorPart |
 		self visitMethodSelectorPart: eachSelectorPart ].
 
@@ -74,7 +188,7 @@ GtPharoStyler >> visitMethodSelectorPart: aSmaCCToken [
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitNamedVariable: aNamedVariable [
 	| isDeclaredVariable |
-	
+	super visitNamedVariable: aNamedVariable.
 	isDeclaredVariable := aNamedVariable isUndeclared not.
 	isDeclaredVariable
 		ifTrue: [ ^ self visitDeclaredVariable: aNamedVariable ].
@@ -92,6 +206,7 @@ GtPharoStyler >> visitNamedVariable: aNamedVariable [
 
 { #category : #visiting }
 GtPharoStyler >> visitNilLiteral: aNilLiteral [
+	super visitNilLiteral: aNilLiteral.
 	self
 		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
 		from: aNilLiteral value startPosition
@@ -100,6 +215,7 @@ GtPharoStyler >> visitNilLiteral: aNilLiteral [
 
 { #category : #visiting }
 GtPharoStyler >> visitNumberLiteral: aNumberLiteral [
+	super visitNumberLiteral: aNumberLiteral.
 	self
 		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
 		from: aNumberLiteral value startPosition
@@ -108,7 +224,7 @@ GtPharoStyler >> visitNumberLiteral: aNumberLiteral [
 
 { #category : #visiting }
 GtPharoStyler >> visitPragma: aPragma [
-	
+	super visitPragma: aPragma.
 	self visitPragmaSelectorPart: aPragma lessThan.
 	aPragma selectorParts do: [ :eachSelectorPart |
 		self visitPragmaSelectorPart: eachSelectorPart ].
@@ -143,6 +259,7 @@ GtPharoStyler >> visitReturnUpArrow: aSmaCCToken [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitSelfVariable: aSelfVariable [
+	super visitSelfVariable: aSelfVariable.
 	self
 		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
 		from: aSelfVariable name startPosition
@@ -169,6 +286,7 @@ GtPharoStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 
 { #category : #visiting }
 GtPharoStyler >> visitStringLiteral: aStringLiteral [
+	super visitStringLiteral: aStringLiteral.
 	self
 		attributes: { BlTextForegroundAttribute color: Color magenta muchDarker }
 		from: aStringLiteral value startPosition
@@ -177,6 +295,7 @@ GtPharoStyler >> visitStringLiteral: aStringLiteral [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitSuperVariable: aSuperVariable [
+	super visitSuperVariable: aSuperVariable.
 	self
 		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
 		from: aSuperVariable name startPosition
@@ -185,6 +304,7 @@ GtPharoStyler >> visitSuperVariable: aSuperVariable [
 
 { #category : #visiting }
 GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
+	super visitSymbolLiteral: aSymbolLiteral.
 	self
 		attributes: { BlTextForegroundAttribute color: Color magenta muchDarker }
 		from: aSymbolLiteral value startPosition
@@ -193,6 +313,7 @@ GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitThisContextVariable: aThisContextVariable [
+	super visitThisContextVariable: aThisContextVariable.
 	self
 		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
 		from: aThisContextVariable name startPosition
@@ -205,4 +326,15 @@ GtPharoStyler >> visitUndeclaredVariable: aVariableNode [
 		attributes: { BlTextForegroundAttribute color: Color red }
 		from: aVariableNode name startPosition
 		to: aVariableNode name stopPosition
+]
+
+{ #category : #accessing }
+GtPharoStyler >> visitValue: aValue [
+	super visitValue: aValue.
+	aValue leftParens doWithIndex: [ :each :i |
+		self 
+			colorParenthesesLeft: each startPosition
+			right: each startPosition
+			atNestingLevel: aValue nestingLevel - aValue leftParens size + i "because its part of nesting".
+	].
 ]
