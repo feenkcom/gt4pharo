@@ -31,32 +31,43 @@ GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLe
 
 { #category : #private }
 GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
+	| theParanthesesMarker cursorEnterAction cursorLeaveAction |
+	
+	theParanthesesMarker := BrTextInvisibleMarkerAttribute new.
+	text
+		attribute: theParanthesesMarker
+		from: aLeftIndex
+		to: aRightIndex.
+
+	cursorEnterAction := [ :aTextEditor |
+		aTextEditor text
+			findAttribute: theParanthesesMarker
+			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
+				aTextEditor text
+					attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor)
+					from: aParanthesesStart
+					to: aParanthesesEnd ] ].
+
+	cursorLeaveAction := [ :aTextEditor | 
+		aTextEditor text
+			findAttribute: theParanthesesMarker
+			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
+				(aTextEditor text
+					from: aParanthesesStart
+					to: aParanthesesEnd)
+						clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ] ].
+
 	(text
 		from: aLeftIndex
 		to: aLeftIndex)
-		onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-			(aTextEditor text
-				from: aLeftIndex
-				to: aRightIndex)
-				attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor) ]
-		leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-			(aTextEditor text
-				from: aLeftIndex
-				to: aRightIndex)
-				clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ].
+		onCursorEnter: cursorEnterAction
+		leave: cursorLeaveAction.
+
 	(text
 		from: aRightIndex
 		to: aRightIndex)
-		onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-			(aTextEditor text
-				from: aLeftIndex
-				to: aRightIndex)
-				attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor) ]
-		leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-			(aTextEditor text
-				from: aLeftIndex
-				to: aRightIndex)
-				clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ].
+		onCursorEnter: cursorEnterAction
+		leave: cursorLeaveAction
 ]
 
 { #category : #private }
@@ -93,12 +104,12 @@ GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 		atNestingLevel: anArrayLiteral nestingLevel.
 ]
 
-{ #category : #accessing }
+{ #category : #visiting }
 GtPharoStyler >> visitBlock: aBlock [
 	super visitBlock: aBlock.
-	"self 
+	self 
 		highlightParenthesesLeft: aBlock leftBracket startPosition
-		right: aBlock rightBracket startPosition."
+		right: aBlock rightBracket startPosition.
 	self 
 		colorParenthesesLeft: aBlock leftBracket startPosition
 		right: aBlock rightBracket startPosition
