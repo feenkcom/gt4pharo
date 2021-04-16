@@ -4,7 +4,69 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Styler'
 }
 
-{ #category : #accessing }
+{ #category : #private }
+GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
+	self 
+		highlightParenthesesLeft: aLeftIndex
+		right: aRightIndex.
+	self 
+		colorParenthesesLeft: aLeftIndex
+		right: aRightIndex
+		atNestingLevel: aNestingLevel
+]
+
+{ #category : #private }
+GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
+	| color |
+	color := self parenthesesColorAt: aNestingLevel.
+	(text
+		from: aLeftIndex
+		to: aLeftIndex)
+		foreground: color.
+	(text
+		from: aRightIndex
+		to: aRightIndex)
+		foreground: color
+]
+
+{ #category : #private }
+GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
+	(text
+		from: aLeftIndex
+		to: aLeftIndex)
+		onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+			(aTextEditor text
+				from: aLeftIndex
+				to: aRightIndex)
+				attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor) ]
+		leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+			(aTextEditor text
+				from: aLeftIndex
+				to: aRightIndex)
+				clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ].
+	(text
+		from: aRightIndex
+		to: aRightIndex)
+		onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+			(aTextEditor text
+				from: aLeftIndex
+				to: aRightIndex)
+				attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor) ]
+		leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+			(aTextEditor text
+				from: aLeftIndex
+				to: aRightIndex)
+				clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ].
+]
+
+{ #category : #private }
+GtPharoStyler >> parenthesesColorAt: anIndex [
+	| colors |
+	colors := self parenthesesColors.
+	^ colors at: (anIndex - 1) \\ colors size + 1
+]
+
+{ #category : #private }
 GtPharoStyler >> parenthesesColors [
 	| colors |
 	colors := BrGlamorousColors distinctTenStrongColors allButFirst
@@ -14,42 +76,33 @@ GtPharoStyler >> parenthesesColors [
 
 { #category : #accessing }
 GtPharoStyler >> visitArray: anArray [
-	| colors color |
 	super visitArray: anArray.
-	colors := self parenthesesColors.
-	color := colors at: (anArray nestingLevel - 1) \\ colors size + 1.
-	(text
-		from: anArray leftBrace startPosition
-		to: anArray leftBrace stopPosition) foreground: color.
-	(text
-		from: anArray rightBrace startPosition
-		to: anArray rightBrace stopPosition) foreground: color
+	self 
+		colorParenthesesLeft: anArray leftBrace startPosition 
+		right: anArray rightBrace startPosition 
+		atNestingLevel: anArray nestingLevel
 ]
 
 { #category : #accessing }
 GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
-	| colors color |
+	| color |
 	super visitArrayLiteral: anArrayLiteral.
-	colors := self parenthesesColors.
-	color := colors at: (anArrayLiteral nestingLevel - 1) \\ colors size + 1.
-	(text
-		from: anArrayLiteral arrayStart startPosition
-		to: anArrayLiteral arrayStart stopPosition) foreground: color.
-	(text
-		from: anArrayLiteral arrayStop startPosition
-		to: anArrayLiteral arrayStop stopPosition) foreground: color
+	self 
+		colorParenthesesLeft: anArrayLiteral arrayStart startPosition
+		right: anArrayLiteral arrayStop startPosition
+		atNestingLevel: anArrayLiteral nestingLevel.
 ]
 
 { #category : #accessing }
 GtPharoStyler >> visitBlock: aBlock [
-	| color colors |
 	super visitBlock: aBlock.
-	colors := self parenthesesColors.
-	color := colors at: (aBlock nestingLevel - 1) \\ colors size + 1.
-	(text from: aBlock leftBracket startPosition to: aBlock leftBracket startPosition)
-		foreground: color.
-	(text from: aBlock rightBracket startPosition to: aBlock rightBracket startPosition)
-		foreground: color.
+	"self 
+		highlightParenthesesLeft: aBlock leftBracket startPosition
+		right: aBlock rightBracket startPosition."
+	self 
+		colorParenthesesLeft: aBlock leftBracket startPosition
+		right: aBlock rightBracket startPosition
+		atNestingLevel: aBlock nestingLevel.
 ]
 
 { #category : #visiting }
@@ -266,15 +319,11 @@ GtPharoStyler >> visitUndeclaredVariable: aVariableNode [
 
 { #category : #accessing }
 GtPharoStyler >> visitValue: aValue [
-	| colors color |
 	super visitValue: aValue.
-	colors := self parenthesesColors.
 	aValue leftParens doWithIndex: [ :each :i |
-		color := colors at: (aValue nestingLevel + i - 1 - aValue leftParens size "because its part of nesting") \\ colors size + 1.
-		(text from: each startPosition to: each startPosition) foreground: color.
-		(text 
-			from: (aValue rightParens at: (aValue rightParens size - i + 1)) startPosition 
-			to: (aValue rightParens at: (aValue rightParens size - i + 1)) startPosition)
-			foreground: color.
-	]
+		self 
+			colorParenthesesLeft: each startPosition
+			right: each startPosition
+			atNestingLevel: aValue nestingLevel - aValue leftParens size + i "because its part of nesting".
+	].
 ]
