@@ -39,9 +39,28 @@ GtPharoMethodDefinition >> fromCompiledMethod: aCompiledMethod [
 	selector := aCompiledMethod selector
 ]
 
+{ #category : #testing }
+GtPharoMethodDefinition >> hasPragmaNamed: aSelector [
+	^ self pragmas anySatisfy: [ :eachPragma | eachPragma selector = aSelector ]
+]
+
 { #category : #accessing }
 GtPharoMethodDefinition >> name [
 	^ self selector
+]
+
+{ #category : #accessing }
+GtPharoMethodDefinition >> pragmas [
+	<return: #Collection of: #Pragma>
+
+	^ (GtPharoParser
+		parse: self sourceCode
+		startingAt: GtPharoParser startingStateForMethod) pragmas
+			collect: [ :eachPragmaNode |
+				Pragma new
+					method: self;
+					arguments: (eachPragmaNode values collect: [ :eachValue | eachValue literalValue ]);
+					selector: eachPragmaNode selector ]
 ]
 
 { #category : #accessing }

@@ -88,6 +88,11 @@ GtCompositeDefinition >> parent: aParent [
 	definitions do: [ :eachDefinition | eachDefinition parent: aParent ]
 ]
 
+{ #category : #enumerating }
+GtCompositeDefinition >> removeSuchThat: aBlock [
+	definitions := definitions reject: aBlock
+]
+
 { #category : #accessing }
 GtCompositeDefinition >> size [
 	<return: #Number>

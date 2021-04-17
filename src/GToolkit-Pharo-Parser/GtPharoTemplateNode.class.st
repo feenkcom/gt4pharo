@@ -14,6 +14,11 @@ GtPharoTemplateNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplate: self
 ]
 
+{ #category : #accessing }
+GtPharoTemplateNode >> asSymbol [
+	^ self expression source asSymbol
+]
+
 { #category : #generated }
 GtPharoTemplateNode >> expression [
 	^ expression
@@ -53,7 +58,17 @@ GtPharoTemplateNode >> rightBraces: aSmaCCToken [
 	rightBraces := aSmaCCToken
 ]
 
+{ #category : #accessing }
+GtPharoTemplateNode >> selector [
+	^ self asSymbol
+]
+
 { #category : #generated }
 GtPharoTemplateNode >> tokenVariables [
 	^ #(#leftBraces #rightBraces)
+]
+
+{ #category : #accessing }
+GtPharoTemplateNode >> variableName [
+	^ self source asSymbol
 ]

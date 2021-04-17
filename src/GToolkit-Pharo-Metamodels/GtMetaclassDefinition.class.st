@@ -96,7 +96,7 @@ GtMetaclassDefinition >> fromMetaclass: aMetaclass in: anEnvironment [
 
 	self environment: anEnvironment.
 	
-	name := aMetaclass name.
+	name := aMetaclass instanceSide name.
 	originalName := name.
 	
 	category := (GtCategoryDefinition fromBehavior: aMetaclass) parent: self.

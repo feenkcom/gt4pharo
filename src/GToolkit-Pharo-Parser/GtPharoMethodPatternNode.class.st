@@ -18,11 +18,6 @@ GtPharoMethodPatternNode >> compositeNodeVariables [
 	^ #(#variables)
 ]
 
-{ #category : #generated }
-GtPharoMethodPatternNode >> compositeTokenVariables [
-	^ #(#selectorParts)
-]
-
 { #category : #'generated-initialize-release' }
 GtPharoMethodPatternNode >> initialize [
 	super initialize.
@@ -33,6 +28,11 @@ GtPharoMethodPatternNode >> initialize [
 { #category : #testing }
 GtPharoMethodPatternNode >> isMethodPattern [
 	^ true
+]
+
+{ #category : #generated }
+GtPharoMethodPatternNode >> otherVariables [
+	^ #(#selectorParts)
 ]
 
 { #category : #accessing }
@@ -47,7 +47,9 @@ GtPharoMethodPatternNode >> selectorParts [
 
 { #category : #generated }
 GtPharoMethodPatternNode >> selectorParts: anOrderedCollection [
-	selectorParts := anOrderedCollection
+	self setParent: self selectorParts to: nil.
+	selectorParts := anOrderedCollection.
+	self setParent: self selectorParts to: self
 ]
 
 { #category : #generated }

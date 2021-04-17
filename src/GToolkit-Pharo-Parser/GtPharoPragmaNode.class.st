@@ -16,16 +16,6 @@ GtPharoPragmaNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #generated }
-GtPharoPragmaNode >> compositeNodeVariables [
-	^ #(#values)
-]
-
-{ #category : #generated }
-GtPharoPragmaNode >> compositeTokenVariables [
-	^ #(#selectorParts)
-]
-
-{ #category : #generated }
 GtPharoPragmaNode >> greaterThan [
 	^ greaterThan
 ]
@@ -57,6 +47,11 @@ GtPharoPragmaNode >> lessThan: aSmaCCToken [
 	lessThan := aSmaCCToken
 ]
 
+{ #category : #generated }
+GtPharoPragmaNode >> otherVariables [
+	^ #(#selectorParts #values)
+]
+
 { #category : #accessing }
 GtPharoPragmaNode >> selector [
 	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each value ] ]
@@ -69,7 +64,9 @@ GtPharoPragmaNode >> selectorParts [
 
 { #category : #generated }
 GtPharoPragmaNode >> selectorParts: anOrderedCollection [
-	selectorParts := anOrderedCollection
+	self setParent: self selectorParts to: nil.
+	selectorParts := anOrderedCollection.
+	self setParent: self selectorParts to: self
 ]
 
 { #category : #generated }
@@ -84,7 +81,7 @@ GtPharoPragmaNode >> values [
 
 { #category : #generated }
 GtPharoPragmaNode >> values: anOrderedCollection [
-	self setParents: self values to: nil.
+	self setParent: self values to: nil.
 	values := anOrderedCollection.
-	self setParents: self values to: self
+	self setParent: self values to: self
 ]

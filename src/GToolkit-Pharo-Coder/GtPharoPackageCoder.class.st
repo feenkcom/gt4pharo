@@ -115,8 +115,8 @@ GtPharoPackageCoder >> newPackageTagCoderFor: aPackageTag [
 GtPharoPackageCoder >> newPackageTagsCoder [
 	^ package
 		realPackageDo: [ :aRPackage |
-			GtPharoPackageTagCoders forPackage: aRPackage ]
-		ifAbsent: [ GtPharoPackageTagCoders new ]
+			GtPharoPackageTagsCoder forPackage: aRPackage ]
+		ifAbsent: [ GtPharoPackageTagsCoder new ]
 ]
 
 { #category : #'private - event handling' }
@@ -195,7 +195,7 @@ GtPharoPackageCoder >> packageTagForClass: aClass [
 
 { #category : #accessing }
 GtPharoPackageCoder >> packageTagsCoder [
-	<return: #GtPharoPackageTagCoders>
+	<return: #GtPharoPackageTagsCoder>
 
 	^ packageTagsCoder ifNil: [ packageTagsCoder := self newPackageTagsCoder ]
 ]

@@ -7,17 +7,40 @@ Class {
 { #category : #generated }
 GtPharoTemplateParser class >> ambiguousTransitions [
 ^#(
-#[ 0 42 1 21] 
-#[ 1 14 1 21] 
-#[ 1 21 1 130] 
-#[ 0 206 1 222] 
-#[ 0 206 1 234]
+#[ 0 14 0 18] 
+#[ 0 22 0 133] 
+#[ 0 22 0 177] 
+#[ 0 22 0 181] 
+#[ 0 22 0 185] 
+#[ 0 22 0 37] 
+#[ 0 38 1 109] 
+#[ 0 37 0 38] 
+#[ 0 42 0 46] 
+#[ 0 66 1 57] 
+#[ 0 37 0 146] 
+#[ 0 37 0 154] 
+#[ 0 230 0 234 0 238] 
+#[ 0 230 0 234 0 238 0 242] 
+#[ 0 230 2 77] 
+#[ 0 230 1 14] 
+#[ 0 86 2 101] 
+#[ 0 6 2 149] 
+#[ 1 57 1 78] 
+#[ 0 37 1 130] 
+#[ 0 230 0 234] 
+#[ 0 246 1 198] 
+#[ 1 57 1 230] 
+#[ 1 138 1 154] 
+#[ 0 37 2 50] 
+#[ 0 230 0 234 0 238 0 242 2 74] 
+#[ 0 230 0 234 0 238 0 242 2 86] 
+#[ 0 6 2 98]
 	).
 ]
 
 { #category : #'generated-accessing' }
 GtPharoTemplateParser class >> cacheId [
-	^'2021-04-13T11:22:29.29752+02:00'
+	^'2021-04-17T18:44:50.415416+02:00'
 ]
 
 { #category : #generated }
@@ -146,11 +169,8 @@ default literalArray <period>
 default literalArray <comment>
 	: \"" [^\""]* \""
 	;
-default literalArray <whitespace>
+default literalArray <space>
 	: (\s | \x0)+
-	;
-<patternToken>
-	: (\`  [^\`]* \`)+
 	;
 default literalArray <self>
 	: self
@@ -167,12 +187,17 @@ default <doubleLeftBrace>
 default <doubleRightBrace>
 	: \}\}
 	;
+<symbolHash>
+	: \#{1,2}
+	;
 Method
 	: MethodPattern 'pattern' MethodSequence 'body' {{}}
 	;
 MethodPattern
 	: <name> 'selectorPart' {{}}
-	| <binary> 'selectorPart' Variable 'variable' {{}}
+	| Template 'selectorPart' {{}}
+	| <binary>'selectorPart' Variable 'variable' {{}}
+	| <binary>'selectorPart' Template 'variable' {{}}
 	| KeywordPattern {{}}
 	| <binary> 'selectorPart' error 'smaccError' {{ErrorPattern}}
 	| <keyword> 'selectorPart' error 'smaccError' {{ErrorPattern}}
@@ -182,13 +207,13 @@ Pragmas
 	: Pragma 'pragma'+
 	;
 Pragma
-	:  <lt> 'lessThan' <name> 'selectorPart' <gt> 'greaterThan' {{}}
-	| <lt> 'lessThan' (<keyword> 'selectorPart' (Literal 'value' | Variable 'value'))+ <gt> 'greaterThan' {{}}
+	:  <lt> 'lessThan' (<name> 'selectorPart' | TemplateName 'selectorPart') <gt> 'greaterThan' {{}}
+	| <lt> 'lessThan' (<keyword> 'selectorPart' (Literal 'value' | Variable 'value' | TemplateName 'value'))+ <gt> 'greaterThan' {{}}
 	| <lt> 'lessThan' error 'smaccError' {{PragmaError}}
 	| <lt> 'lessThan' error 'smaccError' <gt> 'greaterThan' {{PragmaError}}
 	;
 KeywordPattern
-	: (<keyword> 'selectorPart' Variable 'variable')+
+	: (TemplateKeyword 'selectorPart' <space>? Variable 'variable')+
 	;
 MethodSequence
 	: Pragmas Temporaries Pragmas <period> 'period'* Statements? {{}}
@@ -208,6 +233,8 @@ Statements
 StatementList
 	: Statement 'statement'
 	| StatementList <period> 'period'+ Statement 'statement'
+	| StatementList <period> 'period'* Template 'statement'
+	| StatementList <period> 'period'* Template 'statement' <period> 'period'* Statement 'statement'
 	;
 Statement
 	: <return> 'upArrow' Assignment 'value' {{Return}}
@@ -244,6 +271,7 @@ KeywordMessageSendVars
 	;
 KeywordMessage
 	: (<keyword> 'selectorPart' BinaryMessageSend 'value')+ {{}}
+	| (TemplatePattern 'selectorPart' BinaryMessageSend 'value')+ {{}}
 	;
 BinaryMessageSend
 	: BinaryMessageSendVars {{MessageSend}}
@@ -258,12 +286,14 @@ BinaryMessage
 UnaryMessageSend
 	: UnaryMessageSendVars {{MessageSend}}
 	| Value
+	| Template
 	;
 UnaryMessageSendVars
 	: UnaryMessageSend 'receiver' UnaryMessage 'message' 
 	;
 UnaryMessage
 	: <name> 'selectorPart' {{}}
+	| Template 'selectorPart'
 	;
 Variable
 	: SelfVariable
@@ -332,7 +362,7 @@ CharacterLiteral
 	: <character> 'value' {{}}
 	;
 SymbolLiteral
-	: <symbol> 'value' {{}}
+	: TemplateSymbol 'value' {{}}
 	;
 BooleanLiteral
 	: <true> 'value' {{}}
@@ -354,163 +384,210 @@ SuperVariable
 	: <super> 'name' {{}}
 	;
 NamedVariable
-	: <name> 'name' {{}}
+	: TemplateName 'name' {{}}
 	;
 ThisContextVariable
 	: <thisContext> 'name' {{}}
 	;
 Template
 	: <doubleLeftBrace> 'leftBraces' Assignment 'expression' <doubleRightBrace>'rightBraces' {{}}
+	;
+TemplatePattern
+	: Template <colon>
+	| Template
+	;
+TemplateName
+	: <name>
+	| Template
+	;
+TemplateSymbol
+	: <symbol>
+	| Template
+	| <symbolHash>Template
+	;
+TemplateKeyword
+	# TemplateKeyword should be used implace of <keyword> in the normal pharo parser
+	: <keyword>
+	| (<name> | Template)+<colon>
 	;"
 ]
 
 { #category : #generated }
 GtPharoTemplateParser class >> reduceTable [
 ^#(
-	#(50 0 #reduceActionFor_period___period__1: 3607553 false ) 
-	#(97 0 #reduceActionForSwitchToLiteralArray1: 7481345 false ) 
-	#(40 1 #reduceActionForMethodPattern1: 2769921 false ) 
-	#(42 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3024897 false ) 
-	#(48 1 #reduceActionForKeywordPattern1: 3489793 false ) 
-	#(40 1 #reduceActionForMethodPattern3: 2769923 false ) 
-	#(53 0 #reduceActionFor_period___period__1: 3879937 false ) 
-	#(43 1 #reduceActionForKeywordPattern1: 3139585 false ) 
-	#(44 1 #reduceActionForPragma__pragma__1: 3150849 false ) 
-	#(51 1 #reduceActionForSequence1: 3781633 false ) 
-	#(49 1 #liftFirstValue: 3560457 false ) 
-	#(95 1 #reduceActionForBooleanLiteral1: 7377921 false ) 
-	#(95 1 #reduceActionForBooleanLiteral1: 7377922 false ) 
-	#(96 1 #reduceActionForNilLiteral1: 7444481 false ) 
-	#(101 1 #reduceActionForNamedVariable1: 7676929 false ) 
-	#(85 1 #reduceActionForStringLiteral1: 6448129 false ) 
-	#(94 1 #reduceActionForSymbolLiteral1: 7334913 false ) 
-	#(93 1 #reduceActionForCharacterLiteral1: 7285761 false ) 
-	#(86 1 #reduceActionForNumberLiteral1: 6491137 false ) 
-	#(86 1 #reduceActionForNumberLiteral1: 6491138 false ) 
-	#(83 0 #reduceActionForBlockArgs1: 6221825 false ) 
-	#(91 0 #reduceActionFor_period___period__1: 7142401 false ) 
-	#(99 1 #reduceActionForSelfVariable1: 7597057 false ) 
-	#(100 1 #reduceActionForSuperVariable1: 7635969 false ) 
-	#(102 1 #reduceActionForThisContextVariable1: 7716865 false ) 
-	#(57 1 #liftFirstValue: 4076546 false ) 
-	#(58 1 #liftFirstValue: 4157446 false ) 
-	#(59 1 #liftFirstValue: 4494340 false ) 
-	#(64 1 #reduceActionForKeywordMessageSend1: 4822017 false ) 
-	#(64 1 #liftFirstValue: 4822018 false ) 
-	#(69 1 #reduceActionForKeywordMessageSend1: 5076993 false ) 
-	#(69 1 #liftFirstValue: 5076994 false ) 
-	#(72 1 #reduceActionForKeywordMessageSend1: 5320705 false ) 
-	#(76 1 #liftFirstValue: 5606401 false ) 
-	#(72 1 #liftFirstValue: 5320706 false ) 
-	#(76 1 #liftFirstValue: 5606403 false ) 
-	#(76 1 #liftFirstValue: 5606404 false ) 
-	#(76 1 #liftFirstValue: 5606402 false ) 
-	#(84 1 #liftFirstValue: 6294529 false ) 
-	#(84 1 #liftFirstValue: 6294530 false ) 
-	#(84 1 #liftFirstValue: 6294531 false ) 
-	#(84 1 #liftFirstValue: 6294532 false ) 
-	#(84 1 #liftFirstValue: 6294533 false ) 
-	#(84 1 #liftFirstValue: 6294534 false ) 
-	#(84 1 #liftFirstValue: 6294535 false ) 
-	#(84 1 #liftFirstValue: 6294536 false ) 
-	#(75 1 #liftFirstValue: 5519361 false ) 
-	#(75 1 #liftFirstValue: 5519362 false ) 
-	#(75 1 #liftFirstValue: 5519364 false ) 
-	#(75 1 #liftFirstValue: 5519363 false ) 
-	#(58 1 #liftFirstValue: 4157445 false ) 
-	#(76 1 #reduceActionForValue6: 5606406 false ) 
-	#(41 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3024897 false ) 
-	#(40 2 #reduceActionForMethodPattern5: 2769925 false ) 
-	#(40 2 #reduceActionForMethodPattern2: 2769922 false ) 
-	#(40 2 #reduceActionForMethodPattern5: 2769924 false ) 
-	#(39 2 #reduceActionForMethod1: 2704385 false ) 
-	#(42 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3024898 false ) 
-	#(47 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3265537 false ) 
-	#(45 2 #reduceActionForPragma3: 3171331 false ) 
-	#(49 2 #reduceActionForMethodSequence5: 3560453 false ) 
-	#(44 2 #reduceActionForPragma__pragma__2: 3150850 false ) 
-	#(50 2 #reduceActionForPragma__pragma__2: 3607554 false ) 
-	#(51 2 #reduceActionForSequence2: 3781634 false ) 
-	#(54 1 #reduceActionForKeywordPattern1: 3921921 false ) 
-	#(56 1 #reduceActionForStatementList1: 3974145 false ) 
-	#(51 2 #reduceActionForSequence3: 3781635 false ) 
-	#(57 2 #reduceActionForStatement1: 4076545 false ) 
-	#(77 2 #reduceActionForArray1: 5766145 false ) 
-	#(79 0 #reduceActionFor__period___period__Assignment__value___1: 5820417 false ) 
-	#(82 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6049793 false ) 
-	#(59 2 #reduceActionForCascade1: 4494337 false ) 
-	#(62 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4692993 false ) 
-	#(60 1 #reduceActionForKeywordPattern1: 4672513 false ) 
-	#(65 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 4909057 false ) 
-	#(68 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5013505 false ) 
-	#(66 1 #reduceActionForKeywordMessage1: 4995073 false ) 
-	#(70 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5160961 false ) 
-	#(59 2 #reduceActionForCascade1: 4494338 false ) 
-	#(74 1 #reduceActionForUnaryMessage1: 5472257 false ) 
-	#(73 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5391361 false ) 
-	#(59 2 #reduceActionForCascade1: 4494339 false ) 
-	#(88 0 #reduceActionFor_period___period__1: 6639617 false ) 
-	#(40 3 #reduceActionForMethodPattern6: 2769926 false ) 
-	#(52 3 #reduceActionForTemporaries1: 3847169 false ) 
-	#(53 2 #reduceActionForPragma__pragma__2: 3879938 false ) 
-	#(45 3 #reduceActionForPragma1: 3171329 false ) 
-	#(46 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3265538 false ) 
-	#(46 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3265537 false ) 
-	#(45 3 #reduceActionForPragma2: 3171330 false ) 
-	#(47 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3265538 false ) 
-	#(45 3 #reduceActionForPragma4: 3171332 false ) 
-	#(49 3 #reduceActionForMethodSequence6: 3560454 false ) 
-	#(49 3 #reduceActionForMethodSequence7: 3560455 false ) 
-	#(55 1 #reduceActionForPragma__pragma__1: 3950593 false ) 
-	#(54 2 #reduceActionForStatements2: 3921922 false ) 
-	#(49 3 #reduceActionForMethodSequence3: 3560451 false ) 
-	#(51 3 #reduceActionForSequence4: 3781636 false ) 
-	#(77 3 #reduceActionForArray2: 5766146 false ) 
-	#(81 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 6049793 false ) 
-	#(83 2 #reduceActionForBlockArgs2: 6221826 false ) 
-	#(80 3 #reduceActionForBlock2: 5917698 false ) 
-	#(82 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6049794 false ) 
-	#(76 3 #reduceActionForValue5: 5606405 false ) 
-	#(90 3 #reduceActionForByteArrayLiteral1: 7091201 false ) 
-	#(92 1 #liftFirstValue: 7209985 false ) 
-	#(91 2 #reduceActionForPragma__pragma__2: 7142402 false ) 
-	#(92 1 #reduceActionForValue6: 7209986 false ) 
-	#(103 3 #reduceActionForTemplate1: 7770113 false ) 
-	#(61 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 4692993 false ) 
-	#(63 1 #liftFirstValue: 4750337 false ) 
-	#(63 1 #liftFirstValue: 4750338 false ) 
-	#(63 1 #liftFirstValue: 4750339 false ) 
-	#(62 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4692994 false ) 
-	#(67 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5013505 false ) 
-	#(71 2 #reduceActionForBinaryMessage1: 5244929 false ) 
-	#(68 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5013506 false ) 
-	#(58 3 #reduceActionForAssignment1: 4157441 false ) 
-	#(58 3 #reduceActionForAssignment1: 4157443 false ) 
-	#(98 0 #reduceActionForEndLiteralArray1: 7545857 false ) 
-	#(58 3 #reduceActionForAssignment1: 4157442 false ) 
-	#(58 3 #reduceActionForAssignment1: 4157444 false ) 
-	#(49 4 #reduceActionForMethodSequence1: 3560449 false ) 
-	#(49 4 #reduceActionForMethodSequence8: 3560456 false ) 
-	#(55 2 #reduceActionForPragma__pragma__2: 3950594 false ) 
-	#(56 3 #reduceActionForStatementList2: 3974146 false ) 
-	#(49 4 #reduceActionForMethodSequence4: 3560452 false ) 
-	#(77 4 #reduceActionForArray3: 5766147 false ) 
-	#(79 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5820418 false ) 
-	#(80 4 #reduceActionForBlock1: 5917697 false ) 
-	#(80 4 #reduceActionForBlock3: 5917699 false ) 
-	#(89 1 #reduceActionForSymbolLiteral1: 6717443 false ) 
-	#(89 1 #reduceActionForSymbolLiteral1: 6717442 false ) 
-	#(89 1 #reduceActionForSymbolLiteral1: 6717444 false ) 
-	#(89 1 #reduceActionForSymbolLiteral1: 6717446 false ) 
-	#(89 1 #reduceActionForSymbolLiteral1: 6717445 false ) 
-	#(89 1 #liftFirstValue: 6717441 false ) 
-	#(88 2 #reduceActionForPragma__pragma__2: 6639618 false ) 
-	#(89 1 #reduceActionForValue6: 6717448 false ) 
-	#(49 5 #reduceActionForMethodSequence2: 3560450 false ) 
-	#(77 5 #reduceActionForArray4: 5766148 false ) 
-	#(78 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5820417 false ) 
-	#(87 5 #reduceActionForArrayLiteral1: 6567937 false ) 
-	#(89 3 #reduceActionForArrayLiteralValue7: 6717447 false )
+	#(52 0 #reduceActionFor_period___period__1: 3746817 false ) 
+	#(101 0 #reduceActionForSwitchToLiteralArray1: 7895041 false ) 
+	#(40 1 #reduceActionForMethodPattern1: 2753537 false ) 
+	#(112 1 #liftFirstValue: 8574977 false ) 
+	#(111 1 #liftFirstValue: 8458241 false ) 
+	#(42 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3092481 false ) 
+	#(40 1 #reduceActionForMethodPattern5: 2753541 false ) 
+	#(50 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3632129 false ) 
+	#(48 1 #reduceActionForKeywordPattern1: 3613697 false ) 
+	#(40 1 #reduceActionForMethodPattern1: 2753538 false ) 
+	#(112 1 #liftFirstValue: 8574978 false ) 
+	#(113 1 #liftFirstValue: 8574977 false ) 
+	#(55 0 #reduceActionFor_period___period__1: 4019201 false ) 
+	#(43 1 #reduceActionForKeywordPattern1: 3207169 false ) 
+	#(44 1 #reduceActionForPragma__pragma__1: 3218433 false ) 
+	#(53 1 #reduceActionForSequence1: 3920897 false ) 
+	#(51 1 #liftFirstValue: 3699721 false ) 
+	#(99 1 #reduceActionForBooleanLiteral1: 7791617 false ) 
+	#(99 1 #reduceActionForBooleanLiteral1: 7791618 false ) 
+	#(100 1 #reduceActionForNilLiteral1: 7858177 false ) 
+	#(109 1 #liftFirstValue: 8351745 false ) 
+	#(89 1 #reduceActionForStringLiteral1: 6855681 false ) 
+	#(110 1 #liftFirstValue: 8390657 false ) 
+	#(97 1 #reduceActionForCharacterLiteral1: 7693313 false ) 
+	#(90 1 #reduceActionForNumberLiteral1: 6898689 false ) 
+	#(90 1 #reduceActionForNumberLiteral1: 6898690 false ) 
+	#(87 0 #reduceActionForBlockArgs1: 6629377 false ) 
+	#(95 0 #reduceActionFor_period___period__1: 7549953 false ) 
+	#(103 1 #reduceActionForSelfVariable1: 8010753 false ) 
+	#(104 1 #reduceActionForSuperVariable1: 8049665 false ) 
+	#(106 1 #reduceActionForThisContextVariable1: 8136705 false ) 
+	#(59 1 #liftFirstValue: 4374530 false ) 
+	#(60 1 #liftFirstValue: 4455430 false ) 
+	#(61 1 #liftFirstValue: 4792324 false ) 
+	#(66 1 #reduceActionForKeywordMessageSend1: 5120001 false ) 
+	#(66 1 #liftFirstValue: 5120002 false ) 
+	#(73 1 #reduceActionForKeywordMessageSend1: 5444609 false ) 
+	#(73 1 #liftFirstValue: 5444610 false ) 
+	#(76 1 #reduceActionForKeywordMessageSend1: 5688321 false ) 
+	#(80 1 #liftFirstValue: 6013953 false ) 
+	#(76 1 #liftFirstValue: 5688322 false ) 
+	#(80 1 #liftFirstValue: 6013955 false ) 
+	#(80 1 #liftFirstValue: 6013956 false ) 
+	#(80 1 #liftFirstValue: 6013954 false ) 
+	#(88 1 #liftFirstValue: 6702081 false ) 
+	#(88 1 #liftFirstValue: 6702082 false ) 
+	#(88 1 #liftFirstValue: 6702083 false ) 
+	#(88 1 #liftFirstValue: 6702084 false ) 
+	#(88 1 #liftFirstValue: 6702085 false ) 
+	#(88 1 #liftFirstValue: 6702086 false ) 
+	#(88 1 #liftFirstValue: 6702087 false ) 
+	#(88 1 #liftFirstValue: 6702088 false ) 
+	#(79 1 #liftFirstValue: 5926913 false ) 
+	#(79 1 #liftFirstValue: 5926914 false ) 
+	#(79 1 #liftFirstValue: 5926916 false ) 
+	#(79 1 #liftFirstValue: 5926915 false ) 
+	#(109 1 #liftFirstValue: 8351746 false ) 
+	#(110 1 #liftFirstValue: 8390658 false ) 
+	#(76 1 #liftFirstValue: 5688323 false ) 
+	#(60 1 #liftFirstValue: 4455429 false ) 
+	#(105 1 #reduceActionForNamedVariable1: 8090625 false ) 
+	#(98 1 #reduceActionForSymbolLiteral1: 7742465 false ) 
+	#(80 1 #reduceActionForValue6: 6013958 false ) 
+	#(41 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3092481 false ) 
+	#(40 2 #reduceActionForMethodPattern7: 2753543 false ) 
+	#(40 2 #reduceActionForMethodPattern3: 2753539 false ) 
+	#(40 2 #reduceActionForMethodPattern3: 2753540 false ) 
+	#(40 2 #reduceActionForMethodPattern7: 2753542 false ) 
+	#(39 2 #reduceActionForMethod1: 2688001 false ) 
+	#(42 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3092482 false ) 
+	#(50 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3632130 false ) 
+	#(49 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3632129 false ) 
+	#(111 2 #liftFirstValue: 8458242 false ) 
+	#(113 2 #liftFirstValue: 8574978 false ) 
+	#(47 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3365889 false ) 
+	#(45 2 #reduceActionForPragma4: 3238916 false ) 
+	#(51 2 #reduceActionForMethodSequence5: 3699717 false ) 
+	#(44 2 #reduceActionForPragma__pragma__2: 3218434 false ) 
+	#(52 2 #reduceActionForPragma__pragma__2: 3746818 false ) 
+	#(53 2 #reduceActionForSequence2: 3920898 false ) 
+	#(56 1 #reduceActionForKeywordPattern1: 4061185 false ) 
+	#(58 1 #reduceActionForStatementList1: 4113409 false ) 
+	#(53 2 #reduceActionForSequence3: 3920899 false ) 
+	#(59 2 #reduceActionForStatement1: 4374529 false ) 
+	#(81 2 #reduceActionForArray1: 6173697 false ) 
+	#(83 0 #reduceActionFor__period___period__Assignment__value___1: 6227969 false ) 
+	#(86 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6457345 false ) 
+	#(110 2 #liftSecondValue: 8390659 false ) 
+	#(61 2 #reduceActionForCascade1: 4792321 false ) 
+	#(64 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4990977 false ) 
+	#(62 1 #reduceActionForKeywordPattern1: 4970497 false ) 
+	#(67 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5207041 false ) 
+	#(70 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5311489 false ) 
+	#(68 1 #reduceActionForKeywordMessage1: 5293057 false ) 
+	#(72 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5374977 false ) 
+	#(68 1 #reduceActionForKeywordMessage1: 5293058 false ) 
+	#(74 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5528577 false ) 
+	#(108 1 #liftFirstValue: 8299522 false ) 
+	#(61 2 #reduceActionForCascade1: 4792322 false ) 
+	#(78 1 #reduceActionForUnaryMessage1: 5852161 false ) 
+	#(77 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5771265 false ) 
+	#(78 1 #liftFirstValue: 5852162 false ) 
+	#(61 2 #reduceActionForCascade1: 4792323 false ) 
+	#(92 0 #reduceActionFor_period___period__1: 7047169 false ) 
+	#(107 3 #reduceActionForTemplate1: 8189953 false ) 
+	#(40 3 #reduceActionForMethodPattern8: 2753544 false ) 
+	#(49 3 #reduceActionFor_TemplateKeyword__selectorPart___space___Variable__variable__2: 3632130 false ) 
+	#(54 3 #reduceActionForTemporaries1: 3986433 false ) 
+	#(55 2 #reduceActionForPragma__pragma__2: 4019202 false ) 
+	#(45 3 #reduceActionForPragma1: 3238913 false ) 
+	#(46 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3365890 false ) 
+	#(46 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3365889 false ) 
+	#(46 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 3365891 false ) 
+	#(45 3 #reduceActionForPragma3: 3238915 false ) 
+	#(47 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3365890 false ) 
+	#(45 3 #reduceActionForPragma1: 3238914 false ) 
+	#(45 3 #reduceActionForPragma5: 3238917 false ) 
+	#(51 3 #reduceActionForMethodSequence6: 3699718 false ) 
+	#(51 3 #reduceActionForMethodSequence7: 3699719 false ) 
+	#(57 1 #reduceActionForPragma__pragma__1: 4089857 false ) 
+	#(56 2 #reduceActionForStatements2: 4061186 false ) 
+	#(51 3 #reduceActionForMethodSequence3: 3699715 false ) 
+	#(53 3 #reduceActionForSequence4: 3920900 false ) 
+	#(81 3 #reduceActionForArray2: 6173698 false ) 
+	#(85 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 6457345 false ) 
+	#(87 2 #reduceActionForBlockArgs2: 6629378 false ) 
+	#(84 3 #reduceActionForBlock2: 6325250 false ) 
+	#(86 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6457346 false ) 
+	#(80 3 #reduceActionForValue5: 6013957 false ) 
+	#(94 3 #reduceActionForByteArrayLiteral1: 7498753 false ) 
+	#(96 1 #liftFirstValue: 7617537 false ) 
+	#(95 2 #reduceActionForPragma__pragma__2: 7549954 false ) 
+	#(96 1 #reduceActionForValue6: 7617538 false ) 
+	#(63 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 4990977 false ) 
+	#(65 1 #liftFirstValue: 5048321 false ) 
+	#(65 1 #liftFirstValue: 5048322 false ) 
+	#(65 1 #liftFirstValue: 5048323 false ) 
+	#(64 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4990978 false ) 
+	#(69 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5311489 false ) 
+	#(75 2 #reduceActionForBinaryMessage1: 5612545 false ) 
+	#(70 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5311490 false ) 
+	#(72 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5374978 false ) 
+	#(108 2 #liftFirstValue: 8299521 false ) 
+	#(71 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 5374977 false ) 
+	#(60 3 #reduceActionForAssignment1: 4455425 false ) 
+	#(60 3 #reduceActionForAssignment1: 4455427 false ) 
+	#(102 0 #reduceActionForEndLiteralArray1: 7959553 false ) 
+	#(60 3 #reduceActionForAssignment1: 4455426 false ) 
+	#(60 3 #reduceActionForAssignment1: 4455428 false ) 
+	#(51 4 #reduceActionForMethodSequence1: 3699713 false ) 
+	#(51 4 #reduceActionForMethodSequence8: 3699720 false ) 
+	#(58 3 #reduceActionForStatementList3: 4113411 false ) 
+	#(57 2 #reduceActionForPragma__pragma__2: 4089858 false ) 
+	#(58 3 #reduceActionForStatementList3: 4113410 false ) 
+	#(51 4 #reduceActionForMethodSequence4: 3699716 false ) 
+	#(81 4 #reduceActionForArray3: 6173699 false ) 
+	#(83 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6227970 false ) 
+	#(84 4 #reduceActionForBlock1: 6325249 false ) 
+	#(84 4 #reduceActionForBlock3: 6325251 false ) 
+	#(93 1 #reduceActionForSymbolLiteral1: 7124995 false ) 
+	#(93 1 #reduceActionForSymbolLiteral1: 7124994 false ) 
+	#(93 1 #reduceActionForSymbolLiteral1: 7124996 false ) 
+	#(93 1 #reduceActionForSymbolLiteral1: 7124998 false ) 
+	#(93 1 #reduceActionForSymbolLiteral1: 7124997 false ) 
+	#(93 1 #liftFirstValue: 7124993 false ) 
+	#(92 2 #reduceActionForPragma__pragma__2: 7047170 false ) 
+	#(93 1 #reduceActionForValue6: 7125000 false ) 
+	#(51 5 #reduceActionForMethodSequence2: 3699714 false ) 
+	#(81 5 #reduceActionForArray4: 6173700 false ) 
+	#(82 2 #reduceActionFor__keyword___selectorPart__Variable__variable__1: 6227969 false ) 
+	#(91 5 #reduceActionForArrayLiteral1: 6975489 false ) 
+	#(58 5 #reduceActionForStatementList4: 4113412 false ) 
+	#(93 3 #reduceActionForArrayLiteralValue7: 7124999 false )
 	).
 ]
 
@@ -546,211 +623,264 @@ GtPharoTemplateParser class >> startingStateForTemplate [
 
 { #category : #generated }
 GtPharoTemplateParser class >> symbolNames [
-	^ #('<true>' '<false>' '<nil>' '<name>' '<nameAssignment>' '<bar>' '<string>' '<symbol>' '<character>' '<number>' '<negativeNumber>' '<literalArrayKeyword>' '<return>' '<lt>' '<gt>' '<leftBrace>' '<leftBracket>' '<colon>' '<leftParen>' '<literalArrayStart>' '<byteArrayStart>' '<rightParen>' '<rightBracket>' '<rightBrace>' '<keyword>' '<binary>' '<semicolon>' '<assign>' '<period>' '<comment>' '<whitespace>' '<patternToken>' '<self>' '<super>' '<thisContext>' '<doubleLeftBrace>' '<doubleRightBrace>' 'B e g i n' 'Method' 'MethodPattern' '(<keyword> ''selectorPart'' Variable ''variable'')' '(<keyword> ''selectorPart'' Variable ''variable'')+' 'Pragmas' 'Pragma ''pragma''+' 'Pragma' '(<keyword> ''selectorPart'' (Literal ''value'' | Variable ''value''))' '(<keyword> ''selectorPart'' (Literal ''value'' | Variable ''value''))+' 'KeywordPattern' 'MethodSequence' '<period> ''period''*' 'Sequence' 'Temporaries' 'Variable ''variable''*' 'Statements' '<period> ''period''+' 'StatementList' 'Statement' 'Assignment' 'Cascade' 'CascadedMessages' '(<semicolon> ''semicolon'' CascadedMessage ''message'')' '(<semicolon> ''semicolon'' CascadedMessage ''message'')+' 'CascadedMessage' 'KeywordMessageSend' 'KeywordMessageSendVars' 'KeywordMessage' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')+' 'BinaryMessageSend' 'BinaryMessageSendVars' 'BinaryMessage' 'UnaryMessageSend' 'UnaryMessageSendVars' 'UnaryMessage' 'Variable' 'Value' 'Array' '(<period> ''period'' Assignment ''value'')' '(<period> ''period'' Assignment ''value'')*' 'Block' '(<colon> ''colon'' Variable ''variable'')' '(<colon> ''colon'' Variable ''variable'')+' 'BlockArgs' 'Literal' 'StringLiteral' 'NumberLiteral' 'ArrayLiteral' 'ArrayLiteralValue ''value''*' 'ArrayLiteralValue' 'ByteArrayLiteral' 'ByteArrayLiteralValue ''value''*' 'ByteArrayLiteralValue' 'CharacterLiteral' 'SymbolLiteral' 'BooleanLiteral' 'NilLiteral' 'SwitchToLiteralArray' 'EndLiteralArray' 'SelfVariable' 'SuperVariable' 'NamedVariable' 'ThisContextVariable' 'Template' 'E O F' 'error')
+	^ #('<true>' '<false>' '<nil>' '<name>' '<nameAssignment>' '<bar>' '<string>' '<symbol>' '<character>' '<number>' '<negativeNumber>' '<literalArrayKeyword>' '<return>' '<lt>' '<gt>' '<leftBrace>' '<leftBracket>' '<colon>' '<leftParen>' '<literalArrayStart>' '<byteArrayStart>' '<rightParen>' '<rightBracket>' '<rightBrace>' '<keyword>' '<binary>' '<semicolon>' '<assign>' '<period>' '<comment>' '<space>' '<self>' '<super>' '<thisContext>' '<doubleLeftBrace>' '<doubleRightBrace>' '<symbolHash>' 'B e g i n' 'Method' 'MethodPattern' '(<keyword> ''selectorPart'' Variable ''variable'')' '(<keyword> ''selectorPart'' Variable ''variable'')+' 'Pragmas' 'Pragma ''pragma''+' 'Pragma' '(<keyword> ''selectorPart'' (Literal ''value'' | Variable ''value'' | TemplateName ''value''))' '(<keyword> ''selectorPart'' (Literal ''value'' | Variable ''value'' | TemplateName ''value''))+' 'KeywordPattern' '(TemplateKeyword ''selectorPart'' <space>? Variable ''variable'')' '(TemplateKeyword ''selectorPart'' <space>? Variable ''variable'')+' 'MethodSequence' '<period> ''period''*' 'Sequence' 'Temporaries' 'Variable ''variable''*' 'Statements' '<period> ''period''+' 'StatementList' 'Statement' 'Assignment' 'Cascade' 'CascadedMessages' '(<semicolon> ''semicolon'' CascadedMessage ''message'')' '(<semicolon> ''semicolon'' CascadedMessage ''message'')+' 'CascadedMessage' 'KeywordMessageSend' 'KeywordMessageSendVars' 'KeywordMessage' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')+' '(TemplatePattern ''selectorPart'' BinaryMessageSend ''value'')' '(TemplatePattern ''selectorPart'' BinaryMessageSend ''value'')+' 'BinaryMessageSend' 'BinaryMessageSendVars' 'BinaryMessage' 'UnaryMessageSend' 'UnaryMessageSendVars' 'UnaryMessage' 'Variable' 'Value' 'Array' '(<period> ''period'' Assignment ''value'')' '(<period> ''period'' Assignment ''value'')*' 'Block' '(<colon> ''colon'' Variable ''variable'')' '(<colon> ''colon'' Variable ''variable'')+' 'BlockArgs' 'Literal' 'StringLiteral' 'NumberLiteral' 'ArrayLiteral' 'ArrayLiteralValue ''value''*' 'ArrayLiteralValue' 'ByteArrayLiteral' 'ByteArrayLiteralValue ''value''*' 'ByteArrayLiteralValue' 'CharacterLiteral' 'SymbolLiteral' 'BooleanLiteral' 'NilLiteral' 'SwitchToLiteralArray' 'EndLiteralArray' 'SelfVariable' 'SuperVariable' 'NamedVariable' 'ThisContextVariable' 'Template' 'TemplatePattern' 'TemplateName' 'TemplateSymbol' 'TemplateKeyword' '(<name> | Template)' '(<name> | Template)+' 'E O F' 'error')
 ]
 
 { #category : #generated }
 GtPharoTemplateParser class >> symbolTypes [
-	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #GtPharoMethodNode #GtPharoMethodNode #GtPharoMethodPatternNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoPragmaNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoSequenceNode #OrderedCollection #GtPharoSequenceNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoProgramNode #GtPharoValueNode #GtPharoValueNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoMessageNode #GtPharoValueNode #OrderedCollection #GtPharoKeywordMessageNode #OrderedCollection #OrderedCollection #GtPharoValueNode #OrderedCollection #GtPharoBinaryMessageNode #GtPharoValueNode #OrderedCollection #GtPharoUnaryMessageNode #GtPharoVariableNode #GtPharoValueNode #GtPharoArrayNode #OrderedCollection #OrderedCollection #GtPharoBlockNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoLiteralNode #GtPharoStringLiteralNode #GtPharoNumberLiteralNode #GtPharoArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoByteArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoCharacterLiteralNode #GtPharoSymbolLiteralNode #GtPharoBooleanLiteralNode #GtPharoNilLiteralNode #ByteSymbol nil #GtPharoSelfVariableNode #GtPharoSuperVariableNode #GtPharoNamedVariableNode #GtPharoThisContextVariableNode #GtPharoTemplateNode #SmaCCToken #SmaCCErrorNode)
+	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #GtPharoMethodNode #GtPharoMethodNode #GtPharoMethodPatternNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoPragmaNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoSequenceNode #OrderedCollection #GtPharoSequenceNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoProgramNode #GtPharoValueNode #GtPharoValueNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoProgramNode #GtPharoValueNode #OrderedCollection #GtPharoKeywordMessageNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoValueNode #OrderedCollection #GtPharoBinaryMessageNode #GtPharoValueNode #OrderedCollection #GtPharoProgramNode #GtPharoVariableNode #GtPharoValueNode #GtPharoArrayNode #OrderedCollection #OrderedCollection #GtPharoBlockNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoLiteralNode #GtPharoStringLiteralNode #GtPharoNumberLiteralNode #GtPharoArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoByteArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoCharacterLiteralNode #GtPharoSymbolLiteralNode #GtPharoBooleanLiteralNode #GtPharoNilLiteralNode #ByteSymbol nil #GtPharoSelfVariableNode #GtPharoSuperVariableNode #GtPharoNamedVariableNode #GtPharoThisContextVariableNode #GtPharoTemplateNode #GtPharoTemplateNode #Object #Object #Object #Object #Object #SmaCCToken #SmaCCErrorNode)
 ]
 
 { #category : #generated }
 GtPharoTemplateParser class >> transitionTable [
 ^#(
-#[1 0 25 0 4 0 29 0 25 0 33 0 26 0 37 0 39 0 41 0 40 0 45 0 41 0 49 0 42 0 53 0 48] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 57 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 61 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 0 65 0 43 0 69 0 44 0 73 0 45 0 77 0 49 0 81 0 50 0 77 0 51 0 89 0 52 0 6 0 104 0 6 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 0 165 0 57 0 165 0 58 0 165 0 59 0 165 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 21 0 105] 
-#[1 0 25 0 4 0 29 0 25 0 33 0 26 1 25 0 40 0 45 0 41 0 49 0 42 0 53 0 48] 
-#[1 0 161 0 36 1 29 0 103] 
-#[0 0 14 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[1 0 105 0 4 0 149 0 33 0 153 0 34 0 157 0 35 1 33 0 75 1 33 0 99 1 33 0 100 1 33 0 101 1 33 0 102 1 37 0 105] 
-#[1 0 105 0 4 0 149 0 33 0 153 0 34 0 157 0 35 1 41 0 75 1 41 0 99 1 41 0 100 1 41 0 101 1 41 0 102 1 45 0 105] 
-#[0 0 0 0 104] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 57 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 61 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 0 65 0 43 0 69 0 44 0 73 0 45 1 49 0 49 0 81 0 50 1 49 0 51 0 89 0 52 0 6 0 104 0 6 0 105] 
-#[0 0 18 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[1 0 22 0 1 0 22 0 2 0 22 0 3 0 22 0 4 0 22 0 6 0 22 0 7 0 22 0 8 0 22 0 9 0 22 0 10 0 22 0 11 0 22 0 13 0 22 0 14 0 22 0 16 0 22 0 17 0 22 0 19 0 22 0 20 0 22 0 21 1 53 0 25 0 22 0 29 0 22 0 33 0 22 0 34 0 22 0 35 0 22 0 36 1 57 0 41 0 22 0 104 0 22 0 105] 
-#[0 0 26 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[1 0 30 0 4 0 30 0 6 0 30 0 33 0 30 0 34 0 30 0 35 1 61 0 53] 
-#[1 1 65 0 4 1 69 0 25 1 73 0 46 1 77 0 47 1 81 0 105] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 57 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 1 85 0 50 1 89 0 52 0 6 0 104 0 6 0 105] 
-#[1 0 34 0 1 0 34 0 2 0 34 0 3 0 34 0 4 0 34 0 6 0 34 0 7 0 34 0 8 0 34 0 9 0 34 0 10 0 34 0 11 0 34 0 13 0 61 0 14 0 34 0 16 0 34 0 17 0 34 0 19 0 34 0 20 0 34 0 21 0 34 0 29 0 34 0 33 0 34 0 34 0 34 0 35 0 34 0 36 1 93 0 45 0 34 0 104 0 34 0 105] 
-#[0 0 38 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 0 0 0 104] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 42 0 23 1 97 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 1 101 0 54 1 105 0 56 1 109 0 57 1 109 0 58 1 109 0 59 1 109 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 0 42 0 104 0 7 0 105] 
-#[0 0 46 0 104] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 61 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 1 113 0 43 0 69 0 44 0 73 0 45 1 117 0 50 0 6 0 104 0 6 0 105] 
-#[0 0 50 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 54 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 58 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 62 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[0 0 66 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 70 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 74 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 78 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 82 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 1 121 0 58 1 121 0 59 1 121 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 21 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 125 0 24 1 129 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 1 133 0 58 1 133 0 59 1 133 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 21 0 105] 
-#[1 0 86 0 1 0 86 0 2 0 86 0 3 0 86 0 4 0 86 0 6 0 86 0 7 0 86 0 8 0 86 0 9 0 86 0 10 0 86 0 11 0 86 0 13 0 86 0 16 0 86 0 17 1 137 0 18 0 86 0 19 0 86 0 20 0 86 0 21 0 86 0 23 0 86 0 29 0 86 0 33 0 86 0 34 0 86 0 35 0 86 0 36 1 141 0 81 1 145 0 82 1 149 0 83 0 86 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 1 153 0 58 1 153 0 59 1 153 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 21 0 105] 
-#[1 0 90 0 10 0 90 0 11 0 90 0 23 1 157 0 91 0 90 0 105] 
-#[0 0 94 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[0 0 98 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[0 0 102 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 1 161 0 58 1 161 0 59 1 161 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 21 0 105] 
-#[0 0 0 0 104] 
-#[0 0 106 0 23 0 29 0 104 0 105] 
-#[0 0 110 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[0 0 114 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[1 0 118 0 22 0 118 0 23 0 118 0 24 1 165 0 27 0 118 0 29 0 118 0 37 1 169 0 60 1 173 0 61 1 177 0 62 0 118 0 104 0 118 0 105] 
-#[1 0 122 0 22 0 122 0 23 0 122 0 24 1 181 0 25 1 185 0 26 0 122 0 29 0 122 0 37 1 189 0 66 1 193 0 67 1 197 0 68 1 201 0 71 0 122 0 104 0 122 0 105] 
-#[1 0 126 0 22 0 126 0 23 0 126 0 24 0 126 0 25 0 126 0 26 1 165 0 27 0 126 0 29 0 126 0 37 1 205 0 60 1 173 0 61 1 177 0 62 0 126 0 104 0 126 0 105] 
-#[1 1 209 0 4 0 130 0 22 0 130 0 23 0 130 0 24 0 130 0 25 0 130 0 26 0 130 0 27 0 130 0 29 0 130 0 37 1 213 0 74 0 130 0 104 0 130 0 105] 
-#[1 0 134 0 4 0 134 0 22 0 134 0 23 0 134 0 24 0 134 0 25 0 134 0 26 1 165 0 27 0 134 0 29 0 134 0 37 1 217 0 60 1 173 0 61 1 177 0 62 0 134 0 104 0 134 0 105] 
-#[1 0 138 0 4 0 138 0 22 0 138 0 23 0 138 0 24 0 138 0 25 0 138 0 26 1 221 0 28 0 138 0 29 0 138 0 37 0 138 0 104 0 138 0 105] 
-#[0 0 142 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 146 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 150 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 154 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 158 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 162 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 166 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 170 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 174 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 178 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 182 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 186 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 225 0 20] 
-#[0 0 190 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[0 0 194 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[0 0 198 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[0 0 202 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 33 0 34 0 35 0 36 0 37 0 104 0 105] 
-#[1 0 206 0 22 0 206 0 23 0 206 0 24 1 229 0 28 0 206 0 29 0 206 0 37 0 206 0 104 0 206 0 105] 
-#[0 0 210 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 0 0 104] 
-#[0 0 0 0 104] 
-#[0 0 214 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 0 218 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 0 222 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 0 226 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 0 230 0 104] 
-#[1 0 105 0 4 0 149 0 33 0 153 0 34 0 157 0 35 1 33 0 75 1 33 0 99 1 33 0 100 1 33 0 101 1 33 0 102 1 233 0 105] 
-#[0 0 234 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[1 0 105 0 4 1 237 0 6 0 149 0 33 0 153 0 34 0 157 0 35 1 241 0 75 1 241 0 99 1 241 0 100 1 241 0 101 1 241 0 102] 
-#[0 1 245 0 15] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 1 249 0 75 1 253 0 84 1 253 0 85 1 253 0 86 1 253 0 87 1 253 0 90 1 253 0 93 1 253 0 94 1 253 0 95 1 253 0 96 0 253 0 97 1 249 0 99 1 249 0 100 1 249 0 101 1 249 0 102] 
-#[0 0 238 0 15 0 25] 
-#[1 2 1 0 15 1 69 0 25 2 5 0 46] 
-#[1 0 242 0 1 0 242 0 2 0 242 0 3 0 242 0 4 0 242 0 6 0 242 0 7 0 242 0 8 0 242 0 9 0 242 0 10 0 242 0 11 0 242 0 13 0 242 0 14 2 9 0 15 0 242 0 16 0 242 0 17 0 242 0 19 0 242 0 20 0 242 0 21 0 242 0 29 0 242 0 33 0 242 0 34 0 242 0 35 0 242 0 36 0 242 0 104 0 242 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 97 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 13 0 54 1 105 0 56 1 109 0 57 1 109 0 58 1 109 0 59 1 109 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 0 246 0 104 1 21 0 105] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 61 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 2 17 0 43 0 69 0 44 0 73 0 45 2 21 0 50 0 6 0 104 0 6 0 105] 
-#[0 0 250 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 0 254 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 2 0 23 0 104 0 105] 
-#[1 1 6 0 23 2 25 0 29 2 29 0 55 1 6 0 104 1 6 0 105] 
-#[0 1 10 0 23 0 29 0 104 0 105] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 2 33 0 50 0 6 0 104 0 6 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 14 0 23 1 97 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 37 0 54 1 105 0 56 1 109 0 57 1 109 0 58 1 109 0 59 1 109 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 14 0 104 0 11 0 105] 
-#[0 1 18 0 23 0 29 0 104 0 105] 
-#[0 1 22 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 2 41 0 24] 
-#[1 1 26 0 24 1 26 0 29 2 45 0 79] 
-#[1 0 105 0 4 0 149 0 33 0 153 0 34 0 157 0 35 2 49 0 75 2 49 0 99 2 49 0 100 2 49 0 101 2 49 0 102] 
-#[0 1 30 0 6 0 18 0 23] 
-#[1 2 53 0 6 1 137 0 18 2 57 0 23 2 61 0 81] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 57 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 23 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 0 81 0 50 2 65 0 51 2 69 0 52 0 6 0 105] 
-#[0 2 73 0 22] 
-#[1 0 121 0 10 0 125 0 11 2 77 0 23 2 85 0 86 2 85 0 92 2 89 0 105] 
-#[0 2 93 0 37] 
-#[1 1 209 0 4 1 181 0 25 1 185 0 26 2 97 0 63 2 97 0 66 1 193 0 67 1 197 0 68 2 97 0 71 2 97 0 74] 
-#[0 1 34 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[0 1 38 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[1 1 42 0 22 1 42 0 23 1 42 0 24 1 165 0 27 1 42 0 29 1 42 0 37 2 113 0 61 1 42 0 104 1 42 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 2 117 0 69 2 121 0 70 0 193 0 72 2 125 0 73 0 193 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 193 0 99 0 193 0 100 0 193 0 101 0 193 0 102 1 21 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 2 133 0 72 2 125 0 73 2 133 0 75 2 133 0 76 2 133 0 77 2 133 0 80 2 133 0 84 2 133 0 85 2 133 0 86 2 133 0 87 2 133 0 90 2 133 0 93 2 133 0 94 2 133 0 95 2 133 0 96 0 253 0 97 2 133 0 99 2 133 0 100 2 133 0 101 2 133 0 102 1 21 0 105] 
-#[0 1 46 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 50 0 22 0 23 0 24 0 25 0 27 0 29 0 37 0 104 0 105] 
-#[1 1 54 0 22 1 54 0 23 1 54 0 24 1 181 0 25 1 54 0 27 1 54 0 29 1 54 0 37 2 137 0 67 1 54 0 104 1 54 0 105] 
-#[0 1 58 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 62 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[0 1 66 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 70 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 74 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 141 0 58 2 141 0 59 2 141 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 2 145 0 103 1 21 0 105] 
-#[1 1 78 0 1 1 78 0 2 1 78 0 3 1 78 0 4 1 78 0 7 1 78 0 8 1 78 0 9 1 78 0 10 1 78 0 11 1 78 0 12 1 78 0 19 1 78 0 20 1 78 0 21 1 78 0 22 1 78 0 26 1 78 0 27 1 78 0 29 2 149 0 88 1 78 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 153 0 58 2 153 0 59 2 153 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 2 157 0 103 1 21 0 105] 
-#[0 1 82 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 86 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 90 0 4 0 6 0 33 0 34 0 35] 
-#[0 1 94 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 98 0 15 0 25] 
-#[0 1 102 0 15 0 25] 
-#[0 1 106 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 110 0 15 0 25] 
-#[0 1 114 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 118 0 104] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 2 161 0 50 0 6 0 104 0 6 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 97 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 165 0 54 1 105 0 56 1 109 0 57 1 109 0 58 1 109 0 59 1 109 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 122 0 104 1 21 0 105] 
-#[0 1 126 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 130 0 23 2 169 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 173 0 57 2 173 0 58 2 173 0 59 2 173 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 130 0 104 0 15 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 97 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 177 0 54 1 105 0 56 1 109 0 57 1 109 0 58 1 109 0 59 1 109 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 134 0 104 1 21 0 105] 
-#[0 1 138 0 23 0 104 0 105] 
-#[0 1 142 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[1 2 181 0 24 2 185 0 29 2 189 0 78] 
-#[0 1 146 0 6 0 18 0 23] 
-#[0 1 150 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 33 0 34 0 35 0 36 0 105] 
-#[0 1 154 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 158 0 6 0 18 0 23] 
-#[1 2 193 0 23 2 197 0 105] 
-#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 23 0 6 0 29 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 36 1 117 0 50 0 6 0 105] 
-#[0 1 162 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 166 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 170 0 10 0 11 0 23 0 105] 
-#[0 1 174 0 10 0 11 0 23 0 105] 
-#[0 1 178 0 10 0 11 0 23 0 105] 
-#[0 1 182 0 22 0 23 0 24 0 28 0 29 0 37 0 104 0 105] 
-#[0 1 186 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 190 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 194 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 198 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 202 0 22 0 23 0 24 0 27 0 29 0 37 0 104 0 105] 
-#[1 1 206 0 22 1 206 0 23 1 206 0 24 1 206 0 25 1 185 0 26 1 206 0 27 1 206 0 29 1 206 0 37 1 201 0 71 1 206 0 104 1 206 0 105] 
-#[0 0 126 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 134 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 0 138 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[1 1 209 0 4 1 210 0 22 1 210 0 23 1 210 0 24 1 210 0 25 1 210 0 26 1 210 0 27 1 210 0 29 1 210 0 37 1 213 0 74 1 210 0 104 1 210 0 105] 
-#[0 1 214 0 22 0 23 0 24 0 25 0 27 0 29 0 37 0 104 0 105] 
-#[0 1 218 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[1 0 19 0 22 0 19 0 23 0 19 0 24 1 229 0 28 0 19 0 29 0 19 0 37 0 19 0 104 0 19 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 2 201 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 2 205 0 12 2 209 0 19 0 10 0 20 0 145 0 21 1 226 0 22 2 213 0 26 2 217 0 27 2 221 0 29 2 229 0 84 2 229 0 85 2 229 0 86 2 229 0 87 2 229 0 89 2 229 0 90 2 229 0 93 2 229 0 94 2 229 0 95 2 229 0 96 0 253 0 97 2 233 0 98 2 237 0 105] 
-#[0 1 230 0 22 0 23 0 24 0 29 0 37 0 104 0 105] 
-#[1 0 23 0 22 0 23 0 23 0 23 0 24 1 229 0 28 0 23 0 29 0 23 0 37 0 23 0 104 0 23 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 129 0 13 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 1 97 0 29 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 241 0 54 1 105 0 56 1 109 0 57 1 109 0 58 1 109 0 59 1 109 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 238 0 104 1 21 0 105] 
-#[0 1 242 0 104] 
-#[0 1 246 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 33 0 34 0 35 0 36 0 104 0 105] 
-#[0 1 250 0 23 0 29 0 104 0 105] 
-#[0 1 254 0 104] 
-#[0 2 2 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 0 105 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 0 133 0 16 0 137 0 17 0 141 0 19 0 10 0 20 0 145 0 21 2 245 0 24 0 149 0 33 0 153 0 34 0 157 0 35 0 161 0 36 2 249 0 58 2 249 0 59 2 249 0 64 0 181 0 65 0 185 0 69 0 189 0 70 0 193 0 72 0 197 0 73 0 201 0 75 0 193 0 76 0 193 0 77 0 193 0 80 0 193 0 84 0 193 0 85 0 193 0 86 0 193 0 87 0 193 0 90 0 193 0 93 0 193 0 94 0 193 0 95 0 193 0 96 0 253 0 97 0 201 0 99 0 201 0 100 0 201 0 101 0 201 0 102 1 17 0 103 1 21 0 105] 
-#[0 2 6 0 24 0 29] 
-#[0 2 10 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 2 14 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 2 18 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 2 22 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[1 1 78 0 1 1 78 0 2 1 78 0 3 1 78 0 4 1 78 0 7 1 78 0 8 1 78 0 9 1 78 0 10 1 78 0 11 1 78 0 12 1 78 0 19 1 78 0 20 1 78 0 21 1 78 0 22 1 78 0 26 1 78 0 27 1 78 0 29 2 253 0 88 1 78 0 105] 
-#[0 2 26 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 2 30 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 2 34 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 2 38 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 2 42 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 3 1 0 22] 
-#[0 2 46 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105] 
-#[0 2 50 0 104] 
-#[0 2 54 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 2 58 0 24 0 29] 
-#[1 0 93 0 1 0 97 0 2 0 101 0 3 2 201 0 4 0 109 0 7 0 113 0 8 0 117 0 9 0 121 0 10 0 125 0 11 2 205 0 12 2 209 0 19 0 10 0 20 0 145 0 21 3 5 0 22 2 213 0 26 2 217 0 27 2 221 0 29 2 229 0 84 2 229 0 85 2 229 0 86 2 229 0 87 2 229 0 89 2 229 0 90 2 229 0 93 2 229 0 94 2 229 0 95 2 229 0 96 0 253 0 97 2 237 0 105] 
-#[0 2 62 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 37 0 104 0 105] 
-#[0 2 66 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 105]
+#[1 0 25 0 4 0 29 0 25 0 33 0 26 0 37 0 35 0 41 0 39 0 45 0 40 0 49 0 41 0 53 0 42 0 57 0 48 0 61 0 49 0 65 0 50 0 69 0 107 0 73 0 111 0 81 0 112 0 81 0 113] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 85 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 89 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 0 93 0 43 0 97 0 44 0 101 0 45 0 105 0 51 0 109 0 52 0 105 0 53 0 117 0 54 0 6 0 114 0 6 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 0 193 0 59 0 193 0 60 0 193 0 61 0 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[1 0 25 0 4 0 29 0 25 0 33 0 26 0 37 0 35 1 61 0 40 0 49 0 41 0 53 0 42 0 57 0 48 0 61 0 49 0 65 0 50 0 69 0 107 0 73 0 111 0 81 0 112 0 81 0 113] 
+#[1 0 37 0 35 1 65 0 107] 
+#[1 0 14 0 1 0 14 0 2 0 14 0 3 0 7 0 4 0 14 0 6 0 14 0 7 0 14 0 8 0 14 0 9 0 14 0 10 0 14 0 11 0 14 0 13 0 14 0 14 0 14 0 16 0 14 0 17 0 18 0 18 0 14 0 19 0 14 0 20 0 14 0 21 0 14 0 29 0 14 0 32 0 14 0 33 0 14 0 34 0 7 0 35 0 14 0 37 0 14 0 114 0 14 0 115] 
+#[1 0 11 0 4 0 22 0 31 0 15 0 32 0 19 0 33 0 23 0 34 0 27 0 35 1 69 0 79 1 69 0 103 1 69 0 104 1 69 0 105 1 69 0 106 1 49 0 107 1 49 0 109 1 77 0 115] 
+#[1 1 49 0 4 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 1 81 0 79 1 81 0 103 1 81 0 104 1 81 0 105 1 81 0 106 1 85 0 107 1 49 0 109 1 89 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 1 93 0 60 1 93 0 61 1 93 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[0 0 0 0 114] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 85 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 89 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 0 93 0 43 0 97 0 44 0 101 0 45 1 97 0 51 0 109 0 52 1 97 0 53 0 117 0 54 0 6 0 114 0 6 0 115] 
+#[0 0 26 0 25] 
+#[1 1 101 0 25 1 105 0 41] 
+#[0 0 30 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 0 34 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[1 0 38 0 1 0 38 0 2 0 38 0 3 0 31 0 4 0 38 0 6 0 38 0 7 0 38 0 8 0 38 0 9 0 38 0 10 0 38 0 11 0 38 0 13 0 38 0 14 0 38 0 16 0 38 0 17 0 38 0 19 0 38 0 20 0 38 0 21 0 73 0 25 0 38 0 29 0 38 0 32 0 38 0 33 0 38 0 34 0 35 0 35 0 38 0 37 1 117 0 49 0 81 0 107 0 73 0 111 0 81 0 112 0 81 0 113 0 38 0 114 0 38 0 115] 
+#[1 0 42 0 1 0 42 0 2 0 42 0 3 0 39 0 4 0 42 0 6 0 42 0 7 0 42 0 8 0 42 0 9 0 42 0 10 0 42 0 11 0 42 0 13 0 42 0 14 0 42 0 16 0 42 0 17 0 46 0 18 0 42 0 19 0 42 0 20 0 42 0 21 0 42 0 29 0 42 0 32 0 42 0 33 0 42 0 34 0 39 0 35 0 42 0 37 0 42 0 114 0 42 0 115] 
+#[1 1 49 0 4 1 125 0 31 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 1 129 0 79 1 129 0 103 1 129 0 104 1 129 0 105 1 129 0 106 1 49 0 107 1 49 0 109] 
+#[0 0 50 0 4 0 18 0 35] 
+#[1 1 137 0 4 1 133 0 18 0 37 0 35 1 137 0 107 1 137 0 112] 
+#[1 0 54 0 4 0 54 0 6 0 54 0 32 0 54 0 33 0 54 0 34 0 54 0 35 1 141 0 55] 
+#[1 1 145 0 4 1 149 0 25 0 37 0 35 1 153 0 46 1 157 0 47 1 161 0 107 1 161 0 109 1 165 0 115] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 85 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 1 169 0 52 1 173 0 54 0 6 0 114 0 6 0 115] 
+#[1 0 58 0 1 0 58 0 2 0 58 0 3 0 58 0 4 0 58 0 6 0 58 0 7 0 58 0 8 0 58 0 9 0 58 0 10 0 58 0 11 0 58 0 13 0 89 0 14 0 58 0 16 0 58 0 17 0 58 0 19 0 58 0 20 0 58 0 21 0 58 0 29 0 58 0 32 0 58 0 33 0 58 0 34 0 58 0 35 0 58 0 37 1 177 0 45 0 58 0 114 0 58 0 115] 
+#[0 0 62 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 0 0 0 114] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 66 0 23 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 1 185 0 56 1 189 0 58 1 193 0 59 1 193 0 60 1 193 0 61 1 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 0 66 0 114 0 43 0 115] 
+#[0 0 70 0 114] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 89 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 1 197 0 43 0 97 0 44 0 101 0 45 1 201 0 52 0 6 0 114 0 6 0 115] 
+#[0 0 74 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 78 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 82 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 86 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 90 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 94 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 98 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 102 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 106 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 1 205 0 60 1 205 0 61 1 205 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 209 0 24 1 213 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 1 217 0 60 1 217 0 61 1 217 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[1 0 110 0 1 0 110 0 2 0 110 0 3 0 110 0 4 0 110 0 6 0 110 0 7 0 110 0 8 0 110 0 9 0 110 0 10 0 110 0 11 0 110 0 13 0 110 0 16 0 110 0 17 1 221 0 18 0 110 0 19 0 110 0 20 0 110 0 21 0 110 0 23 0 110 0 29 0 110 0 32 0 110 0 33 0 110 0 34 0 110 0 35 0 110 0 37 1 225 0 85 1 229 0 86 1 233 0 87 0 110 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 1 237 0 60 1 237 0 61 1 237 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[1 0 114 0 10 0 114 0 11 0 114 0 23 1 241 0 95 0 114 0 115] 
+#[0 0 118 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 122 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 126 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[1 0 37 0 35 1 245 0 107] 
+#[0 0 0 0 114] 
+#[0 0 130 0 23 0 29 0 35 0 114 0 115] 
+#[0 0 134 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 138 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[1 0 142 0 22 0 142 0 23 0 142 0 24 1 249 0 27 0 142 0 29 0 142 0 35 0 142 0 36 1 253 0 62 2 1 0 63 2 5 0 64 0 142 0 114 0 142 0 115] 
+#[1 0 146 0 22 0 146 0 23 0 146 0 24 2 9 0 25 2 13 0 26 0 146 0 29 0 47 0 35 0 146 0 36 2 17 0 68 2 21 0 69 2 25 0 70 2 29 0 71 2 33 0 72 2 37 0 75 2 41 0 107 2 45 0 108 0 146 0 114 0 146 0 115] 
+#[1 0 150 0 22 0 150 0 23 0 150 0 24 0 150 0 25 0 150 0 26 1 249 0 27 0 150 0 29 0 150 0 35 0 150 0 36 2 49 0 62 2 1 0 63 2 5 0 64 0 150 0 114 0 150 0 115] 
+#[1 2 53 0 4 0 154 0 22 0 154 0 23 0 154 0 24 0 154 0 25 0 154 0 26 0 154 0 27 0 154 0 29 0 51 0 35 0 154 0 36 2 57 0 78 2 57 0 107 0 154 0 114 0 154 0 115] 
+#[1 0 158 0 4 0 158 0 22 0 158 0 23 0 158 0 24 0 158 0 25 0 158 0 26 1 249 0 27 0 158 0 29 0 158 0 35 0 158 0 36 2 65 0 62 2 1 0 63 2 5 0 64 0 158 0 114 0 158 0 115] 
+#[1 0 162 0 4 0 162 0 22 0 162 0 23 0 162 0 24 0 162 0 25 0 162 0 26 2 69 0 28 0 162 0 29 0 162 0 35 0 162 0 36 0 162 0 114 0 162 0 115] 
+#[0 0 166 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 170 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 174 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 178 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 182 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 186 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 190 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 194 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 198 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 202 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 206 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 210 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 2 73 0 20] 
+#[0 0 214 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 218 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 222 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 226 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[1 0 55 0 4 0 59 0 22 0 59 0 23 0 59 0 24 0 55 0 25 0 55 0 26 0 63 0 28 0 59 0 29 0 59 0 35 0 59 0 36 0 59 0 114 0 59 0 115] 
+#[0 0 246 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 250 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 0 254 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 0 0 114] 
+#[0 0 0 0 114] 
+#[0 1 2 0 25] 
+#[0 0 230 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 23 0 25 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 6 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 10 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 0 67 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 18 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 2 81 0 36] 
+#[0 1 22 0 114] 
+#[1 1 49 0 4 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 1 69 0 79 1 69 0 103 1 69 0 104 1 69 0 105 1 69 0 106 1 49 0 107 1 49 0 109 2 85 0 115] 
+#[0 1 26 0 25] 
+#[0 0 18 0 4 0 18 0 35] 
+#[0 0 22 0 4 0 31 0 32 0 33 0 34 0 35] 
+#[0 1 30 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 0 46 0 4 0 18 0 35] 
+#[1 1 49 0 4 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 2 89 0 79 2 89 0 103 2 89 0 104 2 89 0 105 2 89 0 106 1 49 0 107 1 49 0 109] 
+#[0 1 34 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 38 0 4 0 31 0 32 0 33 0 34 0 35] 
+#[0 1 42 0 4 0 18 0 35] 
+#[1 1 49 0 4 2 93 0 6 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 2 97 0 79 2 97 0 103 2 97 0 104 2 97 0 105 2 97 0 106 1 49 0 107 1 49 0 109] 
+#[0 0 71 0 15] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 2 117 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 2 105 0 79 2 109 0 88 2 109 0 89 2 109 0 90 2 109 0 91 2 109 0 94 2 109 0 97 2 109 0 98 2 109 0 99 2 109 0 100 1 25 0 101 2 105 0 103 2 105 0 104 2 105 0 105 2 105 0 106 2 113 0 107 2 117 0 109 1 53 0 110] 
+#[0 1 46 0 15 0 25] 
+#[1 2 121 0 15 1 149 0 25 2 125 0 46] 
+#[0 2 129 0 15] 
+#[1 1 50 0 1 1 50 0 2 1 50 0 3 1 50 0 4 1 50 0 6 1 50 0 7 1 50 0 8 1 50 0 9 1 50 0 10 1 50 0 11 1 50 0 13 1 50 0 14 2 133 0 15 1 50 0 16 1 50 0 17 1 50 0 19 1 50 0 20 1 50 0 21 1 50 0 29 1 50 0 32 1 50 0 33 1 50 0 34 1 50 0 35 1 50 0 37 1 50 0 114 1 50 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 2 137 0 56 1 189 0 58 1 193 0 59 1 193 0 60 1 193 0 61 1 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 54 0 114 1 57 0 115] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 89 0 14 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 2 141 0 43 0 97 0 44 0 101 0 45 2 145 0 52 0 6 0 114 0 6 0 115] 
+#[0 1 58 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 62 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 66 0 23 0 114 0 115] 
+#[1 1 70 0 23 0 75 0 29 0 6 0 35 2 153 0 52 2 157 0 57 1 70 0 114 1 70 0 115] 
+#[0 1 74 0 23 0 29 0 35 0 114 0 115] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 2 161 0 52 0 6 0 114 0 6 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 78 0 23 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 2 165 0 56 1 189 0 58 1 193 0 59 1 193 0 60 1 193 0 61 1 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 78 0 114 0 79 0 115] 
+#[0 1 82 0 23 0 29 0 35 0 114 0 115] 
+#[0 1 86 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 169 0 24] 
+#[1 1 90 0 24 1 90 0 29 2 173 0 83] 
+#[1 1 49 0 4 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 2 177 0 79 2 177 0 103 2 177 0 104 2 177 0 105 2 177 0 106 1 49 0 107 1 49 0 109] 
+#[0 1 94 0 6 0 18 0 23] 
+#[1 2 181 0 6 1 221 0 18 2 185 0 23 2 189 0 85] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 85 0 6 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 23 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 0 109 0 52 2 193 0 53 2 197 0 54 0 6 0 115] 
+#[0 2 201 0 22] 
+#[1 0 149 0 10 0 153 0 11 2 205 0 23 2 213 0 90 2 213 0 96 2 217 0 115] 
+#[0 1 98 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[1 2 53 0 4 2 9 0 25 2 13 0 26 0 37 0 35 2 221 0 65 2 221 0 68 2 21 0 69 2 25 0 70 2 29 0 71 2 33 0 72 2 221 0 75 2 221 0 78 2 237 0 107 2 45 0 108] 
+#[0 1 102 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[0 1 106 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 1 110 0 22 1 110 0 23 1 110 0 24 1 249 0 27 1 110 0 29 1 110 0 35 1 110 0 36 2 241 0 63 1 110 0 114 1 110 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 2 245 0 73 2 249 0 74 0 221 0 76 2 253 0 77 0 221 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 221 0 103 0 221 0 104 0 221 0 105 0 221 0 106 3 5 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 9 0 76 2 253 0 77 3 9 0 79 3 9 0 80 3 9 0 81 3 9 0 84 3 9 0 88 3 9 0 89 3 9 0 90 3 9 0 91 3 9 0 94 3 9 0 97 3 9 0 98 3 9 0 99 3 9 0 100 1 25 0 101 3 9 0 103 3 9 0 104 3 9 0 105 3 9 0 106 3 5 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[0 1 114 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 1 118 0 22 0 23 0 24 0 25 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 1 122 0 22 1 122 0 23 1 122 0 24 2 9 0 25 1 122 0 27 1 122 0 29 1 122 0 35 1 122 0 36 3 13 0 69 1 122 0 114 1 122 0 115] 
+#[0 1 126 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 1 130 0 22 1 130 0 23 1 130 0 24 1 130 0 27 1 130 0 29 0 83 0 35 1 130 0 36 3 17 0 71 2 41 0 107 2 45 0 108 1 130 0 114 1 130 0 115] 
+#[0 1 134 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 1 138 0 1 1 138 0 2 1 138 0 3 1 138 0 4 1 138 0 7 1 138 0 8 1 138 0 9 1 138 0 10 1 138 0 11 1 138 0 16 1 138 0 17 3 21 0 18 1 138 0 19 1 138 0 20 1 138 0 21 1 138 0 32 1 138 0 33 1 138 0 34 1 138 0 35 1 138 0 37 1 138 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 25 0 73 2 249 0 74 0 221 0 76 2 253 0 77 0 221 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 221 0 103 0 221 0 104 0 221 0 105 0 221 0 106 3 5 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[0 1 142 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[0 1 146 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 1 150 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 1 154 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 1 158 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 29 0 60 3 29 0 61 3 29 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 3 33 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[1 1 162 0 1 1 162 0 2 1 162 0 3 1 162 0 4 1 162 0 7 1 162 0 8 1 162 0 9 1 162 0 10 1 162 0 11 1 162 0 12 1 162 0 19 1 162 0 20 1 162 0 21 1 162 0 22 1 162 0 26 1 162 0 27 1 162 0 29 1 162 0 35 1 162 0 37 3 37 0 92 1 162 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 41 0 60 3 41 0 61 3 41 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 3 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[0 1 166 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 32 0 33 0 34 0 35 0 36 0 37 0 114 0 115] 
+#[0 1 170 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 174 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 25 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 178 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 182 0 4 0 6 0 32 0 33 0 34 0 35] 
+#[0 1 186 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 190 0 15 0 25] 
+#[0 1 194 0 15 0 25] 
+#[0 0 87 0 15 0 25] 
+#[0 0 91 0 15 0 25] 
+#[0 1 202 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 206 0 15 0 25] 
+#[0 1 210 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 214 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 14 0 16 0 17 0 19 0 20 0 21 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 1 218 0 114] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 3 49 0 52 0 6 0 114 0 6 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 53 0 56 1 189 0 58 1 193 0 59 1 193 0 60 1 193 0 61 1 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 222 0 114 1 57 0 115] 
+#[0 1 226 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[1 1 181 0 29 0 37 0 35 3 57 0 107] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 230 0 23 3 61 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 65 0 59 3 65 0 60 3 65 0 61 3 65 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 230 0 114 0 95 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 69 0 56 1 189 0 58 1 193 0 59 1 193 0 60 1 193 0 61 1 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 234 0 114 1 57 0 115] 
+#[0 1 238 0 23 0 114 0 115] 
+#[0 1 242 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 3 73 0 24 3 77 0 29 3 81 0 82] 
+#[0 1 246 0 6 0 18 0 23] 
+#[0 1 250 0 1 0 2 0 3 0 4 0 6 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 32 0 33 0 34 0 35 0 37 0 115] 
+#[0 1 254 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 2 0 6 0 18 0 23] 
+#[1 3 85 0 23 3 89 0 115] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 0 6 0 23 0 6 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 6 0 35 0 6 0 37 1 201 0 52 0 6 0 115] 
+#[0 2 6 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 10 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 2 14 0 10 0 11 0 23 0 115] 
+#[0 2 18 0 10 0 11 0 23 0 115] 
+#[0 2 22 0 10 0 11 0 23 0 115] 
+#[0 2 26 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 30 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 34 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 38 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 1 138 0 1 1 138 0 2 1 138 0 3 1 138 0 4 1 138 0 7 1 138 0 8 1 138 0 9 1 138 0 10 1 138 0 11 1 138 0 16 1 138 0 17 3 21 0 18 1 138 0 19 1 138 0 20 1 138 0 21 1 154 0 22 1 154 0 23 1 154 0 24 1 154 0 27 1 154 0 29 1 138 0 32 1 138 0 33 1 138 0 34 0 99 0 35 1 154 0 36 1 138 0 37 1 154 0 114 0 99 0 115] 
+#[0 2 42 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 2 46 0 22 2 46 0 23 2 46 0 24 2 46 0 25 2 13 0 26 2 46 0 27 2 46 0 29 2 46 0 35 2 46 0 36 2 37 0 75 2 46 0 114 2 46 0 115] 
+#[0 0 150 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 158 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 162 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 0 55 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 2 53 0 4 2 50 0 22 2 50 0 23 2 50 0 24 2 50 0 25 2 50 0 26 2 50 0 27 2 50 0 29 0 103 0 35 2 50 0 36 2 57 0 78 2 57 0 107 2 50 0 114 2 50 0 115] 
+#[0 2 54 0 22 0 23 0 24 0 25 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 58 0 22 0 23 0 24 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 62 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 16 0 17 0 19 0 20 0 21 0 32 0 33 0 34 0 35 0 37 0 115] 
+#[1 2 66 0 22 2 66 0 23 2 66 0 24 2 13 0 26 2 66 0 27 2 66 0 29 2 66 0 35 2 66 0 36 2 37 0 75 2 66 0 114 2 66 0 115] 
+#[0 2 70 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[1 0 55 0 4 0 107 0 22 0 107 0 23 0 107 0 24 0 55 0 25 0 55 0 26 0 63 0 28 0 107 0 29 0 107 0 35 0 107 0 36 0 107 0 114 0 107 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 3 93 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 3 97 0 12 3 101 0 19 0 10 0 20 0 173 0 21 2 78 0 22 3 105 0 26 3 109 0 27 3 113 0 29 0 37 0 35 0 189 0 37 3 121 0 88 3 121 0 89 3 121 0 90 3 121 0 91 3 121 0 93 3 121 0 94 3 121 0 97 3 121 0 98 3 121 0 99 3 121 0 100 1 25 0 101 3 125 0 102 1 53 0 107 1 53 0 110 3 133 0 115] 
+#[0 2 82 0 22 0 23 0 24 0 29 0 35 0 36 0 114 0 115] 
+#[1 0 55 0 4 0 111 0 22 0 111 0 23 0 111 0 24 0 55 0 25 0 55 0 26 0 63 0 28 0 111 0 29 0 111 0 35 0 111 0 36 0 111 0 114 0 111 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 137 0 56 1 189 0 58 1 193 0 59 1 193 0 60 1 193 0 61 1 193 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 2 90 0 114 1 57 0 115] 
+#[0 2 94 0 114] 
+#[1 0 6 0 1 0 6 0 2 0 6 0 3 0 6 0 4 0 6 0 7 0 6 0 8 0 6 0 9 0 6 0 10 0 6 0 11 0 6 0 13 0 6 0 16 0 6 0 17 0 6 0 19 0 6 0 20 0 6 0 21 2 98 0 23 0 115 0 29 0 6 0 32 0 6 0 33 0 6 0 34 0 115 0 35 0 6 0 37 3 141 0 52 2 98 0 114 0 115 0 115] 
+#[0 2 102 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 13 0 16 0 17 0 19 0 20 0 21 0 23 0 29 0 32 0 33 0 34 0 35 0 37 0 114 0 115] 
+#[0 2 106 0 23 0 29 0 35 0 114 0 115] 
+#[0 2 110 0 114] 
+#[0 2 114 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 3 145 0 24 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 149 0 60 3 149 0 61 3 149 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[0 2 118 0 24 0 29] 
+#[0 2 122 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 126 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 130 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 134 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[1 1 162 0 1 1 162 0 2 1 162 0 3 1 162 0 4 1 162 0 7 1 162 0 8 1 162 0 9 1 162 0 10 1 162 0 11 1 162 0 12 1 162 0 19 1 162 0 20 1 162 0 21 1 162 0 22 1 162 0 26 1 162 0 27 1 162 0 29 1 162 0 35 1 162 0 37 3 153 0 92 1 162 0 115] 
+#[0 2 138 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 142 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 146 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 150 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 154 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 3 157 0 22] 
+#[0 0 234 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 158 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115] 
+#[0 2 162 0 114] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 1 49 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 13 0 161 0 16 0 165 0 17 0 169 0 19 0 10 0 20 0 173 0 21 1 181 0 29 0 177 0 32 0 181 0 33 0 185 0 34 0 37 0 35 0 189 0 37 3 161 0 59 3 161 0 60 3 161 0 61 3 161 0 66 0 209 0 67 0 213 0 73 0 217 0 74 0 221 0 76 0 225 0 77 0 229 0 79 0 221 0 80 0 221 0 81 0 221 0 84 0 221 0 88 0 221 0 89 0 221 0 90 0 221 0 91 0 221 0 94 0 221 0 97 0 221 0 98 0 221 0 99 0 221 0 100 1 25 0 101 0 229 0 103 0 229 0 104 0 229 0 105 0 229 0 106 1 45 0 107 1 49 0 109 1 53 0 110 1 57 0 115] 
+#[0 2 166 0 4 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 114 0 115] 
+#[0 2 170 0 24 0 29] 
+#[1 0 121 0 1 0 125 0 2 0 129 0 3 3 93 0 4 0 137 0 7 1 53 0 8 0 145 0 9 0 149 0 10 0 153 0 11 3 97 0 12 3 101 0 19 0 10 0 20 0 173 0 21 3 165 0 22 3 105 0 26 3 109 0 27 3 113 0 29 0 37 0 35 0 189 0 37 3 121 0 88 3 121 0 89 3 121 0 90 3 121 0 91 3 121 0 93 3 121 0 94 3 121 0 97 3 121 0 98 3 121 0 99 3 121 0 100 1 25 0 101 1 53 0 107 1 53 0 110 3 133 0 115] 
+#[0 2 174 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 15 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 35 0 36 0 37 0 114 0 115] 
+#[0 2 178 0 23 0 29 0 35 0 114 0 115] 
+#[0 2 182 0 1 0 2 0 3 0 4 0 7 0 8 0 9 0 10 0 11 0 12 0 19 0 20 0 21 0 22 0 26 0 27 0 29 0 35 0 37 0 115]
 	).
+]
+
+{ #category : #private }
+GtPharoTemplateParser >> endLiteralArray [
+	(nodeStack
+		inject: 0
+		into: [ :sum :each | 
+			sum
+				+
+					(each == #array
+						ifTrue: [ 1 ]
+						ifFalse: [ 0 ]) ]) = 1
+		ifTrue: [ self scope: #default ]
 ]
 
 { #category : #'generated-reduction actions' }
@@ -941,7 +1071,7 @@ GtPharoTemplateParser >> reduceActionForEndLiteralArray1: nodes [
 GtPharoTemplateParser >> reduceActionForKeywordMessage1: nodes [
 	| result |
 	result := GtPharoKeywordMessageNode new.
-	result addTokens: ((nodes at: 1) at: 1) to: result selectorParts.
+	result addObjects: ((nodes at: 1) at: 1) to: result selectorParts.
 	result addNodes: ((nodes at: 1) at: 2) to: result values.
 	^ result
 ]
@@ -975,16 +1105,7 @@ GtPharoTemplateParser >> reduceActionForMethod1: nodes [
 GtPharoTemplateParser >> reduceActionForMethodPattern1: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
-	result addToken: (nodes at: 1) to: result selectorParts.
-	^ result
-]
-
-{ #category : #'generated-reduction actions' }
-GtPharoTemplateParser >> reduceActionForMethodPattern2: nodes [
-	| result |
-	result := GtPharoMethodPatternNode new.
-	result addToken: (nodes at: 1) to: result selectorParts.
-	result addNode: (nodes at: 2) to: result variables.
+	result addObject: (nodes at: 1) to: result selectorParts.
 	^ result
 ]
 
@@ -992,27 +1113,36 @@ GtPharoTemplateParser >> reduceActionForMethodPattern2: nodes [
 GtPharoTemplateParser >> reduceActionForMethodPattern3: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
-	result addTokens: ((nodes at: 1) at: 1) to: result selectorParts.
-	result addNodes: ((nodes at: 1) at: 2) to: result variables.
+	result addObject: (nodes at: 1) to: result selectorParts.
+	result addNode: (nodes at: 2) to: result variables.
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
 GtPharoTemplateParser >> reduceActionForMethodPattern5: nodes [
 	| result |
+	result := GtPharoMethodPatternNode new.
+	result addObjects: ((nodes at: 1) at: 1) to: result selectorParts.
+	result addNodes: ((nodes at: 1) at: 2) to: result variables.
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtPharoTemplateParser >> reduceActionForMethodPattern7: nodes [
+	| result |
 	result := GtPharoErrorPatternNode new.
-	result addToken: (nodes at: 1) to: result selectorParts.
+	result addObject: (nodes at: 1) to: result selectorParts.
 	result smaccError: (nodes at: 2).
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoTemplateParser >> reduceActionForMethodPattern6: nodes [
+GtPharoTemplateParser >> reduceActionForMethodPattern8: nodes [
 	| result |
 	result := GtPharoErrorPatternNode new.
-	result addTokens: ((nodes at: 1) at: 1) to: result selectorParts.
+	result addObjects: ((nodes at: 1) at: 1) to: result selectorParts.
 	result addNodes: ((nodes at: 1) at: 2) to: result variables.
-	result addToken: (nodes at: 2) to: result selectorParts.
+	result addObject: (nodes at: 2) to: result selectorParts.
 	result smaccError: (nodes at: 3).
 	^ result
 ]
@@ -1146,24 +1276,24 @@ GtPharoTemplateParser >> reduceActionForPragma1: nodes [
 	| result |
 	result := GtPharoPragmaNode new.
 	result lessThan: (nodes at: 1).
-	result addToken: (nodes at: 2) to: result selectorParts.
-	result greaterThan: (nodes at: 3).
-	^ result
-]
-
-{ #category : #'generated-reduction actions' }
-GtPharoTemplateParser >> reduceActionForPragma2: nodes [
-	| result |
-	result := GtPharoPragmaNode new.
-	result lessThan: (nodes at: 1).
-	result addTokens: ((nodes at: 2) at: 1) to: result selectorParts.
-	result addNodes: ((nodes at: 2) at: 2) to: result values.
+	result addObject: (nodes at: 2) to: result selectorParts.
 	result greaterThan: (nodes at: 3).
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
 GtPharoTemplateParser >> reduceActionForPragma3: nodes [
+	| result |
+	result := GtPharoPragmaNode new.
+	result lessThan: (nodes at: 1).
+	result addObjects: ((nodes at: 2) at: 1) to: result selectorParts.
+	result addObjects: ((nodes at: 2) at: 2) to: result values.
+	result greaterThan: (nodes at: 3).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtPharoTemplateParser >> reduceActionForPragma4: nodes [
 	| result |
 	result := GtPharoPragmaErrorNode new.
 	result lessThan: (nodes at: 1).
@@ -1172,7 +1302,7 @@ GtPharoTemplateParser >> reduceActionForPragma3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoTemplateParser >> reduceActionForPragma4: nodes [
+GtPharoTemplateParser >> reduceActionForPragma5: nodes [
 	| result |
 	result := GtPharoPragmaErrorNode new.
 	result lessThan: (nodes at: 1).
@@ -1267,11 +1397,22 @@ GtPharoTemplateParser >> reduceActionForStatementList1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoTemplateParser >> reduceActionForStatementList2: nodes [
+GtPharoTemplateParser >> reduceActionForStatementList3: nodes [
 	| result |
 	result := nodes at: 1.
 	self addAll: (nodes at: 2) to: (result at: 2).
 	self add: (nodes at: 3) to: (result at: 1).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtPharoTemplateParser >> reduceActionForStatementList4: nodes [
+	| result |
+	result := nodes at: 1.
+	self addAll: (nodes at: 2) to: (result at: 2).
+	self add: (nodes at: 3) to: (result at: 1).
+	self addAll: (nodes at: 4) to: (result at: 2).
+	self add: (nodes at: 5) to: (result at: 1).
 	^ result
 ]
 
@@ -1364,6 +1505,15 @@ GtPharoTemplateParser >> reduceActionForValue6: nodes [
 	| result |
 	result := GtPharoErrorNode new.
 	result smaccError: (nodes at: 1).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtPharoTemplateParser >> reduceActionFor_TemplateKeyword__selectorPart___space___Variable__variable__2: nodes [
+	| result |
+	result := Array new: 2.
+	result at: 1 put: (nodes at: 1).
+	result at: 2 put: (nodes at: 3).
 	^ result
 ]
 

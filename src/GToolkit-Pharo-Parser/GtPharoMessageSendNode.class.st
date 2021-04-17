@@ -29,10 +29,10 @@ GtPharoMessageSendNode >> message [
 ]
 
 { #category : #generated }
-GtPharoMessageSendNode >> message: aGtPharoMessageNode [
+GtPharoMessageSendNode >> message: aGtPharoProgramNode [
 	self message notNil
 		ifTrue: [ self message parent: nil ].
-	message := aGtPharoMessageNode.
+	message := aGtPharoProgramNode.
 	self message notNil
 		ifTrue: [ self message parent: self ]
 ]

@@ -33,14 +33,14 @@ GtPharoSymbolLiteralNode >> literalValue [
 	^ self symbol
 ]
 
+{ #category : #generated }
+GtPharoSymbolLiteralNode >> otherVariables [
+	^ #(#value)
+]
+
 { #category : #accessing }
 GtPharoSymbolLiteralNode >> symbol [
 	^ self asSymbol
-]
-
-{ #category : #generated }
-GtPharoSymbolLiteralNode >> tokenVariables [
-	^ #(#value)
 ]
 
 { #category : #generated }
@@ -49,6 +49,8 @@ GtPharoSymbolLiteralNode >> value [
 ]
 
 { #category : #generated }
-GtPharoSymbolLiteralNode >> value: aSmaCCToken [
-	value := aSmaCCToken
+GtPharoSymbolLiteralNode >> value: anObject [
+	self setParent: self value to: nil.
+	value := anObject.
+	self setParent: self value to: self
 ]

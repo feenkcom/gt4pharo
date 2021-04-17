@@ -113,3 +113,11 @@ GtTagDefinition >> originalName: aSymbolOrString [
 GtTagDefinition >> printOn: aStream [
 	aStream print: self name
 ]
+
+{ #category : #printing }
+GtTagDefinition >> storeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'
+]

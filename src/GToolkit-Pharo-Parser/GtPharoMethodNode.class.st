@@ -39,7 +39,7 @@ GtPharoMethodNode >> isMethod [
 
 { #category : #accessing }
 GtPharoMethodNode >> localVariablesInto: aCollection [
-	self variables do: [ :each | aCollection add: each name value ]
+	self variables do: [ :each | aCollection add: each variableName ]
 ]
 
 { #category : #accessing }

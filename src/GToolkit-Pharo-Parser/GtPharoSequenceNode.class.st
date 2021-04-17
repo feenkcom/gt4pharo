@@ -61,7 +61,7 @@ GtPharoSequenceNode >> leftBar: aSmaCCToken [
 
 { #category : #accessing }
 GtPharoSequenceNode >> localVariablesInto: aCollection [
-	variables do: [ :each | aCollection add: each name value ].
+	variables do: [ :each | aCollection add: each variableName ].
 	super localVariablesInto: aCollection
 ]
 

@@ -275,7 +275,9 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 	addOns addStyler: GtPharoMethodExpanderStyler new.
 	addOns addStyler: (GtFixItStyler new isForWorkspace: false).
 
-	"addOns addStyler: GtCoderCommentStyler new."
+	"
+	Do not add comment styler yet, it has to be ported to SmaCC
+	addOns addStyler: GtCoderCommentStyler new."
 
 	addOns
 		addMainAction: (GtCoderActivatableAction new
@@ -315,16 +317,6 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderSaveShortcut new;
 		addShortcut: GtSourceCoderFormatShortcut new;
 		addShortcut: GtSourceCoderInlineRenameShortcut new
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> methodExpanderFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 10>
-	
-	anAST methodNode
-		ifNil: [ ^ self ].
-
-	"coderAddOns addStyler: (GtCoderExpandablePharoMethodStyler new)"
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

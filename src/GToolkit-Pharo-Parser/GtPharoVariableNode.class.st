@@ -68,12 +68,14 @@ GtPharoVariableNode >> name [
 ]
 
 { #category : #generated }
-GtPharoVariableNode >> name: aSmaCCToken [
-	name := aSmaCCToken
+GtPharoVariableNode >> name: anObject [
+	self setParent: self name to: nil.
+	name := anObject.
+	self setParent: self name to: self
 ]
 
 { #category : #generated }
-GtPharoVariableNode >> tokenVariables [
+GtPharoVariableNode >> otherVariables [
 	^ #(#name)
 ]
 
