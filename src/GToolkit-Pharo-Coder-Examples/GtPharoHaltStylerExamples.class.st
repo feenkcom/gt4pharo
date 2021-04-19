@@ -23,7 +23,7 @@ GtPharoHaltStylerExamples >> haltHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors errorBackgroundColor ] ]
+		findAttributeSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (15 to: 18).
