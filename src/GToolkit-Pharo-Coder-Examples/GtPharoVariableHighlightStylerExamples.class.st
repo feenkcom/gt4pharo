@@ -8,10 +8,10 @@ Class {
 
 { #category : #accessing }
 GtPharoVariableHighlightStylerExamples >> highlightVariable [
-	"<gtExample>"
+	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
-		(GtPharoSnippetCoder forSource: 'var := 42') asCoderViewModel ].
+		(GtPharoSnippetCoder forSource: 'var := var + 1') asCoderViewModel ].
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];
 		onModel.
