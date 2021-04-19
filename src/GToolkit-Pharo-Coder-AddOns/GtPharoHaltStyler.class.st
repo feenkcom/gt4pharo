@@ -1,15 +1,15 @@
 Class {
-	#name : #GtCoderHaltStyler,
+	#name : #GtPharoHaltStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Halt'
 }
 
 { #category : #accessing }
-GtCoderHaltStyler >> visitMessage: aMessageNode [
+GtPharoHaltStyler >> visitMessage: aMessageNode [
 	super visitMessage: aMessageNode.
 	aMessageNode selector = #halt ifTrue: [ 
 		self
-			attribute: (BlTextHighlightAttribute paint: BrGlamorousColors errorBackgroundColor)
+			attribute: (BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor)
 			from: aMessageNode startPosition
 			to: aMessageNode stopPosition ].
 ]

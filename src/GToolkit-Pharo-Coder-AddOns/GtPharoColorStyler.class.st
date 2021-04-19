@@ -1,11 +1,11 @@
 Class {
-	#name : #GtCoderColorStyler,
+	#name : #GtPharoColorStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
 { #category : #accessing }
-GtCoderColorStyler >> visitMessageSend: aMessageSendNode [
+GtPharoColorStyler >> visitMessageSend: aMessageSendNode [
 	| color receiver |
 	super visitMessageSend: aMessageSendNode.
 	aMessageSendNode receiver isVariable ifFalse: [^ self].

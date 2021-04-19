@@ -74,12 +74,6 @@ GtPharoSourceCoder >> classOrMetaClass [
 	^ self behavior
 ]
 
-{ #category : #'api - addons' }
-GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 100>
-	coderAddOns addStyler: GtCoderColorStyler new
-]
-
 { #category : #'private - ast' }
 GtPharoSourceCoder >> detectBehaviorAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a Behavior at the given source text position and evaluate a found block
