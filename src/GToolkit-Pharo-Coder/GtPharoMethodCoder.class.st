@@ -561,6 +561,12 @@ GtPharoMethodCoder >> gtDiffViewFor: aView [
 				create ]"
 ]
 
+{ #category : #'api - addons' }
+GtPharoMethodCoder >> haltAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 20>
+	coderAddOns addStyler: GtCoderHaltStyler new
+]
+
 { #category : #private }
 GtPharoMethodCoder >> handleCompilerErrorsDuring: aBlock [
 	^ [
