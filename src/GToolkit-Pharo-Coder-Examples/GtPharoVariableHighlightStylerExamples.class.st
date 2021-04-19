@@ -7,7 +7,32 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoVariableHighlightStylerExamples >> highlightVariable [
+GtPharoVariableHighlightStylerExamples >> oneOccurrenceNotHighlighted [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterForBlock: [ 
+		(GtPharoSnippetCoder forSource: 'var := 42') asCoderViewModel ].
+	aScripter do
+		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];
+		onModel.
+	aScripter wait forEmptySpaceTaskQueue.
+	aScripter check
+		label: 'Check variable highlight attribute interval';
+		satisfies: [ :aCoderEditor |
+			| highlights |
+			highlights := OrderedCollection new.
+			aCoderEditor text
+				findAttributeSuchThat: [ :eachAttribute | 
+					eachAttribute class = GtPharoVariableHighlightAttribute ]
+				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
+			highlights isEmpty ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+	aScripter syncContinue.
+	^ aScripter
+]
+
+{ #category : #accessing }
+GtPharoVariableHighlightStylerExamples >> twoOccurrencesHighlighted [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
@@ -18,12 +43,14 @@ GtPharoVariableHighlightStylerExamples >> highlightVariable [
 	aScripter wait forEmptySpaceTaskQueue.
 	aScripter check
 		label: 'Check variable highlight attribute interval';
-		value: [ :aCoderEditor |
+		satisfies: [ :aCoderEditor |
+			| highlights |
+			highlights := OrderedCollection new.
 			aCoderEditor text
 				findAttributeSuchThat: [ :eachAttribute | 
 					eachAttribute class = GtPharoVariableHighlightAttribute ]
-				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
-		equals: [ 1 to: 3 ];
+				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
+			highlights notEmpty ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 	aScripter syncContinue.
 	^ aScripter
