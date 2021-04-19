@@ -319,16 +319,6 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> methodExpanderFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 10>
-	
-	anAST methodNode
-		ifNil: [ ^ self ].
-
-	"coderAddOns addStyler: (GtCoderExpandablePharoMethodStyler new)"
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 1>
 
