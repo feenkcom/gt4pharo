@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoTemplateNode,
-	#superclass : #GtPharoValueNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'leftBraces',
 		'expression',

@@ -99,7 +99,7 @@ GtPharoProgramNode >> implicitLocalVariables [
 		allNodesOfType: GtPharoVariableNode
 		do: [ :each | 
 			(each == self or: [ each isLocallyDefined ])
-				ifFalse: [ variables add: each name value ] ].
+				ifFalse: [ variables add: each variableName ] ].
 	^ variables
 ]
 
@@ -179,9 +179,9 @@ GtPharoProgramNode >> needsParenthesisForKeyword [
 
 { #category : #accessing }
 GtPharoProgramNode >> nestingLevel [
-	^ parent 
-		ifNil: [ 0 ] 
-		ifNotNil: [ parent nestingLevel ]
+	^ (parent notNil and: [ parent isErrorNode not ])
+		ifTrue: [ parent nestingLevel ]
+		ifFalse: [ 0 ]
 ]
 
 { #category : #accessing }
