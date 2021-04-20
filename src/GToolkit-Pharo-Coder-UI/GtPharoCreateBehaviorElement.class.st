@@ -71,7 +71,7 @@ GtPharoCreateBehaviorElement >> buildDefinitionEditor [
 
 	definition
 		when: GtBehaviorChangeEvent
-		do: [ :event | saveButton enabled: definition isValidForCreation ].
+		do: [ :event | saveButton enabled: self isValidForCreation ].
 
 	theProperties addChild: (self buildClassLabel constraintsDo: [ :c | c grid horizontal span: 2 ]).
 
@@ -119,6 +119,12 @@ GtPharoCreateBehaviorElement >> forClassDefinition [
 { #category : #initialization }
 GtPharoCreateBehaviorElement >> forClassName: aSymbol [
 	definition name: aSymbol
+]
+
+{ #category : #initialization }
+GtPharoCreateBehaviorElement >> forDefinition: aGtBehaviorDefinition [
+	definition := aGtBehaviorDefinition.
+	self addChild: self buildDefinitionEditor
 ]
 
 { #category : #initialization }
