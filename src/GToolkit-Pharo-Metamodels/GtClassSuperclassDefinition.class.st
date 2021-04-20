@@ -143,7 +143,32 @@ GtClassSuperclassDefinition >> notifySuperclassRenamed: aGtClassSuperclassDefini
 		newName: aNewName)
 ]
 
+{ #category : #accessing }
+GtClassSuperclassDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	name := name copy.
+]
+
 { #category : #printing }
 GtClassSuperclassDefinition >> printOn: aStream [
 	aStream print: self name
+]
+
+{ #category : #accessing }
+GtClassSuperclassDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name.
+	aStream
+		nextPut: $)
 ]

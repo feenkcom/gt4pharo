@@ -92,12 +92,45 @@ GtSlotDefinition >> originalName: anObject [
 	originalName := anObject
 ]
 
+{ #category : #accessing }
+GtSlotDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	name := name copy.
+	originalName := originalName copy.
+	type := type copy.
+]
+
 { #category : #printing }
 GtSlotDefinition >> printOn: aStream [
 	aStream
 		print: self name;
 		nextPutAll: ' => ';
 		print: self type
+]
+
+{ #category : #accessing }
+GtSlotDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'type:';
+		space;
+		store: self type.
+	aStream
+		nextPut: $)
 ]
 
 { #category : #accessing }

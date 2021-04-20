@@ -62,9 +62,35 @@ GtVariableDefinition >> originalName: anObject [
 	originalName := anObject
 ]
 
+{ #category : #accessing }
+GtVariableDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	name := name copy.
+	originalName := originalName copy.
+]
+
 { #category : #printing }
 GtVariableDefinition >> printOn: aStream [
 	aStream print: self name
+]
+
+{ #category : #accessing }
+GtVariableDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name.
+	aStream
+		nextPut: $)
 ]
 
 { #category : #accessing }

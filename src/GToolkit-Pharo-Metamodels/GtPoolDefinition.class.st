@@ -37,7 +37,32 @@ GtPoolDefinition >> name: aSymbol [
 	name := aSymbol asSymbol
 ]
 
+{ #category : #accessing }
+GtPoolDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	name := name copy.
+]
+
 { #category : #printing }
 GtPoolDefinition >> printOn: aStream [
 	aStream print: self name
+]
+
+{ #category : #accessing }
+GtPoolDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name.
+	aStream
+		nextPut: $)
 ]

@@ -14,11 +14,6 @@ GtPharoPackagesCoder class >> forPackages: aCollectionOfPackages [
 	^ self forItems: (aCollectionOfPackages asSortedCollection: [ :a :b | a name < b name ])
 ]
 
-{ #category : #converting }
-GtPharoPackagesCoder >> asCoderUIModel [
-	^ GtPackagesCoderUIModel new coder: self
-]
-
 { #category : #private }
 GtPharoPackagesCoder >> newCoderFor: aPackage [
 	^ GtPharoPackageCoder forPackage: aPackage

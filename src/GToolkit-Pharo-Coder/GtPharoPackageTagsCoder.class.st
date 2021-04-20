@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoPackageTagCoders,
+	#name : #GtPharoPackageTagsCoder,
 	#superclass : #GtCodersModel,
 	#traits : 'TGtCoderTrait',
 	#classTraits : 'TGtCoderTrait classTrait',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtPharoPackageTagCoders class >> forPackage: aRPackage [
+GtPharoPackageTagsCoder class >> forPackage: aRPackage [
 	self
 		assert: [ aRPackage notNil ]
 		description: [ 'Package must not be nil' ].
@@ -19,19 +19,19 @@ GtPharoPackageTagCoders class >> forPackage: aRPackage [
 ]
 
 { #category : #initialization }
-GtPharoPackageTagCoders >> forPackage: aRPackage [
+GtPharoPackageTagsCoder >> forPackage: aRPackage [
 	self forItems: aRPackage classTags asOrderedCollection
 ]
 
 { #category : #'gt-extensions' }
-GtPharoPackageTagCoders >> gtLiveFor: aView [
+GtPharoPackageTagsCoder >> gtLiveFor: aView [
 	<gtView>
 	
 	^ aView empty
 ]
 
 { #category : #'gt-extensions' }
-GtPharoPackageTagCoders >> gtPackageTagsFor: aView [
+GtPharoPackageTagsCoder >> gtPackageTagsFor: aView [
 	<gtView>
 
 	^ aView list
@@ -42,39 +42,39 @@ GtPharoPackageTagCoders >> gtPackageTagsFor: aView [
 ]
 
 { #category : #initialization }
-GtPharoPackageTagCoders >> initialize [
+GtPharoPackageTagsCoder >> initialize [
 	super initialize.
 	
 	
 ]
 
 { #category : #private }
-GtPharoPackageTagCoders >> newCoderFor: anObject [
+GtPharoPackageTagsCoder >> newCoderFor: anObject [
 	^ GtPharoPackageTagCoder forPackageTag: anObject
 ]
 
 { #category : #'private - event handling' }
-GtPharoPackageTagCoders >> onSystemPackageRegistered: aRPackageRegistered [
+GtPharoPackageTagsCoder >> onSystemPackageRegistered: aRPackageRegistered [
 ]
 
 { #category : #'private - event handling' }
-GtPharoPackageTagCoders >> onSystemPackageRenamed: aRPackageRenamed [
+GtPharoPackageTagsCoder >> onSystemPackageRenamed: aRPackageRenamed [
 ]
 
 { #category : #'private - event handling' }
-GtPharoPackageTagCoders >> onSystemPackageTagAdded: aClassTagAdded [
+GtPharoPackageTagsCoder >> onSystemPackageTagAdded: aClassTagAdded [
 ]
 
 { #category : #'private - event handling' }
-GtPharoPackageTagCoders >> onSystemPackageTagRemoved: aClassTagRemoved [
+GtPharoPackageTagsCoder >> onSystemPackageTagRemoved: aClassTagRemoved [
 ]
 
 { #category : #'private - event handling' }
-GtPharoPackageTagCoders >> onSystemPackageUnregistered: aRPackageUnregistered [
+GtPharoPackageTagsCoder >> onSystemPackageUnregistered: aRPackageUnregistered [
 ]
 
 { #category : #'private - subscriptions' }
-GtPharoPackageTagCoders >> subscribeToSystem [
+GtPharoPackageTagsCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 	
 	SystemAnnouncer uniqueInstance weak
