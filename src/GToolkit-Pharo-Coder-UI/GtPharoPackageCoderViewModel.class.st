@@ -13,8 +13,8 @@ A view model that knows its parent view model implements the following api:
 Class {
 	#name : #GtPharoPackageCoderViewModel,
 	#superclass : #Object,
-	#traits : 'TGtWithPharoPackageTagCoderModel',
-	#classTraits : 'TGtWithPharoPackageTagCoderModel classTrait',
+	#traits : 'TGtWithPharoPackageCoderModel',
+	#classTraits : 'TGtWithPharoPackageCoderModel classTrait',
 	#instVars : [
 		'announcer',
 		'pharoPackageTagsCoderViewModel',
@@ -30,6 +30,16 @@ GtPharoPackageCoderViewModel >> announce: anAnnouncement [
 	"Dispatch an event to the parent view model if it is assigned"
 	self hasParentPharoPackagesCoderViewModel
 		ifTrue: [ self parentPharoPackagesCoderViewModel announce: anAnnouncement ].
+]
+
+{ #category : #accessing }
+GtPharoPackageCoderViewModel >> asElement [
+	^ GtPharoPackageCoderElement new coderUIModel: self
+]
+
+{ #category : #accessing }
+GtPharoPackageCoderViewModel >> coder [
+	^ self pharoPackageCoderModel
 ]
 
 { #category : #'private - instance creation' }

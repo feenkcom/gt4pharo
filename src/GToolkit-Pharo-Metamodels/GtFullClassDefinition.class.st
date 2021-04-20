@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtFullClassDefinition class >> forNew [
+	^ self new forNew
+]
+
+{ #category : #'instance creation' }
 GtFullClassDefinition class >> fromClass: aClass [
 	^ self new fromClass: aClass
 ]
@@ -26,6 +31,11 @@ GtFullClassDefinition >> asDefinitionString [
 { #category : #accessing }
 GtFullClassDefinition >> classSideDefinition [
 	^ classSideDefinition
+]
+
+{ #category : #'private - accessing' }
+GtFullClassDefinition >> classSideDefinition: aGtMetaclassDefinition [
+	classSideDefinition := aGtMetaclassDefinition parent: self
 ]
 
 { #category : #accessing }
@@ -84,6 +94,15 @@ GtFullClassDefinition >> differenceWith: aGtCodeDefinition [
 ]
 
 { #category : #initialization }
+GtFullClassDefinition >> forNew [
+	name := self defaultNewClassName.
+	originalName := name.
+	
+	instanceSideDefinition := GtClassDefinition forNew parent: self.
+	classSideDefinition := GtMetaclassDefinition forNew parent: self
+]
+
+{ #category : #initialization }
 GtFullClassDefinition >> fromClass: aClass [
 	self fromClass: aClass in: self environment
 ]
@@ -108,12 +127,57 @@ GtFullClassDefinition >> instanceSideDefinition [
 	^ instanceSideDefinition
 ]
 
+{ #category : #'private - accessing' }
+GtFullClassDefinition >> instanceSideDefinition: aGtClassDefinition [
+	instanceSideDefinition := aGtClassDefinition parent: self
+]
+
 { #category : #accessing }
 GtFullClassDefinition >> name: aSymbol [
 	super name: aSymbol.
 	
 	self instanceSideDefinition name: aSymbol.
 	self classSideDefinition name: aSymbol
+]
+
+{ #category : #accessing }
+GtFullClassDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	classSideDefinition := classSideDefinition copy parent: self.
+	instanceSideDefinition := instanceSideDefinition copy parent: self.
+	name := name copy.
+	originalName := originalName copy.
+]
+
+{ #category : #accessing }
+GtFullClassDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'classSideDefinition:';
+		space;
+		store: self classSideDefinition;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'instanceSideDefinition:';
+		space;
+		store: self instanceSideDefinition;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name.
+	aStream
+		nextPut: $)
 ]
 
 { #category : #initialization }

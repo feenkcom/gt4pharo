@@ -109,6 +109,11 @@ GtCategoryDefinition >> package [
 	^ package
 ]
 
+{ #category : #'private - accessing' }
+GtCategoryDefinition >> package: aPackageDefinition [
+	package := aPackageDefinition parent: self
+]
+
 { #category : #testing }
 GtCategoryDefinition >> packageExists [
 	^ package exists
@@ -123,6 +128,43 @@ GtCategoryDefinition >> parent: aParent [
 ]
 
 { #category : #accessing }
+GtCategoryDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	package := package copy parent: self.
+	tag := tag copy parent: self.
+]
+
+{ #category : #accessing }
+GtCategoryDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'package:';
+		space;
+		store: self package;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'tag:';
+		space;
+		store: self tag.
+	aStream
+		nextPut: $)
+]
+
+{ #category : #accessing }
 GtCategoryDefinition >> tag [
 	^ tag
+]
+
+{ #category : #'private - accessing' }
+GtCategoryDefinition >> tag: aTagDefinition [
+	tag := aTagDefinition parent: self
 ]

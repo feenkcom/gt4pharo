@@ -20,6 +20,16 @@ GtPharoPackagesCoderViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ]
 ]
 
+{ #category : #converting }
+GtPharoPackagesCoderViewModel >> asElement [
+	^ GtPackagesCoderElement new codersUIModel: self
+]
+
+{ #category : #deprecated }
+GtPharoPackagesCoderViewModel >> coder [
+	^ self pharoPackagesCoderModel
+]
+
 { #category : #'private - instance creation' }
 GtPharoPackagesCoderViewModel >> createPharoPackageCoderViewModels [
 	"For each child from the domain modal create a view model and return a resulting collection"

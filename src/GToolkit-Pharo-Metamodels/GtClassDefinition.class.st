@@ -105,6 +105,11 @@ GtClassDefinition >> category [
 	^ category
 ]
 
+{ #category : #'private - accessing' }
+GtClassDefinition >> category: aGtCategoryDefinition [
+	category := aGtCategoryDefinition parent: self
+]
+
 { #category : #accessing }
 GtClassDefinition >> classVariables [
 	<return: #GtClassVariablesDefinition>
@@ -112,11 +117,21 @@ GtClassDefinition >> classVariables [
 	^ classVariables
 ]
 
+{ #category : #'private - accessing' }
+GtClassDefinition >> classVariables: aGtClassVariablesDefinition [
+	classVariables := aGtClassVariablesDefinition parent: self
+]
+
 { #category : #accessing }
 GtClassDefinition >> comment [
 	<return: #GtCommentDefinition>
 	
 	^ comment
+]
+
+{ #category : #'private - accessing' }
+GtClassDefinition >> comment: aGtCommentDefinition [
+	comment := aGtCommentDefinition parent: self
 ]
 
 { #category : #'api - accepting' }
@@ -145,11 +160,6 @@ GtClassDefinition >> createChange [
 	aCompositeChange addChange: (self comment createChange behaviorName: self name).
 
 	^ aCompositeChange
-]
-
-{ #category : #initialization }
-GtClassDefinition >> defaultNewClassName [
-	^ #NameOfSubclass
 ]
 
 { #category : #'api - accepting' }
@@ -282,9 +292,19 @@ GtClassDefinition >> layout [
 	^ layout
 ]
 
+{ #category : #'private - accessing' }
+GtClassDefinition >> layout: aLayout [
+	layout := aLayout
+]
+
 { #category : #accessing }
 GtClassDefinition >> methods [
 	^ methods
+]
+
+{ #category : #'private - accessing' }
+GtClassDefinition >> methods: aGtMethodsDefinition [
+	methods := aGtMethodsDefinition parent: self
 ]
 
 { #category : #accessing }
@@ -294,11 +314,110 @@ GtClassDefinition >> pools [
 	^ pools
 ]
 
+{ #category : #'private - accessing' }
+GtClassDefinition >> pools: aGtPoolsDefinition [
+	pools := aGtPoolsDefinition parent: self
+]
+
+{ #category : #accessing }
+GtClassDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	category := category copy parent: self.
+	classVariables := classVariables copy parent: self.
+	comment := comment copy parent: self.
+	layout := layout copy.
+	methods := methods copy parent: self.
+	name := name copy.
+	originalName := originalName copy.
+	pools := pools copy parent: self.
+	slots := slots copy parent: self.
+	superclass := superclass copy parent: self.
+	traits := traits copy parent: self.
+]
+
 { #category : #accessing }
 GtClassDefinition >> slots [
 	<return: #GtSlotsDefinition>
 
 	^ slots
+]
+
+{ #category : #'private - accessing' }
+GtClassDefinition >> slots: aGtSlotsDefinition [
+	slots := aGtSlotsDefinition parent: self
+]
+
+{ #category : #accessing }
+GtClassDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'category:';
+		space;
+		store: self category;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'classVariables:';
+		space;
+		store: self classVariables;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'comment:';
+		space;
+		store: self comment;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'layout:';
+		space;
+		store: self layout;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'methods:';
+		space;
+		store: self methods;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'pools:';
+		space;
+		store: self pools;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'slots:';
+		space;
+		store: self slots;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'superclass:';
+		space;
+		store: self superclass;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'traits:';
+		space;
+		store: self traits.
+	aStream
+		nextPut: $)
 ]
 
 { #category : #accessing }
@@ -308,11 +427,21 @@ GtClassDefinition >> superclass [
 	^ superclass
 ]
 
+{ #category : #'private - accessing' }
+GtClassDefinition >> superclass: aGtBehaviorDefinition [
+	superclass := aGtBehaviorDefinition parent: self
+]
+
 { #category : #accessing }
 GtClassDefinition >> traits [
 	<return: #GtTraitsDefinition>
 	
 	^ traits
+]
+
+{ #category : #'private - accessing' }
+GtClassDefinition >> traits: aGtTraitsDefinition [
+	traits := aGtTraitsDefinition parent: self
 ]
 
 { #category : #initialization }
