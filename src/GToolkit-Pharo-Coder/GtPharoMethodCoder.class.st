@@ -1226,18 +1226,14 @@ GtPharoMethodCoder >> subscribeToSystem [
 ]
 
 { #category : #'api - addons' }
-GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns [
+GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 20>
 	| isUnaryInstanceSideMethod isUnaryClassSideMethod |
 	
-	self compiledMethod
-		ifNil: [ ^ self ].
+	self compiledMethod ifNil: [ ^ self ].
 	
-	isUnaryInstanceSideMethod := (self hasObjectAttribute
-		and: [ anAST notNil
-			and: [ anAST methodNode
-				ifNotNil: [ :node | node variables isEmpty ]
-				ifNil: [ false ] ] ]).
+	isUnaryInstanceSideMethod := aGtPharoMethodCoderViewModel selfObject notNil and: [ 
+		anAST methodNode selector isUnary ].
 	isUnaryClassSideMethod := (anAST notNil
 		and: [ anAST methodNode
 			ifNotNil: [ :node | node variables isEmpty and: [ self compiledMethod methodClass isClassSide ] ]

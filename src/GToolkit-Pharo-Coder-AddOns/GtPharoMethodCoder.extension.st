@@ -272,12 +272,11 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 	
 	addOns addStyler: GtPharoStyler new.
 	addOns addStyler: GtPharoDeprecationStyler new.
+	addOns addStyler: GtPharoVariableHighlightStyler new.
 	addOns addStyler: GtPharoMethodExpanderStyler new.
 	addOns addStyler: (GtFixItStyler new isForWorkspace: false).
 
-	"
-	Do not add comment styler yet, it has to be ported to SmaCC
-	addOns addStyler: GtCoderCommentStyler new."
+	"addOns addStyler: GtCoderCommentStyler new."
 
 	addOns
 		addMainAction: (GtCoderActivatableAction new

@@ -159,11 +159,9 @@ GtPharoMethodCoderViewModel >> protocol [
 
 { #category : #private }
 GtPharoMethodCoderViewModel >> receiverObjectToPlay [
+	self isMeta ifTrue: [ ^ self behavior instanceSide ].
 	^ self selfObject
-		ifNil: [
-			self isMeta
-				ifTrue: [ self behavior instanceSide ]
-				ifFalse: [ self behavior new ] ]
+		ifNil: [ self behavior new ]
 ]
 
 { #category : #'api - actions' }
