@@ -77,7 +77,7 @@ GtPharoTemplateParser class >> ambiguousTransitions [
 
 { #category : #'generated-accessing' }
 GtPharoTemplateParser class >> cacheId [
-	^'2021-04-19T09:36:26.165203+02:00'
+	^'2021-04-21T09:50:00.977539+02:00'
 ]
 
 { #category : #generated }

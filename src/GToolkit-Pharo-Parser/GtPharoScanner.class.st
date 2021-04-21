@@ -27,12 +27,12 @@ GtPharoScanner >> binaryId [
 
 { #category : #generated }
 GtPharoScanner >> emptySymbolTokenId [
-	^ 109
+	^ 110
 ]
 
 { #category : #generated }
 GtPharoScanner >> errorTokenId [
-	^ 110
+	^ 111
 ]
 
 { #category : #generated }

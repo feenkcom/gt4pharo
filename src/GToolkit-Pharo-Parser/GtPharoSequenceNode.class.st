@@ -27,7 +27,7 @@ GtPharoSequenceNode >> defines: aString [
 ]
 
 { #category : #generated }
-GtPharoSequenceNode >> ignoredCompositeTokenVariables [
+GtPharoSequenceNode >> ignoredOtherVariables [
 	^ #(#periods)
 ]
 
@@ -72,7 +72,9 @@ GtPharoSequenceNode >> periods [
 
 { #category : #generated }
 GtPharoSequenceNode >> periods: anOrderedCollection [
-	periods := anOrderedCollection
+	self setParent: self periods to: nil.
+	periods := anOrderedCollection.
+	self setParent: self periods to: self
 ]
 
 { #category : #accessing }
