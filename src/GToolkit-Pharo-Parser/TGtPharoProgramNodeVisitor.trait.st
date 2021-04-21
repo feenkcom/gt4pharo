@@ -121,6 +121,11 @@ TGtPharoProgramNodeVisitor >> visitNilLiteral: aNilLiteral [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitNothing: aNothing [
+	^ self visitProgram: aNothing
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitNumberLiteral: aNumberLiteral [
 	^ self visitLiteral: aNumberLiteral
 ]
