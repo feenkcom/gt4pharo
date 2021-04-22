@@ -54,12 +54,3 @@ GtPharoValueNode >> rightParens [
 GtPharoValueNode >> rightParens: anOrderedCollection [
 	rightParens := anOrderedCollection
 ]
-
-{ #category : #accessing }
-GtPharoValueNode >> visitBlock: aBlock [
-	super visitBlock: aBlock.
-	self 
-		colorAndHighlightParenthesesLeft: aBlock leftBracket startPosition
-		right: aBlock rightBracket startPosition
-		atNestingLevel: aBlock nestingLevel.
-]
