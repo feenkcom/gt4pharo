@@ -237,17 +237,17 @@ GtPharoCompleterExamples >> startingStatementRequestedCompletions [
 		^var1 size * 3'.
 	strategy := self smalltalkStrategy.
 	index := 1.
-	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1)
-		> 1 ]
-		whileTrue: [ | actions |
+	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1) > 1 ]
+		whileTrue: [
+			| actions |
+			
 			actions := strategy
 				completionActionsFor: text asRopedText
 				at: index - 2
 				max: 10
 				requested: true.
+
 			self assert: actions notEmpty.
-			self
-				assert: (actions noneSatisfy: [ :each | each label includes: $: ]).
 			self
 				assert:
 					(strategy
