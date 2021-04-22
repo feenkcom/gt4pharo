@@ -5,7 +5,7 @@ Class {
 		'pattern',
 		'body'
 	],
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }

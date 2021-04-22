@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoThisContextVariableNode,
 	#superclass : #GtPharoVariableNode,
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }

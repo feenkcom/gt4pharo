@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoProgramNode,
 	#superclass : #SmaCCParseNode,
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #'api - ast' }

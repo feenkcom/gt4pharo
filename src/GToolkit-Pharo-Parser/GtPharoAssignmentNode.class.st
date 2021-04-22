@@ -6,7 +6,7 @@ Class {
 		'assignmentToken',
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }

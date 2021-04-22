@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoTemplateParser,
 	#superclass : #SmaCCGLRParser,
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }

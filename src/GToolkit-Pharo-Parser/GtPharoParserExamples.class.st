@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-Parser-Examples'
 }
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> arrayNestingLevel [
 	<gtExample>
 	| ast |
@@ -15,7 +15,7 @@ GtPharoParserExamples >> arrayNestingLevel [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> blockInParensNestingLevel [
 	<gtExample>
 	| ast |
@@ -26,7 +26,7 @@ GtPharoParserExamples >> blockInParensNestingLevel [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> blockNestingLevel [
 	<gtExample>
 	| ast |
@@ -37,7 +37,7 @@ GtPharoParserExamples >> blockNestingLevel [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> literalArrayNestingLevel [
 	<gtExample>
 	| ast |
@@ -48,7 +48,7 @@ GtPharoParserExamples >> literalArrayNestingLevel [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> parensNestingLevel [
 	<gtExample>
 	| ast |
@@ -59,7 +59,7 @@ GtPharoParserExamples >> parensNestingLevel [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> rootNestingLevel [
 	<gtExample>
 	| ast |
@@ -70,7 +70,7 @@ GtPharoParserExamples >> rootNestingLevel [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> twoParensNestingLevel [
 	<gtExample>
 	| ast |
@@ -78,5 +78,36 @@ GtPharoParserExamples >> twoParensNestingLevel [
 		parse: '((1))'
 		startingAt: GtPharoParser startingStateForStatement.
 	self assert: ast nestingLevel = 2.
+	^ ast
+]
+
+{ #category : #'examples - symbol' }
+GtPharoParserExamples >> validLiteralArrayNode [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser 
+		parse: '#($a #a "a" 1 1.0)'
+		startingAt: GtPharoParser startingStateForStatement.
+
+	self assert: ast literalValue equals: #($a #a "a" 1 1.0).
+	self assert: ast values size equals: 4.
+
+	^ ast
+]
+
+{ #category : #'examples - symbol' }
+GtPharoParserExamples >> validSymbolNode [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser 
+		parse: '#hello'
+		startingAt: GtPharoParser startingStateForStatement.
+
+	self assert: ast literalValue equals: #hello.
+	self assert: ast symbol equals: #hello.
+	self assert: ast asSymbol equals: #hello.
+
 	^ ast
 ]

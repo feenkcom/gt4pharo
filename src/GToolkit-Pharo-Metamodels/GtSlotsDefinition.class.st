@@ -93,6 +93,11 @@ GtSlotsDefinition >> fromTrait: aTrait [
 	definitions := aTrait localSlots collect: [ :eachSlot | (GtSlotDefinition fromSlot: eachSlot) parent: self ]
 ]
 
+{ #category : #'api - slots' }
+GtSlotsDefinition >> hasSlotNamed: aSlotName [
+	^ self hasDefinitionNamed: aSlotName
+]
+
 { #category : #'private - notifying' }
 GtSlotsDefinition >> notifySlotAdded: aGtSlotDefinition [
 	self dispatchEvent: (GtBehaviorSlotAdded new
