@@ -104,7 +104,7 @@ GtCompositeDefinition >> postCopy [
 	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
 	super postCopy.
 	
-	self definitions: definitions copy.
+	self definitions: (definitions collect: [ :eachDefinition | eachDefinition copy ]).
 ]
 
 { #category : #enumerating }

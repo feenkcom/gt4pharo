@@ -139,6 +139,7 @@ GtTraitDefinition >> differenceWith: aTraitDefinition [
 	aDifference add: (self category differenceWith: aTraitDefinition category).
 	aDifference add: (self slots differenceWith: aTraitDefinition slots).
 	aDifference add: (self traits differenceWith: aTraitDefinition traits).
+	aDifference add: (self methods differenceWith: aTraitDefinition methods).
 
 	^ aDifference
 ]

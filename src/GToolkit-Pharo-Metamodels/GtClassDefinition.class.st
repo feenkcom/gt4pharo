@@ -191,6 +191,7 @@ GtClassDefinition >> differenceWith: aClassDefinition [
 	aDifference add: (self classVariables differenceWith: aClassDefinition classVariables).
 	aDifference add: (self traits differenceWith: aClassDefinition traits).
 	aDifference add: (self pools differenceWith: aClassDefinition pools).
+	aDifference add: (self methods differenceWith: aClassDefinition methods).
 
 	^ aDifference
 ]
