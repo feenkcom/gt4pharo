@@ -109,7 +109,33 @@ GtTagDefinition >> originalName: aSymbolOrString [
 	originalName := aSymbolOrString asSymbol
 ]
 
+{ #category : #accessing }
+GtTagDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	name := name copy.
+	originalName := originalName copy.
+]
+
 { #category : #printing }
 GtTagDefinition >> printOn: aStream [
 	aStream print: self name
+]
+
+{ #category : #accessing }
+GtTagDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name.
+	aStream
+		nextPut: $)
 ]

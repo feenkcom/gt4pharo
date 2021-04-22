@@ -51,6 +51,11 @@ GtBehaviorDefinition >> classOrMetaClass [
 	^ self class environment at: self originalName ifAbsent: [  ]
 ]
 
+{ #category : #initialization }
+GtBehaviorDefinition >> defaultNewClassName [
+	^ #NameOfSubclass
+]
+
 { #category : #'api - accepting' }
 GtBehaviorDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aBehavior [
 	^ self subclassResponsibility

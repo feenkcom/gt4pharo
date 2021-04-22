@@ -95,7 +95,7 @@ GtPharoBlockNode >> leftBracket: aSmaCCToken [
 
 { #category : #accessing }
 GtPharoBlockNode >> localVariablesInto: aCollection [
-	variables do: [ :each | aCollection add: each name value ].
+	variables do: [ :each | aCollection add: each variableName ].
 	super localVariablesInto: aCollection
 ]
 

@@ -61,10 +61,10 @@ GtPharoAssignmentNode >> variable [
 ]
 
 { #category : #generated }
-GtPharoAssignmentNode >> variable: aGtPharoValueNode [
+GtPharoAssignmentNode >> variable: aGtPharoVariableNode [
 	self variable notNil
 		ifTrue: [ self variable parent: nil ].
-	variable := aGtPharoValueNode.
+	variable := aGtPharoVariableNode.
 	self variable notNil
 		ifTrue: [ self variable parent: self ]
 ]

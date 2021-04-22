@@ -7,7 +7,6 @@ GtRenameAction2 class >> pharoRenameLocalVariableAt: aTextIndex textualCoderView
 	
 		ast := aTextualCoderViewModel astAwait.
 		items := OrderedCollection new.
-
 		(ast findVariableNodeAt: aTextIndex)
 			ifNotNil: [ :node | 
 				node whoDefines

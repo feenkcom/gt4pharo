@@ -1,6 +1,17 @@
 Extension { #name : #GtClassDefinition }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+GtClassDefinition >> gtMethodsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Methods';
+		priority: 5;
+		object: [ methods ];
+		view: #gtMethodsFor:
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtClassDefinition >> gtSlotsFor: aView [
 	<gtView>
 

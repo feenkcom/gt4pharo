@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtMetaclassDefinition class >> forNew [
+	^ self new forNew
+]
+
+{ #category : #'instance creation' }
 GtMetaclassDefinition class >> fromMetaclass: aMetaclass [
 	^ self new fromMetaclass: aMetaclass
 ]
@@ -35,6 +40,11 @@ GtMetaclassDefinition >> category [
 	<return: #GtCategoryDefinition>
 
 	^ category
+]
+
+{ #category : #'private - accessing' }
+GtMetaclassDefinition >> category: aGtCategoryDefinition [
+	category := aGtCategoryDefinition parent: self
 ]
 
 { #category : #accessing }
@@ -81,6 +91,17 @@ GtMetaclassDefinition >> differenceWith: aMetaclassDefinition [
 ]
 
 { #category : #initialization }
+GtMetaclassDefinition >> forNew [
+	"Initialize me from a new Metaclass"
+	
+	name := self defaultNewClassName.
+	originalName := name.
+	
+	category := GtCategoryDefinition empty parent: self.
+	slots := GtSlotsDefinition empty parent: self.
+]
+
+{ #category : #initialization }
 GtMetaclassDefinition >> fromMetaclass: aMetaclass [
 	"Initialize me from a given real Metaclass"
 
@@ -96,7 +117,7 @@ GtMetaclassDefinition >> fromMetaclass: aMetaclass in: anEnvironment [
 
 	self environment: anEnvironment.
 	
-	name := aMetaclass name.
+	name := aMetaclass instanceSide name.
 	originalName := name.
 	
 	category := (GtCategoryDefinition fromBehavior: aMetaclass) parent: self.
@@ -109,8 +130,53 @@ GtMetaclassDefinition >> isForMetaclass [
 ]
 
 { #category : #accessing }
+GtMetaclassDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	category := category copy parent: self.
+	name := name copy.
+	originalName := originalName copy.
+	slots := slots copy parent: self.
+]
+
+{ #category : #accessing }
 GtMetaclassDefinition >> slots [
 	<return: #GtSlotsDefinition>
 
 	^ slots
+]
+
+{ #category : #'private - accessing' }
+GtMetaclassDefinition >> slots: aGtSlotsDefinition [
+	slots := aGtSlotsDefinition parent: self
+]
+
+{ #category : #accessing }
+GtMetaclassDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'category:';
+		space;
+		store: self category;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'slots:';
+		space;
+		store: self slots.
+	aStream
+		nextPut: $)
 ]

@@ -7,6 +7,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> allowSaveDueTo: anObject [
+	"do nothing"
+]
+
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> behavior [
 	^ self selfObject class
@@ -65,6 +70,11 @@ GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 	self bindingStrategy bindings
 		localAt: #thisCoder
 		put: self coderModel
+]
+
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> preventSaveDueTo: anObject [
+	"do nothing"
 ]
 
 { #category : #'api - bindings' }

@@ -47,3 +47,28 @@ GtCommentDefinition >> initialize [
 GtCommentDefinition >> name [
 	^ 'Comment'
 ]
+
+{ #category : #accessing }
+GtCommentDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	content := content copy.
+]
+
+{ #category : #accessing }
+GtCommentDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'content:';
+		space;
+		store: self content.
+	aStream
+		nextPut: $)
+]

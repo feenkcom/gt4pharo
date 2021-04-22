@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoTemplateNode,
-	#superclass : #GtPharoValueNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'leftBraces',
 		'expression',
@@ -12,6 +12,11 @@ Class {
 { #category : #generated }
 GtPharoTemplateNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplate: self
+]
+
+{ #category : #accessing }
+GtPharoTemplateNode >> asSymbol [
+	^ self expression source asSymbol
 ]
 
 { #category : #generated }
@@ -53,7 +58,17 @@ GtPharoTemplateNode >> rightBraces: aSmaCCToken [
 	rightBraces := aSmaCCToken
 ]
 
+{ #category : #accessing }
+GtPharoTemplateNode >> selector [
+	^ self asSymbol
+]
+
 { #category : #generated }
 GtPharoTemplateNode >> tokenVariables [
 	^ #(#leftBraces #rightBraces)
+]
+
+{ #category : #accessing }
+GtPharoTemplateNode >> variableName [
+	^ self source asSymbol
 ]

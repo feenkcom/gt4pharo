@@ -302,7 +302,7 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 	aGtPharoSourceCoderEvaluationContext
 		sourceString: aSourceString;
 		evaluatedInterval: (1 to: aSourceString size);
-		evaluatedSourceString: aSourceString size.
+		evaluatedSourceString: aSourceString.
 
 	^ self protocol
 		ifNil: [
@@ -559,12 +559,6 @@ GtPharoMethodCoder >> gtDiffViewFor: aView [
 				from: methodSource;
 				to: self newMethodSource;
 				create ]"
-]
-
-{ #category : #'api - addons' }
-GtPharoMethodCoder >> haltAddOnFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 20>
-	coderAddOns addStyler: GtCoderHaltStyler new
 ]
 
 { #category : #private }

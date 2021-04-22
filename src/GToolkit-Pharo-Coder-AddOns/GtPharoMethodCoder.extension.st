@@ -272,7 +272,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 	
 	addOns addStyler: GtPharoStyler new.
 	addOns addStyler: GtPharoDeprecationStyler new.
-	addOns addStyler: GtPharoVariableHighlightStyler new.
+	addOns addStyler: GtPharoDynamicHighlightStyler new.
 	addOns addStyler: GtPharoMethodExpanderStyler new.
 	addOns addStyler: (GtFixItStyler new isForWorkspace: false).
 
@@ -316,16 +316,6 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderSaveShortcut new;
 		addShortcut: GtSourceCoderFormatShortcut new;
 		addShortcut: GtSourceCoderInlineRenameShortcut new
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> methodExpanderFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 10>
-	
-	anAST methodNode
-		ifNil: [ ^ self ].
-
-	"coderAddOns addStyler: (GtCoderExpandablePharoMethodStyler new)"
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

@@ -61,6 +61,15 @@ GtClassMethodsCoder >> classesFilter [
 	^ filter
 ]
 
+{ #category : #elements }
+GtClassMethodsCoder >> codeGeneratorsFor: aMethodsCoderUIModel [
+	^ GtPhlowViewsCollector new
+		fromObject: self;
+		pragmaName: #gtCodeGenerator;
+		context: aMethodsCoderUIModel;
+		collect
+]
+
 { #category : #private }
 GtClassMethodsCoder >> combinedFilter [
 	| combined |

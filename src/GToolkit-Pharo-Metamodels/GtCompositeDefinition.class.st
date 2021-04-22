@@ -40,6 +40,17 @@ GtCompositeDefinition >> definitionNamed: aSymbol ifNone: anExceptionBlock [
 		ifNone: anExceptionBlock
 ]
 
+{ #category : #'private - accessing' }
+GtCompositeDefinition >> definitions [
+	^ definitions
+]
+
+{ #category : #'private - accessing' }
+GtCompositeDefinition >> definitions: anArrayOfDefinitions [
+	definitions := anArrayOfDefinitions asArray.
+	definitions do: [ :each | each parent: self ]
+]
+
 { #category : #enumerating }
 GtCompositeDefinition >> do: aBlock [
 	definitions do: aBlock
@@ -89,8 +100,38 @@ GtCompositeDefinition >> parent: aParent [
 ]
 
 { #category : #accessing }
+GtCompositeDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	self definitions: definitions copy.
+]
+
+{ #category : #enumerating }
+GtCompositeDefinition >> removeSuchThat: aBlock [
+	definitions := definitions reject: aBlock
+]
+
+{ #category : #accessing }
 GtCompositeDefinition >> size [
 	<return: #Number>
 
 	^ definitions size
+]
+
+{ #category : #accessing }
+GtCompositeDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'definitions:';
+		space;
+		store: self definitions.
+	aStream
+		nextPut: $)
 ]
