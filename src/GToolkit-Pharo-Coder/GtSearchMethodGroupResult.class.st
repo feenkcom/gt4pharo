@@ -45,6 +45,23 @@ GtSearchMethodGroupResult >> gtItemsFor: aView [
 		stencil: [ (self asCoder) asElement margin: (BlInsets all: 5) ]
 ]
 
+{ #category : #accessing }
+GtSearchMethodGroupResult >> gtMetricsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Metrics';
+		items: [ {('Number of methods' -> self size).
+			('Lines of code' -> self linesOfCode).
+			('Lines per method' -> (self linesOfCode / self size) asFloat)} ];
+		column: 'Metric' text: #key;
+		column: 'Value' text: [ :assoc | assoc value asString ]
+]
+
+{ #category : #accessing }
+GtSearchMethodGroupResult >> linesOfCode [
+	^ self sumNumbers: [ :method | method linesOfCode ]
+]
+
 { #category : #changes }
 GtSearchMethodGroupResult >> methodAdded: aMethodAnnouncement [
 	(filtered and: [ filter notNil ])
