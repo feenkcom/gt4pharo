@@ -12,6 +12,16 @@ GtPharoKeywordNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitKeyword: self
 ]
 
+{ #category : #converting }
+GtPharoKeywordNode >> asString [
+	^ self source asString
+]
+
+{ #category : #converting }
+GtPharoKeywordNode >> asSymbol [
+	^ self asString asSymbol
+]
+
 { #category : #'generated-initialize-release' }
 GtPharoKeywordNode >> initialize [
 	super initialize.
@@ -23,9 +33,9 @@ GtPharoKeywordNode >> otherVariables [
 	^ #(#selectorParts)
 ]
 
-{ #category : #accessing }
+{ #category : #converting }
 GtPharoKeywordNode >> selector [
-	^ Symbol streamContents: [ :stream | self selectorParts do: [ :eachNode | stream nextPutAll: eachNode source ] ]
+	^ self asSymbol
 ]
 
 { #category : #generated }

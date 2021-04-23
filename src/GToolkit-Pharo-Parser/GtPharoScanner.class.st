@@ -121,7 +121,7 @@ GtPharoScanner >> scan1X1 [
 GtPharoScanner >> scan1X10 [
 	currentCharacter == $:
 		ifTrue:
-			[ ^ self scan1X6 ].
+			[ ^ self scan1X7 ].
 	currentCharacter == $;
 		ifTrue: [ ^ self recordAndReportMatch: #(26) ].
 	currentCharacter == $<
@@ -223,18 +223,19 @@ GtPharoScanner >> scan1X5 [
 
 { #category : #generated }
 GtPharoScanner >> scan1X6 [
-	self recordMatch: #(17).
+	self recordMatch: #(24).
 	self step.
 	currentCharacter == $=
-		ifTrue: [ ^ self recordAndReportMatch: #(27) ].
+		ifTrue: [ ^ self recordAndReportMatch: #(5) ].
 	^ self reportLastMatch
 ]
 
 { #category : #generated }
 GtPharoScanner >> scan1X7 [
+	self recordMatch: #(17).
 	self step.
 	currentCharacter == $=
-		ifTrue: [ ^ self recordAndReportMatch: #(5) ].
+		ifTrue: [ ^ self recordAndReportMatch: #(27) ].
 	^ self reportLastMatch
 ]
 
@@ -266,7 +267,7 @@ GtPharoScanner >> scan1X9 [
 			self step.
 			currentCharacter == $:
 				ifTrue:
-					[ ^ self scan1X7 ].
+					[ ^ self scan1X6 ].
 			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
 				whileTrue ].
 	^ self reportLastMatch

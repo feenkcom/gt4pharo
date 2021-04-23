@@ -12,6 +12,11 @@ GtPharoErrorNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitError: self
 ]
 
+{ #category : #testing }
+GtPharoErrorNode >> isErrorNode [
+	^ true
+]
+
 { #category : #generated }
 GtPharoErrorNode >> nodeVariables [
 	^ #(#smaccError)

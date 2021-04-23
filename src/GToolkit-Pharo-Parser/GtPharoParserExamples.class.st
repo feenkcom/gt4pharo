@@ -37,6 +37,64 @@ GtPharoParserExamples >> blockNestingLevel [
 	^ ast
 ]
 
+{ #category : #'examples - name and keyword' }
+GtPharoParserExamples >> invalidKeywordNode [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser 
+		parseWithErrors: 'hello'
+		startingAt: GtPharoParser startingStateForKeyword.
+	self assert: ast isErrorNode.
+	
+	ast := GtPharoParser 
+		parseWithErrors: 'hello :'
+		startingAt: GtPharoParser startingStateForKeyword.
+	self assert: ast isErrorNode.
+	
+	ast := GtPharoParser 
+		parseWithErrors: 'hello world'
+		startingAt: GtPharoParser startingStateForKeyword.
+	self assert: ast isErrorNode.
+
+	^ ast
+]
+
+{ #category : #'examples - name and keyword' }
+GtPharoParserExamples >> invalidNameNode [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser 
+		parseWithErrors: 'hello world'
+		startingAt: GtPharoParser startingStateForName.
+	self assert: ast isErrorNode.
+	
+	ast := GtPharoParser 
+		parseWithErrors: 'hello:'
+		startingAt: GtPharoParser startingStateForName.
+	self assert: ast isErrorNode.
+
+	^ ast
+]
+
+{ #category : #'examples - message send' }
+GtPharoParserExamples >> invalidReceiverKeywordMessageSend [
+	<gtExample>
+	| ast |
+	
+	ast := GtPharoParser
+		parseWithErrors: 'printOn:'
+		startingAt: GtPharoParser startingStateForKeywordMessageSend.
+	
+	self assert: ast receiver isErrorNode.
+	self assert: ast message selector equals: #printOn:.
+	self assert: ast message arguments size equals: 1.
+	self assert: ast message arguments first isErrorNode.
+	
+	^ ast
+]
+
 { #category : #'examples - nesting level' }
 GtPharoParserExamples >> literalArrayNestingLevel [
 	<gtExample>
@@ -81,6 +139,41 @@ GtPharoParserExamples >> twoParensNestingLevel [
 	^ ast
 ]
 
+{ #category : #'examples - message send' }
+GtPharoParserExamples >> validKeywordMessageSend [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser
+		parseWithErrors: '42 printOn: nil'
+		startingAt: GtPharoParser startingStateForKeywordMessageSend.
+	
+	self assert: ast receiver literalValue equals: 42.
+	self assert: ast message selector equals: #printOn:.
+	self assert: ast message arguments size equals: 1.
+	self assert: ast message arguments first literalValue equals: nil.
+	
+	^ ast
+]
+
+{ #category : #'examples - name and keyword' }
+GtPharoParserExamples >> validKeywordNode [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser 
+		parse: 'hello:'
+		startingAt: GtPharoParser startingStateForKeyword.
+
+	self assert: ast asString equals: 'hello:'.
+	self assert: ast asSymbol equals: #hello:.
+	self assert: ast selector equals: #hello:.
+	self assert: ast selectorParts size equals: 2.
+	self assert: ast selectorParts second class equals: GtPharoNothingNode.
+
+	^ ast
+]
+
 { #category : #'examples - symbol' }
 GtPharoParserExamples >> validLiteralArrayNode [
 	<gtExample>
@@ -92,6 +185,24 @@ GtPharoParserExamples >> validLiteralArrayNode [
 
 	self assert: ast literalValue equals: #($a #a "a" 1 1.0).
 	self assert: ast values size equals: 4.
+
+	^ ast
+]
+
+{ #category : #'examples - name and keyword' }
+GtPharoParserExamples >> validNameNode [
+	<gtExample>
+	| ast |
+
+	ast := GtPharoParser 
+		parse: 'hello'
+		startingAt: GtPharoParser startingStateForName.
+
+	self assert: ast asString equals: 'hello'.
+	self assert: ast asSymbol equals: #hello.
+	self assert: ast selector equals: #hello.
+	self assert: ast nameParts size equals: 2.
+	self assert: ast nameParts second class equals: GtPharoNothingNode.
 
 	^ ast
 ]
