@@ -96,12 +96,22 @@ GtPharoStyler >> visitArray: anArray [
 
 { #category : #accessing }
 GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
-	| color |
+	| color aLeftIndex aRightIndex |
 	super visitArrayLiteral: anArrayLiteral.
+	color := self parenthesesColorAt: anArrayLiteral nestingLevel.
+	aLeftIndex := anArrayLiteral arrayStart startPosition.
+	aRightIndex := anArrayLiteral arrayStop startPosition.
+	(text
+		from: aLeftIndex
+		to: aLeftIndex+1)
+		foreground: color.
+	(text
+		from: aRightIndex
+		to: aRightIndex)
+		foreground: color.
 	self 
-		colorAndHighlightParenthesesLeft: anArrayLiteral arrayStart startPosition
-		right: anArrayLiteral arrayStop startPosition
-		atNestingLevel: anArrayLiteral nestingLevel.
+		highlightParenthesesLeft: aLeftIndex
+		right: aRightIndex.
 ]
 
 { #category : #visiting }
@@ -332,6 +342,6 @@ GtPharoStyler >> visitValue: aValue [
 		self 
 			colorAndHighlightParenthesesLeft: each startPosition
 			right: (aValue rightParens at: (aValue rightParens size - i + 1)) startPosition
-			atNestingLevel: aValue nestingLevel - aValue leftParens size + i "because its part of nesting".
+			atNestingLevel: aValue parent nestingLevel + i.
 	].
 ]
