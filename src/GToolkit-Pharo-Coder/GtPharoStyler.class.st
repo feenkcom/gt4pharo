@@ -279,7 +279,8 @@ GtPharoStyler >> visitSmaCCError: anErrorNode [
 		nodesDo: [ :eachNode | self acceptNode: eachNode ]
 		andTokensDo: [ :eachToken | ]
 		includeErrors: true.
-	anErrorNode dismissedTokens do: [ :eachToken | self visitErrorToken: eachToken ]
+	anErrorNode dismissedTokens do: [ :eachToken | self visitErrorToken: eachToken ].
+	anErrorNode errorToken ifNotNil: [ :eachToken | self visitErrorToken: eachToken ]
 ]
 
 { #category : #visiting }

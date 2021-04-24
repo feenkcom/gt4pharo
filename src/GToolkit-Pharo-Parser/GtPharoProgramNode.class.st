@@ -112,6 +112,11 @@ GtPharoProgramNode >> intersectsInterval: anInterval [
 ]
 
 { #category : #testing }
+GtPharoProgramNode >> isKeyword [
+	^ false
+]
+
+{ #category : #testing }
 GtPharoProgramNode >> isLiteral [
 	^ false
 ]
@@ -133,6 +138,11 @@ GtPharoProgramNode >> isMethod [
 
 { #category : #testing }
 GtPharoProgramNode >> isMethodPattern [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoProgramNode >> isName [
 	^ false
 ]
 
