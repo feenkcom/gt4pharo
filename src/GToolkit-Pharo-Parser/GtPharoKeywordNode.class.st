@@ -28,6 +28,11 @@ GtPharoKeywordNode >> initialize [
 	selectorParts := OrderedCollection new: 2.
 ]
 
+{ #category : #testing }
+GtPharoKeywordNode >> isKeyword [
+	^ true
+]
+
 { #category : #generated }
 GtPharoKeywordNode >> otherVariables [
 	^ #(#selectorParts)

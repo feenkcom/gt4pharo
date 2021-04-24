@@ -28,6 +28,11 @@ GtPharoNameNode >> initialize [
 	nameParts := OrderedCollection new: 2.
 ]
 
+{ #category : #testing }
+GtPharoNameNode >> isName [
+	^ true
+]
+
 { #category : #generated }
 GtPharoNameNode >> nameParts [
 	^ nameParts
