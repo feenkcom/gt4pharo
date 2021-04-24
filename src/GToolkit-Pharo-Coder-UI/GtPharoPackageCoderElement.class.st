@@ -1,10 +1,12 @@
 Class {
 	#name : #GtPharoPackageCoderElement,
 	#superclass : #BrVerticalPane,
+	#traits : 'TGtPharoWithPackageCoderViewModel',
+	#classTraits : 'TGtPharoWithPackageCoderViewModel classTrait',
 	#instVars : [
 		'packageCoder'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-Views'
 }
 
 { #category : #'private - ui' }

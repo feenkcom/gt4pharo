@@ -56,23 +56,16 @@ GtSearchMethodsFilter >> filterValueString [
 { #category : #testing }
 GtSearchMethodsFilter >> gtMetricsFor: aView [
 	<gtView>
-	^ aView columnedList
+	^ aView forward
 		title: 'Metrics';
-		items: [ {('Number of methods' -> self size).
-			('Lines of code' -> self linesOfCode).
-			('Lines per method' -> (self linesOfCode / self size) asFloat)} ];
-		column: 'Metric' text: #key;
-		column: 'Value' text: [ :assoc | assoc value asString ]
+		priority: 11;
+		object: [ self result ];
+		view: #gtMetricsFor:
 ]
 
 { #category : #testing }
 GtSearchMethodsFilter >> includesMethod: aCompiledMethod [
 	self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtSearchMethodsFilter >> linesOfCode [
-	^ self result sumNumbers: [:method | method linesOfCode]
 ]
 
 { #category : #testing }

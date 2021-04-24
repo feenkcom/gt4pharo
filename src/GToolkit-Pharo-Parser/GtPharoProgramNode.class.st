@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoProgramNode,
 	#superclass : #SmaCCParseNode,
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #'api - ast' }
@@ -99,7 +99,7 @@ GtPharoProgramNode >> implicitLocalVariables [
 		allNodesOfType: GtPharoVariableNode
 		do: [ :each | 
 			(each == self or: [ each isLocallyDefined ])
-				ifFalse: [ variables add: each name value ] ].
+				ifFalse: [ variables add: each variableName ] ].
 	^ variables
 ]
 
@@ -109,6 +109,11 @@ GtPharoProgramNode >> intersectsInterval: anInterval [
 
 	^ (anInterval first between: self startPosition and: self stopPosition) 
 		or: [ self startPosition between: anInterval first and: anInterval last ]
+]
+
+{ #category : #testing }
+GtPharoProgramNode >> isKeyword [
+	^ false
 ]
 
 { #category : #testing }
@@ -133,6 +138,11 @@ GtPharoProgramNode >> isMethod [
 
 { #category : #testing }
 GtPharoProgramNode >> isMethodPattern [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoProgramNode >> isName [
 	^ false
 ]
 
@@ -179,9 +189,9 @@ GtPharoProgramNode >> needsParenthesisForKeyword [
 
 { #category : #accessing }
 GtPharoProgramNode >> nestingLevel [
-	^ parent 
-		ifNil: [ 0 ] 
-		ifNotNil: [ parent nestingLevel ]
+	^ (parent notNil and: [ parent isErrorNode not ])
+		ifTrue: [ parent nestingLevel ]
+		ifFalse: [ 0 ]
 ]
 
 { #category : #accessing }

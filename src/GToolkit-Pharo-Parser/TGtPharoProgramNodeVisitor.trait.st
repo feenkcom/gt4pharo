@@ -2,7 +2,7 @@ Trait {
 	#name : #TGtPharoProgramNodeVisitor,
 	#traits : 'TSmaCCParseNodeVisitor',
 	#classTraits : 'TSmaCCParseNodeVisitor classTrait',
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -66,6 +66,11 @@ TGtPharoProgramNodeVisitor >> visitErrorPattern: anErrorPattern [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitKeyword: aKeyword [
+	^ self visitProgram: aKeyword
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitKeywordMessage: aKeywordMessage [
 	^ self visitMessage: aKeywordMessage
 ]
@@ -101,6 +106,11 @@ TGtPharoProgramNodeVisitor >> visitMethodSequence: aMethodSequence [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitName: aName [
+	^ self visitProgram: aName
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitNamedVariable: aNamedVariable [
 	^ self visitVariable: aNamedVariable
 ]
@@ -111,8 +121,18 @@ TGtPharoProgramNodeVisitor >> visitNilLiteral: aNilLiteral [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitNothing: aNothing [
+	^ self visitProgram: aNothing
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitNumberLiteral: aNumberLiteral [
 	^ self visitLiteral: aNumberLiteral
+]
+
+{ #category : #generated }
+TGtPharoProgramNodeVisitor >> visitPeriod: aPeriod [
+	^ self visitProgram: aPeriod
 ]
 
 { #category : #generated }
@@ -156,13 +176,38 @@ TGtPharoProgramNodeVisitor >> visitSuperVariable: aSuperVariable [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitSymbol: aSymbol [
+	^ self visitProgram: aSymbol
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitSymbolLiteral: aSymbolLiteral [
 	^ self visitLiteral: aSymbolLiteral
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitTemplatable: aTemplatable [
+	^ self visitProgram: aTemplatable
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitTemplate: aTemplate [
-	^ self visitValue: aTemplate
+	^ self visitProgram: aTemplate
+]
+
+{ #category : #generated }
+TGtPharoProgramNodeVisitor >> visitTemplateKeyword: aTemplateKeyword [
+	^ self visitTemplatable: aTemplateKeyword
+]
+
+{ #category : #generated }
+TGtPharoProgramNodeVisitor >> visitTemplateName: aTemplateName [
+	^ self visitTemplatable: aTemplateName
+]
+
+{ #category : #generated }
+TGtPharoProgramNodeVisitor >> visitTemplateSymbol: aTemplateSymbol [
+	^ self visitTemplatable: aTemplateSymbol
 ]
 
 { #category : #generated }

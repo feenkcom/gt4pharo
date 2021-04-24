@@ -5,7 +5,7 @@ Class {
 		'selectorParts',
 		'values'
 	],
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -20,12 +20,7 @@ GtPharoKeywordMessageNode >> arguments [
 
 { #category : #generated }
 GtPharoKeywordMessageNode >> compositeNodeVariables [
-	^ #(#values)
-]
-
-{ #category : #generated }
-GtPharoKeywordMessageNode >> compositeTokenVariables [
-	^ #(#selectorParts)
+	^ #(#selectorParts #values)
 ]
 
 { #category : #'generated-initialize-release' }
@@ -47,7 +42,7 @@ GtPharoKeywordMessageNode >> messageReceiver [
 
 { #category : #accessing }
 GtPharoKeywordMessageNode >> selector [
-	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each value ] ]) asSymbol
+	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each selector ] ]) asSymbol
 ]
 
 { #category : #generated }
@@ -57,7 +52,9 @@ GtPharoKeywordMessageNode >> selectorParts [
 
 { #category : #generated }
 GtPharoKeywordMessageNode >> selectorParts: anOrderedCollection [
-	selectorParts := anOrderedCollection
+	self setParents: self selectorParts to: nil.
+	selectorParts := anOrderedCollection.
+	self setParents: self selectorParts to: self
 ]
 
 { #category : #generated }

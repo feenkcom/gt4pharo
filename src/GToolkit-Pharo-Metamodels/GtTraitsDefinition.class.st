@@ -143,6 +143,11 @@ GtTraitsDefinition >> fromTrait: aTrait in: anEnvironment [
 	definitions := aTrait traitComposition traits collect: [ :eachTrait | (GtTraitDefinition fromTrait: eachTrait in: anEnvironment) parent: self ]
 ]
 
+{ #category : #'api - traits' }
+GtTraitsDefinition >> hasTraitNamed: aTraitName [
+	^ self hasDefinitionNamed: aTraitName asSymbol
+]
+
 { #category : #'private - notifying' }
 GtTraitsDefinition >> notifyTraitAdded: aGtTraitDefinition [
 	self dispatchEvent: (GtBehaviorTraitAdded new

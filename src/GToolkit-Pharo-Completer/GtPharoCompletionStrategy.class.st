@@ -146,7 +146,8 @@ GtPharoCompletionStrategy >> completionActionsFor: aText at: positionInteger max
 	maxItems := maxInteger.
 	index := positionInteger.
 	wasRequested := aBoolean.
-	^ (self parseSource: aText characters asString)
+
+	^ (self parseSource: aText asString)
 		ifNil: [ #() ]
 		ifNotNil: [ :tree | tree completionActionsFor: self ]
 ]
@@ -248,7 +249,7 @@ GtPharoCompletionStrategy >> methodPattern: aMethodPattern [
 	methodPattern := aMethodPattern.
 	methodPattern notNil
 		ifTrue: [ methodPattern variables
-				do: [ :each | localVariables add: each name value ] ].
+				do: [ :each | localVariables add: each variableName ] ].
 	self isMethod: false
 ]
 

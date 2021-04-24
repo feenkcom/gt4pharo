@@ -44,6 +44,16 @@ GtClassMethodsCoder >> classVariableFilter: aView [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtClassMethodsCoder >> codeGeneratorsDropDown: anElement for: aMethodsCoderViewModel [
+	^ BrHorizontalPane new
+		exact: 300@300;
+		addChild:
+			(GtPhlowCompositeView new
+				views: (self codeGeneratorsFor: aMethodsCoderViewModel);
+				asElementDo: [ :aTabGroup | aTabGroup matchParent ])
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> examplesFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit

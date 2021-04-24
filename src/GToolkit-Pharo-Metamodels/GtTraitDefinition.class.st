@@ -63,11 +63,21 @@ GtTraitDefinition >> category [
 	^ category
 ]
 
+{ #category : #'private - accessing' }
+GtTraitDefinition >> category: aGtCategoryDefinition [
+	category := aGtCategoryDefinition parent: self
+]
+
 { #category : #accessing }
 GtTraitDefinition >> comment [
 	<return: #GtCommentDefinition>
 	
 	^ comment
+]
+
+{ #category : #'private - accessing' }
+GtTraitDefinition >> comment: aGtCommentDefinition [
+	comment := aGtCommentDefinition parent: self
 ]
 
 { #category : #'api - accepting' }
@@ -129,6 +139,7 @@ GtTraitDefinition >> differenceWith: aTraitDefinition [
 	aDifference add: (self category differenceWith: aTraitDefinition category).
 	aDifference add: (self slots differenceWith: aTraitDefinition slots).
 	aDifference add: (self traits differenceWith: aTraitDefinition traits).
+	aDifference add: (self methods differenceWith: aTraitDefinition methods).
 
 	^ aDifference
 ]
@@ -145,7 +156,8 @@ GtTraitDefinition >> forNew [
 	comment := GtCommentDefinition new parent: self.
 	category := GtCategoryDefinition empty parent: self.
 	slots := GtSlotsDefinition empty parent: self.
-	traits := GtTraitsDefinition empty parent: self
+	traits := GtTraitsDefinition empty parent: self.
+	methods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #initialization }
@@ -199,6 +211,25 @@ GtTraitDefinition >> methods [
 	^ methods
 ]
 
+{ #category : #'private - accessing' }
+GtTraitDefinition >> methods: aGtMethodsDefinition [
+	methods := aGtMethodsDefinition parent: self
+]
+
+{ #category : #accessing }
+GtTraitDefinition >> postCopy [
+	<generatedFrom: #'GtPharoMethodTemplates>>#postCopyTemplate'>
+	super postCopy.
+	
+	category := category copy parent: self.
+	comment := comment copy parent: self.
+	methods := methods copy parent: self.
+	name := name copy.
+	originalName := originalName copy.
+	slots := slots copy parent: self.
+	traits := traits copy parent: self.
+]
+
 { #category : #accessing }
 GtTraitDefinition >> slots [
 	<return: #GtSlotsDefinition>
@@ -206,11 +237,68 @@ GtTraitDefinition >> slots [
 	^ slots
 ]
 
+{ #category : #'private - accessing' }
+GtTraitDefinition >> slots: aGtSlotsDefinition [
+	slots := aGtSlotsDefinition parent: self
+]
+
+{ #category : #accessing }
+GtTraitDefinition >> storeOn: aStream [
+	<generatedFrom: #'GtPharoMethodTemplates>>#storeOnTemplate'>
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		space;
+		nextPutAll: 'new'.
+	aStream
+		space;
+		nextPutAll: 'category:';
+		space;
+		store: self category;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'comment:';
+		space;
+		store: self comment;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'methods:';
+		space;
+		store: self methods;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'name:';
+		space;
+		store: self name;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'slots:';
+		space;
+		store: self slots;
+		nextPut: $;.
+	aStream
+		space;
+		nextPutAll: 'traits:';
+		space;
+		store: self traits.
+	aStream
+		nextPut: $)
+]
+
 { #category : #accessing }
 GtTraitDefinition >> traits [
 	<return: #GtTraitsDefinition>
 	
 	^ traits
+]
+
+{ #category : #'private - accessing' }
+GtTraitDefinition >> traits: aGtTraitsDefinition [
+	traits := aGtTraitsDefinition parent: self
 ]
 
 { #category : #initialization }

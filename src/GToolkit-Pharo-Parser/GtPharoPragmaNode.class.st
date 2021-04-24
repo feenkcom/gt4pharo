@@ -7,7 +7,7 @@ Class {
 		'greaterThan',
 		'values'
 	],
-	#category : #'GToolkit-Pharo-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -17,12 +17,7 @@ GtPharoPragmaNode >> acceptVisitor: aProgramVisitor [
 
 { #category : #generated }
 GtPharoPragmaNode >> compositeNodeVariables [
-	^ #(#values)
-]
-
-{ #category : #generated }
-GtPharoPragmaNode >> compositeTokenVariables [
-	^ #(#selectorParts)
+	^ #(#selectorParts #values)
 ]
 
 { #category : #generated }
@@ -59,7 +54,7 @@ GtPharoPragmaNode >> lessThan: aSmaCCToken [
 
 { #category : #accessing }
 GtPharoPragmaNode >> selector [
-	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each value ] ]
+	^ Symbol streamContents: [ :stream | self selectorParts do: [ :eachNode | stream nextPutAll: eachNode selector ] ]
 ]
 
 { #category : #generated }
@@ -69,7 +64,9 @@ GtPharoPragmaNode >> selectorParts [
 
 { #category : #generated }
 GtPharoPragmaNode >> selectorParts: anOrderedCollection [
-	selectorParts := anOrderedCollection
+	self setParents: self selectorParts to: nil.
+	selectorParts := anOrderedCollection.
+	self setParents: self selectorParts to: self
 ]
 
 { #category : #generated }

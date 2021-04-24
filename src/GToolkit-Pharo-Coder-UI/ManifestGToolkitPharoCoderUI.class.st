@@ -1,6 +1,47 @@
 "
-Navigation is generated from:
+Main view models are generated from ${method:ManifestGToolkitPharoCoderUI class>>#mainViewModels}$.
+Navigation is generated from ${method:ManifestGToolkitPharoCoderUI class>>#navigationViewModels}$.
+"
+Class {
+	#name : #ManifestGToolkitPharoCoderUI,
+	#superclass : #PackageManifest,
+	#category : #'GToolkit-Pharo-Coder-UI-Manifest'
+}
 
+{ #category : #'code generation' }
+ManifestGToolkitPharoCoderUI class >> mainViewModels [
+"
+@project Gt
+@prefix Pharo
+@package 'GToolkit-Pharo-Coder-UI'
+
+@derive notify
+@derive api
+@derive name
+@derive typeTest
+@derive print
+
+package(s) => packageTag(s).
+
+package(s) <GtPharoPackagesCoder::TGtWithPharoPackagesCoderModel> {
+	items: #coders
+}.
+
+package <GtPharoPackageCoder::TGtWithPharoPackageTagCoderModel> {
+	packageTag(s): #packageTagsCoder
+}.
+
+packageTag(s) <GtPharoPackageTagCoders::TGtWithPharoPackageTagsCoderModel> {
+	items: #coders
+}.
+
+packageTag <GtPharoPackageTagCoder::TGtWithPharoPackageTagCoderModel>
+"
+]
+
+{ #category : #'code generation' }
+ManifestGToolkitPharoCoderUI class >> navigationViewModels [
+"
 @project Gt
 @prefix Pharo
 @suffix Navigation
@@ -36,8 +77,4 @@ behavior(s) <GtPharoClassesCoder::TGtWithPharoClassesCoderModel> {
 }.
 behavior <GtPharoBehaviorCoder::TGtWithPharoBehaviorCoderModel>
 "
-Class {
-	#name : #ManifestGToolkitPharoCoderUI,
-	#superclass : #PackageManifest,
-	#category : #'GToolkit-Pharo-Coder-UI-Manifest'
-}
+]

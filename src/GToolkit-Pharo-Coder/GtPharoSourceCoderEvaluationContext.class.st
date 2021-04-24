@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #binding }
+GtPharoSourceCoderEvaluationContext >> bindingAt: aBindingName put: anObject [
+	self bindingStrategy bindings at: aBindingName put: anObject
+]
+
+{ #category : #binding }
 GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 	"aSymbol is a variable name.
 	Return a literal variable if the variable has a value assigned.
@@ -100,6 +105,15 @@ GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 	notifications add: (message -> aCompleteTextIndex).
 	
 	self coder
+		ifNil: [
+			^ SyntaxErrorNotification
+				inClass: UndefinedObject
+				withCode: aString
+				doitFlag: false
+				errorMessage: aString
+				location: anIndex ].
+	
+	self coder
 		notifyParseError: message
 		at: aCompleteTextIndex
 ]
@@ -144,7 +158,7 @@ GtPharoSourceCoderEvaluationContext >> runtimeContext: aContext [
 GtPharoSourceCoderEvaluationContext >> text [
 	"Hack to work with pharo compiler"
 
-	^ coder currentSourceString
+	^ sourceString
 ]
 
 { #category : #hack }

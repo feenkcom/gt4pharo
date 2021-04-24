@@ -302,7 +302,7 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 	aGtPharoSourceCoderEvaluationContext
 		sourceString: aSourceString;
 		evaluatedInterval: (1 to: aSourceString size);
-		evaluatedSourceString: aSourceString size.
+		evaluatedSourceString: aSourceString.
 
 	^ self protocol
 		ifNil: [

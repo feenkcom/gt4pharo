@@ -12,7 +12,7 @@ GtPharoStylerExamples >> invalidSyntaxWithCascade [
 	aCoder := GtPharoSnippetCoder forSource: 'object := Object new
 	isNil;
 	notNil
-Object new' asRopedText.
+Object new'.
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
