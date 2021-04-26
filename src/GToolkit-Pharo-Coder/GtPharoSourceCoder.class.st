@@ -619,3 +619,9 @@ GtPharoSourceCoder >> variableNodeToReferencesFilter: aVariableNode ifFound: aFo
 
 	^ aFoundBlock value: (self referencesFilterForLiteral: aVariableName asSymbol)
 ]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> zincAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoZincStyler new
+]

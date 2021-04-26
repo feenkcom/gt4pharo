@@ -70,7 +70,7 @@ GtDefineMethodFixItAction >> methodSource [
 				with: node arguments
 				do: [ :eachSelectorPart :arg | 
 					stream
-						nextPutAll: eachSelectorPart value;
+						nextPutAll: eachSelectorPart selector;
 						space.
 					baseName := arg isVariable
 						ifTrue: [ arg variableName ]
