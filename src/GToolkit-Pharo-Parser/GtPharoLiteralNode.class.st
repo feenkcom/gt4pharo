@@ -14,6 +14,11 @@ GtPharoLiteralNode >> isLiteral [
 	^ true
 ]
 
+{ #category : #testing }
+GtPharoLiteralNode >> isString [
+	^ false
+]
+
 { #category : #accessing }
 GtPharoLiteralNode >> literalValue [
 	^ self subclassResponsibility

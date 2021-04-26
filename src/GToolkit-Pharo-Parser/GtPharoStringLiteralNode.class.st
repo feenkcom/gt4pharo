@@ -17,6 +17,11 @@ GtPharoStringLiteralNode >> guessType: completionStrategy [
 	^ String
 ]
 
+{ #category : #testing }
+GtPharoStringLiteralNode >> isString [
+	^ true
+]
+
 { #category : #accessing }
 GtPharoStringLiteralNode >> literalValue [
 	| aString |
