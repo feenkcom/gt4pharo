@@ -71,6 +71,11 @@ GtBehaviorDefinition >> isForMetaclass [
 	^ false
 ]
 
+{ #category : #testing }
+GtBehaviorDefinition >> isForTrait [
+	^ false
+]
+
 { #category : #accessing }
 GtBehaviorDefinition >> name [
 	<return: #Symbol>
