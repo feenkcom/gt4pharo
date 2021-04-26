@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'sourceCode',
 		'protocol',
-		'selector'
+		'selector',
+		'methodParts'
 	],
 	#category : #'GToolkit-Pharo-Metamodels-Method - Definitions'
 }
@@ -12,6 +13,19 @@ Class {
 { #category : #'instance creation' }
 GtPharoMethodDefinition class >> fromCompiledMethod: aCompiledMethod [
 	^ self new fromCompiledMethod: aCompiledMethod
+]
+
+{ #category : #adding }
+GtPharoMethodDefinition >> addMethodPart: aGtPharoMethodPartDefinition [
+	self
+		methodPartWithId: aGtPharoMethodPartDefinition id
+		ifFound: [ :anExistingMethodPart | anExistingMethodPart sourceCode: aGtPharoMethodPartDefinition sourceCode ]
+		ifNone: [ methodParts add: aGtPharoMethodPartDefinition ]
+]
+
+{ #category : #adding }
+GtPharoMethodDefinition >> addMethodPartSource: aSourceCode id: anObjectId [
+	self addMethodPart: (GtPharoMethodPartDefinition new sourceCode: aSourceCode; id: anObjectId)
 ]
 
 { #category : #accessing }
@@ -24,12 +38,12 @@ GtPharoMethodDefinition >> arguments [
 
 { #category : #converting }
 GtPharoMethodDefinition >> asDefinitionString [
-	^ self sourceCode
+	^ self fullSourceCode
 ]
 
 { #category : #'api - accepting' }
 GtPharoMethodDefinition >> createChange [
-	^ RBAddMethodToClassNamedChange compile: self sourceCode protocol: self protocol
+	^ RBAddMethodToClassNamedChange compile: self fullSourceCode protocol: self protocol
 ]
 
 { #category : #initialization }
@@ -39,9 +53,38 @@ GtPharoMethodDefinition >> fromCompiledMethod: aCompiledMethod [
 	selector := aCompiledMethod selector
 ]
 
+{ #category : #accessing }
+GtPharoMethodDefinition >> fullSourceCode [
+	^ String streamContents: [ :aStream |
+		aStream nextPutAll: self sourceCode.
+		self methodParts do: [ :eachMethodPart |
+			aStream cr; tab.
+			aStream nextPutAll: eachMethodPart sourceCode ] ]
+]
+
 { #category : #testing }
 GtPharoMethodDefinition >> hasPragmaNamed: aSelector [
 	^ self pragmas anySatisfy: [ :eachPragma | eachPragma selector = aSelector ]
+]
+
+{ #category : #initialization }
+GtPharoMethodDefinition >> initialize [
+	super initialize.
+	
+	methodParts := OrderedCollection new
+]
+
+{ #category : #accessing }
+GtPharoMethodDefinition >> methodPartWithId: anObjectId ifFound: aFoundBlock ifNone: noneBlock [
+	^ self methodParts
+		detect: [ :eachMethodPart | eachMethodPart id = anObjectId ]
+		ifFound: aFoundBlock
+		ifNone: noneBlock
+]
+
+{ #category : #accessing }
+GtPharoMethodDefinition >> methodParts [
+	^ methodParts
 ]
 
 { #category : #accessing }
@@ -54,13 +97,18 @@ GtPharoMethodDefinition >> pragmas [
 	<return: #Collection of: #Pragma>
 
 	^ (GtPharoParser
-		parse: self sourceCode
+		parse: self fullSourceCode
 		startingAt: GtPharoParser startingStateForMethod) pragmas
 			collect: [ :eachPragmaNode |
 				Pragma new
 					method: self;
 					arguments: (eachPragmaNode values collect: [ :eachValue | eachValue literalValue ]);
 					selector: eachPragmaNode selector ]
+]
+
+{ #category : #printing }
+GtPharoMethodDefinition >> printOn: aStream [
+	aStream print: self selector
 ]
 
 { #category : #accessing }

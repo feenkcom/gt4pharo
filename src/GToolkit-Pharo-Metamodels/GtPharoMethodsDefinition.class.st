@@ -22,7 +22,9 @@ GtPharoMethodsDefinition >> addMethod: aNewMethodDefinition [
 			anExistingMethod
 				protocol: aNewMethodDefinition protocol;
 				sourceCode: aNewMethodDefinition sourceCode ]
-		ifNone: [ definitions := definitions copyWith: aNewMethodDefinition ]
+		ifNone: [
+			aNewMethodDefinition parent: self parent.
+			definitions := definitions copyWith: aNewMethodDefinition ]
 ]
 
 { #category : #adding }

@@ -193,6 +193,11 @@ GtTraitDefinition >> hasSlotNamed: aString [
 ]
 
 { #category : #testing }
+GtTraitDefinition >> isForTrait [
+	^ true
+]
+
+{ #category : #testing }
 GtTraitDefinition >> isValidForCreation [
 	self name asSymbol = self defaultNewTraitName
 		ifTrue: [ ^ false ].
