@@ -61,4 +61,8 @@ GtSearchMethodsInClassFilter >> initialize [
 { #category : #enumerating }
 GtSearchMethodsInClassFilter >> methodsDo: aBlock [
 	class methods do: aBlock.
+	includeSuperclass
+		ifTrue: [ class superclass methods do: aBlock ].
+	includeSubclasses
+		ifTrue: [ (class allSubclasses flatCollect: #methods) do: aBlock ]
 ]
