@@ -20,6 +20,16 @@ GtPharoNumberLiteralNode >> guessType: completionStrategy [
 ]
 
 { #category : #accessing }
+GtPharoNumberLiteralNode >> isFloatValue [
+	^ self value value asNumber isFloat
+]
+
+{ #category : #accessing }
+GtPharoNumberLiteralNode >> isIntegerValue [
+	^ self value value asNumber isInteger
+]
+
+{ #category : #accessing }
 GtPharoNumberLiteralNode >> literalValue [
 	^ Number
 		readFrom: self value value
