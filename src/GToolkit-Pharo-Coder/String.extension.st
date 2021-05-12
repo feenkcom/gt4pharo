@@ -26,6 +26,11 @@ String >> gtPackageMatches [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
+String >> gtRBPatternMatches [
+	^ GtSearchRBPatternFilter pattern: self
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
 String >> gtReferences [
 	^ GtSearchReferencesFilter literal: self
 ]

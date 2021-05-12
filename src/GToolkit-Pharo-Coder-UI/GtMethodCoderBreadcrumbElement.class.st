@@ -23,15 +23,16 @@ GtMethodCoderBreadcrumbElement >> coder: aCoder [
 { #category : #initialization }
 GtMethodCoderBreadcrumbElement >> initialize [
 	super initialize.
-	
-	self aptitude: (BrGlamorousBreadcrumbAptitude new
-		separator: [ BrLabel new
-			aptitude: (BrGlamorousLabelAptitude new thin foreground: BrGlamorousColors defaultButtonTextColor);
-			text: '>';
-			margin: (BlInsets left: 5 right: 5) ]).
-	
-	self 
-		fitContent
+	self
+		aptitude:
+			(BrGlamorousBreadcrumbAptitude new
+				separator: [ BrLabel new
+						aptitude:
+							(BrGlamorousLabelAptitude new thin
+								foreground: self theme button defaultTextColor);
+						text: '>';
+						margin: (BlInsets left: 5 right: 5) ]).
+	self fitContent
 ]
 
 { #category : #'instance creation' }
@@ -64,14 +65,14 @@ GtMethodCoderBreadcrumbElement >> onCoderClassChanged: anAnnouncement [
 { #category : #'event handling' }
 GtMethodCoderBreadcrumbElement >> onCoderMethodModified: anAnnouncement [
 	anAnnouncement coder isModified
-		ifTrue: [ self background: BrGlamorousColors errorBackgroundColor ]
+		ifTrue: [ self background: self theme status errorBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
 
 { #category : #'event handling' }
 GtMethodCoderBreadcrumbElement >> onCoderSourceTextModified: anAnnouncement [
 	anAnnouncement coder isModified
-		ifTrue: [ self background: BrGlamorousColors failureBackgroundColor ]
+		ifTrue: [ self background: self theme status failureBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
 
@@ -105,8 +106,7 @@ GtMethodCoderBreadcrumbElement >> sourceCoderUIModel: aGtSourceCoderUIModel [
 GtMethodCoderBreadcrumbElement >> updateBreadcrumbElements: aMethodCoder [
 	self removeAllItems.
 	self addItems: (self newBreadcrumbItemElementsFor: aMethodCoder).
-	
 	aMethodCoder isModified
-		ifTrue: [ self background: BrGlamorousColors failureBackgroundColor ]
+		ifTrue: [ self background: self theme status failureBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
