@@ -91,32 +91,33 @@ GtPharoPackageCoderElement >> buildPackageTagsList [
 { #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildParentLink [
 	| aLinkContainer |
-
 	aLinkContainer := BrHorizontalPane new
 		hMatchParent;
 		vFitContent.
-
-	aLinkContainer addChild:
-		(BrLabel new
-			margin: (BlInsets left: 4);
-			beSmallSize;
-			aptitude: (BrGlamorousLabelAptitude new glamorousRegularFont foreground: BrGlamorousColors defaultButtonTextColor);
-			text: 'In: ').
-
-	aLinkContainer addChild:
-		(BrButton new 
-			aptitude: (BrGlamorousButtonExteriorAptitude new borderPaint: Color transparent)
-				+ BrGlamorousLabelAptitude new glamorousRegularFont;
-			label: 'Pharo';
-			beSmallSize;
-			fitContent;
-			action: [
-				| aCoderToReplace |
-				aCoderToReplace := (GtCoderToReplace new coder: GtPharoPackagesCoder forAllPackages).
-				self fireEvent: aCoderToReplace.
-				aCoderToReplace isConsumed
-					ifFalse: [ self phlow spawnObject: aCoderToReplace coder ] ]).
-
+	aLinkContainer
+		addChild:
+			(BrLabel new
+				margin: (BlInsets left: 4);
+				beSmallSize;
+				aptitude:
+					(BrGlamorousLabelAptitude new glamorousRegularFont
+						foreground: self theme button defaultTextColor);
+				text: 'In: ').
+	aLinkContainer
+		addChild:
+			(BrButton new
+				aptitude:
+					(BrGlamorousButtonExteriorAptitude new borderPaint: Color transparent)
+						+ BrGlamorousLabelAptitude new glamorousRegularFont;
+				label: 'Pharo';
+				beSmallSize;
+				fitContent;
+				action: [ | aCoderToReplace |
+					aCoderToReplace := GtCoderToReplace new
+						coder: GtPharoPackagesCoder forAllPackages.
+					self fireEvent: aCoderToReplace.
+					aCoderToReplace isConsumed
+						ifFalse: [ self phlow spawnObject: aCoderToReplace coder ] ]).
 	^ aLinkContainer
 ]
 

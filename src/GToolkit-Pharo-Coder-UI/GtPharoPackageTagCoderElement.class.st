@@ -86,7 +86,7 @@ GtPharoPackageTagCoderElement >> buildParentLink [
 				beSmallSize;
 				aptitude:
 					(BrGlamorousLabelAptitude new glamorousRegularFont
-						foreground: BrGlamorousColors defaultButtonTextColor);
+						foreground: self theme button defaultTextColor);
 				text: 'In: ').
 	element
 		addChild:
