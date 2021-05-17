@@ -83,3 +83,10 @@ GtPharoCoderPackage >> realPackageDo: aBlock ifAbsent: anAbsentBlock [
 GtPharoCoderPackage >> renamePackageTo: aNewName [
 	self subclassResponsibility
 ]
+
+{ #category : #accessing }
+GtPharoCoderPackage >> tags [
+	<return: #Collection of: #RPackageTag>
+
+	^ self explicitRequirement
+]
