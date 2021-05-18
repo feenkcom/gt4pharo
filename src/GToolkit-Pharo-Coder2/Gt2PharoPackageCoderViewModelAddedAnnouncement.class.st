@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'pharoPackageCoderViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder2-Events'
+	#category : #'GToolkit-Pharo-Coder2-Package Coder - Events'
 }
 
 { #category : #generated }

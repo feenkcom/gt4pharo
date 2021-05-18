@@ -32,6 +32,24 @@ Gt2PharoPackageCoder >> createPharoTagsCoder [
 	^ childObject
 ]
 
+{ #category : #'api - accessing' }
+Gt2PharoPackageCoder >> gtPackageViews [
+	^ self pharoPackage
+		realPackageDo: [ :anRPackage |
+			| collector context |
+			
+			collector := GtPhlowViewsCollector new.
+			collector fromObject: anRPackage.
+			collector pragmaName: #gtPackageView.
+
+			context := GtPhlowContext new.
+			context packageCoder: self.
+			collector context: context.
+
+			collector collect ]
+		ifAbsent: [ #() ]
+]
+
 { #category : #'gt-extentions' }
 Gt2PharoPackageCoder >> gtTagsListViewFor: aView [
 	<gtView>

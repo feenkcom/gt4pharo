@@ -75,3 +75,59 @@ method {
 	@derive model(name: method)
 }."
 ]
+
+{ #category : #'api - coder model' }
+ManifestGToolkitPharoCoder class >> packageCoderViewModel [
+"@prefix Gt2
+@package 'GToolkit-Pharo-Coder2'
+@tag 'Browser'
+@objectTag 'View Models'
+@project Pharo
+@suffix CoderViewModel
+
+@derive children
+@derive parent
+@derive name
+@derive print
+@derive announcer
+@derive notifier
+@derive phlowList
+@derive api
+
+package(s) => packageView(s) and packageAction(s).
+
+package(s) {
+	@derive model(api: TGt2WithPharoPackagesCoder),
+	@derive add(
+		delegate: #addPharoPackageCoder:,
+		subscribe: Gt2PharoPackageCoderAddedAnnouncement),
+	@derive remove(
+		delegate: #removePharoPackageCoder:,
+		subscribe: Gt2PharoPackageCoderRemovedAnnouncement),
+	items: #pharoPackageCoders
+}.
+
+package {
+	@derive model(api: TGt2WithPharoPackageCoder),
+	tag(s): #pharoTagsCoder,
+}.
+
+packageView(s) {
+	@derive add(primitive: true),
+	@derive remove(primitive: true),
+	@derive selection
+}.
+
+packageView {
+	@derive selection
+}.
+
+packageAction(s) {
+	@derive add(primitive: true),
+	@derive remove(primitive: true),
+}.
+
+packageAction {
+	@derive property(name: expanded)
+}"
+]
