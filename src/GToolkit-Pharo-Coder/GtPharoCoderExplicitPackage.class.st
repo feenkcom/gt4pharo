@@ -99,6 +99,11 @@ GtPharoCoderExplicitPackage >> packageNameDo: aBlock [
 	^ aBlock value: package name
 ]
 
+{ #category : #printing }
+GtPharoCoderExplicitPackage >> printOn: aStream [
+	aStream print: self packageName
+]
+
 { #category : #accessing }
 GtPharoCoderExplicitPackage >> realPackageDo: aBlock [
 	^ aBlock value: self package
@@ -108,4 +113,11 @@ GtPharoCoderExplicitPackage >> realPackageDo: aBlock [
 GtPharoCoderExplicitPackage >> renamePackageTo: aNewName [
 	packageName := aNewName asSymbol.
 	GtPharoCodeModifier renamePackage: package to: aNewName
+]
+
+{ #category : #accessing }
+GtPharoCoderExplicitPackage >> tags [
+	<return: #Collection of: #RPackageTag>
+	
+	^ self package classTags
 ]
