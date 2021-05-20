@@ -119,7 +119,10 @@ GtFullClassDefinition >> fromClass: aClass in: anEnvironment [
 	originalName := aClass name.
 	
 	instanceSideDefinition := (GtClassDefinition fromClass: aClass instanceSide in: anEnvironment) parent: self.
-	classSideDefinition := (GtMetaclassDefinition fromMetaclass: aClass classSide in: anEnvironment) parent: self
+	classSideDefinition := (GtMetaclassDefinition fromMetaclass: aClass classSide in: anEnvironment) parent: self.
+	
+	"we should replace class with full class definition"
+	self environment at: self name put: self.
 ]
 
 { #category : #accessing }

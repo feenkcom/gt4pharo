@@ -53,6 +53,11 @@ GtPharoVirtualFallbackEnvironment >> at: aSymbol ifPresent: aPresentBlock ifAbse
 				ifAbsent: anAbsentBlock ]
 ]
 
+{ #category : #'api - environment' }
+GtPharoVirtualFallbackEnvironment >> at: aSymbol put: anObject [
+	^ dictionary at: aSymbol put: anObject
+]
+
 { #category : #compiling }
 GtPharoVirtualFallbackEnvironment >> compile [
 	

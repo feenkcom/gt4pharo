@@ -449,5 +449,9 @@ GtClassDefinition >> traits: aGtTraitsDefinition [
 GtClassDefinition >> withMethodsFromClass: aClass [
 	"Initialize methods from a given real Class"
 	
-	methods := (GtPharoMethodsDefinition fromClass: aClass) parent: self
+	methods := (GtPharoMethodsDefinition fromClass: aClass) parent: self.
+	traits do: [ :eachTraitDefinition |
+		aClass environment
+			at: eachTraitDefinition name
+			ifPresent: [ :aTrait | eachTraitDefinition withMethodsFromTrait: aTrait ] ]
 ]

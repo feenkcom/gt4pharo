@@ -45,6 +45,11 @@ GtPharoVirtualEnvironment >> at: aSymbol ifPresent: aPresentBlock ifAbsent: anAb
 		ifAbsent: anAbsentBlock
 ]
 
+{ #category : #'api - environment' }
+GtPharoVirtualEnvironment >> at: aSymbol put: anObject [
+	^ dictionary at: aSymbol put: anObject
+]
+
 { #category : #initialization }
 GtPharoVirtualEnvironment >> initialize [
 	super initialize.
