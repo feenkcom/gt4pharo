@@ -25,6 +25,11 @@ GtPharoEnvironment >> at: aSymbol ifPresent: aPresentBlock ifAbsent: anAbsentBlo
 ]
 
 { #category : #'api - environment' }
+GtPharoEnvironment >> at: aSymbol put: anObject [
+	self subclassResponsibility
+]
+
+{ #category : #'api - environment' }
 GtPharoEnvironment >> registerBehavior: aBehaviorDefinition [
 	^ self subclassResponsibility
 ]

@@ -19,6 +19,11 @@ GtCodeDefinition >> asDefinitionString [
 	^ ''
 ]
 
+{ #category : #accessing }
+GtCodeDefinition >> definition [
+	^ self
+]
+
 { #category : #'api - accepting' }
 GtCodeDefinition >> differenceWith: aGtCodeDefinition [
 	<return: #GtCodeDefinitionDifference>

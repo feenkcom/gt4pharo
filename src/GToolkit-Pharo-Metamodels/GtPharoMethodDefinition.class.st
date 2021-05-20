@@ -93,6 +93,15 @@ GtPharoMethodDefinition >> name [
 ]
 
 { #category : #accessing }
+GtPharoMethodDefinition >> pragmaNamed: aSelector [
+	<return: #Pragma of: nil>
+
+	^ self pragmas
+		detect: [ :eachPragma | eachPragma selector = aSelector ]
+		ifNone: [ nil ]
+]
+
+{ #category : #accessing }
 GtPharoMethodDefinition >> pragmas [
 	<return: #Collection of: #Pragma>
 

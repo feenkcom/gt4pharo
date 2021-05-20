@@ -44,6 +44,11 @@ GtPharoReadOnlyImageEnvironment >> at: aSymbol ifPresent: aPresentBlock ifAbsent
 ]
 
 { #category : #'api - environment' }
+GtPharoReadOnlyImageEnvironment >> at: aSymbol put: anObject [
+	^ anObject
+]
+
+{ #category : #'api - environment' }
 GtPharoReadOnlyImageEnvironment >> registerBehavior: aBehaviorDefinition [
 	^ aBehaviorDefinition
 ]
