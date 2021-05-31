@@ -68,7 +68,7 @@ GtPharoCoderExplicitBehavior >> behavior: aBehavior [
 		description: [ 'I am immutable and can not be changed' ].
 
 	behavior := aBehavior.
-	behaviorName := aBehavior name
+	aBehavior ifNotNil: [ behaviorName := aBehavior name ]
 ]
 
 { #category : #accessing }
@@ -91,7 +91,7 @@ GtPharoCoderExplicitBehavior >> exists [
 	"Return true if there is a real Behavior in the system corresponding to my definition"
 	<return: #Boolean>
 	
-	^ self behavior isObsolete not
+	^ self behavior notNil and: [ self behavior isObsolete not ]
 ]
 
 { #category : #comparing }
