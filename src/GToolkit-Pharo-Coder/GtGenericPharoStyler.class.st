@@ -6,6 +6,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Styler'
 }
 
+{ #category : #visiting }
+GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
+	aSmaCCParseNode isNil
+		ifTrue: [ ^ nil ].
+	
+	^ BlTextStylerTelemetry
+		timeSync: [ 'Visit ', aSmaCCParseNode class name ]
+		during: [	 aSmaCCParseNode acceptVisitor: self ]
+]
+
 { #category : #'api - styling' }
 GtGenericPharoStyler >> style: aText ast: theAst [
 	text := aText.
