@@ -2,7 +2,8 @@ Class {
 	#name : #GtFixItStyler,
 	#superclass : #GtGenericPharoStyler,
 	#instVars : [
-		'isForWorkspace'
+		'isForWorkspace',
+		'hasRefactoring'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
@@ -60,7 +61,11 @@ GtFixItStyler >> globalFixItActionsFor: aVariableNode [
 
 { #category : #testing }
 GtFixItStyler >> hasRefactoring [
-	^ text hasAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
+	hasRefactoring
+		ifNotNil: [ ^ hasRefactoring ].
+		
+	^ hasRefactoring := text hasAttributeSuchThat: [ :eachAttribute |
+		eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 ]
 
 { #category : #accessing }
@@ -109,6 +114,12 @@ GtFixItStyler >> sourceCoder [
 	^ self coderViewModel coderModel
 ]
 
+{ #category : #'api - styling' }
+GtFixItStyler >> style: aText ast: theAst [
+	hasRefactoring := nil.
+	super style: aText ast: theAst
+]
+
 { #category : #'private - messages' }
 GtFixItStyler >> typeOf: aNode [
 	isForWorkspace
@@ -139,19 +150,30 @@ GtFixItStyler >> typeOf: aNode [
 
 { #category : #visiting }
 GtFixItStyler >> visitMessageSend: aNode [
-	| theNodeType theClassForSelector attribute |
+	| hasRefactoring theNodeType theClassForSelector attribute |
 	super visitMessageSend: aNode.
 
-	self hasRefactoring
+	hasRefactoring := BlTextStylerTelemetry
+		timeSync: [ 'Has refactoring?' ]
+		during: [ self hasRefactoring ].
+
+	hasRefactoring
 		ifTrue: [ ^ self ].
 
-	theNodeType := GtPharoProgramNode
-		typeOf: aNode receiver
-		in: (isForWorkspace ifFalse: [ self sourceCoder behavior ]).	
+	theNodeType := BlTextStylerTelemetry
+		timeSync: [ 'Type of ', aNode receiver source asString, ' in ', self sourceCoder behavior name ]
+		during: [
+			GtPharoProgramNode
+				typeOf: aNode receiver
+				in: (isForWorkspace ifFalse: [ self sourceCoder behavior ]) ].
+
 	theNodeType
 		ifNil: [ ^ self ].
 		
-	theClassForSelector := theNodeType whichClassIncludesSelector: aNode selector.
+	theClassForSelector := BlTextStylerTelemetry
+		timeSync: [ 'Which superclass of ', theNodeType name, ' includes ', aNode selector printString ]
+		during: [ theNodeType whichClassIncludesSelector: aNode selector ].
+
 	theClassForSelector
 		ifNotNil: [ ^ self ].
 	

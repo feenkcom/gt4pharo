@@ -1,5 +1,6 @@
 "
 I represent local slots of a behavior (class or trait)
+
 "
 Class {
 	#name : #GtSlotsDefinition,

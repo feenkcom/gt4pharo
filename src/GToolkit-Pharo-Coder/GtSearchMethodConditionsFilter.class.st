@@ -1,9 +1,10 @@
 "
-I include ${class:CompiledMethod}$ instances that satisfy all ${method:GtSearchMethodConditionsFilter>>#condition:|label=conditions}$. 
-!! Example With One Condition
-${example:GtSearchMethodFilterExamples>>methodConditionsFilter_OneCondition}$
-!! Example With Two Conditions
-${example:GtSearchMethodFilterExamples>>methodConditionsFilter_TwoConditions}$
+I include {{gtClass:CompiledMethod}} instances that satisfy all {{gtMethod:GtSearchMethodConditionsFilter>>#condition:|label=conditions}}. 
+## Example With One Condition
+{{gtExample:GtSearchMethodFilterExamples>>methodConditionsFilter_OneCondition}}
+## Example With Two Conditions
+{{gtExample:GtSearchMethodFilterExamples>>methodConditionsFilter_TwoConditions}}
+
 "
 Class {
 	#name : #GtSearchMethodConditionsFilter,

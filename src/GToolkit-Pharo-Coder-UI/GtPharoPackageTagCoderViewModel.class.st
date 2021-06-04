@@ -1,11 +1,12 @@
 "
-! GtPharoPackageTagCoder View Model
-!! Accessing parent view model
+# GtPharoPackageTagCoder View Model
+## Accessing parent view model
 In addition to the parent -> child view model navigation, each child view model knows its parent view model. It is very useful because is allows cchild view models to access various state properties of its parent, for example parent view model may be responsible for knowing a selected child view model. In order for the child to know if it is selected, that child should know the parent view model.
 A view model that knows its parent view model implements the following api:
- - ${method:GtPharoPackageTagCoderViewModel>>#parentPharoPackageTagsCoderViewModel}$ returns a parent view model (${class:GtPharoPackageTagsCoderViewModel}$) which is used to access various state properties, or potentially propagate events up in the hierarchy of view models. Trying to access a not yet assigned view model results in an error.
- - ${method:GtPharoPackageTagCoderViewModel>>#parentPharoPackageTagsCoderViewModel:}$ allows users to assign a non-null parent view model (${class:GtPharoPackageTagsCoderViewModel}$).
- - ${method:GtPharoPackageTagCoderViewModel>>#hasParentPharoPackageTagsCoderViewModel}$ can be used to test if a parent view model (${class:GtPharoPackageTagsCoderViewModel}$) is assigned. In situations when there is no guarantee that there is a parent view model, users should always check it using ${method:GtPharoPackageTagCoderViewModel>>#hasParentPharoPackageTagsCoderViewModel}$ before trying to access ${method:GtPharoPackageTagCoderViewModel>>#parentPharoPackageTagsCoderViewModel}$
+ - {{gtMethod:GtPharoPackageTagCoderViewModel>>#parentPharoPackageTagsCoderViewModel}} returns a parent view model ({{gtClass:GtPharoPackageTagsCoderViewModel}}) which is used to access various state properties, or potentially propagate events up in the hierarchy of view models. Trying to access a not yet assigned view model results in an error.
+ - {{gtMethod:GtPharoPackageTagCoderViewModel>>#parentPharoPackageTagsCoderViewModel:}} allows users to assign a non-null parent view model ({{gtClass:GtPharoPackageTagsCoderViewModel}}).
+ - {{gtMethod:GtPharoPackageTagCoderViewModel>>#hasParentPharoPackageTagsCoderViewModel}} can be used to test if a parent view model ({{gtClass:GtPharoPackageTagsCoderViewModel}}) is assigned. In situations when there is no guarantee that there is a parent view model, users should always check it using {{gtMethod:GtPharoPackageTagCoderViewModel>>#hasParentPharoPackageTagsCoderViewModel}} before trying to access {{gtMethod:GtPharoPackageTagCoderViewModel>>#parentPharoPackageTagsCoderViewModel}}
+
 "
 Class {
 	#name : #GtPharoPackageTagCoderViewModel,

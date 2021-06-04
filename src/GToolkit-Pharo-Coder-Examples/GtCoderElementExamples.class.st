@@ -1,5 +1,6 @@
 "
-I examplify ${class:GtCoderElement}$ and its subclasses.
+I examplify {{gtClass:GtCoderElement}} and its subclasses.
+
 "
 Class {
 	#name : #GtCoderElementExamples,

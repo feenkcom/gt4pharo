@@ -1,39 +1,39 @@
 "
-!Method filter examples
+# Method filter examples
 
-!!Implementors
+## Implementors
 
-${example:GtSearchMethodFilterExamples>>#implementorsOfThisMessage}$
+{{gtExample:GtSearchMethodFilterExamples>>#implementorsOfThisMessage}}
 
-!!Package pattern
+## Package pattern
 
-${example:GtSearchMethodFilterExamples>>#packagePatternFilter}$
+{{gtExample:GtSearchMethodFilterExamples>>#packagePatternFilter}}
 
-!!Pragmas
+## Pragmas
 
-${example:GtMethodsCoderExamples>>#gtExamplesFilter}$
+{{gtExample:GtMethodsCoderExamples>>#gtExamplesFilter}}
 
 
-!!References
+## References
 
-==gtReferences== can be applied to several objects. 
+`gtReferences` can be applied to several objects. 
 
 Class references:
-${example:GtSearchMethodReferencesFilterExamples>>#referencesToSampleB|previewShow=gtItemsFor:}$
+{{gtExample:GtSearchMethodReferencesFilterExamples>>#referencesToSampleB|previewShow=gtItemsFor:}}
 
 Selector references:
-${example:GtSearchMethodReferencesFilterExamples>>#referencesToThisSelector}$
+{{gtExample:GtSearchMethodReferencesFilterExamples>>#referencesToThisSelector}}
 
 Number references
-${example:GtSearchMethodReferencesFilterExamples>>#referencesTo42}$
+{{gtExample:GtSearchMethodReferencesFilterExamples>>#referencesTo42}}
 
-!!Intersection
+## Intersection
 
-${example:GtSearchMethodReferencesFilterExamples>>#gtExamplePragmasAndReferencesToMethodCoder}$
+{{gtExample:GtSearchMethodReferencesFilterExamples>>#gtExamplePragmasAndReferencesToMethodCoder}}
 
-!!Union
+## Union
 
-@@todo
+[[TODO]] 
 
 
 

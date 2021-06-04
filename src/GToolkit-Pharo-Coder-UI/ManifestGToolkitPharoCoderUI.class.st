@@ -1,6 +1,7 @@
 "
-Main view models are generated from ${method:ManifestGToolkitPharoCoderUI class>>#mainViewModels}$.
-Navigation is generated from ${method:ManifestGToolkitPharoCoderUI class>>#navigationViewModels}$.
+Main view models are generated from {{gtMethod:ManifestGToolkitPharoCoderUI class>>#mainViewModels}}.
+Navigation is generated from {{gtMethod:ManifestGToolkitPharoCoderUI class>>#navigationViewModels}}.
+
 "
 Class {
 	#name : #ManifestGToolkitPharoCoderUI,
