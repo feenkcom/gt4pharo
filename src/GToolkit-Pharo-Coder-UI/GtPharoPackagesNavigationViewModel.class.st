@@ -1,7 +1,8 @@
 "
-! GtPharoPackagesCoder View Model
-!! Accessing child view models
-A view model built for a domain model that represents a collection of some entities creates a view model (${class:GtPharoPackageNavigationViewModel}$) for each domain entity. To do so it accesses the children of the ${method:GtPharoPackagesNavigationViewModel>>#pharoPackagesCoderModel}$ by sending it ==coders== message. Users can access the child view models via ${method:GtPharoPackagesNavigationViewModel>>#pharoPackageNavigationViewModels}$. In addition to the parent -> child view model navigation, each child view model knows its parent view model via ${method:GtPharoPackageNavigationViewModel>>#parentPharoPackagesNavigationViewModel:}$
+# GtPharoPackagesCoder View Model
+## Accessing child view models
+A view model built for a domain model that represents a collection of some entities creates a view model ({{gtClass:GtPharoPackageNavigationViewModel}}) for each domain entity. To do so it accesses the children of the {{gtMethod:GtPharoPackagesNavigationViewModel>>#pharoPackagesCoderModel}} by sending it `coders` message. Users can access the child view models via {{gtMethod:GtPharoPackagesNavigationViewModel>>#pharoPackageNavigationViewModels}}. In addition to the parent -> child view model navigation, each child view model knows its parent view model via {{gtMethod:GtPharoPackageNavigationViewModel>>#parentPharoPackagesNavigationViewModel:}}
+
 "
 Class {
 	#name : #GtPharoPackagesNavigationViewModel,

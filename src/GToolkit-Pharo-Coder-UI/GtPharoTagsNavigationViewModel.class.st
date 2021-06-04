@@ -1,13 +1,14 @@
 "
-! GtPharoPackageTagCoders View Model
-!! Accessing child view models
-A view model built for a domain model that represents a collection of some entities creates a view model (${class:GtPharoTagNavigationViewModel}$) for each domain entity. To do so it accesses the children of the ${method:GtPharoTagsNavigationViewModel>>#pharoPackageTagsCoderModel}$ by sending it ==coders== message. Users can access the child view models via ${method:GtPharoTagsNavigationViewModel>>#pharoTagNavigationViewModels}$. In addition to the parent -> child view model navigation, each child view model knows its parent view model via ${method:GtPharoTagNavigationViewModel>>#parentPharoTagsNavigationViewModel:}$
-!! Accessing parent view model
+# GtPharoPackageTagCoders View Model
+## Accessing child view models
+A view model built for a domain model that represents a collection of some entities creates a view model ({{gtClass:GtPharoTagNavigationViewModel}}) for each domain entity. To do so it accesses the children of the {{gtMethod:GtPharoTagsNavigationViewModel>>#pharoPackageTagsCoderModel}} by sending it `coders` message. Users can access the child view models via {{gtMethod:GtPharoTagsNavigationViewModel>>#pharoTagNavigationViewModels}}. In addition to the parent -> child view model navigation, each child view model knows its parent view model via {{gtMethod:GtPharoTagNavigationViewModel>>#parentPharoTagsNavigationViewModel:}}
+## Accessing parent view model
 In addition to the parent -> child view model navigation, each child view model knows its parent view model. It is very useful because is allows cchild view models to access various state properties of its parent, for example parent view model may be responsible for knowing a selected child view model. In order for the child to know if it is selected, that child should know the parent view model.
 A view model that knows its parent view model implements the following api:
- - ${method:GtPharoTagsNavigationViewModel>>#parentPharoPackageNavigationViewModel}$ returns a parent view model (${class:GtPharoPackageNavigationViewModel}$) which is used to access various state properties, or potentially propagate events up in the hierarchy of view models. Trying to access a not yet assigned view model results in an error.
- - ${method:GtPharoTagsNavigationViewModel>>#parentPharoPackageNavigationViewModel:}$ allows users to assign a non-null parent view model (${class:GtPharoPackageNavigationViewModel}$).
- - ${method:GtPharoTagsNavigationViewModel>>#hasParentPharoPackageNavigationViewModel}$ can be used to test if a parent view model (${class:GtPharoPackageNavigationViewModel}$) is assigned. In situations when there is no guarantee that there is a parent view model, users should always check it using ${method:GtPharoTagsNavigationViewModel>>#hasParentPharoPackageNavigationViewModel}$ before trying to access ${method:GtPharoTagsNavigationViewModel>>#parentPharoPackageNavigationViewModel}$
+ - {{gtMethod:GtPharoTagsNavigationViewModel>>#parentPharoPackageNavigationViewModel}} returns a parent view model ({{gtClass:GtPharoPackageNavigationViewModel}}) which is used to access various state properties, or potentially propagate events up in the hierarchy of view models. Trying to access a not yet assigned view model results in an error.
+ - {{gtMethod:GtPharoTagsNavigationViewModel>>#parentPharoPackageNavigationViewModel:}} allows users to assign a non-null parent view model ({{gtClass:GtPharoPackageNavigationViewModel}}).
+ - {{gtMethod:GtPharoTagsNavigationViewModel>>#hasParentPharoPackageNavigationViewModel}} can be used to test if a parent view model ({{gtClass:GtPharoPackageNavigationViewModel}}) is assigned. In situations when there is no guarantee that there is a parent view model, users should always check it using {{gtMethod:GtPharoTagsNavigationViewModel>>#hasParentPharoPackageNavigationViewModel}} before trying to access {{gtMethod:GtPharoTagsNavigationViewModel>>#parentPharoPackageNavigationViewModel}}
+
 "
 Class {
 	#name : #GtPharoTagsNavigationViewModel,

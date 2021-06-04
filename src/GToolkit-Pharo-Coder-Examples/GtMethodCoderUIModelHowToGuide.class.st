@@ -1,17 +1,18 @@
 "
-!Method Coder's UI model
-When embedding a method coder as a UI component we often want to be able to specify (or save/restore) its initial UI state, such as expansion or a focus state. ${class:GtMethodCoderUIModel}$ fascilicates users with that ability.
-!!How to create a UI model?
-To create a default ${class:GtMethodCoderUIModel}$ for an existing instance of ${class:GtMethodCoder}$ it is enough to send a ${method:GtCoderModel>>#asCoderUIModel}$ message to that coder model. By default, the method coder is expanded and does not have a focus:
-${example:GtMethodCoderUIModelHowToGuide>>#uiModelForCoder|codeExpanded=true}$
-!!How to expand/collapse it?
+# Method Coder's UI model
+When embedding a method coder as a UI component we often want to be able to specify (or save/restore) its initial UI state, such as expansion or a focus state. {{gtClass:GtMethodCoderUIModel}} fascilicates users with that ability.
+## How to create a UI model?
+To create a default {{gtClass:GtMethodCoderUIModel}} for an existing instance of {{gtClass:GtMethodCoder}} it is enough to send a {{gtMethod:GtCoderModel>>#asCoderUIModel}} message to that coder model. By default, the method coder is expanded and does not have a focus:
+{{gtExample:GtMethodCoderUIModelHowToGuide>>#uiModelForCoder|codeExpanded=true}}
+## How to expand/collapse it?
 Users may choose to visually expand a method coder:
-${example:GtMethodCoderUIModelHowToGuide>>#expandedMethodCoder|codeExpanded=true|previewExpanded=true|previewShow=#gtLiveFor:|previewHeight=140}$
+{{gtExample:GtMethodCoderUIModelHowToGuide>>#expandedMethodCoder|codeExpanded=true|previewExpanded=true|previewShow=#gtLiveFor:|previewHeight=140}}
 or collapse it:
-${example:GtMethodCoderUIModelHowToGuide>>#collapsedMethodCoder|codeExpanded=true|previewExpanded=true|previewShow=#gtLiveFor:|previewHeight=95}$
-!!How to give it focus?
+{{gtExample:GtMethodCoderUIModelHowToGuide>>#collapsedMethodCoder|codeExpanded=true|previewExpanded=true|previewShow=#gtLiveFor:|previewHeight=95}}
+## How to give it focus?
 Or also give it a focus by default:
-${example:GtMethodCoderUIModelHowToGuide>>#expandedAndFocusedMethodCoder|codeExpanded=true|previewExpanded=true|previewShow=#gtLiveFor:|previewHeight=140}$
+{{gtExample:GtMethodCoderUIModelHowToGuide>>#expandedAndFocusedMethodCoder|codeExpanded=true|previewExpanded=true|previewShow=#gtLiveFor:|previewHeight=140}}
+
 "
 Class {
 	#name : #GtMethodCoderUIModelHowToGuide,

@@ -1,5 +1,6 @@
 "
 I display various tags in the method coder element such as protocol or instance/class side
+
 "
 Class {
 	#name : #GtMethodCoderTagsElement,

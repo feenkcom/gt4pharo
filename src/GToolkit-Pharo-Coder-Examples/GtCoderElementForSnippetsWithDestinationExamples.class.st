@@ -1,5 +1,6 @@
 "
 I contain examples for working with destinations in a pharo code snippet.
+
 "
 Class {
 	#name : #GtCoderElementForSnippetsWithDestinationExamples,

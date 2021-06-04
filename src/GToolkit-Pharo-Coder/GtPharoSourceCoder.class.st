@@ -1,11 +1,11 @@
 "
-! Source coder
-I am a coder for the source code. I know about the ==sourceCode== (${class:GtCoderSourceCode}$) and ==completionStrategy== (${class:GtCompletionStrategy}$).
-!! Actions
-All source coders know about basic actions such as code evaluation (==do it all, do it and go, do it selection and go==) or different browsing abilities. Those actions can only be executed in a presence of a text editor UI element that is passed as an argument. It is required to provide a text editor element in order to get information about cursor position or current selection, in addition to being able to have a UI context to notify user or provide her with a feedback of the executed action. All actions are always performed on the current source code text (expanded/collapsed state is not taken into account).
-!! Add-ons
-The source coder extends the addons (${class:GtCoderAddOns}$) with extra stylers (see ${class:GtSourceCoderAddOns}$) that allows users to add extra contextual information within the text editor via text attributes.
-!! Implementation details
+# Source coder
+I am a coder for the source code. I know about the `sourceCode` ({{gtClass:GtCoderSourceCode}}) and `completionStrategy` ({{gtClass:GtCompletionStrategy}}).
+## Actions
+All source coders know about basic actions such as code evaluation (`do it all, do it and go, do it selection and go`) or different browsing abilities. Those actions can only be executed in a presence of a text editor UI element that is passed as an argument. It is required to provide a text editor element in order to get information about cursor position or current selection, in addition to being able to have a UI context to notify user or provide her with a feedback of the executed action. All actions are always performed on the current source code text (expanded/collapsed state is not taken into account).
+## Add-ons
+The source coder extends the addons ({{gtClass:GtCoderAddOns}}) with extra stylers (see {{gtClass:GtSourceCoderAddOns}}) that allows users to add extra contextual information within the text editor via text attributes.
+## Implementation details
 It is important to notice that I do not directly reference a text editor and I should not store any UI related information such as cursor position or selection.
 
 

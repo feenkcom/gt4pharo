@@ -1,7 +1,8 @@
 "
-! GtPharoPackageTagsCoder View Model
-!! Accessing child view models
-A view model built for a domain model that represents a collection of some entities creates a view model (${class:Gt2PharoTagViewModel}$) for each domain entity. To do so it accesses the children of the ${method:Gt2PharoTagsViewModel>>#pharoPackageTagsCoderModel}$ by sending it ==yourself== message. Users can access the child view models via ${method:Gt2PharoTagsViewModel>>#pharoTagViewModels}$. In addition to the parent -> child view model navigation, each child view model knows its parent view model via ${method:Gt2PharoTagViewModel>>#parentPharoTagsViewModel:}$
+# GtPharoPackageTagsCoder View Model
+## Accessing child view models
+A view model built for a domain model that represents a collection of some entities creates a view model ({{gtClass:Gt2PharoTagViewModel}}) for each domain entity. To do so it accesses the children of the {{gtMethod:Gt2PharoTagsViewModel>>#pharoPackageTagsCoderModel}} by sending it `yourself` message. Users can access the child view models via {{gtMethod:Gt2PharoTagsViewModel>>#pharoTagViewModels}}. In addition to the parent -> child view model navigation, each child view model knows its parent view model via {{gtMethod:Gt2PharoTagViewModel>>#parentPharoTagsViewModel:}}
+
 "
 Class {
 	#name : #Gt2PharoTagsViewModel,

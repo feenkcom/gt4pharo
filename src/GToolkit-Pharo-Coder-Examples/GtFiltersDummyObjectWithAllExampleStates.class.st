@@ -1,6 +1,7 @@
 "
-I am a ${class:GtFiltersDummyObjectWithExampleStates}$.
-I am used for testing purposes, see my ${class:GtFiltersDummyObjectWithAllExampleStates|label=references|show=#gtAllReferencesFor:|expanded=true}$:
+I am a {{gtClass:GtFiltersDummyObjectWithExampleStates}}.
+I am used for testing purposes, see my {{gtClass:GtFiltersDummyObjectWithAllExampleStates|label=references|show=#gtAllReferencesFor:|expanded=true}}:
+
 "
 Class {
 	#name : #GtFiltersDummyObjectWithAllExampleStates,

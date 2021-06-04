@@ -1,6 +1,7 @@
 "
-! Pharo system traverser
+# Pharo system traverser
 Is an utility for thread safe traversal of the system classes, traits, packages and methods.
+
 "
 Class {
 	#name : #GtPharoSystemTraverser,
