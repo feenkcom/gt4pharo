@@ -19,7 +19,6 @@ GtSearchClassFilterExamples >> classesInCurrentPackageFilter [
 	self assert: (filter matches: Object) not.
 	
 	^ filter
-	
 ]
 
 { #category : #'examples - equality' }
@@ -56,7 +55,6 @@ GtSearchClassFilterExamples >> classesInImageFilter [
 	self assert: (filter matches: Object).
 	
 	^ filter
-	
 ]
 
 { #category : #'examples - equality' }
@@ -89,7 +87,6 @@ GtSearchClassFilterExamples >> deprecatedClassesFilter [
 	self assert: (filter matches: GtSystemS1AnotherClassC3).
 	self assert: (filter matches: GtSystemS1RootClassC1) not.
 	^ filter
-	
 ]
 
 { #category : #'examples - result type' }
