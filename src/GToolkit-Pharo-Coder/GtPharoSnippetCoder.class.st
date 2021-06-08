@@ -61,11 +61,11 @@ GtPharoSnippetCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoCoder
 ]
 
 { #category : #'api - actions' }
-GtPharoSnippetCoder >> profileWithMessageTally [
+GtPharoSnippetCoder >> profileWithMessageTallyInContext: aGtPharoCoderEvaluationContext [
 	^ self
 		evaluate: [ :thisCoder | thisCoder currentSourceString ]
 		decorated: [ :aSourceString | 'MessageTally on: [ ', aSourceString, ']' ]
-		inContext: self evaluationContext
+		inContext: aGtPharoCoderEvaluationContext
 		thenDo: [ :anEvaluationResult | self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
 ]
 
