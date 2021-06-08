@@ -8,6 +8,7 @@ Class {
 
 { #category : #visiting }
 GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
+	<gtIgnoreConstraint: #GtRBAcceptVisitorCalledFromNonVisitingMethods>
 	aSmaCCParseNode isNil
 		ifTrue: [ ^ nil ].
 	
