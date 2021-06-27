@@ -1,7 +1,7 @@
-Extension { #name : #GtSearchInstanceVariableReferenceFilter }
+Extension { #name : #GtSearchInstanceSlotReferenceFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchInstanceVariableReferenceFilter class >> filterDescriptorFor: aMethodsCoder [
+GtSearchInstanceSlotReferenceFilter class >> filterDescriptorFor: aMethodsCoder [
 	aMethodsCoder isForClass
 		ifFalse: [ ^ nil ].
 	^ GtFilterDescriptor
@@ -9,7 +9,7 @@ GtSearchInstanceVariableReferenceFilter class >> filterDescriptorFor: aMethodsCo
 			self
 				forClassAndSubclasses: aMethodsCoder classOrMetaClass
 				andVariable: value ]
-		named: 'InstVar'
+		named: 'Slots'
 		order: 25
 		completion:
 			(GtStringsCompletionStrategy new

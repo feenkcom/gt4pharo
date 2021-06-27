@@ -606,7 +606,7 @@ GtPharoSourceCoder >> variableNodeToReferencesFilter: aVariableNode ifFound: aFo
 	aVariableIndex > 0
 		ifTrue: [
 			aDefiningClass := self behavior whichClassDefinesInstVar: aVariableName.
-			^ aFoundBlock value: (GtSearchInstanceVariableReferenceFilter
+			^ aFoundBlock value: (GtSearchInstanceSlotReferenceFilter
 				forClassAndSubclasses: aDefiningClass
 				andVariable: aVariableName) ].
 

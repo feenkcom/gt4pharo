@@ -11,7 +11,7 @@ GtSlotDefinition >> browseReferencesFrom: anEvent [
 		ifNotNil: [ :class | 
 			anEvent currentTarget phlow
 				spawnObject:
-					(GtSearchInstanceVariableReferenceFilter
+					(GtSearchInstanceSlotReferenceFilter
 						forClassAndSubclasses: class
 						andVariable: self name) ]
 ]

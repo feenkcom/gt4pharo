@@ -1,5 +1,5 @@
 Class {
-	#name : #GtSearchInstanceVariableReferenceFilter,
+	#name : #GtSearchInstanceSlotReferenceFilter,
 	#superclass : #GtSearchMethodsInClassFilter,
 	#instVars : [
 		'variableName'
@@ -8,42 +8,42 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtSearchInstanceVariableReferenceFilter class >> forClass: aClass andVariable: aString [
+GtSearchInstanceSlotReferenceFilter class >> forClass: aClass andVariable: aString [
 	^ self new
 		forClass: aClass andVariable: aString;
 		yourself
 ]
 
 { #category : #'instance creation' }
-GtSearchInstanceVariableReferenceFilter class >> forClassAndSubclasses: aClass andVariable: aString [
+GtSearchInstanceSlotReferenceFilter class >> forClassAndSubclasses: aClass andVariable: aString [
 	^ aClass withAllSubclasses
 		inject: GtSearchNullFilter new
 		into: [ :sum :each | sum | (self forClass: each andVariable: aString) ]
 ]
 
 { #category : #comparing }
-GtSearchInstanceVariableReferenceFilter >> = anObject [
+GtSearchInstanceSlotReferenceFilter >> = anObject [
 	^ super = anObject and: [ self variableName = anObject variableName ]
 ]
 
 { #category : #accessing }
-GtSearchInstanceVariableReferenceFilter >> filterValueString [
+GtSearchInstanceSlotReferenceFilter >> filterValueString [
 	^ self variableName
 ]
 
 { #category : #'initialize-release' }
-GtSearchInstanceVariableReferenceFilter >> forClass: aClass andVariable: aString [
+GtSearchInstanceSlotReferenceFilter >> forClass: aClass andVariable: aString [
 	self forClass: aClass.
 	variableName := aString
 ]
 
 { #category : #comparing }
-GtSearchInstanceVariableReferenceFilter >> hash [
+GtSearchInstanceSlotReferenceFilter >> hash [
 	^ super hash bitXor: self variableName
 ]
 
 { #category : #testing }
-GtSearchInstanceVariableReferenceFilter >> includesMethod: aCompiledMethod [
+GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	| index |
 	(super includesMethod: aCompiledMethod)
 		ifFalse: [ ^ false ].
@@ -52,17 +52,17 @@ GtSearchInstanceVariableReferenceFilter >> includesMethod: aCompiledMethod [
 ]
 
 { #category : #'initialize-release' }
-GtSearchInstanceVariableReferenceFilter >> initialize [
+GtSearchInstanceSlotReferenceFilter >> initialize [
 	super initialize.
 	includeSubclasses := true
 ]
 
 { #category : #accessing }
-GtSearchInstanceVariableReferenceFilter >> variableName [
+GtSearchInstanceSlotReferenceFilter >> variableName [
 	^ variableName
 ]
 
 { #category : #accessing }
-GtSearchInstanceVariableReferenceFilter >> variableName: aString [
+GtSearchInstanceSlotReferenceFilter >> variableName: aString [
 	variableName := aString
 ]
