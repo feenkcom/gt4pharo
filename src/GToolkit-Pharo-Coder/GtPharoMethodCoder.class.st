@@ -703,7 +703,7 @@ GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
 
 { #category : #testing }
 GtPharoMethodCoder >> isNewMethod [
-	^ self currentSourceString isEmpty
+	^ (self currentSourceString isEmpty) or: [selector isNil]
 ]
 
 { #category : #testing }
