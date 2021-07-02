@@ -62,6 +62,7 @@ GtBehaviorMethodCoderTagsElement >> newClassTag [
 								beSmallSize;
 								aptitude: BrGlamorousButtonRectangularAptitude + BrGlamorousButtonLabelAptitude;
 								label: self behaviorOtherSideName;
+								disabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass not;
 								action: [ :aButton | 
 									aButton fireEvent: BrDropdownHideWish new.
 									self methodCoderUIModel coder moveMethodToInstanceOrClass.
