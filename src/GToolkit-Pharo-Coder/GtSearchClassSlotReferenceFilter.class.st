@@ -1,5 +1,5 @@
 Class {
-	#name : #GtSearchClassVariableReferenceFilter,
+	#name : #GtSearchClassSlotReferenceFilter,
 	#superclass : #GtSearchReferencesFilter,
 	#instVars : [
 		'class',
@@ -9,53 +9,53 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtSearchClassVariableReferenceFilter class >> createFilterFor: aMethodCoder [
+GtSearchClassSlotReferenceFilter class >> createFilterFor: aMethodCoder [
 	^ self forClass: aMethodCoder classOrMetaClass
 ]
 
 { #category : #'instance creation' }
-GtSearchClassVariableReferenceFilter class >> forClass: aClass [
+GtSearchClassSlotReferenceFilter class >> forClass: aClass [
 	^ self new
 		forClass: aClass;
 		yourself
 ]
 
 { #category : #'instance creation' }
-GtSearchClassVariableReferenceFilter class >> forClass: aClass andVariable: aString [
+GtSearchClassSlotReferenceFilter class >> forClass: aClass andVariable: aString [
 	^ (self forClass: aClass)
 		variableName: aString;
 		yourself
 ]
 
 { #category : #accessing }
-GtSearchClassVariableReferenceFilter >> filterValueString [
+GtSearchClassSlotReferenceFilter >> filterValueString [
 	^ self variableName
 ]
 
 { #category : #'initialize-release' }
-GtSearchClassVariableReferenceFilter >> forClass: aClass [
+GtSearchClassSlotReferenceFilter >> forClass: aClass [
 	class := aClass
 ]
 
 { #category : #testing }
-GtSearchClassVariableReferenceFilter >> includesMethod: aCompiledMethod [
+GtSearchClassSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	self object isNil
 		ifTrue: [ ^ false ].
 	^ super includesMethod: aCompiledMethod
 ]
 
 { #category : #accessing }
-GtSearchClassVariableReferenceFilter >> object [
+GtSearchClassSlotReferenceFilter >> object [
 	^ object ifNil: [ object := class bindingOf: variableName ]
 ]
 
 { #category : #accessing }
-GtSearchClassVariableReferenceFilter >> variableName [
+GtSearchClassSlotReferenceFilter >> variableName [
 	^ variableName
 ]
 
 { #category : #accessing }
-GtSearchClassVariableReferenceFilter >> variableName: aSymbol [
+GtSearchClassSlotReferenceFilter >> variableName: aSymbol [
 	variableName := aSymbol asSymbol.
 	object := nil
 ]

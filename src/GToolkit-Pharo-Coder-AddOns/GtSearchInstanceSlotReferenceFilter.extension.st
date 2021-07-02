@@ -1,6 +1,6 @@
-Extension { #name : #GtSearchInstanceVariableReferenceFilter }
+Extension { #name : #GtSearchInstanceSlotReferenceFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSearchInstanceVariableReferenceFilter >> highlighter [
+GtSearchInstanceSlotReferenceFilter >> highlighter [
 	^ GtPharoVariableReferenceHighlighter forVariableName: variableName
 ]

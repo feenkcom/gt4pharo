@@ -6,7 +6,7 @@ Class {
 
 { #category : #'instance creation' }
 GtSearchMethodGroupResult class >> forClass: aClass andVariable: aString [
-	^ self forFilter: (GtSearchInstanceVariableReferenceFilter forClass: aClass andVariable: aString)
+	^ self forFilter: (GtSearchInstanceSlotReferenceFilter forClass: aClass andVariable: aString)
 ]
 
 { #category : #'instance creation' }

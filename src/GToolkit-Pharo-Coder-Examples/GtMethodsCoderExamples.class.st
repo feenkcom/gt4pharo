@@ -52,7 +52,7 @@ GtMethodsCoderExamples >> gtExamplesFilter [
 { #category : #'examples - filters' }
 GtMethodsCoderExamples >> instanceVariableFilter [
 	<gtExample>
-	^ GtSearchInstanceVariableReferenceFilter forClass: HashedCollection andVariable: 'array'
+	^ GtSearchInstanceSlotReferenceFilter forClass: HashedCollection andVariable: 'array'
 ]
 
 { #category : #'examples - coder' }

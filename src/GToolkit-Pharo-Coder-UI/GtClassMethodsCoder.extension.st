@@ -24,10 +24,10 @@ GtClassMethodsCoder >> categoryFilter: aView [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtClassMethodsCoder >> classVariableFilter: aView [
+GtClassMethodsCoder >> classSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
-		title: 'Class Variables';
+		title: 'Class Slots';
 		priority: 30;
 		stencil: [
 			| anElement |
@@ -37,7 +37,7 @@ GtClassMethodsCoder >> classVariableFilter: aView [
 				items: class allClassVarNames 
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable | self 
-					setFilters: { (GtSearchClassVariableReferenceFilter
+					setFilters: { (GtSearchClassSlotReferenceFilter
 						forClass: self classOrMetaClass
 						andVariable: aVariable) }
 					source: anElement ] ]
@@ -84,10 +84,10 @@ GtClassMethodsCoder >> filterDropDown: anElement [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtClassMethodsCoder >> instanceVariableFilter: aView [
+GtClassMethodsCoder >> instanceSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
-		title: 'Instance Variables';
+		title: 'Slots';
 		priority: 20;
 		stencil: [
 			| anElement |
@@ -97,7 +97,7 @@ GtClassMethodsCoder >> instanceVariableFilter: aView [
 				items: class allInstVarNames
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable | self 
-					setFilters: { GtSearchInstanceVariableReferenceFilter
+					setFilters: { GtSearchInstanceSlotReferenceFilter
 						forClass: self classOrMetaClass
 						andVariable: aVariable }
 					source: anElement ] ]
