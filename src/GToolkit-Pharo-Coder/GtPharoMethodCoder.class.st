@@ -1244,23 +1244,23 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 	coderAddOns
 		addContextAction: 'Play' translated
 		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anEvent | 
+		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAll
 				coderUIModel: aCoderUIModel;
-				event: anEvent;
+				element: anElement;
 				execute ].
 	coderAddOns
 		addContextAction: 'Play and Inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
-		action: [ :aCoderUIModel :anEvent | 
+		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAllAndInspect
 				coderUIModel: aCoderUIModel;
-				event: anEvent;
+				element: anElement;
 				execute ].
 	coderAddOns
 		addContextAction: 'Debug' translated
 		icon: BrGlamorousVectorIcons debug
-		action: [ :aCoderUIModel :anEvent | aCoderUIModel debug ]
+		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
 ]
 
 { #category : #'private - subscriptions' }
