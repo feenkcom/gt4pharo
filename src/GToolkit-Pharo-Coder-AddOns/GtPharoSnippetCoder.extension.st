@@ -13,30 +13,30 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 	addOns
 		addMainAction: 'Evaluate' translated
 		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anEvent | 
+		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor doIt
 				coderUIModel: aCoderUIModel;
-				event: anEvent;
+				element: anElement;
 				execute ]
 		id: GtSourceCoderDoItActionId.
 	addOns
 		addMainAction: 'Inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
-		action: [ :aCoderUIModel :anEvent | 
+		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor doItAndGo
 				coderUIModel: aCoderUIModel;
-				event: anEvent;
+				element: anElement;
 				execute ]
 		id: GtSourceCoderDoItAndGoActionId.
 	addOns
 		addMainAction: 'Debug' translated
 		icon: BrGlamorousVectorIcons debug
-		action: [ :aCoderUIModel :anEvent | aCoderUIModel debug ]
+		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
 		id: GtSourceCoderDebugActionId.
 	addOns
 		addMainAction: 'Profile' translated
 		icon: BrGlamorousVectorIcons performance
-		action: [ :aCoderUIModel :anEvent | aCoderUIModel profileWithMessageTally ]
+		action: [ :aCoderUIModel :anElement | aCoderUIModel profileWithMessageTally ]
 		id: GtSourceCoderProfileActionId
 ]
 
