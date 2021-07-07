@@ -180,14 +180,14 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 	aScripter checks: 'Check Expanded Source Code Style' do: [ :aStep |
 		aStep check
 			label: 'Check Method Name Attributes';
-			anySatisfies: [ :aTextAttribute | aTextAttribute = BlFontWeightAttribute bold ];
+			anySatisfy: [ :aTextAttribute | aTextAttribute = BlFontWeightAttribute bold ];
 			onChildNamed: #editor;
 			onBrTextEditor;
 			onBrTextEditorText;
 			onTextAttributesAt: 1.
 		aStep check
 			label: 'Check Comment Attributes';
-			anySatisfies: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
+			anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
 			onChildNamed: #editor;
 			onBrTextEditor;
 			onBrTextEditorText;
@@ -328,7 +328,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextAc
 	
 	aScripter check 
 		label: 'Check Context Action Existence Named ', anActionName asString;
-		anySatisfies: [ :aContextActions | aContextActions title = anActionName translated
+		anySatisfy: [ :aContextActions | aContextActions title = anActionName translated
 			and: [ aContextActions action method = (GtPharoMethodCoder>>#exampleAstFor:into:) ] ];
 		onModel;
 		onChildFromMessage: #contextActions.
@@ -446,7 +446,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributes
 	<gtExample>
 	aScripterOrStep check
 		label: 'Check Editor Text Attributes';
-		anySatisfies: aBlock;
+		anySatisfy: aBlock;
 		onChildNamed: #editor;
 		onBrTextEditor;
 		onBrTextEditorText;
