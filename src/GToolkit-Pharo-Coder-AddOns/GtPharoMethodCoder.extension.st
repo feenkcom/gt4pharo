@@ -26,13 +26,17 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
-
-	coderAddOns
-		addContextMenuItem: 'Extract method'
-		hover: [ self highlightFrom: theNodes first startPosition to: theNodes last stopPosition ]
-		leave: [ self removeHighlight ]
-		action: [ :aTextualViewModel :anEvent :anEditorElement | self extractMethod: anEditorElement ]
-		id: GtMethodCoderExtractMethodContextMenuItemId
+	theNodes
+		ifNotEmpty: [
+			coderAddOns
+				addContextMenuItem: 'Extract method'
+				hover: [ self
+						highlightFrom: theNodes first startPosition
+						to: theNodes last stopPosition ]
+				leave: [ self removeHighlight ]
+				action:
+					[ :aTextualViewModel :anEvent :anEditorElement | self extractMethod: anEditorElement ]
+				id: GtMethodCoderExtractMethodContextMenuItemId ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
