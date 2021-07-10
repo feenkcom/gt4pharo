@@ -298,15 +298,15 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 	addOns
 		addMainAction: 'Browse' translated
 		icon: BrGlamorousVectorIcons browse
-		action: [ :aCoderUIModel :anEvent | self browseFrom: anEvent currentTarget ].
+		action: [ :aCoderUIModel :anElement | self browseFrom: anElement ].
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
-		action: [ :aCoderUIModel :anEvent | self notifyObjectSpawn: aCoderUIModel compiledMethod ].
+		action: [ :aCoderUIModel :anElement | self notifyObjectSpawn: aCoderUIModel compiledMethod ].
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
-		action: [ :aCoderUIModel :anEvent | self copyMethodNameToClipboard ]
+		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
