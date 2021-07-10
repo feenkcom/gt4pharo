@@ -26,13 +26,17 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
-
-	coderAddOns
-		addContextMenuItem: 'Extract method'
-		hover: [ self highlightFrom: theNodes first startPosition to: theNodes last stopPosition ]
-		leave: [ self removeHighlight ]
-		action: [ :aTextualViewModel :anEvent :anEditorElement | self extractMethod: anEditorElement ]
-		id: GtMethodCoderExtractMethodContextMenuItemId
+	theNodes
+		ifNotEmpty: [
+			coderAddOns
+				addContextMenuItem: 'Extract method'
+				hover: [ self
+						highlightFrom: theNodes first startPosition
+						to: theNodes last stopPosition ]
+				leave: [ self removeHighlight ]
+				action:
+					[ :aTextualViewModel :anEvent :anEditorElement | self extractMethod: anEditorElement ]
+				id: GtMethodCoderExtractMethodContextMenuItemId ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -294,15 +298,15 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 	addOns
 		addMainAction: 'Browse' translated
 		icon: BrGlamorousVectorIcons browse
-		action: [ :aCoderUIModel :anEvent | self browseFrom: anEvent currentTarget ].
+		action: [ :aCoderUIModel :anElement | self browseFrom: anElement ].
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
-		action: [ :aCoderUIModel :anEvent | self notifyObjectSpawn: aCoderUIModel compiledMethod ].
+		action: [ :aCoderUIModel :anElement | self notifyObjectSpawn: aCoderUIModel compiledMethod ].
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
-		action: [ :aCoderUIModel :anEvent | self copyMethodNameToClipboard ]
+		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -328,7 +332,7 @@ GtPharoMethodCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addMainAction: 'Discard Changes' translated
 		icon: BrGlamorousVectorIcons cancel
-		action: [ :aCoderUIModel :anEvent | aCoderUIModel discardChanges ]
+		action: [ :aCoderUIModel :anElement | aCoderUIModel discardChanges ]
 		id: GtMethodCoderDiscardChangesActionId
 ]
 
