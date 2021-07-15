@@ -10,7 +10,7 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoMethodContextCoder class >> forContext: aContext session: aDebugSession [
-	^ (self forMethod: aContext method)
+	^ (self forMethod: aContext blocDefiningMethod)
 		context: aContext;
 		session: aDebugSession;
 		yourself
