@@ -441,6 +441,7 @@ GtPharoMethodCoderExamples >> debugClassUnaryMethodPointCreation [
 	self assert: aCoder isModified.
 
 	self assert: aDummyDebugger sourceCode equals: 'DoIt
+
 	^ aPoint := 196 @ 400'.
 	self assert: aDummyDebugger method selector equals: #DoIt.
 	self assert: (aDummyDebugger method methodClass inheritsFrom: aCoder behavior).
