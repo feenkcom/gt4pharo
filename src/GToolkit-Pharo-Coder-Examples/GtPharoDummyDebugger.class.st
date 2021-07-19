@@ -16,13 +16,13 @@ GtPharoDummyDebugger class >> useDuring: aBlock [
 	| aDummyDebugger aPreviousDebugger |
 	
 	aDummyDebugger := self new.
-	aPreviousDebugger := Smalltalk tools debuggerTool.
+	aPreviousDebugger := Smalltalk tools debugger.
 	
 	[ 
-		Smalltalk tools debuggerTool: aDummyDebugger.
+		Smalltalk tools gtDebuggerTool: aDummyDebugger.
 		aBlock value
 	] ensure: [
-		Smalltalk tools debuggerTool: aPreviousDebugger.
+		Smalltalk tools gtDebuggerTool: aPreviousDebugger.
 		Smalltalk tools debuggers remove: aDummyDebugger ifAbsent: [  ] ].
 
 	^ aDummyDebugger
