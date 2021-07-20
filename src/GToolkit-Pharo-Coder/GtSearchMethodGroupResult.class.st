@@ -52,7 +52,7 @@ GtSearchMethodGroupResult >> gtMetricsFor: aView [
 		title: 'Metrics';
 		items: [ {('Number of methods' -> self size).
 			('Lines of code' -> self linesOfCode).
-			('Lines per method' -> (self linesOfCode / self size) asFloat)} ];
+			('Lines per method' -> (self size isZero ifFalse: [ (self linesOfCode / self size) asFloat ] ifTrue: [ '0' ]))} ];
 		column: 'Metric' text: #key;
 		column: 'Value' text: [ :assoc | assoc value asString ]
 ]
