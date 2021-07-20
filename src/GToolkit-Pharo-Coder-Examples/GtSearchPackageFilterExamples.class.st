@@ -9,14 +9,14 @@ GtSearchPackageFilterExamples >> assertPackageResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtSearchPackageGroupResult.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtSearchPackageFilterExamples >> deprecatedPackagesFilter [
 	<gtExample>
 	| filter |
 	
 	filter := GtSearchDeprecatedPackagesFilter new.
 	
-	self assert: (filter matches: 'Deprecated80' asPackage).
+	self assert: (filter matches: (RPackageOrganizer default packages select: [:p | p name beginsWith: 'Deprecated']) anyOne).
 	self assert: (filter matches: 'GToolkit-Docs' asPackage) not.
 	
 	^ filter.
