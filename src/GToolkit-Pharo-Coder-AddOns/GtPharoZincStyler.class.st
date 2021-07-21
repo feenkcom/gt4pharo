@@ -1,3 +1,11 @@
+"
+I hide secret information written in a code, e.g., passwords and tokens.
+#Examples
+##Password
+The following code includes apassword that should be hidden by default: {{gtExample:GtPharoZincStylerExamples>>#usernameAndPasswordSourceCode}}
+##Bearer
+The following code includes apassword that should be hidden by default: {{gtExample: GtPharoZincStylerExamples >> #bearerSourceCode}}
+"
 Class {
 	#name : #GtPharoZincStyler,
 	#superclass : #GtGenericPharoStyler,
@@ -5,9 +13,15 @@ Class {
 }
 
 { #category : #accessing }
+GtPharoZincStyler >> selectors [
+	"Note: last argument is considered as a secret information, e.g., password."
+	^ #( 'username:password:' 'setBearerAuthentication:' )
+]
+
+{ #category : #accessing }
 GtPharoZincStyler >> visitKeywordMessage: aMessage [
 	super visitKeywordMessage: aMessage.
-	(aMessage selector = #'username:password:'
+	((self selectors includes: aMessage selector)
 		and: [ aMessage arguments last isLiteral and: [ 
 			aMessage arguments last isString ] ] ) ifFalse: [ ^ self ].
 	self 
