@@ -34,8 +34,8 @@ GtCategoryDefinition >> asDefinitionString [
 { #category : #'api - accepting' }
 GtCategoryDefinition >> createPackageChange [
 	^ tag name notEmpty
-		ifTrue: [ RBAddPackageTagChange packageName: package name tagName: tag name ]
-		ifFalse: [ RBAddPackageChange packageName: package name ]
+		ifTrue: [ GtRBAddPackageTagChange packageName: package name tagName: tag name ]
+		ifFalse: [ GtRBAddPackageChange packageName: package name ]
 ]
 
 { #category : #'api - accepting' }

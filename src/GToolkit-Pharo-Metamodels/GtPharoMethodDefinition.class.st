@@ -43,7 +43,7 @@ GtPharoMethodDefinition >> asDefinitionString [
 
 { #category : #'api - accepting' }
 GtPharoMethodDefinition >> createChange [
-	^ RBAddMethodToClassNamedChange compile: self fullSourceCode protocol: self protocol
+	^ GtRBAddMethodToClassNamedChange compile: self fullSourceCode protocol: self protocol
 ]
 
 { #category : #initialization }

@@ -136,7 +136,7 @@ GtClassDefinition >> comment: aGtCommentDefinition [
 
 { #category : #'api - accepting' }
 GtClassDefinition >> createBehaviorChange [
-	^ RBAddClassWithSlotsChange definition: self asDefinitionString
+	^ GtRBAddClassWithSlotsChange definition: self asDefinitionString
 ]
 
 { #category : #'api - accepting' }
