@@ -59,7 +59,7 @@ GtMetaclassDefinition >> classOrMetaClass [
 
 { #category : #'api - accepting' }
 GtMetaclassDefinition >> createBehaviorChange [
-	^ RBAddMetaclassWithSlotsChange definition: self asDefinitionString
+	^ GtRBAddMetaclassWithSlotsChange definition: self asDefinitionString
 ]
 
 { #category : #'api - accepting' }

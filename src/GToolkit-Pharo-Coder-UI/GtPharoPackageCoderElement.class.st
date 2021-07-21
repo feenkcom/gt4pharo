@@ -57,7 +57,7 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 	previewButton := GtRefactoringsPreviewButton new
 		margin: (BlInsets left: 5);
 		visibility: BlVisibility gone;
-		refactorings: [ { RBRenamePackageRefactoring from: packageCoder package name to: packageNameEditor text asString } ];
+		refactorings: [ { GtRBRenamePackageRefactoring from: packageCoder package name to: packageNameEditor text asString } ];
 		when: GtRefactoringsAppliedEvent do: [ :anEvent | anEvent currentTarget visibility: BlVisibility hidden ].
 		
 	packageNameEditor editor
