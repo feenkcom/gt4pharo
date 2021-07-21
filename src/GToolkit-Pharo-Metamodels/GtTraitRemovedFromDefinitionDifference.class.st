@@ -6,7 +6,7 @@ Class {
 
 { #category : #converting }
 GtTraitRemovedFromDefinitionDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ RBRemoveTraitUsageRefactoring new
+	^ GtRBRemoveTraitUsageRefactoring new
 		model: anRBModel;
 		class: aClass traitName: self traitName
 ]

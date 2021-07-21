@@ -6,7 +6,7 @@ Class {
 
 { #category : #converting }
 GtPoolRemovedDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ RBRemovePoolVariableRefactoring
+	^ GtRBRemovePoolVariableRefactoring
 		model: anRBModel
 		variable: self poolName
 		class: aClass

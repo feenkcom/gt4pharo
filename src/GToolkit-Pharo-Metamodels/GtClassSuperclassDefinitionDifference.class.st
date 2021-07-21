@@ -10,7 +10,7 @@ Class {
 
 { #category : #converting }
 GtClassSuperclassDefinitionDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ RBChangeSuperclassRefactoring new
+	^ GtRBChangeSuperclassRefactoring new
 		model: anRBModel;
 		changeSuperclassOf: aClass to: (anRBModel classNamed: newName)
 ]

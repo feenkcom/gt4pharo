@@ -24,7 +24,7 @@ GtCommentDefinition >> content: anObject [
 
 { #category : #'api - accepting' }
 GtCommentDefinition >> createChange [
-	^ RBCommentOfClassNamedChange new
+	^ GtRBCommentOfClassNamedChange new
 		comment: self content;
 		isMeta: false
 ]
