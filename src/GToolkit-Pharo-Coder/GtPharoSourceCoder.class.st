@@ -623,5 +623,6 @@ GtPharoSourceCoder >> variableNodeToReferencesFilter: aVariableNode ifFound: aFo
 { #category : #accessing }
 GtPharoSourceCoder >> zincAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
-	coderAddOns addStyler: GtPharoZincStyler new
+	coderAddOns addStyler: GtPharoZincStyler new.
+	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
 ]
