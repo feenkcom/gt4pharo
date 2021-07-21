@@ -3,7 +3,14 @@ Extension { #name : #GtPharoSourceCoder }
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
-	coderAddOns addStyler: GtPharoColorStyler new
+	coderAddOns addStyler: GtPharoColorStyler new.
+	coderAddOns addStyler: GtPharoGlamorousColorStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoGlamorousIconStyler new.
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
