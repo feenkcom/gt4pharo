@@ -35,7 +35,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 	| aCoder anAst aSourceText aRedInterval |
 	
 	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''client_id'' put: ''a client secret id''') asRopedText.
+				'at: ''client_id'' put: ''a secret token''') asRopedText.
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
@@ -50,7 +50,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
-	self assert: aRedInterval equals: (61 to: 78).
+	self assert: aRedInterval equals: (61 to: 74).
 
 	^ aSourceText
 ]
@@ -61,7 +61,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 	| aCoder anAst aSourceText aRedInterval |
 	
 	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''client_secret'' put: ''a client secret value''') asRopedText.
+				'at: ''client_secret'' put: ''a secret value''') asRopedText.
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
@@ -76,7 +76,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
-	self assert: aRedInterval equals: (65 to: 85).
+	self assert: aRedInterval equals: (65 to: 78).
 
 	^ aSourceText
 ]
@@ -87,7 +87,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 	| aCoder anAst aSourceText aRedInterval |
 	
 	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''client_token'' put: ''a client secret token''') asRopedText.
+				'at: ''client_token'' put: ''a secret token''') asRopedText.
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
@@ -102,7 +102,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
-	self assert: aRedInterval equals: (64 to: 84).
+	self assert: aRedInterval equals: (64 to: 77).
 
 	^ aSourceText
 ]
