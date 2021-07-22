@@ -1,3 +1,13 @@
+"
+I display a color next to {{gtClass:Color}} messages.
+#Examples
+##Hex String
+The following example shows how a {{gtMethod:Color class >> #fromHexString: | label=#selector}} looks like directly in the code: {{gtExample:GtPharoColorStylerExamples >> #colorFromHexStringSourceCode}}
+##RGB Range Values
+The following example shows how a {{gtMethod:Color class >> #r:g:b:range: | label=#selector}} looks like directly in the code: {{gtExample: GtPharoColorStylerExamples >> #colorFromRGBRangeSourceCode }}
+##Color Registry
+The following example shows how a {{gtMethod:Color class >> #brickColorRegistry | label=#selector}} colors looks like directly in the code: {{ gtExample: GtPharoColorStylerExamples >> #colorFromColorRegistrySourceCode }}
+"
 Class {
 	#name : #GtPharoColorStyler,
 	#superclass : #GtGenericPharoStyler,
