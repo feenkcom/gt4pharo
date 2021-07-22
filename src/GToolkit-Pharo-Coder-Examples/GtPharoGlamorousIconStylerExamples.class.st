@@ -1,26 +1,43 @@
 "
-I exemplify {{gtClass:GtPharoColorStyler}}.
-
+I exemplify {{gtClass:GtPharoGlamorousIconStyler}}.
 "
 Class {
-	#name : #GtPharoColorStylerExamples,
+	#name : #GtPharoGlamorousIconStylerExamples,
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
+{ #category : #'examples - source code' }
+GtPharoGlamorousIconStylerExamples >> glamorousPixelIcon [
+	<gtExample>
+	| anIcon |
+	anIcon := BrGlamorousIcons refresh.
+	self assert: (anIcon isKindOf: Form).
+	^ anIcon
+]
+
+{ #category : #'examples - source code' }
+GtPharoGlamorousIconStylerExamples >> glamorousVectorIcon [
+	<gtExample>
+	| anIcon |
+	anIcon := BrGlamorousVectorIcons refresh.
+	self assert: (anIcon isKindOf: BrStencil).
+	^ anIcon
+]
+
 { #category : #'examples - styling' }
-GtPharoColorStylerExamples >> colorFromColorRegistry [
+GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
 	
-	aCoder := GtPharoSnippetCoder forSource: 'Color brown' asRopedText.
+	aCoder := GtPharoSnippetCoder forSource: (BrGlamorousIcons name, ' ', #refresh) asRopedText.
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
 	
-	GtPharoColorStyler new
+	GtPharoGlamorousIconStyler new
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -30,22 +47,22 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
-	self assert: aRedInterval equals: (11 to: 11).
+	self assert: aRedInterval equals: (24 to: 24).
 
 	^ aSourceText
 ]
 
 { #category : #'examples - styling' }
-GtPharoColorStylerExamples >> colorFromHexHighlighted [
+GtPharoGlamorousIconStylerExamples >> vectorRefreshIcon [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
 	
-	aCoder := GtPharoSnippetCoder forSource: 'Color fromHexString: #''5533ee''' asRopedText.
+	aCoder := GtPharoSnippetCoder forSource: (BrGlamorousVectorIcons name, ' ', #refresh) asRopedText.
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
 	
-	GtPharoColorStyler new
+	GtPharoGlamorousIconStyler new
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -56,31 +73,6 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (30 to: 30).
-
-	^ aSourceText
-]
-
-{ #category : #'examples - styling' }
-GtPharoColorStylerExamples >> colorRGBRangeHighlighted [
-	<gtExample>
-	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: 'Color r: 100 g: 30 b: 200 range: 255' asRopedText.
-
-	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
-	GtPharoColorStyler new
-		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
-	aRedInterval := 1 to: 0.
-	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
-
-	self assert: aRedInterval equals: (36 to: 36).
 
 	^ aSourceText
 ]
