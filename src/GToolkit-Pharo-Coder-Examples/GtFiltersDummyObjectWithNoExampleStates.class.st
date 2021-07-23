@@ -1,10 +1,10 @@
 Class {
-	#name : #GtFiltersDummyObjectWithNoExampleStates,
-	#superclass : #GtFiltersDummyObjectWithExampleStates,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#name : 'GtFiltersDummyObjectWithNoExampleStates',
+	#superclass : 'GtFiltersDummyObjectWithExampleStates',
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtFiltersDummyObjectWithNoExampleStates >> one [
 	^ 1
 ]

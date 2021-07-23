@@ -1,15 +1,15 @@
 Class {
-	#name : #GtBehaviorCoderByScripterExamples,
-	#superclass : #Object,
+	#name : 'GtBehaviorCoderByScripterExamples',
+	#superclass : 'Object',
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#instVars : [
 		'environment'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	<gtExample>
 	<after: #cleanUp>
@@ -25,7 +25,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	^ aBehaviorCoder
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI [
 	<gtExample>
 	| aScripter |
@@ -34,7 +34,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_add_method [
 	<gtExample>
 	| aScripter |
@@ -55,7 +55,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_add_method [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_copyClassName [
 	<gtExample>
 	| aScripter |
@@ -89,7 +89,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_copyClassName [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_doubleClick [
 	<gtExample>
 	| aScripter |
@@ -120,7 +120,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_doubleC
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_shortcut [
 	<gtExample>
 	| aScripter |
@@ -158,7 +158,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_shortcu
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_02_type_new_class_name [
 	<gtExample>
 	| aScripter |
@@ -204,7 +204,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_02_type_ne
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - for class' }
+{ #category : 'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_03_click_rename_preview [
 	<gtExample>
 	| aScripter |
@@ -226,7 +226,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_03_click_r
 	^ aScripter syncContinue
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtCoderNavigationPackagesTagsClassesElementExamples,
-	#superclass : #GtCoderNavigationElementExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtCoderNavigationPackagesTagsClassesElementExamples',
+	#superclass : 'GtCoderNavigationElementExamples',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> assertSelectionOfPackage: aRPackage tag: aRPackageTag class: aClass inElement: anElement [
 
 	self assert: anElement selectedPackage equals: aRPackage.
@@ -12,7 +12,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> assertSelectionOfPackage:
 	self assert: anElement selectedClass equals: aClass.
 ]
 
-{ #category : #'examples - basic' }
+{ #category : 'examples - basic' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> basicElement [
 	<gtExample>
 	| anElement |
@@ -21,25 +21,25 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> basicElement [
 	^ anElement
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> classInPackage [
 	<gtExample>
 	^ BaselineOfGToolkitCoder
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> classInPackageTag [
 	<gtExample>
 	^ self class
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> classInUncategorizedPackageTag [
 	<gtExample>
 	^ GtCoderUncategorizedDummyClass
 ]
 
-{ #category : #'examples - basic' }
+{ #category : 'examples - basic' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModel [
 	<gtExample>
 	| anElement aModel |
@@ -52,7 +52,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModel [
 	^ anElement
 ]
 
-{ #category : #'examples - basic' }
+{ #category : 'examples - basic' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModelInSpace [
 	<gtExample>
 	| anElement |
@@ -63,7 +63,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModelInS
 	^ anElement
 ]
 
-{ #category : #'examples - class selection' }
+{ #category : 'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection [
 	<noTest>
 	<gtExample>
@@ -78,7 +78,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClas
 	^ anElement
 ]
 
-{ #category : #'examples - class selection' }
+{ #category : 'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection_BeforeInSpace [
 	<noTest>
 	<gtExample>
@@ -94,7 +94,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClas
 	^ anElement
 ]
 
-{ #category : #'examples - class selection' }
+{ #category : 'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndClassSelection [
 	<noTest>
 	<gtExample>
@@ -109,7 +109,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 	^ anElement
 ]
 
-{ #category : #'examples - class selection' }
+{ #category : 'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndClassSelection_BeforeInSpace [
 	<noTest>
 	<gtExample>
@@ -125,7 +125,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 	^ anElement
 ]
 
-{ #category : #'examples - package tag selection' }
+{ #category : 'examples - package tag selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSelection [
 	<noTest>
 	<gtExample>
@@ -140,7 +140,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSele
 	^ anElement
 ]
 
-{ #category : #'examples - package selection' }
+{ #category : 'examples - package selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithoutTagsAndExtensionsSelection [
 	<noTest>
 	<gtExample>
@@ -155,7 +155,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 	^ anElement
 ]
 
-{ #category : #'examples - package selection' }
+{ #category : 'examples - package selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithoutTagsAndExtensionsSelection_Children [
 	<noTest>
 	<gtExample>
@@ -167,7 +167,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 	^ anElement
 ]
 
-{ #category : #'examples - class selection' }
+{ #category : 'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPackageTagAndClassSelection [
 	<noTest>
 	<gtExample>
@@ -182,7 +182,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 	^ anElement
 ]
 
-{ #category : #'examples - class selection' }
+{ #category : 'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPackageTagAndClassSelection_BeforeInSpace [
 	<noTest>
 	<gtExample>
@@ -198,7 +198,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 	^ anElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> numberOfSubscriptions [
 	<gtExample>
 	| aMethodOne aMethodTwo theGlobalsOne theGlobalsTwo theGlobals |
@@ -211,25 +211,25 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> numberOfSubscriptions [
 	^ theGlobals size
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> packageTag [
 	<gtExample>
 	^ self packageWithTagsAndWithoutExtensions classTagNamed: 'Navigation'
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithTagsAndWithoutExtensions [
 	<gtExample>
 	^ 'GToolkit-Coder-Examples' asPackage 
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithoutTagsAndExtensions [
 	<gtExample>
 	^ 'GToolkit-Coder-Examples-SystemS1' asPackage 
 ]
 
-{ #category : #'examples - system items' }
+{ #category : 'examples - system items' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> uncategorizedPackageTag [
 	<gtExample>
 	| aPackage aPackageTag aTag |

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtCoderCollapsedContentElementExamples,
-	#superclass : #GtCoderContentElementExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtCoderCollapsedContentElementExamples',
+	#superclass : 'GtCoderContentElementExamples',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'examples - looks' }
+{ #category : 'examples - looks' }
 GtCoderCollapsedContentElementExamples >> forExampleCoder [
 	<gtExample>
 	| aMethodCoder aContentElement |
@@ -17,7 +17,7 @@ GtCoderCollapsedContentElementExamples >> forExampleCoder [
 	^ aContentElement
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtCoderCollapsedContentElementExamples >> forMethodCoder [
 	<gtExample>
 	| aMethodCoder aContentElement |
@@ -31,18 +31,18 @@ GtCoderCollapsedContentElementExamples >> forMethodCoder [
 	^ aContentElement
 ]
 
-{ #category : #'example - samples' }
+{ #category : 'example - samples' }
 GtCoderCollapsedContentElementExamples >> greenExample [
 	<gtExample>
 	^ 42
 ]
 
-{ #category : #'example - samples' }
+{ #category : 'example - samples' }
 GtCoderCollapsedContentElementExamples >> noExample [
 	^ 42
 ]
 
-{ #category : #'examples - looks' }
+{ #category : 'examples - looks' }
 GtCoderCollapsedContentElementExamples >> textAndExampleLook_withExampleMethod [
 	<gtExample>
 	| aMethodCoder aContentElement |
@@ -55,7 +55,7 @@ GtCoderCollapsedContentElementExamples >> textAndExampleLook_withExampleMethod [
 	^ aContentElement
 ]
 
-{ #category : #'examples - looks' }
+{ #category : 'examples - looks' }
 GtCoderCollapsedContentElementExamples >> textAndExampleLook_withRegularMethod [
 	<gtExample>
 	| aMethodCoder aContentElement |

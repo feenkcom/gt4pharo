@@ -1,12 +1,12 @@
 Class {
-	#name : #GtPharoHaltStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoHaltStylerExamples',
+	#superclass : 'Object',
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
-	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoHaltStylerExamples >> haltNowHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -31,7 +31,7 @@ GtPharoHaltStylerExamples >> haltNowHighlighted [
 	^ aSourceText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoHaltStylerExamples >> haltOnceHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -56,7 +56,7 @@ GtPharoHaltStylerExamples >> haltOnceHighlighted [
 	^ aSourceText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoHaltStylerExamples >> selfHaltHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -81,7 +81,7 @@ GtPharoHaltStylerExamples >> selfHaltHighlighted [
 	^ aSourceText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoHaltStylerExamples >> selfHaltOnceHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |

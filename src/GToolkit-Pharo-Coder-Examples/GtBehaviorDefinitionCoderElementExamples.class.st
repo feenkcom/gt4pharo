@@ -1,10 +1,10 @@
 Class {
-	#name : #GtBehaviorDefinitionCoderElementExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtBehaviorDefinitionCoderElementExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorDefinitionCoderElementExamples >> forClassElement [
 	<gtExample>
 	| aCoderUIModel aCoderElement |
@@ -17,7 +17,7 @@ GtBehaviorDefinitionCoderElementExamples >> forClassElement [
 	^ aCoderElement
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorDefinitionCoderElementExamples >> forClassUIModel [
 	<gtExample>
 	| aCoder aCoderUIModel |
@@ -30,7 +30,7 @@ GtBehaviorDefinitionCoderElementExamples >> forClassUIModel [
 	^ aCoderUIModel
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorDefinitionCoderElementExamples >> forMetaclassElement [
 	<gtExample>
 	| aCoderUIModel aCoderElement |
@@ -43,7 +43,7 @@ GtBehaviorDefinitionCoderElementExamples >> forMetaclassElement [
 	^ aCoderElement
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorDefinitionCoderElementExamples >> forMetaclassUIModel [
 	<gtExample>
 	| aCoder aCoderUIModel |
@@ -56,7 +56,7 @@ GtBehaviorDefinitionCoderElementExamples >> forMetaclassUIModel [
 	^ aCoderUIModel
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorDefinitionCoderElementExamples >> forTraitElement [
 	<gtExample>
 	| aCoderUIModel aCoderElement |
@@ -69,7 +69,7 @@ GtBehaviorDefinitionCoderElementExamples >> forTraitElement [
 	^ aCoderElement
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorDefinitionCoderElementExamples >> forTraitUIModel [
 	<gtExample>
 	| aCoder aCoderUIModel |

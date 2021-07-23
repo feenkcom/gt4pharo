@@ -1,10 +1,10 @@
 Class {
-	#name : #GtSearchMethodReferencesFilterExamples,
-	#superclass : #GtSearchMethodFilterExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
+	#name : 'GtSearchMethodReferencesFilterExamples',
+	#superclass : 'GtSearchMethodFilterExamples',
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToMethodCoder [
 	<gtExample>
 	| filter |
@@ -13,7 +13,7 @@ GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToMethodC
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToSampleB [
 	<gtExample>
 	| filter |
@@ -22,7 +22,7 @@ GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToSampleB
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> negatedReferencesToSampleB [
 	<gtExample>
 	| filter |
@@ -31,7 +31,7 @@ GtSearchMethodReferencesFilterExamples >> negatedReferencesToSampleB [
 	self assert: (filter matches: GtFilterStubSampleA >> #anotherMethodReferencingSampleBAndSendingNew) not.
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesTo42 [
 	<gtExample>
 	| filter |
@@ -41,7 +41,7 @@ GtSearchMethodReferencesFilterExamples >> referencesTo42 [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToArray [
 	<gtExample>
 	| filter |
@@ -51,7 +51,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToArray [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToByteArray [
 	<gtExample>
 	| filter |
@@ -61,7 +61,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToByteArray [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToCharacter [
 	<gtExample>
 	| filter |
@@ -71,7 +71,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToCharacter [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToFalse [
 	<gtExample>
 	| filter |
@@ -81,7 +81,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToFalse [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToNil [
 	<gtExample>
 	| filter |
@@ -91,7 +91,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToNil [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToSampleB [
 	<gtExample>
 	| filter |
@@ -102,7 +102,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToSampleB [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToString [
 	<gtExample>
 	| filter |
@@ -112,7 +112,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToString [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToThisSelector [
 	<gtExample>
 	| filter |
@@ -122,7 +122,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToThisSelector [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodReferencesFilterExamples >> referencesToTrue [
 	<gtExample>
 	| filter |

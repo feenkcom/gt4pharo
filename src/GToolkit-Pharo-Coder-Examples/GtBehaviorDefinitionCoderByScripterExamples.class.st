@@ -1,17 +1,17 @@
 Class {
-	#name : #GtBehaviorDefinitionCoderByScripterExamples,
-	#superclass : #GtCoderByScripterExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtBehaviorDefinitionCoderByScripterExamples',
+	#superclass : 'GtCoderByScripterExamples',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'examples - setup' }
+{ #category : 'examples - setup' }
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionCoder [
 	<gtExample>
 
 	^ GtPharoBehaviorDefinitionCoder forBehavior: self targetClass
 ]
 
-{ #category : #'examples - setup' }
+{ #category : 'examples - setup' }
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionElement [
 	<gtExample>
 	| behaviorDefinitionCoder behaviorDefinitionElement |
@@ -22,7 +22,7 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionElement [
 	^ behaviorDefinitionElement
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter [
 	<gtExample>
 	| aScripter |
@@ -35,7 +35,7 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter [
 	^ aScripter syncContinue
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_CollapsedByDefault [
 	<gtExample>
 	| aScripter |
@@ -48,7 +48,7 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Collap
 	^ aScripter syncContinue
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_ExpandHeader [
 	<gtExample>
 	| aScripter |
@@ -66,7 +66,7 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Expand
 	^ aScripter syncContinue
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_ExpandHeader_CollapseHeader [
 	<gtExample>
 	| aScripter |
@@ -86,7 +86,7 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Expand
 	^ aScripter syncContinue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtBehaviorDefinitionCoderByScripterExamples >> targetClass [
 	^ GtBehaviorCoderDummyClass
 ]

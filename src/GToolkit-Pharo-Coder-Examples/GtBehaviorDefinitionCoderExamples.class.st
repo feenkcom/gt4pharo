@@ -1,10 +1,10 @@
 Class {
-	#name : #GtBehaviorDefinitionCoderExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtBehaviorDefinitionCoderExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtBehaviorDefinitionCoderExamples >> forClass [
 	<gtExample>
 	| aCoder |
@@ -17,7 +17,7 @@ GtBehaviorDefinitionCoderExamples >> forClass [
 	^ aCoder
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtBehaviorDefinitionCoderExamples >> forMetaclass [
 	<gtExample>
 	| aCoder |
@@ -30,7 +30,7 @@ GtBehaviorDefinitionCoderExamples >> forMetaclass [
 	^ aCoder
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtBehaviorDefinitionCoderExamples >> forTrait [
 	<gtExample>
 	| aCoder |

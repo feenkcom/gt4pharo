@@ -3,12 +3,12 @@ I examplify {{gtClass:GtCoderElement}} and its subclasses.
 
 "
 Class {
-	#name : #GtCoderElementExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtCoderElementExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'examples - content element' }
+{ #category : 'examples - content element' }
 GtCoderElementExamples >> basicContentElement [
 	<gtExample>
 	| anElement |
@@ -18,13 +18,13 @@ GtCoderElementExamples >> basicContentElement [
 	^ anElement
 ]
 
-{ #category : #'examples - navigation model' }
+{ #category : 'examples - navigation model' }
 GtCoderElementExamples >> basicNavigationModel [
 	<gtExample>
 	^ GtCoderNavigationPackagesTagsClassesModel new
 ]
 
-{ #category : #'examples - playground' }
+{ #category : 'examples - playground' }
 GtCoderElementExamples >> basicPlaygroundElement [
 	<gtExample>
 	| anElement |
@@ -34,7 +34,7 @@ GtCoderElementExamples >> basicPlaygroundElement [
 	^ anElement
 ]
 
-{ #category : #'examples - toolbar' }
+{ #category : 'examples - toolbar' }
 GtCoderElementExamples >> basicToolbarElement [
 	<gtExample>
 	| anElement |
@@ -44,13 +44,13 @@ GtCoderElementExamples >> basicToolbarElement [
 	^ anElement
 ]
 
-{ #category : #'examples - coders' }
+{ #category : 'examples - coders' }
 GtCoderElementExamples >> classCoder [
 	<gtExample>
 	^ GtPharoBehaviorCoder forClass: self class
 ]
 
-{ #category : #'examples - coder element' }
+{ #category : 'examples - coder element' }
 GtCoderElementExamples >> coderElement [
 	<gtExample>
 	| anElement |
@@ -58,7 +58,7 @@ GtCoderElementExamples >> coderElement [
 	^ anElement
 ]
 
-{ #category : #'examples - coder element' }
+{ #category : 'examples - coder element' }
 GtCoderElementExamples >> coderElementWithObject [
 	<gtExample>
 	| anElement |
@@ -66,7 +66,7 @@ GtCoderElementExamples >> coderElementWithObject [
 	^ anElement
 ]
 
-{ #category : #'examples - content element' }
+{ #category : 'examples - content element' }
 GtCoderElementExamples >> contentElementWithClass [
 	<gtExample>
 	| anElement |
@@ -76,7 +76,7 @@ GtCoderElementExamples >> contentElementWithClass [
 	^ anElement
 ]
 
-{ #category : #'examples - content element' }
+{ #category : 'examples - content element' }
 GtCoderElementExamples >> contentElementWithPackages [
 	<gtExample>
 	| anElement aModel |
@@ -89,13 +89,13 @@ GtCoderElementExamples >> contentElementWithPackages [
 	^ anElement
 ]
 
-{ #category : #'examples - coders' }
+{ #category : 'examples - coders' }
 GtCoderElementExamples >> packagesCoder [
 	<gtExample>
 	^ GtPharoPackagesCoder forAllPackages
 ]
 
-{ #category : #'examples - playground' }
+{ #category : 'examples - playground' }
 GtCoderElementExamples >> playgroundElementWithClass [
 	<gtExample>
 	| anElement |
@@ -108,7 +108,7 @@ GtCoderElementExamples >> playgroundElementWithClass [
 	^ anElement
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtCoderElementExamples >> pushClassCoderInto: anElement [
 	<gtExample>
 	| aModel |
@@ -119,7 +119,7 @@ GtCoderElementExamples >> pushClassCoderInto: anElement [
 	self assert: aModel selectedClass equals: self class.
 ]
 
-{ #category : #'examples - toolbar' }
+{ #category : 'examples - toolbar' }
 GtCoderElementExamples >> toolbarElementWithClass [
 	<gtExample>
 	| anElement |
