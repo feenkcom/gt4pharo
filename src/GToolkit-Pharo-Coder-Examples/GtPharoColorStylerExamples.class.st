@@ -35,6 +35,15 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 	^ aSourceText
 ]
 
+{ #category : #'examples - source code' }
+GtPharoColorStylerExamples >> colorFromColorRegistrySourceCode [
+	<gtExample>
+	| aColor |
+	aColor := Color lightBrown.
+	self assert: (aColor isKindOf: Color).
+	^ aColor
+]
+
 { #category : #'examples - styling' }
 GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	<gtExample>
@@ -58,6 +67,24 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	self assert: aRedInterval equals: (30 to: 30).
 
 	^ aSourceText
+]
+
+{ #category : #'examples - source code' }
+GtPharoColorStylerExamples >> colorFromHexStringSourceCode [
+	<gtExample>
+	| aColor |
+	aColor := Color fromHexString: #'5533ee'.
+	self assert: (aColor isKindOf: Color).
+	^ aColor
+]
+
+{ #category : #'examples - source code' }
+GtPharoColorStylerExamples >> colorFromRGBRangeSourceCode [
+	<gtExample>
+	| aColor |
+	aColor := Color r: 100 g: 30 b: 200 range: 255.
+	self assert: (aColor isKindOf: Color).
+	^ aColor
 ]
 
 { #category : #'examples - styling' }

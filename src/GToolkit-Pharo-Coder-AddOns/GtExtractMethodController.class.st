@@ -245,21 +245,33 @@ GtExtractMethodController >> setBodyText: bodySource andAttributesAt: positions 
 
 { #category : #private }
 GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
+	| methodNameBlock |
 	isExisting := false.
+	
+	methodNameBlock := [ :ref :methodName |
+		| selector |
+		methodArguments := Array withAll: methodName arguments.
+		selector := self safeMethodName: methodName in: ref model.
+		extractedSelectorKeywords := selector keywords.
+		methodName
+			selector: selector;
+			yourself ].
+
+	self
+		forPharo8: [
+			aRefactoring
+				setOption: #methodName
+				toUse: [ :ref :methodName | methodNameBlock value: ref value: methodName  ] ]
+		forPharo9: [
+			aRefactoring
+				setOption: #methodName
+				toUse: [ :methodName | methodNameBlock value: aRefactoring value: methodName  ] ].
+	
 	aRefactoring
 		setOption: #useExistingMethod
 			toUse: [ :ref :sel | 
 			extractedSelectorKeywords := sel keywords.
 			isExisting := true ];
-		setOption: #methodName
-			toUse: [ :ref :methodName | 
-			| selector |
-			methodArguments := Array withAll: methodName arguments.
-			selector := self safeMethodName: methodName in: ref model.
-			extractedSelectorKeywords := selector keywords.
-			methodName
-				selector: selector;
-				yourself ];
 		setOption: #extractAssignment
 			toUse:
 				[ :ref :varName | (aRefactoring model classFor: coder behavior) definesVariable: varName ]
@@ -267,14 +279,26 @@ GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
 
 { #category : #private }
 GtExtractMethodController >> setPreviewOptionsOn: aRefactoring [
+	| methodNameBlock |
+	methodNameBlock := [ :ref :methodName |
+		methodName
+			selector: self extractedSelector;
+			arguments: methodArguments;
+			yourself ].
+
+	self
+		forPharo8: [
+			aRefactoring
+				setOption: #methodName
+				toUse: [ :ref :methodName | methodNameBlock value: ref value: methodName  ] ]
+		forPharo9: [
+			aRefactoring
+				setOption: #methodName
+				toUse: [ :methodName | methodNameBlock value: aRefactoring value: methodName  ] ].
+
+
 	aRefactoring
 		setOption: #useExistingMethod toUse: [ :ref :sel | isExisting ];
-		setOption: #methodName
-			toUse: [ :ref :methodName | 
-			methodName
-				selector: self extractedSelector;
-				arguments: methodArguments;
-				yourself ];
 		setOption: #extractAssignment
 			toUse:
 				[ :ref :varName | (aRefactoring model classFor: coder behavior) definesVariable: varName ]
