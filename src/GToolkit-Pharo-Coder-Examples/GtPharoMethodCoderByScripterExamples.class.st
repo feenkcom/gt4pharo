@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - basic' }
@@ -324,15 +324,18 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep discardButtonE
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextActionNamed: anActionName [
+
 	<gtExample>
-	
-	aScripter check 
-		label: 'Check Context Action Existence Named ', anActionName asString;
-		anySatisfy: [ :aContextActions | aContextActions title = anActionName translated
-			and: [ aContextActions action method = (GtPharoMethodCoder>>#exampleAstFor:into:) ] ];
+	aScripter check
+		label:
+			'Check Context Action Existence Named ' , anActionName asString;
+		anySatisfy: [ :aContextActions | 
+			aContextActions title = anActionName translated and: [ 
+					aContextActions action blocDefiningMethod
+					= (GtPharoMethodCoder >> #exampleAstFor:into:) ] ];
 		onModel;
 		onChildFromMessage: #contextActions.
-	
+
 	^ aScripter
 ]
 
@@ -1322,7 +1325,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 	
 	aScripter check
 		label: 'Check current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString ] equals: [ :aCoder |
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 ('{1}: anObject
 	{2} := anObject.
 	self _' format: {
@@ -1342,7 +1345,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 			aCoderEditor text
 				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
-			equals: [ 48 to: 48 ];
+			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	aScripter check
@@ -1351,7 +1354,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 			aCoderEditor text
 				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
-			equals: [ 48 to: 48 ];
+			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 		
 	aScripter check
@@ -1402,7 +1405,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_06_type_method_name [
 			aCoderEditor text
 				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
-			equals: [ 48 to: 48 ];
+			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtSourceCoderEditorId.
 
 	^ aScripter syncContinue
@@ -1421,7 +1424,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 	
 	aScripter check
 		label: 'Check current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString ] equals: [ :aCoder |
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 ('{1}: anObject
 	{2} := anObject.
 	self {3}' format: {
@@ -1450,7 +1453,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 			aCoderEditor text
 				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
-			equals: [ 57 to: 57 ];
+			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 		
 	aScripter check
