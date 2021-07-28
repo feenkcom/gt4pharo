@@ -7,7 +7,8 @@ Class {
 	#superclass : #BlElement,
 	#instVars : [
 		'protocolTag',
-		'methodCoderUIModel'
+		'methodCoderUIModel',
+		'traitMethodTag'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
@@ -29,8 +30,25 @@ GtMethodCoderTagsElement >> behaviorProtocols [
 { #category : #initialization }
 GtMethodCoderTagsElement >> buildTags [	
 	protocolTag := self newProtocolTag.
+	traitMethodTag := self newTraitMethodTag.
 
-	^ { protocolTag }
+	^ { traitMethodTag. protocolTag }
+]
+
+{ #category : #'event handling' }
+GtMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
+	| aTraitElement aClass aSelector aMethod |
+	aTraitElement := self methodCoderUIModel coder traitSource.
+	aTraitElement ifNil: [ ^ self ].
+	(aTraitElement isKindOf: TaCompositionElement)
+		ifFalse: [ ^ self ].
+	aClass := aTraitElement innerClass.
+	aSelector := self methodCoderUIModel coder selector.
+	aSelector
+		ifNil: [ aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
+			^ self ].
+	aMethod := aClass compiledMethodAt: aSelector ifAbsent: [ ^ self ].
+	aButton phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod)
 ]
 
 { #category : #initialization }
@@ -70,7 +88,13 @@ GtMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 		send: #onCoderSourceTextModified:
 		to: self.
 
-	self updateProtocolButton
+	aMethodCoderUIModel coder weak
+		when: GtCoderMethodModified
+		send: #onCoderMethodModified:
+		to: self.	
+
+	self updateProtocolButton.
+	self updateTraitMethodButton.
 ]
 
 { #category : #'private - instance creation' }
@@ -133,6 +157,25 @@ GtMethodCoderTagsElement >> newProtocolTag [
 			content: [ self newProtocolPickerList ])
 ]
 
+{ #category : #'private - instance creation' }
+GtMethodCoderTagsElement >> newTraitMethodTag [
+	^ BrButton new
+		beTinySize;
+		disable;
+		aptitude:
+			(BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		action:
+				[ :aButton | self handleTraitMethodTagButtonClick: aButton ];
+		label: '';
+		fitContent
+]
+
+{ #category : #'event handling' }
+GtMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
+	self updateTraitMethodButton.
+]
+
 { #category : #'event handling' }
 GtMethodCoderTagsElement >> onCoderSourceTextModified: anAnnouncement [
 	protocolTag disabled: anAnnouncement coder isModified
@@ -146,6 +189,14 @@ GtMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 ]
 
 { #category : #private }
+GtMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
+	<return: #String>
+	^ aMethodCoderUIModel coder isFromTrait
+		ifTrue: [ aMethodCoderUIModel coder traitSource printString ]
+		ifFalse: [ '' ]
+]
+
+{ #category : #private }
 GtMethodCoderTagsElement >> unsubscribeFromCoder [
 	methodCoderUIModel
 		ifNil: [ ^ self ].
@@ -156,4 +207,12 @@ GtMethodCoderTagsElement >> unsubscribeFromCoder [
 { #category : #private }
 GtMethodCoderTagsElement >> updateProtocolButton [
 	protocolTag label: (self protocolStringFor: self methodCoderUIModel)
+]
+
+{ #category : #private }
+GtMethodCoderTagsElement >> updateTraitMethodButton [
+	traitMethodTag label: (self traitMethodStringFor: self methodCoderUIModel).
+	self methodCoderUIModel coder isFromTrait
+		ifTrue: [ traitMethodTag enable ]
+		ifFalse: [ traitMethodTag disable ]
 ]

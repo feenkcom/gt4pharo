@@ -18,3 +18,10 @@ GtPharoSourceCoder >> haltAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 20>
 	coderAddOns addStyler: GtPharoHaltStyler new
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> zincAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoZincStyler new.
+	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
+]
