@@ -37,14 +37,18 @@ GtMethodCoderTagsElement >> buildTags [
 
 { #category : #'event handling' }
 GtMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
-	| aTraitElement aClass |
+	| aTraitElement aClass aSelector aMethod |
 	aTraitElement := self methodCoderUIModel coder traitSource.
 	aTraitElement ifNil: [ ^ self ].
-	(aTraitElement isKindOf: TaCompositionElement) ifFalse: [ ^ self ].
+	(aTraitElement isKindOf: TaCompositionElement)
+		ifFalse: [ ^ self ].
 	aClass := aTraitElement innerClass.
-	
-	aButton phlow
-		spawnTool: (GtClassCoderTool forClass: aClass)
+	aSelector := self methodCoderUIModel coder selector.
+	aSelector
+		ifNil: [ aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
+			^ self ].
+	aMethod := aClass compiledMethodAt: aSelector ifAbsent: [ ^ self ].
+	aButton phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod)
 ]
 
 { #category : #initialization }
