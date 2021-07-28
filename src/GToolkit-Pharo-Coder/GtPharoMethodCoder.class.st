@@ -678,6 +678,13 @@ GtPharoMethodCoder >> isForMethod: aCompiledMethod [
 ]
 
 { #category : #testing }
+GtPharoMethodCoder >> isFromTrait [
+	^ self compiledMethod
+		ifNil: [ false ]
+		ifNotNil: [ :aMethod | aMethod isFromTrait ]
+]
+
+{ #category : #testing }
 GtPharoMethodCoder >> isMeta [
 	"Return true if the method is implemented in the metaclass (~ class side)"
 	<return: #Boolean>
@@ -1224,6 +1231,13 @@ GtPharoMethodCoder >> subscribeToSystem [
 		when: MethodAdded send: #onMethodAdded: to: self;
 		when: MethodRemoved send: #onMethodRemoved: to: self;
 		when: MethodModified send: #onMethodModified: to: self
+]
+
+{ #category : #'api - accessing' }
+GtPharoMethodCoder >> traitSource [
+	^ self compiledMethod 
+		ifNotNil: [ :aMethod | aMethod traitSource ] 
+		ifNil: [ nil ]
 ]
 
 { #category : #'api - addons' }
