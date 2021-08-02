@@ -30,6 +30,7 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 		ifFalse: [ ^ self ].
 
 	anExpanderAttribute := (BrGlamorousTrangleExpanderTextAttribute new
+		id: GtSourceCoderEmbeddedExpanderToggleId;
 		attributesCreatingBlock: [
 			BrTextAdornmentDynamicAttribute new
 				beAppend;
