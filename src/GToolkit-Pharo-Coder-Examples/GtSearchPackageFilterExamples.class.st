@@ -1,15 +1,15 @@
 Class {
-	#name : 'GtSearchPackageFilterExamples',
-	#superclass : 'Object',
+	#name : #GtSearchPackageFilterExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : 'asserting' }
+{ #category : #asserting }
 GtSearchPackageFilterExamples >> assertPackageResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtSearchPackageGroupResult.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchPackageFilterExamples >> deprecatedPackagesFilter [
 	<gtExample>
 	| filter |
@@ -22,7 +22,7 @@ GtSearchPackageFilterExamples >> deprecatedPackagesFilter [
 	^ filter.
 ]
 
-{ #category : 'examples - result' }
+{ #category : #'examples - result' }
 GtSearchPackageFilterExamples >> groupResultForPackagesInImageFilter [
 	<gtExample>
 	| filter result |
@@ -39,7 +39,7 @@ GtSearchPackageFilterExamples >> groupResultForPackagesInImageFilter [
 	^ result
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchPackageFilterExamples >> packagesInImageFilter [
 	<gtExample>
 	| filter |
@@ -54,7 +54,7 @@ GtSearchPackageFilterExamples >> packagesInImageFilter [
 	^ filter
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchPackageFilterExamples >> packagesInImageFilterEqualityExample [
 	<gtExample>
 	| filter |

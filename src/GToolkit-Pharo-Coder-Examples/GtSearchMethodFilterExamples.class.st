@@ -39,17 +39,17 @@ Number references
 
 "
 Class {
-	#name : 'GtSearchMethodFilterExamples',
-	#superclass : 'Object',
+	#name : #GtSearchMethodFilterExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : 'asserting' }
+{ #category : #asserting }
 GtSearchMethodFilterExamples >> assertMethodResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtSearchMethodGroupResult.
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> astPatternFilter [
 	<gtExample>
 	| filter |
@@ -59,7 +59,7 @@ GtSearchMethodFilterExamples >> astPatternFilter [
 	^ filter
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtSearchMethodFilterExamples >> deprecatedMethodsFilter [
 	<gtExample>
 	| filter |
@@ -72,7 +72,7 @@ GtSearchMethodFilterExamples >> deprecatedMethodsFilter [
 	^ filter.
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> gtExamplePragmas [
 	<gtExample>
 	| filter |
@@ -82,7 +82,7 @@ GtSearchMethodFilterExamples >> gtExamplePragmas [
 	^ filter
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> implementorsOfThisMessage [
 	<gtExample>
 	| filter |
@@ -91,7 +91,7 @@ GtSearchMethodFilterExamples >> implementorsOfThisMessage [
 	^ filter
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtSearchMethodFilterExamples >> implementorsPatternFilter [
 	<gtExample>
 	| filter |
@@ -102,7 +102,7 @@ GtSearchMethodFilterExamples >> implementorsPatternFilter [
 	^ filter.
 ]
 
-{ #category : 'examples - method conditions' }
+{ #category : #'examples - method conditions' }
 GtSearchMethodFilterExamples >> methodConditionsFilter_Default [
 	<gtExample>
 	| filter |
@@ -114,7 +114,7 @@ GtSearchMethodFilterExamples >> methodConditionsFilter_Default [
 	^ filter.
 ]
 
-{ #category : 'examples - method conditions' }
+{ #category : #'examples - method conditions' }
 GtSearchMethodFilterExamples >> methodConditionsFilter_OneCondition [
 	<gtExample>
 	| filter |
@@ -128,7 +128,7 @@ GtSearchMethodFilterExamples >> methodConditionsFilter_OneCondition [
 	^ filter.
 ]
 
-{ #category : 'examples - method conditions' }
+{ #category : #'examples - method conditions' }
 GtSearchMethodFilterExamples >> methodConditionsFilter_SubclassRerence [
 	<gtExample>
 	| filter |
@@ -142,7 +142,7 @@ GtSearchMethodFilterExamples >> methodConditionsFilter_SubclassRerence [
 	^ filter.
 ]
 
-{ #category : 'examples - method conditions' }
+{ #category : #'examples - method conditions' }
 GtSearchMethodFilterExamples >> methodConditionsFilter_TwoConditions [
 	<gtExample>
 	| filter |
@@ -157,7 +157,7 @@ GtSearchMethodFilterExamples >> methodConditionsFilter_TwoConditions [
 	^ filter.
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> methodsInCategoryFilter [
 	<gtExample>
 	| filter |
@@ -168,7 +168,7 @@ GtSearchMethodFilterExamples >> methodsInCategoryFilter [
 	^ filter.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtSearchMethodFilterExamples >> methodsInPackageFilter [
 	<gtExample>
 	| filter |
@@ -181,7 +181,7 @@ GtSearchMethodFilterExamples >> methodsInPackageFilter [
 	^ filter.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtSearchMethodFilterExamples >> methodsWithClassPatternFilter [
 	<gtExample>
 	| filter |
@@ -192,7 +192,7 @@ GtSearchMethodFilterExamples >> methodsWithClassPatternFilter [
 	^ filter.
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> packagePatternFilter [
 	<gtExample>
 	| filter |

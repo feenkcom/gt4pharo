@@ -1,12 +1,12 @@
 Class {
-	#name : 'GtPharoSnippetCoderByScripterExamples',
-	#superclass : 'Object',
+	#name : #GtPharoSnippetCoderByScripterExamples,
+	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : 'examples - context menu' }
+{ #category : #'examples - context menu' }
 GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 	<gtExample>
 	| aScripter |
