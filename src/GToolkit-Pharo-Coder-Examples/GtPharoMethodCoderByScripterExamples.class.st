@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - basic' }
@@ -898,9 +898,14 @@ GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCode
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new forUnaryInstanceMethod  ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	aScripter do
 		label: 'type in a class that does not exist';
 		action: [ :aCoder | aCoder appendString: (String cr, String tab, '{1}New' format: { (aCoder attributeNamed: #dummyMethod) className }) ];
@@ -955,9 +960,14 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new forUnaryInstanceMethod asCoderViewModel ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod .
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder asCoderViewModel ].
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'instance') ];
@@ -1015,9 +1025,14 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new forUnaryInstanceMethod asCoderViewModel ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder asCoderViewModel ].
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'temporary') ];
@@ -1071,9 +1086,14 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new forKeywordMethodInPackagedClass ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forKeywordMethodInPackagedClass.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	aScripter click
 		label: 'Click on the coder editor to give it focus';
 		id: GtSourceCoderEditorId.
@@ -1230,9 +1250,14 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new forUnaryInstanceMethod ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
@@ -1516,9 +1541,14 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 	<gtExample>
+	<after: #cleanUp>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ GtPharoMethodCoderExamples new forUnaryInstanceMethod ].
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
 	aScripter click
 		label: 'Click on the coder editor to give it focus';
 		id: GtSourceCoderEditorId.
