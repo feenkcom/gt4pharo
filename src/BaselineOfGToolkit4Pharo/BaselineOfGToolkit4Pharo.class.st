@@ -1,10 +1,10 @@
 Class {
-	#name : #BaselineOfGToolkit4Pharo,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfGToolkit4Pharo
+	#name : 'BaselineOfGToolkit4Pharo',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfGToolkit4Pharo'
 }
 
-{ #category : #baseline }
+{ #category : 'baseline' }
 BaselineOfGToolkit4Pharo >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
@@ -16,7 +16,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.388/src' ];
 			baseline: 'SmaCC' with: [
-				spec repository: 'github://j-brant/SmaCC:29b4a7634eb98a44f40ef17d00d24e16f7ace276/src' ].
+				spec repository: 'github://j-brant/SmaCC:17390470738ba30d3fd92d6a1d8d746f11a564a6/src' ].
 		spec 
 			package: 'GToolkit-Pharo-System';
 			package: 'GToolkit-Pharo-Metamodels' with: [
