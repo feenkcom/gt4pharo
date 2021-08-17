@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoMessageSendNode }
+Extension { #name : 'GtPharoMessageSendNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoMessageSendNode >> completionActionsFor: aStrategy [
 	| index |
 	index := aStrategy index.

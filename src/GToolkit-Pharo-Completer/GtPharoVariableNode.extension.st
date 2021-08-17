@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoVariableNode }
+Extension { #name : 'GtPharoVariableNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoVariableNode >> completionActionsFor: aStrategy [
 	| prefix variables allLocalVariables |
 	self name stopPosition = aStrategy index

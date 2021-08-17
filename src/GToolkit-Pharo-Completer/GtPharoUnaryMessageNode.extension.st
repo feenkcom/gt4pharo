@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoUnaryMessageNode }
+Extension { #name : 'GtPharoUnaryMessageNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoUnaryMessageNode >> completionActionsFor: strategy [
 	| startingText index |
 	index := strategy index.

@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoMethodPatternNode }
+Extension { #name : 'GtPharoMethodPatternNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoMethodPatternNode >> completionActionsFor: aStrategy [
 	| seen prefix actions |
 	(self selectorParts size = 1 and: [ self selectorParts first stopPosition = aStrategy index ])

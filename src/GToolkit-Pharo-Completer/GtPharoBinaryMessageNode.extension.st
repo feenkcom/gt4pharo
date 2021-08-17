@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoBinaryMessageNode }
+Extension { #name : 'GtPharoBinaryMessageNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoBinaryMessageNode >> completionActionsFor: strategy [
 	| startingText index |
 	index := strategy index.

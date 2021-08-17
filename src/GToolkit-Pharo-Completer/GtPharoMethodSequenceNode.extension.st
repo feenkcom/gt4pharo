@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoMethodSequenceNode }
+Extension { #name : 'GtPharoMethodSequenceNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoMethodSequenceNode >> completionActionsFor: aStrategy [
 	pragmas
 		do: [ :each | 
