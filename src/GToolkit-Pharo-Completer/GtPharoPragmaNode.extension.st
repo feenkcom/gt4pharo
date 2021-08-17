@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoPragmaNode }
+Extension { #name : 'GtPharoPragmaNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoPragmaNode >> completionActionsFor: aStrategy [
 	| prefix pragmas index |
 	index := aStrategy index.

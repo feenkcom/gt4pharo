@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoMethodNode }
+Extension { #name : 'GtPharoMethodNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoMethodNode >> completionActionsFor: aStrategy [
 	((self comments ifNil: [ #() ])
 		anySatisfy: [ :each | aStrategy index between: each first and: each last ])

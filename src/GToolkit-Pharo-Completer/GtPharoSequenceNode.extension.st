@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoSequenceNode }
+Extension { #name : 'GtPharoSequenceNode' }
 
-{ #category : #'*GToolkit-Pharo-Completer' }
+{ #category : '*GToolkit-Pharo-Completer' }
 GtPharoSequenceNode >> completionActionsFor: aStrategy [
 	| statementBefore periodIndex receiver |
 	(rightBar notNil and: [ rightBar startPosition >= aStrategy index ])
