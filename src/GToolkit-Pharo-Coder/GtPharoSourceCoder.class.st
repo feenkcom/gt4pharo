@@ -11,12 +11,12 @@ It is important to notice that I do not directly reference a text editor and I s
 
 "
 Class {
-	#name : #GtPharoSourceCoder,
-	#superclass : #GtSourceCoder,
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#name : 'GtPharoSourceCoder',
+	#superclass : 'GtSourceCoder',
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalContext [
 	| guineaPig suspendedContext debugSession |
 
@@ -35,12 +35,12 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 		withFullView: true
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 GtPharoSourceCoder class >> sourceEditorName [
 	^ #editor
 ]
 
-{ #category : #'private - refactorings' }
+{ #category : 'private - refactorings' }
 GtPharoSourceCoder >> addRefactoringChangesPreview: aRefactoring at: position [
 	self
 		addRefactoringChangesPreview: aRefactoring
@@ -48,7 +48,7 @@ GtPharoSourceCoder >> addRefactoringChangesPreview: aRefactoring at: position [
 		whenComplete: nil
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
 	Behavior (class, metaclass or trait) helps various add-ons and styler to provide users with better
@@ -58,14 +58,14 @@ GtPharoSourceCoder >> behavior [
 	^ UndefinedObject
 ]
 
-{ #category : #'api - actions examples' }
+{ #category : 'api - actions examples' }
 GtPharoSourceCoder >> canExecuteExample [
 	<return: #Boolean>
 
 	^ false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoSourceCoder >> classOrMetaClass [
 	self
 		deprecated: 'Use #behavior instead.'
@@ -74,7 +74,7 @@ GtPharoSourceCoder >> classOrMetaClass [
 	^ self behavior
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> detectBehaviorAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a Behavior at the given source text position and evaluate a found block
 	with the found Behavior as an argument if such Beahvior was found or none block otherwise. Return the result"
@@ -90,7 +90,7 @@ GtPharoSourceCoder >> detectBehaviorAt: aTextPosition ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> detectBehaviorIn: aSourceString ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a Behavior within the given source string and evaluate a found block
 	with the found Behavior as an argument if such Beahvior was found or none block otherwise. Return the result"
@@ -105,7 +105,7 @@ GtPharoSourceCoder >> detectBehaviorIn: aSourceString ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> detectReferencesFilterAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a name (symbol) in the source code at a given text position of the entity that plays a role
 	of the entity reference in the system and create a corresponding references filter.
@@ -121,7 +121,7 @@ GtPharoSourceCoder >> detectReferencesFilterAt: aTextPosition ifFound: aFoundBlo
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> detectReferencesFilterIn: aSourceString ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a name (symbol) in the given source string of the entity that plays a role
 	of the entity reference in the system and create a corresponding references filter.
@@ -139,7 +139,7 @@ GtPharoSourceCoder >> detectReferencesFilterIn: aSourceString ifFound: aFoundBlo
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> detectSelectorAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a message selector at the given source text position and evaluate a found block
 	with the found selector as an argument if such selector was found or none block otherwise. Return the result"
@@ -155,7 +155,7 @@ GtPharoSourceCoder >> detectSelectorAt: aTextPosition ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> detectSelectorIn: aSourceString ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a message selector in the given source string and evaluate a found block
 	with the found selector as an argument if such selector was found or none block otherwise. Return the result"
@@ -172,7 +172,7 @@ GtPharoSourceCoder >> detectSelectorIn: aSourceString ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 GtPharoSourceCoder >> evaluationContext [
 	<return: #GtSourceCoderEvaluationContext>
 
@@ -181,7 +181,7 @@ GtPharoSourceCoder >> evaluationContext [
 		coder: self
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> extractableNodesAt: anIndex [
 	"Return a collection of extractable nodes that intersect a given interval"
 	<return: #Collection of: #GtPharoProgramNode>
@@ -195,7 +195,7 @@ GtPharoSourceCoder >> extractableNodesAt: anIndex [
 		ifNone: [ #() ]
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 	"Return a collection of extractable nodes that intersect a given interval"
 	<return: #Collection of: #GtPharoProgramNode>
@@ -209,26 +209,26 @@ GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 		ifNone: [ #() ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoSourceCoder >> hasObjectAttribute [
 	<return: #Boolean>
 
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoSourceCoder >> isForMethod [
 	^ false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoSourceCoder >> newCompletionStrategy [
 	^ GtPharoCompletionStrategy new
 		classOrMetaClass: self behavior;
 		yourself
 ]
 
-{ #category : #'private - ast rb' }
+{ #category : 'private - ast rb' }
 GtPharoSourceCoder >> newRbAST: aString [
 	| ast |
 	ast := self parseExpression: aString requestor: nil.
@@ -236,7 +236,7 @@ GtPharoSourceCoder >> newRbAST: aString [
 	^ ast
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	<return: #Object>
 	[
@@ -258,7 +258,7 @@ GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBl
 	^ aNoneBlock value
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> nodeToReferencesFilter: aNode ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to create a references filter from a given AST node. If aNode is not suitable
 	for creating a filter, also check all parents of that node. Evaluate aFoundBlock if a references filter
@@ -295,7 +295,7 @@ GtPharoSourceCoder >> nodeToReferencesFilter: aNode ifFound: aFoundBlock ifNone:
 	^ aNoneBlock value
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to extract a message selector from a given AST node. If aNode is not suitable
 	for extracting a selector, also check all parents of that node. Evaluate aFoundBlock if a selector
@@ -319,7 +319,7 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	^ aNoneBlock value
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneBlock [
 	<return: #Object>
 
@@ -336,7 +336,7 @@ GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneB
 	^ aNoneBlock value
 ]
 
-{ #category : #'private - notifying' }
+{ #category : 'private - notifying' }
 GtPharoSourceCoder >> notifyParseError: aString at: anInteger [
 	self announce: (GtCoderParseError new
 		coder: self;
@@ -344,7 +344,7 @@ GtPharoSourceCoder >> notifyParseError: aString at: anInteger [
 		location: anInteger)
 ]
 
-{ #category : #'private - notifying' }
+{ #category : 'private - notifying' }
 GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination [
 	self announce: (GtCoderToolSpawnRequest new 
 		tool: aTool;
@@ -352,7 +352,7 @@ GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination 
 		coder: self)
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoSourceCoder >> object [
 	"Deprecated! Use GtPharoSourceCoderViewModel>>#selfObject: instead"
 	<return: #Object or: nil>
@@ -362,24 +362,24 @@ GtPharoSourceCoder >> object [
 	^ nil
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoSourceCoder >> object: anObject [
 	"Set an object in the context of which the source code should be modified (may influence self binding)"
 
 	self deprecated: 'Use GtPharoSourceCoderViewModel>>#selfObject: instead'.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoder >> package [
 	^ self attributeNamed: #package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoder >> packageTag [
 	^ self attributeNamed: #packageTag
 ]
 
-{ #category : #'private - ast rb' }
+{ #category : 'private - ast rb' }
 GtPharoSourceCoder >> parse: aString asExpression: isExpression requestor: aRequestor [
 	^ (self behavior ifNil: [ UndefinedObject ]) compiler
 		source: aString;
@@ -389,17 +389,17 @@ GtPharoSourceCoder >> parse: aString asExpression: isExpression requestor: aRequ
 		parse
 ]
 
-{ #category : #'private - ast rb' }
+{ #category : 'private - ast rb' }
 GtPharoSourceCoder >> parseExpression: aString requestor: aRequestor [
 	^ self parse: aString asExpression: true requestor: aRequestor
 ]
 
-{ #category : #'private - ast rb' }
+{ #category : 'private - ast rb' }
 GtPharoSourceCoder >> parseMethod: aString [
 	^ self parse: aString asExpression: false requestor: nil
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 GtPharoSourceCoder >> primitiveAnonymousCompile: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	<return: #CompiledMethod>
 	| isForMethod methodClass |
@@ -425,7 +425,7 @@ GtPharoSourceCoder >> primitiveAnonymousCompile: aSourceString inContext: aGtPha
 			compile ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	| aCompiledMethodToDebug |
 
@@ -440,7 +440,7 @@ GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCod
 		in: aGtPharoSourceCoderEvaluationContext runtimeContext
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	| aCompiledMethodToEvaluate |
 
@@ -456,12 +456,12 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 		executeMethod: aCompiledMethodToEvaluate
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoder >> protocol [
 	^ #accessing
 ]
 
-{ #category : #'private - ast rb' }
+{ #category : 'private - ast rb' }
 GtPharoSourceCoder >> rbAST [
 	| source |
 
@@ -474,33 +474,33 @@ GtPharoSourceCoder >> rbAST [
 		do: [ :ex | ex return: nil ]
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> referencesFilterForBoolean: aBooleanAsString [
 	"aBooleanAsString would be a string 'true', which should be evaluated to get a boolean"
 
 	^ self referencesFilterForLiteral: (Object evaluate: aBooleanAsString)
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> referencesFilterForCharacter: aCharacterAsString [
 	"aCharacterAsString would be a string '$a', which should be evaluated to get a character"
 
 	^ self referencesFilterForLiteral: (Object evaluate: aCharacterAsString)
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> referencesFilterForLiteral: anObject [
 	^ GtSearchReferencesFilter literal: anObject
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> referencesFilterForNumber: aNumberAsString [
 	"aNumberAsString would be a string '42', which should be evaluated to get a boolean"
 
 	^ self referencesFilterForLiteral: (Object evaluate: aNumberAsString)
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> referencesFilterForString: aString [
 	"we have to dispatch through the compiler and to evaluate: the string, otherwise it will not be searched for
 	because it is compared by identity and compiler does some string optimizations"
@@ -508,12 +508,12 @@ GtPharoSourceCoder >> referencesFilterForString: aString [
 	^ self referencesFilterForLiteral: (Object evaluate: aString)
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> referencesFilterForSymbol: aSymbol [
 	^ self referencesFilterForLiteral: aSymbol
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoSourceCoder >> source [
 	<return: #String>
 
@@ -524,7 +524,7 @@ GtPharoSourceCoder >> source [
 	^ self currentSourceString
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoSourceCoder >> validateSyntax [
 	<return: #Boolean>
 
@@ -536,7 +536,7 @@ GtPharoSourceCoder >> validateSyntax [
 	^ true
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> variableNodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to find a variable node ${class:GtPharoVariableNode}$ at a given text position and evaluate a found
 	block if such node exists and none block otherwise. Return the result"
@@ -555,7 +555,7 @@ GtPharoSourceCoder >> variableNodeAt: aTextPosition ifFound: aFoundBlock ifNone:
 	^ aNoneBlock value
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> variableNodeIn: aSourceString ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to extract a variable node ${class:GtPharoVariableNode}$ in a given string and evaluate a found block
 	if such node was found and a none block otherwise. Return the result."
@@ -575,7 +575,7 @@ GtPharoSourceCoder >> variableNodeIn: aSourceString ifFound: aFoundBlock ifNone:
 	^ aNoneBlock value
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> variableNodeToBehavior: aVariableNode ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Convert a given variable node to a behavior registered in the system and evaluate
 	a found block if such behavior exists, evaluate none block otherwise. Return the result"
@@ -594,7 +594,7 @@ GtPharoSourceCoder >> variableNodeToBehavior: aVariableNode ifFound: aFoundBlock
 	^ aFoundBlock value: aBehavior
 ]
 
-{ #category : #'private - ast' }
+{ #category : 'private - ast' }
 GtPharoSourceCoder >> variableNodeToReferencesFilter: aVariableNode ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Convert a given variable node to the references filter and evaluate
 	a found block if such filter can be created, evaluate none block otherwise. Return the result"

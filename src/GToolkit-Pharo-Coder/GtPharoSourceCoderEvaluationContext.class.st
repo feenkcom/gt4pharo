@@ -1,21 +1,21 @@
 Class {
-	#name : #GtPharoSourceCoderEvaluationContext,
-	#superclass : #GtSourceCoderEvaluationContext,
+	#name : 'GtPharoSourceCoderEvaluationContext',
+	#superclass : 'GtSourceCoderEvaluationContext',
 	#instVars : [
 		'notifications',
 		'bindingStrategy',
 		'receiverObject',
 		'runtimeContext'
 	],
-	#category : #'GToolkit-Pharo-Coder-Context'
+	#category : 'GToolkit-Pharo-Coder-Context'
 }
 
-{ #category : #binding }
+{ #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> bindingAt: aBindingName put: anObject [
 	self bindingStrategy bindings at: aBindingName put: anObject
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 	"aSymbol is a variable name.
 	Return a literal variable if the variable has a value assigned.
@@ -25,19 +25,19 @@ GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 	^ self bindingStrategy bindingOf: aSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> bindingStrategy [
 	<return: #GtBindingStrategy>
 
 	^ bindingStrategy
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> bindingStrategy: aGtBindingStrategy [
 	bindingStrategy := aGtBindingStrategy
 ]
 
-{ #category : #hack }
+{ #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> correctFrom: fromIndex to: toIndex with: aString [
 	NonInteractiveTranscript stdout
 		nextPut: $[;
@@ -62,21 +62,21 @@ GtPharoSourceCoderEvaluationContext >> correctFrom: fromIndex to: toIndex with: 
 	sourceInterval := sourceInterval first to: sourceInterval last + aString size - (toIndex - fromIndex + 1)
 ]
 
-{ #category : #hack }
+{ #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> editor [
 	"Hack to handle inserting local variables"
 
 	^ self
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> hasBindingOf: aSymbol [
 	<return: #Boolean>
 
 	^ self bindingStrategy hasBindingOf: aSymbol
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoSourceCoderEvaluationContext >> initialize [
 	super initialize.
 
@@ -84,7 +84,7 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 	notifications := OrderedCollection new
 ]
 
-{ #category : #hack }
+{ #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 	"Hack to work with pharo compiler"
 	| aCompleteTextIndex |
@@ -118,35 +118,35 @@ GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 		at: aCompleteTextIndex
 ]
 
-{ #category : #hack }
+{ #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> paragraph [
 	"Hack to handle inserting local variables"
 
 	^ self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> receiverObject [
 	"Return an object that should be bound to `self`"
 
 	^ receiverObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> receiverObject: anObject [
 	"Assign an object that should be bound to self"
 
 	receiverObject := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> runtimeContext [
 	<return: #Context>
 
 	^ runtimeContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> runtimeContext: aContext [
 	"Assign an optional pharo runtime Context.
 	May be useful when evaluating pharo code in a presence of a running system (live debugger, code snippets in dedbugger) "
@@ -154,21 +154,21 @@ GtPharoSourceCoderEvaluationContext >> runtimeContext: aContext [
 	runtimeContext := aContext
 ]
 
-{ #category : #hack }
+{ #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> text [
 	"Hack to work with pharo compiler"
 
 	^ sourceString
 ]
 
-{ #category : #hack }
+{ #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> textMorph [
 	"Hack to handle inserting local variables"
 
 	^ self
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> withSnippetBindingStrategy [
 	| theExistingBindings |
 

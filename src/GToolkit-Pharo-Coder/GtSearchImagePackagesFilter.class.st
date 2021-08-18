@@ -1,32 +1,32 @@
 Class {
-	#name : #GtSearchImagePackagesFilter,
-	#superclass : #GtSearchPackagesFilter,
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#name : 'GtSearchImagePackagesFilter',
+	#superclass : 'GtSearchPackagesFilter',
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchImagePackagesFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchImagePackagesFilter >> defaultFilterScope [
 	^ self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchImagePackagesFilter >> includesPackage: aPackage [
 	^ RPackage organizer includesPackage: aPackage 
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchImagePackagesFilter >> itemsDo: aBlock [
 	^ self packagesDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchImagePackagesFilter >> packagesDo: aBlock [
 	RPackageOrganizer default packages do: aBlock
 ]

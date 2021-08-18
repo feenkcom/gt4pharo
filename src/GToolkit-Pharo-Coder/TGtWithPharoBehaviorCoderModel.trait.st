@@ -11,14 +11,14 @@ GtWithDomainModelTraitGenerator new
 
 "
 Trait {
-	#name : #TGtWithPharoBehaviorCoderModel,
+	#name : 'TGtWithPharoBehaviorCoderModel',
 	#instVars : [
 		'pharoBehaviorCoderModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'api - pharo behavior coder model' }
+{ #category : 'api - pharo behavior coder model' }
 TGtWithPharoBehaviorCoderModel >> hasPharoBehaviorCoder [
 	"Return a true if pharoBehaviorCoder model is assigned to the receiver, false otherwise"
 	<return: #Boolean>
@@ -27,12 +27,12 @@ TGtWithPharoBehaviorCoderModel >> hasPharoBehaviorCoder [
 	^ pharoBehaviorCoderModel notNil
 ]
 
-{ #category : #'api - pharo behavior coder model' }
+{ #category : 'api - pharo behavior coder model' }
 TGtWithPharoBehaviorCoderModel >> onPharoBehaviorCoderModelChanged [
 	"Is sent when a new pharoBehaviorCoder model is assigned to the view model"
 ]
 
-{ #category : #'api - pharo behavior coder model' }
+{ #category : 'api - pharo behavior coder model' }
 TGtWithPharoBehaviorCoderModel >> pharoBehaviorCoderModel [
 	"Return a not-null pharoBehaviorCoder model assigned to the receiver view model"
 	<modelGetter>
@@ -43,7 +43,7 @@ TGtWithPharoBehaviorCoderModel >> pharoBehaviorCoderModel [
 	^ pharoBehaviorCoderModel
 ]
 
-{ #category : #'api - pharo behavior coder model' }
+{ #category : 'api - pharo behavior coder model' }
 TGtWithPharoBehaviorCoderModel >> pharoBehaviorCoderModel: aPharoBehaviorCoderModel [
 	"Set a not-null pharoBehaviorCoder domain model assigned to the receiver view model"
 	<modelSetter>
@@ -61,14 +61,14 @@ TGtWithPharoBehaviorCoderModel >> pharoBehaviorCoderModel: aPharoBehaviorCoderMo
 	self subscribeToPharoBehaviorCoderModel
 ]
 
-{ #category : #'api - pharo behavior coder model' }
+{ #category : 'api - pharo behavior coder model' }
 TGtWithPharoBehaviorCoderModel >> subscribeToPharoBehaviorCoderModel [
 	"Is sent after a new pharoBehaviorCoder model is assigned to the view model.
 	It is required to unsubscribe from the domain model by implementing
 	#unsubscribeFromPharoBehaviorCoderModel if view model subscribes to them"
 ]
 
-{ #category : #'api - pharo behavior coder model' }
+{ #category : 'api - pharo behavior coder model' }
 TGtWithPharoBehaviorCoderModel >> unsubscribeFromPharoBehaviorCoderModel [
 	"Is sent before a new pharoBehaviorCoder model is assigned to the view model.
 	View models that subscribe to pharoBehaviorCoder model are required to implement this methods"

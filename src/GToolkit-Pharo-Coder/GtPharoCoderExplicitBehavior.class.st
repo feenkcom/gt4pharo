@@ -1,14 +1,14 @@
 Class {
-	#name : #GtPharoCoderExplicitBehavior,
-	#superclass : #GtPharoCoderBehavior,
+	#name : 'GtPharoCoderExplicitBehavior',
+	#superclass : 'GtPharoCoderBehavior',
 	#instVars : [
 		'behavior',
 		'behaviorName'
 	],
-	#category : #'GToolkit-Pharo-Coder-Meta'
+	#category : 'GToolkit-Pharo-Coder-Meta'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtPharoCoderExplicitBehavior >> = anObject [
 	"Answer whether the receiver and anObject represent the same object."
 
@@ -19,49 +19,49 @@ GtPharoCoderExplicitBehavior >> = anObject [
 	^ behavior = anObject behavior
 ]
 
-{ #category : #transformation }
+{ #category : 'transformation' }
 GtPharoCoderExplicitBehavior >> affectByClassAdded: aClassAddedAnnouncement [
 	^ (self affectedByClassAdded: aClassAddedAnnouncement)
 		ifTrue: [ self class new behavior: aClassAddedAnnouncement classAdded ]
 		ifFalse: [ self ]
 ]
 
-{ #category : #transformation }
+{ #category : 'transformation' }
 GtPharoCoderExplicitBehavior >> affectByClassRemoved: aClassRemovedAnnouncement [
 	^ self behavior = aClassRemovedAnnouncement classRemoved
 		ifTrue: [ self class named: behaviorName ]
 		ifFalse: [ self ]
 ]
 
-{ #category : #transformation }
+{ #category : 'transformation' }
 GtPharoCoderExplicitBehavior >> affectByClassRenamed: aClassRenamedAnnouncement [
 	^ self behavior = aClassRenamedAnnouncement classRenamed
 		ifTrue: [ self class new behavior: aClassRenamedAnnouncement classRenamed ]
 		ifFalse: [ self ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoCoderExplicitBehavior >> affectedByClassAdded: aClassRemovedAnnouncement [
 	^ self behavior = aClassRemovedAnnouncement classAdded
 		or: [ self behaviorName = aClassRemovedAnnouncement classAdded name ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoCoderExplicitBehavior >> affectedByClassRemoved: aClassRemovedAnnouncement [
 	^ self behavior = aClassRemovedAnnouncement classRemoved
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoCoderExplicitBehavior >> affectedByClassRenamed: aClassRenamedAnnouncement [
 	^ self behavior = aClassRenamedAnnouncement classRenamed
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderExplicitBehavior >> behavior [
 	^ behavior
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderExplicitBehavior >> behavior: aBehavior [
 	self
 		assert: [ behavior isNil ]
@@ -71,12 +71,12 @@ GtPharoCoderExplicitBehavior >> behavior: aBehavior [
 	aBehavior ifNotNil: [ behaviorName := aBehavior name ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderExplicitBehavior >> behaviorName [
 	^ behaviorName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderExplicitBehavior >> behaviorNameDo: aBlock [
 	^ self exists
 		ifTrue: [ aBlock value: behavior name ]
@@ -86,7 +86,7 @@ GtPharoCoderExplicitBehavior >> behaviorNameDo: aBlock [
 				ifNil: [ nil ] ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoCoderExplicitBehavior >> exists [
 	"Return true if there is a real Behavior in the system corresponding to my definition"
 	<return: #Boolean>
@@ -94,14 +94,14 @@ GtPharoCoderExplicitBehavior >> exists [
 	^ self behavior notNil and: [ self behavior isObsolete not ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtPharoCoderExplicitBehavior >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ behavior hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderExplicitBehavior >> realBehaviorDo: aBlock [
 	^ self exists
 		ifTrue: [ aBlock value: self behavior ]

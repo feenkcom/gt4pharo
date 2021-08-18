@@ -7,20 +7,20 @@ I include {{gtClass:CompiledMethod}} instances that satisfy all {{gtMethod:GtSea
 
 "
 Class {
-	#name : #GtSearchMethodConditionsFilter,
-	#superclass : #GtSearchMethodsFilter,
+	#name : 'GtSearchMethodConditionsFilter',
+	#superclass : 'GtSearchMethodsFilter',
 	#instVars : [
 		'conditions'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #'api - instance creation' }
+{ #category : 'api - instance creation' }
 GtSearchMethodConditionsFilter class >> condition: aValuable [
 	^ self new condition: aValuable
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtSearchMethodConditionsFilter >> condition: aValuable [
 	"Valuable is an object (block) that understands #value:.
 	It must return a ${class:Boolean}$ on aValuble value: aMethod."
@@ -30,25 +30,25 @@ GtSearchMethodConditionsFilter >> condition: aValuable [
 	self conditions add: aValuable
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtSearchMethodConditionsFilter >> conditions [
 	<return: #Collection of: #BlockClosure>
 	^ conditions
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchMethodConditionsFilter >> includesMethod: aMethod [
 	^ self conditions allSatisfy: [ :eachValuable | 
 		eachValuable value: aMethod ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtSearchMethodConditionsFilter >> initialize [
 	super initialize.
 	conditions := OrderedCollection new: 1.
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtSearchMethodConditionsFilter >> referenceClassThat: aValuable [
 	"Valuable is an object (block) that understands #value:.
 	It must return a ${class:Boolean}$ on aValuble value: aClass."
@@ -64,7 +64,7 @@ GtSearchMethodConditionsFilter >> referenceClassThat: aValuable [
 							aValuable value: aNode binding value ] ] ] ] ])
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtSearchMethodConditionsFilter >> referenceSubclass: aClass [
 	"aClass is global class.
 	It returns true if a method references aClass or its subclass."

@@ -1,15 +1,15 @@
 Class {
-	#name : #GtSearchCommentsFilter,
-	#superclass : #GtSearchMethodsFilter,
+	#name : 'GtSearchCommentsFilter',
+	#superclass : 'GtSearchMethodsFilter',
 	#instVars : [
 		'text',
 		'wholeWord',
 		'caseSensitive'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchCommentsFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self text = anObject text
@@ -17,22 +17,22 @@ GtSearchCommentsFilter >> = anObject [
 						and: [ self caseSensitive = anObject caseSensitive ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchCommentsFilter >> caseSensitive [
 	^ caseSensitive
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchCommentsFilter >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchCommentsFilter >> hash [
 	^ self class hash bitXor: self text hash
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchCommentsFilter >> includesMethod: aCompiledMethod [
 	| methodAst |
 	(aCompiledMethod sourceCode
@@ -44,19 +44,19 @@ GtSearchCommentsFilter >> includesMethod: aCompiledMethod [
 	^ false
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtSearchCommentsFilter >> initialize [
 	super initialize.
 	wholeWord := true.
 	caseSensitive := true
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 GtSearchCommentsFilter >> isWordBoundaryCharacter: aCharacter [
 	^ aCharacter isNil or: [ aCharacter isAlphaNumeric not ]
 ]
 
-{ #category : #iterating }
+{ #category : 'iterating' }
 GtSearchCommentsFilter >> matchingIntervalsInAst: methodAst do: aBlock [
 	"Evaluate a given block with text intervals of the matched comment within the given SmaCC Pharo AST"
 	methodAst
@@ -72,14 +72,14 @@ GtSearchCommentsFilter >> matchingIntervalsInAst: methodAst do: aBlock [
 								aBlock value: (comment first + interval first - 1 to: comment first + interval last - 1) ] ] ] ]
 ]
 
-{ #category : #iterating }
+{ #category : 'iterating' }
 GtSearchCommentsFilter >> matchingIntervalsInMethod: aCompiledMethod do: aBlock [
 	| methodAst |
 	methodAst := aCompiledMethod ast.
 	self matchingIntervalsInRBAST: methodAst do: aBlock
 ]
 
-{ #category : #iterating }
+{ #category : 'iterating' }
 GtSearchCommentsFilter >> matchingIntervalsInRBAST: methodAst do: aBlock [
 	methodAst
 		nodesDo: [ :node | 
@@ -92,7 +92,7 @@ GtSearchCommentsFilter >> matchingIntervalsInRBAST: methodAst do: aBlock [
 								value: (comment start + interval first to: comment start + interval last) ] ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtSearchCommentsFilter >> matchingIntervalsInString: aString do: aBlock [
 	| sourceString searchString index |
 	self caseSensitive
@@ -114,22 +114,22 @@ GtSearchCommentsFilter >> matchingIntervalsInString: aString do: aBlock [
 			index := index + searchString size ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchCommentsFilter >> text [
 	^ text
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchCommentsFilter >> text: aString [
 	text := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchCommentsFilter >> wholeWord [
 	^ wholeWord
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchCommentsFilter >> wholeWord: aBoolean [
 	wholeWord := aBoolean
 ]

@@ -1,38 +1,38 @@
 Class {
-	#name : #GtSearchIFixedMethodsFilter,
-	#superclass : #GtSearchMethodsFilter,
+	#name : 'GtSearchIFixedMethodsFilter',
+	#superclass : 'GtSearchMethodsFilter',
 	#instVars : [
 		'methods'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchIFixedMethodsFilter >> defaultFilterScope [
 	^ self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchIFixedMethodsFilter >> includesMethod: aCompiledMethod [
 	^ self methods includes: aCompiledMethod
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchIFixedMethodsFilter >> itemsDo: aBlock [
 	^ self methodsDo: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchIFixedMethodsFilter >> methods [
 	^ methods ifNil: [ methods := OrderedCollection new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchIFixedMethodsFilter >> methods: anOrderedCollection [
 	methods := anOrderedCollection
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchIFixedMethodsFilter >> methodsDo: aBlock [
 	self methods do: aBlock.
 ]

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoClassesCoder,
-	#superclass : #GtCodersModel,
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#name : 'GtPharoClassesCoder',
+	#superclass : 'GtCodersModel',
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassesCoder >> coderForClass: aClass [
 	^ self coders
 		detect: [ :each | each theClass = aClass ]
@@ -15,21 +15,21 @@ GtPharoClassesCoder >> coderForClass: aClass [
 			coder ]
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 GtPharoClassesCoder >> forPackage: aPackage [
 	items := aPackage definedClasses
 		asSortedCollection: [ :a :b | a name < b name ].
 	self updateCoders
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 GtPharoClassesCoder >> forPackageTag: aPackageTag [
 	items := aPackageTag classes
 		asSortedCollection: [ :a :b | a name < b name ].
 	self updateCoders
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoClassesCoder >> newCoderFor: aClass [
 	| coder |
 	coder := GtPharoBehaviorCoder forClass: aClass.

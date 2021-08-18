@@ -1,25 +1,25 @@
 Class {
-	#name : #GtSearchPackagesFilter,
-	#superclass : #GtSearchTypedEntitiesFilter,
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#name : 'GtSearchPackagesFilter',
+	#superclass : 'GtSearchTypedEntitiesFilter',
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchPackagesFilter class >> resultType [
 	^ GtSearchPackageGroupResult 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchPackagesFilter >> defaultFilterScope [
 	^ GtSearchImagePackagesFilter new
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchPackagesFilter >> includesPackage: aPackage [
 	self subclassResponsibility
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchPackagesFilter >> matches: anObject [
 	^ anObject class = RPackage and: [ 
 		self includesPackage: anObject ]

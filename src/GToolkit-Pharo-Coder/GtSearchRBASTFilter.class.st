@@ -1,47 +1,47 @@
 Class {
-	#name : #GtSearchRBASTFilter,
-	#superclass : #GtSearchMethodsFilter,
+	#name : 'GtSearchRBASTFilter',
+	#superclass : 'GtSearchMethodsFilter',
 	#instVars : [
 		'ast',
 		'sentMessagesFilter'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtSearchRBASTFilter class >> ast: aRBProgramNode [
 	^ self new
 		ast: aRBProgramNode;
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtSearchRBASTFilter class >> sourceExpression: aString [
 	^ self new sourceExpression: aString
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtSearchRBASTFilter class >> sourceMethod: aString [
 	^ self new sourceMethod: aString
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchRBASTFilter >> = anObject [
 	^ self class = anObject class and: [ self ast = anObject ast ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBASTFilter >> ast [
 	^ ast
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBASTFilter >> ast: aRBProgramNode [
 	ast := aRBProgramNode.
 	self computeMessagesFilter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtSearchRBASTFilter >> computeMessagesFilter [
 	| messages filters |
 	messages := ast sentMessages.
@@ -51,22 +51,22 @@ GtSearchRBASTFilter >> computeMessagesFilter [
 	sentMessagesFilter := filters reduce: [ :a :b | a & b ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBASTFilter >> filterValueString [
 	^ self source
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtSearchRBASTFilter >> gtDisplayOn: stream [
 	self ast gtDisplayOn: stream
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchRBASTFilter >> hash [
 	^ self class hash bitXor: self ast hash
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchRBASTFilter >> includesMethod: aCompiledMethod [
 	| methodAst |
 	(sentMessagesFilter isNil or: [ sentMessagesFilter matches: aCompiledMethod ])
@@ -79,17 +79,17 @@ GtSearchRBASTFilter >> includesMethod: aCompiledMethod [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBASTFilter >> source [
 	^ ast source ifNil: [ ast formattedCode ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBASTFilter >> sourceExpression: aString [
 	self ast: (RBParser parseRewriteExpression: aString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBASTFilter >> sourceMethod: aString [
 	self ast: (RBParser parseRewriteMethod: aString)
 ]

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtMethodContextCoder,
-	#superclass : #GtPharoMethodContextCoder,
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#name : 'GtMethodContextCoder',
+	#superclass : 'GtPharoMethodContextCoder',
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtMethodContextCoder class >> isDeprecated [
 	^ true
 ]

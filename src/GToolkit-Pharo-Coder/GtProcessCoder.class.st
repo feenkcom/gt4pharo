@@ -1,33 +1,33 @@
 Class {
-	#name : #GtProcessCoder,
-	#superclass : #GtPharoMethodsCoder,
+	#name : 'GtProcessCoder',
+	#superclass : 'GtPharoMethodsCoder',
 	#instVars : [
 		'session'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtProcessCoder class >> forDebugSession: aDebugSession [
 	^ self new
 		forDebugSession: aDebugSession;
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtProcessCoder class >> forProcess: aProcess [
 	^ self new
 		forProcess: aProcess;
 		yourself
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtProcessCoder >> forDebugSession: aDebugSession [
 	session := aDebugSession.
 	self updateCoders
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtProcessCoder >> forProcess: aProcess [
 	self forDebugSession: (DebugSession 
 		named: 'Debug ' , aProcess name 
@@ -35,7 +35,7 @@ GtProcessCoder >> forProcess: aProcess [
 		startedAt: aProcess suspendedContext)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtProcessCoder >> isSuspended [
 	^ session process notNil and: [ 
 		session process isSuspended and: [ 
@@ -43,7 +43,7 @@ GtProcessCoder >> isSuspended [
 				session process isTerminated not ] ] ]
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 GtProcessCoder >> updateCoders [
 	| context firstContext coder newCoders |
 	self isSuspended

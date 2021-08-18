@@ -1,6 +1,6 @@
-Extension { #name : #Array }
+Extension { #name : 'Array' }
 
-{ #category : #'*GToolkit-Pharo-Coder' }
+{ #category : '*GToolkit-Pharo-Coder' }
 Array >> gtReferences [
 	^ GtSearchReferencesFilter literal: self
 ]

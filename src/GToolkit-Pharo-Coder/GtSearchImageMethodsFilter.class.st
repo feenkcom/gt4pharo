@@ -1,39 +1,39 @@
 Class {
-	#name : #GtSearchImageMethodsFilter,
-	#superclass : #GtSearchMethodsFilter,
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#name : 'GtSearchImageMethodsFilter',
+	#superclass : 'GtSearchMethodsFilter',
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchImageMethodsFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ true
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchImageMethodsFilter >> classesDo: aBlock [
 	GtPharoSystemTraverser default allClassesAndTraitsDo: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchImageMethodsFilter >> defaultFilterScope [
 	^ self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchImageMethodsFilter >> includesMethod: aCompiledMethod [
 	self methodsDo: [ :anotherMethod | 
 		anotherMethod = aCompiledMethod ifTrue: [ ^ true ] ].
 	^ false
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchImageMethodsFilter >> itemsDo: aBlock [
 	^ self methodsDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchImageMethodsFilter >> methodsDo: aBlock [
 	self classesDo: [ :aClass |
 		aClass instanceSide methods do: aBlock.

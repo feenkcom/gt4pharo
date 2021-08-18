@@ -1,21 +1,21 @@
 Class {
-	#name : #GtPharoBlockClosureCoder,
-	#superclass : #GtPharoSourceCoder,
+	#name : 'GtPharoBlockClosureCoder',
+	#superclass : 'GtPharoSourceCoder',
 	#instVars : [
 		'class',
 		'parameters',
 		'bindingStrategy'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtPharoBlockClosureCoder >> addParameter: aString ofType: aBehavior [
 	parameters at: aString put: aBehavior.
 	bindingStrategy bindings at: aString asSymbol put: nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBlockClosureCoder >> block [
 	self validateSyntax
 		ifFalse: [ ^ nil ].
@@ -27,12 +27,12 @@ GtPharoBlockClosureCoder >> block [
 		evaluate
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBlockClosureCoder >> blockSource [
 	^ self blockSourceFromText: self sourceText
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBlockClosureCoder >> blockSource: aString [
 	| ast startIndex endIndex |
 	ast := GtPharoParser parse: aString startingAt: GtPharoParser startingStateForStatement.
@@ -50,7 +50,7 @@ GtPharoBlockClosureCoder >> blockSource: aString [
 	self forSource: (aString copyFrom: startIndex to: endIndex)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBlockClosureCoder >> blockSourceFromText: aSourceTextOrString [
 	^ String
 		streamContents: [ :stream | 
@@ -68,7 +68,7 @@ GtPharoBlockClosureCoder >> blockSourceFromText: aSourceTextOrString [
 				nextPut: $] ]
 ]
 
-{ #category : #'api - ast' }
+{ #category : 'api - ast' }
 GtPharoBlockClosureCoder >> computeAst: theSourceString [
 	| anAst anOffset |
 	
@@ -94,7 +94,7 @@ GtPharoBlockClosureCoder >> computeAst: theSourceString [
 	^ anAst
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoBlockClosureCoder >> doItAndGoInContext: aGtSourceCoderEvaluationContext [
 	^ self
 		evaluate: [ :thisCoder | thisCoder blockSource ]
@@ -104,7 +104,7 @@ GtPharoBlockClosureCoder >> doItAndGoInContext: aGtSourceCoderEvaluationContext 
 			self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoBlockClosureCoder >> doItInContext: aGtSourceCoderEvaluationContext thenDo: aBlock [
 	^ self
 		evaluate: [ :thisCoder | thisCoder blockSource ]
@@ -112,17 +112,17 @@ GtPharoBlockClosureCoder >> doItInContext: aGtSourceCoderEvaluationContext thenD
 		thenDo: aBlock
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtPharoBlockClosureCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoBlockClosureCoder >> format [
 	self currentSourceString: self rbAST formattedCode
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBlockClosureCoder >> highlightBindingsStrategy [
 	^ self context 
 		ifNil:  [ GtHighlightingBindingStrategy new 
@@ -132,7 +132,7 @@ GtPharoBlockClosureCoder >> highlightBindingsStrategy [
 			context: self context ] 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtPharoBlockClosureCoder >> initialize [
 	parameters := OrderedDictionary new.
 	bindingStrategy := GtHighlightingBindingStrategy new.
@@ -141,14 +141,14 @@ GtPharoBlockClosureCoder >> initialize [
 	super initialize
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBlockClosureCoder >> newCompletionStrategy [
 	^ super newCompletionStrategy
 		blockVariables: parameters;
 		yourself
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 GtPharoBlockClosureCoder >> newRbAST: aString [
 	| ast |
 	ast := self

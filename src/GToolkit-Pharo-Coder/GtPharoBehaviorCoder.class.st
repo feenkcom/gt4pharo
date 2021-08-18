@@ -1,6 +1,6 @@
 Class {
-	#name : #GtPharoBehaviorCoder,
-	#superclass : #GtCoderModel,
+	#name : 'GtPharoBehaviorCoder',
+	#superclass : 'GtCoderModel',
 	#traits : 'TGtCoderTrait',
 	#classTraits : 'TGtCoderTrait classTrait',
 	#instVars : [
@@ -10,34 +10,34 @@ Class {
 		'definitionCoder',
 		'methodsCoder'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #constants }
+{ #category : 'constants' }
 GtPharoBehaviorCoder class >> addNewMethodButtonName [
 	^ #'button--add-new-method'
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 GtPharoBehaviorCoder class >> behaviorNameEditorName [
 	^ #'behavior-coder--behavior-name-editor'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoBehaviorCoder class >> forClass: aBehavior [
 	^ self new
 		forClass: aBehavior;
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoBehaviorCoder class >> forObject: anObject [
 	^ self new
 		forObject: anObject;
 		yourself
 ]
 
-{ #category : #'api - converting' }
+{ #category : 'api - converting' }
 GtPharoBehaviorCoder >> asNewCoderModelWithSameSubject [
 	"Return new coder model with same subject (e.g., package, class, method)"
 	<return: #GtCoderModel>
@@ -46,26 +46,26 @@ GtPharoBehaviorCoder >> asNewCoderModelWithSameSubject [
 		ifFalse: [ self class forClass: self behavior ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> behavior [
 	<return: #Behavior>
 
 	^ class
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> coderName [
 	^ self theClass name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> definitionCoder [
 	<return: #GtPharoBehaviorDefinitionCoder>
 
 	^ definitionCoder
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtPharoBehaviorCoder >> forClass: aClass [
 	hasObject := false.
 	self initializeClass: aClass.
@@ -73,7 +73,7 @@ GtPharoBehaviorCoder >> forClass: aClass [
 	self methodsCoder: (GtClassMethodsCoder forClass: aClass)
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtPharoBehaviorCoder >> forObject: anObject [
 	object := anObject.
 	hasObject := true.
@@ -82,7 +82,7 @@ GtPharoBehaviorCoder >> forObject: anObject [
 	self methodsCoder: (GtClassMethodsCoder forObject: object)
 ]
 
-{ #category : #'gt-extension' }
+{ #category : 'gt-extension' }
 GtPharoBehaviorCoder >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit 
@@ -95,26 +95,26 @@ GtPharoBehaviorCoder >> gtLiveFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self theClass ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoBehaviorCoder >> hasObject [
 	<return: #Boolean>
 
 	^ hasObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> icon [
 	^ BrGlamorousIcons classicon
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtPharoBehaviorCoder >> initialize [
 	super initialize.
 
 	hasObject := false
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtPharoBehaviorCoder >> initializeClass: aClass [
 	self
 		assert: [ class isNil ]
@@ -124,17 +124,17 @@ GtPharoBehaviorCoder >> initializeClass: aClass [
 	definitionCoder := GtPharoBehaviorDefinitionCoder forBehavior: class
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoBehaviorCoder >> isForClass [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> methodsCoder [
 	^ methodsCoder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> methodsCoder: aMethodsCoder [
 	methodsCoder ifNotNil: [ :aCoder | aCoder announcer unsubscribe: self ].
 	methodsCoder := aMethodsCoder.
@@ -144,34 +144,34 @@ GtPharoBehaviorCoder >> methodsCoder: aMethodsCoder [
 		to: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> name [
 	^ self theClass name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> object [
 	<return: #Object>
 
 	^ object
 ]
 
-{ #category : #'private - announcement handling' }
+{ #category : 'private - announcement handling' }
 GtPharoBehaviorCoder >> onMethodsCoderFiltersChanged: aGtCodersFiltersChanged [
 	self announcer announce: aGtCodersFiltersChanged.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> package [
 	^ self theClass package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> packageTag [
 	^ self package classTagForClass: self theClass
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtPharoBehaviorCoder >> printOn: aStream [
 	aStream
 		nextPutAll: 'Behavior Coder';
@@ -181,19 +181,19 @@ GtPharoBehaviorCoder >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 GtPharoBehaviorCoder >> removeClass [
 	self theClass removeFromSystem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoder >> theClass [
 	<return: #Class>
 
 	^ class
 ]
 
-{ #category : #'api - navigation' }
+{ #category : 'api - navigation' }
 GtPharoBehaviorCoder >> withMethodProtocol: aMethodProtocol source: aSource [
 
 	self announce: (GtClassCoderMethodProtocolNavigationAnnouncement new 
@@ -201,7 +201,7 @@ GtPharoBehaviorCoder >> withMethodProtocol: aMethodProtocol source: aSource [
 		methodProtocol: aMethodProtocol)
 ]
 
-{ #category : #'api - navigation' }
+{ #category : 'api - navigation' }
 GtPharoBehaviorCoder >> withSelectedMethod: aMethod [
 	self
 		assert: [ class instanceSide = aMethod methodClass instanceSide ]

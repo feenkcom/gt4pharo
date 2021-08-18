@@ -1,10 +1,10 @@
 Class {
-	#name : #GtSearchDeprecatedClassesFilter,
-	#superclass : #GtSearchClassesFilter,
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#name : 'GtSearchDeprecatedClassesFilter',
+	#superclass : 'GtSearchClassesFilter',
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchDeprecatedClassesFilter >> includesClass: aClass [
 	^ aClass isDeprecated
 ]
