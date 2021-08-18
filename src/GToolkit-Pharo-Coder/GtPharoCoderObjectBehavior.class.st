@@ -1,24 +1,24 @@
 Class {
-	#name : #GtPharoCoderObjectBehavior,
-	#superclass : #GtPharoCoderBehavior,
+	#name : 'GtPharoCoderObjectBehavior',
+	#superclass : 'GtPharoCoderBehavior',
 	#instVars : [
 		'object',
 		'customBehavior'
 	],
-	#category : #'GToolkit-Pharo-Coder-Meta'
+	#category : 'GToolkit-Pharo-Coder-Meta'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderObjectBehavior >> customBehavior [
 	^ customBehavior
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderObjectBehavior >> customBehavior: anObject [
 	customBehavior := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoCoderObjectBehavior >> exists [
 	"Return true if there is a real Behavior in the system corresponding to my definition"
 	<return: #Boolean>
@@ -32,17 +32,17 @@ GtPharoCoderObjectBehavior >> exists [
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoCoderObjectBehavior >> hasCustomBehavior [
 	^ customBehavior notNil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderObjectBehavior >> object [
 	^ object
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCoderObjectBehavior >> object: anObject [
 	self
 		assert: [ object isNil ]

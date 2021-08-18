@@ -1,36 +1,36 @@
 Class {
-	#name : #GtSearchRBPatternFilter,
-	#superclass : #GtSearchMethodsFilter,
+	#name : 'GtSearchRBPatternFilter',
+	#superclass : 'GtSearchMethodsFilter',
 	#instVars : [
 		'pattern'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBPatternFilter class >> pattern: aString [
 	^ self new
 		pattern: aString;
 		yourself
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchRBPatternFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self pattern = anObject pattern ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBPatternFilter >> filterValueString [
 	^ self pattern
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchRBPatternFilter >> hash [
 	^ self class hash bitXor: self pattern hash
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchRBPatternFilter >> includesMethod: aCompiledMethod [
 	(RBParseTreeSearcher
 		treeMatching: self pattern
@@ -38,12 +38,12 @@ GtSearchRBPatternFilter >> includesMethod: aCompiledMethod [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBPatternFilter >> pattern [
 	^ pattern
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchRBPatternFilter >> pattern: anObject [
 	pattern := anObject
 ]

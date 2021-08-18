@@ -1,10 +1,10 @@
 Class {
-	#name : #GtSearchClassGroupResult,
-	#superclass : #GtSearchTypedGroupResult,
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#name : 'GtSearchClassGroupResult',
+	#superclass : 'GtSearchTypedGroupResult',
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchClassGroupResult >> refreshClasses [
 	| classes |
 	filtered
@@ -20,7 +20,7 @@ GtSearchClassGroupResult >> refreshClasses [
 	filtered := true.
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchClassGroupResult >> refreshItems [
 	self refreshClasses
 ]

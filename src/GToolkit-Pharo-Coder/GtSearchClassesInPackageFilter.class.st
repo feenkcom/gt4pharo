@@ -1,51 +1,51 @@
 Class {
-	#name : #GtSearchClassesInPackageFilter,
-	#superclass : #GtSearchClassesFilter,
+	#name : 'GtSearchClassesInPackageFilter',
+	#superclass : 'GtSearchClassesFilter',
 	#instVars : [
 		'package'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtSearchClassesInPackageFilter class >> forPackageNamed: aPackageName [
 	^ self new
 		package: aPackageName asPackage
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchClassesInPackageFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ package = anObject package
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchClassesInPackageFilter >> classesDo: aBlock [
 	package definedClasses do: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchClassesInPackageFilter >> defaultFilterScope [
 	^ self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchClassesInPackageFilter >> includesClass: aClass [
 	^ aClass package = package
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchClassesInPackageFilter >> itemsDo: aBlock [
 	^ self classesDo: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchClassesInPackageFilter >> package [
 	^ package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtSearchClassesInPackageFilter >> package: aPackage [
 	package := aPackage
 ]

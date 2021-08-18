@@ -1,6 +1,6 @@
 Class {
 	#name : 'GtPharoCompleterExamples',
-	#superclass : 'GtCompleterExamples',
+	#superclass : 'GtCompleterControllerExamples',
 	#category : 'GToolkit-Pharo-Completer-Examples'
 }
 

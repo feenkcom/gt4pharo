@@ -1,14 +1,14 @@
 Class {
-	#name : #GtSearchMethodsInClassFilter,
-	#superclass : #GtSearchMethodsContainedInClassFilter,
+	#name : 'GtSearchMethodsInClassFilter',
+	#superclass : 'GtSearchMethodsContainedInClassFilter',
 	#instVars : [
 		'includeSubclasses',
 		'includeSuperclass'
 	],
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchMethodsInClassFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self filterClass = anObject filterClass
@@ -16,32 +16,32 @@ GtSearchMethodsInClassFilter >> = anObject [
 						and: [ self includeSuperclass = anObject includeSuperclass ] ] ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchMethodsInClassFilter >> hash [
 	^ self class hash bitXor: self filterClass hash
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchMethodsInClassFilter >> includeSubclasses [
 	^ includeSubclasses
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtSearchMethodsInClassFilter >> includeSubclasses: anObject [
 	includeSubclasses := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchMethodsInClassFilter >> includeSuperclass [
 	^ includeSuperclass
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtSearchMethodsInClassFilter >> includeSuperclass: anObject [
 	includeSuperclass := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
@@ -51,14 +51,14 @@ GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 		or: [ includeSuperclass and: [ class includesBehavior: methodClass ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtSearchMethodsInClassFilter >> initialize [
 	super initialize.
 	includeSubclasses := false.
 	includeSuperclass := false
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 GtSearchMethodsInClassFilter >> methodsDo: aBlock [
 	class methods do: aBlock.
 	includeSuperclass

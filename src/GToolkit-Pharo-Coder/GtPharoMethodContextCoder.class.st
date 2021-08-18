@@ -1,14 +1,14 @@
 Class {
-	#name : #GtPharoMethodContextCoder,
-	#superclass : #GtPharoMethodCoder,
+	#name : 'GtPharoMethodContextCoder',
+	#superclass : 'GtPharoMethodCoder',
 	#instVars : [
 		'context',
 		'session'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoMethodContextCoder class >> forContext: aContext session: aDebugSession [
 	^ (self forMethod: aContext blocDefiningMethod)
 		context: aContext;
@@ -16,12 +16,12 @@ GtPharoMethodContextCoder class >> forContext: aContext session: aDebugSession [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoMethodContextCoder >> actionsForPragmas: aSymbolsCollection [
 	^ self session class debuggingActionsForPragmas: aSymbolsCollection for: self
 ]
 
-{ #category : #'debugger access' }
+{ #category : 'debugger access' }
 GtPharoMethodContextCoder >> close [
 	self notifyDebugger.
 	
@@ -29,7 +29,7 @@ GtPharoMethodContextCoder >> close [
 	self updateSelection"
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	| withoutErrors compiledSuccesfully |
 	
@@ -51,7 +51,7 @@ GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationCont
 	^ withoutErrors and: [ compiledSuccesfully ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodContextCoder >> compiledMethod [
 	"The context coder should allways return the compiled method from the context 
 	as the method from the class can be changed. In that case the context will 
@@ -60,19 +60,19 @@ GtPharoMethodContextCoder >> compiledMethod [
 	^ self context method
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodContextCoder >> context [
 	<return: #Context>
 
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodContextCoder >> context: aContext [
 	context := aContext
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoMethodContextCoder >> contextActions [
 	<return: #Collection of: #GtCoderAction>
 
@@ -88,12 +88,12 @@ GtPharoMethodContextCoder >> contextActions [
 				action: [ aDebuggingAction execute ] ]
 ]
 
-{ #category : #'debugger access' }
+{ #category : 'debugger access' }
 GtPharoMethodContextCoder >> currentContext [
 	^ self context
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> debuggerVariableNodes [
 	| variablesList |
 
@@ -112,7 +112,7 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtPharoMethodContextCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 
@@ -120,7 +120,7 @@ GtPharoMethodContextCoder >> initializeAddOns: addOns [
 "	addOns addStyler: (GtCoderContextVariableValueStyler new methodCoder: self)"
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> instanceVariableNamesAndValuesDo: aBlock [
 	| receiver |
 	receiver := self receiver.
@@ -128,7 +128,7 @@ GtPharoMethodContextCoder >> instanceVariableNamesAndValuesDo: aBlock [
 		aBlock value: each value: (receiver instVarAt: i) ]
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> instanceVariableNodesDo: aBloc [
 	self receiver class allSlots collect: [ :aSlot | 
 		aBloc value: (GTInspectorSlotNode 
@@ -136,29 +136,29 @@ GtPharoMethodContextCoder >> instanceVariableNodesDo: aBloc [
 			slot: aSlot) ]
 ]
 
-{ #category : #'debugger access' }
+{ #category : 'debugger access' }
 GtPharoMethodContextCoder >> interruptedContext [
 	^ self session context
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMethodContextCoder >> isDead [
 	^ context isDead
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMethodContextCoder >> needsUpdate [
 	^ self isModified or: [ 
 		(self compiledMethod == self context method) not or: [ 
 			(self selector == self compiledMethod selector) not ]]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoMethodContextCoder >> notifyDebugger [
 	announcer announce: GtCoderRefreshStackAnnouncement new.
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtPharoMethodContextCoder >> printOn: aStream [
 	super printOn: aStream.
 	self context ifNotNil: [ 
@@ -167,19 +167,19 @@ GtPharoMethodContextCoder >> printOn: aStream [
 		aStream nextPut: $) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodContextCoder >> programCounterRange [
 	(self session process isNil or: [ context isDead ])
 		ifTrue: [ ^ nil ].
 	^ self session pcRangeForContext: context.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodContextCoder >> receiver [
 	^ self context receiver
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoMethodContextCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext [
 	(super saveInContext: aGtPharoSourceCoderEvaluationContext)
 		ifFalse: [ ^ false ].
@@ -193,22 +193,22 @@ GtPharoMethodContextCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext
 	^ true
 ]
 
-{ #category : #'debugger access' }
+{ #category : 'debugger access' }
 GtPharoMethodContextCoder >> session [
 	^ session
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodContextCoder >> session: anObject [
 	session := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoMethodContextCoder >> stackDebuggingActionsPragmas [
 	^ #(gt2ContextDebuggingAction)
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> stackVariableNamesAndValuesDo: aBlock [
 	| stackPosition |
 	self context stackPtr isNil
@@ -226,7 +226,7 @@ GtPharoMethodContextCoder >> stackVariableNamesAndValuesDo: aBlock [
 		stackPosition := stackPosition + 1 ]
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> stackVariableNodesDo: aBlock [
 	| stackPosition |
 	self context stackPtr isNil
@@ -243,12 +243,12 @@ GtPharoMethodContextCoder >> stackVariableNodesDo: aBlock [
 		stackPosition := stackPosition + 1 ]
 ]
 
-{ #category : #subscriptions }
+{ #category : 'subscriptions' }
 GtPharoMethodContextCoder >> subscribeToSystem [
 	"do nothing"
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> tempNamesAndValuesDo: aBlock [
 	self context tempNames doWithIndex: [ :each :i | 
 		| value |
@@ -258,7 +258,7 @@ GtPharoMethodContextCoder >> tempNamesAndValuesDo: aBlock [
 		aBlock value: each value: value ]
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> temporaryVariableNodesDo: aBloc [
 	self context tempNames withIndexCollect: [ :tempName :tempIndex |
 		aBloc value: (GTInspectorContextNamedTempNode 
@@ -267,20 +267,20 @@ GtPharoMethodContextCoder >> temporaryVariableNodesDo: aBloc [
 			tempIndex: tempIndex) ]
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 GtPharoMethodContextCoder >> updateSelection [
 	"Still here as it is called from the SmaCC debugger.
 	Remove after updating the SmaCC debugger."
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 GtPharoMethodContextCoder >> updateSourceFromContext [
 	self needsUpdate
 		ifFalse: [ ^ self ].
 	self forMethod: self context method
 ]
 
-{ #category : #'accessing variables' }
+{ #category : 'accessing variables' }
 GtPharoMethodContextCoder >> workspaceDoItNodesDo: aBloc [
 	self context gtDebuggerDoItBindings do: [:aBinding |
 		aBloc value: ((GTInspectorDynamicNode 

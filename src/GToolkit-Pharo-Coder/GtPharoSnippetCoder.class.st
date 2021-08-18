@@ -1,37 +1,37 @@
 Class {
-	#name : #GtPharoSnippetCoder,
-	#superclass : #GtPharoSourceCoder,
+	#name : 'GtPharoSnippetCoder',
+	#superclass : 'GtPharoSourceCoder',
 	#instVars : [
 		'xdocFilename'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoSnippetCoder class >> forSource: aString [
 	^ self new sourceCodeSynchronously: (GtCoderExplicitSourceCode new source: aString)
 ]
 
-{ #category : #'api - ast' }
+{ #category : 'api - ast' }
 GtPharoSnippetCoder >> computeAst: theSourceString [
 	^ GtPharoParser
 		parseWithErrors: theSourceString
 		startingAt: GtPharoParser startingStateForMethodSequence
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoSnippetCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoSnippetCoder >> initialize [	
 	super initialize.
 
 	self forSource: ''
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoSnippetCoder >> newCompletionStrategy [
 	| strategy |
 	strategy := super newCompletionStrategy
@@ -41,7 +41,7 @@ GtPharoSnippetCoder >> newCompletionStrategy [
 	^ strategy
 ]
 
-{ #category : #'private - ast rb' }
+{ #category : 'private - ast rb' }
 GtPharoSnippetCoder >> newRbAST: aString [
 	| ast |
 	ast := self
@@ -51,7 +51,7 @@ GtPharoSnippetCoder >> newRbAST: aString [
 	^ ast
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 GtPharoSnippetCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	self
 		xDocSaveSource: self currentSourceString
@@ -60,7 +60,7 @@ GtPharoSnippetCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoCoder
 	^ super primitiveEvaluate: aSourceString inContext: aGtPharoCoderEvaluationContext onFailDo: anEvaluationFailBlock
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoSnippetCoder >> profileWithMessageTallyInContext: aGtPharoCoderEvaluationContext [
 	^ self
 		evaluate: [ :thisCoder | thisCoder currentSourceString ]
@@ -69,7 +69,7 @@ GtPharoSnippetCoder >> profileWithMessageTallyInContext: aGtPharoCoderEvaluation
 		thenDo: [ :anEvaluationResult | self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
 ]
 
-{ #category : #xdoc }
+{ #category : 'xdoc' }
 GtPharoSnippetCoder >> xDocFilenameForReceiverObject: anObject [
 	"Answer the filename containing the receiver's source.
 	If no action has been performed, use the last saved code.
@@ -81,7 +81,7 @@ GtPharoSnippetCoder >> xDocFilenameForReceiverObject: anObject [
 			ifFalse: [ nil ] ]
 ]
 
-{ #category : #xdoc }
+{ #category : 'xdoc' }
 GtPharoSnippetCoder >> xDocLoadSavedContentForReceiverObject: anObject [
 	"The receiver's object has been changed under us, reload the default code (if not empty)"
 
@@ -90,7 +90,7 @@ GtPharoSnippetCoder >> xDocLoadSavedContentForReceiverObject: anObject [
 	self forSource: (self xDocSourceStringForReceiverObject: anObject)
 ]
 
-{ #category : #xdoc }
+{ #category : 'xdoc' }
 GtPharoSnippetCoder >> xDocSaveSource: aString receiverObject: anObject [
 	"Save the supplied source code"
 
@@ -110,7 +110,7 @@ GtPharoSnippetCoder >> xDocSaveSource: aString receiverObject: anObject [
 				write
 ]
 
-{ #category : #xdoc }
+{ #category : 'xdoc' }
 GtPharoSnippetCoder >> xDocSourceStringForReceiverObject: anObject [
 	"Answer the string to be initially displayed in the snippet"
 	| sourceFile xDoc |
@@ -127,14 +127,14 @@ GtPharoSnippetCoder >> xDocSourceStringForReceiverObject: anObject [
 	^ (xDoc memberNamed: 'playground.source') contents utf8Decoded
 ]
 
-{ #category : #xdoc }
+{ #category : 'xdoc' }
 GtPharoSnippetCoder >> xDocStoreForReceiverObject: anObject [
 	"Answer the XDoc store for the receiver."
 
 	^ XdKeyDocumentStore forKey: (self xDocStoreKeyForReceiverObject: anObject)
 ]
 
-{ #category : #xdoc }
+{ #category : 'xdoc' }
 GtPharoSnippetCoder >> xDocStoreKeyForReceiverObject: anObject [
 	"Answer the key to be used for storing documents"
 

@@ -1,20 +1,20 @@
 Class {
-	#name : #GtSearchDeprecatedMethodsFilter,
-	#superclass : #GtSearchMethodsFilter,
-	#category : #'GToolkit-Pharo-Coder-Filters'
+	#name : 'GtSearchDeprecatedMethodsFilter',
+	#superclass : 'GtSearchMethodsFilter',
+	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchDeprecatedMethodsFilter >> = anObject [
 	^ self class = anObject class
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 GtSearchDeprecatedMethodsFilter >> hash [
 	^ self class hash
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSearchDeprecatedMethodsFilter >> includesMethod: aMethod [
 	^ aMethod isDeprecated
 ]

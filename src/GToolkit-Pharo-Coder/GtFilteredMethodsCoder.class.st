@@ -1,32 +1,32 @@
 Class {
-	#name : #GtFilteredMethodsCoder,
-	#superclass : #GtPharoMethodsCoder,
+	#name : 'GtFilteredMethodsCoder',
+	#superclass : 'GtPharoMethodsCoder',
 	#instVars : [
 		'allCoders',
 		'originalFilter',
 		'additionalFilters'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #'private - adding / removing' }
+{ #category : 'private - adding / removing' }
 GtFilteredMethodsCoder >> addCoder: aCoder [
 	self allCoders add: aCoder.
 	super addCoder: aCoder
 ]
 
-{ #category : #'private - adding / removing' }
+{ #category : 'private - adding / removing' }
 GtFilteredMethodsCoder >> addFirstCoder: aCoder [
 	self allCoders addFirst: aCoder.
 	super addFirstCoder: aCoder
 ]
 
-{ #category : #filters }
+{ #category : 'filters' }
 GtFilteredMethodsCoder >> additionalFilters [
 	^ additionalFilters
 ]
 
-{ #category : #filters }
+{ #category : 'filters' }
 GtFilteredMethodsCoder >> additionalFilters: aCollection [
 	additionalFilters = aCollection
 		ifTrue: [ ^ self ].
@@ -34,7 +34,7 @@ GtFilteredMethodsCoder >> additionalFilters: aCollection [
 	self runFilters
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtFilteredMethodsCoder >> allCoders [
 	<return: #Collection of: #GtPharoMethodCoder>
 	"Return all non-filtered coders.
@@ -42,19 +42,19 @@ GtFilteredMethodsCoder >> allCoders [
 	^ allCoders
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtFilteredMethodsCoder >> allCoders: aCollection [
 	self unsubscribeFromAllCoders.
 	allCoders := aCollection.
 	self subscribeToAllCoders.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtFilteredMethodsCoder >> canFilter [
 	^ true
 ]
 
-{ #category : #completion }
+{ #category : 'completion' }
 GtFilteredMethodsCoder >> categories [
 	| categories |
 	categories := GtPrefixTree new.
@@ -62,7 +62,7 @@ GtFilteredMethodsCoder >> categories [
 	^ categories
 ]
 
-{ #category : #completion }
+{ #category : 'completion' }
 GtFilteredMethodsCoder >> classNames [
 	| classNames |
 	classNames := GtPrefixTree new.
@@ -71,7 +71,7 @@ GtFilteredMethodsCoder >> classNames [
 	^ classNames
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtFilteredMethodsCoder >> coderFor: aCompiledMethod [
 	<return: #GtPharoMethodCoder>
 	^ self allCoders 
@@ -84,7 +84,7 @@ GtFilteredMethodsCoder >> coderFor: aCompiledMethod [
 			aNewCoder ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtFilteredMethodsCoder >> combinedFilter [
 	| combinedFilters |
 	combinedFilters := additionalFilters
@@ -97,7 +97,7 @@ GtFilteredMethodsCoder >> combinedFilter [
 				ifNotNil: [ originalFilter & combinedFilters ] ]
 ]
 
-{ #category : #filters }
+{ #category : 'filters' }
 GtFilteredMethodsCoder >> filterDescriptors [
 	| descriptors |
 	descriptors := SortedCollection sortBlock: [ :a :b | a order < b order ].
@@ -109,12 +109,12 @@ GtFilteredMethodsCoder >> filterDescriptors [
 	^ descriptors
 ]
 
-{ #category : #filters }
+{ #category : 'filters' }
 GtFilteredMethodsCoder >> filterNames [
 	^ self filterDescriptors collect: [ :each | each name ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtFilteredMethodsCoder >> forItems: compiledMethods [
 	super forItems: compiledMethods.
 
@@ -126,14 +126,14 @@ GtFilteredMethodsCoder >> forItems: compiledMethods [
 	originalFilter := compiledMethods filter
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtFilteredMethodsCoder >> initialize [
 	super initialize.
 	additionalFilters := OrderedCollection new.
 	allCoders := #().
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtFilteredMethodsCoder >> methodRemoved: aValueRemoved [
 	| toRemove |
 	toRemove := self allCoders
@@ -143,17 +143,17 @@ GtFilteredMethodsCoder >> methodRemoved: aValueRemoved [
 			self removeCoder: each ]
 ]
 
-{ #category : #'private - announcement handling' }
+{ #category : 'private - announcement handling' }
 GtFilteredMethodsCoder >> onExampleExecuted: aGtCoderExampleExecuted [
 	self announce: aGtCoderExampleExecuted
 ]
 
-{ #category : #'private - announcement handling' }
+{ #category : 'private - announcement handling' }
 GtFilteredMethodsCoder >> onSourceCodeChanged: aGtCoderSourceCodeChanged [
 	self announce: aGtCoderSourceCodeChanged
 ]
 
-{ #category : #completion }
+{ #category : 'completion' }
 GtFilteredMethodsCoder >> packageNames [
 	| packageNames |
 	packageNames := GtPrefixTree new.
@@ -163,7 +163,7 @@ GtFilteredMethodsCoder >> packageNames [
 	^ packageNames
 ]
 
-{ #category : #completion }
+{ #category : 'completion' }
 GtFilteredMethodsCoder >> pragmaNames [
 	| pragmaNames |
 	pragmaNames := GtPrefixTree new.
@@ -173,19 +173,19 @@ GtFilteredMethodsCoder >> pragmaNames [
 	^ pragmaNames
 ]
 
-{ #category : #'private - adding / removing' }
+{ #category : 'private - adding / removing' }
 GtFilteredMethodsCoder >> removeCoder: aCoder [
 	self allCoders remove: aCoder ifAbsent: [ "ignore" ].
 	super removeCoder: aCoder
 ]
 
-{ #category : #filters }
+{ #category : 'filters' }
 GtFilteredMethodsCoder >> runFilters [
 	self updateMethods.
 	self updateCoders
 ]
 
-{ #category : #completion }
+{ #category : 'completion' }
 GtFilteredMethodsCoder >> selectorNames [
 	| selectorNames |
 	selectorNames := GtPrefixTree new.
@@ -193,7 +193,7 @@ GtFilteredMethodsCoder >> selectorNames [
 	^ selectorNames
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtFilteredMethodsCoder >> setFilters: aCollection source: aSource [
 	self additionalFilters: aCollection.
 	self
@@ -205,7 +205,7 @@ GtFilteredMethodsCoder >> setFilters: aCollection source: aSource [
 				yourself)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtFilteredMethodsCoder >> shouldSort: a before: b [
 	a selector isNil
 		ifTrue: [ ^ b selector notNil
@@ -217,13 +217,13 @@ GtFilteredMethodsCoder >> shouldSort: a before: b [
 	^ a behavior name < b behavior name
 ]
 
-{ #category : #'private - subscriptions' }
+{ #category : 'private - subscriptions' }
 GtFilteredMethodsCoder >> subscribeToAllCoders [
 	self allCoders do: [ :eachCoder | 
 		self subscribeToCoder: eachCoder ]
 ]
 
-{ #category : #'private - subscriptions' }
+{ #category : 'private - subscriptions' }
 GtFilteredMethodsCoder >> subscribeToCoder: eachCoder [
 	super subscribeToCoder: eachCoder.
 	eachCoder weak
@@ -236,13 +236,13 @@ GtFilteredMethodsCoder >> subscribeToCoder: eachCoder [
 		to: self
 ]
 
-{ #category : #'private - subscriptions' }
+{ #category : 'private - subscriptions' }
 GtFilteredMethodsCoder >> unsubscribeFromAllCoders [
 	self allCoders do: [ :eachCoder |
 		self unsubscribeFromCoder: eachCoder ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtFilteredMethodsCoder >> updateCoders [
 	| newCoders highlighter |
 	newCoders := coders select: [ :each | each isModified ].
@@ -263,7 +263,7 @@ GtFilteredMethodsCoder >> updateCoders [
 				yourself)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtFilteredMethodsCoder >> updateMethods [
 	(items isKindOf: GtSearchMethodGroupResult)
 		ifTrue: [ items updateForFilter: self combinedFilter ]

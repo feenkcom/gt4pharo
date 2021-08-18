@@ -1,6 +1,6 @@
-Extension { #name : #RBAddClassChange }
+Extension { #name : 'RBAddClassChange' }
 
-{ #category : #'*GToolkit-Pharo-Coder' }
+{ #category : '*GToolkit-Pharo-Coder' }
 RBAddClassChange >> gtDiff [
 	| aClass oldSource newSource |
 	
