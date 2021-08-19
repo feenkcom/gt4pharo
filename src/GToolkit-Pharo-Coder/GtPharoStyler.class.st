@@ -117,10 +117,13 @@ GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 { #category : 'visiting' }
 GtPharoStyler >> visitBlock: aBlock [
 	super visitBlock: aBlock.
-	self 
-		colorAndHighlightParenthesesLeft: aBlock leftBracket startPosition
-		right: aBlock rightBracket startPosition
-		atNestingLevel: aBlock nestingLevel.
+
+	aBlock leftBracket ifNotNil: [ :aLeftBracket | 
+		aBlock rightBracket ifNotNil: [ :aRightBracket | 
+			self
+				colorAndHighlightParenthesesLeft: aLeftBracket startPosition
+				right: aRightBracket startPosition
+				atNestingLevel: aBlock nestingLevel ] ]
 ]
 
 { #category : 'visiting' }
