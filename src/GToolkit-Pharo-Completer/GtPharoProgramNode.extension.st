@@ -21,14 +21,15 @@ GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInt
 
 { #category : '*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> completionActionsFor: aStrategy [
-	((self comments ifNil: [ #() ])
-		anySatisfy: [ :each | aStrategy index between: each first and: each last ])
-		ifTrue: [ ^ #() ].
-	self
-		nodesDo: [ :each | 
-			(aStrategy index between: each startPosition and: each stopPosition)
-				ifTrue: [ ^ each completionActionsFor: aStrategy ] ].
-	^ #()
+
+	((self comments ifNil: [ #(  ) ]) anySatisfy: [ :each | 
+		 aStrategy index between: each first and: each last ]) ifTrue: [ 
+		^ #(  ) ].
+	self nodesDo: [ :each | 
+		(each isErrorNode not and: [ 
+			 aStrategy index between: each startPosition and: each stopPosition ]) 
+			ifTrue: [ ^ each completionActionsFor: aStrategy ] ].
+	^ #(  )
 ]
 
 { #category : '*GToolkit-Pharo-Completer' }

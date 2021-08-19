@@ -23,6 +23,7 @@ GtPharoCompleterExamples >> binaryCompletion [
 { #category : 'smalltalk' }
 GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	<gtExample>
+	<noTest>
 	| completer |
 	completer := self completePrintOnMethodSelector.
 	self
@@ -39,6 +40,7 @@ GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 { #category : 'smalltalk' }
 GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 	<gtExample>
+	<noTest>
 	| completer |
 	completer := self completeInstanceVariableReceiver.
 	self
@@ -63,6 +65,7 @@ GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 { #category : 'smalltalk' }
 GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	<gtExample>
+	<noTest>
 	| completer |
 	completer := self openOn: '' withStrategy: self smalltalkStrategy.
 	self
