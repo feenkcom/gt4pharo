@@ -1,10 +1,10 @@
 Class {
-	#name : #BaselineOfGToolkit4Pharo,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfGToolkit4Pharo
+	#name : 'BaselineOfGToolkit4Pharo',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfGToolkit4Pharo'
 }
 
-{ #category : #baseline }
+{ #category : 'baseline' }
 BaselineOfGToolkit4Pharo >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
@@ -29,6 +29,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #('GToolkitCoder' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Completer' ). ];
 			package: 'GToolkit-Pharo-Coder-UI' with: [
 				spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Metamodels' ). ];
+			package: 'GToolkit-Pharo-Coder-Bubbles' with: [
+				spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-UI' ). ];
 			package: 'GToolkit-Pharo-Coder-AddOns' with: [
 				spec requires: #('GToolkit-Pharo-Coder-UI' ). ];
 			package: 'GToolkit-Pharo-Coder-Examples' with: [
