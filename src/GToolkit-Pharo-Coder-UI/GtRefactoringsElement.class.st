@@ -1,16 +1,16 @@
 Class {
-	#name : #GtRefactoringsElement,
-	#superclass : #BlElement,
+	#name : 'GtRefactoringsElement',
+	#superclass : 'BlElement',
 	#traits : 'TBrLayoutResizable',
 	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
 		'activatableRefactorings',
 		'refactoringsList'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRefactoringsElement >> activatableRefactoring: aRefactoring [
 	^ aRefactoring options
 		at: #activatableRefactoring
@@ -23,13 +23,13 @@ GtRefactoringsElement >> activatableRefactoring: aRefactoring [
 			activatableRefactoring ]
 ]
 
-{ #category : #'api - refactorings' }
+{ #category : 'api - refactorings' }
 GtRefactoringsElement >> applyRefactorings [
 	activatableRefactorings
 		do: [ :eachRefactoring | eachRefactoring execute ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtRefactoringsElement >> initialize [
 	super initialize.
 	
@@ -51,7 +51,7 @@ GtRefactoringsElement >> initialize [
 	self addChild: refactoringsList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
 	activatableRefactorings := (aCollectionOfRBRefactorings
 		collect: [ :eachRefactoring | self activatableRefactoring: eachRefactoring ])

@@ -1,18 +1,18 @@
 Class {
-	#name : #GtPharoTagNavigationViewModelDeselected,
-	#superclass : #Announcement,
+	#name : 'GtPharoTagNavigationViewModelDeselected',
+	#superclass : 'Announcement',
 	#instVars : [
 		'tagViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Events'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Events'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoTagNavigationViewModelDeselected >> tagViewModel [
 	^ tagViewModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoTagNavigationViewModelDeselected >> tagViewModel: anObject [
 	tagViewModel := anObject
 ]

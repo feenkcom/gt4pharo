@@ -715,25 +715,24 @@ GtPharoMethodCoder >> isNewMethod [
 
 { #category : 'testing' }
 GtPharoMethodCoder >> isOverridden [
+
 	| sel |
 	sel := self currentSelector.
-	sel isNil
-		ifTrue: [ ^ false ].
-	self classOrMetaClass
-		allSubclassesDo: [ :cls | 
-			(cls includesSelector: sel)
-				ifTrue: [ ^ true ] ].
+	sel isNil ifTrue: [ ^ false ].
+	self behavior allSubclassesDo: [ :cls | 
+		(cls includesSelector: sel) ifTrue: [ ^ true ] ].
 	^ false
 ]
 
 { #category : 'testing' }
 GtPharoMethodCoder >> isOverriding [
+
 	| sel |
 	sel := self currentSelector.
-	^ sel notNil
-		and: [ self classOrMetaClass superclass
-				ifNil: [ false ]
-				ifNotNil: [ :spr | (spr whichClassIncludesSelector: sel) notNil ] ]
+	^ sel notNil and: [ 
+		  self behavior superclass
+			  ifNil: [ false ]
+			  ifNotNil: [ :spr | (spr whichClassIncludesSelector: sel) notNil ] ]
 ]
 
 { #category : 'api - accessing' }

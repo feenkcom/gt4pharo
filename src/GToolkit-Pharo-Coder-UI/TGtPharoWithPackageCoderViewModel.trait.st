@@ -24,14 +24,14 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Trait {
-	#name : #TGtPharoWithPackageCoderViewModel,
+	#name : 'TGtPharoWithPackageCoderViewModel',
 	#instVars : [
 		'packageCoderViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-View Models'
+	#category : 'GToolkit-Pharo-Coder-UI-View Models'
 }
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> hasPackageCoderViewModel [
 	"Return a true if packageCoder view model is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
@@ -39,7 +39,7 @@ TGtPharoWithPackageCoderViewModel >> hasPackageCoderViewModel [
 	^ packageCoderViewModel notNil
 ]
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> onPackageCoderViewModelChanged [
 	"Is sent when a new packageCoder view model is assigned to the element.
 	Note: #onPackageCoderViewModelChanged is sent before #subscribeToPackageCoderViewModel
@@ -50,14 +50,14 @@ TGtPharoWithPackageCoderViewModel >> onPackageCoderViewModelChanged [
 	self explicitRequirement
 ]
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> onPostPackageCoderViewModelChanged [
 	"I am an optional hook method that is sent after #subscribeToPackageCoderViewModel.
 	I do nothing by default but allow users to perform update operations when a receiver object is already
 	subscribed to announcements."
 ]
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> packageCoderViewModel [
 	"Return a not-null packageCoder view model assigned to the receiver element"
 	self
@@ -67,7 +67,7 @@ TGtPharoWithPackageCoderViewModel >> packageCoderViewModel [
 	^ packageCoderViewModel
 ]
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> packageCoderViewModel: aPackageCoderViewModel [
 	"Set a not-null packageCoder view model assigned to the receiver element"
 	<viewModelSetter>
@@ -86,14 +86,14 @@ TGtPharoWithPackageCoderViewModel >> packageCoderViewModel: aPackageCoderViewMod
 	self onPostPackageCoderViewModelChanged
 ]
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> subscribeToPackageCoderViewModel [
 	"Is sent after a new packageCoder view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromPackageCoderViewModel if elements subscribe to them"
 ]
 
-{ #category : #'api - package coder view model' }
+{ #category : 'api - package coder view model' }
 TGtPharoWithPackageCoderViewModel >> unsubscribeFromPackageCoderViewModel [
 	"Is sent before a new packageCoder view model is assigned to the element.
 	Elements that subscribe to packageCoder view model in domain model are required to implement this methods."

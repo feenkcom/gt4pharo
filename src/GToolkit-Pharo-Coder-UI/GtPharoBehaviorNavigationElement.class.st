@@ -1,22 +1,22 @@
 Class {
-	#name : #GtPharoBehaviorNavigationElement,
-	#superclass : #BrHorizontalPane,
+	#name : 'GtPharoBehaviorNavigationElement',
+	#superclass : 'BrHorizontalPane',
 	#traits : 'TGtWithPharoBehaviorNavigationViewModel',
 	#classTraits : 'TGtWithPharoBehaviorNavigationViewModel classTrait',
 	#instVars : [
 		'classNameLabel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoBehaviorNavigationElement >> createNameLabel [
 	^ BrLabel new
 		aptitude: BrGlamorousLabelAptitude;
 		beSmallSize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoBehaviorNavigationElement >> initialize [
 	super initialize.
 
@@ -35,7 +35,7 @@ GtPharoBehaviorNavigationElement >> initialize [
 			anEvent currentTarget pharoBehaviorNavigationViewModel selectBehaviorWithoutOtherEntities ]
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 GtPharoBehaviorNavigationElement >> onPharoBehaviorNavigationViewModelChanged [
 	"Is sent when a new pharoBehaviorNavigation view model is assigned to the element.
 	Note: #onPharoBehaviorNavigationViewModelChanged is sent before #subscribeToPharoBehaviorNavigationViewModel
@@ -48,7 +48,7 @@ GtPharoBehaviorNavigationElement >> onPharoBehaviorNavigationViewModelChanged [
 	self updateClassSelection
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 GtPharoBehaviorNavigationElement >> subscribeToPharoBehaviorNavigationViewModel [
 	"Is sent after a new pharoBehaviorNavigation view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
@@ -60,7 +60,7 @@ GtPharoBehaviorNavigationElement >> subscribeToPharoBehaviorNavigationViewModel 
 			to: self
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 GtPharoBehaviorNavigationElement >> unsubscribeFromPharoBehaviorNavigationViewModel [
 	"Is sent before a new pharoBehaviorNavigation view model is assigned to the element.
 	Elements that subscribe to pharoBehaviorNavigation view model in domain model are required to implement this methods."
@@ -68,7 +68,7 @@ GtPharoBehaviorNavigationElement >> unsubscribeFromPharoBehaviorNavigationViewMo
 	self pharoBehaviorNavigationViewModel unsubscribe: self
 ]
 
-{ #category : #'private - update' }
+{ #category : 'private - update' }
 GtPharoBehaviorNavigationElement >> updateClassSelection [
 	"A behavior is rendered visually selected when a behavior is selected and none of its child entities is selected"
 	

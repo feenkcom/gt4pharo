@@ -1,22 +1,22 @@
 Class {
-	#name : #GtPharoPackageNavigationElement,
-	#superclass : #BrHorizontalPane,
+	#name : 'GtPharoPackageNavigationElement',
+	#superclass : 'BrHorizontalPane',
 	#traits : 'TGtWithPharoPackageNavigationViewModel',
 	#classTraits : 'TGtWithPharoPackageNavigationViewModel classTrait',
 	#instVars : [
 		'packageNameLabel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoPackageNavigationElement >> createPackageNameLabel [
 	^ BrLabel new
 		aptitude: BrGlamorousLabelAptitude;
 		beSmallSize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoPackageNavigationElement >> initialize [
 	super initialize.
 	
@@ -35,7 +35,7 @@ GtPharoPackageNavigationElement >> initialize [
 			anEvent currentTarget pharoPackageNavigationViewModel selectPackageWithoutOtherEntities ]
 ]
 
-{ #category : #'api - pharo package navigation view model' }
+{ #category : 'api - pharo package navigation view model' }
 GtPharoPackageNavigationElement >> onPharoPackageNavigationViewModelChanged [
 	"Is sent when a new pharoPackageNavigation view model is assigned to the element.
 	Note: #onPharoPackageNavigationViewModelChanged is sent before #subscribeToPharoPackageNavigationViewModel
@@ -48,7 +48,7 @@ GtPharoPackageNavigationElement >> onPharoPackageNavigationViewModelChanged [
 	self updatePackageSelection
 ]
 
-{ #category : #'api - pharo package navigation view model' }
+{ #category : 'api - pharo package navigation view model' }
 GtPharoPackageNavigationElement >> subscribeToPharoPackageNavigationViewModel [
 	"Is sent after a new pharoPackageNavigation view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
@@ -65,7 +65,7 @@ GtPharoPackageNavigationElement >> subscribeToPharoPackageNavigationViewModel [
 			to: self
 ]
 
-{ #category : #'api - pharo package navigation view model' }
+{ #category : 'api - pharo package navigation view model' }
 GtPharoPackageNavigationElement >> unsubscribeFromPharoPackageNavigationViewModel [
 	"Is sent before a new pharoPackageNavigation view model is assigned to the element.
 	Elements that subscribe to pharoPackageNavigation view model in domain model are required to implement this methods."
@@ -74,7 +74,7 @@ GtPharoPackageNavigationElement >> unsubscribeFromPharoPackageNavigationViewMode
 	self pharoPackageNavigationViewModel pharoTagsNavigationViewModel unsubscribe: self
 ]
 
-{ #category : #'private - update' }
+{ #category : 'private - update' }
 GtPharoPackageNavigationElement >> updatePackageSelection [
 	"A package is rendered visually selected when a package is selected and none of its tags is selected"
 	

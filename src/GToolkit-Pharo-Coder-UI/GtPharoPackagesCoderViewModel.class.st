@@ -5,33 +5,33 @@ A view model built for a domain model that represents a collection of some entit
 
 "
 Class {
-	#name : #GtPharoPackagesCoderViewModel,
-	#superclass : #Object,
+	#name : 'GtPharoPackagesCoderViewModel',
+	#superclass : 'Object',
 	#traits : 'TGtWithPharoPackagesCoderModel',
 	#classTraits : 'TGtWithPharoPackagesCoderModel classTrait',
 	#instVars : [
 		'announcer',
 		'pharoPackageCoderViewModels'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-View Models'
+	#category : 'GToolkit-Pharo-Coder-UI-View Models'
 }
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackagesCoderViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 GtPharoPackagesCoderViewModel >> asElement [
 	^ GtPackagesCoderElement new codersUIModel: self
 ]
 
-{ #category : #deprecated }
+{ #category : 'deprecated' }
 GtPharoPackagesCoderViewModel >> coder [
 	^ self pharoPackagesCoderModel
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoPackagesCoderViewModel >> createPharoPackageCoderViewModels [
 	"For each child from the domain modal create a view model and return a resulting collection"
 	<return: #Collection of: #GtPharoPackageCoderViewModel>
@@ -43,7 +43,7 @@ GtPharoPackagesCoderViewModel >> createPharoPackageCoderViewModels [
 		eachViewModel pharoPackageTagCoderModel: eachModel ] as: Array
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackagesCoderViewModel >> isPharoPackageCoderViewModel [
 	"Return true if this is a view model of Package, false otherwise"
 	<return: #Boolean>
@@ -51,7 +51,7 @@ GtPharoPackagesCoderViewModel >> isPharoPackageCoderViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackagesCoderViewModel >> isPharoPackageTagCoderViewModel [
 	"Return true if this is a view model of PackageTag, false otherwise"
 	<return: #Boolean>
@@ -59,7 +59,7 @@ GtPharoPackagesCoderViewModel >> isPharoPackageTagCoderViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackagesCoderViewModel >> isPharoPackageTagsCoderViewModel [
 	"Return true if this is a view model of PackageTags, false otherwise"
 	<return: #Boolean>
@@ -67,7 +67,7 @@ GtPharoPackagesCoderViewModel >> isPharoPackageTagsCoderViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackagesCoderViewModel >> isPharoPackagesCoderViewModel [
 	"Return true if this is a view model of Packages, false otherwise"
 	<return: #Boolean>
@@ -75,7 +75,7 @@ GtPharoPackagesCoderViewModel >> isPharoPackagesCoderViewModel [
 	^ true
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackagesCoderViewModel >> pharoPackageCoderViewModels [
 	"Return a collection of view models (${class:GtPharoPackageCoderViewModel}$) created for each child from the domain model.
 	Note: The view models are lazily instantiated."
@@ -84,20 +84,20 @@ GtPharoPackagesCoderViewModel >> pharoPackageCoderViewModels [
 	^  pharoPackageCoderViewModels ifNil: [ pharoPackageCoderViewModels := self createPharoPackageCoderViewModels ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtPharoPackagesCoderViewModel >> printOn: aStream [
 	aStream
 		print: self pharoPackagesCoderModel
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackagesCoderViewModel >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
 
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackagesCoderViewModel >> viewModelName [
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used
@@ -107,13 +107,13 @@ GtPharoPackagesCoderViewModel >> viewModelName [
 	^ #packages
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackagesCoderViewModel >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
 		when: anAnnouncementClass do: aBlock
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackagesCoderViewModel >> when: anAnnouncementClass send: aSelector to: anObject [
 	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject

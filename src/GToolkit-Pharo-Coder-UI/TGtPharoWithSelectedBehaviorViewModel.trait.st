@@ -27,14 +27,14 @@ GtWithPropertyTraitGenerator new
 
 "
 Trait {
-	#name : #TGtPharoWithSelectedBehaviorViewModel,
+	#name : 'TGtPharoWithSelectedBehaviorViewModel',
 	#instVars : [
 		'selectedBehaviorViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> deselectBehaviorViewModel [
 	<propertyUnsetter: #selectedBehaviorViewModel>
 	| aPreviousSelectedBehaviorViewModel |
@@ -48,7 +48,7 @@ TGtPharoWithSelectedBehaviorViewModel >> deselectBehaviorViewModel [
 	self notifySelectedBehaviorViewModelChanged
 ]
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> hasSelectedBehaviorViewModel [
 	<return: #Boolean>
 	<propertyTester: #selectedBehaviorViewModel>
@@ -56,25 +56,25 @@ TGtPharoWithSelectedBehaviorViewModel >> hasSelectedBehaviorViewModel [
 	^ selectedBehaviorViewModel notNil
 ]
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> notifySelectedBehaviorViewModelChanged [
 	"Override this notify method to announce changes to the property"
 	<propertyChangeNotifier: #selectedBehaviorViewModel>
 ]
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> onNewSelectedBehaviorViewModelSet: aNewSelectedBehaviorViewModel [
 	"Is sent after a new value of the selectedBehaviorViewModel is assigned"
 	<propertySetHook: #selectedBehaviorViewModel>
 ]
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> onPreviousSelectedBehaviorViewModelUnset: aPreviousSelectedBehaviorViewModel [
 	"Is sent after a previous value of the selectedBehaviorViewModel is de-assigned"
 	<propertyUnsetHook: #selectedBehaviorViewModel>
 ]
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> selectBehaviorViewModel: aNewSelectedBehaviorViewModel [
 	<propertySetter: #selectedBehaviorViewModel>
 
@@ -92,7 +92,7 @@ TGtPharoWithSelectedBehaviorViewModel >> selectBehaviorViewModel: aNewSelectedBe
 	self notifySelectedBehaviorViewModelChanged
 ]
 
-{ #category : #'api - selected behavior view model' }
+{ #category : 'api - selected behavior view model' }
 TGtPharoWithSelectedBehaviorViewModel >> selectedBehaviorViewModel [
 	<return: #GtPharoBehaviorNavigationViewModel>
 	<propertyGetter: #selectedBehaviorViewModel>

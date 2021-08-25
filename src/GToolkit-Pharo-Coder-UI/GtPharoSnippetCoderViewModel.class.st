@@ -1,33 +1,33 @@
 Class {
-	#name : #GtPharoSnippetCoderViewModel,
-	#superclass : #GtPharoSourceCoderViewModel,
+	#name : 'GtPharoSnippetCoderViewModel',
+	#superclass : 'GtPharoSourceCoderViewModel',
 	#instVars : [
 		'context'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSnippetCoderViewModel >> allowSaveDueTo: anObject [
 	"do nothing"
 ]
 
-{ #category : #'api - coder model' }
+{ #category : 'api - coder model' }
 GtPharoSnippetCoderViewModel >> behavior [
 	^ self selfObject class
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSnippetCoderViewModel >> context [
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSnippetCoderViewModel >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoSnippetCoderViewModel >> defaultBindingStrategy [
 	| defaultBindings |
 	
@@ -37,13 +37,13 @@ GtPharoSnippetCoderViewModel >> defaultBindingStrategy [
 	^ GtSnippetBindingStrategy new bindings: defaultBindings
 ]
 
-{ #category : #'private - evaluation' }
+{ #category : 'private - evaluation' }
 GtPharoSnippetCoderViewModel >> evaluationContext [
 	^ super evaluationContext
 		runtimeContext: self context
 ]
 
-{ #category : #'api - coder model' }
+{ #category : 'api - coder model' }
 GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	"Return true if a variable with a given name is declared"
 	<return: #Boolean>
@@ -59,7 +59,7 @@ GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
-{ #category : #'api - coder model' }
+{ #category : 'api - coder model' }
 GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
 
@@ -72,24 +72,24 @@ GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 		put: self coderModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSnippetCoderViewModel >> preventSaveDueTo: anObject [
 	"do nothing"
 ]
 
-{ #category : #'api - actions' }
+{ #category : 'api - actions' }
 GtPharoSnippetCoderViewModel >> profileWithMessageTally [
 	<return: #Boolean>
 
 	^ self coderModel profileWithMessageTallyInContext: self evaluationContext
 ]
 
-{ #category : #'api - bindings' }
+{ #category : 'api - bindings' }
 GtPharoSnippetCoderViewModel >> sharedBindings [
 	^ self bindingStrategy bindings sharedBindings
 ]
 
-{ #category : #'api - bindings' }
+{ #category : 'api - bindings' }
 GtPharoSnippetCoderViewModel >> sharedBindings: aGtSnippetBindings [
 	self bindingStrategy bindings sharedBindings: aGtSnippetBindings
 ]

@@ -1,18 +1,18 @@
 Class {
-	#name : #GtUserActivatableChangeElement,
-	#superclass : #BrHorizontalPane,
+	#name : 'GtUserActivatableChangeElement',
+	#superclass : 'BrHorizontalPane',
 	#instVars : [
 		'activatableChange'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtUserActivatableChangeElement class >> fromActivatableChange: aGtUserActivatableChange [
 	^ self new activatableChange: aGtUserActivatableChange
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtUserActivatableChangeElement >> activatableChange: aGtUserActivatableChange [
 	self removeChildren.
 
@@ -25,7 +25,7 @@ GtUserActivatableChangeElement >> activatableChange: aGtUserActivatableChange [
 				text: aGtUserActivatableChange change displayString ])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtUserActivatableChangeElement >> initialize [
 	super initialize.
 	

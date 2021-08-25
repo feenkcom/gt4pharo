@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoNavigationSelectedTagViewModelChanged,
-	#superclass : #Announcement,
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Events'
+	#name : 'GtPharoNavigationSelectedTagViewModelChanged',
+	#superclass : 'Announcement',
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Events'
 }

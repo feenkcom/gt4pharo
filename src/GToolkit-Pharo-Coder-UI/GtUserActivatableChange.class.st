@@ -1,6 +1,6 @@
 Class {
-	#name : #GtUserActivatableChange,
-	#superclass : #Object,
+	#name : 'GtUserActivatableChange',
+	#superclass : 'Object',
 	#instVars : [
 		'announcer',
 		'change',
@@ -9,59 +9,59 @@ Class {
 		'isEnabled',
 		'isExpanded'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtUserActivatableChange class >> fromChange: aRBRefactoryChange [
 	^ self new fromChange: aRBRefactoryChange
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> allChanges [
 	^ { self }, (self changes flatCollect: #allChanges)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 GtUserActivatableChange >> asElement [
 	^ self elementClass fromActivatableChange: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> change [
 	^ change
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> changes [
 	<return: #Collection of: #GtUserActivatableChange>
 
 	^ changes
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 GtUserActivatableChange >> elementClass [
 	^ GtUserActivatableChangeWithExpanderElement
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtUserActivatableChange >> fromChange: anRBRefactoryChange [
 	change := anRBRefactoryChange.
 	changes := change gtChildren collect: [ :eachChange | self class fromChange: eachChange ].
 	isEnabled := true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtUserActivatableChange >> hasDiff [
 	^ self change respondsTo: #gtDiff
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtUserActivatableChange >> initialize [
 	super initialize.
 	
@@ -69,17 +69,17 @@ GtUserActivatableChange >> initialize [
 	isExpanded := false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtUserActivatableChange >> isChange [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> isEnabled [
 	^ isEnabled
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> isEnabled: aBoolean [
 	isEnabled = aBoolean
 		ifTrue: [ ^ self ].
@@ -88,43 +88,43 @@ GtUserActivatableChange >> isEnabled: aBoolean [
 	self refactoring changeStateChanged
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> isExpanded [
 	^ isExpanded
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> isExpanded: anObject [
 	isExpanded := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtUserActivatableChange >> isRefactoring [
 	^ false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtUserActivatableChange >> onEnablementStateChanged [
 	announcer ifNotNil: [ announcer announce: #enablementChanged ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtUserActivatableChange >> printOn: aStream [
 	aStream print: self change
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> refactoring [
 	^ refactoring
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> refactoring: anObject [
 	refactoring := anObject.
 	self changes do: [ :eachChange | eachChange refactoring: self refactoring ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableChange >> setEnabledWithoutRefactoring: aBoolean [
 	isEnabled = aBoolean
 		ifTrue: [ ^ self ].

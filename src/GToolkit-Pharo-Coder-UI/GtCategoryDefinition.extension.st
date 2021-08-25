@@ -1,6 +1,6 @@
-Extension { #name : #GtCategoryDefinition }
+Extension { #name : 'GtCategoryDefinition' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtCategoryDefinition >> categoryEditor [
 	<return: #GtCodeDefinitionViewer>
 	
@@ -9,7 +9,7 @@ GtCategoryDefinition >> categoryEditor [
 		self tag tagEditor }
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtCategoryDefinition >> categoryReader [
 	<return: #GtCodeDefinitionViewer>
 	
@@ -18,12 +18,12 @@ GtCategoryDefinition >> categoryReader [
 		self tag tagReader }
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtCategoryDefinition >> editors [
 	^ { self categoryEditor }
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtCategoryDefinition >> readers [
 	^ { self categoryReader }
 ]

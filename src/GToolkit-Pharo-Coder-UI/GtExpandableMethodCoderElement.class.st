@@ -1,13 +1,13 @@
 Class {
-	#name : #GtExpandableMethodCoderElement,
-	#superclass : #GtExpandableSourceCoderElement,
+	#name : 'GtExpandableMethodCoderElement',
+	#superclass : 'GtExpandableSourceCoderElement',
 	#instVars : [
 		'tagsElement'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 GtExpandableMethodCoderElement >> alignTagsElementBottomRight: aTagsElement [
 	aTagsElement
 		constraintsDo: [ :c |
@@ -15,7 +15,7 @@ GtExpandableMethodCoderElement >> alignTagsElementBottomRight: aTagsElement [
 			c ignored vertical alignBottom ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtExpandableMethodCoderElement >> alignTagsElementCenterRight: aTagsElement [
 	aTagsElement
 		constraintsDo: [ :c |
@@ -23,14 +23,14 @@ GtExpandableMethodCoderElement >> alignTagsElementCenterRight: aTagsElement [
 			c ignored vertical alignCenter ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtExpandableMethodCoderElement >> coderUIModel: aCoderUIModel [
 	super coderUIModel: aCoderUIModel.
 	
 	tagsElement methodCoderUIModel: aCoderUIModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtExpandableMethodCoderElement >> initialize [
 	super initialize.
 	
@@ -38,7 +38,7 @@ GtExpandableMethodCoderElement >> initialize [
 	self addChild: tagsElement
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtExpandableMethodCoderElement >> newTagsElement [
 	^ self newTagsElementClass new
 		constraintsDo: [ :c | 
@@ -49,19 +49,19 @@ GtExpandableMethodCoderElement >> newTagsElement [
 		zIndex: 10
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtExpandableMethodCoderElement >> newTagsElementClass [
 	^ GtMethodCoderTagsElement
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtExpandableMethodCoderElement >> onCollapsed [
 	super onCollapsed.
 		
 	self alignTagsElementCenterRight: tagsElement
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtExpandableMethodCoderElement >> onExpanded [
 	super onExpanded.
 		

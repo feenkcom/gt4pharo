@@ -1,6 +1,6 @@
-Extension { #name : #GtSearchInstanceSlotReferenceFilter }
+Extension { #name : 'GtSearchInstanceSlotReferenceFilter' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtSearchInstanceSlotReferenceFilter class >> filterDescriptorFor: aMethodsCoder [
 	aMethodsCoder isForClass
 		ifFalse: [ ^ nil ].

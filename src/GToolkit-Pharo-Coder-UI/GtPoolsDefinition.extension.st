@@ -1,11 +1,11 @@
-Extension { #name : #GtPoolsDefinition }
+Extension { #name : 'GtPoolsDefinition' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPoolsDefinition >> editors [
 	^ { self poolsEditor }
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPoolsDefinition >> poolsEditor [
 	<return: #GtCodeDefinitionViewer>
 	

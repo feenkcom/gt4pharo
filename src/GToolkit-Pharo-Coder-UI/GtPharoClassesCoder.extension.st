@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoClassesCoder }
+Extension { #name : 'GtPharoClassesCoder' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPharoClassesCoder >> asCoderUIModel [
 	^ GtClassesCoderUIModel new coder: self
 ]

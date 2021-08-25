@@ -1,10 +1,10 @@
 Class {
-	#name : #GtExpandableMethodCoderForBehaviorElement,
-	#superclass : #GtExpandableMethodCoderElement,
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#name : 'GtExpandableMethodCoderForBehaviorElement',
+	#superclass : 'GtExpandableMethodCoderElement',
+	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtExpandableMethodCoderForBehaviorElement >> newTagsElementClass [
 	^ GtBehaviorMethodCoderTagsElement
 ]
