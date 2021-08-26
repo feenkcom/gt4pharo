@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoHaltStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Halt'
+	#name : 'GtPharoHaltStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Halt'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoHaltStyler >> visitMessage: aMessageNode [
 	super visitMessage: aMessageNode.
 	(aMessageNode selector = #halt or: [aMessageNode selector = #haltOnce]) ifTrue: [ 
@@ -14,7 +14,7 @@ GtPharoHaltStyler >> visitMessage: aMessageNode [
 			to: aMessageNode stopPosition ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoHaltStyler >> visitMessageSend: aMessageNode [
 	| receiver |
 	super visitMessageSend: aMessageNode.

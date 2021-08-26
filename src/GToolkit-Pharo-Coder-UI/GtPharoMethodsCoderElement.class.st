@@ -1,19 +1,19 @@
 Class {
-	#name : #GtPharoMethodsCoderElement,
-	#superclass : #BlElement,
+	#name : 'GtPharoMethodsCoderElement',
+	#superclass : 'BlElement',
 	#instVars : [
 		'methodsCoderUIModel',
 		'listElement'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 GtPharoMethodsCoderElement >> asVerticallyResizableDo: aBlock [
 	^ self
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoMethodsCoderElement >> buildElement [
 	self layout: BlLinearLayout vertical.
 	self
@@ -24,7 +24,7 @@ GtPharoMethodsCoderElement >> buildElement [
 	self addChild: self listElement as: #codersList
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoMethodsCoderElement >> buildFilter [
 	| filterElement filterDescriptors |
 	methodsCoderUIModel coder canFilter
@@ -46,12 +46,12 @@ GtPharoMethodsCoderElement >> buildFilter [
 	self addChild: filterElement as: #filter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodsCoderElement >> codersUIModel [
 	^ methodsCoderUIModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodsCoderElement >> codersUIModel: aGtMethodsCoderUIModel [
 	methodsCoderUIModel := aGtMethodsCoderUIModel.
 	self buildElement.
@@ -62,12 +62,12 @@ GtPharoMethodsCoderElement >> codersUIModel: aGtMethodsCoderUIModel [
 		when: GtCodersScrollToCoder send: #scrollToEvent: to: self
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoMethodsCoderElement >> filterElement [ 
 	^ self childWithId: #filter
 ]
 
-{ #category : #'updating ui' }
+{ #category : 'updating ui' }
 GtPharoMethodsCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
 
 	| aFilter |
@@ -75,7 +75,7 @@ GtPharoMethodsCoderElement >> filterWithMethodProtocol: aMethodProtocol source: 
 	methodsCoderUIModel coder setFilters: { aFilter } source: aSource.
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoMethodsCoderElement >> listElement [
 	listElement
 		ifNotNil: [ ^ listElement ].
@@ -93,7 +93,7 @@ GtPharoMethodsCoderElement >> listElement [
 	^ listElement
 ]
 
-{ #category : #'private - event handling' }
+{ #category : 'private - event handling' }
 GtPharoMethodsCoderElement >> scrollToEvent: anEvent [
 	| coder index |
 	coder := anEvent sourceCoder.
@@ -103,7 +103,7 @@ GtPharoMethodsCoderElement >> scrollToEvent: anEvent [
 				scrollToPosition: index ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 GtPharoMethodsCoderElement >> updateCodersFilters: event [
 	| filters |
 	filters := OrderedCollection new.
@@ -113,7 +113,7 @@ GtPharoMethodsCoderElement >> updateCodersFilters: event [
 	^ methodsCoderUIModel coder setFilters: filters source: self
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 GtPharoMethodsCoderElement >> updateDisplayedFilters: anAnnouncement [
 	anAnnouncement source = self ifTrue: [ ^ self ].
 	self
@@ -133,7 +133,7 @@ GtPharoMethodsCoderElement >> updateDisplayedFilters: anAnnouncement [
 		ifNone: [  ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 GtPharoMethodsCoderElement >> updateList [
 	methodsCoderUIModel
 		ifNil: [ ^ self ].

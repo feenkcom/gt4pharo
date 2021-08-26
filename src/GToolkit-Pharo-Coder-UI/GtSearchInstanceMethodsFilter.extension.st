@@ -1,6 +1,6 @@
-Extension { #name : #GtSearchInstanceMethodsFilter }
+Extension { #name : 'GtSearchInstanceMethodsFilter' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtSearchInstanceMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ (GtFilterDescriptor
 		creator: [ :value | self new ]

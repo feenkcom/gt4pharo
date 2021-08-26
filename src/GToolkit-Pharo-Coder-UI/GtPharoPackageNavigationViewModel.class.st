@@ -23,8 +23,8 @@ A few of the most useful api methods are:
 
 "
 Class {
-	#name : #GtPharoPackageNavigationViewModel,
-	#superclass : #Object,
+	#name : 'GtPharoPackageNavigationViewModel',
+	#superclass : 'Object',
 	#traits : 'TGtWithPharoPackageCoderModel',
 	#classTraits : 'TGtWithPharoPackageCoderModel classTrait',
 	#instVars : [
@@ -33,10 +33,10 @@ Class {
 		'pharoTagsNavigationViewModel',
 		'parentPharoPackagesNavigationViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackageNavigationViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
 
@@ -45,7 +45,7 @@ GtPharoPackageNavigationViewModel >> announce: anAnnouncement [
 		ifTrue: [ self parentPharoPackagesNavigationViewModel announce: anAnnouncement ].
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoPackageNavigationViewModel >> createPharoBehaviorsNavigationViewModel [
 	"Create a composite view model for a collection of children and return the result"
 	<return: #GtPharoBehaviorsNavigationViewModel>
@@ -57,7 +57,7 @@ GtPharoPackageNavigationViewModel >> createPharoBehaviorsNavigationViewModel [
 	^ childrenViewModel
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoPackageNavigationViewModel >> createPharoTagsNavigationViewModel [
 	"Create a composite view model for a collection of children and return the result"
 	<return: #GtPharoTagsNavigationViewModel>
@@ -69,7 +69,7 @@ GtPharoPackageNavigationViewModel >> createPharoTagsNavigationViewModel [
 	^ childrenViewModel
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> deselectOtherEntities [
 	"deselect any selected child"
 	<propertyUnsetOthers: #selectedPackageViewModel>
@@ -78,7 +78,7 @@ GtPharoPackageNavigationViewModel >> deselectOtherEntities [
 	self pharoTagsNavigationViewModel deselectTagViewModel.
 ]
 
-{ #category : #'gt-extentions' }
+{ #category : 'gt-extentions' }
 GtPharoPackageNavigationViewModel >> gtBehaviorsListViewFor: aView [
 	<gtView>
 	
@@ -88,7 +88,7 @@ GtPharoPackageNavigationViewModel >> gtBehaviorsListViewFor: aView [
 		items: [ self pharoBehaviorsNavigationViewModel pharoBehaviorNavigationViewModels]
 ]
 
-{ #category : #'gt-extentions' }
+{ #category : 'gt-extentions' }
 GtPharoPackageNavigationViewModel >> gtTagsListViewFor: aView [
 	<gtView>
 	
@@ -98,7 +98,7 @@ GtPharoPackageNavigationViewModel >> gtTagsListViewFor: aView [
 		items: [ self pharoTagsNavigationViewModel pharoTagNavigationViewModels]
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> hasOtherSelectedEntities [
 	"Return true if there are other selected entities that are the children"
 	<return: #Boolean>
@@ -107,7 +107,7 @@ GtPharoPackageNavigationViewModel >> hasOtherSelectedEntities [
 	^ self pharoBehaviorsNavigationViewModel hasSelectedBehaviorViewModel or: [ self pharoTagsNavigationViewModel hasSelectedTagViewModel ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackageNavigationViewModel >> hasParentPharoPackagesNavigationViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
@@ -116,7 +116,7 @@ GtPharoPackageNavigationViewModel >> hasParentPharoPackagesNavigationViewModel [
 	^ parentPharoPackagesNavigationViewModel notNil
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> isOnlySelectedPackage [
 	"Return true if only this package is selected and not any of the children"
 	<return: #Boolean>
@@ -124,7 +124,7 @@ GtPharoPackageNavigationViewModel >> isOnlySelectedPackage [
 	^ self isSelectedPackage and: [ self hasOtherSelectedEntities not ]
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackageNavigationViewModel >> isPharoBehaviorNavigationViewModel [
 	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
@@ -132,7 +132,7 @@ GtPharoPackageNavigationViewModel >> isPharoBehaviorNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackageNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
 	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
@@ -140,7 +140,7 @@ GtPharoPackageNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackageNavigationViewModel >> isPharoPackageNavigationViewModel [
 	"Return true if this is a view model of Package, false otherwise"
 	<return: #Boolean>
@@ -148,7 +148,7 @@ GtPharoPackageNavigationViewModel >> isPharoPackageNavigationViewModel [
 	^ true
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackageNavigationViewModel >> isPharoPackagesNavigationViewModel [
 	"Return true if this is a view model of Packages, false otherwise"
 	<return: #Boolean>
@@ -156,7 +156,7 @@ GtPharoPackageNavigationViewModel >> isPharoPackagesNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackageNavigationViewModel >> isPharoTagNavigationViewModel [
 	"Return true if this is a view model of Tag, false otherwise"
 	<return: #Boolean>
@@ -164,7 +164,7 @@ GtPharoPackageNavigationViewModel >> isPharoTagNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoPackageNavigationViewModel >> isPharoTagsNavigationViewModel [
 	"Return true if this is a view model of Tags, false otherwise"
 	<return: #Boolean>
@@ -172,7 +172,7 @@ GtPharoPackageNavigationViewModel >> isPharoTagsNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> isSelectedPackage [
 	"Return true if this package is selected"
 	<return: #Boolean>
@@ -181,21 +181,21 @@ GtPharoPackageNavigationViewModel >> isSelectedPackage [
 		and: [ self parentPharoPackagesNavigationViewModel selectedPackageViewModel == self ]
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> notifyPackageDeselected [
 	<propertyUnsetNotifier: #selectedPackageViewModel>
 
 	self announce: (GtPharoPackageNavigationViewModelDeselected new packageViewModel: self)
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> notifyPackageSelected [
 	<propertySetNotifier: #selectedPackageViewModel>
 
 	self announce: (GtPharoPackageNavigationViewModelSelected new packageViewModel: self)
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackageNavigationViewModel >> parentPharoPackagesNavigationViewModel [
 	"Return a parent view model which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -210,7 +210,7 @@ GtPharoPackageNavigationViewModel >> parentPharoPackagesNavigationViewModel [
 	^ parentPharoPackagesNavigationViewModel
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackageNavigationViewModel >> parentPharoPackagesNavigationViewModel: aGtPharoPackagesNavigationViewModel [
 	"Assign a parent view model (${class:GtPharoPackagesNavigationViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -224,7 +224,7 @@ GtPharoPackageNavigationViewModel >> parentPharoPackagesNavigationViewModel: aGt
 	parentPharoPackagesNavigationViewModel := aGtPharoPackagesNavigationViewModel
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackageNavigationViewModel >> pharoBehaviorsNavigationViewModel [
 	"Return a composite view model (${class:GtPharoBehaviorsNavigationViewModel}$) created for a collection of children from the domain model.
 	Note: The view model is lazily instantiated."
@@ -233,7 +233,7 @@ GtPharoPackageNavigationViewModel >> pharoBehaviorsNavigationViewModel [
 	^  pharoBehaviorsNavigationViewModel ifNil: [ pharoBehaviorsNavigationViewModel := self createPharoBehaviorsNavigationViewModel ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackageNavigationViewModel >> pharoTagsNavigationViewModel [
 	"Return a composite view model (${class:GtPharoTagsNavigationViewModel}$) created for a collection of children from the domain model.
 	Note: The view model is lazily instantiated."
@@ -242,13 +242,13 @@ GtPharoPackageNavigationViewModel >> pharoTagsNavigationViewModel [
 	^  pharoTagsNavigationViewModel ifNil: [ pharoTagsNavigationViewModel := self createPharoTagsNavigationViewModel ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtPharoPackageNavigationViewModel >> printOn: aStream [
 	aStream
 		print: self pharoPackageCoderModel
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> selectPackage [
 	"Just select a package without changing children"
 	<propertySetter: #selectedPackageViewModel>
@@ -256,7 +256,7 @@ GtPharoPackageNavigationViewModel >> selectPackage [
 	self parentPharoPackagesNavigationViewModel selectPackageViewModel: self
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 GtPharoPackageNavigationViewModel >> selectPackageWithoutOtherEntities [
 	"Select a package and deselect other selected children"
 
@@ -264,14 +264,14 @@ GtPharoPackageNavigationViewModel >> selectPackageWithoutOtherEntities [
 	self selectPackage
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackageNavigationViewModel >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
 
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoPackageNavigationViewModel >> viewModelName [
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used
@@ -281,13 +281,13 @@ GtPharoPackageNavigationViewModel >> viewModelName [
 	^ #package
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackageNavigationViewModel >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
 		when: anAnnouncementClass do: aBlock
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoPackageNavigationViewModel >> when: anAnnouncementClass send: aSelector to: anObject [
 	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject

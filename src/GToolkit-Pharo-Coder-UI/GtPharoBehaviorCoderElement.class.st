@@ -1,16 +1,16 @@
 Class {
-	#name : #GtPharoBehaviorCoderElement,
-	#superclass : #BlElement,
+	#name : 'GtPharoBehaviorCoderElement',
+	#superclass : 'BlElement',
 	#instVars : [
 		'behaviorCoderUIModel',
 		'container',
 		'contentPane',
 		'contentTabs'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : #callbacks }
+{ #category : 'callbacks' }
 GtPharoBehaviorCoderElement >> actOnMethodProtocol: anAnnouncement [ 
 	| tab selectTabBlock selectMethodBlock |
 	
@@ -25,12 +25,12 @@ GtPharoBehaviorCoderElement >> actOnMethodProtocol: anAnnouncement [
 	self executeTask: selectMethodBlock 
 ]
 
-{ #category : #callbacks }
+{ #category : 'callbacks' }
 GtPharoBehaviorCoderElement >> actOnPackageUpdated: ann [
 	self removeContentTabs
 ]
 
-{ #category : #callbacks }
+{ #category : 'callbacks' }
 GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationAnnouncement [
 	| aMethod tab selectTabBlock selectMethodBlock |
 
@@ -46,14 +46,14 @@ GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationA
 	self executeTask: selectMethodBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoderElement >> behavior [
 	<return: #Behavior>
 
 	^ self coderUIModel coder behavior
 ]
 
-{ #category : #callbacks }
+{ #category : 'callbacks' }
 GtPharoBehaviorCoderElement >> browseClassReferences [
 	| classCoder |
 	classCoder := behaviorCoderUIModel coder.
@@ -62,7 +62,7 @@ GtPharoBehaviorCoderElement >> browseClassReferences [
 		ifNotNil: [ :class | self phlow spawnObject: class gtReferences ]
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 GtPharoBehaviorCoderElement >> buildClassLabel [
 	| classCoder aClassNameEditor aContainer aPreviewButton removeClassButton |
 	classCoder := behaviorCoderUIModel coder.
@@ -130,7 +130,7 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 	^ aContainer
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 GtPharoBehaviorCoderElement >> buildContentPane [
 
 	contentPane := BlElement new.
@@ -146,7 +146,7 @@ GtPharoBehaviorCoderElement >> buildContentPane [
 	^ contentPane
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 GtPharoBehaviorCoderElement >> buildContentTabs [
 	<return: #BrTabGroup>
 
@@ -157,7 +157,7 @@ GtPharoBehaviorCoderElement >> buildContentTabs [
 	^ contentTabs
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 GtPharoBehaviorCoderElement >> buildDefinitionElement [
 
 	^ GtPharoBehaviorDefinitionCoderElement new
@@ -165,7 +165,7 @@ GtPharoBehaviorCoderElement >> buildDefinitionElement [
 		margin: (BlInsets top: 5 left: 5)
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 GtPharoBehaviorCoderElement >> buildRemoveClassLabel [
 	| labelText classCoder |
 	
@@ -182,12 +182,12 @@ GtPharoBehaviorCoderElement >> buildRemoveClassLabel [
 		text: labelText asRopedText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoderElement >> classCoder [
 	^ behaviorCoderUIModel classCoder
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBehaviorCoderElement >> classViewItems [
 	| classCoder collector context |
 	
@@ -207,12 +207,12 @@ GtPharoBehaviorCoderElement >> classViewItems [
 	^ collector collect
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoderElement >> coderUIModel [
 	^ behaviorCoderUIModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorCoderElement >> coderUIModel: aGtBehaviorCoderUIModel [
 	
 	behaviorCoderUIModel ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
@@ -234,14 +234,14 @@ GtPharoBehaviorCoderElement >> coderUIModel: aGtBehaviorCoderUIModel [
 	self addChildFirst: container
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoBehaviorCoderElement >> executeTask: aBlock [
 	BlUseAsyncFeatures
 		ifEnabledDo: [ self enqueueTask: (BlTaskAction new action: aBlock) ]
 		otherwise: aBlock
 ]
 
-{ #category : #'updating ui' }
+{ #category : 'updating ui' }
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
 
 	contentTabs content 
@@ -250,7 +250,7 @@ GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source:
 		ifNone: [ "ignore" ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoBehaviorCoderElement >> initialize [
 	super initialize.
 
@@ -263,7 +263,7 @@ GtPharoBehaviorCoderElement >> initialize [
 	self when: BlClickEvent do: [ self requestFocus ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 GtPharoBehaviorCoderElement >> removeClass [
 	| aClassCoder coder event |
 	
@@ -277,14 +277,14 @@ GtPharoBehaviorCoderElement >> removeClass [
 	self fireEvent: event
 ]
 
-{ #category : #'updating ui' }
+{ #category : 'updating ui' }
 GtPharoBehaviorCoderElement >> removeContentTabs [
 	contentTabs
 		ifNotNil: [ contentPane removeChild: contentTabs.
 			contentTabs := nil ]
 ]
 
-{ #category : #'updating ui' }
+{ #category : 'updating ui' }
 GtPharoBehaviorCoderElement >> selectAndScrollToMethod: aMethod [
 
 	contentTabs content 

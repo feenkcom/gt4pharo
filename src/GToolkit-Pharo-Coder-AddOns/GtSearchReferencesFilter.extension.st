@@ -1,6 +1,6 @@
-Extension { #name : #GtSearchReferencesFilter }
+Extension { #name : 'GtSearchReferencesFilter' }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtSearchReferencesFilter >> highlighter [
 	((self object isKindOf: Association) and: [ self object key isSymbol ])
 				ifTrue: [ ^ GtPharoVariableReferenceHighlighter forVariableName: self object key ].

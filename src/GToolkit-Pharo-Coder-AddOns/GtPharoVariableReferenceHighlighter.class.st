@@ -1,30 +1,30 @@
 Class {
-	#name : #GtPharoVariableReferenceHighlighter,
-	#superclass : #GtPharoCodeHighlighter,
+	#name : 'GtPharoVariableReferenceHighlighter',
+	#superclass : 'GtPharoCodeHighlighter',
 	#instVars : [
 		'variableName'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoVariableReferenceHighlighter class >> forVariableName: aString [
 	^ self new
 		variableName: aString;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoVariableReferenceHighlighter >> variableName [
 	^ variableName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoVariableReferenceHighlighter >> variableName: anObject [
 	variableName := anObject
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtPharoVariableReferenceHighlighter >> visitVariable: aVariableNode [
 	super visitVariable: aVariableNode.
 

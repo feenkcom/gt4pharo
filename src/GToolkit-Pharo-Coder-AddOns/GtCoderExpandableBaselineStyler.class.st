@@ -1,17 +1,17 @@
 Class {
-	#name : #GtCoderExpandableBaselineStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
+	#name : 'GtCoderExpandableBaselineStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 GtCoderExpandableBaselineStyler >> isNonEmptyLiteralStringNode: nameNode [
 	^ nameNode isLiteral
 		and: [ nameNode literalValue isString
 			and: [ nameNode literalValue notEmpty ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 	| aBaselineNameNode anExpanderAttribute |
 
@@ -49,7 +49,7 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 		to: aBaselineNameNode value stopPosition.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 	| aPackageNameNode |
 	
@@ -64,7 +64,7 @@ GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 		to: aPackageNameNode value stopPosition
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtCoderExpandableBaselineStyler >> visitMessage: aMessageNode [
 	super visitMessage: aMessageNode.
 	

@@ -1,30 +1,30 @@
 Class {
-	#name : #GtPharoSelectorReferenceAndLiteralHighlighter,
-	#superclass : #GtPharoCodeHighlighter,
+	#name : 'GtPharoSelectorReferenceAndLiteralHighlighter',
+	#superclass : 'GtPharoCodeHighlighter',
 	#instVars : [
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoSelectorReferenceAndLiteralHighlighter class >> forSelector: aSymbol [
 	^ self new
 		selector: aSymbol;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSelectorReferenceAndLiteralHighlighter >> selector [
 	^ selector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSelectorReferenceAndLiteralHighlighter >> selector: aSymbol [
 	selector := aSymbol
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtPharoSelectorReferenceAndLiteralHighlighter >> visitMessage: aMessageNode [
 	super visitMessage: aMessageNode.
 
@@ -34,7 +34,7 @@ GtPharoSelectorReferenceAndLiteralHighlighter >> visitMessage: aMessageNode [
 				stream nextPut: (eachSelectorPart startPosition to: eachSelectorPart stopPosition) ] ]
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtPharoSelectorReferenceAndLiteralHighlighter >> visitSymbolLiteral: aNode [
 	super visitSymbolLiteral: aNode.
 

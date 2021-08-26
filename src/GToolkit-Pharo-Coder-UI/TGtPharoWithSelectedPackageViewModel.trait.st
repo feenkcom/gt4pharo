@@ -27,14 +27,14 @@ GtWithPropertyTraitGenerator new
 
 "
 Trait {
-	#name : #TGtPharoWithSelectedPackageViewModel,
+	#name : 'TGtPharoWithSelectedPackageViewModel',
 	#instVars : [
 		'selectedPackageViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> deselectPackageViewModel [
 	<propertyUnsetter: #selectedPackageViewModel>
 	| aPreviousSelectedPackageViewModel |
@@ -48,7 +48,7 @@ TGtPharoWithSelectedPackageViewModel >> deselectPackageViewModel [
 	self notifySelectedPackageViewModelChanged
 ]
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> hasSelectedPackageViewModel [
 	<return: #Boolean>
 	<propertyTester: #selectedPackageViewModel>
@@ -56,25 +56,25 @@ TGtPharoWithSelectedPackageViewModel >> hasSelectedPackageViewModel [
 	^ selectedPackageViewModel notNil
 ]
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> notifySelectedPackageViewModelChanged [
 	"Override this notify method to announce changes to the property"
 	<propertyChangeNotifier: #selectedPackageViewModel>
 ]
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> onNewSelectedPackageViewModelSet: aNewSelectedPackageViewModel [
 	"Is sent after a new value of the selectedPackageViewModel is assigned"
 	<propertySetHook: #selectedPackageViewModel>
 ]
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> onPreviousSelectedPackageViewModelUnset: aPreviousSelectedPackageViewModel [
 	"Is sent after a previous value of the selectedPackageViewModel is de-assigned"
 	<propertyUnsetHook: #selectedPackageViewModel>
 ]
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> selectPackageViewModel: aNewSelectedPackageViewModel [
 	<propertySetter: #selectedPackageViewModel>
 
@@ -92,7 +92,7 @@ TGtPharoWithSelectedPackageViewModel >> selectPackageViewModel: aNewSelectedPack
 	self notifySelectedPackageViewModelChanged
 ]
 
-{ #category : #'api - selected package view model' }
+{ #category : 'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> selectedPackageViewModel [
 	<return: #GtPharoPackageNavigationViewModel>
 	<propertyGetter: #selectedPackageViewModel>

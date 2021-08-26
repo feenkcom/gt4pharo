@@ -11,8 +11,8 @@ A view model that knows its parent view model implements the following api:
 
 "
 Class {
-	#name : #GtPharoTagsNavigationViewModel,
-	#superclass : #Object,
+	#name : 'GtPharoTagsNavigationViewModel',
+	#superclass : 'Object',
 	#traits : 'TGtWithPharoPackageTagsCoderModel + TGtPharoWithSelectedTagViewModel',
 	#classTraits : 'TGtWithPharoPackageTagsCoderModel classTrait + TGtPharoWithSelectedTagViewModel classTrait',
 	#instVars : [
@@ -20,10 +20,10 @@ Class {
 		'pharoTagNavigationViewModels',
 		'parentPharoPackageNavigationViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoTagsNavigationViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
 
@@ -32,7 +32,7 @@ GtPharoTagsNavigationViewModel >> announce: anAnnouncement [
 		ifTrue: [ self parentPharoPackageNavigationViewModel announce: anAnnouncement ].
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoTagsNavigationViewModel >> createPharoTagNavigationViewModels [
 	"For each child from the domain modal create a view model and return a resulting collection"
 	<return: #Collection of: #GtPharoTagNavigationViewModel>
@@ -44,7 +44,7 @@ GtPharoTagsNavigationViewModel >> createPharoTagNavigationViewModels [
 		eachViewModel pharoPackageTagCoderModel: eachModel ] as: Array
 ]
 
-{ #category : #'gt-extentions' }
+{ #category : 'gt-extentions' }
 GtPharoTagsNavigationViewModel >> gtTagsListViewFor: aView [
 	<gtView>
 	
@@ -54,7 +54,7 @@ GtPharoTagsNavigationViewModel >> gtTagsListViewFor: aView [
 		items: [ self pharoTagNavigationViewModels ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoTagsNavigationViewModel >> hasParentPharoPackageNavigationViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
@@ -63,7 +63,7 @@ GtPharoTagsNavigationViewModel >> hasParentPharoPackageNavigationViewModel [
 	^ parentPharoPackageNavigationViewModel notNil
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoTagsNavigationViewModel >> isPharoBehaviorNavigationViewModel [
 	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
@@ -71,7 +71,7 @@ GtPharoTagsNavigationViewModel >> isPharoBehaviorNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoTagsNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
 	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
@@ -79,7 +79,7 @@ GtPharoTagsNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoTagsNavigationViewModel >> isPharoPackageNavigationViewModel [
 	"Return true if this is a view model of Package, false otherwise"
 	<return: #Boolean>
@@ -87,7 +87,7 @@ GtPharoTagsNavigationViewModel >> isPharoPackageNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoTagsNavigationViewModel >> isPharoPackagesNavigationViewModel [
 	"Return true if this is a view model of Packages, false otherwise"
 	<return: #Boolean>
@@ -95,7 +95,7 @@ GtPharoTagsNavigationViewModel >> isPharoPackagesNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoTagsNavigationViewModel >> isPharoTagNavigationViewModel [
 	"Return true if this is a view model of Tag, false otherwise"
 	<return: #Boolean>
@@ -103,7 +103,7 @@ GtPharoTagsNavigationViewModel >> isPharoTagNavigationViewModel [
 	^ false
 ]
 
-{ #category : #'api - testing' }
+{ #category : 'api - testing' }
 GtPharoTagsNavigationViewModel >> isPharoTagsNavigationViewModel [
 	"Return true if this is a view model of Tags, false otherwise"
 	<return: #Boolean>
@@ -111,7 +111,7 @@ GtPharoTagsNavigationViewModel >> isPharoTagsNavigationViewModel [
 	^ true
 ]
 
-{ #category : #'api - selected tag view model' }
+{ #category : 'api - selected tag view model' }
 GtPharoTagsNavigationViewModel >> notifySelectedTagViewModelChanged [
 	"Override this notify method to announce changes to the property"
 	<propertyChangeNotifier: #selectedTagViewModel>
@@ -119,7 +119,7 @@ GtPharoTagsNavigationViewModel >> notifySelectedTagViewModelChanged [
 	self announce: GtPharoNavigationSelectedTagViewModelChanged new
 ]
 
-{ #category : #'api - selected tag view model' }
+{ #category : 'api - selected tag view model' }
 GtPharoTagsNavigationViewModel >> onNewSelectedTagViewModelSet: aNewSelectedTagViewModel [
 	"Is sent after a new value of the selectedTagViewModel is assigned"
 	<propertySetHook: #selectedTagViewModel>
@@ -129,7 +129,7 @@ GtPharoTagsNavigationViewModel >> onNewSelectedTagViewModelSet: aNewSelectedTagV
 	aNewSelectedTagViewModel notifyTagSelected
 ]
 
-{ #category : #'api - selected tag view model' }
+{ #category : 'api - selected tag view model' }
 GtPharoTagsNavigationViewModel >> onPreviousSelectedTagViewModelUnset: aPreviousSelectedTagViewModel [
 	"Is sent after a previous value of the selectedTagViewModel is de-assigned"
 	<propertyUnsetHook: #selectedTagViewModel>
@@ -138,7 +138,7 @@ GtPharoTagsNavigationViewModel >> onPreviousSelectedTagViewModelUnset: aPrevious
 	aPreviousSelectedTagViewModel notifyTagDeselected
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoTagsNavigationViewModel >> parentPharoPackageNavigationViewModel [
 	"Return a parent view model which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -153,7 +153,7 @@ GtPharoTagsNavigationViewModel >> parentPharoPackageNavigationViewModel [
 	^ parentPharoPackageNavigationViewModel
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoTagsNavigationViewModel >> parentPharoPackageNavigationViewModel: aGtPharoPackageNavigationViewModel [
 	"Assign a parent view model (${class:GtPharoPackageNavigationViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -167,7 +167,7 @@ GtPharoTagsNavigationViewModel >> parentPharoPackageNavigationViewModel: aGtPhar
 	parentPharoPackageNavigationViewModel := aGtPharoPackageNavigationViewModel
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoTagsNavigationViewModel >> pharoTagNavigationViewModels [
 	"Return a collection of view models (${class:GtPharoTagNavigationViewModel}$) created for each child from the domain model.
 	Note: The view models are lazily instantiated."
@@ -176,20 +176,20 @@ GtPharoTagsNavigationViewModel >> pharoTagNavigationViewModels [
 	^  pharoTagNavigationViewModels ifNil: [ pharoTagNavigationViewModels := self createPharoTagNavigationViewModels ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtPharoTagsNavigationViewModel >> printOn: aStream [
 	aStream
 		print: self pharoPackageTagsCoderModel
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoTagsNavigationViewModel >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
 
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 GtPharoTagsNavigationViewModel >> viewModelName [
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used
@@ -199,13 +199,13 @@ GtPharoTagsNavigationViewModel >> viewModelName [
 	^ #tags
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoTagsNavigationViewModel >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
 		when: anAnnouncementClass do: aBlock
 ]
 
-{ #category : #'api - announcer' }
+{ #category : 'api - announcer' }
 GtPharoTagsNavigationViewModel >> when: anAnnouncementClass send: aSelector to: anObject [
 	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject

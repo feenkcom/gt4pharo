@@ -1,12 +1,12 @@
 Trait {
-	#name : #TGtWithPharoBehaviorNavigationViewModel,
+	#name : 'TGtWithPharoBehaviorNavigationViewModel',
 	#instVars : [
 		'pharoBehaviorNavigationViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> hasPharoBehaviorNavigationViewModel [
 	"Return a true if pharoBehaviorNavigation view model is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
@@ -14,7 +14,7 @@ TGtWithPharoBehaviorNavigationViewModel >> hasPharoBehaviorNavigationViewModel [
 	^ pharoBehaviorNavigationViewModel notNil
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> onPharoBehaviorNavigationViewModelChanged [
 	"Is sent when a new pharoBehaviorNavigation view model is assigned to the element.
 	Note: #onPharoBehaviorNavigationViewModelChanged is sent before #subscribeToPharoBehaviorNavigationViewModel
@@ -25,14 +25,14 @@ TGtWithPharoBehaviorNavigationViewModel >> onPharoBehaviorNavigationViewModelCha
 	self explicitRequirement
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> onPostPharoBehaviorNavigationViewModelChanged [
 	"I am an optional hook method that is sent after #subscribeToPharoBehaviorNavigationViewModel.
 	I do nothing by default but allow users to perform update operations when a receiver object is already
 	subscribed to announcements."
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> pharoBehaviorNavigationViewModel [
 	"Return a not-null pharoBehaviorNavigation view model assigned to the receiver element"
 	self
@@ -42,7 +42,7 @@ TGtWithPharoBehaviorNavigationViewModel >> pharoBehaviorNavigationViewModel [
 	^ pharoBehaviorNavigationViewModel
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> pharoBehaviorNavigationViewModel: aPharoBehaviorNavigationViewModel [
 	"Set a not-null pharoBehaviorNavigation view model assigned to the receiver element"
 	self
@@ -60,14 +60,14 @@ TGtWithPharoBehaviorNavigationViewModel >> pharoBehaviorNavigationViewModel: aPh
 	self onPostPharoBehaviorNavigationViewModelChanged
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> subscribeToPharoBehaviorNavigationViewModel [
 	"Is sent after a new pharoBehaviorNavigation view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromPharoBehaviorNavigationViewModel if elements subscribe to them"
 ]
 
-{ #category : #'api - pharo behavior navigation view model' }
+{ #category : 'api - pharo behavior navigation view model' }
 TGtWithPharoBehaviorNavigationViewModel >> unsubscribeFromPharoBehaviorNavigationViewModel [
 	"Is sent before a new pharoBehaviorNavigation view model is assigned to the element.
 	Elements that subscribe to pharoBehaviorNavigation view model in domain model are required to implement this methods."

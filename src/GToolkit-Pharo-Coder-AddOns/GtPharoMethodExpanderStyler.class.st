@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoMethodExpanderStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
+	#name : 'GtPharoMethodExpanderStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtPharoMethodExpanderStyler >> visitMessageSend: aMessageNode [
 	| aMethodClass |
 	

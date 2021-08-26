@@ -1,13 +1,13 @@
 Class {
-	#name : #GtPharoBehaviorDefinitionCoderElement,
-	#superclass : #BrExpander,
+	#name : 'GtPharoBehaviorDefinitionCoderElement',
+	#superclass : 'BrExpander',
 	#instVars : [
 		'behaviorCoderUIModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> addDefinitionEditorShortcutsTo: aPropertiesElement [
 	aPropertiesElement addShortcut: (BlShortcutWithAction new
 		combination: BlKeyCombination arrowUp;
@@ -30,7 +30,7 @@ GtPharoBehaviorDefinitionCoderElement >> addDefinitionEditorShortcutsTo: aProper
 					nextFocusDo: [ :aNextFocusElement | aNextFocusElement requestFocus ] ] ]).
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 	| theProperties |
 		
@@ -60,7 +60,7 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 	^ theProperties
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 	| theProperties theReaders |
 
@@ -83,7 +83,7 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 	^ theProperties
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildSectionLabel: aSectionName [
 	
 	^ BrLabel new
@@ -94,23 +94,23 @@ GtPharoBehaviorDefinitionCoderElement >> buildSectionLabel: aSectionName [
 		constraintsDo: [ :c | c grid horizontal alignLeft ]
 ]
 
-{ #category : #'private - ui' }
+{ #category : 'private - ui' }
 GtPharoBehaviorDefinitionCoderElement >> buttonMargin [
 	^ BlInsets top: 3 left: 0 bottom: 3 right: 5
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorDefinitionCoderElement >> coderUIModel [
 	^ behaviorCoderUIModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBehaviorDefinitionCoderElement >> coderUIModel: aGtBehaviorDefinitionCoderUIModel [
 	behaviorCoderUIModel := aGtBehaviorDefinitionCoderUIModel.	
 	self initializeElements
 ]
 
-{ #category : #'private - ui' }
+{ #category : 'private - ui' }
 GtPharoBehaviorDefinitionCoderElement >> editableLabelLook [
 	^ BrGlamorousEditableLabelAptitude new
 		glamorousCodeFont;
@@ -118,14 +118,14 @@ GtPharoBehaviorDefinitionCoderElement >> editableLabelLook [
 		fontSize: 10
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtPharoBehaviorDefinitionCoderElement >> editors [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 
 	^ behaviorCoderUIModel coder definition editors
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoBehaviorDefinitionCoderElement >> initialize [
 	super initialize.	
 
@@ -135,20 +135,20 @@ GtPharoBehaviorDefinitionCoderElement >> initialize [
 		vFitContent
 ]
 
-{ #category : #'private - ui' }
+{ #category : 'private - ui' }
 GtPharoBehaviorDefinitionCoderElement >> initializeElements [
 	self header: [ self buildDefinitionReader ].
 	self content: [ self buildDefinitionEditor ]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 GtPharoBehaviorDefinitionCoderElement >> readers [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 	
 	^ behaviorCoderUIModel coder definition readers
 ]
 
-{ #category : #'private - ui' }
+{ #category : 'private - ui' }
 GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 	^ BrGlamorousEditorAptitude new
 		glamorousCodeFont;

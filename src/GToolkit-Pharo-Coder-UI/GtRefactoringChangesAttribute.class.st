@@ -1,19 +1,19 @@
 Class {
-	#name : #GtRefactoringChangesAttribute,
-	#superclass : #BrTextAdornmentAttribute,
+	#name : 'GtRefactoringChangesAttribute',
+	#superclass : 'BrTextAdornmentAttribute',
 	#instVars : [
 		'refactoring',
 		'completionAction'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtRefactoringChangesAttribute >> completionAction: aBlock [
 	completionAction := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ GtRefactoringsPreviewButton new
 		beMiniSize;
@@ -26,14 +26,14 @@ GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdit
 				ifTrue: [ completionAction cull: event ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtRefactoringChangesAttribute >> initialize [
 	super initialize.
 	self beAppend.
 	self beNotOverwritableByStyler
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRefactoringChangesAttribute >> refactoring: aRBRefactoring [
 	refactoring := aRBRefactoring
 ]

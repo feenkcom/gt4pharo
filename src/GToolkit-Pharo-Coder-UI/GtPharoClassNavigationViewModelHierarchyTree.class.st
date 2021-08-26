@@ -1,14 +1,14 @@
 Class {
-	#name : #GtPharoClassNavigationViewModelHierarchyTree,
-	#superclass : #Object,
+	#name : 'GtPharoClassNavigationViewModelHierarchyTree',
+	#superclass : 'Object',
 	#instVars : [
 		'rootClass',
 		'subclassTrees'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
-{ #category : #factory }
+{ #category : 'factory' }
 GtPharoClassNavigationViewModelHierarchyTree class >> fromWithPharoBehaviorCoderModels: aCollectionOfWithPharoBehaviorCoderModels [
 	| aRootItem theSetOfWithPharoBehaviorCoderModels theRootTrees theSubclassTrees |
 	
@@ -32,34 +32,34 @@ GtPharoClassNavigationViewModelHierarchyTree class >> fromWithPharoBehaviorCoder
 	^ aRootItem
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 GtPharoClassNavigationViewModelHierarchyTree class >> isWithPharoBehaviorCoderModel: aTGtWithPharoBehaviorCoderModel inheritsFrom: anOtherTGtWithPharoBehaviorCoderModel [
 	^ aTGtWithPharoBehaviorCoderModel pharoBehaviorCoderModel behavior
 		inheritsFrom: anOtherTGtWithPharoBehaviorCoderModel pharoBehaviorCoderModel behavior
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> at: anIndex [
 	<return: #GtCoderClassesHierarchyTree>
 
 	^ self subclassTrees at: anIndex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> classes [
 	<return: #Collection of: #Class>
 	
 	^ self subclassTrees collect: [ :eachTree | eachTree rootClass ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> first [
 	<return: #GtCoderClassesHierarchyTree>
 
 	^ self at: 1
 ]
 
-{ #category : #'gt-extension' }
+{ #category : 'gt-extension' }
 GtPharoClassNavigationViewModelHierarchyTree >> gtTreeFor: aView [
 	<gtView>
 
@@ -71,20 +71,20 @@ GtPharoClassNavigationViewModelHierarchyTree >> gtTreeFor: aView [
 		expandUpTo: 1
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoClassNavigationViewModelHierarchyTree >> hasRootClass [
 	<return: #Boolean>
 
 	^ rootClass isNotNil
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoClassNavigationViewModelHierarchyTree >> initialize [
 	super initialize.
 	subclassTrees := Array empty.
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtPharoClassNavigationViewModelHierarchyTree >> printOn: aStream [
 	self hasRootClass
 		ifTrue: [ aStream print: self rootClass ]
@@ -99,43 +99,43 @@ GtPharoClassNavigationViewModelHierarchyTree >> printOn: aStream [
 				nextPut: $) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> rootClass [
 	<return: #Behavior>
 	^ rootClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> rootClass: aClass [
 	rootClass := aClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> size [
 	<return: #Number>
 
 	^ subclassTrees size
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 GtPharoClassNavigationViewModelHierarchyTree >> sort: aBlock [
 	subclassTrees := subclassTrees sorted: [ :treeA :treeB | aBlock value: treeA rootClass value: treeB rootClass ].
 	subclassTrees do: [ :eachTree | eachTree sort: aBlock ]
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 GtPharoClassNavigationViewModelHierarchyTree >> sortByClassName [
 	self sort: [ :classA :classB | classA name < classB name ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoClassNavigationViewModelHierarchyTree >> subclassTrees [
 	<return: #Collection of: #GtCoderClassesHierarchyTree>
 
 	^ subclassTrees
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoClassNavigationViewModelHierarchyTree >> subclassTrees: aCollection [
 	subclassTrees := aCollection
 ]

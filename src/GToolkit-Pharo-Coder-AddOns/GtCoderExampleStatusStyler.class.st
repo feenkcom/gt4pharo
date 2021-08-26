@@ -1,10 +1,10 @@
 Class {
-	#name : #GtCoderExampleStatusStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
+	#name : 'GtCoderExampleStatusStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
-{ #category : #'method coder styler' }
+{ #category : 'method coder styler' }
 GtCoderExampleStatusStyler class >> examplePatternStylerFor: aMethodCoder [
 	<gtMethodCoderPatternStyler: 5>
 	aMethodCoder example isNil
@@ -15,7 +15,7 @@ GtCoderExampleStatusStyler class >> examplePatternStylerFor: aMethodCoder [
 		yourself
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtCoderExampleStatusStyler >> visitMethod: aMethodNode [
 	| anExample |
 

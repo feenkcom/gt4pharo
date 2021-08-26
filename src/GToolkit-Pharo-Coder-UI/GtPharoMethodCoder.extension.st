@@ -1,11 +1,11 @@
-Extension { #name : #GtPharoMethodCoder }
+Extension { #name : 'GtPharoMethodCoder' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPharoMethodCoder >> asCoderUIModel [
 	^ GtPharoMethodCoderViewModel new coder: self
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPharoMethodCoder >> breadcrumbActions [
 	<return: #Array of: #GtSourceCoderBreadcrumbAction>
 	^ Array
@@ -17,14 +17,14 @@ GtPharoMethodCoder >> breadcrumbActions [
 			aStream nextPut: (GtSourceCoderBreadcrumbSpawnBehaviorAction new methodBehavior: self methodBehavior) ]
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPharoMethodCoder >> browseFrom: anEditorElement [ 
 	((GtCoder forMethod: self compiledMethod)
 		openInPagerFrom: anEditorElement)
 			maximized
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
 	| references element labelText |
 	(self isNewMethod

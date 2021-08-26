@@ -1,6 +1,6 @@
-Extension { #name : #GtMetaclassDefinition }
+Extension { #name : 'GtMetaclassDefinition' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtMetaclassDefinition >> editors [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 	
@@ -10,7 +10,7 @@ GtMetaclassDefinition >> editors [
 	}
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtMetaclassDefinition >> readers [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 	

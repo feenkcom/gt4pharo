@@ -7,18 +7,18 @@ The following code includes apassword that should be hidden by default: {{gtExam
 The following code includes apassword that should be hidden by default: {{gtExample: GtPharoZincStylerExamples >> #bearerSourceCode}}
 "
 Class {
-	#name : #GtPharoZincStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
+	#name : 'GtPharoZincStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoZincStyler >> selectors [
 	"Note: last argument is considered as a secret information, e.g., password."
 	^ #( 'username:password:' 'setBearerAuthentication:' )
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoZincStyler >> visitKeywordMessage: aMessage [
 	super visitKeywordMessage: aMessage.
 	((self selectors includes: aMessage selector)

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoDeprecationStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Deprecation'
+	#name : 'GtPharoDeprecationStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Deprecation'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoDeprecationStyler >> visitNamedVariable: aNamedVariable [
 	super visitNamedVariable: aNamedVariable.
 	

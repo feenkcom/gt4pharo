@@ -1,36 +1,36 @@
 Class {
-	#name : #GtPharoProcessCoderElement,
-	#superclass : #GtPharoMethodsCoderElement,
+	#name : 'GtPharoProcessCoderElement',
+	#superclass : 'GtPharoMethodsCoderElement',
 	#instVars : [
 		'activeCoder',
 		'contextVariablesElement',
 		'watchVariablesElement',
 		'watchExpressions'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> addMethodWatchExpressionFrom: aMethodCoder [
 	GtWatchExpression addExpression: aMethodCoder selectedSource for: aMethodCoder compiledMethod.
 	self updateWatchExpressions
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> addWatchExpressionFrom: aMethodCoder [
 	(watchExpressions at: aMethodCoder ifAbsentPut: [ OrderedCollection new ])
 		add: (GtWatchExpression new expression: aMethodCoder selectedSource).
 	self updateWatchExpressions
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoProcessCoderElement >> buildElement [
 	super buildElement.
 	self layout: BlLinearLayout horizontal.
 	self addChild: self variablesElement
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> contextVariables [
 	| vars |
 	(activeCoder isNil or: [ activeCoder isDead ])
@@ -44,45 +44,45 @@ GtPharoProcessCoderElement >> contextVariables [
 	^ vars
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoProcessCoderElement >> contextVariablesElement [
 	contextVariablesElement := self variablesListElement.
 	contextVariablesElement items: self contextVariables.
 	^ contextVariablesElement
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> focusedCoder: aCoder in: anElement [
 	activeCoder := aCoder.
 	self updateVariables
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 GtPharoProcessCoderElement >> initialize [
 	super initialize.
 	watchExpressions := WeakKeyDictionary new
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> updateList [
 	super updateList.
 	self updateVariables
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> updateVariables [
 	contextVariablesElement notNil
 		ifTrue: [ contextVariablesElement display: self contextVariables ].
 	self updateWatchExpressions
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> updateWatchExpressions [
 	watchVariablesElement notNil
 		ifTrue: [ watchVariablesElement display: self watchVariables ]
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoProcessCoderElement >> variablesElement [
 	^ BrTabGroup new
 		aptitude: BrGlamorousTabGroupAptitude new;
@@ -96,7 +96,7 @@ GtPharoProcessCoderElement >> variablesElement [
 			stencil: [ self watchVariablesElement ])
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoProcessCoderElement >> variablesListElement [
 	| list |
 	list := BrColumnedList new.
@@ -147,12 +147,12 @@ GtPharoProcessCoderElement >> variablesListElement [
 	^ list
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> watchExpressionsFor: aMethodCoder [
 	^ (watchExpressions at: aMethodCoder ifAbsent: [ #() ]) , (GtWatchExpression expressionsFor: aMethodCoder compiledMethod) asArray
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> watchVariables [
 	| variables |
 	variables := OrderedCollection new.
@@ -161,14 +161,14 @@ GtPharoProcessCoderElement >> watchVariables [
 	^ variables
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtPharoProcessCoderElement >> watchVariablesElement [
 	watchVariablesElement := self variablesListElement.
 	watchVariablesElement items: self watchVariables.
 	^ watchVariablesElement
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoProcessCoderElement >> watchVariablesFor: aMethodCoder [
 	^ (self watchExpressionsFor: aMethodCoder)
 		collect: [ :each | 

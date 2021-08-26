@@ -1,6 +1,6 @@
-Extension { #name : #GtCompositeRenameAction }
+Extension { #name : 'GtCompositeRenameAction' }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtCompositeRenameAction class >> coderRenameLocalsOnPattern: aTextEditorElement source: sourceEditor [
 	| action |
 	action := self pharoRenameLocalsOn: aTextEditorElement.
@@ -25,7 +25,7 @@ GtCompositeRenameAction class >> coderRenameLocalsOnPattern: aTextEditorElement 
 	^ action
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtCompositeRenameAction class >> coderRenameLocalsOnSource: aTextEditorElement pattern: patternEditor [
 	^ [ | editor text ast items action patternAST parameter |
 	editor := aTextEditorElement editor.

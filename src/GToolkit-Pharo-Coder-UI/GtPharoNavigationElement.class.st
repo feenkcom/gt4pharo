@@ -1,6 +1,6 @@
 Class {
-	#name : #GtPharoNavigationElement,
-	#superclass : #BrPager,
+	#name : 'GtPharoNavigationElement',
+	#superclass : 'BrPager',
 	#traits : 'TGtWithPharoPackagesNavigationViewModel',
 	#classTraits : 'TGtWithPharoPackagesNavigationViewModel classTrait',
 	#instVars : [
@@ -9,10 +9,10 @@ Class {
 		'behaivorsNavigationElement',
 		'behaviorsPage'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoNavigationElement >> initialize [
 	super initialize.
 	
@@ -42,13 +42,13 @@ GtPharoNavigationElement >> initialize [
 	self addPage: behaviorsPage
 ]
 
-{ #category : #'private - event handling' }
+{ #category : 'private - event handling' }
 GtPharoNavigationElement >> onPharoPackageNavigationSelected: anAnnouncement [
 
 	behaivorsNavigationElement pharoBehaviorsNavigationViewModel: anAnnouncement packageViewModel pharoBehaviorsNavigationViewModel
 ]
 
-{ #category : #'api - pharo packages navigation view model' }
+{ #category : 'api - pharo packages navigation view model' }
 GtPharoNavigationElement >> onPharoPackagesNavigationViewModelChanged [
 	"Is sent when a new pharoPackagesNavigation view model is assigned to the element.
 	Note: #onPharoPackagesNavigationViewModelChanged is sent before #subscribeToPharoPackagesNavigationViewModel
@@ -59,20 +59,20 @@ GtPharoNavigationElement >> onPharoPackagesNavigationViewModelChanged [
 	packagesNavigationElement pharoPackagesNavigationViewModel: self pharoPackagesNavigationViewModel
 ]
 
-{ #category : #'private - event handling' }
+{ #category : 'private - event handling' }
 GtPharoNavigationElement >> onPharoTagNavigationDeselected: anAnnouncement [
 
 	behaivorsNavigationElement pharoBehaviorsNavigationViewModel:
 		anAnnouncement tagViewModel parentPharoTagsNavigationViewModel parentPharoPackageNavigationViewModel pharoBehaviorsNavigationViewModel
 ]
 
-{ #category : #'private - event handling' }
+{ #category : 'private - event handling' }
 GtPharoNavigationElement >> onPharoTagNavigationSelected: anAnnouncement [
 
 	behaivorsNavigationElement pharoBehaviorsNavigationViewModel: anAnnouncement tagViewModel pharoBehaviorsNavigationViewModel
 ]
 
-{ #category : #'api - pharo packages navigation view model' }
+{ #category : 'api - pharo packages navigation view model' }
 GtPharoNavigationElement >> subscribeToPharoPackagesNavigationViewModel [
 	"Is sent after a new pharoPackagesNavigation view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
@@ -90,7 +90,7 @@ GtPharoNavigationElement >> subscribeToPharoPackagesNavigationViewModel [
 			to: self.
 ]
 
-{ #category : #'api - pharo packages navigation view model' }
+{ #category : 'api - pharo packages navigation view model' }
 GtPharoNavigationElement >> unsubscribeFromPharoPackagesNavigationViewModel [
 	"Is sent before a new pharoPackagesNavigation view model is assigned to the element.
 	Elements that subscribe to pharoPackagesNavigation view model in domain model are required to implement this methods."

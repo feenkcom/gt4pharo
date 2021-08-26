@@ -1,6 +1,6 @@
 Class {
-	#name : #GtUserActivatableRefactoringElement,
-	#superclass : #BrHorizontalPane,
+	#name : 'GtUserActivatableRefactoringElement',
+	#superclass : 'BrHorizontalPane',
 	#instVars : [
 		'activatableRefactoring',
 		'description',
@@ -8,20 +8,20 @@ Class {
 		'header',
 		'checkbox'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtUserActivatableRefactoringElement class >> fromActivatableRefactoring: aGtUserActivatableRefactoring [
 	^ self new activatableRefactoring: aGtUserActivatableRefactoring
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtUserActivatableRefactoringElement >> activatableRefactoring [
 	^ activatableRefactoring
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtUserActivatableRefactoringElement >> activatableRefactoring: aGtUserActivatableRefactoring [
 
 	activatableRefactoring ifNotNil: [ activatableRefactoring announcer unsubscribe: self ].
@@ -47,7 +47,7 @@ GtUserActivatableRefactoringElement >> activatableRefactoring: aGtUserActivatabl
 			vFitContent ])"
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtUserActivatableRefactoringElement >> initialize [
 	super initialize.
 
@@ -75,7 +75,7 @@ GtUserActivatableRefactoringElement >> initialize [
 	}
 ]
 
-{ #category : #'event handling' }
+{ #category : 'event handling' }
 GtUserActivatableRefactoringElement >> onEnablementChanged [
 	activatableRefactoring isIndeterminate
 		ifTrue: [ checkbox indeterminate ]

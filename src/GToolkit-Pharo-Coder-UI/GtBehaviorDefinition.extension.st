@@ -1,6 +1,6 @@
-Extension { #name : #GtBehaviorDefinition }
+Extension { #name : 'GtBehaviorDefinition' }
 
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
+{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtBehaviorDefinition >> nameEditor [
 	<return: #GtCodeDefinitionViewer>
 	

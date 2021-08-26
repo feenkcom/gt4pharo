@@ -1,12 +1,12 @@
 Trait {
-	#name : #TGtWithPharoTagsNavigationViewModel,
+	#name : 'TGtWithPharoTagsNavigationViewModel',
 	#instVars : [
 		'pharoTagsNavigationViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> hasPharoTagsNavigationViewModel [
 	"Return a true if pharoTagsNavigation view model is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
@@ -14,7 +14,7 @@ TGtWithPharoTagsNavigationViewModel >> hasPharoTagsNavigationViewModel [
 	^ pharoTagsNavigationViewModel notNil
 ]
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> onPharoTagsNavigationViewModelChanged [
 	"Is sent when a new pharoTagsNavigation view model is assigned to the element.
 	Note: #onPharoTagsNavigationViewModelChanged is sent before #subscribeToPharoTagsNavigationViewModel
@@ -25,14 +25,14 @@ TGtWithPharoTagsNavigationViewModel >> onPharoTagsNavigationViewModelChanged [
 	self explicitRequirement
 ]
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> onPostPharoTagsNavigationViewModelChanged [
 	"I am an optional hook method that is sent after #subscribeToPharoTagsNavigationViewModel.
 	I do nothing by default but allow users to perform update operations when a receiver object is already
 	subscribed to announcements."
 ]
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> pharoTagsNavigationViewModel [
 	"Return a not-null pharoTagsNavigation view model assigned to the receiver element"
 	self
@@ -42,7 +42,7 @@ TGtWithPharoTagsNavigationViewModel >> pharoTagsNavigationViewModel [
 	^ pharoTagsNavigationViewModel
 ]
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> pharoTagsNavigationViewModel: aPharoTagsNavigationViewModel [
 	"Set a not-null pharoTagsNavigation view model assigned to the receiver element"
 	self
@@ -60,14 +60,14 @@ TGtWithPharoTagsNavigationViewModel >> pharoTagsNavigationViewModel: aPharoTagsN
 	self onPostPharoTagsNavigationViewModelChanged
 ]
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> subscribeToPharoTagsNavigationViewModel [
 	"Is sent after a new pharoTagsNavigation view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromPharoTagsNavigationViewModel if elements subscribe to them"
 ]
 
-{ #category : #'api - pharo tags navigation view model' }
+{ #category : 'api - pharo tags navigation view model' }
 TGtWithPharoTagsNavigationViewModel >> unsubscribeFromPharoTagsNavigationViewModel [
 	"Is sent before a new pharoTagsNavigation view model is assigned to the element.
 	Elements that subscribe to pharoTagsNavigation view model in domain model are required to implement this methods."

@@ -27,15 +27,15 @@ GtPharoBehaviorProtocolBubbleElement >> createProtocolLabel [
 ]
 
 { #category : 'private - instance creation' }
-GtPharoBehaviorProtocolBubbleElement >> createProtocolMethodRowFor: aPharoMethodsCoderViewModel index: anIndex [
-
-	| tooltipLook |
+GtPharoBehaviorProtocolBubbleElement >> createProtocolMethodRowFor: aPharoMethodCoderViewModel index: anIndex [
+	| tooltipLook anIcon aLabel aLabelAptitude |
+	
 	tooltipLook := BrGlamorousWithTooltipAptitude content: [ 
-		               aPharoMethodsCoderViewModel expanded: true.
+		               aPharoMethodCoderViewModel expanded: true.
 		               GtSourceCoderEditorElement new
 			               in: [ :anEditorElement | 
 				               anEditorElement editor beParagraphBased ];
-			               textualCoderViewModel: aPharoMethodsCoderViewModel;
+			               textualCoderViewModel: aPharoMethodCoderViewModel;
 			               vFitContent;
 			               hExact: 400 ].
 	tooltipLook
@@ -43,14 +43,34 @@ GtPharoBehaviorProtocolBubbleElement >> createProtocolMethodRowFor: aPharoMethod
 		hideDelay: 0 seconds;
 		attachToLeftAndRight;
 		onPrimaryHover.
+		
+	anIcon := aPharoMethodCoderViewModel isFromTrait
+		ifTrue: [ BrGlamorousIcons traitIcon asElement ]
+		ifFalse: [
+			aPharoMethodCoderViewModel isOverridden
+				ifTrue: [ aPharoMethodCoderViewModel isOverriding
+					ifTrue: [ BrGlamorousVectorIcons upwardsDownwards asElement ]
+					ifFalse: [ BrGlamorousVectorIcons downwards asElement ] ]
+				ifFalse: [ aPharoMethodCoderViewModel isOverriding
+					ifTrue: [ BrGlamorousVectorIcons upwards asElement ]
+					ifFalse: [ BlElement new size: 16@16 ] ] ].
 
-	^ BrLabel new
-		  hMatchParent;
-		  id:
-			  (GtPharoBehaviorProtocolBubbleMethodHeaderElementId indexed:
-					   anIndex);
-		  text: aPharoMethodsCoderViewModel selector;
-		  aptitude: BrGlamorousLabelAptitude + tooltipLook
+	aLabelAptitude := BrGlamorousLabelAptitude new.
+	aPharoMethodCoderViewModel isFromTrait
+		ifTrue: [ aLabelAptitude italic ].			
+					
+	aLabel := BrLabel new
+		hMatchParent;
+		text: aPharoMethodCoderViewModel selector;
+		aptitude: aLabelAptitude.
+	
+	^ BrHorizontalPane new
+		hMatchParent;
+		vFitContent;
+		addChildren: { anIcon . aLabel };
+		alignCenterLeft;
+		id: (GtPharoBehaviorProtocolBubbleMethodHeaderElementId indexed:anIndex);
+		aptitude: tooltipLook
 			  + (BrStyleCommonAptitude new hovered: [ :s | 
 						   s background: (Color gray alpha: 0.2) ]);
 		  when: BlClickEvent do: [ :anEvent | 
@@ -60,8 +80,8 @@ GtPharoBehaviorProtocolBubbleElement >> createProtocolMethodRowFor: aPharoMethod
 			  aContainer := self.
 			  aContainer removeChildNamed: #'bubble--editor'.
 
-			  aPharoMethodsCoderViewModel expanded: true.
-			  aCoderElement := aPharoMethodsCoderViewModel asElement.
+			  aPharoMethodCoderViewModel expanded: true.
+			  aCoderElement := aPharoMethodCoderViewModel asElement.
 			  aCoderElement hExact: 500.
 			  aCoderElement vFitContent.
 
@@ -76,7 +96,7 @@ GtPharoBehaviorProtocolBubbleElement >> initialize [
 
 	self
 		background: Color white;
-		addAptitude: BrShadowLook new beLarge;
+		addAptitude: BrShadowAptitude new beLarge;
 		addAptitude: BrGlamorousWithMaximizerAptitude new;
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 5);
 		beInSeparateCompositionLayer;
