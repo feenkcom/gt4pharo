@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoSnippetCoder }
+Extension { #name : 'GtPharoSnippetCoder' }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 
@@ -40,7 +40,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 		id: GtSourceCoderProfileActionId
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> renameIn: editorElement [
 	GtRenameAction pharoRenameSnippetLocalsOn: editorElement
 ]

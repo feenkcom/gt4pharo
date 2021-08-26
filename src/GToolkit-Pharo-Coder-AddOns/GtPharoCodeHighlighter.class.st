@@ -1,15 +1,15 @@
 Class {
-	#name : #GtPharoCodeHighlighter,
-	#superclass : #GtSourceReferenceHighlighter,
+	#name : 'GtPharoCodeHighlighter',
+	#superclass : 'GtSourceReferenceHighlighter',
 	#traits : 'TGtPharoProgramNodeVisitor',
 	#classTraits : 'TGtPharoProgramNodeVisitor classTrait',
 	#instVars : [
 		'stream'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtPharoCodeHighlighter >> acceptNode: aSmaCCParseNode [
 	"Using acceptVisitor: is the correct way to use a visitor pattern.
 	The constraint was design for RB"
@@ -27,7 +27,7 @@ GtPharoCodeHighlighter >> acceptNode: aSmaCCParseNode [
 					ensure: [ stream := nil ] ] ]
 ]
 
-{ #category : #'api - styling' }
+{ #category : 'api - styling' }
 GtPharoCodeHighlighter >> style: aText ast: theAst [
 	text := aText.
 	[ 
@@ -38,7 +38,7 @@ GtPharoCodeHighlighter >> style: aText ast: theAst [
 			ensure: [ text := nil ]
 ]
 
-{ #category : #'api - styling' }
+{ #category : 'api - styling' }
 GtPharoCodeHighlighter >> style: aText intervals: theIntervals [
 	theIntervals do: [ :eachHighlightInterval |
 		aText

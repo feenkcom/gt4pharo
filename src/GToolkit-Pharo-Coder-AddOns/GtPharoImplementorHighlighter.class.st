@@ -1,30 +1,30 @@
 Class {
-	#name : #GtPharoImplementorHighlighter,
-	#superclass : #GtPharoCodeHighlighter,
+	#name : 'GtPharoImplementorHighlighter',
+	#superclass : 'GtPharoCodeHighlighter',
 	#instVars : [
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtPharoImplementorHighlighter class >> forSelector: aSymbol [
 	^ self new
 		selector: aSymbol;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoImplementorHighlighter >> selector [
 	^ selector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoImplementorHighlighter >> selector: aSymbol [
 	selector := aSymbol
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 GtPharoImplementorHighlighter >> visitMethod: aMethodNode [
 	aMethodNode selector = selector
 		ifTrue: [

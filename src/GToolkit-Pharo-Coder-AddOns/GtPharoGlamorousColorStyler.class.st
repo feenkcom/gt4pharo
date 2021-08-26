@@ -4,12 +4,12 @@ I display a color next to {{gtClass:BrGlamorousColors}} messages.
 The following example shows how a {{gtMethod:BrGlamorousColors class >> #pressedButtonBorderColor | label=#selector}} looks like directly in the code: {{gtExample:GtPharoGlamorousColorStylerExamples>>#glamorousColor}}
 "
 Class {
-	#name : #GtPharoGlamorousColorStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
+	#name : 'GtPharoGlamorousColorStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
-{ #category : #'private - styling' }
+{ #category : 'private - styling' }
 GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode [
 	| color |
 	color := BrGlamorousColors perform: aMessageSendNode message selector.
@@ -17,7 +17,7 @@ GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode [
 	self styleNode: aMessageSendNode withColor: color
 ]
 
-{ #category : #'private - styling' }
+{ #category : 'private - styling' }
 GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode withColor: color [
 	self
 		attribute:
@@ -32,7 +32,7 @@ GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode withColor: color [
 		to: aMessageSendNode stopPosition
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoGlamorousColorStyler >> visitMessageSend: aMessageSendNode [
 	| receiver |
 	super visitMessageSend: aMessageSendNode.

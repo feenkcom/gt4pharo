@@ -1,6 +1,6 @@
-Extension { #name : #GtSubstringFilter }
+Extension { #name : 'GtSubstringFilter' }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtSubstringFilter >> highlighter [
 	^ GtPharoSubstringHighlighter substring: self substring
 ]

@@ -4,17 +4,17 @@ I hide secret information written in a code, e.g., secret IDs and tokens.
 The following code includes a secret information that should be hidden by default: {{gtExample:GtPharoZincApplicationFormUrlEncodedEntityStylerExamples>>#sourceCode}}
 "
 Class {
-	#name : #GtPharoZincApplicationFormUrlEncodedEntityStyler,
-	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
+	#name : 'GtPharoZincApplicationFormUrlEncodedEntityStyler',
+	#superclass : 'GtGenericPharoStyler',
+	#category : 'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoZincApplicationFormUrlEncodedEntityStyler >> secretKeys [
 	^ #( 'secret' 'token' 'id' )
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoZincApplicationFormUrlEncodedEntityStyler >> visitKeywordMessage: aMessage [
 	super visitKeywordMessage: aMessage.
 	aMessage selector = #'at:put:' ifFalse: [ ^ self ].

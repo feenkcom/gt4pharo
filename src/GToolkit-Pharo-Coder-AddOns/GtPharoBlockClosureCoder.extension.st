@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoBlockClosureCoder }
+Extension { #name : 'GtPharoBlockClosureCoder' }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoBlockClosureCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 	
