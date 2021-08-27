@@ -1,18 +1,18 @@
 Class {
-	#name : #GtPharoPackagesCoderExamples,
-	#superclass : #Object,
+	#name : 'GtPharoPackagesCoderExamples',
+	#superclass : 'Object',
 	#instVars : [
 		'environment'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 GtPharoPackagesCoderExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoPackagesCoderExamples >> packagesCoderOnManyPackages [
 	| aCoder |
 	<gtExample>

@@ -1,52 +1,52 @@
 Class {
-	#name : #GtPharoTemplateSymbolNode,
-	#superclass : #GtPharoTemplatableNode,
+	#name : 'GtPharoTemplateSymbolNode',
+	#superclass : 'GtPharoTemplatableNode',
 	#instVars : [
 		'_hash',
 		'symbolParts'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> _hash [
 	^ _hash
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> _hash: aSmaCCToken [
 	_hash := aSmaCCToken
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplateSymbol: self
 ]
 
-{ #category : #'generated-initialize-release' }
+{ #category : 'generated-initialize-release' }
 GtPharoTemplateSymbolNode >> initialize [
 	super initialize.
 	symbolParts := OrderedCollection new: 2.
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> otherVariables [
 	^ #(#symbolParts)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> symbolParts [
 	^ symbolParts
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> symbolParts: anOrderedCollection [
 	self setParent: self symbolParts to: nil.
 	symbolParts := anOrderedCollection.
 	self setParent: self symbolParts to: self
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateSymbolNode >> tokenVariables [
 	^ #(#_hash)
 ]

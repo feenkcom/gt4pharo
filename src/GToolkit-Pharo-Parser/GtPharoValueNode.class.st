@@ -1,56 +1,56 @@
 Class {
-	#name : #GtPharoValueNode,
-	#superclass : #GtPharoProgramNode,
+	#name : 'GtPharoValueNode',
+	#superclass : 'GtPharoProgramNode',
 	#instVars : [
 		'leftParens',
 		'rightParens'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoValueNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitValue: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoValueNode >> guessType: completionStrategy [
 	^ nil
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoValueNode >> ignoredCompositeTokenVariables [
 	^ #(#leftParens #rightParens)
 ]
 
-{ #category : #'generated-initialize-release' }
+{ #category : 'generated-initialize-release' }
 GtPharoValueNode >> initialize [
 	super initialize.
 	leftParens := OrderedCollection new: 2.
 	rightParens := OrderedCollection new: 2.
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoValueNode >> leftParens [
 	^ leftParens
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoValueNode >> leftParens: anOrderedCollection [
 	leftParens := anOrderedCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoValueNode >> nestingLevel [
 	^ self leftParens size + super nestingLevel
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoValueNode >> rightParens [
 	^ rightParens
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoValueNode >> rightParens: anOrderedCollection [
 	rightParens := anOrderedCollection
 ]

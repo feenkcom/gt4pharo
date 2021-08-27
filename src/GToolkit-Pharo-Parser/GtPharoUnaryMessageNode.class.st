@@ -1,48 +1,48 @@
 Class {
-	#name : #GtPharoUnaryMessageNode,
-	#superclass : #GtPharoMessageNode,
+	#name : 'GtPharoUnaryMessageNode',
+	#superclass : 'GtPharoMessageNode',
 	#instVars : [
 		'selectorPart'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoUnaryMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitUnaryMessage: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoUnaryMessageNode >> arguments [
 	^ #()
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoUnaryMessageNode >> isUnary [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoUnaryMessageNode >> messageReceiver [
 	^ parent
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoUnaryMessageNode >> nodeVariables [
 	^ #(#selectorPart)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoUnaryMessageNode >> selector [
 	^ self selectorPart value asSymbol
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoUnaryMessageNode >> selectorPart [
 	^ selectorPart
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoUnaryMessageNode >> selectorPart: aGtPharoNameNode [
 	self selectorPart notNil
 		ifTrue: [ self selectorPart parent: nil ].
@@ -51,7 +51,7 @@ GtPharoUnaryMessageNode >> selectorPart: aGtPharoNameNode [
 		ifTrue: [ self selectorPart parent: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoUnaryMessageNode >> selectorParts [
 	^ {selectorPart}
 ]

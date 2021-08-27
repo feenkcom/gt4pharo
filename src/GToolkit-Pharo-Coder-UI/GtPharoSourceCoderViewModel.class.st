@@ -15,6 +15,11 @@ GtPharoSourceCoderViewModel >> behavior [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'api - accessing' }
+GtPharoSourceCoderViewModel >> bindingOf: aVariableName [
+	^ self bindingStrategy bindingOf: aVariableName
+]
+
 { #category : 'private - bindings' }
 GtPharoSourceCoderViewModel >> bindingStrategy [
 	"Private. Return the underlying bindings strategy. Do not modify the object from the outside!"

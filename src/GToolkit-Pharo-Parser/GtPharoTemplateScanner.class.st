@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoTemplateScanner,
-	#superclass : #SmaCCScanner,
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#name : 'GtPharoTemplateScanner',
+	#superclass : 'SmaCCScanner',
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #'generated-initialization' }
+{ #category : 'generated-initialization' }
 GtPharoTemplateScanner class >> initializeKeywordMap [
 	keywordMap := Dictionary new.
 	#(#(4 'false' 2) #(4 'nil' 3) #(4 'self' 33) #(4 'super' 34) #(4 'thisContext' 35) #(4 'true' 1))
@@ -15,52 +15,52 @@ GtPharoTemplateScanner class >> initializeKeywordMap [
 	^ keywordMap
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> barId [
 	^ 6
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> binaryId [
 	^ 25
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> emptySymbolTokenId [
 	^ 122
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> errorTokenId [
 	^ 123
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> keywordId [
 	^ 24
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> nameAssignmentId [
 	^ 5
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> nameId [
 	^ 4
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> negativeNumberId [
 	^ 10
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> numberId [
 	^ 9
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1 [
 	self step.
 	currentCharacter == $"
@@ -83,7 +83,7 @@ GtPharoTemplateScanner >> scan1 [
 	^ self scan1X13
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X1 [
 	self recordMatch: #(6 25).
 	self step.
@@ -106,7 +106,7 @@ GtPharoTemplateScanner >> scan1X1 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X10 [
 	self step.
 	currentCharacter == $=
@@ -114,7 +114,7 @@ GtPharoTemplateScanner >> scan1X10 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X11 [
 	[ self recordMatch: #(9).
 	self step.
@@ -122,7 +122,7 @@ GtPharoTemplateScanner >> scan1X11 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X12 [
 	(currentCharacter isSeparator
 		or: [ currentCharacter == Character null
@@ -148,7 +148,7 @@ GtPharoTemplateScanner >> scan1X12 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X13 [
 	currentCharacter == $:
 		ifTrue:
@@ -184,7 +184,7 @@ GtPharoTemplateScanner >> scan1X13 [
 	^ self scan1X12
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X2 [
 	self recordMatch: #(14 25).
 	self step.
@@ -207,7 +207,7 @@ GtPharoTemplateScanner >> scan1X2 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X3 [
 	self recordMatch: #(13 25).
 	self step.
@@ -230,7 +230,7 @@ GtPharoTemplateScanner >> scan1X3 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X4 [
 	[ self recordMatch: #(25).
 	self step.
@@ -244,7 +244,7 @@ GtPharoTemplateScanner >> scan1X4 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X5 [
 	[ self recordMatch: #(31).
 	self step.
@@ -256,7 +256,7 @@ GtPharoTemplateScanner >> scan1X5 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X6 [
 	self recordMatch: #(36).
 	self step.
@@ -269,7 +269,7 @@ GtPharoTemplateScanner >> scan1X6 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X7 [
 	self recordMatch: #(23).
 	self step.
@@ -278,7 +278,7 @@ GtPharoTemplateScanner >> scan1X7 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X8 [
 	self recordMatch: #(15).
 	self step.
@@ -287,7 +287,7 @@ GtPharoTemplateScanner >> scan1X8 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan1X9 [
 	self recordMatch: #(17).
 	self step.
@@ -296,7 +296,7 @@ GtPharoTemplateScanner >> scan1X9 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan2 [
 	[ self step.
 	currentCharacter == $"
@@ -309,13 +309,13 @@ GtPharoTemplateScanner >> scan2 [
 	true ] whileTrue
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan3 [
 	self step.
 	^ self recordAndReportMatch: #(8)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan4 [
 	[ self step.
 	currentCharacter == $'
@@ -327,7 +327,7 @@ GtPharoTemplateScanner >> scan4 [
 	true ] whileTrue
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan5 [
 	self recordMatch: #(25).
 	self step.
@@ -355,7 +355,7 @@ GtPharoTemplateScanner >> scan5 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan6 [
 	[ self step.
 	currentCharacter == $`
@@ -367,7 +367,7 @@ GtPharoTemplateScanner >> scan6 [
 	true ] whileTrue
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7 [
 	self step.
 	currentCharacter == $"
@@ -399,7 +399,7 @@ GtPharoTemplateScanner >> scan7 [
 	^ self scan7X6
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7X1 [
 	[ self recordMatch: #(25).
 	self step.
@@ -413,7 +413,7 @@ GtPharoTemplateScanner >> scan7X1 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7X2 [
 	[ self recordMatch: #(30).
 	self step.
@@ -425,7 +425,7 @@ GtPharoTemplateScanner >> scan7X2 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7X3 [
 	self recordMatch: #(11 24).
 	self step.
@@ -434,7 +434,7 @@ GtPharoTemplateScanner >> scan7X3 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7X4 [
 	self step.
 	currentCharacter == $(
@@ -444,7 +444,7 @@ GtPharoTemplateScanner >> scan7X4 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7X5 [
 	[ self recordMatch: #(9).
 	self step.
@@ -452,7 +452,7 @@ GtPharoTemplateScanner >> scan7X5 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan7X6 [
 	(currentCharacter isSeparator
 		or: [ currentCharacter == Character null
@@ -479,7 +479,7 @@ GtPharoTemplateScanner >> scan7X6 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scan8 [
 	[ self step.
 	currentCharacter == $:
@@ -493,7 +493,7 @@ GtPharoTemplateScanner >> scan8 [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> scanForToken [
 	scope == #literalArray
 		ifTrue: [ ^ self scan7 ].
@@ -502,7 +502,7 @@ GtPharoTemplateScanner >> scanForToken [
 	^ self reportLastMatch
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateScanner >> tokenActions [
 	^ #(nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil #comment #whitespace nil #patternToken)
 ]

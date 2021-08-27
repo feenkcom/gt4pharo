@@ -1,68 +1,68 @@
 Class {
-	#name : #GtPharoKeywordMessageNode,
-	#superclass : #GtPharoMessageNode,
+	#name : 'GtPharoKeywordMessageNode',
+	#superclass : 'GtPharoMessageNode',
 	#instVars : [
 		'selectorParts',
 		'values'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoKeywordMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitKeywordMessage: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoKeywordMessageNode >> arguments [
 	^ self values
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoKeywordMessageNode >> compositeNodeVariables [
 	^ #(#selectorParts #values)
 ]
 
-{ #category : #'generated-initialize-release' }
+{ #category : 'generated-initialize-release' }
 GtPharoKeywordMessageNode >> initialize [
 	super initialize.
 	selectorParts := OrderedCollection new: 2.
 	values := OrderedCollection new: 2.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoKeywordMessageNode >> isKeyword [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoKeywordMessageNode >> messageReceiver [
 	^ values last messageReceiver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoKeywordMessageNode >> selector [
 	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each selector ] ]) asSymbol
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoKeywordMessageNode >> selectorParts [
 	^ selectorParts
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoKeywordMessageNode >> selectorParts: anOrderedCollection [
 	self setParents: self selectorParts to: nil.
 	selectorParts := anOrderedCollection.
 	self setParents: self selectorParts to: self
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoKeywordMessageNode >> values [
 	^ values
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoKeywordMessageNode >> values: anOrderedCollection [
 	self setParents: self values to: nil.
 	values := anOrderedCollection.

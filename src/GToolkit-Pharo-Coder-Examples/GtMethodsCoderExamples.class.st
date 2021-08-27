@@ -1,40 +1,40 @@
 Class {
-	#name : #GtMethodsCoderExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#name : 'GtMethodsCoderExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #'examples - filters' }
+{ #category : 'examples - filters' }
 GtMethodsCoderExamples >> doFilter [
 	<gtExample>
 	^ GtSearchImplementorsFilter selector: #do:
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> doImplementorsCoder [
 	<gtExample>
 	^ (GtSearchMethodGroupResult forFilter: self doFilter) asCoder
 ]
 
-{ #category : #'examples - filters' }
+{ #category : 'examples - filters' }
 GtMethodsCoderExamples >> errorFilter [
 	<gtExample>
 	^ GtSearchReferencesFilter literal: #error:
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> errorReferencesCoder [
 	<gtExample>
 	^ (GtSearchMethodGroupResult forFilter: self errorFilter) asCoder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodsCoderExamples >> exceptionProcessCoderExample [
 	<gtExample>
 	^ GtProcessCoder forProcess: self suspendedErrorProcess
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> gtExamplesCoder [
 	<gtExample>
 	| methods |
@@ -43,31 +43,31 @@ GtMethodsCoderExamples >> gtExamplesCoder [
 	^ methods asCoder
 ]
 
-{ #category : #'examples - filters' }
+{ #category : 'examples - filters' }
 GtMethodsCoderExamples >> gtExamplesFilter [
 	<gtExample>
 	^ #gtExample gtPragmas
 ]
 
-{ #category : #'examples - filters' }
+{ #category : 'examples - filters' }
 GtMethodsCoderExamples >> instanceVariableFilter [
 	<gtExample>
 	^ GtSearchInstanceSlotReferenceFilter forClass: HashedCollection andVariable: 'array'
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> instanceVariableReferenceCoder [
 	<gtExample>
 	^ (GtSearchMethodGroupResult forFilter: self instanceVariableFilter) asCoder
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> intersectionCoder [
 	<gtExample>
 	^ (GtSearchMethodGroupResult forFilter: self instanceVariableFilter & self doFilter) asCoder
 ]
 
-{ #category : #'examples - class coder' }
+{ #category : 'examples - class coder' }
 GtMethodsCoderExamples >> methodsCoderWithClass [
 	<gtExample>
 	| classCoder |
@@ -79,31 +79,31 @@ GtMethodsCoderExamples >> methodsCoderWithClass [
 	^ classCoder
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> methodsCoderWithExplicitMethods [
 	<gtExample>
 	^ GtPharoMethodsCoder forItems: { Object>>#printString . Object >>#printOn: }
 ]
 
-{ #category : #'examples - filters' }
+{ #category : 'examples - filters' }
 GtMethodsCoderExamples >> printStringFilter [
 	<gtExample>
 	^ GtSearchReferencesFilter literal: #printString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodsCoderExamples >> processCoderExample [
 	<gtExample>
 	^ GtProcessCoder forProcess: self suspendedProcess
 ]
 
-{ #category : #'examples - filters' }
+{ #category : 'examples - filters' }
 GtMethodsCoderExamples >> selectFilter [
 	<gtExample>
 	^ self doFilter select: [ :each | (each methodClass includesBehavior: Collection) not ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodsCoderExamples >> suspendedErrorProcess [
 	<gtExample>
 	| process exception |
@@ -121,7 +121,7 @@ GtMethodsCoderExamples >> suspendedErrorProcess [
 	^ process
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodsCoderExamples >> suspendedProcess [
 	<gtExample>
 	| process |
@@ -133,13 +133,13 @@ GtMethodsCoderExamples >> suspendedProcess [
 	^ process
 ]
 
-{ #category : #'examples - coder' }
+{ #category : 'examples - coder' }
 GtMethodsCoderExamples >> unionCoder [
 	<gtExample>
 	^ (GtSearchMethodGroupResult forFilter: self errorFilter | self printStringFilter) asCoder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodsCoderExamples >> validateNoMemoryLeaks [
 	<gtExample>
 	<noTest>

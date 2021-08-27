@@ -1,14 +1,14 @@
 Class {
-	#name : #GtCoderNavigationElementExamples,
-	#superclass : #Object,
+	#name : 'GtCoderNavigationElementExamples',
+	#superclass : 'Object',
 	#instVars : [
 		'elements',
 		'spaces'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 GtCoderNavigationElementExamples >> assertSelectionOfPackage: aRPackage tag: aRPackageTag class: aClass inModel: aModel [
 
 	self assert: aModel selectedPackage equals: aRPackage.
@@ -16,7 +16,7 @@ GtCoderNavigationElementExamples >> assertSelectionOfPackage: aRPackage tag: aRP
 	self assert: aModel selectedClass equals: aClass.
 ]
 
-{ #category : #'examples - navigation model' }
+{ #category : 'examples - navigation model' }
 GtCoderNavigationElementExamples >> basicPackageTagsClassesNavigation [
 	<gtExample>
 	| aModel |
@@ -25,20 +25,20 @@ GtCoderNavigationElementExamples >> basicPackageTagsClassesNavigation [
 	^ aModel
 ]
 
-{ #category : #'examples - space' }
+{ #category : 'examples - space' }
 GtCoderNavigationElementExamples >> closeSpaces [
 	elements do: #removeFromParent.
 	spaces do: #close.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtCoderNavigationElementExamples >> initialize [
 	super initialize.
 	elements := OrderedCollection new: 1.
 	spaces := OrderedCollection new: 1.
 ]
 
-{ #category : #'examples - space' }
+{ #category : 'examples - space' }
 GtCoderNavigationElementExamples >> newSpace [
 	<gtExample>
 	| aSpace |
@@ -50,7 +50,7 @@ GtCoderNavigationElementExamples >> newSpace [
 	^ aSpace
 ]
 
-{ #category : #'examples - space' }
+{ #category : 'examples - space' }
 GtCoderNavigationElementExamples >> putInSpace: aBlElement [
 	<gtExample>
 	| aSpace |
@@ -63,7 +63,7 @@ GtCoderNavigationElementExamples >> putInSpace: aBlElement [
 	^ aSpace
 ]
 
-{ #category : #'examples - space' }
+{ #category : 'examples - space' }
 GtCoderNavigationElementExamples >> registerSpace: aSpace element: aBlElement [
 	<gtExample>
 	<after: #closeSpaces>
@@ -71,7 +71,7 @@ GtCoderNavigationElementExamples >> registerSpace: aSpace element: aBlElement [
 	elements add: aBlElement.
 ]
 
-{ #category : #'examples - navigation model' }
+{ #category : 'examples - navigation model' }
 GtCoderNavigationElementExamples >> selectPackage: aRPackage in: aModel [
 	<gtExample>
 	aModel selectPackage: aRPackage.

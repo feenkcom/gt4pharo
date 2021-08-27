@@ -1,10 +1,10 @@
 Class {
-	#name : #GtSourceCoderEditorElementByScripterExamples,
-	#superclass : #GtCoderByScripterExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtSourceCoderEditorElementByScripterExamples',
+	#superclass : 'GtCoderByScripterExamples',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'example - play example' }
+{ #category : 'example - play example' }
 GtSourceCoderEditorElementByScripterExamples >> playExample [
 	<gtExample>
 	| aScripter |
@@ -46,7 +46,7 @@ GtSourceCoderEditorElementByScripterExamples >> playExample [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'example - instance creation' }
+{ #category : 'example - instance creation' }
 GtSourceCoderEditorElementByScripterExamples >> scripterWithElement [
 	<gtExample>
 	| aScripter |

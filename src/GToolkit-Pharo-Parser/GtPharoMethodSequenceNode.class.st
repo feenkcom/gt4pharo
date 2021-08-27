@@ -1,34 +1,34 @@
 Class {
-	#name : #GtPharoMethodSequenceNode,
-	#superclass : #GtPharoSequenceNode,
+	#name : 'GtPharoMethodSequenceNode',
+	#superclass : 'GtPharoSequenceNode',
 	#instVars : [
 		'pragmas'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodSequenceNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMethodSequence: self
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodSequenceNode >> compositeNodeVariables [
 	^ #(#pragmas #statements #variables)
 ]
 
-{ #category : #'generated-initialize-release' }
+{ #category : 'generated-initialize-release' }
 GtPharoMethodSequenceNode >> initialize [
 	super initialize.
 	pragmas := OrderedCollection new: 2.
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodSequenceNode >> pragmas [
 	^ pragmas
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodSequenceNode >> pragmas: anOrderedCollection [
 	self setParents: self pragmas to: nil.
 	pragmas := anOrderedCollection.

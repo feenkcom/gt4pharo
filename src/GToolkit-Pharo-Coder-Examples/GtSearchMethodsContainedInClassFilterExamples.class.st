@@ -1,10 +1,10 @@
 Class {
-	#name : #GtSearchMethodsContainedInClassFilterExamples,
-	#superclass : #GtSearchMethodFilterExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
+	#name : 'GtSearchMethodsContainedInClassFilterExamples',
+	#superclass : 'GtSearchMethodFilterExamples',
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilter [
 	<gtExample>
 	| filter |
@@ -16,7 +16,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilter [
 	^ filter
 ]
 
-{ #category : #'examples - equality' }
+{ #category : 'examples - equality' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilterEquality [
 	<gtExample>
 	| filter |
@@ -28,7 +28,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilterEquality [
 	^ filter
 ]
 
-{ #category : #'examples - result type' }
+{ #category : 'examples - result type' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilterResultType [
 	<gtExample>
 	| filter |
@@ -38,7 +38,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilterResultType 
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilter [
 	<gtExample>
 	| filter |
@@ -50,7 +50,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilter
 	^ filter
 ]
 
-{ #category : #'examples - equality' }
+{ #category : 'examples - equality' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilterEquality [
 	<gtExample>
 	| filter |
@@ -62,7 +62,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilter
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesBothSidesUnionFilter [
 	<gtExample>
 	| filter |
@@ -78,7 +78,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesBothSidesUni
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilter [
 	<gtExample>
 	| filter |
@@ -94,7 +94,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilter 
 	^ filter
 ]
 
-{ #category : #'examples - result type' }
+{ #category : 'examples - result type' }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilterResultType [
 	<gtExample>
 	| filter |
@@ -106,7 +106,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilterR
 	^ filter
 ]
 
-{ #category : #'examples - result' }
+{ #category : 'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInClassFilter [
 	<gtExample>
 	| filter result |
@@ -126,7 +126,7 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInClassFil
 	^ result
 ]
 
-{ #category : #'examples - result' }
+{ #category : 'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClassesBothSidesUnionFilter [
 	<gtExample>
 	| filter result |
@@ -150,7 +150,7 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClass
 	^ result
 ]
 
-{ #category : #'examples - result' }
+{ #category : 'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClassesUnionFilter [
 	<gtExample>
 	| filter result |

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtRenamerExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples'
+	#name : 'GtRenamerExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRenamerExamples >> applyRename [
 	<gtExample>
 	<noTest>
@@ -29,7 +29,7 @@ GtRenamerExamples >> applyRename [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRenamerExamples >> cancelRename [
 	<gtExample>
 	| scripter |
@@ -46,20 +46,20 @@ GtRenamerExamples >> cancelRename [
 	^ scripter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtRenamerExamples >> methodText [
 	^ 'double: anInteger
 	^ anInteger + anInteger'
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtRenamerExamples >> scripter [
 	<gtExample>
 	
 	^ BlDevScripter new
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtRenamerExamples >> smalltalkRenamer [
 	<gtExample>
 	| text styler editorElement completionStrategy completionController |
@@ -92,7 +92,7 @@ GtRenamerExamples >> smalltalkRenamer [
 	^ editorElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRenamerExamples >> smalltalkRenamerScripter [
 	<gtExample>
 	| scripter |
@@ -101,7 +101,7 @@ GtRenamerExamples >> smalltalkRenamerScripter [
 	^ scripter pulse
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRenamerExamples >> startRename [
 	<gtExample>
 	| scripter |

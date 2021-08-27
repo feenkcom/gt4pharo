@@ -1,10 +1,10 @@
 Class {
-	#name : #GtFiltersElementExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#name : 'GtFiltersElementExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFiltersElementExamples >> basicFilteredMethodsCoder [
 	<gtExample>
 	| aCoder |
@@ -12,7 +12,7 @@ GtFiltersElementExamples >> basicFilteredMethodsCoder [
 	^ aCoder
 ]
 
-{ #category : #'examples - ui' }
+{ #category : 'examples - ui' }
 GtFiltersElementExamples >> basicFiltersElement [
 	<gtExample>
 	| anElement |
@@ -23,7 +23,7 @@ GtFiltersElementExamples >> basicFiltersElement [
 	^ anElement
 ]
 
-{ #category : #'examples - ui' }
+{ #category : 'examples - ui' }
 GtFiltersElementExamples >> coderWithFiltersElement [
 	<gtExample>
 	| aFiltersElement aCoder aCoderElement aTag aButton |
@@ -43,7 +43,7 @@ GtFiltersElementExamples >> coderWithFiltersElement [
 	^ aCoder
 ]
 
-{ #category : #'examples - ui' }
+{ #category : 'examples - ui' }
 GtFiltersElementExamples >> filterTagElement [
 	<gtExample>
 	| aFiltersElement aTagElement |
@@ -54,7 +54,7 @@ GtFiltersElementExamples >> filterTagElement [
 	^ aTagElement
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFiltersElementExamples >> filteredMethodsCoder [
 	<gtExample>
 	| aCoder aClass |
@@ -65,7 +65,7 @@ GtFiltersElementExamples >> filteredMethodsCoder [
 	^ aCoder
 ]
 
-{ #category : #'examples - ui' }
+{ #category : 'examples - ui' }
 GtFiltersElementExamples >> filtersElemenFrom: aCoderElement [
 	<gtExample>
 	| aFiltersElement |
@@ -74,7 +74,7 @@ GtFiltersElementExamples >> filtersElemenFrom: aCoderElement [
 	^ aFiltersElement
 ]
 
-{ #category : #'examples - ui' }
+{ #category : 'examples - ui' }
 GtFiltersElementExamples >> filtersElement [
 	<gtExample>
 	| aFiltersElement aCoder aCoderElement |

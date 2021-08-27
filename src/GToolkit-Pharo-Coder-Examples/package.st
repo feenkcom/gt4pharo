@@ -1,1 +1,1 @@
-Package { #name : #'GToolkit-Pharo-Coder-Examples' }
+Package { #name : 'GToolkit-Pharo-Coder-Examples' }

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtBlockCoderExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#name : 'GtBlockCoderExamples',
+	#superclass : 'Object',
+	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBlockCoderExamples >> compileBlock [
 	<gtExample>
 	| block |
@@ -15,7 +15,7 @@ GtBlockCoderExamples >> compileBlock [
 	^ block
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBlockCoderExamples >> syntaxError [
 	<gtExample>
 	| aBlockClosureCoder wasSignalled |
@@ -35,7 +35,7 @@ GtBlockCoderExamples >> syntaxError [
 	^ aBlockClosureCoder
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtBlockCoderExamples >> twoArgumentBlock [
 	<gtExample>
 

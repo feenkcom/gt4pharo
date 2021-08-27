@@ -1,10 +1,10 @@
 Class {
-	#name : #GtExampleMethodCoderWithCatsAndDogs,
-	#superclass : #GtPharoMethodCoder,
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#name : 'GtExampleMethodCoderWithCatsAndDogs',
+	#superclass : 'GtPharoMethodCoder',
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtExampleMethodCoderWithCatsAndDogs >> catsAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 1>
 	(self compiledMethod notNil

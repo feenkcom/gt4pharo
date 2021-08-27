@@ -1,52 +1,52 @@
 Class {
-	#name : #GtPharoNumberLiteralNode,
-	#superclass : #GtPharoLiteralNode,
+	#name : 'GtPharoNumberLiteralNode',
+	#superclass : 'GtPharoLiteralNode',
 	#instVars : [
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoNumberLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitNumberLiteral: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoNumberLiteralNode >> guessType: completionStrategy [
 	^ [ (Number readFrom: value source) class ]
 		on: Error
 		do: [ :ex | ex return: Number ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoNumberLiteralNode >> isFloatValue [
 	^ self value value asNumber isFloat
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoNumberLiteralNode >> isIntegerValue [
 	^ self value value asNumber isInteger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoNumberLiteralNode >> literalValue [
 	^ Number
 		readFrom: self value value
 		ifFail: [ 0 ]
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoNumberLiteralNode >> tokenVariables [
 	^ #(#value)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoNumberLiteralNode >> value [
 	^ value
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoNumberLiteralNode >> value: aSmaCCToken [
 	value := aSmaCCToken
 ]

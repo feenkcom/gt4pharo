@@ -1,23 +1,23 @@
 Class {
-	#name : #GtPharoBooleanLiteralNode,
-	#superclass : #GtPharoLiteralNode,
+	#name : 'GtPharoBooleanLiteralNode',
+	#superclass : 'GtPharoLiteralNode',
 	#instVars : [
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoBooleanLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitBooleanLiteral: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBooleanLiteralNode >> guessType: completionStrategy [
 	^ Boolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoBooleanLiteralNode >> literalValue [
 
 	^ self value value = 'true'
@@ -25,17 +25,17 @@ GtPharoBooleanLiteralNode >> literalValue [
 		ifFalse: [ false ]
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoBooleanLiteralNode >> tokenVariables [
 	^ #(#value)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoBooleanLiteralNode >> value [
 	^ value
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoBooleanLiteralNode >> value: aSmaCCToken [
 	value := aSmaCCToken
 ]

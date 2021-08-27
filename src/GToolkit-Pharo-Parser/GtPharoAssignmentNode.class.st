@@ -1,52 +1,52 @@
 Class {
-	#name : #GtPharoAssignmentNode,
-	#superclass : #GtPharoValueNode,
+	#name : 'GtPharoAssignmentNode',
+	#superclass : 'GtPharoValueNode',
 	#instVars : [
 		'variable',
 		'assignmentToken',
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitAssignment: self
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> assignmentToken [
 	^ assignmentToken
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> assignmentToken: aSmaCCToken [
 	assignmentToken := aSmaCCToken
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoAssignmentNode >> messageReceiver [
 	leftParens notEmpty
 		ifTrue: [ ^ self ].
 	^ value messageReceiver
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> nodeVariables [
 	^ #(#variable #value)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> tokenVariables [
 	^ #(#assignmentToken)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> value [
 	^ value
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> value: aGtPharoValueNode [
 	self value notNil
 		ifTrue: [ self value parent: nil ].
@@ -55,12 +55,12 @@ GtPharoAssignmentNode >> value: aGtPharoValueNode [
 		ifTrue: [ self value parent: self ]
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> variable [
 	^ variable
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoAssignmentNode >> variable: aGtPharoVariableNode [
 	self variable notNil
 		ifTrue: [ self variable parent: nil ].
