@@ -1,63 +1,63 @@
 Class {
-	#name : #GtPharoMethodPatternNode,
-	#superclass : #GtPharoProgramNode,
+	#name : 'GtPharoMethodPatternNode',
+	#superclass : 'GtPharoProgramNode',
 	#instVars : [
 		'selectorParts',
 		'variables'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMethodPattern: self
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> compositeNodeVariables [
 	^ #(#variables)
 ]
 
-{ #category : #'generated-initialize-release' }
+{ #category : 'generated-initialize-release' }
 GtPharoMethodPatternNode >> initialize [
 	super initialize.
 	selectorParts := OrderedCollection new: 2.
 	variables := OrderedCollection new: 2.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMethodPatternNode >> isMethodPattern [
 	^ true
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> otherVariables [
 	^ #(#selectorParts)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMethodPatternNode >> selector [
 	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each selector ] ]
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> selectorParts [
 	^ selectorParts
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> selectorParts: anOrderedCollection [
 	self setParent: self selectorParts to: nil.
 	selectorParts := anOrderedCollection.
 	self setParent: self selectorParts to: self
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> variables [
 	^ variables
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMethodPatternNode >> variables: anOrderedCollection [
 	self setParents: self variables to: nil.
 	variables := anOrderedCollection.

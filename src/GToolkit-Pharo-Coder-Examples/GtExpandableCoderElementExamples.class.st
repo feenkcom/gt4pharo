@@ -1,10 +1,10 @@
 Class {
-	#name : #GtExpandableCoderElementExamples,
-	#superclass : #Object,
+	#name : 'GtExpandableCoderElementExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtExpandableCoderElementExamples >> forCollapsedMethodCoder [
 	<gtExample>
 	| anElement aCoder |
@@ -15,7 +15,7 @@ GtExpandableCoderElementExamples >> forCollapsedMethodCoder [
 	^ anElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtExpandableCoderElementExamples >> forExpandedMethodCoder [
 	<gtExample>
 	| anElement aCoder |

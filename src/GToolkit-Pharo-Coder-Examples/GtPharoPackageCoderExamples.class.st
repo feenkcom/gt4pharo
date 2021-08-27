@@ -1,18 +1,18 @@
 Class {
-	#name : #GtPharoPackageCoderExamples,
-	#superclass : #Object,
+	#name : 'GtPharoPackageCoderExamples',
+	#superclass : 'Object',
 	#instVars : [
 		'environment'
 	],
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #'private - set up' }
+{ #category : 'private - set up' }
 GtPharoPackageCoderExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	<gtExample>
 	<after: #cleanUp>
@@ -32,7 +32,7 @@ GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtPharoPackageCoderExamples >> coderOnUnregisteredPackage [
 	<gtExample>
 	<after: #cleanUp>
@@ -55,12 +55,12 @@ GtPharoPackageCoderExamples >> coderOnUnregisteredPackage [
 	^ aPackageCoder
 ]
 
-{ #category : #'private - set up' }
+{ #category : 'private - set up' }
 GtPharoPackageCoderExamples >> eventsRecorder [
 	^ GtCoderExamplesEventsRecorder new
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerPreviouslyUnregisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -87,7 +87,7 @@ GtPharoPackageCoderExamples >> registerPreviouslyUnregisteredPackageWhenSubscrib
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -108,7 +108,7 @@ GtPharoPackageCoderExamples >> registerRegisteredPackageWhenSubscribedToSystem [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerRegisteredPackageWhenUnsubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -127,7 +127,7 @@ GtPharoPackageCoderExamples >> registerRegisteredPackageWhenUnsubscribedToSystem
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerUnregisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -152,7 +152,7 @@ GtPharoPackageCoderExamples >> registerUnregisteredPackageWhenSubscribedToSystem
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerUnregisteredPackageWhenUnsubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -173,7 +173,7 @@ GtPharoPackageCoderExamples >> registerUnregisteredPackageWhenUnsubscribedToSyst
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerUnregisteredPackageWithoutCoderWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -196,7 +196,7 @@ GtPharoPackageCoderExamples >> registerUnregisteredPackageWithoutCoderWhenSubscr
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package register' }
+{ #category : 'examples - package register' }
 GtPharoPackageCoderExamples >> registerUnregisteredPackageWithoutCoderWhenUnsubscribedToSystem [
 	"The only case when we can not send package registered notification
 	is when coder is not subscribed to the system and package is registered directly,
@@ -217,7 +217,7 @@ GtPharoPackageCoderExamples >> registerUnregisteredPackageWithoutCoderWhenUnsubs
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package rename' }
+{ #category : 'examples - package rename' }
 GtPharoPackageCoderExamples >> renameRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
@@ -244,7 +244,7 @@ GtPharoPackageCoderExamples >> renameRegisteredPackageWhenSubscribedToSystem [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package rename' }
+{ #category : 'examples - package rename' }
 GtPharoPackageCoderExamples >> renameUnloadedPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
@@ -269,7 +269,7 @@ GtPharoPackageCoderExamples >> renameUnloadedPackageWhenSubscribedToSystem [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package rename' }
+{ #category : 'examples - package rename' }
 GtPharoPackageCoderExamples >> renameUnregisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
@@ -294,7 +294,7 @@ GtPharoPackageCoderExamples >> renameUnregisteredPackageWhenSubscribedToSystem [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package rename' }
+{ #category : 'examples - package rename' }
 GtPharoPackageCoderExamples >> renameUnregisteredRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder aNewName |
@@ -325,7 +325,7 @@ GtPharoPackageCoderExamples >> renameUnregisteredRegisteredPackageWhenSubscribed
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unload' }
+{ #category : 'examples - package unload' }
 GtPharoPackageCoderExamples >> unloadRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -350,7 +350,7 @@ GtPharoPackageCoderExamples >> unloadRegisteredPackageWhenSubscribedToSystem [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unload' }
+{ #category : 'examples - package unload' }
 GtPharoPackageCoderExamples >> unloadRegisteredPackageWhenUnsubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -370,7 +370,7 @@ GtPharoPackageCoderExamples >> unloadRegisteredPackageWhenUnsubscribedToSystem [
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unregister' }
+{ #category : 'examples - package unregister' }
 GtPharoPackageCoderExamples >> unregisterRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -399,7 +399,7 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWhenSubscribedToSystem
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unregister' }
+{ #category : 'examples - package unregister' }
 GtPharoPackageCoderExamples >> unregisterRegisteredPackageWhenUnsubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -419,7 +419,7 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWhenUnsubscribedToSyst
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unregister' }
+{ #category : 'examples - package unregister' }
 GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -442,7 +442,7 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenSubscr
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unregister' }
+{ #category : 'examples - package unregister' }
 GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenUnsubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
@@ -460,7 +460,7 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenUnsubs
 	^ aPackageCoder
 ]
 
-{ #category : #'examples - package unregister' }
+{ #category : 'examples - package unregister' }
 GtPharoPackageCoderExamples >> unregisterUnregisteredPackageWhenUnsubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |

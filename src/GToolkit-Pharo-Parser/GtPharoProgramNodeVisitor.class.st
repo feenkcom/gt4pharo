@@ -1,7 +1,7 @@
 Class {
-	#name : #GtPharoProgramNodeVisitor,
-	#superclass : #Object,
+	#name : 'GtPharoProgramNodeVisitor',
+	#superclass : 'Object',
 	#traits : 'TGtPharoProgramNodeVisitor',
 	#classTraits : 'TGtPharoProgramNodeVisitor classTrait',
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }

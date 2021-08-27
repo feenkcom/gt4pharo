@@ -2,14 +2,14 @@
 I exemplify {{gtClass:GtPharoGlamorousColorStyler}}.
 "
 Class {
-	#name : #GtPharoGlamorousColorStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoGlamorousColorStylerExamples',
+	#superclass : 'Object',
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoGlamorousColorStylerExamples >> colorFromDefaultButtonBorderColor [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -34,7 +34,7 @@ GtPharoGlamorousColorStylerExamples >> colorFromDefaultButtonBorderColor [
 	^ aSourceText
 ]
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoGlamorousColorStylerExamples >> glamorousColor [
 	<gtExample>
 	| aColor |

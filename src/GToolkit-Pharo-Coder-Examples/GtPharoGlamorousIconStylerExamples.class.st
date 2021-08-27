@@ -2,14 +2,14 @@
 I exemplify {{gtClass:GtPharoGlamorousIconStyler}}.
 "
 Class {
-	#name : #GtPharoGlamorousIconStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoGlamorousIconStylerExamples',
+	#superclass : 'Object',
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoGlamorousIconStylerExamples >> glamorousPixelIcon [
 	<gtExample>
 	| anIcon |
@@ -18,7 +18,7 @@ GtPharoGlamorousIconStylerExamples >> glamorousPixelIcon [
 	^ anIcon
 ]
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoGlamorousIconStylerExamples >> glamorousVectorIcon [
 	<gtExample>
 	| anIcon |
@@ -27,7 +27,7 @@ GtPharoGlamorousIconStylerExamples >> glamorousVectorIcon [
 	^ anIcon
 ]
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -52,7 +52,7 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	^ aSourceText
 ]
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoGlamorousIconStylerExamples >> vectorRefreshIcon [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |

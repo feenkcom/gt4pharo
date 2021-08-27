@@ -1,10 +1,10 @@
 Class {
-	#name : #GtBehaviorCoderExamples,
-	#superclass : #Object,
+	#name : 'GtBehaviorCoderExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtBehaviorCoderExamples >> forClass [
 	<gtExample>
 	| aCoder |
@@ -23,7 +23,7 @@ GtBehaviorCoderExamples >> forClass [
 	^ aCoder
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtBehaviorCoderExamples >> forObject [
 	<gtExample>
 	| anObject aCoder |

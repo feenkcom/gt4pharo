@@ -8,12 +8,12 @@ See {{gtClass:GtMethodCoderUIModelHowToGuide}} for how to deal with method coder
 
 "
 Class {
-	#name : #GtMethodCoderHowToGuide,
-	#superclass : #Object,
+	#name : 'GtMethodCoderHowToGuide',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-! HowTo'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtMethodCoderHowToGuide >> coderForMethod [
 	<gtExample>
 	

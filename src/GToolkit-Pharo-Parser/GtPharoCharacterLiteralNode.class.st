@@ -1,38 +1,38 @@
 Class {
-	#name : #GtPharoCharacterLiteralNode,
-	#superclass : #GtPharoLiteralNode,
+	#name : 'GtPharoCharacterLiteralNode',
+	#superclass : 'GtPharoLiteralNode',
 	#instVars : [
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoCharacterLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitCharacterLiteral: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCharacterLiteralNode >> guessType: completionStrategy [
 	^ Character
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoCharacterLiteralNode >> literalValue [
 	^ self value value second
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoCharacterLiteralNode >> tokenVariables [
 	^ #(#value)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoCharacterLiteralNode >> value [
 	^ value
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoCharacterLiteralNode >> value: aSmaCCToken [
 	value := aSmaCCToken
 ]

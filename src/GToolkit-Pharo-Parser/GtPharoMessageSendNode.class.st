@@ -1,34 +1,34 @@
 Class {
-	#name : #GtPharoMessageSendNode,
-	#superclass : #GtPharoValueNode,
+	#name : 'GtPharoMessageSendNode',
+	#superclass : 'GtPharoValueNode',
 	#instVars : [
 		'receiver',
 		'message'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageSendNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMessageSend: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageSendNode >> arguments [
 	^ self message arguments
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageSendNode >> isMessageSend [
 	^ true
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageSendNode >> message [
 	^ message
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageSendNode >> message: aGtPharoMessageNode [
 	self message notNil
 		ifTrue: [ self message parent: nil ].
@@ -37,29 +37,29 @@ GtPharoMessageSendNode >> message: aGtPharoMessageNode [
 		ifTrue: [ self message parent: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageSendNode >> messageReceiver [
 	leftParens notEmpty
 		ifTrue: [ ^ self ].
 	^ message messageReceiver
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageSendNode >> needsParenthesisForKeyword [
 	^ true
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageSendNode >> nodeVariables [
 	^ #(#receiver #message)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageSendNode >> receiver [
 	^ receiver
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageSendNode >> receiver: aGtPharoValueNode [
 	self receiver notNil
 		ifTrue: [ self receiver parent: nil ].
@@ -68,12 +68,12 @@ GtPharoMessageSendNode >> receiver: aGtPharoValueNode [
 		ifTrue: [ self receiver parent: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageSendNode >> selector [
 	^ self message selector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageSendNode >> selectorParts [
 	^ self message selectorParts
 ]

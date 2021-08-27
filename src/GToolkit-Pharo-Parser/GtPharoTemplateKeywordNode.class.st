@@ -1,34 +1,34 @@
 Class {
-	#name : #GtPharoTemplateKeywordNode,
-	#superclass : #GtPharoTemplatableNode,
+	#name : 'GtPharoTemplateKeywordNode',
+	#superclass : 'GtPharoTemplatableNode',
 	#instVars : [
 		'selectorParts'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateKeywordNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplateKeyword: self
 ]
 
-{ #category : #'generated-initialize-release' }
+{ #category : 'generated-initialize-release' }
 GtPharoTemplateKeywordNode >> initialize [
 	super initialize.
 	selectorParts := OrderedCollection new: 2.
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateKeywordNode >> otherVariables [
 	^ #(#selectorParts)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateKeywordNode >> selectorParts [
 	^ selectorParts
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoTemplateKeywordNode >> selectorParts: anOrderedCollection [
 	self setParent: self selectorParts to: nil.
 	selectorParts := anOrderedCollection.

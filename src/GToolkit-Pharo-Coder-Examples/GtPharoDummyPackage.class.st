@@ -1,6 +1,6 @@
 Class {
-	#name : #GtPharoDummyPackage,
-	#superclass : #GtPharoDummy,
+	#name : 'GtPharoDummyPackage',
+	#superclass : 'GtPharoDummy',
 	#instVars : [
 		'packageName',
 		'realPackage',
@@ -9,49 +9,49 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
-{ #category : #'api - classes' }
+{ #category : 'api - classes' }
 GtPharoDummyPackage >> amountOfClasses [
 	^ self dummyClasses size
 ]
 
-{ #category : #'api - classes' }
+{ #category : 'api - classes' }
 GtPharoDummyPackage >> anyDummyClass [
 	^ self dummyClasses anyOne
 ]
 
-{ #category : #'api - methods' }
+{ #category : 'api - methods' }
 GtPharoDummyPackage >> anyDummyKeywordMethod [
 	<return: #GtPharoDummyMethod>
 
 	^ self dummyClasses anyOne anyDummyKeywordMethod
 ]
 
-{ #category : #'api - methods' }
+{ #category : 'api - methods' }
 GtPharoDummyPackage >> anyDummyUnaryClassMethod [
 	<return: #GtPharoDummyMethod>
 
 	^ self dummyClasses anyOne anyDummyUnaryClassMethod
 ]
 
-{ #category : #'api - methods' }
+{ #category : 'api - methods' }
 GtPharoDummyPackage >> anyDummyUnaryMethod [
 	<return: #GtPharoDummyMethod>
 
 	^ self dummyClasses anyOne anyDummyUnaryMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoDummyPackage >> dummyClasses [
 	^ dummyClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoDummyPackage >> dummyClasses: aCollectionOfDummyClasses [
 	dummyClasses addAll: aCollectionOfDummyClasses.
 	aCollectionOfDummyClasses do: [ :eachDummyClass | eachDummyClass dummyPackage: self ]
 ]
 
-{ #category : #'gt-extensions' }
+{ #category : 'gt-extensions' }
 GtPharoDummyPackage >> gtClassesFor: aView [
 	<gtView>
 
@@ -62,7 +62,7 @@ GtPharoDummyPackage >> gtClassesFor: aView [
 		itemText: #className
 ]
 
-{ #category : #'gt-extensions' }
+{ #category : 'gt-extensions' }
 GtPharoDummyPackage >> gtCoderFor: aView [
 	<gtView>
 	| aRealPackage |
@@ -75,34 +75,34 @@ GtPharoDummyPackage >> gtCoderFor: aView [
 		stencil: [ GtCoder forPackage: aRealPackage ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtPharoDummyPackage >> initialize [
 	super initialize.
 	
 	dummyClasses := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoDummyPackage >> packageName [
 	^ packageName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoDummyPackage >> packageName: anObject [
 	packageName := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoDummyPackage >> realPackage [
 	^ realPackage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoDummyPackage >> realPackage: anObject [
 	realPackage := anObject
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 GtPharoDummyPackage >> removeFromSystem [
 	realPackage
 		ifNil: [ ^ self ].

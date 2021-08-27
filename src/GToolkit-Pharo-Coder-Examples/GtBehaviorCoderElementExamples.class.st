@@ -1,10 +1,10 @@
 Class {
-	#name : #GtBehaviorCoderElementExamples,
-	#superclass : #Object,
+	#name : 'GtBehaviorCoderElementExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorCoderElementExamples >> forClassElement [
 	<gtExample>
 	| aCoderUIModel aCoderElement |
@@ -15,7 +15,7 @@ GtBehaviorCoderElementExamples >> forClassElement [
 	^ aCoderElement
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtBehaviorCoderElementExamples >> forClassUIModel [
 	<gtExample>
 	| aCoder aCoderUIModel |

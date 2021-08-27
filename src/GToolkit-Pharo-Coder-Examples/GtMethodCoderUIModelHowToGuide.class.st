@@ -15,12 +15,12 @@ Or also give it a focus by default:
 
 "
 Class {
-	#name : #GtMethodCoderUIModelHowToGuide,
-	#superclass : #GtMethodCoderHowToGuide,
+	#name : 'GtMethodCoderUIModelHowToGuide',
+	#superclass : 'GtMethodCoderHowToGuide',
 	#category : 'GToolkit-Pharo-Coder-Examples-! HowTo'
 }
 
-{ #category : #'examples - method coder' }
+{ #category : 'examples - method coder' }
 GtMethodCoderUIModelHowToGuide >> collapsedMethodCoder [
 	<gtExample>
 	| aCoderUIModel |
@@ -31,7 +31,7 @@ GtMethodCoderUIModelHowToGuide >> collapsedMethodCoder [
 	^ aCoderUIModel
 ]
 
-{ #category : #'examples - method coder' }
+{ #category : 'examples - method coder' }
 GtMethodCoderUIModelHowToGuide >> expandedAndFocusedMethodCoder [
 	<gtExample>
 	| aCoderUIModel |
@@ -42,7 +42,7 @@ GtMethodCoderUIModelHowToGuide >> expandedAndFocusedMethodCoder [
 	^ aCoderUIModel
 ]
 
-{ #category : #'examples - method coder' }
+{ #category : 'examples - method coder' }
 GtMethodCoderUIModelHowToGuide >> expandedAndFocusedMethodCoderElement [
 	<gtExample>
 	| aCoderUIModel aMethodCoderElement |
@@ -56,7 +56,7 @@ GtMethodCoderUIModelHowToGuide >> expandedAndFocusedMethodCoderElement [
 	^ aMethodCoderElement
 ]
 
-{ #category : #'examples - method coder' }
+{ #category : 'examples - method coder' }
 GtMethodCoderUIModelHowToGuide >> expandedMethodCoder [
 	<gtExample>
 	| aCoderUIModel |
@@ -67,7 +67,7 @@ GtMethodCoderUIModelHowToGuide >> expandedMethodCoder [
 	^ aCoderUIModel
 ]
 
-{ #category : #'examples - method coder' }
+{ #category : 'examples - method coder' }
 GtMethodCoderUIModelHowToGuide >> expandedMethodCoderElement [
 	<gtExample>
 	| aCoderUIModel aMethodCoderElement |
@@ -78,7 +78,7 @@ GtMethodCoderUIModelHowToGuide >> expandedMethodCoderElement [
 	^ aMethodCoderElement
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtMethodCoderUIModelHowToGuide >> uiModelForCoder [
 	<gtExample>
 	| aCoderUIModel |

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoNothingNode,
-	#superclass : #GtPharoProgramNode,
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#name : 'GtPharoNothingNode',
+	#superclass : 'GtPharoProgramNode',
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoNothingNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitNothing: self
 ]

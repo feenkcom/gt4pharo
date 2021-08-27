@@ -4,30 +4,30 @@ I am used for testing purposes, see my {{gtClass:GtFiltersDummyObjectWithAllExam
 
 "
 Class {
-	#name : #GtFiltersDummyObjectWithAllExampleStates,
-	#superclass : #GtFiltersDummyObjectWithExampleStates,
+	#name : 'GtFiltersDummyObjectWithAllExampleStates',
+	#superclass : 'GtFiltersDummyObjectWithExampleStates',
 	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtFiltersDummyObjectWithAllExampleStates >> foo [
 	^ 42
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtFiltersDummyObjectWithAllExampleStates >> one [
 	<gtExample>
 	^ 42
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtFiltersDummyObjectWithAllExampleStates >> three [
 	<gtExample>
 	<noTest>
 	self assert: false
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtFiltersDummyObjectWithAllExampleStates >> two [
 	<gtExample>
 	<noTest>

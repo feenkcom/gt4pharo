@@ -1,10 +1,10 @@
 Class {
-	#name : #GtBehaviorClassDefinitionExamples,
-	#superclass : #Object,
+	#name : 'GtBehaviorClassDefinitionExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'examples - validation' }
+{ #category : 'examples - validation' }
 GtBehaviorClassDefinitionExamples >> definitionWithEmptyNameIsInvalid [
 	<gtExample>
 	| definition |
@@ -15,7 +15,7 @@ GtBehaviorClassDefinitionExamples >> definitionWithEmptyNameIsInvalid [
 	self assert: definition isValidForCreation not.
 ]
 
-{ #category : #'examples - validation' }
+{ #category : 'examples - validation' }
 GtBehaviorClassDefinitionExamples >> definitionWithSameNameIsInvalid [
 	<gtExample>
 	| definition |
@@ -25,7 +25,7 @@ GtBehaviorClassDefinitionExamples >> definitionWithSameNameIsInvalid [
 	self assert: definition isValidForCreation not.
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtBehaviorClassDefinitionExamples >> fromClass [
 	<gtExample>
 	| aDefinition |
@@ -58,7 +58,7 @@ GtBehaviorClassDefinitionExamples >> fromClass [
 	^ aDefinition
 ]
 
-{ #category : #access }
+{ #category : 'access' }
 GtBehaviorClassDefinitionExamples >> targetClass [
 	^ GtBehaviorCoderDummyClass
 ]

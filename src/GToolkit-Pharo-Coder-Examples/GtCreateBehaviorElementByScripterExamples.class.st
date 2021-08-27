@@ -1,10 +1,10 @@
 Class {
-	#name : #GtCreateBehaviorElementByScripterExamples,
-	#superclass : #GtCoderByScripterExamples,
+	#name : 'GtCreateBehaviorElementByScripterExamples',
+	#superclass : 'GtCoderByScripterExamples',
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtCreateBehaviorElementByScripterExamples >> behaviorCreatorForClass [
 	<gtExample>
 	
@@ -15,11 +15,11 @@ GtCreateBehaviorElementByScripterExamples >> behaviorCreatorForClass [
 			c vertical fitContent ]
 ]
 
-{ #category : #'private - checks' }
+{ #category : 'private - checks' }
 GtCreateBehaviorElementByScripterExamples >> checkClassExists: aClassName [
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> checkDefaultCreatorForClass [
 	<gtExample>
 	| aScripter |
@@ -75,17 +75,17 @@ GtCreateBehaviorElementByScripterExamples >> checkDefaultCreatorForClass [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'private - checks' }
+{ #category : 'private - checks' }
 GtCreateBehaviorElementByScripterExamples >> classExists: aClassName [
 	^ self class environment includesKey: aClassName
 ]
 
-{ #category : #'private - checks' }
+{ #category : 'private - checks' }
 GtCreateBehaviorElementByScripterExamples >> classNamed: aClassName [
 	^ self class environment at: aClassName
 ]
 
-{ #category : #'private - setup' }
+{ #category : 'private - setup' }
 GtCreateBehaviorElementByScripterExamples >> cleanUp [
 	<script: 'self new cleanUp'>
 	
@@ -96,22 +96,22 @@ GtCreateBehaviorElementByScripterExamples >> cleanUp [
 	GtPharoCodeModifier removeBehaviorNamed: self newPackageName
 ]
 
-{ #category : #'private - setup' }
+{ #category : 'private - setup' }
 GtCreateBehaviorElementByScripterExamples >> newClassName [
 	^ #GtCreateBehaviorElementByScripterNewClass
 ]
 
-{ #category : #'private - setup' }
+{ #category : 'private - setup' }
 GtCreateBehaviorElementByScripterExamples >> newPackageName [
 	^ #'GtCreateBehaviorElementByScripterNew-Package'
 ]
 
-{ #category : #'private - setup' }
+{ #category : 'private - setup' }
 GtCreateBehaviorElementByScripterExamples >> newTagName [
 	^ #'Tag'
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> saveClassWithName [
 	<gtExample>
 	<after: #cleanUp>
@@ -134,7 +134,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithName [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackage [
 	<gtExample>
 	<after: #cleanUp>
@@ -181,7 +181,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackage [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackageTag [
 	<gtExample>
 	<after: #cleanUp>
@@ -228,7 +228,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackageTag [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - instance creation' }
+{ #category : 'examples - instance creation' }
 GtCreateBehaviorElementByScripterExamples >> scripterForClass [
 	<gtExample>
 	| aScripter |
@@ -243,7 +243,7 @@ GtCreateBehaviorElementByScripterExamples >> scripterForClass [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 	<gtExample>
 	| aScripter |
@@ -317,7 +317,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 	<gtExample>
 	| aScripter |
@@ -391,7 +391,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass [
 	<gtExample>
 	| aScripter |
@@ -465,7 +465,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 	^ aScripter syncContinue
 ]
 
-{ #category : #'examples - class creator' }
+{ #category : 'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 	<gtExample>
 	| aScripter |

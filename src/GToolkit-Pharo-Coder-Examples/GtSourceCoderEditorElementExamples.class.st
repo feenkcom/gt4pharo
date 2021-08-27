@@ -1,10 +1,10 @@
 Class {
-	#name : #GtSourceCoderEditorElementExamples,
-	#superclass : #GtCoderByScripterExamples,
+	#name : 'GtSourceCoderEditorElementExamples',
+	#superclass : 'GtCoderByScripterExamples',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #'example - instance creation' }
+{ #category : 'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	<gtExample>
 	| aMethodCoder aMethodCoderUIModel anEditorElement |

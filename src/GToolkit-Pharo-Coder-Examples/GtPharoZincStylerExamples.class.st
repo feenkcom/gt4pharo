@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoZincStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoZincStylerExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoZincStylerExamples >> bearerSourceCode [
 	<gtExample>
 	^ ZnClient new
@@ -13,7 +13,7 @@ GtPharoZincStylerExamples >> bearerSourceCode [
 		yourself
 ]
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoZincStylerExamples >> styleBearer [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -39,7 +39,7 @@ GtPharoZincStylerExamples >> styleBearer [
 	^ aSourceText
 ]
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoZincStylerExamples >> styleUsenamePassword [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -65,7 +65,7 @@ GtPharoZincStylerExamples >> styleUsenamePassword [
 	^ aSourceText
 ]
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoZincStylerExamples >> usernameAndPasswordSourceCode [
 	<gtExample>
 	^ ZnClient new

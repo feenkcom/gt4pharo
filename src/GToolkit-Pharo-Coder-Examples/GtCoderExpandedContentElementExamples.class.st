@@ -1,10 +1,10 @@
 Class {
-	#name : #GtCoderExpandedContentElementExamples,
-	#superclass : #GtCoderContentElementExamples,
+	#name : 'GtCoderExpandedContentElementExamples',
+	#superclass : 'GtCoderContentElementExamples',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtCoderExpandedContentElementExamples >> forMethodCoder [
 	<gtExample>
 	| aMethodCoder aContentElement |

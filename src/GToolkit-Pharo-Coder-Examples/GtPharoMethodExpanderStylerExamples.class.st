@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoMethodExpanderStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoMethodExpanderStylerExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoMethodExpanderStylerExamples >> expanderAttribute [
 	<gtExample>
 	| coder text index |
@@ -22,7 +22,7 @@ GtPharoMethodExpanderStylerExamples >> expanderAttribute [
 	^ text
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoMethodExpanderStylerExamples >> indexOfExpanderIn: ropedText [
 	1 to: ropedText size do: [ :i | 
 		((ropedText attributesAt: i)
@@ -31,7 +31,7 @@ GtPharoMethodExpanderStylerExamples >> indexOfExpanderIn: ropedText [
 	^ -1
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToArrayLiteral [
 	<gtExample>	
 	| coder text |
@@ -50,7 +50,7 @@ GtPharoMethodExpanderStylerExamples >> messageToArrayLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToByteArrayLiteral [
 	<gtExample>	
 	| coder text |
@@ -69,7 +69,7 @@ GtPharoMethodExpanderStylerExamples >> messageToByteArrayLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToCharacterLiteral [
 	<gtExample>	
 	| coder text |
@@ -88,7 +88,7 @@ GtPharoMethodExpanderStylerExamples >> messageToCharacterLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToFalseLiteral [
 	<gtExample>	
 	| coder text |
@@ -107,7 +107,7 @@ GtPharoMethodExpanderStylerExamples >> messageToFalseLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToFloatLiteral [
 	<gtExample>	
 	| coder text |
@@ -126,7 +126,7 @@ GtPharoMethodExpanderStylerExamples >> messageToFloatLiteral [
 	^ text
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoMethodExpanderStylerExamples >> messageToGlobal [
 	<gtExample>
 	| coder text |
@@ -146,7 +146,7 @@ GtPharoMethodExpanderStylerExamples >> messageToGlobal [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToIntegerLiteral [
 	<gtExample>	
 	| coder text |
@@ -165,7 +165,7 @@ GtPharoMethodExpanderStylerExamples >> messageToIntegerLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToNilLiteral [
 	<gtExample>	
 	| coder text |
@@ -184,7 +184,7 @@ GtPharoMethodExpanderStylerExamples >> messageToNilLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToStringLiteral [
 	<gtExample>	
 	| coder text |
@@ -203,7 +203,7 @@ GtPharoMethodExpanderStylerExamples >> messageToStringLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToSymbolLiteral [
 	<gtExample>	
 	| coder text |
@@ -222,7 +222,7 @@ GtPharoMethodExpanderStylerExamples >> messageToSymbolLiteral [
 	^ text
 ]
 
-{ #category : #'examples - literals' }
+{ #category : 'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToTrueLiteral [
 	<gtExample>	
 	| coder text |
@@ -241,7 +241,7 @@ GtPharoMethodExpanderStylerExamples >> messageToTrueLiteral [
 	^ text
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 GtPharoMethodExpanderStylerExamples >> methodExpanderAttributesIn: ropedText [
 	| attributes |
 	attributes := OrderedCollection new.
@@ -253,7 +253,7 @@ GtPharoMethodExpanderStylerExamples >> methodExpanderAttributesIn: ropedText [
 	^ attributes
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoMethodExpanderStylerExamples >> missingSelfSend [
 	<gtExample>
 	| coder text |
@@ -272,7 +272,7 @@ GtPharoMethodExpanderStylerExamples >> missingSelfSend [
 	^ text
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoMethodExpanderStylerExamples >> missingSuperSend [
 	<gtExample>
 	| coder text |
@@ -291,7 +291,7 @@ GtPharoMethodExpanderStylerExamples >> missingSuperSend [
 	^ text
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoMethodExpanderStylerExamples >> superExpanderAttribute [
 	<gtExample>
 	| coder text index |

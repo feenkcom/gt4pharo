@@ -3,12 +3,12 @@ I exemplify {{gtClass:GtFilterRunExampleButtonLook|expanded=true|show=#gtSubclas
 
 "
 Class {
-	#name : #GtFilterRunExampleButtonLookExamples,
-	#superclass : #Object,
+	#name : 'GtFilterRunExampleButtonLookExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 GtFilterRunExampleButtonLookExamples >> assert: anElement backgroundColor: aColor [ 
 	self
 		assert: anElement background class 
@@ -21,7 +21,7 @@ GtFilterRunExampleButtonLookExamples >> assert: anElement backgroundColor: aColo
 		equals: aColor.
 ]
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 GtFilterRunExampleButtonLookExamples >> assertFourIconVisibilityIn: anElement success: isSuccessVisible failure: isFailureVisible error: isErrorVisible noExecution: isNoExecutionVisible [
 	
 	"The four-icon is expected in the second position"
@@ -42,7 +42,7 @@ GtFilterRunExampleButtonLookExamples >> assertFourIconVisibilityIn: anElement su
 		equals: (self visibleOrHiddenFrom: isNoExecutionVisible).
 ]
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 GtFilterRunExampleButtonLookExamples >> assertUpdateRequestedState: aBoolean for: anElement [
 	| isAttached |
 	self assert: anElement aptitude isNotNil.
@@ -56,7 +56,7 @@ GtFilterRunExampleButtonLookExamples >> assertUpdateRequestedState: aBoolean for
 	self assert: isAttached description: 'Element must be attached to at least one example look'.
 ]
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 GtFilterRunExampleButtonLookExamples >> assertVisibilityIn: anElement oneIcon: isOneIconVisible fourIcon: isFourIconVisible [
 	"The one-icon is expected in the first position"
 	self 
@@ -69,7 +69,7 @@ GtFilterRunExampleButtonLookExamples >> assertVisibilityIn: anElement oneIcon: i
 		equals: (self visibleOrGoneFrom: isFourIconVisible).
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> attachCoder: aCoder toElementLooks: anElement [
 	<gtExample>
 	| isAttached |
@@ -88,7 +88,7 @@ GtFilterRunExampleButtonLookExamples >> attachCoder: aCoder toElementLooks: anEl
 	^ aCoder
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> basicFourIconLook [
 	<gtExample>
 	| aLook |
@@ -98,7 +98,7 @@ GtFilterRunExampleButtonLookExamples >> basicFourIconLook [
 	^ aLook
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> basicOneIconLook [
 	<gtExample>
 	| aLook |
@@ -108,7 +108,7 @@ GtFilterRunExampleButtonLookExamples >> basicOneIconLook [
 	^ aLook
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> button [
 	<gtExample>
 	^ BrButton new
@@ -116,7 +116,7 @@ GtFilterRunExampleButtonLookExamples >> button [
 		label: 'Run All Examples'
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> buttonWithFourIconLook [
 	<gtExample>
 	| aButton aLook |
@@ -131,7 +131,7 @@ GtFilterRunExampleButtonLookExamples >> buttonWithFourIconLook [
 	^ aButton
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> buttonWithOneIconLook [
 	<gtExample>
 	| aButton aLook |
@@ -148,7 +148,7 @@ GtFilterRunExampleButtonLookExamples >> buttonWithOneIconLook [
 	^ aButton
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> fourIconLookButton_AllExecutionStates [
 	<gtExample>
 	| aButton aCoder |
@@ -169,7 +169,7 @@ GtFilterRunExampleButtonLookExamples >> fourIconLookButton_AllExecutionStates [
 	^ aButton
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> fourIconLookButton_NoExamples [
 	<gtExample>
 	| aButton aCoder |
@@ -191,7 +191,7 @@ GtFilterRunExampleButtonLookExamples >> fourIconLookButton_NoExamples [
 	^ aButton
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> fourIconLookButton_NoExamples_Examples [
 	<gtExample>
 	| aButton aCoder |
@@ -213,7 +213,7 @@ GtFilterRunExampleButtonLookExamples >> fourIconLookButton_NoExamples_Examples [
 	^ aButton
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> fourIconLookButton_NotExecuted [
 	<gtExample>
 	| aButton aCoder |
@@ -231,7 +231,7 @@ GtFilterRunExampleButtonLookExamples >> fourIconLookButton_NotExecuted [
 	^ aButton
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> fourIconLookButton_SuccessAndNotExecutedStates [
 	<gtExample>
 	| aButton aCoder |
@@ -252,7 +252,7 @@ GtFilterRunExampleButtonLookExamples >> fourIconLookButton_SuccessAndNotExecuted
 	^ aButton
 ]
 
-{ #category : #'examples - four-icon look' }
+{ #category : 'examples - four-icon look' }
 GtFilterRunExampleButtonLookExamples >> fourIconLookButton_WithoutCoder [
 	<gtExample>
 	| aButton |
@@ -266,37 +266,37 @@ GtFilterRunExampleButtonLookExamples >> fourIconLookButton_WithoutCoder [
 	^ aButton
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> methodsCoder [
 	<gtExample>
 	^ GtClassMethodsCoder forClass: GtFiltersDummyObjectWithAllExampleStates
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> methodsCoderWithFailingExamples [
 	<gtExample>
 	^ GtClassMethodsCoder forClass: GtFiltersDummyObjectWithFailureExampleStates
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> methodsCoderWithSuccessExamples [
 	<gtExample>
 	^ GtClassMethodsCoder forClass: GtFiltersDummyObjectWithSuccessExampleStates
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> methodsCoderWithoutExamples [
 	<gtExample>
 	^ GtClassMethodsCoder forClass: GtFiltersDummyObjectWithNoExampleStates
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> oneExample [
 	<gtExample>
 	^ (GtFiltersDummyObjectWithAllExampleStates >> #one) gtExample asExampleWithResult
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> oneIconLookButton_Error [
 	<gtExample>
 	| aButton aCoder |
@@ -315,7 +315,7 @@ GtFilterRunExampleButtonLookExamples >> oneIconLookButton_Error [
 	^ aButton
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> oneIconLookButton_Failure [
 	<gtExample>
 	| aButton aCoder |
@@ -334,7 +334,7 @@ GtFilterRunExampleButtonLookExamples >> oneIconLookButton_Failure [
 	^ aButton
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> oneIconLookButton_SkipNoTest [
 	<gtExample>
 	| aButton aCoder |
@@ -352,7 +352,7 @@ GtFilterRunExampleButtonLookExamples >> oneIconLookButton_SkipNoTest [
 	^ aButton
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> oneIconLookButton_Success [
 	<gtExample>
 	| aButton aCoder |
@@ -371,7 +371,7 @@ GtFilterRunExampleButtonLookExamples >> oneIconLookButton_Success [
 	^ aButton
 ]
 
-{ #category : #'examples - one-icon look' }
+{ #category : 'examples - one-icon look' }
 GtFilterRunExampleButtonLookExamples >> oneIconLookButton_WithoutCoder [
 	<gtExample>
 	| aButton |
@@ -383,26 +383,26 @@ GtFilterRunExampleButtonLookExamples >> oneIconLookButton_WithoutCoder [
 	^ aButton
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> threeExample [
 	<gtExample>
 	^ (GtFiltersDummyObjectWithAllExampleStates >> #three) gtExample asExampleWithResult
 ]
 
-{ #category : #'examples - support' }
+{ #category : 'examples - support' }
 GtFilterRunExampleButtonLookExamples >> twoExample [
 	<gtExample>
 	^ (GtFiltersDummyObjectWithAllExampleStates >> #two) gtExample asExampleWithResult
 ]
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 GtFilterRunExampleButtonLookExamples >> visibleOrGoneFrom: aBoolean [
 	^ aBoolean
 		ifTrue: [ BlVisibility visible ]
 		ifFalse: [ BlVisibility gone ]
 ]
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 GtFilterRunExampleButtonLookExamples >> visibleOrHiddenFrom: aBoolean [
 	^ aBoolean
 		ifTrue: [ BlVisibility visible ]

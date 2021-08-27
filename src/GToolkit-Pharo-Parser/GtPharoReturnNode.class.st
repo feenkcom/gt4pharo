@@ -1,49 +1,49 @@
 Class {
-	#name : #GtPharoReturnNode,
-	#superclass : #GtPharoProgramNode,
+	#name : 'GtPharoReturnNode',
+	#superclass : 'GtPharoProgramNode',
 	#instVars : [
 		'upArrow',
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitReturn: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoReturnNode >> messageReceiver [
 	^ value messageReceiver
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> nodeVariables [
 	^ #(#value)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> tokenVariables [
 	^ #(#upArrow)
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> upArrow [
 	^ upArrow
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> upArrow: aSmaCCToken [
 	upArrow := aSmaCCToken
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> value [
 	^ value
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoReturnNode >> value: aGtPharoValueNode [
 	self value notNil
 		ifTrue: [ self value parent: nil ].

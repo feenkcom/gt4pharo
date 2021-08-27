@@ -1,15 +1,15 @@
 Class {
-	#name : #GtSearchClassFilterExamples,
-	#superclass : #Object,
+	#name : 'GtSearchClassFilterExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 GtSearchClassFilterExamples >> assertClassResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtSearchClassGroupResult.
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> classesInCurrentPackageFilter [
 	<gtExample>
 	| filter |
@@ -21,7 +21,7 @@ GtSearchClassFilterExamples >> classesInCurrentPackageFilter [
 	^ filter
 ]
 
-{ #category : #'examples - equality' }
+{ #category : 'examples - equality' }
 GtSearchClassFilterExamples >> classesInCurrentPackageFilterEquality [
 	<gtExample>
 	| filter |
@@ -34,7 +34,7 @@ GtSearchClassFilterExamples >> classesInCurrentPackageFilterEquality [
 	
 ]
 
-{ #category : #'examples - result type' }
+{ #category : 'examples - result type' }
 GtSearchClassFilterExamples >> classesInCurrentPackageFilterResultType [
 	<gtExample>
 	| filter |
@@ -45,7 +45,7 @@ GtSearchClassFilterExamples >> classesInCurrentPackageFilterResultType [
 	
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> classesInImageFilter [
 	<gtExample>
 	| filter |
@@ -57,7 +57,7 @@ GtSearchClassFilterExamples >> classesInImageFilter [
 	^ filter
 ]
 
-{ #category : #'examples - equality' }
+{ #category : 'examples - equality' }
 GtSearchClassFilterExamples >> classesInImageFilterEquality [
 	<gtExample>
 	| filter |
@@ -68,7 +68,7 @@ GtSearchClassFilterExamples >> classesInImageFilterEquality [
 	
 ]
 
-{ #category : #'examples - result type' }
+{ #category : 'examples - result type' }
 GtSearchClassFilterExamples >> classesInImageFilterResultType [
 	<gtExample>
 	| filter |
@@ -79,7 +79,7 @@ GtSearchClassFilterExamples >> classesInImageFilterResultType [
 	
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> deprecatedClassesFilter [
 	<gtExample>
 	| filter |
@@ -89,7 +89,7 @@ GtSearchClassFilterExamples >> deprecatedClassesFilter [
 	^ filter
 ]
 
-{ #category : #'examples - result type' }
+{ #category : 'examples - result type' }
 GtSearchClassFilterExamples >> deprecatedClassesFilterResultType [
 	<gtExample>
 	| filter |
@@ -100,7 +100,7 @@ GtSearchClassFilterExamples >> deprecatedClassesFilterResultType [
 	
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> deprecatedClassesInPackageScopeFilter [
 	<gtExample>
 	"Use an intersection filter that uses the package filter as the first filter in the intersection."
@@ -119,7 +119,7 @@ GtSearchClassFilterExamples >> deprecatedClassesInPackageScopeFilter [
 	
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> deprecatedClassesInPackageUsingImageScopeFilter [
 	<gtExample>
 	"Start first with the deprecated filter. This has as scope the entire image."
@@ -139,7 +139,7 @@ GtSearchClassFilterExamples >> deprecatedClassesInPackageUsingImageScopeFilter [
 	
 ]
 
-{ #category : #'examples - result' }
+{ #category : 'examples - result' }
 GtSearchClassFilterExamples >> groupResultForClassesInImageFilter [
 	<gtExample>
 	<noTest>
@@ -157,7 +157,7 @@ GtSearchClassFilterExamples >> groupResultForClassesInImageFilter [
 	^ result
 ]
 
-{ #category : #'examples - result' }
+{ #category : 'examples - result' }
 GtSearchClassFilterExamples >> groupResultForClassesInPackageFilter [
 	<gtExample>
 	| filter result |
@@ -174,7 +174,7 @@ GtSearchClassFilterExamples >> groupResultForClassesInPackageFilter [
 	^ result
 ]
 
-{ #category : #'examples - result' }
+{ #category : 'examples - result' }
 GtSearchClassFilterExamples >> groupResultForDeprecatedClassesInPackageScopeFilter [
 	<gtExample>
 	| filter result |
@@ -191,7 +191,7 @@ GtSearchClassFilterExamples >> groupResultForDeprecatedClassesInPackageScopeFilt
 	^ result
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> testClassesFilter [
 	<gtExample>
 	| filter |
@@ -204,7 +204,7 @@ GtSearchClassFilterExamples >> testClassesFilter [
 	
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtSearchClassFilterExamples >> testClassesFilterInPackage [
 	<gtExample>
 	| filter |

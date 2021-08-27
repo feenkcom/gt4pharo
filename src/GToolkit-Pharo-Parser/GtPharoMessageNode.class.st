@@ -1,50 +1,50 @@
 Class {
-	#name : #GtPharoMessageNode,
-	#superclass : #GtPharoProgramNode,
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#name : 'GtPharoMessageNode',
+	#superclass : 'GtPharoProgramNode',
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMessage: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageNode >> arguments [
 	^ self subclassResponsibility
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageNode >> isBinary [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageNode >> isKeyword [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageNode >> isMessage [
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageNode >> isUnary [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtPharoMessageNode >> needsParenthesisForKeyword [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageNode >> selector [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoMessageNode >> selectorParts [
 	^ self subclassResponsibility
 ]

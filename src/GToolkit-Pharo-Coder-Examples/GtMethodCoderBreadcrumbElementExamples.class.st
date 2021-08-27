@@ -1,10 +1,10 @@
 Class {
-	#name : #GtMethodCoderBreadcrumbElementExamples,
-	#superclass : #Object,
+	#name : 'GtMethodCoderBreadcrumbElementExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtMethodCoderBreadcrumbElementExamples >> breadcrumbForSourceCoder [
 	<gtExample>
 	| aCoderUIModel aCoderBreadcrumb |
@@ -21,14 +21,14 @@ GtMethodCoderBreadcrumbElementExamples >> breadcrumbForSourceCoder [
 	^ aCoderBreadcrumb
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtMethodCoderBreadcrumbElementExamples >> methodCoder [
 	<gtExample>
 	
 	^ GtPharoMethodCoder forMethod: (GtBehaviorCoderDummyClass >> #instVarB:)
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtMethodCoderBreadcrumbElementExamples >> methodCoderBreadcrumbActions [
 	<gtExample>
 	| theActions |
@@ -41,7 +41,7 @@ GtMethodCoderBreadcrumbElementExamples >> methodCoderBreadcrumbActions [
 	^ theActions
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtMethodCoderBreadcrumbElementExamples >> methodCoderUIModel [
 	<gtExample>
 	

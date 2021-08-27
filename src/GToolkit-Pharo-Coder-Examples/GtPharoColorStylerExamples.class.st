@@ -3,14 +3,14 @@ I exemplify {{gtClass:GtPharoColorStyler}}.
 
 "
 Class {
-	#name : #GtPharoColorStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoColorStylerExamples',
+	#superclass : 'Object',
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoColorStylerExamples >> colorFromColorRegistry [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -35,7 +35,7 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 	^ aSourceText
 ]
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoColorStylerExamples >> colorFromColorRegistrySourceCode [
 	<gtExample>
 	| aColor |
@@ -44,7 +44,7 @@ GtPharoColorStylerExamples >> colorFromColorRegistrySourceCode [
 	^ aColor
 ]
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -69,7 +69,7 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	^ aSourceText
 ]
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoColorStylerExamples >> colorFromHexStringSourceCode [
 	<gtExample>
 	| aColor |
@@ -78,7 +78,7 @@ GtPharoColorStylerExamples >> colorFromHexStringSourceCode [
 	^ aColor
 ]
 
-{ #category : #'examples - source code' }
+{ #category : 'examples - source code' }
 GtPharoColorStylerExamples >> colorFromRGBRangeSourceCode [
 	<gtExample>
 	| aColor |
@@ -87,7 +87,7 @@ GtPharoColorStylerExamples >> colorFromRGBRangeSourceCode [
 	^ aColor
 ]
 
-{ #category : #'examples - styling' }
+{ #category : 'examples - styling' }
 GtPharoColorStylerExamples >> colorRGBRangeHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |

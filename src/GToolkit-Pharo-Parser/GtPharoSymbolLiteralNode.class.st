@@ -1,18 +1,18 @@
 Class {
-	#name : #GtPharoSymbolLiteralNode,
-	#superclass : #GtPharoLiteralNode,
+	#name : 'GtPharoSymbolLiteralNode',
+	#superclass : 'GtPharoLiteralNode',
 	#instVars : [
 		'value'
 	],
-	#category : #'GToolkit-Pharo-Parser-Parser'
+	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoSymbolLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitSymbolLiteral: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSymbolLiteralNode >> asSymbol [
 	| name |
 	name := self value source.
@@ -23,32 +23,32 @@ GtPharoSymbolLiteralNode >> asSymbol [
 	^ name asSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSymbolLiteralNode >> guessType: completionStrategy [
 	^ Symbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSymbolLiteralNode >> literalValue [
 	^ self symbol
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoSymbolLiteralNode >> otherVariables [
 	^ #(#value)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPharoSymbolLiteralNode >> symbol [
 	^ self asSymbol
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoSymbolLiteralNode >> value [
 	^ value
 ]
 
-{ #category : #generated }
+{ #category : 'generated' }
 GtPharoSymbolLiteralNode >> value: anObject [
 	self setParent: self value to: nil.
 	value := anObject.

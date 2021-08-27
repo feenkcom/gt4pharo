@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoStylerExamples,
-	#superclass : #Object,
+	#name : 'GtPharoStylerExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtPharoStylerExamples >> invalidSyntaxWithCascade [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |

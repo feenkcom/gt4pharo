@@ -121,51 +121,30 @@ GtFixItStyler >> style: aText ast: theAst [
 ]
 
 { #category : 'private - messages' }
-GtFixItStyler >> typeOf: aNode [
-	isForWorkspace
-		ifFalse: [ aNode isSelf
-				ifTrue: [ ^ self sourceCoder classOrMetaClass ].
-			aNode isSuper
-				ifTrue: [ ^ self sourceCoder classOrMetaClass
-						ifNotNil: [ :class | class superclass ] ] ].
-	aNode isLiteralNode
-		ifTrue: [ ^ aNode value class ].
-	aNode isDynamicArray
-		ifTrue: [ ^ {} class ].
-	aNode isMessage
-		ifTrue: [ aNode selector = #class
-				ifTrue: [ ^ (self typeOf: aNode receiver) ifNotNil: [ :class | class class ] ].
-			(#(new new:) includes: aNode selector)
-				ifTrue: [ ^ (self typeOf: aNode receiver)
-						ifNotNil: [ :class | class instanceSide ] ] ].
-	aNode isVariable
-		ifTrue: [ aNode binding
-				ifNotNil: [ :binding | 
-					binding isLiteralVariable
-						ifTrue: [ binding value ifNotNil: [ :object | ^ object class ] ].
-					(binding isSpecialVariable and: [ binding isThisContext ])
-						ifTrue: [ ^ Context ] ] ].
-	^ nil
+GtFixItStyler >> typeOf: aGtPharoProgramNode [
+	^ GtPharoProgramNode
+		typeOf: aGtPharoProgramNode
+		in: (isForWorkspace
+			ifTrue: [ self coderViewModel selfObject class ]
+			ifFalse: [ self sourceCoder behavior ])
+		bindings: self coderViewModel
 ]
 
 { #category : 'visiting' }
 GtFixItStyler >> visitMessageSend: aNode [
-	| hasRefactoring theNodeType theClassForSelector attribute |
+	| hasActiveRefactoring theNodeType theClassForSelector attribute |
 	super visitMessageSend: aNode.
 
-	hasRefactoring := BlTextStylerTelemetry
+	hasActiveRefactoring := BlTextStylerTelemetry
 		timeSync: [ 'Has refactoring?' ]
 		during: [ self hasRefactoring ].
 
-	hasRefactoring
+	hasActiveRefactoring
 		ifTrue: [ ^ self ].
 
 	theNodeType := BlTextStylerTelemetry
 		timeSync: [ 'Type of ', aNode receiver source asString, ' in ', self sourceCoder behavior name ]
-		during: [
-			GtPharoProgramNode
-				typeOf: aNode receiver
-				in: (isForWorkspace ifFalse: [ self sourceCoder behavior ]) ].
+		during: [ self typeOf: aNode receiver ].
 
 	theNodeType
 		ifNil: [ ^ self ].

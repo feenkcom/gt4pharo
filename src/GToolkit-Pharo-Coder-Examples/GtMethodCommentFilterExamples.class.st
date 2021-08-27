@@ -1,10 +1,10 @@
 Class {
-	#name : #GtMethodCommentFilterExamples,
-	#superclass : #Object,
+	#name : 'GtMethodCommentFilterExamples',
+	#superclass : 'Object',
 	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtMethodCommentFilterExamples >> sampleCaseInsensitiveWordFilter [
 	<gtExample>
 	| filter locations positions |
@@ -18,7 +18,7 @@ GtMethodCommentFilterExamples >> sampleCaseInsensitiveWordFilter [
 	^ filter
 ]
 
-{ #category : #samples }
+{ #category : 'samples' }
 GtMethodCommentFilterExamples >> sampleMethodWithComments [
 	"Object anObject (Object>>printString) {class:Object} ObjectClass"
 
@@ -30,7 +30,7 @@ GtMethodCommentFilterExamples >> sampleMethodWithComments [
 	^ positions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodCommentFilterExamples >> sampleSubstringCommentFilter [
 	<gtExample>
 	| filter locations positions |
@@ -44,7 +44,7 @@ GtMethodCommentFilterExamples >> sampleSubstringCommentFilter [
 	^ filter
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 GtMethodCommentFilterExamples >> sampleWordFilter [
 	<gtExample>
 	| filter positions |
@@ -55,7 +55,7 @@ GtMethodCommentFilterExamples >> sampleWordFilter [
 	^ filter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMethodCommentFilterExamples >> validateFilter: filter returnsPositions: positions [
 	| method |
 	method := self class >> #sampleMethodWithComments.
