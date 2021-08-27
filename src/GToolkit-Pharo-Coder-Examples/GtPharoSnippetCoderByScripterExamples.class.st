@@ -29,6 +29,56 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 ]
 
 { #category : 'examples - fixit method' }
+GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ 42 ] unknownMessage') asCoderViewModel ].		
+	aScripter wait forEmptySpaceTaskQueue.
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - fixit method' }
+GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure02checkFixitAction [
+	<gtExample>
+	| aScripter |
+	
+	aScripter := self fixitMessageSendToBlockClosure01setup.
+	
+	aScripter check
+		onBreadthFirstChildOfClass: GtFixItButton;
+		exists.
+	
+	aScripter wait forEmptySpaceTaskQueue.
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - fixit method' }
+GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument01setup [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ :value | value unknownMessage ]') asCoderViewModel ].		
+	aScripter wait forEmptySpaceTaskQueue.
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - fixit method' }
+GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument02checkFixitAction [
+	<gtExample>
+	| aScripter |
+	
+	aScripter := self fixitMessageSendToBlockClosureArgument01setup.
+	
+	aScripter check
+		onBreadthFirstChildOfClass: GtFixItButton;
+		notExists.
+	
+	aScripter wait forEmptySpaceTaskQueue.
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable01setup [
 	<gtExample>
 	| aScripter |

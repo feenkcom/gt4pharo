@@ -58,19 +58,25 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 		ifTrue: [
 			| aVariableName |
 			aVariableName := aGtPharoProgramNode name value asSymbol.
-			
+
+			aGtPharoProgramNode whoDefines
+				ifNotNil: [ ^ nil ].
+
 			self class environment
 				at: aVariableName
 				ifPresent: [ :anObject | ^ anObject class ].
 			
 			^ (theBindings bindingOf: aVariableName)
 				ifNotNil: [ :aBinding | aBinding value class ] ].
-	
+
 	aGtPharoProgramNode isLiteral
 		ifTrue: [ ^ aGtPharoProgramNode literalValue class ].
 
 	(aGtPharoProgramNode isKindOf: GtPharoArrayNode)
-		ifTrue: [ ^ {} class ].
+		ifTrue: [ ^ { } class ].
+
+	(aGtPharoProgramNode isKindOf: GtPharoBlockNode)
+		ifTrue: [ ^ [  ] class ].
 
 	aGtPharoProgramNode isMessageSend
 		ifTrue: [
