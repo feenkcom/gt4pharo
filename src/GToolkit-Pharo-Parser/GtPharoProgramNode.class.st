@@ -5,43 +5,6 @@ Class {
 }
 
 { #category : 'api - ast' }
-GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass [
-	"Given a pharo ast node and a class find the return type of the node"
-	
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ]) 
-		ifTrue: [ ^ aClass ].
-	
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ]) 
-		ifTrue: [ ^ aClass ifNotNil: [ :class | class superclass ] ].
-		
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ]) 
-		ifTrue: [ ^ Context ].
-	
-	aGtPharoProgramNode isLiteral
-		ifTrue: [ ^ aGtPharoProgramNode literalValue class ].
-
-	(aGtPharoProgramNode isKindOf: GtPharoArrayNode)
-		ifTrue: [ ^ {} class ].
-
-	aGtPharoProgramNode isMessageSend
-		ifTrue: [
-			aGtPharoProgramNode selector = #class
-				ifTrue: [ ^ (self typeOf: aGtPharoProgramNode receiver in: aClass)
-						ifNotNil: [ :class | class class ] ].
-			(#(new new:) includes: aGtPharoProgramNode selector)
-				ifTrue: [ ^ (self typeOf: aGtPharoProgramNode receiver in: aClass)
-						ifNotNil: [ :class | class instanceSide ] ] ].
-
-	aGtPharoProgramNode isVariable
-		ifTrue: [			
-			self environment
-				at: aGtPharoProgramNode name value asSymbol
-				ifPresent: [ :anObject |
-					anObject ifNotNil: [ ^ anObject class ] ] ].
-	^ nil
-]
-
-{ #category : 'api - ast' }
 GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: theBindings [
 	"Given a pharo ast node and a class find the return type of the node"
 	
@@ -67,7 +30,9 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 				ifPresent: [ :anObject | ^ anObject class ].
 			
 			^ (theBindings bindingOf: aVariableName)
-				ifNotNil: [ :aBinding | aBinding value class ] ].
+				ifNotNil: [ :aBinding |
+					aBinding value
+						ifNotNil: [ :aValue | aValue class ] ] ].
 
 	aGtPharoProgramNode isLiteral
 		ifTrue: [ ^ aGtPharoProgramNode literalValue class ].
