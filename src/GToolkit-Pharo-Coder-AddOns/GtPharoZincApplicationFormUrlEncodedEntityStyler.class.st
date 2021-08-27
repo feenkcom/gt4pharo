@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 GtPharoZincApplicationFormUrlEncodedEntityStyler >> secretKeys [
-	^ #( 'secret' 'token' 'id' )
+	^ #( 'secret' 'token' 'id' 'password' )
 ]
 
 { #category : 'accessing' }

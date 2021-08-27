@@ -15,7 +15,7 @@ Class {
 { #category : 'accessing' }
 GtPharoZincStyler >> selectors [
 	"Note: last argument is considered as a secret information, e.g., password."
-	^ #( 'username:password:' 'setBearerAuthentication:' )
+	^ #( 'username:password:' 'setBearerAuthentication:' 'password:' )
 ]
 
 { #category : 'accessing' }

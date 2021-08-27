@@ -40,6 +40,32 @@ GtPharoZincStylerExamples >> styleBearer [
 ]
 
 { #category : 'examples - styling' }
+GtPharoZincStylerExamples >> stylePassword [
+	<gtExample>
+	| aCoder anAst aSourceText aRedInterval |
+	
+	aCoder := GtPharoSnippetCoder forSource: (ZnClient name, ' new ',
+				'password: ''a secret password''') asRopedText.
+
+	anAst := aCoder astAwait.
+	aSourceText := aCoder sourceText copy unstyled.
+	
+	GtPharoZincStyler new
+		coderViewModel: aCoder asCoderViewModel;
+		style: aSourceText
+		ast: anAst.
+	
+	aRedInterval := 1 to: 0.
+	aSourceText
+		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+
+	self assert: aRedInterval equals: (25 to: 41).
+
+	^ aSourceText
+]
+
+{ #category : 'examples - styling' }
 GtPharoZincStylerExamples >> styleUsenamePassword [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
