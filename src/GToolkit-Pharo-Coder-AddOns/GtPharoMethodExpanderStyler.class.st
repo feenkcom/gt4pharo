@@ -7,19 +7,20 @@ Class {
 { #category : 'visiting' }
 GtPharoMethodExpanderStyler >> visitMessageSend: aMessageNode [
 	| aMethodClass |
-	
+
 	self visitValue: aMessageNode.
 
 	aMethodClass := GtPharoProgramNode
 		typeOf: aMessageNode receiver
-		in: self coderViewModel coderModel behavior.
-	
+		in: self coderViewModel coderModel behavior
+		bindings: self coderViewModel.
+
 	aMethodClass
 		ifNil: [ ^ self ].
 
 	(aMethodClass canUnderstand: aMessageNode selector)
 		ifFalse: [ ^ self ].
-		
+
 	text
 		attribute: (GtPharoMethodExpanderAttribute
 			forClass: aMethodClass
