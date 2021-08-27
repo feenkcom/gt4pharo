@@ -12,7 +12,9 @@ GtPharoMethodExpanderStyler >> visitMessageSend: aMessageNode [
 
 	aMethodClass := GtPharoProgramNode
 		typeOf: aMessageNode receiver
-		in: self coderViewModel coderModel behavior
+		in: (self coderViewModel selfObject
+			ifNil: [ self coderViewModel coderModel behavior ]
+			ifNotNil: [ :aSelfObject | aSelfObject class ])
 		bindings: self coderViewModel.
 
 	aMethodClass
