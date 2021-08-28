@@ -10,8 +10,18 @@ GtSearchPackagesFilter class >> resultType [
 ]
 
 { #category : 'accessing' }
+GtSearchPackagesFilter class >> resultTypeStream [
+	^ GtAsyncSearchPackageGroupStream 
+]
+
+{ #category : 'accessing' }
 GtSearchPackagesFilter >> defaultFilterScope [
 	^ GtSearchImagePackagesFilter new
+]
+
+{ #category : 'accessing' }
+GtSearchPackagesFilter >> defaultFilterScopeStream [
+	^ AsyncImagePackagesStream new
 ]
 
 { #category : 'testing' }

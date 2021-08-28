@@ -16,9 +16,9 @@ GtSearchPackageGroupResult >> refreshPackages [
 		ifTrue: [ ^ self ].
 	packages := OrderedCollection new.
 	filter ifNotNil: [ 
-		scope packagesDo: [ :aClass | 
-			(filter matches: aClass) ifTrue: [
-				packages add: aClass ] ] ].
+		scope packagesDo: [ :eachPackage | 
+			(filter matches: eachPackage) ifTrue: [
+				packages add: eachPackage ] ] ].
 	packages
 		sort: [ :a :b | a name < b name ].
 	items := packages.
