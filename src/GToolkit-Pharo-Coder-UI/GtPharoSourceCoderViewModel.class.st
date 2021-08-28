@@ -35,8 +35,15 @@ GtPharoSourceCoderViewModel >> defaultBindingStrategy [
 
 { #category : 'private - evaluation' }
 GtPharoSourceCoderViewModel >> evaluationContext [
+	| bindingStrategyWithPotentialSlots concreteBindings |
+	bindingStrategyWithPotentialSlots := self bindingStrategy.
+	self selfObject notNil ifTrue: [ 
+		concreteBindings := GtSnippetBindings new.
+		selfObject class slotNames do: [:each | 
+			concreteBindings at: each put: (selfObject instVarNamed: each) ].
+		bindingStrategyWithPotentialSlots bindings: concreteBindings ].
 	^ super evaluationContext
-		bindingStrategy: self bindingStrategy;
+		bindingStrategy: bindingStrategyWithPotentialSlots;
 		receiverObject: self selfObject
 ]
 
