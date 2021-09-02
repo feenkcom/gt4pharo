@@ -1,6 +1,6 @@
-Extension { #name : #GtPharoMethodsDefinition }
+Extension { #name : 'GtPharoMethodsDefinition' }
 
-{ #category : #'*GToolkit-Pharo-Extensions' }
+{ #category : '*GToolkit-Pharo-Extensions' }
 GtPharoMethodsDefinition >> gtMethodsFor: aView [
 	<gtView>
 
@@ -10,6 +10,6 @@ GtPharoMethodsDefinition >> gtMethodsFor: aView [
 		title: 'Methods';
 		priority: 1;
 		items: [ definitions ];
-		column: 'Selector' item: [ :eachMethod | eachMethod selector ];
-		column: 'Protocol' item: [ :eachMethod | eachMethod protocol ]
+		column: 'Selector' text: [ :eachMethod | eachMethod selector ];
+		column: 'Protocol' text: [ :eachMethod | eachMethod protocol ]
 ]

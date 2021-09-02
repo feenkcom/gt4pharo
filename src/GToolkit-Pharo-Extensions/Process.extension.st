@@ -1,6 +1,6 @@
-Extension { #name : #Process }
+Extension { #name : 'Process' }
 
-{ #category : #'*GToolkit-Pharo-Extensions' }
+{ #category : '*GToolkit-Pharo-Extensions' }
 Process >> gtDebugCoderFor: aView [
 	<gtView>
 	self isSuspended ifFalse: [ ^ aView empty ].
