@@ -1,6 +1,6 @@
-Extension { #name : #GtFullClassDefinition }
+Extension { #name : 'GtFullClassDefinition' }
 
-{ #category : #'*GToolkit-Pharo-Extensions' }
+{ #category : '*GToolkit-Pharo-Extensions' }
 GtFullClassDefinition >> gtMethodsFor: aView [
 	<gtView>
 

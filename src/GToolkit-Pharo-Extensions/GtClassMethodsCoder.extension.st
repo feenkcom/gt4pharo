@@ -1,6 +1,6 @@
-Extension { #name : #GtClassMethodsCoder }
+Extension { #name : 'GtClassMethodsCoder' }
 
-{ #category : #'*GToolkit-Pharo-Extensions' }
+{ #category : '*GToolkit-Pharo-Extensions' }
 GtClassMethodsCoder >> gtSpotterMethodsFor: aStep [
 	<gtSearch>
 	aStep listProcessor
