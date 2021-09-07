@@ -54,16 +54,6 @@ GtSearchMethodsFilter >> filterValueString [
 ]
 
 { #category : 'testing' }
-GtSearchMethodsFilter >> gtMetricsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Metrics';
-		priority: 11;
-		object: [ self result ];
-		view: #gtMetricsFor:
-]
-
-{ #category : 'testing' }
 GtSearchMethodsFilter >> includesMethod: aCompiledMethod [
 	self subclassResponsibility
 ]
