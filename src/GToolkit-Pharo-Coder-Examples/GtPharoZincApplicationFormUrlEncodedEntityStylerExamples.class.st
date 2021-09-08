@@ -48,7 +48,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (61 to: 74).
@@ -74,7 +74,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (60 to: 76).
@@ -100,7 +100,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (65 to: 78).
@@ -126,7 +126,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (64 to: 77).

@@ -27,7 +27,7 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (11 to: 11).
@@ -61,7 +61,7 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (30 to: 30).
@@ -104,7 +104,7 @@ GtPharoColorStylerExamples >> colorRGBRangeHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (36 to: 36).

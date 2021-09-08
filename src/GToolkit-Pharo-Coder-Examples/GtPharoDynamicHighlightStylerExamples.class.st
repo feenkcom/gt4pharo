@@ -22,9 +22,10 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 			| highlights |
 			highlights := OrderedCollection new.
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | 
+				findAttributesSuchThat: [ :eachAttribute | 
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
+			
 			highlights notEmpty ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 	aScripter syncContinue.
@@ -47,7 +48,7 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 			| highlights |
 			highlights := OrderedCollection new.
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | 
+				findAttributesSuchThat: [ :eachAttribute | 
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			highlights isEmpty ];
@@ -72,7 +73,7 @@ GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
 			| highlights |
 			highlights := OrderedCollection new.
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | 
+				findAttributesSuchThat: [ :eachAttribute | 
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			highlights isEmpty ];
@@ -97,7 +98,7 @@ GtPharoDynamicHighlightStylerExamples >> twoOccurrencesHighlighted [
 			| highlights |
 			highlights := OrderedCollection new.
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | 
+				findAttributesSuchThat: [ :eachAttribute | 
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			highlights notEmpty ];
