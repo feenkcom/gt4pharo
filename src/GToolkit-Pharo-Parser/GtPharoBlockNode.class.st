@@ -34,11 +34,9 @@ GtPharoBlockNode >> body [
 
 { #category : 'generated' }
 GtPharoBlockNode >> body: aGtPharoSequenceNode [
-	self body notNil
-		ifTrue: [ self body parent: nil ].
+	self body notNil ifTrue: [ self body parent: nil ].
 	body := aGtPharoSequenceNode.
-	self body notNil
-		ifTrue: [ self body parent: self ]
+	self body notNil ifTrue: [ self body parent: self ]
 ]
 
 { #category : 'generated' }

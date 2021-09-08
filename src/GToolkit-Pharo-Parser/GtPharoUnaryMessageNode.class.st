@@ -27,11 +27,6 @@ GtPharoUnaryMessageNode >> messageReceiver [
 	^ parent
 ]
 
-{ #category : 'generated' }
-GtPharoUnaryMessageNode >> nodeVariables [
-	^ #(#selectorPart)
-]
-
 { #category : 'accessing' }
 GtPharoUnaryMessageNode >> selector [
 	^ self selectorPart value asSymbol
@@ -43,15 +38,16 @@ GtPharoUnaryMessageNode >> selectorPart [
 ]
 
 { #category : 'generated' }
-GtPharoUnaryMessageNode >> selectorPart: aGtPharoNameNode [
-	self selectorPart notNil
-		ifTrue: [ self selectorPart parent: nil ].
-	selectorPart := aGtPharoNameNode.
-	self selectorPart notNil
-		ifTrue: [ self selectorPart parent: self ]
+GtPharoUnaryMessageNode >> selectorPart: aSmaCCToken [
+	selectorPart := aSmaCCToken
 ]
 
 { #category : 'accessing' }
 GtPharoUnaryMessageNode >> selectorParts [
 	^ {selectorPart}
+]
+
+{ #category : 'generated' }
+GtPharoUnaryMessageNode >> tokenVariables [
+	^ #(#selectorPart)
 ]

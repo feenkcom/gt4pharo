@@ -66,11 +66,6 @@ TGtPharoProgramNodeVisitor >> visitErrorPattern: anErrorPattern [
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitKeyword: aKeyword [
-	^ self visitProgram: aKeyword
-]
-
-{ #category : 'generated' }
 TGtPharoProgramNodeVisitor >> visitKeywordMessage: aKeywordMessage [
 	^ self visitMessage: aKeywordMessage
 ]
@@ -106,11 +101,6 @@ TGtPharoProgramNodeVisitor >> visitMethodSequence: aMethodSequence [
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitName: aName [
-	^ self visitProgram: aName
-]
-
-{ #category : 'generated' }
 TGtPharoProgramNodeVisitor >> visitNamedVariable: aNamedVariable [
 	^ self visitVariable: aNamedVariable
 ]
@@ -121,18 +111,8 @@ TGtPharoProgramNodeVisitor >> visitNilLiteral: aNilLiteral [
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitNothing: aNothing [
-	^ self visitProgram: aNothing
-]
-
-{ #category : 'generated' }
 TGtPharoProgramNodeVisitor >> visitNumberLiteral: aNumberLiteral [
 	^ self visitLiteral: aNumberLiteral
-]
-
-{ #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitPeriod: aPeriod [
-	^ self visitProgram: aPeriod
 ]
 
 { #category : 'generated' }
@@ -176,18 +156,8 @@ TGtPharoProgramNodeVisitor >> visitSuperVariable: aSuperVariable [
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitSymbol: aSymbol [
-	^ self visitProgram: aSymbol
-]
-
-{ #category : 'generated' }
 TGtPharoProgramNodeVisitor >> visitSymbolLiteral: aSymbolLiteral [
 	^ self visitLiteral: aSymbolLiteral
-]
-
-{ #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitTemplatable: aTemplatable [
-	^ self visitProgram: aTemplatable
 ]
 
 { #category : 'generated' }
@@ -196,18 +166,33 @@ TGtPharoProgramNodeVisitor >> visitTemplate: aTemplate [
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitTemplateKeyword: aTemplateKeyword [
-	^ self visitTemplatable: aTemplateKeyword
+TGtPharoProgramNodeVisitor >> visitTemplateKeywordMessage: aTemplateKeywordMessage [
+	^ self visitKeywordMessage: aTemplateKeywordMessage
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitTemplateName: aTemplateName [
-	^ self visitTemplatable: aTemplateName
+TGtPharoProgramNodeVisitor >> visitTemplateNamePart: aTemplateNamePart [
+	^ self visitProgram: aTemplateNamePart
 ]
 
 { #category : 'generated' }
-TGtPharoProgramNodeVisitor >> visitTemplateSymbol: aTemplateSymbol [
-	^ self visitTemplatable: aTemplateSymbol
+TGtPharoProgramNodeVisitor >> visitTemplatePattern: aTemplatePattern [
+	^ self visitMethodPattern: aTemplatePattern
+]
+
+{ #category : 'generated' }
+TGtPharoProgramNodeVisitor >> visitTemplatePragma: aTemplatePragma [
+	^ self visitPragma: aTemplatePragma
+]
+
+{ #category : 'generated' }
+TGtPharoProgramNodeVisitor >> visitTemplateUnaryMessage: aTemplateUnaryMessage [
+	^ self visitUnaryMessage: aTemplateUnaryMessage
+]
+
+{ #category : 'generated' }
+TGtPharoProgramNodeVisitor >> visitTemplateVariable: aTemplateVariable [
+	^ self visitValue: aTemplateVariable
 ]
 
 { #category : 'generated' }

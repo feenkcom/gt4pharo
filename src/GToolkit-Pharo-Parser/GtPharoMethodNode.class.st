@@ -20,11 +20,9 @@ GtPharoMethodNode >> body [
 
 { #category : 'generated' }
 GtPharoMethodNode >> body: aGtPharoSequenceNode [
-	self body notNil
-		ifTrue: [ self body parent: nil ].
+	self body notNil ifTrue: [ self body parent: nil ].
 	body := aGtPharoSequenceNode.
-	self body notNil
-		ifTrue: [ self body parent: self ]
+	self body notNil ifTrue: [ self body parent: self ]
 ]
 
 { #category : 'testing' }
@@ -59,11 +57,9 @@ GtPharoMethodNode >> pattern [
 
 { #category : 'generated' }
 GtPharoMethodNode >> pattern: aGtPharoMethodPatternNode [
-	self pattern notNil
-		ifTrue: [ self pattern parent: nil ].
+	self pattern notNil ifTrue: [ self pattern parent: nil ].
 	pattern := aGtPharoMethodPatternNode.
-	self pattern notNil
-		ifTrue: [ self pattern parent: self ]
+	self pattern notNil ifTrue: [ self pattern parent: self ]
 ]
 
 { #category : 'accessing' }

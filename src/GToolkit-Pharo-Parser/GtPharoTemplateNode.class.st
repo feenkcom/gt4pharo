@@ -26,11 +26,9 @@ GtPharoTemplateNode >> expression [
 
 { #category : 'generated' }
 GtPharoTemplateNode >> expression: aGtPharoValueNode [
-	self expression notNil
-		ifTrue: [ self expression parent: nil ].
+	self expression notNil ifTrue: [ self expression parent: nil ].
 	expression := aGtPharoValueNode.
-	self expression notNil
-		ifTrue: [ self expression parent: self ]
+	self expression notNil ifTrue: [ self expression parent: self ]
 ]
 
 { #category : 'generated' }

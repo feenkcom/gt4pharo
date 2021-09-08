@@ -45,9 +45,7 @@ GtPharoReturnNode >> value [
 
 { #category : 'generated' }
 GtPharoReturnNode >> value: aGtPharoValueNode [
-	self value notNil
-		ifTrue: [ self value parent: nil ].
+	self value notNil ifTrue: [ self value parent: nil ].
 	value := aGtPharoValueNode.
-	self value notNil
-		ifTrue: [ self value parent: self ]
+	self value notNil ifTrue: [ self value parent: self ]
 ]

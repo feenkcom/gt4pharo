@@ -20,7 +20,12 @@ GtPharoKeywordMessageNode >> arguments [
 
 { #category : 'generated' }
 GtPharoKeywordMessageNode >> compositeNodeVariables [
-	^ #(#selectorParts #values)
+	^ #(#values)
+]
+
+{ #category : 'generated' }
+GtPharoKeywordMessageNode >> compositeTokenVariables [
+	^ #(#selectorParts)
 ]
 
 { #category : 'generated-initialize-release' }
@@ -42,7 +47,7 @@ GtPharoKeywordMessageNode >> messageReceiver [
 
 { #category : 'accessing' }
 GtPharoKeywordMessageNode >> selector [
-	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each selector ] ]) asSymbol
+	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each source ] ]) asSymbol
 ]
 
 { #category : 'generated' }
@@ -52,9 +57,7 @@ GtPharoKeywordMessageNode >> selectorParts [
 
 { #category : 'generated' }
 GtPharoKeywordMessageNode >> selectorParts: anOrderedCollection [
-	self setParents: self selectorParts to: nil.
-	selectorParts := anOrderedCollection.
-	self setParents: self selectorParts to: self
+	selectorParts := anOrderedCollection
 ]
 
 { #category : 'generated' }
