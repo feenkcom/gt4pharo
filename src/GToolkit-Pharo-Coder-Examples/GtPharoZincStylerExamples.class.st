@@ -31,7 +31,7 @@ GtPharoZincStylerExamples >> styleBearer [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (40 to: 53).
@@ -57,7 +57,7 @@ GtPharoZincStylerExamples >> stylePassword [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (25 to: 41).
@@ -83,7 +83,7 @@ GtPharoZincStylerExamples >> styleUsenamePassword [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (44 to: 60).

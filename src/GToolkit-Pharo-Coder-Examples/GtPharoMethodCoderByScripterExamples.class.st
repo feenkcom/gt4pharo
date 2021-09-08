@@ -1368,7 +1368,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		label: 'Check rename editor attribute';
 		value: [ :aCoderEditor |
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
@@ -1377,7 +1377,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		label: 'Check refactoring changes attribute';
 		value: [ :aCoderEditor |
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
@@ -1428,7 +1428,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_06_type_method_name [
 		label: 'Check refactoring changes attribute';
 		value: [ :aCoderEditor |
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtSourceCoderEditorId.
@@ -1476,7 +1476,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 		label: 'Check refactoring changes attribute';
 		value: [ :aCoderEditor |
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
@@ -1526,7 +1526,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 		label: 'Check refactoring changes attribute does not exist';
 		value: [ :aCoderEditor |
 			aCoderEditor text
-				findAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | aStart to: anEnd ] ]
 			equals: [ nil ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.

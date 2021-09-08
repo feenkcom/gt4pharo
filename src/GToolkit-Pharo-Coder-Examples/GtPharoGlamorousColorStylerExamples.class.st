@@ -26,7 +26,7 @@ GtPharoGlamorousColorStylerExamples >> colorFromDefaultButtonBorderColor [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
+		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (42 to: 42).

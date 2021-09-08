@@ -23,7 +23,7 @@ GtPharoHaltStylerExamples >> haltNowHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
+		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (10 to: 17).
@@ -48,7 +48,7 @@ GtPharoHaltStylerExamples >> haltOnceHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
+		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (10 to: 18).
@@ -73,7 +73,7 @@ GtPharoHaltStylerExamples >> selfHaltHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
+		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (15 to: 18).
@@ -98,7 +98,7 @@ GtPharoHaltStylerExamples >> selfHaltOnceHighlighted [
 	
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributeSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
+		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
 
 	self assert: aRedInterval equals: (15 to: 22).
