@@ -37,7 +37,7 @@ GtPharoMethodPatternNode >> isMethodPattern [
 
 { #category : 'accessing' }
 GtPharoMethodPatternNode >> selector [
-	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each selector ] ]
+	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each source ] ]
 ]
 
 { #category : 'generated' }

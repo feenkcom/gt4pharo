@@ -7,7 +7,7 @@ Class {
 { #category : 'examples' }
 GtPharoStylerExamples >> invalidSyntaxWithCascade [
 	<gtExample>
-	| aCoder anAst aSourceText aRedInterval |
+	| aCoder anAst aSourceText aRedIntervals |
 	
 	aCoder := GtPharoSnippetCoder forSource: 'object := Object new
 	isNil;
@@ -22,12 +22,12 @@ Object new'.
 		style: aSourceText
 		ast: anAst.
 	
-	aRedInterval := 1 to: 0.
+	aRedIntervals := OrderedCollection new.
 	aSourceText
 		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextForegroundAttribute) and: [ eachAttribute paint = Color red ] ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		indicesDo: [ :aStartPosition :anEndPosition | aRedIntervals add: (aStartPosition to: anEndPosition) ].	
 
-	self assert: aRedInterval equals: (38 to: 43).
+	self assert: aRedIntervals first equals: (38 to: 43).
 
 	^ aSourceText
 ]
