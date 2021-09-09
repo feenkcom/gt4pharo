@@ -12,6 +12,16 @@ GtPharoVariableNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitVariable: self
 ]
 
+{ #category : 'converting' }
+GtPharoVariableNode >> asString [
+	^ name source
+]
+
+{ #category : 'converting' }
+GtPharoVariableNode >> asSymbol [
+	^ self asString asSymbol
+]
+
 { #category : 'accessing' }
 GtPharoVariableNode >> findVariableNodeAt: anInteger [
 	^ (anInteger between: self startPosition and: self stopPosition)
@@ -68,14 +78,17 @@ GtPharoVariableNode >> name [
 ]
 
 { #category : 'generated' }
-GtPharoVariableNode >> name: anObject [
-	self setParent: self name to: nil.
-	name := anObject.
-	self setParent: self name to: self
+GtPharoVariableNode >> name: aSmaCCToken [
+	name := aSmaCCToken
+]
+
+{ #category : 'converting' }
+GtPharoVariableNode >> selector [
+	^ self asSymbol
 ]
 
 { #category : 'generated' }
-GtPharoVariableNode >> otherVariables [
+GtPharoVariableNode >> tokenVariables [
 	^ #(#name)
 ]
 

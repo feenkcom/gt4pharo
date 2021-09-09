@@ -18,6 +18,11 @@ GtPharoMethodPatternNode >> compositeNodeVariables [
 	^ #(#variables)
 ]
 
+{ #category : 'generated' }
+GtPharoMethodPatternNode >> compositeTokenVariables [
+	^ #(#selectorParts)
+]
+
 { #category : 'generated-initialize-release' }
 GtPharoMethodPatternNode >> initialize [
 	super initialize.
@@ -30,14 +35,9 @@ GtPharoMethodPatternNode >> isMethodPattern [
 	^ true
 ]
 
-{ #category : 'generated' }
-GtPharoMethodPatternNode >> otherVariables [
-	^ #(#selectorParts)
-]
-
 { #category : 'accessing' }
 GtPharoMethodPatternNode >> selector [
-	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each selector ] ]
+	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each source ] ]
 ]
 
 { #category : 'generated' }
@@ -47,9 +47,7 @@ GtPharoMethodPatternNode >> selectorParts [
 
 { #category : 'generated' }
 GtPharoMethodPatternNode >> selectorParts: anOrderedCollection [
-	self setParent: self selectorParts to: nil.
-	selectorParts := anOrderedCollection.
-	self setParent: self selectorParts to: self
+	selectorParts := anOrderedCollection
 ]
 
 { #category : 'generated' }

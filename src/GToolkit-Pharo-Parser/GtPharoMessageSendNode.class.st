@@ -30,11 +30,9 @@ GtPharoMessageSendNode >> message [
 
 { #category : 'generated' }
 GtPharoMessageSendNode >> message: aGtPharoMessageNode [
-	self message notNil
-		ifTrue: [ self message parent: nil ].
+	self message notNil ifTrue: [ self message parent: nil ].
 	message := aGtPharoMessageNode.
-	self message notNil
-		ifTrue: [ self message parent: self ]
+	self message notNil ifTrue: [ self message parent: self ]
 ]
 
 { #category : 'accessing' }
@@ -61,11 +59,9 @@ GtPharoMessageSendNode >> receiver [
 
 { #category : 'generated' }
 GtPharoMessageSendNode >> receiver: aGtPharoValueNode [
-	self receiver notNil
-		ifTrue: [ self receiver parent: nil ].
+	self receiver notNil ifTrue: [ self receiver parent: nil ].
 	receiver := aGtPharoValueNode.
-	self receiver notNil
-		ifTrue: [ self receiver parent: self ]
+	self receiver notNil ifTrue: [ self receiver parent: self ]
 ]
 
 { #category : 'accessing' }

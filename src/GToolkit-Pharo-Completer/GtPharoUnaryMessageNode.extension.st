@@ -6,7 +6,7 @@ GtPharoUnaryMessageNode >> completionActionsFor: strategy [
 	index := strategy index.
 	selectorPart stopPosition = index
 		ifFalse: [ ^ #() ].
-	startingText := selectorPart selector.
+	startingText := selectorPart source.
 	^ (strategy
 		selectorsForReceiver: (parent receiver guessType: strategy)
 		matching: startingText)

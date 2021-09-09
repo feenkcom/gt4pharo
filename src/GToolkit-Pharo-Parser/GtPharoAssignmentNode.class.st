@@ -48,11 +48,9 @@ GtPharoAssignmentNode >> value [
 
 { #category : 'generated' }
 GtPharoAssignmentNode >> value: aGtPharoValueNode [
-	self value notNil
-		ifTrue: [ self value parent: nil ].
+	self value notNil ifTrue: [ self value parent: nil ].
 	value := aGtPharoValueNode.
-	self value notNil
-		ifTrue: [ self value parent: self ]
+	self value notNil ifTrue: [ self value parent: self ]
 ]
 
 { #category : 'generated' }
@@ -61,10 +59,8 @@ GtPharoAssignmentNode >> variable [
 ]
 
 { #category : 'generated' }
-GtPharoAssignmentNode >> variable: aGtPharoVariableNode [
-	self variable notNil
-		ifTrue: [ self variable parent: nil ].
-	variable := aGtPharoVariableNode.
-	self variable notNil
-		ifTrue: [ self variable parent: self ]
+GtPharoAssignmentNode >> variable: aGtPharoValueNode [
+	self variable notNil ifTrue: [ self variable parent: nil ].
+	variable := aGtPharoValueNode.
+	self variable notNil ifTrue: [ self variable parent: self ]
 ]

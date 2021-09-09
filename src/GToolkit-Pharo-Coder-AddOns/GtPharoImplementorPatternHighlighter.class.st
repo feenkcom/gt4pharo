@@ -24,7 +24,7 @@ GtPharoImplementorPatternHighlighter >> highlightMethod: aMethodNode startingAt:
 	aMethodNode selectorParts
 		do: [ :eachSelectorPart | 
 			| first last end |
-			end := offset + eachSelectorPart selector size - 1.
+			end := offset + eachSelectorPart source size - 1.
 			anInteger > end
 				ifFalse: [ (anInteger between: offset and: end)
 						ifTrue: [ first := anInteger - offset + eachSelectorPart startPosition.
