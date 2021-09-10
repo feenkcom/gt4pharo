@@ -353,59 +353,6 @@ GtPharoMethodCoder >> mondrianPaintAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> renameAt: aTextPosition in: anEditorElement [
-	self
-		nodeAt: aTextPosition
-		ifFound: [ :aNode | 
-			(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
-				ifTrue: [ ^ self renameMethod: anEditorElement node: aNode ].
-			aNode isVariable
-				ifTrue: [ aNode isLocallyDefined
-						ifTrue: [ ^ anEditorElement textualCoderViewModel renameLocalVariableAt: aTextPosition ].
-					(self behavior allInstVarNames includes: aNode name value)
-						ifTrue: [ ^ self renameInstanceVariableIn: anEditorElement node: aNode ].
-					(self behavior classVariables
-						anySatisfy: [ :assoc | assoc key asString = aNode name value ])
-						ifTrue: [ ^ self renameClassVariableIn: anEditorElement ].
-					Smalltalk globals
-						at: aNode name value asSymbol
-						ifPresent: [ :cls | 
-							(cls isKindOf: Class)
-								ifTrue: [ ^ self renameClassIn: anEditorElement ] ] ] ]
-		ifNone: [  ]
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> renameClassIn: editorElement [
-	(GtRenameClassController new
-		coder: self;
-		sourceElement: editorElement) execute
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> renameClassVariableIn: editorElement [
-	(GtRenameClassVariableController new
-		coder: self;
-		sourceElement: editorElement) execute
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> renameInstanceVariableIn: editorElement node: aVariableNode [
-	(GtRenameInstanceVariableController new
-		coder: self;
-		sourceElement: editorElement;
-		originalNode: aVariableNode) execute
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> renameMethod: editorElement node: aMessageOrMethodOrMethodPatternNode [
-	(GtRenameMethodController new
-		coder: self;
-		sourceElement: editorElement;
-		originalNode: aMessageOrMethodOrMethodPatternNode) execute
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> runGtViewFrom: anElement [
 	| view |
 	
