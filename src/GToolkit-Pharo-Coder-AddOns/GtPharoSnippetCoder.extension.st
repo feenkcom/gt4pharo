@@ -41,6 +41,21 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> isLocalVariable: aNode [
+	^ aNode isLocallyDefined
+		or:
+			[ (self behavior allInstVarNames includes: aNode name source)
+				or:
+					[ (self behavior classVariables anySatisfy: [ :assoc | assoc key asString = aNode name source ])
+						or: [ (Smalltalk globals includesKey: aNode name source asSymbol) not ] ] ]
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> renameIn: editorElement [
 	GtRenameAction pharoRenameSnippetLocalsOn: editorElement
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> renameTemporaryIn: anEditorElement node: aVariableNode [
+	^ GtRenameAction pharoRenameSnippetLocalsOn: anEditorElement
 ]

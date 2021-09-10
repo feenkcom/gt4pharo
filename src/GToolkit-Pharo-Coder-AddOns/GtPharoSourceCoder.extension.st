@@ -20,6 +20,72 @@ GtPharoSourceCoder >> haltAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isLocalVariable: aNode [
+	^ aNode isLocallyDefined
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameAt: aTextPosition in: anEditorElement [
+	self
+		nodeAt: aTextPosition
+		ifFound: [ :aNode | self renameNode: aNode in: anEditorElement ]
+		ifNone: [  ]
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameClassIn: editorElement node: aVariableNode [
+	(GtRenameClassController new
+		coder: self;
+		sourceElement: editorElement;
+		originalNode: aVariableNode) execute
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameClassVariableIn: editorElement node: aVariableNode [
+	(GtRenameClassVariableController new
+		coder: self;
+		sourceElement: editorElement;
+		originalNode: aVariableNode) execute
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameInstanceVariableIn: editorElement node: aVariableNode [
+	(GtRenameInstanceVariableController new
+		coder: self;
+		sourceElement: editorElement;
+		originalNode: aVariableNode) execute
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameMethod: editorElement node: aMessageOrMethodOrMethodPatternNode [
+	(GtRenameMethodController new
+		coder: self;
+		sourceElement: editorElement;
+		originalNode: aMessageOrMethodOrMethodPatternNode) execute
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameNode: aNode in: anEditorElement [
+	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
+		ifTrue: [ ^ self renameMethod: anEditorElement node: aNode ].
+	aNode isVariable
+		ifTrue:
+			[ (self isLocalVariable: aNode) ifTrue: [ ^ self renameTemporaryIn: anEditorElement node: aNode ].
+			(self behavior allInstVarNames includes: aNode name value)
+				ifTrue: [ ^ self renameInstanceVariableIn: anEditorElement node: aNode ].
+			(self behavior classVariables anySatisfy: [ :assoc | assoc key asString = aNode name value ])
+				ifTrue: [ ^ self renameClassVariableIn: anEditorElement node: aNode ].
+			Smalltalk globals
+				at: aNode name value asSymbol
+				ifPresent: [ :cls | (cls isKindOf: Class) ifTrue: [ ^ self renameClassIn: anEditorElement node: aNode ] ] ]
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameTemporaryIn: anEditorElement node: aVariableNode [
+	^ GtRenameAction pharoRenameLocalsOn: anEditorElement
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> zincAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoZincStyler new.

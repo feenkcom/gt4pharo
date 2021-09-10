@@ -247,10 +247,6 @@ GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBl
 				(aTextPosition between: node startPosition and: node stopPosition)
 					ifTrue: [ innerNode := node ] ].
 		
-		((innerNode isName or: [ innerNode isKeyword ])
-			and: [ innerNode parent notNil ])
-				ifTrue: [ innerNode := innerNode parent ].
-		
 		^ innerNode ifNil: aNoneBlock ifNotNil: aFoundBlock ]
 			on: Error
 			do: [ :ex | ex return ].

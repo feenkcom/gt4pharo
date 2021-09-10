@@ -156,11 +156,6 @@ GtPharoProgramNode >> isMethodPattern [
 ]
 
 { #category : 'testing' }
-GtPharoProgramNode >> isName [
-	^ false
-]
-
-{ #category : 'testing' }
 GtPharoProgramNode >> isPragma [
 	^ false
 ]
