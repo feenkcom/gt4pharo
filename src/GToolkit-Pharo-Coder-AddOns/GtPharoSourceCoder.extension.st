@@ -82,7 +82,14 @@ GtPharoSourceCoder >> renameNode: aNode in: anEditorElement [
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameTemporaryIn: anEditorElement node: aVariableNode [
-	^ GtRenameAction pharoRenameLocalsOn: anEditorElement
+	| action locations |
+	locations := OrderedCollection new.
+	(aVariableNode whoDefines ifNil: [ aVariableNode topParent ])
+		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ locations add: each sourceInterval ] ].
+	action := GtRenameAction locations: locations element: anEditorElement.
+	action forVariableOrUnaryMessage.
+	action install.
+	^ action
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }

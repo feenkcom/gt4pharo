@@ -146,3 +146,75 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable04checkFixitA
 	aScripter wait forEmptySpaceTaskQueue.
 	^ aScripter syncContinue
 ]
+
+{ #category : 'examples - context menu' }
+GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: 'a := 1. a + a' ].
+	aScripter click
+		label: 'Click on the coder editor to give it focus';
+		id: GtSourceCoderEditorId.
+	aScripter wait forEmptySpaceTaskQueue.
+	aScripter do
+		label: 'Move cursor to variable';
+		action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: 0 ];
+		onChildNamed: GtSourceCoderEditorId.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId.
+	aScripter wait forEmptySpaceTaskQueue.
+	aScripter check
+		label: 'Check rename editor exists';
+		exists;
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: GtRenameEditor.
+	
+	aScripter check
+		label: 'Check rename editor attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 1 to: 1 ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		
+	aScripter check
+		label: 'Check source editor is not focused';
+		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		
+	aScripter check
+		label: 'Check source editor has focus';
+		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+	
+	aScripter check
+		label: 'Check method name editor source code';
+		value: [ :aNameEditor | aNameEditor text asString ] equals: 'a';
+		onChildNamed: GtPharoSourceCoder sourceEditorName;
+		onBreadthFirstChildOfClass: GtRenameEditor.
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter
+		substep: 'Enter new name'
+		do: [ :aStep | 
+			aStep keyClick: BlKeyboardKey delete.
+			aStep keyClick: BlKeyboardKey backspace.
+			aStep type: 'b' ].
+
+	aScripter wait forEmptySpaceTaskQueue.
+	aScripter
+		substep: 'Apply rename'
+		do: [ :aStep | aStep keyClick: BlKeyboardKey return ].
+	aScripter wait forEmptySpaceTaskQueue.
+	aScripter syncContinue.
+
+	^ aScripter
+]
