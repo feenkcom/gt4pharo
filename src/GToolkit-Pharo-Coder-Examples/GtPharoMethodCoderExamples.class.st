@@ -986,7 +986,7 @@ GtPharoMethodCoderExamples >> nodeAtCursor [
 		forMethod: GtPharoMethodCoderExamples >> #sampleMethodWithCascades.
 	
 	node := coder
-		nodeAt: ((coder currentSourceString indexOfSubCollection: 'self') - 1)
+		nodeAt: ((coder currentSourceString indexOfSubCollection: 'self') - 2)
 		ifFound: [ :aNode | aNode ]
 		ifNone: [ nil ].
 	self assert: (node isKindOf: GtPharoVariableNode) not.

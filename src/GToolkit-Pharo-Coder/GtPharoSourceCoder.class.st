@@ -244,7 +244,7 @@ GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBl
 		theAST := self astAwait.
 		theAST
 			withAllNodesDo: [ :node | 
-				(aTextPosition between: node startPosition and: node stopPosition)
+				(aTextPosition between: node startPosition - 1 and: node stopPosition)
 					ifTrue: [ innerNode := node ] ].
 		
 		^ innerNode ifNil: aNoneBlock ifNotNil: aFoundBlock ]
@@ -543,7 +543,7 @@ GtPharoSourceCoder >> variableNodeAt: aTextPosition ifFound: aFoundBlock ifNone:
 		theAST
 			withAllNodesOfType: GtPharoVariableNode
 			do: [ :node | 
-				(aTextPosition between: node startPosition and: node stopPosition)
+				(aTextPosition between: node startPosition - 1 and: node stopPosition)
 					ifTrue: [ ^ aFoundBlock value: node ] ] ]
 		on: Error
 		do: [ :ex | ex return ].
