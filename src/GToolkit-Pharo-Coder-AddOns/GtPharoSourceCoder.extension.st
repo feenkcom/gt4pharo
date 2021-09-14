@@ -82,12 +82,26 @@ GtPharoSourceCoder >> renameNode: aNode in: anEditorElement [
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameTemporaryIn: anEditorElement node: aVariableNode [
-	| action locations |
+	| action locations announcement definer |
 	locations := OrderedCollection new.
-	(aVariableNode whoDefines ifNil: [ aVariableNode topParent ])
+	definer := aVariableNode whoDefines.
+	announcement := GtCoderRenameTemporaryRequestedAnnouncement new.
+	definer isNil
+		ifTrue:
+			[ announcement variableName: aVariableNode name source.
+			self announce: announcement ].
+	(definer ifNil: [ aVariableNode topParent ])
 		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ locations add: each sourceInterval ] ].
 	action := GtRenameAction locations: locations element: anEditorElement.
 	action forVariableOrUnaryMessage.
+	action
+		when: GtRenameActionAnnouncement
+		do:
+			[ :ann | 
+			ann eventType = #accept
+				ifTrue:
+					[ announcement interestedCoders
+						do: [ :each | each ~~ self ifTrue: [ each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ] ].
 	action install.
 	^ action
 ]

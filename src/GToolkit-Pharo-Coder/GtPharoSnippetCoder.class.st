@@ -24,6 +24,13 @@ GtPharoSnippetCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
 ]
 
+{ #category : 'private - event handling' }
+GtPharoSnippetCoder >> implicitVariableReferencesTo: aString do: aBlock [
+	self astAwait
+		allNodesDo:
+			[ :each | (each isVariable and: [ aString = each variableName asString and: [ each whoDefines isNil ] ]) ifTrue: [ aBlock value: each ] ]
+]
+
 { #category : 'initialization' }
 GtPharoSnippetCoder >> initialize [	
 	super initialize.
