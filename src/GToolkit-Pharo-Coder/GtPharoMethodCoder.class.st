@@ -272,7 +272,8 @@ GtPharoMethodCoder >> computeAst: theSourceString [
 GtPharoMethodCoder >> createAccessorsFor: aNode instanceVariable: aBoolean in: aCoderViewModel [
 	| refactoring model cls |
 	model := self createRefactoringModel.
-	cls := (model classFor: self classOrMetaClass) instanceSide.
+	cls := model classFor: self behavior.
+	aBoolean ifFalse: [ cls := cls instanceSide ].
 	refactoring := RBCreateAccessorsForVariableRefactoring
 		model: model
 		variable: aNode variableName
@@ -641,7 +642,7 @@ GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 	| statement |
 	aNode methodNode body statements size = 1
 		ifFalse: [ ^ false ].
-	aNode methodNode body temporaries isEmpty
+	aNode methodNode body variables isEmpty
 		ifFalse: [ ^ false ].
 	aNode parent isReturn
 		ifTrue: [ statement := aNode parent.
@@ -651,7 +652,7 @@ GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 	aNode parent isAssignment
 		ifFalse: [ ^ false ].
 	(aNode methodNode selector numArgs = 1
-		and: [ aNode parent value = aNode methodNode arguments first ])
+		and: [ aNode parent value = aNode methodNode pattern variables first ])
 		ifFalse: [ ^ false ].
 	statement := aNode parent.
 	statement parent isReturn

@@ -166,6 +166,11 @@ GtPharoProgramNode >> isPragma [
 ]
 
 { #category : 'testing' }
+GtPharoProgramNode >> isReturn [
+	^ false
+]
+
+{ #category : 'testing' }
 GtPharoProgramNode >> isSelf [
 	^ false
 ]

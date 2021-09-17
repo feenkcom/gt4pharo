@@ -1083,6 +1083,441 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - abstract inst var' }
+GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+('
+	^ {1} isNil' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
+		];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - abstract inst var' }
+GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forAbstactInstVar_01_setup.
+	aScripter do
+		label: 'Select part of the assignment node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 13 to: 14;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - abstract inst var' }
+GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_03_hover_abstract_variable [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forAbstractInstVar_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover abstract';
+		onSpaceRoot;
+		id: #'context-menu--abstract-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - abstract inst var' }
+GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_variable [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forAbstractInstVar_03_hover_abstract_variable.
+
+	aScripter click
+		label: 'Click abstract variable';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--abstract-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
+				index - 1 to: index - 1 ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - create accessors' }
+GtPharoMethodCoderByScripterExamples >> forCreateAccessors_03_hover_create_accessors [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forAbstractInstVar_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover abstract';
+		onSpaceRoot;
+		id: #'context-menu--create-accessors'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - create accessors' }
+GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_accessors [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forCreateAccessors_03_hover_create_accessors.
+
+	aScripter click
+		label: 'Click create accessors';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--create-accessors'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
+				index - 1 to: index - 1 ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString: '
+	^ self printString size' ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_02_select [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forExtractTemp_01_setup.
+	aScripter do
+		label: 'Select part of the method to extract';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 11 to: 27;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check selected text';
+		value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
+			equals: [ 'self printString' ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_03_context_menu [
+	<gtExample>
+	
+	^ self openContextMenu: self forExtractTemp_02_select
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_04_hover_extract_temp [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forExtractTemp_03_context_menu.
+
+	aScripter mouseMoveOver
+		label: 'Hover extract temp';
+		onSpaceRoot;
+		id: #'context-menu--extract-temp'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forExtractTemp_04_hover_extract_temp.
+
+	aScripter click
+		label: 'Click extract temp';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--extract-temp'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
+'method1
+	| _ |
+	_ := self printString.
+	^ _ size' ];
+		onModel.
+		
+	aScripter check
+		label: 'Check source code modified';
+		satisfies: [ :aCoder | aCoder isModified ];
+		onModel.
+	
+	aScripter check
+		label: 'Check rename editor attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor |
+				| index |
+				index := aCoderEditor text asString indexOfSubCollection: '_ :='.
+				index to: index ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		
+	aScripter check
+		label: 'Check source editor is not focused';
+		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		
+	aScripter check
+		label: 'Check source editor has focus';
+		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+	
+	aScripter check
+		label: 'Check variable name editor source code';
+		value: [ :aNameEditor | aNameEditor text asString ] equals: '_';
+		onChildNamed: GtPharoSourceCoder sourceEditorName;
+		onBreadthFirstChildOfClass: GtRenameEditor.
+
+	aScripter check
+		label: 'Check variable name editor has focus';
+		satisfies: [ :aNameEditor | aNameEditor isFocused ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName;
+		onBreadthFirstChildOfClass: GtRenameEditor.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_06_type_variable_name [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forExtractTemp_05_click_extract_temp.
+
+	aScripter keyClick: BlKeyboardKey delete.
+	aScripter keyClick: BlKeyboardKey backspace.
+	aScripter type: 'a'.
+	aScripter keyClick: BlKeyboardKey return.
+	
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - extract temp' }
+GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forExtractTemp_06_type_variable_name.
+
+	aScripter check
+		label: 'Check current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
+'method1
+	| a |
+	a := self printString.
+	^ a size' ];
+		onModel.
+		
+	aScripter check
+		label: 'Check source code modified';
+		satisfies: [ :aCoder | aCoder isModified ];
+		onModel.
+	
+	aScripter check
+		label: 'Check rename editor attribute';
+		value: [ :aCoderEditor |
+			aCoderEditor text
+				hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
+			equals: false;
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		
+	aScripter check
+		label: 'Check source editor is focused';
+		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+	
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline temp' }
+GtPharoMethodCoderByScripterExamples >> forInlineTemp_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString: '
+	| str |
+	str := self printString.
+	^ str size' ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline temp' }
+GtPharoMethodCoderByScripterExamples >> forInlineTemp_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineTemp_01_setup.
+	aScripter do
+		label: 'Select part of the assignment node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 22 to: 24;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline temp' }
+GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forInlineTemp_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover inline temp';
+		onSpaceRoot;
+		id: #'context-menu--inline-temp'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline temp' }
+GtPharoMethodCoderByScripterExamples >> forInlineTemp_04_click_inline_temp [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineTemp_03_hover_inline_temp.
+
+	aScripter click
+		label: 'Click inline temp';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--inline-temp'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
+'method1
+	^ self printString size' ];
+		onModel.
+		
+	aScripter check
+		label: 'Check source code modified';
+		satisfies: [ :aCoder | aCoder isModified ];
+		onModel.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	<gtExample>
@@ -1243,6 +1678,100 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 	self checkFor: aScripter saveButtonEnabled: true.
 	self checkFor: aScripter discardButtonExists: false.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - protect inst var' }
+GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+('
+	^ {1}' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
+		];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - protect inst var' }
+GtPharoMethodCoderByScripterExamples >> forProtectInstVar_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forProtectInstVar_01_setup.
+	aScripter do
+		label: 'Select part of the variable node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 11 to: 12;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - protect inst var' }
+GtPharoMethodCoderByScripterExamples >> forProtectInstVar_03_hover_protect_variable [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forProtectInstVar_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover protect';
+		onSpaceRoot;
+		id: #'context-menu--protect-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - protect inst var' }
+GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_variable [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forProtectInstVar_03_hover_protect_variable.
+
+	aScripter click
+		label: 'Click protect variable';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--protect-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				aCoderEditor text size to: aCoderEditor text size ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	^ aScripter syncContinue
 ]
@@ -1626,6 +2155,18 @@ GtPharoMethodCoderByScripterExamples >> openAndClickFixItActionFor: aScripter id
 	
 	self clickFixItFor: aScripter.
 	self clickFixItActionFor: aScripter id: aBlElementId
+]
+
+{ #category : 'utilities' }
+GtPharoMethodCoderByScripterExamples >> openContextMenu: aScripter [
+
+	aScripter secondaryClick
+		label: 'Open context menu';
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
 ]
 
 { #category : 'examples - pattern highlighter' }

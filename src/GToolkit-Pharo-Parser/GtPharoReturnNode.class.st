@@ -13,6 +13,11 @@ GtPharoReturnNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitReturn: self
 ]
 
+{ #category : 'testing' }
+GtPharoReturnNode >> isReturn [
+	^ true
+]
+
 { #category : 'accessing' }
 GtPharoReturnNode >> messageReceiver [
 	^ value messageReceiver

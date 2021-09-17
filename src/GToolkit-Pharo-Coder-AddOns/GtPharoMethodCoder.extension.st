@@ -12,14 +12,16 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self createLabel: 'Abstract variable' description: aNode variableName)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
-		action: [ :aCoderViewModel | self abstractClassVar: aNode in: aCoderViewModel ].
+		action: [ :aCoderViewModel | self abstractClassVar: aNode in: aCoderViewModel ]
+		id: #'context-menu--abstract-variable'.
 	(self isAccessorMethodFor: aNode)
 		ifFalse: [
 			coderAddOns
 				addContextMenuItem: (self createLabel: 'Create accessors' description: aNode variableName)
 				hover: [ self highlightNode: aNode ]
 				leave: [ self removeHighlight ]
-				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: false in: aCoderViewModel ] ]
+				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: false in: aCoderViewModel ]
+				id: #'context-menu--create-accessors' ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -52,6 +54,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
 		action: [ :aCoderViewModel :anEvent :anEditorElement | self extractTemporaryVariable: aNode in: aCoderViewModel ]
+		id: #'context-menu--extract-temp'
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -76,6 +79,7 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
 		action: [ :element | self inlineTemporaryVariableIn: aNode ]
+		id: #'context-menu--inline-temp'
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -93,18 +97,21 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 		addContextMenuItem: (self createLabel: 'Abstract variable' description: aNode variableName)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
-		action: [ :aCoderViewModel | self abstractInstVar: aNode in: aCoderViewModel ].
+		action: [ :aCoderViewModel | self abstractInstVar: aNode in: aCoderViewModel ]
+		id: #'context-menu--abstract-variable'.
 	(self isAccessorMethodFor: aNode)
 		ifTrue: [ coderAddOns
 				addContextMenuItem: (self createLabel: 'Protect variable' description: aNode variableName)
 				hover: [ self highlightNode: aNode ]
 				leave: [ self removeHighlight ]
-				action: [ :aCoderViewModel | self protectInstVar: aNode in: aCoderViewModel ] ]
+				action: [ :aCoderViewModel | self protectInstVar: aNode in: aCoderViewModel ]
+				id: #'context-menu--protect-variable' ]
 		ifFalse: [ coderAddOns
 				addContextMenuItem: (self createLabel: 'Create accessors' description: aNode variableName)
 				hover: [ self highlightNode: aNode ]
 				leave: [ self removeHighlight ]
-				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: true in: aCoderViewModel ] ]
+				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: true in: aCoderViewModel ]
+				id: #'context-menu--create-accessors' ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
