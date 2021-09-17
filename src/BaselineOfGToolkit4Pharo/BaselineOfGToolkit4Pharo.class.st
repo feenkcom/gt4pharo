@@ -13,7 +13,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.70/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.495/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.496/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.406/src' ].
