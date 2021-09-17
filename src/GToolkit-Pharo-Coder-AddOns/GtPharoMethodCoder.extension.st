@@ -4,7 +4,7 @@ Extension { #name : 'GtPharoMethodCoder' }
 GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
-	(aNode whoDefines: aNode variableName) notNil
+	(aNode whoDefines) notNil
 		ifTrue: [ ^ self ].
 	(self behavior allClassVarNames includes: aNode variableName)
 		ifFalse: [ ^ self ].
@@ -12,14 +12,14 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self createLabel: 'Abstract variable' description: aNode variableName)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
-		action: [ :element | self abstractClassVar: aNode ].
+		action: [ :aCoderViewModel | self abstractClassVar: aNode in: aCoderViewModel ].
 	(self isAccessorMethodFor: aNode)
 		ifFalse: [
 			coderAddOns
 				addContextMenuItem: (self createLabel: 'Create accessors' description: aNode variableName)
 				hover: [ self highlightNode: aNode ]
 				leave: [ self removeHighlight ]
-				action: [ :element | self createAccessorsFor: aNode instanceVariable: false ] ]
+				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: false in: aCoderViewModel ] ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -41,7 +41,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
-	aNode isMessageSend
+	(aNode isValueNode and: [ aNode isVariable not ])
 		ifFalse: [ ^ self ].
 
 	coderAddOns
@@ -51,17 +51,17 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 				description: (self nodeDescription: aNode))
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
-		action: [ :aCoderViewModel :anEvent :anEditorElement | self extractTemporaryVariable: aNode in: anEditorElement ]
+		action: [ :aCoderViewModel :anEvent :anEditorElement | self extractTemporaryVariable: aNode in: aCoderViewModel ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
-	aNode isMessage
+	aNode isMessageSend
 		ifFalse: [ ^ self ].
 	aNode receiver isSelf
 		ifFalse: [ ^ self ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Inline Message' description: aNode selector)
+		addContextMenuItem: (self createLabel: 'Inline Message' description: aNode message selector)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
 		action: [ :element | self inlineMessageSendIn: aNode ]
@@ -69,15 +69,10 @@ GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
-	aNode isAssignment
-		ifFalse: [ ^ self ].
-	aNode variable gtIsLocal
-		ifFalse: [ ^ self ].
+	aNode isAssignment ifFalse: [ ^ self ].
+	aNode variable whoDefines isNil ifTrue: [ ^ self ].
 	coderAddOns
-		addContextMenuItem:
-			(self
-				createLabel: 'Inline Assignment'
-				description: aNode variable name)
+		addContextMenuItem: (self createLabel: 'Inline Assignment' description: aNode variable variableName)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
 		action: [ :element | self inlineTemporaryVariableIn: aNode ]
@@ -98,18 +93,18 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 		addContextMenuItem: (self createLabel: 'Abstract variable' description: aNode variableName)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
-		action: [ :element | self abstractInstVar: aNode ].
+		action: [ :aCoderViewModel | self abstractInstVar: aNode in: aCoderViewModel ].
 	(self isAccessorMethodFor: aNode)
 		ifTrue: [ coderAddOns
 				addContextMenuItem: (self createLabel: 'Protect variable' description: aNode variableName)
 				hover: [ self highlightNode: aNode ]
 				leave: [ self removeHighlight ]
-				action: [ :element | self protectInstVar: aNode ] ]
+				action: [ :aCoderViewModel | self protectInstVar: aNode in: aCoderViewModel ] ]
 		ifFalse: [ coderAddOns
 				addContextMenuItem: (self createLabel: 'Create accessors' description: aNode variableName)
 				hover: [ self highlightNode: aNode ]
 				leave: [ self removeHighlight ]
-				action: [ :element | self createAccessorsFor: aNode instanceVariable: true ] ]
+				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: true in: aCoderViewModel ] ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -125,31 +120,31 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			aNode := theNodes first.
 			
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
-			"self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
+			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			aNode
 				withAllParentsDo: [ :node | self addInlineSelfMessageFor: node to: coderAddOns ].
 			aNode
 				withAllParentsDo: [ :node | self addInlineTempFor: node to: coderAddOns ].
 			aNode
-				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ]" ]
+				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ] ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
-	aNode parent isMethod
+	aNode parent isMethodPattern
 		ifFalse: [ ^ self ].
-	aNode parent body
-		nodesDo: [ :each | 
+	aNode parent parent body
+		allNodesDo: [ :each | 
 			each = aNode
 				ifTrue: [ ^ self ] ].
 	coderAddOns
 		addContextMenuItem: (self createLabel: 'Remove parameter' description: aNode variableName)
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
-		action: [ :element | self removeParameter: aNode ]
+		action: [ :aCoderViewModel | self removeParameter: aNode in: aCoderViewModel ]
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
