@@ -1485,6 +1485,17 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 		id: #'context-menu--inline-temp'.
 
 	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check assignment node highlighted';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute = GtPharoMethodCoder nodeHighlight ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | (aCoderEditor text asString indexOfSubCollection: 'str :=') to: (aCoderEditor text asString indexOf: $.) - 1 ];
+		onChildNamed: GtSourceCoderEditorId.
 
 	^ aScripter syncContinue
 ]
