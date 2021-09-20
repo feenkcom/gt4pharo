@@ -25,6 +25,22 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns [
+	aNode isVariable ifFalse: [ ^ self ].
+	(aNode parent isSequence and: [ 
+		 aNode parent variables identityIncludes: aNode ]) ifFalse: [ 
+		^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				 createLabel: 'Convert to instance variable'
+				 description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | self convertToInstanceVariable: aNode in: aCoderViewModel ]
+		id: #'context-menu--convert-temp-to-inst-var'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
@@ -70,6 +86,7 @@ GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :element | self inlineMessageSendIn: aNode ]
+		id: #'context-menu--inline-message'
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -131,6 +148,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
+			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns. 
 			aNode
 				withAllParentsDo: [ :node | self addInlineSelfMessageFor: node to: coderAddOns ].
 			aNode
@@ -154,6 +172,7 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel | self removeParameter: aNode in: aCoderViewModel ]
+		id: #'context-menu--remove-parameter'
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }

@@ -269,6 +269,19 @@ GtPharoMethodCoder >> computeAst: theSourceString [
 ]
 
 { #category : 'api - refactorings' }
+GtPharoMethodCoder >> convertToInstanceVariable: aNode in: aCoderViewModel [
+	| refactoring model cls |
+	model := self createRefactoringModel.
+	cls := model classFor: self behavior.
+	refactoring := RBTemporaryToInstanceVariableRefactoring 
+		model: model
+		class: cls 
+		selector: aNode methodNode selector
+		variable: aNode variableName.
+	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
+]
+
+{ #category : 'api - refactorings' }
 GtPharoMethodCoder >> createAccessorsFor: aNode instanceVariable: aBoolean in: aCoderViewModel [
 	| refactoring model cls |
 	model := self createRefactoringModel.
