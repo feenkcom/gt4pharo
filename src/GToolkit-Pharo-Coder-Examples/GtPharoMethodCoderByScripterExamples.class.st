@@ -1258,6 +1258,11 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_04_click_convert [
 		onChildNamed: #'context-menu--convert-temp-to-inst-var'.
 
 	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -1306,6 +1311,11 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 		onChildNamed: #'context-menu--create-accessors'.
 
 	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -1710,6 +1720,11 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_04_click_inline_temp [
 	aScripter wait forEmptySpaceTaskQueue.
 	
 	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+	
+	aScripter check
 		label: 'Check current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 'method1
@@ -1966,6 +1981,11 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 		onChildNamed: #'context-menu--protect-variable'.
 
 	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -2060,6 +2080,11 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 		onChildNamed: #'context-menu--remove-parameter'.
 
 	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
