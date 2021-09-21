@@ -1179,6 +1179,103 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - convert temporary to instance variable' }
+GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+'
+	| cache |
+	cache := IdentityDictionary new.
+	^ cache' ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - convert temporary to instance variable' }
+GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forConvertTempToInst_01_setup.
+	aScripter do
+		label: 'Select part of the variable node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 11 to: 12;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - convert temporary to instance variable' }
+GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_03_hover_convert_temporary_to_instance_variable [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forConvertTempToInst_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover convert';
+		onSpaceRoot;
+		id: #'context-menu--convert-temp-to-inst-var'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - convert temporary to instance variable' }
+GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_04_click_convert [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forConvertTempToInst_03_hover_convert_temporary_to_instance_variable.
+
+	aScripter click
+		label: 'Click convert';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--convert-temp-to-inst-var'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor |
+				| index | 
+				index := aCoderEditor text asString indexOfSubCollection: 'cache'.
+				index + 4 to: index + 4 ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - create accessors' }
 GtPharoMethodCoderByScripterExamples >> forCreateAccessors_03_hover_create_accessors [
 	<gtExample>
@@ -1429,6 +1526,99 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+'
+	^ self isNil'];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineMessageSend_01_setup.
+	aScripter do
+		label: 'Select part of the message node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 13 to: 14;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_03_hover_inline_message_send [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forInlineMessageSend_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover inline message send';
+		onSpaceRoot;
+		id: #'context-menu--inline-message'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_message_send [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineMessageSend_03_hover_inline_message_send.
+
+	aScripter click
+		label: 'Click inline temp';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--inline-message'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
+'method1
+	^ false' ];
+		onModel.
+		
+	aScripter check
+		label: 'Check source code modified';
+		satisfies: [ :aCoder | aCoder isModified ];
+		onModel.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_01_setup [
 	<gtExample>
@@ -1490,6 +1680,17 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 		id: #'context-menu--inline-temp'.
 
 	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check assignment node highlighted';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute = GtPharoMethodCoder nodeHighlight ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | (aCoderEditor text asString indexOfSubCollection: 'str :=') to: (aCoderEditor text asString indexOf: $.) - 1 ];
+		onChildNamed: GtSourceCoderEditorId.
 
 	^ aScripter syncContinue
 ]
@@ -1776,6 +1977,102 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 			anInterval ]
 			equals: [ :aCoderEditor | 
 				aCoderEditor text size to: aCoderEditor text size ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - remove parameter' }
+GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+(': unusedArg
+	{1} := Set new' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
+		];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - remove parameter' }
+GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forRemoveParameter_01_setup.
+	aScripter do
+		label: 'Select part of the parameter node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 11 to: 12;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - remove parameter' }
+GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_parameter [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forRemoveParameter_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover remove parameter';
+		onSpaceRoot;
+		id: #'context-menu--remove-parameter'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - remove parameter' }
+GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_parameter [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forRemoveParameter_03_hover_remove_parameter.
+
+	aScripter click
+		label: 'Click remove parameter';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--remove-parameter'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := (aCoderEditor text asString indexOfSubCollection: 'unusedArg') + 8.
+				index to: index ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	^ aScripter syncContinue

@@ -269,6 +269,19 @@ GtPharoMethodCoder >> computeAst: theSourceString [
 ]
 
 { #category : 'api - refactorings' }
+GtPharoMethodCoder >> convertToInstanceVariable: aNode in: aCoderViewModel [
+	| refactoring model cls |
+	model := self createRefactoringModel.
+	cls := model classFor: self behavior.
+	refactoring := RBTemporaryToInstanceVariableRefactoring 
+		model: model
+		class: cls 
+		selector: aNode methodNode selector
+		variable: aNode variableName.
+	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
+]
+
+{ #category : 'api - refactorings' }
 GtPharoMethodCoder >> createAccessorsFor: aNode instanceVariable: aBoolean in: aCoderViewModel [
 	| refactoring model cls |
 	model := self createRefactoringModel.
@@ -585,14 +598,12 @@ GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 ]
 
 { #category : 'private - refactorings' }
-GtPharoMethodCoder >> highlightFrom: startIndex to: endIndex [
-	(self sourceText from: startIndex to: endIndex)
-		attributes: { self class nodeHighlight }
-]
-
-{ #category : 'private - refactorings' }
-GtPharoMethodCoder >> highlightNode: aNode [
-	self highlightFrom: aNode startPosition to: aNode stopPosition
+GtPharoMethodCoder >> highlightNodeBlock: aNode [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel
+		  addTextAttribute: self class nodeHighlight
+		  from: aNode startPosition
+		  to: aNode stopPosition ]
 ]
 
 { #category : 'accessing' }
@@ -1087,9 +1098,9 @@ GtPharoMethodCoder >> remove [
 ]
 
 { #category : 'private - refactorings' }
-GtPharoMethodCoder >> removeHighlight [
-	self sourceText
-		clearAttributes: [ :attr | attr == self class nodeHighlight ]
+GtPharoMethodCoder >> removeHighlightBlock [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : 'api - refactorings' }
