@@ -37,7 +37,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 						to: theNodes last stopPosition ]
 				leave: [ self removeHighlight ]
 				action:
-					[ :aTextualViewModel :anEditorElement | self extractMethod: anEditorElement ]
+					[ :aTextualViewModel :anEditorElement | self extractMethod: aTextualViewModel ]
 				id: GtMethodCoderExtractMethodContextMenuItemId ]
 ]
 
@@ -54,7 +54,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 		hover: [ self highlightNode: aNode ]
 		leave: [ self removeHighlight ]
 		action: [ :aCoderViewModel :anEvent :anEditorElement | self extractTemporaryVariable: aNode in: aCoderViewModel ]
-		id: #'context-menu--extract-temp'
+		id: GtSourceCoderExtractTempVarContextMenuItemId
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
@@ -218,10 +218,8 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractMethod: editorElement [
-	(GtExtractMethodController new
-		coder: self;
-		sourceElement: editorElement) execute
+GtPharoMethodCoder >> extractMethod: aTextualViewModel [
+	(GtExtractMethodController new sourceCoderViewModel: aTextualViewModel) execute
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }

@@ -1296,7 +1296,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_04_hover_extract_temp [
 	aScripter mouseMoveOver
 		label: 'Hover extract temp';
 		onSpaceRoot;
-		id: #'context-menu--extract-temp'.
+		id: GtSourceCoderExtractTempVarContextMenuItemId.
 
 	aScripter wait forEmptySpaceTaskQueue.
 
@@ -1313,7 +1313,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 	aScripter click
 		label: 'Click extract temp';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--extract-temp'.
+		id: GtSourceCoderExtractTempVarContextMenuItemId.
 
 	aScripter wait forEmptySpaceTaskQueue.
 	
@@ -1325,6 +1325,11 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 	_ := self printString.
 	^ _ size' ];
 		onModel.
+		
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 		
 	aScripter check
 		label: 'Check source code modified';

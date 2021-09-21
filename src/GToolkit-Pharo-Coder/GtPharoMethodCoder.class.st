@@ -487,6 +487,7 @@ GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
 	(self findNodeAssigning: tempName)
 		ifNotNil: [ :node | 
 			aCoderViewModel
+				selectNone;
 				moveCursorTo: node stop;
 				renameLocalVariableAt: node stop ]
 ]
