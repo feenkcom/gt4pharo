@@ -14,7 +14,7 @@ GtAbstractInstanceVariableRefactoringController >> refactoring [
 	^ RBAbstractInstanceVariableRefactoring
 		model: aModel
 		variable: self variableName
-		class: (aClass whoDefinesClassVariable: self variableName)
+		class: (aClass whoDefinesInstanceVariable: self variableName)
 ]
 
 { #category : 'accessing' }
