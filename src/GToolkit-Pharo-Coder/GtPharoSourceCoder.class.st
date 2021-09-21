@@ -183,7 +183,7 @@ GtPharoSourceCoder >> extractableNodesAt: anIndex [
 		ifFound: [ :aNode |
 			aNode isSequence
 				ifTrue: [ aNode statements select: [ :eachNode | eachNode intersectsInterval: (anIndex to: anIndex) ] ]
-				ifFalse: [ { aNode } ] ]
+				ifFalse: [ { aNode isMessage ifTrue: [ aNode parent ] ifFalse: [ aNode ] } ] ]
 		ifNone: [ #() ]
 ]
 
