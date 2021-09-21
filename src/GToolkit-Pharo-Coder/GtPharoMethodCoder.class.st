@@ -58,30 +58,6 @@ GtPharoMethodCoder class >> nodeHighlight [
 ]
 
 { #category : 'api - refactorings' }
-GtPharoMethodCoder >> abstractClassVar: aNode in: aCoderViewModel [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := (model classFor: self behavior) instanceSide.
-	refactoring := RBAbstractClassVariableRefactoring
-		model: model
-		variable: aNode variableName
-		class: (cls whoDefinesClassVariable: aNode variableName).
-	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> abstractInstVar: aNode in: aCoderViewModel [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := model classFor: self behavior.
-	refactoring := RBAbstractInstanceVariableRefactoring
-		model: model
-		variable: aNode variableName
-		class: (cls whoDefinesInstanceVariable: aNode variableName).
-	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
-]
-
-{ #category : 'api - refactorings' }
 GtPharoMethodCoder >> addClassVariable: aString [
 	| refactoring |
 	refactoring := RBAddClassVariableRefactoring
@@ -266,36 +242,6 @@ GtPharoMethodCoder >> computeAst: theSourceString [
 	^ GtPharoParser
 		parseWithErrors: theSourceString
 		startingAt: GtPharoParser startingStateForMethod
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> convertToInstanceVariable: aNode in: aCoderViewModel [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := model classFor: self behavior.
-	refactoring := RBTemporaryToInstanceVariableRefactoring 
-		model: model
-		class: cls 
-		selector: aNode methodNode selector
-		variable: aNode variableName.
-	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> createAccessorsFor: aNode instanceVariable: aBoolean in: aCoderViewModel [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := model classFor: self behavior.
-	aBoolean ifFalse: [ cls := cls instanceSide ].
-	refactoring := RBCreateAccessorsForVariableRefactoring
-		model: model
-		variable: aNode variableName
-		class:
-			(aBoolean
-				ifTrue: [ cls whoDefinesInstanceVariable: aNode variableName ]
-				ifFalse: [ cls whoDefinesClassVariable: aNode variableName ])
-		classVariable: aBoolean not.
-	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
 ]
 
 { #category : 'private' }
@@ -1053,18 +999,6 @@ GtPharoMethodCoder >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> protectInstVar: aNode in: aCoderViewModel [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := model classFor: self behavior.
-	refactoring := RBProtectInstanceVariableRefactoring
-		model: model
-		variable: aNode variableName
-		class: (cls whoDefinesInstanceVariable: aNode variableName).
-	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
-]
-
 { #category : 'api - accessing' }
 GtPharoMethodCoder >> protocol [
 	<return: #String or: nil>
@@ -1101,19 +1035,6 @@ GtPharoMethodCoder >> remove [
 GtPharoMethodCoder >> removeHighlightBlock [
 	^ [ :textualCoderViewModel | 
 	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> removeParameter: aNode in: aCoderViewModel [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := (model classFor: self behavior) instanceSide.
-	refactoring := RBRemoveParameterRefactoring
-		model: model
-		removeParameter: aNode variableName
-		in: cls
-		selector: self currentSelector.
-	aCoderViewModel addRefactoringChangesPreview: refactoring at: aNode stopPosition
 ]
 
 { #category : 'api - refactorings' }

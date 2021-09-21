@@ -12,7 +12,10 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self createLabel: 'Abstract variable' description: aNode variableName)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | self abstractClassVar: aNode in: aCoderViewModel ]
+		action: [ :aCoderViewModel |
+			(GtAbstractClassVariableRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
 		id: #'context-menu--abstract-variable'.
 	(self isAccessorMethodFor: aNode)
 		ifFalse: [
@@ -20,7 +23,10 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 				addContextMenuItem: (self createLabel: 'Create accessors' description: aNode variableName)
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
-				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: false in: aCoderViewModel ]
+				action: [ :aCoderViewModel |
+					(GtCreateClassVariableAccessorsRefactoringController new
+						sourceCoderViewModel: aCoderViewModel;
+						variableNode: aNode) execute ]
 				id: #'context-menu--create-accessors' ]
 ]
 
@@ -36,7 +42,10 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 				 description: aNode variableName)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | self convertToInstanceVariable: aNode in: aCoderViewModel ]
+		action: [ :aCoderViewModel |
+			(GtConvertToInstanceVariableRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
 		id: #'context-menu--convert-temp-to-inst-var'
 ]
 
@@ -54,8 +63,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 						from: theNodes first startPosition
 						to: theNodes last stopPosition ]
 				leave: self removeHighlightBlock
-				action:
-					[ :aTextualViewModel :anEditorElement | self extractMethod: anEditorElement ]
+				action: [ :aTextualViewModel | (GtExtractMethodController new sourceCoderViewModel: aTextualViewModel) execute ]
 				id: GtMethodCoderExtractMethodContextMenuItemId ]
 ]
 
@@ -116,20 +124,29 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 		addContextMenuItem: (self createLabel: 'Abstract variable' description: aNode variableName)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | self abstractInstVar: aNode in: aCoderViewModel ]
+		action: [ :aCoderViewModel |
+			(GtAbstractInstanceVariableRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
 		id: #'context-menu--abstract-variable'.
 	(self isAccessorMethodFor: aNode)
 		ifTrue: [ coderAddOns
 				addContextMenuItem: (self createLabel: 'Protect variable' description: aNode variableName)
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
-				action: [ :aCoderViewModel | self protectInstVar: aNode in: aCoderViewModel ]
+				action: [ :aCoderViewModel |
+					(GtProtectInstanceVariableRefactoringController new
+						sourceCoderViewModel: aCoderViewModel;
+						variableNode: aNode) execute ]
 				id: #'context-menu--protect-variable' ]
 		ifFalse: [ coderAddOns
 				addContextMenuItem: (self createLabel: 'Create accessors' description: aNode variableName)
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
-				action: [ :aCoderViewModel | self createAccessorsFor: aNode instanceVariable: true in: aCoderViewModel ]
+				action: [ :aCoderViewModel |
+					(GtCreateInstanceVariableAccessorsRefactoringController new
+						sourceCoderViewModel: aCoderViewModel;
+						variableNode: aNode) execute ]
 				id: #'context-menu--create-accessors' ]
 ]
 
@@ -171,7 +188,10 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self createLabel: 'Remove parameter' description: aNode variableName)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | self removeParameter: aNode in: aCoderViewModel ]
+		action: [ :aCoderViewModel |
+			(GtRemoveParameterRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
 		id: #'context-menu--remove-parameter'
 ]
 
@@ -236,11 +256,6 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 
 	self explanationLink notNil
 		ifTrue: [ coderAddOns addStyler: self explanationLink ].
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractMethod: aTextualViewModel [
-	(GtExtractMethodController new sourceCoderViewModel: aTextualViewModel) execute
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
