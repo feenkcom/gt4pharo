@@ -1,10 +1,5 @@
 "
-# Method Coder
 I extend a {{gtClass:GtSourceCoder}} with the knowledge of how to edit a method. In particular, I am aware of different types of methods and provide a wider variety of refactorings and actions. 
-## Refactorings
-
-### What is the difference between {{gtMethod:GtMethodCoder>>#selector}} and {{gtMethod:GtMethodCoder>>#currentSelector}}
-
 "
 Class {
 	#name : 'GtPharoMethodCoder',
