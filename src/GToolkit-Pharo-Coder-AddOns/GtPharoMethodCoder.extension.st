@@ -55,6 +55,9 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [
+			(theNodes anySatisfy: [ :each | 
+				 each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ]) 
+				ifTrue: [ ^ self ].
 			coderAddOns
 				addContextMenuItem: 'Extract method'
 				hover: [ :textualCoderViewModel | 

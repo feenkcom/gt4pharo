@@ -1536,6 +1536,35 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forUnaryExtraction_01_setup.
+	aScripter do
+		label: 'Select part of the method to extract';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 9 to: 17;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	self openContextMenu: aScripter.
+	
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+				label: 'Check extract method doesn''t exist';
+				onSpaceRoot;
+				notExists;
+				id: GtMethodCoderExtractMethodContextMenuItemId.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 	<gtExample>
