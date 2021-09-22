@@ -568,33 +568,6 @@ GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
 	self requestStyleSourceText
 ]
 
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> inlineMessageSendIn: messageNode [
-	| refactoring model |
-	model := self createRefactoringModel.
-	refactoring := RBInlineMethodRefactoring
-		model: model
-		inline: messageNode sourceInterval
-		inMethod: self currentSelector
-		forClass: (model classFor: self behavior).
-	refactoring
-		setOption: #inlineExpression
-		toUse: [ :ref :string | true ].
-	self performMethodRefactoring: refactoring
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> inlineTemporaryVariableIn: assignmentNode [
-	| refactoring model |
-	model := self createRefactoringModel.
-	refactoring := RBInlineTemporaryRefactoring
-		model: model
-		inline: assignmentNode sourceInterval
-		from: self currentSelector
-		in: (model classFor: self behavior).
-	self performMethodRefactoring: refactoring
-]
-
 { #category : 'private - refactorings' }
 GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 	| statement |

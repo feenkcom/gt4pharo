@@ -79,7 +79,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 				description: (self nodeDescription: aNode))
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel :anEvent :anEditorElement | self extractTemporaryVariable: aNode in: aCoderViewModel ]
+		action: [ :aCoderViewModel | self extractTemporaryVariable: aNode in: aCoderViewModel ]
 		id: #'context-menu--extract-temp'
 ]
 
@@ -93,19 +93,28 @@ GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 		addContextMenuItem: (self createLabel: 'Inline Message' description: aNode message selector)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :element | self inlineMessageSendIn: aNode ]
+		action: [ :aSourceCoderViewModel |
+			(GtMethodInlineMessageSendRefactoringController new
+				node: aNode;
+				sourceCoderViewModel: aSourceCoderViewModel) execute ]
 		id: #'context-menu--inline-message'
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
-	aNode isAssignment ifFalse: [ ^ self ].
-	aNode variable whoDefines isNil ifTrue: [ ^ self ].
+	aNode isAssignment
+		ifFalse: [ ^ self ].
+	aNode variable whoDefines
+		ifNil: [ ^ self ].
+	
 	coderAddOns
 		addContextMenuItem: (self createLabel: 'Inline Assignment' description: aNode variable variableName)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :element | self inlineTemporaryVariableIn: aNode ]
+		action: [ :aSourceCoderViewModel |
+			(GtMethodInlineTemporaryVariableRefactoringController new
+				node: aNode;
+				sourceCoderViewModel: aSourceCoderViewModel) execute ]
 		id: #'context-menu--inline-temp'
 ]
 
