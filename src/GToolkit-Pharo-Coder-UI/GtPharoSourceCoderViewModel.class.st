@@ -39,7 +39,7 @@ GtPharoSourceCoderViewModel >> evaluationContext [
 	bindingStrategyWithPotentialSlots := self bindingStrategy.
 	self selfObject notNil ifTrue: [ 
 		concreteBindings := GtSnippetBindings new.
-		selfObject class slotNames do: [:each | 
+		selfObject class gtCoderSlotNames do: [:each | 
 			concreteBindings at: each put: (selfObject instVarNamed: each) ].
 		bindingStrategyWithPotentialSlots bindings: concreteBindings ].
 	^ super evaluationContext
