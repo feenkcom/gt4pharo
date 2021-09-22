@@ -9,6 +9,22 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : 'examples - reference highlighter' }
+GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
+	<gtExample>
+	| filter aScripter |
+	filter := GtSearchIntersectionFilter new
+		          filter: (GtSearchFixedMethodsFilter new methods:  { thisContext method })
+		          filter: '`@a asCoder' gtASTMatches.
+	aScripter := self scripterForBlock: [ filter asCoder allCoders first ].
+	aScripter syncContinue.
+	aScripter checks: 'Check asCoder highlighted' do: [ :aStep |
+		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'filter asCoder') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+		self checkFor: aStep numberfOfTextAttributes: 14 OfType: BlTextDecorationAttribute ].
+	aScripter syncContinue.
+	^ aScripter
+]
+
 { #category : 'examples - basic' }
 GtPharoMethodCoderByScripterExamples >> basicMethodCoder [
 	<gtExample>
@@ -488,6 +504,22 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExpandAttr
 		textAttributesAt: anIndex 
 		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTrangleExpanderTextAttribute ].
 	^ aScripterOrStep
+]
+
+{ #category : 'examples - reference highlighter' }
+GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
+	<gtExample>
+	| filter aScripter |
+	filter := GtSearchIntersectionFilter new
+		          filter: (GtSearchFixedMethodsFilter new methods: { thisContext method })
+		          filter: OrderedCollection gtReferences.
+	aScripter := self scripterForBlock: [ filter asCoder allCoders first ].
+	aScripter syncContinue.
+	aScripter checks: 'Check OrderedCollection highlighted' do: [ :aStep |
+		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'OrderedCollection') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+		self checkFor: aStep numberfOfTextAttributes: 17 OfType: BlTextDecorationAttribute ].
+	aScripter syncContinue.
+	^ aScripter
 ]
 
 { #category : 'utilities' }

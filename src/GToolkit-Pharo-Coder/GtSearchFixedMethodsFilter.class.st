@@ -1,5 +1,5 @@
 Class {
-	#name : 'GtSearchIFixedMethodsFilter',
+	#name : 'GtSearchFixedMethodsFilter',
 	#superclass : 'GtSearchMethodsFilter',
 	#instVars : [
 		'methods'
@@ -8,31 +8,31 @@ Class {
 }
 
 { #category : 'accessing' }
-GtSearchIFixedMethodsFilter >> defaultFilterScope [
+GtSearchFixedMethodsFilter >> defaultFilterScope [
 	^ self
 ]
 
 { #category : 'testing' }
-GtSearchIFixedMethodsFilter >> includesMethod: aCompiledMethod [
+GtSearchFixedMethodsFilter >> includesMethod: aCompiledMethod [
 	^ self methods includes: aCompiledMethod
 ]
 
 { #category : 'enumerating' }
-GtSearchIFixedMethodsFilter >> itemsDo: aBlock [
+GtSearchFixedMethodsFilter >> itemsDo: aBlock [
 	^ self methodsDo: aBlock
 ]
 
 { #category : 'accessing' }
-GtSearchIFixedMethodsFilter >> methods [
+GtSearchFixedMethodsFilter >> methods [
 	^ methods ifNil: [ methods := OrderedCollection new ]
 ]
 
 { #category : 'accessing' }
-GtSearchIFixedMethodsFilter >> methods: anOrderedCollection [
+GtSearchFixedMethodsFilter >> methods: anOrderedCollection [
 	methods := anOrderedCollection
 ]
 
 { #category : 'enumerating' }
-GtSearchIFixedMethodsFilter >> methodsDo: aBlock [
+GtSearchFixedMethodsFilter >> methodsDo: aBlock [
 	self methods do: aBlock.
 ]
