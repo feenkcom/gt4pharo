@@ -1,5 +1,5 @@
 Class {
-	#name : 'GtMethodRefactoringController',
+	#name : 'GtMethodInlineRefactoringController',
 	#superclass : 'GtPharoSourceCoderRefactoringController',
 	#instVars : [
 		'node'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'private' }
-GtMethodRefactoringController >> changedSourceForCurrentMethod: aRefactoryChange [
+GtMethodInlineRefactoringController >> changedSourceForCurrentMethod: aRefactoryChange [
 	aRefactoryChange changes
 		reverseDo: [ :each | 
 			((each isKindOf: RBAddMethodChange)
@@ -19,19 +19,19 @@ GtMethodRefactoringController >> changedSourceForCurrentMethod: aRefactoryChange
 ]
 
 { #category : 'accessing' }
-GtMethodRefactoringController >> node [
+GtMethodInlineRefactoringController >> node [
 
 	^ node
 ]
 
 { #category : 'accessing' }
-GtMethodRefactoringController >> node: anObject [
+GtMethodInlineRefactoringController >> node: anObject [
 
 	node := anObject
 ]
 
 { #category : 'private' }
-GtMethodRefactoringController >> performMethodRefactoring: aRefactoring [
+GtMethodInlineRefactoringController >> performMethodRefactoring: aRefactoring [
 	[ aRefactoring primitiveExecute ]
 		on: RBRefactoringError
 		do: [ :ex | ^ false ].
@@ -43,7 +43,7 @@ GtMethodRefactoringController >> performMethodRefactoring: aRefactoring [
 ]
 
 { #category : 'executing' }
-GtMethodRefactoringController >> safelyExecute [
+GtMethodInlineRefactoringController >> safelyExecute [
 	
 	sourceCoderViewModel selectNone.
 	self performMethodRefactoring: self refactoring
