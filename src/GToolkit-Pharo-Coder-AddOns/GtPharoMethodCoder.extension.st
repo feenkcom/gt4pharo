@@ -55,6 +55,9 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [
+			(theNodes anySatisfy: [ :each | 
+				 each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ]) 
+				ifTrue: [ ^ self ].
 			coderAddOns
 				addContextMenuItem: 'Extract method'
 				hover: [ :textualCoderViewModel | 
@@ -160,6 +163,55 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
+	| method |
+	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
+		ifFalse: [ ^ self ].
+	self behavior subclasses isEmpty ifTrue: [ ^ self ].
+	method := aNode topParent.
+	(self behavior subclasses allSatisfy: [ :each | each includesSelector: method selector ])
+		ifTrue: [ ^ self ].
+	coderAddOns
+		addContextMenuItem:
+			(self
+				 createLabel: 'Push down method'
+				 description: aNode selector)
+		hover: nil
+		leave: nil
+		action: [ :aCoderViewModel | 
+			(GtPushDownMethodRefactoringController new
+				 sourceCoderViewModel: aCoderViewModel;
+				 methodNode: method) execute ]
+		id: #'context-menu--push-down-method'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
+	| method variables |
+	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
+		ifFalse: [ ^ self ].
+	self behavior superclass isNil ifTrue: [ ^ self ].
+	variables := Set withAll: self behavior instVarNames.
+	variables addAll: self behavior classVarNames.
+	method := aNode topParent.
+	method
+		allNodesOfType: GtPharoVariableNode
+		do: [ :each | (variables includes: each variableName) ifTrue: [ ^ self ] ].
+	coderAddOns
+		addContextMenuItem:
+			(self
+				 createLabel: 'Push up method'
+				 description: aNode selector)
+		hover: nil
+		leave: nil
+		action: [ :aCoderViewModel | 
+			(GtPushUpMethodRefactoringController new
+				 sourceCoderViewModel: aCoderViewModel;
+				 methodNode: method) execute ]
+		id: #'context-menu--push-up-method'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 20>
 	
@@ -171,6 +223,8 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			
 			aNode := theNodes first.
 			
+			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
+			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.

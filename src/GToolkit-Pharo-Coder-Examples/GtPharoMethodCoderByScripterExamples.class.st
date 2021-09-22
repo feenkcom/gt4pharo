@@ -1536,6 +1536,35 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forUnaryExtraction_01_setup.
+	aScripter do
+		label: 'Select part of the method to extract';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 9 to: 17;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	self openContextMenu: aScripter.
+	
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+				label: 'Check extract method doesn''t exist';
+				onSpaceRoot;
+				notExists;
+				id: GtMethodCoderExtractMethodContextMenuItemId.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 	<gtExample>
@@ -1997,6 +2026,106 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 			anInterval ]
 			equals: [ :aCoderEditor | 
 				aCoderEditor text size to: aCoderEditor text size ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up method' }
+GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+'
+	^ self printString' ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up method' }
+GtPharoMethodCoderByScripterExamples >> forPushUpMethod_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPushUpMethod_01_setup .
+	aScripter do
+		label: 'Select part of the method pattern';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 0 to: 7;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up method' }
+GtPharoMethodCoderByScripterExamples >> forPushUpMethod_03_hover_push_up_method [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forPushUpMethod_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover push up method';
+		onSpaceRoot;
+		id: #'context-menu--push-up-method'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up method' }
+GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPushUpMethod_03_hover_push_up_method.
+
+	aScripter click
+		label: 'Click push up method';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--push-up-method'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString lines first size.
+				index to: index ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	^ aScripter syncContinue
