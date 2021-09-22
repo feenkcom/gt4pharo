@@ -29,6 +29,11 @@ GtPharoDummyEnvironment >> anyDummyPackage [
 	^ self dummyPackages anyOne
 ]
 
+{ #category : 'api - classes' }
+GtPharoDummyEnvironment >> anyDummyRootClass [
+	^ self anyDummyPackage dummyClasses detect: [ :each | each realClass superclass = Object ]
+]
+
 { #category : 'api - methods' }
 GtPharoDummyEnvironment >> anyDummyUnaryClassMethod [
 	<return: #GtPharoDummyMethod>

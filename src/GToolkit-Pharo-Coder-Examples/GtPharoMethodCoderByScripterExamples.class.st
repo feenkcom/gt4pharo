@@ -2063,6 +2063,111 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - push down method' }
+GtPharoMethodCoderByScripterExamples >> forPushDownMethod_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| env rootClass method coder |
+		env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+		rootClass := env anyDummyRootClass.
+		method := rootClass anyDummyUnaryMethod realMethod.
+	
+		coder := GtPharoMethodCoder forMethod: method.
+		coder attributeNamed: #dummyEnvironment put: env.
+		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+		coder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+'Unique
+	^ self printString' ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push down method' }
+GtPharoMethodCoderByScripterExamples >> forPushDownMethod_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPushDownMethod_01_setup .
+	aScripter do
+		label: 'Select part of the method pattern';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 0 to: 1;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push down method' }
+GtPharoMethodCoderByScripterExamples >> forPushDownMethod_03_hover_push_down_method [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forPushDownMethod_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover push down method';
+		onSpaceRoot;
+		id: #'context-menu--push-down-method'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push down method' }
+GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_method [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPushDownMethod_03_hover_push_down_method.
+
+	aScripter click
+		label: 'Click push up method';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--push-down-method'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString lines first size.
+				index to: index ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 	<gtExample>
