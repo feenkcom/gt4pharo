@@ -1,13 +1,13 @@
 Class {
 	#name : 'GtPushUpMethodRefactoringController',
 	#superclass : 'GtMethodRefactoringController',
-	#category : 'GToolkit-Pharo-Coder-AddOns-Variables refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : 'accessing' }
 GtPushUpMethodRefactoringController >> refactoring [
 	| model |
-	model := self createModel.
+	model := self createRefactoringModel.
 	^ RBPullUpMethodRefactoring
 		  model: model
 		  pullUp: { self methodSelector }

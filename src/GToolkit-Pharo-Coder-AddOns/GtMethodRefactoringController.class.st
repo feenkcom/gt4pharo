@@ -1,26 +1,11 @@
 Class {
 	#name : 'GtMethodRefactoringController',
-	#superclass : 'GtSourceCoderRefactoringController',
+	#superclass : 'GtPharoSourceCoderRefactoringController',
 	#instVars : [
 		'methodNode'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Variables refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
-
-{ #category : 'executing' }
-GtMethodRefactoringController >> createModel [
-	| model modelClass |
-	model := RBClassModelFactory rbNamespace onEnvironment:
-		         RBBrowserEnvironment new.
-	model name: self refactoringName.
-	modelClass := model classFor: sourceCoderViewModel behavior.
-	(modelClass sourceCodeFor: self methodSelector) = originalSource asString 
-		ifFalse: [ 
-			modelClass
-				compile: originalSource asString
-				classified: sourceCoderViewModel protocol ].
-	^ model
-]
 
 { #category : 'accessing' }
 GtMethodRefactoringController >> methodClass [

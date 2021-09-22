@@ -1,6 +1,6 @@
 Class {
 	#name : 'GtExtractMethodController',
-	#superclass : 'GtSourceCoderRefactoringController',
+	#superclass : 'GtPharoSourceCoderRefactoringController',
 	#instVars : [
 		'methodArguments',
 		'methodSelector',
