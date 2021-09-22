@@ -18,5 +18,7 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 		or: [ ((aModel classFor: aBehavior) sourceCodeFor: aCurrentSelector) ~= aSourceString ])
 		ifTrue: [ (aModel classFor: aBehavior) compile: aSourceString classified: aProtocol ].
 
+	aModel name: self refactoringName.
+
 	^ aModel
 ]
