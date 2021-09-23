@@ -1,18 +1,6 @@
 Extension { #name : 'GtPharoSourceCoder' }
 
 { #category : '*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> addRefactoringChangesPreview: aRefactoring at: position whenComplete: aBlock [
-	self removeRefactoringAttribute.
-	aRefactoring isNil
-		ifTrue: [ ^ self ].
-	(self sourceText from: position to: position)
-		attributes:
-			{(GtRefactoringChangesAttribute new
-				refactoring: aRefactoring;
-				completionAction: aBlock)}
-]
-
-{ #category : '*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
 	"Try to find a behavior reference at a given source text position and request to browse it"
 

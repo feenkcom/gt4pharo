@@ -1,6 +1,6 @@
 Class {
 	#name : 'GtExtractMethodController',
-	#superclass : 'GtSourceCoderRefactoringController',
+	#superclass : 'GtPharoSourceCoderRefactoringController',
 	#instVars : [
 		'methodArguments',
 		'methodSelector',
@@ -69,22 +69,19 @@ GtExtractMethodController >> cancelRefactoring [
 
 { #category : 'executing' }
 GtExtractMethodController >> createModel [
-	| model ast modelClass |
+	| model modelClass |
 	
 	model := RBClassModelFactory rbNamespace
 		onEnvironment: RBBrowserEnvironment new.
 	model name: self refactoringName.
 	
-	modelClass := model classFor: coder behavior.
-	
-	"this is just to extract the method name"
-	ast := RBParser parseFaultyMethod: originalSource asString.
-	methodSelector := ast selector.
+	modelClass := model classFor: sourceCoderViewModel behavior.
+	methodSelector := sourceCoderViewModel selector.
 
 	(modelClass sourceCodeFor: methodSelector) = originalSource asString
 		ifFalse: [ modelClass
 				compile: originalSource asString
-				classified: coder protocol ].
+				classified: sourceCoderViewModel protocol ].
 	^ model
 ]
 
@@ -96,7 +93,7 @@ GtExtractMethodController >> executeRefactoring [
 	self setDefaultOptionsOn: refactoring.
 	refactoring primitiveExecute.
 
-	newSource := ((refactoring model classFor: coder behavior) methodFor: methodSelector) source.
+	newSource := ((refactoring model classFor: sourceCoderViewModel behavior) methodFor: methodSelector) source.
 	self updateMethod: newSource
 ]
 
@@ -112,7 +109,7 @@ GtExtractMethodController >> extractedSelector [
 GtExtractMethodController >> extractionInterval [
 	^ extractionInterval
 		ifNil: [ | nodes |
-			nodes := coder extractableNodesFrom: self sourceElement textualCoderViewModel.
+			nodes := sourceCoderViewModel coderModel extractableNodesFrom: sourceCoderViewModel.
 			nodes ifEmpty: [ ^ 1 to: 0 ].
 			extractionInterval := nodes first startPosition to: nodes last stopPosition ]
 ]
@@ -149,11 +146,11 @@ GtExtractMethodController >> installRenamerAt: anInteger [
 	
 	interval := (message selectorParts at: anInteger) sourceInterval.
 	
-	sourceElement editor moveCursorTo: ((interval first - 1) max: 0).
+	sourceCoderViewModel moveCursorTo: ((interval first - 1) max: 0).
 	
-	renameAction := GtRenameAction
+	renameAction := GtRenameAction2
 		locations: { interval }
-		element: sourceElement.
+		textualCoderViewModel: sourceCoderViewModel.
 	
 	renameAction selectAll: true.
 
@@ -181,17 +178,19 @@ GtExtractMethodController >> isRenaming [
 { #category : 'executing' }
 GtExtractMethodController >> refactoring [
 	| model |
+
 	model := self createModel.
+
 	^ RBExtractMethodRefactoring
 		model: model
 		extract: self extractionInterval
 		from: methodSelector
-		in: (model classFor: coder behavior)
+		in: (model classFor: sourceCoderViewModel behavior)
 ]
 
 { #category : 'executing' }
 GtExtractMethodController >> refactoringFailed [
-	self sourceElement textualCoderViewModel allowSaveDueTo: self
+	self sourceCoderViewModel allowSaveDueTo: self
 ]
 
 { #category : 'accessing' }
@@ -208,7 +207,8 @@ GtExtractMethodController >> removeReorderParametersAttributes [
 { #category : 'private' }
 GtExtractMethodController >> safeMethodName: methodName in: aModel [
 	| modelClass index selector name argCount |
-	modelClass := aModel classFor: coder behavior.
+
+	modelClass := aModel classFor: sourceCoderViewModel behavior.
 	argCount := methodName arguments size.
 	name := '_'.
 	index := 0.
@@ -240,7 +240,7 @@ GtExtractMethodController >> setBodyText: bodySource andAttributesAt: positions 
 				attributes:
 					{GtCompletionPartAttribute new.
 					(GtExtractMethodSelectorKeywordAttribute keywordIndex: i)} ].
-	self sourceEditor text: bodyText
+	self setText: bodyText
 ]
 
 { #category : 'private' }
@@ -274,7 +274,7 @@ GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
 			isExisting := true ];
 		setOption: #extractAssignment
 			toUse:
-				[ :ref :varName | (aRefactoring model classFor: coder behavior) definesVariable: varName ]
+				[ :ref :varName | (aRefactoring model classFor: sourceCoderViewModel behavior) definesVariable: varName ]
 ]
 
 { #category : 'private' }
@@ -301,7 +301,7 @@ GtExtractMethodController >> setPreviewOptionsOn: aRefactoring [
 		setOption: #useExistingMethod toUse: [ :ref :sel | isExisting ];
 		setOption: #extractAssignment
 			toUse:
-				[ :ref :varName | (aRefactoring model classFor: coder behavior) definesVariable: varName ]
+				[ :ref :varName | (aRefactoring model classFor: sourceCoderViewModel behavior) definesVariable: varName ]
 ]
 
 { #category : 'private' }
@@ -312,21 +312,28 @@ GtExtractMethodController >> sourceAst [
 ]
 
 { #category : 'private' }
-GtExtractMethodController >> swap: firstNode with: secondNode in: textEditor [
-	textEditor deleter
-		from: secondNode startPosition - 1 to: secondNode stopPosition;
-		delete.
-	textEditor inserter
-		at: secondNode startPosition - 1;
-		string: firstNode source;
-		insert.
-	textEditor deleter
-		from: firstNode startPosition - 1 to: firstNode stopPosition;
-		delete.
-	textEditor inserter
-		at: firstNode startPosition - 1;
-		string: secondNode source;
-		insert
+GtExtractMethodController >> swap: firstNode with: secondNode [
+	| aNewSourceText aFirstNode aSecondNode |
+
+	aNewSourceText := self sourceText.
+	
+	firstNode startPosition < secondNode startPosition
+		ifTrue: [
+			aFirstNode := firstNode.
+			aSecondNode := secondNode ]
+		ifFalse: [
+			aFirstNode := secondNode.
+			aSecondNode := firstNode ].
+	
+	aNewSourceText
+		replace: aSecondNode startPosition - 1
+		to: aSecondNode stopPosition
+		withString: aFirstNode source.
+
+	aNewSourceText
+		replace: aFirstNode startPosition - 1
+		to: aFirstNode stopPosition
+		withString: aSecondNode source
 ]
 
 { #category : 'private' }
@@ -341,8 +348,7 @@ GtExtractMethodController >> swapParameterWithNext: anInteger [
 	methodArguments swap: anInteger with: anInteger + 1.
 	self
 		swap: (message values at: anInteger)
-		with: (message values at: anInteger + 1)
-		in: self sourceEditor.
+		with: (message values at: anInteger + 1).
 	self addReorderParametersAttributes.
 	renameIndex notNil
 		ifTrue: [ self installRenamerAt: renameIndex ].
@@ -351,7 +357,7 @@ GtExtractMethodController >> swapParameterWithNext: anInteger [
 
 { #category : 'private' }
 GtExtractMethodController >> updateMethod: newSource [
-	self sourceEditor deselecter all deselect.
+	self sourceCoderViewModel selectNone.
 	self setText: newSource.
 
 	"refactoring decided that there is an existing method that can be used instead

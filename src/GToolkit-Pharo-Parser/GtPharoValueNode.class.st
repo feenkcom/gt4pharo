@@ -30,6 +30,11 @@ GtPharoValueNode >> initialize [
 	rightParens := OrderedCollection new: 2.
 ]
 
+{ #category : 'testing' }
+GtPharoValueNode >> isValueNode [
+	^true
+]
+
 { #category : 'generated' }
 GtPharoValueNode >> leftParens [
 	^ leftParens

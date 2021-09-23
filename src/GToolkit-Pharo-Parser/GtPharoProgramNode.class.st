@@ -126,6 +126,11 @@ GtPharoProgramNode >> intersectsInterval: anInterval [
 ]
 
 { #category : 'testing' }
+GtPharoProgramNode >> isAssignment [
+	^ false
+]
+
+{ #category : 'testing' }
 GtPharoProgramNode >> isKeyword [
 	^ false
 ]
@@ -161,7 +166,22 @@ GtPharoProgramNode >> isPragma [
 ]
 
 { #category : 'testing' }
+GtPharoProgramNode >> isReturn [
+	^ false
+]
+
+{ #category : 'testing' }
+GtPharoProgramNode >> isSelf [
+	^ false
+]
+
+{ #category : 'testing' }
 GtPharoProgramNode >> isSequence [
+	^ false
+]
+
+{ #category : 'testing' }
+GtPharoProgramNode >> isValueNode [
 	^ false
 ]
 

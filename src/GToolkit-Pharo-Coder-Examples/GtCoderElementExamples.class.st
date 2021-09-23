@@ -104,7 +104,7 @@ GtCoderElementExamples >> playgroundElementWithClass [
 	self assert: anElement childrenCount equals: 2.
 	self assert: anElement children first class equals: GtCoderContentElement.
 	self assert: anElement children first childrenCount isZero not.
-	self assert: anElement playPage receiver equals: self class.
+	self assert: anElement receiver equals: self class.
 	^ anElement
 ]
 

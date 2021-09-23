@@ -40,14 +40,6 @@ GtPharoSourceCoder class >> sourceEditorName [
 	^ #editor
 ]
 
-{ #category : 'private - refactorings' }
-GtPharoSourceCoder >> addRefactoringChangesPreview: aRefactoring at: position [
-	self
-		addRefactoringChangesPreview: aRefactoring
-		at: position
-		whenComplete: nil
-]
-
 { #category : 'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
@@ -191,7 +183,7 @@ GtPharoSourceCoder >> extractableNodesAt: anIndex [
 		ifFound: [ :aNode |
 			aNode isSequence
 				ifTrue: [ aNode statements select: [ :eachNode | eachNode intersectsInterval: (anIndex to: anIndex) ] ]
-				ifFalse: [ { aNode } ] ]
+				ifFalse: [ { aNode isMessage ifTrue: [ aNode parent ] ifFalse: [ aNode ] } ] ]
 		ifNone: [ #() ]
 ]
 

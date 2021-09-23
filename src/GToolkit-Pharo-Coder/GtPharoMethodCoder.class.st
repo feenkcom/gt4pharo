@@ -1,10 +1,5 @@
 "
-# Method Coder
 I extend a {{gtClass:GtSourceCoder}} with the knowledge of how to edit a method. In particular, I am aware of different types of methods and provide a wider variety of refactorings and actions. 
-## Refactorings
-
-### What is the difference between {{gtMethod:GtMethodCoder>>#selector}} and {{gtMethod:GtMethodCoder>>#currentSelector}}
-
 "
 Class {
 	#name : 'GtPharoMethodCoder',
@@ -55,30 +50,6 @@ GtPharoMethodCoder class >> nodeHighlight [
 	^ NodeHighlight
 		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
 				paint: BrGlamorousColors textHighlightColor ]
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> abstractClassVar: aNode [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := (model classFor: self classOrMetaClass) instanceSide.
-	refactoring := RBAbstractClassVariableRefactoring
-		model: model
-		variable: aNode name
-		class: (cls whoDefinesClassVariable: aNode name).
-	self addRefactoringChangesPreview: refactoring at: aNode stop
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> abstractInstVar: aNode [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := model classFor: self behavior.
-	refactoring := RBAbstractInstanceVariableRefactoring
-		model: model
-		variable: aNode variableName
-		class: (cls whoDefinesInstanceVariable: aNode variableName).
-	self addRefactoringChangesPreview: refactoring at: aNode stopPosition
 ]
 
 { #category : 'api - refactorings' }
@@ -268,22 +239,6 @@ GtPharoMethodCoder >> computeAst: theSourceString [
 		startingAt: GtPharoParser startingStateForMethod
 ]
 
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> createAccessorsFor: aNode instanceVariable: aBoolean [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := (model classFor: self classOrMetaClass) instanceSide.
-	refactoring := RBCreateAccessorsForVariableRefactoring
-		model: model
-		variable: aNode name
-		class:
-			(aBoolean
-				ifTrue: [ cls whoDefinesInstanceVariable: aNode name ]
-				ifFalse: [ cls whoDefinesClassVariable: aNode name ])
-		classVariable: aBoolean not.
-	self addRefactoringChangesPreview: refactoring at: aNode stop
-]
-
 { #category : 'private' }
 GtPharoMethodCoder >> createCompileMethodChange [
 	<return: #RBAddMethodChange or: nil>
@@ -332,16 +287,10 @@ GtPharoMethodCoder >> createLabel: aString description: description [
 { #category : 'private' }
 GtPharoMethodCoder >> createRefactoringModel [
 	| model |
-	model := RBClassModelFactory rbNamespace
-		onEnvironment: RBBrowserEnvironment new.
-	(((model classFor: self behavior)
-		directlyDefinesMethod: self currentSelector) not
-		or:
-			[ ((model classFor: self behavior) sourceCodeFor: self currentSelector)
-				~= self sourceText asString ])
-		ifTrue: [ (model classFor: self classOrMetaClass)
-				compile: self sourceText asString
-				classified: self category ].
+	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
+	(((model classFor: self behavior) directlyDefinesMethod: self currentSelector) not
+		or: [ ((model classFor: self behavior) sourceCodeFor: self currentSelector) ~= self sourceText asString ])
+		ifTrue: [ (model classFor: self behavior) compile: self sourceText asString classified: self protocol ].
 	^ model
 ]
 
@@ -473,7 +422,7 @@ GtPharoMethodCoder >> explanationLink: anExplanation [
 ]
 
 { #category : 'api - refactorings' }
-GtPharoMethodCoder >> extractTemporaryVariable: aNode in: anEditorElement [
+GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
 	| refactoring model tempName |
 
 	model := self createRefactoringModel.
@@ -491,7 +440,8 @@ GtPharoMethodCoder >> extractTemporaryVariable: aNode in: anEditorElement [
 
 	(self findNodeAssigning: tempName)
 		ifNotNil: [ :node | 
-			anEditorElement textualCoderViewModel
+			aCoderViewModel
+				selectNone;
 				moveCursorTo: node stop;
 				renameLocalVariableAt: node stop ]
 ]
@@ -589,14 +539,12 @@ GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 ]
 
 { #category : 'private - refactorings' }
-GtPharoMethodCoder >> highlightFrom: startIndex to: endIndex [
-	(self sourceText from: startIndex to: endIndex)
-		attributes: { self class nodeHighlight }
-]
-
-{ #category : 'private - refactorings' }
-GtPharoMethodCoder >> highlightNode: aNode [
-	self highlightFrom: aNode startPosition to: aNode stopPosition
+GtPharoMethodCoder >> highlightNodeBlock: aNode [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel
+		  addTextAttribute: self class nodeHighlight
+		  from: aNode startPosition
+		  to: aNode stopPosition ]
 ]
 
 { #category : 'accessing' }
@@ -615,39 +563,12 @@ GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
 	self requestStyleSourceText
 ]
 
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> inlineMessageSendIn: messageNode [
-	| refactoring model |
-	model := self createRefactoringModel.
-	refactoring := RBInlineMethodRefactoring
-		model: model
-		inline: messageNode sourceInterval
-		inMethod: self currentSelector
-		forClass: (model classFor: self behavior).
-	refactoring
-		setOption: #inlineExpression
-		toUse: [ :ref :string | true ].
-	self performMethodRefactoring: refactoring
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> inlineTemporaryVariableIn: assignmentNode [
-	| refactoring model |
-	model := self createRefactoringModel.
-	refactoring := RBInlineTemporaryRefactoring
-		model: model
-		inline: assignmentNode sourceInterval
-		from: self currentSelector
-		in: (model classFor: self classOrMetaClass).
-	self performMethodRefactoring: refactoring
-]
-
 { #category : 'private - refactorings' }
 GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 	| statement |
 	aNode methodNode body statements size = 1
 		ifFalse: [ ^ false ].
-	aNode methodNode body temporaries isEmpty
+	aNode methodNode body variables isEmpty
 		ifFalse: [ ^ false ].
 	aNode parent isReturn
 		ifTrue: [ statement := aNode parent.
@@ -657,7 +578,7 @@ GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 	aNode parent isAssignment
 		ifFalse: [ ^ false ].
 	(aNode methodNode selector numArgs = 1
-		and: [ aNode parent value = aNode methodNode arguments first ])
+		and: [ aNode parent value = aNode methodNode pattern variables first ])
 		ifFalse: [ ^ false ].
 	statement := aNode parent.
 	statement parent isReturn
@@ -1046,18 +967,6 @@ GtPharoMethodCoder >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> protectInstVar: aNode [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := model classFor: self behavior.
-	refactoring := RBProtectInstanceVariableRefactoring
-		model: model
-		variable: aNode name
-		class: (cls whoDefinesInstanceVariable: aNode name).
-	self addRefactoringChangesPreview: refactoring at: aNode stop
-]
-
 { #category : 'api - accessing' }
 GtPharoMethodCoder >> protocol [
 	<return: #String or: nil>
@@ -1091,22 +1000,9 @@ GtPharoMethodCoder >> remove [
 ]
 
 { #category : 'private - refactorings' }
-GtPharoMethodCoder >> removeHighlight [
-	self sourceText
-		clearAttributes: [ :attr | attr == self class nodeHighlight ]
-]
-
-{ #category : 'api - refactorings' }
-GtPharoMethodCoder >> removeParameter: aNode [
-	| refactoring model cls |
-	model := self createRefactoringModel.
-	cls := (model classFor: self classOrMetaClass) instanceSide.
-	refactoring := RBRemoveParameterRefactoring
-		model: model
-		removeParameter: aNode name
-		in: cls
-		selector: self currentSelector.
-	self addRefactoringChangesPreview: refactoring at: aNode stop
+GtPharoMethodCoder >> removeHighlightBlock [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : 'api - refactorings' }

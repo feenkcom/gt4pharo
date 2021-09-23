@@ -39,11 +39,6 @@ GtPharoVariableNode >> isLocallyDefined [
 ]
 
 { #category : 'testing' }
-GtPharoVariableNode >> isSelf [
-	^ false
-]
-
-{ #category : 'testing' }
 GtPharoVariableNode >> isSuper [
 	^ false
 ]

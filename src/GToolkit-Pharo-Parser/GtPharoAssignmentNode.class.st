@@ -24,6 +24,11 @@ GtPharoAssignmentNode >> assignmentToken: aSmaCCToken [
 	assignmentToken := aSmaCCToken
 ]
 
+{ #category : 'testing' }
+GtPharoAssignmentNode >> isAssignment [
+	^ true
+]
+
 { #category : 'accessing' }
 GtPharoAssignmentNode >> messageReceiver [
 	leftParens notEmpty
