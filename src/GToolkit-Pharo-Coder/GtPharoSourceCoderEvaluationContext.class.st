@@ -11,11 +11,6 @@ Class {
 }
 
 { #category : 'binding' }
-GtPharoSourceCoderEvaluationContext >> bindingAt: aBindingName put: anObject [
-	self bindingStrategy bindings at: aBindingName put: anObject
-]
-
-{ #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 	"aSymbol is a variable name.
 	Return a literal variable if the variable has a value assigned.
@@ -80,7 +75,7 @@ GtPharoSourceCoderEvaluationContext >> hasBindingOf: aSymbol [
 GtPharoSourceCoderEvaluationContext >> initialize [
 	super initialize.
 
-	bindingStrategy := GtHighlightingBindingStrategy new bindings: GtNoBindings uniqueInstance.
+	bindingStrategy := GtEmptyVariablesBindings new.
 	notifications := OrderedCollection new
 ]
 
@@ -170,11 +165,5 @@ GtPharoSourceCoderEvaluationContext >> textMorph [
 
 { #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> withSnippetBindingStrategy [
-	| theExistingBindings |
-
-	theExistingBindings := bindingStrategy bindings.
-	theExistingBindings = GtNoBindings uniqueInstance
-		ifTrue: [ theExistingBindings := GtSnippetBindings new ].
-
-	bindingStrategy := GtSnippetBindingStrategy new bindings: theExistingBindings
+	bindingStrategy addBindings: GtSharedVariablesBindings new
 ]

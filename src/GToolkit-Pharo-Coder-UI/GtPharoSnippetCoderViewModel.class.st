@@ -2,7 +2,8 @@ Class {
 	#name : 'GtPharoSnippetCoderViewModel',
 	#superclass : 'GtPharoSourceCoderViewModel',
 	#instVars : [
-		'context'
+		'context',
+		'sharedBindings'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
@@ -17,6 +18,18 @@ GtPharoSnippetCoderViewModel >> behavior [
 	^ self selfObject class
 ]
 
+{ #category : 'private - bindings' }
+GtPharoSnippetCoderViewModel >> compositeVariableBindings [
+	| theBindings |
+
+	theBindings := super compositeVariableBindings.
+	theBindings addBindings: sharedBindings.
+	
+	context ifNotNil: [ :aContext | theBindings addBindings: (GtContextVariablesBindings new context: aContext) ].
+	
+	^ theBindings
+]
+
 { #category : 'accessing' }
 GtPharoSnippetCoderViewModel >> context [
 	^ context
@@ -25,16 +38,6 @@ GtPharoSnippetCoderViewModel >> context [
 { #category : 'accessing' }
 GtPharoSnippetCoderViewModel >> context: anObject [
 	context := anObject
-]
-
-{ #category : 'initialization' }
-GtPharoSnippetCoderViewModel >> defaultBindingStrategy [
-	| defaultBindings |
-	
-	defaultBindings := GtLocalSnippetBindings new.
-	defaultBindings sharedBindings: GtSnippetBindings new.
-
-	^ GtSnippetBindingStrategy new bindings: defaultBindings
 ]
 
 { #category : 'private - evaluation' }
@@ -59,15 +62,22 @@ GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
+{ #category : 'initialization' }
+GtPharoSnippetCoderViewModel >> initialize [
+	super initialize.
+	
+	sharedBindings := GtSharedVariablesBindings new
+]
+
 { #category : 'api - coder model' }
 GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
 
-	self bindingStrategy bindings
+	self localBindings
 		localAt: #thisCoderViewModel
 		put: self.
 		
-	self bindingStrategy bindings
+	self localBindings
 		localAt: #thisCoder
 		put: self coderModel
 ]
@@ -86,10 +96,12 @@ GtPharoSnippetCoderViewModel >> profileWithMessageTally [
 
 { #category : 'api - bindings' }
 GtPharoSnippetCoderViewModel >> sharedBindings [
-	^ self bindingStrategy bindings sharedBindings
+	<return: #GtSharedVariablesBindings>
+
+	^ sharedBindings
 ]
 
 { #category : 'api - bindings' }
-GtPharoSnippetCoderViewModel >> sharedBindings: aGtSnippetBindings [
-	self bindingStrategy bindings sharedBindings: aGtSnippetBindings
+GtPharoSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
+	sharedBindings := aGtSharedVariablesBindings
 ]

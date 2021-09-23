@@ -62,13 +62,16 @@ GtPharoSnippetCoderExamples >> snippetCoderViewModel [
 	aCoder := self snippetCoder.
 	aCoderViewModel := aCoder asCoderViewModel.
 
-	expectedBindings := GtLocalSnippetBindings new.
-	expectedBindings localAt: #thisCoder put: aCoder.
-	expectedBindings localAt: #thisCoderViewModel put: aCoderViewModel.
-	expectedBindings sharedBindings: GtSnippetBindings new.
+	expectedBindings := GtCompositeVariablesBindings new.
+	expectedBindings addBindings: GtReservedVariablesBindings new.
+	expectedBindings addBindings: GtGlobalVariablesBindings new.
+	expectedBindings addBindings: (GtLocalVariablesBindings new
+		localAt: #thisCoder put: aCoder;
+		localAt: #thisCoderViewModel put: aCoderViewModel).
+	expectedBindings addBindings: GtSharedVariablesBindings new.
 
 	self assert: aCoderViewModel selfObject equals: nil.
-	self assert: aCoderViewModel bindingStrategy equals: (GtSnippetBindingStrategy new bindings: expectedBindings).
+	self assert: aCoderViewModel compositeVariableBindings equals: expectedBindings.
 	self assert: aCoderViewModel behavior equals: UndefinedObject.
 
 	^ aCoderViewModel
