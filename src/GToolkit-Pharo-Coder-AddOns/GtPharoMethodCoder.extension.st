@@ -1,6 +1,26 @@
 Extension { #name : 'GtPharoMethodCoder' }
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
+	| method |
+	(aNode isMethod or: [ 
+		 aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
+		ifFalse: [ ^ self ].
+	method := aNode topParent.
+	method selector isBinary ifTrue: [ ^ self ].
+	coderAddOns
+		addContextMenuItem:
+		(self createLabel: 'Add parameter' description: aNode selector)
+		hover: nil
+		leave: nil
+		action: [ :aCoderViewModel | 
+			(GtAddParameterRefactoringController new
+				 sourceCoderViewModel: aCoderViewModel;
+				 methodNode: method) execute ]
+		id: #'context-menu--add-parameter'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
@@ -225,6 +245,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
+			self addAddParameterRefactoringFor: aNode to: coderAddOns.
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
