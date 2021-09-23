@@ -10,10 +10,10 @@ Class {
 
 { #category : 'instance creation' }
 GtPharoMethodContextCoder class >> forContext: aContext session: aDebugSession [
-	^ (self forMethod: aContext blocDefiningMethod)
-		context: aContext;
-		session: aDebugSession;
-		yourself
+
+	^ self new
+		  forContext: aContext session: aDebugSession;
+		  yourself
 ]
 
 { #category : 'private' }
@@ -53,11 +53,14 @@ GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationCont
 
 { #category : 'accessing' }
 GtPharoMethodContextCoder >> compiledMethod [
+
 	"The context coder should allways return the compiled method from the context 
 	as the method from the class can be changed. In that case the context will 
 	use its own method."
 
-	^ self context method
+	^ context isBlockContext
+		  ifTrue: [ context home compiledCode ]
+		  ifFalse: [ context compiledCode ]
 ]
 
 { #category : 'accessing' }
@@ -65,11 +68,6 @@ GtPharoMethodContextCoder >> context [
 	<return: #Context>
 
 	^ context
-]
-
-{ #category : 'accessing' }
-GtPharoMethodContextCoder >> context: aContext [
-	context := aContext
 ]
 
 { #category : 'api - actions' }
@@ -110,6 +108,14 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	^ variablesList
 	
 	
+]
+
+{ #category : 'instance creation' }
+GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
+
+	context := aContext.
+	session := aDebugSession.
+	self forMethod: self compiledMethod
 ]
 
 { #category : 'initialize' }
@@ -198,11 +204,6 @@ GtPharoMethodContextCoder >> session [
 	^ session
 ]
 
-{ #category : 'accessing' }
-GtPharoMethodContextCoder >> session: anObject [
-	session := anObject
-]
-
 { #category : 'private' }
 GtPharoMethodContextCoder >> stackDebuggingActionsPragmas [
 	^ #(gt2ContextDebuggingAction)
@@ -275,9 +276,9 @@ GtPharoMethodContextCoder >> updateSelection [
 
 { #category : 'updating' }
 GtPharoMethodContextCoder >> updateSourceFromContext [
-	self needsUpdate
-		ifFalse: [ ^ self ].
-	self forMethod: self context method
+
+	self needsUpdate ifFalse: [ ^ self ].
+	self forContext: context session: session
 ]
 
 { #category : 'accessing variables' }
