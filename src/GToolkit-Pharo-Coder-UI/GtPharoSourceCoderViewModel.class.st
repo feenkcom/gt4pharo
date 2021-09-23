@@ -37,7 +37,8 @@ GtPharoSourceCoderViewModel >> defaultBindingStrategy [
 GtPharoSourceCoderViewModel >> evaluationContext [
 	| bindingStrategyWithPotentialSlots concreteBindings |
 	bindingStrategyWithPotentialSlots := self bindingStrategy.
-	self selfObject notNil ifTrue: [ 
+	"Avoid #isNil #notNil in case we are dealing with a proxy"
+	self selfObject == nil ifFalse: [ 
 		concreteBindings := GtSnippetBindings new.
 		selfObject class gtCoderSlotNames do: [:each | 
 			concreteBindings at: each put: (selfObject instVarNamed: each) ].
