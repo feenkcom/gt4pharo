@@ -32,10 +32,11 @@ GtPharoSourceCoderViewModel >> compositeVariableBindings [
 	theBindings := GtCompositeVariablesBindings new.
 	theBindings addBindings: GtReservedVariablesBindings new.
 	theBindings addBindings: GtGlobalVariablesBindings new.
-
-	self selfObject ifNotNil: [ :anObject |
-		theBindings addBindings: (GtSlotVariablesBindings new object: anObject) ].
 	
+	"Avoid #isNil #notNil in case we are dealing with a proxy"
+	self selfObject == nil
+		ifFalse: [ theBindings addBindings: (GtSlotVariablesBindings new object: self selfObject) ].
+
 	theBindings addBindings: localBindings.
 	
 	^ theBindings
