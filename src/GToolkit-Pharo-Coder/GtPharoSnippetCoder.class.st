@@ -53,7 +53,7 @@ GtPharoSnippetCoder >> newRbAST: aString [
 	| ast |
 	ast := self
 		parseExpression: aString
-		requestor: GtHighlightingBindingStrategy new.
+		requestor: GtLocalVariablesBindings new.
 	ast doSemanticAnalysis.
 	^ ast
 ]

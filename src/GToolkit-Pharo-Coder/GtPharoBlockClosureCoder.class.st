@@ -124,19 +124,17 @@ GtPharoBlockClosureCoder >> format [
 
 { #category : 'private' }
 GtPharoBlockClosureCoder >> highlightBindingsStrategy [
+	self flag: #TODO.
+
 	^ self context 
-		ifNil:  [ GtHighlightingBindingStrategy new 
-			bindings: bindingStrategy bindings]
-		ifNotNil: [ GtContextHighlightingBindingStrategy new
-			bindings: bindingStrategy bindings;
-			context: self context ] 
+		ifNil:  [ bindingStrategy ]
+		ifNotNil: [ bindingStrategy ] 
 ]
 
 { #category : 'initialize-release' }
 GtPharoBlockClosureCoder >> initialize [
 	parameters := OrderedDictionary new.
-	bindingStrategy := GtHighlightingBindingStrategy new.
-	bindingStrategy bindings: Dictionary new.
+	bindingStrategy := GtLocalVariablesBindings new.
 
 	super initialize
 ]
@@ -153,7 +151,7 @@ GtPharoBlockClosureCoder >> newRbAST: aString [
 	| ast |
 	ast := self
 		parseExpression: (self blockSourceFromText: aString)
-		requestor: GtHighlightingBindingStrategy new.
+		requestor: GtLocalVariablesBindings new.
 	ast doSemanticAnalysis.
 	ast gtMoveAllBy: 1 - ast body start.
 	^ ast body

@@ -29,6 +29,10 @@ GtPharoSourceCoderEvaluationContext >> bindingStrategy [
 
 { #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> bindingStrategy: aGtBindingStrategy [
+	self
+		assert: [ aGtBindingStrategy class usesTrait: TGtVariablesBindings ]
+		description: [ 'Must implement variable bindings trait' ].
+
 	bindingStrategy := aGtBindingStrategy
 ]
 
@@ -75,7 +79,7 @@ GtPharoSourceCoderEvaluationContext >> hasBindingOf: aSymbol [
 GtPharoSourceCoderEvaluationContext >> initialize [
 	super initialize.
 
-	bindingStrategy := GtEmptyVariablesBindings new.
+	bindingStrategy := GtCompositeVariablesBindings new.
 	notifications := OrderedCollection new
 ]
 
