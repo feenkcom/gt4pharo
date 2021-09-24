@@ -6,12 +6,14 @@ Class {
 
 { #category : 'accessing' }
 GtPushUpMethodRefactoringController >> refactoring [
-	| model |
+	| model refactoring |
 	model := self createRefactoringModel.
-	^ RBPullUpMethodRefactoring
-		  model: model
-		  pullUp: { self methodSelector }
-		  from: (model classFor: self methodClass)
+	refactoring := RBPullUpMethodRefactoring
+		               model: model
+		               pullUp: { self methodSelector }
+		               from: (model classFor: self methodClass).
+	refactoring gtDefaultToRemoveDuplicates.
+	^ refactoring
 ]
 
 { #category : 'accessing' }

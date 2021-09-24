@@ -2,8 +2,8 @@ Class {
 	#name : 'GtPharoSourceCoderViewModel',
 	#superclass : 'GtSourceCoderViewModel',
 	#instVars : [
-		'bindingStrategy',
-		'selfObject'
+		'selfObject',
+		'localBindings'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
@@ -15,43 +15,44 @@ GtPharoSourceCoderViewModel >> behavior [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'api - accessing' }
-GtPharoSourceCoderViewModel >> bindingOf: aVariableName [
-	^ self bindingStrategy bindingOf: aVariableName
-]
-
 { #category : 'private - bindings' }
 GtPharoSourceCoderViewModel >> bindingStrategy [
 	"Private. Return the underlying bindings strategy. Do not modify the object from the outside!"
-	<return: #GtBindingStrategy>
+	<return: #TGtVariablesBindings>
 
-	^ bindingStrategy
+	self deprecated: 'Use localBindings instead'.
+
+	^ self localBindings
 ]
 
-{ #category : 'initialization' }
-GtPharoSourceCoderViewModel >> defaultBindingStrategy [
-	^ GtHighlightingBindingStrategy new
+{ #category : 'private - bindings' }
+GtPharoSourceCoderViewModel >> compositeVariableBindings [
+	| theBindings |
+
+	theBindings := GtCompositeVariablesBindings new.
+	theBindings addBindings: GtReservedVariablesBindings new.
+	theBindings addBindings: GtGlobalVariablesBindings new.
+	
+	"Avoid #isNil #notNil in case we are dealing with a proxy"
+	self selfObject == nil
+		ifFalse: [ theBindings addBindings: (GtSlotVariablesBindings new object: self selfObject) ].
+
+	theBindings addBindings: localBindings.
+	
+	^ theBindings
 ]
 
 { #category : 'private - evaluation' }
 GtPharoSourceCoderViewModel >> evaluationContext [
-	| bindingStrategyWithPotentialSlots concreteBindings |
-	bindingStrategyWithPotentialSlots := self bindingStrategy.
-	"Avoid #isNil #notNil in case we are dealing with a proxy"
-	self selfObject == nil ifFalse: [ 
-		concreteBindings := GtSnippetBindings new.
-		selfObject class gtCoderSlotNames do: [:each | 
-			concreteBindings at: each put: (selfObject instVarNamed: each) ].
-		bindingStrategyWithPotentialSlots bindings: concreteBindings ].
 	^ super evaluationContext
-		bindingStrategy: bindingStrategyWithPotentialSlots;
+		bindingStrategy: self compositeVariableBindings;
 		receiverObject: self selfObject
 ]
 
 { #category : 'gt-extension' }
 GtPharoSourceCoderViewModel >> gtInfo [
 	^ super gtInfo, {
-		#bindingStrategy -> self bindingStrategy.
+		#bindings -> self compositeVariableBindings.
 		#selfObject -> self selfObject
 	}
 ]
@@ -73,7 +74,7 @@ GtPharoSourceCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 GtPharoSourceCoderViewModel >> initialize [
 	super initialize.
 
-	bindingStrategy := self defaultBindingStrategy
+	localBindings := GtLocalVariablesBindings new
 ]
 
 { #category : 'api - coder model' }
@@ -84,9 +85,11 @@ GtPharoSourceCoderViewModel >> isDeprecatedGlobalNamed: aVariableName [
 		ifAbsent: [ false ]
 ]
 
-{ #category : 'private - evaluation' }
-GtPharoSourceCoderViewModel >> onBindingsReplaced [
-	"Is sent when current variable bindings are replaced with new ones"
+{ #category : 'api - accessing' }
+GtPharoSourceCoderViewModel >> localBindings [
+	<return: #GtLocalVariablesBindings>
+
+	^ localBindings
 ]
 
 { #category : 'api - actions' }
