@@ -87,7 +87,7 @@ GtPharoSourceCoderViewModel >> isDeprecatedGlobalNamed: aVariableName [
 
 { #category : 'api - accessing' }
 GtPharoSourceCoderViewModel >> localBindings [
-	<return: #GtLocalVariableBindings>
+	<return: #GtLocalVariablesBindings>
 
 	^ localBindings
 ]
