@@ -4,17 +4,6 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'private - bindings' }
-GtPharoMethodContextCoderViewModel >> compositeVariableBindings [
-	| theBindings |
-
-	theBindings := super compositeVariableBindings.
-
-	self context ifNotNil: [ :aContext | theBindings addBindings: (GtContextVariablesBindings new context: aContext) ].
-	
-	^ theBindings
-]
-
 { #category : 'accessing' }
 GtPharoMethodContextCoderViewModel >> context [
 	^ self coderModel context
