@@ -36,6 +36,13 @@ GtPharoSourceCoderEvaluationContext >> bindingStrategy: aGtBindingStrategy [
 	bindingStrategy := aGtBindingStrategy
 ]
 
+{ #category : 'accessing' }
+GtPharoSourceCoderEvaluationContext >> bindings [
+	<return: #TGtVariablesBindings>
+
+	^ bindingStrategy
+]
+
 { #category : 'hack' }
 GtPharoSourceCoderEvaluationContext >> correctFrom: fromIndex to: toIndex with: aString [
 	NonInteractiveTranscript stdout

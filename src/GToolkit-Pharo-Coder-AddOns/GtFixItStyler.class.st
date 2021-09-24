@@ -3,7 +3,8 @@ Class {
 	#superclass : 'GtGenericPharoStyler',
 	#instVars : [
 		'isForWorkspace',
-		'hasRefactoring'
+		'hasRefactoring',
+		'variableBindings'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
@@ -117,7 +118,9 @@ GtFixItStyler >> sourceCoder [
 { #category : 'api - styling' }
 GtFixItStyler >> style: aText ast: theAst [
 	hasRefactoring := nil.
-	super style: aText ast: theAst
+	variableBindings := self coderViewModel compositeVariableBindings.
+	[ super style: aText ast: theAst ]
+		ensure: [ variableBindings := nil ]
 ]
 
 { #category : 'private - messages' }
@@ -127,7 +130,7 @@ GtFixItStyler >> typeOf: aGtPharoProgramNode [
 		in: (isForWorkspace
 			ifTrue: [ self coderViewModel selfObject class ]
 			ifFalse: [ self sourceCoder behavior ])
-		bindings: self coderViewModel
+		bindings: variableBindings
 ]
 
 { #category : 'visiting' }
@@ -155,7 +158,7 @@ GtFixItStyler >> visitMessageSend: aNode [
 
 	theClassForSelector
 		ifNotNil: [ ^ self ].
-	
+
 	(theNodeType isTrait
 		and: [ (Object whichClassIncludesSelector: aNode selector) notNil ])
 			ifTrue: [ ^ self ].
