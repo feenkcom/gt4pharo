@@ -7,6 +7,16 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
+{ #category : 'executing' }
+GtMethodRefactoringController >> addRefactoringPreview [
+	self
+		addRefactoringChangesPreview: self refactoring
+		at: self previewPosition
+		whenComplete: [ 
+			self removeRefactoringAttribute.
+			self allowSave ]
+]
+
 { #category : 'accessing' }
 GtMethodRefactoringController >> methodClass [
 	^ sourceCoderViewModel behavior
@@ -28,15 +38,13 @@ GtMethodRefactoringController >> methodSelector [
 ]
 
 { #category : 'executing' }
+GtMethodRefactoringController >> previewPosition [
+	^ methodNode pattern stopPosition
+]
+
+{ #category : 'executing' }
 GtMethodRefactoringController >> safelyExecute [
 	self preventSave.
-
 	sourceCoderViewModel selectNone.
-
-	self
-		addRefactoringChangesPreview: self refactoring
-		at: methodNode pattern stopPosition
-		whenComplete: [
-			self removeRefactoringAttribute.
-			self allowSave ]
+	self addRefactoringPreview
 ]
