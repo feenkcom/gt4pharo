@@ -29,10 +29,8 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 				at: aVariableName
 				ifPresent: [ :anObject | ^ anObject class ].
 			
-			^ (theBindings bindingOf: aVariableName)
-				ifNotNil: [ :aBinding |
-					aBinding value
-						ifNotNil: [ :aValue | aValue class ] ] ].
+			^ (theBindings bindingValueOf: aVariableName)
+				ifNotNil: [ :aValue | aValue class ] ].
 
 	aGtPharoProgramNode isLiteral
 		ifTrue: [ ^ aGtPharoProgramNode literalValue class ].
