@@ -10,6 +10,11 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Context'
 }
 
+{ #category : 'accessing' }
+GtPharoSourceCoderEvaluationContext >> addBindings: aTGtVariableBindings [
+	bindingStrategy addBindings: aTGtVariableBindings
+]
+
 { #category : 'binding' }
 GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 	"aSymbol is a variable name.
@@ -86,7 +91,9 @@ GtPharoSourceCoderEvaluationContext >> hasBindingOf: aSymbol [
 GtPharoSourceCoderEvaluationContext >> initialize [
 	super initialize.
 
-	bindingStrategy := GtCompositeVariablesBindings new.
+	bindingStrategy := GtCompositeVariablesBindings new
+		addBindings: GtReservedVariablesBindings new;
+		addBindings: GtGlobalVariablesBindings new.
 	notifications := OrderedCollection new
 ]
 
