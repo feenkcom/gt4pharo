@@ -2171,6 +2171,99 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+	aScripter := self scripterForBlock: [ 
+		             | aCoder |
+		             aCoder := GtPharoMethodCoderExamples new
+			                       forUnaryInstanceMethod.
+		             environment := aCoder attributeNamed: #dummyEnvironment.
+		             aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | 
+			aCoder appendString: (self moveVariableSource format: {'|temp|'. ''}) ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forMoveVariableScope_01_setup.
+	aScripter do
+		label: 'Select part of the variable node';
+		action: [ :aSourceEditor |
+			| index |
+			index := aSourceEditor text asString indexOfSubCollection: 'temp'.
+			aSourceEditor selecter
+				from: index - 1 to: index + 3;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_03_hover_move_variable_declaration [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forMoveVariableScope_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover protect';
+		onSpaceRoot;
+		id: #'context-menu--move-variable-declaration'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_variable_declaration [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forMoveVariableScope_03_hover_move_variable_declaration.
+
+	aScripter click
+		label: 'Click move variable';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--move-variable-declaration'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+	
+	aScripter check
+		label: 'Check current source in coder model';
+		value: [ :aCoder | (GtPharoParser parse: aCoder currentSourceString) body ] equals: [ :aCoder |
+GtPharoParser parse: (self moveVariableSource format: {''. '|temp|'}) startingAt: GtPharoParser startingStateForMethodSequence  ];
+		onModel.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 	<gtExample>
@@ -2946,6 +3039,17 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 	aScripter := self scripter.
 	aScripter set model: [ self basicMethodCoder ].
 	^ aScripter
+]
+
+{ #category : 'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> moveVariableSource [
+	^ '
+	{1}
+	self printString size > 4 
+		ifTrue: [{2} temp := 4. 
+			^ 3 + temp] 
+		ifFalse: [{2} temp := 2. 
+			^ temp + 40]'
 ]
 
 { #category : 'examples - fixit class' }

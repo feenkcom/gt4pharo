@@ -250,6 +250,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns. 
+			self addVariableScopingFor: aNode to: coderAddOns.
 			aNode
 				withAllParentsDo: [ :node | self addInlineSelfMessageFor: node to: coderAddOns ].
 			aNode
@@ -277,6 +278,44 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 				sourceCoderViewModel: aCoderViewModel;
 				variableNode: aNode) execute ]
 		id: #'context-menu--remove-parameter'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
+	| uses groups |
+	aNode isVariable ifFalse: [ ^ self ].
+	(aNode parent isSequence and: [ 
+		 aNode parent variables identityIncludes: aNode ]) ifFalse: [ 
+		^ self ].
+	uses := OrderedCollection new.
+	aNode parent statements do: [ :each | 
+		each allNodesOfType: GtPharoVariableNode do: [ :var | 
+			var = aNode ifTrue: [ 
+				(var parentOfType: GtPharoBlockNode)
+					ifNil: [ ^ self ]
+					ifNotNil: [ :block | 
+						block == (aNode parentOfType: GtPharoBlockNode) ifTrue: [ 
+							^ self ] ].
+				uses add: var ] ] ].
+	groups := uses groupedBy: [ :each | 
+		          | parents block |
+		          parents := each allParents.
+		          1 to: (parents identityIndexOf: aNode parent) - 1 do: [ :i | 
+			          ((parents at: i) isKindOf: GtPharoBlockNode) ifTrue: [ 
+				          block := parents at: i ] ].
+		          block ].
+	groups do: [ :each | each first isAssignedTo ifFalse: [ ^ self ] ].
+	coderAddOns
+		addContextMenuItem: (self
+				 createLabel: 'Move declaration to inner scope'
+				 description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aSourceCoderViewModel | 
+			(GtMoveVariableRefactoringController new
+				 variableNode: aNode;
+				 sourceCoderViewModel: aSourceCoderViewModel) execute ]
+		id: #'context-menu--move-variable-declaration'
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }

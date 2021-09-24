@@ -34,6 +34,12 @@ GtPharoVariableNode >> guessType: completionStrategy [
 ]
 
 { #category : 'testing' }
+GtPharoVariableNode >> isAssignedTo [
+	^ parent notNil and: [ 
+		  parent isAssignment and: [ parent variable == self ] ]
+]
+
+{ #category : 'testing' }
 GtPharoVariableNode >> isLocallyDefined [
 	^ self allParents anySatisfy: [ :each | each defines: name value ]
 ]
