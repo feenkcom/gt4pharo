@@ -22,7 +22,7 @@ GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 
 { #category : 'accessing' }
 GtPharoSourceCoderEvaluationContext >> bindingStrategy [
-	<return: #GtBindingStrategy>
+	<return: #TGtVariablesBindings>
 
 	^ bindingStrategy
 ]

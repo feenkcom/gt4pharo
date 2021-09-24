@@ -18,7 +18,7 @@ GtPharoSourceCoderViewModel >> behavior [
 { #category : 'private - bindings' }
 GtPharoSourceCoderViewModel >> bindingStrategy [
 	"Private. Return the underlying bindings strategy. Do not modify the object from the outside!"
-	<return: #GtBindingStrategy>
+	<return: #TGtVariablesBindings>
 
 	self deprecated: 'Use localBindings instead'.
 
