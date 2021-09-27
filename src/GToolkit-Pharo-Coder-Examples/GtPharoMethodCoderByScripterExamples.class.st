@@ -1804,6 +1804,101 @@ GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - inline all self sends' }
+GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+'
+	^ self isNil'];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline all self sends' }
+GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineAllSelfSends_01_setup.
+	aScripter do
+		label: 'Select part of the method node';
+		action: [ :aSourceEditor |
+			aSourceEditor selecter
+				from: 1 to: 2;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline all self sends' }
+GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_03_hover_inline_message_send [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forInlineAllSelfSends_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover inline self send';
+		onSpaceRoot;
+		id: #'context-menu--inline-self-sends'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - inline all self sends' }
+GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_04_click_inline_send [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineAllSelfSends_03_hover_inline_message_send.
+
+	aScripter click
+		label: 'Click inline temp';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--inline-self-sends'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString lines first size.
+				index to: index ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 	<gtExample>

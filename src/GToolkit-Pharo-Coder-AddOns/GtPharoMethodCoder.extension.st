@@ -107,6 +107,26 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
+	| method |
+	(aNode isMethod or: [ 
+		 aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
+		ifFalse: [ ^ self ].
+	method := aNode topParent.
+	coderAddOns
+		addContextMenuItem: (self
+				 createLabel: 'Inline All self Sends'
+				 description: method selector)
+		hover: nil
+		leave: nil
+		action: [ :aSourceCoderViewModel | 
+			(GtInlineSelfSendsRefactoringController new
+				 methodNode: method;
+				 sourceCoderViewModel: aSourceCoderViewModel) execute ]
+		id: #'context-menu--inline-self-sends'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 	aNode isMessageSend
 		ifFalse: [ ^ self ].
@@ -246,6 +266,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
 			self addAddParameterRefactoringFor: aNode to: coderAddOns.
+			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
