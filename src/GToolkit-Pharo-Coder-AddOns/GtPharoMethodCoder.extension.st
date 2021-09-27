@@ -203,6 +203,30 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns [
+	| class |
+	aNode isVariable
+		ifFalse: [ ^ self ].
+
+	aNode whoDefines notNil
+		ifTrue: [ ^ self ].
+	
+	class := self behavior whichClassDefinesInstVar: aNode variableName.
+	(class isNil or: [ class = self behavior ])
+		ifTrue: [ ^ self ].
+
+	coderAddOns
+		addContextMenuItem: (self createLabel: 'Pull down variable declaration' description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel |
+			(GtPushDownInstanceVariableRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
+		id: #'context-menu--pull-down-variable'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
@@ -252,6 +276,31 @@ GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
 ]
 
 { #category : '*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
+	aNode isVariable
+		ifFalse: [ ^ self ].
+
+	aNode whoDefines notNil
+		ifTrue: [ ^ self ].
+
+	(self behavior allInstVarNames includes: aNode variableName)
+		ifFalse: [ ^ self ].
+	
+	(self behavior whichClassDefinesInstVar: aNode variableName) superclass = Object 
+		ifTrue: [ ^self ].
+
+	coderAddOns
+		addContextMenuItem: (self createLabel: 'Push up variable declaration' description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel |
+			(GtPushUpInstanceVariableRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
+		id: #'context-menu--push-up-variable'
+]
+
+{ #category : '*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 20>
 	
@@ -268,6 +317,8 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addAddParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
+			self addPushUpVariableRefactoringsFor: aNode to: coderAddOns.
+			self addPullDownVariableRefactoringsFor: aNode to: coderAddOns.
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns. 

@@ -2458,6 +2458,108 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 	^ aScripter syncContinue
 ]
 
+{ #category : 'examples - pull down variable' }
+GtPharoMethodCoderByScripterExamples >> forPullDownVariable_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter rootClass |
+
+	aScripter := self scripterForBlock: [
+		| env method coder |
+		env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+		rootClass := env anyDummyLeafClass.
+		method := rootClass anyDummyUnaryMethod realMethod.
+	
+		coder := GtPharoMethodCoder forMethod: method.
+		coder attributeNamed: #dummyEnvironment put: env.
+		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+		coder ].
+	aScripter do
+		label: 'type in a method';
+		action: [ :aCoder | aCoder appendString:
+('
+	^ {1}' format: { rootClass realClass superclass allInstVarNames last }) ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - pull down variable' }
+GtPharoMethodCoderByScripterExamples >> forPullDownVariable_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPullDownVariable_01_setup.
+	aScripter do
+		label: 'Select part of the variable';
+		action: [ :aSourceEditor |
+			| index |
+			index := (aSourceEditor text asString indexOfSubCollection: '^ ') + 1.
+			aSourceEditor selecter
+				from: index to: index + 8;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - pull down variable' }
+GtPharoMethodCoderByScripterExamples >> forPullDownVariable_03_hover_pull_down [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forPullDownVariable_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover pull down variable';
+		onSpaceRoot;
+		id: #'context-menu--pull-down-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - pull down variable' }
+GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPullDownVariable_03_hover_pull_down.
+
+	aScripter click
+		label: 'Click pull down variable';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--pull-down-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString size.
+				index to: index ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
 { #category : 'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_01_setup [
 	<gtExample>
@@ -2657,6 +2759,108 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method 
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString lines first size.
+				index to: index ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up variable' }
+GtPharoMethodCoderByScripterExamples >> forPushUpVariable_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter rootClass |
+
+	aScripter := self scripterForBlock: [
+		| env method coder |
+		env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+		rootClass := env anyDummyLeafClass.
+		method := rootClass anyDummyUnaryMethod realMethod.
+	
+		coder := GtPharoMethodCoder forMethod: method.
+		coder attributeNamed: #dummyEnvironment put: env.
+		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+		coder ].
+	aScripter do
+		label: 'type in a method';
+		action: [ :aCoder | aCoder appendString:
+('
+	^ {1}' format: { rootClass realClass allInstVarNames last }) ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up variable' }
+GtPharoMethodCoderByScripterExamples >> forPushUpVariable_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPushUpVariable_01_setup.
+	aScripter do
+		label: 'Select part of the variable';
+		action: [ :aSourceEditor |
+			| index |
+			index := (aSourceEditor text asString indexOfSubCollection: '^ ') + 1.
+			aSourceEditor selecter
+				from: index to: index + 8;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up variable' }
+GtPharoMethodCoderByScripterExamples >> forPushUpVariable_03_hover_push_up [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forPushUpVariable_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover push up variable';
+		onSpaceRoot;
+		id: #'context-menu--push-up-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : 'examples - push up variable' }
+GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forPushUpVariable_03_hover_push_up.
+
+	aScripter click
+		label: 'Click push up variable';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--push-up-variable'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := aCoderEditor text asString size.
 				index to: index ];
 		onChildNamed: GtPharoSourceCoder sourceEditorName.
 

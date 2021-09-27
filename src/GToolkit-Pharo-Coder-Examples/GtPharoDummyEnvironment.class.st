@@ -24,6 +24,11 @@ GtPharoDummyEnvironment >> anyDummyKeywordMethod [
 	^ self dummyPackages anyOne anyDummyKeywordMethod
 ]
 
+{ #category : 'api - classes' }
+GtPharoDummyEnvironment >> anyDummyLeafClass [
+	^ self anyDummyPackage dummyClasses detect: [ :each | each realClass subclasses isEmpty ]
+]
+
 { #category : 'api - packages' }
 GtPharoDummyEnvironment >> anyDummyPackage [
 	^ self dummyPackages anyOne
