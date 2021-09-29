@@ -1,5 +1,5 @@
 "
-I exemplify {{gtClass:GtFilterRunExampleButtonLook|expanded=true|show=#gtSubclassesFor:|height=150}} subclasses:
+I exemplify {{gtClass:GtFilterRunExampleButtonAptitude|expanded=true|show=#gtSubclassesFor:|height=150}} subclasses:
 
 "
 Class {
