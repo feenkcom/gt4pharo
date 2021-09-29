@@ -188,6 +188,11 @@ GtPharoProgramNode >> isVariable [
 	^ false
 ]
 
+{ #category : 'testing' }
+GtPharoProgramNode >> isVariableDefinition [
+	^ false
+]
+
 { #category : 'accessing' }
 GtPharoProgramNode >> localVariablesInto: aCollection [
 	parent isNil

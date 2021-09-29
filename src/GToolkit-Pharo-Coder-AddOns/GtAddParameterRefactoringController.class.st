@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'renameAction',
 		'newSelector',
-		'variableName'
+		'variableName',
+		'parameterNode'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -14,14 +15,13 @@ GtAddParameterRefactoringController >> addKeyword [
 	| parameter text |
 	sourceCoderViewModel selectNone.
 	parameter := methodNode pattern variables isEmpty
-		             ifTrue: [ ': ' , self variableName ]
-		             ifFalse: [ ' _: ' , self variableName ].
-	text := ((originalSource asString first:
-		          methodNode pattern stopPosition) , parameter
-	         ,
-	         (originalSource asString allButFirst:
-		          methodNode pattern stopPosition)) asRopedText.
-	GtPharoStyler new style: text ast: (GtPharoParser parse: text asString).
+		ifTrue: [ ': ' , self variableName ]
+		ifFalse: [ ' _: ' , self variableName ].
+	text := ((originalSource asString first: methodNode pattern stopPosition) , parameter
+		, (originalSource asString allButFirst: methodNode pattern stopPosition)) asRopedText.
+	(GtPharoStyler new)
+		coderViewModel: sourceCoderViewModel;
+		style: text ast: (GtPharoParser parse: text asString).
 	self setText: text
 ]
 
@@ -85,6 +85,16 @@ GtAddParameterRefactoringController >> newSelector [
 			                  ifFalse: [ methodNode selector , '_:' ]) asSymbol ]
 ]
 
+{ #category : 'accessing' }
+GtAddParameterRefactoringController >> parameterNode [
+	^ parameterNode
+]
+
+{ #category : 'accessing' }
+GtAddParameterRefactoringController >> parameterNode: aRBValueNode [
+	parameterNode := aRBValueNode
+]
+
 { #category : 'executing' }
 GtAddParameterRefactoringController >> previewPosition [
 	^ sourceCoderViewModel astAwait pattern stopPosition
@@ -94,14 +104,16 @@ GtAddParameterRefactoringController >> previewPosition [
 GtAddParameterRefactoringController >> refactoring [
 	| newArg model |
 	model := self createRefactoringModel.
-	newArg := RBArgumentName name: self variableName value: 'nil'.
-	^ RBAddParameterRefactoring
-		  model: model
-		  addParameterToMethod: methodNode selector
-		  in: (model classFor: self methodClass)
-		  newSelector: self newSelector
-		  permutation: (1 to: methodNode selector numArgs) , { -1 }
-		  newArgs: { newArg }
+	newArg := RBArgumentName
+		name: self variableName
+		value: (parameterNode ifNil: [ 'nil' ] ifNotNil: [ parameterNode source ]).
+	^ (parameterNode ifNil: [ RBAddParameterRefactoring ] ifNotNil: [ GtAddParameterRefactoring ])
+		model: model
+		addParameterToMethod: methodNode selector
+		in: (model classFor: self methodClass)
+		newSelector: self newSelector
+		permutation: (1 to: methodNode selector numArgs) , {-1}
+		newArgs: {newArg}
 ]
 
 { #category : 'accessing' }
