@@ -1,8 +1,8 @@
 "
 # Method Coder's UI model
-When embedding a method coder as a UI component we often want to be able to specify (or save/restore) its initial UI state, such as expansion or a focus state. {{gtClass:GtMethodCoderUIModel}} fascilicates users with that ability.
+When embedding a method coder as a UI component we often want to be able to specify (or save/restore) its initial UI state, such as expansion or a focus state. {{gtClass:GtPharoMethodCoderViewModel}} fascilicates users with that ability.
 ## How to create a UI model?
-To create a default {{gtClass:GtMethodCoderUIModel}} for an existing instance of {{gtClass:GtMethodCoder}} it is enough to send a {{gtMethod:GtCoderModel>>#asCoderUIModel}} message to that coder model. By default, the method coder is expanded and does not have a focus:
+To create a default {{gtClass:GtPharoMethodCoderViewModel}} for an existing instance of {{gtClass:GtPharoMethodCoder}} it is enough to send a {{gtMethod:GtCoderModel>>#asCoderUIModel}} message to that coder model. By default, the method coder is expanded and does not have a focus:
 {{gtExample:GtMethodCoderUIModelHowToGuide>>#uiModelForCoder|codeExpanded=true}}
 ## How to expand/collapse it?
 Users may choose to visually expand a method coder:
