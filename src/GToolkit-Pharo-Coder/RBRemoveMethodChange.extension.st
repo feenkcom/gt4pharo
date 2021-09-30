@@ -1,6 +1,6 @@
-Extension { #name : 'RBRemoveMethodChange' }
+Extension { #name : #RBRemoveMethodChange }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 RBRemoveMethodChange >> gtDiff [
 	| oldSource |
 	oldSource := (self methodSourceFor: self selector) ifNil: [ '' ].

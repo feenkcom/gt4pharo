@@ -2,8 +2,8 @@
 I extend a {{gtClass:GtSourceCoder}} with the knowledge of how to edit a method. In particular, I am aware of different types of methods and provide a wider variety of refactorings and actions. 
 "
 Class {
-	#name : 'GtPharoMethodCoder',
-	#superclass : 'GtPharoSourceCoder',
+	#name : #GtPharoMethodCoder,
+	#superclass : #GtPharoSourceCoder,
 	#instVars : [
 		'methodBehavior',
 		'selector'
@@ -11,48 +11,48 @@ Class {
 	#classVars : [
 		'NodeHighlight'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forClass: aBehavior source: aString [
 	^ self new
 		forClass: aBehavior source: aString;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forExample: anExample [
 	^ self new
 		forExample: anExample;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forMethod: aCompiledMethod [
 	^ self new
 		forMethod: aCompiledMethod;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forNewMethod: aBehavior [
 	^ self forClass: aBehavior source: ''
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
 	^ self forMethod: anObject class >> aSymbol
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder class >> nodeHighlight [
 	^ NodeHighlight
 		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
 				paint: BrGlamorousColors textHighlightColor ]
 ]
 
-{ #category : 'api - refactorings' }
+{ #category : #'api - refactorings' }
 GtPharoMethodCoder >> addClassVariable: aString [
 	| refactoring |
 	refactoring := RBAddClassVariableRefactoring
@@ -67,7 +67,7 @@ GtPharoMethodCoder >> addClassVariable: aString [
 	self requestStyleSourceText
 ]
 
-{ #category : 'api - refactorings' }
+{ #category : #'api - refactorings' }
 GtPharoMethodCoder >> addInstanceVariable: aString [
 	| refactoring |
 	refactoring := RBAddInstanceVariableRefactoring
@@ -78,7 +78,7 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 	self requestStyleSourceText
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> behavior [
 	<return: #Behavior>
 
@@ -89,12 +89,12 @@ GtPharoMethodCoder >> behavior [
 	^ UndefinedObject
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> behavior: aBehavior [
 	self methodBehavior: (GtPharoCoderBehavior explicit: aBehavior)
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> canCompileMethodIn: newClass [
 	| ast modelClass pools variables model |
 	ast := self rbAST.
@@ -113,7 +113,7 @@ GtPharoMethodCoder >> canCompileMethodIn: newClass [
 				or: [ pools anySatisfy: [ :pool | pool includesKey: each asSymbol ] ] ]
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> canExecuteExample [
 	<return: #Boolean>
 
@@ -122,7 +122,7 @@ GtPharoMethodCoder >> canExecuteExample [
 		ifNotNil: [ :anExample | anExample canBeExecuted ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> canMoveMethodToInstanceOrClass [
 	| oldClass newClass |
 	oldClass := self behavior.
@@ -134,7 +134,7 @@ GtPharoMethodCoder >> canMoveMethodToInstanceOrClass [
 	^ self canCompileMethodIn: newClass
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> category [
 	self
 		deprecated: 'Use #protocol instead.'
@@ -143,7 +143,7 @@ GtPharoMethodCoder >> category [
 	^ self protocol
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> category: aSymbol [
 	self
 		deprecated: 'Use #protocol: instead.'
@@ -152,12 +152,12 @@ GtPharoMethodCoder >> category: aSymbol [
 	self protocol: aSymbol
 ]
 
-{ #category : 'private - actions' }
+{ #category : #'private - actions' }
 GtPharoMethodCoder >> changeManager [
 	^ RBRefactoryChangeManager instance
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> changedSourceForCurrentMethod: aRefactoryChange [
 	aRefactoryChange changes
 		reverseDo: [ :each | 
@@ -168,7 +168,7 @@ GtPharoMethodCoder >> changedSourceForCurrentMethod: aRefactoryChange [
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> classOrMetaClass: aBehavior [
 	self
 		deprecated: 'Use #behavior: instead.'
@@ -177,13 +177,13 @@ GtPharoMethodCoder >> classOrMetaClass: aBehavior [
 	self behavior: aBehavior
 ]
 
-{ #category : 'private - actions' }
+{ #category : #'private - actions' }
 GtPharoMethodCoder >> clearExample [
 	self unsubscribeFromExample.
 	self removeAttributeNamed: #example.
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> compile [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
 	<return: #Boolean>
@@ -191,7 +191,7 @@ GtPharoMethodCoder >> compile [
 	^ self compileInContext: self evaluationContext
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
 	<return: #Boolean>
@@ -223,7 +223,7 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 		ifAbsent: [ false ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> compiledMethod [
 	<return: #CompiledMethod or: nil>
 	
@@ -232,14 +232,14 @@ GtPharoMethodCoder >> compiledMethod [
 		ifFalse: [ nil ]
 ]
 
-{ #category : 'api - ast' }
+{ #category : #'api - ast' }
 GtPharoMethodCoder >> computeAst: theSourceString [
 	^ GtPharoParser
 		parseWithErrors: theSourceString
 		startingAt: GtPharoParser startingStateForMethod
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> createCompileMethodChange [
 	<return: #RBAddMethodChange or: nil>
 
@@ -248,7 +248,7 @@ GtPharoMethodCoder >> createCompileMethodChange [
 		ifAbsent: [ nil ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharoSourceCoderEvaluationContext [
 	<return: #RBAddMethodChange>
 	| aSourceString |
@@ -274,7 +274,7 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 				for: aGtPharoSourceCoderEvaluationContext ]
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> createLabel: aString description: description [
 	^ aString asRopedText
 		,
@@ -284,7 +284,7 @@ GtPharoMethodCoder >> createLabel: aString description: description [
 					(BlTextForegroundAttribute paint: Color gray)})
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> createRefactoringModel [
 	| model |
 	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
@@ -294,7 +294,7 @@ GtPharoMethodCoder >> createRefactoringModel [
 	^ model
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> currentSelector [
 	<return: #Symbol or: nil>
 	| theAst |
@@ -314,7 +314,7 @@ GtPharoMethodCoder >> currentSelector [
 	^ #faulty
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> debugExample [
 	self isModified
 		ifTrue: [ self save
@@ -322,7 +322,7 @@ GtPharoMethodCoder >> debugExample [
 	self example openingDebugger result
 ]
 
-{ #category : 'private - actions' }
+{ #category : #'private - actions' }
 GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEvaluationContext thenDo: aThenBlock [
 	"Evaluate a given source code and show the print string if needed"
 	| aReceiver aSourceString aResult |
@@ -352,7 +352,7 @@ GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEv
 	^ aResult
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> example [
 	<return: #GtExampleWithResult or: nil>
 	| anExample |
@@ -364,7 +364,7 @@ GtPharoMethodCoder >> example [
 	^ anExample
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> example: anExampleWithResult [
 	| aCompiledMethod |
 	self unsubscribeFromExample.
@@ -382,13 +382,13 @@ GtPharoMethodCoder >> example: anExampleWithResult [
 			to: self
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> exampleResult [
 	<return: #GtExampleResult or: nil>
 	^ self example ifNotNil: #result
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> existsInTheSystem [
 	"Return true if a method with the given #selector exists in the behavior"
 	<return: #Boolean>
@@ -405,12 +405,12 @@ GtPharoMethodCoder >> existsInTheSystem [
 	^ self behavior includesSelector: self selector
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> explanationLink [
 	^ self attributeNamed: #explanationLink
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> explanationLink: anExplanation [
 	self explanationLink == anExplanation
 		ifTrue: [ ^ self ].
@@ -421,7 +421,7 @@ GtPharoMethodCoder >> explanationLink: anExplanation [
 	self requestUpdateAddOns
 ]
 
-{ #category : 'api - refactorings' }
+{ #category : #'api - refactorings' }
 GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
 	| refactoring model tempName |
 
@@ -446,7 +446,7 @@ GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
 				renameLocalVariableAt: node stop ]
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> findNodeAssigning: aString [
 	self rbAST
 		nodesDo: [ :each | 
@@ -455,7 +455,7 @@ GtPharoMethodCoder >> findNodeAssigning: aString [
 	^ nil
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> findSeparatorBetweenPatternAndBodyIn: aMethodNode [
 	| startIndex char source |
 	source := aMethodNode completeSource.
@@ -465,19 +465,19 @@ GtPharoMethodCoder >> findSeparatorBetweenPatternAndBodyIn: aMethodNode [
 	^ startIndex
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtPharoMethodCoder >> forClass: aBehavior source: aString [
 	self behavior: aBehavior.
 	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtPharoMethodCoder >> forExample: anExampleWithResult [
 	self forMethod: anExampleWithResult method.
 	self example: anExampleWithResult
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
 	self selector: aCompiledMethod selector.
@@ -485,7 +485,7 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self protocol: aCompiledMethod category
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> format [
 	| ast |
 	ast := [ RBParser parseMethod: self currentSourceString ]
@@ -498,7 +498,7 @@ GtPharoMethodCoder >> format [
 	self currentSourceString: ast formattedCode.
 ]
 
-{ #category : 'gt-extensions' }
+{ #category : #'gt-extensions' }
 GtPharoMethodCoder >> gtDiffViewFor: aView [
 	"<gtView>
 	(methodSource = self newMethodSource) ifTrue: [ ^ aView ].
@@ -512,7 +512,7 @@ GtPharoMethodCoder >> gtDiffViewFor: aView [
 				create ]"
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> handleCompilerErrorsDuring: aBlock [
 	^ [
 			aBlock value.
@@ -525,12 +525,12 @@ GtPharoMethodCoder >> handleCompilerErrorsDuring: aBlock [
 			ex return: false ]
 ]
 
-{ #category : 'examples - event handling' }
+{ #category : #'examples - event handling' }
 GtPharoMethodCoder >> handleExampleArgumentsChanged: aGtExampleArgumentsChanged [
 	self requestUpdateAddOns
 ]
 
-{ #category : 'examples - event handling' }
+{ #category : #'examples - event handling' }
 GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 	self requestStyleSourceText.
 	self announce: (GtCoderExampleExecuted new 
@@ -538,7 +538,7 @@ GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 		example: aGtExampleExecuted example)
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> highlightNodeBlock: aNode [
 	^ [ :textualCoderViewModel | 
 	  textualCoderViewModel
@@ -547,7 +547,7 @@ GtPharoMethodCoder >> highlightNodeBlock: aNode [
 		  to: aNode stopPosition ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
 	"Set a source reference highlighter thhat should be used tp highlight or mark some parts
 	of the source code. If a given highlighter is nil, it means that no highlighter should be used"
@@ -563,7 +563,7 @@ GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
 	self requestStyleSourceText
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 	| statement |
 	aNode methodNode body statements size = 1
@@ -587,25 +587,25 @@ GtPharoMethodCoder >> isAccessorMethodFor: aNode [
 		and: [ statement parent parent == aNode methodNode ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isForMethod [
 	^ true
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isForMethod: aCompiledMethod [
 	^ self behavior = aCompiledMethod methodClass
 		and: [ self selector = aCompiledMethod selector ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isFromTrait [
 	^ self compiledMethod
 		ifNil: [ false ]
 		ifNotNil: [ :aMethod | aMethod isFromTrait ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isMeta [
 	"Return true if the method is implemented in the metaclass (~ class side)"
 	<return: #Boolean>
@@ -613,7 +613,7 @@ GtPharoMethodCoder >> isMeta [
 	^ self behavior isMeta
 ]
 
-{ #category : 'api - addons' }
+{ #category : #'api - addons' }
 GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
 	| variable |
 	aMethodNode arguments size ~= 1
@@ -629,12 +629,12 @@ GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
 	^ true
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isNewMethod [
 	^ self currentSourceString isEmpty
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isOverridden [
 
 	| sel |
@@ -645,7 +645,7 @@ GtPharoMethodCoder >> isOverridden [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoder >> isOverriding [
 
 	| sel |
@@ -656,14 +656,14 @@ GtPharoMethodCoder >> isOverriding [
 			  ifNotNil: [ :spr | (spr whichClassIncludesSelector: sel) notNil ] ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> methodBehavior [
 	<return: #GtPharoCoderBehavior>
 
 	^ methodBehavior
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 	self
 		assert: [ aGtMethodCoderBehavior isKindOf: GtPharoCoderBehavior ]
@@ -672,7 +672,7 @@ GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 	methodBehavior := aGtMethodCoderBehavior
 ]
 
-{ #category : 'api - refactorings' }
+{ #category : #'api - refactorings' }
 GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	| oldClass newClass model modelClass oldModelClass |
 	oldClass := self behavior.
@@ -698,7 +698,7 @@ GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	^ true
 ]
 
-{ #category : 'private - actions' }
+{ #category : #'private - actions' }
 GtPharoMethodCoder >> newMethodSource [
 	self
 		deprecated: 'Use #currentSourceString instead.'
@@ -707,7 +707,7 @@ GtPharoMethodCoder >> newMethodSource [
 	^ self currentSourceString
 ]
 
-{ #category : 'updating' }
+{ #category : #updating }
 GtPharoMethodCoder >> newRbAST: aString [
 	| ast |
 	self isModified
@@ -719,7 +719,7 @@ GtPharoMethodCoder >> newRbAST: aString [
 	^ ast
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> nodeDescription: aNode [
 	| description |
 	description := aNode source asString.
@@ -730,44 +730,44 @@ GtPharoMethodCoder >> nodeDescription: aNode [
 		with: ' ') copyReplaceAll: '	' with: ' '
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyClassAdded [
 	self announce: (GtCoderClassAdded new coder: self)
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyClassRemoved [
 	self announce: (GtCoderClassRemoved new coder: self)
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyClassRenamed [
 	self announce: (GtCoderClassRenamed new coder: self)
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyMethodAdded [
 	self announce: (GtCoderMethodAdded new coder: self)
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyMethodModified [
 	self announce: (GtCoderMethodModified new coder: self)
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyMethodRemoved [
 	self announce: (GtCoderMethodRemoved new coder: self)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> object [
 	self deprecated: 'Use GtPharoSourceCoderViewModel>>#selfObject instead'.
 
 	^ UndefinedObject
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onClassAdded: aClassAddedAnnouncement [
 	(self methodBehavior affectedByClassAdded: aClassAddedAnnouncement)
 		ifFalse: [ ^ self ].
@@ -776,7 +776,7 @@ GtPharoMethodCoder >> onClassAdded: aClassAddedAnnouncement [
 	self notifyClassAdded
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onClassRemoved: aClassRemovedAnnouncement [
 	(self methodBehavior affectedByClassRemoved: aClassRemovedAnnouncement)
 		ifFalse: [ ^ self ].
@@ -785,7 +785,7 @@ GtPharoMethodCoder >> onClassRemoved: aClassRemovedAnnouncement [
 	self notifyClassRemoved
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onClassRenamed: aClassRenamedAnnouncement [
 	(self methodBehavior affectedByClassRenamed: aClassRenamedAnnouncement)
 		ifFalse: [ ^ self ].
@@ -794,7 +794,7 @@ GtPharoMethodCoder >> onClassRenamed: aClassRenamedAnnouncement [
 	self notifyClassRenamed
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onMethodAdded: aMethodAddedAnnouncement [
 
 	(aMethodAddedAnnouncement methodAdded methodClass = self behavior
@@ -808,7 +808,7 @@ GtPharoMethodCoder >> onMethodAdded: aMethodAddedAnnouncement [
 	self notifyMethodAdded
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onMethodModified: aMethodModified [
 	| doesAffect |
 
@@ -835,7 +835,7 @@ GtPharoMethodCoder >> onMethodModified: aMethodModified [
 	self notifyMethodModified
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onMethodRemoved: aMethodRemovedAnnouncement [
 
 	(aMethodRemovedAnnouncement methodRemoved methodClass = self behavior
@@ -845,7 +845,7 @@ GtPharoMethodCoder >> onMethodRemoved: aMethodRemovedAnnouncement [
 	self notifyMethodRemoved
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> package [
 	^ super package
 		ifNil: [ self compiledMethod
@@ -853,7 +853,7 @@ GtPharoMethodCoder >> package [
 				ifNotNil: [ :method | method package ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> packageTag [
 	^ super packageTag
 		ifNil: [ self compiledMethod
@@ -867,7 +867,7 @@ GtPharoMethodCoder >> packageTag [
 										ifFalse: [ package classTagForClass: cls ] ] ] ] ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> performMethodRefactoring: refactoring [
 	[ refactoring primitiveExecute ]
 		on: RBRefactoringError
@@ -879,7 +879,7 @@ GtPharoMethodCoder >> performMethodRefactoring: refactoring [
 	^ false
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> playAllAndInspectInContext: aGtPharoSourceCoderEvaluationContext [
 	"Save and execute a method"
 
@@ -894,7 +894,7 @@ GtPharoMethodCoder >> playAllAndInspectInContext: aGtPharoSourceCoderEvaluationC
 		thenDo: [ :anEvaluationResult | self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> playAllInContext: aGtPharoSourceCoderEvaluationContext [
 	self isModified
 		ifTrue: [
@@ -907,13 +907,13 @@ GtPharoMethodCoder >> playAllInContext: aGtPharoSourceCoderEvaluationContext [
 		thenDo: [ :aResult | ]
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> playAndInspectExample [
 	self playExample.
 	self notifyObjectSpawn: self exampleResult returnValueOrExampleException
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> playAndInspectSlide [
 
 	self isModified
@@ -924,7 +924,7 @@ GtPharoMethodCoder >> playAndInspectSlide [
 	self notifyObjectSpawn: self compiledMethod gtSlide
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> playAndInspectSlideFrom: anEditorElement [
 
 	self isModified
@@ -936,7 +936,7 @@ GtPharoMethodCoder >> playAndInspectSlideFrom: anEditorElement [
 		notifyObjectSpawn: self compiledMethod gtSlide returnValueOrExampleException
 ]
 
-{ #category : 'api - actions examples' }
+{ #category : #'api - actions examples' }
 GtPharoMethodCoder >> playExample [
 	self isModified
 		ifTrue: [
@@ -946,7 +946,7 @@ GtPharoMethodCoder >> playExample [
 	self example run
 ]
 
-{ #category : 'gt-extensions' }
+{ #category : #'gt-extensions' }
 GtPharoMethodCoder >> previewElement [
 	"Return a preview element for the Spotter"
 	<return: #BlElement>
@@ -956,7 +956,7 @@ GtPharoMethodCoder >> previewElement [
 		asElement
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtPharoMethodCoder >> printOn: aStream [
 	super printOn: aStream.
 	aStream
@@ -967,7 +967,7 @@ GtPharoMethodCoder >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> protocol [
 	<return: #String or: nil>
 
@@ -978,12 +978,12 @@ GtPharoMethodCoder >> protocol [
 				ifTrue: [ self behavior whichCategoryIncludesSelector: self selector ] ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> protocol: aSymbol [
 	^ self attributeNamed: #category put: aSymbol
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> remove [
 	self coders
 		ifNotNil: [ :theCoders | theCoders removeCoder: self ].
@@ -999,13 +999,13 @@ GtPharoMethodCoder >> remove [
 	self notifyMethodRemoved
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> removeHighlightBlock [
 	^ [ :textualCoderViewModel | 
 	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
-{ #category : 'api - refactorings' }
+{ #category : #'api - refactorings' }
 GtPharoMethodCoder >> renameProtocol: aString [
 	| change |
 	self protocol: aString asSymbol.
@@ -1017,7 +1017,7 @@ GtPharoMethodCoder >> renameProtocol: aString [
 			change execute ]
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtPharoMethodCoder >> reset [
 	super reset.
 	methodBehavior := GtPharoCoderBehavior unspecified.
@@ -1025,7 +1025,7 @@ GtPharoMethodCoder >> reset [
 	self protocol: nil
 ]
 
-{ #category : 'private - refactorings' }
+{ #category : #'private - refactorings' }
 GtPharoMethodCoder >> safeTemporaryName [
 	| name index found ast |
 	name := '_'.
@@ -1044,7 +1044,7 @@ GtPharoMethodCoder >> safeTemporaryName [
 	^ name
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> save [
 	"Try to save the current method validating syntax and return `true` if save was succesful, false otherwise"
 	<return: #Boolean>
@@ -1052,7 +1052,7 @@ GtPharoMethodCoder >> save [
 	^ self saveInContext: self evaluationContext
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to save the current method validating syntax and return `true` if save was succesful, false otherwise"
 	<return: #Boolean>
@@ -1066,7 +1066,7 @@ GtPharoMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> selector [
 	"Assign an original selector which changes when the compiled method is assigned.
 	The selector of the new method is undefined (nil).
@@ -1076,12 +1076,12 @@ GtPharoMethodCoder >> selector [
 	^ selector
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoder >> selector: aSymbol [
 	selector := aSymbol
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoder >> skipBlankLinesIn: source at: startIndex [
 	| char index |
 	index := startIndex.
@@ -1090,7 +1090,7 @@ GtPharoMethodCoder >> skipBlankLinesIn: source at: startIndex [
 	^ index
 ]
 
-{ #category : 'api - addons' }
+{ #category : #'api - addons' }
 GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
 	"<gtAstCoderAddOns: 10>"
 	(self compiledMethod notNil
@@ -1099,7 +1099,7 @@ GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
 					anAST methodNode
 						ifNotNil: [ :node | 
 							node pragmas
-								anySatisfy: [ :each | each isParseError not and: [ each selector = #gtSlide ] ] ]
+								anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtSlide ] ] ]
 						ifNil: [ false ] ] ])
 		ifFalse: [ ^ self ].
 	(anAST methodNode numArgs = 1) ifFalse: [ ^ self ].
@@ -1109,13 +1109,13 @@ GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
 		action: [ :aCoderUIModel :anEvent | self playAndInspectSlide ].
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> sourceCode: aGtCoderSourceCode withStrategy: anUpdateStragegy [
 	self clearExample.
 	super sourceCode: aGtCoderSourceCode withStrategy: anUpdateStragegy
 ]
 
-{ #category : 'private - subscriptions' }
+{ #category : #'private - subscriptions' }
 GtPharoMethodCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 
@@ -1128,14 +1128,14 @@ GtPharoMethodCoder >> subscribeToSystem [
 		when: MethodModified send: #onMethodModified: to: self
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoMethodCoder >> traitSource [
 	^ self compiledMethod 
 		ifNotNil: [ :aMethod | aMethod traitSource ] 
 		ifNil: [ nil ]
 ]
 
-{ #category : 'api - addons' }
+{ #category : #'api - addons' }
 GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 20>
 	| isUnaryInstanceSideMethod isUnaryClassSideMethod |
@@ -1172,7 +1172,7 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
 ]
 
-{ #category : 'private - subscriptions' }
+{ #category : #'private - subscriptions' }
 GtPharoMethodCoder >> unsubscribeFromExample [
 	self
 		attributeNamed: #example

@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoPackageTagsCoder',
-	#superclass : 'GtCodersModel',
+	#name : #GtPharoPackageTagsCoder,
+	#superclass : #GtCodersModel,
 	#traits : 'TGtCoderTrait',
 	#classTraits : 'TGtCoderTrait classTrait',
 	#instVars : [
@@ -9,7 +9,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoPackageTagsCoder class >> forPackage: aRPackage [
 	self
 		assert: [ aRPackage notNil ]
@@ -18,19 +18,19 @@ GtPharoPackageTagsCoder class >> forPackage: aRPackage [
 	^ self new forPackage: aRPackage
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoPackageTagsCoder >> forPackage: aRPackage [
 	self forItems: aRPackage classTags asOrderedCollection
 ]
 
-{ #category : 'gt-extensions' }
+{ #category : #'gt-extensions' }
 GtPharoPackageTagsCoder >> gtLiveFor: aView [
 	<gtView>
 	
 	^ aView empty
 ]
 
-{ #category : 'gt-extensions' }
+{ #category : #'gt-extensions' }
 GtPharoPackageTagsCoder >> gtPackageTagsFor: aView [
 	<gtView>
 
@@ -41,39 +41,39 @@ GtPharoPackageTagsCoder >> gtPackageTagsFor: aView [
 		itemText: [ :eachPackageTagCoder | eachPackageTagCoder packageTagName ]
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoPackageTagsCoder >> initialize [
 	super initialize.
 	
 	
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoPackageTagsCoder >> newCoderFor: anObject [
 	^ GtPharoPackageTagCoder forPackageTag: anObject
 ]
 
-{ #category : 'private - event handling' }
+{ #category : #'private - event handling' }
 GtPharoPackageTagsCoder >> onSystemPackageRegistered: aRPackageRegistered [
 ]
 
-{ #category : 'private - event handling' }
+{ #category : #'private - event handling' }
 GtPharoPackageTagsCoder >> onSystemPackageRenamed: aRPackageRenamed [
 ]
 
-{ #category : 'private - event handling' }
+{ #category : #'private - event handling' }
 GtPharoPackageTagsCoder >> onSystemPackageTagAdded: aClassTagAdded [
 ]
 
-{ #category : 'private - event handling' }
+{ #category : #'private - event handling' }
 GtPharoPackageTagsCoder >> onSystemPackageTagRemoved: aClassTagRemoved [
 ]
 
-{ #category : 'private - event handling' }
+{ #category : #'private - event handling' }
 GtPharoPackageTagsCoder >> onSystemPackageUnregistered: aRPackageUnregistered [
 ]
 
-{ #category : 'private - subscriptions' }
+{ #category : #'private - subscriptions' }
 GtPharoPackageTagsCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 	

@@ -5,7 +5,7 @@ Class {
 		'pattern',
 		'body'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -48,6 +48,11 @@ GtPharoMethodNode >> methodNode [
 { #category : #generated }
 GtPharoMethodNode >> nodeVariables [
 	^ #(#pattern #body)
+]
+
+{ #category : #acccessing }
+GtPharoMethodNode >> numArgs [
+	^ pattern variables size
 ]
 
 { #category : #generated }

@@ -1,6 +1,6 @@
-Extension { #name : 'LiteralVariable' }
+Extension { #name : #LiteralVariable }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 LiteralVariable >> gtReferences [
 	^ GtSearchReferencesFilter literal: self
 ]

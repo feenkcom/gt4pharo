@@ -1,6 +1,6 @@
-Extension { #name : 'GtCoderModel' }
+Extension { #name : #GtCoderModel }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 GtCoderModel class >> gtAstCoderAddOnsFor: aView context: aPhlowContext [
 	<gtClassView>
 	^ aView explicit
