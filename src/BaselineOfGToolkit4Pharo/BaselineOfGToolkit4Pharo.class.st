@@ -1,22 +1,22 @@
 Class {
-	#name : 'BaselineOfGToolkit4Pharo',
-	#superclass : 'BaselineOf',
-	#category : 'BaselineOfGToolkit4Pharo'
+	#name : #BaselineOfGToolkit4Pharo,
+	#superclass : #BaselineOf,
+	#category : #BaselineOfGToolkit4Pharo
 }
 
-{ #category : 'baseline' }
+{ #category : #baseline }
 BaselineOfGToolkit4Pharo >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
 		spec
 			baseline: 'GToolkitRefactoringsUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.71/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.72/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.502/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.503/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.409/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.410/src' ].
 		spec
 			baseline: 'SmaCC' with: [
 				spec repository: 'github://j-brant/SmaCC:d45ba3e1d5fb414c17323ab1d66efc09048c07ed/src' ].
