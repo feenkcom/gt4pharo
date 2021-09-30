@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtRemoveParameterRefactoringController',
-	#superclass : 'GtVariableRefactoringController',
+	#name : #GtRemoveParameterRefactoringController,
+	#superclass : #GtVariableRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRemoveParameterRefactoringController >> refactoring [
 	| aModel aClass |
 	
@@ -18,7 +18,7 @@ GtRemoveParameterRefactoringController >> refactoring [
 		selector: sourceCoderViewModel coderModel currentSelector.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRemoveParameterRefactoringController >> refactoringName [
 	^ 'Remove parameter {1}' format: { self variableName }
 ]

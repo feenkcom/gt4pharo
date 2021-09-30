@@ -1,25 +1,25 @@
 Class {
-	#name : 'GtPharoLiteralNode',
-	#superclass : 'GtPharoValueNode',
+	#name : #GtPharoLiteralNode,
+	#superclass : #GtPharoValueNode,
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitLiteral: self
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoLiteralNode >> isLiteral [
 	^ true
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoLiteralNode >> isString [
 	^ false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoLiteralNode >> literalValue [
 	^ self subclassResponsibility
 ]

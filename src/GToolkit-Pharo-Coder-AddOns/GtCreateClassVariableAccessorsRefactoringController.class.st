@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtCreateClassVariableAccessorsRefactoringController',
-	#superclass : 'GtVariableRefactoringController',
+	#name : #GtCreateClassVariableAccessorsRefactoringController,
+	#superclass : #GtVariableRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtCreateClassVariableAccessorsRefactoringController >> refactoring [
 	| aModel aClass |
 	
@@ -18,7 +18,7 @@ GtCreateClassVariableAccessorsRefactoringController >> refactoring [
 		classVariable: true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtCreateClassVariableAccessorsRefactoringController >> refactoringName [
 	^ 'Create accessors for class variable {1}' format: { self variableName }
 ]

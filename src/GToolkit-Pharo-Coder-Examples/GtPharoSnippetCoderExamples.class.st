@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoSnippetCoderExamples',
-	#superclass : 'Object',
+	#name : #GtPharoSnippetCoderExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : 'examples - bindings' }
+{ #category : #'examples - bindings' }
 GtPharoSnippetCoderExamples >> selfBinding [
 	<gtExample>
 	| aCoderViewModel |
@@ -19,7 +19,7 @@ GtPharoSnippetCoderExamples >> selfBinding [
 	^ aCoderViewModel
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoSnippetCoderExamples >> snippetCoder [
 	<gtExample>
 	| aSnippetCoder |
@@ -31,7 +31,7 @@ GtPharoSnippetCoderExamples >> snippetCoder [
 	^ aSnippetCoder
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtPharoSnippetCoderExamples >> snippetCoderDefaultDestinationExample [
 	<gtExample>
 	| snippetCoder |
@@ -42,7 +42,7 @@ GtPharoSnippetCoderExamples >> snippetCoderDefaultDestinationExample [
 	^ snippetCoder
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtPharoSnippetCoderExamples >> snippetCoderDestinationChangeExample [
 	<gtExample>
 	| snippetCoder |
@@ -54,7 +54,7 @@ GtPharoSnippetCoderExamples >> snippetCoderDestinationChangeExample [
 	^ snippetCoder
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoSnippetCoderExamples >> snippetCoderViewModel [
 	<gtExample>
 	| aCoder aCoderViewModel expectedBindings |
@@ -77,7 +77,7 @@ GtPharoSnippetCoderExamples >> snippetCoderViewModel [
 	^ aCoderViewModel
 ]
 
-{ #category : 'examples - bindings' }
+{ #category : #'examples - bindings' }
 GtPharoSnippetCoderExamples >> superBinding [
 	<gtExample>
 	| aCoderViewModel |
@@ -92,7 +92,7 @@ GtPharoSnippetCoderExamples >> superBinding [
 	^ aCoderViewModel
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtPharoSnippetCoderExamples >> syntaxError [
 	<gtExample>
 	^ GtPharoSnippetCoder new
@@ -100,7 +100,7 @@ GtPharoSnippetCoderExamples >> syntaxError [
 		yourself
 ]
 
-{ #category : 'examples - bindings' }
+{ #category : #'examples - bindings' }
 GtPharoSnippetCoderExamples >> thisCoderBinding [
 	<gtExample>
 	| aCoderViewModel |
@@ -113,7 +113,7 @@ GtPharoSnippetCoderExamples >> thisCoderBinding [
 	^ aCoderViewModel
 ]
 
-{ #category : 'examples - bindings' }
+{ #category : #'examples - bindings' }
 GtPharoSnippetCoderExamples >> thisCoderViewModelBinding [
 	<gtExample>
 	| aCoderViewModel |
@@ -126,7 +126,7 @@ GtPharoSnippetCoderExamples >> thisCoderViewModelBinding [
 	^ aCoderViewModel
 ]
 
-{ #category : 'examples - bindings' }
+{ #category : #'examples - bindings' }
 GtPharoSnippetCoderExamples >> thisContextBinding [
 	<gtExample>
 	| aCoderViewModel |
@@ -139,7 +139,7 @@ GtPharoSnippetCoderExamples >> thisContextBinding [
 	^ aCoderViewModel
 ]
 
-{ #category : 'examples - bindings' }
+{ #category : #'examples - bindings' }
 GtPharoSnippetCoderExamples >> withoutSelfObject [
 	<gtExample>
 	| aCoderViewModel |

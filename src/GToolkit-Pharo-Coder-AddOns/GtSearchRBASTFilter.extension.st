@@ -1,6 +1,6 @@
-Extension { #name : 'GtSearchRBASTFilter' }
+Extension { #name : #GtSearchRBASTFilter }
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSearchRBASTFilter >> highlighter [
 	^ GtPharoEmptyHighlighter new
 ]

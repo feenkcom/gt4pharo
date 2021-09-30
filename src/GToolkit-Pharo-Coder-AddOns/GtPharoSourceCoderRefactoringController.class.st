@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoSourceCoderRefactoringController',
-	#superclass : 'GtSourceCoderRefactoringController',
+	#name : #GtPharoSourceCoderRefactoringController,
+	#superclass : #GtSourceCoderRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
-{ #category : 'private - attributes' }
+{ #category : #'private - attributes' }
 GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefactoring at: aTextPosition [
 	refactoringPreviewAttributes := self sourceCoderViewModel
 		addTextAttribute: (GtRefactoringChangesAttribute new refactoring: aRefactoring)
@@ -12,7 +12,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefact
 		to: aTextPosition
 ]
 
-{ #category : 'private - attributes' }
+{ #category : #'private - attributes' }
 GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefactoring at: aTextPosition whenComplete: aBlock [
 	refactoringPreviewAttributes := self sourceCoderViewModel
 		addTextAttribute:
@@ -23,7 +23,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefact
 		to: aTextPosition
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	| aModel aBehavior aProtocol aSourceString aCurrentSelector |
 	

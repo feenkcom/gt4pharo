@@ -1,20 +1,20 @@
 Class {
-	#name : 'GtDefineClassVariableFixItAction',
-	#superclass : 'GtFixItVariableNodeAction',
+	#name : #GtDefineClassVariableFixItAction,
+	#superclass : #GtFixItVariableNodeAction,
 	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineClassVariableFixItAction >> description [
 	^ 'Add class variable ' , self nodeName , ' to class ', sourceCoder behavior name
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineClassVariableFixItAction >> executeOn: anEditorElement [
 	sourceCoder addClassVariable: self nodeName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineClassVariableFixItAction >> id [
 	<return: #BlElementId>
 

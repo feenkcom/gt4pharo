@@ -1,12 +1,12 @@
 Class {
-	#name : 'GtPharoDynamicHighlightStylerExamples',
-	#superclass : 'Object',
+	#name : #GtPharoDynamicHighlightStylerExamples,
+	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 	<gtExample>
 	| aScripter |
@@ -32,7 +32,7 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 	^ aScripter
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 	<gtExample>
 	| aScripter |
@@ -57,7 +57,7 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 	^ aScripter
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
 	<gtExample>
 	| aScripter |
@@ -82,7 +82,7 @@ GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
 	^ aScripter
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> twoOccurrencesHighlighted [
 	<gtExample>
 	| aScripter |

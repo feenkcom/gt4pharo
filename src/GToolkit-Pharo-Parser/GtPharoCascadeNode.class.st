@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoCascadeNode',
-	#superclass : 'GtPharoValueNode',
+	#name : #GtPharoCascadeNode,
+	#superclass : #GtPharoValueNode,
 	#instVars : [
 		'receiver',
 		'messages',
@@ -9,68 +9,68 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitCascade: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> compositeNodeVariables [
 	^ #(#messages)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> ignoredCompositeTokenVariables [
 	^ #(#semicolons #leftParens #rightParens)
 ]
 
-{ #category : 'generated-initialize-release' }
+{ #category : #'generated-initialize-release' }
 GtPharoCascadeNode >> initialize [
 	super initialize.
 	messages := OrderedCollection new: 2.
 	semicolons := OrderedCollection new: 2.
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> messages [
 	^ messages
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> messages: anOrderedCollection [
 	self setParents: self messages to: nil.
 	messages := anOrderedCollection.
 	self setParents: self messages to: self
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCascadeNode >> needsParenthesisForKeyword [
 	^ true
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> nodeVariables [
 	^ #(#receiver)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> receiver [
 	^ receiver
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> receiver: aGtPharoValueNode [
 	self receiver notNil ifTrue: [ self receiver parent: nil ].
 	receiver := aGtPharoValueNode.
 	self receiver notNil ifTrue: [ self receiver parent: self ]
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> semicolons [
 	^ semicolons
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoCascadeNode >> semicolons: anOrderedCollection [
 	semicolons := anOrderedCollection
 ]

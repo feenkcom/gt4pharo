@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPushDownMethodRefactoringController',
-	#superclass : 'GtMethodRefactoringController',
+	#name : #GtPushDownMethodRefactoringController,
+	#superclass : #GtMethodRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPushDownMethodRefactoringController >> refactoring [
 	| model |
 	model := self createRefactoringModel.
@@ -14,7 +14,7 @@ GtPushDownMethodRefactoringController >> refactoring [
 		  from: (model classFor: self methodClass)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPushDownMethodRefactoringController >> refactoringName [
 	^ 'Push down method #' , self methodSelector
 ]

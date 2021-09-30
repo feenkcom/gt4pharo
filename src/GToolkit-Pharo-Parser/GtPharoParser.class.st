@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoParser',
-	#superclass : 'SmaCCGLRParser',
+	#name : #GtPharoParser,
+	#superclass : #SmaCCGLRParser,
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> ambiguousTransitions [
 ^#(
 #[ 0 38 1 137] 
@@ -25,12 +25,12 @@ GtPharoParser class >> ambiguousTransitions [
 	).
 ]
 
-{ #category : 'generated-accessing' }
+{ #category : #'generated-accessing' }
 GtPharoParser class >> cacheId [
 	^'2021-09-09T12:35:48.964308-05:00'
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> definitionComment [
 "%glr;
 %prefix GtPharo;
@@ -393,7 +393,7 @@ EndLiteralArray
 	;"
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> reduceTable [
 ^#(
 	#(117 0 #reduceActionForSwitchToLiteralArray1: 9074689 true) 
@@ -590,57 +590,57 @@ GtPharoParser class >> reduceTable [
 	).
 ]
 
-{ #category : 'generated-accessing' }
+{ #category : #'generated-accessing' }
 GtPharoParser class >> scannerClass [
 	^GtPharoScanner
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForKeywordMessageSend [
 	^ 5
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForMethod [
 	^ 1
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForMethodPattern [
 	^ 4
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForMethodSequence [
 	^ 2
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForPragma [
 	^ 7
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForStatement [
 	^ 3
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> startingStateForVariable [
 	^ 6
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> symbolNames [
 	^ #('"self"' '"super"' '"thisContext"' '<true>' '<false>' '<nil>' '<name>' '<nameAssignment>' '<bar>' '<string>' '<symbol>' '<character>' '<number>' '<negativeNumber>' '<literalArrayKeyword>' '<return>' '<lt>' '<gt>' '<leftBrace>' '<leftBracket>' '<colon>' '<leftParen>' '<literalArrayStart>' '<byteArrayStart>' '<rightParen>' '<rightBracket>' '<rightBrace>' '<keyword>' '<binary>' '<semicolon>' '<assign>' '<period>' '<comment>' '<whitespace>' '<patternToken>' 'B e g i n' 'Method' 'MethodPattern' '(<keyword> ''selectorPart'' Variable ''variable'')' '(<keyword> ''selectorPart'' Variable ''variable'')+' 'TemplatePattern' '(TemplateKeywordPattern KeywordPattern?)' '(TemplateKeywordPattern KeywordPattern?)+' 'TemplateWithName' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)+' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)*' 'TemplateKeywordPattern' 'TemplateKeyword' 'TemplateNameContinuationPart' 'TemplateNamePart' 'Pragmas' 'Pragma ''pragma''+' 'Pragma' '(<keyword> ''selectorPart'' PragmaArgument)' '(<keyword> ''selectorPart'' PragmaArgument)+' 'PragmaArgument' 'TemplatePragma' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)+' 'KeywordPattern' 'MethodSequence' '<period> ''period''+' 'Sequence' 'Temporaries' 'Variable ''variable''*' 'Statements' 'StatementList' 'Statement' 'Assignment' 'Cascade' 'CascadedMessages' '(<semicolon> ''semicolon'' CascadedMessage ''message'')' '(<semicolon> ''semicolon'' CascadedMessage ''message'')+' 'CascadedMessage' 'KeywordMessageSend' 'KeywordMessageSendVars' 'KeywordMessage' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')+' 'TemplateKeywordMessage' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)+' 'BinaryMessageSend' 'BinaryMessageSendVars' 'BinaryMessage' 'UnaryMessageSend' 'UnaryMessageSendVars' 'UnaryMessage' 'TemplateUnaryMessage' 'Variable' 'NamedVariable' 'TemplateVariable' 'MidTemplate' 'StartTemplate' 'Value' 'Array' '(<period> ''period''+ Assignment ''value'')' '(<period> ''period''+ Assignment ''value'')*' 'Block' '(<colon> ''colon'' Variable ''variable'')' '(<colon> ''colon'' Variable ''variable'')+' 'BlockArgs' 'Literal' 'StringLiteral' 'NumberLiteral' 'ArrayLiteral' 'ArrayLiteralValue ''value''*' 'ArrayLiteralValue' 'ByteArrayLiteral' 'ByteArrayLiteralValue ''value''*' 'ByteArrayLiteralValue' 'CharacterLiteral' 'SymbolLiteral' 'BooleanLiteral' 'NilLiteral' 'SwitchToLiteralArray' 'EndLiteralArray' '<doubleLeftBrace>' '<doubleLeftBraceStart>' '<doubleRightBrace>' '<templateKeyword>' '<templateNamePart>' 'E O F' 'error')
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> symbolTypes [
 	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #GtPharoMethodNode #GtPharoMethodNode #GtPharoMethodPatternNode #OrderedCollection #OrderedCollection #GtPharoTemplatePatternNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoTemplateNamePartNode #GtPharoTemplateNamePartNode #OrderedCollection #OrderedCollection #GtPharoPragmaNode #OrderedCollection #OrderedCollection #GtPharoValueNode #GtPharoTemplatePragmaNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoSequenceNode #OrderedCollection #GtPharoSequenceNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoProgramNode #GtPharoValueNode #GtPharoValueNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoMessageNode #GtPharoValueNode #OrderedCollection #GtPharoKeywordMessageNode #OrderedCollection #OrderedCollection #GtPharoTemplateKeywordMessageNode #OrderedCollection #OrderedCollection #GtPharoValueNode #OrderedCollection #GtPharoBinaryMessageNode #GtPharoValueNode #OrderedCollection #GtPharoUnaryMessageNode #GtPharoTemplateUnaryMessageNode #GtPharoValueNode #GtPharoNamedVariableNode #GtPharoTemplateVariableNode #GtPharoTemplateNode #GtPharoTemplateNode #GtPharoValueNode #GtPharoArrayNode #OrderedCollection #OrderedCollection #GtPharoBlockNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoLiteralNode #GtPharoStringLiteralNode #GtPharoNumberLiteralNode #GtPharoArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoByteArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoCharacterLiteralNode #GtPharoSymbolLiteralNode #GtPharoBooleanLiteralNode #GtPharoNilLiteralNode #ByteSymbol nil #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCErrorNode)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoParser class >> transitionTable [
 ^#(
 #[1 0 33 0 7 0 37 0 28 0 41 0 29 0 45 0 37 0 49 0 38 0 53 0 39 0 57 0 40 0 49 0 41 0 65 0 42 0 69 0 43 0 73 0 44 0 77 0 48 0 81 0 49 0 85 0 51 0 89 0 61 0 93 0 95 0 97 0 120] 
@@ -899,7 +899,7 @@ GtPharoParser class >> transitionTable [
 	).
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoParser >> actionsForCurrentToken [
 	| actions |
 	actions := super actionsForCurrentToken.
@@ -927,7 +927,7 @@ GtPharoParser >> actionsForCurrentToken [
 	^ actions
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoParser >> endLiteralArray [
 	(nodeStack
 		inject: 0
@@ -940,7 +940,7 @@ GtPharoParser >> endLiteralArray [
 		ifTrue: [ self scope: #default ]
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForArray1: nodes [
 	| result |
 	result := GtPharoArrayNode new.
@@ -949,7 +949,7 @@ GtPharoParser >> reduceActionForArray1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForArray2: nodes [
 	| result |
 	result := GtPharoArrayNode new.
@@ -959,7 +959,7 @@ GtPharoParser >> reduceActionForArray2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForArray3: nodes [
 	| result |
 	result := GtPharoArrayNode new.
@@ -971,7 +971,7 @@ GtPharoParser >> reduceActionForArray3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForArray4: nodes [
 	| result |
 	result := GtPharoArrayNode new.
@@ -984,7 +984,7 @@ GtPharoParser >> reduceActionForArray4: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForArrayLiteral1: nodes [
 	| result |
 	result := GtPharoArrayLiteralNode new.
@@ -994,7 +994,7 @@ GtPharoParser >> reduceActionForArrayLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForArrayLiteralValue8: nodes [
 	| result |
 	result := GtPharoArrayLiteralNode new.
@@ -1004,7 +1004,7 @@ GtPharoParser >> reduceActionForArrayLiteralValue8: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForAssignment1: nodes [
 	| result |
 	result := GtPharoAssignmentNode new.
@@ -1014,7 +1014,7 @@ GtPharoParser >> reduceActionForAssignment1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBinaryMessage1: nodes [
 	| result |
 	result := GtPharoBinaryMessageNode new.
@@ -1023,7 +1023,7 @@ GtPharoParser >> reduceActionForBinaryMessage1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBlock1: nodes [
 	| result |
 	result := GtPharoBlockNode new.
@@ -1036,7 +1036,7 @@ GtPharoParser >> reduceActionForBlock1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBlock2: nodes [
 	| result |
 	result := GtPharoBlockNode new.
@@ -1047,7 +1047,7 @@ GtPharoParser >> reduceActionForBlock2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBlock3: nodes [
 	| result |
 	result := GtPharoBlockErrorNode new.
@@ -1060,7 +1060,7 @@ GtPharoParser >> reduceActionForBlock3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBlockArgs1: nodes [
 	| result |
 	result := Array new: 3.
@@ -1069,7 +1069,7 @@ GtPharoParser >> reduceActionForBlockArgs1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBlockArgs2: nodes [
 	| result |
 	result := Array new: 3.
@@ -1081,7 +1081,7 @@ GtPharoParser >> reduceActionForBlockArgs2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForBooleanLiteral1: nodes [
 	| result |
 	result := GtPharoBooleanLiteralNode new.
@@ -1089,7 +1089,7 @@ GtPharoParser >> reduceActionForBooleanLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForByteArrayLiteral1: nodes [
 	| result |
 	result := GtPharoByteArrayLiteralNode new.
@@ -1099,7 +1099,7 @@ GtPharoParser >> reduceActionForByteArrayLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForCascade1: nodes [
 	| result |
 	result := GtPharoCascadeNode new.
@@ -1110,7 +1110,7 @@ GtPharoParser >> reduceActionForCascade1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForCharacterLiteral1: nodes [
 	| result |
 	result := GtPharoCharacterLiteralNode new.
@@ -1118,13 +1118,13 @@ GtPharoParser >> reduceActionForCharacterLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForEndLiteralArray1: nodes [
 	self endLiteralArray.
 	^ nil
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForKeywordMessage1: nodes [
 	| result |
 	result := GtPharoKeywordMessageNode new.
@@ -1133,7 +1133,7 @@ GtPharoParser >> reduceActionForKeywordMessage1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForKeywordMessageSend1: nodes [
 	| result |
 	result := GtPharoMessageSendNode new.
@@ -1142,14 +1142,14 @@ GtPharoParser >> reduceActionForKeywordMessageSend1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForKeywordPattern1: nodes [
 	| result |
 	result := nodes at: 1.
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethod1: nodes [
 	| result |
 	result := GtPharoMethodNode new.
@@ -1158,7 +1158,7 @@ GtPharoParser >> reduceActionForMethod1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodPattern1: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
@@ -1166,7 +1166,7 @@ GtPharoParser >> reduceActionForMethodPattern1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodPattern2: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
@@ -1175,7 +1175,7 @@ GtPharoParser >> reduceActionForMethodPattern2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodPattern3: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
@@ -1184,7 +1184,7 @@ GtPharoParser >> reduceActionForMethodPattern3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodPattern6: nodes [
 	| result |
 	result := GtPharoErrorPatternNode new.
@@ -1193,7 +1193,7 @@ GtPharoParser >> reduceActionForMethodPattern6: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodPattern7: nodes [
 	| result |
 	result := GtPharoErrorPatternNode new.
@@ -1204,7 +1204,7 @@ GtPharoParser >> reduceActionForMethodPattern7: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence10: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1214,7 +1214,7 @@ GtPharoParser >> reduceActionForMethodSequence10: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence11: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1223,7 +1223,7 @@ GtPharoParser >> reduceActionForMethodSequence11: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence12: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1234,7 +1234,7 @@ GtPharoParser >> reduceActionForMethodSequence12: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence13: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1245,7 +1245,7 @@ GtPharoParser >> reduceActionForMethodSequence13: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence14: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1258,7 +1258,7 @@ GtPharoParser >> reduceActionForMethodSequence14: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence15: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1270,7 +1270,7 @@ GtPharoParser >> reduceActionForMethodSequence15: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence16: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1284,7 +1284,7 @@ GtPharoParser >> reduceActionForMethodSequence16: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence1: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1296,7 +1296,7 @@ GtPharoParser >> reduceActionForMethodSequence1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence2: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1310,7 +1310,7 @@ GtPharoParser >> reduceActionForMethodSequence2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence3: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1323,7 +1323,7 @@ GtPharoParser >> reduceActionForMethodSequence3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence4: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1338,7 +1338,7 @@ GtPharoParser >> reduceActionForMethodSequence4: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence5: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1349,7 +1349,7 @@ GtPharoParser >> reduceActionForMethodSequence5: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence6: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1362,7 +1362,7 @@ GtPharoParser >> reduceActionForMethodSequence6: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence7: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1374,7 +1374,7 @@ GtPharoParser >> reduceActionForMethodSequence7: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence8: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1388,7 +1388,7 @@ GtPharoParser >> reduceActionForMethodSequence8: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForMethodSequence9: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
@@ -1396,7 +1396,7 @@ GtPharoParser >> reduceActionForMethodSequence9: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForNamedVariable1: nodes [
 	| result |
 	result := GtPharoNamedVariableNode new.
@@ -1404,7 +1404,7 @@ GtPharoParser >> reduceActionForNamedVariable1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForNilLiteral1: nodes [
 	| result |
 	result := GtPharoNilLiteralNode new.
@@ -1412,7 +1412,7 @@ GtPharoParser >> reduceActionForNilLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForNumberLiteral1: nodes [
 	| result |
 	result := GtPharoNumberLiteralNode new.
@@ -1420,7 +1420,7 @@ GtPharoParser >> reduceActionForNumberLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForPragma1: nodes [
 	| result |
 	result := GtPharoPragmaNode new.
@@ -1430,7 +1430,7 @@ GtPharoParser >> reduceActionForPragma1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForPragma2: nodes [
 	| result |
 	result := GtPharoPragmaNode new.
@@ -1441,7 +1441,7 @@ GtPharoParser >> reduceActionForPragma2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForPragma4: nodes [
 	| result |
 	result := GtPharoPragmaErrorNode new.
@@ -1450,7 +1450,7 @@ GtPharoParser >> reduceActionForPragma4: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForPragma5: nodes [
 	| result |
 	result := GtPharoPragmaErrorNode new.
@@ -1460,7 +1460,7 @@ GtPharoParser >> reduceActionForPragma5: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForPragma__pragma__2: nodes [
 	| result |
 	result := nodes at: 1.
@@ -1468,14 +1468,14 @@ GtPharoParser >> reduceActionForPragma__pragma__2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence1: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence2: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1484,7 +1484,7 @@ GtPharoParser >> reduceActionForSequence2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence3: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1492,7 +1492,7 @@ GtPharoParser >> reduceActionForSequence3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence4: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1502,7 +1502,7 @@ GtPharoParser >> reduceActionForSequence4: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence5: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1512,7 +1512,7 @@ GtPharoParser >> reduceActionForSequence5: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence6: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1524,7 +1524,7 @@ GtPharoParser >> reduceActionForSequence6: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence7: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1535,7 +1535,7 @@ GtPharoParser >> reduceActionForSequence7: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSequence8: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
@@ -1548,7 +1548,7 @@ GtPharoParser >> reduceActionForSequence8: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForStartTemplate1: nodes [
 	| result |
 	result := GtPharoTemplateNode new.
@@ -1558,7 +1558,7 @@ GtPharoParser >> reduceActionForStartTemplate1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForStatement1: nodes [
 	| result |
 	result := GtPharoReturnNode new.
@@ -1567,7 +1567,7 @@ GtPharoParser >> reduceActionForStatement1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForStatementList1: nodes [
 	| result |
 	result := Array new: 2.
@@ -1577,7 +1577,7 @@ GtPharoParser >> reduceActionForStatementList1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForStatementList2: nodes [
 	| result |
 	result := nodes at: 1.
@@ -1586,7 +1586,7 @@ GtPharoParser >> reduceActionForStatementList2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForStatements2: nodes [
 	| result |
 	result := nodes at: 1.
@@ -1594,7 +1594,7 @@ GtPharoParser >> reduceActionForStatements2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForStringLiteral1: nodes [
 	| result |
 	result := GtPharoStringLiteralNode new.
@@ -1602,13 +1602,13 @@ GtPharoParser >> reduceActionForStringLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSwitchToLiteralArray1: nodes [
 	self scope: #literalArray.
 	^ #array
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForSymbolLiteral1: nodes [
 	| result |
 	result := GtPharoSymbolLiteralNode new.
@@ -1616,7 +1616,7 @@ GtPharoParser >> reduceActionForSymbolLiteral1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateKeyword2: nodes [
 	| result |
 	result := Array new: 2.
@@ -1626,7 +1626,7 @@ GtPharoParser >> reduceActionForTemplateKeyword2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateKeywordMessage1: nodes [
 	| result |
 	result := GtPharoTemplateKeywordMessageNode new.
@@ -1636,7 +1636,7 @@ GtPharoParser >> reduceActionForTemplateKeywordMessage1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateKeywordMessage2: nodes [
 	| result |
 	result := GtPharoTemplateKeywordMessageNode new.
@@ -1648,7 +1648,7 @@ GtPharoParser >> reduceActionForTemplateKeywordMessage2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateKeywordPattern1: nodes [
 	| result |
 	result := Array new: 3.
@@ -1659,7 +1659,7 @@ GtPharoParser >> reduceActionForTemplateKeywordPattern1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateNamePart1: nodes [
 	| result |
 	result := GtPharoTemplateNamePartNode new.
@@ -1667,7 +1667,7 @@ GtPharoParser >> reduceActionForTemplateNamePart1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplatePattern1: nodes [
 	| result |
 	result := GtPharoTemplatePatternNode new.
@@ -1675,7 +1675,7 @@ GtPharoParser >> reduceActionForTemplatePattern1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplatePattern2: nodes [
 	| result |
 	result := GtPharoTemplatePatternNode new.
@@ -1685,7 +1685,7 @@ GtPharoParser >> reduceActionForTemplatePattern2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplatePattern3: nodes [
 	| result |
 	result := GtPharoTemplatePatternNode new.
@@ -1697,7 +1697,7 @@ GtPharoParser >> reduceActionForTemplatePattern3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplatePragma1: nodes [
 	| result |
 	result := GtPharoTemplatePragmaNode new.
@@ -1707,7 +1707,7 @@ GtPharoParser >> reduceActionForTemplatePragma1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplatePragma2: nodes [
 	| result |
 	result := GtPharoTemplatePragmaNode new.
@@ -1719,7 +1719,7 @@ GtPharoParser >> reduceActionForTemplatePragma2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplatePragma3: nodes [
 	| result |
 	result := GtPharoTemplatePragmaNode new.
@@ -1733,7 +1733,7 @@ GtPharoParser >> reduceActionForTemplatePragma3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateUnaryMessage1: nodes [
 	| result |
 	result := GtPharoTemplateUnaryMessageNode new.
@@ -1741,7 +1741,7 @@ GtPharoParser >> reduceActionForTemplateUnaryMessage1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateVariable1: nodes [
 	| result |
 	result := GtPharoTemplateVariableNode new.
@@ -1749,7 +1749,7 @@ GtPharoParser >> reduceActionForTemplateVariable1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateWithName1: nodes [
 	| result |
 	result := nodes at: 2.
@@ -1757,7 +1757,7 @@ GtPharoParser >> reduceActionForTemplateWithName1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemplateWithName3: nodes [
 	| result |
 	result := nodes at: 3.
@@ -1766,7 +1766,7 @@ GtPharoParser >> reduceActionForTemplateWithName3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForTemporaries1: nodes [
 	| result |
 	result := Array new: 3.
@@ -1777,7 +1777,7 @@ GtPharoParser >> reduceActionForTemporaries1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForUnaryMessage1: nodes [
 	| result |
 	result := GtPharoUnaryMessageNode new.
@@ -1785,7 +1785,7 @@ GtPharoParser >> reduceActionForUnaryMessage1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForValue5: nodes [
 	| result |
 	result := nodes at: 2.
@@ -1794,7 +1794,7 @@ GtPharoParser >> reduceActionForValue5: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForValue6: nodes [
 	| result |
 	result := GtPharoErrorNode new.
@@ -1802,7 +1802,7 @@ GtPharoParser >> reduceActionForValue6: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForVariable1: nodes [
 	| result |
 	result := GtPharoSelfVariableNode new.
@@ -1810,7 +1810,7 @@ GtPharoParser >> reduceActionForVariable1: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForVariable2: nodes [
 	| result |
 	result := GtPharoSuperVariableNode new.
@@ -1818,7 +1818,7 @@ GtPharoParser >> reduceActionForVariable2: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionForVariable3: nodes [
 	| result |
 	result := GtPharoThisContextVariableNode new.
@@ -1826,7 +1826,7 @@ GtPharoParser >> reduceActionForVariable3: nodes [
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: nodes [
 	| result |
 	result := OrderedCollection new: 2.
@@ -1835,14 +1835,14 @@ GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: nodes [
 	| result |
 	result := OrderedCollection new: 2.
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: nodes [
 	| result |
 	result := nodes at: 1.
@@ -1850,7 +1850,7 @@ GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: nodes [
 	| result |
 	result := Array new: 3.
@@ -1863,7 +1863,7 @@ GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: nodes
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: nodes [
 	| result |
 	result := Array new: 3.
@@ -1878,7 +1878,7 @@ GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: nodes
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: nodes [
 	| result |
 	result := nodes at: 2.
@@ -1888,7 +1888,7 @@ GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: node
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: nodes [
 	| result |
 	result := Array new: 3.
@@ -1901,7 +1901,7 @@ GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___sele
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: nodes [
 	| result |
 	result := Array new: 3.
@@ -1916,7 +1916,7 @@ GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___sele
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable__1: nodes [
 	| result |
 	result := Array new: 2.
@@ -1925,7 +1925,7 @@ GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable__1:
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___1: nodes [
 	| result |
 	result := Array new: 2.
@@ -1936,7 +1936,7 @@ GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___1
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___2: nodes [
 	| result |
 	result := nodes at: 1.
@@ -1945,7 +1945,7 @@ GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___2
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor__period___period___Assignment__value___1: nodes [
 	| result |
 	result := Array new: 2.
@@ -1954,7 +1954,7 @@ GtPharoParser >> reduceActionFor__period___period___Assignment__value___1: nodes
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor__period___period___Assignment__value___2: nodes [
 	| result |
 	result := nodes at: 1.
@@ -1963,7 +1963,7 @@ GtPharoParser >> reduceActionFor__period___period___Assignment__value___2: nodes
 	^ result
 ]
 
-{ #category : 'generated-reduction actions' }
+{ #category : #'generated-reduction actions' }
 GtPharoParser >> reduceActionFor_period___period__1: nodes [
 	| result |
 	result := OrderedCollection new: 2.

@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtInlineSelfSendsRefactoringController',
-	#superclass : 'GtMethodRefactoringController',
+	#name : #GtInlineSelfSendsRefactoringController,
+	#superclass : #GtMethodRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtInlineSelfSendsRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createRefactoringModel.
@@ -16,7 +16,7 @@ GtInlineSelfSendsRefactoringController >> refactoring [
 	^ refactoring
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtInlineSelfSendsRefactoringController >> refactoringName [
 	^ 'Inline all self sends to ' , methodNode selector
 ]

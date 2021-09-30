@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoDynamicHighlightStyler',
-	#superclass : 'GtGenericPharoStyler',
+	#name : #GtPharoDynamicHighlightStyler,
+	#superclass : #GtGenericPharoStyler,
 	#category : 'GToolkit-Pharo-Coder-AddOns-DynamicHighlight'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDynamicHighlightStyler >> visitKeywordMessage: aKeywordMessage [
 	super visitKeywordMessage: aKeywordMessage.
 	aKeywordMessage selectorParts size > 1 ifFalse: [^ self].
@@ -22,7 +22,7 @@ GtPharoDynamicHighlightStyler >> visitKeywordMessage: aKeywordMessage [
 				aTextEditor text clearAttributesOfClass: GtPharoDynamicHighlightAttribute ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDynamicHighlightStyler >> visitNamedVariable: aNamedVariable [
 	| occurrences |
 	super visitNamedVariable: aNamedVariable.

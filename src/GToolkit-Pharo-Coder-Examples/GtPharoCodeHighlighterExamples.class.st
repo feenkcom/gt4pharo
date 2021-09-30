@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoCodeHighlighterExamples',
-	#superclass : 'Object',
+	#name : #GtPharoCodeHighlighterExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : 'ast pattern' }
+{ #category : #'ast pattern' }
 GtPharoCodeHighlighterExamples >> astPatternIfTrueIfFalse [
 	<gtExample>
 	<noTest>
@@ -24,7 +24,7 @@ GtPharoCodeHighlighterExamples >> astPatternIfTrueIfFalse [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'comments reference' }
+{ #category : #'comments reference' }
 GtPharoCodeHighlighterExamples >> commentReferenceA [
 	<gtExample>
 	| theIntervals |
@@ -38,7 +38,7 @@ GtPharoCodeHighlighterExamples >> commentReferenceA [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'comments reference' }
+{ #category : #'comments reference' }
 GtPharoCodeHighlighterExamples >> commentReferenceFalse [
 	<gtExample>
 	| theIntervals |
@@ -52,7 +52,7 @@ GtPharoCodeHighlighterExamples >> commentReferenceFalse [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'comments reference' }
+{ #category : #'comments reference' }
 GtPharoCodeHighlighterExamples >> commentReferenceNotFound [
 	<gtExample>
 	| theIntervals |
@@ -66,7 +66,7 @@ GtPharoCodeHighlighterExamples >> commentReferenceNotFound [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCodeHighlighterExamples >> exampleMethodAst [
 	<gtExample>
 	| anAst |
@@ -80,12 +80,12 @@ GtPharoCodeHighlighterExamples >> exampleMethodAst [
 	^ anAst
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCodeHighlighterExamples >> exampleMethodSelector [
 	^ #exampleWithNumber:
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCodeHighlighterExamples >> exampleWithNumber: x [
     "A method that illustrates every part of Smalltalk method syntax
     except primitives. It has unary, binary, and keyword messages,
@@ -107,7 +107,7 @@ GtPharoCodeHighlighterExamples >> exampleWithNumber: x [
     ^x < y
 ]
 
-{ #category : 'implementor' }
+{ #category : #implementor }
 GtPharoCodeHighlighterExamples >> implementorOtherMethod [
 	<gtExample>
 	| theIntervals |
@@ -121,7 +121,7 @@ GtPharoCodeHighlighterExamples >> implementorOtherMethod [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'implementor pattern' }
+{ #category : #'implementor pattern' }
 GtPharoCodeHighlighterExamples >> implementorPatternPart [
 	<gtExample>
 	| theIntervals |
@@ -135,7 +135,7 @@ GtPharoCodeHighlighterExamples >> implementorPatternPart [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'implementor pattern' }
+{ #category : #'implementor pattern' }
 GtPharoCodeHighlighterExamples >> implementorPatternSelector [
 	<gtExample>
 	| theIntervals |
@@ -149,7 +149,7 @@ GtPharoCodeHighlighterExamples >> implementorPatternSelector [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'implementor pattern' }
+{ #category : #'implementor pattern' }
 GtPharoCodeHighlighterExamples >> implementorPatternSelf [
 	<gtExample>
 	| theIntervals |
@@ -163,7 +163,7 @@ GtPharoCodeHighlighterExamples >> implementorPatternSelf [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'implementor' }
+{ #category : #implementor }
 GtPharoCodeHighlighterExamples >> implementorThisMethod [
 	<gtExample>
 	| theIntervals |
@@ -177,7 +177,7 @@ GtPharoCodeHighlighterExamples >> implementorThisMethod [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'pragma' }
+{ #category : #pragma }
 GtPharoCodeHighlighterExamples >> pragmaOtherMethod [
 	<gtExample>
 	| theIntervals |
@@ -191,7 +191,7 @@ GtPharoCodeHighlighterExamples >> pragmaOtherMethod [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'pragma' }
+{ #category : #pragma }
 GtPharoCodeHighlighterExamples >> pragmaThisMethod [
 	<gtExample>
 	| theIntervals |
@@ -205,7 +205,7 @@ GtPharoCodeHighlighterExamples >> pragmaThisMethod [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'pragma' }
+{ #category : #pragma }
 GtPharoCodeHighlighterExamples >> pragmaThisMethodWithoutColons [
 	<gtExample>
 	| theIntervals |
@@ -219,7 +219,7 @@ GtPharoCodeHighlighterExamples >> pragmaThisMethodWithoutColons [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'selector and literal reference' }
+{ #category : #'selector and literal reference' }
 GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceA [
 	<gtExample>
 	| theIntervals |
@@ -233,7 +233,7 @@ GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceA [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'selector and literal reference' }
+{ #category : #'selector and literal reference' }
 GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceIfTrue [
 	<gtExample>
 	| theIntervals |
@@ -247,7 +247,7 @@ GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceIfTrue [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'selector and literal reference' }
+{ #category : #'selector and literal reference' }
 GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceIfTrueIfFalse [
 	<gtExample>
 	| theIntervals |
@@ -261,7 +261,7 @@ GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceIfTrueIfFalse [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'selector and literal reference' }
+{ #category : #'selector and literal reference' }
 GtPharoCodeHighlighterExamples >> selectorAndLiteralReferencePostcard [
 	<gtExample>
 	| theIntervals |
@@ -275,7 +275,7 @@ GtPharoCodeHighlighterExamples >> selectorAndLiteralReferencePostcard [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'selector and literal reference' }
+{ #category : #'selector and literal reference' }
 GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceShow [
 	<gtExample>
 	| theIntervals |
@@ -289,7 +289,7 @@ GtPharoCodeHighlighterExamples >> selectorAndLiteralReferenceShow [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring' }
+{ #category : #substring }
 GtPharoCodeHighlighterExamples >> substringInComment [
 	<gtExample>
 	| theIntervals |
@@ -303,7 +303,7 @@ GtPharoCodeHighlighterExamples >> substringInComment [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring literal' }
+{ #category : #'substring literal' }
 GtPharoCodeHighlighterExamples >> substringLiteralClass [
 	<gtExample>
 	| theIntervals |
@@ -318,7 +318,7 @@ GtPharoCodeHighlighterExamples >> substringLiteralClass [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring literal' }
+{ #category : #'substring literal' }
 GtPharoCodeHighlighterExamples >> substringLiteralEachCaseInsensitive [
 	<gtExample>
 	| theIntervals |
@@ -333,7 +333,7 @@ GtPharoCodeHighlighterExamples >> substringLiteralEachCaseInsensitive [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring literal' }
+{ #category : #'substring literal' }
 GtPharoCodeHighlighterExamples >> substringLiteralEachCaseSensitive [
 	<gtExample>
 	| theIntervals |
@@ -348,7 +348,7 @@ GtPharoCodeHighlighterExamples >> substringLiteralEachCaseSensitive [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring literal' }
+{ #category : #'substring literal' }
 GtPharoCodeHighlighterExamples >> substringLiteralNotFound [
 	<gtExample>
 	| theIntervals |
@@ -363,7 +363,7 @@ GtPharoCodeHighlighterExamples >> substringLiteralNotFound [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring literal' }
+{ #category : #'substring literal' }
 GtPharoCodeHighlighterExamples >> substringLiteralSpace [
 	<gtExample>
 	| theIntervals |
@@ -378,7 +378,7 @@ GtPharoCodeHighlighterExamples >> substringLiteralSpace [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring' }
+{ #category : #substring }
 GtPharoCodeHighlighterExamples >> substringNotFound [
 	<gtExample>
 	| theIntervals |
@@ -392,7 +392,7 @@ GtPharoCodeHighlighterExamples >> substringNotFound [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'substring' }
+{ #category : #substring }
 GtPharoCodeHighlighterExamples >> substringSelf [
 	<gtExample>
 	| theIntervals |
@@ -406,7 +406,7 @@ GtPharoCodeHighlighterExamples >> substringSelf [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'variable reference' }
+{ #category : #'variable reference' }
 GtPharoCodeHighlighterExamples >> variableReferenceNotFound [
 	<gtExample>
 	| theIntervals |
@@ -420,7 +420,7 @@ GtPharoCodeHighlighterExamples >> variableReferenceNotFound [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'variable reference' }
+{ #category : #'variable reference' }
 GtPharoCodeHighlighterExamples >> variableReferenceX [
 	<gtExample>
 	| theIntervals |
@@ -434,7 +434,7 @@ GtPharoCodeHighlighterExamples >> variableReferenceX [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'variable reference' }
+{ #category : #'variable reference' }
 GtPharoCodeHighlighterExamples >> variableReferenceY [
 	<gtExample>
 	| theIntervals |
@@ -448,7 +448,7 @@ GtPharoCodeHighlighterExamples >> variableReferenceY [
 	^ self visualiseIntervals: theIntervals
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCodeHighlighterExamples >> visualiseIntervals: aCollectionOfIntervals [
 	| aText |
 	

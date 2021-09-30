@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtMoveVariableRefactoringController',
-	#superclass : 'GtVariableRefactoringController',
+	#name : #GtMoveVariableRefactoringController,
+	#superclass : #GtVariableRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMoveVariableRefactoringController >> refactoring [
 	| model |
 	model := self createRefactoringModel..
@@ -15,12 +15,12 @@ GtMoveVariableRefactoringController >> refactoring [
 		  selector: sourceCoderViewModel selector
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMoveVariableRefactoringController >> refactoringName [
 	^ 'Move variable to inner scope'
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtMoveVariableRefactoringController >> safelyExecute [
 	| refactoring newSource |
 	refactoring := self refactoring.

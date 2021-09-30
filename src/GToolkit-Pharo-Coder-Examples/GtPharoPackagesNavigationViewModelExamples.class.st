@@ -1,18 +1,18 @@
 Class {
-	#name : 'GtPharoPackagesNavigationViewModelExamples',
-	#superclass : 'Object',
+	#name : #GtPharoPackagesNavigationViewModelExamples,
+	#superclass : #Object,
 	#instVars : [
 		'environment'
 	],
 	#category : 'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
-{ #category : 'cleanup' }
+{ #category : #cleanup }
 GtPharoPackagesNavigationViewModelExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]
 
-{ #category : 'examples - coders' }
+{ #category : #'examples - coders' }
 GtPharoPackagesNavigationViewModelExamples >> packagesNavigationViewModel [
 	<gtExample>
 	<after: #cleanUp>

@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtFixItStyler',
-	#superclass : 'GtGenericPharoStyler',
+	#name : #GtFixItStyler,
+	#superclass : #GtGenericPharoStyler,
 	#instVars : [
 		'isForWorkspace',
 		'hasRefactoring',
@@ -9,7 +9,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : 'private - variables' }
+{ #category : #'private - variables' }
 GtFixItStyler >> canAddInstanceVariable: aString to: aClass [
 	(Object includesBehavior: aClass)
 		ifTrue: [ ^ false ].
@@ -20,14 +20,14 @@ GtFixItStyler >> canAddInstanceVariable: aString to: aClass [
 		do: [ :ex | ex return: false ]
 ]
 
-{ #category : 'private - variables' }
+{ #category : #'private - variables' }
 GtFixItStyler >> fixItActionsForVariable: aVariableNode [
 	^ aVariableNode variableName first isUppercase
 		ifTrue: [ self globalFixItActionsFor: aVariableNode ]
 		ifFalse: [ self localFixItActionsFor: aVariableNode ]
 ]
 
-{ #category : 'private - variables' }
+{ #category : #'private - variables' }
 GtFixItStyler >> globalFixItActionsFor: aVariableNode [
 	| theFixitActions results |
 
@@ -60,7 +60,7 @@ GtFixItStyler >> globalFixItActionsFor: aVariableNode [
 	^ theFixitActions
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtFixItStyler >> hasRefactoring [
 	hasRefactoring
 		ifNotNil: [ ^ hasRefactoring ].
@@ -69,19 +69,19 @@ GtFixItStyler >> hasRefactoring [
 		eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtFixItStyler >> initialize [
 	super initialize.
 
 	isForWorkspace := false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtFixItStyler >> isForWorkspace: aBoolean [
 	isForWorkspace := aBoolean
 ]
 
-{ #category : 'private - variables' }
+{ #category : #'private - variables' }
 GtFixItStyler >> localFixItActionsFor: aVariableNode [
 	| theFixitActions possibleNames |
 
@@ -110,12 +110,12 @@ GtFixItStyler >> localFixItActionsFor: aVariableNode [
 	^ theFixitActions
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtFixItStyler >> sourceCoder [
 	^ self coderViewModel coderModel
 ]
 
-{ #category : 'api - styling' }
+{ #category : #'api - styling' }
 GtFixItStyler >> style: aText ast: theAst [
 	hasRefactoring := nil.
 	variableBindings := self coderViewModel compositeVariableBindings.
@@ -123,7 +123,7 @@ GtFixItStyler >> style: aText ast: theAst [
 		ensure: [ variableBindings := nil ]
 ]
 
-{ #category : 'private - messages' }
+{ #category : #'private - messages' }
 GtFixItStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
 		typeOf: aGtPharoProgramNode
@@ -133,7 +133,7 @@ GtFixItStyler >> typeOf: aGtPharoProgramNode [
 		bindings: variableBindings
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtFixItStyler >> visitMessageSend: aNode [
 	| hasActiveRefactoring theNodeType theClassForSelector attribute |
 	super visitMessageSend: aNode.
@@ -175,7 +175,7 @@ GtFixItStyler >> visitMessageSend: aNode [
 		to: aNode selectorParts last stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtFixItStyler >> visitMethod: aMethodNode [
 	aMethodNode selectorDo: [ :aSelector |
 		aSelector isDoIt
@@ -184,7 +184,7 @@ GtFixItStyler >> visitMethod: aMethodNode [
 	^ super visitMethod: aMethodNode
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtFixItStyler >> visitVariable: aVariableNode [
 	| isUndeclared anAttribute |
 

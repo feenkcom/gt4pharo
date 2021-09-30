@@ -1,20 +1,20 @@
 Class {
-	#name : 'GtPharoImplementorPatternHighlighter',
-	#superclass : 'GtPharoCodeHighlighter',
+	#name : #GtPharoImplementorPatternHighlighter,
+	#superclass : #GtPharoCodeHighlighter,
 	#instVars : [
 		'pattern'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoImplementorPatternHighlighter class >> forPattern: aString [
 	^ self new
 		pattern: aString;
 		yourself
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoImplementorPatternHighlighter >> highlightMethod: aMethodNode startingAt: anInteger [
 	| offset patternEnd todo |
 	
@@ -43,17 +43,17 @@ GtPharoImplementorPatternHighlighter >> highlightMethod: aMethodNode startingAt:
 			offset := end + 1 ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoImplementorPatternHighlighter >> pattern [
 	^ pattern
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoImplementorPatternHighlighter >> pattern: aString [
 	pattern := aString asLowercase
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoImplementorPatternHighlighter >> visitMethod: aMethodNode [
 	| index start |
 	start := 1.

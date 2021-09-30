@@ -2,18 +2,18 @@
 Exemplify {{gtClass:GtPharoZincApplicationFormUrlEncodedEntityStyler}}.
 "
 Class {
-	#name : 'GtPharoZincApplicationFormUrlEncodedEntityStylerExamples',
-	#superclass : 'Object',
+	#name : #GtPharoZincApplicationFormUrlEncodedEntityStylerExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
-{ #category : 'examples - source code' }
+{ #category : #'examples - source code' }
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> compiledMethod [
 	<gtExample>
 	^ self class >> #sourceCode
 ]
 
-{ #category : 'examples - source code' }
+{ #category : #'examples - source code' }
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> sourceCode [
 	<gtExample>
 	^ ZnClient new
@@ -30,7 +30,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> sourceCode [
 		yourself
 ]
 
-{ #category : 'examples - styling' }
+{ #category : #'examples - styling' }
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -56,7 +56,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 	^ aSourceText
 ]
 
-{ #category : 'examples - styling' }
+{ #category : #'examples - styling' }
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -82,7 +82,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 	^ aSourceText
 ]
 
-{ #category : 'examples - styling' }
+{ #category : #'examples - styling' }
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -108,7 +108,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 	^ aSourceText
 ]
 
-{ #category : 'examples - styling' }
+{ #category : #'examples - styling' }
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |

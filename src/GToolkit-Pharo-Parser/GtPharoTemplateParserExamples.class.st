@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoTemplateParserExamples',
-	#superclass : 'Object',
+	#name : #GtPharoTemplateParserExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Parser-Examples'
 }
 
-{ #category : 'examples - variables' }
+{ #category : #'examples - variables' }
 GtPharoTemplateParserExamples >> invalidTemplateVariableWithSpaceAfterTemplate [
 	<gtExample>
 	
@@ -13,7 +13,7 @@ GtPharoTemplateParserExamples >> invalidTemplateVariableWithSpaceAfterTemplate [
 	self assert: ast equals: 'Should not get here' ] on: SmaCCParserError do: [ :ex | ^ ex ]
 ]
 
-{ #category : 'examples - variables' }
+{ #category : #'examples - variables' }
 GtPharoTemplateParserExamples >> invalidTemplateVariableWithSpaceBeforeTemplate [
 	<gtExample>
 	
@@ -22,7 +22,7 @@ GtPharoTemplateParserExamples >> invalidTemplateVariableWithSpaceBeforeTemplate 
 	self assert: ast equals: 'Should not get here' ] on: SmaCCParserError do: [ :ex | ^ ex ]
 ]
 
-{ #category : 'examples - variables' }
+{ #category : #'examples - variables' }
 GtPharoTemplateParserExamples >> normalVariable [
 	<gtExample>
 	| ast |
@@ -36,7 +36,7 @@ GtPharoTemplateParserExamples >> normalVariable [
 	^ ast
 ]
 
-{ #category : 'examples - messages' }
+{ #category : #'examples - messages' }
 GtPharoTemplateParserExamples >> validTemplateKeywordMessage [
 	<gtExample>
 	| ast |
@@ -55,7 +55,7 @@ GtPharoTemplateParserExamples >> validTemplateKeywordMessage [
 	^ ast
 ]
 
-{ #category : 'examples - method patterns' }
+{ #category : #'examples - method patterns' }
 GtPharoTemplateParserExamples >> validTemplateKeywordMethodPattern [
 	<gtExample>
 	| ast |
@@ -72,7 +72,7 @@ GtPharoTemplateParserExamples >> validTemplateKeywordMethodPattern [
 	^ ast
 ]
 
-{ #category : 'examples - pragmas' }
+{ #category : #'examples - pragmas' }
 GtPharoTemplateParserExamples >> validTemplateKeywordPragma [
 	<gtExample>
 	| ast |
@@ -90,7 +90,7 @@ GtPharoTemplateParserExamples >> validTemplateKeywordPragma [
 	^ ast
 ]
 
-{ #category : 'examples - messages' }
+{ #category : #'examples - messages' }
 GtPharoTemplateParserExamples >> validTemplateUnaryMessage [
 	<gtExample>
 	| ast |
@@ -109,7 +109,7 @@ GtPharoTemplateParserExamples >> validTemplateUnaryMessage [
 	^ ast
 ]
 
-{ #category : 'examples - method patterns' }
+{ #category : #'examples - method patterns' }
 GtPharoTemplateParserExamples >> validTemplateUnaryMethodPattern [
 	<gtExample>
 	| ast |
@@ -127,7 +127,7 @@ GtPharoTemplateParserExamples >> validTemplateUnaryMethodPattern [
 	^ ast
 ]
 
-{ #category : 'examples - pragmas' }
+{ #category : #'examples - pragmas' }
 GtPharoTemplateParserExamples >> validTemplateUnaryPragma [
 	<gtExample>
 	| ast |
@@ -146,7 +146,7 @@ GtPharoTemplateParserExamples >> validTemplateUnaryPragma [
 	^ ast
 ]
 
-{ #category : 'examples - variables' }
+{ #category : #'examples - variables' }
 GtPharoTemplateParserExamples >> validTemplateVariable [
 	<gtExample>
 	| ast |

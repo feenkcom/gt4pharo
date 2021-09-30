@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtAbstractClassVariableRefactoringController',
-	#superclass : 'GtVariableRefactoringController',
+	#name : #GtAbstractClassVariableRefactoringController,
+	#superclass : #GtVariableRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtAbstractClassVariableRefactoringController >> refactoring [
 	| aModel aClass |
 	
@@ -17,7 +17,7 @@ GtAbstractClassVariableRefactoringController >> refactoring [
 		class: (aClass whoDefinesClassVariable: self variableName)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtAbstractClassVariableRefactoringController >> refactoringName [
 	^ 'Abstract class variable {1}' format: { self variableName }
 ]

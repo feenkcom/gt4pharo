@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoAstNodeHighlighterStylerRule',
-	#superclass : 'GtPharoCodeHighlighter',
+	#name : #GtPharoAstNodeHighlighterStylerRule,
+	#superclass : #GtPharoCodeHighlighter,
 	#instVars : [
 		'styleBlock',
 		'nodeClassName',
@@ -9,37 +9,37 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoAstNodeHighlighterStylerRule >> nodeClass [
 	^ nodeClass ifNil: [ nodeClass := Smalltalk at: nodeClassName ifAbsent: [ self class ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoAstNodeHighlighterStylerRule >> nodeClassName [
 	^ nodeClassName.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoAstNodeHighlighterStylerRule >> nodeClassName: aNodeClassName [
 	nodeClassName := aNodeClassName.
 ]
 
-{ #category : 'asserting' }
+{ #category : #asserting }
 GtPharoAstNodeHighlighterStylerRule >> shouldApplyToNode: aNode [
 	^ aNode isKindOf: self nodeClass.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoAstNodeHighlighterStylerRule >> styleBlock [
 	^ styleBlock.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoAstNodeHighlighterStylerRule >> styleBlock: aBlock [
 	styleBlock := aBlock.
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoAstNodeHighlighterStylerRule >> visitNode: aNode [
 	super visitNode: aNode.
 	(self shouldApplyToNode: aNode)

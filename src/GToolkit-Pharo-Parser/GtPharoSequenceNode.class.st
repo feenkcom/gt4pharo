@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoSequenceNode',
-	#superclass : 'GtPharoProgramNode',
+	#name : #GtPharoSequenceNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'periods',
 		'statements',
@@ -11,32 +11,32 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitSequence: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> compositeNodeVariables [
 	^ #(#statements #variables)
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoSequenceNode >> defines: aString [
 	^ variables anySatisfy: [ :each | each name value = aString ]
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> ignoredCompositeTokenVariables [
 	^ #(#periods)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> ignoredTokenVariables [
 	^ #(#leftBar #rightBar)
 ]
 
-{ #category : 'generated-initialize-release' }
+{ #category : #'generated-initialize-release' }
 GtPharoSequenceNode >> initialize [
 	super initialize.
 	statements := OrderedCollection new: 2.
@@ -44,70 +44,70 @@ GtPharoSequenceNode >> initialize [
 	variables := OrderedCollection new: 2.
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoSequenceNode >> isSequence [
 	^ true
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> leftBar [
 	^ leftBar
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> leftBar: aSmaCCToken [
 	leftBar := aSmaCCToken
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoSequenceNode >> localVariablesInto: aCollection [
 	variables do: [ :each | aCollection add: each variableName ].
 	super localVariablesInto: aCollection
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> periods [
 	^ periods
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> periods: anOrderedCollection [
 	periods := anOrderedCollection
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoSequenceNode >> pragmas [
 	^ #()
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> rightBar [
 	^ rightBar
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> rightBar: aSmaCCToken [
 	rightBar := aSmaCCToken
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> statements [
 	^ statements
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> statements: anOrderedCollection [
 	self setParents: self statements to: nil.
 	statements := anOrderedCollection.
 	self setParents: self statements to: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> variables [
 	^ variables
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSequenceNode >> variables: anOrderedCollection [
 	self setParents: self variables to: nil.
 	variables := anOrderedCollection.

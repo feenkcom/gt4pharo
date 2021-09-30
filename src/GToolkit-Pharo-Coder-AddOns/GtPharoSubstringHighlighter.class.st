@@ -1,28 +1,28 @@
 Class {
-	#name : 'GtPharoSubstringHighlighter',
-	#superclass : 'GtPharoCodeHighlighter',
+	#name : #GtPharoSubstringHighlighter,
+	#superclass : #GtPharoCodeHighlighter,
 	#instVars : [
 		'substring'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoSubstringHighlighter class >> substring: aString [
 	^ self new substring: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoSubstringHighlighter >> substring [
 	^ substring
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoSubstringHighlighter >> substring: aString [
 	substring := aString
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoSubstringHighlighter >> visitMethod: aMethodNode [
 	| source index |
 
