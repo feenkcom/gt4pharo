@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtSearchTestClassesFilter',
-	#superclass : 'GtSearchClassesFilter',
+	#name : #GtSearchTestClassesFilter,
+	#superclass : #GtSearchClassesFilter,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchTestClassesFilter >> includesClass: aClass [
 	^ aClass isTestCase
 ]

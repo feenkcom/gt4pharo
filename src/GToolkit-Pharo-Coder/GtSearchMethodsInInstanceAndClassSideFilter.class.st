@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtSearchMethodsInInstanceAndClassSideFilter',
-	#superclass : 'GtSearchMethodsContainedInClassFilter',
+	#name : #GtSearchMethodsInInstanceAndClassSideFilter,
+	#superclass : #GtSearchMethodsContainedInClassFilter,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchMethodsInInstanceAndClassSideFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
@@ -12,7 +12,7 @@ GtSearchMethodsInInstanceAndClassSideFilter >> includesMethod: aCompiledMethod [
 		methodClass = class classSide ]
 ]
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtSearchMethodsInInstanceAndClassSideFilter >> methodsDo: aBlock [
 	class instanceSide methods do: aBlock.
 

@@ -1,28 +1,28 @@
 Class {
-	#name : 'GtPharoStringLiteralNode',
-	#superclass : 'GtPharoLiteralNode',
+	#name : #GtPharoStringLiteralNode,
+	#superclass : #GtPharoLiteralNode,
 	#instVars : [
 		'value'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoStringLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitStringLiteral: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoStringLiteralNode >> guessType: completionStrategy [
 	^ String
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoStringLiteralNode >> isString [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoStringLiteralNode >> literalValue [
 	| aString |
 	aString := self value value.
@@ -32,22 +32,22 @@ GtPharoStringLiteralNode >> literalValue [
 	^ aString
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoStringLiteralNode >> string [
 	^ self literalValue
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoStringLiteralNode >> tokenVariables [
 	^ #(#value)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoStringLiteralNode >> value [
 	^ value
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoStringLiteralNode >> value: aSmaCCToken [
 	value := aSmaCCToken
 ]

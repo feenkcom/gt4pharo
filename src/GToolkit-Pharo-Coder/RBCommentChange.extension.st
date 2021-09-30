@@ -1,6 +1,6 @@
-Extension { #name : 'RBCommentChange' }
+Extension { #name : #RBCommentChange }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 RBCommentChange >> gtDiff [
 	| oldSource newSource |
 	oldSource := (self changeClass ifNotNil: [ :cls | cls comment ])

@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtMethodContextsCoder',
-	#superclass : 'GtPharoMethodsCoder',
+	#name : #GtMethodContextsCoder,
+	#superclass : #GtPharoMethodsCoder,
 	#instVars : [
 		'debugSession'
 	],
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodContextsCoder class >> forDebugSession: aDebugSession [
 
 	^ self new
@@ -15,7 +15,7 @@ GtMethodContextsCoder class >> forDebugSession: aDebugSession [
 		  yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodContextsCoder class >> forProcess: aProcess [
 
 	^ self forDebugSession: (DebugSession
@@ -24,14 +24,14 @@ GtMethodContextsCoder class >> forProcess: aProcess [
 			   startedAt: aProcess suspendedContext)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodContextsCoder >> forDebugSession: aDebugSession [
 
 	debugSession := aDebugSession.
 	self updateCoders
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodContextsCoder >> isSuspended [
 
 	^ debugSession process notNil and: [ 
@@ -40,7 +40,7 @@ GtMethodContextsCoder >> isSuspended [
 				  debugSession process isTerminated not ] ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodContextsCoder >> newCoderFor: aContext [
 	| coder |
 	coder := GtPharoMethodContextCoder forContext: aContext session: debugSession.
@@ -48,7 +48,7 @@ GtMethodContextsCoder >> newCoderFor: aContext [
 	^ coder
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodContextsCoder >> updateCoders [
 
 	| context firstContext coder newCoders |

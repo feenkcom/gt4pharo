@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoTemplateNode',
-	#superclass : 'GtPharoProgramNode',
+	#name : #GtPharoTemplateNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'leftBraces',
 		'expression',
@@ -9,64 +9,64 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplate: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoTemplateNode >> asSymbol [
 	^ self expression source asSymbol
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> expression [
 	^ expression
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> expression: aGtPharoValueNode [
 	self expression notNil ifTrue: [ self expression parent: nil ].
 	expression := aGtPharoValueNode.
 	self expression notNil ifTrue: [ self expression parent: self ]
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> leftBraces [
 	^ leftBraces
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> leftBraces: aSmaCCToken [
 	leftBraces := aSmaCCToken
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> nodeVariables [
 	^ #(#expression)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> rightBraces [
 	^ rightBraces
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> rightBraces: aSmaCCToken [
 	rightBraces := aSmaCCToken
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoTemplateNode >> selector [
 	^ self asSymbol
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNode >> tokenVariables [
 	^ #(#leftBraces #rightBraces)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoTemplateNode >> variableName [
 	^ self source asSymbol
 ]

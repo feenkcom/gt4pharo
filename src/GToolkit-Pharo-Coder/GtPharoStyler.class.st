@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoStyler',
-	#superclass : 'GtGenericPharoStyler',
+	#name : #GtPharoStyler,
+	#superclass : #GtGenericPharoStyler,
 	#category : 'GToolkit-Pharo-Coder-Styler'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
 	self 
 		highlightParenthesesLeft: aLeftIndex
@@ -15,7 +15,7 @@ GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex
 		atNestingLevel: aNestingLevel
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
 	| color |
 	color := self parenthesesColorAt: aNestingLevel.
@@ -29,7 +29,7 @@ GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLe
 		foreground: color
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 	| theParanthesesMarker cursorEnterAction cursorLeaveAction |
 	
@@ -70,14 +70,14 @@ GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 		leave: cursorLeaveAction
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoStyler >> parenthesesColorAt: anIndex [
 	| colors |
 	colors := self parenthesesColors.
 	^ colors at: (anIndex - 1) \\ colors size + 1
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoStyler >> parenthesesColors [
 	| colors |
 	colors := BrGlamorousColors distinctTenStrongColors allButFirst
@@ -85,7 +85,7 @@ GtPharoStyler >> parenthesesColors [
 	^ colors
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoStyler >> visitArray: anArray [
 	super visitArray: anArray.
 	self 
@@ -94,7 +94,7 @@ GtPharoStyler >> visitArray: anArray [
 		atNestingLevel: anArray nestingLevel
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 	| color aLeftIndex aRightIndex |
 	super visitArrayLiteral: anArrayLiteral.
@@ -114,7 +114,7 @@ GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 		right: aRightIndex.
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitBlock: aBlock [
 	super visitBlock: aBlock.
 
@@ -126,7 +126,7 @@ GtPharoStyler >> visitBlock: aBlock [
 				atNestingLevel: aBlock nestingLevel ] ]
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitBooleanLiteral: aBooleanLiteral [
 	super visitBooleanLiteral: aBooleanLiteral.
 	self
@@ -135,7 +135,7 @@ GtPharoStyler >> visitBooleanLiteral: aBooleanLiteral [
 		to: aBooleanLiteral value stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitCharacterLiteral: aCharacterLiteral [
 	super visitCharacterLiteral: aCharacterLiteral.
 	self
@@ -144,7 +144,7 @@ GtPharoStyler >> visitCharacterLiteral: aCharacterLiteral [
 		to: aCharacterLiteral value stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitCommentFrom: aCommentStart to: aCommentEnd [
 	self
 		attributes: { BlTextForegroundAttribute color: Color gray darker }
@@ -152,12 +152,12 @@ GtPharoStyler >> visitCommentFrom: aCommentStart to: aCommentEnd [
 		to: aCommentEnd
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitDeclaredGlobalVariable: aNamedVariable [
 	self visitDeclaredVariable: aNamedVariable
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
 	self
 		attributes: { BlTextForegroundAttribute color: Color blue muchDarker }
@@ -165,12 +165,12 @@ GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
 		to: aNamedVariable name stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitError: anError [
 	anError smaccError acceptVisitor: self
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitErrorToken: anErrorToken [
 	self
 		attributes: { BlTextForegroundAttribute color: Color red }
@@ -178,7 +178,7 @@ GtPharoStyler >> visitErrorToken: anErrorToken [
 		to: anErrorToken stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitMethodPattern: aMethodPattern [
 	super visitMethodPattern: aMethodPattern.
 	aMethodPattern selectorParts do: [ :eachSelectorPart |
@@ -187,7 +187,7 @@ GtPharoStyler >> visitMethodPattern: aMethodPattern [
 	super visitMethodPattern: aMethodPattern
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitMethodSelectorPart: aSmaCCToken [
 	self
 		attributes: { BlFontWeightAttribute bold }
@@ -195,7 +195,7 @@ GtPharoStyler >> visitMethodSelectorPart: aSmaCCToken [
 		to: aSmaCCToken stopPosition
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitNamedVariable: aNamedVariable [
 	| isDeclaredVariable |
 	super visitNamedVariable: aNamedVariable.
@@ -214,7 +214,7 @@ GtPharoStyler >> visitNamedVariable: aNamedVariable [
 	self visitUndeclaredVariable: aNamedVariable
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitNilLiteral: aNilLiteral [
 	super visitNilLiteral: aNilLiteral.
 	self
@@ -223,7 +223,7 @@ GtPharoStyler >> visitNilLiteral: aNilLiteral [
 		to: aNilLiteral value stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitNumberLiteral: aNumberLiteral [
 	super visitNumberLiteral: aNumberLiteral.
 	self
@@ -232,7 +232,7 @@ GtPharoStyler >> visitNumberLiteral: aNumberLiteral [
 		to: aNumberLiteral value stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitPragma: aPragma [
 	super visitPragma: aPragma.
 
@@ -249,7 +249,7 @@ GtPharoStyler >> visitPragma: aPragma [
 		self acceptNode: eachPragmaValue ]
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitPragmaSelectorPart: aSmaCCToken [
 	self
 		attributes: { BlTextForegroundAttribute color: Color green muchDarker }
@@ -257,14 +257,14 @@ GtPharoStyler >> visitPragmaSelectorPart: aSmaCCToken [
 		to: aSmaCCToken stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitReturn: aReturn [
 	super visitReturn: aReturn.
 
 	self visitReturnUpArrow: aReturn upArrow
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitReturnUpArrow: aSmaCCToken [
 	self
 		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
@@ -272,7 +272,7 @@ GtPharoStyler >> visitReturnUpArrow: aSmaCCToken [
 		to: aSmaCCToken stopPosition
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitSelfVariable: aSelfVariable [
 	super visitSelfVariable: aSelfVariable.
 	self
@@ -281,7 +281,7 @@ GtPharoStyler >> visitSelfVariable: aSelfVariable [
 		to: aSelfVariable name stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitSmaCCError: anErrorNode [
 	anErrorNode
 		nodesDo: [ :eachNode | self acceptNode: eachNode ]
@@ -291,7 +291,7 @@ GtPharoStyler >> visitSmaCCError: anErrorNode [
 	anErrorNode errorToken ifNotNil: [ :eachToken | self visitErrorToken: eachToken ]
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 	super visitSmaCCParseNode: aSmaCCParseNode.
 
@@ -300,7 +300,7 @@ GtPharoStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 			self visitCommentFrom: eachComment first to: eachComment second ] ]
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitStringLiteral: aStringLiteral [
 	super visitStringLiteral: aStringLiteral.
 	self
@@ -309,7 +309,7 @@ GtPharoStyler >> visitStringLiteral: aStringLiteral [
 		to: aStringLiteral value stopPosition
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitSuperVariable: aSuperVariable [
 	super visitSuperVariable: aSuperVariable.
 	self
@@ -318,7 +318,7 @@ GtPharoStyler >> visitSuperVariable: aSuperVariable [
 		to: aSuperVariable name stopPosition
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 	super visitSymbolLiteral: aSymbolLiteral.
 	self
@@ -327,7 +327,7 @@ GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 		to: aSymbolLiteral value stopPosition
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitThisContextVariable: aThisContextVariable [
 	super visitThisContextVariable: aThisContextVariable.
 	self
@@ -336,7 +336,7 @@ GtPharoStyler >> visitThisContextVariable: aThisContextVariable [
 		to: aThisContextVariable name stopPosition
 ]
 
-{ #category : 'visiting - variables' }
+{ #category : #'visiting - variables' }
 GtPharoStyler >> visitUndeclaredVariable: aVariableNode [
 	self
 		attributes: { BlTextForegroundAttribute color: Color red }
@@ -344,7 +344,7 @@ GtPharoStyler >> visitUndeclaredVariable: aVariableNode [
 		to: aVariableNode name stopPosition
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoStyler >> visitValue: aValue [
 	super visitValue: aValue.
 	aValue leftParens doWithIndex: [ :each :i |

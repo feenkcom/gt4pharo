@@ -1,6 +1,6 @@
-Extension { #name : 'ByteArray' }
+Extension { #name : #ByteArray }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 ByteArray >> gtReferences [
 	^ GtSearchReferencesFilter literal: self
 ]

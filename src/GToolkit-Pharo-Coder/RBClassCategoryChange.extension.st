@@ -1,6 +1,6 @@
-Extension { #name : 'RBClassCategoryChange' }
+Extension { #name : #RBClassCategoryChange }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 RBClassCategoryChange >> gtDiff [
 	^ ClassDiffBuilder
 		from: (self changeClass category copyReplaceAll: '-' with: ' - ')

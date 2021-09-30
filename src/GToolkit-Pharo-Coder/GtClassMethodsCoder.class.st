@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtClassMethodsCoder',
-	#superclass : 'GtFilteredMethodsCoder',
+	#name : #GtClassMethodsCoder,
+	#superclass : #GtFilteredMethodsCoder,
 	#instVars : [
 		'class',
 		'object',
@@ -9,21 +9,21 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtClassMethodsCoder class >> forClass: aBehavior [
 	^ self new
 		forClass: aBehavior;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtClassMethodsCoder class >> forObject: anObject [
 	^ self new
 		forObject: anObject;
 		yourself
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtClassMethodsCoder >> addMethodsForClass: aClass [
 	(filteredClasses includes: aClass)
 		ifTrue: [ ^ self ].
@@ -32,7 +32,7 @@ GtClassMethodsCoder >> addMethodsForClass: aClass [
 	self updateCoders
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtClassMethodsCoder >> addNewCoder [
 	| aCoder |
 	aCoder := GtPharoMethodCoder forNewMethod: self newMethodClass.
@@ -42,12 +42,12 @@ GtClassMethodsCoder >> addNewCoder [
 	^ aCoder
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtClassMethodsCoder >> classOrMetaClass [
 	^ class
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtClassMethodsCoder >> classesFilter [
 	| filter |
 	filter := nil.
@@ -61,7 +61,7 @@ GtClassMethodsCoder >> classesFilter [
 	^ filter
 ]
 
-{ #category : 'elements' }
+{ #category : #elements }
 GtClassMethodsCoder >> codeGeneratorsFor: aMethodsCoderUIModel [
 	^ GtPhlowViewsCollector new
 		fromObject: self;
@@ -70,7 +70,7 @@ GtClassMethodsCoder >> codeGeneratorsFor: aMethodsCoderUIModel [
 		collect
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtClassMethodsCoder >> combinedFilter [
 	| combined |
 	combined := super combinedFilter.
@@ -80,7 +80,7 @@ GtClassMethodsCoder >> combinedFilter [
 			[ :filter | combined ifNil: [ filter ] ifNotNil: [ filter & combined ] ]
 ]
 
-{ #category : 'elements' }
+{ #category : #elements }
 GtClassMethodsCoder >> filterTypes [
 	^ GtPhlowViewsCollector new
 		fromObject: self;
@@ -88,12 +88,12 @@ GtClassMethodsCoder >> filterTypes [
 		collect
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtClassMethodsCoder >> filteredClass: aBehavior [
 	^ filteredClasses includes: aBehavior
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtClassMethodsCoder >> forClass: aBehavior [
 	class := aBehavior.
 	filteredClasses := Set with: aBehavior.
@@ -101,39 +101,39 @@ GtClassMethodsCoder >> forClass: aBehavior [
 		forFilter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: class))
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtClassMethodsCoder >> forObject: anObject [
 	object := anObject.
 	self forClass: anObject class
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtClassMethodsCoder >> gtDisplayString [
 	^ class name , ' methods'
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtClassMethodsCoder >> hasFilter [
 	^ filteredClasses notEmpty
 ]
 
-{ #category : 'initialize' }
+{ #category : #initialize }
 GtClassMethodsCoder >> initialize [
 	super initialize.
 	filteredClasses := Set new
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtClassMethodsCoder >> isForClass [
 	^ true
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtClassMethodsCoder >> newCoderFor: aMethod [
 	^ (super newCoderFor: aMethod) withoutHeader
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtClassMethodsCoder >> newMethodClass [
 	| methodClass |
 	methodClass := filteredClasses anyOne.
@@ -144,12 +144,12 @@ GtClassMethodsCoder >> newMethodClass [
 	^ methodClass
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtClassMethodsCoder >> object [
 	^ object
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtClassMethodsCoder >> removeMethodsForClass: aClass [
 	(filteredClasses includes: aClass)
 		ifFalse: [ ^ self ].
@@ -167,7 +167,7 @@ GtClassMethodsCoder >> removeMethodsForClass: aClass [
 				yourself)
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtClassMethodsCoder >> shouldSort: a before: b [
 	a selector isNil
 		ifTrue: [ ^ b selector notNil

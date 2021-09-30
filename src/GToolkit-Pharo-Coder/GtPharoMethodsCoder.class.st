@@ -1,16 +1,16 @@
 Class {
-	#name : 'GtPharoMethodsCoder',
-	#superclass : 'GtCodersModel',
+	#name : #GtPharoMethodsCoder,
+	#superclass : #GtCodersModel,
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodsCoder >> exampler [
 	^ GtMethodsCoderExampler new
 		coder: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodsCoder >> forItems: aCollection [
 	super forItems: aCollection.
 	(items isKindOf: GtSearchMethodGroupResult)
@@ -22,12 +22,12 @@ GtPharoMethodsCoder >> forItems: aCollection [
 			coders do: [ :each | each highlighter: items highlighter ] ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodsCoder >> isForClass [
 	^ false
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodsCoder >> methodAdded: aValueAdded [
 	| aCoder |
 	(self coders
@@ -37,7 +37,7 @@ GtPharoMethodsCoder >> methodAdded: aValueAdded [
 	self addCoder: aCoder
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodsCoder >> methodChanged: aValueChanged [
 	coders
 		do: [ :each | 
@@ -45,7 +45,7 @@ GtPharoMethodsCoder >> methodChanged: aValueChanged [
 				ifTrue: [ each forMethod: aValueChanged newValue ] ]
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtPharoMethodsCoder >> methodRemoved: aValueRemoved [
 	| toRemove |
 	toRemove := coders
@@ -55,7 +55,7 @@ GtPharoMethodsCoder >> methodRemoved: aValueRemoved [
 			self removeCoder: each ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodsCoder >> newCoderFor: aMethod [
 	| coder |
 	coder := GtPharoMethodCoder forMethod: aMethod.
@@ -63,12 +63,12 @@ GtPharoMethodsCoder >> newCoderFor: aMethod [
 	^ coder
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodsCoder >> object [
 	^ nil
 ]
 
-{ #category : 'scripting' }
+{ #category : #scripting }
 GtPharoMethodsCoder >> selectAndScrollTo: aMethodCoder [
 	self
 		announce:
@@ -87,7 +87,7 @@ GtPharoMethodsCoder >> selectAndScrollTo: aMethodCoder [
 		otherwise: [ aMethodCoder requestFocus ]
 ]
 
-{ #category : 'scripting' }
+{ #category : #scripting }
 GtPharoMethodsCoder >> selectAndScrollToMethod: aCompiledMethod [
 	| methodCoder |
 	methodCoder := self coders

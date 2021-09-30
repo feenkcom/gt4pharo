@@ -1,48 +1,48 @@
 Class {
-	#name : 'GtSearchInstanceSlotReferenceFilter',
-	#superclass : 'GtSearchMethodsInClassFilter',
+	#name : #GtSearchInstanceSlotReferenceFilter,
+	#superclass : #GtSearchMethodsInClassFilter,
 	#instVars : [
 		'variableName'
 	],
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchInstanceSlotReferenceFilter class >> forClass: aClass andVariable: aString [
 	^ self new
 		forClass: aClass andVariable: aString;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchInstanceSlotReferenceFilter class >> forClassAndSubclasses: aClass andVariable: aString [
 	^ aClass withAllSubclasses
 		inject: GtSearchNullFilter new
 		into: [ :sum :each | sum | (self forClass: each andVariable: aString) ]
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchInstanceSlotReferenceFilter >> = anObject [
 	^ super = anObject and: [ self variableName = anObject variableName ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> filterValueString [
 	^ self variableName
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtSearchInstanceSlotReferenceFilter >> forClass: aClass andVariable: aString [
 	self forClass: aClass.
 	variableName := aString
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchInstanceSlotReferenceFilter >> hash [
 	^ super hash bitXor: self variableName
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	| index |
 	(super includesMethod: aCompiledMethod)
@@ -51,18 +51,18 @@ GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	^ (aCompiledMethod readsField: index) or: [ aCompiledMethod writesField: index ]
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtSearchInstanceSlotReferenceFilter >> initialize [
 	super initialize.
 	includeSubclasses := true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> variableName [
 	^ variableName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> variableName: aString [
 	variableName := aString
 ]

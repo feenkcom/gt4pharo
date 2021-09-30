@@ -1,6 +1,6 @@
-Extension { #name : 'RBAddMethodChange' }
+Extension { #name : #RBAddMethodChange }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 RBAddMethodChange >> gtDiff [
 	| oldSource newSource |
 	oldSource := (self changeClass notNil

@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoPragmaNode',
-	#superclass : 'GtPharoProgramNode',
+	#name : #GtPharoPragmaNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'lessThan',
 		'selectorParts',
@@ -10,79 +10,79 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitPragma: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> compositeNodeVariables [
 	^ #(#values)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> compositeTokenVariables [
 	^ #(#selectorParts)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> greaterThan [
 	^ greaterThan
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> greaterThan: aSmaCCToken [
 	greaterThan := aSmaCCToken
 ]
 
-{ #category : 'generated-initialize-release' }
+{ #category : #'generated-initialize-release' }
 GtPharoPragmaNode >> initialize [
 	super initialize.
 	selectorParts := OrderedCollection new: 2.
 	values := OrderedCollection new: 2.
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoPragmaNode >> isPragma [
 	^ true
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> lessThan [
 	^ lessThan
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> lessThan: aSmaCCToken [
 	lessThan := aSmaCCToken
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPragmaNode >> selector [
 	^ Symbol streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each source ] ]
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> selectorParts [
 	^ selectorParts
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> selectorParts: anOrderedCollection [
 	selectorParts := anOrderedCollection
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> tokenVariables [
 	^ #(#lessThan #greaterThan)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> values [
 	^ values
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoPragmaNode >> values: anOrderedCollection [
 	self setParents: self values to: nil.
 	values := anOrderedCollection.

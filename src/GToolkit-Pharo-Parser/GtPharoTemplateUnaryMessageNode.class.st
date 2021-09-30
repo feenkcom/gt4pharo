@@ -1,34 +1,34 @@
 Class {
-	#name : 'GtPharoTemplateUnaryMessageNode',
-	#superclass : 'GtPharoUnaryMessageNode',
+	#name : #GtPharoTemplateUnaryMessageNode,
+	#superclass : #GtPharoUnaryMessageNode,
 	#instVars : [
 		'parts'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateUnaryMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplateUnaryMessage: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateUnaryMessageNode >> compositeNodeVariables [
 	^ #(#parts)
 ]
 
-{ #category : 'generated-initialize-release' }
+{ #category : #'generated-initialize-release' }
 GtPharoTemplateUnaryMessageNode >> initialize [
 	super initialize.
 	parts := OrderedCollection new: 2.
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateUnaryMessageNode >> parts [
 	^ parts
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateUnaryMessageNode >> parts: anOrderedCollection [
 	self setParents: self parts to: nil.
 	parts := anOrderedCollection.
