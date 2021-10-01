@@ -92,6 +92,11 @@ GtPharoMethodDefinition >> name [
 	^ self selector
 ]
 
+{ #category : #copying }
+GtPharoMethodDefinition >> postCopy [
+	methodParts := methodParts collect: [ :eachPart | eachPart copy ]
+]
+
 { #category : #accessing }
 GtPharoMethodDefinition >> pragmaNamed: aSelector [
 	<return: #Pragma of: nil>
