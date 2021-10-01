@@ -1,44 +1,44 @@
 Class {
-	#name : 'GtPharoSnippetCoder',
-	#superclass : 'GtPharoSourceCoder',
+	#name : #GtPharoSnippetCoder,
+	#superclass : #GtPharoSourceCoder,
 	#instVars : [
 		'xdocFilename'
 	],
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoSnippetCoder class >> forSource: aString [
 	^ self new sourceCodeSynchronously: (GtCoderExplicitSourceCode new source: aString)
 ]
 
-{ #category : 'api - ast' }
+{ #category : #'api - ast' }
 GtPharoSnippetCoder >> computeAst: theSourceString [
 	^ GtPharoParser
 		parseWithErrors: theSourceString
 		startingAt: GtPharoParser startingStateForMethodSequence
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoSnippetCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
 ]
 
-{ #category : 'private - event handling' }
+{ #category : #'private - event handling' }
 GtPharoSnippetCoder >> implicitVariableReferencesTo: aString do: aBlock [
 	self astAwait
 		allNodesDo:
 			[ :each | (each isVariable and: [ aString = each variableName asString and: [ each whoDefines isNil ] ]) ifTrue: [ aBlock value: each ] ]
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoSnippetCoder >> initialize [	
 	super initialize.
 
 	self forSource: ''
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoSnippetCoder >> newCompletionStrategy [
 	| strategy |
 	strategy := super newCompletionStrategy
@@ -48,7 +48,7 @@ GtPharoSnippetCoder >> newCompletionStrategy [
 	^ strategy
 ]
 
-{ #category : 'private - ast rb' }
+{ #category : #'private - ast rb' }
 GtPharoSnippetCoder >> newRbAST: aString [
 	| ast |
 	ast := self
@@ -58,7 +58,7 @@ GtPharoSnippetCoder >> newRbAST: aString [
 	^ ast
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoSnippetCoder >> profileWithMessageTallyInContext: aGtPharoCoderEvaluationContext [
 	^ self
 		evaluate: [ :thisCoder | thisCoder currentSourceString ]

@@ -1,28 +1,28 @@
 Class {
-	#name : 'GtPharoTemplateNamePartNode',
-	#superclass : 'GtPharoProgramNode',
+	#name : #GtPharoTemplateNamePartNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'name'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNamePartNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplateNamePart: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNamePartNode >> name [
 	^ name
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNamePartNode >> name: aSmaCCToken [
 	name := aSmaCCToken
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplateNamePartNode >> tokenVariables [
 	^ #(#name)
 ]

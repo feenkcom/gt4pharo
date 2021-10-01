@@ -1,51 +1,51 @@
 Class {
-	#name : 'GtPharoCoderUnspecifiedBehavior',
-	#superclass : 'GtPharoCoderBehavior',
+	#name : #GtPharoCoderUnspecifiedBehavior,
+	#superclass : #GtPharoCoderBehavior,
 	#category : 'GToolkit-Pharo-Coder-Meta'
 }
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtPharoCoderUnspecifiedBehavior >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	^ self class = anObject class
 ]
 
-{ #category : 'transformation' }
+{ #category : #transformation }
 GtPharoCoderUnspecifiedBehavior >> affectByClassAdded: aClassAddedAnnouncement [
 	^ self
 ]
 
-{ #category : 'transformation' }
+{ #category : #transformation }
 GtPharoCoderUnspecifiedBehavior >> affectByClassRemoved: aClassRemovedAnnouncement [
 	^ self
 ]
 
-{ #category : 'transformation' }
+{ #category : #transformation }
 GtPharoCoderUnspecifiedBehavior >> affectByClassRenamed: aClassRenamedAnnouncement [
 	^ self
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCoderUnspecifiedBehavior >> affectedByClassAdded: aClassAddedAnnouncement [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCoderUnspecifiedBehavior >> affectedByClassRemoved: aClassRemovedAnnouncement [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCoderUnspecifiedBehavior >> affectedByClassRenamed: aClassRenamedAnnouncement [
 	^ false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCoderUnspecifiedBehavior >> behaviorNameDo: aBlock [
 	^ nil
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCoderUnspecifiedBehavior >> exists [
 	"Return true if there is a real Behavior in the system corresponding to my definition"
 	<return: #Boolean>
@@ -53,12 +53,12 @@ GtPharoCoderUnspecifiedBehavior >> exists [
 	^ false
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtPharoCoderUnspecifiedBehavior >> hash [
 	^ self class hash
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCoderUnspecifiedBehavior >> realBehaviorDo: aBlock [
 	^ nil
 ]

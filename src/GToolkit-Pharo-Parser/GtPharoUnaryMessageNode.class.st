@@ -1,53 +1,53 @@
 Class {
-	#name : 'GtPharoUnaryMessageNode',
-	#superclass : 'GtPharoMessageNode',
+	#name : #GtPharoUnaryMessageNode,
+	#superclass : #GtPharoMessageNode,
 	#instVars : [
 		'selectorPart'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoUnaryMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitUnaryMessage: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoUnaryMessageNode >> arguments [
 	^ #()
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoUnaryMessageNode >> isUnary [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoUnaryMessageNode >> messageReceiver [
 	^ parent
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoUnaryMessageNode >> selector [
 	^ self selectorPart value asSymbol
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoUnaryMessageNode >> selectorPart [
 	^ selectorPart
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoUnaryMessageNode >> selectorPart: aSmaCCToken [
 	selectorPart := aSmaCCToken
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoUnaryMessageNode >> selectorParts [
 	^ {selectorPart}
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoUnaryMessageNode >> tokenVariables [
 	^ #(#selectorPart)
 ]

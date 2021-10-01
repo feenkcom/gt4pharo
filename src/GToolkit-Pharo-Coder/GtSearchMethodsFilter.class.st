@@ -1,15 +1,15 @@
 Class {
-	#name : 'GtSearchMethodsFilter',
-	#superclass : 'GtSearchTypedEntitiesFilter',
+	#name : #GtSearchMethodsFilter,
+	#superclass : #GtSearchTypedEntitiesFilter,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchMethodsFilter class >> createFilterFor: aMethodCoder [
 	^ self new
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodsFilter class >> descriptorForTagType: aString in: aMethodsCoder [
 	self withAllSubclasses
 		do: [ :each | 
@@ -19,18 +19,18 @@ GtSearchMethodsFilter class >> descriptorForTagType: aString in: aMethodsCoder [
 						ifTrue: [ ^ descriptor ] ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodsFilter class >> filterDescriptorsFor: aMethodsCoder into: aCollection [
 	(self filterDescriptorFor: aMethodsCoder) 
 		ifNotNil: [ :aDescriptor | aCollection add: aDescriptor ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchMethodsFilter class >> isTag: aTag validFor: aMethodsCoder [
 	^ (self descriptorForTagType: aTag tagType in: aMethodsCoder)
 		ifNil: [ false ]
@@ -38,27 +38,27 @@ GtSearchMethodsFilter class >> isTag: aTag validFor: aMethodsCoder [
 			[ :descriptor | descriptor valueIsRequired not or: [ aTag name trim notEmpty ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodsFilter class >> resultType [
 	^ GtSearchMethodGroupResult 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodsFilter >> defaultFilterScope [
 	^ GtSearchImageMethodsFilter new
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodsFilter >> filterValueString [
 	^ nil
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchMethodsFilter >> includesMethod: aCompiledMethod [
 	self subclassResponsibility
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchMethodsFilter >> matches: anObject [
 	^ anObject isCompiledMethod and: [ 
 		self includesMethod: anObject ]

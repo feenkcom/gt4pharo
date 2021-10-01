@@ -1,20 +1,20 @@
 Class {
-	#name : 'GtSearchInstanceMethodsFilter',
-	#superclass : 'GtSearchMethodsFilter',
+	#name : #GtSearchInstanceMethodsFilter,
+	#superclass : #GtSearchMethodsFilter,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchInstanceMethodsFilter >> = anObject [
 	^ self class = anObject class
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchInstanceMethodsFilter >> hash [
 	^ self class hash
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchInstanceMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod methodClass isInstanceSide
 ]

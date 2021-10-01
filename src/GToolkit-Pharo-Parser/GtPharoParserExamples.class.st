@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoParserExamples',
-	#superclass : 'Object',
+	#name : #GtPharoParserExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Parser-Examples'
 }
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> arrayNestingLevel [
 	<gtExample>
 	| ast |
@@ -15,7 +15,7 @@ GtPharoParserExamples >> arrayNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> blockInParensNestingLevel [
 	<gtExample>
 	| ast |
@@ -26,7 +26,7 @@ GtPharoParserExamples >> blockInParensNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> blockNestingLevel [
 	<gtExample>
 	| ast |
@@ -37,7 +37,7 @@ GtPharoParserExamples >> blockNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - name and keyword' }
+{ #category : #'examples - name and keyword' }
 GtPharoParserExamples >> failTemplateVariableNode [
 	<gtExample>
 	
@@ -46,7 +46,7 @@ GtPharoParserExamples >> failTemplateVariableNode [
 	self assert: ast equals: 'Should not get here' ] on: SmaCCParserError do: [ :ex | ^ ex ]
 ]
 
-{ #category : 'examples - message send' }
+{ #category : #'examples - message send' }
 GtPharoParserExamples >> invalidReceiverKeywordMessageSend [
 	<gtExample>
 	| ast |
@@ -63,7 +63,7 @@ GtPharoParserExamples >> invalidReceiverKeywordMessageSend [
 	^ ast
 ]
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> literalArrayNestingLevel [
 	<gtExample>
 	| ast |
@@ -74,7 +74,7 @@ GtPharoParserExamples >> literalArrayNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> parensNestingLevel [
 	<gtExample>
 	| ast |
@@ -85,7 +85,7 @@ GtPharoParserExamples >> parensNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> rootNestingLevel [
 	<gtExample>
 	| ast |
@@ -96,7 +96,7 @@ GtPharoParserExamples >> rootNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - nesting level' }
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> twoParensNestingLevel [
 	<gtExample>
 	| ast |
@@ -107,7 +107,7 @@ GtPharoParserExamples >> twoParensNestingLevel [
 	^ ast
 ]
 
-{ #category : 'examples - message send' }
+{ #category : #'examples - message send' }
 GtPharoParserExamples >> validKeywordMessageSend [
 	<gtExample>
 	| ast |
@@ -124,7 +124,7 @@ GtPharoParserExamples >> validKeywordMessageSend [
 	^ ast
 ]
 
-{ #category : 'examples - symbol' }
+{ #category : #'examples - symbol' }
 GtPharoParserExamples >> validLiteralArrayNode [
 	<gtExample>
 	| ast |
@@ -139,7 +139,7 @@ GtPharoParserExamples >> validLiteralArrayNode [
 	^ ast
 ]
 
-{ #category : 'examples - symbol' }
+{ #category : #'examples - symbol' }
 GtPharoParserExamples >> validSymbolNode [
 	<gtExample>
 	| ast |
@@ -155,7 +155,7 @@ GtPharoParserExamples >> validSymbolNode [
 	^ ast
 ]
 
-{ #category : 'examples - name and keyword' }
+{ #category : #'examples - name and keyword' }
 GtPharoParserExamples >> validVariableNode [
 	<gtExample>
 	| ast |

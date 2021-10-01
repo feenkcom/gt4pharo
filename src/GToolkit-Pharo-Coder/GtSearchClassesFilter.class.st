@@ -1,25 +1,25 @@
 Class {
-	#name : 'GtSearchClassesFilter',
-	#superclass : 'GtSearchTypedEntitiesFilter',
+	#name : #GtSearchClassesFilter,
+	#superclass : #GtSearchTypedEntitiesFilter,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchClassesFilter class >> resultType [
 	^ GtSearchClassGroupResult
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchClassesFilter >> defaultFilterScope [
 	^ GtSearchImageClassesFilter new
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchClassesFilter >> includesClass: aClass [
 	self subclassResponsibility
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchClassesFilter >> matches: anObject [
 	^ anObject isClass and: [ 
 		self includesClass: anObject ]

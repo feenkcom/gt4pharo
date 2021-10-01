@@ -1,34 +1,34 @@
 Class {
-	#name : 'GtPharoTemplatePatternNode',
-	#superclass : 'GtPharoMethodPatternNode',
+	#name : #GtPharoTemplatePatternNode,
+	#superclass : #GtPharoMethodPatternNode,
 	#instVars : [
 		'parts'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplatePatternNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitTemplatePattern: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplatePatternNode >> compositeNodeVariables [
 	^ #(#parts #variables)
 ]
 
-{ #category : 'generated-initialize-release' }
+{ #category : #'generated-initialize-release' }
 GtPharoTemplatePatternNode >> initialize [
 	super initialize.
 	parts := OrderedCollection new: 2.
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplatePatternNode >> parts [
 	^ parts
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoTemplatePatternNode >> parts: anOrderedCollection [
 	self setParents: self parts to: nil.
 	parts := anOrderedCollection.

@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtSearchDeprecatedPackagesFilter',
-	#superclass : 'GtSearchPackagesFilter',
+	#name : #GtSearchDeprecatedPackagesFilter,
+	#superclass : #GtSearchPackagesFilter,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchDeprecatedPackagesFilter >> includesPackage: aPackage [
 	^ aPackage isDeprecated
 ]

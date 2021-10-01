@@ -1,6 +1,6 @@
-Extension { #name : 'RBProgramNode' }
+Extension { #name : #RBProgramNode }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 RBProgramNode >> gtASTMatches [
 	^ GtSearchRBASTFilter ast: self
 ]

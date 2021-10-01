@@ -11,14 +11,14 @@ GtWithDomainModelTraitGenerator new
 
 "
 Trait {
-	#name : 'TGtWithPharoPackageCoderModel',
+	#name : #TGtWithPharoPackageCoderModel,
 	#instVars : [
 		'pharoPackageCoderModel'
 	],
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'api - pharo package coder model' }
+{ #category : #'api - pharo package coder model' }
 TGtWithPharoPackageCoderModel >> hasPharoPackageCoder [
 	"Return a true if pharoPackageCoder model is assigned to the receiver, false otherwise"
 	<return: #Boolean>
@@ -27,12 +27,12 @@ TGtWithPharoPackageCoderModel >> hasPharoPackageCoder [
 	^ pharoPackageCoderModel notNil
 ]
 
-{ #category : 'api - pharo package coder model' }
+{ #category : #'api - pharo package coder model' }
 TGtWithPharoPackageCoderModel >> onPharoPackageCoderModelChanged [
 	"Is sent when a new pharoPackageCoder model is assigned to the view model"
 ]
 
-{ #category : 'api - pharo package coder model' }
+{ #category : #'api - pharo package coder model' }
 TGtWithPharoPackageCoderModel >> pharoPackageCoderModel [
 	"Return a not-null pharoPackageCoder model assigned to the receiver view model"
 	<modelGetter>
@@ -43,7 +43,7 @@ TGtWithPharoPackageCoderModel >> pharoPackageCoderModel [
 	^ pharoPackageCoderModel
 ]
 
-{ #category : 'api - pharo package coder model' }
+{ #category : #'api - pharo package coder model' }
 TGtWithPharoPackageCoderModel >> pharoPackageCoderModel: aPharoPackageCoderModel [
 	"Set a not-null pharoPackageCoder domain model assigned to the receiver view model"
 	<modelSetter>
@@ -61,14 +61,14 @@ TGtWithPharoPackageCoderModel >> pharoPackageCoderModel: aPharoPackageCoderModel
 	self subscribeToPharoPackageCoderModel
 ]
 
-{ #category : 'api - pharo package coder model' }
+{ #category : #'api - pharo package coder model' }
 TGtWithPharoPackageCoderModel >> subscribeToPharoPackageCoderModel [
 	"Is sent after a new pharoPackageCoder model is assigned to the view model.
 	It is required to unsubscribe from the domain model by implementing
 	#unsubscribeFromPharoPackageCoderModel if view model subscribes to them"
 ]
 
-{ #category : 'api - pharo package coder model' }
+{ #category : #'api - pharo package coder model' }
 TGtWithPharoPackageCoderModel >> unsubscribeFromPharoPackageCoderModel [
 	"Is sent before a new pharoPackageCoder model is assigned to the view model.
 	View models that subscribe to pharoPackageCoder model are required to implement this methods"

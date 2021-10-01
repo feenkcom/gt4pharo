@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtSearchClassSlotReferenceFilter',
-	#superclass : 'GtSearchReferencesFilter',
+	#name : #GtSearchClassSlotReferenceFilter,
+	#superclass : #GtSearchReferencesFilter,
 	#instVars : [
 		'class',
 		'variableName'
@@ -8,53 +8,53 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchClassSlotReferenceFilter class >> createFilterFor: aMethodCoder [
 	^ self forClass: aMethodCoder classOrMetaClass
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchClassSlotReferenceFilter class >> forClass: aClass [
 	^ self new
 		forClass: aClass;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchClassSlotReferenceFilter class >> forClass: aClass andVariable: aString [
 	^ (self forClass: aClass)
 		variableName: aString;
 		yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchClassSlotReferenceFilter >> filterValueString [
 	^ self variableName
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtSearchClassSlotReferenceFilter >> forClass: aClass [
 	class := aClass
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchClassSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	self object isNil
 		ifTrue: [ ^ false ].
 	^ super includesMethod: aCompiledMethod
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchClassSlotReferenceFilter >> object [
 	^ object ifNil: [ object := class bindingOf: variableName ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchClassSlotReferenceFilter >> variableName [
 	^ variableName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchClassSlotReferenceFilter >> variableName: aSymbol [
 	variableName := aSymbol asSymbol.
 	object := nil

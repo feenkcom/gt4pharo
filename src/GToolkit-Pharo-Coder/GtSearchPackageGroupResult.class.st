@@ -1,15 +1,15 @@
 Class {
-	#name : 'GtSearchPackageGroupResult',
-	#superclass : 'GtSearchTypedGroupResult',
+	#name : #GtSearchPackageGroupResult,
+	#superclass : #GtSearchTypedGroupResult,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtSearchPackageGroupResult >> refreshItems [
 	self refreshPackages
 ]
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtSearchPackageGroupResult >> refreshPackages [
 	| packages |
 	filtered

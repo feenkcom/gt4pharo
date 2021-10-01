@@ -1,6 +1,6 @@
-Extension { #name : 'RBRemoveInstanceVariableChange' }
+Extension { #name : #RBRemoveInstanceVariableChange }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 RBRemoveInstanceVariableChange >> gtDiff [
 	| aClass aDefinition oldSource newSource |
 	

@@ -1,15 +1,15 @@
 Class {
-	#name : 'GtPharoSuperVariableNode',
-	#superclass : 'GtPharoVariableNode',
+	#name : #GtPharoSuperVariableNode,
+	#superclass : #GtPharoVariableNode,
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoSuperVariableNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitSuperVariable: self
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoSuperVariableNode >> isSuper [
 	^ true
 ]

@@ -1,41 +1,41 @@
 Class {
-	#name : 'GtSubstringFilter',
-	#superclass : 'GtSearchMethodsFilter',
+	#name : #GtSubstringFilter,
+	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
 		'substring'
 	],
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSubstringFilter class >> substring: aString [
 	^ self new substring: aString
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSubstringFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self substring asLowercase = anObject substring asLowercase ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSubstringFilter >> filterValueString [
 	^ self substring
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtSubstringFilter >> gtDisplayOn: stream [
 	stream
 		print: self substring;
 		nextPutAll: ' substringMatch'
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSubstringFilter >> hash [
 	^ self class hash bitXor: self substring asLowercase hash
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSubstringFilter >> includesMethod: aCompiledMethod [
 	^ (aCompiledMethod sourceCode
 		findString: self substring
@@ -43,19 +43,19 @@ GtSubstringFilter >> includesMethod: aCompiledMethod [
 		caseSensitive: false) > 0
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtSubstringFilter >> printOn: aStream [
 	aStream
 		print: self substring;
 		nextPutAll: ' gtSubstringMatch'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSubstringFilter >> substring [
 	^ substring
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSubstringFilter >> substring: aString [
 	substring := aString
 ]

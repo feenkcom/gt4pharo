@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoBinaryMessageNode',
-	#superclass : 'GtPharoMessageNode',
+	#name : #GtPharoBinaryMessageNode,
+	#superclass : #GtPharoMessageNode,
 	#instVars : [
 		'selectorPart',
 		'value'
@@ -8,62 +8,62 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitBinaryMessage: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBinaryMessageNode >> arguments [
 	^ { self value }
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoBinaryMessageNode >> isBinary [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBinaryMessageNode >> messageReceiver [
 	^ value messageReceiver
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> nodeVariables [
 	^ #(#value)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBinaryMessageNode >> selector [
 	^ self selectorPart value asSymbol
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> selectorPart [
 	^ selectorPart
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> selectorPart: aSmaCCToken [
 	selectorPart := aSmaCCToken
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBinaryMessageNode >> selectorParts [
 	^ {selectorPart}
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> tokenVariables [
 	^ #(#selectorPart)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> value [
 	^ value
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoBinaryMessageNode >> value: aGtPharoValueNode [
 	self value notNil ifTrue: [ self value parent: nil ].
 	value := aGtPharoValueNode.

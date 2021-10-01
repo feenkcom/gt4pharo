@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtSearchLiteralStringFilter',
-	#superclass : 'GtSearchMethodsFilter',
+	#name : #GtSearchLiteralStringFilter,
+	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
 		'substring',
 		'caseSensitive'
@@ -8,39 +8,39 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'api - instance creation' }
+{ #category : #'api - instance creation' }
 GtSearchLiteralStringFilter class >> substring: aString [
 	^ self new substring: aString
 ]
 
-{ #category : 'api - instance creation' }
+{ #category : #'api - instance creation' }
 GtSearchLiteralStringFilter class >> substring: aString caseSensitive: aBoolean [
 	^ self new substring: aString; caseSensitive: aBoolean
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchLiteralStringFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self substring asLowercase = anObject substring asLowercase ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchLiteralStringFilter >> beCaseInsensitive [
 	self caseSensitive: false
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtSearchLiteralStringFilter >> beCaseSensitive [
 	self caseSensitive: true
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtSearchLiteralStringFilter >> caseSensitive [
 	<return: #Boolean>
 	^ caseSensitive
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchLiteralStringFilter >> caseSensitive: aBoolean [
 	self 
 		assert: [ aBoolean isBoolean ] 
@@ -48,7 +48,7 @@ GtSearchLiteralStringFilter >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtSearchLiteralStringFilter >> filterDescriptorFor: aMethodsCoder [
 	^ GtFilterDescriptor
 		creator: [ :value | self substring: value ]
@@ -56,24 +56,24 @@ GtSearchLiteralStringFilter >> filterDescriptorFor: aMethodsCoder [
 		order: 91
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchLiteralStringFilter >> filterValueString [
 	^ self substring
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtSearchLiteralStringFilter >> gtDisplayOn: stream [
 	stream
 		print: self substring;
 		nextPutAll: ' substringLiteralMatch'
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchLiteralStringFilter >> hash [
 	^ self class hash bitXor: self substring asLowercase hash
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchLiteralStringFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod hasLiteralSuchThat: [ :aLiteralNode |
 		aLiteralNode isString 
@@ -83,18 +83,18 @@ GtSearchLiteralStringFilter >> includesMethod: aCompiledMethod [
 			caseSensitive: self caseSensitive] ] ]
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtSearchLiteralStringFilter >> initialize [
 	super initialize.
 	caseSensitive := false.
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtSearchLiteralStringFilter >> substring [
 	^ substring
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchLiteralStringFilter >> substring: aString [
 	substring := aString
 ]

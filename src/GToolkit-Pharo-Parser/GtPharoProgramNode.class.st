@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoProgramNode',
-	#superclass : 'SmaCCParseNode',
+	#name : #GtPharoProgramNode,
+	#superclass : #SmaCCParseNode,
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'api - ast' }
+{ #category : #'api - ast' }
 GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: theBindings [
 	"Given a pharo ast node and a class find the return type of the node"
 	
@@ -53,12 +53,12 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 	^ nil
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoProgramNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitProgram: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> bestNodeFor: anInterval ifFound: aFoundBlock ifNone: aNoneBlock [
 	| selectedChildren |
 	
@@ -80,7 +80,7 @@ GtPharoProgramNode >> bestNodeFor: anInterval ifFound: aFoundBlock ifNone: aNone
 		ifFalse: [ aFoundBlock value: self ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> containedBy: anInterval [
 	"Return true if this node is contained within the interval (or equal to the interval)"
 	<return: #Boolean>
@@ -88,12 +88,12 @@ GtPharoProgramNode >> containedBy: anInterval [
 	^ anInterval first <= self startPosition and: [ anInterval last >= self stopPosition ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> defines: aString [
 	^ false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> findVariableNodeAt: anInteger [
 	self
 		nodesDo:
@@ -103,7 +103,7 @@ GtPharoProgramNode >> findVariableNodeAt: anInteger [
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> implicitLocalVariables [
 	| variables |
 	variables := self localVariables.
@@ -115,7 +115,7 @@ GtPharoProgramNode >> implicitLocalVariables [
 	^ variables
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> intersectsInterval: anInterval [
 	<return: #Boolean>
 
@@ -123,77 +123,77 @@ GtPharoProgramNode >> intersectsInterval: anInterval [
 		or: [ self startPosition between: anInterval first and: anInterval last ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isAssignment [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isKeyword [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isLiteral [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isMessage [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isMessageSend [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isMethod [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isMethodPattern [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isPragma [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isReturn [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isSelf [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isSequence [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isValueNode [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isVariable [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> isVariableDefinition [
 	^ false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> localVariablesInto: aCollection [
 	parent isNil
 		ifTrue: [ ^ self ].
@@ -204,29 +204,29 @@ GtPharoProgramNode >> localVariablesInto: aCollection [
 	parent localVariablesInto: aCollection
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> messageReceiver [
 	^ self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> methodNode [
 	^ parent ifNotNil: [ parent methodNode ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoProgramNode >> needsParenthesisForKeyword [
 	^ false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> nestingLevel [
 	^ (parent notNil and: [ parent isErrorNode not ])
 		ifTrue: [ parent nestingLevel ]
 		ifFalse: [ 0 ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProgramNode >> whoDefines: aName [ 
 	^ (self defines: aName) 
 		ifTrue: [ self ]
@@ -235,7 +235,7 @@ GtPharoProgramNode >> whoDefines: aName [
 			ifNil: [ nil ] ]
 ]
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtPharoProgramNode >> withAllParentsDo: aBlock [
 	| node |
 	node := self.

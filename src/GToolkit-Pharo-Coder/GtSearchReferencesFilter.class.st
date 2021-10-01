@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtSearchReferencesFilter',
-	#superclass : 'GtSearchMethodsFilter',
+	#name : #GtSearchReferencesFilter,
+	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
 		'object',
 		'specialSelectorIndex'
@@ -8,19 +8,19 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchReferencesFilter class >> literal: anObject [
 	^ self new
 		object: anObject;
 		yourself
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchReferencesFilter >> = anObject [
 	^ self class = anObject class and: [ self object = anObject object ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchReferencesFilter >> checkForArrayReference: anObject [
 	anObject isArray
 		ifFalse: [ ^ false ].
@@ -29,7 +29,7 @@ GtSearchReferencesFilter >> checkForArrayReference: anObject [
 			[ :each | each == self object or: [ self checkForArrayReference: each ] ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchReferencesFilter >> checkMethodSource: aCompiledMethod [
 	| ast |
 	ast := aCompiledMethod ast.
@@ -40,7 +40,7 @@ GtSearchReferencesFilter >> checkMethodSource: aCompiledMethod [
 	^ false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchReferencesFilter >> doesMethodIncludeBytecodeLiteral: aCompiledMethod [
 	| stream |
 	stream := InstructionStream on: aCompiledMethod.
@@ -62,18 +62,18 @@ GtSearchReferencesFilter >> doesMethodIncludeBytecodeLiteral: aCompiledMethod [
 	^ false
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtSearchReferencesFilter >> gtDisplayOn: stream [
 	self object gtDisplayOn: stream.
 	stream nextPutAll: ' references'.
 ]
 
-{ #category : 'comparing' }
+{ #category : #comparing }
 GtSearchReferencesFilter >> hash [
 	^ self class hash bitXor: self object hash
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtSearchReferencesFilter >> includesMethod: aCompiledMethod [
 	(aCompiledMethod encoderClass specialLiterals includes: self object)
 		ifTrue: [ ^ self doesMethodIncludeBytecodeLiteral: aCompiledMethod ].
@@ -82,18 +82,18 @@ GtSearchReferencesFilter >> includesMethod: aCompiledMethod [
 		specialSelectorIndex: specialSelectorIndex
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchReferencesFilter >> object [
 	^ object
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchReferencesFilter >> object: anObject [
 	object := anObject.
 	specialSelectorIndex := Smalltalk specialSelectorIndexOrNil: anObject
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtSearchReferencesFilter >> printOn: stream [
 	self object gtDisplayOn: stream.
 	stream nextPutAll: ' gtReferences'.

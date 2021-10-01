@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoTemplateParser',
-	#superclass : 'GtPharoParser',
+	#name : #GtPharoTemplateParser,
+	#superclass : #GtPharoParser,
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoTemplateParser >> actionsForCurrentToken [
 	| actions char |
 	((currentToken ids includes: scanner leftBraceId) and: [ scanner peekCharacter = ${ ])
@@ -48,13 +48,13 @@ GtPharoTemplateParser >> actionsForCurrentToken [
 	^ actions
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoTemplateParser >> characterAt: anInteger [
 	anInteger < 1 ifTrue: [ ^ nil ].
 	^ scanner stream originalContents at: anInteger
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoTemplateParser >> hasActionFor: aTokenId [
 	^ (self actionsForState: self currentState and: aTokenId) notNil
 ]

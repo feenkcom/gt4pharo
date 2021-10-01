@@ -1,6 +1,6 @@
-Extension { #name : 'UndefinedObject' }
+Extension { #name : #UndefinedObject }
 
-{ #category : '*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder' }
 UndefinedObject >> gtReferences [
 	^ GtSearchReferencesFilter literal: self
 ]

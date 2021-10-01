@@ -1,42 +1,42 @@
 Class {
-	#name : 'GtSearchMethodGroupResult',
-	#superclass : 'GtSearchTypedGroupResult',
+	#name : #GtSearchMethodGroupResult,
+	#superclass : #GtSearchTypedGroupResult,
 	#category : 'GToolkit-Pharo-Coder-Filters'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchMethodGroupResult class >> forClass: aClass andVariable: aString [
 	^ self forFilter: (GtSearchInstanceSlotReferenceFilter forClass: aClass andVariable: aString)
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchMethodGroupResult class >> forFilter: aCoderMethodsFilter [
 	^ self new
 		updateForFilter: aCoderMethodsFilter;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchMethodGroupResult class >> forImplementors: aSymbol [
 	^ self forFilter: (GtSearchImplementorsFilter selector: aSymbol)
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtSearchMethodGroupResult class >> forReferences: aSymbol [
 	^ self forFilter: (GtSearchReferencesFilter literal: aSymbol)
 ]
 
-{ #category : 'converting' }
+{ #category : #converting }
 GtSearchMethodGroupResult >> asCoder [
 	^ GtFilteredMethodsCoder forItems: self
 ]
 
-{ #category : 'converting' }
+{ #category : #converting }
 GtSearchMethodGroupResult >> asElement [
 	^ self asCoder asElement 
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtSearchMethodGroupResult >> gtItemsFor: aView [
 	<gtView>
 	^ aView explicit 
@@ -45,7 +45,7 @@ GtSearchMethodGroupResult >> gtItemsFor: aView [
 		stencil: [ (self asCoder) asElement margin: (BlInsets all: 5) ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodGroupResult >> gtMetricsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -57,12 +57,12 @@ GtSearchMethodGroupResult >> gtMetricsFor: aView [
 		column: 'Value' text: [ :assoc | assoc value asString ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSearchMethodGroupResult >> linesOfCode [
 	^ self sumNumbers: [ :method | method linesOfCode ]
 ]
 
-{ #category : 'changes' }
+{ #category : #changes }
 GtSearchMethodGroupResult >> methodAdded: aMethodAnnouncement [
 	(filtered and: [ filter notNil ])
 		ifFalse: [ ^ self ].
@@ -76,7 +76,7 @@ GtSearchMethodGroupResult >> methodAdded: aMethodAnnouncement [
 	announcer announce: (ValueAdded newValue: aMethodAnnouncement methodAdded)
 ]
 
-{ #category : 'changes' }
+{ #category : #changes }
 GtSearchMethodGroupResult >> methodChanged: aMethodAnnouncement [
 	| index selector class |
 	(filtered and: [ filter notNil ])
@@ -103,18 +103,18 @@ GtSearchMethodGroupResult >> methodChanged: aMethodAnnouncement [
 						newValue: aMethodAnnouncement newMethod) ]
 ]
 
-{ #category : 'changes' }
+{ #category : #changes }
 GtSearchMethodGroupResult >> methodRemoved: aMethodAnnouncement [
 	items remove: aMethodAnnouncement methodRemoved ifAbsent: [ ^ self ].
 	announcer announce: (ValueRemoved oldValue: aMethodAnnouncement methodRemoved)
 ]
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtSearchMethodGroupResult >> refreshItems [
 	self refreshMethods
 ]
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtSearchMethodGroupResult >> refreshMethods [
 	| methods |
 	filtered
@@ -130,12 +130,12 @@ GtSearchMethodGroupResult >> refreshMethods [
 	filtered := true.
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtSearchMethodGroupResult >> sortMethods: aCollectionOfMethods [
 	aCollectionOfMethods sort: GtMethodsSortFunction new
 ]
 
-{ #category : 'subscription' }
+{ #category : #subscription }
 GtSearchMethodGroupResult >> subscribe [
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded send: #methodAdded: to: self;
@@ -143,7 +143,7 @@ GtSearchMethodGroupResult >> subscribe [
 		when: MethodRemoved send: #methodRemoved: to: self
 ]
 
-{ #category : 'subscription' }
+{ #category : #subscription }
 GtSearchMethodGroupResult >> unsubscribe [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]

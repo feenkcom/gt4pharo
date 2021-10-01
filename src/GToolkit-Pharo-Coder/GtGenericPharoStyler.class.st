@@ -1,12 +1,12 @@
 Class {
-	#name : 'GtGenericPharoStyler',
-	#superclass : 'GtCoderAstStyler',
+	#name : #GtGenericPharoStyler,
+	#superclass : #GtCoderAstStyler,
 	#traits : 'TGtPharoProgramNodeVisitor',
 	#classTraits : 'TGtPharoProgramNodeVisitor classTrait',
 	#category : 'GToolkit-Pharo-Coder-Styler'
 }
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
 	<gtIgnoreConstraint: #GtRBAcceptVisitorCalledFromNonVisitingMethods>
 	aSmaCCParseNode isNil
@@ -17,7 +17,7 @@ GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
 		during: [	 aSmaCCParseNode acceptVisitor: self ]
 ]
 
-{ #category : 'api - styling' }
+{ #category : #'api - styling' }
 GtGenericPharoStyler >> style: aText ast: theAst [
 	text := aText.
 	[ self accept: theAst ]

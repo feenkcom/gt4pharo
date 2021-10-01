@@ -1,33 +1,33 @@
 Class {
-	#name : 'GtPharoErrorPatternNode',
-	#superclass : 'GtPharoMethodPatternNode',
+	#name : #GtPharoErrorPatternNode,
+	#superclass : #GtPharoMethodPatternNode,
 	#instVars : [
 		'smaccError'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoErrorPatternNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitErrorPattern: self
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoErrorPatternNode >> isErrorNode [
 	^ true
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoErrorPatternNode >> nodeVariables [
 	^ #(#smaccError)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoErrorPatternNode >> smaccError [
 	^ smaccError
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoErrorPatternNode >> smaccError: aSmaCCErrorNode [
 	self smaccError notNil ifTrue: [ self smaccError parent: nil ].
 	smaccError := aSmaCCErrorNode.

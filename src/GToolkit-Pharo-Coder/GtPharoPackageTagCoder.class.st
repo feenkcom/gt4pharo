@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoPackageTagCoder',
-	#superclass : 'GtCoderModel',
+	#name : #GtPharoPackageTagCoder,
+	#superclass : #GtCoderModel,
 	#traits : 'TGtCoderTrait',
 	#classTraits : 'TGtCoderTrait classTrait',
 	#instVars : [
@@ -11,28 +11,28 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoPackageTagCoder class >> forPackageTag: aPackageTag [
 	^ self new
 		packageTag: aPackageTag;
 		yourself
 ]
 
-{ #category : 'api - converting' }
+{ #category : #'api - converting' }
 GtPharoPackageTagCoder >> asNewCoderModelWithSameSubject [
 	"Return new coder model with same subject (e.g., package, class, method)"
 	<return: #GtCoderModel>
 	^ self class forPackageTag: self packageTag
 ]
 
-{ #category : 'asserting' }
+{ #category : #asserting }
 GtPharoPackageTagCoder >> assertCoder: aCoder [
 	self 
 		assert: [ aCoder isNotNil ]
 		description: [ 'Coder must be non-nil' ].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> classesCoder [
 	^ classesCoder
 		ifNil: [ classesCoder := GtPharoClassesCoder new.
@@ -41,22 +41,22 @@ GtPharoPackageTagCoder >> classesCoder [
 			classesCoder ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> coderForClass: aClass [
 	^ packageCoder coderForClass: aClass
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> coderName [
 	^ self packageTagName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> coders [
 	^ self classesCoder coders
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtPharoPackageTagCoder >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
@@ -67,53 +67,53 @@ GtPharoPackageTagCoder >> gtLiveFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self packageTag ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> icon [
 	^ BrGlamorousIcons packageicon asElement
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoPackageTagCoder >> isForPackageTag [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> name [
 	^ packageTag name
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> package [
 	^ packageTag package
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> packageCoder [
 	^ packageCoder ifNil: [ packageCoder := GtPharoPackageCoder forPackage: self package ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> packageCoder: aPackageCoder [
 	self assertCoder: aPackageCoder.
 	packageCoder := aPackageCoder
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> packageTag [
 	^ packageTag
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> packageTag: anObject [
 	packageTag := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoder >> packageTagName [
 	^ packageTag name
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtPharoPackageTagCoder >> printOn: aStream [
 	aStream
 		nextPutAll: 'Package Tag Coder';
@@ -123,7 +123,7 @@ GtPharoPackageTagCoder >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtPharoPackageTagCoder >> unload [
 	self packageTag classes do: [ :each | each removeFromSystem ].
 	self packageTag removeFromPackage

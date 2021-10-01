@@ -1,73 +1,78 @@
 Class {
-	#name : 'GtPharoMethodNode',
-	#superclass : 'GtPharoProgramNode',
+	#name : #GtPharoMethodNode,
+	#superclass : #GtPharoProgramNode,
 	#instVars : [
 		'pattern',
 		'body'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoMethodNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMethod: self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoMethodNode >> body [
 	^ body
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoMethodNode >> body: aGtPharoSequenceNode [
 	self body notNil ifTrue: [ self body parent: nil ].
 	body := aGtPharoSequenceNode.
 	self body notNil ifTrue: [ self body parent: self ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodNode >> defines: aString [
 	^ self variables anySatisfy: [ :each | each name value = aString ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodNode >> isMethod [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodNode >> localVariablesInto: aCollection [
 	self variables do: [ :each | aCollection add: each variableName ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodNode >> methodNode [
 	^ self
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoMethodNode >> nodeVariables [
 	^ #(#pattern #body)
 ]
 
-{ #category : 'generated' }
+{ #category : #acccessing }
+GtPharoMethodNode >> numArgs [
+	^ pattern variables size
+]
+
+{ #category : #generated }
 GtPharoMethodNode >> pattern [
 	^ pattern
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoMethodNode >> pattern: aGtPharoMethodPatternNode [
 	self pattern notNil ifTrue: [ self pattern parent: nil ].
 	pattern := aGtPharoMethodPatternNode.
 	self pattern notNil ifTrue: [ self pattern parent: self ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodNode >> pragmas [
 	^ self body pragmas
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodNode >> selector [
 	"Return a method selector if method pattern parsing was successful or nil otherwise.
 	Consider using #selectorDo: instead, as it does not return nil"
@@ -76,7 +81,7 @@ GtPharoMethodNode >> selector [
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodNode >> selectorDo: aBlock [
 	"Evaluate a block with a parsed method selector if method pattern is not erroneous"
 
@@ -84,12 +89,12 @@ GtPharoMethodNode >> selectorDo: aBlock [
 		ifFalse: [ aBlock value: pattern selector ]
 ]
 
-{ #category : 'acccessing' }
+{ #category : #acccessing }
 GtPharoMethodNode >> selectorParts [
 	^ pattern selectorParts
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodNode >> variables [
 	^ pattern variables
 ]

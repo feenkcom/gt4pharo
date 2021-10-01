@@ -1,33 +1,33 @@
 Class {
-	#name : 'GtPharoNilLiteralNode',
-	#superclass : 'GtPharoLiteralNode',
+	#name : #GtPharoNilLiteralNode,
+	#superclass : #GtPharoLiteralNode,
 	#instVars : [
 		'value'
 	],
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoNilLiteralNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitNilLiteral: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoNilLiteralNode >> literalValue [
 	^ nil
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoNilLiteralNode >> tokenVariables [
 	^ #(#value)
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoNilLiteralNode >> value [
 	^ value
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoNilLiteralNode >> value: aSmaCCToken [
 	value := aSmaCCToken
 ]
