@@ -1092,7 +1092,7 @@ GtPharoMethodCoder >> skipBlankLinesIn: source at: startIndex [
 
 { #category : #'api - addons' }
 GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
-	"<gtAstCoderAddOns: 10>"
+	<gtAstCoderAddOns: 10>
 	(self compiledMethod notNil
 		and: [ anAST notNil
 				and: [ 
