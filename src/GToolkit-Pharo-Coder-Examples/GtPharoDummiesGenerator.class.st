@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoDummiesGenerator',
-	#superclass : 'Object',
+	#name : #GtPharoDummiesGenerator,
+	#superclass : #Object,
 	#instVars : [
 		'amountOfPackages',
 		'amountOfClasses'
@@ -8,7 +8,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
-{ #category : 'api - generation' }
+{ #category : #'api - generation' }
 GtPharoDummiesGenerator class >> withPackages: anAmountOfPackages classHierarchy: anAmountOfClasses [
 	^ self new
 		amountOfPackages: anAmountOfPackages;
@@ -16,7 +16,7 @@ GtPharoDummiesGenerator class >> withPackages: anAmountOfPackages classHierarchy
 		generateHierarchy
 ]
 
-{ #category : 'api - generation' }
+{ #category : #'api - generation' }
 GtPharoDummiesGenerator class >> withPackages: anAmountOfPackages classes: anAmountOfClasses [
 	^ self new
 		amountOfPackages: anAmountOfPackages;
@@ -24,7 +24,7 @@ GtPharoDummiesGenerator class >> withPackages: anAmountOfPackages classes: anAmo
 		generate
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyClassHierarchyToPackage: aDummyPackage [
 	| theDummyClasses currentClass index |
 	currentClass := Object.
@@ -60,7 +60,7 @@ GtPharoDummiesGenerator >> addDummyClassHierarchyToPackage: aDummyPackage [
 	aDummyPackage dummyClasses: theDummyClasses
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyClassesToPackage: aDummyPackage [
 	| theDummyClasses |
 	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackage packageName) collect: [ :eachClassName |
@@ -89,7 +89,7 @@ GtPharoDummiesGenerator >> addDummyClassesToPackage: aDummyPackage [
 	aDummyPackage dummyClasses: theDummyClasses
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyKeywordMethodsToClass: aDummyClass [
 	| theDummyMethods |
 	
@@ -113,7 +113,7 @@ GtPharoDummiesGenerator >> addDummyKeywordMethodsToClass: aDummyClass [
 	aDummyClass addDummyMethods: theDummyMethods
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
 
@@ -130,7 +130,7 @@ GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 	aDummyEnvironment dummyPackages: theDummyPackages
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
 
@@ -147,7 +147,7 @@ GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDum
 	aDummyEnvironment dummyPackages: theDummyPackages
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyUnaryClassMethodsToClass: aDummyClass [
 	| theDummyMethods |
 	theDummyMethods := self dummyUnaryClassMethodNames collect: [ :eachMethodName |
@@ -170,7 +170,7 @@ GtPharoDummiesGenerator >> addDummyUnaryClassMethodsToClass: aDummyClass [
 	aDummyClass addDummyClassMethods: theDummyMethods
 ]
 
-{ #category : 'private - generation' }
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyUnaryMethodsToClass: aDummyClass [
 	| theDummyMethods |
 	theDummyMethods := self dummyUnaryMethodNames collect: [ :eachMethodName |
@@ -193,37 +193,37 @@ GtPharoDummiesGenerator >> addDummyUnaryMethodsToClass: aDummyClass [
 	aDummyClass addDummyMethods: theDummyMethods
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfClasses [
 	^ amountOfClasses
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfClasses: anObject [
 	amountOfClasses := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfPackages [
 	^ amountOfPackages
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfPackages: anObject [
 	amountOfPackages := anObject
 ]
 
-{ #category : 'private - names' }
+{ #category : #'private - names' }
 GtPharoDummiesGenerator >> dummyClassNamesForPackageName: aPackageName [	
 	^ (1 to: amountOfClasses) collect: [ :index | (aPackageName asCamelCase asValidSelector capitalized, 'Class', index asString) asSymbol ]
 ]
 
-{ #category : 'private - names' }
+{ #category : #'private - names' }
 GtPharoDummiesGenerator >> dummyPackageNamePrefix [
 	^ 'TemporaryPackage'
 ]
 
-{ #category : 'private - names' }
+{ #category : #'private - names' }
 GtPharoDummiesGenerator >> dummyPackageNames [
 	<script: #'self new dummyPackageNames inspect'>
 	| thePackageNames |
@@ -240,102 +240,102 @@ GtPharoDummiesGenerator >> dummyPackageNames [
 	^ thePackageNames
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> dummyUnaryClassMethodNames [
 	<script: 'self new dummyUnaryClassMethodNames inspect'>
 	
 	^ (1 to: self fakeMethodCount) collect: [ :index | (#classMethod, index asString) asSymbol ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> dummyUnaryMethodNames [
 	<script: 'self new dummyUnaryMethodNames inspect'>
 	
 	^ (1 to: self fakeMethodCount) collect: [ :index | (#method, index asString) asSymbol ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeCategoryForFakeMethod: aCompiledMethod [
 	^ 'api - ', aCompiledMethod selector
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeCategoryForFakeMethodName: aMethodName [
 	^ 'api - ', aMethodName
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeClassCount [
 	^ 2
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeClassNamed: aFakeClassName [
 	^ self class environment at: aFakeClassName
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeClassNamesForPackage: aPackage [
 	^ self fakeClassNamesForPackageName: aPackage name
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeClassNamesForPackageName: aPackageName [	
 	^ (1 to: self fakeClassCount) collect: [ :index | (aPackageName asCamelCase asValidSelector capitalized, 'Class', index asString) asSymbol ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeClassesInFakePackage: aPackage [
 	^ (self fakeClassNamesForPackage: aPackage) collect: [ :eachClassName | self fakeClassNamed: eachClassName ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeInstVarCount [
 	^ 2
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeInstVarNames [
 	<script: 'self new fakeInstVarNames inspect'>
 	
 	^ (1 to: self fakeInstVarCount) collect: [ :index | ('instVar', index asString) asSymbol ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeKeywordMethodNames [
 	<script: 'self new fakeKeywordMethodNames inspect'>
 	
 	^ (1 to: self fakeMethodCount) collect: [ :index | (#method, index asString, ':') asSymbol ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeKeywordMethodsInFakeClass: aFakeClass [
 	^ self fakeKeywordMethodNames collect: [ :each | aFakeClass >> each ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeMethodCount [
 	^ 2
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeMethodNames [
 	<script: 'self new fakeMethodNames inspect'>
 	
 	^ self fakeUnaryMethodNames, self fakeKeywordMethodNames
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeMethodsInFakeClass: aFakeClass [
 	^ self fakeMethodNames collect: [ :each | aFakeClass >> each ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeMethodsInFakeClass: aFakeClass inFakePackage: aPackage [
 	^ self fakeMethodNames collect: [ :each | aFakeClass >> each ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeMethodsInFakeClassNamed: aFakeClassName inFakePackage: aPackage [
 	| aClass |
 
@@ -343,7 +343,7 @@ GtPharoDummiesGenerator >> fakeMethodsInFakeClassNamed: aFakeClassName inFakePac
 	^ self fakeMethodNames collect: [ :each | aClass >> each ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeRegisteredPackage [
 	| aFakePackageName aPackage |
 	
@@ -361,12 +361,12 @@ GtPharoDummiesGenerator >> fakeRegisteredPackage [
 	^ aPackage
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeUnaryMethodsInFakeClass: aFakeClass [
 	^ self fakeUnaryMethodNames collect: [ :each | aFakeClass >> each ]
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeUnregisteredPackage [
 	| aFakePackageName aPackage |
 
@@ -381,7 +381,7 @@ GtPharoDummiesGenerator >> fakeUnregisteredPackage [
 	^ aPackage
 ]
 
-{ #category : 'api - generation' }
+{ #category : #'api - generation' }
 GtPharoDummiesGenerator >> generate [
 	<script: #'self new generate inspect'>
 	| aDummyEnvironment |
@@ -395,7 +395,7 @@ GtPharoDummiesGenerator >> generate [
 	^ aDummyEnvironment
 ]
 
-{ #category : 'api - generation' }
+{ #category : #'api - generation' }
 GtPharoDummiesGenerator >> generateHierarchy [
 	| aDummyEnvironment |
 	
@@ -408,7 +408,7 @@ GtPharoDummiesGenerator >> generateHierarchy [
 	^ aDummyEnvironment
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoDummiesGenerator >> initialize [
 	super initialize.
 	
@@ -416,7 +416,7 @@ GtPharoDummiesGenerator >> initialize [
 	amountOfClasses := 2
 ]
 
-{ #category : 'private - set up' }
+{ #category : #'private - set up' }
 GtPharoDummiesGenerator >> renamedFakePackageName [
 	^ (self fakePackageName, 'Renamed') asSymbol
 ]

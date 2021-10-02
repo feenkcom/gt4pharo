@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtMethodCoderTagsElementExamples',
-	#superclass : 'Object',
+	#name : #GtMethodCoderTagsElementExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderTagsElementExamples >> forMethodCoder [
 	<gtExample>
 	| aMethodCoder theTagsElement |

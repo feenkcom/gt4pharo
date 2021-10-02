@@ -1,12 +1,12 @@
 Class {
-	#name : 'GtPharoSnippetCoderByScripterExamples',
-	#superclass : 'Object',
+	#name : #GtPharoSnippetCoderByScripterExamples,
+	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : 'examples - context menu' }
+{ #category : #'examples - context menu' }
 GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 	<gtExample>
 	| aScripter |
@@ -28,7 +28,7 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 	^ aScripter
 ]
 
-{ #category : 'examples - fixit method' }
+{ #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
 	<gtExample>
 	| aScripter |
@@ -38,7 +38,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
 	^ aScripter syncContinue
 ]
 
-{ #category : 'examples - fixit method' }
+{ #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure02checkFixitAction [
 	<gtExample>
 	| aScripter |
@@ -53,7 +53,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure02checkFi
 	^ aScripter syncContinue
 ]
 
-{ #category : 'examples - fixit method' }
+{ #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument01setup [
 	<gtExample>
 	| aScripter |
@@ -63,7 +63,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument0
 	^ aScripter syncContinue
 ]
 
-{ #category : 'examples - fixit method' }
+{ #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument02checkFixitAction [
 	<gtExample>
 	| aScripter |
@@ -78,7 +78,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument0
 	^ aScripter syncContinue
 ]
 
-{ #category : 'examples - fixit method' }
+{ #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable01setup [
 	<gtExample>
 	| aScripter |
@@ -88,7 +88,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable01setup [
 	^ aScripter syncContinue
 ]
 
-{ #category : 'examples - fixit method' }
+{ #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable02execute [
 	<gtExample>
 	| aScripter |
@@ -106,7 +106,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable02execute [
 	^ aScripter syncContinue
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable03type [
 	<gtExample>
 	| aScripter |
@@ -132,7 +132,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable03type [
 	^ aScripter syncContinue
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable04checkFixitAction [
 	<gtExample>
 	| aScripter |
@@ -147,7 +147,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable04checkFixitA
 	^ aScripter syncContinue
 ]
 
-{ #category : 'examples - context menu' }
+{ #category : #'examples - context menu' }
 GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	<gtExample>
 	| aScripter |

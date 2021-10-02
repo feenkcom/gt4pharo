@@ -3,12 +3,12 @@ I contain examples for working with destinations in a pharo code snippet.
 
 "
 Class {
-	#name : 'GtCoderElementForSnippetsWithDestinationExamples',
-	#superclass : 'GtCoderByScripterExamples',
+	#name : #GtCoderElementForSnippetsWithDestinationExamples,
+	#superclass : #GtCoderByScripterExamples,
 	#category : 'GToolkit-Pharo-Coder-Examples'
 }
 
-{ #category : 'examples - setup' }
+{ #category : #'examples - setup' }
 GtCoderElementForSnippetsWithDestinationExamples >> coderContainerWithSpawnBelowHandler [
 	"I contain an example of how the below event can be transformed."
 	<gtExample>
@@ -36,7 +36,7 @@ GtCoderElementForSnippetsWithDestinationExamples >> coderContainerWithSpawnBelow
 	^ containerElement
 ]
 
-{ #category : 'examples ' }
+{ #category : #'examples ' }
 GtCoderElementForSnippetsWithDestinationExamples >> coderContainerWithSpawnBelowHandler_InspectButtonClickOnSpawnBelowCoder [
 	<gtExample>
 	| aScripter spawnEvents |
@@ -70,7 +70,7 @@ GtCoderElementForSnippetsWithDestinationExamples >> coderContainerWithSpawnBelow
 	^ aScripter
 ]
 
-{ #category : 'examples ' }
+{ #category : #'examples ' }
 GtCoderElementForSnippetsWithDestinationExamples >> coderElementScripter [
 	<gtExample>
 	| aScripter |
@@ -90,7 +90,7 @@ GtCoderElementForSnippetsWithDestinationExamples >> coderElementScripter [
 	^ aScripter
 ]
 
-{ #category : 'examples ' }
+{ #category : #'examples ' }
 GtCoderElementForSnippetsWithDestinationExamples >> coderElementScripter_DestinationClick [
 	<gtExample>
 	| aScripter |
@@ -114,7 +114,7 @@ GtCoderElementForSnippetsWithDestinationExamples >> coderElementScripter_Destina
 	^ aScripter
 ]
 
-{ #category : 'examples ' }
+{ #category : #'examples ' }
 GtCoderElementForSnippetsWithDestinationExamples >> coderElementWithHandlerScripter_InspectButtonClickOnSpawnBelowCoder [
 	<gtExample>
 	| aScripter spawnEvents |
@@ -146,7 +146,7 @@ GtCoderElementForSnippetsWithDestinationExamples >> coderElementWithHandlerScrip
 	^ aScripter
 ]
 
-{ #category : 'examples ' }
+{ #category : #'examples ' }
 GtCoderElementForSnippetsWithDestinationExamples >> coderElementWithHandlerScripter_InspectButtonClickOnSpawnNextCoder [
 	<gtExample>
 	| aScripter spawnEvents |
@@ -175,7 +175,7 @@ GtCoderElementForSnippetsWithDestinationExamples >> coderElementWithHandlerScrip
 	^ aScripter
 ]
 
-{ #category : 'examples - setup' }
+{ #category : #'examples - setup' }
 GtCoderElementForSnippetsWithDestinationExamples >> snippetsCoderWithDestinationLook [
 	<gtExample>
 	| coder |

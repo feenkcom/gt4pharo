@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoDummyDebugger',
-	#superclass : 'GtPharoDummy',
+	#name : #GtPharoDummyDebugger,
+	#superclass : #GtPharoDummy,
 	#instVars : [
 		'debugSession',
 		'fullView',
@@ -11,7 +11,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoDummyDebugger class >> useDuring: aBlock [
 	| aDummyDebugger aPreviousDebugger |
 	
@@ -28,27 +28,27 @@ GtPharoDummyDebugger class >> useDuring: aBlock [
 	^ aDummyDebugger
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummyDebugger >> debugSession [
 	^ debugSession
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummyDebugger >> fullView [
 	^ fullView
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoDummyDebugger >> isObsolete [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummyDebugger >> method [
 	^ method
 ]
 
-{ #category : 'opening api' }
+{ #category : #'opening api' }
 GtPharoDummyDebugger >> openOn: aDebugSession withFullView: isFullView [
 	debugSession := aDebugSession.
 	fullView := isFullView.
@@ -60,12 +60,12 @@ GtPharoDummyDebugger >> openOn: aDebugSession withFullView: isFullView [
 	debugSession terminate
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummyDebugger >> receiver [
 	^ receiver
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoDummyDebugger >> sourceCode [
 	^ sourceCode
 ]

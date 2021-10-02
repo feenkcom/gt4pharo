@@ -1,21 +1,21 @@
 Class {
-	#name : 'GtMethodCoderExplanationStylerExamples',
-	#superclass : 'Object',
+	#name : #GtMethodCoderExplanationStylerExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : 'dummies' }
+{ #category : #dummies }
 GtMethodCoderExplanationStylerExamples >> a [
 	<gtExample>
 	^ 42
 ]
 
-{ #category : 'dummies' }
+{ #category : #dummies }
 GtMethodCoderExplanationStylerExamples >> a: arg1 a: arg2 a: arg3 a: arg4 [
 	"test method for highlighting implementors"
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> attributeCountOfType: aClass in: aTextEditor [
 	| text iterator count |
 	count := 0.
@@ -28,13 +28,13 @@ GtMethodCoderExplanationStylerExamples >> attributeCountOfType: aClass in: aText
 	^ count
 ]
 
-{ #category : 'dummies' }
+{ #category : #dummies }
 GtMethodCoderExplanationStylerExamples >> b [
 	<gtExample>
 	^ self a * self notAnExample
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderExplanationStylerExamples >> coderOnViewMethod [
 	<gtExample>
 	| selectors variables coder coderViewModel coderElement |
@@ -60,7 +60,7 @@ GtMethodCoderExplanationStylerExamples >> coderOnViewMethod [
 	^ coderElement
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderExplanationStylerExamples >> explanationLinkExample [
 	<gtExample>
 	| container inspectorContainer editor coder coderViewModel coderElement selectors variables |
@@ -109,7 +109,7 @@ GtMethodCoderExplanationStylerExamples >> explanationLinkExample [
 	^ container.
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderExplanationStylerExamples >> explanationLinkExampleText [
 	<gtExample>
 	| text |
@@ -145,17 +145,17 @@ GtMethodCoderExplanationStylerExamples >> explanationLinkExampleText [
 		foreground: Color black.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> hasAttributeOfType: aClass in: aTextEditor [
 	^ (self attributeCountOfType: aClass in: aTextEditor) > 0
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> hasExampleExpandAttributeIn: coder [
 	^ self hasAttributeOfType: BrGlamorousTrangleExpanderTextAttribute in: coder sourceEditor
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> hasExampleStatusIn: coder [
 	| collapsedAttribute sourceAttribute |
 	sourceAttribute := self
@@ -171,12 +171,12 @@ GtMethodCoderExplanationStylerExamples >> hasExampleStatusIn: coder [
 	^ sourceAttribute
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> hasUnderlineAttributeIn: coder [
 	^ self hasAttributeOfType: self unlineAttributeClass in: coder sourceEditor
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 	<gtExample>
 	| resultElement resultInspectorTree titleTab avatarLabel phoneLabel nameLabel avatarElementsCollection listLabelsCollection |
@@ -282,22 +282,22 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 	^ resultElement.
 ]
 
-{ #category : 'dummies' }
+{ #category : #dummies }
 GtMethodCoderExplanationStylerExamples >> notAnExample [
 	^ 42
 ]
 
-{ #category : 'dummies' }
+{ #category : #dummies }
 GtMethodCoderExplanationStylerExamples >> printStringReference [
 	^ self printString
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> unlineAttributeClass [
 	^ BlTextDecorationAttribute
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderExplanationStylerExamples >> viewsExplanationWithLinks [
 	<gtExample>
 	| container editor |
@@ -326,7 +326,7 @@ GtMethodCoderExplanationStylerExamples >> viewsExplanationWithLinks [
 	^ container
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtMethodCoderExplanationStylerExamples >> viewsExplanationWithLinksOnCoderAndInspector [
 	<gtExample>
 	| coderElement inspectorContainer verticalContainer editor container |
@@ -375,7 +375,7 @@ GtMethodCoderExplanationStylerExamples >> viewsExplanationWithLinksOnCoderAndIns
 		addChild: verticalContainer.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> viewsExplanationWithLinksText [
 	| text |
 	
