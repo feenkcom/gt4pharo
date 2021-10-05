@@ -25,6 +25,12 @@ GtPharoSourceCoder >> isLocalVariable: aNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoNonBreakableSpaceStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel [
 	self
 		nodeAt: aTextPosition
