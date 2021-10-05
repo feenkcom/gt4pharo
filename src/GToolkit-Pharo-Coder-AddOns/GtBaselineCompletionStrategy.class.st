@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtBaselineCompletionStrategy',
-	#superclass : 'GtCompletionStrategy',
+	#name : #GtBaselineCompletionStrategy,
+	#superclass : #GtCompletionStrategy,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtBaselineCompletionStrategy >> completionActionsFor: aText at: positionInteger max: maxInteger [
 	| string completionActions first partialName names last ch deleteAction |
 	string := aText asString.
@@ -43,12 +43,12 @@ GtBaselineCompletionStrategy >> completionActionsFor: aText at: positionInteger 
 	^ completionActions
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtBaselineCompletionStrategy >> hasCompletionsAt: anInteger in: aText [
 	^ true
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtBaselineCompletionStrategy >> namesMatching: aString [
 	^ self subclassResponsibility
 ]

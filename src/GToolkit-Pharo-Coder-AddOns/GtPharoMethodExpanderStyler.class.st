@@ -1,20 +1,20 @@
 Class {
-	#name : 'GtPharoMethodExpanderStyler',
-	#superclass : 'GtGenericPharoStyler',
+	#name : #GtPharoMethodExpanderStyler,
+	#superclass : #GtGenericPharoStyler,
 	#instVars : [
 		'variableBindings'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
-{ #category : 'api - styling' }
+{ #category : #'api - styling' }
 GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 	variableBindings := self coderViewModel compositeVariableBindings.
 	[ super style: aText ast: theAst ]
 		ensure: [ variableBindings := nil ]
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoMethodExpanderStyler >> visitMessageSend: aMessageNode [
 	| aMethodClass |
 

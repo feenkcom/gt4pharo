@@ -1,16 +1,16 @@
 Class {
-	#name : 'GtAddParameterRefactoring',
-	#superclass : 'RBAddParameterRefactoring',
+	#name : #GtAddParameterRefactoring,
+	#superclass : #RBAddParameterRefactoring,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtAddParameterRefactoring >> modifyImplementorParseTree: parseTree in: aClass [
 	super modifyImplementorParseTree: parseTree in: aClass.
 	newArgs do: [ :each | self replaceReference: each in: parseTree ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtAddParameterRefactoring >> replaceReference: argumentName in: parseTree [
 	| searchTree |
 	searchTree := RBParser parseExpression: argumentName value1.

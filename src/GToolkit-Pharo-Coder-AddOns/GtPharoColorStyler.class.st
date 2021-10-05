@@ -9,12 +9,12 @@ The following example shows how a {{gtMethod:Color class >> #r:g:b:range: | labe
 The following example shows how a {{gtMethod:Color class >> #brickColorRegistry | label=#selector}} colors looks like directly in the code: {{ gtExample: GtPharoColorStylerExamples >> #colorFromColorRegistrySourceCode }}
 "
 Class {
-	#name : 'GtPharoColorStyler',
-	#superclass : 'GtGenericPharoStyler',
+	#name : #GtPharoColorStyler,
+	#superclass : #GtGenericPharoStyler,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
-{ #category : 'private - styling' }
+{ #category : #'private - styling' }
 GtPharoColorStyler >> styleFromString: aMessageSendNode [
 	| color |
 	color := Color
@@ -22,7 +22,7 @@ GtPharoColorStyler >> styleFromString: aMessageSendNode [
 	self styleNode: aMessageSendNode withColor: color
 ]
 
-{ #category : 'private - styling' }
+{ #category : #'private - styling' }
 GtPharoColorStyler >> styleNode: aMessageSendNode withColor: color [
 	self
 		attribute:
@@ -37,14 +37,14 @@ GtPharoColorStyler >> styleNode: aMessageSendNode withColor: color [
 		to: aMessageSendNode stopPosition
 ]
 
-{ #category : 'private - styling' }
+{ #category : #'private - styling' }
 GtPharoColorStyler >> styleRegisteredColor: aMessageSendNode [
 	| color |
 	color := Color brickColorRegistry at: aMessageSendNode message selector ifAbsent: [ ^ self ].
 	self styleNode: aMessageSendNode withColor: color.
 ]
 
-{ #category : 'private - styling' }
+{ #category : #'private - styling' }
 GtPharoColorStyler >> styleRgbRange: aMessageSendNode [
 	| color |
 	color := Color
@@ -55,7 +55,7 @@ GtPharoColorStyler >> styleRgbRange: aMessageSendNode [
 	self styleNode: aMessageSendNode withColor: color
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoColorStyler >> visitMessageSend: aMessageSendNode [
 	| receiver |
 	super visitMessageSend: aMessageSendNode.

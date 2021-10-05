@@ -1,15 +1,15 @@
 Class {
-	#name : 'GtRenameClassController',
-	#superclass : 'GtRenameVariableController',
+	#name : #GtRenameClassController,
+	#superclass : #GtRenameVariableController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRenameClassController >> refactoringName [
 	^ 'Rename class'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRenameClassController >> rename: anOldName to: aNewName [
 	| aModel |
 

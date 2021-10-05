@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtDefineMethodFixItAction',
-	#superclass : 'GtFixItAction',
+	#name : #GtDefineMethodFixItAction,
+	#superclass : #GtFixItAction,
 	#instVars : [
 		'classOrMetaClass'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtDefineMethodFixItAction >> addCoderAttributeinEditor: aBrTextEditor [
 	| position |
 	
@@ -19,17 +19,17 @@ GtDefineMethodFixItAction >> addCoderAttributeinEditor: aBrTextEditor [
 				andSelector: node selector) isExpanded: true)}
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineMethodFixItAction >> attributePosition [
 	^ node selectorParts last stopPosition
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineMethodFixItAction >> classOrMetaClass: anObject [
 	classOrMetaClass := anObject
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtDefineMethodFixItAction >> compileMethod [
 	| refactoring |
 	refactoring := RBAddMethodRefactoring
@@ -39,26 +39,26 @@ GtDefineMethodFixItAction >> compileMethod [
 	refactoring execute
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineMethodFixItAction >> description [
 	^ 'Create method ' , node selector , ' in class ', classOrMetaClass name
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtDefineMethodFixItAction >> executeOn: anEditorElement [
 	self compileMethod.
 	self clearFixItAttributeInEditor: anEditorElement editor.
 	self addCoderAttributeinEditor: anEditorElement editor.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtDefineMethodFixItAction >> id [
 	<return: #BlElementId>
 
 	^ GtDefineMethodFixItActionElementId
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtDefineMethodFixItAction >> methodSource [
 	node arguments isEmpty
 		ifTrue: [ ^ node selector ].

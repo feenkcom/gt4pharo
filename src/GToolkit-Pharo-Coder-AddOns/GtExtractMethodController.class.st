@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtExtractMethodController',
-	#superclass : 'GtPharoSourceCoderRefactoringController',
+	#name : #GtExtractMethodController,
+	#superclass : #GtPharoSourceCoderRefactoringController,
 	#instVars : [
 		'methodArguments',
 		'methodSelector',
@@ -13,7 +13,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> addRefactoringPreview [
 	| message refactoring |
 
@@ -33,7 +33,7 @@ GtExtractMethodController >> addRefactoringPreview [
 			self allowSave ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> addReorderParametersAttributes [
 	| message text |
 	message := self findExtractedSend.
@@ -58,7 +58,7 @@ GtExtractMethodController >> addReorderParametersAttributes [
 								icon: BrGlamorousVectorIcons right)} ] ]
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> cancelRefactoring [
 	self isRenaming
 		ifTrue: [ renameAction cancel ].
@@ -67,7 +67,7 @@ GtExtractMethodController >> cancelRefactoring [
 	self allowSave
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> createModel [
 	| model modelClass |
 	
@@ -85,7 +85,7 @@ GtExtractMethodController >> createModel [
 	^ model
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> executeRefactoring [
 	| refactoring newSource |
 
@@ -97,7 +97,7 @@ GtExtractMethodController >> executeRefactoring [
 	self updateMethod: newSource
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> extractedSelector [
 	^ (String
 		streamContents:
@@ -105,7 +105,7 @@ GtExtractMethodController >> extractedSelector [
 		asSymbol
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> extractionInterval [
 	^ extractionInterval
 		ifNil: [ | nodes |
@@ -114,7 +114,7 @@ GtExtractMethodController >> extractionInterval [
 			extractionInterval := nodes first startPosition to: nodes last stopPosition ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> findExtractedSend [
 	self sourceAst
 		withAllNodesOfType: GtPharoMessageNode
@@ -132,7 +132,7 @@ GtExtractMethodController >> findExtractedSend [
 	^ nil
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> installRenamerAt: anInteger [
 	| message interval |
 	
@@ -170,12 +170,12 @@ GtExtractMethodController >> installRenamerAt: anInteger [
 	renameAction install
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtExtractMethodController >> isRenaming [
 	^ renameAction notNil and: [ renameAction isInstalled ]
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> refactoring [
 	| model |
 
@@ -188,23 +188,23 @@ GtExtractMethodController >> refactoring [
 		in: (model classFor: sourceCoderViewModel behavior)
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> refactoringFailed [
 	self sourceCoderViewModel allowSaveDueTo: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtExtractMethodController >> refactoringName [
 	^ 'Extract method'
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> removeReorderParametersAttributes [
 	self sourceText
 		clearAttributes: [ :each | each isKindOf: GtExtractMethodReorderParametersAttribute ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> safeMethodName: methodName in: aModel [
 	| modelClass index selector name argCount |
 
@@ -224,13 +224,13 @@ GtExtractMethodController >> safeMethodName: methodName in: aModel [
 	^ selector
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtExtractMethodController >> safelyExecute [
 	self createModel.
 	self executeRefactoring
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> setBodyText: bodySource andAttributesAt: positions [
 	| bodyText |
 	bodyText := bodySource asRopedText.
@@ -243,7 +243,7 @@ GtExtractMethodController >> setBodyText: bodySource andAttributesAt: positions 
 	self setText: bodyText
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
 	| methodNameBlock |
 	isExisting := false.
@@ -277,7 +277,7 @@ GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
 				[ :ref :varName | (aRefactoring model classFor: sourceCoderViewModel behavior) definesVariable: varName ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> setPreviewOptionsOn: aRefactoring [
 	| methodNameBlock |
 	methodNameBlock := [ :ref :methodName |
@@ -304,14 +304,14 @@ GtExtractMethodController >> setPreviewOptionsOn: aRefactoring [
 				[ :ref :varName | (aRefactoring model classFor: sourceCoderViewModel behavior) definesVariable: varName ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> sourceAst [
 	^ GtPharoParser
 		parse: self sourceText characters asString
 		startingAt: GtPharoParser startingStateForMethod
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> swap: firstNode with: secondNode [
 	| aNewSourceText aFirstNode aSecondNode |
 
@@ -336,7 +336,7 @@ GtExtractMethodController >> swap: firstNode with: secondNode [
 		withString: aSecondNode source
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> swapParameterWithNext: anInteger [
 	| message |
 	self removeReorderParametersAttributes.
@@ -355,7 +355,7 @@ GtExtractMethodController >> swapParameterWithNext: anInteger [
 	self addRefactoringPreview
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> updateMethod: newSource [
 	self sourceCoderViewModel selectNone.
 	self setText: newSource.
@@ -375,7 +375,7 @@ GtExtractMethodController >> updateMethod: newSource [
 	self addRefactoringPreview
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtExtractMethodController >> updateSelector: aString [
 	extractedSelectorKeywords at: renameIndex put: aString
 ]

@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtProtectInstanceVariableRefactoringController',
-	#superclass : 'GtVariableRefactoringController',
+	#name : #GtProtectInstanceVariableRefactoringController,
+	#superclass : #GtVariableRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtProtectInstanceVariableRefactoringController >> refactoring [
 	| aModel aClass |
 	
@@ -17,7 +17,7 @@ GtProtectInstanceVariableRefactoringController >> refactoring [
 		class: (aClass whoDefinesInstanceVariable: self variableName)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtProtectInstanceVariableRefactoringController >> refactoringName [
 	^ 'Protect instance variable {1}' format: { self variableName }
 ]

@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtMethodRefactoringController',
-	#superclass : 'GtPharoSourceCoderRefactoringController',
+	#name : #GtMethodRefactoringController,
+	#superclass : #GtPharoSourceCoderRefactoringController,
 	#instVars : [
 		'methodNode'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtMethodRefactoringController >> addRefactoringPreview [
 	self
 		addRefactoringChangesPreview: self refactoring
@@ -17,32 +17,32 @@ GtMethodRefactoringController >> addRefactoringPreview [
 			self allowSave ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodRefactoringController >> methodClass [
 	^ sourceCoderViewModel behavior
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodRefactoringController >> methodNode [
 	^ methodNode
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodRefactoringController >> methodNode: aGtPharoMethodNode [
 	methodNode := aGtPharoMethodNode
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodRefactoringController >> methodSelector [
 	^ sourceCoderViewModel selector
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtMethodRefactoringController >> previewPosition [
 	^ methodNode pattern stopPosition
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtMethodRefactoringController >> safelyExecute [
 	self preventSave.
 	sourceCoderViewModel selectNone.

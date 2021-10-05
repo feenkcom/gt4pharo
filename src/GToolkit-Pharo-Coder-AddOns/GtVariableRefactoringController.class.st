@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtVariableRefactoringController',
-	#superclass : 'GtPharoSourceCoderRefactoringController',
+	#name : #GtVariableRefactoringController,
+	#superclass : #GtPharoSourceCoderRefactoringController,
 	#instVars : [
 		'variableNode'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtVariableRefactoringController >> safelyExecute [
 	self preventSave.
 
@@ -21,18 +21,18 @@ GtVariableRefactoringController >> safelyExecute [
 			self allowSave ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtVariableRefactoringController >> variableName [
 	^ self variableNode variableName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtVariableRefactoringController >> variableNode [
 
 	^ variableNode
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtVariableRefactoringController >> variableNode: anObject [
 
 	variableNode := anObject

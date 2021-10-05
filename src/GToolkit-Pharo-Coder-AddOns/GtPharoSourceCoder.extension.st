@@ -1,30 +1,36 @@
-Extension { #name : 'GtPharoSourceCoder' }
+Extension { #name : #GtPharoSourceCoder }
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoColorStyler new.
 	coderAddOns addStyler: GtPharoGlamorousColorStyler new.
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoGlamorousIconStyler new.
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> haltAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 20>
 	coderAddOns addStyler: GtPharoHaltStyler new
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoNonBreakableSpaceStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel [
 	self
 		nodeAt: aTextPosition
@@ -32,35 +38,35 @@ GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel [
 		ifNone: [  ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameClassIn: aSourceCoderViewModel node: aVariableNode [
 	(GtRenameClassController new
 		sourceCoderViewModel: aSourceCoderViewModel;
 		originalNode: aVariableNode) execute
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameClassVariableIn: aSourceCoderViewModel node: aVariableNode [
 	(GtRenameClassVariableController new
 		sourceCoderViewModel: aSourceCoderViewModel;
 		originalNode: aVariableNode) execute
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode [
 	(GtRenameInstanceVariableController new
 		sourceCoderViewModel: aSourceCoderViewModel;
 		originalNode: aVariableNode) execute
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel node: aMessageOrMethodOrMethodPatternNode [
 	(GtRenameMethodController new
 		sourceCoderViewModel: aSourceCoderViewModel;
 		originalNode: aMessageOrMethodOrMethodPatternNode) execute
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel [
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ ^ self renameMethod: aSourceCoderViewModel node: aNode ].
@@ -76,7 +82,7 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel [
 				ifPresent: [ :cls | (cls isKindOf: Class) ifTrue: [ ^ self renameClassIn: aSourceCoderViewModel node: aNode ] ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNode [
 	| action locations announcement definer otherCoders renameAttributes originalSource |
 	originalSource := aSourceCoderViewModel sourceText from: aVariableNode startPosition to: aVariableNode stopPosition.
@@ -124,7 +130,7 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 	^ action
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> zincAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoZincStyler new.

@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoSubstringLiteralHighlighter',
-	#superclass : 'GtPharoCodeHighlighter',
+	#name : #GtPharoSubstringLiteralHighlighter,
+	#superclass : #GtPharoCodeHighlighter,
 	#instVars : [
 		'substring',
 		'caseSensitive'
@@ -8,23 +8,23 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoSubstringLiteralHighlighter class >> substring: aString [
 	^ self new substring: aString
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoSubstringLiteralHighlighter class >> substring: aString caseSensitive: aBoolean [
 	^ self new substring: aString; caseSensitive: aBoolean
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSubstringLiteralHighlighter >> caseSensitive [
 	<return: #Boolean>
 	^ caseSensitive
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSubstringLiteralHighlighter >> caseSensitive: aBoolean [
 	self 
 		assert: [ aBoolean isBoolean ] 
@@ -32,24 +32,24 @@ GtPharoSubstringLiteralHighlighter >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean.
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoSubstringLiteralHighlighter >> initialize [
 	super initialize.
 
 	caseSensitive := false
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSubstringLiteralHighlighter >> substring [
 	^ substring
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSubstringLiteralHighlighter >> substring: aString [
 	substring := aString
 ]
 
-{ #category : 'visiting' }
+{ #category : #visiting }
 GtPharoSubstringLiteralHighlighter >> visitStringLiteral: aNode [
 	| source index |
 	

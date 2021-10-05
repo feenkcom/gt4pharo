@@ -1,6 +1,6 @@
-Extension { #name : 'GtRenameAction' }
+Extension { #name : #GtRenameAction }
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtRenameAction class >> pharoRenameLocalsOn: aTextEditorElement [
 	^ [
 		| editor text ast items action |
@@ -32,7 +32,7 @@ GtRenameAction class >> pharoRenameLocalsOn: aTextEditorElement [
 				ex return: nil ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtRenameAction class >> pharoRenameSnippetLocalsOn: aTextEditorElement [
 	^ [ | editor text ast items action |
 	editor := aTextEditorElement editor.

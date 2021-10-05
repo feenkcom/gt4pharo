@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtMethodInlineRefactoringController',
-	#superclass : 'GtPharoSourceCoderRefactoringController',
+	#name : #GtMethodInlineRefactoringController,
+	#superclass : #GtPharoSourceCoderRefactoringController,
 	#instVars : [
 		'node'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodInlineRefactoringController >> changedSourceForCurrentMethod: aRefactoryChange [
 	aRefactoryChange changes
 		reverseDo: [ :each | 
@@ -18,19 +18,19 @@ GtMethodInlineRefactoringController >> changedSourceForCurrentMethod: aRefactory
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodInlineRefactoringController >> node [
 
 	^ node
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodInlineRefactoringController >> node: anObject [
 
 	node := anObject
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodInlineRefactoringController >> performMethodRefactoring: aRefactoring [
 	[ aRefactoring primitiveExecute ]
 		on: RBRefactoringError
@@ -42,7 +42,7 @@ GtMethodInlineRefactoringController >> performMethodRefactoring: aRefactoring [
 	^ false
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtMethodInlineRefactoringController >> safelyExecute [
 	
 	sourceCoderViewModel selectNone.

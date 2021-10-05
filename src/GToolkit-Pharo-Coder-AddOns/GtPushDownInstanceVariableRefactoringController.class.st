@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPushDownInstanceVariableRefactoringController',
-	#superclass : 'GtVariableRefactoringController',
+	#name : #GtPushDownInstanceVariableRefactoringController,
+	#superclass : #GtVariableRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPushDownInstanceVariableRefactoringController >> refactoring [
 	| aModel aClass |
 	
@@ -17,7 +17,7 @@ GtPushDownInstanceVariableRefactoringController >> refactoring [
 		class: (aClass whoDefinesInstanceVariable: self variableName)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPushDownInstanceVariableRefactoringController >> refactoringName [
 	^ 'Push down variable ' , variableNode variableName
 ]
