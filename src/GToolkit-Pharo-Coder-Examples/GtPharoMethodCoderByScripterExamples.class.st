@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - reference highlighter' }
@@ -2197,6 +2197,103 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_mes
 		label: 'Check source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel.
+
+	^ aScripter syncContinue
+]
+
+{ #category : #'examples - inline parameter' }
+GtPharoMethodCoderByScripterExamples >> forInlineParameter_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+	aScripter do
+		label: 'type in a method with argument';
+		action: [ :aCoder | aCoder appendString:
+'Unique: arg
+	^ arg printString' ];
+		onModel.
+
+	aScripter do
+		label: 'Save a method with argument';
+		action: [ :aCoder | aCoder save ];
+		onModel.
+		
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : #'examples - inline parameter' }
+GtPharoMethodCoderByScripterExamples >> forInlineParameter_02_cursor [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineParameter_01_setup.
+	aScripter do
+		label: 'Select part of the method arg';
+		action: [ :aSourceEditor |
+			| index |
+			index := (aSourceEditor text asString indexOfSubCollection: 'arg') - 1.
+			aSourceEditor selecter
+				from: index to: index + 3;
+				select ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : #'examples - inline parameter' }
+GtPharoMethodCoderByScripterExamples >> forInlineParameter_03_hover_inline_parameter [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self openContextMenu: self forInlineParameter_02_cursor.
+
+	aScripter mouseMoveOver
+		label: 'Hover inline parameter';
+		onSpaceRoot;
+		id: #'context-menu--inline-parameter'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+
+	^ aScripter syncContinue
+]
+
+{ #category : #'examples - inline parameter' }
+GtPharoMethodCoderByScripterExamples >> forInlineParameter_04_click_inline_parameter [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self forInlineParameter_03_hover_inline_parameter.
+
+	aScripter click
+		label: 'Click inline parameter';
+		onSpaceRoot;
+		onChildNamed: #'context-menu--inline-parameter'.
+
+	aScripter wait forEmptySpaceTaskQueue.
+	
+	aScripter check
+		label: 'Check refactoring changes attribute';
+		value: [ :aCoderEditor |
+			| anInterval |
+			aCoderEditor text
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+			anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
+				index := (aCoderEditor text asString indexOf: Character cr) - 1.
+				index to: index ];
+		onChildNamed: GtPharoSourceCoder sourceEditorName.
 
 	^ aScripter syncContinue
 ]
