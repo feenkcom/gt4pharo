@@ -130,6 +130,24 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
+	(aNode isVariable and: [ aNode parent isMethodPattern ]) 
+		ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem:
+		(self
+			 createLabel: 'Inline parameter'
+			 description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtInlineParameterRefactoringController new
+				 sourceCoderViewModel: aCoderViewModel;
+				 variableNode: aNode) execute ]
+		id: #'context-menu--inline-parameter'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 	aNode isMessageSend
 		ifFalse: [ ^ self ].
@@ -318,6 +336,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
 			self addAddParameterRefactoringFor: aNode to: coderAddOns.
+			self addInlineParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addPushUpVariableRefactoringsFor: aNode to: coderAddOns.
