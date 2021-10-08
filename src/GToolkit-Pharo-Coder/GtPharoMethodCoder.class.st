@@ -8,9 +8,6 @@ Class {
 		'methodBehavior',
 		'selector'
 	],
-	#classVars : [
-		'NodeHighlight'
-	],
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
@@ -43,13 +40,6 @@ GtPharoMethodCoder class >> forNewMethod: aBehavior [
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
 	^ self forMethod: anObject class >> aSymbol
-]
-
-{ #category : #accessing }
-GtPharoMethodCoder class >> nodeHighlight [
-	^ NodeHighlight
-		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
-				paint: BrGlamorousColors textHighlightColor ]
 ]
 
 { #category : #'api - refactorings' }
@@ -272,16 +262,6 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 				in: aBehavior
 				classified: aCategory
 				for: aGtPharoSourceCoderEvaluationContext ]
-]
-
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> createLabel: aString description: description [
-	^ aString asRopedText
-		,
-			((' ' , description) asRopedText
-				attributes:
-					{(BlFontSizeAttribute size: 12).
-					(BlTextForegroundAttribute paint: Color gray)})
 ]
 
 { #category : #private }
@@ -536,15 +516,6 @@ GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 	self announce: (GtCoderExampleExecuted new 
 		coder: self;
 		example: aGtExampleExecuted example)
-]
-
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> highlightNodeBlock: aNode [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel
-		  addTextAttribute: self class nodeHighlight
-		  from: aNode startPosition
-		  to: aNode stopPosition ]
 ]
 
 { #category : #accessing }
@@ -997,12 +968,6 @@ GtPharoMethodCoder >> remove [
 	self reset.
 	
 	self notifyMethodRemoved
-]
-
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> removeHighlightBlock [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : #'api - refactorings' }
