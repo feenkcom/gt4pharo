@@ -1,17 +1,14 @@
 Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns [
-	| class theBindings selector |
+GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel [
+	| class selector |
 	aNode isMessageSend ifFalse: [ ^ false ].
 	selector := aNode selector.
-	theBindings := GtCompositeVariablesBindings new.
-	theBindings addBindings: GtReservedVariablesBindings new.
-	theBindings addBindings: GtGlobalVariablesBindings new.
 	class := GtPharoProgramNode
 		typeOf: aNode receiver
 		in: nil class
-		bindings: theBindings.
+		bindings: aCoderViewModel compositeVariableBindings.
 	class isNil
 		ifTrue:
 			[ Smalltalk globals
@@ -29,11 +26,11 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns [
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action:
-			[ :aCoderViewModel | 
+			[ :each | 
 			((GtSnippetInlineMessageRefactoringController new)
 				messageNode: aNode;
 				implementorClass: class;
-				sourceCoderViewModel: aCoderViewModel) execute ]
+				sourceCoderViewModel: each) execute ]
 		id: #'context-menu--inline-send'
 ]
 
@@ -46,7 +43,7 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 			[ :nodes | 
 			| node |
 			node := nodes first.
-			self addInlineMethodFor: node to: coderAddOns ]
+			self addInlineMethodFor: node to: coderAddOns from: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
