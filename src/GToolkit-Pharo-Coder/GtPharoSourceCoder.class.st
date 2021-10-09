@@ -13,7 +13,10 @@ It is important to notice that I do not directly reference a text editor and I s
 Class {
 	#name : #GtPharoSourceCoder,
 	#superclass : #GtSourceCoder,
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#classVars : [
+		'NodeHighlight'
+	],
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'private - actions' }
@@ -33,6 +36,13 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 	Smalltalk tools debugger
 		openOn: debugSession
 		withFullView: true
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder class >> nodeHighlight [
+	^ NodeHighlight
+		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
+				paint: BrGlamorousColors textHighlightColor ]
 ]
 
 { #category : #constants }
@@ -64,6 +74,16 @@ GtPharoSourceCoder >> classOrMetaClass [
 		transformWith: '`@receiver classOrMetaClass' -> '`@receiver behavior'.
 		
 	^ self behavior
+]
+
+{ #category : #'private - refactorings' }
+GtPharoSourceCoder >> createLabel: aString description: description [
+	^ aString asRopedText
+		,
+			((' ' , description) asRopedText
+				attributes:
+					{(BlFontSizeAttribute size: 12).
+					(BlTextForegroundAttribute paint: Color gray)})
 ]
 
 { #category : #'private - ast' }
@@ -206,6 +226,15 @@ GtPharoSourceCoder >> hasObjectAttribute [
 	<return: #Boolean>
 
 	^ false
+]
+
+{ #category : #'private - refactorings' }
+GtPharoSourceCoder >> highlightNodeBlock: aNode [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel
+		  addTextAttribute: self class nodeHighlight
+		  from: aNode startPosition
+		  to: aNode stopPosition ]
 ]
 
 { #category : #testing }
@@ -499,6 +528,12 @@ GtPharoSourceCoder >> referencesFilterForString: aString [
 { #category : #'private - ast' }
 GtPharoSourceCoder >> referencesFilterForSymbol: aSymbol [
 	^ self referencesFilterForLiteral: aSymbol
+]
+
+{ #category : #'private - refactorings' }
+GtPharoSourceCoder >> removeHighlightBlock [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : #'api - accessing' }

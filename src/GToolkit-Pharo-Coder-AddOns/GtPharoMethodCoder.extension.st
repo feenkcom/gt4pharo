@@ -476,20 +476,6 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractableNodesFrom: aCoderViewModel [
-	| allSelections allCursors |
-
-	allSelections := aCoderViewModel selection allSelections.
-	allCursors := aCoderViewModel cursors allCursors.
-
-	^ allSelections size = 1
-		ifTrue: [ self extractableNodesWithin: allSelections first interval ]
-		ifFalse: [ allCursors size = 1
-			ifTrue: [ self extractableNodesAt: allCursors first position ]
-			ifFalse: [ #() ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 6>
 	(self hasObjectAttribute

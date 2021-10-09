@@ -1,6 +1,52 @@
 Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel [
+	| class selector |
+	aNode isMessageSend ifFalse: [ ^ false ].
+	selector := aNode selector.
+	class := GtPharoProgramNode
+		typeOf: aNode receiver
+		in: nil class
+		bindings: aCoderViewModel compositeVariableBindings.
+	class isNil
+		ifTrue:
+			[ Smalltalk globals
+				allBehaviorsDo:
+					[ :each | 
+					(each includesSelector: selector)
+						ifTrue:
+							[ class notNil ifTrue: [ ^ self ].
+							class := each ] ] ].
+	class isNil ifTrue: [ ^ self ].
+	class := class whichClassIncludesSelector: selector.
+	class isNil ifTrue: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self createLabel: 'Inline send' description: aNode selector)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action:
+			[ :each | 
+			((GtSnippetInlineMessageRefactoringController new)
+				messageNode: aNode;
+				implementorClass: class;
+				sourceCoderViewModel: each) execute ]
+		id: #'context-menu--inline-send'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 20>
+	
+	(self extractableNodesFrom: aCoderViewModel)
+		ifNotEmpty:
+			[ :nodes | 
+			| node |
+			node := nodes first.
+			self addInlineMethodFor: node to: coderAddOns from: aCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 
