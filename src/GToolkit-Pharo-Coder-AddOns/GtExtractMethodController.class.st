@@ -8,9 +8,10 @@ Class {
 		'extractedSelectorKeywords',
 		'renameAction',
 		'renameIndex',
-		'extractionInterval'
+		'extractionInterval',
+		'moveAttributes'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #private }
@@ -35,27 +36,36 @@ GtExtractMethodController >> addRefactoringPreview [
 
 { #category : #private }
 GtExtractMethodController >> addReorderParametersAttributes [
-	| message text |
+	| message text attribute |
+	self removeReorderParametersAttributes.
+	extractedSelectorKeywords size > 1 ifFalse: [ ^ self ].
 	message := self findExtractedSend.
-	message isNil
-		ifTrue: [ ^ self ].
+	message isNil ifTrue: [ ^ self ].
 	text := self sourceText.
-	(message isBinary
-		ifTrue: [ {message value} ]
-		ifFalse: [ message values ])
-		keysAndValuesDo: [ :i :each | 
+	moveAttributes := OrderedCollection new.
+	(message isBinary ifTrue: [ {message value} ] ifFalse: [ message values ])
+		keysAndValuesDo:
+			[ :i :each | 
 			i > 1
-				ifTrue: [ (text from: each startPosition - 1 to: each startPosition - 1)
-						attributes:
-							{(GtExtractMethodReorderParametersAttribute
-								action: [ self swapParameterWithNext: i - 1 ]
-								icon: BrGlamorousVectorIcons left)} ].
+				ifTrue:
+					[ attribute := GtExtractMethodReorderParametersAttribute
+						action: [ self swapParameterWithNext: i - 1 ]
+						icon: BrGlamorousVectorIcons left.
+					moveAttributes add: attribute.
+					self sourceCoderViewModel
+						addTextAttribute: attribute
+						from: each startPosition - 1
+						to: each startPosition - 1 ].
 			i < message values size
-				ifTrue: [ (text from: each stopPosition to: each stopPosition)
-						attributes:
-							{(GtExtractMethodReorderParametersAttribute
-								action: [ self swapParameterWithNext: i ]
-								icon: BrGlamorousVectorIcons right)} ] ]
+				ifTrue:
+					[ attribute := GtExtractMethodReorderParametersAttribute
+						action: [ self swapParameterWithNext: i ]
+						icon: BrGlamorousVectorIcons right.
+					moveAttributes add: attribute.
+					self sourceCoderViewModel
+						addTextAttribute: attribute
+						from: each stopPosition
+						to: each stopPosition ] ]
 ]
 
 { #category : #executing }
@@ -132,10 +142,17 @@ GtExtractMethodController >> findExtractedSend [
 	^ nil
 ]
 
+{ #category : #initialization }
+GtExtractMethodController >> initialize [
+	super initialize.
+	moveAttributes := #()
+]
+
 { #category : #private }
 GtExtractMethodController >> installRenamerAt: anInteger [
 	| message interval |
-	
+	self addReorderParametersAttributes.
+			
 	renameIndex := anInteger.
 	anInteger isNil
 		ifTrue: [ ^ self addRefactoringPreview ].
@@ -200,8 +217,7 @@ GtExtractMethodController >> refactoringName [
 
 { #category : #private }
 GtExtractMethodController >> removeReorderParametersAttributes [
-	self sourceText
-		clearAttributes: [ :each | each isKindOf: GtExtractMethodReorderParametersAttribute ]
+	moveAttributes do: [ :each | self sourceCoderViewModel removeAttribute: each ]
 ]
 
 { #category : #private }
@@ -314,26 +330,22 @@ GtExtractMethodController >> sourceAst [
 { #category : #private }
 GtExtractMethodController >> swap: firstNode with: secondNode [
 	| aNewSourceText aFirstNode aSecondNode |
-
-	aNewSourceText := self sourceText.
-	
+	aNewSourceText := self sourceText copy.
 	firstNode startPosition < secondNode startPosition
-		ifTrue: [
-			aFirstNode := firstNode.
+		ifTrue:
+			[ aFirstNode := firstNode.
 			aSecondNode := secondNode ]
-		ifFalse: [
-			aFirstNode := secondNode.
+		ifFalse:
+			[ aFirstNode := secondNode.
 			aSecondNode := firstNode ].
-	
-	aNewSourceText
-		replace: aSecondNode startPosition - 1
-		to: aSecondNode stopPosition
-		withString: aFirstNode source.
-
-	aNewSourceText
-		replace: aFirstNode startPosition - 1
-		to: aFirstNode stopPosition
-		withString: aSecondNode source
+	aNewSourceText := (aNewSourceText copyFrom: 1 to: aFirstNode startPosition - 1) , aSecondNode source asRopedText
+		, (aNewSourceText copyFrom: aFirstNode stopPosition + 1 to: aSecondNode startPosition - 1) , aFirstNode source asRopedText
+		,
+			(aSecondNode stopPosition = aNewSourceText size
+				ifTrue: [ '' asRopedText ]
+				ifFalse: [ aNewSourceText copyFrom: aSecondNode stopPosition + 1 to: aNewSourceText size ]).
+	self setText: aNewSourceText.
+	self addReorderParametersAttributes
 ]
 
 { #category : #private }
@@ -367,9 +379,6 @@ GtExtractMethodController >> updateMethod: newSource [
 
 	"At this point saving is undefined, we disable it until refactoring is applied or canceled"
 	self preventSave.
-	
-	extractedSelectorKeywords size > 1
-		ifTrue: [ self addReorderParametersAttributes ].
 
 	self installRenamerAt: 1.
 	self addRefactoringPreview

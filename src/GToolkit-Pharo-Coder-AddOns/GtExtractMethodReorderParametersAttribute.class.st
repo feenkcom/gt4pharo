@@ -5,7 +5,7 @@ Class {
 		'actionBlock',
 		'icon'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #'instance creation' }
@@ -28,10 +28,11 @@ GtExtractMethodReorderParametersAttribute >> actionBlock: aBlock [
 
 { #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	^ BlElement new
-		size: icon extent;
-		background: icon;
-		addEventHandlerOn: BlClickEvent do: [ :anEvent | actionBlock cull: anEvent ];
+	^ (BrButton new)
+		aptitude: (BrGlamorousButtonRectangularAptitude paddingScale: 0) + BrGlamorousButtonIconAptitude;
+		action: [ :anEvent | actionBlock cull: anEvent ];
+		icon: icon;
+		id: #'reorder-parameter-button';
 		yourself
 ]
 
