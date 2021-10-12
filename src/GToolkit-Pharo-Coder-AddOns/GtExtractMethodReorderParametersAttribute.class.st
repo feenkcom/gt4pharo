@@ -29,9 +29,12 @@ GtExtractMethodReorderParametersAttribute >> actionBlock: aBlock [
 { #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ (BrButton new)
-		aptitude: (BrGlamorousButtonRectangularAptitude paddingScale: 0) + BrGlamorousButtonIconAptitude;
-		action: [ :anEvent | actionBlock cull: anEvent ];
 		icon: icon;
+		label: 'Reorder';
+		aptitude: BrGlamorousButtonExteriorAptitude +  ((BrGlamorousButtonRectangularAptitude paddingScale: 2/3) + BrGlamorousButtonIconAptitude + BrGlamorousButtonWithLabelTooltipAptitude);
+		beTinySize;
+		margin: (BlInsets top: 1 right: 4 bottom: 0 left: 4);
+		action: [ :anEvent | actionBlock cull: anEvent ];
 		id: #'reorder-parameter-button';
 		yourself
 ]
