@@ -639,7 +639,7 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 	anAST methodNode
 		ifNil: [ ^ self ].
 
-	"coderAddOns addStyler: GtCoderExampleStatusStyler new".
+	coderAddOns addStyler: GtPharoMethodTestCaseStyler new.
 
 	coderAddOns
 		addContextAction: 'Play Unit Test' translated
