@@ -302,6 +302,17 @@ GtPharoMethodCoder >> debugExample [
 	self example openingDebugger result
 ]
 
+{ #category : #'api - actions' }
+GtPharoMethodCoder >> ensureSave [
+	"Try to save the current method validating syntax and return `true` if save was succesful, false otherwise"
+	<return: #Boolean>
+	self isModified
+		ifTrue: [
+			self save
+				ifFalse: [ ^ false ] ].
+	^ true
+]
+
 { #category : #'private - actions' }
 GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEvaluationContext thenDo: aThenBlock [
 	"Evaluate a given source code and show the print string if needed"
