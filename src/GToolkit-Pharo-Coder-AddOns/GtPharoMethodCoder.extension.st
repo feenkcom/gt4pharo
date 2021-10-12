@@ -617,3 +617,38 @@ GtPharoMethodCoder >> runMondrianPaintFrom: anElement [
 	self object perform: self selector with: mondrian.
 	anElement phlow spawnObject: mondrian
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> testCase [
+
+	^ self
+		  attributeNamed: #testCase
+		  ifPresent: [ :aTestCase | aTestCase ]
+		  ifAbsent: [ 
+			  self
+				  attributeNamed: #testCase
+				  put: (GtPharoMethodTestCase forMethodCoder: self) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 11>
+	
+	self testCase canExecute ifFalse: [ ^ self ].
+	
+	anAST methodNode
+		ifNil: [ ^ self ].
+
+	"coderAddOns addStyler: GtCoderExampleStatusStyler new".
+
+	coderAddOns
+		addContextAction: 'Play Unit Test' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anEvent | self testCase play ]
+		id: GtMethodCoderPlayExampleActionId.
+	coderAddOns
+		addContextAction: 'Debug Unit Test' translated
+		icon: BrGlamorousVectorIcons debug
+		action: [ :aCoderUIModel :anEvent | self testCase debug ]
+		id: GtMethodCoderDebugExampleActionId
+]
