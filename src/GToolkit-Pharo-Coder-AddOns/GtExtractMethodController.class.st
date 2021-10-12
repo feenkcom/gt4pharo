@@ -126,19 +126,17 @@ GtExtractMethodController >> extractionInterval [
 
 { #category : #private }
 GtExtractMethodController >> findExtractedSend [
-	self sourceAst
+	[ self sourceAst
 		withAllNodesOfType: GtPharoMessageNode
-		do: [ :each | 
+		do:
+			[ :each | 
 			(each selector = self extractedSelector
-				and: [ ((1 to: methodArguments size)
-						allSatisfy: [ :i | 
-							(each isBinary
-								ifTrue: [ each value ]
-								ifFalse: [ each values at: i ]) source
-								= (methodArguments at: i) ])
-						and: [ (each parent receiver isKindOf: GtPharoVariableNode)
-								and: [ each parent receiver name value = 'self' ] ] ])
-				ifTrue: [ ^ each ] ].
+				and:
+					[ ((1 to: methodArguments size)
+						allSatisfy:
+							[ :i | (each isBinary ifTrue: [ each value ] ifFalse: [ each values at: i ]) source = (methodArguments at: i) ])
+						and: [ (each parent receiver isKindOf: GtPharoVariableNode) and: [ each parent receiver name value = 'self' ] ] ])
+				ifTrue: [ ^ each ] ] ] on: SmaCCParserError do: [ :ex | ^ nil ].
 	^ nil
 ]
 
