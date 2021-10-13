@@ -1,8 +1,22 @@
 Class {
 	#name : #GtCoderCollapsedContentElementExamples,
 	#superclass : #GtCoderContentElementExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
+
+{ #category : #accessing }
+GtCoderCollapsedContentElementExamples >> addOnsAptitude_withTestMethod [
+	<gtExample>
+	| aMethodCoder aContentElement |
+	aMethodCoder := GtPharoMethodCoder
+		forMethod: GtPharoDummyTestCase >> #testPassedOne.
+	aContentElement := GtSourceCoderCollapsedContentElement new
+		coderUIModel: aMethodCoder asCoderUIModel.
+	
+	aContentElement aptitude: GtMethodCoderHeaderAptitude +GtSourceCoderCollapsedAddOnsAptitude.
+	
+	^ aContentElement
+]
 
 { #category : #'examples - looks' }
 GtCoderCollapsedContentElementExamples >> forExampleCoder [

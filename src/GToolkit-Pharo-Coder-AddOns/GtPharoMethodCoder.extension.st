@@ -632,14 +632,15 @@ GtPharoMethodCoder >> testCase [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
+
 	<gtAstCoderAddOns: 11>
-	
+	anAST methodNode ifNil: [ ^ self ].
+
 	self testCase canExecute ifFalse: [ ^ self ].
-	
-	anAST methodNode
-		ifNil: [ ^ self ].
 
 	coderAddOns addStyler: GtPharoMethodTestCaseStyler new.
+	coderAddOns addPreview: 'Test Case' stencil: [ 
+		GtPharoMethodTestCaseStateElement new testCase: self testCase ].
 
 	coderAddOns
 		addContextAction: 'Play Unit Test' translated
