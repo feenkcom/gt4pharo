@@ -9,6 +9,11 @@ GtPharoMethodTestCaseErrorState class >> representsTestResult: aTestResult [
 	^ aTestResult hasErrors
 ]
 
+{ #category : #visiting }
+GtPharoMethodTestCaseErrorState >> accept: aVisitor [
+	^ aVisitor visitTestCaseErrorState: self
+]
+
 { #category : #accessing }
 GtPharoMethodTestCaseErrorState >> color [
 	^ BrGlamorousColors errorBackgroundColor

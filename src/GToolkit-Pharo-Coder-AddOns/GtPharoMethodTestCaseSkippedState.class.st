@@ -9,6 +9,11 @@ GtPharoMethodTestCaseSkippedState class >> representsTestResult: aTestResult [
 	^ aTestResult skippedCount isZero not
 ]
 
+{ #category : #visiting }
+GtPharoMethodTestCaseSkippedState >> accept: aVisitor [
+	^ aVisitor visitTestCaseSkippedState: self
+]
+
 { #category : #accessing }
 GtPharoMethodTestCaseSkippedState >> color [
 	^ BrGlamorousColors neutralBackgroundColor

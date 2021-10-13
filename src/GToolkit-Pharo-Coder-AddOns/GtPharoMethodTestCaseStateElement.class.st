@@ -10,6 +10,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
+{ #category : #'private - instance creation' }
+GtPharoMethodTestCaseStateElement >> hasResult [
+	self testResultDo: [ :aTestResult | ^ true ].
+	^ false
+]
+
 { #category : #initialization }
 GtPharoMethodTestCaseStateElement >> initialize [
 	super initialize.
@@ -22,7 +28,7 @@ GtPharoMethodTestCaseStateElement >> initialize [
 		exact: 12@12.
 		
 	self initializeInteractiveLook.
-	"self initializeTooltipLook."
+	self initializeTooltipLook.
 	self addAptitude: BrLayoutResizerAptitude inherit.
 ]
 
@@ -33,12 +39,29 @@ GtPharoMethodTestCaseStateElement >> initializeInteractiveLook [
 ]
 
 { #category : #initialization }
+GtPharoMethodTestCaseStateElement >> initializeTooltipLook [
+	self addAptitude:
+		(BrGlamorousWithTooltipAptitude content: [
+			self newTooltipContent ])
+]
+
+{ #category : #initialization }
 GtPharoMethodTestCaseStateElement >> initializeViewModels [
 	| aButtonModel |
 	
 	aButtonModel := BrButtonModel new
 		action: [ :aButton | self onClick: aButton ].
 	self viewModel: aButtonModel.
+]
+
+{ #category : #'private - instance creation' }
+GtPharoMethodTestCaseStateElement >> newTooltipContent [
+
+	^ GtPharoMethodTestCaseTooltipBuilder new
+		  element: self;
+		  state: self testCaseState;
+		  result: self testResult;
+		  build
 ]
 
 { #category : #'private - event handling' }
@@ -126,6 +149,7 @@ GtPharoMethodTestCaseStateElement >> testCaseState [
 { #category : #'private - accessing' }
 GtPharoMethodTestCaseStateElement >> testResult [
 	<return: #TestResult>
+	self testResultDo: [ :aTestResult | ^ aTestResult ].
 	^ nil
 ]
 

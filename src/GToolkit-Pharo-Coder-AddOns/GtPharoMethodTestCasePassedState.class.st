@@ -9,6 +9,11 @@ GtPharoMethodTestCasePassedState class >> representsTestResult: aTestResult [
 	^ aTestResult passedCount isZero not
 ]
 
+{ #category : #visiting }
+GtPharoMethodTestCasePassedState >> accept: aVisitor [
+	^ aVisitor visitTestCasePassedState: self
+]
+
 { #category : #accessing }
 GtPharoMethodTestCasePassedState >> color [
 	^ BrGlamorousColors successBackgroundColor
