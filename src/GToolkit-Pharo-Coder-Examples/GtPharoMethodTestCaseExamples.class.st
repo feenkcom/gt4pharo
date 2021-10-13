@@ -17,7 +17,12 @@ GtPharoMethodTestCaseExamples >> assertUnexecutedTestCaseOfCoder: aCoder [
 
 	self assert: aCoder testCase isSkipped not description: [ 
 		aCoder compiledMethod asString
-		, ' cannot be a skipped test case as it was not executed' ]
+		, ' cannot be a skipped test case as it was not executed' ].
+		
+	self
+		assert: aCoder testCase state
+		equals: GtPharoMethodNotExecutedState default.
+
 ]
 
 { #category : #'examples - test case' }
@@ -29,6 +34,42 @@ GtPharoMethodTestCaseExamples >> basicTestCase [
 	self assert: aTestCase canExecute not description: [ 'Uninitialized test case cannot be executed' ].
 	
 	^ aTestCase
+]
+
+{ #category : #'examples - execution' }
+GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
+
+	<gtExample>
+	| aCoder |
+	aCoder := self executePassingTestCase.
+	aCoder deleteSourceTextFrom: 63 to: 66.
+
+	self assert: aCoder testCase result isNotNil.
+	self assert: aCoder testCase state isNotNil.
+	self assert: aCoder testCase isPassed.
+	self
+		assert: aCoder testCase state
+		equals: GtPharoMethodNotExecutedState default.
+
+	^ aCoder
+]
+
+{ #category : #'examples - execution' }
+GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
+
+	<gtExample>
+	| aCoder |
+	aCoder := self executePassingTestCase.
+	aCoder deleteSourceTextFrom: 2 to: 4.
+
+	self assert: aCoder testCase result isNotNil.
+	self assert: aCoder testCase state isNotNil.
+	self assert: aCoder testCase isPassed.
+	"self
+		assert: aCoder testCase state
+		equals: GtPharoMethodNotExecutableTestCaseState default."
+
+	^ aCoder
 ]
 
 { #category : #'examples - test case' }
@@ -54,6 +95,24 @@ GtPharoMethodTestCaseExamples >> examplePharoMethodCoder [
 	^ self
 		  initializeCoderWith: self class >> #foo
 		  executable: false
+]
+
+{ #category : #'examples - execution' }
+GtPharoMethodTestCaseExamples >> executePassingTestCase [
+
+	<gtExample>
+	| aCoder |
+	aCoder := self passedOneUnitTestPharoMethodCoder.
+	aCoder testCase play.
+
+	self assert: aCoder testCase result isNotNil.
+	self assert: aCoder testCase isPassed.
+	self assert: aCoder testCase state isNotNil.
+	self
+		assert: aCoder testCase state
+		equals: GtPharoMethodTestCasePassedState default.
+
+	^ aCoder
 ]
 
 { #category : #'examples - mocks' }

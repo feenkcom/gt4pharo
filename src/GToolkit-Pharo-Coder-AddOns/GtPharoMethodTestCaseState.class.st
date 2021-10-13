@@ -1,0 +1,44 @@
+Class {
+	#name : #GtPharoMethodTestCaseState,
+	#superclass : #Object,
+	#traits : 'TGtUniqueInstance',
+	#classTraits : 'TGtUniqueInstance classTrait',
+	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
+}
+
+{ #category : #testing }
+GtPharoMethodTestCaseState class >> representsTestResult: aTestResult [
+	^ self subclassResponsibility
+]
+
+{ #category : #enumerating }
+GtPharoMethodTestCaseState class >> stateClassesDo: aBlock [
+
+	self allSubclassesDo: [ :eachClass | 
+		eachClass isAbstract ifFalse: [ aBlock value: eachClass ] ]
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodTestCaseState class >> stateFromTestResult: aTestResult [
+
+	aTestResult ifNil: [ ^ GtPharoMethodNotExecutedState default ].
+
+	self stateClassesDo: [ :eachStateClass | 
+		(eachStateClass representsTestResult: aTestResult) ifTrue: [ 
+			^ eachStateClass default ] ].
+
+	^ GtPharoMethodNotExecutedState default
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCaseState >> color [
+	"Return a color that represents a given state"
+	<return: #Color>
+	^ Color transparent
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCaseState >> label [
+	"Return a textural representation"
+	^ self subclassResponsibility
+]
