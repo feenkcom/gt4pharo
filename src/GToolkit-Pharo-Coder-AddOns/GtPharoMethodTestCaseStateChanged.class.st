@@ -1,18 +1,18 @@
 Class {
-	#name : #GtPharoMethodTestResultChanged,
+	#name : #GtPharoMethodTestCaseStateChanged,
 	#superclass : #GtPharoMethodTestCaseAnnouncement,
 	#instVars : [
-		'result'
+		'state'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
 { #category : #accessing }
-GtPharoMethodTestResultChanged >> result [
-	result
+GtPharoMethodTestCaseStateChanged >> state [
+	^ state
 ]
 
 { #category : #accessing }
-GtPharoMethodTestResultChanged >> result: aTestResult [
-	result := aTestResult
+GtPharoMethodTestCaseStateChanged >> state: aState [
+	state := aState
 ]
