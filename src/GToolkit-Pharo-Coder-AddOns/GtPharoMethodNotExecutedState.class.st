@@ -9,6 +9,11 @@ GtPharoMethodNotExecutedState class >> representsTestResult: aTestResult [
 	^ false
 ]
 
+{ #category : #visiting }
+GtPharoMethodNotExecutedState >> accept: aVisitor [
+	^ aVisitor visitTestCaseNotExecutedState: self
+]
+
 { #category : #accessing }
 GtPharoMethodNotExecutedState >> color [
 	^ BrGlamorousColors neutralBackgroundColor

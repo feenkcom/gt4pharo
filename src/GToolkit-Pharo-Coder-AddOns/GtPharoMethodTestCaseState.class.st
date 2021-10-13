@@ -30,6 +30,11 @@ GtPharoMethodTestCaseState class >> stateFromTestResult: aTestResult [
 	^ GtPharoMethodNotExecutedState default
 ]
 
+{ #category : #visiting }
+GtPharoMethodTestCaseState >> accept: aVisitor [
+	^ aVisitor visitTestCaseState: self
+]
+
 { #category : #accessing }
 GtPharoMethodTestCaseState >> color [
 	"Return a color that represents a given state"

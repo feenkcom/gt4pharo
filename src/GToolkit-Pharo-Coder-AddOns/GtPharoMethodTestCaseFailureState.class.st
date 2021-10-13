@@ -9,6 +9,11 @@ GtPharoMethodTestCaseFailureState class >> representsTestResult: aTestResult [
 	^ aTestResult hasFailures
 ]
 
+{ #category : #visiting }
+GtPharoMethodTestCaseFailureState >> accept: aVisitor [
+	^ aVisitor visitTestCaseFailureState: self
+]
+
 { #category : #accessing }
 GtPharoMethodTestCaseFailureState >> color [
 	^ BrGlamorousColors failureBackgroundColor

@@ -10,6 +10,11 @@ GtPharoMethodNotExecutableTestCaseState class >> representsTestResult: aTestResu
 ]
 
 { #category : #accessing }
+GtPharoMethodNotExecutableTestCaseState >> accept: aVisitor [
+	^ aVisitor visitTestCaseNotExecutableState: self
+]
+
+{ #category : #accessing }
 GtPharoMethodNotExecutableTestCaseState >> color [
 	^ Color transparent
 ]

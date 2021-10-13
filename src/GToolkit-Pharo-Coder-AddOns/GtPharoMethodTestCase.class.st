@@ -138,9 +138,9 @@ GtPharoMethodTestCase >> onSourceCodeChanged: anAnnouncement [
 
 { #category : #'private - updating' }
 GtPharoMethodTestCase >> onStateChanged [
-	self announce: (GtPharoMethodTestResultChanged new
+	self announce: (GtPharoMethodTestCaseStateChanged new
 		testCase: self;
-		result: self result)
+		state: self state)
 ]
 
 { #category : #'api - execution' }

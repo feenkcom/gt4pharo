@@ -10,10 +10,10 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #'private - event handling' }
-GtPharoMethodTestCaseStateElement >> debugTestCaseFrom: aButton [
-
-	self testCaseDo: [ :aTestCase | aTestCase debug ]
+{ #category : #'private - instance creation' }
+GtPharoMethodTestCaseStateElement >> hasResult [
+	self testResultDo: [ :aTestResult | ^ true ].
+	^ false
 ]
 
 { #category : #initialization }
@@ -28,7 +28,7 @@ GtPharoMethodTestCaseStateElement >> initialize [
 		exact: 12@12.
 		
 	self initializeInteractiveLook.
-	"self initializeTooltipLook."
+	self initializeTooltipLook.
 	self addAptitude: BrLayoutResizerAptitude inherit.
 ]
 
@@ -36,6 +36,13 @@ GtPharoMethodTestCaseStateElement >> initialize [
 GtPharoMethodTestCaseStateElement >> initializeInteractiveLook [
 	self addAptitude: (styleLook := BrStyleCommonAptitude new).
 	self updateStyleLook.
+]
+
+{ #category : #initialization }
+GtPharoMethodTestCaseStateElement >> initializeTooltipLook [
+	self addAptitude:
+		(BrGlamorousWithTooltipAptitude content: [
+			self newTooltipContent ])
 ]
 
 { #category : #initialization }
@@ -47,13 +54,20 @@ GtPharoMethodTestCaseStateElement >> initializeViewModels [
 	self viewModel: aButtonModel.
 ]
 
+{ #category : #'private - instance creation' }
+GtPharoMethodTestCaseStateElement >> newTooltipContent [
+
+	^ GtPharoMethodTestCaseTooltipBuilder new
+		  element: self;
+		  state: self testCaseState;
+		  result: self testResult;
+		  build
+]
+
 { #category : #'private - event handling' }
 GtPharoMethodTestCaseStateElement >> onClick: aButton [
 
-	self testCaseDo: [ :aTestCase | 
-		true ifTrue: [ ^ self spawnTestResultFrom: aButton ].
-		aTestCase isPassed ifTrue: [ ^ self spawnTestResultFrom: aButton ].
-		self debugTestCaseFrom: aButton ]
+	self spawnTestResultFrom: aButton
 ]
 
 { #category : #'private - hooks' }
@@ -62,16 +76,25 @@ GtPharoMethodTestCaseStateElement >> onTestCaseChanged [
 	self updateElement
 ]
 
-{ #category : #accessing }
+{ #category : #'private - event handling' }
 GtPharoMethodTestCaseStateElement >> onTestCaseResultChanged: aGtPharoMethodTestResultChanged [
 
 	BlUseAsyncFeatures
 		ifEnabledDo: [ 
-		self enqueueTask: (BlTaskAction new action: [ self updateElement ]) ]
-		otherwise: [ self updateElement ]
+		self enqueueTask: (BlTaskAction new action: [ self updateResult ]) ]
+		otherwise: [ self updateResult ]
 ]
 
 { #category : #'private - event handling' }
+GtPharoMethodTestCaseStateElement >> onTestCaseStateChanged: aGtPharoMethodTestCaseStateChanged [
+	
+	BlUseAsyncFeatures
+		ifEnabledDo: [ 
+		self enqueueTask: (BlTaskAction new action: [ self updateState ]) ]
+		otherwise: [ self updateState ]
+]
+
+{ #category : #'private - actions' }
 GtPharoMethodTestCaseStateElement >> spawnTestResultFrom: anElement [
 
 	self testResultDo: [ :aTestResult | 
@@ -83,6 +106,11 @@ GtPharoMethodTestCaseStateElement >> subscribeToTestCase [
 	self testCase weak 
 		when: GtPharoMethodTestResultChanged
 		send: #onTestCaseResultChanged:
+		to: self.
+		
+	self testCase weak 
+		when: GtPharoMethodTestCaseStateChanged
+		send: #onTestCaseStateChanged:
 		to: self
 ]
 
@@ -118,9 +146,10 @@ GtPharoMethodTestCaseStateElement >> testCaseState [
 	^ GtPharoMethodNotExecutedState default
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 GtPharoMethodTestCaseStateElement >> testResult [
 	<return: #TestResult>
+	self testResultDo: [ :aTestResult | ^ aTestResult ].
 	^ nil
 ]
 
@@ -138,6 +167,17 @@ GtPharoMethodTestCaseStateElement >> unsubscribeFromTestCase [
 
 { #category : #'private - updating' }
 GtPharoMethodTestCaseStateElement >> updateElement [
+
+	self updateState.
+	self updateResult.
+]
+
+{ #category : #'private - updating' }
+GtPharoMethodTestCaseStateElement >> updateResult [
+]
+
+{ #category : #'private - updating' }
+GtPharoMethodTestCaseStateElement >> updateState [
 
 	self background: self testCaseState color.
 	self updateStyleLook

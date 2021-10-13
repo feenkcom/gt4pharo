@@ -101,8 +101,11 @@ GtPharoMethodTestCaseExamples >> examplePharoMethodCoder [
 GtPharoMethodTestCaseExamples >> executePassingTestCase [
 
 	<gtExample>
-	| aCoder |
+	| aCoder allAnnouncements |
 	aCoder := self passedOneUnitTestPharoMethodCoder.
+	allAnnouncements := OrderedCollection new.
+	aCoder testCase when: Announcement send: #add: to: allAnnouncements.
+	
 	aCoder testCase play.
 
 	self assert: aCoder testCase result isNotNil.
@@ -111,7 +114,10 @@ GtPharoMethodTestCaseExamples >> executePassingTestCase [
 	self
 		assert: aCoder testCase state
 		equals: GtPharoMethodTestCasePassedState default.
-
+	self assert: allAnnouncements size equals: 2.
+	self assert: allAnnouncements first class equals: GtPharoMethodTestCaseStateChanged.
+	self assert: allAnnouncements second class equals: GtPharoMethodTestResultChanged.
+	
 	^ aCoder
 ]
 

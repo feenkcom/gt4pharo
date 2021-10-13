@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMethodTestCaseStateElementExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
+	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
 }
 
 { #category : #asserting }
