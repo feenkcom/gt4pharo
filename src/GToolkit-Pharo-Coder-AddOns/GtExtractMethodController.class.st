@@ -149,11 +149,12 @@ GtExtractMethodController >> initialize [
 { #category : #private }
 GtExtractMethodController >> installRenamerAt: anInteger [
 	| message interval |
+	self addRefactoringPreview.
 	self addReorderParametersAttributes.
 			
 	renameIndex := anInteger.
 	anInteger isNil
-		ifTrue: [ ^ self addRefactoringPreview ].
+		ifTrue: [ ^ self ].
 	
 	message := self findExtractedSend.
 	message isNil
@@ -367,8 +368,10 @@ GtExtractMethodController >> swapParameterWithNext: anInteger [
 
 { #category : #private }
 GtExtractMethodController >> updateMethod: newSource [
+	| newText |
 	self sourceCoderViewModel selectNone.
-	self setText: newSource.
+	newText := newSource asRopedText glamorousCodeFontAndSize.
+	self setText: newText.
 
 	"refactoring decided that there is an existing method that can be used instead
 	of creating a new one. In this case there is no need to spawn a renamer"
