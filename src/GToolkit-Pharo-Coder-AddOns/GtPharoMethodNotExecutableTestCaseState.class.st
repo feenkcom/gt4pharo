@@ -1,3 +1,8 @@
+"
+I represent a state in which a method is not a test case.
+It may happen when a test case method source code is modified.
+
+"
 Class {
 	#name : #GtPharoMethodNotExecutableTestCaseState,
 	#superclass : #GtPharoMethodTestCaseState,

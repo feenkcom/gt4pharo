@@ -1,3 +1,8 @@
+"
+I am a {{gtClass:GtGenericPharoStyler}}.
+I insert {{gtClass:GtPharoMethodTestCaseStateAttribute}} into a {{gtClass:BlText}}. 
+
+"
 Class {
 	#name : #GtPharoMethodTestCaseStyler,
 	#superclass : #GtGenericPharoStyler,

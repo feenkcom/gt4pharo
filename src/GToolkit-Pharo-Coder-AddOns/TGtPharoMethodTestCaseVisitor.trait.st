@@ -1,3 +1,6 @@
+"
+I am a {{gtClass:GtPharoMethodTestCaseState}} visitor.
+"
 Trait {
 	#name : #TGtPharoMethodTestCaseVisitor,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'

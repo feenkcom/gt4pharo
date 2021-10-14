@@ -1,3 +1,7 @@
+"
+I build a tooltip for {{gtClass:GtPharoMethodTestCaseStateElement}}.
+
+"
 Class {
 	#name : #GtPharoMethodTestCaseTooltipBuilder,
 	#superclass : #Object,
@@ -6,7 +10,8 @@ Class {
 	#instVars : [
 		'state',
 		'result',
-		'element'
+		'element',
+		'testCase'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
@@ -46,6 +51,45 @@ GtPharoMethodTestCaseTooltipBuilder >> state: aTestCaseState [
 	state := aTestCaseState
 ]
 
+{ #category : #accessing }
+GtPharoMethodTestCaseTooltipBuilder >> testCase [
+	^ testCase
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCaseTooltipBuilder >> testCase: aTestCase [
+	testCase := aTestCase
+]
+
+{ #category : #visiting }
+GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseNotExecutedState: aState [
+
+	^ BrVerticalPane new
+		  fitContent;
+		  alignCenter;
+		  padding: (BlInsets all: 5);
+		  addChild: (BrLabel new
+				   aptitude: BrGlamorousLabelAptitude new;
+				   margin: (BlInsets bottom: 5);
+				   text: 'Not Executed Test Case';
+				   fitContent);
+		addChild: (BrHorizontalPane new
+			fitContent;
+			addChild: (BrButton new 
+				beTinySize;
+				aptitude: BrGlamorousButtonWithIconAptitude;
+				margin: (BlInsets right: 5);
+				icon: BrGlamorousVectorIcons play;
+				label: 'Play Unit Test';
+				action: [ :aButton | self testCase play ]);
+			addChild: (BrButton new 
+				beTinySize; 
+				aptitude: BrGlamorousButtonWithIconAptitude;
+				icon: BrGlamorousVectorIcons debug;
+				label: 'Debug Unit Test';
+				action: [ :aButton | self testCase debug ]))
+]
+
 { #category : #visiting }
 GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseResultState: aState [
 
@@ -60,6 +104,14 @@ GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseResultState: aState [
 		(((GtInspector forObject: self result) exact: 400 @ 400)
 			 asScalableElement size: 200 @ 200).
 	^ aContainer
+]
+
+{ #category : #visiting }
+GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseSkippedState: aState [
+	^ BrLabel new
+		aptitude: BrGlamorousLabelAptitude new;
+		text: 'Skipped Test Unit';
+		fitContent
 ]
 
 { #category : #visiting }

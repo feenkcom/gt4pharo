@@ -1,3 +1,6 @@
+"
+I represent a state in which a test case that was executed properly, satisfying all assertions.
+"
 Class {
 	#name : #GtPharoMethodTestCasePassedState,
 	#superclass : #GtPharoMethodTestCaseState,

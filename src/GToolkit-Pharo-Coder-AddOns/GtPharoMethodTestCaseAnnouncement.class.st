@@ -1,3 +1,8 @@
+"
+I am an {{gtClass:Announcement}}.
+I am emitted by {{gtClass:GtPharoMethodTestCase}}.
+
+"
 Class {
 	#name : #GtPharoMethodTestCaseAnnouncement,
 	#superclass : #Announcement,

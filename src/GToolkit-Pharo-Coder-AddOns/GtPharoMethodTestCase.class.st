@@ -1,3 +1,15 @@
+"
+I represent a {{gtClass:TestCase}} for a particular {{gtClass:GtPharoMethodCoder}}.
+I keep a {{gtClass:TestResult}} and define the test case execution state using {{gtClass:GtPharoMethodTestCaseState}}.
+#Examples
+##Not Executed Test Case
+The following example shows a *not* executed test case method: {{gtExample:GtPharoMethodTestCaseExamples >> #passedOneUnitTestPharoMethodCoder | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor: | previewHeight=120}}
+##Executed Test Case
+The following example shows a executed test case method: {{gtExample:GtPharoMethodTestCaseExamples >> #executePassingTestCase | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor: | previewHeight=120}}
+##Modified Test Case Method
+The following example shows that if we modify code, the test case state indicator changes: {{gtExample:GtPharoMethodTestCaseExamples >> #editExecutePassedTestCaseCode | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor: | previewHeight=120}}
+The test case state indicator can also dissapear if a method is identified as invalid test case (missing `test` method name prefix in this case): {{gtExample:GtPharoMethodTestCaseExamples >> #editTestCaseMethodName | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor: | previewHeight=120}}
+"
 Class {
 	#name : #GtPharoMethodTestCase,
 	#superclass : #Object,
@@ -176,10 +188,11 @@ GtPharoMethodTestCase >> result: aTestResult [
 
 { #category : #accessing }
 GtPharoMethodTestCase >> state [
+
 	<return: #GtPharoMethodTestCaseState>
-	^ self methodCoder isModified
-		ifFalse: [ state ]
-		ifTrue: [ GtPharoMethodNotExecutedState default ]
+	self methodCoder isModified ifTrue: [ 
+		^ GtPharoMethodNotExecutedState default ].
+	^ state
 ]
 
 { #category : #'private - updating' }
@@ -213,8 +226,6 @@ GtPharoMethodTestCase >> updateState [
 
 	self canExecute ifFalse: [ 
 		^ self state: GtPharoMethodNotExecutableTestCaseState default ].
-	self methodCoder isModified ifTrue: [ 
-		^ self state: GtPharoMethodNotExecutedState default ].
 	self hasResult ifFalse: [
 		^ self state: GtPharoMethodNotExecutedState default ].
 	self state: (GtPharoMethodTestCaseState stateFromTestResult: self result)

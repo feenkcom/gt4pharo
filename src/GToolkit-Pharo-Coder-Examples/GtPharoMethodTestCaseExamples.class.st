@@ -1,3 +1,7 @@
+"
+I exemplify {{gtClass:GtPharoMethodTestCase}}.
+
+"
 Class {
 	#name : #GtPharoMethodTestCaseExamples,
 	#superclass : #Object,
@@ -65,9 +69,9 @@ GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
 	self assert: aCoder testCase result isNotNil.
 	self assert: aCoder testCase state isNotNil.
 	self assert: aCoder testCase isPassed.
-	"self
+	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutableTestCaseState default."
+		equals: GtPharoMethodNotExecutedState default.
 
 	^ aCoder
 ]
@@ -161,7 +165,7 @@ GtPharoMethodTestCaseExamples >> nonUnitTestPharoMethodCoder [
 GtPharoMethodTestCaseExamples >> passedOneUnitTestPharoMethodCoder [
 
 	<gtExample>
-	^ self
+	^ (self
 		  initializeCoderWith: GtPharoDummyTestCase >> #testPassedOne
-		  executable: true
+		  executable: true)
 ]

@@ -1,3 +1,8 @@
+"
+I represent {{gtClass:GtPharoMethodTestCase}} state.
+My subclasses define states like passed, failure, error test case execution results.
+
+"
 Class {
 	#name : #GtPharoMethodTestCaseState,
 	#superclass : #Object,
