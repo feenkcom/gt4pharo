@@ -11,10 +11,12 @@ GtCoderSmalltalkEnvironment >> driver [
 
 { #category : #'api - queries' }
 GtCoderSmalltalkEnvironment >> methodProtocolOf: aGtCoderSmalltalkMethod [
-	^ GtCoderSmalltalkMethodProtocolFuture new future: ([ self driver primitiveMethodProtocolOf: aGtCoderSmalltalkMethod asDictionaryForExport ] asFuture)
+	^ GtCoderSmalltalkMethodProtocolFuture new future: (
+		[ self driver
+			primitiveMethodProtocolOf: aGtCoderSmalltalkMethod asDictionaryForExport ] asAsyncFuture)
 ]
 
 { #category : #'api - queries' }
 GtCoderSmalltalkEnvironment >> methodSourceCodeOf: aGtCoderSmalltalkMethod [
-	^ GtCoderSmalltalkMethodSourceCodeFuture new future: ([ self driver primitiveMethodSourceCodeOf: aGtCoderSmalltalkMethod asDictionaryForExport ] asFuture)
+	^ GtCoderSmalltalkMethodSourceCodeFuture new future: ([ self driver primitiveMethodSourceCodeOf: aGtCoderSmalltalkMethod asDictionaryForExport ] asAsyncFuture)
 ]
