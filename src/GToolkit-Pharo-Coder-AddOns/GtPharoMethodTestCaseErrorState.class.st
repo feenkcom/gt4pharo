@@ -1,3 +1,6 @@
+"
+I represent a state in which a test case that produced  runtime error.
+"
 Class {
 	#name : #GtPharoMethodTestCaseErrorState,
 	#superclass : #GtPharoMethodTestCaseState,

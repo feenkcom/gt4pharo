@@ -27,3 +27,10 @@ GtPharoDummyTestCase >> testPassedOne [
 
 	self assert: true description: [ 'I should be true' ].
 ]
+
+{ #category : #accessing }
+GtPharoDummyTestCase >> testSkippedOne [
+
+	<noTest>
+	self assert: true description: [ 'I should be true' ]
+]

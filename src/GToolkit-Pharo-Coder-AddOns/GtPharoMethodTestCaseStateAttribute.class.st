@@ -1,3 +1,6 @@
+"
+I insert {{gtClass:GtPharoMethodTestCaseStateElement}} when a {{gtClass:BlText}} is displayed by {{gtClass:BrEditorElement}}. 
+"
 Class {
 	#name : #GtPharoMethodTestCaseStateAttribute,
 	#superclass : #BrTextAdornmentAttribute,

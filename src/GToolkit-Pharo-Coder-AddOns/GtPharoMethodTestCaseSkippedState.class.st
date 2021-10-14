@@ -1,3 +1,6 @@
+"
+I represent a state in which a test case that was skipped instead of an execution.
+"
 Class {
 	#name : #GtPharoMethodTestCaseSkippedState,
 	#superclass : #GtPharoMethodTestCaseState,

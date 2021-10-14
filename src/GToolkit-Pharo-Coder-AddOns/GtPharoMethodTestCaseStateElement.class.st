@@ -1,3 +1,13 @@
+"
+I represent a {{gtClass:GtPharoMethodTestCaseState}}   of {{gtClass:GtPharoMethodTestCase}}.
+I render an icon that represents the state.
+I use {{gtClass:GtPharoMethodTestCaseTooltipBuilder}} to build tooltips.
+#Examples
+##Not Executed Test Case Icon
+{{gtExample:GtPharoMethodTestCaseStateElementExamples >> #stateElement_NotExecuted | codeExpanded=false | previewExpanded=true | previewHeight= 100 | previewShow=#gtLiveFor:}}
+#Passes Test Case Icon
+{{gtExample:GtPharoMethodTestCaseStateElementExamples >> #stateElement_Success | codeExpanded=false | previewExpanded=true | previewHeight= 100 | previewShow=#gtLiveFor:}}
+"
 Class {
 	#name : #GtPharoMethodTestCaseStateElement,
 	#superclass : #BlElement,
@@ -23,7 +33,7 @@ GtPharoMethodTestCaseStateElement >> initialize [
 
 	self 
 		layout: BlLinearLayout horizontal;
-		geometry: BlRectangleGeometry new;
+		geometry: BlSquare new;
 		margin: (BlInsets all: 1);
 		exact: 12@12.
 		
@@ -59,6 +69,7 @@ GtPharoMethodTestCaseStateElement >> newTooltipContent [
 
 	^ GtPharoMethodTestCaseTooltipBuilder new
 		  element: self;
+		  testCase: self testCase;
 		  state: self testCaseState;
 		  result: self testResult;
 		  build
