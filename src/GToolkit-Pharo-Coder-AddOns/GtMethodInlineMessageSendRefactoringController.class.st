@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtMethodInlineMessageSendRefactoringController',
-	#superclass : 'GtMethodInlineRefactoringController',
+	#name : #GtMethodInlineMessageSendRefactoringController,
+	#superclass : #GtMethodInlineRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodInlineMessageSendRefactoringController >> refactoring [
 	| aRefactoring aModel |
 
@@ -23,7 +23,7 @@ GtMethodInlineMessageSendRefactoringController >> refactoring [
 	^ aRefactoring
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodInlineMessageSendRefactoringController >> refactoringName [
 	^ 'Inline message send'
 ]

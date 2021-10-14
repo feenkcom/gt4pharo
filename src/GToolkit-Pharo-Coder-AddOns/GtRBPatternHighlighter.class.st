@@ -1,23 +1,23 @@
 Class {
-	#name : 'GtRBPatternHighlighter',
-	#superclass : 'GtPharoCodeHighlighter',
+	#name : #GtRBPatternHighlighter,
+	#superclass : #GtPharoCodeHighlighter,
 	#instVars : [
 		'ast'
 	],
 	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRBPatternHighlighter >> ast [
 	^ ast
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRBPatternHighlighter >> ast: aRBProgramNode [
 	ast := aRBProgramNode
 ]
 
-{ #category : 'api - styling' }
+{ #category : #'api - styling' }
 GtRBPatternHighlighter >> style: aText ast: theAst [
 	| tree intervals |
 	tree := theAst

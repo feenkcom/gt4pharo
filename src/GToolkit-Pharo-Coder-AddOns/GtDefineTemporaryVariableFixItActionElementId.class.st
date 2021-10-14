@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtDefineTemporaryVariableFixItActionElementId',
-	#superclass : 'GtFixItActionElementId',
+	#name : #GtDefineTemporaryVariableFixItActionElementId,
+	#superclass : #GtFixItActionElementId,
 	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : 'converting' }
+{ #category : #converting }
 GtDefineTemporaryVariableFixItActionElementId >> asSymbol [
 	^ #'fixit-action--define-temporary-variable'
 ]

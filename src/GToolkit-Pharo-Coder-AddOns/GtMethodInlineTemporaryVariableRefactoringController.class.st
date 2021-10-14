@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtMethodInlineTemporaryVariableRefactoringController',
-	#superclass : 'GtMethodInlineRefactoringController',
+	#name : #GtMethodInlineTemporaryVariableRefactoringController,
+	#superclass : #GtMethodInlineRefactoringController,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodInlineTemporaryVariableRefactoringController >> refactoring [
 	| aModel |
 
@@ -17,7 +17,7 @@ GtMethodInlineTemporaryVariableRefactoringController >> refactoring [
 		in: (aModel classFor: sourceCoderViewModel behavior)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodInlineTemporaryVariableRefactoringController >> refactoringName [
 	^ 'Inline temporary variable'
 ]

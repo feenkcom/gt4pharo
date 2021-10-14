@@ -1,14 +1,14 @@
 Class {
-	#name : 'GtExtractMethodReorderParametersAttribute',
-	#superclass : 'BrTextAdornmentAttribute',
+	#name : #GtExtractMethodReorderParametersAttribute,
+	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
 		'actionBlock',
 		'icon'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtExtractMethodReorderParametersAttribute class >> action: aBlock icon: anIcon [
 	^ self new
 		actionBlock: aBlock;
@@ -16,36 +16,40 @@ GtExtractMethodReorderParametersAttribute class >> action: aBlock icon: anIcon [
 		yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> actionBlock [
 	^ actionBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> actionBlock: aBlock [
 	actionBlock := aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	^ BlElement new
-		size: icon extent;
-		background: icon;
-		addEventHandlerOn: BlClickEvent do: [ :anEvent | actionBlock cull: anEvent ];
+	^ (BrButton new)
+		icon: icon;
+		label: 'Reorder';
+		aptitude: BrGlamorousButtonExteriorAptitude +  ((BrGlamorousButtonRectangularAptitude paddingScale: 2/3) + BrGlamorousButtonIconAptitude + BrGlamorousButtonWithLabelTooltipAptitude);
+		beTinySize;
+		margin: (BlInsets top: 1 right: 4 bottom: 0 left: 4);
+		action: [ :anEvent | actionBlock cull: anEvent ];
+		id: #'reorder-parameter-button';
 		yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> icon [
 	^ icon
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtExtractMethodReorderParametersAttribute >> icon: anObject [
 	icon := anObject
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtExtractMethodReorderParametersAttribute >> initialize [
 	super initialize.
 

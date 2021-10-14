@@ -7,12 +7,12 @@ The following example shows how a pixel {{gtMethod:BrGlamorousIcons class >> #re
 The following example shows how a vector {{gtMethod:BrGlamorousVectorIcons class >> #refresh | label=#selector}} looks like directly in the code: {{gtExample:GtPharoGlamorousIconStylerExamples>>#glamorousVectorIcon}}
 "
 Class {
-	#name : 'GtPharoGlamorousIconStyler',
-	#superclass : 'GtGenericPharoStyler',
+	#name : #GtPharoGlamorousIconStyler,
+	#superclass : #GtGenericPharoStyler,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Icon'
 }
 
-{ #category : 'private - styling' }
+{ #category : #'private - styling' }
 GtPharoGlamorousIconStyler >> styleNode: aMessageSendNode withForm: aFormOrStencil [
 	self
 		attribute:
@@ -26,7 +26,7 @@ GtPharoGlamorousIconStyler >> styleNode: aMessageSendNode withForm: aFormOrStenc
 		to: aMessageSendNode stopPosition
 ]
 
-{ #category : 'private - styling' }
+{ #category : #'private - styling' }
 GtPharoGlamorousIconStyler >> styleNode: aMessageSendNode withIconLibrary: anIconLibrary [
 	| icon |
 	icon := anIconLibrary perform: aMessageSendNode message selector.
@@ -35,7 +35,7 @@ GtPharoGlamorousIconStyler >> styleNode: aMessageSendNode withIconLibrary: anIco
 	self styleNode: aMessageSendNode withForm: icon
 ]
 
-{ #category : 'generated' }
+{ #category : #generated }
 GtPharoGlamorousIconStyler >> visitMessageSend: aMessageSendNode [
 	| receiver anIconLibrary aMethod |
 	super visitMessageSend: aMessageSendNode.

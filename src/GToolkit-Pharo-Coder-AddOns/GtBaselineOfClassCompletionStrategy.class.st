@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtBaselineOfClassCompletionStrategy',
-	#superclass : 'GtBaselineCompletionStrategy',
+	#name : #GtBaselineOfClassCompletionStrategy,
+	#superclass : #GtBaselineCompletionStrategy,
 	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtBaselineOfClassCompletionStrategy >> namesMatching: aString [
 	| name |
 	name := 'BaselineOf' , aString.

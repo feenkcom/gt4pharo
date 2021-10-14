@@ -8,9 +8,6 @@ Class {
 		'methodBehavior',
 		'selector'
 	],
-	#classVars : [
-		'NodeHighlight'
-	],
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
@@ -43,13 +40,6 @@ GtPharoMethodCoder class >> forNewMethod: aBehavior [
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
 	^ self forMethod: anObject class >> aSymbol
-]
-
-{ #category : #accessing }
-GtPharoMethodCoder class >> nodeHighlight [
-	^ NodeHighlight
-		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
-				paint: BrGlamorousColors textHighlightColor ]
 ]
 
 { #category : #'api - refactorings' }
@@ -274,16 +264,6 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 				for: aGtPharoSourceCoderEvaluationContext ]
 ]
 
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> createLabel: aString description: description [
-	^ aString asRopedText
-		,
-			((' ' , description) asRopedText
-				attributes:
-					{(BlFontSizeAttribute size: 12).
-					(BlTextForegroundAttribute paint: Color gray)})
-]
-
 { #category : #private }
 GtPharoMethodCoder >> createRefactoringModel [
 	| model |
@@ -320,6 +300,17 @@ GtPharoMethodCoder >> debugExample [
 		ifTrue: [ self save
 			ifFalse: [ ^ self ] ].
 	self example openingDebugger result
+]
+
+{ #category : #'api - actions' }
+GtPharoMethodCoder >> ensureSave [
+	"Try to save the current method validating syntax and return `true` if save was succesful, false otherwise"
+	<return: #Boolean>
+	self isModified
+		ifTrue: [
+			self save
+				ifFalse: [ ^ false ] ].
+	^ true
 ]
 
 { #category : #'private - actions' }
@@ -536,15 +527,6 @@ GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 	self announce: (GtCoderExampleExecuted new 
 		coder: self;
 		example: aGtExampleExecuted example)
-]
-
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> highlightNodeBlock: aNode [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel
-		  addTextAttribute: self class nodeHighlight
-		  from: aNode startPosition
-		  to: aNode stopPosition ]
 ]
 
 { #category : #accessing }
@@ -997,12 +979,6 @@ GtPharoMethodCoder >> remove [
 	self reset.
 	
 	self notifyMethodRemoved
-]
-
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> removeHighlightBlock [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : #'api - refactorings' }

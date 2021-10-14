@@ -1,0 +1,221 @@
+Class {
+	#name : #GtPharoMethodTestCase,
+	#superclass : #Object,
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
+	#instVars : [
+		'methodCoder',
+		'result',
+		'state',
+		'announcer'
+	],
+	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
+}
+
+{ #category : #'instance creation' }
+GtPharoMethodTestCase class >> forMethodCoder: aMethodCoder [
+
+	^ self new methodCoder: aMethodCoder
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> announcer [
+	^ announcer
+]
+
+{ #category : #'accessing - coder' }
+GtPharoMethodTestCase >> behavior [
+	^ self methodCoder behavior
+]
+
+{ #category : #'api - testing' }
+GtPharoMethodTestCase >> canExecute [
+
+	^ self methodCoder isNotNil and: [ 
+			  self behavior isTestCase and: [ 
+				  self behavior isAbstract not and: [ 
+				  	| aNode |
+				  	aNode := self methodCoder rbAST methodNode.
+				  	aNode isNotNil and: [ aNode selector isTestSelector ] ] ] ]
+]
+
+{ #category : #'accessing - coder' }
+GtPharoMethodTestCase >> compiledMethod [
+	^ self methodCoder compiledMethod
+]
+
+{ #category : #'api - execution' }
+GtPharoMethodTestCase >> debug [
+
+	self methodCoder ensureSave ifFalse: [ ^ self ].
+
+	self rawDebug
+]
+
+{ #category : #'api - testing' }
+GtPharoMethodTestCase >> hasResult [
+	^ self result isNotNil
+]
+
+{ #category : #initialization }
+GtPharoMethodTestCase >> initialize [
+	super initialize.
+	announcer := Announcer new.
+	state := GtPharoMethodNotExecutedState default.
+]
+
+{ #category : #'api - testing' }
+GtPharoMethodTestCase >> isError [
+
+	^ self hasResult and: [ 
+		  self result
+			  isErrorFor: self behavior
+			  selector: self methodSelector ]
+]
+
+{ #category : #'api - testing' }
+GtPharoMethodTestCase >> isFailure [
+
+	^ self hasResult and: [ 
+		  self result
+			  isFailureFor: self behavior
+			  selector: self methodSelector ]
+]
+
+{ #category : #'api - testing' }
+GtPharoMethodTestCase >> isPassed [
+
+	^ self hasResult and: [ 
+		  self result
+			  isPassedFor: self behavior
+			  selector: self methodSelector ]
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> isSkipped [
+
+	^ self hasResult and: [ self result skippedCount isZero not ]
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> methodCoder [
+	^ methodCoder
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> methodCoder: aMethodCoder [ 
+	methodCoder := aMethodCoder.
+	self subscribeToMethodCoder.
+]
+
+{ #category : #'accessing - coder' }
+GtPharoMethodTestCase >> methodSelector [
+	^ self methodCoder currentSelector
+]
+
+{ #category : #'accessing - test case' }
+GtPharoMethodTestCase >> notifyResultChanged [
+
+	self announce: (GtPharoMethodTestResultChanged new
+			 testCase: self;
+			 result: self result)
+]
+
+{ #category : #'private - hooks' }
+GtPharoMethodTestCase >> onMethodCoderChanged [
+	self updateState
+]
+
+{ #category : #'private - hooks' }
+GtPharoMethodTestCase >> onResultChanged [
+	self updateState
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> onSourceCodeChanged: anAnnouncement [
+	self updateState.
+]
+
+{ #category : #'private - updating' }
+GtPharoMethodTestCase >> onStateChanged [
+	self announce: (GtPharoMethodTestCaseStateChanged new
+		testCase: self;
+		state: self state)
+]
+
+{ #category : #'api - execution' }
+GtPharoMethodTestCase >> play [
+
+	self methodCoder ensureSave ifFalse: [ ^ self ].
+
+	self rawPlay.
+]
+
+{ #category : #execution }
+GtPharoMethodTestCase >> rawDebug [
+	self result: self testCaseInstance debug
+]
+
+{ #category : #execution }
+GtPharoMethodTestCase >> rawPlay [
+	self result: self testCaseInstance run.
+]
+
+{ #category : #'accessing - test case' }
+GtPharoMethodTestCase >> result [
+	<return: #TestResult>
+	^ result
+]
+
+{ #category : #'accessing - test case' }
+GtPharoMethodTestCase >> result: aTestResult [ 
+	result := aTestResult.
+	self onResultChanged.
+	self notifyResultChanged.
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> state [
+	<return: #GtPharoMethodTestCaseState>
+	^ self methodCoder isModified
+		ifFalse: [ state ]
+		ifTrue: [ GtPharoMethodNotExecutedState default ]
+]
+
+{ #category : #'private - updating' }
+GtPharoMethodTestCase >> state: aState [ 
+	state == aState ifTrue: [ ^ self ].
+	state := aState.
+	self onStateChanged.
+]
+
+{ #category : #'accessing - test case' }
+GtPharoMethodTestCase >> stateLabel [
+	^ self state label
+]
+
+{ #category : #'private - subscriptions' }
+GtPharoMethodTestCase >> subscribeToMethodCoder [
+	methodCoder weak 
+		when: GtCoderAstChanged
+		send: #onSourceCodeChanged:
+		to: self
+]
+
+{ #category : #'accessing - test case' }
+GtPharoMethodTestCase >> testCaseInstance [
+
+	^ self behavior selector: self methodSelector
+]
+
+{ #category : #'private - updating' }
+GtPharoMethodTestCase >> updateState [
+
+	self canExecute ifFalse: [ 
+		^ self state: GtPharoMethodNotExecutableTestCaseState default ].
+	self methodCoder isModified ifTrue: [ 
+		^ self state: GtPharoMethodNotExecutedState default ].
+	self hasResult ifFalse: [
+		^ self state: GtPharoMethodNotExecutedState default ].
+	self state: (GtPharoMethodTestCaseState stateFromTestResult: self result)
+]

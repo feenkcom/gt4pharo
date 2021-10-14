@@ -1,6 +1,6 @@
-Extension { #name : 'GtPharoMethodCoder' }
+Extension { #name : #GtPharoMethodCoder }
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 	| method valueNode |
 	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
@@ -23,7 +23,7 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 		id: #'context-menu--add-parameter'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
@@ -53,7 +53,7 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 				id: #'context-menu--create-accessors' ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns [
 	aNode isVariable ifFalse: [ ^ self ].
 	(aNode parent isSequence and: [ 
@@ -72,7 +72,7 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 		id: #'context-menu--convert-temp-to-inst-var'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
@@ -93,7 +93,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 				id: GtMethodCoderExtractMethodContextMenuItemId ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 	(aNode isValueNode and: [ aNode isVariable not ])
 		ifFalse: [ ^ self ].
@@ -109,7 +109,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 		id: #'context-menu--extract-temp'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ 
@@ -129,7 +129,25 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 		id: #'context-menu--inline-self-sends'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
+	(aNode isVariable and: [ aNode parent isMethodPattern ]) 
+		ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem:
+		(self
+			 createLabel: 'Inline parameter'
+			 description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtInlineParameterRefactoringController new
+				 sourceCoderViewModel: aCoderViewModel;
+				 variableNode: aNode) execute ]
+		id: #'context-menu--inline-parameter'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 	aNode isMessageSend
 		ifFalse: [ ^ self ].
@@ -146,7 +164,7 @@ GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
 		id: #'context-menu--inline-message'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 	aNode isAssignment
 		ifFalse: [ ^ self ].
@@ -164,7 +182,7 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 		id: #'context-menu--inline-temp'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
@@ -205,7 +223,7 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 				id: #'context-menu--create-accessors' ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns [
 	| class |
 	aNode isVariable
@@ -229,7 +247,7 @@ GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns 
 		id: #'context-menu--pull-down-variable'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
@@ -252,7 +270,7 @@ GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 		id: #'context-menu--push-down-method'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
 	| method variables |
 	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ]) 
@@ -278,7 +296,7 @@ GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
 		id: #'context-menu--push-up-method'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
@@ -303,7 +321,7 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 		id: #'context-menu--push-up-variable'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 20>
 	
@@ -318,6 +336,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
 			self addAddParameterRefactoringFor: aNode to: coderAddOns.
+			self addInlineParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
 			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addPushUpVariableRefactoringsFor: aNode to: coderAddOns.
@@ -334,7 +353,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 	aNode isVariable
 		ifFalse: [ ^ self ].
@@ -355,7 +374,7 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 		id: #'context-menu--remove-parameter'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 	| uses groups |
 	aNode isVariable ifFalse: [ ^ self ].
@@ -393,7 +412,7 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 		id: #'context-menu--move-variable-declaration'
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> baselineAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 
@@ -403,13 +422,13 @@ GtPharoMethodCoder >> baselineAddOnFor: anAST into: coderAddOns [
 	coderAddOns addStyler: GtCoderExpandableBaselineStyler new
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> copyMethodNameToClipboard [
 	self compiledMethod ifNotNil: [ :aCompiledMethod | 
 		Clipboard clipboardText: aCompiledMethod printString ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 	
@@ -448,7 +467,7 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		id: GtMethodCoderDebugExampleActionId
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 
@@ -456,21 +475,7 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 		ifTrue: [ coderAddOns addStyler: self explanationLink ].
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractableNodesFrom: aCoderViewModel [
-	| allSelections allCursors |
-
-	allSelections := aCoderViewModel selection allSelections.
-	allCursors := aCoderViewModel cursors allCursors.
-
-	^ allSelections size = 1
-		ifTrue: [ self extractableNodesWithin: allSelections first interval ]
-		ifFalse: [ allCursors size = 1
-			ifTrue: [ self extractableNodesAt: allCursors first position ]
-			ifFalse: [ #() ] ]
-]
-
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 6>
 	(self hasObjectAttribute
@@ -490,21 +495,21 @@ GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns [
 		action: [ :aCoderUIModel :anEvent | self runGtViewFrom: anEvent currentTarget ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> highlighter [
 	<return: #GtSourceReferenceHighlighter>
 
 	^ self attributeNamed: #highlighter
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 	self highlighter notNil
 		ifTrue: [ coderAddOns addStyler: self highlighter ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 	
@@ -543,7 +548,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 
@@ -556,7 +561,7 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderInlineRenameShortcut new
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 1>
 
@@ -570,7 +575,7 @@ GtPharoMethodCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
 		id: GtMethodCoderDiscardChangesActionId
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> mondrianPaintAddOnFor: anAST into: coderAddOns [
 	"<gtAstCoderAddOns: 7>"
 	(self hasObjectAttribute
@@ -586,7 +591,7 @@ GtPharoMethodCoder >> mondrianPaintAddOnFor: anAST into: coderAddOns [
 		action: [ :aCoderUIModel :anEvent | self runMondrianPaintFrom: anEvent currentTarget ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> runGtViewFrom: anElement [
 	| view |
 	
@@ -599,7 +604,7 @@ GtPharoMethodCoder >> runGtViewFrom: anElement [
 	anElement phlow spawnObject: view
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> runMondrianPaintFrom: anElement [
 	| mondrian |
 	
@@ -611,4 +616,40 @@ GtPharoMethodCoder >> runMondrianPaintFrom: anElement [
 	mondrian := GtMondrian new.
 	self object perform: self selector with: mondrian.
 	anElement phlow spawnObject: mondrian
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> testCase [
+
+	^ self
+		  attributeNamed: #testCase
+		  ifPresent: [ :aTestCase | aTestCase ]
+		  ifAbsent: [ 
+			  self
+				  attributeNamed: #testCase
+				  put: (GtPharoMethodTestCase forMethodCoder: self) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
+
+	<gtAstCoderAddOns: 11>
+	anAST methodNode ifNil: [ ^ self ].
+
+	self testCase canExecute ifFalse: [ ^ self ].
+
+	coderAddOns addStyler: GtPharoMethodTestCaseStyler new.
+	coderAddOns addPreview: 'Test Case' stencil: [ 
+		GtPharoMethodTestCaseStateElement new testCase: self testCase ].
+
+	coderAddOns
+		addContextAction: 'Play Unit Test' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anEvent | self testCase play ]
+		id: GtMethodCoderPlayExampleActionId.
+	coderAddOns
+		addContextAction: 'Debug Unit Test' translated
+		icon: BrGlamorousVectorIcons debug
+		action: [ :aCoderUIModel :anEvent | self testCase debug ]
+		id: GtMethodCoderDebugExampleActionId
 ]

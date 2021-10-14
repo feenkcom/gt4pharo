@@ -1,6 +1,6 @@
-Extension { #name : 'RBPullUpMethodRefactoring' }
+Extension { #name : #RBPullUpMethodRefactoring }
 
-{ #category : '*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBPullUpMethodRefactoring >> gtDefaultToRemoveDuplicates [
 	removeDuplicates := true
 ]
