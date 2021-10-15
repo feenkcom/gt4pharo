@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtUserActivatableChangeWithExpanderElement',
-	#superclass : 'GtUserActivatableChangeElement',
+	#name : #GtUserActivatableChangeWithExpanderElement,
+	#superclass : #GtUserActivatableChangeElement,
 	#instVars : [
 		'expander',
 		'header',
@@ -10,7 +10,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivatableChange [
 
 	activatableChange ifNotNil: [ activatableChange announcer unsubscribe: self ].
@@ -42,7 +42,7 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 		ifFalse: [ expander collapse ].
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtUserActivatableChangeWithExpanderElement >> initialize [
 	super initialize.
 	
@@ -91,7 +91,7 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 		expander }
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtUserActivatableChangeWithExpanderElement >> onEnablementChanged [
 
 	activatableChange isEnabled

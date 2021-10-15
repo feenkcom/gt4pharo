@@ -42,7 +42,19 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 		ifNotEmpty:
 			[ :nodes | 
 			| node |
-			node := nodes first.
+			
+			coderAddOns
+				addContextMenuItem: 'Extract method'
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: nodes first startPosition
+						to: nodes last stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | (GtExtractMethodFromSnippetController new sourceCoderViewModel: aTextualViewModel) execute ]
+				id: GtMethodCoderExtractMethodContextMenuItemId.
+			
+			node  := nodes first.
 			self addInlineMethodFor: node to: coderAddOns from: aCoderViewModel ]
 ]
 

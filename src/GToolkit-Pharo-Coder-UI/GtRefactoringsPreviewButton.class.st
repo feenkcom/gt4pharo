@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtRefactoringsPreviewButton',
-	#superclass : 'BrButton',
+	#name : #GtRefactoringsPreviewButton,
+	#superclass : #BrButton,
 	#instVars : [
 		'refactoringsComputation'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 	| applyAction theRefactoringsElement anAcceptButton aContainer |
 
@@ -53,7 +53,7 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 	^ aContainer
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtRefactoringsPreviewButton >> initialize [
 	super initialize.
 	
@@ -86,19 +86,19 @@ GtRefactoringsPreviewButton >> initialize [
 		action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ])
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtRefactoringsPreviewButton >> previewWidth [
 	^ self isAttachedToSceneGraph
 		ifTrue: [ (self topMostParent extent / 2.0) x ]
 		ifFalse: [ 500 ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRefactoringsPreviewButton >> refactorings [
 	^ refactoringsComputation value
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtRefactoringsPreviewButton >> refactorings: aBlock [
 	refactoringsComputation := aBlock
 ]

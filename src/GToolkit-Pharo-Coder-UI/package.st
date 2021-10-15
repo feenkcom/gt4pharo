@@ -1,1 +1,1 @@
-Package { #name : 'GToolkit-Pharo-Coder-UI' }
+Package { #name : #'GToolkit-Pharo-Coder-UI' }

@@ -1,6 +1,6 @@
-Extension { #name : 'GtSearchMethodsWithPackagePatternFilter' }
+Extension { #name : #GtSearchMethodsWithPackagePatternFilter }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodsWithPackagePatternFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ GtFilterDescriptor
 		creator: [ :value | self pattern: value ]

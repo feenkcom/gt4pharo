@@ -1,6 +1,6 @@
-Extension { #name : 'GtPackageDefinition' }
+Extension { #name : #GtPackageDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> browseFrom: anEvent [
 	| aRealPackage aCoderEvent aPackageCoder |
 
@@ -15,12 +15,12 @@ GtPackageDefinition >> browseFrom: anEvent [
 		ifFalse: [ anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> editors [
 	^ { self packageEditor }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> packageEditor [
 	^ GtCodeDefinitionSingleEditor new
 		title: 'Package';
@@ -36,7 +36,7 @@ GtPackageDefinition >> packageEditor [
 		containerName: self class packageEditorName
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> packageReader [
 	^ GtCodeDefinitionSingleReader new
 		title: 'Package';
@@ -47,12 +47,12 @@ GtPackageDefinition >> packageReader [
 		whenPrimaryClickDo: [ :anEvent :aDefinition  | aDefinition browseFrom: anEvent ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> readers [
 	^ { self packageReader }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> replaceFrom: anEvent [
 	| aRealPackage aCoderEvent aPackageCoder |
 

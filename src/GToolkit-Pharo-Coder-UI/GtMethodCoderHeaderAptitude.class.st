@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtMethodCoderHeaderAptitude',
-	#superclass : 'GtSourceCoderAptitude',
+	#name : #GtMethodCoderHeaderAptitude,
+	#superclass : #GtSourceCoderAptitude,
 	#instVars : [
 		'header',
 		'breadcrumb'
@@ -8,7 +8,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtMethodCoderHeaderAptitude >> initialize [
 	super initialize.
 	
@@ -20,7 +20,7 @@ GtMethodCoderHeaderAptitude >> initialize [
 	self addChangeAddChildAs: #(content header) with: [ header ].
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtMethodCoderHeaderAptitude >> newBreadcrumb [
 	<return: #BrBreadcrumb>
 
@@ -32,7 +32,7 @@ GtMethodCoderHeaderAptitude >> newBreadcrumb [
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtMethodCoderHeaderAptitude >> newHeaderElement [
 	^ BlElement new
 		layout: BlFrameLayout new;
@@ -42,7 +42,7 @@ GtMethodCoderHeaderAptitude >> newHeaderElement [
 		yourself
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtMethodCoderHeaderAptitude >> onCoderChanged: aGtSourceCoderUIModel [
 	breadcrumb sourceCoderUIModel: aGtSourceCoderUIModel
 ]

@@ -1,12 +1,12 @@
 Class {
-	#name : 'GtPharoBehaviorsNavigationElement',
-	#superclass : 'BrSimpleTree',
+	#name : #GtPharoBehaviorsNavigationElement,
+	#superclass : #BrSimpleTree,
 	#traits : 'TGtWithPharoBehaviorsNavigationViewModel',
 	#classTraits : 'TGtWithPharoBehaviorsNavigationViewModel classTrait',
 	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoBehaviorsNavigationElement >> initialize [
 	super initialize.
 	
@@ -20,7 +20,7 @@ GtPharoBehaviorsNavigationElement >> initialize [
 		eachNodeElement pharoBehaviorNavigationViewModel: eachTreeNode value ]
 ]
 
-{ #category : 'api - pharo behaviors navigation view model' }
+{ #category : #'api - pharo behaviors navigation view model' }
 GtPharoBehaviorsNavigationElement >> onPharoBehaviorsNavigationViewModelChanged [
 	"Is sent when a new pharoBehaviorsNavigation view model is assigned to the element.
 	Note: #onPharoBehaviorsNavigationViewModelChanged is sent before #subscribeToPharoBehaviorsNavigationViewModel

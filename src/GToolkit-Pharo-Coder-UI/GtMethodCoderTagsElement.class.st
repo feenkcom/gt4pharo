@@ -3,8 +3,8 @@ I display various tags in the method coder element such as protocol or instance/
 
 "
 Class {
-	#name : 'GtMethodCoderTagsElement',
-	#superclass : 'BlElement',
+	#name : #GtMethodCoderTagsElement,
+	#superclass : #BlElement,
 	#instVars : [
 		'protocolTag',
 		'methodCoderUIModel',
@@ -13,7 +13,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodCoderTagsElement >> behaviorProtocols [
 	| allSubAndSuperclassProtocols excludedClasses |
 	
@@ -27,7 +27,7 @@ GtMethodCoderTagsElement >> behaviorProtocols [
 	^ allSubAndSuperclassProtocols asArray sorted
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtMethodCoderTagsElement >> buildTags [	
 	protocolTag := self newProtocolTag.
 	traitMethodTag := self newTraitMethodTag.
@@ -35,7 +35,7 @@ GtMethodCoderTagsElement >> buildTags [
 	^ { traitMethodTag. protocolTag }
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 	| aTraitElement aClass aSelector aMethod |
 	aTraitElement := self methodCoderUIModel coder traitSource.
@@ -51,7 +51,7 @@ GtMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 	aButton phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod)
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtMethodCoderTagsElement >> initialize [
 	super initialize.
 	
@@ -64,12 +64,12 @@ GtMethodCoderTagsElement >> initialize [
 	self addChildren: self buildTags
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderTagsElement >> methodCoderUIModel [
 	^ methodCoderUIModel
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 	self
 		assert: [ aMethodCoderUIModel isKindOf: GtPharoMethodCoderViewModel ]
@@ -97,7 +97,7 @@ GtMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 	self updateTraitMethodButton.
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtMethodCoderTagsElement >> newProtocolEditor [
 	| anEditor |
 
@@ -129,7 +129,7 @@ GtMethodCoderTagsElement >> newProtocolEditor [
 	^ anEditor
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtMethodCoderTagsElement >> newProtocolPickerList [
 	^ BrSimpleList new
 		vFitContentLimited;
@@ -148,7 +148,7 @@ GtMethodCoderTagsElement >> newProtocolPickerList [
 		items: self behaviorProtocols
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtMethodCoderTagsElement >> newProtocolTag [
 	^ BrButton new
 		beTinySize;
@@ -157,7 +157,7 @@ GtMethodCoderTagsElement >> newProtocolTag [
 			content: [ self newProtocolPickerList ])
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtMethodCoderTagsElement >> newTraitMethodTag [
 	^ BrButton new
 		beTinySize;
@@ -171,24 +171,24 @@ GtMethodCoderTagsElement >> newTraitMethodTag [
 		fitContent
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
 	self updateTraitMethodButton.
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtMethodCoderTagsElement >> onCoderSourceTextModified: anAnnouncement [
 	protocolTag disabled: anAnnouncement coder isModified
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 	<return: #String>
 
 	^ aMethodCoderUIModel coder protocol
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
 	<return: #String>
 	^ aMethodCoderUIModel coder isFromTrait
@@ -196,7 +196,7 @@ GtMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
 		ifFalse: [ '' ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodCoderTagsElement >> unsubscribeFromCoder [
 	methodCoderUIModel
 		ifNil: [ ^ self ].
@@ -204,12 +204,12 @@ GtMethodCoderTagsElement >> unsubscribeFromCoder [
 	methodCoderUIModel coder unsubscribe: self
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodCoderTagsElement >> updateProtocolButton [
 	protocolTag label: (self protocolStringFor: self methodCoderUIModel)
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtMethodCoderTagsElement >> updateTraitMethodButton [
 	traitMethodTag label: (self traitMethodStringFor: self methodCoderUIModel).
 	self methodCoderUIModel coder isFromTrait

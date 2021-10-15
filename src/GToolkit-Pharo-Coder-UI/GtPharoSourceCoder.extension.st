@@ -1,6 +1,6 @@
-Extension { #name : 'GtPharoSourceCoder' }
+Extension { #name : #GtPharoSourceCoder }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
 	"Try to find a behavior reference at a given source text position and request to browse it"
 
@@ -13,7 +13,7 @@ GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
 		ifNone: [  ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseBehaviorIn: aSourceString [
 	"Try to find a behavior reference within a given source code and request to browse it"
 
@@ -26,7 +26,7 @@ GtPharoSourceCoder >> browseBehaviorIn: aSourceString [
 		ifNone: [  ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseImplementorsAt: aTextPosition [
 	"Try to find a message selector at a given source text position and request to browse it"
 
@@ -36,7 +36,7 @@ GtPharoSourceCoder >> browseImplementorsAt: aTextPosition [
 		ifNone: [  ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseImplementorsIn: aSourceString [
 	"Try to find a message selector within a given source string and request to browse it"
 
@@ -46,7 +46,7 @@ GtPharoSourceCoder >> browseImplementorsIn: aSourceString [
 		ifNone: [  ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseReferencesAt: aTextPosition [
 	"Try to create a references filter for an entity at the given text position and request to browse it"
 
@@ -56,7 +56,7 @@ GtPharoSourceCoder >> browseReferencesAt: aTextPosition [
 		ifNone: [ GtSearchNullFilter new ])
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> browseReferencesIn: aSourceString [
 	"Try to create a references filter for an entity within a given source string and request to browse it"
 
@@ -66,12 +66,12 @@ GtPharoSourceCoder >> browseReferencesIn: aSourceString [
 		ifNone: [ GtSearchNullFilter new ])
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> defaultCoderLook [
 	^ [ GtMethodCoderHeaderAptitude ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 
@@ -82,18 +82,18 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderDiscardChangesShortcut new
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> removeRefactoringAttribute [
 	self sourceText
 		clearAttributes: [ :each | each class = GtRefactoringChangesAttribute ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> withHeader [
 	self coderLook: [ GtMethodCoderHeaderAptitude ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> withoutHeader [
 	self coderLook: nil
 ]

@@ -17,8 +17,8 @@ A few of the most useful api methods are:
 
 "
 Class {
-	#name : 'GtPharoBehaviorNavigationViewModel',
-	#superclass : 'Object',
+	#name : #GtPharoBehaviorNavigationViewModel,
+	#superclass : #Object,
 	#traits : 'TGtWithPharoBehaviorCoderModel',
 	#classTraits : 'TGtWithPharoBehaviorCoderModel classTrait',
 	#instVars : [
@@ -28,7 +28,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoBehaviorNavigationViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
 
@@ -37,13 +37,13 @@ GtPharoBehaviorNavigationViewModel >> announce: anAnnouncement [
 		ifTrue: [ self parentPharoBehaviorsNavigationViewModel announce: anAnnouncement ].
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> deselectOtherEntities [
 	"deselect any selected child"
 	<propertyUnsetOthers: #selectedBehaviorViewModel>
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> hasOtherSelectedEntities [
 	"Return true if there are other selected entities that are the children"
 	<return: #Boolean>
@@ -52,7 +52,7 @@ GtPharoBehaviorNavigationViewModel >> hasOtherSelectedEntities [
 	^ false
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoBehaviorNavigationViewModel >> hasParentPharoBehaviorsNavigationViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
@@ -61,7 +61,7 @@ GtPharoBehaviorNavigationViewModel >> hasParentPharoBehaviorsNavigationViewModel
 	^ parentPharoBehaviorsNavigationViewModel notNil
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> isOnlySelectedBehavior [
 	"Return true if only this behavior is selected and not any of the children"
 	<return: #Boolean>
@@ -69,7 +69,7 @@ GtPharoBehaviorNavigationViewModel >> isOnlySelectedBehavior [
 	^ self isSelectedBehavior and: [ self hasOtherSelectedEntities not ]
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoBehaviorNavigationViewModel >> isPharoBehaviorNavigationViewModel [
 	"Return true if this is a view model of Behavior, false otherwise"
 	<return: #Boolean>
@@ -77,7 +77,7 @@ GtPharoBehaviorNavigationViewModel >> isPharoBehaviorNavigationViewModel [
 	^ true
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoBehaviorNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
 	"Return true if this is a view model of Behaviors, false otherwise"
 	<return: #Boolean>
@@ -85,7 +85,7 @@ GtPharoBehaviorNavigationViewModel >> isPharoBehaviorsNavigationViewModel [
 	^ false
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoBehaviorNavigationViewModel >> isPharoPackageNavigationViewModel [
 	"Return true if this is a view model of Package, false otherwise"
 	<return: #Boolean>
@@ -93,7 +93,7 @@ GtPharoBehaviorNavigationViewModel >> isPharoPackageNavigationViewModel [
 	^ false
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoBehaviorNavigationViewModel >> isPharoPackagesNavigationViewModel [
 	"Return true if this is a view model of Packages, false otherwise"
 	<return: #Boolean>
@@ -101,7 +101,7 @@ GtPharoBehaviorNavigationViewModel >> isPharoPackagesNavigationViewModel [
 	^ false
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoBehaviorNavigationViewModel >> isPharoTagNavigationViewModel [
 	"Return true if this is a view model of Tag, false otherwise"
 	<return: #Boolean>
@@ -109,7 +109,7 @@ GtPharoBehaviorNavigationViewModel >> isPharoTagNavigationViewModel [
 	^ false
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoBehaviorNavigationViewModel >> isPharoTagsNavigationViewModel [
 	"Return true if this is a view model of Tags, false otherwise"
 	<return: #Boolean>
@@ -117,7 +117,7 @@ GtPharoBehaviorNavigationViewModel >> isPharoTagsNavigationViewModel [
 	^ false
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> isSelectedBehavior [
 	"Return true if this behavior is selected"
 	<return: #Boolean>
@@ -126,21 +126,21 @@ GtPharoBehaviorNavigationViewModel >> isSelectedBehavior [
 		and: [ self parentPharoBehaviorsNavigationViewModel selectedBehaviorViewModel == self ]
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> notifyBehaviorDeselected [
 	<propertyUnsetNotifier: #selectedBehaviorViewModel>
 
 	self announce: (GtPharoBehaviorNavigationViewModelDeselected new behaviorViewModel: self)
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> notifyBehaviorSelected [
 	<propertySetNotifier: #selectedBehaviorViewModel>
 
 	self announce: (GtPharoBehaviorNavigationViewModelSelected new behaviorViewModel: self)
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoBehaviorNavigationViewModel >> parentPharoBehaviorsNavigationViewModel [
 	"Return a parent view model which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -155,7 +155,7 @@ GtPharoBehaviorNavigationViewModel >> parentPharoBehaviorsNavigationViewModel [
 	^ parentPharoBehaviorsNavigationViewModel
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoBehaviorNavigationViewModel >> parentPharoBehaviorsNavigationViewModel: aGtPharoBehaviorsNavigationViewModel [
 	"Assign a parent view model (${class:GtPharoBehaviorsNavigationViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -169,13 +169,13 @@ GtPharoBehaviorNavigationViewModel >> parentPharoBehaviorsNavigationViewModel: a
 	parentPharoBehaviorsNavigationViewModel := aGtPharoBehaviorsNavigationViewModel
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtPharoBehaviorNavigationViewModel >> printOn: aStream [
 	aStream
 		print: self pharoBehaviorCoderModel
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> selectBehavior [
 	"Just select a behavior without changing children"
 	<propertySetter: #selectedBehaviorViewModel>
@@ -183,7 +183,7 @@ GtPharoBehaviorNavigationViewModel >> selectBehavior [
 	self parentPharoBehaviorsNavigationViewModel selectBehaviorViewModel: self
 ]
 
-{ #category : 'api - selection' }
+{ #category : #'api - selection' }
 GtPharoBehaviorNavigationViewModel >> selectBehaviorWithoutOtherEntities [
 	"Select a behavior and deselect other selected children"
 
@@ -191,14 +191,14 @@ GtPharoBehaviorNavigationViewModel >> selectBehaviorWithoutOtherEntities [
 	self selectBehavior
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoBehaviorNavigationViewModel >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
 
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoBehaviorNavigationViewModel >> viewModelName [
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used
@@ -208,13 +208,13 @@ GtPharoBehaviorNavigationViewModel >> viewModelName [
 	^ #behavior
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoBehaviorNavigationViewModel >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
 		when: anAnnouncementClass do: aBlock
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoBehaviorNavigationViewModel >> when: anAnnouncementClass send: aSelector to: anObject [
 	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject

@@ -1,6 +1,6 @@
-Extension { #name : 'GtSearchMethodsWithClassPatternFilter' }
+Extension { #name : #GtSearchMethodsWithClassPatternFilter }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodsWithClassPatternFilter class >> filterDescriptorFor: aMethodsCoder [
 	aMethodsCoder isForClass
 		ifTrue: [ ^ nil ].

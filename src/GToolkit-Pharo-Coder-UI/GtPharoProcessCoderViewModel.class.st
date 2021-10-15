@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoProcessCoderViewModel',
-	#superclass : 'GtPharoMethodsCoderViewModel',
+	#name : #GtPharoProcessCoderViewModel,
+	#superclass : #GtPharoMethodsCoderViewModel,
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoProcessCoderViewModel >> elementClass [
 	^ GtPharoProcessCoderElement
 ]

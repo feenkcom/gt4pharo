@@ -1,6 +1,6 @@
-Extension { #name : 'GtSearchExamplesFilter' }
+Extension { #name : #GtSearchExamplesFilter }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchExamplesFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ (GtFilterDescriptor
 		creator: [ :value | self new

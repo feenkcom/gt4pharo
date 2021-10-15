@@ -1,23 +1,23 @@
 Class {
-	#name : 'GtPharoCreateBehaviorElement',
-	#superclass : 'GtCreateElement',
+	#name : #GtPharoCreateBehaviorElement,
+	#superclass : #GtCreateElement,
 	#instVars : [
 		'behaviorBlock'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-Behavior'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCreateBehaviorElement class >> saveButtonName [
 	^ #'creator--save-button'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCreateBehaviorElement >> behaviorBlock: aBlock [
 	behaviorBlock := aBlock
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtPharoCreateBehaviorElement >> buildClassLabel [
 	^ definition nameEditor asElement
 		aptitude: (BrGlamorousEditableLabelAptitude new
@@ -28,7 +28,7 @@ GtPharoCreateBehaviorElement >> buildClassLabel [
 		yourself
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtPharoCreateBehaviorElement >> buildDefinitionEditor [
 	| theProperties saveButton |
 		
@@ -88,7 +88,7 @@ GtPharoCreateBehaviorElement >> buildDefinitionEditor [
 	^ theProperties
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCreateBehaviorElement >> compileBehavior [
 	| change |
 	
@@ -105,50 +105,50 @@ GtPharoCreateBehaviorElement >> compileBehavior [
 		ifTrue: [ behaviorBlock cull: change definedClass ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCreateBehaviorElement >> editors [
 	^ definition editors
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forClassDefinition [
 	definition := GtClassDefinition forNew.
 	self addChild: self buildDefinitionEditor
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forClassName: aSymbol [
 	definition name: aSymbol
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forDefinition: aGtBehaviorDefinition [
 	definition := aGtBehaviorDefinition.
 	self addChild: self buildDefinitionEditor
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forPackage: aPackage [
 	definition category package name: aPackage name
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forPackageTag: aPackageTag [
 	definition category tag name: aPackageTag name
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forSuperclass: aClass [
 	definition superclass name: aClass name
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreateBehaviorElement >> forTraitDefinition [
 	definition := GtTraitDefinition forNew.
 	self addChild: self buildDefinitionEditor
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCreateBehaviorElement >> isValidForCreation [
 	^ definition isValidForCreation
 ]

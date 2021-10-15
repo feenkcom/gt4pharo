@@ -1,35 +1,35 @@
 Class {
-	#name : 'GtBehaviorMethodCoderTagsElement',
-	#superclass : 'GtMethodCoderTagsElement',
+	#name : #GtBehaviorMethodCoderTagsElement,
+	#superclass : #GtMethodCoderTagsElement,
 	#instVars : [
 		'classTag'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtBehaviorMethodCoderTagsElement >> behaviorOtherSideName [
 	^ self classTagStringForMeta: self methodCoderUIModel isMeta not
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtBehaviorMethodCoderTagsElement >> behaviorSideName [
 	^ self classTagStringForMeta: self methodCoderUIModel isMeta
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtBehaviorMethodCoderTagsElement >> buildTags [
 	^ super buildTags, { classTag := self newClassTag }
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtBehaviorMethodCoderTagsElement >> classTagStringFor: aMethodCoderUIModel [
 	<return: #String>
 
 	^ self classTagStringForMeta: aMethodCoderUIModel isMeta
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtBehaviorMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 	<return: #String>
 
@@ -38,14 +38,14 @@ GtBehaviorMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 		ifFalse: [ 'instance' ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtBehaviorMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 	super methodCoderUIModel: aMethodCoderUIModel.
 
 	self updateBehaviorSideButton
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtBehaviorMethodCoderTagsElement >> newClassTag [
 	^ BrButton new
 		beTinySize;
@@ -68,7 +68,7 @@ GtBehaviorMethodCoderTagsElement >> newClassTag [
 									classTag label: self behaviorSideName ] ])
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtBehaviorMethodCoderTagsElement >> updateBehaviorSideButton [
 	classTag label: (self classTagStringFor: self methodCoderUIModel).
 	classTag enabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass
