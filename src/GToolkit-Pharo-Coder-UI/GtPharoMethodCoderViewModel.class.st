@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtPharoMethodCoderViewModel',
-	#superclass : 'GtPharoSourceCoderViewModel',
+	#name : #GtPharoMethodCoderViewModel,
+	#superclass : #GtPharoSourceCoderViewModel,
 	#instVars : [
 		'savePreventors'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> allowSave [
 	"Remove all save prventors and recompute the updated save availability"
 
@@ -15,7 +15,7 @@ GtPharoMethodCoderViewModel >> allowSave [
 	self notifySaveEnabled
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> allowSaveDueTo: aSavePreventor [
 	savePreventors
 		remove: aSavePreventor
@@ -27,32 +27,32 @@ GtPharoMethodCoderViewModel >> allowSaveDueTo: aSavePreventor [
 	self notifySaveEnabled
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> behavior [
 	^ self coderModel behavior
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> compile [
 	<return: #Boolean>
 
 	^ self coderModel compileInContext: self evaluationContext
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> compiledMethod [
 	<return: #CompiledMethod>
 
 	^ self coderModel compiledMethod
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> discardChanges [
 	super discardChanges.
 	self allowSave
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodCoderViewModel >> elementClass [
 	self coders
 		ifNil: [ ^ GtExpandableMethodCoderElement ].
@@ -62,13 +62,13 @@ GtPharoMethodCoderViewModel >> elementClass [
 		ifFalse: [ GtExpandableMethodCoderElement ]
 ]
 
-{ #category : 'private - evaluation' }
+{ #category : #'private - evaluation' }
 GtPharoMethodCoderViewModel >> evaluationContext [
 	^ super evaluationContext
 		receiverObject: (self selfObject ifNil: [ self behavior instanceSide ])
 ]
 
-{ #category : 'gt-extension' }
+{ #category : #'gt-extension' }
 GtPharoMethodCoderViewModel >> gtInfo [
 	^ super gtInfo, (Array streamContents: [ :aStream |
 		aStream nextPut: (#saveEnabled -> self isSaveEnabled).
@@ -76,7 +76,7 @@ GtPharoMethodCoderViewModel >> gtInfo [
 			ifFalse: [ aStream nextPut: (#savePreventors -> savePreventors asArray) ] ])
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	"Return true if a variable with a given name is declared"
 	<return: #Boolean>
@@ -93,19 +93,19 @@ GtPharoMethodCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoMethodCoderViewModel >> initialize [
 	super initialize.
 	
 	savePreventors := OrderedCollection new
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoderViewModel >> isFromTrait [
 	^ self coderModel isFromTrait
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoderViewModel >> isMeta [
 	"Return true if the method is implemented in a pharo metaclass (~ class side)"
 	<return: #Boolean>
@@ -113,46 +113,46 @@ GtPharoMethodCoderViewModel >> isMeta [
 	^ self coderModel isMeta
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoderViewModel >> isOverridden [
 	^ self coderModel isOverridden
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoderViewModel >> isOverriding [
 	^ self coderModel isOverriding
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoMethodCoderViewModel >> isSaveEnabled [
 	^ savePreventors isEmpty
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveDisabled [
 	self announce: (GtMethodCoderSaveDisabled new preventors: savePreventors asArray)
 ]
 
-{ #category : 'private - notifying' }
+{ #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveEnabled [
 	self announce: (GtMethodCoderSaveEnabled new)
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> playAll [
 	"Evaluate the whole source code and inspect the result"
 
 	^ self coder playAllInContext: (self evaluationContext all; receiverObject: self receiverObjectToPlay)
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> playAllAndInspect [
 	"Evaluate the whole source code and inspect the result"
 	
 	^ self coder playAllAndInspectInContext: (self evaluationContext all; receiverObject: self receiverObjectToPlay)
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> preventSaveDueTo: aSavePreventor [
 	(savePreventors includes: aSavePreventor)
 		ifTrue: [ ^ self ].
@@ -165,21 +165,21 @@ GtPharoMethodCoderViewModel >> preventSaveDueTo: aSavePreventor [
 	self notifySaveDisabled
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> protocol [
 	<return: #String>
 
 	^ self coderModel protocol
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodCoderViewModel >> receiverObjectToPlay [
 	self isMeta ifTrue: [ ^ self behavior instanceSide ].
 	^ self selfObject
 		ifNil: [ self behavior new ]
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> save [
 	<return: #Boolean>
 	
@@ -189,7 +189,7 @@ GtPharoMethodCoderViewModel >> save [
 	^ self coderModel saveInContext: self evaluationContext
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> selector [
 	^ self coderModel selector
 ]

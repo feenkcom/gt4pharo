@@ -1,6 +1,6 @@
-Extension { #name : 'GtTagDefinition' }
+Extension { #name : #GtTagDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> browseFrom: anEvent [
 	| aRealPackage |
 
@@ -20,17 +20,17 @@ GtTagDefinition >> browseFrom: anEvent [
 				ifFalse: [ anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> editors [
 	^ { self tagEditor }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> readers [
 	^ { self tagReader }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> replaceFrom: anEvent [
 	| aRealPackage |
 
@@ -50,7 +50,7 @@ GtTagDefinition >> replaceFrom: anEvent [
 				ifFalse: [ anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> tagEditor [
 	^ GtCodeDefinitionSingleEditor new
 		title: 'Tag';
@@ -65,7 +65,7 @@ GtTagDefinition >> tagEditor [
 		containerName: self class tagEditorName
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> tagReader [
 	^ GtCodeDefinitionSingleReader new
 		title: 'Tag';

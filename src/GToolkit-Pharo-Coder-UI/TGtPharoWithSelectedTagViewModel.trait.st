@@ -27,14 +27,14 @@ GtWithPropertyTraitGenerator new
 
 "
 Trait {
-	#name : 'TGtPharoWithSelectedTagViewModel',
+	#name : #TGtPharoWithSelectedTagViewModel,
 	#instVars : [
 		'selectedTagViewModel'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> deselectTagViewModel [
 	<propertyUnsetter: #selectedTagViewModel>
 	| aPreviousSelectedTagViewModel |
@@ -48,7 +48,7 @@ TGtPharoWithSelectedTagViewModel >> deselectTagViewModel [
 	self notifySelectedTagViewModelChanged
 ]
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> hasSelectedTagViewModel [
 	<return: #Boolean>
 	<propertyTester: #selectedTagViewModel>
@@ -56,25 +56,25 @@ TGtPharoWithSelectedTagViewModel >> hasSelectedTagViewModel [
 	^ selectedTagViewModel notNil
 ]
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> notifySelectedTagViewModelChanged [
 	"Override this notify method to announce changes to the property"
 	<propertyChangeNotifier: #selectedTagViewModel>
 ]
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> onNewSelectedTagViewModelSet: aNewSelectedTagViewModel [
 	"Is sent after a new value of the selectedTagViewModel is assigned"
 	<propertySetHook: #selectedTagViewModel>
 ]
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> onPreviousSelectedTagViewModelUnset: aPreviousSelectedTagViewModel [
 	"Is sent after a previous value of the selectedTagViewModel is de-assigned"
 	<propertyUnsetHook: #selectedTagViewModel>
 ]
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> selectTagViewModel: aNewSelectedTagViewModel [
 	<propertySetter: #selectedTagViewModel>
 
@@ -92,7 +92,7 @@ TGtPharoWithSelectedTagViewModel >> selectTagViewModel: aNewSelectedTagViewModel
 	self notifySelectedTagViewModelChanged
 ]
 
-{ #category : 'api - selected tag view model' }
+{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> selectedTagViewModel [
 	<return: #GtPharoTagNavigationViewModel>
 	<propertyGetter: #selectedTagViewModel>

@@ -1,6 +1,6 @@
-Extension { #name : 'GtPoolDefinition' }
+Extension { #name : #GtPoolDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPoolDefinition >> browseFrom: anEvent [
 	self class environment
 		at: self name

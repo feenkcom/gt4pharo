@@ -4,12 +4,12 @@ Navigation is generated from {{gtMethod:ManifestGToolkitPharoCoderUI class>>#nav
 
 "
 Class {
-	#name : 'ManifestGToolkitPharoCoderUI',
-	#superclass : 'PackageManifest',
+	#name : #ManifestGToolkitPharoCoderUI,
+	#superclass : #PackageManifest,
 	#category : 'GToolkit-Pharo-Coder-UI-Manifest'
 }
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 ManifestGToolkitPharoCoderUI class >> mainViewModels [
 "
 @project Gt
@@ -40,7 +40,7 @@ packageTag <GtPharoPackageTagCoder::TGtWithPharoPackageTagCoderModel>
 "
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 ManifestGToolkitPharoCoderUI class >> navigationViewModels [
 "
 @project Gt

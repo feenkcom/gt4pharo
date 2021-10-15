@@ -9,8 +9,8 @@ A view model that knows its parent view model implements the following api:
 
 "
 Class {
-	#name : 'Gt2PharoTagViewModel',
-	#superclass : 'Object',
+	#name : #Gt2PharoTagViewModel,
+	#superclass : #Object,
 	#traits : 'TGtWithPharoPackageTagCoderModel',
 	#classTraits : 'TGtWithPharoPackageTagCoderModel classTrait',
 	#instVars : [
@@ -20,7 +20,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-!  - View Models'
 }
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 Gt2PharoTagViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
 
@@ -29,7 +29,7 @@ Gt2PharoTagViewModel >> announce: anAnnouncement [
 		ifTrue: [ self parentPharoTagsViewModel announce: anAnnouncement ].
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 Gt2PharoTagViewModel >> hasParentPharoTagsViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
@@ -38,7 +38,7 @@ Gt2PharoTagViewModel >> hasParentPharoTagsViewModel [
 	^ parentPharoTagsViewModel notNil
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 Gt2PharoTagViewModel >> isPharoTagViewModel [
 	"Return true if this is a view model of Tag, false otherwise"
 	<return: #Boolean>
@@ -46,7 +46,7 @@ Gt2PharoTagViewModel >> isPharoTagViewModel [
 	^ true
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 Gt2PharoTagViewModel >> isPharoTagsViewModel [
 	"Return true if this is a view model of Tags, false otherwise"
 	<return: #Boolean>
@@ -54,7 +54,7 @@ Gt2PharoTagViewModel >> isPharoTagsViewModel [
 	^ false
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 Gt2PharoTagViewModel >> parentPharoTagsViewModel [
 	"Return a parent view model which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -69,7 +69,7 @@ Gt2PharoTagViewModel >> parentPharoTagsViewModel [
 	^ parentPharoTagsViewModel
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 Gt2PharoTagViewModel >> parentPharoTagsViewModel: aGt2PharoTagsViewModel [
 	"Assign a parent view model (${class:Gt2PharoTagsViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -83,20 +83,20 @@ Gt2PharoTagViewModel >> parentPharoTagsViewModel: aGt2PharoTagsViewModel [
 	parentPharoTagsViewModel := aGt2PharoTagsViewModel
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 Gt2PharoTagViewModel >> printOn: aStream [
 	aStream
 		print: self pharoPackageTagCoderModel
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 Gt2PharoTagViewModel >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
 
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 Gt2PharoTagViewModel >> viewModelName [
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used
@@ -106,13 +106,13 @@ Gt2PharoTagViewModel >> viewModelName [
 	^ #tag
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 Gt2PharoTagViewModel >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
 		when: anAnnouncementClass do: aBlock
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 Gt2PharoTagViewModel >> when: anAnnouncementClass send: aSelector to: anObject [
 	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject

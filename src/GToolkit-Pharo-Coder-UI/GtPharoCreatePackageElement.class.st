@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtPharoCreatePackageElement',
-	#superclass : 'GtCreateElement',
+	#name : #GtPharoCreatePackageElement,
+	#superclass : #GtCreateElement,
 	#instVars : [
 		'packageBlock'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-Behavior'
 }
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreatePackageElement >> buildDefinitionEditor [
 	| theProperties saveButton |
 		
@@ -69,7 +69,7 @@ GtPharoCreatePackageElement >> buildDefinitionEditor [
 	^ theProperties
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoCreatePackageElement >> buildPackageLabel [
 	^ definition package packageEditor asElement
 		aptitude:
@@ -81,7 +81,7 @@ GtPharoCreatePackageElement >> buildPackageLabel [
 		yourself
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreatePackageElement >> createPackage [
 	| change |
 	change := definition createPackageChange.
@@ -90,12 +90,12 @@ GtPharoCreatePackageElement >> createPackage [
 		ifTrue: [ packageBlock cull: change package cull: change tag ]
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreatePackageElement >> forPackage: aPackage [
 	definition package name: aPackage name
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoCreatePackageElement >> initialize [
 	super initialize.
 	definition := GtCategoryDefinition empty.
@@ -103,7 +103,7 @@ GtPharoCreatePackageElement >> initialize [
 	self addChild: self buildDefinitionEditor
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCreatePackageElement >> packageBlock: aBlock [
 	packageBlock := aBlock
 ]

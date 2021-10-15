@@ -1,11 +1,11 @@
-Extension { #name : 'GtTraitsDefinition' }
+Extension { #name : #GtTraitsDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTraitsDefinition >> editors [
 	^ { self traitsEditor }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTraitsDefinition >> traitsEditor [
 	<return: #GtCodeDefinitionViewer>
 	

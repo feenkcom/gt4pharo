@@ -1,12 +1,12 @@
 Class {
-	#name : 'GtPharoPackagesNavigationElement',
-	#superclass : 'BrSimpleTree',
+	#name : #GtPharoPackagesNavigationElement,
+	#superclass : #BrSimpleTree,
 	#traits : 'TGtWithPharoPackagesNavigationViewModel',
 	#classTraits : 'TGtWithPharoPackagesNavigationViewModel classTrait',
 	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoPackagesNavigationElement >> initialize [
 	super initialize.
 	
@@ -29,7 +29,7 @@ GtPharoPackagesNavigationElement >> initialize [
 		eachNodeElement perform: aViewModelSetter with: eachTreeNode value ]
 ]
 
-{ #category : 'api - pharo packages navigation view model' }
+{ #category : #'api - pharo packages navigation view model' }
 GtPharoPackagesNavigationElement >> onPharoPackagesNavigationViewModelChanged [
 	"Is sent when a new pharoPackagesNavigation view model is assigned to the element.
 	Note: #onPharoPackagesNavigationViewModelChanged is sent before #subscribeToPharoPackagesNavigationViewModel

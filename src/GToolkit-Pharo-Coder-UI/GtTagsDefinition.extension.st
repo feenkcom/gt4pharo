@@ -1,11 +1,11 @@
-Extension { #name : 'GtTagsDefinition' }
+Extension { #name : #GtTagsDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagsDefinition >> editors [
 	^ { self tagsEditor }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagsDefinition >> tagsEditor [
 	<return: #GtCodeDefinitionViewer>
 	

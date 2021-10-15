@@ -1,5 +1,5 @@
 Class {
-	#name : 'GtPharoNavigationViewModel',
-	#superclass : 'Object',
+	#name : #GtPharoNavigationViewModel,
+	#superclass : #Object,
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }

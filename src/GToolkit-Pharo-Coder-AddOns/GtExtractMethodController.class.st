@@ -36,14 +36,19 @@ GtExtractMethodController >> addRefactoringPreview [
 
 { #category : #private }
 GtExtractMethodController >> addReorderParametersAttributes [
-	| message text attribute |
+	| message |
 	self removeReorderParametersAttributes.
-	extractedSelectorKeywords size > 1 ifFalse: [ ^ self ].
 	message := self findExtractedSend.
 	message isNil ifTrue: [ ^ self ].
-	text := self sourceText.
+	self addReorderParametersAttributesOn: message
+]
+
+{ #category : #private }
+GtExtractMethodController >> addReorderParametersAttributesOn: message [
+	| attribute |
+	extractedSelectorKeywords size > 1 ifFalse: [ ^ self ].
 	moveAttributes := OrderedCollection new.
-	(message isBinary ifTrue: [ {message value} ] ifFalse: [ message values ])
+	message values
 		keysAndValuesDo:
 			[ :i :each | 
 			i > 1

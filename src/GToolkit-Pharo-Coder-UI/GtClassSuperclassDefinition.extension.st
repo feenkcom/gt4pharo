@@ -1,6 +1,6 @@
-Extension { #name : 'GtClassSuperclassDefinition' }
+Extension { #name : #GtClassSuperclassDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> browseFrom: anEvent [
 	self class environment
 		at: self name
@@ -14,7 +14,7 @@ GtClassSuperclassDefinition >> browseFrom: anEvent [
 				ifFalse: [ anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> browseReferencesFrom: anEvent [
 	self class environment
 		at: self name
@@ -22,17 +22,17 @@ GtClassSuperclassDefinition >> browseReferencesFrom: anEvent [
 			[ :class | anEvent currentTarget phlow spawnObject: class gtReferences ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> editors [
 	^ { self superclassEditor }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> readers [
 	^ { self superclassReader }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> replaceFrom: anEvent [
 	self class environment
 		at: self name
@@ -45,7 +45,7 @@ GtClassSuperclassDefinition >> replaceFrom: anEvent [
 				anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> superclassEditor [
 	<return: #GtCodeDefinitionViewer>
 	
@@ -67,7 +67,7 @@ GtClassSuperclassDefinition >> superclassEditor [
 		containerName: self class behaviorSuperclassEditorName
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> superclassReader [
 	<return: #GtCodeDefinitionViewer>
 	

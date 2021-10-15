@@ -1,11 +1,11 @@
-Extension { #name : 'GtSlotsDefinition' }
+Extension { #name : #GtSlotsDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSlotsDefinition >> editors [
 	^ { self slotsEditor }
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSlotsDefinition >> slotsEditor [
 	<return: #GtCodeDefinitionViewer>
 	

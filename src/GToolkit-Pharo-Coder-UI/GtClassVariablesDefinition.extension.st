@@ -1,6 +1,6 @@
-Extension { #name : 'GtClassVariablesDefinition' }
+Extension { #name : #GtClassVariablesDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassVariablesDefinition >> classVariablesEditor [
 	<return: #GtCodeDefinitionViewer>
 	
@@ -24,7 +24,7 @@ GtClassVariablesDefinition >> classVariablesEditor [
 		containerName: self class classVariablesEditorName
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassVariablesDefinition >> editors [
 	^ { self classVariablesEditor }
 ]

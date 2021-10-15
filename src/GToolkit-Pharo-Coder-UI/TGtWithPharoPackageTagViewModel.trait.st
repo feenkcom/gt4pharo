@@ -1,12 +1,12 @@
 Trait {
-	#name : 'TGtWithPharoPackageTagViewModel',
+	#name : #TGtWithPharoPackageTagViewModel,
 	#instVars : [
 		'pharoPackageTagViewModel'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-Support'
 }
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> hasPharoPackageTagViewModel [
 	"Return a true if pharoPackageTag view model is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
@@ -14,7 +14,7 @@ TGtWithPharoPackageTagViewModel >> hasPharoPackageTagViewModel [
 	^ pharoPackageTagViewModel notNil
 ]
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> onPharoPackageTagViewModelChanged [
 	"Is sent when a new pharoPackageTag view model is assigned to the element.
 	Note: #onPharoPackageTagViewModelChanged is sent before #subscribeToPharoPackageTagViewModel
@@ -25,14 +25,14 @@ TGtWithPharoPackageTagViewModel >> onPharoPackageTagViewModelChanged [
 	self explicitRequirement
 ]
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> onPostPharoPackageTagViewModelChanged [
 	"I am an optional hook method that is sent after #subscribeToPharoPackageTagViewModel.
 	I do nothing by default but allow users to perform update operations when a receiver object is already
 	subscribed to announcements."
 ]
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> pharoPackageTagViewModel [
 	"Return a not-null pharoPackageTag view model assigned to the receiver element"
 	self
@@ -42,7 +42,7 @@ TGtWithPharoPackageTagViewModel >> pharoPackageTagViewModel [
 	^ pharoPackageTagViewModel
 ]
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> pharoPackageTagViewModel: aPharoPackageTagViewModel [
 	"Set a not-null pharoPackageTag view model assigned to the receiver element"
 	self
@@ -60,14 +60,14 @@ TGtWithPharoPackageTagViewModel >> pharoPackageTagViewModel: aPharoPackageTagVie
 	self onPostPharoPackageTagViewModelChanged
 ]
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> subscribeToPharoPackageTagViewModel [
 	"Is sent after a new pharoPackageTag view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromPharoPackageTagViewModel if elements subscribe to them"
 ]
 
-{ #category : 'api - pharo package tag view model' }
+{ #category : #'api - pharo package tag view model' }
 TGtWithPharoPackageTagViewModel >> unsubscribeFromPharoPackageTagViewModel [
 	"Is sent before a new pharoPackageTag view model is assigned to the element.
 	Elements that subscribe to pharoPackageTag view model in domain model are required to implement this methods."
