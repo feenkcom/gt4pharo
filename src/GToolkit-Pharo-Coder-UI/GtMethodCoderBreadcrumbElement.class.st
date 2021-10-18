@@ -4,15 +4,15 @@
 
 "
 Class {
-	#name : 'GtMethodCoderBreadcrumbElement',
-	#superclass : 'BrBreadcrumb',
+	#name : #GtMethodCoderBreadcrumbElement,
+	#superclass : #BrBreadcrumb,
 	#instVars : [
 		'sourceCoderUIModel'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderBreadcrumbElement >> coder: aCoder [
 	self 
 		deprecated: 'Use #sourceCoderUIModel: instead.'
@@ -21,7 +21,7 @@ GtMethodCoderBreadcrumbElement >> coder: aCoder [
 	self sourceCoderUIModel: aCoder
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtMethodCoderBreadcrumbElement >> initialize [
 	super initialize.
 	self
@@ -36,7 +36,7 @@ GtMethodCoderBreadcrumbElement >> initialize [
 	self fitContent
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtMethodCoderBreadcrumbElement >> newBreadcrumbItemElementsFor: aSourceCoder [
 	<return: #Collection of: #BrButton>
 
@@ -44,7 +44,7 @@ GtMethodCoderBreadcrumbElement >> newBreadcrumbItemElementsFor: aSourceCoder [
 		collect: [ :eachBreadcrumbAction | self newBreadcrumbItemFor: eachBreadcrumbAction ]
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtMethodCoderBreadcrumbElement >> newBreadcrumbItemFor: aGtSourceCoderBreadcrumbAction [
 	^ BrButton new
 		aptitude: (BrGlamorousLabelAptitude new
@@ -55,7 +55,7 @@ GtMethodCoderBreadcrumbElement >> newBreadcrumbItemFor: aGtSourceCoderBreadcrumb
 		action: [ :aButtonElement :aButtonModel | aButtonModel model performSourceCoderActionFrom: aButtonElement ]
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtMethodCoderBreadcrumbElement >> onCoderClassChanged: anAnnouncement [
 	| aCoder |
 	
@@ -63,21 +63,21 @@ GtMethodCoderBreadcrumbElement >> onCoderClassChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateBreadcrumbElements: aCoder ])
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtMethodCoderBreadcrumbElement >> onCoderMethodModified: anAnnouncement [
 	anAnnouncement coder isModified
 		ifTrue: [ self background: self theme status errorBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
 
-{ #category : 'event handling' }
+{ #category : #'event handling' }
 GtMethodCoderBreadcrumbElement >> onCoderSourceTextModified: anAnnouncement [
 	anAnnouncement coder isModified
 		ifTrue: [ self background: self theme status failureBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderBreadcrumbElement >> sourceCoderUIModel: aGtSourceCoderUIModel [
 	sourceCoderUIModel ifNotNil: [ :aPreviousCoderUIModel | 
 		aPreviousCoderUIModel coder announcer unsubscribe: self ].
@@ -103,7 +103,7 @@ GtMethodCoderBreadcrumbElement >> sourceCoderUIModel: aGtSourceCoderUIModel [
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtMethodCoderBreadcrumbElement >> updateBreadcrumbElements: aMethodCoder [
 	self removeAllItems.
 	self addItems: (self newBreadcrumbItemElementsFor: aMethodCoder).

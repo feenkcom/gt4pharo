@@ -1,28 +1,28 @@
 Class {
-	#name : 'GtPharoBehaviorProtocolCoderViewModel',
-	#superclass : 'GtSingleCoderViewModel',
+	#name : #GtPharoBehaviorProtocolCoderViewModel,
+	#superclass : #GtSingleCoderViewModel,
 	#instVars : [
 		'methodViewModels'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBehaviorProtocolCoderViewModel >> elementClass [
 	^ self shouldNotImplement
 ]
 
-{ #category : 'gt-extension' }
+{ #category : #'gt-extension' }
 GtPharoBehaviorProtocolCoderViewModel >> gtLiveFor: aView [
 	^ aView empty
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBehaviorProtocolCoderViewModel >> methodViewModels [
 	^ methodViewModels
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoBehaviorProtocolCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
 
@@ -30,7 +30,7 @@ GtPharoBehaviorProtocolCoderViewModel >> onCoderModelChanged [
 		collect: [ :eachMethodCoder | eachMethodCoder asCoderViewModel ]
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoBehaviorProtocolCoderViewModel >> protocol [
 	^ self coderModel protocol
 ]

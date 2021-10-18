@@ -1,40 +1,40 @@
 Class {
-	#name : 'GtPharoMethodContextCoderViewModel',
-	#superclass : 'GtPharoMethodCoderViewModel',
+	#name : #GtPharoMethodContextCoderViewModel,
+	#superclass : #GtPharoMethodCoderViewModel,
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodContextCoderViewModel >> context [
 	^ self coderModel context
 ]
 
-{ #category : 'private - evaluation' }
+{ #category : #'private - evaluation' }
 GtPharoMethodContextCoderViewModel >> evaluationContext [
 	^ super evaluationContext
 		runtimeContext: self context
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoMethodContextCoderViewModel >> initialize [
 	super initialize.
 	
 	expanded := false
 ]
 
-{ #category : 'notifications' }
+{ #category : #notifications }
 GtPharoMethodContextCoderViewModel >> notifyContextPCRangeChangedTo: anInterval [
 	self announcerUIModel
 		announce: (GtMethodCoderContextPCRangeChanged new
 			pcRange: anInterval)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodContextCoderViewModel >> programCounterRange [
 	^ self coderModel programCounterRange
 ]
 
-{ #category : 'updating' }
+{ #category : #updating }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
 	self notifyContextPCRangeChangedTo: self programCounterRange
 ]

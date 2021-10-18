@@ -11,8 +11,8 @@ A view model that knows its parent view model implements the following api:
 
 "
 Class {
-	#name : 'GtPharoPackageTagsCoderViewModel',
-	#superclass : 'Object',
+	#name : #GtPharoPackageTagsCoderViewModel,
+	#superclass : #Object,
 	#traits : 'TGtWithPharoPackageTagsCoderModel',
 	#classTraits : 'TGtWithPharoPackageTagsCoderModel classTrait',
 	#instVars : [
@@ -23,7 +23,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-View Models'
 }
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoPackageTagsCoderViewModel >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
 
@@ -32,7 +32,7 @@ GtPharoPackageTagsCoderViewModel >> announce: anAnnouncement [
 		ifTrue: [ self parentPharoPackageCoderViewModel announce: anAnnouncement ].
 ]
 
-{ #category : 'private - instance creation' }
+{ #category : #'private - instance creation' }
 GtPharoPackageTagsCoderViewModel >> createPharoPackageTagCoderViewModels [
 	"For each child from the domain modal create a view model and return a resulting collection"
 	<return: #Collection of: #GtPharoPackageTagCoderViewModel>
@@ -44,7 +44,7 @@ GtPharoPackageTagsCoderViewModel >> createPharoPackageTagCoderViewModels [
 		eachViewModel pharoPackageTagCoderModel: eachModel ] as: Array
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoPackageTagsCoderViewModel >> hasParentPharoPackageCoderViewModel [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
@@ -53,7 +53,7 @@ GtPharoPackageTagsCoderViewModel >> hasParentPharoPackageCoderViewModel [
 	^ parentPharoPackageCoderViewModel notNil
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoPackageTagsCoderViewModel >> isPharoPackageCoderViewModel [
 	"Return true if this is a view model of Package, false otherwise"
 	<return: #Boolean>
@@ -61,7 +61,7 @@ GtPharoPackageTagsCoderViewModel >> isPharoPackageCoderViewModel [
 	^ false
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoPackageTagsCoderViewModel >> isPharoPackageTagCoderViewModel [
 	"Return true if this is a view model of PackageTag, false otherwise"
 	<return: #Boolean>
@@ -69,7 +69,7 @@ GtPharoPackageTagsCoderViewModel >> isPharoPackageTagCoderViewModel [
 	^ false
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoPackageTagsCoderViewModel >> isPharoPackageTagsCoderViewModel [
 	"Return true if this is a view model of PackageTags, false otherwise"
 	<return: #Boolean>
@@ -77,7 +77,7 @@ GtPharoPackageTagsCoderViewModel >> isPharoPackageTagsCoderViewModel [
 	^ true
 ]
 
-{ #category : 'api - testing' }
+{ #category : #'api - testing' }
 GtPharoPackageTagsCoderViewModel >> isPharoPackagesCoderViewModel [
 	"Return true if this is a view model of Packages, false otherwise"
 	<return: #Boolean>
@@ -85,7 +85,7 @@ GtPharoPackageTagsCoderViewModel >> isPharoPackagesCoderViewModel [
 	^ false
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoPackageTagsCoderViewModel >> parentPharoPackageCoderViewModel [
 	"Return a parent view model which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -100,7 +100,7 @@ GtPharoPackageTagsCoderViewModel >> parentPharoPackageCoderViewModel [
 	^ parentPharoPackageCoderViewModel
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoPackageTagsCoderViewModel >> parentPharoPackageCoderViewModel: aGtPharoPackageCoderViewModel [
 	"Assign a parent view model (${class:GtPharoPackageCoderViewModel}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
@@ -114,7 +114,7 @@ GtPharoPackageTagsCoderViewModel >> parentPharoPackageCoderViewModel: aGtPharoPa
 	parentPharoPackageCoderViewModel := aGtPharoPackageCoderViewModel
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoPackageTagsCoderViewModel >> pharoPackageTagCoderViewModels [
 	"Return a collection of view models (${class:GtPharoPackageTagCoderViewModel}$) created for each child from the domain model.
 	Note: The view models are lazily instantiated."
@@ -123,20 +123,20 @@ GtPharoPackageTagsCoderViewModel >> pharoPackageTagCoderViewModels [
 	^  pharoPackageTagCoderViewModels ifNil: [ pharoPackageTagCoderViewModels := self createPharoPackageTagCoderViewModels ]
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtPharoPackageTagsCoderViewModel >> printOn: aStream [
 	aStream
 		print: self pharoPackageTagsCoderModel
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoPackageTagsCoderViewModel >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
 
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoPackageTagsCoderViewModel >> viewModelName [
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used
@@ -146,13 +146,13 @@ GtPharoPackageTagsCoderViewModel >> viewModelName [
 	^ #packageTags
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoPackageTagsCoderViewModel >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
 		when: anAnnouncementClass do: aBlock
 ]
 
-{ #category : 'api - announcer' }
+{ #category : #'api - announcer' }
 GtPharoPackageTagsCoderViewModel >> when: anAnnouncementClass send: aSelector to: anObject [
 	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject

@@ -1,12 +1,12 @@
 Trait {
-	#name : 'TGt2WithPharoTagViewModel',
+	#name : #TGt2WithPharoTagViewModel,
 	#instVars : [
 		'pharoTagViewModel'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-!  - Support'
 }
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> hasPharoTagViewModel [
 	"Return a true if pharoTag view model is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
@@ -14,7 +14,7 @@ TGt2WithPharoTagViewModel >> hasPharoTagViewModel [
 	^ pharoTagViewModel notNil
 ]
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> onPharoTagViewModelChanged [
 	"Is sent when a new pharoTag view model is assigned to the element.
 	Note: #onPharoTagViewModelChanged is sent before #subscribeToPharoTagViewModel
@@ -25,14 +25,14 @@ TGt2WithPharoTagViewModel >> onPharoTagViewModelChanged [
 	self explicitRequirement
 ]
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> onPostPharoTagViewModelChanged [
 	"I am an optional hook method that is sent after #subscribeToPharoTagViewModel.
 	I do nothing by default but allow users to perform update operations when a receiver object is already
 	subscribed to announcements."
 ]
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> pharoTagViewModel [
 	"Return a not-null pharoTag view model assigned to the receiver element"
 	self
@@ -42,7 +42,7 @@ TGt2WithPharoTagViewModel >> pharoTagViewModel [
 	^ pharoTagViewModel
 ]
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> pharoTagViewModel: aPharoTagViewModel [
 	"Set a not-null pharoTag view model assigned to the receiver element"
 	self
@@ -60,14 +60,14 @@ TGt2WithPharoTagViewModel >> pharoTagViewModel: aPharoTagViewModel [
 	self onPostPharoTagViewModelChanged
 ]
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> subscribeToPharoTagViewModel [
 	"Is sent after a new pharoTag view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromPharoTagViewModel if elements subscribe to them"
 ]
 
-{ #category : 'api - pharo tag view model' }
+{ #category : #'api - pharo tag view model' }
 TGt2WithPharoTagViewModel >> unsubscribeFromPharoTagViewModel [
 	"Is sent before a new pharoTag view model is assigned to the element.
 	Elements that subscribe to pharoTag view model in domain model are required to implement this methods."

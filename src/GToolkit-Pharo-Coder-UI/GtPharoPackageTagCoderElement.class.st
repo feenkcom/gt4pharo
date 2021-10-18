@@ -1,13 +1,13 @@
 Class {
-	#name : 'GtPharoPackageTagCoderElement',
-	#superclass : 'BlElement',
+	#name : #GtPharoPackageTagCoderElement,
+	#superclass : #BlElement,
 	#instVars : [
 		'packageTagCoder'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-! Views'
 }
 
-{ #category : 'build ui' }
+{ #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildContentPane [
 	self removeChildren.
 	self addChild: self buildPackageTagLabel.
@@ -15,7 +15,7 @@ GtPharoPackageTagCoderElement >> buildContentPane [
 	self addChild: self buildContentTabs
 ]
 
-{ #category : 'build ui' }
+{ #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildContentTabs [
 	<return: #BrTabGroup>
 	| contentTabs |
@@ -25,7 +25,7 @@ GtPharoPackageTagCoderElement >> buildContentTabs [
 	^ contentTabs
 ]
 
-{ #category : 'build ui' }
+{ #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 	| tagNameEditor container previewButton unloadButton |
 		
@@ -70,7 +70,7 @@ GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 	^ container
 ]
 
-{ #category : 'build ui' }
+{ #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildParentLink [
 	| element |
 	element := BlElement new.
@@ -106,7 +106,7 @@ GtPharoPackageTagCoderElement >> buildParentLink [
 	^ element
 ]
 
-{ #category : 'build ui' }
+{ #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildRemovePackageTagLabel [
 	| labelText count |
 	count := packageTagCoder packageTag classes size.
@@ -121,7 +121,7 @@ GtPharoPackageTagCoderElement >> buildRemovePackageTagLabel [
 		text: labelText asRopedText
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoPackageTagCoderElement >> initialize [
 	super initialize.
 	self padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
@@ -132,18 +132,18 @@ GtPharoPackageTagCoderElement >> initialize [
 			c vertical matchParent ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoderElement >> packageTagCoder [
 	^ packageTagCoder
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageTagCoderElement >> packageTagCoder: anObject [
 	packageTagCoder := anObject.
 	self buildContentPane
 ]
 
-{ #category : 'build ui' }
+{ #category : #'build ui' }
 GtPharoPackageTagCoderElement >> packageTagViewItems [
 	| collector context |
 	collector := GtPhlowViewsCollector new.
@@ -155,7 +155,7 @@ GtPharoPackageTagCoderElement >> packageTagViewItems [
 	^ collector collect
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtPharoPackageTagCoderElement >> unloadPackageTag [
 	| event |
 	packageTagCoder unload.

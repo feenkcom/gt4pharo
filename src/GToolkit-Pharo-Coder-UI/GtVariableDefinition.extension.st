@@ -1,11 +1,11 @@
-Extension { #name : 'GtVariableDefinition' }
+Extension { #name : #GtVariableDefinition }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtVariableDefinition >> browseFrom: anEvent [
 	anEvent currentTarget phlow spawnObject: self
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtVariableDefinition >> browseReferencesFrom: anEvent [
 	parent classOrMetaClass
 		ifNotNil: [ :class | 
@@ -15,7 +15,7 @@ GtVariableDefinition >> browseReferencesFrom: anEvent [
 						spawnObject: (GtSearchReferencesFilter literal: binding) ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtVariableDefinition >> inspectFrom: anEvent [
 	anEvent currentTarget phlow spawnObject: self value
 ]

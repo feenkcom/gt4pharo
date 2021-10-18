@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoPackageCoderElement',
-	#superclass : 'BrVerticalPane',
+	#name : #GtPharoPackageCoderElement,
+	#superclass : #BrVerticalPane,
 	#traits : 'TGtPharoWithPackageCoderViewModel',
 	#classTraits : 'TGtPharoWithPackageCoderViewModel classTrait',
 	#instVars : [
@@ -9,7 +9,7 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-Views'
 }
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildContentPane [
 	self addChildren: {
 		self buildPackageLabel.
@@ -17,7 +17,7 @@ GtPharoPackageCoderElement >> buildContentPane [
 		self buildContentTabs }
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildContentTabs [
 	<return: #BrTabGroup>
 	| contentTabs |
@@ -27,7 +27,7 @@ GtPharoPackageCoderElement >> buildContentTabs [
 	^ contentTabs
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildPackageLabel [
 	| packageNameEditor container previewButton unloadButton |
 		
@@ -80,7 +80,7 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 	^ container
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildPackageTagsList [
 	^ BrSimpleList new
 		itemStencil: [ GtPackageTagCardElement new ];
@@ -88,7 +88,7 @@ GtPharoPackageCoderElement >> buildPackageTagsList [
 		items: (packageCoder packageTagsCoder coders asSortedCollection: [ :a :b | a packageTagName < b packageTagName ])
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildParentLink [
 	| aLinkContainer |
 	aLinkContainer := BrHorizontalPane new
@@ -121,7 +121,7 @@ GtPharoPackageCoderElement >> buildParentLink [
 	^ aLinkContainer
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildRemovePackageLabel [
 	| labelText classCount extensionCount |
 
@@ -142,14 +142,14 @@ GtPharoPackageCoderElement >> buildRemovePackageLabel [
 		text: labelText asRopedText
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageCoderElement >> coderUIModel: aGtPackageCoder [
 	packageCoder := aGtPackageCoder coder.
 
 	self buildContentPane
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoPackageCoderElement >> initialize [
 	super initialize.
 
@@ -158,21 +158,21 @@ GtPharoPackageCoderElement >> initialize [
 	self matchParent
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageCoderElement >> package [
 	<return: #RPackage>
 
 	^ self packageCoder package
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageCoderElement >> packageCoder [
 	<return: #GtPharoPackageCoder>
 
 	^ packageCoder
 ]
 
-{ #category : 'private - ui' }
+{ #category : #'private - ui' }
 GtPharoPackageCoderElement >> packageViewItems [
 	| collector context |
 	collector := GtPhlowViewsCollector new.
@@ -184,7 +184,7 @@ GtPharoPackageCoderElement >> packageViewItems [
 	^ collector collect
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtPharoPackageCoderElement >> unloadPackage [
 	packageCoder unload.
 

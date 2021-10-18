@@ -2622,7 +2622,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_parameters_and_enter_keywords [
 	<gtExample>
-	| aScripter text |
+	| aScripter |
 
 	aScripter := self forKeywordExtraction_05_click_extract_method.
 	

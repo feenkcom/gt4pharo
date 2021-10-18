@@ -1,18 +1,18 @@
 Class {
-	#name : 'GtPharoPackageNavigationViewModelDeselected',
-	#superclass : 'Announcement',
+	#name : #GtPharoPackageNavigationViewModelDeselected,
+	#superclass : #Announcement,
 	#instVars : [
 		'packageViewModel'
 	],
 	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Events'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageNavigationViewModelDeselected >> packageViewModel [
 	^ packageViewModel
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoPackageNavigationViewModelDeselected >> packageViewModel: anObject [
 	packageViewModel := anObject
 ]

@@ -1,6 +1,6 @@
-Extension { #name : 'GtClassMethodsCoder' }
+Extension { #name : #GtClassMethodsCoder }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> categoryFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
@@ -23,7 +23,7 @@ GtClassMethodsCoder >> categoryFilter: aView [
 					source: anElement ] ].
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> classSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
@@ -43,7 +43,7 @@ GtClassMethodsCoder >> classSlotFilter: aView [
 					source: anElement ] ]
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> codeGeneratorsDropDown: anElement for: aMethodsCoderViewModel [
 	^ BrHorizontalPane new
 		exact: 300@300;
@@ -53,7 +53,7 @@ GtClassMethodsCoder >> codeGeneratorsDropDown: anElement for: aMethodsCoderViewM
 				asElementDo: [ :aTabGroup | aTabGroup matchParent ])
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> examplesFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
@@ -73,7 +73,7 @@ GtClassMethodsCoder >> examplesFilter: aView [
 					source: anElement ] ].
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> filterDropDown: anElement [
 	^ BlElement new
 		size: 430 @ 430;
@@ -83,7 +83,7 @@ GtClassMethodsCoder >> filterDropDown: anElement [
 				asElementDo: [ :aTabGroup | aTabGroup matchParent ])
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> instanceSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit

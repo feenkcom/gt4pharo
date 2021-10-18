@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoSourceCoderViewModel',
-	#superclass : 'GtSourceCoderViewModel',
+	#name : #GtPharoSourceCoderViewModel,
+	#superclass : #GtSourceCoderViewModel,
 	#instVars : [
 		'selfObject',
 		'localBindings'
@@ -8,14 +8,14 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoSourceCoderViewModel >> behavior [
 	"Return a class (or trait) in the context of which the coder is opened"
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'private - bindings' }
+{ #category : #'private - bindings' }
 GtPharoSourceCoderViewModel >> bindingStrategy [
 	"Private. Return the underlying bindings strategy. Do not modify the object from the outside!"
 	<return: #TGtVariablesBindings>
@@ -25,7 +25,7 @@ GtPharoSourceCoderViewModel >> bindingStrategy [
 	^ self localBindings
 ]
 
-{ #category : 'private - bindings' }
+{ #category : #'private - bindings' }
 GtPharoSourceCoderViewModel >> compositeVariableBindings [
 	| theBindings |
 
@@ -42,14 +42,14 @@ GtPharoSourceCoderViewModel >> compositeVariableBindings [
 	^ theBindings
 ]
 
-{ #category : 'private - evaluation' }
+{ #category : #'private - evaluation' }
 GtPharoSourceCoderViewModel >> evaluationContext [
 	^ super evaluationContext
 		bindingStrategy: self compositeVariableBindings;
 		receiverObject: self selfObject
 ]
 
-{ #category : 'gt-extension' }
+{ #category : #'gt-extension' }
 GtPharoSourceCoderViewModel >> gtInfo [
 	^ super gtInfo, {
 		#bindings -> self compositeVariableBindings.
@@ -57,12 +57,12 @@ GtPharoSourceCoderViewModel >> gtInfo [
 	}
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoSourceCoderViewModel >> hasDeclaredGlobalNamed: aVariableName [
 	^ self class environment includesKey: aVariableName
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoSourceCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	"Return true if a variable with a given name is declared"
 	<return: #Boolean>
@@ -70,14 +70,14 @@ GtPharoSourceCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPharoSourceCoderViewModel >> initialize [
 	super initialize.
 
 	localBindings := GtLocalVariablesBindings new
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoSourceCoderViewModel >> isDeprecatedGlobalNamed: aVariableName [
 	^ self class environment
 		at: aVariableName
@@ -85,21 +85,21 @@ GtPharoSourceCoderViewModel >> isDeprecatedGlobalNamed: aVariableName [
 		ifAbsent: [ false ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> localBindings [
 	<return: #GtLocalVariablesBindings>
 
 	^ localBindings
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoSourceCoderViewModel >> renameLocalVariableAt: aTextIndex [
 	GtRenameAction2
 		pharoRenameLocalVariableAt: aTextIndex
 		textualCoderViewModel: self
 ]
 
-{ #category : 'api - actions' }
+{ #category : #'api - actions' }
 GtPharoSourceCoderViewModel >> renameLocalVariableAtCursor [
 	self cursors do: [ :aCursor |
 		^ GtRenameAction2
@@ -107,14 +107,14 @@ GtPharoSourceCoderViewModel >> renameLocalVariableAtCursor [
 			textualCoderViewModel: self ]
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> selfObject [
 	"Return an object that should be bound to `self` during code evaluation"
 
 	^ selfObject
 ]
 
-{ #category : 'api - accessing' }
+{ #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> selfObject: anObject [
 	"Assign an object that should be bound to `self` during code evaluation"
 

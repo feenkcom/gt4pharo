@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoBehaviorCoderViewModel',
-	#superclass : 'GtSingleCoderViewModel',
+	#name : #GtPharoBehaviorCoderViewModel,
+	#superclass : #GtSingleCoderViewModel,
 	#instVars : [
 		'definitionCoderUIModel',
 		'methodsCoderUIModel'
@@ -8,27 +8,27 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoBehaviorCoderViewModel >> behavior [
 	^ self coderModel behavior
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBehaviorCoderViewModel >> definitionCoderUIModel [
 	^ definitionCoderUIModel ifNil: [ self coder definitionCoder asCoderUIModel ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBehaviorCoderViewModel >> elementClass [
 	^ GtPharoBehaviorCoderElement
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoBehaviorCoderViewModel >> methodsCoderUIModel [
 	^ methodsCoderUIModel ifNil: [ self coder methodsCoder asCoderUIModel ]
 ]
 
-{ #category : 'api - coder model' }
+{ #category : #'api - coder model' }
 GtPharoBehaviorCoderViewModel >> protocols [
 	^ self coderModel behavior protocols
 ]

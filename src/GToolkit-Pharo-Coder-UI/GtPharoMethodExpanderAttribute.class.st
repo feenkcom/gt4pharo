@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoMethodExpanderAttribute',
-	#superclass : 'BrGlamorousTrangleExpanderTextAttribute',
+	#name : #GtPharoMethodExpanderAttribute,
+	#superclass : #BrGlamorousTrangleExpanderTextAttribute,
 	#instVars : [
 		'classOrMetaClass',
 		'selector'
@@ -8,14 +8,14 @@ Class {
 	#category : 'GToolkit-Pharo-Coder-UI-Attributes'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 	^ self new
 		forClass: aClass andSelector: aSymbol;
 		yourself
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	| editorElement coder method |
 	(method := self compiledMethod)
@@ -35,23 +35,23 @@ GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	^ editorElement
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodExpanderAttribute >> classOrMetaClass [
 	^ classOrMetaClass
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodExpanderAttribute >> compiledMethod [
 	^ classOrMetaClass lookupSelector: selector
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtPharoMethodExpanderAttribute >> forClass: aClass andSelector: aSymbol [
 	classOrMetaClass := aClass.
 	selector := aSymbol
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtPharoMethodExpanderAttribute >> initialize [
 	super initialize.
 	self
@@ -60,7 +60,7 @@ GtPharoMethodExpanderAttribute >> initialize [
 				stencil: [ self buildMethodCoder ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoMethodExpanderAttribute >> selector [
 	^ selector
 ]

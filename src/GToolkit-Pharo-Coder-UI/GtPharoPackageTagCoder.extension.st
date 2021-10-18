@@ -1,16 +1,16 @@
-Extension { #name : 'GtPharoPackageTagCoder' }
+Extension { #name : #GtPharoPackageTagCoder }
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoPackageTagCoder >> asCardElement [
 	^ GtPackageTagCardElement new coder: self
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoPackageTagCoder >> asCoderUIModel [
 	^ GtPharoPackageTagViewModel new pharoPackageTagCoderModel: self
 ]
 
-{ #category : '*GToolkit-Pharo-Coder-UI' }
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoPackageTagCoder >> asElement [
 	^ GtPharoPackageTagCoderElement new packageTagCoder: self
 ]
