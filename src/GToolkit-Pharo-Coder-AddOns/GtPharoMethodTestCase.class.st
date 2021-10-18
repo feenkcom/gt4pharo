@@ -65,6 +65,12 @@ GtPharoMethodTestCase >> debug [
 ]
 
 { #category : #'api - testing' }
+GtPharoMethodTestCase >> hasNoTestPragma [
+
+	^ self compiledMethod hasPragmaNamed: #noTest
+]
+
+{ #category : #'api - testing' }
 GtPharoMethodTestCase >> hasResult [
 	^ self result isNotNil
 ]

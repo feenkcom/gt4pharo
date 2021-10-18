@@ -6,7 +6,7 @@ Class {
 		'originalFilter',
 		'additionalFilters'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'private - adding / removing' }
@@ -244,7 +244,8 @@ GtFilteredMethodsCoder >> unsubscribeFromAllCoders [
 
 { #category : #private }
 GtFilteredMethodsCoder >> updateCoders [
-	| newCoders highlighter |
+	| newCoders highlighter oldCoders |
+	oldCoders := coders.
 	newCoders := coders select: [ :each | each isModified ].
 	items
 		do: [ :eachMethod | 
@@ -260,6 +261,8 @@ GtFilteredMethodsCoder >> updateCoders [
 		announce:
 			(GtCodersCodersChanged new
 				coders: self;
+				oldCoders: oldCoders;
+				newCoders: coders;
 				yourself)
 ]
 

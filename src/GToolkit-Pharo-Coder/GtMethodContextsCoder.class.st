@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'debugSession'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #accessing }
@@ -51,7 +51,8 @@ GtMethodContextsCoder >> newCoderFor: aContext [
 { #category : #accessing }
 GtMethodContextsCoder >> updateCoders [
 
-	| context firstContext coder newCoders |
+	| context firstContext coder newCoders oldCoders |
+	oldCoders := coders.
 	self isSuspended
 		ifTrue: [ 
 			coders := coders asOrderedCollection reject: [ :each | each isDead ].
@@ -74,5 +75,7 @@ GtMethodContextsCoder >> updateCoders [
 		ifFalse: [ coders := OrderedCollection new ].
 	self announce: (GtCodersCodersChanged new
 			 coders: self;
+			 oldCoders: oldCoders;
+			 newCoders: coders;
 			 yourself)
 ]
