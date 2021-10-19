@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMethodsCoder,
 	#superclass : #GtCodersModel,
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #accessing }
@@ -94,4 +94,10 @@ GtPharoMethodsCoder >> selectAndScrollToMethod: aCompiledMethod [
 		detect: [ :each | each isForMethod: aCompiledMethod ]
 		ifNone: [ ^ self ].
 	self selectAndScrollTo: methodCoder
+]
+
+{ #category : #accessing }
+GtPharoMethodsCoder >> testSuite [
+	^ GtPharoTestSuite new 
+		coder: self
 ]

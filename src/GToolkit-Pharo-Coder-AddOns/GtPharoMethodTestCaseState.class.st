@@ -40,6 +40,11 @@ GtPharoMethodTestCaseState >> accept: aVisitor [
 	^ aVisitor visitTestCaseState: self
 ]
 
+{ #category : #'api - state change' }
+GtPharoMethodTestCaseState >> beSkipped: aGtPharoMethodTestCase [
+	"Subclasses may react to the be-skipped request"
+]
+
 { #category : #accessing }
 GtPharoMethodTestCaseState >> color [
 	"Return a color that represents a given state"

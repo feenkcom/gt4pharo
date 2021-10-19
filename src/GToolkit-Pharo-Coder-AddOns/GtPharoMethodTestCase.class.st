@@ -35,6 +35,11 @@ GtPharoMethodTestCase >> announcer [
 	^ announcer
 ]
 
+{ #category : #'api - state' }
+GtPharoMethodTestCase >> beSkipped [
+	self state beSkipped: self
+]
+
 { #category : #'accessing - coder' }
 GtPharoMethodTestCase >> behavior [
 	^ self methodCoder behavior
@@ -62,6 +67,12 @@ GtPharoMethodTestCase >> debug [
 	self methodCoder ensureSave ifFalse: [ ^ self ].
 
 	self rawDebug
+]
+
+{ #category : #'api - testing' }
+GtPharoMethodTestCase >> hasNoTestPragma [
+
+	^ self compiledMethod hasPragmaNamed: #noTest
 ]
 
 { #category : #'api - testing' }
@@ -125,7 +136,7 @@ GtPharoMethodTestCase >> methodSelector [
 	^ self methodCoder currentSelector
 ]
 
-{ #category : #'accessing - test case' }
+{ #category : #'private - notifications' }
 GtPharoMethodTestCase >> notifyResultChanged [
 
 	self announce: (GtPharoMethodTestResultChanged new

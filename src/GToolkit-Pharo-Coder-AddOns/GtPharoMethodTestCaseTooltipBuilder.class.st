@@ -31,6 +31,35 @@ GtPharoMethodTestCaseTooltipBuilder >> element: anElement [
 	element := anElement
 ]
 
+{ #category : #'instance creation' }
+GtPharoMethodTestCaseTooltipBuilder >> newPlayTestCaseElementWithExplanation: aString [
+
+	^ BrVerticalPane new
+		  fitContent;
+		  alignCenter;
+		  padding: (BlInsets all: 5);
+		  addChild: (BrLabel new
+				   aptitude: BrGlamorousLabelAptitude new;
+				   margin: (BlInsets bottom: 5);
+				   text: aString;
+				   fitContent);
+		  addChild: (BrHorizontalPane new
+				   fitContent;
+				   addChild: (BrButton new
+						    beTinySize;
+						    aptitude: BrGlamorousButtonWithIconAptitude;
+						    margin: (BlInsets right: 5);
+						    icon: BrGlamorousVectorIcons play;
+						    label: 'Play Unit Test';
+						    action: [ :aButton | self testCase play ]);
+				   addChild: (BrButton new
+						    beTinySize;
+						    aptitude: BrGlamorousButtonWithIconAptitude;
+						    icon: BrGlamorousVectorIcons debug;
+						    label: 'Debug Unit Test';
+						    action: [ :aButton | self testCase debug ]))
+]
+
 { #category : #accessing }
 GtPharoMethodTestCaseTooltipBuilder >> result [
 	^ result
@@ -64,30 +93,8 @@ GtPharoMethodTestCaseTooltipBuilder >> testCase: aTestCase [
 { #category : #visiting }
 GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseNotExecutedState: aState [
 
-	^ BrVerticalPane new
-		  fitContent;
-		  alignCenter;
-		  padding: (BlInsets all: 5);
-		  addChild: (BrLabel new
-				   aptitude: BrGlamorousLabelAptitude new;
-				   margin: (BlInsets bottom: 5);
-				   text: 'Not Executed Test Case';
-				   fitContent);
-		addChild: (BrHorizontalPane new
-			fitContent;
-			addChild: (BrButton new 
-				beTinySize;
-				aptitude: BrGlamorousButtonWithIconAptitude;
-				margin: (BlInsets right: 5);
-				icon: BrGlamorousVectorIcons play;
-				label: 'Play Unit Test';
-				action: [ :aButton | self testCase play ]);
-			addChild: (BrButton new 
-				beTinySize; 
-				aptitude: BrGlamorousButtonWithIconAptitude;
-				icon: BrGlamorousVectorIcons debug;
-				label: 'Debug Unit Test';
-				action: [ :aButton | self testCase debug ]))
+	^ self newPlayTestCaseElementWithExplanation:
+		  'Not Executed Test Case'
 ]
 
 { #category : #visiting }
@@ -108,10 +115,8 @@ GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseResultState: aState [
 
 { #category : #visiting }
 GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseSkippedState: aState [
-	^ BrLabel new
-		aptitude: BrGlamorousLabelAptitude new;
-		text: 'Skipped Test Unit';
-		fitContent
+
+	^ self newPlayTestCaseElementWithExplanation: 'Skipped Test Unit'
 ]
 
 { #category : #visiting }
