@@ -224,6 +224,23 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
+	aNode isVariable ifFalse: [ ^ self ].
+	aNode whoDefines ifNotNil: [ :node | node isMethod ifFalse: [ ^ self ] ].
+	aNode topParent allNodesOfType: GtPharoAssignmentNode do: [ :node | node variable = aNode ifTrue: [ ^ self ] ].
+	coderAddOns
+		addContextMenuItem: (self createLabel: 'Move method into' description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action:
+			[ :aCoderViewModel | 
+			((GtMoveMethodRefactoringController new)
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) execute ]
+		id: #'context-menu--move-method'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns [
 	| class |
 	aNode isVariable
@@ -260,7 +277,7 @@ GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem:
 			(self
 				 createLabel: 'Push down method'
-				 description: aNode selector)
+				 description: method selector)
 		hover: nil
 		leave: nil
 		action: [ :aCoderViewModel | 
@@ -335,6 +352,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
+			self addMoveMethodRefactoringFor: aNode to: coderAddOns. 
 			self addAddParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
