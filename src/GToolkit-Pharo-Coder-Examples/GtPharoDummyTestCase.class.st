@@ -23,9 +23,19 @@ GtPharoDummyTestCase >> testFailingOne [
 ]
 
 { #category : #accessing }
+GtPharoDummyTestCase >> testNewOne [
+	self assert: true
+]
+
+{ #category : #accessing }
 GtPharoDummyTestCase >> testPassedOne [
 
 	self assert: true description: [ 'I should be true' ].
+]
+
+{ #category : #accessing }
+GtPharoDummyTestCase >> testSecondNewOne [
+	self assert: false
 ]
 
 { #category : #accessing }

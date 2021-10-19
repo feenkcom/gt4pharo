@@ -6,7 +6,7 @@ Class {
 		'object',
 		'filteredClasses'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -151,12 +151,14 @@ GtClassMethodsCoder >> object [
 
 { #category : #actions }
 GtClassMethodsCoder >> removeMethodsForClass: aClass [
+	| oldCoders |
 	(filteredClasses includes: aClass)
 		ifFalse: [ ^ self ].
 	filteredClasses remove: aClass.
 	self updateMethods.
-	coders
-		removeAllSuchThat: [ :each | 
+	oldCoders := coders.
+	coders := coders
+		reject: [ :each | 
 			(each classOrMetaClass = aClass
 				or: [ each classOrMetaClass = aClass classSide ])
 				and: [ each isModified not ] ].
@@ -164,6 +166,8 @@ GtClassMethodsCoder >> removeMethodsForClass: aClass [
 		announce:
 			(GtCodersCodersChanged new
 				coders: self;
+				oldCoders: oldCoders;
+				newCoders: coders;
 				yourself)
 ]
 

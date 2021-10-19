@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'session'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -45,7 +45,8 @@ GtProcessCoder >> isSuspended [
 
 { #category : #updating }
 GtProcessCoder >> updateCoders [
-	| context firstContext coder newCoders |
+	| context firstContext coder newCoders oldCoders |
+	oldCoders := coders.
 	self isSuspended
 		ifTrue: [ coders := coders asOrderedCollection reject: [ :each | each isDead ].
 			firstContext := coders isEmpty
@@ -67,5 +68,7 @@ GtProcessCoder >> updateCoders [
 		announce:
 			(GtCodersCodersChanged new
 				coders: self;
+				oldCoders: oldCoders;
+				newCoders: coders
 				yourself)
 ]

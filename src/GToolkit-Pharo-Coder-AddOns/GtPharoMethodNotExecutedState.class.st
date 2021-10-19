@@ -19,6 +19,11 @@ GtPharoMethodNotExecutedState >> accept: aVisitor [
 ]
 
 { #category : #accessing }
+GtPharoMethodNotExecutedState >> beSkipped: aGtPharoMethodTestCase [
+	aGtPharoMethodTestCase state: GtPharoMethodTestCaseSkippedState default
+]
+
+{ #category : #accessing }
 GtPharoMethodNotExecutedState >> color [
 	^ BrGlamorousColors neutralBackgroundColor
 ]
