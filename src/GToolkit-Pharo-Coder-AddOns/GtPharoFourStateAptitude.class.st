@@ -173,9 +173,9 @@ GtPharoFourStateAptitude >> newColoredIcon: aColor [
 ]
 
 { #category : #accessing }
-GtPharoFourStateAptitude >> onAddedToSceneGraph: anEvent [ 
-	NonInteractiveTranscript stdout show: 'Added to scene (onAddedToSceneGraph): '; show: anEvent; cr.
-	
+GtPharoFourStateAptitude >> onAddedToSceneGraph: anEvent [
+	"I dispatch it for myself so that updater can receive notifications"
+
 	self dispatchEventToMyself: anEvent
 ]
 
@@ -264,7 +264,8 @@ GtPharoFourStateAptitude >> unsubscribeFromCodersCoder: aMethodCoder [
 
 { #category : #'private - updating' }
 GtPharoFourStateAptitude >> updateElement [
-	NonInteractiveTranscript stdout show: 'Update element request: '; show: self; cr.
+	"Subclasses may update the widget.
+	It should be called from the UI process."
 	
 ]
 
