@@ -124,7 +124,8 @@ GtPharoTestSuite >> playSelected [
 
 	self selectedExecutableTestCasesDo: [ :aCoder :aTestCase | 
 		(aCoder isModified not and: [ aTestCase hasNoTestPragma not ]) 
-			ifTrue: [ aTestCase play ] ]
+			ifTrue: [ aTestCase play ]
+			ifFalse: [ aTestCase beSkipped ] ]
 ]
 
 { #category : #'api - execution' }
