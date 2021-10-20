@@ -48,12 +48,18 @@ GtPharoMethodTestCase >> behavior [
 { #category : #'api - testing' }
 GtPharoMethodTestCase >> canExecute [
 
-	^ self methodCoder isNotNil and: [ 
-			  self behavior isTestCase and: [ 
-				  self behavior isAbstract not and: [ 
-				  	| aNode |
-				  	aNode := self methodCoder rbAST methodNode.
-				  	aNode isNotNil and: [ aNode selector isTestSelector ] ] ] ]
+	| aNode |
+	self methodCoder ifNil: [ ^ false ].
+	self behavior isTestCase ifFalse: [ ^ false ].
+	self behavior isAbstract ifTrue: [ 
+		| hasConreteSubclass |
+		hasConreteSubclass := false.
+		self behavior allSubclassesDo: [ :eachClass | 
+			eachClass isAbstract ifFalse: [ hasConreteSubclass := true ] ].
+		hasConreteSubclass ifFalse: [ ^ false ] ].
+
+	aNode := self methodCoder rbAST methodNode.
+	^ aNode isNotNil and: [ aNode selector isTestSelector ]
 ]
 
 { #category : #'accessing - coder' }
@@ -229,7 +235,10 @@ GtPharoMethodTestCase >> subscribeToMethodCoder [
 { #category : #'accessing - test case' }
 GtPharoMethodTestCase >> testCaseInstance [
 
-	^ self behavior selector: self methodSelector
+	^ GtPharoMethodTestSuiteBuilder new
+		behavior: self behavior;
+		selector: self methodSelector;
+		build
 ]
 
 { #category : #'private - updating' }

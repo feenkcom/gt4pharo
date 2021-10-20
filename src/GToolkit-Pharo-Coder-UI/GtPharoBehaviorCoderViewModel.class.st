@@ -5,7 +5,7 @@ Class {
 		'definitionCoderUIModel',
 		'methodsCoderUIModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
 { #category : #'api - coder model' }
@@ -25,7 +25,16 @@ GtPharoBehaviorCoderViewModel >> elementClass [
 
 { #category : #accessing }
 GtPharoBehaviorCoderViewModel >> methodsCoderUIModel [
-	^ methodsCoderUIModel ifNil: [ self coder methodsCoder asCoderUIModel ]
+
+	^ methodsCoderUIModel ifNil: [ 
+		  methodsCoderUIModel := self coder methodsCoder asCoderUIModel ]
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderViewModel >> onCoderModelChanged [
+
+	super onCoderModelChanged.
+	methodsCoderUIModel := nil
 ]
 
 { #category : #'api - coder model' }
