@@ -1,3 +1,7 @@
+"
+I exemplify {{gtClass:GtPharoMethodTestSuiteBuilder}}.
+
+"
 Class {
 	#name : #GtPharoMethodTestSuiteBuilderExamples,
 	#superclass : #Object,
@@ -14,7 +18,7 @@ GtPharoMethodTestSuiteBuilderExamples >> basicBuilder [
 	^ aBuilder
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoMethodTestSuiteBuilderExamples >> builderWithAbstractClass [
 
 	<gtExample>
@@ -40,7 +44,7 @@ GtPharoMethodTestSuiteBuilderExamples >> builderWithAbstractClassAndTestCallingF
 	^ aBuilder
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoMethodTestSuiteBuilderExamples >> testResultFromAbstractClassAndTestCallingFoo [
 
 	<gtExample>
@@ -51,7 +55,7 @@ GtPharoMethodTestSuiteBuilderExamples >> testResultFromAbstractClassAndTestCalli
 	^ aResult
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoMethodTestSuiteBuilderExamples >> testSuiteFromAbstractClassAndTestCallingFoo [
 
 	<gtExample>

@@ -1,3 +1,12 @@
+"
+I create {{gtClass:TestCase}} instances for a given class and test case selector. 
+I return {{gtClass:TestSuite}}.
+#Example
+##TestSuite
+For a given abstract class and test case selector, I collect concrete test case subclasses with the assigned test case selector: {{gtExample:GtPharoMethodTestSuiteBuilderExamples >> #testSuiteFromAbstractClassAndTestCallingFoo | codeExpanded=false | previewExpanded= true | previewHeight=200}}
+#TestResult
+In the example above, we see one method source code and two test cases. If the test suite is executed, we obtain the following result: {{gtExample:GtPharoMethodTestSuiteBuilderExamples >> #testResultFromAbstractClassAndTestCallingFoo | codeExpanded=false | previewExpanded=true }}
+"
 Class {
 	#name : #GtPharoMethodTestSuiteBuilder,
 	#superclass : #Object,
