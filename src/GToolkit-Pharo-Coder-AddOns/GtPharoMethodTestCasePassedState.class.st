@@ -24,5 +24,5 @@ GtPharoMethodTestCasePassedState >> color [
 
 { #category : #accessing }
 GtPharoMethodTestCasePassedState >> label [
-	^ 'Success'
+	^ 'Passed'
 ]
