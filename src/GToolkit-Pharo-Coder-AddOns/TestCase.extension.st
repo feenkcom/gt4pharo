@@ -10,6 +10,12 @@ TestCase >> gtCompiledMethod [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+TestCase class >> gtTestCaseMethods [
+
+	^ GtSearchClassTestSuiteFilter new testCaseClass: self
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 TestCase >> testCasesDo: aBlock [
 
 	aBlock cull: self

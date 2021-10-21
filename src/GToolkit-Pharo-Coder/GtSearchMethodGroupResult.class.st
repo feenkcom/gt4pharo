@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchMethodGroupResult,
 	#superclass : #GtSearchTypedGroupResult,
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #'instance creation' }
@@ -38,11 +38,17 @@ GtSearchMethodGroupResult >> asElement [
 
 { #category : #ui }
 GtSearchMethodGroupResult >> gtItemsFor: aView [
+
 	<gtView>
-	^ aView explicit 
-		title: 'Live' translated;
-		priority: 10;
-		stencil: [ (self asCoder) asElement margin: (BlInsets all: 5) ]
+	| aMethodsCoder |
+	aMethodsCoder := self asCoder.
+
+	^ aView explicit
+		  title: 'Live' translated;
+		  priority: 10;
+		  stencil: [ aMethodsCoder asElement margin: (BlInsets all: 5) ];
+		  actionStencil: [ 
+			  GtCoderUIUtility newTestSuiteButtonForMethodsCoder: aMethodsCoder ]
 ]
 
 { #category : #accessing }
