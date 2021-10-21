@@ -12,7 +12,8 @@ GtPharoTestCaseStateProvider >> allStates [
 		  GtPharoMethodTestCasePassedState default.
 		  GtPharoMethodTestCaseSkippedState default.
 		  GtPharoMethodTestCaseFailureState default.
-		  GtPharoMethodTestCaseErrorState default }
+		  GtPharoMethodTestCaseErrorState default.
+		  GtPharoMethodNotExecutedState default. }
 ]
 
 { #category : #'api - accessing' }
