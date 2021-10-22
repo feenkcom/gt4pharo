@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #testing }
+GtPharoMethodAllState class >> representsTestResult: aTestResult [
+
+	^ false
+]
+
+{ #category : #testing }
 GtPharoMethodAllState >> includesCoder: aCoder [
 
 	^ aCoder testCase canExecute
