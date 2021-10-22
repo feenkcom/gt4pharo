@@ -13,13 +13,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.79/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.531/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.532/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.425/src' ].
 		spec
 			baseline: 'SmaCC' with: [
-				spec repository: 'github://j-brant/SmaCC:1dcf09f3225a1642835b1bd47cd813ab86075e6f/src' ].
+				spec repository: 'github://j-brant/SmaCC:864be7dbfb00c169d0090edd969718fad1cf6596/src' ].
 
 		spec package: 'GToolkit-Pharo-System'.
 		spec package: 'GToolkit-Pharo-Metamodels' with: [
