@@ -642,3 +642,9 @@ GtPharoSourceCoder >> variableNodeToReferencesFilter: aVariableNode ifFound: aFo
 
 	^ aFoundBlock value: (self referencesFilterForLiteral: aVariableName asSymbol)
 ]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> whenSendToAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoWhenSendToExpanderStyler new.
+]

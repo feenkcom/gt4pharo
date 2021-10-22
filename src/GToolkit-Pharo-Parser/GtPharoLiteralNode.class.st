@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoLiteralNode,
 	#superclass : #GtPharoValueNode,
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -16,6 +16,12 @@ GtPharoLiteralNode >> isLiteral [
 
 { #category : #testing }
 GtPharoLiteralNode >> isString [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoLiteralNode >> isSymbol [
+
 	^ false
 ]
 

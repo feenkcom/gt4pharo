@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'value'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -26,6 +26,12 @@ GtPharoSymbolLiteralNode >> asSymbol [
 { #category : #accessing }
 GtPharoSymbolLiteralNode >> guessType: completionStrategy [
 	^ Symbol
+]
+
+{ #category : #testing }
+GtPharoSymbolLiteralNode >> isSymbol [
+
+	^ true
 ]
 
 { #category : #accessing }
