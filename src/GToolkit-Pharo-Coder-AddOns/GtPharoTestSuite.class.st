@@ -16,15 +16,23 @@ GtPharoTestSuite >> allCodersDo: aBlock [
 { #category : #'api - enumerating' }
 GtPharoTestSuite >> allErrorTestCasesDo: aBlock [
 
-	self executableTestCasesDo: [ :aCoder :aTestCase | 
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
 		aTestCase state = GtPharoMethodTestCaseErrorState default ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]
 ]
 
 { #category : #'api - enumerating' }
+GtPharoTestSuite >> allExecutableTestCasesDo: aBlock [
+
+	self allCodersDo: [ :eachCoder | 
+		eachCoder testCase canExecute ifTrue: [ 
+			aBlock cull: eachCoder cull: eachCoder testCase ] ]
+]
+
+{ #category : #'api - enumerating' }
 GtPharoTestSuite >> allFailureTestCasesDo: aBlock [
 
-	self executableTestCasesDo: [ :aCoder :aTestCase | 
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
 		aTestCase state = GtPharoMethodTestCaseFailureState default ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ] 
 ]
@@ -32,7 +40,7 @@ GtPharoTestSuite >> allFailureTestCasesDo: aBlock [
 { #category : #'api - enumerating' }
 GtPharoTestSuite >> allNotExecutedTestCasesDo: aBlock [
 
-	self executableTestCasesDo: [ :aCoder :aTestCase | 
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
 		aTestCase state = GtPharoMethodNotExecutedState default ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]
 ]
@@ -40,8 +48,16 @@ GtPharoTestSuite >> allNotExecutedTestCasesDo: aBlock [
 { #category : #'api - enumerating' }
 GtPharoTestSuite >> allPassedTestCasesDo: aBlock [
 
-	self executableTestCasesDo: [ :aCoder :aTestCase | 
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
 		aTestCase state = GtPharoMethodTestCasePassedState default ifTrue: [ 
+			aBlock cull: aCoder cull: aTestCase ] ]  
+]
+
+{ #category : #'api - enumerating' }
+GtPharoTestSuite >> allSkippedTestCasesDo: aBlock [
+
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
+		aTestCase state = GtPharoMethodTestCaseSkippedState default ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]  
 ]
 
@@ -51,7 +67,7 @@ GtPharoTestSuite >> allTestCaseStates [
 	| aSet |
 	aSet := Set new.
 
-	self executableTestCasesDo: [ :aCoder :aTestCase | 
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
 		aSet add: aTestCase state ].
 
 	^ aSet
@@ -69,14 +85,6 @@ GtPharoTestSuite >> coder: aCoder [
 	coder := aCoder
 ]
 
-{ #category : #'api - enumerating' }
-GtPharoTestSuite >> executableTestCasesDo: aBlock [
-
-	self allCodersDo: [ :eachCoder | 
-		eachCoder testCase canExecute ifTrue: [ 
-			aBlock cull: eachCoder cull: eachCoder testCase ] ]
-]
-
 { #category : #'api - testing' }
 GtPharoTestSuite >> hasErrorTestCases [
 
@@ -87,7 +95,7 @@ GtPharoTestSuite >> hasErrorTestCases [
 { #category : #'api - testing' }
 GtPharoTestSuite >> hasExecutableTestCases [
 
-	self executableTestCasesDo: [ :aCoder :aTestCase | ^ true ].
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | ^ true ].
 	^ false
 ]
 
@@ -117,6 +125,46 @@ GtPharoTestSuite >> hasSelectedExecutableTestCases [
 
 	self selectedExecutableTestCasesDo: [ :aCoder :aTestCase | ^ true ].
 	^ false
+]
+
+{ #category : #'api - counts' }
+GtPharoTestSuite >> numberOfAllPassedTestCases [
+
+	| aCount |
+	aCount := 0.
+	self allPassedTestCasesDo: [ :aCoder :aTestCase | 
+		aCount := aCount + 1 ].
+	^ aCount
+]
+
+{ #category : #'api - counts' }
+GtPharoTestSuite >> numberOfAllSkippedTestCases [
+
+	| aCount |
+	aCount := 0.
+	self allSkippedTestCasesDo: [ :aCoder :aTestCase | 
+		aCount := aCount + 1 ].
+	^ aCount
+]
+
+{ #category : #'api - counts' }
+GtPharoTestSuite >> numberOfAllTestCases [
+
+	| aCount |
+	aCount := 0.
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
+		aCount := aCount + 1 ].
+	^ aCount
+]
+
+{ #category : #'api - counts' }
+GtPharoTestSuite >> numberOfAllTestCasesWithState: aState [
+
+	| aCount |
+	aCount := 0.
+	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
+		aTestCase state = aState ifTrue: [ aCount := aCount + 1 ] ].
+	^ aCount
 ]
 
 { #category : #'api - execution' }

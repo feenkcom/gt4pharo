@@ -1,39 +1,16 @@
 Class {
 	#name : #GtPharoFourStateAptitude,
-	#superclass : #BrAptitude,
+	#superclass : #GtPharoMethodsCoderAptitude,
 	#instVars : [
-		'coder',
-		'updater',
 		'fourIconElement',
 		'neutralIconElement',
 		'errorIconElement',
 		'failureIconElement',
 		'passedIconElement',
-		'addedToSceneGraphEventHandler',
 		'oneIconElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
-
-{ #category : #accessing }
-GtPharoFourStateAptitude >> coder: aGtFilteredMethodsCoder [
-	coder = aGtFilteredMethodsCoder ifTrue: [ ^ self ].
-	self unsubscribeFromCoder.
-	coder := aGtFilteredMethodsCoder.
-	self subscribeToCoder.
-	self onCoderChanged.
-]
-
-{ #category : #accessing }
-GtPharoFourStateAptitude >> coderDo: aBlock [
-	coder ifNotNil: aBlock
-]
-
-{ #category : #'api - tasks' }
-GtPharoFourStateAptitude >> enqueueTask: aTask [
-
-	self widgetDo: [ :anElement | anElement enqueueTask: aTask ]
-]
 
 { #category : #'private - accessing' }
 GtPharoFourStateAptitude >> errorIconElement [
@@ -70,16 +47,12 @@ GtPharoFourStateAptitude >> initialize [
 	self fourIconElement addChild: self neutralIconElement as: #neutral.
 
 	self
-		addChangeAddChildAs: #( content oneStateExample )
+		addChangeAddChildAs: #( content oneState )
 		with: [ self oneIconElement ].
 	self
-		addChangeAddChildAs: #( content fourStateExample )
+		addChangeAddChildAs: #( content fourState )
 		with: [ self fourIconElement ].
-	updater := GtPhlowUpdateRequester new
-		           element: self
-		           selector: #updateElement.
 	
-	self initializeEventHandler.
 ]
 
 { #category : #initialization }
@@ -87,23 +60,6 @@ GtPharoFourStateAptitude >> initializeErrorIconElement [
 
 	errorIconElement := self newColoredIcon:
 		                    GtPharoMethodTestCaseErrorState default color
-]
-
-{ #category : #initialization }
-GtPharoFourStateAptitude >> initializeEventHandler [
-
-	addedToSceneGraphEventHandler := BlEventHandler
-		                                 on: BlElementAddedToSceneGraphEvent
-		                                 do:
-		                                 (MessageSend
-			                                  receiver: self
-			                                  selector: #onAddedToSceneGraph:).
-
-	self addChange: (BrLookChange new
-			 up: [ :e | widget addEventHandler: addedToSceneGraphEventHandler ];
-			 down: [ :e | 
-				 widget removeEventHandler: addedToSceneGraphEventHandler ];
-			 yourself)
 ]
 
 { #category : #initialization }
@@ -149,13 +105,6 @@ GtPharoFourStateAptitude >> initializePassedIconElement [
 		                     GtPharoMethodTestCasePassedState default color
 ]
 
-{ #category : #'api - testing' }
-GtPharoFourStateAptitude >> isAttachedToSceneGraph [
-
-	self widgetDo: [ :anElement | ^ anElement isAttachedToSceneGraph ].
-	^ false
-]
-
 { #category : #'private - accessing' }
 GtPharoFourStateAptitude >> neutralIconElement [
 
@@ -165,54 +114,7 @@ GtPharoFourStateAptitude >> neutralIconElement [
 { #category : #initialization }
 GtPharoFourStateAptitude >> newColoredIcon: aColor [
 
-	^ BlElement new
-		  background: aColor;
-		  geometry: BlSquare new;
-		  margin: (BlInsets all: 1);
-		  size: 8 @ 8
-]
-
-{ #category : #accessing }
-GtPharoFourStateAptitude >> onAddedToSceneGraph: anEvent [
-	"I dispatch it for myself so that updater can receive notifications"
-
-	self dispatchEventToMyself: anEvent
-]
-
-{ #category : #'private - hooks' }
-GtPharoFourStateAptitude >> onCoderChanged [
-	updater requestUpdate
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> onCoderChanged: anAnnouncement [
-	self flag: 'replace it'.
-	updater requestUpdate
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> onCodersCoderAdded: aGtCodersCoderAdded [
-	"Handle coder added announcement"
-	
-	self subscribeToCodersCoder: aGtCodersCoderAdded coder.
-	self updater requestUpdate.
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> onCodersCoderRemoved: aGtCodersCoderRemoved [
-	"Handle coder removed announcement"
-	self unsubscribeFromCodersCoder: aGtCodersCoderRemoved coder.
-	self updater requestUpdate.
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> onCodersCoderSourceCodeChanged: aGtCoderSourceCodeChanged [
-	self updater requestUpdate
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> onCodersCodersChanged: aGtCodersCodersChanged [
-	"Handle coders changed (added and/or removed) announcement"
+	^ GtPharoTestCaseUtility newColoredIcon: aColor
 ]
 
 { #category : #'private - accessing' }
@@ -225,51 +127,4 @@ GtPharoFourStateAptitude >> oneIconElement [
 GtPharoFourStateAptitude >> passedIconElement [
 
 	^ passedIconElement
-]
-
-{ #category : #'element compatibility' }
-GtPharoFourStateAptitude >> space [
-	^ self widget space
-]
-
-{ #category : #'private - subscriptions' }
-GtPharoFourStateAptitude >> subscribeToCoder [
-
-	self coderDo: [ :aCoder | 
-		aCoder weak
-			when: GtCodersCoderAdded send: #onCodersCoderAdded: to: self;
-			when: GtCodersCoderRemoved send: #onCodersCoderRemoved: to: self;
-			when: GtCodersCodersChanged send: #onCodersCodersChanged: to: self ]
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> subscribeToCodersCoder: aMethodCoder [
-
-	aMethodCoder weak 
-		when: GtCoderSourceCodeChanged 
-		send: #onCodersCoderSourceCodeChanged:
-		to: self 
-]
-
-{ #category : #'private - subscriptions' }
-GtPharoFourStateAptitude >> unsubscribeFromCoder [
-	self coderDo: [ :aCoder |
-		aCoder unsubscribe: self ].
-]
-
-{ #category : #'private - announcement handling' }
-GtPharoFourStateAptitude >> unsubscribeFromCodersCoder: aMethodCoder [ 
-	aMethodCoder unsubscribe: self
-]
-
-{ #category : #'private - updating' }
-GtPharoFourStateAptitude >> updateElement [
-	"Subclasses may update the widget.
-	It should be called from the UI process."
-	
-]
-
-{ #category : #'private - accessing' }
-GtPharoFourStateAptitude >> updater [
-	^ updater
 ]

@@ -4,14 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #'private - accessing' }
-GtPharoTestSuiteAptitude >> miniIconsDo: aBlock [ 
-	aBlock cull: self neutralIconElement .
-	aBlock cull: self errorIconElement.
-	aBlock cull: self failureIconElement.
-	aBlock cull: passedIconElement
-]
-
 { #category : #'private - announcement handling' }
 GtPharoTestSuiteAptitude >> onTestCaseStateChanged: anAnnouncement [
 	self updater requestUpdate.

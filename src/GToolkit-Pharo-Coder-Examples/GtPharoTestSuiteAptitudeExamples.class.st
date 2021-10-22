@@ -32,7 +32,7 @@ GtPharoTestSuiteAptitudeExamples >> buttonWithAptitudeAndMethodCoders_Executed [
 	anElement aptitude testSuiteDo: [ :aTestSuite | 
 		| anyOneExecuted |
 		anyOneExecuted := false.
-		aTestSuite executableTestCasesDo: [ :aCoder :aTestCase | 
+		aTestSuite allExecutableTestCasesDo: [ :aCoder :aTestCase | 
 			anyOneExecuted ifFalse: [ 
 				aTestCase play.
 				anyOneExecuted := true ] ] ].
