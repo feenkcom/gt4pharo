@@ -48,6 +48,8 @@ GtSearchMethodGroupResult >> gtItemsFor: aView [
 		  priority: 10;
 		  stencil: [ aMethodsCoder asElement margin: (BlInsets all: 5) ];
 		  actionStencil: [ 
+			  GtCoderUIUtility newExamplesButtonForMethodsCoder: aMethodsCoder ];
+		  actionStencil: [ 
 			  GtCoderUIUtility newTestSuiteButtonForMethodsCoder: aMethodsCoder ]
 ]
 
