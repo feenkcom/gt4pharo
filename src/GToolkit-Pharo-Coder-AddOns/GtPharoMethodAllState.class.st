@@ -5,25 +5,25 @@ Class {
 }
 
 { #category : #testing }
-GtPharoMethodAllState class >> representsTestResult: aTestResult [
-
-	^ false
-]
-
-{ #category : #testing }
-GtPharoMethodAllState >> includesCoder: aCoder [
+GtPharoMethodAllState class >> includesCoder: aCoder [
 
 	^ aCoder testCase canExecute
 ]
 
 { #category : #accessing }
-GtPharoMethodAllState >> label [
+GtPharoMethodAllState class >> label [
 	"Return a textural representation"
 	^ 'All'
 ]
 
 { #category : #accessing }
-GtPharoMethodAllState >> numberOfMethodsIn: aMethodsCoder [
+GtPharoMethodAllState class >> numberOfMethodsIn: aMethodsCoder [
 
 	^ aMethodsCoder testSuite numberOfAllTestCases
+]
+
+{ #category : #testing }
+GtPharoMethodAllState class >> representsTestResult: aTestResult [
+
+	^ false
 ]

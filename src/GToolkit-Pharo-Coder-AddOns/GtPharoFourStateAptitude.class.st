@@ -59,14 +59,14 @@ GtPharoFourStateAptitude >> initialize [
 GtPharoFourStateAptitude >> initializeErrorIconElement [
 
 	errorIconElement := self newColoredIcon:
-		                    GtPharoMethodTestCaseErrorState default color
+		                    GtPharoMethodTestCaseErrorState color
 ]
 
 { #category : #initialization }
 GtPharoFourStateAptitude >> initializeFailureIconElement [
 
 	failureIconElement := self newColoredIcon:
-		                      GtPharoMethodTestCaseFailureState default
+		                      GtPharoMethodTestCaseFailureState
 			                      color
 ]
 
@@ -87,7 +87,7 @@ GtPharoFourStateAptitude >> initializeFourStateIconElement [
 GtPharoFourStateAptitude >> initializeNeutralIconElement [
 
 	neutralIconElement := self newColoredIcon:
-		                      GtPharoMethodNotExecutedState default color
+		                      GtPharoMethodNotExecutedState color
 ]
 
 { #category : #initialization }
@@ -102,7 +102,7 @@ GtPharoFourStateAptitude >> initializeOneStateIconElement [
 GtPharoFourStateAptitude >> initializePassedIconElement [
 
 	passedIconElement := self newColoredIcon:
-		                     GtPharoMethodTestCasePassedState default color
+		                     GtPharoMethodTestCasePassedState color
 ]
 
 { #category : #'private - accessing' }

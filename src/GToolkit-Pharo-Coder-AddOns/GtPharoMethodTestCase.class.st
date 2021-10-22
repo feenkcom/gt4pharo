@@ -90,7 +90,7 @@ GtPharoMethodTestCase >> hasResult [
 GtPharoMethodTestCase >> initialize [
 	super initialize.
 	announcer := Announcer new.
-	state := GtPharoMethodNotExecutedState default.
+	state := GtPharoMethodNotExecutedState.
 ]
 
 { #category : #'api - testing' }
@@ -208,7 +208,7 @@ GtPharoMethodTestCase >> state [
 
 	<return: #GtPharoMethodTestCaseState>
 	self methodCoder isModified ifTrue: [ 
-		^ GtPharoMethodNotExecutedState default ].
+		^ GtPharoMethodNotExecutedState ].
 	^ state
 ]
 
@@ -245,8 +245,8 @@ GtPharoMethodTestCase >> testCaseInstance [
 GtPharoMethodTestCase >> updateState [
 
 	self canExecute ifFalse: [ 
-		^ self state: GtPharoMethodNotExecutableTestCaseState default ].
+		^ self state: GtPharoMethodNotExecutableTestCaseState ].
 	self hasResult ifFalse: [
-		^ self state: GtPharoMethodNotExecutedState default ].
+		^ self state: GtPharoMethodNotExecutedState ].
 	self state: (GtPharoMethodTestCaseState stateFromTestResult: self result)
 ]

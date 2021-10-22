@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 GtPharoTestCaseStateFilter class >> defaultState [
 
-	^ GtPharoMethodAllState default
+	^ GtPharoMethodAllState
 ]
 
 { #category : #accessing }

@@ -7,22 +7,22 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #testing }
-GtPharoMethodTestCasePassedState class >> representsTestResult: aTestResult [
-	^ aTestResult passedCount isZero not
-]
-
 { #category : #visiting }
-GtPharoMethodTestCasePassedState >> accept: aVisitor [
+GtPharoMethodTestCasePassedState class >> accept: aVisitor [
 	^ aVisitor visitTestCasePassedState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCasePassedState >> color [
+GtPharoMethodTestCasePassedState class >> color [
 	^ BrGlamorousColors successBackgroundColor
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCasePassedState >> label [
+GtPharoMethodTestCasePassedState class >> label [
 	^ 'Passed'
+]
+
+{ #category : #testing }
+GtPharoMethodTestCasePassedState class >> representsTestResult: aTestResult [
+	^ aTestResult passedCount isZero not
 ]

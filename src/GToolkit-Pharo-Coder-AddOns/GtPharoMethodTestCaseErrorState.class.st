@@ -7,22 +7,22 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #testing }
-GtPharoMethodTestCaseErrorState class >> representsTestResult: aTestResult [
-	^ aTestResult hasErrors
-]
-
 { #category : #visiting }
-GtPharoMethodTestCaseErrorState >> accept: aVisitor [
+GtPharoMethodTestCaseErrorState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseErrorState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCaseErrorState >> color [
+GtPharoMethodTestCaseErrorState class >> color [
 	^ BrGlamorousColors errorBackgroundColor
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCaseErrorState >> label [
+GtPharoMethodTestCaseErrorState class >> label [
 	^ 'Error'
+]
+
+{ #category : #testing }
+GtPharoMethodTestCaseErrorState class >> representsTestResult: aTestResult [
+	^ aTestResult hasErrors
 ]

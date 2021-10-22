@@ -25,7 +25,7 @@ GtPharoMethodTestCaseExamples >> assertUnexecutedTestCaseOfCoder: aCoder [
 		
 	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutedState default.
+		equals: GtPharoMethodNotExecutedState.
 
 ]
 
@@ -53,7 +53,7 @@ GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
 	self assert: aCoder testCase isPassed.
 	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutedState default.
+		equals: GtPharoMethodNotExecutedState.
 
 	^ aCoder
 ]
@@ -71,7 +71,7 @@ GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
 	self assert: aCoder testCase isPassed.
 	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutedState default.
+		equals: GtPharoMethodNotExecutedState.
 
 	^ aCoder
 ]
@@ -117,7 +117,7 @@ GtPharoMethodTestCaseExamples >> executePassingTestCase [
 	self assert: aCoder testCase state isNotNil.
 	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodTestCasePassedState default.
+		equals: GtPharoMethodTestCasePassedState.
 	self assert: allAnnouncements size equals: 2.
 	self assert: allAnnouncements first class equals: GtPharoMethodTestCaseStateChanged.
 	self assert: allAnnouncements second class equals: GtPharoMethodTestResultChanged.
