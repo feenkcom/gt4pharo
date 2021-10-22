@@ -6,8 +6,6 @@ My subclasses define states like passed, failure, error test case execution resu
 Class {
 	#name : #GtPharoMethodTestCaseState,
 	#superclass : #Object,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
