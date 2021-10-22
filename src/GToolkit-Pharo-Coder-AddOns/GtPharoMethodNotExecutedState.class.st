@@ -8,27 +8,27 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #testing }
-GtPharoMethodNotExecutedState class >> representsTestResult: aTestResult [
-	^ false
-]
-
 { #category : #visiting }
-GtPharoMethodNotExecutedState >> accept: aVisitor [
+GtPharoMethodNotExecutedState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseNotExecutedState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodNotExecutedState >> beSkipped: aGtPharoMethodTestCase [
-	aGtPharoMethodTestCase state: GtPharoMethodTestCaseSkippedState default
+GtPharoMethodNotExecutedState class >> beSkipped: aGtPharoMethodTestCase [
+	aGtPharoMethodTestCase state: GtPharoMethodTestCaseSkippedState
 ]
 
 { #category : #accessing }
-GtPharoMethodNotExecutedState >> color [
+GtPharoMethodNotExecutedState class >> color [
 	^ BrGlamorousColors neutralBackgroundColor
 ]
 
 { #category : #accessing }
-GtPharoMethodNotExecutedState >> label [
+GtPharoMethodNotExecutedState class >> label [
 	^ 'Not Executed'
+]
+
+{ #category : #testing }
+GtPharoMethodNotExecutedState class >> representsTestResult: aTestResult [
+	^ false
 ]

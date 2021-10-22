@@ -17,7 +17,7 @@ GtPharoTestSuite >> allCodersDo: aBlock [
 GtPharoTestSuite >> allErrorTestCasesDo: aBlock [
 
 	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
-		aTestCase state = GtPharoMethodTestCaseErrorState default ifTrue: [ 
+		aTestCase state = GtPharoMethodTestCaseErrorState ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]
 ]
 
@@ -33,7 +33,7 @@ GtPharoTestSuite >> allExecutableTestCasesDo: aBlock [
 GtPharoTestSuite >> allFailureTestCasesDo: aBlock [
 
 	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
-		aTestCase state = GtPharoMethodTestCaseFailureState default ifTrue: [ 
+		aTestCase state = GtPharoMethodTestCaseFailureState ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ] 
 ]
 
@@ -41,7 +41,7 @@ GtPharoTestSuite >> allFailureTestCasesDo: aBlock [
 GtPharoTestSuite >> allNotExecutedTestCasesDo: aBlock [
 
 	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
-		aTestCase state = GtPharoMethodNotExecutedState default ifTrue: [ 
+		aTestCase state = GtPharoMethodNotExecutedState ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]
 ]
 
@@ -49,7 +49,7 @@ GtPharoTestSuite >> allNotExecutedTestCasesDo: aBlock [
 GtPharoTestSuite >> allPassedTestCasesDo: aBlock [
 
 	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
-		aTestCase state = GtPharoMethodTestCasePassedState default ifTrue: [ 
+		aTestCase state = GtPharoMethodTestCasePassedState ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]  
 ]
 
@@ -57,7 +57,7 @@ GtPharoTestSuite >> allPassedTestCasesDo: aBlock [
 GtPharoTestSuite >> allSkippedTestCasesDo: aBlock [
 
 	self allExecutableTestCasesDo: [ :aCoder :aTestCase | 
-		aTestCase state = GtPharoMethodTestCaseSkippedState default ifTrue: [ 
+		aTestCase state = GtPharoMethodTestCaseSkippedState ifTrue: [ 
 			aBlock cull: aCoder cull: aTestCase ] ]  
 ]
 

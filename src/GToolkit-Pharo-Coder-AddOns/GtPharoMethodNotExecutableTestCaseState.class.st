@@ -10,21 +10,21 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoMethodNotExecutableTestCaseState class >> representsTestResult: aTestResult [
-	^ false
-]
-
-{ #category : #accessing }
-GtPharoMethodNotExecutableTestCaseState >> accept: aVisitor [
+GtPharoMethodNotExecutableTestCaseState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseNotExecutableState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodNotExecutableTestCaseState >> color [
+GtPharoMethodNotExecutableTestCaseState class >> color [
 	^ Color transparent
 ]
 
 { #category : #accessing }
-GtPharoMethodNotExecutableTestCaseState >> label [
+GtPharoMethodNotExecutableTestCaseState class >> label [
 	^ 'Not Executable'
+]
+
+{ #category : #accessing }
+GtPharoMethodNotExecutableTestCaseState class >> representsTestResult: aTestResult [
+	^ false
 ]

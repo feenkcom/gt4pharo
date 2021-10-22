@@ -7,22 +7,22 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #testing }
-GtPharoMethodTestCaseSkippedState class >> representsTestResult: aTestResult [
-	^ aTestResult skippedCount isZero not
-]
-
 { #category : #visiting }
-GtPharoMethodTestCaseSkippedState >> accept: aVisitor [
+GtPharoMethodTestCaseSkippedState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseSkippedState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCaseSkippedState >> color [
+GtPharoMethodTestCaseSkippedState class >> color [
 	^ BrGlamorousColors neutralBackgroundColor
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCaseSkippedState >> label [
+GtPharoMethodTestCaseSkippedState class >> label [
 	^ 'Skipped'
+]
+
+{ #category : #testing }
+GtPharoMethodTestCaseSkippedState class >> representsTestResult: aTestResult [
+	^ aTestResult skippedCount isZero not
 ]

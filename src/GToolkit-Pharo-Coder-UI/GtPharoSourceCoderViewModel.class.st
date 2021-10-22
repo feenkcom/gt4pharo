@@ -3,9 +3,10 @@ Class {
 	#superclass : #GtSourceCoderViewModel,
 	#instVars : [
 		'selfObject',
-		'localBindings'
+		'localBindings',
+		'hasSelfObject'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
 { #category : #'api - coder model' }
@@ -70,11 +71,18 @@ GtPharoSourceCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
+{ #category : #'api - testing' }
+GtPharoSourceCoderViewModel >> hasSelfObject [
+
+	^ hasSelfObject ifNil: [ false ]
+]
+
 { #category : #initialization }
 GtPharoSourceCoderViewModel >> initialize [
 	super initialize.
 
-	localBindings := GtLocalVariablesBindings new
+	localBindings := GtLocalVariablesBindings new.
+	hasSelfObject := false.
 ]
 
 { #category : #'api - coder model' }

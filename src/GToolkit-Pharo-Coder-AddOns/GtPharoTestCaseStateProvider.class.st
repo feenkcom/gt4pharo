@@ -8,12 +8,12 @@ Class {
 GtPharoTestCaseStateProvider >> allStates [
 
 	^ { 
-		  GtPharoMethodAllState default.
-		  GtPharoMethodTestCasePassedState default.
-		  GtPharoMethodTestCaseSkippedState default.
-		  GtPharoMethodTestCaseFailureState default.
-		  GtPharoMethodTestCaseErrorState default.
-		  GtPharoMethodNotExecutedState default. }
+		  GtPharoMethodAllState.
+		  GtPharoMethodTestCasePassedState.
+		  GtPharoMethodTestCaseSkippedState.
+		  GtPharoMethodTestCaseFailureState.
+		  GtPharoMethodTestCaseErrorState.
+		  GtPharoMethodNotExecutedState. }
 ]
 
 { #category : #'api - accessing' }

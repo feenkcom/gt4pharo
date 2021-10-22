@@ -45,7 +45,7 @@ GtPharoMethodTestCaseStateElementExamples >> stateElement_NotExecuted [
 	self assert: anElement testResult isNil.
 	self 
 		assert: anElement 
-		backgroundColor: GtPharoMethodNotExecutedState default color.
+		backgroundColor: GtPharoMethodNotExecutedState color.
 	^ anElement
 ]
 
@@ -60,6 +60,6 @@ GtPharoMethodTestCaseStateElementExamples >> stateElement_Success [
 	self assert: anElement testCase isPassed.
 	self 
 		assert: anElement 
-		backgroundColor: GtPharoMethodTestCasePassedState default color.
+		backgroundColor: GtPharoMethodTestCasePassedState color.
 	^ anElement
 ]

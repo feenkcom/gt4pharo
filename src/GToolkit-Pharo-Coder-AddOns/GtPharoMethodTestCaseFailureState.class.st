@@ -7,22 +7,22 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #testing }
-GtPharoMethodTestCaseFailureState class >> representsTestResult: aTestResult [
-	^ aTestResult hasFailures
-]
-
 { #category : #visiting }
-GtPharoMethodTestCaseFailureState >> accept: aVisitor [
+GtPharoMethodTestCaseFailureState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseFailureState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCaseFailureState >> color [
+GtPharoMethodTestCaseFailureState class >> color [
 	^ BrGlamorousColors failureBackgroundColor
 ]
 
 { #category : #accessing }
-GtPharoMethodTestCaseFailureState >> label [
+GtPharoMethodTestCaseFailureState class >> label [
 	^ 'Failure'
+]
+
+{ #category : #testing }
+GtPharoMethodTestCaseFailureState class >> representsTestResult: aTestResult [
+	^ aTestResult hasFailures
 ]

@@ -154,7 +154,7 @@ GtPharoMethodTestCaseStateElement >> testCaseDo: aBlock [
 GtPharoMethodTestCaseStateElement >> testCaseState [
 
 	self testCaseDo: [ :aTestCase | ^ aTestCase state ].
-	^ GtPharoMethodNotExecutedState default
+	^ GtPharoMethodNotExecutedState
 ]
 
 { #category : #'private - accessing' }
