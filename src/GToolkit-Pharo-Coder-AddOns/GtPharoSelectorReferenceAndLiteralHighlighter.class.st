@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'selector'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
 { #category : #'instance creation' }
@@ -32,6 +32,12 @@ GtPharoSelectorReferenceAndLiteralHighlighter >> visitMessage: aMessageNode [
 		ifTrue: [
 			aMessageNode selectorParts do: [ :eachSelectorPart |
 				stream nextPut: (eachSelectorPart startPosition to: eachSelectorPart stopPosition) ] ]
+]
+
+{ #category : #accessing }
+GtPharoSelectorReferenceAndLiteralHighlighter >> visitNumberLiteral: aNumberLiteral [
+	aNumberLiteral literalValue = selector
+		ifTrue: [ stream nextPut: (aNumberLiteral startPosition to: aNumberLiteral stopPosition) ]
 ]
 
 { #category : #visiting }
