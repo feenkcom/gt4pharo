@@ -13,10 +13,13 @@ GtPharoCoderUIUtility class >> newExamplesButtonForMethodsCoder: aMethodsCoder [
 			  - BrGlamorousButtonWithLabelTooltipAptitude;
 		  addAptitude:
 			  (GtFilterRunExampleButtonTooltipAptitude new coder: aMethodsCoder);
+		  addAptitude: (GtPharoStateTooltipAptitude new
+				   coder: aMethodsCoder;
+				   statesProvider: GtPharoExampleStateProvider new);
 		  icon: BrGlamorousVectorIcons play;
 		  label: 'Run Examples';
 		  action: [ :element | 
-			  aMethodsCoder exampler runExamplesFrom: element ]
+		  aMethodsCoder exampler runExamplesFrom: element ]
 ]
 
 { #category : #'instance creation' }
