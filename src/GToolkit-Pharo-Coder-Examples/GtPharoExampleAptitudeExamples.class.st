@@ -1,17 +1,17 @@
 Class {
-	#name : #GtPharoTestSuiteAptitudeExamples,
+	#name : #GtPharoExampleAptitudeExamples,
 	#superclass : #GtPharoFourStateAptitudeExamples,
 	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
 }
 
 { #category : #accessing }
-GtPharoTestSuiteAptitudeExamples >> aptitudeClass [
+GtPharoExampleAptitudeExamples >> aptitudeClass [
 	<gtExample>
-	^ GtPharoTestSuiteAptitude
+	^ GtPharoExampleAptitude
 ]
 
 { #category : #accessing }
-GtPharoTestSuiteAptitudeExamples >> buttonWithAptitudeAndMethodCoders [
+GtPharoExampleAptitudeExamples >> buttonWithAptitudeAndMethodCoders [
 
 	<gtExample>
 	| aButton |
@@ -24,28 +24,28 @@ GtPharoTestSuiteAptitudeExamples >> buttonWithAptitudeAndMethodCoders [
 ]
 
 { #category : #accessing }
-GtPharoTestSuiteAptitudeExamples >> buttonWithAptitudeAndMethodCoders_Executed [
+GtPharoExampleAptitudeExamples >> buttonWithAptitudeAndMethodCoders_Executed [
 
 	<gtExample>
 	| anElement |
 	anElement := self buttonWithAptitudeAndMethodCoders.
-	anElement aptitude testSuiteDo: [ :aTestSuite | 
+	anElement aptitude examplerDo: [ :anExampler | 
 		| anyOneExecuted |
 		anyOneExecuted := false.
-		aTestSuite allExecutableTestCasesDo: [ :aCoder :aTestCase | 
+		anExampler allExecutableExampleCodersDo: [ :aCoder :anExample | 
 			anyOneExecuted ifFalse: [ 
-				aTestCase play.
+				anExample run.
 				anyOneExecuted := true ] ] ].
 
 	^ anElement
 ]
 
 { #category : #'examples - coder' }
-GtPharoTestSuiteAptitudeExamples >> methodsCoders [
+GtPharoExampleAptitudeExamples >> methodsCoders [
 
 	<gtExample>
 	| aCoder |
-	aCoder := GtClassMethodsCoder forClass: GtPharoDummyTestCase.
+	aCoder := GtClassMethodsCoder forClass: GtPharoMethodTestCaseExamples.
 	
 	self
 		assert: aCoder coders size > 1
@@ -55,21 +55,21 @@ GtPharoTestSuiteAptitudeExamples >> methodsCoders [
 ]
 
 { #category : #'examples - coder' }
-GtPharoTestSuiteAptitudeExamples >> methodsCoders_Executed [
+GtPharoExampleAptitudeExamples >> methodsCoders_Executed [
 
 	<gtExample>
 	| aMethodsCoder anyOneExecuted |
 	aMethodsCoder := self methodsCoders.
 
 	anyOneExecuted := false.
-	aMethodsCoder testSuite allExecutableTestCasesDo: [ :aCoder :aTestCase | 
+	aMethodsCoder exampler allExecutableExampleCodersDo: [ :aCoder :anExample | 
 		anyOneExecuted ifFalse: [ 
-			aTestCase play.
+			anExample run.
 			anyOneExecuted := true ] ].
 
 	self
 		assert: anyOneExecuted
-		description: 'At least one test case must be executed'.
+		description: 'At least one example must be executed'.
 
 	^ aMethodsCoder
 ]
