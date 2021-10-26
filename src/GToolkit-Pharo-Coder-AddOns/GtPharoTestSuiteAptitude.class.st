@@ -1,3 +1,9 @@
+"
+I display a summary of test case states, e.g., successfully executed.
+#Example
+For the following methods: {{gtExample:GtPharoTestSuiteAptitudeExamples >> #methodsCoders_Executed | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor:}}
+I display the following icon presenting the all actual test case states (execution results): {{gtExample:GtPharoTestSuiteAptitudeExamples >> #buttonWithAptitudeAndMethodCoders_Executed | codeExpanded=false | previewExpanded=true }}
+"
 Class {
 	#name : #GtPharoTestSuiteAptitude,
 	#superclass : #GtPharoFourStateAptitude,

@@ -36,23 +36,6 @@ GtSearchMethodGroupResult >> asElement [
 	^ self asCoder asElement 
 ]
 
-{ #category : #ui }
-GtSearchMethodGroupResult >> gtItemsFor: aView [
-
-	<gtView>
-	| aMethodsCoder |
-	aMethodsCoder := self asCoder.
-
-	^ aView explicit
-		  title: 'Live' translated;
-		  priority: 10;
-		  stencil: [ aMethodsCoder asElement margin: (BlInsets all: 5) ];
-		  actionStencil: [ 
-			  GtCoderUIUtility newExamplesButtonForMethodsCoder: aMethodsCoder ];
-		  actionStencil: [ 
-			  GtCoderUIUtility newTestSuiteButtonForMethodsCoder: aMethodsCoder ]
-]
-
 { #category : #accessing }
 GtSearchMethodGroupResult >> gtMetricsFor: aView [
 	<gtView>

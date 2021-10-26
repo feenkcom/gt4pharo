@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
 }
 
+{ #category : #testing }
+GtPharoFourStateAptitudeExamples class >> isAbstract [
+	^ self name = #GtPharoFourStateAptitudeExamples
+]
+
 { #category : #'examples - aptitude' }
 GtPharoFourStateAptitudeExamples >> aptitudeClass [
 
@@ -15,7 +20,7 @@ GtPharoFourStateAptitudeExamples >> aptituteWithMethodCoders [
 
 	<gtExample>
 	| anAptitude |
-	anAptitude := self basicAptitude coder: self methodCoders.
+	anAptitude := self basicAptitude coder: self methodsCoders.
 
 	self
 		assert: anAptitude updater isUpdateRequested
@@ -90,15 +95,7 @@ GtPharoFourStateAptitudeExamples >> elementWithAptitudeAndMethodCoders [
 ]
 
 { #category : #'examples - coder' }
-GtPharoFourStateAptitudeExamples >> methodCoders [
+GtPharoFourStateAptitudeExamples >> methodsCoders [
 
-	<gtExample>
-	| aCoder |
-	aCoder := GtClassMethodsCoder forClass: GtPharoDummyTestCase.
-	
-	self
-		assert: aCoder coders size > 1
-		description: [ 'There must be some method coders' ].
-
-	^ aCoder
+	^ self subclassResponsibility
 ]

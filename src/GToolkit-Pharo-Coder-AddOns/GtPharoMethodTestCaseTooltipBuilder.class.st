@@ -94,7 +94,7 @@ GtPharoMethodTestCaseTooltipBuilder >> testCase: aTestCase [
 GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseNotExecutedState: aState [
 
 	^ self newPlayTestCaseElementWithExplanation:
-		  'Not Executed Test Case'
+		  'Test case not executed'
 ]
 
 { #category : #visiting }

@@ -651,7 +651,7 @@ GtPharoMethodCoder >> testCase [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 
-	<gtAstCoderAddOns: 11>
+	<gtAstCoderAddOns: 9>
 	anAST methodNode ifNil: [ ^ self ].
 
 	self testCase canExecute ifFalse: [ ^ self ].
