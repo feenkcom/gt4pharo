@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
 }
 
+{ #category : #testing }
+GtPharoFourStateAptitudeExamples class >> isAbstract [
+	^ self name = #GtPharoFourStateAptitudeExamples
+]
+
 { #category : #'examples - aptitude' }
 GtPharoFourStateAptitudeExamples >> aptitudeClass [
 
