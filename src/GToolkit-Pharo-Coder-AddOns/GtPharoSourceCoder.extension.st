@@ -45,6 +45,13 @@ GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> passwordAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoMethodPasswordStyler new.
+	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel [
 	self
 		nodeAt: aTextPosition
@@ -142,11 +149,4 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 				ifTrue: [ otherCoders do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ].
 	action install.
 	^ action
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> zincAddOnFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 100>
-	coderAddOns addStyler: GtPharoZincStyler new.
-	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
 ]

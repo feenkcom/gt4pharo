@@ -14,6 +14,38 @@ GtPharoWhenSendToExpanderStylerExamples >> onAnnouncement: anAnnouncement [
 ]
 
 { #category : #'examples - styling' }
+GtPharoWhenSendToExpanderStylerExamples >> styleCascadeWhenSendTo [
+
+	<gtExample>
+	| aCoder anAst aSourceText allRedIntervals aCoderViewModel |
+	aCoder := GtPharoSnippetCoder forSource: (Announcer name
+		           ,
+		           ' new when: Announcement send: #onAnnouncement: to: self; yourself')
+			          asRopedText.
+
+	anAst := aCoder astAwait.
+	aSourceText := aCoder sourceText copy unstyled.
+	aCoderViewModel := aCoder asCoderViewModel.
+	aCoderViewModel selfObject: self.
+
+	GtPharoWhenSendToExpanderStyler new
+		coderViewModel: aCoderViewModel;
+		style: aSourceText ast: anAst.
+
+	allRedIntervals := OrderedCollection new.
+	aSourceText
+		findAttributesSuchThat: [ :eachAttribute | 
+			eachAttribute isKindOf: GtPharoMethodExpanderAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			allRedIntervals add: (aStartPosition to: anEndPosition) ].
+
+	self assert: allRedIntervals size equals: 1.
+	self assert: allRedIntervals asArray equals: { (55 to: 55) }.
+
+	^ aSourceText
+]
+
+{ #category : #'examples - styling' }
 GtPharoWhenSendToExpanderStylerExamples >> styleWhenSendTo [
 
 	<gtExample>

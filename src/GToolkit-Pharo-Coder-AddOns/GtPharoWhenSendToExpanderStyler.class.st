@@ -22,10 +22,10 @@ GtPharoWhenSendToExpanderStyler >> style: aText ast: theAst [
 ]
 
 { #category : #visiting }
-GtPharoWhenSendToExpanderStyler >> visitMessageSend: aMessageNode [
+GtPharoWhenSendToExpanderStyler >> visitKeywordMessage: aMessageNode [
 
 	| aMethodClass aSelector aSelectorNode |
-	super visitMessageSend: aMessageNode.
+	super visitKeywordMessage: aMessageNode.
 
 	aMessageNode selector = #when:send:to: ifFalse: [ ^ self ].
 
