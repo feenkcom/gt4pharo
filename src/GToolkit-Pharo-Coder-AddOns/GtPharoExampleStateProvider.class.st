@@ -14,7 +14,7 @@ GtPharoExampleStateProvider >> allStates [
 GtPharoExampleStateProvider >> totalDescriptionForState: aState in: aMethodsCoder [
 
 	| aTotal aTotalString |
-	aTotal := aState numberOfExamplesFor: aMethodsCoder.
+	aTotal := aState numberOfExamplesFor: aMethodsCoder exampler.
 	aTotalString := aTotal asString , (' example' asPluralBasedOn: aTotal).
 	^ aTotalString
 ]
