@@ -1,6 +1,6 @@
-Extension { #name : 'GtPharoPackageCoder' }
+Extension { #name : #GtPharoPackageCoder }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtPharoPackageCoder >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit

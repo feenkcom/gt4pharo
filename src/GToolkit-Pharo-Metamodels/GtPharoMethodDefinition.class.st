@@ -41,6 +41,12 @@ GtPharoMethodDefinition >> asDefinitionString [
 	^ self fullSourceCode
 ]
 
+{ #category : #'system compatibility' }
+GtPharoMethodDefinition >> category [
+
+	^ self protocol
+]
+
 { #category : #'api - accepting' }
 GtPharoMethodDefinition >> createChange [
 	^ GtRBAddMethodToClassNamedChange compile: self fullSourceCode protocol: self protocol
@@ -72,6 +78,12 @@ GtPharoMethodDefinition >> initialize [
 	super initialize.
 	
 	methodParts := OrderedCollection new
+]
+
+{ #category : #'system compatibility' }
+GtPharoMethodDefinition >> methodClass [
+
+	^ self parent
 ]
 
 { #category : #accessing }

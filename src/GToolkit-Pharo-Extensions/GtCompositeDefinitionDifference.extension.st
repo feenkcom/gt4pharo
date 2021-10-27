@@ -1,6 +1,6 @@
-Extension { #name : 'GtCompositeDefinitionDifference' }
+Extension { #name : #GtCompositeDefinitionDifference }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtCompositeDefinitionDifference >> gtDifferencesFor: aView [
 	<gtView>
 	

@@ -1,6 +1,6 @@
-Extension { #name : 'GtClassDefinition' }
+Extension { #name : #GtClassDefinition }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtClassDefinition >> gtMethodsFor: aView [
 	<gtView>
 
@@ -11,7 +11,7 @@ GtClassDefinition >> gtMethodsFor: aView [
 		view: #gtMethodsFor:
 ]
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtClassDefinition >> gtSlotsFor: aView [
 	<gtView>
 
@@ -22,7 +22,7 @@ GtClassDefinition >> gtSlotsFor: aView [
 		view: #gtSlotsFor:
 ]
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtClassDefinition >> gtTraitsFor: aView [
 	<gtView>
 

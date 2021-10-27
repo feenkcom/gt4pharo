@@ -76,6 +76,15 @@ GtPharoMethodsDefinition >> fromTrait: aTrait [
 		(GtPharoMethodDefinition fromCompiledMethod: eachCompiledMethod) parent: self ]
 ]
 
+{ #category : #accessing }
+GtPharoMethodsDefinition >> includesSelector: aSelector [
+
+	^ self definitions
+		  detect: [ :eachMethod | eachMethod selector = aSelector ]
+		  ifFound: [ :aMethod | true ]
+		  ifNone: [ false ]
+]
+
 { #category : #'api - accessing' }
 GtPharoMethodsDefinition >> methodNamed: aSelector [
 	^ self

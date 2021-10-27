@@ -1,6 +1,6 @@
-Extension { #name : 'Object' }
+Extension { #name : #Object }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 Object >> gtMetaFor: aView [
 	<gtView>
 	^ aView explicit

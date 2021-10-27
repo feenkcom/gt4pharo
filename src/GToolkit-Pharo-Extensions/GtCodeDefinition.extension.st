@@ -1,6 +1,6 @@
-Extension { #name : 'GtCodeDefinition' }
+Extension { #name : #GtCodeDefinition }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtCodeDefinition >> gtDefinitionFor: aView [
 	<gtView>
 
@@ -10,7 +10,7 @@ GtCodeDefinition >> gtDefinitionFor: aView [
 		text: [ self asDefinitionString ]
 ]
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtCodeDefinition >> gtEditorsFor: aView [
 	<gtView>
 	

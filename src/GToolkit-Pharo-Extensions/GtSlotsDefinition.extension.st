@@ -1,6 +1,6 @@
-Extension { #name : 'GtSlotsDefinition' }
+Extension { #name : #GtSlotsDefinition }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtSlotsDefinition >> gtSlotsFor: aView [
 	<gtView>
 	

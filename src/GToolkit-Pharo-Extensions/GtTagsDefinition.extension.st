@@ -1,6 +1,6 @@
-Extension { #name : 'GtTagsDefinition' }
+Extension { #name : #GtTagsDefinition }
 
-{ #category : '*GToolkit-Pharo-Extensions' }
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtTagsDefinition >> gtTagsFor: aView [
 	<gtView>
 	
