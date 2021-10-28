@@ -32,7 +32,7 @@ GtPharoTestCaseStateFilter class >> filterDescriptorFor: aMethodsCoder [
 { #category : #comparing }
 GtPharoTestCaseStateFilter >> = anObject [
 
-	^ super = anObject and: [ 
+	^ self class = anObject class and: [ 
 		  self resultState = anObject resultState and: [ 
 			  self coder = anObject coder ] ]
 ]
@@ -58,7 +58,7 @@ GtPharoTestCaseStateFilter >> filterValueString [
 { #category : #comparing }
 GtPharoTestCaseStateFilter >> hash [
 
-	^ (super hash bitXor: self resultState hash) bitXor: self coder hash
+	^ (self class hash bitXor: self resultState hash) bitXor: self coder hash
 ]
 
 { #category : #accessing }
@@ -74,6 +74,18 @@ GtPharoTestCaseStateFilter >> includesMethod: aCompiledMethod [
 	aMethodCoder := self coder coderFor: aCompiledMethod.
 
 	^ self resultState includesCoder: aMethodCoder
+]
+
+{ #category : #printing }
+GtPharoTestCaseStateFilter >> printOn: aStream [
+
+	super printOn: aStream.
+	self resultState ifNil: [ ^ self ].
+
+	aStream
+		nextPut: $(;
+		print: self resultState;
+		nextPut: $)
 ]
 
 { #category : #accessing }

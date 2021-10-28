@@ -81,9 +81,9 @@ GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoder [
 	| aViewModel aCoder |
 	aViewModel := GtPharoTestSuiteViewModel new.
 	aCoder := self methodsCoderWithTestCase.
-	aViewModel coder: aCoder.
+	aViewModel methodsCoderModel: aCoder.
 
-	self assert: aViewModel coder equals: aCoder.
+	self assert: aViewModel methodsCoderModel equals: aCoder.
 
 	^ aViewModel
 ]

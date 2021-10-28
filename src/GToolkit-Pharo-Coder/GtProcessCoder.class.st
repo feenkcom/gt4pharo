@@ -69,6 +69,6 @@ GtProcessCoder >> updateCoders [
 			(GtCodersCodersChanged new
 				coders: self;
 				oldCoders: oldCoders;
-				newCoders: coders
+				newCoders: coders;
 				yourself)
 ]

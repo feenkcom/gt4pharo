@@ -8,7 +8,8 @@ Class {
 		'toolbarElement',
 		'localToggle',
 		'remoteToggle',
-		'playButton'
+		'playButton',
+		'updater'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
@@ -16,7 +17,6 @@ Class {
 { #category : #'private - accessing' }
 GtPharoSuiteOverviewElement >> allStates [
 
-	self hasSuiteViewModel ifFalse: [ ^ #(  ) ].
 	^ self suiteViewModel allStates
 ]
 
@@ -30,6 +30,7 @@ GtPharoSuiteOverviewElement >> defaultLayout [
 GtPharoSuiteOverviewElement >> initialize [
 
 	super initialize.
+	self initializeUpdater.
 	self initializeListElement.
 	self initializeToolbar.
 
@@ -45,9 +46,9 @@ GtPharoSuiteOverviewElement >> initializeListElement [
 
 	listElement := BrColumnedList new.
 	listElement
-		padding: (BlInsets all: 10);
+		margin: (BlInsets bottom: 10);
 		constraintsDo: [ :c | 
-			c minWidth: 180. 
+			c minWidth: 170. 
 			c minHeight: 10. ];
 		fitContent.
 
@@ -73,7 +74,7 @@ GtPharoSuiteOverviewElement >> initializeListElement [
 		title: 'Name';
 		cellStencil: [ BrLabel new aptitude: BrGlamorousLabelAptitude ];
 		dataBinder: [ :anElement :anItem | anElement text: anItem label ];
-		width: 100.
+		width: 120.
 
 	listElement column
 		title: 'Amount';
@@ -103,13 +104,20 @@ GtPharoSuiteOverviewElement >> initializeToolbar [
 			 addToggle: (localToggle := BrToggle new
 					                 activate;
 					                 disable;
+					                 beSmallSize;
 					                 aptitude: BrGlamorousToggleWithLabelAptitude new;
-					                 label: 'Local');
+					                 label: 'Local';
+					                 when: BrToggleActivatedEvent
+					                 do: [ :anEvent | self onLocalActivated: anEvent ]);
 			 addToggle: (remoteToggle := BrToggle new
 					                  disable;
+					                  beSmallSize;
 					                  aptitude:
 						                  BrGlamorousToggleWithLabelAptitude new;
-					                  label: 'Remote')).
+					                  label: 'Remote';
+					                  when: BrToggleActivatedEvent
+					                  do: [ :anEvent | 
+						                  self onRemoteActivated: anEvent ])).
 
 	toolbarElement addItem: (BlElement new
 			 viewModel: BrWidgetModel new;
@@ -119,9 +127,20 @@ GtPharoSuiteOverviewElement >> initializeToolbar [
 
 	toolbarElement addItem: (playButton := BrButton new
 			               disable;
-			               aptitude: BrGlamorousButtonWithIconAptitude new;
+			               beSmallSize;
+			               aptitude:
+				               BrGlamorousButtonWithIconAndLabelAptitude new;
 			               icon: BrGlamorousVectorIcons play;
-			               label: 'Play')
+			               label: 'Run';
+			               action: [ :aButton | self playFrom: aButton ])
+]
+
+{ #category : #initialization }
+GtPharoSuiteOverviewElement >> initializeUpdater [
+
+	updater := GtPhlowUpdateRequester new
+		           element: self
+		           selector: #updateElement
 ]
 
 { #category : #'private - accessing' }
@@ -134,6 +153,30 @@ GtPharoSuiteOverviewElement >> listElement [
 GtPharoSuiteOverviewElement >> localToggle [
 
 	^ localToggle
+]
+
+{ #category : #'private - announcement handling' }
+GtPharoSuiteOverviewElement >> onCodersCoderChanged [
+
+	self updater requestUpdate
+]
+
+{ #category : #'private - announcement handling' }
+GtPharoSuiteOverviewElement >> onCodersCoderChanged: anAnnouncement [
+
+	self updater requestUpdate
+]
+
+{ #category : #'private - event handling' }
+GtPharoSuiteOverviewElement >> onLocalActivated: anEvent [
+
+	self suiteViewModel beLocalFrom: self
+]
+
+{ #category : #'private - event handling' }
+GtPharoSuiteOverviewElement >> onRemoteActivated: anEvent [
+
+	self suiteViewModel beRemoteFrom: self
 ]
 
 { #category : #'api - suite view model' }
@@ -151,13 +194,22 @@ GtPharoSuiteOverviewElement >> playButton [
 { #category : #'private - event handling' }
 GtPharoSuiteOverviewElement >> playFrom: aButton [
 
-	self suiteViewModel play
+	self suiteViewModel playFrom: aButton
 ]
 
 { #category : #'private - accessing' }
 GtPharoSuiteOverviewElement >> remoteToggle [
 
 	^ remoteToggle
+]
+
+{ #category : #'api - suite view model' }
+GtPharoSuiteOverviewElement >> subscribeToSuiteViewModel [
+
+	self suiteViewModel weak
+		when: GtPharoSuiteViewModelChanged
+		send: #onCodersCoderChanged:
+		to: self
 ]
 
 { #category : #'private - accessing' }
@@ -170,6 +222,12 @@ GtPharoSuiteOverviewElement >> toolbarElement [
 GtPharoSuiteOverviewElement >> totalStringForState: aState [
 
 	^ self suiteViewModel totalStringForState: aState
+]
+
+{ #category : #'api - suite view model' }
+GtPharoSuiteOverviewElement >> unsubscribeFromSuiteViewModel [
+
+	self suiteViewModel unsubscribe: self
 ]
 
 { #category : #'private - updating' }
@@ -195,7 +253,8 @@ GtPharoSuiteOverviewElement >> updateListElement [
 { #category : #'private - updating' }
 GtPharoSuiteOverviewElement >> updatePlayButton [
 
-	self playButton enable.
+	self playButton enabled:
+		self suiteViewModel hasSelectedExecutableSuiteItems
 ]
 
 { #category : #'private - updating' }
@@ -203,4 +262,14 @@ GtPharoSuiteOverviewElement >> updateToggles [
 
 	self localToggle enable.
 	self remoteToggle enable.
+
+	self suiteViewModel isLocal
+		ifTrue: [ self localToggle activate ]
+		ifFalse: [ self remoteToggle activate ]
+]
+
+{ #category : #'private - accessing' }
+GtPharoSuiteOverviewElement >> updater [
+
+	^ updater
 ]
