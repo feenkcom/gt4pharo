@@ -76,6 +76,12 @@ GtBehaviorDefinition >> isForTrait [
 	^ false
 ]
 
+{ #category : #'system compatibility' }
+GtBehaviorDefinition >> isObsolete [
+
+	^ false
+]
+
 { #category : #accessing }
 GtBehaviorDefinition >> name [
 	<return: #Symbol>

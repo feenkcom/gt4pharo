@@ -26,6 +26,18 @@ GtTraitDefinition class >> fromTrait: aTrait in: anEnvironment [
 	^ self new fromTrait: aTrait in: anEnvironment
 ]
 
+{ #category : #'system compatibility' }
+GtTraitDefinition >> allClassVarNames [
+
+	^ #(  )
+]
+
+{ #category : #'system compatibility' }
+GtTraitDefinition >> allInstVarNames [
+
+	^ self slots definitions collect: #name
+]
+
 { #category : #converting }
 GtTraitDefinition >> asDefinitionString [
 	<return: #String>
@@ -192,9 +204,21 @@ GtTraitDefinition >> hasSlotNamed: aString [
 	^ traits all anySatisfy: [ :each | each hasSlotNamed: aString ]
 ]
 
+{ #category : #'system compatibility' }
+GtTraitDefinition >> includesSelector: aSelector [
+
+	^ false
+]
+
 { #category : #testing }
 GtTraitDefinition >> isForTrait [
 	^ true
+]
+
+{ #category : #'system compatibility' }
+GtTraitDefinition >> isMeta [
+
+	^ false
 ]
 
 { #category : #testing }
@@ -219,6 +243,12 @@ GtTraitDefinition >> methods [
 { #category : #'private - accessing' }
 GtTraitDefinition >> methods: aGtMethodsDefinition [
 	methods := aGtMethodsDefinition parent: self
+]
+
+{ #category : #'system compatibility' }
+GtTraitDefinition >> package [
+
+	^ self category package
 ]
 
 { #category : #accessing }
@@ -292,6 +322,12 @@ GtTraitDefinition >> storeOn: aStream [
 		store: self traits.
 	aStream
 		nextPut: $)
+]
+
+{ #category : #'system compatibility' }
+GtTraitDefinition >> superclass [
+
+	^ nil
 ]
 
 { #category : #accessing }
