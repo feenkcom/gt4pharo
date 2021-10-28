@@ -94,7 +94,7 @@ GtPharoSuiteOverviewElement >> initializeListElement [
 GtPharoSuiteOverviewElement >> initializeToolbar [
 
 	toolbarElement := BrToolbar new.
-	toolbarElement aptitude: BrGlamorousToolbarAptitude new.
+	toolbarElement aptitude: (BrGlamorousToolbarAptitude new spacing: 0).
 	toolbarElement
 		hMatchParent;
 		vFitContent.
