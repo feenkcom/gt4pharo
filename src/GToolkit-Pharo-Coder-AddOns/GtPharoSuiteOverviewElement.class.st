@@ -148,6 +148,12 @@ GtPharoSuiteOverviewElement >> playButton [
 	^ playButton
 ]
 
+{ #category : #'private - event handling' }
+GtPharoSuiteOverviewElement >> playFrom: aButton [
+
+	self suiteViewModel play
+]
+
 { #category : #'private - accessing' }
 GtPharoSuiteOverviewElement >> remoteToggle [
 
@@ -163,13 +169,13 @@ GtPharoSuiteOverviewElement >> toolbarElement [
 { #category : #'private - accessing' }
 GtPharoSuiteOverviewElement >> totalStringForState: aState [
 
-	^ '? ' , aState label asString
+	^ self suiteViewModel totalStringForState: aState
 ]
 
 { #category : #'private - updating' }
-GtPharoSuiteOverviewElement >> updateCoderFilterWith: aSelectedObject [
+GtPharoSuiteOverviewElement >> updateCoderFilterWith: aState [
 
-	self flag: #todo
+	self suiteViewModel updateCoderFilterWith: aState source: self
 ]
 
 { #category : #'private - updating' }

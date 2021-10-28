@@ -29,7 +29,7 @@ GtPharoSuiteOverviewElementExamples >> basicTestSuiteViewModel [
 ]
 
 { #category : #'examples - element' }
-GtPharoSuiteOverviewElementExamples >> elementWithTestSuite [
+GtPharoSuiteOverviewElementExamples >> elementWithBasicTestSuite [
 
 	<gtExample>
 	| aViewModel anElement |
@@ -42,4 +42,48 @@ GtPharoSuiteOverviewElementExamples >> elementWithTestSuite [
 	self assert: anElement suiteViewModel == aViewModel.
 
 	^ anElement
+]
+
+{ #category : #'examples - element' }
+GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoder [
+
+	<gtExample>
+	| aViewModel anElement |
+	anElement := self basicElement.
+	aViewModel := self testSuiteViewModelWithMethodsCoder.
+
+	anElement suiteViewModel: aViewModel.
+
+	self assert: anElement hasSuiteViewModel.
+	self assert: anElement suiteViewModel == aViewModel.
+
+	^ anElement
+]
+
+{ #category : #'examples - coder' }
+GtPharoSuiteOverviewElementExamples >> methodsCoderWithTestCase [
+
+	<gtExample>
+	| aCoder |
+	aCoder := GtClassMethodsCoder forClass: GtPharoDummyTestCase.
+	
+	self
+		assert: aCoder coders size > 1
+		description: [ 'There must be some method coders' ].
+
+	^ aCoder
+]
+
+{ #category : #accessing }
+GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoder [
+
+	<gtExample>
+	| aViewModel aCoder |
+	aViewModel := GtPharoTestSuiteViewModel new.
+	aCoder := self methodsCoderWithTestCase.
+	aViewModel coder: aCoder.
+
+	self assert: aViewModel coder equals: aCoder.
+
+	^ aViewModel
 ]
