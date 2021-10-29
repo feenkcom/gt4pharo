@@ -30,7 +30,5 @@ GtPharoRemoteTestSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 						aTestResult := LanguageLinkUtils base64Decode:
 							               aTestResult readStream ].
 					aTestCase result: aTestResult ] ]
-			ifFalse: [ aTestCase beSkipped ] ].
-
-	isRunning ifFalse: [ GtPharoLinkCodeSync default stop ]
+			ifFalse: [ aTestCase beSkipped ] ]
 ]

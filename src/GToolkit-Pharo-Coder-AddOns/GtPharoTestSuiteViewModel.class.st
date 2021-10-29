@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'coder',
 		'announcer',
-		'executor'
+		'executor',
+		'executionState'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
@@ -42,6 +43,22 @@ GtPharoTestSuiteViewModel >> beRemoteFrom: aSource [
 ]
 
 { #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> executionState [
+
+	^ executionState ifNil: [ executionState := #unknown -> nil ]
+]
+
+{ #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> executionState: aStateAssociation [
+
+	self executionState = aStateAssociation ifTrue: [ ^ self ].
+
+	executionState := aStateAssociation.
+
+	self notifyChanged
+]
+
+{ #category : #'api - suite' }
 GtPharoTestSuiteViewModel >> executor [
 
 	<return: #TGtPharoSuiteExecutor>
@@ -53,6 +70,12 @@ GtPharoTestSuiteViewModel >> executor: anExecutor [
 
 	executor := anExecutor.
 	self notifyChanged
+]
+
+{ #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> hasPendingExecution [
+
+	^ self executionState key = #pending
 ]
 
 { #category : #'api - suite' }
@@ -125,7 +148,14 @@ GtPharoTestSuiteViewModel >> onMethodsCoderModelChanged [
 GtPharoTestSuiteViewModel >> playFrom: anElement [
 
 	self methodsCoderModelDo: [ :aCoder | 
-		self executor playSelectedInMethodsCoder: aCoder ]
+		| aFuture |
+		self executionState: #pending -> nil.
+		aFuture := [ self executor playSelectedInMethodsCoder: aCoder ]
+			           asAsyncFuture.
+		aFuture await
+			onSuccessDo: [ :aResult | self executionState: #success -> aResult ];
+			onFailureDo: [ :anException | 
+				self executionState: #failure -> anException ] ]
 ]
 
 { #category : #'api - methods coder model' }
