@@ -253,15 +253,27 @@ GtPharoSuiteOverviewElement >> updateListElement [
 { #category : #'private - updating' }
 GtPharoSuiteOverviewElement >> updatePlayButton [
 
-	self playButton enabled:
-		self suiteViewModel hasSelectedExecutableSuiteItems
+	| isButtonEnabled hasPendingExecution |
+	hasPendingExecution := self suiteViewModel hasPendingExecution.
+	isButtonEnabled := hasPendingExecution not and: [ 
+		                   self suiteViewModel
+			                   hasSelectedExecutableSuiteItems ].
+
+	self playButton enabled: isButtonEnabled.
+
+	hasPendingExecution
+		ifTrue: [ self playButton label: 'Running' ]
+		ifFalse: [ self playButton label: 'Run' ]
 ]
 
 { #category : #'private - updating' }
 GtPharoSuiteOverviewElement >> updateToggles [
 
-	self localToggle enable.
-	self remoteToggle enable.
+	| hasPendingExecution |
+	hasPendingExecution := self suiteViewModel hasPendingExecution.
+
+	self localToggle enabled: hasPendingExecution not.
+	self remoteToggle enabled: hasPendingExecution not.
 
 	self suiteViewModel isLocal
 		ifTrue: [ self localToggle activate ]
