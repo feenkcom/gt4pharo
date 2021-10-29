@@ -178,6 +178,7 @@ GtPharoTestSuite >> playSelected [
 
 { #category : #'api - execution' }
 GtPharoTestSuite >> playSelectedFrom: anElement [
+
 	self playSelected
 ]
 

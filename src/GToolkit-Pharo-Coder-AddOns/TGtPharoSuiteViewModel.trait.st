@@ -12,6 +12,58 @@ TGtPharoSuiteViewModel >> allStates [
 ]
 
 { #category : #'api - suite' }
+TGtPharoSuiteViewModel >> beLocalFrom: aSource [
+
+	"Set local executor"
+
+	self explicitRequirement
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> beRemoteFrom: aSource [
+
+	"Set remote executor"
+
+	self explicitRequirement
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> executor [
+
+	<return: #TGtPharoSuiteExecutor>
+	^ self explicitRequirement
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> hasSelectedExecutableSuiteItems [
+
+	"Return true if there are executable suite items"
+
+	^ self explicitRequirement
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> isLocal [
+
+	^ self executor isLocal
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> isRemote [
+
+	^ self executor isRemote
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> playFrom: anElement [
+
+	"Perform a suite, e.g., test suite, examples.
+	anElement is a widget from which the request comes from."
+	
+	self explicitRequirement
+]
+
+{ #category : #'api - suite' }
 TGtPharoSuiteViewModel >> totalStringForState: aState [
 
 	"Return string representing amount of items for a given state, 
