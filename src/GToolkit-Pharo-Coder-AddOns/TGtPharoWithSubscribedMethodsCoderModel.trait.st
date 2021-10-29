@@ -6,9 +6,17 @@ Trait {
 }
 
 { #category : #'api - methods coder model' }
+TGtPharoWithSubscribedMethodsCoderModel >> notifyCodersCoderChanged [
+
+	"Notify one or more method coders changed"
+]
+
+{ #category : #'api - methods coder model' }
 TGtPharoWithSubscribedMethodsCoderModel >> onCodersCoderAdded: aGtCodersCoderAdded [
 
 	"Handle coder added announcement"
+	
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - methods coder model' }
@@ -16,7 +24,7 @@ TGtPharoWithSubscribedMethodsCoderModel >> onCodersCoderRemoved: aGtCodersCoderR
 
 	"Handle coder removed announcement"
 
-	
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - methods coder model' }
@@ -24,7 +32,7 @@ TGtPharoWithSubscribedMethodsCoderModel >> onCodersCoderSourceCodeChanged: aGtCo
 
 	"Handle method coder source code changes"
 
-	
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - methods coder model' }
@@ -32,7 +40,13 @@ TGtPharoWithSubscribedMethodsCoderModel >> onCodersCodersChanged: aGtCodersCoder
 
 	"Handle coders changed (added and/or removed) announcement"
 
-	
+	self notifyCodersCoderChanged
+]
+
+{ #category : #'api - methods coder model' }
+TGtPharoWithSubscribedMethodsCoderModel >> onMethodsCoderModelChanged [
+
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - methods coder model' }

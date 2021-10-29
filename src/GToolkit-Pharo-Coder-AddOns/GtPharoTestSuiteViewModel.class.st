@@ -24,7 +24,7 @@ GtPharoTestSuiteViewModel >> allStates [
 		  GtPharoMethodNotExecutedState }
 ]
 
-{ #category : #accessing }
+{ #category : #announcer }
 GtPharoTestSuiteViewModel >> announcer [
 
 	^ announcer
@@ -69,7 +69,7 @@ GtPharoTestSuiteViewModel >> executor [
 GtPharoTestSuiteViewModel >> executor: anExecutor [
 
 	executor := anExecutor.
-	self notifyChanged
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - suite' }
@@ -102,46 +102,24 @@ GtPharoTestSuiteViewModel >> methodsCoderModelDo: aBlock [
 	methodsCoderModel ifNotNil: aBlock
 ]
 
-{ #category : #'private - notifying' }
+{ #category : #deprecated }
 GtPharoTestSuiteViewModel >> notifyChanged [
 
+	self notifyCodersCoderChanged
+]
+
+{ #category : #'api - methods coder model' }
+GtPharoTestSuiteViewModel >> notifyCodersCoderChanged [
+
+	"Notify one or more method coders changed"
+	
 	self announce: GtPharoSuiteViewModelChanged new
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCoderAdded: aGtCodersCoderAdded [
-
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCoderRemoved: aGtCodersCoderRemoved [
-
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCoderSourceCodeChanged: aGtCoderSourceCodeChanged [
-
-	self notifyChanged
 ]
 
 { #category : #'api - methods coder model' }
 GtPharoTestSuiteViewModel >> onCodersCoderTestCaseAnnouncement: aGtPharoMethodTestCaseAnnouncement [
 
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCodersChanged: aGtCodersCodersChanged [
-
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onMethodsCoderModelChanged [
-
-	self notifyChanged
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - suite' }
