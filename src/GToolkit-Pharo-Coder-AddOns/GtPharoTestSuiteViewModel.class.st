@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'coder',
 		'announcer',
-		'executor'
+		'executor',
+		'executionState'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
@@ -23,7 +24,7 @@ GtPharoTestSuiteViewModel >> allStates [
 		  GtPharoMethodNotExecutedState }
 ]
 
-{ #category : #accessing }
+{ #category : #announcer }
 GtPharoTestSuiteViewModel >> announcer [
 
 	^ announcer
@@ -42,6 +43,22 @@ GtPharoTestSuiteViewModel >> beRemoteFrom: aSource [
 ]
 
 { #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> executionState [
+
+	^ executionState ifNil: [ executionState := #unknown -> nil ]
+]
+
+{ #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> executionState: aStateAssociation [
+
+	self executionState = aStateAssociation ifTrue: [ ^ self ].
+
+	executionState := aStateAssociation.
+
+	self notifyChanged
+]
+
+{ #category : #'api - suite' }
 GtPharoTestSuiteViewModel >> executor [
 
 	<return: #TGtPharoSuiteExecutor>
@@ -52,7 +69,13 @@ GtPharoTestSuiteViewModel >> executor [
 GtPharoTestSuiteViewModel >> executor: anExecutor [
 
 	executor := anExecutor.
-	self notifyChanged
+	self notifyCodersCoderChanged
+]
+
+{ #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> hasPendingExecution [
+
+	^ self executionState key = #pending
 ]
 
 { #category : #'api - suite' }
@@ -79,53 +102,38 @@ GtPharoTestSuiteViewModel >> methodsCoderModelDo: aBlock [
 	methodsCoderModel ifNotNil: aBlock
 ]
 
-{ #category : #'private - notifying' }
+{ #category : #deprecated }
 GtPharoTestSuiteViewModel >> notifyChanged [
 
+	self notifyCodersCoderChanged
+]
+
+{ #category : #'api - methods coder model' }
+GtPharoTestSuiteViewModel >> notifyCodersCoderChanged [
+
+	"Notify one or more method coders changed"
+	
 	self announce: GtPharoSuiteViewModelChanged new
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCoderAdded: aGtCodersCoderAdded [
-
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCoderRemoved: aGtCodersCoderRemoved [
-
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCoderSourceCodeChanged: aGtCoderSourceCodeChanged [
-
-	self notifyChanged
 ]
 
 { #category : #'api - methods coder model' }
 GtPharoTestSuiteViewModel >> onCodersCoderTestCaseAnnouncement: aGtPharoMethodTestCaseAnnouncement [
 
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onCodersCodersChanged: aGtCodersCodersChanged [
-
-	self notifyChanged
-]
-
-{ #category : #'api - methods coder model' }
-GtPharoTestSuiteViewModel >> onMethodsCoderModelChanged [
-
-	self notifyChanged
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - suite' }
 GtPharoTestSuiteViewModel >> playFrom: anElement [
 
 	self methodsCoderModelDo: [ :aCoder | 
-		self executor playSelectedInMethodsCoder: aCoder ]
+		| aFuture |
+		self executionState: #pending -> nil.
+		aFuture := [ self executor playSelectedInMethodsCoder: aCoder ]
+			           asAsyncFuture.
+		aFuture await
+			onSuccessDo: [ :aResult | self executionState: #success -> aResult ];
+			onFailureDo: [ :anException | 
+				self executionState: #failure -> anException ] ]
 ]
 
 { #category : #'api - methods coder model' }
