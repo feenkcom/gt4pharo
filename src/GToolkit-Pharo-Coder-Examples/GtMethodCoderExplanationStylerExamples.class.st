@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMethodCoderExplanationStylerExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #dummies }
@@ -222,7 +222,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
-				geometry: BlCircle new;
+				geometry: BlCircleGeometry new;
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #title:);
 				relocate: 10 @ titleTab extent y / 2).
 	avatarLabel
@@ -231,7 +231,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
-				geometry: BlCircle new;
+				geometry: BlCircleGeometry new;
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #columns);
 				relocate: 5 @ avatarLabel extent y / 2).
 	nameLabel
@@ -240,7 +240,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
-				geometry: BlCircle new;
+				geometry: BlCircleGeometry new;
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #columns);
 				relocate: 5 @ nameLabel extent y / 2).
 	phoneLabel
@@ -249,7 +249,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
-				geometry: BlCircle new;
+				geometry: BlCircleGeometry new;
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #columns);
 				relocate: 5 @ phoneLabel extent y / 2).
 	avatarElementsCollection
@@ -260,7 +260,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 						constraintsDo: [ :c | c ignoreByLayout ];
 						size: 5 @ 5;
 						elevation: (BlRelativeElevation elevation: 10);
-						geometry: BlCircle new;
+						geometry: BlCircleGeometry new;
 						aptitude: (GtExplainerTargetAptitude new explanationModel: #avatar);
 						relocate: 0 @ eachAvatar extent y / 2) ].			
 	listLabelsCollection
@@ -275,7 +275,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 						constraintsDo: [ :c | c ignoreByLayout ];
 						size: 5 @ 5;
 						elevation: (BlRelativeElevation elevation: 10);
-						geometry: BlCircle new;
+						geometry: BlCircleGeometry new;
 						aptitude: (GtExplainerTargetAptitude new explanationModel: modelName);
 						relocate: -5 @ eachLabel extent y / 2) ].
 	
