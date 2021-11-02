@@ -136,7 +136,9 @@ GtPharoExampleSuiteViewModel >> subscribeExtraToCodersCoder: aMethodCoder [
 GtPharoExampleSuiteViewModel >> totalStringForState: aState [
 
 	self methodsCoderModelDo: [ :aCoder | 
-		^ aState labelWithAmountFor: aCoder exampler ].
+		| aTotal |
+		aTotal := aState numberOfExamplesFor: aCoder exampler.
+		^ aTotal asString , (' example' asPluralBasedOn: aTotal) ].
 	^ '?'
 ]
 
