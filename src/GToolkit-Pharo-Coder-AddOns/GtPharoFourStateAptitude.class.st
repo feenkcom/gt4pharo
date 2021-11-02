@@ -117,6 +117,15 @@ GtPharoFourStateAptitude >> newColoredIcon: aColor [
 	^ GtPharoTestCaseUtility newColoredIcon: aColor
 ]
 
+{ #category : #accessing }
+GtPharoFourStateAptitude >> onInstalledIn: anElement [
+
+	super onInstalledIn: anElement.
+
+	anElement space ifNil: [ ^ self ].
+	self updater requestUpdate
+]
+
 { #category : #'private - accessing' }
 GtPharoFourStateAptitude >> oneIconElement [
 

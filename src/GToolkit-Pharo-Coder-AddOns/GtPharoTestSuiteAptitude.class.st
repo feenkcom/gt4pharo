@@ -10,13 +10,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #accessing }
-GtPharoTestSuiteAptitude >> onInstalledIn: anElement [
-	super onInstalledIn: anElement.
-	
-	self updater requestUpdate.
-]
-
 { #category : #'private - announcement handling' }
 GtPharoTestSuiteAptitude >> onTestCaseStateChanged: anAnnouncement [
 	self updater requestUpdate.
