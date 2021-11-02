@@ -7,7 +7,7 @@ Class {
 		'announcer',
 		'executor'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
 }
 
 { #category : #'api - suite' }
