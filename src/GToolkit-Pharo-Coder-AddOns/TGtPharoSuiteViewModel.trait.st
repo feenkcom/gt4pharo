@@ -35,6 +35,14 @@ TGtPharoSuiteViewModel >> executor [
 ]
 
 { #category : #'api - suite' }
+TGtPharoSuiteViewModel >> hasPendingExecution [
+
+	"Return true if an execution is happening (or about to happen)."
+
+	^ self explicitRequirement
+]
+
+{ #category : #'api - suite' }
 TGtPharoSuiteViewModel >> hasSelectedExecutableSuiteItems [
 
 	"Return true if there are executable suite items"
