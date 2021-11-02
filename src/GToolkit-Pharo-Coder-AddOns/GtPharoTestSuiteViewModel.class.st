@@ -55,7 +55,7 @@ GtPharoTestSuiteViewModel >> executionState: aStateAssociation [
 
 	executionState := aStateAssociation.
 
-	self notifyChanged
+	self notifyCodersCoderChanged
 ]
 
 { #category : #'api - suite' }
