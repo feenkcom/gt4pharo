@@ -10,6 +10,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
+{ #category : #accessing }
+GtPharoTestSuiteAptitude >> onInstalledIn: anElement [
+	super onInstalledIn: anElement.
+	
+	self updater requestUpdate.
+]
+
 { #category : #'private - announcement handling' }
 GtPharoTestSuiteAptitude >> onTestCaseStateChanged: anAnnouncement [
 	self updater requestUpdate.
@@ -66,17 +73,22 @@ GtPharoTestSuiteAptitude >> unsubscribeFromCodersCoder: aMethodCoder [
 
 { #category : #'private - updating' }
 GtPharoTestSuiteAptitude >> updateElement [
+
 	super updateElement.
-	self widgetDo: [ :aWidget | 
-		self testSuiteDo: [ :aTestSuite | 
-			| aState |
-			aState := aTestSuite hasSelectedExecutableTestCases.
-			aWidget dispatchEvent: (BrEnablementWish enabled: aState).
-			aTestSuite hasExecutableTestCases
+	self testSuiteDo: [ :aTestSuite | 
+		| hasTests |
+		hasTests := aTestSuite hasExecutableTestCases.
+		self widgetDo: [ :aWidget | 
+			hasTests
 				ifFalse: [ aWidget visibility: BlVisibility gone ]
 				ifTrue: [ 
+					| hasSelectedTests |
 					aWidget visibility: BlVisibility visible.
-					self updateFourIconElement ] ] ]
+					hasSelectedTests := aTestSuite hasSelectedExecutableTestCases.
+					aWidget dispatchEvent:
+						(BrEnablementWish enabled: hasSelectedTests) ] ].
+
+		hasTests ifTrue: [ self updateFourIconElement ] ]
 ]
 
 { #category : #'private - updating' }
