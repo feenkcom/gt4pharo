@@ -18,7 +18,9 @@ GtPharoRemoteExampleSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 	| isRunning |
 	"Ensure Pharo Link is running"
 	isRunning := GtPharoLinkCodeSync default isRunning.
-	isRunning ifFalse: [ GtPharoLinkCodeSync default start ].
+	isRunning ifFalse: [ 
+		GtPharoLinkCodeSync default stop.
+		GtPharoLinkCodeSync default start ].
 
 	aMethodsCoder exampler selectedExampleCodersDo: [ 
 		:aCoder 
@@ -26,12 +28,13 @@ GtPharoRemoteExampleSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 		(aCoder isModified not and: [ anExampleWithResult hasNoTestPragma not ])
 			ifTrue: [ 
 				| aGroup aPromise aRemoteExample |
-				aGroup := GtExampleGroup withAll: { anExampleWithResult }.
+				aGroup := GtExampleGroup withAll: { anExampleWithResult example asExampleWithResult }.
 				self halt.
 				self flag: 'currently an issue if you proceed'.
 				aPromise := GtPharoLinkCodeSync default runExamples: aGroup.
 				aRemoteExample := aPromise waitForValue.
 				self halt.
+				self flag: 'this part is not finished yet'.
 				aRemoteExample isString ifTrue: [ 
 						aRemoteExample := LanguageLinkUtils base64Decode:
 							               aRemoteExample readStream ].
