@@ -25,19 +25,22 @@ GtPharoRemoteExampleSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 	aMethodsCoder exampler selectedExampleCodersDo: [ 
 		:aCoder 
 		:anExampleWithResult | 
-		(aCoder isModified not and: [ anExampleWithResult hasNoTestPragma not ])
+		(aCoder isModified not and: [ 
+			 anExampleWithResult hasNoTestPragma not ])
 			ifTrue: [ 
 				| aGroup aPromise aRemoteExample |
-				aGroup := GtExampleGroup withAll: { anExampleWithResult example asExampleWithResult }.
-				self halt.
+				aGroup := GtExampleGroup withAll:
+					          { anExampleWithResult example asExampleWithResult }.
+				
 				self flag: 'currently an issue if you proceed'.
 				aPromise := GtPharoLinkCodeSync default runExamples: aGroup.
 				aRemoteExample := aPromise waitForValue.
-				self halt.
+				
 				self flag: 'this part is not finished yet'.
 				aRemoteExample isString ifTrue: [ 
-						aRemoteExample := LanguageLinkUtils base64Decode:
-							               aRemoteExample readStream ].
-					anExampleWithResult result: aRemoteExample ]
+					aRemoteExample := LanguageLinkUtils base64Decode:
+						                  aRemoteExample readStream ].
+
+				anExampleWithResult result: aRemoteExample examples anyOne result ]
 			ifFalse: [ "anExample beSkipped" ] ]
 ]
