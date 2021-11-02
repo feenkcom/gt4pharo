@@ -14,7 +14,9 @@ GtPharoRemoteTestSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 	| isRunning |
 	"Ensure Pharo Link is running"
 	isRunning := GtPharoLinkCodeSync default isRunning.
-	isRunning ifFalse: [ GtPharoLinkCodeSync default start ].
+	isRunning ifFalse: [ 
+		GtPharoLinkCodeSync default stop.
+		GtPharoLinkCodeSync default start ].
 
 	aMethodsCoder testSuite selectedExecutableTestCasesDo: [ 
 		:aCoder 
