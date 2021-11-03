@@ -36,6 +36,12 @@ GtPharoExampleSuiteViewModel >> beRemoteFrom: aSource [
 ]
 
 { #category : #'api - suite' }
+GtPharoExampleSuiteViewModel >> executionDetail [
+
+	^ self executionState value
+]
+
+{ #category : #'api - suite' }
 GtPharoExampleSuiteViewModel >> executionState [
 
 	^ executionState ifNil: [ executionState := #unknown -> nil ]
@@ -63,6 +69,12 @@ GtPharoExampleSuiteViewModel >> executor: anExecutor [
 
 	executor := anExecutor.
 	self notifyCodersCoderChanged
+]
+
+{ #category : #'api - suite' }
+GtPharoExampleSuiteViewModel >> hasExecutionError [
+
+	^ self executionState key = #exception
 ]
 
 { #category : #'api - suite' }

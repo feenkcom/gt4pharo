@@ -43,6 +43,12 @@ GtPharoTestSuiteViewModel >> beRemoteFrom: aSource [
 ]
 
 { #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> executionDetail [
+
+	^ self executionState value
+]
+
+{ #category : #'api - suite' }
 GtPharoTestSuiteViewModel >> executionState [
 
 	^ executionState ifNil: [ executionState := #unknown -> nil ]
@@ -70,6 +76,12 @@ GtPharoTestSuiteViewModel >> executor: anExecutor [
 
 	executor := anExecutor.
 	self notifyCodersCoderChanged
+]
+
+{ #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> hasExecutionError [
+
+	^ self executionState key = #exception
 ]
 
 { #category : #'api - suite' }
@@ -133,7 +145,7 @@ GtPharoTestSuiteViewModel >> playFrom: anElement [
 		aFuture await
 			onSuccessDo: [ :aResult | self executionState: #success -> aResult ];
 			onFailureDo: [ :anException | 
-				self executionState: #failure -> anException ] ]
+				self executionState: #exception -> anException ] ]
 ]
 
 { #category : #'api - methods coder model' }
