@@ -32,11 +32,9 @@ GtPharoRemoteExampleSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 				aGroup := GtExampleGroup withAll:
 					          { anExampleWithResult example asExampleWithResult }.
 				
-				self flag: 'currently an issue if you proceed'.
 				aPromise := GtPharoLinkCodeSync default runExamples: aGroup.
 				aRemoteExample := aPromise waitForValue.
 				
-				self flag: 'this part is not finished yet'.
 				aRemoteExample isString ifTrue: [ 
 					aRemoteExample := LanguageLinkUtils base64Decode:
 						                  aRemoteExample readStream ].
