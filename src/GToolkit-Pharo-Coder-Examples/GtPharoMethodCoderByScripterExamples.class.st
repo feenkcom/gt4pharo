@@ -78,7 +78,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 		
 		aStep check
 			label: 'Check Coder Editor Text';
-			value: [ :label | label text asString ] equals: '?';
+			value: [ :label | label text asString ] equals: '? anObject';
 			id: GtSourceCoderCollapsedTextId.
 		aStep check 
 			label: 'Check Coder UI Is Collapsed';

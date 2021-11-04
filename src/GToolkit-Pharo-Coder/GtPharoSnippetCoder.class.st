@@ -4,12 +4,12 @@ Class {
 	#instVars : [
 		'xdocFilename'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
 GtPharoSnippetCoder class >> forSource: aString [
-	^ self new sourceCodeSynchronously: (GtCoderExplicitSourceCode new source: aString)
+	^ self new sourceCodeSynchronously: (GtCoderExplicitStringSource new source: aString)
 ]
 
 { #category : #'api - ast' }
@@ -21,7 +21,7 @@ GtPharoSnippetCoder >> computeAst: theSourceString [
 
 { #category : #initialization }
 GtPharoSnippetCoder >> forSource: aString [
-	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
+	self sourceCode: (GtCoderExplicitStringSource new source: aString)
 ]
 
 { #category : #'private - event handling' }

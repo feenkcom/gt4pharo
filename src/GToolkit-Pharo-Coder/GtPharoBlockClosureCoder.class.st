@@ -6,7 +6,7 @@ Class {
 		'parameters',
 		'bindingStrategy'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'initialize-release' }
@@ -114,7 +114,7 @@ GtPharoBlockClosureCoder >> doItInContext: aGtSourceCoderEvaluationContext thenD
 
 { #category : #'initialize-release' }
 GtPharoBlockClosureCoder >> forSource: aString [
-	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
+	self sourceCode: (GtCoderExplicitStringSource new source: aString)
 ]
 
 { #category : #'api - actions' }

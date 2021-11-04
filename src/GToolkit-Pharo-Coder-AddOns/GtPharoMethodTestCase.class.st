@@ -227,7 +227,7 @@ GtPharoMethodTestCase >> stateLabel [
 { #category : #'private - subscriptions' }
 GtPharoMethodTestCase >> subscribeToMethodCoder [
 	methodCoder weak 
-		when: GtCoderAstChanged
+		when: GtCoderSourceCodeChanged
 		send: #onSourceCodeChanged:
 		to: self
 ]

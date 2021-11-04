@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'sample methods' }
@@ -55,27 +55,28 @@ GtPharoMethodCoderExamples >> coderOnClassUnaryMethodThatCreatesPoint [
 GtPharoMethodCoderExamples >> compileMethodWithCoderModifiedWhenSubscribedToSystem [
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder anOldMethod aNewMethod |
-	
+
 	anEventsRecoder := self eventsRecorder.
-	
+
 	aMethodCoder := self forUnaryInstanceMethod.
 	anOldMethod := (aMethodCoder attributeNamed: #dummyMethod) realMethod.
-	
-	aMethodCoder sourceText append: '"modified"' asRopedText.
+
+	aMethodCoder appendString: '"modified"'.
 	aMethodCoder subscribeToSystem.
-	
+
 	self assert: aMethodCoder isModified.
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode, '"modified"'.
-	
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode , '"modified"'.
+
 	aMethodCoder weak
 		when: GtCoderClassRemoved send: #record: to: anEventsRecoder;
 		when: GtCoderMethodAdded send: #record: to: anEventsRecoder;
 		when: GtCoderMethodModified send: #record: to: anEventsRecoder;
 		when: GtCoderMethodRemoved send: #record: to: anEventsRecoder.
 
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
+	wasSuccessful := [ aMethodCoder compile ] ensure: [ aMethodCoder unsubscribeFromSystem ].
+
 	self assert: wasSuccessful.
 	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass >> anOldMethod selector.
 
@@ -87,47 +88,62 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderModifiedWhenSubscribedToSyst
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode, '"modified"'.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode , '"modified"'.
+	self
+		assert: aMethodCoder sourceCode class
+		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
-	self assert: aMethodCoder sourceCode sourceString equals: anOldMethod sourceCode, '"modified"'.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: anOldMethod sourceCode, '"modified"'.
+	self
+		assert: aMethodCoder sourceCode currentSourceString wait string
+		equals: anOldMethod sourceCode , '"modified"'.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: anOldMethod sourceCode , '"modified"'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderMethodModified.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderMethodModified.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
+
 	^ aMethodCoder
 ]
 
 { #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileMethodWithCoderWhenSubscribedToSystem [
+
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder anOldMethod aNewMethod |
-	
 	anEventsRecoder := self eventsRecorder.
-	
+
 	aMethodCoder := self forUnaryInstanceMethod.
 	anOldMethod := (aMethodCoder attributeNamed: #dummyMethod) realMethod.
-	
+
 	aMethodCoder subscribeToSystem.
-	
+
 	self assert: aMethodCoder isModified not.
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode.
-	
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode.
+
 	aMethodCoder weak
 		when: GtCoderClassRemoved send: #record: to: anEventsRecoder;
 		when: GtCoderMethodAdded send: #record: to: anEventsRecoder;
 		when: GtCoderMethodModified send: #record: to: anEventsRecoder;
 		when: GtCoderMethodRemoved send: #record: to: anEventsRecoder.
 
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self assert: wasSuccessful.
-	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass >> anOldMethod selector.
+	wasSuccessful := [ aMethodCoder compile ] ensure: [ 
+		                 aMethodCoder unsubscribeFromSystem ].
 
-	self assert: aMethodCoder behavior equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
+	self assert: wasSuccessful.
+	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass
+	              >> anOldMethod selector.
+
+	self
+		assert: aMethodCoder behavior
+		equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder selector equals: anOldMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
@@ -135,16 +151,26 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderWhenSubscribedToSystem [
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode class
+		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
-	self assert: aMethodCoder sourceCode sourceString equals: anOldMethod sourceCode.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: anOldMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode currentSourceString wait string
+		equals: anOldMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: anOldMethod sourceCode.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderMethodModified.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderMethodModified.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
+
 	^ aMethodCoder
 ]
 
@@ -169,80 +195,84 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsConflictWhenSubsc
 	
 	self assert: wasSuccessful not.
 
-	self assert: anEventsRecoder numberOfEvents equals: 2.
-	self assert: anEventsRecoder first class equals: GtCoderAstChanged.
+	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder first class equals: GtCoderParseError.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	self assert: anEventsRecoder second class equals: GtCoderParseError.
-	self assert: anEventsRecoder second coder equals: aMethodCoder.
-	self assert: anEventsRecoder second errorMessage equals: 'Temp shadows: each'.
+	self assert: anEventsRecoder first errorMessage equals: 'Temp shadows: each'.
 
 	^ aMethodCoder
 ]
 
 { #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileMethodWithoutCoderModifiedWhenSubscribedToSystem [
+
 	<gtExample>
 	| aMethodCoder aCompiledSelector anEventsRecoder anOldMethod aNewMethod |
-	
 	anEventsRecoder := self eventsRecorder.
-	
+
 	aMethodCoder := self forUnaryInstanceMethod.
 	anOldMethod := (aMethodCoder attributeNamed: #dummyMethod) realMethod.
-	
-	aMethodCoder sourceText append: '"modified"' asRopedText.
+
+	aMethodCoder appendString: '"modified"'.
 	aMethodCoder subscribeToSystem.
-	
+
 	self assert: aMethodCoder isModified.
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode, '"modified"'.
-	
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode , '"modified"'.
+
 	aMethodCoder weak
 		when: GtCoderClassRemoved send: #record: to: anEventsRecoder;
 		when: GtCoderMethodAdded send: #record: to: anEventsRecoder;
 		when: GtCoderMethodModified send: #record: to: anEventsRecoder;
 		when: GtCoderMethodRemoved send: #record: to: anEventsRecoder.
 
-	aCompiledSelector := [
+	aCompiledSelector := [ 
 		GtPharoCodeModifier
-			compileMethodSource: anOldMethod sourceCode, '"new method"'
+			compileMethodSource: anOldMethod sourceCode , '"new method"'
 			in: anOldMethod methodClass
 			protocol: anOldMethod protocol ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
+				ensure: [ aMethodCoder unsubscribeFromSystem ].
 	self assert: aCompiledSelector equals: anOldMethod selector.
+
 	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass >> aCompiledSelector.
 
-	self assert: aMethodCoder behavior equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
+	self
+		assert: aMethodCoder behavior
+		equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
 	self assert: aMethodCoder protocol equals: aNewMethod protocol.
 	self assert: aMethodCoder existsInTheSystem.
-	self assert: aMethodCoder isModified.
 
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode, '"modified"'.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	"Make sure that the coder's source code was updated accordingly"
+	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode , '"modified"'.
+	
+	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
+	self assert: aMethodCoder isModified.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
-	self assert: aMethodCoder sourceCode sourceString equals: anOldMethod sourceCode, '"modified"'.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: anOldMethod sourceCode, '"new method"'.
+	self assert: aMethodCoder sourceCode currentSourceString wait string equals: anOldMethod sourceCode , '"modified"'.
+	self assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString equals: anOldMethod sourceCode , '"new method"'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderMethodModified.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
+
 	^ aMethodCoder
 ]
 
 { #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribedToSystem [
+
 	<gtExample>
 	| aMethodCoder aCompiledSelector anEventsRecoder anOldMethod aNewMethod |
-	
 	anEventsRecoder := self eventsRecorder.
-	
+
 	aMethodCoder := self forUnaryInstanceMethod.
 	aMethodCoder subscribeToSystem.
-	
+
 	self assert: aMethodCoder isModified not.
-	
+
 	aMethodCoder weak
 		when: GtCoderClassRemoved send: #record: to: anEventsRecoder;
 		when: GtCoderMethodAdded send: #record: to: anEventsRecoder;
@@ -251,63 +281,81 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribed
 
 	anOldMethod := (aMethodCoder attributeNamed: #dummyMethod) realMethod.
 
-	aCompiledSelector := [
-		GtPharoCodeModifier
-			compileMethodSource: anOldMethod sourceCode, '"new method"'
-			in: anOldMethod methodClass
-			protocol: anOldMethod protocol ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self assert: aCompiledSelector equals: anOldMethod selector.
-	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass >> aCompiledSelector.
+	aCompiledSelector := [ 
+	                     GtPharoCodeModifier
+		                     compileMethodSource:
+		                     anOldMethod sourceCode , '"new method"'
+		                     in: anOldMethod methodClass
+		                     protocol: anOldMethod protocol ] ensure: [ 
+		                     aMethodCoder unsubscribeFromSystem ].
 
-	self assert: aMethodCoder behavior equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
+	self assert: aCompiledSelector equals: anOldMethod selector.
+	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass
+	              >> aCompiledSelector.
+
+	self
+		assert: aMethodCoder behavior
+		equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
 	self assert: aMethodCoder protocol equals: aNewMethod protocol.
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode, '"new method"'.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode , '"new method"'.
+	self
+		assert: aMethodCoder sourceCode class
+		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
-	self assert: aMethodCoder sourceCode sourceString equals: anOldMethod sourceCode, '"new method"'.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: anOldMethod sourceCode, '"new method"'.
+	self
+		assert: aMethodCoder sourceCode currentSourceString wait string
+		equals: anOldMethod sourceCode , '"new method"'.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: anOldMethod sourceCode , '"new method"'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderMethodModified.
+	self
+		assert: anEventsRecoder first class
+		equals: GtCoderMethodModified.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
+
 	^ aMethodCoder
 ]
 
 { #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileModifiedNewMethodWithCoderWhenSubscribedToSystem [
+
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder aNewMethodSelector aNewMethod |
-	
 	anEventsRecoder := self eventsRecorder.
-	
+
 	aMethodCoder := self modifyNewMethod.
-	
+
 	aMethodCoder subscribeToSystem.
-	
+
 	self assert: aMethodCoder isModified.
-	aNewMethodSelector := (aMethodCoder attributeNamed: #dummyMethod) selector.
-	
+	aNewMethodSelector := (aMethodCoder attributeNamed: #dummyMethod)
+		                      selector.
+
 	aMethodCoder weak
 		when: GtCoderClassRemoved send: #record: to: anEventsRecoder;
 		when: GtCoderMethodAdded send: #record: to: anEventsRecoder;
 		when: GtCoderMethodModified send: #record: to: anEventsRecoder;
 		when: GtCoderMethodRemoved send: #record: to: anEventsRecoder.
 
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
+	wasSuccessful := [ aMethodCoder compile ] ensure: [ 
+		                 aMethodCoder unsubscribeFromSystem ].
 
 	self assert: wasSuccessful.
-	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass >> aNewMethodSelector.
+	aNewMethod := (aMethodCoder attributeNamed: #dummyMethod) realClass
+	              >> aNewMethodSelector.
 
-	self assert: aMethodCoder behavior equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
+	self
+		assert: aMethodCoder behavior
+		equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder selector equals: aNewMethodSelector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
@@ -315,16 +363,24 @@ GtPharoMethodCoderExamples >> compileModifiedNewMethodWithCoderWhenSubscribedToS
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
-	self assert: aMethodCoder currentSourceString equals: aNewMethodSelector.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self
+		assert: aMethodCoder currentSourceString
+		equals: aNewMethodSelector.
+	self
+		assert: aMethodCoder sourceCode class
+		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
-	self assert: aMethodCoder sourceCode sourceString equals: aNewMethodSelector.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: aNewMethodSelector.
+	self
+		assert: aMethodCoder sourceCode currentSourceString wait string
+		equals: aNewMethodSelector.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: aNewMethodSelector.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderMethodAdded.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
+
 	^ aMethodCoder
 ]
 
@@ -644,23 +700,22 @@ GtPharoMethodCoderExamples >> example [
 
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forBinaryMethodCoder [
+
 	<gtExample>
 	| method methodCoder |
 	method := GtPharoMethodCoderExamples >> #?.
 	methodCoder := GtPharoMethodCoder forMethod: method.
-	self
-		assert: (methodCoder sourceCode isKindOf: GtCoderCompiledMethodSourceCode).
+	self assert:
+		(methodCoder sourceCode isKindOf: GtCoderCompiledMethodTextSource).
 	self assert: methodCoder sourceCode compiledMethod equals: method.
 	self assert: methodCoder sourceCode hasSourceText not.
-	self assert: methodCoder sourceCode hasCollapsedText not.
 	self assert: methodCoder selector equals: #?.
 	self assert: methodCoder currentSelector equals: #?.
 	self assert: methodCoder behavior equals: GtPharoMethodCoderExamples.
 	self assert: methodCoder compiledMethod equals: method.
-	self assert: methodCoder collapsedText asString equals: '?'.
-	self assert: methodCoder sourceCode hasCollapsedText.
+	self assert: methodCoder collapsedText asString equals: '? anObject'.
 	self
-		assert: methodCoder sourceText asString
+		assert: methodCoder currentSourceText asString
 		equals: method sourceCode.
 	self assert: methodCoder sourceCode hasSourceText.
 	self
@@ -701,6 +756,7 @@ GtPharoMethodCoderExamples >> forEmptyLinesMethodCoder [
 
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forExampleMethodCoder [
+
 	<gtExample>
 	| method methodCoder |
 	method := GtPharoMethodCoderExamples >> #example.
@@ -714,7 +770,7 @@ GtPharoMethodCoderExamples >> forExampleMethodCoder [
 		assert: methodCoder currentSourceString
 		equals: method sourceCode.
 	self
-		assert: methodCoder sourceText asString
+		assert: methodCoder currentSourceText asString
 		equals: method sourceCode.
 	self assert: methodCoder isModified not.
 	^ methodCoder
@@ -741,7 +797,7 @@ GtPharoMethodCoderExamples >> forKeywordMethodInPackagedClass [
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
 	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
 	^ aMethodCoder
@@ -756,7 +812,7 @@ GtPharoMethodCoderExamples >> forKeywordSelectorMethodCoder [
 
 	methodCoder := GtPharoMethodCoder forMethod: method.
 
-	self assert: methodCoder collapsedText asString equals: 'keyword:selector:'.
+	self assert: methodCoder collapsedText asString equals: 'keyword: a selector: b'.
 	self assert: methodCoder currentSourceString equals: method sourceCode.
 
 	^ methodCoder
@@ -797,7 +853,7 @@ GtPharoMethodCoderExamples >> forSelfReturnMethodCoder [
 
 	methodCoder := GtPharoMethodCoder forMethod: method.
 
-	self assert: methodCoder collapsedText asString equals: 'returnSelf'.
+	self assert: methodCoder collapsedText asString equals: 'returnSelf ^self'.
 	self assert: methodCoder currentSourceString equals: method sourceCode.
 	^ methodCoder
 ]
@@ -858,7 +914,7 @@ GtPharoMethodCoderExamples >> forUnaryClassMethod [
 	self assert: aMethodCoder selector equals: aDummyMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aDummyMethod realMethod.
 	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aDummyMethod realMethod.
 
 	^ aMethodCoder
@@ -885,7 +941,7 @@ GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
 	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
+	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
 	^ aMethodCoder
@@ -907,37 +963,58 @@ GtPharoMethodCoderExamples >> methodSourceWithTempAndBlockArgsConflict [
 
 { #category : #'examples - modification' }
 GtPharoMethodCoderExamples >> modifyBackCompiledMethodWithoutCoderModifiedWhenSubscribedToSystem [
+
 	<gtExample>
 	| aMethodCoder anOldMethod aNewMethod |
-	
-	aMethodCoder := self compileMethodWithoutCoderModifiedWhenSubscribedToSystem.
+	aMethodCoder := self
+		                compileMethodWithoutCoderModifiedWhenSubscribedToSystem.
 	anOldMethod := (aMethodCoder attributeNamed: #dummyMethod) realMethod.
 	aNewMethod := aMethodCoder compiledMethod.
-	
-	self assert: aMethodCoder isModified.
-	
-	aMethodCoder
-		deleteSourceTextFrom: aMethodCoder sourceText size - '"modified"' size + 1
-		to: aMethodCoder sourceText size.
-	
+
 	self assert: aMethodCoder isModified.
 
-	self assert: aMethodCoder currentSourceString equals: anOldMethod sourceCode.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
-	self assert: aMethodCoder sourceCode sourceString equals: anOldMethod sourceCode.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: anOldMethod sourceCode, '"new method"'.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: aNewMethod sourceCode.
-	
+	aMethodCoder
+		deleteSourceTextFrom: aMethodCoder currentSourceText size - '"modified"' size + 1
+		to: aMethodCoder currentSourceText size.
+
+	self assert: aMethodCoder isModified.
+
+	self
+		assert: aMethodCoder currentSourceString
+		equals: anOldMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode class
+		equals: GtCoderCompiledMethodTextSource.
+	self
+		assert: aMethodCoder sourceCode currentSourceString wait string
+		equals: anOldMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: anOldMethod sourceCode , '"new method"'.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: aNewMethod sourceCode.
+
 	aMethodCoder appendString: '"new method"'.
-	
+
 	self assert: aMethodCoder isModified not.
 
-	self assert: aMethodCoder currentSourceString equals: aNewMethod sourceCode.
-	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodSourceCode.
-	self assert: aMethodCoder sourceCode sourceString equals: aNewMethod sourceCode.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: anOldMethod sourceCode, '"new method"'.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: aNewMethod sourceCode.
-	
+	self
+		assert: aMethodCoder currentSourceString
+		equals: aNewMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode class
+		equals: GtCoderCompiledMethodTextSource.
+	self
+		assert: aMethodCoder sourceCode currentSourceString wait string
+		equals: aNewMethod sourceCode.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: anOldMethod sourceCode , '"new method"'.
+	self
+		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		equals: aNewMethod sourceCode.
+
 	^ aMethodCoder
 ]
 
@@ -948,31 +1025,32 @@ GtPharoMethodCoderExamples >> modifyNewMethod [
 
 	aMethodCoder := self forNewMethod.
 	aMethodName := (aMethodCoder attributeNamed: #dummyMethod) selector.
-	
+
 	anEventsRecoder := self eventsRecorder.
 
 	aMethodCoder
-		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
+		when: GtCoderAnnouncement
+		send: #record:
+		to: anEventsRecoder.
 
 	self assert: aMethodCoder isModified not.
 	aMethodCoder appendString: aMethodName.
-	
-	self assert: anEventsRecoder numberOfEvents equals: 2.
+
+	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderSourceCodeChanged.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
 	self assert: anEventsRecoder first isSynchronous not.
-	self assert: anEventsRecoder second class equals: GtCoderCollapsedLabelChanged.
-	self assert: anEventsRecoder second coder equals: aMethodCoder.
+	self assert: anEventsRecoder first newText asString equals: aMethodName.
 
 	self assert: aMethodCoder isModified.
 	self assert: aMethodCoder selector equals: nil.
 	self assert: aMethodCoder currentSelector equals: aMethodName.
 
 	self assert: aMethodCoder currentSourceString equals: aMethodName.
-	self assert: aMethodCoder sourceCode class equals: GtCoderExplicitSourceCode.
+	self assert: aMethodCoder sourceCode class equals: GtCoderExplicitStringSource.
 	self assert: aMethodCoder sourceCode source equals: ''.
-	self assert: aMethodCoder sourceCode sourceString equals: aMethodName.
-	self assert: aMethodCoder sourceCode buildSourceText asString equals: ''.
+	self assert: aMethodCoder sourceCode currentSourceString wait string equals: aMethodName.
+	self assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString equals: ''.
 
 	^ aMethodCoder
 ]
