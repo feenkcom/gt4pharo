@@ -892,7 +892,7 @@ GtPharoMethodCoder >> playAllInContext: aGtPharoSourceCoderEvaluationContext [
 { #category : #'api - actions examples' }
 GtPharoMethodCoder >> playAndInspectExample [
 	self playExample.
-	self notifyObjectSpawn: self exampleResult returnValueOrExampleException
+	self notifyObjectSpawn: self exampleResult returnValue
 ]
 
 { #category : #'api - actions examples' }
@@ -915,7 +915,7 @@ GtPharoMethodCoder >> playAndInspectSlideFrom: anEditorElement [
 				ifFalse: [ ^ self ] ].
 
 	self
-		notifyObjectSpawn: self compiledMethod gtSlide returnValueOrExampleException
+		notifyObjectSpawn: self compiledMethod gtSlide returnValue
 ]
 
 { #category : #'api - actions examples' }
