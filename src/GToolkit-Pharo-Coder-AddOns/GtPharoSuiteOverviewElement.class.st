@@ -9,7 +9,8 @@ Class {
 		'localToggle',
 		'remoteToggle',
 		'playButton',
-		'updater'
+		'updater',
+		'errorElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
@@ -26,6 +27,12 @@ GtPharoSuiteOverviewElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
+{ #category : #'private - accessing' }
+GtPharoSuiteOverviewElement >> errorElement [
+
+	^ errorElement
+]
+
 { #category : #initialization }
 GtPharoSuiteOverviewElement >> initialize [
 
@@ -33,12 +40,36 @@ GtPharoSuiteOverviewElement >> initialize [
 	self initializeUpdater.
 	self initializeListElement.
 	self initializeToolbar.
+	self initializeErrorElement.
 
 	self addChild: self listElement as: #list.
 	self addChild: self toolbarElement as: #toolbar.
+	self addChild: self errorElement as: #error.
 	self addAptitude:
 		(BrLayoutResizerAptitude new vAnyToFitContent: self toolbarElement).
 	self fitContent
+]
+
+{ #category : #initialization }
+GtPharoSuiteOverviewElement >> initializeErrorElement [
+
+	errorElement := BrButton new
+		                beSmallSize;
+		                vFitContent;
+		                hMatchParent;
+		                aptitude:
+			                (BrGlamorousButtonExteriorAptitude new 
+				                 backgroundPaint:
+					                 BrGlamorousColors paleErrorBackgroundColor)
+			                + BrGlamorousButtonRectangularAptitude
+			                + BrGlamorousButtonIconAptitude
+			                + BrGlamorousButtonLabelAptitude;
+		                margin: (BlInsets top: 10);
+		                visibility: BlVisibility gone;
+		                icon: BrGlamorousVectorIcons inspect;
+		                label: 'Execution error';
+		                action: [ :aButton | 
+			                self spawnErrorDetailFrom: aButton ]
 ]
 
 { #category : #initialization }
@@ -203,6 +234,14 @@ GtPharoSuiteOverviewElement >> remoteToggle [
 	^ remoteToggle
 ]
 
+{ #category : #'private - event handling' }
+GtPharoSuiteOverviewElement >> spawnErrorDetailFrom: aButton [
+
+	self suiteViewModel hasExecutionError ifFalse: [ ^ self ].
+
+	aButton phlow spawnObject: self suiteViewModel executionDetail
+]
+
 { #category : #'api - suite view model' }
 GtPharoSuiteOverviewElement >> subscribeToSuiteViewModel [
 
@@ -242,6 +281,19 @@ GtPharoSuiteOverviewElement >> updateElement [
 	self updateListElement.
 	self updateToggles.
 	self updatePlayButton.
+	self updateErrorElement.
+]
+
+{ #category : #'private - updating' }
+GtPharoSuiteOverviewElement >> updateErrorElement [
+
+	| isVisible |
+	isVisible := self suiteViewModel hasPendingExecution not and: [ 
+		             self suiteViewModel hasExecutionError ].
+
+	isVisible
+		ifTrue: [ self errorElement visibility: BlVisibility visible ]
+		ifFalse: [ self errorElement visibility: BlVisibility gone ]
 ]
 
 { #category : #'private - updating' }

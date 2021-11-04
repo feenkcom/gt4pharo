@@ -28,9 +28,33 @@ TGtPharoSuiteViewModel >> beRemoteFrom: aSource [
 ]
 
 { #category : #'api - suite' }
+TGtPharoSuiteViewModel >> executionDetail [
+
+	"Return an object that represents execution state, e.g., exception in case execution failure."
+
+	^ self explicitRequirement
+]
+
+{ #category : #'api - suite' }
 TGtPharoSuiteViewModel >> executor [
 
 	<return: #TGtPharoSuiteExecutor>
+	^ self explicitRequirement
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> hasExecutionError [
+
+	"Return true if there is an execution error."
+
+	^ self explicitRequirement
+]
+
+{ #category : #'api - suite' }
+TGtPharoSuiteViewModel >> hasPendingExecution [
+
+	"Return true if an execution is happening (or about to happen)."
+
 	^ self explicitRequirement
 ]
 

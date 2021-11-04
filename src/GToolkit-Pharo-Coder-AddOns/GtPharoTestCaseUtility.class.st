@@ -4,7 +4,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Test Case'
 }
 
-{ #category : #'instance creation' }
+{ #category : #'api - testing' }
+GtPharoTestCaseUtility class >> hasConcreteSubclasses: aClass [
+
+	aClass allSubclassesDo: [ :eachClass | 
+		eachClass isAbstract ifFalse: [ ^ true ] ].
+
+	^ false
+]
+
+{ #category : #'api - instance creation' }
 GtPharoTestCaseUtility class >> newColoredIcon: aColor [
 
 	^ BlElement new

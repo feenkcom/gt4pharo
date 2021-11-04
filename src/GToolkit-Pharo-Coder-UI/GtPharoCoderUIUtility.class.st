@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtPharoCoderUIUtility class >> newBorderlessExamplesButtonForMethodsCoder: aMethodsCoder [ 
+
+	^ BrButton new
+		  addAptitude: (GtPharoExampleAptitude new coder: aMethodsCoder);
+		  addAptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonExteriorAptitude;
+		  icon: BrGlamorousVectorIcons play;
+		  label: 'Run Examples'
+]
+
+{ #category : #'instance creation' }
 GtPharoCoderUIUtility class >> newBorderlessTestSuiteButtonForMethodsCoder: aMethodsCoder [
 
 	^ BrButton new
@@ -30,6 +40,32 @@ GtPharoCoderUIUtility class >> newExamplesButtonForMethodsCoder: aMethodsCoder [
 		  label: 'Run Examples';
 		  action: [ :element | 
 		  aMethodsCoder exampler runExamplesFrom: element ]
+]
+
+{ #category : #'instance creation' }
+GtPharoCoderUIUtility class >> newExamplesDropdownButtonForViewModel: aViewModel methodsCoder: aMethodsCoder [
+
+	| aButton |
+	aButton := self newSimpleExampleButtonForMethodsCoder: aMethodsCoder.
+	aButton addAptitude: (BrGlamorousWithDropdownAptitude
+			 handle: [ 
+			 self newBorderlessExamplesButtonForMethodsCoder: aMethodsCoder ]
+			 content: [ 
+				 GtPharoSuiteOverviewElement new
+					 suiteViewModel: aViewModel;
+					 margin: (BlInsets all: 10) ]).
+
+	^ aButton
+]
+
+{ #category : #'instance creation' }
+GtPharoCoderUIUtility class >> newSimpleExampleButtonForMethodsCoder: aMethodsCoder [
+
+	^ BrButton new
+		  addAptitude: (GtPharoExampleAptitude new coder: aMethodsCoder);
+		  addAptitude: BrGlamorousButtonWithIconAptitude;
+		  icon: BrGlamorousVectorIcons play;
+		  label: 'Run Examples' 
 ]
 
 { #category : #'instace creation' }

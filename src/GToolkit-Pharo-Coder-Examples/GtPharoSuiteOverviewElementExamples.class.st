@@ -60,6 +60,22 @@ GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoder [
 	^ anElement
 ]
 
+{ #category : #accessing }
+GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoderAndExecutionError [
+
+	<gtExample>
+	| aViewModel anElement |
+	anElement := self basicElement.
+	aViewModel := self testSuiteViewModelWithMethodsCoderAndExecutionError.
+
+	anElement suiteViewModel: aViewModel.
+
+	self assert: anElement hasSuiteViewModel.
+	self assert: anElement suiteViewModel == aViewModel.
+
+	^ anElement
+]
+
 { #category : #'examples - coder' }
 GtPharoSuiteOverviewElementExamples >> methodsCoderWithTestCase [
 
@@ -74,16 +90,30 @@ GtPharoSuiteOverviewElementExamples >> methodsCoderWithTestCase [
 	^ aCoder
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - view model' }
 GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoder [
 
 	<gtExample>
 	| aViewModel aCoder |
-	aViewModel := GtPharoTestSuiteViewModel new.
+	aViewModel := self basicTestSuiteViewModel.
 	aCoder := self methodsCoderWithTestCase.
 	aViewModel methodsCoderModel: aCoder.
 
 	self assert: aViewModel methodsCoderModel equals: aCoder.
+
+	^ aViewModel
+]
+
+{ #category : #'examples - view model' }
+GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoderAndExecutionError [
+
+	<gtExample>
+	| aViewModel aCoder |
+	aViewModel := self testSuiteViewModelWithMethodsCoder.
+	aViewModel executionState: #exception -> ZeroDivide new.
+
+	self assert: aViewModel hasPendingExecution not.
+	self assert: aViewModel hasExecutionError.
 
 	^ aViewModel
 ]

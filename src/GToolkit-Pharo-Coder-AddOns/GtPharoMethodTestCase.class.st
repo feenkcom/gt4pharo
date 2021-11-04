@@ -51,12 +51,9 @@ GtPharoMethodTestCase >> canExecute [
 	| aNode |
 	self methodCoder ifNil: [ ^ false ].
 	self behavior isTestCase ifFalse: [ ^ false ].
-	self behavior isAbstract ifTrue: [ 
-		| hasConreteSubclass |
-		hasConreteSubclass := false.
-		self behavior allSubclassesDo: [ :eachClass | 
-			eachClass isAbstract ifFalse: [ hasConreteSubclass := true ] ].
-		hasConreteSubclass ifFalse: [ ^ false ] ].
+	(self behavior isAbstract and: [ 
+		 (GtPharoTestCaseUtility hasConcreteSubclasses: self behavior) not ]) 
+		ifTrue: [ ^ false ].
 
 	aNode := self methodCoder rbAST methodNode.
 	^ aNode isNotNil and: [ aNode selector isTestSelector ]
