@@ -1,27 +1,29 @@
 Class {
 	#name : #GtSourceCoderEditorElementExamples,
 	#superclass : #GtCoderByScripterExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	<gtExample>
 	| aMethodCoder aMethodCoderUIModel anEditorElement |
-	
+
 	aMethodCoder := GtPharoMethodCoderExamples new forExampleMethodCoder.
 	aMethodCoderUIModel := aMethodCoder asCoderUIModel.
-	
+
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated.
-	BlUseAsyncFeatures disableDuring: [
-		anEditorElement := GtSourceCoderEditorElement new
-			textualCoderViewModel: aMethodCoderUIModel ].
+	BlUseAsyncFeatures disableDuring: [ 
+		anEditorElement := GtSourceCoderEditorElement new 
+			                   textualCoderViewModel: aMethodCoderUIModel ].
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated not.
 
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
 	self assert: anEditorElement margin equals: BlInsets empty.
-	self assert: anEditorElement text characters equals: aMethodCoder sourceText characters.
+	self
+		assert: anEditorElement text characters
+		equals: aMethodCoder currentSourceText characters.
 
 	^ anEditorElement
 ]
