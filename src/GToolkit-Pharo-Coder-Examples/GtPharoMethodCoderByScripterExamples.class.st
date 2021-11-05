@@ -1136,25 +1136,29 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 	aScripter check
 		label: 'Make sure the instance variable was created';
 		satisfies: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realClass hasSlotNamed: #instance ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter check
 		label: 'Make sure the method still mofied';
 		satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter check
 		label: 'Make sure the method is not saved/recompiled after adding a temporary variable';
 		value: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) systemMethod sourceCode ]
 		equals: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realMethod sourceCode ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		label: 'Make sure the text was deselected';
 		satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
-		onModel.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1168,16 +1172,17 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder asCoderViewModel ].
+
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'temporary') ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
 	self selectTextFor: aScripter from: 9 to: 18 andCheck: 'temporary'.	
 	self clickFixItFor: aScripter.
 	
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1197,25 +1202,29 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 					nextPutAll: (aCoderViewModel coderModel attributeNamed: #dummyMethod) selector; cr;
 					tab; nextPutAll: '| temporary |'; cr;
 					tab; nextPutAll: 'temporary' ] ];
-		onModel.
-		
+		onModel;
+		play.
+	
 	aScripter check
 		label: 'Make sure the method still mofied';
 		satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		label: 'Make sure the method is not saved/recompiled after adding a temporary variable';
 		value: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) systemMethod sourceCode ]
 		equals: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realMethod sourceCode ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		label: 'Make sure the text was deselected';
 		satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
-		onModel.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - abstract inst var' }
