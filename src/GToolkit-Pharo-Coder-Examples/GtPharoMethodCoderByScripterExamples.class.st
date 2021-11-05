@@ -605,10 +605,10 @@ GtPharoMethodCoderByScripterExamples >> clickFixItActionFor: aScripter id: aBlEl
 	
 	aScripter click
 		onSpaceRoot;
-		id: aBlElementId.
+		id: aBlElementId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -619,20 +619,21 @@ GtPharoMethodCoderByScripterExamples >> clickFixItFor: aScripter [
 	aScripter check
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
-		notExists.
+		notExists;
+		play.
 	
 	aScripter click
-		onBreadthFirstChildOfClass: GtFixItButton.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		onBreadthFirstChildOfClass: GtFixItButton;
+		play.
 	
 	"now it appeared"
 	aScripter check
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
-		exists.
+		exists;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -1030,21 +1031,21 @@ GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCode
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	<gtExample>
-	<after: #cleanUp>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [
 		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
-		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder := GtPharoMethodCoderExamples new emptyMethodCoder.
+		aCoder appendString: 'method'.
 		aCoder ].
+
 	aScripter do
-		label: 'type in a class that does not exist';
-		action: [ :aCoder | aCoder appendString: (String cr, String tab, '{1}New' format: { (aCoder attributeNamed: #dummyMethod) className }) ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		label: 'Type in a class that does not exist';
+		action: [ :aCoder | aCoder appendString: (String cr, String tab, 'ClassThatDoesNotExist6561') ];
+		onModel;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1054,7 +1055,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_02_click_fixit [
 
 	aScripter := self fixitCreateClass_01_setup.
 	self clickFixItFor: aScripter.
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1067,26 +1068,28 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	"there is no create behavior element before clicking on the menu"
 	aScripter check
 		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
-		notExists.
+		notExists;
+		play.
 	
 	aScripter click
 		onSpaceRoot;
-		id: (GtDefineClassFixItActionElementId indexed: 1).
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: (GtDefineClassFixItActionElementId indexed: 1);
+		play.
 	
 	"now it appeared"
 	aScripter check
 		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
-		exists.
+		exists;
+		play.
 	
 	"context menu should disappear"
 	aScripter check
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
-		notExists.
+		notExists;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1103,13 +1106,13 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'instance') ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 	
 	self selectTextFor: aScripter from: 9 to: 17 andCheck: 'instance'.	
 	self clickFixItFor: aScripter.
 	
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
