@@ -20,9 +20,15 @@ GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 
 	aScripter := self scripterForBlock: [ filter asCoder allCoders first ].
 
-	aScripter checks: 'Check asCoder highlighted' do: [ :aStep |
-		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'filter asCoder') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
-		self checkFor: aStep numberfOfTextAttributes: 14 OfType: BlTextDecorationAttribute ].
+	self
+		checkFor: aScripter
+		textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'filter asCoder')
+		anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+
+	self
+		checkFor: aScripter
+		numberfOfTextAttributes: 14
+		OfType: BlTextDecorationAttribute.
 
 	^ aScripter
 ]
@@ -952,7 +958,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play Example'.
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play and Inspect Example Result'.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
@@ -964,9 +970,10 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 	
 	aScripter click
 		label: 'Click play and inspect';
-		id: GtMethodCoderPlayAndInspectExampleActionId.
+		id: GtMethodCoderPlayAndInspectExampleActionId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
