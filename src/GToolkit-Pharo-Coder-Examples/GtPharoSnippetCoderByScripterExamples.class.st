@@ -18,7 +18,8 @@ GtPharoSnippetCoderByScripterExamples >> check: aScripter hasReorderAttributes: 
 					indicesDo: [ :aStart :anEnd | count := count + 1. ].
 				count ]
 			equals: [ :aCoderEditor | anInteger ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName
+		id: GtSourceCoderEditorId;
+		play
 ]
 
 { #category : #'examples - extract method' }
@@ -26,7 +27,8 @@ GtPharoSnippetCoderByScripterExamples >> checkExtractedSource: aScripter [
 	| text variables possibleSelectors |
 	variables := #(string start end).
 	possibleSelectors := #(#_:_: #substringFrom:_: #substringFrom:to:).
-	(aScripter check)
+
+	aScripter check
 		label: 'Check text';
 		elementSatisfies:
 				[ :aSourceEditor | 
@@ -39,7 +41,8 @@ GtPharoSnippetCoderByScripterExamples >> checkExtractedSource: aScripter [
 								and:
 									[ (variables includes: messageSend receiver variableName)
 										and: [ messageSend arguments allSatisfy: [ :each | variables includes: each variableName ] ] ] ] ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 	^ text
 ]
 
@@ -47,7 +50,7 @@ GtPharoSnippetCoderByScripterExamples >> checkExtractedSource: aScripter [
 GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: aBoolean [
 	| selectorPart |
 	selectorPart := aBoolean ifTrue: [ '_:' ] ifFalse: [ '_' ].
-	(aScripter check)
+	aScripter check
 		label: 'Check rename editor attribute';
 		value:
 				[ :aCoderEditor | 
@@ -61,8 +64,10 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 				| index |
 				index := aCoderEditor text asString indexOfSubCollection: selectorPart.
 				index to: index + selectorPart size - 1 ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	(aScripter check)
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter check
 		label: 'Check refactoring changes attribute';
 		value:
 				[ :aCoderEditor | 
@@ -72,48 +77,63 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 						indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 					anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	(aScripter check)
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter check
 		label: 'Check source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	(aScripter check)
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter check
 		label: 'Check source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	(aScripter check)
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter check
 		label: 'Check method name editor source code';
 		value: [ :aNameEditor | aNameEditor text asString ] equals: selectorPart;
-		onChildNamed: GtPharoSourceCoder sourceEditorName;
-		onBreadthFirstChildOfClass: GtRenameEditor.
-	(aScripter check)
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
+
+	aScripter check
 		label: 'Check method name editor selected text';
 		value: [ :aNameEditor | aNameEditor editor selectedText asString ] equals: selectorPart;
-		onChildNamed: GtPharoSourceCoder sourceEditorName;
-		onBreadthFirstChildOfClass: GtRenameEditor.
-	(aScripter check)
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
+
+	aScripter check
 		label: 'Check method name editor has focus';
 		satisfies: [ :aNameEditor | aNameEditor isFocused ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName;
-		onBreadthFirstChildOfClass: GtRenameEditor
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 	| text |
 	text := self checkExtractedSource: aScripter.
-	(aScripter click)
+	
+	aScripter click
 		label: 'Open context menu';
-		onChildNamed: #'reorder-parameter-button'.
-	aScripter wait forEmptySpaceTaskQueue.
-	(aScripter check)
+		onChildNamed: #'reorder-parameter-button';
+		play.
+	
+	aScripter check
 		label: 'Check selected text';
 		elementSatisfies:
 				[ :aSourceEditor | 
 					| string |
 					string := aSourceEditor text asString.
 					text ~= string ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
+
 	self checkExtractedSource: aScripter.
 	self check: aScripter hasReorderAttributes: 4
 ]
@@ -135,7 +155,8 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 			ifFound: [ :theEvent |
 				theEvent object = Object ]
 			ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-		onScripter.	
+		onScripter;
+		play.	
 
 	^ aScripter
 ]
@@ -145,9 +166,8 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
 	<gtExample>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ 42 ] unknownMessage') asCoderViewModel ].		
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ 42 ] unknownMessage') asCoderViewModel ].
+	^ aScripter
 ]
 
 { #category : #'examples - fixit method' }
@@ -159,10 +179,10 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure02checkFi
 	
 	aScripter check
 		onBreadthFirstChildOfClass: GtFixItButton;
-		exists.
-	
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		exists;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - fixit method' }
@@ -171,8 +191,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument0
 	| aScripter |
 
 	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ :value | value unknownMessage ]') asCoderViewModel ].		
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit method' }
@@ -184,10 +203,10 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument0
 	
 	aScripter check
 		onBreadthFirstChildOfClass: GtFixItButton;
-		notExists.
+		notExists;
+		play.
 	
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit method' }
@@ -196,8 +215,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable01setup [
 	| aScripter |
 
 	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: 'object := Object new.') asCoderViewModel ].		
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit method' }
@@ -207,15 +225,16 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable02execute [
 	aScripter := self fixitMessageSendToVariable01setup.
 	
 	aScripter click
-		id: GtSourceCoderDoItActionId.
-	aScripter wait forEmptySpaceTaskQueue.
-	
+		id: GtSourceCoderDoItActionId;
+		play.
+
 	aScripter check
 		label: 'Check variable assignment';
 		value: [ :aCoderViewModel | (aCoderViewModel sharedBindings bindingOf: #object) value class ] equals: [ Object ];
-		onModel.
-	
-	^ aScripter syncContinue
+		onModel;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #accessing }
@@ -262,96 +281,96 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable04checkFixitA
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forClassExtraction_01_setup [
 	<gtExample>
-	
 	| aScripter |
-	aScripter := self
-		scripterForBlock:
-			[ GtPharoSnippetCoder
-				forSource:
-					'OrderedCollection new addAll: (1 to: 100); yourself' ].
-	(aScripter click)
+	
+	aScripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: 'OrderedCollection new addAll: (1 to: 100); yourself' ].
+	aScripter click
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId.
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forClassExtraction_02_select [
 	<gtExample>
-	
 	| aScripter |
+	
 	aScripter := self forClassExtraction_01_setup.
-	(aScripter do)
+	aScripter do
 		label: 'Select part of the method to extract';
-		action:
-				[ :aSourceEditor | 
-					(aSourceEditor selecter)
-						from: 0 to: aSourceEditor text size;
-						select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		action: [ :aSourceEditor |  aSourceEditor selecter from: 0 to: aSourceEditor text size; select ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forClassExtraction_03_context_menu [
 	<gtExample>
-	
 	| aScripter |
+	
 	aScripter := self forClassExtraction_02_select.
-	(aScripter secondaryClick)
+	aScripter secondaryClick
 		label: 'Open context menu';
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter wait forEmptySpaceTaskQueue.
-	(aScripter mouseMoveOver)
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter mouseMoveOver
 		label: 'Hover extract method';
 		onSpaceRoot;
-		id: GtMethodCoderExtractMethodContextMenuItemId.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forClassExtraction_04_click_extract_method [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forClassExtraction_03_context_menu.
-	(aScripter click)
+	aScripter click
 		label: 'Click extract method';
 		onSpaceRoot;
-		onChildNamed: GtMethodCoderExtractMethodContextMenuItemId.
-	aScripter wait forEmptySpaceTaskQueue.
-	(aScripter check)
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
+
+	aScripter check
 		label: 'Check source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
-		onModel.
+		onModel;
+		play.
+
 	self check: aScripter hasReorderAttributes: 0.
 	self checkRenameEditor: aScripter keyword: false.
-	^ aScripter syncContinue
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forClassExtraction_05_enter_name [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forClassExtraction_04_click_extract_method.
+
 	self checkRenameEditor: aScripter keyword: false.
-	aScripter type: 'oneHundred'.
-	aScripter wait forEmptySpaceTaskQueue.
+	(aScripter type: 'oneHundred') play.
 	self hasRefactoringChanges: aScripter.
-	aScripter keyClick: BlKeyboardKey tab.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	(aScripter keyClick: BlKeyboardKey tab) play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_01_setup [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: 'string := ''Some string''.
 start := -1.
 end := 100.
@@ -359,18 +378,19 @@ string copyFrom: ((start min: string size + 1) max: 1) to: ((end min: string siz
 ' ].
 	(aScripter click)
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId.
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_02_select [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forKeywordExtraction_01_setup.
-	(aScripter do)
+	aScripter do
 		label: 'Select part of the method to extract';
 		action:
 				[ :aSourceEditor | 
@@ -379,86 +399,95 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_02_select [
 					(aSourceEditor selecter)
 						from: index to: aSourceEditor text size;
 						select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_03_context_menu [
 	<gtExample>
-	
 	| aScripter |
+	
 	aScripter := self forKeywordExtraction_02_select.
-	(aScripter secondaryClick)
+	aScripter secondaryClick
 		label: 'Open context menu';
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_04_hover_extract_method [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forKeywordExtraction_03_context_menu.
-	(aScripter mouseMoveOver)
+	aScripter mouseMoveOver
 		label: 'Hover extract method';
 		onSpaceRoot;
-		id: GtMethodCoderExtractMethodContextMenuItemId.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_05_click_extract_method [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forKeywordExtraction_04_hover_extract_method.
-	(aScripter click)
+	aScripter click
 		label: 'Click extract method';
 		onSpaceRoot;
-		onChildNamed: GtMethodCoderExtractMethodContextMenuItemId.
-	aScripter wait forEmptySpaceTaskQueue.
-	(aScripter check)
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
+
+	aScripter check
 		label: 'Check source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
-		onModel.
+		onModel;
+		play.
+
 	self check: aScripter hasReorderAttributes: 4.
 	self checkRenameEditor: aScripter keyword: true.
-	^ aScripter syncContinue
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_06_reorder_parameters_and_enter_keywords [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forKeywordExtraction_05_click_extract_method.
+	
 	self clickReorderParameter: aScripter.
 	self checkRenameEditor: aScripter keyword: true.
-	aScripter type: 'substringFrom:'.
-	aScripter wait forEmptySpaceTaskQueue.
+	
+	(aScripter type: 'substringFrom:') play.
 	self hasRefactoringChanges: aScripter.
-	aScripter keyClick: BlKeyboardKey tab.
+	
+	(aScripter keyClick: BlKeyboardKey tab) play.
 	self clickReorderParameter: aScripter.
 	self checkRenameEditor: aScripter keyword: true.
-	aScripter type: 'to:'.
-	aScripter wait forEmptySpaceTaskQueue.
-	aScripter keyClick: BlKeyboardKey return.
+	
+	(aScripter type: 'to:') play.
+	(aScripter keyClick: BlKeyboardKey return) play.
 	self clickReorderParameter: aScripter.
-	aScripter wait forEmptySpaceTaskQueue.
 	self clickReorderParameter: aScripter.
-	^ aScripter syncContinue
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self
 		scripterForBlock:
 			[ GtPharoSnippetCoder
@@ -466,20 +495,22 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_01_setup [
 					'string := ''Some string''.
 string , string
 ' ].
-	(aScripter click)
+
+	aScripter click
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId.
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_02_select [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forUnaryExtraction_01_setup.
-	(aScripter do)
+	aScripter do
 		label: 'Select part of the method to extract';
 		action:
 				[ :aSourceEditor | 
@@ -488,62 +519,70 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_02_select [
 					(aSourceEditor selecter)
 						from: index to: aSourceEditor text size;
 						select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forUnaryExtraction_02_select.
-	(aScripter secondaryClick)
+	aScripter secondaryClick
 		label: 'Open context menu';
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter wait forEmptySpaceTaskQueue.
-	(aScripter mouseMoveOver)
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter mouseMoveOver
 		label: 'Hover extract method';
 		onSpaceRoot;
-		id: GtMethodCoderExtractMethodContextMenuItemId.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_04_click_extract_method [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forUnaryExtraction_03_context_menu.
-	(aScripter click)
+	aScripter click
 		label: 'Click extract method';
 		onSpaceRoot;
-		onChildNamed: GtMethodCoderExtractMethodContextMenuItemId.
-	aScripter wait forEmptySpaceTaskQueue.
-	(aScripter check)
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
+
+	aScripter check
 		label: 'Check source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
-		onModel.
+		onModel;
+		play.
+
 	self check: aScripter hasReorderAttributes: 0.
 	self checkRenameEditor: aScripter keyword: false.
-	^ aScripter syncContinue
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_05_enter_name [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self forUnaryExtraction_04_click_extract_method.
 	self checkRenameEditor: aScripter keyword: false.
-	aScripter type: 'oneHundred'.
-	aScripter wait forEmptySpaceTaskQueue.
+
+	(aScripter type: 'oneHundred') play.
 	self hasRefactoringChanges: aScripter.
-	aScripter keyClick: BlKeyboardKey tab.
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+	
+	(aScripter keyClick: BlKeyboardKey tab) play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -569,24 +608,27 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	aScripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: 'a := 1. a + a' ].
 	aScripter click
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId.
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	aScripter do
 		label: 'Move cursor to variable';
 		action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: 0 ];
-		onChildNamed: GtSourceCoderEditorId.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
+
 	aScripter wait forEmptySpaceTaskQueue.
 	aScripter check
 		label: 'Check rename editor exists';
 		exists;
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 	
 	aScripter check
 		label: 'Check rename editor attribute';
@@ -597,38 +639,38 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | 1 to: 1 ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 		
 	aScripter check
 		label: 'Check source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 		
 	aScripter check
 		label: 'Check source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter check
 		label: 'Check method name editor source code';
 		value: [ :aNameEditor | aNameEditor text asString ] equals: 'a';
-		onChildNamed: GtPharoSourceCoder sourceEditorName;
-		onBreadthFirstChildOfClass: GtRenameEditor.
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
 	aScripter
 		substep: 'Enter new name'
 		do: [ :aStep | 
-			aStep keyClick: BlKeyboardKey delete.
-			aStep keyClick: BlKeyboardKey backspace.
-			aStep type: 'b' ].
+			(aStep keyClick: BlKeyboardKey delete) play.
+			(aStep keyClick: BlKeyboardKey backspace) play.
+			(aStep type: 'b') play ].
 
-	aScripter wait forEmptySpaceTaskQueue.
 	aScripter
 		substep: 'Apply rename'
-		do: [ :aStep | aStep keyClick: BlKeyboardKey return ].
-	aScripter wait forEmptySpaceTaskQueue.
-	aScripter syncContinue.
+		do: [ :aStep | (aStep keyClick: BlKeyboardKey return) play ].
 
 	^ aScripter
 ]
