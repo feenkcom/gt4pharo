@@ -14,14 +14,14 @@ GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
 	| filter aScripter |
 	filter := GtSearchIntersectionFilter new
-		          filter: (GtSearchFixedMethodsFilter new methods:  { thisContext method })
-		          filter: '`@a asCoder' gtASTMatches.
+		filter: (GtSearchFixedMethodsFilter new methods:  { thisContext method })
+		filter: '`@a asCoder' gtASTMatches.
 	aScripter := self scripterForBlock: [ filter asCoder allCoders first ].
-	aScripter syncContinue.
+
 	aScripter checks: 'Check asCoder highlighted' do: [ :aStep |
 		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'filter asCoder') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
 		self checkFor: aStep numberfOfTextAttributes: 14 OfType: BlTextDecorationAttribute ].
-	aScripter syncContinue.
+
 	^ aScripter
 ]
 
@@ -335,7 +335,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep discardButtonE
 				notExists;
 				label: 'Check discard button does not exist' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
@@ -378,7 +378,6 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber OfType: aClass [
-	<gtExample>
 	aScripterOrStep check
 		label: 'Check Editor Text Attributes';
 		value: [ :aText | 
@@ -391,8 +390,8 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextA
 			aCounter ] equals: aNumber;
 		onChildNamed: #editor;
 		onBrTextEditor;
-		onBrTextEditorText.
-	^ aScripterOrStep
+		onBrTextEditorText;
+		play.
 ]
 
 { #category : #utilities }
@@ -414,7 +413,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep refactoringPre
 				notExists;
 				label: 'Check refactoring preview button does not exist' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
@@ -436,7 +435,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep renameEditorEx
 				notExists;
 				label: 'Check rename editor does not exist' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
@@ -457,20 +456,19 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep saveButtonEnab
 				satisfies: [ :aButton | aButton isDisabled ];
 				label: 'Check save button is disbled' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributesAt: anIndex anySatisfies: aBlock [
-	<gtExample>
 	aScripterOrStep check
 		label: 'Check Editor Text Attributes';
 		anySatisfy: aBlock;
 		onChildNamed: #editor;
 		onBrTextEditor;
 		onBrTextEditorText;
-		onTextAttributesAt: anIndex.
-	^ aScripterOrStep
+		onTextAttributesAt: anIndex;
+		play
 ]
 
 { #category : #utilities }
@@ -606,9 +604,7 @@ GtPharoMethodCoderByScripterExamples >> clickFixItActionFor: aScripter id: aBlEl
 	aScripter click
 		onSpaceRoot;
 		id: aBlElementId;
-		play.
-
-	^ aScripter
+		play
 ]
 
 { #category : #'examples - fixit class' }
@@ -2850,9 +2846,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
-		id: GtSourceCoderEditorId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	self checkFor: aScripter saveButtonEnabled: false.
 	self checkFor: aScripter renameEditorExists: true.
@@ -2862,9 +2857,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 		label: 'Check rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2875,9 +2871,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 	aScripter := self forKeywordRename_02_shortcut.
 	
 	"this positions the cursor before `:`"
-	aScripter keyClick: BlKeyboardKey arrowLeft.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+	(aScripter keyClick: BlKeyboardKey arrowLeft) play.
 	
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 	
@@ -2885,15 +2879,17 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 		label: 'Check cursor position';
 		value: [ :anEditor | anEditor editor cursors positions ] equals: [ { (aScripter model attributeNamed: #dummyMethod) selector size - 1 } ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
 	aScripter check
 		label: 'Check rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ '' ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2903,9 +2899,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 
 	aScripter := self forKeywordRename_03_move_cursor.
 
-	aScripter type: 'New'.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+	(aScripter type: 'New') play.
 	
 	self checkFor: aScripter renameEditorExists: true.
 	self checkFor: aScripter refactoringPreviewButtonExists: true.
@@ -2916,9 +2910,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 		label: 'Check text';
 		value: [ :anEditor | anEditor text asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast, 'New:' ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2931,9 +2926,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 	aScripter click
 		label: 'Click refactoring preview button';
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
+		play.
 
 	self checkFor: aScripter discardButtonExists: true.
 
@@ -2941,9 +2935,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 		label: 'Check that refactorings preview appeared';
 		exists;
 		onSpaceRoot;
-		id: GtRefactoringsPreviewAcceptId.
+		id: GtRefactoringsPreviewAcceptId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2956,16 +2951,15 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	aScripter click
 		label: 'Click refactorings apply button';
 		onSpaceRoot;
-		id: GtRefactoringsPreviewAcceptId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtRefactoringsPreviewAcceptId;
+		play.
 	
 	self checkFor: aScripter renameEditorExists: false.
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 	self checkFor: aScripter saveButtonEnabled: true.
 	self checkFor: aScripter discardButtonExists: false.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - move variable scope' }
