@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchMethodsFilter,
 	#superclass : #GtSearchTypedEntitiesFilter,
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #'instance creation' }
@@ -44,8 +44,18 @@ GtSearchMethodsFilter class >> resultType [
 ]
 
 { #category : #accessing }
+GtSearchMethodsFilter class >> resultTypeStream [
+	^ GtAsyncSearchMethodGroupStream
+]
+
+{ #category : #accessing }
 GtSearchMethodsFilter >> defaultFilterScope [
 	^ GtSearchImageMethodsFilter new
+]
+
+{ #category : #accessing }
+GtSearchMethodsFilter >> defaultFilterScopeStream [
+	^ AsyncImageMethodsStream new
 ]
 
 { #category : #accessing }
