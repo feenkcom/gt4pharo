@@ -9,6 +9,27 @@ Class {
 }
 
 { #category : #asserting }
+GtPharoMethodTestCaseExamples >> assertNotExecutableTestCaseOfCoder: aCoder [
+
+	self assert: aCoder testCase isFailure not description: [ 
+		aCoder compiledMethod asString
+		, ' cannot be a failed test case as it was not executed' ].
+
+	self assert: aCoder testCase isError not description: [ 
+		aCoder compiledMethod asString
+		, ' cannot be a errored test case as it was not executed' ].
+
+	self assert: aCoder testCase isSkipped not description: [ 
+		aCoder compiledMethod asString
+		, ' cannot be a skipped test case as it was not executed' ].
+		
+	self
+		assert: aCoder testCase state
+		equals: GtPharoMethodNotExecutableTestCaseState.
+
+]
+
+{ #category : #asserting }
 GtPharoMethodTestCaseExamples >> assertUnexecutedTestCaseOfCoder: aCoder [
 
 	self assert: aCoder testCase isFailure not description: [ 
@@ -87,7 +108,7 @@ GtPharoMethodTestCaseExamples >> emptyPharoMethodCoder [
 		assert: aCoder testCase canExecute not
 		description: [ 
 		'Uninitialized method coder cannot execute test cases' ].
-	self assertUnexecutedTestCaseOfCoder: aCoder.
+	self assertNotExecutableTestCaseOfCoder: aCoder.
 
 	^ aCoder
 ]

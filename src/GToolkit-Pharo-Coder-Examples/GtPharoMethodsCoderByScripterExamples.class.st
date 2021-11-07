@@ -16,52 +16,52 @@ GtPharoMethodsCoderByScripterExamples >> cleanUp [
 
 { #category : #accessing }
 GtPharoMethodsCoderByScripterExamples >> methodsCoder [
-
 	<gtExample>
 	behaviorExamples ifNil: [ 
 		behaviorExamples := GtBehaviorCoderByScripterExamples new ].
+
 	^ behaviorExamples classCoderForClassUI
 ]
 
 { #category : #accessing }
 GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter [
-
 	<gtExample>
 	| aScripter |
+
 	aScripter := self methodsCoder.
 
 	aScripter substep: 'Enter into Edit Mode' do: [ :aStep | 
 		aStep doubleClick
 			id: #filter;
 			onChildOfClass: GtFilterTagElement;
-			id: #editableLabel.
-		aStep wait forEmptySpaceTaskQueue ].
+			id: #editableLabel;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #accessing }
 GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_click_add_method [
-
 	<gtExample>
 	<noTest>
 	| aScripter |
+
 	aScripter := self methodsCoderWithFilledFilter_insert_text.
 
 	aScripter substep: 'Add new method' do: [ :aStep | 
 		aStep click
 			label: 'Click add method button';
-			id: GtPharoBehaviorCoder addNewMethodButtonName.
-		aStep wait forEmptySpaceTaskQueue.].
+			id: GtPharoBehaviorCoder addNewMethodButtonName;
+			play ].
 
 	^ aScripter
 ]
 
 { #category : #accessing }
 GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_insert_text [
-
 	<gtExample>
 	| aScripter |
+
 	aScripter := self methodsCoderWithFilledFilter.
 
 	aScripter substep: 'Insert new text' do: [ :aStep | 
@@ -69,8 +69,8 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_insert_tex
 			text: 'foo';
 			id: #filter;
 			onChildOfClass: GtFilterTagElement;
-			id: #editableLabel.
-		aStep wait forEmptySpaceTaskQueue ].
+			id: #editableLabel;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]

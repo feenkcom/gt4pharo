@@ -521,10 +521,26 @@ GtPharoMethodCoder >> highlighter [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
+	"Set a source reference highlighter thhat should be used tp highlight or mark some parts
+	of the source code. If a given highlighter is nil, it means that no highlighter should be used"
+
+	self highlighter == aGtSourceReferenceHighlighter
+		ifTrue: [ ^ self ].
+
+	self
+		attributeNamed: #highlighter
+		put: aGtSourceReferenceHighlighter.
+
+	self requestUpdateAddOns
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
-	self highlighter notNil
-		ifTrue: [ coderAddOns addStyler: self highlighter ]
+
+	self highlighter
+		ifNotNil: [ :aHighlighter | coderAddOns addStyler: aHighlighter ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

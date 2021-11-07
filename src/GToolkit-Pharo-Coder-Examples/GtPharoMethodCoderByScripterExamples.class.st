@@ -13,15 +13,23 @@ Class {
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
 	| filter aScripter |
+
 	filter := GtSearchIntersectionFilter new
-		          filter: (GtSearchFixedMethodsFilter new methods:  { thisContext method })
-		          filter: '`@a asCoder' gtASTMatches.
+		filter: (GtSearchFixedMethodsFilter new methods:  { thisContext method })
+		filter: '`@a asCoder' gtASTMatches.
+
 	aScripter := self scripterForBlock: [ filter asCoder allCoders first ].
-	aScripter syncContinue.
-	aScripter checks: 'Check asCoder highlighted' do: [ :aStep |
-		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'filter asCoder') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
-		self checkFor: aStep numberfOfTextAttributes: 14 OfType: BlTextDecorationAttribute ].
-	aScripter syncContinue.
+
+	self
+		checkFor: aScripter
+		textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'filter asCoder')
+		anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+
+	self
+		checkFor: aScripter
+		numberfOfTextAttributes: 14
+		OfType: BlTextDecorationAttribute.
+
 	^ aScripter
 ]
 
@@ -78,7 +86,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 		
 		aStep check
 			label: 'Check Coder Editor Text';
-			value: [ :label | label text asString ] equals: '?';
+			value: [ :label | label text asString ] equals: '? anObject';
 			id: GtSourceCoderCollapsedTextId.
 		aStep check 
 			label: 'Check Coder UI Is Collapsed';
@@ -304,22 +312,18 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 ]
 
 { #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> checkFor: aScripter absenceOfContextActionNamed: anActionName [
-	<gtExample>
-	
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripter absenceOfContextActionNamed: anActionName [	
 	aScripter check 
 		label: 'Check Context Action Existence Named ', anActionName asString;
 		nonSatisfies: [ :aContextActions | aContextActions title = anActionName translated
 			and: [ aContextActions action method = (GtPharoMethodCoder>>#exampleAstFor:into:) ] ];
 		onModel;
-		onChildFromMessage: #contextActions.
-	
-	^ aScripter
+		onChildFromMessage: #contextActions;
+		play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep discardButtonExists: doesExist [
-	<gtExample>
 	| aCheck |
 
 	aCheck := aScripterOrStep check
@@ -335,13 +339,11 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep discardButtonE
 				notExists;
 				label: 'Check discard button does not exist' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextActionNamed: anActionName [
-
-	<gtExample>
 	aScripter check
 		label:
 			'Check Context Action Existence Named ' , anActionName asString;
@@ -350,35 +352,30 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextAc
 					aContextActions action blocDefiningMethod
 					= (GtPharoMethodCoder >> #exampleAstFor:into:) ] ];
 		onModel;
-		onChildFromMessage: #contextActions.
-
-	^ aScripter
+		onChildFromMessage: #contextActions;
+		play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions: aMainActionsCount contextAction: anAddonsActionsCount [
-	<gtExample>
 	aScripter substeps: 'Check Available Action Buttons' do: [ :aStep |
-		aStep wait forEmptySpaceTaskQueue.
-
 		aStep check 
 			label: 'Number of main actions';
 			childrenCount: aMainActionsCount;
 			onBreadthFirstChildOfClass: GtCoderActionsElement;
-			onChildAt: 1.
+			onChildAt: 1;
+			play.
 
 		aStep check 
 			label: 'Number of addons actions';
 			childrenCount: anAddonsActionsCount;
 			onBreadthFirstChildOfClass: GtCoderActionsElement;
-			onChildAt: 3 ].
-
-	^ aScripter
+			onChildAt: 3;
+			play ]
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber OfType: aClass [
-	<gtExample>
 	aScripterOrStep check
 		label: 'Check Editor Text Attributes';
 		value: [ :aText | 
@@ -391,13 +388,12 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextA
 			aCounter ] equals: aNumber;
 		onChildNamed: #editor;
 		onBrTextEditor;
-		onBrTextEditorText.
-	^ aScripterOrStep
+		onBrTextEditorText;
+		play.
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep refactoringPreviewButtonExists: doesExist [
-	<gtExample>
 	| aCheck |
 
 	aCheck := aScripterOrStep check
@@ -414,12 +410,11 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep refactoringPre
 				notExists;
 				label: 'Check refactoring preview button does not exist' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep renameEditorExists: doesExist [
-	<gtExample>
 	| aCheck |
 
 	aCheck := aScripterOrStep check
@@ -436,12 +431,11 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep renameEditorEx
 				notExists;
 				label: 'Check rename editor does not exist' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep saveButtonEnabled: isEnabled [
-	<gtExample>
 	| aCheck |
 
 	aCheck := aScripterOrStep check
@@ -457,53 +451,47 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep saveButtonEnab
 				satisfies: [ :aButton | aButton isDisabled ];
 				label: 'Check save button is disbled' ].
 
-	^ aScripterOrStep
+	aCheck play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributesAt: anIndex anySatisfies: aBlock [
-	<gtExample>
 	aScripterOrStep check
 		label: 'Check Editor Text Attributes';
 		anySatisfy: aBlock;
 		onChildNamed: #editor;
 		onBrTextEditor;
 		onBrTextEditorText;
-		onTextAttributesAt: anIndex.
-	^ aScripterOrStep
+		onTextAttributesAt: anIndex;
+		play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributesAt: anIndex nonSatisfies: aBlock [
-	<gtExample>
 	aScripterOrStep check
 		label: 'Check Editor Text Attributes';
 		nonSatisfies: aBlock;
 		onChildNamed: #editor;
 		onBrTextEditor;
 		onBrTextEditorText;
-		onTextAttributesAt: anIndex.
-	^ aScripterOrStep
+		onTextAttributesAt: anIndex;
+		play
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExampleStatusAttributeAt: anIndex [
-	<gtExample>
 	self 
 		checkFor: aScripterOrStep 
 		textAttributesAt: anIndex 
-		anySatisfies: [ :aTextAttribute | aTextAttribute class = GtCoderExampleStatusAttribute ].
-	^ aScripterOrStep
+		anySatisfies: [ :aTextAttribute | aTextAttribute class = GtCoderExampleStatusAttribute ]
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExpandAttributeAt: anIndex [
-	<gtExample>
 	self 
 		checkFor: aScripterOrStep 
 		textAttributesAt: anIndex 
-		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTrangleExpanderTextAttribute ].
-	^ aScripterOrStep
+		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTrangleExpanderTextAttribute ]
 ]
 
 { #category : #'examples - extract method' }
@@ -581,15 +569,16 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
 	<gtExample>
 	| filter aScripter |
+
 	filter := GtSearchIntersectionFilter new
-		          filter: (GtSearchFixedMethodsFilter new methods: { thisContext method })
-		          filter: OrderedCollection gtReferences.
+		 filter: (GtSearchFixedMethodsFilter new methods: { thisContext method })
+		filter: OrderedCollection gtReferences.
 	aScripter := self scripterForBlock: [ filter asCoder allCoders first ].
-	aScripter syncContinue.
+
 	aScripter checks: 'Check OrderedCollection highlighted' do: [ :aStep |
 		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'OrderedCollection') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
 		self checkFor: aStep numberfOfTextAttributes: 17 OfType: BlTextDecorationAttribute ].
-	aScripter syncContinue.
+
 	^ aScripter
 ]
 
@@ -605,10 +594,8 @@ GtPharoMethodCoderByScripterExamples >> clickFixItActionFor: aScripter id: aBlEl
 	
 	aScripter click
 		onSpaceRoot;
-		id: aBlElementId.
-
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		id: aBlElementId;
+		play
 ]
 
 { #category : #'examples - fixit class' }
@@ -619,20 +606,21 @@ GtPharoMethodCoderByScripterExamples >> clickFixItFor: aScripter [
 	aScripter check
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
-		notExists.
+		notExists;
+		play.
 	
 	aScripter click
-		onBreadthFirstChildOfClass: GtFixItButton.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		onBreadthFirstChildOfClass: GtFixItButton;
+		play.
 	
 	"now it appeared"
 	aScripter check
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
-		exists.
+		exists;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -818,17 +806,19 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 	aScripter substep: 'Collapse and Check Coder' do: [ :aStep |
 		aStep click
 			label: 'Click on Expander';
-			onChildAt: 1.
-		aStep wait forEmptySpaceTaskQueue.
+			onChildAt: 1;
+			play.
 
 		aStep check 
 			label: 'Check Coder UI is Expanded';
-			satisfies: [ :aCoderElement | aCoderElement isExpanded not ].
+			satisfies: [ :aCoderElement | aCoderElement isExpanded not ];
+			play.
 
 		aStep check
 			label: 'Check Coder Collapsed Label Text';
 			value: [ :aLabelElement | aLabelElement text asString ] equals: [ aMethod selector ];
-			id: GtSourceCoderCollapsedTextId ].
+			id: GtSourceCoderCollapsedTextId;
+			play ].
 
 	^ aScripter
 ]
@@ -869,9 +859,11 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCut [
 	Clipboard clipboardText: ''.
 	self openAndClickOnContextMenuItemFor: aScripter id: GtTextualCoderCutContextMenuItemId.
 	self assert: Clipboard clipboardText asString equals: '196@400'.
+
 	aScripter check
 		satisfies: [ :aCoder | (aCoder currentSourceString includesSubstring: '196@400') not ];
-		onModel.
+		onModel;
+		play.
 	
 	^ aScripter
 ]
@@ -887,17 +879,22 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 		aCoder := GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	self selectTextFor: aScripter from: 38 to: 45 andCheck: '196@400'.
 	
 	Clipboard clipboardText: '400@196'.
 	self openAndClickOnContextMenuItemFor: aScripter id: GtTextualCoderPasteContextMenuItemId.
 	self assert: Clipboard clipboardText asString equals: '400@196'.
+
 	aScripter check
 		satisfies: [ :aCoder | (aCoder currentSourceString includesSubstring: '196@400') not ];
-		onModel.
+		onModel;
+		play.
+
 	aScripter check
 		satisfies: [ :aCoder | (aCoder currentSourceString includesSubstring: '400@196') ];
-		onModel.
+		onModel;
+		play.
 	
 	^ aScripter
 ]
@@ -925,7 +922,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI [
 	
 	aScripter := self scripterForBlock: [ self exampleMethodCoder asCoderViewModel ].
 	
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
@@ -935,7 +932,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_CollapsedFromUI [
 	aScripter := self exampleMethodCoderUI.
 	self collapseFromUI: aScripter method: self exampleMethod.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
@@ -945,7 +942,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI [
 	aScripter := self exampleMethodCoderUI_CollapsedFromUI.
 	self expandFromUI: aScripter method: self exampleMethod.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
@@ -961,7 +958,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play Example'.
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play and Inspect Example Result'.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
@@ -973,9 +970,10 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 	
 	aScripter click
 		label: 'Click play and inspect';
-		id: GtMethodCoderPlayAndInspectExampleActionId.
+		id: GtMethodCoderPlayAndInspectExampleActionId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - example method' }
@@ -988,8 +986,9 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 		aStep do
 			label: 'Delete e character from <gtExample>';
 			action: [ :anEditor | anEditor deleter from: 20 to: 21; delete ];
-			onChildNamed: #editor;
-			onBrTextEditor.
+			id: GtSourceCoderEditorId;
+			play.
+
 		self 
 			checkFor: aStep
 			numberOfMainActions: 6
@@ -997,27 +996,27 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 
 		self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod [
-	<gtExample>
 	aScripter substep: 'Expand and Check Coder' do: [ :aStep |
 		aStep click
 			label: 'Click on Expander';
-			onChildAt: 1.
-
-		aStep wait forEmptySpaceTaskQueue.
+			onChildAt: 1;
+			play.
 
 		aStep check 
 			label: 'Check Coder UI is Expanded';
-			satisfies: [ :aCoderElement | aCoderElement isExpanded ].
+			satisfies: [ :aCoderElement | aCoderElement isExpanded ];
+			play.
 
 		aStep check
 			label: 'Check Coder Editor Text';
 			value: [ :anEditorElement | anEditorElement editor text asString ] equals: [ aMethod sourceCode ];
-			onChildNamed: #editor ].
+			id: GtSourceCoderEditorId;
+			play ].
 
 	^ aScripter
 ]
@@ -1030,21 +1029,21 @@ GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCode
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	<gtExample>
-	<after: #cleanUp>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [
 		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
-		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder := GtPharoMethodCoderExamples new emptyMethodCoder.
+		aCoder appendString: 'method'.
 		aCoder ].
+
 	aScripter do
-		label: 'type in a class that does not exist';
-		action: [ :aCoder | aCoder appendString: (String cr, String tab, '{1}New' format: { (aCoder attributeNamed: #dummyMethod) className }) ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		label: 'Type in a class that does not exist';
+		action: [ :aCoder | aCoder appendString: (String cr, String tab, 'ClassThatDoesNotExist6561') ];
+		onModel;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1054,7 +1053,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_02_click_fixit [
 
 	aScripter := self fixitCreateClass_01_setup.
 	self clickFixItFor: aScripter.
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1067,26 +1066,28 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	"there is no create behavior element before clicking on the menu"
 	aScripter check
 		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
-		notExists.
+		notExists;
+		play.
 	
 	aScripter click
 		onSpaceRoot;
-		id: (GtDefineClassFixItActionElementId indexed: 1).
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: (GtDefineClassFixItActionElementId indexed: 1);
+		play.
 	
 	"now it appeared"
 	aScripter check
 		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
-		exists.
+		exists;
+		play.
 	
 	"context menu should disappear"
 	aScripter check
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
-		notExists.
+		notExists;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1103,13 +1104,13 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'instance') ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 	
 	self selectTextFor: aScripter from: 9 to: 17 andCheck: 'instance'.	
 	self clickFixItFor: aScripter.
 	
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1133,25 +1134,29 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 	aScripter check
 		label: 'Make sure the instance variable was created';
 		satisfies: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realClass hasSlotNamed: #instance ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter check
 		label: 'Make sure the method still mofied';
 		satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter check
 		label: 'Make sure the method is not saved/recompiled after adding a temporary variable';
 		value: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) systemMethod sourceCode ]
 		equals: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realMethod sourceCode ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		label: 'Make sure the text was deselected';
 		satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
-		onModel.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1165,16 +1170,17 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder asCoderViewModel ].
+
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'temporary') ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
 	self selectTextFor: aScripter from: 9 to: 18 andCheck: 'temporary'.	
 	self clickFixItFor: aScripter.
 	
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1194,25 +1200,29 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 					nextPutAll: (aCoderViewModel coderModel attributeNamed: #dummyMethod) selector; cr;
 					tab; nextPutAll: '| temporary |'; cr;
 					tab; nextPutAll: 'temporary' ] ];
-		onModel.
-		
+		onModel;
+		play.
+	
 	aScripter check
 		label: 'Make sure the method still mofied';
 		satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		label: 'Make sure the method is not saved/recompiled after adding a temporary variable';
 		value: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) systemMethod sourceCode ]
 		equals: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realMethod sourceCode ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		label: 'Make sure the text was deselected';
 		satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
-		onModel.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - abstract inst var' }
@@ -1232,16 +1242,16 @@ GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
 ('
 	^ {1} isNil' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - abstract inst var' }
@@ -1252,15 +1262,11 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_02_cursor [
 	aScripter := self forAbstactInstVar_01_setup.
 	aScripter do
 		label: 'Select part of the assignment node';
-		action: [ :aSourceEditor |
-			aSourceEditor selecter
-				from: 13 to: 14;
-				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		action: [ :aSourceEditor | aSourceEditor selecter from: 13 to: 14; select ];
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - abstract inst var' }
@@ -1273,11 +1279,10 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_03_hover_abstract_var
 	aScripter mouseMoveOver
 		label: 'Hover abstract';
 		onSpaceRoot;
-		id: #'context-menu--abstract-variable'.
+		id: #'context-menu--abstract-variable';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - abstract inst var' }
@@ -1290,9 +1295,8 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 	aScripter click
 		label: 'Click abstract variable';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--abstract-variable'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--abstract-variable';
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -1306,9 +1310,10 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 				| index |
 				index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
 				index - 1 to: index - 1 ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - add parameter' }
@@ -2803,15 +2808,16 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forKeywordMethodInPackagedClass.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter click
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 
 	aScripter shortcut
 		combination: BlKeyCombination arrowUp;
-		id: GtSourceCoderEditorId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	self checkFor: aScripter saveButtonEnabled: true.
 	self checkFor: aScripter discardButtonExists: false.
@@ -2819,14 +2825,16 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	aScripter check
 		label: 'Check editor is focused';
 		satisfies: [ :anEditorElement | anEditorElement isFocused ];
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter check
 		label: 'Check cursor position';
 		value: [ :anEditorElement | anEditorElement editor cursors positions ] equals: [ #(0) ];
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2838,9 +2846,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
-		id: GtSourceCoderEditorId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	self checkFor: aScripter saveButtonEnabled: false.
 	self checkFor: aScripter renameEditorExists: true.
@@ -2850,9 +2857,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 		label: 'Check rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2863,9 +2871,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 	aScripter := self forKeywordRename_02_shortcut.
 	
 	"this positions the cursor before `:`"
-	aScripter keyClick: BlKeyboardKey arrowLeft.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+	(aScripter keyClick: BlKeyboardKey arrowLeft) play.
 	
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 	
@@ -2873,15 +2879,17 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 		label: 'Check cursor position';
 		value: [ :anEditor | anEditor editor cursors positions ] equals: [ { (aScripter model attributeNamed: #dummyMethod) selector size - 1 } ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
 	aScripter check
 		label: 'Check rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ '' ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2891,9 +2899,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 
 	aScripter := self forKeywordRename_03_move_cursor.
 
-	aScripter type: 'New'.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+	(aScripter type: 'New') play.
 	
 	self checkFor: aScripter renameEditorExists: true.
 	self checkFor: aScripter refactoringPreviewButtonExists: true.
@@ -2904,9 +2910,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 		label: 'Check text';
 		value: [ :anEditor | anEditor text asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast, 'New:' ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2919,9 +2926,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 	aScripter click
 		label: 'Click refactoring preview button';
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
+		play.
 
 	self checkFor: aScripter discardButtonExists: true.
 
@@ -2929,9 +2935,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 		label: 'Check that refactorings preview appeared';
 		exists;
 		onSpaceRoot;
-		id: GtRefactoringsPreviewAcceptId.
+		id: GtRefactoringsPreviewAcceptId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -2944,16 +2951,15 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	aScripter click
 		label: 'Click refactorings apply button';
 		onSpaceRoot;
-		id: GtRefactoringsPreviewAcceptId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtRefactoringsPreviewAcceptId;
+		play.
 	
 	self checkFor: aScripter renameEditorExists: false.
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 	self checkFor: aScripter saveButtonEnabled: true.
 	self checkFor: aScripter discardButtonExists: false.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - move variable scope' }
@@ -2961,26 +2967,27 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 	<gtExample>
 	<after: #cleanUp>
 	| aScripter |
+
 	aScripter := self scripterForBlock: [ 
-		             | aCoder |
-		             aCoder := GtPharoMethodCoderExamples new
-			                       forUnaryInstanceMethod.
-		             environment := aCoder attributeNamed: #dummyEnvironment.
-		             aCoder ].
+		| aCoder |
+		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+		environment := aCoder attributeNamed: #dummyEnvironment.
+		aCoder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | 
 			aCoder appendString: (self moveVariableSource format: {'|temp|'. ''}) ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
+		onModel;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - move variable scope' }
@@ -2997,11 +3004,10 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_02_cursor [
 			aSourceEditor selecter
 				from: index - 1 to: index + 3;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - move variable scope' }
@@ -3014,11 +3020,10 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_03_hover_move_varia
 	aScripter mouseMoveOver
 		label: 'Hover protect';
 		onSpaceRoot;
-		id: #'context-menu--move-variable-declaration'.
+		id: #'context-menu--move-variable-declaration';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - move variable scope' }
@@ -3031,22 +3036,23 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_varia
 	aScripter click
 		label: 'Click move variable';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--move-variable-declaration'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--move-variable-declaration';
+		play.
 	
 	aScripter check
 		label: 'Check there is no selected text';
 		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter check
 		label: 'Check current source in coder model';
 		value: [ :aCoder | (GtPharoParser parse: aCoder currentSourceString) body ] equals: [ :aCoder |
 GtPharoParser parse: (self moveVariableSource format: {''. '|temp|'}) startingAt: GtPharoParser startingStateForMethodSequence  ];
-		onModel.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - protect inst var' }
@@ -3060,22 +3066,23 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 ('
 	^ {1}' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - protect inst var' }
@@ -3084,17 +3091,17 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_02_cursor [
 	| aScripter |
 
 	aScripter := self forProtectInstVar_01_setup.
+
 	aScripter do
 		label: 'Select part of the variable node';
 		action: [ :aSourceEditor |
 			aSourceEditor selecter
 				from: 11 to: 12;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - protect inst var' }
@@ -3107,11 +3114,10 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_03_hover_protect_varia
 	aScripter mouseMoveOver
 		label: 'Hover protect';
 		onSpaceRoot;
-		id: #'context-menu--protect-variable'.
+		id: #'context-menu--protect-variable';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - protect inst var' }
@@ -3124,14 +3130,14 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 	aScripter click
 		label: 'Click protect variable';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--protect-variable'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--protect-variable';
+		play.
 	
 	aScripter check
 		label: 'Check there is no selected text';
 		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -3143,9 +3149,10 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 			anInterval ]
 			equals: [ :aCoderEditor | 
 				aCoderEditor text size to: aCoderEditor text size ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - pull down variable' }
@@ -3164,21 +3171,22 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_01_setup [
 		coder attributeNamed: #dummyEnvironment put: env.
 		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
 		coder ].
+
 	aScripter do
 		label: 'type in a method';
 		action: [ :aCoder | aCoder appendString:
 ('
 	^ {1}' format: { rootClass realClass superclass allInstVarNames last }) ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - pull down variable' }
@@ -3195,11 +3203,10 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_02_cursor [
 			aSourceEditor selecter
 				from: index to: index + 8;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - pull down variable' }
@@ -3212,11 +3219,10 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_03_hover_pull_down [
 	aScripter mouseMoveOver
 		label: 'Hover pull down variable';
 		onSpaceRoot;
-		id: #'context-menu--pull-down-variable'.
+		id: #'context-menu--pull-down-variable';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - pull down variable' }
@@ -3229,9 +3235,8 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 	aScripter click
 		label: 'Click pull down variable';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--pull-down-variable'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--pull-down-variable';
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -3245,9 +3250,10 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 				| index |
 				index := aCoderEditor text asString size.
 				index to: index ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push down method' }
@@ -3266,21 +3272,22 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_01_setup [
 		coder attributeNamed: #dummyEnvironment put: env.
 		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
 		coder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 'Unique
 	^ self printString' ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push down method' }
@@ -3295,11 +3302,10 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_02_cursor [
 			aSourceEditor selecter
 				from: 0 to: 1;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push down method' }
@@ -3312,11 +3318,10 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_03_hover_push_down_met
 	aScripter mouseMoveOver
 		label: 'Hover push down method';
 		onSpaceRoot;
-		id: #'context-menu--push-down-method'.
+		id: #'context-menu--push-down-method';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push down method' }
@@ -3329,14 +3334,14 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_met
 	aScripter click
 		label: 'Click push up method';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--push-down-method'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--push-down-method';
+		play.
 	
 	aScripter check
 		label: 'Check there is no selected text';
 		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -3350,9 +3355,10 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_met
 				| index |
 				index := aCoderEditor text asString lines first size.
 				index to: index ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up method' }
@@ -3366,21 +3372,22 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 '
 	^ self printString' ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up method' }
@@ -3395,11 +3402,10 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_02_cursor [
 			aSourceEditor selecter
 				from: 0 to: 7;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up method' }
@@ -3412,11 +3418,10 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_03_hover_push_up_method 
 	aScripter mouseMoveOver
 		label: 'Hover push up method';
 		onSpaceRoot;
-		id: #'context-menu--push-up-method'.
+		id: #'context-menu--push-up-method';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up method' }
@@ -3429,14 +3434,14 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method 
 	aScripter click
 		label: 'Click push up method';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--push-up-method'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--push-up-method';
+		play.
 	
 	aScripter check
 		label: 'Check there is no selected text';
 		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -3450,9 +3455,10 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method 
 				| index |
 				index := aCoderEditor text asString lines first size.
 				index to: index ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up variable' }
@@ -3471,21 +3477,22 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_01_setup [
 		coder attributeNamed: #dummyEnvironment put: env.
 		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
 		coder ].
+
 	aScripter do
 		label: 'type in a method';
 		action: [ :aCoder | aCoder appendString:
 ('
 	^ {1}' format: { rootClass realClass allInstVarNames last }) ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up variable' }
@@ -3502,11 +3509,10 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_02_cursor [
 			aSourceEditor selecter
 				from: index to: index + 8;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up variable' }
@@ -3519,11 +3525,10 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_03_hover_push_up [
 	aScripter mouseMoveOver
 		label: 'Hover push up variable';
 		onSpaceRoot;
-		id: #'context-menu--push-up-variable'.
+		id: #'context-menu--push-up-variable';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - push up variable' }
@@ -3536,9 +3541,8 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 	aScripter click
 		label: 'Click push up variable';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--push-up-variable'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--push-up-variable';
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -3552,9 +3556,10 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 				| index |
 				index := aCoderEditor text asString size.
 				index to: index ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - remove parameter' }
@@ -3568,22 +3573,23 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter do
-		label: 'type in a method with argument';
+		label: 'Type-in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 (': unusedArg
 	{1} := Set new' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - remove parameter' }
@@ -3594,15 +3600,11 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
 	aScripter := self forRemoveParameter_01_setup.
 	aScripter do
 		label: 'Select part of the parameter node';
-		action: [ :aSourceEditor |
-			aSourceEditor selecter
-				from: 11 to: 12;
-				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		action: [ :aSourceEditor | aSourceEditor selecter from: 11 to: 12; select ];
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - remove parameter' }
@@ -3615,11 +3617,10 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_param
 	aScripter mouseMoveOver
 		label: 'Hover remove parameter';
 		onSpaceRoot;
-		id: #'context-menu--remove-parameter'.
+		id: #'context-menu--remove-parameter';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - remove parameter' }
@@ -3632,14 +3633,14 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 	aScripter click
 		label: 'Click remove parameter';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--remove-parameter'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--remove-parameter';
+		play.
 
 	aScripter check
 		label: 'Check there is no selected text';
 		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
@@ -3653,9 +3654,10 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 				| index |
 				index := (aCoderEditor text asString indexOfSubCollection: 'unusedArg') + 8.
 				index to: index ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -4212,27 +4214,30 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter click
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 
 	aScripter shortcut
 		combination: BlKeyCombination arrowUp;
-		id: GtSourceCoderEditorId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter check
 		label: 'Check editor is focused';
 		satisfies: [ :anEditorElement | anEditorElement isFocused ];
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter check
 		label: 'Check cursor position';
 		value: [ :anEditorElement | anEditorElement editor cursors positions ] equals: [ #(0) ];
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - rename method' }
@@ -4244,23 +4249,24 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 	
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
-		id: GtSourceCoderEditorId.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
 	aScripter check
 		label: 'Check rename editor exists';
 		exists;
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
 	aScripter check
 		label: 'Check rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor.
+		onBreadthFirstChildOfClass: GtRenameEditor;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - basic' }
@@ -4294,14 +4300,12 @@ GtPharoMethodCoderByScripterExamples >> openAndClickFixItActionFor: aScripter id
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> openContextMenu: aScripter [
-
 	aScripter secondaryClick
 		label: 'Open context menu';
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+		id: GtSourceCoderEditorId;
+		play.
+		
+	^ aScripter
 ]
 
 { #category : #'examples - pattern highlighter' }
@@ -4325,19 +4329,26 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterMethodCoder ].
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
 	| aScripter |
+
 	aScripter := self patternHighlighterMethodCoderUI.
-	aScripter checks: 'Check Pattern Highlighter Source Code Style' do: [ :aStep |
-		self checkFor: aStep textAttributesAt: 2 anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
-		self checkFor: aStep numberfOfTextAttributes: 8 OfType: BlTextDecorationAttribute.
-	].
-	aScripter syncContinue.
+	
+	self
+		checkFor: aScripter
+		textAttributesAt: 2
+		anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+	
+	self
+		checkFor: aScripter
+		numberfOfTextAttributes: 8
+		OfType: BlTextDecorationAttribute.
+
 	^ aScripter
 ]
 
@@ -4363,20 +4374,31 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoderUI [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterPrintMethodCoder ].
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - pattern highlither - print' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
 	| aScripter |
+
 	aScripter := self patternHighlighterPrintMethodCoderUI.
-	aScripter checks: 'Check Pattern Highlighter Source Code Style' do: [ :aStep |
-		self checkFor: aStep textAttributesAt: 1 anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
-		self checkFor: aStep numberfOfTextAttributes: 5 OfType: BlTextDecorationAttribute.
-		self checkFor: aStep textAttributesAt: 30 nonSatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
-	].
-	aScripter syncContinue.
+	
+	self
+		checkFor: aScripter
+		textAttributesAt: 1
+		anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+	
+	self
+		checkFor: aScripter
+		numberfOfTextAttributes: 5
+		OfType: BlTextDecorationAttribute.
+
+	self
+		checkFor: aScripter
+		textAttributesAt: 30
+		nonSatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
+
 	^ aScripter
 ]
 
@@ -4395,20 +4417,20 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoder
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterPrintStringMethodCoder ].
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
 	| aScripter |
+
 	aScripter := self patternHighlighterPrintStringMethodCoderUI.
 	aScripter checks: 'Check Pattern Highlighter Source Code Style' do: [ :aStep |
 		self checkFor: aStep textAttributesAt: 1 nonSatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
 		self checkFor: aStep textAttributesAt: 30 anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
-		self checkFor: aStep numberfOfTextAttributes: 11 OfType: BlTextDecorationAttribute.
-	].
-	aScripter syncContinue.
+		self checkFor: aStep numberfOfTextAttributes: 11 OfType: BlTextDecorationAttribute ].
+
 	^ aScripter
 ]
 
@@ -4432,7 +4454,6 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self referencedExampleMethodCoder asCoderViewModel ].
-	aScripter syncContinue.
 	^ aScripter
 ]
 
@@ -4440,10 +4461,10 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI [
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExampleAttribute [
 	<gtExample>
 	| aScripter |
+	
 	aScripter := self referencedExampleMethodCoderUI.
-	aScripter checks: 'Check Example Status' do: [ :aStep | 
-		self checkFor: aStep textExampleStatusAttributeAt: 1 ].
-	aScripter syncContinue.
+	self checkFor: aScripter textExampleStatusAttributeAt: 1.
+	
 	^ aScripter
 ]
 
@@ -4455,7 +4476,6 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 	aScripter checks: 'Check Example Status and Expand Attribute' do: [ :aStep | 
 		self checkFor: aStep textExpandAttributeAt: 24.
 		self checkFor: aStep textExampleStatusAttributeAt: 1 ].
-	aScripter syncContinue.
 	^ aScripter
 ]
 
@@ -4469,7 +4489,8 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			label: 'Delete e character from <gtExample>';
 			action: [ :anEditor | anEditor deleter from: 12 to: 13; delete ];
 			onChildNamed: #editor;
-			onBrTextEditor.
+			onBrTextEditor;
+			play.
 		self 
 			checkFor: aStep
 			numberOfMainActions: 6
@@ -4481,7 +4502,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			checkFor: aStep 
 			textAttributesAt: 1 
 			nonSatisfies: [ :aTextAttribute | aTextAttribute class = GtCoderExampleStatusAttribute ] ].
-	aScripter syncContinue.
+	
 	^ aScripter
 ]
 
@@ -4495,8 +4516,8 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			label: 'Insert e character in <gtExample>';
 			action: [ :anEditor | anEditor inserter at: 12; string: 'e'; insert ];
 			onChildNamed: #editor;
-			onBrTextEditor.
-		aStep wait forEmptySpaceTaskQueue.
+			onBrTextEditor;
+			play.
 		self 
 			checkFor: aStep
 			numberOfMainActions: 5
@@ -4505,6 +4526,5 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 	aScripter checks: 'Check Example Status Is Present' do: [ :aStep | 
 		self checkFor: aStep textExpandAttributeAt: 24.
 		self checkFor: aStep textExampleStatusAttributeAt: 1. ].
-	aScripter syncContinue.
 	^ aScripter
 ]

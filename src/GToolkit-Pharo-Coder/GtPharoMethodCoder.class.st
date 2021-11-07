@@ -50,9 +50,6 @@ GtPharoMethodCoder >> addClassVariable: aString [
 		class: self behavior instanceSide.
 	refactoring execute.
 
-	"Need to reset AST for undeclared variables"
-	self resetASTCache.
-
 	"and restyle the text"
 	self requestStyleSourceText
 ]
@@ -64,7 +61,7 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 		variable: aString
 		class: self behavior.
 	refactoring execute.
-	self resetASTCache.	"Need to reset AST for undeclared variables"
+
 	self requestStyleSourceText
 ]
 
@@ -266,32 +263,42 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 
 { #category : #private }
 GtPharoMethodCoder >> createRefactoringModel [
+
 	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
-	(((model classFor: self behavior) directlyDefinesMethod: self currentSelector) not
-		or: [ ((model classFor: self behavior) sourceCodeFor: self currentSelector) ~= self sourceText asString ])
-		ifTrue: [ (model classFor: self behavior) compile: self sourceText asString classified: self protocol ].
+	model := RBClassModelFactory rbNamespace onEnvironment:
+		         RBBrowserEnvironment new.
+	(((model classFor: self behavior) directlyDefinesMethod:
+		  self currentSelector) not or: [ 
+		 ((model classFor: self behavior) sourceCodeFor:
+			  self currentSelector) ~= self currentSourceText asString ]) 
+		ifTrue: [ 
+			(model classFor: self behavior)
+				compile: self sourceText asString
+				classified: self protocol ].
 	^ model
 ]
 
 { #category : #accessing }
 GtPharoMethodCoder >> currentSelector [
-	<return: #Symbol or: nil>
-	| theAst |
+	<return: #Symbol>
+
+	^ self currentSelectorPromise wait
+]
+
+{ #category : #accessing }
+GtPharoMethodCoder >> currentSelectorPromise [
+	<return: #Symbol>
 
 	selector
-		ifNotNil: [ ^ selector ].
+		ifNotNil: [ ^ selector asAsyncPromise ].
 
-	theAst := self astAwait.
-	theAst
-		ifNil: [ ^ nil ].
-	
-	theAst isMethod
-		ifFalse: [ ^ #faulty ].
-			
-	theAst selectorDo: [ :aSymbol | ^ aSymbol ].
-
-	^ #faulty
+	^ self ast then: [ :aGtCoderAst |
+		| anAst |
+		
+		anAst := aGtCoderAst ast.
+		anAst isMethod
+			ifFalse: [ #faulty ]
+			ifTrue: [ anAst selector ifNil: [ #faulty ] ] ]
 ]
 
 { #category : #'api - actions examples' }
@@ -459,7 +466,7 @@ GtPharoMethodCoder >> findSeparatorBetweenPatternAndBodyIn: aMethodNode [
 { #category : #initialize }
 GtPharoMethodCoder >> forClass: aBehavior source: aString [
 	self behavior: aBehavior.
-	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
+	self sourceCode: (GtCoderExplicitStringSource new source: aString)
 ]
 
 { #category : #initialize }
@@ -472,7 +479,7 @@ GtPharoMethodCoder >> forExample: anExampleWithResult [
 GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
 	self selector: aCompiledMethod selector.
-	self sourceCode: (GtCoderCompiledMethodSourceCode new compiledMethod: aCompiledMethod).
+	self sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
 	self protocol: aCompiledMethod category
 ]
 
@@ -527,22 +534,6 @@ GtPharoMethodCoder >> handleExampleExecuted: aGtExampleExecuted [
 	self announce: (GtCoderExampleExecuted new 
 		coder: self;
 		example: aGtExampleExecuted example)
-]
-
-{ #category : #accessing }
-GtPharoMethodCoder >> highlighter: aGtSourceReferenceHighlighter [
-	"Set a source reference highlighter thhat should be used tp highlight or mark some parts
-	of the source code. If a given highlighter is nil, it means that no highlighter should be used"
-
-	self highlighter == aGtSourceReferenceHighlighter
-		ifTrue: [ ^ self ].
-
-	self
-		attributeNamed: #highlighter
-		put: aGtSourceReferenceHighlighter.
-
-	self requestUpdateAddOns.
-	self requestStyleSourceText
 ]
 
 { #category : #'private - refactorings' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSourceCoderEditorElementByScripterExamples,
 	#superclass : #GtCoderByScripterExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'example - play example' }
@@ -18,32 +18,32 @@ GtSourceCoderEditorElementByScripterExamples >> playExample [
 			value: [ :aStateElement | 
 				aStateElement background paint color ]
 			equals: GtFilterExampleNotExecutedState default color;
-			onBreadthFirstChildOfClass: GtCoderExampleStateElement.
+			onBreadthFirstChildOfClass: GtCoderExampleStateElement;
+			play.
 	
 		aStep do
 			label: 'Play button from model';
 			block: [ :aUIModel | aUIModel coder playExample ];
-			onModel.
+			onModel;
+			play.
 		
 		aStep check
 			label: 'Check green example status';
 			value: [ :aStateElement | 
 				aStateElement background paint color ]
 			equals: GtFilterExampleSuccessState default color;
-			onBreadthFirstChildOfClass: GtCoderExampleStateElement.
-			
-		aStep wait forEmptySpaceTaskQueue.
+			onBreadthFirstChildOfClass: GtCoderExampleStateElement;
+			play.
 			
 		aStep check
 			label: 'Check green example status after all actions (styling)';
 			value: [ :aStateElement | 
 				aStateElement background paint color ]
 			equals: GtFilterExampleSuccessState default color;
-			onBreadthFirstChildOfClass: GtCoderExampleStateElement.
+			onBreadthFirstChildOfClass: GtCoderExampleStateElement;
+			play  ].
 
-	].
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'example - instance creation' }
@@ -56,12 +56,14 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElement [
 		aStep set
 			label: 'Initialize Coder Editor UI';
 			element: [ GtSourceCoderEditorElementExamples new editorForExampleMethodCoder ];
-			onSelf.
+			onSelf;
+			play.
 
 		aStep set
 			label: 'Initialize Coder UI Model';
 			model: [ :anElement | anElement textualCoderViewModel ];
-			onSelf ].
+			onSelf;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
