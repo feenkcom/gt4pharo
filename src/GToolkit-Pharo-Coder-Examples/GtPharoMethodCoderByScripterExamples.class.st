@@ -304,17 +304,14 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 ]
 
 { #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> checkFor: aScripter absenceOfContextActionNamed: anActionName [
-	<gtExample>
-	
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripter absenceOfContextActionNamed: anActionName [	
 	aScripter check 
 		label: 'Check Context Action Existence Named ', anActionName asString;
 		nonSatisfies: [ :aContextActions | aContextActions title = anActionName translated
 			and: [ aContextActions action method = (GtPharoMethodCoder>>#exampleAstFor:into:) ] ];
 		onModel;
-		onChildFromMessage: #contextActions.
-	
-	^ aScripter
+		onChildFromMessage: #contextActions;
+		play
 ]
 
 { #category : #utilities }
@@ -357,23 +354,20 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextAc
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions: aMainActionsCount contextAction: anAddonsActionsCount [
-	<gtExample>
 	aScripter substeps: 'Check Available Action Buttons' do: [ :aStep |
-		aStep wait forEmptySpaceTaskQueue.
-
 		aStep check 
 			label: 'Number of main actions';
 			childrenCount: aMainActionsCount;
 			onBreadthFirstChildOfClass: GtCoderActionsElement;
-			onChildAt: 1.
+			onChildAt: 1;
+			play.
 
 		aStep check 
 			label: 'Number of addons actions';
 			childrenCount: anAddonsActionsCount;
 			onBreadthFirstChildOfClass: GtCoderActionsElement;
-			onChildAt: 3 ].
-
-	^ aScripter
+			onChildAt: 3;
+			play ]
 ]
 
 { #category : #utilities }
@@ -486,22 +480,18 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributes
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExampleStatusAttributeAt: anIndex [
-	<gtExample>
 	self 
 		checkFor: aScripterOrStep 
 		textAttributesAt: anIndex 
-		anySatisfies: [ :aTextAttribute | aTextAttribute class = GtCoderExampleStatusAttribute ].
-	^ aScripterOrStep
+		anySatisfies: [ :aTextAttribute | aTextAttribute class = GtCoderExampleStatusAttribute ]
 ]
 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExpandAttributeAt: anIndex [
-	<gtExample>
 	self 
 		checkFor: aScripterOrStep 
 		textAttributesAt: anIndex 
-		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTrangleExpanderTextAttribute ].
-	^ aScripterOrStep
+		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTrangleExpanderTextAttribute ]
 ]
 
 { #category : #'examples - extract method' }
@@ -4438,7 +4428,6 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self referencedExampleMethodCoder asCoderViewModel ].
-	aScripter syncContinue.
 	^ aScripter
 ]
 
@@ -4449,7 +4438,6 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter checks: 'Check Example Status' do: [ :aStep | 
 		self checkFor: aStep textExampleStatusAttributeAt: 1 ].
-	aScripter syncContinue.
 	^ aScripter
 ]
 
@@ -4461,7 +4449,6 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 	aScripter checks: 'Check Example Status and Expand Attribute' do: [ :aStep | 
 		self checkFor: aStep textExpandAttributeAt: 24.
 		self checkFor: aStep textExampleStatusAttributeAt: 1 ].
-	aScripter syncContinue.
 	^ aScripter
 ]
 
@@ -4475,7 +4462,8 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			label: 'Delete e character from <gtExample>';
 			action: [ :anEditor | anEditor deleter from: 12 to: 13; delete ];
 			onChildNamed: #editor;
-			onBrTextEditor.
+			onBrTextEditor;
+			play.
 		self 
 			checkFor: aStep
 			numberOfMainActions: 6
@@ -4487,7 +4475,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			checkFor: aStep 
 			textAttributesAt: 1 
 			nonSatisfies: [ :aTextAttribute | aTextAttribute class = GtCoderExampleStatusAttribute ] ].
-	aScripter syncContinue.
+	
 	^ aScripter
 ]
 
@@ -4501,8 +4489,8 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			label: 'Insert e character in <gtExample>';
 			action: [ :anEditor | anEditor inserter at: 12; string: 'e'; insert ];
 			onChildNamed: #editor;
-			onBrTextEditor.
-		aStep wait forEmptySpaceTaskQueue.
+			onBrTextEditor;
+			play.
 		self 
 			checkFor: aStep
 			numberOfMainActions: 5
@@ -4511,6 +4499,5 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 	aScripter checks: 'Check Example Status Is Present' do: [ :aStep | 
 		self checkFor: aStep textExpandAttributeAt: 24.
 		self checkFor: aStep textExampleStatusAttributeAt: 1. ].
-	aScripter syncContinue.
 	^ aScripter
 ]
