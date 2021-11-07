@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchClassesFilter,
 	#superclass : #GtSearchTypedEntitiesFilter,
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #accessing }
@@ -10,8 +10,18 @@ GtSearchClassesFilter class >> resultType [
 ]
 
 { #category : #accessing }
+GtSearchClassesFilter class >> resultTypeStream [
+	^ GtAsyncSearchClassGroupStream
+]
+
+{ #category : #accessing }
 GtSearchClassesFilter >> defaultFilterScope [
 	^ GtSearchImageClassesFilter new
+]
+
+{ #category : #accessing }
+GtSearchClassesFilter >> defaultFilterScopeStream [
+	^ AsyncImageBehaviorsStream new
 ]
 
 { #category : #testing }
