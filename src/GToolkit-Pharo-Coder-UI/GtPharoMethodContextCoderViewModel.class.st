@@ -1,7 +1,10 @@
 Class {
 	#name : #GtPharoMethodContextCoderViewModel,
 	#superclass : #GtPharoMethodCoderViewModel,
-	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
+	#instVars : [
+		'programCounterAttributes'
+	],
+	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
 { #category : #accessing }
@@ -22,11 +25,26 @@ GtPharoMethodContextCoderViewModel >> initialize [
 	expanded := false
 ]
 
-{ #category : #notifications }
-GtPharoMethodContextCoderViewModel >> notifyContextPCRangeChangedTo: anInterval [
-	self announcerUIModel
-		announce: (GtMethodCoderContextPCRangeChanged new
-			pcRange: anInterval)
+{ #category : #'api - coder model' }
+GtPharoMethodContextCoderViewModel >> onCoderModelChanged [
+	super onCoderModelChanged.
+	
+	self updateProgramCounterRange: self coderModel sourceCode
+]
+
+{ #category : #'private - event handling' }
+GtPharoMethodContextCoderViewModel >> onSourceCodeChanged: anSourceCodeChangedAnnouncement [
+	| aSourceCode |
+	super onSourceCodeChanged: anSourceCodeChangedAnnouncement.
+
+	aSourceCode := self coderModel sourceCode.
+	aSourceCode isModifiedPromise then: [ :isModified |
+		isModified ifFalse: [ self updateProgramCounterRange: aSourceCode ] ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoMethodContextCoderViewModel >> onSourceCodeReplaced: aSourceCodeReplacedAnnouncement [
+	self updateProgramCounterRange: aSourceCodeReplacedAnnouncement sourceCode
 ]
 
 { #category : #accessing }
@@ -34,7 +52,32 @@ GtPharoMethodContextCoderViewModel >> programCounterRange [
 	^ self coderModel programCounterRange
 ]
 
-{ #category : #updating }
+{ #category : #'api - coder model' }
+GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
+	super subscribeToCoderModel.
+	
+	self coderModel weak
+		when: GtCoderSourceCodeReplaced
+		send: #onSourceCodeReplaced:
+		to: self
+]
+
+{ #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
-	self notifyContextPCRangeChangedTo: self programCounterRange
+	self updateProgramCounterRange: self coderModel sourceCode
+]
+
+{ #category : #'private - updating' }
+GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
+	aSourceCode currentSourceText then: [ :aSourceText |
+		| anInterval |
+
+		anInterval := self programCounterRange.
+		
+		programCounterAttributes ifNotNil: [ :theAttributes | self removeCoderTextAttributes: theAttributes ].
+		programCounterAttributes := self
+			addTextAttribute: (BlTextDecorationAttribute new underline color: BrGlamorousColors errorBackgroundColor; thickness: 1.5) beNotOverwritableByStyler
+			onText: aSourceText text
+			from: anInterval first
+			to: anInterval last ]
 ]
