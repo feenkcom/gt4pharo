@@ -106,7 +106,9 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNode [
 	| action locations announcement definer otherCoders renameAttributes originalSource |
-	originalSource := aSourceCoderViewModel sourceText from: aVariableNode startPosition to: aVariableNode stopPosition.
+	originalSource := (aSourceCoderViewModel styledText ifNil: [ aSourceCoderViewModel sourceText ])
+		from: aVariableNode startPosition
+		to: aVariableNode stopPosition.
 	locations := OrderedCollection new.
 	definer := aVariableNode whoDefines.
 	announcement := GtCoderRenameTemporaryRequestedAnnouncement new.
@@ -129,9 +131,9 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 					[ :node | 
 					| attribute |
 					attribute := GtRenamePreviewAttribute new text: originalSource.
-					(each sourceText from: node startPosition to: node stopPosition) attributes: {attribute}.
+					(each currentSourceText from: node startPosition to: node stopPosition) attributes: {attribute}.
 					renameAttributes add: attribute ].
-			each sourceChanged ].
+			each sourceChangedTo: each currentSourceText ].
 	action
 		when: GtRenameActionAnnouncement
 		do:
@@ -143,8 +145,8 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 					[ otherCoders
 						do:
 							[ :each | 
-							each sourceText clearAttributes: [ :attr | attr isKindOf: GtRenamePreviewAttribute ].
-							each sourceChanged ] ].
+							each currentSourceText clearAttributes: [ :attr | attr isKindOf: GtRenamePreviewAttribute ].
+							each sourceChangedTo: each currentSourceText ] ].
 			ann eventType = #accept
 				ifTrue: [ otherCoders do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ].
 	action install.
