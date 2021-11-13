@@ -36,6 +36,16 @@ String >> gtReferences [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
+String >> gtStringLiteralCaseSensitiveMatch [
+	^ GtSearchLiteralExactStringFilter string: self caseSensitive: true
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+String >> gtStringLiteralMatch [
+	^ GtSearchLiteralExactStringFilter string: self caseSensitive: false
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
 String >> gtSubstringLiteralCaseSensitiveMatch [
 	^ GtSearchLiteralStringFilter substring: self caseSensitive: true
 ]
