@@ -4,24 +4,53 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Filters - Stream'
 }
 
-{ #category : #ui }
-GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
-	<gtView>
-
-	^ aView list
-		title: 'Live' translated;
-		priority: 10;
-		items: [
-			self updateItems.
-			itemsStream map: [ :eachCompiledMethod |
-				(GtPharoMethodCoder forMethod: eachCompiledMethod) asCoderViewModel
-					expanded: false ] ];
-		itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
-		itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement coderUIModel: aCoderViewModel ]
+{ #category : #converting }
+GtAsyncSearchMethodGroupStream >> asCoder [
+	^ GtFilteredMethodsCoder forFilter: self filter
 ]
 
-{ #category : #updating }
-GtAsyncSearchMethodGroupStream >> updateItems [
-	itemsStream := scope filter: filter.
-	itemsFuture := itemsStream collect map: [ :theMethods | theMethods sorted: GtMethodsSortFunction new ]
+{ #category : #'gt - extensions' }
+GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
+	<gtView>
+	
+	^ aView explicit
+		title: 'Live' translated;
+		priority: 10;
+		stencil: [
+			| aStream |			
+
+			aStream := self asyncSimilarCopy map: [ :eachCompiledMethod |
+				((GtPharoMethodCoder forMethod: eachCompiledMethod)
+					highlighter: self highlighter)
+						asCoderViewModel
+							expanded: false ].
+
+			BrSimpleList new
+				itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
+				itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement coderUIModel: aCoderViewModel ];
+				stream: aStream ]
+]
+
+{ #category : #'gt - extensions' }
+GtAsyncSearchMethodGroupStream >> gtMetricsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Metrics';
+		object: [ self metrics ];
+		view: #gtMetricsFor:
+]
+
+{ #category : #'source code management' }
+GtAsyncSearchMethodGroupStream >> linesOfCode [
+	<return: #TAsyncFuture>
+
+	^ self metrics map: [ :theMetrics | theMetrics linesOfCode ]
+]
+
+{ #category : #'source code management' }
+GtAsyncSearchMethodGroupStream >> metrics [
+	<return: #TAsyncFuture>
+
+	^ self filteredItemsStream inject: GtAsyncSearchMethodGroupMetrics new into: [ :metrics :eachMethod | metrics accumulateMethod: eachMethod ]
 ]

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'class'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #'instance creation' }
@@ -28,7 +28,7 @@ GtSearchMethodsContainedInClassFilter >> = anObject [
 
 { #category : #accessing }
 GtSearchMethodsContainedInClassFilter >> defaultFilterScope [
-	^ self
+	^ AsyncBehaviorAllMethodsStream forBehavior: class
 ]
 
 { #category : #accessing }

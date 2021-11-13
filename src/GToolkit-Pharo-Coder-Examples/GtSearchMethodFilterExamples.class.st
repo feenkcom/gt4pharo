@@ -41,12 +41,12 @@ Number references
 Class {
 	#name : #GtSearchMethodFilterExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #asserting }
 GtSearchMethodFilterExamples >> assertMethodResultTypeForFilter: aFilter [
-	self assert: aFilter resultType equals: GtSearchMethodGroupResult.
+	self assert: aFilter resultType equals: GtAsyncSearchMethodGroupStream
 ]
 
 { #category : #examples }
@@ -59,13 +59,13 @@ GtSearchMethodFilterExamples >> astPatternFilter [
 	^ filter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> deprecatedMethodsFilter [
 	<gtExample>
 	| filter |
 	
 	filter := GtSearchDeprecatedMethodsFilter new.
-	
+	self assert: filter notEmpty.
 	self assert: (filter matches: BlElement>>#extent:).
 	self assert: (filter matches: BlElement>>#margin) not.
 	
@@ -87,16 +87,17 @@ GtSearchMethodFilterExamples >> implementorsOfThisMessage [
 	<gtExample>
 	| filter |
 	filter := #implementorsOfThisMessage gtImplementors.
+	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
 	^ filter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtSearchMethodFilterExamples >> implementorsPatternFilter [
 	<gtExample>
 	| filter |
 	filter := GtSearchImplementorPatternFilter pattern: #implementorsPattern.
-	
+	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
 	
 	^ filter.
@@ -162,31 +163,29 @@ GtSearchMethodFilterExamples >> methodsInCategoryFilter [
 	<gtExample>
 	| filter |
 	filter := GtSearchMethodCategoryFilter forCategory: 'examples'.
-	
-	self assert: (filter matches: thisContext method).
-	
-	^ filter.
-]
-
-{ #category : #'as yet unclassified' }
-GtSearchMethodFilterExamples >> methodsInPackageFilter [
-	<gtExample>
-	| filter |
-	
-	filter := GtSearchMethodsInPackageFilter new package: (thisContext method package).
-	
 	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
 	
 	^ filter.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
+GtSearchMethodFilterExamples >> methodsInPackageFilter [
+	<gtExample>
+	| filter |
+	
+	filter := GtSearchMethodsInPackageFilter new package: (thisContext method package).
+	self assert: filter notEmpty.
+	self assert: (filter matches: thisContext method).	
+	^ filter.
+]
+
+{ #category : #examples }
 GtSearchMethodFilterExamples >> methodsWithClassPatternFilter [
 	<gtExample>
 	| filter |
 	filter := GtSearchMethodsWithClassPatternFilter pattern: #FilterExamples.
-	
+	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
 	
 	^ filter.
@@ -197,6 +196,7 @@ GtSearchMethodFilterExamples >> packagePatternFilter [
 	<gtExample>
 	| filter |
 	filter := 'coder-examples' gtPackageMatches.
+	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
 	^ filter
 ]

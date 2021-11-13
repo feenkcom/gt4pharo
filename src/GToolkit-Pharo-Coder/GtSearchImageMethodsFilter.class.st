@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchImageMethodsFilter,
 	#superclass : #GtSearchMethodsFilter,
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #comparing }
@@ -14,11 +14,6 @@ GtSearchImageMethodsFilter >> = anObject [
 { #category : #enumerating }
 GtSearchImageMethodsFilter >> classesDo: aBlock [
 	GtPharoSystemTraverser default allClassesAndTraitsDo: aBlock
-]
-
-{ #category : #accessing }
-GtSearchImageMethodsFilter >> defaultFilterScope [
-	^ self
 ]
 
 { #category : #testing }

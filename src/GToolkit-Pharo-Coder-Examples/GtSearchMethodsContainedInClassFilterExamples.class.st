@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchMethodsContainedInClassFilterExamples,
 	#superclass : #GtSearchMethodFilterExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #examples }
@@ -34,7 +34,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilterResultType 
 	| filter |
 	filter := self methodsInClassFilter.
 	self assertMethodResultTypeForFilter: filter.
-	self assert: filter defaultFilterScope == filter.
+	self assert: filter notEmpty.
 	^ filter
 ]
 
@@ -69,12 +69,12 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesBothSidesUni
 	filter := GtSearchUnionFilter new
 		filter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1SubclassC2)
 		filter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1AnotherClassC3).
-		
+
 	self assert: (filter matches: GtSystemS1AnotherClassC3>>#oneMethodOnS1C3).
 	self assert: (filter matches: GtSystemS1AnotherClassC3 class>>#isDeprecated).
 	self assert: (filter matches: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
 	self assert: (filter matches: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1).
-		
+
 	^ filter
 ]
 
@@ -101,7 +101,7 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilterR
 	filter := self methodsInTwoClassesUnionFilter.
 		
 	self assertMethodResultTypeForFilter: filter.
-	self assert: filter defaultFilterScope == filter.
+	self assert: filter defaultFilterScope class equals: AsyncFlattenStream.
 		
 	^ filter
 ]
@@ -109,30 +109,36 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilterR
 { #category : #'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInClassFilter [
 	<gtExample>
-	| filter result |
+	| filter resultStream result |
+
 	filter := self methodsInClassFilter.
-	result := filter result.
+	resultStream := filter result.
 	
+	self assert: resultStream class equals: GtAsyncSearchMethodGroupStream.
+	self assert: resultStream filter equals: filter.
+	
+	result := resultStream collect wait.
 	self 
 		assert: result size 
 		equals: (GtSystemS1SubclassC2 instanceSide methods size).
 	self assert: (result includes: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
 	self assert: (result includes: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1) not.
-	
-	self assert: result class equals: GtSearchMethodGroupResult.
-	self assert: result filter equals: filter.
-	self assert: result scope == filter.
-	
-	^ result
+
+	^ resultStream
 ]
 
 { #category : #'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClassesBothSidesUnionFilter [
 	<gtExample>
-	| filter result |
+	| filter resultStream result |
+
 	filter := self methodsInTwoClassesBothSidesUnionFilter.
-	result := filter result.
-	
+
+	resultStream := filter result.
+	self assert: resultStream class equals: GtAsyncSearchMethodGroupStream.
+	self assert: resultStream filter equals: filter.
+
+	result := resultStream collect wait.
 	self 
 		assert: result size 
 		equals: (GtSystemS1SubclassC2 instanceSide methods size 
@@ -142,32 +148,31 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClass
 	self assert: (result includes: GtSystemS1AnotherClassC3 class>>#isDeprecated).
 	self assert: (result includes: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
 	self assert: (result includes: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1).
-	
-	self assert: result class equals: GtSearchMethodGroupResult.
-	self assert: result filter equals: filter.
-	self assert: result scope == filter.
-			
-	^ result
+
+	^ resultStream
 ]
 
 { #category : #'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClassesUnionFilter [
 	<gtExample>
-	| filter result |
+	| filter resultStream result |
+
 	filter := self methodsInTwoClassesUnionFilter.
-	result := filter result.
-	
+
+	resultStream := filter result.
+	self assert: resultStream class equals: GtAsyncSearchMethodGroupStream.
+	self assert: resultStream filter equals: filter.
+
+	result := resultStream collect wait.
+
 	self 
-		assert: result size 
+		assert: result size
 		equals: (GtSystemS1SubclassC2 instanceSide methods size 
 			+ GtSystemS1AnotherClassC3 instanceSide methods size).
+
 	self assert: (result includes: GtSystemS1AnotherClassC3>>#oneMethodOnS1C3).
 	self assert: (result includes: GtSystemS1AnotherClassC3 class>>#isDeprecated) not.
 	self assert: (result includes: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
-	
-	self assert: result class equals: GtSearchMethodGroupResult.
-	self assert: result filter equals: filter.
-	self assert: result scope == filter.
-		
-	^ result
+
+	^ resultStream
 ]

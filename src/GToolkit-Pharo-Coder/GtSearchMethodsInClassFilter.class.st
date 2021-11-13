@@ -5,7 +5,7 @@ Class {
 		'includeSubclasses',
 		'includeSuperclass'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #comparing }
@@ -14,6 +14,23 @@ GtSearchMethodsInClassFilter >> = anObject [
 		and: [ self filterClass = anObject filterClass
 				and: [ self includeSubclasses = anObject includeSubclasses
 						and: [ self includeSuperclass = anObject includeSuperclass ] ] ]
+]
+
+{ #category : #accessing }
+GtSearchMethodsInClassFilter >> defaultFilterScope [
+	| theStreams |
+	
+	theStreams := OrderedCollection new.
+	
+	theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class).
+	
+	(includeSuperclass and: [ class superclass notNil ])
+		ifTrue: [ theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class superclass) ].
+
+	includeSubclasses
+		ifTrue: [ theStreams add: (class allSubclasses asAsyncStream map: [ :eachBehavior | (AsyncBehaviorAllMethodsStream forBehavior: eachBehavior) ]) flatten ].
+
+	^ theStreams asAsyncStream flatten
 ]
 
 { #category : #comparing }

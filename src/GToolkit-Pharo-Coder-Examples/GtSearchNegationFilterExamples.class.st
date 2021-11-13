@@ -1,10 +1,10 @@
 Class {
 	#name : #GtSearchNegationFilterExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtSearchNegationFilterExamples >> negationSearchFilter [
 	<gtExample>
 	| basicFilter negationFilter |
@@ -17,7 +17,7 @@ GtSearchNegationFilterExamples >> negationSearchFilter [
 	^ negationFilter.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtSearchNegationFilterExamples >> negationSearchFilterExplicitDefinition [
 	<gtExample>
 	| basicFilter negationFilter |

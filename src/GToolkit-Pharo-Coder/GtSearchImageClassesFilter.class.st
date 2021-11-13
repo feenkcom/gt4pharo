@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchImageClassesFilter,
 	#superclass : #GtSearchClassesFilter,
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #comparing }
@@ -16,14 +16,14 @@ GtSearchImageClassesFilter >> classesDo: aBlock [
 	GtPharoSystemTraverser default allClassesAndTraitsDo: aBlock
 ]
 
-{ #category : #accessing }
-GtSearchImageClassesFilter >> defaultFilterScope [
-	^ self
+{ #category : #comparing }
+GtSearchImageClassesFilter >> hash [
+	^ self class hash
 ]
 
 { #category : #testing }
 GtSearchImageClassesFilter >> includesClass: aClass [
-	^ Smalltalk hasClassNamed: aClass name
+	^ Smalltalk environment hasClassOrTraitNamed: aClass name
 ]
 
 { #category : #enumerating }

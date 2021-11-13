@@ -1,12 +1,12 @@
 Class {
 	#name : #GtSearchPackageFilterExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #asserting }
 GtSearchPackageFilterExamples >> assertPackageResultTypeForFilter: aFilter [
-	self assert: aFilter resultType equals: GtSearchPackageGroupResult.
+	self assert: aFilter resultType equals: GtAsyncSearchPackageGroupStream
 ]
 
 { #category : #accessing }
@@ -25,18 +25,21 @@ GtSearchPackageFilterExamples >> deprecatedPackagesFilter [
 { #category : #'examples - result' }
 GtSearchPackageFilterExamples >> groupResultForPackagesInImageFilter [
 	<gtExample>
-	| filter result |
+	| filter resultStream result |
+
 	filter := self packagesInImageFilter.
-	result := filter result.
+	resultStream := filter result.
 	
-	self assert: (result isKindOf: GtSearchPackageGroupResult).
-	self assert: result filter equals: filter.
-	self assert: result scope == filter.
+	self assert: (resultStream isKindOf: GtAsyncSearchPackageGroupStream).
+	self assert: resultStream filter equals: filter.
+	self assert: resultStream scope equals: AsyncImagePackagesStream new.
+	
+	result := resultStream collect wait.
 	self assert: result size equals: RPackage organizer packages size.
 	self assert: (result includes: 'GToolkit-Coder-Examples' asPackage).
 	self assert: (result includes: (RPackage named: 'A-Package-ThatDoesNotExist')) not.
 	
-	^ result
+	^ resultStream
 ]
 
 { #category : #examples }
@@ -48,7 +51,7 @@ GtSearchPackageFilterExamples >> packagesInImageFilter [
 	self assert: (filter matches: 'GToolkit-Coder-Examples' asPackage).
 	self assert: (filter matches: (RPackage named: 'A-Package-ThatDoesNotExist')) not.
 	
-	self assert: filter defaultFilterScope == filter.
+	self assert: filter defaultFilterScope equals: AsyncImagePackagesStream new.
 	self assertPackageResultTypeForFilter: filter.
 	
 	^ filter

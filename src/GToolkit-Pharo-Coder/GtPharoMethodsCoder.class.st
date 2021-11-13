@@ -10,18 +10,6 @@ GtPharoMethodsCoder >> exampler [
 		coder: self
 ]
 
-{ #category : #accessing }
-GtPharoMethodsCoder >> forItems: aCollection [
-	super forItems: aCollection.
-	(items isKindOf: GtSearchMethodGroupResult)
-		ifTrue: [
-			items announcer weak
-				when: ValueAdded send: #methodAdded: to: self;
-				when: ValueChanged send: #methodChanged: to: self;
-				when: ValueRemoved send: #methodRemoved: to: self.
-			coders do: [ :each | each highlighter: items highlighter ] ]
-]
-
 { #category : #testing }
 GtPharoMethodsCoder >> isForClass [
 	^ false

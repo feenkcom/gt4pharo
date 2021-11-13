@@ -6,21 +6,11 @@ Class {
 
 { #category : #accessing }
 GtSearchClassesFilter class >> resultType [
-	^ GtSearchClassGroupResult
-]
-
-{ #category : #accessing }
-GtSearchClassesFilter class >> resultTypeStream [
 	^ GtAsyncSearchClassGroupStream
 ]
 
 { #category : #accessing }
 GtSearchClassesFilter >> defaultFilterScope [
-	^ GtSearchImageClassesFilter new
-]
-
-{ #category : #accessing }
-GtSearchClassesFilter >> defaultFilterScopeStream [
 	^ AsyncImageBehaviorsStream new
 ]
 
@@ -31,6 +21,5 @@ GtSearchClassesFilter >> includesClass: aClass [
 
 { #category : #testing }
 GtSearchClassesFilter >> matches: anObject [
-	^ anObject isClass and: [ 
-		self includesClass: anObject ]
+	^ (anObject isClass or: [ anObject isTrait ]) and: [ self includesClass: anObject ]
 ]

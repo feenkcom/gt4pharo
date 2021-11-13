@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #'instance creation' }
@@ -15,6 +15,9 @@ GtSearchClassesInPackageFilter class >> forPackageNamed: aPackageName [
 
 { #category : #comparing }
 GtSearchClassesInPackageFilter >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ package = anObject package
@@ -27,7 +30,15 @@ GtSearchClassesInPackageFilter >> classesDo: aBlock [
 
 { #category : #accessing }
 GtSearchClassesInPackageFilter >> defaultFilterScope [
-	^ self
+	^ AsyncPackageBehaviorsStream package: self package
+]
+
+{ #category : #comparing }
+GtSearchClassesInPackageFilter >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ package hash
 ]
 
 { #category : #testing }

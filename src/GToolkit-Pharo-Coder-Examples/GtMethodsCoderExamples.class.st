@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMethodsCoderExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - filters' }
@@ -13,7 +13,7 @@ GtMethodsCoderExamples >> doFilter [
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> doImplementorsCoder [
 	<gtExample>
-	^ (GtSearchMethodGroupResult forFilter: self doFilter) asCoder
+	^ self doFilter asCoder
 ]
 
 { #category : #'examples - filters' }
@@ -25,7 +25,8 @@ GtMethodsCoderExamples >> errorFilter [
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> errorReferencesCoder [
 	<gtExample>
-	^ (GtSearchMethodGroupResult forFilter: self errorFilter) asCoder
+
+	^ self errorFilter asCoder
 ]
 
 { #category : #accessing }
@@ -38,8 +39,8 @@ GtMethodsCoderExamples >> exceptionProcessCoderExample [
 GtMethodsCoderExamples >> gtExamplesCoder [
 	<gtExample>
 	| methods |
-	methods := GtSearchMethodGroupResult forFilter: self gtExamplesFilter.
-	self assert: (methods includes: thisContext method).
+	methods := self gtExamplesFilter result.
+	self assert: (methods collect wait includes: thisContext method).
 	^ methods asCoder
 ]
 
@@ -58,13 +59,13 @@ GtMethodsCoderExamples >> instanceVariableFilter [
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> instanceVariableReferenceCoder [
 	<gtExample>
-	^ (GtSearchMethodGroupResult forFilter: self instanceVariableFilter) asCoder
+	^ self instanceVariableFilter asCoder
 ]
 
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> intersectionCoder [
 	<gtExample>
-	^ (GtSearchMethodGroupResult forFilter: self instanceVariableFilter & self doFilter) asCoder
+	^ (self instanceVariableFilter & self doFilter) asCoder
 ]
 
 { #category : #'examples - class coder' }
@@ -136,7 +137,7 @@ GtMethodsCoderExamples >> suspendedProcess [
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> unionCoder [
 	<gtExample>
-	^ (GtSearchMethodGroupResult forFilter: self errorFilter | self printStringFilter) asCoder
+	^ (self errorFilter | self printStringFilter) asCoder
 ]
 
 { #category : #accessing }
@@ -146,11 +147,11 @@ GtMethodsCoderExamples >> validateNoMemoryLeaks [
 	| subscriptionCount instanceCount diffSubscriptions diffInstances |
 	Smalltalk garbageCollect.
 	subscriptionCount := SystemAnnouncer uniqueInstance numberOfSubscriptions.
-	instanceCount := GtSearchMethodGroupResult allInstances size.
+	instanceCount := GtAsyncSearchMethodGroupStream allInstances size.
 	10 timesRepeat: [ self doImplementorsCoder ].
 	3 timesRepeat: [ Smalltalk garbageCollect ].
 	diffSubscriptions := subscriptionCount - SystemAnnouncer uniqueInstance numberOfSubscriptions.
-	diffInstances := instanceCount - GtSearchMethodGroupResult allInstances size.
+	diffInstances := instanceCount - GtAsyncSearchMethodGroupStream allInstances size.
 	self assert: diffSubscriptions >= 0.
 	self assert: diffInstances >= 0.
 	^ {diffSubscriptions.

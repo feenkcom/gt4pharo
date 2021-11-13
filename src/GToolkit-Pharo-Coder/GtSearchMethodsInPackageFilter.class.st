@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #comparing }
@@ -16,7 +16,9 @@ GtSearchMethodsInPackageFilter >> = anObject [
 
 { #category : #accessing }
 GtSearchMethodsInPackageFilter >> defaultFilterScope [
-	^ self
+	^ ((AsyncPackageBehaviorsStream forPackage: self package)
+		map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
+			flatten
 ]
 
 { #category : #comparing }

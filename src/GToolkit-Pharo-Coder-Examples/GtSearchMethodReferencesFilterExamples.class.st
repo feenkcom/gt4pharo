@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchMethodReferencesFilterExamples,
 	#superclass : #GtSearchMethodFilterExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #examples }
@@ -10,6 +10,7 @@ GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToMethodC
 	| filter |
 	filter := #gtExample gtPragmas & GtPharoMethodCoder gtReferences.
 	self assert: (filter matches: thisContext method).
+	self assert: filter notEmpty.
 	^ filter
 ]
 
@@ -26,9 +27,12 @@ GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToSampleB
 GtSearchMethodReferencesFilterExamples >> negatedReferencesToSampleB [
 	<gtExample>
 	| filter |
+	
 	filter := self referencesToSampleB not.
 	self assert: (filter matches: GtFilterStubSampleA >> #methodReferencingSampleB) not.
 	self assert: (filter matches: GtFilterStubSampleA >> #anotherMethodReferencingSampleBAndSendingNew) not.
+	
+	^ filter
 ]
 
 { #category : #examples }
@@ -36,7 +40,7 @@ GtSearchMethodReferencesFilterExamples >> referencesTo42 [
 	<gtExample>
 	| filter |
 	filter := 42 gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencing42).
 	^ filter
 ]
@@ -46,7 +50,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToArray [
 	<gtExample>
 	| filter |
 	filter := #(4 2) gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingArray).
 	^ filter
 ]
@@ -56,7 +60,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToByteArray [
 	<gtExample>
 	| filter |
 	filter := #[ 4 2 ] gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingByteArray).
 	^ filter
 ]
@@ -66,7 +70,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToCharacter [
 	<gtExample>
 	| filter |
 	filter := $c gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingCharacter).
 	^ filter
 ]
@@ -76,7 +80,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToFalse [
 	<gtExample>
 	| filter |
 	filter := true gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingTrue).
 	^ filter
 ]
@@ -86,7 +90,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToNil [
 	<gtExample>
 	| filter |
 	filter := nil gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingNil).
 	^ filter
 ]
@@ -107,7 +111,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToString [
 	<gtExample>
 	| filter |
 	filter := 'string' gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingString).
 	^ filter
 ]
@@ -127,7 +131,7 @@ GtSearchMethodReferencesFilterExamples >> referencesToTrue [
 	<gtExample>
 	| filter |
 	filter := true gtReferences.
-	self assert: filter isEmpty not.
+	self assert: filter notEmpty.
 	self assert: (filter matches: GtFilterStubSampleB >> #methodReferencingTrue).
 	^ filter
 ]
