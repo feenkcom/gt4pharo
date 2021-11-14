@@ -2253,11 +2253,10 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_02_cursor [
 			aSourceEditor selecter
 				from: 13 to: 14;
 				select ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
+		id: GtSourceCoderEditorId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline message send' }
