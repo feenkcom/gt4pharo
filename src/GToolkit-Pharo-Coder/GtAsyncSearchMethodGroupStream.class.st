@@ -10,6 +10,11 @@ GtAsyncSearchMethodGroupStream >> asCoder [
 ]
 
 { #category : #'gt - extensions' }
+GtAsyncSearchMethodGroupStream >> gtCompositionChildren [
+	^ { itemsStream }
+]
+
+{ #category : #'gt - extensions' }
 GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
 	<gtView>
 	

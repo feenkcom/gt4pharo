@@ -170,6 +170,13 @@ GtPharoMethodCoder >> clearExample [
 	self removeAttributeNamed: #example.
 ]
 
+{ #category : #'api - text' }
+GtPharoMethodCoder >> collapsedTextPromise [
+	<return: #TAsyncPromise of: #BlText>
+
+	^ self currentSelectorPromise then: [ :aSelector | aSelector asRopedText ]
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoder >> compile [
 	"Try to compile the current source code and return true if it was successful, false otherwise"

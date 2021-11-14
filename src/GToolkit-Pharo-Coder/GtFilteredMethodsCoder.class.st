@@ -256,6 +256,7 @@ GtFilteredMethodsCoder >> unsubscribeFromAllCoders [
 { #category : #private }
 GtFilteredMethodsCoder >> updateCoders [
 	| newCoders highlighter oldCoders |
+
 	oldCoders := coders.
 	newCoders := coders select: [ :each | each isModified ].
 	items
