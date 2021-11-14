@@ -125,7 +125,7 @@ GtFilteredMethodsCoder >> forFilter: aFilter [
 	
 	aFilterStream := aFilter asAsyncStream.
 	
-	super forItems: aFilterStream collect wait.
+	super forItems: ((aFilterStream collectAs: OrderedCollection) wait sorted: GtMethodsSortFunction new).
 
 	"I store all initialized coders in allCoders variable in order to
 	keep their state while filtering. The coders variable includes
