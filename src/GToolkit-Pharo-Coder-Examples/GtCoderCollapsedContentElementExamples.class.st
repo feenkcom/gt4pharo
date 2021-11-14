@@ -13,8 +13,6 @@ GtCoderCollapsedContentElementExamples >> addOnsAptitude_withTestMethod [
 	aContentElement := GtSourceCoderCollapsedContentElement new
 		coderUIModel: aMethodCoder asCoderUIModel.
 	
-	aContentElement aptitude: GtMethodCoderHeaderAptitude.
-	
 	^ aContentElement
 ]
 
@@ -37,10 +35,7 @@ GtCoderCollapsedContentElementExamples >> forMethodCoder [
 	aMethodCoder := GtPharoMethodCoder
 		forMethod: BlElement >> #position:extent:context:.
 	aContentElement := GtSourceCoderCollapsedContentElement new
-		coderUIModel: aMethodCoder asCoderUIModel.
-	
-	aContentElement addAptitude: GtMethodCoderHeaderAptitude.
-	
+		coderUIModel: aMethodCoder asCoderUIModel.	
 	^ aContentElement
 ]
 

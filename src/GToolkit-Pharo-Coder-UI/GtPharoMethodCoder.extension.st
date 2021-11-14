@@ -6,18 +6,6 @@ GtPharoMethodCoder >> asCoderUIModel [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoMethodCoder >> breadcrumbActions [
-	<return: #Array of: #GtSourceCoderBreadcrumbAction>
-	^ Array
-		streamContents: [ :aStream | 
-			(self compiledMethod ifNil: [ self behavior ]) package
-				ifNotNil: [ :aPackage | 
-					aStream
-						nextPut: (GtSourceCoderBreadcrumbSpawnPackageAction new package: aPackage) ].
-			aStream nextPut: (GtSourceCoderBreadcrumbSpawnBehaviorAction new methodBehavior: self methodBehavior) ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoMethodCoder >> browseFrom: anEditorElement [ 
 	((GtCoder forMethod: self compiledMethod)
 		openInPagerFrom: anEditorElement)
