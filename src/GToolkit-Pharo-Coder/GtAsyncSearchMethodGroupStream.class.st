@@ -24,7 +24,7 @@ GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
 		stencil: [
 			| aStream |			
 
-			aStream := self asyncSimilarCopy map: [ :eachCompiledMethod |
+			aStream := self asyncSimilarCopy collect: [ :eachCompiledMethod |
 				((GtPharoMethodCoder forMethod: eachCompiledMethod)
 					highlighter: self highlighter)
 						asCoderViewModel

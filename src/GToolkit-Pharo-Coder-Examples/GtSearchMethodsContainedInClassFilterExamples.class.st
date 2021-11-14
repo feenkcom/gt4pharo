@@ -117,7 +117,7 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInClassFil
 	self assert: resultStream class equals: GtAsyncSearchMethodGroupStream.
 	self assert: resultStream filter equals: filter.
 	
-	result := resultStream collect wait.
+	result := resultStream toArray wait.
 	self 
 		assert: result size 
 		equals: (GtSystemS1SubclassC2 instanceSide methods size).
@@ -138,7 +138,7 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClass
 	self assert: resultStream class equals: GtAsyncSearchMethodGroupStream.
 	self assert: resultStream filter equals: filter.
 
-	result := resultStream collect wait.
+	result := resultStream toArray wait.
 	self 
 		assert: result size 
 		equals: (GtSystemS1SubclassC2 instanceSide methods size 
@@ -163,7 +163,7 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClass
 	self assert: resultStream class equals: GtAsyncSearchMethodGroupStream.
 	self assert: resultStream filter equals: filter.
 
-	result := resultStream collect wait.
+	result := resultStream toArray wait.
 
 	self 
 		assert: result size

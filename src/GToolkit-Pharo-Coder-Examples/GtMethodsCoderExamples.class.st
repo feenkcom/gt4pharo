@@ -40,7 +40,7 @@ GtMethodsCoderExamples >> gtExamplesCoder [
 	<gtExample>
 	| methods |
 	methods := self gtExamplesFilter result.
-	self assert: (methods collect wait includes: thisContext method).
+	self assert: (methods toArray wait includes: thisContext method).
 	^ methods asCoder
 ]
 

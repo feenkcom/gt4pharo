@@ -150,7 +150,7 @@ GtSearchClassFilterExamples >> groupResultForClassesInImageFilter [
 	self assert: resultStream filter equals: filter.
 	self assert: resultStream scope class equals: AsyncImageBehaviorsStream.
 
-	result := resultStream collect wait.
+	result := resultStream toArray wait.
 
 	self assert: result size equals: Smalltalk allClassesAndTraits size.
 	self assert: (result includes: GtSystemS1SubclassC2).
@@ -171,7 +171,7 @@ GtSearchClassFilterExamples >> groupResultForClassesInPackageFilter [
 	self assert: resultStream filter equals: filter.
 	self assert: resultStream scope equals: (AsyncPackageBehaviorsStream package: 'GToolkit-Coder-Examples-SystemS1' asPackage).
 	
-	result := resultStream collect wait.
+	result := resultStream toArray wait.
 
 	self assert: result size equals: 5.
 	self assert: (result includes: GtSystemS1SubclassC2).
@@ -192,7 +192,7 @@ GtSearchClassFilterExamples >> groupResultForDeprecatedClassesInPackageScopeFilt
 	self assert: resultStream filter equals: filter.
 	self assert: resultStream scope equals: filter leftFilter result scope.
 
-	result := resultStream collect wait.
+	result := resultStream toArray wait.
 	self assert: result size equals: 1.
 	self assert: (result includes: GtSystemS1AnotherClassC3).
 	self assert: (result includes: GtSystemS1RootClassC1) not.
