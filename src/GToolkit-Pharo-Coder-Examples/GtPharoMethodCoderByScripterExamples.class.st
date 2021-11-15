@@ -80,19 +80,21 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 	aScripter substep: 'Collapse and Check Coder' do: [ :aStep |
 		aStep click
 			label: 'Click on Expander';
-			onChildAt: 1.
-		
-		aStep wait forEmptySpaceTaskQueue.
+			onChildAt: 1;
+			play.
 		
 		aStep check
 			label: 'Check Coder Editor Text';
-			value: [ :label | label text asString ] equals: '? anObject';
-			id: GtSourceCoderCollapsedTextId.
+			value: [ :label | label text asString ] equals: '?';
+			id: GtSourceCoderCollapsedTextId;
+			play.
+
 		aStep check 
 			label: 'Check Coder UI Is Collapsed';
-			satisfies: [ :aCoderElement | aCoderElement isExpanded not ] ].
+			satisfies: [ :aCoderElement | aCoderElement isExpanded not ];
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -101,18 +103,20 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
 	aScripter checks: 'Check Breadcrumb' do: [ :aStep | 
-		aStep  check 
+		aStep check 
 			label: 'Check Breadcrumb Package Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples package name ];
 			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 1.
-		aStep  check 
+			onChildAt: 1;
+			play.
+		aStep check 
 			label: 'Check Breadcrumb Class Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples name ];
 			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 3 ].
+			onChildAt: 3;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -120,16 +124,12 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	<gtExample>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
-	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
+	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |	
 		aStep click
 			label: 'Click On Class Name';
-			onChildAt: 2;
-			onChildOfClass: GtSourceCoderCollapsedContentElement;
-			onChildAt: 1;
-			onChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 3.
-		
-		aStep wait forEmptySpaceTaskQueue.	
+			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onChildAt: 3;
+			play.
 		
 		aStep  check 
 			label: 'Check Triggered Spawn Object Event';
@@ -138,10 +138,10 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 				ifFound: [ :theEvent |
 					theEvent object = self binaryMethod methodClass and: [ theEvent tool isKindOf: GtClassCoderTool ] ]
 				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter.
-		].
+			onScripter;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -152,13 +152,9 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
 		aStep click
 			label: 'Click On Package Name';
-			onChildAt: 2;
-			onChildOfClass: GtSourceCoderCollapsedContentElement;
+			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
 			onChildAt: 1;
-			onChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 1.
-		
-		aStep wait forEmptySpaceTaskQueue.
+			play.
 		
 		aStep  check 
 			label: 'Check Triggered Spawn Object Event';
@@ -166,10 +162,10 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 				detectEventOfClass: GtPhlowObjectToSpawn
 				ifFound: [ :theEvent | theEvent object class = RPackage and: [ theEvent object name = self class package name ] ]
 				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter.
-		].
+			onScripter;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -179,7 +175,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI [
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
 	self expandFromUI: aScripter method: self binaryMethod.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -193,7 +189,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_Check
 		numberOfMainActions: 5
 		contextAction: 0.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -205,20 +201,21 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 		aStep check
 			label: 'Check Method Name Attributes';
 			anySatisfy: [ :aTextAttribute | aTextAttribute = BlFontWeightAttribute bold ];
-			onChildNamed: #editor;
+			id: GtSourceCoderEditorId;
 			onBrTextEditor;
 			onBrTextEditorText;
-			onTextAttributesAt: 1.
+			onTextAttributesAt: 1;
+			play.
 		aStep check
 			label: 'Check Comment Attributes';
 			anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
-			onChildNamed: #editor;
+			id: GtSourceCoderEditorId;
 			onBrTextEditor;
 			onBrTextEditorText;
-			onTextAttributesAt: 13.
-	].
+			onTextAttributesAt: 13;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -231,14 +228,16 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbC
 			label: 'Check Breadcrumb Package Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples package name ];
 			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 1.
+			onChildAt: 1;
+			play.
 		aStep  check 
 			label: 'Check Breadcrumb Class Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples name ];
 			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 3 ].
+			onChildAt: 3;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -249,13 +248,9 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
 		aStep click
 			label: 'Click On Class Name';
-			onChildAt: 2;
-			onChildOfClass: GtSourceCoderExpandedContentElement;
-			onChildAt: 1;
-			onChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 3.
-			
-		aStep wait forEmptySpaceTaskQueue.
+			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onChildAt: 3;
+			play.
 		
 		aStep  check 
 			label: 'Check Triggered Spawn Object Event';
@@ -264,9 +259,9 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 				ifFound: [ :theEvent |
 					theEvent object = self binaryMethod methodClass and: [ theEvent tool isKindOf: GtClassCoderTool ] ]
 				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter.
-		].
-	^ aScripter syncContinue
+			onScripter;
+			play ].
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -277,13 +272,9 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
 		aStep click
 			label: 'Click On Package Name';
-			onChildAt: 2;
-			onChildOfClass: GtSourceCoderExpandedContentElement;
+			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
 			onChildAt: 1;
-			onChildOfClass: GtMethodCoderBreadcrumbElement;
-			onChildAt: 1.
-			
-		aStep wait forEmptySpaceTaskQueue.
+			play.
 		
 		aStep  check 
 			label: 'Check Triggered Spawn Object Event';
@@ -291,10 +282,10 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 				detectEventOfClass: GtPhlowObjectToSpawn
 				ifFound: [ :theEvent | theEvent object class = RPackage and: [ theEvent object name = self class package name ] ]
 				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter.
-		].
+			onScripter;
+			play ].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -308,7 +299,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 		contextAction: 0.
 	self checkFor: aScripter absenceOfContextActionNamed: 'Play'.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #utilities }
