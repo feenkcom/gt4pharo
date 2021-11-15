@@ -15,6 +15,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
+{ #category : #accessing }
+GtMethodCoderBreadcrumbElement >> behaviorButton [
+	^ behavior
+]
+
 { #category : #initialization }
 GtMethodCoderBreadcrumbElement >> initialize [
 	super initialize.
@@ -82,6 +87,11 @@ GtMethodCoderBreadcrumbElement >> onTextualCoderViewModelChanged [
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 
 	self updateBreadcrumbElements
+]
+
+{ #category : #accessing }
+GtMethodCoderBreadcrumbElement >> packageButton [
+	^ package
 ]
 
 { #category : #'private - actions' }

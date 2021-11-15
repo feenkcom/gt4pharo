@@ -14,9 +14,8 @@ GtMethodCoderBreadcrumbElementExamples >> breadcrumbForSourceCoder [
 	aCoderBreadcrumb := GtMethodCoderBreadcrumbElement new.
 	aCoderBreadcrumb textualCoderViewModel: aCoderUIModel.
 	
-	self assert: aCoderBreadcrumb numberOfItems equals: 2.
-	self assert: (aCoderBreadcrumb itemAt: 1) model package name equals: #'GToolkit-Coder-Examples'.
-	self assert: (aCoderBreadcrumb itemAt: 2) model name equals: #'GtBehaviorCoderDummyClass'.
+	self assert: aCoderBreadcrumb packageButton label asString equals: 'GToolkit-Coder-Examples'.
+	self assert: aCoderBreadcrumb behaviorButton label asString equals: 'GtBehaviorCoderDummyClass'.
 	
 	^ aCoderBreadcrumb
 ]
