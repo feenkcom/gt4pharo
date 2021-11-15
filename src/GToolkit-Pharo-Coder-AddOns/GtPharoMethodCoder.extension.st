@@ -449,6 +449,7 @@ GtPharoMethodCoder >> copyMethodNameToClipboard [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
+	| anExample |
 	
 	self compiledMethod
 		ifNil: [ ^ self ].
@@ -463,6 +464,11 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
+
+	anExample := self example.
+	coderAddOns
+		addPreview: 'Example'
+		stencil: [ GtCoderExampleStateElement new example: anExample ].
 
 	coderAddOns
 		addContextAction: 'Play Example' translated
@@ -666,8 +672,8 @@ GtPharoMethodCoder >> testCase [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
-
 	<gtAstCoderAddOns: 9>
+
 	anAST methodNode ifNil: [ ^ self ].
 
 	self testCase canExecute ifFalse: [ ^ self ].

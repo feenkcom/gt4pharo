@@ -9,6 +9,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
+{ #category : #'instance creation' }
+GtFilteredMethodsCoder class >> forFilter: aFilter [
+	^ self new forFilter: aFilter
+]
+
 { #category : #'private - adding / removing' }
 GtFilteredMethodsCoder >> addCoder: aCoder [
 	self allCoders add: aCoder.
@@ -115,15 +120,21 @@ GtFilteredMethodsCoder >> filterNames [
 ]
 
 { #category : #'initialize-release' }
-GtFilteredMethodsCoder >> forItems: compiledMethods [
-	super forItems: compiledMethods.
+GtFilteredMethodsCoder >> forFilter: aFilter [
+	| aFilterStream |
+	
+	aFilterStream := aFilter asAsyncStream.
+	
+	super forItems: ((aFilterStream to: OrderedCollection) wait sorted: GtMethodsSortFunction new).
 
 	"I store all initialized coders in allCoders variable in order to
 	keep their state while filtering. The coders variable includes
 	a filtered subset of allCoders variable."
 	self allCoders: coders copy.
 
-	originalFilter := compiledMethods filter
+	originalFilter := aFilter.
+	
+	coders do: [ :each | each highlighter: aFilter highlighter ]
 ]
 
 { #category : #'initialize-release' }
@@ -245,6 +256,7 @@ GtFilteredMethodsCoder >> unsubscribeFromAllCoders [
 { #category : #private }
 GtFilteredMethodsCoder >> updateCoders [
 	| newCoders highlighter oldCoders |
+
 	oldCoders := coders.
 	newCoders := coders select: [ :each | each isModified ].
 	items
@@ -254,9 +266,10 @@ GtFilteredMethodsCoder >> updateCoders [
 				ifFalse: [ newCoders add: (self coderFor: eachMethod) ] ].
 	coders := newCoders.
 	coders sort: [ :a :b | self shouldSort: a before: b ].
-	(items isKindOf: GtSearchMethodGroupResult)
-		ifTrue: [ highlighter := items highlighter.
-			coders do: [ :each | each highlighter: highlighter ] ].
+	
+	highlighter := self combinedFilter highlighter.
+	coders do: [ :each | each highlighter: highlighter ].
+
 	self
 		announce:
 			(GtCodersCodersChanged new
@@ -267,7 +280,6 @@ GtFilteredMethodsCoder >> updateCoders [
 ]
 
 { #category : #private }
-GtFilteredMethodsCoder >> updateMethods [
-	(items isKindOf: GtSearchMethodGroupResult)
-		ifTrue: [ items updateForFilter: self combinedFilter ]
+GtFilteredMethodsCoder >> updateMethods [		
+	items := self combinedFilter result toArray wait
 ]

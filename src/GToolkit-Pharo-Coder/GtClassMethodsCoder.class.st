@@ -97,8 +97,7 @@ GtClassMethodsCoder >> filteredClass: aBehavior [
 GtClassMethodsCoder >> forClass: aBehavior [
 	class := aBehavior.
 	filteredClasses := Set with: aBehavior.
-	self forItems: (GtSearchMethodGroupResult 
-		forFilter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: class))
+	self forFilter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: class)
 ]
 
 { #category : #initialize }
