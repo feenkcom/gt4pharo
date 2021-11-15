@@ -75,6 +75,6 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
 			programCounterAttributes := self
 				addTextAttribute: (BlTextDecorationAttribute new underline color: BrGlamorousColors errorBackgroundColor; thickness: 1.5) beNotOverwritableByStyler
 				onText: aSourceText text
-				from: anInterval first
-				to: anInterval last ] ]
+				from: (anInterval first min: aSourceText text size)
+				to: (anInterval last min: aSourceText text size) ] ]
 ]
