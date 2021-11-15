@@ -77,11 +77,6 @@ GtPharoSourceCoderViewModel >> hasSelfObject [
 	^ hasSelfObject ifNil: [ false ]
 ]
 
-{ #category : #defaults }
-GtPharoSourceCoderViewModel >> headerElementClass [
-	^ GtMethodCoderBreadcrumbElement
-]
-
 { #category : #initialization }
 GtPharoSourceCoderViewModel >> initialize [
 	super initialize.

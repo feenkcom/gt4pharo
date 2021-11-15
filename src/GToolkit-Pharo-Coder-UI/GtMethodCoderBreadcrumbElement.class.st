@@ -136,7 +136,9 @@ GtMethodCoderBreadcrumbElement >> unsubscribeFromTextualCoderViewModel [
 
 { #category : #'event handling' }
 GtMethodCoderBreadcrumbElement >> updateBreadcrumbElements [
-	package label: textualCoderViewModel coderModel package name.
+	package label: (textualCoderViewModel coderModel package
+		ifNil: [ '(Unspecified)' ]
+		ifNotNil: [ :aPackage | aPackage name ]).
 	behavior label: (textualCoderViewModel coderModel methodBehavior
 		behaviorNameDo: [ :aName |
 			textualCoderViewModel coderModel methodBehavior exists

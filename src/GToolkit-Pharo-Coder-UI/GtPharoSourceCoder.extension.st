@@ -82,18 +82,3 @@ GtPharoSourceCoder >> removeRefactoringAttribute [
 	self sourceText
 		clearAttributes: [ :each | each class = GtRefactoringChangesAttribute ]
 ]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> wantsHeader [
-	^ self attributeNamed: #withHeader ifAbsent: [ true ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> withHeader [
-	self attributeNamed: #withHeader put: true
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> withoutHeader [
-	self attributeNamed: #withHeader put: false
-]
