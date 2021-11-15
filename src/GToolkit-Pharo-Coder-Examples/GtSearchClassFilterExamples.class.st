@@ -130,7 +130,7 @@ GtSearchClassFilterExamples >> deprecatedClassesInPackageUsingImageScopeFilter [
 	
 	self assert: (filter matches: GtSystemS1AnotherClassC3).
 	self assert: (filter matches: GtSystemS1RootClassC1) not.
-	self assert: filter result size wait equals: 1.
+	self assert: filter size equals: 1.
 	self assert: filter defaultFilterScope equals: (AsyncPackageBehaviorsStream package: 'GToolkit-Coder-Examples-SystemS1' asPackage).
 	self assertClassResultTypeForFilter: filter.
 	
