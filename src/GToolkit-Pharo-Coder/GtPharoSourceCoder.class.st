@@ -45,11 +45,6 @@ GtPharoSourceCoder class >> nodeHighlight [
 				paint: BrGlamorousColors textHighlightColor ]
 ]
 
-{ #category : #constants }
-GtPharoSourceCoder class >> sourceEditorName [
-	^ #editor
-]
-
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.

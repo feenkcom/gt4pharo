@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #accessing }
@@ -12,10 +12,12 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		(GtPharoSnippetCoder forSource: '#() do: [:x | ] displayingProgress: ''''') asCoderViewModel ].
+
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 6 ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
+
 	aScripter check
 		label: 'Check keyword highlighted';
 		satisfies: [ :aCoderEditor |
@@ -27,8 +29,9 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			
 			highlights notEmpty ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter syncContinue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
 
@@ -38,10 +41,12 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		(GtPharoSnippetCoder forSource: '#() do: [:x | ]') asCoderViewModel ].
+
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 6 ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
+
 	aScripter check
 		label: 'Check keyword not highlighted';
 		satisfies: [ :aCoderEditor |
@@ -52,8 +57,9 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			highlights isEmpty ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter syncContinue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
 
@@ -63,10 +69,12 @@ GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		(GtPharoSnippetCoder forSource: 'var := 42') asCoderViewModel ].
+
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
+
 	aScripter check
 		label: 'Check variable not highlighted';
 		satisfies: [ :aCoderEditor |
@@ -77,8 +85,9 @@ GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			highlights isEmpty ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter syncContinue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
 
@@ -88,10 +97,12 @@ GtPharoDynamicHighlightStylerExamples >> twoOccurrencesHighlighted [
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		(GtPharoSnippetCoder forSource: 'var := var + 1') asCoderViewModel ].
+
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];
-		onModel.
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
+
 	aScripter check
 		label: 'Check variable highlight attribute interval';
 		satisfies: [ :aCoderEditor |
@@ -102,7 +113,8 @@ GtPharoDynamicHighlightStylerExamples >> twoOccurrencesHighlighted [
 					eachAttribute class = GtPharoDynamicHighlightAttribute ]
 				indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
 			highlights notEmpty ];
-		onChildNamed: GtPharoSourceCoder sourceEditorName.
-	aScripter syncContinue.
+		id: GtSourceCoderEditorId;
+		play.
+
 	^ aScripter
 ]
