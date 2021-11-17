@@ -58,21 +58,7 @@ GtPharoMethodsCoder >> object [
 
 { #category : #scripting }
 GtPharoMethodsCoder >> selectAndScrollTo: aMethodCoder [
-	self
-		announce:
-			(GtCodersScrollToCoder new
-				coders: self;
-				sourceCoder: aMethodCoder).
-	BlUseAsyncFeatures 
-		ifEnabledDo: [ 
-			| aCommand |
-			
-			aCommand := BlTaskAtPostponedTerminableTask new
-				command: [ aMethodCoder requestFocus ];
-				pool: BlTktWorkerProvider highUICPUBoundPool;
-				scheduledTime: BlTime real now + 100 milliSeconds.
-			BlTaskAtQueue default schedule: aCommand ]
-		otherwise: [ aMethodCoder requestFocus ]
+	
 ]
 
 { #category : #scripting }
