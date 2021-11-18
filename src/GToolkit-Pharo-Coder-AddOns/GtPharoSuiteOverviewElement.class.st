@@ -169,7 +169,7 @@ GtPharoSuiteOverviewElement >> initializeToolbar [
 { #category : #initialization }
 GtPharoSuiteOverviewElement >> initializeUpdater [
 
-	updater := GtPhlowUpdateRequester new
+	updater := BrElementUpdater new
 		           element: self
 		           selector: #updateElement
 ]
