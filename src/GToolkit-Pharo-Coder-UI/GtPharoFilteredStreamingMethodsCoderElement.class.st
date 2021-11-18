@@ -11,8 +11,9 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoFilteredStreamingMethodsCoderElement >> buildFilter [
-	"| filterElement filterDescriptors |
-	filterDescriptors := methodsCoderUIModel coder filterDescriptors.
+	| filterElement filterDescriptors |
+
+	filterDescriptors := pharoFilteredStreamingMethodsCoderViewModel codersModel filterDescriptors.
 	filterDescriptors isEmpty
 		ifTrue: [ ^ self ].
 
@@ -20,14 +21,22 @@ GtPharoFilteredStreamingMethodsCoderElement >> buildFilter [
 		padding: (BlInsets all: 2);
 		descriptors: filterDescriptors;
 		yourself.
+
 	filterElement
 		when: GtFiltersChangedEvent
 		do: [ :event | self updateCodersFilters: event ].
-	methodsCoderUIModel coder announcer weak
+
+	pharoFilteredStreamingMethodsCoderViewModel codersModel
 		when: GtCodersFiltersChanged
 		send: #updateDisplayedFilters:
 		to: self.
-	self addChild: filterElement as: #filter"
+
+	self addChildFirst: filterElement as: #filter
+]
+
+{ #category : #initialization }
+GtPharoFilteredStreamingMethodsCoderElement >> defaultLayout [
+	^ BlLinearLayout vertical
 ]
 
 { #category : #initialization }
@@ -40,7 +49,7 @@ GtPharoFilteredStreamingMethodsCoderElement >> initialize [
 		itemType: [ :anItemTypeFactory :anItemObject | anItemObject class ];
 		itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
 		itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement textualCoderViewModel: aCoderViewModel ].
-		
+	
 	self addChild: list
 ]
 
@@ -53,6 +62,7 @@ GtPharoFilteredStreamingMethodsCoderElement >> onPharoFilteredStreamingMethodsCo
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 
+	self buildFilter.
 	list stream: pharoFilteredStreamingMethodsCoderViewModel coderViewModelsStream
 ]
 
@@ -70,7 +80,7 @@ GtPharoFilteredStreamingMethodsCoderElement >> subscribeToPharoFilteredStreaming
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#subscribeToObjectTemplate'>
 	
 	pharoFilteredStreamingMethodsCoderViewModel
-		when: GtStreamingCodersChanged
+		when: GtStreamingCodersViewModelChanged
 		send: #onStreamingCodersChanged:
 		to: self
 ]
@@ -83,4 +93,14 @@ GtPharoFilteredStreamingMethodsCoderElement >> unsubscribeFromPharoFilteredStrea
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#unsubscribeFromObjectTemplate'>
 	
 	pharoFilteredStreamingMethodsCoderViewModel unsubscribe: self
+]
+
+{ #category : #'private - update' }
+GtPharoFilteredStreamingMethodsCoderElement >> updateCodersFilters: event [
+	| filters |
+	filters := OrderedCollection new.
+	event filterElement
+		filtersDo:
+			[ :descriptor :value | filters add: (descriptor newFilterWithValue: value) ].
+	^ pharoFilteredStreamingMethodsCoderViewModel codersModel additionalFilters: filters
 ]

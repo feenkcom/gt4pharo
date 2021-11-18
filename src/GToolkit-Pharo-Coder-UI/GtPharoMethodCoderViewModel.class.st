@@ -143,6 +143,11 @@ GtPharoMethodCoderViewModel >> notifySaveEnabled [
 	self announce: (GtMethodCoderSaveEnabled new)
 ]
 
+{ #category : #'private - notifying' }
+GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
+	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> playAll [
 	"Evaluate the whole source code and inspect the result"
@@ -186,12 +191,16 @@ GtPharoMethodCoderViewModel >> receiverObjectToPlay [
 
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> save [
+	| aSaveResult |
 	<return: #Boolean>
 	
 	self isSaveEnabled
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ false ].
 
-	^ self coderModel saveInContext: self evaluationContext
+	aSaveResult := self coderModel saveInContext: self evaluationContext.
+	aSaveResult ifTrue: [ self notifySaved: self compiledMethod ].
+
+	^ aSaveResult
 ]
 
 { #category : #'api - coder model' }
