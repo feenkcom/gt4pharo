@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'tagsElement'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #private }
@@ -21,13 +21,6 @@ GtExpandableMethodCoderElement >> alignTagsElementCenterRight: aTagsElement [
 		constraintsDo: [ :c |
 			c ignored horizontal alignRight.
 			c ignored vertical alignCenter ]
-]
-
-{ #category : #accessing }
-GtExpandableMethodCoderElement >> coderUIModel: aCoderUIModel [
-	super coderUIModel: aCoderUIModel.
-	
-	tagsElement methodCoderUIModel: aCoderUIModel
 ]
 
 { #category : #initialization }
@@ -66,4 +59,11 @@ GtExpandableMethodCoderElement >> onExpanded [
 	super onExpanded.
 		
 	self alignTagsElementBottomRight: tagsElement
+]
+
+{ #category : #'api - textual coder view model' }
+GtExpandableMethodCoderElement >> onTextualCoderViewModelChanged [
+	super onTextualCoderViewModelChanged.
+	
+	tagsElement methodCoderUIModel: textualCoderViewModel
 ]

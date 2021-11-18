@@ -67,11 +67,6 @@ GtPharoSourceCoder >> browseReferencesIn: aSourceString [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> defaultCoderLook [
-	^ [ GtMethodCoderHeaderAptitude ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoSourceCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 
@@ -86,14 +81,4 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 GtPharoSourceCoder >> removeRefactoringAttribute [
 	self sourceText
 		clearAttributes: [ :each | each class = GtRefactoringChangesAttribute ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> withHeader [
-	self coderLook: [ GtMethodCoderHeaderAptitude ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoSourceCoder >> withoutHeader [
-	self coderLook: nil
 ]

@@ -70,14 +70,11 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
 	aSourceCode currentSourceText then: [ :aSourceText |
-		| anInterval |
-
-		anInterval := self programCounterRange.
-		
-		programCounterAttributes ifNotNil: [ :theAttributes | self removeCoderTextAttributes: theAttributes ].
-		programCounterAttributes := self
-			addTextAttribute: (BlTextDecorationAttribute new underline color: BrGlamorousColors errorBackgroundColor; thickness: 1.5) beNotOverwritableByStyler
-			onText: aSourceText text
-			from: anInterval first
-			to: anInterval last ]
+		self programCounterRange ifNotNil: [ :anInterval |
+			programCounterAttributes ifNotNil: [ :theAttributes | self removeCoderTextAttributes: theAttributes ].
+			programCounterAttributes := self
+				addTextAttribute: (BlTextDecorationAttribute new underline color: BrGlamorousColors errorBackgroundColor; thickness: 1.5) beNotOverwritableByStyler
+				onText: aSourceText text
+				from: (anInterval first min: aSourceText text size)
+				to: (anInterval last min: aSourceText text size) ] ]
 ]

@@ -4,12 +4,12 @@ Class {
 	#instVars : [
 		'methods'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #accessing }
 GtSearchFixedMethodsFilter >> defaultFilterScope [
-	^ self
+	^ self methods asAsyncStream
 ]
 
 { #category : #testing }

@@ -10,18 +10,6 @@ GtPharoMethodsCoder >> exampler [
 		coder: self
 ]
 
-{ #category : #accessing }
-GtPharoMethodsCoder >> forItems: aCollection [
-	super forItems: aCollection.
-	(items isKindOf: GtSearchMethodGroupResult)
-		ifTrue: [
-			items announcer weak
-				when: ValueAdded send: #methodAdded: to: self;
-				when: ValueChanged send: #methodChanged: to: self;
-				when: ValueRemoved send: #methodRemoved: to: self.
-			coders do: [ :each | each highlighter: items highlighter ] ]
-]
-
 { #category : #testing }
 GtPharoMethodsCoder >> isForClass [
 	^ false
@@ -70,21 +58,7 @@ GtPharoMethodsCoder >> object [
 
 { #category : #scripting }
 GtPharoMethodsCoder >> selectAndScrollTo: aMethodCoder [
-	self
-		announce:
-			(GtCodersScrollToCoder new
-				coders: self;
-				sourceCoder: aMethodCoder).
-	BlUseAsyncFeatures 
-		ifEnabledDo: [ 
-			| aCommand |
-			
-			aCommand := BlTaskAtPostponedTerminableTask new
-				command: [ aMethodCoder requestFocus ];
-				pool: BlTktWorkerProvider highUICPUBoundPool;
-				scheduledTime: BlTime real now + 100 milliSeconds.
-			BlTaskAtQueue default schedule: aCommand ]
-		otherwise: [ aMethodCoder requestFocus ]
+	
 ]
 
 { #category : #scripting }

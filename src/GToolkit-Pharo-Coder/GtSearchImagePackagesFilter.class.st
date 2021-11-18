@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchImagePackagesFilter,
 	#superclass : #GtSearchPackagesFilter,
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #comparing }
@@ -9,11 +9,6 @@ GtSearchImagePackagesFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ true
-]
-
-{ #category : #accessing }
-GtSearchImagePackagesFilter >> defaultFilterScope [
-	^ self
 ]
 
 { #category : #testing }

@@ -1,12 +1,12 @@
 Class {
 	#name : #GtSearchClassFilterExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #assertions }
 GtSearchClassFilterExamples >> assertClassResultTypeForFilter: aFilter [
-	self assert: aFilter resultType equals: GtSearchClassGroupResult.
+	self assert: aFilter resultType equals: GtAsyncSearchClassGroupStream.
 ]
 
 { #category : #examples }
@@ -39,10 +39,9 @@ GtSearchClassFilterExamples >> classesInCurrentPackageFilterResultType [
 	<gtExample>
 	| filter |
 	filter := self classesInCurrentPackageFilter.
-	self assert: filter defaultFilterScope == filter.
+	self assert: filter defaultFilterScope equals: (AsyncPackageBehaviorsStream package: 'GToolkit-Coder-Examples-SystemS1' asPackage).
 	self assertClassResultTypeForFilter: filter.
 	^ filter
-	
 ]
 
 { #category : #examples }
@@ -72,9 +71,11 @@ GtSearchClassFilterExamples >> classesInImageFilterEquality [
 GtSearchClassFilterExamples >> classesInImageFilterResultType [
 	<gtExample>
 	| filter |
+
 	filter := self classesInImageFilter.
-	self assert: filter defaultFilterScope == filter.
+	self assert: filter defaultFilterScope equals: AsyncImageBehaviorsStream new.
 	self assertClassResultTypeForFilter: filter.
+
 	^ filter
 	
 ]
@@ -94,10 +95,9 @@ GtSearchClassFilterExamples >> deprecatedClassesFilterResultType [
 	<gtExample>
 	| filter |
 	filter := self deprecatedClassesFilter.
-	self assert: filter defaultFilterScope equals: GtSearchImageClassesFilter new.
+	self assert: filter defaultFilterScope equals: AsyncImageBehaviorsStream new.
 	self assertClassResultTypeForFilter: filter.
 	^ filter
-	
 ]
 
 { #category : #examples }
@@ -105,18 +105,17 @@ GtSearchClassFilterExamples >> deprecatedClassesInPackageScopeFilter [
 	<gtExample>
 	"Use an intersection filter that uses the package filter as the first filter in the intersection."
 	| filter |
+
 	filter := GtSearchIntersectionFilter new
 		filter: self classesInCurrentPackageFilter
 		filter: GtSearchDeprecatedClassesFilter new.
 	
 	self assert: (filter matches: GtSystemS1AnotherClassC3).
 	self assert: (filter matches: GtSystemS1RootClassC1) not.
-	
-	self assert: filter defaultFilterScope == filter leftFilter.
+	self assert: filter defaultFilterScope equals: filter leftFilter defaultFilterScope.
 	self assertClassResultTypeForFilter: filter.
-	
+
 	^ filter
-	
 ]
 
 { #category : #examples }
@@ -124,15 +123,15 @@ GtSearchClassFilterExamples >> deprecatedClassesInPackageUsingImageScopeFilter [
 	<gtExample>
 	"Start first with the deprecated filter. This has as scope the entire image."
 	| filter |
+
 	filter := GtSearchIntersectionFilter new
-		filter: GtSearchDeprecatedClassesFilter new
-		filter: self classesInCurrentPackageFilter.
+		filter: self classesInCurrentPackageFilter
+		filter: GtSearchDeprecatedClassesFilter new.
 	
 	self assert: (filter matches: GtSystemS1AnotherClassC3).
 	self assert: (filter matches: GtSystemS1RootClassC1) not.
-	self assert: filter result size equals: 1.
-	
-	self assert: filter defaultFilterScope equals: GtSearchImageClassesFilter new.
+	self assert: filter size equals: 1.
+	self assert: filter defaultFilterScope equals: (AsyncPackageBehaviorsStream package: 'GToolkit-Coder-Examples-SystemS1' asPackage).
 	self assertClassResultTypeForFilter: filter.
 	
 	^ filter
@@ -142,53 +141,63 @@ GtSearchClassFilterExamples >> deprecatedClassesInPackageUsingImageScopeFilter [
 { #category : #'examples - result' }
 GtSearchClassFilterExamples >> groupResultForClassesInImageFilter [
 	<gtExample>
-	<noTest>
-	| filter result |
+	| filter resultStream result |
+
 	filter := self classesInImageFilter.
-	result := filter result.
-	
-	self assert: result class equals: GtSearchClassGroupResult.
-	self assert: result filter equals: filter.
-	self assert: result scope == filter.
+
+	resultStream := filter result.
+	self assert: resultStream class equals: GtAsyncSearchClassGroupStream.
+	self assert: resultStream filter equals: filter.
+	self assert: resultStream scope class equals: AsyncImageBehaviorsStream.
+
+	result := resultStream toArray wait.
+
 	self assert: result size equals: Smalltalk allClassesAndTraits size.
 	self assert: (result includes: GtSystemS1SubclassC2).
 	self assert: (result includes: Object).
 	
-	^ result
+	^ resultStream
 ]
 
 { #category : #'examples - result' }
 GtSearchClassFilterExamples >> groupResultForClassesInPackageFilter [
 	<gtExample>
-	| filter result |
-	filter := self classesInCurrentPackageFilter.
-	result := filter result.
+	| filter resultStream result |
 	
-	self assert: result class equals: GtSearchClassGroupResult.
-	self assert: result filter equals: filter.
-	self assert: result scope == filter.
+	filter := self classesInCurrentPackageFilter.
+	
+	resultStream := filter result.
+	self assert: resultStream class equals: GtAsyncSearchClassGroupStream.
+	self assert: resultStream filter equals: filter.
+	self assert: resultStream scope equals: (AsyncPackageBehaviorsStream package: 'GToolkit-Coder-Examples-SystemS1' asPackage).
+	
+	result := resultStream toArray wait.
+
 	self assert: result size equals: 5.
 	self assert: (result includes: GtSystemS1SubclassC2).
 	self assert: (result includes: Object) not.
 	
-	^ result
+	^ resultStream
 ]
 
 { #category : #'examples - result' }
 GtSearchClassFilterExamples >> groupResultForDeprecatedClassesInPackageScopeFilter [
 	<gtExample>
-	| filter result |
+	| filter resultStream result |
+
 	filter := self deprecatedClassesInPackageScopeFilter.
-	result := filter result.
-	
-	self assert: result class equals: GtSearchClassGroupResult.
-	self assert: result filter equals: filter.
-	self assert: result scope == filter leftFilter.
+
+	resultStream := filter result.
+	self assert: resultStream class equals: GtAsyncSearchClassGroupStream.
+	self assert: resultStream filter equals: filter.
+	self assert: resultStream scope equals: filter leftFilter result scope.
+
+	result := resultStream toArray wait.
 	self assert: result size equals: 1.
 	self assert: (result includes: GtSystemS1AnotherClassC3).
 	self assert: (result includes: GtSystemS1RootClassC1) not.
 	
-	^ result
+	^ resultStream
 ]
 
 { #category : #examples }

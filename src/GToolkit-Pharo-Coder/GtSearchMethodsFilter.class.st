@@ -40,21 +40,11 @@ GtSearchMethodsFilter class >> isTag: aTag validFor: aMethodsCoder [
 
 { #category : #accessing }
 GtSearchMethodsFilter class >> resultType [
-	^ GtSearchMethodGroupResult 
-]
-
-{ #category : #accessing }
-GtSearchMethodsFilter class >> resultTypeStream [
 	^ GtAsyncSearchMethodGroupStream
 ]
 
 { #category : #accessing }
 GtSearchMethodsFilter >> defaultFilterScope [
-	^ GtSearchImageMethodsFilter new
-]
-
-{ #category : #accessing }
-GtSearchMethodsFilter >> defaultFilterScopeStream [
 	^ AsyncImageMethodsStream new
 ]
 

@@ -5,7 +5,7 @@ Class {
 		'context',
 		'session'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -32,6 +32,9 @@ GtPharoMethodContextCoder >> close [
 { #category : #'api - actions' }
 GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	| withoutErrors compiledSuccesfully |
+	
+	self session
+		ifNil: [ ^ super compileInContext: aGtPharoSourceCoderEvaluationContext ].
 	
 	compiledSuccesfully := false.
 	withoutErrors := self handleCompilerErrorsDuring: [
@@ -175,9 +178,12 @@ GtPharoMethodContextCoder >> printOn: aStream [
 
 { #category : #accessing }
 GtPharoMethodContextCoder >> programCounterRange [
+	self session
+		ifNil: [ ^ context pcRangeContextIsActive: false ].
+
 	(self session process isNil or: [ context isDead ])
 		ifTrue: [ ^ nil ].
-	^ self session pcRangeForContext: context.
+	^ self session pcRangeForContext: context
 ]
 
 { #category : #accessing }

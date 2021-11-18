@@ -642,7 +642,7 @@ GtPharoMethodCoderExamples >> emptyMethodCoder [
 	methodCoder := GtPharoMethodCoder new.
 
 	self assert: methodCoder behavior equals: UndefinedObject.
-	self assert: methodCoder collapsedText asString equals: ''.
+	self assert: methodCoder collapsedText asString equals: 'faulty'.
 	self assert: methodCoder currentSourceString equals: ''.
 	self assert: methodCoder selector equals: nil.
 	self assert: methodCoder currentSelector equals: #faulty.
@@ -713,7 +713,7 @@ GtPharoMethodCoderExamples >> forBinaryMethodCoder [
 	self assert: methodCoder currentSelector equals: #?.
 	self assert: methodCoder behavior equals: GtPharoMethodCoderExamples.
 	self assert: methodCoder compiledMethod equals: method.
-	self assert: methodCoder collapsedText asString equals: '? anObject'.
+	self assert: methodCoder collapsedText asString equals: '?'.
 	self
 		assert: methodCoder currentSourceText asString
 		equals: method sourceCode.
@@ -812,7 +812,7 @@ GtPharoMethodCoderExamples >> forKeywordSelectorMethodCoder [
 
 	methodCoder := GtPharoMethodCoder forMethod: method.
 
-	self assert: methodCoder collapsedText asString equals: 'keyword: a selector: b'.
+	self assert: methodCoder collapsedText asString equals: 'keyword:selector:'.
 	self assert: methodCoder currentSourceString equals: method sourceCode.
 
 	^ methodCoder
@@ -836,7 +836,7 @@ GtPharoMethodCoderExamples >> forNewMethod [
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
-	self assert: aMethodCoder collapsedText asString equals: ''.
+	self assert: aMethodCoder collapsedText asString equals: #faulty.
 	self assert: aMethodCoder currentSourceString equals: ''.
 	self assert: aMethodCoder selector equals: nil.
 	self assert: aMethodCoder currentSelector equals: #faulty.
@@ -853,7 +853,7 @@ GtPharoMethodCoderExamples >> forSelfReturnMethodCoder [
 
 	methodCoder := GtPharoMethodCoder forMethod: method.
 
-	self assert: methodCoder collapsedText asString equals: 'returnSelf ^self'.
+	self assert: methodCoder collapsedText asString equals: 'returnSelf'.
 	self assert: methodCoder currentSourceString equals: method sourceCode.
 	^ methodCoder
 ]
