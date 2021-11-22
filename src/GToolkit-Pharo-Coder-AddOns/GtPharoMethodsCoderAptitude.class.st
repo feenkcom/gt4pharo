@@ -58,7 +58,7 @@ GtPharoMethodsCoderAptitude >> initializeEventHandler [
 { #category : #initialization }
 GtPharoMethodsCoderAptitude >> initializeUpdater [
 
-	updater := GtPhlowUpdateRequester new
+	updater := BrElementUpdater new
 		           element: self
 		           selector: #updateElement
 ]
