@@ -2,7 +2,7 @@ Extension { #name : #GtPharoStreamingBehaviorMethodsCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoStreamingBehaviorMethodsCoder >> asCoderUIModel [
-	^ GtPharoFilteredStreamingMethodsCoderViewModel new codersModel: self
+	^ GtPharoStreamingMethodsCoderViewModel new codersModel: self
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

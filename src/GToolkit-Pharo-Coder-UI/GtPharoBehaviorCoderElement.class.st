@@ -7,7 +7,7 @@ Class {
 		'contentPane',
 		'contentTabs'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #callbacks }
@@ -39,9 +39,12 @@ GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationA
 	tab := contentTabs viewModel tabs
 		detect: [ :each | each widget label asString = 'Methods' ]
 		ifNone: [ ^ self ].
+	
 	tab isSelected
-		ifFalse: [ selectTabBlock := [ tab select ].
+		ifFalse: [
+			selectTabBlock := [ tab select ].
 			self executeTask: selectTabBlock ].
+	
 	selectMethodBlock := [ self selectAndScrollToMethod: aMethod ].
 	self executeTask: selectMethodBlock
 ]
@@ -288,7 +291,10 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 GtPharoBehaviorCoderElement >> selectAndScrollToMethod: aMethod [
 
 	contentTabs content 
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoMethodsCoderElement ] 
-		ifFound: [ :theElement | theElement codersUIModel coder selectAndScrollToMethod: aMethod ] 
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoFilteredStreamingMethodsCoderElement ] 
+		ifFound: [ :theElement |
+			theElement pharoFilteredStreamingMethodsCoderViewModel
+				expandAndFocusCompiledMethod: aMethod;
+				scrollToCompiledMethod: aMethod ] 
 		ifNone: [ "ignore" ]
 ]

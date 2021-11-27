@@ -63,7 +63,15 @@ GtPharoFilteredStreamingMethodsCoderElement >> onPharoFilteredStreamingMethodsCo
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 
 	self buildFilter.
-	list stream: pharoFilteredStreamingMethodsCoderViewModel coderViewModelsStream
+	list stream: pharoFilteredStreamingMethodsCoderViewModel coderViewModelsStream.
+	
+	pharoFilteredStreamingMethodsCoderViewModel hasScrollTarget
+		ifTrue: [ self updateScrollTarget: pharoFilteredStreamingMethodsCoderViewModel scrollTarget ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoFilteredStreamingMethodsCoderElement >> onScrollTargetChanged: anAnnouncement [
+	self updateScrollTarget: anAnnouncement scrollTarget
 ]
 
 { #category : #'private - event handling' }
@@ -81,8 +89,11 @@ GtPharoFilteredStreamingMethodsCoderElement >> subscribeToPharoFilteredStreaming
 	
 	pharoFilteredStreamingMethodsCoderViewModel
 		when: GtStreamingCodersViewModelChanged
-		send: #onStreamingCodersChanged:
-		to: self
+			send: #onStreamingCodersChanged:
+			to: self;
+		when: GtStreamingCodersViewModelScrollTargetChanged
+			send: #onScrollTargetChanged:
+			to: self
 ]
 
 { #category : #'api - pharo filtered streaming methods coder view model' }
@@ -103,4 +114,9 @@ GtPharoFilteredStreamingMethodsCoderElement >> updateCodersFilters: event [
 		filtersDo:
 			[ :descriptor :value | filters add: (descriptor newFilterWithValue: value) ].
 	^ pharoFilteredStreamingMethodsCoderViewModel codersModel additionalFilters: filters
+]
+
+{ #category : #'private - update' }
+GtPharoFilteredStreamingMethodsCoderElement >> updateScrollTarget: aScrollTarget [
+	list scrollToItemSuchThat: [ :eachItem | aScrollTarget applicableTo: eachItem ]
 ]
