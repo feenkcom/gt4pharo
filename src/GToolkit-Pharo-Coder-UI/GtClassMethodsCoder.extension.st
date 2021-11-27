@@ -64,10 +64,10 @@ GtClassMethodsCoder >> examplesFilter: aView [
 			anElement := GtCoderFilterList new.
 			anElement
 				matchParent;
-				items: GtFilterExampleState default allStates
+				items: GtExampleState default allStates
 				title: [ :aState | aState labelWithAmountFor: self exampler ]
 				action: [ :aState | self 
-					setFilters: { (GtSearchExamplesFilter new
+					setFilters: { (GtPharoExampleStateFilter new
 						resultState: aState)
 						coder: self }
 					source: anElement ] ].

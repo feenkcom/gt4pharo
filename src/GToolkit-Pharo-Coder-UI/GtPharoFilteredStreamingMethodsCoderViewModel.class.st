@@ -4,11 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
-{ #category : #accessing }
-GtPharoFilteredStreamingMethodsCoderViewModel >> elementClass [
-	^ GtPharoFilteredStreamingMethodsCoderElement
-]
-
 { #category : #'api  - coders' }
 GtPharoFilteredStreamingMethodsCoderViewModel >> expandAndFocusCompiledMethod: aCompiledMethod [
 	self enqueueCommand: (GtPharoExpandMethodCoderViewModelCommand new

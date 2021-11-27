@@ -667,7 +667,7 @@ GtPharoMethodCoder >> testCase [
 		  ifAbsent: [ 
 			  self
 				  attributeNamed: #testCase
-				  put: (GtPharoMethodTestCase forMethodCoder: self) ]
+				  put: (GtPharoMethodTestCase forMethod: self compiledMethod) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

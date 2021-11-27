@@ -6,8 +6,7 @@ Class {
 
 { #category : #accessing }
 GtPharoMethodsCoder >> exampler [
-	^ GtMethodsCoderExampler new
-		coder: self
+	^ GtPharoExampleSuite new coder: self
 ]
 
 { #category : #testing }

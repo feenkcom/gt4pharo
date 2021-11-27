@@ -6,7 +6,7 @@ Class {
 		'hasRefactoring',
 		'variableBindings'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #'private - variables' }
@@ -139,21 +139,21 @@ GtFixItStyler >> visitMessageSend: aNode [
 	super visitMessageSend: aNode.
 
 	hasActiveRefactoring := BlTextStylerTelemetry
-		timeSync: [ 'Has refactoring?' ]
+		time: [ 'Has refactoring?' ]
 		during: [ self hasRefactoring ].
 
 	hasActiveRefactoring
 		ifTrue: [ ^ self ].
 
 	theNodeType := BlTextStylerTelemetry
-		timeSync: [ 'Type of ', aNode receiver source asString, ' in ', self sourceCoder behavior name ]
+		time: [ 'Type of ', aNode receiver source asString, ' in ', self sourceCoder behavior name ]
 		during: [ self typeOf: aNode receiver ].
 
 	theNodeType
 		ifNil: [ ^ self ].
 		
 	theClassForSelector := BlTextStylerTelemetry
-		timeSync: [ 'Which superclass of ', theNodeType name, ' includes ', aNode selector printString ]
+		time: [ 'Which superclass of ', theNodeType name, ' includes ', aNode selector printString ]
 		during: [ theNodeType whichClassIncludesSelector: aNode selector ].
 
 	theClassForSelector

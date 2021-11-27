@@ -1,7 +1,7 @@
-Extension { #name : #GtSearchExamplesFilter }
+Extension { #name : #GtPharoExampleStateFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchExamplesFilter class >> filterDescriptorFor: aMethodsCoder [
+GtPharoExampleStateFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ (GtFilterDescriptor
 		creator: [ :value | self new
 			resultStateString: value;
@@ -9,7 +9,7 @@ GtSearchExamplesFilter class >> filterDescriptorFor: aMethodsCoder [
 		named: 'Examples'
 		order: 12
 		completion: (GtStringsCompletionStrategy new completions: 
-			(GtPrefixTree withAll: GtFilterExampleState default allLabels)) 
+			(GtPrefixTree withAll: GtExampleState default allLabels)) 
 		emptyDefaultValue: self defaultState label)
 		beNotDefault
 ]
