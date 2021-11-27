@@ -55,7 +55,10 @@ GtClassMethodsCoder >> codeGeneratorsDropDown: anElement for: aMethodsCoderViewM
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> examplesFilter: aView [
-	<gtFilterTypes>
+	"<gtFilterTypes>"
+	
+	self flag: #TODO.
+	
 	^ aView explicit
 		title: 'Examples';
 		priority: 40;
