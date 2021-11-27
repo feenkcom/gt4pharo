@@ -10,7 +10,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 	spec for: #'common' do: [
 		spec 
 			baseline: 'Futures' with: [
-				spec repository: 'github://feenkcom/gtoolkit-futures:main/src' ];
+				spec repository: 'github://feenkcom/pharo-futures:main/src' ];
 			baseline: 'GToolkitRefactoringsUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitCoder' with: [
