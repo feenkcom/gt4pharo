@@ -9,7 +9,7 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoStreamingBehaviorMethodsCoder class >> forBehavior: aBehavior [
-	^ (self forFilter: (GtSearchMethodsInClassFilter forClass: aBehavior)) behavior: aBehavior
+	^ (self forFilter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: aBehavior)) behavior: aBehavior
 ]
 
 { #category : #'api - accessing' }

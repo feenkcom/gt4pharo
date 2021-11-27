@@ -10,7 +10,7 @@ Class {
 		'methodCoderUIModel',
 		'traitMethodTag'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #private }
@@ -92,9 +92,14 @@ GtMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 		when: GtCoderMethodModified
 		send: #onCoderMethodModified:
 		to: self.	
-
-	self updateProtocolButton.
-	self updateTraitMethodButton.
+	
+	BlFrameTelemetry
+		time: [ self class name, ' #updateProtocolButton' ]
+		during: [ self updateProtocolButton ].
+		
+	BlFrameTelemetry
+		time: [ self class name, ' #updateTraitMethodButton' ]
+		during: [ self updateTraitMethodButton ]
 ]
 
 { #category : #'private - instance creation' }

@@ -48,7 +48,10 @@ GtPharoFilteredStreamingMethodsCoderElement >> initialize [
 	list := BrSimpleList new
 		itemType: [ :anItemTypeFactory :anItemObject | anItemObject class ];
 		itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
-		itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement textualCoderViewModel: aCoderViewModel ].
+		itemDataBinder: [ :aCoderElement :aCoderViewModel |
+			BlFrameTelemetry
+				time: [ 'Set {1} as a view model of {2}' format: { aCoderViewModel class name . aCoderElement class name } ]
+				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ].
 	
 	self addChild: list
 ]
@@ -88,7 +91,7 @@ GtPharoFilteredStreamingMethodsCoderElement >> subscribeToPharoFilteredStreaming
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#subscribeToObjectTemplate'>
 	
 	pharoFilteredStreamingMethodsCoderViewModel
-		when: GtStreamingCodersViewModelChanged
+		when: GtStreamingCodersViewModelStreamChanged
 			send: #onStreamingCodersChanged:
 			to: self;
 		when: GtStreamingCodersViewModelScrollTargetChanged
