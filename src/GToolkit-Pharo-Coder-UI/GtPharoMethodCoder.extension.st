@@ -25,6 +25,8 @@ GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
 		ifTrue: [ ^ noReferencesLabel ].
 
 	references := self selector gtReferences. 
+	
+	noReferencesLabel text: (selector asRopedText bold, ' is not referenced' asRopedText).
 
 	waitingLabel := BrLabel new
 		aptitude: BrGlamorousLabelAptitude new italic;
@@ -34,7 +36,7 @@ GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
 	selectorLabel := BrLabel new
 		margin: (BlInsets top: 10 left: 10 bottom: 10 right: 0);
 		aptitude: BrGlamorousLabelAptitude new;
-		text: (selector asRopedText glamorousCodeFontAndSize bold, ' is still referenced in ' asRopedText glamorousRegularFontAndSize).
+		text: (selector asRopedText bold, ' is still referenced in ' asRopedText).
 
 	referencesButton := BrButton new
 		aptitude: BrGlamorousLinkSquaredButtonWithLabelAptitude new glamorousCodeSmallSize;
