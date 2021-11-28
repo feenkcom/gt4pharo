@@ -74,7 +74,7 @@ GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
 							selectorLabel visibility: BlVisibility gone.
 							referencesButton visibility: BlVisibility gone.
 							noReferencesLabel visibility: BlVisibility visible ].
-						
+
 					referencesButton label: (String streamContents: [ :aStream |
 						aStream
 							print: aSink count;

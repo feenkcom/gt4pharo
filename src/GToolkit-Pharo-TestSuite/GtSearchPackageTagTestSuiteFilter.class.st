@@ -9,8 +9,6 @@ Class {
 
 { #category : #accessing }
 GtSearchPackageTagTestSuiteFilter >> includesMethod: aCompiledMethod [
-
-
 	(aCompiledMethod methodClass inheritsFrom: TestCase) ifFalse: [ 
 		^ false ].
 	aCompiledMethod selector isTestSelector ifFalse: [ ^ false ].

@@ -37,3 +37,20 @@ GtPharoCoderUIUtility class >> newTestsDropdownButtonForViewModel: aViewModel [
 		suiteViewModel: aViewModel;
 		yourself
 ]
+
+{ #category : #'instance creation' }
+GtPharoCoderUIUtility class >> testMethodsPhlowViewFor: aView filter: aGtSearchFilter [
+	| aMethodsCoder aMethodsCoderViewModel aTestSuiteViewModel |
+	
+	aMethodsCoder := GtPharoStreamingBehaviorMethodsCoder forFilter: aGtSearchFilter.
+	aMethodsCoderViewModel := GtPharoStreamingMethodsCoderViewModel new streamingCodersModel: aMethodsCoder.
+
+	aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
+
+	^ aView explicit
+		  title: 'Tests';
+		  stencil: [ GtPharoStreamingMethodsCoderElement new streamingCodersViewModel: aMethodsCoderViewModel ];
+		  actionStencil: [ 
+			  GtPharoCoderUIUtility
+				  newTestsDropdownButtonForViewModel: aTestSuiteViewModel ]
+]

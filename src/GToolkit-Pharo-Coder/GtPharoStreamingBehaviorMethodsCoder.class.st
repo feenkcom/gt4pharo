@@ -41,6 +41,8 @@ GtPharoStreamingBehaviorMethodsCoder >> classOrMetaClass [
 GtPharoStreamingBehaviorMethodsCoder >> initialize [
 	super initialize.
 	
+	behavior := UndefinedObject.
+	
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded send: #onMethodAdded: to: self;
 		when: MethodRemoved send: #onMethodRemoved: to: self
