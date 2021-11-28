@@ -46,5 +46,5 @@ GtPharoSuiteOverviewStateElement >> state: aState [
 	state := aState.
 
 	icon background: aState color.
-	name text: aState label
+	name text: (aState label, ':')
 ]
