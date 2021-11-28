@@ -291,9 +291,9 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 GtPharoBehaviorCoderElement >> selectAndScrollToMethod: aMethod [
 
 	contentTabs content 
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoFilteredStreamingMethodsCoderElement ] 
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ] 
 		ifFound: [ :theElement |
-			theElement pharoFilteredStreamingMethodsCoderViewModel
+			theElement streamingCodersViewModel
 				expandAndFocusCompiledMethod: aMethod;
 				scrollToCompiledMethod: aMethod ] 
 		ifNone: [ "ignore" ]

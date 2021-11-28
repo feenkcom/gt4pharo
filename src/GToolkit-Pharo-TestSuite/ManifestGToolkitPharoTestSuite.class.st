@@ -6,3 +6,16 @@ Class {
 	#superclass : #PackageManifest,
 	#category : #'GToolkit-Pharo-TestSuite-Manifest'
 }
+
+{ #category : #accessing }
+ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
+	^ {
+		'Announcements-Core'.
+		'Collections-Sequenceable'.
+		'Collections-Unordered'.
+		'Futures'.
+		'GToolkit-Pharo-Coder'.
+		'Kernel'.
+		'SUnit-Core'
+	}
+]

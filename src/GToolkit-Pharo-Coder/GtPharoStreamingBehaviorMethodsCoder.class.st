@@ -24,12 +24,12 @@ GtPharoStreamingBehaviorMethodsCoder >> behavior: aBehavior [
 
 { #category : #'api - completion' }
 GtPharoStreamingBehaviorMethodsCoder >> categories [
-	^ ((filter asAsyncStream map: [ :eachMethod | eachMethod category ]) to: GtPrefixTree) wait
+	^ ((self itemsStream map: [ :eachMethod | eachMethod category ]) to: GtPrefixTree) wait
 ]
 
 { #category : #'api - completion' }
 GtPharoStreamingBehaviorMethodsCoder >> classNames [
-	^ ((filter asAsyncStream map: [ :eachMethod | eachMethod methodClass instanceSide name ]) withoutDuplicates to: GtPrefixTree) wait
+	^ ((self itemsStream map: [ :eachMethod | eachMethod methodClass instanceSide name ]) withoutDuplicates to: GtPrefixTree) wait
 ]
 
 { #category : #'api - accessing' }
@@ -51,43 +51,51 @@ GtPharoStreamingBehaviorMethodsCoder >> isForClass [
 	^ behavior notNil
 ]
 
-{ #category : #private }
+{ #category : #'private - instance creation' }
 GtPharoStreamingBehaviorMethodsCoder >> newCoderFor: aCompiledMethod [
 	^ (GtPharoMethodCoder forMethod: aCompiledMethod) withoutHeader
 ]
 
 { #category : #'private - event handling' }
 GtPharoStreamingBehaviorMethodsCoder >> onMethodAdded: aMethodAddedAnnouncement [
-	| aCoderModel |
+	| anAddedCoder |
 
 	(filter matches: aMethodAddedAnnouncement methodAdded)
 		ifFalse: [ ^ self ].
 	
-	aCoderModel := self privateFetchCoderFor: aMethodAddedAnnouncement methodAdded.
-	
-	self announce: (GtCodersCoderAdded new
-		coders: self;
-		coder: aCoderModel)
+	anAddedCoder := self privateFetchCoderFor: aMethodAddedAnnouncement methodAdded.
+	self
+		itemsStream: (self createItemsStreamForFilter: filter andAdditionalFilters: additionalFilters)
+		dueTo: (GtStreamingCodersAddedReason new coder: anAddedCoder)
 ]
 
 { #category : #'private - event handling' }
 GtPharoStreamingBehaviorMethodsCoder >> onMethodRemoved: aMethodRemovedAnnouncement [
+	| aRemovedCoder |
+
 	(filter matches: aMethodRemovedAnnouncement methodRemoved)
 		ifFalse: [ ^ self ].
-		
-	self notifyChanged
+
+	monitor critical: [
+		aRemovedCoder := coders
+			removeKey: aMethodRemovedAnnouncement methodRemoved
+			ifAbsent: [ nil ] ].
+
+	self
+		itemsStream: (self createItemsStreamForFilter: filter andAdditionalFilters: additionalFilters)
+		dueTo: (GtStreamingCodersRemovedReason new coder: aRemovedCoder)
 ]
 
 { #category : #'api - completion' }
 GtPharoStreamingBehaviorMethodsCoder >> packageNames [
-	^ (((filter asAsyncStream
+	^ (((self itemsStream
 		filter: [ :eachMethod | eachMethod package notNil ])
 		map: [ :eachMethod | eachMethod package name ]) to: GtPrefixTree) wait
 ]
 
 { #category : #'api - completion' }
 GtPharoStreamingBehaviorMethodsCoder >> pragmaNames [
-	^ (((filter asAsyncStream
+	^ (((self itemsStream
 		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
 		flatten
 		map: [ :eachPragma | eachPragma selector ])
@@ -96,5 +104,5 @@ GtPharoStreamingBehaviorMethodsCoder >> pragmaNames [
 
 { #category : #'api - completion' }
 GtPharoStreamingBehaviorMethodsCoder >> selectorNames [	
-	^ ((filter asAsyncStream map: [ :eachMethod | eachMethod selector ]) to: GtPrefixTree) wait
+	^ ((self itemsStream map: [ :eachMethod | eachMethod selector ]) to: GtPrefixTree) wait
 ]

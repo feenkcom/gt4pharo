@@ -1,11 +1,6 @@
 Extension { #name : #GtPharoStreamingBehaviorMethodsCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> asCoderUIModel [
-	^ GtPharoStreamingMethodsCoderViewModel new codersModel: self
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoStreamingBehaviorMethodsCoder >> categoryFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit

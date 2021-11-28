@@ -11,14 +11,6 @@ GtPharoStreamingMethodsCoderViewModel >> expandAndFocusCompiledMethod: aCompiled
 		selector: aCompiledMethod selector)
 ]
 
-{ #category : #initialization }
-GtPharoStreamingMethodsCoderViewModel >> initialize [
-	super initialize.
-	
-	monitor := Monitor new.
-	coderViewModels := Dictionary new
-]
-
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
 	^ aCoderModel asCoderViewModel expanded: false
