@@ -29,11 +29,6 @@ GtPharoStreamingMethodsCoderElement >> buildFilter [
 		when: GtFiltersChangedEvent
 		do: [ :event | self updateCodersFilters: event ].
 
-	streamingCodersViewModel streamingCodersModel
-		when: GtCodersFiltersChanged
-		send: #updateDisplayedFilters:
-		to: self.
-
 	self addChildFirst: filterElement as: #filter
 ]
 
@@ -49,14 +44,34 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 	self matchParent.
 	
 	list := BrSimpleList new
-		itemType: [ :anItemTypeFactory :anItemObject | anItemObject class ];
-		itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
+		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
+		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
 		itemDataBinder: [ :aCoderElement :aCoderViewModel |
 			BlFrameTelemetry
 				time: [ 'Set {1} as a view model of {2}' format: { aCoderViewModel class name . aCoderElement class name } ]
 				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ].
 	
 	self addChild: list
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoderElement >> onFilterChanged: anAnnouncement [
+	self
+		childWithId: #filter
+		ifFound: [ :aFiltersElement |
+			aFiltersElement
+				buildFilters: [
+					streamingCodersViewModel additionalFilters do: [ :each | 
+						(each filterDescriptorFor: streamingCodersViewModel streamingCodersModel)
+							ifNotNil: [ :descriptor | 
+								| label |
+								label := descriptor valueIsRequired
+									ifTrue: [ each filterValueString ].
+									
+								aFiltersElement
+									addFilterForDescriptor: descriptor
+									andValue: label ] ] ] ]
+		ifNone: [  ]
 ]
 
 { #category : #'private - event handling' }
@@ -102,6 +117,9 @@ GtPharoStreamingMethodsCoderElement >> subscribeToStreamingCodersViewModel [
 			to: self;
 		when: GtStreamingCodersViewModelScrollTargetChanged
 			send: #onScrollTargetChanged:
+			to: self;
+		when: GtFilteredCodersViewModelFilterChanged
+			send: #onFilterChanged:
 			to: self
 ]
 
@@ -116,13 +134,15 @@ GtPharoStreamingMethodsCoderElement >> unsubscribeFromStreamingCodersViewModel [
 ]
 
 { #category : #'private - update' }
-GtPharoStreamingMethodsCoderElement >> updateCodersFilters: event [
+GtPharoStreamingMethodsCoderElement >> updateCodersFilters: anEvent [
 	| filters |
+	
 	filters := OrderedCollection new.
-	event filterElement
-		filtersDo:
-			[ :descriptor :value | filters add: (descriptor newFilterWithValue: value) ].
-	^ streamingCodersViewModel streamingCodersModel additionalFilters: filters
+
+	anEvent filterElement filtersDo: [ :descriptor :value |
+		filters add: (descriptor newFilterWithValue: value) ].
+	
+	streamingCodersViewModel streamingCodersModel additionalFilters: filters
 ]
 
 { #category : #'private - update' }

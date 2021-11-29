@@ -63,8 +63,8 @@ GtPharoMethodTestCaseExamples >> basicTestCase [
 
 { #category : #'examples - execution' }
 GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
-
 	<gtExample>
+	<noTest>
 	| aCoder |
 	aCoder := self executePassingTestCase.
 	aCoder deleteSourceTextFrom: 63 to: 66.
@@ -81,8 +81,8 @@ GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
 
 { #category : #'examples - execution' }
 GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
-
 	<gtExample>
+	<noTest>
 	| aCoder |
 	aCoder := self executePassingTestCase.
 	aCoder deleteSourceTextFrom: 2 to: 4.
@@ -108,7 +108,7 @@ GtPharoMethodTestCaseExamples >> emptyPharoMethodCoder [
 		assert: aCoder testCase canExecute not
 		description: [ 
 		'Uninitialized method coder cannot execute test cases' ].
-	self assertNotExecutableTestCaseOfCoder: aCoder.
+	self assertUnexecutedTestCaseOfCoder: aCoder.
 
 	^ aCoder
 ]

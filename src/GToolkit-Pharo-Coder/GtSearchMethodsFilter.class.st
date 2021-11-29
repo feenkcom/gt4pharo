@@ -20,11 +20,6 @@ GtSearchMethodsFilter class >> descriptorForTagType: aString in: aMethodsCoder [
 ]
 
 { #category : #accessing }
-GtSearchMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
-	^ nil
-]
-
-{ #category : #accessing }
 GtSearchMethodsFilter class >> filterDescriptorsFor: aMethodsCoder into: aCollection [
 	(self filterDescriptorFor: aMethodsCoder) 
 		ifNotNil: [ :aDescriptor | aCollection add: aDescriptor ]
@@ -46,11 +41,6 @@ GtSearchMethodsFilter class >> resultType [
 { #category : #accessing }
 GtSearchMethodsFilter >> defaultFilterScope [
 	^ AsyncImageMethodsStream new
-]
-
-{ #category : #accessing }
-GtSearchMethodsFilter >> filterValueString [
-	^ nil
 ]
 
 { #category : #testing }
