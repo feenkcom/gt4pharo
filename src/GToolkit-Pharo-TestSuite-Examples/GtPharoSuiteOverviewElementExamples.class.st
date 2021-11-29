@@ -7,6 +7,7 @@ Class {
 { #category : #'examples - element' }
 GtPharoSuiteOverviewElementExamples >> basicElement [
 	<gtExample>
+	<noTest>
 	| anElement |
 	
 	anElement := GtPharoSuiteOverviewElement new.
@@ -19,6 +20,7 @@ GtPharoSuiteOverviewElementExamples >> basicElement [
 { #category : #'examples - view model' }
 GtPharoSuiteOverviewElementExamples >> basicTestSuiteViewModel [
 	<gtExample>
+	<noTest>
 	| aViewModel |
 	aViewModel := GtPharoTestSuiteViewModel new.
 
@@ -30,6 +32,7 @@ GtPharoSuiteOverviewElementExamples >> basicTestSuiteViewModel [
 { #category : #'examples - element' }
 GtPharoSuiteOverviewElementExamples >> elementWithBasicTestSuite [
 	<gtExample>
+	<noTest>
 	| aViewModel anElement |
 	anElement := self basicElement.
 	aViewModel := self basicTestSuiteViewModel.
@@ -44,8 +47,8 @@ GtPharoSuiteOverviewElementExamples >> elementWithBasicTestSuite [
 
 { #category : #'examples - element' }
 GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoder [
-
 	<gtExample>
+	<noTest>
 	| aViewModel anElement |
 	anElement := self basicElement.
 	aViewModel := self testSuiteViewModelWithMethodsCoder.
@@ -60,8 +63,8 @@ GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoder [
 
 { #category : #accessing }
 GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoderAndExecutionError [
-
 	<gtExample>
+	<noTest>
 	| aViewModel anElement |
 	anElement := self basicElement.
 	aViewModel := self testSuiteViewModelWithMethodsCoderAndExecutionError.
@@ -76,8 +79,8 @@ GtPharoSuiteOverviewElementExamples >> elementWithTestSuiteWithMethodsCoderAndEx
 
 { #category : #'examples - coder' }
 GtPharoSuiteOverviewElementExamples >> methodsCoderWithTestCase [
-
 	<gtExample>
+	<noTest>
 	| aCoder |
 	aCoder := GtClassMethodsCoder forClass: GtPharoDummyTestCase.
 	
@@ -90,8 +93,8 @@ GtPharoSuiteOverviewElementExamples >> methodsCoderWithTestCase [
 
 { #category : #'examples - view model' }
 GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoder [
-
 	<gtExample>
+	<noTest>
 	| aViewModel aCoder |
 	aViewModel := self basicTestSuiteViewModel.
 	aCoder := self methodsCoderWithTestCase.
@@ -104,8 +107,8 @@ GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoder [
 
 { #category : #'examples - view model' }
 GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoderAndExecutionError [
-
 	<gtExample>
+	<noTest>
 	| aViewModel aCoder |
 	aViewModel := self testSuiteViewModelWithMethodsCoder.
 	aViewModel executionState: #exception -> ZeroDivide new.
