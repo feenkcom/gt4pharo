@@ -44,8 +44,8 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 	self matchParent.
 	
 	list := BrSimpleList new
-		itemType: [ :anItemTypeFactory :anItemObject | anItemObject class ];
-		itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
+		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
+		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
 		itemDataBinder: [ :aCoderElement :aCoderViewModel |
 			BlFrameTelemetry
 				time: [ 'Set {1} as a view model of {2}' format: { aCoderViewModel class name . aCoderElement class name } ]
