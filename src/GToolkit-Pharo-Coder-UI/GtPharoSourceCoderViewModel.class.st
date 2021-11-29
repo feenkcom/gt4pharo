@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'selfObject',
 		'localBindings',
-		'hasSelfObject'
+		'hasSelfObject',
+		'highlighter'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
@@ -77,12 +78,32 @@ GtPharoSourceCoderViewModel >> hasSelfObject [
 	^ hasSelfObject ifNil: [ false ]
 ]
 
+{ #category : #'api - accessing' }
+GtPharoSourceCoderViewModel >> highlighter [
+	<return: #GtSourceReferenceHighlighter>
+
+	^ highlighter
+]
+
+{ #category : #'api - accessing' }
+GtPharoSourceCoderViewModel >> highlighter: aGtSourceReferenceHighlighter [
+	"Set a source reference highlighter thhat should be used tp highlight or mark some parts
+	of the source code. If a given highlighter is nil, it means that no highlighter should be used"
+
+	self highlighter == aGtSourceReferenceHighlighter
+		ifTrue: [ ^ self ].
+
+	highlighter := aGtSourceReferenceHighlighter.
+	self coderModel requestUpdateAddOns
+]
+
 { #category : #initialization }
 GtPharoSourceCoderViewModel >> initialize [
 	super initialize.
 
 	localBindings := GtLocalVariablesBindings new.
 	hasSelfObject := false.
+	highlighter := nil
 ]
 
 { #category : #'api - coder model' }

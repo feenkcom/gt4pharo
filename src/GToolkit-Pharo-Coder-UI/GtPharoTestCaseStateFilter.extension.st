@@ -3,14 +3,14 @@ Extension { #name : #GtPharoTestCaseStateFilter }
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoTestCaseStateFilter class >> filterDescriptorFor: aMethodsCoder [
 
-	^ (GtFilterDescriptor
+	^ GtFilterDescriptor new
 		   creator: [ :value | 
 			   self new
 				   resultStateString: value;
-				   coder: aMethodsCoder ]
-		   named: 'Tests'
-		   order: 13
-		   completion: (GtStringsCompletionStrategy new completions:
-				    (GtPrefixTree withAll: GtPharoMethodTestCaseState allLabels))
-		   emptyDefaultValue: self defaultState label) beNotDefault
+				   coder: aMethodsCoder ];
+		   named: 'Tests';
+		   order: 13;
+		   completion: [ (GtStringsCompletionStrategy new completions: [ (GtPrefixTree withAll: GtPharoMethodTestCaseState allLabels) ]) ];
+		   emptyDefaultValue: self defaultState label;
+			beNotDefault
 ]

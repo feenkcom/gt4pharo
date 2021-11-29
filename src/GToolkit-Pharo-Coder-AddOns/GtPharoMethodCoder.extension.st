@@ -550,6 +550,17 @@ GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns viewModel: aGtPharoSourceCoderViewModel [
+	<gtAstCoderAddOns: 10>
+	
+	self highlighter
+		ifNotNil: [ :aHighlighter | coderAddOns addStyler: aHighlighter ].
+
+	aGtPharoSourceCoderViewModel highlighter
+		ifNotNil: [ :aHighlighter | coderAddOns addStyler: aHighlighter ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 	

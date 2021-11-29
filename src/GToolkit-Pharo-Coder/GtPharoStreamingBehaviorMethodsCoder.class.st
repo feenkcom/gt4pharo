@@ -55,7 +55,7 @@ GtPharoStreamingBehaviorMethodsCoder >> isForClass [
 
 { #category : #'private - instance creation' }
 GtPharoStreamingBehaviorMethodsCoder >> newCoderFor: aCompiledMethod [
-	^ (GtPharoMethodCoder forMethod: aCompiledMethod) withoutHeader
+	^ GtPharoMethodCoder forMethod: aCompiledMethod
 ]
 
 { #category : #'private - event handling' }
@@ -67,7 +67,7 @@ GtPharoStreamingBehaviorMethodsCoder >> onMethodAdded: aMethodAddedAnnouncement 
 	
 	anAddedCoder := self privateFetchCoderFor: aMethodAddedAnnouncement methodAdded.
 	self
-		itemsStream: (self createItemsStreamForFilter: filter andAdditionalFilters: additionalFilters)
+		itemsStream: compositeFilter asAsyncStream
 		dueTo: (GtStreamingCodersAddedReason new coder: anAddedCoder)
 ]
 
@@ -84,7 +84,7 @@ GtPharoStreamingBehaviorMethodsCoder >> onMethodRemoved: aMethodRemovedAnnouncem
 			ifAbsent: [ nil ] ].
 
 	self
-		itemsStream: (self createItemsStreamForFilter: filter andAdditionalFilters: additionalFilters)
+		itemsStream: compositeFilter asAsyncStream
 		dueTo: (GtStreamingCodersRemovedReason new coder: aRemovedCoder)
 ]
 

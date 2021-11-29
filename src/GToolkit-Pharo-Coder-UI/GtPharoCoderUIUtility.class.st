@@ -5,6 +5,34 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView filter: aGtSearchFilter testsRunner: shouldHaveTestsRunner examplesRunner: shouldHaveExamplesRunner [
+	| aMethodsCoder aMethodsCoderViewModel  anItemsView |
+	
+	aMethodsCoder := GtPharoStreamingBehaviorMethodsCoder forFilter: aGtSearchFilter.
+	aMethodsCoderViewModel := (GtPharoStreamingMethodsCoderViewModel new streamingCodersModel: aMethodsCoder)
+		shouldExpandByDefault: false;
+		shouldHaveHeaderByDefault: true.
+
+	anItemsView := aView explicit
+		title: 'Tests';
+		stencil: [ GtPharoStreamingMethodsCoderElement new streamingCodersViewModel: aMethodsCoderViewModel ].
+
+	shouldHaveTestsRunner ifTrue: [
+		| aTestSuiteViewModel |
+		aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
+		anItemsView
+			actionStencil: [ GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].
+
+	shouldHaveExamplesRunner ifTrue: [
+		| anExamplesSuiteViewModel |
+		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new pharoExampleSuite: (GtPharoExampleSuite forStream: aMethodsCoder itemsStream).
+		anItemsView
+			actionStencil: [ GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExamplesSuiteViewModel ] ].
+
+	^ anItemsView
+]
+
+{ #category : #'instance creation' }
 GtPharoCoderUIUtility class >> newExamplesButtonForMethodsCoder: aMethodsCoder [
 
 	^ BrButton new
@@ -40,17 +68,9 @@ GtPharoCoderUIUtility class >> newTestsDropdownButtonForViewModel: aViewModel [
 
 { #category : #'instance creation' }
 GtPharoCoderUIUtility class >> testMethodsPhlowViewFor: aView filter: aGtSearchFilter [
-	| aMethodsCoder aMethodsCoderViewModel aTestSuiteViewModel |
-	
-	aMethodsCoder := GtPharoStreamingBehaviorMethodsCoder forFilter: aGtSearchFilter.
-	aMethodsCoderViewModel := GtPharoStreamingMethodsCoderViewModel new streamingCodersModel: aMethodsCoder.
-
-	aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
-
-	^ aView explicit
-		  title: 'Tests';
-		  stencil: [ GtPharoStreamingMethodsCoderElement new streamingCodersViewModel: aMethodsCoderViewModel ];
-		  actionStencil: [ 
-			  GtPharoCoderUIUtility
-				  newTestsDropdownButtonForViewModel: aTestSuiteViewModel ]
+	^ self
+		filteredMethodsPhlowViewFor: aView
+		filter: aGtSearchFilter
+		testsRunner: true
+		examplesRunner: false
 ]

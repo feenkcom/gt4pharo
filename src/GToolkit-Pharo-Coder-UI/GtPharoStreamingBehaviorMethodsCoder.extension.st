@@ -43,12 +43,22 @@ GtPharoStreamingBehaviorMethodsCoder >> classSlotFilter: aView [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoStreamingBehaviorMethodsCoder >> filterDescriptors [
 	| descriptors |
+	<return: #TAsyncStream>
+
 	descriptors := SortedCollection sortBlock: [ :a :b | a order < b order ].
-	GtSearchMethodsFilter
-		withAllSubclassesDo: [ :eachClass | 
-			eachClass 
-				filterDescriptorsFor: self 
-				into: descriptors ].
+
+	BlFrameTelemetry
+		time: [ 'Create filter descriptors' ]
+		during: [
+			GtSearchMethodsFilter
+				withAllSubclassesDo: [ :eachClass | 
+					BlFrameTelemetry
+						time: [ 'Filter descriptors of ', eachClass name ]
+						during: [
+							eachClass 
+								filterDescriptorsFor: self 
+								into: descriptors ] ] ].
+
 	^ descriptors
 ]
 

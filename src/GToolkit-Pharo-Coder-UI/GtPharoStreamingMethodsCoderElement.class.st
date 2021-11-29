@@ -17,10 +17,13 @@ GtPharoStreamingMethodsCoderElement >> buildFilter [
 	filterDescriptors isEmpty
 		ifTrue: [ ^ self ].
 
-	filterElement := GtFiltersElement new
-		padding: (BlInsets all: 2);
-		descriptors: filterDescriptors;
-		yourself.
+	filterElement := BlFrameTelemetry
+		time: [ 'Create filters element' ]
+		during: [
+			GtFiltersElement new
+				padding: (BlInsets all: 2);
+				descriptors: filterDescriptors;
+				yourself ].
 
 	filterElement
 		when: GtFiltersChangedEvent
@@ -75,9 +78,12 @@ GtPharoStreamingMethodsCoderElement >> onStreamingCodersViewModelChanged [
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 	
-	self buildFilter.
+	BlFrameTelemetry
+		time: [ 'Build filters widget' ]
+		during: [ self buildFilter ].
+
 	list stream: streamingCodersViewModel coderViewModelsStream.
-	
+
 	streamingCodersViewModel hasScrollTarget
 		ifTrue: [ self updateScrollTarget: streamingCodersViewModel scrollTarget ]
 ]

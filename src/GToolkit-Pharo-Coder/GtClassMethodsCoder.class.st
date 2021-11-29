@@ -129,7 +129,7 @@ GtClassMethodsCoder >> isForClass [
 
 { #category : #private }
 GtClassMethodsCoder >> newCoderFor: aMethod [
-	^ (super newCoderFor: aMethod) withoutHeader
+	^ super newCoderFor: aMethod
 ]
 
 { #category : #private }
