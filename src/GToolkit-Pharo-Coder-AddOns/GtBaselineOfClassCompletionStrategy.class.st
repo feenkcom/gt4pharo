@@ -1,14 +1,13 @@
 Class {
 	#name : #GtBaselineOfClassCompletionStrategy,
 	#superclass : #GtBaselineCompletionStrategy,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
 { #category : #private }
-GtBaselineOfClassCompletionStrategy >> namesMatching: aString [
+GtBaselineOfClassCompletionStrategy >> nameStreamMatching: aString [
 	| name |
 	name := 'BaselineOf' , aString.
-	^ (BaselineOf withAllSubclasses
-		select: [ :each | each name beginsWith: name ])
+	^ ((AsyncDepthFirstTraversalStream root: BaselineOf children: #subclasses) select: [ :each | each name beginsWith: name ])
 		collect: [ :each | each name allButFirst: 10 ]
 ]
