@@ -1,10 +1,9 @@
 Class {
 	#name : #GtPharoStreamingMethodsCoderViewModel,
-	#superclass : #GtStreamingCodersViewModel,
+	#superclass : #GtFilteredCodersViewModel,
 	#instVars : [
 		'shouldExpandByDefault',
-		'shouldHaveHeaderByDefault',
-		'highlighter'
+		'shouldHaveHeaderByDefault'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
@@ -32,30 +31,6 @@ GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
 		highlighter: highlighter
 ]
 
-{ #category : #'private - event handling' }
-GtPharoStreamingMethodsCoderViewModel >> onCodersStreamChanged: anAnnouncement [
-	super onCodersStreamChanged: anAnnouncement.
-
-	((anAnnouncement isDueTo: GtFilteredCodersFilterReason)
-		or: [ anAnnouncement isDueTo: GtFilteredCodersAdditionalFiltersReason ])
-			ifFalse: [ ^ self ].
-
-	self updateFiltersHighlighter
-]
-
-{ #category : #'api - streaming coders model' }
-GtPharoStreamingMethodsCoderViewModel >> onStreamingCodersModelChanged [
-	"Is sent when a new streamingCodersModel is assigned to the receiver.
-	Note: #onStreamingCodersModelChanged is sent before #subscribeToStreamingCodersModel
-	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
-	didn't get a chance to subscribe to any announcement. Override #onPostStreamingCodersModelChanged if you
-	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
-	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
-	
-	super onStreamingCodersModelChanged.
-	self updateFiltersHighlighter
-]
-
 { #category : #'api - coders' }
 GtPharoStreamingMethodsCoderViewModel >> scrollToCompiledMethod: aCompiledMethod [
 	self scrollToTarget: (GtPharoMethodCoderViewModelScrollTarget new
@@ -75,21 +50,14 @@ GtPharoStreamingMethodsCoderViewModel >> shouldExpandByDefault: anObject [
 	shouldExpandByDefault := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'api - accessing' }
 GtPharoStreamingMethodsCoderViewModel >> shouldHaveHeaderByDefault [
 
 	^ shouldHaveHeaderByDefault
 ]
 
-{ #category : #accessing }
+{ #category : #'api - accessing' }
 GtPharoStreamingMethodsCoderViewModel >> shouldHaveHeaderByDefault: anObject [
 
 	shouldHaveHeaderByDefault := anObject
-]
-
-{ #category : #'private - update' }
-GtPharoStreamingMethodsCoderViewModel >> updateFiltersHighlighter [	
-	highlighter := streamingCodersModel compositeFilter highlighter.
-	coderViewModels valuesDo: [ :eachCoderViewModel |
-		eachCoderViewModel highlighter: highlighter ]
 ]

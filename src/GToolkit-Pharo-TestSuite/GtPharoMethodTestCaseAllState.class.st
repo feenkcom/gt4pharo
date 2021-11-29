@@ -27,7 +27,7 @@ GtPharoMethodTestCaseAllState class >> includesTestCase: aPharoTestCase [
 { #category : #accessing }
 GtPharoMethodTestCaseAllState class >> label [
 	"Return a textural representation"
-	^ 'All'
+	^ 'All tests'
 ]
 
 { #category : #accessing }

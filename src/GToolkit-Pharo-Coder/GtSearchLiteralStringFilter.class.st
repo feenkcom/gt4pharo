@@ -48,14 +48,6 @@ GtSearchLiteralStringFilter >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean.
 ]
 
-{ #category : #'as yet unclassified' }
-GtSearchLiteralStringFilter >> filterDescriptorFor: aMethodsCoder [
-	^ GtFilterDescriptor new
-		creator: [ :value | self substring: value ];
-		named: 'Substring Literal';
-		order: 91
-]
-
 { #category : #accessing }
 GtSearchLiteralStringFilter >> filterValueString [
 	^ self substring

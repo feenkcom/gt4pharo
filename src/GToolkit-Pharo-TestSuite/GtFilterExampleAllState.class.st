@@ -21,7 +21,7 @@ GtFilterExampleAllState >> isStatusFor: aGtExampleWithResult [
 
 { #category : #'api - accessing' }
 GtFilterExampleAllState >> label [
-	^ 'All'
+	^ 'All examples'
 ]
 
 { #category : #'api - accessing' }

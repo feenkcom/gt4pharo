@@ -84,8 +84,7 @@ GtPharoSuiteOverviewContentElement >> initializeToolbar [
 			 addToggle: (remoteToggle := BrToggle new
 					                  disable;
 					                  beSmallSize;
-					                  aptitude:
-						                  BrGlamorousToggleWithLabelAptitude new;
+					                  aptitude: BrGlamorousToggleWithLabelAptitude new;
 					                  label: 'Remote';
 					                  when: BrToggleActivatedEvent
 					                  do: [ :anEvent | 
