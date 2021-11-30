@@ -1,25 +1,44 @@
 Class {
 	#name : #GtPharoDynamicHighlightStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-DynamicHighlight'
+	#category : #'GToolkit-Pharo-Coder-AddOns-DynamicHighlight'
 }
 
 { #category : #accessing }
 GtPharoDynamicHighlightStyler >> visitKeywordMessage: aKeywordMessage [
+	| theMarkers |
 	super visitKeywordMessage: aKeywordMessage.
-	aKeywordMessage selectorParts size > 1 ifFalse: [^ self].
-	aKeywordMessage selectorParts do: [:eachPart |
+	
+	aKeywordMessage selectorParts size <= 1
+		ifTrue: [ ^ self].
+	
+	theMarkers := OrderedCollection new.
+	aKeywordMessage selectorParts do: [ :eachPart |
+		| eachMarker |
+		
+		eachMarker := BrTextInvisibleMarkerAttribute new.
+		theMarkers add: eachMarker. 
+		
 		(text 
 			from: eachPart startPosition
 			to: eachPart stopPosition)
-			onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-				aKeywordMessage selectorParts do: [ :node |
-						(aTextEditor text
-							from: node startPosition
-							to: node stopPosition)
-							attribute: (GtPharoDynamicHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor)]]
-			leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex |
-				aTextEditor text clearAttributesOfClass: GtPharoDynamicHighlightAttribute ] ]
+				attribute: eachMarker;
+				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+					aTextEditor text
+						findAttributes: theMarkers
+						indicesDo: [ :aHighlightStart :aHighlightEnd |
+							(aTextEditor text
+								from: aHighlightStart
+								to: aHighlightEnd)
+									attribute: (GtPharoDynamicHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor) ] ]
+				leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex |
+					aTextEditor text
+						findAttributes: theMarkers
+						indicesDo: [ :aHighlightStart :aHighlightEnd |
+							(aTextEditor text
+								from: aHighlightStart
+								to: aHighlightEnd)
+									clearAttributesOfClass: GtPharoDynamicHighlightAttribute ] ] ]
 ]
 
 { #category : #accessing }
