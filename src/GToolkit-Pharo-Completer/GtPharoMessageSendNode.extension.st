@@ -1,18 +1,18 @@
-Extension { #name : 'GtPharoMessageSendNode' }
+Extension { #name : #GtPharoMessageSendNode }
 
-{ #category : '*GToolkit-Pharo-Completer' }
-GtPharoMessageSendNode >> completionActionsFor: aStrategy [
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoMessageSendNode >> completionActionStreamFor: aStrategy [
 	| index |
 	index := aStrategy index.
 	(index > receiver stopPosition and: [ index < message startPosition ])
-		ifTrue: [ ^ (aStrategy
-				selectorsForReceiver: (receiver guessType: aStrategy)
-				matching: '')
-				collect: [ :each | 
+		ifTrue:
+			[ ^ (aStrategy selectorStreamForReceiver: (receiver guessType: aStrategy) matching: '')
+				collect:
+					[ :each | 
 					receiver
 						actionForSelector: each
 						startingWith: ''
 						at: aStrategy index
 						needsParensKeywords: true ] ].
-	^ super completionActionsFor: aStrategy
+	^ super completionActionStreamFor: aStrategy
 ]

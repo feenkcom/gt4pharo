@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtPharoCompleterExamples',
-	#superclass : 'GtCompleterControllerExamples',
+	#name : #GtPharoCompleterExamples,
+	#superclass : #GtCompleterControllerExamples,
 	#category : 'GToolkit-Pharo-Completer-Examples'
 }
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> binaryCompletion [
 	<gtExample>
 	| text strategy |
@@ -20,7 +20,7 @@ GtPharoCompleterExamples >> binaryCompletion [
 	^ strategy
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	<gtExample>
 	<noTest>
@@ -37,7 +37,7 @@ GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	^ completer
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 	<gtExample>
 	<noTest>
@@ -62,7 +62,7 @@ GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 	^ completer
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	<gtExample>
 	<noTest>
@@ -81,7 +81,7 @@ GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	^ completer
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> crLfMessageCompletion [
 	<gtExample>
 	| text strategy items |
@@ -96,7 +96,7 @@ GtPharoCompleterExamples >> crLfMessageCompletion [
 	^ strategy
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> emptyExplicitlyRequestedCompletions [
 	<gtExample>
 	| text strategy index |
@@ -119,7 +119,7 @@ GtPharoCompleterExamples >> emptyExplicitlyRequestedCompletions [
 	^ strategy
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> endingStatementRequestedCompletions [
 	<gtExample>
 	| text strategy index |
@@ -154,7 +154,7 @@ GtPharoCompleterExamples >> endingStatementRequestedCompletions [
 	^ strategy
 ]
 
-{ #category : 'private-source' }
+{ #category : #'private-source' }
 GtPharoCompleterExamples >> instanceVariableReceiverSource [
 	^ self printOnMethodSelectorSource
 		,
@@ -162,7 +162,7 @@ GtPharoCompleterExamples >> instanceVariableReceiverSource [
 	isMethod'
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> methodSourceCompleter [
 	<gtExample>
 	| text styler editor editorElement completionStrategy completionController method ast |
@@ -190,12 +190,12 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 	^ editorElement
 ]
 
-{ #category : 'private-source' }
+{ #category : #'private-source' }
 GtPharoCompleterExamples >> printOnMethodSelectorSource [
 	^ 'printOn: aStream'
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> smalltalkCompleter [
 	<gtExample>
 	| text styler editor editorElement completionStrategy completionController |
@@ -219,7 +219,7 @@ GtPharoCompleterExamples >> smalltalkCompleter [
 	^ editorElement
 ]
 
-{ #category : 'strategies' }
+{ #category : #strategies }
 GtPharoCompleterExamples >> smalltalkStrategy [
 	<gtExample>
 	| completionStrategy |
@@ -228,7 +228,7 @@ GtPharoCompleterExamples >> smalltalkStrategy [
 	^ completionStrategy
 ]
 
-{ #category : 'smalltalk' }
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> startingStatementRequestedCompletions [
 	<gtExample>
 	| text strategy index |

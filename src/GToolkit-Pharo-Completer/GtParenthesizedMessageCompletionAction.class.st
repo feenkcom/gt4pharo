@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtParenthesizedMessageCompletionAction',
-	#superclass : 'GtInsertTextCompletionAction',
+	#name : #GtParenthesizedMessageCompletionAction,
+	#superclass : #GtInsertTextCompletionAction,
 	#instVars : [
 		'endPosition',
 		'parenIndex'
@@ -8,7 +8,7 @@ Class {
 	#category : 'GToolkit-Pharo-Completer-Completion'
 }
 
-{ #category : 'adding' }
+{ #category : #adding }
 GtParenthesizedMessageCompletionAction >> addMessageAndArgsOn: aCompletionController [
 	| first argLocations |
 	first := true.
@@ -34,12 +34,12 @@ GtParenthesizedMessageCompletionAction >> addMessageAndArgsOn: aCompletionContro
 		ifTrue: [ endPosition := endPosition + 1 ]
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtParenthesizedMessageCompletionAction >> addParenthesesBefore: anIndex [
 	parenIndex := anIndex
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtParenthesizedMessageCompletionAction >> addParenthesesOn: aCompletionController [
 	self hasParentheses
 		ifFalse: [ ^ self ].
@@ -48,19 +48,19 @@ GtParenthesizedMessageCompletionAction >> addParenthesesOn: aCompletionControlle
 	self insert: '(' at: parenIndex - 1 on: aCompletionController
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtParenthesizedMessageCompletionAction >> addParenthesisAttributeOn: aCompletionController [
 	self hasParentheses
 		ifFalse: [ ^ self ].
 	self addPreviewAttributeForText: '(' at: parenIndex - 1 on: aCompletionController
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtParenthesizedMessageCompletionAction >> affectsText [
 	^ true
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtParenthesizedMessageCompletionAction >> completedMessage [
 	^ String
 		streamContents: [ :stream | 
@@ -79,7 +79,7 @@ GtParenthesizedMessageCompletionAction >> completedMessage [
 				ifTrue: [ stream nextPut: $) ] ]
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtParenthesizedMessageCompletionAction >> finishCompletionOn: aCompletionController moveCursor: aBoolean [
 	self clearPreviewAttributesOn: aCompletionController.
 	self addMessageAndArgsOn: aCompletionController.
@@ -88,30 +88,30 @@ GtParenthesizedMessageCompletionAction >> finishCompletionOn: aCompletionControl
 	self moveCursorOn: aCompletionController
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtParenthesizedMessageCompletionAction >> fromIndex [
 	^ self hasParentheses
 		ifTrue: [ parenIndex ]
 		ifFalse: [ super fromIndex ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtParenthesizedMessageCompletionAction >> hasParentheses [
 	^ parenIndex notNil
 ]
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtParenthesizedMessageCompletionAction >> messageAndArgumentNamesDo: aBlock [
 	self subclassResponsibility
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtParenthesizedMessageCompletionAction >> moveCursorOn: aCompletionController [
 	aCompletionController textEditor moveCursorTo: position.
 	aCompletionController moveCursorToNextUncompletedItem: 1
 ]
 
-{ #category : 'executing' }
+{ #category : #executing }
 GtParenthesizedMessageCompletionAction >> previewOn: aCompletionController [
 	self
 		addPreviewAttributeForText: self completedMessage
@@ -120,12 +120,12 @@ GtParenthesizedMessageCompletionAction >> previewOn: aCompletionController [
 	self addParenthesisAttributeOn: aCompletionController
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtParenthesizedMessageCompletionAction >> toIndex [
 	^ endPosition
 ]
 
-{ #category : 'translating' }
+{ #category : #translating }
 GtParenthesizedMessageCompletionAction >> translateBy: anIndex [
 	super translateBy: anIndex.
 	parenIndex notNil

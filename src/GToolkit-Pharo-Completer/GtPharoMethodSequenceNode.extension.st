@@ -1,10 +1,9 @@
-Extension { #name : 'GtPharoMethodSequenceNode' }
+Extension { #name : #GtPharoMethodSequenceNode }
 
-{ #category : '*GToolkit-Pharo-Completer' }
-GtPharoMethodSequenceNode >> completionActionsFor: aStrategy [
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoMethodSequenceNode >> completionActionStreamFor: aStrategy [
 	pragmas
-		do: [ :each | 
-			(aStrategy index between: each startPosition and: each stopPosition)
-				ifTrue: [ ^ each completionActionsFor: aStrategy ] ].
-	^ super completionActionsFor: aStrategy
+		do:
+			[ :each | (aStrategy index between: each startPosition and: each stopPosition) ifTrue: [ ^ each completionActionStreamFor: aStrategy ] ].
+	^ super completionActionStreamFor: aStrategy
 ]

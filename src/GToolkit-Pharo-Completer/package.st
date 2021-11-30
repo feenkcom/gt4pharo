@@ -1,1 +1,1 @@
-Package { #name : 'GToolkit-Pharo-Completer' }
+Package { #name : #'GToolkit-Pharo-Completer' }

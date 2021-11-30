@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtKeywordCompletionAction',
-	#superclass : 'GtParenthesizedMessageCompletionAction',
+	#name : #GtKeywordCompletionAction,
+	#superclass : #GtParenthesizedMessageCompletionAction,
 	#category : 'GToolkit-Pharo-Completer-Completion'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtKeywordCompletionAction >> messageAndArgumentNamesDo: aBlock [
 	text first = $:
 		ifTrue: [ aBlock value: ':' value: '_' ].

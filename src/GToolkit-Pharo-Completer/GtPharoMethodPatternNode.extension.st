@@ -1,26 +1,26 @@
-Extension { #name : 'GtPharoMethodPatternNode' }
+Extension { #name : #GtPharoMethodPatternNode }
 
-{ #category : '*GToolkit-Pharo-Completer' }
-GtPharoMethodPatternNode >> completionActionsFor: aStrategy [
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoMethodPatternNode >> completionActionStreamFor: aStrategy [
 	| seen prefix actions |
 	(self selectorParts size = 1 and: [ self selectorParts first stopPosition = aStrategy index ])
-		ifFalse: [ ^ #() ].
+		ifFalse: [ ^ #() asAsyncStream ].
 	prefix := self selectorParts first source.
 	seen := Set new.
 	actions := OrderedCollection new.
-	(aStrategy hierarchyMethodsStartingWith: prefix)
-		do: [ :each | 
-			((seen includes: each selector)
-				or: [ aStrategy classOrMetaClass includesSelector: each selector ])
-				ifFalse: [ seen add: each selector.
-					actions
-						add:
-							(GtInsertTextCompletionAction
-								labeled: each selector
-								completion: ((aStrategy signatureFor: each) allButFirst: prefix size)
-								position: aStrategy index
-								from: aStrategy index - prefix size + 1).
-					actions size = aStrategy maxItems
-						ifTrue: [ ^ actions ] ] ].
-	^ actions
+	^ ((aStrategy hierarchyMethodsStartingWith: prefix) asAsyncStream
+		select:
+			[ :each | 
+			((seen includes: each selector) or: [ aStrategy classOrMetaClass includesSelector: each selector ])
+				ifTrue: [ false ]
+				ifFalse:
+					[ seen add: each selector.
+					true ] ])
+		collect:
+			[ :each | 
+			GtInsertTextCompletionAction
+				labeled: each selector
+				completion: ((aStrategy signatureFor: each) allButFirst: prefix size)
+				position: aStrategy index
+				from: aStrategy index - prefix size + 1 ]
 ]
