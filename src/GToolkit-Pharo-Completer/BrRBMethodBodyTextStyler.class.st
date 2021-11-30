@@ -1,13 +1,13 @@
 Class {
-	#name : 'BrRBMethodBodyTextStyler',
-	#superclass : 'BrRBTextStyler',
+	#name : #BrRBMethodBodyTextStyler,
+	#superclass : #BrRBTextStyler,
 	#instVars : [
 		'methodPatternSource'
 	],
 	#category : 'GToolkit-Pharo-Completer-Completion'
 }
 
-{ #category : 'adding' }
+{ #category : #adding }
 BrRBMethodBodyTextStyler >> addAttributes: attributes from: start to: stop [
 	| length |
 	length := methodPatternSource size + 1.
@@ -16,12 +16,12 @@ BrRBMethodBodyTextStyler >> addAttributes: attributes from: start to: stop [
 	^ super addAttributes: attributes from: start - length to: stop - length
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 BrRBMethodBodyTextStyler >> methodPatternSource: aString [
 	methodPatternSource := aString
 ]
 
-{ #category : 'parsing' }
+{ #category : #parsing }
 BrRBMethodBodyTextStyler >> parse: aText isMethod: isMethod [
 	| source |
 	source := methodPatternSource , ' ' , aText asString.

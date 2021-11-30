@@ -1,22 +1,18 @@
-Extension { #name : 'GtPharoBinaryMessageNode' }
+Extension { #name : #GtPharoBinaryMessageNode }
 
-{ #category : '*GToolkit-Pharo-Completer' }
-GtPharoBinaryMessageNode >> completionActionsFor: strategy [
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoBinaryMessageNode >> completionActionStreamFor: strategy [
 	| startingText index |
 	index := strategy index.
-	selectorPart stopPosition = index
-		ifFalse: [ ^ super completionActionsFor: strategy ].
+	selectorPart stopPosition = index ifFalse: [ ^ super completionActionStreamFor: strategy ].
 	startingText := selectorPart value.
-	^ (strategy
-		selectorsForReceiver: (parent receiver guessType: strategy)
-		matching: startingText)
-		collect: [ :each | 
+	^ (strategy selectorStreamForReceiver: (parent receiver guessType: strategy) matching: startingText)
+		collect:
+			[ :each | 
 			parent
 				actionForSelector: each
 				startingWith: startingText
 				at: index
 				needsParensKeywords:
-					((value isKindOf: GtPharoErrorNode)
-						ifTrue: [ parent parent ]
-						ifFalse: [ parent ]) needsParenthesisForKeyword ]
+					((value isKindOf: GtPharoErrorNode) ifTrue: [ parent parent ] ifFalse: [ parent ]) needsParenthesisForKeyword ]
 ]

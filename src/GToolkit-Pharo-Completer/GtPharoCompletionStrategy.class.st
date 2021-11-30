@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtPharoCompletionStrategy',
-	#superclass : 'GtCompletionStrategy',
+	#name : #GtPharoCompletionStrategy,
+	#superclass : #GtCompletionStrategy,
 	#instVars : [
 		'class',
 		'isMethod',
@@ -10,7 +10,6 @@ Class {
 		'variables',
 		'localVariables',
 		'index',
-		'maxItems',
 		'pragmas',
 		'variableTypes',
 		'bindings'
@@ -19,15 +18,15 @@ Class {
 		'GlobalCache',
 		'SelectorCache'
 	],
-	#category : 'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> classAdded: anAnnouncement [
 	GlobalCache add: anAnnouncement classAdded name
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> classRemoved: anAnnouncement [
 	GlobalCache
 		remove:
@@ -36,20 +35,20 @@ GtPharoCompletionStrategy class >> classRemoved: anAnnouncement [
 				with: '')
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> classRenamed: anAnnouncement [
 	GlobalCache
 		remove: anAnnouncement oldName;
 		add: anAnnouncement newName
 ]
 
-{ #category : 'class initialization' }
+{ #category : #'class initialization' }
 GtPharoCompletionStrategy class >> initialize [
 	SelectorCache := GtPrefixTree new.
 	GlobalCache := GtPrefixTree new.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy class >> initializeCache [
 	SelectorCache := GtPrefixTree new.
 	Smalltalk
@@ -63,31 +62,31 @@ GtPharoCompletionStrategy class >> initializeCache [
 	self subscribeToSystem
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> methodAdded: anAnnouncement [
 	SelectorCache add: anAnnouncement method selector
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> methodRemoved: anAnnouncement [
 	SelectorCache remove: anAnnouncement method selector
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoCompletionStrategy class >> newForExpression [
 	^ self new
 		isMethod: false;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoCompletionStrategy class >> newForMethod [
 	^ self new
 		isMethod: true;
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtPharoCompletionStrategy class >> newForSnippet [
 	^ self new
 		isMethod: false;
@@ -95,7 +94,7 @@ GtPharoCompletionStrategy class >> newForSnippet [
 		yourself
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> subscribeToSystem [
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded send: #methodAdded: to: self;
@@ -105,22 +104,22 @@ GtPharoCompletionStrategy class >> subscribeToSystem [
 		when: ClassRenamed send: #classRenamed: to: self
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy class >> unsubscribeFromSystem [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> bindings [
 	^ bindings
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> bindings: anObject [
 	bindings := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> blockVariables: aDictionary [
 	variableTypes := Dictionary new.
 	aDictionary
@@ -130,12 +129,12 @@ GtPharoCompletionStrategy >> blockVariables: aDictionary [
 	self isMethod: false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> classOrMetaClass [
 	^ class
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> classOrMetaClass: aClass [
 	class := aClass.
 	class notNil
@@ -147,18 +146,14 @@ GtPharoCompletionStrategy >> classOrMetaClass: aClass [
 				ifTrue: [ localVariables add: 'super' ] ]
 ]
 
-{ #category : 'accessing' }
-GtPharoCompletionStrategy >> completionActionsFor: aText at: positionInteger max: maxInteger requested: aBoolean [
-	maxItems := maxInteger.
+{ #category : #accessing }
+GtPharoCompletionStrategy >> completionActionStreamFor: aText at: positionInteger requested: aBoolean [
 	index := positionInteger.
 	wasRequested := aBoolean.
-
-	^ (self parseSource: aText asString)
-		ifNil: [ #() ]
-		ifNotNil: [ :tree | tree completionActionsFor: self ]
+	^ (self parseSource: aText asString) ifNil: [ #() asAsyncStream ] ifNotNil: [ :tree | tree completionActionStreamFor: self ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> forMethod: aCompiledMethod [
 	| source ast |
 	self classOrMetaClass: aCompiledMethod methodClass.
@@ -167,7 +162,7 @@ GtPharoCompletionStrategy >> forMethod: aCompiledMethod [
 	self methodPattern: ast pattern
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtPharoCompletionStrategy >> gtItemsFor: aView [
 	<gtView>
 	^ self variables 
@@ -175,7 +170,7 @@ GtPharoCompletionStrategy >> gtItemsFor: aView [
 		ifNotNil: [ self variables gtItemsFor: aView ]
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtPharoCompletionStrategy >> gtViewChildrenFor: aView [
 	<gtView>
 	^ self variables 
@@ -183,7 +178,7 @@ GtPharoCompletionStrategy >> gtViewChildrenFor: aView [
 		ifNotNil: [ self variables gtItemsFor: aView ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCompletionStrategy >> hasCompletionsAt: anInteger in: aText [
 	| char |
 	anInteger < 1
@@ -192,17 +187,17 @@ GtPharoCompletionStrategy >> hasCompletionsAt: anInteger in: aText [
 	^ char isLetter or: [ char isDigit ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> hasImplicitVariables [
 	^ hasImplicitVariables
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> hasImplicitVariables: aBoolean [
 	hasImplicitVariables := aBoolean
 ]
 
-{ #category : 'private-method' }
+{ #category : #'private-method' }
 GtPharoCompletionStrategy >> hierarchyMethodsStartingWith: aString [
 	| methods |
 	class isNil
@@ -215,12 +210,12 @@ GtPharoCompletionStrategy >> hierarchyMethodsStartingWith: aString [
 	^ methods
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> index [
 	^ index
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtPharoCompletionStrategy >> initialize [
 	super initialize.
 	isMethod := true.
@@ -233,24 +228,19 @@ GtPharoCompletionStrategy >> initialize [
 			localVariables}
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 GtPharoCompletionStrategy >> isMethod: aBoolean [
 	isMethod := aBoolean
 ]
 
-{ #category : 'private-variables' }
+{ #category : #'private-variables' }
 GtPharoCompletionStrategy >> localVariablesFor: aVariableNode [
 	^ self hasImplicitVariables
 		ifTrue: [ aVariableNode implicitLocalVariables ]
 		ifFalse: [ aVariableNode localVariables ]
 ]
 
-{ #category : 'accessing' }
-GtPharoCompletionStrategy >> maxItems [
-	^ maxItems
-]
-
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> methodPattern: aMethodPattern [
 	methodPattern := aMethodPattern.
 	methodPattern notNil
@@ -259,7 +249,7 @@ GtPharoCompletionStrategy >> methodPattern: aMethodPattern [
 	self isMethod: false
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPharoCompletionStrategy >> parseSource: aString [
 	^ [ isMethod
 		ifTrue: [ GtPharoParser parseWithErrors: aString ]
@@ -268,7 +258,7 @@ GtPharoCompletionStrategy >> parseSource: aString [
 		do: [ :ex | ex return: nil ]
 ]
 
-{ #category : 'private-pragmas' }
+{ #category : #'private-pragmas' }
 GtPharoCompletionStrategy >> pragmas [
 	pragmas isNil
 		ifTrue: [ pragmas := GtPrefixTree new.
@@ -280,21 +270,19 @@ GtPharoCompletionStrategy >> pragmas [
 	^ pragmas
 ]
 
-{ #category : 'private-pragmas' }
+{ #category : #'private-pragmas' }
 GtPharoCompletionStrategy >> pragmas: anInteger startingWith: aString [
 	^ self pragmas weightedFirst: anInteger startingWith: aString
 ]
 
-{ #category : 'private-selector' }
-GtPharoCompletionStrategy >> selectorsForReceiver: aBehavior matching: aString [
+{ #category : #'private-selector' }
+GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aString [
 	| tree |
-	tree := aBehavior notNil
-		ifTrue: [ GtPrefixTree withAll: aBehavior allSelectors ]
-		ifFalse: [ SelectorCache ].
-	^ tree weightedFirst: maxItems startingWith: aString
+	tree := aBehavior notNil ifTrue: [ GtPrefixTree withAll: aBehavior allSelectors ] ifFalse: [ SelectorCache ].
+	^ tree asyncWeightedStreamStartingWith: aString
 ]
 
-{ #category : 'private-method' }
+{ #category : #'private-method' }
 GtPharoCompletionStrategy >> signatureFor: aMethod [
 	| source ast |
 	source := aMethod sourceCode.
@@ -307,7 +295,7 @@ GtPharoCompletionStrategy >> signatureFor: aMethod [
 				ifFalse: [ ast variables ]) last stopPosition
 ]
 
-{ #category : 'typing' }
+{ #category : #typing }
 GtPharoCompletionStrategy >> typeOfVariable: aString [
 	aString = 'self'
 		ifTrue: [ ^ self classOrMetaClass ].
@@ -322,27 +310,25 @@ GtPharoCompletionStrategy >> typeOfVariable: aString [
 	^ nil
 ]
 
-{ #category : 'private' }
-GtPharoCompletionStrategy >> variableCompletionActionsFor: anAST [
-	| vars allLocalVariables |
+{ #category : #private }
+GtPharoCompletionStrategy >> variableCompletionActionStreamFor: anAST [
+	| allLocalVariables |
 	allLocalVariables := self localVariablesFor: anAST.
-	vars := allLocalVariables first: self maxItems startingWith: ''.
-	vars
-		addAll: (self variables first: self maxItems - vars size startingWith: '').
-	^ vars
-		collect: [ :each | 
+	^ ((allLocalVariables asyncStreamStartingWith: '') merge: (self variables asyncStreamStartingWith: ''))
+		collect:
+			[ :each | 
 			GtInsertTextCompletionAction
 				labeled: each
 				completion: each
 				position: self index ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPharoCompletionStrategy >> variables [
 	^ variables
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtPharoCompletionStrategy >> wasRequested [
 	^ wasRequested
 ]

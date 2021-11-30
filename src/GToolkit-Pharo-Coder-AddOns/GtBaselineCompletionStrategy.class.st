@@ -39,11 +39,6 @@ GtBaselineCompletionStrategy >> completionActionStreamFor: aText at: positionInt
 						yourself ] ]
 ]
 
-{ #category : #accessing }
-GtBaselineCompletionStrategy >> completionActionsFor: aText at: positionInteger max: maxInteger [
-	^ ((self completionActionStreamFor: aText at: positionInteger) take: maxInteger) toArray wait
-]
-
 { #category : #testing }
 GtBaselineCompletionStrategy >> hasCompletionsAt: anInteger in: aText [
 	^ true

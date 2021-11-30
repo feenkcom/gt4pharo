@@ -1,16 +1,14 @@
-Extension { #name : 'GtPharoUnaryMessageNode' }
+Extension { #name : #GtPharoUnaryMessageNode }
 
-{ #category : '*GToolkit-Pharo-Completer' }
-GtPharoUnaryMessageNode >> completionActionsFor: strategy [
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoUnaryMessageNode >> completionActionStreamFor: strategy [
 	| startingText index |
 	index := strategy index.
-	selectorPart stopPosition = index
-		ifFalse: [ ^ #() ].
+	selectorPart stopPosition = index ifFalse: [ ^ #() asAsyncStream ].
 	startingText := selectorPart source.
-	^ (strategy
-		selectorsForReceiver: (parent receiver guessType: strategy)
-		matching: startingText)
-		collect: [ :each | 
+	^ (strategy selectorStreamForReceiver: (parent receiver guessType: strategy) matching: startingText)
+		collect:
+			[ :each | 
 			parent
 				actionForSelector: each
 				startingWith: startingText
