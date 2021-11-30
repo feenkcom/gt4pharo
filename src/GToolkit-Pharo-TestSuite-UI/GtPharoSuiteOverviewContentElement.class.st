@@ -77,15 +77,17 @@ GtPharoSuiteOverviewContentElement >> initializeToolbar [
 					                 activate;
 					                 disable;
 					                 beSmallSize;
-					                 aptitude: BrGlamorousToggleWithLabelAptitude new;
+					                 aptitude: BrGlamorousToggleWithCheckedIconAndLabelAptitude;
 					                 label: 'Local';
+					                 icon: BrGlamorousVectorIcons accept;
 					                 when: BrToggleActivatedEvent
 					                 do: [ :anEvent | self onLocalActivated: anEvent ]);
 			 addToggle: (remoteToggle := BrToggle new
 					                  disable;
 					                  beSmallSize;
-					                  aptitude: BrGlamorousToggleWithLabelAptitude new;
+					                  aptitude: BrGlamorousToggleWithCheckedIconAndLabelAptitude;
 					                  label: 'Remote';
+					                  icon: BrGlamorousVectorIcons accept;
 					                  when: BrToggleActivatedEvent
 					                  do: [ :anEvent | 
 						                  self onRemoteActivated: anEvent ])).
