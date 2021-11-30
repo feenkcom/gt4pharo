@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtCoderAstStyler,
 	#traits : 'TGtPharoProgramNodeVisitor',
 	#classTraits : 'TGtPharoProgramNodeVisitor classTrait',
-	#category : 'GToolkit-Pharo-Coder-Styler'
+	#category : #'GToolkit-Pharo-Coder-Styler'
 }
 
 { #category : #visiting }
@@ -13,7 +13,7 @@ GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
 		ifTrue: [ ^ nil ].
 	
 	^ BlTextStylerTelemetry
-		timeSync: [ 'Visit ', aSmaCCParseNode class name ]
+		time: [ 'Visit ', aSmaCCParseNode class name ]
 		during: [	 aSmaCCParseNode acceptVisitor: self ]
 ]
 

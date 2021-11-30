@@ -3,12 +3,14 @@ Extension { #name : #GtCoderModel }
 { #category : #'*GToolkit-Pharo-Coder' }
 GtCoderModel class >> gtAstCoderAddOnsFor: aView context: aPhlowContext [
 	<gtClassView>
-	^ aView explicit
-		title: 'Coder AddOns';
-		priority: 60;
-		stencil: [ 
+	^ aView forward
+		title: 'Coder Addons';
+		tooltip: 'The methods that extend the Coder with AddOns';
+		priority: 40;
+		object: [ 
 			#gtAstCoderAddOns: gtPragmas
 				& (GtSearchMethodsInClassFilter new 
 					forClass: self;
-					includeSuperclass: true) ]
+					includeSuperclass: true) ];
+		view: #gtItemsFor:
 ]

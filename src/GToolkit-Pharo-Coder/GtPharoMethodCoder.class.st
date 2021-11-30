@@ -1153,3 +1153,8 @@ GtPharoMethodCoder >> unsubscribeFromExample [
 		ifPresent: [ :anOldExampleWithResult | anOldExampleWithResult announcer unsubscribe: self ]
 		ifAbsent: [ "do nothing" ].
 ]
+
+{ #category : #'private - subscriptions' }
+GtPharoMethodCoder >> unsubscribeFromSystem [
+	SystemAnnouncer uniqueInstance unsubscribe: self
+]

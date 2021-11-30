@@ -4,12 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
-{ #category : #accessing }
-GtPharoMethodsCoder >> exampler [
-	^ GtMethodsCoderExampler new
-		coder: self
-]
-
 { #category : #testing }
 GtPharoMethodsCoder >> isForClass [
 	^ false
@@ -68,10 +62,4 @@ GtPharoMethodsCoder >> selectAndScrollToMethod: aCompiledMethod [
 		detect: [ :each | each isForMethod: aCompiledMethod ]
 		ifNone: [ ^ self ].
 	self selectAndScrollTo: methodCoder
-]
-
-{ #category : #accessing }
-GtPharoMethodsCoder >> testSuite [
-	^ GtPharoTestSuite new 
-		coder: self
 ]

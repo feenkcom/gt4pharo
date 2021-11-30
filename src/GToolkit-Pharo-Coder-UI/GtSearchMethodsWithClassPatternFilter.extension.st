@@ -4,10 +4,10 @@ Extension { #name : #GtSearchMethodsWithClassPatternFilter }
 GtSearchMethodsWithClassPatternFilter class >> filterDescriptorFor: aMethodsCoder [
 	aMethodsCoder isForClass
 		ifTrue: [ ^ nil ].
-	^ GtFilterDescriptor
-		creator: [ :value | self pattern: value ]
-		named: 'Class'
-		order: 20
-		completion:
-			(GtStringsCompletionStrategy new completions: aMethodsCoder classNames)
+
+	^ GtFilterDescriptor new
+		creator: [ :value | self pattern: value ];
+		named: 'Class';
+		order: 20;
+		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder classNames ] ]
 ]

@@ -5,7 +5,7 @@ Class {
 		'substring',
 		'caseSensitive'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #'api - instance creation' }
@@ -46,14 +46,6 @@ GtSearchLiteralStringFilter >> caseSensitive: aBoolean [
 		assert: [ aBoolean isBoolean ] 
 		description: [ 'Case sensitive must be a boolean value' ].
 	caseSensitive := aBoolean.
-]
-
-{ #category : #'as yet unclassified' }
-GtSearchLiteralStringFilter >> filterDescriptorFor: aMethodsCoder [
-	^ GtFilterDescriptor
-		creator: [ :value | self substring: value ]
-		named: 'Substring Literal'
-		order: 91
 ]
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classTag'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #private }
@@ -41,8 +41,10 @@ GtBehaviorMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 { #category : #accessing }
 GtBehaviorMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 	super methodCoderUIModel: aMethodCoderUIModel.
-
-	self updateBehaviorSideButton
+	
+	BlFrameTelemetry
+		time: [ self class name, ' #updateBehaviorSideButton' ]
+		during: [ self updateBehaviorSideButton ]
 ]
 
 { #category : #'instance creation' }
@@ -71,5 +73,9 @@ GtBehaviorMethodCoderTagsElement >> newClassTag [
 { #category : #private }
 GtBehaviorMethodCoderTagsElement >> updateBehaviorSideButton [
 	classTag label: (self classTagStringFor: self methodCoderUIModel).
-	classTag enabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass
+	
+	self flag: #TODO.
+	"canMoveMethodToInstanceOrClass is very expensive to compute"
+
+	"classTag enabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass"
 ]

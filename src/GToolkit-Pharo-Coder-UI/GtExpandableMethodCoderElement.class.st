@@ -65,5 +65,7 @@ GtExpandableMethodCoderElement >> onExpanded [
 GtExpandableMethodCoderElement >> onTextualCoderViewModelChanged [
 	super onTextualCoderViewModelChanged.
 	
-	tagsElement methodCoderUIModel: textualCoderViewModel
+	BlFrameTelemetry
+		time: [ tagsElement class name, ' #methodCoderUIModel:' ]
+		during: [ tagsElement methodCoderUIModel: textualCoderViewModel ]
 ]

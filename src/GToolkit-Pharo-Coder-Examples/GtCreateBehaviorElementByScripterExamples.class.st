@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCreateBehaviorElementByScripterExamples,
 	#superclass : #GtCoderByScripterExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - instance creation' }
@@ -235,12 +235,9 @@ GtCreateBehaviorElementByScripterExamples >> scripterForClass [
 	
 	self cleanUp.
 	aScripter := self scripter.
-	aScripter substep: 'Initialize Class creator' do: [ :aStep | 
-		aStep set 
-			label: 'Set Class creator element UI';
-			element: [ self behaviorCreatorForClass ] ].
+	aScripter element: self behaviorCreatorForClass.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - class creator' }

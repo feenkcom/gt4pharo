@@ -8,7 +8,7 @@ Class {
 		'packages',
 		'coder'
 	],
-	#category : 'GToolkit-Pharo-Coder-Navigation'
+	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
 
 { #category : #'instance creation' }
@@ -307,12 +307,15 @@ GtCoderNavigationPackagesTagsClassesModel >> selectTag: anRPackageTag [
 	| aCoder |
 	(self showPackage: anRPackageTag package)
 		ifFalse: [ ^ self ].
+
 	(coder isForPackageTag and: [ coder packageTag = anRPackageTag ])
 		ifTrue: [ ^ self ].
+
 	aCoder := ((coder isForPackage
 		and: [ coder package = anRPackageTag package ])
-		ifTrue: [ coder packageTagCoderFor: anRPackageTag ])
+			ifTrue: [ coder packageTagCoderFor: anRPackageTag ])
 		ifNil: [ GtPharoPackageTagCoder forPackageTag: anRPackageTag ].
+
 	self assertCoder: aCoder.
 	self coder: aCoder.
 	self notifyTagSelected: anRPackageTag package: anRPackageTag package

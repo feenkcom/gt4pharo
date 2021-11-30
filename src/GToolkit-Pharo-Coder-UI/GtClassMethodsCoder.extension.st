@@ -55,7 +55,10 @@ GtClassMethodsCoder >> codeGeneratorsDropDown: anElement for: aMethodsCoderViewM
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassMethodsCoder >> examplesFilter: aView [
-	<gtFilterTypes>
+	"<gtFilterTypes>"
+	
+	self flag: #TODO.
+	
 	^ aView explicit
 		title: 'Examples';
 		priority: 40;
@@ -64,10 +67,10 @@ GtClassMethodsCoder >> examplesFilter: aView [
 			anElement := GtCoderFilterList new.
 			anElement
 				matchParent;
-				items: GtFilterExampleState default allStates
+				items: GtExampleState default allStates
 				title: [ :aState | aState labelWithAmountFor: self exampler ]
 				action: [ :aState | self 
-					setFilters: { (GtSearchExamplesFilter new
+					setFilters: { (GtPharoExampleStateFilter new
 						resultState: aState)
 						coder: self }
 					source: anElement ] ].

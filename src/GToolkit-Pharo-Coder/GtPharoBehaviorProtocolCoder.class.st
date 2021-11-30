@@ -6,7 +6,7 @@ Class {
 		'protocol',
 		'methodCoders'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -46,7 +46,7 @@ GtPharoBehaviorProtocolCoder >> forBehavior: aBehavior protocol: aProtocol [
 	methodCoders removeAll.
 	methodCoders addAll: (((aBehavior methods
 		select: [ :eachCompiledMethod | eachCompiledMethod protocol = aProtocol ]) sorted: GtMethodsSortFunction new)
-			collect: [ :eachCompiledMethod | (GtPharoMethodCoder forMethod: eachCompiledMethod) withoutHeader ])
+			collect: [ :eachCompiledMethod | GtPharoMethodCoder forMethod: eachCompiledMethod ])
 ]
 
 { #category : #printing }

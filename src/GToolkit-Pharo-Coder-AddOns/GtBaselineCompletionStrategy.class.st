@@ -1,33 +1,29 @@
 Class {
 	#name : #GtBaselineCompletionStrategy,
 	#superclass : #GtCompletionStrategy,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
 { #category : #accessing }
-GtBaselineCompletionStrategy >> completionActionsFor: aText at: positionInteger max: maxInteger [
-	| string completionActions first partialName names last ch deleteAction |
+GtBaselineCompletionStrategy >> completionActionStreamFor: aText at: positionInteger [
+	| string first partialName names last ch deleteAction |
 	string := aText asString.
 	first := positionInteger.
-	[ first > 0 and: [ (string at: first) ~= $' ] ]
-		whileTrue: [ first := first - 1 ].
-	first = 0
-		ifTrue: [ ^ #() ].
+	[ first > 0 and: [ (string at: first) ~= $' ] ] whileTrue: [ first := first - 1 ].
+	first = 0 ifTrue: [ ^ #() ].
 	partialName := string copyFrom: first + 1 to: positionInteger.
-	names := self namesMatching: partialName.
-	names isEmpty
-		ifTrue: [ ^ #() ].
+	names := self nameStreamMatching: partialName.
 	last := positionInteger.
-	[ last <= string size
-		and: [ (ch := string at: last) isSeparator not and: [ ch ~= $' ] ] ]
-		whileTrue: [ last := last + 1 ].
+	[ last <= string size and: [ (ch := string at: last) isSeparator not and: [ ch ~= $' ] ] ] whileTrue: [ last := last + 1 ].
 	last - 1 > positionInteger
-		ifTrue: [ deleteAction := GtDeleteTextCompletionAction
+		ifTrue:
+			[ deleteAction := GtDeleteTextCompletionAction
 				labeled: ''
 				from: positionInteger + 1
 				to: last - 1 ].
-	completionActions := names asSortedCollection
-		collect: [ :each | 
+	^ names
+		collect:
+			[ :each | 
 			| insert |
 			insert := GtInsertTextCompletionAction
 				labeled: each
@@ -36,11 +32,16 @@ GtBaselineCompletionStrategy >> completionActionsFor: aText at: positionInteger 
 				from: positionInteger - partialName size + 1.
 			deleteAction isNil
 				ifTrue: [ insert ]
-				ifFalse: [ (GtCompositeCompletionAction labeled: insert label)
+				ifFalse:
+					[ (GtCompositeCompletionAction labeled: insert label)
 						addAction: deleteAction;
 						addAction: insert;
-						yourself ] ].
-	^ completionActions
+						yourself ] ]
+]
+
+{ #category : #accessing }
+GtBaselineCompletionStrategy >> completionActionsFor: aText at: positionInteger max: maxInteger [
+	^ ((self completionActionStreamFor: aText at: positionInteger) take: maxInteger) toArray wait
 ]
 
 { #category : #testing }
@@ -49,6 +50,6 @@ GtBaselineCompletionStrategy >> hasCompletionsAt: anInteger in: aText [
 ]
 
 { #category : #private }
-GtBaselineCompletionStrategy >> namesMatching: aString [
+GtBaselineCompletionStrategy >> nameStreamMatching: aString [
 	^ self subclassResponsibility
 ]

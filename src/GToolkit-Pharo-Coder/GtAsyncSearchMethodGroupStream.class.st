@@ -15,28 +15,6 @@ GtAsyncSearchMethodGroupStream >> gtCompositionChildren [
 ]
 
 { #category : #'gt - extensions' }
-GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
-	<gtView>
-	
-	^ aView explicit
-		title: 'Live' translated;
-		priority: 10;
-		stencil: [
-			| aStream |			
-
-			aStream := self asyncSimilarCopy collect: [ :eachCompiledMethod |
-				((GtPharoMethodCoder forMethod: eachCompiledMethod)
-					highlighter: self highlighter)
-						asCoderViewModel
-							expanded: false ].
-
-			BrSimpleList new
-				itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
-				itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement coderUIModel: aCoderViewModel ];
-				stream: aStream ]
-]
-
-{ #category : #'gt - extensions' }
 GtAsyncSearchMethodGroupStream >> gtMetricsFor: aView [
 	<gtView>
 

@@ -12,6 +12,7 @@ Class {
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
+	<noTest>
 	| filter aScripter |
 
 	filter := GtSearchIntersectionFilter new
@@ -105,7 +106,8 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	aScripter checks: 'Check Breadcrumb' do: [ :aStep | 
 		aStep check 
 			label: 'Check Breadcrumb Package Name';
-			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples package name ];
+			value: [ :aButton | aButton label asString ]
+				equals: [ GtPharoMethodCoderExamples package name ];
 			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
 			onChildAt: 1;
 			play.
