@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoTestSuiteAptitudeExamples,
 	#superclass : #GtPharoFourStateAptitudeExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
+	#category : #'GToolkit-Pharo-TestSuite-Examples'
 }
 
 { #category : #accessing }
@@ -56,8 +56,8 @@ GtPharoTestSuiteAptitudeExamples >> methodsCoders [
 
 { #category : #'examples - coder' }
 GtPharoTestSuiteAptitudeExamples >> methodsCoders_Executed [
-
 	<gtExample>
+	<noTest>
 	| aMethodsCoder anyOneExecuted |
 	aMethodsCoder := self methodsCoders.
 

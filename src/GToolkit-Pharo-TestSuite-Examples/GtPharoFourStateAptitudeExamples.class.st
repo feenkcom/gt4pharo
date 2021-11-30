@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoFourStateAptitudeExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
+	#category : #'GToolkit-Pharo-TestSuite-Examples'
 }
 
 { #category : #testing }
