@@ -9,6 +9,7 @@ Class {
 { #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		(GtPharoSnippetCoder forSource: '#() do: [:x | ] displayingProgress: ''''') asCoderViewModel ].
