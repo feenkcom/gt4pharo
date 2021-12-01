@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'pattern'
 	],
-	#category : 'GToolkit-Pharo-Coder-Filters'
+	#category : #'GToolkit-Pharo-Coder-Filters'
 }
 
 { #category : #'instance creation' }
@@ -18,6 +18,14 @@ GtSearchMethodsWithPackagePatternFilter class >> pattern: aString [
 GtSearchMethodsWithPackagePatternFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self pattern asLowercase = anObject pattern asLowercase ]
+]
+
+{ #category : #accessing }
+GtSearchMethodsWithPackagePatternFilter >> defaultFilterScope [
+	^ (((AsyncImagePackagesStream new select: [ :eachPackage | (eachPackage name asLowercase indexOfSubCollection: pattern asLowercase) > 0 ])
+		collect: [ :eachPackage | AsyncPackageBehaviorsStream forPackage: eachPackage ]) flatten
+			collect: [ :eachBehavior | AsyncBehaviorAllLocalMethodsStream forBehavior: eachBehavior ])
+				flatten
 ]
 
 { #category : #accessing }

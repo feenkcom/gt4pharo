@@ -701,6 +701,17 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: aViewModel [
+	<gtAstCoderAddOns: 1>
+
+	coderAddOns
+		addPreview: 'Inheritance'
+		stencil: [
+			GtPharoMethodCoderInheritanceElement new 
+				pharoMethodCoderViewModel: aViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 1>
 

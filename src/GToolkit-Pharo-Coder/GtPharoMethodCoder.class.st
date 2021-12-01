@@ -652,6 +652,13 @@ GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 	methodBehavior := aGtMethodCoderBehavior
 ]
 
+{ #category : #'api - accessing' }
+GtPharoMethodCoder >> methodOrigin [
+	<return: #TAsyncFuture of: #GtPharoMethodOrigin>
+
+	^ [ self privateComputeMethodOrigin ] asAsyncFuture
+]
+
 { #category : #'api - refactorings' }
 GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	| oldClass newClass model modelClass oldModelClass |
@@ -945,6 +952,26 @@ GtPharoMethodCoder >> printOn: aStream [
 		nextPutAll: '>>#';
 		nextPutAll: self selector asString;
 		nextPut: $)
+]
+
+{ #category : #private }
+GtPharoMethodCoder >> privateComputeMethodOrigin [
+	<return: #GtPharoMethodOrigin>
+	| aCompiledMethod anOriginBehavior aMethodBehavior |
+	
+	aCompiledMethod := self compiledMethod
+		ifNil: [ ^ GtPharoMethodUnknownOrigin new ].
+	
+	anOriginBehavior := aCompiledMethod origin.
+	aMethodBehavior := aCompiledMethod methodClass.
+
+	anOriginBehavior isTrait
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].
+
+	(anOriginBehavior = aMethodBehavior)
+		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+		
+	^ GtPharoMethodUnknownOrigin new
 ]
 
 { #category : #'api - accessing' }
