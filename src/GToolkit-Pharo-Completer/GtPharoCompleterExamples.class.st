@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoCompleterExamples,
 	#superclass : #GtCompleterControllerExamples,
-	#category : 'GToolkit-Pharo-Completer-Examples'
+	#category : #'GToolkit-Pharo-Completer-Examples'
 }
 
 { #category : #smalltalk }
@@ -13,10 +13,9 @@ GtPharoCompleterExamples >> binaryCompletion [
 	self
 		assert:
 			(strategy
-				completionActionsFor: text asRopedText
+				completionActionStreamFor: text asRopedText
 				at: text size
-				max: 10
-				requested: true) notEmpty.
+				requested: true) isNotEmpty wait.
 	^ strategy
 ]
 
@@ -84,21 +83,22 @@ GtPharoCompleterExamples >> completePrintOnMethodSelector [
 { #category : #smalltalk }
 GtPharoCompleterExamples >> crLfMessageCompletion [
 	<gtExample>
+	
 	| text strategy items |
 	text := ('foo' , String crlf , '^3 ab') asRopedText.
 	strategy := self smalltalkStrategy.
 	items := strategy
-		completionActionsFor: text
+		completionActionStreamFor: text
 		at: 10
-		max: 11
 		requested: true.
-	self assert: (items anySatisfy: [ :each | each label = 'abs' ]).
+	self assert: ((items take: 30) toArray wait anySatisfy: [ :each | each label = 'abs' ]).
 	^ strategy
 ]
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> emptyExplicitlyRequestedCompletions [
 	<gtExample>
+	
 	| text strategy index |
 	text := '  "<"method:  "<"arg  "<"
 		| var1 |
@@ -107,21 +107,21 @@ GtPharoCompleterExamples >> emptyExplicitlyRequestedCompletions [
 		^var1 size * 3'.
 	strategy := self smalltalkStrategy.
 	index := 1.
-	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1)
-		> 1 ]
-		whileTrue: [ self
+	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1) > 1 ]
+		whileTrue:
+			[ self
 				assert:
 					(strategy
-						completionActionsFor: text asRopedText
+						completionActionStreamFor: text asRopedText
 						at: index - 2
-						max: 10
-						requested: true) isEmpty ].
+						requested: true) isNotEmpty wait not ].
 	^ strategy
 ]
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> endingStatementRequestedCompletions [
 	<gtExample>
+	
 	| text strategy index |
 	text := 'method: arg 
 		| var1 |
@@ -130,27 +130,23 @@ GtPharoCompleterExamples >> endingStatementRequestedCompletions [
 		^var1 size * 3  "<"'.
 	strategy := self smalltalkStrategy.
 	index := 1.
-	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1)
-		> 1 ]
-		whileTrue: [ | actions |
+	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1) > 1 ]
+		whileTrue:
+			[ | actions |
 			actions := strategy
-				completionActionsFor: text asRopedText
+				completionActionStreamFor: text asRopedText
 				at: index - 2
-				max: 10
 				requested: true.
-			self assert: actions notEmpty.
+			self assert: actions asyncSimilarCopy isNotEmpty wait.
 			self
 				assert:
-					(actions
-						anySatisfy:
-							[ :each | (each label includes: $:) or: [ each label asSymbol isBinary ] ]).
+					((actions take: 30) toArray wait anySatisfy: [ :each | (each label includes: $:) or: [ each label asSymbol isBinary ] ]).
 			self
 				assert:
 					(strategy
-						completionActionsFor: text asRopedText
+						completionActionStreamFor: text asRopedText
 						at: index - 2
-						max: 10
-						requested: false) isEmpty ].
+						requested: false) isNotEmpty wait not ].
 	^ strategy
 ]
 
@@ -231,6 +227,7 @@ GtPharoCompleterExamples >> smalltalkStrategy [
 { #category : #smalltalk }
 GtPharoCompleterExamples >> startingStatementRequestedCompletions [
 	<gtExample>
+	
 	| text strategy index |
 	text := 'method: arg 
 		| var1 |
@@ -241,22 +238,18 @@ GtPharoCompleterExamples >> startingStatementRequestedCompletions [
 	strategy := self smalltalkStrategy.
 	index := 1.
 	[ (index := (text indexOfSubCollection: '"<"' startingAt: index) + 1) > 1 ]
-		whileTrue: [
-			| actions |
-			
+		whileTrue:
+			[ | actions |
 			actions := strategy
-				completionActionsFor: text asRopedText
+				completionActionStreamFor: text asRopedText
 				at: index - 2
-				max: 10
 				requested: true.
-
-			self assert: actions notEmpty.
+			self assert: actions isNotEmpty wait.
 			self
 				assert:
 					(strategy
-						completionActionsFor: text asRopedText
+						completionActionStreamFor: text asRopedText
 						at: index - 2
-						max: 10
-						requested: false) isEmpty ].
+						requested: false) isNotEmpty wait not ].
 	^ strategy
 ]
