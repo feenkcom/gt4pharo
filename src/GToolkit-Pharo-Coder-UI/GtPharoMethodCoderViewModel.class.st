@@ -54,12 +54,7 @@ GtPharoMethodCoderViewModel >> discardChanges [
 
 { #category : #accessing }
 GtPharoMethodCoderViewModel >> elementClass [
-	self coders
-		ifNil: [ ^ GtExpandableMethodCoderElement ].
-
-	^ self coders isForClass
-		ifTrue: [ GtExpandableMethodCoderForBehaviorElement ]
-		ifFalse: [ GtExpandableMethodCoderElement ]
+	^ GtExpandableMethodCoderForBehaviorElement
 ]
 
 { #category : #'private - evaluation' }
