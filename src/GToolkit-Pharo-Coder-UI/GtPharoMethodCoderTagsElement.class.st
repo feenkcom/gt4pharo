@@ -3,18 +3,24 @@ I display various tags in the method coder element such as protocol or instance/
 
 "
 Class {
-	#name : #GtMethodCoderTagsElement,
+	#name : #GtPharoMethodCoderTagsElement,
 	#superclass : #BlElement,
 	#instVars : [
 		'protocolTag',
 		'methodCoderUIModel',
-		'traitMethodTag'
+		'traitMethodTag',
+		'classTag'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #private }
-GtMethodCoderTagsElement >> behaviorProtocols [
+GtPharoMethodCoderTagsElement >> behaviorOtherSideName [
+	^ self classTagStringForMeta: self methodCoderUIModel isMeta not
+]
+
+{ #category : #private }
+GtPharoMethodCoderTagsElement >> behaviorProtocols [
 	| allSubAndSuperclassProtocols excludedClasses |
 	
 	allSubAndSuperclassProtocols := Set new.
@@ -27,16 +33,38 @@ GtMethodCoderTagsElement >> behaviorProtocols [
 	^ allSubAndSuperclassProtocols asArray sorted
 ]
 
+{ #category : #private }
+GtPharoMethodCoderTagsElement >> behaviorSideName [
+	^ self classTagStringForMeta: self methodCoderUIModel isMeta
+]
+
 { #category : #initialization }
-GtMethodCoderTagsElement >> buildTags [	
+GtPharoMethodCoderTagsElement >> buildTags [	
 	protocolTag := self newProtocolTag.
 	traitMethodTag := self newTraitMethodTag.
+	classTag := self newClassTag.
 
-	^ { traitMethodTag. protocolTag }
+	^ { traitMethodTag. protocolTag. classTag }
+]
+
+{ #category : #private }
+GtPharoMethodCoderTagsElement >> classTagStringFor: aMethodCoderUIModel [
+	<return: #String>
+
+	^ self classTagStringForMeta: aMethodCoderUIModel isMeta
+]
+
+{ #category : #private }
+GtPharoMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
+	<return: #String>
+
+	^ aBoolean
+		ifTrue: [ 'class' ]
+		ifFalse: [ 'instance' ]
 ]
 
 { #category : #'event handling' }
-GtMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
+GtPharoMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 	| aTraitElement aClass aSelector aMethod |
 	aTraitElement := self methodCoderUIModel coder traitSource.
 	aTraitElement ifNil: [ ^ self ].
@@ -52,7 +80,7 @@ GtMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 ]
 
 { #category : #initialization }
-GtMethodCoderTagsElement >> initialize [
+GtPharoMethodCoderTagsElement >> initialize [
 	super initialize.
 	
 	self 
@@ -65,12 +93,12 @@ GtMethodCoderTagsElement >> initialize [
 ]
 
 { #category : #accessing }
-GtMethodCoderTagsElement >> methodCoderUIModel [
+GtPharoMethodCoderTagsElement >> methodCoderUIModel [
 	^ methodCoderUIModel
 ]
 
 { #category : #accessing }
-GtMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
+GtPharoMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 	self
 		assert: [ aMethodCoderUIModel isKindOf: GtPharoMethodCoderViewModel ]
 		description: [ 'Must be method coder''s UI Model' ].
@@ -99,11 +127,38 @@ GtMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 		
 	BlFrameTelemetry
 		time: [ self class name, ' #updateTraitMethodButton' ]
-		during: [ self updateTraitMethodButton ]
+		during: [ self updateTraitMethodButton ].
+		
+	BlFrameTelemetry
+		time: [ self class name, ' #updateBehaviorSideButton' ]
+		during: [ self updateBehaviorSideButton ]
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoderTagsElement >> newClassTag [
+	^ BrButton new
+		beTinySize;
+		aptitude:
+			BrGlamorousButtonWithLabelAptitude
+				+
+					(BrGlamorousWithDropdownAptitude
+						handle: [ BrButton new
+								beSmallSize;
+								disable;
+								aptitude: BrGlamorousButtonRectangularAptitude + BrGlamorousButtonLabelAptitude;
+								label: self behaviorSideName ]
+						content: [ BrButton new
+								beSmallSize;
+								aptitude: BrGlamorousButtonRectangularAptitude + BrGlamorousButtonLabelAptitude;
+								label: self behaviorOtherSideName;
+								action: [ :aButton | 
+									aButton fireEvent: BrDropdownHideWish new.
+									self methodCoderUIModel coder moveMethodToInstanceOrClass.
+									classTag label: self behaviorSideName ] ])
 ]
 
 { #category : #'private - instance creation' }
-GtMethodCoderTagsElement >> newProtocolEditor [
+GtPharoMethodCoderTagsElement >> newProtocolEditor [
 	| anEditor |
 
 	anEditor := BrEditableLabel new
@@ -135,7 +190,7 @@ GtMethodCoderTagsElement >> newProtocolEditor [
 ]
 
 { #category : #'private - instance creation' }
-GtMethodCoderTagsElement >> newProtocolPickerList [
+GtPharoMethodCoderTagsElement >> newProtocolPickerList [
 	^ BrSimpleList new
 		vFitContentLimited;
 		hExact: 250;
@@ -154,7 +209,7 @@ GtMethodCoderTagsElement >> newProtocolPickerList [
 ]
 
 { #category : #'private - instance creation' }
-GtMethodCoderTagsElement >> newProtocolTag [
+GtPharoMethodCoderTagsElement >> newProtocolTag [
 	^ BrButton new
 		beTinySize;
 		aptitude: BrGlamorousButtonWithLabelAptitude + (BrGlamorousWithDropdownAptitude
@@ -163,7 +218,7 @@ GtMethodCoderTagsElement >> newProtocolTag [
 ]
 
 { #category : #'private - instance creation' }
-GtMethodCoderTagsElement >> newTraitMethodTag [
+GtPharoMethodCoderTagsElement >> newTraitMethodTag [
 	^ BrButton new
 		beTinySize;
 		disable;
@@ -177,24 +232,24 @@ GtMethodCoderTagsElement >> newTraitMethodTag [
 ]
 
 { #category : #'event handling' }
-GtMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
+GtPharoMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
 	self updateTraitMethodButton.
 ]
 
 { #category : #'event handling' }
-GtMethodCoderTagsElement >> onCoderSourceTextModified: anAnnouncement [
+GtPharoMethodCoderTagsElement >> onCoderSourceTextModified: anAnnouncement [
 	protocolTag disabled: anAnnouncement coder isModified
 ]
 
 { #category : #private }
-GtMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
+GtPharoMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 	<return: #String>
 
 	^ aMethodCoderUIModel coder protocol
 ]
 
 { #category : #private }
-GtMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
+GtPharoMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
 	<return: #String>
 	^ aMethodCoderUIModel coder isFromTrait
 		ifTrue: [ aMethodCoderUIModel coder traitSource printString ]
@@ -202,7 +257,7 @@ GtMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
 ]
 
 { #category : #private }
-GtMethodCoderTagsElement >> unsubscribeFromCoder [
+GtPharoMethodCoderTagsElement >> unsubscribeFromCoder [
 	methodCoderUIModel
 		ifNil: [ ^ self ].
 
@@ -210,12 +265,22 @@ GtMethodCoderTagsElement >> unsubscribeFromCoder [
 ]
 
 { #category : #private }
-GtMethodCoderTagsElement >> updateProtocolButton [
+GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
+	classTag label: (self classTagStringFor: self methodCoderUIModel).
+	
+	self flag: #TODO.
+	"canMoveMethodToInstanceOrClass is very expensive to compute"
+
+	"classTag enabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass"
+]
+
+{ #category : #private }
+GtPharoMethodCoderTagsElement >> updateProtocolButton [
 	protocolTag label: (self protocolStringFor: self methodCoderUIModel)
 ]
 
 { #category : #private }
-GtMethodCoderTagsElement >> updateTraitMethodButton [
+GtPharoMethodCoderTagsElement >> updateTraitMethodButton [
 	traitMethodTag label: (self traitMethodStringFor: self methodCoderUIModel).
 	self methodCoderUIModel coder isFromTrait
 		ifTrue: [ traitMethodTag enable ]

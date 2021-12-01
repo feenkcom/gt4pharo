@@ -44,7 +44,7 @@ GtExpandableMethodCoderElement >> newTagsElement [
 
 { #category : #'private - instance creation' }
 GtExpandableMethodCoderElement >> newTagsElementClass [
-	^ GtMethodCoderTagsElement
+	^ GtPharoMethodCoderTagsElement
 ]
 
 { #category : #private }
