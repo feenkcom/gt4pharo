@@ -11,7 +11,7 @@ GtMethodCoderBreadcrumbElementExamples >> breadcrumbForSourceCoder [
 	
 	aCoderUIModel := self methodCoderUIModel.
 
-	aCoderBreadcrumb := GtMethodCoderBreadcrumbElement new.
+	aCoderBreadcrumb := GtPharoMethodCoderHeaderElement new.
 	aCoderBreadcrumb textualCoderViewModel: aCoderUIModel.
 	
 	self assert: aCoderBreadcrumb packageButton label asString equals: 'GToolkit-Coder-Examples'.

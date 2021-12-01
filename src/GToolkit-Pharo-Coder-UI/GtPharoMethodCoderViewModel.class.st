@@ -90,7 +90,7 @@ GtPharoMethodCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 
 { #category : #accessing }
 GtPharoMethodCoderViewModel >> headerElementClass [
-	^ GtMethodCoderBreadcrumbElement
+	^ GtPharoMethodCoderHeaderElement
 ]
 
 { #category : #initialization }
@@ -141,6 +141,12 @@ GtPharoMethodCoderViewModel >> notifySaveEnabled [
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
 	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
+]
+
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> originBehavior [
+	"Returns a behavior in which the method is compiled."
+	<return: #Behavior>
 ]
 
 { #category : #'api - actions' }
@@ -201,4 +207,24 @@ GtPharoMethodCoderViewModel >> save [
 { #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> selector [
 	^ self coderModel selector
+]
+
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> sourceBehavior [
+	"Returns a behavior in which the method is compiled."
+	<return: #Behavior or: nil>
+	
+	^ coderModel traitSource
+		ifNil: [ coderModel behavior ]
+		ifNotNil: [ :aTraitCompositionElement |
+			(aTraitCompositionElement
+				traitDefining: coderModel selector
+				ifNone: [ nil ]) innerClass ]
+]
+
+{ #category : #'api - header' }
+GtPharoMethodCoderViewModel >> wantsHeader [
+	<return: #Boolean>
+	
+	^ super wantsHeader or: [ self isFromTrait ]
 ]

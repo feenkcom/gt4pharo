@@ -66,10 +66,14 @@ GtPharoMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 { #category : #'event handling' }
 GtPharoMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 	| aTraitElement aClass aSelector aMethod |
+
 	aTraitElement := self methodCoderUIModel coder traitSource.
-	aTraitElement ifNil: [ ^ self ].
+	aTraitElement
+		ifNil: [ ^ self ].
+
 	(aTraitElement isKindOf: TaCompositionElement)
 		ifFalse: [ ^ self ].
+	
 	aClass := aTraitElement innerClass.
 	aSelector := self methodCoderUIModel coder selector.
 	aSelector
@@ -110,7 +114,7 @@ GtPharoMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 	self unsubscribeFromCoder.
 
 	methodCoderUIModel := aMethodCoderUIModel.
-	
+
 	aMethodCoderUIModel coder weak
 		when: GtCoderSourceCodeChanged
 		send: #onCoderSourceTextModified:
@@ -120,15 +124,15 @@ GtPharoMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
 		when: GtCoderMethodModified
 		send: #onCoderMethodModified:
 		to: self.	
-	
+
 	BlFrameTelemetry
 		time: [ self class name, ' #updateProtocolButton' ]
 		during: [ self updateProtocolButton ].
-		
+
 	BlFrameTelemetry
 		time: [ self class name, ' #updateTraitMethodButton' ]
 		during: [ self updateTraitMethodButton ].
-		
+
 	BlFrameTelemetry
 		time: [ self class name, ' #updateBehaviorSideButton' ]
 		during: [ self updateBehaviorSideButton ]
@@ -264,7 +268,7 @@ GtPharoMethodCoderTagsElement >> unsubscribeFromCoder [
 	methodCoderUIModel coder unsubscribe: self
 ]
 
-{ #category : #private }
+{ #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
 	classTag label: (self classTagStringFor: self methodCoderUIModel).
 	
@@ -274,12 +278,12 @@ GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
 	"classTag enabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass"
 ]
 
-{ #category : #private }
+{ #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateProtocolButton [
 	protocolTag label: (self protocolStringFor: self methodCoderUIModel)
 ]
 
-{ #category : #private }
+{ #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateTraitMethodButton [
 	traitMethodTag label: (self traitMethodStringFor: self methodCoderUIModel).
 	self methodCoderUIModel coder isFromTrait

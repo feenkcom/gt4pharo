@@ -8,7 +8,7 @@ Class {
 		'methodBehavior',
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Method Coder'
 }
 
 { #category : #'instance creation' }
