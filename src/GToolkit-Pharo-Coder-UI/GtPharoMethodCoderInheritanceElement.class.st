@@ -78,7 +78,7 @@ GtPharoMethodCoderInheritanceElement >> newInheritanceDropdownContent [
 									text: 'Overridden by');
 								addChild: (self newMethodsCountButton
 									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverridingMethodsFilter new method: aMethodOrigin method)) ];
-									withAsyncSinkDo: [ :anElementSink | (aMethodOrigin overridingMethods forward: anElementSink) asAsyncPromise ])) ].
+									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overridingMethods ])) ].
 
 					aMethodOrigin isOverriding
 						ifTrue: [
@@ -91,7 +91,7 @@ GtPharoMethodCoderInheritanceElement >> newInheritanceDropdownContent [
 									text: 'Overrides');
 								addChild: (self newMethodsCountButton
 									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverriddenMethodsFilter new method: aMethodOrigin method)) ];
-									withAsyncSinkDo: [ :anElementSink | (aMethodOrigin overriddenMethods forward: anElementSink) asAsyncPromise ])) ] ] ]
+									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overriddenMethods ])) ] ] ]
 ]
 
 { #category : #'private - insance creation' }

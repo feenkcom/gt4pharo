@@ -516,7 +516,7 @@ GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
 							space;
 							nextPutAll: ('method' asPluralBasedOn: aSink count) ]) ] ].
 
-	(references asAsyncStream forward: container asyncSink) await.
+	container asyncSink forwardStream: references asAsyncStream.
 
 	container addChildren: {
 		waitingLabel.
