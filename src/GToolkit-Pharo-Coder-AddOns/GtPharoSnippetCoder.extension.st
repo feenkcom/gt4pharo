@@ -99,6 +99,18 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> initializeShortcuts: addOns [
+	super initializeShortcuts: addOns.
+
+	addOns
+		addShortcut: GtSourceCoderDoItShortcut new;
+		addShortcut: GtSourceCoderDoItAndInspectShortcut new;
+		addShortcut: GtSourceCoderPrintItShortcut new;
+		addShortcut: GtSnippetCoderExtractMethodShortcut new;
+		addShortcut: GtSourceCoderInlineRenameShortcut new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
 		or:

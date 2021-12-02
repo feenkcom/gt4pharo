@@ -726,6 +726,22 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
+	| variable |
+	aMethodNode arguments size ~= 1
+		ifTrue: [ ^ false ].
+	('paint*With:' match: aMethodNode selector)
+		ifFalse: [ ^ false ].
+	variable := aMethodNode arguments first.
+	aMethodNode
+		nodesDo: [ :each | 
+			(each isMessage and: [ each receiver = variable ])
+				ifTrue: [ (GtMondrian canUnderstand: each selector)
+						ifFalse: [ ^ false ] ] ].
+	^ true
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: aViewModel [
 	<gtAstCoderAddOns: 1>
 
@@ -794,6 +810,25 @@ GtPharoMethodCoder >> runMondrianPaintFrom: anElement [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 10>
+	(self compiledMethod notNil
+		and: [ anAST notNil
+				and: [ 
+					anAST methodNode
+						ifNotNil: [ :node | 
+							node pragmas
+								anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtSlide ] ] ]
+						ifNil: [ false ] ] ])
+		ifFalse: [ ^ self ].
+	(anAST methodNode numArgs = 1) ifFalse: [ ^ self ].
+	coderAddOns
+		addContextAction: 'Play and Inspect' translated
+		icon: BrGlamorousVectorIcons playinspect
+		action: [ :aCoderUIModel :anEvent | self playAndInspectSlide ].
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> testCase [
 
 	^ self
@@ -803,6 +838,43 @@ GtPharoMethodCoder >> testCase [
 			  self
 				  attributeNamed: #testCase
 				  put: (GtPharoMethodTestCase forMethod: self compiledMethod) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
+	<gtAstCoderAddOns: 20>
+	| isUnaryInstanceSideMethod isUnaryClassSideMethod |
+	
+	self compiledMethod ifNil: [ ^ self ].
+	
+	isUnaryInstanceSideMethod := aGtPharoMethodCoderViewModel selfObject notNil and: [ 
+		anAST methodNode selector isUnary ].
+	isUnaryClassSideMethod := (anAST notNil
+		and: [ anAST methodNode
+			ifNotNil: [ :node | node variables isEmpty and: [ self compiledMethod methodClass isClassSide ] ]
+			ifNil: [ false ] ] ).
+	(isUnaryInstanceSideMethod or: [ isUnaryClassSideMethod ])		
+		ifFalse: [ ^ self ].
+	coderAddOns
+		addContextAction: 'Play' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor playAll
+				coderUIModel: aCoderUIModel;
+				element: anElement;
+				execute ].
+	coderAddOns
+		addContextAction: 'Play and Inspect' translated
+		icon: BrGlamorousVectorIcons playinspect
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor playAllAndInspect
+				coderUIModel: aCoderUIModel;
+				element: anElement;
+				execute ].
+	coderAddOns
+		addContextAction: 'Debug' translated
+		icon: BrGlamorousVectorIcons debug
+		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
