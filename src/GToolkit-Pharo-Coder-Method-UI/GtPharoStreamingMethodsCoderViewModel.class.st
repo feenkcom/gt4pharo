@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtFilteredCodersViewModel,
 	#instVars : [
 		'shouldExpandByDefault',
-		'shouldHaveHeaderByDefault'
+		'shouldHaveHeaderByDefault',
+		'selfObject'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
@@ -28,7 +29,8 @@ GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
 	^ aCoderModel asCoderViewModel
 		expanded: shouldExpandByDefault;
 		shouldHaveHeader: shouldHaveHeaderByDefault;
-		highlighter: highlighter
+		highlighter: highlighter;
+		selfObject: selfObject
 ]
 
 { #category : #'api - coders' }
@@ -36,6 +38,19 @@ GtPharoStreamingMethodsCoderViewModel >> scrollToCompiledMethod: aCompiledMethod
 	self scrollToTarget: (GtPharoMethodCoderViewModelScrollTarget new
 		behaviorName: aCompiledMethod methodClass name;
 		selector: aCompiledMethod selector)
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderViewModel >> selfObject [
+
+	^ selfObject
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderViewModel >> selfObject: anObject [
+	selfObject := anObject.
+	coderViewModels valuesDo: [ :eachCoderViewModel |
+		eachCoderViewModel selfObject: anObject ]
 ]
 
 { #category : #'api - accessing' }

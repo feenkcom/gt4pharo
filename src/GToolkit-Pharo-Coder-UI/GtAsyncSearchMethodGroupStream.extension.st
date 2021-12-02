@@ -1,6 +1,11 @@
 Extension { #name : #GtAsyncSearchMethodGroupStream }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtAsyncSearchMethodGroupStream >> asCoder [
+	^ GtFilteredMethodsCoder forFilter: self filter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
 	<gtView>
 	

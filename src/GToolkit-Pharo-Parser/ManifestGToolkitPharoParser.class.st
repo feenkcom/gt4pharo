@@ -2,28 +2,28 @@
 Please describe the package using the class comment of the included manifest class. The manifest class also includes other additional metadata for the package. These meta data are used by other tools such as the SmalllintManifestChecker and the critics Browser
 "
 Class {
-	#name : #ManifestGToolkitPharoTestSuite,
+	#name : #ManifestGToolkitPharoParser,
 	#superclass : #PackageManifest,
-	#category : #'GToolkit-Pharo-TestSuite-Manifest'
+	#category : #'GToolkit-Pharo-Parser-Manifest'
 }
 
 { #category : #accessing }
-ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
+ManifestGToolkitPharoParser class >> mustOnlyDependOn [
 	^ {
-		'Announcements-Core'.
+		'Collections-Native'.
 		'Collections-Sequenceable'.
+		'Collections-Strings'.
 		'Collections-Unordered'.
-		'Futures'.
-		'GToolkit-Pharo-SearchFilters'.
 		'Kernel'.
-		'SUnit-Core'
+		'SmaCC_GLR_Runtime'.
+		'SmaCC_Runtime'
 	}
 ]
 
 { #category : #accessing }
-ManifestGToolkitPharoTestSuite class >> shouldDependOn [
-	^ {
-		'Futures'.
-		'GToolkit-Pharo-SearchFilters'.
+ManifestGToolkitPharoParser class >> shouldDependOn [
+	^ { 
+		'SmaCC_GLR_Runtime'.
+		'SmaCC_Runtime'
 	}
 ]

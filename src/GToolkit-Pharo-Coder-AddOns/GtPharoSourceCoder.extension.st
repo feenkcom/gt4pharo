@@ -1,10 +1,86 @@
 Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
+	"Try to find a behavior reference at a given source text position and request to browse it"
+
+	self
+		detectBehaviorAt: aTextPosition
+		ifFound: [ :aBehavior |
+			self
+				notifyToolSpawn: (GtClassCoderTool observedClass: aBehavior)
+				withDestination: self spawnDestination  ]
+		ifNone: [  ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> browseBehaviorIn: aSourceString [
+	"Try to find a behavior reference within a given source code and request to browse it"
+
+	self
+		detectBehaviorIn: aSourceString
+		ifFound: [ :aBehavior |
+			self
+				notifyToolSpawn: (GtClassCoderTool observedClass: aBehavior)
+				withDestination: self spawnDestination  ]
+		ifNone: [  ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> browseImplementorsAt: aTextPosition [
+	"Try to find a message selector at a given source text position and request to browse it"
+
+	self
+		detectSelectorAt: aTextPosition
+		ifFound: [ :aSelector | self notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector)  ]
+		ifNone: [  ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> browseImplementorsIn: aSourceString [
+	"Try to find a message selector within a given source string and request to browse it"
+
+	self
+		detectSelectorIn: aSourceString
+		ifFound: [ :aSelector | self notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector) ]
+		ifNone: [  ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> browseReferencesAt: aTextPosition [
+	"Try to create a references filter for an entity at the given text position and request to browse it"
+
+	self notifyObjectSpawn: (self
+		detectReferencesFilterAt: aTextPosition
+		ifFound: [ :aReferencesFilter | aReferencesFilter ]
+		ifNone: [ GtSearchNullFilter new ])
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> browseReferencesIn: aSourceString [
+	"Try to create a references filter for an entity within a given source string and request to browse it"
+
+	self notifyObjectSpawn: (self
+		detectReferencesFilterIn: aSourceString
+		ifFound: [ :aReferencesFilter | aReferencesFilter ]
+		ifNone: [ GtSearchNullFilter new ])
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoColorStyler new.
 	coderAddOns addStyler: GtPharoGlamorousColorStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> createLabel: aString description: description [
+	^ aString asRopedText
+		,
+			((' ' , description) asRopedText
+				attributes:
+					{(BlFontSizeAttribute size: 12).
+					(BlTextForegroundAttribute paint: Color gray)})
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -34,8 +110,35 @@ GtPharoSourceCoder >> haltAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> highlightNodeBlock: aNode [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel
+		  addTextAttribute: self class nodeHighlight
+		  from: aNode startPosition
+		  to: aNode stopPosition ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> initializeShortcuts: addOns [
+	super initializeShortcuts: addOns.
+
+	addOns
+		addShortcut: GtSourceCoderBrowseImplementorsShortcut new;
+		addShortcut: GtSourceCoderBrowseReferencesShortcut new;
+		addShortcut: GtSourceCoderBrowseBehaviorShortcut new;
+		addShortcut: GtSourceCoderDiscardChangesShortcut new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder class >> nodeHighlight [
+	^ NodeHighlight
+		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
+				paint: BrGlamorousColors textHighlightColor ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -49,6 +152,18 @@ GtPharoSourceCoder >> passwordAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoMethodPasswordStyler new.
 	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> removeHighlightBlock [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> removeRefactoringAttribute [
+	self sourceText
+		clearAttributes: [ :each | each class = GtRefactoringChangesAttribute ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -151,4 +266,10 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 				ifTrue: [ otherCoders do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ].
 	action install.
 	^ action
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> whenSendToAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoWhenSendToExpanderStyler new.
 ]

@@ -8,3 +8,10 @@ GtPharoBlockClosureCoder >> initializeAddOns: addOns [
 	addOns addStyler: GtPharoDeprecationStyler new.
 	addOns addStyler: GtPharoDynamicHighlightStyler new.
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoBlockClosureCoder >> initializeShortcuts: addOns [
+	super initializeShortcuts: addOns.
+	
+	addOns addShortcut: GtSourceCoderFormatShortcut new
+]
