@@ -1,13 +1,4 @@
-Class {
-	#name : #GtPharoMethodsCoderView,
-	#superclass : #Object,
-	#instVars : [
-		'filter',
-		'shouldHaveTestsRunner',
-		'shouldHaveExamplesRunner'
-	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
-}
+Extension { #name : #GtPharoMethodsCoderView }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoMethodsCoderView >> gtMethodsFor: aView [

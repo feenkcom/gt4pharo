@@ -11,7 +11,7 @@ Class {
 		'traitMethodTag',
 		'classTag'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
 { #category : #private }

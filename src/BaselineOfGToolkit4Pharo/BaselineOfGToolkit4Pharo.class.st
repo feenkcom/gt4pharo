@@ -29,8 +29,10 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #('GToolkitCompleter' 'GToolkit-Pharo-Parser' ). ];
 			package: 'GToolkit-Pharo-Coder' with: [
 				spec requires: #('GToolkitCoder' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Completer' ). ];
+			package: 'GToolkit-Pharo-Coder-Method-UI' with: [
+				spec requires: #('GToolkitCoder' 'GToolkit-Pharo-Completer' ). ];
 			package: 'GToolkit-Pharo-Coder-UI' with: [
-				spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Metamodels' ). ];
+				spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Coder-Method-UI'). ];
 			package: 'GToolkit-Pharo-TestSuite' with: [
 				spec requires: #('Futures' 'GToolkit-Pharo-Coder'). ];
 			package: 'GToolkit-Pharo-TestSuite-Remote' with: [

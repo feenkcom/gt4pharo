@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'programCounterAttributes'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
 
 { #category : #accessing }

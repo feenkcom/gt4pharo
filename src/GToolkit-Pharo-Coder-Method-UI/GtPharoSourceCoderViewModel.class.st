@@ -7,7 +7,7 @@ Class {
 		'hasSelfObject',
 		'highlighter'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
 
 { #category : #'api - coder model' }
@@ -119,21 +119,6 @@ GtPharoSourceCoderViewModel >> localBindings [
 	<return: #GtLocalVariablesBindings>
 
 	^ localBindings
-]
-
-{ #category : #'api - actions' }
-GtPharoSourceCoderViewModel >> renameLocalVariableAt: aTextIndex [
-	GtRenameAction2
-		pharoRenameLocalVariableAt: aTextIndex
-		textualCoderViewModel: self
-]
-
-{ #category : #'api - actions' }
-GtPharoSourceCoderViewModel >> renameLocalVariableAtCursor [
-	self cursors do: [ :aCursor |
-		^ GtRenameAction2
-			pharoRenameLocalVariableAt: aCursor position
-			textualCoderViewModel: self ]
 ]
 
 { #category : #'api - accessing' }

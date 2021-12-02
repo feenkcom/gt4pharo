@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'list'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
 { #category : #'instance creation' }

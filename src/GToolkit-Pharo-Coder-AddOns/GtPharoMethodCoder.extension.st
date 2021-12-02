@@ -588,6 +588,31 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
+	| refactoring model tempName |
+
+	model := self createRefactoringModel.
+	tempName := self safeTemporaryName.
+
+	refactoring := RBExtractToTemporaryRefactoring
+		model: model
+		extract: aNode sourceInterval
+		to: tempName
+		from: self currentSelector
+		in: (model classFor: self behavior).
+
+	(self performMethodRefactoring: refactoring)
+		ifFalse: [ ^ self ].
+
+	(self findNodeAssigning: tempName)
+		ifNotNil: [ :node | 
+			aCoderViewModel
+				selectNone;
+				moveCursorTo: node stop;
+				renameLocalVariableAt: node stop ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 6>
 	(self hasObjectAttribute
