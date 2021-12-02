@@ -8,9 +8,9 @@ GtCoderModel class >> gtAstCoderAddOnsFor: aView context: aPhlowContext [
 		tooltip: 'The methods that extend the Coder with AddOns';
 		priority: 40;
 		object: [ 
-			#gtAstCoderAddOns: gtPragmas
-				& (GtSearchMethodsInClassFilter new 
+			(GtSearchMethodsInClassFilter new 
 					forClass: self;
-					includeSuperclass: true) ];
+					includeSuperclass: true) & 
+					#gtAstCoderAddOns: gtPragmas];
 		view: #gtItemsFor:
 ]
