@@ -1,6 +1,6 @@
 "
 # Source coder breadcrumb
-{{gtExample:GtMethodCoderBreadcrumbElementExamples>>#breadcrumbForSourceCoder}}
+{{gtExample:GtMethodCoderHeaderElementExamples>>#headerForMethodCoder}}
 
 "
 Class {
