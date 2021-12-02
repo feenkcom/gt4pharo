@@ -23,6 +23,7 @@ ManifestGToolkitPharoCoderMethodUI class >> mustOnlyDependOn [
 		'Bloc-Text'.
 		'Brick'.
 		'Brick-Core'.
+		'Brick-Editor'.
 		'Brick-Glamorous'.
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
@@ -33,6 +34,7 @@ ManifestGToolkitPharoCoderMethodUI class >> mustOnlyDependOn [
 		'GToolkit-Coder-UI'.
 		'GToolkit-Completer'.
 		'GToolkit-Pharo-Coder-Method'.
+		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-Phlow'.
 		'GToolkit-VariableBindings'.
@@ -50,6 +52,7 @@ ManifestGToolkitPharoCoderMethodUI class >> shouldDependOn [
 		'GToolkit-Coder-UI'.
 		'GToolkit-Completer'.
 		'GToolkit-Pharo-Coder-Method'.
+		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-VariableBindings'.
 	}
