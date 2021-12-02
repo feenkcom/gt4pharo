@@ -98,12 +98,32 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			package: 'GToolkit-Pharo-Coder-AddOns' with: [
 				spec requires: #('GToolkit-Pharo-Coder-UI' ). ];
 			
-			package: 'GToolkit-Pharo-TestSuite-Examples' with: [
-				spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-UI' 'GToolkit-Pharo-Coder-Examples'). ];
-			
 			package: 'GToolkit-Pharo-Coder-Examples' with: [
-				spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-UI' 'GToolkit-Pharo-Coder-AddOns' ). ];
+				spec requires: #(
+					'GToolkit-Pharo-Coder'
+					'GToolkit-Pharo-Coder-AddOns'
+					'GToolkit-Pharo-Coder-Method'
+					'GToolkit-Pharo-Coder-Method-UI'
+					'GToolkit-Pharo-Coder-UI'
+					'GToolkit-Pharo-Completer'
+					'GToolkit-Pharo-Metamodels'
+					'GToolkit-Pharo-Parser'
+					'GToolkit-Pharo-SearchFilters'
+					'GToolkit-Pharo-System'
+					'GToolkit-Pharo-TestSuite' ). ];
+
+			package: 'GToolkit-Pharo-TestSuite-Examples' with: [
+				spec requires: #(
+					'GToolkit-Pharo-Coder'
+					'GToolkit-Pharo-Coder-Examples'
+					'GToolkit-Pharo-Coder-Method'
+					'GToolkit-Pharo-TestSuite'
+					'GToolkit-Pharo-TestSuite-UI'). ];
+
 			package: 'GToolkit-Pharo-Extensions' with: [
-				spec requires: #('GToolkit-Pharo-Metamodels' ). ]. ].
+				spec requires: #(
+					'GToolkitCoder'
+					'GToolkit-Pharo-Coder'
+					'GToolkit-Pharo-Metamodels' ). ]. ].
 
 ]
