@@ -1,10 +1,10 @@
 "
 # Source coder breadcrumb
-{{gtExample:GtMethodCoderBreadcrumbElementExamples>>#breadcrumbForSourceCoder}}
+{{gtExample:GtMethodCoderHeaderElementExamples>>#headerForMethodCoder}}
 
 "
 Class {
-	#name : #GtMethodCoderBreadcrumbElement,
+	#name : #GtPharoMethodCoderHeaderElement,
 	#superclass : #BrHorizontalPane,
 	#traits : 'TGtWithTextualCoderViewModel',
 	#classTraits : 'TGtWithTextualCoderViewModel classTrait',
@@ -12,16 +12,16 @@ Class {
 		'package',
 		'behavior'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
 { #category : #accessing }
-GtMethodCoderBreadcrumbElement >> behaviorButton [
+GtPharoMethodCoderHeaderElement >> behaviorButton [
 	^ behavior
 ]
 
 { #category : #initialization }
-GtMethodCoderBreadcrumbElement >> initialize [
+GtPharoMethodCoderHeaderElement >> initialize [
 	super initialize.
 
 	self fitContent.
@@ -40,7 +40,7 @@ GtMethodCoderBreadcrumbElement >> initialize [
 ]
 
 { #category : #'instance creation' }
-GtMethodCoderBreadcrumbElement >> newBehaviorButton [
+GtPharoMethodCoderHeaderElement >> newBehaviorButton [
 	^ BrButton new
 		fitContent;
 		aptitude: (BrGlamorousLabelAptitude new
@@ -50,7 +50,7 @@ GtMethodCoderBreadcrumbElement >> newBehaviorButton [
 ]
 
 { #category : #'instance creation' }
-GtMethodCoderBreadcrumbElement >> newPackageButton [
+GtPharoMethodCoderHeaderElement >> newPackageButton [
 	^ BrButton new
 		fitContent;
 		aptitude: (BrGlamorousLabelAptitude new
@@ -60,60 +60,61 @@ GtMethodCoderBreadcrumbElement >> newPackageButton [
 ]
 
 { #category : #'event handling' }
-GtMethodCoderBreadcrumbElement >> onCoderClassChanged: anAnnouncement [
+GtPharoMethodCoderHeaderElement >> onCoderClassChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateBreadcrumbElements ])
 ]
 
 { #category : #'event handling' }
-GtMethodCoderBreadcrumbElement >> onCoderMethodModified: anAnnouncement [
+GtPharoMethodCoderHeaderElement >> onCoderMethodModified: anAnnouncement [
 	anAnnouncement coder isModified
 		ifTrue: [ self background: self theme status errorBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
 
 { #category : #'event handling' }
-GtMethodCoderBreadcrumbElement >> onCoderSourceTextModified: anAnnouncement [
+GtPharoMethodCoderHeaderElement >> onCoderSourceTextModified: anAnnouncement [
 	anAnnouncement coder isModified
 		ifTrue: [ self background: self theme status failureBackgroundColor ]
 		ifFalse: [ self background: Color white ]
 ]
 
 { #category : #'api - textual coder view model' }
-GtMethodCoderBreadcrumbElement >> onTextualCoderViewModelChanged [
+GtPharoMethodCoderHeaderElement >> onTextualCoderViewModelChanged [
 	"Is sent when a new textualCoder view model is assigned to the element.
 	Note: #onTextualCoderViewModelChanged is sent before #subscribeToTextualCoderViewModel
 	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
 	didn't get a chance to subscribe to any announcement. Override #onPostTextualCoderViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 
-	self updateBreadcrumbElements
+	[ self updateBreadcrumbElements ]
+		on: Error
+		do: [ :anError |
+			self removeChildNamed: #error.
+			self addChild: anError asDebuggableElement as: #error ]
 ]
 
 { #category : #accessing }
-GtMethodCoderBreadcrumbElement >> packageButton [
+GtPharoMethodCoderHeaderElement >> packageButton [
 	^ package
 ]
 
 { #category : #'private - actions' }
-GtMethodCoderBreadcrumbElement >> spawnBehavior [
-	| aMethodBehavior |
+GtPharoMethodCoderHeaderElement >> spawnBehavior [
+	| aSourceBehavior |
 	
-	aMethodBehavior := textualCoderViewModel coderModel methodBehavior.
+	aSourceBehavior := textualCoderViewModel sourceBehavior.
 	
-	aMethodBehavior realBehaviorDo: [ :aBehavior |
-		self phlow spawnTool: (GtClassCoderTool observedClass: aBehavior).
-		^ self ].
-
-	self phlow spawnTool: (GtInspectorTool forObject: aMethodBehavior)
+	aSourceBehavior ifNotNil: [ :aBehavior |
+		self phlow spawnTool: (GtClassCoderTool observedClass: aBehavior) ]
 ]
 
 { #category : #'private - actions' }
-GtMethodCoderBreadcrumbElement >> spawnPackage [
+GtPharoMethodCoderHeaderElement >> spawnPackage [
 	self phlow spawnTool: (GtPackageCoderTool package: textualCoderViewModel coderModel package)
 ]
 
 { #category : #'api - textual coder view model' }
-GtMethodCoderBreadcrumbElement >> subscribeToTextualCoderViewModel [
+GtPharoMethodCoderHeaderElement >> subscribeToTextualCoderViewModel [
 	"Is sent after a new textualCoder view model is assigned to the element.
 	It is required to unsubscribe from the view model or domain model by implementing
 	#unsubscribeFromTextualCoderViewModel if elements subscribe to them"
@@ -137,7 +138,7 @@ GtMethodCoderBreadcrumbElement >> subscribeToTextualCoderViewModel [
 ]
 
 { #category : #'api - textual coder view model' }
-GtMethodCoderBreadcrumbElement >> unsubscribeFromTextualCoderViewModel [
+GtPharoMethodCoderHeaderElement >> unsubscribeFromTextualCoderViewModel [
 	"Is sent before a new textualCoder view model is assigned to the element.
 	Elements that subscribe to textualCoder view model in domain model are required to implement this methods."
 	
@@ -145,14 +146,12 @@ GtMethodCoderBreadcrumbElement >> unsubscribeFromTextualCoderViewModel [
 ]
 
 { #category : #'event handling' }
-GtMethodCoderBreadcrumbElement >> updateBreadcrumbElements [
-	package label: (textualCoderViewModel coderModel package
-		ifNil: [ '(Unspecified)' ]
-		ifNotNil: [ :aPackage | aPackage name ]).
-	behavior label: (textualCoderViewModel coderModel methodBehavior
-		behaviorNameDo: [ :aName |
-			textualCoderViewModel coderModel methodBehavior exists
-				ifTrue: [ aName ]
-				ifFalse: [ aName, ' (Deleted)' ] ]
-		ifAbsent: [ '(Unspecified)' ])
+GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
+	package label: (textualCoderViewModel sourceBehavior
+		ifNotNil: [ :aBehavior | aBehavior package name ]
+		ifNil: [ '(Unspecified)' ]).
+
+	behavior label: (textualCoderViewModel sourceBehavior
+		ifNotNil: [ :aBehavior | aBehavior name ]
+		ifNil: [ '(Unspecified)' ])
 ]

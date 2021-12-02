@@ -17,7 +17,7 @@ GtSearchMethodsInPackageFilter >> = anObject [
 { #category : #accessing }
 GtSearchMethodsInPackageFilter >> defaultFilterScope [
 	^ ((AsyncPackageBehaviorsStream forPackage: self package)
-		map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
+		collect: [ :eachBehavior | AsyncBehaviorAllLocalMethodsStream forBehavior: eachBehavior ])
 			flatten
 ]
 

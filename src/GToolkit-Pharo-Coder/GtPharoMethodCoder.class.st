@@ -8,7 +8,7 @@ Class {
 		'methodBehavior',
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Method Coder'
 }
 
 { #category : #'instance creation' }
@@ -426,31 +426,6 @@ GtPharoMethodCoder >> explanationLink: anExplanation [
 	self requestUpdateAddOns
 ]
 
-{ #category : #'api - refactorings' }
-GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
-	| refactoring model tempName |
-
-	model := self createRefactoringModel.
-	tempName := self safeTemporaryName.
-
-	refactoring := RBExtractToTemporaryRefactoring
-		model: model
-		extract: aNode sourceInterval
-		to: tempName
-		from: self currentSelector
-		in: (model classFor: self behavior).
-
-	(self performMethodRefactoring: refactoring)
-		ifFalse: [ ^ self ].
-
-	(self findNodeAssigning: tempName)
-		ifNotNil: [ :node | 
-			aCoderViewModel
-				selectNone;
-				moveCursorTo: node stop;
-				renameLocalVariableAt: node stop ]
-]
-
 { #category : #'private - refactorings' }
 GtPharoMethodCoder >> findNodeAssigning: aString [
 	self rbAST
@@ -650,6 +625,13 @@ GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 		description: [ 'Behavior must be reifined as an object' ].
 
 	methodBehavior := aGtMethodCoderBehavior
+]
+
+{ #category : #'api - accessing' }
+GtPharoMethodCoder >> methodOrigin [
+	<return: #TAsyncFuture of: #GtPharoMethodOrigin>
+
+	^ [ self privateComputeMethodOrigin ] asAsyncFuture
 ]
 
 { #category : #'api - refactorings' }
@@ -945,6 +927,26 @@ GtPharoMethodCoder >> printOn: aStream [
 		nextPutAll: '>>#';
 		nextPutAll: self selector asString;
 		nextPut: $)
+]
+
+{ #category : #private }
+GtPharoMethodCoder >> privateComputeMethodOrigin [
+	<return: #GtPharoMethodOrigin>
+	| aCompiledMethod anOriginBehavior aMethodBehavior |
+	
+	aCompiledMethod := self compiledMethod
+		ifNil: [ ^ GtPharoMethodUnknownOrigin new ].
+	
+	anOriginBehavior := aCompiledMethod origin.
+	aMethodBehavior := aCompiledMethod methodClass.
+
+	anOriginBehavior isTrait
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].
+
+	(anOriginBehavior = aMethodBehavior)
+		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+		
+	^ GtPharoMethodUnknownOrigin new
 ]
 
 { #category : #'api - accessing' }

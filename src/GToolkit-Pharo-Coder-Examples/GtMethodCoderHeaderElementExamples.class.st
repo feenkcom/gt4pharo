@@ -1,17 +1,17 @@
 Class {
-	#name : #GtMethodCoderBreadcrumbElementExamples,
+	#name : #GtMethodCoderHeaderElementExamples,
 	#superclass : #Object,
 	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #examples }
-GtMethodCoderBreadcrumbElementExamples >> breadcrumbForSourceCoder [
+GtMethodCoderHeaderElementExamples >> headerForMethodCoder [
 	<gtExample>
 	| aCoderUIModel aCoderBreadcrumb |
 	
 	aCoderUIModel := self methodCoderUIModel.
 
-	aCoderBreadcrumb := GtMethodCoderBreadcrumbElement new.
+	aCoderBreadcrumb := GtPharoMethodCoderHeaderElement new.
 	aCoderBreadcrumb textualCoderViewModel: aCoderUIModel.
 	
 	self assert: aCoderBreadcrumb packageButton label asString equals: 'GToolkit-Coder-Examples'.
@@ -21,15 +21,15 @@ GtMethodCoderBreadcrumbElementExamples >> breadcrumbForSourceCoder [
 ]
 
 { #category : #'instance creation' }
-GtMethodCoderBreadcrumbElementExamples >> methodCoder [
+GtMethodCoderHeaderElementExamples >> methodCoder [
 	<gtExample>
 	
 	^ GtPharoMethodCoder forMethod: (GtBehaviorCoderDummyClass >> #instVarB:)
 ]
 
 { #category : #'instance creation' }
-GtMethodCoderBreadcrumbElementExamples >> methodCoderUIModel [
+GtMethodCoderHeaderElementExamples >> methodCoderUIModel [
 	<gtExample>
 	
-	^ GtSourceCoderViewModel new coder: self methodCoder
+	^ GtPharoMethodCoderViewModel new coderModel: self methodCoder
 ]

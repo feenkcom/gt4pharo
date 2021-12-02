@@ -108,13 +108,13 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 			label: 'Check Breadcrumb Package Name';
 			value: [ :aButton | aButton label asString ]
 				equals: [ GtPharoMethodCoderExamples package name ];
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 1;
 			play.
 		aStep check 
 			label: 'Check Breadcrumb Class Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples name ];
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 3;
 			play ].
 
@@ -129,7 +129,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |	
 		aStep click
 			label: 'Click On Class Name';
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 3;
 			play.
 		
@@ -154,7 +154,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
 		aStep click
 			label: 'Click On Package Name';
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 1;
 			play.
 		
@@ -229,13 +229,13 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbC
 		aStep  check 
 			label: 'Check Breadcrumb Package Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples package name ];
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 1;
 			play.
 		aStep  check 
 			label: 'Check Breadcrumb Class Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples name ];
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 3;
 			play ].
 
@@ -250,7 +250,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
 		aStep click
 			label: 'Click On Class Name';
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 3;
 			play.
 		
@@ -274,7 +274,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
 		aStep click
 			label: 'Click On Package Name';
-			onBreadthFirstChildOfClass: GtMethodCoderBreadcrumbElement;
+			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 1;
 			play.
 		

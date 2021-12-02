@@ -441,6 +441,94 @@ GtPharoMethodCoder >> baselineAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> browseFrom: anEditorElement [ 
+	((GtCoder forMethod: self compiledMethod)
+		openInPagerFrom: anEditorElement)
+			maximized
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
+	| noReferencesLabel container waitingLabel selectorLabel referencesButton references |
+
+	noReferencesLabel := BrLabel new
+		margin: (BlInsets all: 10);
+		aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
+		text: 'Remove method?' asRopedText.
+
+	(self isNewMethod or: [ selector isNil ])
+		ifTrue: [ ^ noReferencesLabel ].
+
+	references := self selector gtReferences. 
+	
+	noReferencesLabel text: (selector asRopedText bold, ' is not referenced' asRopedText).
+
+	waitingLabel := BrLabel new
+		aptitude: BrGlamorousLabelAptitude new italic;
+		margin: (BlInsets all: 10);
+		text: 'Searching references...'.
+
+	selectorLabel := BrLabel new
+		margin: (BlInsets top: 10 left: 10 bottom: 10 right: 0);
+		aptitude: BrGlamorousLabelAptitude new;
+		text: (selector asRopedText bold, ' is still referenced in ' asRopedText).
+
+	referencesButton := BrButton new
+		aptitude: BrGlamorousLinkSquaredButtonWithLabelAptitude new glamorousCodeSmallSize;
+		beSmallSize;
+		margin: (BlInsets top: 10 left: 2 bottom: 10 right: 10);
+		label: '0 methods';
+		action: [ anElement phlow spawnObject: references ].
+		
+	container := BrHorizontalPane new
+		fitContent;
+		withAsyncSinkDo: [ :anElementSink |
+			anElementSink
+				sink: AsyncCounterSink new;
+				whenPending: [ :aContainer :aSink |
+					aSink count > 0
+						ifTrue: [
+							waitingLabel visibility: BlVisibility gone.
+							selectorLabel visibility: BlVisibility visible.
+							referencesButton visibility: BlVisibility visible ].
+					
+					referencesButton label: (String streamContents: [ :aStream |
+						aStream
+							print: aSink count;
+							space;
+							nextPutAll: ('method' asPluralBasedOn: aSink count);
+							nextPutAll: '...' ]) ];
+				whenSuccess: [ :aContainer :aSink | 
+					waitingLabel visibility: BlVisibility gone.
+
+					aSink count > 0
+						ifTrue: [
+							selectorLabel visibility: BlVisibility visible.
+							referencesButton visibility: BlVisibility visible ]
+						ifFalse: [
+							selectorLabel visibility: BlVisibility gone.
+							referencesButton visibility: BlVisibility gone.
+							noReferencesLabel visibility: BlVisibility visible ].
+
+					referencesButton label: (String streamContents: [ :aStream |
+						aStream
+							print: aSink count;
+							space;
+							nextPutAll: ('method' asPluralBasedOn: aSink count) ]) ] ].
+
+	container asyncSink forwardStream: references asAsyncStream.
+
+	container addChildren: {
+		waitingLabel.
+		selectorLabel visibility: BlVisibility gone.
+		referencesButton visibility: BlVisibility gone.
+		noReferencesLabel visibility: BlVisibility gone
+	}.
+
+	^ container
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> copyMethodNameToClipboard [
 	self compiledMethod ifNotNil: [ :aCompiledMethod | 
 		Clipboard clipboardText: aCompiledMethod printString ]
@@ -497,6 +585,31 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 
 	self explanationLink notNil
 		ifTrue: [ coderAddOns addStyler: self explanationLink ].
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
+	| refactoring model tempName |
+
+	model := self createRefactoringModel.
+	tempName := self safeTemporaryName.
+
+	refactoring := RBExtractToTemporaryRefactoring
+		model: model
+		extract: aNode sourceInterval
+		to: tempName
+		from: self currentSelector
+		in: (model classFor: self behavior).
+
+	(self performMethodRefactoring: refactoring)
+		ifFalse: [ ^ self ].
+
+	(self findNodeAssigning: tempName)
+		ifNotNil: [ :node | 
+			aCoderViewModel
+				selectNone;
+				moveCursorTo: node stop;
+				renameLocalVariableAt: node stop ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -610,6 +723,17 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderSaveShortcut new;
 		addShortcut: GtSourceCoderFormatShortcut new;
 		addShortcut: GtSourceCoderInlineRenameShortcut new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: aViewModel [
+	<gtAstCoderAddOns: 1>
+
+	coderAddOns
+		addPreview: 'Inheritance'
+		stencil: [
+			GtPharoMethodCoderInheritanceElement new 
+				pharoMethodCoderViewModel: aViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
