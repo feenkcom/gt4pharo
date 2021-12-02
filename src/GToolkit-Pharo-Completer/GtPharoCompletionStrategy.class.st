@@ -233,6 +233,17 @@ GtPharoCompletionStrategy >> isMethod: aBoolean [
 	isMethod := aBoolean
 ]
 
+{ #category : #'private-selector' }
+GtPharoCompletionStrategy >> isSubsequence: subString of: completeString [
+	| i |
+	i := 1.
+	^ subString
+		allSatisfy:
+			[ :char | 
+			i := (completeString indexOf: char startingAt: i) + 1.
+			i > 1 ]
+]
+
 { #category : #'private-variables' }
 GtPharoCompletionStrategy >> localVariablesFor: aVariableNode [
 	^ self hasImplicitVariables
