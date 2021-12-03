@@ -9,7 +9,7 @@ Class {
 		'startIndex',
 		'previewIndex'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #executing }
@@ -26,7 +26,7 @@ GtRenameMethodController >> installRenamer [
 			message := self originalNode.
 			message selectorParts
 				keysAndValuesDo: [ :i :eachSmaCCToken | 
-					(eachSmaCCToken sourceInterval includes: position)
+					((eachSmaCCToken sourceInterval includes: position) or: [ eachSmaCCToken stopPosition + 1 = position ])
 						ifTrue: [
 							selectorIndex := i.
 							self installRenamerOn: message ] ] ]
