@@ -69,11 +69,9 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 GtPharoMethodCoder >> behavior [
 	<return: #Behavior>
 
-	self methodBehavior isClass
-		ifTrue: [ ^ self methodBehavior ].
-
-	self methodBehavior realBehaviorDo: [ :aBehavior | ^ aBehavior ].
-	^ UndefinedObject
+	^ self methodBehavior
+		realBehaviorDo: [ :aBehavior | aBehavior ]
+		ifAbsent: [ UndefinedObject ]
 ]
 
 { #category : #'api - accessing' }
@@ -189,32 +187,34 @@ GtPharoMethodCoder >> compile [
 GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
 	<return: #Boolean>
+	| aChange |
 
 	"we should use #currentSelector instead of #selector because we care
 	about the `current` state of the coder (#selector may be nil for new methods)"
 	self currentSelector
 		ifNil: [ ^ false ].
 
-	^ self methodBehavior
-		realBehaviorDo: [ :aBehavior |
-			| aChange |
-			aChange := self createCompileMethodChangeIn: aBehavior inContext: aGtPharoSourceCoderEvaluationContext.
+	aGtPharoSourceCoderEvaluationContext hasTargetBehavior
+		ifFalse: [ ^ GtPharoMethodCoderTargetBehaviorNotDefined signal ].
 
-			selector := aChange selector.
+	aChange := self
+		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
+		inContext: aGtPharoSourceCoderEvaluationContext.
 
-			(self
-				handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
-				ifFalse: [ ^ false ].
+	selector := aChange selector.
 
-			aChange definedSelector
-				ifNotNil: [ :sel | 
-					self selector: sel.
-					self compiledMethod
-						ifNotNil: [ :method |
-							self forMethod: method.
-							^ true ] ].
-			false ]
-		ifAbsent: [ false ]
+	(self
+		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
+		ifFalse: [ ^ false ].
+
+	aChange definedSelector
+		ifNotNil: [ :sel | 
+			self selector: sel.
+			self compiledMethod
+				ifNotNil: [ :method |
+					self forMethod: method.
+					^ true ] ].
+	^ false
 ]
 
 { #category : #accessing }
@@ -355,6 +355,26 @@ GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEv
 	aThenBlock cull: aResult.
 
 	^ aResult
+]
+
+{ #category : #'private - evaluation' }
+GtPharoMethodCoder >> evaluationContext [
+	| anEvaluationContext aMethodOrigin |
+	
+	anEvaluationContext := super evaluationContext.
+	
+	aMethodOrigin := self methodOrigin wait.
+	"By default we should aim to compile the method in the same behavior as the method's origin"
+	aMethodOrigin behaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ].
+	
+	"however, when a compiled method does not exist it is not possible to determine its origin.
+	In that case we should rely solely on the defined method behavior, if any"
+	aMethodOrigin isUnknownOrigin
+		ifTrue: [
+			self methodBehavior
+				realBehaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ] ].
+
+	^ anEvaluationContext
 ]
 
 { #category : #'api - actions examples' }
@@ -644,6 +664,11 @@ GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	^ true
 ]
 
+{ #category : #'instance creation' }
+GtPharoMethodCoder >> newEvaluationContext [
+	^ GtPharoMethodCoderCompilationContext new
+]
+
 { #category : #'private - actions' }
 GtPharoMethodCoder >> newMethodSource [
 	self
@@ -718,7 +743,7 @@ GtPharoMethodCoder >> onClassAdded: aClassAddedAnnouncement [
 	(self methodBehavior affectedByClassAdded: aClassAddedAnnouncement)
 		ifFalse: [ ^ self ].
 
-	methodBehavior := self methodBehavior affectByClassAdded: aClassAddedAnnouncement.
+	self methodBehavior: (self methodBehavior affectByClassAdded: aClassAddedAnnouncement).
 	self notifyClassAdded
 ]
 
@@ -727,7 +752,7 @@ GtPharoMethodCoder >> onClassRemoved: aClassRemovedAnnouncement [
 	(self methodBehavior affectedByClassRemoved: aClassRemovedAnnouncement)
 		ifFalse: [ ^ self ].
 		
-	methodBehavior := self methodBehavior affectByClassRemoved: aClassRemovedAnnouncement.
+	self methodBehavior: (self methodBehavior affectByClassRemoved: aClassRemovedAnnouncement).
 	self notifyClassRemoved
 ]
 
@@ -736,7 +761,7 @@ GtPharoMethodCoder >> onClassRenamed: aClassRenamedAnnouncement [
 	(self methodBehavior affectedByClassRenamed: aClassRenamedAnnouncement)
 		ifFalse: [ ^ self ].
 
-	methodBehavior := self methodBehavior affectByClassRenamed: aClassRenamedAnnouncement.
+	self methodBehavior: (self methodBehavior affectByClassRenamed: aClassRenamedAnnouncement).
 	self notifyClassRenamed
 ]
 
@@ -924,11 +949,11 @@ GtPharoMethodCoder >> privateComputeMethodOrigin [
 	anOriginBehavior := aCompiledMethod origin.
 	aMethodBehavior := aCompiledMethod methodClass.
 
-	anOriginBehavior isTrait
-		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].
-
 	(anOriginBehavior = aMethodBehavior)
 		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+
+	anOriginBehavior isTrait
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].	
 		
 	^ GtPharoMethodUnknownOrigin new
 ]
@@ -980,7 +1005,8 @@ GtPharoMethodCoder >> renameProtocol: aString [
 { #category : #initialize }
 GtPharoMethodCoder >> reset [
 	super reset.
-	methodBehavior := GtPharoCoderBehavior unspecified.
+
+	self methodBehavior: GtPharoCoderBehavior unspecified.
 	selector := nil.
 	self protocol: nil
 ]

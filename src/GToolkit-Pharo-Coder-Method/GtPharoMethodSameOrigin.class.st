@@ -27,6 +27,13 @@ GtPharoMethodSameOrigin >> behavior: anObject method: aCompiledMethod [
 	method := aCompiledMethod
 ]
 
+{ #category : #accessing }
+GtPharoMethodSameOrigin >> behaviorDo: aBlock [
+	"Evaluate a given block with the origin behavior"
+
+	^ aBlock value: behavior
+]
+
 { #category : #testing }
 GtPharoMethodSameOrigin >> isSameOrigin [
 	^ true

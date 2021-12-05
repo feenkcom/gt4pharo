@@ -2,7 +2,8 @@ Class {
 	#name : #GtPharoMethodCoderViewModel,
 	#superclass : #GtPharoSourceCoderViewModel,
 	#instVars : [
-		'savePreventors'
+		'savePreventors',
+		'contextualBehavior'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
@@ -27,6 +28,22 @@ GtPharoMethodCoderViewModel >> allowSaveDueTo: aSavePreventor [
 	self notifySaveEnabled
 ]
 
+{ #category : #private }
+GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
+	"Return a list of behaviors in which the method can be compiled.
+	For example, a trait method can be compile in a trait itself, or in a behavior that uses that trait.
+	Superclass methods that are displayed in a methods coder can be compiled in a context of that methods coder
+	or in the origin superclass"
+	<return: #TAsyncStream of: #Behavior>
+	
+	^ ({ 
+		contextualBehavior asAsyncFuture asAsyncStream.
+		self behavior asAsyncFuture asAsyncStream.
+		(self coderModel methodOrigin map: [ :aMethodOrigin | aMethodOrigin behaviorDo: [ :aBehavior | aBehavior ] ]) asAsyncStream.
+	
+	} asAsyncStream flatten select: [ :eachBehavior | eachBehavior notNil ]) withoutDuplicates
+]
+
 { #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> behavior [
 	^ self coderModel behavior
@@ -46,6 +63,18 @@ GtPharoMethodCoderViewModel >> compiledMethod [
 	^ self coderModel compiledMethod
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> contextualBehavior: aBehavior [
+	contextualBehavior := aBehavior
+]
+
+{ #category : #private }
+GtPharoMethodCoderViewModel >> defaultCompilationBehavior [
+	<return: #Behavior>
+	
+	^ contextualBehavior ifNil: [ self sourceBehavior ]
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> discardChanges [
 	super discardChanges.
@@ -60,7 +89,8 @@ GtPharoMethodCoderViewModel >> elementClass [
 { #category : #'private - evaluation' }
 GtPharoMethodCoderViewModel >> evaluationContext [
 	^ super evaluationContext
-		receiverObject: (self selfObject ifNil: [ self behavior instanceSide ])
+		receiverObject: (self selfObject ifNil: [ self behavior instanceSide ]);
+		targetBehavior: self defaultCompilationBehavior
 ]
 
 { #category : #'gt-extension' }
@@ -143,12 +173,6 @@ GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
 	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
 ]
 
-{ #category : #'api - coder model' }
-GtPharoMethodCoderViewModel >> originBehavior [
-	"Returns a behavior in which the method is compiled."
-	<return: #Behavior>
-]
-
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> playAll [
 	"Evaluate the whole source code and inspect the result"
@@ -199,6 +223,20 @@ GtPharoMethodCoderViewModel >> save [
 		ifFalse: [ ^ false ].
 
 	aSaveResult := self coderModel saveInContext: self evaluationContext.
+	aSaveResult ifTrue: [ self notifySaved: self compiledMethod ].
+
+	^ aSaveResult
+]
+
+{ #category : #'api - actions' }
+GtPharoMethodCoderViewModel >> saveIn: aBehavior [
+	| aSaveResult |
+	<return: #Boolean>
+	
+	self isSaveEnabled
+		ifFalse: [ ^ false ].
+
+	aSaveResult := self coderModel saveInContext: (self evaluationContext targetBehavior: aBehavior).
 	aSaveResult ifTrue: [ self notifySaved: self compiledMethod ].
 
 	^ aSaveResult

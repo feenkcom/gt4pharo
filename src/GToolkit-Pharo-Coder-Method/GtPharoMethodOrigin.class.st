@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-Origin'
 }
 
+{ #category : #accessing }
+GtPharoMethodOrigin >> behaviorDo: aBlock [
+	"Evaluate a given block with the origin behavior"
+	
+	^ nil
+]
+
 { #category : #testing }
 GtPharoMethodOrigin >> isSameOrigin [
 	^ false
@@ -11,5 +18,10 @@ GtPharoMethodOrigin >> isSameOrigin [
 
 { #category : #testing }
 GtPharoMethodOrigin >> isTraitOrigin [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoMethodOrigin >> isUnknownOrigin [
 	^ false
 ]

@@ -8,6 +8,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-Origin'
 }
 
+{ #category : #enumerating }
+GtPharoMethodTraitOrigin >> behaviorDo: aBlock [
+	"Evaluate a given block with the origin behavior"
+
+	^ aBlock value: trait
+]
+
 { #category : #testing }
 GtPharoMethodTraitOrigin >> isTraitOrigin [
 	^ true
