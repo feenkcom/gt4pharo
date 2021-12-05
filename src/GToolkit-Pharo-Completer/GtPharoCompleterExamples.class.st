@@ -253,3 +253,33 @@ GtPharoCompleterExamples >> startingStatementRequestedCompletions [
 						requested: false) isNotEmpty wait not ].
 	^ strategy
 ]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> subsequenceSelectorCompletion [
+	<gtExample>
+	
+	| text strategy items |
+	text := ('foo' , String crlf , '^cls aSwM') asRopedText.
+	strategy := self smalltalkStrategy.
+	items := strategy
+		completionActionStreamFor: text
+		at: text size
+		requested: true.
+	self assert: ((items take: 30) toArray wait anySatisfy: [ :each | each label = 'addSelector:withMethod:' ]).
+	^ strategy
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> subsequenceVariableCompletion [
+	<gtExample>
+	
+	| text strategy items |
+	text := ('foo' , String crlf , '^GtPharoCompEx') asRopedText.
+	strategy := self smalltalkStrategy.
+	items := strategy
+		completionActionStreamFor: text
+		at: text size
+		requested: true.
+	self assert: ((items take: 30) toArray wait anySatisfy: [ :each | each label = 'GtPharoCompleterExamples' ]).
+	^ strategy
+]
