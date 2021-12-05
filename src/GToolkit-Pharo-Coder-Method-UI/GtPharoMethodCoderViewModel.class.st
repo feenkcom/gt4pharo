@@ -90,7 +90,7 @@ GtPharoMethodCoderViewModel >> elementClass [
 GtPharoMethodCoderViewModel >> evaluationContext [
 	^ super evaluationContext
 		receiverObject: (self selfObject ifNil: [ self behavior instanceSide ]);
-		behavior: self defaultCompilationBehavior
+		targetBehavior: self defaultCompilationBehavior
 ]
 
 { #category : #'gt-extension' }
@@ -236,7 +236,7 @@ GtPharoMethodCoderViewModel >> saveIn: aBehavior [
 	self isSaveEnabled
 		ifFalse: [ ^ false ].
 
-	aSaveResult := self coderModel saveInContext: (self evaluationContext behavior: aBehavior).
+	aSaveResult := self coderModel saveInContext: (self evaluationContext targetBehavior: aBehavior).
 	aSaveResult ifTrue: [ self notifySaved: self compiledMethod ].
 
 	^ aSaveResult

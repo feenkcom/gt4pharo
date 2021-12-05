@@ -69,11 +69,9 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 GtPharoMethodCoder >> behavior [
 	<return: #Behavior>
 
-	self methodBehavior isClass
-		ifTrue: [ ^ self methodBehavior ].
-
-	self methodBehavior realBehaviorDo: [ :aBehavior | ^ aBehavior ].
-	^ UndefinedObject
+	^ self methodBehavior
+		realBehaviorDo: [ :aBehavior | aBehavior ]
+		ifAbsent: [ UndefinedObject ]
 ]
 
 { #category : #'api - accessing' }
@@ -195,12 +193,12 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	about the `current` state of the coder (#selector may be nil for new methods)"
 	self currentSelector
 		ifNil: [ ^ false ].
-	
-	aGtPharoSourceCoderEvaluationContext behavior
-		ifNil: [ ^ false ].
+
+	aGtPharoSourceCoderEvaluationContext hasTargetBehavior
+		ifFalse: [ ^ GtPharoMethodCoderTargetBehaviorNotDefined signal ].
 
 	aChange := self
-		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext behavior
+		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
 		inContext: aGtPharoSourceCoderEvaluationContext.
 
 	selector := aChange selector.
@@ -357,6 +355,26 @@ GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEv
 	aThenBlock cull: aResult.
 
 	^ aResult
+]
+
+{ #category : #'private - evaluation' }
+GtPharoMethodCoder >> evaluationContext [
+	| anEvaluationContext aMethodOrigin |
+	
+	anEvaluationContext := super evaluationContext.
+	
+	aMethodOrigin := self methodOrigin wait.
+	"By default we should aim to compile the method in the same behavior as the method's origin"
+	aMethodOrigin behaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ].
+	
+	"however, when a compiled method does not exist it is not possible to determine its origin.
+	In that case we should rely solely on the defined method behavior, if any"
+	aMethodOrigin isUnknownOrigin
+		ifTrue: [
+			self methodBehavior
+				realBehaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ] ].
+
+	^ anEvaluationContext
 ]
 
 { #category : #'api - actions examples' }
@@ -725,7 +743,7 @@ GtPharoMethodCoder >> onClassAdded: aClassAddedAnnouncement [
 	(self methodBehavior affectedByClassAdded: aClassAddedAnnouncement)
 		ifFalse: [ ^ self ].
 
-	methodBehavior := self methodBehavior affectByClassAdded: aClassAddedAnnouncement.
+	self methodBehavior: (self methodBehavior affectByClassAdded: aClassAddedAnnouncement).
 	self notifyClassAdded
 ]
 
@@ -734,7 +752,7 @@ GtPharoMethodCoder >> onClassRemoved: aClassRemovedAnnouncement [
 	(self methodBehavior affectedByClassRemoved: aClassRemovedAnnouncement)
 		ifFalse: [ ^ self ].
 		
-	methodBehavior := self methodBehavior affectByClassRemoved: aClassRemovedAnnouncement.
+	self methodBehavior: (self methodBehavior affectByClassRemoved: aClassRemovedAnnouncement).
 	self notifyClassRemoved
 ]
 
@@ -743,7 +761,7 @@ GtPharoMethodCoder >> onClassRenamed: aClassRenamedAnnouncement [
 	(self methodBehavior affectedByClassRenamed: aClassRenamedAnnouncement)
 		ifFalse: [ ^ self ].
 
-	methodBehavior := self methodBehavior affectByClassRenamed: aClassRenamedAnnouncement.
+	self methodBehavior: (self methodBehavior affectByClassRenamed: aClassRenamedAnnouncement).
 	self notifyClassRenamed
 ]
 
@@ -931,11 +949,11 @@ GtPharoMethodCoder >> privateComputeMethodOrigin [
 	anOriginBehavior := aCompiledMethod origin.
 	aMethodBehavior := aCompiledMethod methodClass.
 
-	anOriginBehavior isTrait
-		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].
-
 	(anOriginBehavior = aMethodBehavior)
 		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+
+	anOriginBehavior isTrait
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].	
 		
 	^ GtPharoMethodUnknownOrigin new
 ]
@@ -987,7 +1005,8 @@ GtPharoMethodCoder >> renameProtocol: aString [
 { #category : #initialize }
 GtPharoMethodCoder >> reset [
 	super reset.
-	methodBehavior := GtPharoCoderBehavior unspecified.
+
+	self methodBehavior: GtPharoCoderBehavior unspecified.
 	selector := nil.
 	self protocol: nil
 ]

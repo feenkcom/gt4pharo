@@ -20,3 +20,8 @@ GtPharoMethodOrigin >> isSameOrigin [
 GtPharoMethodOrigin >> isTraitOrigin [
 	^ false
 ]
+
+{ #category : #testing }
+GtPharoMethodOrigin >> isUnknownOrigin [
+	^ false
+]

@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
 }
 
 { #category : #'sample methods' }
@@ -337,8 +337,7 @@ GtPharoMethodCoderExamples >> compileModifiedNewMethodWithCoderWhenSubscribedToS
 	aMethodCoder subscribeToSystem.
 
 	self assert: aMethodCoder isModified.
-	aNewMethodSelector := (aMethodCoder attributeNamed: #dummyMethod)
-		                      selector.
+	aNewMethodSelector := (aMethodCoder attributeNamed: #dummyMethod) selector.
 
 	aMethodCoder weak
 		when: GtCoderClassRemoved send: #record: to: anEventsRecoder;
@@ -402,7 +401,9 @@ GtPharoMethodCoderExamples >> compileRemovedMethodWithCoderWhenSubscribedToSyste
 		when: GtCoderMethodAdded send: #record: to: anEventsRecoder;
 		when: GtCoderMethodRemoved send: #record: to: anEventsRecoder.
 
-	aCompilationResult := [ aMethodCoder compile ] ensure: [
+	aCompilationResult := [ [ aMethodCoder compile ]
+			on: GtPharoMethodCoderTargetBehaviorNotDefined
+			do: [ false ] ] ensure: [
 		aMethodCoder unsubscribeFromSystem ].
 	
 	self assert: aCompilationResult not.
