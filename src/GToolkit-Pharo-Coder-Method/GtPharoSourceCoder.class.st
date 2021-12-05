@@ -162,15 +162,6 @@ GtPharoSourceCoder >> detectSelectorIn: aSourceString ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - actions' }
-GtPharoSourceCoder >> evaluationContext [
-	<return: #GtSourceCoderEvaluationContext>
-
-	^ GtPharoSourceCoderEvaluationContext new
-		requesterObject: self;
-		coder: self
-]
-
 { #category : #'private - ast' }
 GtPharoSourceCoder >> extractableNodesAt: anIndex [
 	"Return a collection of extractable nodes that intersect a given interval"
@@ -216,6 +207,11 @@ GtPharoSourceCoder >> newCompletionStrategy [
 	^ GtPharoCompletionStrategy new
 		classOrMetaClass: self behavior;
 		yourself
+]
+
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> newEvaluationContext [
+	^ GtPharoSourceCoderEvaluationContext new
 ]
 
 { #category : #'private - ast rb' }

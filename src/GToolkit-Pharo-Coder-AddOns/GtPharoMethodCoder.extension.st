@@ -674,8 +674,8 @@ GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns viewModel: aGtPhar
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> initializeAddOns: addOns [
-	super initializeAddOns: addOns.
+GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
+	super initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel.
 	
 	addOns addStyler: GtPharoStyler new.
 	addOns addStyler: GtPharoDeprecationStyler new.
@@ -686,13 +686,10 @@ GtPharoMethodCoder >> initializeAddOns: addOns [
 	"addOns addStyler: GtCoderCommentStyler new."
 
 	addOns
-		addMainAction: (GtCoderActivatableAction new
-			id: GtMethodCoderSaveActionId;
-			title: 'Save' translated;
-			icon: BrGlamorousVectorIcons accept;
-			action: [ :aCoderUIModel :anEvent | aCoderUIModel save ];
-			enabled: [ :aCoderUIModel | aCoderUIModel isSaveEnabled ];
-			updateWhen: GtMethodCoderSaveAbilityChanged).
+		addMainAction: (GtCoderCustomAction new
+			stencil: [
+				GtPharoMethodCoderSaveButton new
+					pharoMethodCoderViewModel: aGtPharoMethodCoderViewModel ]).
 	addOns
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons remove

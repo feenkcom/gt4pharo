@@ -189,32 +189,34 @@ GtPharoMethodCoder >> compile [
 GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
 	<return: #Boolean>
+	| aChange |
 
 	"we should use #currentSelector instead of #selector because we care
 	about the `current` state of the coder (#selector may be nil for new methods)"
 	self currentSelector
 		ifNil: [ ^ false ].
+	
+	aGtPharoSourceCoderEvaluationContext behavior
+		ifNil: [ ^ false ].
 
-	^ self methodBehavior
-		realBehaviorDo: [ :aBehavior |
-			| aChange |
-			aChange := self createCompileMethodChangeIn: aBehavior inContext: aGtPharoSourceCoderEvaluationContext.
+	aChange := self
+		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext behavior
+		inContext: aGtPharoSourceCoderEvaluationContext.
 
-			selector := aChange selector.
+	selector := aChange selector.
 
-			(self
-				handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
-				ifFalse: [ ^ false ].
+	(self
+		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
+		ifFalse: [ ^ false ].
 
-			aChange definedSelector
-				ifNotNil: [ :sel | 
-					self selector: sel.
-					self compiledMethod
-						ifNotNil: [ :method |
-							self forMethod: method.
-							^ true ] ].
-			false ]
-		ifAbsent: [ false ]
+	aChange definedSelector
+		ifNotNil: [ :sel | 
+			self selector: sel.
+			self compiledMethod
+				ifNotNil: [ :method |
+					self forMethod: method.
+					^ true ] ].
+	^ false
 ]
 
 { #category : #accessing }
@@ -642,6 +644,11 @@ GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	[ model changes execute ]
 		ifCurtailed: [ self behavior: oldClass ].
 	^ true
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoder >> newEvaluationContext [
+	^ GtPharoMethodCoderCompilationContext new
 ]
 
 { #category : #'private - actions' }
