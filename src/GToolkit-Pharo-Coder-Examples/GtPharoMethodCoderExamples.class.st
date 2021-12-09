@@ -458,6 +458,44 @@ GtPharoMethodCoderExamples >> compileRemovedMethodWithoutCoderWhenSubscribedToSy
 	^ aMethodCoder
 ]
 
+{ #category : #'private - set up' }
+GtPharoMethodCoderExamples >> createEnvironment [
+	<gtExample>
+	| anEnvironment aPackage aClass anInstanceMethod aClassMethod |
+
+	anEnvironment := RGEnvironment new.
+	anEnvironment backend: (RGEnvironmentBackend for: anEnvironment).
+	
+	aPackage := RGPackage named: 'MyPackage' parent: anEnvironment.
+	anEnvironment addPackage: aPackage.
+
+	aClass := (RGBehavior named: 'MyClass' parent: anEnvironment behaviorStrategy: RGClassStrategy basicNew) makeResolved.
+	aClass classSide makeResolved.
+	aClass package: aPackage.
+	
+	anInstanceMethod := (RGMethod unresolvedNamed: 'unaryInstanceMethod' withParent: aClass instanceSide) makeResolved.
+	anInstanceMethod sourceCode: 'unaryInstanceMethod ^ 42'.
+	anInstanceMethod protocol: 'accessing'.
+	anInstanceMethod package: aPackage.
+	aClass instanceSide addLocalMethod: anInstanceMethod.
+	
+	aClassMethod := (RGMethod unresolvedNamed: 'unaryClassMethod' withParent: aClass classSide) makeResolved.
+	aClassMethod sourceCode: 'unaryClassMethod ^ 42'.
+	aClassMethod protocol: 'accessing'.
+	aClassMethod package: aPackage.
+	aClass classSide addLocalMethod: aClassMethod.
+
+	anEnvironment addBehavior: aClass.
+
+	self assert: aClass package equals: aPackage.
+	self assert: aClass instanceSide name equals: 'MyClass'.
+	self assert: aClass classSide name equals: 'MyClass class'.
+	self assert: anInstanceMethod package equals: aPackage.
+	self assert: aClassMethod package equals: aPackage.
+	
+	^ anEnvironment
+]
+
 { #category : #'examples - debug' }
 GtPharoMethodCoderExamples >> debugClassUnaryMethodAll [
 	<gtExample>
@@ -701,19 +739,19 @@ GtPharoMethodCoderExamples >> example [
 
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forBinaryMethodCoder [
-
 	<gtExample>
 	| method methodCoder |
+
 	method := GtPharoMethodCoderExamples >> #?.
-	methodCoder := GtPharoMethodCoder forMethod: method.
-	self assert:
-		(methodCoder sourceCode isKindOf: GtCoderCompiledMethodTextSource).
-	self assert: methodCoder sourceCode compiledMethod equals: method.
+	methodCoder := GtPharoMethodCoder forCompiledMethod: method.
+
+	self assert: (methodCoder sourceCode isKindOf: GtCoderCompiledMethodTextSource).
+	self assert: methodCoder sourceCode compiledMethod selector equals: method selector.
 	self assert: methodCoder sourceCode hasSourceText not.
 	self assert: methodCoder selector equals: #?.
 	self assert: methodCoder currentSelector equals: #?.
-	self assert: methodCoder behavior equals: GtPharoMethodCoderExamples.
-	self assert: methodCoder compiledMethod equals: method.
+	self assert: methodCoder behavior name equals: GtPharoMethodCoderExamples name.
+	self assert: methodCoder compiledMethod selector equals: method selector.
 	self assert: methodCoder collapsedText asString equals: '?'.
 	self
 		assert: methodCoder currentSourceText asString
@@ -900,23 +938,20 @@ GtPharoMethodCoderExamples >> forThisObjectMethodCoder [
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forUnaryClassMethod [
 	<gtExample>
-	<after: #cleanUp>
-	| aDummyMethod aMethodCoder |
+	| anEnvironment aMethod aMethodCoder |
+	
+	anEnvironment := self createEnvironment.
+	aMethod := (anEnvironment ask behaviorNamed: 'MyClass') classSide >> #unaryClassMethod.
 
-	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyMethod := environment anyDummyUnaryClassMethod.
+	aMethodCoder := GtPharoMethodCoder forRingMethod: aMethod.
 
-	aMethodCoder := GtPharoMethodCoder forMethod: aDummyMethod realMethod.
-	aMethodCoder attributeNamed: #dummyEnvironment put: environment.
-	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
-
-	self assert: aMethodCoder behavior equals: aDummyMethod realClass class.
-	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aDummyMethod realClass class).
-	self assert: aMethodCoder selector equals: aDummyMethod selector.
-	self assert: aMethodCoder compiledMethod equals: aDummyMethod realMethod.
-	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
+	self assert: aMethodCoder behavior name equals: 'MyClass class'.
+	self assert: aMethodCoder selector equals: aMethod selector.
+	self assert: aMethodCoder environment equals: anEnvironment.
+	self assert: aMethodCoder compiledMethod equals: aMethod.
+	self assert: aMethodCoder protocol equals: 'accessing'.
 	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
-	self assert: aMethodCoder sourceCode compiledMethod equals: aDummyMethod realMethod.
+	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
 	^ aMethodCoder
 ]
@@ -924,24 +959,18 @@ GtPharoMethodCoderExamples >> forUnaryClassMethod [
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	<gtExample>
-	<after: #cleanUp>
-	| aDummyMethod aMethod aClass aMethodCoder |
-
-	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
-	aDummyMethod := environment anyDummyUnaryMethod.
-
-	aMethod := aDummyMethod realMethod.
-	aClass := aDummyMethod realClass.
+	| anEnvironment aMethod aMethodCoder |
 	
-	aMethodCoder := GtPharoMethodCoder forMethod: aMethod.
-	aMethodCoder attributeNamed: #dummyEnvironment put: environment.
-	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
+	anEnvironment := self createEnvironment.
+	aMethod := (anEnvironment ask behaviorNamed: 'MyClass') >> #unaryInstanceMethod.
 
-	self assert: aMethodCoder behavior equals: aClass.
-	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aClass).
+	aMethodCoder := GtPharoMethodCoder forRingMethod: aMethod.
+
+	self assert: aMethodCoder behavior name equals: 'MyClass'.
 	self assert: aMethodCoder selector equals: aMethod selector.
+	self assert: aMethodCoder environment equals: anEnvironment.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
-	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
+	self assert: aMethodCoder protocol equals: 'accessing'.
 	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
@@ -1123,7 +1152,7 @@ GtPharoMethodCoderExamples >> removeClassWhenSubscribedToSystem [
 	
 	aMethodCoder when: GtCoderClassRemoved send: #record: to: anEventsRecoder.
 
-	[ GtPharoCodeModifier removeBehavior: aMethodCoder behavior ] ensure: [
+	[ aMethodCoder behavior removeFromSystem ] ensure: [
 		aMethodCoder unsubscribeFromSystem ].
 
 	self assert: aMethodCoder behavior equals: UndefinedObject.

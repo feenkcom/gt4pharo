@@ -72,7 +72,12 @@ GtPharoMethodCoderViewModel >> contextualBehavior: aBehavior [
 GtPharoMethodCoderViewModel >> defaultCompilationBehavior [
 	<return: #Behavior>
 	
-	^ contextualBehavior ifNil: [ self sourceBehavior ]
+	^ contextualBehavior ifNil: [
+		(self methodOrigin
+			map: [ :aMethodOrigin |
+				aMethodOrigin
+					behaviorDo: [ :aBehavior | aBehavior ]
+					ifUnknown: [ nil ] ]) wait ]
 ]
 
 { #category : #'api - actions' }
@@ -109,17 +114,21 @@ GtPharoMethodCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	(super hasDeclaredVariableNamed: aVariableName)
 		ifTrue: [ ^ true ].
 		
-	(self behavior classThatDefinesInstVarNamed: aVariableName)
-		 ifNotNil: [ ^ true ].
+	(self behavior allSlots anySatisfy: [ :eachSlot | eachSlot name =  aVariableName ])
+		 ifTrue: [ ^ true ].
 		
-	(self behavior classThatDefinesClassVariable: aVariableName)
-		 ifNotNil: [ ^ true ].
+	(self behavior allClassVariables anySatisfy: [ :eachSlot | eachSlot name = aVariableName ])
+		 ifTrue: [ ^ true ].
 
 	^ false
 ]
 
 { #category : #accessing }
 GtPharoMethodCoderViewModel >> headerElementClass [
+	"Return an class of an element that should represent a header of the coder.
+	The used element must implement {{gtClass:TGtWithTextualCoderViewModel}} trait."
+	<return: #TGtWithTextualCoderViewModel or: nil>
+	
 	^ GtPharoMethodCoderHeaderElement
 ]
 
@@ -130,12 +139,12 @@ GtPharoMethodCoderViewModel >> initialize [
 	savePreventors := OrderedCollection new
 ]
 
-{ #category : #testing }
+{ #category : #'api - testing' }
 GtPharoMethodCoderViewModel >> isFromTrait [
 	^ self coderModel isFromTrait
 ]
 
-{ #category : #testing }
+{ #category : #'api - testing' }
 GtPharoMethodCoderViewModel >> isMeta [
 	"Return true if the method is implemented in a pharo metaclass (~ class side)"
 	<return: #Boolean>
@@ -143,19 +152,16 @@ GtPharoMethodCoderViewModel >> isMeta [
 	^ self coderModel isMeta
 ]
 
-{ #category : #testing }
-GtPharoMethodCoderViewModel >> isOverridden [
-	^ self coderModel isOverridden
-]
-
-{ #category : #testing }
-GtPharoMethodCoderViewModel >> isOverriding [
-	^ self coderModel isOverriding
-]
-
-{ #category : #testing }
+{ #category : #'api - testing' }
 GtPharoMethodCoderViewModel >> isSaveEnabled [
 	^ savePreventors isEmpty
+]
+
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> methodOrigin [
+	<return: #TAsyncFuture of: #GtPharoMethodOrigin>
+	
+	^ self coderModel methodOrigin
 ]
 
 { #category : #'private - notifying' }
@@ -209,9 +215,15 @@ GtPharoMethodCoderViewModel >> protocol [
 
 { #category : #private }
 GtPharoMethodCoderViewModel >> receiverObjectToPlay [
-	self isMeta ifTrue: [ ^ self behavior instanceSide ].
+	"Return an object that should play a role of the receiver when executing code within a method"
+	<return: #Object>
+	
 	^ self selfObject
-		ifNil: [ self behavior new ]
+		ifNil: [
+			contextualBehavior ifNotNil: [ :aBehavior |
+				self isMeta
+					ifTrue: [ aBehavior instanceSide ]
+					ifFalse: [ aBehavior instanceSide new ] ] ]
 ]
 
 { #category : #'api - actions' }
@@ -245,19 +257,6 @@ GtPharoMethodCoderViewModel >> saveIn: aBehavior [
 { #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> selector [
 	^ self coderModel selector
-]
-
-{ #category : #'api - coder model' }
-GtPharoMethodCoderViewModel >> sourceBehavior [
-	"Returns a behavior in which the method is compiled."
-	<return: #Behavior or: nil>
-	
-	^ coderModel traitSource
-		ifNil: [ coderModel behavior ]
-		ifNotNil: [ :aTraitCompositionElement |
-			(aTraitCompositionElement
-				traitDefining: coderModel selector
-				ifNone: [ nil ]) innerClass ]
 ]
 
 { #category : #'api - header' }

@@ -285,6 +285,9 @@ GtPharoMethodCoderTagsElement >> updateProtocolButton [
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateTraitMethodButton [
+
+	true ifTrue: [ ^ self ].
+
 	traitMethodTag label: (self traitMethodStringFor: self methodCoderUIModel).
 	self methodCoderUIModel coder isFromTrait
 		ifTrue: [ traitMethodTag enable ]

@@ -97,7 +97,7 @@ GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 
 	context := aContext.
 	session := aDebugSession.
-	self forMethod: self compiledMethod
+	self forCompiledMethod: self compiledMethod
 ]
 
 { #category : #initialize }

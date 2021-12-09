@@ -5,31 +5,47 @@ Class {
 	#name : #GtPharoMethodCoder,
 	#superclass : #GtPharoSourceCoder,
 	#instVars : [
-		'methodBehavior',
-		'selector'
+		'methodDefinition'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forClass: aBehavior source: aString [
-	^ self new
+	^ self basicNew
+		initialize;
 		forClass: aBehavior source: aString;
 		yourself
 ]
 
 { #category : #'instance creation' }
+GtPharoMethodCoder class >> forCompiledMethod: aCompiledMethod [
+	^ self basicNew
+		initialize;
+		forCompiledMethod: aCompiledMethod;
+		yourself
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoder class >> forCompiledMethod: aCompiledMethod environment: anRGEnvironment [
+	^ self basicNew
+		initialize;
+		forCompiledMethod: aCompiledMethod
+		environment: anRGEnvironment;
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forExample: anExample [
-	^ self new
+	^ self basicNew
+		initialize;
 		forExample: anExample;
 		yourself
 ]
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forMethod: aCompiledMethod [
-	^ self new
-		forMethod: aCompiledMethod;
-		yourself
+	^ self forCompiledMethod: aCompiledMethod
 ]
 
 { #category : #'instance creation' }
@@ -39,7 +55,20 @@ GtPharoMethodCoder class >> forNewMethod: aBehavior [
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
-	^ self forMethod: anObject class >> aSymbol
+	^ self forCompiledMethod: anObject class >> aSymbol
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoder class >> forRingMethod: anRGMethod [
+	^ self basicNew
+		initialize;
+		forRingMethod: anRGMethod;
+		yourself
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoder class >> new [
+	self error: 'Use one of the factory methods instead'
 ]
 
 { #category : #'api - refactorings' }
@@ -67,16 +96,16 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> behavior [
-	<return: #Behavior>
+	"Return a ring definition of the behavior to which the method belongs.
+	The method behavior may be different from the #methodOrigin."
+	<return: #RGBehavior>
 
-	^ self methodBehavior
-		realBehaviorDo: [ :aBehavior | aBehavior ]
-		ifAbsent: [ UndefinedObject ]
+	^ self methodDefinition methodClass
 ]
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> behavior: aBehavior [
-	self methodBehavior: (GtPharoCoderBehavior explicit: aBehavior)
+	self deprecated: 'Behavior of the method can not be changed'
 ]
 
 { #category : #testing }
@@ -201,7 +230,7 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
 		inContext: aGtPharoSourceCoderEvaluationContext.
 
-	selector := aChange selector.
+	"selector := aChange selector.
 
 	(self
 		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
@@ -213,7 +242,7 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 			self compiledMethod
 				ifNotNil: [ :method |
 					self forMethod: method.
-					^ true ] ].
+					^ true ] ]."
 	^ false
 ]
 
@@ -296,8 +325,8 @@ GtPharoMethodCoder >> currentSelector [
 GtPharoMethodCoder >> currentSelectorPromise [
 	<return: #Symbol>
 
-	selector
-		ifNotNil: [ ^ selector asAsyncPromise ].
+	methodDefinition selector
+		ifNotNil: [ ^ methodDefinition selector asAsyncPromise ].
 
 	^ self ast then: [ :aGtCoderAst |
 		| anAst |
@@ -327,6 +356,13 @@ GtPharoMethodCoder >> ensureSave [
 	^ true
 ]
 
+{ #category : #'api - accessing' }
+GtPharoMethodCoder >> environment [
+	<return: #RGEnvironment>
+	
+	^ methodDefinition environment
+]
+
 { #category : #'private - actions' }
 GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEvaluationContext thenDo: aThenBlock [
 	"Evaluate a given source code and show the print string if needed"
@@ -337,8 +373,7 @@ GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEv
 	will indefinitely wait when trying to enter a critical section."
 	self critical: [
 		aReceiver := aGtPharoSourceCoderEvaluationContext receiverObject.
-
-	aSourceString := self currentSourceString ].
+		aSourceString := self currentSourceString ].
 	
 	aGtPharoSourceCoderEvaluationContext
 		sourceString: aSourceString;
@@ -399,7 +434,7 @@ GtPharoMethodCoder >> example: anExampleWithResult [
 	aCompiledMethod := anExampleWithResult method.
 	(aCompiledMethod selector = self selector
 		and: [ aCompiledMethod methodClass = self behavior ])
-		ifFalse: [ self error: 'Can not assign example of the wrong method' ].
+		ifFalse: [ "self error: 'Can not assign example of the wrong method'" ].
 	self example announcer
 		when: GtExampleExecuted send: #handleExampleExecuted: to: self;
 		when: GtExampleArgumentsChanged
@@ -467,22 +502,78 @@ GtPharoMethodCoder >> findSeparatorBetweenPatternAndBodyIn: aMethodNode [
 
 { #category : #initialize }
 GtPharoMethodCoder >> forClass: aBehavior source: aString [
-	self behavior: aBehavior.
-	self sourceCode: (GtCoderExplicitStringSource new source: aString)
+	| anEnvironment |
+	
+	anEnvironment := RGEnvironment new.
+	anEnvironment backend: (RGReadOnlyImageBackend for: anEnvironment).
+	
+	self forClass: aBehavior source: aString environment: anEnvironment
+]
+
+{ #category : #initialize }
+GtPharoMethodCoder >> forClass: aBehavior source: aString environment: anRGEnvironment [
+	| aRingBehavior aMethod anAst aSelector |
+
+	aRingBehavior := anRGEnvironment ask
+		behaviorNamed: aBehavior name
+		ifAbsent: [ ^ self error: 'Could not find behavior named ', aBehavior name ].
+
+	anAst := self computeAst: aString.
+	aSelector := anAst isMethod
+		ifFalse: [ #faulty ]
+		ifTrue: [ anAst selector ifNil: [ #faulty ] ].
+
+	aMethod := RGMethod unresolvedNamed: aSelector withParent: aRingBehavior.
+	aMethod sourceCode: aString.
+
+	self forRingMethod: aMethod
+]
+
+{ #category : #initialize }
+GtPharoMethodCoder >> forCompiledMethod: aCompiledMethod [
+	| anEnvironment |
+	
+	anEnvironment := RGEnvironment new.
+	anEnvironment backend: (RGReadOnlyImageBackend for: anEnvironment).
+
+	self forCompiledMethod: aCompiledMethod environment: anEnvironment
+]
+
+{ #category : #initialize }
+GtPharoMethodCoder >> forCompiledMethod: aCompiledMethod environment: anRGEnvironment [
+	| aBehavior aMethod |
+
+	aBehavior := anRGEnvironment ask
+		behaviorNamed: aCompiledMethod methodClass name
+		ifAbsent: [ ^ self error: 'Could not find class named ', aCompiledMethod methodClass name ].
+
+	aMethod := (aBehavior methods
+		detect: [ :eachMethod | eachMethod selector = aCompiledMethod selector ]
+		ifNone: [ ^ self error: 'Could not find method ', aCompiledMethod selector , ' in class ', aCompiledMethod methodClass name ]).
+
+	self forRingMethod: aMethod
 ]
 
 { #category : #initialize }
 GtPharoMethodCoder >> forExample: anExampleWithResult [
-	self forMethod: anExampleWithResult method.
+	self forCompiledMethod: anExampleWithResult method.
 	self example: anExampleWithResult
 ]
 
 { #category : #initialize }
 GtPharoMethodCoder >> forMethod: aCompiledMethod [
-	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
-	self selector: aCompiledMethod selector.
-	self sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
-	self protocol: aCompiledMethod category
+	self forCompiledMethod: aCompiledMethod
+]
+
+{ #category : #initialize }
+GtPharoMethodCoder >> forRingMethod: anRGMethod [
+	self
+		assert: [ anRGMethod isKindOf: RGMethod ]
+		description: [ 'Must be a ring method model' ].
+
+	methodDefinition := anRGMethod.
+
+	self sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: methodDefinition)
 ]
 
 { #category : #'api - actions' }
@@ -593,42 +684,18 @@ GtPharoMethodCoder >> isNewMethod [
 	^ self currentSourceString isEmpty
 ]
 
-{ #category : #testing }
-GtPharoMethodCoder >> isOverridden [
-
-	| sel |
-	sel := self currentSelector.
-	sel isNil ifTrue: [ ^ false ].
-	self behavior allSubclassesDo: [ :cls | 
-		(cls includesSelector: sel) ifTrue: [ ^ true ] ].
-	^ false
-]
-
-{ #category : #testing }
-GtPharoMethodCoder >> isOverriding [
-
-	| sel |
-	sel := self currentSelector.
-	^ sel notNil and: [ 
-		  self behavior superclass
-			  ifNil: [ false ]
-			  ifNotNil: [ :spr | (spr whichClassIncludesSelector: sel) notNil ] ]
-]
-
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> methodBehavior [
 	<return: #GtPharoCoderBehavior>
 
-	^ methodBehavior
+	^ GtPharoCoderBehavior unspecified
 ]
 
 { #category : #'api - accessing' }
-GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
-	self
-		assert: [ aGtMethodCoderBehavior isKindOf: GtPharoCoderBehavior ]
-		description: [ 'Behavior must be reifined as an object' ].
+GtPharoMethodCoder >> methodDefinition [
+	<return: #RGMethodDefinition>
 
-	methodBehavior := aGtMethodCoderBehavior
+	^ methodDefinition
 ]
 
 { #category : #'api - accessing' }
@@ -743,7 +810,7 @@ GtPharoMethodCoder >> onClassAdded: aClassAddedAnnouncement [
 	(self methodBehavior affectedByClassAdded: aClassAddedAnnouncement)
 		ifFalse: [ ^ self ].
 
-	self methodBehavior: (self methodBehavior affectByClassAdded: aClassAddedAnnouncement).
+	"self methodBehavior: (self methodBehavior affectByClassAdded: aClassAddedAnnouncement)."
 	self notifyClassAdded
 ]
 
@@ -752,7 +819,7 @@ GtPharoMethodCoder >> onClassRemoved: aClassRemovedAnnouncement [
 	(self methodBehavior affectedByClassRemoved: aClassRemovedAnnouncement)
 		ifFalse: [ ^ self ].
 		
-	self methodBehavior: (self methodBehavior affectByClassRemoved: aClassRemovedAnnouncement).
+	"self methodBehavior: (self methodBehavior affectByClassRemoved: aClassRemovedAnnouncement)."
 	self notifyClassRemoved
 ]
 
@@ -761,7 +828,7 @@ GtPharoMethodCoder >> onClassRenamed: aClassRenamedAnnouncement [
 	(self methodBehavior affectedByClassRenamed: aClassRenamedAnnouncement)
 		ifFalse: [ ^ self ].
 
-	self methodBehavior: (self methodBehavior affectByClassRenamed: aClassRenamedAnnouncement).
+	"self methodBehavior: (self methodBehavior affectByClassRenamed: aClassRenamedAnnouncement)."
 	self notifyClassRenamed
 ]
 
@@ -773,7 +840,7 @@ GtPharoMethodCoder >> onMethodAdded: aMethodAddedAnnouncement [
 			ifFalse: [ ^ self ].
 
 	self isModified
-		ifFalse: [ self forMethod: aMethodAddedAnnouncement methodAdded ]
+		ifFalse: [ self forCompiledMethod: aMethodAddedAnnouncement methodAdded ]
 		ifTrue: [ self sourceCode: (self sourceCode asCompiledMethodSourceCode: aMethodAddedAnnouncement methodAdded) ].
 
 	self notifyMethodAdded
@@ -800,7 +867,7 @@ GtPharoMethodCoder >> onMethodModified: aMethodModified [
 		ifFalse: [ ^ self ].
 
 	self isModified
-		ifFalse: [ self forMethod: aMethodModified newMethod ]
+		ifFalse: [ self forCompiledMethod: aMethodModified newMethod ]
 		ifTrue: [ self sourceCode: (self sourceCode asCompiledMethodSourceCode: aMethodModified newMethod) ].
 
 	self notifyMethodModified
@@ -941,19 +1008,17 @@ GtPharoMethodCoder >> printOn: aStream [
 { #category : #private }
 GtPharoMethodCoder >> privateComputeMethodOrigin [
 	<return: #GtPharoMethodOrigin>
-	| aCompiledMethod anOriginBehavior aMethodBehavior |
+	| aMethod anOriginBehavior aMethodBehavior |
 	
-	aCompiledMethod := self compiledMethod
-		ifNil: [ ^ GtPharoMethodUnknownOrigin new ].
-	
-	anOriginBehavior := aCompiledMethod origin.
-	aMethodBehavior := aCompiledMethod methodClass.
+	aMethod := methodDefinition.
+	anOriginBehavior := aMethod origin.
+	aMethodBehavior := aMethod methodClass.
 
 	(anOriginBehavior = aMethodBehavior)
-		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aMethod ].
 
 	anOriginBehavior isTrait
-		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].	
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aMethod ].	
 		
 	^ GtPharoMethodUnknownOrigin new
 ]
@@ -962,16 +1027,7 @@ GtPharoMethodCoder >> privateComputeMethodOrigin [
 GtPharoMethodCoder >> protocol [
 	<return: #String or: nil>
 
-	^ self
-		attributeNamed: #category
-		ifAbsent: [
-			(self behavior notNil and: [ self selector notNil ])
-				ifTrue: [ self behavior whichCategoryIncludesSelector: self selector ] ]
-]
-
-{ #category : #'api - accessing' }
-GtPharoMethodCoder >> protocol: aSymbol [
-	^ self attributeNamed: #category put: aSymbol
+	^ methodDefinition protocol
 ]
 
 { #category : #'api - actions' }
@@ -984,31 +1040,20 @@ GtPharoMethodCoder >> remove [
 		during: [ self methodBehavior realBehaviorDo: [ :aBehavior |
 				GtPharoCodeModifier current
 					removeMethodFrom: aBehavior selector: self selector ] ].
-
-	self reset.
 	
 	self notifyMethodRemoved
 ]
 
 { #category : #'api - refactorings' }
 GtPharoMethodCoder >> renameProtocol: aString [
-	| change |
+	"| change |
 	self protocol: aString asSymbol.
 	selector notNil
 		ifTrue: [ change := RBMethodProtocolChange
 				selector: selector
 				in: self behavior
 				classified: self protocol.
-			change execute ]
-]
-
-{ #category : #initialize }
-GtPharoMethodCoder >> reset [
-	super reset.
-
-	self methodBehavior: GtPharoCoderBehavior unspecified.
-	selector := nil.
-	self protocol: nil
+			change execute ]"
 ]
 
 { #category : #'private - refactorings' }
@@ -1054,17 +1099,12 @@ GtPharoMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext [
 
 { #category : #accessing }
 GtPharoMethodCoder >> selector [
-	"Assign an original selector which changes when the compiled method is assigned.
+	"Return an original selector which changes when the compiled method is assigned.
 	The selector of the new method is undefined (nil).
 	See #currentSelector if you need to take the source code into account"
 	<return: #Symbol or: nil>
 
-	^ selector
-]
-
-{ #category : #accessing }
-GtPharoMethodCoder >> selector: aSymbol [
-	selector := aSymbol
+	^ methodDefinition selector
 ]
 
 { #category : #private }
@@ -1086,7 +1126,7 @@ GtPharoMethodCoder >> sourceCode: aGtCoderSourceCode withStrategy: anUpdateStrag
 GtPharoMethodCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 
-	SystemAnnouncer uniqueInstance weak
+	self environment announcer weak
 		when: ClassAdded send: #onClassAdded: to: self;
 		when: ClassRenamed send: #onClassRenamed: to: self;
 		when: ClassRemoved send: #onClassRemoved: to: self;
@@ -1112,5 +1152,5 @@ GtPharoMethodCoder >> unsubscribeFromExample [
 
 { #category : #'private - subscriptions' }
 GtPharoMethodCoder >> unsubscribeFromSystem [
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	self environment announcer unsubscribe: self
 ]
