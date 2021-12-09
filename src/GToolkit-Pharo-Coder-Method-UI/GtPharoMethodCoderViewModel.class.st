@@ -39,7 +39,7 @@ GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 	^ ({ 
 		contextualBehavior asAsyncFuture asAsyncStream.
 		self behavior asAsyncFuture asAsyncStream.
-		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ]) asAsyncStream.
+		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ]) asAsyncFuture asAsyncStream.
 	
 	} asAsyncStream flatten select: [ :eachBehavior | eachBehavior notNil ]) withoutDuplicates
 ]
