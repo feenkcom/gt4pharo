@@ -158,6 +158,11 @@ GtPharoMethodCoderViewModel >> isSaveEnabled [
 	^ savePreventors isEmpty
 ]
 
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> methodOrigin [
+	^ coderModel methodOrigin
+]
+
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveDisabled [
 	self announce: (GtMethodCoderSaveDisabled new preventors: savePreventors asArray)
