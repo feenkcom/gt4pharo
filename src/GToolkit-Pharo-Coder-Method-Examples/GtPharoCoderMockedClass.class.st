@@ -3,16 +3,16 @@ Class {
 	#superclass : #GtPharoCoderMockedSuperClass,
 	#traits : 'TGtPharoCoderMockedTrait',
 	#classTraits : 'TGtPharoCoderMockedTrait classTrait',
-	#category : #'GToolkit-Pharo-Coder-Examples-Mocks'
+	#category : #'GToolkit-Pharo-Coder-Method-Examples-Mocks'
 }
 
 { #category : #'class - accessing' }
-GtPharoCoderMockedClass >> classMethodA [
+GtPharoCoderMockedClass >> instanceMethodA [
 	^ 'A'
 ]
 
 { #category : #'class - accessing' }
-GtPharoCoderMockedClass >> classMethodB [
+GtPharoCoderMockedClass >> instanceMethodB [
 	^ 'B'
 ]
 

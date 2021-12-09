@@ -96,11 +96,13 @@ GtPharoMethodCoderInheritanceElement >> newInheritanceDropdownContent [
 
 { #category : #'private - insance creation' }
 GtPharoMethodCoderInheritanceElement >> newMethodOriginFuture [
-	^ pharoMethodCoderViewModel coderModel methodOrigin
-		then: [ :anOrigin |
-			anOrigin isSameOrigin
-				ifTrue: [ anOrigin withInheritance ]
-				ifFalse: [ anOrigin ] ]
+	| aMethodOrigin |
+	
+	aMethodOrigin := pharoMethodCoderViewModel methodOrigin.
+	
+	^ aMethodOrigin isSameOrigin
+		ifTrue: [ aMethodOrigin withInheritance ]
+		ifFalse: [ aMethodOrigin asAsyncFuture ]
 ]
 
 { #category : #'private - insance creation' }

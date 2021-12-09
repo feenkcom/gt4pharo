@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBehaviorCoderElementExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'examples - instance creation' }
@@ -31,13 +31,6 @@ GtBehaviorCoderElementExamples >> forClassUIModel [
 	self
 		assert: aCoderUIModel definitionCoderUIModel coder
 		equals: aCoder definitionCoder.
-
-	self
-		assert: aCoderUIModel methodsCoderUIModel class
-		equals: GtPharoMethodsCoderViewModel.
-	self
-		assert: aCoderUIModel methodsCoderUIModel coder
-		equals: aCoder methodsCoder.
 
 	^ aCoderUIModel
 ]

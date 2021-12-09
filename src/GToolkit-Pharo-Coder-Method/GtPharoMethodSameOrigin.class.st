@@ -28,7 +28,7 @@ GtPharoMethodSameOrigin >> behavior: anObject method: aCompiledMethod [
 ]
 
 { #category : #accessing }
-GtPharoMethodSameOrigin >> behaviorDo: aBlock [
+GtPharoMethodSameOrigin >> behaviorDo: aBlock ifUnknown: anUnknownBlock [
 	"Evaluate a given block with the origin behavior"
 
 	^ aBlock value: behavior

@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtPharoCoderMockedTrait,
-	#category : #'GToolkit-Pharo-Coder-Examples-Mocks'
+	#category : #'GToolkit-Pharo-Coder-Method-Examples-Mocks'
 }
 
 { #category : #'trait - accessing' }

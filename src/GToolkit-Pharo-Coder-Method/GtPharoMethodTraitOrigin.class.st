@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #enumerating }
-GtPharoMethodTraitOrigin >> behaviorDo: aBlock [
+GtPharoMethodTraitOrigin >> behaviorDo: aBlock ifUnknown: anUnknownBlock [
 	"Evaluate a given block with the origin behavior"
 
 	^ aBlock value: trait

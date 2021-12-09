@@ -39,7 +39,7 @@ GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 	^ ({ 
 		contextualBehavior asAsyncFuture asAsyncStream.
 		self behavior asAsyncFuture asAsyncStream.
-		(self coderModel methodOrigin map: [ :aMethodOrigin | aMethodOrigin behaviorDo: [ :aBehavior | aBehavior ] ]) asAsyncStream.
+		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ]) asAsyncFuture asAsyncStream.
 	
 	} asAsyncStream flatten select: [ :eachBehavior | eachBehavior notNil ]) withoutDuplicates
 ]
@@ -156,6 +156,13 @@ GtPharoMethodCoderViewModel >> isOverriding [
 { #category : #testing }
 GtPharoMethodCoderViewModel >> isSaveEnabled [
 	^ savePreventors isEmpty
+]
+
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> methodOrigin [
+	<return: #GtPharoMethodOrigin>
+
+	^ coderModel methodOrigin
 ]
 
 { #category : #'private - notifying' }

@@ -86,11 +86,13 @@ GtPharoMethodCoderHeaderElement >> onTextualCoderViewModelChanged [
 	didn't get a chance to subscribe to any announcement. Override #onPostTextualCoderViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 
-	[ self updateBreadcrumbElements ]
-		on: Error
-		do: [ :anError |
-			self removeChildNamed: #error.
-			self addChild: anError asDebuggableElement as: #error ]
+	[ BlFrameTelemetry
+		time: [ 'Update package and behavior labels' ]
+		during: [ self updateBreadcrumbElements ] ]
+			on: Error
+			do: [ :anError |
+				self removeChildNamed: #error.
+				self addChild: anError asDebuggableElement as: #error ]
 ]
 
 { #category : #accessing }
@@ -99,18 +101,15 @@ GtPharoMethodCoderHeaderElement >> packageButton [
 ]
 
 { #category : #'private - actions' }
-GtPharoMethodCoderHeaderElement >> spawnBehavior [
-	| aSourceBehavior |
-	
-	aSourceBehavior := textualCoderViewModel sourceBehavior.
-	
-	aSourceBehavior ifNotNil: [ :aBehavior |
+GtPharoMethodCoderHeaderElement >> spawnBehavior [	
+	behavior model behaviorDo: [ :aBehavior |
 		self phlow spawnTool: (GtClassCoderTool observedClass: aBehavior) ]
 ]
 
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnPackage [
-	self phlow spawnTool: (GtPackageCoderTool package: textualCoderViewModel coderModel package)
+	package model behaviorDo: [ :aBehavior |
+		self phlow spawnTool: (GtPackageCoderTool package: aBehavior package) ]
 ]
 
 { #category : #'api - textual coder view model' }
@@ -146,12 +145,20 @@ GtPharoMethodCoderHeaderElement >> unsubscribeFromTextualCoderViewModel [
 ]
 
 { #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
-	package label: (textualCoderViewModel sourceBehavior
-		ifNotNil: [ :aBehavior | aBehavior package name ]
-		ifNil: [ '(Unspecified)' ]).
+GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [	
+	| aMethodOrigin |
+	
+	aMethodOrigin := textualCoderViewModel methodOrigin.
 
-	behavior label: (textualCoderViewModel sourceBehavior
-		ifNotNil: [ :aBehavior | aBehavior name ]
-		ifNil: [ '(Unspecified)' ])
+	package
+		model: aMethodOrigin;
+		label: (aMethodOrigin
+			behaviorDo: [ :aBehavior | aBehavior package name ]
+			ifUnknown: 'Unknown').
+
+	behavior
+		model: aMethodOrigin;
+		label: (aMethodOrigin
+			behaviorDo: [ :aBehavior | aBehavior name ]
+			ifUnknown: 'Unknown')
 ]

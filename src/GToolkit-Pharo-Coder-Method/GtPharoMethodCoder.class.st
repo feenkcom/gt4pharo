@@ -363,7 +363,7 @@ GtPharoMethodCoder >> evaluationContext [
 	
 	anEvaluationContext := super evaluationContext.
 	
-	aMethodOrigin := self methodOrigin wait.
+	aMethodOrigin := self methodOrigin.
 	"By default we should aim to compile the method in the same behavior as the method's origin"
 	aMethodOrigin behaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ].
 	
@@ -633,9 +633,22 @@ GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> methodOrigin [
-	<return: #TAsyncFuture of: #GtPharoMethodOrigin>
+	<return: #GtPharoMethodOrigin>
+	| aCompiledMethod anOriginBehavior aMethodBehavior |
+	
+	aCompiledMethod := self compiledMethod
+		ifNil: [ ^ GtPharoMethodUnknownOrigin new ].
+	
+	anOriginBehavior := aCompiledMethod origin.
+	aMethodBehavior := aCompiledMethod methodClass.
 
-	^ [ self privateComputeMethodOrigin ] asAsyncFuture
+	(anOriginBehavior = aMethodBehavior)
+		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+
+	anOriginBehavior isTrait
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].	
+		
+	^ GtPharoMethodUnknownOrigin new
 ]
 
 { #category : #'api - refactorings' }
@@ -936,26 +949,6 @@ GtPharoMethodCoder >> printOn: aStream [
 		nextPutAll: '>>#';
 		nextPutAll: self selector asString;
 		nextPut: $)
-]
-
-{ #category : #private }
-GtPharoMethodCoder >> privateComputeMethodOrigin [
-	<return: #GtPharoMethodOrigin>
-	| aCompiledMethod anOriginBehavior aMethodBehavior |
-	
-	aCompiledMethod := self compiledMethod
-		ifNil: [ ^ GtPharoMethodUnknownOrigin new ].
-	
-	anOriginBehavior := aCompiledMethod origin.
-	aMethodBehavior := aCompiledMethod methodClass.
-
-	(anOriginBehavior = aMethodBehavior)
-		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
-
-	anOriginBehavior isTrait
-		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].	
-		
-	^ GtPharoMethodUnknownOrigin new
 ]
 
 { #category : #'api - accessing' }

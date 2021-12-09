@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMethodCoderEvaluationContextExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
+	#category : #'GToolkit-Pharo-Coder-Method-Examples-Coder'
 }
 
 { #category : #'examples - evaluation context' }
@@ -36,7 +36,7 @@ GtPharoMethodCoderEvaluationContextExamples >> evaluationContextFromSameClass [
 	<gtExample>
 	| aMethodCoder anEvaluationContext |
 	
-	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #classMethodB.
+	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodB.
 
 	anEvaluationContext := aMethodCoder evaluationContext.
 	self assert: anEvaluationContext hasTargetBehavior.
