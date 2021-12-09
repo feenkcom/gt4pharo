@@ -46,7 +46,20 @@ GtPharoMethodCoderHeaderElement >> newBehaviorButton [
 		aptitude: (BrGlamorousLabelAptitude new
 			foreground: BrGlamorousColors defaultButtonTextColor;
 			fontSize: 12);
-		action: [ self spawnBehavior ]
+		action: [ self spawnBehavior ];
+		withAsyncPromiseDo: [ :anElementPromise |
+			anElementPromise
+				whenSuccess: [ :aButton :aMethodOrigin |
+					aButton
+						model: aMethodOrigin;
+						label: (aMethodOrigin
+							behaviorDo: [ :aBehavior | aBehavior name ]
+							ifUnknown: 'Unknown') ];
+				whenError: [ :aButton :anError |
+					aButton
+						model: GtPharoMethodUnknownOrigin new;
+						label: anError description ];
+				whenPending: [ :aButton | aButton label: '' ] ]
 ]
 
 { #category : #'instance creation' }
@@ -56,7 +69,20 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 		aptitude: (BrGlamorousLabelAptitude new
 			foreground: BrGlamorousColors defaultButtonTextColor;
 			fontSize: 12);
-		action: [ self spawnPackage ]
+		action: [ self spawnPackage ];
+		withAsyncPromiseDo: [ :anElementPromise |
+			anElementPromise
+				whenSuccess: [ :aButton :aMethodOrigin |
+					aButton
+						model: aMethodOrigin;
+						label: (aMethodOrigin
+							behaviorDo: [ :aBehavior | aBehavior package name ]
+							ifUnknown: 'Unknown') ];
+				whenError: [ :aButton :anError |
+					aButton
+						model: GtPharoMethodUnknownOrigin new;
+						label: anError description ];
+				whenPending: [ :aButton | aButton label: '' ] ]
 ]
 
 { #category : #'event handling' }
@@ -99,18 +125,15 @@ GtPharoMethodCoderHeaderElement >> packageButton [
 ]
 
 { #category : #'private - actions' }
-GtPharoMethodCoderHeaderElement >> spawnBehavior [
-	| aSourceBehavior |
-	
-	aSourceBehavior := textualCoderViewModel sourceBehavior.
-	
-	aSourceBehavior ifNotNil: [ :aBehavior |
+GtPharoMethodCoderHeaderElement >> spawnBehavior [	
+	behavior model behaviorDo: [ :aBehavior |
 		self phlow spawnTool: (GtClassCoderTool observedClass: aBehavior) ]
 ]
 
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnPackage [
-	self phlow spawnTool: (GtPackageCoderTool package: textualCoderViewModel coderModel package)
+	package model behaviorDo: [ :aBehavior |
+		self phlow spawnTool: (GtPackageCoderTool package: aBehavior package) ]
 ]
 
 { #category : #'api - textual coder view model' }
@@ -146,12 +169,11 @@ GtPharoMethodCoderHeaderElement >> unsubscribeFromTextualCoderViewModel [
 ]
 
 { #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
-	package label: (textualCoderViewModel sourceBehavior
-		ifNotNil: [ :aBehavior | aBehavior package name ]
-		ifNil: [ '(Unspecified)' ]).
+GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [	
+	| aMethodOriginPromise |
+	
+	aMethodOriginPromise := textualCoderViewModel methodOrigin asAsyncPromise.
 
-	behavior label: (textualCoderViewModel sourceBehavior
-		ifNotNil: [ :aBehavior | aBehavior name ]
-		ifNil: [ '(Unspecified)' ])
+	package asyncPromise promise: aMethodOriginPromise.
+	behavior asyncPromise promise: aMethodOriginPromise
 ]

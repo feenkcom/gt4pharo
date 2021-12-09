@@ -2,7 +2,8 @@ Class {
 	#name : #GtPharoStreamingBehaviorMethodsCoder,
 	#superclass : #GtFilteredCodersModel,
 	#instVars : [
-		'behavior'
+		'behavior',
+		'environment'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
@@ -42,6 +43,8 @@ GtPharoStreamingBehaviorMethodsCoder >> initialize [
 	super initialize.
 	
 	behavior := UndefinedObject.
+	environment := RGEnvironment new.
+	environment backend: (RGReadOnlyImageBackend for: environment).
 	
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded send: #onMethodAdded: to: self;
@@ -55,7 +58,7 @@ GtPharoStreamingBehaviorMethodsCoder >> isForClass [
 
 { #category : #'private - instance creation' }
 GtPharoStreamingBehaviorMethodsCoder >> newCoderFor: aCompiledMethod [
-	^ GtPharoMethodCoder forMethod: aCompiledMethod
+	^ GtPharoMethodCoder forCompiledMethod: aCompiledMethod environment: environment
 ]
 
 { #category : #'private - event handling' }

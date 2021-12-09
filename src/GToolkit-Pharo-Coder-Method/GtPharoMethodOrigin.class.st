@@ -8,7 +8,16 @@ Class {
 GtPharoMethodOrigin >> behaviorDo: aBlock [
 	"Evaluate a given block with the origin behavior"
 	
-	^ nil
+	^ self
+		behaviorDo: aBlock
+		ifUnknown: [ nil ]
+]
+
+{ #category : #accessing }
+GtPharoMethodOrigin >> behaviorDo: aBlock ifUnknown: anUnknownBlock [
+	"Evaluate a given block with the origin behavior"
+	
+	^ self subclassResponsibility
 ]
 
 { #category : #testing }

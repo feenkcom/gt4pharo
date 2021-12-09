@@ -10,7 +10,7 @@ Class {
 		'definitionCoder',
 		'methodsCoder'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #constants }
@@ -69,8 +69,6 @@ GtPharoBehaviorCoder >> definitionCoder [
 GtPharoBehaviorCoder >> forClass: aClass [
 	hasObject := false.
 	self initializeClass: aClass.
-
-	self methodsCoder: (GtClassMethodsCoder forClass: aClass)
 ]
 
 { #category : #initialize }
@@ -78,8 +76,6 @@ GtPharoBehaviorCoder >> forObject: anObject [
 	object := anObject.
 	hasObject := true.
 	self initializeClass: anObject class.
-	
-	self methodsCoder: (GtClassMethodsCoder forObject: object)
 ]
 
 { #category : #'gt-extension' }
@@ -127,21 +123,6 @@ GtPharoBehaviorCoder >> initializeClass: aClass [
 { #category : #testing }
 GtPharoBehaviorCoder >> isForClass [
 	^ true
-]
-
-{ #category : #accessing }
-GtPharoBehaviorCoder >> methodsCoder [
-	^ methodsCoder
-]
-
-{ #category : #accessing }
-GtPharoBehaviorCoder >> methodsCoder: aMethodsCoder [
-	methodsCoder ifNotNil: [ :aCoder | aCoder announcer unsubscribe: self ].
-	methodsCoder := aMethodsCoder.
-	aMethodsCoder weak
-		when: GtCodersFiltersChanged
-		send: #onMethodsCoderFiltersChanged:
-		to: self
 ]
 
 { #category : #accessing }

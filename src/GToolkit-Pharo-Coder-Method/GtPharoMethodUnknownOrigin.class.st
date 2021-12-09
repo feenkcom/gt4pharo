@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-Origin'
 }
 
+{ #category : #accessing }
+GtPharoMethodUnknownOrigin >> behaviorDo: aBlock ifUnknown: anUnknownBlock [
+	"Evaluate a given block with the origin behavior"
+	
+	^ anUnknownBlock value
+]
+
 { #category : #testing }
 GtPharoMethodUnknownOrigin >> isUnknownOrigin [
 	^ true
