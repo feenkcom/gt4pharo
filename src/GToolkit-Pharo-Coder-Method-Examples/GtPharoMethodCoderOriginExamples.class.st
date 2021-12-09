@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMethodCoderOriginExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
+	#category : #'GToolkit-Pharo-Coder-Method-Examples-Coder'
 }
 
 { #category : #'examples - origin' }
@@ -10,7 +10,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginForNewCoder [
 	| aMethodCoder aMethodOrigin |
 	
 	aMethodCoder := GtPharoMethodCoder new.
-	aMethodOrigin := aMethodCoder methodOrigin wait.
+	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isUnknownOrigin.
 	
@@ -23,7 +23,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginForNewMethod [
 	| aMethodCoder aMethodOrigin |
 	
 	aMethodCoder := GtPharoMethodCoder forNewMethod: GtPharoCoderMockedClass.
-	aMethodOrigin := aMethodCoder methodOrigin wait.
+	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isUnknownOrigin.
 	
@@ -35,12 +35,12 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromSameClass [
 	<gtExample>
 	| aMethodCoder aMethodOrigin |
 	
-	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #classMethodB.
-	aMethodOrigin := aMethodCoder methodOrigin wait.
+	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodB.
+	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: GtPharoCoderMockedClass.
-	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #classMethodB.
+	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #instanceMethodB.
 	
 	^ aMethodOrigin
 ]
@@ -51,7 +51,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromSameTrait [
 	| aMethodCoder aMethodOrigin |
 	
 	aMethodCoder := GtPharoMethodCoder forMethod: TGtPharoCoderMockedTrait >> #traitMethodA.
-	aMethodOrigin := aMethodCoder methodOrigin wait.
+	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: TGtPharoCoderMockedTrait.
@@ -66,7 +66,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromTrait [
 	| aMethodCoder aMethodOrigin |
 	
 	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #traitMethodA.
-	aMethodOrigin := aMethodCoder methodOrigin wait.
+	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isTraitOrigin.
 	self assert: aMethodOrigin trait equals: TGtPharoCoderMockedTrait.
@@ -81,7 +81,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromTraitOverridden [
 	| aMethodCoder aMethodOrigin |
 	
 	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #traitMethodB.
-	aMethodOrigin := aMethodCoder methodOrigin wait.
+	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: GtPharoCoderMockedClass.

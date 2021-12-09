@@ -46,20 +46,7 @@ GtPharoMethodCoderHeaderElement >> newBehaviorButton [
 		aptitude: (BrGlamorousLabelAptitude new
 			foreground: BrGlamorousColors defaultButtonTextColor;
 			fontSize: 12);
-		action: [ self spawnBehavior ];
-		withAsyncPromiseDo: [ :anElementPromise |
-			anElementPromise
-				whenSuccess: [ :aButton :aMethodOrigin |
-					aButton
-						model: aMethodOrigin;
-						label: (aMethodOrigin
-							behaviorDo: [ :aBehavior | aBehavior name ]
-							ifUnknown: 'Unknown') ];
-				whenError: [ :aButton :anError |
-					aButton
-						model: GtPharoMethodUnknownOrigin new;
-						label: anError description ];
-				whenPending: [ :aButton | aButton label: '' ] ]
+		action: [ self spawnBehavior ]
 ]
 
 { #category : #'instance creation' }
@@ -69,20 +56,7 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 		aptitude: (BrGlamorousLabelAptitude new
 			foreground: BrGlamorousColors defaultButtonTextColor;
 			fontSize: 12);
-		action: [ self spawnPackage ];
-		withAsyncPromiseDo: [ :anElementPromise |
-			anElementPromise
-				whenSuccess: [ :aButton :aMethodOrigin |
-					aButton
-						model: aMethodOrigin;
-						label: (aMethodOrigin
-							behaviorDo: [ :aBehavior | aBehavior package name ]
-							ifUnknown: 'Unknown') ];
-				whenError: [ :aButton :anError |
-					aButton
-						model: GtPharoMethodUnknownOrigin new;
-						label: anError description ];
-				whenPending: [ :aButton | aButton label: '' ] ]
+		action: [ self spawnPackage ]
 ]
 
 { #category : #'event handling' }
@@ -112,11 +86,13 @@ GtPharoMethodCoderHeaderElement >> onTextualCoderViewModelChanged [
 	didn't get a chance to subscribe to any announcement. Override #onPostTextualCoderViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 
-	[ self updateBreadcrumbElements ]
-		on: Error
-		do: [ :anError |
-			self removeChildNamed: #error.
-			self addChild: anError asDebuggableElement as: #error ]
+	[ BlFrameTelemetry
+		time: [ 'Update package and behavior labels' ]
+		during: [ self updateBreadcrumbElements ] ]
+			on: Error
+			do: [ :anError |
+				self removeChildNamed: #error.
+				self addChild: anError asDebuggableElement as: #error ]
 ]
 
 { #category : #accessing }
@@ -170,10 +146,19 @@ GtPharoMethodCoderHeaderElement >> unsubscribeFromTextualCoderViewModel [
 
 { #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [	
-	| aMethodOriginPromise |
+	| aMethodOrigin |
 	
-	aMethodOriginPromise := textualCoderViewModel methodOrigin asAsyncPromise.
+	aMethodOrigin := textualCoderViewModel methodOrigin.
 
-	package asyncPromise promise: aMethodOriginPromise.
-	behavior asyncPromise promise: aMethodOriginPromise
+	package
+		model: aMethodOrigin;
+		label: (aMethodOrigin
+			behaviorDo: [ :aBehavior | aBehavior package name ]
+			ifUnknown: 'Unknown').
+
+	behavior
+		model: aMethodOrigin;
+		label: (aMethodOrigin
+			behaviorDo: [ :aBehavior | aBehavior name ]
+			ifUnknown: 'Unknown')
 ]

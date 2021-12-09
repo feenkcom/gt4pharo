@@ -39,7 +39,7 @@ GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 	^ ({ 
 		contextualBehavior asAsyncFuture asAsyncStream.
 		self behavior asAsyncFuture asAsyncStream.
-		(self coderModel methodOrigin map: [ :aMethodOrigin | aMethodOrigin behaviorDo: [ :aBehavior | aBehavior ] ]) asAsyncStream.
+		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ]) asAsyncStream.
 	
 	} asAsyncStream flatten select: [ :eachBehavior | eachBehavior notNil ]) withoutDuplicates
 ]
@@ -160,6 +160,8 @@ GtPharoMethodCoderViewModel >> isSaveEnabled [
 
 { #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> methodOrigin [
+	<return: #GtPharoMethodOrigin>
+
 	^ coderModel methodOrigin
 ]
 
