@@ -20,6 +20,7 @@ GtPharoStreamingMethodsCoderViewModel >> expandAndFocusCompiledMethod: aCompiled
 GtPharoStreamingMethodsCoderViewModel >> initialize [
 	super initialize.
 	
+	selfObject := nil.
 	shouldExpandByDefault := false.
 	shouldHaveHeaderByDefault := false
 ]
