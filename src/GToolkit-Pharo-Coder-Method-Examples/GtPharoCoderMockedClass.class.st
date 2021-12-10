@@ -19,6 +19,11 @@ GtPharoCoderMockedClass >> instanceMethodA [
 ]
 
 { #category : #'instance - accessing' }
+GtPharoCoderMockedClass >> instanceMethodB [
+	^ 'B'
+]
+
+{ #category : #'instance - accessing' }
 GtPharoCoderMockedClass >> instanceMethodC [
 	"Should not be overridden by subclasses"
 
