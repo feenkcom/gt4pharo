@@ -1,7 +1,7 @@
-Extension { #name : #GtPharoStreamingBehaviorMethodsCoder }
+Extension { #name : #GtPharoStreamingMethodsCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> categoryFilter: aView [
+GtPharoStreamingMethodsCoder >> categoryFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
 		title: 'Categories';
@@ -21,7 +21,7 @@ GtPharoStreamingBehaviorMethodsCoder >> categoryFilter: aView [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> classSlotFilter: aView [
+GtPharoStreamingMethodsCoder >> classSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
 		title: 'Class Slots';
@@ -41,7 +41,26 @@ GtPharoStreamingBehaviorMethodsCoder >> classSlotFilter: aView [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> filterDescriptors [
+GtPharoStreamingMethodsCoder >> codeGeneratorsDropDown: anElement for: aMethodsCoderViewModel [
+	^ BrHorizontalPane new
+		exact: 300@300;
+		addChild:
+			(GtPhlowCompositeView new
+				views: (self codeGeneratorsFor: aMethodsCoderViewModel);
+				asElementDo: [ :aTabGroup | aTabGroup matchParent ])
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+GtPharoStreamingMethodsCoder >> codeGeneratorsFor: aMethodsCoderViewModel [
+	^ GtPhlowViewsCollector new
+		fromObject: self;
+		pragmaName: #gtCodeGenerator;
+		context: aMethodsCoderViewModel;
+		collect
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+GtPharoStreamingMethodsCoder >> filterDescriptors [
 	| descriptors |
 	<return: #TAsyncStream>
 
@@ -63,7 +82,7 @@ GtPharoStreamingBehaviorMethodsCoder >> filterDescriptors [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> filterDropDown: anElement [
+GtPharoStreamingMethodsCoder >> filterDropDown: anElement [
 	^ BlElement new
 		size: 430 @ 430;
 		addChild:
@@ -73,7 +92,7 @@ GtPharoStreamingBehaviorMethodsCoder >> filterDropDown: anElement [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> filterTypes [
+GtPharoStreamingMethodsCoder >> filterTypes [
 	^ GtPhlowViewsCollector new
 		fromObject: self;
 		pragmaName: #gtFilterTypes;
@@ -81,7 +100,7 @@ GtPharoStreamingBehaviorMethodsCoder >> filterTypes [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> gtLiveFor: aView [
+GtPharoStreamingMethodsCoder >> gtLiveFor: aView [
 	<gtView>
 	
 	^ aView explicit
@@ -100,7 +119,7 @@ GtPharoStreamingBehaviorMethodsCoder >> gtLiveFor: aView [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoStreamingBehaviorMethodsCoder >> instanceSlotFilter: aView [
+GtPharoStreamingMethodsCoder >> instanceSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
 		title: 'Slots';

@@ -248,8 +248,10 @@ GtPharoBehaviorCoderElement >> executeTask: aBlock [
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
 
 	contentTabs content 
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoMethodsCoderElement ] 
-		ifFound: [ :theElement | theElement filterWithMethodProtocol: aMethodProtocol source: aSource ] 
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ] 
+		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: {
+			GtSearchMethodCategoryFilter forCategory: aMethodProtocol name.
+		} ] 
 		ifNone: [ "ignore" ]
 ]
 

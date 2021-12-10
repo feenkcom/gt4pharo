@@ -187,7 +187,9 @@ GtPharoMethodCoder >> compile [
 GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
 	<return: #Boolean>
-	| aChange |
+	| aPreviousCompiledMethod aChange aNewCompiledMethod |
+
+	aPreviousCompiledMethod := self compiledMethod.
 
 	"we should use #currentSelector instead of #selector because we care
 	about the `current` state of the coder (#selector may be nil for new methods)"
@@ -201,20 +203,19 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
 		inContext: aGtPharoSourceCoderEvaluationContext.
 
-	selector := aChange selector.
-
 	(self
 		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
 		ifFalse: [ ^ false ].
 
 	aChange definedSelector
-		ifNotNil: [ :sel | 
-			self selector: sel.
-			self compiledMethod
-				ifNotNil: [ :method |
-					self forMethod: method.
-					^ true ] ].
-	^ false
+		ifNil: [ ^ false ].
+	
+	aNewCompiledMethod := aChange changeClass >> aChange definedSelector.
+	self forMethod: aNewCompiledMethod.
+	
+	self notifyMethodRecompiledFrom: aPreviousCompiledMethod to: aNewCompiledMethod.
+	
+	^ true
 ]
 
 { #category : #accessing }
@@ -737,6 +738,11 @@ GtPharoMethodCoder >> notifyMethodAdded [
 { #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyMethodModified [
 	self announce: (GtCoderMethodModified new coder: self)
+]
+
+{ #category : #'private - notifying' }
+GtPharoMethodCoder >> notifyMethodRecompiledFrom: aPreviousCompiledMethod to: aNewCompiledMethod [
+	self announce: (GtPharoMethodCoderCompiled new previousMethod: aPreviousCompiledMethod; newMethod: aNewCompiledMethod)
 ]
 
 { #category : #'private - notifying' }

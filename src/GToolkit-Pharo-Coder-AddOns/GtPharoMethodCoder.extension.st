@@ -745,7 +745,7 @@ GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: a
 	coderAddOns
 		addPreview: 'Inheritance'
 		stencil: [
-			GtPharoMethodCoderInheritanceElement new 
+			GtPharoMethodCoderOverridingOverriddenElement new 
 				pharoMethodCoderViewModel: aViewModel ]
 ]
 

@@ -5,7 +5,7 @@ GtPharoMethodsCoderView >> gtMethodsFor: aView [
 	| aMethodsCoder aMethodsCoderViewModel  anItemsView |
 	<gtView>
 
-	aMethodsCoder := GtPharoStreamingBehaviorMethodsCoder forFilter: filter.
+	aMethodsCoder := GtPharoStreamingMethodsCoder forFilter: filter.
 	aMethodsCoderViewModel := (GtPharoStreamingMethodsCoderViewModel new streamingCodersModel: aMethodsCoder)
 		shouldExpandByDefault: false;
 		shouldHaveHeaderByDefault: true.

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoMethodCoderInheritanceElement,
+	#name : #GtPharoMethodCoderOverridingOverriddenElement,
 	#superclass : #BlElement,
 	#traits : 'TBrLayoutResizable + TGtWithPharoMethodCoderViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtWithPharoMethodCoderViewModel classTrait',
@@ -10,15 +10,16 @@ Class {
 }
 
 { #category : #initialization }
-GtPharoMethodCoderInheritanceElement >> defaultLayout [
+GtPharoMethodCoderOverridingOverriddenElement >> defaultLayout [
 	^ BlFrameLayout new
 ]
 
 { #category : #initialization }
-GtPharoMethodCoderInheritanceElement >> initialize [
+GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 	super initialize.
 
 	self fitContent.
+	self id: GtMethodCoderOverridingOverriddenId.
 
 	self withAsyncPromiseDo: [ :anElementPromise |
 		anElementPromise
@@ -40,15 +41,18 @@ GtPharoMethodCoderInheritanceElement >> initialize [
 											ifTrue: [ aButton icon: BrGlamorousVectorIcons upwards ].
 										anOrigin isOverridden
 											ifTrue: [ aButton icon: BrGlamorousVectorIcons downwards ] ].
-								self addChild: aButton ] ] ];
+								self addChild: aButton.
+								self visibility: BlVisibility visible ]
+							ifFalse: [ self visibility: BlVisibility gone ] ] ];
 			whenError: [ :anElement :anError |
 				self removeChildren.
+				self visibility: BlVisibility visible.
 				anElement addChild: anError asDebuggableElement ];
-			whenPending: [  ] ]
+			whenPending: [ self visibility: BlVisibility gone ] ]
 ]
 
 { #category : #'private - insance creation' }
-GtPharoMethodCoderInheritanceElement >> newInheritanceButton [
+GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceButton [
 	^ BrButton new
 		vFitContent;
 		hExact: 18;
@@ -59,7 +63,7 @@ GtPharoMethodCoderInheritanceElement >> newInheritanceButton [
 ]
 
 { #category : #'private - insance creation' }
-GtPharoMethodCoderInheritanceElement >> newInheritanceDropdownContent [
+GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceDropdownContent [
 	^ BrVerticalPane new
 		fitContent;
 		padding: (BlInsets all: 5);
@@ -77,6 +81,7 @@ GtPharoMethodCoderInheritanceElement >> newInheritanceDropdownContent [
 									aptitude: BrGlamorousLabelAptitude;
 									text: 'Overridden by');
 								addChild: (self newMethodsCountButton
+									id: GtMethodCoderOverriddenAmountId;
 									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverridingMethodsFilter new method: aMethodOrigin method)) ];
 									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overridingMethods ])) ].
 
@@ -90,12 +95,13 @@ GtPharoMethodCoderInheritanceElement >> newInheritanceDropdownContent [
 									aptitude: BrGlamorousLabelAptitude;
 									text: 'Overrides');
 								addChild: (self newMethodsCountButton
+									id: GtMethodCoderOverridesAmountId;
 									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverriddenMethodsFilter new method: aMethodOrigin method)) ];
 									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overriddenMethods ])) ] ] ]
 ]
 
 { #category : #'private - insance creation' }
-GtPharoMethodCoderInheritanceElement >> newMethodOriginFuture [
+GtPharoMethodCoderOverridingOverriddenElement >> newMethodOriginFuture [
 	| aMethodOrigin |
 	
 	aMethodOrigin := pharoMethodCoderViewModel methodOrigin.
@@ -106,7 +112,7 @@ GtPharoMethodCoderInheritanceElement >> newMethodOriginFuture [
 ]
 
 { #category : #'private - insance creation' }
-GtPharoMethodCoderInheritanceElement >> newMethodsCountButton [
+GtPharoMethodCoderOverridingOverriddenElement >> newMethodsCountButton [
 	^ BrButton new
 		aptitude: BrGlamorousLinkButtonWithLabelAptitude;
 		label: '0 methods...';
@@ -119,7 +125,7 @@ GtPharoMethodCoderInheritanceElement >> newMethodsCountButton [
 ]
 
 { #category : #'api - pharo method coder view model' }
-GtPharoMethodCoderInheritanceElement >> onPharoMethodCoderViewModelChanged [
+GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChanged [
 	"Is sent when a new pharoMethodCoderViewModel is assigned to the receiver.
 	Note: #onPharoMethodCoderViewModelChanged is sent before #subscribeToPharoMethodCoderViewModel
 	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
