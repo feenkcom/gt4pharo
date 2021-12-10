@@ -35,12 +35,12 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromSameClass [
 	<gtExample>
 	| aMethodCoder aMethodOrigin |
 	
-	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodB.
+	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodC.
 	aMethodOrigin := aMethodCoder methodOrigin.
 	
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: GtPharoCoderMockedClass.
-	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #instanceMethodB.
+	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #instanceMethodC.
 	
 	^ aMethodOrigin
 ]
