@@ -8,7 +8,7 @@ Class {
 GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView filter: aGtSearchFilter testsRunner: shouldHaveTestsRunner examplesRunner: shouldHaveExamplesRunner [
 	| aMethodsCoder aMethodsCoderViewModel  anItemsView |
 	
-	aMethodsCoder := GtPharoStreamingBehaviorMethodsCoder forFilter: aGtSearchFilter.
+	aMethodsCoder := GtPharoStreamingMethodsCoder forFilter: aGtSearchFilter.
 	aMethodsCoderViewModel := (GtPharoStreamingMethodsCoderViewModel new streamingCodersModel: aMethodsCoder)
 		shouldExpandByDefault: false;
 		shouldHaveHeaderByDefault: true.

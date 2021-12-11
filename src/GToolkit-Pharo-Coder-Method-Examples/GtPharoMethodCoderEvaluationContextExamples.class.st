@@ -36,7 +36,7 @@ GtPharoMethodCoderEvaluationContextExamples >> evaluationContextFromSameClass [
 	<gtExample>
 	| aMethodCoder anEvaluationContext |
 	
-	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodB.
+	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodC.
 
 	anEvaluationContext := aMethodCoder evaluationContext.
 	self assert: anEvaluationContext hasTargetBehavior.

@@ -327,7 +327,7 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribed
 
 { #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileModifiedNewMethodWithCoderWhenSubscribedToSystem [
-
+	<noTest>
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder aNewMethodSelector aNewMethod |
 	anEventsRecoder := self eventsRecorder.

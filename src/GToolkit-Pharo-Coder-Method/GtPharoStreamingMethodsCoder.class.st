@@ -1,0 +1,126 @@
+Class {
+	#name : #GtPharoStreamingMethodsCoder,
+	#superclass : #GtFilteredCodersModel,
+	#instVars : [
+		'behavior'
+	],
+	#category : #'GToolkit-Pharo-Coder-Method-Coder'
+}
+
+{ #category : #'instance creation' }
+GtPharoStreamingMethodsCoder class >> forBehavior: aBehavior [
+	^ (self forFilter: (GtSearchSortedMethodsInInstanceAndClassSideFilter forClass: aBehavior)) behavior: aBehavior
+]
+
+{ #category : #'api - accessing' }
+GtPharoStreamingMethodsCoder >> behavior [
+	^ behavior
+]
+
+{ #category : #'api - accessing' }
+GtPharoStreamingMethodsCoder >> behavior: aBehavior [
+	behavior := aBehavior
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> categories [
+	^ ((self itemsStream map: [ :eachMethod | eachMethod category ]) to: GtPrefixTree) wait
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> classNames [
+	^ ((self itemsStream map: [ :eachMethod | eachMethod methodClass instanceSide name ]) withoutDuplicates to: GtPrefixTree) wait
+]
+
+{ #category : #'api - accessing' }
+GtPharoStreamingMethodsCoder >> classOrMetaClass [
+	^ self behavior
+]
+
+{ #category : #initialization }
+GtPharoStreamingMethodsCoder >> initialize [
+	super initialize.
+	
+	behavior := UndefinedObject.
+	
+	SystemAnnouncer uniqueInstance weak
+		when: MethodAdded send: #onMethodAdded: to: self;
+		when: MethodRemoved send: #onMethodRemoved: to: self
+]
+
+{ #category : #'api - accessing' }
+GtPharoStreamingMethodsCoder >> isForClass [
+	^ behavior notNil
+]
+
+{ #category : #'private - instance creation' }
+GtPharoStreamingMethodsCoder >> newCoderCacheKeyFor: aCompiledMethod [
+	^ GtPharoMethodDescription forCompiledMethod: aCompiledMethod
+]
+
+{ #category : #'private - instance creation' }
+GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
+	| aMethodCoder |
+	
+	aMethodCoder := GtPharoMethodCoder forMethod: aCompiledMethod.
+	aMethodCoder weak
+		when: GtPharoMethodCoderCompiled
+		send: #onPharoMethodCoderCompiled:
+		to: self.
+	
+	^ aMethodCoder
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoder >> onMethodAdded: aMethodAddedAnnouncement [
+	(filter matches: aMethodAddedAnnouncement methodAdded)
+		ifFalse: [ ^ self ].
+
+	self privateAddCoderFor: aMethodAddedAnnouncement methodAdded
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoder >> onMethodRemoved: aMethodRemovedAnnouncement [
+	(filter matches: aMethodRemovedAnnouncement methodRemoved)
+		ifFalse: [ ^ self ].
+
+	self privateRemoveCoderFor: aMethodRemovedAnnouncement methodRemoved
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoder >> onPharoMethodCoderCompiled: aCompiledAnnouncement [
+	| aNewCoder |
+	aCompiledAnnouncement isSameMethod
+		ifTrue: [ ^ self ].
+
+	aCompiledAnnouncement previousMethod
+		ifNil: [ ^ self ].
+
+	aNewCoder := self privateFetchCoderFor: aCompiledAnnouncement newMethod.
+	aNewCoder forMethod: aCompiledAnnouncement previousMethod.
+	
+	self
+		privateSwapCodersFor: aCompiledAnnouncement previousMethod
+		and: aCompiledAnnouncement newMethod
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> packageNames [
+	^ (((self itemsStream
+		filter: [ :eachMethod | eachMethod package notNil ])
+		map: [ :eachMethod | eachMethod package name ]) to: GtPrefixTree) wait
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> pragmaNames [
+	^ (((self itemsStream
+		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
+		flatten
+		map: [ :eachPragma | eachPragma selector ])
+		to: GtPrefixTree) wait
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> selectorNames [	
+	^ ((self itemsStream map: [ :eachMethod | eachMethod selector ]) to: GtPrefixTree) wait
+]
