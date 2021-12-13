@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoCodeHighlighterExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'ast pattern' }
@@ -175,6 +175,22 @@ GtPharoCodeHighlighterExamples >> implementorThisMethod [
 	self assert: theIntervals equals: {(1 to: 18)}.
 
 	^ self visualiseIntervals: theIntervals
+]
+
+{ #category : #'variable reference' }
+GtPharoCodeHighlighterExamples >> literalClassReference [
+	<gtExample>
+	
+	| highlighter theIntervals code pattern index text |
+	code := thisContext method sourceCode.
+	pattern := '#OrderedCollection'.
+	index := code indexOfSubCollection: pattern , ' asString'.
+	highlighter := GtPharoVariableReferenceHighlighter forSymbolAndVariableName: #OrderedCollection asString.
+	theIntervals := highlighter accept: (GtPharoParser parse: code).
+	self assert: theIntervals equals: {index to: index + pattern size - 1}.
+	text := code asRopedText glamorousCodeFont.
+	GtPharoCodeHighlighter new style: text intervals: theIntervals.
+	^ text
 ]
 
 { #category : #pragma }

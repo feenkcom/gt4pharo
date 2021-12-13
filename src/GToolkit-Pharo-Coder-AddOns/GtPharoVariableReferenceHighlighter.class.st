@@ -2,16 +2,36 @@ Class {
 	#name : #GtPharoVariableReferenceHighlighter,
 	#superclass : #GtPharoCodeHighlighter,
 	#instVars : [
-		'variableName'
+		'variableName',
+		'searchSymbols'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
+
+{ #category : #'instance creation' }
+GtPharoVariableReferenceHighlighter class >> forSymbolAndVariableName: aString [
+	^ self new
+		variableName: aString;
+		includeSymbols;
+		yourself
+]
 
 { #category : #'instance creation' }
 GtPharoVariableReferenceHighlighter class >> forVariableName: aString [
 	^ self new
 		variableName: aString;
 		yourself
+]
+
+{ #category : #initialization }
+GtPharoVariableReferenceHighlighter >> includeSymbols [
+	searchSymbols := true
+]
+
+{ #category : #initialization }
+GtPharoVariableReferenceHighlighter >> initialize [
+	super initialize.
+	searchSymbols := false
 ]
 
 { #category : #accessing }
@@ -22,6 +42,14 @@ GtPharoVariableReferenceHighlighter >> variableName [
 { #category : #accessing }
 GtPharoVariableReferenceHighlighter >> variableName: anObject [
 	variableName := anObject
+]
+
+{ #category : #visiting }
+GtPharoVariableReferenceHighlighter >> visitSymbolLiteral: aNode [
+	super visitSymbolLiteral: aNode.
+	searchSymbols ifFalse: [ ^ self ].
+	aNode symbol = variableName
+		ifTrue: [ stream nextPut: (aNode startPosition to: aNode stopPosition) ]
 ]
 
 { #category : #visiting }
