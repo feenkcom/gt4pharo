@@ -132,7 +132,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_shortcu
 		do: [ :aStep |
 			aStep click
 				label: 'Click class name';
-				onChildNamed: GtBehaviorCoderBehaviorNameId.
+				id: GtBehaviorCoderBehaviorNameId.
 
 			aStep wait forEmptySpaceTaskQueue.
 

@@ -2316,7 +2316,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_mes
 	aScripter click
 		label: 'Click inline temp';
 		onSpaceRoot;
-		onChildNamed: #'context-menu--inline-message'.
+		id: #'context-menu--inline-message'.
 
 	aScripter wait forEmptySpaceTaskQueue.
 	
@@ -2501,7 +2501,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | (aCoderEditor text asString indexOfSubCollection: 'str :=') to: (aCoderEditor text asString indexOf: $.) - 1 ];
-		onChildNamed: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId.
 
 	^ aScripter syncContinue
 ]
@@ -3877,7 +3877,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_06_type_method_name [
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
-		onChildNamed: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId.
 
 	^ aScripter syncContinue
 ]

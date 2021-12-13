@@ -30,47 +30,47 @@ GtCreateBehaviorElementByScripterExamples >> checkDefaultCreatorForClass [
 		aStep check
 			label: 'Check default new class name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: 'NameOfSubclass';
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 	
 		aStep check
 			label: 'Check default superclass name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: 'Object';
-			onChildNamed: GtCodeDefinition behaviorSuperclassEditorName.
+			id: GtCodeDefinition behaviorSuperclassEditorName.
 			
 		aStep check
 			label: 'Check default package name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: '';
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep check
 			label: 'Check default tag name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: '';
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep check
 			label: 'Check default traits';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
-			onChildNamed: GtCodeDefinition traitsEditorName.
+			id: GtCodeDefinition traitsEditorName.
 			
 		aStep check
 			label: 'Check default slots';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
-			onChildNamed: GtCodeDefinition slotsEditorName.
+			id: GtCodeDefinition slotsEditorName.
 			
 		aStep check
 			label: 'Check default class variables';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
-			onChildNamed: GtCodeDefinition classVariablesEditorName.
+			id: GtCodeDefinition classVariablesEditorName.
 			
 		aStep check
 			label: 'Check default shared pools';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
-			onChildNamed: GtCodeDefinition poolsEditorName.
+			id: GtCodeDefinition poolsEditorName.
 
 		aStep check
 			label: 'Check save button is disabled';
 			satisfies: [ :aButton | aButton isDisabled ];
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
+			id: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -121,7 +121,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithName [
 	
 	aScripter substep: 'Save class with just name' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName.
+			id: GtPharoCreateBehaviorElement saveButtonName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 		
@@ -144,7 +144,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackage [
 	
 	aScripter substep: 'Save class with name and package' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName.
+			id: GtPharoCreateBehaviorElement saveButtonName.
 		
 		aStep wait forEmptySpaceTaskQueue.
 		
@@ -191,7 +191,7 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackageTag [
 	
 	aScripter substep: 'Save class with name, package and tag' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName.
+			id: GtPharoCreateBehaviorElement saveButtonName.
 		
 		aStep wait forEmptySpaceTaskQueue.
 		
@@ -249,19 +249,19 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 	
 	aScripter substep: 'Type new class name' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 	
 		aStep check
 			label: 'Check class name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep check
 			label: 'Check class name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
@@ -270,18 +270,18 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 		aStep check
 			label: 'Check class name editor is in editable mode';
 			satisfies: [ :aNameEditor | aNameEditor isEditable ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 		
 		aStep type
 			text: self newClassName;
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 			
 		aStep check
 			label: 'Check typed new class name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: self newClassName;
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
@@ -290,12 +290,12 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 		aStep check
 			label: 'Check class name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep check
 			label: 'Check class name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep keyClick: BlKeyboardKey escape.
 		
@@ -304,12 +304,12 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 		aStep check
 			label: 'Check class name editor does not have focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus not ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 		
 		aStep check
 			label: 'Check save button is disabled';
 			satisfies: [ :aButton | aButton isDisabled ];
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
+			id: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -323,19 +323,19 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 	
 	aScripter substep: 'Type new package name' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 	
 		aStep check
 			label: 'Check package name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep check
 			label: 'Check package name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
@@ -344,18 +344,18 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 		aStep check
 			label: 'Check package name editor is in editable mode';
 			satisfies: [ :aNameEditor | aNameEditor isEditable ];
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 		
 		aStep type
 			text: self newPackageName;
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 			
 		aStep check
 			label: 'Check typed new package name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: self newPackageName;
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
@@ -364,12 +364,12 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 		aStep check
 			label: 'Check package name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep check
 			label: 'Check package name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 			
 		aStep keyClick: BlKeyboardKey escape.
 		
@@ -378,12 +378,12 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 		aStep check
 			label: 'Check package name editor does not have focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus not ];
-			onChildNamed: GtCodeDefinition packageEditorName.
+			id: GtCodeDefinition packageEditorName.
 		
 		aStep check
 			label: 'Check save button is enabled';
 			satisfies: [ :aButton | aButton isEnabled ];
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
+			id: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -397,19 +397,19 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 	
 	aScripter substep: 'Type new tag name' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 	
 		aStep wait forEmptySpaceTaskQueue.
 	
 		aStep check
 			label: 'Check tag name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep check
 			label: 'Check tag name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
@@ -418,18 +418,18 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 		aStep check
 			label: 'Check tag name editor is in editable mode';
 			satisfies: [ :aNameEditor | aNameEditor isEditable ];
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 		
 		aStep type
 			text: self newTagName;
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 			
 		aStep check
 			label: 'Check typed new tag name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: self newTagName;
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
@@ -438,12 +438,12 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 		aStep check
 			label: 'Check tag name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep check
 			label: 'Check tag name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 			
 		aStep keyClick: BlKeyboardKey escape.
 		
@@ -452,12 +452,12 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 		aStep check
 			label: 'Check tag name editor does not have focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus not ];
-			onChildNamed: GtCodeDefinition tagEditorName.
+			id: GtCodeDefinition tagEditorName.
 		
 		aStep check
 			label: 'Check save button is enabled';
 			satisfies: [ :aButton | aButton isEnabled ];
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
+			id: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
@@ -471,47 +471,47 @@ GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 	
 	aScripter substep: 'Type new class name' do: [ :aStep | 
 		aStep click
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep wait forEmptySpaceTaskQueue.
 	
 		aStep check
 			label: 'Check class name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep check
 			label: 'Check class name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 			
 		aStep check
 			label: 'Check class name editor is in editable mode';
 			satisfies: [ :aNameEditor | aNameEditor isEditable ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 		
 		aStep type
 			text: self newClassName;
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep check
 			label: 'Check typed new class name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: self newClassName;
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep keyClick: BlKeyboardKey return.
 		
 		aStep check
 			label: 'Check class name editor has focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep check
 			label: 'Check class name editor is readonly';
 			satisfies: [ :aNameEditor | aNameEditor isReadOnly ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 			
 		aStep keyClick: BlKeyboardKey escape.
 		
@@ -520,12 +520,12 @@ GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 		aStep check
 			label: 'Check class name editor does not have focus';
 			satisfies: [ :aNameEditor | aNameEditor hasFocus not ];
-			onChildNamed: GtCodeDefinition behaviorNameEditorName.
+			id: GtCodeDefinition behaviorNameEditorName.
 		
 		aStep check
 			label: 'Check save button is enabled';
 			satisfies: [ :aButton | aButton isEnabled not ];
-			onChildNamed: GtPharoCreateBehaviorElement saveButtonName ].
+			id: GtPharoCreateBehaviorElement saveButtonName ].
 
 	^ aScripter syncContinue
 ]
