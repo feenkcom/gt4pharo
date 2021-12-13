@@ -46,6 +46,15 @@ GtPharoSnippetCoderViewModel >> evaluationContext [
 		runtimeContext: self context
 ]
 
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> gtBindingsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Bindings';
+		object: [sharedBindings];
+		view: #gtBindingsFor:
+]
+
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	"Return true if a variable with a given name is declared"
