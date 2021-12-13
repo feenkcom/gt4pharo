@@ -63,6 +63,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 
 	addOns addStyler: GtPharoStyler new.
+	"addOns addStyler: (GtContextVariableValueStyler new methodCoder: self)."
 	addOns addStyler: GtPharoDynamicHighlightStyler new.
 	addOns addStyler: GtPharoDeprecationStyler new.
 	addOns addStyler: GtPharoMethodExpanderStyler new.

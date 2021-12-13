@@ -257,6 +257,8 @@ GtPharoSourceCoder >> nodeToReferencesFilter: aNode ifFound: aFoundBlock ifNone:
 					variableNodeToReferencesFilter: aCurrentNode
 					ifFound: aFoundBlock
 					ifNone: aNoneBlock ].
+		(aCurrentNode isKindOf: GtPharoPragmaNode)
+			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForPragma: aCurrentNode selector) ].
 		(aCurrentNode isKindOf: GtPharoSymbolLiteralNode)
 			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForLiteral: aCurrentNode asSymbol) ].
 		(aCurrentNode isKindOf: GtPharoStringLiteralNode)
@@ -480,6 +482,11 @@ GtPharoSourceCoder >> referencesFilterForNumber: aNumberAsString [
 	"aNumberAsString would be a string '42', which should be evaluated to get a boolean"
 
 	^ self referencesFilterForLiteral: (Object evaluate: aNumberAsString)
+]
+
+{ #category : #'private - ast' }
+GtPharoSourceCoder >> referencesFilterForPragma: aSymbol [
+	^ GtSearchPragmasFilter forPragma: aSymbol 
 ]
 
 { #category : #'private - ast' }

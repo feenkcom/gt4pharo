@@ -5,9 +5,10 @@ I display various tags in the method coder element such as protocol or instance/
 Class {
 	#name : #GtPharoMethodCoderTagsElement,
 	#superclass : #BlElement,
+	#traits : 'TGtWithPharoMethodCoderViewModel',
+	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait',
 	#instVars : [
 		'protocolTag',
-		'methodCoderUIModel',
 		'traitMethodTag',
 		'classTag'
 	],
@@ -16,7 +17,7 @@ Class {
 
 { #category : #private }
 GtPharoMethodCoderTagsElement >> behaviorOtherSideName [
-	^ self classTagStringForMeta: self methodCoderUIModel isMeta not
+	^ self classTagStringForMeta: pharoMethodCoderViewModel isMeta not
 ]
 
 { #category : #private }
@@ -26,7 +27,7 @@ GtPharoMethodCoderTagsElement >> behaviorProtocols [
 	allSubAndSuperclassProtocols := Set new.
 	excludedClasses := Set withAll: { ProtoObject . Object }.
 	
-	self methodCoderUIModel coder behavior withAllSubAndSuperclassesDo: [ :eachBehavior |
+	pharoMethodCoderViewModel coder behavior withAllSubAndSuperclassesDo: [ :eachBehavior |
 		(excludedClasses includes: eachBehavior)
 			ifFalse: [ allSubAndSuperclassProtocols addAll: eachBehavior protocols ] ].
 
@@ -35,7 +36,7 @@ GtPharoMethodCoderTagsElement >> behaviorProtocols [
 
 { #category : #private }
 GtPharoMethodCoderTagsElement >> behaviorSideName [
-	^ self classTagStringForMeta: self methodCoderUIModel isMeta
+	^ self classTagStringForMeta: pharoMethodCoderViewModel isMeta
 ]
 
 { #category : #initialization }
@@ -63,11 +64,11 @@ GtPharoMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 		ifFalse: [ 'instance' ]
 ]
 
-{ #category : #'event handling' }
+{ #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 	| aTraitElement aClass aSelector aMethod |
 
-	aTraitElement := self methodCoderUIModel coder traitSource.
+	aTraitElement := pharoMethodCoderViewModel coder traitSource.
 	aTraitElement
 		ifNil: [ ^ self ].
 
@@ -75,7 +76,7 @@ GtPharoMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
 		ifFalse: [ ^ self ].
 	
 	aClass := aTraitElement innerClass.
-	aSelector := self methodCoderUIModel coder selector.
+	aSelector := pharoMethodCoderViewModel coder selector.
 	aSelector
 		ifNil: [ aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
 			^ self ].
@@ -94,48 +95,6 @@ GtPharoMethodCoderTagsElement >> initialize [
 			c vertical fitContent ].
 		
 	self addChildren: self buildTags
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderTagsElement >> methodCoderUIModel [
-	^ methodCoderUIModel
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderTagsElement >> methodCoderUIModel: aMethodCoderUIModel [
-	self
-		assert: [ aMethodCoderUIModel isKindOf: GtPharoMethodCoderViewModel ]
-		description: [ 'Must be method coder''s UI Model' ].
-
-	methodCoderUIModel == aMethodCoderUIModel
-		ifTrue: [ ^ self ].
-
-	"do not forget to unsubscribe from the previous coder"
-	self unsubscribeFromCoder.
-
-	methodCoderUIModel := aMethodCoderUIModel.
-
-	aMethodCoderUIModel coder weak
-		when: GtCoderSourceCodeChanged
-		send: #onCoderSourceTextModified:
-		to: self.
-
-	aMethodCoderUIModel coder weak
-		when: GtCoderMethodModified
-		send: #onCoderMethodModified:
-		to: self.	
-
-	BlFrameTelemetry
-		time: [ self class name, ' #updateProtocolButton' ]
-		during: [ self updateProtocolButton ].
-
-	BlFrameTelemetry
-		time: [ self class name, ' #updateTraitMethodButton' ]
-		during: [ self updateTraitMethodButton ].
-
-	BlFrameTelemetry
-		time: [ self class name, ' #updateBehaviorSideButton' ]
-		during: [ self updateBehaviorSideButton ]
 ]
 
 { #category : #'instance creation' }
@@ -157,7 +116,7 @@ GtPharoMethodCoderTagsElement >> newClassTag [
 								label: self behaviorOtherSideName;
 								action: [ :aButton | 
 									aButton fireEvent: BrDropdownHideWish new.
-									self methodCoderUIModel coder moveMethodToInstanceOrClass.
+									pharoMethodCoderViewModel coder moveMethodToInstanceOrClass.
 									classTag label: self behaviorSideName ] ])
 ]
 
@@ -166,7 +125,7 @@ GtPharoMethodCoderTagsElement >> newProtocolEditor [
 	| anEditor |
 
 	anEditor := BrEditableLabel new
-		text: (self protocolStringFor: self methodCoderUIModel);
+		text: (self protocolStringFor: pharoMethodCoderViewModel);
 		constraintsDo: [ :c | c minWidth: 100 ];
 		aptitude:
 			(BrGlamorousEditableLabelAptitude new
@@ -179,7 +138,7 @@ GtPharoMethodCoderTagsElement >> newProtocolEditor [
 		when: BrEditorAcceptWish
 			do: [ :aWish | 
 				aWish currentTarget fireEvent: (BrDropdownHideWish new).
-				self methodCoderUIModel coder renameProtocol: aWish text asString.
+				pharoMethodCoderViewModel coder renameProtocol: aWish text asString.
 				self updateProtocolButton ];
 		when: BrEditorCancelWish
 			do: [ :aWish | aWish currentTarget fireEvent: (BrDropdownHideWish new) ];
@@ -204,7 +163,7 @@ GtPharoMethodCoderTagsElement >> newProtocolPickerList [
 				aptitude: BrGlamorousButtonRectangularAptitude + BrGlamorousButtonLabelAptitude;
 				action: [ :aButton :aButtonModel |
 					aButton fireEvent: (BrDropdownHideWish new).
-					self methodCoderUIModel coder renameProtocol: aButtonModel model asString.
+					pharoMethodCoderViewModel coder renameProtocol: aButtonModel model asString.
 					self updateProtocolButton ] ];
 		itemDataBinder: [ :eachButton :eachProtocol |
 			eachButton viewModel model: eachProtocol.
@@ -218,7 +177,11 @@ GtPharoMethodCoderTagsElement >> newProtocolTag [
 		beTinySize;
 		aptitude: BrGlamorousButtonWithLabelAptitude + (BrGlamorousWithDropdownAptitude
 			handle: [ self newProtocolEditor ]
-			content: [ self newProtocolPickerList ])
+			content: [ self newProtocolPickerList ]);
+		withAsyncPromiseDo: [ :anElementPromise |
+			anElementPromise
+				whenSuccess: [ :aButton :isModified |
+					aButton enabled: isModified not ] ]
 ]
 
 { #category : #'private - instance creation' }
@@ -235,14 +198,36 @@ GtPharoMethodCoderTagsElement >> newTraitMethodTag [
 		fitContent
 ]
 
-{ #category : #'event handling' }
+{ #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
-	self updateTraitMethodButton.
+	self updateTraitMethodButton
 ]
 
-{ #category : #'event handling' }
-GtPharoMethodCoderTagsElement >> onCoderSourceTextModified: anAnnouncement [
-	protocolTag disabled: anAnnouncement coder isModified
+{ #category : #'api - pharo method coder view model' }
+GtPharoMethodCoderTagsElement >> onPharoMethodCoderViewModelChanged [
+	"Is sent when a new pharoMethodCoderViewModel is assigned to the receiver.
+	Note: #onPharoMethodCoderViewModelChanged is sent before #subscribeToPharoMethodCoderViewModel
+	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
+	didn't get a chance to subscribe to any announcement. Override #onPostPharoMethodCoderViewModelChanged if you
+	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
+	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
+	
+	BlFrameTelemetry
+		time: [ self class name, ' #updateProtocolButton' ]
+		during: [ self updateProtocolButton ].
+
+	BlFrameTelemetry
+		time: [ self class name, ' #updateTraitMethodButton' ]
+		during: [ self updateTraitMethodButton ].
+
+	BlFrameTelemetry
+		time: [ self class name, ' #updateBehaviorSideButton' ]
+		during: [ self updateBehaviorSideButton ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoMethodCoderTagsElement >> onViewModelTextChanged: anAnnouncement [
+	self updateProtocolButtonActivation
 ]
 
 { #category : #private }
@@ -250,6 +235,25 @@ GtPharoMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 	<return: #String>
 
 	^ aMethodCoderUIModel coder protocol
+]
+
+{ #category : #'api - pharo method coder view model' }
+GtPharoMethodCoderTagsElement >> subscribeToPharoMethodCoderViewModel [
+	"Is sent after a new pharoMethodCoderViewModel is assigned to the receiver.
+	It is required to unsubscribe from the previously subscribed objects by implementing
+	#unsubscribeFromPharoMethodCoderViewModel if the receiver subscribes to them"
+	<modelSubscriber: #methodCoderViewModel>
+	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#subscribeToObjectTemplate'>
+	
+	pharoMethodCoderViewModel weak
+		when: GtTextualCoderViewModelTextChanged
+		send: #onViewModelTextChanged:
+		to: self.
+
+	pharoMethodCoderViewModel coder weak
+		when: GtCoderMethodModified
+		send: #onCoderMethodModified:
+		to: self.
 ]
 
 { #category : #private }
@@ -260,17 +264,20 @@ GtPharoMethodCoderTagsElement >> traitMethodStringFor: aMethodCoderUIModel [
 		ifFalse: [ '' ]
 ]
 
-{ #category : #private }
-GtPharoMethodCoderTagsElement >> unsubscribeFromCoder [
-	methodCoderUIModel
-		ifNil: [ ^ self ].
-
-	methodCoderUIModel coder unsubscribe: self
+{ #category : #'api - pharo method coder view model' }
+GtPharoMethodCoderTagsElement >> unsubscribeFromPharoMethodCoderViewModel [
+	"Is sent before a new pharoMethodCoderViewModel is assigned to the receiver.
+	Objects that subscribe to pharoMethodCoderViewModel are required to implement this method."
+	<modelUnsubscriber: #methodCoderViewModel>
+	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#unsubscribeFromObjectTemplate'>
+	
+	pharoMethodCoderViewModel coderModel unsubscribe: self.
+	pharoMethodCoderViewModel unsubscribe: self
 ]
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
-	classTag label: (self classTagStringFor: self methodCoderUIModel).
+	classTag label: (self classTagStringFor: pharoMethodCoderViewModel).
 	
 	self flag: #TODO.
 	"canMoveMethodToInstanceOrClass is very expensive to compute"
@@ -280,13 +287,24 @@ GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateProtocolButton [
-	protocolTag label: (self protocolStringFor: self methodCoderUIModel)
+	self updateProtocolButtonLabel.
+	self updateProtocolButtonActivation
+]
+
+{ #category : #'private - update' }
+GtPharoMethodCoderTagsElement >> updateProtocolButtonActivation [
+	protocolTag asyncPromise promise: pharoMethodCoderViewModel isTextModified
+]
+
+{ #category : #'private - update' }
+GtPharoMethodCoderTagsElement >> updateProtocolButtonLabel [
+	protocolTag label: (self protocolStringFor: pharoMethodCoderViewModel)
 ]
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateTraitMethodButton [
-	traitMethodTag label: (self traitMethodStringFor: self methodCoderUIModel).
-	self methodCoderUIModel coder isFromTrait
+	traitMethodTag label: (self traitMethodStringFor: pharoMethodCoderViewModel).
+	pharoMethodCoderViewModel coder isFromTrait
 		ifTrue: [ traitMethodTag enable ]
 		ifFalse: [ traitMethodTag disable ]
 ]
