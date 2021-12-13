@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBehaviorDefinitionCoderByScripterExamples,
 	#superclass : #GtCoderByScripterExamples,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'examples - setup' }
@@ -28,11 +28,9 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter [
 	| aScripter |
 
 	aScripter := self scripter.
-	aScripter set 
-		label: 'Initialize behavior definition element';
-		element: [ self behaviorDefinitionElement ].
+	aScripter element: self behaviorDefinitionElement.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #examples }
