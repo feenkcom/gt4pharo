@@ -121,7 +121,7 @@ GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 	
 	aScripter click
 		label: 'Open context menu';
-		onChildNamed: #'reorder-parameter-button';
+		id: #'reorder-parameter-button';
 		play.
 	
 	aScripter check
@@ -597,7 +597,7 @@ GtPharoSnippetCoderByScripterExamples >> hasRefactoringChanges: aScripter [
 						indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 					anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
-		onChildNamed: GtSourceCoderEditorId
+		id: GtSourceCoderEditorId
 ]
 
 { #category : #'examples - context menu' }

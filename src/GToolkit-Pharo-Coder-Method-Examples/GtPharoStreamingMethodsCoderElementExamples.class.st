@@ -60,40 +60,6 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckOverridden [
 ]
 
 { #category : #accessing }
-GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckProtocol [
-	<gtExample>
-	| aScripter |
-
-	aScripter := self forSuperclass.
-
-	aScripter check
-		id: GtSourceCoderId index: 1;
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
-		play.
-
-	aScripter check
-		id: GtSourceCoderId index: 2;
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
-		play.
-
-	aScripter check
-		id: GtSourceCoderId index: 3;
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
-		play.
-
-	aScripter check
-		id: GtSourceCoderId index: 4;
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
-		play.
-
-	^ aScripter
-]
-
-{ #category : #accessing }
 GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickFirstOverridden [
 	<gtExample>
 	| aScripter |
