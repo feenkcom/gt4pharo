@@ -78,6 +78,15 @@ GtPharoSnippetCoderViewModel >> initialize [
 	sharedBindings := GtSharedVariablesBindings new
 ]
 
+{ #category : #'private - bindings' }
+GtPharoSnippetCoderViewModel >> localSnippetVariableBindings [
+	| theBindings |
+	theBindings := GtCompositeVariablesBindings new.
+	theBindings addBindings: localBindings.
+	theBindings addBindings: sharedBindings.
+	^ theBindings
+]
+
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
@@ -88,7 +97,9 @@ GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 		
 	self localBindings
 		localAt: #thisCoder
-		put: self coderModel
+		put: self coderModel.
+		
+	self updateCompletionBindings
 ]
 
 { #category : #accessing }
@@ -112,5 +123,11 @@ GtPharoSnippetCoderViewModel >> sharedBindings [
 
 { #category : #'api - bindings' }
 GtPharoSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
-	sharedBindings := aGtSharedVariablesBindings
+	sharedBindings := aGtSharedVariablesBindings.
+	self updateCompletionBindings
+]
+
+{ #category : #'api - coder model' }
+GtPharoSnippetCoderViewModel >> updateCompletionBindings [
+	coderModel ifNotNil: [ coderModel completionStrategy bindings: self localSnippetVariableBindings  ]
 ]

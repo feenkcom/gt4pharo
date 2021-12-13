@@ -109,6 +109,11 @@ GtPharoCompletionStrategy class >> unsubscribeFromSystem [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
+{ #category : #'private-variables' }
+GtPharoCompletionStrategy >> addBindingsTo: variableNames [
+	bindings ifNotNil: [ variableNames addAll: bindings bindingNames ]
+]
+
 { #category : #accessing }
 GtPharoCompletionStrategy >> bindings [
 	^ bindings
@@ -246,9 +251,11 @@ GtPharoCompletionStrategy >> isSubsequence: subString of: completeString [
 
 { #category : #'private-variables' }
 GtPharoCompletionStrategy >> localVariablesFor: aVariableNode [
-	^ self hasImplicitVariables
-		ifTrue: [ aVariableNode implicitLocalVariables ]
-		ifFalse: [ aVariableNode localVariables ]
+	| vars |
+	self hasImplicitVariables ifFalse: [ aVariableNode localVariables ].
+	vars := aVariableNode implicitLocalVariables.
+	self addBindingsTo: vars.
+	^ vars
 ]
 
 { #category : #accessing }
