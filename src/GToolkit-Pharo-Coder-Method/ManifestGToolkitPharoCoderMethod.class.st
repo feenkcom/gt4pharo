@@ -19,8 +19,9 @@ ManifestGToolkitPharoCoderMethod class >> mustNotDependOn [
 
 { #category : #asserting }
 ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
-		^ {
+	^ {
 		'AST-Core'.
+		'Announcements-Core'.
 		'Collections-Sequenceable'.
 		'Collections-Strings'.
 		'Collections-Unordered'.
