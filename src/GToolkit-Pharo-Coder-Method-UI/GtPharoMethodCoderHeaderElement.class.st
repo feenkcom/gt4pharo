@@ -64,20 +64,6 @@ GtPharoMethodCoderHeaderElement >> onCoderClassChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateBreadcrumbElements ])
 ]
 
-{ #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> onCoderMethodModified: anAnnouncement [
-	anAnnouncement coder isModified
-		ifTrue: [ self background: self theme status errorBackgroundColor ]
-		ifFalse: [ self background: Color white ]
-]
-
-{ #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> onCoderSourceTextModified: anAnnouncement [
-	anAnnouncement coder isModified
-		ifTrue: [ self background: self theme status failureBackgroundColor ]
-		ifFalse: [ self background: Color white ]
-]
-
 { #category : #'api - textual coder view model' }
 GtPharoMethodCoderHeaderElement >> onTextualCoderViewModelChanged [
 	"Is sent when a new textualCoder view model is assigned to the element.
@@ -121,19 +107,7 @@ GtPharoMethodCoderHeaderElement >> subscribeToTextualCoderViewModel [
 	textualCoderViewModel coder weak
 		when: GtCoderClassAdded, GtCoderClassRenamed, GtCoderClassRemoved
 		send: #onCoderClassChanged:
-		to: self.
-
-	textualCoderViewModel coder weak
-		when: GtCoderMethodModified
-		send: #onCoderMethodModified:
-		to: self.
-		
-	textualCoderViewModel coder weak
-		when: GtCoderSourceCodeChanged
-		send: #onCoderSourceTextModified:
-		to: self.
-		
-	
+		to: self
 ]
 
 { #category : #'api - textual coder view model' }

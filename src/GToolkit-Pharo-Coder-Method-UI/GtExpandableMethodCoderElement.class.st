@@ -66,6 +66,6 @@ GtExpandableMethodCoderElement >> onTextualCoderViewModelChanged [
 	super onTextualCoderViewModelChanged.
 	
 	BlFrameTelemetry
-		time: [ tagsElement class name, ' #methodCoderUIModel:' ]
-		during: [ tagsElement methodCoderUIModel: textualCoderViewModel ]
+		time: [ tagsElement class name, ' #pharoMethodCoderViewModel:' ]
+		during: [ tagsElement pharoMethodCoderViewModel: textualCoderViewModel ]
 ]
