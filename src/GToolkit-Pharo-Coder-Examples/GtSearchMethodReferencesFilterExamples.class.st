@@ -76,6 +76,15 @@ GtSearchMethodReferencesFilterExamples >> referencesToCharacter [
 ]
 
 { #category : #examples }
+GtSearchMethodReferencesFilterExamples >> referencesToClassBySymbol [
+	<gtExample>
+	| filter |
+	filter := (Smalltalk at: #OrderedCollection) gtReferences.
+	self assert: (filter matches: thisContext method).
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchMethodReferencesFilterExamples >> referencesToFalse [
 	<gtExample>
 	| filter |
