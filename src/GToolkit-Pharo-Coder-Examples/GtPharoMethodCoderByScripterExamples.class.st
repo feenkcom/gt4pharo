@@ -908,6 +908,110 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	^ aScripter
 ]
 
+{ #category : #'examples - modify source' }
+GtPharoMethodCoderByScripterExamples >> emptyBodyMethod [
+
+	<gtExample>
+	^ GtPharoMethodCoderExamples >> #emptyBody
+]
+
+{ #category : #'examples - modify source' }
+GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoder [
+
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self emptyBodyMethod.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - modify source' }
+GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI [
+
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterForBlock: [ 
+		             self emptyBodyMethodCoder asCoderViewModel ].
+
+	^ aScripter
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode [
+
+	"Check https://github.com/feenkcom/gtoolkit/issues/2289"
+
+	<gtExample>
+	| aScripter |
+	aScripter := self emptyBodyMethodCoderUI.
+
+	aScripter substeps: 'Select method from Completer' do: [ :aStep | 
+		aStep do
+			label: 'Append code ';
+			action: [ :anEditor | 
+				anEditor inserter
+					atEnd;
+					string: ' ' , GtPharoMethodCoderExamples name , ' new '
+						, ((GtPharoMethodCoderExamples
+							  >> #many:many:many:many:many:many:arguments:) selector 
+								 first: 4);
+					insert.
+
+				anEditor editor moveCursorTo: anEditor text size.
+
+				self assert: anEditor editor hasCursors ];
+			id: GtSourceCoderEditorId;
+			play.
+
+		aStep shortcut
+			label: 'Trigger completer pop-up';
+			combination: BlKeyCombination builder secondary space build;
+			id: GtSourceCoderEditorId;
+			play.
+
+		aStep wait
+			forEnqueuedSpaceTaskTimeout: 0.5 seconds;
+			play.
+		aStep wait
+			forEmptySpaceTaskQueueTimeout: 5 seconds;
+			play.
+
+		aStep do
+			label: 'Select method with many arguments';
+			block: [ :element | 
+				| items item i text |
+				i := 1.
+				text := (GtPharoMethodCoderExamples
+				         >> #many:many:many:many:many:many:arguments:) selector
+					        asString.
+				items := element items.
+				[ item isNil and: [ i < items size ] ] whileTrue: [ 
+						(items at: i) label = text
+							ifTrue: [ item := items at: i ]
+							ifFalse: [ i := i + 1 ] ].
+				self
+					assert: item notNil
+					description: [ 
+						'Cannot find completer selector: {1]' format: text ].
+				element selectOne: i ];
+			onSpaceRoot;
+			id: #'completion-list';
+			play.
+
+		aStep shortcut
+			label: 'Complete with TAB key';
+			combination: BlKeyCombination tab;
+			id: GtSourceCoderEditorId;
+			play.
+
+		aStep type
+			text: '''arg1''';
+			id: GtSourceCoderEditorId;
+			play ].
+
+	^ aScripter
+]
+
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethod [
 	<gtExample>
