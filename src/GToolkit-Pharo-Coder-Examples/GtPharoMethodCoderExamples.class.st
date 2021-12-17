@@ -954,6 +954,10 @@ GtPharoMethodCoderExamples >> keyword: a selector: b [
 ]
 
 { #category : #'sample methods' }
+GtPharoMethodCoderExamples >> many: a many: b many: c many: d many: e many: f arguments: g [
+]
+
+{ #category : #'sample methods' }
 GtPharoMethodCoderExamples >> methodSourceWithTempAndBlockArgsConflict [
 	^ 'method
 	| each |
