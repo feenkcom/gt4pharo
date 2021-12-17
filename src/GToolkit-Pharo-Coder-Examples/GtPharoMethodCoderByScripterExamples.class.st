@@ -908,14 +908,14 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	^ aScripter
 ]
 
-{ #category : #'examples - modify source' }
+{ #category : #'examples - complete method name' }
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethod [
 
 	<gtExample>
 	^ GtPharoMethodCoderExamples >> #emptyBody
 ]
 
-{ #category : #'examples - modify source' }
+{ #category : #'examples - complete method name' }
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoder [
 
 	<gtExample>
@@ -925,7 +925,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoder [
 	^ aCoder
 ]
 
-{ #category : #'examples - modify source' }
+{ #category : #'examples - complete method name' }
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI [
 
 	<gtExample>
@@ -936,7 +936,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI [
 	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - complete method name' }
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode [
 
 	"Check https://github.com/feenkcom/gtoolkit/issues/2289"
@@ -945,9 +945,9 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 	| aScripter |
 	aScripter := self emptyBodyMethodCoderUI.
 
-	aScripter substeps: 'Select method from Completer' do: [ :aStep | 
+	aScripter substeps: 'Open method completer' do: [ :aStep | 
 		aStep do
-			label: 'Append code ';
+			label: 'Append class name and a selector part';
 			action: [ :anEditor | 
 				anEditor inserter
 					atEnd;
@@ -974,8 +974,19 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 			play.
 		aStep wait
 			forEmptySpaceTaskQueueTimeout: 5 seconds;
-			play.
+			play ].
 
+	^ aScripter
+]
+
+{ #category : #'examples - complete method name' }
+GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_SelectMethodNameFromCompleterPopUp [
+
+	<gtExample>
+	| aScripter |
+	aScripter := self emptyBodyMethodCoderUI_ModifySourceCode.
+
+	aScripter substeps: 'Select and insert method' do: [ :aStep | 
 		aStep do
 			label: 'Select method with many arguments';
 			block: [ :element | 
@@ -1002,12 +1013,38 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 			label: 'Complete with TAB key';
 			combination: BlKeyCombination tab;
 			id: GtSourceCoderEditorId;
-			play.
-
-		aStep type
-			text: '''arg1''';
-			id: GtSourceCoderEditorId;
 			play ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - complete method name' }
+GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments [
+
+	<gtExample>
+	| aScripter |
+	aScripter := self
+		             emptyBodyMethodCoderUI_SelectMethodNameFromCompleterPopUp.
+
+	aScripter substeps: 'Insert argument values' do: [ :aStep | 
+		| aNumArgs |
+		aNumArgs := (GtPharoMethodCoderExamples
+		             >> #many:many:many:many:many:many:arguments:) numArgs.
+
+
+
+		(1 to: aNumArgs)
+			do: [ :anIndex | 
+				aStep type
+					text: '''arg' , anIndex asString , '''';
+					id: GtSourceCoderEditorId;
+					play ]
+			separatedBy: [ 
+				aStep shortcut
+					label: 'Complete with TAB key';
+					combination: BlKeyCombination tab;
+					id: GtSourceCoderEditorId;
+					play ] ].
 
 	^ aScripter
 ]
