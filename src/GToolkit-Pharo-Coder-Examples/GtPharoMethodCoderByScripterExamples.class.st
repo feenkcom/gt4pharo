@@ -1044,7 +1044,14 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments 
 					label: 'Complete with TAB key';
 					combination: BlKeyCombination tab;
 					id: GtSourceCoderEditorId;
-					play ] ].
+					play ].
+
+		aStep check
+			label: 'Check method source code content';
+			value: [ :anEditor | anEditor text characters ]
+			equals: self finalCompleterSourceCode;
+			id: GtSourceCoderEditorId;
+			play ].
 
 	^ aScripter
 ]
@@ -1174,6 +1181,12 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
 	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
+]
+
+{ #category : #'examples - complete method name' }
+GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
+
+	^ 'emptyBody GtPharoMethodCoderExamples new many: ''arg1'' many: ''arg2'' many: ''arg3'' many: ''arg4'' many: ''arg5'' many: ''arg6'' arguments: ''arg7'''
 ]
 
 { #category : #'examples - fixit class' }
