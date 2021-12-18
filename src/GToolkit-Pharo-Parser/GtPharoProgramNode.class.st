@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoProgramNode,
 	#superclass : #SmaCCParseNode,
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #'api - ast' }
@@ -195,13 +195,11 @@ GtPharoProgramNode >> isVariableDefinition [
 
 { #category : #accessing }
 GtPharoProgramNode >> localVariablesInto: aCollection [
-	parent isNil
-		ifTrue: [ ^ self ].
-
-	parent isErrorNode
-		ifTrue: [ ^ self ].
-
-	parent localVariablesInto: aCollection
+	| ancestor |
+	ancestor := parent.
+	[ ancestor notNil and: [ (ancestor isKindOf: GtPharoProgramNode) not ] ] whileTrue: [ ancestor := ancestor parent ].
+	ancestor isNil ifTrue: [ ^ self ].
+	ancestor localVariablesInto: aCollection
 ]
 
 { #category : #accessing }

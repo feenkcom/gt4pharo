@@ -271,7 +271,7 @@ GtPharoCompletionStrategy >> isSubsequence: subString of: completeString [
 { #category : #'private-variables' }
 GtPharoCompletionStrategy >> localVariablesFor: aVariableNode [
 	| vars |
-	self hasImplicitVariables ifFalse: [ aVariableNode localVariables ].
+	self hasImplicitVariables ifFalse: [ ^ aVariableNode localVariables ].
 	vars := aVariableNode implicitLocalVariables.
 	self addBindingsTo: vars.
 	^ vars
