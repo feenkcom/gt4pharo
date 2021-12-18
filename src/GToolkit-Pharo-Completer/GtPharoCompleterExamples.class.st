@@ -19,6 +19,19 @@ GtPharoCompleterExamples >> binaryCompletion [
 	^ strategy
 ]
 
+{ #category : #'private-source' }
+GtPharoCompleterExamples >> checkCompletionsIn: aString contains: completionString [
+	| text strategy items |
+	text := (aString copyReplaceAll: '`' with: '') asRopedText.
+	strategy := self smalltalkStrategy.
+	items := strategy
+		completionActionStreamFor: text
+		at: (aString indexOf: $`) - 1
+		requested: true.
+	self assert: ((items asyncSimilarCopy take: 30) toArray wait anySatisfy: [ :each | each label = completionString ]).
+	^ items
+]
+
 { #category : #smalltalk }
 GtPharoCompleterExamples >> completeFullSelector [
 	<gtExample>
@@ -68,6 +81,42 @@ GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completeMessageAtEndOfIncompleteBlock [
+	<gtExample>
+	
+	^ self
+		checkCompletionsIn:
+			'a
+				self ifNil: [self printOn`'
+		contains: 'printOn:'
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeMessageBetweenStatements [
+	<gtExample>
+	
+	^ self
+		checkCompletionsIn:
+			'a
+				| a b |
+				a := 1.
+				a printOn`
+				b :+ 2'
+		contains: 'printOn:'
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeMessageInsideKeywordAtEndOfIncompleteBlock [
+	<gtExample>
+	
+	^ self
+		checkCompletionsIn:
+			'a
+				self ifNil: [self a: 1 b: self printOn`'
+		contains: 'printOn:'
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 	<gtExample>
 	
@@ -104,6 +153,32 @@ GtPharoCompleterExamples >> completePrintOnMethodSelector [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completeVariableAtEndOfIncompleteBlock [
+	<gtExample>
+	
+	^ self
+		checkCompletionsIn:
+			'a
+				| zxcv |
+				self ifNil: [zx`'
+		contains: 'zxcv'
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeVariableBetweenStatements [
+	<gtExample>
+	
+	^ self
+		checkCompletionsIn:
+			'a
+				| zxcv a b |
+				a := 1.
+				zx`
+				b :+ 2'
+		contains: 'zxcv'
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeVariableFromBinding [
 	<gtExample>
 	
@@ -114,6 +189,7 @@ GtPharoCompleterExamples >> completeVariableFromBinding [
 		text: ''.
 	strategy := self smalltalkStrategy.
 	strategy isMethod: false.
+	strategy hasImplicitVariables: true.
 	bindings := GtSharedVariablesBindings new.
 	name := #someUniqueVariableName.
 	bindings bindings at: name put: 'value'.
