@@ -4,7 +4,8 @@ Class {
 	#traits : 'TBrLayoutResizable + TGtWithStreamingCodersViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtWithStreamingCodersViewModel classTrait',
 	#instVars : [
-		'list'
+		'list',
+		'listItemsProvider'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
@@ -43,13 +44,16 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 	
 	self matchParent.
 	
+	listItemsProvider := BrListStreamItemsProvider new stream: AsyncEmptyStream new.
+
 	list := BrSimpleList new
 		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
 		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
 		itemDataBinder: [ :aCoderElement :aCoderViewModel |
 			BlFrameTelemetry
 				time: [ 'Set {1} as a view model of {2}' format: { aCoderViewModel class name . aCoderElement class name } ]
-				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ].
+				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ];
+		itemsProvider: listItemsProvider.
 	
 	self addChild: list
 ]
@@ -81,7 +85,7 @@ GtPharoStreamingMethodsCoderElement >> onScrollTargetChanged: anAnnouncement [
 
 { #category : #'private - event handling' }
 GtPharoStreamingMethodsCoderElement >> onStreamingCodersChanged: anAnnouncement [
-	list stream: streamingCodersViewModel coderViewModelsStream
+	listItemsProvider stream: streamingCodersViewModel coderViewModelsStream
 ]
 
 { #category : #'api - streaming coders view model' }
@@ -97,7 +101,7 @@ GtPharoStreamingMethodsCoderElement >> onStreamingCodersViewModelChanged [
 		time: [ 'Build filters widget' ]
 		during: [ self buildFilter ].
 
-	list stream: streamingCodersViewModel coderViewModelsStream.
+	listItemsProvider stream: streamingCodersViewModel coderViewModelsStream.
 
 	streamingCodersViewModel hasScrollTarget
 		ifTrue: [ self updateScrollTarget: streamingCodersViewModel scrollTarget ]
