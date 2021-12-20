@@ -22,6 +22,11 @@ Class {
 }
 
 { #category : #private }
+GtPharoCompletionStrategy class >> addSendsFrom: aMethod [
+	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache add: selector weight: count ]
+]
+
+{ #category : #private }
 GtPharoCompletionStrategy class >> classAdded: anAnnouncement [
 	GlobalCache add: anAnnouncement classAdded name
 ]
@@ -55,21 +60,29 @@ GtPharoCompletionStrategy class >> initializeCache [
 		allClassesDo: [ :each | 
 			SelectorCache
 				addAll: each selectors;
-				addAll: each class selectors ].
-	Smalltalk allTraits
-		do: [ :each | SelectorCache addAll: each selectors ].
+				addAll: each class selectors.
+			each methodsDo: [ :method | self addSendsFrom: method ].
+			each class methodsDo: [ :method | self addSendsFrom: method ] ].
 	GlobalCache := GtPrefixTree withAll: Smalltalk globals keys.
 	self subscribeToSystem
 ]
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodAdded: anAnnouncement [
-	SelectorCache add: anAnnouncement method selector
+	SelectorCache add: anAnnouncement method selector.
+	self addSendsFrom: anAnnouncement method
+]
+
+{ #category : #private }
+GtPharoCompletionStrategy class >> methodModified: anAnnouncement [
+	self removeSendsFrom: anAnnouncement oldMethod.
+	self addSendsFrom: anAnnouncement newMethod
 ]
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodRemoved: anAnnouncement [
-	SelectorCache remove: anAnnouncement method selector
+	SelectorCache remove: anAnnouncement method selector.
+	self removeSendsFrom: anAnnouncement method
 ]
 
 { #category : #'instance creation' }
@@ -95,9 +108,15 @@ GtPharoCompletionStrategy class >> newForSnippet [
 ]
 
 { #category : #private }
+GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
+	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache remove: selector weight: count ]
+]
+
+{ #category : #private }
 GtPharoCompletionStrategy class >> subscribeToSystem [
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded send: #methodAdded: to: self;
+		when: MethodModified send: #methodModified: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
@@ -252,7 +271,7 @@ GtPharoCompletionStrategy >> isSubsequence: subString of: completeString [
 { #category : #'private-variables' }
 GtPharoCompletionStrategy >> localVariablesFor: aVariableNode [
 	| vars |
-	self hasImplicitVariables ifFalse: [ aVariableNode localVariables ].
+	self hasImplicitVariables ifFalse: [ ^ aVariableNode localVariables ].
 	vars := aVariableNode implicitLocalVariables.
 	self addBindingsTo: vars.
 	^ vars
@@ -315,16 +334,16 @@ GtPharoCompletionStrategy >> signatureFor: aMethod [
 
 { #category : #typing }
 GtPharoCompletionStrategy >> typeOfVariable: aString [
-	aString = 'self'
-		ifTrue: [ ^ self classOrMetaClass ].
-	aString = 'super'
-		ifTrue: [ ^ self classOrMetaClass superclass ].
+	aString = 'self' ifTrue: [ ^ self classOrMetaClass ].
+	aString = 'super' ifTrue: [ ^ self classOrMetaClass superclass ].
 	self classOrMetaClass notNil
-		ifTrue: [ (self classOrMetaClass bindingOf: aString asSymbol) ifNotNil: [ :binding | ^ binding value class ] ].
+		ifTrue:
+			[ (self classOrMetaClass bindingOf: aString asSymbol)
+				ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ].
 	bindings notNil
-		ifTrue: [ (bindings bindingOf: aString asSymbol) ifNotNil: [ :binding | ^ binding value class ] ].
-	variableTypes notNil
-		ifTrue: [ (variableTypes at: aString ifAbsent: [ nil ]) ifNotNil: [ :cls | ^ cls ] ].
+		ifTrue:
+			[ (bindings bindingOf: aString asSymbol) ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ].
+	variableTypes notNil ifTrue: [ (variableTypes at: aString ifAbsent: [ nil ]) ifNotNil: [ :cls | ^ cls ] ].
 	^ nil
 ]
 

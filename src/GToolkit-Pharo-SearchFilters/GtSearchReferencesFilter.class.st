@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
 		'object',
-		'specialSelectorIndex'
+		'specialSelectorIndex',
+		'isVariable'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
@@ -77,9 +78,8 @@ GtSearchReferencesFilter >> hash [
 GtSearchReferencesFilter >> includesMethod: aCompiledMethod [
 	(aCompiledMethod encoderClass specialLiterals includes: self object)
 		ifTrue: [ ^ self doesMethodIncludeBytecodeLiteral: aCompiledMethod ].
-	^ aCompiledMethod
-		hasSelector: self object
-		specialSelectorIndex: specialSelectorIndex
+	^ (aCompiledMethod hasSelector: self object specialSelectorIndex: specialSelectorIndex)
+		or: [ isVariable and: [ aCompiledMethod hasSelector: self object name specialSelectorIndex: specialSelectorIndex ] ]
 ]
 
 { #category : #accessing }
@@ -90,7 +90,8 @@ GtSearchReferencesFilter >> object [
 { #category : #accessing }
 GtSearchReferencesFilter >> object: anObject [
 	object := anObject.
-	specialSelectorIndex := Smalltalk specialSelectorIndexOrNil: anObject
+	specialSelectorIndex := Smalltalk specialSelectorIndexOrNil: anObject.
+	isVariable := object isKindOf: Variable
 ]
 
 { #category : #ui }

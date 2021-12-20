@@ -4,8 +4,8 @@ Extension { #name : #GtSearchReferencesFilter }
 GtSearchReferencesFilter >> highlighter [
 	((self object isKindOf: Association) and: [ self object key isSymbol ])
 		ifTrue: [ ^ GtPharoVariableReferenceHighlighter forVariableName: self object key ].
-	(self object isKindOf: Variable) 
-		ifTrue: [ ^ GtPharoVariableReferenceHighlighter forVariableName: self object name ].
+	isVariable
+		ifTrue: [ ^ GtPharoVariableReferenceHighlighter forSymbolAndVariableName: self object name ].
 	self object isLiteral ifTrue: [ ^ GtPharoSelectorReferenceAndLiteralHighlighter forSelector: self object ].
 	^ nil
 ]
