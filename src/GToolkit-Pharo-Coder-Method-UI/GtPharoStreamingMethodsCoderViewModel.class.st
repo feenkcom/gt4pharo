@@ -34,6 +34,25 @@ GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
 		selfObject: selfObject
 ]
 
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoderViewModel >> onCodersStreamChanged: anAnnouncement [
+	| aCoderViewModelA aCoderViewModelB |
+	
+	super onCodersStreamChanged: anAnnouncement.
+	
+	(anAnnouncement isDueTo: GtStreamingCodersSwappedReason)
+		ifFalse: [ ^ self ].
+
+	aCoderViewModelA := self privateFetchCoderViewModelFor: anAnnouncement dueTo coderA.
+	aCoderViewModelB := self privateFetchCoderViewModelFor: anAnnouncement dueTo coderB.
+	
+	aCoderViewModelA focused
+		ifTrue: [
+			self scrollToCompiledMethod: aCoderViewModelA compiledMethod ]
+				ifFalse: [ aCoderViewModelB focused
+				ifTrue: [ self scrollToCompiledMethod: aCoderViewModelB compiledMethod ] ]
+]
+
 { #category : #'api - coders' }
 GtPharoStreamingMethodsCoderViewModel >> scrollToCompiledMethod: aCompiledMethod [
 	self scrollToTarget: (GtPharoMethodCoderViewModelScrollTarget new
