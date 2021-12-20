@@ -42,24 +42,24 @@ GtSearchReferencesFilter >> checkMethodSource: aCompiledMethod [
 ]
 
 { #category : #testing }
-GtSearchReferencesFilter >> doesMethodIncludeBytecodeLiteral: aCompiledMethod [
+GtSearchReferencesFilter >> doesMethodIncludeBytecodeLiteral: aCompiledCode [
 	| stream |
-	stream := InstructionStream on: aCompiledMethod.
+	stream := InstructionStream on: aCompiledCode.
 	[ stream atEnd ]
-		whileFalse: [ | instruction |
+		whileFalse:
+			[ | instruction |
 			instruction := stream nextInstruction.
-			(#methodReturnConstant: = instruction selector
-				and: [ instruction arguments first == self object ])
-				ifTrue: [ ^ true ].
-			(#pushConstant: = instruction selector
-				and: [ instruction arguments first == self object ])
-				ifTrue: [ ^ self checkMethodSource: aCompiledMethod ] ].
-	aCompiledMethod
-		literalsDo: [ :each | 
-			each == self object
-				ifTrue: [ ^ self checkMethodSource: aCompiledMethod ].
-			(self checkForArrayReference: each)
-				ifTrue: [ ^ true ] ].
+			(#methodReturnConstant: = instruction selector and: [ instruction arguments first == self object ]) ifTrue: [ ^ true ].
+			(#pushConstant: = instruction selector and: [ instruction arguments first == self object ])
+				ifTrue: [ ^ self checkMethodSource: aCompiledCode ] ].
+	aCompiledCode
+		literalsDo:
+			[ :each | 
+			each == self object ifTrue: [ ^ self checkMethodSource: aCompiledCode ].
+			(self checkForArrayReference: each) ifTrue: [ ^ true ] ].
+	aCompiledCode
+		innerCompiledBlocksDo:
+			[ :each | (self doesMethodIncludeBytecodeLiteral: (each isClosure ifTrue: [ each compiledBlock ] ifFalse: [ each ])) ifTrue: [ ^ true ] ].
 	^ false
 ]
 

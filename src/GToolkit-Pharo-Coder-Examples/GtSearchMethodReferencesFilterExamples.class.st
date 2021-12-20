@@ -105,6 +105,15 @@ GtSearchMethodReferencesFilterExamples >> referencesToNil [
 ]
 
 { #category : #examples }
+GtSearchMethodReferencesFilterExamples >> referencesToOneInBlock [
+	<gtExample>
+	| filter |
+	filter := [1] value gtReferences.
+	self assert: (filter matches: thisContext method).
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchMethodReferencesFilterExamples >> referencesToSampleB [
 	<gtExample>
 	| filter |
