@@ -13,6 +13,7 @@ GtPharoMessageSendNode >> completionActionStreamFor: aStrategy [
 						actionForSelector: each
 						startingWith: ''
 						at: aStrategy index
-						needsParensKeywords: true ] ].
+						needsParensKeywords: true
+						strategy: aStrategy ] ].
 	^ super completionActionStreamFor: aStrategy
 ]

@@ -1,21 +1,18 @@
 Extension { #name : #GtPharoProgramNode }
 
 { #category : #'*GToolkit-Pharo-Completer' }
-GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInteger needsParensKeywords: aBoolean [
+GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInteger needsParensKeywords: aBoolean strategy: aStrategy [
 	| isKeyword isBinary actionClass action |
 	isKeyword := aSymbol last = $:.
 	isBinary := aSymbol asSymbol isBinary.
 	actionClass := isKeyword
 		ifTrue: [ GtKeywordCompletionAction ]
-		ifFalse: [ isBinary
-				ifTrue: [ GtBinaryCompletionAction ]
-				ifFalse: [ GtInsertTextCompletionAction ] ].
+		ifFalse: [ isBinary ifTrue: [ GtBinaryCompletionAction ] ifFalse: [ GtInsertTextCompletionAction ] ].
 	action := actionClass
-		labeled: aSymbol
+		labeled: (aStrategy labelFor: aSymbol withSearch: aString)
 		completion: (aSymbol allButFirst: aString size)
 		position: anInteger.
-	((isKeyword or: [ isBinary ]) and: [ aBoolean ])
-		ifTrue: [ action addParenthesesBefore: self startPosition ].
+	((isKeyword or: [ isBinary ]) and: [ aBoolean ]) ifTrue: [ action addParenthesesBefore: self startPosition ].
 	^ action
 ]
 
@@ -28,7 +25,7 @@ GtPharoProgramNode >> completeVariable: token for: aStrategy [
 		collect:
 			[ :each | 
 			GtInsertTextCompletionAction
-				labeled: each
+				labeled: (aStrategy labelFor: each withSearch: prefix)
 				completion: (each allButFirst: prefix size)
 				position: aStrategy index ])
 		merge:
@@ -36,7 +33,7 @@ GtPharoProgramNode >> completeVariable: token for: aStrategy [
 				filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isSubsequence: prefix of: each ] ])
 				collect:
 					[ :each | 
-					(GtCompositeCompletionAction labeled: each)
+					(GtCompositeCompletionAction labeled: (aStrategy labelFor: each withSearch: prefix))
 						addAction:
 								(GtDeleteTextCompletionAction
 										labeled: ''
@@ -82,13 +79,14 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 				actionForSelector: each
 				startingWith: aToken source
 				at: index
-				needsParensKeywords: needsParensForKeyword ])
+				needsParensKeywords: needsParensForKeyword
+				strategy: strategy ])
 		merge:
 			(((strategy selectorStreamForReceiver: (receiver guessType: strategy) matching: '')
 				filter: [ :each | (each beginsWith: aToken source) not and: [ strategy isSubsequence: aToken source of: each ] ])
 				collect:
 					[ :each | 
-					(GtCompositeCompletionAction labeled: each)
+					(GtCompositeCompletionAction labeled: (strategy labelFor: each withSearch: aToken source))
 						addAction:
 								(GtDeleteTextCompletionAction
 										labeled: ''
@@ -99,5 +97,6 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 										actionForSelector: each
 										startingWith: ''
 										at: aToken startPosition - 1
-										needsParensKeywords: needsParensForKeyword) ])
+										needsParensKeywords: needsParensForKeyword
+										strategy: strategy) ])
 ]

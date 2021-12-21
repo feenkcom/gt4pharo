@@ -257,15 +257,9 @@ GtPharoCompletionStrategy >> isMethod: aBoolean [
 	isMethod := aBoolean
 ]
 
-{ #category : #'private-selector' }
+{ #category : #testing }
 GtPharoCompletionStrategy >> isSubsequence: subString of: completeString [
-	| i |
-	i := 1.
-	^ subString
-		allSatisfy:
-			[ :char | 
-			i := (completeString indexOf: char startingAt: i) + 1.
-			i > 1 ]
+	^ (self subsequenceIndices: subString of: completeString) size = subString size
 ]
 
 { #category : #'private-variables' }
