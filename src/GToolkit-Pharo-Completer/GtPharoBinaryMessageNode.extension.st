@@ -14,5 +14,6 @@ GtPharoBinaryMessageNode >> completionActionStreamFor: strategy [
 				startingWith: startingText
 				at: index
 				needsParensKeywords:
-					((value isKindOf: GtPharoErrorNode) ifTrue: [ parent parent ] ifFalse: [ parent ]) needsParenthesisForKeyword ]
+					((value isKindOf: GtPharoErrorNode) ifTrue: [ parent parent ] ifFalse: [ parent ]) needsParenthesisForKeyword
+				strategy: strategy ]
 ]

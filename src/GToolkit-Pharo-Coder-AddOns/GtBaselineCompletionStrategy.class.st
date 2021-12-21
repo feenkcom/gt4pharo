@@ -26,14 +26,14 @@ GtBaselineCompletionStrategy >> completionActionStreamFor: aText at: positionInt
 			[ :each | 
 			| insert |
 			insert := GtInsertTextCompletionAction
-				labeled: each
+				labeled: (self labelFor: each withSearch: partialName)
 				completion: (each allButFirst: partialName size)
 				position: positionInteger
 				from: positionInteger - partialName size + 1.
 			deleteAction isNil
 				ifTrue: [ insert ]
 				ifFalse:
-					[ (GtCompositeCompletionAction labeled: insert label)
+					[ (GtCompositeCompletionAction labeled: insert displayText)
 						addAction: deleteAction;
 						addAction: insert;
 						yourself ] ]
