@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'behaviorBlock'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Behavior'
+	#category : #'GToolkit-Pharo-Coder-UI-Behavior'
 }
 
 { #category : #accessing }
@@ -108,6 +108,13 @@ GtPharoCreateBehaviorElement >> compileBehavior [
 { #category : #private }
 GtPharoCreateBehaviorElement >> editors [
 	^ definition editors
+]
+
+{ #category : #initialization }
+GtPharoCreateBehaviorElement >> forBaselineDefinition [
+
+	definition := GtBaselineDefinition forNewBaseline.
+	self addChild: self buildDefinitionEditor
 ]
 
 { #category : #initialization }
