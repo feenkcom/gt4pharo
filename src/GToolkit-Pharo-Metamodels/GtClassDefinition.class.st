@@ -20,6 +20,12 @@ GtClassDefinition class >> forNew [
 	^ self new forNew
 ]
 
+{ #category : #'instace creation' }
+GtClassDefinition class >> forNewBaseline [
+
+	^ self new forNewBaseline
+]
+
 { #category : #'instance creation' }
 GtClassDefinition class >> fromClass: aClass [
 	^ self new fromClass: aClass
@@ -96,6 +102,30 @@ GtClassDefinition >> asMethodsDefinitionString [
 				nextPut: $. ] ].
 
 	^ aStream contents
+]
+
+{ #category : #initialization }
+GtClassDefinition >> baselineMethodSourceCode [
+
+	^ self baselineMethodSourceCodeTemplate format: #( 'PackageOne' )
+]
+
+{ #category : #initialization }
+GtClassDefinition >> baselineMethodSourceCodeTemplate [
+
+	^ 'baseline: spec
+	
+	<baseline>
+	spec for: #''common'' do: [
+	
+		spec baseline: ''ExternalProject'' with: [
+			spec repository: ''github://<organization>/<repository>:main/src'' ].
+			
+		spec package: ''{1}''.
+		spec package: ''PackageTwo'' with: [ 
+			spec requieres: #( ''ExternalProject'' ''{1}'' ) ]
+	]'
+
 ]
 
 { #category : #accessing }
@@ -222,6 +252,31 @@ GtClassDefinition >> forNew [
 	traits := GtTraitsDefinition empty parent: self.
 	pools := GtPoolsDefinition empty parent: self.
 	methods := GtPharoMethodsDefinition new parent: self
+]
+
+{ #category : #initialization }
+GtClassDefinition >> forNewBaseline [
+	| anEnvironment |
+	name := self defaultNewClassName.
+	originalName := name.
+	
+	anEnvironment := RGEnvironment new.
+	anEnvironment backend: (RGReadOnlyImageBackend for: anEnvironment).
+	
+	layout := BaselineOf classLayout asRingMinimalDefinitionIn: anEnvironment.
+	
+	comment := GtCommentDefinition new parent: self.
+	
+	superclass := (GtClassSuperclassDefinition named: BaselineOf name) parent: self.
+	category := GtCategoryDefinition empty parent: self.
+	slots := GtSlotsDefinition empty parent: self.
+	classVariables := GtClassVariablesDefinition empty parent: self.
+	
+	traits := GtTraitsDefinition empty parent: self.
+	pools := GtPoolsDefinition empty parent: self.
+	methods := GtPharoMethodsDefinition new parent: self.
+	
+	methods addMethod: self baselineMethodSourceCode protocol: 'baseline'.
 ]
 
 { #category : #initialization }
