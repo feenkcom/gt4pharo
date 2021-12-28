@@ -8,17 +8,20 @@ Class {
 
 { #category : #initialization }
 GtPharoSuiteShowButton >> initialize [
+
 	super initialize.
-	
 	self icon: BrGlamorousVectorIcons play.
-	
 	self addAptitude: BrGlamorousButtonWithIconAptitude.
 	self addAptitude: (BrGlamorousWithDropdownAptitude
-		handle: [ BlElement new size: self extent ]
-		content: [
-			GtPharoSuiteOverviewElement new
-				suiteViewModel: self suiteViewModel;
-				margin: (BlInsets all: 10) ])
+			 handle: [ BlElement new size: self extent ]
+			 content: [ "as tooltips/dropdowns attach to the space root element, phlow spawn will end up there and be swallowed"
+				 GtPharoSuiteOverviewElement new
+					 when: GtPhlowObjectToSpawn do: [ :anEvent | 
+						 self fireEvent: (GtPhlowObjectToSpawn new
+									  object: anEvent object;
+									  sourceElement: anEvent target) ];
+					 suiteViewModel: self suiteViewModel;
+					 margin: (BlInsets all: 10) ])
 ]
 
 { #category : #'private - instance creation' }

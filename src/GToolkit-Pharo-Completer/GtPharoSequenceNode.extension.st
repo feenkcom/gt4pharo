@@ -24,5 +24,6 @@ GtPharoSequenceNode >> completionActionStreamFor: aStrategy [
 				actionForSelector: each
 				startingWith: ''
 				at: aStrategy index
-				needsParensKeywords: receiver parent needsParenthesisForKeyword ]
+				needsParensKeywords: receiver parent needsParenthesisForKeyword
+				strategy: aStrategy ]
 ]

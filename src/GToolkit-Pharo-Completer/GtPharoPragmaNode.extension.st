@@ -15,5 +15,6 @@ GtPharoPragmaNode >> completionActionStreamFor: aStrategy [
 				actionForSelector: each
 				startingWith: prefix
 				at: index
-				needsParensKeywords: false ]
+				needsParensKeywords: false
+				strategy: aStrategy ]
 ]

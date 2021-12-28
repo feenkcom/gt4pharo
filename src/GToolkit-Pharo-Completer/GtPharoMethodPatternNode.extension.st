@@ -19,7 +19,7 @@ GtPharoMethodPatternNode >> completionActionStreamFor: aStrategy [
 		collect:
 			[ :each | 
 			GtInsertTextCompletionAction
-				labeled: each selector
+				labeled: (aStrategy labelFor: each selector withSearch: prefix)
 				completion: ((aStrategy signatureFor: each) allButFirst: prefix size)
 				position: aStrategy index
 				from: aStrategy index - prefix size + 1 ]
