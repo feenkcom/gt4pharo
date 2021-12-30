@@ -252,6 +252,21 @@ GtPharoCompletionStrategy >> initialize [
 			localVariables}
 ]
 
+{ #category : #testing }
+GtPharoCompletionStrategy >> isCamelCaseSubsequence: subString of: completeString [
+	| indices current |
+	indices := self subsequenceIndices: subString of: completeString.
+	indices size = subString size ifFalse: [ ^ false ].
+	current := 1.
+	subString
+		with: indices
+		do:
+			[ :char :i | 
+			(i = current or: [ char isUppercase or: [ i > 1 and: [ (completeString at: i - 1) = $: ] ] ]) ifFalse: [ ^ false ].
+			current := i + 1 ].
+	^ true
+]
+
 { #category : #'initialize-release' }
 GtPharoCompletionStrategy >> isMethod: aBoolean [
 	isMethod := aBoolean
