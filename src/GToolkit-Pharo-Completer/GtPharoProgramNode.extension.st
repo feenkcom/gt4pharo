@@ -18,32 +18,36 @@ GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInt
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> completeVariable: token for: aStrategy [
-	| allLocalVariables prefix |
+	| allLocalVariables prefix completionsStream replacementsStream camelCaseReplacementNames anyReplacementNames |
 	prefix := token source.
 	allLocalVariables := aStrategy localVariablesFor: self.
-	^ (((allLocalVariables asyncStreamStartingWith: prefix) merge: (aStrategy variables asyncStreamStartingWith: prefix))
+	completionsStream := ((allLocalVariables asyncStreamStartingWith: prefix)
+		merge: (aStrategy variables asyncStreamStartingWith: prefix))
 		collect:
 			[ :each | 
 			GtInsertTextCompletionAction
 				labeled: (aStrategy labelFor: each withSearch: prefix)
 				completion: (each allButFirst: prefix size)
-				position: aStrategy index ])
-		merge:
-			(((aStrategy variables asyncStreamStartingWith: '')
-				filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isSubsequence: prefix of: each ] ])
-				collect:
-					[ :each | 
-					(GtCompositeCompletionAction labeled: (aStrategy labelFor: each withSearch: prefix))
-						addAction:
-								(GtDeleteTextCompletionAction
-										labeled: ''
-										from: token startPosition
-										to: token stopPosition);
-						addAction:
-								(GtInsertTextCompletionAction
-										labeled: each
-										completion: each
-										position: token startPosition - 1) ])
+				position: aStrategy index ].
+	camelCaseReplacementNames := (aStrategy variables asyncStreamStartingWith: '')
+		filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isCamelCaseSubsequence: prefix of: each ] ].
+	anyReplacementNames := (aStrategy variables asyncStreamStartingWith: '')
+		filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isSubsequence: prefix of: each ] ].
+	replacementsStream := (camelCaseReplacementNames merge: anyReplacementNames) withoutDuplicates
+		collect:
+			[ :each | 
+			(GtCompositeCompletionAction labeled: (aStrategy labelFor: each withSearch: prefix))
+				addAction:
+						(GtDeleteTextCompletionAction
+								labeled: ''
+								from: token startPosition
+								to: token stopPosition);
+				addAction:
+						(GtInsertTextCompletionAction
+								labeled: each
+								completion: each
+								position: token startPosition - 1) ].
+	^ completionsStream merge: replacementsStream
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }
@@ -70,33 +74,38 @@ GtPharoProgramNode >> localVariables [
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy [
-	| index |
+	| index type name completionsStream replacementsStream camelCaseReplacementNames anyReplacementNames |
 	index := strategy index.
-	^ ((strategy selectorStreamForReceiver: (receiver guessType: strategy) matching: aToken source)
+	type := receiver guessType: strategy.
+	name := aToken source.
+	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
 		collect:
 			[ :each | 
 			receiver
 				actionForSelector: each
-				startingWith: aToken source
+				startingWith: name
 				at: index
 				needsParensKeywords: needsParensForKeyword
-				strategy: strategy ])
-		merge:
-			(((strategy selectorStreamForReceiver: (receiver guessType: strategy) matching: '')
-				filter: [ :each | (each beginsWith: aToken source) not and: [ strategy isSubsequence: aToken source of: each ] ])
-				collect:
-					[ :each | 
-					(GtCompositeCompletionAction labeled: (strategy labelFor: each withSearch: aToken source))
-						addAction:
-								(GtDeleteTextCompletionAction
-										labeled: ''
-										from: aToken startPosition
-										to: aToken stopPosition);
-						addAction:
-								(receiver
-										actionForSelector: each
-										startingWith: ''
-										at: aToken startPosition - 1
-										needsParensKeywords: needsParensForKeyword
-										strategy: strategy) ])
+				strategy: strategy ].
+	camelCaseReplacementNames := (strategy selectorStreamForReceiver: type matching: '')
+		filter: [ :each | (each beginsWith: name) not and: [ strategy isCamelCaseSubsequence: name of: each ] ].
+	anyReplacementNames := (strategy selectorStreamForReceiver: type matching: '')
+		filter: [ :each | (each beginsWith: name) not and: [ strategy isSubsequence: name of: each ] ].
+	replacementsStream := (camelCaseReplacementNames merge: anyReplacementNames) withoutDuplicates
+		collect:
+			[ :each | 
+			(GtCompositeCompletionAction labeled: (strategy labelFor: each withSearch: name))
+				addAction:
+						(GtDeleteTextCompletionAction
+								labeled: ''
+								from: aToken startPosition
+								to: aToken stopPosition);
+				addAction:
+						(receiver
+								actionForSelector: each
+								startingWith: ''
+								at: aToken startPosition - 1
+								needsParensKeywords: needsParensForKeyword
+								strategy: strategy) ].
+	^ completionsStream merge: replacementsStream
 ]
