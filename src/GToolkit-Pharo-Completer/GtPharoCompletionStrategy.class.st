@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoCompletionStrategy,
-	#superclass : #GtCompletionStrategy,
+	#superclass : #GtStreamedCompletionStrategy,
 	#instVars : [
 		'class',
 		'isMethod',
@@ -270,11 +270,6 @@ GtPharoCompletionStrategy >> isCamelCaseSubsequence: subString of: completeStrin
 { #category : #'initialize-release' }
 GtPharoCompletionStrategy >> isMethod: aBoolean [
 	isMethod := aBoolean
-]
-
-{ #category : #testing }
-GtPharoCompletionStrategy >> isSubsequence: subString of: completeString [
-	^ (self subsequenceIndices: subString of: completeString) size = subString size
 ]
 
 { #category : #'private-variables' }
