@@ -116,15 +116,15 @@ GtClassDefinition >> baselineMethodSourceCodeTemplate [
 	^ 'baseline: spec
 	
 	<baseline>
-	spec for: #''common'' do: [
+	"spec for: #''common'' do: [
 	
 		spec baseline: ''ExternalProject'' with: [
 			spec repository: ''github://<organization>/<repository>:main/src'' ].
 			
 		spec package: ''{1}''.
 		spec package: ''PackageTwo'' with: [ 
-			spec requieres: #( ''ExternalProject'' ''{1}'' ) ]
-	]'
+			spec requires: #( ''ExternalProject'' ''{1}'' ) ]
+	]"'
 
 ]
 
