@@ -21,7 +21,8 @@ GtPharoClassExpanderAttribute >> buildBehaviorCoder [
 	coder subscribeToSystem.
 	editorElement := coder asElement.
 	editorElement background: Color white.
-	editorElement aptitude: BrShadowAptitude.
+	editorElement aptitude: (BrShadowAptitude
+			+ (BrGlamorousWithVerticalResizerAptitude new beBottom; yourself)).
 	editorElement
 		height: 400;
 		margin:
