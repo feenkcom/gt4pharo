@@ -5,7 +5,7 @@ Class {
 		'classOrMetaClass',
 		'selector'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Attributes'
+	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
 }
 
 { #category : #'instance creation' }
@@ -24,7 +24,6 @@ GtPharoMethodExpanderAttribute >> buildMethodCoder [
 		forExample: (classOrMetaClass gtExamplesFactory createExample: method).
 	coder subscribeToSystem.
 	editorElement := coder asElement.
-	editorElement border: (BlBorder paint: Color veryLightGray width: 1).
 	editorElement
 		margin:
 			(BlInsets

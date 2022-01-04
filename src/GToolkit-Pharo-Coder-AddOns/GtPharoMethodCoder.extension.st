@@ -681,6 +681,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 	addOns addStyler: GtPharoDeprecationStyler new.
 	addOns addStyler: GtPharoDynamicHighlightStyler new.
 	addOns addStyler: GtPharoMethodExpanderStyler new.
+	addOns addStyler: GtPharoClassExpanderStyler new.
 	addOns addStyler: (GtFixItStyler new isForWorkspace: false).
 
 	"addOns addStyler: GtCoderCommentStyler new."
