@@ -38,6 +38,73 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 		withFullView: true
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+
+	<gtCoderContextMenuAddOns: 100>
+	| foundClass |
+	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
+		| node |
+		node := nodes first.
+		node isVariable ifFalse: [ ^ self ].
+		self
+			variableNodeToBehavior: node
+			ifFound: [ :aClass | foundClass := aClass ]
+			ifNone: [ ^ self ].
+		coderAddOns
+			addContextMenuItem:
+			(self createLabel: 'Browse Class' description: foundClass name)
+			hover: [ :textualCoderViewModel | 
+				textualCoderViewModel
+					addTextAttribute: self class nodeHighlight
+					from: node startPosition
+					to: node stopPosition ]
+			leave: self removeHighlightBlock
+			action: [ :aTextualViewModel | self browseBehaviorAt: node startPosition ] ]
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+
+	<gtCoderContextMenuAddOns: 100>
+	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
+		| node |
+		node := nodes first.
+		node isMessageSend ifFalse: [ ^ self ].
+		coderAddOns
+			addContextMenuItem:
+			(self createLabel: 'Browse Implementors' description: node selector)
+			hover: [ :textualCoderViewModel | 
+				textualCoderViewModel
+					addTextAttribute: self class nodeHighlight
+					from: node message startPosition
+					to: node message stopPosition ]
+			leave: self removeHighlightBlock
+			action: [ :aTextualViewModel | 
+			self browseImplementorsAt: node message startPosition ] ]
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+
+	<gtCoderContextMenuAddOns: 100>
+	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
+		| node |
+		node := nodes first.
+		node isMessageSend ifFalse: [ ^ self ].
+		coderAddOns
+			addContextMenuItem:
+			(self createLabel: 'Browse References' description: node selector)
+			hover: [ :textualCoderViewModel | 
+				textualCoderViewModel
+					addTextAttribute: self class nodeHighlight
+					from: node message startPosition
+					to: node message stopPosition ]
+			leave: self removeHighlightBlock
+			action: [ :aTextualViewModel | 
+			self browseReferencesAt: node message startPosition ] ]
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.

@@ -697,10 +697,6 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 		action: [ :aButtonElement :aButtonModel :anEvent | self remove ]
 		stencil: [ :element | self buildRemoveMethodLabel: element ].
 	addOns
-		addMainAction: 'Browse' translated
-		icon: BrGlamorousVectorIcons browse
-		action: [ :aCoderUIModel :anElement | self browseFrom: anElement ].
-	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
 		action: [ :aCoderUIModel :anElement | self notifyObjectSpawn: aCoderUIModel compiledMethod ].
