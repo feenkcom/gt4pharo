@@ -38,6 +38,34 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 		withFullView: true
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+
+	<gtCoderContextMenuAddOns: 100>
+	| allCursors position foundClass |
+	allCursors := aCoderViewModel cursors allCursors.
+	allCursors size = 1 ifFalse: [ ^ self ].
+	position := allCursors first position.
+	self
+		detectBehaviorAt: position
+		ifFound: [ :aClass | foundClass := aClass ]
+		ifNone: [ ^ self ].
+	self
+		nodeAt: position
+		ifFound: [ :aNode | 
+			coderAddOns
+				addContextMenuItem:
+				(self createLabel: 'Browse Class' description: foundClass name)
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: aNode startPosition
+						to: aNode stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | self browseBehaviorAt: position ] ]
+		ifNone: [  ]
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
