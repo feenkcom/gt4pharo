@@ -188,7 +188,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_Check
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
 	self 
 		checkFor: aScripter 
-		numberOfMainActions: 5
+		numberOfMainActions: 4
 		contextAction: 0.
 
 	^ aScripter
@@ -297,7 +297,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
 	self 
 		checkFor: aScripter 
-		numberOfMainActions: 5
+		numberOfMainActions: 4
 		contextAction: 0.
 	self checkFor: aScripter absenceOfContextActionNamed: 'Play'.
 
@@ -1109,7 +1109,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 	self 
 		checkFor: aScripter 
-		numberOfMainActions: 5
+		numberOfMainActions: 4
 		contextAction: 4.
 
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play Example'.
@@ -1148,7 +1148,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 
 		self 
 			checkFor: aStep
-			numberOfMainActions: 6
+			numberOfMainActions: 5
 			contextAction: 0.
 
 		self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
@@ -4693,7 +4693,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			play.
 		self 
 			checkFor: aStep
-			numberOfMainActions: 6
+			numberOfMainActions: 5
 			contextAction: 0.
 		self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
 	aScripter checks: 'Check Example Status Is Not Present' do: [ :aStep | 
@@ -4720,7 +4720,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			play.
 		self 
 			checkFor: aStep
-			numberOfMainActions: 5
+			numberOfMainActions: 4
 			contextAction: 4.
 		self checkFor: aStep existenceOfContextActionNamed: 'Play Example' ].
 	aScripter checks: 'Check Example Status Is Present' do: [ :aStep | 
