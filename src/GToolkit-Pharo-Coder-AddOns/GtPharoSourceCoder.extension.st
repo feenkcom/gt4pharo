@@ -119,6 +119,17 @@ GtPharoSourceCoder >> highlightNodeBlock: aNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> initializeAddOns: addOns [
+	super initializeAddOns: addOns.
+
+	addOns addStyler: GtPharoStyler new.
+	addOns addStyler: GtPharoDynamicHighlightStyler new.
+	addOns addStyler: GtPharoDeprecationStyler new.
+	addOns addStyler: GtPharoMethodExpanderStyler new.
+	addOns addStyler: GtPharoClassExpanderStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 

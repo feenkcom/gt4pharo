@@ -675,22 +675,16 @@ GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns viewModel: aGtPhar
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
-	super initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel.
-	
-	addOns addStyler: GtPharoStyler new.
-	addOns addStyler: GtPharoDeprecationStyler new.
-	addOns addStyler: GtPharoDynamicHighlightStyler new.
-	addOns addStyler: GtPharoMethodExpanderStyler new.
-	addOns addStyler: GtPharoClassExpanderStyler new.
+
+	super
+		initializeAddOns: addOns
+		viewModel: aGtPharoMethodCoderViewModel.
+
 	addOns addStyler: (GtFixItStyler new isForWorkspace: false).
 
-	"addOns addStyler: GtCoderCommentStyler new."
-
-	addOns
-		addMainAction: (GtCoderCustomAction new
-			stencil: [
-				GtPharoMethodCoderSaveButton new
-					pharoMethodCoderViewModel: aGtPharoMethodCoderViewModel ]).
+	addOns addMainAction: (GtCoderCustomAction new stencil: [ 
+			 GtPharoMethodCoderSaveButton new pharoMethodCoderViewModel:
+				 aGtPharoMethodCoderViewModel ]).
 	addOns
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons remove
@@ -699,11 +693,13 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
-		action: [ :aCoderUIModel :anElement | self notifyObjectSpawn: aCoderUIModel compiledMethod ].
+		action: [ :aCoderUIModel :anElement | 
+			self notifyObjectSpawn: aCoderUIModel compiledMethod ].
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
-		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
+		action: [ :aCoderUIModel :anElement | 
+		self copyMethodNameToClipboard ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

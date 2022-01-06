@@ -60,14 +60,9 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> initializeAddOns: addOns [
+
 	super initializeAddOns: addOns.
 
-	addOns addStyler: GtPharoStyler new.
-	"addOns addStyler: (GtContextVariableValueStyler new methodCoder: self)."
-	addOns addStyler: GtPharoDynamicHighlightStyler new.
-	addOns addStyler: GtPharoDeprecationStyler new.
-	addOns addStyler: GtPharoMethodExpanderStyler new.
-	addOns addStyler: GtPharoClassExpanderStyler new.
 	addOns addStyler: (GtFixItStyler new isForWorkspace: true).
 
 	addOns
@@ -96,7 +91,8 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 	addOns
 		addMainAction: 'Profile' translated
 		icon: BrGlamorousVectorIcons performance
-		action: [ :aCoderUIModel :anElement | aCoderUIModel profileWithMessageTally ]
+		action: [ :aCoderUIModel :anElement | 
+		aCoderUIModel profileWithMessageTally ]
 		id: GtSourceCoderProfileActionId
 ]
 
