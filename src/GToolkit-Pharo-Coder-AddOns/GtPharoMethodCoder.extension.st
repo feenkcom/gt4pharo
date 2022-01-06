@@ -395,7 +395,7 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
-	(self isLocalVariable: aNode) ifFalse: [ ^ self ].
+	(aNode isVariable and: [self isLocalVariable: aNode]) ifFalse: [ ^ self ].
 	coderAddOns
 		addContextMenuItem: (self
 				 createLabel: 'Rename Local'
