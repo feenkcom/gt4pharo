@@ -361,7 +361,8 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addPullDownVariableRefactoringsFor: aNode to: coderAddOns.
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
-			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns. 
+			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns.
+			self addRenameTemporaryRefactoringFor: aNode to: coderAddOns.
 			self addVariableScopingFor: aNode to: coderAddOns.
 			aNode
 				withAllParentsDo: [ :node | self addInlineSelfMessageFor: node to: coderAddOns ].
@@ -390,6 +391,19 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 				sourceCoderViewModel: aCoderViewModel;
 				variableNode: aNode) execute ]
 		id: #'context-menu--remove-parameter'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
+	(self isLocalVariable: aNode) ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				 createLabel: 'Rename Local'
+				 description: aNode variableName)
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
+		id: #'context-menu--rename-temp'
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
