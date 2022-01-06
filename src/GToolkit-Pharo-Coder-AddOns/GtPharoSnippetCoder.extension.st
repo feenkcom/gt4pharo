@@ -67,6 +67,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 	addOns addStyler: GtPharoDynamicHighlightStyler new.
 	addOns addStyler: GtPharoDeprecationStyler new.
 	addOns addStyler: GtPharoMethodExpanderStyler new.
+	addOns addStyler: GtPharoClassExpanderStyler new.
 	addOns addStyler: (GtFixItStyler new isForWorkspace: true).
 
 	addOns
