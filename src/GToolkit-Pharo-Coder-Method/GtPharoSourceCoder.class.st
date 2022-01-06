@@ -68,20 +68,32 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 
 	<gtCoderContextMenuAddOns: 100>
 	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
-		| node |
-		node := nodes first.
-		node isMessageSend ifFalse: [ ^ self ].
-		coderAddOns
-			addContextMenuItem:
-			(self createLabel: 'Browse Implementors' description: node selector)
-			hover: [ :textualCoderViewModel | 
-				textualCoderViewModel
-					addTextAttribute: self class nodeHighlight
-					from: node message startPosition
-					to: node message stopPosition ]
-			leave: self removeHighlightBlock
-			action: [ :aTextualViewModel | 
-			self browseImplementorsAt: node message startPosition ] ]
+		self
+			addLinkMenuAddOnsTo: coderAddOns
+			label: 'Browse Implementors'
+			node: nodes first
+			selector: #browseImplementorsAt: ]
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: selector [
+
+	| highlightNode |
+	(node isMessageSend or: [ node isMethodPattern ]) ifFalse: [ ^ self ].
+	highlightNode := node isMessageSend
+		                 ifTrue: [ node message ]
+		                 ifFalse: [ node ].
+	coderAddOns
+		addContextMenuItem:
+		(self createLabel: menuLabel description: node selector)
+		hover: [ :textualCoderViewModel | 
+			textualCoderViewModel
+				addTextAttribute: self class nodeHighlight
+				from: highlightNode startPosition
+				to: highlightNode stopPosition ]
+		leave: self removeHighlightBlock
+		action: [ :aTextualViewModel | 
+			self perform: selector with: highlightNode startPosition ]
 ]
 
 { #category : #accessing }
@@ -89,20 +101,11 @@ GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aC
 
 	<gtCoderContextMenuAddOns: 100>
 	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
-		| node |
-		node := nodes first.
-		node isMessageSend ifFalse: [ ^ self ].
-		coderAddOns
-			addContextMenuItem:
-			(self createLabel: 'Browse References' description: node selector)
-			hover: [ :textualCoderViewModel | 
-				textualCoderViewModel
-					addTextAttribute: self class nodeHighlight
-					from: node message startPosition
-					to: node message stopPosition ]
-			leave: self removeHighlightBlock
-			action: [ :aTextualViewModel | 
-			self browseReferencesAt: node message startPosition ] ]
+		self
+			addLinkMenuAddOnsTo: coderAddOns
+			label: 'Browse References'
+			node: nodes first
+			selector: #browseReferencesAt: ]
 ]
 
 { #category : #'api - accessing' }
