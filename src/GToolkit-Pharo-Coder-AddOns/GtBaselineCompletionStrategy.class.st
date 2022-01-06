@@ -1,6 +1,6 @@
 Class {
 	#name : #GtBaselineCompletionStrategy,
-	#superclass : #GtCompletionStrategy,
+	#superclass : #GtStreamedCompletionStrategy,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
