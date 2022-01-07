@@ -7,7 +7,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - styling' }
@@ -18,7 +18,7 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 	aCoder := GtPharoSnippetCoder forSource: 'Color brown' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
 		coderViewModel: aCoder asCoderViewModel;
@@ -52,7 +52,7 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	aCoder := GtPharoSnippetCoder forSource: 'Color fromHexString: #''5533ee''' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
 		coderViewModel: aCoder asCoderViewModel;
@@ -95,7 +95,7 @@ GtPharoColorStylerExamples >> colorRGBRangeHighlighted [
 	aCoder := GtPharoSnippetCoder forSource: 'Color r: 100 g: 30 b: 200 range: 255' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
 		coderViewModel: aCoder asCoderViewModel;
