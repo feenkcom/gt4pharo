@@ -29,7 +29,7 @@ GtPharoBlockClosureCoder >> block [
 
 { #category : #private }
 GtPharoBlockClosureCoder >> blockSource [
-	^ self blockSourceFromText: self sourceText
+	^ self blockSourceFromText: self currentSourceText
 ]
 
 { #category : #private }

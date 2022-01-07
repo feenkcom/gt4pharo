@@ -4,7 +4,7 @@ Exemplify {{gtClass:GtPharoZincApplicationFormUrlEncodedEntityStyler}}.
 Class {
 	#name : #GtPharoZincApplicationFormUrlEncodedEntityStylerExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - source code' }
@@ -34,22 +34,24 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> sourceCode [
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''client_id'' put: ''a secret token''') asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          (ZnApplicationFormUrlEncodedEntity name , ' new '
+		           , 'at: ''client_id'' put: ''a secret token''')
+			          asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+			eachAttribute isKindOf: BrTextReplacingAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (61 to: 74).
 
@@ -60,22 +62,24 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''password'' put: ''a secret password''') asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          (ZnApplicationFormUrlEncodedEntity name , ' new '
+		           , 'at: ''password'' put: ''a secret password''')
+			          asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+		eachAttribute isKindOf: BrTextReplacingAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (60 to: 76).
 
@@ -86,22 +90,24 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''client_secret'' put: ''a secret value''') asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          (ZnApplicationFormUrlEncodedEntity name , ' new '
+		           , 'at: ''client_secret'' put: ''a secret value''')
+			          asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+		eachAttribute isKindOf: BrTextReplacingAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (65 to: 78).
 
@@ -112,22 +118,24 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: (ZnApplicationFormUrlEncodedEntity name, ' new ',
-				'at: ''client_token'' put: ''a secret token''') asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          (ZnApplicationFormUrlEncodedEntity name , ' new '
+		           , 'at: ''client_token'' put: ''a secret token''')
+			          asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextReplacingAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+		eachAttribute isKindOf: BrTextReplacingAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (64 to: 77).
 
