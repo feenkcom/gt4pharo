@@ -2,9 +2,10 @@ Class {
 	#name : #GtPharoBehaviorDefinitionCoderElement,
 	#superclass : #BrExpander,
 	#instVars : [
-		'behaviorCoderUIModel'
+		'behaviorCoderUIModel',
+		'modificationIndicator'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #'private - instance creation' }
@@ -33,30 +34,31 @@ GtPharoBehaviorDefinitionCoderElement >> addDefinitionEditorShortcutsTo: aProper
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 	| theProperties |
-		
-	theProperties := BlElement new
+	modificationIndicator visibility: BlVisibility gone.
+	theProperties := (BlElement new)
 		layout: (BlGridLayout new columnCount: 2);
-		constraintsDo: [ :c |
-			c horizontal matchParent.
-			c vertical fitContent ].
-		
+		constraintsDo:
+				[ :c | 
+					c horizontal matchParent.
+					c vertical fitContent ].
 	self addDefinitionEditorShortcutsTo: theProperties.
-
-	self editors do: [ :eachEditor |
-		theProperties addChildren: { 
-				(self buildSectionLabel: eachEditor title).
-				(eachEditor
-					aptitude: [ self editableLabelLook ];
-					margin: self buttonMargin;
-					asElement) } ].
-
-	theProperties addChild: (GtRefactoringsPreviewButton new
-		refactorings: [ self coderUIModel coder refactorings ];
-		when: GtRefactoringsAppliedEvent do: [
-			self initializeElements
-		];
-		constraintsDo: [ :c | c grid horizontal span: 2 ]).
-
+	self editors
+		do:
+			[ :eachEditor | 
+			[ eachEditor definition when: GtBehaviorChangeEvent do: [ :each | self updateModified ] ] on: Error do: [ :e |  ].
+			theProperties
+				addChildren:
+					{self buildSectionLabel: eachEditor title.
+						eachEditor
+							aptitude: [ self editableLabelLook ];
+							margin: self buttonMargin;
+							asElement} ].
+	theProperties
+		addChild:
+			((GtRefactoringsPreviewButton new)
+				refactorings: [ self coderUIModel coder refactorings ];
+				when: GtRefactoringsAppliedEvent do: [ self initializeElements ];
+				constraintsDo: [ :c | c grid horizontal span: 2 ]).
 	^ theProperties
 ]
 
@@ -132,13 +134,35 @@ GtPharoBehaviorDefinitionCoderElement >> initialize [
 	self
 		aptitude: GtCoderExpanderAptitude;
 		hMatchParent;
-		vFitContent
+		vFitContent.
+	modificationIndicator := self newModificationIndicator.
+	self addChild: modificationIndicator.
 ]
 
 { #category : #'private - ui' }
 GtPharoBehaviorDefinitionCoderElement >> initializeElements [
 	self header: [ self buildDefinitionReader ].
 	self content: [ self buildDefinitionEditor ]
+]
+
+{ #category : #accessing }
+GtPharoBehaviorDefinitionCoderElement >> newModificationIndicator [
+	^ BlElement new
+		constraintsDo: [ :c |
+			c ignoreByLayout.
+			c ignored horizontal alignLeft.
+			c horizontal exact: 5.
+			c vertical matchParent.
+			c margin: (BlInsets left: 8) ];
+		preventMeAndChildrenMouseEvents;
+		background: self theme status changesBackgroundColor;
+		id: GtTextualCoderModificationIndicatorId;
+		withAsyncPromiseDo: [ :anElementPromise |
+			anElementPromise
+				whenSuccess: [ :anIndicator :isModified |
+					anIndicator visibility: (isModified
+						ifTrue: [ BlVisibility visible ]
+						ifFalse: [ BlVisibility gone ]) ] ]
 ]
 
 { #category : #'private - accessing' }
@@ -164,4 +188,9 @@ GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 					aStyle
 						border: (BlBorder paint: self theme button hoveredBorderColor width: 1) ]);
 		yourself
+]
+
+{ #category : #'private - instance creation' }
+GtPharoBehaviorDefinitionCoderElement >> updateModified [
+	modificationIndicator asyncPromise promise: (self coderUIModel coder refactorings notEmpty)
 ]
