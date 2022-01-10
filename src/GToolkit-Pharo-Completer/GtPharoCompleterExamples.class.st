@@ -33,6 +33,42 @@ GtPharoCompleterExamples >> checkCompletionsIn: aString contains: completionStri
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> clickingSelectedCompletionItemTriggersCompletion [
+	<gtExample>
+	
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyClick: BlKeyboardKey tab) play.
+	self enterText: 'is' in: aScripter.
+	self openCompletionIn: aScripter.
+	(aScripter check)
+		label: 'Verify first item selected';
+		onSpaceRoot;
+		id: #'completion-list';
+		satisfies: [ :element | element selectedIndices asArray = #(1) ];
+		play.
+	aScripter syncContinue.
+	(aScripter click)
+		label: 'Click first item';
+		onSpaceRoot;
+		id: #'completion-list';
+		onBreadthFirstChildOfClass: BrLabel;
+		play.
+	aScripter syncContinue.
+	(aScripter check)
+		label: 'Verify completion popup has closed';
+		onSpaceRoot;
+		id: #'completion-list';
+		notExists.
+	(aScripter check)
+		label: 'Check text was updated with completion';
+		do: [ :element | self assert: (element text asString endsWith: 'isMethod') ].
+	aScripter syncContinue.
+	^ aScripter
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeFullSelector [
 	<gtExample>
 	
