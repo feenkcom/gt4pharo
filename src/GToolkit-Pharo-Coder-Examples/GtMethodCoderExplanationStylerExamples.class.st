@@ -49,7 +49,7 @@ GtMethodCoderExplanationStylerExamples >> coderOnViewMethod [
 	variables addVariables: {'aView' . 'aContact'}.
 	
 	coder := GtPharoMethodCoder forMethod: (GtABAddressBook>>#gtViewContactsOn:).
-	coderViewModel := coder asCoderViewModel.
+	coderViewModel := coder asCoderUIModel.
 	coderViewModel addStylers: { selectors. variables }.
 	coderViewModel expanded: true.
 
@@ -87,7 +87,7 @@ GtMethodCoderExplanationStylerExamples >> explanationLinkExample [
 	variables addVariables: {'self'. 'y' }.
 	
 	coder := GtPharoMethodCoder forMethod: (GtPharoMethodExample>>#exampleWithNumber:).	
-	coderViewModel := coder asCoderViewModel.
+	coderViewModel := coder asCoderUIModel.
 	coderViewModel addStylers: { variables. selectors }.
 	coderViewModel expanded: true.
 	

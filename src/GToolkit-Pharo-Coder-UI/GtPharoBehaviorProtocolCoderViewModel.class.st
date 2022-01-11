@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'methodViewModels'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
 { #category : #accessing }
@@ -27,7 +27,7 @@ GtPharoBehaviorProtocolCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
 
 	methodViewModels := self coderModel methodCoders
-		collect: [ :eachMethodCoder | eachMethodCoder asCoderViewModel ]
+		collect: [ :eachMethodCoder | eachMethodCoder asCoderUIModel ]
 ]
 
 { #category : #'api - coder model' }

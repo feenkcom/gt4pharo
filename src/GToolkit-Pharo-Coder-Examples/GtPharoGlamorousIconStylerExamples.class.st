@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - source code' }
@@ -38,7 +38,7 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoGlamorousIconStyler new
-		coderViewModel: aCoder asCoderViewModel;
+		coderViewModel: aCoder asCoderUIModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -63,7 +63,7 @@ GtPharoGlamorousIconStylerExamples >> vectorRefreshIcon [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoGlamorousIconStyler new
-		coderViewModel: aCoder asCoderViewModel;
+		coderViewModel: aCoder asCoderUIModel;
 		style: aSourceText
 		ast: anAst.
 	

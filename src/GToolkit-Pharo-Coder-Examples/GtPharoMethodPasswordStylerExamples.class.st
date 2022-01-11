@@ -56,7 +56,7 @@ GtPharoMethodPasswordStylerExamples >> styleSourceCode: aSourceString attributeI
 	aSourceText := aCoder sourceText copy unstyled.
 
 	GtPharoMethodPasswordStyler new
-		coderViewModel: aCoder asCoderViewModel;
+		coderViewModel: aCoder asCoderUIModel;
 		style: aSourceText ast: anAst.
 
 	allIntervals := OrderedCollection new.

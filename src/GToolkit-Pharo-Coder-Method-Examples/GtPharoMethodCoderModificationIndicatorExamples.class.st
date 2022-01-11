@@ -48,7 +48,7 @@ GtPharoMethodCoderModificationIndicatorExamples >> methodCoderElement [
 	| aCoder aViewModel |
 	
 	aCoder := GtPharoMethodCoder forMethod: GtPharoCoderMockedClass >> #instanceMethodC.
-	aViewModel := aCoder asCoderViewModel
+	aViewModel := aCoder asCoderUIModel
 		expanded: true.
 
 	^ GtExpandableMethodCoderElement new textualCoderViewModel: aViewModel

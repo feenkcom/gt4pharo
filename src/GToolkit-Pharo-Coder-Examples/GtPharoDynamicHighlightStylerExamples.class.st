@@ -12,7 +12,7 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
-		(GtPharoSnippetCoder forSource: '#() do: [:x | ] displayingProgress: ''''') asCoderViewModel ].
+		(GtPharoSnippetCoder forSource: '#() do: [:x | ] displayingProgress: ''''') asCoderUIModel ].
 
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 6 ];
@@ -41,7 +41,7 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
-		(GtPharoSnippetCoder forSource: '#() do: [:x | ]') asCoderViewModel ].
+		(GtPharoSnippetCoder forSource: '#() do: [:x | ]') asCoderUIModel ].
 
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 6 ];
@@ -69,7 +69,7 @@ GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
-		(GtPharoSnippetCoder forSource: 'var := 42') asCoderViewModel ].
+		(GtPharoSnippetCoder forSource: 'var := 42') asCoderUIModel ].
 
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];
@@ -97,7 +97,7 @@ GtPharoDynamicHighlightStylerExamples >> twoOccurrencesHighlighted [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
-		(GtPharoSnippetCoder forSource: 'var := var + 1') asCoderViewModel ].
+		(GtPharoSnippetCoder forSource: 'var := var + 1') asCoderUIModel ].
 
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];

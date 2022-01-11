@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoSnippetCoderExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - bindings' }
@@ -60,7 +60,7 @@ GtPharoSnippetCoderExamples >> snippetCoderViewModel [
 	| aCoder aCoderViewModel expectedBindings |
 
 	aCoder := self snippetCoder.
-	aCoderViewModel := aCoder asCoderViewModel.
+	aCoderViewModel := aCoder asCoderUIModel.
 
 	expectedBindings := GtCompositeVariablesBindings new.
 	expectedBindings addBindings: GtReservedVariablesBindings new.

@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - styling' }
@@ -20,7 +20,7 @@ GtPharoGlamorousColorStylerExamples >> colorFromDefaultButtonBorderColor [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoGlamorousColorStyler new
-		coderViewModel: aCoder asCoderViewModel;
+		coderViewModel: aCoder asCoderUIModel;
 		style: aSourceText
 		ast: anAst.
 	

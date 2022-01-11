@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderExpandableBaselineStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
 { #category : #private }
@@ -39,7 +39,7 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 						at: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol) >> #baseline:.
 					aBaselineMethodCoder := GtPharoMethodCoder forMethod: aBaselineMethod.
 					aBaselineMethodCoder subscribeToSystem.
-					(aBaselineMethodCoder asCoderViewModel expanded: true) asElement
+					(aBaselineMethodCoder asCoderUIModel expanded: true) asElement
 						border: (BlBorder paint: Color veryLightGray width: 1);
 						margin: (BlInsets top: 3 right: 10 bottom: 10 left: 10) ] ]).
 
