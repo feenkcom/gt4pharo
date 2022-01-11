@@ -34,35 +34,37 @@ GtPharoBehaviorDefinitionCoderElement >> addDefinitionEditorShortcutsTo: aProper
 
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
-
 	| theProperties |
 	modificationIndicator visibility: BlVisibility gone.
-	theProperties := BlElement new
-		                 layout: (BlGridLayout new columnCount: 2);
-		                 constraintsDo: [ :c | 
-			                 c horizontal matchParent.
-			                 c vertical fitContent ].
+	theProperties := (BlElement new)
+		layout: (BlGridLayout new columnCount: 2);
+		constraintsDo:
+				[ :c | 
+					c horizontal matchParent.
+					c vertical fitContent ].
 	self addDefinitionEditorShortcutsTo: theProperties.
-	self editors do: [ :eachEditor | 
-		[ 
-		eachEditor definition
-			when: GtBehaviorChangeEvent
-			do: [ :each | self updateModified ] ]
-			on: Error
-			do: [ :e |  ].
-		theProperties addChildren: { 
-				(self buildSectionLabel: eachEditor title).
-				(eachEditor
-					 aptitude: [ self editableLabelLook ];
-					 margin: self buttonMargin;
-					 asElement) } ].
-	previewButton := GtRefactoringsPreviewButton new
-		                 refactorings: [ 
-			                 self coderUIModel coder refactorings ];
-		                 when: GtRefactoringsAppliedEvent
-		                 do: [ self initializeElements ];
-		                 constraintsDo: [ :c | c grid horizontal span: 2 ];
-		                 visibility: BlVisibility gone.
+	self editors
+		do:
+			[ :eachEditor | 
+			[ eachEditor definition when: GtBehaviorChangeEvent do: [ :each | self updateModified ] ] on: Error do: [ :e |  ].
+			theProperties
+				addChildren:
+					{self buildSectionLabel: eachEditor title.
+						eachEditor
+							aptitude: [ self editableLabelLook ];
+							margin: self buttonMargin;
+							asElement} ].
+	previewButton := (GtRefactoringsPreviewButton new)
+		refactorings: [ self coderUIModel coder refactorings ];
+		when: GtRefactoringsAppliedEvent do: [ self initializeElements ];
+		constraintsDo: [ :c | c grid horizontal span: 2 ];
+		margin:
+				(BlInsets
+						top: 5
+						right: 5
+						bottom: 0
+						left: 5);
+		visibility: BlVisibility gone.
 	theProperties addChild: previewButton.
 	^ theProperties
 ]
