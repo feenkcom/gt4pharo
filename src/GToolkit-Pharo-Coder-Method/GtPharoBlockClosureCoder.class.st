@@ -117,11 +117,6 @@ GtPharoBlockClosureCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitStringSource new source: aString)
 ]
 
-{ #category : #'api - actions' }
-GtPharoBlockClosureCoder >> format [
-	self currentSourceString: self rbAST formattedCode
-]
-
 { #category : #private }
 GtPharoBlockClosureCoder >> highlightBindingsStrategy [
 	self flag: #TODO.

@@ -260,6 +260,11 @@ GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 		ifNone: [ #() ]
 ]
 
+{ #category : #'api - actions' }
+GtPharoSourceCoder >> format [
+	self currentSourceString: self rbAST formattedCode
+]
+
 { #category : #testing }
 GtPharoSourceCoder >> hasObjectAttribute [
 	<return: #Boolean>

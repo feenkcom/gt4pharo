@@ -137,7 +137,8 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderBrowseImplementorsShortcut new;
 		addShortcut: GtSourceCoderBrowseReferencesShortcut new;
 		addShortcut: GtSourceCoderBrowseBehaviorShortcut new;
-		addShortcut: GtSourceCoderDiscardChangesShortcut new
+		addShortcut: GtSourceCoderDiscardChangesShortcut new;
+		addShortcut: GtSourceCoderFormatShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

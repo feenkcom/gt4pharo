@@ -725,7 +725,6 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderPlayAndInspectShortcut new;
 		addShortcut: GtSourceCoderExtractMethodShortcut new;
 		addShortcut: GtSourceCoderSaveShortcut new;
-		addShortcut: GtSourceCoderFormatShortcut new;
 		addShortcut: GtSourceCoderInlineRenameShortcut new
 ]
 
