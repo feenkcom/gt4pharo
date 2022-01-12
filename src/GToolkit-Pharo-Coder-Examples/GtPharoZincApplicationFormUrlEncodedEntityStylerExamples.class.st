@@ -43,7 +43,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.
 
 	aRedInterval := 1 to: 0.
@@ -71,7 +71,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.
 
 	aRedInterval := 1 to: 0.
@@ -99,7 +99,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.
 
 	aRedInterval := 1 to: 0.
@@ -127,7 +127,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.
 
 	aRedInterval := 1 to: 0.

@@ -166,7 +166,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
 	<gtExample>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ 42 ] unknownMessage') asCoderUIModel ].
+	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ 42 ] unknownMessage') asCoderViewModel ].
 	^ aScripter
 ]
 
@@ -190,7 +190,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument0
 	<gtExample>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ :value | value unknownMessage ]') asCoderUIModel ].		
+	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: '[ :value | value unknownMessage ]') asCoderViewModel ].		
 	^ aScripter
 ]
 
@@ -214,7 +214,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable01setup [
 	<gtExample>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: 'object := Object new.') asCoderUIModel ].		
+	aScripter := self scripterForBlock: [ (GtPharoSnippetCoder forSource: 'object := Object new.') asCoderViewModel ].		
 	^ aScripter
 ]
 

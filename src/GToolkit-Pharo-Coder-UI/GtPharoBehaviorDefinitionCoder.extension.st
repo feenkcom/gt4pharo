@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoBehaviorDefinitionCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoBehaviorDefinitionCoder >> asCoderUIModel [
+GtPharoBehaviorDefinitionCoder >> asCoderViewModel [
 	^ GtBehaviorDefinitionCoderUIModel new coder: self
 ]

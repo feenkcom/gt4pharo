@@ -25,7 +25,7 @@ GtPharoWhenSendToExpanderStylerExamples >> styleCascadeWhenSendTo [
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder currentSourceText copy unstyled.
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel selfObject: self.
 
 	GtPharoWhenSendToExpanderStyler new
@@ -57,7 +57,7 @@ GtPharoWhenSendToExpanderStylerExamples >> styleWhenSendTo [
 
 	anAst := aCoder astAwait.
 	aSourceText := aCoder sourceText copy unstyled.
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel selfObject: self.
 
 	GtPharoWhenSendToExpanderStyler new

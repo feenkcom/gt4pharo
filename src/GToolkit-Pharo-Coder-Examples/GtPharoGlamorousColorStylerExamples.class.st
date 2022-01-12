@@ -20,7 +20,7 @@ GtPharoGlamorousColorStylerExamples >> colorFromDefaultButtonBorderColor [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoGlamorousColorStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	

@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoSnippetCoder >> asCoderUIModel [
+GtPharoSnippetCoder >> asCoderViewModel [
 	^ GtPharoSnippetCoderViewModel new coder: self
 ]

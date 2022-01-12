@@ -6,6 +6,6 @@ GtPharoBehaviorCoder >> asCardElement [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoBehaviorCoder >> asCoderUIModel [
+GtPharoBehaviorCoder >> asCoderViewModel [
 	^ GtPharoBehaviorCoderViewModel new coder: self
 ]

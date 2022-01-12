@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoBlockClosureCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
-GtPharoBlockClosureCoder >> asCoderUIModel [
+GtPharoBlockClosureCoder >> asCoderViewModel [
 	^ GtSourceCoderViewModel new coder: self
 ]

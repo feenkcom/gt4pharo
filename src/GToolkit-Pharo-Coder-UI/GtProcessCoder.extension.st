@@ -1,6 +1,6 @@
 Extension { #name : #GtProcessCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtProcessCoder >> asCoderUIModel [
+GtProcessCoder >> asCoderViewModel [
 	^ GtPharoProcessCoderViewModel new coder: self
 ]

@@ -776,7 +776,7 @@ GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 	<gtExample>
 	| aScripter |
 
-	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderUIModel ].
+	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
 	aScripter wait forEmptySpaceTaskQueue.
 		
 	aScripter check
@@ -931,7 +931,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
-		             self emptyBodyMethodCoder asCoderUIModel ].
+		             self emptyBodyMethodCoder asCoderViewModel ].
 
 	^ aScripter
 ]
@@ -1077,7 +1077,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI [
 	<gtExample>
 	| aScripter |
 	
-	aScripter := self scripterForBlock: [ self exampleMethodCoder asCoderUIModel ].
+	aScripter := self scripterForBlock: [ self exampleMethodCoder asCoderViewModel ].
 	
 	^ aScripter
 ]
@@ -1263,7 +1263,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 		| aCoder |
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod .
 		environment := aCoder attributeNamed: #dummyEnvironment.
-		aCoder asCoderUIModel ].
+		aCoder asCoderViewModel ].
 	aScripter do
 		label: 'type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'instance') ];
@@ -1332,7 +1332,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 		| aCoder |
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
-		aCoder asCoderUIModel ].
+		aCoder asCoderViewModel ].
 
 	aScripter do
 		label: 'type in a variable that does not exist';
@@ -4653,7 +4653,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoder [
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI [
 	<gtExample>
 	| aScripter |
-	aScripter := self scripterForBlock: [ self referencedExampleMethodCoder asCoderUIModel ].
+	aScripter := self scripterForBlock: [ self referencedExampleMethodCoder asCoderViewModel ].
 	^ aScripter
 ]
 
