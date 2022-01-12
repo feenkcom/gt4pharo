@@ -5,7 +5,7 @@ Class {
 		'methodsCoderUIModel',
 		'listElement'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #converting }
@@ -86,7 +86,7 @@ GtPharoMethodsCoderElement >> listElement [
 		itemType: [ :itemTypeFactory :eachCoderUIModel | eachCoderUIModel elementClass ];
 		itemId: [ :eachCoderUIModel | eachCoderUIModel coder id ];
 		itemStencil: [ :anElementClass | anElementClass new ];
-		itemDataBinder: [ :eachCoderElement :eachCoderUIModel | eachCoderElement coderUIModel: eachCoderUIModel ];
+		itemDataBinder: [ :eachCoderElement :eachCoderUIModel | eachCoderElement coderViewModel: eachCoderUIModel ];
 		items: methodsCoderUIModel coderUIModels;
 		yourself.
 

@@ -863,7 +863,7 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 		icon: BrGlamorousVectorIcons play
 		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAll
-				coderUIModel: aCoderUIModel;
+				coderViewModel: aCoderUIModel;
 				element: anElement;
 				execute ].
 	coderAddOns
@@ -871,7 +871,7 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 		icon: BrGlamorousVectorIcons playinspect
 		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAllAndInspect
-				coderUIModel: aCoderUIModel;
+				coderViewModel: aCoderUIModel;
 				element: anElement;
 				execute ].
 	coderAddOns

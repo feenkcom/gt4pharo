@@ -2,9 +2,9 @@ Class {
 	#name : #GtPharoBehaviorDefinitionCoderElement,
 	#superclass : #BrExpander,
 	#instVars : [
-		'behaviorCoderUIModel',
 		'modificationIndicator',
-		'previewButton'
+		'previewButton',
+		'behaviorCoderViewModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
@@ -55,7 +55,7 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 							margin: self buttonMargin;
 							asElement} ].
 	previewButton := (GtRefactoringsPreviewButton new)
-		refactorings: [ self coderUIModel coder refactorings ];
+		refactorings: [ self coderViewModel coder refactorings ];
 		when: GtRefactoringsAppliedEvent do: [ self initializeElements ];
 		constraintsDo: [ :c | c grid horizontal span: 2 ];
 		margin:
@@ -109,13 +109,13 @@ GtPharoBehaviorDefinitionCoderElement >> buttonMargin [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorDefinitionCoderElement >> coderUIModel [
-	^ behaviorCoderUIModel
+GtPharoBehaviorDefinitionCoderElement >> coderViewModel [
+	^ behaviorCoderViewModel
 ]
 
 { #category : #accessing }
-GtPharoBehaviorDefinitionCoderElement >> coderUIModel: aGtBehaviorDefinitionCoderUIModel [
-	behaviorCoderUIModel := aGtBehaviorDefinitionCoderUIModel.	
+GtPharoBehaviorDefinitionCoderElement >> coderViewModel: aGtBehaviorDefinitionCoderViewModel [
+	behaviorCoderViewModel := aGtBehaviorDefinitionCoderViewModel.	
 	self initializeElements
 ]
 
@@ -131,7 +131,7 @@ GtPharoBehaviorDefinitionCoderElement >> editableLabelLook [
 GtPharoBehaviorDefinitionCoderElement >> editors [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 
-	^ behaviorCoderUIModel coder definition editors
+	^ behaviorCoderViewModel coder definition editors
 ]
 
 { #category : #initialization }
@@ -177,7 +177,7 @@ GtPharoBehaviorDefinitionCoderElement >> newModificationIndicator [
 GtPharoBehaviorDefinitionCoderElement >> readers [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 	
-	^ behaviorCoderUIModel coder definition readers
+	^ behaviorCoderViewModel coder definition readers
 ]
 
 { #category : #'private - ui' }
@@ -202,7 +202,7 @@ GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 GtPharoBehaviorDefinitionCoderElement >> updateModified [
 
 	| modified |
-	modified := self coderUIModel coder refactorings notEmpty.
+	modified := self coderViewModel coder refactorings notEmpty.
 	modificationIndicator asyncPromise promise: modified.
 	previewButton visibility: (modified ifTrue: [BlVisibility visible] ifFalse: [BlVisibility gone])
 ]

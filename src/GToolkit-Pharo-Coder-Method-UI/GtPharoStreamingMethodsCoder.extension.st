@@ -114,7 +114,7 @@ GtPharoStreamingMethodsCoder >> gtLiveFor: aView [
 
 			BrSimpleList new
 				itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];
-				itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement coderUIModel: aCoderViewModel ];
+				itemDataBinder: [ :aCoderElement :aCoderViewModel | aCoderElement coderViewModel: aCoderViewModel ];
 				stream: aStream ]
 ]
 
