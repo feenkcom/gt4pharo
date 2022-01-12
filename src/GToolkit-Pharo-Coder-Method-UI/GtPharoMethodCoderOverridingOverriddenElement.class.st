@@ -21,8 +21,9 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 	self fitContent.
 	self id: GtMethodCoderOverridingOverriddenId.
 
-	self withAsyncPromiseDo: [ :anElementPromise |
-		anElementPromise
+	self withAsyncFutureDo: [ :anElementFuture |
+		anElementFuture
+			executionConfiguration: (AsyncFutureExecutionConfiguration new customGroup: #CoderAddOn; lowPriority);
 			whenSuccess: [ :anElement :anOrigin |
 				self removeChildren.
 
@@ -133,5 +134,5 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 
-	self asyncPromise promise: self newMethodOriginFuture asAsyncPromise
+	self asyncFuture future: self newMethodOriginFuture
 ]
