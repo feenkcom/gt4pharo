@@ -13,7 +13,7 @@ GtPharoMethodExpanderStylerExamples >> expanderAttribute [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	index := text asString indexOfSubCollection: 'do:'.
@@ -40,7 +40,7 @@ GtPharoMethodExpanderStylerExamples >> messageToArrayLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -59,7 +59,7 @@ GtPharoMethodExpanderStylerExamples >> messageToByteArrayLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -78,7 +78,7 @@ GtPharoMethodExpanderStylerExamples >> messageToCharacterLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -97,7 +97,7 @@ GtPharoMethodExpanderStylerExamples >> messageToFalseLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -116,7 +116,7 @@ GtPharoMethodExpanderStylerExamples >> messageToFloatLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -135,7 +135,7 @@ GtPharoMethodExpanderStylerExamples >> messageToGlobal [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -155,7 +155,7 @@ GtPharoMethodExpanderStylerExamples >> messageToIntegerLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -174,7 +174,7 @@ GtPharoMethodExpanderStylerExamples >> messageToNilLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -193,7 +193,7 @@ GtPharoMethodExpanderStylerExamples >> messageToStringLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -212,7 +212,7 @@ GtPharoMethodExpanderStylerExamples >> messageToSymbolLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -231,7 +231,7 @@ GtPharoMethodExpanderStylerExamples >> messageToTrueLiteral [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -262,7 +262,7 @@ GtPharoMethodExpanderStylerExamples >> missingSelfSend [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -281,7 +281,7 @@ GtPharoMethodExpanderStylerExamples >> missingSuperSend [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self
@@ -300,7 +300,7 @@ GtPharoMethodExpanderStylerExamples >> superExpanderAttribute [
 	text := coder sourceText copy.
 
 	GtPharoMethodExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	index := text asString indexOfSubCollection: 'do:'.

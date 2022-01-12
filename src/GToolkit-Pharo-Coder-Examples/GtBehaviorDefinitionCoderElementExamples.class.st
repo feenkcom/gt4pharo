@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBehaviorDefinitionCoderElementExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'examples - instance creation' }
@@ -23,7 +23,7 @@ GtBehaviorDefinitionCoderElementExamples >> forClassUIModel [
 	| aCoder aCoderUIModel |
 
 	aCoder := GtBehaviorDefinitionCoderExamples new forClass.
-	aCoderUIModel := aCoder asCoderUIModel.
+	aCoderUIModel := aCoder asCoderViewModel.
 
 	self assert: aCoderUIModel coder equals: aCoder.
 
@@ -49,7 +49,7 @@ GtBehaviorDefinitionCoderElementExamples >> forMetaclassUIModel [
 	| aCoder aCoderUIModel |
 
 	aCoder := GtBehaviorDefinitionCoderExamples new forMetaclass.
-	aCoderUIModel := aCoder asCoderUIModel.
+	aCoderUIModel := aCoder asCoderViewModel.
 
 	self assert: aCoderUIModel coder equals: aCoder.
 
@@ -75,7 +75,7 @@ GtBehaviorDefinitionCoderElementExamples >> forTraitUIModel [
 	| aCoder aCoderUIModel |
 
 	aCoder := GtBehaviorDefinitionCoderExamples new forTrait.
-	aCoderUIModel := aCoder asCoderUIModel.
+	aCoderUIModel := aCoder asCoderViewModel.
 
 	self assert: aCoderUIModel coder equals: aCoder.
 

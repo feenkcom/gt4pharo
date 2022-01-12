@@ -38,7 +38,7 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoGlamorousIconStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -63,7 +63,7 @@ GtPharoGlamorousIconStylerExamples >> vectorRefreshIcon [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoGlamorousIconStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	

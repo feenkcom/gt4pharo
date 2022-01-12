@@ -60,7 +60,7 @@ GtPharoSnippetCoderExamples >> snippetCoderViewModel [
 	| aCoder aCoderViewModel expectedBindings |
 
 	aCoder := self snippetCoder.
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 
 	expectedBindings := GtCompositeVariablesBindings new.
 	expectedBindings addBindings: GtReservedVariablesBindings new.

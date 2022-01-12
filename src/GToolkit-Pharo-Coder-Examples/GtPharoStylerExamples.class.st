@@ -18,7 +18,7 @@ Object new'.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	

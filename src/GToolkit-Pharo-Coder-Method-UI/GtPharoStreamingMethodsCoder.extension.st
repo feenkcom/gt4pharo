@@ -110,7 +110,7 @@ GtPharoStreamingMethodsCoder >> gtLiveFor: aView [
 			| aStream |			
 
 			aStream := self asAsyncStream map: [ :eachCoder |
-				eachCoder asCoderUIModel expanded: false ].
+				eachCoder asCoderViewModel expanded: false ].
 
 			BrSimpleList new
 				itemStencil: [ GtExpandableMethodCoderForBehaviorElement new ];

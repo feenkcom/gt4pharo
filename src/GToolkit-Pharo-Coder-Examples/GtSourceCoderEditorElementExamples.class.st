@@ -10,7 +10,7 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	| aMethodCoder aMethodCoderUIModel anEditorElement |
 
 	aMethodCoder := GtPharoMethodCoderExamples new forExampleMethodCoder.
-	aMethodCoderUIModel := aMethodCoder asCoderUIModel.
+	aMethodCoderUIModel := aMethodCoder asCoderViewModel.
 
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated.
 	BlUseAsyncFeatures disableDuring: [ 

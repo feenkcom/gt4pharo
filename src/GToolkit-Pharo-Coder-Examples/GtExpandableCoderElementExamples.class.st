@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExpandableCoderElementExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'as yet unclassified' }
@@ -10,7 +10,7 @@ GtExpandableCoderElementExamples >> forCollapsedMethodCoder [
 	| anElement aCoder |
 	aCoder := GtPharoMethodCoder forMethod: GtPharoMethodCoderExamples >> #example.
 	anElement := GtExpandableSourceCoderElement new.
-	anElement coderUIModel: (aCoder asCoderUIModel expanded: false).
+	anElement coderUIModel: (aCoder asCoderViewModel expanded: false).
 	self assert: anElement isExpanded not.
 	^ anElement
 ]
@@ -21,7 +21,7 @@ GtExpandableCoderElementExamples >> forExpandedMethodCoder [
 	| anElement aCoder |
 	aCoder := GtPharoMethodCoder forMethod: GtPharoMethodCoderExamples >> #example.
 	anElement := GtExpandableSourceCoderElement new.
-	anElement coderUIModel: (aCoder asCoderUIModel expanded: true).
+	anElement coderUIModel: (aCoder asCoderViewModel expanded: true).
 	self assert: anElement isExpanded.
 	^ anElement
 ]

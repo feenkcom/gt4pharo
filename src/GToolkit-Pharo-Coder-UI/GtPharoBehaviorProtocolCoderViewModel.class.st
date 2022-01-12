@@ -27,7 +27,7 @@ GtPharoBehaviorProtocolCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
 
 	methodViewModels := self coderModel methodCoders
-		collect: [ :eachMethodCoder | eachMethodCoder asCoderUIModel ]
+		collect: [ :eachMethodCoder | eachMethodCoder asCoderViewModel ]
 ]
 
 { #category : #'api - coder model' }

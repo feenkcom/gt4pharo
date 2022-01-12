@@ -27,7 +27,7 @@ GtPharoStreamingMethodsCoderViewModel >> initialize [
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
-	^ aCoderModel asCoderUIModel
+	^ aCoderModel asCoderViewModel
 		expanded: shouldExpandByDefault;
 		shouldHaveHeader: shouldHaveHeaderByDefault;
 		highlighter: highlighter;

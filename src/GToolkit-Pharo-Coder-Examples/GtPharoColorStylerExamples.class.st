@@ -21,7 +21,7 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -55,7 +55,7 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -98,7 +98,7 @@ GtPharoColorStylerExamples >> colorRGBRangeHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	

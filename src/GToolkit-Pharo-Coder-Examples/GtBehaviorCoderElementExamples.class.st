@@ -20,7 +20,7 @@ GtBehaviorCoderElementExamples >> forClassUIModel [
 	<gtExample>
 	| aCoder aCoderUIModel |
 	aCoder := GtBehaviorCoderExamples new forClass.
-	aCoderUIModel := aCoder asCoderUIModel.
+	aCoderUIModel := aCoder asCoderViewModel.
 
 	self assert: aCoderUIModel class equals: GtPharoBehaviorCoderViewModel.
 	self assert: aCoderUIModel coder equals: aCoder.

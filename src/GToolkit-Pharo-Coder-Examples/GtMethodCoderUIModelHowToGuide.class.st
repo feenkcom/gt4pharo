@@ -17,7 +17,7 @@ Or also give it a focus by default:
 Class {
 	#name : #GtMethodCoderUIModelHowToGuide,
 	#superclass : #GtMethodCoderHowToGuide,
-	#category : 'GToolkit-Pharo-Coder-Examples-! HowTo'
+	#category : #'GToolkit-Pharo-Coder-Examples-! HowTo'
 }
 
 { #category : #'examples - method coder' }
@@ -83,7 +83,7 @@ GtMethodCoderUIModelHowToGuide >> uiModelForCoder [
 	<gtExample>
 	| aCoderUIModel |
 	
-	aCoderUIModel := self coderForMethod asCoderUIModel.
+	aCoderUIModel := self coderForMethod asCoderViewModel.
 
 	self assert: aCoderUIModel focused equals: false.
 	self assert: aCoderUIModel expanded equals: true.

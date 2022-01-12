@@ -17,7 +17,7 @@ GtPharoHaltStylerExamples >> haltNowHighlighted [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoHaltStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -42,7 +42,7 @@ GtPharoHaltStylerExamples >> haltOnceHighlighted [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoHaltStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -67,7 +67,7 @@ GtPharoHaltStylerExamples >> selfHaltHighlighted [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoHaltStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	
@@ -92,7 +92,7 @@ GtPharoHaltStylerExamples >> selfHaltOnceHighlighted [
 	aSourceText := aCoder sourceText copy unstyled.
 	
 	GtPharoHaltStyler new
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 	

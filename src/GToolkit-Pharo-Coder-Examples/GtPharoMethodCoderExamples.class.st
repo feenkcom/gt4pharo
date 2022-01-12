@@ -466,7 +466,7 @@ GtPharoMethodCoderExamples >> debugClassUnaryMethodAll [
 	aCoder := self coderOnClassUnaryMethodThatCreatesPoint.
 	self assert: aCoder isModified.
 
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 
 	aDummyDebugger := GtPharoDummyDebugger useDuring: [ aCoderViewModel debug ].
 
@@ -489,7 +489,7 @@ GtPharoMethodCoderExamples >> debugClassUnaryMethodPointCreation [
 	aCoder := self coderOnClassUnaryMethodThatCreatesPoint.
 	self assert: aCoder isModified.
 	
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel select: 28 to: 46.
 
 	aDummyDebugger := GtPharoDummyDebugger useDuring: [ aCoderViewModel debug ].
@@ -659,7 +659,7 @@ GtPharoMethodCoderExamples >> evaluateClassUnaryMethodAll [
 	aCoder := self coderOnClassUnaryMethodThatCreatesPoint.
 	self assert: aCoder isModified.
 
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 
 	aResult := aCoderViewModel doIt.
 
@@ -679,7 +679,7 @@ GtPharoMethodCoderExamples >> evaluateClassUnaryMethodMethodPointCreation [
 	aCoder := self coderOnClassUnaryMethodThatCreatesPoint.
 	self assert: aCoder isModified.
 
-	aCoderViewModel := aCoder asCoderUIModel.
+	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel select: 28 to: 46.
 
 	aResult := aCoderViewModel doIt.

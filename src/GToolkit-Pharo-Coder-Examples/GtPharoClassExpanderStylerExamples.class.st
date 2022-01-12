@@ -27,7 +27,7 @@ GtPharoClassExpanderStylerExamples >> existingClass [
 	text := coder currentSourceText copy.
 
 	GtPharoClassExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self assert:
@@ -48,7 +48,7 @@ GtPharoClassExpanderStylerExamples >> missingClass [
 	text := coder currentSourceText copy.
 
 	GtPharoClassExpanderStyler new
-		coderViewModel: coder asCoderUIModel;
+		coderViewModel: coder asCoderViewModel;
 		style: text ast: coder astAwait.
 
 	self assert:

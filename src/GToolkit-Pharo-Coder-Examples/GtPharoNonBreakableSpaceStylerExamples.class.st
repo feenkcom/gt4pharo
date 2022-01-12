@@ -26,7 +26,7 @@ GtPharoNonBreakableSpaceStylerExamples >> styleNonBreakableSpace [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoNonBreakableSpaceStyler new 
-		coderViewModel: aCoder asCoderUIModel;
+		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
 
