@@ -2,5 +2,7 @@ Extension { #name : #GtSearchRBASTFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSearchRBASTFilter >> highlighter [
-	^ GtPharoEmptyHighlighter new
+	^ GtRBPatternHighlighter new
+		  ast: self ast;
+		  yourself
 ]
