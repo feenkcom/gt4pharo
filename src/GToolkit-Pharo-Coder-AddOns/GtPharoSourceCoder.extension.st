@@ -137,7 +137,8 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderBrowseImplementorsShortcut new;
 		addShortcut: GtSourceCoderBrowseReferencesShortcut new;
 		addShortcut: GtSourceCoderBrowseBehaviorShortcut new;
-		addShortcut: GtSourceCoderDiscardChangesShortcut new
+		addShortcut: GtSourceCoderDiscardChangesShortcut new;
+		addShortcut: GtSourceCoderFormatShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -246,6 +247,7 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 	(definer ifNil: [ aVariableNode topParent ])
 		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ locations add: each sourceInterval ] ].
 	action := GtRenameAction2 locations: locations textualCoderViewModel: aSourceCoderViewModel.
+	action selectAll: true.
 	action forVariableOrUnaryMessage.
 	renameAttributes := OrderedCollection new.
 	otherCoders

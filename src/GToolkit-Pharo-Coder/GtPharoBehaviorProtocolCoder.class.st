@@ -77,7 +77,7 @@ GtPharoBehaviorProtocolCoder >> gtMethodsFor: aView [
 		items: [ self methodCoders collect: [ :eachMethodCoder | eachMethodCoder asCoderViewModel expanded: false ] ];
 		itemType: [ :aTypeFactory :eachViewModel | eachViewModel elementClass ];
 		itemStencil: [ :anElementClass | anElementClass new ];
-		itemDataBinder: [ :eachCoderElement :eachCoderViewModel | eachCoderElement coderUIModel: eachCoderViewModel ]
+		itemDataBinder: [ :eachCoderElement :eachCoderViewModel | eachCoderElement coderViewModel: eachCoderViewModel ]
 ]
 
 { #category : #initialize }

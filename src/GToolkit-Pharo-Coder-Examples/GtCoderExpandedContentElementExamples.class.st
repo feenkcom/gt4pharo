@@ -11,6 +11,6 @@ GtCoderExpandedContentElementExamples >> forMethodCoder [
 	aMethodCoder := GtPharoMethodCoder
 		forMethod: BlElement >> #position:extent:context:.
 	aContentElement := GtSourceCoderExpandedContentElement new
-		coderUIModel: aMethodCoder asCoderUIModel.
+		coderViewModel: aMethodCoder asCoderViewModel.
 	^ aContentElement
 ]

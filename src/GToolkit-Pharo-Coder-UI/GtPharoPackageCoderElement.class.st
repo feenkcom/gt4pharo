@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'packageCoder'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Views'
+	#category : #'GToolkit-Pharo-Coder-UI-Views'
 }
 
 { #category : #'private - ui' }
@@ -143,7 +143,7 @@ GtPharoPackageCoderElement >> buildRemovePackageLabel [
 ]
 
 { #category : #accessing }
-GtPharoPackageCoderElement >> coderUIModel: aGtPackageCoder [
+GtPharoPackageCoderElement >> coderViewModel: aGtPackageCoder [
 	packageCoder := aGtPackageCoder coder.
 
 	self buildContentPane

@@ -29,7 +29,7 @@ GtPharoBlockClosureCoder >> block [
 
 { #category : #private }
 GtPharoBlockClosureCoder >> blockSource [
-	^ self blockSourceFromText: self sourceText
+	^ self blockSourceFromText: self currentSourceText
 ]
 
 { #category : #private }
@@ -115,11 +115,6 @@ GtPharoBlockClosureCoder >> doItInContext: aGtSourceCoderEvaluationContext thenD
 { #category : #'initialize-release' }
 GtPharoBlockClosureCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitStringSource new source: aString)
-]
-
-{ #category : #'api - actions' }
-GtPharoBlockClosureCoder >> format [
-	self currentSourceString: self rbAST formattedCode
 ]
 
 { #category : #private }

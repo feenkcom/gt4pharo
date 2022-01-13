@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'focusedCoderUIModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
 { #category : #'api - interations' }
@@ -20,7 +20,7 @@ GtPharoMethodsCoderViewModel >> addNewCoder [
 
 { #category : #updating }
 GtPharoMethodsCoderViewModel >> coderUIModelFor: aCoder [
-	^ aCoder asCoderUIModel
+	^ aCoder asCoderViewModel
 		expanded: false;
 		selfObject: self coder object
 ]

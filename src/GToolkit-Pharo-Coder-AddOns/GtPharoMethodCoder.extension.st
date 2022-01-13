@@ -567,10 +567,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
 
-	anExample := self example.
 	coderAddOns
 		addPreview: 'Example'
-		stencil: [ GtCoderExampleStateElement new example: anExample ].
+		stencil: [ GtCoderExampleStateElement new ]
+		dataBinder: [ :anElement :aCoderViewModel | anElement example: aCoderViewModel coderModel example ].
+
+	anExample := self example.
 
 	coderAddOns
 		addContextAction: 'Play Example' translated
@@ -725,7 +727,6 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderPlayAndInspectShortcut new;
 		addShortcut: GtSourceCoderExtractMethodShortcut new;
 		addShortcut: GtSourceCoderSaveShortcut new;
-		addShortcut: GtSourceCoderFormatShortcut new;
 		addShortcut: GtSourceCoderInlineRenameShortcut new
 ]
 
@@ -746,14 +747,13 @@ GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: aViewModel [
+GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 1>
 
 	coderAddOns
 		addPreview: 'Inheritance'
-		stencil: [
-			GtPharoMethodCoderOverridingOverriddenElement new 
-				pharoMethodCoderViewModel: aViewModel ]
+		stencil: [ GtPharoMethodCoderOverridingOverriddenElement new ]
+		dataBinder: [ :anElement :aCoderViewModel | anElement pharoMethodCoderViewModel: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -864,7 +864,7 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 		icon: BrGlamorousVectorIcons play
 		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAll
-				coderUIModel: aCoderUIModel;
+				coderViewModel: aCoderUIModel;
 				element: anElement;
 				execute ].
 	coderAddOns
@@ -872,7 +872,7 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 		icon: BrGlamorousVectorIcons playinspect
 		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAllAndInspect
-				coderUIModel: aCoderUIModel;
+				coderViewModel: aCoderUIModel;
 				element: anElement;
 				execute ].
 	coderAddOns
@@ -890,8 +890,10 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 	self testCase canExecute ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtPharoMethodTestCaseStyler new.
-	coderAddOns addPreview: 'Test Case' stencil: [ 
-		GtPharoMethodTestCaseStateElement new testCase: self testCase ].
+	coderAddOns
+		addPreview: 'Test Case'
+		stencil: [ GtPharoMethodTestCaseStateElement new ]
+		dataBinder: [ :anElement :aCoderViewModel | anElement testCase: self testCase ].
 
 	coderAddOns
 		addContextAction: 'Play Unit Test' translated

@@ -6,7 +6,7 @@ GtPharoPackageTagCoder >> asCardElement [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoPackageTagCoder >> asCoderUIModel [
+GtPharoPackageTagCoder >> asCoderViewModel [
 	^ GtPharoPackageTagViewModel new pharoPackageTagCoderModel: self
 ]
 

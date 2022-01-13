@@ -21,7 +21,7 @@ Class {
 		'pharoPackageTagsCoderViewModel',
 		'parentPharoPackagesCoderViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-View Models'
 }
 
 { #category : #'api - announcer' }
@@ -35,7 +35,7 @@ GtPharoPackageCoderViewModel >> announce: anAnnouncement [
 
 { #category : #accessing }
 GtPharoPackageCoderViewModel >> asElement [
-	^ GtPharoPackageCoderElement new coderUIModel: self
+	^ GtPharoPackageCoderElement new coderViewModel: self
 ]
 
 { #category : #accessing }

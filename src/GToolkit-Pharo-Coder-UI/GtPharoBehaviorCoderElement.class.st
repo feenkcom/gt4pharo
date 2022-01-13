@@ -2,10 +2,10 @@ Class {
 	#name : #GtPharoBehaviorCoderElement,
 	#superclass : #BlElement,
 	#instVars : [
-		'behaviorCoderUIModel',
 		'container',
 		'contentPane',
-		'contentTabs'
+		'contentTabs',
+		'behaviorCoderViewModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
@@ -53,13 +53,13 @@ GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationA
 GtPharoBehaviorCoderElement >> behavior [
 	<return: #Behavior>
 
-	^ self coderUIModel coder behavior
+	^ self coderViewModel coder behavior
 ]
 
 { #category : #callbacks }
 GtPharoBehaviorCoderElement >> browseClassReferences [
 	| classCoder |
-	classCoder := behaviorCoderUIModel coder.
+	classCoder := behaviorCoderViewModel coder.
 
 	classCoder theClass
 		ifNotNil: [ :class | self phlow spawnObject: class gtReferences ]
@@ -68,7 +68,7 @@ GtPharoBehaviorCoderElement >> browseClassReferences [
 { #category : #'building ui' }
 GtPharoBehaviorCoderElement >> buildClassLabel [
 	| classCoder aClassNameEditor aContainer aPreviewButton removeClassButton |
-	classCoder := behaviorCoderUIModel coder.
+	classCoder := behaviorCoderViewModel coder.
 
 	aContainer := BrHorizontalPane new
 		hMatchParent;
@@ -164,7 +164,7 @@ GtPharoBehaviorCoderElement >> buildContentTabs [
 GtPharoBehaviorCoderElement >> buildDefinitionElement [
 
 	^ GtPharoBehaviorDefinitionCoderElement new
-		coderUIModel: behaviorCoderUIModel definitionCoderUIModel;
+		coderViewModel: behaviorCoderViewModel definitionCoderUIModel;
 		margin: (BlInsets top: 5 left: 5)
 ]
 
@@ -172,7 +172,7 @@ GtPharoBehaviorCoderElement >> buildDefinitionElement [
 GtPharoBehaviorCoderElement >> buildRemoveClassLabel [
 	| labelText classCoder |
 	
-	classCoder := behaviorCoderUIModel coder.
+	classCoder := behaviorCoderViewModel coder.
 	labelText := (classCoder theClass isReferenced
 		ifTrue: [ '<1s> is referenced. Remove anyway?' ]
 		ifFalse: [ classCoder theClass subclasses isEmpty
@@ -187,14 +187,14 @@ GtPharoBehaviorCoderElement >> buildRemoveClassLabel [
 
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> classCoder [
-	^ behaviorCoderUIModel classCoder
+	^ behaviorCoderViewModel classCoder
 ]
 
 { #category : #private }
 GtPharoBehaviorCoderElement >> classViewItems [
 	| classCoder collector context |
 	
-	classCoder := behaviorCoderUIModel coder.
+	classCoder := behaviorCoderViewModel coder.
 
 	collector := GtPhlowViewsCollector new
 		fromObject: classCoder theClass;
@@ -203,7 +203,7 @@ GtPharoBehaviorCoderElement >> classViewItems [
 		pragmaName: #gtClassView.
 
 	context := GtPhlowContext new.
-	context optionAt: #behaviorCoder put: behaviorCoderUIModel.
+	context optionAt: #behaviorCoder put: behaviorCoderViewModel.
 
 	collector context: context.
 
@@ -211,17 +211,17 @@ GtPharoBehaviorCoderElement >> classViewItems [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorCoderElement >> coderUIModel [
-	^ behaviorCoderUIModel
+GtPharoBehaviorCoderElement >> coderViewModel [
+	^ behaviorCoderViewModel
 ]
 
 { #category : #accessing }
-GtPharoBehaviorCoderElement >> coderUIModel: aGtBehaviorCoderUIModel [
+GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
 	
-	behaviorCoderUIModel ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
+	behaviorCoderViewModel ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
 	
-	behaviorCoderUIModel := aGtBehaviorCoderUIModel.
-	behaviorCoderUIModel coder weak
+	behaviorCoderViewModel := aGtBehaviorCoderViewModel.
+	behaviorCoderViewModel coder weak
 		when: GtCoderPackageUpdatedAnnouncement
 			send: #actOnPackageUpdated:
 			to: self;
@@ -272,7 +272,7 @@ GtPharoBehaviorCoderElement >> initialize [
 GtPharoBehaviorCoderElement >> removeClass [
 	| aClassCoder coder event |
 	
-	aClassCoder := behaviorCoderUIModel coder.
+	aClassCoder := behaviorCoderViewModel coder.
 	
 	coder := aClassCoder packageTag
 		ifNotNil: [ :tag | GtPharoPackageTagCoder forPackageTag: tag ]

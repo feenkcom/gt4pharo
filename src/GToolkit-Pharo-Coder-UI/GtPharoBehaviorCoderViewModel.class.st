@@ -14,7 +14,7 @@ GtPharoBehaviorCoderViewModel >> behavior [
 
 { #category : #accessing }
 GtPharoBehaviorCoderViewModel >> definitionCoderUIModel [
-	^ definitionCoderUIModel ifNil: [ self coder definitionCoder asCoderUIModel ]
+	^ definitionCoderUIModel ifNil: [ self coder definitionCoder asCoderViewModel ]
 ]
 
 { #category : #accessing }

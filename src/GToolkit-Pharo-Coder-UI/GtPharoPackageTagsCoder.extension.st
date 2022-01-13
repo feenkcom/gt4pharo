@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoPackageTagsCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoPackageTagsCoder >> asCoderUIModel [
+GtPharoPackageTagsCoder >> asCoderViewModel [
 	^ GtPharoPackageTagsViewModel new pharoPackageTagsCoderModel: self
 ]

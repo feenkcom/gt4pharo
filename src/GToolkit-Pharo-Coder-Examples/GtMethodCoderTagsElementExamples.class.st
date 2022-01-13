@@ -9,6 +9,6 @@ GtMethodCoderTagsElementExamples >> forMethodCoder [
 	<gtExample>
 	| aMethodCoder theTagsElement |
 	aMethodCoder := GtPharoMethodCoder forMethod: GtPharoMethodCoderExamples >> #forExampleMethodCoder.
-	theTagsElement := GtPharoMethodCoderTagsElement new pharoMethodCoderViewModel: aMethodCoder asCoderUIModel.
+	theTagsElement := GtPharoMethodCoderTagsElement new pharoMethodCoderViewModel: aMethodCoder asCoderViewModel.
 	^ theTagsElement
 ]

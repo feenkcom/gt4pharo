@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoStylerExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #examples }
@@ -15,7 +15,7 @@ GtPharoStylerExamples >> invalidSyntaxWithCascade [
 Object new'.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoStyler new
 		coderViewModel: aCoder asCoderViewModel;
