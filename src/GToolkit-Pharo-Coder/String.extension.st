@@ -2,12 +2,12 @@ Extension { #name : #String }
 
 { #category : #'*GToolkit-Pharo-Coder' }
 String >> gtASTMatches [
-	^ GtSearchAstFilter sourceExpression: self
+	^ GtSearchRBASTFilter sourceExpression: self
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
 String >> gtASTMethodMatches [
-	^ GtSearchAstFilter sourceMethod: self
+	^ GtSearchRBASTFilter sourceMethod: self
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
