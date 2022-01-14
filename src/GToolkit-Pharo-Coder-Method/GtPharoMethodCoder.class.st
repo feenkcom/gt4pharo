@@ -628,8 +628,11 @@ GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 	self
 		assert: [ aGtMethodCoderBehavior isKindOf: GtPharoCoderBehavior ]
 		description: [ 'Behavior must be reifined as an object' ].
-
-	methodBehavior := aGtMethodCoderBehavior
+	methodBehavior == aGtMethodCoderBehavior ifFalse: [ 
+		methodBehavior := aGtMethodCoderBehavior. 
+		self announce: (GtCoderBehaviorChanged new 
+			newBehavior: aGtMethodCoderBehavior;
+			coder: self) ]
 ]
 
 { #category : #'api - accessing' }

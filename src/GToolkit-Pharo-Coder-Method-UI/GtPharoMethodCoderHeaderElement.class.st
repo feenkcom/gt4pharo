@@ -107,7 +107,11 @@ GtPharoMethodCoderHeaderElement >> subscribeToTextualCoderViewModel [
 	textualCoderViewModel coder weak
 		when: GtCoderClassAdded, GtCoderClassRenamed, GtCoderClassRemoved
 		send: #onCoderClassChanged:
-		to: self
+		to: self.
+	textualCoderViewModel weak
+		when: GtTextualCoderViewModelBehaviorChanged
+		send: #onCoderClassChanged:
+		to: self.
 ]
 
 { #category : #'api - textual coder view model' }
