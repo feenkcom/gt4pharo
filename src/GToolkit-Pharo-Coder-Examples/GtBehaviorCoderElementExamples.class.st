@@ -27,7 +27,7 @@ GtBehaviorCoderElementExamples >> forClassUIModel [
 
 	self
 		assert: aCoderUIModel definitionCoderUIModel class
-		equals: GtBehaviorDefinitionCoderUIModel.
+		equals: GtBehaviorDefinitionCoderViewModel.
 	self
 		assert: aCoderUIModel definitionCoderUIModel coder
 		equals: aCoder definitionCoder.

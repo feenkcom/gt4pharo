@@ -25,6 +25,11 @@ GtPharoMethodContextCoderViewModel >> initialize [
 	expanded := false
 ]
 
+{ #category : #'private - event handling' }
+GtPharoMethodContextCoderViewModel >> onBehaviorChanged: aBehaviorChangedAnnouncement [
+	self announce: ((GtTextualCoderViewModelBehaviorChanged new newBehavior: (aBehaviorChangedAnnouncement newBehavior)))
+]
+
 { #category : #'api - coder model' }
 GtPharoMethodContextCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
@@ -59,6 +64,11 @@ GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
 	self coderModel weak
 		when: GtCoderSourceCodeReplaced
 		send: #onSourceCodeReplaced:
+		to: self.
+
+	self coderModel weak
+		when: GtCoderBehaviorChanged
+		send: #onBehaviorChanged:
 		to: self
 ]
 
