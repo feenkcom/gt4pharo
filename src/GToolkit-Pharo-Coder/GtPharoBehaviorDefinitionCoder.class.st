@@ -7,7 +7,7 @@ Class {
 		'behavior',
 		'definition'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -42,10 +42,25 @@ GtPharoBehaviorDefinitionCoder >> difference [
 { #category : #'api - initialization' }
 GtPharoBehaviorDefinitionCoder >> forBehavior: aBehavior [
 	behavior := aBehavior.
-	definition := nil
+	definition := nil.
+	self subscribeToSystem
+]
+
+{ #category : #accessing }
+GtPharoBehaviorDefinitionCoder >> onClassChanged: anAnnouncement [
+	anAnnouncement classAffected == behavior ifFalse: [^self].
+	definition := nil.
+	self announce: (GtCoderClassChanged new coder: self)
 ]
 
 { #category : #accessing }
 GtPharoBehaviorDefinitionCoder >> refactorings [	
 	^  self definition difference: self difference toRefactoringsOf: self behavior
+]
+
+{ #category : #accessing }
+GtPharoBehaviorDefinitionCoder >> subscribeToSystem [
+
+	SystemAnnouncer uniqueInstance weak
+		when: ClassAnnouncement send: #onClassChanged: to: self
 ]
