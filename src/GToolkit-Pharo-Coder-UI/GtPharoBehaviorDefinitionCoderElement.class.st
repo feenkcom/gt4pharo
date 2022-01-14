@@ -34,7 +34,7 @@ GtPharoBehaviorDefinitionCoderElement >> addDefinitionEditorShortcutsTo: aProper
 
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
-	| theProperties |
+	| theProperties | 
 	modificationIndicator visibility: BlVisibility gone.
 	theProperties := (BlElement new)
 		layout: (BlGridLayout new columnCount: 2);
@@ -115,7 +115,12 @@ GtPharoBehaviorDefinitionCoderElement >> coderViewModel [
 
 { #category : #accessing }
 GtPharoBehaviorDefinitionCoderElement >> coderViewModel: aGtBehaviorDefinitionCoderViewModel [
-	behaviorCoderViewModel := aGtBehaviorDefinitionCoderViewModel.	
+
+	behaviorCoderViewModel := aGtBehaviorDefinitionCoderViewModel.
+	behaviorCoderViewModel weak
+		when: GtCoderClassChanged
+		send: #updateDefinition
+		to: self.
 	self initializeElements
 ]
 
@@ -196,6 +201,11 @@ GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 					aStyle
 						border: (BlBorder paint: self theme button hoveredBorderColor width: 1) ]);
 		yourself
+]
+
+{ #category : #accessing }
+GtPharoBehaviorDefinitionCoderElement >> updateDefinition [
+	self initializeElements
 ]
 
 { #category : #'private - instance creation' }

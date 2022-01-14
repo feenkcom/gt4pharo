@@ -22,12 +22,6 @@ GtPharoBehaviorCoderViewModel >> elementClass [
 	^ GtPharoBehaviorCoderElement
 ]
 
-{ #category : #accessing }
-GtPharoBehaviorCoderViewModel >> onCoderModelChanged [
-
-	super onCoderModelChanged.
-]
-
 { #category : #'api - coder model' }
 GtPharoBehaviorCoderViewModel >> protocols [
 	^ self coderModel behavior protocols
