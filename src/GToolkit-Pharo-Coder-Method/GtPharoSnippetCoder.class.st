@@ -2,7 +2,8 @@ Class {
 	#name : #GtPharoSnippetCoder,
 	#superclass : #GtPharoSourceCoder,
 	#instVars : [
-		'xdocFilename'
+		'xdocFilename',
+		'behavior'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
@@ -10,6 +11,17 @@ Class {
 { #category : #'instance creation' }
 GtPharoSnippetCoder class >> forSource: aString [
 	^ self new sourceCodeSynchronously: (GtCoderExplicitStringSource new source: aString)
+]
+
+{ #category : #accessing }
+GtPharoSnippetCoder >> behavior [
+	^ behavior ifNil: [ super behavior ]
+]
+
+{ #category : #accessing }
+GtPharoSnippetCoder >> behavior: aBehavior [
+	behavior := aBehavior.
+	completionStrategy ifNotNil: [ completionStrategy classOrMetaClass: self behavior ]
 ]
 
 { #category : #'api - ast' }
