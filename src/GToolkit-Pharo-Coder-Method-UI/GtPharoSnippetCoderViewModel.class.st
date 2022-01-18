@@ -114,6 +114,12 @@ GtPharoSnippetCoderViewModel >> profileWithMessageTally [
 	^ self coderModel profileWithMessageTallyInContext: self evaluationContext
 ]
 
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> selfObject: anObject [
+	super selfObject: anObject.
+	coderModel ifNotNil: [ coderModel behavior: self behavior ]
+]
+
 { #category : #'api - bindings' }
 GtPharoSnippetCoderViewModel >> sharedBindings [
 	<return: #GtSharedVariablesBindings>
