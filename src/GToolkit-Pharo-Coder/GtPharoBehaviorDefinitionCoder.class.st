@@ -48,7 +48,10 @@ GtPharoBehaviorDefinitionCoder >> forBehavior: aBehavior [
 
 { #category : #accessing }
 GtPharoBehaviorDefinitionCoder >> onClassChanged: anAnnouncement [
-	anAnnouncement classAffected == behavior ifFalse: [^self].
+
+	(anAnnouncement classAffected == behavior or: [ 
+		 anAnnouncement classAffected == behavior class ]) ifFalse: [ 
+		^ self ].
 	definition := nil.
 	self announce: (GtCoderClassChanged new coder: self)
 ]

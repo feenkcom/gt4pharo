@@ -63,8 +63,7 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 						top: 5
 						right: 5
 						bottom: 0
-						left: 5);
-		visibility: BlVisibility gone.
+						left: 5).
 	theProperties addChild: previewButton.
 	^ theProperties
 ]
