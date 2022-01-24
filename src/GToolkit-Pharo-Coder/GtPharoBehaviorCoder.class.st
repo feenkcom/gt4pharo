@@ -7,8 +7,7 @@ Class {
 		'class',
 		'object',
 		'hasObject',
-		'definitionCoder',
-		'methodsCoder'
+		'definitionCoder'
 	],
 	#category : #'GToolkit-Pharo-Coder-Coders'
 }
