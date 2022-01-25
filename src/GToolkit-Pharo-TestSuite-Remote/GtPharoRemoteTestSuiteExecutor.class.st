@@ -35,6 +35,17 @@ GtPharoRemoteTestSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 ]
 
 { #category : #'api - execution' }
+GtPharoRemoteTestSuiteExecutor >> playStreamForSuiteStream: aSuiteCaseStream [
+
+	"Execute a given test case / example"
+
+	<return: #TAsyncStream>
+	^ aSuiteCaseStream map: [ :aTestCase | 
+		  self playSuiteCase: aTestCase.
+		  aTestCase ]
+]
+
+{ #category : #'private - execution' }
 GtPharoRemoteTestSuiteExecutor >> playSuiteCase: aTestCase [
 	"Execute a given test case / example"
 	| isRunning |

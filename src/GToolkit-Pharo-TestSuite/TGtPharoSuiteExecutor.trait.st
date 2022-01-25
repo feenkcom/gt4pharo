@@ -22,7 +22,16 @@ TGtPharoSuiteExecutor >> isRemote [
 { #category : #'api - execution' }
 TGtPharoSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
 
-	"Execute test cases of a given methods coder"
+	"Execute test cases of a given methods coder.
+	TODO: remove it"
+
+	self explicitRequirement
+]
+
+{ #category : #'api - execution' }
+TGtPharoSuiteExecutor >> playStreamForSuiteStream: aSuiteCaseStream [
+	"Execute a given test case / example"
+	<return: #TAsyncStream>
 
 	self explicitRequirement
 ]

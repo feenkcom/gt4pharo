@@ -101,17 +101,18 @@ TGtPharoSuiteViewModel >> isRemote [
 
 { #category : #'api - suite' }
 TGtPharoSuiteViewModel >> playFrom: anElement [
+
 	"Perform a suite, e.g., test suite, examples.
 	anElement is a widget from which the request comes from."
+
 	<return: #TAsyncStream>
-	| aSelectedState anExecutor |
-	
+	| aSelectedState aStream |
 	aSelectedState := selectedState.
-	anExecutor := self executor.
-	^ self allSuiteCases collect: [ :eachSuiteCase |
-		(aSelectedState = self allSuiteCasesState or: [ (self suiteCaseStateOf: eachSuiteCase) = aSelectedState ])
-			ifTrue: [ anExecutor playSuiteCase: eachSuiteCase ].
-		eachSuiteCase ]
+	aStream := self allSuiteCases filter: [ :eachSuiteCase | 
+		           aSelectedState = self allSuiteCasesState or: [ 
+			           (self suiteCaseStateOf: eachSuiteCase) = aSelectedState ] ].
+
+	^ self executor playStreamForSuiteStream: aStream
 ]
 
 { #category : #'api - accessing' }
