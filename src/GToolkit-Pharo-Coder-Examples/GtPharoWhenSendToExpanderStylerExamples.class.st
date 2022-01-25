@@ -56,7 +56,7 @@ GtPharoWhenSendToExpanderStylerExamples >> styleWhenSendTo [
 			          asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel selfObject: self.
 
