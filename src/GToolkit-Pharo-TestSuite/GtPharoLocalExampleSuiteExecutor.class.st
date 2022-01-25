@@ -13,14 +13,17 @@ GtPharoLocalExampleSuiteExecutor >> isLocal [
 ]
 
 { #category : #'api - execution' }
-GtPharoLocalExampleSuiteExecutor >> playSelectedInMethodsCoder: aMethodsCoder [
+GtPharoLocalExampleSuiteExecutor >> playStreamForSuiteStream: aSuiteCaseStream [
 
-	"Execute examples of a given methods coder"
+	"Execute a given test case / example"
 
-	aMethodsCoder exampler runExamples
+	<return: #TAsyncStream>
+	^ aSuiteCaseStream map: [ :aSuiteCase | 
+		  self playSuiteCase: aSuiteCase.
+		  aSuiteCase ]
 ]
 
-{ #category : #'api - execution' }
+{ #category : #'private - execution' }
 GtPharoLocalExampleSuiteExecutor >> playSuiteCase: aSuiteCase [
 	"Execute a given test case / example"
 	

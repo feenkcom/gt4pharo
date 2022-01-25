@@ -13,15 +13,21 @@ GtPharoLocalTestSuiteExecutor >> isLocal [
 ]
 
 { #category : #'api - execution' }
-GtPharoLocalTestSuiteExecutor >> playSelectedInMethodsCoder: aTestSuite [
+GtPharoLocalTestSuiteExecutor >> playStreamForSuiteStream: aSuiteCaseStream [
 
-	"Execute test cases of a given methods coder"
-	aTestSuite playSelected
+	"Execute a given test case / example"
+
+	<return: #TAsyncStream>
+	^ aSuiteCaseStream map: [ :aSuiteCase | 
+		  self playSuiteCase: aSuiteCase ]
 ]
 
-{ #category : #'api - execution' }
+{ #category : #'private - execution' }
 GtPharoLocalTestSuiteExecutor >> playSuiteCase: aSuiteCase [
+
 	aSuiteCase hasNoTestPragma
 		ifFalse: [ aSuiteCase play ]
-		ifTrue: [ aSuiteCase beSkipped ]
+		ifTrue: [ aSuiteCase beSkipped ].
+
+	^ aSuiteCase
 ]
