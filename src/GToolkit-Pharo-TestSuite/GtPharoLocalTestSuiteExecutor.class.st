@@ -13,13 +13,6 @@ GtPharoLocalTestSuiteExecutor >> isLocal [
 ]
 
 { #category : #'api - execution' }
-GtPharoLocalTestSuiteExecutor >> playSelectedInMethodsCoder: aTestSuite [
-
-	"Execute test cases of a given methods coder"
-	aTestSuite playSelected
-]
-
-{ #category : #'api - execution' }
 GtPharoLocalTestSuiteExecutor >> playStreamForSuiteStream: aSuiteCaseStream [
 
 	"Execute a given test case / example"
