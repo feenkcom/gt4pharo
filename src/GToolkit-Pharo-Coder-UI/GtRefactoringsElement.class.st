@@ -7,7 +7,7 @@ Class {
 		'activatableRefactorings',
 		'refactoringsList'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #accessing }
@@ -52,8 +52,8 @@ GtRefactoringsElement >> initialize [
 ]
 
 { #category : #accessing }
-GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
-	activatableRefactorings := (aCollectionOfRBRefactorings
+GtRefactoringsElement >> refactorings: aCompositeRefactoring [
+	activatableRefactorings := (aCompositeRefactoring leafRefactorings
 		collect: [ :eachRefactoring | self activatableRefactoring: eachRefactoring ])
 		sorted: [ :a :b | a isDangerous ].
 
