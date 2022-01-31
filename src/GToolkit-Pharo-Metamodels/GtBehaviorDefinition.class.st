@@ -57,12 +57,7 @@ GtBehaviorDefinition >> defaultNewClassName [
 ]
 
 { #category : #'api - accepting' }
-GtBehaviorDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aBehavior [
-	^ self subclassResponsibility
-]
-
-{ #category : #'api - accepting' }
-GtBehaviorDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aBehavior in: anRBModel [
+GtBehaviorDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aBehavior in: aModel [
 	^ self subclassResponsibility
 ]
 
