@@ -16,10 +16,11 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 		vFitContentLimited;
 		refactorings: self refactorings.
 
-	applyAction := [
+	applyAction := [ | refs |
 		self fireEvent: (BrDropdownHideWish new anchor: self).
-		"theRefactoringsElement applyRefactorings."
-		self refactorings do: [ :each | each execute ].
+		refs := self refactorings.
+		refs do: #primitiveExecute.
+		refs first model changes execute.
 		self dispatchEvent: GtRefactoringsAppliedEvent new ].
 
 	anAcceptButton := BrButton new
