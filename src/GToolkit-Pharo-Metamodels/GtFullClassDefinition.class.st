@@ -56,28 +56,21 @@ GtFullClassDefinition >> createChange [
 ]
 
 { #category : #'api - accepting' }
-GtFullClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass [
-	| instRefactorings classRefactorings |
-	instRefactorings := (instanceSideDefinition
-		difference: aGtCodeDefinitionDifference instanceSideDifference
-		toRefactoringsOf: aClass instanceSide) asOrderedCollection.
-	classRefactorings := (classSideDefinition
-		difference: aGtCodeDefinitionDifference classSideDifference
-		toRefactoringsOf: aClass classSide) asOrderedCollection.
-	^ instRefactorings , classRefactorings
-]
+GtFullClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass in: aModel [
 
-{ #category : #'api - accepting' }
-GtFullClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aBehavior in: anRBModel [
 	| instRefactorings classRefactorings |
 	instRefactorings := (instanceSideDefinition
-		difference: aGtCodeDefinitionDifference instanceSideDifference
-		toRefactoringsOf: aBehavior instanceSide
-		in: anRBModel) asOrderedCollection.
+		                     difference:
+		                     aGtCodeDefinitionDifference
+			                     instanceSideDifference
+		                     toRefactoringsOf: aClass instanceSide
+		                     in: aModel) asOrderedCollection.
 	classRefactorings := (classSideDefinition
-		difference: aGtCodeDefinitionDifference classSideDifference
-		toRefactoringsOf: aBehavior classSide
-		in: anRBModel) asOrderedCollection.
+		                      difference:
+		                      aGtCodeDefinitionDifference
+			                      classSideDifference
+		                      toRefactoringsOf: aClass classSide
+		                      in: aModel) asOrderedCollection.
 	^ instRefactorings , classRefactorings
 ]
 

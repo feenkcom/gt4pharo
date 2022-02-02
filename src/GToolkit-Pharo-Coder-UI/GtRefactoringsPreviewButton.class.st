@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'refactoringsComputation'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #initialization }
@@ -18,7 +18,8 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 
 	applyAction := [
 		self fireEvent: (BrDropdownHideWish new anchor: self).
-		theRefactoringsElement applyRefactorings.
+		"theRefactoringsElement applyRefactorings."
+		self refactorings do: [ :each | each execute ].
 		self dispatchEvent: GtRefactoringsAppliedEvent new ].
 
 	anAcceptButton := BrButton new

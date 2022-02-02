@@ -193,13 +193,8 @@ GtClassDefinition >> createChange [
 ]
 
 { #category : #'api - accepting' }
-GtClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass [
-	^ aGtCodeDefinitionDifference asClassRefactorings: aClass
-]
-
-{ #category : #'api - accepting' }
-GtClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass in: anRBModel [
-	^ aGtCodeDefinitionDifference asClassRefactorings: aClass in: anRBModel
+GtClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass in: aModel [
+	^ aGtCodeDefinitionDifference asClassRefactorings: aClass in: aModel
 ]
 
 { #category : #'api - accepting' }

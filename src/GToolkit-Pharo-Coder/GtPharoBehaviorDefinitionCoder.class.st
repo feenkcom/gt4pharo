@@ -57,8 +57,12 @@ GtPharoBehaviorDefinitionCoder >> onClassChanged: anAnnouncement [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorDefinitionCoder >> refactorings [	
-	^  self definition difference: self difference toRefactoringsOf: self behavior
+GtPharoBehaviorDefinitionCoder >> refactorings [
+
+	^ self definition
+		  difference: self difference
+		  toRefactoringsOf: self behavior
+		  in: RBNamespace new
 ]
 
 { #category : #accessing }

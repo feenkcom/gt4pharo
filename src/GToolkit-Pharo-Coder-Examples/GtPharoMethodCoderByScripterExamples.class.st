@@ -668,23 +668,25 @@ GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 	
 	aScripter do
 		action: [ :aCoderViewModel | aCoderViewModel collapse ];
-		onModel.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 		
 	aScripter check
 		satisfies: [ :aCoderViewModel | aCoderViewModel expanded not ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		satisfies: [ :aCoderViewModel | aCoderViewModel focused not ];
-		onModel.
+		onModel;
+		play.
 		
 	aScripter check
 		satisfies: [ :anExpandableCoderElement | anExpandableCoderElement isCollapsed ];
-		onSelf.
+		onSelf;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - expansion' }
@@ -2076,20 +2078,21 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString: '
 	^ self printString size' ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract temp' }
@@ -2707,6 +2710,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
@@ -2715,16 +2719,16 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_01_setup [
 	temp := 42.
 	^ temp factorial printString , anObject printString')
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -2778,11 +2782,10 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_04_hover_extract_me
 	aScripter mouseMoveOver
 		label: 'Hover extract method';
 		onSpaceRoot;
-		id: GtMethodCoderExtractMethodContextMenuItemId.
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -3118,6 +3121,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_05_click_preview.
@@ -3845,6 +3849,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
@@ -3852,16 +3857,16 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	{1} := anObject.
 	{1} := {1} + 42.' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -4117,6 +4122,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactorin
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_08_preview_refactoring.
@@ -4682,6 +4688,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter substeps: 'Remove Pragma' do: [ :aStep |
