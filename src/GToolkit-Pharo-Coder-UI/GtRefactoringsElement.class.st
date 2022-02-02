@@ -7,7 +7,7 @@ Class {
 		'activatableRefactorings',
 		'refactoringsList'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #accessing }
@@ -38,13 +38,13 @@ GtRefactoringsElement >> initialize [
 	self padding: (BlInsets all: 10).
 	
 	refactoringsList := BrSimpleTree new.
-	refactoringsList
+	"refactoringsList
 		nodeType: [ :aTypeFactory :aTreeNode | aTreeNode value elementClass ];
 		nodeStencil: [ :aNodeType | aNodeType new ];
 		nodeDataBinder: [ :eachElement :eachUserActivatableRefactoring |
 			eachUserActivatableRefactoring isRefactoring
 				ifTrue: [ (eachElement activatableRefactoring: eachUserActivatableRefactoring) ]
-				ifFalse: [ (eachElement activatableChange: eachUserActivatableRefactoring) ] ].	
+				ifFalse: [ (eachElement activatableChange: eachUserActivatableRefactoring) ] ].	"
 
 	self addAptitude: (BrLayoutResizerAptitude inherit inherit: refactoringsList).
 	
@@ -53,7 +53,7 @@ GtRefactoringsElement >> initialize [
 
 { #category : #accessing }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
-	activatableRefactorings := (aCollectionOfRBRefactorings
+	"activatableRefactorings := (aCollectionOfRBRefactorings
 		collect: [ :eachRefactoring | self activatableRefactoring: eachRefactoring ])
 		sorted: [ :a :b | a isDangerous ].
 
@@ -62,5 +62,5 @@ GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
 		lazy: [ :eachUserActivatableChangeOrRefactoring |
 			eachUserActivatableChangeOrRefactoring isRefactoring
 				ifTrue: [ eachUserActivatableChangeOrRefactoring allChanges ]
-				ifFalse: [ #() ] ]
+				ifFalse: [ #() ] ]"
 ]
