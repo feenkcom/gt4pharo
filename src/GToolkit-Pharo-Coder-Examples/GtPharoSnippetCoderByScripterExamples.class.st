@@ -250,17 +250,15 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable03type [
 			aCoderViewModel
 				focused: true;
 				moveCursorAtEnd  ];
-		onModel.
-	
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 	
 	aScripter type
 		text: 'object unknownMessage';
-		id: GtSourceCoderEditorId.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		id: GtSourceCoderEditorId;
+		play.
 	
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #accessing }
@@ -272,10 +270,10 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable04checkFixitA
 	
 	aScripter check
 		onBreadthFirstChildOfClass: GtFixItButton;
-		exists.
-	
-	aScripter wait forEmptySpaceTaskQueue.
-	^ aScripter syncContinue
+		exists;
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -622,7 +620,6 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
 	aScripter check
 		label: 'Check rename editor exists';
 		exists;

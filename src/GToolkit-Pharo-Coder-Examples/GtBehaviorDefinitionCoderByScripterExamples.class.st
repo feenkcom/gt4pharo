@@ -55,13 +55,15 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Expand
 	aScripter substep: 'Expand behavior definition' do: [ :aStep |
 		aStep click
 			label: 'Click on expand element';
-			onChildAt: 1.
-		aStep wait forEmptySpaceTaskQueue.
+			onChildAt: 1;
+			play.
 		aStep check 
 			label: 'Check behavior definition element is expanded';
-			satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isExpanded ] ].
+			satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isExpanded ];
+			play.
+	].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #examples }
@@ -73,15 +75,16 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Expand
 	aScripter substep: 'Expand and collapse behavior definition' do: [ :aStep |
 		aStep click
 			label: 'Click on expand element';
-			onChildAt: 1.
-	
-		aStep wait forEmptySpaceTaskQueue.
+			onChildAt: 1;
+			play.
 	
 		aStep check
 			label: 'Check behavior definition element is collapsed';
-			satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isCollapsed ] ].
+			satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isCollapsed ];
+			play.
+	].
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #accessing }
