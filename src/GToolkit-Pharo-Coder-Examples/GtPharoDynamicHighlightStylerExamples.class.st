@@ -39,6 +39,7 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 { #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		(GtPharoSnippetCoder forSource: '#() do: [:x | ]') asCoderViewModel ].
