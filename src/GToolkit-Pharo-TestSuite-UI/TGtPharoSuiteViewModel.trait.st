@@ -101,12 +101,13 @@ TGtPharoSuiteViewModel >> isRemote [
 
 { #category : #'api - suite' }
 TGtPharoSuiteViewModel >> playFrom: anElement [
-
 	"Perform a suite, e.g., test suite, examples.
-	anElement is a widget from which the request comes from."
-
+	anElement is a widget from which the request comes from.
+	Select test cases that are part of the selected filter in the coder test run dropdown."
 	<return: #TAsyncStream>
 	| aSelectedState aStream |
+
+	"Store the state in a local variable as it may be changed in the UI while the tests are being run"
 	aSelectedState := selectedState.
 	aStream := self allSuiteCases filter: [ :eachSuiteCase | 
 		           aSelectedState = self allSuiteCasesState or: [ 

@@ -8,13 +8,17 @@ Class {
 
 { #category : #'api - execution' }
 GtPharoRemoteTestSuiteExecutor >> playStreamForSuiteStream: aSuiteCaseStream [
-
 	"Execute a given test case / example"
-
 	<return: #TAsyncStream>
-	^ aSuiteCaseStream map: [ :aTestCase | 
-		  self playSuiteCase: aTestCase.
-		  aTestCase ]
+	"| job |
+
+	job := GtRrTestsJob fromTestCaseAsyncStream: aSuiteCaseStream.
+	GtRemoteRunner default submitJob: job.
+	^ job asAsyncStream."
+
+	^ GtPharoRemoteTestSuiteStream new 
+		sourceStream: aSuiteCaseStream;
+		start
 ]
 
 { #category : #'private - execution' }
