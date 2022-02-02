@@ -3121,7 +3121,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_05_click_preview.
@@ -4122,7 +4121,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactorin
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_08_preview_refactoring.
@@ -4688,7 +4686,6 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter substeps: 'Remove Pragma' do: [ :aStep |

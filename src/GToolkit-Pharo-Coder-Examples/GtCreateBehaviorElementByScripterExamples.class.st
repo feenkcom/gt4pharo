@@ -333,7 +333,6 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 { #category : #'examples - class creator' }
 GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self typeNewClassNameForClass.
