@@ -197,6 +197,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_Check
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeStyle [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
 	aScripter checks: 'Check Expanded Source Code Style' do: [ :aStep |
@@ -4627,6 +4628,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoder
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self patternHighlighterPrintStringMethodCoderUI.
