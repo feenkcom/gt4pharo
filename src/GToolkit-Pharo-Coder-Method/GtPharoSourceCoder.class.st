@@ -577,6 +577,11 @@ GtPharoSourceCoder >> referencesFilterForSymbol: aSymbol [
 	^ self referencesFilterForLiteral: aSymbol
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> selector: aSymbol [
+	"default to ignore selector changes"
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> source [
 	<return: #String>
