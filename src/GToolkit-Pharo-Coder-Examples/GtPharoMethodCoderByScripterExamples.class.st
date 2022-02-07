@@ -37,6 +37,7 @@ GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 { #category : #'examples - basic' }
 GtPharoMethodCoderByScripterExamples >> basicMethodCoder [
 	<gtExample>
+	<noTest>
 	| aCoder |
 	aCoder := GtPharoMethodCoder new.
 	self assert: aCoder selector isNil.
@@ -50,6 +51,7 @@ GtPharoMethodCoderByScripterExamples >> basicMethodCoder [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethod [
 	<gtExample>
+	<noTest>
 
 	^ GtPharoMethodCoderExamples >> #?
 ]
@@ -57,6 +59,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethod [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoder [
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self binaryMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -66,6 +69,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoder [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [ self binaryMethodCoder ].
@@ -75,6 +79,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self binaryMethodCoderUI.
@@ -101,6 +106,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_BreadcrumbContent [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
 	aScripter checks: 'Check Breadcrumb' do: [ :aStep | 
@@ -124,6 +130,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_BreadcrumbOnClassNameClick [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |	
@@ -149,6 +156,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_BreadcrumbOnPackageClick [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
@@ -173,6 +181,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
 	self expandFromUI: aScripter method: self binaryMethod.
@@ -183,6 +192,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CheckActionButtons [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
@@ -224,6 +234,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbContent [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI.
 	aScripter checks: 'Check Breadcrumb' do: [ :aStep | 
@@ -246,6 +257,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbC
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbOnClassNameClick [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI.
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
@@ -270,6 +282,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbOnPackageClick [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI.
 	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
@@ -294,6 +307,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleActions [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
 	self 
@@ -570,6 +584,7 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
 	<gtExample>
+	<noTest>
 	| filter aScripter |
 
 	filter := GtSearchIntersectionFilter new
@@ -663,6 +678,7 @@ play.
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self coderExpandedByDefault.
@@ -693,6 +709,7 @@ GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnExpander [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self coderCollapseProgrammatically.
@@ -720,6 +737,7 @@ GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnExpander [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnHeader [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self coderCollapseProgrammatically.
@@ -749,6 +767,7 @@ GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnHeader [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self coderCollapseProgrammatically.
@@ -777,6 +796,7 @@ GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
@@ -800,6 +820,7 @@ GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> coderOnMethod: aMethod [
 	<gtExample>
+	<noTest>
 	| aCoder |
 	aCoder := self basicMethodCoder.
 	aCoder forMethod: aMethod.
@@ -815,6 +836,7 @@ GtPharoMethodCoderByScripterExamples >> coderOnMethod: aMethod [
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMethod [
 	<gtExample>
+	<noTest>
 	aScripter substep: 'Collapse and Check Coder' do: [ :aStep |
 		aStep click
 			label: 'Click on Expander';
@@ -838,6 +860,7 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -858,6 +881,7 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuCut [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -883,6 +907,7 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCut [
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -915,6 +940,7 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethod [
 
 	<gtExample>
+	<noTest>
 	^ GtPharoMethodCoderExamples >> #emptyBody
 ]
 
@@ -922,6 +948,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethod [
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoder [
 
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self emptyBodyMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -932,6 +959,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoder [
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI [
 
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ 
 		             self emptyBodyMethodCoder asCoderViewModel ].
@@ -945,6 +973,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 	"Check https://github.com/feenkcom/gtoolkit/issues/2289"
 
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self emptyBodyMethodCoderUI.
 
@@ -986,6 +1015,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_SelectMethodNameFromCompleterPopUp [
 
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self emptyBodyMethodCoderUI_ModifySourceCode.
 
@@ -1025,6 +1055,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_SelectMethodNameF
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments [
 
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self
 		             emptyBodyMethodCoderUI_SelectMethodNameFromCompleterPopUp.
@@ -1062,6 +1093,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments 
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethod [
 	<gtExample>
+	<noTest>
 
 	^ GtPharoMethodCoderExamples >> #sumMethod
 ]
@@ -1069,6 +1101,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethod [
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoder [
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self exampleMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -1078,6 +1111,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoder [
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	
 	aScripter := self scripterForBlock: [ self exampleMethodCoder asCoderViewModel ].
@@ -1088,6 +1122,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI [
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_CollapsedFromUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self exampleMethodCoderUI.
 	self collapseFromUI: aScripter method: self exampleMethod.
@@ -1109,6 +1144,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI [
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_CheckActionButtons [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 	self 
@@ -1125,6 +1161,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_PlayAndInspect [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI_CheckActionButtons.
@@ -1140,12 +1177,14 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_RemovePragma [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 
 	aScripter substeps: 'Remove Pragma' do: [ :aStep |
 		aStep do
-			label: 'Delete e character from <gtExample>';
+			label: 'Delete e character from <gtExample>
+	<noTest>';
 			action: [ :anEditor | anEditor deleter from: 20 to: 21; delete ];
 			id: GtSourceCoderEditorId;
 			play.
@@ -1196,6 +1235,7 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [
@@ -1216,6 +1256,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_02_click_fixit [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self fixitCreateClass_01_setup.
@@ -1226,6 +1267,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_02_click_fixit [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self fixitCreateClass_02_click_fixit.
@@ -1260,6 +1302,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1283,6 +1326,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self fixitCreateInstVar_01_setup.
@@ -1329,6 +1373,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1353,6 +1398,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self fixitCreateTempVar_01_setup.
@@ -1395,6 +1441,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 { #category : #'examples - abstract inst var' }
 GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1424,6 +1471,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
 { #category : #'examples - abstract inst var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAbstactInstVar_01_setup.
@@ -1439,6 +1487,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_02_cursor [
 { #category : #'examples - abstract inst var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_03_hover_abstract_variable [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAbstractInstVar_02_cursor.
@@ -1455,6 +1504,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_03_hover_abstract_var
 { #category : #'examples - abstract inst var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_variable [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAbstractInstVar_03_hover_abstract_variable.
@@ -1486,6 +1536,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1514,6 +1565,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_01_setup [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameterFromValue_01_setup.
@@ -1534,6 +1586,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_02_cursor [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_03_hover_add_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAddParameterFromValue_02_cursor.
@@ -1551,6 +1604,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_03_hover_add_pa
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameterFromValue_03_hover_add_parameter.
@@ -1629,6 +1683,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_pa
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method_name [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameterFromValue_04_click_add_parameter .
@@ -1702,6 +1757,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1730,6 +1786,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_01_setup [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameter_01_setup.
@@ -1748,6 +1805,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_02_cursor [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_03_hover_add_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAddParameter_02_cursor.
@@ -1765,6 +1823,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_03_hover_add_parameter [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameter_03_hover_add_parameter.
@@ -1843,6 +1902,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameter_04_click_add_parameter .
@@ -1916,6 +1976,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1947,6 +2008,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_01_setup [
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forConvertTempToInst_01_setup.
@@ -1965,6 +2027,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_02_cursor [
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_03_hover_convert_temporary_to_instance_variable [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forConvertTempToInst_02_cursor.
@@ -1982,6 +2045,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_03_hover_convert_te
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_04_click_convert [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forConvertTempToInst_03_hover_convert_temporary_to_instance_variable.
@@ -2019,6 +2083,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_04_click_convert [
 { #category : #'examples - create accessors' }
 GtPharoMethodCoderByScripterExamples >> forCreateAccessors_03_hover_create_accessors [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAbstractInstVar_02_cursor.
@@ -2035,6 +2100,7 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_03_hover_create_acces
 { #category : #'examples - create accessors' }
 GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_accessors [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forCreateAccessors_03_hover_create_accessors.
@@ -2072,6 +2138,7 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2100,6 +2167,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_02_select [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_01_setup.
@@ -2125,6 +2193,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_02_select [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_03_context_menu [
 	<gtExample>
+	<noTest>
 	
 	^ self openContextMenu: self forExtractTemp_02_select
 ]
@@ -2132,6 +2201,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_03_context_menu [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_04_hover_extract_temp [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_03_context_menu.
@@ -2149,6 +2219,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_04_hover_extract_temp [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_04_hover_extract_temp.
@@ -2228,6 +2299,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_06_type_variable_name [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_05_click_extract_temp.
@@ -2243,6 +2315,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_06_type_variable_name [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_06_type_variable_name.
@@ -2284,6 +2357,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_01_setup.
@@ -2311,6 +2385,7 @@ GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2339,6 +2414,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_01_setup [
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineAllSelfSends_01_setup.
@@ -2357,6 +2433,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_02_cursor [
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_03_hover_inline_message_send [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineAllSelfSends_02_cursor.
@@ -2374,6 +2451,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_03_hover_inline_me
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_04_click_inline_send [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineAllSelfSends_03_hover_inline_message_send.
@@ -2405,6 +2483,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_04_click_inline_se
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2433,6 +2512,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineMessageSend_01_setup.
@@ -2451,6 +2531,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_02_cursor [
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_03_hover_inline_message_send [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineMessageSend_02_cursor.
@@ -2468,6 +2549,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_03_hover_inline_mes
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_message_send [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineMessageSend_03_hover_inline_message_send.
@@ -2497,6 +2579,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_mes
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2525,6 +2608,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_01_setup [
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineParameter_01_setup.
@@ -2545,6 +2629,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_02_cursor [
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_03_hover_inline_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineParameter_02_cursor.
@@ -2562,6 +2647,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_03_hover_inline_param
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_04_click_inline_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineParameter_03_hover_inline_parameter.
@@ -2593,6 +2679,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_04_click_inline_param
 { #category : #'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2622,6 +2709,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_01_setup [
 { #category : #'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineTemp_01_setup.
@@ -2640,6 +2728,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_02_cursor [
 { #category : #'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineTemp_02_cursor.
@@ -2668,6 +2757,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 { #category : #'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_04_click_inline_temp [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineTemp_03_hover_inline_temp.
@@ -2704,6 +2794,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_04_click_inline_temp [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2736,6 +2827,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_01_setup [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_02_select [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordExtraction_01_setup.
@@ -2763,6 +2855,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_02_select [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_03_context_menu [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordExtraction_02_select.
@@ -2777,6 +2870,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_03_context_menu [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_04_hover_extract_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordExtraction_03_context_menu.
@@ -2793,6 +2887,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_04_hover_extract_me
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordExtraction_04_hover_extract_method.
@@ -2818,6 +2913,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_parameters_and_enter_keywords [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordExtraction_05_click_extract_method.
@@ -2855,6 +2951,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2886,6 +2983,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_02_select [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordMoveMethod_01_setup.
@@ -2913,6 +3011,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_02_select [
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_03_context_menu_move_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordMoveMethod_02_select.
@@ -2942,6 +3041,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_03_context_menu_mov
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_parameters_and_enter_keywords [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordMoveMethod_03_context_menu_move_method.
@@ -2979,6 +3079,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3019,6 +3120,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_01_setup.
@@ -3045,6 +3147,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_02_shortcut.
@@ -3074,6 +3177,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_03_move_cursor.
@@ -3098,6 +3202,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_04_type.
@@ -3123,6 +3228,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_05_click_preview.
@@ -3144,6 +3250,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3172,6 +3279,7 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forMoveVariableScope_01_setup.
@@ -3192,6 +3300,7 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_02_cursor [
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_03_hover_move_variable_declaration [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forMoveVariableScope_02_cursor.
@@ -3208,6 +3317,7 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_03_hover_move_varia
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_variable_declaration [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forMoveVariableScope_03_hover_move_variable_declaration.
@@ -3237,6 +3347,7 @@ GtPharoParser parse: (self moveVariableSource format: {''. '|temp|'}) startingAt
 { #category : #'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3267,6 +3378,7 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 { #category : #'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forProtectInstVar_01_setup.
@@ -3286,6 +3398,7 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_02_cursor [
 { #category : #'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_03_hover_protect_variable [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forProtectInstVar_02_cursor.
@@ -3302,6 +3415,7 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_03_hover_protect_varia
 { #category : #'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_variable [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forProtectInstVar_03_hover_protect_variable.
@@ -3337,6 +3451,7 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 { #category : #'examples - pull down variable' }
 GtPharoMethodCoderByScripterExamples >> forPullDownVariable_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter rootClass |
 
@@ -3371,6 +3486,7 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_01_setup [
 { #category : #'examples - pull down variable' }
 GtPharoMethodCoderByScripterExamples >> forPullDownVariable_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPullDownVariable_01_setup.
@@ -3391,6 +3507,7 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_02_cursor [
 { #category : #'examples - pull down variable' }
 GtPharoMethodCoderByScripterExamples >> forPullDownVariable_03_hover_pull_down [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forPullDownVariable_02_cursor.
@@ -3407,6 +3524,7 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_03_hover_pull_down [
 { #category : #'examples - pull down variable' }
 GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPullDownVariable_03_hover_pull_down.
@@ -3438,6 +3556,7 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3472,6 +3591,7 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_01_setup [
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPushDownMethod_01_setup .
@@ -3490,6 +3610,7 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_02_cursor [
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_03_hover_push_down_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forPushDownMethod_02_cursor.
@@ -3506,6 +3627,7 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_03_hover_push_down_met
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPushDownMethod_03_hover_push_down_method.
@@ -3543,6 +3665,7 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_met
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3572,6 +3695,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPushUpMethod_01_setup .
@@ -3590,6 +3714,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_02_cursor [
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_03_hover_push_up_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forPushUpMethod_02_cursor.
@@ -3606,6 +3731,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_03_hover_push_up_method 
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPushUpMethod_03_hover_push_up_method.
@@ -3643,6 +3769,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method 
 { #category : #'examples - push up variable' }
 GtPharoMethodCoderByScripterExamples >> forPushUpVariable_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter rootClass |
 
@@ -3677,6 +3804,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_01_setup [
 { #category : #'examples - push up variable' }
 GtPharoMethodCoderByScripterExamples >> forPushUpVariable_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPushUpVariable_01_setup.
@@ -3697,6 +3825,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_02_cursor [
 { #category : #'examples - push up variable' }
 GtPharoMethodCoderByScripterExamples >> forPushUpVariable_03_hover_push_up [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forPushUpVariable_02_cursor.
@@ -3713,6 +3842,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_03_hover_push_up [
 { #category : #'examples - push up variable' }
 GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forPushUpVariable_03_hover_push_up.
@@ -3744,6 +3874,7 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3774,6 +3905,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forRemoveParameter_01_setup.
@@ -3789,6 +3921,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forRemoveParameter_02_cursor.
@@ -3805,6 +3938,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_param
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_parameter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forRemoveParameter_03_hover_remove_parameter.
@@ -3842,6 +3976,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3873,6 +4008,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_02_select [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_01_setup.
@@ -3898,6 +4034,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_02_select [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_02_select.
@@ -3912,6 +4049,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_04_hover_extract_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_03_context_menu.
@@ -3929,6 +4067,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_04_hover_extract_meth
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_04_hover_extract_method.
@@ -4020,6 +4159,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_06_type_method_name [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_05_click_extract_method.
@@ -4045,6 +4185,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_06_type_method_name [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_enter [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_06_type_method_name.
@@ -4103,6 +4244,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactoring [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_07_01_accept_with_enter.
@@ -4123,6 +4265,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactorin
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_08_preview_refactoring.
@@ -4155,6 +4298,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -4184,6 +4328,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_01_setup [
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_02_select [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryMoveMethod_01_setup.
@@ -4211,6 +4356,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_02_select [
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryMoveMethod_02_select.
@@ -4304,6 +4450,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_method_and_enter_name [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryMoveMethod_02_select.
@@ -4412,6 +4559,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 	<gtExample>
+	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -4449,6 +4597,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryRename_01_setup.
@@ -4478,6 +4627,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 { #category : #'examples - basic' }
 GtPharoMethodCoderByScripterExamples >> methodCoder [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripter.
 	aScripter set model: [ self basicMethodCoder ].
@@ -4517,12 +4667,14 @@ GtPharoMethodCoderByScripterExamples >> openContextMenu: aScripter [
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethod [
 	<gtExample>
+	<noTest>
 	^ GtPharoMethodCoderExamples >> #a:a:a:a:
 ]
 
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoder [
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self patternHighlighterMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -4533,6 +4685,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoder [
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterMethodCoder ].
 	^ aScripter
@@ -4541,6 +4694,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI [
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self patternHighlighterMethodCoderUI.
@@ -4561,6 +4715,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI_CheckUnd
 { #category : #'examples - pattern highlither - print' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethod [
 	<gtExample>
+	<noTest>
 
 	^ GtPharoMethodCoderExamples >> #printStringReference
 ]
@@ -4568,6 +4723,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethod [
 { #category : #'examples - pattern highlither - print' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoder [
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self patternHighlighterPrintMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -4578,6 +4734,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoder [
 { #category : #'examples - pattern highlither - print' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoderUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterPrintMethodCoder ].
 	^ aScripter
@@ -4586,6 +4743,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoderUI [
 { #category : #'examples - pattern highlither - print' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self patternHighlighterPrintMethodCoderUI.
@@ -4611,6 +4769,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintMethodCoderUI_Che
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoder [
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self patternHighlighterPrintMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -4621,6 +4780,7 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoder
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoderUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterPrintStringMethodCoder ].
 	^ aScripter
@@ -4644,12 +4804,14 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoder
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethod [
 	<gtExample>
+	<noTest>
 	^ GtPharoMethodCoderExamples >> #b
 ]
 
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoder [
 	<gtExample>
+	<noTest>
 	| aMethod aCoder |
 	aMethod := self referencedExampleMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -4659,6 +4821,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoder [
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self referencedExampleMethodCoder asCoderViewModel ].
 	^ aScripter
@@ -4667,6 +4830,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI [
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExampleAttribute [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	
 	aScripter := self referencedExampleMethodCoderUI.
@@ -4678,6 +4842,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExampleExpandAttribute [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter checks: 'Check Example Status and Expand Attribute' do: [ :aStep | 
@@ -4689,11 +4854,13 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter substeps: 'Remove Pragma' do: [ :aStep |
 		aStep do
-			label: 'Delete e character from <gtExample>';
+			label: 'Delete e character from <gtExample>
+	<noTest>';
 			action: [ :anEditor | anEditor deleter from: 12 to: 13; delete ];
 			id: GtSourceCoderEditorId;
 			onBrTextEditor;
@@ -4716,11 +4883,13 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion_WriteExamplePragma [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion.
 	aScripter substeps: 'Insert Pragma' do: [ :aStep |
 		aStep do
-			label: 'Insert e character in <gtExample>';
+			label: 'Insert e character in <gtExample>
+	<noTest>';
 			action: [ :anEditor | anEditor inserter at: 12; string: 'e'; insert ];
 			id: GtSourceCoderEditorId;
 			onBrTextEditor;
@@ -4733,5 +4902,25 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 	aScripter checks: 'Check Example Status Is Present' do: [ :aStep | 
 		self checkFor: aStep textExpandAttributeAt: 24.
 		self checkFor: aStep textExampleStatusAttributeAt: 1. ].
+	^ aScripter
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> scripterForBlock: aBlock [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self scripter.
+	aScripter substep: 'Initialize Coder Model and UI' do: [ :aStep | 
+		aStep set 
+			label: 'Initialize Coder Model';
+			model: aBlock;
+			play.
+		aStep set 
+			label: 'Initialize Coder UI';
+			element: [ :aCoder | aCoder asElement ];
+			onModel;
+			play ].
+
 	^ aScripter
 ]
