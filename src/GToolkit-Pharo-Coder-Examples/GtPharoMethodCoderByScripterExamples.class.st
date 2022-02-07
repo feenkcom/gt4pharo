@@ -1098,6 +1098,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_CollapsedFromUI [
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self exampleMethodCoderUI_CollapsedFromUI.
 	self expandFromUI: aScripter method: self exampleMethod.
