@@ -546,6 +546,7 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_04_click_extract_method [
 	<gtExample>
+	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_03_context_menu.
