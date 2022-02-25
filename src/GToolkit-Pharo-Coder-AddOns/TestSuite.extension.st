@@ -19,6 +19,6 @@ TestSuite >> gtAllCompiledMethods [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 TestSuite >> testCasesDo: aBlock [
 
-	self tests ifNil: [ ^ self ].
+	tests ifNil: [ ^ self ].
 	self tests do: [ :eachTest | eachTest testCasesDo: aBlock ]
 ]
