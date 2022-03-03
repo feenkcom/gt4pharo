@@ -57,35 +57,37 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 
 { #category : #initialization }
 GtRefactoringsPreviewButton >> initialize [
+
 	super initialize.
-	
-	refactoringsComputation := [ #() ].
-	
+
+	refactoringsComputation := [ #(  ) ].
+
 	self
 		icon: BrGlamorousVectorIcons accept;
 		beSmallSize;
-		aptitude: BrGlamorousButtonWithIconAptitude new + (BrGlamorousWithDropdownAptitude
-			handle: [
-				BrButton new
-					icon: BrGlamorousIcons empty;
-					beSmallSize;
-					aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
-			content: [
-				BlLazyElement new
-					layout: BlLinearLayout vertical;
-					withGlamorousPreview: 'Computing...';
-					constraintsDo: [ :c |
-						c vertical exact: 50.
-						c horizontal exact: self previewWidth ];
-					postAction: [ :theLazyElement |								
-						theLazyElement constraintsDo: [ :c | 
-							c vertical fitContentLimited ] ];
-					elementBuilder: [ self buildRefactoringsPreview ] ]);
+		aptitude: BrGlamorousButtonWithIconAptitude new
+			+ (BrGlamorousWithDropdownAptitude
+					 handle: [ 
+						 BrButton new
+							 icon: BrGlamorousIcons empty;
+							 beSmallSize;
+							 aptitude: BrGlamorousButtonRectangularAptitude new
+								 + BrGlamorousButtonIconAptitude new ]
+					 content: [ 
+						 BrAsyncWidget new
+							 layout: BlLinearLayout vertical;
+							 constraintsDo: [ :c | 
+								 c vertical exact: 50.
+								 c horizontal exact: self previewWidth ];
+							 postAction: [ :theLazyElement | 
+								 theLazyElement constraintsDo: [ :c | 
+										 c vertical fitContentLimited ] ];
+							 stencil: [ self buildRefactoringsPreview ] ]);
 		label: 'Preview'.
-		
+
 	self addShortcut: (BlShortcutWithAction new
-		combination: BlKeyCombination return;
-		action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ])
+			 combination: BlKeyCombination return;
+			 action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ])
 ]
 
 { #category : #initialization }
