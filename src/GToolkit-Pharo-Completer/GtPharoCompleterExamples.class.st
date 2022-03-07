@@ -48,61 +48,74 @@ GtPharoCompleterExamples >> clickingSelectedCompletionItemTriggersCompletion [
 		id: #'completion-list';
 		satisfies: [ :element | element selectedIndices asArray = #(1) ];
 		play.
-	aScripter syncContinue.
+
 	(aScripter click)
 		label: 'Click first item';
 		onSpaceRoot;
 		id: #'completion-list';
 		onBreadthFirstChildOfClass: BrLabel;
 		play.
-	aScripter syncContinue.
+
 	(aScripter check)
 		label: 'Verify completion popup has closed';
 		onSpaceRoot;
 		id: #'completion-list';
-		notExists.
+		notExists;
+		play.
+
 	(aScripter check)
 		label: 'Check text was updated with completion';
-		do: [ :element | self assert: (element text asString endsWith: 'isMethod') ].
-	aScripter syncContinue.
+		do: [ :element | self assert: (element text asString endsWith: 'isMethod') ];
+		play.
+
 	^ aScripter
 ]
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> completeFullSelector [
-	<gtExample>
-	
+	<gtExample>	
 	| aScripter text |
+
 	aScripter := self completeFullVariableName.
 	self enterText: ' ' in: aScripter.
-	aScripter check do: [ :element | text := element text asString ].
+
+	aScripter check
+		do: [ :element | text := element text asString ];
+		play.
+
 	self openCompletionIn: aScripter.
 	self completeWithTabIn: aScripter.
-	aScripter check satisfies: [ :element | element text asString ~= text ].
-	aScripter syncContinue.
+	aScripter check
+		satisfies: [ :element | element text asString ~= text ];
+		play.
+
 	^ aScripter
 ]
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> completeFullVariableName [
-	<gtExample>
-	
+	<gtExample>	
 	| aScripter |
+
 	aScripter := self completePrintOnMethodSelector.
+
 	self enterText: ' ' in: aScripter.
 	self openCompletionIn: aScripter.
 	self selectionCompletionItem: 'aStream' in: aScripter.
 	self completeWithTabIn: aScripter.
-	aScripter check satisfies: [ :element | (element text asString allRangesOfSubstring: 'aStream') size = 2 ].
-	aScripter syncContinue.
+
+	aScripter check
+		satisfies: [ :element | (element text asString allRangesOfSubstring: 'aStream') size = 2 ];
+		play.
+
 	^ aScripter
 ]
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	<gtExample>
-	
 	| aScripter |
+
 	aScripter := self completePrintOnMethodSelector.
 	(aScripter keyClick: BlKeyboardKey return) play.
 	(aScripter keyClick: BlKeyboardKey tab) play.
@@ -110,9 +123,11 @@ GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	self openCompletionIn: aScripter.
 	self selectionCompletionItem: 'isMethod' in: aScripter.
 	self completeWithTabIn: aScripter.
+
 	aScripter check
-		do: [ :element | self assert: element text asString lines equals: self instanceVariableReceiverSource lines ].
-	aScripter syncContinue.
+		do: [ :element | self assert: element text asString lines equals: self instanceVariableReceiverSource lines ];
+		play.
+
 	^ aScripter
 ]
 
@@ -167,24 +182,28 @@ GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 	self enterText: '[^2]' in: aScripter.
 	aScripter check
 		do:
-			[ :element | self assert: element text asString lines equals: (self instanceVariableReceiverSource , ' ifTrue: [^1] ifFalse: [^2]') lines ].
-	aScripter syncContinue.
+			[ :element | self assert: element text asString lines equals: (self instanceVariableReceiverSource , ' ifTrue: [^1] ifFalse: [^2]') lines ];
+		play.
+
 	^ aScripter
 ]
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	<gtExample>
-	
 	| aScripter text |
 	text := 'printOn:'.
+
 	aScripter := self smalltalkCompletionMethodEditor.
 	self enterText: 'prin' in: aScripter.
 	self openCompletionIn: aScripter.
 	self selectionCompletionItem: text in: aScripter.
 	self completeWithTabIn: aScripter.
-	aScripter check satisfies: [ :element | element text asString beginsWith: text ].
-	aScripter syncContinue.
+
+	aScripter check
+		satisfies: [ :element | element text asString beginsWith: text ];
+		play.
+
 	^ aScripter
 ]
 
@@ -233,22 +252,23 @@ GtPharoCompleterExamples >> completeVariableFromBinding [
 	aCompletionController := GtCompletionController on: anEditor strategy: strategy.
 	aCompletionController install.
 	aScripter element: anEditor.
-	(aScripter click)
+	aScripter click
 		label: 'focus editor';
 		play.
-	aScripter syncContinue.
+
 	self openCompletionIn: aScripter.
 	self selectionCompletionItem: name asString in: aScripter.
 	self completeWithTabIn: aScripter.
-	aScripter check satisfies: [ :element | element text asString = name asString ].
-	aScripter syncContinue.
+	aScripter check
+		satisfies: [ :element | element text asString = name asString ];
+		play.
+
 	^ aScripter
 ]
 
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> completeWithTabIn: aScripter [
-	(aScripter keyClick: BlKeyboardKey tab) play.
-	aScripter syncContinue
+	(aScripter keyClick: BlKeyboardKey tab) play
 ]
 
 { #category : #smalltalk }
@@ -323,8 +343,7 @@ GtPharoCompleterExamples >> endingStatementRequestedCompletions [
 
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> enterText: aString in: aScripter [
-	(aScripter type: aString) play.
-	aScripter syncContinue
+	(aScripter type: aString) play
 ]
 
 { #category : #'private-source' }
@@ -365,13 +384,9 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> openCompletionIn: aScripter [
-	BlUseAsyncFeatures
-		disableDuring:
-			[ (aScripter keyDown: self secondaryKey) play.
-			(aScripter keyClick: BlKeyboardKey space) play.
-			(aScripter keyUp: self secondaryKey) play.
-			aScripter wait forEmptySpaceTaskQueue ].
-	aScripter syncContinue
+	(aScripter keyDown: self secondaryKey) play.
+	(aScripter keyClick: BlKeyboardKey space) play.
+	(aScripter keyUp: self secondaryKey) play
 ]
 
 { #category : #'private-source' }
@@ -400,8 +415,7 @@ GtPharoCompleterExamples >> selectionCompletionItem: text in: aScripter [
 						whileTrue: [ (items at: i) label = text ifTrue: [ item := items at: i ] ifFalse: [ i := i + 1 ] ].
 					self assert: item notNil.
 					element selectOne: i ];
-		play.
-	aScripter syncContinue
+		play
 ]
 
 { #category : #smalltalk }
@@ -438,10 +452,9 @@ GtPharoCompleterExamples >> smalltalkCompletionMethodEditor [
 	aCompletionController := GtCompletionController on: anEditor strategy: self smalltalkStrategy.
 	aCompletionController install.
 	aScripter element: anEditor.
-	(aScripter click)
+	aScripter click
 		label: 'focus editor';
 		play.
-	aScripter syncContinue.
 	^ aScripter
 ]
 
