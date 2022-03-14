@@ -14,7 +14,7 @@ GtPharoHaltStylerExamples >> haltNowHighlighted [
 	aCoder := GtPharoSnippetCoder forSource: 'x := 42. Halt now. y := 42' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoHaltStyler new
 		coderViewModel: aCoder asCoderViewModel;
@@ -39,7 +39,7 @@ GtPharoHaltStylerExamples >> haltOnceHighlighted [
 	aCoder := GtPharoSnippetCoder forSource: 'x := 42. Halt once. y := 42' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoHaltStyler new
 		coderViewModel: aCoder asCoderViewModel;
