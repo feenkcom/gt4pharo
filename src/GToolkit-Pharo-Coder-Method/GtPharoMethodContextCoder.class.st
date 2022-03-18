@@ -84,8 +84,8 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	
 	variablesList sort: [:node1 :node2 | node1 key < node2 key].
 	variablesList 
-		addFirst: (GTInspectorSelfNode hostObject: self receiver);
-		addLast: (GTInspectorDynamicNode hostObject: self context label: 'thisContext' value: self context).
+		addFirst: (GtInspectorSelfNode hostObject: self receiver);
+		addLast: (GtInspectorDynamicNode hostObject: self context label: 'thisContext' value: self context).
 	self stackVariableNodesDo: [ :aNode | variablesList add: aNode ].
 	^ variablesList
 	
@@ -119,7 +119,7 @@ GtPharoMethodContextCoder >> instanceVariableNamesAndValuesDo: aBlock [
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> instanceVariableNodesDo: aBloc [
 	self receiver class allSlots collect: [ :aSlot | 
-		aBloc value: (GTInspectorSlotNode 
+		aBloc value: (GtInspectorSlotNode 
 			hostObject: self receiver 
 			slot: aSlot) ]
 ]
@@ -219,7 +219,7 @@ GtPharoMethodContextCoder >> stackVariableNodesDo: aBlock [
 		ifTrue: [ ^ self ].
 	stackPosition := 0.
 	self context stackPtr to: self context numTemps + 1 by: -1 do: [ :i | 
-		aBlock value: (GTInspectorDynamicNode 
+		aBlock value: (GtInspectorDynamicNode 
 			hostObject: self context
 			label: ('stack top' ,
 				(stackPosition > 0
@@ -247,7 +247,7 @@ GtPharoMethodContextCoder >> tempNamesAndValuesDo: aBlock [
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> temporaryVariableNodesDo: aBloc [
 	self context tempNames withIndexCollect: [ :tempName :tempIndex |
-		aBloc value: (GTInspectorContextNamedTempNode 
+		aBloc value: (GtInspectorContextNamedTempNode 
 			hostObject: self context 
 			tempName: tempName 
 			tempIndex: tempIndex) ]
@@ -269,7 +269,7 @@ GtPharoMethodContextCoder >> updateSourceFromContext [
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> workspaceDoItNodesDo: aBloc [
 	self context gtDebuggerDoItBindings do: [:aBinding |
-		aBloc value: ((GTInspectorDynamicNode 
+		aBloc value: ((GtInspectorDynamicNode 
 			hostObject: self context 
 			label: aBinding key 
 			value: aBinding value)
