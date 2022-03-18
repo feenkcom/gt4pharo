@@ -51,16 +51,6 @@ GtPharoSnippetCoder >> initialize [
 	self forSource: ''
 ]
 
-{ #category : #private }
-GtPharoSnippetCoder >> newCompletionStrategy [
-	| strategy |
-	strategy := super newCompletionStrategy
-		isMethod: false;
-		hasImplicitVariables: true;
-		yourself.
-	^ strategy
-]
-
 { #category : #'private - ast rb' }
 GtPharoSnippetCoder >> newRbAST: aString [
 	| ast |
