@@ -121,6 +121,13 @@ GtPharoSourceCoderViewModel >> localBindings [
 	^ localBindings
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoderViewModel >> newCompletionStrategy [
+	^ GtPharoCompletionStrategy new
+		classOrMetaClass: self behavior;
+		yourself
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> selfObject [
 	"Return an object that should be bound to `self` during code evaluation"

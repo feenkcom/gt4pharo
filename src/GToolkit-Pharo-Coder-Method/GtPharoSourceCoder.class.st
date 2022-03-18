@@ -277,13 +277,6 @@ GtPharoSourceCoder >> isForMethod [
 	^ false
 ]
 
-{ #category : #private }
-GtPharoSourceCoder >> newCompletionStrategy [
-	^ GtPharoCompletionStrategy new
-		classOrMetaClass: self behavior;
-		yourself
-]
-
 { #category : #'private - actions' }
 GtPharoSourceCoder >> newEvaluationContext [
 	^ GtPharoSourceCoderEvaluationContext new

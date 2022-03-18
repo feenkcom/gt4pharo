@@ -97,21 +97,13 @@ GtPharoStyler >> visitArray: anArray [
 { #category : #accessing }
 GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 	| color aLeftIndex aRightIndex |
-	super visitArrayLiteral: anArrayLiteral.
 	color := self parenthesesColorAt: anArrayLiteral nestingLevel.
 	aLeftIndex := anArrayLiteral arrayStart startPosition.
 	aRightIndex := anArrayLiteral arrayStop startPosition.
-	(text
-		from: aLeftIndex
-		to: aLeftIndex+1)
-		foreground: color.
-	(text
-		from: aRightIndex
-		to: aRightIndex)
-		foreground: color.
-	self 
-		highlightParenthesesLeft: aLeftIndex
-		right: aRightIndex.
+	(text from: aLeftIndex to: aLeftIndex + 1) foreground: color.
+	(text from: aRightIndex to: aRightIndex) foreground: color.
+	self highlightParenthesesLeft: aLeftIndex right: aRightIndex.
+	super visitArrayLiteral: anArrayLiteral
 ]
 
 { #category : #visiting }

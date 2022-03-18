@@ -87,6 +87,16 @@ GtPharoSnippetCoderViewModel >> localSnippetVariableBindings [
 	^ theBindings
 ]
 
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> newCompletionStrategy [
+	| strategy |
+	strategy := super newCompletionStrategy
+		isMethod: false;
+		hasImplicitVariables: true;
+		yourself.
+	^ strategy
+]
+
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
@@ -135,5 +145,5 @@ GtPharoSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
 
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> updateCompletionBindings [
-	coderModel ifNotNil: [ coderModel completionStrategy bindings: self localSnippetVariableBindings  ]
+	completionStrategy ifNotNil: [ completionStrategy bindings: self localSnippetVariableBindings  ]
 ]
