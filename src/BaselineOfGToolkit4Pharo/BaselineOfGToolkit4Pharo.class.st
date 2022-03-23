@@ -16,13 +16,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.45/src' ].
 		spec
 			baseline: 'GToolkitRefactoringsUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.101/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.102/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.684/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.685/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.562/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.563/src' ].
 		spec
 			baseline: 'SmaCC' with: [
 				spec repository: 'github://j-brant/SmaCC:6d40902bfc67fac2d45eea3c6dd765361e41ec8f/src' ].
