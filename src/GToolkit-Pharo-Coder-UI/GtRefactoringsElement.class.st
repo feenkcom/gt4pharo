@@ -40,7 +40,11 @@ GtRefactoringsElement >> initialize [
 { #category : #accessing }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
 	| changes |
-	aCollectionOfRBRefactorings do: #primitiveExecute. 
+	aCollectionOfRBRefactorings
+		do:
+			[ :each | 
+			each model name: each printString.
+			each primitiveExecute ].
 	changes := aCollectionOfRBRefactorings first model changes.
-	refactoringsList items: { changes } lazy: [ :each | each gtChildren ]
+	refactoringsList items: {changes} lazy: [ :each | each gtChildren ]
 ]
