@@ -9,7 +9,7 @@ Class {
 		'isEnabled',
 		'isExpanded'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #'instance creation' }
@@ -81,11 +81,10 @@ GtUserActivatableChange >> isEnabled [
 
 { #category : #accessing }
 GtUserActivatableChange >> isEnabled: aBoolean [
-	isEnabled = aBoolean
-		ifTrue: [ ^ self ].
-
-	self setEnabledWithoutRefactoring: aBoolean.
-	self refactoring changeStateChanged
+	isEnabled = aBoolean ifTrue: [ ^ self ].
+	isEnabled := aBoolean.
+	self onEnablementStateChanged.
+	changes do: [ :each | each isEnabled: aBoolean ]
 ]
 
 { #category : #accessing }
@@ -111,24 +110,4 @@ GtUserActivatableChange >> onEnablementStateChanged [
 { #category : #printing }
 GtUserActivatableChange >> printOn: aStream [
 	aStream print: self change
-]
-
-{ #category : #accessing }
-GtUserActivatableChange >> refactoring [
-	^ refactoring
-]
-
-{ #category : #accessing }
-GtUserActivatableChange >> refactoring: anObject [
-	refactoring := anObject.
-	self changes do: [ :eachChange | eachChange refactoring: self refactoring ]
-]
-
-{ #category : #accessing }
-GtUserActivatableChange >> setEnabledWithoutRefactoring: aBoolean [
-	isEnabled = aBoolean
-		ifTrue: [ ^ self ].
-
-	isEnabled := aBoolean.
-	self onEnablementStateChanged
 ]
