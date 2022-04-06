@@ -31,6 +31,11 @@ GtPharoMethodPasswordStyler class >> gtSelectorsFor: aView [
 		  view: #gtSelectorsFor:
 ]
 
+{ #category : #comparing }
+GtPharoMethodPasswordStyler >> = anObject [
+	^ self class = anObject class
+]
+
 { #category : #accessing }
 GtPharoMethodPasswordStyler >> definitions [
 
