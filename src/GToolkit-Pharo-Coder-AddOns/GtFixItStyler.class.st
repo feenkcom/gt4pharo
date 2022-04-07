@@ -9,6 +9,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
+{ #category : #comparing }
+GtFixItStyler >> = anObject [
+	^ self class = anObject class
+		and: [ self isForWorkspace = anObject isForWorkspace and: [ self variableBindings == anObject variableBindings ] ]
+]
+
 { #category : #'private - variables' }
 GtFixItStyler >> canAddInstanceVariable: aString to: aClass [
 	(Object includesBehavior: aClass)
@@ -77,6 +83,11 @@ GtFixItStyler >> initialize [
 ]
 
 { #category : #accessing }
+GtFixItStyler >> isForWorkspace [
+	^ isForWorkspace
+]
+
+{ #category : #accessing }
 GtFixItStyler >> isForWorkspace: aBoolean [
 	isForWorkspace := aBoolean
 ]
@@ -131,6 +142,11 @@ GtFixItStyler >> typeOf: aGtPharoProgramNode [
 			ifTrue: [ self coderViewModel selfObject class ]
 			ifFalse: [ self sourceCoder behavior ])
 		bindings: variableBindings
+]
+
+{ #category : #accessing }
+GtFixItStyler >> variableBindings [
+	^ variableBindings
 ]
 
 { #category : #visiting }

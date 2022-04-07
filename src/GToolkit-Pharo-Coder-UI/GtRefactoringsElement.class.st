@@ -11,16 +11,14 @@ Class {
 }
 
 { #category : #accessing }
-GtRefactoringsElement >> activatableRefactoring: aRefactoring [
-	^ aRefactoring options
-		at: #activatableRefactoring
-		ifAbsent: [ | activatableRefactoring |
-			activatableRefactoring := GtUserActivatableRefactoring
-				fromRefactoring: aRefactoring.
-			aRefactoring
-				setOption: #activatableRefactoring
-				toUse: activatableRefactoring.
-			activatableRefactoring ]
+GtRefactoringsElement >> applyRefactorings [
+	| aCompositeChange theChanges |
+	aCompositeChange := RBCompositeRefactoryChange new.
+	theChanges := (refactoringsList viewModel root value flatCollect: #allChanges)
+		select: [ :eachChange | eachChange isEnabled ]
+		thenCollect: [ :eachChange | eachChange change gtWithoutChanges ].
+	aCompositeChange changes: theChanges.
+	GtPharoCodeModifier current performRefactoryChange: aCompositeChange andAddUndoPointer: 1
 ]
 
 { #category : #initialization }
@@ -30,8 +28,9 @@ GtRefactoringsElement >> initialize [
 	self matchParent.
 	self padding: (BlInsets all: 10).
 	refactoringsList := (BrSimpleTree new)
-		nodeStencil: [ BrLabel new aptitude: BrGlamorousLabelAptitude ];
-		nodeDataBinder: [ :aNodeElement :aRef | aNodeElement text: aRef gtDescription ];
+		nodeType: [ :aTypeFactory :aTreeNode | aTreeNode value elementClass ];
+		nodeStencil: [ :aNodeType | aNodeType new ];
+		nodeDataBinder: [ :eachElement :eachUserActivatableChange | eachElement activatableChange: eachUserActivatableChange ];
 		yourself.
 	self addAptitude: (BrLayoutResizerAptitude inherit inherit: refactoringsList).
 	self addChild: refactoringsList
@@ -46,5 +45,5 @@ GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
 			each model name: each printString.
 			each primitiveExecute ].
 	changes := aCollectionOfRBRefactorings first model changes.
-	refactoringsList items: {changes} lazy: [ :each | each gtChildren ]
+	refactoringsList items: {GtUserActivatableChange fromChange: changes} lazy: [ :each | each changes ]
 ]

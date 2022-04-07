@@ -55,29 +55,27 @@ GtPharoDynamicHighlightStyler >> visitNamedVariable: aNamedVariable [
 		allNodesOfType: aNamedVariable class
 		do: [ :node |
 			node = aNamedVariable
-				ifTrue: [ theVariableOccurences add: node ] ].
-
-	theVariableOccurences do: [ :eachVariableNode |
-		text
-			attribute: aVariableMarker
-			from: eachVariableNode startPosition
-			to: eachVariableNode stopPosition ].
+				ifTrue: [ 
+					(node ~~ aNamedVariable and: [ theVariableOccurences isEmpty ])
+						ifTrue: [ ^ self ].
+					theVariableOccurences add: node ] ].
 		
 	theVariableOccurences size <= 1
 		ifTrue: [ ^ self ].
 
-	(text
-		from: aNamedVariable name startPosition
-		to: aNamedVariable name stopPosition)
-			attribute: aVariableMarker;
-			onCursorEnter: [ :aTextEditor :anEvent | 
-				aTextEditor text
-					findAttribute: aVariableMarker
-					indicesDo: [ :aVariableStart :aVariableEnd |
-						aTextEditor text
-							attribute: aVariableHighlightAttribute
-							from: aVariableStart
-							to: aVariableEnd ] ]
-			leave: [ :aTextEditor :anEvent |
-				aTextEditor text removeAttribute: aVariableHighlightAttribute ]
+	theVariableOccurences do: [ :each | 
+		(text
+			from: each startPosition
+			to: each stopPosition)
+				attribute: aVariableMarker;
+				onCursorEnter: [ :aTextEditor :anEvent | 
+					aTextEditor text
+						findAttribute: aVariableMarker
+						indicesDo: [ :aVariableStart :aVariableEnd |
+							aTextEditor text
+								attribute: aVariableHighlightAttribute
+								from: aVariableStart
+								to: aVariableEnd ] ]
+				leave: [ :aTextEditor :anEvent |
+					aTextEditor text removeAttribute: aVariableHighlightAttribute ] ]
 ]
