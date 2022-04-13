@@ -18,7 +18,6 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 
 	applyAction := [ | refs |
 		self fireEvent: (BrDropdownHideWish new anchor: self).
-		"self refactorings first model changes execute."
 		theRefactoringsElement applyRefactorings.
 		self dispatchEvent: GtRefactoringsAppliedEvent new ].
 
