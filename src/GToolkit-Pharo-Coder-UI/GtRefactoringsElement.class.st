@@ -14,9 +14,12 @@ Class {
 GtRefactoringsElement >> applyRefactorings [
 	| aCompositeChange theChanges |
 	aCompositeChange := RBCompositeRefactoryChange new.
-	theChanges := (refactoringsList viewModel root value flatCollect: #allChanges)
+
+			"theChanges := (refactoringsList viewModel root value flatCollect: #allChanges)
 		select: [ :eachChange | eachChange isEnabled ]
-		thenCollect: [ :eachChange | eachChange change gtWithoutChanges ].
+		thenCollect: [ :eachChange | eachChange change gtWithoutChanges ]."
+		
+	theChanges := refactoringsList viewModel root value collect: [ :each | each change copy ].
 	aCompositeChange changes: theChanges.
 	GtPharoCodeModifier current performRefactoryChange: aCompositeChange andAddUndoPointer: 1
 ]
