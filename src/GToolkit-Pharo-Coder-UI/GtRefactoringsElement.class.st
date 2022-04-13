@@ -12,15 +12,11 @@ Class {
 
 { #category : #accessing }
 GtRefactoringsElement >> applyRefactorings [
-	| aCompositeChange theChanges |
+	| aCompositeChange disabledChanges |
 	aCompositeChange := RBCompositeRefactoryChange new.
-
-			"theChanges := (refactoringsList viewModel root value flatCollect: #allChanges)
-		select: [ :eachChange | eachChange isEnabled ]
-		thenCollect: [ :eachChange | eachChange change gtWithoutChanges ]."
-		
-	theChanges := refactoringsList viewModel root value collect: [ :each | each change copy ].
-	aCompositeChange changes: theChanges.
+	disabledChanges := (refactoringsList viewModel root value flatCollect: #allChanges) reject: [ :each | each isEnabled ].
+	aCompositeChange changes: (refactoringsList viewModel root value collect: [ :each | each change copy ]) asOrderedCollection.
+	disabledChanges do: [ :each | aCompositeChange recursivelyRemoveChange: each change ].
 	GtPharoCodeModifier current performRefactoryChange: aCompositeChange andAddUndoPointer: 1
 ]
 
