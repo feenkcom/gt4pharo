@@ -64,7 +64,7 @@ GtPharoHaltStylerExamples >> selfHaltHighlighted [
 	aCoder := GtPharoSnippetCoder forSource: 'x := 42. self halt. y := 42' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
+	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoHaltStyler new
 		coderViewModel: aCoder asCoderViewModel;
@@ -83,23 +83,26 @@ GtPharoHaltStylerExamples >> selfHaltHighlighted [
 
 { #category : #accessing }
 GtPharoHaltStylerExamples >> selfHaltOnceHighlighted [
+
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: 'x := 42. self haltOnce. y := 42' asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          'x := 42. self haltOnce. y := 42' asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoHaltStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextHighlightAttribute) and: [ eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+			(eachAttribute isKindOf: BlTextHighlightAttribute) and: [ 
+				eachAttribute paint = BrGlamorousColors paleErrorBackgroundColor ] ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (15 to: 22).
 

@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
-	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - source code' }
@@ -29,23 +29,25 @@ GtPharoGlamorousIconStylerExamples >> glamorousVectorIcon [
 
 { #category : #'examples - styling' }
 GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
+
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: (BrGlamorousIcons name, ' ', #refresh) asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          (BrGlamorousIcons name , ' ' , #refresh) asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoGlamorousIconStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+			eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (24 to: 24).
 
@@ -54,23 +56,25 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 
 { #category : #'examples - styling' }
 GtPharoGlamorousIconStylerExamples >> vectorRefreshIcon [
+
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
-	
-	aCoder := GtPharoSnippetCoder forSource: (BrGlamorousVectorIcons name, ' ', #refresh) asRopedText.
+	aCoder := GtPharoSnippetCoder forSource:
+		          (BrGlamorousVectorIcons name , ' ' , #refresh) asRopedText.
 
 	anAst := aCoder astAwait.
-	aSourceText := aCoder sourceText copy unstyled.
-	
+	aSourceText := aCoder currentSourceText copy unstyled.
+
 	GtPharoGlamorousIconStyler new
 		coderViewModel: aCoder asCoderViewModel;
-		style: aSourceText
-		ast: anAst.
-	
+		style: aSourceText ast: anAst.
+
 	aRedInterval := 1 to: 0.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
-		indicesDo: [ :aStartPosition :anEndPosition | aRedInterval := aStartPosition to: anEndPosition ].	
+		findAttributesSuchThat: [ :eachAttribute | 
+			eachAttribute isKindOf: BrTextAdornmentDynamicAttribute ]
+		indicesDo: [ :aStartPosition :anEndPosition | 
+			aRedInterval := aStartPosition to: anEndPosition ].
 
 	self assert: aRedInterval equals: (30 to: 30).
 
