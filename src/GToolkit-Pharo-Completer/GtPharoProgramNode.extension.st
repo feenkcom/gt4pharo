@@ -74,7 +74,7 @@ GtPharoProgramNode >> localVariables [
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy [
-	| index type name completionsStream replacementsStream camelCaseReplacementNames anyReplacementNames |
+	| index type name completionsStream replacementsStream camelCaseReplacementNames anyReplacementNames selectorsStream |
 	index := strategy index.
 	type := receiver guessType: strategy.
 	name := aToken source.
@@ -87,9 +87,13 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 				at: index
 				needsParensKeywords: needsParensForKeyword
 				strategy: strategy ].
-	camelCaseReplacementNames := (strategy selectorStreamForReceiver: type matching: '')
+	selectorsStream := (strategy
+		selectorStreamForReceiver: type
+		matching: ''
+		alphabetical: true) cached.
+	camelCaseReplacementNames := selectorsStream asyncSimilarCopy
 		filter: [ :each | (each beginsWith: name) not and: [ strategy isCamelCaseSubsequence: name of: each ] ].
-	anyReplacementNames := (strategy selectorStreamForReceiver: type matching: '')
+	anyReplacementNames := selectorsStream asyncSimilarCopy
 		filter: [ :each | (each beginsWith: name) not and: [ strategy isSubsequence: name of: each ] ].
 	replacementsStream := (camelCaseReplacementNames merge: anyReplacementNames) withoutDuplicates
 		collect:

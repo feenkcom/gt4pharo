@@ -318,9 +318,17 @@ GtPharoCompletionStrategy >> pragmas: anInteger startingWith: aString [
 
 { #category : #'private-selector' }
 GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aString [
+	^ self
+		selectorStreamForReceiver: aBehavior
+		matching: aString
+		alphabetical: false
+]
+
+{ #category : #'private-selector' }
+GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aString alphabetical: aBoolean [
 	| tree |
 	tree := aBehavior notNil ifTrue: [ GtPrefixTree withAll: aBehavior allSelectors ] ifFalse: [ SelectorCache ].
-	^ tree asyncWeightedStreamStartingWith: aString
+	^ aBoolean ifTrue: [ tree asyncStreamStartingWith: aString ] ifFalse: [ tree asyncWeightedStreamStartingWith: aString ]
 ]
 
 { #category : #'private-method' }
