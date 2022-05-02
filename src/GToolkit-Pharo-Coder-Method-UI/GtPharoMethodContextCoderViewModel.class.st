@@ -49,6 +49,7 @@ GtPharoMethodContextCoderViewModel >> onSourceCodeChanged: anSourceCodeChangedAn
 
 { #category : #'private - event handling' }
 GtPharoMethodContextCoderViewModel >> onSourceCodeReplaced: aSourceCodeReplacedAnnouncement [
+	super onSourceCodeReplaced: aSourceCodeReplacedAnnouncement.
 	self updateProgramCounterRange: aSourceCodeReplacedAnnouncement sourceCode
 ]
 
@@ -60,11 +61,6 @@ GtPharoMethodContextCoderViewModel >> programCounterRange [
 { #category : #'api - coder model' }
 GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
 	super subscribeToCoderModel.
-	
-	self coderModel weak
-		when: GtCoderSourceCodeReplaced
-		send: #onSourceCodeReplaced:
-		to: self.
 
 	self coderModel weak
 		when: GtCoderBehaviorChanged
