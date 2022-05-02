@@ -12,25 +12,55 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderElement >> buildFilter [
-	| filterElement filterDescriptors |
 
-	filterDescriptors := streamingCodersViewModel streamingCodersModel filterDescriptors.
-	filterDescriptors isEmpty
-		ifTrue: [ ^ self ].
+	| filterElement filterDescriptors |
+	filterDescriptors := streamingCodersViewModel streamingCodersModel
+		                     filterDescriptors.
+	filterDescriptors isEmpty ifTrue: [ ^ self ].
 
 	filterElement := BlFrameTelemetry
-		time: [ 'Create filters element' ]
-		during: [
-			GtFiltersElement new
-				padding: (BlInsets all: 2);
-				descriptors: filterDescriptors;
-				yourself ].
+		                 time: [ 'Create filters element' ]
+		                 during: [ 
+			                 GtFiltersElement new
+				                 padding: (BlInsets all: 2);
+				                 descriptors: filterDescriptors;
+				                 yourself ].
 
 	filterElement
 		when: GtFiltersChangedEvent
 		do: [ :event | self updateCodersFilters: event ].
 
-	self addChildFirst: filterElement as: #filter
+	^ filterElement
+]
+
+{ #category : #'instance creation' }
+GtPharoStreamingMethodsCoderElement >> buildFilterAndIndicator [
+	| container |
+	container := BrHorizontalPane new vFitContent hMatchParent.
+	
+	container addChild: self buildFilter as: #filter.
+	container addChild: BrFrame new.
+	container addChild: self buildWorkingIndicator as: #workingIndicator.
+	
+	self addChildFirst: container as: #headerContainer
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderElement >> buildWorkingIndicator [
+
+	| label |
+	label := BrButton new
+		  aptitude: BrGlamorousButtonWithIconAptitude new + BrGlamorousButtonWithLabelTooltipAptitude new - BrGlamorousButtonExteriorAptitude;
+		  icon: BrGlamorousVectorIcons refresh;
+		  label: 'In Progress';
+		  disable;
+		  margin: (BlInsets all: 4).
+
+	list viewModel when: BrListModelItemsAddedEvent do: [ label icon: BrGlamorousVectorIcons pause; label: 'Paused' ].
+	list viewModel when: BrListItemsProviderStartedLoadingEvent do: [ label icon: BrGlamorousVectorIcons refresh; label: 'In Progress' ].
+	list viewModel when: BrListItemsProviderDoneEvent do: [ label removeFromParent  ].
+		  
+	^ label
 ]
 
 { #category : #initialization }
@@ -40,21 +70,31 @@ GtPharoStreamingMethodsCoderElement >> defaultLayout [
 
 { #category : #initialization }
 GtPharoStreamingMethodsCoderElement >> initialize [
+
 	super initialize.
-	
+
 	self matchParent.
-	
-	listItemsProvider := BrListStreamItemsProvider new stream: AsyncEmptyStream new.
+
+	listItemsProvider := BrListStreamItemsProvider new
+		                     preloadAmount: 1;
+		                     loadSinglesUntil: 20;
+		                     stream: AsyncEmptyStream new.
 
 	list := BrSimpleList new
-		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
-		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
-		itemDataBinder: [ :aCoderElement :aCoderViewModel |
-			BlFrameTelemetry
-				time: [ 'Set {1} as a view model of {2}' format: { aCoderViewModel class name . aCoderElement class name } ]
-				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ];
-		itemsProvider: listItemsProvider.
-	
+		        itemType: [ :anItemTypeFactory :anItemObject | 
+			        anItemObject elementClass ];
+		        itemStencil: [ :anElementClass | 
+			        anElementClass new id: GtSourceCoderId ];
+		        itemDataBinder: [ :aCoderElement :aCoderViewModel | 
+			        BlFrameTelemetry
+				        time: [ 
+					        'Set {1} as a view model of {2}' format: { 
+								        aCoderViewModel class name.
+								        aCoderElement class name } ]
+				        during: [ 
+					        aCoderElement textualCoderViewModel: aCoderViewModel ] ];
+		        itemsProvider: listItemsProvider.
+
 	self addChild: list
 ]
 
@@ -90,21 +130,25 @@ GtPharoStreamingMethodsCoderElement >> onStreamingCodersChanged: anAnnouncement 
 
 { #category : #'api - streaming coders view model' }
 GtPharoStreamingMethodsCoderElement >> onStreamingCodersViewModelChanged [
+
 	"Is sent when a new streamingCodersViewModel is assigned to the receiver.
 	Note: #onStreamingCodersViewModelChanged is sent before #subscribeToStreamingCodersViewModel
 	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
 	didn't get a chance to subscribe to any announcement. Override #onPostStreamingCodersViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
-	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
-	
+
+	<generatedFrom:
+	#'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
+
 	BlFrameTelemetry
 		time: [ 'Build filters widget' ]
-		during: [ self buildFilter ].
+		during: [ self buildFilterAndIndicator ].
 
-	listItemsProvider stream: streamingCodersViewModel coderViewModelsStream.
+	listItemsProvider stream:
+		streamingCodersViewModel coderViewModelsStream.
 
-	streamingCodersViewModel hasScrollTarget
-		ifTrue: [ self updateScrollTarget: streamingCodersViewModel scrollTarget ]
+	streamingCodersViewModel hasScrollTarget ifTrue: [ 
+		self updateScrollTarget: streamingCodersViewModel scrollTarget ]
 ]
 
 { #category : #'api - streaming coders view model' }
