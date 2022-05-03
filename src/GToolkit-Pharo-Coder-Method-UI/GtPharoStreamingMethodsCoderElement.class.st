@@ -39,7 +39,7 @@ GtPharoStreamingMethodsCoderElement >> buildFilterAndIndicator [
 	container := BrHorizontalPane new vFitContent hMatchParent.
 	
 	container addChild: self buildFilter as: #filter.
-	container addChild: BrFrame new.
+	container addChild: BrFrame new vMatchParent.
 	container addChild: self buildWorkingIndicator as: #workingIndicator.
 	
 	self addChildFirst: container as: #headerContainer

@@ -29,6 +29,8 @@ GtAsyncSearchMethodGroupStream >> linesOfCode [
 { #category : #'source code management' }
 GtAsyncSearchMethodGroupStream >> metrics [
 	<return: #TAsyncFuture>
-
-	^ self filteredItemsStream inject: GtAsyncSearchMethodGroupMetrics new into: [ :metrics :eachMethod | metrics accumulateMethod: eachMethod ]
+	| metrics |
+	metrics := GtAsyncSearchMethodGroupMetrics new.
+	(self filteredItemsStream forEach: [ :eachMethod | metrics accumulateMethod: eachMethod ]) await.
+	^ metrics
 ]
