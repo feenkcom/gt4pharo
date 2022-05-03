@@ -71,7 +71,7 @@ GtPharoMethodsCoderElement >> filterElement [
 GtPharoMethodsCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
 
 	| aFilter |
-	aFilter := GtSearchMethodCategoryFilter forCategory: aMethodProtocol name.
+	aFilter := GtSearchMethodCategoryFilter forCategory: aMethodProtocol.
 	methodsCoderUIModel coder setFilters: { aFilter } source: aSource.
 ]
 
