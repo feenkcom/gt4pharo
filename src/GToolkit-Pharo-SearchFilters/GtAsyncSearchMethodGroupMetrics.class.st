@@ -1,6 +1,8 @@
 Class {
 	#name : #GtAsyncSearchMethodGroupMetrics,
 	#superclass : #Object,
+	#traits : 'TGtWithAnnouncer',
+	#classTraits : 'TGtWithAnnouncer classTrait',
 	#instVars : [
 		'amountOfMethods',
 		'linesOfCode'
@@ -11,7 +13,8 @@ Class {
 { #category : #initialization }
 GtAsyncSearchMethodGroupMetrics >> accumulateMethod: aCompiledMethod [
 	amountOfMethods := amountOfMethods + 1.
-	linesOfCode := linesOfCode + aCompiledMethod linesOfCode
+	linesOfCode := linesOfCode + aCompiledMethod linesOfCode.
+	self announce: GtAsyncSearchMethodMetricsUpdate new
 ]
 
 { #category : #accessing }
@@ -22,14 +25,22 @@ GtAsyncSearchMethodGroupMetrics >> amountOfMethods [
 
 { #category : #'gt - extensions' }
 GtAsyncSearchMethodGroupMetrics >> gtMetricsFor: aView [
+
 	<gtView>
 	^ aView columnedList
-		title: 'Metrics';
-		items: [ {('Number of methods' -> self amountOfMethods).
-			('Lines of code' -> self linesOfCode).
-			('Lines per method' -> (self amountOfMethods isZero ifFalse: [ (self linesOfCode / self amountOfMethods) asFloat ] ifTrue: [ '0' ]))} ];
-		column: 'Metric' text: #key;
-		column: 'Value' text: [ :assoc | assoc value asString ]
+		  title: 'Metrics';
+		  items: [ 
+			  { 
+				  ('Number of methods' -> self amountOfMethods).
+				  ('Lines of code' -> self linesOfCode).
+				  ('Lines per method' -> (self amountOfMethods isZero
+						    ifFalse: [ 
+							    (self linesOfCode / self amountOfMethods) asFloat ]
+						    ifTrue: [ '0' ])) } ];
+		  column: 'Metric' text: #key;
+		  column: 'Value' text: [ :assoc | assoc value asString ];
+		  updateWhen: GtAsyncSearchMethodMetricsUpdate in: [ self announcer ];
+		  actionUpdateButton
 ]
 
 { #category : #initialization }
