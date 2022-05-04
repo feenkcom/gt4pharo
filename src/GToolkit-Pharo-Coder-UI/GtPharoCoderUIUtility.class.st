@@ -15,7 +15,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView filter: aGtSea
 
 	anItemsView := aView explicit
 		title: 'Tests';
-		stencil: [ GtPharoStreamingMethodsCoderElement new streamingCodersViewModel: aMethodsCoderViewModel ].
+		stencil: [ GtPharoStreamingMethodsCoderElement new showIndicator loadSinglesUntil: 20; streamingCodersViewModel: aMethodsCoderViewModel  ].
 
 	shouldHaveTestsRunner ifTrue: [
 		| aTestSuiteViewModel |
