@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'variableBindings'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Expander'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
 { #category : #'api - styling' }
@@ -15,28 +15,21 @@ GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 ]
 
 { #category : #visiting }
-GtPharoMethodExpanderStyler >> visitMessageSend: aMessageNode [
+GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 	| aMethodClass |
-
-	self visitValue: aMessageNode.
-
+	self visitProgram: aMessage.
+	aMessage parent isNil ifTrue: [ ^ self ].
 	aMethodClass := GtPharoProgramNode
-		typeOf: aMessageNode receiver
-		in: (self coderViewModel selfObject
-			ifNil: [ self coderViewModel coderModel behavior ]
-			ifNotNil: [ :aSelfObject | aSelfObject class ])
+		typeOf: aMessage parent receiver
+		in:
+			(self coderViewModel selfObject
+				ifNil: [ self coderViewModel coderModel behavior ]
+				ifNotNil: [ :aSelfObject | aSelfObject class ])
 		bindings: variableBindings.
-
-	aMethodClass
-		ifNil: [ ^ self ].
-
-	(aMethodClass canUnderstand: aMessageNode selector)
-		ifFalse: [ ^ self ].
-
+	aMethodClass ifNil: [ ^ self ].
+	(aMethodClass canUnderstand: aMessage selector) ifFalse: [ ^ self ].
 	text
-		attribute: (GtPharoMethodExpanderAttribute
-			forClass: aMethodClass
-			andSelector: aMessageNode selector)
-		from: aMessageNode selectorParts last stopPosition
-		to: aMessageNode selectorParts last stopPosition
+		attribute: (GtPharoMethodExpanderAttribute forClass: aMethodClass andSelector: aMessage selector)
+		from: aMessage selectorParts last stopPosition
+		to: aMessage selectorParts last stopPosition
 ]
