@@ -5,7 +5,10 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait + TGtWithStreamingCodersViewModel classTrait',
 	#instVars : [
 		'list',
-		'listItemsProvider'
+		'listItemsProvider',
+		'showIndicator',
+		'preloadAmount',
+		'loadSinglesUntil'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
@@ -35,13 +38,15 @@ GtPharoStreamingMethodsCoderElement >> buildFilter [
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderElement >> buildFilterAndIndicator [
+
 	| container |
 	container := BrHorizontalPane new vFitContent hMatchParent.
-	
+
 	container addChild: self buildFilter as: #filter.
 	container addChild: BrFrame new vMatchParent.
-	container addChild: self buildWorkingIndicator as: #workingIndicator.
-	
+	showIndicator ifTrue: [ 
+		container addChild: self buildWorkingIndicator as: #workingIndicator ].
+
 	self addChildFirst: container as: #headerContainer
 ]
 
@@ -92,6 +97,21 @@ GtPharoStreamingMethodsCoderElement >> defaultLayout [
 ]
 
 { #category : #initialization }
+GtPharoStreamingMethodsCoderElement >> defaultLoadSinglesUntil [
+	^ 0
+]
+
+{ #category : #initialization }
+GtPharoStreamingMethodsCoderElement >> defaultPreloadAmount [
+	^ 20
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderElement >> doNotShowIndicator [
+	showIndicator := false
+]
+
+{ #category : #initialization }
 GtPharoStreamingMethodsCoderElement >> initialize [
 
 	super initialize.
@@ -99,8 +119,8 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 	self matchParent.
 
 	listItemsProvider := BrListStreamItemsProvider new
-		                     preloadAmount: 1;
-		                     loadSinglesUntil: 20;
+		                     preloadAmount: self preloadAmount;
+		                     loadSinglesUntil: self loadSinglesUntil;
 		                     stream: AsyncEmptyStream new.
 
 	list := BrSimpleList new
@@ -118,7 +138,19 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 					        aCoderElement textualCoderViewModel: aCoderViewModel ] ];
 		        itemsProvider: listItemsProvider.
 
-	self addChild: list
+	self addChild: list.
+	showIndicator := false.
+]
+
+{ #category : #initialization }
+GtPharoStreamingMethodsCoderElement >> loadSinglesUntil [
+	^ loadSinglesUntil ifNil: [ loadSinglesUntil := self defaultLoadSinglesUntil ]
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderElement >> loadSinglesUntil: aNumber [
+	loadSinglesUntil := aNumber.
+	listItemsProvider loadSinglesUntil: loadSinglesUntil
 ]
 
 { #category : #'private - event handling' }
@@ -172,6 +204,22 @@ GtPharoStreamingMethodsCoderElement >> onStreamingCodersViewModelChanged [
 
 	streamingCodersViewModel hasScrollTarget ifTrue: [ 
 		self updateScrollTarget: streamingCodersViewModel scrollTarget ]
+]
+
+{ #category : #initialization }
+GtPharoStreamingMethodsCoderElement >> preloadAmount [
+	^ preloadAmount ifNil: [ preloadAmount := self defaultPreloadAmount ]
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderElement >> preloadAmount: aNumber [
+	preloadAmount := aNumber.
+	listItemsProvider preloadAmount: preloadAmount
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderElement >> showIndicator [
+	showIndicator := true
 ]
 
 { #category : #'api - streaming coders view model' }

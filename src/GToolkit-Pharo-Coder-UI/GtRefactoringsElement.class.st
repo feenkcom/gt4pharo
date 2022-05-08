@@ -38,6 +38,7 @@ GtRefactoringsElement >> initialize [
 { #category : #accessing }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
 	| changes |
+	aCollectionOfRBRefactorings isEmpty ifTrue: [^self].
 	aCollectionOfRBRefactorings
 		do:
 			[ :each | 
