@@ -52,10 +52,7 @@ GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 		aTextEditor text
 			findAttribute: theParanthesesMarker
 			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
-				(aTextEditor text
-					from: aParanthesesStart
-					to: aParanthesesEnd)
-						clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ] ].
+				aTextEditor text clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ] ].
 
 	(text
 		from: aLeftIndex
