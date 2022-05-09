@@ -37,6 +37,11 @@ GtSearchImplementorsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod selector = selector
 ]
 
+{ #category : #accessing }
+GtSearchImplementorsFilter >> matches: anObject [
+	^ anObject isCompiledMethod and: [ anObject isFromTrait not and: [ self includesMethod: anObject ] ]
+]
+
 { #category : #ui }
 GtSearchImplementorsFilter >> printOn: stream [
 	stream 
