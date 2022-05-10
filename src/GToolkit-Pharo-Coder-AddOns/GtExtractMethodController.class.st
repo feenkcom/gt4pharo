@@ -251,19 +251,6 @@ GtExtractMethodController >> safelyExecute [
 ]
 
 { #category : #private }
-GtExtractMethodController >> setBodyText: bodySource andAttributesAt: positions [
-	| bodyText |
-	bodyText := bodySource asRopedText.
-	positions
-		keysAndValuesDo: [ :i :each | 
-			(bodyText from: each to: each)
-				attributes:
-					{GtCompletionPartAttribute new.
-					(GtExtractMethodSelectorKeywordAttribute keywordIndex: i)} ].
-	self setText: bodyText
-]
-
-{ #category : #private }
 GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
 	| methodNameBlock |
 	isExisting := false.
