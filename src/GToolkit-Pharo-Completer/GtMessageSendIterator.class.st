@@ -107,12 +107,16 @@ GtMessageSendIterator >> processBlocksAndOptimizedSends [
 
 { #category : #processing }
 GtMessageSendIterator >> processNormalSends [
-	| instruction instructionStream |
+	| instruction instructionStream endPc |
 	instructionStream := InstructionStream on: code.
-	[ instructionStream atEnd ]
+	endPc := instructionStream method endPC.
+	[ instructionStream pc > endPc ]
 		whileFalse:
 			[ instruction := instructionStream nextInstruction.
-			#send:super:numArgs: = instruction selector ifTrue: [ block value: instruction arguments first value: 1 ].
-			#jump: = instruction selector ifTrue: [ self jump: instruction arguments first ].
-			#jump:if: = instruction selector ifTrue: [ self conditionalJump: instruction arguments first ] ]
+			#send:super:numArgs: = instruction selector
+				ifTrue: [ block value: instruction arguments first value: 1 ]
+				ifFalse:
+					[ #jump: = instruction selector
+						ifTrue: [ self jump: instruction arguments first ]
+						ifFalse: [ #jump:if: = instruction selector ifTrue: [ self conditionalJump: instruction arguments first ] ] ] ]
 ]
