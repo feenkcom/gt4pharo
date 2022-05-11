@@ -447,15 +447,6 @@ GtPharoMethodCoder >> explanationLink: anExplanation [
 	self requestUpdateAddOns
 ]
 
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> findNodeAssigning: aString [
-	self rbAST
-		nodesDo: [ :each | 
-			(each isAssignment and: [ each variable name = aString ])
-				ifTrue: [ ^ each variable ] ].
-	^ nil
-]
-
 { #category : #private }
 GtPharoMethodCoder >> findSeparatorBetweenPatternAndBodyIn: aMethodNode [
 	| startIndex char source |
@@ -705,17 +696,6 @@ GtPharoMethodCoder >> newRbAST: aString [
 		ifTrue: [ ^ ast ].
 	ast doSemanticAnalysis.
 	^ ast
-]
-
-{ #category : #'private - refactorings' }
-GtPharoMethodCoder >> nodeDescription: aNode [
-	| description |
-	description := aNode source asString.
-	description size > 40
-		ifTrue: [ description := (description first: 40) , '...' ].
-	^ ((description copyReplaceAll: String cr with: ' ')
-		copyReplaceAll: String lf
-		with: ' ') copyReplaceAll: '	' with: ' '
 ]
 
 { #category : #'private - notifying' }
