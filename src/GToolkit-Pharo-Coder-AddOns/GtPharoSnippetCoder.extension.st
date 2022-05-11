@@ -1,6 +1,21 @@
 Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
+	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self createLabel: 'Extract variable' description: (self nodeDescription: aNode))
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action:
+			[ :aCoderViewModel | 
+			((GtSnippetExtractTemporaryRefactoringController new)
+				node: aNode;
+				sourceCoderViewModel: aCoderViewModel) execute ]
+		id: #'context-menu--extract-variable'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel [
 	| class selector |
 	aNode isMessageSend ifFalse: [ ^ false ].
@@ -55,6 +70,7 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 				id: GtMethodCoderExtractMethodContextMenuItemId.
 			
 			node  := nodes first.
+			self addExtractVariableFor: node to: coderAddOns. 
 			self addInlineMethodFor: node to: coderAddOns from: aCoderViewModel ]
 ]
 
