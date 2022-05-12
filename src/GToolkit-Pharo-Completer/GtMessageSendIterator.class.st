@@ -84,12 +84,12 @@ GtMessageSendIterator >> processBlocksAndOptimizedSends [
 			[ :index | 
 			| value |
 			value := code literalAt: index.
-			(value isKindOf: CompiledCode) ifTrue: [ self class messageSendsIn: value do: block ].
 			value isSymbol
 				ifTrue:
 					[ (ConditionalSelectors includes: value) ifTrue: [ conditionalSelectors add: value ].
-					(LoopSelectors includes: value) ifTrue: [ loopSelectors add: value ] ] ].
-			
+					(LoopSelectors includes: value) ifTrue: [ loopSelectors add: value ] ]
+				ifFalse: [ (value isKindOf: CompiledCode) ifTrue: [ self class messageSendsIn: value do: block ] ] ].
+	
 	"We don't know which jumps correspond to which sends, so we just estimate them."
 	conditionalForwardJumps := conditionalForwardJumps - backwardJumps max: 0.
 	conditionalForwardJumps > 0
