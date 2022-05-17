@@ -308,6 +308,17 @@ GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBl
 	^ aNoneBlock value
 ]
 
+{ #category : #'private - refactorings' }
+GtPharoSourceCoder >> nodeDescription: aNode [
+	| description |
+	description := aNode source asString.
+	description size > 40
+		ifTrue: [ description := (description first: 40) , '...' ].
+	^ ((description copyReplaceAll: String cr with: ' ')
+		copyReplaceAll: String lf
+		with: ' ') copyReplaceAll: '	' with: ' '
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> nodeToReferencesFilter: aNode ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Try to create a references filter from a given AST node. If aNode is not suitable

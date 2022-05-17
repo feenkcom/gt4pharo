@@ -9,14 +9,14 @@ GtRenameAction2 class >> pharoRenameLocalVariableAt: aTextIndex textualCoderView
 		items := OrderedCollection new.
 		(ast findVariableNodeAt: aTextIndex)
 			ifNotNil: [ :node | 
-				node whoDefines
-					ifNotNil: [ :definer | 
-						definer
-							withAllNodesDo: [ :each | 
-								each = node
-									ifTrue: [ items add: (each startPosition to: each stopPosition) ] ]
-							andTokensDo: nil
-							includesErrors: true ] ].
+				| definer |
+				definer := node whoDefines ifNil: [ node topParent ].
+				definer
+					withAllNodesDo: [ :each | 
+						each = node
+							ifTrue: [ items add: (each startPosition to: each stopPosition) ] ]
+					andTokensDo: nil
+					includesErrors: true ].
 		action := self locations: items textualCoderViewModel: aTextualCoderViewModel.
 		action forVariableOrUnaryMessage.
 		action install ]

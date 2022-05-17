@@ -25,6 +25,13 @@ GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefact
 ]
 
 { #category : #private }
+GtPharoSourceCoderRefactoringController >> compileSnippetMethodIn: model [
+	| cls |
+	cls := model classFor: nil class.
+	cls compile: self snippetSelector , ' ' , self sourceText asString classified: #accessing
+]
+
+{ #category : #private }
 GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	| aModel aBehavior aProtocol aSourceString aCurrentSelector |
 	
@@ -41,4 +48,9 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	aModel name: self refactoringName.
 
 	^ aModel
+]
+
+{ #category : #private }
+GtPharoSourceCoderRefactoringController >> snippetSelector [
+	^ #_
 ]

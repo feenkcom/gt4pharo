@@ -9,13 +9,6 @@ Class {
 }
 
 { #category : #private }
-GtSnippetInlineMessageRefactoringController >> compileSnippetMethodIn: model [
-	| cls |
-	cls := model classFor: nil class.
-	cls compile: self snippetSelector , ' ' , self sourceText asString classified: #accessing
-]
-
-{ #category : #private }
 GtSnippetInlineMessageRefactoringController >> createRefactoringModel [
 	| model |
 	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
@@ -69,11 +62,6 @@ GtSnippetInlineMessageRefactoringController >> safelyExecute [
 { #category : #private }
 GtSnippetInlineMessageRefactoringController >> snippetClass [
 	^ nil class
-]
-
-{ #category : #private }
-GtSnippetInlineMessageRefactoringController >> snippetSelector [
-	^ #_
 ]
 
 { #category : #private }

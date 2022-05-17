@@ -95,17 +95,16 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
-	(aNode isValueNode and: [ aNode isVariable not ])
-		ifFalse: [ ^ self ].
-
+	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
 	coderAddOns
-		addContextMenuItem:
-			(self
-				createLabel: 'Extract temporary'
-				description: (self nodeDescription: aNode))
+		addContextMenuItem: (self createLabel: 'Extract temporary' description: (self nodeDescription: aNode))
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | self extractTemporaryVariable: aNode in: aCoderViewModel ]
+		action:
+			[ :aCoderViewModel | 
+			((GtExtractTemporaryRefactoringController new)
+				node: aNode;
+				sourceCoderViewModel: aCoderViewModel) execute ]
 		id: #'context-menu--extract-temp'
 ]
 
@@ -601,31 +600,6 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 
 	self explanationLink notNil
 		ifTrue: [ coderAddOns addStyler: self explanationLink ].
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractTemporaryVariable: aNode in: aCoderViewModel [
-	| refactoring model tempName |
-
-	model := self createRefactoringModel.
-	tempName := self safeTemporaryName.
-
-	refactoring := RBExtractToTemporaryRefactoring
-		model: model
-		extract: aNode sourceInterval
-		to: tempName
-		from: self currentSelector
-		in: (model classFor: self behavior).
-
-	(self performMethodRefactoring: refactoring)
-		ifFalse: [ ^ self ].
-
-	(self findNodeAssigning: tempName)
-		ifNotNil: [ :node | 
-			aCoderViewModel
-				selectNone;
-				moveCursorTo: node stop;
-				renameLocalVariableAt: node stop ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
