@@ -26,6 +26,11 @@ GtPharoCompletionStrategy class >> addSendsFrom: aMethod [
 	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache add: selector weight: count ]
 ]
 
+{ #category : #accessing }
+GtPharoCompletionStrategy class >> cacheSizeInMemory [
+	^ GlobalCache gtSpecificSizeInMemory + SelectorCache gtSpecificSizeInMemory
+]
+
 { #category : #private }
 GtPharoCompletionStrategy class >> classAdded: anAnnouncement [
 	GlobalCache add: anAnnouncement classAdded name
