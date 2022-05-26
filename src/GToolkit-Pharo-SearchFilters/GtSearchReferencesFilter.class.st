@@ -99,3 +99,8 @@ GtSearchReferencesFilter >> printOn: stream [
 	self object gtDisplayOn: stream.
 	stream nextPutAll: ' gtReferences'.
 ]
+
+{ #category : #accessing }
+GtSearchReferencesFilter >> shouldFilterOutTraitMethods [
+	^ true
+]
