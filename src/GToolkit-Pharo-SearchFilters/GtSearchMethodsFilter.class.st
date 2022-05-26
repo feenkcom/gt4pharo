@@ -50,6 +50,12 @@ GtSearchMethodsFilter >> includesMethod: aCompiledMethod [
 
 { #category : #testing }
 GtSearchMethodsFilter >> matches: anObject [
+	^ anObject isCompiledMethod
+		and: [ (self shouldFilterOutTraitMethods not or: [ anObject isFromTrait not ])
+				and: [ self includesMethod: anObject ] ]
+]
 
-	^ anObject isCompiledMethod and: [ self includesMethod: anObject ]
+{ #category : #accessing }
+GtSearchMethodsFilter >> shouldFilterOutTraitMethods [
+	^ false
 ]
