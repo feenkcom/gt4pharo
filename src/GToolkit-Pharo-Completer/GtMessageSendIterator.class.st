@@ -21,7 +21,7 @@ GtMessageSendIterator class >> example [
 	
 	| messages condition values |
 	"Some dummy code to affect the results"
-	condition := #printString = #printOn:.
+	condition := #'print String' = #'print On:'.
 	condition
 		ifTrue: [ [ condition not ] whileTrue: [ condition := condition not ] ].
 	condition ifFalse: [ condition := condition not ].
@@ -30,8 +30,8 @@ GtMessageSendIterator class >> example [
 	self
 		messageSendsIn: thisContext method
 		doReferences: [ :selector :count | messages add: selector weight: count ]
-		andGlobals: nil.
-	values := #(#('=' 1) #('ifTrue:' 1) #('not' 3) #('whileTrue:' 1) #('ifFalse:' 1) #('new' 1) #(#messageSendsIn:doReferences: 1) #('method' 1) #(#add:weight: 1) #('do:' 1) #('assert:equals:' 2) #('weightOf:' 1) #('first' 1) #('last' 1) #('size' 2)).
+		andGlobals: [ :var :count |  ].
+	values := #(#('=' 1) #('ifTrue:' 1) #('not' 3) #('whileTrue:' 1) #('ifFalse:' 1) #('new' 1) #(#messageSendsIn:doReferences:andGlobals: 2) #('method' 1) #(#add:weight: 2) #('do:' 1) #('assert:equals:' 2) #('weightOf:' 1) #('first' 1) #('last' 1) #('size' 2)).
 	values
 		do: [ :each | self assert: (messages weightOf: each first) equals: each last ].
 	self assert: values size equals: messages size.
