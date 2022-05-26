@@ -3,9 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'code',
-		'block',
 		'conditionalForwardJumps',
-		'backwardJumps'
+		'backwardJumps',
+		'referencesBlock',
+		'globalsBlock'
 	],
 	#classVars : [
 		'ConditionalSelectors',
@@ -19,16 +20,20 @@ GtMessageSendIterator class >> example [
 	<gtExample>
 	
 	| messages condition values |
-	
 	"Some dummy code to affect the results"
 	condition := #printString = #printOn:.
-	condition ifTrue: [ [ condition not ] whileTrue: [ condition := condition not ] ].
+	condition
+		ifTrue: [ [ condition not ] whileTrue: [ condition := condition not ] ].
 	condition ifFalse: [ condition := condition not ].
-	
+
 	messages := GtPrefixTree new.
-	self messageSendsIn: thisContext method do: [ :selector :count | messages add: selector weight: count ].
-	values := #(#('=' 1) #('ifTrue:' 1) #('not' 3) #('whileTrue:' 1) #('ifFalse:' 1) #('new' 1) #(#messageSendsIn:do: 1) #('method' 1) #(#add:weight: 1) #('do:' 1) #('assert:equals:' 2) #('weightOf:' 1) #('first' 1) #('last' 1) #('size' 2)).
-	values do: [ :each | self assert: (messages weightOf: each first) equals: each last ].
+	self
+		messageSendsIn: thisContext method
+		doReferences: [ :selector :count | messages add: selector weight: count ]
+		andGlobals: nil.
+	values := #(#('=' 1) #('ifTrue:' 1) #('not' 3) #('whileTrue:' 1) #('ifFalse:' 1) #('new' 1) #(#messageSendsIn:doReferences: 1) #('method' 1) #(#add:weight: 1) #('do:' 1) #('assert:equals:' 2) #('weightOf:' 1) #('first' 1) #('last' 1) #('size' 2)).
+	values
+		do: [ :each | self assert: (messages weightOf: each first) equals: each last ].
 	self assert: values size equals: messages size.
 	^ messages
 ]
@@ -42,8 +47,11 @@ GtMessageSendIterator class >> initialize [
 ]
 
 { #category : #processing }
-GtMessageSendIterator class >> messageSendsIn: aCompiledCode do: aBlock [
-	self new messageSendsIn: aCompiledCode do: aBlock
+GtMessageSendIterator class >> messageSendsIn: aCompiledCode doReferences: aBlock andGlobals: globalsBlock [
+	self new
+		messageSendsIn: aCompiledCode
+		doReferences: aBlock
+		andGlobals: globalsBlock
 ]
 
 { #category : #'instruction decoding' }
@@ -66,8 +74,9 @@ GtMessageSendIterator >> jump: distance [
 ]
 
 { #category : #processing }
-GtMessageSendIterator >> messageSendsIn: aCompiledCode do: aBlock [
-	block := aBlock.
+GtMessageSendIterator >> messageSendsIn: aCompiledCode doReferences: aBlock andGlobals: anotherBlock [
+	referencesBlock := aBlock.
+	globalsBlock := anotherBlock.
 	code := aCompiledCode.
 	self processNormalSends.
 	self processBlocksAndOptimizedSends
@@ -80,29 +89,28 @@ GtMessageSendIterator >> processBlocksAndOptimizedSends [
 	loopSelectors := OrderedCollection new.
 	1
 		to: code numLiterals - code literalsToSkip
-		do:
-			[ :index | 
+		do: [ :index | 
 			| value |
 			value := code literalAt: index.
 			value isSymbol
-				ifTrue:
-					[ (ConditionalSelectors includes: value) ifTrue: [ conditionalSelectors add: value ].
+				ifTrue: [ (ConditionalSelectors includes: value)
+						ifTrue: [ conditionalSelectors add: value ].
 					(LoopSelectors includes: value) ifTrue: [ loopSelectors add: value ] ]
-				ifFalse: [ (value isKindOf: CompiledCode) ifTrue: [ self class messageSendsIn: value do: block ] ] ].
-	
-	"We don't know which jumps correspond to which sends, so we just estimate them."
+				ifFalse: [ (value isKindOf: CompiledCode)
+						ifTrue: [ self class
+								messageSendsIn: value
+								doReferences: referencesBlock
+								andGlobals: globalsBlock ] ] ].	"We don't know which jumps correspond to which sends, so we just estimate them."
 	conditionalForwardJumps := conditionalForwardJumps - backwardJumps max: 0.
 	conditionalForwardJumps > 0
-		ifTrue:
-			[ conditionalSelectors notEmpty
-				ifTrue:
-					[ count := (conditionalForwardJumps / conditionalSelectors size) ceiling.
-					conditionalSelectors do: [ :each | block value: each value: count ] ]
+		ifTrue: [ conditionalSelectors notEmpty
+				ifTrue: [ count := (conditionalForwardJumps / conditionalSelectors size) ceiling.
+					conditionalSelectors
+						do: [ :each | referencesBlock value: each value: count ] ]
 				ifFalse: [ backwardJumps := backwardJumps + conditionalForwardJumps ] ].
 	(backwardJumps > 0 and: [ loopSelectors notEmpty ])
-		ifTrue:
-			[ count := (backwardJumps / loopSelectors size) ceiling.
-			loopSelectors do: [ :each | block value: each value: count ] ]
+		ifTrue: [ count := (backwardJumps / loopSelectors size) ceiling.
+			loopSelectors do: [ :each | referencesBlock value: each value: count ] ]
 ]
 
 { #category : #processing }
@@ -111,12 +119,27 @@ GtMessageSendIterator >> processNormalSends [
 	instructionStream := InstructionStream on: code.
 	endPc := instructionStream method endPC.
 	[ instructionStream pc > endPc ]
-		whileFalse:
-			[ instruction := instructionStream nextInstruction.
+		whileFalse: [ instruction := instructionStream nextInstruction.
 			#send:super:numArgs: = instruction selector
-				ifTrue: [ block value: instruction arguments first value: 1 ]
-				ifFalse:
-					[ #jump: = instruction selector
+				ifTrue: [ referencesBlock value: instruction arguments first value: 1 ]
+				ifFalse: [ #jump: = instruction selector
 						ifTrue: [ self jump: instruction arguments first ]
-						ifFalse: [ #jump:if: = instruction selector ifTrue: [ self conditionalJump: instruction arguments first ] ] ] ]
+						ifFalse: [ #jump:if: = instruction selector
+								ifTrue: [ self conditionalJump: instruction arguments first ]
+								ifFalse: [ #pushConstant: = instruction selector
+										ifTrue: [ self pushLiteral: instruction arguments first ]
+										ifFalse: [ #pushLiteralVariable: = instruction selector
+												ifTrue: [ self pushLiteralVariable: instruction arguments first ] ] ] ] ] ]
+]
+
+{ #category : #processing }
+GtMessageSendIterator >> pushLiteral: aValue [
+	aValue isSymbol
+		ifTrue: [ aValue numArgs >= 0 ifTrue: [ referencesBlock value: aValue value: 1 ] ]
+		ifFalse: [ aValue isArray ifTrue: [ aValue do: [ :each | self pushLiteral: each ] ] ]
+]
+
+{ #category : #accessing }
+GtMessageSendIterator >> pushLiteralVariable: aVariable [
+	(aVariable isKindOf: GlobalVariable) ifTrue: [ globalsBlock cull: aVariable cull: 1 ]
 ]

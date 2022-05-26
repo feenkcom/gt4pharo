@@ -23,7 +23,22 @@ Class {
 
 { #category : #private }
 GtPharoCompletionStrategy class >> addSendsFrom: aMethod [
-	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache add: selector weight: count ]
+	| seen |
+	seen := Set new.
+	GtMessageSendIterator
+		messageSendsIn: aMethod
+		doReferences: [ :selector :count | 
+			| node |
+			node := SelectorCache add: selector weight: count.
+			(seen includes: selector)
+				ifFalse: [ seen add: selector.
+					node addReference: aMethod ] ]
+		andGlobals: [ :global :count | 
+			| node |
+			node := GlobalCache add: global name weight: count.
+			(seen includes: global)
+				ifFalse: [ seen add: global.
+					node addReference: aMethod ] ]
 ]
 
 { #category : #accessing }
@@ -52,6 +67,11 @@ GtPharoCompletionStrategy class >> classRenamed: anAnnouncement [
 		add: anAnnouncement newName
 ]
 
+{ #category : #accessing }
+GtPharoCompletionStrategy class >> globalVariableReferencesTo: aVariable [
+	^ (GlobalCache referencesTo: aVariable name) asOrderedCollection
+]
+
 { #category : #'class initialization' }
 GtPharoCompletionStrategy class >> initialize [
 	SelectorCache := GtPrefixTree new.
@@ -60,7 +80,9 @@ GtPharoCompletionStrategy class >> initialize [
 
 { #category : #accessing }
 GtPharoCompletionStrategy class >> initializeCache [
-	SelectorCache := GtPrefixTree new.
+	self unsubscribeFromSystem.
+	SelectorCache := GtReferencesPrefixTree new.
+	GlobalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
 	Smalltalk
 		allClassesDo: [ :each | 
 			SelectorCache
@@ -68,7 +90,6 @@ GtPharoCompletionStrategy class >> initializeCache [
 				addAll: each class selectors.
 			each methodsDo: [ :method | self addSendsFrom: method ].
 			each class methodsDo: [ :method | self addSendsFrom: method ] ].
-	GlobalCache := GtPrefixTree withAll: Smalltalk globals keys.
 	self subscribeToSystem
 ]
 
@@ -114,7 +135,27 @@ GtPharoCompletionStrategy class >> newForSnippet [
 
 { #category : #private }
 GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
-	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache remove: selector weight: count ]
+	| seen |
+	seen := Set new.
+	GtMessageSendIterator
+		messageSendsIn: aMethod
+		doReferences: [ :selector :count | 
+			(SelectorCache remove: selector weight: count)
+				ifNotNil: [ :node | 
+					(seen includes: selector)
+						ifFalse: [ seen add: selector.
+							node removeReference: aMethod ] ] ]
+		andGlobals: [ :global :count | 
+			| node |
+			node := GlobalCache remove: global name weight: count.
+			(seen includes: global)
+				ifFalse: [ seen add: global.
+					node removeReference: aMethod ] ]
+]
+
+{ #category : #accessing }
+GtPharoCompletionStrategy class >> sendersOf: aSelector [
+	^ (SelectorCache referencesTo: aSelector) asOrderedCollection
 ]
 
 { #category : #private }

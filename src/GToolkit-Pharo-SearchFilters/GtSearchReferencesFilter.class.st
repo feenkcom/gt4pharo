@@ -10,8 +10,17 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtSearchReferencesFilter class >> canUseOptimizedSearch: anObject [
+	^ anObject isSymbol
+		ifTrue: [ anObject numArgs >= 0 ]
+		ifFalse: [ anObject isKindOf: GlobalVariable ]
+]
+
+{ #category : #'instance creation' }
 GtSearchReferencesFilter class >> literal: anObject [
-	^ self new
+	^ ((self canUseOptimizedSearch: anObject)
+		ifTrue: [ GtCachedSearchReferencesFilter ]
+		ifFalse: [ self ]) new
 		object: anObject;
 		yourself
 ]
