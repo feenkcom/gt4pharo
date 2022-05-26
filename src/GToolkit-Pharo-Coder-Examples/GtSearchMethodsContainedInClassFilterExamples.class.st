@@ -101,7 +101,6 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilterR
 	filter := self methodsInTwoClassesUnionFilter.
 		
 	self assertMethodResultTypeForFilter: filter.
-	self assert: filter defaultFilterScope class equals: AsyncFlattenStream.
 		
 	^ filter
 ]
