@@ -23,22 +23,28 @@ Class {
 
 { #category : #private }
 GtPharoCompletionStrategy class >> addSendsFrom: aMethod [
-	| seen |
+	| seen globalBlock selectorBlock |
 	seen := Set new.
+	globalBlock := [ :global | 
+		| node |
+		node := GlobalCache add: global name weight: 1.
+		(seen includes: global)
+			ifFalse: [ seen add: global.
+				node addReference: aMethod ] ].
+	selectorBlock := [ :selector :count | 
+		| node |
+		node := SelectorCache add: selector weight: count.
+		(seen includes: selector)
+			ifFalse: [ seen add: selector.
+				node addReference: aMethod ].
+		selector first isUppercase
+			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+	aMethod
+		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
 		messageSendsIn: aMethod
-		doReferences: [ :selector :count | 
-			| node |
-			node := SelectorCache add: selector weight: count.
-			(seen includes: selector)
-				ifFalse: [ seen add: selector.
-					node addReference: aMethod ] ]
-		andGlobals: [ :global :count | 
-			| node |
-			node := GlobalCache add: global name weight: count.
-			(seen includes: global)
-				ifFalse: [ seen add: global.
-					node addReference: aMethod ] ]
+		doReferences: selectorBlock
+		andGlobals: globalBlock
 ]
 
 { #category : #accessing }
@@ -134,23 +140,40 @@ GtPharoCompletionStrategy class >> newForSnippet [
 ]
 
 { #category : #private }
+GtPharoCompletionStrategy class >> processPragma: aPragma selectorsDo: selectorBlock [
+	| todo item |
+	selectorBlock cull: aPragma selector cull: 1.
+	todo := OrderedCollection with: aPragma arguments.
+	[ todo notEmpty ]
+		whileTrue: [ item := todo removeFirst.
+			item isSymbol
+				ifTrue: [ item numArgs >= 0 ifTrue: [ selectorBlock cull: item cull: 1 ] ]
+				ifFalse: [ item isArray ifTrue: [ todo addAll: item ] ] ]
+]
+
+{ #category : #private }
 GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
-	| seen |
+	| seen globalBlock selectorBlock |
 	seen := Set new.
+	globalBlock := [ :global | 
+		| node |
+		node := GlobalCache remove: global name weight: 1.
+		(seen includes: global)
+			ifFalse: [ seen add: global.
+				node removeReference: aMethod ] ].
+	selectorBlock := [ :selector :count | 
+		(SelectorCache remove: selector weight: count)
+			ifNotNil: [ :node | 
+				(seen includes: selector)
+					ifFalse: [ seen add: selector.
+						node removeReference: aMethod ] ].
+		selector first isUppercase
+			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+	aMethod pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
 		messageSendsIn: aMethod
-		doReferences: [ :selector :count | 
-			(SelectorCache remove: selector weight: count)
-				ifNotNil: [ :node | 
-					(seen includes: selector)
-						ifFalse: [ seen add: selector.
-							node removeReference: aMethod ] ] ]
-		andGlobals: [ :global :count | 
-			| node |
-			node := GlobalCache remove: global name weight: count.
-			(seen includes: global)
-				ifFalse: [ seen add: global.
-					node removeReference: aMethod ] ]
+		doReferences: selectorBlock
+		andGlobals: globalBlock
 ]
 
 { #category : #accessing }

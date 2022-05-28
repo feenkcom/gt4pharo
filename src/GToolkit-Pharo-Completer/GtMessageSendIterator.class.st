@@ -30,7 +30,7 @@ GtMessageSendIterator class >> example [
 	self
 		messageSendsIn: thisContext method
 		doReferences: [ :selector :count | messages add: selector weight: count ]
-		andGlobals: [ :var :count |  ].
+		andGlobals: [ :var |  ].
 	values := #(#('=' 1) #('ifTrue:' 1) #('not' 3) #('whileTrue:' 1) #('ifFalse:' 1) #('new' 1) #(#messageSendsIn:doReferences:andGlobals: 2) #('method' 1) #(#add:weight: 2) #('do:' 1) #('assert:equals:' 2) #('weightOf:' 1) #('first' 1) #('last' 1) #('size' 2)).
 	values
 		do: [ :each | self assert: (messages weightOf: each first) equals: each last ].
