@@ -7,6 +7,16 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
+{ #category : #accessing }
+GtSearchImplementorsFilter class >> classImplementorsExample [
+	<gtExample>
+	
+	| filter |
+	filter := self new selector: thisContext selector.
+	self assert: (filter contents includes: thisContext method).
+	^ filter
+]
+
 { #category : #'instance creation' }
 GtSearchImplementorsFilter class >> selector: aSymbol [
 	^ self new
@@ -23,8 +33,10 @@ GtSearchImplementorsFilter >> = anObject [
 { #category : #accessing }
 GtSearchImplementorsFilter >> defaultFilterScope [
 	^ (AsyncImageBehaviorsStream new
-		collect: [ :each | each compiledMethodAt: selector ifAbsent: [  ] ])
-		select: [ :each | each notNil ]
+		collect: [ :each | 
+			{each compiledMethodAt: selector ifAbsent: [  ].
+				each class compiledMethodAt: selector ifAbsent: [  ]} asAsyncStream ])
+		flatten select: [ :each | each notNil ]
 ]
 
 { #category : #ui }
