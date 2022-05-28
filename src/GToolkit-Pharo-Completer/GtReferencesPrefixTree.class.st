@@ -47,6 +47,7 @@ GtReferencesPrefixTree >> referencesTo: aString [
 GtReferencesPrefixTree >> removeReference: aMethod [
 	references ifNil: [ ^ self ].
 	references == aMethod ifTrue: [ ^ references := nil ].
+	references class == OrderedCollection ifFalse: [ ^ self ].
 	references remove: aMethod ifAbsent: [  ]
 ]
 
