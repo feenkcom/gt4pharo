@@ -20,6 +20,13 @@ GtSearchImplementorsFilter >> = anObject [
 		and: [ self selector = anObject selector ]
 ]
 
+{ #category : #accessing }
+GtSearchImplementorsFilter >> defaultFilterScope [
+	^ (AsyncImageBehaviorsStream new
+		collect: [ :each | each compiledMethodAt: selector ifAbsent: [  ] ])
+		select: [ :each | each notNil ]
+]
+
 { #category : #ui }
 GtSearchImplementorsFilter >> gtDisplayOn: stream [
 	stream

@@ -23,7 +23,28 @@ Class {
 
 { #category : #private }
 GtPharoCompletionStrategy class >> addSendsFrom: aMethod [
-	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache add: selector weight: count ]
+	| seen globalBlock selectorBlock |
+	seen := Set new.
+	globalBlock := [ :global | 
+		| node |
+		node := GlobalCache add: global name weight: 1.
+		(seen includes: global)
+			ifFalse: [ seen add: global.
+				node addReference: aMethod ] ].
+	selectorBlock := [ :selector :count | 
+		| node |
+		node := SelectorCache add: selector weight: count.
+		(seen includes: selector)
+			ifFalse: [ seen add: selector.
+				node addReference: aMethod ].
+		selector first isUppercase
+			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+	aMethod
+		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
+	GtMessageSendIterator
+		messageSendsIn: aMethod
+		doReferences: selectorBlock
+		andGlobals: globalBlock
 ]
 
 { #category : #accessing }
@@ -52,6 +73,11 @@ GtPharoCompletionStrategy class >> classRenamed: anAnnouncement [
 		add: anAnnouncement newName
 ]
 
+{ #category : #accessing }
+GtPharoCompletionStrategy class >> globalVariableReferencesTo: aVariable [
+	^ (GlobalCache referencesTo: aVariable name) asOrderedCollection
+]
+
 { #category : #'class initialization' }
 GtPharoCompletionStrategy class >> initialize [
 	SelectorCache := GtPrefixTree new.
@@ -60,7 +86,9 @@ GtPharoCompletionStrategy class >> initialize [
 
 { #category : #accessing }
 GtPharoCompletionStrategy class >> initializeCache [
-	SelectorCache := GtPrefixTree new.
+	self unsubscribeFromSystem.
+	SelectorCache := GtReferencesPrefixTree new.
+	GlobalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
 	Smalltalk
 		allClassesDo: [ :each | 
 			SelectorCache
@@ -68,7 +96,6 @@ GtPharoCompletionStrategy class >> initializeCache [
 				addAll: each class selectors.
 			each methodsDo: [ :method | self addSendsFrom: method ].
 			each class methodsDo: [ :method | self addSendsFrom: method ] ].
-	GlobalCache := GtPrefixTree withAll: Smalltalk globals keys.
 	self subscribeToSystem
 ]
 
@@ -113,8 +140,45 @@ GtPharoCompletionStrategy class >> newForSnippet [
 ]
 
 { #category : #private }
+GtPharoCompletionStrategy class >> processPragma: aPragma selectorsDo: selectorBlock [
+	| todo item |
+	selectorBlock cull: aPragma selector cull: 1.
+	todo := OrderedCollection with: aPragma arguments.
+	[ todo notEmpty ]
+		whileTrue: [ item := todo removeFirst.
+			item isSymbol
+				ifTrue: [ item numArgs >= 0 ifTrue: [ selectorBlock cull: item cull: 1 ] ]
+				ifFalse: [ item isArray ifTrue: [ todo addAll: item ] ] ]
+]
+
+{ #category : #private }
 GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
-	GtMessageSendIterator messageSendsIn: aMethod do: [ :selector :count | SelectorCache remove: selector weight: count ]
+	| seen globalBlock selectorBlock |
+	seen := Set new.
+	globalBlock := [ :global | 
+		| node |
+		node := GlobalCache remove: global name weight: 1.
+		(seen includes: global)
+			ifFalse: [ seen add: global.
+				node removeReference: aMethod ] ].
+	selectorBlock := [ :selector :count | 
+		(SelectorCache remove: selector weight: count)
+			ifNotNil: [ :node | 
+				(seen includes: selector)
+					ifFalse: [ seen add: selector.
+						node removeReference: aMethod ] ].
+		selector first isUppercase
+			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+	aMethod pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
+	GtMessageSendIterator
+		messageSendsIn: aMethod
+		doReferences: selectorBlock
+		andGlobals: globalBlock
+]
+
+{ #category : #accessing }
+GtPharoCompletionStrategy class >> sendersOf: aSelector [
+	^ (SelectorCache referencesTo: aSelector) asOrderedCollection
 ]
 
 { #category : #private }
