@@ -142,6 +142,7 @@ GtPharoBehaviorCoderElement >> buildContentPane [
 		c horizontal matchParent.
 		c vertical matchParent ].
 	contentPane padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
+	contentPane addChild: self makeLabel.
 	contentPane addChild: self buildClassLabel.
 	contentPane addChild: self buildDefinitionElement.
 	contentPane addChild: self buildContentTabs.
@@ -266,6 +267,16 @@ GtPharoBehaviorCoderElement >> initialize [
 			c vertical matchParent ].
 		
 	self when: BlClickEvent do: [ self requestFocus ]
+]
+
+{ #category : #'building ui' }
+GtPharoBehaviorCoderElement >> makeLabel [
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: Color gray;
+				fontSize: 12);
+		text: 'Class';
+		padding: (BlInsets left: 5)
 ]
 
 { #category : #actions }

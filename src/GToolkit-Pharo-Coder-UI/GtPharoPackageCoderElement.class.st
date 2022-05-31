@@ -12,6 +12,7 @@ Class {
 { #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildContentPane [
 	self addChildren: {
+		self makeLabel.
 		self buildPackageLabel.
 		self buildParentLink.
 		self buildContentTabs }
@@ -156,6 +157,16 @@ GtPharoPackageCoderElement >> initialize [
 	self padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
 	self when: BlClickEvent do: [ self requestFocus ].
 	self matchParent
+]
+
+{ #category : #'private - ui' }
+GtPharoPackageCoderElement >> makeLabel [
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: Color gray;
+				fontSize: 12);
+		text: 'Package';
+		padding: (BlInsets left: 5)
 ]
 
 { #category : #accessing }
