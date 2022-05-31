@@ -4,12 +4,13 @@ Class {
 	#instVars : [
 		'packageTagCoder'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildContentPane [
 	self removeChildren.
+	self addChild: self makeLabel.
 	self addChild: self buildPackageTagLabel.
 	self addChild: self buildParentLink.
 	self addChild: self buildContentTabs
@@ -130,6 +131,16 @@ GtPharoPackageTagCoderElement >> initialize [
 		constraintsDo: [ :c | 
 			c horizontal matchParent.
 			c vertical matchParent ]
+]
+
+{ #category : #'build ui' }
+GtPharoPackageTagCoderElement >> makeLabel [
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: Color gray;
+				fontSize: 12);
+		text: 'Package Tag';
+		padding: (BlInsets left: 5)
 ]
 
 { #category : #accessing }
