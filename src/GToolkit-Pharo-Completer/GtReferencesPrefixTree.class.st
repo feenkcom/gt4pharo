@@ -12,14 +12,16 @@ GtReferencesPrefixTree >> addReference: aMethod [
 	references
 		ifNil: [ references := aMethod ]
 		ifNotNil: [ references class == OrderedCollection
-				ifFalse: [ references := OrderedCollection with: references ].
+				ifFalse: [ references := references isArray
+							ifTrue: [ references := references asOrderedCollection ]
+							ifFalse: [ OrderedCollection with: references ] ].
 			references add: aMethod ]
 ]
 
 { #category : #accessing }
 GtReferencesPrefixTree >> gtSpecificSizeInMemory [
 	^ super gtSpecificSizeInMemory
-		+ (references class == OrderedCollection
+		+ ((references isArray or: [ references class == OrderedCollection ])
 				ifTrue: [ references gtSpecificSizeInMemory ]
 				ifFalse: [ 0 ])
 ]
@@ -47,6 +49,7 @@ GtReferencesPrefixTree >> referencesTo: aString [
 GtReferencesPrefixTree >> removeReference: aMethod [
 	references ifNil: [ ^ self ].
 	references == aMethod ifTrue: [ ^ references := nil ].
+	references isArray ifTrue: [ references := references asOrderedCollection ].
 	references class == OrderedCollection ifFalse: [ ^ self ].
 	references remove: aMethod ifAbsent: [  ]
 ]
