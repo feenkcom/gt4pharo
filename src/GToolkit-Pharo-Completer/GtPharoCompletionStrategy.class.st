@@ -86,6 +86,7 @@ GtPharoCompletionStrategy class >> initialize [
 
 { #category : #accessing }
 GtPharoCompletionStrategy class >> initializeCache [
+	| compactBlock |
 	self unsubscribeFromSystem.
 	SelectorCache := GtReferencesPrefixTree new.
 	GlobalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
@@ -96,6 +97,11 @@ GtPharoCompletionStrategy class >> initializeCache [
 				addAll: each class selectors.
 			each methodsDo: [ :method | self addSendsFrom: method ].
 			each class methodsDo: [ :method | self addSendsFrom: method ] ].
+	compactBlock := [ :each | 
+		each references isCollection
+			ifTrue: [ each references: each references asArray ] ].
+	SelectorCache allNodesDo: compactBlock.
+	GlobalCache allNodesDo: compactBlock.
 	self subscribeToSystem
 ]
 
