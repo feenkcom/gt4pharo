@@ -17,8 +17,3 @@ GtCachedSearchReferencesFilter >> defaultFilterScope [
 	references size < 50000 ifTrue: [ references sort: GtMethodsSortFunction new ].
 	^ references asAsyncStream
 ]
-
-{ #category : #testing }
-GtCachedSearchReferencesFilter >> includesMethod: aCompiledMethod [
-	^ true
-]
