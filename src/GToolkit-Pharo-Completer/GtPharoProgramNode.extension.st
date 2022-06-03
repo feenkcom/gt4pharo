@@ -74,42 +74,16 @@ GtPharoProgramNode >> localVariables [
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy [
-	| index type name completionsStream replacementsStream camelCaseReplacementNames anyReplacementNames selectorsStream |
+	| index type name |
 	index := strategy index.
 	type := receiver guessType: strategy.
 	name := aToken source.
-	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
-		collect:
-			[ :each | 
+	^ (strategy selectorStreamForReceiver: type matching: name)
+		collect: [ :each | 
 			receiver
 				actionForSelector: each
 				startingWith: name
 				at: index
 				needsParensKeywords: needsParensForKeyword
-				strategy: strategy ].
-	selectorsStream := (strategy
-		selectorStreamForReceiver: type
-		matching: ''
-		alphabetical: true) cached.
-	camelCaseReplacementNames := selectorsStream asyncSimilarCopy
-		filter: [ :each | (each beginsWith: name) not and: [ strategy isCamelCaseSubsequence: name of: each ] ].
-	anyReplacementNames := selectorsStream asyncSimilarCopy
-		filter: [ :each | (each beginsWith: name) not and: [ strategy isSubsequence: name of: each ] ].
-	replacementsStream := (camelCaseReplacementNames merge: anyReplacementNames) withoutDuplicates
-		collect:
-			[ :each | 
-			(GtCompositeCompletionAction labeled: (strategy labelFor: each withSearch: name))
-				addAction:
-						(GtDeleteTextCompletionAction
-								labeled: ''
-								from: aToken startPosition
-								to: aToken stopPosition);
-				addAction:
-						(receiver
-								actionForSelector: each
-								startingWith: ''
-								at: aToken startPosition - 1
-								needsParensKeywords: needsParensForKeyword
-								strategy: strategy) ].
-	^ completionsStream merge: replacementsStream
+				strategy: strategy ]
 ]
