@@ -386,7 +386,15 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 GtPharoCompleterExamples >> openCompletionIn: aScripter [
 	(aScripter keyDown: self secondaryKey) play.
 	(aScripter keyClick: BlKeyboardKey space) play.
-	(aScripter keyUp: self secondaryKey) play
+	(aScripter keyUp: self secondaryKey) play.
+	aScripter check
+		label: 'Verify first item selected';
+		onSpaceRoot;
+		satisfies: [ :element | 
+			(Delay forMilliseconds: 50) wait.
+			true ];
+		play.
+	aScripter wait forEmptySpaceTaskQueue play
 ]
 
 { #category : #'private-source' }
