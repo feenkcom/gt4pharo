@@ -1,7 +1,7 @@
-Extension { #name : #Object }
+Extension { #name : #ProtoObject }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-Object >> gtMetaFor: aView [
+ProtoObject >> gtMetaFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Meta';
