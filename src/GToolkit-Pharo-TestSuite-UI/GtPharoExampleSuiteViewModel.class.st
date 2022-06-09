@@ -60,7 +60,7 @@ GtPharoExampleSuiteViewModel >> beLocalFrom: aSource [
 { #category : #'api - suite' }
 GtPharoExampleSuiteViewModel >> beRemoteFrom: aSource [
 
-	self executor: GtPharoRemoteExampleSuiteExecutor new
+	self executor: GtPharoRemoteExamplesExecutor new
 ]
 
 { #category : #'api - suite' }
