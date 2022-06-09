@@ -120,7 +120,8 @@ GtMessageSendIterator >> processNormalSends [
 	endPc := instructionStream method endPC.
 	[ instructionStream pc > endPc ]
 		whileFalse: [ instruction := instructionStream nextInstruction.
-			#send:super:numArgs: = instruction selector
+			(#(#send:super:numArgs: #directedSuperSend:numArgs:)
+				includes: instruction selector)
 				ifTrue: [ referencesBlock value: instruction arguments first value: 1 ]
 				ifFalse: [ #jump: = instruction selector
 						ifTrue: [ self jump: instruction arguments first ]
