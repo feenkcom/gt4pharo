@@ -99,6 +99,12 @@ GtPharoMethodTestCase >> isFailure [
 			  selector: self methodSelector ]
 ]
 
+{ #category : #testing }
+GtPharoMethodTestCase >> isGtExample [
+
+	^ false
+]
+
 { #category : #'api - testing' }
 GtPharoMethodTestCase >> isPassed [
 
@@ -106,6 +112,12 @@ GtPharoMethodTestCase >> isPassed [
 		  self result
 			  isPassedFor: self behavior
 			  selector: self methodSelector ]
+]
+
+{ #category : #testing }
+GtPharoMethodTestCase >> isSUnitTestCase [
+
+	^ true
 ]
 
 { #category : #'api - testing' }
