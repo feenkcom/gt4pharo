@@ -20,8 +20,7 @@ GtPharoSnippetCoder >> behavior [
 
 { #category : #accessing }
 GtPharoSnippetCoder >> behavior: aBehavior [
-	behavior := aBehavior.
-	completionStrategy ifNotNil: [ completionStrategy classOrMetaClass: self behavior ]
+	behavior := aBehavior
 ]
 
 { #category : #'api - ast' }

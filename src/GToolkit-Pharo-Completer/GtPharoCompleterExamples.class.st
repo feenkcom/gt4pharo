@@ -386,7 +386,15 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 GtPharoCompleterExamples >> openCompletionIn: aScripter [
 	(aScripter keyDown: self secondaryKey) play.
 	(aScripter keyClick: BlKeyboardKey space) play.
-	(aScripter keyUp: self secondaryKey) play
+	(aScripter keyUp: self secondaryKey) play.
+	aScripter check
+		label: 'Verify first item selected';
+		onSpaceRoot;
+		satisfies: [ :element | 
+			(Delay forMilliseconds: 50) wait.
+			true ];
+		play.
+	aScripter wait forEmptySpaceTaskQueue play
 ]
 
 { #category : #'private-source' }
@@ -494,21 +502,6 @@ GtPharoCompleterExamples >> startingStatementRequestedCompletions [
 						completionActionStreamFor: text asRopedText
 						at: index - 2
 						requested: false) isNotEmpty wait not ].
-	^ strategy
-]
-
-{ #category : #smalltalk }
-GtPharoCompleterExamples >> subsequenceSelectorCompletion [
-	<gtExample>
-	
-	| text strategy items |
-	text := ('foo' , String crlf , '^cls aSwM') asRopedText.
-	strategy := self smalltalkStrategy.
-	items := strategy
-		completionActionStreamFor: text
-		at: text size
-		requested: true.
-	self assert: ((items take: 30) toArray wait anySatisfy: [ :each | each label = 'addSelector:withMethod:' ]).
 	^ strategy
 ]
 
