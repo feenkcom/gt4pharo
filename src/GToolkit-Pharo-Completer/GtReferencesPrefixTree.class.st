@@ -19,6 +19,18 @@ GtReferencesPrefixTree >> addReference: aMethod [
 ]
 
 { #category : #accessing }
+GtReferencesPrefixTree >> gtReferencesFor: aView [
+	<gtView>
+	^ aView list
+		title: 'References';
+		items: [ references
+				ifNil: [ {} ]
+				ifNotNil: [ references isCollection
+						ifTrue: [ references ]
+						ifFalse: [ Array with: references ] ] ]
+]
+
+{ #category : #accessing }
 GtReferencesPrefixTree >> gtSpecificSizeInMemory [
 	^ super gtSpecificSizeInMemory
 		+ ((references isArray or: [ references class == OrderedCollection ])
