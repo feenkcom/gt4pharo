@@ -12,6 +12,6 @@ GtPharoClassExpanderStyler >> visitDeclaredGlobalVariable: aNamedVariable [
 	super visitDeclaredGlobalVariable: aNamedVariable.
 	(self class environment at: aNamedVariable variableName) isBehavior ifFalse: [^self].
 	text attribute: (GtPharoClassExpanderAttribute forClass: (self class environment at: aNamedVariable variableName))
-		from: aNamedVariable startPosition 
+		from: aNamedVariable stopPosition 
 		to: aNamedVariable stopPosition
 ]
