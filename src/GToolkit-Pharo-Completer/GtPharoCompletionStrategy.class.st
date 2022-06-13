@@ -78,6 +78,11 @@ GtPharoCompletionStrategy class >> globalVariableReferencesTo: aVariable [
 	^ (GlobalCache referencesTo: aVariable name) asOrderedCollection
 ]
 
+{ #category : #accessing }
+GtPharoCompletionStrategy class >> implementersOf: aSelector [
+	^ SelectorCache implementersOf: aSelector
+]
+
 { #category : #'class initialization' }
 GtPharoCompletionStrategy class >> initialize [
 	SelectorCache := GtPrefixTree new.
@@ -88,15 +93,12 @@ GtPharoCompletionStrategy class >> initialize [
 GtPharoCompletionStrategy class >> initializeCache [
 	| compactBlock |
 	self unsubscribeFromSystem.
-	SelectorCache := GtReferencesPrefixTree new.
-	GlobalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
+	SelectorCache := GtCachingPrefixTree new.
+	GlobalCache := GtCachingPrefixTree withAll: Smalltalk globals keys.
 	Smalltalk
 		allClassesDo: [ :each | 
-			SelectorCache
-				addAll: each selectors;
-				addAll: each class selectors.
-			each methodsDo: [ :method | self addSendsFrom: method ].
-			each class methodsDo: [ :method | self addSendsFrom: method ] ].
+			each methodsDo: [ :method | self methodAdded: method ].
+			each class methodsDo: [ :method | self methodAdded: method ] ].
 	compactBlock := [ :each | 
 		each references isCollection
 			ifTrue: [ each references: each references asArray ] ].
@@ -107,19 +109,29 @@ GtPharoCompletionStrategy class >> initializeCache [
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodAdded: anAnnouncement [
-	SelectorCache add: anAnnouncement method selector.
+	| node |
+	node := SelectorCache add: anAnnouncement method selector weight: 1.
+	node addImplementer: anAnnouncement method.
 	self addSendsFrom: anAnnouncement method
 ]
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodModified: anAnnouncement [
+	SelectorCache
+		nodeFor: anAnnouncement newMethod selector
+		startingAt: 1
+		do: [ :node :ignore | 
+			node
+				removeImplementer: anAnnouncement oldMethod;
+				addImplementer: anAnnouncement newMethod ].
 	self removeSendsFrom: anAnnouncement oldMethod.
 	self addSendsFrom: anAnnouncement newMethod
 ]
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodRemoved: anAnnouncement [
-	SelectorCache remove: anAnnouncement method selector.
+	(SelectorCache remove: anAnnouncement method selector weight: 1)
+		ifNotNil: [ :node | node removeImplementer: anAnnouncement method ].
 	self removeSendsFrom: anAnnouncement method
 ]
 

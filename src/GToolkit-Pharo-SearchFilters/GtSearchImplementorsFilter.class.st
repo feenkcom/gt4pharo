@@ -32,11 +32,13 @@ GtSearchImplementorsFilter >> = anObject [
 
 { #category : #accessing }
 GtSearchImplementorsFilter >> defaultFilterScope [
-	^ (AsyncImageBehaviorsStream new
-		collect: [ :each | 
-			{each compiledMethodAt: selector ifAbsent: [  ].
-				each class compiledMethodAt: selector ifAbsent: [  ]} asAsyncStream ])
-		flatten select: [ :each | each notNil ]
+	| implementers |
+	implementers := GtPharoCompletionStrategy implementersOf: selector.
+	
+	"50,000 items sort in less < 1/2 second so it should be quick enough for searching in coder"
+	implementers size < 50000
+		ifTrue: [ implementers sort: GtMethodsSortFunction new ].
+	^ implementers asAsyncStream
 ]
 
 { #category : #ui }
