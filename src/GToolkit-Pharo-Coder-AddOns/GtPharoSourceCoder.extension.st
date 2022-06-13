@@ -84,6 +84,12 @@ GtPharoSourceCoder >> createLabel: aString description: description [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> criticStylerAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 20>
+	coderAddOns addStyler: GtMethodCriticStyler new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> extractableNodesFrom: aCoderViewModel [
 	| allSelections allCursors |
 
