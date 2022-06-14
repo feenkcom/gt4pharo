@@ -89,7 +89,7 @@ GtPharoMethodCoderHeaderElement >> packageButton [
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnBehavior [	
 	behavior model behaviorDo: [ :aBehavior |
-		self phlow spawnTool: (GtClassCoderTool observedClass: aBehavior) ]
+		self phlow spawnTool: (GtMethodCoderTool compiledMethod: self textualCoderViewModel compiledMethod) ]
 ]
 
 { #category : #'private - actions' }
