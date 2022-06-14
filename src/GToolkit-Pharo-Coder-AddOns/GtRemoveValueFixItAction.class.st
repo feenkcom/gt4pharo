@@ -1,0 +1,35 @@
+Class {
+	#name : #GtRemoveValueFixItAction,
+	#superclass : #GtCriticFixItAction,
+	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
+}
+
+{ #category : #'api - action' }
+GtRemoveValueFixItAction >> description [
+	^ 'Remove unused expression'
+]
+
+{ #category : #'api - action' }
+GtRemoveValueFixItAction >> id [
+	^ GtRemoveValueFixItActionElementId
+]
+
+{ #category : #executing }
+GtRemoveValueFixItAction >> nodeToRemove [
+	^ node
+]
+
+{ #category : #executing }
+GtRemoveValueFixItAction >> updateSource [
+	| string nodeToRemove |
+	nodeToRemove := self nodeToRemove.
+	string := SmaCCString on: nodeToRemove topParent completeSource.
+	string deleteFrom: nodeToRemove startPosition to: nodeToRemove stopPosition.
+	nodeToRemove parent isSequence
+		ifTrue: [ (nodeToRemove parent periods
+				detect: [ :each | each startPosition > nodeToRemove stopPosition ]
+				ifNone: [ nil ])
+				ifNotNil: [ :periodToDelete | string deleteFrom: periodToDelete startPosition to: periodToDelete stopPosition ] ].
+	self deleteStartOfLineWhitespace: string before: nodeToRemove.
+	^ string asString
+]

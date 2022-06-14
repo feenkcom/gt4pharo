@@ -129,6 +129,16 @@ GtPharoProgramNode >> isAssignment [
 ]
 
 { #category : #testing }
+GtPharoProgramNode >> isBlock [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoProgramNode >> isCascade [
+	^ false
+]
+
+{ #category : #testing }
 GtPharoProgramNode >> isKeyword [
 	^ false
 ]
@@ -175,6 +185,25 @@ GtPharoProgramNode >> isSelf [
 
 { #category : #testing }
 GtPharoProgramNode >> isSequence [
+	^ false
+]
+
+{ #category : #accessing }
+GtPharoProgramNode >> isUsed [
+	parent ifNil: [ ^ true ].
+	parent isValueNode ifTrue: [ ^ true ].
+	parent isReturn ifTrue: [ ^ true ].
+	parent isMessage ifTrue: [ ^ true ].
+	(parent isSequence and: [ parent statements last == self ])
+		ifTrue: [ parent parent ifNil: [ ^ true ].
+			parent parent isBlock
+				ifTrue: [ | node |
+					node := parent parent parent.
+					node isMessage
+						ifTrue: [ (#(#ifTrue: #ifTrue:ifFalse: #ifFalse: #ifFalse:ifTrue: #whileTrue: #whileFalse: #ifNil: #ifNil:ifNotNil: #ifNotNil: #ifNotNil:ifNil:)
+								includes: node selector) ifTrue: [ ^ node isUsed ] ].
+					^ true ] ].
+	parent isPragma ifTrue: [ ^ true ].
 	^ false
 ]
 

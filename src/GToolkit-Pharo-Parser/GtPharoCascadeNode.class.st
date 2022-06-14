@@ -6,7 +6,7 @@ Class {
 		'messages',
 		'semicolons'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -29,6 +29,11 @@ GtPharoCascadeNode >> initialize [
 	super initialize.
 	messages := OrderedCollection new: 2.
 	semicolons := OrderedCollection new: 2.
+]
+
+{ #category : #testing }
+GtPharoCascadeNode >> isCascade [
+	^ true
 ]
 
 { #category : #generated }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMessageNode,
 	#superclass : #GtPharoProgramNode,
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -32,6 +32,12 @@ GtPharoMessageNode >> isMessage [
 { #category : #testing }
 GtPharoMessageNode >> isUnary [
 	^ false
+]
+
+{ #category : #accessing }
+GtPharoMessageNode >> isUsed [
+	^ (parent isCascade not or: [ parent messages last == self ])
+		and: [ parent isUsed ]
 ]
 
 { #category : #testing }

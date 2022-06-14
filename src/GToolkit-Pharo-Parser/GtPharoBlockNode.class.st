@@ -9,7 +9,7 @@ Class {
 		'body',
 		'rightBracket'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -79,6 +79,11 @@ GtPharoBlockNode >> initialize [
 	super initialize.
 	colons := OrderedCollection new: 2.
 	variables := OrderedCollection new: 2.
+]
+
+{ #category : #testing }
+GtPharoBlockNode >> isBlock [
+	^ true
 ]
 
 { #category : #generated }
