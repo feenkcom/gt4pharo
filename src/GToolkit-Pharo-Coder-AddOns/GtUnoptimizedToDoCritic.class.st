@@ -7,7 +7,7 @@ Class {
 { #category : #private }
 GtUnoptimizedToDoCritic >> attributesFor: aNode from: sourceCoder [
 	^ {GtFixItAttributeWithDescription new
-			description: self description;
+			description: [:editorElement | self descriptionWithEditor: editorElement ];
 			fixItActions: [ {(GtRemoveParenthesisFixItAction forCoder: sourceCoder node: aNode receiver)
 						description: 'Convert to optimized #' , aNode receiver selector , aNode selector;
 						yourself} ];

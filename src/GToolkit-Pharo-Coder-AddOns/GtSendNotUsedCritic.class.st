@@ -12,7 +12,7 @@ GtSendNotUsedCritic class >> isAbstract [
 { #category : #private }
 GtSendNotUsedCritic >> attributesFor: aNode from: sourceCoder [
 	^ {GtFixItAttributeWithDescription new
-			description: self description;
+			description: [:editorElement | self descriptionWithEditor: editorElement ];
 			fixItActions: [ self fixItActionsFor: aNode from: sourceCoder ];
 			yourself}
 ]

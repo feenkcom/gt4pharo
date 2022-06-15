@@ -49,6 +49,26 @@ GtMethodCritic >> description [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtMethodCritic >> descriptionWithEditor: anEditorElement [
+	| text browseAttribute |
+	text := self description asRopedText.
+	browseAttribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ BrButton new
+					aptitude: BrGlamorousButtonWithIconAptitude new;
+					beTinySize;
+					margin: (BlInsets left: 5);
+					icon: BrGlamorousVectorIcons browse;
+					action: [ anEditorElement phlow spawnTool: (GtClassCoderTool forClass: self class) ];
+					label: 'Browse rule definition' ].
+	text
+		attribute: browseAttribute
+		from: text size
+		to: text size.
+	^ text
+]
+
 { #category : #styling }
 GtMethodCritic >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
