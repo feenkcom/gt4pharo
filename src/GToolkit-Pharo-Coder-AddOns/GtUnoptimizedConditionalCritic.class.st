@@ -7,7 +7,7 @@ Class {
 { #category : #private }
 GtUnoptimizedConditionalCritic >> attributesFor: aNode from: sourceCoder [
 	^ {GtFixItAttributeWithDescription new
-			description: self description;
+			description: [:editorElement | self descriptionWithEditor: editorElement ];
 			fixItActions: [ {GtReorderConditionalsFixItAction forCoder: sourceCoder node: aNode} ];
 			yourself}
 ]

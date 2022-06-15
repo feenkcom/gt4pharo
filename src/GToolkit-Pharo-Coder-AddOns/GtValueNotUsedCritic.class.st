@@ -7,7 +7,7 @@ Class {
 { #category : #private }
 GtValueNotUsedCritic >> attributesFor: aNode from: sourceCoder [
 	^ {GtFixItAttributeWithDescription new
-			description: self description;
+			description: [:editorElement | self descriptionWithEditor: editorElement ];
 			fixItActions: [ {GtRemoveValueFixItAction forCoder: sourceCoder node: aNode} ];
 			yourself}
 ]

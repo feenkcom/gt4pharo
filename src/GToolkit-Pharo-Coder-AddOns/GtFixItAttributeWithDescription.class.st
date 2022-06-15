@@ -2,19 +2,14 @@ Class {
 	#name : #GtFixItAttributeWithDescription,
 	#superclass : #GtFixItAttribute,
 	#instVars : [
-		'description'
+		'descriptionBlock'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
 { #category : #accessing }
-GtFixItAttributeWithDescription >> description [
-	^ description
-]
-
-{ #category : #accessing }
-GtFixItAttributeWithDescription >> description: aBlText [
-	description := aBlText asRopedText
+GtFixItAttributeWithDescription >> description: aBlockReturningBlText [
+	descriptionBlock := aBlockReturningBlText
 ]
 
 { #category : #accessing }
@@ -22,19 +17,7 @@ GtFixItAttributeWithDescription >> dropDownElementFor: anEditorElement [
 	| pane label text |
 	pane := BrVerticalPane new.
 	pane fitContent.
-	text := description foreground: BrGlamorousColors disabledButtonTextColor.
-	text
-		attribute: (GtButtonAttribute new
-				beAppend;
-				stencil: [ BrButton new
-						aptitude: BrGlamorousButtonWithIconAptitude new;
-						beTinySize;
-						margin: (BlInsets left: 5);
-						icon: BrGlamorousVectorIcons browse;
-						label: 'Browse rule definition';
-						action: [ anEditorElement phlow spawnTool: ((GtMethodCoderTool compiledMethod: GtFixItAttributeWithDescription>>#dropDownElementFor:)) ] ])
-		from: text size
-		to: text size.
+	text := (descriptionBlock cull: anEditorElement) asRopedText foreground: BrGlamorousColors disabledButtonTextColor.
 	label := BrEditor new
 			hMatchParent;
 			vFitContent;
@@ -43,4 +26,10 @@ GtFixItAttributeWithDescription >> dropDownElementFor: anEditorElement [
 	pane addChild: label.
 	pane addChild: (super dropDownElementFor: anEditorElement).
 	^ pane
+]
+
+{ #category : #accessing }
+GtFixItAttributeWithDescription >> initialize [
+	super initialize.
+	descriptionBlock := [ :editorElement | '' ]
 ]

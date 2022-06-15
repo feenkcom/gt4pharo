@@ -7,7 +7,8 @@ Class {
 { #category : #private }
 GtRedundantAssignmentCritic >> attributesFor: aNode from: sourceCoder [
 	^ {GtFixItAttributeWithDescription new
-			description: self description;
+			description: [:editorElement | self descriptionWithEditor: editorElement ];
+			toolToBrowse: (GtClassCoderTool forClass: self class);
 			fixItActions: [ {GtRemoveValueFixItAction forCoder: sourceCoder node: aNode} ];
 			yourself}
 ]
