@@ -97,5 +97,7 @@ GtPharoVariableNode >> variableName [
 
 { #category : #accessing }
 GtPharoVariableNode >> whoDefines [
-	^ self allParents detect: [ :each | each defines: name value ] ifNone: [  ]
+	^ self allParents
+		detect: [ :each | each isErrorNode not and: [ each defines: name value ] ]
+		ifNone: [  ]
 ]
