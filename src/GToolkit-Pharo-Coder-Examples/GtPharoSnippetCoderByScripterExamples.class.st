@@ -203,7 +203,7 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosureArgument0
 	
 	aScripter check
 		onBreadthFirstChildOfClass: GtFixItButton;
-		notExists;
+		exists;
 		play.
 	
 	^ aScripter
