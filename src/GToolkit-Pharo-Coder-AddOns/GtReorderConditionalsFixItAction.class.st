@@ -27,6 +27,6 @@ GtReorderConditionalsFixItAction >> updateSource [
 	string
 		deleteFrom: bracketToDelete startPosition
 		to: bracketToDelete stopPosition.
-	string insert: ']' at: node stopPosition + 1.
+	string insert: ' ]' at: node stopPosition + 1.
 	^ string asString
 ]

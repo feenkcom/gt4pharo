@@ -4,17 +4,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
 
-{ #category : #private }
-GtUnoptimizedConditionalCritic >> attributesFor: aNode from: sourceCoder [
-	^ {GtFixItAttributeWithDescription new
-			description: [:editorElement | self descriptionWithEditor: editorElement ];
-			fixItActions: [ {GtReorderConditionalsFixItAction forCoder: sourceCoder node: aNode} ];
-			yourself}
-]
-
 { #category : #accessing }
 GtUnoptimizedConditionalCritic >> description [
 	^ '((a and:[b]) and: [c]) can be written as (a and: [b and: [c]])'
+]
+
+{ #category : #private }
+GtUnoptimizedConditionalCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ {GtReorderConditionalsFixItAction
+			forCoder: aCriticStyler coderModel
+			node: aNode}
 ]
 
 { #category : #styling }
@@ -25,15 +24,8 @@ GtUnoptimizedConditionalCritic >> highlightPositionsFor: aSmaCCNode [
 		yourself
 ]
 
-{ #category : #private }
-GtUnoptimizedConditionalCritic >> locationFor: aSmaCCNode [
-	| index |
-	index := aSmaCCNode selectorParts last stopPosition.
-	^ index to: index
-]
-
 { #category : #accessing }
-GtUnoptimizedConditionalCritic >> matches: aNode [
+GtUnoptimizedConditionalCritic >> matches: aNode from: aCriticRunner [
 	| conditionals |
 	(aNode isMessageSend and: [ aNode receiver isMessageSend ])
 		ifFalse: [ ^ false ].

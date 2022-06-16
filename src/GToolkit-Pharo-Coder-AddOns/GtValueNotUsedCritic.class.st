@@ -4,28 +4,18 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
 
-{ #category : #private }
-GtValueNotUsedCritic >> attributesFor: aNode from: sourceCoder [
-	^ {GtFixItAttributeWithDescription new
-			description: [:editorElement | self descriptionWithEditor: editorElement ];
-			fixItActions: [ {GtRemoveValueFixItAction forCoder: sourceCoder node: aNode} ];
-			yourself}
-]
-
 { #category : #accessing }
 GtValueNotUsedCritic >> description [
 	^ 'Variables and literals should be used, or they should be removed to simplify the code.'
 ]
 
 { #category : #private }
-GtValueNotUsedCritic >> locationFor: aSmaCCNode [
-	| index |
-	index := aSmaCCNode stopPosition.
-	^ index to: index
+GtValueNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ {GtRemoveValueFixItAction forCoder: aCriticStyler coderModel node: aNode}
 ]
 
 { #category : #testing }
-GtValueNotUsedCritic >> matches: aNode [
+GtValueNotUsedCritic >> matches: aNode from: aCriticRunner [
 	aNode isVariable
 		ifTrue: [ ^ aNode isUsed not
 				and: [ aNode parent isValueNode or: [ aNode parent isMessage ] ] ].

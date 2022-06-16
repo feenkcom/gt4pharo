@@ -10,7 +10,7 @@ GtDuplicateCodeInConditionalCritic >> description [
 ]
 
 { #category : #accessing }
-GtDuplicateCodeInConditionalCritic >> matches: aNode [
+GtDuplicateCodeInConditionalCritic >> matches: aNode from: aCriticRunner [
 	| first last |
 	aNode isMessage ifFalse: [ ^ false ].
 	(#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: aNode selector)

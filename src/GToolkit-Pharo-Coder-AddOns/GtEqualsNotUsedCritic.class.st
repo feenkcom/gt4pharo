@@ -10,15 +10,15 @@ GtEqualsNotUsedCritic >> description [
 ]
 
 { #category : #private }
-GtEqualsNotUsedCritic >> fixItActionsFor: aNode from: sourceCoder [
+GtEqualsNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
 	| actions |
 	actions := OrderedCollection new.
 	(aNode selector = #=
 		and: [ aNode parent notNil
 				and: [ aNode parent isMessageSend and: [ aNode parent receiver isVariable ] ] ])
 		ifTrue: [ actions
-				add: (GtConvertToAssignmentFixItAction forCoder: sourceCoder node: aNode) ].
-	actions addAll: (super fixItActionsFor: aNode from: sourceCoder).
+				add: (GtConvertToAssignmentFixItAction forCoder: aCriticStyler coderModel node: aNode) ].
+	actions addAll: (super fixItActionsFor: aNode using: aCriticStyler).
 	^ actions
 ]
 

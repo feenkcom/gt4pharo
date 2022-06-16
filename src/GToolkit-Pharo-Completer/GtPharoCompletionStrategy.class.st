@@ -78,6 +78,12 @@ GtPharoCompletionStrategy class >> globalVariableReferencesTo: aVariable [
 	^ (GlobalCache referencesTo: aVariable name) asOrderedCollection
 ]
 
+{ #category : #iterating }
+GtPharoCompletionStrategy class >> implementersDo: aBlock [
+	SelectorCache
+		do: [ :each :weight :node | (node implementers ifNil: [ #() ]) isEmpty ifFalse: [ aBlock value: each ] ]
+]
+
 { #category : #accessing }
 GtPharoCompletionStrategy class >> implementersOf: aSelector [
 	^ SelectorCache implementersOf: aSelector

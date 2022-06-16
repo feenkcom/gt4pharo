@@ -7,48 +7,48 @@ Class {
 { #category : #'api - ast' }
 GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: theBindings [
 	"Given a pharo ast node and a class find the return type of the node"
-	
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ]) 
+
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
 		ifTrue: [ ^ aClass ].
-	
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ]) 
+
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
 		ifTrue: [ ^ aClass ifNotNil: [ :class | class superclass ] ].
-		
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ]) 
+
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ])
 		ifTrue: [ ^ Context ].
-		
+
 	aGtPharoProgramNode isVariable
-		ifTrue: [
-			| aVariableName |
+		ifTrue: [ | aVariableName |
 			aVariableName := aGtPharoProgramNode name value asSymbol.
 
-			aGtPharoProgramNode whoDefines
-				ifNotNil: [ ^ nil ].
+			aGtPharoProgramNode whoDefines ifNotNil: [ ^ nil ].
 
 			self class environment
 				at: aVariableName
 				ifPresent: [ :anObject | ^ anObject class ].
-			
-			^ (theBindings bindingValueOf: aVariableName)
-				ifNotNil: [ :aValue | aValue class ] ].
+
+			^ theBindings
+				ifNotNil: [ (theBindings bindingValueOf: aVariableName)
+						ifNotNil: [ :aValue | aValue class ] ] ].
 
 	aGtPharoProgramNode isLiteral
 		ifTrue: [ ^ aGtPharoProgramNode literalValue class ].
 
-	(aGtPharoProgramNode isKindOf: GtPharoArrayNode)
-		ifTrue: [ ^ { } class ].
+	(aGtPharoProgramNode isKindOf: GtPharoArrayNode) ifTrue: [ ^ {} class ].
 
-	(aGtPharoProgramNode isKindOf: GtPharoBlockNode)
-		ifTrue: [ ^ [  ] class ].
+	(aGtPharoProgramNode isKindOf: GtPharoBlockNode) ifTrue: [ ^ [  ] class ].
 
 	aGtPharoProgramNode isMessageSend
-		ifTrue: [
-			aGtPharoProgramNode selector = #class
-				ifTrue: [ ^ (self typeOf: aGtPharoProgramNode receiver in: aClass  bindings: theBindings)
-						ifNotNil: [ :class | class class ] ].
+		ifTrue: [ aGtPharoProgramNode selector = #class
+				ifTrue: [ ^ (self
+						typeOf: aGtPharoProgramNode receiver
+						in: aClass
+						bindings: theBindings) ifNotNil: [ :class | class class ] ].
 			(#(new new:) includes: aGtPharoProgramNode selector)
-				ifTrue: [ ^ (self typeOf: aGtPharoProgramNode receiver in: aClass  bindings: theBindings)
-						ifNotNil: [ :class | class instanceSide ] ] ].
+				ifTrue: [ ^ (self
+						typeOf: aGtPharoProgramNode receiver
+						in: aClass
+						bindings: theBindings) ifNotNil: [ :class | class instanceSide ] ] ].
 
 	^ nil
 ]

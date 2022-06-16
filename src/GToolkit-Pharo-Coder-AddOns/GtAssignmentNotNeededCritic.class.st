@@ -4,17 +4,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
 
-{ #category : #private }
-GtAssignmentNotNeededCritic >> attributesFor: aNode from: sourceCoder [
-	^ {GtFixItAttributeWithDescription new
-			description: self description;
-			fixItActions: [ {GtRemoveAssignmentFixItAction forCoder: sourceCoder node: aNode} ];
-			yourself}
-]
-
 { #category : #accessing }
 GtAssignmentNotNeededCritic >> description [
 	^ 'Assignment to local variable is not used'
+]
+
+{ #category : #private }
+GtAssignmentNotNeededCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ {GtRemoveAssignmentFixItAction forCoder: aCriticStyler coderModel node: aNode}
+]
+
+{ #category : #private }
+GtAssignmentNotNeededCritic >> fixItLocationFor: aSmaCCNode [
+	^ aSmaCCNode assignmentToken stopPosition
 ]
 
 { #category : #styling }
@@ -23,15 +25,8 @@ GtAssignmentNotNeededCritic >> highlightPositionsFor: aSmaCCNode [
 			to: aSmaCCNode assignmentToken stopPosition}
 ]
 
-{ #category : #private }
-GtAssignmentNotNeededCritic >> locationFor: aSmaCCNode [
-	| index |
-	index := aSmaCCNode assignmentToken stopPosition.
-	^ index to: index
-]
-
 { #category : #testing }
-GtAssignmentNotNeededCritic >> matches: aNode [
+GtAssignmentNotNeededCritic >> matches: aNode from: aCriticRunner [
 	^ aNode isAssignment
 		and: [ aNode parent notNil
 				and: [ aNode parent isReturn and: [ aNode variable whoDefines notNil ] ] ]

@@ -19,29 +19,9 @@ GtMethodCritic class >> isAbstract [
 	^ self == GtMethodCritic
 ]
 
-{ #category : #private }
-GtMethodCritic >> attributes [
-	^ #()
-]
-
-{ #category : #styling }
-GtMethodCritic >> attributesAndLocationsFor: aSmaCCNode from: coderModel do: aBlock [
-	aBlock
-		value: (self attributesFor: aSmaCCNode from: coderModel)
-		value: (self locationFor: aSmaCCNode).
-	self includeHighlight
-		ifTrue: [ (self highlightPositionsFor: aSmaCCNode)
-				do: [ :each | aBlock value: {self errorHighlightAttribute} value: each ] ]
-]
-
-{ #category : #private }
-GtMethodCritic >> attributesFor: aNode [
-	^ self attributes
-]
-
-{ #category : #private }
-GtMethodCritic >> attributesFor: aNode from: coderModel [
-	^ self attributesFor: aNode
+{ #category : #comparing }
+GtMethodCritic >> = anObject [
+	^ self class = anObject class
 ]
 
 { #category : #accessing }
@@ -49,7 +29,7 @@ GtMethodCritic >> description [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #styling }
 GtMethodCritic >> descriptionWithEditor: anEditorElement [
 	| text browseAttribute |
 	text := self description asRopedText.
@@ -75,6 +55,24 @@ GtMethodCritic >> errorHighlightAttribute [
 ]
 
 { #category : #styling }
+GtMethodCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ #()
+]
+
+{ #category : #styling }
+GtMethodCritic >> fixItLocationFor: aSmaCCNode [
+	aSmaCCNode isMessage ifTrue: [ ^ aSmaCCNode selectorParts last stopPosition ].
+	aSmaCCNode isMessageSend
+		ifTrue: [ ^ aSmaCCNode message selectorParts last stopPosition ].
+	^ aSmaCCNode stopPosition
+]
+
+{ #category : #comparing }
+GtMethodCritic >> hash [
+	^ self class hash
+]
+
+{ #category : #styling }
 GtMethodCritic >> highlightPositionsFor: aSmaCCNode [
 	aSmaCCNode isMessage
 		ifTrue: [ ^ aSmaCCNode selectorParts collect: [ :each | each sourceInterval ] ].
@@ -84,16 +82,47 @@ GtMethodCritic >> highlightPositionsFor: aSmaCCNode [
 ]
 
 { #category : #testing }
+GtMethodCritic >> includeFixIt [
+	^ true
+]
+
+{ #category : #testing }
 GtMethodCritic >> includeHighlight [
 	^ true
 ]
 
-{ #category : #private }
-GtMethodCritic >> locationFor: aSmaCCNode [
-	^ aSmaCCNode sourceInterval
+{ #category : #testing }
+GtMethodCritic >> matches: aNode from: aCriticRunner [
+	^ self subclassResponsibility
 ]
 
-{ #category : #testing }
-GtMethodCritic >> matches: aNode [
-	self subclassResponsibility
+{ #category : #styling }
+GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
+	| location |
+	self includeFixIt ifFalse: [ ^ self ].
+	location := self fixItLocationFor: aNode.
+	aCriticStyler
+		attributes: {GtFixItAttribute new
+					description: [ :editorElement | self descriptionWithEditor: editorElement ];
+					fixItActions: [ self fixItActionsFor: aNode using: aCriticStyler ];
+					yourself}
+		from: location
+		to: location
+]
+
+{ #category : #styling }
+GtMethodCritic >> styleHighlight: aNode using: aCriticStyler [
+	self includeHighlight ifFalse: [ ^ self ].
+	(self highlightPositionsFor: aNode)
+		do: [ :each | 
+			aCriticStyler
+				attributes: {self errorHighlightAttribute}
+				from: each first
+				to: each last ]
+]
+
+{ #category : #styling }
+GtMethodCritic >> styleIssue: aNode using: aCriticStyler [
+	self styleFixIt: aNode using: aCriticStyler.
+	self styleHighlight: aNode using: aCriticStyler
 ]

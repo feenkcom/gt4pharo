@@ -9,8 +9,13 @@ GtHaltCritic >> description [
 	^ 'Debugging code is in method and should be removed before it is released.'
 ]
 
+{ #category : #testing }
+GtHaltCritic >> includeFixIt [
+	^ false
+]
+
 { #category : #accessing }
-GtHaltCritic >> matches: aNode [
+GtHaltCritic >> matches: aNode from: aCriticRunner [
 	aNode isMessage ifTrue: [ ^ #(halt haltOnce haltIf:) includes: aNode selector ].
 	aNode isMessageSend
 		ifTrue: [ | receiver method |

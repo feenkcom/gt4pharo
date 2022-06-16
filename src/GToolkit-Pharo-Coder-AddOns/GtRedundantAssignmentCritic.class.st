@@ -4,28 +4,17 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
 
-{ #category : #private }
-GtRedundantAssignmentCritic >> attributesFor: aNode from: sourceCoder [
-	^ {GtFixItAttributeWithDescription new
-			description: [:editorElement | self descriptionWithEditor: editorElement ];
-			toolToBrowse: (GtClassCoderTool forClass: self class);
-			fixItActions: [ {GtRemoveValueFixItAction forCoder: sourceCoder node: aNode} ];
-			yourself}
-]
-
 { #category : #accessing }
 GtRedundantAssignmentCritic >> description [
 	^ 'Assignment statement is using same variable on both sides. Most likely it should refer to another variable.'
 ]
 
 { #category : #private }
-GtRedundantAssignmentCritic >> locationFor: aSmaCCNode [
-	| index |
-	index := aSmaCCNode stopPosition.
-	^ index to: index
+GtRedundantAssignmentCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ {GtRemoveValueFixItAction forCoder: aCriticStyler coderModel node: aNode}
 ]
 
 { #category : #testing }
-GtRedundantAssignmentCritic >> matches: aNode [
+GtRedundantAssignmentCritic >> matches: aNode from: aCriticRunner [
 	^ aNode isAssignment and: [ aNode variable = aNode value ]
 ]
