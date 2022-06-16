@@ -21,6 +21,13 @@ GtSendNotUsedCritic >> matches: aNode from: aCriticRunner [
 	^ self selectors includes: aNode selector
 ]
 
+{ #category : #enumerating }
+GtSendNotUsedCritic >> potentialMethodsDo: aBlock [
+	(self selectors
+		inject: GtSearchNullFilter new
+		into: [ :sum :each | sum | each gtReferences ]) do: aBlock
+]
+
 { #category : #accessing }
 GtSendNotUsedCritic >> selectors [
 	self subclassResponsibility

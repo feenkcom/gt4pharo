@@ -19,7 +19,8 @@ TCriticRunner >> hasDeclaredVariableNamed: aString [
 	class := self behavior.
 	(class classThatDefinesInstVarNamed: aString) ifNotNil: [ ^ true ].
 	(class classThatDefinesClassVariable: aString) ifNotNil: [ ^ true ].
-	^ false
+	^ class instanceSide allSharedPools
+		anySatisfy: [ :each | each classPool includesKey: aString asSymbol ]
 ]
 
 { #category : #testing }

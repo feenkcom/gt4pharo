@@ -21,3 +21,9 @@ GtDuplicateCodeInConditionalCritic >> matches: aNode from: aCriticRunner [
 	(first isEmpty or: [ last isEmpty ]) ifTrue: [ ^ false ].
 	^ first first = last first or: [ first last = last last ]
 ]
+
+{ #category : #enumerating }
+GtDuplicateCodeInConditionalCritic >> potentialMethodsDo: aBlock [
+	#ifTrue:ifFalse: gtReferences | #ifFalse:ifTrue: gtReferences
+		| Halt gtReferences do: aBlock
+]

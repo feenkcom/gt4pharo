@@ -35,3 +35,8 @@ GtUnoptimizedConditionalCritic >> matches: aNode from: aCriticRunner [
 				and: [ aNode receiver message arguments first isBlock
 						and: [ aNode message arguments first isBlock ] ] ]
 ]
+
+{ #category : #enumerating }
+GtUnoptimizedConditionalCritic >> potentialMethodsDo: aBlock [
+	#and: gtReferences | #or: gtReferences do: aBlock
+]

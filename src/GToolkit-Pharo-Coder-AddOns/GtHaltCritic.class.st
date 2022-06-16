@@ -9,6 +9,11 @@ GtHaltCritic >> description [
 	^ 'Debugging code is in method and should be removed before it is released.'
 ]
 
+{ #category : #accessing }
+GtHaltCritic >> haltSelectors [
+	^ #(halt haltOnce haltIf:)
+]
+
 { #category : #testing }
 GtHaltCritic >> includeFixIt [
 	^ false
@@ -16,7 +21,7 @@ GtHaltCritic >> includeFixIt [
 
 { #category : #accessing }
 GtHaltCritic >> matches: aNode from: aCriticRunner [
-	aNode isMessage ifTrue: [ ^ #(halt haltOnce haltIf:) includes: aNode selector ].
+	aNode isMessage ifTrue: [ ^ self haltSelectors includes: aNode selector ].
 	aNode isMessageSend
 		ifTrue: [ | receiver method |
 			receiver := aNode receiver.
@@ -26,4 +31,11 @@ GtHaltCritic >> matches: aNode from: aCriticRunner [
 			^ method pragmas
 				anySatisfy: [ :each | each selector = #debuggerCompleteToSender ] ].
 	^ false
+]
+
+{ #category : #enumerating }
+GtHaltCritic >> potentialMethodsDo: aBlock [
+	(self haltSelectors
+		inject: GtSearchNullFilter new
+		into: [ :sum :each | sum | each gtReferences ]) | Halt gtReferences do: aBlock
 ]

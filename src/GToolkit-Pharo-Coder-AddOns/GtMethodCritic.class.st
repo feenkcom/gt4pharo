@@ -25,6 +25,14 @@ GtMethodCritic >> = anObject [
 ]
 
 { #category : #accessing }
+GtMethodCritic >> allMethodsDo: aBlock [
+	Smalltalk
+		allClassesDo: [ :each | 
+			each methodsDo: aBlock.
+			each class methodsDo: aBlock ]
+]
+
+{ #category : #accessing }
 GtMethodCritic >> description [
 	^ self subclassResponsibility
 ]
@@ -94,6 +102,11 @@ GtMethodCritic >> includeHighlight [
 { #category : #testing }
 GtMethodCritic >> matches: aNode from: aCriticRunner [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtMethodCritic >> potentialMethodsDo: aBlock [
+	^ self allMethodsDo: aBlock
 ]
 
 { #category : #styling }

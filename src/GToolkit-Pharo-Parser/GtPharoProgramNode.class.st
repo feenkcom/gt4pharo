@@ -194,7 +194,8 @@ GtPharoProgramNode >> isUsed [
 	parent isValueNode ifTrue: [ ^ true ].
 	parent isReturn ifTrue: [ ^ true ].
 	parent isMessage ifTrue: [ ^ true ].
-	(parent isSequence and: [ parent statements last == self ])
+	(parent isSequence
+		and: [ parent statements notEmpty and: [ parent statements last == self ] ])
 		ifTrue: [ parent parent ifNil: [ ^ true ].
 			parent parent isBlock
 				ifTrue: [ | node |

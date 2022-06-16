@@ -33,3 +33,8 @@ GtUnoptimizedToDoCritic >> matches: aNode from: aCriticRunner [
 	^ aNode message selector = #do:
 		and: [ #(to: #to:by:) includes: aNode receiver message selector ]
 ]
+
+{ #category : #enumerating }
+GtUnoptimizedToDoCritic >> potentialMethodsDo: aBlock [
+	#do: gtReferences & (#to: gtReferences | #to:by: gtReferences) do: aBlock
+]
