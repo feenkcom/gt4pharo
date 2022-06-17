@@ -10,10 +10,10 @@ GtCollectSelectNotUsedCritic >> description [
 ]
 
 { #category : #private }
-GtCollectSelectNotUsedCritic >> fixItActionsFor: aNode from: sourceCoder [
-	^ {(GtRenameMessageFixItAction forCoder: sourceCoder node: aNode)
+GtCollectSelectNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ {(GtRenameMessageFixItAction forCoder: aCriticStyler coderModel node: aNode)
 			selector: #do:;
-			yourself} , (super fixItActionsFor: aNode from: sourceCoder)
+			yourself} , (super fixItActionsFor: aNode using: aCriticStyler)
 ]
 
 { #category : #accessing }

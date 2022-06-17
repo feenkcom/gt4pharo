@@ -10,7 +10,7 @@ GtDuplicateCodeInConditionalCritic >> description [
 ]
 
 { #category : #accessing }
-GtDuplicateCodeInConditionalCritic >> matches: aNode [
+GtDuplicateCodeInConditionalCritic >> matches: aNode from: aCriticRunner [
 	| first last |
 	aNode isMessage ifFalse: [ ^ false ].
 	(#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: aNode selector)
@@ -20,4 +20,10 @@ GtDuplicateCodeInConditionalCritic >> matches: aNode [
 	last := aNode arguments last body statements.
 	(first isEmpty or: [ last isEmpty ]) ifTrue: [ ^ false ].
 	^ first first = last first or: [ first last = last last ]
+]
+
+{ #category : #enumerating }
+GtDuplicateCodeInConditionalCritic >> potentialMethodsDo: aBlock [
+	#ifTrue:ifFalse: gtReferences | #ifFalse:ifTrue: gtReferences
+		| Halt gtReferences do: aBlock
 ]

@@ -1,0 +1,25 @@
+Class {
+	#name : #GtRemoveAssignmentFixItAction,
+	#superclass : #GtCriticFixItAction,
+	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
+}
+
+{ #category : #'api - action' }
+GtRemoveAssignmentFixItAction >> description [
+	^ 'Remove assignment of ' , node variable variableName
+]
+
+{ #category : #'api - action' }
+GtRemoveAssignmentFixItAction >> id [
+	^ GtRemoveAssignmentFixItActionElementId
+]
+
+{ #category : #executing }
+GtRemoveAssignmentFixItAction >> updateSource [
+	| string |
+	string := SmaCCString on: node topParent completeSource.
+	string
+		deleteFrom: node variable startPosition
+		to: node assignmentToken stopPosition.
+	^ string asString
+]

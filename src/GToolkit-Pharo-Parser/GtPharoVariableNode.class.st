@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -56,16 +56,10 @@ GtPharoVariableNode >> isThisContext [
 
 { #category : #testing }
 GtPharoVariableNode >> isUndeclared [
-	self isSelf
-		ifTrue: [ ^ false ].
-
-	self isSuper
-		ifTrue: [ ^ false ].
-
-	self isThisContext
-		ifTrue: [ ^ false ].
-
-	^ (self localVariables includes: self variableName) not
+	self isSelf ifTrue: [ ^ false ].
+	self isSuper ifTrue: [ ^ false ].
+	self isThisContext ifTrue: [ ^ false ].
+	^ self whoDefines isNil
 ]
 
 { #category : #testing }
@@ -103,5 +97,7 @@ GtPharoVariableNode >> variableName [
 
 { #category : #accessing }
 GtPharoVariableNode >> whoDefines [
-	^ self allParents detect: [ :each | each defines: name value ] ifNone: [  ]
+	^ self allParents
+		detect: [ :each | each isErrorNode not and: [ each defines: name value ] ]
+		ifNone: [  ]
 ]

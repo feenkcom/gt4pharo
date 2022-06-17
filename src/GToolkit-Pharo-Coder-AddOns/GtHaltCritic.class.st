@@ -10,8 +10,18 @@ GtHaltCritic >> description [
 ]
 
 { #category : #accessing }
-GtHaltCritic >> matches: aNode [
-	aNode isMessage ifTrue: [ ^ #(halt haltOnce haltIf:) includes: aNode selector ].
+GtHaltCritic >> haltSelectors [
+	^ #(halt haltOnce haltIf:)
+]
+
+{ #category : #testing }
+GtHaltCritic >> includeFixIt [
+	^ false
+]
+
+{ #category : #accessing }
+GtHaltCritic >> matches: aNode from: aCriticRunner [
+	aNode isMessage ifTrue: [ ^ self haltSelectors includes: aNode selector ].
 	aNode isMessageSend
 		ifTrue: [ | receiver method |
 			receiver := aNode receiver.
@@ -21,4 +31,11 @@ GtHaltCritic >> matches: aNode [
 			^ method pragmas
 				anySatisfy: [ :each | each selector = #debuggerCompleteToSender ] ].
 	^ false
+]
+
+{ #category : #enumerating }
+GtHaltCritic >> potentialMethodsDo: aBlock [
+	(self haltSelectors
+		inject: GtSearchNullFilter new
+		into: [ :sum :each | sum | each gtReferences ]) | Halt gtReferences do: aBlock
 ]

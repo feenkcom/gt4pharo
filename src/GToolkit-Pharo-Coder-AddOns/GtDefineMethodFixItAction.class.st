@@ -4,11 +4,11 @@ Class {
 	#instVars : [
 		'classOrMetaClass'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #executing }
-GtDefineMethodFixItAction >> addCoderAttributeinEditor: aBrTextEditor [
+GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
 	| position |
 	
 	position := self attributePosition.
@@ -48,7 +48,7 @@ GtDefineMethodFixItAction >> description [
 GtDefineMethodFixItAction >> executeOn: anEditorElement [
 	self compileMethod.
 	self clearFixItAttributeInEditor: anEditorElement editor.
-	self addCoderAttributeinEditor: anEditorElement editor.
+	self addCoderAttributeInEditor: anEditorElement editor.
 ]
 
 { #category : #accessing }

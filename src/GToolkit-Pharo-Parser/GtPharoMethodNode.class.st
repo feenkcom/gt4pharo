@@ -27,7 +27,16 @@ GtPharoMethodNode >> body: aGtPharoSequenceNode [
 
 { #category : #testing }
 GtPharoMethodNode >> defines: aString [
-	^ self variables anySatisfy: [ :each | each name value = aString ]
+	(self variables anySatisfy: [ :each | each name value = aString ])
+		ifTrue: [ ^ true ].
+	body pragmas
+		do: [ :each | 
+			each selectorParts first source = 'primitive:'
+				ifTrue: [ each selectorParts
+						keysAndValuesDo: [ :i :keyword | 
+							(keyword source = 'error:' and: [ (each values at: i) source = aString ])
+								ifTrue: [ ^ true ] ] ] ].
+	^ false
 ]
 
 { #category : #testing }

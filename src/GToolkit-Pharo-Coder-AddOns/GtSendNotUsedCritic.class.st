@@ -10,31 +10,22 @@ GtSendNotUsedCritic class >> isAbstract [
 ]
 
 { #category : #private }
-GtSendNotUsedCritic >> attributesFor: aNode from: sourceCoder [
-	^ {GtFixItAttributeWithDescription new
-			description: self description;
-			fixItActions: [ self fixItActionsFor: aNode from: sourceCoder ];
-			yourself}
-]
-
-{ #category : #private }
-GtSendNotUsedCritic >> fixItActionsFor: aNode from: sourceCoder [
-	^ {GtRemoveMessageFixItAction forCoder: sourceCoder node: aNode}
+GtSendNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+	^ {GtRemoveMessageFixItAction forCoder: aCriticStyler coderModel node: aNode}
 ]
 
 { #category : #accessing }
-GtSendNotUsedCritic >> locationFor: aSmaCCNode [
-	| index |
-	index := aSmaCCNode selectorParts last stopPosition.
-	^ index to: index
-]
-
-{ #category : #accessing }
-GtSendNotUsedCritic >> matches: aNode [
-	| parent |
+GtSendNotUsedCritic >> matches: aNode from: aCriticRunner [
 	aNode isMessage ifFalse: [ ^ false ].
 	aNode isUsed ifTrue: [ ^ false ].
 	^ self selectors includes: aNode selector
+]
+
+{ #category : #enumerating }
+GtSendNotUsedCritic >> potentialMethodsDo: aBlock [
+	(self selectors
+		inject: GtSearchNullFilter new
+		into: [ :sum :each | sum | each gtReferences ]) do: aBlock
 ]
 
 { #category : #accessing }
