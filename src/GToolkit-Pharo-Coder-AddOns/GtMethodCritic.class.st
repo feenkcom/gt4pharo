@@ -69,7 +69,8 @@ GtMethodCritic >> fixItActionsFor: aNode using: aCriticStyler [
 
 { #category : #styling }
 GtMethodCritic >> fixItLocationFor: aSmaCCNode [
-	aSmaCCNode isMessage ifTrue: [ ^ aSmaCCNode selectorParts last stopPosition ].
+	(aSmaCCNode isMessage or: [ aSmaCCNode isMethodPattern ])
+		ifTrue: [ ^ aSmaCCNode selectorParts last stopPosition ].
 	aSmaCCNode isMessageSend
 		ifTrue: [ ^ aSmaCCNode message selectorParts last stopPosition ].
 	^ aSmaCCNode stopPosition
