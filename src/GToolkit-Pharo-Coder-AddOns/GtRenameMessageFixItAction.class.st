@@ -9,7 +9,7 @@ Class {
 
 { #category : #'api - action' }
 GtRenameMessageFixItAction >> description [
-	^ 'Rename message #' , node selector , ' to #' , selector
+	^ 'Rename #' , node selector , ' to #' , selector
 ]
 
 { #category : #'api - action' }

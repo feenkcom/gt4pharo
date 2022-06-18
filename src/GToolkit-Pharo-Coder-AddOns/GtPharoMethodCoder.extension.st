@@ -670,7 +670,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 		initializeAddOns: addOns
 		viewModel: aGtPharoMethodCoderViewModel.
 
-	addOns addStyler: (GtFixItStyler new isForWorkspace: false).
+	addOns addStyler: (GtMethodCriticStyler new isForWorkspace: false).
 
 	addOns addMainAction: (GtCoderCustomAction new stencil: [ 
 			 GtPharoMethodCoderSaveButton new pharoMethodCoderViewModel:

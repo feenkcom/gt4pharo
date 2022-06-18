@@ -52,6 +52,23 @@ GtPharoCompletionStrategy class >> cacheSizeInMemory [
 	^ GlobalCache gtSpecificSizeInMemory + SelectorCache gtSpecificSizeInMemory
 ]
 
+{ #category : #iterating }
+GtPharoCompletionStrategy class >> cachedSelectorsDo: aBlock [
+	"Evaluate aBlock with the name of the selector, implementers of that selector, and senders of that selector, 
+	for all cached symbols in the image."
+
+	SelectorCache
+		do: [ :each :weight :node | 
+			aBlock
+				cull: each asSymbol
+				cull: (node implementers
+						ifNil: [ #() ]
+						ifNotNil: [ :i | i asOrderedCollection ])
+				cull: (node references
+						ifNil: [ #() ]
+						ifNotNil: [ :r | r asOrderedCollection ]) ]
+]
+
 { #category : #private }
 GtPharoCompletionStrategy class >> classAdded: anAnnouncement [
 	GlobalCache add: anAnnouncement classAdded name
@@ -76,6 +93,12 @@ GtPharoCompletionStrategy class >> classRenamed: anAnnouncement [
 { #category : #accessing }
 GtPharoCompletionStrategy class >> globalVariableReferencesTo: aVariable [
 	^ (GlobalCache referencesTo: aVariable name) asOrderedCollection
+]
+
+{ #category : #iterating }
+GtPharoCompletionStrategy class >> implementersDo: aBlock [
+	SelectorCache
+		do: [ :each :weight :node | (node implementers ifNil: [ #() ]) isEmpty ifFalse: [ aBlock value: each ] ]
 ]
 
 { #category : #accessing }
