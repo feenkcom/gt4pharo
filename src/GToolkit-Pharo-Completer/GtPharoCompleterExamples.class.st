@@ -365,7 +365,7 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 	styler := BrRBMethodBodyTextStyler new.
 	styler classOrMetaClass: method methodClass.
 	styler methodPatternSource: ast pattern source.
-	editor := BrTextEditor new.
+	editor := BrTextEditorModel new.
 	editor styler: styler.
 	editor text: text.
 	editorElement := BrEditorElement new.
@@ -435,7 +435,7 @@ GtPharoCompleterExamples >> smalltalkCompleter [
 		attributes: { (BlFontSizeAttribute size: 14) beNotOverwritableByStyler }.
 	styler := BrRBTextStyler new.
 	styler classOrMetaClass: GtPharoCompletionStrategy.
-	editor := BrTextEditor new.
+	editor := BrTextEditorModel new.
 	editor styler: styler.
 	editor text: text.
 	editorElement := BrEditorElement new.
