@@ -16,9 +16,8 @@ GtMessageNotImplementedCritic >> fixItActionsFor: aNode using: aCriticStyler [
 	type := aCriticStyler typeOf: aNode parent receiver.
 	type
 		ifNotNil: [ actions
-				add: ((GtDefineMethodFixItAction
-						forCoder: aCriticStyler coderModel
-						node: aNode parent) classOrMetaClass: type) ].
+				add: ((GtDefineMethodFixItAction forCoder: aCriticStyler coderModel node: aNode)
+						classOrMetaClass: type) ].
 	actions
 		addAll: (self
 				potentialRenameActionsFor: aNode
