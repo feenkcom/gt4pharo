@@ -330,10 +330,11 @@ GtPharoStyler >> visitThisContextVariable: aThisContextVariable [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitUndeclaredVariable: aVariableNode [
-	self
+	"We do not color undeclared variables in red because we already have critics"
+	"self
 		attributes: { BlTextForegroundAttribute color: Color red }
 		from: aVariableNode name startPosition
-		to: aVariableNode name stopPosition
+		to: aVariableNode name stopPosition"
 ]
 
 { #category : #accessing }
