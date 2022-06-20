@@ -22,6 +22,11 @@ GtDuplicateCodeInConditionalCritic >> matches: aNode from: aCriticRunner [
 	^ first first = last first or: [ first last = last last ]
 ]
 
+{ #category : #accessing }
+GtDuplicateCodeInConditionalCritic >> name [
+	^ 'Duplicate code in conditional'
+]
+
 { #category : #enumerating }
 GtDuplicateCodeInConditionalCritic >> potentialMethodsDo: aBlock [
 	#ifTrue:ifFalse: gtReferences | #ifFalse:ifTrue: gtReferences

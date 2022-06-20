@@ -33,6 +33,11 @@ GtHaltCritic >> matches: aNode from: aCriticRunner [
 	^ false
 ]
 
+{ #category : #accessing }
+GtHaltCritic >> name [
+	^ 'Debugging code in method'
+]
+
 { #category : #enumerating }
 GtHaltCritic >> potentialMethodsDo: aBlock [
 	(self haltSelectors

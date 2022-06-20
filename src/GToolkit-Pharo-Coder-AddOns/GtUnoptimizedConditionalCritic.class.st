@@ -36,6 +36,11 @@ GtUnoptimizedConditionalCritic >> matches: aNode from: aCriticRunner [
 						and: [ aNode message arguments first isBlock ] ] ]
 ]
 
+{ #category : #accessing }
+GtUnoptimizedConditionalCritic >> name [
+	^ 'Unoptimized conditional expression'
+]
+
 { #category : #enumerating }
 GtUnoptimizedConditionalCritic >> potentialMethodsDo: aBlock [
 	#and: gtReferences | #or: gtReferences do: aBlock

@@ -43,3 +43,8 @@ GtTemporaryNotUsedCritic >> matches: aNode from: aCriticRunner [
 				ifFalse: [ variables remove: aNode variableName ifAbsent: [  ] ] ].
 	^ false
 ]
+
+{ #category : #accessing }
+GtTemporaryNotUsedCritic >> name [
+	^ 'Temporary is not used'
+]

@@ -37,6 +37,11 @@ GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
 	^ aCriticRunner behavior includesSelector: aNode selector
 ]
 
+{ #category : #accessing }
+GtMethodNotUsedCritic >> name [
+	^ 'Method is not sent'
+]
+
 { #category : #enumerating }
 GtMethodNotUsedCritic >> potentialMethodsDo: aBlock [
 	GtPharoCompletionStrategy

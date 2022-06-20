@@ -93,3 +93,8 @@ GtUndeclaredVariableCritic >> matches: aNode from: aCriticRunner [
 		ifTrue: [ ^ false ].
 	^ (aCriticRunner hasDeclaredGlobalNamed: aNode variableName) not
 ]
+
+{ #category : #accessing }
+GtUndeclaredVariableCritic >> name [
+	^ 'Reference to undeclared variable'
+]

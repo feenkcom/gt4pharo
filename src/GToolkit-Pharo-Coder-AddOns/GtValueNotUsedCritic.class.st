@@ -21,3 +21,8 @@ GtValueNotUsedCritic >> matches: aNode from: aCriticRunner [
 				and: [ aNode parent isValueNode or: [ aNode parent isMessage ] ] ].
 	^ aNode isLiteral and: [ aNode isUsed not ]
 ]
+
+{ #category : #accessing }
+GtValueNotUsedCritic >> name [
+	^ 'Value is not used'
+]

@@ -21,6 +21,11 @@ GtSendNotUsedCritic >> matches: aNode from: aCriticRunner [
 	^ self selectors includes: aNode selector
 ]
 
+{ #category : #accessing }
+GtSendNotUsedCritic >> name [
+	^ 'Message send is not used'
+]
+
 { #category : #enumerating }
 GtSendNotUsedCritic >> potentialMethodsDo: aBlock [
 	(self selectors

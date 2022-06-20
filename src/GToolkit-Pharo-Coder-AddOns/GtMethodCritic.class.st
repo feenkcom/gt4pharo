@@ -116,27 +116,44 @@ GtMethodCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
+GtMethodCritic >> name [
+	^ ''
+]
+
+{ #category : #accessing }
 GtMethodCritic >> potentialMethodsDo: aBlock [
 	^ self allMethodsDo: aBlock
 ]
 
 { #category : #styling }
 GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
-	| location |
+	| location hoverMarker hoverAttribute |
 	self includeFixIt ifFalse: [ ^ self ].
 	location := self fixItLocationFor: aNode.
+	hoverMarker := BrTextInvisibleMarkerAttribute new.
+	hoverAttribute := self errorHighlightAttribute.
 	aCriticStyler
 		attributes: {GtFixItAttribute new
+					label: self name;
+					hoverMarker: hoverMarker;
+					hoverAttribute: hoverAttribute;
 					description: [ :editorElement | self descriptionWithEditor: editorElement ];
 					fixItActions: [ self fixItActionsFor: aNode using: aCriticStyler ];
 					yourself}
 		from: location
-		to: location
+		to: location.
+	self includeHighlight ifFalse: [ ^ self ].
+	(self highlightPositionsFor: aNode)
+		do: [ :each | 
+			aCriticStyler
+				attributes: {hoverMarker}
+				from: each first
+				to: each last ]
 ]
 
 { #category : #styling }
 GtMethodCritic >> styleHighlight: aNode using: aCriticStyler [
-	self includeHighlight ifFalse: [ ^ self ].
+	(self includeHighlight and: [ self includeFixIt not ]) ifFalse: [ ^ self ].
 	(self highlightPositionsFor: aNode)
 		do: [ :each | 
 			aCriticStyler

@@ -18,3 +18,8 @@ GtRedundantAssignmentCritic >> fixItActionsFor: aNode using: aCriticStyler [
 GtRedundantAssignmentCritic >> matches: aNode from: aCriticRunner [
 	^ aNode isAssignment and: [ aNode variable = aNode value ]
 ]
+
+{ #category : #accessing }
+GtRedundantAssignmentCritic >> name [
+	^ 'Assignment to same value'
+]

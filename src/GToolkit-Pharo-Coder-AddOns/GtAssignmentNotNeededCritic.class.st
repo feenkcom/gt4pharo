@@ -31,3 +31,8 @@ GtAssignmentNotNeededCritic >> matches: aNode from: aCriticRunner [
 		and: [ aNode parent notNil
 				and: [ aNode parent isReturn and: [ aNode variable whoDefines notNil ] ] ]
 ]
+
+{ #category : #accessing }
+GtAssignmentNotNeededCritic >> name [
+	^ 'Assignment is not needed'
+]
