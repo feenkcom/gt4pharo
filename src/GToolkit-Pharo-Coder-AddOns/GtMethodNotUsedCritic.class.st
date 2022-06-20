@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtMethodNotUsedCritic class >> isDefault [
+	^ false
+]
+
+{ #category : #accessing }
 GtMethodNotUsedCritic >> description [
 	^ 'Method has no senders. If it is not called through a constructed selector, then it can be removed.'
 ]
