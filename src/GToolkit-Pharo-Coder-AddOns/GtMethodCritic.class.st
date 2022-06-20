@@ -10,13 +10,19 @@ Class {
 { #category : #accessing }
 GtMethodCritic class >> activeCritics [
 	^ ActiveCritics
-		ifNil: [ (self withAllSubclasses reject: [ :each | each isAbstract ])
+		ifNil: [ (self withAllSubclasses
+				select: [ :each | each isAbstract not and: [ each isDefault ] ])
 				collect: [ :each | each new ] ]
 ]
 
 { #category : #testing }
 GtMethodCritic class >> isAbstract [
 	^ self == GtMethodCritic
+]
+
+{ #category : #testing }
+GtMethodCritic class >> isDefault [
+	^ true
 ]
 
 { #category : #comparing }
