@@ -68,6 +68,10 @@ GtMethodCritic >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
 ]
 
+{ #category : #accessing }
+GtMethodCritic >> finish: aNode from: criticRunner [
+]
+
 { #category : #styling }
 GtMethodCritic >> fixItActionsFor: aNode using: aCriticStyler [
 	^ #()

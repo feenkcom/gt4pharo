@@ -32,7 +32,7 @@ GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
 						whichSuperclassSatisfies: [ :cls | cls name = #TestCase ]) notNil ])
 				ifTrue: [ ^ false ] ].
 	(aNode parent body pragmas
-		anySatisfy: [ :pragma | #(gtExample gtSlide) includes: pragma selector ])
+		anySatisfy: [ :pragma | #(gtExample gtView gtSearch gtSlide gtClassView) includes: pragma selector ])
 		ifTrue: [ ^ false ].
 	^ aCriticRunner behavior includesSelector: aNode selector
 ]
