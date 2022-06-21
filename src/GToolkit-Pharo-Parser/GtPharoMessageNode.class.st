@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
+{ #category : #accessing }
+GtPharoMessageNode class >> priority [
+	^ self subclassResponsibility
+]
+
 { #category : #generated }
 GtPharoMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMessage: self
@@ -42,7 +47,12 @@ GtPharoMessageNode >> isUsed [
 
 { #category : #testing }
 GtPharoMessageNode >> needsParenthesisForKeyword [
-	^ self selector isKeyword
+	^ true
+]
+
+{ #category : #accessing }
+GtPharoMessageNode >> priority [
+	^ self class priority
 ]
 
 { #category : #accessing }

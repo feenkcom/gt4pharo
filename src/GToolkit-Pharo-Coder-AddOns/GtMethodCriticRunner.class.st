@@ -48,11 +48,3 @@ GtMethodCriticRunner >> processNode: aNode [
 	aNode nodesDo: [ :node | self processNode: node ].
 	critic finish: aNode from: self
 ]
-
-{ #category : #typing }
-GtMethodCriticRunner >> typeOf: aGtPharoProgramNode [
-	^ GtPharoProgramNode
-		typeOf: aGtPharoProgramNode
-		in: self behavior
-		bindings: nil
-]

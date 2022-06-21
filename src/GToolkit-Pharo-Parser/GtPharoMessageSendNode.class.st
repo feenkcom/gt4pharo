@@ -44,12 +44,17 @@ GtPharoMessageSendNode >> messageReceiver [
 
 { #category : #testing }
 GtPharoMessageSendNode >> needsParenthesisForKeyword [
-	^ message needsParenthesisForKeyword
+	^ true
 ]
 
 { #category : #generated }
 GtPharoMessageSendNode >> nodeVariables [
 	^ #(#receiver #message)
+]
+
+{ #category : #accessing }
+GtPharoMessageSendNode >> priority [
+	^ message priority
 ]
 
 { #category : #generated }

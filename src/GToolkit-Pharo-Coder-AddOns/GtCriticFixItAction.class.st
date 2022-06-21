@@ -4,6 +4,31 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtCriticFixItAction class >> testOriginal: originalSource generates: modifiedSource forNode: nodeBlock [
+	^ self
+		testOriginal: originalSource
+		generates: modifiedSource
+		forNode: nodeBlock
+		configure: [ :node |  ]
+]
+
+{ #category : #examples }
+GtCriticFixItAction class >> testOriginal: originalSource generates: modifiedSource forNode: nodeBlock configure: configureBlock [
+	| source ast element action coder |
+	source := originalSource.
+	ast := GtPharoParser parse: source.
+	coder := GtPharoMethodCoder forClass: self source: source.
+	action := self forCoder: coder node: (nodeBlock value: ast).
+	configureBlock value: action.
+	element := coder asElement.
+	element
+		allChildrenBreadthFirstDetect: [ :each | each isKindOf: BrEditorElement ]
+		ifFound: [ :editor | action executeOn: editor ].
+	self assert: coder currentSourceString equals: modifiedSource.
+	^ element
+]
+
 { #category : #executing }
 GtCriticFixItAction >> deleteStartOfLineWhitespace: aSmaCCString before: aNode [
 	| index char |

@@ -33,6 +33,9 @@ TCriticRunner >> hasRefactoring [
 ]
 
 { #category : #typing }
-TCriticRunner >> typeOf: aGtPharoNode [
-	^ nil
+TCriticRunner >> typeOf: aGtPharoProgramNode [
+	^ GtPharoProgramNode
+		typeOf: aGtPharoProgramNode
+		in: self behavior
+		bindings: nil
 ]

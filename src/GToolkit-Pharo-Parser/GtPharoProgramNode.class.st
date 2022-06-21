@@ -258,6 +258,11 @@ GtPharoProgramNode >> nestingLevel [
 ]
 
 { #category : #accessing }
+GtPharoProgramNode >> priority [
+	^ SmallInteger maxVal
+]
+
+{ #category : #accessing }
 GtPharoProgramNode >> whoDefines: aName [ 
 	^ (self defines: aName) 
 		ifTrue: [ self ]

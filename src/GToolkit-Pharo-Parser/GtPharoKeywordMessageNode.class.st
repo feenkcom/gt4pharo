@@ -8,6 +8,11 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
+{ #category : #accessing }
+GtPharoKeywordMessageNode class >> priority [
+	^ 3
+]
+
 { #category : #generated }
 GtPharoKeywordMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitKeywordMessage: self

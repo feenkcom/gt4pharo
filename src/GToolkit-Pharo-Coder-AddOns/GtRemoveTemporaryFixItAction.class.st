@@ -4,6 +4,24 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtRemoveTemporaryFixItAction class >> removeTemp [
+	<gtExample>
+	^ self
+		testOriginal: 'a | a | Transcript print: 1'
+		generates: 'a  Transcript print: 1'
+		forNode: [ :method | method body variables first ]
+]
+
+{ #category : #examples }
+GtRemoveTemporaryFixItAction class >> removeTempInTemps [
+	<gtExample>
+	^ self
+		testOriginal: 'a | a b c | Transcript print: 1'
+		generates: 'a | a c | Transcript print: 1'
+		forNode: [ :method | method body variables second ]
+]
+
 { #category : #accessing }
 GtRemoveTemporaryFixItAction >> description [
 	^ 'Remove temporary ' , node variableName

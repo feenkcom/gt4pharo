@@ -112,6 +112,11 @@ GtPharoBlockNode >> nodeVariables [
 	^ #(#body)
 ]
 
+{ #category : #accessing }
+GtPharoBlockNode >> priority [
+	^ 0
+]
+
 { #category : #generated }
 GtPharoBlockNode >> rightBracket [
 	^ rightBracket

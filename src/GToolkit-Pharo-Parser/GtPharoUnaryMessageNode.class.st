@@ -7,6 +7,11 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
+{ #category : #accessing }
+GtPharoUnaryMessageNode class >> priority [
+	^ 1
+]
+
 { #category : #generated }
 GtPharoUnaryMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitUnaryMessage: self

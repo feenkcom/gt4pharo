@@ -8,6 +8,11 @@ Class {
 	#category : 'GToolkit-Pharo-Parser-Parser'
 }
 
+{ #category : #accessing }
+GtPharoBinaryMessageNode class >> priority [
+	^ 2
+]
+
 { #category : #generated }
 GtPharoBinaryMessageNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitBinaryMessage: self

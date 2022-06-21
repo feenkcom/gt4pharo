@@ -36,14 +36,14 @@ GtPharoAssignmentNode >> messageReceiver [
 	^ value messageReceiver
 ]
 
-{ #category : #accessing }
-GtPharoAssignmentNode >> needsParenthesisForKeyword [
-	^ true
-]
-
 { #category : #generated }
 GtPharoAssignmentNode >> nodeVariables [
 	^ #(#variable #value)
+]
+
+{ #category : #accessing }
+GtPharoAssignmentNode >> priority [
+	^ 5
 ]
 
 { #category : #generated }

@@ -4,6 +4,24 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtReorderConditionalsFixItAction class >> reorderAnds [
+	<gtExample>
+	^ self
+		testOriginal: 'a (self isBehavior and: [self foo: self]) and: [self superclass isBehavior]'
+		generates: 'a self isBehavior and: [(self foo: self) and: [self superclass isBehavior] ]'
+		forNode: [ :method | method body statements last ]
+]
+
+{ #category : #examples }
+GtReorderConditionalsFixItAction class >> reorderOrs [
+	<gtExample>
+	^ self
+		testOriginal: 'a ((self isBehavior or: [self superclass isBehavior]) or: [self superclass superclass isBehavior]) ifTrue: [ Transcript show: ''true'' ]'
+		generates: 'a (self isBehavior or: [self superclass isBehavior or: [self superclass superclass isBehavior] ]) ifTrue: [ Transcript show: ''true'' ]'
+		forNode: [ :method | method body statements last receiver ]
+]
+
 { #category : #'api - action' }
 GtReorderConditionalsFixItAction >> description [
 	^ 'Rewrite "(a <1s> [b]) <1s> [c]" as "a <1s> [b <1s> [c]]"'
@@ -20,7 +38,7 @@ GtReorderConditionalsFixItAction >> updateSource [
 	| string bracketToDelete expr |
 	string := SmaCCString on: node topParent completeSource.
 	expr := node receiver message arguments first body statements last.
-	expr needsParenthesisForKeyword
+	expr priority >= GtPharoKeywordMessageNode priority
 		ifTrue: [ string insert: '(' at: expr startPosition.
 			string insert: ')' at: expr stopPosition + 1 ].
 	node receiver leftParens
