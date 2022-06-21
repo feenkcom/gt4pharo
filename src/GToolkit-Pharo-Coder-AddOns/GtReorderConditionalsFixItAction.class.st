@@ -17,8 +17,12 @@ GtReorderConditionalsFixItAction >> id [
 
 { #category : #private }
 GtReorderConditionalsFixItAction >> updateSource [
-	| string bracketToDelete |
+	| string bracketToDelete expr |
 	string := SmaCCString on: node topParent completeSource.
+	expr := node receiver message arguments first body statements last.
+	expr needsParenthesisForKeyword
+		ifTrue: [ string insert: '(' at: expr startPosition.
+			string insert: ')' at: expr stopPosition + 1 ].
 	node receiver leftParens
 		do: [ :each | string deleteFrom: each startPosition to: each stopPosition ].
 	node receiver rightParens
@@ -27,6 +31,6 @@ GtReorderConditionalsFixItAction >> updateSource [
 	string
 		deleteFrom: bracketToDelete startPosition
 		to: bracketToDelete stopPosition.
-	string insert: ' ]' at: node stopPosition + 1.
+	string insert: ' ]' at: node arguments last stopPosition + 1.
 	^ string asString
 ]

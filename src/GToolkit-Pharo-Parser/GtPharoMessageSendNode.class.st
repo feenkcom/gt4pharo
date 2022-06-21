@@ -5,7 +5,7 @@ Class {
 		'receiver',
 		'message'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -44,7 +44,7 @@ GtPharoMessageSendNode >> messageReceiver [
 
 { #category : #testing }
 GtPharoMessageSendNode >> needsParenthesisForKeyword [
-	^ true
+	^ message needsParenthesisForKeyword
 ]
 
 { #category : #generated }

@@ -6,7 +6,7 @@ Class {
 		'assignmentToken',
 		'value'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -34,6 +34,11 @@ GtPharoAssignmentNode >> messageReceiver [
 	leftParens notEmpty
 		ifTrue: [ ^ self ].
 	^ value messageReceiver
+]
+
+{ #category : #accessing }
+GtPharoAssignmentNode >> needsParenthesisForKeyword [
+	^ true
 ]
 
 { #category : #generated }
