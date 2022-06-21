@@ -99,6 +99,11 @@ GtMethodCriticStyler >> style: aText ast: theAst [
 		ensure: [ variableBindings := nil ]
 ]
 
+{ #category : #accessing }
+GtMethodCriticStyler >> text [
+	^ text
+]
+
 { #category : #utility }
 GtMethodCriticStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode

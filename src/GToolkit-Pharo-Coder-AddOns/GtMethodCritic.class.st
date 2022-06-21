@@ -145,10 +145,15 @@ GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
 	self includeHighlight ifFalse: [ ^ self ].
 	(self highlightPositionsFor: aNode)
 		do: [ :each | 
-			aCriticStyler
-				attributes: {hoverMarker}
-				from: each first
-				to: each last ]
+			(aCriticStyler text from: each first to: each last)
+				attribute: hoverMarker;
+				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+						aTextEditor text
+							findAttribute: hoverMarker
+							indicesDo: [ :aHighlightStart :aHighlightEnd | 
+								(aTextEditor text from: aHighlightStart to: aHighlightEnd)
+									attribute: hoverAttribute ] ]
+					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | aTextEditor text clearAttributes: [ :e | e == hoverAttribute ] ] ]
 ]
 
 { #category : #styling }
