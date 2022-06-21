@@ -42,7 +42,7 @@ GtPharoMessageNode >> isUsed [
 
 { #category : #testing }
 GtPharoMessageNode >> needsParenthesisForKeyword [
-	^ true
+	^ self selector isKeyword
 ]
 
 { #category : #accessing }

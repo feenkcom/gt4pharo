@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtCollectSelectNotUsedCritic >> description [
-	^ '#collect:, #select:, and #reject return new collections. If they are not used, they could be changed to use #do:.'
+	^ '#collect:, #select:, and #reject: return new collections. If they are not used, they could be changed to use #do:.'
 ]
 
 { #category : #private }

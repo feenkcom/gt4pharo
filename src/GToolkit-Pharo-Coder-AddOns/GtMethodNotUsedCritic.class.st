@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtMethodNotUsedCritic class >> isDefault [
+	^ false
+]
+
+{ #category : #accessing }
 GtMethodNotUsedCritic >> description [
 	^ 'Method has no senders. If it is not called through a constructed selector, then it can be removed.'
 ]
@@ -27,9 +32,14 @@ GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
 						whichSuperclassSatisfies: [ :cls | cls name = #TestCase ]) notNil ])
 				ifTrue: [ ^ false ] ].
 	(aNode parent body pragmas
-		anySatisfy: [ :pragma | #(gtExample gtSlide) includes: pragma selector ])
+		anySatisfy: [ :pragma | #(gtExample gtView gtSearch gtSlide gtClassView) includes: pragma selector ])
 		ifTrue: [ ^ false ].
 	^ aCriticRunner behavior includesSelector: aNode selector
+]
+
+{ #category : #accessing }
+GtMethodNotUsedCritic >> name [
+	^ 'Method is not sent'
 ]
 
 { #category : #enumerating }

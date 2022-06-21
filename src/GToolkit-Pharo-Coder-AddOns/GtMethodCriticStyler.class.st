@@ -27,7 +27,8 @@ GtMethodCriticStyler >> acceptNode: aSmaCCParseNode [
 		do: [ :each | 
 			(each matches: aSmaCCParseNode from: self)
 				ifTrue: [ each styleIssue: aSmaCCParseNode using: self ] ].
-	super acceptNode: aSmaCCParseNode
+	super acceptNode: aSmaCCParseNode.
+	critics do: [ :each | each finish: aSmaCCParseNode from: self ]
 ]
 
 { #category : #accessing }
@@ -48,6 +49,11 @@ GtMethodCriticStyler >> critics [
 { #category : #accessing }
 GtMethodCriticStyler >> critics: aCollection [
 	critics := aCollection
+]
+
+{ #category : #accessing }
+GtMethodCriticStyler >> foundIssue: aCritic in: aNode [
+	aCritic styleIssue: aNode using: self
 ]
 
 { #category : #testing }

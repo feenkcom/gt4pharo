@@ -10,13 +10,19 @@ Class {
 { #category : #accessing }
 GtMethodCritic class >> activeCritics [
 	^ ActiveCritics
-		ifNil: [ (self withAllSubclasses reject: [ :each | each isAbstract ])
+		ifNil: [ (self withAllSubclasses
+				select: [ :each | each isAbstract not and: [ each isDefault ] ])
 				collect: [ :each | each new ] ]
 ]
 
 { #category : #testing }
 GtMethodCritic class >> isAbstract [
 	^ self == GtMethodCritic
+]
+
+{ #category : #testing }
+GtMethodCritic class >> isDefault [
+	^ true
 ]
 
 { #category : #comparing }
@@ -60,6 +66,10 @@ GtMethodCritic >> descriptionWithEditor: anEditorElement [
 { #category : #styling }
 GtMethodCritic >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
+]
+
+{ #category : #accessing }
+GtMethodCritic >> finish: aNode from: criticRunner [
 ]
 
 { #category : #styling }
@@ -106,27 +116,44 @@ GtMethodCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
+GtMethodCritic >> name [
+	^ ''
+]
+
+{ #category : #accessing }
 GtMethodCritic >> potentialMethodsDo: aBlock [
 	^ self allMethodsDo: aBlock
 ]
 
 { #category : #styling }
 GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
-	| location |
+	| location hoverMarker hoverAttribute |
 	self includeFixIt ifFalse: [ ^ self ].
 	location := self fixItLocationFor: aNode.
+	hoverMarker := BrTextInvisibleMarkerAttribute new.
+	hoverAttribute := self errorHighlightAttribute.
 	aCriticStyler
 		attributes: {GtFixItAttribute new
+					label: self name;
+					hoverMarker: hoverMarker;
+					hoverAttribute: hoverAttribute;
 					description: [ :editorElement | self descriptionWithEditor: editorElement ];
 					fixItActions: [ self fixItActionsFor: aNode using: aCriticStyler ];
 					yourself}
 		from: location
-		to: location
+		to: location.
+	self includeHighlight ifFalse: [ ^ self ].
+	(self highlightPositionsFor: aNode)
+		do: [ :each | 
+			aCriticStyler
+				attributes: {hoverMarker}
+				from: each first
+				to: each last ]
 ]
 
 { #category : #styling }
 GtMethodCritic >> styleHighlight: aNode using: aCriticStyler [
-	self includeHighlight ifFalse: [ ^ self ].
+	(self includeHighlight and: [ self includeFixIt not ]) ifFalse: [ ^ self ].
 	(self highlightPositionsFor: aNode)
 		do: [ :each | 
 			aCriticStyler

@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TCriticRunner classTrait',
 	#instVars : [
 		'critic',
-		'currentMethod'
+		'currentMethod',
+		'methods'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
@@ -23,18 +24,29 @@ GtMethodCriticRunner >> critic: aMethodCritic [
 ]
 
 { #category : #accessing }
+GtMethodCriticRunner >> foundIssue: aCritic in: aNode [
+	methods add: currentMethod
+]
+
+{ #category : #accessing }
 GtMethodCriticRunner >> issues [
-	| methods |
+	methods ifNotNil: [ ^ methods ].
 	methods := IdentitySet new.
 	critic
 		potentialMethodsDo: [ :each | 
 			| ast |
 			currentMethod := each.
 			ast := GtPharoParser parseWithErrors: each sourceCode.
-			ast
-				withAllNodesDo: [ :node | (critic matches: node from: self) ifTrue: [ methods add: each ] ].
+			self processNode: ast.
 			currentMethod := nil ].
 	^ methods
+]
+
+{ #category : #accessing }
+GtMethodCriticRunner >> processNode: aNode [
+	(critic matches: aNode from: self) ifTrue: [ methods add: currentMethod ].
+	aNode nodesDo: [ :node | self processNode: node ].
+	critic finish: aNode from: self
 ]
 
 { #category : #typing }

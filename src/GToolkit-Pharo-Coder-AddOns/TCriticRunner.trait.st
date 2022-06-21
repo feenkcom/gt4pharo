@@ -8,6 +8,10 @@ TCriticRunner >> behavior [
 	^ nil class
 ]
 
+{ #category : #accessing }
+TCriticRunner >> foundIssue: aCritic in: aNode [
+]
+
 { #category : #testing }
 TCriticRunner >> hasDeclaredGlobalNamed: aString [
 	^ self class environment includesKey: aString asSymbol

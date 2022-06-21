@@ -16,9 +16,8 @@ GtMessageNotImplementedCritic >> fixItActionsFor: aNode using: aCriticStyler [
 	type := aCriticStyler typeOf: aNode parent receiver.
 	type
 		ifNotNil: [ actions
-				add: ((GtDefineMethodFixItAction
-						forCoder: aCriticStyler coderModel
-						node: aNode parent) classOrMetaClass: type) ].
+				add: ((GtDefineMethodFixItAction forCoder: aCriticStyler coderModel node: aNode)
+						classOrMetaClass: type) ].
 	actions
 		addAll: (self
 				potentialRenameActionsFor: aNode
@@ -38,6 +37,11 @@ GtMessageNotImplementedCritic >> matches: aNode from: aCriticRunner [
 	^ (receiverType whichClassIncludesSelector: aNode selector) isNil
 		and: [ receiverType isTrait not
 				or: [ (Object whichClassIncludesSelector: aNode selector) isNil ] ]
+]
+
+{ #category : #accessing }
+GtMessageNotImplementedCritic >> name [
+	^ 'Message is not implemented'
 ]
 
 { #category : #private }
