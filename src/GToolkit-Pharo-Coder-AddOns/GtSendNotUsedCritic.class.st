@@ -27,10 +27,10 @@ GtSendNotUsedCritic >> name [
 ]
 
 { #category : #enumerating }
-GtSendNotUsedCritic >> potentialMethodsDo: aBlock [
-	(self selectors
+GtSendNotUsedCritic >> potentialFilter [
+	^ (self selectors
 		inject: GtSearchNullFilter new
-		into: [ :sum :each | sum | each gtReferences ]) do: aBlock
+		into: [ :sum :each | sum | each gtReferences ]) asAsyncStream
 ]
 
 { #category : #accessing }

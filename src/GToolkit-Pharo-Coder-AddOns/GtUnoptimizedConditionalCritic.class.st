@@ -42,6 +42,6 @@ GtUnoptimizedConditionalCritic >> name [
 ]
 
 { #category : #enumerating }
-GtUnoptimizedConditionalCritic >> potentialMethodsDo: aBlock [
-	#and: gtReferences | #or: gtReferences do: aBlock
+GtUnoptimizedConditionalCritic >> potentialFilter [
+	^ (#and: gtReferences | #or: gtReferences) asAsyncStream
 ]

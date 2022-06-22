@@ -43,7 +43,10 @@ GtMethodNotUsedCritic >> name [
 ]
 
 { #category : #enumerating }
-GtMethodNotUsedCritic >> potentialMethodsDo: aBlock [
+GtMethodNotUsedCritic >> potentialFilter [
+	| methods |
+	methods := OrderedCollection new.
 	GtPharoCompletionStrategy
-		cachedSelectorsDo: [ :selector :implementers :senders | senders isEmpty ifTrue: [ implementers do: aBlock ] ]
+		cachedSelectorsDo: [ :selector :implementers :senders | senders isEmpty ifTrue: [ methods addAll: implementers ] ].
+	^ (methods sorted: GtMethodsSortFunction new) asAsyncStream
 ]

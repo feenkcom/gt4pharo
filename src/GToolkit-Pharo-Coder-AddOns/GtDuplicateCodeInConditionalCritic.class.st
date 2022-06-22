@@ -28,7 +28,7 @@ GtDuplicateCodeInConditionalCritic >> name [
 ]
 
 { #category : #enumerating }
-GtDuplicateCodeInConditionalCritic >> potentialMethodsDo: aBlock [
-	#ifTrue:ifFalse: gtReferences | #ifFalse:ifTrue: gtReferences
-		| Halt gtReferences do: aBlock
+GtDuplicateCodeInConditionalCritic >> potentialFilter [
+	^ (#ifTrue:ifFalse: gtReferences | #ifFalse:ifTrue: gtReferences
+		| Halt gtReferences) asAsyncStream
 ]

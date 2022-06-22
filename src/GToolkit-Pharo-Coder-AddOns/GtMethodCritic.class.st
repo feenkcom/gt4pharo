@@ -15,6 +15,19 @@ GtMethodCritic class >> activeCritics [
 				collect: [ :each | each new ] ]
 ]
 
+{ #category : #accessing }
+GtMethodCritic class >> gtMethodsFor: aView [
+	<gtClassView>
+	self isAbstract ifTrue: [ ^ aView empty ].
+	^ aView forward
+		title: 'Issues';
+		priority: 20;
+		object: [ GtSearchMethodCriticFilter new
+				critic: self new;
+				yourself ];
+		view: #gtItemsFor:
+]
+
 { #category : #testing }
 GtMethodCritic class >> isAbstract [
 	^ self == GtMethodCritic
@@ -121,8 +134,8 @@ GtMethodCritic >> name [
 ]
 
 { #category : #accessing }
-GtMethodCritic >> potentialMethodsDo: aBlock [
-	^ self allMethodsDo: aBlock
+GtMethodCritic >> potentialFilter [
+	^ nil
 ]
 
 { #category : #styling }

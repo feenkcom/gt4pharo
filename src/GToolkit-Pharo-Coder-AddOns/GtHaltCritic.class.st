@@ -44,8 +44,9 @@ GtHaltCritic >> name [
 ]
 
 { #category : #enumerating }
-GtHaltCritic >> potentialMethodsDo: aBlock [
-	(self haltSelectors
+GtHaltCritic >> potentialFilter [
+	^ ((self haltSelectors
 		inject: GtSearchNullFilter new
-		into: [ :sum :each | sum | each gtReferences ]) | Halt gtReferences do: aBlock
+		into: [ :sum :each | sum | each gtReferences ]) | Halt gtReferences)
+		asAsyncStream
 ]

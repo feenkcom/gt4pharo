@@ -40,6 +40,7 @@ GtUnoptimizedToDoCritic >> name [
 ]
 
 { #category : #enumerating }
-GtUnoptimizedToDoCritic >> potentialMethodsDo: aBlock [
-	#do: gtReferences & (#to: gtReferences | #to:by: gtReferences) do: aBlock
+GtUnoptimizedToDoCritic >> potentialFilter [
+	^ (#do: gtReferences & (#to: gtReferences | #to:by: gtReferences))
+		asAsyncStream
 ]
