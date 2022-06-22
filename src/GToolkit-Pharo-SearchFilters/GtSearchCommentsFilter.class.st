@@ -34,7 +34,6 @@ GtSearchCommentsFilter >> hash [
 
 { #category : #testing }
 GtSearchCommentsFilter >> includesMethod: aCompiledMethod [
-	| methodAst |
 	(aCompiledMethod sourceCode
 		findString: self text
 		startingAt: 1

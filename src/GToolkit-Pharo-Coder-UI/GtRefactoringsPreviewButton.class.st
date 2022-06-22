@@ -16,7 +16,7 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 		vFitContentLimited;
 		refactorings: self refactorings.
 
-	applyAction := [ | refs |
+	applyAction := [ 
 		self fireEvent: (BrDropdownHideWish new anchor: self).
 		theRefactoringsElement applyRefactorings.
 		self dispatchEvent: GtRefactoringsAppliedEvent new ].
