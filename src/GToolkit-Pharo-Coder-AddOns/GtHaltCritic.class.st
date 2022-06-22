@@ -14,6 +14,11 @@ GtHaltCritic >> haltSelectors [
 	^ #(halt haltOnce haltIf:)
 ]
 
+{ #category : #accessing }
+GtHaltCritic >> highlightPositionsFor: aSmaCCNode [
+	^ {aSmaCCNode sourceInterval}
+]
+
 { #category : #testing }
 GtHaltCritic >> includeFixIt [
 	^ false
