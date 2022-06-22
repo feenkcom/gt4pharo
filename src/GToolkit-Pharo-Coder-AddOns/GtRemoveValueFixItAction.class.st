@@ -7,6 +7,7 @@ Class {
 { #category : #examples }
 GtRemoveValueFixItAction class >> removeLiteralAtBeginning [
 	<gtExample>
+	self = GtRemoveValueFixItAction ifFalse: [ ^ self ].
 	^ self
 		testOriginal: 'a #(). Transcript print: 1'
 		generates: 'a Transcript print: 1'
