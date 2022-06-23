@@ -1,6 +1,6 @@
 Class {
 	#name : #GtMethodCritic,
-	#superclass : #Object,
+	#superclass : #GtCritic,
 	#classVars : [
 		'ActiveCritics'
 	],
@@ -33,27 +33,12 @@ GtMethodCritic class >> isAbstract [
 	^ self == GtMethodCritic
 ]
 
-{ #category : #testing }
-GtMethodCritic class >> isDefault [
-	^ true
-]
-
-{ #category : #comparing }
-GtMethodCritic >> = anObject [
-	^ self class = anObject class
-]
-
 { #category : #accessing }
 GtMethodCritic >> allMethodsDo: aBlock [
 	Smalltalk
 		allClassesDo: [ :each | 
 			each methodsDo: aBlock.
 			each class methodsDo: aBlock ]
-]
-
-{ #category : #accessing }
-GtMethodCritic >> description [
-	^ self subclassResponsibility
 ]
 
 { #category : #styling }
@@ -99,11 +84,6 @@ GtMethodCritic >> fixItLocationFor: aSmaCCNode [
 	^ aSmaCCNode stopPosition
 ]
 
-{ #category : #comparing }
-GtMethodCritic >> hash [
-	^ self class hash
-]
-
 { #category : #styling }
 GtMethodCritic >> highlightPositionsFor: aSmaCCNode [
 	aSmaCCNode isMessage
@@ -121,16 +101,6 @@ GtMethodCritic >> includeFixIt [
 { #category : #testing }
 GtMethodCritic >> includeHighlight [
 	^ true
-]
-
-{ #category : #testing }
-GtMethodCritic >> matches: aNode from: aCriticRunner [
-	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtMethodCritic >> name [
-	^ ''
 ]
 
 { #category : #accessing }
