@@ -45,7 +45,10 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 						in: aClass
 						bindings: theBindings) ifNotNil: [ :class | class class ] ].
 			(#(new new:) includes: aGtPharoProgramNode selector)
-				ifTrue: [ ^ (self
+				ifTrue: [ (aGtPharoProgramNode receiver isVariable
+						and: [ aGtPharoProgramNode receiver isSuper ])
+						ifTrue: [ ^ aClass ifNotNil: [ :class | class instanceSide ] ].
+					^ (self
 						typeOf: aGtPharoProgramNode receiver
 						in: aClass
 						bindings: theBindings) ifNotNil: [ :class | class instanceSide ] ] ].
@@ -252,6 +255,11 @@ GtPharoProgramNode >> nestingLevel [
 	^ (parent notNil and: [ parent isErrorNode not ])
 		ifTrue: [ parent nestingLevel ]
 		ifFalse: [ 0 ]
+]
+
+{ #category : #accessing }
+GtPharoProgramNode >> priority [
+	^ SmallInteger maxVal
 ]
 
 { #category : #accessing }

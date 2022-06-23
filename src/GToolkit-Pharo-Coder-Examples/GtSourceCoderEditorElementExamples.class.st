@@ -11,12 +11,12 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	aMethodCoder := GtPharoMethodCoderExamples new forExampleMethodCoder.
 	aMethodCoderUIModel := aMethodCoder asCoderViewModel.
 
-	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated.
+	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
 	BlUseAsyncFeatures
 		disableDuring: [ anEditorElement := GtSourceCoderEditorElement new
 					textualCoderViewModel: aMethodCoderUIModel.
 			aMethodCoderUIModel ensureAddOns ].
-	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated not.
+	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait not.
 
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
@@ -32,15 +32,16 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	<gtExample>
 	| aSnippetCoder aSnippetCoderUIModel anEditorElement |
+
 	aSnippetCoder := GtPharoSnippetCoder new.
 	aSnippetCoderUIModel := aSnippetCoder asCoderViewModel.
 
-	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated.
-	BlUseAsyncFeatures
-		disableDuring: [ anEditorElement := GtSourceCoderEditorElement new
-					textualCoderViewModel: aSnippetCoderUIModel.
-				aSnippetCoderUIModel ensureAddOns ].
-	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated not.
+	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated wait.
+
+	anEditorElement := GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel.
+	aSnippetCoderUIModel ensureAddOns.
+
+	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated wait not.
 
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
@@ -49,5 +50,5 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 		assert: anEditorElement text characters
 		equals: aSnippetCoder currentSourceText characters.
 
-	^ anEditorElement
+	^ ValueHolder new contents: anEditorElement
 ]

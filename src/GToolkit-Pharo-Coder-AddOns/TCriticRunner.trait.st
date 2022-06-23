@@ -8,6 +8,10 @@ TCriticRunner >> behavior [
 	^ nil class
 ]
 
+{ #category : #accessing }
+TCriticRunner >> foundIssue: aCritic in: aNode [
+]
+
 { #category : #testing }
 TCriticRunner >> hasDeclaredGlobalNamed: aString [
 	^ self class environment includesKey: aString asSymbol
@@ -29,6 +33,9 @@ TCriticRunner >> hasRefactoring [
 ]
 
 { #category : #typing }
-TCriticRunner >> typeOf: aGtPharoNode [
-	^ nil
+TCriticRunner >> typeOf: aGtPharoProgramNode [
+	^ GtPharoProgramNode
+		typeOf: aGtPharoProgramNode
+		in: self behavior
+		bindings: nil
 ]

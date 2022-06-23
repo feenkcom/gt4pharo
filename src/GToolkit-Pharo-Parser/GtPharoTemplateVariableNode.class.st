@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'parts'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -33,4 +33,9 @@ GtPharoTemplateVariableNode >> parts: anOrderedCollection [
 	self setParents: self parts to: nil.
 	parts := anOrderedCollection.
 	self setParents: self parts to: self
+]
+
+{ #category : #accessing }
+GtPharoTemplateVariableNode >> priority [
+	^ 0
 ]

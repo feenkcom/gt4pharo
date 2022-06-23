@@ -121,7 +121,8 @@ GtPharoSnippetCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderDoItAndInspectShortcut new;
 		addShortcut: GtSourceCoderPrintItShortcut new;
 		addShortcut: GtSnippetCoderExtractMethodShortcut new;
-		addShortcut: GtSourceCoderInlineRenameShortcut new
+		addShortcut: GtSourceCoderInlineRenameShortcut new;
+		addShortcut: GtSourceCoderFixItShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

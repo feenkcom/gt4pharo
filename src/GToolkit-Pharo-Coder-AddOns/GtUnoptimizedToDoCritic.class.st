@@ -34,7 +34,13 @@ GtUnoptimizedToDoCritic >> matches: aNode from: aCriticRunner [
 		and: [ #(to: #to:by:) includes: aNode receiver message selector ]
 ]
 
+{ #category : #accessing }
+GtUnoptimizedToDoCritic >> name [
+	^ 'to:do: not optimized'
+]
+
 { #category : #enumerating }
-GtUnoptimizedToDoCritic >> potentialMethodsDo: aBlock [
-	#do: gtReferences & (#to: gtReferences | #to:by: gtReferences) do: aBlock
+GtUnoptimizedToDoCritic >> potentialFilter [
+	^ (#do: gtReferences & (#to: gtReferences | #to:by: gtReferences))
+		asAsyncStream
 ]

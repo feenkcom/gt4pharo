@@ -104,12 +104,6 @@ GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> haltAddOnFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 20>
-	coderAddOns addStyler: GtPharoHaltStyler new
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> highlightNodeBlock: aNode [
 	^ [ :textualCoderViewModel | 
 	  textualCoderViewModel

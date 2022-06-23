@@ -58,6 +58,11 @@ GtPharoCascadeNode >> nodeVariables [
 	^ #(#receiver)
 ]
 
+{ #category : #accessing }
+GtPharoCascadeNode >> priority [
+	^ 4
+]
+
 { #category : #generated }
 GtPharoCascadeNode >> receiver [
 	^ receiver

@@ -39,6 +39,11 @@ GtMessageNotImplementedCritic >> matches: aNode from: aCriticRunner [
 				or: [ (Object whichClassIncludesSelector: aNode selector) isNil ] ]
 ]
 
+{ #category : #accessing }
+GtMessageNotImplementedCritic >> name [
+	^ 'Message is not implemented'
+]
+
 { #category : #private }
 GtMessageNotImplementedCritic >> potentialRenameActionsFor: aNode type: type using: aCriticStyler [
 	| selectors block args currentSelector index minRating |

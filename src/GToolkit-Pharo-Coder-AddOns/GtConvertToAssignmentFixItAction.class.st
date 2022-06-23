@@ -4,6 +4,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtConvertToAssignmentFixItAction class >> rewriteEquals [
+	<gtExample>
+	^ self
+		testOriginal: 'a: b c = b'
+		generates: 'a: b c := b'
+		forNode: [ :method | method body statements last ]
+]
+
 { #category : #'api - action' }
 GtConvertToAssignmentFixItAction >> description [
 	^ 'Convert #= message to assignment'
