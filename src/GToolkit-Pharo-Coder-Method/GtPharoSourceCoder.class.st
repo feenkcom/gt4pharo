@@ -65,47 +65,44 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 
 { #category : #accessing }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-
 	<gtCoderContextMenuAddOns: 100>
-	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
-		self
-			addLinkMenuAddOnsTo: coderAddOns
-			label: 'Browse Implementors'
-			node: nodes first
-			selector: #browseImplementorsAt: ]
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			self
+				addLinkMenuAddOnsTo: coderAddOns
+				label: 'Browse Implementors'
+				node: node
+				selector: #browseImplementorsAt: ]
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: selector [
-
+GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: sel [
 	| highlightNode |
-	(node isMessageSend or: [ node isMethodPattern ]) ifFalse: [ ^ self ].
-	highlightNode := node isMessageSend
-		                 ifTrue: [ node message ]
-		                 ifFalse: [ node ].
+	((node isMessage or: [ node isMessageSend ]) or: [ node isMethodPattern ])
+		ifFalse: [ ^ self ].
+	highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
 	coderAddOns
-		addContextMenuItem:
-		(self createLabel: menuLabel description: node selector)
+		addContextMenuItem: (self createLabel: menuLabel description: node selector)
 		hover: [ :textualCoderViewModel | 
 			textualCoderViewModel
 				addTextAttribute: self class nodeHighlight
 				from: highlightNode startPosition
 				to: highlightNode stopPosition ]
 		leave: self removeHighlightBlock
-		action: [ :aTextualViewModel | 
-			self perform: selector with: highlightNode startPosition ]
+		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition ]
 ]
 
 { #category : #accessing }
 GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-
 	<gtCoderContextMenuAddOns: 100>
-	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
-		self
-			addLinkMenuAddOnsTo: coderAddOns
-			label: 'Browse References'
-			node: nodes first
-			selector: #browseReferencesAt: ]
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node |
+			node isMessage
+				ifTrue: [ self
+						addLinkMenuAddOnsTo: coderAddOns
+						label: 'Browse References'
+						node: node
+						selector: #browseReferencesAt: ] ]
 ]
 
 { #category : #'api - accessing' }
@@ -249,14 +246,15 @@ GtPharoSourceCoder >> extractableNodesAt: anIndex [
 { #category : #'private - ast' }
 GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 	"Return a collection of extractable nodes that intersect a given interval"
-	<return: #Collection of: #GtPharoProgramNode>
 
+	<return: #Collection of: #GtPharoProgramNode>
 	^ self
 		nodeWithin: anInterval
-		ifFound: [ :aNode |
+		ifFound: [ :aNode | 
 			aNode isSequence
-				ifTrue: [ aNode statements select: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ { aNode } ] ]
+				ifTrue: [ aNode statements
+						select: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
+				ifFalse: [ {aNode} ] ]
 		ifNone: [ #() ]
 ]
 
@@ -293,6 +291,18 @@ GtPharoSourceCoder >> newRbAST: aString [
 	^ ast
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> nodeAt: anIndex [
+	^ self
+		nodeAt: anIndex
+		ifFound: [ :aNode | 
+			aNode isSequence
+				ifTrue: [ aNode statements
+						detect: [ :eachNode | eachNode intersectsInterval: (anIndex to: anIndex) ] ]
+				ifFalse: [ aNode ] ]
+		ifNone: [ nil ]
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	<return: #Object>
@@ -320,6 +330,20 @@ GtPharoSourceCoder >> nodeDescription: aNode [
 	^ ((description copyReplaceAll: String cr with: ' ')
 		copyReplaceAll: String lf
 		with: ' ') copyReplaceAll: '	' with: ' '
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> nodeFrom: aCoderViewModel [ 
+	| allSelections allCursors |
+
+	allSelections := aCoderViewModel selection allSelections.
+	allCursors := aCoderViewModel cursors allCursors.
+
+	^ allSelections size = 1
+		ifTrue: [ self nodeWithin: allSelections first interval ]
+		ifFalse: [ allCursors size = 1
+			ifTrue: [ self nodeAt: allCursors first position ]
+			ifFalse: [ #() ] ]
 ]
 
 { #category : #'private - ast' }
@@ -385,6 +409,18 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	^ aNoneBlock value
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> nodeWithin: anInterval [
+	^ self
+		nodeWithin: anInterval
+		ifFound: [ :aNode | 
+			aNode isSequence
+				ifTrue: [ aNode statements
+						detect: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
+				ifFalse: [ {aNode} ] ]
+		ifNone: [ #() ]
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneBlock [
 	<return: #Object>
@@ -400,6 +436,10 @@ GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneB
 				do: [ :ex | ex return ].
 
 	^ aNoneBlock value
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> nodesAt: anObject [ 
 ]
 
 { #category : #'private - notifying' }
