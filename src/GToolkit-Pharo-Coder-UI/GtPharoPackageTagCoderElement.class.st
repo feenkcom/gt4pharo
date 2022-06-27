@@ -81,29 +81,45 @@ GtPharoPackageTagCoderElement >> buildParentLink [
 			c horizontal matchParent.
 			c vertical fitContent ].
 	element
-		addChild:
-			(BrLabel new
+		addChild: (BrLabel new
 				margin: (BlInsets left: 4);
 				beSmallSize;
-				aptitude:
-					(BrGlamorousLabelAptitude new glamorousRegularFont
+				aptitude: (BrGlamorousLabelAptitude new glamorousRegularFont
 						foreground: self theme button defaultTextColor);
 				text: 'In: ').
 	element
-		addChild:
-			(BrButton new
-				aptitude:
-					(BrGlamorousButtonExteriorAptitude new borderPaint: Color transparent)
+		addChild: (BrLabel new
+				aptitude: (BrGlamorousButtonExteriorAptitude new borderPaint: Color transparent)
 						+ BrGlamorousLabelAptitude new glamorousRegularFont;
-				label: packageTagCoder package name;
+				text: packageTagCoder package name;
 				fitContent;
 				beSmallSize;
-				action: [ | anEvent |
-					anEvent := GtCoderToReplace new
-						coder: packageTagCoder packageCoder.
-					self fireEvent: anEvent.
-					anEvent isConsumed
-						ifFalse: [ self phlow spawnObject: anEvent coder ] ]).
+				when: BlClickEvent
+					do: [ :anEvent | 
+						| aCoder aCoderEvent aSpace |
+						aCoder := packageTagCoder packageCoder.
+						anEvent modifiers isAlt
+							ifTrue: [ aCoderEvent := GtCoderToReplace new coder: aCoder.
+								self fireEvent: aCoderEvent.
+								aCoderEvent isConsumed
+									ifFalse: [ self phlow spawnObject: aCoderEvent coder ] ]
+							ifFalse: [ anEvent modifiers isPrimaryModifier
+									ifTrue: [ aSpace := BlSpace new.
+										aSpace title: aCoder package name.
+										aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
+										aSpace extent: 1200 @ 600.
+										aSpace root background: Color transparent.
+										aSpace
+											addChild: (GtPager
+													createOn: (GtPagerWrapperElement new
+															tool: (GtCoder forPackage: aCoder package);
+															embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
+										aSpace withHalos.
+										anEvent target showSpace: aSpace ]
+									ifFalse: [ aCoderEvent := GtCoderToSpawn new coder: aCoder.
+										self fireEvent: aCoderEvent.
+										aCoderEvent isConsumed
+											ifFalse: [ self phlow spawnObject: aCoderEvent coder ] ] ] ]).
 	^ element
 ]
 
