@@ -28,6 +28,28 @@ GtClassSuperclassDefinition >> editors [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtClassSuperclassDefinition >> newTabFrom: anEvent [
+	self class environment
+		at: self name
+		ifPresent: [ :aClass | 
+			| aClassCoder aSpace |
+			aClassCoder := GtCoder forClass: aClass.
+
+			aSpace := BlSpace new.
+			aSpace title: self name.
+			aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
+			aSpace extent: 1200 @ 600.
+			aSpace root background: Color transparent.
+			aSpace
+				addChild: (GtPager
+						createOn: (GtPagerWrapperElement new
+								tool: aClassCoder;
+								embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
+			aSpace withHalos.
+			anEvent target showSpace: aSpace ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> readers [
 	^ { self superclassReader }
 ]
@@ -70,12 +92,12 @@ GtClassSuperclassDefinition >> superclassEditor [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> superclassReader [
 	<return: #GtCodeDefinitionViewer>
-	
 	^ GtCodeDefinitionSingleReader new
-			definition: self;
-			title: 'Superclass';
-			getSelector: #name;
-			renameEvent: GtBehaviorSuperclassRenamed;
-			whenPrimaryClickDo: [ :anEvent :aDefinition  | aDefinition browseFrom: anEvent ];
-			whenClickDo: [ :anEvent :aDefinition | aDefinition replaceFrom: anEvent ]
+		definition: self;
+		title: 'Superclass';
+		getSelector: #name;
+		renameEvent: GtBehaviorSuperclassRenamed;
+		whenAltClickDo: [ :anEvent :aDefinition | aDefinition replaceFrom: anEvent ];
+		whenPrimaryClickDo: [ :anEvent :aDefinition | aDefinition newTabFrom: anEvent ];
+		whenClickDo: [ :anEvent :aDefinition | aDefinition browseFrom: anEvent ]
 ]

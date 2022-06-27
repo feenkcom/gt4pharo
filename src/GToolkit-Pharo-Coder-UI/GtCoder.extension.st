@@ -1,6 +1,11 @@
 Extension { #name : #GtCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoder class >> forAllPackages [
+	^ self forCoder: GtPharoPackagesCoder forAllPackages
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtCoder class >> forClass: aClass [
 	^ self forCoder: (GtPharoBehaviorCoder forClass: aClass)
 ]

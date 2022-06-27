@@ -21,6 +21,29 @@ GtPackageDefinition >> editors [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtPackageDefinition >> newTabFrom: anEvent [
+	| aRealPackage aPackageCoder aSpace |
+	aRealPackage := RPackageOrganizer default
+			packageNamed: self name
+			ifAbsent: [ ^ self ].
+
+	aPackageCoder := GtCoder forPackage: aRealPackage.
+
+	aSpace := BlSpace new.
+	aSpace title: self name.
+	aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
+	aSpace extent: 1200 @ 600.
+	aSpace root background: Color transparent.
+	aSpace
+		addChild: (GtPager
+				createOn: (GtPagerWrapperElement new
+						tool: aPackageCoder;
+						embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
+	aSpace withHalos.
+	anEvent target showSpace: aSpace
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> packageEditor [
 	^ GtCodeDefinitionSingleEditor new
 		title: 'Package';
@@ -43,8 +66,9 @@ GtPackageDefinition >> packageReader [
 		definition: self;
 		getSelector: #name;
 		renameEvent: GtBehaviorPackageRenamed;
-		whenClickDo: [ :anEvent :aDefinition | aDefinition replaceFrom: anEvent ];
-		whenPrimaryClickDo: [ :anEvent :aDefinition  | aDefinition browseFrom: anEvent ]
+		whenAltClickDo: [ :anEvent :aDefinition | aDefinition replaceFrom: anEvent ];
+		whenPrimaryClickDo: [ :anEvent :aDefinition | aDefinition newTabFrom: anEvent ];
+		whenClickDo: [ :anEvent :aDefinition | aDefinition browseFrom: anEvent ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
