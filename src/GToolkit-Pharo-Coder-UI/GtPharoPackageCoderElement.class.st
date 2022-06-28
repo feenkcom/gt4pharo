@@ -93,32 +93,48 @@ GtPharoPackageCoderElement >> buildPackageTagsList [
 GtPharoPackageCoderElement >> buildParentLink [
 	| aLinkContainer |
 	aLinkContainer := BrHorizontalPane new
-		hMatchParent;
-		vFitContent.
+			hMatchParent;
+			vFitContent.
 	aLinkContainer
-		addChild:
-			(BrLabel new
+		addChild: (BrLabel new
 				margin: (BlInsets left: 4);
 				beSmallSize;
-				aptitude:
-					(BrGlamorousLabelAptitude new glamorousRegularFont
+				aptitude: (BrGlamorousLabelAptitude new glamorousRegularFont
 						foreground: self theme button defaultTextColor);
 				text: 'In: ').
 	aLinkContainer
-		addChild:
-			(BrButton new
-				aptitude:
-					(BrGlamorousButtonExteriorAptitude new borderPaint: Color transparent)
+		addChild: (BrLabel new
+				aptitude: (BrGlamorousButtonExteriorAptitude new borderPaint: Color transparent)
 						+ BrGlamorousLabelAptitude new glamorousRegularFont;
-				label: 'Pharo';
+				text: 'Pharo';
 				beSmallSize;
 				fitContent;
-				action: [ | aCoderToReplace |
-					aCoderToReplace := GtCoderToReplace new
-						coder: GtPharoPackagesCoder forAllPackages.
-					self fireEvent: aCoderToReplace.
-					aCoderToReplace isConsumed
-						ifFalse: [ self phlow spawnObject: aCoderToReplace coder ] ]).
+				when: BlClickEvent
+					do: [ :anEvent | 
+						| aCoder aCoderEvent aSpace |
+						aCoder := GtPharoPackagesCoder forAllPackages.
+						anEvent modifiers isAlt
+							ifTrue: [ aCoderEvent := GtCoderToReplace new coder: aCoder.
+								self fireEvent: aCoderEvent.
+								aCoderEvent isConsumed
+									ifFalse: [ self phlow spawnObject: aCoderEvent coder ] ]
+							ifFalse: [ anEvent modifiers isPrimaryModifier
+									ifTrue: [ aSpace := BlSpace new.
+										aSpace title: 'Packages'.
+										aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
+										aSpace extent: 1200 @ 600.
+										aSpace root background: Color transparent.
+										aSpace
+											addChild: (GtPager
+													createOn: (GtPagerWrapperElement new
+															tool: GtCoder forAllPackages;
+															embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
+										aSpace withHalos.
+										anEvent target showSpace: aSpace ]
+									ifFalse: [ aCoderEvent := GtCoderToSpawn new coder: aCoder.
+										self fireEvent: aCoderEvent.
+										aCoderEvent isConsumed
+											ifFalse: [ self phlow spawnObject: aCoderEvent coder ] ] ] ]).
 	^ aLinkContainer
 ]
 
