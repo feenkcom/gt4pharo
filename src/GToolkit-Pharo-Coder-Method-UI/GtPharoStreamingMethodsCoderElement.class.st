@@ -75,7 +75,7 @@ GtPharoStreamingMethodsCoderElement >> buildWorkingIndicator [
 		do: [ label removeFromParent ].
 
 	updater := BrElementUpdater new.
-	updater postponedDuration: 100 milliseconds.
+	updater postponedDuration: 100 milliSeconds.
 	updater element: label.
 	updater action: [ :e | 
 		state = #inProgress ifTrue: [ 
