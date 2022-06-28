@@ -4,6 +4,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtRemoveValueFixItAction class >> removeLiteralAtBeginning [
+	<gtExample>
+	self = GtRemoveValueFixItAction ifFalse: [ ^ self ].
+	^ self
+		testOriginal: 'a #(). Transcript print: 1'
+		generates: 'a Transcript print: 1'
+		forNode: [ :method | method body statements first ]
+]
+
 { #category : #'api - action' }
 GtRemoveValueFixItAction >> description [
 	^ 'Remove unused expression'

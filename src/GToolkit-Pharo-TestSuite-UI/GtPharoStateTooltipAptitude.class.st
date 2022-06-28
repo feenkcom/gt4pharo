@@ -64,7 +64,7 @@ GtPharoStateTooltipAptitude >> newTooltipContent [
 				aptitude: BrGlamorousLabelAptitude;
 				fitContent ];
 		dataBinder: [ :anElement :anItem | 
-			| aTotal aTotalString aTotalText |
+			| aTotalString aTotalText |
 			aTotalString := self totalStringForState: anItem.
 			aTotalText := aTotalString asRopedText foreground: Color gray.
 			anElement text: aTotalText ].

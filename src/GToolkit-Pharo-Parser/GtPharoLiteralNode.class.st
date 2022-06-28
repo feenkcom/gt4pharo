@@ -29,3 +29,8 @@ GtPharoLiteralNode >> isSymbol [
 GtPharoLiteralNode >> literalValue [
 	^ self subclassResponsibility
 ]
+
+{ #category : #accessing }
+GtPharoLiteralNode >> priority [
+	^ 0
+]

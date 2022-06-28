@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'smaccError'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -20,6 +20,11 @@ GtPharoErrorNode >> isErrorNode [
 { #category : #generated }
 GtPharoErrorNode >> nodeVariables [
 	^ #(#smaccError)
+]
+
+{ #category : #accessing }
+GtPharoErrorNode >> priority [
+	^ 0
 ]
 
 { #category : #generated }

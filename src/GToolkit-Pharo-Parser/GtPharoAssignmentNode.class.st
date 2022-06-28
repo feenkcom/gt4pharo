@@ -6,7 +6,7 @@ Class {
 		'assignmentToken',
 		'value'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -39,6 +39,11 @@ GtPharoAssignmentNode >> messageReceiver [
 { #category : #generated }
 GtPharoAssignmentNode >> nodeVariables [
 	^ #(#variable #value)
+]
+
+{ #category : #accessing }
+GtPharoAssignmentNode >> priority [
+	^ 5
 ]
 
 { #category : #generated }

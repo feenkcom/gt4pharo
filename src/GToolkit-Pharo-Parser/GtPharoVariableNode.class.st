@@ -77,6 +77,11 @@ GtPharoVariableNode >> name: aSmaCCToken [
 	name := aSmaCCToken
 ]
 
+{ #category : #accessing }
+GtPharoVariableNode >> priority [
+	^ 0
+]
+
 { #category : #converting }
 GtPharoVariableNode >> selector [
 	^ self asSymbol

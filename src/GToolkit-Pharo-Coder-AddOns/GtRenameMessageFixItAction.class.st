@@ -7,6 +7,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtRenameMessageFixItAction class >> renameCollect [
+	<gtExample>
+	^ self
+		testOriginal: 'a (1 to: 10) collect: [:i | Transcript print: i; cr]'
+		generates: 'a (1 to: 10) do: [:i | Transcript print: i; cr]'
+		forNode: [ :method | method body statements last message ]
+		configure: [ :action | action selector: #do: ]
+]
+
 { #category : #'api - action' }
 GtRenameMessageFixItAction >> description [
 	^ 'Rename #' , node selector , ' to #' , selector

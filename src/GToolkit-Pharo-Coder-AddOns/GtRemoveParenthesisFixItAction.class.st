@@ -7,6 +7,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtRemoveParenthesisFixItAction class >> rewriteToDo [
+	<gtExample>
+	^ self
+		testOriginal: 'a (1 to: 10) do: [:i | Transcript print: i; cr]'
+		generates: 'a 1 to: 10 do: [:i | Transcript print: i; cr]'
+		forNode: [ :method | method body statements last receiver ]
+]
+
 { #category : #'api - action' }
 GtRemoveParenthesisFixItAction >> description [
 	^ description ifNil: [ 'Remove unnecessary parenthesis' ]

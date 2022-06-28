@@ -4,6 +4,33 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtRemoveMessageFixItAction class >> removeCollect [
+	<gtExample>
+	^ self
+		testOriginal: 'a (1 to: 10) collect: [:i | Transcript print: i; cr]. ^#()'
+		generates: 'a ^#()'
+		forNode: [ :method | method body statements first message ]
+]
+
+{ #category : #examples }
+GtRemoveMessageFixItAction class >> removeFromMiddleOfCascade [
+	<gtExample>
+	^ self
+		testOriginal: 'a Transcript print: 1; yourself; print: 2'
+		generates: 'a Transcript print: 1; print: 2'
+		forNode: [ :method | method body statements first messages second ]
+]
+
+{ #category : #examples }
+GtRemoveMessageFixItAction class >> removeYourself [
+	<gtExample>
+	^ self
+		testOriginal: 'a Transcript print: 1; print: 2; yourself'
+		generates: 'a Transcript print: 1; print: 2'
+		forNode: [ :method | method body statements first messages last ]
+]
+
 { #category : #'api - node' }
 GtRemoveMessageFixItAction >> attributePosition [
 	^ node selectorParts last stopPosition

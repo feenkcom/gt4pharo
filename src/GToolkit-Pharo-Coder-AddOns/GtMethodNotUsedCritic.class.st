@@ -32,13 +32,21 @@ GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
 						whichSuperclassSatisfies: [ :cls | cls name = #TestCase ]) notNil ])
 				ifTrue: [ ^ false ] ].
 	(aNode parent body pragmas
-		anySatisfy: [ :pragma | #(gtExample gtSlide) includes: pragma selector ])
+		anySatisfy: [ :pragma | #(gtExample gtView gtSearch gtSlide gtClassView) includes: pragma selector ])
 		ifTrue: [ ^ false ].
 	^ aCriticRunner behavior includesSelector: aNode selector
 ]
 
+{ #category : #accessing }
+GtMethodNotUsedCritic >> name [
+	^ 'Method is not sent'
+]
+
 { #category : #enumerating }
-GtMethodNotUsedCritic >> potentialMethodsDo: aBlock [
+GtMethodNotUsedCritic >> potentialFilter [
+	| methods |
+	methods := OrderedCollection new.
 	GtPharoCompletionStrategy
-		cachedSelectorsDo: [ :selector :implementers :senders | senders isEmpty ifTrue: [ implementers do: aBlock ] ]
+		cachedSelectorsDo: [ :selector :implementers :senders | senders isEmpty ifTrue: [ methods addAll: implementers ] ].
+	^ (methods sorted: GtMethodsSortFunction new) asAsyncStream
 ]

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtMethodCritic,
-	#superclass : #Object,
+	#superclass : #GtCritic,
 	#classVars : [
 		'ActiveCritics'
 	],
@@ -15,19 +15,22 @@ GtMethodCritic class >> activeCritics [
 				collect: [ :each | each new ] ]
 ]
 
+{ #category : #accessing }
+GtMethodCritic class >> gtMethodsFor: aView [
+	<gtClassView>
+	self isAbstract ifTrue: [ ^ aView empty ].
+	^ aView forward
+		title: 'Issues';
+		priority: 20;
+		object: [ GtSearchMethodCriticFilter new
+				critic: self new;
+				yourself ];
+		view: #gtItemsFor:
+]
+
 { #category : #testing }
 GtMethodCritic class >> isAbstract [
 	^ self == GtMethodCritic
-]
-
-{ #category : #testing }
-GtMethodCritic class >> isDefault [
-	^ true
-]
-
-{ #category : #comparing }
-GtMethodCritic >> = anObject [
-	^ self class = anObject class
 ]
 
 { #category : #accessing }
@@ -36,11 +39,6 @@ GtMethodCritic >> allMethodsDo: aBlock [
 		allClassesDo: [ :each | 
 			each methodsDo: aBlock.
 			each class methodsDo: aBlock ]
-]
-
-{ #category : #accessing }
-GtMethodCritic >> description [
-	^ self subclassResponsibility
 ]
 
 { #category : #styling }
@@ -68,6 +66,10 @@ GtMethodCritic >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
 ]
 
+{ #category : #accessing }
+GtMethodCritic >> finish: aNode from: criticRunner [
+]
+
 { #category : #styling }
 GtMethodCritic >> fixItActionsFor: aNode using: aCriticStyler [
 	^ #()
@@ -80,11 +82,6 @@ GtMethodCritic >> fixItLocationFor: aSmaCCNode [
 	aSmaCCNode isMessageSend
 		ifTrue: [ ^ aSmaCCNode message selectorParts last stopPosition ].
 	^ aSmaCCNode stopPosition
-]
-
-{ #category : #comparing }
-GtMethodCritic >> hash [
-	^ self class hash
 ]
 
 { #category : #styling }
@@ -106,33 +103,47 @@ GtMethodCritic >> includeHighlight [
 	^ true
 ]
 
-{ #category : #testing }
-GtMethodCritic >> matches: aNode from: aCriticRunner [
-	^ self subclassResponsibility
-]
-
 { #category : #accessing }
-GtMethodCritic >> potentialMethodsDo: aBlock [
-	^ self allMethodsDo: aBlock
+GtMethodCritic >> potentialFilter [
+	^ nil
 ]
 
 { #category : #styling }
 GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
-	| location |
+	| location hoverMarker hoverAttribute fixItAttribute |
 	self includeFixIt ifFalse: [ ^ self ].
 	location := self fixItLocationFor: aNode.
+	hoverMarker := GtFixItMarkerAttribute new.
+	hoverAttribute := self errorHighlightAttribute.
+	fixItAttribute := GtFixItAttribute new
+			label: self name;
+			hoverMarker: hoverMarker;
+			hoverAttribute: hoverAttribute;
+			description: [ :editorElement | self descriptionWithEditor: editorElement ];
+			fixItActions: [ self fixItActionsFor: aNode using: aCriticStyler ];
+			yourself.
+	hoverMarker fixItAttribute: fixItAttribute.
 	aCriticStyler
-		attributes: {GtFixItAttribute new
-					description: [ :editorElement | self descriptionWithEditor: editorElement ];
-					fixItActions: [ self fixItActionsFor: aNode using: aCriticStyler ];
-					yourself}
+		attributes: {fixItAttribute}
 		from: location
-		to: location
+		to: location.
+	self includeHighlight ifFalse: [ ^ self ].
+	(self highlightPositionsFor: aNode)
+		do: [ :each | 
+			(aCriticStyler text from: each first to: each last)
+				attribute: hoverMarker;
+				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+						aTextEditor text
+							findAttribute: hoverMarker
+							indicesDo: [ :aHighlightStart :aHighlightEnd | 
+								(aTextEditor text from: aHighlightStart to: aHighlightEnd)
+									attribute: hoverAttribute ] ]
+					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | aTextEditor text clearAttributes: [ :e | e == hoverAttribute ] ] ]
 ]
 
 { #category : #styling }
 GtMethodCritic >> styleHighlight: aNode using: aCriticStyler [
-	self includeHighlight ifFalse: [ ^ self ].
+	(self includeHighlight and: [ self includeFixIt not ]) ifFalse: [ ^ self ].
 	(self highlightPositionsFor: aNode)
 		do: [ :each | 
 			aCriticStyler

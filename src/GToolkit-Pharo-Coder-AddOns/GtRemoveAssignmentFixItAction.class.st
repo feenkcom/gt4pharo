@@ -4,6 +4,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
 }
 
+{ #category : #examples }
+GtRemoveAssignmentFixItAction class >> removeAssignment [
+	<gtExample>
+	^ self
+		testOriginal: 'a |b| ^b:=self printString'
+		generates: 'a |b| ^self printString'
+		forNode: [ :method | method body statements last value ]
+]
+
 { #category : #'api - action' }
 GtRemoveAssignmentFixItAction >> description [
 	^ 'Remove assignment of ' , node variable variableName

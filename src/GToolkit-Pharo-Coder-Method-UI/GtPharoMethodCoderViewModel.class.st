@@ -115,7 +115,8 @@ GtPharoMethodCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	(self behavior classThatDefinesClassVariable: aVariableName)
 		 ifNotNil: [ ^ true ].
 
-	^ false
+	^ self behavior instanceSide allSharedPools
+		anySatisfy: [ :each | each classPool includesKey: aVariableName asSymbol ]
 ]
 
 { #category : #accessing }

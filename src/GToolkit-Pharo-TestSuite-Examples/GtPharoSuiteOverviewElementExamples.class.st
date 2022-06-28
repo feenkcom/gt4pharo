@@ -109,7 +109,7 @@ GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoder [
 GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoderAndExecutionError [
 	<gtExample>
 	<noTest>
-	| aViewModel aCoder |
+	| aViewModel |
 	aViewModel := self testSuiteViewModelWithMethodsCoder.
 	aViewModel executionState: #exception -> ZeroDivide new.
 

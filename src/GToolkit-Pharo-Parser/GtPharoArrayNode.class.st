@@ -7,7 +7,7 @@ Class {
 		'periods',
 		'values'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -60,6 +60,11 @@ GtPharoArrayNode >> periods [
 { #category : #generated }
 GtPharoArrayNode >> periods: anOrderedCollection [
 	periods := anOrderedCollection
+]
+
+{ #category : #accessing }
+GtPharoArrayNode >> priority [
+	^ 0
 ]
 
 { #category : #generated }
