@@ -102,5 +102,23 @@ GtTagDefinition >> tagReader [
 		renameEvent: GtBehaviorTagRenamed;
 		whenAltClickDo: [ :anEvent :aDefinition | aDefinition replaceFrom: anEvent ];
 		whenPrimaryClickDo: [ :anEvent :aDefinition | aDefinition newTabFrom: anEvent ];
-		whenClickDo: [ :anEvent :aDefinition | aDefinition browseFrom: anEvent ]
+		whenClickDo: [ :anEvent :aDefinition | aDefinition browseFrom: anEvent ];
+		when: BlMouseEnterEvent
+			do: [ :anEvent | 
+				anEvent consumed: true.
+				anEvent target mouseCursor: nil.
+				anEvent target requestFocus ];
+		when: BlMouseLeaveEvent
+			do: [ :anEvent | 
+				anEvent consumed: true.
+				anEvent target loseFocus ];
+		when: BlKeyUpEvent do: [ :anEvent | anEvent target mouseCursor: nil ];
+		when: BlKeyDownEvent
+			do: [ :anEvent | 
+				anEvent consumed: true.
+				anEvent key isAlt
+					ifTrue: [ anEvent target mouseCursor: BlAliasCursor new ]
+					ifFalse: [ anEvent key isPrimary
+							ifTrue: [ anEvent target mouseCursor: BlCopyCursor new ]
+							ifFalse: [ anEvent target mouseCursor: nil ] ] ]
 ]
