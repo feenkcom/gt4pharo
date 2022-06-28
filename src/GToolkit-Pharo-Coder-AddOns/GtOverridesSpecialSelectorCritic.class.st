@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOverridesSpecialSelectorCritic,
-	#superclass : #GtClassCritic,
+	#superclass : #GtMethodCritic,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
 
@@ -20,14 +20,26 @@ GtOverridesSpecialSelectorCritic >> instanceSideSelectors [
 ]
 
 { #category : #testing }
-GtOverridesSpecialSelectorCritic >> matches: aBehavior from: aCriticRunner [
-	^ (aBehavior isClassSide
-		ifTrue: [ self classSideSelectors ]
-		ifFalse: [ self instanceSideSelectors ])
-		anySatisfy: [ :each | aBehavior includesSelector: each ]
+GtOverridesSpecialSelectorCritic >> matches: aNode from: aCriticRunner [
+	aNode isMethodPattern ifFalse: [ ^ false ].
+	^ aCriticRunner behavior superclass notNil
+		and: [ ((aCriticRunner behavior isClassSide
+				ifTrue: [ self classSideSelectors ]
+				ifFalse: [ self instanceSideSelectors ]) includes: aNode selector)
+				and: [ (aCriticRunner behavior superclass whichClassIncludesSelector: aNode selector)
+						notNil ] ]
 ]
 
 { #category : #accessing }
 GtOverridesSpecialSelectorCritic >> name [
 	^ 'Overrides special selector'
+]
+
+{ #category : #accessing }
+GtOverridesSpecialSelectorCritic >> potentialFilter [
+	^ (self classSideSelectors
+		inject: (self instanceSideSelectors
+				inject: GtSearchNullFilter new
+				into: [ :sum :each | sum | each gtImplementors ])
+		into: [ :sum :each | sum | each gtImplementors ]) asAsyncStream
 ]

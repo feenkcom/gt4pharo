@@ -1,6 +1,6 @@
 Class {
 	#name : #GtDefinesEqualButNotHashCritic,
-	#superclass : #GtClassCritic,
+	#superclass : #GtMethodCritic,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
 }
 
@@ -10,12 +10,18 @@ GtDefinesEqualButNotHashCritic >> description [
 ]
 
 { #category : #testing }
-GtDefinesEqualButNotHashCritic >> matches: aBehavior from: aCriticRunner [
-	^ (aBehavior includesSelector: #=)
-		and: [ (aBehavior includesSelector: #hash) not ]
+GtDefinesEqualButNotHashCritic >> matches: aNode from: aCriticRunner [
+	aNode isMethodPattern ifFalse: [ ^ false ].
+	aNode selector = #= ifFalse: [ ^ false ].
+	^ (aCriticRunner behavior includesSelector: #hash) not
 ]
 
 { #category : #accessing }
 GtDefinesEqualButNotHashCritic >> name [
 	^ 'Defines #= but not #hash'
+]
+
+{ #category : #accessing }
+GtDefinesEqualButNotHashCritic >> potentialFilter [
+	^ #= gtImplementors asAsyncStream
 ]
