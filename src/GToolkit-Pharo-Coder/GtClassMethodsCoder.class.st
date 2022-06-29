@@ -61,6 +61,11 @@ GtClassMethodsCoder >> classesFilter [
 	^ filter
 ]
 
+{ #category : #accessing }
+GtClassMethodsCoder >> codeGeneratorsAvailableFor: aMethodsCoderViewModel [
+	^ (self codeGeneratorsFor: aMethodsCoderViewModel) size > 0
+]
+
 { #category : #elements }
 GtClassMethodsCoder >> codeGeneratorsFor: aMethodsCoderUIModel [
 	^ GtPhlowViewsCollector new
