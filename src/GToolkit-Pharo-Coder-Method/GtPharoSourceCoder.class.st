@@ -255,7 +255,7 @@ GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 				ifTrue: [ aNode statements
 						select: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
 				ifFalse: [ {aNode} ] ]
-		ifNone: [ #() ]
+		ifNone: [ #() ] 
 ]
 
 { #category : #'api - actions' }
