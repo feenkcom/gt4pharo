@@ -37,6 +37,11 @@ GtPharoStreamingMethodsCoder >> classOrMetaClass [
 	^ self behavior
 ]
 
+{ #category : #accessing }
+GtPharoStreamingMethodsCoder >> codeGeneratorsAvailableFor: aMethodsCoderViewModel [
+	^ (self codeGeneratorsFor: aMethodsCoderViewModel) size > 0
+]
+
 { #category : #initialization }
 GtPharoStreamingMethodsCoder >> initialize [
 	super initialize.
