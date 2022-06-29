@@ -264,15 +264,9 @@ GtExtractMethodController >> setDefaultOptionsOn: aRefactoring [
 			selector: selector;
 			yourself ].
 
-	self
-		forPharo8: [
-			aRefactoring
-				setOption: #methodName
-				toUse: [ :ref :methodName | methodNameBlock value: ref value: methodName  ] ]
-		forPharo9: [
-			aRefactoring
-				setOption: #methodName
-				toUse: [ :methodName | methodNameBlock value: aRefactoring value: methodName  ] ].
+	aRefactoring
+		setOption: #methodName
+		toUse: [ :methodName | methodNameBlock value: aRefactoring value: methodName ].
 	
 	aRefactoring
 		setOption: #useExistingMethod
@@ -293,15 +287,10 @@ GtExtractMethodController >> setPreviewOptionsOn: aRefactoring [
 			arguments: methodArguments;
 			yourself ].
 
-	self
-		forPharo8: [
-			aRefactoring
-				setOption: #methodName
-				toUse: [ :ref :methodName | methodNameBlock value: ref value: methodName  ] ]
-		forPharo9: [
-			aRefactoring
-				setOption: #methodName
-				toUse: [ :methodName | methodNameBlock value: aRefactoring value: methodName  ] ].
+
+	aRefactoring
+		setOption: #methodName
+		toUse: [ :methodName | methodNameBlock value: aRefactoring value: methodName ].
 
 
 	aRefactoring
