@@ -66,6 +66,53 @@ GtPharoBehaviorCoderElement >> browseClassReferences [
 ]
 
 { #category : #'building ui' }
+GtPharoBehaviorCoderElement >> buildAdviceDropDownFor: aContainer [
+	behaviorCoderViewModel behavior
+		ifNotNil: [ :class | 
+			| adviceStream |
+			adviceStream := (GtAdvice asyncAdviceStreamForClass: class) cached.
+			(adviceStream asyncSimilarCopy hasNext
+				then: [ :bool | 
+					bool
+						ifTrue: [ aContainer
+								enqueueTask: (BlTaskAction new
+										action: [ aContainer
+												addChild: (self buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ]) await ]
+]
+
+{ #category : #'building ui' }
+GtPharoBehaviorCoderElement >> buildAdviceListFor: anAsyncStream [
+	| button dropDownAptitude |
+	button := GtFixItButton new.
+	button beTinySize.
+	button label: 'Advice'.
+	dropDownAptitude := BrGlamorousWithDropdownAptitude
+			handle: [ | dropdownButton |
+				dropdownButton := BrButton new.
+				dropdownButton beTinySize.
+				dropdownButton
+					aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+							- BrGlamorousButtonExteriorAptitude.
+				dropdownButton icon: BrGlamorousVectorIcons repair.
+				dropdownButton ]
+			content: [ | element |
+				element := BrSimpleList new.
+				element padding: (BlInsets all: 3).
+				element vFitContentLimited.
+				element hExact: 300.
+				element
+					itemsProvider: (BrListStreamItemsProvider new
+							preloadAmount: 1;
+							stream: anAsyncStream asyncSimilarCopy);
+					stencil: [ :eachImage | eachImage buildElementFor: button ].
+				element ].
+	button aptitude: BrGlamorousButtonWithIconAptitude + dropDownAptitude.
+	button icon: BrGlamorousVectorIcons repair.
+	button margin: (BlInsets left: 5).
+	^ button
+]
+
+{ #category : #'building ui' }
 GtPharoBehaviorCoderElement >> buildClassLabel [
 	| classCoder aClassNameEditor aContainer aPreviewButton removeClassButton |
 	classCoder := behaviorCoderViewModel coder.
@@ -130,6 +177,8 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 	aContainer addChild: aClassNameEditor.
 	aContainer addChild: removeClassButton.
 
+	self buildAdviceDropDownFor: aContainer.
+	
 	^ aContainer
 ]
 
