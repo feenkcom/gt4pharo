@@ -3,70 +3,94 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'priorAdvice',
-		'creator'
+		'creator',
+		'name',
+		'description',
+		'priority',
+		'actions'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Advice'
 }
 
 { #category : #accessing }
+GtAdvice class >> adviceFor: anObject [
+	| pragmas |
+	pragmas := self advicePragmasFor: anObject.
+	^ ((pragmas collect: [ :each | each methodSelector ]) asSet
+		collect: [ :each | anObject perform: each with: self none ])
+		asSortedCollection: [ :a :b | a priority < b priority ]
+]
+
+{ #category : #accessing }
+GtAdvice class >> adviceForClass: aClass [
+	| advice |
+	advice := self adviceFor: aClass instanceSide.
+	advice addAll: (self adviceFor: aClass classSide).
+	^ advice
+]
+
+{ #category : #accessing }
 GtAdvice class >> advicePragmasFor: anObject [
 	^ Pragma
-		allNamed: #gtAdvice:
+		allNamed: #gtAdvice
 		from: anObject class
 		to: ProtoObject
 ]
 
-{ #category : #accessing }
-GtAdvice class >> asyncAdviceStreamFor: anObject [
-	| pragmas |
-	pragmas := (self advicePragmasFor: anObject)
-			asSortedCollection: [ :a :b | a arguments first < b arguments first ].
-	^ ((pragmas asAsyncStream collect: [ :each | each methodSelector ])
-		withoutDuplicates collect: [ :each | anObject perform: each with: self none ])
-		select: [ :each | each isNone not ]
-]
-
-{ #category : #accessing }
-GtAdvice class >> asyncAdviceStreamForClass: aClass [
-	| pragmas |
-	pragmas := OrderedCollection new.
-	(self advicePragmasFor: aClass instanceSide)
-		do: [ :each | 
-			pragmas
-				add: {each.
-						aClass instanceSide} ].
-	(self advicePragmasFor: aClass classSide)
-		do: [ :each | 
-			pragmas
-				add: {each.
-						aClass classSide} ].
-	pragmas
-		sort: [ :a :b | 
-			a first arguments first < b first arguments first
-				or: [ a first arguments first = b first arguments first
-						and: [ a last isInstanceSide ] ] ].
-	^ ((pragmas asAsyncStream
-		collect: [ :each | 
-			{each last.
-				each first methodSelector} ]) withoutDuplicates
-		collect: [ :each | each first perform: each last with: self none ])
-		select: [ :each | each isNone not ]
-]
-
-{ #category : #'instace creation' }
+{ #category : #'instance creation' }
 GtAdvice class >> none [
 	^ GtNoAdvice new
 ]
 
-{ #category : #'instace creation' }
+{ #category : #'instance creation' }
 GtAdvice class >> on: aGtAdvice [
 	^ self new
 		priorAdvice: aGtAdvice;
 		yourself
 ]
 
+{ #category : #accessing }
+GtAdvice >> actions [
+	^ actions
+]
+
+{ #category : #accessing }
+GtAdvice >> actions: aBlock [
+	actions := aBlock
+]
+
 { #category : #ui }
 GtAdvice >> buildActionsIn: anElement for: aButton [
+	| adviceActions |
+	adviceActions := (actions cull: self result)
+			ifNil: [ ^ self ]
+			ifNotNil: [ :a | a asOrderedCollection ].
+	adviceActions isEmpty ifTrue: [ ^ self ].
+	anElement
+		addChild: (BrSimpleList new
+				padding: (BlInsets left: 20);
+				stencil: [ :each | 
+					| element |
+					element := BrHorizontalPane new
+							hMatchParent;
+							vFitContent;
+							addAptitude: (BrStyleCommonAptitude new
+									hovered: [ :aStyle | aStyle background: aButton theme button defaultBorderColor ]);
+							padding: (BlInsets all: 5);
+							when: BlClickEvent
+								do: [ :anEvent | 
+									anEvent consumed: true.
+									each executeOn: aButton.
+									aButton fireEvent: BrDropdownHideWish new.
+									aButton fireEvent: BrContextMenuHideWish new ];
+							addChild: (BrLabel new
+									aptitude: BrGlamorousLabelAptitude;
+									text: each title glamorousCodeSmallSize;
+									yourself).
+					element ];
+				hMatchParent;
+				vFitContentLimited;
+				items: adviceActions)
 ]
 
 { #category : #ui }
@@ -110,25 +134,57 @@ GtAdvice >> buildElementFor: aButton [
 ]
 
 { #category : #accessing }
+GtAdvice >> creator [
+	^ creator
+]
+
+{ #category : #accessing }
 GtAdvice >> description [
-	^ self subclassResponsibility
+	^ (description isBlock
+		ifTrue: [ self hasAdvice ifTrue: [ description cull: self result ] ifFalse: [ '' ] ]
+		ifFalse: [ description ]) asRopedText
+]
+
+{ #category : #accessing }
+GtAdvice >> description: aBlockOrText [
+	description := aBlockOrText
 ]
 
 { #category : #testing }
-GtAdvice >> isNone [
+GtAdvice >> hasAdvice [
 	^ false
+]
+
+{ #category : #initialization }
+GtAdvice >> initialize [
+	super initialize.
+	priority := SmallInteger maxVal.
+	actions := [ :result | #() ]
+]
+
+{ #category : #advice }
+GtAdvice >> item [
+	^ GtItemAdvice on: self
+]
+
+{ #category : #advice }
+GtAdvice >> list [
+	^ GtListAdvice on: self
 ]
 
 { #category : #accessing }
 GtAdvice >> name [
-	^ self subclassResponsibility
+	^ name
 ]
 
-{ #category : #advising }
+{ #category : #accessing }
+GtAdvice >> name: aString [
+	name := aString
+]
+
+{ #category : #advice }
 GtAdvice >> none [
-	^ GtNoAdvice new
-		priorAdvice: self;
-		yourself
+	^ GtNoAdvice on: self
 ]
 
 { #category : #printing }
@@ -147,13 +203,28 @@ GtAdvice >> priorAdvice: aGtAdvice [
 	self setCreator
 ]
 
+{ #category : #accessing }
+GtAdvice >> priority [
+	^ priority
+]
+
+{ #category : #accessing }
+GtAdvice >> priority: anInteger [
+	priority := anInteger
+]
+
+{ #category : #accessing }
+GtAdvice >> result [
+	^ nil
+]
+
 { #category : #private }
 GtAdvice >> setCreator [
 	| current pragmas |
 	current := thisContext.
 	[ current notNil ]
 		whileTrue: [ pragmas := current method pragmas.
-			(pragmas anySatisfy: [ :each | each selector = #gtAdvice: ])
+			(pragmas anySatisfy: [ :each | each selector = #gtAdvice ])
 				ifTrue: [ ^ creator := current method ].
 			current := current sender ]
 ]

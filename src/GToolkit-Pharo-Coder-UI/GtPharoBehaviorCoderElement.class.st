@@ -70,14 +70,15 @@ GtPharoBehaviorCoderElement >> buildAdviceDropDownFor: aContainer [
 	behaviorCoderViewModel behavior
 		ifNotNil: [ :class | 
 			| adviceStream |
-			adviceStream := (GtAdvice asyncAdviceStreamForClass: class) cached.
+			adviceStream := ((GtAdvice adviceForClass: class) asAsyncStream
+					select: [ :each | each hasAdvice ]) cached.
 			(adviceStream asyncSimilarCopy hasNext
 				then: [ :bool | 
 					bool
 						ifTrue: [ aContainer
 								enqueueTask: (BlTaskAction new
-										action: [ aContainer
-												addChild: (self buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ]) await ]
+										action: [ aContainer addChild: (self buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ])
+				await ]
 ]
 
 { #category : #'building ui' }
