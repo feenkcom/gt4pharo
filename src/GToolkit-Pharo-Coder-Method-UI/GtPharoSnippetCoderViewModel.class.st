@@ -145,5 +145,5 @@ GtPharoSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
 
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> updateCompletionBindings [
-	completionStrategy ifNotNil: [ completionStrategy bindings: self localSnippetVariableBindings  ]
+	self completionStrategy bindings: self localSnippetVariableBindings
 ]
