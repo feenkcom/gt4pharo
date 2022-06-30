@@ -201,7 +201,7 @@ GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
 		node := GlobalCache remove: global name weight: 1.
 		(seen includes: global)
 			ifFalse: [ seen add: global.
-				node removeReference: aMethod ] ].
+				node ifNotNil: [ node removeReference: aMethod ] ] ].
 	selectorBlock := [ :selector :count | 
 		(SelectorCache remove: selector weight: count)
 			ifNotNil: [ :node | 
@@ -210,7 +210,8 @@ GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
 						node removeReference: aMethod ] ].
 		selector first isUppercase
 			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
-	aMethod pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
+	aMethod
+		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
 		messageSendsIn: aMethod
 		doReferences: selectorBlock
