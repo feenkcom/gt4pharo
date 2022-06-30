@@ -123,9 +123,9 @@ GtMessageSendIterator >> processNormalSends [
 			(#(#send:super:numArgs: #directedSuperSend:numArgs:)
 				includes: instruction selector)
 				ifTrue: [ referencesBlock value: instruction arguments first value: 1 ]
-				ifFalse: [ #jump: = instruction selector
+				ifFalse: [ #jump:withInterpreter: = instruction selector
 						ifTrue: [ self jump: instruction arguments first ]
-						ifFalse: [ #jump:if: = instruction selector
+						ifFalse: [ #jump:if:withInterpreter: = instruction selector
 								ifTrue: [ self conditionalJump: instruction arguments first ]
 								ifFalse: [ #pushConstant: = instruction selector
 										ifTrue: [ self pushLiteral: instruction arguments first ]
