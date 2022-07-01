@@ -100,7 +100,8 @@ GtAdvice >> buildElementFor: aButton [
 	pane := BrVerticalPane new.
 	pane
 		hMatchParent;
-		vFitContent.
+		vFitContent;
+		margin: (BlInsets top: 5 bottom: 5).
 
 	self
 		resultsDo: [ :each | 
