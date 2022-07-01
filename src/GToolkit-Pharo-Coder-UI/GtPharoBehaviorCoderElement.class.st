@@ -153,7 +153,7 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 		margin: (BlInsets left: 5);
 		refactorings: [ { RBRenameClassRefactoring
 			model: RBNamespace new
-			rename: classCoder theClass
+			rename: classCoder theClass name
 			to: aClassNameEditor text asString } ];
 		when: GtRefactoringsAppliedEvent do: [ :anEvent |
 			aClassNameEditor text asString trimBoth asSymbol = classCoder name
