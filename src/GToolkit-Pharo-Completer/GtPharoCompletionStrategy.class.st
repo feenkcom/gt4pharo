@@ -85,9 +85,46 @@ GtPharoCompletionStrategy class >> classRemoved: anAnnouncement [
 
 { #category : #private }
 GtPharoCompletionStrategy class >> classRenamed: anAnnouncement [
-	GlobalCache
-		remove: anAnnouncement oldName;
-		add: anAnnouncement newName
+	| node oldRefs addedRefs |
+	"First remove the old entry"
+	node := GlobalCache nodeFor: anAnnouncement oldName.
+	oldRefs := (node ifNotNil: [ node references ])
+			ifNil: [ #() ]
+			ifNotNil: [ :refs | refs asOrderedCollection ].
+	node
+		ifNotNil: [ GlobalCache remove: anAnnouncement oldName weight: node weight ].
+		
+	"Add new entry"
+	node := GlobalCache add: anAnnouncement newName weight: 1.
+	addedRefs := IdentitySet new.
+	
+	"Update methods that have the variable reference to point to new variable. 
+	At this point the source of the method and the method itself are out of sync. 
+	The source of the method will have the old name and the method will have the renamed class."
+	oldRefs
+		do: [ :each | 
+			GtMessageSendIterator
+				messageSendsIn: each
+				doReferences: [ :selector :count |  ]
+				andGlobals: [ :global | 
+					global name = anAnnouncement newName
+						ifTrue: [ GlobalCache add: anAnnouncement newName weight: 1.
+							(addedRefs includes: each)
+								ifFalse: [ addedRefs add: each.
+									node addReference: each ] ] ] ].
+	
+	"Finally, any symbol references to the new name should be marked as class references."
+	(self sendersOf: anAnnouncement newName)
+		do: [ :each | 
+			GtMessageSendIterator
+				messageSendsIn: each
+				doReferences: [ :selector :count | 
+					selector = anAnnouncement newName
+						ifTrue: [ GlobalCache add: anAnnouncement newName weight: count.
+							(addedRefs includes: each)
+								ifFalse: [ addedRefs add: each.
+									node addReference: each ] ] ]
+				andGlobals: [ :global |  ] ]
 ]
 
 { #category : #accessing }
@@ -140,10 +177,8 @@ GtPharoCompletionStrategy class >> methodAdded: anAnnouncement [
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodModified: anAnnouncement [
-	SelectorCache
-		nodeFor: anAnnouncement newMethod selector
-		startingAt: 1
-		do: [ :node :ignore | 
+	(SelectorCache nodeFor: anAnnouncement newMethod selector)
+		ifNotNil: [ :node | 
 			node
 				removeImplementer: anAnnouncement oldMethod;
 				addImplementer: anAnnouncement newMethod ].
