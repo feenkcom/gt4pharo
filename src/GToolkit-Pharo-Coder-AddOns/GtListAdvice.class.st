@@ -33,3 +33,8 @@ GtListAdvice >> initialize [
 GtListAdvice >> result [
 	^ items ifNil: [ items := compute value ]
 ]
+
+{ #category : #enumerating }
+GtListAdvice >> resultsDo: aBlock [
+	self result do: aBlock
+]

@@ -5,25 +5,11 @@ Class >> gtClassVariableCase: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice list
 		priority: 30;
-		name: 'Class variable name should start with uppercase letters';
-		description: [ :variables | 
-			(self name asString , ' has class variable'
-				, (variables size > 1 ifTrue: [ 's' ] ifFalse: [ '' ]) , ' that start'
-				, (variables size = 1 ifTrue: [ 's' ] ifFalse: [ '' ])
-				, ' with lowercase letters '
-				, (String
-						streamContents: [ :stream | 
-							stream nextPutAll: '('.
-							variables
-								do: [ :each | stream nextPutAll: each ]
-								separatedBy: [ stream nextPutAll: ', ' ].
-							stream nextPutAll: ').' ])) asRopedText ];
+		description: [ :each | (each , ' should start with an uppercase letter') asRopedText ];
 		compute: [ self classVarNames select: [ :each | each first isLowercase ] ];
-		actions: [ :variables | 
-			variables
-				select: [ :each | self classVarNames includes: each ]
-				thenCollect: [ :each | 
-					GtRenameClassVariableAdviceAction
+		action: [ :each | 
+			(self classVarNames includes: each)
+				ifTrue: [ GtRenameClassVariableAdviceAction
 						rename: each
 						to: each first asUppercase asString , each allButFirst
 						in: self ] ]
@@ -50,10 +36,7 @@ Class >> gtNotReferenced: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice item
 		priority: 10;
-		name: 'Class not referenced';
-		description: [ :class | 
-			(class name asString
-				, ' is not referenced and has no subclasses. If it isn''t referenced using reflection (e.g., allSubclasses) then it can be removed.')
-				asRopedText ];
-		compute: [ self gtIsReferenced ifFalse: [ self ] ]
+		description: [ :class | (class name asString , ' is not referenced') asRopedText ];
+		compute: [ self gtIsReferenced ifFalse: [ self ] ];
+		action: [ :class | class isObsolete ifFalse: [ GtRemoveClassAdviceAction remove: class ] ]
 ]
