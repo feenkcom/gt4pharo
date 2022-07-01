@@ -50,6 +50,12 @@ GtAdvice class >> on: aGtAdvice [
 ]
 
 { #category : #accessing }
+GtAdvice >> action: aBlock [
+	self
+		actions: [ :each | (aBlock cull: each) ifNil: [ #() ] ifNotNil: [ :item | {item} ] ]
+]
+
+{ #category : #accessing }
 GtAdvice >> actions [
 	^ actions
 ]
@@ -60,15 +66,10 @@ GtAdvice >> actions: aBlock [
 ]
 
 { #category : #ui }
-GtAdvice >> buildActionsIn: anElement for: aButton [
-	| adviceActions |
-	adviceActions := (actions cull: self result)
-			ifNil: [ ^ self ]
-			ifNotNil: [ :a | a asOrderedCollection ].
+GtAdvice >> buildActions: adviceActions in: anElement for: aButton [
 	adviceActions isEmpty ifTrue: [ ^ self ].
 	anElement
 		addChild: (BrSimpleList new
-				padding: (BlInsets left: 20);
 				stencil: [ :each | 
 					| element |
 					element := BrHorizontalPane new
@@ -100,36 +101,34 @@ GtAdvice >> buildElementFor: aButton [
 	pane
 		hMatchParent;
 		vFitContent.
-	text := self name asRopedText.
-	labelText := BrEditor new
-			vFitContent;
-			aptitude: BrGlamorousRegularEditorAptitude new glamorousCodeSmallSize;
-			text: text.
-	pane addChild: labelText.
 
-	text := self description asRopedText
-			foreground: BrGlamorousColors disabledButtonTextColor.
-	creator
-		ifNotNil: [ browseAttribute := GtButtonAttribute new
-					beAppend;
-					stencil: [ BrButton new
-							aptitude: BrGlamorousButtonWithIconAptitude new;
-							beTinySize;
-							margin: (BlInsets left: 5);
-							icon: BrGlamorousVectorIcons browse;
-							action: [ aButton phlow spawnTool: (GtMethodCoderTool compiledMethod: creator) ];
-							label: 'Browse rule definition' ].
-			text
-				attribute: browseAttribute
-				from: text size
-				to: text size ].
-	labelText := BrEditor new
-			padding: (BlInsets left: 20);
-			vFitContent;
-			aptitude: BrGlamorousRegularEditorAptitude new glamorousCodeSmallSize;
-			text: text.
-	pane addChild: labelText.
-	self buildActionsIn: pane for: aButton.
+	self
+		resultsDo: [ :each | 
+			text := (self descriptionFor: each) asRopedText
+					foreground: BrGlamorousColors disabledButtonTextColor.
+			creator
+				ifNotNil: [ browseAttribute := GtButtonAttribute new
+							beAppend;
+							stencil: [ BrButton new
+									aptitude: BrGlamorousButtonWithIconAptitude new;
+									beTinySize;
+									margin: (BlInsets left: 5);
+									icon: BrGlamorousVectorIcons browse;
+									action: [ aButton phlow spawnTool: (GtMethodCoderTool compiledMethod: creator) ];
+									label: 'Browse rule definition' ].
+					text
+						attribute: browseAttribute
+						from: text size
+						to: text size ].
+			labelText := BrEditor new
+					vFitContent;
+					aptitude: BrGlamorousRegularEditorAptitude new glamorousCodeSmallSize;
+					text: text.
+			pane addChild: labelText.
+			self
+				buildActions: (actions cull: each)
+				in: pane
+				for: aButton ].
 	^ pane
 ]
 
@@ -140,14 +139,17 @@ GtAdvice >> creator [
 
 { #category : #accessing }
 GtAdvice >> description [
-	^ (description isBlock
-		ifTrue: [ self hasAdvice ifTrue: [ description cull: self result ] ifFalse: [ '' ] ]
-		ifFalse: [ description ]) asRopedText
+	^ description
 ]
 
 { #category : #accessing }
 GtAdvice >> description: aBlockOrText [
 	description := aBlockOrText
+]
+
+{ #category : #accessing }
+GtAdvice >> descriptionFor: anObject [
+	^ description cull: anObject
 ]
 
 { #category : #testing }
@@ -172,24 +174,9 @@ GtAdvice >> list [
 	^ GtListAdvice on: self
 ]
 
-{ #category : #accessing }
-GtAdvice >> name [
-	^ name
-]
-
-{ #category : #accessing }
-GtAdvice >> name: aString [
-	name := aString
-]
-
 { #category : #advice }
 GtAdvice >> none [
 	^ GtNoAdvice on: self
-]
-
-{ #category : #printing }
-GtAdvice >> printOn: aStream [
-	aStream nextPutAll: self name
 ]
 
 { #category : #accessing }
@@ -216,6 +203,10 @@ GtAdvice >> priority: anInteger [
 { #category : #accessing }
 GtAdvice >> result [
 	^ nil
+]
+
+{ #category : #enumerating }
+GtAdvice >> resultsDo: aBlock [
 ]
 
 { #category : #private }
