@@ -38,3 +38,8 @@ GtItemAdvice >> result [
 			hasComputed := true ].
 	^ value
 ]
+
+{ #category : #enumerating }
+GtItemAdvice >> resultsDo: aBlock [
+	self result ifNotNil: aBlock
+]

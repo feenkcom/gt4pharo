@@ -78,7 +78,7 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 { #category : #accessing }
 GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: sel [
 	| highlightNode |
-	((node isMessage or: [ node isMessageSend ]) or: [ node isMethodPattern ])
+	(node isMessage or: [ node isMessageSend  or: [ node isMethodPattern ] ])
 		ifFalse: [ ^ self ].
 	highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
 	coderAddOns
@@ -96,13 +96,12 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: no
 GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
 	(self nodeFrom: aCoderViewModel)
-		ifNotNil: [ :node |
-			node isMessage
-				ifTrue: [ self
-						addLinkMenuAddOnsTo: coderAddOns
-						label: 'Browse References'
-						node: node
-						selector: #browseReferencesAt: ] ]
+		ifNotNil: [ :node | 
+			self
+				addLinkMenuAddOnsTo: coderAddOns
+				label: 'Browse References'
+				node: node
+				selector: #browseReferencesAt: ]
 ]
 
 { #category : #'api - accessing' }

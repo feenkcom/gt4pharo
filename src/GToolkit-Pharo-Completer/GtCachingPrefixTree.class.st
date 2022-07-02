@@ -77,10 +77,8 @@ GtCachingPrefixTree >> implementers: aCollection [
 
 { #category : #accessing }
 GtCachingPrefixTree >> implementersOf: aString [
-	self
-		nodeFor: aString
-		startingAt: 1
-		do: [ :node :ignore | 
+	(self nodeFor: aString)
+		ifNotNil: [ :node | 
 			^ node implementers
 				ifNil: [ #() ]
 				ifNotNil: [ :refs | refs asOrderedCollection ] ].
@@ -99,10 +97,8 @@ GtCachingPrefixTree >> references: aCollection [
 
 { #category : #accessing }
 GtCachingPrefixTree >> referencesTo: aString [
-	self
-		nodeFor: aString
-		startingAt: 1
-		do: [ :node :ignore | ^ node references ifNil: [ #() ] ifNotNil: [ :refs | refs asOrderedCollection ] ].
+	(self nodeFor: aString)
+		ifNotNil: [ :node | ^ node references ifNil: [ #() ] ifNotNil: [ :refs | refs asOrderedCollection ] ].
 	^ #()
 ]
 
