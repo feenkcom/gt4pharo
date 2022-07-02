@@ -17,10 +17,12 @@ ManifestGToolkitPharoCoderMethodUI class >> mustNotDependOn [
 
 { #category : #accessing }
 ManifestGToolkitPharoCoderMethodUI class >> mustOnlyDependOn [
-	^ {
+		^ {
+		'Beacon-ExtraSignals'.
 		'Bloc'.
 		'Bloc-Layout'.
 		'Bloc-Text'.
+		'Bloc-Text-Elements'.
 		'Brick'.
 		'Brick-Core'.
 		'Brick-Editor'.
@@ -29,17 +31,19 @@ ManifestGToolkitPharoCoderMethodUI class >> mustOnlyDependOn [
 		'Collections-Unordered'.
 		'Colors'.
 		'Futures'.
+		'GToolkit-Clipboard'.
 		'GToolkit-Coder'.
+		'GToolkit-Coder-StreamingCoders'.
 		'GToolkit-Coder-StreamingCoders-UI'.
 		'GToolkit-Coder-UI'.
 		'GToolkit-Completer'.
 		'GToolkit-Pharo-Coder-Method'.
+		'GToolkit-Pharo-Completer'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-Phlow'.
 		'GToolkit-VariableBindings'.
 		'Kernel'.
-		'System-Clipboard'.
 		'TraitsV2'
 	}
 ]
@@ -52,6 +56,7 @@ ManifestGToolkitPharoCoderMethodUI class >> shouldDependOn [
 		'GToolkit-Coder-UI'.
 		'GToolkit-Completer'.
 		'GToolkit-Pharo-Coder-Method'.
+		'GToolkit-Pharo-Completer'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-VariableBindings'.

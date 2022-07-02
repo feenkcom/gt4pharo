@@ -144,7 +144,7 @@ GtPharoMethodCoderTagsElement >> newProtocolEditor [
 			do: [ :aWish | aWish currentTarget fireEvent: (BrDropdownHideWish new) ];
 		whenKey: BlKeyCombination primaryC
 			labelDo: [ :aShortcutEvent :aShortcut | 
-				Clipboard clipboardText: aShortcutEvent currentTarget text asString ].
+				GtClipboard clipboardText: aShortcutEvent currentTarget text asString ].
 	(GtCompletionController
 		on: anEditor
 		strategy: GtMethodProtocolCompletionStrategy new) install.

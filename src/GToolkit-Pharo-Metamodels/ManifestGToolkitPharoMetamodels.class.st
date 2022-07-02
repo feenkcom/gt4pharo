@@ -9,6 +9,8 @@ Class {
 
 { #category : #accessing }
 ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
+	"Please note that metamodels should be a low level package with as little dependencies on the
+	rest of GToolkit as possible. The package should definitely depend on UI."
 	^ {
 		'AST-Core'.
 		'Announcements-Core'.
@@ -19,6 +21,7 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'GToolkit-Pharo-System'.
 		'GToolkit-Utility-Refactorings'.
 		'Kernel'.
+		'Metacello-Base'.
 		'RPackage-Core'.
 		'Refactoring-Changes'.
 		'Refactoring-Core'.

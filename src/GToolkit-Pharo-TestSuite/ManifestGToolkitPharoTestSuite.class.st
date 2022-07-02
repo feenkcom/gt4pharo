@@ -9,11 +9,14 @@ Class {
 
 { #category : #accessing }
 ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
+	"Test suit extends 'GToolkit-Examples' to be able to differentiate between gt examples an test cases"
+
 	^ {
 		'Announcements-Core'.
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
 		'Futures'.
+		'GToolkit-Examples'.
 		'GToolkit-Pharo-SearchFilters'.
 		'Kernel'.
 		'SUnit-Core'
@@ -25,5 +28,7 @@ ManifestGToolkitPharoTestSuite class >> shouldDependOn [
 	^ {
 		'Futures'.
 		'GToolkit-Pharo-SearchFilters'.
+		'GToolkit-Examples'.
+		'SUnit-Core'
 	}
 ]
