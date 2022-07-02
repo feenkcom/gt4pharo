@@ -39,6 +39,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkitCompleter'
 					'GToolkit-Pharo-Parser'
 					'GToolkit-Pharo-System'). ];
+			package: 'GToolkit-Pharo-Completer-Examples' with: [
+				spec requires: #('GToolkit-Pharo-Completer'). ];
 			package: 'GToolkit-Pharo-TestSuite' with: [
 				spec requires: #(
 					'Futures'
