@@ -57,7 +57,7 @@ GtSearchReferencesFilter >> doesMethodIncludeBytecodeLiteral: aCompiledCode [
 	[ stream atEnd ]
 		whileFalse:
 			[ | instruction |
-			instruction := stream nextInstruction.
+			instruction := stream decodeNextInstruction.
 			(#methodReturnConstant: = instruction selector and: [ instruction arguments first == self object ]) ifTrue: [ ^ true ].
 			(#pushConstant: = instruction selector and: [ instruction arguments first == self object ])
 				ifTrue: [ ^ self checkMethodSource: aCompiledCode ] ].

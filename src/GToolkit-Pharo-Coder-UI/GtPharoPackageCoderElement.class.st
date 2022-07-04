@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoPackageCoderElement,
 	#superclass : #BrVerticalPane,
-	#traits : 'TGtPharoWithPackageCoderViewModel',
-	#classTraits : 'TGtPharoWithPackageCoderViewModel classTrait',
+	#traits : 'TGtPharoWithPackageCoderViewModel + TGtWithCoderToolbar',
+	#classTraits : 'TGtPharoWithPackageCoderViewModel classTrait + TGtWithCoderToolbar classTrait',
 	#instVars : [
 		'packageCoder'
 	],
@@ -77,6 +77,7 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 	container addChild: packageNameEditor.
 	container addChild: previewButton.
 	container addChild: unloadButton.
+	container addChild: self toolbarElement.
 
 	^ container
 ]
@@ -169,6 +170,7 @@ GtPharoPackageCoderElement >> coderViewModel: aGtPackageCoder [
 { #category : #initialization }
 GtPharoPackageCoderElement >> initialize [
 	super initialize.
+	self initializeToolbarElement.
 
 	self padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
 	self when: BlClickEvent do: [ self requestFocus ].

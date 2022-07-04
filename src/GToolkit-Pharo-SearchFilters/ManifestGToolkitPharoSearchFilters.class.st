@@ -9,10 +9,14 @@ Class {
 
 { #category : #accessing }
 ManifestGToolkitPharoSearchFilters class >> mustNotDependOn [
+	"Do not bring these dependencies back!"
+
 	^ { 
 		'GToolkit-Pharo-Coder'.
 		'GToolkit-Pharo-Coder-AddOns'.
 		'GToolkit-Pharo-Coder-UI'.
+		'GToolkit-Pharo-Completer'.
+		'GToolkit-Utility-Announcer'
 	}
 ]
 
@@ -20,11 +24,13 @@ ManifestGToolkitPharoSearchFilters class >> mustNotDependOn [
 ManifestGToolkitPharoSearchFilters class >> mustOnlyDependOn [
 	^ {
 		'AST-Core'.
+		'Announcements-Core'.
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
 		'Futures-Extra'.
 		'GToolkit-Pharo-System'.
 		'GToolkit-SearchFilters'.
+		'GToolkit-Utility-Basic'.
 		'Kernel'.
 		'RPackage-Core'
 	}

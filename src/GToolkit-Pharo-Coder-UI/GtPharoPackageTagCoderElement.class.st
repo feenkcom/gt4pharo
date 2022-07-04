@@ -1,6 +1,8 @@
 Class {
 	#name : #GtPharoPackageTagCoderElement,
 	#superclass : #BlElement,
+	#traits : 'TGtWithCoderToolbar',
+	#classTraits : 'TGtWithCoderToolbar classTrait',
 	#instVars : [
 		'packageTagCoder'
 	],
@@ -67,6 +69,7 @@ GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 	container addChild: tagNameEditor.
 	container addChild: previewButton.
 	container addChild: unloadButton.
+	container addChild: self toolbarElement.
 
 	^ container
 ]
@@ -141,6 +144,7 @@ GtPharoPackageTagCoderElement >> buildRemovePackageTagLabel [
 { #category : #initialization }
 GtPharoPackageTagCoderElement >> initialize [
 	super initialize.
+	self initializeToolbarElement.
 	self padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
 	self layout: BlLinearLayout vertical.
 	self

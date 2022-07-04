@@ -362,7 +362,7 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 	text attribute: (BlFontSizeAttribute size: 14) beNotOverwritableByStyler.
 	method := OrderedCollection >> #addAll:.
 	ast := GtPharoParser parse: method sourceCode.
-	styler := BrRBMethodBodyTextStyler new.
+	styler := GtPharoCompleterExamplesMethodBodyTextStyler new.
 	styler classOrMetaClass: method methodClass.
 	styler methodPatternSource: ast pattern source.
 	editor := BrTextEditorModel new.
