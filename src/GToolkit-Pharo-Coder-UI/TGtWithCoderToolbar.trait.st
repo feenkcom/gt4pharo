@@ -1,0 +1,21 @@
+Trait {
+	#name : #TGtWithCoderToolbar,
+	#instVars : [
+		'toolbarElement'
+	],
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
+}
+
+{ #category : #accessing }
+TGtWithCoderToolbar >> initializeToolbarElement [
+	toolbarElement := GtCoderToolbarElement new
+		constraintsDo: [ :c | 
+			c ignoreByLayout.
+			c ignored horizontal alignRight.
+			c ignored vertical alignTop ]
+]
+
+{ #category : #accessing }
+TGtWithCoderToolbar >> toolbarElement [
+	^ toolbarElement
+]
