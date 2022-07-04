@@ -33,7 +33,7 @@ GtMessageNotImplementedCritic >> matches: aNode from: aCriticRunner [
 	aCriticRunner hasRefactoring ifTrue: [ ^ self ].
 	receiverType := aCriticRunner typeOf: aNode parent receiver.
 	receiverType
-		ifNil: [ ^ (GtPharoCompletionStrategy implementersOf: aNode selector) isEmpty ].
+		ifNil: [ ^ (GtPharoIndex current implementersOf: aNode selector) isEmpty ].
 	^ (receiverType whichClassIncludesSelector: aNode selector) isNil
 		and: [ receiverType isTrait not
 				or: [ (Object whichClassIncludesSelector: aNode selector) isNil ] ]
@@ -66,7 +66,7 @@ GtMessageNotImplementedCritic >> potentialRenameActionsFor: aNode type: type usi
 											ifFalse: [ index := 0 ] ].
 								selectors size > 10 ifTrue: [ selectors removeLast ] ] ] ] ].
 	type
-		ifNil: [ GtPharoCompletionStrategy implementersDo: block ]
+		ifNil: [ GtPharoIndex current implementersDo: block ]
 		ifNotNil: [ (type allSelectors
 				addAll: (type isTrait ifTrue: [ Object allSelectors ] ifFalse: [ #() ]);
 				yourself) do: block ].
