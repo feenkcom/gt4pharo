@@ -24,7 +24,7 @@ GtMethodNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
 { #category : #testing }
 GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
 	(aNode isMethodPattern
-		and: [ (GtPharoCompletionStrategy sendersOf: aNode selector) isEmpty ])
+		and: [ (GtPharoIndex current sendersOf: aNode selector) isEmpty ])
 		ifFalse: [ ^ false ].
 	(aNode selector beginsWith: 'test')
 		ifTrue: [ (aCriticRunner behavior isMeta not
@@ -46,7 +46,7 @@ GtMethodNotUsedCritic >> name [
 GtMethodNotUsedCritic >> potentialFilter [
 	| methods |
 	methods := OrderedCollection new.
-	GtPharoCompletionStrategy
+	GtPharoIndex current
 		cachedSelectorsDo: [ :selector :implementers :senders | senders isEmpty ifTrue: [ methods addAll: implementers ] ].
 	^ (methods sorted: GtMethodsSortFunction new) asAsyncStream
 ]

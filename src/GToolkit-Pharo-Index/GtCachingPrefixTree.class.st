@@ -5,7 +5,7 @@ Class {
 		'references',
 		'implementers'
 	],
-	#category : #'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Index'
 }
 
 { #category : #accessing }

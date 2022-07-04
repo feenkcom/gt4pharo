@@ -33,7 +33,7 @@ GtSearchImplementorsFilter >> = anObject [
 { #category : #accessing }
 GtSearchImplementorsFilter >> defaultFilterScope [
 	| implementers |
-	implementers := GtPharoCompletionStrategy implementersOf: selector.
+	implementers := GtPharoIndex current implementersOf: selector.
 	
 	"50,000 items sort in less < 1/2 second so it should be quick enough for searching in coder"
 	implementers size < 50000
