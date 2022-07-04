@@ -119,7 +119,7 @@ GtMessageSendIterator >> processNormalSends [
 	instructionStream := InstructionStream on: code.
 	endPc := instructionStream method endPC.
 	[ instructionStream pc > endPc ]
-		whileFalse: [ instruction := instructionStream nextInstruction.
+		whileFalse: [ instruction := instructionStream decodeNextInstruction.
 			(#(#send:super:numArgs: #directedSuperSend:numArgs:)
 				includes: instruction selector)
 				ifTrue: [ referencesBlock value: instruction arguments first value: 1 ]
