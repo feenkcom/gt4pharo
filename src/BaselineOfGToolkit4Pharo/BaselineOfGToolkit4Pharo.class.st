@@ -33,10 +33,12 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #('SmaCC') ].
 		spec package: 'GToolkit-Pharo-Metamodels' with: [
 			spec requires: #('GToolkitRefactoringsUtility' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
+		spec package: 'GToolkit-Pharo-Index' with: [
+			spec requires: #('GToolkitCompleter') ].
 		spec package: 'GToolkit-Pharo-SearchFilters' with: [
-			spec requires: #('GToolkitCoder' 'GToolkit-Pharo-System') ].
+			spec requires: #('GToolkitCoder' 'GToolkit-Pharo-System' 'GToolkit-Pharo-Index') ].
 		spec package: 'GToolkit-Pharo-Completer' with: [
-			spec requires: #('SmaCC' 'GToolkitCompleter' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
+			spec requires: #('SmaCC' 'GToolkitCompleter' 'GToolkit-Pharo-Index' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Completer-Examples' with: [
 			spec requires: #('GToolkit-Pharo-Completer') ].
 		spec package: 'GToolkit-Pharo-TestSuite' with: [
