@@ -14,11 +14,11 @@ ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 		'Collections-Strings'.
 		'Collections-Unordered'.
 		'GToolkit-Completer'.
+		'GToolkit-Pharo-Index'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-System'.
 		'Kernel'.
 		'SmaCC_Runtime'.
-		'System-Announcements'
 	}
 ]
 
@@ -26,6 +26,7 @@ ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 ManifestGToolkitPharoCompleter class >> shouldDependOn [
 	^ {
 		'GToolkit-Completer'.
+		'GToolkit-Pharo-Index'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-System'.
 		'SmaCC_Runtime'.

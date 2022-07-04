@@ -12,7 +12,7 @@ Class {
 		'ConditionalSelectors',
 		'LoopSelectors'
 	],
-	#category : #'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Index'
 }
 
 { #category : #examples }
