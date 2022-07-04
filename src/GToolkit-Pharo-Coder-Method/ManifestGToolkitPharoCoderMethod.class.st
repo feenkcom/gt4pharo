@@ -27,12 +27,11 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Collections-Unordered'.
 		'Futures'.
 		'Futures-Extra'.
-		'GT-Inspector'.
 		'GToolkit-Coder'.
 		'GToolkit-Coder-StreamingCoders'.
 		'GToolkit-Completer'.
 		'GToolkit-Examples'.
-		'GToolkit-Pharo-Completer'.
+		'GToolkit-Inspector'.
 		'GToolkit-Pharo-Metamodels'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.
@@ -56,7 +55,6 @@ ManifestGToolkitPharoCoderMethod class >> shouldDependOn [
 		'GToolkit-Coder'.
 		'GToolkit-Coder-StreamingCoders'.
 		'GToolkit-Completer'.
-		'GToolkit-Pharo-Completer'.
 		'GToolkit-Pharo-Metamodels'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.

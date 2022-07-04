@@ -10,8 +10,6 @@ Class {
 { #category : #accessing }
 ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 	^ {
-		'Bloc-Text'.
-		'Brick-Editor'.
 		'Collections-Sequenceable'.
 		'Collections-Strings'.
 		'Collections-Unordered'.
