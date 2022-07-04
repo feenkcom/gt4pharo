@@ -76,11 +76,16 @@ GtPharoCompletionStrategy class >> classAdded: anAnnouncement [
 
 { #category : #private }
 GtPharoCompletionStrategy class >> classRemoved: anAnnouncement [
-	GlobalCache
-		remove:
-			(anAnnouncement classRemoved name
-				copyReplaceAll: 'AnObsolete'
-				with: '')
+	| className |
+	className := anAnnouncement classRemoved name
+			copyReplaceAll: 'AnObsolete'
+			with: ''.
+	(GlobalCache nodeFor: className)
+		ifNotNil: [ :node | GlobalCache remove: className weight: node weight ].
+	anAnnouncement classRemoved instanceSide
+		methodsDo: [ :each | self removeMethodFromCache: each ].
+	anAnnouncement classRemoved classSide
+		methodsDo: [ :each | self removeMethodFromCache: each ]
 ]
 
 { #category : #private }
@@ -188,9 +193,7 @@ GtPharoCompletionStrategy class >> methodModified: anAnnouncement [
 
 { #category : #private }
 GtPharoCompletionStrategy class >> methodRemoved: anAnnouncement [
-	(SelectorCache remove: anAnnouncement method selector weight: 1)
-		ifNotNil: [ :node | node removeImplementer: anAnnouncement method ].
-	self removeSendsFrom: anAnnouncement method
+	self removeMethodFromCache: anAnnouncement method
 ]
 
 { #category : #'instance creation' }
@@ -225,6 +228,13 @@ GtPharoCompletionStrategy class >> processPragma: aPragma selectorsDo: selectorB
 			item isSymbol
 				ifTrue: [ item numArgs >= 0 ifTrue: [ selectorBlock cull: item cull: 1 ] ]
 				ifFalse: [ item isArray ifTrue: [ todo addAll: item ] ] ]
+]
+
+{ #category : #private }
+GtPharoCompletionStrategy class >> removeMethodFromCache: method [
+	(SelectorCache remove: method selector weight: 1)
+		ifNotNil: [ :node | node removeImplementer: method ].
+	self removeSendsFrom: method
 ]
 
 { #category : #private }
