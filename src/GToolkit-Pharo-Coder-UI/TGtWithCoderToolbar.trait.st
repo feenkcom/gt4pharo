@@ -16,6 +16,11 @@ TGtWithCoderToolbar >> initializeToolbarElement [
 ]
 
 { #category : #accessing }
+TGtWithCoderToolbar >> navigationModelForToolbar: aNavigationModel [
+	self toolbarElement navigationModel: aNavigationModel
+]
+
+{ #category : #accessing }
 TGtWithCoderToolbar >> toolbarElement [
 	^ toolbarElement
 ]
