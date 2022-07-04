@@ -52,6 +52,24 @@ GtPharoIndex >> addSendsFrom: aMethod [
 		andGlobals: globalBlock
 ]
 
+{ #category : #private }
+GtPharoIndex >> addSymbolReferencesTo: newClassName [	| addedRefs |
+	addedRefs := IdentitySet new.
+	(self sendersOf: newClassName)
+		do: [ :each | 
+			GtMessageSendIterator
+				messageSendsIn: each
+				doReferences: [ :selector :count | 
+					| node |
+					selector = newClassName
+						ifTrue: [ node := globalCache add: newClassName weight: count.
+							(addedRefs includes: each)
+								ifFalse: [ addedRefs add: each.
+									node addReference: each ] ] ]
+				andGlobals: [ :global |  ] ].
+	^ addedRefs
+]
+
 { #category : #accessing }
 GtPharoIndex >> cacheSizeInMemory [
 	^ globalCache gtSpecificSizeInMemory + selectorCache gtSpecificSizeInMemory
@@ -76,7 +94,8 @@ GtPharoIndex >> cachedSelectorsDo: aBlock [
 
 { #category : #private }
 GtPharoIndex >> classAdded: anAnnouncement [
-	globalCache add: anAnnouncement classAdded name
+	globalCache add: anAnnouncement classAdded name.
+	self addSymbolReferencesTo: anAnnouncement classAdded name
 ]
 
 { #category : #private }
@@ -86,7 +105,9 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 			copyReplaceAll: 'AnObsolete'
 			with: ''.
 	(globalCache nodeFor: className)
-		ifNotNil: [ :node | globalCache remove: className weight: node weight ].
+		ifNotNil: [ :node | 
+			node references: nil.
+			globalCache remove: className weight: node weight ].
 	anAnnouncement classRemoved instanceSide
 		methodsDo: [ :each | self removeMethodFromCache: each ].
 	anAnnouncement classRemoved classSide
@@ -95,18 +116,21 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> classRenamed: anAnnouncement [
-	| node oldRefs addedRefs |
+	| oldRefs addedRefs newClassName |
 	"First remove the old entry"
-	node := globalCache nodeFor: anAnnouncement oldName.
-	oldRefs := (node ifNotNil: [ node references ])
-			ifNil: [ #() ]
-			ifNotNil: [ :refs | refs asOrderedCollection ].
-	node
-		ifNotNil: [ globalCache remove: anAnnouncement oldName weight: node weight ].
-		
+	(globalCache nodeFor: anAnnouncement oldName)
+		ifNil: [ oldRefs := #() ]
+		ifNotNil: [ :node | 
+			oldRefs := node references asOrderedCollection.
+			node references: nil.
+			globalCache remove: anAnnouncement oldName weight: node weight ].
+			
 	"Add new entry"
-	node := globalCache add: anAnnouncement newName weight: 1.
-	addedRefs := IdentitySet new.
+	newClassName := anAnnouncement newName.
+	globalCache add: newClassName weight: 1.
+	
+	"Any symbol references to the new name should be marked as class references."
+	addedRefs := self addSymbolReferencesTo: newClassName.
 	
 	"Update methods that have the variable reference to point to new variable. 
 	At this point the source of the method and the method itself are out of sync. 
@@ -117,24 +141,12 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 				messageSendsIn: each
 				doReferences: [ :selector :count |  ]
 				andGlobals: [ :global | 
-					global name = anAnnouncement newName
-						ifTrue: [ globalCache add: anAnnouncement newName weight: 1.
+					| node |
+					global name = newClassName
+						ifTrue: [ node := globalCache add: newClassName weight: 1.
 							(addedRefs includes: each)
 								ifFalse: [ addedRefs add: each.
-									node addReference: each ] ] ] ].
-	
-	"Finally, any symbol references to the new name should be marked as class references."
-	(self sendersOf: anAnnouncement newName)
-		do: [ :each | 
-			GtMessageSendIterator
-				messageSendsIn: each
-				doReferences: [ :selector :count | 
-					selector = anAnnouncement newName
-						ifTrue: [ globalCache add: anAnnouncement newName weight: count.
-							(addedRefs includes: each)
-								ifFalse: [ addedRefs add: each.
-									node addReference: each ] ] ]
-				andGlobals: [ :global |  ] ]
+									node addReference: each ] ] ] ]
 ]
 
 { #category : #accessing }
