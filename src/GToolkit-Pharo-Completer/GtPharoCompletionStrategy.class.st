@@ -21,6 +21,28 @@ Class {
 	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
+{ #category : #'instance creation' }
+GtPharoCompletionStrategy class >> newForExpression [
+	^ self new
+		isMethod: false;
+		yourself
+]
+
+{ #category : #'instance creation' }
+GtPharoCompletionStrategy class >> newForMethod [
+	^ self new
+		isMethod: true;
+		yourself
+]
+
+{ #category : #'instance creation' }
+GtPharoCompletionStrategy class >> newForSnippet [
+	^ self new
+		isMethod: false;
+		hasImplicitVariables: true;
+		yourself
+]
+
 { #category : #'private-variables' }
 GtPharoCompletionStrategy >> addBindingsTo: variableNames [
 	bindings ifNotNil: [ variableNames addAll: bindings bindingNames ]
