@@ -6,5 +6,5 @@ ProtoObject >> gtMetaFor: aView [
 	^ aView explicit
 		title: 'Meta';
 		priority: 200;
-		stencil: [ (GtPharoBehaviorCoder forObject: self) asElement navigationModelForToolbar: (GtCoderNavigationModel default selectClass: self class) ]
+		stencil: [ GtCoder forCoder: (GtPharoBehaviorCoder forObject: self) ]
 ]
