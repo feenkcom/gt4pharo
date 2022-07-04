@@ -1,6 +1,8 @@
 Class {
 	#name : #GtPharoBehaviorCoderElement,
 	#superclass : #BlElement,
+	#traits : 'TGtWithCoderToolbar',
+	#classTraits : 'TGtWithCoderToolbar classTrait',
 	#instVars : [
 		'container',
 		'contentPane',
@@ -180,6 +182,8 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 
 	self buildAdviceDropDownFor: aContainer.
 	
+	aContainer addChild: self toolbarElement.
+	
 	^ aContainer
 ]
 
@@ -309,6 +313,7 @@ GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source:
 { #category : #initialization }
 GtPharoBehaviorCoderElement >> initialize [
 	super initialize.
+	self initializeToolbarElement.
 
 	self
 		layout: BlLinearLayout vertical;
