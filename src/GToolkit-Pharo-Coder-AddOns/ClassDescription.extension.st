@@ -46,7 +46,7 @@ ClassDescription >> gtNonAbstractClassHasAbstractMethods: aGtAdvice [
 		compute: [ (self instanceSide isAbstract
 				or: [ self isTrait or: [ self subclasses notEmpty ] ])
 				ifTrue: [ #() ]
-				ifFalse: [ ((GtPharoCompletionStrategy sendersOf: #subclassResponsibility)
+				ifFalse: [ ((GtPharoIndex current sendersOf: #subclassResponsibility)
 						select: [ :each | each methodClass = self ]
 						thenCollect: [ :each | each selector ]) asSortedCollection ] ];
 		action: [ :each | 

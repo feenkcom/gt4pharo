@@ -21,181 +21,6 @@ Class {
 	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
-{ #category : #private }
-GtPharoCompletionStrategy class >> addSendsFrom: aMethod [
-	| seen globalBlock selectorBlock |
-	seen := Set new.
-	globalBlock := [ :global | 
-		| node |
-		node := GlobalCache add: global name weight: 1.
-		(seen includes: global)
-			ifFalse: [ seen add: global.
-				node addReference: aMethod ] ].
-	selectorBlock := [ :selector :count | 
-		| node |
-		node := SelectorCache add: selector weight: count.
-		(seen includes: selector)
-			ifFalse: [ seen add: selector.
-				node addReference: aMethod ].
-		selector first isUppercase
-			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
-	aMethod
-		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
-	GtMessageSendIterator
-		messageSendsIn: aMethod
-		doReferences: selectorBlock
-		andGlobals: globalBlock
-]
-
-{ #category : #accessing }
-GtPharoCompletionStrategy class >> cacheSizeInMemory [
-	^ GlobalCache gtSpecificSizeInMemory + SelectorCache gtSpecificSizeInMemory
-]
-
-{ #category : #iterating }
-GtPharoCompletionStrategy class >> cachedSelectorsDo: aBlock [
-	"Evaluate aBlock with the name of the selector, implementers of that selector, and senders of that selector, 
-	for all cached symbols in the image."
-
-	SelectorCache
-		do: [ :each :weight :node | 
-			aBlock
-				cull: each asSymbol
-				cull: (node implementers
-						ifNil: [ #() ]
-						ifNotNil: [ :i | i asOrderedCollection ])
-				cull: (node references
-						ifNil: [ #() ]
-						ifNotNil: [ :r | r asOrderedCollection ]) ]
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> classAdded: anAnnouncement [
-	GlobalCache add: anAnnouncement classAdded name
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> classRemoved: anAnnouncement [
-	| className |
-	className := anAnnouncement classRemoved name
-			copyReplaceAll: 'AnObsolete'
-			with: ''.
-	(GlobalCache nodeFor: className)
-		ifNotNil: [ :node | GlobalCache remove: className weight: node weight ].
-	anAnnouncement classRemoved instanceSide
-		methodsDo: [ :each | self removeMethodFromCache: each ].
-	anAnnouncement classRemoved classSide
-		methodsDo: [ :each | self removeMethodFromCache: each ]
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> classRenamed: anAnnouncement [
-	| node oldRefs addedRefs |
-	"First remove the old entry"
-	node := GlobalCache nodeFor: anAnnouncement oldName.
-	oldRefs := (node ifNotNil: [ node references ])
-			ifNil: [ #() ]
-			ifNotNil: [ :refs | refs asOrderedCollection ].
-	node
-		ifNotNil: [ GlobalCache remove: anAnnouncement oldName weight: node weight ].
-		
-	"Add new entry"
-	node := GlobalCache add: anAnnouncement newName weight: 1.
-	addedRefs := IdentitySet new.
-	
-	"Update methods that have the variable reference to point to new variable. 
-	At this point the source of the method and the method itself are out of sync. 
-	The source of the method will have the old name and the method will have the renamed class."
-	oldRefs
-		do: [ :each | 
-			GtMessageSendIterator
-				messageSendsIn: each
-				doReferences: [ :selector :count |  ]
-				andGlobals: [ :global | 
-					global name = anAnnouncement newName
-						ifTrue: [ GlobalCache add: anAnnouncement newName weight: 1.
-							(addedRefs includes: each)
-								ifFalse: [ addedRefs add: each.
-									node addReference: each ] ] ] ].
-	
-	"Finally, any symbol references to the new name should be marked as class references."
-	(self sendersOf: anAnnouncement newName)
-		do: [ :each | 
-			GtMessageSendIterator
-				messageSendsIn: each
-				doReferences: [ :selector :count | 
-					selector = anAnnouncement newName
-						ifTrue: [ GlobalCache add: anAnnouncement newName weight: count.
-							(addedRefs includes: each)
-								ifFalse: [ addedRefs add: each.
-									node addReference: each ] ] ]
-				andGlobals: [ :global |  ] ]
-]
-
-{ #category : #accessing }
-GtPharoCompletionStrategy class >> globalVariableReferencesTo: aVariable [
-	^ (GlobalCache referencesTo: aVariable name) asOrderedCollection
-]
-
-{ #category : #iterating }
-GtPharoCompletionStrategy class >> implementersDo: aBlock [
-	SelectorCache
-		do: [ :each :weight :node | (node implementers ifNil: [ #() ]) isEmpty ifFalse: [ aBlock value: each ] ]
-]
-
-{ #category : #accessing }
-GtPharoCompletionStrategy class >> implementersOf: aSelector [
-	^ SelectorCache implementersOf: aSelector
-]
-
-{ #category : #'class initialization' }
-GtPharoCompletionStrategy class >> initialize [
-	SelectorCache := GtPrefixTree new.
-	GlobalCache := GtPrefixTree new.
-]
-
-{ #category : #accessing }
-GtPharoCompletionStrategy class >> initializeCache [
-	| compactBlock |
-	self unsubscribeFromSystem.
-	SelectorCache := GtCachingPrefixTree new.
-	GlobalCache := GtCachingPrefixTree withAll: Smalltalk globals keys.
-	Smalltalk
-		allClassesDo: [ :each | 
-			each methodsDo: [ :method | self methodAdded: method ].
-			each class methodsDo: [ :method | self methodAdded: method ] ].
-	compactBlock := [ :each | 
-		each references isCollection
-			ifTrue: [ each references: each references asArray ] ].
-	SelectorCache allNodesDo: compactBlock.
-	GlobalCache allNodesDo: compactBlock.
-	self subscribeToSystem
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> methodAdded: anAnnouncement [
-	| node |
-	node := SelectorCache add: anAnnouncement method selector weight: 1.
-	node addImplementer: anAnnouncement method.
-	self addSendsFrom: anAnnouncement method
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> methodModified: anAnnouncement [
-	(SelectorCache nodeFor: anAnnouncement newMethod selector)
-		ifNotNil: [ :node | 
-			node
-				removeImplementer: anAnnouncement oldMethod;
-				addImplementer: anAnnouncement newMethod ].
-	self removeSendsFrom: anAnnouncement oldMethod.
-	self addSendsFrom: anAnnouncement newMethod
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> methodRemoved: anAnnouncement [
-	self removeMethodFromCache: anAnnouncement method
-]
-
 { #category : #'instance creation' }
 GtPharoCompletionStrategy class >> newForExpression [
 	^ self new
@@ -216,72 +41,6 @@ GtPharoCompletionStrategy class >> newForSnippet [
 		isMethod: false;
 		hasImplicitVariables: true;
 		yourself
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> processPragma: aPragma selectorsDo: selectorBlock [
-	| todo item |
-	selectorBlock cull: aPragma selector cull: 1.
-	todo := OrderedCollection with: aPragma arguments.
-	[ todo notEmpty ]
-		whileTrue: [ item := todo removeFirst.
-			item isSymbol
-				ifTrue: [ item numArgs >= 0 ifTrue: [ selectorBlock cull: item cull: 1 ] ]
-				ifFalse: [ item isArray ifTrue: [ todo addAll: item ] ] ]
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> removeMethodFromCache: method [
-	(SelectorCache remove: method selector weight: 1)
-		ifNotNil: [ :node | node removeImplementer: method ].
-	self removeSendsFrom: method
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> removeSendsFrom: aMethod [
-	| seen globalBlock selectorBlock |
-	seen := Set new.
-	globalBlock := [ :global | 
-		| node |
-		node := GlobalCache remove: global name weight: 1.
-		(seen includes: global)
-			ifFalse: [ seen add: global.
-				node ifNotNil: [ node removeReference: aMethod ] ] ].
-	selectorBlock := [ :selector :count | 
-		(SelectorCache remove: selector weight: count)
-			ifNotNil: [ :node | 
-				(seen includes: selector)
-					ifFalse: [ seen add: selector.
-						node removeReference: aMethod ] ].
-		selector first isUppercase
-			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
-	aMethod
-		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
-	GtMessageSendIterator
-		messageSendsIn: aMethod
-		doReferences: selectorBlock
-		andGlobals: globalBlock
-]
-
-{ #category : #accessing }
-GtPharoCompletionStrategy class >> sendersOf: aSelector [
-	^ (SelectorCache referencesTo: aSelector) asOrderedCollection
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> subscribeToSystem [
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded send: #methodAdded: to: self;
-		when: MethodModified send: #methodModified: to: self;
-		when: MethodRemoved send: #methodRemoved: to: self;
-		when: ClassAdded send: #classAdded: to: self;
-		when: ClassRemoved send: #classRemoved: to: self;
-		when: ClassRenamed send: #classRenamed: to: self
-]
-
-{ #category : #private }
-GtPharoCompletionStrategy class >> unsubscribeFromSystem [
-	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #'private-variables' }
@@ -404,7 +163,7 @@ GtPharoCompletionStrategy >> initialize [
 		withAll: #('self' 'true' 'false' 'nil' 'thisContext').
 	variables := GtCompositePrefixTree
 		trees:
-			{GlobalCache.
+			{GtPharoIndex current globalCache.
 			localVariables}
 ]
 
@@ -483,8 +242,12 @@ GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aStr
 { #category : #'private-selector' }
 GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aString alphabetical: aBoolean [
 	| tree |
-	tree := aBehavior notNil ifTrue: [ GtPrefixTree withAll: aBehavior allSelectors ] ifFalse: [ SelectorCache ].
-	^ aBoolean ifTrue: [ tree asyncStreamStartingWith: aString ] ifFalse: [ tree asyncWeightedStreamStartingWith: aString ]
+	tree := aBehavior notNil
+			ifTrue: [ GtPrefixTree withAll: aBehavior allSelectors ]
+			ifFalse: [ GtPharoIndex current selectorCache ].
+	^ aBoolean
+		ifTrue: [ tree asyncStreamStartingWith: aString ]
+		ifFalse: [ tree asyncWeightedStreamStartingWith: aString ]
 ]
 
 { #category : #'private-method' }

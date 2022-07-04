@@ -19,7 +19,7 @@ Class >> gtClassVariableCase: aGtAdvice [
 Class >> gtIsReferenced [
 	| methodBlock |
 	(self subclasses isEmpty
-		and: [ (GtPharoCompletionStrategy globalVariableReferencesTo: self binding) isEmpty ])
+		and: [ (GtPharoIndex current globalVariableReferencesTo: self binding) isEmpty ])
 		ifFalse: [ ^ true ].
 	self
 		withAllSuperclassesDo: [ :each | (#(BaselineOf SharedPool TestCase) includes: each name) ifTrue: [ ^ true ] ].
