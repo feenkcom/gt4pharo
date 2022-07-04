@@ -8,7 +8,7 @@ Class {
 	#classInstVars : [
 		'current'
 	],
-	#category : #'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Index'
 }
 
 { #category : #accessing }

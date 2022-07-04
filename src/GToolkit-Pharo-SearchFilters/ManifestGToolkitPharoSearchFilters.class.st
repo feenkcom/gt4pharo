@@ -28,6 +28,7 @@ ManifestGToolkitPharoSearchFilters class >> mustOnlyDependOn [
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
 		'Futures-Extra'.
+		'GToolkit-Pharo-Index'.
 		'GToolkit-Pharo-System'.
 		'GToolkit-SearchFilters'.
 		'GToolkit-Utility-Basic'.
