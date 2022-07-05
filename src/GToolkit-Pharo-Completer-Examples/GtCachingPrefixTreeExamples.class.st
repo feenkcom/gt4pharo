@@ -8,7 +8,7 @@ Class {
 GtCachingPrefixTreeExamples >> implementersExample [
 	<gtExample>
 	| tree |
-	tree := GtCachingPrefixTree new.
+	tree := GtReferencesAndImplementersPrefixTree new.
 	(tree add: 'asdf' weight: 1) addImplementer: thisContext method.
 	(tree add: 'bb' weight: 1) addImplementer: thisContext method.
 	self assert: (tree implementersOf: 'asd') isEmpty.
@@ -21,7 +21,7 @@ GtCachingPrefixTreeExamples >> implementersExample [
 GtCachingPrefixTreeExamples >> referencesExample [
 	<gtExample>
 	| tree |
-	tree := GtCachingPrefixTree new.
+	tree := GtReferencesPrefixTree new.
 	(tree add: 'asdf' weight: 1) addReference: thisContext method.
 	(tree add: 'bb' weight: 1) addReference: thisContext method.
 	self assert: (tree referencesTo: 'asd') isEmpty.
