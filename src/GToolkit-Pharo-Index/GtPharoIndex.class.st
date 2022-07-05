@@ -173,25 +173,21 @@ GtPharoIndex >> implementersOf: aSelector [
 { #category : #initialization }
 GtPharoIndex >> initialize [
 	super initialize.
-	selectorCache := GtCachingPrefixTree new.
-	globalCache := GtCachingPrefixTree new
+	selectorCache := GtReferencesAndImplementersPrefixTree new.
+	globalCache := GtReferencesPrefixTree new
 ]
 
 { #category : #initialization }
 GtPharoIndex >> initializeCache [
-	| compactBlock |
 	self unsubscribeFromSystem.
-	selectorCache := GtCachingPrefixTree new.
-	globalCache := GtCachingPrefixTree withAll: Smalltalk globals keys.
+	selectorCache := GtReferencesAndImplementersPrefixTree new.
+	globalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
 	Smalltalk
 		allClassesDo: [ :each | 
 			each methodsDo: [ :method | self methodAdded: method ].
 			each class methodsDo: [ :method | self methodAdded: method ] ].
-	compactBlock := [ :each | 
-		each references isCollection
-			ifTrue: [ each references: each references asArray ] ].
-	selectorCache allNodesDo: compactBlock.
-	globalCache allNodesDo: compactBlock.
+	selectorCache allNodesDo: #compressData.
+	globalCache allNodesDo: #compressData.
 	self subscribeToSystem
 ]
 
