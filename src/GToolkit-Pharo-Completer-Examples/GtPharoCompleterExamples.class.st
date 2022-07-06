@@ -189,6 +189,42 @@ GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completePragmaAtStart [
+	<gtExample>
+	| code stream |
+	code := 'a <  self foo'.
+	stream := self smalltalkStrategy
+			completionActionStreamFor: code asRopedText
+			at: 3
+			requested: true.
+	self
+		assert: (stream asyncSimilarCopy
+				select: [ :each | each displayText asString = 'gtExample' ]) hasNext wait.
+	self
+		assert: (stream asyncSimilarCopy
+				select: [ :each | each displayText asString = 'return:' ]) hasNext wait.
+	^ stream
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completePragmaInKeyword [
+	<gtExample>
+	| code stream |
+	code := 'a <g  self foo'.
+	stream := self smalltalkStrategy
+			completionActionStreamFor: code asRopedText
+			at: 4
+			requested: true.
+	self
+		assert: (stream asyncSimilarCopy
+				select: [ :each | each displayText asString = 'gtExample' ]) hasNext wait.
+	self
+		assert: (stream asyncSimilarCopy
+				select: [ :each | each displayText asString = 'return:' ]) hasNext wait not.
+	^ stream
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	<gtExample>
 	| aScripter text |

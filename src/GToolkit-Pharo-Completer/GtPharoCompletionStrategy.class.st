@@ -218,11 +218,8 @@ GtPharoCompletionStrategy >> parseSource: aString [
 GtPharoCompletionStrategy >> pragmas [
 	pragmas isNil
 		ifTrue: [ pragmas := GtPrefixTree new.
-			GtPharoSystemTraverser default
-				allClassesAndTraitsDo: [ :each | 
-					[ :cls | cls selectors do: [ :sel | (cls >> sel) pragmas do: [ :pragma | pragmas add: pragma selector ] ] ]
-						value: each;
-						value: each class ] ].
+			Pragma pragmaCache
+				keysAndValuesDo: [ :key :value | pragmas add: key weight: value size ] ].
 	^ pragmas
 ]
 
