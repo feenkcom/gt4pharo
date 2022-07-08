@@ -77,7 +77,9 @@ GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 GtPharoSourceCoder >> createLabel: aString description: description [
 	^ aString asRopedText
 		, ((' ' , description) asRopedText
-				attributes: {BlTextForegroundAttribute paint: Color gray})
+				fontName: 'Source Code Pro';
+				foreground: Color gray;
+				fontSize: 10)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
