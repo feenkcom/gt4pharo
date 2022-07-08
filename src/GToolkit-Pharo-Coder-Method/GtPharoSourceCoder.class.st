@@ -66,17 +66,20 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 { #category : #accessing }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
+	| mod |
+	mod := OSPlatform current defaultModifier name.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
 				label: 'Browse Implementors'
 				node: node
-				selector: #browseImplementorsAt: ]
+				selector: #browseImplementorsAt:
+				shortcutKey: mod, '-M' ]
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: sel [
+GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: sel shortcutKey: aString [
 	| highlightNode |
 	(node isMessage or: [ node isMessageSend  or: [ node isMethodPattern ] ])
 		ifFalse: [ ^ self ].
@@ -90,18 +93,22 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: no
 				to: highlightNode stopPosition ]
 		leave: self removeHighlightBlock
 		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition ]
+		shortcutKey: aString
 ]
 
 { #category : #accessing }
 GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
+	| mod |
+	mod := OSPlatform current defaultModifier name.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
 				label: 'Browse References'
 				node: node
-				selector: #browseReferencesAt: ]
+				selector: #browseReferencesAt:
+				shortcutKey: mod , '-N' ]
 ]
 
 { #category : #'api - accessing' }
