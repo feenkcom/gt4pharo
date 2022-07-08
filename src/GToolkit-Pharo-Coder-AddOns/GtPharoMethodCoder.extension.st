@@ -74,12 +74,12 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
-	| theNodes |
+	| theNodes mod |
+	mod := OSPlatform current defaultModifier name.
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
-		ifNotEmpty: [
-			(theNodes anySatisfy: [ :each | 
-				 each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ]) 
+		ifNotEmpty: [ (theNodes
+				anySatisfy: [ :each | each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ])
 				ifTrue: [ ^ self ].
 			coderAddOns
 				addContextMenuItem: 'Extract method'
@@ -90,7 +90,8 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 						to: theNodes last stopPosition ]
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | (GtExtractMethodController new sourceCoderViewModel: aTextualViewModel) execute ]
-				id: GtMethodCoderExtractMethodContextMenuItemId ]
+				id: GtMethodCoderExtractMethodContextMenuItemId
+				shortcutKey: mod , '-E' ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -394,15 +395,18 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
-	(aNode isVariable and: [self isLocalVariable: aNode]) ifFalse: [ ^ self ].
+	| mod |
+	mod := OSPlatform current defaultModifier name.
+	(aNode isVariable and: [ self isLocalVariable: aNode ]) ifFalse: [ ^ self ].
 	coderAddOns
 		addContextMenuItem: (self
-				 createLabel: 'Rename Local'
-				 description: aNode variableName)
+				createLabel: 'Rename Local'
+				description: aNode variableName)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
 		id: #'context-menu--rename-temp'
+		shortcutKey: mod , '-R'
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
