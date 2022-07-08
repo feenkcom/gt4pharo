@@ -121,7 +121,9 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 	(globalCache nodeFor: anAnnouncement oldName)
 		ifNil: [ oldRefs := #() ]
 		ifNotNil: [ :node | 
-			oldRefs := node references asOrderedCollection.
+			oldRefs := node references
+					ifNil: [ #() ]
+					ifFalse: [ :refs | refs asOrderedCollection ].
 			node references: nil.
 			globalCache remove: anAnnouncement oldName weight: node weight ].
 			
