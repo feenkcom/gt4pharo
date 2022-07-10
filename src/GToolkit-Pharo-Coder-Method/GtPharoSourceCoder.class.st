@@ -66,8 +66,6 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 { #category : #accessing }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
-	| mod |
-	mod := OSPlatform current defaultModifier name.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
@@ -75,7 +73,8 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 				label: 'Browse Implementors'
 				node: node
 				selector: #browseImplementorsAt:
-				shortcutKey: mod, '-M' ]
+				shortcutKey: GtSourceCoderBrowseImplementorsShortcut new
+						combinationForPlatform userPrintString ]
 ]
 
 { #category : #accessing }
@@ -99,8 +98,6 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: no
 { #category : #accessing }
 GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
-	| mod |
-	mod := OSPlatform current defaultModifier name.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
@@ -108,7 +105,8 @@ GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aC
 				label: 'Browse References'
 				node: node
 				selector: #browseReferencesAt:
-				shortcutKey: mod , '-N' ]
+				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
+						combinationForPlatform userPrintString ]
 ]
 
 { #category : #'api - accessing' }

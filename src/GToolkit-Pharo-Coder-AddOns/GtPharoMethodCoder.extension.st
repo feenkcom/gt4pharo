@@ -74,8 +74,7 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
-	| theNodes mod |
-	mod := OSPlatform current defaultModifier name.
+	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [ (theNodes
@@ -91,7 +90,8 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | (GtExtractMethodController new sourceCoderViewModel: aTextualViewModel) execute ]
 				id: GtMethodCoderExtractMethodContextMenuItemId
-				shortcutKey: mod , '-E' ]
+				shortcutKey: GtSourceCoderExtractMethodShortcut new combinationForPlatform
+						userPrintString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -395,8 +395,6 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
-	| mod |
-	mod := OSPlatform current defaultModifier name.
 	(aNode isVariable and: [ self isLocalVariable: aNode ]) ifFalse: [ ^ self ].
 	coderAddOns
 		addContextMenuItem: (self
@@ -406,7 +404,8 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
 		id: #'context-menu--rename-temp'
-		shortcutKey: mod , '-R'
+		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
+				userPrintString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
