@@ -67,11 +67,11 @@ GtPharoStreamingMethodsCoderElement >> buildWorkingIndicator [
 	list viewModel when: BrListModelItemsAddedEvent do: [ 
 		state := #paused.
 		updater requestUpdate ].
-	list viewModel when: BrListItemsProviderStartedLoadingEvent do: [ 
+	list viewModel when: BrItemsProviderStartedLoadingEvent do: [ 
 		state := #inProgress.
 		updater requestUpdate ].
 	list viewModel
-		when: BrListItemsProviderDoneEvent
+		when: BrItemsProviderDoneEvent
 		do: [ label removeFromParent ].
 
 	updater := BrElementUpdater new.
@@ -118,7 +118,7 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 
 	self matchParent.
 
-	listItemsProvider := BrListStreamItemsProvider new
+	listItemsProvider := BrStreamItemsProvider new
 		                     preloadAmount: self preloadAmount;
 		                     loadSinglesUntil: self loadSinglesUntil;
 		                     stream: AsyncEmptyStream new.
