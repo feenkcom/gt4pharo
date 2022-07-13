@@ -104,7 +104,7 @@ GtPharoBehaviorCoderElement >> buildAdviceListFor: anAsyncStream [
 				element vFitContentLimited.
 				element hExact: 300.
 				element
-					itemsProvider: (BrListStreamItemsProvider new
+					itemsProvider: (BrStreamItemsProvider new
 							preloadAmount: 1;
 							stream: anAsyncStream asyncSimilarCopy);
 					stencil: [ :eachImage | eachImage buildElementFor: button ].

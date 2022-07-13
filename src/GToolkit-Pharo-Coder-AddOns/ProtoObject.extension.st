@@ -28,7 +28,7 @@ ProtoObject >> gtAdviceActionFor: anAction [
 						element vFitContentLimited.
 						element hExact: 300.
 						element
-							itemsProvider: (BrListStreamItemsProvider new
+							itemsProvider: (BrStreamItemsProvider new
 									preloadAmount: 1;
 									stream: actionStream asyncSimilarCopy);
 							stencil: [ :eachImage | eachImage buildElementFor: button ].
