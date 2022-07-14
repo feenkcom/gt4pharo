@@ -24,6 +24,17 @@ GtReferencesAndImplementersPrefixTree >> compressData [
 	implementers isCollection ifTrue: [ implementers := implementers asArray ]
 ]
 
+{ #category : #accessing }
+GtReferencesAndImplementersPrefixTree >> gtImplementersAreInstalled: aGtAdvice [
+	<gtAdvice>
+	^ aGtAdvice asyncStream
+		description: [ :each | (each , ' has an implementer that is not installed') asRopedText ];
+		compute: [ (self asyncStreamStartingWith: '')
+				select: [ :each | 
+					(self nodeFor: each) implementersCollection
+						anySatisfy: [ :method | method gtIsActive not ] ] ]
+]
+
 { #category : #inspector }
 GtReferencesAndImplementersPrefixTree >> gtImplementersFor: aView [
 	<gtView>
@@ -34,6 +45,18 @@ GtReferencesAndImplementersPrefixTree >> gtImplementersFor: aView [
 				ifNotNil: [ implementers isCollection
 						ifTrue: [ implementers ]
 						ifFalse: [ Array with: implementers ] ] ]
+]
+
+{ #category : #inspector }
+GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
+	<gtAdvice>
+	^ aGtAdvice asyncStream
+		description: [ :each | (each , ' has duplicate implementer methods') asRopedText ];
+		compute: [ (self asyncStreamStartingWith: '')
+				select: [ :each | 
+					(self nodeFor: each) implementersCollection
+						ifEmpty: [ false ]
+						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ]
 ]
 
 { #category : #accessing }
@@ -52,6 +75,11 @@ GtReferencesAndImplementersPrefixTree >> implementers [
 { #category : #private }
 GtReferencesAndImplementersPrefixTree >> implementers: aCollection [
 	implementers := aCollection
+]
+
+{ #category : #accessing }
+GtReferencesAndImplementersPrefixTree >> implementersCollection [
+	^ implementers ifNil: [ #() ] ifNotNil: [ implementers asOrderedCollection ]
 ]
 
 { #category : #accessing }
