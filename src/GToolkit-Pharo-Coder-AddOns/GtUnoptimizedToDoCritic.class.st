@@ -36,7 +36,7 @@ GtUnoptimizedToDoCritic >> matches: aNode from: aCriticRunner [
 
 { #category : #accessing }
 GtUnoptimizedToDoCritic >> name [
-	^ 'to:do: not optimized'
+	^ 'to:{by:}do: not optimized'
 ]
 
 { #category : #enumerating }
