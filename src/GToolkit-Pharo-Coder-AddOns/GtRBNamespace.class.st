@@ -15,6 +15,21 @@ GtRBNamespace >> allReferencesTo: aSelector [
 ]
 
 { #category : #accessing }
+GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [ 
+	| rbMethod |
+	(GtPharoIndex current globalVariableReferencesTo: aRBClass) do: [ :method | 
+		rbMethod := (self classNamed: method methodClass name) methodFor: method selector.
+		aBlock value: rbMethod ].
+	
+	"self allClassesDo: 
+			[:each |
+			(each whichSelectorsReferToClass: aRBClass) 
+				do: [:sel | aBlock value: (each methodFor: sel)].
+			(each classSide whichSelectorsReferToClass: aRBClass) 
+				do: [:sel | aBlock value: (each classSide methodFor: sel)]]"
+]
+
+{ #category : #accessing }
 GtRBNamespace >> createNewClassFor: aBehavior [
 	| nonMeta meta className rbType rbMetaType category behaviorName |
 	className := aBehavior instanceSide name.
