@@ -113,3 +113,22 @@ GtReferencesPrefixTree >> removeReference: aMethod [
 	references class == OrderedCollection ifFalse: [ ^ self ].
 	references remove: aMethod ifAbsent: [  ]
 ]
+
+{ #category : #private }
+GtReferencesPrefixTree >> updateReference: aMethod [
+	references ifNil: [ ^ self addReference: aMethod ].
+	references isCompiledMethod
+		ifTrue: [ ^ (references methodClass = aMethod methodClass
+				and: [ references selector = aMethod selector ])
+				ifTrue: [ references := aMethod ]
+				ifFalse: [ self addReference: aMethod ] ].
+	1
+		to: references size
+		do: [ :i | 
+			| each |
+			each := references at: i.
+			(each methodClass = aMethod methodClass
+				and: [ each selector = aMethod selector ])
+				ifTrue: [ ^ references at: i put: aMethod ] ].
+	^ self addReference: aMethod
+]
