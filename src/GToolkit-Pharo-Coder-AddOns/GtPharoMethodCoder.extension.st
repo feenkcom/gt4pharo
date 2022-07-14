@@ -73,6 +73,34 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addEvaluateAddonsTo: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 100>
+	coderAddOns
+		addContextMenuItem: 'Evaluate' translated
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor doIt
+				coderViewModel: aCoderUIModel;
+				element: anElement;
+				execute ]
+		shortcutKey: GtSourceCoderDoItShortcut new combinationForPlatform
+				userPrintString.
+	coderAddOns
+		addContextMenuItem: 'Inspect' translated
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor doItAndGo
+				coderViewModel: aCoderUIModel;
+				element: anElement;
+				execute ]
+		shortcutKey: GtSourceCoderDoItAndInspectShortcut new combinationForPlatform
+				userPrintString.
+	coderAddOns
+		addContextMenuItem: 'Print' translated
+		action: [ :aCoderUIModel :anElement | GtCoderExecutionContextVariable element: anElement do: [ aCoderUIModel printIt ] ]
+		shortcutKey: GtSourceCoderPrintItShortcut new combinationForPlatform
+				userPrintString
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
@@ -705,7 +733,8 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderExtractMethodShortcut new;
 		addShortcut: GtSourceCoderSaveShortcut new;
 		addShortcut: GtSourceCoderInlineRenameShortcut new;
-		addShortcut: GtSourceCoderFixItShortcut new
+		addShortcut: GtSourceCoderFixItShortcut new;
+		addShortcut: GtSourceCoderPrintItShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
