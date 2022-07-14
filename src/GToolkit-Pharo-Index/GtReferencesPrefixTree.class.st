@@ -25,6 +25,29 @@ GtReferencesPrefixTree >> compressData [
 ]
 
 { #category : #inspector }
+GtReferencesPrefixTree >> gtNoDuplicateReferences: aGtAdvice [
+	<gtAdvice>
+	^ aGtAdvice asyncStream
+		description: [ :each | (each , ' has duplicate reference methods') asRopedText ];
+		compute: [ (self asyncStreamStartingWith: '')
+				select: [ :each | 
+					(self nodeFor: each) referencesCollection
+						ifEmpty: [ false ]
+						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ]
+]
+
+{ #category : #inspector }
+GtReferencesPrefixTree >> gtReferencesAreInstalled: aGtAdvice [
+	<gtAdvice>
+	^ aGtAdvice asyncStream
+		description: [ :each | (each , ' has a reference method that is not installed') asRopedText ];
+		compute: [ (self asyncStreamStartingWith: '')
+				select: [ :each | 
+					(self nodeFor: each) referencesCollection
+						anySatisfy: [ :method | method gtIsActive not ] ] ]
+]
+
+{ #category : #inspector }
 GtReferencesPrefixTree >> gtReferencesFor: aView [
 	<gtView>
 	^ aView list
@@ -59,6 +82,11 @@ GtReferencesPrefixTree >> references [
 { #category : #private }
 GtReferencesPrefixTree >> references: aCollection [
 	references := aCollection
+]
+
+{ #category : #accessing }
+GtReferencesPrefixTree >> referencesCollection [
+	^ references ifNil: [ #() ] ifNotNil: [ references asOrderedCollection ]
 ]
 
 { #category : #accessing }
