@@ -32,7 +32,8 @@ GtReferencesAndImplementersPrefixTree >> gtImplementersAreInstalled: aGtAdvice [
 		compute: [ (self asyncStreamStartingWith: '')
 				select: [ :each | 
 					(self nodeFor: each) implementersCollection
-						anySatisfy: [ :method | method gtIsActive not ] ] ]
+						anySatisfy: [ :method | method gtIsActive not ] ] ];
+		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
 { #category : #inspector }
@@ -56,7 +57,8 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 				select: [ :each | 
 					(self nodeFor: each) implementersCollection
 						ifEmpty: [ false ]
-						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ]
+						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ];
+		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
 { #category : #accessing }
@@ -104,4 +106,21 @@ GtReferencesAndImplementersPrefixTree >> removeImplementer: aMethod [
 		ifTrue: [ implementers := implementers asOrderedCollection ].
 	implementers class == OrderedCollection ifFalse: [ ^ self ].
 	implementers remove: aMethod ifAbsent: [  ]
+]
+
+{ #category : #accessing }
+GtReferencesAndImplementersPrefixTree >> updateImplementer: aMethod [
+	implementers ifNil: [ ^ self addImplementer: aMethod ].
+	implementers isCompiledMethod
+		ifTrue: [ ^ implementers methodClass = aMethod methodClass
+				ifTrue: [ implementers := aMethod ]
+				ifFalse: [ self addImplementer: aMethod ] ].
+	1
+		to: implementers size
+		do: [ :i | 
+			| each |
+			each := implementers at: i.
+			each methodClass = aMethod methodClass
+				ifTrue: [ ^ implementers at: i put: aMethod ] ].
+	^ self addImplementer: aMethod
 ]
