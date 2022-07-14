@@ -84,12 +84,8 @@ GtPharoIndex >> cachedSelectorsDo: aBlock [
 		do: [ :each :weight :node | 
 			aBlock
 				cull: each asSymbol
-				cull: (node implementers
-						ifNil: [ #() ]
-						ifNotNil: [ :i | i asOrderedCollection ])
-				cull: (node references
-						ifNil: [ #() ]
-						ifNotNil: [ :r | r asOrderedCollection ]) ]
+				cull: node implementersCollection
+				cull: node referencesCollection ]
 ]
 
 { #category : #private }
@@ -121,9 +117,7 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 	(globalCache nodeFor: anAnnouncement oldName)
 		ifNil: [ oldRefs := #() ]
 		ifNotNil: [ :node | 
-			oldRefs := node references
-					ifNil: [ #() ]
-					ifNotNil: [ :refs | refs asOrderedCollection ].
+			oldRefs := node referencesCollection.
 			node references: nil.
 			globalCache remove: anAnnouncement oldName weight: node weight ].
 			

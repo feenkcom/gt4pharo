@@ -48,8 +48,12 @@ GtMessageSendIterator class >> initialize [
 
 { #category : #processing }
 GtMessageSendIterator class >> messageSendsIn: aCompiledCode doReferences: aBlock andGlobals: globalsBlock [
+	| code |
+	code := aCompiledCode isCompiledMethod
+			ifTrue: [ aCompiledCode gtOriginalFFIMethod ]
+			ifFalse: [ aCompiledCode ].
 	self new
-		messageSendsIn: aCompiledCode
+		messageSendsIn: code
 		doReferences: aBlock
 		andGlobals: globalsBlock
 ]

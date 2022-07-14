@@ -65,6 +65,11 @@ GtAdvice >> actions: aBlock [
 	actions := aBlock
 ]
 
+{ #category : #advice }
+GtAdvice >> asyncStream [
+	^ GtAsyncStreamAdvice on: self
+]
+
 { #category : #ui }
 GtAdvice >> buildActions: adviceActions in: anElement for: aButton [
 	adviceActions isEmpty ifTrue: [ ^ self ].
