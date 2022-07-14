@@ -94,6 +94,32 @@ GtPharoIndex >> classAdded: anAnnouncement [
 	self addSymbolReferencesTo: anAnnouncement classAdded name
 ]
 
+{ #category : #accessing }
+GtPharoIndex >> classModified: anAnnouncement [
+	anAnnouncement classAffected
+		methodsDo: [ :method | 
+			| seen globalBlock selectorBlock |
+			(selectorCache nodeFor: method selector)
+				ifNotNil: [ :node | node updateImplementer: method ].
+			seen := Set new.
+			globalBlock := [ :global | 
+				(seen includes: global)
+					ifFalse: [ seen add: global.
+						(globalCache nodeFor: global name) updateReference: method ] ].
+			selectorBlock := [ :selector :count | 
+				(seen includes: selector)
+					ifFalse: [ seen add: selector.
+						(selectorCache nodeFor: selector) updateReference: method ].
+				selector first isUppercase
+					ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+			method
+				pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
+			GtMessageSendIterator
+				messageSendsIn: method
+				doReferences: selectorBlock
+				andGlobals: globalBlock ]
+]
+
 { #category : #private }
 GtPharoIndex >> classRemoved: anAnnouncement [
 	| className |
@@ -274,7 +300,8 @@ GtPharoIndex >> subscribeToSystem [
 		when: MethodRemoved send: #methodRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
-		when: ClassRenamed send: #classRenamed: to: self
+		when: ClassRenamed send: #classRenamed: to: self;
+		when: ClassModificationApplied send: #classModified: to: self
 ]
 
 { #category : #private }
