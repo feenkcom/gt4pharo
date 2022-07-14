@@ -33,7 +33,15 @@ GtReferencesPrefixTree >> gtNoDuplicateReferences: aGtAdvice [
 				select: [ :each | 
 					(self nodeFor: each) referencesCollection
 						ifEmpty: [ false ]
-						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ]
+						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ];
+		action: [ :each | self gtPhlowInspectNodeAction: each ]
+]
+
+{ #category : #inspector }
+GtReferencesPrefixTree >> gtPhlowInspectNodeAction: aString [
+	^ (GtPhlowObjectAdviceAction object: (self nodeFor: aString))
+		title: aString asRopedText;
+		yourself
 ]
 
 { #category : #inspector }
@@ -44,7 +52,8 @@ GtReferencesPrefixTree >> gtReferencesAreInstalled: aGtAdvice [
 		compute: [ (self asyncStreamStartingWith: '')
 				select: [ :each | 
 					(self nodeFor: each) referencesCollection
-						anySatisfy: [ :method | method gtIsActive not ] ] ]
+						anySatisfy: [ :method | method gtIsActive not ] ] ];
+		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
 { #category : #inspector }

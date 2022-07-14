@@ -32,7 +32,8 @@ GtReferencesAndImplementersPrefixTree >> gtImplementersAreInstalled: aGtAdvice [
 		compute: [ (self asyncStreamStartingWith: '')
 				select: [ :each | 
 					(self nodeFor: each) implementersCollection
-						anySatisfy: [ :method | method gtIsActive not ] ] ]
+						anySatisfy: [ :method | method gtIsActive not ] ] ];
+		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
 { #category : #inspector }
@@ -56,7 +57,8 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 				select: [ :each | 
 					(self nodeFor: each) implementersCollection
 						ifEmpty: [ false ]
-						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ]
+						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ];
+		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
 { #category : #accessing }
