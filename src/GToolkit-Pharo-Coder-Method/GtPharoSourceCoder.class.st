@@ -64,29 +64,6 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
-	coderAddOns
-		addContextMenuItem: 'Evaluate' translated
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor doIt
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		shortcutKey: GtSourceCoderDoItShortcut new combinationForPlatform
-				userPrintString.
-	coderAddOns
-		addContextMenuItem: 'Inspect' translated
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor doItAndGo
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		shortcutKey: GtSourceCoderDoItAndInspectShortcut new combinationForPlatform
-				userPrintString
-]
-
-{ #category : #accessing }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
 	(self nodeFrom: aCoderViewModel)
