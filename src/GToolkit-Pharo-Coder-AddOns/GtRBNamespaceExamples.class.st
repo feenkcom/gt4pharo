@@ -34,6 +34,7 @@ GtRBNamespaceExamples >> implementersOfPrintOnTheSameAsDefault [
 { #category : #accessing }
 GtRBNamespaceExamples >> rbClassesCategoriesMatchThoseInTheSystem [
 	<gtExample>
+	<noTest>
 	| model rb |
 	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
 	Smalltalk allClassesAndTraits
