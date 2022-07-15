@@ -28,26 +28,27 @@ GtPharoIndex class >> initializeCache [
 
 { #category : #private }
 GtPharoIndex >> addSendsFrom: aMethod [
-	| seen globalBlock selectorBlock |
+	| seen globalBlock selectorBlock method |
+	method := aMethod gtOriginalMethod.
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
 		node := globalCache add: global name weight: 1.
 		(seen includes: global)
 			ifFalse: [ seen add: global.
-				node addReference: aMethod ] ].
+				node addReference: method ] ].
 	selectorBlock := [ :selector :count | 
 		| node |
 		node := selectorCache add: selector weight: count.
 		(seen includes: selector)
 			ifFalse: [ seen add: selector.
-				node addReference: aMethod ].
+				node addReference: method ].
 		selector first isUppercase
 			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
-	aMethod
+	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
-		messageSendsIn: aMethod
+		messageSendsIn: method
 		doReferences: selectorBlock
 		andGlobals: globalBlock
 ]
@@ -97,19 +98,22 @@ GtPharoIndex >> classAdded: anAnnouncement [
 { #category : #accessing }
 GtPharoIndex >> classModified: anAnnouncement [
 	anAnnouncement classAffected
-		methodsDo: [ :method | 
-			| seen globalBlock selectorBlock |
+		methodsDo: [ :m | 
+			| seen globalBlock selectorBlock method |
+			method := m gtOriginalMethod.
 			(selectorCache nodeFor: method selector)
 				ifNotNil: [ :node | node updateImplementer: method ].
 			seen := Set new.
 			globalBlock := [ :global | 
 				(seen includes: global)
 					ifFalse: [ seen add: global.
-						(globalCache nodeFor: global name) updateReference: method ] ].
+						(globalCache nodeFor: global name)
+							ifNotNil: [ :node | node updateReference: method ] ] ].
 			selectorBlock := [ :selector :count | 
 				(seen includes: selector)
 					ifFalse: [ seen add: selector.
-						(selectorCache nodeFor: selector) updateReference: method ].
+						(selectorCache nodeFor: selector)
+							ifNotNil: [ :node | node updateReference: method ] ].
 				selector first isUppercase
 					ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
 			method
@@ -217,7 +221,7 @@ GtPharoIndex >> initializeCache [
 GtPharoIndex >> methodAdded: anAnnouncement [
 	| node |
 	node := selectorCache add: anAnnouncement method selector weight: 1.
-	node addImplementer: anAnnouncement method.
+	node addImplementer: anAnnouncement method gtOriginalMethod.
 	self addSendsFrom: anAnnouncement method
 ]
 
@@ -226,8 +230,8 @@ GtPharoIndex >> methodModified: anAnnouncement [
 	(selectorCache nodeFor: anAnnouncement newMethod selector)
 		ifNotNil: [ :node | 
 			node
-				removeImplementer: anAnnouncement oldMethod;
-				addImplementer: anAnnouncement newMethod ].
+				removeImplementer: anAnnouncement oldMethod gtOriginalMethod;
+				addImplementer: anAnnouncement newMethod gtOriginalMethod ].
 	self removeSendsFrom: anAnnouncement oldMethod.
 	self addSendsFrom: anAnnouncement newMethod
 ]
@@ -252,32 +256,33 @@ GtPharoIndex >> processPragma: aPragma selectorsDo: selectorBlock [
 { #category : #private }
 GtPharoIndex >> removeMethodFromCache: method [
 	(selectorCache remove: method selector weight: 1)
-		ifNotNil: [ :node | node removeImplementer: method ].
+		ifNotNil: [ :node | node removeImplementer: method gtOriginalMethod ].
 	self removeSendsFrom: method
 ]
 
 { #category : #private }
 GtPharoIndex >> removeSendsFrom: aMethod [
-	| seen globalBlock selectorBlock |
+	| seen globalBlock selectorBlock method |
+	method := aMethod gtOriginalMethod.
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
 		node := globalCache remove: global name weight: 1.
 		(seen includes: global)
 			ifFalse: [ seen add: global.
-				node ifNotNil: [ node removeReference: aMethod ] ] ].
+				node ifNotNil: [ node removeReference: method ] ] ].
 	selectorBlock := [ :selector :count | 
 		(selectorCache remove: selector weight: count)
 			ifNotNil: [ :node | 
 				(seen includes: selector)
 					ifFalse: [ seen add: selector.
-						node removeReference: aMethod ] ].
+						node removeReference: method ] ].
 		selector first isUppercase
 			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
-	aMethod
+	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
-		messageSendsIn: aMethod
+		messageSendsIn: method
 		doReferences: selectorBlock
 		andGlobals: globalBlock
 ]
