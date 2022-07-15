@@ -7,18 +7,29 @@ Class {
 { #category : #accessing }
 GtRBNamespaceExamples >> implementersOfPrintOn [
 	<gtExample>
-	| environment implementers |
-	environment := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
-	implementers := environment allImplementorsOf: #printOn:.
+	| model implementers |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	implementers := model allImplementorsOf: #printOn:.
 	self assert: implementers notEmpty.
-	implementers do: [:each | self assert: (each isKindOf: RBClass)].
+	implementers do: [ :each | self assert: (each isKindOf: RBClass) ].
+	^ implementers
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> implementersOfPrintOnInCustomEnvironment [
+	<gtExample>
+	| model implementers |
+	model := GtRBNamespace
+			onEnvironment: (RBSelectorEnvironment onMethods: #(printOn:) forClass: Object) not.
+	implementers := model allImplementorsOf: #printOn:.
+	self assert: implementers size + 1 equals: self implementersOfPrintOn size.
+	self assert: (implementers noneSatisfy: [ :each | each name = #Object ]).
 	^ implementers
 ]
 
 { #category : #accessing }
 GtRBNamespaceExamples >> implementersOfPrintOnTheSameAsDefault [
 	<gtExample>
-	<noTest>
 	| defaultEnvironment defaultImplementers gtImplementers difference1 difference2 |
 	gtImplementers := self implementersOfPrintOn.
 	defaultEnvironment := RBNamespace onEnvironment: RBBrowserEnvironment new.
@@ -32,24 +43,226 @@ GtRBNamespaceExamples >> implementersOfPrintOnTheSameAsDefault [
 ]
 
 { #category : #accessing }
+GtRBNamespaceExamples >> implementersOfPrintOnWithNewClass [
+	<gtExample>
+	| model implementers |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	model
+		defineClass: 'ProtoObject subclass: #Object1234
+			instanceVariableNames: ''''
+			classVariableNames: ''''
+			poolDictionaries: ''''
+			package: ''Kernel-Objects'''.
+	(model classNamed: #Object1234)
+		compile: 'printOn: aStream'
+		classified: #printing.
+	implementers := model allImplementorsOf: #printOn:.
+	self assert: implementers size - 1 equals: self implementersOfPrintOn size.
+	self assert: (implementers anySatisfy: [ :each | each name = #Object1234 ]).
+	^ implementers
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> implementersOfPrintOnWithNewMethod [
+	<gtExample>
+	| model implementers |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	(model classFor: self class) compile: 'printOn: aStream' classified: #printing.
+	implementers := model allImplementorsOf: #printOn:.
+	self assert: implementers size - 1 equals: self implementersOfPrintOn size.
+	self assert: (implementers anySatisfy: [ :each | each name = self class name ]).
+	^ implementers
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> implementersOfPrintOnWithRecompiledMethod [
+	<gtExample>
+	| model implementers |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	(model classFor: Object) compile: 'printOn: aStream'.
+	implementers := model allImplementorsOf: #printOn:.
+	self assert: implementers size equals: self implementersOfPrintOn size.
+	self assert: (implementers anySatisfy: [ :each | each name = #Object ]).
+	^ implementers
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> implementersOfPrintOnWithRemovedMethod [
+	<gtExample>
+	| model implementers |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	(model classFor: Object) removeMethod: #printOn:.
+	implementers := model allImplementorsOf: #printOn:.
+	self assert: implementers size + 1 equals: self implementersOfPrintOn size.
+	self assert: (implementers noneSatisfy: [ :each | each name = #Object ]).
+	^ implementers
+]
+
+{ #category : #accessing }
 GtRBNamespaceExamples >> rbClassesCategoriesMatchThoseInTheSystem [
 	<gtExample>
-	<noTest>
 	| model rb |
 	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
 	Smalltalk allClassesAndTraits
 		do: [ :each | 
 			rb := (model createNewClassFor: each) first.
-			self assert: rb category = each category ]
+			self
+				assert: (rb category = each category
+						or: [ (rb category , '-' , rb category) = each category ]) ]
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToObject [
+	<gtExample>
+	| model references |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	references := OrderedCollection new.
+	model
+		allReferencesToClass: (model classFor: Object)
+		do: [ :each | references add: each ].
+	self assert: references notEmpty.
+	references do: [ :each | self assert: (each isKindOf: RBMethod) ].
+	^ references
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToObjectInCustomEnvironment [
+	<gtExample>
+	| model refs |
+	model := GtRBNamespace
+			onEnvironment: (RBSelectorEnvironment
+					onMethods: {thisContext method selector}
+					forClass: self class) not.
+	refs := OrderedCollection new.
+	model
+		allReferencesToClass: (model classFor: Object)
+		do: [ :each | refs add: each ].
+	self assert: refs size + 1 equals: self referencesToObject size.
+	^ refs
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToObjectTheSameAsDefault [
+	<gtExample>
+	<noTest>
+	| refs defaultRefs model |
+	refs := self referencesToObject.
+	defaultRefs := OrderedCollection new.
+	(model := RBNamespace onEnvironment: RBBrowserEnvironment new)
+		allReferencesToClass: (model classFor: Object)
+		do: [ :each | defaultRefs add: each ].
+	self assert: refs size equals: defaultRefs size.
+	self
+		assert: (refs collect: [ :each | each methodClass name , each selector ])
+				asSortedCollection
+		equals: (refs collect: [ :each | each methodClass name , each selector ])
+				asSortedCollection.
+	^ refs
 ]
 
 { #category : #accessing }
 GtRBNamespaceExamples >> referencesToPrintOn [
 	<gtExample>
-	| environment references |
-	environment := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
-	references := environment allReferencesTo: #printOn:.
+	| model references |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	references := model allReferencesTo: #printOn:.
 	self assert: references notEmpty.
-	references do: [:each | self assert: (each isKindOf: RBMethod)].
+	references do: [ :each | self assert: (each isKindOf: RBMethod) ].
 	^ references
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToPrintOnInCustomEnvironment [
+	<gtExample>
+	| model refs |
+	model := GtRBNamespace
+			onEnvironment: (RBSelectorEnvironment onMethods: #(printStringLimitedTo:) forClass: Object) not.
+	refs := model allReferencesTo: #printOn:.
+	self assert: refs size + 1 equals: self referencesToPrintOn size.
+	^ refs
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToPrintOnTheSameAsDefault [
+	<gtExample>
+	| gtRefs defaultRefs |
+	gtRefs := self referencesToPrintOn.
+	defaultRefs := (RBNamespace onEnvironment: RBBrowserEnvironment new)
+			allReferencesTo: #printOn:.
+	self assert: gtRefs size equals: defaultRefs size.
+	self
+		assert: (gtRefs collect: [ :each | each methodClass name , each selector ])
+				asSortedCollection
+		equals: (gtRefs collect: [ :each | each methodClass name , each selector ])
+				asSortedCollection.
+	^ gtRefs
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToPrintOnWithNewClass [
+	<gtExample>
+	| model refs |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	model
+		defineClass: 'ProtoObject subclass: #Object1234
+			instanceVariableNames: ''''
+			classVariableNames: ''''
+			poolDictionaries: ''''
+			package: ''Kernel-Objects'''.
+	(model classNamed: #Object1234)
+		compile: 'asdf self printOn: aStream'
+		classified: #printing.
+	refs := model allReferencesTo: #printOn:.
+	self assert: refs size - 1 equals: self referencesToPrintOn size.
+	self assert: (refs anySatisfy: [ :each | each methodClass name = #Object1234 ]).
+	^ refs
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToPrintOnWithNewMethod [
+	<gtExample>
+	| model refs |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	(model classFor: self class)
+		compile: 'someNewMethodName: aStream self printOn: aStream'
+		classified: #printing.
+	refs := model allReferencesTo: #printOn:.
+	self assert: refs size - 1 equals: self referencesToPrintOn size.
+	self
+		assert: (refs
+				anySatisfy: [ :each | 
+					each methodClass name = self class name
+						and: [ each selector = #someNewMethodName: ] ]).
+	^ refs
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToPrintOnWithRecompiledMethods [
+	<gtExample>
+	| model refs |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	(model classFor: Object) compile: 'printStringLimitedTo: a'.
+	(model classFor: ProtoObject) compile: '== a self printOn: a'.
+	refs := model allReferencesTo: #printOn:.
+	self assert: refs size equals: self referencesToPrintOn size.
+	self
+		assert: (refs
+				noneSatisfy: [ :method | 
+					method methodClass name = #Object
+						and: [ method selector = #printStringLimitedTo: ] ]).
+	self
+		assert: (refs
+				anySatisfy: [ :method | method methodClass name = #ProtoObject and: [ method selector = #== ] ]).
+	^ refs
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToPrintOnWithRemovedMethod [
+	<gtExample>
+	| model refs |
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	(model classFor: Object) removeMethod: #printStringLimitedTo:.
+	refs := model allReferencesTo: #printOn:.
+	self assert: refs size + 1 equals: self referencesToPrintOn size.
+	^ refs
 ]

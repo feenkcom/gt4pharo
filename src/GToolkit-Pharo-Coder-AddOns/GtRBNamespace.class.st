@@ -5,28 +5,28 @@ Class {
 }
 
 { #category : #accessing }
-GtRBNamespace >> allImplementorsOf: aSelector [ 
-	^ (GtPharoIndex current implementersOf: aSelector) collect: [:each | self classNamed: each methodClass name ]
-]
-
-{ #category : #accessing }
-GtRBNamespace >> allReferencesTo: aSelector [ 
-	^ (GtPharoIndex current sendersOf: aSelector) collect: [:each | (self classNamed: each methodClass name) methodFor: each selector ]
-]
-
-{ #category : #accessing }
-GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [ 
-	| rbMethod |
-	(GtPharoIndex current globalVariableReferencesTo: aRBClass) do: [ :method | 
-		rbMethod := (self classNamed: method methodClass name) methodFor: method selector.
-		aBlock value: rbMethod ].
-	
-	"self allClassesDo: 
-			[:each |
-			(each whichSelectorsReferToClass: aRBClass) 
-				do: [:sel | aBlock value: (each methodFor: sel)].
-			(each classSide whichSelectorsReferToClass: aRBClass) 
-				do: [:sel | aBlock value: (each classSide methodFor: sel)]]"
+GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [
+	| refs |
+	refs := OrderedCollection new.
+	self newClasses
+		do: [ :each | each do: [ :cls | refs addAll: (cls whichSelectorsReferToClass: aRBClass) ] ].
+	self changedClasses
+		do: [ :each | 
+			each
+				do: [ :cls | 
+					cls newMethods
+						do: [ :method | (method refersToClassNamed: aRBClass name) ifTrue: [ refs add: each selector ] ] ] ].
+	(GtPharoIndex current globalVariableReferencesTo: aRBClass)
+		do: [ :each | 
+			| name cls |
+			name := each methodClass instanceSide name.
+			((self newClasses includesKey: name)
+				or: [ (environment includesMethod: each) not
+						or: [ cls := self classNamed: each methodClass name.
+							(cls hasRemoved: each selector)
+								or: [ cls newMethods includesKey: each selector ] ] ])
+				ifFalse: [ refs add: (cls methodFor: each selector) ] ].
+	refs do: aBlock
 ]
 
 { #category : #accessing }
@@ -48,4 +48,56 @@ GtRBNamespace >> createNewClassFor: aBehavior [
 		ifNone: [  ].
 	nonMeta category: category.
 	^ changedClasses at: className put: (Array with: nonMeta with: meta)
+]
+
+{ #category : #accessing }
+GtRBNamespace >> privateImplementorsOf: aSelector [
+	| implementers |
+	implementers := Set new.
+	self newClasses
+		do: [ :each | 
+			each
+				do: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+	self changedClasses
+		do: [ :each | 
+			each
+				do: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+	(GtPharoIndex current implementersOf: aSelector)
+		do: [ :each | 
+			| cls |
+			((environment includesMethod: each)
+				and: [ each isFromTrait not
+						and: [ (self hasRemoved: each methodClass instanceSide name) not ] ])
+				ifTrue: [ cls := self classNamed: each methodClass name.
+					(cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+	^ implementers
+]
+
+{ #category : #accessing }
+GtRBNamespace >> privateReferencesTo: aSelector [
+	| refs |
+	refs := OrderedCollection new.
+	self newClasses
+		do: [ :each | 
+			each
+				do: [ :cls | 
+					(cls whichSelectorsReferToSymbol: aSelector)
+						do: [ :sel | refs add: (cls methodFor: sel) ] ] ].
+	self changedClasses
+		do: [ :each | 
+			each
+				do: [ :cls | 
+					cls newMethods
+						do: [ :method | (method refersToSymbol: aSelector) ifTrue: [ refs add: method ] ] ] ].
+	(GtPharoIndex current sendersOf: aSelector)
+		do: [ :each | 
+			| name cls |
+			name := each methodClass instanceSide name.
+			((self newClasses includesKey: name)
+				or: [ (environment includesMethod: each) not
+						or: [ cls := self classNamed: each methodClass name.
+							(cls hasRemoved: each selector)
+								or: [ cls newMethods includesKey: each selector ] ] ])
+				ifFalse: [ refs add: (cls methodFor: each selector) ] ].
+	^ refs
 ]
