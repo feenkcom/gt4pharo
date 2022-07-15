@@ -50,7 +50,7 @@ GtMessageSendIterator class >> initialize [
 GtMessageSendIterator class >> messageSendsIn: aCompiledCode doReferences: aBlock andGlobals: globalsBlock [
 	| code |
 	code := aCompiledCode isCompiledMethod
-			ifTrue: [ aCompiledCode gtOriginalFFIMethod ]
+			ifTrue: [ aCompiledCode gtOriginalMethod ]
 			ifFalse: [ aCompiledCode ].
 	self new
 		messageSendsIn: code

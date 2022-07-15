@@ -9,14 +9,14 @@ CompiledMethod >> gtIsActive [
 							ifNotNil: [ :class | 
 								self selector
 									ifNotNil: [ :selector | class compiledMethodAt: selector ifAbsent: nil ] ].
-					self == (installedMethod ifNotNil: [ installedMethod gtOriginalFFIMethod ]) ] ]
+					self == (installedMethod ifNotNil: [ installedMethod gtOriginalMethod ]) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Index' }
-CompiledMethod >> gtOriginalFFIMethod [
+CompiledMethod >> gtOriginalMethod [
 	| other |
 	self isFFIMethod ifFalse: [ ^ self ].
 	other := self propertyAt: #ffiNonCompiledMethod.
 	(other isNil or: [ self == other ]) ifTrue: [ ^ self ].
-	^ other gtOriginalFFIMethod
+	^ other gtOriginalMethod
 ]
