@@ -4,11 +4,11 @@ Class {
 	#traits : 'TMethodAdviceRunner',
 	#classTraits : 'TMethodAdviceRunner classTrait',
 	#instVars : [
-		'critics',
 		'isForWorkspace',
 		'hasRefactoring',
 		'variableBindings',
-		'isDoIt'
+		'isDoIt',
+		'advices'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
@@ -18,17 +18,27 @@ GtMethodAdviceStyler >> = anObject [
 	^ self class = anObject class
 		and: [ self isForWorkspace = anObject isForWorkspace
 				and: [ self variableBindings == anObject variableBindings
-						and: [ self critics = anObject critics ] ] ]
+						and: [ self advices = anObject advices ] ] ]
 ]
 
 { #category : #visiting }
 GtMethodAdviceStyler >> acceptNode: aSmaCCParseNode [
-	critics
+	advices
 		do: [ :each | 
 			(each matches: aSmaCCParseNode from: self)
 				ifTrue: [ each styleIssue: aSmaCCParseNode using: self ] ].
 	super acceptNode: aSmaCCParseNode.
-	critics do: [ :each | each finish: aSmaCCParseNode from: self ]
+	advices do: [ :each | each finish: aSmaCCParseNode from: self ]
+]
+
+{ #category : #accessing }
+GtMethodAdviceStyler >> advices [
+	^ advices
+]
+
+{ #category : #accessing }
+GtMethodAdviceStyler >> advices: aCollection [
+	advices := aCollection
 ]
 
 { #category : #accessing }
@@ -39,16 +49,6 @@ GtMethodAdviceStyler >> behavior [
 { #category : #accessing }
 GtMethodAdviceStyler >> coderModel [
 	^ self coderViewModel coderModel
-]
-
-{ #category : #accessing }
-GtMethodAdviceStyler >> critics [
-	^ critics
-]
-
-{ #category : #accessing }
-GtMethodAdviceStyler >> critics: aCollection [
-	critics := aCollection
 ]
 
 { #category : #accessing }
@@ -71,7 +71,7 @@ GtMethodAdviceStyler >> hasRefactoring [
 { #category : #accessing }
 GtMethodAdviceStyler >> initialize [
 	super initialize.
-	critics := GtMethodAdvice activeCritics.
+	advices := GtMethodAdvice activeCritics.
 	isDoIt := false.
 	isForWorkspace := false
 ]

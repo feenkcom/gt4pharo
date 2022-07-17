@@ -1,11 +1,11 @@
 Class {
-	#name : #GtMethodCriticExamples,
+	#name : #GtMethodAdviceExamples,
 	#superclass : #Object,
 	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #accessing }
-GtMethodCriticExamples >> globalActiveMethodAdvices [
+GtMethodAdviceExamples >> globalActiveMethodAdvices [
 	<gtExample>
 	| all |
 	all := GtMethodAdvice activeCritics.
