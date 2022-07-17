@@ -1,8 +1,8 @@
 Class {
-	#name : #GtMethodCriticStyler,
+	#name : #GtMethodAdviceStyler,
 	#superclass : #GtGenericPharoStyler,
-	#traits : 'TCriticRunner',
-	#classTraits : 'TCriticRunner classTrait',
+	#traits : 'TMethodAdviceRunner',
+	#classTraits : 'TMethodAdviceRunner classTrait',
 	#instVars : [
 		'critics',
 		'isForWorkspace',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #comparing }
-GtMethodCriticStyler >> = anObject [
+GtMethodAdviceStyler >> = anObject [
 	^ self class = anObject class
 		and: [ self isForWorkspace = anObject isForWorkspace
 				and: [ self variableBindings == anObject variableBindings
@@ -22,7 +22,7 @@ GtMethodCriticStyler >> = anObject [
 ]
 
 { #category : #visiting }
-GtMethodCriticStyler >> acceptNode: aSmaCCParseNode [
+GtMethodAdviceStyler >> acceptNode: aSmaCCParseNode [
 	critics
 		do: [ :each | 
 			(each matches: aSmaCCParseNode from: self)
@@ -32,44 +32,44 @@ GtMethodCriticStyler >> acceptNode: aSmaCCParseNode [
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> behavior [
+GtMethodAdviceStyler >> behavior [
 	^ self coderViewModel behavior
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> coderModel [
+GtMethodAdviceStyler >> coderModel [
 	^ self coderViewModel coderModel
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> critics [
+GtMethodAdviceStyler >> critics [
 	^ critics
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> critics: aCollection [
+GtMethodAdviceStyler >> critics: aCollection [
 	critics := aCollection
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> foundIssue: aCritic in: aNode [
+GtMethodAdviceStyler >> foundIssue: aCritic in: aNode [
 	aCritic styleIssue: aNode using: self
 ]
 
 { #category : #testing }
-GtMethodCriticStyler >> hasDeclaredVariableNamed: aString [
+GtMethodAdviceStyler >> hasDeclaredVariableNamed: aString [
 	^ self coderViewModel hasDeclaredVariableNamed: aString
 ]
 
 { #category : #testing }
-GtMethodCriticStyler >> hasRefactoring [
+GtMethodAdviceStyler >> hasRefactoring [
 	^ hasRefactoring
 		ifNil: [ hasRefactoring := text
 					hasAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ] ]
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> initialize [
+GtMethodAdviceStyler >> initialize [
 	super initialize.
 	critics := GtMethodAdvice activeCritics.
 	isDoIt := false.
@@ -77,22 +77,22 @@ GtMethodCriticStyler >> initialize [
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> isForWorkspace [
+GtMethodAdviceStyler >> isForWorkspace [
 	^ isForWorkspace
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> isForWorkspace: aBoolean [
+GtMethodAdviceStyler >> isForWorkspace: aBoolean [
 	isForWorkspace := aBoolean
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> sourceCoder [
+GtMethodAdviceStyler >> sourceCoder [
 	^ self coderViewModel coderModel
 ]
 
 { #category : #styling }
-GtMethodCriticStyler >> style: aText ast: theAst [
+GtMethodAdviceStyler >> style: aText ast: theAst [
 	hasRefactoring := nil.
 	variableBindings := self coderViewModel compositeVariableBindings.
 	[ super style: aText ast: theAst ]
@@ -100,12 +100,12 @@ GtMethodCriticStyler >> style: aText ast: theAst [
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> text [
+GtMethodAdviceStyler >> text [
 	^ text
 ]
 
 { #category : #utility }
-GtMethodCriticStyler >> typeOf: aGtPharoProgramNode [
+GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
 		typeOf: aGtPharoProgramNode
 		in: (isForWorkspace
@@ -115,6 +115,6 @@ GtMethodCriticStyler >> typeOf: aGtPharoProgramNode [
 ]
 
 { #category : #accessing }
-GtMethodCriticStyler >> variableBindings [
+GtMethodAdviceStyler >> variableBindings [
 	^ variableBindings
 ]

@@ -1,8 +1,8 @@
 Class {
-	#name : #GtSearchMethodCriticFilter,
+	#name : #GtSearchMethodAdviceFilter,
 	#superclass : #GtSearchMethodsFilter,
-	#traits : 'TCriticRunner',
-	#classTraits : 'TCriticRunner classTrait',
+	#traits : 'TMethodAdviceRunner',
+	#classTraits : 'TMethodAdviceRunner classTrait',
 	#instVars : [
 		'critic',
 		'currentMethod',
@@ -12,29 +12,29 @@ Class {
 }
 
 { #category : #accessing }
-GtSearchMethodCriticFilter >> behavior [
+GtSearchMethodAdviceFilter >> behavior [
 	^ currentMethod
 		ifNil: [ nil class ]
 		ifNotNil: [ currentMethod methodClass ]
 ]
 
 { #category : #accessing }
-GtSearchMethodCriticFilter >> critic: aMethodCritic [
+GtSearchMethodAdviceFilter >> critic: aMethodCritic [
 	critic := aMethodCritic
 ]
 
 { #category : #accessing }
-GtSearchMethodCriticFilter >> defaultFilterScope [
+GtSearchMethodAdviceFilter >> defaultFilterScope [
 	^ critic potentialFilter ifNil: [ super defaultFilterScope ]
 ]
 
 { #category : #accessing }
-GtSearchMethodCriticFilter >> foundIssue: aCritic in: aNode [
+GtSearchMethodAdviceFilter >> foundIssue: aCritic in: aNode [
 	found := true
 ]
 
 { #category : #testing }
-GtSearchMethodCriticFilter >> includesMethod: aCompiledMethod [
+GtSearchMethodAdviceFilter >> includesMethod: aCompiledMethod [
 	| source |
 	currentMethod := aCompiledMethod.
 	source := aCompiledMethod sourceCode.
@@ -45,7 +45,7 @@ GtSearchMethodCriticFilter >> includesMethod: aCompiledMethod [
 ]
 
 { #category : #accessing }
-GtSearchMethodCriticFilter >> processNode: aNode [
+GtSearchMethodAdviceFilter >> processNode: aNode [
 	(critic matches: aNode from: self) ifTrue: [ found := true ].
 	aNode nodesDo: [ :node | self processNode: node ].
 	critic finish: aNode from: self

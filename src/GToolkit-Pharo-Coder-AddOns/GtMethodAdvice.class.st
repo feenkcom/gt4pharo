@@ -22,7 +22,7 @@ GtMethodAdvice class >> gtMethodsFor: aView [
 	^ aView forward
 		title: 'Issues';
 		priority: 20;
-		object: [ GtSearchMethodCriticFilter new
+		object: [ GtSearchMethodAdviceFilter new
 				critic: self new;
 				yourself ];
 		view: #gtItemsFor:

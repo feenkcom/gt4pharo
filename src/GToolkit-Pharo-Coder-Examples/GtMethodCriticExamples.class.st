@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtMethodCriticExamples >> globalActiveCritics [
+GtMethodCriticExamples >> globalActiveMethodAdvices [
 	<gtExample>
 	| all |
 	all := GtMethodAdvice activeCritics.
