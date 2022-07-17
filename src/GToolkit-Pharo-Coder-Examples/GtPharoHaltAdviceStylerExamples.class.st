@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoHaltCriticStylerExamples,
+	#name : #GtPharoHaltAdviceStylerExamples,
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoHaltCriticStylerExamples >> haltNowHighlighted [
+GtPharoHaltAdviceStylerExamples >> haltNowHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
 	
@@ -16,7 +16,7 @@ GtPharoHaltCriticStylerExamples >> haltNowHighlighted [
 	anAst := aCoder astAwait.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
-	GtMethodCriticStyler new
+	GtMethodAdviceStyler new
 		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
@@ -33,7 +33,7 @@ GtPharoHaltCriticStylerExamples >> haltNowHighlighted [
 ]
 
 { #category : #accessing }
-GtPharoHaltCriticStylerExamples >> haltOnceHighlighted [
+GtPharoHaltAdviceStylerExamples >> haltOnceHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
 	
@@ -42,7 +42,7 @@ GtPharoHaltCriticStylerExamples >> haltOnceHighlighted [
 	anAst := aCoder astAwait.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
-	GtMethodCriticStyler new
+	GtMethodAdviceStyler new
 		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
@@ -59,7 +59,7 @@ GtPharoHaltCriticStylerExamples >> haltOnceHighlighted [
 ]
 
 { #category : #accessing }
-GtPharoHaltCriticStylerExamples >> selfHaltHighlighted [
+GtPharoHaltAdviceStylerExamples >> selfHaltHighlighted [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
 	
@@ -68,7 +68,7 @@ GtPharoHaltCriticStylerExamples >> selfHaltHighlighted [
 	anAst := aCoder astAwait.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
-	GtMethodCriticStyler new
+	GtMethodAdviceStyler new
 		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
@@ -85,7 +85,7 @@ GtPharoHaltCriticStylerExamples >> selfHaltHighlighted [
 ]
 
 { #category : #accessing }
-GtPharoHaltCriticStylerExamples >> selfHaltOnceHighlighted [
+GtPharoHaltAdviceStylerExamples >> selfHaltOnceHighlighted [
 
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
@@ -95,7 +95,7 @@ GtPharoHaltCriticStylerExamples >> selfHaltOnceHighlighted [
 	anAst := aCoder astAwait.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
-	GtMethodCriticStyler new
+	GtMethodAdviceStyler new
 		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.

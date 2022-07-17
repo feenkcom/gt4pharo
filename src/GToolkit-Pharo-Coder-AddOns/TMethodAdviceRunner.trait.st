@@ -1,24 +1,24 @@
 Trait {
-	#name : #TCriticRunner,
+	#name : #TMethodAdviceRunner,
 	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-TCriticRunner >> behavior [
+TMethodAdviceRunner >> behavior [
 	^ nil class
 ]
 
 { #category : #accessing }
-TCriticRunner >> foundIssue: aCritic in: aNode [
+TMethodAdviceRunner >> foundIssue: aCritic in: aNode [
 ]
 
 { #category : #testing }
-TCriticRunner >> hasDeclaredGlobalNamed: aString [
+TMethodAdviceRunner >> hasDeclaredGlobalNamed: aString [
 	^ self class environment includesKey: aString asSymbol
 ]
 
 { #category : #testing }
-TCriticRunner >> hasDeclaredVariableNamed: aString [
+TMethodAdviceRunner >> hasDeclaredVariableNamed: aString [
 	| class |
 	class := self behavior.
 	(class classThatDefinesInstVarNamed: aString) ifNotNil: [ ^ true ].
@@ -28,12 +28,12 @@ TCriticRunner >> hasDeclaredVariableNamed: aString [
 ]
 
 { #category : #testing }
-TCriticRunner >> hasRefactoring [
+TMethodAdviceRunner >> hasRefactoring [
 	^ false
 ]
 
 { #category : #typing }
-TCriticRunner >> typeOf: aGtPharoProgramNode [
+TMethodAdviceRunner >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
 		typeOf: aGtPharoProgramNode
 		in: self behavior

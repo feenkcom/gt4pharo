@@ -79,7 +79,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 
 	super initializeAddOns: addOns.
 
-	addOns addStyler: (GtMethodCriticStyler new isForWorkspace: true).
+	addOns addStyler: (GtMethodAdviceStyler new isForWorkspace: true).
 
 	addOns
 		addMainAction: 'Evaluate' translated

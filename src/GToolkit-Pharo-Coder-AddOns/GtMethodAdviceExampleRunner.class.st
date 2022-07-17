@@ -1,8 +1,8 @@
 Class {
-	#name : #GtMethodCriticExampleRunner,
+	#name : #GtMethodAdviceExampleRunner,
 	#superclass : #Object,
-	#traits : 'TCriticRunner',
-	#classTraits : 'TCriticRunner classTrait',
+	#traits : 'TMethodAdviceRunner',
+	#classTraits : 'TMethodAdviceRunner classTrait',
 	#instVars : [
 		'critic',
 		'method',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : #'example method' }
-GtMethodCriticExampleRunner class >> newExampleMethod [
+GtMethodAdviceExampleRunner class >> newExampleMethod [
 	"Just here for some sample messages for examples"
 
 	^ {super new behavior.
@@ -28,7 +28,7 @@ GtMethodCriticExampleRunner class >> newExampleMethod [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> andandExample [
+GtMethodAdviceExampleRunner >> andandExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUnoptimizedConditionalAdvice new
@@ -37,7 +37,7 @@ GtMethodCriticExampleRunner >> andandExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> andorExample [
+GtMethodAdviceExampleRunner >> andorExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUnoptimizedConditionalAdvice new
@@ -46,7 +46,7 @@ GtMethodCriticExampleRunner >> andorExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> assignmentNotNeededExample [
+GtMethodAdviceExampleRunner >> assignmentNotNeededExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtAssignmentNotNeededAdvice new
@@ -55,7 +55,7 @@ GtMethodCriticExampleRunner >> assignmentNotNeededExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> assignmentToSameVariableExample [
+GtMethodAdviceExampleRunner >> assignmentToSameVariableExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtRedundantAssignmentAdvice new
@@ -64,12 +64,12 @@ GtMethodCriticExampleRunner >> assignmentToSameVariableExample [
 ]
 
 { #category : #accessing }
-GtMethodCriticExampleRunner >> behavior [
+GtMethodAdviceExampleRunner >> behavior [
 	^ method methodClass
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> checkClassVarRefIsValid [
+GtMethodAdviceExampleRunner >> checkClassVarRefIsValid [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUndeclaredVariableAdvice new
@@ -78,7 +78,7 @@ GtMethodCriticExampleRunner >> checkClassVarRefIsValid [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> checkPoolVarRefIsValid [
+GtMethodAdviceExampleRunner >> checkPoolVarRefIsValid [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUndeclaredVariableAdvice new
@@ -87,7 +87,7 @@ GtMethodCriticExampleRunner >> checkPoolVarRefIsValid [
 ]
 
 { #category : #private }
-GtMethodCriticExampleRunner >> compareResultsFrom: aCritic method: aCompiledMethod to: aBlock [
+GtMethodAdviceExampleRunner >> compareResultsFrom: aCritic method: aCompiledMethod to: aBlock [
 	| source ast foundNodes |
 	critic := aCritic.
 	method := aCompiledMethod.
@@ -106,7 +106,7 @@ GtMethodCriticExampleRunner >> compareResultsFrom: aCritic method: aCompiledMeth
 ]
 
 { #category : #private }
-GtMethodCriticExampleRunner >> compareResultsFrom: aCritic source: aString to: aBlock [
+GtMethodAdviceExampleRunner >> compareResultsFrom: aCritic source: aString to: aBlock [
 	| source ast foundNodes |
 	critic := aCritic.
 	method := thisContext method.
@@ -125,7 +125,7 @@ GtMethodCriticExampleRunner >> compareResultsFrom: aCritic source: aString to: a
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> duplicateCodeInCondition [
+GtMethodAdviceExampleRunner >> duplicateCodeInCondition [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtDuplicateCodeInConditionalAdvice new
@@ -136,7 +136,7 @@ GtMethodCriticExampleRunner >> duplicateCodeInCondition [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> equalsNotUsedExample [
+GtMethodAdviceExampleRunner >> equalsNotUsedExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtEqualsNotUsedAdvice new
@@ -145,12 +145,12 @@ GtMethodCriticExampleRunner >> equalsNotUsedExample [
 ]
 
 { #category : #accessing }
-GtMethodCriticExampleRunner >> foundIssue: aCritic in: aNode [
+GtMethodAdviceExampleRunner >> foundIssue: aCritic in: aNode [
 	nodes add: aNode
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> haltExample [
+GtMethodAdviceExampleRunner >> haltExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtHaltAdvice new
@@ -161,13 +161,13 @@ GtMethodCriticExampleRunner >> haltExample [
 ]
 
 { #category : #initialization }
-GtMethodCriticExampleRunner >> initialize [
+GtMethodAdviceExampleRunner >> initialize [
 	super initialize.
 	nodes := IdentitySet new
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> messagesNotImplementedExample [
+GtMethodAdviceExampleRunner >> messagesNotImplementedExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtMessageNotImplementedAdvice new
@@ -178,7 +178,7 @@ GtMethodCriticExampleRunner >> messagesNotImplementedExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> ororExample [
+GtMethodAdviceExampleRunner >> ororExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUnoptimizedConditionalAdvice new
@@ -187,14 +187,14 @@ GtMethodCriticExampleRunner >> ororExample [
 ]
 
 { #category : #accessing }
-GtMethodCriticExampleRunner >> processNode: aNode [
+GtMethodAdviceExampleRunner >> processNode: aNode [
 	(critic matches: aNode from: self) ifTrue: [ nodes add: aNode ].
 	aNode nodesDo: [ :node | self processNode: node ].
 	critic finish: aNode from: self
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> rejectNotUsedExample [
+GtMethodAdviceExampleRunner >> rejectNotUsedExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtCollectSelectNotUsedAdvice new
@@ -203,7 +203,7 @@ GtMethodCriticExampleRunner >> rejectNotUsedExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> tempNotUsedExample [
+GtMethodAdviceExampleRunner >> tempNotUsedExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtTemporaryNotUsedAdvice new
@@ -212,7 +212,7 @@ GtMethodCriticExampleRunner >> tempNotUsedExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> todoExample [
+GtMethodAdviceExampleRunner >> todoExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUnoptimizedToDoAdvice new
@@ -221,7 +221,7 @@ GtMethodCriticExampleRunner >> todoExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> undeclaredVariable [
+GtMethodAdviceExampleRunner >> undeclaredVariable [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUndeclaredVariableAdvice new
@@ -230,7 +230,7 @@ GtMethodCriticExampleRunner >> undeclaredVariable [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> valueNotUsedExample [
+GtMethodAdviceExampleRunner >> valueNotUsedExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtValueNotUsedAdvice new
@@ -239,7 +239,7 @@ GtMethodCriticExampleRunner >> valueNotUsedExample [
 ]
 
 { #category : #examples }
-GtMethodCriticExampleRunner >> yourselfNotUsedExample [
+GtMethodAdviceExampleRunner >> yourselfNotUsedExample [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtYourselfNotUsedAdvice new
