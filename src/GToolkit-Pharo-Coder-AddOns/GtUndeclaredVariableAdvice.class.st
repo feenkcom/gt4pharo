@@ -1,11 +1,11 @@
 Class {
-	#name : #GtUndeclaredVariableCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtUndeclaredVariableAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #testing }
-GtUndeclaredVariableCritic >> canAddInstanceVariable: aString to: aClass [
+GtUndeclaredVariableAdvice >> canAddInstanceVariable: aString to: aClass [
 	(Object includesBehavior: aClass) ifTrue: [ ^ false ].
 	^ [ (RBAddInstanceVariableRefactoring variable: aString class: aClass)
 		checkPreconditions.
@@ -13,19 +13,19 @@ GtUndeclaredVariableCritic >> canAddInstanceVariable: aString to: aClass [
 ]
 
 { #category : #accessing }
-GtUndeclaredVariableCritic >> description [
+GtUndeclaredVariableAdvice >> description [
 	^ 'Variable is undeclared.'
 ]
 
 { #category : #styling }
-GtUndeclaredVariableCritic >> fixItActionsFor: aVariableNode using: aCriticStyler [
+GtUndeclaredVariableAdvice >> fixItActionsFor: aVariableNode using: aCriticStyler [
 	^ aVariableNode variableName first isUppercase
 		ifTrue: [ self globalFixItActionsFor: aVariableNode using: aCriticStyler ]
 		ifFalse: [ self localFixItActionsFor: aVariableNode using: aCriticStyler ]
 ]
 
 { #category : #styling }
-GtUndeclaredVariableCritic >> globalFixItActionsFor: aVariableNode using: aCriticStyler [
+GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode using: aCriticStyler [
 	| theFixitActions results |
 	theFixitActions := OrderedCollection new.
 	theFixitActions
@@ -57,7 +57,7 @@ GtUndeclaredVariableCritic >> globalFixItActionsFor: aVariableNode using: aCriti
 ]
 
 { #category : #styling }
-GtUndeclaredVariableCritic >> localFixItActionsFor: aVariableNode using: aCriticStyler [
+GtUndeclaredVariableAdvice >> localFixItActionsFor: aVariableNode using: aCriticStyler [
 	| theFixitActions possibleNames |
 	theFixitActions := OrderedCollection new.
 	theFixitActions
@@ -86,7 +86,7 @@ GtUndeclaredVariableCritic >> localFixItActionsFor: aVariableNode using: aCritic
 ]
 
 { #category : #testing }
-GtUndeclaredVariableCritic >> matches: aNode from: aCriticRunner [
+GtUndeclaredVariableAdvice >> matches: aNode from: aCriticRunner [
 	aNode isVariable ifFalse: [ ^ false ].
 	aNode isUndeclared ifFalse: [ ^ false ].
 	(aCriticRunner hasDeclaredVariableNamed: aNode variableName)
@@ -95,6 +95,6 @@ GtUndeclaredVariableCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtUndeclaredVariableCritic >> name [
+GtUndeclaredVariableAdvice >> name [
 	^ 'Reference to undeclared variable'
 ]

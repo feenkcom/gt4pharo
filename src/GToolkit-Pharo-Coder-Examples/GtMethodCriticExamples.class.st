@@ -8,8 +8,8 @@ Class {
 GtMethodCriticExamples >> globalActiveCritics [
 	<gtExample>
 	| all |
-	all := GtMethodCritic activeCritics.
-	self assert: (all includes: GtMethodNotUsedCritic) not.
-	self assert: (all includes: GtSendNotUsedCritic) not.
+	all := GtMethodAdvice activeCritics.
+	self assert: (all includes: GtMethodNotUsedAdvice) not.
+	self assert: (all includes: GtSendNotUsedAdvice) not.
 	^ all
 ]

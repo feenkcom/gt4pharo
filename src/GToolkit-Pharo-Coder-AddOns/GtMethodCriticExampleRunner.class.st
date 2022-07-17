@@ -11,7 +11,7 @@ Class {
 	#pools : [
 		'TextConstants'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #'example method' }
@@ -31,7 +31,7 @@ GtMethodCriticExampleRunner class >> newExampleMethod [
 GtMethodCriticExampleRunner >> andandExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUnoptimizedConditionalCritic new
+		compareResultsFrom: GtUnoptimizedConditionalAdvice new
 		source: 'a (self isLiteral and: [a isLiteral]) and: [b isLitera]'
 		to: [ :ast :block | block value: ast body statements last ]
 ]
@@ -40,7 +40,7 @@ GtMethodCriticExampleRunner >> andandExample [
 GtMethodCriticExampleRunner >> andorExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUnoptimizedConditionalCritic new
+		compareResultsFrom: GtUnoptimizedConditionalAdvice new
 		source: 'a (self isLiteral and: [a isLiteral]) or: [b isLitera]'
 		to: [ :ast :block |  ]
 ]
@@ -49,7 +49,7 @@ GtMethodCriticExampleRunner >> andorExample [
 GtMethodCriticExampleRunner >> assignmentNotNeededExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtAssignmentNotNeededCritic new
+		compareResultsFrom: GtAssignmentNotNeededAdvice new
 		source: 'a | a | ^ a := 3'
 		to: [ :ast :block | block value: ast body statements first value ]
 ]
@@ -58,7 +58,7 @@ GtMethodCriticExampleRunner >> assignmentNotNeededExample [
 GtMethodCriticExampleRunner >> assignmentToSameVariableExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtRedundantAssignmentCritic new
+		compareResultsFrom: GtRedundantAssignmentAdvice new
 		source: 'a: b critic := critic'
 		to: [ :ast :block | block value: ast body statements last ]
 ]
@@ -72,7 +72,7 @@ GtMethodCriticExampleRunner >> behavior [
 GtMethodCriticExampleRunner >> checkClassVarRefIsValid [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUndeclaredVariableCritic new
+		compareResultsFrom: GtUndeclaredVariableAdvice new
 		source: 'classVarReference ^ DependentsFields'
 		to: [ :ast :block |  ]
 ]
@@ -81,7 +81,7 @@ GtMethodCriticExampleRunner >> checkClassVarRefIsValid [
 GtMethodCriticExampleRunner >> checkPoolVarRefIsValid [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUndeclaredVariableCritic new
+		compareResultsFrom: GtUndeclaredVariableAdvice new
 		source: 'poolVariableReference ^ Tab'
 		to: [ :ast :block |  ]
 ]
@@ -128,7 +128,7 @@ GtMethodCriticExampleRunner >> compareResultsFrom: aCritic source: aString to: a
 GtMethodCriticExampleRunner >> duplicateCodeInCondition [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtDuplicateCodeInConditionalCritic new
+		compareResultsFrom: GtDuplicateCodeInConditionalAdvice new
 		source: 'a self isLiteral ifTrue: [3] ifFalse: [4]. self isLiteral ifTrue: [self foo. self bar] ifFalse: [self foo]. self isLiteral ifTrue: [self foo. self bar] ifFalse: [self bar]'
 		to: [ :ast :block | 
 			block value: ast body statements second message.
@@ -139,7 +139,7 @@ GtMethodCriticExampleRunner >> duplicateCodeInCondition [
 GtMethodCriticExampleRunner >> equalsNotUsedExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtEqualsNotUsedCritic new
+		compareResultsFrom: GtEqualsNotUsedAdvice new
 		source: 'a: b critic = b'
 		to: [ :ast :block | block value: ast body statements last message ]
 ]
@@ -153,7 +153,7 @@ GtMethodCriticExampleRunner >> foundIssue: aCritic in: aNode [
 GtMethodCriticExampleRunner >> haltExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtHaltCritic new
+		compareResultsFrom: GtHaltAdvice new
 		source: 'a self halt. Halt once'
 		to: [ :ast :block | 
 			block value: ast body statements first message.
@@ -170,7 +170,7 @@ GtMethodCriticExampleRunner >> initialize [
 GtMethodCriticExampleRunner >> messagesNotImplementedExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtMessageNotImplementedCritic new
+		compareResultsFrom: GtMessageNotImplementedAdvice new
 		method: self class class >> #newExampleMethod
 		to: [ :ast :block | 
 			ast body statements last value values
@@ -181,7 +181,7 @@ GtMethodCriticExampleRunner >> messagesNotImplementedExample [
 GtMethodCriticExampleRunner >> ororExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUnoptimizedConditionalCritic new
+		compareResultsFrom: GtUnoptimizedConditionalAdvice new
 		source: 'a (self isLiteral or: [a isLiteral]) or: [b isLitera]'
 		to: [ :ast :block | block value: ast body statements last ]
 ]
@@ -197,7 +197,7 @@ GtMethodCriticExampleRunner >> processNode: aNode [
 GtMethodCriticExampleRunner >> rejectNotUsedExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtCollectSelectNotUsedCritic new
+		compareResultsFrom: GtCollectSelectNotUsedAdvice new
 		source: 'a (1 to: 10) reject: [:each | each isOdd]'
 		to: [ :ast :block | block value: ast body statements last message ]
 ]
@@ -206,7 +206,7 @@ GtMethodCriticExampleRunner >> rejectNotUsedExample [
 GtMethodCriticExampleRunner >> tempNotUsedExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtTemporaryNotUsedCritic new
+		compareResultsFrom: GtTemporaryNotUsedAdvice new
 		source: 'a | a b | a := 3. ^ a * 2'
 		to: [ :ast :block | block value: ast body variables last ]
 ]
@@ -215,7 +215,7 @@ GtMethodCriticExampleRunner >> tempNotUsedExample [
 GtMethodCriticExampleRunner >> todoExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUnoptimizedToDoCritic new
+		compareResultsFrom: GtUnoptimizedToDoAdvice new
 		source: 'a (1 to: 10) do: [ :i | Transcript print: i ]'
 		to: [ :ast :block | block value: ast body statements last ]
 ]
@@ -224,7 +224,7 @@ GtMethodCriticExampleRunner >> todoExample [
 GtMethodCriticExampleRunner >> undeclaredVariable [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtUndeclaredVariableCritic new
+		compareResultsFrom: GtUndeclaredVariableAdvice new
 		source: 'a ^UndeclaredTab'
 		to: [ :ast :block | block value: ast body statements last value ]
 ]
@@ -233,7 +233,7 @@ GtMethodCriticExampleRunner >> undeclaredVariable [
 GtMethodCriticExampleRunner >> valueNotUsedExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtValueNotUsedCritic new
+		compareResultsFrom: GtValueNotUsedAdvice new
 		source: 'a #()'
 		to: [ :ast :block | block value: ast body statements last ]
 ]
@@ -242,7 +242,7 @@ GtMethodCriticExampleRunner >> valueNotUsedExample [
 GtMethodCriticExampleRunner >> yourselfNotUsedExample [
 	<gtExample>
 	^ self
-		compareResultsFrom: GtYourselfNotUsedCritic new
+		compareResultsFrom: GtYourselfNotUsedAdvice new
 		source: 'a Transcript print: 1; yourself'
 		to: [ :ast :block | block value: ast body statements last messages last ]
 ]

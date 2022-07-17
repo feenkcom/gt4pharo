@@ -1,26 +1,26 @@
 Class {
-	#name : #GtOverridesSpecialSelectorCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtOverridesSpecialSelectorAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #testing }
-GtOverridesSpecialSelectorCritic >> classSideSelectors [
+GtOverridesSpecialSelectorAdvice >> classSideSelectors [
 	^ #(basicNew basicNew: class comment name)
 ]
 
 { #category : #accessing }
-GtOverridesSpecialSelectorCritic >> description [
+GtOverridesSpecialSelectorAdvice >> description [
 	^ 'Class overrides a special selector that is essential for the functioning of the image.'
 ]
 
 { #category : #testing }
-GtOverridesSpecialSelectorCritic >> instanceSideSelectors [
+GtOverridesSpecialSelectorAdvice >> instanceSideSelectors [
 	^ #(#== #~~ #class #basicAt: #basicAt:put: #basicSize #identityHash)
 ]
 
 { #category : #testing }
-GtOverridesSpecialSelectorCritic >> matches: aNode from: aCriticRunner [
+GtOverridesSpecialSelectorAdvice >> matches: aNode from: aCriticRunner [
 	aNode isMethodPattern ifFalse: [ ^ false ].
 	^ aCriticRunner behavior superclass notNil
 		and: [ ((aCriticRunner behavior isClassSide
@@ -31,12 +31,12 @@ GtOverridesSpecialSelectorCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtOverridesSpecialSelectorCritic >> name [
+GtOverridesSpecialSelectorAdvice >> name [
 	^ 'Overrides special selector'
 ]
 
 { #category : #accessing }
-GtOverridesSpecialSelectorCritic >> potentialFilter [
+GtOverridesSpecialSelectorAdvice >> potentialFilter [
 	^ (self classSideSelectors
 		inject: (self instanceSideSelectors
 				inject: GtSearchNullFilter new

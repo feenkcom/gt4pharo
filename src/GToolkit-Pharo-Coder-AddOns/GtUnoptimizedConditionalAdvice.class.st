@@ -1,23 +1,23 @@
 Class {
-	#name : #GtUnoptimizedConditionalCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtUnoptimizedConditionalAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtUnoptimizedConditionalCritic >> description [
+GtUnoptimizedConditionalAdvice >> description [
 	^ '((a and:[b]) and: [c]) can be written as (a and: [b and: [c]])'
 ]
 
 { #category : #private }
-GtUnoptimizedConditionalCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtUnoptimizedConditionalAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ {GtReorderConditionalsFixItAction
 			forCoder: aCriticStyler coderModel
 			node: aNode}
 ]
 
 { #category : #styling }
-GtUnoptimizedConditionalCritic >> highlightPositionsFor: aSmaCCNode [
+GtUnoptimizedConditionalAdvice >> highlightPositionsFor: aSmaCCNode [
 	^ OrderedCollection new
 		addAll: (aSmaCCNode receiver message selectorParts collect: #sourceInterval);
 		addAll: (aSmaCCNode message selectorParts collect: #sourceInterval);
@@ -25,7 +25,7 @@ GtUnoptimizedConditionalCritic >> highlightPositionsFor: aSmaCCNode [
 ]
 
 { #category : #accessing }
-GtUnoptimizedConditionalCritic >> matches: aNode from: aCriticRunner [
+GtUnoptimizedConditionalAdvice >> matches: aNode from: aCriticRunner [
 	| conditionals |
 	(aNode isMessageSend and: [ aNode receiver isMessageSend ])
 		ifFalse: [ ^ false ].
@@ -37,11 +37,11 @@ GtUnoptimizedConditionalCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtUnoptimizedConditionalCritic >> name [
+GtUnoptimizedConditionalAdvice >> name [
 	^ 'Unoptimized conditional expression'
 ]
 
 { #category : #enumerating }
-GtUnoptimizedConditionalCritic >> potentialFilter [
+GtUnoptimizedConditionalAdvice >> potentialFilter [
 	^ (#and: gtReferences | #or: gtReferences) asAsyncStream
 ]

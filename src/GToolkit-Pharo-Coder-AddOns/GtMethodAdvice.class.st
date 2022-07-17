@@ -1,14 +1,14 @@
 Class {
-	#name : #GtMethodCritic,
+	#name : #GtMethodAdvice,
 	#superclass : #Object,
 	#classVars : [
 		'ActiveCritics'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtMethodCritic class >> activeCritics [
+GtMethodAdvice class >> activeCritics [
 	^ ActiveCritics
 		ifNil: [ (self withAllSubclasses
 				select: [ :each | each isAbstract not and: [ each isDefault ] ])
@@ -16,7 +16,7 @@ GtMethodCritic class >> activeCritics [
 ]
 
 { #category : #accessing }
-GtMethodCritic class >> gtMethodsFor: aView [
+GtMethodAdvice class >> gtMethodsFor: aView [
 	<gtClassView>
 	self isAbstract ifTrue: [ ^ aView empty ].
 	^ aView forward
@@ -29,27 +29,27 @@ GtMethodCritic class >> gtMethodsFor: aView [
 ]
 
 { #category : #testing }
-GtMethodCritic class >> isAbstract [
-	^ self == GtMethodCritic
+GtMethodAdvice class >> isAbstract [
+	^ self == GtMethodAdvice
 ]
 
 { #category : #testing }
-GtMethodCritic class >> isDefault [
+GtMethodAdvice class >> isDefault [
 	^ true
 ]
 
 { #category : #comparing }
-GtMethodCritic >> = anObject [
+GtMethodAdvice >> = anObject [
 	^ self class = anObject class
 ]
 
 { #category : #accessing }
-GtMethodCritic >> description [
+GtMethodAdvice >> description [
 	^ self subclassResponsibility
 ]
 
 { #category : #styling }
-GtMethodCritic >> descriptionWithEditor: anEditorElement [
+GtMethodAdvice >> descriptionWithEditor: anEditorElement [
 	| text browseAttribute |
 	text := self description asRopedText.
 	browseAttribute := GtButtonAttribute new
@@ -69,21 +69,21 @@ GtMethodCritic >> descriptionWithEditor: anEditorElement [
 ]
 
 { #category : #styling }
-GtMethodCritic >> errorHighlightAttribute [
+GtMethodAdvice >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
 ]
 
 { #category : #accessing }
-GtMethodCritic >> finish: aNode from: criticRunner [
+GtMethodAdvice >> finish: aNode from: criticRunner [
 ]
 
 { #category : #styling }
-GtMethodCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtMethodAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ #()
 ]
 
 { #category : #styling }
-GtMethodCritic >> fixItLocationFor: aSmaCCNode [
+GtMethodAdvice >> fixItLocationFor: aSmaCCNode [
 	(aSmaCCNode isMessage or: [ aSmaCCNode isMethodPattern ])
 		ifTrue: [ ^ aSmaCCNode selectorParts last stopPosition ].
 	aSmaCCNode isMessageSend
@@ -92,12 +92,12 @@ GtMethodCritic >> fixItLocationFor: aSmaCCNode [
 ]
 
 { #category : #comparing }
-GtMethodCritic >> hash [
+GtMethodAdvice >> hash [
 	^ self class hash
 ]
 
 { #category : #styling }
-GtMethodCritic >> highlightPositionsFor: aSmaCCNode [
+GtMethodAdvice >> highlightPositionsFor: aSmaCCNode [
 	aSmaCCNode isMessage
 		ifTrue: [ ^ aSmaCCNode selectorParts collect: [ :each | each sourceInterval ] ].
 	aSmaCCNode isMessageSend
@@ -106,32 +106,32 @@ GtMethodCritic >> highlightPositionsFor: aSmaCCNode [
 ]
 
 { #category : #testing }
-GtMethodCritic >> includeFixIt [
+GtMethodAdvice >> includeFixIt [
 	^ true
 ]
 
 { #category : #testing }
-GtMethodCritic >> includeHighlight [
+GtMethodAdvice >> includeHighlight [
 	^ true
 ]
 
 { #category : #testing }
-GtMethodCritic >> matches: aNode from: aCriticRunner [
+GtMethodAdvice >> matches: aNode from: aCriticRunner [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtMethodCritic >> name [
+GtMethodAdvice >> name [
 	^ ''
 ]
 
 { #category : #accessing }
-GtMethodCritic >> potentialFilter [
+GtMethodAdvice >> potentialFilter [
 	^ nil
 ]
 
 { #category : #styling }
-GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
+GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 	| location hoverMarker hoverAttribute fixItAttribute |
 	self includeFixIt ifFalse: [ ^ self ].
 	location := self fixItLocationFor: aNode.
@@ -164,7 +164,7 @@ GtMethodCritic >> styleFixIt: aNode using: aCriticStyler [
 ]
 
 { #category : #styling }
-GtMethodCritic >> styleHighlight: aNode using: aCriticStyler [
+GtMethodAdvice >> styleHighlight: aNode using: aCriticStyler [
 	(self includeHighlight and: [ self includeFixIt not ]) ifFalse: [ ^ self ].
 	(self highlightPositionsFor: aNode)
 		do: [ :each | 
@@ -175,7 +175,7 @@ GtMethodCritic >> styleHighlight: aNode using: aCriticStyler [
 ]
 
 { #category : #styling }
-GtMethodCritic >> styleIssue: aNode using: aCriticStyler [
+GtMethodAdvice >> styleIssue: aNode using: aCriticStyler [
 	self styleFixIt: aNode using: aCriticStyler.
 	self styleHighlight: aNode using: aCriticStyler
 ]

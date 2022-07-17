@@ -6,7 +6,7 @@ Class {
 		'compute',
 		'hasComputed'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Advice'
+	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #accessing }

@@ -5,7 +5,7 @@ Class {
 		'compute',
 		'stream'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Advice'
+	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #accessing }

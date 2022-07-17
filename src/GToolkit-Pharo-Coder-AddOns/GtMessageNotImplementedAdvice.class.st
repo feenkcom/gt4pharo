@@ -1,16 +1,16 @@
 Class {
-	#name : #GtMessageNotImplementedCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtMessageNotImplementedAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtMessageNotImplementedCritic >> description [
+GtMessageNotImplementedAdvice >> description [
 	^ 'The message has no implementers. If the code is executed, then it will case a #doesNotUnderstand: message to be sent.'
 ]
 
 { #category : #private }
-GtMessageNotImplementedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtMessageNotImplementedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	| actions type |
 	actions := OrderedCollection new.
 	type := aCriticStyler typeOf: aNode parent receiver.
@@ -27,7 +27,7 @@ GtMessageNotImplementedCritic >> fixItActionsFor: aNode using: aCriticStyler [
 ]
 
 { #category : #testing }
-GtMessageNotImplementedCritic >> matches: aNode from: aCriticRunner [
+GtMessageNotImplementedAdvice >> matches: aNode from: aCriticRunner [
 	| receiverType |
 	aNode isMessage ifFalse: [ ^ false ].
 	aCriticRunner hasRefactoring ifTrue: [ ^ self ].
@@ -40,12 +40,12 @@ GtMessageNotImplementedCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtMessageNotImplementedCritic >> name [
+GtMessageNotImplementedAdvice >> name [
 	^ 'Message is not implemented'
 ]
 
 { #category : #private }
-GtMessageNotImplementedCritic >> potentialRenameActionsFor: aNode type: type using: aCriticStyler [
+GtMessageNotImplementedAdvice >> potentialRenameActionsFor: aNode type: type using: aCriticStyler [
 	| selectors block args currentSelector index minRating |
 	selectors := OrderedCollection new.
 	args := aNode arguments size.

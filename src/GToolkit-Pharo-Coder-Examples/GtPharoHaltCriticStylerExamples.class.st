@@ -17,7 +17,7 @@ GtPharoHaltCriticStylerExamples >> haltNowHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodCriticStyler new
-		critics: { GtHaltCritic new };
+		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -43,7 +43,7 @@ GtPharoHaltCriticStylerExamples >> haltOnceHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodCriticStyler new
-		critics: { GtHaltCritic new };
+		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -69,7 +69,7 @@ GtPharoHaltCriticStylerExamples >> selfHaltHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodCriticStyler new
-		critics: { GtHaltCritic new };
+		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -96,7 +96,7 @@ GtPharoHaltCriticStylerExamples >> selfHaltOnceHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtMethodCriticStyler new
-		critics: { GtHaltCritic new };
+		critics: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.
 

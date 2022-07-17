@@ -1,19 +1,19 @@
 Class {
-	#name : #GtTemporaryNotUsedCritic,
-	#superclass : #GtMethodCritic,
+	#name : #GtTemporaryNotUsedAdvice,
+	#superclass : #GtMethodAdvice,
 	#instVars : [
 		'variables'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtTemporaryNotUsedCritic >> description [
+GtTemporaryNotUsedAdvice >> description [
 	^ 'Temporary variable is not used.'
 ]
 
 { #category : #accessing }
-GtTemporaryNotUsedCritic >> finish: aNode from: criticRunner [
+GtTemporaryNotUsedAdvice >> finish: aNode from: criticRunner [
 	(aNode isSequence and: [ aNode variables notEmpty ]) ifFalse: [ ^ self ].
 	aNode variables
 		do: [ :each | 
@@ -23,18 +23,18 @@ GtTemporaryNotUsedCritic >> finish: aNode from: criticRunner [
 ]
 
 { #category : #accessing }
-GtTemporaryNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtTemporaryNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ {GtRemoveTemporaryFixItAction forCoder: aCriticStyler coderModel node: aNode}
 ]
 
 { #category : #accessing }
-GtTemporaryNotUsedCritic >> initialize [
+GtTemporaryNotUsedAdvice >> initialize [
 	super initialize.
 	variables := Set new
 ]
 
 { #category : #accessing }
-GtTemporaryNotUsedCritic >> matches: aNode from: aCriticRunner [
+GtTemporaryNotUsedAdvice >> matches: aNode from: aCriticRunner [
 	(aNode isSequence and: [ aNode variables notEmpty ])
 		ifTrue: [ aNode variables do: [ :each | variables add: each variableName ] ].
 	aNode isVariable
@@ -45,6 +45,6 @@ GtTemporaryNotUsedCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtTemporaryNotUsedCritic >> name [
+GtTemporaryNotUsedAdvice >> name [
 	^ 'Temporary is not used'
 ]
