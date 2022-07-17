@@ -4,12 +4,17 @@ Class {
 	#traits : 'TMethodAdviceRunner',
 	#classTraits : 'TMethodAdviceRunner classTrait',
 	#instVars : [
-		'critic',
 		'currentMethod',
-		'found'
+		'found',
+		'advice'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
+
+{ #category : #accessing }
+GtSearchMethodAdviceFilter >> advice: aMethodAdvice [
+	advice := aMethodAdvice
+]
 
 { #category : #accessing }
 GtSearchMethodAdviceFilter >> behavior [
@@ -19,13 +24,8 @@ GtSearchMethodAdviceFilter >> behavior [
 ]
 
 { #category : #accessing }
-GtSearchMethodAdviceFilter >> critic: aMethodCritic [
-	critic := aMethodCritic
-]
-
-{ #category : #accessing }
 GtSearchMethodAdviceFilter >> defaultFilterScope [
-	^ critic potentialFilter ifNil: [ super defaultFilterScope ]
+	^ advice potentialFilter ifNil: [ super defaultFilterScope ]
 ]
 
 { #category : #accessing }
@@ -46,7 +46,7 @@ GtSearchMethodAdviceFilter >> includesMethod: aCompiledMethod [
 
 { #category : #accessing }
 GtSearchMethodAdviceFilter >> processNode: aNode [
-	(critic matches: aNode from: self) ifTrue: [ found := true ].
+	(advice matches: aNode from: self) ifTrue: [ found := true ].
 	aNode nodesDo: [ :node | self processNode: node ].
-	critic finish: aNode from: self
+	advice finish: aNode from: self
 ]

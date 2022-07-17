@@ -17,7 +17,7 @@ GtPharoHaltAdviceStylerExamples >> haltNowHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodAdviceStyler new
-		critics: { GtHaltAdvice new };
+		advices: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -43,7 +43,7 @@ GtPharoHaltAdviceStylerExamples >> haltOnceHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodAdviceStyler new
-		critics: { GtHaltAdvice new };
+		advices: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -69,7 +69,7 @@ GtPharoHaltAdviceStylerExamples >> selfHaltHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodAdviceStyler new
-		critics: { GtHaltAdvice new };
+		advices: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText
 		ast: anAst.
@@ -96,7 +96,7 @@ GtPharoHaltAdviceStylerExamples >> selfHaltOnceHighlighted [
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtMethodAdviceStyler new
-		critics: { GtHaltAdvice new };
+		advices: { GtHaltAdvice new };
 		coderViewModel: aCoder asCoderViewModel;
 		style: aSourceText ast: anAst.
 
