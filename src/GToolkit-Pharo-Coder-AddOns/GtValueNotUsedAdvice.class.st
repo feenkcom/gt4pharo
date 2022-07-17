@@ -1,21 +1,21 @@
 Class {
-	#name : #GtValueNotUsedCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtValueNotUsedAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtValueNotUsedCritic >> description [
+GtValueNotUsedAdvice >> description [
 	^ 'Variables and literals should be used, or they should be removed to simplify the code.'
 ]
 
 { #category : #private }
-GtValueNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtValueNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ {GtRemoveValueFixItAction forCoder: aCriticStyler coderModel node: aNode}
 ]
 
 { #category : #testing }
-GtValueNotUsedCritic >> matches: aNode from: aCriticRunner [
+GtValueNotUsedAdvice >> matches: aNode from: aCriticRunner [
 	aNode isVariable
 		ifTrue: [ ^ aNode isUsed not
 				and: [ aNode parent isValueNode or: [ aNode parent isMessage ] ] ].
@@ -23,6 +23,6 @@ GtValueNotUsedCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtValueNotUsedCritic >> name [
+GtValueNotUsedAdvice >> name [
 	^ 'Value is not used'
 ]

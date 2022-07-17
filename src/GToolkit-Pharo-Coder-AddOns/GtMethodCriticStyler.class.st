@@ -10,7 +10,7 @@ Class {
 		'variableBindings',
 		'isDoIt'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #comparing }
@@ -71,7 +71,7 @@ GtMethodCriticStyler >> hasRefactoring [
 { #category : #accessing }
 GtMethodCriticStyler >> initialize [
 	super initialize.
-	critics := GtMethodCritic activeCritics.
+	critics := GtMethodAdvice activeCritics.
 	isDoIt := false.
 	isForWorkspace := false
 ]

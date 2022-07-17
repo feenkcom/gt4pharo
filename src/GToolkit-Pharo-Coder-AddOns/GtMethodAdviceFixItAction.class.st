@@ -1,11 +1,11 @@
 Class {
-	#name : #GtCriticFixItAction,
+	#name : #GtMethodAdviceFixItAction,
 	#superclass : #GtFixItAction,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #examples }
-GtCriticFixItAction class >> testOriginal: originalSource generates: modifiedSource forNode: nodeBlock [
+GtMethodAdviceFixItAction class >> testOriginal: originalSource generates: modifiedSource forNode: nodeBlock [
 	^ self
 		testOriginal: originalSource
 		generates: modifiedSource
@@ -14,7 +14,7 @@ GtCriticFixItAction class >> testOriginal: originalSource generates: modifiedSou
 ]
 
 { #category : #examples }
-GtCriticFixItAction class >> testOriginal: originalSource generates: modifiedSource forNode: nodeBlock configure: configureBlock [
+GtMethodAdviceFixItAction class >> testOriginal: originalSource generates: modifiedSource forNode: nodeBlock configure: configureBlock [
 	| source ast element action coder |
 	source := originalSource.
 	ast := GtPharoParser parse: source.
@@ -30,7 +30,7 @@ GtCriticFixItAction class >> testOriginal: originalSource generates: modifiedSou
 ]
 
 { #category : #executing }
-GtCriticFixItAction >> deleteStartOfLineWhitespace: aSmaCCString before: aNode [
+GtMethodAdviceFixItAction >> deleteStartOfLineWhitespace: aSmaCCString before: aNode [
 	| index char |
 	index := aNode startPosition - 1.
 	[ index > 0
@@ -47,7 +47,7 @@ GtCriticFixItAction >> deleteStartOfLineWhitespace: aSmaCCString before: aNode [
 ]
 
 { #category : #executing }
-GtCriticFixItAction >> executeOn: anEditorElement [
+GtMethodAdviceFixItAction >> executeOn: anEditorElement [
 	| newSource |
 	newSource := sourceCoder currentSourceString.
 	newSource = node topParent completeSource asString ifFalse: [ ^ self ].
@@ -56,6 +56,6 @@ GtCriticFixItAction >> executeOn: anEditorElement [
 ]
 
 { #category : #executing }
-GtCriticFixItAction >> updateSource [
+GtMethodAdviceFixItAction >> updateSource [
 	^ self subclassResponsibility
 ]

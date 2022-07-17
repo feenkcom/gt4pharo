@@ -1,10 +1,10 @@
 Class {
 	#name : #GtRenameMessageFixItAction,
-	#superclass : #GtCriticFixItAction,
+	#superclass : #GtMethodAdviceFixItAction,
 	#instVars : [
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #examples }

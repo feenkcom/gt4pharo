@@ -8,7 +8,7 @@ Class {
 		'currentMethod',
 		'found'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }

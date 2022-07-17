@@ -1,16 +1,16 @@
 Class {
-	#name : #GtEqualsNotUsedCritic,
-	#superclass : #GtSendNotUsedCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtEqualsNotUsedAdvice,
+	#superclass : #GtSendNotUsedAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtEqualsNotUsedCritic >> description [
+GtEqualsNotUsedAdvice >> description [
 	^ 'Comparison messages should be used. #= messages may be missing : for an assignment expression.'
 ]
 
 { #category : #private }
-GtEqualsNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtEqualsNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	| actions |
 	actions := OrderedCollection new.
 	(aNode selector = #=
@@ -23,6 +23,6 @@ GtEqualsNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
 ]
 
 { #category : #accessing }
-GtEqualsNotUsedCritic >> selectors [
+GtEqualsNotUsedAdvice >> selectors [
 	^ #(= ~= == ~~ < <= > >=)
 ]

@@ -1,16 +1,16 @@
 Class {
-	#name : #GtDuplicateCodeInConditionalCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtDuplicateCodeInConditionalAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtDuplicateCodeInConditionalCritic >> description [
+GtDuplicateCodeInConditionalAdvice >> description [
 	^ 'Code at the beginning or end of #ifTrue:ifFalse: block is duplicated.'
 ]
 
 { #category : #accessing }
-GtDuplicateCodeInConditionalCritic >> matches: aNode from: aCriticRunner [
+GtDuplicateCodeInConditionalAdvice >> matches: aNode from: aCriticRunner [
 	| first last |
 	aNode isMessage ifFalse: [ ^ false ].
 	(#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: aNode selector)
@@ -23,12 +23,12 @@ GtDuplicateCodeInConditionalCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtDuplicateCodeInConditionalCritic >> name [
+GtDuplicateCodeInConditionalAdvice >> name [
 	^ 'Duplicate code in conditional'
 ]
 
 { #category : #enumerating }
-GtDuplicateCodeInConditionalCritic >> potentialFilter [
+GtDuplicateCodeInConditionalAdvice >> potentialFilter [
 	^ (#ifTrue:ifFalse: gtReferences | #ifFalse:ifTrue: gtReferences
 		| Halt gtReferences) asAsyncStream
 ]

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRemoveAssignmentFixItAction,
-	#superclass : #GtCriticFixItAction,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
+	#superclass : #GtMethodAdviceFixItAction,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #examples }

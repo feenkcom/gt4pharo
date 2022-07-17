@@ -1,22 +1,22 @@
 Class {
-	#name : #GtCollectSelectNotUsedCritic,
-	#superclass : #GtSendNotUsedCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtCollectSelectNotUsedAdvice,
+	#superclass : #GtSendNotUsedAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtCollectSelectNotUsedCritic >> description [
+GtCollectSelectNotUsedAdvice >> description [
 	^ '#collect:, #select:, and #reject: return new collections. If they are not used, they could be changed to use #do:.'
 ]
 
 { #category : #private }
-GtCollectSelectNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtCollectSelectNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ {(GtRenameMessageFixItAction forCoder: aCriticStyler coderModel node: aNode)
 			selector: #do:;
 			yourself} , (super fixItActionsFor: aNode using: aCriticStyler)
 ]
 
 { #category : #accessing }
-GtCollectSelectNotUsedCritic >> selectors [
+GtCollectSelectNotUsedAdvice >> selectors [
 	^ #(collect: select: reject:)
 ]

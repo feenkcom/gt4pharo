@@ -1,28 +1,28 @@
 Class {
-	#name : #GtMethodNotUsedCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtMethodNotUsedAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtMethodNotUsedCritic class >> isDefault [
+GtMethodNotUsedAdvice class >> isDefault [
 	^ false
 ]
 
 { #category : #accessing }
-GtMethodNotUsedCritic >> description [
+GtMethodNotUsedAdvice >> description [
 	^ 'Method has no senders. If it is not called through a constructed selector, then it can be removed.'
 ]
 
 { #category : #private }
-GtMethodNotUsedCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtMethodNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ {(GtRemoveMethodFixItAction forCoder: aCriticStyler coderModel node: aNode)
 			behavior: aCriticStyler behavior;
 			yourself}
 ]
 
 { #category : #testing }
-GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
+GtMethodNotUsedAdvice >> matches: aNode from: aCriticRunner [
 	(aNode isMethodPattern
 		and: [ (GtPharoIndex current sendersOf: aNode selector) isEmpty ])
 		ifFalse: [ ^ false ].
@@ -38,12 +38,12 @@ GtMethodNotUsedCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtMethodNotUsedCritic >> name [
+GtMethodNotUsedAdvice >> name [
 	^ 'Method is not sent'
 ]
 
 { #category : #enumerating }
-GtMethodNotUsedCritic >> potentialFilter [
+GtMethodNotUsedAdvice >> potentialFilter [
 	| methods |
 	methods := OrderedCollection new.
 	GtPharoIndex current

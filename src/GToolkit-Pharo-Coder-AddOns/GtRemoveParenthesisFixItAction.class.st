@@ -1,10 +1,10 @@
 Class {
 	#name : #GtRemoveParenthesisFixItAction,
-	#superclass : #GtCriticFixItAction,
+	#superclass : #GtMethodAdviceFixItAction,
 	#instVars : [
 		'description'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #examples }

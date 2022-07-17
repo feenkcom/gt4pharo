@@ -1,16 +1,16 @@
 Class {
-	#name : #GtUnoptimizedToDoCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtUnoptimizedToDoAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtUnoptimizedToDoCritic >> description [
+GtUnoptimizedToDoAdvice >> description [
 	^ '#to:do: is optimized by the compiler and is faster than using (to:)do:'
 ]
 
 { #category : #private }
-GtUnoptimizedToDoCritic >> fixItActionsFor: aNode using: aCriticStyler [
+GtUnoptimizedToDoAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	^ {(GtRemoveParenthesisFixItAction
 			forCoder: aCriticStyler coderModel
 			node: aNode receiver)
@@ -19,7 +19,7 @@ GtUnoptimizedToDoCritic >> fixItActionsFor: aNode using: aCriticStyler [
 ]
 
 { #category : #styling }
-GtUnoptimizedToDoCritic >> highlightPositionsFor: aSmaCCNode [
+GtUnoptimizedToDoAdvice >> highlightPositionsFor: aSmaCCNode [
 	^ OrderedCollection new
 		addAll: (aSmaCCNode receiver message selectorParts collect: #sourceInterval);
 		addAll: (aSmaCCNode message selectorParts collect: #sourceInterval);
@@ -27,7 +27,7 @@ GtUnoptimizedToDoCritic >> highlightPositionsFor: aSmaCCNode [
 ]
 
 { #category : #accessing }
-GtUnoptimizedToDoCritic >> matches: aNode from: aCriticRunner [
+GtUnoptimizedToDoAdvice >> matches: aNode from: aCriticRunner [
 	(aNode isMessageSend and: [ aNode receiver isMessageSend ])
 		ifFalse: [ ^ false ].
 	^ aNode message selector = #do:
@@ -35,12 +35,12 @@ GtUnoptimizedToDoCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtUnoptimizedToDoCritic >> name [
+GtUnoptimizedToDoAdvice >> name [
 	^ 'to:{by:}do: not optimized'
 ]
 
 { #category : #enumerating }
-GtUnoptimizedToDoCritic >> potentialFilter [
+GtUnoptimizedToDoAdvice >> potentialFilter [
 	^ (#do: gtReferences & (#to: gtReferences | #to:by: gtReferences))
 		asAsyncStream
 ]

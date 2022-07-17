@@ -1,6 +1,6 @@
 Trait {
 	#name : #TCriticRunner,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }

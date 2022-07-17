@@ -1,31 +1,31 @@
 Class {
-	#name : #GtHaltCritic,
-	#superclass : #GtMethodCritic,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Critics'
+	#name : #GtHaltAdvice,
+	#superclass : #GtMethodAdvice,
+	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtHaltCritic >> description [
+GtHaltAdvice >> description [
 	^ 'Debugging code is in method and should be removed before it is released.'
 ]
 
 { #category : #accessing }
-GtHaltCritic >> haltSelectors [
+GtHaltAdvice >> haltSelectors [
 	^ #(halt haltOnce haltIf:)
 ]
 
 { #category : #accessing }
-GtHaltCritic >> highlightPositionsFor: aSmaCCNode [
+GtHaltAdvice >> highlightPositionsFor: aSmaCCNode [
 	^ {aSmaCCNode sourceInterval}
 ]
 
 { #category : #testing }
-GtHaltCritic >> includeFixIt [
+GtHaltAdvice >> includeFixIt [
 	^ false
 ]
 
 { #category : #accessing }
-GtHaltCritic >> matches: aNode from: aCriticRunner [
+GtHaltAdvice >> matches: aNode from: aCriticRunner [
 	aNode isMessage ifTrue: [ ^ self haltSelectors includes: aNode selector ].
 	aNode isMessageSend
 		ifTrue: [ | receiver method |
@@ -39,12 +39,12 @@ GtHaltCritic >> matches: aNode from: aCriticRunner [
 ]
 
 { #category : #accessing }
-GtHaltCritic >> name [
+GtHaltAdvice >> name [
 	^ 'Debugging code in method'
 ]
 
 { #category : #enumerating }
-GtHaltCritic >> potentialFilter [
+GtHaltAdvice >> potentialFilter [
 	^ ((self haltSelectors
 		inject: GtSearchNullFilter new
 		into: [ :sum :each | sum | each gtReferences ]) | Halt gtReferences)
