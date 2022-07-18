@@ -84,7 +84,11 @@ GtPharoMethodCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
 			withId: nil
-			to: coderAddOns
+			to: coderAddOns.
+	coderAddOns
+		addContextMenuItem: 'Debug'
+		action: [ :aCoderViewModel :anEditorElement | aCoderViewModel debug ]
+		id: nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
