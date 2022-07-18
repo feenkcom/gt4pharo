@@ -27,27 +27,31 @@ GtPharoMethodCoderSaveButton >> initialize [
 GtPharoMethodCoderSaveButton >> newSaveDestinationPickerElement [
 	^ BrVerticalPane new
 		fitContent;
-		padding: (BlInsets top: 5 left: 10 bottom: 5 right: 10);
+		padding: (BlInsets
+				top: 5
+				left: 10
+				bottom: 5
+				right: 10);
 		cellSpacing: 5;
 		addChild: (BrLabel new
-			aptitude: BrGlamorousLabelAptitude new;
-			padding: (BlInsets left: 7);
-			text: 'Where should it be saved?');
+				padding: (BlInsets left: 7);
+				text: 'Where should it be saved?');
 		addChild: (BrSimpleList new
-			fitContent;
-			itemStencil: [
-				BrButton new
-					hMatchParent;
-					alignCenterLeft;
-					aptitude: (BrGlamorousButtonFlatExteriorAptitude + (BrGlamorousLabelAptitude new glamorousCodeFont) + BrGlamorousButtonRectangularAptitude);
-					action: [ :aButton |
-						pharoMethodCoderViewModel saveIn: aButton model.
-						self dispatchEvent: BrDropdownHideWish new ] ];
-			itemDataBinder: [ :eachLabel :eachBehavior |
-				eachLabel
-					model: eachBehavior;
-					label: eachBehavior name ];
-			stream: pharoMethodCoderViewModel availableCompilationBehaviors)
+				fitContent;
+				itemStencil: [ BrButton new
+						hMatchParent;
+						alignCenterLeft;
+						aptitude: BrGlamorousButtonFlatExteriorAptitude
+								+ BrGlamorousLabelAptitude new glamorousCodeFont
+								+ BrGlamorousButtonRectangularAptitude;
+						action: [ :aButton | 
+							pharoMethodCoderViewModel saveIn: aButton model.
+							self dispatchEvent: BrDropdownHideWish new ] ];
+				itemDataBinder: [ :eachLabel :eachBehavior | 
+					eachLabel
+						model: eachBehavior;
+						label: eachBehavior name ];
+				stream: pharoMethodCoderViewModel availableCompilationBehaviors)
 ]
 
 { #category : #'private - event handling' }
