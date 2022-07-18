@@ -69,36 +69,36 @@ GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceDropdownContent [
 		fitContent;
 		padding: (BlInsets all: 5);
 		cellSpacing: 5;
-		withAsyncPromiseDo: [ :anElementPromise | 
+		withAsyncPromiseDo: [ :anElementPromise |
 			anElementPromise
-				whenSuccess: [ :aContainer :aMethodOrigin | 
+				whenSuccess: [ :aContainer :aMethodOrigin |
 					aMethodOrigin isOverridden
-						ifTrue: [ aContainer
-								addChild: (BrHorizontalPane new
-										fitContent;
-										cellSpacing: 5;
-										alignCenterLeft;
-										addChild: (BrLabel new text: 'Overridden by');
-										addChild: (self newMethodsCountButton
-												id: GtMethodCoderOverriddenAmountId;
-												action: [ self phlow
-														spawnObject: (GtPharoMethodsCoderView new
-																filter: (GtSearchOverridingMethodsFilter new method: aMethodOrigin method)) ];
-												withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overridingMethods ])) ].
+						ifTrue: [
+							aContainer addChild: (BrHorizontalPane new
+								fitContent;
+								cellSpacing: 5;
+								alignCenterLeft;
+								addChild: (BrLabel new
+									aptitude: BrGlamorousLabelAptitude;
+									text: 'Overridden by');
+								addChild: (self newMethodsCountButton
+									id: GtMethodCoderOverriddenAmountId;
+									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverridingMethodsFilter new method: aMethodOrigin method)) ];
+									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overridingMethods ])) ].
 
 					aMethodOrigin isOverriding
-						ifTrue: [ aContainer
-								addChild: (BrHorizontalPane new
-										fitContent;
-										cellSpacing: 5;
-										alignCenterLeft;
-										addChild: (BrLabel new text: 'Overrides');
-										addChild: (self newMethodsCountButton
-												id: GtMethodCoderOverridesAmountId;
-												action: [ self phlow
-														spawnObject: (GtPharoMethodsCoderView new
-																filter: (GtSearchOverriddenMethodsFilter new method: aMethodOrigin method)) ];
-												withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overriddenMethods ])) ] ] ]
+						ifTrue: [
+							aContainer addChild: (BrHorizontalPane new
+								fitContent;
+								cellSpacing: 5;
+								alignCenterLeft;
+								addChild: (BrLabel new
+									aptitude: BrGlamorousLabelAptitude;
+									text: 'Overrides');
+								addChild: (self newMethodsCountButton
+									id: GtMethodCoderOverridesAmountId;
+									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverriddenMethodsFilter new method: aMethodOrigin method)) ];
+									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overriddenMethods ])) ] ] ]
 ]
 
 { #category : #'private - insance creation' }
