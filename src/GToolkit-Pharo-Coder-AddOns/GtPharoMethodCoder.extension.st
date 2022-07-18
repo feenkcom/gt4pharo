@@ -131,15 +131,6 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addFormatMethodAst: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 10>
-	self
-		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
-		withId: nil
-		to: coderAddOns
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ 
