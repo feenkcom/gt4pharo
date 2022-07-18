@@ -70,21 +70,19 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 		ifNotNil: [ :node | 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
-				label: 'Browse Implementors'
 				node: node
 				selector: #browseImplementorsAt:
-				shortcutKey: GtSourceCoderBrowseImplementorsShortcut new
-						combinationForPlatform userPrintString ]
+				shortcut: GtSourceCoderBrowseImplementorsShortcut new ]
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: node selector: sel shortcutKey: aString [
+GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut [
 	| highlightNode |
 	(node isMessage or: [ node isMessageSend  or: [ node isMethodPattern ] ])
 		ifFalse: [ ^ self ].
 	highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: menuLabel description: node selector)
+		addContextMenuItem: (self createLabel: aShortcut name description: node selector)
 		hover: [ :textualCoderViewModel | 
 			textualCoderViewModel
 				addTextAttribute: self class nodeHighlight
@@ -92,7 +90,7 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns label: menuLabel node: no
 				to: highlightNode stopPosition ]
 		leave: self removeHighlightBlock
 		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition ]
-		shortcutKey: aString
+		shortcutKey: aShortcut combinationForPlatform userPrintString
 ]
 
 { #category : #accessing }
@@ -102,11 +100,9 @@ GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aC
 		ifNotNil: [ :node | 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
-				label: 'Browse References'
 				node: node
 				selector: #browseReferencesAt:
-				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
-						combinationForPlatform userPrintString ]
+				shortcut: GtSourceCoderBrowseReferencesShortcut new ]
 ]
 
 { #category : #'api - accessing' }

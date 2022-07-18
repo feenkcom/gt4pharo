@@ -75,29 +75,16 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addEvaluateAddonsTo: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
-	coderAddOns
-		addContextMenuItem: 'Evaluate' translated
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor doIt
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		shortcutKey: GtSourceCoderDoItShortcut new combinationForPlatform
-				userPrintString.
-	coderAddOns
-		addContextMenuItem: 'Inspect' translated
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor doItAndGo
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		shortcutKey: GtSourceCoderDoItAndInspectShortcut new combinationForPlatform
-				userPrintString.
-	coderAddOns
-		addContextMenuItem: 'Print' translated
-		action: [ :aCoderUIModel :anElement | GtCoderExecutionContextVariable element: anElement do: [ aCoderUIModel printIt ] ]
-		shortcutKey: GtSourceCoderPrintItShortcut new combinationForPlatform
-				userPrintString
+	self
+		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
+			withId: nil
+			to: coderAddOns;
+		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
+			withId: nil
+			to: coderAddOns;
+		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
+			withId: nil
+			to: coderAddOns
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -105,21 +92,27 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
-		ifNotEmpty: [ (theNodes
+		ifNotEmpty: [ | shortcut |
+			(theNodes
 				anySatisfy: [ :each | each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ])
 				ifTrue: [ ^ self ].
+			shortcut := GtSourceCoderExtractMethodShortcut new.
 			coderAddOns
-				addContextMenuItem: 'Extract method'
+				addContextMenuItem: shortcut name
 				hover: [ :textualCoderViewModel | 
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
 						from: theNodes first startPosition
 						to: theNodes last stopPosition ]
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | (GtExtractMethodController new sourceCoderViewModel: aTextualViewModel) execute ]
+				action: [ :aTextualViewModel | 
+					shortcut
+						performOnEditor: nil
+						element: nil
+						coderViewModel: aTextualViewModel
+						dueTo: nil ]
 				id: GtMethodCoderExtractMethodContextMenuItemId
-				shortcutKey: GtSourceCoderExtractMethodShortcut new combinationForPlatform
-						userPrintString ]
+				shortcutKey: shortcut combinationForPlatform userPrintString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
