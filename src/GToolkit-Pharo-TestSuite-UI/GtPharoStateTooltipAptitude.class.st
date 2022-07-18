@@ -25,7 +25,6 @@ GtPharoStateTooltipAptitude >> initialize [
 
 { #category : #initialization }
 GtPharoStateTooltipAptitude >> newTooltipContent [
-
 	| aTooltipContent |
 	aTooltipContent := BrColumnedList new.
 	aTooltipContent
@@ -36,33 +35,28 @@ GtPharoStateTooltipAptitude >> newTooltipContent [
 	aTooltipContent
 		addEventHandlerOn: BrSelectionChanged
 		do: [ :anEvent | 
-			anEvent selectedDo: [ :theIndices | 
-				| aWidgetElement aSelectedObject |
-				aWidgetElement := anEvent currentTarget.
-				aSelectedObject := aWidgetElement viewModel itemAt:
-					                   theIndices first.
-				self updateCoderFilterWith: aSelectedObject ] ].
+			anEvent
+				selectedDo: [ :theIndices | 
+					| aWidgetElement aSelectedObject |
+					aWidgetElement := anEvent currentTarget.
+					aSelectedObject := aWidgetElement viewModel itemAt: theIndices first.
+					self updateCoderFilterWith: aSelectedObject ] ].
 
 	aTooltipContent column
 		title: 'Icon';
-		cellStencil: [ 
-			GtPharoTestCaseUtility newColoredIcon: BlBackground transparent ];
-		dataBinder: [ :anElement :anItem | 
-			anElement background: anItem color ];
+		cellStencil: [ GtPharoTestCaseUtility newColoredIcon: BlBackground transparent ];
+		dataBinder: [ :anElement :anItem | anElement background: anItem color ];
 		width: 10.
 
 	aTooltipContent column
 		title: 'Name';
-		cellStencil: [ BrLabel new aptitude: BrGlamorousLabelAptitude ];
+		cellStencil: [ BrLabel new ];
 		dataBinder: [ :anElement :anItem | anElement text: anItem label ];
 		width: 100.
 
 	aTooltipContent column
 		title: 'Amount';
-		cellStencil: [ 
-			BrLabel new
-				aptitude: BrGlamorousLabelAptitude;
-				fitContent ];
+		cellStencil: [ BrLabel new fitContent ];
 		dataBinder: [ :anElement :anItem | 
 			| aTotalString aTotalText |
 			aTotalString := self totalStringForState: anItem.
