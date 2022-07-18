@@ -154,7 +154,7 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 		id: GtBehaviorCoderBehaviorNameApplyPreviewId;
 		margin: (BlInsets left: 5);
 		refactorings: [ { RBRenameClassRefactoring
-			model: RBNamespace new
+			model: (GtRBNamespace onEnvironment: RBBrowserEnvironment new)
 			rename: classCoder theClass name
 			to: aClassNameEditor text asString } ];
 		when: GtRefactoringsAppliedEvent do: [ :anEvent |
