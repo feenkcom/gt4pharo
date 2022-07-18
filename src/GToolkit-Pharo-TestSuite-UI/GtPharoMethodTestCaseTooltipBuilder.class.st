@@ -33,29 +33,31 @@ GtPharoMethodTestCaseTooltipBuilder >> element: anElement [
 
 { #category : #'instance creation' }
 GtPharoMethodTestCaseTooltipBuilder >> newPlayTestCaseElementWithExplanation: aString [
+
 	^ BrVerticalPane new
-		fitContent;
-		alignCenter;
-		padding: (BlInsets all: 5);
-		addChild: (BrLabel new
-				margin: (BlInsets bottom: 5);
-				text: aString;
-				fitContent);
-		addChild: (BrHorizontalPane new
-				fitContent;
-				addChild: (BrButton new
-						beTinySize;
-						aptitude: BrGlamorousButtonWithIconAptitude;
-						margin: (BlInsets right: 5);
-						icon: BrGlamorousVectorIcons play;
-						label: 'Play Unit Test';
-						action: [ :aButton | self testCase play ]);
-				addChild: (BrButton new
-						beTinySize;
-						aptitude: BrGlamorousButtonWithIconAptitude;
-						icon: BrGlamorousVectorIcons debug;
-						label: 'Debug Unit Test';
-						action: [ :aButton | self testCase debug ]))
+		  fitContent;
+		  alignCenter;
+		  padding: (BlInsets all: 5);
+		  addChild: (BrLabel new
+				   aptitude: BrGlamorousLabelAptitude new;
+				   margin: (BlInsets bottom: 5);
+				   text: aString;
+				   fitContent);
+		  addChild: (BrHorizontalPane new
+				   fitContent;
+				   addChild: (BrButton new
+						    beTinySize;
+						    aptitude: BrGlamorousButtonWithIconAptitude;
+						    margin: (BlInsets right: 5);
+						    icon: BrGlamorousVectorIcons play;
+						    label: 'Play Unit Test';
+						    action: [ :aButton | self testCase play ]);
+				   addChild: (BrButton new
+						    beTinySize;
+						    aptitude: BrGlamorousButtonWithIconAptitude;
+						    icon: BrGlamorousVectorIcons debug;
+						    label: 'Debug Unit Test';
+						    action: [ :aButton | self testCase debug ]))
 ]
 
 { #category : #accessing }
@@ -120,6 +122,7 @@ GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseSkippedState: aState [
 { #category : #visiting }
 GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseState: aState [
 	^ BrLabel new
+		aptitude: BrGlamorousLabelAptitude new;
 		text: 'Test Result Indicator';
 		fitContent
 ]

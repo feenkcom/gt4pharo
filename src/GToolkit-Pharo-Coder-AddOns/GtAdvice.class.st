@@ -90,6 +90,7 @@ GtAdvice >> buildActions: adviceActions in: anElement for: aButton [
 									aButton fireEvent: BrDropdownHideWish new.
 									aButton fireEvent: BrContextMenuHideWish new ];
 							addChild: (BrLabel new
+									aptitude: BrGlamorousLabelAptitude;
 									text: each title glamorousCodeSmallSize;
 									yourself).
 					element ];

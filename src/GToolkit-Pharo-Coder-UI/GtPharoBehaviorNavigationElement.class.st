@@ -6,12 +6,14 @@ Class {
 	#instVars : [
 		'classNameLabel'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
 { #category : #initialization }
 GtPharoBehaviorNavigationElement >> createNameLabel [
-	^ BrLabel new beSmallSize
+	^ BrLabel new
+		aptitude: BrGlamorousLabelAptitude;
+		beSmallSize
 ]
 
 { #category : #initialization }

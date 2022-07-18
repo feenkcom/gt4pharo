@@ -13,28 +13,27 @@ Class {
 { #category : #initialization }
 GtPharoSuiteOverviewStateElement >> initialize [
 	super initialize.
-
+	
 	self
 		hMatchParent;
 		vFitContent;
 		alignCenterLeft.
 
 	icon := GtPharoTestCaseUtility newColoredIcon: BlBackground transparent.
-	name := BrLabel new.
+	name := BrLabel new
+		aptitude: BrGlamorousLabelAptitude.
 
 	amount := BrLabel new
-			text: '0';
-			withAsyncSinkDo: [ :anElementSink | 
-				anElementSink
-					sink: AsyncCounterSink new;
-					whenPending: [ :aLabel :aSink | aLabel text: aSink count ] ].
+		aptitude: BrGlamorousLabelAptitude;
+		text: '0';
+		withAsyncSinkDo: [ :anElementSink |
+			anElementSink
+				sink: AsyncCounterSink new;
+				whenPending: [ :aLabel :aSink | aLabel text: aSink count ] ].
 
 	self asyncSink sink: amount asyncSink.
 
-	self
-		addChildren: {icon.
-				name.
-				amount}
+	self addChildren: { icon . name . amount }
 ]
 
 { #category : #'api - accessing' }
