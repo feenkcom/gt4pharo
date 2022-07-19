@@ -60,11 +60,11 @@ GtRecentChanges >> onChangeOrAdd: anAnnouncement [
 	changeList add: anAnnouncement method.
 	groupedChanges
 		detect: [ :each | each theClass = anAnnouncement method methodClass ]
-		ifFound: [ :each | each add: anAnnouncement method ]
+		ifFound: [ :each | each add: anAnnouncement method asRingDefinition ]
 		ifNone: [ groupedChanges
 				add: (GtRecentChange
 						class: anAnnouncement method methodClass
-						methods: anAnnouncement method) ]
+						methods: anAnnouncement method asRingDefinition) ]
 ]
 
 { #category : #accessing }
@@ -73,20 +73,20 @@ GtRecentChanges >> onRemove: anAnnouncement [
 	changeList remove: anAnnouncement method.
 	groupedChanges
 		detect: [ :each | each theClass = anAnnouncement method methodClass ]
-		ifFound: [ :each | each remove: anAnnouncement method ]
+		ifFound: [ :each | each remove: anAnnouncement method asRingDefinition ]
 ]
 
 { #category : #accessing }
 GtRecentChanges >> setupListener [
-	SystemAnnouncer uniqueInstance
+	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded
 		send: #onChangeOrAdd:
 		to: self.
-	SystemAnnouncer uniqueInstance
+	SystemAnnouncer uniqueInstance weak
 		when: MethodModified
 		send: #onChangeOrAdd:
 		to: self.
-	SystemAnnouncer uniqueInstance
+	SystemAnnouncer uniqueInstance weak
 		when: MethodRemoved
 		send: #onRemove:
 		to: self
