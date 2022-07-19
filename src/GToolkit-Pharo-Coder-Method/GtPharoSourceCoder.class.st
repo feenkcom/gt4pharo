@@ -105,6 +105,32 @@ GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aC
 				shortcut: GtSourceCoderBrowseReferencesShortcut new ]
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 100>
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			| highlightNode |
+			(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
+				ifFalse: [ ^ self ].
+			highlightNode := node isMessageSend
+					ifTrue: [ node message ]
+					ifFalse: [ node ].
+			coderAddOns
+				addContextMenuItem: (self
+						createLabel: GtSourceCoderInlineRenameShortcut new name
+						description: node selector)
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: highlightNode startPosition
+						to: highlightNode stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
+				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
+						userPrintString ]
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
