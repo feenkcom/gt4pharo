@@ -22,7 +22,7 @@ GtRecentChanges >> computeRecentlyChanged [
 	changes := (changes groupedBy: [ :each | each content methodAffected ])
 			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].
 	changeList := changes keys asOrderedCollection.
-	groupedChanges := (changeList groupedBy: #methodClass) associations collect: [:each | GtRecentChange class: each key methods: each value ]
+	groupedChanges := (changeList groupedBy: #methodClass) associations collect: [:each | GtRecentChange class: each key methods: each value asOrderedCollection ]
 ]
 
 { #category : #accessing }
