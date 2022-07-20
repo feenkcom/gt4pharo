@@ -35,6 +35,11 @@ GtRecentChange >> gtChildren [
 	^ methods
 ]
 
+{ #category : #accessing }
+GtRecentChange >> ifEmpty: aBlock [
+	^ methods ifEmpty: aBlock
+]
+
 { #category : #acccessing }
 GtRecentChange >> methods: aCollectionOfMethods [ 
 	methods := aCollectionOfMethods

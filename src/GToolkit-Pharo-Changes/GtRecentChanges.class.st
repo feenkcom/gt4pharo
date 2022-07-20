@@ -22,7 +22,7 @@ GtRecentChanges >> computeRecentlyChanged [
 	changes := (changes groupedBy: [ :each | each content methodAffected ])
 			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].
 	changeList := changes keys asOrderedCollection.
-	groupedChanges := (changeList groupedBy: #methodClass) associations collect: [:each | GtRecentChange class: each key methods: each value asOrderedCollection ]
+	groupedChanges := ((changeList groupedBy: #methodClass) associations collect: [:each | GtRecentChange class: each key methods: each value asOrderedCollection ]) asOrderedCollection
 ]
 
 { #category : #accessing }
@@ -64,7 +64,7 @@ GtRecentChanges >> onChangeOrAdd: anAnnouncement [
 		ifNone: [ groupedChanges
 				add: (GtRecentChange
 						class: anAnnouncement method methodClass
-						methods: anAnnouncement method asRingDefinition) ]
+						methods: (OrderedCollection with: anAnnouncement method asRingDefinition)) ]
 ]
 
 { #category : #accessing }
@@ -73,7 +73,9 @@ GtRecentChanges >> onRemove: anAnnouncement [
 	changeList remove: anAnnouncement method.
 	groupedChanges
 		detect: [ :each | each theClass = anAnnouncement method methodClass ]
-		ifFound: [ :each | each remove: anAnnouncement method asRingDefinition ]
+		ifFound: [ :each | 
+			each remove: anAnnouncement method asRingDefinition.
+			each ifEmpty: [ groupedChanges remove: each ] ]
 ]
 
 { #category : #accessing }
