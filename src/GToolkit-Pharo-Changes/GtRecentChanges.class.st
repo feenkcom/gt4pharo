@@ -5,8 +5,34 @@ Class {
 		'changeList',
 		'groupedChanges'
 	],
-	#category : #'GToolkit-Pharo-Changes'
+	#category : #'GToolkit-Pharo-Changes-Model'
 }
+
+{ #category : #accessing }
+GtRecentChanges >> applyFiltersFrom: aFilterElement [
+	| items |
+	items := groupedChanges copy.
+	aFilterElement
+		filtersDo: [ :descriptor :value | items := (descriptor newFilterWithValue: value) value: items ].
+	^ items
+]
+
+{ #category : #accessing }
+GtRecentChanges >> changedClasses [
+	^ (changeList collect: [:each | each method methodClass name ]) asSet
+]
+
+{ #category : #accessing }
+GtRecentChanges >> classFilter [
+	<gtRecentChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :value | [ :aCollection | aCollection select: [ :aChange | aChange theClass name = value ] ] ];
+		named: 'In Class';
+		order: 12;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: self changedClasses ] ];
+		beNotDefault
+]
 
 { #category : #accessing }
 GtRecentChanges >> computeRecentlyChanged [
@@ -18,11 +44,28 @@ GtRecentChanges >> computeRecentlyChanged [
 	changes := allEntries
 			select: [ :each | 
 				(each content isKindOf: EpMethodChange)
-					and: [ (each tagAt: #time) >= lastSaved ] ].
+					and: [ (each tagAt: #time) >= lastSaved
+							and: [ each content methodAffected methodClass isNotNil ] ] ].
 	changes := (changes groupedBy: [ :each | each content methodAffected ])
 			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].
 	changeList := changes keys asOrderedCollection.
-	groupedChanges := ((changeList groupedBy: #methodClass) associations collect: [:each | GtRecentChange class: each key methods: each value asOrderedCollection ]) asOrderedCollection
+	groupedChanges := ((changeList groupedBy: #methodClass) associations
+			collect: [ :each | GtRecentChange class: each key methods: each value asOrderedCollection ])
+			asOrderedCollection
+]
+
+{ #category : #accessing }
+GtRecentChanges >> filterDescriptors [
+	^ (GtPhlowCollector new
+		fromObject: self;
+		pragmaName: #gtRecentChangeFilter;
+		collectAllPragmas)
+		collect: [ :aPragma | self perform: aPragma methodSelector ]
+]
+
+{ #category : #accessing }
+GtRecentChanges >> groupedChanges [
+	^ groupedChanges
 ]
 
 { #category : #accessing }
