@@ -12,6 +12,7 @@ Class {
 GtRecentChanges >> applyFiltersFrom: aFilterElement [
 	| items |
 	items := groupedChanges copy.
+	"for every filter we apply it; it gives us back a list filter which we immediately apply also"
 	aFilterElement
 		filtersDo: [ :descriptor :value | items := (descriptor newFilterWithValue: value) value: items ].
 	^ items
@@ -36,19 +37,26 @@ GtRecentChanges >> classFilter [
 
 { #category : #accessing }
 GtRecentChanges >> computeRecentlyChanged [
-	| allEntries changes lastSaved |
+	| allEntries changes lastSaved allSaved |
 	allEntries := GtEpicea allInSessionStore flatCollect: [ :each | each entries ].
-	lastSaved := (allEntries
-			select: [ :each | each content isKindOf: EpSessionSnapshot ]) first
-			tagAt: #time.
+	allSaved := allEntries
+			select: [ :each | each content isKindOf: EpSessionSnapshot ].
+	"the last save is the cut-off"
+	lastSaved := allSaved size > 0
+			ifTrue: [ allSaved first tagAt: #time ]
+			ifFalse: [ DateAndTime epoch ].
+	"we get all method changes that are recent enough and the class of which still exists"
 	changes := allEntries
 			select: [ :each | 
 				(each content isKindOf: EpMethodChange)
 					and: [ (each tagAt: #time) >= lastSaved
 							and: [ each content methodAffected methodClass isNotNil ] ] ].
+	"group the methods; if the last action is a removal, we get rid of it"
 	changes := (changes groupedBy: [ :each | each content methodAffected ])
 			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].
-	changeList := changes keys asOrderedCollection.
+	"the keys are the methods"
+	changeList := changes keys asSet.
+	"we then generate a list of RecentChange objects that map classes and methods"
 	groupedChanges := ((changeList groupedBy: #methodClass) associations
 			collect: [ :each | GtRecentChange class: each key methods: each value asOrderedCollection ])
 			asOrderedCollection
@@ -74,7 +82,7 @@ GtRecentChanges >> gtEventsFor: aView [
 	^ aView list
 		title: 'Change List';
 		priority: 3;
-		items: [ changeList ]
+		items: [ changeList asOrderedCollection ]
 ]
 
 { #category : #accessing }
