@@ -111,6 +111,13 @@ GtRecentChanges >> onChangeOrAdd: anAnnouncement [
 ]
 
 { #category : #accessing }
+GtRecentChanges >> onClassRemove: anAnnouncement [
+	changeList := changeList reject: [ :each | each method isNil ].
+	groupedChanges := groupedChanges
+			reject: [ :each | each theClass = anAnnouncement classAffected ]
+]
+
+{ #category : #accessing }
 GtRecentChanges >> onRemove: anAnnouncement [
 	(changeList includes: anAnnouncement method) ifFalse: [ ^ self ].
 	changeList remove: anAnnouncement method.
@@ -134,5 +141,9 @@ GtRecentChanges >> setupListener [
 	SystemAnnouncer uniqueInstance weak
 		when: MethodRemoved
 		send: #onRemove:
+		to: self.
+	SystemAnnouncer uniqueInstance weak
+		when: ClassRemoved
+		send: #onClassRemove:
 		to: self
 ]

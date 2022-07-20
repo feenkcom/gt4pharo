@@ -60,7 +60,14 @@ GtRecentChangeElement >> onAnnouncement: anAnnouncement [
 
 { #category : #accessing }
 GtRecentChangeElement >> setupListener [
-	SystemAnnouncer uniqueInstance weak when: MethodAnnouncement send: #onAnnouncement: to: self
+	SystemAnnouncer uniqueInstance weak
+		when: MethodAnnouncement
+		send: #onAnnouncement:
+		to: self.
+	SystemAnnouncer uniqueInstance weak
+		when: ClassRemoved
+		send: #onAnnouncement:
+		to: self
 ]
 
 { #category : #accessing }
