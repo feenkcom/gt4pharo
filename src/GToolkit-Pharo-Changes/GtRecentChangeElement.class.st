@@ -47,8 +47,6 @@ GtRecentChangeElement >> navigationModel: aNavigationModel [
 { #category : #accessing }
 GtRecentChangeElement >> onAnnouncement: anAnnouncement [
 	self updateFilters.
-	"force an update here"
-	model computeRecentlyChanged.
 	self updateTree.
 
 	self removeChildNamed: #filters.
@@ -60,14 +58,7 @@ GtRecentChangeElement >> onAnnouncement: anAnnouncement [
 
 { #category : #accessing }
 GtRecentChangeElement >> setupListener [
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAnnouncement
-		send: #onAnnouncement:
-		to: self.
-	SystemAnnouncer uniqueInstance weak
-		when: ClassRemoved
-		send: #onAnnouncement:
-		to: self
+	model weak when: GtRecentChangesUpdated send: #onAnnouncement: to: self
 ]
 
 { #category : #accessing }
