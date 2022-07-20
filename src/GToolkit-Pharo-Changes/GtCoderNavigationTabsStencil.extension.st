@@ -4,11 +4,8 @@ Extension { #name : #GtCoderNavigationTabsStencil }
 GtCoderNavigationTabsStencil >> gtRecentChangesFor: aView [
 	<gtCoderNavigation>
 	self navigationModel ifNil: [ ^ aView empty ].
-	^ aView forward
+	^ aView explicit
 		priority: 10;
 		title: 'Recent Changes';
-		updateWhen: MethodAnnouncement in: SystemAnnouncer uniqueInstance;
-		object: [ GtRecentChanges new ];
-		view: #gtTreeFor:;
-		send: [ :item | item navigateToUsingModel: self navigationModel ]
+		stencil: [ GtRecentChangeElement new navigationModel: self navigationModel ]
 ]
