@@ -144,18 +144,22 @@ GtRBNamespaceExamples >> referencesToObjectInCustomEnvironment [
 { #category : #accessing }
 GtRBNamespaceExamples >> referencesToObjectTheSameAsDefault [
 	<gtExample>
-	<noTest>
 	| refs defaultRefs model |
-	refs := self referencesToObject.
-	defaultRefs := OrderedCollection new.
+	refs := (self referencesToObject
+			collect: [ :each | 
+				{each methodClass.
+					each selector} ]) asSet.
+	defaultRefs := Set new.
 	(model := RBNamespace onEnvironment: RBBrowserEnvironment new)
 		allReferencesToClass: (model classFor: Object)
-		do: [ :each | defaultRefs add: each ].
+		do: [ :each | 
+			defaultRefs
+				add: {each methodClass.
+						each selector} ].
 	self assert: refs size equals: defaultRefs size.
 	self
-		assert: (refs collect: [ :each | each methodClass name , each selector ])
-				asSortedCollection
-		equals: (refs collect: [ :each | each methodClass name , each selector ])
+		assert: (refs collect: [ :each | each first name , each last ]) asSortedCollection
+		equals: (defaultRefs collect: [ :each | each first name , each last ])
 				asSortedCollection.
 	^ refs
 ]
@@ -186,14 +190,19 @@ GtRBNamespaceExamples >> referencesToPrintOnInCustomEnvironment [
 GtRBNamespaceExamples >> referencesToPrintOnTheSameAsDefault [
 	<gtExample>
 	| gtRefs defaultRefs |
-	gtRefs := self referencesToPrintOn.
-	defaultRefs := (RBNamespace onEnvironment: RBBrowserEnvironment new)
-			allReferencesTo: #printOn:.
+	gtRefs := (self referencesToPrintOn
+			collect: [ :each | 
+				{each methodClass.
+					each selector} ]) asSet.
+	defaultRefs := (((RBNamespace onEnvironment: RBBrowserEnvironment new)
+			allReferencesTo: #printOn:)
+			collect: [ :each | 
+				{each methodClass.
+					each selector} ]) asSet.
 	self assert: gtRefs size equals: defaultRefs size.
 	self
-		assert: (gtRefs collect: [ :each | each methodClass name , each selector ])
-				asSortedCollection
-		equals: (gtRefs collect: [ :each | each methodClass name , each selector ])
+		assert: (gtRefs collect: [ :each | each first name , each last ]) asSortedCollection
+		equals: (defaultRefs collect: [ :each | each first name , each last ])
 				asSortedCollection.
 	^ gtRefs
 ]

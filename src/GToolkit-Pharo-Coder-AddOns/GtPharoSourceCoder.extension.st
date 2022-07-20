@@ -1,6 +1,15 @@
 Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
+	<gtCoderContextMenuAddOns: 10>
+	self
+		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
+		withId: nil
+		to: coderAddOns
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
 	"Try to find a behavior reference at a given source text position and request to browse it"
 

@@ -28,6 +28,7 @@ GtReferencesAndImplementersPrefixTree >> compressData [
 GtReferencesAndImplementersPrefixTree >> gtImplementersAreInstalled: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
+		priority: 10;
 		description: [ :each | (each , ' has an implementer that is not installed') asRopedText ];
 		compute: [ (self asyncStreamStartingWith: '')
 				select: [ :each | 
@@ -48,10 +49,30 @@ GtReferencesAndImplementersPrefixTree >> gtImplementersFor: aView [
 						ifFalse: [ Array with: implementers ] ] ]
 ]
 
+{ #category : #accessing }
+GtReferencesAndImplementersPrefixTree >> gtMethodNotInCache: aGtAdvice [
+	<gtAdvice>
+	prefix = '' ifFalse: [ ^ aGtAdvice none ].
+	^ aGtAdvice asyncStream
+		priority: 100;
+		description: [ :each | (each selector asString , ' is not in the implementers cache') asRopedText ];
+		compute: [ AsyncImageMethodsStream new
+				select: [ :each | 
+					each isFromTrait not
+						and: [ (self nodeFor: each selector)
+								ifNil: [ true ]
+								ifNotNil: [ :node | (node implementersCollection includes: each gtOriginalMethod) not ] ] ] ];
+		action: [ :each | 
+			(GtPhlowObjectAdviceAction object: each)
+				title: each printString asRopedText;
+				yourself ]
+]
+
 { #category : #inspector }
 GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
+		priority: 20;
 		description: [ :each | (each , ' has duplicate implementer methods') asRopedText ];
 		compute: [ (self asyncStreamStartingWith: '')
 				select: [ :each | 

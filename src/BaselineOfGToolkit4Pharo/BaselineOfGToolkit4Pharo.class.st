@@ -134,6 +134,10 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #(
 					'GToolkitCoder'
 					'GToolkit-Pharo-Coder'
-					'GToolkit-Pharo-Metamodels' ). ]. ].
+					'GToolkit-Pharo-Metamodels' ). ];
+
+			package: 'GToolkit-Pharo-Changes' with: [
+				spec requires: #(
+					'GToolkitCoder' ). ]. ].
 
 ]

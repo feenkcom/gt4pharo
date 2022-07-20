@@ -95,33 +95,12 @@ GtPharoIndex >> classAdded: anAnnouncement [
 	self addSymbolReferencesTo: anAnnouncement classAdded name
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtPharoIndex >> classModified: anAnnouncement [
-	anAnnouncement classAffected
-		methodsDo: [ :m | 
-			| seen globalBlock selectorBlock method |
-			method := m gtOriginalMethod.
-			(selectorCache nodeFor: method selector)
-				ifNotNil: [ :node | node updateImplementer: method ].
-			seen := Set new.
-			globalBlock := [ :global | 
-				(seen includes: global)
-					ifFalse: [ seen add: global.
-						(globalCache nodeFor: global name)
-							ifNotNil: [ :node | node updateReference: method ] ] ].
-			selectorBlock := [ :selector :count | 
-				(seen includes: selector)
-					ifFalse: [ seen add: selector.
-						(selectorCache nodeFor: selector)
-							ifNotNil: [ :node | node updateReference: method ] ].
-				selector first isUppercase
-					ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
-			method
-				pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
-			GtMessageSendIterator
-				messageSendsIn: method
-				doReferences: selectorBlock
-				andGlobals: globalBlock ]
+	anAnnouncement classAffected instanceSide
+		methodsDo: [ :method | self recompiledMethod: method ].
+	anAnnouncement classAffected classSide
+		methodsDo: [ :method | self recompiledMethod: method ]
 ]
 
 { #category : #private }
@@ -220,6 +199,7 @@ GtPharoIndex >> initializeCache [
 { #category : #private }
 GtPharoIndex >> methodAdded: anAnnouncement [
 	| node |
+	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
 	node := selectorCache add: anAnnouncement method selector weight: 1.
 	node addImplementer: anAnnouncement method gtOriginalMethod.
 	self addSendsFrom: anAnnouncement method
@@ -227,6 +207,7 @@ GtPharoIndex >> methodAdded: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> methodModified: anAnnouncement [
+	anAnnouncement newMethod isFromTrait ifTrue: [ ^ self ].
 	(selectorCache nodeFor: anAnnouncement newMethod selector)
 		ifNotNil: [ :node | 
 			node
@@ -238,6 +219,7 @@ GtPharoIndex >> methodModified: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> methodRemoved: anAnnouncement [
+	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
 	self removeMethodFromCache: anAnnouncement method
 ]
 
@@ -253,8 +235,37 @@ GtPharoIndex >> processPragma: aPragma selectorsDo: selectorBlock [
 				ifFalse: [ item isArray ifTrue: [ todo addAll: item ] ] ]
 ]
 
+{ #category : #accessing }
+GtPharoIndex >> recompiledMethod: aMethod [
+	| seen selectorBlock globalBlock method |
+	aMethod isFromTrait ifTrue: [ ^ self ].
+	method := aMethod gtOriginalMethod.
+	(selectorCache nodeFor: method selector)
+		ifNotNil: [ :node | node updateImplementer: method ].
+	seen := Set new.
+	globalBlock := [ :global | 
+		(seen includes: global)
+			ifFalse: [ seen add: global.
+				(globalCache nodeFor: global name)
+					ifNotNil: [ :node | node updateReference: method ] ] ].
+	selectorBlock := [ :selector :count | 
+		(seen includes: selector)
+			ifFalse: [ seen add: selector.
+				(selectorCache nodeFor: selector)
+					ifNotNil: [ :node | node updateReference: method ] ].
+		selector first isUppercase
+			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+	method
+		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
+	GtMessageSendIterator
+		messageSendsIn: method
+		doReferences: selectorBlock
+		andGlobals: globalBlock
+]
+
 { #category : #private }
 GtPharoIndex >> removeMethodFromCache: method [
+	method isFromTrait ifTrue: [ ^ self ].
 	(selectorCache remove: method selector weight: 1)
 		ifNotNil: [ :node | node removeImplementer: method gtOriginalMethod ].
 	self removeSendsFrom: method
