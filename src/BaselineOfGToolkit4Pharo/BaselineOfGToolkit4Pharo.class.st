@@ -19,6 +19,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-coder:main/src' ];
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:main/src' ];
+			baseline: 'GToolkit4Changes' with: [
+				spec repository: 'github://feenkcom/gt4changes:main/src' ];
 			baseline: 'SmaCC' with: [
 				spec repository: 'github://j-brant/SmaCC:Pharo10/src' ].
 		spec 
@@ -134,6 +136,11 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #(
 					'GToolkitCoder'
 					'GToolkit-Pharo-Coder'
-					'GToolkit-Pharo-Metamodels' ). ]. ].
+					'GToolkit-Pharo-Metamodels' ). ];
+
+			package: 'GToolkit-Pharo-Changes' with: [
+				spec requires: #(
+					'GToolkitCoder'
+					'GToolkit4Changes' ). ]. ].
 
 ]
