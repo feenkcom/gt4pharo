@@ -19,7 +19,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.126/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.818/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.819/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.673/src' ].
@@ -65,5 +65,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-Examples' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-UI') ].
 		spec package: 'GToolkit-Pharo-Extensions' with: [
 			spec requires: #('GToolkitCoder' 'GToolkit-Pharo-Coder' 'GToolkit-Pharo-Metamodels') ].
+		spec package: 'GToolkit-Pharo-Changes' with: [
+			spec requires: #('GToolkitCoder') ].
 	]
 ]
