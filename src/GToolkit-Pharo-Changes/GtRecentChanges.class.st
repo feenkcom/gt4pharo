@@ -38,7 +38,7 @@ GtRecentChanges >> classFilter [
 { #category : #accessing }
 GtRecentChanges >> computeRecentlyChanged [
 	| allEntries changes lastSaved allSaved |
-	allEntries := GtEpicea allInSessionStore flatCollect: [ :each | each entries ].
+	allEntries := GtEpicea current entries.
 	allSaved := allEntries
 			select: [ :each | each content isKindOf: EpSessionSnapshot ].
 	"the last save is the cut-off"
