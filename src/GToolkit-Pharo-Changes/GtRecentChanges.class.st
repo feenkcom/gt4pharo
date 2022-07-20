@@ -1,6 +1,8 @@
 Class {
 	#name : #GtRecentChanges,
 	#superclass : #Object,
+	#traits : 'TGtWithAnnouncer',
+	#classTraits : 'TGtWithAnnouncer classTrait',
 	#instVars : [
 		'changeList',
 		'groupedChanges'
@@ -115,14 +117,16 @@ GtRecentChanges >> onChangeOrAdd: anAnnouncement [
 		ifNone: [ groupedChanges
 				add: (GtRecentChange
 						class: anAnnouncement method methodClass
-						methods: (OrderedCollection with: anAnnouncement method asRingDefinition)) ]
+						methods: (OrderedCollection with: anAnnouncement method asRingDefinition)) ].
+	self announce: GtRecentChangesUpdated new
 ]
 
 { #category : #accessing }
 GtRecentChanges >> onClassRemove: anAnnouncement [
 	changeList := changeList reject: [ :each | each method isNil ].
 	groupedChanges := groupedChanges
-			reject: [ :each | each theClass = anAnnouncement classAffected ]
+			reject: [ :each | each theClass = anAnnouncement classAffected ].
+	self announce: GtRecentChangesUpdated new
 ]
 
 { #category : #accessing }
@@ -133,7 +137,8 @@ GtRecentChanges >> onRemove: anAnnouncement [
 		detect: [ :each | each theClass = anAnnouncement method methodClass ]
 		ifFound: [ :each | 
 			each remove: anAnnouncement method asRingDefinition.
-			each ifEmpty: [ groupedChanges remove: each ] ]
+			each ifEmpty: [ groupedChanges remove: each ] ].
+	self announce: GtRecentChangesUpdated new
 ]
 
 { #category : #accessing }
