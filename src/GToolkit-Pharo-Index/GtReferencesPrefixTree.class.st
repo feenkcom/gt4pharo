@@ -48,6 +48,7 @@ GtReferencesPrefixTree >> gtPhlowInspectNodeAction: aString [
 GtReferencesPrefixTree >> gtReferencesAreInstalled: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
+		priority: 10;
 		description: [ :each | (each , ' has a reference method that is not installed') asRopedText ];
 		compute: [ (self asyncStreamStartingWith: '')
 				select: [ :each | 
