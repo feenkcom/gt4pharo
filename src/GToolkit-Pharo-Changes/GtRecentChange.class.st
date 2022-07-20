@@ -5,7 +5,7 @@ Class {
 		'methods',
 		'theClass'
 	],
-	#category : #'GToolkit-Pharo-Changes'
+	#category : #'GToolkit-Pharo-Changes-Model'
 }
 
 { #category : #'instance creation' }
@@ -53,6 +53,11 @@ GtRecentChange >> navigateToUsingModel: aNavigationModel [
 { #category : #accessing }
 GtRecentChange >> remove: aMethod [
 	methods remove: aMethod
+]
+
+{ #category : #accessing }
+GtRecentChange >> size [
+	^ methods size
 ]
 
 { #category : #accessing }
