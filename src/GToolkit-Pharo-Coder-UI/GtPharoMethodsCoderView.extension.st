@@ -6,26 +6,33 @@ GtPharoMethodsCoderView >> gtMethodsFor: aView [
 	<gtView>
 
 	aMethodsCoder := GtPharoStreamingMethodsCoder forFilter: filter.
-	aMethodsCoderViewModel := (GtPharoStreamingMethodsCoderViewModel new streamingCodersModel: aMethodsCoder)
-		shouldExpandByDefault: false;
-		shouldHaveHeaderByDefault: true.
+	aMethodsCoderViewModel := (GtPharoStreamingMethodsCoderViewModel new 
+		streamingCodersModel: aMethodsCoder)
+			shouldExpandByDefault: false;
+			shouldHaveHeaderByDefault: true.
 
 	anItemsView := aView explicit
 		title: 'Methods';
 		priority: 10;
-		stencil: [ GtPharoStreamingMethodsCoderElement new streamingCodersViewModel: aMethodsCoderViewModel ].
+		stencil: [ 
+			GtPharoStreamingMethodsCoderElement new 
+				streamingCodersViewModel: aMethodsCoderViewModel ].
 
 	shouldHaveTestsRunner ifTrue: [
 		| aTestSuiteViewModel |
-		aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
+		aTestSuiteViewModel := GtPharoTestSuiteViewModel new 
+			pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
 		anItemsView
-			actionStencil: [ GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].
+			actionStencil: [ 
+				GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].
 
 	shouldHaveExamplesRunner ifTrue: [
 		| anExamplesSuiteViewModel |
-		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new pharoExampleSuite: (GtPharoExampleSuite forStream: aMethodsCoder itemsStream).
+		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new 
+			pharoExampleSuite: (GtPharoExampleSuite forStream: aMethodsCoder itemsStream).
 		anItemsView
-			actionStencil: [ GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExamplesSuiteViewModel ] ].
+			actionStencil: [ 
+				GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExamplesSuiteViewModel ] ].
 
 	^ anItemsView
 ]

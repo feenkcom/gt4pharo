@@ -9,6 +9,44 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
+{ #category : #'private - insance creation' }
+GtPharoMethodCoderOverridingOverriddenElement >> createOverridenBySummaryElementFor: aMethodOrigin [
+	^ BrHorizontalPane new
+		fitContent;
+		cellSpacing: 5;
+		alignCenterLeft;
+		addChild: (BrLabel new
+			aptitude: BrGlamorousLabelAptitude;
+			text: 'Overridden by');
+		addChild: (self newMethodsCountButton
+			id: GtMethodCoderOverriddenAmountId;
+			action: [ self phlow
+				spawnObject: (GtPharoMethodsCoderView new
+					filter: (GtSearchOverridingMethodsFilter new 
+						method: aMethodOrigin method)) ];
+			withAsyncSinkDo: [ :anElementSink | 
+				anElementSink forwardStream: aMethodOrigin overridingMethods ])
+]
+
+{ #category : #'private - insance creation' }
+GtPharoMethodCoderOverridingOverriddenElement >> createOverridesSummaryElementFor: aMethodOrigin [
+	^ BrHorizontalPane new
+		fitContent;
+		cellSpacing: 5;
+		alignCenterLeft;
+		addChild: (BrLabel new
+			aptitude: BrGlamorousLabelAptitude;
+			text: 'Overrides');
+		addChild: (self newMethodsCountButton
+			id: GtMethodCoderOverridesAmountId;
+			action: [ self phlow
+				spawnObject: (GtPharoMethodsCoderView new
+					filter: (GtSearchOverriddenMethodsFilter new 
+						method: aMethodOrigin method)) ];
+			withAsyncSinkDo: [ :anElementSink | 
+				anElementSink forwardStream: aMethodOrigin overriddenMethods ])
+]
+
 { #category : #initialization }
 GtPharoMethodCoderOverridingOverriddenElement >> defaultLayout [
 	^ BlFrameLayout new
@@ -57,10 +95,14 @@ GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceButton [
 	^ BrButton new
 		vFitContent;
 		hExact: 18;
-		aptitude: BrGlamorousButtonFlatExteriorAptitude + BrGlamorousButtonIconAptitude + (BrGlamorousButtonRectangularAptitude cornerRadius: 3);
+		aptitude: BrGlamorousButtonFlatExteriorAptitude 
+			+ BrGlamorousButtonIconAptitude 
+			+ (BrGlamorousButtonRectangularAptitude cornerRadius: 3);
 		addAptitude: (BrGlamorousWithDropdownAptitude
 			handle: [ BlElement new size: 18@18 ]
-			content: [ self newInheritanceDropdownContent withAsyncPromiseDo: [ :anElementPromise | anElementPromise promise: self newMethodOriginFuture ]])
+			content: [ self newInheritanceDropdownContent 
+				withAsyncPromiseDo: [ :anElementPromise | 
+					anElementPromise promise: self newMethodOriginFuture ]])
 ]
 
 { #category : #'private - insance creation' }
@@ -69,36 +111,15 @@ GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceDropdownContent [
 		fitContent;
 		padding: (BlInsets all: 5);
 		cellSpacing: 5;
-		withAsyncPromiseDo: [ :anElementPromise |
+		withAsyncPromiseDo: [ :anElementPromise | 
 			anElementPromise
-				whenSuccess: [ :aContainer :aMethodOrigin |
+				whenSuccess: [ :aContainer :aMethodOrigin | 
 					aMethodOrigin isOverridden
-						ifTrue: [
-							aContainer addChild: (BrHorizontalPane new
-								fitContent;
-								cellSpacing: 5;
-								alignCenterLeft;
-								addChild: (BrLabel new
-									aptitude: BrGlamorousLabelAptitude;
-									text: 'Overridden by');
-								addChild: (self newMethodsCountButton
-									id: GtMethodCoderOverriddenAmountId;
-									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverridingMethodsFilter new method: aMethodOrigin method)) ];
-									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overridingMethods ])) ].
-
+						ifTrue: [ aContainer addChild: (self 
+							createOverridenBySummaryElementFor: aMethodOrigin) ].
 					aMethodOrigin isOverriding
-						ifTrue: [
-							aContainer addChild: (BrHorizontalPane new
-								fitContent;
-								cellSpacing: 5;
-								alignCenterLeft;
-								addChild: (BrLabel new
-									aptitude: BrGlamorousLabelAptitude;
-									text: 'Overrides');
-								addChild: (self newMethodsCountButton
-									id: GtMethodCoderOverridesAmountId;
-									action: [ self phlow spawnObject: (GtPharoMethodsCoderView new filter: (GtSearchOverriddenMethodsFilter new method: aMethodOrigin method)) ];
-									withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overriddenMethods ])) ] ] ]
+						ifTrue: [ aContainer addChild: (self 
+							createOverridesSummaryElementFor: aMethodOrigin) ] ] ]
 ]
 
 { #category : #'private - insance creation' }
@@ -121,8 +142,10 @@ GtPharoMethodCoderOverridingOverriddenElement >> newMethodsCountButton [
 		withAsyncSinkDo: [ :anElementSink |
 			anElementSink
 				sink: AsyncCounterSink new;
-				whenSuccess: [ :aButton :aSink | aButton label: aSink count asString, ' ', ('method' asPluralBasedOn: aSink count) ];
-				whenPending: [ :aButton :aSink | aButton label: aSink count asString, ' ', ('method' asPluralBasedOn: aSink count), '...' ] ]
+				whenSuccess: [ :aButton :aSink | 
+					aButton label: aSink count asString, ' ', ('method' asPluralBasedOn: aSink count) ];
+				whenPending: [ :aButton :aSink | 
+					aButton label: aSink count asString, ' ', ('method' asPluralBasedOn: aSink count), '...' ] ]
 ]
 
 { #category : #'api - pharo method coder view model' }
