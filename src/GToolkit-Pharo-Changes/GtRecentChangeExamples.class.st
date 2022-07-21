@@ -9,16 +9,21 @@ Class {
 { #category : #accessing }
 GtRecentChangeExamples >> simpleChange [
 	<gtExample>
-	| change |
-	change := GtRecentChange class: GtRecentChange methods: { GtRecentChange >> #gtChildren } asOrderedCollection.
-	
+	| change methodChange |
+	methodChange := GtRecentMethodChangeExamples new simpleMethodChange.
+	change := GtRecentChange
+			class: GtRecentChange
+			methods: {methodChange} asOrderedCollection.
+
 	self assert: change size equals: 1.
-	self shouldnt: [ change ifEmpty: [ self error: 'works' ] ] raise: Error.
-	
-	change remove: GtRecentChange >> #gtChildren.
-	
+	self assert: change isEmpty equals: false.
+	self shouldnt: [ change ifEmpty: [ self error: 'this should not be executed' ] ] raise: Error.
+
+	change remove: methodChange method.
+
 	self assert: change size equals: 0.
-	self should: [ change ifEmpty: [ self error: 'works' ] ] raise: Error.
-	
+	self assert: change isEmpty.
+	self should: [ change ifEmpty: [ self error: 'this should be executed' ] ] raise: Error.
+
 	^ change
 ]

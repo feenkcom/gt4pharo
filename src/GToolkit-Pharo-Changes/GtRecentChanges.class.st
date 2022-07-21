@@ -1,14 +1,22 @@
 Class {
 	#name : #GtRecentChanges,
 	#superclass : #Object,
-	#traits : 'TGtWithAnnouncer',
-	#classTraits : 'TGtWithAnnouncer classTrait',
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'changeList',
-		'groupedChanges'
+		'groupedChanges',
+		'announcer'
 	],
 	#category : #'GToolkit-Pharo-Changes-Model'
 }
+
+{ #category : #announcer }
+GtRecentChanges >> announcer [
+
+	<return: #Announcer>
+	^ announcer ifNil: [ announcer := Announcer new ]
+]
 
 { #category : #accessing }
 GtRecentChanges >> applyFiltersFrom: aFilterElement [
@@ -18,6 +26,27 @@ GtRecentChanges >> applyFiltersFrom: aFilterElement [
 	aFilterElement
 		filtersDo: [ :descriptor :value | items := (descriptor newFilterWithValue: value) value: items ].
 	^ items
+]
+
+{ #category : #accessing }
+GtRecentChanges >> changeFilter [
+	<gtRecentChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :value | 
+			| log |
+			log := GtEpicea allInSessionStore
+					detect: [ :anEpicea | anEpicea log store globalName = value ].
+			[ :aCollection | 
+			aCollection
+				collect: [ :aChange | aChange filterByLog: log ]
+				thenReject: #isEmpty ] ];
+		named: 'In Change Log';
+		order: 12;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree
+						withAll: (GtEpicea allInSessionStore
+								collect: [ :anEpicea | anEpicea log store globalName ]) ] ];
+		beNotDefault
 ]
 
 { #category : #accessing }
@@ -40,28 +69,31 @@ GtRecentChanges >> classFilter [
 { #category : #accessing }
 GtRecentChanges >> computeRecentlyChanged [
 	| allEntries changes lastSaved allSaved |
-	allEntries := GtEpicea current entries.
+	allEntries := GtEpicea allInSessionStore flatCollect: #entries.
 	allSaved := allEntries
-			select: [ :each | each content isKindOf: EpSessionSnapshot ].
-	"the last save is the cut-off"
+			select: [ :each | each content isKindOf: EpSessionSnapshot ].	"the last save is the cut-off"
 	lastSaved := allSaved size > 0
 			ifTrue: [ allSaved first tagAt: #time ]
-			ifFalse: [ DateAndTime epoch ].
-	"we get all method changes that are recent enough and the class of which still exists"
+			ifFalse: [ DateAndTime epoch ].	"we get all method changes that are recent enough and the class of which still exists"
 	changes := allEntries
 			select: [ :each | 
 				(each content isKindOf: EpMethodChange)
 					and: [ (each tagAt: #time) >= lastSaved
-							and: [ each content methodAffected methodClass isNotNil ] ] ].
-	"group the methods; if the last action is a removal, we get rid of it"
+							and: [ each content methodAffected methodClass isNotNil ] ] ].	"group the methods; if the last action is a removal, we get rid of it"
 	changes := (changes groupedBy: [ :each | each content methodAffected ])
-			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].
-	"the keys are the methods"
-	changeList := changes keys asSet.
-	"we then generate a list of RecentChange objects that map classes and methods"
+			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].	"the keys are the methods"
+	changeList := changes keys asSet.	"we then generate a list of RecentChange objects that map classes and methods"
 	groupedChanges := ((changeList groupedBy: #methodClass) associations
-			collect: [ :each | GtRecentChange class: each key methods: each value asOrderedCollection ])
-			asOrderedCollection
+			collect: [ :each | 
+				GtRecentChange
+					class: each key
+					methods: (each value
+							collect: [ :method | 
+								| change |
+								change := (changes at: method) last.
+								GtRecentMethodChange
+									method: method
+									timestamp: (change tagAt: #time) ]) ]) asOrderedCollection
 ]
 
 { #category : #accessing }
@@ -109,15 +141,19 @@ GtRecentChanges >> initialize [
 
 { #category : #accessing }
 GtRecentChanges >> onChangeOrAdd: anAnnouncement [
+	| methodChange |
 	(changeList includes: anAnnouncement method) ifTrue: [ ^ self ].
 	changeList add: anAnnouncement method.
+	methodChange := GtRecentMethodChange
+			method: anAnnouncement method asRingDefinition
+			timestamp: DateAndTime now.
 	groupedChanges
 		detect: [ :each | each theClass = anAnnouncement method methodClass ]
-		ifFound: [ :each | each add: anAnnouncement method asRingDefinition ]
+		ifFound: [ :each | each add: methodChange ]
 		ifNone: [ groupedChanges
 				add: (GtRecentChange
 						class: anAnnouncement method methodClass
-						methods: (OrderedCollection with: anAnnouncement method asRingDefinition)) ].
+						methods: (OrderedCollection with: methodChange)) ].
 	self announce: GtRecentChangesUpdated new
 ]
 
