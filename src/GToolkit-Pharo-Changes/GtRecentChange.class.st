@@ -31,6 +31,21 @@ GtRecentChange >> displayForTree [
 ]
 
 { #category : #accessing }
+GtRecentChange >> filterByLog: aLog [
+	| startTime endTime |
+	startTime := aLog log startTime.
+	endTime := aLog log endTime.
+	startTime ifNil: [ ^ self class class: theClass methods: {} ].
+	^ self class
+		class: theClass
+		methods: (methods
+				select: [ :aMethod | 
+					endTime
+						ifNil: [ aMethod timestamp >= startTime ]
+						ifNotNil: [ aMethod timestamp >= startTime and: [ aMethod timestamp <= endTime ] ] ])
+]
+
+{ #category : #accessing }
 GtRecentChange >> gtChildren [
 	^ methods
 ]
@@ -38,6 +53,11 @@ GtRecentChange >> gtChildren [
 { #category : #accessing }
 GtRecentChange >> ifEmpty: aBlock [
 	^ methods ifEmpty: aBlock
+]
+
+{ #category : #accessing }
+GtRecentChange >> isEmpty [
+	^ methods isEmpty
 ]
 
 { #category : #acccessing }
@@ -52,7 +72,7 @@ GtRecentChange >> navigateToUsingModel: aNavigationModel [
 
 { #category : #accessing }
 GtRecentChange >> remove: aMethod [
-	methods remove: aMethod
+	methods := methods reject: [ :each | each method = aMethod ]
 ]
 
 { #category : #accessing }
