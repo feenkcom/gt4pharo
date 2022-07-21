@@ -52,12 +52,9 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 20>
-	
 	(self extractableNodesFrom: aCoderViewModel)
-		ifNotEmpty:
-			[ :nodes | 
+		ifNotEmpty: [ :nodes | 
 			| node |
-			
 			coderAddOns
 				addContextMenuItem: 'Extract method'
 				hover: [ :textualCoderViewModel | 
@@ -66,12 +63,18 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 						from: nodes first startPosition
 						to: nodes last stopPosition ]
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | (GtExtractMethodFromSnippetController new sourceCoderViewModel: aTextualViewModel) execute ]
+				action: [ :aTextualViewModel | 
+					(GtExtractMethodFromSnippetController new
+						sourceCoderViewModel: aTextualViewModel) execute ]
 				id: GtMethodCoderExtractMethodContextMenuItemId.
-			
-			node  := nodes first.
-			self addExtractVariableFor: node to: coderAddOns. 
-			self addInlineMethodFor: node to: coderAddOns from: aCoderViewModel ]
+
+			node := nodes first.
+			node
+				withAllParentsDo: [ :aNode | self addExtractVariableFor: aNode to: coderAddOns ].
+			self
+				addInlineMethodFor: node
+				to: coderAddOns
+				from: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
