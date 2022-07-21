@@ -11,9 +11,11 @@ Class {
 
 { #category : #'instance creation' }
 GtSearchReferencesFilter class >> canUseOptimizedSearch: anObject [
-	^ anObject isSymbol
-		ifTrue: [ anObject numArgs >= 0 ]
-		ifFalse: [ anObject isKindOf: GlobalVariable ]
+	^ GtPharoIndex isActive
+		and: [ anObject isSymbol
+				ifTrue: [ anObject numArgs >= 0 ]
+				ifFalse: [ (anObject isKindOf: GlobalVariable)
+						and: [ anObject value isBehavior and: [ anObject name = anObject value name ] ] ] ]
 ]
 
 { #category : #'instance creation' }

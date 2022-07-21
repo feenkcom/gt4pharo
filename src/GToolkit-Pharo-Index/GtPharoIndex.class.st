@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'globalCache',
-		'selectorCache'
+		'selectorCache',
+		'active'
 	],
 	#classInstVars : [
 		'current'
@@ -26,6 +27,11 @@ GtPharoIndex class >> initializeCache [
 	self current initializeCache
 ]
 
+{ #category : #testing }
+GtPharoIndex class >> isActive [
+	^ current ifNil: [ false ] ifNotNil: [ current isActive ]
+]
+
 { #category : #private }
 GtPharoIndex >> addSendsFrom: aMethod [
 	| seen globalBlock selectorBlock method |
@@ -33,10 +39,11 @@ GtPharoIndex >> addSendsFrom: aMethod [
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
-		node := globalCache add: global name weight: 1.
-		(seen includes: global)
-			ifFalse: [ seen add: global.
-				node addReference: method ] ].
+		(self isVariableForClass: global)
+			ifTrue: [ node := globalCache add: global name weight: 1.
+				(seen includes: global)
+					ifFalse: [ seen add: global.
+						node addReference: method ] ] ].
 	selectorBlock := [ :selector :count | 
 		| node |
 		node := selectorCache add: selector weight: count.
@@ -50,7 +57,7 @@ GtPharoIndex >> addSendsFrom: aMethod [
 	GtMessageSendIterator
 		messageSendsIn: method
 		doReferences: selectorBlock
-		andGlobals: globalBlock
+		andVariables: globalBlock
 ]
 
 { #category : #private }
@@ -67,7 +74,7 @@ GtPharoIndex >> addSymbolReferencesTo: newClassName [	| addedRefs |
 							(addedRefs includes: each)
 								ifFalse: [ addedRefs add: each.
 									node addReference: each ] ] ]
-				andGlobals: [ :global |  ] ].
+				andVariables: [ :global |  ] ].
 	^ addedRefs
 ]
 
@@ -128,16 +135,10 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 		ifNotNil: [ :node | 
 			oldRefs := node referencesCollection.
 			node references: nil.
-			globalCache remove: anAnnouncement oldName weight: node weight ].
-			
-	"Add new entry"
+			globalCache remove: anAnnouncement oldName weight: node weight ].	"Add new entry"
 	newClassName := anAnnouncement newName.
-	globalCache add: newClassName weight: 1.
-	
-	"Any symbol references to the new name should be marked as class references."
-	addedRefs := self addSymbolReferencesTo: newClassName.
-	
-	"Update methods that have the variable reference to point to new variable. 
+	globalCache add: newClassName weight: 1.	"Any symbol references to the new name should be marked as class references."
+	addedRefs := self addSymbolReferencesTo: newClassName.	"Update methods that have the variable reference to point to new variable. 
 	At this point the source of the method and the method itself are out of sync. 
 	The source of the method will have the old name and the method will have the renamed class."
 	oldRefs
@@ -145,13 +146,14 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 			GtMessageSendIterator
 				messageSendsIn: each
 				doReferences: [ :selector :count |  ]
-				andGlobals: [ :global | 
+				andVariables: [ :global | 
 					| node |
-					global name = newClassName
-						ifTrue: [ node := globalCache add: newClassName weight: 1.
-							(addedRefs includes: each)
-								ifFalse: [ addedRefs add: each.
-									node addReference: each ] ] ] ]
+					(self isVariableForClass: global)
+						ifTrue: [ global name = newClassName
+								ifTrue: [ node := globalCache add: newClassName weight: 1.
+									(addedRefs includes: each)
+										ifFalse: [ addedRefs add: each.
+											node addReference: each ] ] ] ] ]
 ]
 
 { #category : #accessing }
@@ -179,7 +181,8 @@ GtPharoIndex >> implementersOf: aSelector [
 GtPharoIndex >> initialize [
 	super initialize.
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
-	globalCache := GtReferencesPrefixTree new
+	globalCache := GtReferencesPrefixTree new.
+	active := false
 ]
 
 { #category : #initialization }
@@ -194,6 +197,18 @@ GtPharoIndex >> initializeCache [
 	selectorCache allNodesDo: #compressData.
 	globalCache allNodesDo: #compressData.
 	self subscribeToSystem
+]
+
+{ #category : #testing }
+GtPharoIndex >> isActive [
+	^ active
+]
+
+{ #category : #testing }
+GtPharoIndex >> isVariableForClass: aVariable [
+	^ (aVariable isKindOf: GlobalVariable)
+		and: [ aVariable value isBehavior
+				and: [ (self class environment bindingOf: aVariable name) == aVariable ] ]
 ]
 
 { #category : #private }
@@ -244,10 +259,11 @@ GtPharoIndex >> recompiledMethod: aMethod [
 		ifNotNil: [ :node | node updateImplementer: method ].
 	seen := Set new.
 	globalBlock := [ :global | 
-		(seen includes: global)
-			ifFalse: [ seen add: global.
-				(globalCache nodeFor: global name)
-					ifNotNil: [ :node | node updateReference: method ] ] ].
+		(self isVariableForClass: global)
+			ifTrue: [ (seen includes: global)
+					ifFalse: [ seen add: global.
+						(globalCache nodeFor: global name)
+							ifNotNil: [ :node | node updateReference: method ] ] ] ].
 	selectorBlock := [ :selector :count | 
 		(seen includes: selector)
 			ifFalse: [ seen add: selector.
@@ -260,7 +276,7 @@ GtPharoIndex >> recompiledMethod: aMethod [
 	GtMessageSendIterator
 		messageSendsIn: method
 		doReferences: selectorBlock
-		andGlobals: globalBlock
+		andVariables: globalBlock
 ]
 
 { #category : #private }
@@ -278,10 +294,11 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
-		node := globalCache remove: global name weight: 1.
-		(seen includes: global)
-			ifFalse: [ seen add: global.
-				node ifNotNil: [ node removeReference: method ] ] ].
+		(self isVariableForClass: global)
+			ifTrue: [ node := globalCache remove: global name weight: 1.
+				(seen includes: global)
+					ifFalse: [ seen add: global.
+						node ifNotNil: [ node removeReference: method ] ] ] ].
 	selectorBlock := [ :selector :count | 
 		(selectorCache remove: selector weight: count)
 			ifNotNil: [ :node | 
@@ -295,7 +312,7 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 	GtMessageSendIterator
 		messageSendsIn: method
 		doReferences: selectorBlock
-		andGlobals: globalBlock
+		andVariables: globalBlock
 ]
 
 { #category : #accessing }
@@ -317,10 +334,12 @@ GtPharoIndex >> subscribeToSystem [
 		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
-		when: ClassModificationApplied send: #classModified: to: self
+		when: ClassModificationApplied send: #classModified: to: self.
+	active := true
 ]
 
 { #category : #private }
 GtPharoIndex >> unsubscribeFromSystem [
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	SystemAnnouncer uniqueInstance unsubscribe: self.
+	active := false
 ]
