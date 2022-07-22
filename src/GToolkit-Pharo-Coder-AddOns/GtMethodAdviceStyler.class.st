@@ -109,9 +109,10 @@ GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
 		typeOf: aGtPharoProgramNode
 		in: (isForWorkspace
-			ifTrue: [ self coderViewModel selfObject class ]
-			ifFalse: [ self sourceCoder behavior ])
-		bindings: variableBindings
+				ifTrue: [ self coderViewModel selfObject class ]
+				ifFalse: [ self sourceCoder behavior ])
+		bindings: (variableBindings
+				ifNil: [ self coderViewModel compositeVariableBindings ])
 ]
 
 { #category : #accessing }
