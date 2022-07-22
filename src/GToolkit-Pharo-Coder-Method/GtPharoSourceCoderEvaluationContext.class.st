@@ -2,7 +2,6 @@ Class {
 	#name : #GtPharoSourceCoderEvaluationContext,
 	#superclass : #GtSourceCoderEvaluationContext,
 	#instVars : [
-		'notifications',
 		'bindingStrategy',
 		'receiverObject',
 		'runtimeContext'
@@ -94,7 +93,6 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 	bindingStrategy := GtCompositeVariablesBindings new
 		addBindings: GtReservedVariablesBindings new;
 		addBindings: GtGlobalVariablesBindings new.
-	notifications := OrderedCollection new
 ]
 
 { #category : #hack }
@@ -114,8 +112,6 @@ GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 		nextPutAll: 'at ';
 		print: aCompleteTextIndex;
 		cr.
-
-	notifications add: (message -> aCompleteTextIndex).
 	
 	self coder
 		ifNil: [
