@@ -6,5 +6,5 @@ ProtoObject >> gtMetaFor: aView [
 	^ aView explicit
 		title: 'Meta';
 		priority: 200;
-		stencil: [ GtCoder forCoder: (GtPharoBehaviorCoder forObject: self) ]
+		stencil: [ (GtCoder forCoder: (GtPharoBehaviorCoder forObject: self)) disablePlayPage ]
 ]
