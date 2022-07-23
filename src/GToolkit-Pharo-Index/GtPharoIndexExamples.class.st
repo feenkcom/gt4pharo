@@ -1,10 +1,37 @@
 Class {
 	#name : #GtPharoIndexExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Index-GToolkit-Pharo-Index'
+	#category : #'GToolkit-Pharo-Index'
 }
 
-{ #category : #accessing }
+{ #category : #private }
+GtPharoIndexExamples >> addClassVar [
+	Object
+		evaluate: (self class definitionString
+				copyReplaceAll: 'classVariableNames: '''''
+				with: 'classVariableNames: ''GtMessageSendIterator''')
+]
+
+{ #category : #private }
+GtPharoIndexExamples >> addPoolVar [
+	Object
+		evaluate: (self class definitionString
+				copyReplaceAll: 'package: '
+				with: 'poolDictionaries: ''GtPharoIndexExamplesPool'' package: ')
+]
+
+{ #category : #private }
+GtPharoIndexExamples >> checkGtMessageSendIteratorRefs: aBoolean [
+	| refs |
+	GtMessageSendIterator printString.	"Create >1 refs in this method"
+	self assert: GtMessageSendIterator isBehavior equals: aBoolean.
+	refs := GtPharoIndex current
+			globalVariableReferencesTo: (Object environment bindingOf: 'GtMessageSendIterator' asSymbol).
+	self assert: (refs includes: thisContext method) equals: aBoolean.
+	self assert: (refs allSatisfy: [ :each | each gtIsActive ])
+]
+
+{ #category : #examples }
 GtPharoIndexExamples >> classReferenceInsideBlock [
 	<gtExample>
 	| refs |
@@ -15,7 +42,26 @@ GtPharoIndexExamples >> classReferenceInsideBlock [
 	^ refs
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
+GtPharoIndexExamples >> classVarShadowsClass [
+	<gtExample>
+	| node originalWeight |
+	node := GtPharoIndex current globalCache
+			nodeFor: 'GtMessageSendIterator' asSymbol.
+	originalWeight := node weight.
+	[ self checkGtMessageSendIteratorRefs: true.
+	self addClassVar.
+	self assert: node weight + 2 equals: originalWeight.
+	self checkGtMessageSendIteratorRefs: false.
+	self removeClassVar.
+	self assert: node weight equals: originalWeight.
+	self checkGtMessageSendIteratorRefs: true ]
+		ensure: [ (self class classVarNames includes: 'GtMessageSendIterator' asSymbol)
+				ifTrue: [ self removeClassVar ] ].
+	^ node
+]
+
+{ #category : #examples }
 GtPharoIndexExamples >> implementer [
 	<gtExample>
 	| impls |
@@ -24,7 +70,7 @@ GtPharoIndexExamples >> implementer [
 	^ impls
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoIndexExamples >> messageSendInsideBlock [
 	<gtExample>
 	| refs |
@@ -34,7 +80,7 @@ GtPharoIndexExamples >> messageSendInsideBlock [
 	^ refs
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoIndexExamples >> noImplementers [
 	<gtExample>
 	| impls |
@@ -43,7 +89,7 @@ GtPharoIndexExamples >> noImplementers [
 	^ impls
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoIndexExamples >> noSenders [
 	<gtExample>
 	| refs |
@@ -63,13 +109,32 @@ GtPharoIndexExamples >> notAClassReference [
 	^ refs
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoIndexExamples >> optimizedIfTrue [
 	<gtExample>
 	| refs |
 	refs := GtPharoIndex current sendersOf: ('if' , 'True:') asSymbol.
 	(refs includes: thisContext method) not ifTrue: [ self assert: false ].
 	^ refs
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> poolVarShadowsClass [
+	<gtExample>
+	| node originalWeight |
+	node := GtPharoIndex current globalCache
+			nodeFor: 'GtMessageSendIterator' asSymbol.
+	originalWeight := node weight.
+	[ self checkGtMessageSendIteratorRefs: true.
+	self addPoolVar.
+	self assert: node weight + 2 equals: originalWeight.
+	self checkGtMessageSendIteratorRefs: false.
+	self removePoolVar.
+	self assert: node weight equals: originalWeight.
+	self checkGtMessageSendIteratorRefs: true ]
+		ensure: [ (self class sharedPoolNames includes: 'GtPharoIndexExamplesPool' asSymbol)
+				ifTrue: [ self removePoolVar ] ].
+	^ node
 ]
 
 { #category : #accessing }
@@ -82,7 +147,19 @@ GtPharoIndexExamples >> referenceInLiteralArray [
 	^ refs
 ]
 
-{ #category : #accessing }
+{ #category : #private }
+GtPharoIndexExamples >> removeClassVar [
+	Object
+		evaluate: (self class definitionString copyReplaceAll: 'GtMessageSendIterator' with: '')
+]
+
+{ #category : #private }
+GtPharoIndexExamples >> removePoolVar [
+	Object
+		evaluate: (self class definitionString copyReplaceAll: 'GtPharoIndexExamplesPool' with: '')
+]
+
+{ #category : #examples }
 GtPharoIndexExamples >> specialSelector [
 	<gtExample>
 	| refs |
@@ -91,7 +168,7 @@ GtPharoIndexExamples >> specialSelector [
 	^ refs
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoIndexExamples >> symbolIsAlsoClassReference [
 	<gtExample>
 	| refs |

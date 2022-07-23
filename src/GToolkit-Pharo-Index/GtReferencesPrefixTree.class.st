@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'references'
 	],
-	#category : #'GToolkit-Pharo-Index-GToolkit-Pharo-Index'
+	#category : #'GToolkit-Pharo-Index'
 }
 
 { #category : #adding }
@@ -117,12 +117,16 @@ GtReferencesPrefixTree >> removeReference: aMethod [
 
 { #category : #private }
 GtReferencesPrefixTree >> updateReference: aMethod [
-	references ifNil: [ ^ self addReference: aMethod ].
+	references
+		ifNil: [ self addReference: aMethod.
+			^ false ].
 	references isCompiledMethod
 		ifTrue: [ ^ (references methodClass = aMethod methodClass
 				and: [ references selector = aMethod selector ])
-				ifTrue: [ references := aMethod ]
-				ifFalse: [ self addReference: aMethod ] ].
+				ifTrue: [ references := aMethod.
+					true ]
+				ifFalse: [ self addReference: aMethod.
+					false ] ].
 	1
 		to: references size
 		do: [ :i | 
@@ -130,6 +134,8 @@ GtReferencesPrefixTree >> updateReference: aMethod [
 			each := references at: i.
 			(each methodClass = aMethod methodClass
 				and: [ each selector = aMethod selector ])
-				ifTrue: [ ^ references at: i put: aMethod ] ].
-	^ self addReference: aMethod
+				ifTrue: [ references at: i put: aMethod.
+					^ true ] ].
+	self addReference: aMethod.
+	^ false
 ]

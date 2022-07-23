@@ -276,18 +276,39 @@ GtPharoIndex >> recompileMethodsIn: aBehavior [
 
 { #category : #accessing }
 GtPharoIndex >> recompiledMethod: aMethod [
-	| seen selectorBlock globalBlock method |
+	| seen selectorBlock globalBlock method convertedToClasses convertedFromClasses |
 	aMethod isFromTrait ifTrue: [ ^ self ].
 	method := aMethod gtOriginalMethod.
 	(selectorCache nodeFor: method selector)
 		ifNotNil: [ :node | node updateImplementer: method ].
 	seen := Set new.
+	convertedFromClasses := Set new.
+	convertedToClasses := Set new.
 	globalBlock := [ :global | 
-		(self isVariableForClass: global)
-			ifTrue: [ (seen includes: global)
-					ifFalse: [ seen add: global.
-						(globalCache nodeFor: global name)
-							ifNotNil: [ :node | node updateReference: method ] ] ] ].
+		(seen includes: global)
+			ifTrue: [ ((global isKindOf: LiteralVariable) and: [ global name notNil ])
+					ifTrue: [ (convertedToClasses includes: global name)
+							ifTrue: [ globalCache add: global name weight: 1 ].
+						(convertedFromClasses includes: global name)
+							ifTrue: [ globalCache remove: global name weight: 1 ] ] ]
+			ifFalse: [ seen add: global.
+				(self isVariableForClass: global)
+					ifTrue: [ (globalCache nodeFor: global name)
+							ifNotNil: [ :node | 
+								(node updateReference: method)
+									ifFalse: [ globalCache add: global name weight: 1.
+										convertedToClasses add: global name ] ] ]
+					ifFalse: [ ((global isKindOf: LiteralVariable) and: [ global name notNil ])
+							ifTrue: [ (Object environment bindingOf: global name)
+									ifNotNil: [ (globalCache nodeFor: global name)
+											ifNotNil: [ :node | 
+												(node referencesCollection
+													detect: [ :each | each methodClass = aMethod methodClass and: [ each selector = aMethod selector ] ]
+													ifNone: [  ])
+													ifNotNil: [ :m | 
+														node removeReference: m.
+														globalCache remove: global name weight: 1.
+														convertedFromClasses add: global name ] ] ] ] ] ] ].
 	selectorBlock := [ :selector :count | 
 		(seen includes: selector)
 			ifFalse: [ seen add: selector.
