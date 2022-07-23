@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'globalCache',
 		'selectorCache',
-		'active'
+		'active',
+		'shouldRecomputeSubclasses'
 	],
 	#classInstVars : [
 		'current'
@@ -104,10 +105,26 @@ GtPharoIndex >> classAdded: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> classModified: anAnnouncement [
-	anAnnouncement classAffected instanceSide
-		methodsDo: [ :method | self recompiledMethod: method ].
-	anAnnouncement classAffected classSide
-		methodsDo: [ :method | self recompiledMethod: method ]
+	| class |
+	class := anAnnouncement classAffected.
+	shouldRecomputeSubclasses
+		ifTrue: [ class withAllSubclassesDo: [ :each | self recompileMethodsIn: each ] ]
+		ifFalse: [ self recompileMethodsIn: class ]
+]
+
+{ #category : #accessing }
+GtPharoIndex >> classModifiedClassDefinition: anAnnouncement [
+	"Adding class variables or pool variables only announce the class as being changed, 
+	but the subclasses are recompiled, so we need to know if we should also recache the 
+	subclasses when we get the modified event."
+
+	| oldClass newClass |
+	oldClass := anAnnouncement oldClassDefinition.
+	newClass := anAnnouncement newClassDefinition.
+	shouldRecomputeSubclasses := newClass isClassSide not
+			and: [ oldClass instVarNames = newClass instVarNames
+					and: [ oldClass classVarNames ~= newClass classVarNames
+							or: [ oldClass sharedPools ~= newClass sharedPools ] ] ]
 ]
 
 { #category : #private }
@@ -182,7 +199,8 @@ GtPharoIndex >> initialize [
 	super initialize.
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
 	globalCache := GtReferencesPrefixTree new.
-	active := false
+	active := false.
+	shouldRecomputeSubclasses := false
 ]
 
 { #category : #initialization }
@@ -250,20 +268,47 @@ GtPharoIndex >> processPragma: aPragma selectorsDo: selectorBlock [
 				ifFalse: [ item isArray ifTrue: [ todo addAll: item ] ] ]
 ]
 
+{ #category : #private }
+GtPharoIndex >> recompileMethodsIn: aBehavior [
+	aBehavior instanceSide methodsDo: [ :method | self recompiledMethod: method ].
+	aBehavior classSide methodsDo: [ :method | self recompiledMethod: method ]
+]
+
 { #category : #accessing }
 GtPharoIndex >> recompiledMethod: aMethod [
-	| seen selectorBlock globalBlock method |
+	| seen selectorBlock globalBlock method convertedToClasses convertedFromClasses |
 	aMethod isFromTrait ifTrue: [ ^ self ].
 	method := aMethod gtOriginalMethod.
 	(selectorCache nodeFor: method selector)
 		ifNotNil: [ :node | node updateImplementer: method ].
 	seen := Set new.
+	convertedFromClasses := Set new.
+	convertedToClasses := Set new.
 	globalBlock := [ :global | 
-		(self isVariableForClass: global)
-			ifTrue: [ (seen includes: global)
-					ifFalse: [ seen add: global.
-						(globalCache nodeFor: global name)
-							ifNotNil: [ :node | node updateReference: method ] ] ] ].
+		(seen includes: global)
+			ifTrue: [ ((global isKindOf: LiteralVariable) and: [ global name notNil ])
+					ifTrue: [ (convertedToClasses includes: global name)
+							ifTrue: [ globalCache add: global name weight: 1 ].
+						(convertedFromClasses includes: global name)
+							ifTrue: [ globalCache remove: global name weight: 1 ] ] ]
+			ifFalse: [ seen add: global.
+				(self isVariableForClass: global)
+					ifTrue: [ (globalCache nodeFor: global name)
+							ifNotNil: [ :node | 
+								(node updateReference: method)
+									ifFalse: [ globalCache add: global name weight: 1.
+										convertedToClasses add: global name ] ] ]
+					ifFalse: [ ((global isKindOf: LiteralVariable) and: [ global name notNil ])
+							ifTrue: [ (Object environment bindingOf: global name)
+									ifNotNil: [ (globalCache nodeFor: global name)
+											ifNotNil: [ :node | 
+												(node referencesCollection
+													detect: [ :each | each methodClass = aMethod methodClass and: [ each selector = aMethod selector ] ]
+													ifNone: [  ])
+													ifNotNil: [ :m | 
+														node removeReference: m.
+														globalCache remove: global name weight: 1.
+														convertedFromClasses add: global name ] ] ] ] ] ] ].
 	selectorBlock := [ :selector :count | 
 		(seen includes: selector)
 			ifFalse: [ seen add: selector.
@@ -334,6 +379,7 @@ GtPharoIndex >> subscribeToSystem [
 		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
+		when: ClassModifiedClassDefinition send: #classModifiedClassDefinition: to: self;
 		when: ClassModificationApplied send: #classModified: to: self.
 	active := true
 ]
