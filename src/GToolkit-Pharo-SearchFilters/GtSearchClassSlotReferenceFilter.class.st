@@ -46,7 +46,10 @@ GtSearchClassSlotReferenceFilter >> includesMethod: aCompiledMethod [
 
 { #category : #accessing }
 GtSearchClassSlotReferenceFilter >> object [
-	^ object ifNil: [ object := class bindingOf: variableName ]
+	object
+		ifNil: [ object := class bindingOf: variableName.
+			isVariable := object isKindOf: Variable ].
+	^ object
 ]
 
 { #category : #accessing }
