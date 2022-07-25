@@ -4,11 +4,13 @@ Extension { #name : #GtSearchClassSlotReferenceFilter }
 GtSearchClassSlotReferenceFilter class >> filterDescriptorFor: aMethodsCoder [
 	aMethodsCoder isForClass
 		ifFalse: [ ^ nil ].
+
 	^ GtFilterDescriptor new
-		creator: [ :value | self forClass: aMethodsCoder classOrMetaClass andVariable: value ];
-		named: 'Class Slot';
-		order: 25;
-		completion: [
-			(GtStringsCompletionStrategy new
-				completions: [ GtPrefixTree withAll: aMethodsCoder classOrMetaClass allClassVarNames ]) ]
+		creator: [ :value | 
+			self
+				forClassAndSubclasses: aMethodsCoder classOrMetaClass classSide
+				andVariable: value ];
+		named: 'Class Slots';
+		order: 27;
+		completion: [ GtStringsCompletionStrategy new completions: [ GtPrefixTree withAll: aMethodsCoder classOrMetaClass classSide allInstVarNames ] ]
 ]

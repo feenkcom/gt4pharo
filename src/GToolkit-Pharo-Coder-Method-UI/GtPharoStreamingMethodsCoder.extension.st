@@ -25,6 +25,25 @@ GtPharoStreamingMethodsCoder >> classSlotFilter: aView [
 	<gtFilterTypes>
 	^ aView explicit
 		title: 'Class Slots';
+		priority: 40;
+		stencil: [ | anElement |
+			anElement := GtCoderFilterList new.
+			anElement
+				matchParent;
+				items: (self behavior classSide allInstVarNames sorted: [ :a :b | a < b ])
+					title: [ :aVariable | aVariable ]
+					action: [ :aVariable | 
+						self
+							additionalFilters: {GtSearchClassSlotReferenceFilter
+										forClass: self behavior classSide
+										andVariable: aVariable} ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+GtPharoStreamingMethodsCoder >> classVariableFilter: aView [
+	<gtFilterTypes>
+	^ aView explicit
+		title: 'Class Variables';
 		priority: 30;
 		stencil: [
 			| anElement |
@@ -35,7 +54,7 @@ GtPharoStreamingMethodsCoder >> classSlotFilter: aView [
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable |
 					self additionalFilters: {
-						(GtSearchClassSlotReferenceFilter
+						(GtSearchClassVariableReferenceFilter
 							forClass: self behavior instanceSide
 							andVariable: aVariable) } ] ]
 ]
