@@ -10,7 +10,7 @@ GtCoderToolbarElement >> addBaselineTab: look [
 			element := GtPharoCreateBaselineElement new.
 			element
 				behaviorBlock: [ :cls | 
-					look hide.
+					look fireEvent: BrDropdownHideWish new.
 					navigationModel selectClass: cls ].
 			element forBaselineDefinition.
 			navigationModel
