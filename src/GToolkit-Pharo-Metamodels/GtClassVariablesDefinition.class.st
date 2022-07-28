@@ -48,6 +48,25 @@ GtClassVariablesDefinition >> classVariableNamed: aSymbol [
 		ifNone: [ self errorClassVariableNotFound: aSymbol ]
 ]
 
+{ #category : #'api - class vars' }
+GtClassVariablesDefinition >> createContextMenuContentFor: aDefinition editor: anElement [
+	| theContextMenu items |
+	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
+	items := OrderedCollection new.
+	items
+		addAll: {GtCoderContextMenuAction new
+					action: [ :element | (self pushUpClassVariableRefactoringFor: aDefinition name) execute ];
+					title: 'Push Up ' , aDefinition name.
+				GtCoderContextMenuAction new
+					action: [ :element | (self pushDownClassVariableRefactoringFor: aDefinition name) execute ];
+					title: 'Push Down ' , aDefinition name.
+				GtCoderContextMenuAction new
+					action: [ :element | (self generateAccessorsFor: aDefinition name) execute ];
+					title: 'Create accessors for ' , aDefinition name}.
+	theContextMenu items: items.
+	^ theContextMenu
+]
+
 { #category : #'api - accepting' }
 GtClassVariablesDefinition >> differenceWith: aGtClassVariablesDefinition [
 	| theDifference |
@@ -86,6 +105,10 @@ GtClassVariablesDefinition >> fromClass: aClass [
 	definitions := aClass classVariables collect: [ :eachClassVariable | (GtVariableDefinition fromClassVariable: eachClassVariable) parent: self ]
 ]
 
+{ #category : #'api - class vars' }
+GtClassVariablesDefinition >> generateAccessorsFor: anObject [ 
+]
+
 { #category : #'private - notifying' }
 GtClassVariablesDefinition >> notifyClassVariableAdded: aGtVariableDefinition [
 	self dispatchEvent: (GtBehaviorClassVariableAdded new
@@ -107,6 +130,22 @@ GtClassVariablesDefinition >> notifyClassVariableRenamed: aGtVariableDefinition 
 		owner: self parent;
 		oldName: anOldName;
 		newName: aNewName)
+]
+
+{ #category : #'api - class vars' }
+GtClassVariablesDefinition >> pushDownClassVariableRefactoringFor: anObject [ 
+]
+
+{ #category : #'api - class vars' }
+GtClassVariablesDefinition >> pushUpClassVariableRefactoringFor: varName [ 
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := aModel classNamed: self definition topMostParent name.
+
+	^ RBPullUpClassVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass superclass
 ]
 
 { #category : #'api - class vars' }
