@@ -20,11 +20,6 @@ GtSlotsDefinition >> createContextMenuContentFor: aDefinition editor: anElement 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSlotsDefinition >> createRefactoringModel [
-	^ RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSlotsDefinition >> editors [
 	^ { self slotsEditor }
 ]
