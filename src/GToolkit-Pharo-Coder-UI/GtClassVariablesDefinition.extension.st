@@ -12,6 +12,7 @@ GtClassVariablesDefinition >> classVariablesEditor [
 			renameSelector: #renameClassVariableNamed:to:;
 			getSelector: #names;
 			modelSelector: #classVariableNamed:;
+			contextMenuBlock: [ :defn :editor | [ self createContextMenuContentFor: defn editor: editor ] ];
 			addEvent: GtBehaviorClassVariableAdded;
 			removeEvent: GtBehaviorClassVariableRemoved;
 			renameEvent: GtBehaviorClassVariableRenamed;

@@ -95,6 +95,19 @@ GtSlotsDefinition >> fromTrait: aTrait [
 ]
 
 { #category : #'api - slots' }
+GtSlotsDefinition >> generateAccessorsFor: varName [
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := self modelClassFrom: aModel.
+
+	^ RBCreateAccessorsForVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass
+		classVariable: false
+]
+
+{ #category : #'api - slots' }
 GtSlotsDefinition >> hasSlotNamed: aSlotName [
 	^ self hasDefinitionNamed: aSlotName
 ]

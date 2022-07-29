@@ -55,13 +55,13 @@ GtClassVariablesDefinition >> createContextMenuContentFor: aDefinition editor: a
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
-					action: [ :element | (self pushUpClassVariableRefactoringFor: aDefinition name) execute ];
+					action: [ (self pushUpClassVariableRefactoringFor: aDefinition name) execute ];
 					title: 'Push Up ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ :element | (self pushDownClassVariableRefactoringFor: aDefinition name) execute ];
+					action: [ (self pushDownClassVariableRefactoringFor: aDefinition name) execute ];
 					title: 'Push Down ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ :element | (self generateAccessorsFor: aDefinition name) execute ];
+					action: [ (self generateAccessorsFor: aDefinition name) execute ];
 					title: 'Create accessors for ' , aDefinition name}.
 	theContextMenu items: items.
 	^ theContextMenu
@@ -106,7 +106,16 @@ GtClassVariablesDefinition >> fromClass: aClass [
 ]
 
 { #category : #'api - class vars' }
-GtClassVariablesDefinition >> generateAccessorsFor: anObject [ 
+GtClassVariablesDefinition >> generateAccessorsFor: varName [
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := aModel classNamed: self definition topMostParent name.
+
+	^ RBCreateAccessorsForVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass
+		classVariable: true
 ]
 
 { #category : #'private - notifying' }
@@ -133,7 +142,15 @@ GtClassVariablesDefinition >> notifyClassVariableRenamed: aGtVariableDefinition 
 ]
 
 { #category : #'api - class vars' }
-GtClassVariablesDefinition >> pushDownClassVariableRefactoringFor: anObject [ 
+GtClassVariablesDefinition >> pushDownClassVariableRefactoringFor: varName [ 
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := aModel classNamed: self definition topMostParent name.
+
+	^ RBPushDownClassVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass
 ]
 
 { #category : #'api - class vars' }
