@@ -1,20 +1,38 @@
 Extension { #name : #GtSlotsDefinition }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSlotsDefinition >> abstractVariable: varName [
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := self modelClassFrom: aModel.
+
+	^ RBAbstractInstanceVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSlotsDefinition >> createContextMenuContentFor: aDefinition editor: anElement [
 	| theContextMenu items |
 	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
-					action: [ :element | (self pushUpSlotRefactoringFor: aDefinition name) execute ];
+					action: [ (self pushUpSlotRefactoringFor: aDefinition name) execute ];
 					title: 'Push Up ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ :element | (self pushDownSlotRefactoringFor: aDefinition name) execute ];
+					action: [ (self pushDownSlotRefactoringFor: aDefinition name) execute ];
 					title: 'Push Down ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ :element | (self generateAccessorsFor: aDefinition name) execute ];
-					title: 'Create accessors for ' , aDefinition name}.
+					action: [ (self generateAccessorsFor: aDefinition name) execute ];
+					title: 'Create accessors for ' , aDefinition name.
+				GtCoderContextMenuAction new
+					action: [ (self abstractVariable: aDefinition name) execute ];
+					title: 'Abstract ' , aDefinition name.
+				GtCoderContextMenuAction new
+					action: [ (self protectVariable: aDefinition name) execute ];
+					title: 'Protect ' , aDefinition name}.
 	theContextMenu items: items.
 	^ theContextMenu
 ]
@@ -25,35 +43,39 @@ GtSlotsDefinition >> editors [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSlotsDefinition >> generateAccessorsFor: varName [
-	| aModel aClass |
-	aModel := self createRefactoringModel.
-	aClass := aModel classNamed: self definition topMostParent name.
-
-	^ RBCreateAccessorsForVariableRefactoring
-		model: aModel
-		variable: varName
-		class: (aClass whoDefinesInstanceVariable: varName)
-		classVariable: false
+GtSlotsDefinition >> modelClassFrom: aModel [
+	^ aModel classNamed: self definition topMostParent name
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSlotsDefinition >> pushDownSlotRefactoringFor: varName [ 
+GtSlotsDefinition >> protectVariable: varName [
 	| aModel aClass |
 	aModel := self createRefactoringModel.
-	aClass := aModel classNamed: self definition topMostParent name.
+	aClass := self modelClassFrom: aModel.
+
+	^ RBProtectInstanceVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSlotsDefinition >> pushDownSlotRefactoringFor: varName [
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := self modelClassFrom: aModel.
 
 	^ RBPushDownInstanceVariableRefactoring
 		model: aModel
 		variable: varName
-		class:aClass
+		class: aClass
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSlotsDefinition >> pushUpSlotRefactoringFor: varName [
 	| aModel aClass |
 	aModel := self createRefactoringModel.
-	aClass := aModel classNamed: self definition topMostParent name.
+	aClass := self modelClassFrom: aModel.
 
 	^ RBPullUpInstanceVariableRefactoring
 		model: aModel
