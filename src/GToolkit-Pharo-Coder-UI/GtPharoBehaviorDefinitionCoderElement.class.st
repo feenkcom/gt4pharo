@@ -45,9 +45,11 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 	self addDefinitionEditorShortcutsTo: theProperties.
 	self editors
 		do: [ :eachEditor | 
-			[ eachEditor definition
-				when: GtBehaviorChangeEvent
-				do: [ :each | self updateModified ] ] on: Error do: [ :e |  ].
+			eachEditor
+				definitionsDo: [ :each | 
+					each
+						when: GtBehaviorChangeEvent
+						do: [ :event | [ self updateModified ] on: Error do: [ :e |  ] ] ].
 			theProperties
 				addChildren: {self buildSectionLabel: eachEditor title.
 						eachEditor
