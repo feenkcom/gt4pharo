@@ -39,6 +39,12 @@ GtPharoBehaviorDefinitionCoder >> difference [
 	^ self definition differenceWith: (self definitionFrom: self behavior)
 ]
 
+{ #category : #accessing }
+GtPharoBehaviorDefinitionCoder >> discardChanges [
+	definition := nil.
+	self announce: (GtCoderClassChanged new coder: self)
+]
+
 { #category : #'api - initialization' }
 GtPharoBehaviorDefinitionCoder >> forBehavior: aBehavior [
 	behavior := aBehavior.
