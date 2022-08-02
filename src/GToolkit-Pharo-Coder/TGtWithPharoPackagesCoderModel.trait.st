@@ -1,13 +1,13 @@
 "
-!! Generation
-${class:TGtWithPharoPackagesCoderModel}$ was automatically generated with the following code:
-[[[
+## Generation
+{{gtClass:TGtWithPharoPackagesCoderModel}} was automatically generated with the following code:
+```
 GtWithDomainModelTraitGenerator new
 	modelName: 'pharoPackagesCoder';
 	projectPrefix: 'Gt';
 	packageName: 'GToolkit-Pharo-Coder-Coders';
 	generate
-]]] 
+]```
 
 "
 Trait {
@@ -15,7 +15,7 @@ Trait {
 	#instVars : [
 		'pharoPackagesCoderModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'api - pharo packages coder model' }
