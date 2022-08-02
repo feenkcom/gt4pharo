@@ -1,18 +1,18 @@
 "
-! With selected package view model 
-Is used to add support for ==selectedPackageViewModel== to a user class.
-!! Implemented api:
+# With selected package view model 
+Is used to add support for `selectedPackageViewModel` to a user class.
+## Implemented api:
 The trait implements the following methods:
- - ${method:TGtPharoWithSelectedPackageViewModel>>#selectedPackageViewModel}$ to get the value of the selected package view model
- - ${method:TGtPharoWithSelectedPackageViewModel>>#selectPackageViewModel:}$ to set a new value of the selected package view model
- - ${method:TGtPharoWithSelectedPackageViewModel>>#deselectPackageViewModel}$ to unset the value of the selected package view model (set it to nil)
- - ${method:TGtPharoWithSelectedPackageViewModel>>#hasSelectedPackageViewModel}$ to check if the selected package view model has an assigned value (the default value is nil)
- - ${method:TGtPharoWithSelectedPackageViewModel>>#notifySelectedPackageViewModelChanged}$ to announce changes to the value of the selected package view model. By default does nothing and users are expected to provide a domain specific implementation with a domain specific event
- - ${method:TGtPharoWithSelectedPackageViewModel>>#onPreviousSelectedPackageViewModelUnset:}$ (advanced) - is a hook sent after a previous non-nil value of the selected package view model is unset. The default implementation does nothing and if needed users are free to provide a custom implementation. One of the use-cases is to perform a cleanup of the previous value or exlicitly notify the previous value that it is no longer in use.
- - ${method:TGtPharoWithSelectedPackageViewModel>>#onNewSelectedPackageViewModelSet:}$ (advanced) - is a hook sent after a new value of the selected package view model is set. The default implementation does nothing and if needed users are free to provide a custom implementation. One of the use-cases is to perform a set up of the new value or exlicitly notify the new value that it is now in use.
-!! Generation
-${class:TGtPharoWithSelectedPackageViewModel}$ was automatically generated with the following code:
-[[[
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#selectedPackageViewModel}} to get the value of the selected package view model
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#selectPackageViewModel:}} to set a new value of the selected package view model
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#deselectPackageViewModel}} to unset the value of the selected package view model (set it to nil)
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#hasSelectedPackageViewModel}} to check if the selected package view model has an assigned value (the default value is nil)
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#notifySelectedPackageViewModelChanged}} to announce changes to the value of the selected package view model. By default does nothing and users are expected to provide a domain specific implementation with a domain specific event
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#onPreviousSelectedPackageViewModelUnset:}} (advanced) - is a hook sent after a previous non-nil value of the selected package view model is unset. The default implementation does nothing and if needed users are free to provide a custom implementation. One of the use-cases is to perform a cleanup of the previous value or exlicitly notify the previous value that it is no longer in use.
+ - {{gtMethod:TGtPharoWithSelectedPackageViewModel>>#onNewSelectedPackageViewModelSet:}} (advanced) - is a hook sent after a new value of the selected package view model is set. The default implementation does nothing and if needed users are free to provide a custom implementation. One of the use-cases is to perform a set up of the new value or exlicitly notify the new value that it is now in use.
+## Generation
+{{gtClass:TGtPharoWithSelectedPackageViewModel}} was automatically generated with the following code:
+```
 GtWithPropertyTraitGenerator new
 	propertyName: 'selectedPackageViewModel';
 	propertySetter: 'selectPackageViewModel';
@@ -23,7 +23,7 @@ GtWithPropertyTraitGenerator new
 	packageName: 'GToolkit-Pharo-Coder-UI';
 	tagName: 'Navigation - Support';
 	generate
-]]] 
+]```
 
 "
 Trait {
@@ -31,7 +31,7 @@ Trait {
 	#instVars : [
 		'selectedPackageViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
 { #category : #'api - selected package view model' }
