@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenameClassController,
 	#superclass : #GtRenameVariableController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #accessing }
@@ -17,6 +17,6 @@ GtRenameClassController >> rename: anOldName to: aNewName [
 
 	^ GtRBRenameClassWithCommentsRefactoring
 		model: aModel
-		rename: (self class environment at: anOldName asSymbol)
+		rename: anOldName asSymbol
 		to: aNewName
 ]
