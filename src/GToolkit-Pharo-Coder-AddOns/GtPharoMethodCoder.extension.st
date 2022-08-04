@@ -388,6 +388,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns.
 			self addRenameTemporaryRefactoringFor: aNode to: coderAddOns.
+			self addRenameClassRefactoringFor: aNode to: coderAddOns.
 			self addVariableScopingFor: aNode to: coderAddOns.
 			aNode
 				withAllParentsDo: [ :node | self addInlineSelfMessageFor: node to: coderAddOns ].
@@ -416,6 +417,22 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 				sourceCoderViewModel: aCoderViewModel;
 				variableNode: aNode) execute ]
 		id: #'context-menu--remove-parameter'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
+	Smalltalk globals
+		at: aNode name value asSymbol
+		ifPresent: [ :cls | 
+			(cls isKindOf: Class)
+				ifTrue: [ coderAddOns
+						addContextMenuItem: (self
+									createLabel: 'Rename Class'
+									description: aNode variableName)
+							hover: (self highlightNodeBlock: aNode)
+							leave: self removeHighlightBlock
+							action: [ :aCoderViewModel | self renameClassIn: aCoderViewModel node: aNode ];
+						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform userPrintString ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
