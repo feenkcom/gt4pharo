@@ -33,7 +33,7 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 		yourself.
 		
 	anAcceptButton addShortcut: (BlShortcutWithAction new
-		combination: BlKeyCombination return;
+		combination: BlKeyCombination enter;
 		action: applyAction).
 	
 	aContainer := BlElement new
@@ -84,7 +84,7 @@ GtRefactoringsPreviewButton >> initialize [
 		label: 'Preview'.
 
 	self addShortcut: (BlShortcutWithAction new
-			 combination: BlKeyCombination return;
+			 combination: BlKeyCombination enter;
 			 action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ])
 ]
 
