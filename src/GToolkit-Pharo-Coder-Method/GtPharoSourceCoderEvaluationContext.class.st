@@ -95,6 +95,11 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 		addBindings: GtGlobalVariablesBindings new.
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoSourceCoderEvaluationContext >> isForScripting [
+	^true
+]
+
 { #category : #hack }
 GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 	"Hack to work with pharo compiler"
