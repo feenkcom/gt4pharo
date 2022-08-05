@@ -191,6 +191,11 @@ GtPharoProgramNode >> isSequence [
 	^ false
 ]
 
+{ #category : #testing }
+GtPharoProgramNode >> isSuper [
+	^ false
+]
+
 { #category : #accessing }
 GtPharoProgramNode >> isUsed [
 	parent ifNil: [ ^ true ].
