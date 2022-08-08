@@ -11,7 +11,7 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 	method := aNode topParent.
 	method selector isBinary ifTrue: [ ^ self ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Add parameter' description: method selector)
+		addContextMenuItem: (self createLabel: 'Extract as parameter' description: method selector)
 		hover: (valueNode ifNotNil: [ self highlightNodeBlock: valueNode ])
 		leave: self removeHighlightBlock
 		action:
