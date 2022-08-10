@@ -11,7 +11,7 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 	method := aNode topParent.
 	method selector isBinary ifTrue: [ ^ self ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Add parameter' description: method selector)
+		addContextMenuItem: (self createLabel: 'Extract as parameter' description: method selector)
 		hover: (valueNode ifNotNil: [ self highlightNodeBlock: valueNode ])
 		leave: self removeHighlightBlock
 		action:
@@ -155,6 +155,47 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
+	aNode isMessageSend ifFalse: [ ^ self ].
+	(aNode receiver isSelf or: [ aNode receiver isSuper ])
+		ifTrue: [ coderAddOns
+				addContextMenuItem: (self
+						createLabel: 'Inline Message'
+						description: aNode message selector)
+				hover: (self highlightNodeBlock: aNode)
+				leave: self removeHighlightBlock
+				action: [ :aSourceCoderViewModel | 
+					(GtMethodInlineMessageSendRefactoringController new
+						node: aNode;
+						sourceCoderViewModel: aSourceCoderViewModel) execute ]
+				id: #'context-menu--inline-message' ]
+		ifFalse: [ (GtPharoIndex current implementersOf: aNode selector)
+				ifNotEmpty: [ :classes | 
+					(classes size = 1
+						ifTrue: [ classes anyOne methodClass]
+						ifFalse: [ classes isEmpty
+								ifFalse: [ GtPharoProgramNode
+										typeOf: aNode receiver
+										in: self behavior
+										bindings: nil ] ])
+						ifNotNil: [ :class | 
+							(class whichClassIncludesSelector: aNode selector)
+								ifNotNil: [ :impl | 
+									coderAddOns
+										addContextMenuItem: (self
+												createLabel: 'Inline Message'
+												description: aNode message selector)
+										hover: (self highlightNodeBlock: aNode)
+										leave: self removeHighlightBlock
+										action: [ :aSourceCoderViewModel | 
+											(GtMethodInlineMessageFromComponentRefactoringController new
+												implementor: impl;
+												node: aNode;
+												sourceCoderViewModel: aSourceCoderViewModel) execute ]
+										id: #'context-menu--inline-message' ] ] ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
 	(aNode isVariable and: [ aNode parent isMethodPattern ]) 
 		ifFalse: [ ^ self ].
@@ -170,23 +211,6 @@ GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
 				 sourceCoderViewModel: aCoderViewModel;
 				 variableNode: aNode) execute ]
 		id: #'context-menu--inline-parameter'
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addInlineSelfMessageFor: aNode to: coderAddOns [
-	aNode isMessageSend
-		ifFalse: [ ^ self ].
-	aNode receiver isSelf
-		ifFalse: [ ^ self ].
-	coderAddOns
-		addContextMenuItem: (self createLabel: 'Inline Message' description: aNode message selector)
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
-		action: [ :aSourceCoderViewModel |
-			(GtMethodInlineMessageSendRefactoringController new
-				node: aNode;
-				sourceCoderViewModel: aSourceCoderViewModel) execute ]
-		id: #'context-menu--inline-message'
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -391,7 +415,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addRenameClassRefactoringFor: aNode to: coderAddOns.
 			self addVariableScopingFor: aNode to: coderAddOns.
 			aNode
-				withAllParentsDo: [ :node | self addInlineSelfMessageFor: node to: coderAddOns ].
+				withAllParentsDo: [ :node | self addInlineMessageFor: node to: coderAddOns ].
 			aNode
 				withAllParentsDo: [ :node | self addInlineTempFor: node to: coderAddOns ].
 			aNode
@@ -421,6 +445,7 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
+	aNode isVariable ifFalse: [ ^ self ].
 	Smalltalk globals
 		at: aNode name value asSymbol
 		ifPresent: [ :cls | 
