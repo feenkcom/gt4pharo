@@ -5,19 +5,14 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
 		'activatableRefactorings',
-		'refactoringsList'
+		'changesElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #accessing }
 GtRefactoringsElement >> applyRefactorings [
-	| aCompositeChange disabledChanges |
-	aCompositeChange := RBCompositeRefactoryChange new.
-	disabledChanges := (refactoringsList viewModel root value flatCollect: #allChanges) reject: [ :each | each isEnabled ].
-	aCompositeChange changes: (refactoringsList viewModel root value collect: [ :each | each change copy ]) asOrderedCollection.
-	disabledChanges do: [ :each | aCompositeChange recursivelyRemoveChange: each change ].
-	GtPharoCodeModifier current performRefactoryChange: aCompositeChange andAddUndoPointer: 1
+	^ changesElement applyChanges
 ]
 
 { #category : #initialization }
@@ -26,24 +21,19 @@ GtRefactoringsElement >> initialize [
 	self layout: BlLinearLayout vertical.
 	self matchParent.
 	self padding: (BlInsets all: 10).
-	refactoringsList := (BrSimpleTree new)
-		nodeType: [ :aTypeFactory :aTreeNode | aTreeNode value elementClass ];
-		nodeStencil: [ :aNodeType | aNodeType new ];
-		nodeDataBinder: [ :eachElement :eachUserActivatableChange | eachElement activatableChange: eachUserActivatableChange ];
-		yourself.
-	self addAptitude: (BrLayoutResizerAptitude inherit inherit: refactoringsList).
-	self addChild: refactoringsList
+	changesElement := GtChangesElement new.
+	self addAptitude: (BrLayoutResizerAptitude inherit inherit: changesElement).
+	self addChild: changesElement
 ]
 
 { #category : #accessing }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
 	| changes |
-	aCollectionOfRBRefactorings isEmpty ifTrue: [^self].
+	aCollectionOfRBRefactorings isEmpty ifTrue: [ ^ self ].
 	aCollectionOfRBRefactorings
-		do:
-			[ :each | 
+		do: [ :each | 
 			each model name: each printString.
 			each primitiveExecute ].
 	changes := aCollectionOfRBRefactorings first model changes.
-	refactoringsList items: {GtUserActivatableChange fromChange: changes} lazy: [ :each | each changes ]
+	changesElement changes: changes
 ]

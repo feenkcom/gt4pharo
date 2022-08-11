@@ -170,7 +170,7 @@ GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange andAddUndoPointe
 	^ self deferFlushDuring: [
 		RBRefactoryChangeManager instance
 			performChange: aRefactoryChange;
-			addUndoPointer: 1 ]
+			addUndoPointer: aNumber ]
 ]
 
 { #category : #'api - package' }
