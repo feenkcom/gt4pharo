@@ -2,7 +2,7 @@ Trait {
 	#name : #TGtPharoProgramNodeVisitor,
 	#traits : 'TSmaCCParseNodeVisitor',
 	#classTraits : 'TSmaCCParseNodeVisitor classTrait',
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -113,6 +113,11 @@ TGtPharoProgramNodeVisitor >> visitNilLiteral: aNilLiteral [
 { #category : #generated }
 TGtPharoProgramNodeVisitor >> visitNumberLiteral: aNumberLiteral [
 	^ self visitLiteral: aNumberLiteral
+]
+
+{ #category : #generated }
+TGtPharoProgramNodeVisitor >> visitPatternMessageBlock: aPatternMessageBlock [
+	^ self visitValue: aPatternMessageBlock
 ]
 
 { #category : #generated }
