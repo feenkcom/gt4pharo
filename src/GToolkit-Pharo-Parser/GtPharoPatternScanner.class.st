@@ -13,7 +13,8 @@ GtPharoPatternScanner >> scanForToken [
 			currentCharacter = ${
 				ifTrue: [ ^ self recordAndReportMatch: {self rbPatternBlockId} ].
 			[ currentCharacter notNil and: [ '`@;#.' includes: currentCharacter ] ]
-				whileTrue: [ self step ].
+				whileTrue: [ self recordMatch: {self rbNamePatternId}.
+					self step ].
 			[ currentCharacter notNil
 				and: [ currentCharacter isLetter or: [ currentCharacter between: $0 and: $9 ] ] ]
 				whileTrue: [ self recordMatch: {self rbNamePatternId}.
