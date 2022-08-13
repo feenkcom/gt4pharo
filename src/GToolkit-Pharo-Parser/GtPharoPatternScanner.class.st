@@ -8,6 +8,7 @@ Class {
 GtPharoPatternScanner >> scanForToken [
 	stream peek = $`
 		ifTrue: [ self step.
+			self recordMatch: {self rbNamePatternId}.
 			self step.
 			currentCharacter = ${
 				ifTrue: [ ^ self recordAndReportMatch: {self rbPatternBlockId} ].
