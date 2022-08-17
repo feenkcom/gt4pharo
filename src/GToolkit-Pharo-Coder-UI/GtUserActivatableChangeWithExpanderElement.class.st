@@ -7,39 +7,43 @@ Class {
 		'description',
 		'checkbox'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #'instance creation' }
 GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivatableChange [
-
+	| label |
 	activatableChange ifNotNil: [ activatableChange announcer unsubscribe: self ].
 	activatableChange := aGtUserActivatableChange.
 	activatableChange announcer weak
-		when: #enablementChanged send: #onEnablementChanged to: self.
+		when: #enablementChanged
+		send: #onEnablementChanged
+		to: self.
 
 	activatableChange isEnabled
 		ifTrue: [ checkbox check ]
 		ifFalse: [ checkbox uncheck ].
+	label := activatableChange change displayString.
+	activatableChange change changesSize > 1
+		ifTrue: [ label := label asRopedText
+					, ((' (' , activatableChange change changesSize printString , ' changes)')
+							asRopedText foreground: BrGlamorousColors disabledHeaderTextColor) ].
+	description text: label.
 
-	description text: activatableChange change displayString. 
+	expander
+		content: [ activatableChange hasDiff
+				ifTrue: [ (GtDiffElement on: activatableChange change gtDiff)
+						aptitude: GtDiffFlatAptitude;
+						vFitContent;
+						beSmallSize ]
+				ifFalse: [ BrLabel new
+						beSmallSize;
+						aptitude: BrGlamorousLabelAptitude new;
+						text: label ] ].
 
-	expander content: [
-		((activatableChange hasDiff)
-			ifTrue: [
-				(GtDiffElement on: activatableChange change gtDiff)
-					aptitude: GtDiffFlatAptitude;
-					vFitContent;
-					beSmallSize ]
-			ifFalse: [
-				BrLabel new
-					beSmallSize;
-					aptitude: BrGlamorousLabelAptitude new;
-					text: activatableChange change displayString ]) ].
-			
 	activatableChange isExpanded
 		ifTrue: [ expander expand ]
-		ifFalse: [ expander collapse ].
+		ifFalse: [ expander collapse ]
 ]
 
 { #category : #initialization }

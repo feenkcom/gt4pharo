@@ -42,6 +42,11 @@ GtChangesElement >> changes: aRefactoryChange [
 		lazy: [ :each | each changes ]
 ]
 
+{ #category : #accessing }
+GtChangesElement >> expandUpTo: anInteger [
+	changesTree expandUpTo: anInteger
+]
+
 { #category : #initialization }
 GtChangesElement >> initialize [
 	super initialize.
