@@ -58,8 +58,7 @@ GtPharoMethodsCoderElement >> codersUIModel: aGtMethodsCoderUIModel [
 	methodsCoderUIModel coder announcer weak
 		when: GtCodersCoderAdded , GtCodersCoderRemoved , GtCodersCodersChanged
 			send: #updateList
-			to: self;
-		when: GtCodersScrollToCoder send: #scrollToEvent: to: self
+			to: self
 ]
 
 { #category : #ui }
