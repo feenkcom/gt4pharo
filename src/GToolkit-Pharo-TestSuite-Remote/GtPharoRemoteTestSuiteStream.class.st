@@ -172,7 +172,7 @@ GtPharoRemoteTestSuiteStream >> start [
 		groupTasksByAverageTime;
 		job.
 	job
-		showProgressNotification;
+		showExamplesProgressNotification;
 		when: GtRrTaskCompletedAnnouncement 
 			send: #onTaskCompletedAnnouncement: 
 			to: self;
