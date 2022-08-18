@@ -90,7 +90,7 @@ GtPharoStyler >> visitArray: anArray [
 	super visitArray: anArray.
 	self 
 		colorAndHighlightParenthesesLeft: anArray leftBrace startPosition 
-		right: anArray rightBrace startPosition 
+		right: anArray rightBrace startPosition
 		atNestingLevel: anArray nestingLevel
 ]
 
