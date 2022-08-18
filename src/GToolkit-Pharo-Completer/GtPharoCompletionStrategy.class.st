@@ -265,13 +265,14 @@ GtPharoCompletionStrategy >> typeOfVariable: aString [
 	aString = 'self' ifTrue: [ ^ self classOrMetaClass ].
 	aString = 'super' ifTrue: [ ^ self classOrMetaClass superclass ].
 	self classOrMetaClass notNil
-		ifTrue:
-			[ (self classOrMetaClass bindingOf: aString asSymbol)
+		ifTrue: [ (self classOrMetaClass bindingOf: aString asSymbol)
 				ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ].
 	bindings notNil
-		ifTrue:
-			[ (bindings bindingOf: aString asSymbol) ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ].
-	variableTypes notNil ifTrue: [ (variableTypes at: aString ifAbsent: [ nil ]) ifNotNil: [ :cls | ^ cls ] ].
+		ifTrue: [ (bindings hasBindingOf: aString asSymbol)
+				ifTrue: [ (bindings bindingOf: aString asSymbol)
+						ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ] ].
+	variableTypes notNil
+		ifTrue: [ (variableTypes at: aString ifAbsent: [ nil ]) ifNotNil: [ :cls | ^ cls ] ].
 	^ nil
 ]
 
