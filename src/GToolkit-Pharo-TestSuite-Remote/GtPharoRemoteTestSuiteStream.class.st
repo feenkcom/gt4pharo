@@ -143,7 +143,7 @@ GtPharoRemoteTestSuiteStream >> sourceStream: anObject [
 { #category : #'start-stop' }
 GtPharoRemoteTestSuiteStream >> start [
 	"Read all the tests to be run and submit them to the default RemoteRunner.
-	This is currently a simplistic implementation that creates a task per test."
+	Tests are grouped based on an average execution time, see {{gtClass:GtRrAverageTimeExampleAllocator}}."
 	| testNames exampleNames testRegistrationStream |
 
 	self reset.
@@ -172,6 +172,7 @@ GtPharoRemoteTestSuiteStream >> start [
 		groupTasksByAverageTime;
 		job.
 	job
+		showProgressNotification;
 		when: GtRrTaskCompletedAnnouncement 
 			send: #onTaskCompletedAnnouncement: 
 			to: self;
