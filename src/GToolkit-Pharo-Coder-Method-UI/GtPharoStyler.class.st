@@ -90,7 +90,7 @@ GtPharoStyler >> visitArray: anArray [
 	super visitArray: anArray.
 	self 
 		colorAndHighlightParenthesesLeft: anArray leftBrace startPosition 
-		right: anArray rightBrace startPosition - 1
+		right: anArray rightBrace startPosition
 		atNestingLevel: anArray nestingLevel
 ]
 
@@ -99,7 +99,7 @@ GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 	| color aLeftIndex aRightIndex |
 	color := self parenthesesColorAt: anArrayLiteral nestingLevel.
 	aLeftIndex := anArrayLiteral arrayStart startPosition.
-	aRightIndex := anArrayLiteral arrayStop startPosition - 1.
+	aRightIndex := anArrayLiteral arrayStop startPosition.
 	(text from: aLeftIndex to: aLeftIndex + 1) foreground: color.
 	(text from: aRightIndex to: aRightIndex) foreground: color.
 	self highlightParenthesesLeft: aLeftIndex right: aRightIndex.
@@ -114,7 +114,7 @@ GtPharoStyler >> visitBlock: aBlock [
 		aBlock rightBracket ifNotNil: [ :aRightBracket | 
 			self
 				colorAndHighlightParenthesesLeft: aLeftBracket startPosition
-				right: aRightBracket startPosition - 1
+				right: aRightBracket startPosition
 				atNestingLevel: aBlock nestingLevel ] ]
 ]
 
@@ -343,7 +343,7 @@ GtPharoStyler >> visitValue: aValue [
 	aValue leftParens doWithIndex: [ :each :i |
 		self 
 			colorAndHighlightParenthesesLeft: each startPosition
-			right: (aValue rightParens at: (aValue rightParens size - i + 1)) startPosition - 1
+			right: (aValue rightParens at: (aValue rightParens size - i + 1)) startPosition
 			atNestingLevel: aValue parent nestingLevel + i.
 	].
 ]
