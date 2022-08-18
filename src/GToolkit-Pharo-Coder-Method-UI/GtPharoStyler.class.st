@@ -36,8 +36,8 @@ GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 	theParanthesesMarker := BrTextInvisibleMarkerAttribute new.
 	text
 		attribute: theParanthesesMarker
-		from: aLeftIndex
-		to: aRightIndex.
+		from: aLeftIndex + 1
+		to: aRightIndex - 1.
 
 	cursorEnterAction := [ :aTextEditor |
 		aTextEditor text
@@ -64,8 +64,8 @@ GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 		leave: cursorLeaveAction.
 
 	(text
-		from: aRightIndex
-		to: aRightIndex)
+		from: aRightIndex - 1
+		to: aRightIndex - 1)
 		onCursorEnter: cursorEnterAction
 		leave: cursorLeaveAction
 ]
@@ -102,7 +102,7 @@ GtPharoStyler >> visitArrayLiteral: anArrayLiteral [
 	aRightIndex := anArrayLiteral arrayStop startPosition.
 	(text from: aLeftIndex to: aLeftIndex + 1) foreground: color.
 	(text from: aRightIndex to: aRightIndex) foreground: color.
-	self highlightParenthesesLeft: aLeftIndex right: aRightIndex.
+	self highlightParenthesesLeft: aLeftIndex + 1 right: aRightIndex.
 	super visitArrayLiteral: anArrayLiteral
 ]
 
