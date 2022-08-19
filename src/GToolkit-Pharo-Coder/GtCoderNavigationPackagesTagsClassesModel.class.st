@@ -113,6 +113,20 @@ GtCoderNavigationPackagesTagsClassesModel >> initializeWithPackages: aCollection
 	
 ]
 
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
+	self selectedClass == aMethodAdded methodModified methodClass ifFalse: [ ^ self ].
+	self announcer
+		announce: (GtCoderNavigationMethodModification new methodModified: aMethodAdded)
+]
+
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> methodRemoved: aMethodRemoved [
+	self selectedClass == aMethodRemoved methodRemoved methodClass ifFalse: [ ^ self ].
+	self announcer
+		announce: (GtCoderNavigationMethodModification new methodModified: aMethodRemoved)
+]
+
 { #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass package: anRPackage tag: anRPackageTag [
 	self
@@ -368,7 +382,9 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
-		when: ClassModificationApplied send: #classModificationApplied: to: self
+		when: ClassModificationApplied send: #classModificationApplied: to: self;
+		when: MethodAdded send: #methodAdded: to: self;
+		when: MethodRemoved send: #methodRemoved: to: self
 ]
 
 { #category : #'api - subscriptions' }
