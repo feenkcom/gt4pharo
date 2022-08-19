@@ -10,6 +10,7 @@ Class {
 GtPharoSuiteShowButton >> initialize [
 
 	super initialize.
+	self initializeAsyncPromise.
 	self icon: BrGlamorousVectorIcons play.
 	self addAptitude: BrGlamorousButtonWithIconAptitude.
 	self addAptitude: (BrGlamorousWithDropdownAptitude
@@ -22,6 +23,19 @@ GtPharoSuiteShowButton >> initialize [
 									  sourceElement: anEvent target) ];
 					 suiteViewModel: self suiteViewModel;
 					 margin: (BlInsets all: 10) ])
+]
+
+{ #category : #initialization }
+GtPharoSuiteShowButton >> initializeAsyncPromise [
+	self asyncPromise
+		whenPending: [ :aButton | aButton visibility: BlVisibility visible ];
+		whenError: [ :aButton :anError | 
+			aButton visibility: BlVisibility visible.
+			aButton icon: anError asDebuggableElement ];
+		whenSuccess: [ :aButton :hasSuiteCases | 
+			aButton
+				visibility: (hasSuiteCases ifTrue: [ BlVisibility visible ] ifFalse: [ BlVisibility gone ]).
+			aButton icon: self newForStatePlayIcon ]
 ]
 
 { #category : #'private - instance creation' }
@@ -46,18 +60,7 @@ GtPharoSuiteShowButton >> onSuiteViewModelChanged [
 	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
 	didn't get a chance to subscribe to any announcement. Override #onPostSuiteViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
+
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
-	
-	self asyncPromise
-		whenPending: [ :aButton |
-			aButton visibility: BlVisibility visible ];
-		whenError: [ :aButton :anError |
-			aButton visibility: BlVisibility visible.
-			aButton icon: anError asDebuggableElement ];
-		whenSuccess: [ :aButton :hasSuiteCases |
-			aButton visibility: (hasSuiteCases
-				ifTrue: [ BlVisibility visible ]
-				ifFalse: [ BlVisibility gone ]).
-			aButton icon: self newForStatePlayIcon ];
-		promise: self suiteViewModel hasSuiteCases
+	self asyncPromise promise: self suiteViewModel hasSuiteCases
 ]
