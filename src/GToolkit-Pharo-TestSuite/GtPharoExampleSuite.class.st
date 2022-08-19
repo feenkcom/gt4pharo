@@ -10,7 +10,8 @@ Class {
 	#instVars : [
 		'examplesWithResultStream',
 		'examplesWithResultCache',
-		'examplesCache'
+		'examplesCache',
+		'announcer'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-Base'
 }
@@ -18,12 +19,6 @@ Class {
 { #category : #'api - instance creation' }
 GtPharoExampleSuite class >> forStream: anAsyncStream [
 	^ self new stream: anAsyncStream
-]
-
-{ #category : #'api - enumeration' }
-GtPharoExampleSuite >> allExampleCodersDo: aBlock [
-	"iterate all coders with examples"
-	self subclassResponsibility
 ]
 
 { #category : #'api - accessing' }
@@ -52,6 +47,11 @@ GtPharoExampleSuite >> allExecutableExampleCodersWithResultsDo: aBlock [
 	self allExecutableExampleCodersDo: [ :aCoder :anExample | 
 		aCoder exampleResult ifNotNil: [ :aResult |
 			aBlock cull: aCoder cull: anExample cull: aResult ] ]
+]
+
+{ #category : #'api - announcer' }
+GtPharoExampleSuite >> announcer [
+	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #'private - instance creation' }
@@ -122,6 +122,11 @@ GtPharoExampleSuite >> hasSuccessExamples [
 	^ false
 ]
 
+{ #category : #'private - notifying' }
+GtPharoExampleSuite >> notifyStreamChanged [
+	self announcer announce: (GtPharoSuiteStreamChanged new suite: self)
+]
+
 { #category : #'api - accessing' }
 GtPharoExampleSuite >> numberOfAllExamples [
 	<return: #Integer>
@@ -176,6 +181,11 @@ GtPharoExampleSuite >> numberOfSuccessExamples [
 	^ aTotal
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoExampleSuite >> onCodersStreamChanged: aGtStreamingCodersStreamChanged [ 
+	"ignore"
+]
+
 { #category : #'api - execution' }
 GtPharoExampleSuite >> runExamples [
 	self selectedExecutableExampleCodersDo: [ :eachCoder | 
@@ -193,12 +203,6 @@ GtPharoExampleSuite >> runNoTestExamples [
 	self selectedExecutableExampleCodersDo: [ :eachCoder | 
 		(eachCoder isModified not and: [ eachCoder example hasNoTestPragma ]) ifTrue: [ 
 			eachCoder example run ] ]
-]
-
-{ #category : #'api - enumeration' }
-GtPharoExampleSuite >> selectedExampleCodersDo: aBlock [
-	"iterate selected coders with examples"
-	self subclassResponsibility
 ]
 
 { #category : #'api - enumeration' }
@@ -225,9 +229,33 @@ GtPharoExampleSuite >> stream: anAsyncStream [
 	examplesCache := AsyncSharedDictionary new.
 	examplesWithResultCache := AsyncSharedDictionary new.
 
+	self updateStream: anAsyncStream.
+]
+
+{ #category : #accessing }
+GtPharoExampleSuite >> streamChangedTo: anAsyncStream [
+	self updateStream: anAsyncStream.
+	self notifyStreamChanged
+]
+
+{ #category : #'api - announcer' }
+GtPharoExampleSuite >> unsubscribe: aSubscriber [
+	self announcer unsubscribe: aSubscriber
+]
+
+{ #category : #'private - updating' }
+GtPharoExampleSuite >> updateStream: anAsyncStream [
 	examplesWithResultStream := (((anAsyncStream
-		map: [ :eachMethod | eachMethod gtExample ] cache: examplesCache)
+		map: [ :eachMethod | eachMethod gtExample ] cache: examplesCache) 
 		filter: [ :eachExample | eachExample notNil ])
-		map: [ :eachExample | eachExample asExampleWithResult ] cache: examplesWithResultCache)
+		map: [ :eachExample | eachExample asExampleWithResult ] cache: examplesWithResultCache) 
 		cached
+]
+
+{ #category : #'api - announcer' }
+GtPharoExampleSuite >> when: anAnnouncementClass send: aSelector to: aReceiver [
+	self announcer weak
+		when: anAnnouncementClass
+		send: aSelector
+		to: aReceiver
 ]

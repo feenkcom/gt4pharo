@@ -10,7 +10,6 @@ Class {
 		'localToggle',
 		'remoteToggle',
 		'playButton',
-		'updater',
 		'errorElement'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
@@ -23,10 +22,6 @@ GtPharoSuiteOverviewContentElement >> initialize [
 	self
 		vFitContent;
 		hMatchParent.
-
-	updater := BrElementUpdater new
-		element: self
-		selector: #updateElement.
 
 	listElement := self newStatesList.
 	stateElements := Dictionary new.
@@ -155,6 +150,11 @@ GtPharoSuiteOverviewContentElement >> onRemoteActivated: anEvent [
 	self suiteViewModel beRemoteFrom: self
 ]
 
+{ #category : #'private - announcement handling' }
+GtPharoSuiteOverviewContentElement >> onSuiteStreamChanged: anAnnouncement [
+	self updateElement
+]
+
 { #category : #'api - suite view model' }
 GtPharoSuiteOverviewContentElement >> onSuiteViewModelChanged [
 
@@ -180,16 +180,14 @@ GtPharoSuiteOverviewContentElement >> spawnErrorDetailFrom: aButton [
 
 { #category : #'api - suite view model' }
 GtPharoSuiteOverviewContentElement >> subscribeToSuiteViewModel [
-
 	self suiteViewModel
-		when: GtPharoSuiteViewModelChanged
-		send: #onCodersCoderChanged:
+		when: GtPharoSuiteStreamChanged
+		send: #onSuiteStreamChanged:
 		to: self
 ]
 
 { #category : #'api - suite view model' }
 GtPharoSuiteOverviewContentElement >> unsubscribeFromSuiteViewModel [
-
 	self suiteViewModel unsubscribe: self
 ]
 
