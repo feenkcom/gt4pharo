@@ -53,6 +53,11 @@ GtPharoSuiteShowButton >> newForStatePlayIcon [
 		}
 ]
 
+{ #category : #'private - announcement handling' }
+GtPharoSuiteShowButton >> onSuiteStreamChanged: anAnnouncement [
+	self asyncPromise promise: self suiteViewModel hasSuiteCases
+]
+
 { #category : #'api - suite view model' }
 GtPharoSuiteShowButton >> onSuiteViewModelChanged [
 	"Is sent when a new suiteViewModel is assigned to the receiver.
@@ -63,4 +68,17 @@ GtPharoSuiteShowButton >> onSuiteViewModelChanged [
 
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 	self asyncPromise promise: self suiteViewModel hasSuiteCases
+]
+
+{ #category : #'api - suite view model' }
+GtPharoSuiteShowButton >> subscribeToSuiteViewModel [
+	self suiteViewModel
+		when: GtPharoSuiteStreamChanged
+		send: #onSuiteStreamChanged:
+		to: self
+]
+
+{ #category : #'api - suite view model' }
+GtPharoSuiteShowButton >> unsubscribeFromSuiteViewModel [
+	self suiteViewModel unsubscribe: self
 ]
