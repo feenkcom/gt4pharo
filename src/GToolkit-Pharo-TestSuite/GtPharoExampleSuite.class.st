@@ -21,12 +21,6 @@ GtPharoExampleSuite class >> forStream: anAsyncStream [
 	^ self new stream: anAsyncStream
 ]
 
-{ #category : #'api - enumeration' }
-GtPharoExampleSuite >> allExampleCodersDo: aBlock [
-	"iterate all coders with examples"
-	self subclassResponsibility
-]
-
 { #category : #'api - accessing' }
 GtPharoExampleSuite >> allExampleStates [
 	<return: #TAsyncStream>
@@ -209,12 +203,6 @@ GtPharoExampleSuite >> runNoTestExamples [
 	self selectedExecutableExampleCodersDo: [ :eachCoder | 
 		(eachCoder isModified not and: [ eachCoder example hasNoTestPragma ]) ifTrue: [ 
 			eachCoder example run ] ]
-]
-
-{ #category : #'api - enumeration' }
-GtPharoExampleSuite >> selectedExampleCodersDo: aBlock [
-	"iterate selected coders with examples"
-	self subclassResponsibility
 ]
 
 { #category : #'api - enumeration' }
