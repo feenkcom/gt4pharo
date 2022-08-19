@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'testCasesStream',
-		'testCasesCache'
+		'testCasesCache',
+		'announcer'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-Base'
 }
@@ -70,6 +71,11 @@ GtPharoTestSuite >> allTestCasesWithState: aState [
 	^ self allTestCases select: [ :eachTestCase | eachTestCase state = aState ]
 ]
 
+{ #category : #'api - announcer' }
+GtPharoTestSuite >> announcer [
+	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
 { #category : #'private - instance creation' }
 GtPharoTestSuite >> createTestCaseForMethod: aCompiledMethod [
 	^ GtPharoMethodTestCase forMethod: aCompiledMethod
@@ -132,6 +138,11 @@ GtPharoTestSuite >> initialize [
 	testCasesCache := AsyncSharedDictionary new
 ]
 
+{ #category : #'private - notifying' }
+GtPharoTestSuite >> notifyStreamChanged [
+	self announcer announce: (GtPharoSuiteStreamChanged new suite: self)
+]
+
 { #category : #'api - counts' }
 GtPharoTestSuite >> numberOfAllPassedTestCases [
 	<return: #TAsyncFuture>
@@ -182,9 +193,28 @@ GtPharoTestSuite >> stream: anAsyncStream [
 		cached
 ]
 
+{ #category : #'api - updating' }
+GtPharoTestSuite >> streamChangedTo: anAsyncStream [
+	self stream: anAsyncStream.
+	self notifyStreamChanged.
+]
+
 { #category : #'api - accessing' }
 GtPharoTestSuite >> testCaseForMethod: aCompiledMethod [
 	^ testCasesCache
 		at: aCompiledMethod
 		ifAbsentPut: [ self createTestCaseForMethod: aCompiledMethod ]
+]
+
+{ #category : #'api - announcer' }
+GtPharoTestSuite >> unsubscribe: aSubscriber [
+	self announcer unsubscribe: aSubscriber
+]
+
+{ #category : #'api - announcer' }
+GtPharoTestSuite >> when: anAnnouncementClass send: aSelector to: aReceiver [
+	self announcer weak
+		when: anAnnouncementClass
+		send: aSelector
+		to: aReceiver
 ]

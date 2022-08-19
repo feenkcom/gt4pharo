@@ -123,6 +123,19 @@ GtPharoTestSuiteViewModel >> initialize [
 	selectedState := self allSuiteCasesState
 ]
 
+{ #category : #'private - announcement handling' }
+GtPharoTestSuiteViewModel >> onSuiteStreamChanged: anAnnouncement [
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - pharo test suite' }
+GtPharoTestSuiteViewModel >> subscribeToPharoTestSuite [
+	self pharoTestSuite
+		when: GtPharoSuiteStreamChanged
+		send: #onSuiteStreamChanged:
+		to: self
+]
+
 { #category : #'api - suite' }
 GtPharoTestSuiteViewModel >> suiteCaseStateOf: aSuiteCaseObject [
 	^ aSuiteCaseObject state
@@ -134,6 +147,11 @@ GtPharoTestSuiteViewModel >> unsubscribe: anObject [
 
 	<generatedFrom: #'TGtRobocoderAnnouncerTemplate>>#unsubscribeTemplate'>
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
+]
+
+{ #category : #'api - pharo test suite' }
+GtPharoTestSuiteViewModel >> unsubscribeFromPharoTestSuite [
+	self pharoTestSuite unsubscribe: self
 ]
 
 { #category : #'api - announcer' }

@@ -128,6 +128,19 @@ GtPharoExampleSuiteViewModel >> initialize [
 GtPharoExampleSuiteViewModel >> methodsCoderModelDo: aBlock [
 ]
 
+{ #category : #'private - announcement handling' }
+GtPharoExampleSuiteViewModel >> onSuiteStreamChanged: anAnnouncement [
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - pharo example suite' }
+GtPharoExampleSuiteViewModel >> subscribeToPharoExampleSuite [
+	self pharoExampleSuite
+		when: GtPharoSuiteStreamChanged
+		send: #onSuiteStreamChanged:
+		to: self
+]
+
 { #category : #'api - suite' }
 GtPharoExampleSuiteViewModel >> suiteCaseStateOf: aSuiteCaseObject [
 	^ pharoExampleSuite stateOf: aSuiteCaseObject
@@ -149,6 +162,11 @@ GtPharoExampleSuiteViewModel >> unsubscribe: anObject [
 
 	<generatedFrom: #'TGtRobocoderAnnouncerTemplate>>#unsubscribeTemplate'>
 	^ announcer ifNotNil: [ :anAnnouncer | anAnnouncer unsubscribe: anObject ]
+]
+
+{ #category : #'api - pharo example suite' }
+GtPharoExampleSuiteViewModel >> unsubscribeFromPharoExampleSuite [
+	self pharoExampleSuite unsubscribe: self
 ]
 
 { #category : #'api - announcer' }
