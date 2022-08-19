@@ -115,7 +115,7 @@ GtCoderNavigationPackagesTagsClassesModel >> initializeWithPackages: aCollection
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
-	self selectedClass == aMethodAdded methodModified methodClass ifFalse: [ ^ self ].
+	self selectedClass == aMethodAdded methodAdded methodClass ifFalse: [ ^ self ].
 	self announcer
 		announce: (GtCoderNavigationMethodModification new methodModified: aMethodAdded)
 ]
