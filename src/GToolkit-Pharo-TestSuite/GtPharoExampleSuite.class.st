@@ -232,7 +232,7 @@ GtPharoExampleSuite >> stream: anAsyncStream [
 	self updateStream: anAsyncStream.
 ]
 
-{ #category : #accessing }
+{ #category : #'api - updating' }
 GtPharoExampleSuite >> streamChangedTo: anAsyncStream [
 	self updateStream: anAsyncStream.
 	self notifyStreamChanged
