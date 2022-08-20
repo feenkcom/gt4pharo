@@ -62,26 +62,26 @@ GtPharoRemoteTestSuiteStream >> onJobTerminatedAnnouncement: anAnnouncement [
 { #category : #private }
 GtPharoRemoteTestSuiteStream >> onTaskCompletedAnnouncement: anAnnouncement [
 	| testResult testName gtTestCase |
-
-	anAnnouncement task result do: [ :taskResult |
-		taskResult isSUnitTestCase ifTrue:
-			[ testResult := TestResult new.
-			testName := taskResult testCaseClass name -> taskResult testCaseSelector.
-			gtTestCase := tests at: testName.
-			taskResult 
-				populateTestResult: testResult 
-				with: (taskResult testCaseClass selector: taskResult testCaseSelector).
-			gtTestCase result: testResult.
-			"Then put on the queue ready to answer in the output stream."
-			results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
-		ifFalse: [ taskResult isGtExample ifTrue:
-			[ results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: taskResult)) ]
-		ifFalse: [ self error: 'Unknown result type' ]].
-		Stdio stdout
-			print: Time now;
-			<< ' wakeup';
-			lf.
-		waker wakeUp. ].
+	anAnnouncement task result
+		do: [ :taskResult | 
+			taskResult isSUnitTestCase
+				ifTrue: [ testResult := TestResult new.
+					testName := taskResult testCaseClass name -> taskResult testCaseSelector.
+					gtTestCase := tests at: testName.
+					taskResult
+						populateTestResult: testResult
+						with: (taskResult testCaseClass selector: taskResult testCaseSelector).
+					gtTestCase result: testResult.	
+					"Then put on the queue ready to answer in the output stream."
+					results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
+				ifFalse: [ taskResult isGtExample
+						ifTrue: [ results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: taskResult)) ]
+						ifFalse: [ self error: 'Unknown result type' ] ].
+			Stdio stdout
+				print: Time now;
+				<< ' wakeup';
+				lf.
+			waker wakeUp ]
 ]
 
 { #category : #private }
