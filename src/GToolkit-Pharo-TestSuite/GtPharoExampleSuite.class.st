@@ -245,7 +245,9 @@ GtPharoExampleSuite >> unsubscribe: aSubscriber [
 
 { #category : #'private - updating' }
 GtPharoExampleSuite >> updateStream: anAsyncStream [
-	examplesWithResultStream := (((anAsyncStream
+	NonInteractiveTranscript stdout show: 'New example stream: '; show: anAsyncStream; cr.
+	examplesWithResultStream := ((((anAsyncStream 
+		filter: [ :eachItem | eachItem notNil ])
 		map: [ :eachMethod | eachMethod gtExample ] cache: examplesCache) 
 		filter: [ :eachExample | eachExample notNil ])
 		map: [ :eachExample | eachExample asExampleWithResult ] cache: examplesWithResultCache) 
