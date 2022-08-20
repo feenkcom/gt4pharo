@@ -42,6 +42,15 @@ GtPharoStreamingMethodsCoder >> codeGeneratorsAvailableFor: aMethodsCoderViewMod
 	^ (self codeGeneratorsFor: aMethodsCoderViewModel) size > 0
 ]
 
+{ #category : #'api - accessing' }
+GtPharoStreamingMethodsCoder >> examplesStream [
+	"Return a stream of examples"
+
+	<return: #TAsyncStream>
+	^ (self codersStream map: [ :eachCoder | eachCoder example ])
+		filter: [ :eachExample | eachExample notNil ]
+]
+
 { #category : #initialization }
 GtPharoStreamingMethodsCoder >> initialize [
 	super initialize.

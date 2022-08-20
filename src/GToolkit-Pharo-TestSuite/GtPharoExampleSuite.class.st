@@ -186,25 +186,6 @@ GtPharoExampleSuite >> onCodersStreamChanged: aGtStreamingCodersStreamChanged [
 	"ignore"
 ]
 
-{ #category : #'api - execution' }
-GtPharoExampleSuite >> runExamples [
-	self selectedExecutableExampleCodersDo: [ :eachCoder | 
-		(eachCoder isModified or: [ eachCoder example hasNoTestPragma ]) ifFalse: [ 
-			eachCoder example run ] ]
-]
-
-{ #category : #'api - execution' }
-GtPharoExampleSuite >> runExamplesFrom: anElement [
-	self runExamples. 
-]
-
-{ #category : #'api - execution' }
-GtPharoExampleSuite >> runNoTestExamples [
-	self selectedExecutableExampleCodersDo: [ :eachCoder | 
-		(eachCoder isModified not and: [ eachCoder example hasNoTestPragma ]) ifTrue: [ 
-			eachCoder example run ] ]
-]
-
 { #category : #'api - enumeration' }
 GtPharoExampleSuite >> selectedExecutableExampleCodersDo: aBlock [
 	self selectedExampleCodersDo: [ :aCoder :anExample | 
@@ -245,7 +226,9 @@ GtPharoExampleSuite >> unsubscribe: aSubscriber [
 
 { #category : #'private - updating' }
 GtPharoExampleSuite >> updateStream: anAsyncStream [
-	examplesWithResultStream := (((anAsyncStream
+	NonInteractiveTranscript stdout show: 'New example stream: '; show: anAsyncStream; cr.
+	examplesWithResultStream := ((((anAsyncStream 
+		filter: [ :eachItem | eachItem notNil ])
 		map: [ :eachMethod | eachMethod gtExample ] cache: examplesCache) 
 		filter: [ :eachExample | eachExample notNil ])
 		map: [ :eachExample | eachExample asExampleWithResult ] cache: examplesWithResultCache) 
