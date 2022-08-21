@@ -173,11 +173,6 @@ GtPharoExampleSuite >> numberOfSuccessExamples [
 	^ aTotal
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoExampleSuite >> onCodersStreamChanged: aGtStreamingCodersStreamChanged [ 
-	"ignore"
-]
-
 { #category : #'api - enumeration' }
 GtPharoExampleSuite >> selectedExecutableExampleCodersDo: aBlock [
 	self selectedExampleCodersDo: [ :aCoder :anExample | 

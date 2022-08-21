@@ -76,6 +76,11 @@ GtPharoTestSuite >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoTestSuite >> codersStreamChangedTo: anAsyncMapWithCacheStream [ 
+	"a bug?"
+]
+
 { #category : #'private - instance creation' }
 GtPharoTestSuite >> createTestCaseForMethod: aCompiledMethod [
 	^ GtPharoMethodTestCase forMethod: aCompiledMethod
