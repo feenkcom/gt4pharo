@@ -120,7 +120,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 		class: self classInPackageTag
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	self assert: anElement methodList isVisible not.
+	self assert: anElement methodList isVisible.
 	^ anElement
 ]
 
