@@ -4,6 +4,20 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
+{ #category : #'examples - class selection' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdatesMethodList [
+	<gtExample>
+	| anElement |
+	anElement := self elementWithPackageTagAndClassSelection.
+	self
+		assert: (anElement methodList items noneSatisfy: [ :meth | meth selector == #newMethod ]).
+	[ self classInPackageTag compile: 'newMethod ^self'.
+	anElement methodList items anySatisfy: [ :meth | meth selector == #newMethod ] ]
+		ensure: [ self classInPackageTag removeSelector: #newMethod ].
+	anElement methodList items noneSatisfy: [ :meth | meth selector == #newMethod ].
+	^ anElement
+]
+
 { #category : #asserting }
 GtCoderNavigationPackagesTagsClassesElementExamples >> assertSelectionOfPackage: aRPackage tag: aRPackageTag class: aClass inElement: anElement [
 
@@ -69,11 +83,13 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClas
 	| anElement |
 	anElement := self elementNavigationModelInSpace.
 	anElement navigationModel selectClass: self classInPackage.
-	self 
+	self
 		assertSelectionOfPackage: self classInPackage package
-		tag: nil 
-		class: self classInPackage 
+		tag: nil
+		class: self classInPackage
 		inElement: anElement.
+	self assert: anElement methodProtocolsList isVisible.
+	self assert: anElement methodList isVisible.
 	^ anElement
 ]
 
@@ -84,10 +100,10 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClas
 	anElement := self elementNavigationModel.
 	anElement navigationModel selectClass: self classInPackage.
 	self putInSpace: anElement.
-	self 
+	self
 		assertSelectionOfPackage: self classInPackage package
-		tag: nil 
-		class: self classInPackage 
+		tag: nil
+		class: self classInPackage
 		inElement: anElement.
 	^ anElement
 ]
@@ -98,11 +114,13 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 	| anElement |
 	anElement := self elementNavigationModelInSpace.
 	anElement navigationModel selectClass: self classInPackageTag.
-	self 
+	self
 		assertSelectionOfPackage: nil
-		tag: self packageTag 
-		class: self classInPackageTag 
+		tag: self packageTag
+		class: self classInPackageTag
 		inElement: anElement.
+	self assert: anElement methodProtocolsList isVisible.
+	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 
@@ -127,11 +145,13 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSele
 	| anElement |
 	anElement := self elementNavigationModelInSpace.
 	anElement navigationModel selectPackageTag: self packageTag.
-	self 
+	self
 		assertSelectionOfPackage: nil
-		tag: self packageTag 
-		class: nil 
+		tag: self packageTag
+		class: nil
 		inElement: anElement.
+	self assert: anElement methodProtocolsList isVisible not.
+	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 
@@ -141,11 +161,13 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 	| anElement |
 	anElement := self elementNavigationModelInSpace.
 	anElement navigationModel selectPackage: self packageWithoutTagsAndExtensions.
-	self 
-		assertSelectionOfPackage: self packageWithoutTagsAndExtensions 
-		tag: nil 
-		class: nil 
+	self
+		assertSelectionOfPackage: self packageWithoutTagsAndExtensions
+		tag: nil
+		class: nil
 		inElement: anElement.
+	self assert: anElement methodProtocolsList isVisible not.
+	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 
