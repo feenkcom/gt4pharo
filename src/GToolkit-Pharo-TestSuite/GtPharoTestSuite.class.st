@@ -76,6 +76,11 @@ GtPharoTestSuite >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoTestSuite >> codersStreamChangedTo: anAsyncMapWithCacheStream [ 
+	"a bug?"
+]
+
 { #category : #'private - instance creation' }
 GtPharoTestSuite >> createTestCaseForMethod: aCompiledMethod [
 	^ GtPharoMethodTestCase forMethod: aCompiledMethod
@@ -185,17 +190,13 @@ GtPharoTestSuite >> playSelectedFrom: anElement [
 	self playSelected
 ]
 
-{ #category : #initialization }
+{ #category : #'api - stream' }
 GtPharoTestSuite >> stream: anAsyncStream [
-	testCasesStream := ((anAsyncStream
+	testCasesStream := (((anAsyncStream
+		filter: [ :eachMethod | eachMethod isNotNil ])
 		map: [ :eachMethod | self createTestCaseForMethod: eachMethod ] cache: testCasesCache)
 		filter: [ :eachTestCase | eachTestCase canExecute ])
-		cached
-]
-
-{ #category : #'api - updating' }
-GtPharoTestSuite >> streamChangedTo: anAsyncStream [
-	self stream: anAsyncStream.
+		cached.
 	self notifyStreamChanged.
 ]
 

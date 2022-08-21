@@ -8,14 +8,24 @@ GtAsyncSearchMethodGroupStream >> asCoder [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtAsyncSearchMethodGroupStream >> gtItemsFor: aView [
 	<gtView>
-	
+	^ aView forward
+		title: 'Live' translated;
+		priority: 10;
+		object: [ self ];
+		view: #gtItemsFor:context:
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtAsyncSearchMethodGroupStream >> gtItemsFor: aView context: aPhlowContext [
+	<gtView>
 	^ (GtPharoCoderUIUtility
 		filteredMethodsPhlowViewFor: aView
+		context: aPhlowContext
 		filter: filter
 		testsRunner: true
 		examplesRunner: true)
-			title: 'Live' translated;
-			priority: 10
+		title: 'Live' translated;
+		priority: 10
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

@@ -114,6 +114,14 @@ GtPharoExampleSuite >> hasSuccessExamples [
 	^ false
 ]
 
+{ #category : #accessing }
+GtPharoExampleSuite >> initialize [
+	super initialize.
+
+	examplesWithResultCache := AsyncSharedDictionary new.
+	examplesWithResultStream := AsyncEmptyStream new.
+]
+
 { #category : #'private - notifying' }
 GtPharoExampleSuite >> notifyStreamChanged [
 	self announcer announce: (GtPharoSuiteStreamChanged new suite: self)
@@ -173,11 +181,6 @@ GtPharoExampleSuite >> numberOfSuccessExamples [
 	^ aTotal
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoExampleSuite >> onCodersStreamChanged: aGtStreamingCodersStreamChanged [ 
-	"ignore"
-]
-
 { #category : #'api - enumeration' }
 GtPharoExampleSuite >> selectedExecutableExampleCodersDo: aBlock [
 	self selectedExampleCodersDo: [ :aCoder :anExample | 
@@ -197,39 +200,27 @@ GtPharoExampleSuite >> stateOf: aGtExampleWithResult [
 	^ GtExampleState default stateFromExample: aGtExampleWithResult
 ]
 
-{ #category : #initialization }
+{ #category : #'api - stream' }
 GtPharoExampleSuite >> stream: anAsyncStream [
 	examplesWithResultCache := AsyncSharedDictionary new.
-
-	self updateStream: anAsyncStream.
-]
-
-{ #category : #'api - updating' }
-GtPharoExampleSuite >> streamChangedTo: anAsyncStream [
-	self updateStream: anAsyncStream.
+	examplesWithResultStream := ((((((anAsyncStream
+			filter: [ :eachItem | eachItem notNil ])
+			map: [ :eachItem | eachItem gtExample ])
+			filter: [ :eachExample | eachExample notNil ])
+			map: [ :eachExample | 
+				| aMethod |
+				eachExample methodDo: [ :theMethod | aMethod := theMethod ].
+				aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
+			filter: [ :anAssoc | anAssoc notNil ])
+			map: [ :anAssoc | anAssoc value ]
+			key: [ :anAssoc | anAssoc key ]
+			cache: examplesWithResultCache) cached.
 	self notifyStreamChanged
 ]
 
 { #category : #'api - announcer' }
 GtPharoExampleSuite >> unsubscribe: aSubscriber [
 	self announcer unsubscribe: aSubscriber
-]
-
-{ #category : #'private - updating' }
-GtPharoExampleSuite >> updateStream: anAsyncStream [
-	NonInteractiveTranscript stdout show: 'New example stream: '; show: anAsyncStream; cr.
-	examplesWithResultStream := ((((((anAsyncStream 
-		filter: [ :eachItem | eachItem notNil ])
-		map: [ :eachItem | eachItem gtExample ])
-		filter: [ :eachExample | eachExample notNil ])
-		map: [ :eachExample | | aMethod |
-			eachExample methodDo: [ :theMethod | aMethod := theMethod ].
-			aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
-		filter: [ :anAssoc | anAssoc notNil ])
-		map: [ :anAssoc | anAssoc value ] 
-			key: [ :anAssoc | anAssoc key ] 
-			cache: examplesWithResultCache)
-		cached
 ]
 
 { #category : #'api - announcer' }

@@ -383,10 +383,21 @@ GtPharoMethodCoder >> example [
 	<return: #GtExampleWithResult or: nil>
 	| anExample |
 	anExample := self attributeNamed: #example.
-	anExample ifNil: [ 
-		anExample := self compiledMethod ifNotNil: [ :aCompiledMethod | 
-			aCompiledMethod gtExample ifNotNil: #asExampleWithResult ].
-		anExample ifNotNil: [ self example: anExample ] ].
+	anExample
+		ifNil: [ anExample := self compiledMethod
+					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExampleWithResult 
+						ifNotNil: #asExampleWithResult ].
+			anExample ifNotNil: [ self example: anExample ] ].
+
+	self compiledMethod
+		ifNotNil: [ :aCompiledMethod | 
+			self
+				assert: [ aCompiledMethod selector = self selector
+						and: [ aCompiledMethod methodClass = self behavior ] ]
+				description: [ 'Example and compiled method are out of sync: example is {1}; method is {2}'
+						format: {anExample gtDisplayString.
+								aCompiledMethod} ] ].
+
 	^ anExample
 ]
 
@@ -401,7 +412,7 @@ GtPharoMethodCoder >> example: anExampleWithResult [
 	(aCompiledMethod selector = self selector
 		and: [ aCompiledMethod methodClass = self behavior ])
 		ifFalse: [ self error: 'Can not assign example of the wrong method' ].
-	self example announcer
+	self example announcer weak
 		when: GtExampleExecuted send: #handleExampleExecuted: to: self;
 		when: GtExampleArgumentsChanged
 			send: #handleExampleArgumentsChanged:
@@ -883,7 +894,8 @@ GtPharoMethodCoder >> playAllInContext: aGtPharoSourceCoderEvaluationContext [
 { #category : #'api - actions examples' }
 GtPharoMethodCoder >> playAndInspectExample [
 	self playExample.
-	self notifyObjectSpawn: self exampleResult returnValue
+	self exampleResult
+		ifNotNil: [ :anExampleResult | self notifyObjectSpawn: anExampleResult returnValue ]
 ]
 
 { #category : #'api - actions examples' }

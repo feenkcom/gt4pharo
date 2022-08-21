@@ -105,13 +105,18 @@ GtPharoSuiteOverviewContentElement >> newPlayButton [
 		icon: BrGlamorousVectorIcons play;
 		label: 'Run';
 		action: [ :aButton | self playFrom: aButton ];
-		withAsyncSinkDo: [ :anElementSink |
+		when: BlMouseDownEvent
+			do: [ :anEvent | 
+				(anEvent modifiers isAlt or: [ anEvent modifiers isCtrl ])
+					ifTrue: [ self suiteViewModel inspect.
+						anEvent consumed: true ] ];
+		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				whenPending: [ :aButton |
+				whenPending: [ :aButton | 
 					aButton
 						disable;
 						label: 'Running...' ];
-				whenSuccess: [ :aButton |
+				whenSuccess: [ :aButton | 
 					aButton
 						enable;
 						label: 'Run' ] ]
