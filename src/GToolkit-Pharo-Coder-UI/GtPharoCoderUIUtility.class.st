@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView filter: aGtSearchFilter testsRunner: shouldHaveTestsRunner examplesRunner: shouldHaveExamplesRunner [
+GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlowContext filter: aGtSearchFilter testsRunner: shouldHaveTestsRunner examplesRunner: shouldHaveExamplesRunner [
 	| aMethodsCoder aMethodsCoderViewModel  anItemsView |
 	
 	aMethodsCoder := GtPharoStreamingMethodsCoder forFilter: aGtSearchFilter.
@@ -21,16 +21,28 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView filter: aGtSea
 			streamingCodersViewModel: aMethodsCoderViewModel  ].
 
 	shouldHaveTestsRunner ifTrue: [
-		| aTestSuiteViewModel |
-		aTestSuiteViewModel := GtPharoTestSuiteViewModel new 
-			pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
+		| aTestSuite aTestSuiteViewModel aTestCommunicator |
+		aTestSuite := GtPharoTestSuite new.
+		aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: aTestSuite.
+		aTestCommunicator := GtPharoExampleSuiteMethodsCoderCommunicator
+					forMethodsCoder: aMethodsCoder
+					suiteModel: aTestSuite
+					viewModel: aTestSuiteViewModel.
+		aPhlowContext optionAt: #exampleViewModelHandler put: aTestCommunicator.
+		
 		anItemsView
 			actionStencil: [ GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].
 
 	shouldHaveExamplesRunner ifTrue: [
-		| anExamplesSuiteViewModel |
-		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new 
-			pharoExampleSuite: (GtPharoExampleSuite forStream: aMethodsCoder itemsStream).
+		| anExampleSuite anExamplesSuiteViewModel anExampleCommunicator |
+		anExampleSuite := GtPharoExampleSuite new.
+		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new pharoExampleSuite: anExampleSuite.
+		anExampleCommunicator := GtPharoExampleSuiteMethodsCoderCommunicator
+					forMethodsCoder: aMethodsCoder
+					suiteModel: anExampleSuite
+					viewModel: anExamplesSuiteViewModel.
+		aPhlowContext optionAt: #exampleViewModelHandler put: anExampleCommunicator.
+		
 		anItemsView
 			actionStencil: [ 
 				GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExamplesSuiteViewModel ] ].
@@ -55,9 +67,10 @@ GtPharoCoderUIUtility class >> newTestsDropdownButtonForViewModel: aViewModel [
 ]
 
 { #category : #'instance creation' }
-GtPharoCoderUIUtility class >> testMethodsPhlowViewFor: aView filter: aGtSearchFilter [
+GtPharoCoderUIUtility class >> testMethodsPhlowViewFor: aView context: aPhlowContext filter: aGtSearchFilter [
 	^ self
 		filteredMethodsPhlowViewFor: aView
+		context: aPhlowContext
 		filter: aGtSearchFilter
 		testsRunner: true
 		examplesRunner: false
