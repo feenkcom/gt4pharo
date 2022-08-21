@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'example'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
 { #category : #'instance creation' }
@@ -18,7 +18,7 @@ GtCoderExampleStatusAttribute class >> forExample: anExampleWithResult [
 GtCoderExampleStatusAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ { GtCoderExampleStateElement new 
 			example: self example;
-			margin: (BlInsets top: 1 left: 2 bottom: 1 right: 1) }.
+			margin: (BlInsets top: 1 left: 6 bottom: 1 right: 1) }.
 ]
 
 { #category : #accessing }
