@@ -640,26 +640,33 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		addPreview: 'Example'
 		stencil: [ GtCoderExampleStateElement new ]
 		dataBinder: [ :anElement :aCoderViewModel |
-			| aHandler |			
+			| aHandler aCoder |						
 			anElement userData 
 				at: #exampleAstFor_into_example_handler
-				ifPresent: [ :anOldHandler | aCoderViewModel coderModel unsubscribe: anOldHandler ]
+				ifPresent: [ :anOldHandler | 
+					anElement userData 
+						at: #exampleAstFor_into_example_coder
+						ifPresent: [ :anOldCoder | anOldCoder unsubscribe: anOldHandler ]
+						ifAbsent: [ "ignore" ] ]
 				ifAbsent: [ "ignore" ].
 			
-			aHandler := [ :anAnnouncement | aCoderViewModel coderModel example 
+			aCoder := aCoderViewModel coderModel.
+
+			aHandler := [ :anAnnouncement | aCoder example 
 				ifNotNil: [ :aNewExample | 
 					anElement example: aNewExample; visibility: BlVisibility visible ]
 				ifNil: [ 
 					anElement visibility: BlVisibility hidden ] ].
 			anElement userData 
-				at: #exampleAstFor_into_example_handler put: aHandler.
+				at: #exampleAstFor_into_example_handler put: aHandler;
+				at: #exampleAstFor_into_example_coder put: aCoder.
 			
-			(aCoderViewModel coderModel weak
+			(aCoder weak
 				when: GtCoderMethodAdded, GtCoderMethodRemoved, GtCoderMethodModified, GtPharoMethodCoderCompiled
 				send: #value:
 				to: aHandler).
 			 
-			anElement example: aCoderViewModel coderModel example ].
+			anElement example: aCoder example ].
 
 	anExample := self example.
 
