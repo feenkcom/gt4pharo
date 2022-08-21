@@ -639,7 +639,27 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addPreview: 'Example'
 		stencil: [ GtCoderExampleStateElement new ]
-		dataBinder: [ :anElement :aCoderViewModel | anElement example: aCoderViewModel coderModel example ].
+		dataBinder: [ :anElement :aCoderViewModel |
+			| aHandler |			
+			anElement userData 
+				at: #exampleAstFor_into_example_handler
+				ifPresent: [ :anOldHandler | aCoderViewModel coderModel unsubscribe: anOldHandler ]
+				ifAbsent: [ "ignore" ].
+			
+			aHandler := [ :anAnnouncement | aCoderViewModel coderModel example 
+				ifNotNil: [ :aNewExample | 
+					anElement example: aNewExample; visibility: BlVisibility visible ]
+				ifNil: [ 
+					anElement visibility: BlVisibility hidden ] ].
+			anElement userData 
+				at: #exampleAstFor_into_example_handler put: aHandler.
+			
+			(aCoderViewModel coderModel weak
+				when: GtCoderMethodAdded, GtCoderMethodRemoved, GtCoderMethodModified, GtPharoMethodCoderCompiled
+				send: #value:
+				to: aHandler).
+			 
+			anElement example: aCoderViewModel coderModel example ].
 
 	anExample := self example.
 
