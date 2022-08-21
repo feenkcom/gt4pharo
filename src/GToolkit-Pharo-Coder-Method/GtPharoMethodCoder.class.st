@@ -385,7 +385,7 @@ GtPharoMethodCoder >> example [
 	anExample := self attributeNamed: #example.
 	anExample
 		ifNil: [ anExample := self compiledMethod
-					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExample 
+					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExampleWithResult 
 						ifNotNil: #asExampleWithResult ].
 			anExample ifNotNil: [ self example: anExample ] ].
 
