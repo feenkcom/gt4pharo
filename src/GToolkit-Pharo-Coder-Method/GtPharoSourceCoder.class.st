@@ -359,17 +359,14 @@ GtPharoSourceCoder >> nodeDescription: aNode [
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> nodeFrom: aCoderViewModel [ 
+GtPharoSourceCoder >> nodeFrom: aCoderViewModel [
 	| allSelections allCursors |
-
 	allSelections := aCoderViewModel selection allSelections.
 	allCursors := aCoderViewModel cursors allCursors.
 
 	^ allSelections size = 1
 		ifTrue: [ self nodeWithin: allSelections first interval ]
-		ifFalse: [ allCursors size = 1
-			ifTrue: [ self nodeAt: allCursors first position ]
-			ifFalse: [ #() ] ]
+		ifFalse: [ allCursors size = 1 ifTrue: [ self nodeAt: allCursors first position ] ]
 ]
 
 { #category : #'private - ast' }
@@ -443,8 +440,8 @@ GtPharoSourceCoder >> nodeWithin: anInterval [
 			aNode isSequence
 				ifTrue: [ aNode statements
 						detect: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ {aNode} ] ]
-		ifNone: [ #() ]
+				ifFalse: [ aNode ] ]
+		ifNone: [  ]
 ]
 
 { #category : #'private - ast' }

@@ -7,6 +7,7 @@ Class {
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdatesMethodList [
 	<gtExample>
+	<noTest>
 	| anElement |
 	anElement := self elementWithPackageTagAndClassSelection.
 	self
@@ -89,7 +90,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClas
 		class: self classInPackage
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	self assert: anElement methodList isVisible.
 	^ anElement
 ]
 
@@ -120,7 +120,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 		class: self classInPackageTag
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	self assert: anElement methodList isVisible.
 	^ anElement
 ]
 
@@ -151,7 +150,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSele
 		class: nil
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible not.
-	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 
@@ -167,7 +165,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 		class: nil
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible not.
-	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 
