@@ -74,7 +74,11 @@ GtPharoRemoteTestSuiteStream >> onTaskCompletedAnnouncement: anAnnouncement [
 				"Then put on the queue ready to answer in the output stream."
 				results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
 			ifFalse: [ taskResult isGtExample
-				ifTrue: [ results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: taskResult)) ]
+				ifTrue: [ 
+					testName := taskResult example methodClass name -> taskResult example selector.
+					gtTestCase := tests at: testName.
+					gtTestCase result: taskResult result.
+					results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
 				ifFalse: [ self error: 'Unknown result type' ] ].
 			Stdio stdout
 				print: Time now;
@@ -153,6 +157,7 @@ GtPharoRemoteTestSuiteStream >> start [
 		anExample isGtExample ifTrue:
 			[ testName := anExample example methodClass name ->
 				anExample example selector.
+			tests at: testName put: anExample.
 			exampleNames add: testName ]
 		ifFalse: [ anExample isSUnitTestCase ifTrue:
 			[ method := anExample compiledMethod.
