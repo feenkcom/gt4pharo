@@ -907,14 +907,14 @@ GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> testCase [
-
+	<return: #GtPharoMethodTestCase or: nil>
 	^ self
-		  attributeNamed: #testCase
-		  ifPresent: [ :aTestCase | aTestCase ]
-		  ifAbsent: [ 
-			  self
-				  attributeNamed: #testCase
-				  put: (GtPharoMethodTestCase forMethod: self compiledMethod) ]
+		attributeNamed: #testCase
+		ifPresent: [ :aTestCase | aTestCase ]
+		ifAbsent: [ | aMethod |
+			aMethod := self compiledMethod.
+			aMethod
+				ifNotNil: [ self attributeNamed: #testCase put: aMethod gtPharoMethodTestCase ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -960,13 +960,41 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 
 	anAST methodNode ifNil: [ ^ self ].
 
+	self testCase ifNil: [ ^ self ].
 	self testCase canExecute ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtPharoMethodTestCaseStyler new.
 	coderAddOns
 		addPreview: 'Test Case'
 		stencil: [ GtPharoMethodTestCaseStateElement new ]
-		dataBinder: [ :anElement :aCoderViewModel | anElement testCase: self testCase ].
+		dataBinder: [ :anElement :aCoderViewModel | 
+			| aHandler aCoder |						
+			anElement userData 
+				at: #unitTestAstFor_into_testcase_handler
+				ifPresent: [ :anOldHandler | 
+					anElement userData 
+						at: #unitTestAstFor_into_testcase_coder
+						ifPresent: [ :anOldCoder | anOldCoder unsubscribe: anOldHandler ]
+						ifAbsent: [ "ignore" ] ]
+				ifAbsent: [ "ignore" ].
+			
+			aCoder := aCoderViewModel coderModel.
+
+			aHandler := [ :anAnnouncement | aCoder testCase 
+				ifNotNil: [ :aNewTestCase | 
+					anElement testCase: aNewTestCase; visibility: BlVisibility visible ]
+				ifNil: [ 
+					anElement visibility: BlVisibility hidden ] ].
+			anElement userData 
+				at: #unitTestAstFor_into_testcase_handler put: aHandler;
+				at: #unitTestAstFor_into_testcase_coder put: aCoder.
+			
+			(aCoder weak
+				when: GtCoderMethodAdded, GtCoderMethodRemoved, GtCoderMethodModified, GtPharoMethodCoderCompiled
+				send: #value:
+				to: aHandler).
+		
+			anElement testCase: self testCase ].
 
 	coderAddOns
 		addContextAction: 'Play Unit Test' translated
