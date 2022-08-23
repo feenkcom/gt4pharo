@@ -214,7 +214,8 @@ GtPharoExampleSuite >> stream: anAsyncStream [
 			filter: [ :anAssoc | anAssoc notNil ])
 			map: [ :anAssoc | anAssoc value ]
 			key: [ :anAssoc | anAssoc key ]
-			cache: examplesWithResultCache) cached.
+			cache: examplesWithResultCache) 
+			cached.
 	self notifyStreamChanged
 ]
 
