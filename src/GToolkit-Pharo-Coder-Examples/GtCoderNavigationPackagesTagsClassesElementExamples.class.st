@@ -7,15 +7,14 @@ Class {
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdatesMethodList [
 	<gtExample>
-	<noTest>
 	| anElement |
 	anElement := self elementWithPackageTagAndClassSelection.
 	self
-		assert: (anElement methodList items noneSatisfy: [ :meth | meth selector == #newMethod ]).
+		assert: (anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ]).
 	[ self classInPackageTag compile: 'newMethod ^self'.
-	anElement methodList items anySatisfy: [ :meth | meth selector == #newMethod ] ]
+	anElement methodList anySatisfy: [ :meth | meth selector == #newMethod ] ]
 		ensure: [ self classInPackageTag removeSelector: #newMethod ].
-	anElement methodList items noneSatisfy: [ :meth | meth selector == #newMethod ].
+	anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ].
 	^ anElement
 ]
 
