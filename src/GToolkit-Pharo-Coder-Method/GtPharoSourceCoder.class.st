@@ -131,6 +131,30 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 						userPrintString ]
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> addRenamePackage: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 19>
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			| package |
+			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ self ].
+			package := RPackageOrganizer default
+					packageNamed: node literalValue
+					ifAbsent: [ ^ self ].
+			coderAddOns
+				addContextMenuItem: (self
+						createLabel: 'Rename package'
+						description: node literalValue)
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: node startPosition
+						to: node stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ] ]
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
@@ -645,6 +669,13 @@ GtPharoSourceCoder >> referencesFilterForString: aString [
 { #category : #'private - ast' }
 GtPharoSourceCoder >> referencesFilterForSymbol: aSymbol [
 	^ self referencesFilterForLiteral: aSymbol
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel [
+	(GtRenamePackageInBaselineController new
+		sourceCoderViewModel: aTextualViewModel;
+		originalNode: node) execute
 ]
 
 { #category : #accessing }
