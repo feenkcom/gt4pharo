@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenameVariableController,
 	#superclass : #GtRenameController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #accessing }
@@ -10,10 +10,22 @@ GtRenameVariableController >> addRefactoringChangesPreview [
 	self styleRenamedVariable
 ]
 
+{ #category : #accessing }
+GtRenameVariableController >> allRenameIntervals [
+	| intervals |
+	intervals := OrderedCollection new.
+	intervals add: self originalNode sourceInterval.
+	self originalNode topParent
+		withAllNodesDo: [ :each | 
+			(each ~~ self originalNode and: [ each = self originalNode ])
+				ifTrue: [ intervals add: each sourceInterval ] ].
+	^ intervals
+]
+
 { #category : #executing }
 GtRenameVariableController >> installRenamer [
-	newName := self originalNode source.
-	renameInterval := self originalNode sourceInterval.
+	newName := self originalName.
+	renameInterval := self originalSourcePosition.
 
 	self installRenameAction
 ]
@@ -21,6 +33,11 @@ GtRenameVariableController >> installRenamer [
 { #category : #accessing }
 GtRenameVariableController >> originalName [
 	^ self originalNode source
+]
+
+{ #category : #executing }
+GtRenameVariableController >> originalSourcePosition [
+	^ self originalNode sourceInterval
 ]
 
 { #category : #accessing }
