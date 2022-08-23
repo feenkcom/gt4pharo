@@ -94,6 +94,13 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 ]
 
 { #category : #accessing }
+GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 1>
+	(self behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	coderAddOns addShortcut: GtRenamePackageInBaselineShortcut new
+]
+
+{ #category : #accessing }
 GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
 	(self nodeFrom: aCoderViewModel)
@@ -676,6 +683,21 @@ GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel [
 	(GtRenamePackageInBaselineController new
 		sourceCoderViewModel: aTextualViewModel;
 		originalNode: node) execute
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel [
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
+	(self nodeAt: anIndex)
+		ifNotNil: [ :node | 
+			| package |
+			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ false ].
+			package := RPackageOrganizer default
+					packageNamed: node literalValue
+					ifAbsent: [ ^ false ].
+			self renamePackage: node in: aCoderViewModel.
+			^ true ].
+	^ false
 ]
 
 { #category : #accessing }
