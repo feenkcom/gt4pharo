@@ -45,23 +45,23 @@ GtPharoMethodTestCase >> behavior [
 
 { #category : #'api - testing' }
 GtPharoMethodTestCase >> canExecute [
-	method ifNil: [ ^ false ].
-	self behavior isTestCase ifFalse: [ ^ false ].
-	(self behavior isAbstract and: [ 
-		 (GtPharoTestCaseUtility hasConcreteSubclasses: self behavior) not ]) 
-		ifTrue: [ ^ false ].
-
-	^ self methodSelector isTestSelector
+	^ GtPharoTestCaseUtility canExecuteTestCase: method
 ]
 
 { #category : #'api - accessing' }
 GtPharoMethodTestCase >> compiledMethod [
+	<return: #CompiledMethod>
 	^ method
 ]
 
 { #category : #'api - execution' }
 GtPharoMethodTestCase >> debug [
 	self rawDebug
+]
+
+{ #category : #accessing }
+GtPharoMethodTestCase >> gtPharoMethodTestCase [
+	^ self
 ]
 
 { #category : #'api - testing' }

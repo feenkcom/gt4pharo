@@ -76,16 +76,6 @@ GtPharoTestSuite >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoTestSuite >> codersStreamChangedTo: anAsyncMapWithCacheStream [ 
-	"a bug?"
-]
-
-{ #category : #'private - instance creation' }
-GtPharoTestSuite >> createTestCaseForMethod: aCompiledMethod [
-	^ GtPharoMethodTestCase forMethod: aCompiledMethod
-]
-
 { #category : #'api - testing' }
 GtPharoTestSuite >> hasErrorTestCases [
 	<return: #TAsyncFuture>
@@ -140,7 +130,8 @@ GtPharoTestSuite >> hasTestCases [
 GtPharoTestSuite >> initialize [
 	super initialize.
 	
-	testCasesCache := AsyncSharedDictionary new
+	testCasesCache := AsyncSharedDictionary new.
+	testCasesStream := AsyncEmptyStream new.
 ]
 
 { #category : #'private - notifying' }
@@ -192,19 +183,27 @@ GtPharoTestSuite >> playSelectedFrom: anElement [
 
 { #category : #'api - stream' }
 GtPharoTestSuite >> stream: anAsyncStream [
-	testCasesStream := (((anAsyncStream
-		filter: [ :eachMethod | eachMethod isNotNil ])
-		map: [ :eachMethod | self createTestCaseForMethod: eachMethod ] cache: testCasesCache)
-		filter: [ :eachTestCase | eachTestCase canExecute ])
-		cached.
-	self notifyStreamChanged.
+	testCasesCache := AsyncSharedDictionary new.
+	testCasesStream := (((((((anAsyncStream 
+			filter: [ :eachItem | eachItem isNotNil ])
+			map: [ :eachItem | eachItem gtPharoMethodTestCase ])
+			filter: [ :eachTestCase | eachTestCase isNotNil ])
+			filter: [ :eachTestCase | eachTestCase canExecute ])
+			map: [ :eachTestCase | 
+				eachTestCase compiledMethod ifNotNil: [ :aMethod | 
+					aMethod -> eachTestCase ] ])
+			filter: [ :anAssoc | anAssoc notNil ])
+			map: [ :anAssoc | anAssoc value ]
+			key: [ :anAssoc | anAssoc key ]
+			cache: testCasesCache) 
+			cached.
+	self notifyStreamChanged
 ]
 
 { #category : #'api - accessing' }
 GtPharoTestSuite >> testCaseForMethod: aCompiledMethod [
-	^ testCasesCache
-		at: aCompiledMethod
-		ifAbsentPut: [ self createTestCaseForMethod: aCompiledMethod ]
+	<return: #GtPharoMethodTestCase or: nil>
+	^ testCasesCache at: aCompiledMethod ifAbsent: [ nil ]
 ]
 
 { #category : #'api - announcer' }

@@ -168,6 +168,11 @@ GtPharoMethodCoder >> clearExample [
 	self removeAttributeNamed: #example.
 ]
 
+{ #category : #'private - actions' }
+GtPharoMethodCoder >> clearTestCase [
+	self removeAttributeNamed: #testCase.
+]
+
 { #category : #'api - text' }
 GtPharoMethodCoder >> collapsedTextPromise [
 	<return: #TAsyncPromise of: #BlText>
@@ -1076,6 +1081,7 @@ GtPharoMethodCoder >> skipBlankLinesIn: source at: startIndex [
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> sourceCode: aGtCoderSourceCode withStrategy: anUpdateStragegy [
 	self clearExample.
+	self clearTestCase.
 	super sourceCode: aGtCoderSourceCode withStrategy: anUpdateStragegy
 ]
 

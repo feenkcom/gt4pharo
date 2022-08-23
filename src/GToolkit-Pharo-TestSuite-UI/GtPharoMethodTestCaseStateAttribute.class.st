@@ -14,7 +14,7 @@ Class {
 GtPharoMethodTestCaseStateAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ { GtPharoMethodTestCaseStateElement new 
 			testCase: self testCase;
-			margin: (BlInsets top: 1 left: 2 bottom: 1 right: 1) }.
+			margin: (BlInsets top: 1 left: 6 bottom: 1 right: 1) }.
 ]
 
 { #category : #initialization }
