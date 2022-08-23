@@ -24,7 +24,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 		| aTestSuite aTestSuiteViewModel aTestCommunicator |
 		aTestSuite := GtPharoTestSuite new.
 		aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: aTestSuite.
-		aTestCommunicator := GtPharoExampleSuiteMethodsCoderCommunicator
+		aTestCommunicator := GtPharoExampleSuiteMethodsCoderMediator
 					forMethodsCoder: aMethodsCoder
 					suiteModel: aTestSuite
 					viewModel: aTestSuiteViewModel.
@@ -37,7 +37,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 		| anExampleSuite anExamplesSuiteViewModel anExampleCommunicator |
 		anExampleSuite := GtPharoExampleSuite new.
 		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new pharoExampleSuite: anExampleSuite.
-		anExampleCommunicator := GtPharoExampleSuiteMethodsCoderCommunicator
+		anExampleCommunicator := GtPharoExampleSuiteMethodsCoderMediator
 					forMethodsCoder: aMethodsCoder
 					suiteModel: anExampleSuite
 					viewModel: anExamplesSuiteViewModel.

@@ -736,7 +736,10 @@ GtPharoMethodCoder >> notifyMethodModified [
 
 { #category : #'private - notifying' }
 GtPharoMethodCoder >> notifyMethodRecompiledFrom: aPreviousCompiledMethod to: aNewCompiledMethod [
-	self announce: (GtPharoMethodCoderCompiled new previousMethod: aPreviousCompiledMethod; newMethod: aNewCompiledMethod)
+	self announce: (GtPharoMethodCoderCompiled new 
+		methodCoder: self;
+		previousMethod: aPreviousCompiledMethod; 
+		newMethod: aNewCompiledMethod)
 ]
 
 { #category : #'private - notifying' }
