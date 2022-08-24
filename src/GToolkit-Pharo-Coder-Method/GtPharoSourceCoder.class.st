@@ -69,8 +69,9 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 									to: node stopPosition ]
 							leave: self removeHighlightBlock
 							action: [ :model :element | 
-								(RPackageOrganizer default packageNamed: node literalValue)
-									gtBrowseFrom: element ] ]
+								element phlow
+									spawnTool: (GtPackageCoderTool
+											package: (RPackageOrganizer default packageNamed: node literalValue)) ] ]
 				ifFalse: [ node gtIsBaselineName
 						ifTrue: [ coderAddOns
 								addContextMenuItem: (self
@@ -85,7 +86,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 								action: [ :model :element | 
 									self class environment
 										at: ('BaselineOf' , node literalValue) asSymbol
-										ifPresent: [ :cls | cls gtBrowseFrom: element ] ] ] ] ]
+										ifPresent: [ :cls | element phlow spawnTool: (GtClassCoderTool observedClass: cls) ] ] ] ] ]
 ]
 
 { #category : #accessing }
