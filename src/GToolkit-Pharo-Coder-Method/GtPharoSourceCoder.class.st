@@ -44,32 +44,48 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ self ].
-			coderAddOns
-				addContextMenuItem: (self
-							createLabel: 'Rename package'
-							description: node literalValue)
-					hover: [ :textualCoderViewModel | 
-						textualCoderViewModel
-							addTextAttribute: self class nodeHighlight
-							from: node startPosition
-							to: node stopPosition ]
-					leave: self removeHighlightBlock
-					action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
-					shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
-							userPrintString;
-				addContextMenuItem: (self
-							createLabel: 'Browse package'
-							description: node literalValue)
-					hover: [ :textualCoderViewModel | 
-						textualCoderViewModel
-							addTextAttribute: self class nodeHighlight
-							from: node startPosition
-							to: node stopPosition ]
-					leave: self removeHighlightBlock
-					action: [ :model :element | 
-						(RPackageOrganizer default packageNamed: node literalValue)
-							gtBrowseFrom: element ] ]
+			node isLiteral ifFalse: [ ^ self ].
+			node gtIsBaselinePackageName
+				ifTrue: [ coderAddOns
+						addContextMenuItem: (self
+									createLabel: 'Rename package'
+									description: node literalValue)
+							hover: [ :textualCoderViewModel | 
+								textualCoderViewModel
+									addTextAttribute: self class nodeHighlight
+									from: node startPosition
+									to: node stopPosition ]
+							leave: self removeHighlightBlock
+							action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
+							shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
+									userPrintString;
+						addContextMenuItem: (self
+									createLabel: 'Browse package'
+									description: node literalValue)
+							hover: [ :textualCoderViewModel | 
+								textualCoderViewModel
+									addTextAttribute: self class nodeHighlight
+									from: node startPosition
+									to: node stopPosition ]
+							leave: self removeHighlightBlock
+							action: [ :model :element | 
+								(RPackageOrganizer default packageNamed: node literalValue)
+									gtBrowseFrom: element ] ]
+				ifFalse: [ node gtIsBaselineName
+						ifTrue: [ coderAddOns
+								addContextMenuItem: (self
+										createLabel: 'Browse baseline'
+										description: node literalValue)
+								hover: [ :textualCoderViewModel | 
+									textualCoderViewModel
+										addTextAttribute: self class nodeHighlight
+										from: node startPosition
+										to: node stopPosition ]
+								leave: self removeHighlightBlock
+								action: [ :model :element | 
+									self class environment
+										at: ('BaselineOf' , node literalValue) asSymbol
+										ifPresent: [ :cls | cls gtBrowseFrom: element ] ] ] ] ]
 ]
 
 { #category : #accessing }
