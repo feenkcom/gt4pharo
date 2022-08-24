@@ -5,6 +5,39 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtPharoCoderUIUtility class >> exampleViewModelCachedAs: aSymbol inPhlowContext: aPhlowContext [
+	<return: #GtPharoExampleSuiteViewModel>
+	^ aPhlowContext
+		optionAt: aSymbol
+		ifPresent: [ :anExampleViewModel | anExampleViewModel ]
+		ifAbsentPut: [ | aSuiteModel aViewModel |
+			aSuiteModel := GtPharoExampleSuite new.
+			aViewModel := GtPharoExampleSuiteViewModel new pharoExampleSuite: aSuiteModel.
+
+			aViewModel ]
+]
+
+{ #category : #'instance creation' }
+GtPharoCoderUIUtility class >> exampleViewModelCachedAs: aSymbol inPhlowContext: aPhlowContext forMethodsCoder: aMethodsCoder [
+	<return: #GtPharoExampleSuiteViewModel>
+	^ aPhlowContext
+		optionAt: aSymbol
+		ifPresent: [ :anExampleViewModel | anExampleViewModel ]
+		ifAbsent: [ | aViewModel aHandler |
+			aViewModel := self
+					exampleViewModelCachedAs: aSymbol
+					inPhlowContext: aPhlowContext.
+
+			aHandler := GtPharoExampleSuiteMethodsCoderMediator
+					forMethodsCoder: aMethodsCoder
+					suiteModel: aViewModel pharoExampleSuite
+					viewModel: aViewModel.
+			aPhlowContext optionAt: aSymbol , #_handler put: aHandler.
+
+			aViewModel ]
+]
+
+{ #category : #'instance creation' }
 GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlowContext filter: aGtSearchFilter testsRunner: shouldHaveTestsRunner examplesRunner: shouldHaveExamplesRunner [
 	| aMethodsCoder aMethodsCoderViewModel  anItemsView |
 	
