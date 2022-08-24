@@ -45,9 +45,10 @@ GtPharoMethodTestCaseExamples >> assertUnexecutedTestCaseOfCoder: aCoder [
 		, ' cannot be a skipped test case as it was not executed' ].
 		
 	self
-		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutedState.
-
+		assert: aCoder testCase state isNotNil
+		description: [ 
+			aCoder compiledMethod asString 
+			, ' must have a test case state' ].
 ]
 
 { #category : #'examples - test case' }
@@ -62,9 +63,20 @@ GtPharoMethodTestCaseExamples >> basicTestCase [
 ]
 
 { #category : #'examples - execution' }
+GtPharoMethodTestCaseExamples >> cleanOneUnitTestCache [
+	<gtExample>
+	| aMethod |
+	aMethod := GtPharoDummyTestCase >> #testPassedOne.
+	aMethod clearExampleAndTestCaches.
+	
+	self assert: aMethod isNotNil.
+	
+	^ aMethod
+]
+
+{ #category : #'examples - execution' }
 GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
 	<gtExample>
-	<noTest>
 	| aCoder |
 	aCoder := self executePassingTestCase.
 	aCoder deleteSourceTextFrom: 63 to: 66.
@@ -74,7 +86,7 @@ GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
 	self assert: aCoder testCase isPassed.
 	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutedState.
+		equals: GtPharoMethodTestCasePassedState.
 
 	^ aCoder
 ]
@@ -82,7 +94,6 @@ GtPharoMethodTestCaseExamples >> editExecutePassedTestCaseCode [
 { #category : #'examples - execution' }
 GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
 	<gtExample>
-	<noTest>
 	| aCoder |
 	aCoder := self executePassingTestCase.
 	aCoder deleteSourceTextFrom: 2 to: 4.
@@ -92,7 +103,7 @@ GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
 	self assert: aCoder testCase isPassed.
 	self
 		assert: aCoder testCase state
-		equals: GtPharoMethodNotExecutedState.
+		equals: GtPharoMethodTestCasePassedState.
 
 	^ aCoder
 ]
@@ -100,15 +111,12 @@ GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> emptyPharoMethodCoder [
 	<gtExample>
-	<noTest>
 	| aCoder |
 	aCoder := GtPharoMethodCoder new.
 
 	self
-		assert: aCoder testCase canExecute not
-		description: [ 
-		'Uninitialized method coder cannot execute test cases' ].
-	self assertUnexecutedTestCaseOfCoder: aCoder.
+		assert: aCoder testCase isNil
+		description: [ 'Uninitialized method coder cannot have test cases' ].
 
 	^ aCoder
 ]
@@ -116,17 +124,14 @@ GtPharoMethodTestCaseExamples >> emptyPharoMethodCoder [
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> examplePharoMethodCoder [
 	<gtExample>
-	<noTest>
-	^ self
-		  initializeCoderWith: self class >> #foo
-		  executable: false
+	^ self initializeCoderWith: self class >> #foo executable: false
 ]
 
 { #category : #'examples - execution' }
 GtPharoMethodTestCaseExamples >> executePassingTestCase [
 	<gtExample>
-	<noTest>
 	| aCoder allAnnouncements |
+	self cleanOneUnitTestCache.
 	aCoder := self passedOneUnitTestPharoMethodCoder.
 	allAnnouncements := OrderedCollection new.
 	aCoder testCase when: Announcement send: #add: to: allAnnouncements.
@@ -158,14 +163,15 @@ GtPharoMethodTestCaseExamples >> initializeCoderWith: aCompiledMethod executable
 	| aCoder |
 	aCoder := GtPharoMethodCoder forMethod: aCompiledMethod.
 
+	aBoolean ifFalse: [ 
+		self assert: aCoder testCase isNil 
+		description: [ aCompiledMethod asString , ' should not return a test case' ].
+		^ aCoder ].
+	
 	self
 		assert: aCoder testCase canExecute = aBoolean
 		description: [ 
 		aCompiledMethod asString , ' should be executed as a test case' ].
-
-	self assert: aCoder testCase isPassed not description: [ 
-		aCompiledMethod asString
-		, ' cannot be a successful test case as it was not executed' ].
 
 	self assertUnexecutedTestCaseOfCoder: aCoder.
 
@@ -175,7 +181,6 @@ GtPharoMethodTestCaseExamples >> initializeCoderWith: aCompiledMethod executable
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> nonUnitTestPharoMethodCoder [
 	<gtExample>
-	<noTest>
 	
 	^ self
 		  initializeCoderWith: GtPharoDummyTestCase >> #setUp
@@ -185,7 +190,6 @@ GtPharoMethodTestCaseExamples >> nonUnitTestPharoMethodCoder [
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> passedOneUnitTestPharoMethodCoder [
 	<gtExample>
-	<noTest>
 	^ (self
 		  initializeCoderWith: GtPharoDummyTestCase >> #testPassedOne
 		  executable: true)
