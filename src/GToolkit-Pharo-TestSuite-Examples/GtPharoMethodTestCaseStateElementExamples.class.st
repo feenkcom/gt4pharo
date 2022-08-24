@@ -40,6 +40,7 @@ GtPharoMethodTestCaseStateElementExamples >> stateElement_NotExecuted [
 	| anElement aTestCase |
 	anElement := self basicStateElement.
 	aTestCase := self passingTestCase.
+	aTestCase result: nil.
 	anElement testCase: aTestCase.
 	self assert: anElement testCase equals: aTestCase.
 	self assert: anElement testResult isNil.
