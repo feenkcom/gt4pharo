@@ -77,9 +77,7 @@ GtRenameController >> cursorPositionDo: aBlock [
 
 { #category : #executing }
 GtRenameController >> installRenameAction [
-	renameAction := GtRenameAction2
-			locations: self allRenameIntervals
-			textualCoderViewModel: sourceCoderViewModel.
+	renameAction := self renameAction.
 
 	renameAction selectAll: true.
 
@@ -128,6 +126,13 @@ GtRenameController >> originalNode [
 { #category : #accessing }
 GtRenameController >> originalNode: aGtPharoProgramNode [
 	node := aGtPharoProgramNode
+]
+
+{ #category : #executing }
+GtRenameController >> renameAction [
+	^ GtRenameAction2
+		locations: self allRenameIntervals
+		textualCoderViewModel: sourceCoderViewModel
 ]
 
 { #category : #private }
