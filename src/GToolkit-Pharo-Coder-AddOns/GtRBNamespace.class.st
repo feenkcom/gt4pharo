@@ -76,6 +76,7 @@ GtRBNamespace >> privateImplementorsOf: aSelector [
 { #category : #accessing }
 GtRBNamespace >> privateReferencesTo: aSelector [
 	| refs |
+	aSelector isSymbol ifFalse: [ ^ super privateReferencesTo: aSelector ].
 	refs := OrderedCollection new.
 	self newClasses
 		do: [ :each | 

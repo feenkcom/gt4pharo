@@ -62,21 +62,24 @@ GtPharoRemoteTestSuiteStream >> onJobTerminatedAnnouncement: anAnnouncement [
 { #category : #private }
 GtPharoRemoteTestSuiteStream >> onTaskCompletedAnnouncement: anAnnouncement [
 	| testResult testName gtTestCase |
-	anAnnouncement task result
-		do: [ :taskResult | 
-			taskResult isSUnitTestCase
-				ifTrue: [ testResult := TestResult new.
-					testName := taskResult testCaseClass name -> taskResult testCaseSelector.
+	anAnnouncement taskResult do: [ :taskResult | 
+		taskResult isSUnitTestCase
+			ifTrue: [ testResult := TestResult new.
+				testName := taskResult testCaseClass name -> taskResult testCaseSelector.
+				gtTestCase := tests at: testName.
+				taskResult
+					populateTestResult: testResult
+					with: (taskResult testCaseClass selector: taskResult testCaseSelector).
+				gtTestCase result: testResult.	
+				"Then put on the queue ready to answer in the output stream."
+				results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
+			ifFalse: [ taskResult isGtExample
+				ifTrue: [ 
+					testName := taskResult example methodClass name -> taskResult example selector.
 					gtTestCase := tests at: testName.
-					taskResult
-						populateTestResult: testResult
-						with: (taskResult testCaseClass selector: taskResult testCaseSelector).
-					gtTestCase result: testResult.	
-					"Then put on the queue ready to answer in the output stream."
+					gtTestCase result: taskResult result.
 					results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
-				ifFalse: [ taskResult isGtExample
-						ifTrue: [ results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: taskResult)) ]
-						ifFalse: [ self error: 'Unknown result type' ] ].
+				ifFalse: [ self error: 'Unknown result type' ] ].
 			Stdio stdout
 				print: Time now;
 				<< ' wakeup';
@@ -151,10 +154,10 @@ GtPharoRemoteTestSuiteStream >> start [
 	exampleNames := OrderedCollection new.
 	testRegistrationStream := sourceStream forEach: [ :anExample |
 		| method testName |
-		Stdio stdout print: anExample; lf.
 		anExample isGtExample ifTrue:
 			[ testName := anExample example methodClass name ->
 				anExample example selector.
+			tests at: testName put: anExample.
 			exampleNames add: testName ]
 		ifFalse: [ anExample isSUnitTestCase ifTrue:
 			[ method := anExample compiledMethod.
@@ -171,6 +174,7 @@ GtPharoRemoteTestSuiteStream >> start [
 		setNotInImage;
 		groupTasksByAverageTime;
 		job.
+	job := GtRemoteRunner default submitJob: job.
 	job
 		showExamplesProgressNotification;
 		when: GtRrTaskCompletedAnnouncement 
@@ -188,5 +192,4 @@ GtPharoRemoteTestSuiteStream >> start [
 		when: GtRrJobTerminatedAnnouncement
 			send: #onJobTerminatedAnnouncement:
 			to: self.
-	GtRemoteRunner default submitJob: job.
 ]

@@ -94,6 +94,13 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 ]
 
 { #category : #accessing }
+GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 1>
+	(self behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	coderAddOns addShortcut: GtRenamePackageInBaselineShortcut new
+]
+
+{ #category : #accessing }
 GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
 	(self nodeFrom: aCoderViewModel)
@@ -129,6 +136,30 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 						userPrintString ]
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> addRenamePackage: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 19>
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			| package |
+			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ self ].
+			package := RPackageOrganizer default
+					packageNamed: node literalValue
+					ifAbsent: [ ^ self ].
+			coderAddOns
+				addContextMenuItem: (self
+						createLabel: 'Rename package'
+						description: node literalValue)
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: node startPosition
+						to: node stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ] ]
 ]
 
 { #category : #'api - accessing' }
@@ -359,17 +390,14 @@ GtPharoSourceCoder >> nodeDescription: aNode [
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> nodeFrom: aCoderViewModel [ 
+GtPharoSourceCoder >> nodeFrom: aCoderViewModel [
 	| allSelections allCursors |
-
 	allSelections := aCoderViewModel selection allSelections.
 	allCursors := aCoderViewModel cursors allCursors.
 
 	^ allSelections size = 1
 		ifTrue: [ self nodeWithin: allSelections first interval ]
-		ifFalse: [ allCursors size = 1
-			ifTrue: [ self nodeAt: allCursors first position ]
-			ifFalse: [ #() ] ]
+		ifFalse: [ allCursors size = 1 ifTrue: [ self nodeAt: allCursors first position ] ]
 ]
 
 { #category : #'private - ast' }
@@ -443,8 +471,8 @@ GtPharoSourceCoder >> nodeWithin: anInterval [
 			aNode isSequence
 				ifTrue: [ aNode statements
 						detect: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ {aNode} ] ]
-		ifNone: [ #() ]
+				ifFalse: [ aNode ] ]
+		ifNone: [  ]
 ]
 
 { #category : #'private - ast' }
@@ -648,6 +676,28 @@ GtPharoSourceCoder >> referencesFilterForString: aString [
 { #category : #'private - ast' }
 GtPharoSourceCoder >> referencesFilterForSymbol: aSymbol [
 	^ self referencesFilterForLiteral: aSymbol
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel [
+	(GtRenamePackageInBaselineController new
+		sourceCoderViewModel: aTextualViewModel;
+		originalNode: node) execute
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel [
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
+	(self nodeAt: anIndex)
+		ifNotNil: [ :node | 
+			| package |
+			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ false ].
+			package := RPackageOrganizer default
+					packageNamed: node literalValue
+					ifAbsent: [ ^ false ].
+			self renamePackage: node in: aCoderViewModel.
+			^ true ].
+	^ false
 ]
 
 { #category : #accessing }

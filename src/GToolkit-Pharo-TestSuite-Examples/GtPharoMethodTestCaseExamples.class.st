@@ -99,8 +99,8 @@ GtPharoMethodTestCaseExamples >> editTestCaseMethodName [
 
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> emptyPharoMethodCoder [
-
 	<gtExample>
+	<noTest>
 	| aCoder |
 	aCoder := GtPharoMethodCoder new.
 
@@ -115,8 +115,8 @@ GtPharoMethodTestCaseExamples >> emptyPharoMethodCoder [
 
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> examplePharoMethodCoder [
-
 	<gtExample>
+	<noTest>
 	^ self
 		  initializeCoderWith: self class >> #foo
 		  executable: false
@@ -124,8 +124,8 @@ GtPharoMethodTestCaseExamples >> examplePharoMethodCoder [
 
 { #category : #'examples - execution' }
 GtPharoMethodTestCaseExamples >> executePassingTestCase [
-
 	<gtExample>
+	<noTest>
 	| aCoder allAnnouncements |
 	aCoder := self passedOneUnitTestPharoMethodCoder.
 	allAnnouncements := OrderedCollection new.
@@ -174,8 +174,8 @@ GtPharoMethodTestCaseExamples >> initializeCoderWith: aCompiledMethod executable
 
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> nonUnitTestPharoMethodCoder [
-
 	<gtExample>
+	<noTest>
 	
 	^ self
 		  initializeCoderWith: GtPharoDummyTestCase >> #setUp
@@ -184,8 +184,8 @@ GtPharoMethodTestCaseExamples >> nonUnitTestPharoMethodCoder [
 
 { #category : #'examples - test case' }
 GtPharoMethodTestCaseExamples >> passedOneUnitTestPharoMethodCoder [
-
 	<gtExample>
+	<noTest>
 	^ (self
 		  initializeCoderWith: GtPharoDummyTestCase >> #testPassedOne
 		  executable: true)

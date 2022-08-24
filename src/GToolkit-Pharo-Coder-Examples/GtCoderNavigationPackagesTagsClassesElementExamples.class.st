@@ -10,11 +10,11 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdates
 	| anElement |
 	anElement := self elementWithPackageTagAndClassSelection.
 	self
-		assert: (anElement methodList items noneSatisfy: [ :meth | meth selector == #newMethod ]).
+		assert: (anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ]).
 	[ self classInPackageTag compile: 'newMethod ^self'.
-	anElement methodList items anySatisfy: [ :meth | meth selector == #newMethod ] ]
+	anElement methodList anySatisfy: [ :meth | meth selector == #newMethod ] ]
 		ensure: [ self classInPackageTag removeSelector: #newMethod ].
-	anElement methodList items noneSatisfy: [ :meth | meth selector == #newMethod ].
+	anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ].
 	^ anElement
 ]
 
@@ -89,7 +89,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClas
 		class: self classInPackage
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	self assert: anElement methodList isVisible.
 	^ anElement
 ]
 
@@ -120,7 +119,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 		class: self classInPackageTag
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	self assert: anElement methodList isVisible.
 	^ anElement
 ]
 
@@ -151,7 +149,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSele
 		class: nil
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible not.
-	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 
@@ -167,7 +164,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 		class: nil
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible not.
-	self assert: anElement methodList isVisible not.
 	^ anElement
 ]
 

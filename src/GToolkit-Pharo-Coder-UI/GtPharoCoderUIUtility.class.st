@@ -24,11 +24,11 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 		| aTestSuite aTestSuiteViewModel aTestCommunicator |
 		aTestSuite := GtPharoTestSuite new.
 		aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: aTestSuite.
-		aTestCommunicator := GtPharoExampleSuiteMethodsCoderMediator
+		aTestCommunicator := GtPharoTestSuiteMethodsCoderMediator
 					forMethodsCoder: aMethodsCoder
 					suiteModel: aTestSuite
 					viewModel: aTestSuiteViewModel.
-		aPhlowContext optionAt: #exampleViewModelHandler put: aTestCommunicator.
+		aPhlowContext optionAt: #testViewModelHandler put: aTestCommunicator.
 		
 		anItemsView
 			actionStencil: [ GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].

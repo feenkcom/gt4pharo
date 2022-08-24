@@ -9,7 +9,7 @@ Class {
 		'renameInterval',
 		'completionAction'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #private }
@@ -30,6 +30,11 @@ GtRenameController >> addRefactoringChangesPreview [
 			self removeRefactoringAttribute.
 			self completionAction value.
 			self allowSave ]
+]
+
+{ #category : #executing }
+GtRenameController >> allRenameIntervals [
+	^ {renameInterval}
 ]
 
 { #category : #executing }
@@ -73,11 +78,11 @@ GtRenameController >> cursorPositionDo: aBlock [
 { #category : #executing }
 GtRenameController >> installRenameAction [
 	renameAction := GtRenameAction2
-		locations: { renameInterval }
-		textualCoderViewModel: sourceCoderViewModel.
-	
-	renameAction selectAll: true.	
-	
+			locations: self allRenameIntervals
+			textualCoderViewModel: sourceCoderViewModel.
+
+	renameAction selectAll: true.
+
 	self preventSave.
 
 	renameAction
@@ -87,8 +92,7 @@ GtRenameController >> installRenameAction [
 				ifTrue: [ self updateName: renameAction newName ].
 			(#(#tab #shiftTab) includes: ann eventType)
 				ifTrue: [ self tab: ann eventType = #tab ].
-			ann eventType = #cancel
-				ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
 
 	self installValidation.
 	renameAction install
@@ -128,9 +132,14 @@ GtRenameController >> originalNode: aGtPharoProgramNode [
 
 { #category : #private }
 GtRenameController >> renamePosition [
+	| offsetCount start |
+	start := self allRenameIntervals first first.
+	offsetCount := self allRenameIntervals
+			inject: 0
+			into: [ :sum :each | sum + (each first <= start ifTrue: [ 1 ] ifFalse: [ 0 ]) ].
 	^ (renameAction isNil or: [ renameAction isInstalled ])
 		ifTrue: [ renameInterval last ]
-		ifFalse: [ renameInterval last + self newName size - self originalName size ]
+		ifFalse: [ renameInterval last + ((self newName size - self originalName size) * offsetCount) ]
 ]
 
 { #category : #executing }
