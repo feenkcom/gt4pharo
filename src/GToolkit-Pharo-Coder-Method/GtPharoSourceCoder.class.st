@@ -39,6 +39,56 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 ]
 
 { #category : #accessing }
+GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 19>
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			node isLiteral ifFalse: [ ^ self ].
+			node gtIsBaselinePackageName
+				ifTrue: [ coderAddOns
+						addContextMenuItem: (self
+									createLabel: 'Rename package'
+									description: node literalValue)
+							hover: [ :textualCoderViewModel | 
+								textualCoderViewModel
+									addTextAttribute: self class nodeHighlight
+									from: node startPosition
+									to: node stopPosition ]
+							leave: self removeHighlightBlock
+							action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
+							shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
+									userPrintString;
+						addContextMenuItem: (self
+									createLabel: 'Browse package'
+									description: node literalValue)
+							hover: [ :textualCoderViewModel | 
+								textualCoderViewModel
+									addTextAttribute: self class nodeHighlight
+									from: node startPosition
+									to: node stopPosition ]
+							leave: self removeHighlightBlock
+							action: [ :model :element | 
+								(RPackageOrganizer default packageNamed: node literalValue)
+									gtBrowseFrom: element ] ]
+				ifFalse: [ node gtIsBaselineName
+						ifTrue: [ coderAddOns
+								addContextMenuItem: (self
+										createLabel: 'Browse baseline'
+										description: node literalValue)
+								hover: [ :textualCoderViewModel | 
+									textualCoderViewModel
+										addTextAttribute: self class nodeHighlight
+										from: node startPosition
+										to: node stopPosition ]
+								leave: self removeHighlightBlock
+								action: [ :model :element | 
+									self class environment
+										at: ('BaselineOf' , node literalValue) asSymbol
+										ifPresent: [ :cls | cls gtBrowseFrom: element ] ] ] ] ]
+]
+
+{ #category : #accessing }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 
 	<gtCoderContextMenuAddOns: 100>
@@ -136,30 +186,6 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 						userPrintString ]
-]
-
-{ #category : #accessing }
-GtPharoSourceCoder >> addRenamePackage: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 19>
-	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
-	(self nodeFrom: aCoderViewModel)
-		ifNotNil: [ :node | 
-			| package |
-			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ self ].
-			package := RPackageOrganizer default
-					packageNamed: node literalValue
-					ifAbsent: [ ^ self ].
-			coderAddOns
-				addContextMenuItem: (self
-						createLabel: 'Rename package'
-						description: node literalValue)
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: node startPosition
-						to: node stopPosition ]
-				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ] ]
 ]
 
 { #category : #'api - accessing' }
@@ -690,11 +716,7 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel [
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
 	(self nodeAt: anIndex)
 		ifNotNil: [ :node | 
-			| package |
-			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ false ].
-			package := RPackageOrganizer default
-					packageNamed: node literalValue
-					ifAbsent: [ ^ false ].
+			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ false ].
 			self renamePackage: node in: aCoderViewModel.
 			^ true ].
 	^ false
