@@ -144,11 +144,7 @@ GtPharoSourceCoder >> addRenamePackage: anAst to: coderAddOns from: aCoderViewMo
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			| package |
-			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ self ].
-			package := RPackageOrganizer default
-					packageNamed: node literalValue
-					ifAbsent: [ ^ self ].
+			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ self ].
 			coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Rename package'
@@ -159,7 +155,9 @@ GtPharoSourceCoder >> addRenamePackage: anAst to: coderAddOns from: aCoderViewMo
 						from: node startPosition
 						to: node stopPosition ]
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ] ]
+				action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
+				shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
+						userPrintString ]
 ]
 
 { #category : #'api - accessing' }
@@ -690,11 +688,7 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel [
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
 	(self nodeAt: anIndex)
 		ifNotNil: [ :node | 
-			| package |
-			(node isLiteral and: [ node literalValue isString ]) ifFalse: [ ^ false ].
-			package := RPackageOrganizer default
-					packageNamed: node literalValue
-					ifAbsent: [ ^ false ].
+			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ false ].
 			self renamePackage: node in: aCoderViewModel.
 			^ true ].
 	^ false
