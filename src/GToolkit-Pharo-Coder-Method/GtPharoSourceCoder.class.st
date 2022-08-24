@@ -39,6 +39,40 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 ]
 
 { #category : #accessing }
+GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 19>
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ self ].
+			coderAddOns
+				addContextMenuItem: (self
+							createLabel: 'Rename package'
+							description: node literalValue)
+					hover: [ :textualCoderViewModel | 
+						textualCoderViewModel
+							addTextAttribute: self class nodeHighlight
+							from: node startPosition
+							to: node stopPosition ]
+					leave: self removeHighlightBlock
+					action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
+					shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
+							userPrintString;
+				addContextMenuItem: (self
+							createLabel: 'Browse package'
+							description: node literalValue)
+					hover: [ :textualCoderViewModel | 
+						textualCoderViewModel
+							addTextAttribute: self class nodeHighlight
+							from: node startPosition
+							to: node stopPosition ]
+					leave: self removeHighlightBlock
+					action: [ :model :element | 
+						(RPackageOrganizer default packageNamed: node literalValue)
+							gtBrowseFrom: element ] ]
+]
+
+{ #category : #accessing }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 
 	<gtCoderContextMenuAddOns: 100>
@@ -135,28 +169,6 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-						userPrintString ]
-]
-
-{ #category : #accessing }
-GtPharoSourceCoder >> addRenamePackage: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 19>
-	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
-	(self nodeFrom: aCoderViewModel)
-		ifNotNil: [ :node | 
-			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ self ].
-			coderAddOns
-				addContextMenuItem: (self
-						createLabel: 'Rename package'
-						description: node literalValue)
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: node startPosition
-						to: node stopPosition ]
-				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
-				shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
 						userPrintString ]
 ]
 
