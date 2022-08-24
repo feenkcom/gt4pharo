@@ -700,23 +700,28 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns [
+GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 6>
-	(self hasObjectAttribute
+	| view |
+	(self compiledMethod notNil
 		and: [ anAST notNil
 				and: [ anAST methodNode
 						ifNotNil: [ :node | 
-							node arguments size = 1
-								and: [ node pragmas
-										anySatisfy:
-											[ :each | each isParseError not and: [ each selector = #gtView ] ] ] ]
-						ifNil: [ false ] ] ])
-		ifFalse: [ ^ self ].
+							node pragmas
+								anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtView ] ] ]
+						ifNil: [ false ] ] ]) ifFalse: [ ^ self ].
+	anAST methodNode numArgs = 1 ifFalse: [ ^ self ].
 
 	coderAddOns
 		addContextAction: 'gtView' translated
 		icon: BrGlamorousVectorIcons playinspect
-		action: [ :aCoderUIModel :anEvent | self runGtViewFrom: anEvent currentTarget ]
+		action: [ :aCoderUIModel :aButton | 
+			self isModified
+				ifTrue: [ self save ]
+				ifFalse: [ view := aGtPharoMethodCoderViewModel selfObject
+									perform: self selector
+									with: GtPhlowEmptyView new.
+							aButton phlow spawnObject: view ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -857,19 +862,6 @@ GtPharoMethodCoder >> mondrianPaintAddOnFor: anAST into: coderAddOns [
 		addContextAction: 'Mondrian' translated
 		icon: BrGlamorousVectorIcons playinspect
 		action: [ :aCoderUIModel :anEvent | self runMondrianPaintFrom: anEvent currentTarget ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> runGtViewFrom: anElement [
-	| view |
-	
-	self isModified
-		ifTrue: [
-			self save
-				ifFalse: [ ^ self ] ].
-	
-	view := self object perform: self selector with: GtPhlowEmptyView new.
-	anElement phlow spawnObject: view
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
