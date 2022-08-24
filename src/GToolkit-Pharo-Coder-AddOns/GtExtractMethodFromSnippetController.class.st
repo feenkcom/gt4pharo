@@ -115,15 +115,28 @@ GtExtractMethodFromSnippetController >> getTypeForReceiverIn: aModel [
 
 { #category : #executing }
 GtExtractMethodFromSnippetController >> refactoring [
-	| model refactoring |
-	model := self createModel.
-	refactoring := GtExtractMethodFromSnippetRefactoring extract: self extractionInterval from: originalSource.
-	refactoring
-		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | self getReceiverVariableFor: cls selector: sel ];
-		setOption: #useExistingMethod toUse: [ :ref :sel | false ];
-		setOption: #extractAssignment toUse: [ :ref :varName | false ];
-		setOption: #variableTypesForReceiver toUse: [ :ref | self getTypeForReceiverIn: ref model ];
-		setOption: #variableTypes toUse: [ :ref :types :selected | self getTypeForReceiverFor: ref from: types ].
+	| refactoring |
+	sourceCoderViewModel behavior = nil class
+		ifTrue: [ refactoring := GtExtractMethodFromSnippetRefactoring
+					extract: self extractionInterval
+					from: originalSource.
+			refactoring
+				setOption: #selectVariableToMoveTo
+					toUse: [ :ref :cls :sel | self getReceiverVariableFor: cls selector: sel ];
+				setOption: #useExistingMethod toUse: [ :ref :sel | false ];
+				setOption: #extractAssignment toUse: [ :ref :varName | false ];
+				setOption: #variableTypesForReceiver
+					toUse: [ :ref | self getTypeForReceiverIn: ref model ];
+				setOption: #variableTypes
+					toUse: [ :ref :types :selected | self getTypeForReceiverFor: ref from: types ] ]
+		ifFalse: [ refactoring := GtExtractMethodFromInspectorRefactoring
+					extract: self extractionInterval
+					from: originalSource
+					in: sourceCoderViewModel behavior.
+			refactoring
+				setOption: #useExistingMethod toUse: [ :ref :sel | false ];
+				setOption: #extractAssignment toUse: [ :ref :varName | false ].
+			receiverVariable := 'self' ].
 	^ refactoring
 ]
 
