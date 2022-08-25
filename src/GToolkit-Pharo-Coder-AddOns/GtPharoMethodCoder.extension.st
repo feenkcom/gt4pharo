@@ -73,25 +73,6 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 100>
-	self
-		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
-			withId: nil
-			to: coderAddOns;
-		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
-			withId: nil
-			to: coderAddOns;
-		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
-			withId: nil
-			to: coderAddOns.
-	coderAddOns
-		addContextMenuItem: 'Debug'
-		action: [ :aCoderViewModel :anEditorElement | aCoderViewModel debug ]
-		id: nil
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.

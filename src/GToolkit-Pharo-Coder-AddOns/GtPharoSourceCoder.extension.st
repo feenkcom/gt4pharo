@@ -1,6 +1,24 @@
 Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
+	<gtCoderContextMenuAddOns: 100>
+	self
+		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
+			withId: nil
+			to: coderAddOns;
+		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
+			withId: nil
+			to: coderAddOns;
+		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
+			withId: nil
+			to: coderAddOns;
+		addContextMenuItemFrom: GtSourceCoderDebugShortcut new
+			withId: nil
+			to: coderAddOns
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 10>
 	self
@@ -140,7 +158,8 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderBrowseReferencesShortcut new;
 		addShortcut: GtSourceCoderBrowseBehaviorShortcut new;
 		addShortcut: GtSourceCoderDiscardChangesShortcut new;
-		addShortcut: GtSourceCoderFormatShortcut new
+		addShortcut: GtSourceCoderFormatShortcut new;
+		addShortcut: GtSourceCoderDebugShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
