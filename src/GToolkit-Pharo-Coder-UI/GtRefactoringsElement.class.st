@@ -28,12 +28,6 @@ GtRefactoringsElement >> initialize [
 
 { #category : #accessing }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
-	| changes |
 	aCollectionOfRBRefactorings isEmpty ifTrue: [ ^ self ].
-	aCollectionOfRBRefactorings
-		do: [ :each | 
-			each model name: each printString.
-			each primitiveExecute ].
-	changes := aCollectionOfRBRefactorings first model changes.
-	changesElement changes: changes
+	changesElement changes: aCollectionOfRBRefactorings first model changes
 ]

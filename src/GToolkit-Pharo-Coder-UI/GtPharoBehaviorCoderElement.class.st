@@ -153,7 +153,7 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 	aPreviewButton := GtRefactoringsPreviewButton new
 		id: GtBehaviorCoderBehaviorNameApplyPreviewId;
 		margin: (BlInsets left: 5);
-		refactorings: [ { RBRenameClassRefactoring
+		refactorings: [ { GtRBRenameClassRefactoring
 			model: (RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new)
 			rename: classCoder theClass name
 			to: aClassNameEditor text asString } ];
