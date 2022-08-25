@@ -11,11 +11,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
 
-{ #category : #'instance creation' }
-GtCoderNavigationPackagesTagsClassesModel class >> fromPackages: aCollectionOfPackages [
-	^ self new initializeWithPackages: aCollectionOfPackages
-]
-
 { #category : #announcer }
 GtCoderNavigationPackagesTagsClassesModel >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
