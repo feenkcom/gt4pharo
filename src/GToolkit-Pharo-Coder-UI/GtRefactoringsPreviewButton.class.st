@@ -2,7 +2,8 @@ Class {
 	#name : #GtRefactoringsPreviewButton,
 	#superclass : #BrButton,
 	#instVars : [
-		'refactoringsComputation'
+		'refactoringsComputation',
+		'executedRefactorings'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -10,46 +11,62 @@ Class {
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 	| applyAction theRefactoringsElement anAcceptButton aContainer |
-
 	theRefactoringsElement := GtRefactoringsElement new
-		hExact: self previewWidth * 1.25;
-		vFitContentLimited;
-		refactorings: self refactorings.
+			hExact: self previewWidth * 1.25;
+			vFitContentLimited;
+			refactorings: self executedRefactorings.
 
 	applyAction := [ self fireEvent: (BrDropdownHideWish new anchor: self).
 		theRefactoringsElement applyRefactorings
 			then: [ :ignore | self dispatchEvent: GtRefactoringsAppliedEvent new ] ].
 
 	anAcceptButton := BrButton new
-		id: GtRefactoringsPreviewAcceptId;
-		icon: BrGlamorousVectorIcons accept;
-		beSmallSize;
-		requestFocus;
-		aptitude: BrGlamorousButtonWithIconAptitude new;
-		label: 'Save';
-		margin: (BlInsets top: 0 left: 10 bottom: 10 right: 0);
-		action: applyAction;
-		yourself.
-		
-	anAcceptButton addShortcut: (BlShortcutWithAction new
-		combination: BlKeyCombination enter;
-		action: applyAction).
-	
+			id: GtRefactoringsPreviewAcceptId;
+			icon: BrGlamorousVectorIcons accept;
+			beSmallSize;
+			requestFocus;
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			label: 'Save';
+			margin: (BlInsets
+					top: 0
+					left: 10
+					bottom: 10
+					right: 0);
+			action: applyAction;
+			yourself.
+
+	anAcceptButton
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination enter;
+				action: applyAction).
+
 	aContainer := BlElement new
-		layout: BlLinearLayout vertical;
-		when: GtPhlowObjectToSpawn do: [ :anEvent | 
-			anEvent target phlow spawnObject: anEvent object ];
-		constraintsDo: [ :c |
-			c horizontal exact: self previewWidth.
-			c vertical fitContentLimited ].
-	aContainer addChild: ((theRefactoringsElement asScalableElement
-			width: self previewWidth;
-			fitWidth;
-			constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
+			layout: BlLinearLayout vertical;
+			when: GtPhlowObjectToSpawn
+				do: [ :anEvent | anEvent target phlow spawnObject: anEvent object ];
+			constraintsDo: [ :c | 
+				c horizontal exact: self previewWidth.
+				c vertical fitContentLimited ].
+	aContainer
+		addChild: ((theRefactoringsElement asScalableElement
+				width: self previewWidth;
+				fitWidth;
+				constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
 				constraintsDo: [ :c | c vertical fitContentLimited ]).
-	aContainer addChild: anAcceptButton. 
+	aContainer addChild: anAcceptButton.
 
 	^ aContainer
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> executedRefactorings [
+	^ executedRefactorings
+		ifNil: [ executedRefactorings := self refactorings.
+			executedRefactorings
+				do: [ :each | 
+					each model name: each printString.
+					each primitiveExecute ].
+			executedRefactorings ]
 ]
 
 { #category : #initialization }
