@@ -29,6 +29,16 @@ GtCoderNavigationPackagesTagsClassesModel >> assertCoder: aCoder [
 ]
 
 { #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
+	(self packagesToShow includes: aClassAdded packageAffected) ifFalse: [ ^ self ].
+	self announcer announce: (GtCoderNavigationClassAdded new 
+		coder: coder;
+		package: aClassAdded packageAffected;
+		tag: aClassAdded classTagAffected;
+		theClass: aClassAdded classAdded)
+]
+
+{ #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: anAnnouncement [
 	(self packagesToShow includes: anAnnouncement packageAffected) ifFalse: [ ^ self ].
 	self announcer announce: (GtCoderNavigationClassModified new 
@@ -381,6 +391,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: RPackageRenamed send: #packageRenamed: to: self;
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
+		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
 		when: MethodAdded send: #methodAdded: to: self;
