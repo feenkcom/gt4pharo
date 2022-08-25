@@ -15,7 +15,7 @@ GtRenameClassController >> rename: anOldName to: aNewName [
 
 	aModel := self createModel.
 
-	^ GtRBRenameClassWithCommentsRefactoring
+	^ GtRBRenameClassRefactoring
 		model: aModel
 		rename: anOldName asSymbol
 		to: aNewName
