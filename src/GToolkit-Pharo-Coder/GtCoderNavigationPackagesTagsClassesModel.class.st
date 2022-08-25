@@ -11,11 +11,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
 
-{ #category : #'instance creation' }
-GtCoderNavigationPackagesTagsClassesModel class >> fromPackages: aCollectionOfPackages [
-	^ self new initializeWithPackages: aCollectionOfPackages
-]
-
 { #category : #announcer }
 GtCoderNavigationPackagesTagsClassesModel >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
@@ -26,6 +21,16 @@ GtCoderNavigationPackagesTagsClassesModel >> assertCoder: aCoder [
 	self 
 		assert: [ aCoder isNotNil ]
 		description: [ 'Coder must be non-nil' ].
+]
+
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
+	(self packagesToShow includes: aClassAdded packageAffected) ifFalse: [ ^ self ].
+	self announcer announce: (GtCoderNavigationClassAdded new 
+		coder: coder;
+		package: aClassAdded packageAffected;
+		tag: aClassAdded classTagAffected;
+		theClass: aClassAdded classAdded)
 ]
 
 { #category : #'event handling' }
@@ -381,6 +386,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: RPackageRenamed send: #packageRenamed: to: self;
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
+		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
 		when: MethodAdded send: #methodAdded: to: self;
