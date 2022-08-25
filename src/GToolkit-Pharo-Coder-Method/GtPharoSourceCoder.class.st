@@ -57,7 +57,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 									to: node stopPosition ]
 							leave: self removeHighlightBlock
 							action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
-							shortcutKey: GtRenamePackageInBaselineShortcut new combinationForPlatform
+							shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
 									userPrintString;
 						addContextMenuItem: (self
 									createLabel: 'Browse package'
@@ -75,18 +75,30 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 				ifFalse: [ node gtIsBaselineName
 						ifTrue: [ coderAddOns
 								addContextMenuItem: (self
-										createLabel: 'Browse baseline'
-										description: node literalValue)
-								hover: [ :textualCoderViewModel | 
-									textualCoderViewModel
-										addTextAttribute: self class nodeHighlight
-										from: node startPosition
-										to: node stopPosition ]
-								leave: self removeHighlightBlock
-								action: [ :model :element | 
-									self class environment
-										at: ('BaselineOf' , node literalValue) asSymbol
-										ifPresent: [ :cls | element phlow spawnTool: (GtClassCoderTool observedClass: cls) ] ] ] ] ]
+											createLabel: 'Rename baseline class'
+											description: node literalValue)
+									hover: [ :textualCoderViewModel | 
+										textualCoderViewModel
+											addTextAttribute: self class nodeHighlight
+											from: node startPosition
+											to: node stopPosition ]
+									leave: self removeHighlightBlock
+									action: [ :aTextualViewModel | self renameBaseline: node in: aTextualViewModel ]
+									shortcutKey: GtRenameInBaselineShortcut new
+											combinationForPlatform userPrintString;
+								addContextMenuItem: (self
+											createLabel: 'Browse baseline'
+											description: node literalValue)
+									hover: [ :textualCoderViewModel | 
+										textualCoderViewModel
+											addTextAttribute: self class nodeHighlight
+											from: node startPosition
+											to: node stopPosition ]
+									leave: self removeHighlightBlock
+									action: [ :model :element | 
+										self class environment
+											at: ('BaselineOf' , node literalValue) asSymbol
+											ifPresent: [ :cls | element phlow spawnTool: (GtClassCoderTool observedClass: cls) ] ] ] ] ]
 ]
 
 { #category : #accessing }
@@ -148,7 +160,7 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 1>
 	(self behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
-	coderAddOns addShortcut: GtRenamePackageInBaselineShortcut new
+	coderAddOns addShortcut: GtRenameInBaselineShortcut new
 ]
 
 { #category : #accessing }
@@ -703,6 +715,24 @@ GtPharoSourceCoder >> referencesFilterForString: aString [
 { #category : #'private - ast' }
 GtPharoSourceCoder >> referencesFilterForSymbol: aSymbol [
 	^ self referencesFilterForLiteral: aSymbol
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> renameBaseline: node in: aTextualViewModel [
+	(GtRenameBaselineInMethodController new
+		sourceCoderViewModel: aTextualViewModel;
+		originalNode: node) execute
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> renameBaselineAt: anIndex in: aCoderViewModel [
+	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
+	(self nodeAt: anIndex)
+		ifNotNil: [ :node | 
+			(node isLiteral and: [ node gtIsBaselineName ]) ifFalse: [ ^ false ].
+			self renameBaseline: node in: aCoderViewModel.
+			^ true ].
+	^ false
 ]
 
 { #category : #accessing }
