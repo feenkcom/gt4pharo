@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'testCasesStream',
 		'testCasesCache',
-		'announcer'
+		'announcer',
+		'mutex'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-Base'
 }
@@ -132,6 +133,7 @@ GtPharoTestSuite >> initialize [
 	
 	testCasesCache := AsyncSharedDictionary new.
 	testCasesStream := AsyncEmptyStream new.
+	mutex := Mutex new.
 ]
 
 { #category : #'private - notifying' }
@@ -183,20 +185,21 @@ GtPharoTestSuite >> playSelectedFrom: anElement [
 
 { #category : #'api - stream' }
 GtPharoTestSuite >> stream: anAsyncStream [
-	testCasesCache := AsyncSharedDictionary new.
-	testCasesStream := (((((((anAsyncStream 
-			filter: [ :eachItem | eachItem isNotNil ])
-			map: [ :eachItem | eachItem gtPharoMethodTestCase ])
-			filter: [ :eachTestCase | eachTestCase isNotNil ])
-			filter: [ :eachTestCase | eachTestCase canExecute ])
-			map: [ :eachTestCase | 
-				eachTestCase compiledMethod ifNotNil: [ :aMethod | 
-					aMethod -> eachTestCase ] ])
-			filter: [ :anAssoc | anAssoc notNil ])
-			map: [ :anAssoc | anAssoc value ]
-			key: [ :anAssoc | anAssoc key ]
-			cache: testCasesCache) 
-			cached.
+	mutex critical: [
+		testCasesCache := AsyncSharedDictionary new.
+		testCasesStream := (((((((anAsyncStream 
+				filter: [ :eachItem | eachItem isNotNil ])
+				map: [ :eachItem | eachItem gtPharoMethodTestCase ])
+				filter: [ :eachTestCase | eachTestCase isNotNil ])
+				filter: [ :eachTestCase | eachTestCase canExecute ])
+				map: [ :eachTestCase | 
+					eachTestCase compiledMethod ifNotNil: [ :aMethod | 
+						aMethod -> eachTestCase ] ])
+				filter: [ :anAssoc | anAssoc notNil ])
+				map: [ :anAssoc | anAssoc value ]
+				key: [ :anAssoc | anAssoc key ]
+				cache: testCasesCache) 
+				cached ].
 	self notifyStreamChanged
 ]
 
