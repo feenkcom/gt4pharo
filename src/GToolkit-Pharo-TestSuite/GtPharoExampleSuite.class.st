@@ -10,7 +10,8 @@ Class {
 	#instVars : [
 		'examplesWithResultStream',
 		'examplesWithResultCache',
-		'announcer'
+		'announcer',
+		'mutex'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-Base'
 }
@@ -120,6 +121,7 @@ GtPharoExampleSuite >> initialize [
 
 	examplesWithResultCache := AsyncSharedDictionary new.
 	examplesWithResultStream := AsyncEmptyStream new.
+	mutex := Mutex new.
 ]
 
 { #category : #'private - notifying' }
@@ -202,20 +204,21 @@ GtPharoExampleSuite >> stateOf: aGtExampleWithResult [
 
 { #category : #'api - stream' }
 GtPharoExampleSuite >> stream: anAsyncStream [
-	examplesWithResultCache := AsyncSharedDictionary new.
-	examplesWithResultStream := ((((((anAsyncStream
-			filter: [ :eachItem | eachItem notNil ])
-			map: [ :eachItem | eachItem gtExample ])
-			filter: [ :eachExample | eachExample notNil ])
-			map: [ :eachExample | 
-				| aMethod |
-				eachExample methodDo: [ :theMethod | aMethod := theMethod ].
-				aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
-			filter: [ :anAssoc | anAssoc notNil ])
-			map: [ :anAssoc | anAssoc value ]
-			key: [ :anAssoc | anAssoc key ]
-			cache: examplesWithResultCache) 
-			cached.
+	mutex critical: [ 
+		examplesWithResultCache := AsyncSharedDictionary new.
+		examplesWithResultStream := ((((((anAsyncStream
+				filter: [ :eachItem | eachItem notNil ])
+				map: [ :eachItem | eachItem gtExample ])
+				filter: [ :eachExample | eachExample notNil ])
+				map: [ :eachExample | 
+					| aMethod |
+					eachExample methodDo: [ :theMethod | aMethod := theMethod ].
+					aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
+				filter: [ :anAssoc | anAssoc notNil ])
+				map: [ :anAssoc | anAssoc value ]
+				key: [ :anAssoc | anAssoc key ]
+				cache: examplesWithResultCache) 
+				cached ].
 	self notifyStreamChanged
 ]
 
