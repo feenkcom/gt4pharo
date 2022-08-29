@@ -2,7 +2,7 @@ Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 5>
 	self
 		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
 			withId: nil
