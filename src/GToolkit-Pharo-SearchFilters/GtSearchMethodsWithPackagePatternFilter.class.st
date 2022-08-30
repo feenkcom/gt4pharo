@@ -49,6 +49,7 @@ GtSearchMethodsWithPackagePatternFilter >> hash [
 GtSearchMethodsWithPackagePatternFilter >> includesMethod: aCompiledMethod [
 	| package |
 	package := aCompiledMethod package.
+	package ifNil: [ ^ false ].
 	^ pattern isEmpty or: [ (package name asLowercase indexOfSubCollection: pattern asLowercase) > 0 ]
 ]
 

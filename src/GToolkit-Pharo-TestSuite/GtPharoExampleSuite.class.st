@@ -62,7 +62,10 @@ GtPharoExampleSuite >> createExampleCaseForMethod: aCompiledMethod [
 { #category : #'api - accessing' }
 GtPharoExampleSuite >> exampleWithResultForMethod: aCompiledMethod [
 	<return: #GtExampleWithResult or: nil>
-	^ examplesWithResultCache at: aCompiledMethod ifAbsent: [ nil ]
+	^ examplesWithResultCache
+		at: {aCompiledMethod methodClass.
+				aCompiledMethod}
+		ifAbsent: [ nil ]
 ]
 
 { #category : #'api - testing' }
@@ -216,7 +219,7 @@ GtPharoExampleSuite >> stream: anAsyncStream [
 					aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
 				filter: [ :anAssoc | anAssoc notNil ])
 				map: [ :anAssoc | anAssoc value ]
-				key: [ :anAssoc | anAssoc key ]
+				key: [ :anAssoc | { anAssoc value providerClass. anAssoc key } ]
 				cache: examplesWithResultCache) 
 				cached ].
 	self notifyStreamChanged
