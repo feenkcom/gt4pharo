@@ -27,11 +27,20 @@ GtUnoptimizedToDoAdvice >> highlightPositionsFor: aSmaCCNode [
 ]
 
 { #category : #accessing }
+GtUnoptimizedToDoAdvice >> isLikelyNumber: aNode [
+	aNode isLiteral ifTrue: [ ^ aNode literalValue isKindOf: Number ].
+	aNode isMessageSend ifTrue: [ ^ #(size + - * /) includes: aNode selector ].
+	^ false
+]
+
+{ #category : #accessing }
 GtUnoptimizedToDoAdvice >> matches: aNode from: aCriticRunner [
 	(aNode isMessageSend and: [ aNode receiver isMessageSend ])
 		ifFalse: [ ^ false ].
 	^ aNode message selector = #do:
-		and: [ #(to: #to:by:) includes: aNode receiver message selector ]
+		and: [ (#(to: #to:by:) includes: aNode receiver message selector)
+				and: [ (self isLikelyNumber: aNode receiver receiver)
+						or: [ self isLikelyNumber: aNode receiver message arguments first ] ] ]
 ]
 
 { #category : #accessing }
