@@ -898,7 +898,7 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 	self compiledMethod ifNil: [ ^ self ].
 	
 	isUnaryInstanceSideMethod := aGtPharoMethodCoderViewModel selfObject notNil and: [ 
-		anAST methodNode selector isUnary ].
+		anAST methodNode selector isNotNil and: [ anAST methodNode selector isUnary ] ].
 	isUnaryClassSideMethod := (anAST notNil
 		and: [ anAST methodNode
 			ifNotNil: [ :node | node variables isEmpty and: [ self compiledMethod methodClass isClassSide ] ]
