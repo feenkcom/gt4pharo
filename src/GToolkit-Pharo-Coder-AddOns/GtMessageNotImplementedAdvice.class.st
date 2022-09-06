@@ -13,7 +13,10 @@ GtMessageNotImplementedAdvice >> description [
 GtMessageNotImplementedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 	| actions type |
 	actions := OrderedCollection new.
-	type := aCriticStyler typeOf: aNode parent receiver.
+	type := aCriticStyler
+			typeOf: (aNode isMessage
+					ifTrue: [ aNode parent receiver ]
+					ifFalse: [ aNode parent arguments last ]).
 	type
 		ifNotNil: [ actions
 				add: ((GtDefineMethodFixItAction forCoder: aCriticStyler coderModel node: aNode)
@@ -28,15 +31,25 @@ GtMessageNotImplementedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
 
 { #category : #testing }
 GtMessageNotImplementedAdvice >> matches: aNode from: aCriticRunner [
-	| receiverType |
-	aNode isMessage ifFalse: [ ^ false ].
-	aCriticRunner hasRefactoring ifTrue: [ ^ self ].
-	receiverType := aCriticRunner typeOf: aNode parent receiver.
+	| receiverType selector |
+	aCriticRunner hasRefactoring ifTrue: [ ^ false ].
+	aNode isMessage
+		ifTrue: [ receiverType := aCriticRunner typeOf: aNode parent receiver.
+			selector := aNode selector ]
+		ifFalse: [ (aNode isLiteral
+				and: [ aNode isSymbol
+						and: [ aNode parent isMessage
+								and: [ aNode parent selector = #when:send:to:
+										and: [ (aNode parent arguments at: 2) == aNode
+												and: [ aNode literalValue numArgs >= 0 ] ] ] ] ])
+				ifFalse: [ ^ false ].
+			receiverType := aCriticRunner typeOf: aNode parent arguments last.
+			selector := aNode literalValue ].
 	receiverType
-		ifNil: [ ^ (GtPharoIndex current implementersOf: aNode selector) isEmpty ].
-	^ (receiverType whichClassIncludesSelector: aNode selector) isNil
+		ifNil: [ ^ (GtPharoIndex current implementersOf: selector) isEmpty ].
+	^ (receiverType whichClassIncludesSelector: selector) isNil
 		and: [ receiverType isTrait not
-				or: [ (Object whichClassIncludesSelector: aNode selector) isNil ] ]
+				or: [ (Object whichClassIncludesSelector: selector) isNil ] ]
 ]
 
 { #category : #accessing }
@@ -48,8 +61,10 @@ GtMessageNotImplementedAdvice >> name [
 GtMessageNotImplementedAdvice >> potentialRenameActionsFor: aNode type: type using: aCriticStyler [
 	| selectors block args currentSelector index minRating |
 	selectors := OrderedCollection new.
-	args := aNode arguments size.
-	currentSelector := aNode selector.
+	currentSelector := aNode isMessage
+			ifTrue: [ aNode selector ]
+			ifFalse: [ aNode literalValue ].
+	args := currentSelector numArgs.
 	minRating := currentSelector size / 2.0.
 	block := [ :each | 
 		| rating |
