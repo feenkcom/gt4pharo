@@ -10,18 +10,18 @@ Class {
 { #category : #executing }
 GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
 	| position |
-	
 	position := self attributePosition.
 	(aBrTextEditor text from: position to: position)
-		attributes:
-			{((GtPharoMethodExpanderAttribute
-				forClass: classOrMetaClass
-				andSelector: node selector) isExpanded: true)}
+		attributes: {(GtPharoMethodExpanderAttribute
+					forClass: classOrMetaClass
+					andSelector: self selector) isExpanded: true}
 ]
 
 { #category : #accessing }
 GtDefineMethodFixItAction >> attributePosition [
-	^ node selectorParts last stopPosition
+	^ node isMessage
+		ifTrue: [ node selectorParts last stopPosition ]
+		ifFalse: [ node stopPosition ]
 ]
 
 { #category : #accessing }
@@ -41,7 +41,7 @@ GtDefineMethodFixItAction >> compileMethod [
 
 { #category : #accessing }
 GtDefineMethodFixItAction >> description [
-	^ 'Create method ' , node selector , ' in class ', classOrMetaClass name
+	^ 'Create method ' , self selector , ' in class ' , classOrMetaClass name
 ]
 
 { #category : #executing }
@@ -60,8 +60,19 @@ GtDefineMethodFixItAction >> id [
 
 { #category : #private }
 GtDefineMethodFixItAction >> methodSource [
-	node arguments isEmpty
-		ifTrue: [ ^ node selector ].
+	node isLiteral
+		ifTrue: [ | selector |
+			selector := node literalValue.
+			selector numArgs = 0 ifTrue: [ ^ selector ].
+			^ String
+				streamContents: [ :stream | 
+					selector keywords
+						keysAndValuesDo: [ :i :part | 
+							stream
+								nextPutAll: part;
+								nextPutAll: ' anObject';
+								print: i ] ] ].
+	node arguments isEmpty ifTrue: [ ^ node selector ].
 	^ String
 		streamContents: [ :stream | 
 			| variables baseName name index |
@@ -73,11 +84,10 @@ GtDefineMethodFixItAction >> methodSource [
 						nextPutAll: eachSelectorPart source;
 						space.
 					baseName := arg isVariable
-						ifTrue: [ arg variableName ]
-						ifFalse: [ 
-							arg isLiteral
-								ifTrue: [ arg literalValue class canonicalArgumentName ]
-								ifFalse: [ 'anObject' ] ].
+							ifTrue: [ arg variableName ]
+							ifFalse: [ arg isLiteral
+									ifTrue: [ arg literalValue class canonicalArgumentName ]
+									ifFalse: [ 'anObject' ] ].
 					index := 0.
 					name := baseName.
 					[ variables includes: name ]
@@ -87,4 +97,9 @@ GtDefineMethodFixItAction >> methodSource [
 					stream
 						nextPutAll: name;
 						space ] ]
+]
+
+{ #category : #accessing }
+GtDefineMethodFixItAction >> selector [
+	^ node isMessage ifTrue: [ node selector ] ifFalse: [ node literalValue ]
 ]
