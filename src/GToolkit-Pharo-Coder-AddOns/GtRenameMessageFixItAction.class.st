@@ -19,7 +19,9 @@ GtRenameMessageFixItAction class >> renameCollect [
 
 { #category : #'api - action' }
 GtRenameMessageFixItAction >> description [
-	^ 'Rename #' , node selector , ' to #' , selector
+	^ 'Rename #'
+		, (node isMessage ifTrue: [ node selector ] ifFalse: [ node literalValue ])
+		, ' to #' , selector
 ]
 
 { #category : #'api - action' }
@@ -41,12 +43,17 @@ GtRenameMessageFixItAction >> selector: aSymbol [
 GtRenameMessageFixItAction >> updateSource [
 	| string |
 	string := SmaCCString on: node topParent completeSource.
-	node selectorParts
-		with: selector keywords
-		do: [ :token :each | 
-			string
-				replaceFrom: token startPosition
-				to: token stopPosition
-				with: each ].
+	node isMessage
+		ifTrue: [ node selectorParts
+				with: selector keywords
+				do: [ :token :each | 
+					string
+						replaceFrom: token startPosition
+						to: token stopPosition
+						with: each ] ]
+		ifFalse: [ string
+				replaceFrom: node startPosition
+				to: node stopPosition
+				with: selector storeString ].
 	^ string asString
 ]
