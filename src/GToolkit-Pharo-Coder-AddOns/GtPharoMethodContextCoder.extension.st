@@ -19,7 +19,8 @@ GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAdd
 			GtCoderAction new
 				title: aDebuggingAction label;
 				icon: (aDebuggingAction icon ifNil: [ BlElement new size: 0@0 ]);
-				action: [ aDebuggingAction execute ] ].
+				action: [ aDebuggingAction execute ];
+				shortcutKey: aDebuggingAction keymap ].
 			
 	coderAddOns addContextMenuActions: theActions 
 ]
