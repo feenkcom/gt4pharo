@@ -8,21 +8,26 @@ GtPharoMethodContextCoder >> actionsForPragmas: aSymbolsCollection [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 10>
-	| theActions |
+	| theActions classes |
+	classes := {ResumeDebugAction.
+			RestartDebugAction.
+			StepOverDebugAction.
+			StepIntoDebugAction.
+			StepThroughDebugAction}.
 
-	theActions := ((self actionsForPragmas: self stackDebuggingActionsPragmas)
-		select: [ :aDebuggingAction | 
-			"Quite hacky solutions for only showing StepInto for the top context."
-			aDebuggingAction class ~= StepIntoDebugAction or: [ 
-				self context = self session interruptedContext ] ])
-		collect: [ :aDebuggingAction |
-			GtCoderAction new
-				title: aDebuggingAction label;
-				icon: (aDebuggingAction icon ifNil: [ BlElement new size: 0@0 ]);
-				action: [ aDebuggingAction execute ];
-				shortcutKey: aDebuggingAction keymap ].
-			
-	coderAddOns addContextMenuActions: theActions 
+	theActions := ((classes
+			collect: [ :each | each gt2ContextDebuggingActionFor: self ])
+			select: [ :aDebuggingAction "Quite hacky solutions for only showing StepInto for the top context." | 
+				aDebuggingAction class ~= StepIntoDebugAction
+					or: [ self context = self session interruptedContext ] ])
+			collect: [ :aDebuggingAction | 
+				GtCoderAction new
+					title: aDebuggingAction label;
+					icon: (aDebuggingAction icon ifNil: [ BlElement new size: 0 @ 0 ]);
+					action: [ aDebuggingAction execute ];
+					shortcutKey: aDebuggingAction keymap ].
+
+	coderAddOns addContextMenuActions: theActions
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
