@@ -5,7 +5,9 @@ Class {
 		'globalCache',
 		'selectorCache',
 		'active',
-		'shouldRecomputeSubclasses'
+		'shouldRecomputeSubclasses',
+		'selectorWordCache',
+		'classWordCache'
 	],
 	#classInstVars : [
 		'current'
@@ -34,6 +36,13 @@ GtPharoIndex class >> isActive [
 ]
 
 { #category : #private }
+GtPharoIndex >> addClassWordsFor: newClassName [
+	self
+		wordsIn: newClassName
+		do: [ :word | (classWordCache add: word asLowercase weight: 1) addName: newClassName ]
+]
+
+{ #category : #private }
 GtPharoIndex >> addSendsFrom: aMethod [
 	| seen globalBlock selectorBlock method |
 	method := aMethod gtOriginalMethod.
@@ -49,7 +58,11 @@ GtPharoIndex >> addSendsFrom: aMethod [
 		| node |
 		node := selectorCache add: selector weight: count.
 		(seen includes: selector)
-			ifFalse: [ seen add: selector.
+			ifFalse: [ node weight = count
+					ifTrue: [ self
+							wordsIn: selector
+							do: [ :word | (selectorWordCache add: word asLowercase weight: 1) addName: selector ] ].
+				seen add: selector.
 				node addReference: method ].
 		selector first isUppercase
 			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
@@ -80,8 +93,63 @@ GtPharoIndex >> addSymbolReferencesTo: newClassName [	| addedRefs |
 ]
 
 { #category : #accessing }
+GtPharoIndex >> asyncClassNamesForWord: aString [
+	| words longest |
+	words := self searchWordsFrom: aString.
+	longest := words isEmpty
+			ifTrue: [ '' ]
+			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
+	^ ((classWordCache asyncStreamStartingWith: longest)
+		collect: [ :each | 
+			(classWordCache nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | 
+					node namesCollection asArray asAsyncStream
+						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
+		flatten withoutDuplicates
+]
+
+{ #category : #accessing }
+GtPharoIndex >> asyncImplementersForWord: aString [
+	^ ((self asyncSelectorsForWord: aString)
+		collect: [ :each | 
+			(selectorCache nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | node implementersCollection asAsyncStream ] ]) flatten
+]
+
+{ #category : #accessing }
+GtPharoIndex >> asyncSelectorsForWord: aString [
+	| words longest |
+	words := self searchWordsFrom: aString.
+	longest := words isEmpty
+			ifTrue: [ '' ]
+			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
+	^ ((selectorWordCache asyncStreamStartingWith: longest)
+		collect: [ :each | 
+			(selectorWordCache nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | 
+					node namesCollection asArray asAsyncStream
+						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
+		flatten withoutDuplicates
+]
+
+{ #category : #accessing }
+GtPharoIndex >> asyncSendersForWord: aString [
+	^ ((self asyncSelectorsForWord: aString)
+		collect: [ :each | 
+			(selectorCache nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | node referencesCollection asAsyncStream ] ]) flatten
+		withoutDuplicates
+]
+
+{ #category : #accessing }
 GtPharoIndex >> cacheSizeInMemory [
 	^ globalCache gtSpecificSizeInMemory + selectorCache gtSpecificSizeInMemory
+		+ selectorWordCache gtSpecificSizeInMemory
+		+ classWordCache gtSpecificSizeInMemory
 ]
 
 { #category : #iterating }
@@ -99,8 +167,11 @@ GtPharoIndex >> cachedSelectorsDo: aBlock [
 
 { #category : #private }
 GtPharoIndex >> classAdded: anAnnouncement [
-	globalCache add: anAnnouncement classAdded name.
-	self addSymbolReferencesTo: anAnnouncement classAdded name
+	| newName |
+	newName := anAnnouncement classAdded name.
+	globalCache add: newName.
+	self addClassWordsFor: newName.
+	self addSymbolReferencesTo: newName
 ]
 
 { #category : #private }
@@ -137,6 +208,7 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 		ifNotNil: [ :node | 
 			node references: nil.
 			globalCache remove: className weight: node weight ].
+	self removeClassWordsFor: className.
 	anAnnouncement classRemoved instanceSide
 		methodsDo: [ :each | self removeMethodFromCache: each ].
 	anAnnouncement classRemoved classSide
@@ -145,17 +217,26 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> classRenamed: anAnnouncement [
-	| oldRefs addedRefs newClassName |
+	| oldRefs addedRefs newClassName oldClassName |
 	"First remove the old entry"
-	(globalCache nodeFor: anAnnouncement oldName)
+	oldClassName := anAnnouncement oldName.
+	(globalCache nodeFor: oldClassName)
 		ifNil: [ oldRefs := #() ]
 		ifNotNil: [ :node | 
 			oldRefs := node referencesCollection.
 			node references: nil.
-			globalCache remove: anAnnouncement oldName weight: node weight ].	"Add new entry"
+			globalCache remove: oldClassName weight: node weight ].
+	self removeClassWordsFor: oldClassName.
+			
+	"Add new entry"
 	newClassName := anAnnouncement newName.
-	globalCache add: newClassName weight: 1.	"Any symbol references to the new name should be marked as class references."
-	addedRefs := self addSymbolReferencesTo: newClassName.	"Update methods that have the variable reference to point to new variable. 
+	globalCache add: newClassName weight: 1.
+	self addClassWordsFor: newClassName.
+	
+	"Any symbol references to the new name should be marked as class references."
+	addedRefs := self addSymbolReferencesTo: newClassName.
+	
+	"Update methods that have the variable reference to point to new variable. 
 	At this point the source of the method and the method itself are out of sync. 
 	The source of the method will have the old name and the method will have the renamed class."
 	oldRefs
@@ -173,6 +254,11 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 											node addReference: each ] ] ] ] ]
 ]
 
+{ #category : #testing }
+GtPharoIndex >> does: selector matchWords: words [
+	^ (self intervalsIn: selector matchingWords: words) notEmpty
+]
+
 { #category : #accessing }
 GtPharoIndex >> globalCache [
 	^ globalCache
@@ -181,6 +267,11 @@ GtPharoIndex >> globalCache [
 { #category : #accessing }
 GtPharoIndex >> globalVariableReferencesTo: aVariable [
 	^ (globalCache referencesTo: aVariable name) asOrderedCollection
+]
+
+{ #category : #testing }
+GtPharoIndex >> hasImplementersOf: aSelector [
+	^ (selectorCache nodeFor: aSelector) implementers notNil
 ]
 
 { #category : #iterating }
@@ -199,6 +290,8 @@ GtPharoIndex >> initialize [
 	super initialize.
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
 	globalCache := GtReferencesPrefixTree new.
+	selectorWordCache := GtNamesPrefixTree new.
+	classWordCache := GtNamesPrefixTree new.
 	active := false.
 	shouldRecomputeSubclasses := false
 ]
@@ -208,13 +301,52 @@ GtPharoIndex >> initializeCache [
 	self unsubscribeFromSystem.
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
 	globalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
+	selectorWordCache := GtNamesPrefixTree new.
+	classWordCache := GtNamesPrefixTree new.
 	Smalltalk
 		allClassesDo: [ :each | 
+			self addClassWordsFor: each name.
 			each methodsDo: [ :method | self methodAdded: method ].
 			each class methodsDo: [ :method | self methodAdded: method ] ].
 	selectorCache allNodesDo: #compressData.
 	globalCache allNodesDo: #compressData.
+	selectorWordCache allNodesDo: #compressData.
+	classWordCache allNodesDo: #compressData.
 	self subscribeToSystem
+]
+
+{ #category : #accessing }
+GtPharoIndex >> intervalsIn: selector matching: wordString [
+	| words |
+	words := self searchWordsFrom: wordString.
+	^ self intervalsIn: selector matchingWords: words
+]
+
+{ #category : #private }
+GtPharoIndex >> intervalsIn: selector matchingWords: words [
+	| selectorWords intervals |
+	intervals := OrderedCollection new: words size.
+	selectorWords := OrderedCollection new.
+	self
+		wordsIn: selector
+		do: [ :each :index | 
+			selectorWords
+				add: {index.
+						each asLowercase} ]
+		minSize: 1
+		includeSubStrings: true.
+	selectorWords
+		sorted: [ :a :b | a last size > b last size or: [ a last = b last and: [ a first < b first ] ] ].
+	(words asSet asSortedCollection: [ :a :b | a size > b size ])
+		do: [ :each | 
+			(words occurrencesOf: each)
+				timesRepeat: [ | item |
+					item := selectorWords
+							detect: [ :sel | sel last beginsWith: each ]
+							ifNone: [ ^ #() ].
+					intervals add: (item first to: item first + each size - 1).
+					selectorWords remove: item ] ].
+	^ intervals
 ]
 
 { #category : #testing }
@@ -234,6 +366,10 @@ GtPharoIndex >> methodAdded: anAnnouncement [
 	| node |
 	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
 	node := selectorCache add: anAnnouncement method selector weight: 1.
+	node weight = 1
+		ifTrue: [ self
+				wordsIn: anAnnouncement method selector
+				do: [ :word | (selectorWordCache add: word asLowercase weight: 1) addName: anAnnouncement method selector ] ].
 	node addImplementer: anAnnouncement method gtOriginalMethod.
 	self addSendsFrom: anAnnouncement method
 ]
@@ -325,10 +461,26 @@ GtPharoIndex >> recompiledMethod: aMethod [
 ]
 
 { #category : #private }
+GtPharoIndex >> removeClassWordsFor: className [
+	self
+		wordsIn: className
+		do: [ :word | 
+			(classWordCache remove: word asLowercase weight: 1)
+				ifNotNil: [ :node | node removeName: className ] ]
+]
+
+{ #category : #private }
 GtPharoIndex >> removeMethodFromCache: method [
 	method isFromTrait ifTrue: [ ^ self ].
 	(selectorCache remove: method selector weight: 1)
-		ifNotNil: [ :node | node removeImplementer: method gtOriginalMethod ].
+		ifNotNil: [ :node | 
+			node removeImplementer: method gtOriginalMethod.
+			node weight = 0
+				ifTrue: [ self
+						wordsIn: method selector
+						do: [ :word | 
+							(selectorWordCache remove: word asLowercase weight: 1)
+								ifNotNil: [ :n | n removeName: method selector ] ] ] ].
 	self removeSendsFrom: method
 ]
 
@@ -347,6 +499,12 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 	selectorBlock := [ :selector :count | 
 		(selectorCache remove: selector weight: count)
 			ifNotNil: [ :node | 
+				node weight = 0
+					ifTrue: [ self
+							wordsIn: selector
+							do: [ :word | 
+								(selectorWordCache remove: word asLowercase weight: 1)
+									ifNotNil: [ :n | n removeName: selector ] ] ].
 				(seen includes: selector)
 					ifFalse: [ seen add: selector.
 						node removeReference: method ] ].
@@ -358,6 +516,18 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 		messageSendsIn: method
 		doReferences: selectorBlock
 		andVariables: globalBlock
+]
+
+{ #category : #accessing }
+GtPharoIndex >> searchWordsFrom: aString [
+	| words |
+	words := Bag new.
+	self
+		wordsIn: aString
+		do: [ :each | words add: each asLowercase ]
+		minSize: 1
+		includeSubStrings: false.
+	^ words
 ]
 
 { #category : #accessing }
@@ -388,4 +558,40 @@ GtPharoIndex >> subscribeToSystem [
 GtPharoIndex >> unsubscribeFromSystem [
 	SystemAnnouncer uniqueInstance unsubscribe: self.
 	active := false
+]
+
+{ #category : #private }
+GtPharoIndex >> wordsIn: aSymbol do: aBlock [
+	self
+		wordsIn: aSymbol
+		do: aBlock
+		minSize: 1
+		includeSubStrings: true
+]
+
+{ #category : #private }
+GtPharoIndex >> wordsIn: aSymbol do: aBlock minSize: anInteger includeSubStrings: aBoolean [
+	| start end char size |
+	size := aSymbol size.
+	start := 1.
+	[ start <= size ]
+		whileTrue: [ [ start <= size and: [ (char := aSymbol at: start) isLetter not ] ]
+				whileTrue: [ start := start + 1 ].
+			start > size ifTrue: [ ^ self ].
+			end := start + 1.
+			char isUppercase
+				ifTrue: [ [ end <= size and: [ (aSymbol at: end) isUppercase ] ]
+						whileTrue: [ end := end + 1 ] ].
+			[ end <= size
+				and: [ (char := aSymbol at: end) isLowercase or: [ char isDigit ] ] ]
+				whileTrue: [ end := end + 1 ].
+			end := end - 1.
+			[ end - start + 1 >= anInteger ]
+				whileTrue: [ aBlock cull: (aSymbol copyFrom: start to: end) cull: start.
+					(aBoolean and: [ (aSymbol at: end) isUppercase not ])
+						ifTrue: [ start := start + 1.
+							(start < size and: [ (aSymbol at: start) isUppercase ])
+								ifFalse: [ start := end + 1 ] ]
+						ifFalse: [ start := end + 1 ] ].
+			start := end + 1 ]
 ]
