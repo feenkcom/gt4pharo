@@ -18,13 +18,16 @@ GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInt
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> completeVariable: token for: aStrategy [
-	| allLocalVariables prefix stream |
+	| allLocalVariables prefix stream compositeTree |
 	prefix := token source.
 	allLocalVariables := aStrategy localVariablesFor: self.
-	stream := (((((allLocalVariables
+	compositeTree := GtCompositePrefixTree
+			trees: {allLocalVariables.
+					aStrategy variables}.
+	stream := (((((compositeTree
 			asyncStreamStartingWith: prefix
-			caseSensitive: false)
-			merge: (aStrategy variables asyncStreamStartingWith: prefix caseSensitive: false))
+			caseSensitive: true)
+			merge: (compositeTree asyncStreamStartingWith: prefix caseSensitive: false))
 			merge: (GtPharoIndex current asyncClassNamesForWord: prefix))
 			merge: ((aStrategy variables asyncStreamStartingWith: '')
 					filter: [ :each | 
