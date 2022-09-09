@@ -99,14 +99,15 @@ GtPharoIndex >> asyncClassNamesForWord: aString [
 	longest := words isEmpty
 			ifTrue: [ '' ]
 			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
-	^ ((classWordCache asyncStreamStartingWith: longest)
-		collect: [ :each | 
-			(classWordCache nodeFor: each)
-				ifNil: [ #() asAsyncStream ]
-				ifNotNil: [ :node | 
-					node namesCollection asArray asAsyncStream
-						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
-		flatten withoutDuplicates
+	^ ((globalCache asyncWeightedStreamStartingWith: aString trim caseSensitive: false)
+		merge: ((classWordCache asyncStreamStartingWith: longest)
+				collect: [ :each | 
+					(classWordCache nodeFor: each)
+						ifNil: [ #() asAsyncStream ]
+						ifNotNil: [ :node | 
+							node namesCollection asArray asAsyncStream
+								select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
+				flatten) withoutDuplicates
 ]
 
 { #category : #accessing }
@@ -132,7 +133,7 @@ GtPharoIndex >> asyncSelectorsForWord: aString [
 	longest := words isEmpty
 			ifTrue: [ '' ]
 			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
-	^ ((selectorCache asyncStreamStartingWith: aString trim)
+	^ ((selectorCache asyncWeightedStreamStartingWith: aString trim caseSensitive: false)
 		merge: ((selectorWordCache asyncStreamStartingWith: longest)
 				collect: [ :each | 
 					(selectorWordCache nodeFor: each)
