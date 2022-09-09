@@ -7,5 +7,6 @@ GtSearchSubclassResponsibilityMethodsFilter class >> filterDescriptorFor: aMetho
 		named: 'Abstract Methods';
 		order: 18;
 		valueNotRequired;
+		beNotDefault;
 		yourself
 ]
