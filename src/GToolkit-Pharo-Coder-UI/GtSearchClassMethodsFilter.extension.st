@@ -7,5 +7,6 @@ GtSearchClassMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 		named: 'Class Methods';
 		order: 17;
 		valueNotRequired;
+		beNotDefault;
 		yourself
 ]

@@ -7,5 +7,6 @@ GtSearchInstanceMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 		named: 'Instance Methods';
 		order: 16;
 		valueNotRequired;
+		beNotDefault;
 		yourself
 ]
