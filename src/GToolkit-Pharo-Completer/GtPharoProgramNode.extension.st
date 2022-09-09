@@ -18,36 +18,38 @@ GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInt
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> completeVariable: token for: aStrategy [
-	| allLocalVariables prefix completionsStream replacementsStream camelCaseReplacementNames anyReplacementNames |
+	| allLocalVariables prefix stream |
 	prefix := token source.
 	allLocalVariables := aStrategy localVariablesFor: self.
-	completionsStream := ((allLocalVariables asyncStreamStartingWith: prefix)
-		merge: (aStrategy variables asyncStreamStartingWith: prefix))
-		collect:
-			[ :each | 
-			GtInsertTextCompletionAction
-				labeled: (aStrategy labelFor: each withSearch: prefix)
-				completion: (each allButFirst: prefix size)
-				position: aStrategy index ].
-	camelCaseReplacementNames := (aStrategy variables asyncStreamStartingWith: '')
-		filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isCamelCaseSubsequence: prefix of: each ] ].
-	anyReplacementNames := (aStrategy variables asyncStreamStartingWith: '')
-		filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isSubsequence: prefix of: each ] ].
-	replacementsStream := (camelCaseReplacementNames merge: anyReplacementNames) withoutDuplicates
-		collect:
-			[ :each | 
-			(GtCompositeCompletionAction labeled: (aStrategy labelFor: each withSearch: prefix))
-				addAction:
-						(GtDeleteTextCompletionAction
+	stream := (((((allLocalVariables
+			asyncStreamStartingWith: prefix
+			caseSensitive: false)
+			merge: (aStrategy variables asyncStreamStartingWith: prefix caseSensitive: false))
+			merge: (GtPharoIndex current asyncClassNamesForWord: prefix))
+			merge: ((aStrategy variables asyncStreamStartingWith: '')
+					filter: [ :each | 
+						(each beginsWith: prefix) not
+							and: [ aStrategy isCamelCaseSubsequence: prefix of: each ] ]))
+			merge: ((aStrategy variables asyncStreamStartingWith: '')
+					filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isSubsequence: prefix of: each ] ]))
+			withoutDuplicates.
+	^ stream
+		collect: [ :each | 
+			(each beginsWith: prefix)
+				ifTrue: [ GtInsertTextCompletionAction
+						labeled: (aStrategy labelFor: each withSearch: prefix)
+						completion: (each allButFirst: prefix size)
+						position: aStrategy index ]
+				ifFalse: [ (GtCompositeCompletionAction
+						labeled: (aStrategy labelFor: each withWords: prefix))
+						addAction: (GtDeleteTextCompletionAction
 								labeled: ''
 								from: token startPosition
 								to: token stopPosition);
-				addAction:
-						(GtInsertTextCompletionAction
+						addAction: (GtInsertTextCompletionAction
 								labeled: each
 								completion: each
-								position: token startPosition - 1) ].
-	^ completionsStream merge: replacementsStream
+								position: token startPosition - 1) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }
