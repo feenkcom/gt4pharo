@@ -247,6 +247,16 @@ GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aStr
 		ifFalse: [ tree asyncWeightedStreamStartingWith: aString ]
 ]
 
+{ #category : #'private-selector' }
+GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matchingWords: aString [
+	^ (GtPharoIndex current asyncSelectorsForWord: aString)
+		select: [ :each | 
+			(each beginsWith: aString) not
+				and: [ aBehavior isNil
+						ifTrue: [ GtPharoIndex current hasImplementersOf: each ]
+						ifFalse: [ (aBehavior whichClassIncludesSelector: each asSymbol) notNil ] ] ]
+]
+
 { #category : #'private-method' }
 GtPharoCompletionStrategy >> signatureFor: aMethod [
 	| source ast |

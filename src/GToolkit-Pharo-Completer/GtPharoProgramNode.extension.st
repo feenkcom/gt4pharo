@@ -74,16 +74,33 @@ GtPharoProgramNode >> localVariables [
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy [
-	| index type name |
+	| index type name completionsStream replacementsStream wordSelectorStream |
 	index := strategy index.
 	type := receiver guessType: strategy.
 	name := aToken source.
-	^ (strategy selectorStreamForReceiver: type matching: name)
-		collect: [ :each | 
-			receiver
-				actionForSelector: each
-				startingWith: name
-				at: index
-				needsParensKeywords: needsParensForKeyword
-				strategy: strategy ]
+	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
+			collect: [ :each | 
+				receiver
+					actionForSelector: each
+					startingWith: name
+					at: index
+					needsParensKeywords: needsParensForKeyword
+					strategy: strategy ].
+	wordSelectorStream := (strategy
+			selectorStreamForReceiver: type
+			matchingWords: name) cached.
+	replacementsStream := wordSelectorStream
+			collect: [ :each | 
+				(GtCompositeCompletionAction labeled: (strategy labelFor: each withWords: name))
+					addAction: (GtDeleteTextCompletionAction
+							labeled: ''
+							from: aToken startPosition
+							to: aToken stopPosition);
+					addAction: (receiver
+							actionForSelector: each
+							startingWith: ''
+							at: aToken startPosition - 1
+							needsParensKeywords: needsParensForKeyword
+							strategy: strategy) ].
+	^ completionsStream merge: replacementsStream
 ]
