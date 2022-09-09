@@ -21,7 +21,7 @@ GtPharoMethodTestCaseAllState class >> includesCoder: aCoder [
 GtPharoMethodTestCaseAllState class >> includesTestCase: aPharoTestCase [
 	<return: #Boolean>
 
-	^ aPharoTestCase canExecute
+	^ true
 ]
 
 { #category : #accessing }

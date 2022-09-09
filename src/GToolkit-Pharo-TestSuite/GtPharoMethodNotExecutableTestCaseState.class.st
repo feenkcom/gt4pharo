@@ -14,6 +14,13 @@ GtPharoMethodNotExecutableTestCaseState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseNotExecutableState: self
 ]
 
+{ #category : #testing }
+GtPharoMethodNotExecutableTestCaseState class >> includesTestCase: aPharoTestCase [
+	<return: #Boolean>
+
+	^ aPharoTestCase canExecute not
+]
+
 { #category : #accessing }
 GtPharoMethodNotExecutableTestCaseState class >> label [
 	^ 'Not Executable'
