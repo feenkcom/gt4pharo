@@ -110,6 +110,13 @@ GtPharoIndex >> asyncClassNamesForWord: aString [
 ]
 
 { #category : #accessing }
+GtPharoIndex >> asyncClassesForWord: aString [
+	^ ((self asyncClassNamesForWord: aString)
+		collect: [ :each | Smalltalk at: each asSymbol ifAbsent: [  ] ])
+		select: [ :each | each notNil ]
+]
+
+{ #category : #accessing }
 GtPharoIndex >> asyncImplementersForWord: aString [
 	^ ((self asyncSelectorsForWord: aString)
 		collect: [ :each | 
@@ -125,14 +132,15 @@ GtPharoIndex >> asyncSelectorsForWord: aString [
 	longest := words isEmpty
 			ifTrue: [ '' ]
 			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
-	^ ((selectorWordCache asyncStreamStartingWith: longest)
-		collect: [ :each | 
-			(selectorWordCache nodeFor: each)
-				ifNil: [ #() asAsyncStream ]
-				ifNotNil: [ :node | 
-					node namesCollection asArray asAsyncStream
-						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
-		flatten withoutDuplicates
+	^ ((selectorCache asyncStreamStartingWith: aString trim)
+		merge: ((selectorWordCache asyncStreamStartingWith: longest)
+				collect: [ :each | 
+					(selectorWordCache nodeFor: each)
+						ifNil: [ #() asAsyncStream ]
+						ifNotNil: [ :node | 
+							node namesCollection asArray asAsyncStream
+								select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
+				flatten) withoutDuplicates
 ]
 
 { #category : #accessing }
