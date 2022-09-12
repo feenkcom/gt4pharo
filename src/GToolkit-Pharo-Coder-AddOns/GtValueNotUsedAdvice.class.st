@@ -10,8 +10,8 @@ GtValueNotUsedAdvice >> description [
 ]
 
 { #category : #private }
-GtValueNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {GtRemoveValueFixItAction forCoder: aCriticStyler coderModel node: aNode}
+GtValueNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtRemoveValueFixItAction forCoder: coderModel node: aNode}
 ]
 
 { #category : #testing }

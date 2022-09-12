@@ -18,23 +18,23 @@ GtUndeclaredVariableAdvice >> description [
 ]
 
 { #category : #styling }
-GtUndeclaredVariableAdvice >> fixItActionsFor: aVariableNode using: aCriticStyler [
+GtUndeclaredVariableAdvice >> fixItActionsForNode: aVariableNode coderModel: coderModel [
 	^ aVariableNode variableName first isUppercase
-		ifTrue: [ self globalFixItActionsFor: aVariableNode using: aCriticStyler ]
-		ifFalse: [ self localFixItActionsFor: aVariableNode using: aCriticStyler ]
+		ifTrue: [ self globalFixItActionsFor: aVariableNode coderModel: coderModel ]
+		ifFalse: [ self localFixItActionsFor: aVariableNode coderModel: coderModel ]
 ]
 
 { #category : #styling }
-GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode using: aCriticStyler [
+GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode coderModel: coderModel [
 	| theFixitActions results |
 	theFixitActions := OrderedCollection new.
 	theFixitActions
-		add: (GtDefineClassFixItAction forCoder: aCriticStyler coderModel node: aVariableNode).
+		add: (GtDefineClassFixItAction forCoder: coderModel node: aVariableNode).
 
-	aCriticStyler isForWorkspace
+	coderModel class = GtPharoSnippetCoder
 		ifFalse: [ | aDefineClassAction |
 			aDefineClassAction := GtDefineClassVariableFixItAction
-					forCoder: aCriticStyler coderModel
+					forCoder: coderModel
 					node: aVariableNode.
 			theFixitActions add: aDefineClassAction ].
 
@@ -42,45 +42,39 @@ GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode using: aCriti
 			correctAgainst: aVariableNode localVariables
 			continuedFrom: nil.
 
-	results := aCriticStyler behavior
+	results := coderModel behavior
 			possibleVariablesFor: aVariableNode variableName
 			continuedFrom: results.
 
 	theFixitActions
 		addAll: ((aVariableNode variableName correctAgainst: nil continuedFrom: results)
 				collect: [ :each | 
-					(GtRenameVariableFixItAction
-						forCoder: aCriticStyler coderModel
-						node: aVariableNode) newName: each ]).
+					(GtRenameVariableFixItAction forCoder: coderModel node: aVariableNode)
+						newName: each ]).
 
 	^ theFixitActions
 ]
 
 { #category : #styling }
-GtUndeclaredVariableAdvice >> localFixItActionsFor: aVariableNode using: aCriticStyler [
+GtUndeclaredVariableAdvice >> localFixItActionsFor: aVariableNode coderModel: coderModel [
 	| theFixitActions possibleNames |
 	theFixitActions := OrderedCollection new.
 	theFixitActions
-		add: (GtDefineTemporaryFixItAction
-				forCoder: aCriticStyler coderModel
-				node: aVariableNode).
+		add: (GtDefineTemporaryFixItAction forCoder: coderModel node: aVariableNode).
 
 	(self
 		canAddInstanceVariable: aVariableNode variableName
-		to: aCriticStyler behavior)
+		to: coderModel behavior)
 		ifTrue: [ theFixitActions
-				add: (GtDefineInstanceVariableFixItAction
-						forCoder: aCriticStyler coderModel
-						node: aVariableNode) ].
+				add: (GtDefineInstanceVariableFixItAction forCoder: coderModel node: aVariableNode) ].
 	possibleNames := aVariableNode localVariables
-			, aCriticStyler behavior allInstVarNames.
+			, coderModel behavior allInstVarNames.
 
 	theFixitActions
 		addAll: ((aVariableNode variableName correctAgainst: possibleNames)
 				collect: [ :each | 
-					(GtRenameVariableFixItAction
-						forCoder: aCriticStyler coderModel
-						node: aVariableNode) newName: each ]).
+					(GtRenameVariableFixItAction forCoder: coderModel node: aVariableNode)
+						newName: each ]).
 
 	^ theFixitActions
 ]

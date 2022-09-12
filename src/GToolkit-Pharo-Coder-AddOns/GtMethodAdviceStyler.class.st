@@ -86,11 +86,6 @@ GtMethodAdviceStyler >> isForWorkspace: aBoolean [
 	isForWorkspace := aBoolean
 ]
 
-{ #category : #accessing }
-GtMethodAdviceStyler >> sourceCoder [
-	^ self coderViewModel coderModel
-]
-
 { #category : #styling }
 GtMethodAdviceStyler >> style: aText ast: theAst [
 	hasRefactoring := nil.
@@ -110,7 +105,7 @@ GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 		typeOf: aGtPharoProgramNode
 		in: (isForWorkspace
 				ifTrue: [ self coderViewModel selfObject class ]
-				ifFalse: [ self sourceCoder behavior ])
+				ifFalse: [ self coderModel behavior ])
 		bindings: (variableBindings
 				ifNil: [ self coderViewModel compositeVariableBindings ])
 ]

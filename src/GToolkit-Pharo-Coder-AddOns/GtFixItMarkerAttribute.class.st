@@ -16,8 +16,3 @@ GtFixItMarkerAttribute >> fixItAttribute [
 GtFixItMarkerAttribute >> fixItAttribute: aFixItAttribute [
 	fixItAttribute := aFixItAttribute
 ]
-
-{ #category : #opening }
-GtFixItMarkerAttribute >> togglePopup [
-	^ fixItAttribute ifNil: [ false ] ifNotNil: [ fixItAttribute togglePopup ]
-]

@@ -10,8 +10,8 @@ GtSendNotUsedAdvice class >> isAbstract [
 ]
 
 { #category : #private }
-GtSendNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {GtRemoveMessageFixItAction forCoder: aCriticStyler coderModel node: aNode}
+GtSendNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtRemoveMessageFixItAction forCoder: coderModel node: aNode}
 ]
 
 { #category : #accessing }

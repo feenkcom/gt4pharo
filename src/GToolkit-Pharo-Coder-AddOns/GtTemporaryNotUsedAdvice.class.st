@@ -23,8 +23,8 @@ GtTemporaryNotUsedAdvice >> finish: aNode from: criticRunner [
 ]
 
 { #category : #accessing }
-GtTemporaryNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {GtRemoveTemporaryFixItAction forCoder: aCriticStyler coderModel node: aNode}
+GtTemporaryNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtRemoveTemporaryFixItAction forCoder: coderModel node: aNode}
 ]
 
 { #category : #accessing }

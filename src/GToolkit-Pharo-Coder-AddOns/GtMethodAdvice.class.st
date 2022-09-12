@@ -49,6 +49,11 @@ GtMethodAdvice >> description [
 ]
 
 { #category : #styling }
+GtMethodAdvice >> descriptionBlock [
+	^ [ :editorElement | self descriptionWithEditor: editorElement ]
+]
+
+{ #category : #styling }
 GtMethodAdvice >> descriptionWithEditor: anEditorElement [
 	| text browseAttribute |
 	text := self description asRopedText.
@@ -78,8 +83,17 @@ GtMethodAdvice >> finish: aNode from: criticRunner [
 ]
 
 { #category : #styling }
-GtMethodAdvice >> fixItActionsFor: aNode using: aCriticStyler [
+GtMethodAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
 	^ #()
+]
+
+{ #category : #styling }
+GtMethodAdvice >> fixItActionsForNode: aNode styler: aCriticStyler [
+	^ MessageSend
+		receiver: self
+		selector: #fixItActionsForNode:coderModel:
+		arguments: {aNode.
+				aCriticStyler coderModel}
 ]
 
 { #category : #styling }
@@ -141,8 +155,8 @@ GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 			label: self name;
 			hoverMarker: hoverMarker;
 			hoverAttribute: hoverAttribute;
-			description: [ :editorElement | self descriptionWithEditor: editorElement ];
-			fixItActions: [ self fixItActionsFor: aNode using: aCriticStyler ];
+			description: self descriptionBlock;
+			fixItActions: (self fixItActionsForNode: aNode styler: aCriticStyler);
 			yourself.
 	hoverMarker fixItAttribute: fixItAttribute.
 	aCriticStyler

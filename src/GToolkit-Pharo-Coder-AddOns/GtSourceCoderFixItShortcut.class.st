@@ -25,10 +25,17 @@ GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorE
 	| text |
 	text := aBrTextEditor text.
 	aBrTextEditor cursors
-		do: [ :each | 
-			(each position between: 1 and: text size)
-				ifTrue: [ (text attributesAt: each position)
-						do: [ :attr | 
-							(attr isKindOf: GtFixItMarkerAttribute)
-								ifTrue: [ attr togglePopup ifTrue: [ ^ self ] ] ] ] ]
+		do: [ :cursor | 
+			(cursor position between: 1 and: text size)
+				ifTrue: [ (text attributesAt: cursor position)
+						do: [ :marker | 
+							(marker isKindOf: GtFixItMarkerAttribute)
+								ifTrue: [ aBrEditorElement
+										allChildrenBreadthFirstDetect: [ :element | 
+											(element isKindOf: GtFixItButton)
+												and: [ (element userData at: #fixItAttribute ifAbsent: [  ]) = marker fixItAttribute ] ]
+										ifFound: [ :element | 
+											element userData
+												at: #dropDownAptitude
+												ifPresent: [ :attr | ^ attr canShow ifTrue: [ attr show ] ifFalse: [ attr hide ] ] ] ] ] ] ]
 ]
