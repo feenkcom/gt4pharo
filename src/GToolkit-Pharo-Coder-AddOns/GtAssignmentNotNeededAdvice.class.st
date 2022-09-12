@@ -10,8 +10,8 @@ GtAssignmentNotNeededAdvice >> description [
 ]
 
 { #category : #private }
-GtAssignmentNotNeededAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {GtRemoveAssignmentFixItAction forCoder: aCriticStyler coderModel node: aNode}
+GtAssignmentNotNeededAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtRemoveAssignmentFixItAction forCoder: coderModel node: aNode}
 ]
 
 { #category : #private }

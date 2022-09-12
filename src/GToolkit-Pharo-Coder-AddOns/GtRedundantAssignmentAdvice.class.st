@@ -10,8 +10,8 @@ GtRedundantAssignmentAdvice >> description [
 ]
 
 { #category : #private }
-GtRedundantAssignmentAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {GtRemoveValueFixItAction forCoder: aCriticStyler coderModel node: aNode}
+GtRedundantAssignmentAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtRemoveValueFixItAction forCoder: coderModel node: aNode}
 ]
 
 { #category : #testing }

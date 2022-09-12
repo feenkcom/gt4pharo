@@ -10,10 +10,8 @@ GtUnoptimizedConditionalAdvice >> description [
 ]
 
 { #category : #private }
-GtUnoptimizedConditionalAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {GtReorderConditionalsFixItAction
-			forCoder: aCriticStyler coderModel
-			node: aNode}
+GtUnoptimizedConditionalAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtReorderConditionalsFixItAction forCoder: coderModel node: aNode}
 ]
 
 { #category : #styling }

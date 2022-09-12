@@ -10,10 +10,8 @@ GtUnoptimizedToDoAdvice >> description [
 ]
 
 { #category : #private }
-GtUnoptimizedToDoAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {(GtRemoveParenthesisFixItAction
-			forCoder: aCriticStyler coderModel
-			node: aNode receiver)
+GtUnoptimizedToDoAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {(GtRemoveParenthesisFixItAction forCoder: coderModel node: aNode receiver)
 			description: 'Convert to optimized #' , aNode receiver selector , aNode selector;
 			yourself}
 ]

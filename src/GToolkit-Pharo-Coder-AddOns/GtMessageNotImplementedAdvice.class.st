@@ -10,23 +10,32 @@ GtMessageNotImplementedAdvice >> description [
 ]
 
 { #category : #private }
-GtMessageNotImplementedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	| actions type |
+GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderModel: coderModel type: type [
+	| actions |
 	actions := OrderedCollection new.
-	type := aCriticStyler
-			typeOf: (aNode isMessage
-					ifTrue: [ aNode parent receiver ]
-					ifFalse: [ aNode parent arguments last ]).
 	type
 		ifNotNil: [ actions
-				add: ((GtDefineMethodFixItAction forCoder: aCriticStyler coderModel node: aNode)
+				add: ((GtDefineMethodFixItAction forCoder: coderModel node: aNode)
 						classOrMetaClass: type) ].
 	actions
 		addAll: (self
 				potentialRenameActionsFor: aNode
 				type: type
-				using: aCriticStyler).
+				coderModel: coderModel).
 	^ actions
+]
+
+{ #category : #accessing }
+GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode styler: aCriticStyler [
+	^ MessageSend
+		receiver: self
+		selector: #fixItActionsForNode:coderModel:type:
+		arguments: {aNode.
+				aCriticStyler coderModel.
+				aCriticStyler
+					typeOf: (aNode isMessage
+							ifTrue: [ aNode parent receiver ]
+							ifFalse: [ aNode parent arguments last ])}
 ]
 
 { #category : #testing }
@@ -58,7 +67,7 @@ GtMessageNotImplementedAdvice >> name [
 ]
 
 { #category : #private }
-GtMessageNotImplementedAdvice >> potentialRenameActionsFor: aNode type: type using: aCriticStyler [
+GtMessageNotImplementedAdvice >> potentialRenameActionsFor: aNode type: type coderModel: coderModel [
 	| selectors block args currentSelector index minRating |
 	selectors := OrderedCollection new.
 	currentSelector := aNode isMessage
@@ -87,7 +96,7 @@ GtMessageNotImplementedAdvice >> potentialRenameActionsFor: aNode type: type usi
 				yourself) do: block ].
 	^ selectors
 		collect: [ :each | 
-			(GtRenameMessageFixItAction forCoder: aCriticStyler coderModel node: aNode)
+			(GtRenameMessageFixItAction forCoder: coderModel node: aNode)
 				selector: each key;
 				yourself ]
 ]

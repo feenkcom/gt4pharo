@@ -15,9 +15,9 @@ GtMethodNotUsedAdvice >> description [
 ]
 
 { #category : #private }
-GtMethodNotUsedAdvice >> fixItActionsFor: aNode using: aCriticStyler [
-	^ {(GtRemoveMethodFixItAction forCoder: aCriticStyler coderModel node: aNode)
-			behavior: aCriticStyler behavior;
+GtMethodNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {(GtRemoveMethodFixItAction forCoder: coderModel node: aNode)
+			behavior: coderModel behavior;
 			yourself}
 ]
 
