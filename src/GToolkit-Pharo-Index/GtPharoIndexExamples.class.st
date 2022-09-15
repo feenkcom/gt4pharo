@@ -146,6 +146,16 @@ GtPharoIndexExamples >> implementer [
 	^ impls
 ]
 
+{ #category : #accessing }
+GtPharoIndexExamples >> lowercaseWordSearch [
+	<gtExample>
+	| results |
+	results := (GtPharoIndex current asyncClassNamesForWord: 'prefixtr') toArray
+			wait.	"assumes no classes have 'prefixtr' as a word"
+	self assert: (results includes: #GtPrefixTree).
+	^ results
+]
+
 { #category : #examples }
 GtPharoIndexExamples >> messageSendInsideBlock [
 	<gtExample>
