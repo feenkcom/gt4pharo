@@ -268,3 +268,44 @@ GtPharoIndexExamples >> symbolIsAlsoClassReference [
 	self assert: (refs includes: thisContext method).
 	^ refs
 ]
+
+{ #category : #accessing }
+GtPharoIndexExamples >> wordSearchOrdering [
+	<gtExample>
+	| prefixTree wordTree results names words |
+	prefixTree := GtPrefixTree new.
+	wordTree := GtNamesPrefixTree new.
+	names := #('OneTwoThreeFour' 'TwoThreeFourOne' 'ThreeFourOneTwo' 'FourOneTwoThree').
+	words := #('one' 'two' 'three' 'four').
+	prefixTree addAll: names.
+	prefixTree add: 'One'.
+	wordTree addAll: words.
+	names
+		do: [ :each | words do: [ :word | (wordTree nodeFor: word) addName: each ] ].
+	(wordTree nodeFor: 'one') addName: 'One'.
+
+	results := (GtPharoIndex current
+			asyncNamesForWord: 'One'
+			usingPrefixCache: prefixTree
+			andWordCache: wordTree) toArray wait.
+	self assert: results first = 'One'.
+	self assert: results second = 'OneTwoThreeFour'.
+	self assert: results size = 5.
+
+	results := (GtPharoIndex current
+			asyncNamesForWord: 'OneTwo'
+			usingPrefixCache: prefixTree
+			andWordCache: wordTree) toArray wait.
+	self assert: results first = 'OneTwoThreeFour'.
+	self assert: results last = 'TwoThreeFourOne'.
+	self assert: results size = 4.
+
+	results := (GtPharoIndex current
+			asyncNamesForWord: 'ThreeOneTwo'
+			usingPrefixCache: prefixTree
+			andWordCache: wordTree) toArray wait.
+	self assert: results first = 'ThreeFourOneTwo'.
+	self assert: results size = 4.
+
+	^ results
+]
