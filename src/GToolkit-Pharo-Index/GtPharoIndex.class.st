@@ -153,12 +153,28 @@ GtPharoIndex >> asyncOrderedSearchForWords: aString in: prefixTree [
 ]
 
 { #category : #private }
+GtPharoIndex >> asyncSearchForSubstringWords: aString in: prefixTree [
+	"aString isn't a word, so look for other words in aString that are followed by the rest of aString"
+
+	^ ((aString size - 1 to: 1 by: -1) asAsyncStream
+		collect: [ :i | 
+			(prefixTree nodeFor: (aString copyFrom: 1 to: i))
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | 
+					node namesCollection asArray asAsyncStream
+						select: [ :each | self does: each includeString: aString ] ] ])
+		flatten withoutDuplicates
+]
+
+{ #category : #private }
 GtPharoIndex >> asyncSearchForWords: aString in: prefixTree [
 	| words longest |
 	words := self searchWordsFrom: aString.
 	longest := words isEmpty
 			ifTrue: [ '' ]
 			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
+	(words size = 1 and: [ (prefixTree first: 1 startingWith: longest) isEmpty ])
+		ifTrue: [ ^ self asyncSearchForSubstringWords: longest in: prefixTree ].
 	^ ((prefixTree asyncStreamStartingWith: longest)
 		collect: [ :each | 
 			(prefixTree nodeFor: each)
