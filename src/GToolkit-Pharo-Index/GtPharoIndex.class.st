@@ -94,20 +94,10 @@ GtPharoIndex >> addSymbolReferencesTo: newClassName [	| addedRefs |
 
 { #category : #accessing }
 GtPharoIndex >> asyncClassNamesForWord: aString [
-	| words longest |
-	words := self searchWordsFrom: aString.
-	longest := words isEmpty
-			ifTrue: [ '' ]
-			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
-	^ ((globalCache asyncWeightedStreamStartingWith: aString trim caseSensitive: false)
-		merge: ((classWordCache asyncStreamStartingWith: longest)
-				collect: [ :each | 
-					(classWordCache nodeFor: each)
-						ifNil: [ #() asAsyncStream ]
-						ifNotNil: [ :node | 
-							node namesCollection asArray asAsyncStream
-								select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
-				flatten) withoutDuplicates
+	^ self
+		asyncNamesForWord: aString
+		usingPrefixCache: globalCache
+		andWordCache: classWordCache
 ]
 
 { #category : #accessing }
@@ -126,22 +116,65 @@ GtPharoIndex >> asyncImplementersForWord: aString [
 				ifNotNil: [ :node | node implementersCollection asAsyncStream ] ]) flatten
 ]
 
-{ #category : #accessing }
-GtPharoIndex >> asyncSelectorsForWord: aString [
+{ #category : #private }
+GtPharoIndex >> asyncNamesForWord: aString usingPrefixCache: prefixCache andWordCache: wordCache [
+	"Ordered the results by first ones with exact matches, and then with case-insensitve prefix match, 
+	and finally by word matches."
+
+	| wordStream trimmedString includesString |
+	trimmedString := aString trim.
+	wordStream := self asyncOrderedSearchForWords: trimmedString in: wordCache.
+	includesString := prefixCache includes: trimmedString.
+	^ (((includesString ifTrue: [ {trimmedString} ] ifFalse: [ #() ]) asAsyncStream
+		merge: (prefixCache asyncWeightedStreamStartingWith: trimmedString caseSensitive: false))
+		merge: wordStream) withoutDuplicates
+]
+
+{ #category : #private }
+GtPharoIndex >> asyncOrderedSearchForWords: aString in: prefixTree [
+	"Order the results by 1) names that begin with aString, 2) names that have aString in them,
+	3) names that have the words from aString in order and begins with the first word in aString,
+	4) names that have the words from aString in order, and 5) names that have all the words from
+	aString in any order. The stream returned may (and likely will) contain duplicates."
+
+	| matchStream substringMatchStream wordsInOrderStream startingSubstringMatchStream startingWordsInOrderStream |
+	matchStream := (self asyncSearchForWords: aString in: prefixTree) cached.
+	substringMatchStream := (matchStream asyncSimilarCopy
+			select: [ :each | self does: each includeString: aString ]) cached.
+	startingSubstringMatchStream := substringMatchStream asyncSimilarCopy
+			select: [ :each | self does: each beginWithWord: aString ].
+	wordsInOrderStream := (matchStream asyncSimilarCopy
+			select: [ :each | self does: each includeWordsInOrder: aString ]) cached.
+	startingWordsInOrderStream := wordsInOrderStream asyncSimilarCopy
+			select: [ :each | self does: each beginWithWord: aString ].
+	^ (((startingSubstringMatchStream merge: substringMatchStream)
+		merge: startingWordsInOrderStream) merge: wordsInOrderStream)
+		merge: matchStream
+]
+
+{ #category : #private }
+GtPharoIndex >> asyncSearchForWords: aString in: prefixTree [
 	| words longest |
 	words := self searchWordsFrom: aString.
 	longest := words isEmpty
 			ifTrue: [ '' ]
 			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
-	^ ((selectorCache asyncWeightedStreamStartingWith: aString trim caseSensitive: false)
-		merge: ((selectorWordCache asyncStreamStartingWith: longest)
-				collect: [ :each | 
-					(selectorWordCache nodeFor: each)
-						ifNil: [ #() asAsyncStream ]
-						ifNotNil: [ :node | 
-							node namesCollection asArray asAsyncStream
-								select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
-				flatten) withoutDuplicates
+	^ ((prefixTree asyncStreamStartingWith: longest)
+		collect: [ :each | 
+			(prefixTree nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | 
+					node namesCollection asArray asAsyncStream
+						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
+		flatten withoutDuplicates
+]
+
+{ #category : #accessing }
+GtPharoIndex >> asyncSelectorsForWord: aString [
+	^ self
+		asyncNamesForWord: aString
+		usingPrefixCache: selectorCache
+		andWordCache: selectorWordCache
 ]
 
 { #category : #accessing }
@@ -261,6 +294,38 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 									(addedRefs includes: each)
 										ifFalse: [ addedRefs add: each.
 											node addReference: each ] ] ] ] ]
+]
+
+{ #category : #testing }
+GtPharoIndex >> does: aSymbol beginWithWord: aString [
+	| string |
+	string := aSymbol asString asLowercase.
+	self
+		wordsIn: aString
+		do: [ :each | ^ string beginsWith: each asLowercase ]
+		minSize: 1
+		includeSubStrings: false.
+	^ false
+]
+
+{ #category : #testing }
+GtPharoIndex >> does: aSymbol includeString: aString [
+	^ aSymbol includesSubstring: aString caseSensitive: false
+]
+
+{ #category : #testing }
+GtPharoIndex >> does: aSymbol includeWordsInOrder: wordString [
+	| string index |
+	string := aSymbol asString asLowercase.
+	index := 1.
+	self
+		wordsIn: wordString
+		do: [ :each | 
+			index := string indexOfSubCollection: each asLowercase startingAt: index.
+			index > 0 ifTrue: [ index := index + each size ] ifFalse: [ ^ false ] ]
+		minSize: 1
+		includeSubStrings: false.
+	^ true
 ]
 
 { #category : #testing }
