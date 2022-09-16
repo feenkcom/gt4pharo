@@ -661,19 +661,22 @@ GtPharoIndex >> wordsIn: aSymbol do: aBlock [
 
 { #category : #private }
 GtPharoIndex >> wordsIn: aSymbol do: aBlock minSize: anInteger includeSubStrings: aBoolean [
-	| start end char size |
+	| start end char size firstIsDigit |
 	size := aSymbol size.
 	start := 1.
 	[ start <= size ]
-		whileTrue: [ [ start <= size and: [ (char := aSymbol at: start) isLetter not ] ]
+		whileTrue: [ [ start <= size
+				and: [ ((char := aSymbol at: start) isLetter or: [ char isDigit ]) not ] ]
 				whileTrue: [ start := start + 1 ].
 			start > size ifTrue: [ ^ self ].
 			end := start + 1.
 			char isUppercase
 				ifTrue: [ [ end <= size and: [ (aSymbol at: end) isUppercase ] ]
 						whileTrue: [ end := end + 1 ] ].
+			firstIsDigit := char isDigit.
 			[ end <= size
-				and: [ (char := aSymbol at: end) isLowercase or: [ char isDigit ] ] ]
+				and: [ char := aSymbol at: end.
+					firstIsDigit ifTrue: [ char isDigit ] ifFalse: [ char isLowercase ] ] ]
 				whileTrue: [ end := end + 1 ].
 			end := end - 1.
 			[ end - start + 1 >= anInteger ]
