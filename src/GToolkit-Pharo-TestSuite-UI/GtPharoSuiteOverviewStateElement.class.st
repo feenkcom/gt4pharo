@@ -19,7 +19,7 @@ GtPharoSuiteOverviewStateElement >> initialize [
 		vFitContent;
 		alignCenterLeft.
 
-	icon := GtPharoTestCaseUtility newColoredIcon: BlBackground transparent.
+	icon := GtPharoTestCaseUtility newColoredIconWithMargin: BlBackground transparent.
 	name := BrLabel new
 		aptitude: BrGlamorousLabelAptitude.
 
