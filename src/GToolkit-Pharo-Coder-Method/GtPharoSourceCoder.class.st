@@ -606,8 +606,9 @@ GtPharoSourceCoder >> primitiveAnonymousCompile: aSourceString inContext: aGtPha
 	isForMethod := self isForMethod and: [
 		aGtPharoSourceCoderEvaluationContext evaluatedInterval = (1 to: aGtPharoSourceCoderEvaluationContext sourceString size) ].
 	
-	isForMethod
-		ifFalse: [ aGtPharoSourceCoderEvaluationContext withSnippetBindingStrategy ].
+	(isForMethod not
+		and: [ aGtPharoSourceCoderEvaluationContext receiverObject isNil ])
+		ifTrue: [ aGtPharoSourceCoderEvaluationContext withSnippetBindingStrategy ].
 
 	methodClass := aGtPharoSourceCoderEvaluationContext runtimeContext
 		ifNil: [ aGtPharoSourceCoderEvaluationContext receiverObject class ]
