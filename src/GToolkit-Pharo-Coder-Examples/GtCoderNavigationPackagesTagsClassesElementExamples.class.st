@@ -186,7 +186,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
 	self 
 		assertSelectionOfPackage: nil
-		tag: self uncategorizedPackageTag 
+		tag: nil 
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
 	^ anElement
@@ -201,7 +201,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 	self putInSpace: anElement.
 	self 
 		assertSelectionOfPackage: nil
-		tag: self uncategorizedPackageTag 
+		tag: nil 
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
 	^ anElement
