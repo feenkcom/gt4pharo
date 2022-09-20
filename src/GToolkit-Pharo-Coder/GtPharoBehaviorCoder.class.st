@@ -148,7 +148,10 @@ GtPharoBehaviorCoder >> package [
 
 { #category : #accessing }
 GtPharoBehaviorCoder >> packageTag [
-	^ self package classTagForClass: self theClass
+	| tag |
+	tag := self package classTagForClass: self theClass.
+	tag isRoot ifTrue: [ ^ nil ].
+	^ tag
 ]
 
 { #category : #printing }
