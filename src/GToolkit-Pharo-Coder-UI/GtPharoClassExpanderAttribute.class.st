@@ -19,14 +19,17 @@ GtPharoClassExpanderAttribute >> buildBehaviorCoder [
 	| editorElement coder |
 	coder := GtPharoBehaviorCoder forClass: classToExpand.
 	coder subscribeToSystem.
-	editorElement := coder asElement.
+	editorElement := coder asElement
+			navigationModelForToolbar: (GtCoderNavigationModel default selectClass: classToExpand).
 	editorElement background: Color white.
-	editorElement aptitude: (BrShadowAptitude
-			+ (BrGlamorousWithVerticalResizerAptitude new beBottom; yourself)).
+	editorElement
+		aptitude: BrShadowAptitude
+				+ (BrGlamorousWithVerticalResizerAptitude new
+						beBottom;
+						yourself).
 	editorElement
 		height: 400;
-		margin:
-			(BlInsets
+		margin: (BlInsets
 				top: 3
 				right: 10
 				bottom: 10
