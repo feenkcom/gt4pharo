@@ -35,6 +35,19 @@ GtPharoSnippetCoder >> forSource: aString [
 	self sourceCode: (GtCoderExplicitStringSource new source: aString)
 ]
 
+{ #category : #accessing }
+GtPharoSnippetCoder >> implicitVariableNames [
+	| variables |
+	variables := Set new.
+	self astAwait
+		allNodesDo: [ :each | 
+			(each isVariable
+				and: [ each parent isAssignment
+						and: [ each parent variable == each and: [ each whoDefines isNil ] ] ])
+				ifTrue: [ variables add: each name source ] ].
+	^ variables
+]
+
 { #category : #'private - event handling' }
 GtPharoSnippetCoder >> implicitVariableReferencesTo: aString do: aBlock [
 
