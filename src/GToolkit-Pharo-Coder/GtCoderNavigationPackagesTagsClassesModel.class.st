@@ -233,18 +233,17 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
-	| aCoder |
-	(self showPackage: aClass package)
-		ifFalse: [ ^ self ].
-	(coder isForClass and: [ coder theClass = aClass ])
-		ifTrue: [ ^ self ].
+	| aCoder aTag |
+	(self showPackage: aClass package) ifFalse: [ ^ self ].
+	(coder isForClass and: [ coder theClass = aClass ]) ifTrue: [ ^ self ].
 	aCoder := GtPharoBehaviorCoder forClass: aClass.
 	self assertCoder: aCoder.
 	self coder: aCoder.
+	aTag := aClass package classTagForClass: aClass.
 	self
 		notifyClassSelected: aClass
 		package: aClass package
-		tag: (aClass package classTagForClass: aClass)
+		tag: (aTag isRoot ifTrue: [ nil ] ifFalse: [ aTag ])
 ]
 
 { #category : #'api - selection' }
