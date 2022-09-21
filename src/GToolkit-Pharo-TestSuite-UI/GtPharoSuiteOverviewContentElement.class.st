@@ -105,11 +105,7 @@ GtPharoSuiteOverviewContentElement >> newPlayButton [
 		icon: BrGlamorousVectorIcons play;
 		label: 'Run';
 		action: [ :aButton | self playFrom: aButton ];
-		when: BlMouseDownEvent
-			do: [ :anEvent | 
-				(anEvent modifiers isAlt or: [ anEvent modifiers isCtrl ])
-					ifTrue: [ self suiteViewModel inspect.
-						anEvent consumed: true ] ];
+		addAptitude: (GtPhlowBrowseDefinitionAptitude new definition: [ self suiteViewModel ]);
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				whenPending: [ :aButton | 
