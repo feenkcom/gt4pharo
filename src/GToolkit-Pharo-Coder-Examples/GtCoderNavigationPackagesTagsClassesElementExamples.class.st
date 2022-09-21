@@ -186,7 +186,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
 	self 
 		assertSelectionOfPackage: nil
-		tag: self uncategorizedPackageTag 
+		tag: nil 
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
 	^ anElement
@@ -200,8 +200,8 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
 	self putInSpace: anElement.
 	self 
-		assertSelectionOfPackage: nil
-		tag: self uncategorizedPackageTag 
+		assertSelectionOfPackage: self simplePackage
+		tag: nil  
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
 	^ anElement
@@ -236,6 +236,12 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithTagsAndWithout
 GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithoutTagsAndExtensions [
 	<gtExample>
 	^ 'GToolkit-Coder-Examples-SystemS1' asPackage 
+]
+
+{ #category : #'examples - system items' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> simplePackage [
+	<gtExample>
+	^ 'GToolkit-Coder-Examples' asPackage 
 ]
 
 { #category : #'examples - system items' }
