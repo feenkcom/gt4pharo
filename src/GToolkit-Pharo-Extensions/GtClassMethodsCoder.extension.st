@@ -1,13 +1,13 @@
 Extension { #name : #GtClassMethodsCoder }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtClassMethodsCoder >> gtSpotterMethodsFor: aStep [
+GtClassMethodsCoder >> gtSpotterMethodsFor: aSearch [
 	<gtSearch>
-	aStep listProcessor
+	^ aSearch list
 		priority: 10;
 		title: 'Methods';
-		allCandidates: [ self coders ];
+		items: [ self coders ];
 		itemName: [ :method | method selector ];
 		previewElement: [ :coder | coder previewElement ];
-		filter: GtFilterSubstring
+		filterBySubstring
 ]
