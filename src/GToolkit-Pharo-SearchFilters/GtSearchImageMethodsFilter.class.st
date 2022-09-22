@@ -4,6 +4,12 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
+{ #category : #accessing }
+GtSearchImageMethodsFilter class >> allMethods [
+	<gtSearchFilter>
+	^ self new labeled: 'All Methods'
+]
+
 { #category : #comparing }
 GtSearchImageMethodsFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
@@ -18,9 +24,7 @@ GtSearchImageMethodsFilter >> classesDo: aBlock [
 
 { #category : #testing }
 GtSearchImageMethodsFilter >> includesMethod: aCompiledMethod [
-	self methodsDo: [ :anotherMethod | 
-		anotherMethod = aCompiledMethod ifTrue: [ ^ true ] ].
-	^ false
+	^ aCompiledMethod isInstalled
 ]
 
 { #category : #enumerating }
