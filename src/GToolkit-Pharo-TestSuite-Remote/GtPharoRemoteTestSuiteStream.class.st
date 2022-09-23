@@ -168,7 +168,7 @@ GtPharoRemoteTestSuiteStream >> start [
 		ifFalse: [ Stdio stdout << '*** Async thingy error'; lf.
 			self error: 'Unknown example type' ] ] ].
 	testRegistrationStream wait.
-	job := GtRrExampleTestFactory new 
+	job := GtRrChecksFactory new 
 		addSUnitTestNames: testNames;
 		addExampleTestNames: exampleNames;
 		setNotInImage;
