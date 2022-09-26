@@ -22,9 +22,14 @@ GtSearchImageMethodsFilter >> classesDo: aBlock [
 	GtPharoSystemTraverser default allClassesAndTraitsDo: aBlock
 ]
 
+{ #category : #accessing }
+GtSearchImageMethodsFilter >> hash [
+	^ self class hash
+]
+
 { #category : #testing }
 GtSearchImageMethodsFilter >> includesMethod: aCompiledMethod [
-	^ aCompiledMethod isInstalled
+	^ true
 ]
 
 { #category : #enumerating }
