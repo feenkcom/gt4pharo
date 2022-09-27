@@ -8,3 +8,13 @@ GtSearchMethodsWithPackagePatternFilter class >> filterDescriptorFor: aMethodsCo
 		order: 30;
 		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder packageNames ] ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodsWithPackagePatternFilter class >> packageFilterDescriptor [
+	^ GtFilterDescriptor new
+		creator: [ :value | self pattern: value ];
+		named: 'Package';
+		order: 30;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: RPackageOrganizer default packageNames ] ]
+]
