@@ -2951,7 +2951,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2968,14 +2967,18 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 	temp := 42.
 	^ OrderedCollection with: self with: anObject with: temp factorial printString , anObject printString')
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
+		onModel;
+		play.
 		
-	aScripter wait forEmptySpaceTaskQueue.
+	aScripter wait 
+		forEmptySpaceTaskQueue; 
+		play.
 
 	^ aScripter syncContinue
 ]
@@ -2983,7 +2986,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_02_select [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordMoveMethod_01_setup.
