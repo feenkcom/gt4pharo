@@ -74,8 +74,8 @@ GtCreateBehaviorElementByScripterExamples >> checkDefaultCreatorForClass [
 		aStep check
 			label: 'Check save button is disabled';
 			satisfies: [ :aButton | aButton isDisabled ];
-			id: GtPharoCreateBehaviorElement saveButtonName ];
-			play.
+			id: GtPharoCreateBehaviorElement saveButtonName ;
+			play ].
 
 	^ aScripter
 ]
