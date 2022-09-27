@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenamerExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #accessing }
@@ -56,7 +56,7 @@ GtRenamerExamples >> methodText [
 GtRenamerExamples >> scripter [
 	<gtExample>
 	
-	^ BlDevScripter new
+	^ BlScripter new
 ]
 
 { #category : #examples }

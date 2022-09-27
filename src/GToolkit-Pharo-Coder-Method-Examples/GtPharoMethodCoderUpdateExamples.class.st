@@ -35,7 +35,7 @@ GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderCheckCollapsedText [
 	aCoderViewModel collapse; withoutHeader.
 	aCoderElement := aCoderViewModel asElement.
 	
-	aScripter := BlDevScripter new.
+	aScripter := BlScripter new.
 	aScripter set key: #coder value: [ aCoder ]; play.
 	aScripter set key: #coderViewModel value: [ aCoderViewModel ]; play.
 	aScripter element: aCoderElement.

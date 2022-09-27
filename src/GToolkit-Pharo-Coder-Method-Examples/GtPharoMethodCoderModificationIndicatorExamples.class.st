@@ -9,7 +9,7 @@ GtPharoMethodCoderModificationIndicatorExamples >> cleanMethodCoder [
 	<gtExample>
 	| aScripter |
 
-	aScripter := BlDevScripter new element: self methodCoderElement.
+	aScripter := BlScripter new element: self methodCoderElement.
 	
 	aScripter check
 		id: GtTextualCoderModificationIndicatorId;
