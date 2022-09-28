@@ -274,7 +274,7 @@ GtPharoCompleterExamples >> completeVariableFromBinding [
 	<gtExample>
 	
 	| aScripter aCompletionController anEditor strategy bindings name |
-	aScripter := BlDevScripter new.
+	aScripter := BlScripter new.
 	anEditor := (BrEditor new)
 		aptitude: BrGlamorousCodeEditorAptitude new + BrGlamorousTextAreaSpacingAptitude new;
 		text: ''.
@@ -489,7 +489,7 @@ GtPharoCompleterExamples >> smalltalkCompleter [
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> smalltalkCompletionMethodEditor [
 	| aCompletionController anEditor aScripter |
-	aScripter := BlDevScripter new.
+	aScripter := BlScripter new.
 	anEditor := (BrEditor new)
 		aptitude: BrGlamorousCodeEditorAptitude new + BrGlamorousTextAreaSpacingAptitude new;
 		text: ''.

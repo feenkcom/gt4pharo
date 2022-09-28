@@ -12,7 +12,6 @@ Class {
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
-	<noTest>
 	| filter aScripter |
 
 	filter := GtSearchIntersectionFilter new
@@ -51,7 +50,6 @@ GtPharoMethodCoderByScripterExamples >> basicMethodCoder [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethod [
 	<gtExample>
-	<noTest>
 
 	^ GtPharoMethodCoderExamples >> #?
 ]
@@ -59,7 +57,6 @@ GtPharoMethodCoderByScripterExamples >> binaryMethod [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoder [
 	<gtExample>
-	<noTest>
 	| aMethod aCoder |
 	aMethod := self binaryMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -69,11 +66,10 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoder [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [ self binaryMethodCoder ].
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - binary method' }
@@ -820,7 +816,6 @@ GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> coderOnMethod: aMethod [
 	<gtExample>
-	<noTest>
 	| aCoder |
 	aCoder := self basicMethodCoder.
 	aCoder forMethod: aMethod.
@@ -1373,7 +1368,6 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2083,7 +2077,6 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_04_click_convert [
 { #category : #'examples - create accessors' }
 GtPharoMethodCoderByScripterExamples >> forCreateAccessors_03_hover_create_accessors [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAbstractInstVar_02_cursor.
@@ -2138,7 +2131,6 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2167,7 +2159,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_02_select [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_01_setup.
@@ -2180,8 +2171,8 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_02_select [
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check selected text';
+	aScripter assert
+		label: 'Assert selected text';
 		value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
 			equals: [ 'self printString' ];
 		id: GtSourceCoderEditorId;
@@ -2193,7 +2184,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_02_select [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_03_context_menu [
 	<gtExample>
-	<noTest>
 	
 	^ self openContextMenu: self forExtractTemp_02_select
 ]
@@ -2201,7 +2191,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_03_context_menu [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_04_hover_extract_temp [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_03_context_menu.
@@ -2209,17 +2198,15 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_04_hover_extract_temp [
 	aScripter mouseMoveOver
 		label: 'Hover extract temp';
 		onSpaceRoot;
-		id: GtSourceCoderExtractTempVarContextMenuItemId.
+		id: GtSourceCoderExtractTempVarContextMenuItemId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_04_hover_extract_temp.
@@ -2230,8 +2217,8 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 		id: GtSourceCoderExtractTempVarContextMenuItemId;
 		play.
 	
-	aScripter check
-		label: 'Check current source in coder model';
+	aScripter assert
+		label: 'Assert current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 'method1
 	| _ |
@@ -2240,20 +2227,20 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 		onModel;
 		play.
 		
-	aScripter check
-		label: 'Check there is no selected text';
+	aScripter assert
+		label: 'Assert there is no selected text';
 		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source code modified';
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
 	
-	aScripter check
-		label: 'Check rename editor attribute';
+	aScripter assert
+		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -2267,27 +2254,27 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor is not focused';
+	aScripter assert
+		label: 'Assert source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor has focus';
+	aScripter assert
+		label: 'Assert source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check variable name editor source code';
+	aScripter assert
+		label: 'Assert variable name editor source code';
 		value: [ :aNameEditor | aNameEditor text asString ] equals: '_';
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 
-	aScripter check
-		label: 'Check variable name editor has focus';
+	aScripter assert
+		label: 'Assert variable name editor has focus';
 		satisfies: [ :aNameEditor | aNameEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
@@ -2299,7 +2286,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_06_type_variable_name [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forExtractTemp_05_click_extract_temp.
@@ -2483,7 +2469,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_04_click_inline_se
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2492,27 +2477,27 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+		
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 '
 	^ self isNil'];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineMessageSend_01_setup.
@@ -2531,7 +2516,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_02_cursor [
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_03_hover_inline_message_send [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineMessageSend_02_cursor.
@@ -2539,11 +2523,10 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_03_hover_inline_mes
 	aScripter mouseMoveOver
 		label: 'Hover inline message send';
 		onSpaceRoot;
-		id: #'context-menu--inline-message'.
+		id: #'context-menu--inline-message';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline message send' }
@@ -2579,7 +2562,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_mes
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2588,27 +2570,27 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+	
 	aScripter do
 		label: 'type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 'Unique: arg
 	^ arg printString' ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineParameter_01_setup.
@@ -2629,7 +2611,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_02_cursor [
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_03_hover_inline_parameter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineParameter_02_cursor.
@@ -2637,17 +2618,15 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_03_hover_inline_param
 	aScripter mouseMoveOver
 		label: 'Hover inline parameter';
 		onSpaceRoot;
-		id: #'context-menu--inline-parameter'.
+		id: #'context-menu--inline-parameter';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline parameter' }
 GtPharoMethodCoderByScripterExamples >> forInlineParameter_04_click_inline_parameter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineParameter_03_hover_inline_parameter.
@@ -2658,8 +2637,8 @@ GtPharoMethodCoderByScripterExamples >> forInlineParameter_04_click_inline_param
 		id: #'context-menu--inline-parameter';
 		play.
 	
-	aScripter check
-		label: 'Check refactoring changes attribute';
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -2951,7 +2930,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2968,22 +2946,21 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_01_setup [
 	temp := 42.
 	^ OrderedCollection with: self with: anObject with: temp factorial printString , anObject printString')
 		];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_02_select [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordMoveMethod_01_setup.
@@ -2998,8 +2975,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_02_select [
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check selected text';
+	aScripter assert
+		label: 'Assert selected text';
 		value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
 			equals: [ 'OrderedCollection' ];
 		id: GtSourceCoderEditorId;
@@ -3079,7 +3056,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3102,14 +3078,14 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	self checkFor: aScripter saveButtonEnabled: true.
 	self checkFor: aScripter discardButtonExists: false.
 	
-	aScripter check
-		label: 'Check editor is focused';
+	aScripter assert
+		label: 'Assert editor is focused';
 		satisfies: [ :anEditorElement | anEditorElement isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check cursor position';
+	aScripter assert
+		label: 'Assert cursor position';
 		value: [ :anEditorElement | anEditorElement editor cursors positions ] equals: [ #(0) ];
 		id: GtSourceCoderEditorId;
 		play.
@@ -3120,7 +3096,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forKeywordRename_01_setup.
@@ -3134,8 +3109,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	self checkFor: aScripter renameEditorExists: true.
 	self checkFor: aScripter discardButtonExists: false.
 
-	aScripter check
-		label: 'Check rename editor all selected';
+	aScripter assert
+		label: 'Assert rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
@@ -3250,7 +3225,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3874,7 +3848,6 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -3905,7 +3878,6 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forRemoveParameter_01_setup.
@@ -3921,7 +3893,6 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_parameter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forRemoveParameter_02_cursor.
@@ -3976,7 +3947,6 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -4008,7 +3978,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_02_select [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_01_setup.
@@ -4021,8 +3990,8 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_02_select [
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check selected text';
+	aScripter assert
+		label: 'Assert selected text';
 		value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
 			equals: [ '{1} := {1} + 42' format: { (aScripter model attributeNamed:  #dummyMethod) anyInstVarName } ];
 		id: GtSourceCoderEditorId;
@@ -4034,7 +4003,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_02_select [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_02_select.
@@ -4049,7 +4017,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_04_hover_extract_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_03_context_menu.
@@ -4057,17 +4024,15 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_04_hover_extract_meth
 	aScripter mouseMoveOver
 		label: 'Hover extract method';
 		onSpaceRoot;
-		id: GtMethodCoderExtractMethodContextMenuItemId.
+		id: GtMethodCoderExtractMethodContextMenuItemId;
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_04_hover_extract_method.
@@ -4078,8 +4043,8 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		id: GtMethodCoderExtractMethodContextMenuItemId;
 		play.
 	
-	aScripter check
-		label: 'Check current source in coder model';
+	aScripter assert
+		label: 'Assert current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 ('{1}: anObject
 	{2} := anObject.
@@ -4090,14 +4055,14 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		onModel;
 		play.
 		
-	aScripter check
-		label: 'Check source code modified';
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
 	
-	aScripter check
-		label: 'Check rename editor attribute';
+	aScripter assert
+		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -4108,8 +4073,8 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -4120,34 +4085,34 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor is not focused';
+	aScripter assert
+		label: 'Assert source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor has focus';
+	aScripter assert
+		label: 'Assert source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check method name editor source code';
+	aScripter assert
+		label: 'Assert method name editor source code';
 		value: [ :aNameEditor | aNameEditor text asString ] equals: '_';
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 		
-	aScripter check
-		label: 'Check method name editor selected text';
+	aScripter assert
+		label: 'Assert method name editor selected text';
 		value: [ :aNameEditor | aNameEditor editor selectedText asString ] equals: '_';
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 
-	aScripter check
-		label: 'Check method name editor has focus';
+	aScripter assert
+		label: 'Assert method name editor has focus';
 		satisfies: [ :aNameEditor | aNameEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;

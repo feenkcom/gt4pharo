@@ -23,59 +23,59 @@ GtCreateBehaviorElementByScripterExamples >> checkDefaultCreatorForClass [
 	aScripter := self scripterForClass.
 	
 	aScripter substep: 'Check initial state of the class creator' do: [ :aStep | 
-		aStep check
-			label: 'Check default new class name';
+		aStep assert
+			label: 'Assert default new class name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: 'NameOfSubclass';
 			id: GtCodeDefinition behaviorNameEditorName;
 			play.
 	
-		aStep check
-			label: 'Check default superclass name';
+		aStep assert
+			label: 'Assert default superclass name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: 'Object';
 			id: GtCodeDefinition behaviorSuperclassEditorName;
 			play.
 			
-		aStep check
-			label: 'Check default package name';
+		aStep assert
+			label: 'Assert default package name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: '';
 			id: GtCodeDefinition packageEditorName;
 			play.
 			
-		aStep check
-			label: 'Check default tag name';
+		aStep assert
+			label: 'Assert default tag name';
 			value: [ :aNameEditor | aNameEditor text asString ] equals: '';
 			id: GtCodeDefinition tagEditorName;
 			play.
 			
-		aStep check
-			label: 'Check default traits';
+		aStep assert
+			label: 'Assert default traits';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
 			id: GtCodeDefinition traitsEditorName;
 			play.
 			
-		aStep check
-			label: 'Check default slots';
+		aStep assert
+			label: 'Assert default slots';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
 			id: GtCodeDefinition slotsEditorName;
 			play.
 			
-		aStep check
-			label: 'Check default class variables';
+		aStep assert
+			label: 'Assert default class variables';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
 			id: GtCodeDefinition classVariablesEditorName;
 			play.
 			
-		aStep check
-			label: 'Check default shared pools';
+		aStep assert
+			label: 'Assert default shared pools';
 			value: [ :aTagger | aTagger tagNames asArray ] equals: #();
 			id: GtCodeDefinition poolsEditorName;
 			play.
 
-		aStep check
-			label: 'Check save button is disabled';
+		aStep assert
+			label: 'Assert save button is disabled';
 			satisfies: [ :aButton | aButton isDisabled ];
-			id: GtPharoCreateBehaviorElement saveButtonName ];
-			play.
+			id: GtPharoCreateBehaviorElement saveButtonName ;
+			play ].
 
 	^ aScripter
 ]

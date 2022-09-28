@@ -14,7 +14,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclass [
 	anElement := GtPharoStreamingMethodsCoderElement new
 		streamingCodersViewModel: aViewModel.
 
-	aScripter := BlDevScripter new
+	aScripter := BlScripter new
 		element: anElement.
 
 	aScripter check
