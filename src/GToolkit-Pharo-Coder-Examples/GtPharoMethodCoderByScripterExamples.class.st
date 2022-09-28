@@ -1233,13 +1233,13 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 				onChildAt: 1;
 				play.
 
-			aStep check
-				label: 'Check Coder UI is Expanded';
+			aStep assert
+				label: 'Assert Coder UI is Expanded';
 				satisfies: [ :aCoderElement | aCoderElement isExpanded ];
 				play.
 
-			aStep check
-				label: 'Check Coder Editor Text';
+			aStep assert
+				label: 'Assert Coder Editor Text';
 				value: [ :anEditorElement | anEditorElement editor text asString ]
 					equals: [ aMethod sourceCode ];
 				id: GtSourceCoderEditorId;
@@ -1262,7 +1262,6 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self scripterForBlock: [
@@ -1329,7 +1328,6 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 	aScripter := self
@@ -1337,6 +1335,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 				environment := aCoder attributeNamed: #dummyEnvironment.
 				aCoder asCoderViewModel ].
+				
 	aScripter do
 		label: 'Type in a variable that does not exist';
 		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: String cr , String tab , 'instance' ];
@@ -2364,7 +2363,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forUnaryExtraction_01_setup.
 	aScripter do
@@ -3280,7 +3278,6 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_02_cursor [
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_03_hover_move_variable_declaration [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forMoveVariableScope_02_cursor.
@@ -3297,7 +3294,6 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_03_hover_move_varia
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_variable_declaration [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forMoveVariableScope_03_hover_move_variable_declaration.
 
@@ -3572,7 +3568,6 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_01_setup [
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forPushDownMethod_01_setup .
@@ -3591,7 +3586,6 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_02_cursor [
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_03_hover_push_down_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forPushDownMethod_02_cursor.
@@ -3608,7 +3602,6 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_03_hover_push_down_met
 { #category : #'examples - push down method' }
 GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forPushDownMethod_03_hover_push_down_method.
 

@@ -16,7 +16,7 @@ GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderChangeMethodAndCheckColl
 	
 	aCoder forMethod: aNewMethod.
 	
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderCollapsedTextId;
 		value: [ :aLabel | aLabel text asString ] equals: [ aNewMethod selector asString ];
 		play.
@@ -40,7 +40,7 @@ GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderCheckCollapsedText [
 	aScripter set key: #coderViewModel value: [ aCoderViewModel ]; play.
 	aScripter element: aCoderElement.
 	
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderCollapsedTextId;
 		value: [ :aLabel | aLabel text asString ] equals: [ aMethod selector asString ];
 		play.

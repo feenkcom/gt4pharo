@@ -11,7 +11,7 @@ GtPharoMethodCoderModificationIndicatorExamples >> cleanMethodCoder [
 
 	aScripter := BlScripter new element: self methodCoderElement.
 	
-	aScripter check
+	aScripter assert
 		id: GtTextualCoderModificationIndicatorId;
 		value: [ :anIndicator | anIndicator visibility ] equals: [ BlVisibility gone ];
 		play.
@@ -34,7 +34,7 @@ GtPharoMethodCoderModificationIndicatorExamples >> dirtyMethodCoder [
 			synchronously: true ];
 		play.
 
-	aScripter check
+	aScripter assert
 		id: GtTextualCoderModificationIndicatorId;
 		value: [ :anIndicator | anIndicator visibility ] equals: [ BlVisibility visible ];
 		play.
