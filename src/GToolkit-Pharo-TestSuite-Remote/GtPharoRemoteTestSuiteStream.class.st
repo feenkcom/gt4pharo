@@ -78,7 +78,8 @@ GtPharoRemoteTestSuiteStream >> onTaskCompletedAnnouncement: anAnnouncement [
 				gtTestCase := tests at: testName.
 				gtTestCase result: (GtExampleResult new
 					example: gtTestCase example;
-					successValue: taskResult).
+					returnValue: taskResult asGtExampleResult).
+				taskResult asGtExampleResult.
 				results nextPut: (AsyncPoll ready: (AsyncOptionalValue some: gtTestCase)) ]
 			ifFalse: 
 				[ self error: 'Unknown result type' ] ].
