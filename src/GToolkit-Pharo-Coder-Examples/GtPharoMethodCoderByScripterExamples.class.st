@@ -12,7 +12,6 @@ Class {
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
-	<noTest>
 	| filter aScripter |
 
 	filter := GtSearchIntersectionFilter new
@@ -385,7 +384,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
 	aScripterOrStep assert
-		label: 'Assert Editor Text Attributes';
+		label: 'Assert Editor Text Attributes Count';
 		value: [ :aText | 
 			| anIterator aCounter |
 			aCounter := 0.
@@ -466,7 +465,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep saveButtonEnab
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributesAt: anIndex anySatisfies: aBlock [
 	<gtExample>
 	aScripterOrStep assert
-		label: 'Assert Editor Text Attributes';
+		label: 'Assert Any Editor Text Attribute Satisfaction';
 		anySatisfy: aBlock;
 		id: GtSourceCoderEditorId;
 		onBrTextEditor;
