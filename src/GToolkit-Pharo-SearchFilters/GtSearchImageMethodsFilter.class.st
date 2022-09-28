@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtSearchImageMethodsFilter class >> allMethods [
+GtSearchImageMethodsFilter class >> forAllMethods [
 	<gtSearchFilter>
 	^ self new labeled: 'All Methods'
 ]
