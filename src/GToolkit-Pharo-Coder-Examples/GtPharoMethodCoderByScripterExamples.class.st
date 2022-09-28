@@ -74,7 +74,6 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self binaryMethodCoderUI.
@@ -84,14 +83,14 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 			onChildAt: 1;
 			play.
 		
-		aStep check
-			label: 'Check Coder Editor Text';
+		aStep assert
+			label: 'Assert Coder Editor Text';
 			value: [ :label | label text asString ] equals: '?';
 			id: GtSourceCoderCollapsedTextId;
 			play.
 
-		aStep check 
-			label: 'Check Coder UI Is Collapsed';
+		aStep assert 
+			label: 'Assert Coder UI Is Collapsed';
 			satisfies: [ :aCoderElement | aCoderElement isExpanded not ];
 			play ].
 
@@ -101,19 +100,20 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_CollapsedFromUI [
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_BreadcrumbContent [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
+	
 	aScripter checks: 'Check Breadcrumb' do: [ :aStep | 
-		aStep check 
-			label: 'Check Breadcrumb Package Name';
+		aStep assert 
+			label: 'Assert Breadcrumb Package Name';
 			value: [ :aButton | aButton label asString ]
 				equals: [ GtPharoMethodCoderExamples package name ];
 			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 1;
 			play.
-		aStep check 
-			label: 'Check Breadcrumb Class Name';
+			
+		aStep assert 
+			label: 'Assert Breadcrumb Class Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples name ];
 			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 3;
@@ -128,22 +128,27 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
-	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |	
-		aStep click
-			label: 'Click On Class Name';
-			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
-			onChildAt: 3;
-			play.
-		
-		aStep  check 
-			label: 'Check Triggered Spawn Object Event';
-			satisfies: [ :theScripter | theScripter events reversed 
-				detectEventOfClass: GtPhlowObjectToSpawn
-				ifFound: [ :theEvent |
-					theEvent object = self binaryMethod methodClass and: [ theEvent tool isKindOf: GtClassCoderTool ] ]
-				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter;
-			play ].
+	aScripter
+		substeps: 'Click On Breadcrumb'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click On Class Name';
+				onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
+				onChildAt: 3;
+				play.
+
+			aStep assert
+				label: 'Assert Triggered Spawn Object Event';
+				satisfies: [ :theScripter | 
+					theScripter events reversed
+						detectEventOfClass: GtPhlowObjectToSpawn
+						ifFound: [ :theEvent | 
+							theEvent object = self binaryMethod methodClass
+								and: [ theEvent tool isKindOf: GtClassCoderTool ] ]
+						ifNone: [ AssertionFailure
+								signal: GtPhlowObjectToSpawn name , ' event was not found' ] ];
+				onScripter;
+				play ].
 
 	^ aScripter
 ]
@@ -154,21 +159,27 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_CollapsedFromUI.
-	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
-		aStep click
-			label: 'Click On Package Name';
-			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
-			onChildAt: 1;
-			play.
-		
-		aStep  check 
-			label: 'Check Triggered Spawn Object Event';
-			satisfies: [ :theScripter | theScripter events reversed 
-				detectEventOfClass: GtPhlowObjectToSpawn
-				ifFound: [ :theEvent | theEvent object class = RPackage and: [ theEvent object name = self class package name ] ]
-				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter;
-			play ].
+	aScripter
+		substeps: 'Click On Breadcrumb'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click On Package Name';
+				onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
+				onChildAt: 1;
+				play.
+
+			aStep assert
+				label: 'Assert Triggered Spawn Object Event';
+				satisfies: [ :theScripter | 
+					theScripter events reversed
+						detectEventOfClass: GtPhlowObjectToSpawn
+						ifFound: [ :theEvent | 
+							theEvent object class = RPackage
+								and: [ theEvent object name = self class package name ] ]
+						ifNone: [ AssertionFailure
+								signal: GtPhlowObjectToSpawn name , ' event was not found' ] ];
+				onScripter;
+				play ].
 
 	^ aScripter
 ]
@@ -205,23 +216,25 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
-	aScripter checks: 'Check Expanded Source Code Style' do: [ :aStep |
-		aStep check
-			label: 'Check Method Name Attributes';
-			anySatisfy: [ :aTextAttribute | aTextAttribute = BlFontWeightAttribute bold ];
-			id: GtSourceCoderEditorId;
-			onBrTextEditor;
-			onBrTextEditorText;
-			onTextAttributesAt: 1;
-			play.
-		aStep check
-			label: 'Check Comment Attributes';
-			anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
-			id: GtSourceCoderEditorId;
-			onBrTextEditor;
-			onBrTextEditorText;
-			onTextAttributesAt: 13;
-			play ].
+	aScripter
+		checks: 'Check Expanded Source Code Style'
+		do: [ :aStep | 
+			aStep assert
+				label: 'Assert Method Name Attributes';
+				anySatisfy: [ :aTextAttribute | aTextAttribute = BlFontWeightAttribute bold ];
+				id: GtSourceCoderEditorId;
+				onBrTextEditor;
+				onBrTextEditorText;
+				onTextAttributesAt: 1;
+				play.
+			aStep assert
+				label: 'Assert Comment Attributes';
+				anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
+				id: GtSourceCoderEditorId;
+				onBrTextEditor;
+				onBrTextEditorText;
+				onTextAttributesAt: 13;
+				play ].
 
 	^ aScripter
 ]
@@ -229,18 +242,19 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 { #category : #'examples - binary method' }
 GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbContent [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI.
 	aScripter checks: 'Check Breadcrumb' do: [ :aStep | 
-		aStep  check 
-			label: 'Check Breadcrumb Package Name';
+	
+		aStep assert 
+			label: 'Assert Breadcrumb Package Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples package name ];
 			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 1;
 			play.
-		aStep  check 
-			label: 'Check Breadcrumb Class Name';
+			
+		aStep  assert 
+			label: 'Assert Breadcrumb Class Name';
 			value: [ :aButton | aButton label asString ] equals: [ GtPharoMethodCoderExamples name ];
 			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 			onChildAt: 3;
@@ -255,22 +269,27 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI.
-	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
-		aStep click
-			label: 'Click On Class Name';
-			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
-			onChildAt: 3;
-			play.
-		
-		aStep  check 
-			label: 'Check Triggered Spawn Object Event';
-			satisfies: [ :theScripter | theScripter events reversed 
-				detectEventOfClass: GtPhlowObjectToSpawn
-				ifFound: [ :theEvent |
-					theEvent object = self binaryMethod methodClass and: [ theEvent tool isKindOf: GtClassCoderTool ] ]
-				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter;
-			play ].
+	aScripter
+		substeps: 'Click On Breadcrumb'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click On Class Name';
+				onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
+				onChildAt: 3;
+				play.
+
+			aStep assert
+				label: 'Assert Triggered Spawn Object Event';
+				satisfies: [ :theScripter | 
+					theScripter events reversed
+						detectEventOfClass: GtPhlowObjectToSpawn
+						ifFound: [ :theEvent | 
+							theEvent object = self binaryMethod methodClass
+								and: [ theEvent tool isKindOf: GtClassCoderTool ] ]
+						ifNone: [ AssertionFailure
+								signal: GtPhlowObjectToSpawn name , ' event was not found' ] ];
+				onScripter;
+				play ].
 	^ aScripter
 ]
 
@@ -280,21 +299,27 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 	<noTest>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI.
-	aScripter substeps: 'Click On Breadcrumb' do: [ :aStep |
-		aStep click
-			label: 'Click On Package Name';
-			onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
-			onChildAt: 1;
-			play.
-		
-		aStep  check 
-			label: 'Check Triggered Spawn Object Event';
-			satisfies: [ :theScripter | theScripter events reversed 
-				detectEventOfClass: GtPhlowObjectToSpawn
-				ifFound: [ :theEvent | theEvent object class = RPackage and: [ theEvent object name = self class package name ] ]
-				ifNone: [ AssertionFailure signal: GtPhlowObjectToSpawn name, ' event was not found' ]  ];
-			onScripter;
-			play ].
+	aScripter
+		substeps: 'Click On Breadcrumb'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click On Package Name';
+				onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
+				onChildAt: 1;
+				play.
+
+			aStep assert
+				label: 'Assert Triggered Spawn Object Event';
+				satisfies: [ :theScripter | 
+					theScripter events reversed
+						detectEventOfClass: GtPhlowObjectToSpawn
+						ifFound: [ :theEvent | 
+							theEvent object class = RPackage
+								and: [ theEvent object name = self class package name ] ]
+						ifNone: [ AssertionFailure
+								signal: GtPhlowObjectToSpawn name , ' event was not found' ] ];
+				onScripter;
+				play ].
 
 	^ aScripter
 ]
@@ -712,29 +737,30 @@ GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnExpander [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self coderCollapseProgrammatically.
 	
 	aScripter click
-		id: GtSourceCoderExpanderToggleId.
+		id: GtSourceCoderExpanderToggleId;
+		play.
 	
-	aScripter wait forEmptySpaceTaskQueue.
-		
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoderViewModel | aCoderViewModel expanded ];
-		onModel.
+		onModel;
+		play.
 		
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoderViewModel | aCoderViewModel focused not ];
-		onModel.
+		onModel;
+		play.
 
-	aScripter check
+	aScripter assert
 		satisfies: [ :anExpandableCoderElement | anExpandableCoderElement isExpanded ];
-		onSelf.
+		onSelf;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - expansion' }
@@ -749,17 +775,17 @@ GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnHeader [
 		onBreadthFirstChildOfClass: GtSourceCoderCollapsedContentElement;
 		play.
 		
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoderViewModel | aCoderViewModel expanded ];
 		onModel;
 		play.
 		
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoderViewModel | aCoderViewModel focused ];
 		onModel;
 		play.
 		
-	aScripter check
+	aScripter assert
 		satisfies: [ :anExpandableCoderElement | anExpandableCoderElement isExpanded ];
 		onSelf;
 		play.
@@ -904,7 +930,7 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCut [
 	self openAndClickOnContextMenuItemFor: aScripter id: GtTextualCoderCutContextMenuItemId.
 	self assert: Clipboard clipboardText asString equals: '196@400'.
 
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoder | (aCoder currentSourceString includesSubstring: '196@400') not ];
 		onModel;
 		play.
@@ -931,12 +957,12 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	self openAndClickOnContextMenuItemFor: aScripter id: GtTextualCoderPasteContextMenuItemId.
 	self assert: Clipboard clipboardText asString equals: '400@196'.
 
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoder | (aCoder currentSourceString includesSubstring: '196@400') not ];
 		onModel;
 		play.
 
-	aScripter check
+	aScripter assert
 		satisfies: [ :aCoder | (aCoder currentSourceString includesSubstring: '400@196') ];
 		onModel;
 		play.
@@ -1057,39 +1083,38 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_SelectMethodNameF
 
 { #category : #'examples - complete method name' }
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments [
-
 	<gtExample>
 	<noTest>
 	| aScripter |
-	aScripter := self
-		             emptyBodyMethodCoderUI_SelectMethodNameFromCompleterPopUp.
+	aScripter := self emptyBodyMethodCoderUI_SelectMethodNameFromCompleterPopUp.
 
-	aScripter substeps: 'Insert argument values' do: [ :aStep | 
-		| aNumArgs |
-		aNumArgs := (GtPharoMethodCoderExamples
-		             >> #many:many:many:many:many:many:arguments:) numArgs.
+	aScripter
+		substeps: 'Insert argument values'
+		do: [ :aStep | 
+			| aNumArgs |
+			aNumArgs := (GtPharoMethodCoderExamples
+					>> #many:many:many:many:many:many:arguments:) numArgs.
 
 
 
-		(1 to: aNumArgs)
-			do: [ :anIndex | 
-				aStep type
-					text: '''arg' , anIndex asString , '''';
-					id: GtSourceCoderEditorId;
-					play ]
-			separatedBy: [ 
-				aStep shortcut
-					label: 'Complete with TAB key';
-					combination: BlKeyCombination tab;
-					id: GtSourceCoderEditorId;
-					play ].
+			(1 to: aNumArgs)
+				do: [ :anIndex | 
+					aStep type
+						text: '''arg' , anIndex asString , '''';
+						id: GtSourceCoderEditorId;
+						play ]
+				separatedBy: [ aStep shortcut
+						label: 'Complete with TAB key';
+						combination: BlKeyCombination tab;
+						id: GtSourceCoderEditorId;
+						play ].
 
-		aStep check
-			label: 'Check method source code content';
-			value: [ :anEditor | anEditor text characters ]
-			equals: self finalCompleterSourceCode;
-			id: GtSourceCoderEditorId;
-			play ].
+			aStep assert
+				label: 'Assert method source code content';
+				value: [ :anEditor | anEditor text characters ]
+					equals: self finalCompleterSourceCode;
+				id: GtSourceCoderEditorId;
+				play ].
 
 	^ aScripter
 ]
@@ -1275,7 +1300,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	aScripter := self fixitCreateClass_02_click_fixit.
 	
 	"there is no create behavior element before clicking on the menu"
-	aScripter check
+	aScripter assert
 		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
 		notExists;
 		play.
@@ -1286,13 +1311,13 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 		play.
 	
 	"now it appeared"
-	aScripter check
+	aScripter assert
 		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
 		exists;
 		play.
 	
 	"context menu should disappear"
-	aScripter check
+	aScripter assert
 		onSpaceRoot;
 		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
 		notExists;
@@ -1335,7 +1360,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 	
 	self clickFixItActionFor: aScripter id: (GtDefineInstanceVariableFixItActionElementId indexed: 1).
 
-	aScripter check
+	aScripter assert
 		value: [ :aCoderViewModel | aCoderViewModel coderModel currentSourceString ]
 		equals: [ :aCoderViewModel |
 			String streamContents: [ :aStream |
@@ -1344,26 +1369,26 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 					tab; nextPutAll: 'instance' ] ];
 		onModel.
 
-	aScripter check
+	aScripter assert
 		label: 'Make sure the instance variable was created';
 		satisfies: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realClass hasSlotNamed: #instance ];
 		onModel;
 		play.
 
-	aScripter check
+	aScripter assert
 		label: 'Make sure the method still mofied';
 		satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
 		onModel;
 		play.
 
-	aScripter check
+	aScripter assert
 		label: 'Make sure the method is not saved/recompiled after adding a temporary variable';
 		value: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) systemMethod sourceCode ]
 		equals: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realMethod sourceCode ];
 		onModel;
 		play.
 		
-	aScripter check
+	aScripter assert
 		label: 'Make sure the text was deselected';
 		satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
 		onModel;
@@ -1406,7 +1431,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	
 	self clickFixItActionFor: aScripter id: (GtDefineTemporaryVariableFixItActionElementId indexed: 1).
 	
-	aScripter check
+	aScripter assert
 		value: [ :aCoderViewModel | aCoderViewModel coderModel currentSourceString ]
 		equals: [ :aCoderViewModel |
 			String streamContents: [ :aStream |
@@ -1417,20 +1442,20 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 		onModel;
 		play.
 	
-	aScripter check
+	aScripter assert
 		label: 'Make sure the method still mofied';
 		satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
 		onModel;
 		play.
 		
-	aScripter check
+	aScripter assert
 		label: 'Make sure the method is not saved/recompiled after adding a temporary variable';
 		value: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) systemMethod sourceCode ]
 		equals: [ :aCoderViewModel | (aCoderViewModel coderModel attributeNamed: #dummyMethod) realMethod sourceCode ];
 		onModel;
 		play.
 		
-	aScripter check
+	aScripter assert
 		label: 'Make sure the text was deselected';
 		satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
 		onModel;
@@ -1505,7 +1530,6 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forAbstractInstVar_03_hover_abstract_variable.
 
 	aScripter click
@@ -1514,14 +1538,14 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 		id: #'context-menu--abstract-variable';
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
@@ -1535,7 +1559,6 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1544,30 +1567,31 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+		
 	aScripter do
-		label: 'type in a method with argument';
+		label: 'Type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 'Unique
 	^ (1 to: self items size) detect: [:each | (self items at: each) notNil]' ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameterFromValue_01_setup.
+	
 	aScripter do
 		label: 'Select part of the method pattern';
 		action: [ :aSourceEditor |
@@ -1585,7 +1609,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_02_cursor [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_03_hover_add_parameter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAddParameterFromValue_02_cursor.
@@ -1593,11 +1616,10 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_03_hover_add_pa
 	aScripter mouseMoveOver
 		label: 'Hover add parameter';
 		onSpaceRoot;
-		id: #'context-menu--add-parameter'.
+		id: #'context-menu--add-parameter';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - add parameter' }
@@ -1605,7 +1627,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_pa
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forAddParameterFromValue_03_hover_add_parameter.
 
 	aScripter click
@@ -1613,64 +1634,64 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_pa
 		onSpaceRoot;
 		id: #'context-menu--add-parameter';
 		play.
-	
-	aScripter check
-		label: 'Check current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-('{1}Unique: anObject
-	^ (1 to: self items size) detect: [:each | (self items at: each) notNil]' format: {
-		(aCoder attributeNamed: #dummyMethod) selector
-	}) ];
+
+	aScripter assert
+		label: 'Assert current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ]
+			equals: [ :aCoder | 
+				'{1}Unique: anObject
+	^ (1 to: self items size) detect: [:each | (self items at: each) notNil]'
+					format: {(aCoder attributeNamed: #dummyMethod) selector} ];
 		onModel;
 		play.
-		
-	aScripter check
-		label: 'Check source code modified';
+
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
-	
-	aScripter check
-		label: 'Check rename editor attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+
+	aScripter assert
+		label: 'Assert rename editor attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 1 to: (aCoderEditor text asString indexOf: $:) ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
 				index to: index ];
 		id: GtSourceCoderEditorId;
 		play.
-		
-	aScripter check
-		label: 'Check source editor is not focused';
+
+	aScripter assert
+		label: 'Assert source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
-		
-	aScripter check
-		label: 'Check source editor has focus';
+
+	aScripter assert
+		label: 'Assert source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check method name editor has focus';
+	aScripter assert
+		label: 'Assert method name editor has focus';
 		satisfies: [ :aNameEditor | aNameEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
@@ -1684,19 +1705,18 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 	<gtExample>
 	<noTest>
 	| aScripter |
-
-	aScripter := self forAddParameterFromValue_04_click_add_parameter .
+	aScripter := self forAddParameterFromValue_04_click_add_parameter.
 
 	(aScripter type: 'someOtherMethodName:') play.
-	
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
@@ -1705,47 +1725,48 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 		play.
 
 	(aScripter keyClick: BlKeyboardKey return) play.
-	
-	aScripter check
-		label: 'Check current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-'someOtherMethodName: anObject
+
+	aScripter assert
+		label: 'Assert current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ]
+			equals: [ :aCoder | 
+				'someOtherMethodName: anObject
 	^ (1 to: self items size) detect: [:each | (self items at: each) notNil]' ];
 		onModel;
 		play.
-		
-	aScripter check
-		label: 'Check source code modified';
+
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
-	
-	aScripter check
-		label: 'Check rename editor attribute';
-		value: [ :aCoderEditor |
-			aCoderEditor text
-				hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
+
+	aScripter assert
+		label: 'Assert rename editor attribute';
+		value: [ :aCoderEditor | 
+				aCoderEditor text
+					hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
 			equals: false;
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
 				index to: index ];
 		id: GtSourceCoderEditorId;
 		play.
-		
-	aScripter check
-		label: 'Check source editor is focused';
+
+	aScripter assert
+		label: 'Assert source editor is focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
@@ -1756,7 +1777,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1765,27 +1785,27 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+		
 	aScripter do
-		label: 'type in a method with argument';
+		label: 'Type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 'Unique
 	^ self printString' ];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
+		onModel;
+		play.
 		
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameter_01_setup.
@@ -1804,7 +1824,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_02_cursor [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_03_hover_add_parameter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forAddParameter_02_cursor.
@@ -1812,17 +1831,15 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_03_hover_add_parameter [
 	aScripter mouseMoveOver
 		label: 'Hover add parameter';
 		onSpaceRoot;
-		id: #'context-menu--add-parameter'.
+		id: #'context-menu--add-parameter';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameter_03_hover_add_parameter.
@@ -1833,8 +1850,8 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		id: #'context-menu--add-parameter';
 		play.
 	
-	aScripter check
-		label: 'Check current source in coder model';
+	aScripter assert
+		label: 'Assert current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 ('{1}Unique: anObject
 	^ self printString' format: {
@@ -1843,14 +1860,14 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		onModel;
 		play.
 		
-	aScripter check
-		label: 'Check source code modified';
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
 	
-	aScripter check
-		label: 'Check rename editor attribute';
+	aScripter assert
+		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -1861,8 +1878,8 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -1876,20 +1893,20 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor is not focused';
+	aScripter assert
+		label: 'Assert source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor has focus';
+	aScripter assert
+		label: 'Assert source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check method name editor has focus';
+	aScripter assert
+		label: 'Assert method name editor has focus';
 		satisfies: [ :aNameEditor | aNameEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
@@ -1901,15 +1918,14 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 { #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forAddParameter_04_click_add_parameter .
 
 	(aScripter type: 'someOtherMethodName:') play.
 	
-	aScripter check
-		label: 'Check refactoring changes attribute';
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -1925,22 +1941,22 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 
 	(aScripter keyClick: BlKeyboardKey return) play.
 	
-	aScripter check
-		label: 'Check current source in coder model';
+	aScripter assert
+		label: 'Assert current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 'someOtherMethodName: anObject
 	^ self printString' ];
 		onModel;
 		play.
 		
-	aScripter check
-		label: 'Check source code modified';
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
 	
-	aScripter check
-		label: 'Check rename editor attribute';
+	aScripter assert
+		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor |
 			aCoderEditor text
 				hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
@@ -1948,8 +1964,8 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -1963,8 +1979,8 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor is focused';
+	aScripter assert
+		label: 'Assert source editor is focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
@@ -1975,7 +1991,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -1986,7 +2001,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_01_setup [
 		aCoder ].
 
 	aScripter do
-		label: 'type in a method with argument';
+		label: 'Type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 '
 	| cache |
@@ -2007,7 +2022,6 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_01_setup [
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forConvertTempToInst_01_setup.
@@ -2026,7 +2040,6 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_02_cursor [
 { #category : #'examples - convert temporary to instance variable' }
 GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_03_hover_convert_temporary_to_instance_variable [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forConvertTempToInst_02_cursor.
@@ -2034,11 +2047,10 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_03_hover_convert_te
 	aScripter mouseMoveOver
 		label: 'Hover convert';
 		onSpaceRoot;
-		id: #'context-menu--convert-temp-to-inst-var'.
+		id: #'context-menu--convert-temp-to-inst-var';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - convert temporary to instance variable' }
@@ -2046,31 +2058,32 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_04_click_convert [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
-	aScripter := self forConvertTempToInst_03_hover_convert_temporary_to_instance_variable.
+	aScripter := self
+			forConvertTempToInst_03_hover_convert_temporary_to_instance_variable.
 
 	aScripter click
 		label: 'Click convert';
 		onSpaceRoot;
 		id: #'context-menu--convert-temp-to-inst-var';
 		play.
-	
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
-			equals: [ :aCoderEditor |
-				| index | 
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
+			equals: [ :aCoderEditor | 
+				| index |
 				index := aCoderEditor text asString indexOfSubCollection: 'cache'.
 				index + 4 to: index + 4 ];
 		id: GtSourceCoderEditorId;
@@ -2100,7 +2113,6 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forCreateAccessors_03_hover_create_accessors.
 
 	aScripter click
@@ -2109,20 +2121,21 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 		id: #'context-menu--create-accessors';
 		play.
 
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
@@ -2308,40 +2321,40 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forExtractTemp_06_type_variable_name.
 
-	aScripter check
-		label: 'Check current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-'method1
+	aScripter assert
+		label: 'Assert current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ]
+			equals: [ :aCoder | 
+				'method1
 	| a |
 	a := self printString.
 	^ a size' ];
 		onModel;
 		play.
-		
-	aScripter check
-		label: 'Check source code modified';
+
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
-	
-	aScripter check
-		label: 'Check rename editor attribute';
-		value: [ :aCoderEditor |
-			aCoderEditor text
-				hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
+
+	aScripter assert
+		label: 'Assert rename editor attribute';
+		value: [ :aCoderEditor | 
+				aCoderEditor text
+					hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
 			equals: false;
 		id: GtSourceCoderEditorId;
 		play.
-		
-	aScripter check
-		label: 'Check source editor is focused';
+
+	aScripter assert
+		label: 'Assert source editor is focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
-	
+
 	^ aScripter
 ]
 
@@ -2350,21 +2363,20 @@ GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forUnaryExtraction_01_setup.
 	aScripter do
 		label: 'Select part of the method to extract';
-		action: [ :aSourceEditor |
+		action: [ :aSourceEditor | 
 			aSourceEditor selecter
 				from: 9 to: 17;
 				select ];
 		id: GtSourceCoderEditorId;
 		play.
-	
+
 	self openContextMenu: aScripter.
-	
-	aScripter check
-		label: 'Check extract method doesn''t exist';
+
+	aScripter assert
+		label: 'Assert extract method doesn''t exist';
 		onSpaceRoot;
 		notExists;
 		id: GtMethodCoderExtractMethodContextMenuItemId;
@@ -2376,7 +2388,6 @@ GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 
@@ -2385,27 +2396,27 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_01_setup [
 		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
+		
 	aScripter do
-		label: 'type in a method with argument';
+		label: 'Type in a method with argument';
 		action: [ :aCoder | aCoder appendString:
 '
 	^ self isNil'];
-		onModel.
+		onModel;
+		play.
 
 	aScripter do
 		label: 'Save a method with argument';
 		action: [ :aCoder | aCoder save ];
-		onModel.
-		
-	aScripter wait forEmptySpaceTaskQueue.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineAllSelfSends_01_setup.
@@ -2424,7 +2435,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_02_cursor [
 { #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_03_hover_inline_message_send [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forInlineAllSelfSends_02_cursor.
@@ -2432,11 +2442,10 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_03_hover_inline_me
 	aScripter mouseMoveOver
 		label: 'Hover inline self send';
 		onSpaceRoot;
-		id: #'context-menu--inline-self-sends'.
+		id: #'context-menu--inline-self-sends';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline all self sends' }
@@ -2444,7 +2453,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_04_click_inline_se
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forInlineAllSelfSends_03_hover_inline_message_send.
 
 	aScripter click
@@ -2453,14 +2461,14 @@ GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_04_click_inline_se
 		id: #'context-menu--inline-self-sends';
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString lines first size.
@@ -2537,7 +2545,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_03_hover_inline_mes
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_message_send [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineMessageSend_03_hover_inline_message_send.
@@ -2545,23 +2552,24 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_mes
 	aScripter click
 		label: 'Click inline temp';
 		onSpaceRoot;
-		id: #'context-menu--inline-message'.
+		id: #'context-menu--inline-message';
+		play.
 
-	aScripter wait forEmptySpaceTaskQueue.
-	
-	aScripter check
-		label: 'Check current source in coder model';
+	aScripter assert
+		label: 'Assert current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 'method1
 	^ false' ];
-		onModel.
+		onModel;
+		play.
 		
-	aScripter check
-		label: 'Check source code modified';
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
-		onModel.
+		onModel;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline parameter' }
@@ -2693,7 +2701,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_01_setup [
 { #category : #'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forInlineTemp_01_setup.
@@ -2720,12 +2727,11 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 	aScripter mouseMoveOver
 		label: 'Hover inline temp';
 		onSpaceRoot;
-		id: #'context-menu--inline-temp'.
-
-	aScripter wait forEmptySpaceTaskQueue.
+		id: #'context-menu--inline-temp';
+		play.
 	
-	aScripter check
-		label: 'Check assignment node highlighted';
+	aScripter assert
+		label: 'Assert assignment node highlighted';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -2733,9 +2739,10 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | (aCoderEditor text asString indexOfSubCollection: 'str :=') to: (aCoderEditor text asString indexOf: $.) - 1 ];
-		id: GtSourceCoderEditorId.
+		id: GtSourceCoderEditorId;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - inline temp' }
@@ -2743,7 +2750,6 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_04_click_inline_temp [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forInlineTemp_03_hover_inline_temp.
 
 	aScripter click
@@ -2751,23 +2757,25 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_04_click_inline_temp [
 		onSpaceRoot;
 		id: #'context-menu--inline-temp';
 		play.
-	
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
-	
-	aScripter check
-		label: 'Check current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-'method1
+
+	aScripter assert
+		label: 'Assert current source in coder model';
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ]
+			equals: [ :aCoder | 
+				'method1
 	^ self printString size' ];
 		onModel;
 		play.
-		
-	aScripter check
-		label: 'Check source code modified';
+
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
@@ -2871,7 +2879,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forKeywordExtraction_04_hover_extract_method.
 
 	aScripter click
@@ -2879,13 +2886,13 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 		onSpaceRoot;
 		id: GtMethodCoderExtractMethodContextMenuItemId;
 		play.
-		
-	aScripter check
-		label: 'Check source code modified';
+
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
-		
+
 	self checkHasTwoReorderAttributes: aScripter.
 	self checkKeywordRenameEditor: aScripter.
 
@@ -2897,31 +2904,30 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forKeywordExtraction_05_click_extract_method.
-	
+
 	self clickReorderParameter: aScripter variables: #('temp' 'anObject').
 	self checkKeywordRenameEditor: aScripter.
-	
+
 	(aScripter type: 'a:') play.
-	
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		id: GtSourceCoderEditorId;
 		play.
-	
+
 	(aScripter keyClick: BlKeyboardKey tab) play.
-	
+
 	self clickReorderParameter: aScripter variables: #('temp' 'anObject').
 	self checkKeywordRenameEditor: aScripter.
-	
+
 	(aScripter type: 'b:') play.
 	(aScripter keyClick: BlKeyboardKey return) play.
 
@@ -2993,7 +2999,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_03_context_menu_mov
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forKeywordMoveMethod_02_select.
 	aScripter secondaryClick
 		label: 'Open context menu';
@@ -3005,13 +3010,13 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_03_context_menu_mov
 		onSpaceRoot;
 		id: #'context-menu--move-method';
 		play.
-		
-	aScripter check
-		label: 'Check source code modified';
+
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
-		
+
 	self checkHasTwoReorderAttributes: aScripter.
 	self checkKeywordRenameEditor: aScripter.
 
@@ -3023,34 +3028,33 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forKeywordMoveMethod_03_context_menu_move_method.
-	
+
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
 	self checkKeywordRenameEditor: aScripter.
-	
+
 	(aScripter type: 'a:') play.
-	
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		id: GtSourceCoderEditorId;
 		play.
-	
+
 	(aScripter keyClick: BlKeyboardKey tab) play.
-	
+
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
 	self checkKeywordRenameEditor: aScripter.
-	
+
 	(aScripter type: 'b:') play.
 	(aScripter keyClick: BlKeyboardKey return) play.
-	
+
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
 
 	^ aScripter
@@ -3127,23 +3131,21 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
-	aScripter := self forKeywordRename_02_shortcut.
-	
-	"this positions the cursor before `:`"
+	aScripter := self forKeywordRename_02_shortcut.	"this positions the cursor before `:`"
 	(aScripter keyClick: BlKeyboardKey arrowLeft) play.
-	
+
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
-	
-	aScripter check
-		label: 'Check cursor position';
-		value: [ :anEditor | anEditor editor cursors positions ] equals: [ { (aScripter model attributeNamed: #dummyMethod) selector size - 1 } ];
+
+	aScripter assert
+		label: 'Assert cursor position';
+		value: [ :anEditor | anEditor editor cursors positions ]
+			equals: [ {(aScripter model attributeNamed: #dummyMethod) selector size - 1} ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 
-	aScripter check
-		label: 'Check rename editor all selected';
+	aScripter assert
+		label: 'Assert rename editor all selected';
 		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ '' ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
@@ -3157,19 +3159,19 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forKeywordRename_03_move_cursor.
 
 	(aScripter type: 'New') play.
-	
+
 	self checkFor: aScripter renameEditorExists: true.
 	self checkFor: aScripter refactoringPreviewButtonExists: true.
 	self checkFor: aScripter saveButtonEnabled: false.
 	self checkFor: aScripter discardButtonExists: false.
 
-	aScripter check
-		label: 'Check text';
-		value: [ :anEditor | anEditor text asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast, 'New:' ];
+	aScripter assert
+		label: 'Assert text';
+		value: [ :anEditor | anEditor text asString ]
+			equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast , 'New:' ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
@@ -3182,7 +3184,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forKeywordRename_04_type.
 
 	aScripter click
@@ -3193,8 +3194,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 
 	self checkFor: aScripter discardButtonExists: true.
 
-	aScripter check
-		label: 'Check that refactorings preview appeared';
+	aScripter assert
+		label: 'Assert that refactorings preview appeared';
 		exists;
 		onSpaceRoot;
 		id: GtRefactoringsPreviewAcceptId;
@@ -3296,7 +3297,6 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_varia
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forMoveVariableScope_03_hover_move_variable_declaration.
 
 	aScripter click
@@ -3304,17 +3304,23 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_varia
 		onSpaceRoot;
 		id: #'context-menu--move-variable-declaration';
 		play.
-	
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
-	
-	aScripter check
-		label: 'Check current source in coder model';
-		value: [ :aCoder | (GtPharoParser parse: aCoder currentSourceString) body ] equals: [ :aCoder |
-GtPharoParser parse: (self moveVariableSource format: {''. '|temp|'}) startingAt: GtPharoParser startingStateForMethodSequence  ];
+
+	aScripter assert
+		label: 'Assert current source in coder model';
+		value: [ :aCoder | (GtPharoParser parse: aCoder currentSourceString) body ]
+			equals: [ :aCoder | 
+				GtPharoParser
+					parse: (self moveVariableSource
+							format: {''.
+									'|temp|'})
+					startingAt: GtPharoParser startingStateForMethodSequence ];
 		onModel;
 		play.
 
@@ -3394,7 +3400,6 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forProtectInstVar_03_hover_protect_variable.
 
 	aScripter click
@@ -3402,23 +3407,23 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 		onSpaceRoot;
 		id: #'context-menu--protect-variable';
 		play.
-	
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
-			equals: [ :aCoderEditor | 
-				aCoderEditor text size to: aCoderEditor text size ];
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
+			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		id: GtSourceCoderEditorId;
 		play.
 
@@ -3503,7 +3508,6 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forPullDownVariable_03_hover_pull_down.
 
 	aScripter click
@@ -3512,14 +3516,14 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 		id: #'context-menu--pull-down-variable';
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString size.
@@ -3605,7 +3609,6 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_met
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forPushDownMethod_03_hover_push_down_method.
 
 	aScripter click
@@ -3613,21 +3616,22 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_met
 		onSpaceRoot;
 		id: #'context-menu--push-down-method';
 		play.
-	
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString lines first size.
@@ -3709,7 +3713,6 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method 
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forPushUpMethod_03_hover_push_up_method.
 
 	aScripter click
@@ -3717,21 +3720,22 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method 
 		onSpaceRoot;
 		id: #'context-menu--push-up-method';
 		play.
-	
-	aScripter check
-		label: 'Check there is no selected text';
-		value: [ :aSourceEditor | aSourceEditor editor hasSelection ] equals: [ false ];
+
+	aScripter assert
+		label: 'Assert there is no selected text';
+		value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+			equals: [ false ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString lines first size.
@@ -3820,7 +3824,6 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forPushUpVariable_03_hover_push_up.
 
 	aScripter click
@@ -3829,14 +3832,14 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 		id: #'context-menu--push-up-variable';
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString size.
@@ -4211,22 +4214,21 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactoring [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryExtraction_07_01_accept_with_enter.
 
 	aScripter click
-		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton.
+		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
+		play.
 	
-	aScripter wait forEmptySpaceTaskQueue.
-	
-	aScripter check
+	aScripter assert
 		onSpaceRoot;
 		id: GtRefactoringsPreviewAcceptId;
-		exists.
+		exists;
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -4234,7 +4236,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forUnaryExtraction_08_preview_refactoring.
 
 	aScripter click
@@ -4242,19 +4243,19 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 		id: GtRefactoringsPreviewAcceptId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute does not exist';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+	aScripter assert
+		label: 'Assert refactoring changes attribute does not exist';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ nil ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
+	aScripter assert
 		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
 		notExists;
 		play.
@@ -4322,7 +4323,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_02_select [
 { #category : #'examples - move method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forUnaryMoveMethod_02_select.
@@ -4337,8 +4337,8 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		id: #'context-menu--move-method';
 		play.
 
-	aScripter check
-		label: 'Check current source in coder model';
+	aScripter assert
+		label: 'Assert current source in coder model';
 		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
 ('{1}: anObject
 	^ anObject _' format: {
@@ -4347,14 +4347,14 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		onModel;
 		play.
 		
-	aScripter check
-		label: 'Check source code modified';
+	aScripter assert
+		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
 	
-	aScripter check
-		label: 'Check rename editor attribute';
+	aScripter assert
+		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -4365,8 +4365,8 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter check
-		label: 'Check refactoring changes attribute';
+	aScripter assert
+		label: 'Assert refactoring changes attribute';
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
@@ -4377,34 +4377,34 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor is not focused';
+	aScripter assert
+		label: 'Assert source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
 		
-	aScripter check
-		label: 'Check source editor has focus';
+	aScripter assert
+		label: 'Assert source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 	
-	aScripter check
-		label: 'Check method name editor source code';
+	aScripter assert
+		label: 'Assert method name editor source code';
 		value: [ :aNameEditor | aNameEditor text asString ] equals: '_';
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 		
-	aScripter check
-		label: 'Check method name editor selected text';
+	aScripter assert
+		label: 'Assert method name editor selected text';
 		value: [ :aNameEditor | aNameEditor editor selectedText asString ] equals: '_';
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 
-	aScripter check
-		label: 'Check method name editor has focus';
+	aScripter assert
+		label: 'Assert method name editor has focus';
 		satisfies: [ :aNameEditor | aNameEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
@@ -4527,12 +4527,11 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 	<noTest>
 	<after: #cleanUp>
 	| aScripter |
-
-	aScripter := self scripterForBlock: [
-		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
-		environment := aCoder attributeNamed: #dummyEnvironment.
-		aCoder ].
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
 
 	aScripter click
 		label: 'Click on the coder editor to give it focus';
@@ -4543,16 +4542,17 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 		combination: BlKeyCombination arrowUp;
 		id: GtSourceCoderEditorId;
 		play.
-	
-	aScripter check
-		label: 'Check editor is focused';
+
+	aScripter assert
+		label: 'Assert editor is focused';
 		satisfies: [ :anEditorElement | anEditorElement isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
-	
-	aScripter check
-		label: 'Check cursor position';
-		value: [ :anEditorElement | anEditorElement editor cursors positions ] equals: [ #(0) ];
+
+	aScripter assert
+		label: 'Assert cursor position';
+		value: [ :anEditorElement | anEditorElement editor cursors positions ]
+			equals: [ #(0) ];
 		id: GtSourceCoderEditorId;
 		play.
 
@@ -4564,24 +4564,24 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	aScripter := self forUnaryRename_01_setup.
-	
+
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
 		play.
-	
-	aScripter check
-		label: 'Check rename editor exists';
+
+	aScripter assert
+		label: 'Assert rename editor exists';
 		exists;
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
 
-	aScripter check
-		label: 'Check rename editor all selected';
-		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
+	aScripter assert
+		label: 'Assert rename editor all selected';
+		value: [ :anEditor | anEditor editor selectedText asString ]
+			equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
@@ -4633,14 +4633,12 @@ GtPharoMethodCoderByScripterExamples >> openContextMenu: aScripter [
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethod [
 	<gtExample>
-	<noTest>
 	^ GtPharoMethodCoderExamples >> #a:a:a:a:
 ]
 
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoder [
 	<gtExample>
-	<noTest>
 	| aMethod aCoder |
 	aMethod := self patternHighlighterMethod.
 	aCoder := self coderOnMethod: aMethod.
@@ -4651,7 +4649,6 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoder [
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self scripterForBlock: [ self patternHighlighterMethodCoder ].
 	^ aScripter
@@ -4660,7 +4657,6 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI [
 { #category : #'examples - pattern highlighter' }
 GtPharoMethodCoderByScripterExamples >> patternHighlighterMethodCoderUI_CheckUndelineAttributes [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self patternHighlighterMethodCoderUI.
