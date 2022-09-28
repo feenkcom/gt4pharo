@@ -3242,7 +3242,7 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 		aCoder ].
 
 	aScripter do
-		label: 'type in a method with argument';
+		label: 'Type in a method with argument';
 		action: [ :aCoder | 
 			aCoder appendString: (self moveVariableSource format: {'|temp|'. ''}) ];
 		onModel;
@@ -3260,7 +3260,6 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forMoveVariableScope_01_setup.
@@ -3647,7 +3646,6 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_04_click_push_down_met
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 	<gtExample>
-	<noTest>
 	<after: #cleanUp>
 	| aScripter |
 	aScripter := self
@@ -3677,7 +3675,6 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_02_cursor [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self forPushUpMethod_01_setup .
@@ -3696,7 +3693,6 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_02_cursor [
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_03_hover_push_up_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self openContextMenu: self forPushUpMethod_02_cursor.
@@ -3713,7 +3709,6 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_03_hover_push_up_method 
 { #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_04_click_push_up_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forPushUpMethod_03_hover_push_up_method.
 
