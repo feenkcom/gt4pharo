@@ -1332,21 +1332,24 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_01_setup [
 	<noTest>
 	<after: #cleanUp>
 	| aScripter |
-
-	aScripter := self scripterForBlock: [
-		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod .
-		environment := aCoder attributeNamed: #dummyEnvironment.
-		aCoder asCoderViewModel ].
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder asCoderViewModel ].
 	aScripter do
-		label: 'type in a variable that does not exist';
-		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: (String cr, String tab, 'instance') ];
+		label: 'Type in a variable that does not exist';
+		action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: String cr , String tab , 'instance' ];
 		onModel;
 		play.
-	
-	self selectTextFor: aScripter from: 9 to: 17 andCheck: 'instance'.	
+
+	self
+		selectTextFor: aScripter
+		from: 9
+		to: 17
+		andCheck: 'instance'.
 	self clickFixItFor: aScripter.
-	
+
 	^ aScripter
 ]
 
@@ -3333,19 +3336,18 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 	<noTest>
 	<after: #cleanUp>
 	| aScripter |
-
-	aScripter := self scripterForBlock: [
-		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
-		environment := aCoder attributeNamed: #dummyEnvironment.
-		aCoder ].
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
 
 	aScripter do
-		label: 'type in a method with argument';
-		action: [ :aCoder | aCoder appendString:
-('
-	^ {1}' format: { (aCoder attributeNamed: #dummyMethod) anyInstVarName })
-		];
+		label: 'Type in a method with argument';
+		action: [ :aCoder | 
+			aCoder
+				appendString: ('
+	^ {1}' format: {(aCoder attributeNamed: #dummyMethod) anyInstVarName}) ];
 		onModel;
 		play.
 
@@ -3436,23 +3438,23 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_01_setup [
 	<noTest>
 	<after: #cleanUp>
 	| aScripter rootClass |
+	aScripter := self
+			scripterForBlock: [ | env method coder |
+				env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+				rootClass := env anyDummyLeafClass.
+				method := rootClass anyDummyUnaryMethod realMethod.
 
-	aScripter := self scripterForBlock: [
-		| env method coder |
-		env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
-		rootClass := env anyDummyLeafClass.
-		method := rootClass anyDummyUnaryMethod realMethod.
-	
-		coder := GtPharoMethodCoder forMethod: method.
-		coder attributeNamed: #dummyEnvironment put: env.
-		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
-		coder ].
+				coder := GtPharoMethodCoder forMethod: method.
+				coder attributeNamed: #dummyEnvironment put: env.
+				coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+				coder ].
 
 	aScripter do
-		label: 'type in a method';
-		action: [ :aCoder | aCoder appendString:
-('
-	^ {1}' format: { rootClass realClass superclass allInstVarNames last }) ];
+		label: 'Type in a method';
+		action: [ :aCoder | 
+			aCoder
+				appendString: ('
+	^ {1}' format: {rootClass realClass superclass allInstVarNames last}) ];
 		onModel;
 		play.
 
@@ -3648,17 +3650,17 @@ GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 	<noTest>
 	<after: #cleanUp>
 	| aScripter |
-
-	aScripter := self scripterForBlock: [
-		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
-		environment := aCoder attributeNamed: #dummyEnvironment.
-		aCoder ].
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
 
 	aScripter do
-		label: 'type in a method with argument';
-		action: [ :aCoder | aCoder appendString:
-'
+		label: 'Type in a method with argument';
+		action: [ :aCoder | 
+			aCoder
+				appendString: '
 	^ self printString' ];
 		onModel;
 		play.
@@ -3752,23 +3754,23 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_01_setup [
 	<noTest>
 	<after: #cleanUp>
 	| aScripter rootClass |
+	aScripter := self
+			scripterForBlock: [ | env method coder |
+				env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+				rootClass := env anyDummyLeafClass.
+				method := rootClass anyDummyUnaryMethod realMethod.
 
-	aScripter := self scripterForBlock: [
-		| env method coder |
-		env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
-		rootClass := env anyDummyLeafClass.
-		method := rootClass anyDummyUnaryMethod realMethod.
-	
-		coder := GtPharoMethodCoder forMethod: method.
-		coder attributeNamed: #dummyEnvironment put: env.
-		coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
-		coder ].
+				coder := GtPharoMethodCoder forMethod: method.
+				coder attributeNamed: #dummyEnvironment put: env.
+				coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+				coder ].
 
 	aScripter do
-		label: 'type in a method';
-		action: [ :aCoder | aCoder appendString:
-('
-	^ {1}' format: { rootClass realClass allInstVarNames last }) ];
+		label: 'Type in a method';
+		action: [ :aCoder | 
+			aCoder
+				appendString: ('
+	^ {1}' format: {rootClass realClass allInstVarNames last}) ];
 		onModel;
 		play.
 
