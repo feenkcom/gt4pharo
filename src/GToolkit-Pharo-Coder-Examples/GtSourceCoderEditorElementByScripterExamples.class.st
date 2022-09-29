@@ -8,40 +8,37 @@ Class {
 GtSourceCoderEditorElementByScripterExamples >> playExample [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self scripterWithElement.
-	
-	aScripter substep: 'Play example' do: [ :aStep | 
-		
-		aStep check
-			label: 'Check gray example status';
-			value: [ :aStateElement | 
-				aStateElement background paint color ]
-			equals: GtFilterExampleNotExecutedState default color;
-			onBreadthFirstChildOfClass: GtCoderExampleStateElement;
-			play.
-	
-		aStep do
-			label: 'Play button from model';
-			block: [ :aUIModel | aUIModel coder playExample ];
-			onModel;
-			play.
-		
-		aStep check
-			label: 'Check green example status';
-			value: [ :aStateElement | 
-				aStateElement background paint color ]
-			equals: GtFilterExampleSuccessState default color;
-			onBreadthFirstChildOfClass: GtCoderExampleStateElement;
-			play.
-			
-		aStep check
-			label: 'Check green example status after all actions (styling)';
-			value: [ :aStateElement | 
-				aStateElement background paint color ]
-			equals: GtFilterExampleSuccessState default color;
-			onBreadthFirstChildOfClass: GtCoderExampleStateElement;
-			play  ].
+
+	aScripter
+		substep: 'Play example'
+		do: [ :aStep | 
+			aStep assert
+				label: 'Assert gray example status';
+				value: [ :aStateElement | aStateElement background paint color ]
+					equals: GtFilterExampleNotExecutedState default color;
+				onBreadthFirstChildOfClass: GtCoderExampleStateElement;
+				play.
+
+			aStep do
+				label: 'Play button from model';
+				block: [ :aUIModel | aUIModel coder playExample ];
+				onModel;
+				play.
+
+			aStep assert
+				label: 'Assert green example status';
+				value: [ :aStateElement | aStateElement background paint color ]
+					equals: GtFilterExampleSuccessState default color;
+				onBreadthFirstChildOfClass: GtCoderExampleStateElement;
+				play.
+
+			aStep assert
+				label: 'Assert green example status after all actions (styling)';
+				value: [ :aStateElement | aStateElement background paint color ]
+					equals: GtFilterExampleSuccessState default color;
+				onBreadthFirstChildOfClass: GtCoderExampleStateElement;
+				play ].
 
 	^ aScripter
 ]

@@ -37,10 +37,9 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter [
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_CollapsedByDefault [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self behaviorDefinitionScripter.
-	aScripter check
-		label: 'Check that behavior definition is collapsed by default';
+	aScripter assert
+		label: 'Assert that behavior definition is collapsed by default';
 		satisfies: [ :aHeaderElement | aHeaderElement isCollapsed ].
 
 	^ aScripter syncContinue
@@ -50,18 +49,18 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Collap
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_ExpandHeader [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self behaviorDefinitionScripter_CollapsedByDefault.
-	aScripter substep: 'Expand behavior definition' do: [ :aStep |
-		aStep click
-			label: 'Click on expand element';
-			onChildAt: 1;
-			play.
-		aStep check 
-			label: 'Check behavior definition element is expanded';
-			satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isExpanded ];
-			play.
-	].
+	aScripter
+		substep: 'Expand behavior definition'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on expand element';
+				onChildAt: 1;
+				play.
+			aStep assert
+				label: 'Assert behavior definition element is expanded';
+				satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isExpanded ];
+				play ].
 
 	^ aScripter
 ]
@@ -70,19 +69,19 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Expand
 GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_ExpandHeader_CollapseHeader [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self behaviorDefinitionScripter_ExpandHeader.
-	aScripter substep: 'Expand and collapse behavior definition' do: [ :aStep |
-		aStep click
-			label: 'Click on expand element';
-			onChildAt: 1;
-			play.
-	
-		aStep check
-			label: 'Check behavior definition element is collapsed';
-			satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isCollapsed ];
-			play.
-	].
+	aScripter
+		substep: 'Expand and collapse behavior definition'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on expand element';
+				onChildAt: 1;
+				play.
+
+			aStep assert
+				label: 'Assert behavior definition element is collapsed';
+				satisfies: [ :aBehaviorDefinition | aBehaviorDefinition isCollapsed ];
+				play ].
 
 	^ aScripter
 ]

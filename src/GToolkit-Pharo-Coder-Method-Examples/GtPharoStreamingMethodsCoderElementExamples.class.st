@@ -17,7 +17,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclass [
 	aScripter := BlScripter new
 		element: anElement.
 
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderId index: 1;
 		exists;
 		play.
@@ -32,25 +32,25 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckOverridden [
 
 	aScripter := self forSuperclass.
 
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderId index: 1;
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
 		play.
 
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderId index: 2;
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
 		play.
 
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderId index: 3;
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
 		play.
 
-	aScripter check
+	aScripter assert
 		id: GtSourceCoderId index: 4;
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
@@ -71,7 +71,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickFirstOverridden
 		id: GtMethodCoderOverridingOverriddenId;
 		play.
 
-	aScripter check
+	aScripter assert
 		onSpaceRoot;
 		id: GtMethodCoderOverriddenAmountId index: 1;
 		value: [ :aButton | aButton label asString ] equals: [ '1 method' ];
@@ -92,7 +92,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickSecondOverridde
 		id: GtMethodCoderOverridingOverriddenId;
 		play.
 
-	aScripter check
+	aScripter assert
 		onSpaceRoot;
 		id: GtMethodCoderOverriddenAmountId;
 		value: [ :aButton | aButton label asString ] equals: [ '1 method' ];
