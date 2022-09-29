@@ -40,9 +40,10 @@ GtBehaviorDefinitionCoderByScripterExamples >> behaviorDefinitionScripter_Collap
 	aScripter := self behaviorDefinitionScripter.
 	aScripter assert
 		label: 'Assert that behavior definition is collapsed by default';
-		satisfies: [ :aHeaderElement | aHeaderElement isCollapsed ].
+		satisfies: [ :aHeaderElement | aHeaderElement isCollapsed ];
+		play.
 
-	^ aScripter syncContinue
+	^ aScripter
 ]
 
 { #category : #examples }

@@ -8,6 +8,7 @@ Class {
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> check: aScripter hasReorderAttributes: anInteger [
+	<gtExample>
 	aScripter check
 		label: 'Check reorder attributes';
 		value: [ :aCoderEditor |
@@ -48,6 +49,7 @@ GtPharoSnippetCoderByScripterExamples >> checkExtractedSource: aScripter [
 
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: aBoolean [
+	<gtExample>
 	| selectorPart |
 	selectorPart := aBoolean ifTrue: [ '_:' ] ifFalse: [ '_' ].
 	aScripter check
@@ -552,7 +554,6 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_03_context_menu [
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_04_click_extract_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forUnaryExtraction_03_context_menu.
 	aScripter click

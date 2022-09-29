@@ -43,7 +43,6 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter [
 { #category : #accessing }
 GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_click_add_method [
 	<gtExample>
-	<noTest>
 	| aScripter |
 
 	aScripter := self methodsCoderWithFilledFilter_insert_text.
