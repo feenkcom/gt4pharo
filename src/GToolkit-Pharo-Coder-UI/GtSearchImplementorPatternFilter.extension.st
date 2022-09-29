@@ -8,3 +8,13 @@ GtSearchImplementorPatternFilter class >> filterDescriptorFor: aMethodsCoder [
 		order: 10;
 		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder selectorNames ] ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchImplementorPatternFilter class >> globalFilterDescriptor [
+	^ GtFilterDescriptor new
+		creator: [ :value | self pattern: value ];
+		named: 'Implementor';
+		order: 10;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPharoIndex current selectorCache ] ]
+]
