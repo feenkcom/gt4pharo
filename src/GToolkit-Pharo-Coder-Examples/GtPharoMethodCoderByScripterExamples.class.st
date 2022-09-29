@@ -3155,7 +3155,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forKeywordRename_04_type.
 

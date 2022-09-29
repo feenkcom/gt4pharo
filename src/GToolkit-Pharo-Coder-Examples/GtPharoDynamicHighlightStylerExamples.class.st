@@ -9,7 +9,6 @@ Class {
 { #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ (GtPharoSnippetCoder forSource: '#() do: [:x | ] displayingProgress: ''''')
@@ -39,7 +38,6 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithMultiplePartsHighlighted [
 { #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ (GtPharoSnippetCoder forSource: '#() do: [:x | ]') asCoderViewModel ].
