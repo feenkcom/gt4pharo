@@ -7,24 +7,20 @@ Class {
 { #category : #accessing }
 GtRenamerExamples >> applyRename [
 	<gtExample>
-	<noTest>
-
 	| scripter |
 	scripter := self startRename.
-	scripter
-		substep: 'Delete char'
-		do: [ :aStep | aStep keyClick: BlKeyboardKey backspace ].
+	scripter keyClick
+		label: 'Delete char';
+		key: BlKeyboardKey backspace;
+		play.
 
-	scripter syncContinue pulse.
-	scripter
-		substep: 'Apply rename'
-		do: [ :aStep | aStep keyClick: BlKeyboardKey return ].
+	scripter keyClick
+		label: 'Apply rename';
+		key: BlKeyboardKey return;
+		play.
 
-	scripter wait forEmptySpaceTaskQueue.
-	scripter syncContinue.
 	self
-		assert:
-			scripter element editor text asString
+		assert: scripter element editor text asString
 				= (self methodText copyReplaceAll: 'anInteger' with: 'aInteger').
 	^ scripter
 ]
@@ -34,14 +30,16 @@ GtRenamerExamples >> cancelRename [
 	<gtExample>
 	| scripter |
 	scripter := self startRename.
-	scripter
-		substep: 'Delete char'
-		do: [ :aStep | aStep keyClick: BlKeyboardKey backspace ].
-	scripter syncContinue pulse.
-	scripter
-		substep: 'Cancel rename'
-		do: [ :aStep | aStep keyClick: BlKeyboardKey escape ].
-	scripter syncContinue.
+	scripter keyClick
+		label: 'Delete char';
+		key: BlKeyboardKey backspace;
+		play.
+		
+	scripter keyClick
+		label: 'Cancel rename';
+		key: BlKeyboardKey escape;
+		play.
+
 	self assert: scripter element editor text asString = self methodText.
 	^ scripter
 ]
@@ -106,23 +104,19 @@ GtRenamerExamples >> startRename [
 	<gtExample>
 	| scripter |
 	scripter := self smalltalkRenamerScripter.
-	scripter
-		substep: 'Request focus'
-		do: [ :aStep | 
-			aStep
-				requestFocus;
-				onSelf ].
+
+	scripter requestFocus
+		onSelf;
+		play.
+
 	scripter
 		substep: 'Move cursor'
-		do: [ :aStep | 10 timesRepeat: [ aStep keyClick: BlKeyboardKey arrowRight ] ].
-	
-	scripter syncContinue.
-	scripter wait forEmptySpaceTaskQueue.
-	
-	scripter
-		substep: 'Start rename'
-		do: [ :aStep | aStep shortcut combination: BlKeyCombination primaryR ].
-	scripter wait forEmptySpaceTaskQueue.
+		do: [ :aStep | 10 timesRepeat: [ (aStep keyClick: BlKeyboardKey arrowRight) play ] ].
 
-	^ scripter syncContinue
+	scripter shortcut
+		label: 'Start rename';
+		combination: BlKeyCombination primaryR;
+		play.
+
+	^ scripter
 ]

@@ -143,7 +143,6 @@ GtCreateBehaviorElementByScripterExamples >> saveClassWithName [
 GtCreateBehaviorElementByScripterExamples >> saveClassWithNamePackage [
 	<gtExample>
 	<after: #cleanUp>
-	<noTest>
 	| aScripter |
 	aScripter := self typeNewClassNamePackageForClass.
 

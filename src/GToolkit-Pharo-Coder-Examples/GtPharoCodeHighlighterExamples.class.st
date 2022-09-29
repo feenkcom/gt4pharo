@@ -7,7 +7,6 @@ Class {
 { #category : #'ast pattern' }
 GtPharoCodeHighlighterExamples >> astPatternIfTrueIfFalse [
 	<gtExample>
-	<noTest>
 	| theIntervals |
 	
 	"we need smacc pharo pattern parser (an alternative to RBPatternParser)"
