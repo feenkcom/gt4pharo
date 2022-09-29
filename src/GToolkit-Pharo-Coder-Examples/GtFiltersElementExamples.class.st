@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFiltersElementExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
 { #category : #'examples - support' }
@@ -17,7 +17,7 @@ GtFiltersElementExamples >> basicFiltersElement [
 	<gtExample>
 	| anElement |
 	anElement := GtFiltersElement new.
-	self assert: anElement descriptors isNil.
+	self assert: anElement descriptors isEmptyOrNil.
 	self assert: anElement childrenCount equals: 1.
 	self assert: (anElement childAt: 1) class equals: BrButton.
 	^ anElement
