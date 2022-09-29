@@ -12,3 +12,8 @@ GtPharoExampleStateFilter class >> filterDescriptorFor: aMethodsCoder [
 		emptyDefaultValue: self defaultState label;
 		beNotDefault
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtPharoExampleStateFilter class >> globalFilterDescriptor [
+	^ nil
+]
