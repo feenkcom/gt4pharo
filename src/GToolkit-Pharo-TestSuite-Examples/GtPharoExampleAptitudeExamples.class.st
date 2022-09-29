@@ -52,23 +52,3 @@ GtPharoExampleAptitudeExamples >> methodsCoders [
 
 	^ aCoder
 ]
-
-{ #category : #'examples - coder' }
-GtPharoExampleAptitudeExamples >> methodsCoders_Executed [
-	<gtExample>
-	<noTest>
-	| aMethodsCoder anyOneExecuted |
-	aMethodsCoder := self methodsCoders.
-
-	anyOneExecuted := false.
-	aMethodsCoder exampler allExecutableExampleCodersDo: [ :aCoder :anExample | 
-		anyOneExecuted ifFalse: [ 
-			anExample run.
-			anyOneExecuted := true ] ].
-
-	self
-		assert: anyOneExecuted
-		description: 'At least one example must be executed'.
-
-	^ aMethodsCoder
-]
