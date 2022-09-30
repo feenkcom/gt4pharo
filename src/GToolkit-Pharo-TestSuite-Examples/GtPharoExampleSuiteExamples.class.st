@@ -11,12 +11,27 @@ GtPharoExampleSuiteExamples >> assertIn: aStep allExamplesWithSomeExamples: aBoo
 	<gtExample>
 	aStep assert
 		label: ('All examples label is visible {1}'
-				format: {aBoolean ifTrue: [ 'with a non-zero ammount' ] ifFalse: [ 'with zero amount' ]});
+				format: {aBoolean ifTrue: [ 'with a non-zero amount' ] ifFalse: [ 'with zero amount' ]});
 		satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString ~= '0' = aBoolean ];
 		onSpaceRoot;
 		id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
 		id: GtPharoSuiteStateAmountLabelId;
 		play
+]
+
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> assertIn: aParentStep exampleCountsOfAll: allCount success: successCount failure: failureCount error: errorCount notExecuted: notExecutedCount [
+	<gtExample>
+	aParentStep
+		checks: 'Assert displayed example results'
+		do: [ :aStep | 
+			aStep assert
+				label: 'All examples label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
+				id: GtPharoSuiteStateAmountLabelId;
+				play ]
 ]
 
 { #category : #'examples - example suite' }
@@ -61,7 +76,12 @@ GtPharoExampleSuiteExamples >> assertIn: aStep localToggleActive: localActivated
 GtPharoExampleSuiteExamples >> classCoderWithExampleMethods [
 	<gtExample>
 	| aScripter |
-	aScripter := self scripterForBlock: [ GtCoder forClass: self class ].
+	aScripter := self
+			scripterForBlock: [ | aClass |
+				aClass := self classWithExamples.
+				aClass gtExamples
+					do: [ :eachExample | eachExample method clearExampleAndTestCaches ].
+				GtCoder forClass: aClass ].
 
 	aScripter set
 		label: 'Store suite view model';
@@ -93,6 +113,12 @@ GtPharoExampleSuiteExamples >> classCoderWithExampleMethods [
 	^ aScripter
 ]
 
+{ #category : #'examples - dummy examples' }
+GtPharoExampleSuiteExamples >> classWithExamples [
+	<gtExample>
+	^ GtPharoExampleSuiteDummyExamples
+]
+
 { #category : #'examples - example suite' }
 GtPharoExampleSuiteExamples >> clickOnRemoteToggle [
 	<gtExample>
@@ -114,9 +140,27 @@ GtPharoExampleSuiteExamples >> clickOnRemoteToggle [
 				playEnabled: true
 				withLabel: 'Run'.
 
-			self assertIn: aStep allExamplesWithSomeExamples: true ].
+			self
+				assertIn: aStep
+				exampleCountsOfAll: self numberOfExamples
+				success: 0
+				failure: 0
+				error: 0
+				notExecuted: self numberOfExamples ].
 
 	^ aScripter
+]
+
+{ #category : #'examples - dummy examples' }
+GtPharoExampleSuiteExamples >> numberOfExamples [
+	<gtExample>
+	| aCount |
+	aCount := self classWithExamples gtExamples size.
+	self
+		assert: aCount isZero not
+		description: [ '{1} must have examples' format: {self classWithExamples} ].
+
+	^ aCount
 ]
 
 { #category : #'examples - example suite' }
@@ -134,15 +178,35 @@ GtPharoExampleSuiteExamples >> openExampleDropdown [
 				play.
 
 			self
-				flag: 'The idea is that the list with example states should be properly filled with numbers.
-		I suspect that the following wait steps does not target it properly 
-		and it is only coincidence that it works'.
+				assertIn: aStep
+				localToggleActive: true
+				playEnabled: true
+				withLabel: 'Run'.
 
-			aStep wait
-				forEnqueuedSpaceTaskTimeout: 3 seconds;
-				play.
-			aStep wait
-				forEmptySpaceTaskQueue;
+			self
+				assertIn: aStep
+				exampleCountsOfAll: self numberOfExamples
+				success: 0
+				failure: 0
+				error: 0
+				notExecuted: self numberOfExamples ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> runExamplesLocally [
+	<gtExample>
+	| aScripter |
+	aScripter := self openExampleDropdown.
+
+	aScripter
+		substep: 'Execute examples locally'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on run button';
+				onSpaceRoot;
+				id: GtPharoSuitePlayButtonId;
 				play.
 
 			self
@@ -151,7 +215,45 @@ GtPharoExampleSuiteExamples >> openExampleDropdown [
 				playEnabled: true
 				withLabel: 'Run'.
 
-			self assertIn: aStep allExamplesWithSomeExamples: true ].
+			self
+				assertIn: aStep
+				exampleCountsOfAll: self numberOfExamples
+				success: self numberOfExamples
+				failure: 0
+				error: 0
+				notExecuted: 0 ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> runExamplesRemotely [
+	<gtExample>
+	| aScripter |
+	aScripter := self clickOnRemoteToggle.
+
+	aScripter
+		substep: 'Execute examples remotely'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on run button';
+				onSpaceRoot;
+				id: GtPharoSuitePlayButtonId;
+				play.
+
+			self
+				assertIn: aStep
+				localToggleActive: false
+				playEnabled: true
+				withLabel: 'Run'.
+
+			self
+				assertIn: aStep
+				exampleCountsOfAll: self numberOfExamples
+				success: self numberOfExamples
+				failure: 0
+				error: 0
+				notExecuted: 0 ].
 
 	^ aScripter
 ]
