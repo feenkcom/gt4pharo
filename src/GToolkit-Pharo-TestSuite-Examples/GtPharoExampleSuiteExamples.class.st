@@ -7,19 +7,6 @@ Class {
 }
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> assertIn: aStep allExamplesWithSomeExamples: aBoolean [
-	<gtExample>
-	aStep assert
-		label: ('All examples label is visible {1}'
-				format: {aBoolean ifTrue: [ 'with a non-zero amount' ] ifFalse: [ 'with zero amount' ]});
-		satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString ~= '0' = aBoolean ];
-		onSpaceRoot;
-		id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
-		id: GtPharoSuiteStateAmountLabelId;
-		play
-]
-
-{ #category : #'examples - example suite' }
 GtPharoExampleSuiteExamples >> assertIn: aParentStep exampleCountsOfAll: allCount success: successCount failure: failureCount error: errorCount notExecuted: notExecutedCount [
 	<gtExample>
 	aParentStep
@@ -30,6 +17,38 @@ GtPharoExampleSuiteExamples >> assertIn: aParentStep exampleCountsOfAll: allCoun
 				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
 				onSpaceRoot;
 				id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+				
+			aStep assert
+				label: 'Success examples label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = successCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtFilterExampleSuccessState uniqueInstance);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+				
+			aStep assert
+				label: 'Failure examples label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtFilterExampleFailureState uniqueInstance);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+				
+			aStep assert
+				label: 'Error examples label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtFilterExampleErrorState uniqueInstance);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+				
+			aStep assert
+				label: 'Not executed examples label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtFilterExampleNotExecutedState uniqueInstance);
 				id: GtPharoSuiteStateAmountLabelId;
 				play ]
 ]
@@ -151,6 +170,52 @@ GtPharoExampleSuiteExamples >> clickOnRemoteToggle [
 	^ aScripter
 ]
 
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> closeDropdownWithLocallyExecutedExamples [
+	<gtExample>
+	| aScripter |
+	aScripter := self runExamplesLocally.
+
+	aScripter
+		substep: 'Close example dropdown'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click class name';
+				id: GtBehaviorCoderBehaviorNameId;
+				play.
+
+			aStep assert
+				label: 'Local toggle does not exist';
+				notExists;
+				id: GtPharoSuiteLocalToggleId;
+				play ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> closeDropdownWithRemoteToggleSelected [
+	<gtExample>
+	| aScripter |
+	aScripter := self clickOnRemoteToggle.
+
+	aScripter
+		substep: 'Close example dropdown'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click class name';
+				id: GtBehaviorCoderBehaviorNameId;
+				play.
+
+			aStep assert
+				label: 'Remote toggle does not exist';
+				notExists;
+				id: GtPharoSuiteRemoteToggleId;
+				play ].
+
+	^ aScripter
+]
+
 { #category : #'examples - dummy examples' }
 GtPharoExampleSuiteExamples >> numberOfExamples [
 	<gtExample>
@@ -180,6 +245,68 @@ GtPharoExampleSuiteExamples >> openExampleDropdown [
 			self
 				assertIn: aStep
 				localToggleActive: true
+				playEnabled: true
+				withLabel: 'Run'.
+
+			self
+				assertIn: aStep
+				exampleCountsOfAll: self numberOfExamples
+				success: 0
+				failure: 0
+				error: 0
+				notExecuted: self numberOfExamples ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> reopenExampleDropdownWithLocallyExecutedExamples [
+	<gtExample>
+	| aScripter |
+	aScripter := self closeDropdownWithLocallyExecutedExamples.
+
+	aScripter
+		substep: 'Display example Dropdown'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on example button';
+				id: GtPharoExampleSuiteShowButtonId;
+				play.
+
+			self
+				assertIn: aStep
+				localToggleActive: true
+				playEnabled: true
+				withLabel: 'Run'.
+
+			self
+				assertIn: aStep
+				exampleCountsOfAll: self numberOfExamples
+				success: self numberOfExamples
+				failure: 0
+				error: 0
+				notExecuted: 0 ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> reopenExampleDropdownWithRemoteToggleSelected [
+	<gtExample>
+	| aScripter |
+	aScripter := self closeDropdownWithRemoteToggleSelected.
+
+	aScripter
+		substep: 'Display example Dropdown'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on example button';
+				id: GtPharoExampleSuiteShowButtonId;
+				play.
+
+			self
+				assertIn: aStep
+				localToggleActive: false
 				playEnabled: true
 				withLabel: 'Run'.
 
