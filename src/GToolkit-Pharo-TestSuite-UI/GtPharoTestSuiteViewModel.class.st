@@ -68,6 +68,11 @@ GtPharoTestSuiteViewModel >> executionDetail [
 ]
 
 { #category : #'api - suite' }
+GtPharoTestSuiteViewModel >> executionError: anError [
+	self executionState: #exception -> anError
+]
+
+{ #category : #'api - suite' }
 GtPharoTestSuiteViewModel >> executionState [
 
 	^ executionState ifNil: [ executionState := #unknown -> nil ]

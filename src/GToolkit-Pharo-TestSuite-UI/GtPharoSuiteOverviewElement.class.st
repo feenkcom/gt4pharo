@@ -24,7 +24,7 @@ GtPharoSuiteOverviewElement >> initialize [
 		vFitContent;
 		stencil: content;
 		dataBinder: [ :anElement :aSnapshot | aSnapshot ifError: [ :anError |
-				suiteViewModel executionState: #exception -> anError.
+				suiteViewModel executionError: anError.
 				content updateErrorElement.
 			Smalltalk logStdOutDuring: [ :logger |
 				logger

@@ -58,6 +58,11 @@ TGtPharoSuiteViewModel >> executionDetail [
 ]
 
 { #category : #'api - suite' }
+TGtPharoSuiteViewModel >> executionError: anError [
+	self explicitRequirement
+]
+
+{ #category : #'api - suite' }
 TGtPharoSuiteViewModel >> executor [
 
 	<return: #TGtPharoSuiteExecutor>

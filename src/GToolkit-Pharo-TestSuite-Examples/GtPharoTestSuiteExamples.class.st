@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoExampleSuiteExamples,
+	#name : #GtPharoTestSuiteExamples,
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
@@ -7,54 +7,7 @@ Class {
 }
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> assertIn: aParentStep exampleCountsOfAll: allCount success: successCount failure: failureCount error: errorCount notExecuted: notExecutedCount [
-	<gtExample>
-	aParentStep
-		checks: 'Assert displayed example results'
-		do: [ :aStep | 
-			aStep assert
-				label: 'All examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Success examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = successCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleSuccessState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Failure examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleFailureState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Error examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleErrorState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Not executed examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleNotExecutedState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play ]
-]
-
-{ #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> assertIn: aStep localToggleActive: localActivated playEnabled: playIsEnabled withLabel: playLabel [
+GtPharoTestSuiteExamples >> assertIn: aStep localToggleActive: localActivated playEnabled: playIsEnabled withLabel: playLabel [
 	<gtExample>
 	aStep assert
 		label: ('Play button is {1} with label "{2}"'
@@ -92,57 +45,112 @@ GtPharoExampleSuiteExamples >> assertIn: aStep localToggleActive: localActivated
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> classCoderWithExampleMethods [
+GtPharoTestSuiteExamples >> assertIn: aParentStep testCaseCountsOfAll: allCount passed: passedCount skipped: skippedCount failure: failureCount error: errorCount notExecuted: notExecutedCount [
+	<gtExample>
+	aParentStep
+		checks: 'Assert displayed example results'
+		do: [ :aStep | 
+			aStep assert
+				label: 'All test case label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseAllState);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+
+			aStep assert
+				label: 'Passed test case label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = passedCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCasePassedState );
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+
+			aStep assert
+				label: 'Skipped test case label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = skippedCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseSkippedState);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+
+			aStep assert
+				label: 'Failure test case label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseFailureState);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+
+			aStep assert
+				label: 'Error test case label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseErrorState);
+				id: GtPharoSuiteStateAmountLabelId;
+				play.
+
+			aStep assert
+				label: 'Not executed test case label';
+				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
+				onSpaceRoot;
+				id: (GtPharoSuiteStateId new state: GtPharoMethodNotExecutedState);
+				id: GtPharoSuiteStateAmountLabelId;
+				play ]
+]
+
+{ #category : #'examples - example suite' }
+GtPharoTestSuiteExamples >> classCoderWithTestCaseMethods [
 	<gtExample>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ | aClass |
-				aClass := self classWithExamples.
-				aClass gtExamples
-					do: [ :eachExample | eachExample method clearExampleAndTestCaches ].
+				aClass := self classWithTestCases.
+				aClass suite tests
+					do: [ :aTestCase | aTestCase gtCompiledMethod clearExampleAndTestCaches ].
 				GtCoder forClass: aClass ].
 
 	aScripter set
 		label: 'Store suite view model';
 		key: #suiteViewModel value: [ :aButton | aButton suiteViewModel ];
-		id: GtPharoExampleSuiteShowButtonId;
+		id: GtPharoTestSuiteShowButtonId;
 		play.
 
 	aScripter
 		checks: 'Initial state assertions'
 		do: [ :aStep | 
 			aStep assert
-				label: 'Assert example button exists';
+				label: 'Assert test button exists';
 				exists;
 				id: GtPharoExampleSuiteShowButtonId;
 				play.
 
 			aStep assert
-				label: 'Example button is enabled and visible';
+				label: 'Test button is enabled and visible';
 				satisfies: [ :aButton | aButton isEnabled and: [ aButton visibility = BlVisibility visible ] ];
-				id: GtPharoExampleSuiteShowButtonId;
+				id: GtPharoTestSuiteShowButtonId;
 				play.
 
 			aStep assert
-				label: 'Test button is gone';
+				label: 'Example button is gone';
 				satisfies: [ :aButton | aButton visibility = BlVisibility gone ];
-				id: GtPharoTestSuiteShowButtonId;
+				id: GtPharoExampleSuiteShowButtonId;
 				play ].
 
 	^ aScripter
 ]
 
 { #category : #'examples - dummy examples' }
-GtPharoExampleSuiteExamples >> classWithExamples [
+GtPharoTestSuiteExamples >> classWithTestCases [
 	<gtExample>
-	^ GtPharoExampleSuiteDummyExamples
+	^ GtPharoTestSuiteDummyTest
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> clickOnRemoteToggle [
+GtPharoTestSuiteExamples >> clickOnRemoteToggle [
 	<gtExample>
 	| aScripter |
-	aScripter := self openExampleDropdown.
+	aScripter := self openTestCaseDropdown.
 
 	aScripter
 		substep: 'Choose remote execution'
@@ -161,23 +169,24 @@ GtPharoExampleSuiteExamples >> clickOnRemoteToggle [
 
 			self
 				assertIn: aStep
-				exampleCountsOfAll: self numberOfExamples
-				success: 0
+				testCaseCountsOfAll: self numberOfTestCases
+				passed: 0
+				skipped: 0
 				failure: 0
 				error: 0
-				notExecuted: self numberOfExamples ].
+				notExecuted: self numberOfTestCases ].
 
 	^ aScripter
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> closeDropdownWithLocallyExecutedExamples [
+GtPharoTestSuiteExamples >> closeDropdownWithLocallyExecutedTestCases [
 	<gtExample>
 	| aScripter |
-	aScripter := self runExamplesLocally.
+	aScripter := self runTestCasesLocally.
 
 	aScripter
-		substep: 'Close example dropdown'
+		substep: 'Close test case dropdown'
 		do: [ :aStep | 
 			aStep click
 				label: 'Click class name';
@@ -194,13 +203,13 @@ GtPharoExampleSuiteExamples >> closeDropdownWithLocallyExecutedExamples [
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> closeDropdownWithRemoteToggleSelected [
+GtPharoTestSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 	<gtExample>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
 	aScripter
-		substep: 'Close example dropdown'
+		substep: 'Close test case dropdown'
 		do: [ :aStep | 
 			aStep click
 				label: 'Click class name';
@@ -217,29 +226,29 @@ GtPharoExampleSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 ]
 
 { #category : #'examples - dummy examples' }
-GtPharoExampleSuiteExamples >> numberOfExamples [
+GtPharoTestSuiteExamples >> numberOfTestCases [
 	<gtExample>
 	| aCount |
-	aCount := self classWithExamples gtExamples size.
+	aCount := self classWithTestCases suite tests size.
 	self
 		assert: aCount isZero not
-		description: [ '{1} must have examples' format: {self classWithExamples} ].
+		description: [ '{1} must have test cases' format: {self classWithTestCases} ].
 
 	^ aCount
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> openExampleDropdown [
+GtPharoTestSuiteExamples >> openTestCaseDropdown [
 	<gtExample>
 	| aScripter |
-	aScripter := self classCoderWithExampleMethods.
+	aScripter := self classCoderWithTestCaseMethods.
 
 	aScripter
-		substep: 'Display example dropdown'
+		substep: 'Display test dropdown'
 		do: [ :aStep | 
 			aStep click
-				label: 'Click on example button';
-				id: GtPharoExampleSuiteShowButtonId;
+				label: 'Click on test button';
+				id: GtPharoTestSuiteShowButtonId;
 				play.
 
 			self
@@ -250,27 +259,28 @@ GtPharoExampleSuiteExamples >> openExampleDropdown [
 
 			self
 				assertIn: aStep
-				exampleCountsOfAll: self numberOfExamples
-				success: 0
+				testCaseCountsOfAll: self numberOfTestCases
+				passed: 0
+				skipped: 0
 				failure: 0
 				error: 0
-				notExecuted: self numberOfExamples ].
+				notExecuted: self numberOfTestCases ].
 
 	^ aScripter
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> reopenExampleDropdownWithLocallyExecutedExamples [
+GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithLocallyExecutedTestCases [
 	<gtExample>
 	| aScripter |
-	aScripter := self closeDropdownWithLocallyExecutedExamples.
+	aScripter := self closeDropdownWithLocallyExecutedTestCases.
 
 	aScripter
-		substep: 'Display example Dropdown'
+		substep: 'Display test case dropdown'
 		do: [ :aStep | 
 			aStep click
-				label: 'Click on example button';
-				id: GtPharoExampleSuiteShowButtonId;
+				label: 'Click on test case button';
+				id: GtPharoTestSuiteShowButtonId;
 				play.
 
 			self
@@ -281,8 +291,9 @@ GtPharoExampleSuiteExamples >> reopenExampleDropdownWithLocallyExecutedExamples 
 
 			self
 				assertIn: aStep
-				exampleCountsOfAll: self numberOfExamples
-				success: self numberOfExamples
+				testCaseCountsOfAll: self numberOfTestCases
+				passed: self numberOfTestCases
+				skipped: 0
 				failure: 0
 				error: 0
 				notExecuted: 0 ].
@@ -291,17 +302,17 @@ GtPharoExampleSuiteExamples >> reopenExampleDropdownWithLocallyExecutedExamples 
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> reopenExampleDropdownWithRemoteToggleSelected [
+GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithRemoteToggleSelected [
 	<gtExample>
 	| aScripter |
 	aScripter := self closeDropdownWithRemoteToggleSelected.
 
 	aScripter
-		substep: 'Display example dropdown'
+		substep: 'Display test suite dropdown'
 		do: [ :aStep | 
 			aStep click
-				label: 'Click on example button';
-				id: GtPharoExampleSuiteShowButtonId;
+				label: 'Click on test suite button';
+				id: GtPharoTestSuiteShowButtonId;
 				play.
 
 			self
@@ -312,20 +323,21 @@ GtPharoExampleSuiteExamples >> reopenExampleDropdownWithRemoteToggleSelected [
 
 			self
 				assertIn: aStep
-				exampleCountsOfAll: self numberOfExamples
-				success: 0
+				testCaseCountsOfAll: self numberOfTestCases
+				passed: 0
+				skipped: 0
 				failure: 0
 				error: 0
-				notExecuted: self numberOfExamples ].
+				notExecuted: self numberOfTestCases ].
 
 	^ aScripter
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> runExamplesLocally [
+GtPharoTestSuiteExamples >> runTestCasesLocally [
 	<gtExample>
 	| aScripter |
-	aScripter := self openExampleDropdown.
+	aScripter := self openTestCaseDropdown.
 
 	aScripter
 		substep: 'Execute examples locally'
@@ -344,8 +356,9 @@ GtPharoExampleSuiteExamples >> runExamplesLocally [
 
 			self
 				assertIn: aStep
-				exampleCountsOfAll: self numberOfExamples
-				success: self numberOfExamples
+				testCaseCountsOfAll: self numberOfTestCases
+				passed: self numberOfTestCases
+				skipped: 0
 				failure: 0
 				error: 0
 				notExecuted: 0 ].
@@ -354,13 +367,13 @@ GtPharoExampleSuiteExamples >> runExamplesLocally [
 ]
 
 { #category : #'examples - example suite' }
-GtPharoExampleSuiteExamples >> runExamplesRemotely [
+GtPharoTestSuiteExamples >> runTestCasesRemotely [
 	<gtExample>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
 	aScripter
-		substep: 'Execute examples remotely'
+		substep: 'Execute test cases remotely'
 		do: [ :aStep | 
 			aStep click
 				label: 'Click on run button';
@@ -376,8 +389,9 @@ GtPharoExampleSuiteExamples >> runExamplesRemotely [
 
 			self
 				assertIn: aStep
-				exampleCountsOfAll: self numberOfExamples
-				success: self numberOfExamples
+				testCaseCountsOfAll: self numberOfTestCases
+				passed: self numberOfTestCases
+				skipped: 0
 				failure: 0
 				error: 0
 				notExecuted: 0 ].
