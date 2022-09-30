@@ -143,12 +143,12 @@ GtMethodsCoderExamples >> unionCoder [
 { #category : #accessing }
 GtMethodsCoderExamples >> validateNoMemoryLeaks [
 	<gtExample>
-	<noTest>
 	| subscriptionCount instanceCount diffSubscriptions diffInstances |
 	Smalltalk garbageCollect.
 	subscriptionCount := SystemAnnouncer uniqueInstance numberOfSubscriptions.
 	instanceCount := GtAsyncSearchMethodGroupStream allInstances size.
 	10 timesRepeat: [ self doImplementorsCoder ].
+	(Delay forMilliseconds: 100) wait.	"Need to let terminated processes finish"
 	3 timesRepeat: [ Smalltalk garbageCollect ].
 	diffSubscriptions := subscriptionCount - SystemAnnouncer uniqueInstance numberOfSubscriptions.
 	diffInstances := instanceCount - GtAsyncSearchMethodGroupStream allInstances size.
