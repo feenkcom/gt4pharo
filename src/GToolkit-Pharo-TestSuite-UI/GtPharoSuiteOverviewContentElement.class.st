@@ -31,67 +31,65 @@ GtPharoSuiteOverviewContentElement >> initialize [
 
 	self addChild: listElement as: #list.
 	self addChild: toolbarElement as: #toolbar.
-	self addChild: errorElement as: #error.
+	self addChild: errorElement.
 	self addAptitude: (BrLayoutResizerAptitude new vAnyToFitContent: toolbarElement).
 ]
 
 { #category : #initialization }
 GtPharoSuiteOverviewContentElement >> initializeErrorElement [
-
 	errorElement := BrButton new
-		                beSmallSize;
-		                vFitContent;
-		                hMatchParent;
-		                aptitude:
-			                (BrGlamorousButtonExteriorAptitude new 
-				                 backgroundPaint:
-					                 BrGlamorousColors paleErrorBackgroundColor)
-			                + BrGlamorousButtonRectangularAptitude
-			                + BrGlamorousButtonIconAptitude
-			                + BrGlamorousButtonLabelAptitude;
-		                margin: (BlInsets top: 10);
-		                visibility: BlVisibility gone;
-		                icon: BrGlamorousVectorIcons inspect;
-		                label: 'Execution error';
-		                action: [ :aButton | 
-			                self spawnErrorDetailFrom: aButton ]
+			id: GtPharoSuiteExecutionErrorButtonId;
+			beSmallSize;
+			vFitContent;
+			hMatchParent;
+			aptitude: (BrGlamorousButtonExteriorAptitude new
+					backgroundPaint: BrGlamorousColors paleErrorBackgroundColor)
+					+ BrGlamorousButtonRectangularAptitude + BrGlamorousButtonIconAptitude
+					+ BrGlamorousButtonLabelAptitude;
+			margin: (BlInsets top: 10);
+			visibility: BlVisibility gone;
+			icon: BrGlamorousVectorIcons inspect;
+			label: 'Execution error';
+			action: [ :aButton | self spawnErrorDetailFrom: aButton ]
 ]
 
 { #category : #initialization }
 GtPharoSuiteOverviewContentElement >> initializeToolbar [
-
 	toolbarElement := BrToolbar new.
 	toolbarElement aptitude: (BrGlamorousToolbarAptitude new spacing: 0).
 	toolbarElement
 		hMatchParent;
 		vFitContent.
 
-	toolbarElement addItem: (BrToggleGroup new
-			 aptitude: BrGlamorousToggleGroupAptitude new;
-			 addToggle: (localToggle := BrToggle new
-					                 activate;
-					                 disable;
-					                 beSmallSize;
-					                 aptitude: BrGlamorousToggleWithCheckedIconAndLabelAptitude;
-					                 label: 'Local';
-					                 icon: BrGlamorousVectorIcons accept;
-					                 when: BrToggleActivatedEvent
-					                 do: [ :anEvent | self onLocalActivated: anEvent ]);
-			 addToggle: (remoteToggle := BrToggle new
-					                  disable;
-					                  beSmallSize;
-					                  aptitude: BrGlamorousToggleWithCheckedIconAndLabelAptitude;
-					                  label: 'Remote';
-					                  icon: BrGlamorousVectorIcons accept;
-					                  when: BrToggleActivatedEvent
-					                  do: [ :anEvent | 
-						                  self onRemoteActivated: anEvent ])).
+	toolbarElement
+		addItem: (BrToggleGroup new
+				aptitude: BrGlamorousToggleGroupAptitude new;
+				addToggle: (localToggle := BrToggle new
+							id: GtPharoSuiteLocalToggleId;
+							activate;
+							disable;
+							beSmallSize;
+							aptitude: BrGlamorousToggleWithCheckedIconAndLabelAptitude;
+							label: 'Local';
+							icon: BrGlamorousVectorIcons accept;
+							when: BrToggleActivatedEvent
+								do: [ :anEvent | self onLocalActivated: anEvent ]);
+				addToggle: (remoteToggle := BrToggle new
+							id: GtPharoSuiteRemoteToggleId;
+							disable;
+							beSmallSize;
+							aptitude: BrGlamorousToggleWithCheckedIconAndLabelAptitude;
+							label: 'Remote';
+							icon: BrGlamorousVectorIcons accept;
+							when: BrToggleActivatedEvent
+								do: [ :anEvent | self onRemoteActivated: anEvent ])).
 
-	toolbarElement addItem: (BlElement new
-			 viewModel: BrWidgetModel new;
-			 constraintsDo: [ :c | 
-				 c horizontal matchParent.
-				 c vertical exact: 0 ]).
+	toolbarElement
+		addItem: (BlElement new
+				viewModel: BrWidgetModel new;
+				constraintsDo: [ :c | 
+					c horizontal matchParent.
+					c vertical exact: 0 ]).
 
 	toolbarElement addItem: (playButton := self newPlayButton)
 ]
@@ -99,6 +97,7 @@ GtPharoSuiteOverviewContentElement >> initializeToolbar [
 { #category : #'private - instance creation' }
 GtPharoSuiteOverviewContentElement >> newPlayButton [
 	^ BrButton new
+		id: GtPharoSuitePlayButtonId;
 		disable;
 		beSmallSize;
 		aptitude: BrGlamorousButtonWithIconAndLabelAptitude new;
@@ -240,9 +239,9 @@ GtPharoSuiteOverviewContentElement >> updateSink [
 { #category : #'private - updating' }
 GtPharoSuiteOverviewContentElement >> updateStateElementFor: aState [
 	| aStateElement |
-
 	aStateElement := stateElements at: aState.
-	aStateElement state: aState
+	aStateElement state: aState.
+	aStateElement id: (GtPharoSuiteStateId new state: aState)
 ]
 
 { #category : #'private - updating' }

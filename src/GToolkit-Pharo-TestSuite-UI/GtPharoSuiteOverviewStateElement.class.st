@@ -24,6 +24,7 @@ GtPharoSuiteOverviewStateElement >> initialize [
 		aptitude: BrGlamorousLabelAptitude.
 
 	amount := BrLabel new
+		id: GtPharoSuiteStateAmountLabelId;
 		aptitude: BrGlamorousLabelAptitude;
 		text: '0';
 		withAsyncSinkDo: [ :anElementSink |

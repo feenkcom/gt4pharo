@@ -86,6 +86,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 { #category : #'instance creation' }
 GtPharoCoderUIUtility class >> newExamplesDropdownButtonForViewModel: aViewModel [
 	^ GtPharoSuiteShowButton new
+		id: GtPharoExampleSuiteShowButtonId;
 		label: 'Run Examples';
 		suiteViewModel: aViewModel;
 		yourself
@@ -94,6 +95,7 @@ GtPharoCoderUIUtility class >> newExamplesDropdownButtonForViewModel: aViewModel
 { #category : #'instance creation' }
 GtPharoCoderUIUtility class >> newTestsDropdownButtonForViewModel: aViewModel [
 	^ GtPharoSuiteShowButton new
+		id: GtPharoTestSuiteShowButtonId;
 		label: 'Run Tests';
 		suiteViewModel: aViewModel;
 		yourself

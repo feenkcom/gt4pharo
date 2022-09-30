@@ -1,7 +1,7 @@
 "
 I display a summary of example states, e.g., successfully executed.
 #Example
-For the following methods: {{gtExample:GtPharoExampleAptitudeExamples >> #methodsCoders_Executed | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor:}}
+For the following methods: {{gtExample:GtPharoExampleAptitudeExamples >> #methodsCoders | codeExpanded=false | previewExpanded=true | previewShow=#gtLiveFor:}}
 I display the following icon presenting the all actual example states (execution results): {{gtExample:GtPharoExampleAptitudeExamples >> #buttonWithAptitudeAndMethodCoders_Executed | codeExpanded=false | previewExpanded=true }}
 "
 Class {
