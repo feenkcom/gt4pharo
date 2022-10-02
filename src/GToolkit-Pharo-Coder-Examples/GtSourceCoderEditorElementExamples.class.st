@@ -50,12 +50,5 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 		assert: anEditorElement text characters
 		equals: aSnippetCoder currentSourceText characters.
 
-	^ ValueHolder new contents: anEditorElement
-]
-
-{ #category : #'example - instance creation' }
-GtSourceCoderEditorElementExamples >> editorForSnippetCoder2 [
-	<gtExample>
-	"This method is used in a 'Basic Shortcuts' lepiter page"
-	^ self editorForSnippetCoder contents
+	^ anEditorElement
 ]
