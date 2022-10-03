@@ -1,11 +1,6 @@
 Extension { #name : #GtSearchRBASTFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchRBASTFilter class >> filterDescriptorFor: aMethodsCoder [
-	^ self globalFilterDescriptor
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchRBASTFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self sourceExpression: value ];
