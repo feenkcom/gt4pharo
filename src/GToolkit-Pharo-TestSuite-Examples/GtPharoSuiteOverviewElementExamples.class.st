@@ -111,7 +111,7 @@ GtPharoSuiteOverviewElementExamples >> testSuiteViewModelWithMethodsCoderAndExec
 	<noTest>
 	| aViewModel |
 	aViewModel := self testSuiteViewModelWithMethodsCoder.
-	aViewModel executionState: #exception -> ZeroDivide new.
+	aViewModel executionError: ZeroDivide new.
 
 	self assert: aViewModel hasPendingExecution not.
 	self assert: aViewModel hasExecutionError.

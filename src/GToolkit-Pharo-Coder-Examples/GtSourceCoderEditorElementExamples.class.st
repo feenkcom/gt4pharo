@@ -50,5 +50,5 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 		assert: anEditorElement text characters
 		equals: aSnippetCoder currentSourceText characters.
 
-	^ ValueHolder new contents: anEditorElement
+	^ anEditorElement
 ]

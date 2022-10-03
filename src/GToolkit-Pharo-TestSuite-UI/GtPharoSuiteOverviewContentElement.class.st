@@ -10,7 +10,8 @@ Class {
 		'localToggle',
 		'remoteToggle',
 		'playButton',
-		'errorElement'
+		'errorElement',
+		'updater'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
 }
@@ -18,6 +19,8 @@ Class {
 { #category : #initialization }
 GtPharoSuiteOverviewContentElement >> initialize [
 	super initialize.
+
+	updater := BrElementUpdater new element: self selector: #updateElement.
 
 	self
 		vFitContent;
@@ -32,7 +35,8 @@ GtPharoSuiteOverviewContentElement >> initialize [
 	self addChild: listElement as: #list.
 	self addChild: toolbarElement as: #toolbar.
 	self addChild: errorElement.
-	self addAptitude: (BrLayoutResizerAptitude new vAnyToFitContent: toolbarElement).
+	self
+		addAptitude: (BrLayoutResizerAptitude new vAnyToFitContent: toolbarElement)
 ]
 
 { #category : #initialization }
@@ -152,7 +156,7 @@ GtPharoSuiteOverviewContentElement >> onRemoteActivated: anEvent [
 
 { #category : #'private - announcement handling' }
 GtPharoSuiteOverviewContentElement >> onSuiteStreamChanged: anAnnouncement [
-	self updateElement
+	updater requestUpdate
 ]
 
 { #category : #'api - suite view model' }
