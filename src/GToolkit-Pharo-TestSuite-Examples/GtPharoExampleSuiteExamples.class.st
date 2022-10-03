@@ -293,6 +293,7 @@ GtPharoExampleSuiteExamples >> reopenExampleDropdownWithLocallyExecutedExamples 
 { #category : #'examples - example suite' }
 GtPharoExampleSuiteExamples >> reopenExampleDropdownWithRemoteToggleSelected [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self closeDropdownWithRemoteToggleSelected.
 
