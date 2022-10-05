@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'programCounterAttributes'
 	],
+	#classVars : [
+		'ProgramCounterTextAttribute'
+	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
 
@@ -58,6 +61,14 @@ GtPharoMethodContextCoderViewModel >> programCounterRange [
 	^ self coderModel programCounterRange
 ]
 
+{ #category : #'private - updating' }
+GtPharoMethodContextCoderViewModel >> programCounterTextAttribute [
+	^ ProgramCounterTextAttribute
+		ifNil: [ ProgramCounterTextAttribute := (BlTextDecorationAttribute new underline
+					color: BrGlamorousColors errorBackgroundColor;
+					thickness: 1.5) beNotOverwritableByStyler ]
+]
+
 { #category : #'api - coder model' }
 GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
 	super subscribeToCoderModel.
@@ -75,12 +86,16 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
 
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
-	aSourceCode currentSourceText then: [ :aSourceText |
-		self programCounterRange ifNotNil: [ :anInterval |
-			programCounterAttributes ifNotNil: [ :theAttributes | self removeCoderTextAttributes: theAttributes ].
-			programCounterAttributes := self
-				addTextAttribute: (BlTextDecorationAttribute new underline color: BrGlamorousColors errorBackgroundColor; thickness: 1.5) beNotOverwritableByStyler
-				onText: aSourceText text
-				from: (anInterval first min: aSourceText text size)
-				to: (anInterval last min: aSourceText text size) ] ]
+ContextStackSignal emit.
+	aSourceCode currentSourceText
+		then: [ :aSourceText | 
+			self programCounterRange
+				ifNotNil: [ :anInterval | 
+					programCounterAttributes
+						ifNotNil: [ :theAttributes | self removeCoderTextAttributes: theAttributes ].
+					programCounterAttributes := self
+							addTextAttribute: self programCounterTextAttribute
+							onText: aSourceText text
+							from: (anInterval first min: aSourceText text size)
+							to: (anInterval last min: aSourceText text size) ] ]
 ]
