@@ -86,7 +86,6 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
 
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
-ContextStackSignal emit.
 	aSourceCode currentSourceText
 		then: [ :aSourceText | 
 			self programCounterRange
