@@ -182,7 +182,6 @@ GtPharoTestSuiteExamples >> clickOnRemoteToggle [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> closeDropdownWithLocallyExecutedTestCases [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self runTestCasesLocally.
 
@@ -206,7 +205,6 @@ GtPharoTestSuiteExamples >> closeDropdownWithLocallyExecutedTestCases [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
@@ -274,7 +272,6 @@ GtPharoTestSuiteExamples >> openTestCaseDropdown [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithLocallyExecutedTestCases [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self closeDropdownWithLocallyExecutedTestCases.
 
@@ -307,7 +304,6 @@ GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithLocallyExecutedTestCases [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithRemoteToggleSelected [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self closeDropdownWithRemoteToggleSelected.
 
@@ -340,7 +336,6 @@ GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithRemoteToggleSelected [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> runTestCasesLocally [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self openTestCaseDropdown.
 
@@ -374,7 +369,6 @@ GtPharoTestSuiteExamples >> runTestCasesLocally [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> runTestCasesRemotely [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
