@@ -374,6 +374,7 @@ GtPharoTestSuiteExamples >> runTestCasesLocally [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> runTestCasesRemotely [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
