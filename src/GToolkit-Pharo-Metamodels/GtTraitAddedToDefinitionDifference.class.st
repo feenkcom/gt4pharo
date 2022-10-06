@@ -4,13 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Differences'
 }
 
-{ #category : #converting }
-GtTraitAddedToDefinitionDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ GtRBAddTraitUsageRefactoring new
-		model: anRBModel;
-		class: aClass traitName: self traitName
-]
-
 { #category : #printing }
 GtTraitAddedToDefinitionDifference >> printOn: aStream [
 	aStream

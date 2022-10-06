@@ -8,13 +8,6 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Differences'
 }
 
-{ #category : #converting }
-GtClassSuperclassDefinitionDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ GtRBChangeSuperclassRefactoring new
-		model: anRBModel;
-		changeSuperclassOf: aClass to: (anRBModel classNamed: newName)
-]
-
 { #category : #accessing }
 GtClassSuperclassDefinitionDifference >> newName [
 	^ newName

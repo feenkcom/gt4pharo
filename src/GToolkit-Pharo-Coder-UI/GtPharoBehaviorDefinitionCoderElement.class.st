@@ -56,10 +56,13 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 							aptitude: [ self editableLabelLook ];
 							margin: self buttonMargin;
 							asElement} ].
-	previewButton := GtRefactoringsPreviewButton new
-			refactorings: [ self coderViewModel coder refactorings ];
-			when: GtRefactoringsAppliedEvent do: [ self initializeElements ];
-			constraintsDo: [ :c | c grid horizontal span: 2 ];
+	previewButton := BrButton new
+		aptitude: BrGlamorousButtonWithIconAptitude;
+		label: 'Accept Changes';
+		icon: BrGlamorousVectorIcons accept;
+		beSmallSize;
+		constraintsDo: [ :c | c grid horizontal span: 2 ];
+			action: [ self coderViewModel acceptChanges ];
 			margin: (BlInsets
 					top: 5
 					right: 5
@@ -229,7 +232,8 @@ GtPharoBehaviorDefinitionCoderElement >> updateDefinition [
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> updateModified [
 	| modified visibility |
-	modified := self coderViewModel coder refactorings notEmpty.
+	
+	modified := self coderViewModel coder difference hasDifference.
 	modificationIndicator asyncPromise promise: modified.
 	visibility := modified
 			ifTrue: [ BlVisibility visible ]

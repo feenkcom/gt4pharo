@@ -10,14 +10,6 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Differences'
 }
 
-{ #category : #converting }
-GtCategoryDefinitionDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ GtRBMoveClassToPackageRefactoring
-		model: anRBModel
-		move: aClass name
-		to: self newCategory
-]
-
 { #category : #testing }
 GtCategoryDefinitionDifference >> hasDifference [
 	^ packageDifference hasDifference or: [ tagDifference hasDifference ]

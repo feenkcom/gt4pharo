@@ -8,15 +8,6 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Differences'
 }
 
-{ #category : #converting }
-GtClassVariableRenamedDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ RBRenameClassVariableRefactoring
-		model: anRBModel
-		rename: self oldName
-		to: self newName
-		in: aClass
-]
-
 { #category : #accessing }
 GtClassVariableRenamedDifference >> newName [
 	^ newName
