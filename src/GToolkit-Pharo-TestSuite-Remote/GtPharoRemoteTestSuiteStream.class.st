@@ -173,7 +173,6 @@ GtPharoRemoteTestSuiteStream >> start [
 		setNotInImage;
 		groupTasksByAverageTime;
 		job.
-	job := GtRemoteRunner default submitJob: job.
 	job
 		showExamplesProgressNotification;
 		when: GtRrTaskCompletedAnnouncement 
@@ -191,4 +190,5 @@ GtPharoRemoteTestSuiteStream >> start [
 		when: GtRrJobTerminatedAnnouncement
 			send: #onJobTerminatedAnnouncement:
 			to: self.
+	job := GtRemoteRunner default submitJob: job.
 ]
