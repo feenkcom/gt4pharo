@@ -56,11 +56,6 @@ GtBehaviorDefinition >> defaultNewClassName [
 	^ #NameOfSubclass
 ]
 
-{ #category : #'api - accepting' }
-GtBehaviorDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aBehavior in: aModel [
-	^ self subclassResponsibility
-]
-
 { #category : #testing }
 GtBehaviorDefinition >> isForMetaclass [
 	^ false

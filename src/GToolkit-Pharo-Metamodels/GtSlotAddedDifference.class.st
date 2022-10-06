@@ -4,14 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Differences'
 }
 
-{ #category : #converting }
-GtSlotAddedDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ RBAddInstanceVariableRefactoring
-		model: anRBModel
-		variable: self slotName
-		class: aClass
-]
-
 { #category : #printing }
 GtSlotAddedDifference >> printOn: aStream [
 	aStream

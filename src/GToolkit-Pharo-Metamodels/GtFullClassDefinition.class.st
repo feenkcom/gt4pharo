@@ -56,25 +56,6 @@ GtFullClassDefinition >> createChange [
 ]
 
 { #category : #'api - accepting' }
-GtFullClassDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass in: aModel [
-
-	| instRefactorings classRefactorings |
-	instRefactorings := (instanceSideDefinition
-		                     difference:
-		                     aGtCodeDefinitionDifference
-			                     instanceSideDifference
-		                     toRefactoringsOf: aClass instanceSide
-		                     in: aModel) asOrderedCollection.
-	classRefactorings := (classSideDefinition
-		                      difference:
-		                      aGtCodeDefinitionDifference
-			                      classSideDifference
-		                      toRefactoringsOf: aClass classSide
-		                      in: aModel) asOrderedCollection.
-	^ instRefactorings , classRefactorings
-]
-
-{ #category : #'api - accepting' }
 GtFullClassDefinition >> differenceWith: aGtCodeDefinition [
 	^ GtFullClassDefinitionDifference new
 		instanceSideDifference:

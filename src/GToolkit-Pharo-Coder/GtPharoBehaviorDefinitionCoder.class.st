@@ -16,6 +16,12 @@ GtPharoBehaviorDefinitionCoder class >> forBehavior: aBehavior [
 ]
 
 { #category : #accessing }
+GtPharoBehaviorDefinitionCoder >> acceptChanges [
+	self definition createChange execute.
+	self announce: (GtCoderClassChanged new coder: self)
+]
+
+{ #category : #accessing }
 GtPharoBehaviorDefinitionCoder >> behavior [
 	<return: #Behavior>
 
@@ -35,7 +41,6 @@ GtPharoBehaviorDefinitionCoder >> definitionFrom: aBehavior [
 { #category : #accessing }
 GtPharoBehaviorDefinitionCoder >> difference [
 	<return: #GtCodeDefinitionDifference>
-	
 	^ self definition differenceWith: (self definitionFrom: self behavior)
 ]
 
@@ -60,15 +65,6 @@ GtPharoBehaviorDefinitionCoder >> onClassChanged: anAnnouncement [
 		^ self ].
 	definition := nil.
 	self announce: (GtCoderClassChanged new coder: self)
-]
-
-{ #category : #accessing }
-GtPharoBehaviorDefinitionCoder >> refactorings [
-
-	^ self definition
-		  difference: self difference
-		  toRefactoringsOf: self behavior
-		  in: RBNamespace new
 ]
 
 { #category : #accessing }

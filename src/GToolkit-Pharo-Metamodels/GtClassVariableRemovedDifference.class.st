@@ -4,14 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Differences'
 }
 
-{ #category : #converting }
-GtClassVariableRemovedDifference >> asClassRefactorings: aClass in: anRBModel [
-	^ RBRemoveClassVariableRefactoring
-		model: anRBModel
-		variable: self classVariableName
-		class: aClass
-]
-
 { #category : #printing }
 GtClassVariableRemovedDifference >> printOn: aStream [
 	aStream

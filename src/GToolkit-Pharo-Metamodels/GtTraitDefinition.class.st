@@ -126,11 +126,6 @@ GtTraitDefinition >> defaultNewTraitName [
 ]
 
 { #category : #'api - accepting' }
-GtTraitDefinition >> difference: aGtCodeDefinitionDifference toRefactoringsOf: aClass in: aModel [
-	^ aGtCodeDefinitionDifference asClassRefactorings: aClass in: aModel
-]
-
-{ #category : #'api - accepting' }
 GtTraitDefinition >> differenceWith: aTraitDefinition [
 	| aDifference |
 	
