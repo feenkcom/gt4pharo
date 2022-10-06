@@ -357,6 +357,7 @@ GtPharoExampleSuiteExamples >> runExamplesLocally [
 { #category : #'examples - example suite' }
 GtPharoExampleSuiteExamples >> runExamplesRemotely [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
