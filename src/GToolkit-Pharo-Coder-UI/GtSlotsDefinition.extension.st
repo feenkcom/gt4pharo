@@ -92,6 +92,14 @@ GtSlotsDefinition >> slotsEditor [
 		addSelector: #addSlotNamed:;
 		removeSelector: #removeSlotNamed:;
 		renameSelector: #renameSlotNamed:to:;
+		renameRefactoringBlock: [ :from :to | 
+			| class |
+			class := Smalltalk at: self parent name.
+			self parent isForMetaclass ifTrue: [ class := class class ].
+			RBRenameInstanceVariableRefactoring
+				rename: from
+				to: to
+				in: class ];
 		getSelector: #names;
 		modelSelector: #slotNamed:;
 		contextMenuBlock: [ :defn :editor | [ self createContextMenuContentFor: defn editor: editor ] ];
