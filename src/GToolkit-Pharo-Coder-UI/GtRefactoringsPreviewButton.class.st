@@ -1,31 +1,30 @@
+"
+nil
+"
 Class {
 	#name : #GtRefactoringsPreviewButton,
-	#superclass : #BrButton,
+	#superclass : #BrHorizontalPane,
 	#instVars : [
-		'refactoringsComputation',
-		'executedRefactorings'
+		'executedRefactorings',
+		'cancelBlock',
+		'refactoringsComputation'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #initialization }
-GtRefactoringsPreviewButton >> buildRefactoringsPreview [
-	| applyAction theRefactoringsElement anAcceptButton aContainer |
-	theRefactoringsElement := GtRefactoringsElement new
-			hExact: self previewWidth * 1.25;
-			vFitContentLimited;
-			refactorings: self executedRefactorings.
-
-	applyAction := [ self fireEvent: (BrDropdownHideWish new anchor: self).
+GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
+	| applyAction anAcceptButton |
+	applyAction := [ aButton fireEvent: BrDropdownHideWish new.
 		theRefactoringsElement applyRefactorings
 			then: [ :ignore | self dispatchEvent: GtRefactoringsAppliedEvent new ] ].
 
 	anAcceptButton := BrButton new
+			aptitude: BrGlamorousButtonWithIconAptitude new;
 			id: GtRefactoringsPreviewAcceptId;
 			icon: BrGlamorousVectorIcons accept;
 			beSmallSize;
 			requestFocus;
-			aptitude: BrGlamorousButtonWithIconAptitude new;
 			label: 'Save';
 			margin: (BlInsets
 					top: 0
@@ -39,14 +38,47 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 		addShortcut: (BlShortcutWithAction new
 				combination: BlKeyCombination enter;
 				action: applyAction).
+	^ anAcceptButton
+]
 
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> buildCancelButton [
+	| cancelAction |
+	cancelAction := [ self removeFromParent.
+		cancelBlock value ].
+
+	^ BrButton new
+		aptitude: BrGlamorousButtonWithIconAptitude;
+		icon: BrGlamorousVectorIcons cancel;
+		beSmallSize;
+		requestFocus;
+		label: 'Cancel';
+		margin: (BlInsets
+				top: 0
+				left: 5
+				bottom: 10
+				right: 0);
+		action: cancelAction;
+		yourself
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
+	| theRefactoringsElement anAcceptButton aContainer |
+	theRefactoringsElement := GtRefactoringsElement new
+			hExact: self previewWidth * 1.25;
+			vFitContentLimited;
+			refactorings: self executedRefactorings.
+	anAcceptButton := self
+			buildAcceptForButton: aButton
+			andElement: theRefactoringsElement.
 	aContainer := BlElement new
 			layout: BlLinearLayout vertical;
 			when: GtPhlowObjectToSpawn
 				do: [ :anEvent | anEvent target phlow spawnObject: anEvent object ];
-			constraintsDo: [ :c | 
-				c horizontal exact: self previewWidth.
-				c vertical fitContentLimited ].
+			constraintsDo: [ :c1 | 
+				c1 horizontal exact: self previewWidth.
+				c1 vertical fitContentLimited ].
 	aContainer
 		addChild: ((theRefactoringsElement asScalableElement
 				width: self previewWidth;
@@ -54,8 +86,13 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreview [
 				constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
 				constraintsDo: [ :c | c vertical fitContentLimited ]).
 	aContainer addChild: anAcceptButton.
-
 	^ aContainer
+]
+
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> cancelBlock: aBlock [
+	cancelBlock := aBlock.
+	cancelBlock notNil ifTrue: [ self addChild: self buildCancelButton ]
 ]
 
 { #category : #initialization }
@@ -71,37 +108,39 @@ GtRefactoringsPreviewButton >> executedRefactorings [
 
 { #category : #initialization }
 GtRefactoringsPreviewButton >> initialize [
-
+	| previewButton |
 	super initialize.
 
-	refactoringsComputation := [ #(  ) ].
+	self fitContent.
 
-	self
+	refactoringsComputation := [ #() ].
+
+	previewButton := BrButton new.
+	previewButton
 		icon: BrGlamorousVectorIcons accept;
 		beSmallSize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
-			+ (BrGlamorousWithDropdownAptitude
-					 handle: [ 
-						 BrButton new
-							 icon: BrGlamorousIcons empty;
-							 beSmallSize;
-							 aptitude: BrGlamorousButtonRectangularAptitude new
-								 + BrGlamorousButtonIconAptitude new ]
-					 content: [ 
-						 BrAsyncWidget new
-							 layout: BlLinearLayout vertical;
-							 constraintsDo: [ :c | 
-								 c vertical exact: 50.
-								 c horizontal exact: self previewWidth ];
-							 postAction: [ :theLazyElement | 
-								 theLazyElement constraintsDo: [ :c | 
-										 c vertical fitContentLimited ] ];
-							 stencil: [ self buildRefactoringsPreview ] ]);
+				+ (BrGlamorousWithDropdownAptitude
+						handle: [ BrButton new
+								icon: BrGlamorousIcons empty;
+								beSmallSize;
+								aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
+						content: [ BrAsyncWidget new
+								layout: BlLinearLayout vertical;
+								constraintsDo: [ :c | 
+									c vertical exact: 50.
+									c horizontal exact: self previewWidth ];
+								postAction: [ :theLazyElement | theLazyElement constraintsDo: [ :c | c vertical fitContentLimited ] ];
+								stencil: [ self buildRefactoringsPreviewForButton: previewButton ] ]);
 		label: 'Preview'.
 
-	self addShortcut: (BlShortcutWithAction new
-			 combination: BlKeyCombination enter;
-			 action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ])
+	previewButton
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination enter;
+				action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ]).
+
+	self addChild: previewButton.
+
 ]
 
 { #category : #initialization }
