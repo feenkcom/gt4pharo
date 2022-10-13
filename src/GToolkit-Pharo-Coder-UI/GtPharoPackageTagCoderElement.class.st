@@ -51,6 +51,7 @@ GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 		margin: (BlInsets left: 5);
 		visibility: BlVisibility gone;
 		refactorings: [ { GtRBRenamePackageTagRefactoring packageName: packageTagCoder package name from: packageTagCoder packageTag gtTagName to: tagNameEditor text asString } ];
+		cancelBlock: [ tagNameEditor text: packageTagCoder packageTag name];
 		when: GtRefactoringsAppliedEvent do: [ :anEvent | anEvent currentTarget visibility: BlVisibility hidden ].
 		
 	tagNameEditor editor

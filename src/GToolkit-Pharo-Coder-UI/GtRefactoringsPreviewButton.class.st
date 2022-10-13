@@ -51,7 +51,6 @@ GtRefactoringsPreviewButton >> buildCancelButton [
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		icon: BrGlamorousVectorIcons cancel;
 		beSmallSize;
-		requestFocus;
 		label: 'Cancel';
 		margin: (BlInsets
 				top: 0
