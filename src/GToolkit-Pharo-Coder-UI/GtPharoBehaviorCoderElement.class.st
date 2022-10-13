@@ -121,69 +121,72 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 	classCoder := behaviorCoderViewModel coder.
 
 	aContainer := BrHorizontalPane new
-		hMatchParent;
-		alignCenterLeft;
-		vFitContent.
-	
+			hMatchParent;
+			alignCenterLeft;
+			vFitContent.
+
 	aClassNameEditor := BrEditableLabel new
-		aptitude: (BrGlamorousEditableLabelAptitude new
-			defaultBackground: Color transparent;
-			glamorousCodeFont;
-			bold;
-			fontSize: 18);
-		inputFilter: BrTextEditorClassNameInputFilter new;
-		text: (classCoder name);
-		margin: (BlInsets all: 0);
-		id: GtBehaviorCoderBehaviorNameId;
-		whenKey: BlKeyCombination primaryN
-			labelDo: [ :aShortcutEvent | self browseClassReferences ];
-		whenKey: BlKeyCombination primaryB
-			labelDo: [ :aShortcutEvent| self phlow spawnTool: (GtClassCoderTool observedClass: self behavior) ];
-		whenKey: BlKeyCombination primaryG
-			labelDo: [ :aShortcutEvent | self phlow spawnObject: self behavior ];
-		whenKey: BlKeyCombination primaryR
-			labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
-		whenKey: BlKeyCombination primaryC
-			labelDo: [ :aShortcutEvent | Clipboard clipboardText: self behavior name asString ].
-	
+			aptitude: (BrGlamorousEditableLabelAptitude new
+					defaultBackground: Color transparent;
+					glamorousCodeFont;
+					bold;
+					fontSize: 18);
+			inputFilter: BrTextEditorClassNameInputFilter new;
+			text: classCoder name;
+			margin: (BlInsets all: 0);
+			id: GtBehaviorCoderBehaviorNameId;
+			whenKey: BlKeyCombination primaryN
+				labelDo: [ :aShortcutEvent | self browseClassReferences ];
+			whenKey: BlKeyCombination primaryB
+				labelDo: [ :aShortcutEvent | self phlow spawnTool: (GtClassCoderTool observedClass: self behavior) ];
+			whenKey: BlKeyCombination primaryG
+				labelDo: [ :aShortcutEvent | self phlow spawnObject: self behavior ];
+			whenKey: BlKeyCombination primaryR
+				labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
+			whenKey: BlKeyCombination primaryC
+				labelDo: [ :aShortcutEvent | Clipboard clipboardText: self behavior name asString ].
+
 	(GtCompletionController
 		on: aClassNameEditor
-		strategy: (GtClassesCompletionStrategy new)) install showOnTextModification: false.
+		strategy: GtClassesCompletionStrategy new) install
+		showOnTextModification: false.
 
 	aPreviewButton := GtRefactoringsPreviewButton new
-		id: GtBehaviorCoderBehaviorNameApplyPreviewId;
-		margin: (BlInsets left: 5);
-		refactorings: [ { GtRBRenameClassRefactoring
-			model: (RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new)
-			rename: classCoder theClass name
-			to: aClassNameEditor text asString } ];
-		when: GtRefactoringsAppliedEvent do: [ :anEvent |
-			aClassNameEditor text asString trimBoth asSymbol = classCoder name
-				ifTrue: [ aContainer removeChild: anEvent currentTarget ] ].
+			id: GtBehaviorCoderBehaviorNameApplyPreviewId;
+			margin: (BlInsets left: 5);
+			refactorings: [ {GtRBRenameClassRefactoring
+						model: (RBClassModelFactory rbNamespace
+								onEnvironment: RBBrowserEnvironment new)
+						rename: classCoder theClass name
+						to: aClassNameEditor text asString} ];
+			cancelBlock: [ aClassNameEditor text: classCoder theClass name ];
+			when: GtRefactoringsAppliedEvent
+				do: [ :anEvent | 
+					aClassNameEditor text asString trimBoth asSymbol = classCoder name
+						ifTrue: [ aContainer removeChild: anEvent currentTarget ] ].
 
 	aClassNameEditor editor
-		when: BrTextEditorModifiedEvent 
-		do: [ :anEvent |
+		when: BrTextEditorModifiedEvent
+		do: [ :anEvent | 
 			anEvent text asString trimBoth asSymbol = classCoder name
 				ifTrue: [ aContainer removeChild: aPreviewButton ]
-				ifFalse: [
-					"show preview button when name is modified"
-					(aContainer hasChild: aPreviewButton)
+				ifFalse: [  "show preview button when name is modified"(aContainer
+						hasChild: aPreviewButton)
 						ifFalse: [ aContainer addChild: aPreviewButton after: aClassNameEditor ] ] ].
 
 	removeClassButton := GtPreviewChangeButton new
-		icon: BrGlamorousVectorIcons remove;
-		label: 'Remove';
-		changeAction: [ self removeClass ];
-		changeStencil: [ self buildRemoveClassLabel ].
+			icon: BrGlamorousVectorIcons remove;
+			label: 'Remove';
+			changeAction: [ self removeClass ];
+			changeStencil: [ self buildRemoveClassLabel ].
 
 	aContainer addChild: aClassNameEditor.
 	aContainer addChild: removeClassButton.
 
 	self buildAdviceDropDownFor: aContainer.
-	
+
 	aContainer addChild: self toolbarElement.
-	
+
 	^ aContainer
 ]
 

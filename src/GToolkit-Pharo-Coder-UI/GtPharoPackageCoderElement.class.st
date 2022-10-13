@@ -31,48 +31,51 @@ GtPharoPackageCoderElement >> buildContentTabs [
 { #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildPackageLabel [
 	| packageNameEditor container previewButton unloadButton |
-		
 	container := BrHorizontalPane new
-		hMatchParent;
-		alignCenterLeft;
-		vFitContent.
-	
+			hMatchParent;
+			alignCenterLeft;
+			vFitContent.
+
 	packageNameEditor := BrEditableLabel new
-		id: GtPackageCoderPackageNameId;
-		aptitude: (BrGlamorousEditableLabelAptitude new
-			defaultBackground: Color transparent;
-			glamorousCodeFont;
-			bold;
-			fontSize: 18);
-		text: packageCoder package name;
-		margin: (BlInsets all: 0);
-		whenKey: BlKeyCombination primaryB
-			labelDo: [ :aShortcutEvent| self phlow spawnTool: (GtPackageCoderTool package: self package) ];
-		whenKey: BlKeyCombination primaryG
-			labelDo: [ :aShortcutEvent | self phlow spawnObject: self package ];
-		whenKey: BlKeyCombination primaryR
-			labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
-		whenKey: BlKeyCombination primaryC
-			labelDo: [ :aShortcutEvent | Clipboard clipboardText: self package name asString ].
+			id: GtPackageCoderPackageNameId;
+			aptitude: (BrGlamorousEditableLabelAptitude new
+					defaultBackground: Color transparent;
+					glamorousCodeFont;
+					bold;
+					fontSize: 18);
+			text: packageCoder package name;
+			margin: (BlInsets all: 0);
+			whenKey: BlKeyCombination primaryB
+				labelDo: [ :aShortcutEvent | self phlow spawnTool: (GtPackageCoderTool package: self package) ];
+			whenKey: BlKeyCombination primaryG
+				labelDo: [ :aShortcutEvent | self phlow spawnObject: self package ];
+			whenKey: BlKeyCombination primaryR
+				labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
+			whenKey: BlKeyCombination primaryC
+				labelDo: [ :aShortcutEvent | Clipboard clipboardText: self package name asString ].
 
 	previewButton := GtRefactoringsPreviewButton new
-		margin: (BlInsets left: 5);
-		visibility: BlVisibility gone;
-		refactorings: [ { GtRBRenamePackageRefactoring from: packageCoder package name to: packageNameEditor text asString } ];
-		when: GtRefactoringsAppliedEvent do: [ :anEvent | anEvent currentTarget visibility: BlVisibility hidden ].
-		
+			margin: (BlInsets left: 5);
+			visibility: BlVisibility gone;
+			refactorings: [ {GtRBRenamePackageRefactoring
+						from: packageCoder package name
+						to: packageNameEditor text asString} ];
+			cancelBlock: [ packageNameEditor text: packageCoder package name ];
+			when: GtRefactoringsAppliedEvent
+				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility hidden ].
+
 	packageNameEditor editor
-		when: BrTextEditorModifiedEvent 
-		do: [ :anEvent |
+		when: BrTextEditorModifiedEvent
+		do: [ :anEvent | 
 			anEvent text asString = packageCoder package name
 				ifTrue: [ previewButton visibility: BlVisibility gone ]
-				ifFalse: [  previewButton visibility: BlVisibility visible ] ].
+				ifFalse: [ previewButton visibility: BlVisibility visible ] ].
 
 	unloadButton := GtPreviewChangeButton new
-		icon: BrGlamorousVectorIcons remove;
-		label: 'Unload';
-		changeAction: [ self unloadPackage ];
-		changeStencil: [ self buildRemovePackageLabel ].
+			icon: BrGlamorousVectorIcons remove;
+			label: 'Unload';
+			changeAction: [ self unloadPackage ];
+			changeStencil: [ self buildRemovePackageLabel ].
 
 	container addChild: packageNameEditor.
 	container addChild: previewButton.
