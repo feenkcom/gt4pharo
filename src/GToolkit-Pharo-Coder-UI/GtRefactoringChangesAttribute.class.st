@@ -5,7 +5,7 @@ Class {
 		'refactoring',
 		'completionAction'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #initialization }
@@ -16,7 +16,7 @@ GtRefactoringChangesAttribute >> completionAction: aBlock [
 { #category : #accessing }
 GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ GtRefactoringsPreviewButton new
-		beMiniSize;
+		"beMiniSize;"
 		vMatchParent;
 		refactorings: [ {refactoring} ];
 		margin: (BlInsets top: 1 right: 4 bottom: 0 left: 4);
