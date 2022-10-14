@@ -16,12 +16,13 @@ GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefact
 GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefactoring at: aTextPosition whenComplete: aBlock [
 	self removeRefactoringAttribute.
 	refactoringPreviewAttributes := self sourceCoderViewModel
-		addTextAttribute:
-			(GtRefactoringChangesAttribute new
-				refactoring: aRefactoring;
-				completionAction: aBlock)
-		from: aTextPosition
-		to: aTextPosition
+			addTextAttribute: (GtRefactoringChangesAttribute new
+					refactoring: aRefactoring;
+					completionAction: aBlock;
+					cancelAction: [ 
+						self restoreText ])
+			from: aTextPosition
+			to: aTextPosition
 ]
 
 { #category : #private }

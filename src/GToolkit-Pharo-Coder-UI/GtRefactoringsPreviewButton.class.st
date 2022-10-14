@@ -12,6 +12,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> beMiniSize [
+	self childrenDo: #beMiniSize
+]
+
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
 	| applyAction anAcceptButton |
@@ -51,12 +56,9 @@ GtRefactoringsPreviewButton >> buildCancelButton [
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		icon: BrGlamorousVectorIcons cancel;
 		beSmallSize;
+		alignCenterLeft;
 		label: 'Cancel';
-		margin: (BlInsets
-				top: 0
-				left: 5
-				bottom: 10
-				right: 0);
+		margin: (BlInsets left: 5);
 		action: cancelAction;
 		yourself
 ]
@@ -110,13 +112,16 @@ GtRefactoringsPreviewButton >> initialize [
 	| previewButton |
 	super initialize.
 
-	self fitContent.
+	self
+		fitContent;
+		alignCenterLeft.
 
 	refactoringsComputation := [ #() ].
 
 	previewButton := BrButton new.
 	previewButton
 		icon: BrGlamorousVectorIcons accept;
+		id: #previewCheckButton;
 		beSmallSize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
 				+ (BrGlamorousWithDropdownAptitude
@@ -138,8 +143,7 @@ GtRefactoringsPreviewButton >> initialize [
 				combination: BlKeyCombination enter;
 				action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ]).
 
-	self addChild: previewButton.
-
+	self addChild: previewButton
 ]
 
 { #category : #initialization }
