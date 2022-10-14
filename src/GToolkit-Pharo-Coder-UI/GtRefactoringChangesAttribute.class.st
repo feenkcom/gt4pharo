@@ -3,10 +3,16 @@ Class {
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
 		'refactoring',
-		'completionAction'
+		'completionAction',
+		'cancelAction'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
+
+{ #category : #'private - attributes' }
+GtRefactoringChangesAttribute >> cancelAction: aBlock [
+	cancelAction := aBlock 
+]
 
 { #category : #initialization }
 GtRefactoringChangesAttribute >> completionAction: aBlock [
@@ -16,14 +22,17 @@ GtRefactoringChangesAttribute >> completionAction: aBlock [
 { #category : #accessing }
 GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ GtRefactoringsPreviewButton new
-		"beMiniSize;"
 		vMatchParent;
 		refactorings: [ {refactoring} ];
-		margin: (BlInsets top: 1 right: 4 bottom: 0 left: 4);
+		margin: (BlInsets
+				top: 1
+				right: 4
+				bottom: 0
+				left: 4);
+		cancelBlock: cancelAction;
+		beMiniSize;
 		when: GtRefactoringsAppliedEvent
-			do: [ :event | 
-			completionAction notNil
-				ifTrue: [ completionAction cull: event ] ]
+			do: [ :event | completionAction notNil ifTrue: [ completionAction cull: event ] ]
 ]
 
 { #category : #initialization }

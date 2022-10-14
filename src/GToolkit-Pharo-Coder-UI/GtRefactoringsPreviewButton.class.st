@@ -12,6 +12,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> beMiniSize [
+	self childrenDo: #beMiniSize
+]
+
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
 	| applyAction anAcceptButton |
