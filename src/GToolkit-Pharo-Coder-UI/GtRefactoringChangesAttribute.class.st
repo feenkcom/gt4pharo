@@ -24,7 +24,7 @@ GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdit
 	^ GtRefactoringsPreviewButton new
 		vMatchParent;
 		refactorings: [ {refactoring} ];
-		margin: (BlInsets
+		padding: (BlInsets
 				top: 1
 				right: 4
 				bottom: 0
