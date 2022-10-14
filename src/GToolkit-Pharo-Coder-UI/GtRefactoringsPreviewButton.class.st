@@ -56,12 +56,9 @@ GtRefactoringsPreviewButton >> buildCancelButton [
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		icon: BrGlamorousVectorIcons cancel;
 		beSmallSize;
+		alignCenterLeft;
 		label: 'Cancel';
-		margin: (BlInsets
-				top: 0
-				left: 5
-				bottom: 10
-				right: 0);
+		margin: (BlInsets left: 5);
 		action: cancelAction;
 		yourself
 ]
@@ -115,7 +112,9 @@ GtRefactoringsPreviewButton >> initialize [
 	| previewButton |
 	super initialize.
 
-	self fitContent.
+	self
+		fitContent;
+		alignCenterLeft.
 
 	refactoringsComputation := [ #() ].
 
@@ -143,8 +142,7 @@ GtRefactoringsPreviewButton >> initialize [
 				combination: BlKeyCombination enter;
 				action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ]).
 
-	self addChild: previewButton.
-
+	self addChild: previewButton
 ]
 
 { #category : #initialization }
