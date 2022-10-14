@@ -3162,7 +3162,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 	aScripter click
 		label: 'Click refactoring preview button';
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
+		id: #previewCheckButton;
 		play.
 
 	self checkFor: aScripter discardButtonExists: true.
@@ -4169,7 +4169,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactorin
 	aScripter := self forUnaryExtraction_07_01_accept_with_enter.
 
 	aScripter click
-		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
+		id: #previewCheckButton;
 		play.
 	
 	aScripter assert

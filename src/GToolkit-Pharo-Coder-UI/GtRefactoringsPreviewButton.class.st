@@ -121,6 +121,7 @@ GtRefactoringsPreviewButton >> initialize [
 	previewButton := BrButton new.
 	previewButton
 		icon: BrGlamorousVectorIcons accept;
+		id: #previewCheckButton;
 		beSmallSize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
 				+ (BrGlamorousWithDropdownAptitude
