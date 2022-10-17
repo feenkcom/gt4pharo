@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoMethodExpanderAttribute,
-	#superclass : #BrGlamorousTrangleExpanderTextAttribute,
+	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
 	#instVars : [
 		'classOrMetaClass',
 		'selector'
