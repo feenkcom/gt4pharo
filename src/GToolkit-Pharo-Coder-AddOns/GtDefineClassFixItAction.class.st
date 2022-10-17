@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDefineClassFixItAction,
 	#superclass : #GtFixItVariableNodeAction,
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #private }
@@ -30,7 +30,7 @@ GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 			c textFlow pushLine.
 			c horizontal matchParent ].
 	element ].
-	attribute := BrGlamorousTrangleExpanderTextAttribute new.
+	attribute := BrGlamorousTriangleExpanderTextAttribute new.
 	attribute isExpanded: true.
 	attribute
 		attributesCreatingBlock: [ adornmentAttribute := BrTextAdornmentDynamicAttribute new

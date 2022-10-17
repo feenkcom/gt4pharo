@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderExpandableBaselineStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
 { #category : #private }
@@ -29,7 +29,7 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 		includesKey: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol)
 		ifFalse: [ ^ self ].
 
-	anExpanderAttribute := (BrGlamorousTrangleExpanderTextAttribute new
+	anExpanderAttribute := (BrGlamorousTriangleExpanderTextAttribute new
 		id: GtSourceCoderEmbeddedExpanderToggleId;
 		attributesCreatingBlock: [
 			BrTextAdornmentDynamicAttribute new
