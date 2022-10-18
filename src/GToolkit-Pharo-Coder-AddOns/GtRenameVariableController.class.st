@@ -54,8 +54,8 @@ GtRenameVariableController >> rename: oldName to: newName [
 
 { #category : #accessing }
 GtRenameVariableController >> styleRenamedVariable [
-	(self sourceText
-		from: renameInterval first
-		to: self renamePosition)
-			attributes: {(BlTextForegroundAttribute paint: Color gray) }
+	| interval |
+	interval := self currentRenameInterval.
+	(self sourceText from: interval first to: interval last)
+		attributes: {BlTextForegroundAttribute paint: Color gray}
 ]

@@ -2,7 +2,7 @@ Extension { #name : #GtPharoSourceCoderViewModel }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoderViewModel >> renameLocalVariableAt: aTextIndex [
-	GtRenameAction2
+	GtCoderViewModelRenameAction
 		pharoRenameLocalVariableAt: aTextIndex
 		textualCoderViewModel: self
 ]
@@ -10,7 +10,7 @@ GtPharoSourceCoderViewModel >> renameLocalVariableAt: aTextIndex [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoderViewModel >> renameLocalVariableAtCursor [
 	self cursors do: [ :aCursor |
-		^ GtRenameAction2
+		^ GtCoderViewModelRenameAction
 			pharoRenameLocalVariableAt: aCursor position
 			textualCoderViewModel: self ]
 ]

@@ -2,17 +2,16 @@ Extension { #name : #RBAddInstanceVariableChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
 RBAddInstanceVariableChange >> gtDiff [
-	| aClass aDefinition oldSource newSource |
-	
-	aClass := self changeClass.
-	aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
-	oldSource := aDefinition asDefinitionString.
-	
-	aDefinition slots addSlotNamed: variable asSymbol.
-	newSource := aDefinition asDefinitionString.
+	| oldSource newSource aDefinition |
+	self changeClass
+		ifNil: [ oldSource := ''.
+			newSource := className , ' addInstVarNamed: ''' , variable , '''' ]
+		ifNotNil: [ :aClass | 
+			aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
+			oldSource := aDefinition asDefinitionString.
 
-	^ ClassDiffBuilder
-		from: oldSource
-		to: newSource
-		inClass: aClass
+			aDefinition slots addSlotNamed: variable asSymbol.
+			newSource := aDefinition asDefinitionString ].
+
+	^ ClassDiffBuilder from: oldSource to: newSource
 ]

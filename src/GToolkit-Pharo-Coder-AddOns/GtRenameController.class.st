@@ -69,6 +69,20 @@ GtRenameController >> createModel [
 	^ model
 ]
 
+{ #category : #private }
+GtRenameController >> currentRenameInterval [
+	| end offsetCount start |
+	(renameAction isNil or: [ renameAction isInstalled ])
+		ifTrue: [ ^ renameInterval ].
+	start := self allRenameIntervals first first.
+	offsetCount := self allRenameIntervals
+			inject: 0
+			into: [ :sum :each | sum + (each first <= start ifTrue: [ 1 ] ifFalse: [ 0 ]) ].
+	end := renameInterval last
+			+ ((self newName size - self originalName size) * offsetCount).
+	^end - self newName size + 1 to: end
+]
+
 { #category : #accessing }
 GtRenameController >> cursorPositionDo: aBlock [
 	sourceCoderViewModel cursors
@@ -130,21 +144,14 @@ GtRenameController >> originalNode: aGtPharoProgramNode [
 
 { #category : #executing }
 GtRenameController >> renameAction [
-	^ GtRenameAction2
+	^ GtCoderViewModelRenameAction
 		locations: self allRenameIntervals
 		textualCoderViewModel: sourceCoderViewModel
 ]
 
 { #category : #private }
 GtRenameController >> renamePosition [
-	| offsetCount start |
-	start := self allRenameIntervals first first.
-	offsetCount := self allRenameIntervals
-			inject: 0
-			into: [ :sum :each | sum + (each first <= start ifTrue: [ 1 ] ifFalse: [ 0 ]) ].
-	^ (renameAction isNil or: [ renameAction isInstalled ])
-		ifTrue: [ renameInterval last ]
-		ifFalse: [ renameInterval last + ((self newName size - self originalName size) * offsetCount) ]
+	^ self currentRenameInterval last
 ]
 
 { #category : #executing }
