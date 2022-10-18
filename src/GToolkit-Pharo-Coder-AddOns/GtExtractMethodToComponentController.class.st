@@ -30,6 +30,7 @@ GtExtractMethodToComponentController >> installRenamer [
 			message: message
 			textualCoderViewModel: sourceCoderViewModel.
 	renameAction newSelector: self newExtractedSelector.
+	renameAction selectAll: true.
 	renameAction
 		when: GtRenameActionAnnouncement
 		do: [ :ann | 

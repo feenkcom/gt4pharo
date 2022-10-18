@@ -543,10 +543,9 @@ GtPharoMethodCoderByScripterExamples >> checkHasTwoReorderAttributes: aScripter 
 
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
-	<gtExample>
 	aScripter check
 		label: 'Check rename editor attribute';
-		value: [ :aCoderEditor |
+		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
 					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
@@ -561,47 +560,45 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		id: GtSourceCoderEditorId;
 		play.
-		
+
 	aScripter check
 		label: 'Check source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
-		
+
 	aScripter check
 		label: 'Check source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
-	
+
 	aScripter check
 		label: 'Check method name editor source code';
 		value: [ :aNameEditor | aNameEditor text asString ] equals: '_:';
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
-		play.
-		
-	aScripter check
-		label: 'Check method name editor selected text';
-		value: [ :aNameEditor | aNameEditor editor selectedText asString ] equals: '_:';
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
+		onChildFromBlock: [ :element | 
+			element
+				allChildrenBreadthFirstDetect: [ :each | (each isKindOf: GtRenameEditor) and: [ each isFocused ] ]
+				ifFound: [ :each | each ] ];
 		play.
 
 	aScripter check
-		label: 'Check method name editor has focus';
-		satisfies: [ :aNameEditor | aNameEditor isFocused ];
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
+		label: 'Check method name editor selected text';
+		value: [ :aNameEditor | aNameEditor editor selectedText asString ]
+			equals: '_:';
+		onChildFromBlock: [ :element | 
+			element
+				allChildrenBreadthFirstDetect: [ :each | (each isKindOf: GtRenameEditor) and: [ each isFocused ] ]
+				ifFound: [ :each | each ] ];
 		play
 ]
 
@@ -2900,9 +2897,9 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 		id: GtSourceCoderEditorId;
 		play.
 
-	(aScripter keyClick: BlKeyboardKey tab) play.
-
 	self clickReorderParameter: aScripter variables: #('temp' 'anObject').
+
+	(aScripter keyClick: BlKeyboardKey tab) play.
 	self checkKeywordRenameEditor: aScripter.
 
 	(aScripter type: 'b:') play.
