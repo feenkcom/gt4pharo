@@ -550,7 +550,7 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 				| anInterval |
 				aCoderEditor text
 					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
-					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+					indicesDo: [ :aStart :anEnd | anInterval ifNil: [ anInterval := aStart to: anEnd ] ].
 				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
@@ -4111,33 +4111,11 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 	aScripter keyClick
 		key: BlKeyboardKey return;
 		play.
-	
-	aScripter assert
-		label: 'Assert current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-('{1}: anObject
-	{2} := anObject.
-	self {3}' format: {
-		(aCoder attributeNamed: #dummyMethod) selector.
-		(aCoder attributeNamed:  #dummyMethod) anyInstVarName.
-		self extractedUnaryMethodNameFor: aCoder
-	}) ];
-		onModel;
-		play.
 		
 	aScripter assert
 		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
-		play.
-	
-	aScripter assert
-		label: 'Assert rename editor attribute';
-		value: [ :aCoderEditor |
-			aCoderEditor text
-				hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
-			equals: false;
-		id: GtSourceCoderEditorId;
 		play.
 
 	aScripter assert
@@ -4149,12 +4127,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
-		id: GtSourceCoderEditorId;
-		play.
-		
-	aScripter assert
-		label: 'Assert source editor is focused';
-		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
 

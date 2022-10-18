@@ -267,7 +267,7 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 	otherCoders := announcement interestedCoders reject: [ :each | each == self ].
 	(definer ifNil: [ aVariableNode topParent ])
 		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ locations add: each sourceInterval ] ].
-	action := GtRenameAction2 locations: locations textualCoderViewModel: aSourceCoderViewModel.
+	action := GtCoderViewModelRenameAction locations: locations textualCoderViewModel: aSourceCoderViewModel.
 	action selectAll: true.
 	action forVariableOrUnaryMessage.
 	renameAttributes := OrderedCollection new.

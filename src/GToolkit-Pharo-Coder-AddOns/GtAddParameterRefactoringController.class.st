@@ -7,7 +7,7 @@ Class {
 		'variableName',
 		'parameterNode'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #executing }
@@ -60,7 +60,7 @@ GtAddParameterRefactoringController >> createRefactoringModel [
 GtAddParameterRefactoringController >> installRenamer [
 	| ast |
 	ast := sourceCoderViewModel astAwait.
-	renameAction := GtRenameAction2
+	renameAction := GtCoderViewModelRenameAction
 		                locations: { ast pattern selectorParts last sourceInterval }
 		                textualCoderViewModel: sourceCoderViewModel.
 	renameAction forKeyword.

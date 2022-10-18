@@ -174,6 +174,6 @@ GtExtractMethodFromSnippetController >> swapParameterWithNext: anInteger [
 	methodArguments at: 1 put: oldReceiver.
 	self swap: message parent receiver with: message values first.
 	self addReorderParametersAttributes.
-	renameIndex notNil ifTrue: [ self installRenamerAt: renameIndex ].
+	self updateRenamer.
 	self addRefactoringPreview
 ]

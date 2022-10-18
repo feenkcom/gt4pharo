@@ -1,7 +1,7 @@
-Extension { #name : #GtRenameAction2 }
+Extension { #name : #GtCoderViewModelRenameAction }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtRenameAction2 class >> pharoRenameLocalVariableAt: aTextIndex textualCoderViewModel: aTextualCoderViewModel [
+GtCoderViewModelRenameAction class >> pharoRenameLocalVariableAt: aTextIndex textualCoderViewModel: aTextualCoderViewModel [
 	^ [
 		| ast items action |
 	
@@ -29,7 +29,7 @@ GtRenameAction2 class >> pharoRenameLocalVariableAt: aTextIndex textualCoderView
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtRenameAction2 class >> pharoRenameSnippetLocalsOn: aTextEditorElement [
+GtCoderViewModelRenameAction class >> pharoRenameSnippetLocalsOn: aTextEditorElement [
 	^ [ | editor text ast items action |
 	editor := aTextEditorElement editor.
 	editor cursors cursorsCount = 1
@@ -57,7 +57,7 @@ GtRenameAction2 class >> pharoRenameSnippetLocalsOn: aTextEditorElement [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtRenameAction2 class >> pharoRenameTemporaryVariable: aVariableName textualCoderViewModel: aTextualCoderViewModel [
+GtCoderViewModelRenameAction class >> pharoRenameTemporaryVariable: aVariableName textualCoderViewModel: aTextualCoderViewModel [
 	^ [
 		| ast items action |
 	
