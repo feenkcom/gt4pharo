@@ -128,8 +128,19 @@ GtSelectorStyler >> forUnary [
 
 { #category : #private }
 GtSelectorStyler >> privateStyle: aText [
+	aText
+		clearAttributes: 0
+		to: aText size
+		if: [ :attr | 
+			attr class = GtImplicitColonAttribute
+				or: [ self class errorAttributes includes: attr ] ].
 	self perform: stylingMethod with: aText.
 	^ aText
+]
+
+{ #category : #private }
+GtSelectorStyler >> style: aText [
+	^ self privateStyle: aText
 ]
 
 { #category : #private }
@@ -138,21 +149,25 @@ GtSelectorStyler >> styleBinaryOrKeyword: aText [
 	selector := aText asString.
 	args := selector numArgs.
 	args = 1 ifTrue: [ ^ self ].
-	(args = 0 or: [ selector isEmpty ])
-		ifTrue: [ ^ (aText from: aText size to: aText size)
-				attributes: {GtImplicitColonAttribute new} ].
-	aText attributes: self class errorAttributes
+	self styleKeyword: aText
 ]
 
 { #category : #private }
 GtSelectorStyler >> styleKeyword: aText [
 	| selector args |
 	selector := aText asString.
+	selector isEmpty
+		ifTrue: [ ^ aText
+				attributes: {GtImplicitColonAttribute new}
+				from: 0
+				to: 0 ].
 	args := selector numArgs.
 	(args = 1 and: [ selector last = $: ]) ifTrue: [ ^ self ].
-	(args = 0 or: [ selector isEmpty ])
-		ifTrue: [ ^ (aText from: aText size to: aText size)
-				attributes: {GtImplicitColonAttribute new} ].
+	args = 0
+		ifTrue: [ ^ aText
+				attributes: {GtImplicitColonAttribute new}
+				from: 1
+				to: aText size ].
 	aText attributes: self class errorAttributes
 ]
 
