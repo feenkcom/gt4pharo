@@ -4,18 +4,8 @@ Class {
 	#instVars : [
 		'methodNode'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
-
-{ #category : #executing }
-GtMethodRefactoringController >> addRefactoringPreview [
-	self
-		addRefactoringChangesPreview: self refactoring
-		at: self previewPosition
-		whenComplete: [ 
-			self removeRefactoringAttribute.
-			self allowSave ]
-]
 
 { #category : #accessing }
 GtMethodRefactoringController >> methodClass [

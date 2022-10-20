@@ -2,30 +2,37 @@ Extension { #name : #GtCoderViewModelRenameAction }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtCoderViewModelRenameAction class >> pharoRenameLocalVariableAt: aTextIndex textualCoderViewModel: aTextualCoderViewModel [
-	^ [
-		| ast items action |
-	
-		ast := aTextualCoderViewModel astAwait.
-		items := OrderedCollection new.
-		(ast findVariableNodeAt: aTextIndex)
-			ifNotNil: [ :node | 
-				| definer |
-				definer := node whoDefines ifNil: [ node topParent ].
-				definer
-					withAllNodesDo: [ :each | 
-						each = node
-							ifTrue: [ items add: (each startPosition to: each stopPosition) ] ]
-					andTokensDo: nil
-					includesErrors: true ].
-		action := self locations: items textualCoderViewModel: aTextualCoderViewModel.
-		action forVariableOrUnaryMessage.
-		action install ]
-			on: Error
-			do: [ :ex |
-				NonInteractiveTranscript stdout
-					nextPutAll: ('[{1}] {2}' format: { self name . ex asString });
-					cr.
-				ex return: nil ]
+	^ self
+		pharoRenameLocalVariableAt: aTextIndex
+		textualCoderViewModel: aTextualCoderViewModel
+		selectAll: false
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtCoderViewModelRenameAction class >> pharoRenameLocalVariableAt: aTextIndex textualCoderViewModel: aTextualCoderViewModel selectAll: aBoolean [
+	^ [ | ast items action |
+	ast := aTextualCoderViewModel astAwait.
+	items := OrderedCollection new.
+	(ast findVariableNodeAt: aTextIndex)
+		ifNotNil: [ :node | 
+			| definer |
+			definer := node whoDefines ifNil: [ node topParent ].
+			definer
+				withAllNodesDo: [ :each | each = node ifTrue: [ items add: (each startPosition to: each stopPosition) ] ]
+				andTokensDo: nil
+				includesErrors: true ].
+	action := self locations: items textualCoderViewModel: aTextualCoderViewModel.
+	action forVariableOrUnaryMessage.
+	action selectAll: aBoolean.
+	action install ]
+		on: Error
+		do: [ :ex | 
+			NonInteractiveTranscript stdout
+				nextPutAll: ('[{1}] {2}'
+						format: {self name.
+								ex asString});
+				cr.
+			ex return: nil ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

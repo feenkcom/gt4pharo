@@ -6,52 +6,14 @@ Class {
 		'renameAction',
 		'node',
 		'newName',
-		'renameInterval',
-		'completionAction'
+		'renameInterval'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
-{ #category : #private }
-GtRenameController >> addRefactoringChangesPreview [
-	| aRefactoring aRenamePosition |
-	self removeRefactoringAttribute.
-
-	aRefactoring := self refactoring.
-	aRefactoring
-		ifNil: [ ^ self cancelRefactoring ].
-
-	aRenamePosition := self renamePosition.
-
-	self
-		addRefactoringChangesPreview: aRefactoring
-		at: aRenamePosition
-		whenComplete: [
-			self removeRefactoringAttribute.
-			self completionAction value.
-			self allowSave ]
-]
-
 { #category : #executing }
 GtRenameController >> allRenameIntervals [
 	^ {renameInterval}
-]
-
-{ #category : #executing }
-GtRenameController >> cancelRefactoring [
-	self removeRefactoringAttribute.
-	self restoreText.
-	self allowSave
-]
-
-{ #category : #accessing }
-GtRenameController >> completionAction [
-	^ completionAction ifNil: [ [  ] ]
-]
-
-{ #category : #accessing }
-GtRenameController >> completionAction: aBlock [
-	completionAction := aBlock
 ]
 
 { #category : #executing }
@@ -142,6 +104,11 @@ GtRenameController >> originalNode: aGtPharoProgramNode [
 	node := aGtPharoProgramNode
 ]
 
+{ #category : #accessing }
+GtRenameController >> previewPosition [
+	^ self renamePosition
+]
+
 { #category : #executing }
 GtRenameController >> renameAction [
 	^ GtCoderViewModelRenameAction
@@ -166,5 +133,5 @@ GtRenameController >> tab: forward [
 { #category : #private }
 GtRenameController >> updateName: aString [
 	newName := aString.
-	self addRefactoringChangesPreview
+	self addRefactoringPreview
 ]

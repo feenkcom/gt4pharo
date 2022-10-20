@@ -5,8 +5,8 @@ Class {
 }
 
 { #category : #accessing }
-GtRenameVariableController >> addRefactoringChangesPreview [
-	super addRefactoringChangesPreview.
+GtRenameVariableController >> addRefactoringPreview [
+	super addRefactoringPreview.
 	self styleRenamedVariable
 ]
 

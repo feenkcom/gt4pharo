@@ -72,12 +72,14 @@ GtExtractTemporaryRefactoringController >> safelyExecute [
 	model := refactoring model.
 	self setText: (self updatedSourceFrom: model).
 	(self findNodeAssigning: tempName)
-		ifNotNil:
-			[ :var | 
-			sourceCoderViewModel
-				selectNone;
-				moveCursorTo: var stopPosition;
-				renameLocalVariableAt: var stopPosition ]
+		ifNotNil: [ :var | 
+			sourceCoderViewModel selectNone.
+			sourceCoderViewModel moveCursorTo: var stopPosition.
+			(sourceCoderViewModel renameLocalVariableAt: var stopPosition)
+				ifNotNil: [ :action | 
+					action
+						when: GtRenameActionAnnouncement
+						do: [ :ann | ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ] ] ]
 ]
 
 { #category : #accessing }

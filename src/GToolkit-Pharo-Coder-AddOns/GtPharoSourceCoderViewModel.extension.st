@@ -2,9 +2,10 @@ Extension { #name : #GtPharoSourceCoderViewModel }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoderViewModel >> renameLocalVariableAt: aTextIndex [
-	GtCoderViewModelRenameAction
+	^ GtCoderViewModelRenameAction
 		pharoRenameLocalVariableAt: aTextIndex
 		textualCoderViewModel: self
+		selectAll: true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
