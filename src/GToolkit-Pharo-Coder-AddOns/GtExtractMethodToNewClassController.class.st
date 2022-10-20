@@ -45,18 +45,10 @@ GtExtractMethodToNewClassController >> addCreateClassAttributeFor: aMessage [
 GtExtractMethodToNewClassController >> addRefactoringPreview [
 	| message refactoring |
 	message := self findExtractedSend.
-	message ifNil: [ ^ self	"refactoring failed" ].
-
+	message ifNil: [ ^ self cancelRefactoring ].
 	self addCreateClassAttributeFor: message.
-	
-	refactoring := self refactoring.
 
-	self setPreviewOptionsOn: refactoring.
-	self
-		addRefactoringChangesPreview: refactoring
-		at: message stopPosition
-		whenComplete: [ self removeRefactoringAttribute.
-			self allowSave ]
+	super addRefactoringPreview
 ]
 
 { #category : #accessing }

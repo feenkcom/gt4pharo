@@ -26,17 +26,9 @@ GtAddParameterRefactoringController >> addKeyword [
 ]
 
 { #category : #executing }
-GtAddParameterRefactoringController >> addRefactoringPreview [
-	self removeRefactoringAttribute.
-	super addRefactoringPreview
-]
-
-{ #category : #executing }
 GtAddParameterRefactoringController >> cancelRefactoring [
-	self isRenaming
-		ifTrue: [ renameAction cancel ].	
-	self restoreText.
-	self allowSave
+	self isRenaming ifTrue: [ renameAction cancel ].
+	super cancelRefactoring
 ]
 
 { #category : #executing }

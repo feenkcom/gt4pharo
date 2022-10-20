@@ -14,26 +14,6 @@ Class {
 }
 
 { #category : #private }
-GtAbstractExtractMethodController >> addRefactoringPreview [
-	| message refactoring |
-
-	message := self findExtractedSend.
-	message
-		"refactoring failed"
-		ifNil: [ ^ self ].
-	
-	refactoring := self refactoring.
-
-	self setPreviewOptionsOn: refactoring.
-	self
-		addRefactoringChangesPreview: refactoring
-		at: message stopPosition
-		whenComplete: [
-			self removeRefactoringAttribute.
-			self allowSave ]
-]
-
-{ #category : #private }
 GtAbstractExtractMethodController >> addReorderParametersAttributes [
 	| message |
 	self removeReorderParametersAttributes.
@@ -75,8 +55,8 @@ GtAbstractExtractMethodController >> addReorderParametersAttributesOn: message [
 { #category : #executing }
 GtAbstractExtractMethodController >> cancelRefactoring [
 	self cancelRenaming.
-	self restoreText.
-	self allowSave
+	self removeReorderParametersAttributes.
+	super cancelRefactoring
 ]
 
 { #category : #private }
@@ -164,8 +144,18 @@ GtAbstractExtractMethodController >> isRenaming [
 ]
 
 { #category : #private }
+GtAbstractExtractMethodController >> isValidForPreview [
+	^ self findExtractedSend notNil
+]
+
+{ #category : #private }
 GtAbstractExtractMethodController >> newExtractedSelector [
 	^ self extractedSelector
+]
+
+{ #category : #private }
+GtAbstractExtractMethodController >> previewPosition [
+	^ self findExtractedSend stopPosition
 ]
 
 { #category : #executing }
