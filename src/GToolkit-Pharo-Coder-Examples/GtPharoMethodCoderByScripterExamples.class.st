@@ -584,7 +584,7 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 
 	aScripter check
 		label: 'Check method name editor source code';
-		value: [ :aNameEditor | aNameEditor text asString ] equals: '_:';
+		value: [ :aNameEditor | aNameEditor text asString first ] equals: $_;
 		onChildFromBlock: [ :element | 
 			element
 				allChildrenBreadthFirstDetect: [ :each | (each isKindOf: GtRenameEditor) and: [ each isFocused ] ]
@@ -593,8 +593,8 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 
 	aScripter check
 		label: 'Check method name editor selected text';
-		value: [ :aNameEditor | aNameEditor editor selectedText asString ]
-			equals: '_:';
+		value: [ :aNameEditor | aNameEditor editor selectedText asString first ]
+			equals: $_;
 		onChildFromBlock: [ :element | 
 			element
 				allChildrenBreadthFirstDetect: [ :each | (each isKindOf: GtRenameEditor) and: [ each isFocused ] ]

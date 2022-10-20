@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtCoderViewModelRenameAction,
 	#instVars : [
 		'message',
-		'newSelector'
+		'newSelector',
+		'styler'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -36,7 +37,8 @@ GtRenameSelectorAction >> addRenameAttributes [
 						filter: filter;
 						text: (text from: each first to: each last);
 						requestInitialFocus: first;
-						isForSelector: true.
+						isForSelector: true;
+						styler: styler.
 				first := false.
 
 				self pharoSourceCoderViewModel
@@ -50,7 +52,32 @@ GtRenameSelectorAction >> addRenameAttributes [
 	newSelector
 		ifNotNil: [ newSelector keywords
 				with: renameAttributes
-				do: [ :each :attr | attr text: each asRopedText ] ]
+				do: [ :each :attr | 
+					attr
+						text: (each last = $: ifTrue: [ each allButLast ] ifFalse: [ each ]) asRopedText ] ]
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> forBinaryOrKeyword [
+	validationBlock := [ :str | 
+		(self validateKeyword: str)
+			or: [ (self validateBinary: str) or: [ self validateVariable: str ] ] ].
+	styler := GtSelectorStyler new forBinaryOrKeyword.
+	filter := GtSelectorInputFilter forBinaryOrKeywordMessage
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> forKeyword [
+	validationBlock := [ :str | (self validateKeyword: str) or: [ self validateVariable: str ] ].
+	styler := GtSelectorStyler new forKeyword.
+	filter := GtSelectorInputFilter forKeywordMessage
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> forVariableOrUnaryMessage [
+	super forVariableOrUnaryMessage.
+	styler := GtSelectorStyler new forUnary.
+	filter := GtSelectorInputFilter forUnaryMessage
 ]
 
 { #category : #accessing }
@@ -85,15 +112,22 @@ GtRenameSelectorAction >> message: aGtPharoMessageNode [
 GtRenameSelectorAction >> newSelector [
 	^ renameAttributes
 		ifNil: [ newSelector ]
-		ifNotNil: [ (String
-				streamContents: [ :stream | renameAttributes do: [ :each | stream nextPutAll: each text asString ] ])
-				asSymbol ]
+		ifNotNil: [ | hasArguments |
+			hasArguments := message arguments size > 0.
+			(String
+				streamContents: [ :stream | 
+					renameAttributes
+						do: [ :each | 
+							| selector |
+							selector := each text asString.
+							stream nextPutAll: selector.
+							(hasArguments and: [ selector numArgs < 1 ])
+								ifTrue: [ stream nextPut: $: ] ] ]) asSymbol ]
 ]
 
 { #category : #accessing }
-GtRenameSelectorAction >> newSelector: anObject [
-
-	newSelector := anObject
+GtRenameSelectorAction >> newSelector: aSymbol [
+	newSelector := aSymbol
 ]
 
 { #category : #accessing }
