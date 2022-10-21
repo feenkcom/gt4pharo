@@ -22,6 +22,7 @@ GtRenameAction class >> pharoRenameLocalsOn: aTextEditorElement [
 							andTokensDo: nil
 							includesErrors: true ] ].
 		action := self locations: items element: aTextEditorElement.
+		action selectAll: false.
 		action forVariableOrUnaryMessage.
 		action install ]
 			on: Error

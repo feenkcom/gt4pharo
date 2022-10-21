@@ -140,7 +140,7 @@ GtRenameMethodController >> tab: forward [
 			self sourceCoderViewModel moveCursorTo: (message selectorParts at: selectorIndex) stopPosition.
 			self installRenamerOn: message.
 			newSelectorParts = selector keywords
-				ifFalse: [ self addRefactoringChangesPreview ] ]
+				ifFalse: [ self addRefactoringPreview ] ]
 ]
 
 { #category : #private }

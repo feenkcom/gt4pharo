@@ -5,24 +5,28 @@ Class {
 }
 
 { #category : #'private - attributes' }
-GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefactoring at: aTextPosition [
-	self
-		addRefactoringChangesPreview: aRefactoring
-		at: aTextPosition
-		whenComplete: [  ]
-]
-
-{ #category : #'private - attributes' }
 GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefactoring at: aTextPosition whenComplete: aBlock [
 	self removeRefactoringAttribute.
 	refactoringPreviewAttributes := self sourceCoderViewModel
 			addTextAttribute: (GtRefactoringChangesAttribute new
 					refactoring: aRefactoring;
 					completionAction: aBlock;
-					cancelAction: [ 
-						self restoreText ])
+					cancelAction: [ self cancelRefactoring ])
 			from: aTextPosition
 			to: aTextPosition
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> addRefactoringPreview [
+	| refactoring |
+	self isValidForPreview ifFalse: [ ^ self cancelRefactoring ].
+	refactoring := self refactoring.
+	refactoring ifNil: [ ^ self cancelRefactoring ].
+	self setPreviewOptionsOn: refactoring.
+	self
+		addRefactoringChangesPreview: refactoring
+		at: self previewPosition
+		whenComplete: [ self cleanUp ]
 ]
 
 { #category : #private }
@@ -49,6 +53,20 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	aModel name: self refactoringName.
 
 	^ aModel
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> isValidForPreview [
+	^ true
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> previewPosition [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> setPreviewOptionsOn: refactoring [ 
 ]
 
 { #category : #private }

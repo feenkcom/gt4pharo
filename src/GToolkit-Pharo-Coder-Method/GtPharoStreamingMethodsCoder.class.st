@@ -55,7 +55,7 @@ GtPharoStreamingMethodsCoder >> initialize [
 
 { #category : #'api - accessing' }
 GtPharoStreamingMethodsCoder >> isForClass [
-	^ behavior notNil
+	^ behavior notNil and: [ behavior ~~ UndefinedObject ]
 ]
 
 { #category : #'private - instance creation' }

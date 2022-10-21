@@ -4,21 +4,19 @@ Class {
 	#instVars : [
 		'variableNode'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
+
+{ #category : #accessing }
+GtVariableRefactoringController >> previewPosition [
+	^ variableNode stopPosition
+]
 
 { #category : #executing }
 GtVariableRefactoringController >> safelyExecute [
 	self preventSave.
-
 	sourceCoderViewModel selectNone.
-
-	self
-		addRefactoringChangesPreview: self refactoring
-		at: variableNode stopPosition
-		whenComplete: [
-			self removeRefactoringAttribute.
-			self allowSave ]
+	self addRefactoringPreview
 ]
 
 { #category : #accessing }

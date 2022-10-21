@@ -6,52 +6,14 @@ Class {
 		'renameAction',
 		'node',
 		'newName',
-		'renameInterval',
-		'completionAction'
+		'renameInterval'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
-{ #category : #private }
-GtRenameController >> addRefactoringChangesPreview [
-	| aRefactoring aRenamePosition |
-	self removeRefactoringAttribute.
-
-	aRefactoring := self refactoring.
-	aRefactoring
-		ifNil: [ ^ self cancelRefactoring ].
-
-	aRenamePosition := self renamePosition.
-
-	self
-		addRefactoringChangesPreview: aRefactoring
-		at: aRenamePosition
-		whenComplete: [
-			self removeRefactoringAttribute.
-			self completionAction value.
-			self allowSave ]
-]
-
 { #category : #executing }
 GtRenameController >> allRenameIntervals [
 	^ {renameInterval}
-]
-
-{ #category : #executing }
-GtRenameController >> cancelRefactoring [
-	self removeRefactoringAttribute.
-	self restoreText.
-	self allowSave
-]
-
-{ #category : #accessing }
-GtRenameController >> completionAction [
-	^ completionAction ifNil: [ [  ] ]
-]
-
-{ #category : #accessing }
-GtRenameController >> completionAction: aBlock [
-	completionAction := aBlock
 ]
 
 { #category : #executing }
@@ -67,6 +29,20 @@ GtRenameController >> createModel [
 						compile: originalSource asString
 						classified: sourceCoderViewModel protocol ] ].
 	^ model
+]
+
+{ #category : #private }
+GtRenameController >> currentRenameInterval [
+	| end offsetCount start |
+	(renameAction isNil or: [ renameAction isInstalled ])
+		ifTrue: [ ^ renameInterval ].
+	start := self allRenameIntervals first first.
+	offsetCount := self allRenameIntervals
+			inject: 0
+			into: [ :sum :each | sum + (each first <= start ifTrue: [ 1 ] ifFalse: [ 0 ]) ].
+	end := renameInterval last
+			+ ((self newName size - self originalName size) * offsetCount).
+	^end - self newName size + 1 to: end
 ]
 
 { #category : #accessing }
@@ -128,23 +104,21 @@ GtRenameController >> originalNode: aGtPharoProgramNode [
 	node := aGtPharoProgramNode
 ]
 
+{ #category : #accessing }
+GtRenameController >> previewPosition [
+	^ self renamePosition
+]
+
 { #category : #executing }
 GtRenameController >> renameAction [
-	^ GtRenameAction2
+	^ GtCoderViewModelRenameAction
 		locations: self allRenameIntervals
 		textualCoderViewModel: sourceCoderViewModel
 ]
 
 { #category : #private }
 GtRenameController >> renamePosition [
-	| offsetCount start |
-	start := self allRenameIntervals first first.
-	offsetCount := self allRenameIntervals
-			inject: 0
-			into: [ :sum :each | sum + (each first <= start ifTrue: [ 1 ] ifFalse: [ 0 ]) ].
-	^ (renameAction isNil or: [ renameAction isInstalled ])
-		ifTrue: [ renameInterval last ]
-		ifFalse: [ renameInterval last + ((self newName size - self originalName size) * offsetCount) ]
+	^ self currentRenameInterval last
 ]
 
 { #category : #executing }
@@ -159,5 +133,5 @@ GtRenameController >> tab: forward [
 { #category : #private }
 GtRenameController >> updateName: aString [
 	newName := aString.
-	self addRefactoringChangesPreview
+	self addRefactoringPreview
 ]

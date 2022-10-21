@@ -32,7 +32,7 @@ GtExtractMethodReorderParametersAttribute >> doAffect: aTBrTextEditorTextualPiec
 		icon: icon;
 		label: 'Reorder';
 		aptitude: BrGlamorousButtonExteriorAptitude +  ((BrGlamorousButtonRectangularAptitude paddingScale: 2/3) + BrGlamorousButtonIconAptitude + BrGlamorousButtonWithLabelTooltipAptitude);
-		beTinySize;
+		beMiniSize;
 		margin: (BlInsets top: 1 right: 4 bottom: 0 left: 4);
 		action: [ :anEvent | actionBlock cull: anEvent ];
 		id: #'reorder-parameter-button';

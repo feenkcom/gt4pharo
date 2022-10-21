@@ -7,16 +7,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : #accessing }
-GtMethodInlineMessageFromComponentRefactoringController >> addRefactoringPreview [
-	self
-		addRefactoringChangesPreview: self refactoring
-		at: self previewPosition
-		whenComplete: [ 
-			self removeRefactoringAttribute.
-			self allowSave ]
-]
-
 { #category : #initialization }
 GtMethodInlineMessageFromComponentRefactoringController >> implementor: aClass [
 	implementor := aClass
