@@ -84,14 +84,12 @@ GtAbstractExtractMethodController >> createModel [
 
 { #category : #executing }
 GtAbstractExtractMethodController >> executeRefactoring [
-	| refactoring newSource |
-
+	| refactoring model |
 	refactoring := self refactoring.
 	self setDefaultOptionsOn: refactoring.
 	refactoring primitiveExecute.
-
-	newSource := ((refactoring model classFor: sourceCoderViewModel behavior) methodFor: methodSelector) source.
-	self updateMethod: newSource
+	model := refactoring model.
+	self updateFromModel: model
 ]
 
 { #category : #private }
@@ -115,14 +113,16 @@ GtAbstractExtractMethodController >> extractionInterval [
 GtAbstractExtractMethodController >> findExtractedSend [
 	[ self sourceAst
 		withAllNodesOfType: GtPharoMessageNode
-		do:
-			[ :each | 
+		do: [ :each | 
 			(each selector = self extractedSelector
-				and:
-					[ ((1 to: methodArguments size)
-						allSatisfy:
-							[ :i | (each isBinary ifTrue: [ each value ] ifFalse: [ each values at: i ]) source = (methodArguments at: i) ])
-						and: [ (each parent receiver isKindOf: GtPharoVariableNode) and: [ each parent receiver name value = 'self' ] ] ])
+				and: [ ((1 to: methodArguments size)
+						allSatisfy: [ :i | 
+							(each arguments at: i) source = (methodArguments at: i)
+								or: [ (each arguments at: i) source = 'self'
+										and: [ ((methodArguments at: i)
+												indexOfSubCollection: sourceCoderViewModel behavior name) > 0 ] ] ])
+						and: [ (each parent receiver isKindOf: GtPharoVariableNode)
+								and: [ each parent receiver name value = self receiver ] ] ])
 				ifTrue: [ ^ each ] ] ] on: SmaCCParserError do: [ :ex | ^ nil ].
 	^ nil
 ]
@@ -156,6 +156,11 @@ GtAbstractExtractMethodController >> newExtractedSelector [
 { #category : #private }
 GtAbstractExtractMethodController >> previewPosition [
 	^ self findExtractedSend stopPosition
+]
+
+{ #category : #accessing }
+GtAbstractExtractMethodController >> receiver [
+	^ 'self'
 ]
 
 { #category : #executing }
@@ -309,6 +314,14 @@ GtAbstractExtractMethodController >> swapParameterWithNext: anInteger [
 	self addReorderParametersAttributes.
 	self updateRenamer.
 	self addRefactoringPreview
+]
+
+{ #category : #executing }
+GtAbstractExtractMethodController >> updateFromModel: aRBModel [
+	| newSource |
+	newSource := ((aRBModel classFor: sourceCoderViewModel behavior)
+			methodFor: methodSelector) source.
+	self updateMethod: newSource
 ]
 
 { #category : #private }

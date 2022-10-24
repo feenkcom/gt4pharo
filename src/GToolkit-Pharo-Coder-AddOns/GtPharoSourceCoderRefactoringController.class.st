@@ -26,7 +26,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringPreview [
 	self
 		addRefactoringChangesPreview: refactoring
 		at: self previewPosition
-		whenComplete: [ self cleanUp ]
+		whenComplete: [ self finishRefactoring ]
 ]
 
 { #category : #private }
@@ -53,6 +53,11 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	aModel name: self refactoringName.
 
 	^ aModel
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> finishRefactoring [
+	^ self cleanUp
 ]
 
 { #category : #accessing }
