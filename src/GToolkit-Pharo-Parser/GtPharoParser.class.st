@@ -29,7 +29,7 @@ GtPharoParser class >> ambiguousTransitions [
 
 { #category : #'generated-accessing' }
 GtPharoParser class >> cacheId [
-	^'2022-08-15T12:30:43.758077-05:00'
+	^'2022-10-24T11:11:42.689266-05:00'
 ]
 
 { #category : #generated }
@@ -112,7 +112,7 @@ default <lt>
 default <gt>
 	: \>
 	;
-default <leftBrace>
+default literalArray <leftBrace>
 	: \{
 	;
 default literalArray <leftBracket>
@@ -136,7 +136,7 @@ default literalArray <rightParen>
 default literalArray <rightBracket>
 	: \]
 	;
-default <rightBrace>
+default literalArray <rightBrace>
 	: \}
 	;
 default <keyword>
@@ -369,6 +369,10 @@ ArrayLiteralValue
 	| <return> 'value' {{SymbolLiteral}}
 	| <semicolon> 'value' {{SymbolLiteral}}
 	| <colon> 'value' {{SymbolLiteral}}
+	| <leftBrace> 'value' {{SymbolLiteral}}
+	| <rightBrace> 'value' {{SymbolLiteral}}
+	| <leftBracket> 'value' {{SymbolLiteral}}
+	| <rightBracket> 'value' {{SymbolLiteral}}
 	| <leftParen> 'arrayStart' ArrayLiteralValue 'value'* <rightParen> 'arrayStop' {{ArrayLiteral}}
 	| error 'smaccError' {{Error}}
 	;
@@ -403,213 +407,217 @@ EndLiteralArray
 { #category : #generated }
 GtPharoParser class >> reduceTable [
 ^#(
-	#(121 0 #reduceActionForSwitchToLiteralArray1: 9524225 true) 
-	#(66 0 #reduceActionForSequence1: 4896769 false) 
-	#(38 1 #reduceActionForMethodPattern1: 2825217 false) 
-	#(51 1 #reduceActionForTemplateNamePart1: 3850241 false) 
-	#(40 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3139585 false) 
-	#(38 1 #liftFirstValue: 2825221 false) 
-	#(43 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 3315713 false) 
-	#(41 1 #reduceActionForTemplatePattern2: 3254274 false) 
-	#(41 1 #reduceActionForTemplatePattern1: 3254273 false) 
-	#(42 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: 3315713 false) 
-	#(38 1 #reduceActionForMethodPattern4: 2825220 false) 
-	#(63 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4581377 false) 
-	#(61 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 4562945 false) 
-	#(47 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 3534849 false) 
-	#(38 1 #reduceActionForMethodPattern1: 2825218 false) 
-	#(95 1 #reduceActionForVariable1: 6774785 false) 
-	#(95 1 #reduceActionForVariable2: 6774786 false) 
-	#(95 1 #reduceActionForVariable3: 6774787 false) 
-	#(119 1 #reduceActionForBooleanLiteral1: 9420801 false) 
-	#(119 1 #reduceActionForBooleanLiteral1: 9420802 false) 
-	#(120 1 #reduceActionForNilLiteral1: 9487361 false) 
-	#(96 1 #reduceActionForNamedVariable1: 6945793 false) 
-	#(68 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 4996097 false) 
-	#(109 1 #reduceActionForStringLiteral1: 8306689 false) 
-	#(118 1 #reduceActionForSymbolLiteral1: 9377793 false) 
-	#(117 1 #reduceActionForCharacterLiteral1: 9328641 false) 
-	#(110 1 #reduceActionForNumberLiteral1: 8349697 false) 
-	#(110 1 #reduceActionForNumberLiteral1: 8349698 false) 
-	#(107 0 #reduceActionForBlockArgs1: 8080385 false) 
-	#(115 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 9185281 false) 
-	#(65 1 #reduceActionFor_period___period__1: 4719617 false) 
-	#(97 1 #reduceActionForTemplateVariable1: 7031809 false) 
-	#(64 1 #reduceActionForMethodSequence9: 4672521 false) 
-	#(52 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 3909633 false) 
-	#(53 1 #reduceActionFor_period___period__1: 3920897 false) 
-	#(54 1 #liftFirstValue: 3941379 false) 
-	#(66 1 #reduceActionForSequence3: 4896771 false) 
-	#(64 1 #liftFirstValue: 4672529 false) 
-	#(66 1 #reduceActionForSequence5: 4896773 false) 
-	#(66 1 #reduceActionForSequence2: 4896770 false) 
-	#(69 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 5038081 false) 
-	#(70 1 #reduceActionForStatementList1: 5090305 false) 
-	#(71 1 #liftFirstValue: 5192706 false) 
-	#(72 1 #liftFirstValue: 5273602 false) 
-	#(73 1 #liftFirstValue: 5374980 false) 
-	#(78 1 #reduceActionForKeywordMessageSend1: 5702657 false) 
-	#(78 1 #liftFirstValue: 5702658 false) 
-	#(88 1 #reduceActionForKeywordMessageSend1: 6217729 false) 
-	#(88 1 #liftFirstValue: 6217730 false) 
-	#(91 1 #reduceActionForKeywordMessageSend1: 6461441 false) 
-	#(100 1 #liftFirstValue: 7326721 false) 
-	#(95 1 #liftFirstValue: 6774788 false) 
-	#(95 1 #liftFirstValue: 6774789 false) 
-	#(91 1 #liftFirstValue: 6461442 false) 
-	#(100 1 #liftFirstValue: 7326723 false) 
-	#(100 1 #liftFirstValue: 7326724 false) 
-	#(100 1 #liftFirstValue: 7326722 false) 
-	#(108 1 #liftFirstValue: 8153089 false) 
-	#(108 1 #liftFirstValue: 8153090 false) 
-	#(108 1 #liftFirstValue: 8153091 false) 
-	#(108 1 #liftFirstValue: 8153092 false) 
-	#(108 1 #liftFirstValue: 8153093 false) 
-	#(108 1 #liftFirstValue: 8153094 false) 
-	#(108 1 #liftFirstValue: 8153095 false) 
-	#(108 1 #liftFirstValue: 8153096 false) 
-	#(96 1 #reduceActionForNamedVariable1: 6945794 false) 
-	#(100 1 #reduceActionForValue8: 7326728 false) 
-	#(62 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4581377 false) 
-	#(39 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 3139585 false) 
-	#(38 2 #reduceActionForMethodPattern7: 2825223 false) 
-	#(38 2 #reduceActionForMethodPattern3: 2825219 false) 
-	#(38 2 #reduceActionForMethodPattern7: 2825222 false) 
-	#(37 2 #reduceActionForMethod1: 2759681 false) 
-	#(40 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3139586 false) 
-	#(43 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 3315714 false) 
-	#(49 2 #reduceActionForTemplateKeyword2: 3664898 false) 
-	#(49 2 #reduceActionForTemplateKeyword2: 3664897 false) 
-	#(42 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: 3315714 false) 
-	#(48 2 #reduceActionForTemplateKeywordPattern1: 3598337 false) 
-	#(46 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 3411969 false) 
-	#(44 2 #reduceActionForTemplateWithName1: 3366913 false) 
-	#(45 1 #reduceActionFor_period___period__1: 3411969 false) 
-	#(41 2 #reduceActionForTemplatePattern3: 3254275 false) 
-	#(63 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4581378 false) 
-	#(44 2 #reduceActionForTemplateWithName1: 3366914 false) 
-	#(50 1 #reduceActionForTemplateNamePart1: 3766273 false) 
-	#(62 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4581378 false) 
-	#(71 2 #reduceActionForStatement1: 5192705 false) 
-	#(56 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4035585 false) 
-	#(60 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 4455425 false) 
-	#(54 2 #reduceActionForPragma4: 3941380 false) 
-	#(101 2 #reduceActionForArray1: 7622657 false) 
-	#(103 0 #reduceActionFor__period___period___Assignment__value___1: 7676929 false) 
-	#(106 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 7908353 false) 
-	#(64 2 #reduceActionForMethodSequence11: 4672523 false) 
-	#(64 2 #reduceActionForMethodSequence13: 4672525 false) 
-	#(64 2 #reduceActionForMethodSequence10: 4672522 false) 
-	#(53 2 #reduceActionForPragma__pragma__2: 3920898 false) 
-	#(65 2 #reduceActionForPragma__pragma__2: 4719618 false) 
-	#(66 2 #reduceActionForSequence4: 4896772 false) 
-	#(64 2 #reduceActionForMethodSequence5: 4672517 false) 
-	#(66 2 #reduceActionForSequence7: 4896775 false) 
-	#(66 2 #reduceActionForSequence6: 4896774 false) 
-	#(69 2 #reduceActionForStatements2: 5038082 false) 
-	#(73 2 #reduceActionForCascade1: 5374977 false) 
-	#(76 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5573633 false) 
-	#(74 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 5553153 false) 
-	#(79 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5789697 false) 
-	#(82 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5894145 false) 
-	#(80 1 #reduceActionForKeywordMessage1: 5875713 false) 
-	#(80 1 #liftFirstValue: 5875714 false) 
-	#(85 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 6107137 false) 
-	#(83 1 #reduceActionForTemplateKeywordMessage1: 6024193 false) 
-	#(87 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6151169 false) 
-	#(89 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6301697 false) 
-	#(73 2 #reduceActionForCascade1: 5374978 false) 
-	#(93 1 #reduceActionForUnaryMessage1: 6612993 false) 
-	#(94 1 #reduceActionForTemplateUnaryMessage1: 6724609 false) 
-	#(92 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6532097 false) 
-	#(93 1 #liftFirstValue: 6612995 false) 
-	#(93 1 #reduceActionForUnaryMessage1: 6612994 false) 
-	#(73 2 #reduceActionForCascade1: 5374979 false) 
-	#(112 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 8498177 false) 
-	#(38 3 #reduceActionForMethodPattern8: 2825224 false) 
-	#(46 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3411970 false) 
-	#(45 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: 3411970 false) 
-	#(47 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3534850 false) 
-	#(44 3 #reduceActionForTemplateWithName3: 3366915 false) 
-	#(99 3 #reduceActionForStartTemplate1: 7198721 false) 
-	#(67 3 #reduceActionForTemporaries1: 4963329 false) 
-	#(68 2 #reduceActionForPragma__pragma__2: 4996098 false) 
-	#(54 3 #reduceActionForPragma1: 3941377 false) 
-	#(55 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4035585 false) 
-	#(57 1 #liftFirstValue: 4255746 false) 
-	#(57 1 #liftFirstValue: 4255745 false) 
-	#(58 3 #reduceActionForTemplatePragma1: 4314113 false) 
-	#(59 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 4455425 false) 
-	#(54 3 #reduceActionForPragma2: 3941378 false) 
-	#(56 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4035586 false) 
-	#(58 3 #reduceActionForTemplatePragma2: 4314114 false) 
-	#(60 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 4455426 false) 
-	#(54 3 #reduceActionForPragma5: 3941381 false) 
-	#(101 3 #reduceActionForArray2: 7622658 false) 
-	#(105 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 7908353 false) 
-	#(107 2 #reduceActionForBlockArgs2: 8080386 false) 
-	#(104 3 #reduceActionForBlock2: 7776258 false) 
-	#(106 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 7908354 false) 
-	#(100 3 #reduceActionForValue5: 7326725 false) 
-	#(114 3 #reduceActionForByteArrayLiteral1: 9134081 false) 
-	#(116 1 #liftFirstValue: 9252865 false) 
-	#(115 2 #reduceActionForPragma__pragma__2: 9185282 false) 
-	#(116 1 #reduceActionForValue8: 9252866 false) 
-	#(64 3 #reduceActionForMethodSequence12: 4672524 false) 
-	#(64 3 #reduceActionForMethodSequence1: 4672513 false) 
-	#(64 3 #reduceActionForMethodSequence15: 4672527 false) 
-	#(64 3 #reduceActionForMethodSequence14: 4672526 false) 
-	#(64 3 #reduceActionForMethodSequence7: 4672519 false) 
-	#(64 3 #reduceActionForMethodSequence6: 4672518 false) 
-	#(66 3 #reduceActionForSequence8: 4896776 false) 
-	#(70 3 #reduceActionForStatementList2: 5090306 false) 
-	#(75 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5573633 false) 
-	#(77 1 #liftFirstValue: 5630977 false) 
-	#(77 1 #liftFirstValue: 5630978 false) 
-	#(77 1 #liftFirstValue: 5630979 false) 
-	#(76 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5573634 false) 
-	#(86 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6151169 false) 
-	#(81 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5894145 false) 
-	#(90 2 #reduceActionForBinaryMessage1: 6385665 false) 
-	#(84 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 6107137 false) 
-	#(82 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5894146 false) 
-	#(85 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 6107138 false) 
-	#(83 2 #reduceActionForTemplateKeywordMessage2: 6024194 false) 
-	#(87 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6151170 false) 
-	#(81 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5894146 false) 
-	#(72 3 #reduceActionForAssignment1: 5273601 false) 
-	#(122 0 #reduceActionForEndLiteralArray1: 9588737 true) 
-	#(98 3 #reduceActionForStartTemplate1: 7077889 false) 
-	#(59 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 4455426 false) 
-	#(58 4 #reduceActionForTemplatePragma3: 4314115 false) 
-	#(101 4 #reduceActionForArray3: 7622659 false) 
-	#(103 2 #reduceActionFor__period___period___Assignment__value___2: 7676930 false) 
-	#(104 4 #reduceActionForBlock1: 7776257 false) 
-	#(104 4 #reduceActionForBlock3: 7776259 false) 
-	#(64 4 #reduceActionForMethodSequence3: 4672515 false) 
-	#(64 4 #reduceActionForMethodSequence2: 4672514 false) 
-	#(64 4 #reduceActionForMethodSequence16: 4672528 false) 
-	#(64 4 #reduceActionForMethodSequence8: 4672520 false) 
-	#(84 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 6107138 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576004 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576002 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576008 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576010 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576006 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576009 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576007 false) 
-	#(113 1 #liftFirstValue: 8576001 false) 
-	#(112 2 #reduceActionForPragma__pragma__2: 8498178 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576003 false) 
-	#(113 1 #reduceActionForSymbolLiteral1: 8576005 false) 
-	#(113 1 #reduceActionForValue8: 8576012 false) 
-	#(100 4 #reduceActionForValue6: 7326726 false) 
-	#(101 5 #reduceActionForArray4: 7622660 false) 
-	#(102 2 #reduceActionForTemplateKeyword2: 7676929 false) 
-	#(64 5 #reduceActionForMethodSequence4: 4672516 false) 
-	#(100 5 #reduceActionForValue7: 7326727 false) 
-	#(111 5 #reduceActionForArrayLiteral1: 8426497 false) 
-	#(113 3 #reduceActionForArrayLiteralValue11: 8576011 false)
+	#(121 0 #reduceActionForSwitchToLiteralArray1: 9724929 true) 
+	#(66 0 #reduceActionForSequence1: 4923393 false) 
+	#(38 1 #reduceActionForMethodPattern1: 2851841 false) 
+	#(51 1 #reduceActionForTemplateNamePart1: 3876865 false) 
+	#(40 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3166209 false) 
+	#(38 1 #liftFirstValue: 2851845 false) 
+	#(43 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 3342337 false) 
+	#(41 1 #reduceActionForTemplatePattern2: 3280898 false) 
+	#(41 1 #reduceActionForTemplatePattern1: 3280897 false) 
+	#(42 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: 3342337 false) 
+	#(38 1 #reduceActionForMethodPattern4: 2851844 false) 
+	#(63 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4608001 false) 
+	#(61 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 4589569 false) 
+	#(47 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 3561473 false) 
+	#(38 1 #reduceActionForMethodPattern1: 2851842 false) 
+	#(95 1 #reduceActionForVariable1: 6801409 false) 
+	#(95 1 #reduceActionForVariable2: 6801410 false) 
+	#(95 1 #reduceActionForVariable3: 6801411 false) 
+	#(119 1 #reduceActionForBooleanLiteral1: 9621505 false) 
+	#(119 1 #reduceActionForBooleanLiteral1: 9621506 false) 
+	#(120 1 #reduceActionForNilLiteral1: 9688065 false) 
+	#(96 1 #reduceActionForNamedVariable1: 6972417 false) 
+	#(68 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 5022721 false) 
+	#(109 1 #reduceActionForStringLiteral1: 8333313 false) 
+	#(118 1 #reduceActionForSymbolLiteral1: 9578497 false) 
+	#(117 1 #reduceActionForCharacterLiteral1: 9529345 false) 
+	#(110 1 #reduceActionForNumberLiteral1: 8376321 false) 
+	#(110 1 #reduceActionForNumberLiteral1: 8376322 false) 
+	#(107 0 #reduceActionForBlockArgs1: 8107009 false) 
+	#(115 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 9385985 false) 
+	#(65 1 #reduceActionFor_period___period__1: 4746241 false) 
+	#(97 1 #reduceActionForTemplateVariable1: 7058433 false) 
+	#(64 1 #reduceActionForMethodSequence9: 4699145 false) 
+	#(52 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 3936257 false) 
+	#(53 1 #reduceActionFor_period___period__1: 3947521 false) 
+	#(54 1 #liftFirstValue: 3968003 false) 
+	#(66 1 #reduceActionForSequence3: 4923395 false) 
+	#(64 1 #liftFirstValue: 4699153 false) 
+	#(66 1 #reduceActionForSequence5: 4923397 false) 
+	#(66 1 #reduceActionForSequence2: 4923394 false) 
+	#(69 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 5064705 false) 
+	#(70 1 #reduceActionForStatementList1: 5116929 false) 
+	#(71 1 #liftFirstValue: 5219330 false) 
+	#(72 1 #liftFirstValue: 5300226 false) 
+	#(73 1 #liftFirstValue: 5401604 false) 
+	#(78 1 #reduceActionForKeywordMessageSend1: 5729281 false) 
+	#(78 1 #liftFirstValue: 5729282 false) 
+	#(88 1 #reduceActionForKeywordMessageSend1: 6244353 false) 
+	#(88 1 #liftFirstValue: 6244354 false) 
+	#(91 1 #reduceActionForKeywordMessageSend1: 6488065 false) 
+	#(100 1 #liftFirstValue: 7353345 false) 
+	#(95 1 #liftFirstValue: 6801412 false) 
+	#(95 1 #liftFirstValue: 6801413 false) 
+	#(91 1 #liftFirstValue: 6488066 false) 
+	#(100 1 #liftFirstValue: 7353347 false) 
+	#(100 1 #liftFirstValue: 7353348 false) 
+	#(100 1 #liftFirstValue: 7353346 false) 
+	#(108 1 #liftFirstValue: 8179713 false) 
+	#(108 1 #liftFirstValue: 8179714 false) 
+	#(108 1 #liftFirstValue: 8179715 false) 
+	#(108 1 #liftFirstValue: 8179716 false) 
+	#(108 1 #liftFirstValue: 8179717 false) 
+	#(108 1 #liftFirstValue: 8179718 false) 
+	#(108 1 #liftFirstValue: 8179719 false) 
+	#(108 1 #liftFirstValue: 8179720 false) 
+	#(96 1 #reduceActionForNamedVariable1: 6972418 false) 
+	#(100 1 #reduceActionForValue8: 7353352 false) 
+	#(62 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4608001 false) 
+	#(39 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 3166209 false) 
+	#(38 2 #reduceActionForMethodPattern7: 2851847 false) 
+	#(38 2 #reduceActionForMethodPattern3: 2851843 false) 
+	#(38 2 #reduceActionForMethodPattern7: 2851846 false) 
+	#(37 2 #reduceActionForMethod1: 2786305 false) 
+	#(40 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3166210 false) 
+	#(43 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 3342338 false) 
+	#(49 2 #reduceActionForTemplateKeyword2: 3691522 false) 
+	#(49 2 #reduceActionForTemplateKeyword2: 3691521 false) 
+	#(42 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: 3342338 false) 
+	#(48 2 #reduceActionForTemplateKeywordPattern1: 3624961 false) 
+	#(46 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 3438593 false) 
+	#(44 2 #reduceActionForTemplateWithName1: 3393537 false) 
+	#(45 1 #reduceActionFor_period___period__1: 3438593 false) 
+	#(41 2 #reduceActionForTemplatePattern3: 3280899 false) 
+	#(63 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4608002 false) 
+	#(44 2 #reduceActionForTemplateWithName1: 3393538 false) 
+	#(50 1 #reduceActionForTemplateNamePart1: 3792897 false) 
+	#(62 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4608002 false) 
+	#(71 2 #reduceActionForStatement1: 5219329 false) 
+	#(56 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4062209 false) 
+	#(60 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 4482049 false) 
+	#(54 2 #reduceActionForPragma4: 3968004 false) 
+	#(101 2 #reduceActionForArray1: 7649281 false) 
+	#(103 0 #reduceActionFor__period___period___Assignment__value___1: 7703553 false) 
+	#(106 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 7934977 false) 
+	#(64 2 #reduceActionForMethodSequence11: 4699147 false) 
+	#(64 2 #reduceActionForMethodSequence13: 4699149 false) 
+	#(64 2 #reduceActionForMethodSequence10: 4699146 false) 
+	#(53 2 #reduceActionForPragma__pragma__2: 3947522 false) 
+	#(65 2 #reduceActionForPragma__pragma__2: 4746242 false) 
+	#(66 2 #reduceActionForSequence4: 4923396 false) 
+	#(64 2 #reduceActionForMethodSequence5: 4699141 false) 
+	#(66 2 #reduceActionForSequence7: 4923399 false) 
+	#(66 2 #reduceActionForSequence6: 4923398 false) 
+	#(69 2 #reduceActionForStatements2: 5064706 false) 
+	#(73 2 #reduceActionForCascade1: 5401601 false) 
+	#(76 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5600257 false) 
+	#(74 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 5579777 false) 
+	#(79 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5816321 false) 
+	#(82 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5920769 false) 
+	#(80 1 #reduceActionForKeywordMessage1: 5902337 false) 
+	#(80 1 #liftFirstValue: 5902338 false) 
+	#(85 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___1: 6133761 false) 
+	#(83 1 #reduceActionForTemplateKeywordMessage1: 6050817 false) 
+	#(87 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6177793 false) 
+	#(89 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6328321 false) 
+	#(73 2 #reduceActionForCascade1: 5401602 false) 
+	#(93 1 #reduceActionForUnaryMessage1: 6639617 false) 
+	#(94 1 #reduceActionForTemplateUnaryMessage1: 6751233 false) 
+	#(92 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6558721 false) 
+	#(93 1 #liftFirstValue: 6639619 false) 
+	#(93 1 #reduceActionForUnaryMessage1: 6639618 false) 
+	#(73 2 #reduceActionForCascade1: 5401603 false) 
+	#(112 0 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____1: 8524801 false) 
+	#(38 3 #reduceActionForMethodPattern8: 2851848 false) 
+	#(46 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3438594 false) 
+	#(45 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: 3438594 false) 
+	#(47 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3561474 false) 
+	#(44 3 #reduceActionForTemplateWithName3: 3393539 false) 
+	#(99 3 #reduceActionForStartTemplate1: 7225345 false) 
+	#(67 3 #reduceActionForTemporaries1: 4989953 false) 
+	#(68 2 #reduceActionForPragma__pragma__2: 5022722 false) 
+	#(54 3 #reduceActionForPragma1: 3968001 false) 
+	#(55 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4062209 false) 
+	#(57 1 #liftFirstValue: 4282370 false) 
+	#(57 1 #liftFirstValue: 4282369 false) 
+	#(58 3 #reduceActionForTemplatePragma1: 4340737 false) 
+	#(59 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 4482049 false) 
+	#(54 3 #reduceActionForPragma2: 3968002 false) 
+	#(56 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4062210 false) 
+	#(58 3 #reduceActionForTemplatePragma2: 4340738 false) 
+	#(60 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 4482050 false) 
+	#(54 3 #reduceActionForPragma5: 3968005 false) 
+	#(101 3 #reduceActionForArray2: 7649282 false) 
+	#(105 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 7934977 false) 
+	#(107 2 #reduceActionForBlockArgs2: 8107010 false) 
+	#(104 3 #reduceActionForBlock2: 7802882 false) 
+	#(106 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 7934978 false) 
+	#(100 3 #reduceActionForValue5: 7353349 false) 
+	#(114 3 #reduceActionForByteArrayLiteral1: 9334785 false) 
+	#(116 1 #liftFirstValue: 9453569 false) 
+	#(115 2 #reduceActionForPragma__pragma__2: 9385986 false) 
+	#(116 1 #reduceActionForValue8: 9453570 false) 
+	#(64 3 #reduceActionForMethodSequence12: 4699148 false) 
+	#(64 3 #reduceActionForMethodSequence1: 4699137 false) 
+	#(64 3 #reduceActionForMethodSequence15: 4699151 false) 
+	#(64 3 #reduceActionForMethodSequence14: 4699150 false) 
+	#(64 3 #reduceActionForMethodSequence7: 4699143 false) 
+	#(64 3 #reduceActionForMethodSequence6: 4699142 false) 
+	#(66 3 #reduceActionForSequence8: 4923400 false) 
+	#(70 3 #reduceActionForStatementList2: 5116930 false) 
+	#(75 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5600257 false) 
+	#(77 1 #liftFirstValue: 5657601 false) 
+	#(77 1 #liftFirstValue: 5657602 false) 
+	#(77 1 #liftFirstValue: 5657603 false) 
+	#(76 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5600258 false) 
+	#(86 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6177793 false) 
+	#(81 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5920769 false) 
+	#(90 2 #reduceActionForBinaryMessage1: 6412289 false) 
+	#(84 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 6133761 false) 
+	#(82 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5920770 false) 
+	#(85 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 6133762 false) 
+	#(83 2 #reduceActionForTemplateKeywordMessage2: 6050818 false) 
+	#(87 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6177794 false) 
+	#(81 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5920770 false) 
+	#(72 3 #reduceActionForAssignment1: 5300225 false) 
+	#(122 0 #reduceActionForEndLiteralArray1: 9789441 true) 
+	#(98 3 #reduceActionForStartTemplate1: 7104513 false) 
+	#(59 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 4482050 false) 
+	#(58 4 #reduceActionForTemplatePragma3: 4340739 false) 
+	#(101 4 #reduceActionForArray3: 7649283 false) 
+	#(103 2 #reduceActionFor__period___period___Assignment__value___2: 7703554 false) 
+	#(104 4 #reduceActionForBlock1: 7802881 false) 
+	#(104 4 #reduceActionForBlock3: 7802883 false) 
+	#(64 4 #reduceActionForMethodSequence3: 4699139 false) 
+	#(64 4 #reduceActionForMethodSequence2: 4699138 false) 
+	#(64 4 #reduceActionForMethodSequence16: 4699152 false) 
+	#(64 4 #reduceActionForMethodSequence8: 4699144 false) 
+	#(84 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 6133762 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602628 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602626 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602632 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602635 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602637 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602634 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602638 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602636 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602630 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602633 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602631 false) 
+	#(113 1 #liftFirstValue: 8602625 false) 
+	#(112 2 #reduceActionForPragma__pragma__2: 8524802 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602627 false) 
+	#(113 1 #reduceActionForSymbolLiteral1: 8602629 false) 
+	#(113 1 #reduceActionForValue8: 8602640 false) 
+	#(100 4 #reduceActionForValue6: 7353350 false) 
+	#(101 5 #reduceActionForArray4: 7649284 false) 
+	#(102 2 #reduceActionForTemplateKeyword2: 7703553 false) 
+	#(64 5 #reduceActionForMethodSequence4: 4699140 false) 
+	#(100 5 #reduceActionForValue7: 7353351 false) 
+	#(111 5 #reduceActionForArrayLiteral1: 8453121 false) 
+	#(113 3 #reduceActionForArrayLiteralValue15: 8602639 false)
 	).
 ]
 
@@ -697,16 +705,16 @@ GtPharoParser class >> transitionTable [
 #[0 0 66 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 9 0 10 0 11 0 12 0 13 0 14 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
 #[0 0 70 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 9 0 10 0 11 0 12 0 13 0 14 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
 #[0 0 74 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 9 0 10 0 11 0 12 0 13 0 14 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[0 0 78 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 82 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 86 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 78 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 82 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 86 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
 #[1 0 90 0 1 0 90 0 2 0 90 0 3 0 90 0 4 0 90 0 5 0 90 0 6 0 90 0 7 0 90 0 9 0 90 0 10 0 90 0 11 0 90 0 12 0 90 0 13 0 90 0 14 0 90 0 16 0 90 0 17 0 90 0 18 0 90 0 19 0 90 0 20 0 90 0 21 0 90 0 22 0 90 0 23 0 90 0 24 0 90 0 25 0 90 0 26 0 90 0 27 0 90 0 28 0 90 0 29 0 90 0 30 0 90 0 31 0 90 0 32 0 18 0 123 0 90 0 124 0 90 0 125 0 90 0 126 0 90 0 128 0 90 0 129 0 90 0 132 0 90 0 133] 
 #[1 0 94 0 1 0 94 0 2 0 94 0 3 0 94 0 7 0 94 0 9 1 237 0 68 0 94 0 124 0 94 0 128] 
-#[0 0 98 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 102 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 106 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 110 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 114 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 98 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 102 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 106 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 110 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 114 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
 #[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 0 197 0 44 0 85 0 51 1 241 0 72 1 241 0 73 1 241 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
 #[1 1 245 0 7 1 249 0 28 1 253 0 44 2 1 0 49 0 85 0 51 2 5 0 55 2 9 0 56 2 13 0 59 2 17 0 60 0 101 0 99 0 105 0 124 2 21 0 133] 
 #[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 2 25 0 27 0 193 0 32 0 197 0 44 0 85 0 51 2 29 0 65 2 33 0 72 2 33 0 73 2 33 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
@@ -741,14 +749,14 @@ GtPharoParser class >> transitionTable [
 #[0 0 222 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
 #[0 0 226 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
 #[0 0 230 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[0 0 234 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 238 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 242 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 246 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 250 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 0 254 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 1 2 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 1 6 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 234 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 238 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 242 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 246 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 250 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 0 254 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 1 2 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 1 6 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
 #[0 2 205 0 23] 
 #[0 1 10 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 9 0 10 0 11 0 12 0 13 0 14 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
 #[1 0 118 0 1 0 118 0 2 0 118 0 3 0 118 0 4 0 118 0 5 0 118 0 6 0 118 0 7 0 118 0 9 0 118 0 10 0 118 0 11 0 118 0 12 0 118 0 13 0 118 0 14 0 118 0 16 0 118 0 19 0 118 0 20 2 37 0 21 0 118 0 22 0 118 0 23 0 118 0 24 0 118 0 27 0 118 0 32 2 41 0 105 2 209 0 106 2 213 0 107 0 118 0 124 0 118 0 128 0 118 0 129 0 118 0 133] 
@@ -844,7 +852,7 @@ GtPharoParser class >> transitionTable [
 #[1 0 118 0 1 0 118 0 2 0 118 0 3 0 118 0 4 0 118 0 5 0 118 0 6 0 118 0 7 0 118 0 9 0 118 0 10 0 118 0 11 0 118 0 12 0 118 0 13 0 118 0 14 0 118 0 16 0 118 0 19 0 118 0 20 2 37 0 21 0 118 0 22 0 118 0 23 0 118 0 24 0 118 0 27 0 118 0 32 2 41 0 105 2 209 0 106 3 201 0 107 0 118 0 124 0 118 0 128 0 118 0 129 0 118 0 133] 
 #[0 1 234 0 25 0 26 0 27 0 32 0 125 0 132 0 133] 
 #[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 0 197 0 44 0 85 0 51 3 205 0 72 3 205 0 73 3 205 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
-#[1 1 238 0 4 1 238 0 5 1 238 0 6 1 238 0 7 1 238 0 10 1 238 0 11 1 238 0 12 1 238 0 13 1 238 0 14 1 238 0 15 1 238 0 16 1 238 0 21 1 238 0 22 1 238 0 23 1 238 0 24 1 238 0 25 1 238 0 29 1 238 0 30 1 238 0 32 3 209 0 112 1 238 0 127 1 238 0 128 1 238 0 133] 
+#[1 1 238 0 4 1 238 0 5 1 238 0 6 1 238 0 7 1 238 0 10 1 238 0 11 1 238 0 12 1 238 0 13 1 238 0 14 1 238 0 15 1 238 0 16 1 238 0 19 1 238 0 20 1 238 0 21 1 238 0 22 1 238 0 23 1 238 0 24 1 238 0 25 1 238 0 26 1 238 0 27 1 238 0 29 1 238 0 30 1 238 0 32 3 209 0 112 1 238 0 127 1 238 0 128 1 238 0 133] 
 #[1 3 65 0 9 2 37 0 21 3 73 0 105] 
 #[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 169 0 16 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 0 10 0 27 0 193 0 32 0 197 0 44 0 85 0 51 0 221 0 65 3 213 0 66 3 81 0 67 0 233 0 69 0 237 0 70 0 241 0 71 0 241 0 72 0 241 0 73 0 241 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
 #[0 1 22 0 28] 
@@ -879,7 +887,7 @@ GtPharoParser class >> transitionTable [
 #[1 3 241 0 26 3 245 0 133] 
 #[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 169 0 16 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 0 158 0 26 0 158 0 27 0 193 0 32 0 197 0 44 0 85 0 51 2 89 0 65 2 93 0 69 0 237 0 70 0 241 0 71 0 241 0 72 0 241 0 73 0 241 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 0 59 0 133] 
 #[0 2 82 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[0 2 86 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 2 86 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
 #[0 2 90 0 13 0 14 0 26 0 133] 
 #[0 2 94 0 13 0 14 0 26 0 133] 
 #[0 2 98 0 13 0 14 0 26 0 133] 
@@ -909,46 +917,50 @@ GtPharoParser class >> transitionTable [
 #[1 2 186 0 25 2 186 0 26 2 186 0 27 2 186 0 28 2 121 0 29 2 186 0 30 2 186 0 32 2 161 0 90 2 186 0 125 2 186 0 126 2 186 0 132 2 186 0 133] 
 #[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 145 0 9 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 169 0 16 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 0 10 0 27 0 193 0 32 0 197 0 44 0 85 0 51 0 221 0 65 4 21 0 66 3 81 0 67 0 233 0 69 0 237 0 70 0 241 0 71 0 241 0 72 0 241 0 73 0 241 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
 #[0 2 190 0 25 0 26 0 27 0 32 0 125 0 132 0 133] 
-#[1 0 129 0 4 0 133 0 5 0 137 0 6 4 25 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 4 29 0 15 4 33 0 16 4 37 0 21 4 41 0 22 0 6 0 23 0 189 0 24 2 194 0 25 4 45 0 29 4 49 0 30 4 53 0 32 4 61 0 108 4 61 0 109 4 61 0 110 4 61 0 111 4 61 0 113 4 61 0 114 4 61 0 117 4 61 0 118 4 61 0 119 4 61 0 120 1 81 0 121 4 65 0 122 4 69 0 127 4 73 0 128 4 77 0 133] 
-#[0 4 81 0 27] 
+#[1 0 129 0 4 0 133 0 5 0 137 0 6 4 25 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 4 29 0 15 4 33 0 16 4 37 0 19 4 41 0 20 4 45 0 21 4 49 0 22 0 6 0 23 0 189 0 24 2 194 0 25 4 53 0 26 4 57 0 27 4 61 0 29 4 65 0 30 4 69 0 32 4 77 0 108 4 77 0 109 4 77 0 110 4 77 0 111 4 77 0 113 4 77 0 114 4 77 0 117 4 77 0 118 4 77 0 119 4 77 0 120 1 81 0 121 4 81 0 122 4 85 0 127 4 89 0 128 4 93 0 133] 
+#[0 4 97 0 27] 
 #[0 2 198 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 9 0 10 0 11 0 12 0 13 0 14 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 123 0 124 0 125 0 126 0 128 0 129 0 130 0 131 0 132 0 133] 
 #[1 2 202 0 7 2 202 0 18 1 249 0 28 3 33 0 55 2 202 0 124] 
 #[0 2 206 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 9 0 10 0 11 0 12 0 13 0 14 0 16 0 17 0 19 0 20 0 22 0 23 0 24 0 32 0 124 0 128 0 129 0 132 0 133] 
 #[0 2 210 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 4 85 0 27 2 77 0 32 0 197 0 44 0 85 0 51 4 89 0 72 4 89 0 73 4 89 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
+#[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 4 101 0 27 2 77 0 32 0 197 0 44 0 85 0 51 4 105 0 72 4 105 0 73 4 105 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 1 93 0 133] 
 #[0 2 214 0 27 0 32] 
 #[0 2 218 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
 #[0 2 222 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 169 0 16 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 2 77 0 32 0 197 0 44 0 85 0 51 4 93 0 69 0 237 0 70 0 241 0 71 0 241 0 72 0 241 0 73 0 241 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 2 226 0 132 1 93 0 133] 
+#[1 0 117 0 1 0 121 0 2 0 125 0 3 0 129 0 4 0 133 0 5 0 137 0 6 0 141 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 0 169 0 16 0 177 0 19 0 181 0 20 0 185 0 22 0 6 0 23 0 189 0 24 2 77 0 32 0 197 0 44 0 85 0 51 4 109 0 69 0 237 0 70 0 241 0 71 0 241 0 72 0 241 0 73 0 241 0 78 1 1 0 79 1 5 0 88 1 9 0 89 1 13 0 91 1 17 0 92 1 21 0 95 1 21 0 96 1 21 0 97 0 101 0 99 1 13 0 100 1 13 0 101 1 13 0 104 1 13 0 108 1 13 0 109 1 13 0 110 1 13 0 111 1 13 0 114 1 13 0 117 1 13 0 118 1 13 0 119 1 13 0 120 1 81 0 121 0 105 0 124 1 85 0 128 1 89 0 129 2 226 0 132 1 93 0 133] 
 #[0 2 230 0 132] 
 #[0 2 234 0 132] 
 #[0 2 238 0 132] 
 #[1 2 242 0 7 2 242 0 25 2 242 0 26 2 242 0 27 3 185 0 28 2 242 0 30 2 242 0 32 3 193 0 86 2 242 0 124 2 242 0 125 2 242 0 132 2 242 0 133] 
 #[1 2 158 0 25 2 158 0 26 2 158 0 27 2 158 0 28 2 121 0 29 2 158 0 30 2 158 0 32 2 161 0 90 2 158 0 125 2 158 0 126 2 158 0 132 2 158 0 133] 
 #[1 2 154 0 7 2 154 0 25 2 154 0 26 2 154 0 27 2 154 0 28 2 121 0 29 2 154 0 30 2 154 0 32 2 161 0 90 2 154 0 124 2 154 0 125 2 154 0 132 2 154 0 133] 
-#[0 4 97 0 27] 
-#[0 2 246 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 2 250 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 2 254 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 2 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[1 1 238 0 4 1 238 0 5 1 238 0 6 1 238 0 7 1 238 0 10 1 238 0 11 1 238 0 12 1 238 0 13 1 238 0 14 1 238 0 15 1 238 0 16 1 238 0 21 1 238 0 22 1 238 0 23 1 238 0 24 1 238 0 25 1 238 0 29 1 238 0 30 1 238 0 32 4 101 0 112 1 238 0 127 1 238 0 128 1 238 0 133] 
-#[0 3 6 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 10 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 14 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 18 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 22 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 4 105 0 25] 
-#[0 3 26 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 30 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 34 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133] 
-#[0 3 38 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[0 3 42 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[0 3 46 0 27 0 32] 
-#[0 3 50 0 132] 
+#[0 4 113 0 27] 
+#[0 2 246 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 2 250 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 2 254 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 2 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 6 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 10 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[1 1 238 0 4 1 238 0 5 1 238 0 6 1 238 0 7 1 238 0 10 1 238 0 11 1 238 0 12 1 238 0 13 1 238 0 14 1 238 0 15 1 238 0 16 1 238 0 19 1 238 0 20 1 238 0 21 1 238 0 22 1 238 0 23 1 238 0 24 1 238 0 25 1 238 0 26 1 238 0 27 1 238 0 29 1 238 0 30 1 238 0 32 4 117 0 112 1 238 0 127 1 238 0 128 1 238 0 133] 
+#[0 3 14 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 18 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 22 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 26 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 30 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 34 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 38 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 4 121 0 25] 
+#[0 3 42 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 46 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
+#[0 3 50 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133] 
 #[0 3 54 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
-#[1 0 129 0 4 0 133 0 5 0 137 0 6 4 25 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 4 29 0 15 4 33 0 16 4 37 0 21 4 41 0 22 0 6 0 23 0 189 0 24 4 109 0 25 4 45 0 29 4 49 0 30 4 53 0 32 4 61 0 108 4 61 0 109 4 61 0 110 4 61 0 111 4 61 0 113 4 61 0 114 4 61 0 117 4 61 0 118 4 61 0 119 4 61 0 120 1 81 0 121 4 69 0 127 4 73 0 128 4 77 0 133] 
-#[0 3 58 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
-#[0 3 62 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 21 0 22 0 23 0 24 0 25 0 29 0 30 0 32 0 127 0 128 0 133]
+#[0 3 58 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
+#[0 3 62 0 27 0 32] 
+#[0 3 66 0 132] 
+#[0 3 70 0 7 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 128 0 129 0 132 0 133] 
+#[1 0 129 0 4 0 133 0 5 0 137 0 6 4 25 0 7 0 149 0 10 0 153 0 11 0 157 0 12 0 161 0 13 0 165 0 14 4 29 0 15 4 33 0 16 4 37 0 19 4 41 0 20 4 45 0 21 4 49 0 22 0 6 0 23 0 189 0 24 4 125 0 25 4 53 0 26 4 57 0 27 4 61 0 29 4 65 0 30 4 69 0 32 4 77 0 108 4 77 0 109 4 77 0 110 4 77 0 111 4 77 0 113 4 77 0 114 4 77 0 117 4 77 0 118 4 77 0 119 4 77 0 120 1 81 0 121 4 85 0 127 4 89 0 128 4 93 0 133] 
+#[0 3 74 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 32 0 124 0 125 0 126 0 127 0 128 0 129 0 132 0 133] 
+#[0 3 78 0 4 0 5 0 6 0 7 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 29 0 30 0 32 0 127 0 128 0 133]
 	).
 ]
 
@@ -1048,7 +1060,7 @@ GtPharoParser >> reduceActionForArrayLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArrayLiteralValue11: nodes [
+GtPharoParser >> reduceActionForArrayLiteralValue15: nodes [
 	| result |
 	result := GtPharoArrayLiteralNode new.
 	result arrayStart: (nodes at: 1).

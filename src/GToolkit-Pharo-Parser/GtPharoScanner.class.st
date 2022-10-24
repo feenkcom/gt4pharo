@@ -165,12 +165,77 @@ GtPharoScanner >> scan11 [
 
 { #category : #generated }
 GtPharoScanner >> scan12 [
+	self step.
+	currentCharacter == $" ifTrue: [ ^ self scan2 ].
+	currentCharacter == $# ifTrue: [ ^ self scan3 ].
+	^ self scan12X4
+]
+
+{ #category : #generated }
+GtPharoScanner >> scan12X1 [
+	[ self recordMatch: #(29).
+	self step.
+	currentCharacter == $!
+		or: [ (currentCharacter between: $% and: $&)
+				or: [ (currentCharacter between: $* and: $-)
+						or: [ currentCharacter == $/
+								or: [ (currentCharacter between: $< and: $@)
+										or: [ '\|~' includes: currentCharacter ] ] ] ] ] ] whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoScanner >> scan12X2 [
+	[ self recordMatch: #(34).
+	self step.
+	currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoScanner >> scan12X3 [
+	currentCharacter == $} ifTrue: [ ^ self recordAndReportMatch: #(27) ].
+	currentCharacter isDigit ifTrue: [ ^ self recordAndReportMatch: #(13) ].
+	(currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ]) ifTrue: [ ^ self scan12X2 ].
+	((currentCharacter between: $! and: $@)
+		or: [ currentCharacter == $\ or: [ currentCharacter between: $| and: $~ ] ])
+		ifTrue: [ ^ self scan12X1 ].
+	(currentCharacter isLetter or: [ currentCharacter == $_ ])
+		ifTrue: [ [ self recordMatch: #(7).
+			self step.
+			currentCharacter == $: ifTrue: [ ^ self scan13 ].
+			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ] whileTrue ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtPharoScanner >> scan12X4 [
+	currentCharacter == $$ ifTrue: [ ^ self scan8 ].
+	currentCharacter == $' ifTrue: [ ^ self scan9 ].
+	currentCharacter == $( ifTrue: [ ^ self recordAndReportMatch: #(22) ].
+	currentCharacter == $) ifTrue: [ ^ self recordAndReportMatch: #(25) ].
+	currentCharacter == $- ifTrue: [ ^ self scan10 ].
+	currentCharacter == $. ifTrue: [ ^ self recordAndReportMatch: #(32) ].
+	currentCharacter == $: ifTrue: [ ^ self recordAndReportMatch: #(21) ].
+	currentCharacter == $; ifTrue: [ ^ self recordAndReportMatch: #(30) ].
+	currentCharacter == $[ ifTrue: [ ^ self recordAndReportMatch: #(20) ].
+	currentCharacter == $] ifTrue: [ ^ self recordAndReportMatch: #(26) ].
+	currentCharacter == $^ ifTrue: [ ^ self recordAndReportMatch: #(16) ].
+	currentCharacter == ${ ifTrue: [ ^ self recordAndReportMatch: #(19) ].
+	^ self scan12X3
+]
+
+{ #category : #generated }
+GtPharoScanner >> scan13 [
 	self recordMatch: #(15).
 	self step.
 	(currentCharacter isLetter or: [ currentCharacter == $_ ])
-		ifTrue:
-			[ [ self step.
-			currentCharacter == $: ifTrue: [ ^ self scan12 ].
+		ifTrue: [ [ self step.
+			currentCharacter == $: ifTrue: [ ^ self scan13 ].
 			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ] whileTrue ].
 	^ self reportLastMatch
 ]
@@ -456,67 +521,8 @@ GtPharoScanner >> scan9 [
 
 { #category : #generated }
 GtPharoScanner >> scanForToken [
-	scope == #literalArray ifTrue: [ ^ self scanForTokenX1 ].
+	scope == #literalArray ifTrue: [ ^ self scan12 ].
 	scope == #default ifTrue: [ ^ self scan1 ].
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scanForTokenX1 [
-	self step.
-	currentCharacter == $" ifTrue: [ ^ self scan2 ].
-	currentCharacter == $# ifTrue: [ ^ self scan3 ].
-	currentCharacter == $$ ifTrue: [ ^ self scan8 ].
-	currentCharacter == $' ifTrue: [ ^ self scan9 ].
-	currentCharacter == $( ifTrue: [ ^ self recordAndReportMatch: #(22) ].
-	currentCharacter == $) ifTrue: [ ^ self recordAndReportMatch: #(25) ].
-	currentCharacter == $- ifTrue: [ ^ self scan10 ].
-	currentCharacter == $. ifTrue: [ ^ self recordAndReportMatch: #(32) ].
-	currentCharacter == $: ifTrue: [ ^ self recordAndReportMatch: #(21) ].
-	currentCharacter == $; ifTrue: [ ^ self recordAndReportMatch: #(30) ].
-	currentCharacter == $[ ifTrue: [ ^ self recordAndReportMatch: #(20) ].
-	currentCharacter == $] ifTrue: [ ^ self recordAndReportMatch: #(26) ].
-	^ self scanForTokenX1X3
-]
-
-{ #category : #generated }
-GtPharoScanner >> scanForTokenX1X1 [
-	[ self recordMatch: #(29).
-	self step.
-	currentCharacter == $!
-		or:
-			[ (currentCharacter between: $% and: $&)
-				or:
-					[ (currentCharacter between: $* and: $-)
-						or: [ currentCharacter == $/ or: [ (currentCharacter between: $< and: $@) or: [ '\|~' includes: currentCharacter ] ] ] ] ] ]
-		whileTrue.
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scanForTokenX1X2 [
-	[ self recordMatch: #(34).
-	self step.
-	currentCharacter isSeparator or: [ currentCharacter == Character null or: [ currentCharacter == Character pageUp ] ] ]
-		whileTrue.
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtPharoScanner >> scanForTokenX1X3 [
-	currentCharacter == $^ ifTrue: [ ^ self recordAndReportMatch: #(16) ].
-	currentCharacter isDigit ifTrue: [ ^ self recordAndReportMatch: #(13) ].
-	(currentCharacter isSeparator
-		or: [ currentCharacter == Character null
-				or: [ currentCharacter == Character pageUp ] ])
-		ifTrue: [ ^ self scanForTokenX1X2 ].
-	((currentCharacter between: $! and: $@)
-		or: [ '\|~' includes: currentCharacter ]) ifTrue: [ ^ self scanForTokenX1X1 ].
-	(currentCharacter isLetter or: [ currentCharacter == $_ ])
-		ifTrue: [ [ self recordMatch: #(7).
-			self step.
-			currentCharacter == $: ifTrue: [ ^ self scan12 ].
-			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ] whileTrue ].
 	^ self reportLastMatch
 ]
 
