@@ -33,6 +33,7 @@ GtExtractMethodToComponentController >> extractedAst [
 { #category : #accessing }
 GtExtractMethodToComponentController >> finishRefactoring [
 	super finishRefactoring.
+	self removeReceiverSelector.
 	sourceCoderViewModel discardChanges
 ]
 
@@ -207,7 +208,7 @@ GtExtractMethodToComponentController >> refactoring [
 { #category : #'private - attributes' }
 GtExtractMethodToComponentController >> removeReceiverSelector [
 	receiverAttribute ifNil: [ ^ self ].
-	self sourceCoderViewModel removeAttribute: receiverAttribute
+	self sourceCoderViewModel removeCoderTextAttributes: receiverAttribute
 ]
 
 { #category : #private }

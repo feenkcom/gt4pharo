@@ -4,51 +4,31 @@ Class {
 	#instVars : [
 		'selector',
 		'someImplementor',
-		'newSelectorParts',
-		'selectorIndex',
-		'startIndex',
-		'previewIndex'
+		'newSelectorParts'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #executing }
 GtRenameMethodController >> installRenamer [
-	self
-		cursorPositionDo: [ :position | 
-			| message |
-			selector := self originalNode selector.
-			self someImplementor isNil
-				ifTrue: [ ^ self ].
+	| message |
+	message := self originalNode.
+	selector := message selector.
+	self someImplementor isNil ifTrue: [ ^ self ].
 
-			startIndex := self originalNode selectorParts first startPosition.
-			newSelectorParts := selector keywords.
-			message := self originalNode.
-			message selectorParts
-				keysAndValuesDo: [ :i :eachSmaCCToken | 
-					((eachSmaCCToken sourceInterval includes: position) or: [ eachSmaCCToken stopPosition + 1 = position ])
-						ifTrue: [
-							selectorIndex := i.
-							self installRenamerOn: message ] ] ]
-]
+	newSelectorParts := selector keywords.
 
-{ #category : #executing }
-GtRenameMethodController >> installRenamerOn: aGtPharoMessageNode [
-	previewIndex := node selectorParts last stopPosition.
-	newName := newSelectorParts at: selectorIndex.
-	renameInterval := (aGtPharoMessageNode selectorParts at: selectorIndex) sourceInterval.
-	self installRenameAction
-]
-
-{ #category : #accessing }
-GtRenameMethodController >> installValidation [
-	| argCount |
-	argCount := selector numArgs.
-	argCount = 0
-		ifTrue: [ ^ super installValidation ].
-	argCount = 1
-		ifTrue: [ renameAction forBinaryOrKeyword ]
-		ifFalse: [ renameAction forKeyword ]
+	renameAction := GtRenameSelectorAction
+			message: message
+			textualCoderViewModel: sourceCoderViewModel.
+	renameAction newSelector: message selector.
+	renameAction selectAll: true.
+	renameAction
+		when: GtRenameActionAnnouncement
+		do: [ :ann | 
+			ann eventType = #textUpdated ifTrue: [ self updateSelector ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+	renameAction install
 ]
 
 { #category : #accessing }
@@ -57,22 +37,9 @@ GtRenameMethodController >> newName [
 ]
 
 { #category : #private }
-GtRenameMethodController >> newNode [
-	sourceCoderViewModel astAwait
-		withAllNodesDo: [ :each | 
-			((each isMessage or: [ each isMethod or: [ each isMethodPattern ] ])
-				and: [ each selectorParts first startPosition = startIndex ])
-				ifTrue: [ ^ each ] ].
-	^ nil
-]
-
-{ #category : #private }
 GtRenameMethodController >> newSelectorName [
-	selector numArgs = 0
-		ifTrue: [ ^ newName asSymbol ].
 	^ (String
-		streamContents:
-			[ :stream | newSelectorParts do: [ :each | stream nextPutAll: each ] ])
+		streamContents: [ :stream | newSelectorParts do: [ :each | stream nextPutAll: each ] ])
 		asSymbol
 ]
 
@@ -83,21 +50,25 @@ GtRenameMethodController >> originalName [
 
 { #category : #private }
 GtRenameMethodController >> refactoring [
-	| implementor newSelector model |
+	| implementor newSelector model refactoring isCoderMethodBeingRenamed |
 	implementor := self someImplementor.
-	implementor isNil
-		ifTrue: [ ^ nil ].
+	implementor isNil ifTrue: [ ^ nil ].
 	newSelector := self newSelectorName.
-	newSelector = selector
-		ifTrue: [ ^ nil ].
+	newSelector = selector ifTrue: [ ^ nil ].
 	model := self createModel.
-	^ (GtCoderRenameMethodRefactoring
-		model: model
-		renameMethod: selector
-		in: (model classFor: implementor)
-		to: newSelector
-		permutation: (1 to: selector numArgs))
-			methodCoder: sourceCoderViewModel coderModel
+	isCoderMethodBeingRenamed := sourceCoderViewModel coderModel selector
+			= selector.
+	refactoring := (isCoderMethodBeingRenamed
+			ifTrue: [ GtCoderRenameMethodRefactoring ]
+			ifFalse: [ RBRenameMethodRefactoring ])
+			model: model
+			renameMethod: selector
+			in: (model classFor: implementor)
+			to: newSelector
+			permutation: (1 to: selector numArgs).
+	isCoderMethodBeingRenamed
+		ifTrue: [ refactoring methodCoder: sourceCoderViewModel coderModel ].
+	^ refactoring
 ]
 
 { #category : #accessing }
@@ -107,12 +78,7 @@ GtRenameMethodController >> refactoringName [
 
 { #category : #accessing }
 GtRenameMethodController >> renamePosition [
-	self newNode
-		ifNotNil: [ :message | ^ message selectorParts last stopPosition ].
-	^ (renameAction isNil or: [ renameAction isInstalled ])
-		ifTrue: [ previewIndex ]
-		ifFalse: [ self originalNode selectorParts last stopPosition + self newName size
-				- self originalName size ]
+	^ self originalNode selectorParts last stopPosition
 ]
 
 { #category : #private }
@@ -123,30 +89,11 @@ GtRenameMethodController >> someImplementor [
 				ifNotEmpty: [ :impls | someImplementor := impls anyOne methodClass ] ]
 ]
 
-{ #category : #private }
-GtRenameMethodController >> tab: forward [
-	self originalNode arguments size < 2
-		ifTrue: [ ^ self ].
-	forward
-		ifTrue: [ selectorIndex := selectorIndex + 1.
-			selectorIndex > self originalNode arguments size
-				ifTrue: [ selectorIndex := 1 ] ]
-		ifFalse: [ selectorIndex := selectorIndex - 1.
-			selectorIndex = 0
-				ifTrue: [ selectorIndex := self originalNode arguments size ] ].
-	self newNode
-		ifNotNil: [ :message | 
-			self removeRefactoringAttribute.
-			self sourceCoderViewModel moveCursorTo: (message selectorParts at: selectorIndex) stopPosition.
-			self installRenamerOn: message.
-			newSelectorParts = selector keywords
+{ #category : #executing }
+GtRenameMethodController >> updateSelector [
+	renameAction isValid
+		ifTrue: [ newSelectorParts := renameAction newSelector asSymbol keywords.
+			selector = renameAction newSelector
+				ifTrue: [ self removeRefactoringAttribute ]
 				ifFalse: [ self addRefactoringPreview ] ]
-]
-
-{ #category : #private }
-GtRenameMethodController >> updateName: aString [
-
-	"we should update selector parts before updating the name, otherwise the refactoring will be canceled"
-	newSelectorParts at: selectorIndex put: aString.
-	super updateName: aString
 ]
