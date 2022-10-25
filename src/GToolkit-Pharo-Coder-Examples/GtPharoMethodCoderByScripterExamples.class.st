@@ -3090,7 +3090,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 
 	aScripter assert
 		label: 'Assert rename editor all selected';
-		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector ];
+		value: [ :anEditor | anEditor editor selectedText asString ] equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
@@ -3105,6 +3105,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 	aScripter := self forKeywordRename_02_shortcut.	
 	"this positions the cursor before `:`"
 	(aScripter keyClick: BlKeyboardKey arrowLeft) play.
+	(aScripter keyClick: BlKeyboardKey arrowRight) play.
 
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 
@@ -3142,7 +3143,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_04_type [
 	aScripter assert
 		label: 'Assert text';
 		value: [ :anEditor | anEditor text asString ]
-			equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast , 'New:' ];
+			equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast , 'New' ];
 		id: GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: GtRenameEditor;
 		play.
@@ -3161,8 +3162,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 		id: GtSourceCoderEditorId;
 		id: #previewCheckButton;
 		play.
-
-	self checkFor: aScripter discardButtonExists: true.
 
 	aScripter assert
 		label: 'Assert that refactorings preview appeared';
