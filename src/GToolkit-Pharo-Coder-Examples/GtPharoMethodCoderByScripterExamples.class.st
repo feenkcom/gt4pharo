@@ -4134,13 +4134,30 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactoring [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self forUnaryExtraction_07_01_accept_with_enter.
+	
+	"Enter opens the preview"
+	aScripter assert
+		onSpaceRoot;
+		id: GtRefactoringsPreviewAcceptId;
+		exists;
+		play.
 
 	aScripter click
 		id: #previewCheckButton;
 		play.
-	
+		
+	"Click should close the preview"
+	aScripter assert
+		onSpaceRoot;
+		id: GtRefactoringsPreviewAcceptId;
+		notExists;
+		play.
+
+	aScripter click
+		id: #previewCheckButton;
+		play.
+
 	aScripter assert
 		onSpaceRoot;
 		id: GtRefactoringsPreviewAcceptId;
