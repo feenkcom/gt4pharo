@@ -141,9 +141,20 @@ GtRefactoringsPreviewButton >> initialize [
 	previewButton
 		addShortcut: (BlShortcutWithAction new
 				combination: BlKeyCombination enter;
-				action: [ self fireEvent: (BrDropdownShowWish new anchor: self) ]).
+				action: [ self openPreview ]).
 
 	self addChild: previewButton
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> openPreview [
+	^ self previewButton
+		fireEvent: (BrDropdownShowWish new anchor: self previewButton)
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> previewButton [
+	^ self childAt: 1
 ]
 
 { #category : #initialization }
