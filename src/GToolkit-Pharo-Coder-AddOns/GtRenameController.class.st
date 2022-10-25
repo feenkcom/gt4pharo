@@ -51,6 +51,12 @@ GtRenameController >> cursorPositionDo: aBlock [
 		do: [ :eachCursor | ^ aBlock value: (eachCursor position + 1 min: self sourceText size) ]
 ]
 
+{ #category : #accessing }
+GtRenameController >> finishRefactoring [
+	super finishRefactoring.
+	renameAction ifNotNil: [ renameAction uninstall ]
+]
+
 { #category : #executing }
 GtRenameController >> installRenameAction [
 	renameAction := self renameAction.

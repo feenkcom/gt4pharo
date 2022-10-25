@@ -127,6 +127,13 @@ GtAbstractExtractMethodController >> findExtractedSend [
 	^ nil
 ]
 
+{ #category : #accessing }
+GtAbstractExtractMethodController >> finishRefactoring [
+	super finishRefactoring.
+	self removeRenaming.
+	self removeReorderParametersAttributes
+]
+
 { #category : #initialization }
 GtAbstractExtractMethodController >> initialize [
 	super initialize.
