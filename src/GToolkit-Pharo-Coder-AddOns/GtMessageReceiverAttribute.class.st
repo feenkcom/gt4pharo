@@ -14,8 +14,10 @@ GtMessageReceiverAttribute >> createDropDown [
 	button := self createDropDownButton.
 	dropDownLook := BrGlamorousWithDropdownAptitude
 			handle: [ self createDropDownButton ]
-			content: [ BrSimpleList new
-					fitContent;
+			content: [ | list |
+				list := BrSimpleList new.
+				list fitContent.
+				list
 					stencil: [ :each | 
 						BrHorizontalPane new
 							hMatchParent;
@@ -35,9 +37,9 @@ GtMessageReceiverAttribute >> createDropDown [
 									aptitude: BrGlamorousLabelAptitude new glamorousCodeFont glamorousCodeSmallSize;
 									text: each;
 									yourself);
-							yourself ];
-					items: receivers;
-					yourself ].
+							yourself ].
+				list items: receivers.
+				list asScrollableElement ].
 	button addAptitude: dropDownLook.
 	button
 		addAptitude: (BrStyleCommonAptitude new
