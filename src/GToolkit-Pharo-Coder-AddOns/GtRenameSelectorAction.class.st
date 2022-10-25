@@ -130,6 +130,21 @@ GtRenameSelectorAction >> newSelector: aSymbol [
 	newSelector := aSymbol
 ]
 
+{ #category : #actions }
+GtRenameSelectorAction >> processReturnFor: renameEditor in: anEditorElement [
+	| lastWasEditor first |
+	lastWasEditor := false.
+	anEditorElement
+		allChildrenBreadthFirstDo: [ :each | 
+			(lastWasEditor and: [ each isKindOf: GtRefactoringsPreviewButton ])
+				ifTrue: [ ^ each openPreview ].
+			(each isKindOf: GtRenameEditor)
+				ifTrue: [ first ifNil: [ first := each ].
+					lastWasEditor ifTrue: [ ^ each requestFocus ].
+					lastWasEditor := each == renameEditor ] ].
+	first ifNotNil: [ ^ first requestFocus ]
+]
+
 { #category : #accessing }
 GtRenameSelectorAction >> tabAccept: forward [
 ]
