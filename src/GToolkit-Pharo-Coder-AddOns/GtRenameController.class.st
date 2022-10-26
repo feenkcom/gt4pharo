@@ -52,8 +52,8 @@ GtRenameController >> cursorPositionDo: aBlock [
 ]
 
 { #category : #accessing }
-GtRenameController >> finishRefactoring [
-	super finishRefactoring.
+GtRenameController >> finishRefactoring: refactoring [
+	super finishRefactoring: refactoring.
 	renameAction ifNotNil: [ renameAction uninstall ]
 ]
 

@@ -1,54 +1,25 @@
+"
+nil
+"
 Class {
 	#name : #GtExtractMethodFromSnippetController,
-	#superclass : #GtExtractMethodController,
-	#instVars : [
-		'receiverVariable',
-		'selector'
-	],
+	#superclass : #GtExtractMethodToComponentController,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
-
-{ #category : #adding }
-GtExtractMethodFromSnippetController >> addReorderParametersAttributesOn: message [
-	| attribute |
-	message isUnary ifTrue: [ ^ self ].
-	moveAttributes := OrderedCollection new.
-	attribute := GtExtractMethodReorderParametersAttribute
-		action: [ self swapParameterWithNext: 0 ]
-		icon: BrGlamorousVectorIcons right.
-	moveAttributes add: attribute.
-	self sourceCoderViewModel
-		addTextAttribute: attribute
-		from: message parent receiver stopPosition
-		to: message parent receiver stopPosition.
-	(message isBinary ifTrue: [ {message value} ] ifFalse: [ message values ])
-		keysAndValuesDo:
-			[ :i :each | 
-			attribute := GtExtractMethodReorderParametersAttribute
-				action: [ self swapParameterWithNext: i - 1 ]
-				icon: BrGlamorousVectorIcons left.
-			moveAttributes add: attribute.
-			self sourceCoderViewModel
-				addTextAttribute: attribute
-				from: each startPosition - 1
-				to: each startPosition - 1.
-			i < message values size
-				ifTrue:
-					[ attribute := GtExtractMethodReorderParametersAttribute
-						action: [ self swapParameterWithNext: i ]
-						icon: BrGlamorousVectorIcons right.
-					moveAttributes add: attribute.
-					self sourceCoderViewModel
-						addTextAttribute: attribute
-						from: each stopPosition
-						to: each stopPosition ] ]
-]
 
 { #category : #private }
 GtExtractMethodFromSnippetController >> boundReceiverValueFor: aString [
 	(sourceCoderViewModel compositeVariableBindings hasBindingOf: aString)
-		ifTrue: [ (sourceCoderViewModel compositeVariableBindings bindingValueOf: aString) ifNotNil: [ :value | ^ value ] ].
-	^ nil
+		ifTrue: [ (sourceCoderViewModel compositeVariableBindings bindingValueOf: aString)
+				ifNotNil: [ :value | ^ value ] ].
+	(sourceCoderViewModel behavior bindingOf: aString) value
+		ifNotNil: [ :value | ^ value ].
+	^ sourceCoderViewModel selfObject
+		ifNotNil: [ :value | 
+			value class
+				slotNamed: aString
+				ifFound: [ :slot | slot read: self ]
+				ifNone: [  ] ]
 ]
 
 { #category : #executing }
@@ -59,121 +30,112 @@ GtExtractMethodFromSnippetController >> createModel [
 	^ model
 ]
 
-{ #category : #executing }
-GtExtractMethodFromSnippetController >> executeRefactoring [
-	| refactoring |
-
-	refactoring := self refactoring.
-	self setDefaultOptionsOn: refactoring.
-	refactoring primitiveExecute.
-
-	self updateMethod: refactoring snippetSource
-]
-
-{ #category : #private }
-GtExtractMethodFromSnippetController >> findExtractedSend [
-	[ self sourceAst
-		withAllNodesOfType: GtPharoMessageNode
-		do:
-			[ :each | 
-			(each selector = self extractedSelector
-				and:
-					[ ((1 to: methodArguments size)
-						allSatisfy:
-							[ :i | (each isBinary ifTrue: [ each value ] ifFalse: [ each values at: i ]) source = (methodArguments at: i) ])
-						and:
-							[ (each parent receiver isKindOf: GtPharoVariableNode) and: [ each parent receiver name value = receiverVariable ] ] ])
-				ifTrue: [ ^ each ] ] ] on: SmaCCParserError do: [ :ex | ^ nil ].
-	^ nil
+{ #category : #accessing }
+GtExtractMethodFromSnippetController >> finishRefactoring: refactoring [
+	| newText |
+	super finishRefactoring: refactoring.
+	newText := refactoring snippetSource asRopedText glamorousCodeFontAndSize.
+	self sourceCoderViewModel
+		sourceText: newText asRopedText
+		from: self
+		synchronously: false
 ]
 
 { #category : #private }
 GtExtractMethodFromSnippetController >> getReceiverVariableFor: cls selector: sel [
 	| ast |
-	receiverVariable notNil ifTrue: [ ^ receiverVariable ].
+	(receiver notNil and: [ receiver ~= 'self' or: [ self isForInspector ] ])
+		ifTrue: [ ^ receiver ].
 	ast := (cls methodFor: sel) ast.
 	ast arguments isEmpty
-		ifTrue:
-			[ ast
-				nodesDo:
-					[ :each | (each isVariable and: [ Smalltalk globals includesKey: each name asSymbol ]) ifTrue: [ ^ receiverVariable := each name ] ].
-			^ receiverVariable := #Object ].
-	^ receiverVariable := (ast arguments
-		detect: [ :each | (self boundReceiverValueFor: each name) notNil ]
-		ifNone: [ ast arguments first ]) name
+		ifTrue: [ ast
+				nodesDo: [ :each | 
+					(each isVariable and: [ Smalltalk globals includesKey: each name asSymbol ])
+						ifTrue: [ ^ receiver := each name ] ].
+			^ receiver := #Object ].
+	^ receiver := (ast arguments
+			detect: [ :each | (self boundReceiverValueFor: each name) notNil ]
+			ifNone: [ ast arguments first ]) name
 ]
 
 { #category : #private }
 GtExtractMethodFromSnippetController >> getTypeForReceiverFor: aRefactoring from: types [
-	^ types reject: [ :e | e isTrait ]
+	| classes |
+	receiverClassName
+		ifNotNil: [ ^ {aRefactoring model classNamed: receiverClassName} ].
+	classes := types reject: [ :e | e isTrait ].
+	potentialTypes := GtPrefixTree withAll: (classes collect: #name).
+	classes size = 1 ifTrue: [ receiverClassName := classes anyOne name ].
+	^ {aRefactoring model classNamed: self receiverClassName}
 ]
 
 { #category : #private }
 GtExtractMethodFromSnippetController >> getTypeForReceiverIn: aModel [
-	^ (self boundReceiverValueFor: receiverVariable) ifNotNil: [ :value | Set with: (aModel classFor: value class) ]
+	^ (self boundReceiverValueFor: receiver)
+		ifNotNil: [ :value | 
+			| class |
+			class := value class.
+			{Boolean.
+				Symbol.
+				Integer.
+				Float} do: [ :each | (class inheritsFrom: each) ifTrue: [ class := each ] ].
+			((class inheritsFrom: String) and: [ class ~= Symbol ])
+				ifTrue: [ class := String ].
+			{aModel classFor: class} ]
+]
+
+{ #category : #private }
+GtExtractMethodFromSnippetController >> isForInspector [
+	^ sourceCoderViewModel behavior ~= nil class
+]
+
+{ #category : #private }
+GtExtractMethodFromSnippetController >> parserStartingState [
+	^ GtPharoParser startingStateForMethodSequence
+]
+
+{ #category : #accessing }
+GtExtractMethodFromSnippetController >> potentialReceivers [
+	| names |
+	potentialReceivers ifNotNil: [ ^ potentialReceivers ].
+	names := super potentialReceivers.
+	receiver ~= 'self' ifTrue: [ names at: (names indexOf: 'self') put: receiver ].
+	self isForInspector
+		ifFalse: [ sourceCoderViewModel behavior allClassVarNames
+				do: [ :each | names remove: each ifAbsent: [  ] ] ].
+	^ names
 ]
 
 { #category : #executing }
 GtExtractMethodFromSnippetController >> refactoring [
 	| refactoring |
-	sourceCoderViewModel behavior = nil class
+	(self isForInspector not or: [ receiver ~= 'self' ])
 		ifTrue: [ refactoring := GtExtractMethodFromSnippetRefactoring
 					extract: self extractionInterval
 					from: originalSource.
 			refactoring
+				setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
 				setOption: #selectVariableToMoveTo
 					toUse: [ :ref :cls :sel | self getReceiverVariableFor: cls selector: sel ];
-				setOption: #useExistingMethod toUse: [ :ref :sel | false ];
-				setOption: #extractAssignment toUse: [ :ref :varName | false ];
 				setOption: #variableTypesForReceiver
-					toUse: [ :ref | self getTypeForReceiverIn: ref model ];
+					toUse: [ :ref :block | 
+						| classes |
+						classes := (self getTypeForReceiverIn: ref model) ifNil: block.
+						self getTypeForReceiverFor: ref from: classes ];
 				setOption: #variableTypes
 					toUse: [ :ref :types :selected | self getTypeForReceiverFor: ref from: types ] ]
 		ifFalse: [ refactoring := GtExtractMethodFromInspectorRefactoring
 					extract: self extractionInterval
 					from: originalSource
-					in: sourceCoderViewModel behavior.
-			refactoring
-				setOption: #useExistingMethod toUse: [ :ref :sel | false ];
-				setOption: #extractAssignment toUse: [ :ref :varName | false ].
-			receiverVariable := 'self' ].
+					in: sourceCoderViewModel behavior ].
 	^ refactoring
 ]
 
-{ #category : #executing }
-GtExtractMethodFromSnippetController >> setDefaultOptionsOn: aRefactoring [
-	super setDefaultOptionsOn: aRefactoring.
-	aRefactoring
-		setOption: #useExistingMethod toUse: [ :ref :sel | false ];
-		setOption: #extractAssignment toUse: [ :ref :varName | false ]
-]
-
-{ #category : #executing }
-GtExtractMethodFromSnippetController >> setPreviewOptionsOn: aRefactoring [
-	super setPreviewOptionsOn: aRefactoring.
-	aRefactoring
-		setOption: #useExistingMethod toUse: [ :ref :sel | false ];
-		setOption: #extractAssignment toUse: [ :ref :varName | false ]
-]
-
-{ #category : #private }
-GtExtractMethodFromSnippetController >> sourceAst [
-	^ GtPharoParser parse: self sourceText characters asString startingAt: GtPharoParser startingStateForMethodSequence
-]
-
-{ #category : #private }
-GtExtractMethodFromSnippetController >> swapParameterWithNext: anInteger [
-	| message oldReceiver |
-	anInteger > 0 ifTrue: [ ^ super swapParameterWithNext: anInteger ].
-	self removeReorderParametersAttributes.
-	self isRenaming ifTrue: [ renameAction uninstall ].
-	message := self findExtractedSend.
-	message isNil ifTrue: [ ^ self ].
-	oldReceiver := receiverVariable.
-	receiverVariable := methodArguments first.
-	methodArguments at: 1 put: oldReceiver.
-	self swap: message parent receiver with: message values first.
-	self addReorderParametersAttributes.
-	self updateRenamer.
-	self addRefactoringPreview
+{ #category : #accessing }
+GtExtractMethodFromSnippetController >> updateFromRefactoring: aRefactoring [
+	| newSource |
+	self updateExtractedMethodSourceFrom: aRefactoring.
+	self resetNewSelectorIfNeeded.
+	newSource := aRefactoring snippetSource.
+	self updateMethod: newSource
 ]

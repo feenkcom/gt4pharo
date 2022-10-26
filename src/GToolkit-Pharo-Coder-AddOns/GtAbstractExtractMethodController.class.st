@@ -84,12 +84,11 @@ GtAbstractExtractMethodController >> createModel [
 
 { #category : #executing }
 GtAbstractExtractMethodController >> executeRefactoring [
-	| refactoring model |
+	| refactoring |
 	refactoring := self refactoring.
 	self setDefaultOptionsOn: refactoring.
 	refactoring primitiveExecute.
-	model := refactoring model.
-	self updateFromModel: model
+	self updateFromRefactoring: refactoring
 ]
 
 { #category : #private }
@@ -128,8 +127,8 @@ GtAbstractExtractMethodController >> findExtractedSend [
 ]
 
 { #category : #accessing }
-GtAbstractExtractMethodController >> finishRefactoring [
-	super finishRefactoring.
+GtAbstractExtractMethodController >> finishRefactoring: refactoring [
+	super finishRefactoring: refactoring.
 	self removeRenaming.
 	self removeReorderParametersAttributes
 ]
@@ -158,6 +157,11 @@ GtAbstractExtractMethodController >> isValidForPreview [
 { #category : #private }
 GtAbstractExtractMethodController >> newExtractedSelector [
 	^ self extractedSelector
+]
+
+{ #category : #private }
+GtAbstractExtractMethodController >> parserStartingState [
+	^ GtPharoParser startingStateForMethod
 ]
 
 { #category : #private }
@@ -283,7 +287,7 @@ GtAbstractExtractMethodController >> setPreviewOptionsOn: aRefactoring [
 GtAbstractExtractMethodController >> sourceAst [
 	^ GtPharoParser
 		parse: self sourceText characters asString
-		startingAt: GtPharoParser startingStateForMethod
+		startingAt: self parserStartingState
 ]
 
 { #category : #private }
@@ -324,9 +328,9 @@ GtAbstractExtractMethodController >> swapParameterWithNext: anInteger [
 ]
 
 { #category : #executing }
-GtAbstractExtractMethodController >> updateFromModel: aRBModel [
+GtAbstractExtractMethodController >> updateFromRefactoring: aRefactoring [
 	| newSource |
-	newSource := ((aRBModel classFor: sourceCoderViewModel behavior)
+	newSource := ((aRefactoring model classFor: sourceCoderViewModel behavior)
 			methodFor: methodSelector) source.
 	self updateMethod: newSource
 ]

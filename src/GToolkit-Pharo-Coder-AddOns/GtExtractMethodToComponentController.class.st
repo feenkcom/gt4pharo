@@ -31,8 +31,8 @@ GtExtractMethodToComponentController >> extractedAst [
 ]
 
 { #category : #accessing }
-GtExtractMethodToComponentController >> finishRefactoring [
-	super finishRefactoring.
+GtExtractMethodToComponentController >> finishRefactoring: refactoring [
+	super finishRefactoring: refactoring.
 	self removeReceiverSelector.
 	sourceCoderViewModel discardChanges
 ]
@@ -190,13 +190,7 @@ GtExtractMethodToComponentController >> refactoring [
 			from: methodSelector
 			in: (model classFor: sourceCoderViewModel behavior).
 	refactoring
-		setOption: #selfArgumentName
-			toUse: [ :ref | 
-				| name |
-				name := sourceCoderViewModel behavior name asString
-						copyReplaceAll: ' class'
-						with: 'Class'.
-				(name first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , name ];
+		setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | receiver ];
 		setOption: #variableTypes
 			toUse: [ :ref :types :selected | 
@@ -209,6 +203,22 @@ GtExtractMethodToComponentController >> refactoring [
 GtExtractMethodToComponentController >> removeReceiverSelector [
 	receiverAttribute ifNil: [ ^ self ].
 	self sourceCoderViewModel removeCoderTextAttributes: receiverAttribute
+]
+
+{ #category : #accessing }
+GtExtractMethodToComponentController >> resetNewSelectorIfNeeded [
+	newSelector
+		ifNotNil: [ newSelector numArgs ~= self extractedSelector numArgs
+				ifTrue: [ newSelector := nil ] ]
+]
+
+{ #category : #accessing }
+GtExtractMethodToComponentController >> selfArgumentName [
+	| name |
+	name := sourceCoderViewModel behavior name asString
+			copyReplaceAll: ' class'
+			with: 'Class'.
+	^ (name first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , name
 ]
 
 { #category : #private }
@@ -258,14 +268,27 @@ GtExtractMethodToComponentController >> temporariesAssignedBefore: extractedSend
 ]
 
 { #category : #accessing }
-GtExtractMethodToComponentController >> updateFromModel: aRBModel [
+GtExtractMethodToComponentController >> updateExtractedMethodSourceFrom: aRefactoring [
 	extractedMethod
-		ifNil: [ extractedMethod := ((aRBModel classFor: sourceCoderViewModel behavior)
-					methodFor: self extractedSelector) source ].
-	newSelector
-		ifNotNil: [ newSelector numArgs ~= self extractedSelector numArgs
-				ifTrue: [ newSelector := nil ] ].
-	super updateFromModel: aRBModel
+		ifNil: [ | method |
+			method := (aRefactoring model
+					classNamed: (receiverClassName ifNil: [ sourceCoderViewModel behavior name ]))
+					methodFor: self extractedSelector.
+			method
+				ifNil: [ (aRefactoring model allImplementorsOf: self extractedSelector)
+						ifNotEmpty: [ :coll | 
+							| cls |
+							cls := coll anyOne.	"If we get here we are extracting to component & must have created a unique selector"
+							potentialTypes ifNil: [ potentialTypes := GtPrefixTree with: cls name ].
+							method := cls methodFor: self extractedSelector ] ].
+			extractedMethod := method source ]
+]
+
+{ #category : #accessing }
+GtExtractMethodToComponentController >> updateFromRefactoring: aRefactoring [
+	self updateExtractedMethodSourceFrom: aRefactoring.
+	self resetNewSelectorIfNeeded.
+	super updateFromRefactoring: aRefactoring
 ]
 
 { #category : #accessing }
