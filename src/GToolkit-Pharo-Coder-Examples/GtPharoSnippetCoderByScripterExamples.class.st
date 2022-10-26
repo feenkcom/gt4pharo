@@ -54,15 +54,13 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 	selectorPart := aBoolean ifTrue: [ '_:' ] ifFalse: [ '_' ].
 	aScripter check
 		label: 'Check rename editor attribute';
-		value:
-				[ :aCoderEditor | 
-					| anInterval |
-					aCoderEditor text
-						findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
-						indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-					anInterval ]
-			equals:
-				[ :aCoderEditor | 
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval ifNil: [ anInterval := aStart to: anEnd ] ].
+				anInterval ]
+			equals: [ :aCoderEditor | 
 				| index |
 				index := aCoderEditor text asString indexOfSubCollection: selectorPart.
 				index to: index + selectorPart size - 1 ];
@@ -71,13 +69,12 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 
 	aScripter check
 		label: 'Check refactoring changes attribute';
-		value:
-				[ :aCoderEditor | 
-					| anInterval |
-					aCoderEditor text
-						findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-						indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-					anInterval ]
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 		id: GtSourceCoderEditorId;
 		play.
@@ -95,24 +92,21 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 		play.
 
 	aScripter check
+		label: 'Check method name editor selected text';
+		value: [ :focus | focus focusOwner class ] equals: GtRenameEditor;
+		onFocusProcessor;
+		play.
+
+	aScripter check
 		label: 'Check method name editor source code';
-		value: [ :aNameEditor | aNameEditor text asString ] equals: selectorPart;
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
+		value: [ :focus | focus focusOwner text asString ] equals: '_';
+		onFocusProcessor;
 		play.
 
 	aScripter check
 		label: 'Check method name editor selected text';
-		value: [ :aNameEditor | aNameEditor editor selectedText asString ] equals: selectorPart;
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
-		play.
-
-	aScripter check
-		label: 'Check method name editor has focus';
-		satisfies: [ :aNameEditor | aNameEditor isFocused ];
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
+		value: [ :focus | focus focusOwner editor selectedText asString ] equals: '_';
+		onFocusProcessor;
 		play
 ]
 
@@ -137,7 +131,7 @@ GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 		play.
 
 	self checkExtractedSource: aScripter.
-	self check: aScripter hasReorderAttributes: 4
+	self check: aScripter hasReorderAttributes: 2
 ]
 
 { #category : #'examples - context menu' }
@@ -452,13 +446,7 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_05_click_extract_m
 		id: GtMethodCoderExtractMethodContextMenuItemId;
 		play.
 
-	aScripter assert
-		label: 'Assert source code modified';
-		satisfies: [ :aCoder | aCoder isModified ];
-		onModel;
-		play.
-
-	self check: aScripter hasReorderAttributes: 4.
+	self check: aScripter hasReorderAttributes: 2.
 	self checkRenameEditor: aScripter keyword: true.
 
 	^ aScripter
@@ -477,8 +465,8 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramet
 	(aScripter type: 'substringFrom:') play.
 	self hasRefactoringChanges: aScripter.
 	
-	(aScripter keyClick: BlKeyboardKey tab) play.
 	self clickReorderParameter: aScripter.
+	(aScripter keyClick: BlKeyboardKey tab) play.
 	self checkRenameEditor: aScripter keyword: true.
 	
 	(aScripter type: 'to:') play.

@@ -1,6 +1,9 @@
+"
+nil
+"
 Class {
 	#name : #GtExtractMethodFromSnippetRefactoring,
-	#superclass : #RBExtractMethodToComponentRefactoring,
+	#superclass : #GtExtractMethodToComponentRefactoring,
 	#instVars : [
 		'source',
 		'offset',
@@ -91,49 +94,48 @@ GtExtractMethodFromSnippetRefactoring >> snippetMethodSource [
 	snippetMethodSource notNil ifTrue: [ ^ snippetMethodSource ].
 	temps := Set new.
 	newSource := SmaCCString on: source.
-	ast := GtPharoParser parse: source startingAt: GtPharoParser startingStateForMethodSequence.
+	ast := GtPharoParser
+			parse: source
+			startingAt: GtPharoParser startingStateForMethodSequence.
 	ast
 		allNodesOfType: GtPharoVariableNode
-		do:
-			[ :each | (each whoDefines isNil and: [ (Smalltalk globals includesKey: each variableName) not ]) ifTrue: [ temps add: each ] ].
+		do: [ :each | 
+			(each whoDefines isNil
+				and: [ (#(self super) includes: each variableName) not
+						and: [ (Smalltalk globals includesKey: each variableName) not ] ])
+				ifTrue: [ temps add: each ] ].
 	written := Set new.
 	ast
 		allNodesOfType: GtPharoAssignmentNode
-		do:
-			[ :each | 
+		do: [ :each | 
 			(temps includes: each variable)
-				ifTrue:
-					[ written add: each variable.
+				ifTrue: [ written add: each variable.
 					temps remove: each variable ] ].
 	methodPattern := temps isEmpty
-		ifTrue: [ '__ ' ]
-		ifFalse:
-			[ String
-				streamContents:
-					[ :stream | 
-					temps
-						do:
-							[ :each | 
-							stream
-								nextPutAll: '__: ';
-								nextPutAll: each variableName;
-								space ] ] ].
+			ifTrue: [ '__ ' ]
+			ifFalse: [ String
+					streamContents: [ :stream | 
+						temps
+							do: [ :each | 
+								stream
+									nextPutAll: '__: ';
+									nextPutAll: each variableName;
+									space ] ] ].
 	newSource insert: methodPattern at: 1.
 	offset := methodPattern size.
 	written notEmpty
-		ifTrue:
-			[ tempsSource := String
-				streamContents:
-					[ :stream | 
-					ast leftBar ifNil: [ stream nextPut: $| ].
-					written
-						do:
-							[ :each | 
-							stream
-								space;
-								nextPutAll: each variableName ].
-					ast leftBar ifNil: [ stream nextPut: $| ] ].
-			newSource insert: tempsSource at: (ast rightBar ifNil: [ 1 ] ifNotNil: [ :token | token startPosition ]).
+		ifTrue: [ tempsSource := String
+					streamContents: [ :stream | 
+						ast leftBar ifNil: [ stream nextPut: $| ].
+						written
+							do: [ :each | 
+								stream
+									space;
+									nextPutAll: each variableName ].
+						ast leftBar ifNil: [ stream nextPut: $| ] ].
+			newSource
+				insert: tempsSource
+				at: (ast rightBar ifNil: [ 1 ] ifNotNil: [ :token | token startPosition ]).
 			offset := offset + tempsSource size ].
 	snippetMethodSource := newSource asString.
 	snippetSelector := (GtPharoParser parse: snippetMethodSource) selector.
