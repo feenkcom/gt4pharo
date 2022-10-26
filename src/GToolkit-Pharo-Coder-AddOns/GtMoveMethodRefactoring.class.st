@@ -13,7 +13,7 @@ GtMoveMethodRefactoring >> checkAssignmentsToVariable [
 GtMoveMethodRefactoring >> getClassesToMoveTo [
 	moveToClasses := (self options
 			at: #variableTypesForReceiver
-			ifAbsent: [ :ref :block | block value ])
+			ifAbsent: [ [ :ref :block | block value ] ])
 			cull: self
 			cull: [ self isExpression
 					ifTrue: [ | ast |
