@@ -1,6 +1,9 @@
+"
+nil
+"
 Class {
 	#name : #GtExtractMethodFromInspectorRefactoring,
-	#superclass : #RBExtractMethodRefactoring,
+	#superclass : #GtExtractMethodRefactoring,
 	#instVars : [
 		'source',
 		'offset',

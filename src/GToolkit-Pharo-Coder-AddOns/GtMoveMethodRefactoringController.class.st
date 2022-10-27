@@ -1,6 +1,6 @@
 Class {
 	#name : #GtMoveMethodRefactoringController,
-	#superclass : #GtExtractMethodController,
+	#superclass : #AnObsoleteGtExtractMethodController,
 	#instVars : [
 		'variableNode'
 	],
@@ -22,7 +22,7 @@ GtMoveMethodRefactoringController >> methodClass [
 GtMoveMethodRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createModel.
-	refactoring := RBMoveMethodRefactoring
+	refactoring := GtMoveMethodRefactoring
 		model: model
 		selector: variableNode topParent selector
 		class: (model classFor: self methodClass)
