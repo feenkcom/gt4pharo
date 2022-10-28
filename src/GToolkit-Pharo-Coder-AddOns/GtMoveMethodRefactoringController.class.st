@@ -1,6 +1,6 @@
 Class {
 	#name : #GtMoveMethodRefactoringController,
-	#superclass : #AnObsoleteGtExtractMethodController,
+	#superclass : #GtExtractMethodToComponentController,
 	#instVars : [
 		'variableNode'
 	],
@@ -45,5 +45,7 @@ GtMoveMethodRefactoringController >> refactoringName [
 
 { #category : #accessing }
 GtMoveMethodRefactoringController >> variableNode: aNode [
-	variableNode := aNode
+	variableNode := aNode.
+	receiver := aNode source.
+	potentialReceivers := OrderedCollection with: receiver
 ]
