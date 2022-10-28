@@ -12,6 +12,11 @@ TGtPharoMethodTestCaseStateVisitor >> visitTestCaseErrorState: aState [
 ]
 
 { #category : #visiting }
+TGtPharoMethodTestCaseStateVisitor >> visitTestCaseExecutingState: aState [
+	^ self visitTestCaseState: aState
+]
+
+{ #category : #visiting }
 TGtPharoMethodTestCaseStateVisitor >> visitTestCaseFailureState: aState [
 	^ self visitTestCaseUnsuccessfulState: aState
 ]
