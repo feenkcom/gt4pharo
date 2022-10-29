@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'executedRefactorings',
 		'cancelBlock',
-		'refactoringsComputation'
+		'refactoringsComputation',
+		'notificationMessages'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -80,6 +81,17 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 			constraintsDo: [ :c1 | 
 				c1 horizontal exact: self previewWidth.
 				c1 vertical fitContentLimited ].
+	self notificationMessages
+		do: [ :each | 
+			| element |
+			element := each cull: aButton.
+			element
+				margin: (BlInsets
+						top: 10
+						left: 10
+						bottom: 0
+						right: 10).
+			aContainer addChild: element ].
 	aContainer
 		addChild: ((theRefactoringsElement asScalableElement
 				width: self previewWidth;
@@ -97,13 +109,23 @@ GtRefactoringsPreviewButton >> cancelBlock: aBlock [
 ]
 
 { #category : #initialization }
+GtRefactoringsPreviewButton >> executeRefactorings [
+	notificationMessages := OrderedCollection new.
+	executedRefactorings := self refactorings.
+	executedRefactorings
+		do: [ :each | 
+			each model name: each printString.
+			[ each primitiveExecute ]
+				on: GtRefactoringNotification
+				do: [ :ex | 
+					notificationMessages add: ex tag.
+					ex pass ] ]
+]
+
+{ #category : #initialization }
 GtRefactoringsPreviewButton >> executedRefactorings [
 	^ executedRefactorings
-		ifNil: [ executedRefactorings := self refactorings.
-			executedRefactorings
-				do: [ :each | 
-					each model name: each printString.
-					each primitiveExecute ].
+		ifNil: [ self executeRefactorings.
 			executedRefactorings ]
 ]
 
@@ -144,6 +166,12 @@ GtRefactoringsPreviewButton >> initialize [
 				action: [ self openPreview ]).
 
 	self addChild: previewButton
+]
+
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> notificationMessages [
+	notificationMessages ifNil: [ self executeRefactorings ].
+	^ notificationMessages
 ]
 
 { #category : #initialization }

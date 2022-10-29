@@ -27,6 +27,48 @@ GtMoveMethodRefactoring >> getClassesToMoveTo [
 ]
 
 { #category : #accessing }
+GtMoveMethodRefactoring >> getNewMethodName [
+	"Copied from superclass to change how overriding selectors work."
+
+	| newSelector parameters methodName newMethodName |
+	self removeArgument.
+	parameters := parseTree argumentNames asOrderedCollection.	"parameters remove: variable ifAbsent: []."
+	self needsToReplaceSelfReferences ifTrue: [ parameters add: selfVariableName ].
+	methodName := RBMethodName
+			selector: (self uniqueMethodNameFor: parameters size)
+			arguments: parameters.
+
+	[ newMethodName := self requestMethodNameFor: methodName.
+	newMethodName ifNil: [ self refactoringFailure: 'Did not move method' ].
+	newMethodName isValid
+		ifTrue: [ newSelector := newMethodName selector ]
+		ifFalse: [ self refactoringWarning: 'Invalid method name' ].
+	parameters := newMethodName arguments.
+	(self checkMethodName: newSelector in: class)
+		ifFalse: [ self refactoringWarning: newSelector , ' is not a valid selector name.'.
+			newSelector := nil ].
+	moveToClasses
+		detect: [ :each | each hierarchyDefinesMethod: newSelector ]
+		ifFound: [ :hierarchyClass | 
+			(self gtSignalMethodOverwritten: newSelector in: hierarchyClass)
+				ifFalse: [ self refactoringError: newSelector , ' is already defined in the hierarchy' ] ].
+	newSelector isNil ] whileTrue.
+	parseTree
+		renameSelector: newSelector
+		andArguments: (parameters collect: [ :each | RBVariableNode named: each ]) asArray
+]
+
+{ #category : #accessing }
 GtMoveMethodRefactoring >> isExpression [
 	^ (RBScanner isVariable: variable) not
+]
+
+{ #category : #accessing }
+GtMoveMethodRefactoring >> moveToClasses [
+	^ moveToClasses
+]
+
+{ #category : #accessing }
+GtMoveMethodRefactoring >> movedSelector [
+	^ parseTree selector
 ]

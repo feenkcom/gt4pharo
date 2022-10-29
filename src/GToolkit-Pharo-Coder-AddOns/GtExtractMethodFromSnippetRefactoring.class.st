@@ -78,7 +78,7 @@ GtExtractMethodFromSnippetRefactoring >> moveMethod [
 	| variable refactoring |
 	variable := self selectVariableToMoveMethodTo: extractedMethodSelector class: class.
 	variable ifNil: [ self refactoringFailure: 'Did not extract method' ].
-	refactoring := GtSnippetMoveMethodRefactoring
+	refactoring := GtMoveMethodRefactoring
 		model: self model
 		selector: extractedMethodSelector
 		class: class

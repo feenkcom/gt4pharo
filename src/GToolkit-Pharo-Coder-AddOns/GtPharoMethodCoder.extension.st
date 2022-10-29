@@ -116,24 +116,6 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addExtractToNewClassContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	"<gtCoderContextMenuAddOns: 20>"
-	(self extractableNodesFrom: aCoderViewModel)
-		ifNotEmpty: [ :theNodes | 
-			coderAddOns
-				addContextMenuItem: 'Extract to new class'
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: theNodes first startPosition
-						to: theNodes last stopPosition ]
-				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | 
-					(GtExtractMethodToNewClassController new sourceCoderViewModel: aTextualViewModel)
-						execute ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ 

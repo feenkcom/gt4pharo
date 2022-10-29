@@ -1,6 +1,6 @@
 Class {
 	#name : #GtMoveMethodRefactoringController,
-	#superclass : #GtExtractMethodController,
+	#superclass : #GtExtractMethodToComponentController,
 	#instVars : [
 		'variableNode'
 	],
@@ -22,7 +22,7 @@ GtMoveMethodRefactoringController >> methodClass [
 GtMoveMethodRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createModel.
-	refactoring := RBMoveMethodRefactoring
+	refactoring := GtMoveMethodRefactoring
 		model: model
 		selector: variableNode topParent selector
 		class: (model classFor: self methodClass)
@@ -45,5 +45,7 @@ GtMoveMethodRefactoringController >> refactoringName [
 
 { #category : #accessing }
 GtMoveMethodRefactoringController >> variableNode: aNode [
-	variableNode := aNode
+	variableNode := aNode.
+	receiver := aNode source.
+	potentialReceivers := OrderedCollection with: receiver
 ]

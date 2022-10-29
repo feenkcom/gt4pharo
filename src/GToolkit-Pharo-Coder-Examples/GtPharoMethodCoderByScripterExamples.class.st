@@ -3019,9 +3019,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 		id: GtSourceCoderEditorId;
 		play.
 
-	(aScripter keyClick: BlKeyboardKey tab) play.
-
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
+	(aScripter keyClick: BlKeyboardKey tab) play.
 	self checkKeywordRenameEditor: aScripter.
 
 	(aScripter type: 'b:') play.

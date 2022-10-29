@@ -180,7 +180,7 @@ GtAbstractExtractMethodController >> refactoring [
 
 	model := self createModel.
 
-	^ RBExtractMethodRefactoring
+	^ GtExtractMethodRefactoring
 		model: model
 		extract: self extractionInterval
 		from: methodSelector
