@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'message',
 		'newSelector',
-		'styler'
+		'styler',
+		'focusedIndex'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -23,11 +24,11 @@ GtRenameSelectorAction >> accept [
 
 { #category : #accessing }
 GtRenameSelectorAction >> addRenameAttributes [
-	| text first |
+	| text index |
 	text := self pharoSourceCoderViewModel styledText
 			ifNil: [ self pharoSourceCoderViewModel sourceText ].
 
-	first := true.
+	index := 1.
 	coderAttributes := originalLocations
 			collect: [ :each | 
 				| attribute |
@@ -36,10 +37,10 @@ GtRenameSelectorAction >> addRenameAttributes [
 						selectAll: selectAll;
 						filter: filter;
 						text: (text from: each first to: each last);
-						requestInitialFocus: first;
+						requestInitialFocus: index = focusedIndex;
 						isForSelector: true;
 						styler: styler.
-				first := false.
+				index := index + 1.
 
 				self pharoSourceCoderViewModel
 					addTextAttribute: attribute
@@ -55,6 +56,16 @@ GtRenameSelectorAction >> addRenameAttributes [
 				do: [ :each :attr | 
 					attr
 						text: (each last = $: ifTrue: [ each allButLast ] ifFalse: [ each ]) asRopedText ] ]
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> focusedIndex [
+	^ focusedIndex
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> focusedIndex: anInteger [
+	focusedIndex := anInteger
 ]
 
 { #category : #accessing }
@@ -78,6 +89,12 @@ GtRenameSelectorAction >> forVariableOrUnaryMessage [
 	super forVariableOrUnaryMessage.
 	styler := GtSelectorStyler new forUnary.
 	filter := GtSelectorInputFilter forUnaryMessage
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> initialize [
+	super initialize.
+	focusedIndex := 1
 ]
 
 { #category : #accessing }
