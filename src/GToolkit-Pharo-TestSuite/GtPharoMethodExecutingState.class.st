@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtPharoMethodExecutingState class >> representsTestResult: aTestResult [
+	^ false
+]
+
+{ #category : #accessing }
 GtPharoMethodExecutingState >> accept: aVisitor [
 	^ aVisitor visitTestCaseexecutingState: self
 ]
@@ -17,9 +22,4 @@ GtPharoMethodExecutingState >> color [
 { #category : #accessing }
 GtPharoMethodExecutingState >> label [
 	^ 'Executing'
-]
-
-{ #category : #accessing }
-GtPharoMethodExecutingState >> representsTestResult: aTestResult [
-	^ false
 ]
