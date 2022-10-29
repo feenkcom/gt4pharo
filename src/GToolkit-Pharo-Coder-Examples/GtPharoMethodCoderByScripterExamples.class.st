@@ -1707,27 +1707,9 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 	(aScripter keyClick: BlKeyboardKey return) play.
 
 	aScripter assert
-		label: 'Assert current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ]
-			equals: [ :aCoder | 
-				'someOtherMethodName: anObject
-	^ (1 to: self items size) detect: [:each | (self items at: each) notNil]' ];
-		onModel;
-		play.
-
-	aScripter assert
 		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
-		play.
-
-	aScripter assert
-		label: 'Assert rename editor attribute';
-		value: [ :aCoderEditor | 
-				aCoderEditor text
-					hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
-			equals: false;
-		id: GtSourceCoderEditorId;
 		play.
 
 	aScripter assert
@@ -1742,12 +1724,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
 				index to: index ];
-		id: GtSourceCoderEditorId;
-		play.
-
-	aScripter assert
-		label: 'Assert source editor is focused';
-		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
 
@@ -1920,28 +1896,11 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 		play.
 
 	(aScripter keyClick: BlKeyboardKey return) play.
-	
-	aScripter assert
-		label: 'Assert current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-'someOtherMethodName: anObject
-	^ self printString' ];
-		onModel;
-		play.
 		
 	aScripter assert
 		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
-		play.
-	
-	aScripter assert
-		label: 'Assert rename editor attribute';
-		value: [ :aCoderEditor |
-			aCoderEditor text
-				hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
-			equals: false;
-		id: GtSourceCoderEditorId;
 		play.
 
 	aScripter assert
@@ -1956,12 +1915,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
 				index to: index ];
-		id: GtSourceCoderEditorId;
-		play.
-		
-	aScripter assert
-		label: 'Assert source editor is focused';
-		satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 		id: GtSourceCoderEditorId;
 		play.
 

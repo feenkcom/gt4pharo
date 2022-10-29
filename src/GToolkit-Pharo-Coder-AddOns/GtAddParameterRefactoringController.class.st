@@ -52,15 +52,17 @@ GtAddParameterRefactoringController >> createRefactoringModel [
 GtAddParameterRefactoringController >> installRenamer [
 	| ast |
 	ast := sourceCoderViewModel astAwait.
-	renameAction := GtCoderViewModelRenameAction
-		                locations: { ast pattern selectorParts last sourceInterval }
-		                textualCoderViewModel: sourceCoderViewModel.
-	renameAction forKeyword.
+	renameAction := GtRenameSelectorAction
+			message: ast pattern
+			textualCoderViewModel: sourceCoderViewModel.
 	renameAction selectAll: true.
-	renameAction when: GtRenameActionAnnouncement do: [ :ann | 
-		ann eventType = #textUpdated ifTrue: [ self updateSelector: renameAction newName ].
-		ann eventType = #accept ifTrue: [ self addRefactoringPreview ].
-		ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+	renameAction focusedIndex: ast numArgs.
+	renameAction
+		when: GtRenameActionAnnouncement
+		do: [ :ann | 
+			ann eventType = #textUpdated
+				ifTrue: [ self updateSelector: renameAction newSelector ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
 	renameAction install
 ]
 
@@ -123,9 +125,7 @@ GtAddParameterRefactoringController >> safelyExecute [
 { #category : #executing }
 GtAddParameterRefactoringController >> updateSelector: aString [
 	aString asSymbol isKeyword ifFalse: [ ^ self ].
-	newSelector := ('' join:
-		                self newSelector keywords allButLast , { aString })
-		               asSymbol.
+	newSelector := aString asSymbol.
 	self addRefactoringPreview
 ]
 
