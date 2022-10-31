@@ -16,21 +16,6 @@ GtRenameController >> allRenameIntervals [
 	^ {renameInterval}
 ]
 
-{ #category : #executing }
-GtRenameController >> createModel [
-	| model |
-	model := RBClassModelFactory rbNamespace
-		onEnvironment: RBBrowserEnvironment new.
-	model name: self refactoringName.
-	sourceCoderViewModel coderModel isForMethod
-		ifTrue: [ ((model classFor: sourceCoderViewModel behavior) sourceCodeFor: sourceCoderViewModel selector)
-				~= originalSource asString
-				ifTrue: [ (model classFor: sourceCoderViewModel behavior)
-						compile: originalSource asString
-						classified: sourceCoderViewModel protocol ] ].
-	^ model
-]
-
 { #category : #private }
 GtRenameController >> currentRenameInterval [
 	| end offsetCount start |

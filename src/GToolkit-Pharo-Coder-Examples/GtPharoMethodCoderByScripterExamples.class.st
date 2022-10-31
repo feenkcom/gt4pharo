@@ -533,7 +533,7 @@ GtPharoMethodCoderByScripterExamples >> checkHasTwoReorderAttributes: aScripter 
 				| count |
 				count := 0.
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtExtractMethodReorderParametersAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtReorderParametersAttribute ]
 					indicesDo: [ :aStart :anEnd | count := count + 1. ].
 				count ]
 			equals: [ :aCoderEditor | 2 ];

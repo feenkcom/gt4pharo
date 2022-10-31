@@ -254,6 +254,19 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 19>
+	| theNodes |
+	theNodes := self extractableNodesFrom: aCoderViewModel.
+	theNodes
+		ifNotEmpty: [ coderAddOns
+				addContextMenuItem: 'Create method object' asRopedText
+				hover: nil
+				leave: nil
+				action: [ :model | (GtMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
 	aNode isVariable ifFalse: [ ^ self ].
 	aNode whoDefines ifNotNil: [ :node | node isMethod ifFalse: [ ^ self ] ].
