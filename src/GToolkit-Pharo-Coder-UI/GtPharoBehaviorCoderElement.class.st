@@ -13,18 +13,19 @@ Class {
 }
 
 { #category : #callbacks }
-GtPharoBehaviorCoderElement >> actOnMethodProtocol: anAnnouncement [ 
+GtPharoBehaviorCoderElement >> actOnMethodProtocol: anAnnouncement [
 	| tab selectTabBlock selectMethodBlock |
-	
 	tab := contentTabs viewModel tabs
-		detect: [ :each | each widget label asString = 'Methods' ]
-		ifNone: [ ^ self ].
+			detect: [ :each | each widget label asString = 'Methods' ]
+			ifNone: [ ^ self ].
 	tab isSelected
 		ifFalse: [ selectTabBlock := [ tab select ].
 			self executeTask: selectTabBlock ].
 
-	selectMethodBlock := [ self filterWithMethodProtocol: anAnnouncement methodProtocol source: anAnnouncement source ].
-	self executeTask: selectMethodBlock 
+	selectMethodBlock := [ self
+			filterWithMethodProtocol: anAnnouncement methodProtocol name
+			source: anAnnouncement source ].
+	self executeTask: selectMethodBlock
 ]
 
 { #category : #callbacks }

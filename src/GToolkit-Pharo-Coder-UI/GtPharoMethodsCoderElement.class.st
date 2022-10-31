@@ -69,7 +69,7 @@ GtPharoMethodsCoderElement >> filterElement [
 { #category : #'updating ui' }
 GtPharoMethodsCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
 
-	| aFilter |
+	| aFilter | 
 	aFilter := GtSearchMethodCategoryFilter forCategory: aMethodProtocol.
 	methodsCoderUIModel coder setFilters: { aFilter } source: aSource.
 ]
