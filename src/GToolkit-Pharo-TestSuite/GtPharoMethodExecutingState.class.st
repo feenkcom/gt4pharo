@@ -5,21 +5,21 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoMethodExecutingState class >> representsTestResult: aTestResult [
-	^ false
-]
-
-{ #category : #accessing }
-GtPharoMethodExecutingState >> accept: aVisitor [
+GtPharoMethodExecutingState class >> accept: aVisitor [
 	^ aVisitor visitTestCaseexecutingState: self
 ]
 
 { #category : #accessing }
-GtPharoMethodExecutingState >> color [
+GtPharoMethodExecutingState class >> color [
 	^ Color blue
 ]
 
 { #category : #accessing }
-GtPharoMethodExecutingState >> label [
+GtPharoMethodExecutingState class >> label [
 	^ 'Executing'
+]
+
+{ #category : #accessing }
+GtPharoMethodExecutingState class >> representsTestResult: aTestResult [
+	^ false
 ]
