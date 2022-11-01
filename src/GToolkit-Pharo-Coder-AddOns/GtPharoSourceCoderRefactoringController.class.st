@@ -36,6 +36,22 @@ GtPharoSourceCoderRefactoringController >> compileSnippetMethodIn: model [
 	cls compile: self snippetSelector , ' ' , self sourceText asString classified: #accessing
 ]
 
+{ #category : #executing }
+GtPharoSourceCoderRefactoringController >> createModel [
+	| model modelClass |
+	model := RBClassModelFactory rbNamespace
+			onEnvironment: RBBrowserEnvironment new.
+	model name: self refactoringName.
+	sourceCoderViewModel coderModel isForMethod
+		ifTrue: [ modelClass := model classFor: sourceCoderViewModel behavior.
+			(modelClass sourceCodeFor: sourceCoderViewModel selector)
+				~= originalSource asString
+				ifTrue: [ modelClass
+						compile: originalSource asString
+						classified: sourceCoderViewModel protocol ] ].
+	^ model
+]
+
 { #category : #private }
 GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	| aModel aBehavior aProtocol aSourceString aCurrentSelector |
@@ -68,6 +84,33 @@ GtPharoSourceCoderRefactoringController >> isValidForPreview [
 { #category : #accessing }
 GtPharoSourceCoderRefactoringController >> previewPosition [
 	self subclassResponsibility
+]
+
+{ #category : #private }
+GtPharoSourceCoderRefactoringController >> safeMethodName: methodName in: modelClass [
+	| index selector name argCount |
+	argCount := methodName arguments size.
+	name := '_'.
+	index := 0.
+	[ selector := (String
+			streamContents: [ :stream | 
+				stream nextPutAll: name.
+				argCount >= 1
+					ifTrue: [ stream nextPut: $:.
+						2 to: argCount do: [ :i | stream nextPutAll: '_:' ] ] ]) asSymbol.
+	modelClass hierarchyDefinesMethod: selector ]
+		whileTrue: [ name := name , index printString.
+			index := index + 1 ].
+	^ selector
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> selfArgumentName [
+	| name |
+	name := sourceCoderViewModel behavior name asString
+			copyReplaceAll: ' class'
+			with: 'Class'.
+	^ (name first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , name
 ]
 
 { #category : #accessing }

@@ -38,7 +38,7 @@ GtRenameSelectorAction >> addRenameAttributes [
 						filter: filter;
 						text: (text from: each first to: each last);
 						requestInitialFocus: index = focusedIndex;
-						isForSelector: true;
+						coordinateFocus: true;
 						styler: styler.
 				index := index + 1.
 
