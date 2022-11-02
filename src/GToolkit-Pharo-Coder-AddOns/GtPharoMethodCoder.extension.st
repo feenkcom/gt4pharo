@@ -260,7 +260,7 @@ GtPharoMethodCoder >> addMethodObjectMenuForAst: anAst to: coderAddOns from: aCo
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [ coderAddOns
-				addContextMenuItem: 'Create method object' asRopedText
+				addContextMenuItem: 'Extract method object' asRopedText
 				hover: nil
 				leave: nil
 				action: [ :model | (GtMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]

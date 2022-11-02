@@ -203,7 +203,7 @@ GtMethodObjectRefactoringController >> refactoring [
 
 { #category : #accessing }
 GtMethodObjectRefactoringController >> refactoringName [
-	^ 'Create method object'
+	^ 'Extract method object'
 ]
 
 { #category : #'private - attributes' }
