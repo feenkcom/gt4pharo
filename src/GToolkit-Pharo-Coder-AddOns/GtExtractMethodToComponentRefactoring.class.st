@@ -18,3 +18,9 @@ GtExtractMethodToComponentRefactoring >> moveMethod [
 			variable: variable.
 	self performCompositeRefactoring: refactoring
 ]
+
+{ #category : #accessing }
+GtExtractMethodToComponentRefactoring >> transform [
+	super transform.
+	self gtCleanupChanges
+]
