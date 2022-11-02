@@ -465,7 +465,8 @@ GtExtractMethodToComponentController >> swap: firstNode with: secondNode [
 				ifTrue: [ '' asRopedText ]
 				ifFalse: [ aNewSourceText copyFrom: aSecondNode stopPosition + 1 to: aNewSourceText size ]).
 	self setText: aNewSourceText.
-	self addReorderParametersAttributes
+	self addReorderParametersAttributes.
+	self installReceiverSelector
 ]
 
 { #category : #private }

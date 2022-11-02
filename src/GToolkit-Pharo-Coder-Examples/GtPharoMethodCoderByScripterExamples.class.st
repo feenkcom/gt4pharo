@@ -525,6 +525,22 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExpandAttr
 ]
 
 { #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> checkHasReceiverAttribute: aScripter [
+	aScripter check
+		label: 'Check receiver attribute';
+		value: [ :aCoderEditor | 
+				| count |
+				count := 0.
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtMessageReceiverAttribute ]
+					indicesDo: [ :aStart :anEnd | count := count + 1 ].
+				count ]
+			equals: [ :aCoderEditor | 1 ];
+		id: GtSourceCoderEditorId;
+		play
+]
+
+{ #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> checkHasTwoReorderAttributes: aScripter [
 	<gtExample>
 	aScripter check
@@ -2821,6 +2837,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 		onModel;
 		play.
 
+	self checkHasReceiverAttribute: aScripter.
 	self checkHasTwoReorderAttributes: aScripter.
 	self checkKeywordRenameEditor: aScripter.
 
@@ -2835,6 +2852,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 
 	self clickReorderParameter: aScripter variables: #('temp' 'anObject').
 	self checkKeywordRenameEditor: aScripter.
+	self checkHasReceiverAttribute: aScripter.
 
 	(aScripter type: 'a:') play.
 
