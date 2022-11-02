@@ -1,6 +1,11 @@
 Extension { #name : #RBRefactoring }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBRefactoring >> gtCleanupChanges [
+	self model gtCleanupChanges
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBRefactoring >> gtSignalMethodOverwritten: aSelector in: aClass [
 	| message |
 	message := (aClass directlyDefinesMethod: aSelector)

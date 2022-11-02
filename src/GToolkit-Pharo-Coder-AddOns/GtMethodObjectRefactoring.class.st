@@ -194,7 +194,8 @@ GtMethodObjectRefactoring >> transform [
 	self extractToNewClass.
 	self inlineAssignment.
 	self convertCascadedConstructor.
-	self inlineMessage
+	self inlineMessage.
+	self gtCleanupChanges
 ]
 
 { #category : #accessing }
