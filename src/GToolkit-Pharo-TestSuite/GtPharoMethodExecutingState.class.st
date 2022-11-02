@@ -10,11 +10,6 @@ GtPharoMethodExecutingState class >> accept: aVisitor [
 ]
 
 { #category : #accessing }
-GtPharoMethodExecutingState class >> color [
-	^ Color blue
-]
-
-{ #category : #accessing }
 GtPharoMethodExecutingState class >> label [
 	^ 'Executing'
 ]
