@@ -37,6 +37,8 @@ GtPharoMethodTestCaseState class >> beSkipped: aGtPharoMethodTestCase [
 { #category : #view }
 GtPharoMethodTestCaseState class >> gtLiveFor: aView [
 	<gtView>
+	self hasAbstractMethods ifTrue: [ ^ aView empty ].
+
 	^ aView explicit
 		title: 'Live';
 		priority: 1;
