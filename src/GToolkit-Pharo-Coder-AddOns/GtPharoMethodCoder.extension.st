@@ -409,18 +409,16 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 20>
-	
 	self addExtractMethodTo: coderAddOns from: aCoderViewModel.
-	
+
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
 			| aNode |
-			
 			aNode := theNodes first.
-			
+
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
-			self addMoveMethodRefactoringFor: aNode to: coderAddOns. 
+			self addMoveMethodRefactoringFor: aNode to: coderAddOns.
 			self addAddParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineParameterRefactoringFor: aNode to: coderAddOns.
 			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
@@ -431,6 +429,8 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns.
 			self addRenameTemporaryRefactoringFor: aNode to: coderAddOns.
+			self addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns.
+			self addRenameClassVariableRefactoringFor: aNode to: coderAddOns.
 			self addRenameClassRefactoringFor: aNode to: coderAddOns.
 			self addVariableScopingFor: aNode to: coderAddOns.
 			aNode
@@ -473,10 +473,40 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
 						addContextMenuItem: (self
 									createLabel: 'Rename Class'
 									description: aNode variableName)
-							hover: (self highlightNodeBlock: aNode)
+							hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 							leave: self removeHighlightBlock
 							action: [ :aCoderViewModel | self renameClassIn: aCoderViewModel node: aNode ];
 						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform userPrintString ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOns [
+	(aNode isVariable and: [ self isClassVariable: aNode ]) ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Rename class variable'
+				description: aNode variableName)
+		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | self renameClassVariableIn: aCoderViewModel node: aNode ]
+		id: #'context-menu--rename-class-var'
+		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
+				userPrintString
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns [
+	(aNode isVariable and: [ self isInstanceVariable: aNode ]) ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Rename instance variable'
+				description: aNode variableName)
+		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | self renameInstanceVariableIn: aCoderViewModel node: aNode ]
+		id: #'context-menu--rename-inst-var'
+		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
+				userPrintString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -486,7 +516,7 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Rename Local'
 				description: aNode variableName)
-		hover: (self highlightNodeBlock: aNode)
+		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
 		id: #'context-menu--rename-temp'

@@ -174,6 +174,17 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isClassVariable: aNode [
+	^ self behavior classVariables
+		anySatisfy: [ :assoc | assoc key asString = aNode name value ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isInstanceVariable: aNode [
+	^ self behavior allInstVarNames includes: aNode name value
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
 ]
@@ -251,15 +262,17 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel [
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ ^ self renameMethod: aSourceCoderViewModel node: aNode ].
 	aNode isVariable
-		ifTrue:
-			[ (self isLocalVariable: aNode) ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
-			(self behavior allInstVarNames includes: aNode name value)
+		ifTrue: [ (self isLocalVariable: aNode)
+				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
+			(self isInstanceVariable: aNode)
 				ifTrue: [ ^ self renameInstanceVariableIn: aSourceCoderViewModel node: aNode ].
-			(self behavior classVariables anySatisfy: [ :assoc | assoc key asString = aNode name value ])
+			(self isClassVariable: aNode)
 				ifTrue: [ ^ self renameClassVariableIn: aSourceCoderViewModel node: aNode ].
 			Smalltalk globals
 				at: aNode name value asSymbol
-				ifPresent: [ :cls | (cls isKindOf: Class) ifTrue: [ ^ self renameClassIn: aSourceCoderViewModel node: aNode ] ] ]
+				ifPresent: [ :cls | 
+					(cls isKindOf: Class)
+						ifTrue: [ ^ self renameClassIn: aSourceCoderViewModel node: aNode ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
