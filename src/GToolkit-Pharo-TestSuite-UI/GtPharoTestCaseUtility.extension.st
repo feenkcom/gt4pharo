@@ -11,6 +11,17 @@ GtPharoTestCaseUtility class >> newColoredIcon: aColor [
 ]
 
 { #category : #'*GToolkit-Pharo-TestSuite-UI' }
+GtPharoTestCaseUtility class >> newColoredIconFor: aState [
+
+	^ BlElement new
+		  background: aState color;
+		  border: aState border;
+		  geometry: BlSquare new;
+		  margin: (BlInsets all: 1);
+		  size: 8 @ 8
+]
+
+{ #category : #'*GToolkit-Pharo-TestSuite-UI' }
 GtPharoTestCaseUtility class >> newColoredIconWithMargin: aColor [
 
 	^ BlElement new

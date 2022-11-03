@@ -2,7 +2,7 @@ Extension { #name : #GtPharoMethodExecutingState }
 
 { #category : #'*GToolkit-Pharo-TestSuite-UI' }
 GtPharoMethodExecutingState class >> border [
-	^ Color gray
+	^ Color lightGray
 ]
 
 { #category : #'*GToolkit-Pharo-TestSuite-UI' }

@@ -2663,34 +2663,34 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_02_cursor [
 { #category : #'examples - inline temp' }
 GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 	<gtExample>
-	| aScripter |
-	aScripter := self openContextMenu: self forInlineTemp_02_cursor.
+	| scripter |
+	scripter := self openContextMenu: self forInlineTemp_02_cursor.
 
-	aScripter mouseMoveOver
+	scripter mouseMoveOver
 		label: 'Hover inline temp';
 		onSpaceRoot;
 		id: #'context-menu--inline-temp';
 		play.
 
-	aScripter assert
+	scripter assert
 		label: 'Assert assignment node highlighted';
-		value: [ :aCoderEditor | 
-				| aMin aMax |
-				aMin := Float infinity.
-				aMax := 0.
-				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute = GtPharoMethodCoder nodeHighlight ]
-					indicesDo: [ :aStart :anEnd | 
-						aMin := aMin min: aStart.
-						aMax := aMax max: anEnd ].
-				aMin to: aMax ]
+		value: [ :editor | 
+				| intervals |
+				intervals := OrderedCollection new.
+				editor text
+					findAttributesSuchThat: [ :each | each = GtPharoMethodCoder nodeHighlight ]
+					indicesDo: [ :start :end | 
+						(intervals notEmpty and: [ intervals last last + 1 = start ])
+							ifTrue: [ intervals at: intervals size put: (intervals last first to: end) ]
+							ifFalse: [ intervals add: (start to: end) ] ].
+				intervals detect: [ :each | each size > 3 ] ]
 			equals: [ :aCoderEditor | 
 				(aCoderEditor text asString indexOfSubCollection: 'str :=')
 					to: (aCoderEditor text asString indexOf: $.) - 1 ];
 		id: GtSourceCoderEditorId;
 		play.
 
-	^ aScripter
+	^ scripter
 ]
 
 { #category : #'examples - inline temp' }
