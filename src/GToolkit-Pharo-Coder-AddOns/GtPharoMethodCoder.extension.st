@@ -196,18 +196,31 @@ GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
-	aNode isAssignment
-		ifFalse: [ ^ self ].
-	aNode variable whoDefines
-		ifNil: [ ^ self ].
-	
+	| variable uses definer |
+	aNode isAssignment ifTrue: [ variable := aNode variable ].
+	aNode isVariable
+		ifTrue: [ (aNode parent isAssignment and: [ aNode parent variable == aNode ])
+				ifTrue: [ ^ self ].
+			variable := aNode ].
+	(variable isNil or: [ (definer := variable whoDefines) isNil ])
+		ifTrue: [ ^ self ].
+	uses := self allReferencesTo: variable.
+	uses size < 2 ifTrue: [ ^ self ].
+	uses first isDeclaration ifFalse: [ ^ self ].
+	uses second isAssignedTo ifFalse: [ ^ self ].
+	3 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ self ] ].
+	uses size >= 3
+		ifTrue: [ uses second stopPosition > uses third startPosition ifTrue: [ ^ self ] ].
+
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Inline Assignment' description: aNode variable variableName)
-		hover: (self highlightNodeBlock: aNode)
+		addContextMenuItem: (self
+				createLabel: 'Inline assignment'
+				description: variable variableName)
+		hover: (self highlightNodesBlock: {uses second parent} , uses)
 		leave: self removeHighlightBlock
-		action: [ :aSourceCoderViewModel |
+		action: [ :aSourceCoderViewModel | 
 			(GtMethodInlineTemporaryVariableRefactoringController new
-				node: aNode;
+				node: uses second parent;
 				sourceCoderViewModel: aSourceCoderViewModel) execute ]
 		id: #'context-menu--inline-temp'
 ]
@@ -505,6 +518,15 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 				 variableNode: aNode;
 				 sourceCoderViewModel: aSourceCoderViewModel) execute ]
 		id: #'context-menu--move-variable-declaration'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> allReferencesTo: aVariableNode [
+	| nodes |
+	nodes := OrderedCollection new.
+	(aVariableNode whoDefines ifNil: [ aVariableNode topParent ])
+		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ nodes add: each ] ].
+	^ nodes sort: [ :a :b | a startPosition < b startPosition ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

@@ -35,8 +35,15 @@ GtPharoVariableNode >> guessType: completionStrategy [
 
 { #category : #testing }
 GtPharoVariableNode >> isAssignedTo [
-	^ parent notNil and: [ 
-		  parent isAssignment and: [ parent variable == self ] ]
+	^ parent notNil and: [ parent isAssignment and: [ parent variable == self ] ]
+]
+
+{ #category : #testing }
+GtPharoVariableNode >> isDeclaration [
+	^ parent notNil
+		and: [ self whoDefines
+				ifNil: [ false ]
+				ifNotNil: [ :node | node variables identityIncludes: self ] ]
 ]
 
 { #category : #testing }

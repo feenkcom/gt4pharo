@@ -139,6 +139,17 @@ GtPharoSourceCoder >> highlightNodeBlock: aNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> highlightNodesBlock: aCollection [
+	^ [ :textualCoderViewModel | 
+	aCollection
+		do: [ :each | 
+			textualCoderViewModel
+				addTextAttribute: self class nodeHighlight
+				from: each startPosition
+				to: each stopPosition ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 
