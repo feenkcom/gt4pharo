@@ -75,14 +75,19 @@ GtPharoCompletionStrategy >> classOrMetaClass [
 
 { #category : #accessing }
 GtPharoCompletionStrategy >> classOrMetaClass: aClass [
+	class
+		ifNotNil: [ localVariables removeAll: class allInstVarNames.
+			class isMeta
+				ifTrue: [ localVariables removeAll: class instanceSide allClassVarNames ]
+				ifFalse: [ localVariables removeAll: class allClassVarNames ].
+			class superclass ifNotNil: [ localVariables remove: 'super' ] ].
 	class := aClass.
-	class notNil
-		ifTrue: [ localVariables addAll: class allInstVarNames.
+	class
+		ifNotNil: [ localVariables addAll: class allInstVarNames.
 			class isMeta
 				ifTrue: [ localVariables addAll: class instanceSide allClassVarNames ]
 				ifFalse: [ localVariables addAll: class allClassVarNames ].
-			class superclass notNil
-				ifTrue: [ localVariables add: 'super' ] ]
+			class superclass ifNotNil: [ localVariables add: 'super' ] ]
 ]
 
 { #category : #accessing }
