@@ -2,7 +2,7 @@ Extension { #name : #GtPharoMethodTestCaseState }
 
 { #category : #'*GToolkit-Pharo-TestSuite-UI' }
 GtPharoMethodTestCaseState class >> border [
-	^ Color transparent
+	^ self color
 ]
 
 { #category : #'*GToolkit-Pharo-TestSuite-UI' }
