@@ -90,3 +90,20 @@ GtCoderViewModelRenameAction class >> pharoRenameTemporaryVariable: aVariableNam
 					cr.
 				ex return: nil ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtCoderViewModelRenameAction >> processReturnFor: renameEditor in: anEditorElement [
+	| lastWasEditor first |
+	hasRefactoringPreview
+		ifFalse: [ ^ super processReturnFor: renameEditor in: anEditorElement ].
+	lastWasEditor := false.
+	anEditorElement
+		allChildrenBreadthFirstDo: [ :each | 
+			(lastWasEditor and: [ each isKindOf: GtRefactoringsPreviewButton ])
+				ifTrue: [ ^ each openPreview ].
+			(each isKindOf: GtRenameEditor)
+				ifTrue: [ first ifNil: [ first := each ].
+					lastWasEditor ifTrue: [ ^ each requestFocus ].
+					lastWasEditor := each == renameEditor ] ].
+	first ifNotNil: [ ^ first requestFocus ]
+]

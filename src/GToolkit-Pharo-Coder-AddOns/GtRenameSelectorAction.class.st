@@ -94,7 +94,8 @@ GtRenameSelectorAction >> forVariableOrUnaryMessage [
 { #category : #accessing }
 GtRenameSelectorAction >> initialize [
 	super initialize.
-	focusedIndex := 1
+	focusedIndex := 1.
+	self hasRefactoringPreview: true
 ]
 
 { #category : #accessing }
@@ -102,10 +103,6 @@ GtRenameSelectorAction >> isValid [
 	validationBlock isNil ifTrue: [ ^ true ].
 	^ renameAttributes
 		allSatisfy: [ :each | validationBlock value: each text asString ]
-]
-
-{ #category : #accessing }
-GtRenameSelectorAction >> lostFocus [
 ]
 
 { #category : #accessing }
@@ -145,21 +142,6 @@ GtRenameSelectorAction >> newSelector [
 { #category : #accessing }
 GtRenameSelectorAction >> newSelector: aSymbol [
 	newSelector := aSymbol
-]
-
-{ #category : #actions }
-GtRenameSelectorAction >> processReturnFor: renameEditor in: anEditorElement [
-	| lastWasEditor first |
-	lastWasEditor := false.
-	anEditorElement
-		allChildrenBreadthFirstDo: [ :each | 
-			(lastWasEditor and: [ each isKindOf: GtRefactoringsPreviewButton ])
-				ifTrue: [ ^ each openPreview ].
-			(each isKindOf: GtRenameEditor)
-				ifTrue: [ first ifNil: [ first := each ].
-					lastWasEditor ifTrue: [ ^ each requestFocus ].
-					lastWasEditor := each == renameEditor ] ].
-	first ifNotNil: [ ^ first requestFocus ]
 ]
 
 { #category : #accessing }
