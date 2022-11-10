@@ -33,19 +33,23 @@ GtContextVariableValueStyler >> visitVariable: aVariableNode [
 			aContainer := BlElement new
 					clipChildren: false;
 					layout: BlLinearLayout vertical;
+					border: (BlBorder paint: Color red);
+					padding: (BlInsets top: 12);
+					"margin: (BlInsets top: 10);"
 					constraintsDo: [ :c | 
 						c horizontal exact: aTextPiece textLength * 10.
-						c vertical fitContent ].
+						c vertical exact: 25 ].
 			displayText := self
 					valueForVariableNamed: aVariableNode name value
 					ifPresent: [ :aValue | 
 						theValue := aValue.
-						[ aValue gtDisplayString asRopedText
+						[ aValue gtDisplayString asRopedText glamorousRegularFont
 							foreground: Color veryLightGray;
-							fontSize: 8 ]
+							fontSize: 10 ]
 							on: Error , Halt
-							do: [ :e | e messageText asRopedText foreground: Color red ] ]
-					ifAbsent: [ '<missing>' asRopedText foreground: Color red ].
+							do: [ :e | e messageText asRopedText glamorousRegularFont foreground: Color red ] ]
+					ifAbsent: [ '<missing>' asRopedText glamorousRegularFont
+							foreground: Color red ].
 			aValueElement := BlShrinkingTextElement new text: displayText.
 			aValueElement
 				aptitude: ((BrGlamorousWithTooltipAptitude
