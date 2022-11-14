@@ -29,16 +29,20 @@ GtContextVariableValueStyler >> visitVariable: aVariableNode [
 
 	(text from: aVariableNode startPosition to: aVariableNode stopPosition)
 		overlayingAdornment: [ :aTextPiece :anEditorElement | 
-			| aContainer displayText aValueElement theValue |
+			| aContainer displayText aValueElement theValue verticalBar |
 			aContainer := BlElement new
 					clipChildren: false;
-					layout: BlLinearLayout vertical;
-					border: (BlBorder paint: Color red);
-					padding: (BlInsets top: 12);
-					"margin: (BlInsets top: 10);"
+					layout: BlFrameLayout new;
 					constraintsDo: [ :c | 
 						c horizontal exact: aTextPiece textLength * 10.
 						c vertical exact: 25 ].
+			verticalBar := BlElement new
+					constraintsDo: [ :c | 
+						c frame vertical alignBottom.
+						c horizontal exact: 1.
+						c vertical exact: 15 ];
+					background: Color veryLightGray.
+
 			displayText := self
 					valueForVariableNamed: aVariableNode name value
 					ifPresent: [ :aValue | 
@@ -68,11 +72,24 @@ GtContextVariableValueStyler >> visitVariable: aVariableNode [
 						showDelay: 200 milliSeconds).
 			aValueElement
 				when: BlClickEvent
-				do: [ :event | aValueElement phlow spawnObject: theValue ].
-			aValueElement clipChildren: true.
+					do: [ :event | aValueElement phlow spawnObject: theValue ];
+				when: BlMouseEnterEvent
+					do: [ :event | 
+						aValueElement
+							text: (aValueElement text copy foreground: BrGlamorousColors hoveredButtonBorderColor).
+						verticalBar background: BrGlamorousColors hoveredButtonBorderColor ];
+				when: BlMouseLeaveEvent
+					do: [ :event | 
+						aValueElement text: (aValueElement text copy foreground: Color veryLightGray).
+						verticalBar background: Color veryLightGray ].
 			aValueElement
+				clipChildren: true;
+				padding: (BlInsets left: 2);
 				constraintsDo: [ :c | 
 					c horizontal matchParent.
-					c vertical fitContent ].
-			aContainer addChildren: {aValueElement} ]
+					c vertical fitContent.
+					c frame vertical alignBottom ].
+			aContainer
+				addChildren: {verticalBar.
+						aValueElement} ]
 ]
