@@ -73,12 +73,12 @@ GtRecentChanges >> computeRecentlyChanged [
 	allSaved := allEntries
 			select: [ :each | each content isKindOf: EpSessionSnapshot ].	"the last save is the cut-off"
 	lastSaved := allSaved size > 0
-			ifTrue: [ allSaved first tagAt: #time ]
+			ifTrue: [ allSaved first gtTime ]
 			ifFalse: [ DateAndTime epoch ].	"we get all method changes that are recent enough and the class of which still exists"
 	changes := allEntries
 			select: [ :each | 
 				(each content isKindOf: EpMethodChange)
-					and: [ (each tagAt: #time) >= lastSaved
+					and: [ (each gtTime) >= lastSaved
 							and: [ each content methodAffected methodClass isNotNil ] ] ].	"group the methods; if the last action is a removal, we get rid of it"
 	changes := (changes groupedBy: [ :each | each content methodAffected ])
 			reject: [ :each | each value last content isKindOf: EpMethodRemoval ].	"the keys are the methods"
@@ -93,7 +93,7 @@ GtRecentChanges >> computeRecentlyChanged [
 								change := (changes at: method) last.
 								GtRecentMethodChange
 									method: method
-									timestamp: (change tagAt: #time) ]) ]) asOrderedCollection
+									timestamp: (change gtTime) ]) ]) asOrderedCollection
 ]
 
 { #category : #accessing }
