@@ -1,11 +1,37 @@
 Class {
 	#name : #GtMethodInlineMessageFromComponentRefactoringController,
-	#superclass : #GtMethodInlineMessageSendRefactoringController,
+	#superclass : #GtPharoSourceCoderRefactoringController,
 	#instVars : [
-		'implementor'
+		'implementor',
+		'node',
+		'receiverTypeAttribute'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> addReceiverTypeAttribute [
+	self removeReceiverTypeAttribute.
+	receiverTypeAttribute := self sourceCoderViewModel
+			addTextAttribute: (GtClassPickerAttribute new
+					refactoringController: self;
+					classes: self potentialImplementors;
+					selected: self implementor;
+					yourself)
+			from: node receiver stopPosition
+			to: node receiver stopPosition
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> cleanUp [
+	super cleanUp.
+	self removeReceiverTypeAttribute
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> implementor [
+	^ implementor ifNil: [ implementor := self potentialImplementors anyOne ]
+]
 
 { #category : #initialization }
 GtMethodInlineMessageFromComponentRefactoringController >> implementor: aClass [
@@ -13,8 +39,19 @@ GtMethodInlineMessageFromComponentRefactoringController >> implementor: aClass [
 ]
 
 { #category : #accessing }
-GtMethodInlineMessageFromComponentRefactoringController >> inlineRefactoringClass [
-	^ RBInlineMethodFromComponentRefactoring
+GtMethodInlineMessageFromComponentRefactoringController >> installAttributes [
+	self addReceiverTypeAttribute.
+	self addRefactoringPreview
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> node [
+	^ node
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> node: aMessageSend [
+	node := aMessageSend
 ]
 
 { #category : #accessing }
@@ -35,16 +72,54 @@ GtMethodInlineMessageFromComponentRefactoringController >> performMethodRefactor
 ]
 
 { #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> potentialImplementors [
+	^ ((GtPharoIndex current implementersOf: node selector)
+		collect: [ :each | each methodClass ])
+		asSortedCollection: [ :a :b | a name < b name ]
+]
+
+{ #category : #accessing }
 GtMethodInlineMessageFromComponentRefactoringController >> previewPosition [
-	^ node sourceInterval last
+	^ node message selectorParts last stopPosition
 ]
 
 { #category : #accessing }
 GtMethodInlineMessageFromComponentRefactoringController >> refactoring [
-	| refactoring |
-	refactoring := super refactoring.
+	| refactoring model |
+	model := self createRefactoringModel.
+
+	refactoring := RBInlineMethodFromComponentRefactoring
+			model: model
+			inline: node sourceInterval
+			inMethod: sourceCoderViewModel coderModel currentSelector
+			forClass: (model classFor: sourceCoderViewModel behavior).
+
+	refactoring setOption: #inlineExpression toUse: [ :ref :string | true ].
 	refactoring
 		setOption: #implementorToInline
-		toUse: [ :ref :classes | classes detect: [ :each | each realClass = implementor ] ifNone: [ nil ] ].
+		toUse: [ :ref :classes | classes detect: [ :each | each realClass = self implementor ] ifNone: [ nil ] ].
 	^ refactoring
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> refactoringName [
+	^ 'Inline message send'
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> removeReceiverTypeAttribute [
+	receiverTypeAttribute ifNil: [ ^ self ].
+	self sourceCoderViewModel removeCoderTextAttributes: receiverTypeAttribute.
+	receiverTypeAttribute := nil
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> safelyExecute [
+	self installAttributes
+]
+
+{ #category : #executing }
+GtMethodInlineMessageFromComponentRefactoringController >> selectClass: aClass [
+	self implementor: aClass.
+	self installAttributes
 ]
