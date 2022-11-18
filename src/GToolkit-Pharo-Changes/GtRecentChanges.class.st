@@ -111,6 +111,15 @@ GtRecentChanges >> groupedChanges [
 ]
 
 { #category : #accessing }
+GtRecentChanges >> gtChangedClassesFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Changed Classes';
+		priority: 3;
+		items: [ self changedClasses asOrderedCollection ]
+]
+
+{ #category : #accessing }
 GtRecentChanges >> gtEventsFor: aView [
 	<gtView>
 	^ aView list
