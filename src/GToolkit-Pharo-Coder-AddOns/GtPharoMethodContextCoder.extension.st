@@ -13,10 +13,11 @@ GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAdd
 			RestartDebugAction.
 			StepOverDebugAction.
 			StepIntoDebugAction.
-			StepThroughDebugAction}.
+			StepThroughDebugAction.
+			GtRunToSelectionDebugAction}.
 
 	theActions := ((classes
-			collect: [ :each | each gt2ContextDebuggingActionFor: self ])
+			collect: [ :each | each gt2ContextDebuggingActionFor: nil ])
 			select: [ :aDebuggingAction "Quite hacky solutions for only showing StepInto for the top context." | 
 				aDebuggingAction class ~= StepIntoDebugAction
 					or: [ self context = self session interruptedContext ] ])
@@ -24,7 +25,14 @@ GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAdd
 				GtCoderAction new
 					title: aDebuggingAction label;
 					icon: (aDebuggingAction icon ifNil: [ BlElement new size: 0 @ 0 ]);
-					action: [ aDebuggingAction execute ];
+					action: [ :viewModel :element | 
+						element
+							withAllParentsDetect: [ :each | each isKindOf: GtDebuggerElement ]
+							ifFound: [ :dbg | 
+								aDebuggingAction
+									debugger: dbg;
+									execute ]
+							ifNone: [  ] ];
 					shortcutKey: aDebuggingAction keymap ].
 
 	coderAddOns addContextMenuActions: theActions

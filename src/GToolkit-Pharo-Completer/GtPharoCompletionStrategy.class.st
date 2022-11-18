@@ -299,7 +299,7 @@ GtPharoCompletionStrategy >> variableCompletionActionStreamFor: anAST [
 		collect:
 			[ :each | 
 			GtInsertTextCompletionAction
-				labeled: each
+				labeled: each asRopedText glamorousCodeFont
 				completion: each
 				position: self index ]
 ]
