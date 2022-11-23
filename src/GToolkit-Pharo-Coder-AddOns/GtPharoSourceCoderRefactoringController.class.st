@@ -30,6 +30,11 @@ GtPharoSourceCoderRefactoringController >> addRefactoringPreview [
 ]
 
 { #category : #private }
+GtPharoSourceCoderRefactoringController >> ast [
+	^ sourceCoderViewModel astAwait
+]
+
+{ #category : #private }
 GtPharoSourceCoderRefactoringController >> compileSnippetMethodIn: model [
 	| cls |
 	cls := model classFor: nil class.
@@ -69,6 +74,12 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	aModel name: self refactoringName.
 
 	^ aModel
+]
+
+{ #category : #executing }
+GtPharoSourceCoderRefactoringController >> findNodeAssigning: aString [
+	self ast allNodesDo: [ :each | (each isAssignment and: [ each variable source = aString ]) ifTrue: [ ^ each variable ] ].
+	^ nil
 ]
 
 { #category : #accessing }

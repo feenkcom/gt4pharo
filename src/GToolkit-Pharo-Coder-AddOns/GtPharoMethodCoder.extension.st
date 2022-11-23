@@ -73,6 +73,22 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addEliminateCascadesFor: aNode to: coderAddOns [
+	aNode isCascade ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Convert cascade to statements'
+				description: (self nodeDescription: aNode))
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtConvertCascadesToStatementsController new
+				node: aNode;
+				sourceCoderViewModel: aCoderViewModel) execute ]
+		id: #'context-menu--cascades-to-statements'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
@@ -436,7 +452,9 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			aNode
 				withAllParentsDo: [ :node | self addInlineTempFor: node to: coderAddOns ].
 			aNode
-				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ] ]
+				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ].
+			aNode
+				withAllParentsDo: [ :node | self addEliminateCascadesFor: node to: coderAddOns ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
