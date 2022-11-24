@@ -54,6 +54,41 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
+	aNode isCascade ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Convert cascade to statements'
+				description: (self nodeDescription: aNode))
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtConvertCascadesToStatementsController new
+				node: aNode;
+				sourceCoderViewModel: aCoderViewModel) execute ]
+		id: #'context-menu--cascades-to-statements'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
+	nodes size > 1 ifFalse: [ ^ self ].
+	(nodes allSatisfy: [ :each | each isMessageSend ]) ifFalse: [ ^ self ].
+	(nodes allSatisfy: [ :each | each receiver = nodes first receiver ])
+		ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Convert statements to cascade'
+				description: (self nodeDescription: nodes first))
+		hover: (self highlightNodesBlock: nodes)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtConvertStatementsToCascadesController new
+				nodes: nodes;
+				sourceCoderViewModel: aCoderViewModel) execute ]
+		id: #'context-menu--statements-to-cascade'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns [
 	aNode isVariable ifFalse: [ ^ self ].
 	(aNode parent isSequence and: [ 
@@ -436,7 +471,10 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			aNode
 				withAllParentsDo: [ :node | self addInlineTempFor: node to: coderAddOns ].
 			aNode
-				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ] ]
+				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ].
+			aNode
+				withAllParentsDo: [ :node | self addConvertCascadesToStatementsFor: node to: coderAddOns ].
+			self addConvertStatementsToCascadesFor: theNodes to: coderAddOns ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

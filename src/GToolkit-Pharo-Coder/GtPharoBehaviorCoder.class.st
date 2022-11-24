@@ -150,7 +150,7 @@ GtPharoBehaviorCoder >> package [
 GtPharoBehaviorCoder >> packageTag [
 	| tag |
 	tag := self package classTagForClass: self theClass.
-	tag isRoot ifTrue: [ ^ nil ].
+	(tag isNil or: [ tag isRoot ]) ifTrue: [ ^ nil ].
 	^ tag
 ]
 
