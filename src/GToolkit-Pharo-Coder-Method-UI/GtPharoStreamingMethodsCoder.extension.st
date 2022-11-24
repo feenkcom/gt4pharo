@@ -148,7 +148,7 @@ GtPharoStreamingMethodsCoder >> instanceSlotFilter: aView [
 			anElement := GtCoderFilterList new.
 			anElement
 				matchParent;
-				items: self behavior instanceSide allInstVarNames
+				items: (self behavior instanceSide allInstVarNames sorted: [ :a :b | a < b ])
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable | self 
 					additionalFilters: { GtSearchInstanceSlotReferenceFilter
