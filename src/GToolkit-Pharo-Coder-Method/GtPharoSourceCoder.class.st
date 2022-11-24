@@ -116,7 +116,7 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 			ifNone: [ ^ self ].
 		coderAddOns
 			addContextMenuItem:
-			(self createLabel: 'Browse Class' description: foundClass name)
+			(self createLabel: 'Browse class' description: foundClass name)
 			hover: [ :textualCoderViewModel | 
 				textualCoderViewModel
 					addTextAttribute: self class nodeHighlight
@@ -139,6 +139,26 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 ]
 
 { #category : #accessing }
+GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 100>
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
+			coderAddOns
+				addContextMenuItem: (self createLabel: 'Browse references' description: node name value)
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: node startPosition
+						to: node stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition ]
+				id: nil
+				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
+						combinationForPlatform userPrintString ]
+]
+
+{ #category : #accessing }
 GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut [
 	| highlightNode |
 	(node isMessage or: [ node isMessageSend  or: [ node isMethodPattern ] ])
@@ -157,14 +177,7 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 ]
 
 { #category : #accessing }
-GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 1>
-	(self behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
-	coderAddOns addShortcut: GtRenameInBaselineShortcut new
-]
-
-{ #category : #accessing }
-GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 100>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
@@ -173,6 +186,13 @@ GtPharoSourceCoder >> addReferencesMenuAddOnsAst: anAst to: coderAddOns from: aC
 				node: node
 				selector: #browseReferencesAt:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new ]
+]
+
+{ #category : #accessing }
+GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 1>
+	(self behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	coderAddOns addShortcut: GtRenameInBaselineShortcut new
 ]
 
 { #category : #accessing }
