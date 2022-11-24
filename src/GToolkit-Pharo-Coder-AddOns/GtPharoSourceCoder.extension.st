@@ -102,11 +102,11 @@ GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> createLabel: aString description: description [
-	^ aString asRopedText
+	^ aString asRopedText glamorousRegularFont
 		, ((' ' , description) asRopedText
-				fontName: 'Source Code Pro';
+				glamorousCodeFont;
 				foreground: Color gray;
-				fontSize: 10)
+				glamorousCodeTinySize)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
