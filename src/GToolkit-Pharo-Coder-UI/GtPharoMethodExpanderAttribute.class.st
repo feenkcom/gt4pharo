@@ -55,7 +55,7 @@ GtPharoMethodExpanderAttribute >> initialize [
 	self
 		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
 				beAppend;
-				stencil: [ self buildMethodCoder ] ]
+				stencil: [ Transcript show: 'coder'; cr. self buildMethodCoder ] ]
 ]
 
 { #category : #accessing }
