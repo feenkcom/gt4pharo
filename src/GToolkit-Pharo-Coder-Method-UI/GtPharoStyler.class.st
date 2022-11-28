@@ -5,6 +5,26 @@ Class {
 }
 
 { #category : #private }
+GtPharoStyler >> collapserForParenthesesLeft: aLeftIndex right: aRightIndex [
+	| theParenthesesMarker folder |
+	theParenthesesMarker := BrTextInvisibleMarkerAttribute new.
+	text
+		attribute: theParenthesesMarker
+		from: aLeftIndex + 1
+		to: aRightIndex - 1.
+
+	folder := (text attributesAt: aLeftIndex)
+			detect: [ :each | each class == GtParenthesisFolderAttribute ]
+			ifNone: [ | att |
+				att := GtParenthesisFolderAttribute new beNotOverwritableByStyler.
+				text
+					attribute: att
+					from: aLeftIndex
+					to: aLeftIndex ].
+	folder attribute: theParenthesesMarker
+]
+
+{ #category : #private }
 GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
 	self 
 		highlightParenthesesLeft: aLeftIndex
@@ -12,7 +32,8 @@ GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex
 	self 
 		colorParenthesesLeft: aLeftIndex
 		right: aRightIndex
-		atNestingLevel: aNestingLevel
+		atNestingLevel: aNestingLevel.
+	"self collapserForParenthesesLeft: aLeftIndex right: aRightIndex"
 ]
 
 { #category : #private }
