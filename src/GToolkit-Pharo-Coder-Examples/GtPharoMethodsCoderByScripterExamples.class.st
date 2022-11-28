@@ -29,14 +29,11 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter [
 	| aScripter |
 
 	aScripter := self methodsCoder.
-
-	aScripter substep: 'Enter into Edit Mode' do: [ :aStep | 
-		aStep doubleClick
-			id: #filter;
-			onChildOfClass: GtFilterTagElement;
-			id: #editableLabel;
-			play ].
-
+	aScripter click
+		label: 'Enter into Edit Mode';
+		id: GtFilterTagEditorId index: 1;
+		play.
+	
 	^ aScripter
 ]
 
@@ -47,11 +44,10 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_click_add_
 
 	aScripter := self methodsCoderWithFilledFilter_insert_text.
 
-	aScripter substep: 'Add new method' do: [ :aStep | 
-		aStep click
-			label: 'Click add method button';
-			id: GtPharoBehaviorCoder addNewMethodButtonName;
-			play ].
+	aScripter click
+		label: 'Click add method button';
+		id: GtPharoBehaviorCoder addNewMethodButtonName;
+		play.
 
 	^ aScripter
 ]
@@ -63,13 +59,11 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_insert_tex
 
 	aScripter := self methodsCoderWithFilledFilter.
 
-	aScripter substep: 'Insert new text' do: [ :aStep | 
-		aStep type
-			text: 'foo';
-			id: #filter;
-			onChildOfClass: GtFilterTagElement;
-			id: #editableLabel;
-			play ].
+	aScripter type
+		label: 'Insert new text';
+		text: 'foo';
+		id: GtFilterTagEditorId index: 1;
+		play.
 
 	^ aScripter
 ]

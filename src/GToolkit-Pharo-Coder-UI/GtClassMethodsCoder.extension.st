@@ -33,7 +33,7 @@ GtClassMethodsCoder >> classSlotFilter: aView [
 			anElement := GtCoderFilterList new.
 			anElement
 				matchParent;
-				items: class class allInstVarNames
+				items: (class class allInstVarNames sorted: [ :a :b | a < b ])
 					title: [ :aVariable | aVariable ]
 					action: [ :aVariable | 
 						self
@@ -54,7 +54,7 @@ GtClassMethodsCoder >> classVariableFilter: aView [
 			anElement := GtCoderFilterList new.
 			anElement
 				matchParent;
-				items: class allClassVarNames 
+				items: (class allClassVarNames sorted: [ :a :b | a < b ])
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable | self 
 					setFilters: { (GtSearchClassVariableReferenceFilter
@@ -94,7 +94,7 @@ GtClassMethodsCoder >> instanceSlotFilter: aView [
 			anElement := GtCoderFilterList new.
 			anElement
 				matchParent;
-				items: class allInstVarNames
+				items: (class allInstVarNames sorted: [ :a :b | a < b ])
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable | self 
 					setFilters: { GtSearchInstanceSlotReferenceFilter

@@ -8,20 +8,9 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
-{ #category : #private }
-GtExtractTemporaryRefactoringController >> ast [
-	^ sourceCoderViewModel astAwait
-]
-
 { #category : #accessing }
 GtExtractTemporaryRefactoringController >> behavior [
 	^ sourceCoderViewModel behavior
-]
-
-{ #category : #executing }
-GtExtractTemporaryRefactoringController >> findNodeAssigning: aString [
-	self ast allNodesDo: [ :each | (each isAssignment and: [ each variable source = aString ]) ifTrue: [ ^ each variable ] ].
-	^ nil
 ]
 
 { #category : #accessing }
