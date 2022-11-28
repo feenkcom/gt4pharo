@@ -37,9 +37,8 @@ GtFiltersElementExamples >> coderWithFiltersElement [
 	"Check whether the default filter is Category filter"
 	aTag := aFiltersElement childAt: 1.
 	self assert: aTag class equals: GtFilterTagElement.
-	aButton := aTag childAt: 1.
-	self assert: aButton class equals: BrButton.
-	self assert: aButton label asString equals: 'Category'.
+	aButton := (aTag query // GtFilterTagLabelId) anyOne.
+	self assert: aButton text asString equals: 'Category'.
 	^ aCoder
 ]
 
