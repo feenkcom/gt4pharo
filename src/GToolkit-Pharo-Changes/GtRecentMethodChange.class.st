@@ -40,6 +40,11 @@ GtRecentMethodChange >> navigateToUsingModel: aNavigationModel [
 	aNavigationModel selectMethod: method
 ]
 
+{ #category : #accessing }
+GtRecentMethodChange >> timestamp [
+	^ timestamp
+]
+
 { #category : #'instance creation' }
 GtRecentMethodChange >> timestamp: aDateAndTime [ 
 	timestamp := aDateAndTime
