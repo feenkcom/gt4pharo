@@ -1,11 +1,11 @@
 Class {
-	#name : #GtFiltersElementExamples,
+	#name : #GtFilteredMethodCoderElementExamples,
 	#superclass : #Object,
 	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
 { #category : #'examples - support' }
-GtFiltersElementExamples >> basicFilteredMethodsCoder [
+GtFilteredMethodCoderElementExamples >> basicFilteredMethodsCoder [
 	<gtExample>
 	| aCoder |
 	aCoder := GtClassMethodsCoder new.
@@ -13,7 +13,7 @@ GtFiltersElementExamples >> basicFilteredMethodsCoder [
 ]
 
 { #category : #'examples - ui' }
-GtFiltersElementExamples >> basicFiltersElement [
+GtFilteredMethodCoderElementExamples >> basicFiltersElement [
 	<gtExample>
 	| anElement |
 	anElement := GtFiltersElement new.
@@ -24,7 +24,7 @@ GtFiltersElementExamples >> basicFiltersElement [
 ]
 
 { #category : #'examples - ui' }
-GtFiltersElementExamples >> coderWithFiltersElement [
+GtFilteredMethodCoderElementExamples >> coderWithFiltersElement [
 	<gtExample>
 	| aFiltersElement aCoder aCoderElement aTag aButton |
 	aCoder := self filteredMethodsCoder.
@@ -43,10 +43,21 @@ GtFiltersElementExamples >> coderWithFiltersElement [
 ]
 
 { #category : #'examples - ui' }
-GtFiltersElementExamples >> filterTagElement [
+GtFilteredMethodCoderElementExamples >> emptyFiltersElement [
+	<gtExample>
+	| aFiltersElement aCoder aCoderElement |
+	aCoder := self coderWithFiltersElement.
+	aCoderElement := aCoder asElement.
+	aFiltersElement := self filtersElemenFrom: aCoderElement.
+	aFiltersElement removeFromParent.
+	^ aFiltersElement
+]
+
+{ #category : #'examples - ui' }
+GtFilteredMethodCoderElementExamples >> filterTagElement [
 	<gtExample>
 	| aFiltersElement aTagElement |
-	aFiltersElement := self filtersElement.
+	aFiltersElement := self emptyFiltersElement.
 	aTagElement := aFiltersElement childAt: 1.
 	self assert: aTagElement class equals: GtFilterTagElement.
 	aTagElement removeFromParent.
@@ -54,7 +65,7 @@ GtFiltersElementExamples >> filterTagElement [
 ]
 
 { #category : #'examples - support' }
-GtFiltersElementExamples >> filteredMethodsCoder [
+GtFilteredMethodCoderElementExamples >> filteredMethodsCoder [
 	<gtExample>
 	| aCoder aClass |
 	aCoder := self basicFilteredMethodsCoder.
@@ -65,21 +76,10 @@ GtFiltersElementExamples >> filteredMethodsCoder [
 ]
 
 { #category : #'examples - ui' }
-GtFiltersElementExamples >> filtersElemenFrom: aCoderElement [
+GtFilteredMethodCoderElementExamples >> filtersElemenFrom: aCoderElement [
 	<gtExample>
 	| aFiltersElement |
 	aFiltersElement := aCoderElement childAt: 1.
 	self assert: aFiltersElement class equals: GtFiltersElement.
-	^ aFiltersElement
-]
-
-{ #category : #'examples - ui' }
-GtFiltersElementExamples >> filtersElement [
-	<gtExample>
-	| aFiltersElement aCoder aCoderElement |
-	aCoder := self coderWithFiltersElement.
-	aCoderElement := aCoder asElement.
-	aFiltersElement := self filtersElemenFrom: aCoderElement.
-	aFiltersElement removeFromParent.
 	^ aFiltersElement
 ]
