@@ -34,7 +34,7 @@ GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex
 		colorParenthesesLeft: aLeftIndex
 		right: aRightIndex
 		atNestingLevel: aNestingLevel.
-	self collapserForParenthesesLeft: aLeftIndex right: aRightIndex
+	"self collapserForParenthesesLeft: aLeftIndex right: aRightIndex"
 ]
 
 { #category : #private }
