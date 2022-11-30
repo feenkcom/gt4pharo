@@ -20,20 +20,21 @@ GtPharoStyler >> collapserForParenthesesLeft: aLeftIndex right: aRightIndex [
 				text
 					attribute: att
 					from: aLeftIndex
-					to: aLeftIndex ].
+					to: aLeftIndex.
+				att ].
 	folder attribute: theParenthesesMarker
 ]
 
 { #category : #private }
 GtPharoStyler >> colorAndHighlightParenthesesLeft: aLeftIndex right: aRightIndex atNestingLevel: aNestingLevel [ 
-	self 
+	self
 		highlightParenthesesLeft: aLeftIndex
 		right: aRightIndex.
 	self 
 		colorParenthesesLeft: aLeftIndex
 		right: aRightIndex
 		atNestingLevel: aNestingLevel.
-	"self collapserForParenthesesLeft: aLeftIndex right: aRightIndex"
+	self collapserForParenthesesLeft: aLeftIndex right: aRightIndex
 ]
 
 { #category : #private }
