@@ -5,7 +5,8 @@ Class {
 		'variable',
 		'package',
 		'tag',
-		'superclass'
+		'superclass',
+		'requestInitialFocus'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -33,7 +34,7 @@ GtCreateClassAction >> addRenameAttributes [
 						selectAll: selectAll;
 						filter: filter;
 						text: (text from: each first to: each last);
-						requestInitialFocus: true;
+						requestInitialFocus: requestInitialFocus;
 						coordinateFocus: true.
 				index := index + 1.
 
@@ -66,7 +67,8 @@ GtCreateClassAction >> category [
 GtCreateClassAction >> initialize [
 	super initialize.
 	filter := GtSelectorInputFilter forUnaryMessage.
-	self hasRefactoringPreview: true
+	self hasRefactoringPreview: true.
+	requestInitialFocus := true
 ]
 
 { #category : #accessing }
@@ -84,6 +86,16 @@ GtCreateClassAction >> package [
 { #category : #accessing }
 GtCreateClassAction >> package: aSymbol [
 	package := aSymbol
+]
+
+{ #category : #accessing }
+GtCreateClassAction >> requestInitialFocus [
+	^ requestInitialFocus
+]
+
+{ #category : #accessing }
+GtCreateClassAction >> requestInitialFocus: aBoolean [
+	requestInitialFocus := aBoolean
 ]
 
 { #category : #accessing }

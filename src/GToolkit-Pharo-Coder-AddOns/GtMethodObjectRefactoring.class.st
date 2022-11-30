@@ -86,11 +86,12 @@ GtMethodObjectRefactoring >> extractMethod [
 			in: class.
 	refactoring
 		setOption: #methodName
-		toUse: [ :methodName :ref | 
-			extractedMethodSelector := self uniqueMethodNameFor: methodName arguments size.
-			methodName
-				selector: extractedMethodSelector;
-				yourself ].
+			toUse: [ :methodName :ref | 
+				extractedMethodSelector := self uniqueMethodNameFor: methodName arguments size.
+				methodName
+					selector: extractedMethodSelector;
+					yourself ];
+		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
 	self performCompositeRefactoring: refactoring
 ]
 
@@ -107,7 +108,8 @@ GtMethodObjectRefactoring >> extractToNewClass [
 		setOption: #selectVariableToMoveTo
 			toUse: [ :ref :cls :sel | '_' , className ];
 		setOption: #variableTypes
-			toUse: [ :ref :types :selected | {self methodObjectClass} ].
+			toUse: [ :ref :types :selected | {self methodObjectClass} ];
+		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
 	self performCompositeRefactoring: refactoring
 ]
 
@@ -117,6 +119,11 @@ GtMethodObjectRefactoring >> extractedAst [
 	modelClass := self modelClass.
 	source := modelClass sourceCodeFor: extractedMethodSelector.
 	^ RBParser parseMethod: source
+]
+
+{ #category : #accessing }
+GtMethodObjectRefactoring >> extractedMethodSelector [
+	^ extractedMethodSelector
 ]
 
 { #category : #transforming }
@@ -173,6 +180,11 @@ GtMethodObjectRefactoring >> newClassInstanceTemp [
 { #category : #preconditions }
 GtMethodObjectRefactoring >> preconditions [
 	^ self emptyCondition
+]
+
+{ #category : #accessing }
+GtMethodObjectRefactoring >> selector [
+	^ selector
 ]
 
 { #category : #accessing }

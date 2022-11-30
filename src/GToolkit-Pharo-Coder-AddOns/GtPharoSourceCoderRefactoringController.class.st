@@ -132,3 +132,10 @@ GtPharoSourceCoderRefactoringController >> setPreviewOptionsOn: refactoring [
 GtPharoSourceCoderRefactoringController >> snippetSelector [
 	^ #_
 ]
+
+{ #category : #private }
+GtPharoSourceCoderRefactoringController >> sourceAst [
+	^ GtPharoParser
+		parse: self sourceText characters asString
+		startingAt: self parserStartingState
+]
