@@ -53,6 +53,22 @@ GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationA
 ]
 
 { #category : #accessing }
+GtPharoBehaviorCoderElement >> actOnSlot: anAnnouncement [
+	| tab selectTabBlock selectMethodBlock |
+	tab := contentTabs viewModel tabs
+			detect: [ :each | each widget label asString = 'Methods' ]
+			ifNone: [ ^ self ].
+	tab isSelected
+		ifFalse: [ selectTabBlock := [ tab select ].
+			self executeTask: selectTabBlock ].
+
+	selectMethodBlock := [ self
+			filterWithSlot: anAnnouncement slot name
+			source: anAnnouncement source ].
+	self executeTask: selectMethodBlock
+]
+
+{ #category : #accessing }
 GtPharoBehaviorCoderElement >> behavior [
 	<return: #Behavior>
 
@@ -276,9 +292,9 @@ GtPharoBehaviorCoderElement >> coderViewModel [
 
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
-	
-	behaviorCoderViewModel ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
-	
+	behaviorCoderViewModel
+		ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
+
 	behaviorCoderViewModel := aGtBehaviorCoderViewModel.
 	behaviorCoderViewModel coder weak
 		when: GtCoderPackageUpdatedAnnouncement
@@ -289,6 +305,9 @@ GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
 			to: self;
 		when: GtClassCoderMethodProtocolNavigationAnnouncement
 			send: #actOnMethodProtocol:
+			to: self;
+		when: GtClassCoderSlotNavigationAnnouncement
+			send: #actOnSlot:
 			to: self.
 
 	container ifNotNil: #removeFromParent.
@@ -312,6 +331,18 @@ GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source:
 			GtSearchMethodCategoryFilter forCategory: aMethodProtocol.
 		} ] 
 		ifNone: [ "ignore" ]
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
+	contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: [ :theElement | 
+			theElement streamingCodersViewModel
+				additionalFilters: {GtSearchInstanceSlotReferenceFilter
+							forClass: aSource selectedClass
+							andVariable: slotName} ]
+		ifNone: [  "ignore" ]
 ]
 
 { #category : #initialization }
