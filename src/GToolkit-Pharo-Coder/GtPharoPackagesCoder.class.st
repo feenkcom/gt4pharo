@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoPackagesCoder,
 	#superclass : #GtPackagesCoder,
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -12,6 +12,14 @@ GtPharoPackagesCoder class >> forAllPackages [
 { #category : #'instance creation' }
 GtPharoPackagesCoder class >> forPackages: aCollectionOfPackages [
 	^ self forItems: (aCollectionOfPackages asSortedCollection: [ :a :b | a name < b name ])
+]
+
+{ #category : #private }
+GtPharoPackagesCoder >> asNewCoderModelWithSameSubject [
+	"Return new coder model with same subject (e.g., package, class, method)"
+
+	<return: #GtCoderModel>
+	^ self class forItems: items
 ]
 
 { #category : #private }

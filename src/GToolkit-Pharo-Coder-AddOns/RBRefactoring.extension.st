@@ -6,6 +6,64 @@ RBRefactoring >> gtCleanupChanges [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBRefactoring class >> gtComponentRefactoringClassIn: node do: aBlock [
+	node isVariable
+		ifTrue: [ node methodNode
+				nodesDo: [ :each | 
+					(each isAssignment and: [ each variable = node ])
+						ifTrue: [ self gtComponentRefactoringClassIn: each value do: aBlock ] ] ]
+		ifFalse: [ (node isMessage or: [ node isCascade ])
+				ifTrue: [ node receiver isVariable
+						ifTrue: [ (self class bindingOf: node receiver name) value
+								ifNotNil: [ :obj | 
+									(obj isBehavior and: [ obj inheritsFrom: RBRefactoring ])
+										ifTrue: [ aBlock value: obj ] ] ]
+						ifFalse: [ self gtComponentRefactoringClassIn: node receiver do: aBlock ] ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBRefactoring class >> gtComponentRefactoringsFor: aView [
+	<gtClassView>
+	| map children |
+	map := self gtComponentRefactoringsMap.
+	children := [ :cls | 
+		cls withAllSuperclasses
+			flatCollectAsSet: [ :each | map at: each ifAbsent: [ #() ] ] ].
+	(children value: self) isEmpty ifTrue: [ ^ aView empty ].
+	^ aView tree
+		title: 'Component refactorings';
+		items: [ {{self.
+					nil}} ];
+		children: [ :each | 
+			(children value: each first)
+				asSortedCollection: [ :a :b | a first name < b first name ] ];
+		itemText: [ :each | each first name ];
+		send: [ :each | 
+			each last
+				ifNotNil: [ (GtPharoMethodCoder forMethod: each last)
+						highlighter: each first gtReferences highlighter;
+						yourself ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBRefactoring class >> gtComponentRefactoringsMap [
+	| map |
+	map := Dictionary new.
+	(GtPharoIndex current sendersOf: #performCompositeRefactoring:)
+		do: [ :method | 
+			method ast
+				nodesDo: [ :each | 
+					(each isMessage and: [ each selector = #performCompositeRefactoring: ])
+						ifTrue: [ self
+								gtComponentRefactoringClassIn: each arguments first
+								do: [ :cls | 
+									(map at: method methodClass ifAbsentPut: [ Set new ])
+										add: {cls.
+												method} ] ] ] ].
+	^ map
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBRefactoring >> gtSignalMethodOverwritten: aSelector in: aClass [
 	| message |
 	message := (aClass directlyDefinesMethod: aSelector)
