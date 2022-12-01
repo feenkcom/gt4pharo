@@ -2,7 +2,9 @@ Class {
 	#name : #GtSearchInstanceSlotReferenceFilter,
 	#superclass : #GtSearchMethodsInClassFilter,
 	#instVars : [
-		'variableName'
+		'variableName',
+		'includeReaders',
+		'includeWriters'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
@@ -16,9 +18,10 @@ GtSearchInstanceSlotReferenceFilter class >> forClass: aClass andVariable: aStri
 
 { #category : #'instance creation' }
 GtSearchInstanceSlotReferenceFilter class >> forClassAndSubclasses: aClass andVariable: aString [
-	^ aClass withAllSubclasses
-		inject: GtSearchNullFilter new
-		into: [ :sum :each | sum | (self forClass: each andVariable: aString) ]
+	^ self new
+		forClass: aClass andVariable: aString;
+		includeSubclasses: true;
+		yourself
 ]
 
 { #category : #comparing }
@@ -37,24 +40,105 @@ GtSearchInstanceSlotReferenceFilter >> forClass: aClass andVariable: aString [
 	variableName := aString
 ]
 
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> gtMessagesSentToSlotFor: aView [
+	<gtView>
+	| selectorStream |
+	selectorStream := (self asAsyncStream
+			collect: [ :each | 
+				| messages |
+				messages := OrderedCollection new.
+				each ast
+					nodesDo: [ :node | 
+						(node isMessage
+							and: [ node receiver isVariable and: [ node receiver name = variableName ] ])
+							ifTrue: [ messages add: node selector ] ].
+				messages asAsyncStream ]) flatten withoutDuplicates cached.
+	^ aView list
+		title: 'Messages';
+		priority: 30;
+		items: [ selectorStream asyncSimilarCopy ];
+		send: [ :each | 
+			| pattern |
+			pattern := each numArgs = 0
+					ifTrue: [ ' ' , each ]
+					ifFalse: [ String
+							streamContents: [ :stream | 
+								each keywords
+									keysAndValuesDo: [ :i :kw | 
+										stream space
+											nextPutAll: kw;
+											nextPutAll: ' `@a';
+											print: i ] ] ].
+			self & (variableName , pattern) gtASTMatches ]
+]
+
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> gtReadersFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Readers';
+		priority: 11;
+		object: [ self copy
+				includeReaders: true;
+				includeWriters: false;
+				yourself ];
+		view: #gtItemsFor:
+]
+
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> gtWritersFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Writers';
+		priority: 12;
+		object: [ self copy
+				includeReaders: false;
+				includeWriters: true;
+				yourself ];
+		view: #gtItemsFor:
+]
+
 { #category : #comparing }
 GtSearchInstanceSlotReferenceFilter >> hash [
 	^ super hash bitXor: self variableName
 ]
 
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> includeReaders [
+	^ includeReaders
+]
+
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> includeReaders: aBoolean [
+	includeReaders := aBoolean
+]
+
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> includeWriters [
+	^ includeWriters
+]
+
+{ #category : #accessing }
+GtSearchInstanceSlotReferenceFilter >> includeWriters: aBoolean [
+	includeWriters := aBoolean
+]
+
 { #category : #testing }
 GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	| index |
-	(super includesMethod: aCompiledMethod)
-		ifFalse: [ ^ false ].
+	(super includesMethod: aCompiledMethod) ifFalse: [ ^ false ].
 	index := class instVarIndexFor: variableName ifAbsent: [ ^ false ].
-	^ (aCompiledMethod readsField: index) or: [ aCompiledMethod writesField: index ]
+	^ (includeReaders and: [ aCompiledMethod readsField: index ])
+		or: [ includeWriters and: [ aCompiledMethod writesField: index ] ]
 ]
 
 { #category : #'initialize-release' }
 GtSearchInstanceSlotReferenceFilter >> initialize [
 	super initialize.
-	includeSubclasses := true
+	includeSubclasses := true.
+	includeReaders := true.
+	includeWriters := true
 ]
 
 { #category : #accessing }
