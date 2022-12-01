@@ -1,5 +1,5 @@
 Class {
-	#name : #GtMethodObjectRefactoringController,
+	#name : #GtExtractMethodObjectRefactoringController,
 	#superclass : #GtExtractMethodToComponentController,
 	#instVars : [
 		'className',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : #private }
-GtMethodObjectRefactoringController >> addAsInstanceVariable: aString [
+GtExtractMethodObjectRefactoringController >> addAsInstanceVariable: aString [
 	self removeAllAttributes.
 	self cancelRefactoring.
 	self basicAddInstanceVariable: aString.
@@ -23,7 +23,7 @@ GtMethodObjectRefactoringController >> addAsInstanceVariable: aString [
 ]
 
 { #category : #private }
-GtMethodObjectRefactoringController >> addReorderParametersAttributesOn: message [
+GtExtractMethodObjectRefactoringController >> addReorderParametersAttributesOn: message [
 	| attribute |
 	super addReorderParametersAttributesOn: message.
 	self removeVariableAttributes.
@@ -57,7 +57,7 @@ GtMethodObjectRefactoringController >> addReorderParametersAttributesOn: message
 ]
 
 { #category : #private }
-GtMethodObjectRefactoringController >> basicAddInstanceVariable: aString [
+GtExtractMethodObjectRefactoringController >> basicAddInstanceVariable: aString [
 	variables add: aString.
 	aString = 'self'
 		ifTrue: [ variableNames
@@ -69,38 +69,38 @@ GtMethodObjectRefactoringController >> basicAddInstanceVariable: aString [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> cancelRenaming [
+GtExtractMethodObjectRefactoringController >> cancelRenaming [
 	super cancelRenaming.
 	variableRenamers do: [ :each | each isInstalled ifTrue: [ each cancel ] ]
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> category [
+GtExtractMethodObjectRefactoringController >> category [
 	^ category ifNil: [ sourceCoderViewModel behavior category ]
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> category: aSymbol [
+GtExtractMethodObjectRefactoringController >> category: aSymbol [
 	category := aSymbol
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> className [
+GtExtractMethodObjectRefactoringController >> className [
 	^ className ifNil: [ self initialClassName ]
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> className: aSymbol [
+GtExtractMethodObjectRefactoringController >> className: aSymbol [
 	className := aSymbol
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> initialClassName [
+GtExtractMethodObjectRefactoringController >> initialClassName [
 	^ #NewClass
 ]
 
 { #category : #initialization }
-GtMethodObjectRefactoringController >> initialize [
+GtExtractMethodObjectRefactoringController >> initialize [
 	super initialize.
 	firstRun := true.
 	variableAttributes := #().
@@ -109,7 +109,7 @@ GtMethodObjectRefactoringController >> initialize [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> installRenamer [
+GtExtractMethodObjectRefactoringController >> installRenamer [
 	| message |
 	super installRenamer.
 
@@ -129,7 +129,7 @@ GtMethodObjectRefactoringController >> installRenamer [
 ]
 
 { #category : #testing }
-GtMethodObjectRefactoringController >> isReceiver: receiverNode [
+GtExtractMethodObjectRefactoringController >> isReceiver: receiverNode [
 	| aNode |
 	(variables isEmpty and: [ receiverNode isCascade ])
 		ifTrue: [ receiverNode messages last selector = #yourself ifFalse: [ ^ false ].
@@ -143,17 +143,17 @@ GtMethodObjectRefactoringController >> isReceiver: receiverNode [
 ]
 
 { #category : #private }
-GtMethodObjectRefactoringController >> potentialReceivers [
+GtExtractMethodObjectRefactoringController >> potentialReceivers [
 	^ OrderedCollection with: self receiver
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> receiver [
+GtExtractMethodObjectRefactoringController >> receiver [
 	^ self className
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> receiverRenamerOn: aVariable [
+GtExtractMethodObjectRefactoringController >> receiverRenamerOn: aVariable [
 	| action |
 	action := GtCreateClassAction
 			variable: aVariable
@@ -180,10 +180,10 @@ GtMethodObjectRefactoringController >> receiverRenamerOn: aVariable [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> refactoring [
+GtExtractMethodObjectRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createModel.
-	refactoring := GtMethodObjectRefactoring new
+	refactoring := GtExtractMethodObjectRefactoring new
 			model: model;
 			extract: self extractionInterval
 				from: sourceCoderViewModel selector
@@ -202,18 +202,18 @@ GtMethodObjectRefactoringController >> refactoring [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> refactoringName [
+GtExtractMethodObjectRefactoringController >> refactoringName [
 	^ 'Extract method object'
 ]
 
 { #category : #'private - attributes' }
-GtMethodObjectRefactoringController >> removeAllAttributes [
+GtExtractMethodObjectRefactoringController >> removeAllAttributes [
 	super removeAllAttributes.
 	self removeVariableAttributes
 ]
 
 { #category : #private }
-GtMethodObjectRefactoringController >> removeInstanceVariable: aString [
+GtExtractMethodObjectRefactoringController >> removeInstanceVariable: aString [
 	self removeAllAttributes.
 	self cancelRefactoring.
 	variables remove: aString ifAbsent: [  ].
@@ -221,19 +221,19 @@ GtMethodObjectRefactoringController >> removeInstanceVariable: aString [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> removeRenaming [
+GtExtractMethodObjectRefactoringController >> removeRenaming [
 	super removeRenaming.
 	variableRenamers do: [ :each | each uninstall ]
 ]
 
 { #category : #private }
-GtMethodObjectRefactoringController >> removeVariableAttributes [
+GtExtractMethodObjectRefactoringController >> removeVariableAttributes [
 	variableAttributes
 		do: [ :each | self sourceCoderViewModel removeCoderTextAttributes: each ]
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> renameActionForSetter: node [
+GtExtractMethodObjectRefactoringController >> renameActionForSetter: node [
 	| action |
 	action := GtRenameSelectorAction
 			message: node
@@ -254,7 +254,7 @@ GtMethodObjectRefactoringController >> renameActionForSetter: node [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> setDefaultValuesOnFirstRun [
+GtExtractMethodObjectRefactoringController >> setDefaultValuesOnFirstRun [
 	| vars selectorParts args originalAst |
 	firstRun ifFalse: [ ^ self ].
 	firstRun := false.
@@ -280,17 +280,17 @@ GtMethodObjectRefactoringController >> setDefaultValuesOnFirstRun [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> superclass [
+GtExtractMethodObjectRefactoringController >> superclass [
 	^ superclass ifNil: [ #Object ]
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> superclass: aSymbol [
+GtExtractMethodObjectRefactoringController >> superclass: aSymbol [
 	superclass := aSymbol
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoringController >> updateFromRefactoring: aRefactoring [
+GtExtractMethodObjectRefactoringController >> updateFromRefactoring: aRefactoring [
 	super updateFromRefactoring: aRefactoring.
 	self setDefaultValuesOnFirstRun
 ]
