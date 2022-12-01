@@ -1,5 +1,5 @@
 Class {
-	#name : #GtMethodObjectRefactoring,
+	#name : #GtExtractMethodObjectRefactoring,
 	#superclass : #RBMethodRefactoring,
 	#instVars : [
 		'selector',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> addClass [
+GtExtractMethodObjectRefactoring >> addClass [
 	self
 		performCompositeRefactoring: (RBAddClassRefactoring
 				model: self model
@@ -26,27 +26,27 @@ GtMethodObjectRefactoring >> addClass [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> category [
+GtExtractMethodObjectRefactoring >> category [
 	^ category
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> category: aSymbol [
+GtExtractMethodObjectRefactoring >> category: aSymbol [
 	category := aSymbol
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> className [
+GtExtractMethodObjectRefactoring >> className [
 	^ className
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> className: aSymbol [
+GtExtractMethodObjectRefactoring >> className: aSymbol [
 	className := aSymbol
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> convertCascadedConstructor [
+GtExtractMethodObjectRefactoring >> convertCascadedConstructor [
 	| rewriter ast |
 	ast := self modelClass parseTreeFor: extractedMethodSelector.
 	rewriter := RBParseTreeRewriter new.
@@ -58,7 +58,7 @@ GtMethodObjectRefactoring >> convertCascadedConstructor [
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> createClassInstance [
+GtExtractMethodObjectRefactoring >> createClassInstance [
 	| tree |
 	tree := self extractedAst.
 	tree body addTemporaryNamed: '_' , className.
@@ -70,14 +70,14 @@ GtMethodObjectRefactoring >> createClassInstance [
 ]
 
 { #category : #initialization }
-GtMethodObjectRefactoring >> extract: anInterval from: aSelector in: aClass [
+GtExtractMethodObjectRefactoring >> extract: anInterval from: aSelector in: aClass [
 	interval := anInterval.
 	selector := aSelector.
 	class := aClass
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> extractMethod [
+GtExtractMethodObjectRefactoring >> extractMethod [
 	| refactoring |
 	refactoring := RBExtractMethodRefactoring
 			model: self model
@@ -96,7 +96,7 @@ GtMethodObjectRefactoring >> extractMethod [
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> extractToNewClass [
+GtExtractMethodObjectRefactoring >> extractToNewClass [
 	| refactoring ast |
 	ast := self extractedAst body.
 	refactoring := GtExtractMethodToComponentRefactoring
@@ -114,7 +114,7 @@ GtMethodObjectRefactoring >> extractToNewClass [
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> extractedAst [
+GtExtractMethodObjectRefactoring >> extractedAst [
 	| source modelClass |
 	modelClass := self modelClass.
 	source := modelClass sourceCodeFor: extractedMethodSelector.
@@ -122,12 +122,12 @@ GtMethodObjectRefactoring >> extractedAst [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> extractedMethodSelector [
+GtExtractMethodObjectRefactoring >> extractedMethodSelector [
 	^ extractedMethodSelector
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> inlineAssignment [
+GtExtractMethodObjectRefactoring >> inlineAssignment [
 	| tree |
 	tree := self extractedAst.
 	self
@@ -139,7 +139,7 @@ GtMethodObjectRefactoring >> inlineAssignment [
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> inlineMessage [
+GtExtractMethodObjectRefactoring >> inlineMessage [
 	self
 		performCompositeRefactoring: (RBInlineAllSendersRefactoring
 				model: self model
@@ -148,17 +148,17 @@ GtMethodObjectRefactoring >> inlineMessage [
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> methodObjectClass [
+GtExtractMethodObjectRefactoring >> methodObjectClass [
 	^ self model classNamed: className
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> modelClass [
+GtExtractMethodObjectRefactoring >> modelClass [
 	^ self model classObjectFor: class
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> moveDataToClass [
+GtExtractMethodObjectRefactoring >> moveDataToClass [
 	variablesToMove
 		with: newVariableNames
 		do: [ :oldName :newName | 
@@ -173,32 +173,32 @@ GtMethodObjectRefactoring >> moveDataToClass [
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> newClassInstanceTemp [
+GtExtractMethodObjectRefactoring >> newClassInstanceTemp [
 	^ '_' , className
 ]
 
 { #category : #preconditions }
-GtMethodObjectRefactoring >> preconditions [
+GtExtractMethodObjectRefactoring >> preconditions [
 	^ self emptyCondition
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> selector [
+GtExtractMethodObjectRefactoring >> selector [
 	^ selector
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> superclass [
+GtExtractMethodObjectRefactoring >> superclass [
 	^ superclass
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> superclass: aSymbol [
+GtExtractMethodObjectRefactoring >> superclass: aSymbol [
 	superclass := aSymbol
 ]
 
 { #category : #transforming }
-GtMethodObjectRefactoring >> transform [
+GtExtractMethodObjectRefactoring >> transform [
 	self extractMethod.
 	self addClass.
 	self createClassInstance.
@@ -211,7 +211,7 @@ GtMethodObjectRefactoring >> transform [
 ]
 
 { #category : #accessing }
-GtMethodObjectRefactoring >> variables: originalVariableNames withAccessorNames: namesCollection [
+GtExtractMethodObjectRefactoring >> variables: originalVariableNames withAccessorNames: namesCollection [
 	variablesToMove := originalVariableNames.
 	newVariableNames := namesCollection
 ]

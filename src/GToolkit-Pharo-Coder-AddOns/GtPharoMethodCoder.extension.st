@@ -173,7 +173,7 @@ GtPharoMethodCoder >> addExtractToParagraphMenuForAst: anAst to: coderAddOns fro
 				hover: nil
 				leave: nil
 				action: [ :model | 
-					(GtExtractToParagraphRefactoringController new sourceCoderViewModel: model)
+					(GtExtractToWrappedMethodObjectRefactoringController new sourceCoderViewModel: model)
 						execute ] ]
 ]
 
@@ -336,7 +336,7 @@ GtPharoMethodCoder >> addMethodObjectMenuForAst: anAst to: coderAddOns from: aCo
 				addContextMenuItem: 'Extract method object' asRopedText
 				hover: nil
 				leave: nil
-				action: [ :model | (GtMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
+				action: [ :model | (GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
