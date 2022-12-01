@@ -1,5 +1,5 @@
 Class {
-	#name : #GtExtractToParagraphRefactoring,
+	#name : #GtExtractToWrappedMethodObjectRefactoring,
 	#superclass : #RBMethodRefactoring,
 	#instVars : [
 		'selector',
@@ -17,27 +17,27 @@ Class {
 }
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> category [
+GtExtractToWrappedMethodObjectRefactoring >> category [
 	^ category
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> category: aSymbol [
+GtExtractToWrappedMethodObjectRefactoring >> category: aSymbol [
 	category := aSymbol
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> className [
+GtExtractToWrappedMethodObjectRefactoring >> className [
 	^ className
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> className: aSymbol [
+GtExtractToWrappedMethodObjectRefactoring >> className: aSymbol [
 	className := aSymbol
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> createMethodObjectConstructor [
+GtExtractToWrappedMethodObjectRefactoring >> createMethodObjectConstructor [
 	| sender |
 	sender := self findSenderNode.
 	sender parent isCascade ifFalse: [ ^ self ].
@@ -47,7 +47,7 @@ GtExtractToParagraphRefactoring >> createMethodObjectConstructor [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> eliminateCascade [
+GtExtractToWrappedMethodObjectRefactoring >> eliminateCascade [
 	| cascadeRefactoring |
 	cascadeRefactoring := GtConvertCascadesToStatementsRefactoring
 			model: self model
@@ -63,14 +63,14 @@ GtExtractToParagraphRefactoring >> eliminateCascade [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> extract: anInterval from: aSelector in: aClass [
+GtExtractToWrappedMethodObjectRefactoring >> extract: anInterval from: aSelector in: aClass [
 	interval := anInterval.
 	selector := aSelector.
 	class := aClass
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> extractConstructor [
+GtExtractToWrappedMethodObjectRefactoring >> extractConstructor [
 	| node parents sequenceIndex sequence first last refactoring |
 	node := self findSenderNode.
 	parents := node withAllParents reversed.
@@ -102,9 +102,9 @@ GtExtractToParagraphRefactoring >> extractConstructor [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> extractToMethodObject [
+GtExtractToWrappedMethodObjectRefactoring >> extractToMethodObject [
 	| refactoring |
-	refactoring := GtMethodObjectRefactoring new
+	refactoring := GtExtractMethodObjectRefactoring new
 			model: self model;
 			extract: interval
 				from: selector
@@ -124,7 +124,7 @@ GtExtractToParagraphRefactoring >> extractToMethodObject [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> findSenderNode [
+GtExtractToWrappedMethodObjectRefactoring >> findSenderNode [
 	(self methodClass parseTreeFor: self selector)
 		nodesDo: [ :node | 
 			(node isMessage and: [ node selector = methodObjectSelector ])
@@ -133,7 +133,7 @@ GtExtractToParagraphRefactoring >> findSenderNode [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> inlineMovedMethodForwarder [
+GtExtractToWrappedMethodObjectRefactoring >> inlineMovedMethodForwarder [
 	| refactoring |
 	refactoring := RBInlineMethodFromComponentRefactoring
 			model: model
@@ -150,7 +150,7 @@ GtExtractToParagraphRefactoring >> inlineMovedMethodForwarder [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> inlineTempIn: aRBMethod [
+GtExtractToWrappedMethodObjectRefactoring >> inlineTempIn: aRBMethod [
 	| refactoring node |
 	aRBMethod ast
 		nodesDo: [ :each | 
@@ -165,7 +165,7 @@ GtExtractToParagraphRefactoring >> inlineTempIn: aRBMethod [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> inlineTemps [
+GtExtractToWrappedMethodObjectRefactoring >> inlineTemps [
 	tempName ifNil: [ ^ self ].
 	self inlineTempIn: (self methodClass methodFor: self selector).
 	self
@@ -173,7 +173,7 @@ GtExtractToParagraphRefactoring >> inlineTemps [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> introduceCascadeInConstructor [
+GtExtractToWrappedMethodObjectRefactoring >> introduceCascadeInConstructor [
 	| refactoring node newClass |
 	newClass := (self model classNamed: className) classSide.
 	node := newClass parseTreeFor: constructorSelector.
@@ -187,7 +187,7 @@ GtExtractToParagraphRefactoring >> introduceCascadeInConstructor [
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> moveExtractedMethodToComponent [
+GtExtractToWrappedMethodObjectRefactoring >> moveExtractedMethodToComponent [
 	| variable refactoring |
 	variable := self
 			selectVariableToMoveMethodTo: methodObjectSelector
@@ -205,27 +205,27 @@ GtExtractToParagraphRefactoring >> moveExtractedMethodToComponent [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> preconditions [
+GtExtractToWrappedMethodObjectRefactoring >> preconditions [
 	^ RBCondition definesSelector: selector in: class
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> selector [
+GtExtractToWrappedMethodObjectRefactoring >> selector [
 	^ selector
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> superclass [
+GtExtractToWrappedMethodObjectRefactoring >> superclass [
 	^ superclass
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> superclass: aSymbol [
+GtExtractToWrappedMethodObjectRefactoring >> superclass: aSymbol [
 	superclass := aSymbol
 ]
 
 { #category : #transforming }
-GtExtractToParagraphRefactoring >> transform [
+GtExtractToWrappedMethodObjectRefactoring >> transform [
 	self extractToMethodObject.
 	self moveExtractedMethodToComponent.
 	self createMethodObjectConstructor.
@@ -235,7 +235,7 @@ GtExtractToParagraphRefactoring >> transform [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoring >> variables: originalVariableNames withAccessorNames: namesCollection [
+GtExtractToWrappedMethodObjectRefactoring >> variables: originalVariableNames withAccessorNames: namesCollection [
 	variablesToMove := originalVariableNames.
 	newVariableNames := namesCollection
 ]

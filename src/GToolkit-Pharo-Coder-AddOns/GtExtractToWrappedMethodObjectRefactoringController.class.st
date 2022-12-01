@@ -1,5 +1,5 @@
 Class {
-	#name : #GtExtractToParagraphRefactoringController,
+	#name : #GtExtractToWrappedMethodObjectRefactoringController,
 	#superclass : #GtExtractMethodToComponentController,
 	#instVars : [
 		'className',
@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : #private }
-GtExtractToParagraphRefactoringController >> addReorderConstructorParametersAttributesOn: message [
+GtExtractToWrappedMethodObjectRefactoringController >> addReorderConstructorParametersAttributesOn: message [
 	| attribute |
 	message arguments size > 1 ifFalse: [ ^ self ].
 	moveAttributes := OrderedCollection new.
@@ -44,39 +44,39 @@ GtExtractToParagraphRefactoringController >> addReorderConstructorParametersAttr
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> addReorderParametersAttributes [
+GtExtractToWrappedMethodObjectRefactoringController >> addReorderParametersAttributes [
 	super addReorderParametersAttributes.
 	self constructorSendDo: [ :each | self addReorderConstructorParametersAttributesOn: each ]
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> cancelRenaming [
+GtExtractToWrappedMethodObjectRefactoringController >> cancelRenaming [
 	super cancelRenaming.
 	actions do: [ :each | each isInstalled ifTrue: [ each cancel ] ]
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> category [
+GtExtractToWrappedMethodObjectRefactoringController >> category [
 	^ category ifNil: [ sourceCoderViewModel behavior category ]
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> category: aSymbol [
+GtExtractToWrappedMethodObjectRefactoringController >> category: aSymbol [
 	category := aSymbol
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> className [
+GtExtractToWrappedMethodObjectRefactoringController >> className [
 	^ className ifNil: [ #NewClass ]
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> className: aSymbol [
+GtExtractToWrappedMethodObjectRefactoringController >> className: aSymbol [
 	className := aSymbol
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> constructorSendDo: aBlock [
+GtExtractToWrappedMethodObjectRefactoringController >> constructorSendDo: aBlock [
 	| message |
 	message := self findExtractedSend.
 	message ifNil: [ ^ self ].
@@ -86,7 +86,7 @@ GtExtractToParagraphRefactoringController >> constructorSendDo: aBlock [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> findExtractedSend [
+GtExtractToWrappedMethodObjectRefactoringController >> findExtractedSend [
 	[ self sourceAst
 		withAllNodesOfType: GtPharoMessageNode
 		do: [ :each | each selector = self extractedSelector ifTrue: [ ^ each ] ] ]
@@ -96,12 +96,12 @@ GtExtractToParagraphRefactoringController >> findExtractedSend [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> getCurrentState [
+GtExtractToWrappedMethodObjectRefactoringController >> getCurrentState [
 	^ super getCurrentState , {variables copy}
 ]
 
 { #category : #initialization }
-GtExtractToParagraphRefactoringController >> initialize [
+GtExtractToWrappedMethodObjectRefactoringController >> initialize [
 	super initialize.
 	firstRun := true.
 	variables := OrderedCollection new.
@@ -112,7 +112,7 @@ GtExtractToParagraphRefactoringController >> initialize [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> installRenamer [
+GtExtractToWrappedMethodObjectRefactoringController >> installRenamer [
 	super installRenamer.
 	actions := OrderedCollection new.
 	self
@@ -122,12 +122,12 @@ GtExtractToParagraphRefactoringController >> installRenamer [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> isParagraphReceiver: aString [
+GtExtractToWrappedMethodObjectRefactoringController >> isParagraphReceiver: aString [
 	^ aString includesSubstring: 'stream' caseSensitive: false
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> refactoring [
+GtExtractToWrappedMethodObjectRefactoringController >> refactoring [
 	| model |
 	variableNames
 		at: 'self'
@@ -137,8 +137,8 @@ GtExtractToParagraphRefactoringController >> refactoring [
 				with: 'Class' ].
 	model := self createModel.
 	^ (firstRun
-		ifTrue: [ GtMethodObjectRefactoring ]
-		ifFalse: [ GtExtractToParagraphRefactoring ]) new
+		ifTrue: [ GtExtractMethodObjectRefactoring ]
+		ifFalse: [ GtExtractToWrappedMethodObjectRefactoring ]) new
 		model: model;
 		extract: self extractionInterval
 			from: sourceCoderViewModel selector
@@ -159,12 +159,12 @@ GtExtractToParagraphRefactoringController >> refactoring [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> refactoringName [
+GtExtractToWrappedMethodObjectRefactoringController >> refactoringName [
 	^ 'Extract to paragraph'
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> renameActionForConstructor: node [
+GtExtractToWrappedMethodObjectRefactoringController >> renameActionForConstructor: node [
 	| action |
 	action := GtRenameSelectorAction
 			message: node
@@ -185,7 +185,7 @@ GtExtractToParagraphRefactoringController >> renameActionForConstructor: node [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> renameActionForReceiver: aVariable [
+GtExtractToWrappedMethodObjectRefactoringController >> renameActionForReceiver: aVariable [
 	| action |
 	action := GtCreateClassAction
 			variable: aVariable
@@ -213,13 +213,13 @@ GtExtractToParagraphRefactoringController >> renameActionForReceiver: aVariable 
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> setCurrentState: anArray [
+GtExtractToWrappedMethodObjectRefactoringController >> setCurrentState: anArray [
 	super setCurrentState: anArray.
 	variables := anArray third copy
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> setDefaultOptionsOn: aRefactoring [
+GtExtractToWrappedMethodObjectRefactoringController >> setDefaultOptionsOn: aRefactoring [
 	super setDefaultOptionsOn: aRefactoring.
 	aRefactoring
 		setOption: #methodName
@@ -255,7 +255,7 @@ GtExtractToParagraphRefactoringController >> setDefaultOptionsOn: aRefactoring [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> setDefaultValuesFor: aRefactoring [
+GtExtractToWrappedMethodObjectRefactoringController >> setDefaultValuesFor: aRefactoring [
 	| vars send |
 	(aRefactoring methodClass parseTreeFor: aRefactoring selector)
 		nodesDo: [ :node | 
@@ -269,7 +269,7 @@ GtExtractToParagraphRefactoringController >> setDefaultValuesFor: aRefactoring [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> setPreviewOptionsOn: aRefactoring [
+GtExtractToWrappedMethodObjectRefactoringController >> setPreviewOptionsOn: aRefactoring [
 	super setPreviewOptionsOn: aRefactoring.
 	aRefactoring
 		setOption: #constructorMethodName
@@ -281,7 +281,7 @@ GtExtractToParagraphRefactoringController >> setPreviewOptionsOn: aRefactoring [
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> setReceiverAndTypeFrom: potentialReceiverVariables [
+GtExtractToWrappedMethodObjectRefactoringController >> setReceiverAndTypeFrom: potentialReceiverVariables [
 	potentialReceiverVariables isEmpty
 		ifTrue: [ self error: 'No variables are needed in the method' ].
 	receiver := potentialReceiverVariables
@@ -291,17 +291,17 @@ GtExtractToParagraphRefactoringController >> setReceiverAndTypeFrom: potentialRe
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> superclass [
+GtExtractToWrappedMethodObjectRefactoringController >> superclass [
 	^ superclass ifNil: [ #Object ]
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> superclass: aSymbol [
+GtExtractToWrappedMethodObjectRefactoringController >> superclass: aSymbol [
 	superclass := aSymbol
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> swapConstructorParameterWithNext: anInteger [
+GtExtractToWrappedMethodObjectRefactoringController >> swapConstructorParameterWithNext: anInteger [
 	self removeAllAttributes.
 	self
 		constructorSendDo: [ :message | 
@@ -315,7 +315,7 @@ GtExtractToParagraphRefactoringController >> swapConstructorParameterWithNext: a
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> updateFromRefactoring: aRefactoring [
+GtExtractToWrappedMethodObjectRefactoringController >> updateFromRefactoring: aRefactoring [
 	firstRun
 		ifTrue: [ firstRun := false.
 			self updateExtractedMethodSourceFrom: aRefactoring.
@@ -325,7 +325,7 @@ GtExtractToParagraphRefactoringController >> updateFromRefactoring: aRefactoring
 ]
 
 { #category : #accessing }
-GtExtractToParagraphRefactoringController >> updateReceiverTo: aString [
+GtExtractToWrappedMethodObjectRefactoringController >> updateReceiverTo: aString [
 	variables := (variables copyWithout: aString) copyWith: receiver.
 	super updateReceiverTo: aString
 ]
