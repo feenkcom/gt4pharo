@@ -122,7 +122,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> installRenamer [
 ]
 
 { #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> isParagraphReceiver: aString [
+GtExtractToWrappedMethodObjectRefactoringController >> isWrapperReceiver: aString [
 	^ aString includesSubstring: 'stream' caseSensitive: false
 ]
 
@@ -285,7 +285,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> setReceiverAndTypeFrom: p
 	potentialReceiverVariables isEmpty
 		ifTrue: [ self error: 'No variables are needed in the method' ].
 	receiver := potentialReceiverVariables
-			detect: [ :each | self isParagraphReceiver: each ]
+			detect: [ :each | self isWrapperReceiver: each ]
 			ifNone: [ potentialReceiverVariables first ].
 	receiverClassName := nil
 ]

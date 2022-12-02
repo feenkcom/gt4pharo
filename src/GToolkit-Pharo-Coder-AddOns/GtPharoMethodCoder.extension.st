@@ -163,7 +163,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addExtractToParagraphMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
+GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	"<gtCoderContextMenuAddOns: 18>"
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
