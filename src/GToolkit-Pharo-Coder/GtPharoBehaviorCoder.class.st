@@ -192,3 +192,10 @@ GtPharoBehaviorCoder >> withSelectedMethod: aMethod [
 
 	self announce: (GtClassCoderMethodNavigationAnnouncement new method: aMethod)
 ]
+
+{ #category : #accessing }
+GtPharoBehaviorCoder >> withSlot: aSlot source: aSource [ 
+	self announce: (GtClassCoderSlotNavigationAnnouncement new 
+		source: aSource;
+		slot: aSlot)
+]
