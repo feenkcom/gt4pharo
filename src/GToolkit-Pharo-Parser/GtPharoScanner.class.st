@@ -24,27 +24,27 @@ GtPharoScanner >> binaryId [
 
 { #category : #generated }
 GtPharoScanner >> doubleLeftBraceId [
-	^ 123
-]
-
-{ #category : #generated }
-GtPharoScanner >> doubleLeftBraceStartId [
 	^ 124
 ]
 
 { #category : #generated }
-GtPharoScanner >> doubleRightBraceId [
+GtPharoScanner >> doubleLeftBraceStartId [
 	^ 125
 ]
 
 { #category : #generated }
+GtPharoScanner >> doubleRightBraceId [
+	^ 126
+]
+
+{ #category : #generated }
 GtPharoScanner >> emptySymbolTokenId [
-	^ 132
+	^ 134
 ]
 
 { #category : #generated }
 GtPharoScanner >> errorTokenId [
-	^ 133
+	^ 135
 ]
 
 { #category : #generated }
@@ -91,22 +91,22 @@ GtPharoScanner >> numberId [
 
 { #category : #generated }
 GtPharoScanner >> rbKeywordPatternId [
-	^ 126
-]
-
-{ #category : #generated }
-GtPharoScanner >> rbLiteralArrayKeywordPatternId [
 	^ 127
 ]
 
 { #category : #generated }
-GtPharoScanner >> rbNamePatternId [
+GtPharoScanner >> rbLiteralArrayKeywordPatternId [
 	^ 128
 ]
 
 { #category : #generated }
-GtPharoScanner >> rbPatternBlockId [
+GtPharoScanner >> rbNamePatternId [
 	^ 129
+]
+
+{ #category : #generated }
+GtPharoScanner >> rbPatternBlockId [
+	^ 130
 ]
 
 { #category : #generated }
@@ -540,13 +540,18 @@ GtPharoScanner >> scanNumber: anInteger [
 ]
 
 { #category : #generated }
+GtPharoScanner >> templateId [
+	^ 131
+]
+
+{ #category : #generated }
 GtPharoScanner >> templateKeywordId [
-	^ 130
+	^ 132
 ]
 
 { #category : #generated }
 GtPharoScanner >> templateNamePartId [
-	^ 131
+	^ 133
 ]
 
 { #category : #generated }
