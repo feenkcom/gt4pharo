@@ -61,11 +61,26 @@ GtPharoBehaviorCoderElement >> actOnSlot: anAnnouncement [
 	tab isSelected
 		ifFalse: [ selectTabBlock := [ tab select ].
 			self executeTask: selectTabBlock ].
-
-	selectMethodBlock := [ self
-			filterWithSlot: anAnnouncement slot name
-			source: anAnnouncement source ].
+	selectMethodBlock := anAnnouncement slot owningClass isMeta
+			ifTrue: [ [ self
+					filterWithClassSlot: anAnnouncement slot name
+					source: anAnnouncement source ] ]
+			ifFalse: [ anAnnouncement slot isClassVariable
+					ifTrue: [ [ self
+							filterWithClassVariable: anAnnouncement slot name
+							source: anAnnouncement source ] ]
+					ifFalse: [ [ self
+							filterWithSlot: anAnnouncement slot name
+							source: anAnnouncement source ] ] ].
 	self executeTask: selectMethodBlock
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> addFilters: filters [
+	contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: filters ]
+		ifNone: [  "ignore" ]
 ]
 
 { #category : #accessing }
@@ -322,27 +337,33 @@ GtPharoBehaviorCoderElement >> executeTask: aBlock [
 		otherwise: aBlock
 ]
 
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> filterWithClassSlot: slotName source: aSource [
+	self
+		addFilters: {GtSearchClassSlotReferenceFilter
+					forClass: aSource selectedClass class
+					andVariable: slotName}
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> filterWithClassVariable: slotName source: aSource [
+	self
+		addFilters: {GtSearchClassVariableReferenceFilter
+					forClass: aSource selectedClass
+					andVariable: slotName}
+]
+
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
-
-	contentTabs content 
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ] 
-		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: {
-			GtSearchMethodCategoryFilter forCategory: aMethodProtocol.
-		} ] 
-		ifNone: [ "ignore" ]
+	self addFilters: {GtSearchMethodCategoryFilter forCategory: aMethodProtocol}
 ]
 
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
-	contentTabs content
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
-		ifFound: [ :theElement | 
-			theElement streamingCodersViewModel
-				additionalFilters: {GtSearchInstanceSlotReferenceFilter
-							forClass: aSource selectedClass
-							andVariable: slotName} ]
-		ifNone: [  "ignore" ]
+	self
+		addFilters: {GtSearchInstanceSlotReferenceFilter
+					forClass: aSource selectedClass
+					andVariable: slotName}
 ]
 
 { #category : #initialization }
