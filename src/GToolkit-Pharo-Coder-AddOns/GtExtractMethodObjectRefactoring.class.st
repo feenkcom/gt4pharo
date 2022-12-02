@@ -14,6 +14,21 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
+{ #category : #accessing }
+GtExtractMethodObjectRefactoring >> abstractVariablesInExtractedMethod [
+	| refactoring ast |
+	ast := class parseTreeFor: extractedMethodSelector.
+	refactoring := RBAbstractVariablesRefactoring
+			model: self model
+			abstractVariablesIn: ast
+			from: class
+			toAll: {self model classNamed: className}
+			ignoring: ''.
+	refactoring hasVariablesToAbstract
+		ifTrue: [ self performCompositeRefactoring: refactoring.
+			class compileTree: ast ]
+]
+
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> addClass [
 	self
@@ -201,6 +216,7 @@ GtExtractMethodObjectRefactoring >> superclass: aSymbol [
 GtExtractMethodObjectRefactoring >> transform [
 	self extractMethod.
 	self addClass.
+	self abstractVariablesInExtractedMethod.
 	self createClassInstance.
 	self moveDataToClass.
 	self extractToNewClass.
