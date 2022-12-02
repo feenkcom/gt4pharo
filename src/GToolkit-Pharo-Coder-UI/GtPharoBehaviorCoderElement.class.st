@@ -53,6 +53,37 @@ GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationA
 ]
 
 { #category : #accessing }
+GtPharoBehaviorCoderElement >> actOnSlot: anAnnouncement [
+	| tab selectTabBlock selectMethodBlock |
+	tab := contentTabs viewModel tabs
+			detect: [ :each | each widget label asString = 'Methods' ]
+			ifNone: [ ^ self ].
+	tab isSelected
+		ifFalse: [ selectTabBlock := [ tab select ].
+			self executeTask: selectTabBlock ].
+	selectMethodBlock := anAnnouncement slot owningClass isMeta
+			ifTrue: [ [ self
+					filterWithClassSlot: anAnnouncement slot name
+					source: anAnnouncement source ] ]
+			ifFalse: [ anAnnouncement slot isClassVariable
+					ifTrue: [ [ self
+							filterWithClassVariable: anAnnouncement slot name
+							source: anAnnouncement source ] ]
+					ifFalse: [ [ self
+							filterWithSlot: anAnnouncement slot name
+							source: anAnnouncement source ] ] ].
+	self executeTask: selectMethodBlock
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> addFilters: filters [
+	contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: filters ]
+		ifNone: [  "ignore" ]
+]
+
+{ #category : #accessing }
 GtPharoBehaviorCoderElement >> behavior [
 	<return: #Behavior>
 
@@ -276,9 +307,9 @@ GtPharoBehaviorCoderElement >> coderViewModel [
 
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
-	
-	behaviorCoderViewModel ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
-	
+	behaviorCoderViewModel
+		ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
+
 	behaviorCoderViewModel := aGtBehaviorCoderViewModel.
 	behaviorCoderViewModel coder weak
 		when: GtCoderPackageUpdatedAnnouncement
@@ -289,6 +320,9 @@ GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
 			to: self;
 		when: GtClassCoderMethodProtocolNavigationAnnouncement
 			send: #actOnMethodProtocol:
+			to: self;
+		when: GtClassCoderSlotNavigationAnnouncement
+			send: #actOnSlot:
 			to: self.
 
 	container ifNotNil: #removeFromParent.
@@ -303,15 +337,33 @@ GtPharoBehaviorCoderElement >> executeTask: aBlock [
 		otherwise: aBlock
 ]
 
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> filterWithClassSlot: slotName source: aSource [
+	self
+		addFilters: {GtSearchClassSlotReferenceFilter
+					forClass: aSource selectedClass class
+					andVariable: slotName}
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> filterWithClassVariable: slotName source: aSource [
+	self
+		addFilters: {GtSearchClassVariableReferenceFilter
+					forClass: aSource selectedClass
+					andVariable: slotName}
+]
+
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
+	self addFilters: {GtSearchMethodCategoryFilter forCategory: aMethodProtocol}
+]
 
-	contentTabs content 
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ] 
-		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: {
-			GtSearchMethodCategoryFilter forCategory: aMethodProtocol.
-		} ] 
-		ifNone: [ "ignore" ]
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
+	self
+		addFilters: {GtSearchInstanceSlotReferenceFilter
+					forClass: aSource selectedClass
+					andVariable: slotName}
 ]
 
 { #category : #initialization }
