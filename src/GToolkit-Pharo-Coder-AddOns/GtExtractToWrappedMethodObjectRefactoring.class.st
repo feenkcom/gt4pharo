@@ -11,10 +11,30 @@ Class {
 		'newVariableNames',
 		'methodObjectSelector',
 		'tempName',
-		'constructorSelector'
+		'constructorSelector',
+		'receiverClasses',
+		'uniqueComponentSelector'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
+
+{ #category : #transforming }
+GtExtractToWrappedMethodObjectRefactoring >> addMethodObjectParameterToUnaryMessage [
+	| refactoring methodName |
+	uniqueComponentSelector ifNil: [ ^ self ].
+	methodName := RBMethodName
+			selector: (self uniqueMethodNameFor: 1)
+			arguments: {self methodObjectArgumentName}.
+	methodName := (self options at: #methodName) cull: methodName cull: self.
+	refactoring := RBAddParameterRefactoring
+			model: model
+			addParameterToMethod: uniqueComponentSelector
+			in: receiverClasses first
+			newSelector: methodName selector
+			permutation: {-1}
+			newArgs: {RBArgumentName name: methodName arguments first value: 'self'}.
+	self performCompositeRefactoring: refactoring
+]
 
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoring >> category [
@@ -187,6 +207,11 @@ GtExtractToWrappedMethodObjectRefactoring >> introduceCascadeInConstructor [
 ]
 
 { #category : #transforming }
+GtExtractToWrappedMethodObjectRefactoring >> methodObjectArgumentName [
+	^ (className first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , self className
+]
+
+{ #category : #transforming }
 GtExtractToWrappedMethodObjectRefactoring >> moveExtractedMethodToComponent [
 	| variable refactoring |
 	variable := self
@@ -199,8 +224,21 @@ GtExtractToWrappedMethodObjectRefactoring >> moveExtractedMethodToComponent [
 			class: (self model classNamed: self className)
 			variable: variable.
 	refactoring
-		setOption: #selfArgumentName
-		toUse: [ :ref | (className first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , self className ].
+		setOption: #selfArgumentName toUse: [ :ref | self methodObjectArgumentName ];
+		setOption: #methodName
+			toUse: [ :methodName :ref | 
+				methodName arguments isEmpty
+					ifTrue: [ uniqueComponentSelector := ref uniqueMethodNameFor: 0.
+						methodName
+							selector: uniqueComponentSelector;
+							yourself ]
+					ifFalse: [ (self options at: #methodName) cull: methodName cull: ref ] ];
+		setOption: #variableTypes
+			toUse: [ :ref :types :selected | 
+				receiverClasses := (self options at: #variableTypes)
+						cull: ref
+						cull: types
+						cull: selected ].
 	self performCompositeRefactoring: refactoring
 ]
 
@@ -228,6 +266,7 @@ GtExtractToWrappedMethodObjectRefactoring >> superclass: aSymbol [
 GtExtractToWrappedMethodObjectRefactoring >> transform [
 	self extractToMethodObject.
 	self moveExtractedMethodToComponent.
+	self addMethodObjectParameterToUnaryMessage.
 	self createMethodObjectConstructor.
 	self inlineMovedMethodForwarder.
 	self inlineTemps.

@@ -3,7 +3,8 @@ Extension { #name : #RBRemoveMethodChange }
 { #category : #'*GToolkit-Pharo-Coder' }
 RBRemoveMethodChange >> gtDiff [
 	| oldSource |
-	oldSource := (self methodSourceFor: self selector) ifNil: [ '' ].
+	oldSource := (self changeClass notNil
+			ifTrue: [ self methodSourceFor: self selector ]) ifNil: [ '' ].
 	^ PrettyTextDiffBuilder
 		from: oldSource
 		to: ''
