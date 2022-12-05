@@ -1,14 +1,13 @@
-Extension { #name : #Behavior }
+Extension { #name : #GtCoderNavigationTabsStencil }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-Behavior >> gtAddBaselineTab: look [
+GtCoderNavigationTabsStencil >> gtAddBaselineTab: look [
 	<gtCreateComponentTab: 40>
 	^ BrTab new
 		aptitude: BrGlamorousTabAptitude new;
 		label: 'Baseline';
-		stencil: [ | element navigationModel |
+		stencil: [ | element |
 			element := GtPharoCreateBaselineElement new.
-			navigationModel := look phlow firstParentWithView navigationModel.
 			element
 				behaviorBlock: [ :cls | 
 					look fireEvent: BrDropdownHideWish new.
