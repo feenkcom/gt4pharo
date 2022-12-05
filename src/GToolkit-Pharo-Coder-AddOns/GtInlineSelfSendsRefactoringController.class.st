@@ -1,14 +1,14 @@
 Class {
 	#name : #GtInlineSelfSendsRefactoringController,
 	#superclass : #GtMethodRefactoringController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #accessing }
 GtInlineSelfSendsRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createRefactoringModel.
-	refactoring := RBInlineAllSendersRefactoring
+	refactoring := GtInlineAllSendersRefactoring
 		               model: model
 		               sendersOf: methodNode selector
 		               in: (model classFor: self methodClass).
