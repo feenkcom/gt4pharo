@@ -209,14 +209,14 @@ GtPharoSourceCoder >> moveStatementDownAt: aTextPosition in: aSourceCoderViewMod
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> moveStatementNode: aNode downIn: aSourceCoderViewModel [
-	| statement editString siblings index nextNode cursorPos |
+	| statement editString siblings index nextNode cursorOffsetFromEnd |
 	statement := aNode statementNode.
 	siblings := statement parent statements.
 	index := siblings indexOf: statement.
 	index = siblings size ifTrue: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
 	nextNode := siblings at: index + 1.
-	cursorPos := statement stopPosition
+	cursorOffsetFromEnd := statement stopPosition
 			- aSourceCoderViewModel cursors first position.
 	editString insert: nextNode source at: statement startPosition.
 	editString insert: statement source at: nextNode startPosition.
@@ -227,20 +227,20 @@ GtPharoSourceCoder >> moveStatementNode: aNode downIn: aSourceCoderViewModel [
 		sourceText: editString asString asRopedText
 			from: self
 			synchronously: true;
-		select: nextNode stopPosition - (statement stopPosition - statement startPosition) - 1 to: nextNode stopPosition;
-		cursors: (BrTextEditorCursor at: nextNode stopPosition - cursorPos)
+		cursors: (BrTextEditorCursor at: nextNode stopPosition - cursorOffsetFromEnd).
+	self selectStatementAt: nextNode stopPosition in: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> moveStatementNode: aNode upIn: aSourceCoderViewModel [
-	| statement editString siblings index prevNode cursorPos |
+	| statement editString siblings index prevNode cursorOffsetFromStart |
 	statement := aNode statementNode.
 	siblings := statement parent statements.
 	index := siblings indexOf: statement.
 	index = 1 ifTrue: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
 	prevNode := siblings at: index - 1.
-	cursorPos := aSourceCoderViewModel cursors first position
+	cursorOffsetFromStart := aSourceCoderViewModel cursors first position
 			- statement startPosition.
 	editString insert: statement source at: prevNode startPosition.
 	editString insert: prevNode source at: statement startPosition.
@@ -251,9 +251,8 @@ GtPharoSourceCoder >> moveStatementNode: aNode upIn: aSourceCoderViewModel [
 		sourceText: editString asString asRopedText
 			from: self
 			synchronously: true;
-		select: prevNode startPosition - 1
-			to: prevNode startPosition + (statement stopPosition - statement startPosition);
-		cursors: (BrTextEditorCursor at: prevNode startPosition + cursorPos)
+		cursors: (BrTextEditorCursor at: prevNode startPosition + cursorOffsetFromStart).
+	self selectStatementAt: prevNode startPosition in: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -399,6 +398,19 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 				ifTrue: [ otherCoders do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ].
 	action install.
 	^ action
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
+	| node statement |
+	self
+		nodeAt: anIndex
+		ifFound: [ :aNode | node := aNode ]
+		ifNone: [ ^ self ].
+	statement := node statementNode.
+	aSourceCoderViewModel
+		selectNone;
+		select: statement startPosition - 1 to: statement stopPosition
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
