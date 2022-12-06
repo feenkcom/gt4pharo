@@ -54,12 +54,6 @@ GtSearchPackage >> gtCodeStructureName [
 ]
 
 { #category : #accessing }
-GtSearchPackage >> gtFilter [
-
-	^ self group & self package name gtPackageMatches
-]
-
-{ #category : #accessing }
 GtSearchPackage >> package [
 
 	^ package

@@ -33,12 +33,6 @@ GtSearchClass >> gtCodeStructureName [
 ]
 
 { #category : #accessing }
-GtSearchClass >> gtFilter [
-
-	^ self group & self methodClass name gtClassMatches
-]
-
-{ #category : #accessing }
 GtSearchClass >> methodClass [
 
 	^ methodClass
