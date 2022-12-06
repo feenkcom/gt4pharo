@@ -79,6 +79,14 @@ GtExtractMethodToComponentController >> defaultReceiverClassName [
 	^ #Object
 ]
 
+{ #category : #accessing }
+GtExtractMethodToComponentController >> dummySelectorForArgs: argCount [
+	argCount = 0 ifTrue: [ ^ #_ ].
+	^ (String
+		streamContents: [ :stream | argCount timesRepeat: [ stream nextPutAll: '_:' ] ])
+		asSymbol
+]
+
 { #category : #executing }
 GtExtractMethodToComponentController >> executeRefactoring [
 	| refactoring |
@@ -133,6 +141,12 @@ GtExtractMethodToComponentController >> finishRefactoring: refactoring [
 	super finishRefactoring: refactoring.
 	self removeAllAttributes.
 	sourceCoderViewModel discardChanges
+]
+
+{ #category : #private }
+GtExtractMethodToComponentController >> getCurrentState [
+	^ {receiver.
+		receiverClassName}
 ]
 
 { #category : #accessing }
@@ -204,7 +218,8 @@ GtExtractMethodToComponentController >> isValidForPreview [
 
 { #category : #accessing }
 GtExtractMethodToComponentController >> newExtractedSelector [
-	^ newSelector ifNil: [ self extractedSelector ]
+	^ newSelector
+		ifNil: [ self dummySelectorForArgs: self extractedSelector numArgs ]
 ]
 
 { #category : #private }
@@ -282,18 +297,15 @@ GtExtractMethodToComponentController >> receiver [
 
 { #category : #accessing }
 GtExtractMethodToComponentController >> receiver: aString [
-	| previous previousClass |
-	previous := receiver.
-	previousClass := receiverClassName.
-	receiver := aString.
-	receiverClassName := nil.
+	| state |
+	state := self getCurrentState.
+	self updateReceiverTo: aString.
 	self cancelRefactoring.
 	[ self safelyExecute ]
 		on: Error
 		do: [ :ex | 
 			self potentialReceivers remove: aString ifAbsent: [  ].
-			receiver := previous.
-			receiverClassName := previousClass.
+			self setCurrentState: state.
 			self safelyExecute ]
 ]
 
@@ -376,8 +388,13 @@ GtExtractMethodToComponentController >> resetNewSelectorIfNeeded [
 
 { #category : #executing }
 GtExtractMethodToComponentController >> safelyExecute [
-	self createModel.
 	self executeRefactoring
+]
+
+{ #category : #private }
+GtExtractMethodToComponentController >> setCurrentState: anArray [
+	receiver := anArray first.
+	receiverClassName := anArray second
 ]
 
 { #category : #private }
@@ -402,15 +419,15 @@ GtExtractMethodToComponentController >> setDefaultOptionsOn: aRefactoring [
 				yourself ].
 	aRefactoring
 		setOption: #useExistingMethod
-			toUse: [ :ref1 :sel1 | 
+			toUse: [ :ref :sel | 
 				receiver = 'self'
-					and: [ extractedSelectorKeywords := sel1 keywords.
+					and: [ extractedSelectorKeywords := sel keywords.
 						isExisting := true ] ];
 		setOption: #extractAssignment
-			toUse: [ :ref1 :varName1 | 
+			toUse: [ :ref :varName | 
 				receiver = 'self'
 					and: [ (aRefactoring model classFor: sourceCoderViewModel behavior)
-							definesVariable: varName1 ] ]
+							definesVariable: varName ] ]
 ]
 
 { #category : #private }
@@ -418,10 +435,11 @@ GtExtractMethodToComponentController >> setPreviewOptionsOn: aRefactoring [
 	aRefactoring
 		setOption: #methodName
 		toUse: [ :methodName | 
-			methodName
-				selector: self newExtractedSelector;
-				arguments: methodArguments;
-				yourself ].
+			methodName selector: self newExtractedSelector.
+			(methodArguments size = methodName arguments size
+				and: [ methodArguments allSatisfy: [ :each | methodName arguments includes: each ] ])
+				ifTrue: [ methodName arguments: methodArguments ].
+			methodName ].
 	aRefactoring
 		setOption: #useExistingMethod
 			toUse: [ :ref1 :sel1 | receiver = 'self' and: [ isExisting ] ];
@@ -438,13 +456,6 @@ GtExtractMethodToComponentController >> showReceiverType [
 	^ (sourceCoderViewModel behavior bindingOf: receiver asSymbol) value
 		ifNotNil: [ :value | (value isBehavior and: [ value name = receiver ]) not ]
 		ifNil: [ true ]
-]
-
-{ #category : #private }
-GtExtractMethodToComponentController >> sourceAst [
-	^ GtPharoParser
-		parse: self sourceText characters asString
-		startingAt: self parserStartingState
 ]
 
 { #category : #private }
@@ -540,8 +551,14 @@ GtExtractMethodToComponentController >> updateMethod: newSource [
 	isExisting
 		ifFalse: [ self preventSave.
 			self installRenamer.
-			self addRefactoringPreview ].
-	self installReceiverSelector
+			self addRefactoringPreview.
+			self installReceiverSelector ]
+]
+
+{ #category : #accessing }
+GtExtractMethodToComponentController >> updateReceiverTo: aString [
+	receiver := aString.
+	receiverClassName := nil
 ]
 
 { #category : #accessing }

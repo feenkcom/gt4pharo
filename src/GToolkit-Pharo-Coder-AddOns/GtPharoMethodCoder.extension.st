@@ -163,6 +163,21 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
+	"<gtCoderContextMenuAddOns: 18>"
+	| theNodes |
+	theNodes := self extractableNodesFrom: aCoderViewModel.
+	theNodes
+		ifNotEmpty: [ coderAddOns
+				addContextMenuItem: 'Extract to paragraph' asRopedText
+				hover: nil
+				leave: nil
+				action: [ :model | 
+					(GtExtractToWrappedMethodObjectRefactoringController new sourceCoderViewModel: model)
+						execute ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ 
@@ -321,7 +336,7 @@ GtPharoMethodCoder >> addMethodObjectMenuForAst: anAst to: coderAddOns from: aCo
 				addContextMenuItem: 'Extract method object' asRopedText
 				hover: nil
 				leave: nil
-				action: [ :model | (GtMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
+				action: [ :model | (GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

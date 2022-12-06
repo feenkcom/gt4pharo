@@ -23,7 +23,8 @@ GtParenthesisFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEd
 				ifTrue: [ text
 						clearAttributes: aParenthesesStart
 						to: aParenthesesEnd
-						if: [ :att | att class == BrTextHideAttribute ] ]
+						if: [ :att | att class == BrTextHideAttribute ].
+					aTextEditor styleText ]
 				ifFalse: [ text
 						clearAttributes: aParenthesesStart
 						to: aParenthesesEnd
@@ -33,8 +34,7 @@ GtParenthesisFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEd
 					text
 						attribute: BrTextHideAttribute new beNotOverwritableByStyler
 						from: aParenthesesStart
-						to: aParenthesesEnd ] ].
-	aTextEditor text: text
+						to: aParenthesesEnd ] ]
 ]
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
-Extension { #name : #GtCoderToolbarElement }
+Extension { #name : #GtCoderNavigationTabsStencil }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoderToolbarElement >> addBaselineTab: look [
+GtCoderNavigationTabsStencil >> gtAddBaselineTab: look [
 	<gtCreateComponentTab: 40>
 	^ BrTab new
 		aptitude: BrGlamorousTabAptitude new;

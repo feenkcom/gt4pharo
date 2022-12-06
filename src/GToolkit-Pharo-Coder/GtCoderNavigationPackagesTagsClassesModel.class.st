@@ -167,6 +167,11 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyPackageSelected: anRPackage [
 				package: anRPackage)
 ]
 
+{ #category : #accessing }
+GtCoderNavigationPackagesTagsClassesModel >> notifySlotSelected: aSlot source: aSource [
+	coder withSlot: aSlot source: aSource
+]
+
 { #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyTagSelected: anRPackageTag package: anRPackage [
 	self
@@ -318,6 +323,11 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 	self assertCoder: aCoder.
 	self coder: aCoder.
 	self notifyTagSelected: aRPackageTag package: aRPackageTag package
+]
+
+{ #category : #accessing }
+GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
+	self notifySlotSelected: aSlot source: aSource
 ]
 
 { #category : #'api - selection' }
