@@ -551,10 +551,6 @@ GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneB
 	^ aNoneBlock value
 ]
 
-{ #category : #accessing }
-GtPharoSourceCoder >> nodesAt: anObject [ 
-]
-
 { #category : #'private - notifying' }
 GtPharoSourceCoder >> notifyParseError: aString at: anInteger [
 	self announce: (GtCoderParseError new

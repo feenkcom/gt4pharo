@@ -110,6 +110,46 @@ GtPharoSourceCoder >> createLabel: aString description: description [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval downIn: aSourceCoderViewModel [
+	(self isIntervalCompleteStatements: aSelectionInterval)
+		ifTrue: [ | statement siblings index |
+			statement := (self nodeAt: aSelectionInterval last) statementNode.
+			siblings := statement parent
+					ifNil: [ ^ self ]
+					ifNotNil: [ :node | node statements ].
+			index := siblings indexOf: statement.
+			index = siblings size
+				ifTrue: [ ^ self
+						selectStatementAt: statement parent statementNode startPosition
+						in: aSourceCoderViewModel ].
+			self
+				selectStatementAt: (siblings at: index + 1) startPosition
+				in: aSourceCoderViewModel ]
+		ifFalse: [ aSourceCoderViewModel selectNone.
+			self selectStatementAt: aSelectionInterval last in: aSourceCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSourceCoderViewModel [
+	(self isIntervalCompleteStatements: aSelectionInterval)
+		ifTrue: [ | statement siblings index |
+			statement := (self nodeAt: aSelectionInterval first) statementNode.
+			siblings := statement parent
+					ifNil: [ ^ self ]
+					ifNotNil: [ :node | node statements ].
+			index := siblings indexOf: statement.
+			index = 1
+				ifTrue: [ ^ self
+						selectStatementAt: statement parent statementNode startPosition
+						in: aSourceCoderViewModel ].
+			self
+				selectStatementAt: (siblings at: index - 1) startPosition
+				in: aSourceCoderViewModel ]
+		ifFalse: [ aSourceCoderViewModel selectNone.
+			self selectStatementAt: aSelectionInterval first in: aSourceCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> extractableNodesFrom: aCoderViewModel [
 	| allSelections allCursors |
 
@@ -177,6 +217,8 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 			GtSourceCoderInlineRenameShortcut.
 			GtSourceCoderMoveStatementUpShortcut.
 			GtSourceCoderMoveStatementDownShortcut.
+			GtSourceCoderSelectStatementUpShortcut.
+			GtSourceCoderSelectStatementDownShortcut.
 			GtSourceCoderFixItShortcut.
 			GtSourceCoderPrintItShortcut} collect: #new.
 
@@ -192,6 +234,23 @@ GtPharoSourceCoder >> isClassVariable: aNode [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isInstanceVariable: aNode [
 	^ self behavior allInstVarNames includes: aNode name value
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isIntervalCompleteStatements: aSelectionInterval [
+	"Test to see if the current selection boundaries end exactly on statement nodes"
+
+	self
+		nodeAt: aSelectionInterval first
+		ifFound: [ :first | 
+			first statementNode startPosition = aSelectionInterval first
+				ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	self
+		nodeAt: aSelectionInterval last
+		ifFound: [ :last | last statementNode stopPosition = aSelectionInterval last ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -409,8 +468,8 @@ GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
 		ifNone: [ ^ self ].
 	statement := node statementNode.
 	aSourceCoderViewModel
-		selectNone;
-		select: statement startPosition - 1 to: statement stopPosition
+		select: statement startPosition - 1
+		to: statement stopPosition
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
