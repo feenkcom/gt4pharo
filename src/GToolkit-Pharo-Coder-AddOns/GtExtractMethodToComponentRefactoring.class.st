@@ -4,7 +4,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
-{ #category : #accessing }
+{ #category : #transforming }
+GtExtractMethodToComponentRefactoring >> inlineForwarder [
+	"Changing to use Gt inline all variant"
+	| refactoring |
+	refactoring := GtInlineAllSendersRefactoring 
+				model: self model
+				sendersOf: extractedMethodSelector
+				in: class.
+	refactoring setOption: #inlineExpression toUse: [:ref :string | true].
+	self performCompositeRefactoring: refactoring
+]
+
+{ #category : #transforming }
 GtExtractMethodToComponentRefactoring >> moveMethod [
 	| variable refactoring |
 	variable := self
@@ -19,7 +31,7 @@ GtExtractMethodToComponentRefactoring >> moveMethod [
 	self performCompositeRefactoring: refactoring
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
 GtExtractMethodToComponentRefactoring >> transform [
 	super transform.
 	self gtCleanupChanges

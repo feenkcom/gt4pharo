@@ -156,7 +156,7 @@ GtExtractMethodObjectRefactoring >> inlineAssignment [
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> inlineMessage [
 	self
-		performCompositeRefactoring: (RBInlineAllSendersRefactoring
+		performCompositeRefactoring: (GtInlineAllSendersRefactoring
 				model: self model
 				sendersOf: extractedMethodSelector
 				in: class)
