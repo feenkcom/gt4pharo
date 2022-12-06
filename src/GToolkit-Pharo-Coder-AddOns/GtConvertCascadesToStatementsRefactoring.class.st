@@ -29,7 +29,7 @@ GtConvertCascadesToStatementsRefactoring >> convert: anInterval inMethod: aSelec
 GtConvertCascadesToStatementsRefactoring >> extractReceiverIntoVariable: aNode [
 	| statement newAssignment oldReceiver variable |
 	(aNode parent isAssignment and: [ aNode messages last selector = #yourself ])
-		ifTrue: [ statement := self findStatement: aNode.
+		ifTrue: [ statement := aNode statementNode.
 			newAssignment := RBAssignmentNode
 					variable: aNode parent variable copy
 					value: aNode receiver copy.
@@ -38,7 +38,7 @@ GtConvertCascadesToStatementsRefactoring >> extractReceiverIntoVariable: aNode [
 				do: [ :each | each replaceNode: oldReceiver withNode: newAssignment ].
 			aNode parent parent replaceNode: aNode parent withNode: aNode ].
 	aNode receiver isAssignment
-		ifTrue: [ statement := self findStatement: aNode.
+		ifTrue: [ statement := aNode statementNode.
 			statement parent addNode: aNode receiver copy before: statement.
 			variable := aNode receiver variable.
 			aNode messages
@@ -53,7 +53,7 @@ GtConvertCascadesToStatementsRefactoring >> extractStatementsFor: aNode [
 	newMessages := aNode messages collect: [ :each | each copy ].
 	(newMessages last isMessage and: [ newMessages last selector = #yourself ])
 		ifTrue: [ newMessages at: newMessages size put: newMessages last receiver ].
-	statement := self findStatement: aNode.
+	statement := aNode statementNode.
 	statement parent addNodes: newMessages allButLast before: statement.
 	(statement == aNode and: [ newMessages last isVariable ])
 		ifTrue: [ aNode parent removeNode: aNode ]
@@ -94,14 +94,6 @@ GtConvertCascadesToStatementsRefactoring >> findNode [
 			(each isCascade and: [ each sourceInterval = sourceInterval ])
 				ifTrue: [ ^ each ] ].
 	^ nil
-]
-
-{ #category : #accessing }
-GtConvertCascadesToStatementsRefactoring >> findStatement: aNode [
-	| current |
-	current := aNode.
-	[ current parent isSequence ] whileFalse: [ current := current parent ].
-	^ current
 ]
 
 { #category : #accessing }

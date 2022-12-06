@@ -268,6 +268,14 @@ GtPharoProgramNode >> priority [
 ]
 
 { #category : #accessing }
+GtPharoProgramNode >> statementNode [
+	"Return your topmost node that is contained by a sequence node."
+
+	(parent isNil or: [parent isSequence]) ifTrue: [^self].
+	^parent statementNode
+]
+
+{ #category : #accessing }
 GtPharoProgramNode >> whoDefines: aName [ 
 	^ (self defines: aName) 
 		ifTrue: [ self ]
