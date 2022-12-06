@@ -170,9 +170,7 @@ GtPharoIndex >> asyncSearchForSubstringWords: aString in: prefixTree [
 GtPharoIndex >> asyncSearchForWords: aString in: prefixTree [
 	| words longest |
 	words := self searchWordsFrom: aString.
-	longest := words isEmpty
-			ifTrue: [ '' ]
-			ifFalse: [ (words asSet asSortedCollection: [ :a :b | a size > b size ]) first ].
+	longest := words isEmpty ifTrue: [ '' ] ifFalse: [ words first ].
 	(words size = 1 and: [ (prefixTree first: 1 startingWith: longest) isEmpty ])
 		ifTrue: [ ^ self asyncSearchForSubstringWords: longest in: prefixTree ].
 	^ ((prefixTree asyncStreamStartingWith: longest)
@@ -426,16 +424,15 @@ GtPharoIndex >> intervalsIn: selector matchingWords: words [
 		minSize: 1
 		includeSubStrings: true.
 	selectorWords
-		sorted: [ :a :b | a last size > b last size or: [ a last = b last and: [ a first < b first ] ] ].
-	(words asSet asSortedCollection: [ :a :b | a size > b size ])
+		sort: [ :a :b | a last size > b last size or: [ a last = b last and: [ a first < b first ] ] ].
+	words
 		do: [ :each | 
-			(words occurrencesOf: each)
-				timesRepeat: [ | item |
-					item := selectorWords
-							detect: [ :sel | sel last beginsWith: each ]
-							ifNone: [ ^ #() ].
-					intervals add: (item first to: item first + each size - 1).
-					selectorWords remove: item ] ].
+			| item |
+			item := selectorWords
+					detect: [ :sel | sel last beginsWith: each ]
+					ifNone: [ ^ #() ].
+			intervals add: (item first to: item first + each size - 1).
+			selectorWords remove: item ].
 	^ intervals
 ]
 
@@ -611,13 +608,13 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 { #category : #accessing }
 GtPharoIndex >> searchWordsFrom: aString [
 	| words |
-	words := Bag new.
+	words := OrderedCollection new.
 	self
 		wordsIn: aString
 		do: [ :each | words add: each asLowercase ]
 		minSize: 1
 		includeSubStrings: false.
-	^ words
+	^ words sort: [ :a :b | a size > b size ]
 ]
 
 { #category : #accessing }

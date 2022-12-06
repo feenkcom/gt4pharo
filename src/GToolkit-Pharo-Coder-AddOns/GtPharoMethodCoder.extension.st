@@ -910,11 +910,7 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 	addOns
 		addShortcut: GtSourceCoderPlayShortcut new;
 		addShortcut: GtSourceCoderPlayAndInspectShortcut new;
-		addShortcut: GtSourceCoderExtractMethodShortcut new;
-		addShortcut: GtSourceCoderSaveShortcut new;
-		addShortcut: GtSourceCoderInlineRenameShortcut new;
-		addShortcut: GtSourceCoderFixItShortcut new;
-		addShortcut: GtSourceCoderPrintItShortcut new
+		addShortcut: GtSourceCoderSaveShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
