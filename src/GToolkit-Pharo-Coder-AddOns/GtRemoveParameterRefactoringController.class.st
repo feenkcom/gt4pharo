@@ -1,21 +1,20 @@
 Class {
 	#name : #GtRemoveParameterRefactoringController,
 	#superclass : #GtVariableRefactoringController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
 { #category : #accessing }
 GtRemoveParameterRefactoringController >> refactoring [
 	| aModel aClass |
-	
 	aModel := self createRefactoringModel.
-	aClass := (aModel classFor: sourceCoderViewModel behavior) instanceSide.
+	aClass := aModel classFor: sourceCoderViewModel behavior.
 
 	^ RBRemoveParameterRefactoring
 		model: aModel
 		removeParameter: self variableName
 		in: aClass
-		selector: sourceCoderViewModel coderModel currentSelector.
+		selector: sourceCoderViewModel coderModel currentSelector
 ]
 
 { #category : #accessing }
