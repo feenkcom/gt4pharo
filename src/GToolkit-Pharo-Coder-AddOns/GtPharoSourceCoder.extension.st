@@ -222,7 +222,6 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 			GtSourceCoderDiscardChangesShortcut.
 			GtSourceCoderFormatShortcut.
 			GtSourceCoderDebugShortcut.
-			GtSnippetCoderExtractMethodShortcut.
 			GtSourceCoderInlineRenameShortcut.
 			GtSourceCoderMoveStatementUpShortcut.
 			GtSourceCoderMoveStatementDownShortcut.

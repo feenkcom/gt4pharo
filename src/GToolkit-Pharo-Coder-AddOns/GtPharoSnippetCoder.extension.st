@@ -124,7 +124,8 @@ GtPharoSnippetCoder >> initializeShortcuts: addOns [
 		addShortcut: GtSourceCoderDoItAndInspectShortcut new;
 		addShortcut: GtSourceCoderBrowseImplementorsShortcut new;
 		addShortcut: GtSourceCoderBrowseReferencesShortcut new;
-		addShortcut: GtSourceCoderBrowseBehaviorShortcut new
+		addShortcut: GtSourceCoderBrowseBehaviorShortcut new;
+		addShortcut: GtSnippetCoderExtractMethodShortcut new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
