@@ -279,11 +279,8 @@ GtPharoSourceCoder >> moveStatementDownAt: aTextPosition in: aSourceCoderViewMod
 GtPharoSourceCoder >> moveStatementNodes: statements downIn: aSourceCoderViewModel [
 	"Expects a collection of sibling statement nodes"
 
-	| editString siblings index nextNode |
-	siblings := statements any parent statements.
-	index := siblings indexOf: statements last.
-	index = siblings size ifTrue: [ ^ self ].
-	nextNode := siblings at: index + 1.
+	| editString nextNode |
+	nextNode := (self statementNodeAfter: statements) ifNil: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
 	editString
 		swapFrom: statements first startPosition
@@ -300,11 +297,8 @@ GtPharoSourceCoder >> moveStatementNodes: statements downIn: aSourceCoderViewMod
 GtPharoSourceCoder >> moveStatementNodes: statements upIn: aSourceCoderViewModel [
 	"Expects a collection of sibling statement nodes"
 
-	| editString siblings index prevNode |
-	siblings := statements any parent statements.
-	index := siblings indexOf: statements first.
-	index = 1 ifTrue: [ ^ self ].
-	prevNode := siblings at: index - 1.
+	| editString prevNode |
+	prevNode := (self statementNodeBefore: statements) ifNil: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
 	editString
 		swapFrom: prevNode startPosition
@@ -337,6 +331,15 @@ GtPharoSourceCoder >> moveStatementsUpWithin: aSelectionInterval in: aSourceCode
 	self
 		moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
 		upIn: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> nodeAfter: aStatementNodeCollection [
+	| siblings index nextNode |
+	siblings := aStatementNodeCollection any parent statements.
+	index := siblings indexOf: aStatementNodeCollection last.
+	index = siblings size ifFalse: [ nextNode := siblings at: index + 1 ].
+	^ nextNode
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -487,6 +490,22 @@ GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
 	aSourceCoderViewModel
 		select: statement startPosition - 1
 		to: statement stopPosition
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> statementNodeAfter: aStatementNodeCollection [
+	| siblings index |
+	siblings := aStatementNodeCollection any parent statements.
+	index := siblings indexOf: aStatementNodeCollection last.
+	^ index = siblings size ifTrue: [ nil ] ifFalse: [ siblings at: index + 1 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> statementNodeBefore: aStatementNodeCollection [
+	| siblings index |
+	siblings := aStatementNodeCollection any parent statements.
+	index := siblings indexOf: aStatementNodeCollection first.
+	^ index = 1 ifTrue: [ nil ] ifFalse: [ siblings at: index - 1 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
