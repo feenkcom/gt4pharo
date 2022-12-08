@@ -6,7 +6,8 @@ Class {
 		'className',
 		'superClassName',
 		'packageName',
-		'tagName'
+		'tagName',
+		'onAccept'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Behavior'
 }
@@ -14,6 +15,23 @@ Class {
 { #category : #'instance creation' }
 GtCopyClassForm class >> for: aClass [
 	^ self new for: aClass
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> acceptAction [
+	<magritteActionDescription>
+	^ MAActionDescription new
+		label: 'Accept';
+		action: [ :aModel :aButton | 
+			[ | aClass |
+			aClass := self copyClass.
+			onAccept ifNotNil: [ onAccept value: aClass ] ] on: Error do: #inspect ];
+		beCommitAction
+]
+
+{ #category : #converting }
+GtCopyClassForm >> asElement [
+	^ self asGtMagritteViewModel asElement
 ]
 
 { #category : #accessing }
@@ -26,6 +44,21 @@ GtCopyClassForm >> className [
 GtCopyClassForm >> className: anObject [
 
 	className := anObject
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> copyClass [
+	| class |
+	class := Smalltalk classInstaller
+			make: [ :builder | 
+				builder
+					fillFor: innerClass;
+					name: className;
+					superclass: superClassName asClass;
+					category: (tagName ifEmpty: [ packageName ] ifNotEmpty: [ packageName , '-' , tagName ]) ].
+	class copyAllCategoriesFrom: innerClass.
+	class class copyAllCategoriesFrom: innerClass class.
+	^ class
 ]
 
 { #category : #accessing }
@@ -48,6 +81,11 @@ GtCopyClassForm >> nameDescription [
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue) isNil ]
 		labelled: 'Class name is already taken'
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> onAccept: anAction [
+	onAccept := anAction
 ]
 
 { #category : #magritte }
