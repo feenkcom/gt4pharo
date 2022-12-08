@@ -19,13 +19,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.160/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1048/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1049/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.832/src' ].
 		spec
 			baseline: 'SmaCC' with: [
-				spec repository: 'github://j-brant/SmaCC:3a1c5948755d13868864f545c235bebfeb994931/src' ].
+				spec repository: 'github://j-brant/SmaCC:6a7dfa86d63bb7e3b83ebaffd445718fa58ccda8/src' ].
 
 		spec package: 'GToolkit-Pharo-System' with: [
 			spec requires: #('GToolkitExamplesEngine') ].
