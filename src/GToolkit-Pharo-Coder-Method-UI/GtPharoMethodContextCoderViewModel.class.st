@@ -81,7 +81,8 @@ GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
 
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
-	self updateProgramCounterRange: self coderModel sourceCode
+	self updateProgramCounterRange: self coderModel sourceCode.
+	self announce: GtTextualCoderViewModelReadyToRestyle new
 ]
 
 { #category : #'private - updating' }
