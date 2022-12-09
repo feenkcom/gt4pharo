@@ -26,6 +26,7 @@ ManifestGToolkitPharoSearchFilters class >> mustOnlyDependOn [
 		'AST-Core'.
 		'Announcements-Core'.
 		'Collections-Sequenceable'.
+		'Collections-Strings'.
 		'Collections-Unordered'.
 		'Futures-Extra'.
 		'GToolkit-Pharo-Index'.

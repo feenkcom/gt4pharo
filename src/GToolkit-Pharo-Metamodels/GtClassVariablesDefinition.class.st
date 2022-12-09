@@ -48,25 +48,6 @@ GtClassVariablesDefinition >> classVariableNamed: aSymbol [
 		ifNone: [ self errorClassVariableNotFound: aSymbol ]
 ]
 
-{ #category : #'api - class vars' }
-GtClassVariablesDefinition >> createContextMenuContentFor: aDefinition editor: anElement [
-	| theContextMenu items |
-	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
-	items := OrderedCollection new.
-	items
-		addAll: {GtCoderContextMenuAction new
-					action: [ (self pushUpClassVariableRefactoringFor: aDefinition name) execute ];
-					title: 'Push Up ' , aDefinition name.
-				GtCoderContextMenuAction new
-					action: [ (self pushDownClassVariableRefactoringFor: aDefinition name) execute ];
-					title: 'Push Down ' , aDefinition name.
-				GtCoderContextMenuAction new
-					action: [ (self generateAccessorsFor: aDefinition name) execute ];
-					title: 'Create accessors for ' , aDefinition name}.
-	theContextMenu items: items.
-	^ theContextMenu
-]
-
 { #category : #'api - accepting' }
 GtClassVariablesDefinition >> differenceWith: aGtClassVariablesDefinition [
 	| theDifference |
