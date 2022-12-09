@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'attribute'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
 
 { #category : #accessing }

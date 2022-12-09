@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenameInBaselineShortcut,
 	#superclass : #GtSourceCoderInlineRenameShortcut,
-	#category : #'GToolkit-Pharo-Coder-Method-Rename'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Rename'
 }
 
 { #category : #accessing }

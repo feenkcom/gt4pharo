@@ -27,6 +27,8 @@ ManifestGToolkitPharoCoderMethodUI class >> mustOnlyDependOn [
 		'Brick-Core'.
 		'Brick-Editor'.
 		'Brick-Glamorous'.
+		'Brick-List'.
+		'Brick-List-Ungrouped'.
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
 		'Colors'.

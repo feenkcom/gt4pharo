@@ -1,11 +1,10 @@
 Class {
 	#name : #GtAsyncSearchMethodGroupMetrics,
 	#superclass : #Object,
-	#traits : 'TGtWithAnnouncer',
-	#classTraits : 'TGtWithAnnouncer classTrait',
 	#instVars : [
 		'amountOfMethods',
-		'linesOfCode'
+		'linesOfCode',
+		'announcer'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Streams'
 }
@@ -14,7 +13,7 @@ Class {
 GtAsyncSearchMethodGroupMetrics >> accumulateMethod: aCompiledMethod [
 	amountOfMethods := amountOfMethods + 1.
 	linesOfCode := linesOfCode + aCompiledMethod linesOfCode.
-	self announce: GtAsyncSearchMethodMetricsUpdate new
+	announcer announce: GtAsyncSearchMethodMetricsUpdate new
 ]
 
 { #category : #accessing }
@@ -39,7 +38,7 @@ GtAsyncSearchMethodGroupMetrics >> gtMetricsFor: aView [
 						    ifTrue: [ '0' ])) } ];
 		  column: 'Metric' text: #key;
 		  column: 'Value' text: [ :assoc | assoc value asString ];
-		  updateWhen: GtAsyncSearchMethodMetricsUpdate in: [ self announcer ];
+		  updateWhen: GtAsyncSearchMethodMetricsUpdate in: [ announcer ];
 		  actionUpdateButton
 ]
 
@@ -48,7 +47,8 @@ GtAsyncSearchMethodGroupMetrics >> initialize [
 	super initialize.
 	
 	amountOfMethods := 0.
-	linesOfCode := 0
+	linesOfCode := 0.
+	announcer := Announcer new
 ]
 
 { #category : #accessing }

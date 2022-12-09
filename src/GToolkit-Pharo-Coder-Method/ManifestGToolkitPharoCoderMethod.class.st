@@ -10,6 +10,7 @@ Class {
 { #category : #asserting }
 ManifestGToolkitPharoCoderMethod class >> mustNotDependOn [
 	^ { 
+		'GToolkit-Coder-UI'.
 		'GToolkit-Pharo-Coder-Method-UI'.
 		'GToolkit-Pharo-Coder'.
 		'GToolkit-Pharo-Coder-UI'.

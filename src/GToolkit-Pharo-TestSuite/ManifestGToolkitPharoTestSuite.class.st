@@ -16,7 +16,6 @@ ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
 		'Futures'.
-		'GToolkit-Examples'.
 		'GToolkit-Pharo-SearchFilters'.
 		'Kernel'.
 		'SUnit-Core'
@@ -28,7 +27,6 @@ ManifestGToolkitPharoTestSuite class >> shouldDependOn [
 	^ {
 		'Futures'.
 		'GToolkit-Pharo-SearchFilters'.
-		'GToolkit-Examples'.
 		'SUnit-Core'
 	}
 ]
