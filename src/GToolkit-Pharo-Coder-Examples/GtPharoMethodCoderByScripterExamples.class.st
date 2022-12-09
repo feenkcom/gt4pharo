@@ -4780,3 +4780,17 @@ GtPharoMethodCoderByScripterExamples >> scripterForBlock: aBlock [
 
 	^ aScripter
 ]
+
+{ #category : #'examples - statement selection/motion' }
+GtPharoMethodCoderByScripterExamples >> selectSingleStatement [
+	<gtExample>
+]
+
+{ #category : #'examples - statement selection/motion' }
+GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := GtPharoMethodCoderExamples >> #multipleStatementMethod.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
