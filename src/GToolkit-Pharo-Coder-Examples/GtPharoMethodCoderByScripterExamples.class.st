@@ -4782,8 +4782,122 @@ GtPharoMethodCoderByScripterExamples >> scripterForBlock: aBlock [
 ]
 
 { #category : #'examples - statement selection/motion' }
-GtPharoMethodCoderByScripterExamples >> selectSingleStatement [
+GtPharoMethodCoderByScripterExamples >> selectStatementsDown [
 	<gtExample>
+	| aScripter expecteds |
+	aScripter := self scripterForBlock: [ self statementMethodCoder ].
+	aScripter do
+		label: 'Move cursor to middle of statement';
+		action: [ :aSourceEditor | 
+			| index |
+			index := aSourceEditor text asString indexOf: $2.
+			aSourceEditor textualCoderViewModel
+				cursors: (BrTextEditorCursor at: index - 1) ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	expecteds := #(
+	'b := 2'
+	
+	'b := 2.
+			c := 3'
+			
+	'a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ]'
+			
+	'a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ].
+	d := 6'
+	
+	'multipleStatementMethod
+	| a b c d |
+	a := 1.
+	a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ].
+	d := 6'
+	).
+		
+	expecteds do: [:each | 
+	aScripter shortcut
+		combination: BlKeyCombination builder primary shift arrowDown build;
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter assert
+		label: 'Assert selected text';
+		value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
+			equals: each
+	;
+		id: GtSourceCoderEditorId;
+		play].
+
+	^ aScripter
+]
+
+{ #category : #'examples - statement selection/motion' }
+GtPharoMethodCoderByScripterExamples >> selectStatementsUp [
+	<gtExample>
+	| aScripter expecteds |
+	aScripter := self scripterForBlock: [ self statementMethodCoder ].
+	aScripter do
+		label: 'Move cursor to middle of statement';
+		action: [ :aSourceEditor | 
+			| index |
+			index := aSourceEditor text asString indexOf: $2.
+			aSourceEditor textualCoderViewModel
+				cursors: (BrTextEditorCursor at: index - 1) ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	expecteds := #('b := 2' 
+	
+	'a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ]' 
+			
+	'a := 1.
+	a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ]' 
+			
+	'multipleStatementMethod
+	| a b c d |
+	a := 1.
+	a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ].
+	d := 6').
+
+	expecteds
+		do: [ :each | 
+			aScripter shortcut
+				combination: BlKeyCombination builder primary shift arrowUp build;
+				id: GtSourceCoderEditorId;
+				play.
+
+			aScripter assert
+				label: 'Assert selected text';
+				value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
+					equals: each;
+				id: GtSourceCoderEditorId;
+				play ].
+
+	^ aScripter
 ]
 
 { #category : #'examples - statement selection/motion' }
