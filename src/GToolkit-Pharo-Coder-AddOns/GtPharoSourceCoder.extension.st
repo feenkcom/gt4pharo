@@ -110,6 +110,55 @@ GtPharoSourceCoder >> createLabel: aString description: description [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandSelection: aSelectionInterval toCompleteStatementsIn: aSourceCoderViewModel [
+	| nodes |
+	nodes := self extractableNodesWithin: aSelectionInterval.
+	aSourceCoderViewModel
+		select: nodes first statementNode startPosition - 1
+		to: nodes last statementNode stopPosition
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
+	| statement siblings index |
+	(self isIntervalCompleteStatements: aSelectionInterval)
+		ifFalse: [ self
+				expandSelection: aSelectionInterval
+				toCompleteStatementsIn: aSourceCoderViewModel.
+			^ self ].
+	statement := (self nodeAt: position) statementNode.
+	siblings := statement parent
+			ifNil: [ ^ self ]
+			ifNotNil: [ :node | node statements ].
+	index := (siblings indexOf: statement) + offset.
+	(index between: 1 and: siblings size)
+		ifFalse: [ ^ self
+				selectStatementAt: statement parent statementNode startPosition
+				in: aSourceCoderViewModel ].
+	self
+		selectStatementAt: (siblings at: index) startPosition
+		in: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval downIn: aSourceCoderViewModel [
+	self
+		expandStatementSelection: aSelectionInterval
+		at: aSelectionInterval last
+		directionOffset: 1
+		in: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSourceCoderViewModel [
+	self
+		expandStatementSelection: aSelectionInterval
+		at: aSelectionInterval first
+		directionOffset: -1
+		in: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> extractableNodesFrom: aCoderViewModel [
 	| allSelections allCursors |
 
@@ -173,10 +222,11 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 			GtSourceCoderDiscardChangesShortcut.
 			GtSourceCoderFormatShortcut.
 			GtSourceCoderDebugShortcut.
-			GtSnippetCoderExtractMethodShortcut.
 			GtSourceCoderInlineRenameShortcut.
 			GtSourceCoderMoveStatementUpShortcut.
 			GtSourceCoderMoveStatementDownShortcut.
+			GtSourceCoderSelectStatementUpShortcut.
+			GtSourceCoderSelectStatementDownShortcut.
 			GtSourceCoderFixItShortcut.
 			GtSourceCoderPrintItShortcut} collect: #new.
 
@@ -195,6 +245,23 @@ GtPharoSourceCoder >> isInstanceVariable: aNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isIntervalCompleteStatements: aSelectionInterval [
+	"Test to see if the current selection boundaries end exactly on statement nodes"
+
+	self
+		nodeAt: aSelectionInterval first
+		ifFound: [ :first | 
+			first statementNode startPosition = aSelectionInterval first
+				ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	self
+		nodeAt: aSelectionInterval last
+		ifFound: [ :last | last statementNode stopPosition = aSelectionInterval last ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	^ true
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
 ]
@@ -203,64 +270,75 @@ GtPharoSourceCoder >> isLocalVariable: aNode [
 GtPharoSourceCoder >> moveStatementDownAt: aTextPosition in: aSourceCoderViewModel [
 	self
 		nodeAt: aTextPosition
-		ifFound: [ :aNode | self moveStatementNode: aNode downIn: aSourceCoderViewModel ]
+		ifFound: [ :aNode | self moveStatementNodes: { aNode statementNode } downIn: aSourceCoderViewModel ]
 		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> moveStatementNode: aNode downIn: aSourceCoderViewModel [
-	| statement editString siblings index nextNode cursorOffsetFromEnd |
-	statement := aNode statementNode.
-	siblings := statement parent statements.
-	index := siblings indexOf: statement.
-	index = siblings size ifTrue: [ ^ self ].
+GtPharoSourceCoder >> moveStatementNodes: statements downIn: aSourceCoderViewModel [
+	"Expects a collection of sibling statement nodes"
+
+	| editString nextNode |
+	nextNode := (self statementNodeAfter: statements) ifNil: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
-	nextNode := siblings at: index + 1.
-	cursorOffsetFromEnd := statement stopPosition
-			- aSourceCoderViewModel cursors first position.
-	editString insert: nextNode source at: statement startPosition.
-	editString insert: statement source at: nextNode startPosition.
-	editString deleteFrom: statement startPosition to: statement stopPosition.
-	editString deleteFrom: nextNode startPosition to: nextNode stopPosition.
-	aSourceCoderViewModel
-		selectNone;
-		sourceText: editString asString asRopedText
-			from: self
-			synchronously: true;
-		cursors: (BrTextEditorCursor at: nextNode stopPosition - cursorOffsetFromEnd).
-	self selectStatementAt: nextNode stopPosition in: aSourceCoderViewModel
+	editString
+		swapFrom: statements first startPosition
+		to: statements last stopPosition
+		with: nextNode startPosition
+		to: nextNode stopPosition.
+	self
+		updateSourceAndSelectMovedStatements: statements
+		from: editString
+		in: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> moveStatementNode: aNode upIn: aSourceCoderViewModel [
-	| statement editString siblings index prevNode cursorOffsetFromStart |
-	statement := aNode statementNode.
-	siblings := statement parent statements.
-	index := siblings indexOf: statement.
-	index = 1 ifTrue: [ ^ self ].
+GtPharoSourceCoder >> moveStatementNodes: statements upIn: aSourceCoderViewModel [
+	"Expects a collection of sibling statement nodes"
+
+	| editString prevNode |
+	prevNode := (self statementNodeBefore: statements) ifNil: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
-	prevNode := siblings at: index - 1.
-	cursorOffsetFromStart := aSourceCoderViewModel cursors first position
-			- statement startPosition.
-	editString insert: statement source at: prevNode startPosition.
-	editString insert: prevNode source at: statement startPosition.
-	editString deleteFrom: prevNode startPosition to: prevNode stopPosition.
-	editString deleteFrom: statement startPosition to: statement stopPosition.
-	aSourceCoderViewModel
-		selectNone;
-		sourceText: editString asString asRopedText
-			from: self
-			synchronously: true;
-		cursors: (BrTextEditorCursor at: prevNode startPosition + cursorOffsetFromStart).
-	self selectStatementAt: prevNode startPosition in: aSourceCoderViewModel
+	editString
+		swapFrom: prevNode startPosition
+		to: prevNode stopPosition
+		with: statements first startPosition
+		to: statements last stopPosition.
+	self
+		updateSourceAndSelectMovedStatements: statements
+		from: editString
+		in: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> moveStatementUpAt: aTextPosition in: aSourceCoderViewModel [
 	self
 		nodeAt: aTextPosition
-		ifFound: [ :aNode | self moveStatementNode: aNode upIn: aSourceCoderViewModel ]
+		ifFound: [ :aNode | self moveStatementNodes: { aNode statementNode } upIn: aSourceCoderViewModel ]
 		ifNone: [  ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> moveStatementsDownWithin: aSelectionInterval in: aSourceCoderViewModel [
+	self
+		moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
+		downIn: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> moveStatementsUpWithin: aSelectionInterval in: aSourceCoderViewModel [
+	self
+		moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
+		upIn: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> nodeAfter: aStatementNodeCollection [
+	| siblings index nextNode |
+	siblings := aStatementNodeCollection any parent statements.
+	index := siblings indexOf: aStatementNodeCollection last.
+	index = siblings size ifFalse: [ nextNode := siblings at: index + 1 ].
+	^ nextNode
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -409,8 +487,37 @@ GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
 		ifNone: [ ^ self ].
 	statement := node statementNode.
 	aSourceCoderViewModel
+		select: statement startPosition - 1
+		to: statement stopPosition
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> statementNodeAfter: aStatementNodeCollection [
+	| siblings index |
+	siblings := aStatementNodeCollection any parent statements.
+	index := siblings indexOf: aStatementNodeCollection last.
+	^ index = siblings size ifTrue: [ nil ] ifFalse: [ siblings at: index + 1 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> statementNodeBefore: aStatementNodeCollection [
+	| siblings index |
+	siblings := aStatementNodeCollection any parent statements.
+	index := siblings indexOf: aStatementNodeCollection first.
+	^ index = 1 ifTrue: [ nil ] ifFalse: [ siblings at: index - 1 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> updateSourceAndSelectMovedStatements: statements from: editString in: aSourceCoderViewModel [
+	aSourceCoderViewModel
 		selectNone;
-		select: statement startPosition - 1 to: statement stopPosition
+		sourceText: editString asString asRopedText
+			from: self
+			synchronously: true;
+		cursors: (BrTextEditorCursor
+				at: (editString newPositionFor: aSourceCoderViewModel cursors first position));
+		select: (editString newPositionFor: statements first startPosition) - 1
+			to: (editString newPositionFor: statements last stopPosition)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
