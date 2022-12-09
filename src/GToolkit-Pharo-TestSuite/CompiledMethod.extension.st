@@ -1,6 +1,6 @@
 Extension { #name : #CompiledMethod }
 
-{ #category : #'*GToolkit-Pharo-Coder-Method' }
+{ #category : #'*GToolkit-Pharo-TestSuite' }
 CompiledMethod >> gtPharoMethodTestCase [
 	<return: #GtPharoMethodTestCase or: nil>
 	| aWeak aPharoMethodTestCase |
