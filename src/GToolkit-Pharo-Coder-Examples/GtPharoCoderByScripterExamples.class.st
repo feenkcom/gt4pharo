@@ -22,7 +22,7 @@ GtPharoCoderByScripterExamples >> coderInPager [
 { #category : #accessing }
 GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 	<gtExample>
-	<noCode>
+	<noTest>
 	| aScripter |
 	aScripter := self coderInPager.
 
@@ -41,7 +41,7 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 { #category : #accessing }
 GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 	<gtExample>
-	<noCode>
+	<noTest>
 	| aScripter |
 	aScripter := self coder.
 
