@@ -32,6 +32,7 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 			aStep click
 				// GtPharoBehaviorCoderElement;
 				// GtCoderToolbarElement;
+				// GtCoderClassHierarchyButtonId;
 				play ].
 
 	^ aScripter
@@ -50,6 +51,7 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 			aStep click
 				// GtPharoBehaviorCoderElement;
 				// GtCoderToolbarElement;
+				// GtCoderClassHierarchyButtonId;
 				play ].
 
 	^ aScripter
