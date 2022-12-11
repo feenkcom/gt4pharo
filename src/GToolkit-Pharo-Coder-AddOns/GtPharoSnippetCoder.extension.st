@@ -22,7 +22,7 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 	selector := aNode selector.
 	class := GtPharoProgramNode
 		typeOf: aNode receiver
-		in: nil class
+		in: self behavior
 		bindings: aCoderViewModel compositeVariableBindings.
 	class isNil
 		ifTrue:
