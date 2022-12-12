@@ -8,8 +8,7 @@ Class {
 		'superclass',
 		'category',
 		'className',
-		'variablesToMove',
-		'newVariableNames'
+		'variablesToMove'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
@@ -40,6 +39,19 @@ GtExtractMethodObjectRefactoring >> addClass [
 				category: category)
 ]
 
+{ #category : #transforming }
+GtExtractMethodObjectRefactoring >> cascadeExtractedMessage [
+	| rewriter ast |
+	self shouldEliminateYourselfFromConstructor ifFalse: [ ^ self ].
+	ast := self modelClass parseTreeFor: extractedMethodSelector.
+	rewriter := RBParseTreeRewriter new.
+	rewriter
+		replace: '((' , className , ' `@msg: `@args) `@;messages; yourself) `@msg2: `@args2'
+		with: '(' , className , ' `@msg: `@args) `@;messages; `@msg2: `@args2'.
+	(rewriter executeTree: ast)
+		ifTrue: [ self modelClass compileTree: rewriter tree ]
+]
+
 { #category : #accessing }
 GtExtractMethodObjectRefactoring >> category [
 	^ category
@@ -62,26 +74,60 @@ GtExtractMethodObjectRefactoring >> className: aSymbol [
 
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> convertCascadedConstructor [
-	| rewriter ast |
-	ast := self modelClass parseTreeFor: extractedMethodSelector.
-	rewriter := RBParseTreeRewriter new.
-	rewriter
-		replace: '((' , className , ' `@msg: `@args) `@;messages; yourself) `@msg2: `@args2'
-		with: '(' , className , ' `@msg: `@args) `@;messages; `@msg2: `@args2'.
-	(rewriter executeTree: ast)
-		ifTrue: [ self modelClass compileTree: rewriter tree ]
+	| constructorName |
+	constructorName := RBMethodName new.
+	constructorName selector: (self uniqueMethodNameFor: (self variablesToMove) size).
+	constructorName arguments: self variablesToMove.
+	((self options
+		at: #constructorMethodName
+		ifAbsent: [ [ :methodName :ref | nil ] ]) cull: constructorName cull: self)
+		ifNil: [ self cascadeExtractedMessage ]
+		ifNotNil: [ :methodName | self createConstructor: methodName ]
 ]
 
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> createClassInstance [
 	| tree |
 	tree := self extractedAst.
-	tree body addTemporaryNamed: '_' , className.
+	tree body addTemporaryNamed: self newClassInstanceTemp.
 	tree body
 		addNodeFirst: (RBAssignmentNode
 				variable: (RBVariableNode named: self newClassInstanceTemp)
 				value: (RBMessageNode receiver: (RBVariableNode named: className) selector: #new)).
 	self modelClass compileTree: tree
+]
+
+{ #category : #transforming }
+GtExtractMethodObjectRefactoring >> createConstructor: methodName [
+	| node ast refactoring |
+	ast := self modelClass parseTreeFor: extractedMethodSelector.
+	ast
+		nodesDo: [ :each | 
+			(each isMessage
+				and: [ each selector = #yourself
+						and: [ each receiver isMessage
+								and: [ each receiver receiver isVariable
+										and: [ each receiver receiver name = className ] ] ] ])
+				ifTrue: [ node := each ] ].
+	node ifNil: [ ^ self ].
+	refactoring := GtExtractMethodToComponentRefactoring
+			model: model
+			extract: (node start to: node stop)
+			from: extractedMethodSelector
+			in: self modelClass.
+	refactoring
+		setOption: #methodName
+			toUse: [ :mn :ref | 
+				mn selector: methodName selector.
+				mn
+					arguments: (methodName arguments
+							collect: [ :each | each = 'self' ifTrue: [ self requestSelfArgumentName ] ifFalse: [ each ] ]).
+				mn ];
+		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | className ];
+		setOption: #variableTypes
+			toUse: [ :ref :types :selected | {self methodObjectClass classSide} ];
+		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
+	self performCompositeRefactoring: refactoring
 ]
 
 { #category : #initialization }
@@ -141,6 +187,13 @@ GtExtractMethodObjectRefactoring >> extractedMethodSelector [
 	^ extractedMethodSelector
 ]
 
+{ #category : #accessing }
+GtExtractMethodObjectRefactoring >> hasSelfReferenceIn: ast [
+	ast
+		nodesDo: [ :each | (each isVariable and: [ each isSelfVariable ]) ifTrue: [ ^ true ] ].
+	^ false
+]
+
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> inlineAssignment [
 	| tree |
@@ -174,9 +227,8 @@ GtExtractMethodObjectRefactoring >> modelClass [
 
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> moveDataToClass [
-	variablesToMove
-		with: newVariableNames
-		do: [ :oldName :newName | 
+	self variablesToMove
+		do: [ :oldName | 
 			self
 				performCompositeRefactoring: (GtMoveTempToObjectRefactoring
 						model: self model
@@ -184,7 +236,7 @@ GtExtractMethodObjectRefactoring >> moveDataToClass [
 						selector: extractedMethodSelector
 						temp: oldName
 						intoTemp: self newClassInstanceTemp
-						instVar: newName) ]
+						instVar: ((self options at: #newVariableName) cull: oldName cull: self)) ]
 ]
 
 { #category : #transforming }
@@ -200,6 +252,11 @@ GtExtractMethodObjectRefactoring >> preconditions [
 { #category : #accessing }
 GtExtractMethodObjectRefactoring >> selector [
 	^ selector
+]
+
+{ #category : #testing }
+GtExtractMethodObjectRefactoring >> shouldEliminateYourselfFromConstructor [
+	^ true
 ]
 
 { #category : #accessing }
@@ -227,7 +284,11 @@ GtExtractMethodObjectRefactoring >> transform [
 ]
 
 { #category : #accessing }
-GtExtractMethodObjectRefactoring >> variables: originalVariableNames withAccessorNames: namesCollection [
-	variablesToMove := originalVariableNames.
-	newVariableNames := namesCollection
+GtExtractMethodObjectRefactoring >> variablesToMove [
+	^ variablesToMove
+		ifNil: [ | vars ast |
+			ast := class parseTreeFor: extractedMethodSelector.
+			vars := (ast arguments collect: #name) asOrderedCollection.
+			(self hasSelfReferenceIn: ast) ifTrue: [ vars add: 'self' ].
+			variablesToMove := (self options at: #variablesToMove) cull: vars cull: self ]
 ]
