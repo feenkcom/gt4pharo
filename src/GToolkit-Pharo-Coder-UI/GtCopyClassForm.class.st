@@ -53,9 +53,11 @@ GtCopyClassForm >> copyClass [
 			make: [ :builder | 
 				builder
 					fillFor: innerClass;
-					name: className;
-					superclass: superClassName asClass;
-					category: (tagName ifEmpty: [ packageName ] ifNotEmpty: [ packageName , '-' , tagName ]) ].
+					name: className trim;
+					superclass: superClassName trim asClass;
+					category: (tagName trim
+							ifEmpty: [ packageName trim ]
+							ifNotEmpty: [ packageName trim , '-' , tagName trim ]) ].
 	class copyAllCategoriesFrom: innerClass.
 	class class copyAllCategoriesFrom: innerClass class.
 	^ class
@@ -79,8 +81,12 @@ GtCopyClassForm >> nameDescription [
 		accessor: #className;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue) isNil ]
-		labelled: 'Class name is already taken'
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
+		labelled: 'Class name is already taken';		
+		addCondition: [ :aValue | aValue first isUppercase ]
+		labelled: 'First character must be uppercase';		
+		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
+		labelled: 'Class name must be alphanumeric'
 ]
 
 { #category : #accessing }
@@ -97,7 +103,7 @@ GtCopyClassForm >> packageDescription [
 		accessor: #packageName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: RPackageOrganizer default packageNames) ];
-		addCondition: [ :aValue | (RPackageOrganizer default packageNamed: aValue ifAbsent: [ nil ]) isNotNil ]
+		addCondition: [ :aValue | (RPackageOrganizer default packageNamed: aValue trim ifAbsent: [ nil ]) isNotNil ]
 			labelled: 'Package does not exist'
 ]
 
@@ -122,7 +128,7 @@ GtCopyClassForm >> superClassDescription [
 		accessor: #superClassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue) isNotNil ]
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
 		labelled: 'Class does not exist'		
 ]
 
