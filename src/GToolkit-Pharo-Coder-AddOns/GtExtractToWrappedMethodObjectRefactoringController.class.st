@@ -5,9 +5,6 @@ Class {
 		'className',
 		'superclass',
 		'category',
-		'variables',
-		'variableNames',
-		'firstRun',
 		'constructorMethodArguments',
 		'actions',
 		'generatedConstructorSelector',
@@ -43,13 +40,11 @@ GtExtractToWrappedMethodObjectRefactoringController >> addReorderConstructorPara
 						to: each stopPosition ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtExtractToWrappedMethodObjectRefactoringController >> addReorderParametersAttributes [
-	super addReorderParametersAttributes.
-	self constructorSendDo: [ :each | self addReorderConstructorParametersAttributesOn: each ]
 ]
 
-{ #category : #accessing }
+{ #category : #executing }
 GtExtractToWrappedMethodObjectRefactoringController >> cancelRenaming [
 	super cancelRenaming.
 	actions do: [ :each | each isInstalled ifTrue: [ each cancel ] ]
@@ -67,7 +62,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> category: aSymbol [
 
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoringController >> className [
-	^ className ifNil: [ #NewClass ]
+	^ className ifNil: [ self initialClassName ]
 ]
 
 { #category : #accessing }
@@ -75,70 +70,102 @@ GtExtractToWrappedMethodObjectRefactoringController >> className: aSymbol [
 	className := aSymbol
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtExtractToWrappedMethodObjectRefactoringController >> constructorSendDo: aBlock [
-	| message |
-	message := self findExtractedSend.
-	message ifNil: [ ^ self ].
-	message
-		withAllNodesOfType: GtPharoMessageNode
-		do: [ :each | each selector = generatedConstructorSelector ifTrue: [ aBlock value: each ] ]
+	[ self sourceAst
+		withAllNodesOfType: GtPharoVariableNode
+		do: [ :each | 
+			(each variableName = self initialClassName
+				or: [ each variableName = self className ])
+				ifTrue: [ | constructor |
+					constructor := each parent.
+					(constructor parent isCascade
+						and: [ constructor parent receiver == constructor ])
+						ifTrue: [ constructor := constructor parent ].
+					constructor parent isMessage ifTrue: [ ^ aBlock value: constructor ] ] ] ]
+		on: SmaCCParserError
+		do: [ :ex |  ]
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtExtractToWrappedMethodObjectRefactoringController >> findExtractedSend [
-	[ self sourceAst
-		withAllNodesOfType: GtPharoMessageNode
-		do: [ :each | each selector = self extractedSelector ifTrue: [ ^ each ] ] ]
-		on: SmaCCParserError
-		do: [ :ex | ^ nil ].
+	self constructorSendDo: [ :each | ^ each parent ].
 	^ nil
 ]
 
 { #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> getCurrentState [
-	^ super getCurrentState , {variables copy}
+GtExtractToWrappedMethodObjectRefactoringController >> initialClassName [
+	^ #NewClass
 ]
 
 { #category : #initialization }
 GtExtractToWrappedMethodObjectRefactoringController >> initialize [
 	super initialize.
-	firstRun := true.
-	variables := OrderedCollection new.
-	variableNames := Dictionary new.
 	constructorSelector := #''.
 	constructorMethodArguments := #().
 	actions := #()
 ]
 
-{ #category : #accessing }
+{ #category : #installation }
+GtExtractToWrappedMethodObjectRefactoringController >> installReceiverSelector [
+]
+
+{ #category : #installation }
 GtExtractToWrappedMethodObjectRefactoringController >> installRenamer [
-	super installRenamer.
+	| foundConstructor |
+	self addRefactoringPreview.
+
+	foundConstructor := false.
 	actions := OrderedCollection new.
 	self
 		constructorSendDo: [ :each | 
-			actions add: (self renameActionForReceiver: each parent receiver).
-			actions add: (self renameActionForConstructor: each) ]
+			foundConstructor := true.
+			each isCascade
+				ifTrue: [ actions add: (self renameActionForReceiver: each receiver receiver) ]
+				ifFalse: [ actions add: (self renameActionForReceiver: each receiver).
+					actions add: (self renameActionForConstructor: each message).
+					self addReorderConstructorParametersAttributesOn: each message ] ].
+	foundConstructor ifFalse: [ self cancelRefactoring ]
 ]
 
-{ #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> isWrapperReceiver: aString [
-	^ aString includesSubstring: 'stream' caseSensitive: false
+{ #category : #testing }
+GtExtractToWrappedMethodObjectRefactoringController >> isValidForPreview [
+	self constructorSendDo: [ :each | ^ true ].
+	^ false
+]
+
+{ #category : #private }
+GtExtractToWrappedMethodObjectRefactoringController >> methodObjectMethodName: methodName in: ref [
+	"methodName selector: #mySelector:; arguments: (...)."
+
+	| selector |
+	(methodArguments size = methodName arguments size
+		and: [ methodArguments allSatisfy: [ :each | methodName arguments includes: each ] ])
+		ifTrue: [ methodName arguments: methodArguments ]
+		ifFalse: [ methodArguments := Array withAll: methodName arguments ].
+	selector := self methodObjectSelectorFor: methodName in: ref.
+	extractedSelectorKeywords := selector keywords.
+	^ methodName
+		selector: selector;
+		yourself
+]
+
+{ #category : #customization }
+GtExtractToWrappedMethodObjectRefactoringController >> methodObjectSelectorFor: methodName in: ref [
+	"^ #methodObject:"
+
+	| selector |
+	selector := ref uniqueMethodNameFor: methodName arguments size.
+	selector numArgs = self extractedSelector numArgs
+		ifTrue: [ selector := self extractedSelector ].
+	^ selector
 ]
 
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoringController >> refactoring [
 	| model |
-	variableNames
-		at: 'self'
-		ifAbsentPut: [ (String with: sourceCoderViewModel behavior name first asLowercase)
-				, sourceCoderViewModel behavior name allButFirst
-				copyReplaceAll: ' class'
-				with: 'Class' ].
 	model := self createModel.
-	^ (firstRun
-		ifTrue: [ GtExtractMethodObjectRefactoring ]
-		ifFalse: [ GtExtractToWrappedMethodObjectRefactoring ]) new
+	^ GtExtractToWrappedMethodObjectRefactoring new
 		model: model;
 		extract: self extractionInterval
 			from: sourceCoderViewModel selector
@@ -146,8 +173,14 @@ GtExtractToWrappedMethodObjectRefactoringController >> refactoring [
 		className: self className;
 		superclass: self superclass;
 		category: self category;
-		variables: variables
-			withAccessorNames: (variables collect: [ :each | variableNames at: each ifAbsent: [ each ] ]);
+		setOption: #variablesToMove
+			toUse: [ :potential :ref | self variablesToMove: potential ];
+		setOption: #newVariableName
+			toUse: [ :oldName :ref | self variableNameFor: oldName ];
+		setOption: #wrappedReceiver
+			toUse: [ :receivers :ref | self wrappedReceiverFrom: receivers ];
+		setOption: #wrappedMethodName
+			toUse: [ :methodName :ref | self wrappedMethodName: methodName in: ref ];
 		setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
 		setOption: #selectVariableToMoveTo
 			toUse: [ :ref :cls :sel | receiver = 'self' ifTrue: [ self selfArgumentName ] ifFalse: [ receiver ] ];
@@ -163,7 +196,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> refactoringName [
 	^ 'Extract to paragraph'
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtExtractToWrappedMethodObjectRefactoringController >> renameActionForConstructor: node [
 	| action |
 	action := GtRenameSelectorAction
@@ -184,13 +217,13 @@ GtExtractToWrappedMethodObjectRefactoringController >> renameActionForConstructo
 	^ action
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtExtractToWrappedMethodObjectRefactoringController >> renameActionForReceiver: aVariable [
 	| action |
 	action := GtCreateClassAction
 			variable: aVariable
 			textualCoderViewModel: sourceCoderViewModel.
-	action requestInitialFocus: false.
+	action requestInitialFocus: true.
 	action package: sourceCoderViewModel behavior package name.
 	sourceCoderViewModel behavior tags ifNotEmpty: [ :col | action tag: col first ].
 	action selectAll: true.
@@ -212,82 +245,41 @@ GtExtractToWrappedMethodObjectRefactoringController >> renameActionForReceiver: 
 	^ action
 ]
 
-{ #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> setCurrentState: anArray [
-	super setCurrentState: anArray.
-	variables := anArray third copy
-]
-
-{ #category : #accessing }
+{ #category : #executing }
 GtExtractToWrappedMethodObjectRefactoringController >> setDefaultOptionsOn: aRefactoring [
 	super setDefaultOptionsOn: aRefactoring.
 	aRefactoring
 		setOption: #methodName
-		toUse: [ :methodName :ref | 
-			| selector |
-			(methodArguments size = methodName arguments size
-				and: [ methodArguments allSatisfy: [ :each | methodName arguments includes: each ] ])
-				ifTrue: [ methodName arguments: methodArguments ]
-				ifFalse: [ methodArguments := Array withAll: methodName arguments ].
-			selector := ref uniqueMethodNameFor: methodName arguments size.
-			selector numArgs = self extractedSelector numArgs
-				ifTrue: [ selector := self extractedSelector ].
-			extractedSelectorKeywords := selector keywords.
-			methodName
-				selector: selector;
-				yourself ].
-	aRefactoring
+			toUse: [ :methodName :ref | self methodObjectMethodName: methodName in: ref ];
 		setOption: #constructorMethodName
-		toUse: [ :methodName :ref | 
-			(constructorMethodArguments size = methodName arguments size
-				and: [ constructorMethodArguments
-						allSatisfy: [ :each | methodName arguments includes: each ] ])
-				ifTrue: [ methodName arguments: constructorMethodArguments ]
-				ifFalse: [ constructorMethodArguments := Array withAll: methodName arguments ].
-			generatedConstructorSelector := ref
-					uniqueMethodNameFor: methodName arguments size.
-			generatedConstructorSelector numArgs = constructorSelector numArgs
-				ifFalse: [ constructorSelector := self
-							dummySelectorForArgs: generatedConstructorSelector numArgs ].
-			methodName
-				selector: generatedConstructorSelector;
-				yourself ]
+			toUse: [ :methodName :ref | 
+				(constructorMethodArguments size = methodName arguments size
+					and: [ constructorMethodArguments
+							allSatisfy: [ :each | methodName arguments includes: each ] ])
+					ifTrue: [ methodName arguments: constructorMethodArguments ]
+					ifFalse: [ constructorMethodArguments := Array withAll: methodName arguments ].
+				generatedConstructorSelector := ref
+						uniqueMethodNameFor: methodName arguments size.
+				generatedConstructorSelector numArgs = constructorSelector numArgs
+					ifFalse: [ constructorSelector := self
+								dummySelectorForArgs: generatedConstructorSelector numArgs ].
+				methodName
+					selector: generatedConstructorSelector;
+					yourself ]
 ]
 
-{ #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> setDefaultValuesFor: aRefactoring [
-	| vars send |
-	(aRefactoring methodClass parseTreeFor: aRefactoring selector)
-		nodesDo: [ :node | 
-			(node isMessage and: [ node selector = self extractedSelector ])
-				ifTrue: [ send := node ] ].
-	vars := OrderedCollection
-			withAll: (send arguments collect: [ :each | each name ]).
-	potentialReceivers := vars copy.
-	self setReceiverAndTypeFrom: vars.
-	variables := vars copyWithout: receiver
-]
-
-{ #category : #accessing }
+{ #category : #executing }
 GtExtractToWrappedMethodObjectRefactoringController >> setPreviewOptionsOn: aRefactoring [
 	super setPreviewOptionsOn: aRefactoring.
 	aRefactoring
+		setOption: #methodName
+			toUse: [ :methodName :ref | self methodObjectMethodName: methodName in: ref ];
 		setOption: #constructorMethodName
-		toUse: [ :methodName | 
-			methodName
-				selector: constructorSelector;
-				arguments: constructorMethodArguments;
-				yourself ]
-]
-
-{ #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> setReceiverAndTypeFrom: potentialReceiverVariables [
-	potentialReceiverVariables isEmpty
-		ifTrue: [ self error: 'No variables are needed in the method' ].
-	receiver := potentialReceiverVariables
-			detect: [ :each | self isWrapperReceiver: each ]
-			ifNone: [ potentialReceiverVariables first ].
-	receiverClassName := nil
+			toUse: [ :methodName | 
+				methodName
+					selector: constructorSelector;
+					arguments: constructorMethodArguments;
+					yourself ]
 ]
 
 { #category : #accessing }
@@ -300,32 +292,56 @@ GtExtractToWrappedMethodObjectRefactoringController >> superclass: aSymbol [
 	superclass := aSymbol
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtExtractToWrappedMethodObjectRefactoringController >> swapConstructorParameterWithNext: anInteger [
 	self removeAllAttributes.
 	self
-		constructorSendDo: [ :message | 
+		constructorSendDo: [ :each | 
 			constructorMethodArguments swap: anInteger with: anInteger + 1.
 			self
-				swap: (message values at: anInteger)
-				with: (message values at: anInteger + 1) ].
+				swap: (each message values at: anInteger)
+				with: (each message values at: anInteger + 1) ].
 	self addReorderParametersAttributes.
 	self updateRenamer.
 	self addRefactoringPreview
 ]
 
-{ #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> updateFromRefactoring: aRefactoring [
-	firstRun
-		ifTrue: [ firstRun := false.
-			self updateExtractedMethodSourceFrom: aRefactoring.
-			self setDefaultValuesFor: aRefactoring.
-			self safelyExecute ]
-		ifFalse: [ super updateFromRefactoring: aRefactoring ]
+{ #category : #customization }
+GtExtractToWrappedMethodObjectRefactoringController >> variableNameFor: oldName [
+	"name for the variable in the method object"
+
+	oldName = 'self'
+		ifTrue: [ ^ (String with: sourceCoderViewModel behavior name first asLowercase)
+				, sourceCoderViewModel behavior name allButFirst
+				copyReplaceAll: ' class'
+				with: 'Class' ].
+	^ oldName
 ]
 
-{ #category : #accessing }
-GtExtractToWrappedMethodObjectRefactoringController >> updateReceiverTo: aString [
-	variables := (variables copyWithout: aString) copyWith: receiver.
-	super updateReceiverTo: aString
+{ #category : #customization }
+GtExtractToWrappedMethodObjectRefactoringController >> variablesToMove: potential [
+	"variables that should be in the method object"
+
+	^ potential copyWithout: (self wrappedReceiverFrom: potential)
+]
+
+{ #category : #private }
+GtExtractToWrappedMethodObjectRefactoringController >> wrappedMethodName: methodName in: aRefactoring [
+	methodName
+		selector: (self wrappedMethodSelectorFor: methodName in: aRefactoring).
+	^ methodName
+]
+
+{ #category : #customization }
+GtExtractToWrappedMethodObjectRefactoringController >> wrappedMethodSelectorFor: methodName in: aRefactoring [
+	"^ #mySelector:"
+
+	^ methodName selector
+]
+
+{ #category : #customization }
+GtExtractToWrappedMethodObjectRefactoringController >> wrappedReceiverFrom: receivers [
+	"^receivers detect: [:each | each includesSubstring: 'var' caseSensitive: false]"
+
+	^ receivers first
 ]

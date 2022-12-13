@@ -191,12 +191,12 @@ GtExtractMethodObjectRefactoringController >> refactoring [
 			className: self className;
 			superclass: self superclass;
 			category: self category;
-			variables: variables
-				withAccessorNames: (variables collect: [ :each | variableNames at: each ifAbsent: [ each ] ]);
 			yourself.
 	refactoring
-		setOption: #selfArgumentName
-		toUse: [ :ref | self selfArgumentName ].
+		setOption: #variablesToMove toUse: [ :potential :ref | variables ];
+		setOption: #newVariableName
+			toUse: [ :oldName :ref | variableNames at: oldName ifAbsent: [ oldName ] ];
+		setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ].
 
 	^ refactoring
 ]
