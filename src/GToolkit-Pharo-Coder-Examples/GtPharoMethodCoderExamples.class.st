@@ -1060,6 +1060,18 @@ GtPharoMethodCoderExamples >> modifyNewMethod [
 	^ aMethodCoder
 ]
 
+{ #category : #'sample methods' }
+GtPharoMethodCoderExamples >> multipleStatementMethod [
+	| a b c d |
+	a := 1.
+	a = 1
+		ifTrue: [ b := 2.
+			c := 3 ]
+		ifFalse: [ c := 4.
+			d := 5 ].
+	d := 6
+]
+
 { #category : #'examples - ast' }
 GtPharoMethodCoderExamples >> nodeAtCursor [
 	<gtExample>
