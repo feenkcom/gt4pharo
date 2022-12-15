@@ -88,52 +88,10 @@ GtTraitCreationForm >> slotsDescription [
 		label: 'Slots';
 		priority: 5;
 		accessor: #slots;
-		  classes: { String };
-		blocListStencil: [ :aMemento :aDescription :aForm | 
-			| aTagger |
-			aTagger := BrTagger new.
-			aTagger
-				margin: ((BlInsets left: 7) withBottom: 4);
-				hMatchParent;
-				vFitContent.
-			aForm hMatchParent.
-			aTagger
-				aptitude: (BrGlamorousTaggerEditableAptitude new
-						margin: (BlInsets right: 5);
-						tagLabel: [ :aTag | 
-							BrEditableLabel new
-								text: (aDescription displayStringFor: aTag name);
-								aptitude: (BrGlamorousEditableLabelAptitude new
-										glamorousCodeFont;
-										defaultForeground: Color black;
-										fontSize: 10);
-								whenKey: BlKeyCombination primaryB
-									labelDo: [ :aShortcutEvent :aShortcut | aTagger phlow spawnObject: aTag name ] ]).
-			aTagger
-				when: BrTaggerAddTagRequest
-				do: [ :aRequest | 
-					aMemento
-						write: ((aTagger tags collect: #name)
-								add: aRequest tag name;
-								yourself)
-						using: aDescription ].
-			aTagger
-				when: BrTaggerRemoveTagRequest
-				do: [ :aRequest | 
-					aMemento
-						write: ((aTagger tags collect: #name)
-								remove: aRequest tag name;
-								yourself)
-						using: aDescription ].
-			aTagger
-				withAsyncSinkDo: [ :anElementSink | 
-					anElementSink
-						sink: AsyncPeakSink new;
-						whenUpdate: [ :theTagger :aSink | 
-							| theValues |
-							theValues := aSink value currentValue.
-							theTagger namedTags: theValues ].
-					(aMemento readObservableValueUsing: aDescription) observe: anElementSink ] ]
+		classes: {String};
+		blocListStencil: self taggerStencil;
+		addCondition: [ :aValue | aValue asSet size = aValue size ]
+			labelled: 'All slot names must be unique'
 ]
 
 { #category : #accessing }
@@ -161,55 +119,5 @@ GtTraitCreationForm >> traitsDescription [
 		priority: 5;
 		accessor: #traits;
 		classes: {String};
-		blocListStencil: [ :aMemento :aDescription :aForm | 
-			| aTagger |
-			aTagger := BrTagger new.
-			aTagger
-				margin: ((BlInsets left: 7) withBottom: 4);
-				hMatchParent;
-				vFitContent.
-			aForm hMatchParent.
-			aTagger
-				aptitude: (BrGlamorousTaggerEditableAptitude new
-						margin: (BlInsets right: 5);
-						tagLabel: [ :aTag | 
-							| aLabel |
-							aLabel := BrEditableLabel new
-									text: (aDescription displayStringFor: aTag name);
-									aptitude: (BrGlamorousEditableLabelAptitude new
-											glamorousCodeFont;
-											defaultForeground: Color black;
-											fontSize: 10);
-									whenKey: BlKeyCombination primaryB
-										labelDo: [ :aShortcutEvent :aShortcut | aTagger phlow spawnObject: aTag name ].
-
-							(GtCompletionController
-								on: aLabel
-								strategy: GtClassesCompletionStrategy new) install.
-							aLabel ]).
-			aTagger
-				when: BrTaggerAddTagRequest
-				do: [ :aRequest | 
-					aMemento
-						write: ((aTagger tags collect: #name)
-								add: aRequest tag name;
-								yourself)
-						using: aDescription ].
-			aTagger
-				when: BrTaggerRemoveTagRequest
-				do: [ :aRequest | 
-					aMemento
-						write: ((aTagger tags collect: #name)
-								remove: aRequest tag name;
-								yourself)
-						using: aDescription ].
-			aTagger
-				withAsyncSinkDo: [ :anElementSink | 
-					anElementSink
-						sink: AsyncPeakSink new;
-						whenUpdate: [ :theTagger :aSink | 
-							| theValues |
-							theValues := aSink value currentValue.
-							theTagger namedTags: theValues ].
-					(aMemento readObservableValueUsing: aDescription) observe: anElementSink ] ]
+		blocListStencil: self taggerStencil
 ]
