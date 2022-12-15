@@ -30,15 +30,18 @@ GtCreationForm >> commit [
 
 { #category : #callbacks }
 GtCreationForm >> commitPackage [
+	| aPackage |
 	(RPackageOrganizer default includesPackageNamed: packageAndTagName packageName)
-		ifTrue: [ | aPackage |
-			aPackage := RPackageOrganizer default
+		ifTrue: [ aPackage := RPackageOrganizer default
 					packageNamed: packageAndTagName packageName.
 			packageAndTagName tagName
 				ifEmpty: [ ^ aPackage ]
 				ifNotEmpty: [ :aTagName | ^ aPackage classTagNamed: aTagName ifAbsent: [ aPackage addClassTag: aTagName ] ] ]
-		ifFalse: [ ^ (RPackage named: packageAndTagName packageName) register
-				addClassTag: packageAndTagName tagName ]
+		ifFalse: [ aPackage := (RPackage named: packageAndTagName packageName)
+					register.
+			packageAndTagName tagName
+				ifEmpty: [ ^ aPackage ]
+				ifNotEmpty: [ :aTagName | aPackage addClassTag: aTagName ] ]
 ]
 
 { #category : #initialization }
@@ -79,4 +82,54 @@ GtCreationForm >> packageAndTagName [
 GtCreationForm >> packageAndTagName: anObject [
 
 	packageAndTagName := anObject
+]
+
+{ #category : #accessing }
+GtCreationForm >> taggerStencil [
+	^ [ :aMemento :aDescription :aForm | 
+	| aTagger |
+	aTagger := BrTagger new.
+	aTagger
+		margin: ((BlInsets left: 7) withBottom: 4);
+		fitContent.
+	aForm hMatchParent.
+	aTagger
+		aptitude: (BrGlamorousTaggerEditableAptitude new
+				margin: (BlInsets right: 5);
+				tagLabel: [ :aTag | 
+					BrEditableLabel new
+						text: (aDescription displayStringFor: aTag name);
+						aptitude: (BrGlamorousEditableLabelAptitude new
+								glamorousCodeFont;
+								defaultForeground: Color black;
+								fontSize: 10) ]).
+	aTagger
+		when: BrTaggerAddTagRequest
+		do: [ :aRequest | 
+			aMemento
+				write: ((aTagger tags collect: #name)
+						add: aRequest tag name;
+						yourself)
+				using: aDescription ].
+	aTagger
+		when: BrTaggerRemoveTagRequest
+		do: [ :aRequest | 
+			aMemento
+				write: ((aTagger tags collect: #name)
+						remove: aRequest tag name;
+						yourself)
+				using: aDescription ].
+	aTagger
+		withAsyncSinkDo: [ :anElementSink | 
+			anElementSink
+				sink: AsyncPeakSink new;
+				whenUpdate: [ :theTagger :aSink | 
+					| theValues |
+					theValues := aSink value currentValue.
+					theTagger namedTags: theValues ].
+			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
+	GtMagritteBuilderUtility
+		newValidationContainerWith: aTagger
+		memento: aMemento
+		using: aDescription ]
 ]
