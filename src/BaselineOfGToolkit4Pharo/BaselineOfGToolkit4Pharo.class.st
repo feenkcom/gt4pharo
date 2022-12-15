@@ -18,7 +18,9 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			baseline: 'GToolkitCoder' with: [
 				spec repository: 'github://feenkcom/gtoolkit-coder:main/src' ];
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:main/src' ];
+				spec repository: 'github://feenkcom/gtoolkit-completer:main/src' ];			
+			baseline: 'GToolkit4Magritte' with: [
+				spec repository: 'github://feenkcom/gt4magritte:main/src' ];
 			baseline: 'SmaCC' with: [
 				spec repository: 'github://j-brant/SmaCC:Pharo10/src' ].
 		spec 
@@ -85,6 +87,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			package: 'GToolkit-Pharo-Coder' with: [
 				spec requires: #(
 					'GToolkitCoder'
+					'GToolkit4Magritte'
 					'GToolkitCompleter'
 					'GToolkit-Pharo-Coder-Method'
 					'GToolkit-Pharo-Metamodels'
@@ -94,6 +97,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			package: 'GToolkit-Pharo-Coder-UI' with: [
 				spec requires: #(
 					'GToolkitCoder'
+					'GToolkit4Magritte'
 					'GToolkitCompleter'
 					'GToolkitRefactoringsUtility'
 					'GToolkit-Pharo-Coder'
