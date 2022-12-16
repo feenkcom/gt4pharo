@@ -120,6 +120,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
 	| action toggleModel |
 	super initializeAddOns: addOns viewModel: aViewModel.
 	toggleModel := aViewModel variableValueToggleModel.
+	toggleModel ifNil: [^self].
 	toggleModel
 		when: BrToggleActivatedEvent
 			do: [ :anEvent | 
