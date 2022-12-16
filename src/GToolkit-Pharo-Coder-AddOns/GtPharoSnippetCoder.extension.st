@@ -118,7 +118,6 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
 	| action toggleModel |
-	aViewModel inspectOnce.
 	super initializeAddOns: addOns viewModel: aViewModel.
 	toggleModel := aViewModel variableValueToggleModel.
 	action := GtCoderToggleAction new

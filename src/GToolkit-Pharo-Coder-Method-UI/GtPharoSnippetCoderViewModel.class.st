@@ -150,6 +150,5 @@ GtPharoSnippetCoderViewModel >> updateCompletionBindings [
 
 { #category : #accessing }
 GtPharoSnippetCoderViewModel >> variableValueToggleModel [
-	self inspectOnce.
 	^BrToggleModel new
 ]
