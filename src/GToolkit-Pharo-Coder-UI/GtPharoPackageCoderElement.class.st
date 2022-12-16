@@ -144,16 +144,19 @@ GtPharoPackageCoderElement >> buildParentLink [
 
 { #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildRemovePackageLabel [
-	| labelText classCount extensionCount |
+	| labelText classCount extensionCount tagCount |
 
 	classCount := packageCoder package definedClasses size.
+	tagCount := packageCoder package classTags size.
 	extensionCount := packageCoder package extensionMethods size.
 
-	labelText := 'Remove package <1s> with <2p> class<3?:es> and <4p> extension method<5?:s>'
+	labelText := 'Remove package <1s> with <2p> class<3?:es>, <4p> tag<5?:s> and <6p> extension method<7?:s>'
 		expandMacrosWithArguments:
 			{packageCoder package name.
 			classCount.
 			(classCount = 1).
+			tagCount.
+			(tagCount = 1).
 			extensionCount.
 			(extensionCount = 1)}.
 
