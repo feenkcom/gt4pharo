@@ -116,6 +116,30 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
+	| action toggleModel |
+	aViewModel inspectOnce.
+	super initializeAddOns: addOns viewModel: aViewModel.
+	toggleModel := aViewModel variableValueToggleModel.
+	action := GtCoderToggleAction new
+			title: 'Variable Values' translated;
+			icon: BrGlamorousVectorIcons edit;
+			activateBlock: [ :anEvent | 
+				aViewModel
+					addStyler: (GtContextVariableValueStyler new coderViewModel: aViewModel).
+				aViewModel requestUpdateAddOns ];
+			deactivateBlock: [ :anEvent | 
+				aViewModel removeStylersOfClass: GtContextVariableValueStyler.
+				aViewModel requestUpdateAddOns ];
+			id: GtSourceCoderProfileActionId.
+
+	addOns
+		updateActionList: #mainActions
+		withAction: action
+		onlyNew: true
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 
