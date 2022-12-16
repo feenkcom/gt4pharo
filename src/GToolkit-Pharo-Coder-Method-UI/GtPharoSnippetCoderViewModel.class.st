@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtPharoSourceCoderViewModel,
 	#instVars : [
 		'context',
-		'sharedBindings'
+		'sharedBindings',
+		'variableValueToggleModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
@@ -150,5 +151,10 @@ GtPharoSnippetCoderViewModel >> updateCompletionBindings [
 
 { #category : #accessing }
 GtPharoSnippetCoderViewModel >> variableValueToggleModel [
-	^BrToggleModel new
+	^variableValueToggleModel
+]
+
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> variableValueToggleModel: aModel [
+	variableValueToggleModel := aModel
 ]

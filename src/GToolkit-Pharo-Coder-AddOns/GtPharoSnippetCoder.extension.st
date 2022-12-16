@@ -120,16 +120,23 @@ GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
 	| action toggleModel |
 	super initializeAddOns: addOns viewModel: aViewModel.
 	toggleModel := aViewModel variableValueToggleModel.
-	action := GtCoderToggleAction new
-			title: 'Variable Values' translated;
-			icon: BrGlamorousVectorIcons edit;
-			activateBlock: [ :anEvent | 
+	toggleModel
+		when: BrToggleActivatedEvent
+			do: [ :anEvent | 
 				aViewModel
 					addStyler: (GtContextVariableValueStyler new coderViewModel: aViewModel).
 				aViewModel requestUpdateAddOns ];
-			deactivateBlock: [ :anEvent | 
+		when: BrToggleDeactivatedEvent
+			do: [ :anEvent | 
 				aViewModel removeStylersOfClass: GtContextVariableValueStyler.
-				aViewModel requestUpdateAddOns ];
+				aViewModel requestUpdateAddOns ].
+
+	action := GtCoderToggleAction new
+			title: 'Variable Values' translated;
+			icon: BrGlamorousVectorIcons edit;
+			toggleModel: toggleModel;
+			activateBlock: [ :anEvent | toggleModel activate ];
+			deactivateBlock: [ :anEvent | toggleModel deactivate ];
 			id: GtSourceCoderProfileActionId.
 
 	addOns
