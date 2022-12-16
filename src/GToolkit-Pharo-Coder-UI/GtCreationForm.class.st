@@ -34,13 +34,13 @@ GtCreationForm >> commitPackage [
 	(RPackageOrganizer default includesPackageNamed: packageAndTagName packageName)
 		ifTrue: [ aPackage := RPackageOrganizer default
 					packageNamed: packageAndTagName packageName.
-			packageAndTagName tagName
-				ifEmpty: [ ^ aPackage ]
-				ifNotEmpty: [ :aTagName | ^ aPackage classTagNamed: aTagName ifAbsent: [ aPackage addClassTag: aTagName ] ] ]
+			^ packageAndTagName tagName
+				ifEmpty: [ aPackage ]
+				ifNotEmpty: [ :aTagName | aPackage classTagNamed: aTagName ifAbsent: [ aPackage addClassTag: aTagName ] ] ]
 		ifFalse: [ aPackage := (RPackage named: packageAndTagName packageName)
 					register.
-			packageAndTagName tagName
-				ifEmpty: [ ^ aPackage ]
+			^ packageAndTagName tagName
+				ifEmpty: [ aPackage ]
 				ifNotEmpty: [ :aTagName | aPackage addClassTag: aTagName ] ]
 ]
 
@@ -87,22 +87,26 @@ GtCreationForm >> packageAndTagName: anObject [
 { #category : #accessing }
 GtCreationForm >> taggerStencil [
 	^ [ :aMemento :aDescription :aForm | 
-	| aTagger |
+	| aTagger aTaggerAptitude |
 	aTagger := BrTagger new.
 	aTagger
 		margin: ((BlInsets left: 7) withBottom: 4);
 		fitContent.
 	aForm hMatchParent.
 	aTagger
-		aptitude: (BrGlamorousTaggerEditableAptitude new
-				margin: (BlInsets right: 5);
-				tagLabel: [ :aTag | 
-					BrEditableLabel new
-						text: (aDescription displayStringFor: aTag name);
-						aptitude: (BrGlamorousEditableLabelAptitude new
-								glamorousCodeFont;
-								defaultForeground: Color black;
-								fontSize: 10) ]).
+		aptitude: (aTaggerAptitude := BrGlamorousTaggerEditableAptitude new
+					margin: (BlInsets right: 5);
+					tagLabel: [ :aTag | 
+						BrEditableLabel new
+							text: (aDescription displayStringFor: aTag name);
+							aptitude: (BrGlamorousEditableLabelAptitude new
+									glamorousCodeFont;
+									defaultForeground: Color black;
+									fontSize: 10);
+							whenKey: BlKeyCombination space
+								editorDo: [ :anEvent | 
+									anEvent target acceptEdition.
+									aTaggerAptitude addTagCreatorElement ] ]).
 	aTagger
 		when: BrTaggerAddTagRequest
 		do: [ :aRequest | 

@@ -131,7 +131,7 @@ GtPharoPackageTagCoderElement >> buildParentLink [
 GtPharoPackageTagCoderElement >> buildRemovePackageTagLabel [
 	| labelText count |
 	count := packageTagCoder packageTag classes size.
-	labelText := 'Remove package tag <1s> and <2p> class<3?:es>'
+	labelText := 'Remove package tag <1s> with <2p> class<3?:es>'
 		expandMacrosWithArguments:
 			{packageTagCoder packageTag name.
 			count.
