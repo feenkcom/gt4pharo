@@ -1,3 +1,6 @@
+"
+I exemplify {{gtClass:GtCoder}}. 
+"
 Class {
 	#name : #GtPharoCoderByScripterExamples,
 	#superclass : #Object,
@@ -12,17 +15,67 @@ GtPharoCoderByScripterExamples >> coder [
 	^ self scripterForBlock: [ GtCoder forClass: GtPharoDummyClass ]
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coderInPager [
 	<gtExample>
-	^ self
-		scripterForBlock: [ GtPager createWrappedOn: (GtCoder forClass: GtPharoDummyClass) ]
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPager createWrappedOn: (GtCoder forClass: GtPharoDummyClass) ].
+
+	aScripter assert
+		label: 'Assert one page';
+		satisfies: [ :aPager | aPager pages size = 1 ];
+		onSelf;
+		play.
+
+	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
+GtPharoCoderByScripterExamples >> coderInPager_clickOnCopyClassButton [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderInPager.
+
+	aScripter
+		substeps: 'Click on Copy Class'
+		do: [ :aStep | 
+			aStep click
+				// GtPharoBehaviorCoderElement;
+				// GtCoderToolbarElement;
+				// GtPharoCopyClassElementId;
+				play ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoCoderByScripterExamples >> coderInPager_clickOnGitButton [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderInPager.
+
+	aScripter
+		substeps: 'Go to Git'
+		do: [ :aStep | 
+			aStep click
+				// GtPharoBehaviorCoderElement;
+				// GtCoderToolbarElement;
+				// GtCoderGitButtonId;
+				play.
+
+			aStep assert
+				label: 'Assert two pages';
+				satisfies: [ :aPager | aPager pages size = 2 ];
+				onSelf;
+				play ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self coderInPager.
 
@@ -38,10 +91,9 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self coder.
 
