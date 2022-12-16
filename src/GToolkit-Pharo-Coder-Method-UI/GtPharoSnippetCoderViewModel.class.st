@@ -147,3 +147,8 @@ GtPharoSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
 GtPharoSnippetCoderViewModel >> updateCompletionBindings [
 	self completionStrategy bindings: self localSnippetVariableBindings
 ]
+
+{ #category : #accessing }
+GtPharoSnippetCoderViewModel >> variableValueToggleModel [
+	^BrToggleModel new
+]
