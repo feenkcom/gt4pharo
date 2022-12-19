@@ -126,7 +126,7 @@ GtCreationForm >> taggerStencil [
 	aTagger
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				sink: AsyncPeakSink new;
+				sink: AsyncPeekSink new;
 				whenUpdate: [ :theTagger :aSink | 
 					| theValues |
 					theValues := aSink value currentValue.

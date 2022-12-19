@@ -25,7 +25,7 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 			c minWidth: 20 ];
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				sink: AsyncPeakSink new;
+				sink: AsyncPeekSink new;
 				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue packageName ].
 			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
 
@@ -70,7 +70,7 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 			c minWidth: 20 ];
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				sink: AsyncPeakSink new;
+				sink: AsyncPeekSink new;
 				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue tagName ].
 			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
 
