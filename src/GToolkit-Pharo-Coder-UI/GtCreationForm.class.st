@@ -85,7 +85,8 @@ GtCreationForm >> taggerStencil [
 	^ [ :aMemento :aDescription :aForm | 
 	| aTagger aTaggerAptitude |
 	aTagger := BrTagger new.
-	aTagger fitContent.
+	aTagger
+		fitContent.
 	aForm hMatchParent.
 	aTagger
 		aptitude: (aTaggerAptitude := BrGlamorousTaggerEditableAptitude new
@@ -120,7 +121,7 @@ GtCreationForm >> taggerStencil [
 	aTagger
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				sink: AsyncPeakSink new;
+				sink: AsyncPeekSink new;
 				whenUpdate: [ :theTagger :aSink | 
 					| theValues |
 					theValues := aSink value currentValue.
