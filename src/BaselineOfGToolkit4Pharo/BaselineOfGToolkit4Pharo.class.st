@@ -25,7 +25,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.844/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.6.463/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.6.464/src' ].
 		spec
 			baseline: 'SmaCC' with: [
 				spec repository: 'github://j-brant/SmaCC:cc8e51c4e70e2f955e73b5b12a80626c42bf8af0/src' ].
