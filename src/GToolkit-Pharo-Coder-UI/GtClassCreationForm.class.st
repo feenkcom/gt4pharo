@@ -1,6 +1,3 @@
-"
-nil
-"
 Class {
 	#name : #GtClassCreationForm,
 	#superclass : #GtTraitCreationForm,
@@ -37,7 +34,12 @@ GtClassCreationForm >> classVarsDescription [
 { #category : #accessing }
 GtClassCreationForm >> commit [
 	Smalltalk compiler evaluate: self definitionString.
-	^ Smalltalk classNamed: self className
+	^ Smalltalk classNamed: self rawClassName
+]
+
+{ #category : #accessing }
+GtClassCreationForm >> defaultName [
+	^ 'NameOfSubclass'
 ]
 
 { #category : #accessing }
@@ -48,7 +50,7 @@ GtClassCreationForm >> definitionString [
 
 	aStream
 		nextPutAll: ' subclass: ';
-		store: self className asSymbol.
+		store: self rawClassName asSymbol.
 
 	self traits isEmpty
 		ifFalse: [ aStream
@@ -87,7 +89,6 @@ GtClassCreationForm >> definitionString [
 GtClassCreationForm >> initialize [
 	super initialize.
 
-	self className: 'NameOfSubclass'.
 	self superclassName: 'Object'.
 
 	classVars := OrderedCollection new.

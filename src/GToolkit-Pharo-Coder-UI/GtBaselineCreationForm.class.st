@@ -1,6 +1,3 @@
-"
-nil
-"
 Class {
 	#name : #GtBaselineCreationForm,
 	#superclass : #GtCreationForm,

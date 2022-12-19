@@ -1,6 +1,3 @@
-"
-nil
-"
 Class {
 	#name : #GtCreationForm,
 	#superclass : #Object,
@@ -68,8 +65,7 @@ GtCreationForm >> packageAndTagDescription [
 		label: 'Package';
 		priority: 3;
 		accessor: #packageAndTagName;
-		addCondition: [ :aValue | aValue packageName trim isNotEmpty ]
-			labelled: 'Package must be set'
+		beRequired
 ]
 
 { #category : #accessing }
@@ -89,9 +85,7 @@ GtCreationForm >> taggerStencil [
 	^ [ :aMemento :aDescription :aForm | 
 	| aTagger aTaggerAptitude |
 	aTagger := BrTagger new.
-	aTagger
-		margin: ((BlInsets left: 7) withBottom: 4);
-		fitContent.
+	aTagger fitContent.
 	aForm hMatchParent.
 	aTagger
 		aptitude: (aTaggerAptitude := BrGlamorousTaggerEditableAptitude new
