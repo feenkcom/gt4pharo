@@ -1,6 +1,3 @@
-"
-nil
-"
 Class {
 	#name : #GtCreationFormWidget,
 	#superclass : #BrFrame,

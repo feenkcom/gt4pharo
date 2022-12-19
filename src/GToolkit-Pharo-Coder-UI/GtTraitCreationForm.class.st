@@ -1,6 +1,3 @@
-"
-nil
-"
 Class {
 	#name : #GtTraitCreationForm,
 	#superclass : #GtCreationForm,
@@ -14,7 +11,9 @@ Class {
 
 { #category : #accessing }
 GtTraitCreationForm >> className [
-	^ className
+	^ className asRopedText
+		attribute: (BrGhostTextAttribute
+				for: (self defaultName asRopedText glamorousRegularFontAndSize foreground: Color lightGray))
 ]
 
 { #category : #accessing }
@@ -45,7 +44,7 @@ GtTraitCreationForm >> defaultName [
 GtTraitCreationForm >> initialize [
 	super initialize.
 
-	className := self defaultName.
+	self className: ''.
 	traits := OrderedCollection new.
 	slots := OrderedCollection new
 ]
@@ -54,19 +53,27 @@ GtTraitCreationForm >> initialize [
 GtTraitCreationForm >> nameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
-		label: 'Name';
+		label: 'Name*';
 		priority: 1;
 		accessor: #className;
+		kind: Object;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
+		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
+			labelled: 'Name cannot be empty';
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
 			labelled: 'Name is already taken';
-		addCondition: [ :aValue | aValue first isUppercase ]
+		addCondition: [ :aValue | aValue size > 0 ifTrue: [ aValue first isUppercase ] ifFalse: [ true ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
+		addCondition: [ :aValue | aValue  asString isAllAlphaNumerics ]
 			labelled: 'Name must be alphanumeric';
 		addCondition: [ :aValue | (aValue = 'TNameOfTrait') not and: [ (aValue = 'NameOfSubclass') not ] ]
 			labelled: 'Name cannot be example value'
+]
+
+{ #category : #accessing }
+GtTraitCreationForm >> rawClassName [
+	^ className asString
 ]
 
 { #category : #accessing }

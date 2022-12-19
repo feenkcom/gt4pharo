@@ -28,6 +28,11 @@ GtPackageAndTagName >> initialize [
 ]
 
 { #category : #accessing }
+GtPackageAndTagName >> isEmpty [
+	^ packageName trim isEmpty
+]
+
+{ #category : #accessing }
 GtPackageAndTagName >> packageName [
 
 	^ packageName
