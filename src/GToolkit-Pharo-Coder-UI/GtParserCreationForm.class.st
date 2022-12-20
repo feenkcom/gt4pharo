@@ -9,6 +9,16 @@ Class {
 }
 
 { #category : #accessing }
+GtParserCreationForm class >> componentName [
+	^ 'Parser'
+]
+
+{ #category : #accessing }
+GtParserCreationForm class >> priority [
+	^ 5
+]
+
+{ #category : #callbacks }
 GtParserCreationForm >> commit [
 	| category |
 	category := self commitPackage categoryName.
@@ -65,12 +75,15 @@ GtParserCreationForm >> parserDescription [
 		accessor: #parser;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		addCondition: [ :aValue | aValue trim isNotEmpty ]
+			labelled: 'Parser name must be set';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
 			labelled: 'Class name is already taken';
 		addCondition: [ :aValue | aValue first isUppercase ]
 			labelled: 'First character must be uppercase';
 		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
-			labelled: 'Class name must be alphanumeric'
+			labelled: 'Class name must be alphanumeric';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -94,10 +107,13 @@ GtParserCreationForm >> scannerDescription [
 		accessor: #scanner;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		addCondition: [ :aValue | aValue trim isNotEmpty ]
+			labelled: 'Scanner name must be set';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
 			labelled: 'Class name is already taken';
 		addCondition: [ :aValue | aValue first isUppercase ]
 			labelled: 'First character must be uppercase';
 		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
-			labelled: 'Class name must be alphanumeric'
+			labelled: 'Class name must be alphanumeric';
+		beRequired
 ]

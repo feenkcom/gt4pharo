@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #accessing }
+GtClassCreationForm class >> componentName [
+	^ 'Class'
+]
+
+{ #category : #accessing }
+GtClassCreationForm class >> priority [
+	^ 1
+]
+
+{ #category : #accessing }
 GtClassCreationForm >> classVars [
 
 	^ classVars

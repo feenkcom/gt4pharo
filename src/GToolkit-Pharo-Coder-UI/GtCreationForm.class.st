@@ -8,6 +8,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Forms - Models'
 }
 
+{ #category : #accessing }
+GtCreationForm class >> componentName [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtCreationForm class >> priority [
+	^ self subclassResponsibility
+]
+
 { #category : #magritte }
 GtCreationForm >> acceptAction [
 	<magritteActionDescription>
@@ -131,4 +141,9 @@ GtCreationForm >> taggerStencil [
 		newValidationContainerWith: aTagger
 		memento: aMemento
 		using: aDescription ]
+]
+
+{ #category : #accessing }
+GtCreationForm >> toolFor: anInstance [
+	^ GtClassCoderTool forClass: anInstance
 ]

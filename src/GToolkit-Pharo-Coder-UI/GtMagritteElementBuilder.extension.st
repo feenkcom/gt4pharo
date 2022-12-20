@@ -26,7 +26,7 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				sink: AsyncPeekSink new;
-				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue packageName ].
+				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue packageRope ].
 			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
 
 	aCompletionStrategy := GtStringsCompletionStrategy new
@@ -71,7 +71,7 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				sink: AsyncPeekSink new;
-				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue tagName ].
+				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue tagRope ].
 			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
 
 	tagEditor editor
