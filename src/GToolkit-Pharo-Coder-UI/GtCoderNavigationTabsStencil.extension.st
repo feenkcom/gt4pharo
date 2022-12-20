@@ -71,3 +71,33 @@ GtCoderNavigationTabsStencil >> gtAddTraitTab: look [
 			navigationModel selectedTagDo: [ :tag | element forPackageTag: tag ].
 			element ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoderNavigationTabsStencil >> gtBaselineComponent [
+	<gtCreateComponent>
+	^ GtBaselineCreationForm
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoderNavigationTabsStencil >> gtClassComponent [
+	<gtCreateComponent>
+	^ GtClassCreationForm
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoderNavigationTabsStencil >> gtPackageComponent [
+	<gtCreateComponent>
+	^ GtPackageCreationForm
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoderNavigationTabsStencil >> gtParserComponent [
+	<gtCreateComponent>
+	^ GtParserCreationForm
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoderNavigationTabsStencil >> gtTraitComponent [
+	<gtCreateComponent>
+	^ GtTraitCreationForm
+]

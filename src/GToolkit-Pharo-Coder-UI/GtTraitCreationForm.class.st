@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #accessing }
+GtTraitCreationForm class >> componentName [
+	^ 'Trait'
+]
+
+{ #category : #accessing }
+GtTraitCreationForm class >> priority [
+	^ 2
+]
+
+{ #category : #accessing }
 GtTraitCreationForm >> className [
 	^ className asRopedText
 		attribute: (BrGhostTextAttribute

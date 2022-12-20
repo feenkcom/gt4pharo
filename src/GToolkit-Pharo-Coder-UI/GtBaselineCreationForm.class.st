@@ -8,6 +8,16 @@ Class {
 }
 
 { #category : #accessing }
+GtBaselineCreationForm class >> componentName [
+	^ 'Baseline'
+]
+
+{ #category : #accessing }
+GtBaselineCreationForm class >> priority [
+	^ 4
+]
+
+{ #category : #accessing }
 GtBaselineCreationForm >> baseline [
 
 	^ baseline
@@ -25,20 +35,35 @@ GtBaselineCreationForm >> baselineDescription [
 	^ MAStringDescription new
 		label: 'Baseline';
 		priority: 1;
-		accessor: #baseline;
+		accessor: #baselineRope;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		addCondition: [ :aValue | aValue trim isNotEmpty ]
+		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Baseline name must be set';
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
 			labelled: 'Baseline name is already taken';
 		addCondition: [ :aValue | aValue ifEmpty: [ true ] ifNotEmpty: [ aValue first isUppercase ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
-			labelled: 'Class name must be alphanumeric'
+		addCondition: [ :aValue | aValue asString isAllAlphaNumerics ]
+			labelled: 'Class name must be alphanumeric';
+		beRequired
 ]
 
 { #category : #accessing }
+GtBaselineCreationForm >> baselineRope [
+	^ self baseline asRopedText
+		ifEmpty: [ self baseline asRopedText
+				attribute: (BrGhostTextAttribute
+						for: (self defaultBaselineName asRopedText glamorousRegularFontAndSize
+								foreground: Color lightGray)) ]
+]
+
+{ #category : #accessing }
+GtBaselineCreationForm >> baselineRope: aRope [
+	self baseline: aRope asString
+]
+
+{ #category : #callbacks }
 GtBaselineCreationForm >> commit [
 	^ Smalltalk classInstaller
 		make: [ :builder | 
@@ -49,11 +74,16 @@ GtBaselineCreationForm >> commit [
 ]
 
 { #category : #accessing }
+GtBaselineCreationForm >> defaultBaselineName [
+	^ 'BaselineName'
+]
+
+{ #category : #accessing }
 GtBaselineCreationForm >> initialize [
 	baseline := ''
 ]
 
-{ #category : #accessing }
+{ #category : #magritte }
 GtBaselineCreationForm >> packageAndTagDescription [
 	"empty"
 	^ nil

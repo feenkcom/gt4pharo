@@ -22,6 +22,16 @@ GtPackageAndTagName >> copyWithNewTagName: aTagName [
 ]
 
 { #category : #accessing }
+GtPackageAndTagName >> defaultPackageName [
+	^ 'PackageName'
+]
+
+{ #category : #accessing }
+GtPackageAndTagName >> defaultTagName [
+	^ 'TagName'
+]
+
+{ #category : #accessing }
 GtPackageAndTagName >> initialize [
 	packageName := ''.
 	tagName := ''
@@ -45,6 +55,15 @@ GtPackageAndTagName >> packageName: anObject [
 ]
 
 { #category : #accessing }
+GtPackageAndTagName >> packageRope [
+	^ self packageName asRopedText
+		ifEmpty: [ self packageName asRopedText
+				attribute: (BrGhostTextAttribute
+						for: (self defaultPackageName asRopedText glamorousRegularFontAndSize
+								foreground: Color lightGray)) ]
+]
+
+{ #category : #accessing }
 GtPackageAndTagName >> printOn: aStream [
 	aStream
 		nextPutAll: packageName asString;
@@ -62,4 +81,13 @@ GtPackageAndTagName >> tagName [
 GtPackageAndTagName >> tagName: anObject [
 
 	tagName := anObject
+]
+
+{ #category : #accessing }
+GtPackageAndTagName >> tagRope [
+	^ self tagName asRopedText
+		ifEmpty: [ self tagName asRopedText
+				attribute: (BrGhostTextAttribute
+						for: (self defaultTagName asRopedText glamorousRegularFontAndSize
+								foreground: Color lightGray)) ]
 ]

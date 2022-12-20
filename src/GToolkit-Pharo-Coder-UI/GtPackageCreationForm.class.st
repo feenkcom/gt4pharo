@@ -5,11 +5,21 @@ Class {
 }
 
 { #category : #accessing }
+GtPackageCreationForm class >> componentName [
+	^ 'Package'
+]
+
+{ #category : #accessing }
+GtPackageCreationForm class >> priority [
+	^ 3
+]
+
+{ #category : #callbacks }
 GtPackageCreationForm >> commit [
 	^ self commitPackage package
 ]
 
-{ #category : #accessing }
+{ #category : #magritte }
 GtPackageCreationForm >> packageAndTagDescription [
 	<magritteDescription>
 	^ super packageAndTagDescription
@@ -22,4 +32,9 @@ GtPackageCreationForm >> packageAndTagDescription [
 						ifEmpty: [ false ]
 						ifNotEmpty: [ (aPackage classTagNamed: aValue tagName ifAbsent: [ nil ]) isNil ] ] ]
 		labelled: 'Package and tag exist'
+]
+
+{ #category : #accessing }
+GtPackageCreationForm >> toolFor: anInstance [
+	^ GtPackageCoderTool package: anInstance
 ]
