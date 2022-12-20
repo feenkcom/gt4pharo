@@ -42,8 +42,7 @@ GtCreationFormWidget class >> forTrait [
 
 { #category : #converting }
 GtCreationFormWidget >> createForm [
-	self
-		addChild: (self form onAccept: self onAccept) asGtMagritteViewModel asElement
+	self addChild: (self form onAccept: self onAccept) asElement
 ]
 
 { #category : #accessing }

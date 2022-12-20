@@ -30,6 +30,11 @@ GtCreationForm >> acceptAction [
 		beCommitAction
 ]
 
+{ #category : #converting }
+GtCreationForm >> asElement [
+	^ self asGtMagritteViewModel asElement
+]
+
 { #category : #callbacks }
 GtCreationForm >> commit [
 	^ self subclassResponsibility
