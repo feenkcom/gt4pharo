@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtTraitCreationFormExample >> formClass [
+	^ GtTraitCreationForm
+]
+
+{ #category : #accessing }
 GtTraitCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
