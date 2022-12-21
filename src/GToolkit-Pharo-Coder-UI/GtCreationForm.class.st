@@ -30,6 +30,11 @@ GtCreationForm >> acceptAction [
 		beCommitAction
 ]
 
+{ #category : #converting }
+GtCreationForm >> asElement [
+	^ self asGtMagritteViewModel asElement
+]
+
 { #category : #callbacks }
 GtCreationForm >> commit [
 	^ self subclassResponsibility
@@ -99,7 +104,7 @@ GtCreationForm >> taggerStencil [
 		fitContent.
 	aForm hMatchParent.
 	aTagger
-		aptitude: (aTaggerAptitude := BrGlamorousTaggerEditableAptitude new
+		aptitude: (aTaggerAptitude := GtCreationEditableTaggerAptitude new
 					margin: (BlInsets right: 5);
 					tagLabel: [ :aTag | 
 						BrEditableLabel new

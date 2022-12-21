@@ -125,7 +125,11 @@ GtPharoIndex >> asyncNamesForWord: aString usingPrefixCache: prefixCache andWord
 	trimmedString := aString trim.
 	wordStream := self asyncOrderedSearchForWords: trimmedString in: wordCache.
 	includesString := prefixCache includes: trimmedString.
-	^ (((includesString ifTrue: [ {trimmedString} ] ifFalse: [ #() ]) asAsyncStream
+	^ (((includesString
+		ifTrue: [ {trimmedString} ]
+		ifFalse: [ (prefixCache exactMatchFor: trimmedString caseSensitive: false)
+				ifNil: [ #() ]
+				ifNotNil: [ :str | {str} ] ]) asAsyncStream
 		merge: (prefixCache asyncWeightedStreamStartingWith: trimmedString caseSensitive: false))
 		merge: wordStream) withoutDuplicates
 ]
