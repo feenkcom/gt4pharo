@@ -82,11 +82,11 @@ GtCopyClassForm >> nameDescription [
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
-		labelled: 'Class name is already taken';		
-		addCondition: [ :aValue | aValue first isUppercase ]
-		labelled: 'First character must be uppercase';		
+			labelled: 'Class name is already taken';
+		addCondition: [ :aValue | aValue isEmpty or: [ aValue first isUppercase ] ]
+			labelled: 'First character must be uppercase';
 		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
-		labelled: 'Class name must be alphanumeric'
+			labelled: 'Class name must be alphanumeric'
 ]
 
 { #category : #accessing }
