@@ -38,7 +38,7 @@ GtClassCreationForm >> classVarsDescription [
 		label: 'Class vars';
 		priority: 7;
 		accessor: #classVars;
-		blocListStencil: self taggerStencil
+		blocListStencil: (self taggerStencilWithCompletion: nil)
 ]
 
 { #category : #accessing }
@@ -124,7 +124,7 @@ GtClassCreationForm >> poolsDescription [
 		label: 'Pools';
 		priority: 7;
 		accessor: #pools;
-		blocListStencil: self taggerStencil
+		blocListStencil: (self taggerStencilWithCompletion: GtPoolsCompletionStrategy new)
 ]
 
 { #category : #accessing }
