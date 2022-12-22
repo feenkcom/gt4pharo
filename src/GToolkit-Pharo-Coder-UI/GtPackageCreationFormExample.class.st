@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtPackageCreationFormExample >> examplePackageName [
+	^ 'MyExamplePackage'
+]
+
+{ #category : #accessing }
 GtPackageCreationFormExample >> formClass [
 	^ GtPackageCreationForm
 ]
@@ -27,4 +32,45 @@ GtPackageCreationFormExample >> scripterOnSimpleForm [
 GtPackageCreationFormExample >> simpleForm [
 	<gtExample>
 	^ self formClass new asElement
+]
+
+{ #category : #accessing }
+GtPackageCreationFormExample >> simpleFormWithPackageFilled [
+	<gtExample>
+	| scripter |
+	scripter := self scripterOnSimpleForm.
+
+	scripter click
+		label: 'Select package editor';
+		id: #field;
+		id: #package;
+		play.
+
+	scripter type
+		label: 'Enter package name';
+		text: self examplePackageName;
+		play.
+		
+	scripter check
+		label: 'Check that package is set';
+		satisfies: [ :aFrame | 
+			(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue packageName
+				= self examplePackageName ];
+		play.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtPackageCreationFormExample >> simpleFormWithTagNavigated [
+	<gtExample>
+	| scripter |
+	scripter := self simpleFormWithPackageFilled.
+
+	scripter shortcut
+		label: 'Navigate to tag';
+		combination: BlKeyCombination tab;
+		play.
+
+	^ scripter
 ]

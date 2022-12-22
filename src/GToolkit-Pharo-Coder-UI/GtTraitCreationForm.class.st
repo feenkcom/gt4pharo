@@ -67,8 +67,6 @@ GtTraitCreationForm >> nameDescription [
 		priority: 1;
 		accessor: #className;
 		kind: Object;
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Name cannot be empty';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
@@ -106,7 +104,7 @@ GtTraitCreationForm >> slotsDescription [
 		priority: 5;
 		accessor: #slots;
 		classes: {String};
-		blocListStencil: self taggerStencil;
+		blocListStencil: (self taggerStencilWithCompletion: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
 ]
@@ -136,5 +134,5 @@ GtTraitCreationForm >> traitsDescription [
 		priority: 5;
 		accessor: #traits;
 		classes: {String};
-		blocListStencil: self taggerStencil
+		blocListStencil: (self taggerStencilWithCompletion: GtClassesCompletionStrategy new)
 ]
