@@ -26,7 +26,7 @@ GtAbstractVariableValueStyler >> visitVariable: aVariableNode [
 
 	(text from: aVariableNode startPosition to: aVariableNode stopPosition)
 		overlayingAdornment: [ :aTextPiece :anEditorElement | 
-			| aContainer displayText aValueElement theValue verticalBar |
+			| aContainer displayText aValueElement theValue |
 			aContainer := BlElement new
 					clipChildren: false;
 					layout: BlFrameLayout new;
