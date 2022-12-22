@@ -21,9 +21,7 @@ GtTraitCreationForm class >> priority [
 
 { #category : #accessing }
 GtTraitCreationForm >> className [
-	^ className asRopedText
-		attribute: (BrGhostTextAttribute
-				for: (self defaultName asRopedText glamorousRegularFontAndSize foreground: Color lightGray))
+	^ className asRopedText attribute: (self ghostTextFor: self defaultName)
 ]
 
 { #category : #accessing }

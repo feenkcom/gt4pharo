@@ -53,9 +53,7 @@ GtBaselineCreationForm >> baselineDescription [
 GtBaselineCreationForm >> baselineRope [
 	^ self baseline asRopedText
 		ifEmpty: [ self baseline asRopedText
-				attribute: (BrGhostTextAttribute
-						for: (self defaultBaselineName asRopedText glamorousRegularFontAndSize
-								foreground: Color lightGray)) ]
+				attribute: (self ghostTextFor: self defaultBaselineName) ]
 ]
 
 { #category : #accessing }
@@ -75,7 +73,7 @@ GtBaselineCreationForm >> commit [
 
 { #category : #accessing }
 GtBaselineCreationForm >> defaultBaselineName [
-	^ 'BaselineName'
+	^ 'BaselineOfExample'
 ]
 
 { #category : #accessing }
