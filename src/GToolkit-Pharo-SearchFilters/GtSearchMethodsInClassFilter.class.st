@@ -83,3 +83,23 @@ GtSearchMethodsInClassFilter >> methodsDo: aBlock [
 	includeSubclasses
 		ifTrue: [ (class allSubclasses flatCollect: #methods) do: aBlock ]
 ]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSubclasses [
+	self includeSubclasses: true
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSuperclasses [
+	self includeSuperclass: true
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withoutSubclasses [
+	self includeSubclasses: false
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withoutSuperclasses [
+	self includeSuperclass: false
+]
