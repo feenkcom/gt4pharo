@@ -7,6 +7,12 @@ Class {
 { #category : #accessing }
 GtStackContextVariableValueStyler >> valueForVariableNamed: aVariableName ifPresent: presentBlock ifAbsent: absentBlock [
 	| value |
+	aVariableName = 'self' ifTrue: [ ^ absentBlock value ].
 	value := coderViewModel context readVariableNamed: aVariableName.
-	^ value ifNotNil: [ presentBlock value: value ] ifNil: absentBlock
+	^ value
+		ifNotNil: [ :val | 
+			(val isBehavior and: [ val name = aVariableName ])
+				ifTrue: [ absentBlock value ]
+				ifFalse: [ presentBlock value: val ] ]
+		ifNil: absentBlock
 ]
