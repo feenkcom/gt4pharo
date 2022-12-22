@@ -50,8 +50,8 @@ GtParserCreationForm >> defaultScanner [
 GtParserCreationForm >> initialize [
 	super initialize.
 
-	parser := self defaultParser.
-	scanner := self defaultScanner
+	parser := ''.
+	scanner := ''
 ]
 
 { #category : #accessing }
@@ -72,18 +72,29 @@ GtParserCreationForm >> parserDescription [
 	^ MAStringDescription new
 		label: 'Parser';
 		priority: 1;
-		accessor: #parser;
+		accessor: #parserRope;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		addCondition: [ :aValue | aValue trim isNotEmpty ]
+		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Parser name must be set';
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
 			labelled: 'Class name is already taken';
-		addCondition: [ :aValue | aValue first isUppercase ]
+		addCondition: [ :aValue | aValue isEmpty or: [ aValue asString first isUppercase ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
+		addCondition: [ :aValue | aValue asString isAllAlphaNumerics ]
 			labelled: 'Class name must be alphanumeric';
 		beRequired
+]
+
+{ #category : #accessing }
+GtParserCreationForm >> parserRope [
+	^ self parser asRopedText
+		ifEmpty: [ self parser asRopedText attribute: (self ghostTextFor: self defaultParser) ]
+]
+
+{ #category : #accessing }
+GtParserCreationForm >> parserRope: aRope [
+	self parser: aRope asString
 ]
 
 { #category : #accessing }
@@ -104,16 +115,27 @@ GtParserCreationForm >> scannerDescription [
 	^ MAStringDescription new
 		label: 'Scanner';
 		priority: 2;
-		accessor: #scanner;
+		accessor: #scannerRope;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		addCondition: [ :aValue | aValue trim isNotEmpty ]
+		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Scanner name must be set';
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
 			labelled: 'Class name is already taken';
-		addCondition: [ :aValue | aValue first isUppercase ]
+		addCondition: [ :aValue | aValue isEmpty or: [ aValue asString first isUppercase ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
+		addCondition: [ :aValue | aValue asString isAllAlphaNumerics ]
 			labelled: 'Class name must be alphanumeric';
 		beRequired
+]
+
+{ #category : #accessing }
+GtParserCreationForm >> scannerRope [
+	^ self scanner asRopedText
+		ifEmpty: [ self scanner asRopedText attribute: (self ghostTextFor: self defaultScanner) ]
+]
+
+{ #category : #accessing }
+GtParserCreationForm >> scannerRope: aRope [
+	self scanner: aRope asString
 ]

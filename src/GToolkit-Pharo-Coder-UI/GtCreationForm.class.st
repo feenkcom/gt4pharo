@@ -56,6 +56,12 @@ GtCreationForm >> commitPackage [
 				ifNotEmpty: [ :aTagName | aPackage addClassTag: aTagName ] ]
 ]
 
+{ #category : #accessing }
+GtCreationForm >> ghostTextFor: aString [
+	^ BrGhostTextAttribute
+		for: (aString asRopedText glamorousRegularFontAndSize foreground: Color lightGray)
+]
+
 { #category : #initialization }
 GtCreationForm >> initialize [
 	packageAndTagName := GtPackageAndTagName new
