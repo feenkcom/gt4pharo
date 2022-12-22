@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtSearchMethodsContainedInClassFilter,
 	#instVars : [
 		'includeSubclasses',
-		'includeSuperclass'
+		'includeSuperclass',
+		'upToSuperclass'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
@@ -62,10 +63,13 @@ GtSearchMethodsInClassFilter >> includeSuperclass: anObject [
 GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
-	methodClass = class
-		ifTrue: [ ^ true ].
+	methodClass = class ifTrue: [ ^ true ].
 	^ (includeSubclasses and: [ methodClass includesBehavior: class ])
-		or: [ includeSuperclass and: [ class includesBehavior: methodClass ] ]
+		or: [ includeSuperclass
+				and: [ (class includesBehavior: methodClass)
+						and: [ upToSuperclass
+								ifNil: [ true ]
+								ifNotNil: [ (upToSuperclass includesBehavior: methodClass) not ] ] ] ]
 ]
 
 { #category : #'initialize-release' }
@@ -92,6 +96,18 @@ GtSearchMethodsInClassFilter >> withSubclasses [
 { #category : #scripting }
 GtSearchMethodsInClassFilter >> withSuperclasses [
 	self includeSuperclass: true
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSuperclassesUpTo: aClass [
+	self withSuperclasses.
+	upToSuperclass := aClass
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSuperclassesUpToIncluding: aClass [
+	self withSuperclasses.
+	upToSuperclass := aClass ifNotNil: [ aClass superclass ]
 ]
 
 { #category : #scripting }
