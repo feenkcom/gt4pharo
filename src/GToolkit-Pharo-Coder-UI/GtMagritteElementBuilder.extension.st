@@ -47,7 +47,7 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtMagritteElementBuilder >> newTagNameWidget: aDescription [
-	| aMemento tagEditor |
+	| aMemento tagEditor aCompletionController |
 	aMemento := self memento.
 	tagEditor := BrEditor new.
 	tagEditor
@@ -71,8 +71,23 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				sink: AsyncPeekSink new;
-				whenUpdate: [ :theEditor :aSink | theEditor text: aSink value currentValue tagRope ].
+				whenUpdate: [ :theEditor :aSink | 
+					| aPackage aCompletionStrategy |
+					aPackage := aSink value currentValue packageName asPackageIfAbsent: [ nil ].
+
+					aPackage
+						ifNotNil: [ aCompletionController ifNotNil: [ aCompletionController uninstall ].
+							aCompletionStrategy := GtStringsCompletionStrategy new
+									completions: (GtPrefixTree withAll: (aPackage classTags collect: #name)).
+
+							aCompletionController := (GtCompletionController
+									on: tagEditor
+									strategy: aCompletionStrategy) install ].
+
+					theEditor text: aSink value currentValue tagRope ].
 			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
+
+
 
 	tagEditor editor
 		when: BrTextEditorModifiedEvent
@@ -93,13 +108,13 @@ GtMagritteElementBuilder >> visitGtPackageAndTagDescription: aDescription [
 	tagEditor := self newTagNameWidget: aDescription.
 
 	aContainer
-		addChild: packageEditor;
+		addChild: packageEditor as: #package;
 		addChild: ((GtMagritteBuilderUtility
 				newFieldLabelWithSpace: self defaultSpacing
 				using: aDescription)
 				text: 'Tag:';
 				constraintsDo: [ :c | c linear vertical alignCenter ]);
-		addChild: tagEditor.
+		addChild: tagEditor as: #tag.
 
 	aDescription isWithChangeIndicator
 		ifTrue: [ aValidationElement := GtMagritteBuilderUtility

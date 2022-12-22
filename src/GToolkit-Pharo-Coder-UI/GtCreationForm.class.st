@@ -56,9 +56,26 @@ GtCreationForm >> commitPackage [
 				ifNotEmpty: [ :aTagName | aPackage addClassTag: aTagName ] ]
 ]
 
+{ #category : #accessing }
+GtCreationForm >> ghostTextFor: aString [
+	^ BrGhostTextAttribute
+		for: (aString asRopedText glamorousRegularFontAndSize foreground: Color lightGray)
+]
+
 { #category : #initialization }
 GtCreationForm >> initialize [
 	packageAndTagName := GtPackageAndTagName new
+]
+
+{ #category : #accessing }
+GtCreationForm >> mockTabEvent: aTagger [
+	| anEvent aBuffer |
+	aBuffer := BlKeyboardBuffer new.
+	BlKeyCombination tab asBufferKeys
+		do: [ :eachKeyboardKey | aBuffer add: (BlKeyDownEvent new key: eachKeyboardKey) ].
+
+	anEvent := BlShortcutEvent new buffer: aBuffer.
+	aTagger fireEvent: anEvent
 ]
 
 { #category : #accessing }
@@ -96,27 +113,30 @@ GtCreationForm >> packageAndTagName: anObject [
 ]
 
 { #category : #accessing }
-GtCreationForm >> taggerStencil [
+GtCreationForm >> taggerStencilWithCompletion: aCompletionStrategy [
 	^ [ :aMemento :aDescription :aForm | 
 	| aTagger aTaggerAptitude |
 	aTagger := BrTagger new.
-	aTagger
-		fitContent.
+	aTagger fitContent.
 	aForm hMatchParent.
 	aTagger
-		aptitude: (aTaggerAptitude := BrGlamorousTaggerEditableAptitude new
+		aptitude: (aTaggerAptitude := GtCreationEditableTaggerAptitude new
 					margin: (BlInsets right: 5);
 					tagLabel: [ :aTag | 
-						BrEditableLabel new
-							text: (aDescription displayStringFor: aTag name);
-							aptitude: (BrGlamorousEditableLabelAptitude new
-									glamorousCodeFont;
-									defaultForeground: Color black;
-									fontSize: 10);
-							whenKey: BlKeyCombination space
-								editorDo: [ :anEvent | 
-									anEvent target acceptEdition.
-									aTaggerAptitude addTagCreatorElement ] ]).
+						| aLabel |
+						aLabel := BrEditableLabel new
+								text: (aDescription displayStringFor: aTag name);
+								aptitude: (BrGlamorousEditableLabelAptitude new
+										glamorousCodeFont;
+										defaultForeground: Color black;
+										fontSize: 10);
+								whenKey: BlKeyCombination space
+									editorDo: [ :anEvent | 
+										anEvent target acceptEdition.
+										aTaggerAptitude addTagCreatorElement ].
+						aCompletionStrategy
+							ifNotNil: [ (GtCompletionController on: aLabel strategy: aCompletionStrategy) install ].
+						aLabel ]).
 	aTagger
 		when: BrTaggerAddTagRequest
 		do: [ :aRequest | 
@@ -132,7 +152,8 @@ GtCreationForm >> taggerStencil [
 				write: ((aTagger tags collect: #name)
 						remove: aRequest tag name;
 						yourself)
-				using: aDescription ].
+				using: aDescription.
+			self mockTabEvent: aTagger ].
 	aTagger
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
