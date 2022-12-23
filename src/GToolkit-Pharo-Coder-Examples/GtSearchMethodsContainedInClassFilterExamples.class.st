@@ -62,6 +62,34 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilter
 	^ filter
 ]
 
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> methodsInClassUpToFilter [
+	<gtExample>
+	| filter |
+	filter := (GtSearchMethodsInClassFilter forClass: OrderedCollection)
+			withSuperclassesUpTo: Collection.
+	self assert: (filter matches: OrderedCollection >> #add:).
+	self assert: (filter matches: SequenceableCollection >> #first).
+	self assert: (filter matches: Collection >> #add:) equals: false.
+	self assert: (filter matches: Object >> #->) equals: false.
+	self assert: (filter matches: thisContext method) equals: false.
+	^ filter
+]
+
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> methodsInClassUpToIncludingFilter [
+	<gtExample>
+	| filter |
+	filter := (GtSearchMethodsInClassFilter forClass: OrderedCollection)
+			withSuperclassesUpToIncluding: Collection.
+	self assert: (filter matches: OrderedCollection >> #add:).
+	self assert: (filter matches: SequenceableCollection >> #first).
+	self assert: (filter matches: Collection >> #add:).
+	self assert: (filter matches: Object >> #->) equals: false.
+	self assert: (filter matches: thisContext method) equals: false.
+	^ filter
+]
+
 { #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesBothSidesUnionFilter [
 	<gtExample>
