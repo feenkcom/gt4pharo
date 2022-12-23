@@ -20,16 +20,21 @@ GtSearchMethodsInClassFilter >> = anObject [
 { #category : #accessing }
 GtSearchMethodsInClassFilter >> defaultFilterScope [
 	| theStreams |
-	
 	theStreams := OrderedCollection new.
-	
+
 	theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class).
-	
-	(includeSuperclass and: [ class superclass notNil ])
-		ifTrue: [ theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class superclass) ].
+
+	includeSuperclass
+		ifTrue: [ theStreams
+				add: (class allSuperclasses asAsyncStream
+						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
+						flatten ].
 
 	includeSubclasses
-		ifTrue: [ theStreams add: (class allSubclasses asAsyncStream map: [ :eachBehavior | (AsyncBehaviorAllMethodsStream forBehavior: eachBehavior) ]) flatten ].
+		ifTrue: [ theStreams
+				add: (class allSubclasses asAsyncStream
+						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
+						flatten ].
 
 	^ theStreams asAsyncStream flatten
 ]
