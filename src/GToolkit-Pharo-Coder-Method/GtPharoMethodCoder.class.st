@@ -79,6 +79,17 @@ GtPharoMethodCoder >> behavior: aBehavior [
 	self methodBehavior: (GtPharoCoderBehavior explicit: aBehavior)
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> browseHierarchyImplementorsAt: aTextPosition [
+	self
+		detectSelectorAt: aTextPosition
+		ifFound: [ :aSelector | 
+			self
+				notifyObjectSpawn: (GtSearchMethodsInClassFilter forClass: self behavior) withSuperclasses
+						withSubclasses & aSelector gtImplementors ]
+		ifNone: [  ]
+]
+
 { #category : #testing }
 GtPharoMethodCoder >> canCompileMethodIn: newClass [
 	| ast modelClass pools variables model |
