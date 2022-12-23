@@ -90,6 +90,17 @@ GtPharoMethodCoder >> browseHierarchyImplementorsAt: aTextPosition [
 		ifNone: [  ]
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> browseHierarchyReferencesAt: aTextPosition [
+	self
+		detectSelectorAt: aTextPosition
+		ifFound: [ :aSelector | 
+			self
+				notifyObjectSpawn: (GtSearchMethodsInClassFilter forClass: self behavior) withSuperclasses
+						withSubclasses & aSelector gtSenders ]
+		ifNone: [  ]
+]
+
 { #category : #testing }
 GtPharoMethodCoder >> canCompileMethodIn: newClass [
 	| ast modelClass pools variables model |
