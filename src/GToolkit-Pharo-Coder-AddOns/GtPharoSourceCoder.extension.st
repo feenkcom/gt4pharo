@@ -704,6 +704,7 @@ GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
 		nodeAt: anIndex
 		ifFound: [ :aNode | node := aNode ]
 		ifNone: [ ^ self ].
+	node isErrorNode ifTrue: [^self].
 	statement := node statementNode.
 	aSourceCoderViewModel
 		select: statement startPosition - 1
