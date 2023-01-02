@@ -1,6 +1,22 @@
 Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
+	aNode isCascade ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Convert cascade to statements'
+				description: (self nodeDescription: aNode))
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtSnippetConvertCascadesToStatementsController new
+				node: aNode;
+				sourceCoderViewModel: aCoderViewModel) execute ]
+		id: #'context-menu--cascades-to-statements'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
 	coderAddOns
@@ -74,7 +90,10 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 			self
 				addInlineMethodFor: node
 				to: coderAddOns
-				from: aCoderViewModel ]
+				from: aCoderViewModel.
+			node
+				withAllParentsDo: [ :n | self addConvertCascadesToStatementsFor: n to: coderAddOns ].
+			self addConvertStatementsToCascadesFor: nodes to: coderAddOns ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

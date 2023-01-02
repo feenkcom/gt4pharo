@@ -60,11 +60,6 @@ GtSnippetInlineMessageRefactoringController >> safelyExecute [
 ]
 
 { #category : #private }
-GtSnippetInlineMessageRefactoringController >> snippetClass [
-	^ nil class
-]
-
-{ #category : #private }
 GtSnippetInlineMessageRefactoringController >> updateVariableReferencesIn: model [
 	| cls method ast rewriter |
 	cls := model classFor: implementorClass.
