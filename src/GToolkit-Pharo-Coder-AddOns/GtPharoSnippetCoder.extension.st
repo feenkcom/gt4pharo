@@ -17,6 +17,25 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
+	nodes size > 1 ifFalse: [ ^ self ].
+	(nodes allSatisfy: [ :each | each isMessageSend ]) ifFalse: [ ^ self ].
+	(nodes allSatisfy: [ :each | each receiver = nodes first receiver ])
+		ifFalse: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Convert statements to cascade'
+				description: (self nodeDescription: nodes first))
+		hover: (self highlightNodesBlock: nodes)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel | 
+			(GtSnippetConvertStatementsToCascadesController new
+				nodes: nodes;
+				sourceCoderViewModel: aCoderViewModel) execute ]
+		id: #'context-menu--statements-to-cascade'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
 	coderAddOns
