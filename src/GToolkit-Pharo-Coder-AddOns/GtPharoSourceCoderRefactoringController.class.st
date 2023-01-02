@@ -129,6 +129,11 @@ GtPharoSourceCoderRefactoringController >> setPreviewOptionsOn: refactoring [
 ]
 
 { #category : #private }
+GtPharoSourceCoderRefactoringController >> snippetClass [
+	^ nil class
+]
+
+{ #category : #private }
 GtPharoSourceCoderRefactoringController >> snippetSelector [
 	^ #_
 ]
