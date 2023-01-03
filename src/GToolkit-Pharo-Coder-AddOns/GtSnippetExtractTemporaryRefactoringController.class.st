@@ -9,15 +9,12 @@ Class {
 
 { #category : #accessing }
 GtSnippetExtractTemporaryRefactoringController >> behavior [
-	^ nil class
+	^self snippetClass
 ]
 
 { #category : #private }
 GtSnippetExtractTemporaryRefactoringController >> createRefactoringModel [
-	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
-	self compileSnippetMethodIn: model.
-	^ model
+	^ self createSnippetRefactoringModel
 ]
 
 { #category : #accessing }
@@ -27,9 +24,7 @@ GtSnippetExtractTemporaryRefactoringController >> selector [
 
 { #category : #accessing }
 GtSnippetExtractTemporaryRefactoringController >> sourceInterval [
-	| interval |
-	interval := super sourceInterval.
-	^ interval first + 2 to: interval last + 2
+	^ self snippetIntervalFor: super sourceInterval
 ]
 
 { #category : #executing }
