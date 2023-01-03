@@ -5,20 +5,13 @@ Class {
 }
 
 { #category : #accessing }
-GtSnippetConvertStatementsToCascadesController >> createRefactoringModel [
-	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
-	self compileSnippetMethodIn: model.
-	^ model
-]
-
-{ #category : #accessing }
 GtSnippetConvertStatementsToCascadesController >> refactoring [
 	| refactoring model |
-	model := self createRefactoringModel.
+	model := self createSnippetRefactoringModel.
 	refactoring := GtConvertStatementsToCascadesRefactoring
 			model: model
-			convert: (nodes first startPosition + 2 to: nodes last stopPosition + 2)
+			convert: (self
+					snippetIntervalFor: (nodes first startPosition to: nodes last stopPosition))
 			inMethod: self snippetSelector
 			forClass: self snippetClass.
 	^ refactoring
@@ -26,12 +19,9 @@ GtSnippetConvertStatementsToCascadesController >> refactoring [
 
 { #category : #accessing }
 GtSnippetConvertStatementsToCascadesController >> safelyExecute [
-	| refactoring ast |
+	| refactoring |
 	refactoring := self refactoring.
 	sourceCoderViewModel selectNone.
 	[ refactoring primitiveExecute ] on: RBRefactoringError do: [ :ex | ^ false ].
-	ast := ((refactoring model classFor: self snippetClass)
-			methodFor: self snippetSelector) ast body.
-	ast temporaryNames do: [ :each | ast removeTemporaryNamed: each ].
-	self setText: ast formattedCode
+	self setText: (self refactoredSnippetCodeFrom: refactoring)
 ]

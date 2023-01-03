@@ -8,15 +8,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : #private }
-GtSnippetInlineMessageRefactoringController >> createRefactoringModel [
-	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
-	self compileSnippetMethodIn: model.
-	self updateVariableReferencesIn: model.
-	^ model
-]
-
 { #category : #accessing }
 GtSnippetInlineMessageRefactoringController >> implementorClass: aClass [
 	implementorClass := aClass
@@ -30,14 +21,13 @@ GtSnippetInlineMessageRefactoringController >> messageNode: aGtPharoMessageSendN
 { #category : #accessing }
 GtSnippetInlineMessageRefactoringController >> refactoring [
 	| model refactoring |
-	model := self createRefactoringModel.
+	model := self createSnippetRefactoringModel.
 	refactoring := RBInlineMethodFromComponentRefactoring
-		model: model
-		inline:
-			(messageNode startPosition + self snippetSelector size + 1 to: messageNode stopPosition + self snippetSelector size + 1)
-		inMethod: self snippetSelector
-		forClass: self snippetClass.
-	(refactoring options)
+			model: model
+			inline: (self snippetIntervalFor: messageNode sourceInterval)
+			inMethod: self snippetSelector
+			forClass: self snippetClass.
+	refactoring options
 		at: #implementorToInline
 			put: [ :ref :classes | classes detect: [ :each | each realClass = implementorClass ] ifNone: [ nil ] ];
 		at: #inlineExpression put: [ :ref :msg | false ].
@@ -51,12 +41,10 @@ GtSnippetInlineMessageRefactoringController >> refactoringName [
 
 { #category : #executing }
 GtSnippetInlineMessageRefactoringController >> safelyExecute [
-	| refactoring ast |
+	| refactoring |
 	refactoring := self refactoring.
 	[ refactoring primitiveExecute ] on: RBRefactoringError do: [ :ex | ^ self ].
-	ast := ((refactoring model classFor: self snippetClass) methodFor: self snippetSelector) ast body.
-	ast temporaryNames do: [ :each | ast removeTemporaryNamed: each ].
-	self setText: ast formattedCode
+	self setText: (self refactoredSnippetCodeFrom: refactoring)
 ]
 
 { #category : #private }

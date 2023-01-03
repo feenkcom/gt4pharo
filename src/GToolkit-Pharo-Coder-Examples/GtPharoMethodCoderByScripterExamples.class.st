@@ -4901,6 +4901,40 @@ GtPharoMethodCoderByScripterExamples >> selectStatementsUp [
 ]
 
 { #category : #'examples - statement selection/motion' }
+GtPharoMethodCoderByScripterExamples >> selectStatementsWithError [
+	<gtExample>
+	| aScripter coder |
+	aScripter := self scripterForBlock: [ coder := self statementMethodCoder ].
+	
+	"Create a syntax error"
+	coder appendString: ';'.
+	
+	aScripter do
+		label: 'Move cursor to last statement';
+		action: [ :aSourceEditor | 
+			| index |
+			index := aSourceEditor text asString indexOf: $6.
+			aSourceEditor textualCoderViewModel
+				cursors: (BrTextEditorCursor at: index - 1) ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter shortcut
+		combination: BlKeyCombination builder primary shift arrowUp build;
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter assert
+		label: 'Assert selected text';
+		value: [ :aSourceEditor | aSourceEditor editor selectedText asString ]
+			equals: '';
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - statement selection/motion' }
 GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
 	<gtExample>
 	| aMethod aCoder |
