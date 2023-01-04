@@ -293,6 +293,22 @@ GtPharoSourceCoder >> createLabel: aString description: description [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandCascadeSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
+	| cascade siblings messageNode index |
+	messageNode := (self nodeAt: position) messageNode.
+	cascade := messageNode cascadeNode.
+	siblings := cascade messages.
+	index := (siblings indexOf: messageNode) + offset.
+	(index between: 1 and: siblings size)
+		ifFalse: [ ^ self
+				selectStatementOrCascadeAt: cascade startPosition
+				in: aSourceCoderViewModel ].
+	self
+		selectStatementOrCascadeAt: (siblings at: index) startPosition
+		in: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> expandSelection: aSelectionInterval toCompleteStatementsIn: aSourceCoderViewModel [
 	| nodes |
 	nodes := self extractableNodesWithin: aSelectionInterval.
@@ -305,10 +321,15 @@ GtPharoSourceCoder >> expandSelection: aSelectionInterval toCompleteStatementsIn
 GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
 	| statement siblings index |
 	(self isIntervalCompleteStatements: aSelectionInterval)
-		ifFalse: [ self
-				expandSelection: aSelectionInterval
-				toCompleteStatementsIn: aSourceCoderViewModel.
-			^ self ].
+		ifFalse: [ ^ (self isIntervalCompleteCascades: aSelectionInterval)
+				ifTrue: [ self
+						expandCascadeSelection: aSelectionInterval
+						at: position
+						directionOffset: offset
+						in: aSourceCoderViewModel ]
+				ifFalse: [ self
+						expandSelection: aSelectionInterval
+						toCompleteStatementsIn: aSourceCoderViewModel ] ].
 	statement := (self nodeAt: position) statementNode.
 	siblings := statement parent
 			ifNil: [ ^ self ]
@@ -316,10 +337,10 @@ GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval at: position 
 	index := (siblings indexOf: statement) + offset.
 	(index between: 1 and: siblings size)
 		ifFalse: [ ^ self
-				selectStatementAt: statement parent statementNode startPosition
+				selectStatementOrCascadeAt: statement parent statementNode startPosition
 				in: aSourceCoderViewModel ].
 	self
-		selectStatementAt: (siblings at: index) startPosition
+		selectStatementOrCascadeAt: (siblings at: index) startPosition
 		in: aSourceCoderViewModel
 ]
 
@@ -425,6 +446,29 @@ GtPharoSourceCoder >> isClassVariable: aNode [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isInstanceVariable: aNode [
 	^ self behavior allInstVarNames includes: aNode name value
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isIntervalCompleteCascades: aSelectionInterval [
+	"Test to see if the current selection boundaries end exactly on cascaded message nodes"
+
+	| cascade |
+	self
+		nodeAt: aSelectionInterval first
+		ifFound: [ :first | 
+			(cascade := first cascadeNode) ifNil: [ ^ false ].
+			(cascade messages includes: first) ifFalse: [ ^ false ].
+			first startPosition = aSelectionInterval first ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	self
+		nodeAt: aSelectionInterval last
+		ifFound: [ :last | 
+			| message |
+			last cascadeNode = cascade ifFalse: [ ^ false ].
+			message := last messageNode.
+			message stopPosition = aSelectionInterval last ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -698,17 +742,18 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
-	| node statement |
+GtPharoSourceCoder >> selectStatementOrCascadeAt: anIndex in: aSourceCoderViewModel [
+	| node selectNode |
 	self
 		nodeAt: anIndex
 		ifFound: [ :aNode | node := aNode ]
 		ifNone: [ ^ self ].
-	node isErrorNode ifTrue: [^self].
-	statement := node statementNode.
+	node isErrorNode ifTrue: [ ^ self ].
+	node cascadeNode ifNotNil: [ selectNode := node messageNode ].
+	selectNode ifNil: [ selectNode := node statementNode ].
 	aSourceCoderViewModel
-		select: statement startPosition - 1
-		to: statement stopPosition
+		select: selectNode startPosition - 1
+		to: selectNode stopPosition
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
