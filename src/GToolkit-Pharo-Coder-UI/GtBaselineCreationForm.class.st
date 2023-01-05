@@ -42,10 +42,10 @@ GtBaselineCreationForm >> baselineDescription [
 			labelled: 'Baseline name must be set';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
 			labelled: 'Baseline name is already taken';
-		addCondition: [ :aValue | aValue ifEmpty: [ true ] ifNotEmpty: [ aValue first isUppercase ] ]
-			labelled: 'First character must be uppercase';
+		addCondition: [ :aValue | aValue beginsWith: 'BaselineOf' ]
+			labelled: 'Baseline name must start with BaselineOf';
 		addCondition: [ :aValue | aValue asString isAllAlphaNumerics ]
-			labelled: 'Class name must be alphanumeric';
+			labelled: 'Baseline name must be alphanumeric';
 		beRequired
 ]
 
@@ -53,9 +53,7 @@ GtBaselineCreationForm >> baselineDescription [
 GtBaselineCreationForm >> baselineRope [
 	^ self baseline asRopedText
 		ifEmpty: [ self baseline asRopedText
-				attribute: (BrGhostTextAttribute
-						for: (self defaultBaselineName asRopedText glamorousRegularFontAndSize
-								foreground: Color lightGray)) ]
+				attribute: (self ghostTextFor: self defaultBaselineName) ]
 ]
 
 { #category : #accessing }
@@ -75,7 +73,7 @@ GtBaselineCreationForm >> commit [
 
 { #category : #accessing }
 GtBaselineCreationForm >> defaultBaselineName [
-	^ 'BaselineName'
+	^ 'BaselineOfExample'
 ]
 
 { #category : #accessing }

@@ -7,13 +7,10 @@ Class {
 { #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilter [
 	<gtExample>
-	| filter |
-	filter := GtSearchMethodsInClassFilter forClass: GtSystemS1SubclassC2.
-	
-	self assert: (filter matches: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
-	self assert: (filter matches: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1) not.
-	
-	^ filter
+	^ self
+		testFilter: (GtSearchMethodsInClassFilter forClass: GtSystemS1SubclassC2)
+		shouldInclude: {GtSystemS1SubclassC2 >> #stubMethodInClassC2S1}
+		shouldExclude: {GtSystemS1SubclassC2 class >> #stubMethodOnClassSideOfC2S1}
 ]
 
 { #category : #'examples - equality' }
@@ -41,13 +38,12 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilterResultType 
 { #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilter [
 	<gtExample>
-	| filter |
-	filter := GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1SubclassC2.
-
-	self assert: (filter matches: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
-	self assert: (filter matches: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1).
-		
-	^ filter
+	^ self
+		testFilter: (GtSearchMethodsInInstanceAndClassSideFilter
+				forClass: GtSystemS1SubclassC2)
+		shouldInclude: {GtSystemS1SubclassC2 >> #stubMethodInClassC2S1.
+				GtSystemS1SubclassC2 class >> #stubMethodOnClassSideOfC2S1}
+		shouldExclude: {}
 ]
 
 { #category : #'examples - equality' }
@@ -62,36 +58,57 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassOnBothSidesFilter
 	^ filter
 ]
 
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> methodsInClassUpToFilter [
+	<gtExample>
+	^ self
+		testFilter: ((GtSearchMethodsInClassFilter forClass: OrderedCollection)
+				withSuperclassesUpTo: Collection)
+		shouldInclude: {OrderedCollection >> #add:.
+				SequenceableCollection >> #first}
+		shouldExclude: {Collection >> #add:.
+				Object >> #->.
+				thisContext method}
+]
+
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> methodsInClassUpToIncludingFilter [
+	<gtExample>
+	^self
+		testFilter: ((GtSearchMethodsInClassFilter forClass: OrderedCollection)
+				withSuperclassesUpToIncluding: Collection)
+		shouldInclude: {OrderedCollection >> #add:.
+				SequenceableCollection >> #first.
+				Collection >> #add:}
+		shouldExclude: {Object >> #->.
+				thisContext method}.
+]
+
 { #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesBothSidesUnionFilter [
 	<gtExample>
-	| filter |
-	filter := GtSearchUnionFilter new
-		filter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1SubclassC2)
-		filter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1AnotherClassC3).
-
-	self assert: (filter matches: GtSystemS1AnotherClassC3>>#oneMethodOnS1C3).
-	self assert: (filter matches: GtSystemS1AnotherClassC3 class>>#isDeprecated).
-	self assert: (filter matches: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
-	self assert: (filter matches: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1).
-
-	^ filter
+	^self
+		testFilter: (GtSearchUnionFilter new
+				filter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1SubclassC2)
+				filter: (GtSearchMethodsInInstanceAndClassSideFilter forClass: GtSystemS1AnotherClassC3))
+		shouldInclude: {GtSystemS1AnotherClassC3 >> #oneMethodOnS1C3.
+				GtSystemS1AnotherClassC3 class >> #isDeprecated.
+				GtSystemS1SubclassC2 >> #stubMethodInClassC2S1.
+				GtSystemS1SubclassC2 class >> #stubMethodOnClassSideOfC2S1}
+		shouldExclude: {}
 ]
 
 { #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilter [
 	<gtExample>
-	| filter |
-	filter := GtSearchUnionFilter new
-		filter: (GtSearchMethodsInClassFilter forClass: GtSystemS1SubclassC2)
-		filter: (GtSearchMethodsInClassFilter forClass: GtSystemS1AnotherClassC3).
-		
-	self assert: (filter matches: GtSystemS1AnotherClassC3>>#oneMethodOnS1C3).
-	self assert: (filter matches: GtSystemS1AnotherClassC3 class>>#isDeprecated) not.
-	self assert: (filter matches: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
-	self assert: (filter matches: GtSystemS1SubclassC2 class>>#stubMethodOnClassSideOfC2S1) not.
-		
-	^ filter
+	^ self
+		testFilter: (GtSearchUnionFilter new
+				filter: (GtSearchMethodsInClassFilter forClass: GtSystemS1SubclassC2)
+				filter: (GtSearchMethodsInClassFilter forClass: GtSystemS1AnotherClassC3))
+		shouldInclude: {GtSystemS1AnotherClassC3 >> #oneMethodOnS1C3.
+				GtSystemS1SubclassC2 >> #stubMethodInClassC2S1}
+		shouldExclude: {GtSystemS1AnotherClassC3 class >> #isDeprecated.
+				GtSystemS1SubclassC2 class >> #stubMethodOnClassSideOfC2S1}
 ]
 
 { #category : #'examples - result type' }
@@ -174,4 +191,20 @@ GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInTwoClass
 	self assert: (result includes: GtSystemS1SubclassC2>>#stubMethodInClassC2S1).
 
 	^ resultStream
+]
+
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> testFilter: filter shouldInclude: inMethods shouldExclude: outMethods [
+	"Checks that the filter includes and excludes some methods and the results reflect the same"
+
+	| result |
+	result := filter result toArray wait.
+	inMethods
+		do: [ :each | self assert: ((filter matches: each) and: [ result includes: each ]) ].
+	outMethods
+		do: [ :each | 
+			self
+				assert: ((filter matches: each) or: [ result includes: each ])
+				equals: false ].
+	^ filter
 ]

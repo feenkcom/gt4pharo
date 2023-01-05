@@ -178,6 +178,48 @@ GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coder
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 100>
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			| highlightNode |
+			(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
+				ifTrue: [ highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
+					coderAddOns
+						addContextMenuItem: (self
+								createLabel: 'Browse Hierarchy Implementors'
+								description: node selector)
+						hover: [ :textualCoderViewModel | 
+							textualCoderViewModel
+								addTextAttribute: self class nodeHighlight
+								from: highlightNode startPosition
+								to: highlightNode stopPosition ]
+						leave: self removeHighlightBlock
+						action: [ :aTextualViewModel | self perform: #browseHierarchyImplementorsAt: with: highlightNode startPosition ] ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 100>
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			| highlightNode |
+			(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
+				ifTrue: [ highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
+					coderAddOns
+						addContextMenuItem: (self
+								createLabel: 'Browse Hierarchy References'
+								description: node selector)
+						hover: [ :textualCoderViewModel | 
+							textualCoderViewModel
+								addTextAttribute: self class nodeHighlight
+								from: highlightNode startPosition
+								to: highlightNode stopPosition ]
+						leave: self removeHighlightBlock
+						action: [ :aTextualViewModel | self perform: #browseHierarchyReferencesAt: with: highlightNode startPosition ] ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 	| method |
 	(aNode isMethod or: [ 

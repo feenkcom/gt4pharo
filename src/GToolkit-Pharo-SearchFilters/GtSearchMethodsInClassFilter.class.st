@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtSearchMethodsContainedInClassFilter,
 	#instVars : [
 		'includeSubclasses',
-		'includeSuperclass'
+		'includeSuperclass',
+		'upToSuperclass'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
@@ -19,16 +20,21 @@ GtSearchMethodsInClassFilter >> = anObject [
 { #category : #accessing }
 GtSearchMethodsInClassFilter >> defaultFilterScope [
 	| theStreams |
-	
 	theStreams := OrderedCollection new.
-	
+
 	theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class).
-	
-	(includeSuperclass and: [ class superclass notNil ])
-		ifTrue: [ theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class superclass) ].
+
+	includeSuperclass
+		ifTrue: [ theStreams
+				add: (class allSuperclasses asAsyncStream
+						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
+						flatten ].
 
 	includeSubclasses
-		ifTrue: [ theStreams add: (class allSubclasses asAsyncStream map: [ :eachBehavior | (AsyncBehaviorAllMethodsStream forBehavior: eachBehavior) ]) flatten ].
+		ifTrue: [ theStreams
+				add: (class allSubclasses asAsyncStream
+						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
+						flatten ].
 
 	^ theStreams asAsyncStream flatten
 ]
@@ -62,10 +68,13 @@ GtSearchMethodsInClassFilter >> includeSuperclass: anObject [
 GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
-	methodClass = class
-		ifTrue: [ ^ true ].
+	methodClass = class ifTrue: [ ^ true ].
 	^ (includeSubclasses and: [ methodClass includesBehavior: class ])
-		or: [ includeSuperclass and: [ class includesBehavior: methodClass ] ]
+		or: [ includeSuperclass
+				and: [ (class includesBehavior: methodClass)
+						and: [ upToSuperclass
+								ifNil: [ true ]
+								ifNotNil: [ (upToSuperclass includesBehavior: methodClass) not ] ] ] ]
 ]
 
 { #category : #'initialize-release' }
@@ -82,4 +91,36 @@ GtSearchMethodsInClassFilter >> methodsDo: aBlock [
 		ifTrue: [ class superclass methods do: aBlock ].
 	includeSubclasses
 		ifTrue: [ (class allSubclasses flatCollect: #methods) do: aBlock ]
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSubclasses [
+	self includeSubclasses: true
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSuperclasses [
+	self includeSuperclass: true
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSuperclassesUpTo: aClass [
+	self withSuperclasses.
+	upToSuperclass := aClass
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withSuperclassesUpToIncluding: aClass [
+	self withSuperclasses.
+	upToSuperclass := aClass ifNotNil: [ aClass superclass ]
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withoutSubclasses [
+	self includeSubclasses: false
+]
+
+{ #category : #scripting }
+GtSearchMethodsInClassFilter >> withoutSuperclasses [
+	self includeSuperclass: false
 ]
