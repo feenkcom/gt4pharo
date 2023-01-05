@@ -6,38 +6,36 @@ Class {
 
 { #category : #private }
 GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
-	| text stencilBlock attribute adornmentAttribute | 
-	
+	| text stencilBlock attribute adornmentAttribute |
 	text := aBrTextEditor text.
 	stencilBlock := [ | element |
-	element := GtPharoCreateBehaviorElement new.
-	element
-		behaviorBlock: [ :cls | 
-			text
-				clearAttributes: [ :each | each == attribute or: [ each == adornmentAttribute ] ].
-			sourceCoder requestStyleSourceText ].
-	element forClassDefinition.
-	element forClassName: node name value asSymbol.
-	sourceCoder package
-		ifNotNil: [ :package | element forPackage: package ].
-	sourceCoder packageTag
-		ifNotNil: [ :tag | element forPackageTag: tag ].
-	element addAptitude: BrShadowAptitude.
-	element background: Color white.
-	element margin: (BlInsets all: 10).
-	element
-		constraintsDo: [ :c | 
-			c textFlow pushLine.
-			c horizontal matchParent ].
-	element ].
+		element := GtPharoCreateBehaviorElement new.
+		element
+			behaviorBlock: [ :cls | 
+				text
+					clearAttributes: [ :each | each == attribute or: [ each == adornmentAttribute ] ].
+				sourceCoder requestStyleSourceText ].
+		element forClassDefinition.
+		element forClassName: node name value asSymbol.
+		sourceCoder package ifNotNil: [ :package | element forPackage: package ].
+		sourceCoder packageTag ifNotNil: [ :tag | element forPackageTag: tag ].
+		element addAptitude: BrShadowAptitude.
+		element background: Color white.
+		element margin: (BlInsets all: 10).
+		element
+			constraintsDo: [ :c | 
+				c textFlow pushLine.
+				c horizontal matchParent ].
+		element ].
+	adornmentAttribute := BrTextAdornmentDynamicAttribute new
+			beAppend;
+			stencil: stencilBlock.
 	attribute := BrGlamorousTriangleExpanderTextAttribute new.
 	attribute isExpanded: true.
-	attribute
-		attributesCreatingBlock: [ adornmentAttribute := BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: stencilBlock ].
+	attribute createdAttributes: { adornmentAttribute }.
+	attribute attributesCreatingBlock: [ adornmentAttribute ].
 	text
-		attribute: attribute
+		attributes: {attribute. adornmentAttribute}
 		from: self attributePosition
 		to: self attributePosition
 ]
