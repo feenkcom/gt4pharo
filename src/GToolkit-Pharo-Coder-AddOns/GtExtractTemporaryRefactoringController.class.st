@@ -25,7 +25,7 @@ GtExtractTemporaryRefactoringController >> refactoring [
 	class := model classFor: self behavior.
 	selector := self selector.
 	tempName := self safeTemporaryName.
-	^ RBExtractToTemporaryRefactoring
+	^ GtExtractToTemporaryRefactoring
 		model: model
 		extract: self sourceInterval
 		to: tempName
