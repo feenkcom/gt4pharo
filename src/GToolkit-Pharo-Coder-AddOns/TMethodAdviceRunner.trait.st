@@ -32,6 +32,11 @@ TMethodAdviceRunner >> hasRefactoring [
 	^ false
 ]
 
+{ #category : #accessing }
+TMethodAdviceRunner >> textAttributesAt: anInteger [
+	^ #()
+]
+
 { #category : #typing }
 TMethodAdviceRunner >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode

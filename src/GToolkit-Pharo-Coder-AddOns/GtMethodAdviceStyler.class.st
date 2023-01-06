@@ -99,6 +99,11 @@ GtMethodAdviceStyler >> text [
 	^ text
 ]
 
+{ #category : #accessing }
+GtMethodAdviceStyler >> textAttributesAt: anInteger [
+	^ text attributesAt: anInteger
+]
+
 { #category : #utility }
 GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
