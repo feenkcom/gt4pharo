@@ -144,7 +144,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 						and: [ aNode whoDefines ifNil: [ true ] ifNotNil: [ :def | def isSequence not ] ] ] ])
 		ifFalse: [ ^ self ].
 	nodes := OrderedCollection new.
-	aNode topParent
+	aNode statementNode
 		withAllNodesDo: [ :each | each = aNode ifTrue: [ nodes add: each ] ].
 	aNode isVariable
 		ifTrue: [ nodes removeAllSuchThat: [ :each | each isDeclaration ] ].
