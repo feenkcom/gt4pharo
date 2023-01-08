@@ -108,6 +108,19 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 215>
+	| theNodes |
+	theNodes := self extractableNodesFrom: aCoderViewModel.
+	theNodes
+		ifNotEmpty: [ coderAddOns
+				addContextMenuItem: 'Extract method object' asRopedText
+				hover: nil
+				leave: nil
+				action: [ :model | (GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
@@ -369,19 +382,6 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 215>
-	| theNodes |
-	theNodes := self extractableNodesFrom: aCoderViewModel.
-	theNodes
-		ifNotEmpty: [ coderAddOns
-				addContextMenuItem: 'Extract method object' asRopedText
-				hover: nil
-				leave: nil
-				action: [ :model | (GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model) execute ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
 	aNode isVariable ifFalse: [ ^ self ].
 	aNode whoDefines ifNotNil: [ :node | node isMethod ifFalse: [ ^ self ] ].
@@ -498,7 +498,7 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 200>
+	<gtCoderContextMenuAddOns: 220>
 	self addExtractMethodTo: coderAddOns from: aCoderViewModel.
 
 	(self extractableNodesFrom: aCoderViewModel)
@@ -506,10 +506,6 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			| aNode |
 			aNode := theNodes first.
 
-			self addRenameTemporaryRefactoringFor: aNode to: coderAddOns.
-			self addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns.
-			self addRenameClassVariableRefactoringFor: aNode to: coderAddOns.
-			self addRenameClassRefactoringFor: aNode to: coderAddOns.
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
 			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
 			self addMoveMethodRefactoringFor: aNode to: coderAddOns.
@@ -600,6 +596,21 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 		id: #'context-menu--rename-inst-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 				gtDisplayString
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addRenameMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 200>
+
+	(self extractableNodesFrom: aCoderViewModel)
+		ifNotEmpty: [ :theNodes | 
+			| aNode |
+			aNode := theNodes first.
+
+			self addRenameTemporaryRefactoringFor: aNode to: coderAddOns.
+			self addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns.
+			self addRenameClassVariableRefactoringFor: aNode to: coderAddOns.
+			self addRenameClassRefactoringFor: aNode to: coderAddOns. ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
