@@ -2,7 +2,7 @@ Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 19>
+	<gtCoderContextMenuAddOns: 5>
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
@@ -66,7 +66,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 11>
 	| foundClass |
 	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
 		| node |
@@ -90,7 +90,7 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 5>
+	<gtCoderContextMenuAddOns: 800>
 	self
 		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
 			withId: nil
@@ -108,7 +108,7 @@ GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 10>
+	<gtCoderContextMenuAddOns: 30>
 	self
 		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
 		withId: nil
@@ -117,7 +117,7 @@ GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 10>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
@@ -129,7 +129,7 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 11>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
@@ -167,7 +167,7 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 15>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
@@ -186,7 +186,7 @@ GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 200>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			| highlightNode |
@@ -197,7 +197,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 					ifFalse: [ node ].
 			coderAddOns
 				addContextMenuItem: (self
-						createLabel: GtSourceCoderInlineRenameShortcut new name
+						createLabel: 'Rename message'
 						description: node selector)
 				hover: [ :textualCoderViewModel | 
 					textualCoderViewModel
