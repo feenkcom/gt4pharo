@@ -132,7 +132,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 						coderViewModel: aTextualViewModel
 						dueTo: nil ]
 				id: GtMethodCoderExtractMethodContextMenuItemId
-				shortcutKey: shortcut combinationForPlatform userPrintString ]
+				shortcutKey: shortcut combinationForPlatform gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -569,7 +569,7 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
 							hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 							leave: self removeHighlightBlock
 							action: [ :aCoderViewModel | self renameClassIn: aCoderViewModel node: aNode ];
-						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform userPrintString ] ]
+						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform gtDisplayString ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -584,7 +584,7 @@ GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOn
 		action: [ :aCoderViewModel | self renameClassVariableIn: aCoderViewModel node: aNode ]
 		id: #'context-menu--rename-class-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-				userPrintString
+				gtDisplayString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -599,7 +599,7 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 		action: [ :aCoderViewModel | self renameInstanceVariableIn: aCoderViewModel node: aNode ]
 		id: #'context-menu--rename-inst-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-				userPrintString
+				gtDisplayString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -614,7 +614,7 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
 		id: #'context-menu--rename-temp'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-				userPrintString
+				gtDisplayString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

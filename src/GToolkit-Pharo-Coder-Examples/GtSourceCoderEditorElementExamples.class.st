@@ -7,15 +7,14 @@ Class {
 { #category : #'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	<gtExample>
-	| aMethodCoder aMethodCoderUIModel anEditorElement |
+	| aMethodCoder aMethodCoderUIModel anEditorElement scripter |
 	aMethodCoder := GtPharoMethodCoderExamples new forExampleMethodCoder.
 	aMethodCoderUIModel := aMethodCoder asCoderViewModel.
-
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
-	BlUseAsyncFeatures
-		disableDuring: [ anEditorElement := GtSourceCoderEditorElement new
-					textualCoderViewModel: aMethodCoderUIModel.
-			aMethodCoderUIModel ensureAddOns ].
+	scripter := BlScripter new.
+	scripter
+		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
+	anEditorElement := scripter elementWithoutParent.
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait not.
 
 	self assert: anEditorElement hasFocus not.
@@ -31,18 +30,16 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 { #category : #'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	<gtExample>
-	| aSnippetCoder aSnippetCoderUIModel anEditorElement |
-
+	| aSnippetCoder aSnippetCoderUIModel scripter anEditorElement |
 	aSnippetCoder := GtPharoSnippetCoder new.
 	aSnippetCoderUIModel := aSnippetCoder asCoderViewModel.
 
 	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated wait.
-
-	anEditorElement := GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel.
-	aSnippetCoderUIModel ensureAddOns.
-
+	scripter := BlScripter new.
+	scripter
+		element: (GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel).
+	anEditorElement := scripter elementWithoutParent.
 	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated wait not.
-
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
 	self assert: anEditorElement margin equals: BlInsets empty.
@@ -50,5 +47,5 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 		assert: anEditorElement text characters
 		equals: aSnippetCoder currentSourceText characters.
 
-	^ anEditorElement
+	^ GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel
 ]

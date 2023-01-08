@@ -20,7 +20,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 							leave: self removeHighlightBlock
 							action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
 							shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
-									userPrintString;
+									gtDisplayString;
 						addContextMenuItem: (self
 									createLabel: 'Browse package'
 									description: node literalValue)
@@ -47,7 +47,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 									leave: self removeHighlightBlock
 									action: [ :aTextualViewModel | self renameBaseline: node in: aTextualViewModel ]
 									shortcutKey: GtRenameInBaselineShortcut new
-											combinationForPlatform userPrintString;
+											combinationForPlatform gtDisplayString;
 								addContextMenuItem: (self
 											createLabel: 'Browse baseline'
 											description: node literalValue)
@@ -144,7 +144,7 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition ]
 				id: nil
 				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
-						combinationForPlatform userPrintString ]
+						combinationForPlatform gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -162,7 +162,7 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 				to: highlightNode stopPosition ]
 		leave: self removeHighlightBlock
 		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition ]
-		shortcutKey: aShortcut combinationForPlatform userPrintString
+		shortcutKey: aShortcut combinationForPlatform gtDisplayString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -207,7 +207,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-						userPrintString ]
+						gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
