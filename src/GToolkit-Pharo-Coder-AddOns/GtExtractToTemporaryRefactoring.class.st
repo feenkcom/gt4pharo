@@ -14,6 +14,8 @@ GtExtractToTemporaryRefactoring >> insertTemporary [
 	sequenceNode := statementNode parent.
 	nodeReferences := (sequenceNode allChildren select: [ :each | each = node ])
 			sort: [ :a :b | a start < b start ].
+	[ nodeReferences first statementNode parent ~= sequenceNode ]
+		whileTrue: [ nodeReferences removeFirst ].
 	node := nodeReferences first.
 	sequenceNode
 		addTemporaryNamed: newVariableName;

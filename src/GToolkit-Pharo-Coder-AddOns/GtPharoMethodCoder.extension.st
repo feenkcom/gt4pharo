@@ -150,18 +150,21 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
-	| nodes |
+	| nodes sequenceNode |
 	(aNode isValueNode
 		and: [ aNode isVariable not
 				or: [ (aNode isAssignedTo or: [ aNode isDeclaration ]) not
 						and: [ aNode whoDefines ifNil: [ true ] ifNotNil: [ :def | def isSequence not ] ] ] ])
 		ifFalse: [ ^ self ].
 	nodes := OrderedCollection new.
-	aNode statementNode
+	sequenceNode := aNode statementNode parent.
+	sequenceNode
 		withAllNodesDo: [ :each | each = aNode ifTrue: [ nodes add: each ] ].
 	aNode isVariable
 		ifTrue: [ nodes removeAllSuchThat: [ :each | each isDeclaration ] ].
 	nodes sort: [ :a :b | a startPosition < b startPosition ].
+	[ nodes first statementNode parent ~= sequenceNode ]
+		whileTrue: [ nodes removeFirst ].
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Extract temporary'
