@@ -78,7 +78,27 @@ GtPharoProgramNode >> localVariables [
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }
-GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy [
+GtPharoProgramNode >> mergeKeywordCompletionsWith: completionsStream from: aMessage matching: aToken preferKeywords: aBoolean for: strategy [
+	| keywordStream keywords cachedCompletions cachedKeywords |
+	keywords := aMessage keywordArrayWithToken: aToken.
+	keywordStream := (GtPharoIndex current asyncKeywordImplementorsFor: keywords)
+			collect: [ :each | 
+				GtKeywordPartCompletionAction
+					on: aToken
+					forMessage: aMessage
+					completing: each ].
+	cachedCompletions := completionsStream cached.
+	cachedKeywords := keywordStream cached.
+	^ ((aBoolean
+		ifTrue: [ #() asAsyncStream ]
+		ifFalse: [ cachedCompletions asyncSimilarCopy take: 10 ])
+		merge: (((cachedKeywords asyncSimilarCopy take: 10)
+				merge: cachedCompletions asyncSimilarCopy)
+				merge: cachedKeywords asyncSimilarCopy)) withoutDuplicates
+]
+
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy parentMessage: anObject [
 	| index type name completionsStream replacementsStream wordSelectorStream |
 	index := strategy index.
 	type := receiver guessType: strategy.
@@ -94,6 +114,47 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 	wordSelectorStream := (strategy
 			selectorStreamForReceiver: type
 			matchingWords: name) cached.
+	anObject ifNotNil: [].
+	replacementsStream := wordSelectorStream
+			collect: [ :each | 
+				(GtCompositeCompletionAction labeled: (strategy labelFor: each withWords: name))
+					addAction: (GtDeleteTextCompletionAction
+							labeled: ''
+							from: aToken startPosition
+							to: aToken stopPosition);
+					addAction: (receiver
+							actionForSelector: each
+							startingWith: ''
+							at: aToken startPosition - 1
+							needsParensKeywords: needsParensForKeyword
+							strategy: strategy) ].
+	^ completionsStream merge: replacementsStream
+]
+
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword parentMessage: aMessage for: strategy [
+	| index type name completionsStream replacementsStream wordSelectorStream |
+	index := strategy index.
+	type := receiver guessType: strategy.
+	name := aToken source.
+	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
+			collect: [ :each | 
+				receiver
+					actionForSelector: each
+					startingWith: name
+					at: index
+					needsParensKeywords: needsParensForKeyword
+					strategy: strategy ].
+	wordSelectorStream := (strategy
+			selectorStreamForReceiver: type
+			matchingWords: name) cached.
+	aMessage
+		ifNotNil: [ completionsStream := self
+					mergeKeywordCompletionsWith: completionsStream
+					from: aMessage
+					matching: aToken
+					preferKeywords: (type notNil and: [ type includesBehavior: BlockClosure ])
+					for: strategy ].
 	replacementsStream := wordSelectorStream
 			collect: [ :each | 
 				(GtCompositeCompletionAction labeled: (strategy labelFor: each withWords: name))

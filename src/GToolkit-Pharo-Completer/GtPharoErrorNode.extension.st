@@ -6,21 +6,21 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 	anInteger <= 1 ifTrue: [ ^ #() asAsyncStream ].
 	previousItem := smaccError stackContents at: anInteger - 1.
 	(previousItem isKindOf: GtPharoValueNode)
-		ifTrue:
-			[ ^ self
+		ifTrue: [ ^ self
 				messageCompletionsSendTo: previousItem
 				matching: aToken
 				withParens: false
-				for: aStrategy ].
+				parentMessage: nil 
+				for: aStrategy].
 	(previousItem isArray
-		and:
-			[ previousItem size = 2
-				and: [ (previousItem last isKindOf: OrderedCollection) and: [ previousItem last last isKindOf: GtPharoValueNode ] ] ])
-		ifTrue:
-			[ ^ self
+		and: [ previousItem size = 2
+				and: [ (previousItem last isKindOf: OrderedCollection)
+						and: [ previousItem last last isKindOf: GtPharoValueNode ] ] ])
+		ifTrue: [ ^ self
 				messageCompletionsSendTo: previousItem last last
 				matching: aToken
 				withParens: true
+				parentMessage: nil
 				for: aStrategy ]
 ]
 
