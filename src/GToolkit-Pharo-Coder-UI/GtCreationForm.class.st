@@ -126,7 +126,8 @@ GtCreationForm >> taggerStencilWithCompletion: aCompletionStrategy [
 						| aLabel |
 						aLabel := BrEditableLabel new
 								text: (aDescription displayStringFor: aTag name);
-								aptitude: (BrGlamorousEditableLabelAptitude new defaultForeground: Color black);
+								aptitude: (BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize
+										defaultForeground: Color black);
 								whenKey: BlKeyCombination arrowRight
 									editorDo: [ :anEvent | 
 										anEvent target acceptEdition.
