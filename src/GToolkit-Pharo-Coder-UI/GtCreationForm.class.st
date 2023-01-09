@@ -68,17 +68,6 @@ GtCreationForm >> initialize [
 ]
 
 { #category : #accessing }
-GtCreationForm >> mockTabEvent: aTagger [
-	| anEvent aBuffer |
-	aBuffer := BlKeyboardBuffer new.
-	BlKeyCombination tab asBufferKeys
-		do: [ :eachKeyboardKey | aBuffer add: (BlKeyDownEvent new key: eachKeyboardKey) ].
-
-	anEvent := BlShortcutEvent new buffer: aBuffer.
-	aTagger fireEvent: anEvent
-]
-
-{ #category : #accessing }
 GtCreationForm >> onAccept [
 
 	^ onAccept
@@ -151,7 +140,7 @@ GtCreationForm >> taggerStencilWithCompletion: aCompletionStrategy [
 						remove: aRequest tag name;
 						yourself)
 				using: aDescription.
-			self mockTabEvent: aTagger ].
+			aTaggerAptitude addTagCreatorElement ].
 	aTagger
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
