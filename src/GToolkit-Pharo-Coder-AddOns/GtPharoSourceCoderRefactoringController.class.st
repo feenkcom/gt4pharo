@@ -76,6 +76,14 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 	^ aModel
 ]
 
+{ #category : #private }
+GtPharoSourceCoderRefactoringController >> createSnippetRefactoringModel [
+	| model |
+	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
+	self compileSnippetMethodIn: model.
+	^ model
+]
+
 { #category : #executing }
 GtPharoSourceCoderRefactoringController >> findNodeAssigning: aString [
 	self ast allNodesDo: [ :each | (each isAssignment and: [ each variable source = aString ]) ifTrue: [ ^ each variable ] ].
@@ -95,6 +103,15 @@ GtPharoSourceCoderRefactoringController >> isValidForPreview [
 { #category : #accessing }
 GtPharoSourceCoderRefactoringController >> previewPosition [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> refactoredSnippetCodeFrom: refactoring [
+	| ast |
+	ast := ((refactoring model classFor: self snippetClass)
+			methodFor: self snippetSelector) ast body.
+	ast temporaryNames do: [ :each | ast removeTemporaryNamed: each ].
+	^ ast formattedCode
 ]
 
 { #category : #private }
@@ -126,6 +143,17 @@ GtPharoSourceCoderRefactoringController >> selfArgumentName [
 
 { #category : #accessing }
 GtPharoSourceCoderRefactoringController >> setPreviewOptionsOn: refactoring [ 
+]
+
+{ #category : #private }
+GtPharoSourceCoderRefactoringController >> snippetClass [
+	^ nil class
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> snippetIntervalFor: anInterval [
+	^ anInterval first + self snippetSelector size + 1
+		to: anInterval last + self snippetSelector size + 1
 ]
 
 { #category : #private }

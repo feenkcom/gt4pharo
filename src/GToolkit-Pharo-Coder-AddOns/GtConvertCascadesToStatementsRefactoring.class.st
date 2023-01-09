@@ -66,7 +66,7 @@ GtConvertCascadesToStatementsRefactoring >> extractTempForReceiver: aNode [
 	| tempName sourceTree |
 	tempName := (self options at: #receiverName) value: self.
 	self
-		performCompositeRefactoring: (RBExtractToTemporaryRefactoring
+		performCompositeRefactoring: (GtExtractToTemporaryRefactoring
 				model: self model
 				extract: aNode receiver sourceInterval
 				to: tempName

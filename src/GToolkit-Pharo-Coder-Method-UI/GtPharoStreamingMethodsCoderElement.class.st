@@ -13,6 +13,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
+{ #category : #converting }
+GtPharoStreamingMethodsCoderElement >> asScrollableElement [
+	"I am already a scrollable list of methods, no need to wrap me again"
+	^ self
+]
+
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderElement >> buildFilter [
 
@@ -113,33 +119,30 @@ GtPharoStreamingMethodsCoderElement >> doNotShowIndicator [
 
 { #category : #initialization }
 GtPharoStreamingMethodsCoderElement >> initialize [
-
 	super initialize.
 
 	self matchParent.
+	self beInSeparateCompositionLayer.
 
 	listItemsProvider := BrStreamItemsProvider new
-		                     preloadAmount: self preloadAmount;
-		                     loadSinglesUntil: self loadSinglesUntil;
-		                     stream: AsyncEmptyStream new.
+		preloadAmount: self preloadAmount;
+		loadSinglesUntil: self loadSinglesUntil;
+		stream: AsyncEmptyStream new.
 
 	list := BrSimpleList new
-		        itemType: [ :anItemTypeFactory :anItemObject | 
-			        anItemObject elementClass ];
-		        itemStencil: [ :anElementClass | 
-			        anElementClass new id: GtSourceCoderId ];
-		        itemDataBinder: [ :aCoderElement :aCoderViewModel | 
-			        BlFrameTelemetry
-				        time: [ 
-					        'Set {1} as a view model of {2}' format: { 
-								        aCoderViewModel class name.
-								        aCoderElement class name } ]
-				        during: [ 
-					        aCoderElement textualCoderViewModel: aCoderViewModel ] ];
-		        itemsProvider: listItemsProvider.
+		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
+		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
+		itemId: [ :eachCoderViewModel | eachCoderViewModel coder id ];
+		itemDataBinder: [ :aCoderElement :aCoderViewModel | 
+			BlFrameTelemetry
+				time: [ 'Set {1} as a view model of {2}'
+						format: {aCoderViewModel class name.
+								aCoderElement class name} ]
+				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ];
+		itemsProvider: listItemsProvider.
 
 	self addChild: list.
-	showIndicator := false.
+	showIndicator := false
 ]
 
 { #category : #initialization }

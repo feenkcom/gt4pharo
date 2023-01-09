@@ -2,7 +2,7 @@ Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 19>
+	<gtCoderContextMenuAddOns: 5>
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
@@ -20,7 +20,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 							leave: self removeHighlightBlock
 							action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
 							shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
-									userPrintString;
+									gtDisplayString;
 						addContextMenuItem: (self
 									createLabel: 'Browse package'
 									description: node literalValue)
@@ -47,7 +47,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 									leave: self removeHighlightBlock
 									action: [ :aTextualViewModel | self renameBaseline: node in: aTextualViewModel ]
 									shortcutKey: GtRenameInBaselineShortcut new
-											combinationForPlatform userPrintString;
+											combinationForPlatform gtDisplayString;
 								addContextMenuItem: (self
 											createLabel: 'Browse baseline'
 											description: node literalValue)
@@ -66,7 +66,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 11>
 	| foundClass |
 	(self extractableNodesFrom: aCoderViewModel) ifNotEmpty: [ :nodes | 
 		| node |
@@ -90,7 +90,7 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 5>
+	<gtCoderContextMenuAddOns: 800>
 	self
 		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
 			withId: nil
@@ -108,7 +108,7 @@ GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 10>
+	<gtCoderContextMenuAddOns: 30>
 	self
 		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
 		withId: nil
@@ -117,7 +117,7 @@ GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 10>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
@@ -129,7 +129,7 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 11>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
@@ -144,7 +144,7 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition ]
 				id: nil
 				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
-						combinationForPlatform userPrintString ]
+						combinationForPlatform gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -162,12 +162,12 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 				to: highlightNode stopPosition ]
 		leave: self removeHighlightBlock
 		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition ]
-		shortcutKey: aShortcut combinationForPlatform userPrintString
+		shortcutKey: aShortcut combinationForPlatform gtDisplayString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 15>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			self
@@ -186,7 +186,7 @@ GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 100>
+	<gtCoderContextMenuAddOns: 200>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			| highlightNode |
@@ -197,7 +197,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 					ifFalse: [ node ].
 			coderAddOns
 				addContextMenuItem: (self
-						createLabel: GtSourceCoderInlineRenameShortcut new name
+						createLabel: 'Rename message'
 						description: node selector)
 				hover: [ :textualCoderViewModel | 
 					textualCoderViewModel
@@ -207,7 +207,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-						userPrintString ]
+						gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -293,6 +293,22 @@ GtPharoSourceCoder >> createLabel: aString description: description [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> expandCascadeSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
+	| cascade siblings messageNode index |
+	messageNode := (self nodeAt: position) messageNode.
+	cascade := messageNode cascadeNode.
+	siblings := cascade messages.
+	index := (siblings indexOf: messageNode) + offset.
+	(index between: 1 and: siblings size)
+		ifFalse: [ ^ self
+				selectStatementOrCascadeAt: cascade startPosition
+				in: aSourceCoderViewModel ].
+	self
+		selectStatementOrCascadeAt: (siblings at: index) startPosition
+		in: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> expandSelection: aSelectionInterval toCompleteStatementsIn: aSourceCoderViewModel [
 	| nodes |
 	nodes := self extractableNodesWithin: aSelectionInterval.
@@ -305,10 +321,15 @@ GtPharoSourceCoder >> expandSelection: aSelectionInterval toCompleteStatementsIn
 GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
 	| statement siblings index |
 	(self isIntervalCompleteStatements: aSelectionInterval)
-		ifFalse: [ self
-				expandSelection: aSelectionInterval
-				toCompleteStatementsIn: aSourceCoderViewModel.
-			^ self ].
+		ifFalse: [ ^ (self isIntervalCompleteCascades: aSelectionInterval)
+				ifTrue: [ self
+						expandCascadeSelection: aSelectionInterval
+						at: position
+						directionOffset: offset
+						in: aSourceCoderViewModel ]
+				ifFalse: [ self
+						expandSelection: aSelectionInterval
+						toCompleteStatementsIn: aSourceCoderViewModel ] ].
 	statement := (self nodeAt: position) statementNode.
 	siblings := statement parent
 			ifNil: [ ^ self ]
@@ -316,10 +337,10 @@ GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval at: position 
 	index := (siblings indexOf: statement) + offset.
 	(index between: 1 and: siblings size)
 		ifFalse: [ ^ self
-				selectStatementAt: statement parent statementNode startPosition
+				selectStatementOrCascadeAt: statement parent statementNode startPosition
 				in: aSourceCoderViewModel ].
 	self
-		selectStatementAt: (siblings at: index) startPosition
+		selectStatementOrCascadeAt: (siblings at: index) startPosition
 		in: aSourceCoderViewModel
 ]
 
@@ -428,6 +449,29 @@ GtPharoSourceCoder >> isInstanceVariable: aNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> isIntervalCompleteCascades: aSelectionInterval [
+	"Test to see if the current selection boundaries end exactly on cascaded message nodes"
+
+	| cascade |
+	self
+		nodeAt: aSelectionInterval first
+		ifFound: [ :first | 
+			(cascade := first cascadeNode) ifNil: [ ^ false ].
+			(cascade messages includes: first) ifFalse: [ ^ false ].
+			first startPosition = aSelectionInterval first ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	self
+		nodeAt: aSelectionInterval last
+		ifFound: [ :last | 
+			| message |
+			last cascadeNode = cascade ifFalse: [ ^ false ].
+			message := last messageNode.
+			message stopPosition = aSelectionInterval last ifFalse: [ ^ false ] ]
+		ifNone: [ ^ false ].
+	^ true
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isIntervalCompleteStatements: aSelectionInterval [
 	"Test to see if the current selection boundaries end exactly on statement nodes"
 
@@ -450,11 +494,55 @@ GtPharoSourceCoder >> isLocalVariable: aNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> moveStatementDownAt: aTextPosition in: aSourceCoderViewModel [
+GtPharoSourceCoder >> messageNodeAfter: aMessageNodeCollection [
+	| siblings index |
+	siblings := aMessageNodeCollection any parent messages.
+	index := siblings indexOf: aMessageNodeCollection last.
+	^ index = siblings size ifTrue: [ nil ] ifFalse: [ siblings at: index + 1 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> messageNodeBefore: aMessageNodeCollection [
+	| siblings index |
+	siblings := aMessageNodeCollection any parent messages.
+	index := siblings indexOf: aMessageNodeCollection first.
+	^ index = 1 ifTrue: [ nil ] ifFalse: [ siblings at: index - 1 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> moveCascadeNodes: messages downIn: aSourceCoderViewModel [
+	"Expects a collection of sibling statement nodes"
+
+	| editString nextNode |
+	nextNode := (self messageNodeAfter: messages) ifNil: [ ^ self ].
+	editString := SmaCCString on: self currentSourceText.
+	editString
+		swapFrom: messages first startPosition
+		to: messages last stopPosition
+		with: nextNode startPosition
+		to: nextNode stopPosition.
 	self
-		nodeAt: aTextPosition
-		ifFound: [ :aNode | self moveStatementNodes: { aNode statementNode } downIn: aSourceCoderViewModel ]
-		ifNone: [  ]
+		updateSourceAndSelectMovedStatements: messages
+		from: editString
+		in: aSourceCoderViewModel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> moveCascadeNodes: messages upIn: aSourceCoderViewModel [
+	"Expects a collection of sibling message nodes"
+
+	| editString prevNode |
+	prevNode := (self messageNodeBefore: messages) ifNil: [ ^ self ].
+	editString := SmaCCString on: self currentSourceText.
+	editString
+		swapFrom: prevNode startPosition
+		to: prevNode stopPosition
+		with: messages first startPosition
+		to: messages last stopPosition.
+	self
+		updateSourceAndSelectMovedStatements: messages
+		from: editString
+		in: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -494,25 +582,47 @@ GtPharoSourceCoder >> moveStatementNodes: statements upIn: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> moveStatementUpAt: aTextPosition in: aSourceCoderViewModel [
+GtPharoSourceCoder >> moveStatementOrCascadeDownAt: aTextPosition in: aSourceCoderViewModel [
 	self
 		nodeAt: aTextPosition
-		ifFound: [ :aNode | self moveStatementNodes: { aNode statementNode } upIn: aSourceCoderViewModel ]
+		ifFound: [ :aNode | 
+			aNode cascadeNode
+				ifNotNil: [ self moveCascadeNodes: {aNode messageNode} downIn: aSourceCoderViewModel ]
+				ifNil: [ self moveStatementNodes: {aNode statementNode} downIn: aSourceCoderViewModel ] ]
 		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> moveStatementsDownWithin: aSelectionInterval in: aSourceCoderViewModel [
+GtPharoSourceCoder >> moveStatementOrCascadeUpAt: aTextPosition in: aSourceCoderViewModel [
 	self
-		moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
-		downIn: aSourceCoderViewModel
+		nodeAt: aTextPosition
+		ifFound: [ :aNode | 
+			aNode cascadeNode
+				ifNotNil: [ self moveCascadeNodes: {aNode messageNode} upIn: aSourceCoderViewModel ]
+				ifNil: [ self moveStatementNodes: {aNode statementNode} upIn: aSourceCoderViewModel ] ]
+		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> moveStatementsUpWithin: aSelectionInterval in: aSourceCoderViewModel [
-	self
-		moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
-		upIn: aSourceCoderViewModel
+GtPharoSourceCoder >> moveStatementsOrCascadesDownWithin: aSelectionInterval in: aSourceCoderViewModel [
+	| cascades |
+	cascades := self cascadedMessagesWithin: aSelectionInterval.
+	cascades isEmpty
+		ifTrue: [ self
+				moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
+				downIn: aSourceCoderViewModel ]
+		ifFalse: [ self moveCascadeNodes: cascades downIn: aSourceCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> moveStatementsOrCascadesUpWithin: aSelectionInterval in: aSourceCoderViewModel [
+	| cascades |
+	cascades := self cascadedMessagesWithin: aSelectionInterval.
+	cascades isEmpty
+		ifTrue: [ self
+				moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
+				upIn: aSourceCoderViewModel ]
+		ifFalse: [ self moveCascadeNodes: cascades upIn: aSourceCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -698,16 +808,18 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> selectStatementAt: anIndex in: aSourceCoderViewModel [
-	| node statement |
+GtPharoSourceCoder >> selectStatementOrCascadeAt: anIndex in: aSourceCoderViewModel [
+	| node selectNode |
 	self
 		nodeAt: anIndex
 		ifFound: [ :aNode | node := aNode ]
 		ifNone: [ ^ self ].
-	statement := node statementNode.
+	node isErrorNode ifTrue: [ ^ self ].
+	node cascadeNode ifNotNil: [ selectNode := node messageNode ].
+	selectNode ifNil: [ selectNode := node statementNode ].
 	aSourceCoderViewModel
-		select: statement startPosition - 1
-		to: statement stopPosition
+		select: selectNode startPosition - 1
+		to: selectNode stopPosition
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
