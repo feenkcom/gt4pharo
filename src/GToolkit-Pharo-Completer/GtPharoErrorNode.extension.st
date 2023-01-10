@@ -2,7 +2,7 @@ Extension { #name : #GtPharoErrorNode }
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
-	| previousItem |
+	| previousItem item |
 	anInteger <= 1 ifTrue: [ ^ #() asAsyncStream ].
 	previousItem := smaccError stackContents at: anInteger - 1.
 	(previousItem isKindOf: GtPharoValueNode)
@@ -22,6 +22,24 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 				withParens: true
 				parentMessage: nil
 				for: aStrategy ].
+	(aToken source = ';' and: [ anInteger >= 2 ])
+		ifTrue: [ item := smaccError stackContents at: anInteger - 1.
+			(item isKindOf: Array)
+				ifTrue: [ ((item first isKindOf: OrderedCollection)
+						and: [ item first notEmpty
+								and: [ (item first first isKindOf: SmaCCToken) and: [ item first first source = ';' ] ] ])
+						ifTrue: [ item := smaccError stackContents at: anInteger - 2.
+							((item isKindOf: Array) and: [ item first isKindOf: GtPharoValueNode ])
+								ifTrue: [ ^ (aStrategy
+										selectorStreamForReceiver: (item first guessType: aStrategy)
+										matching: '')
+										collect: [ :each | 
+											item first
+												actionForSelector: each
+												startingWith: ''
+												at: aStrategy index
+												needsParensKeywords: false
+												strategy: aStrategy ] ] ] ] ].
 	^ #() asAsyncStream
 ]
 
@@ -40,7 +58,7 @@ GtPharoErrorNode >> completionActionStreamFor: aStrategy [
 	smaccError stackContents
 		keysAndValuesDo:
 			[ :i :each | 
-			(each isKindOf: OrderedCollection)
+			(each isKindOf: SequenceableCollection)
 				ifTrue: [ each do: [ :value | nodeBlock value: value value: 1 ] ]
 				ifFalse: [ nodeBlock value: each value: i ] ].
 	^ super completionActionStreamFor: aStrategy
