@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'selectorPart'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #accessing }
@@ -20,6 +20,11 @@ GtPharoUnaryMessageNode >> acceptVisitor: aProgramVisitor [
 { #category : #accessing }
 GtPharoUnaryMessageNode >> arguments [
 	^ #()
+]
+
+{ #category : #testing }
+GtPharoUnaryMessageNode >> isConstructorMessage [
+	^ self selectorPart source = 'new'
 ]
 
 { #category : #testing }

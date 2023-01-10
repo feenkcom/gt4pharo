@@ -18,6 +18,14 @@ GtPharoMessageSendNode >> arguments [
 	^ self message arguments
 ]
 
+{ #category : #accessing }
+GtPharoMessageSendNode >> guessType: completionStrategy [
+	message isConstructorMessage
+		ifTrue: [ (self receiver guessType: completionStrategy)
+				ifNotNil: [ :type | type isClassSide ifTrue: [ ^ type instanceSide ] ] ].
+	^ super guessType: completionStrategy
+]
+
 { #category : #testing }
 GtPharoMessageSendNode >> isMessageSend [
 	^ true

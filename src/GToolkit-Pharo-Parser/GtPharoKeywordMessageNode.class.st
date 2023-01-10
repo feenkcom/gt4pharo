@@ -5,7 +5,7 @@ Class {
 		'selectorParts',
 		'values'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #accessing }
@@ -38,6 +38,11 @@ GtPharoKeywordMessageNode >> initialize [
 	super initialize.
 	selectorParts := OrderedCollection new: 2.
 	values := OrderedCollection new: 2.
+]
+
+{ #category : #testing }
+GtPharoKeywordMessageNode >> isConstructorMessage [
+	^ self selectorParts size = 1 and: [ self selectorParts first source = 'new:' ]
 ]
 
 { #category : #testing }
