@@ -10,8 +10,8 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 				messageCompletionsSendTo: previousItem
 				matching: aToken
 				withParens: false
-				parentMessage: nil 
-				for: aStrategy].
+				parentMessage: nil
+				for: aStrategy ].
 	(previousItem isArray
 		and: [ previousItem size = 2
 				and: [ (previousItem last isKindOf: OrderedCollection)
@@ -21,7 +21,8 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 				matching: aToken
 				withParens: true
 				parentMessage: nil
-				for: aStrategy ]
+				for: aStrategy ].
+	^ #() asAsyncStream
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }

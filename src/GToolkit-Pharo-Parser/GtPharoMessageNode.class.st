@@ -25,6 +25,11 @@ GtPharoMessageNode >> isBinary [
 ]
 
 { #category : #testing }
+GtPharoMessageNode >> isConstructorMessage [
+	^ false
+]
+
+{ #category : #testing }
 GtPharoMessageNode >> isKeyword [
 	^ false
 ]
