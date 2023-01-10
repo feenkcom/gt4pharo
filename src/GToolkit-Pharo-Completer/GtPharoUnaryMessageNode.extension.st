@@ -4,9 +4,7 @@ Extension { #name : #GtPharoUnaryMessageNode }
 GtPharoUnaryMessageNode >> completionActionStreamFor: strategy [
 	selectorPart stopPosition = strategy index ifFalse: [ ^ #() asAsyncStream ].
 	^ self
-		messageCompletionsSendTo: ((parent isKindOf: GtPharoMessageSendNode)
-				ifTrue: [ parent receiver ]
-				ifFalse: [ (self nodeOfType: GtPharoValueNode) ifNil: [ self ] ])
+		messageCompletionsSendTo: self receiver
 		matching: selectorPart
 		withParens: false
 		parentMessage: self completionKeywordMessage
@@ -28,4 +26,16 @@ GtPharoUnaryMessageNode >> completionKeywordMessage [
 
 			current := current parent ].
 	^ nil
+]
+
+{ #category : #'*GToolkit-Pharo-Completer' }
+GtPharoUnaryMessageNode >> receiver [
+	((parent isKindOf: GtPharoMessageSendNode)
+		or: [ parent isKindOf: GtPharoCascadeNode ]) ifTrue: [ ^ parent receiver ].
+	(parent isKindOf: SmaCCErrorNode)
+		ifTrue: [ (parent stackContents notEmpty
+				and: [ parent stackContents first isArray
+						and: [ parent stackContents first first isKindOf: GtPharoProgramNode ] ])
+				ifTrue: [ ^ parent stackContents first first ] ].
+	^ (self nodeOfType: GtPharoValueNode) ifNil: [ self ]
 ]
