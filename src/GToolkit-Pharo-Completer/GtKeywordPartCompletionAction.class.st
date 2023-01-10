@@ -48,10 +48,7 @@ GtKeywordPartCompletionAction >> computeLabel [
 	label := selector asRopedText glamorousCodeFont.
 	parts := keywordMessage keywordArrayWithToken: completionToken.
 	map := GtPharoIndex current map: selector toKeywords: parts.
-	attributes := {BlTextDecorationAttribute new
-				color: BrGlamorousColors textHighlightColor;
-				thickness: 3;
-				underline}.
+	attributes := GtCompletionStrategy matchingCharacterAttributes.
 	position := 1.
 	selector keywords
 		doWithIndex: [ :each :index | 
