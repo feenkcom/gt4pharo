@@ -10,6 +10,7 @@ Class {
 { #category : #accessing }
 ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 	^ {
+		'Collections-Abstract'.
 		'Collections-Sequenceable'.
 		'Collections-Strings'.
 		'Collections-Unordered'.
