@@ -116,6 +116,14 @@ GtPharoIndex >> asyncImplementersForWord: aString [
 				ifNotNil: [ :node | node implementersCollection asAsyncStream ] ]) flatten
 ]
 
+{ #category : #accessing }
+GtPharoIndex >> asyncKeywordImplementorsFor: anArray [
+	^ (self asyncSelectorsForWord: (' ' join: anArray))
+		select: [ :each | 
+			(self hasImplementersOf: each)
+				and: [ (self map: each toKeywords: anArray) notNil ] ]
+]
+
 { #category : #private }
 GtPharoIndex >> asyncNamesForWord: aString usingPrefixCache: prefixCache andWordCache: wordCache [
 	"Ordered the results by first ones with exact matches, and then with case-insensitve prefix match, 
@@ -452,6 +460,36 @@ GtPharoIndex >> isVariableForClass: aVariable [
 				and: [ (self class environment bindingOf: aVariable name) == aVariable ] ]
 ]
 
+{ #category : #accessing }
+GtPharoIndex >> map: aSelector toKeywords: anArray [
+	| selector otherKeywords index map |
+	map := OrderedCollection new: anArray size.
+	selector := aSelector asSymbol.
+	index := 0.
+	otherKeywords := selector keywords.
+	anArray
+		do: [ :kw | 
+			kw last = $:
+				ifTrue: [ index := otherKeywords indexOf: kw startingAt: index + 1 ]
+				ifFalse: [ | myWords |
+					myWords := self wordsIn: kw.
+					index := (index + 1 to: otherKeywords size)
+							detect: [ :i | 
+								| otherWords currentIndex |
+								otherWords := self wordsIn: (otherKeywords at: i).
+								currentIndex := 0.
+								myWords
+									allSatisfy: [ :e | 
+										currentIndex := (currentIndex + 1 to: otherWords size)
+												detect: [ :j | (otherWords at: j) beginsWith: e ]
+												ifNone: [ 0 ].
+										currentIndex > 0 ] ]
+							ifNone: [ 0 ] ].
+			index > 0 ifFalse: [ ^ nil ].
+			map add: index ].
+	^ map
+]
+
 { #category : #private }
 GtPharoIndex >> methodAdded: anAnnouncement [
 	| node |
@@ -649,6 +687,18 @@ GtPharoIndex >> subscribeToSystem [
 GtPharoIndex >> unsubscribeFromSystem [
 	SystemAnnouncer uniqueInstance unsubscribe: self.
 	active := false
+]
+
+{ #category : #private }
+GtPharoIndex >> wordsIn: kw [
+	| myWords |
+	myWords := OrderedCollection new.
+	self
+		wordsIn: kw
+		do: [ :each | myWords add: each asLowercase ]
+		minSize: 1
+		includeSubStrings: false.
+	^ myWords
 ]
 
 { #category : #private }
