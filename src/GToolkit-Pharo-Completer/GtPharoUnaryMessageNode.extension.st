@@ -4,7 +4,9 @@ Extension { #name : #GtPharoUnaryMessageNode }
 GtPharoUnaryMessageNode >> completionActionStreamFor: strategy [
 	selectorPart stopPosition = strategy index ifFalse: [ ^ #() asAsyncStream ].
 	^ self
-		messageCompletionsSendTo: parent receiver
+		messageCompletionsSendTo: ((parent isKindOf: GtPharoMessageSendNode)
+				ifTrue: [ parent receiver ]
+				ifFalse: [ (self nodeOfType: GtPharoValueNode) ifNil: [ self ] ])
 		matching: selectorPart
 		withParens: false
 		parentMessage: self completionKeywordMessage

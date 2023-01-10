@@ -1062,14 +1062,14 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_SelectMethodNameF
 				         >> #many:many:many:many:many:many:arguments:) selector
 					        asString.
 				items := element items.
-				[ item isNil and: [ i < items size ] ] whileTrue: [ 
+				[ item isNil and: [ i <= items size ] ] whileTrue: [ 
 						(items at: i) label = text
 							ifTrue: [ item := items at: i ]
 							ifFalse: [ i := i + 1 ] ].
 				self
 					assert: item notNil
 					description: [ 
-						'Cannot find completer selector: {1]' format: text ].
+						'Cannot find completer selector: {1}' format: {text} ].
 				element selectOne: i ];
 			onSpaceRoot;
 			id: #'completion-list';
