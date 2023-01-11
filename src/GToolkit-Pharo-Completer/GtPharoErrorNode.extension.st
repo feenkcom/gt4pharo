@@ -2,7 +2,7 @@ Extension { #name : #GtPharoErrorNode }
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
-	| previousItem item |
+	| previousItem |
 	anInteger <= 1 ifTrue: [ ^ #() asAsyncStream ].
 	previousItem := smaccError stackContents at: anInteger - 1.
 	(previousItem isKindOf: GtPharoValueNode)
@@ -20,23 +20,15 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 				matching: aToken
 				parentMessage: nil
 				for: aStrategy ].
-	(aToken source = ';' and: [ anInteger >= 2 ])
-		ifTrue: [ item := smaccError stackContents at: anInteger - 1.
-			(item isKindOf: Array)
-				ifTrue: [ ((item first isKindOf: OrderedCollection)
-						and: [ item first notEmpty
-								and: [ (item first first isKindOf: SmaCCToken) and: [ item first first source = ';' ] ] ])
-						ifTrue: [ item := smaccError stackContents at: anInteger - 2.
-							((item isKindOf: Array) and: [ item first isKindOf: GtPharoValueNode ])
-								ifTrue: [ ^ (aStrategy
-										selectorStreamForReceiver: (item first guessType: aStrategy)
-										matching: '')
-										collect: [ :each | 
-											item first
-												actionForSelector: each
-												startingWith: ''
-												at: aStrategy index
-												strategy: aStrategy ] ] ] ] ].
+	self cascadeReceiver
+		ifNotNil: [ :node | 
+			^ (aStrategy selectorStreamForReceiver: (node guessType: aStrategy) matching: '')
+				collect: [ :each | 
+					node
+						actionForSelector: each
+						startingWith: ''
+						at: aStrategy index
+						strategy: aStrategy ] ].
 	^ #() asAsyncStream
 ]
 

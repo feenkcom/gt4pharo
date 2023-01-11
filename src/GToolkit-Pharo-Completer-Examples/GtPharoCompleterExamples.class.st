@@ -20,6 +20,38 @@ GtPharoCompleterExamples >> binaryCompletion [
 ]
 
 { #category : #'private-source' }
+GtPharoCompleterExamples >> checkCompletionsIn: aString areSameAs: selectors [
+	| text strategy items |
+	text := (aString copyReplaceAll: '`' with: '') asRopedText.
+	strategy := self smalltalkStrategy.
+	items := strategy
+			completionActionStreamFor: text
+			at: (aString indexOf: $`) - 1
+			requested: true.
+	items := items toArray wait.
+	self assert: items size equals: selectors size.
+	self
+		assert: (items allSatisfy: [ :each | selectors includes: each label asString asSymbol ]).
+	^ items
+]
+
+{ #category : #'private-source' }
+GtPharoCompleterExamples >> checkCompletionsIn: aString areSupersetOf: selectors [
+	| text strategy items itemsSelectors |
+	text := (aString copyReplaceAll: '`' with: '') asRopedText.
+	strategy := self smalltalkStrategy.
+	items := strategy
+			completionActionStreamFor: text
+			at: (aString indexOf: $`) - 1
+			requested: true.
+	items := items toArray wait.
+	itemsSelectors := items collect: [ :each | each label asString asSymbol ].
+	self assert: itemsSelectors size >= selectors size.
+	self assert: (selectors allSatisfy: [ :each | itemsSelectors includes: each ]).
+	^ items
+]
+
+{ #category : #'private-source' }
 GtPharoCompleterExamples >> checkCompletionsIn: aString contains: completionString [
 	| text strategy items |
 	text := (aString copyReplaceAll: '`' with: '') asRopedText.
@@ -69,6 +101,59 @@ GtPharoCompleterExamples >> clickingSelectedCompletionItemTriggersCompletion [
 		play.
 
 	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeCascade [
+	<gtExample>
+	| selectors cSelectors |
+	selectors := ProtoObject allSelectors.
+	cSelectors := selectors select: [ :each | each first = $c ].
+	
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new printString; `'
+		areSameAs: selectors.
+	
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new printString; c`'
+		areSupersetOf: cSelectors.
+
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new printString;`'
+		areSameAs: selectors.
+
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new ` printString; printOn: b'
+		areSameAs: selectors.
+	
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new c` printString; printOn: b'
+		areSupersetOf: cSelectors.
+
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new printString; ` printOn: b'
+		areSameAs: selectors.
+
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new printString; printOn: b;`'
+		areSameAs: selectors.
+	
+	self
+		checkCompletionsIn: 'a
+				ProtoObject new printString; printOn: b; c`'
+		areSupersetOf: cSelectors.
+
+	^ self
+		checkCompletionsIn: 'a
+				ProtoObject new printString; printOn: b; `'
+		areSameAs: selectors
 ]
 
 { #category : #smalltalk }
@@ -152,7 +237,7 @@ GtPharoCompleterExamples >> completeMessageBetweenStatements [
 				| a b |
 				a := 1.
 				a printOn`
-				b :+ 2'
+				b := 2'
 		contains: 'printOn:'
 ]
 
