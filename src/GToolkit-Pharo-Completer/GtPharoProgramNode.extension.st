@@ -90,7 +90,7 @@ GtPharoProgramNode >> mergeKeywordCompletionsWith: completionsStream from: aMess
 	cachedKeywords := keywordStream cached.
 	^ ((aBoolean
 		ifTrue: [ #() asAsyncStream ]
-		ifFalse: [ cachedCompletions asyncSimilarCopy take: 10 ])
+		ifFalse: [ cachedCompletions asyncSimilarCopy take: 6 ])
 		merge: (((cachedKeywords asyncSimilarCopy take: 10)
 				merge: cachedCompletions asyncSimilarCopy)
 				merge: cachedKeywords asyncSimilarCopy)) withoutDuplicates
