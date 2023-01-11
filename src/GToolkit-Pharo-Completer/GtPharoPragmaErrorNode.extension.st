@@ -30,7 +30,6 @@ GtPharoPragmaErrorNode >> pragmaActionFor: aSelector startingWith: prefix strate
 			actionForSelector: aSelector
 			startingWith: prefix
 			at: aStrategy index
-			needsParensKeywords: false
 			strategy: aStrategy.
 	composite := GtCompositeCompletionAction labeled: action displayText.
 	gtAction := GtInsertTextCompletionAction

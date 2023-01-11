@@ -1,7 +1,7 @@
 Extension { #name : #GtPharoProgramNode }
 
 { #category : #'*GToolkit-Pharo-Completer' }
-GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInteger needsParensKeywords: aBoolean strategy: aStrategy [
+GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInteger strategy: aStrategy [
 	| isKeyword isBinary actionClass action |
 	isKeyword := aSymbol last = $:.
 	isBinary := aSymbol asSymbol isBinary.
@@ -12,7 +12,6 @@ GtPharoProgramNode >> actionForSelector: aSymbol startingWith: aString at: anInt
 		labeled: (aStrategy labelFor: aSymbol withSearch: aString)
 		completion: (aSymbol allButFirst: aString size)
 		position: anInteger.
-	((isKeyword or: [ isBinary ]) and: [ aBoolean ]) ifTrue: [ action addParenthesesBefore: self startPosition ].
 	^ action
 ]
 
@@ -98,7 +97,7 @@ GtPharoProgramNode >> mergeKeywordCompletionsWith: completionsStream from: aMess
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }
-GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword for: strategy parentMessage: anObject [
+GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken for: strategy parentMessage: anObject [
 	| index type name completionsStream replacementsStream wordSelectorStream |
 	index := strategy index.
 	type := receiver guessType: strategy.
@@ -109,12 +108,11 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 					actionForSelector: each
 					startingWith: name
 					at: index
-					needsParensKeywords: needsParensForKeyword
 					strategy: strategy ].
 	wordSelectorStream := (strategy
 			selectorStreamForReceiver: type
 			matchingWords: name) cached.
-	anObject ifNotNil: [].
+	anObject ifNotNil: [  ].
 	replacementsStream := wordSelectorStream
 			collect: [ :each | 
 				(GtCompositeCompletionAction labeled: (strategy labelFor: each withWords: name))
@@ -126,13 +124,12 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 							actionForSelector: each
 							startingWith: ''
 							at: aToken startPosition - 1
-							needsParensKeywords: needsParensForKeyword
 							strategy: strategy) ].
 	^ completionsStream merge: replacementsStream
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }
-GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withParens: needsParensForKeyword parentMessage: aMessage for: strategy [
+GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken parentMessage: aMessage for: strategy [
 	| index type name completionsStream replacementsStream wordSelectorStream |
 	index := strategy index.
 	type := receiver guessType: strategy.
@@ -143,7 +140,6 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 					actionForSelector: each
 					startingWith: name
 					at: index
-					needsParensKeywords: needsParensForKeyword
 					strategy: strategy ].
 	wordSelectorStream := (strategy
 			selectorStreamForReceiver: type
@@ -166,7 +162,6 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken withPa
 							actionForSelector: each
 							startingWith: ''
 							at: aToken startPosition - 1
-							needsParensKeywords: needsParensForKeyword
 							strategy: strategy) ].
 	^ completionsStream merge: replacementsStream
 ]

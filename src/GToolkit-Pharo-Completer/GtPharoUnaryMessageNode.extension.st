@@ -6,7 +6,6 @@ GtPharoUnaryMessageNode >> completionActionStreamFor: strategy [
 	^ self
 		messageCompletionsSendTo: self receiver
 		matching: selectorPart
-		withParens: false
 		parentMessage: self completionKeywordMessage
 		for: strategy
 ]
