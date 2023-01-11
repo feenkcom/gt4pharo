@@ -13,16 +13,17 @@ GtPharoErrorNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
-GtPharoErrorNode >> guessType: completionStrategy [
+GtPharoErrorNode >> cascadeReceiver [
+	"If it appears that we are in a cascade node, return the receiver."
+
 	| token item |
-	"Check if the error is from parsing a cascaded message with an ending ';'"
 	smaccError stackContents size > 1
 		ifTrue: [ token := smaccError stackContents last.
 			((token isKindOf: SmaCCToken) and: [ token source = ';' ])
 				ifTrue: [ item := smaccError stackContents at: smaccError stackContents size - 1.
 					(item isArray and: [ item size = 2 ])
 						ifTrue: [ (item first isKindOf: GtPharoValueNode)
-								ifTrue: [ ^ item first guessType: completionStrategy ]
+								ifTrue: [ ^ item first ]
 								ifFalse: [ (smaccError stackContents size > 2
 										and: [ (item first isKindOf: OrderedCollection)
 												and: [ item first notEmpty
@@ -30,7 +31,13 @@ GtPharoErrorNode >> guessType: completionStrategy [
 										ifTrue: [ item := smaccError stackContents at: smaccError stackContents size - 2.
 											(item isArray
 												and: [ item size = 2 and: [ item first isKindOf: GtPharoValueNode ] ])
-												ifTrue: [ ^ item first guessType: completionStrategy ] ] ] ] ] ].
+												ifTrue: [ ^ item first ] ] ] ] ] ].
+	^ nil
+]
+
+{ #category : #accessing }
+GtPharoErrorNode >> guessType: completionStrategy [
+	self cascadeReceiver ifNotNil: [ :node | ^ node guessType: completionStrategy ].
 	^ super guessType: completionStrategy
 ]
 
