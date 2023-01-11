@@ -9,7 +9,6 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 		ifTrue: [ ^ self
 				messageCompletionsSendTo: previousItem
 				matching: aToken
-				withParens: false
 				parentMessage: nil
 				for: aStrategy ].
 	(previousItem isArray
@@ -19,7 +18,6 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 		ifTrue: [ ^ self
 				messageCompletionsSendTo: previousItem last last
 				matching: aToken
-				withParens: true
 				parentMessage: nil
 				for: aStrategy ].
 	(aToken source = ';' and: [ anInteger >= 2 ])
@@ -38,7 +36,6 @@ GtPharoErrorNode >> completeToken: aToken at: anInteger for: aStrategy [
 												actionForSelector: each
 												startingWith: ''
 												at: aStrategy index
-												needsParensKeywords: false
 												strategy: aStrategy ] ] ] ] ].
 	^ #() asAsyncStream
 ]
