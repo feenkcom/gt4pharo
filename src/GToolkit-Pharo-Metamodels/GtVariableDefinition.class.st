@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'originalName',
 		'name',
-		'value'
+		'binding'
 	],
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Definitions'
 }
@@ -28,7 +28,7 @@ GtVariableDefinition >> asDefinitionString [
 GtVariableDefinition >> fromClassVariable: aClassVariable [
 	name := aClassVariable name asSymbol.
 	originalName := name.
-	value := aClassVariable value
+	binding := aClassVariable
 ]
 
 { #category : #testing }
@@ -95,5 +95,5 @@ GtVariableDefinition >> storeOn: aStream [
 
 { #category : #accessing }
 GtVariableDefinition >> value [
-	^ value
+	^ binding value
 ]
