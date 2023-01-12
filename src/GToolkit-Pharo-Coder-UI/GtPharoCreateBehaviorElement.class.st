@@ -141,6 +141,7 @@ GtPharoCreateBehaviorElement >> forPackage: aPackage [
 
 { #category : #initialization }
 GtPharoCreateBehaviorElement >> forPackageTag: aPackageTag [
+	aPackageTag isRoot ifTrue: [ ^ self ].
 	definition category tag name: aPackageTag name
 ]
 
