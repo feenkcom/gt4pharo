@@ -2,7 +2,9 @@ Class {
 	#name : #GtPharoStreamingMethodsCoder,
 	#superclass : #GtFilteredCodersModel,
 	#instVars : [
-		'behavior'
+		'behavior',
+		'exampleSuite',
+		'testSuite'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
@@ -40,6 +42,16 @@ GtPharoStreamingMethodsCoder >> classOrMetaClass [
 { #category : #accessing }
 GtPharoStreamingMethodsCoder >> codeGeneratorsAvailableFor: aMethodsCoderViewModel [
 	^ (self codeGeneratorsFor: aMethodsCoderViewModel) size > 0
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoder >> exampleSuite [
+	^ exampleSuite
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoder >> exampleSuite: aGtPharoExampleSuite [
+	exampleSuite := aGtPharoExampleSuite
 ]
 
 { #category : #initialization }
@@ -128,4 +140,14 @@ GtPharoStreamingMethodsCoder >> pragmaNames [
 { #category : #'api - completion' }
 GtPharoStreamingMethodsCoder >> selectorNames [	
 	^ ((self itemsStream map: [ :eachMethod | eachMethod selector ]) to: GtPrefixTree) wait
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoder >> testSuite [
+	^ testSuite
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoder >> testSuite: aGtPharoTestSuite [
+	testSuite := aGtPharoTestSuite
 ]

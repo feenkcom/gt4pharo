@@ -22,6 +22,7 @@ GtPharoMethodsCoderView >> gtMethodsFor: aView [
 		| aTestSuiteViewModel |
 		aTestSuiteViewModel := GtPharoTestSuiteViewModel new 
 			pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
+		aMethodsCoder testSuite: aTestSuiteViewModel testSuite.
 		anItemsView
 			actionStencil: [ 
 				GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].
@@ -30,6 +31,7 @@ GtPharoMethodsCoderView >> gtMethodsFor: aView [
 		| anExamplesSuiteViewModel |
 		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new 
 			pharoExampleSuite: (GtPharoExampleSuite forStream: aMethodsCoder itemsStream).
+		aMethodsCoder exampleSuite: anExamplesSuiteViewModel pharoExampleSuite.
 		anItemsView
 			actionStencil: [ 
 				GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExamplesSuiteViewModel ] ].
