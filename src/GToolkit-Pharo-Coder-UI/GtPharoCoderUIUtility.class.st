@@ -22,11 +22,14 @@ GtPharoCoderUIUtility class >> exampleViewModelCachedAs: aSymbol inPhlowContext:
 	<return: #GtPharoExampleSuiteViewModel>
 	^ aPhlowContext
 		optionAt: aSymbol
-		ifPresent: [ :anExampleViewModel | anExampleViewModel ]
+		ifPresent: [ :anExampleViewModel | 
+			aMethodsCoder exampleSuite: anExampleViewModel pharoExampleSuite.
+			anExampleViewModel ]
 		ifAbsent: [ | aViewModel aHandler |
 			aViewModel := self
 					exampleViewModelCachedAs: aSymbol
 					inPhlowContext: aPhlowContext.
+			aMethodsCoder exampleSuite: aViewModel pharoExampleSuite.
 
 			aHandler := GtPharoExampleSuiteMethodsCoderMediator
 					forMethodsCoder: aMethodsCoder
@@ -56,6 +59,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 	shouldHaveTestsRunner ifTrue: [
 		| aTestSuite aTestSuiteViewModel aTestCommunicator |
 		aTestSuite := GtPharoTestSuite new.
+		aMethodsCoder testSuite: aTestSuite.
 		aTestSuiteViewModel := GtPharoTestSuiteViewModel new pharoTestSuite: aTestSuite.
 		aTestCommunicator := GtPharoTestSuiteMethodsCoderMediator
 					forMethodsCoder: aMethodsCoder
@@ -69,6 +73,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 	shouldHaveExamplesRunner ifTrue: [
 		| anExampleSuite anExamplesSuiteViewModel anExampleCommunicator |
 		anExampleSuite := GtPharoExampleSuite new.
+		aMethodsCoder exampleSuite: anExampleSuite.
 		anExamplesSuiteViewModel := GtPharoExampleSuiteViewModel new pharoExampleSuite: anExampleSuite.
 		anExampleCommunicator := GtPharoExampleSuiteMethodsCoderMediator
 					forMethodsCoder: aMethodsCoder
