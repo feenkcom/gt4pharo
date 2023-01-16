@@ -15,9 +15,9 @@ GtPharoExampleStateFilter class >> defaultState [
 
 { #category : #comparing }
 GtPharoExampleStateFilter >> = anObject [
-	^ super = anObject and: [ 
-		self resultState = anObject resultState and: [ 
-			self coder = anObject coder ] ]
+	^ super = anObject
+		and: [ self resultState = anObject resultState
+				and: [ self pharoExampleSuite = anObject pharoExampleSuite ] ]
 ]
 
 { #category : #accessing }
@@ -27,8 +27,8 @@ GtPharoExampleStateFilter >> filterValueString [
 
 { #category : #comparing }
 GtPharoExampleStateFilter >> hash [
-	^ (super hash bitXor: self resultState hash) 
-		bitXor: self coder hash
+	^ (super hash bitXor: self resultState hash)
+		bitXor: self pharoExampleSuite hash
 ]
 
 { #category : #testing }
