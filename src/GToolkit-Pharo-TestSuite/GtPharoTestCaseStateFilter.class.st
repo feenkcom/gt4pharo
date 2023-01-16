@@ -37,9 +37,8 @@ GtPharoTestCaseStateFilter >> hash [
 { #category : #accessing }
 GtPharoTestCaseStateFilter >> includesMethod: aCompiledMethod [
 	| aTestCase |
-
 	aTestCase := self pharoTestSuite testCaseForMethod: aCompiledMethod.
-	^ self resultState includesTestCase: aTestCase
+	^ aTestCase notNil and: [ self resultState includesTestCase: aTestCase ]
 ]
 
 { #category : #accessing }
