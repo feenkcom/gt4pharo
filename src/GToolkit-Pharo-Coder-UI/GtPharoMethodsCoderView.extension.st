@@ -22,7 +22,7 @@ GtPharoMethodsCoderView >> gtMethodsFor: aView [
 		| aTestSuiteViewModel |
 		aTestSuiteViewModel := GtPharoTestSuiteViewModel new 
 			pharoTestSuite: (GtPharoTestSuite forStream: aMethodsCoder itemsStream).
-		aMethodsCoder testSuite: aTestSuiteViewModel testSuite.
+		aMethodsCoder testSuite: aTestSuiteViewModel pharoTestSuite.
 		anItemsView
 			actionStencil: [ 
 				GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ] ].
