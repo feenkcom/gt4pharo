@@ -16,11 +16,8 @@ GtPharoClassExpanderAttribute class >> forClass: aClass [
 
 { #category : #private }
 GtPharoClassExpanderAttribute >> buildBehaviorCoder [
-	| editorElement coder |
-	coder := GtPharoBehaviorCoder forClass: classToExpand.
-	coder subscribeToSystem.
-	editorElement := coder asElement
-			navigationModelForToolbar: (GtCoderNavigationModel default selectClass: classToExpand).
+	| editorElement |
+	editorElement := GtCoder forClass: classToExpand.
 	editorElement background: Color white.
 	editorElement
 		aptitude: BrShadowAptitude
