@@ -16,10 +16,9 @@ GtPharoTestCaseStateFilter class >> defaultState [
 
 { #category : #comparing }
 GtPharoTestCaseStateFilter >> = anObject [
-
-	^ self class = anObject class and: [ 
-		  self resultState = anObject resultState and: [ 
-			  self coder = anObject coder ] ]
+	^ self class = anObject class
+		and: [ self resultState = anObject resultState
+				and: [ self pharoTestSuite = anObject pharoTestSuite ] ]
 ]
 
 { #category : #accessing }
@@ -30,8 +29,8 @@ GtPharoTestCaseStateFilter >> filterValueString [
 
 { #category : #comparing }
 GtPharoTestCaseStateFilter >> hash [
-
-	^ (self class hash bitXor: self resultState hash) bitXor: self coder hash
+	^ (self class hash bitXor: self resultState hash)
+		bitXor: self pharoTestSuite hash
 ]
 
 { #category : #accessing }
