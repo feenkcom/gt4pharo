@@ -19,19 +19,19 @@ GtSlotsDefinition >> createContextMenuContentFor: aDefinition editor: anElement 
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
-					action: [ (self pushUpSlotRefactoringFor: aDefinition name) execute ];
+					action: [ self executeRefactoring: (self pushUpSlotRefactoringFor: aDefinition name) ];
 					title: 'Push Up ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ (self pushDownSlotRefactoringFor: aDefinition name) execute ];
+					action: [ self executeRefactoring: (self pushDownSlotRefactoringFor: aDefinition name) ];
 					title: 'Push Down ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ (self generateAccessorsFor: aDefinition name) execute ];
+					action: [ self executeRefactoring: (self generateAccessorsFor: aDefinition name) ];
 					title: 'Create accessors for ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ (self abstractVariable: aDefinition name) execute ];
+					action: [ self executeRefactoring: (self abstractVariable: aDefinition name) ];
 					title: 'Abstract ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ (self protectVariable: aDefinition name) execute ];
+					action: [ self executeRefactoring: (self protectVariable: aDefinition name) ];
 					title: 'Protect ' , aDefinition name}.
 	theContextMenu items: items.
 	^ theContextMenu
