@@ -39,13 +39,15 @@ GtClassVariablesDefinition >> createContextMenuContentFor: aDefinition editor: a
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
-					action: [ (self pushUpClassVariableRefactoringFor: aDefinition name) execute ];
+					action: [ self
+							executeRefactoring: (self pushUpClassVariableRefactoringFor: aDefinition name) ];
 					title: 'Push Up ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ (self pushDownClassVariableRefactoringFor: aDefinition name) execute ];
+					action: [ self
+							executeRefactoring: (self pushDownClassVariableRefactoringFor: aDefinition name) ];
 					title: 'Push Down ' , aDefinition name.
 				GtCoderContextMenuAction new
-					action: [ (self generateAccessorsFor: aDefinition name) execute ];
+					action: [ self executeRefactoring: (self generateAccessorsFor: aDefinition name) ];
 					title: 'Create accessors for ' , aDefinition name}.
 	theContextMenu items: items.
 	^ theContextMenu
