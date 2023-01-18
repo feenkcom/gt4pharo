@@ -8,7 +8,8 @@ Class {
 		'executedRefactorings',
 		'cancelBlock',
 		'refactoringsComputation',
-		'notificationMessages'
+		'notificationMessages',
+		'errorMessages'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -66,7 +67,7 @@ GtRefactoringsPreviewButton >> buildCancelButton [
 
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
-	| theRefactoringsElement anAcceptButton aContainer |
+	| theRefactoringsElement anAcceptButton aContainer label |
 	theRefactoringsElement := GtRefactoringsElement new
 			hExact: self previewWidth * 1.25;
 			vFitContentLimited;
@@ -81,24 +82,34 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 			constraintsDo: [ :c1 | 
 				c1 horizontal exact: self previewWidth.
 				c1 vertical fitContentLimited ].
-	self notificationMessages
-		do: [ :each | 
-			| element |
-			element := each cull: aButton.
-			element
-				margin: (BlInsets
-						top: 10
-						left: 10
-						bottom: 0
-						right: 10).
-			aContainer addChild: element ].
-	aContainer
-		addChild: ((theRefactoringsElement asScalableElement
-				width: self previewWidth;
-				fitWidth;
-				constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
-				constraintsDo: [ :c | c vertical fitContentLimited ]).
-	aContainer addChild: anAcceptButton.
+	self errorMessages isEmpty
+		ifTrue: [ self notificationMessages
+				do: [ :each | 
+					| element |
+					element := each cull: aButton.
+					element
+						margin: (BlInsets
+								top: 10
+								left: 10
+								bottom: 0
+								right: 10).
+					aContainer addChild: element ].
+			aContainer
+				addChild: ((theRefactoringsElement asScalableElement
+						width: self previewWidth;
+						fitWidth;
+						constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
+						constraintsDo: [ :c | c vertical fitContentLimited ]).
+			aContainer addChild: anAcceptButton ]
+		ifFalse: [ self errorMessages
+				do: [ :each | 
+					label := BrLabel new
+							fitContent;
+							aptitude: BrGlamorousLabelAptitude new;
+							padding: (BlInsets all: 5);
+							text: (each asRopedText glamorousRegularFontAndSize
+									foreground: BrGlamorousColors linkWithErrorColor).
+					aContainer addChild: label ] ].
 	^ aContainer
 ]
 
@@ -108,18 +119,29 @@ GtRefactoringsPreviewButton >> cancelBlock: aBlock [
 	cancelBlock notNil ifTrue: [ self addChild: self buildCancelButton ]
 ]
 
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> errorMessages [
+	errorMessages ifNil: [ self executeRefactorings ].
+	^ errorMessages
+]
+
 { #category : #initialization }
 GtRefactoringsPreviewButton >> executeRefactorings [
+	errorMessages := OrderedCollection new.
 	notificationMessages := OrderedCollection new.
 	executedRefactorings := self refactorings.
 	executedRefactorings
 		do: [ :each | 
 			each model name: each printString.
-			[ each primitiveExecute ]
+			[ [ each primitiveExecute ]
 				on: GtRefactoringNotification
 				do: [ :ex | 
 					notificationMessages add: ex tag.
 					ex pass ] ]
+				on: RBRefactoringError
+				do: [ :ex | 
+					errorMessages add: ex messageText.
+					ex return ] ]
 ]
 
 { #category : #initialization }
