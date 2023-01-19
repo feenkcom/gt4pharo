@@ -107,8 +107,8 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 							fitContent;
 							aptitude: BrGlamorousLabelAptitude new;
 							padding: (BlInsets all: 5);
-							text: (each asRopedText glamorousRegularFontAndSize
-									foreground: BrGlamorousColors linkWithErrorColor).
+							text: each asRopedText glamorousRegularFontAndSize.
+					aContainer background: BrGlamorousColors errorBackgroundColor.
 					aContainer addChild: label ] ].
 	^ aContainer
 ]
