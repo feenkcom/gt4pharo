@@ -1031,7 +1031,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 
 		aStep shortcut
 			label: 'Trigger completer pop-up';
-			combination: BlKeyCombination builder secondary space build;
+			combination: BlKeyCombination builder control space build;
 			id: GtSourceCoderEditorId;
 			play.
 
