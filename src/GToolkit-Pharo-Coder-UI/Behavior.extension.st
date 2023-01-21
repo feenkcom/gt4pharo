@@ -12,6 +12,6 @@ Behavior >> gtCopyButtonFor: anAction [
 			((GtCopyClassForm for: self)
 				onAccept: [ :aClass | 
 					aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
-					aButton fireEvent: BrDropdownHideWish new ]) asElement
-				padding: (BlInsets all: 5) ]
+					aButton inUIProcessDo: [ aButton dispatchEvent: BrDropdownHideWish new ] ])
+				asElement padding: (BlInsets all: 5) ]
 ]
