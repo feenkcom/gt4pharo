@@ -507,7 +507,7 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 GtPharoCompleterExamples >> openCompletionIn: aScripter [
 	(aScripter keyDown: BlKeyboardKey controlLeft) play.
 	(aScripter keyClick: BlKeyboardKey space) play.
-	(aScripter keyUp: self secondaryKey) play.
+	(aScripter keyUp: BlKeyboardKey controlLeft) play.
 	aScripter check
 		label: 'Verify first item selected';
 		onSpaceRoot;
