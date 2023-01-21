@@ -505,7 +505,7 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> openCompletionIn: aScripter [
-	(aScripter keyDown: self secondaryKey) play.
+	(aScripter keyDown: BlKeyboardKey controlLeft) play.
 	(aScripter keyClick: BlKeyboardKey space) play.
 	(aScripter keyUp: self secondaryKey) play.
 	aScripter check
