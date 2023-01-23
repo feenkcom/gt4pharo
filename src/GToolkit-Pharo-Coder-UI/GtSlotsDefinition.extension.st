@@ -20,10 +20,10 @@ GtSlotsDefinition >> createContextMenuContentFor: aDefinition editor: anElement 
 	items
 		addAll: {GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self pushUpSlotRefactoringFor: aDefinition name) ];
-					title: 'Push Up ' , aDefinition name.
+					title: 'Push up ' , aDefinition name.
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self pushDownSlotRefactoringFor: aDefinition name) ];
-					title: 'Push Down ' , aDefinition name.
+					title: 'Push down ' , aDefinition name.
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self generateAccessorsFor: aDefinition name) ];
 					title: 'Create accessors for ' , aDefinition name.
