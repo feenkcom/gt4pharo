@@ -125,6 +125,7 @@ GtPharoSourceCoderViewModel >> localBindings [
 GtPharoSourceCoderViewModel >> newCompletionStrategy [
 	^ GtPharoCompletionStrategy new
 		classOrMetaClass: self behavior;
+		selfObject: self selfObject;
 		yourself
 ]
 
@@ -141,5 +142,7 @@ GtPharoSourceCoderViewModel >> selfObject: anObject [
 
 	selfObject := anObject.
 	completionStrategy
-		ifNotNil: [ completionStrategy classOrMetaClass: self behavior ]
+		ifNotNil: [ completionStrategy
+				classOrMetaClass: self behavior;
+				selfObject: anObject ]
 ]
