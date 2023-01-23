@@ -11,8 +11,8 @@ Class {
 		'localVariables',
 		'index',
 		'pragmas',
-		'variableTypes',
-		'bindings'
+		'bindings',
+		'selfObject'
 	],
 	#classVars : [
 		'GlobalCache',
@@ -56,16 +56,6 @@ GtPharoCompletionStrategy >> bindings [
 { #category : #accessing }
 GtPharoCompletionStrategy >> bindings: anObject [
 	bindings := anObject
-]
-
-{ #category : #accessing }
-GtPharoCompletionStrategy >> blockVariables: aDictionary [
-	variableTypes := Dictionary new.
-	aDictionary
-		keysAndValuesDo: [ :name :cls | 
-			localVariables add: name.
-			variableTypes at: name put: cls ].
-	self isMethod: false
 ]
 
 { #category : #accessing }
@@ -262,6 +252,16 @@ GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matchingWords:
 						ifFalse: [ (aBehavior whichClassIncludesSelector: each asSymbol) notNil ] ] ]
 ]
 
+{ #category : #accessing }
+GtPharoCompletionStrategy >> selfObject [
+	^ selfObject
+]
+
+{ #category : #accessing }
+GtPharoCompletionStrategy >> selfObject: anObject [
+	selfObject := anObject
+]
+
 { #category : #'private-method' }
 GtPharoCompletionStrategy >> signatureFor: aMethod [
 	| source ast |
@@ -286,8 +286,9 @@ GtPharoCompletionStrategy >> typeOfVariable: aString [
 		ifTrue: [ (bindings hasBindingOf: aString asSymbol)
 				ifTrue: [ (bindings bindingOf: aString asSymbol)
 						ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ] ].
-	variableTypes notNil
-		ifTrue: [ (variableTypes at: aString ifAbsent: [ nil ]) ifNotNil: [ :cls | ^ cls ] ].
+	self selfObject class
+		slotNamed: aString
+		ifFound: [ :slot | ^ (slot read: self selfObject) ifNotNil: [ :obj | obj class ] ].
 	^ nil
 ]
 

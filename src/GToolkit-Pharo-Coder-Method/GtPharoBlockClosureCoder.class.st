@@ -134,13 +134,6 @@ GtPharoBlockClosureCoder >> initialize [
 	super initialize
 ]
 
-{ #category : #private }
-GtPharoBlockClosureCoder >> newCompletionStrategy [
-	^ super newCompletionStrategy
-		blockVariables: parameters;
-		yourself
-]
-
 { #category : #updating }
 GtPharoBlockClosureCoder >> newRbAST: aString [
 	| ast |
