@@ -2,12 +2,14 @@ Extension { #name : #GtMagritteElementBuilder }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
-	| aMemento packageEditor aCompletionStrategy |
+	| aMemento packageEditor aCompletionStrategy aptitude |
 	aMemento := self memento.
 	packageEditor := BrEditor new.
+	aptitude := BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize.
+	aDescription textStyler ifNotNil: [ :aBlock | aBlock value: aptitude ].
 	packageEditor
 		inputFilter: BrPackageNameInputFilter new;
-		aptitude: BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize;
+		aptitude: aptitude;
 		addAptitude: (BrStyleCommonAptitude new
 				default: [ :aStyle | aStyle border: BlBorder empty ];
 				hovered: [ :aStyle | 
@@ -47,12 +49,14 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtMagritteElementBuilder >> newTagNameWidget: aDescription [
-	| aMemento tagEditor aCompletionController |
+	| aMemento tagEditor aCompletionController aptitude |
 	aMemento := self memento.
 	tagEditor := BrEditor new.
+	aptitude := BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize.
+	aDescription textStyler ifNotNil: [ :aBlock | aBlock value: aptitude ].
 	tagEditor
 		inputFilter: BrPackageTagNameInputFilter new;
-		aptitude: BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize;
+		aptitude: aptitude;
 		addAptitude: (BrStyleCommonAptitude new
 				default: [ :aStyle | aStyle border: BlBorder empty ];
 				hovered: [ :aStyle | 

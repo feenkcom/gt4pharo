@@ -59,7 +59,7 @@ GtCreationForm >> commitPackage [
 { #category : #accessing }
 GtCreationForm >> ghostTextFor: aString [
 	^ BrGhostTextAttribute
-		for: (aString asRopedText glamorousRegularFontAndSize foreground: Color lightGray)
+		for: (aString asRopedText glamorousCodeFont foreground: Color lightGray)
 ]
 
 { #category : #initialization }
@@ -86,6 +86,7 @@ GtCreationForm >> packageAndTagDescription [
 		label: 'Package';
 		priority: 3;
 		accessor: #packageAndTagName;
+		textStyler: #glamorousCodeFont;
 		beRequired
 ]
 
@@ -115,7 +116,7 @@ GtCreationForm >> taggerStencilWithCompletion: aCompletionStrategy [
 						| aLabel |
 						aLabel := BrEditableLabel new
 								text: (aDescription displayStringFor: aTag name);
-								aptitude: (BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize
+								aptitude: (BrGlamorousEditableLabelAptitude new glamorousCodeFont
 										defaultForeground: Color black);
 								whenKey: BlKeyCombination arrowRight
 									editorDo: [ :anEvent | 
