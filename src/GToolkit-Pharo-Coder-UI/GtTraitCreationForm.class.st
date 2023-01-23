@@ -65,6 +65,7 @@ GtTraitCreationForm >> nameDescription [
 		priority: 1;
 		accessor: #className;
 		kind: Object;
+		textStyler: #glamorousCodeFont;
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Name cannot be empty';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
