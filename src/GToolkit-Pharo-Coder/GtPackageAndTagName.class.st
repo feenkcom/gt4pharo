@@ -59,7 +59,7 @@ GtPackageAndTagName >> packageRope [
 	^ self packageName asRopedText
 		ifEmpty: [ self packageName asRopedText
 				attribute: (BrGhostTextAttribute
-						for: (self defaultPackageName asRopedText glamorousRegularFontAndSize
+						for: (self defaultPackageName asRopedText glamorousCodeFont
 								foreground: Color lightGray)) ]
 ]
 
@@ -88,6 +88,6 @@ GtPackageAndTagName >> tagRope [
 	^ self tagName asRopedText
 		ifEmpty: [ self tagName asRopedText
 				attribute: (BrGhostTextAttribute
-						for: (self defaultTagName asRopedText glamorousRegularFontAndSize
+						for: (self defaultTagName asRopedText glamorousCodeFont
 								foreground: Color lightGray)) ]
 ]

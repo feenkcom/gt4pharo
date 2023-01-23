@@ -136,6 +136,7 @@ GtClassCreationForm >> superclassDescription [
 		accessor: #superclassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		textStyler: #glamorousCodeFont;
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
 			labelled: 'Unknown class'
 ]
