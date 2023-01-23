@@ -261,7 +261,7 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 	(aNode receiver isSelf or: [ aNode receiver isSuper ])
 		ifTrue: [ coderAddOns
 				addContextMenuItem: (self
-						createLabel: 'Inline Message'
+						createLabel: 'Inline message'
 						description: aNode message selector)
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
@@ -282,7 +282,7 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 									ifNotNil: [ :cls | cls whichClassIncludesSelector: aNode selector ] ].
 					coderAddOns
 						addContextMenuItem: (self
-								createLabel: 'Inline Message'
+								createLabel: 'Inline message'
 								description: aNode message selector)
 						hover: (self highlightNodeBlock: aNode)
 						leave: self removeHighlightBlock
