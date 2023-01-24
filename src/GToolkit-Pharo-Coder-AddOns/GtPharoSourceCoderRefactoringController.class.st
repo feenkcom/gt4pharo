@@ -11,7 +11,8 @@ GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefact
 			addTextAttribute: (GtRefactoringChangesAttribute new
 					refactoring: aRefactoring;
 					completionAction: aBlock;
-					cancelAction: [ self cancelRefactoring ])
+					cancelAction: [ self cancelRefactoring ];
+					showWhenCreated: self previewDisplaysImmediately)
 			from: aTextPosition
 			to: aTextPosition
 ]
@@ -98,6 +99,11 @@ GtPharoSourceCoderRefactoringController >> finishRefactoring: refactoring [
 { #category : #accessing }
 GtPharoSourceCoderRefactoringController >> isValidForPreview [
 	^ true
+]
+
+{ #category : #testing }
+GtPharoSourceCoderRefactoringController >> previewDisplaysImmediately [
+	^ false
 ]
 
 { #category : #accessing }
