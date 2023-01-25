@@ -156,6 +156,7 @@ GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 			hoverMarker: hoverMarker;
 			hoverAttribute: hoverAttribute;
 			description: self descriptionBlock;
+			placeholderAlignment: #alignMiddle;
 			fixItActions: (self fixItActionsForNode: aNode styler: aCriticStyler);
 			yourself.
 	hoverMarker fixItAttribute: fixItAttribute.
