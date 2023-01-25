@@ -53,8 +53,9 @@ GtCreationFormWidget >> form [
 
 { #category : #accessing }
 GtCreationFormWidget >> form: anObject [
-
-	form := anObject
+	form := anObject.
+	self removeChildren.
+	self createForm
 ]
 
 { #category : #initialization }
@@ -79,6 +80,7 @@ GtCreationFormWidget >> onAccept [
 
 { #category : #accessing }
 GtCreationFormWidget >> onAccept: anObject [
-
-	onAccept := anObject
+	onAccept := anObject.
+	self removeChildren.
+	self createForm
 ]

@@ -103,6 +103,11 @@ GtCreationForm >> packageAndTagName: anObject [
 ]
 
 { #category : #accessing }
+GtCreationForm >> selectInNavigationModel: aNavigationModel anInstance: anInstance [
+	^ aNavigationModel selectClass: anInstance
+]
+
+{ #category : #accessing }
 GtCreationForm >> taggerStencilWithCompletion: aCompletionStrategy [
 	^ [ :aMemento :aDescription :aForm | 
 	| aTagger aTaggerAptitude |
