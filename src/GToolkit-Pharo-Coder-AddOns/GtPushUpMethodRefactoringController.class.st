@@ -13,7 +13,7 @@ GtPushUpMethodRefactoringController >> previewDisplaysImmediately [
 GtPushUpMethodRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createRefactoringModel.
-	refactoring := RBPullUpMethodRefactoring
+	refactoring := GtPushUpMethodRefactoring
 		               model: model
 		               pullUp: { self methodSelector }
 		               from: (model classFor: self methodClass).
