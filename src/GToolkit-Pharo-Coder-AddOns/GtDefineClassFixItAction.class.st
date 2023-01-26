@@ -8,15 +8,14 @@ Class {
 GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 	| text stencilBlock attribute adornmentAttribute |
 	text := aBrTextEditor text.
-	stencilBlock := [ | form element |
-		form := GtClassCreationForm new
+	stencilBlock := [ | element |
+		element := GtCreationFormWidget forClass
 				onAccept: [ :cls | element inUIProcessDo: [ sourceCoder requestStyleSourceText ] ].
-		form className: node name value asSymbol.
+		element form className: node name value asSymbol.
 		sourceCoder package
-			ifNotNil: [ :package | form packageAndTagName packageName: package name ].
+			ifNotNil: [ :package | element form packageAndTagName packageName: package name ].
 		sourceCoder packageTag
-			ifNotNil: [ :tag | form packageAndTagName tagName: tag name ].
-		element := form asElement.
+			ifNotNil: [ :tag | element form packageAndTagName tagName: tag name ].
 		element addAptitude: BrShadowAptitude.
 		element background: Color white.
 		element margin: (BlInsets all: 10).
@@ -33,7 +32,7 @@ GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 	attribute isExpanded: true.
 	attribute createdAttributes: {adornmentAttribute}.
 	attribute attributesCreatingBlock: [ adornmentAttribute ].
-	"ANewclass new."
+	
 	text
 		attributes: {attribute.
 				adornmentAttribute}

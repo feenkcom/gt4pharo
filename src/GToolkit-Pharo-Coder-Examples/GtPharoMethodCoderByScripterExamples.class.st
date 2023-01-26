@@ -1298,7 +1298,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 	
 	"there is no create behavior element before clicking on the menu"
 	aScripter assert
-		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
+		onBreadthFirstChildOfClass: GtCreationFormWidget;
 		notExists;
 		play.
 	
@@ -1306,10 +1306,12 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 		onSpaceRoot;
 		id: (GtDefineClassFixItActionElementId indexed: 1);
 		play.
+		
+	
 	
 	"now it appeared"
 	aScripter assert
-		onBreadthFirstChildOfClass: GtPharoCreateBehaviorElement;
+		onBreadthFirstChildOfClass: GtCreationFormWidget;
 		exists;
 		play.
 	
