@@ -1,8 +1,13 @@
 Class {
 	#name : #GtPushDownMethodRefactoringController,
 	#superclass : #GtMethodRefactoringController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
+
+{ #category : #testing }
+GtPushDownMethodRefactoringController >> previewDisplaysImmediately [
+	^ true
+]
 
 { #category : #accessing }
 GtPushDownMethodRefactoringController >> refactoring [

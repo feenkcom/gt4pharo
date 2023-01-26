@@ -35,6 +35,11 @@ GtPackageCreationForm >> packageAndTagDescription [
 ]
 
 { #category : #accessing }
+GtPackageCreationForm >> selectInNavigationModel: aNavigationModel anInstance: anInstance [
+	^ aNavigationModel selectClass: anInstance
+]
+
+{ #category : #accessing }
 GtPackageCreationForm >> toolFor: anInstance [
 	^ GtPackageCoderTool package: anInstance
 ]
