@@ -77,6 +77,11 @@ GtBaselineCreationForm >> defaultBaselineName [
 	^ 'BaselineOfExample'
 ]
 
+{ #category : #magritte }
+GtBaselineCreationForm >> hasPackageAndTag [
+	^ false
+]
+
 { #category : #accessing }
 GtBaselineCreationForm >> initialize [
 	baseline := ''
