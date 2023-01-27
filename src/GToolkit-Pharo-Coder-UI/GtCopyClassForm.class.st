@@ -3,11 +3,11 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'innerClass',
-		'className',
 		'superClassName',
 		'packageName',
 		'tagName',
-		'onAccept'
+		'onAccept',
+		'newClassName'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Behavior'
 }
@@ -35,25 +35,13 @@ GtCopyClassForm >> asElement [
 ]
 
 { #category : #accessing }
-GtCopyClassForm >> className [
-
-	^ className
-]
-
-{ #category : #accessing }
-GtCopyClassForm >> className: anObject [
-
-	className := anObject
-]
-
-{ #category : #accessing }
 GtCopyClassForm >> copyClass [
 	| class |
 	class := Smalltalk classInstaller
 			make: [ :builder | 
 				builder
 					fillFor: innerClass;
-					name: className trim;
+					name: newClassName trim;
 					superclass: superClassName trim asClass;
 					category: (tagName trim
 							ifEmpty: [ packageName trim ]
@@ -66,7 +54,7 @@ GtCopyClassForm >> copyClass [
 { #category : #accessing }
 GtCopyClassForm >> for: aClass [
 	innerClass := aClass.
-	className := aClass name asString.
+	newClassName := aClass name asString.
 	superClassName := aClass superclass name asString.
 	packageName := aClass package name.
 	tagName := self treatTag: aClass 
@@ -78,7 +66,7 @@ GtCopyClassForm >> nameDescription [
 	^ MAStringDescription new
 		label: 'Name';
 		priority: 1;
-		accessor: #className;
+		accessor: #newClassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
@@ -87,6 +75,18 @@ GtCopyClassForm >> nameDescription [
 			labelled: 'First character must be uppercase';
 		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
 			labelled: 'Class name must be alphanumeric'
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> newClassName [
+
+	^ newClassName
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> newClassName: anObject [
+
+	newClassName := anObject
 ]
 
 { #category : #accessing }

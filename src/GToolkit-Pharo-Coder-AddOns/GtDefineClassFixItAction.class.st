@@ -11,7 +11,7 @@ GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 	stencilBlock := [ | element |
 		element := GtCreationFormWidget forClass
 				onAccept: [ :cls | element inUIProcessDo: [ sourceCoder requestStyleSourceText ] ].
-		element form className: node name value asSymbol.
+		element form newClassName: node name value asSymbol.
 		sourceCoder package
 			ifNotNil: [ :package | element form packageAndTagName packageName: package name ].
 		sourceCoder packageTag
