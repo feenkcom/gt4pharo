@@ -9,19 +9,17 @@ GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 	| text stencilBlock attribute adornmentAttribute |
 	text := aBrTextEditor text.
 	stencilBlock := [ | element |
-		element := GtPharoCreateBehaviorElement new.
-		element
-			behaviorBlock: [ :cls | 
-				text
-					clearAttributes: [ :each | each == attribute or: [ each == adornmentAttribute ] ].
-				sourceCoder requestStyleSourceText ].
-		element forClassDefinition.
-		element forClassName: node name value asSymbol.
-		sourceCoder package ifNotNil: [ :package | element forPackage: package ].
-		sourceCoder packageTag ifNotNil: [ :tag | element forPackageTag: tag ].
+		element := GtCreationFormWidget forClass
+				onAccept: [ :cls | element inUIProcessDo: [ sourceCoder requestStyleSourceText ] ].
+		element form newClassName: node name value asSymbol.
+		sourceCoder package
+			ifNotNil: [ :package | element form packageAndTagName packageName: package name ].
+		sourceCoder packageTag
+			ifNotNil: [ :tag | element form packageAndTagName tagName: tag name ].
 		element addAptitude: BrShadowAptitude.
 		element background: Color white.
 		element margin: (BlInsets all: 10).
+		element padding: (BlInsets all: 8).
 		element
 			constraintsDo: [ :c | 
 				c textFlow pushLine.
@@ -32,10 +30,12 @@ GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 			stencil: stencilBlock.
 	attribute := BrGlamorousTriangleExpanderTextAttribute new.
 	attribute isExpanded: true.
-	attribute createdAttributes: { adornmentAttribute }.
+	attribute createdAttributes: {adornmentAttribute}.
 	attribute attributesCreatingBlock: [ adornmentAttribute ].
+	
 	text
-		attributes: {attribute. adornmentAttribute}
+		attributes: {attribute.
+				adornmentAttribute}
 		from: self attributePosition
 		to: self attributePosition
 ]

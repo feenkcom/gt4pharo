@@ -2,9 +2,9 @@ Class {
 	#name : #GtTraitCreationForm,
 	#superclass : #GtCreationForm,
 	#instVars : [
-		'className',
 		'traits',
-		'slots'
+		'slots',
+		'newClassName'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Forms - Models'
 }
@@ -20,23 +20,13 @@ GtTraitCreationForm class >> priority [
 ]
 
 { #category : #accessing }
-GtTraitCreationForm >> className [
-	^ className asRopedText attribute: (self ghostTextFor: self defaultName)
-]
-
-{ #category : #accessing }
-GtTraitCreationForm >> className: anObject [
-	className := anObject
-]
-
-{ #category : #accessing }
 GtTraitCreationForm >> commit [
 	| category |
 	category := self commitPackage categoryName.
 	^ Smalltalk classInstaller
 		make: [ :builder | 
 			builder
-				name: className;
+				name: newClassName;
 				category: category;
 				slots: slots;
 				traitComposition: self traitComposition;
@@ -52,7 +42,7 @@ GtTraitCreationForm >> defaultName [
 GtTraitCreationForm >> initialize [
 	super initialize.
 
-	self className: ''.
+	self newClassName: ''.
 	traits := OrderedCollection new.
 	slots := OrderedCollection new
 ]
@@ -63,7 +53,7 @@ GtTraitCreationForm >> nameDescription [
 	^ MAStringDescription new
 		label: 'Name*';
 		priority: 1;
-		accessor: #className;
+		accessor: #newClassName;
 		kind: Object;
 		textStyler: #glamorousCodeFont;
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
@@ -79,8 +69,18 @@ GtTraitCreationForm >> nameDescription [
 ]
 
 { #category : #accessing }
+GtTraitCreationForm >> newClassName [
+	^ newClassName asRopedText attribute: (self ghostTextFor: self defaultName)
+]
+
+{ #category : #accessing }
+GtTraitCreationForm >> newClassName: aClassName [
+	newClassName := aClassName
+]
+
+{ #category : #accessing }
 GtTraitCreationForm >> rawClassName [
-	^ className asString
+	^ newClassName asString
 ]
 
 { #category : #accessing }
