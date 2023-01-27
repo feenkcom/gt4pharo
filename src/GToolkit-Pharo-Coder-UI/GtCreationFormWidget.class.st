@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
 		'onAccept',
-		'form'
+		'form',
+		'onElementCreated'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Forms'
 }
@@ -42,7 +43,9 @@ GtCreationFormWidget class >> forTrait [
 
 { #category : #converting }
 GtCreationFormWidget >> createForm [
-	self addChild: (self form onAccept: self onAccept) asElement
+	self
+		addChild: ((self form onAccept: self onAccept) asGtMagritteViewModel
+				onElementCreated: self onElementCreated) asElement
 ]
 
 { #category : #accessing }
@@ -63,7 +66,7 @@ GtCreationFormWidget >> initialize [
 	super initialize.
 
 	onAccept := [ :aValue | self phlow spawnObject: aValue ].
-
+	onElementCreated := [ :aFrame |  ].
 	self layout: BlFlowLayout vertical.
 	self margin: (BlInsets all: 5).
 	self
@@ -81,6 +84,18 @@ GtCreationFormWidget >> onAccept [
 { #category : #accessing }
 GtCreationFormWidget >> onAccept: anObject [
 	onAccept := anObject.
+	self removeChildren.
+	self createForm
+]
+
+{ #category : #accessing }
+GtCreationFormWidget >> onElementCreated [
+	^ onElementCreated
+]
+
+{ #category : #accessing }
+GtCreationFormWidget >> onElementCreated: anObject [
+	onElementCreated := anObject.
 	self removeChildren.
 	self createForm
 ]
