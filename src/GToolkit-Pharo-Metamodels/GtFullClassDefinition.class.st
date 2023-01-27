@@ -23,6 +23,39 @@ GtFullClassDefinition class >> fromClass: aClass in: anEnvironment [
 	^ self new fromClass: aClass in: anEnvironment
 ]
 
+{ #category : #'instance creation' }
+GtFullClassDefinition class >> fromHeaderDictionary: aDictionary [
+	| definition className superclassName package tag comment classVariables instanceSlotNames classSlotNames poolNames traitNames |
+
+	className := aDictionary at: 'name'.
+	superclassName := aDictionary at: 'superclassName'.
+	package := aDictionary at: 'package'.
+	tag := aDictionary at: 'tag' ifAbsent: [ '' ].
+	comment := aDictionary at: 'comment' ifAbsent: [ '' ].
+	instanceSlotNames := aDictionary at: 'instanceSlots' ifAbsent: [ #() ].
+	classVariables := aDictionary at: 'classVariables' ifAbsent: [ #() ].
+	poolNames := aDictionary at: 'pools' ifAbsent: [ #() ].
+	traitNames := aDictionary at: 'traits' ifAbsent: [ #() ].
+	classSlotNames := aDictionary at: 'classSlots' ifAbsent: [ #() ].
+
+	definition := self forNew.
+	definition name: className.
+	definition instanceSideDefinition superclass name: superclassName.
+
+	definition instanceSideDefinition category package name: package.
+	definition instanceSideDefinition category tag name: tag.
+
+	instanceSlotNames do: [ :eachName | definition instanceSideDefinition slots addSlotNamed: eachName ].
+	classVariables do: [ :eachName | definition instanceSideDefinition classVariables addClassVariableNamed: eachName ].
+	poolNames do: [ :eachName | definition instanceSideDefinition pools addPoolNamed: eachName ].
+	traitNames do: [ :eachName | definition instanceSideDefinition traits addTraitNamed: eachName ].
+	classSlotNames do: [ :eachName | definition classSideDefinition slots addSlotNamed: eachName ].
+	
+	definition comment content: comment.
+	
+	^ definition
+]
+
 { #category : #converting }
 GtFullClassDefinition >> asDefinitionString [
 	^ self instanceSideDefinition asDefinitionString, '.', String cr, String cr, self classSideDefinition asDefinitionString
@@ -126,6 +159,40 @@ GtFullClassDefinition >> postCopy [
 	instanceSideDefinition := instanceSideDefinition copy parent: self.
 	name := name copy.
 	originalName := originalName copy.
+]
+
+{ #category : #accessing }
+GtFullClassDefinition >> storeHeaderAsDictionary [
+	| aDictionary |
+
+	aDictionary := OrderedDictionary new.
+
+	aDictionary at: 'name' put: self name.
+	aDictionary at: 'superclassName' put: self instanceSideDefinition superclass name.
+	aDictionary at: 'package' put: self instanceSideDefinition category package name.
+	
+	self instanceSideDefinition category tag name
+		ifNotEmpty: [ :aTagName | aDictionary at: 'tag' put: aTagName ].
+		
+	(self instanceSideDefinition slots collect: [ :eachSlot | eachSlot name ])
+		ifNotEmpty: [ :theSlots | aDictionary at: 'instanceSlots' put: theSlots asArray ].
+		
+	(self instanceSideDefinition classVariables collect: [ :eachVar | eachVar name ])
+		ifNotEmpty: [ :theClassVariables | aDictionary at: 'classVariables' put: theClassVariables asArray ].
+		
+	(self instanceSideDefinition pools collect: [ :eachPool | eachPool name ])
+		ifNotEmpty: [ :thePools | aDictionary at: 'pools' put: thePools asArray ].
+		
+	(self instanceSideDefinition traits collect: [ :eachTrait | eachTrait name ])
+		ifNotEmpty: [ :theTraits | aDictionary at: 'traits' put: theTraits asArray ].
+		
+	(self classSideDefinition slots collect: [ :eachSlot | eachSlot name ])
+		ifNotEmpty: [ :theSlots | aDictionary at: 'classSlots' put: theSlots asArray ].
+	
+	self comment content
+		ifNotEmpty: [ :aComment | aDictionary at: 'comment' put: aComment ].
+
+	^ aDictionary
 ]
 
 { #category : #accessing }
