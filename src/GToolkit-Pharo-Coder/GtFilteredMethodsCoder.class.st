@@ -141,7 +141,7 @@ GtFilteredMethodsCoder >> forFilter: aFilter [
 GtFilteredMethodsCoder >> initialize [
 	super initialize.
 	additionalFilters := OrderedCollection new.
-	allCoders := #().
+	allCoders := OrderedCollection new.
 ]
 
 { #category : #'private - accessing' }
