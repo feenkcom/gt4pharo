@@ -17,6 +17,31 @@ GtTraitDefinition class >> forNew [
 ]
 
 { #category : #'instance creation' }
+GtTraitDefinition class >> fromHeaderDictionary: aDictionary [
+	| definition className package tag comment slots traitNames |
+
+	className := aDictionary at: 'name'.
+	package := aDictionary at: 'package'.
+	tag := aDictionary at: 'tag' ifAbsent: [ '' ].
+	comment := aDictionary at: 'comment' ifAbsent: [ '' ].
+	slots := aDictionary at: 'slots' ifAbsent: [ #() ].
+	traitNames := aDictionary at: 'traits' ifAbsent: [ #() ].
+
+	definition := self forNew.
+	definition name: className.
+
+	definition category package name: package.
+	definition category tag name: tag.
+
+	slots do: [ :eachName | definition slots addSlotNamed: eachName ].
+	traitNames do: [ :eachName | definition traits addTraitNamed: eachName ].
+	
+	definition comment content: comment.
+	
+	^ definition
+]
+
+{ #category : #'instance creation' }
 GtTraitDefinition class >> fromTrait: aTrait [
 	^ self new fromTrait: aTrait
 ]
@@ -265,6 +290,30 @@ GtTraitDefinition >> slots [
 { #category : #'private - accessing' }
 GtTraitDefinition >> slots: aGtSlotsDefinition [
 	slots := aGtSlotsDefinition parent: self
+]
+
+{ #category : #converting }
+GtTraitDefinition >> storeHeaderAsDictionary [
+	| aDictionary |
+
+	aDictionary := OrderedDictionary new.
+
+	aDictionary at: 'name' put: self name.
+	aDictionary at: 'package' put: self category package name.
+	
+	self category tag name
+		ifNotEmpty: [ :aTagName | aDictionary at: 'tag' put: aTagName ].
+		
+	(self slots collect: [ :eachSlot | eachSlot name ])
+		ifNotEmpty: [ :theSlots | aDictionary at: 'slots' put: theSlots asArray ].
+
+	(self traits collect: [ :eachTrait | eachTrait name ])
+		ifNotEmpty: [ :theTraits | aDictionary at: 'traits' put: theTraits asArray ].
+	
+	self comment content
+		ifNotEmpty: [ :aComment | aDictionary at: 'comment' put: aComment ].
+
+	^ aDictionary
 ]
 
 { #category : #accessing }
