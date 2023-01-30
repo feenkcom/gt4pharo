@@ -112,6 +112,8 @@ GtMagritteElementBuilder >> visitGtPackageAndTagDescription: aDescription [
 	tagEditor := self newTagNameWidget: aDescription.
 
 	aContainer
+		beFocusable;
+		when: BlFocusInEvent do: [ :anEvent | packageEditor requestFocus ];
 		addChild: packageEditor as: #package;
 		addChild: ((GtMagritteBuilderUtility
 				newFieldLabelWithSpace: self defaultSpacing
