@@ -32,7 +32,7 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 
 	expander
 		content: [ activatableChange hasDiff
-				ifTrue: [ (GtDiffElement on: activatableChange change gtDiff)
+				ifTrue: [ (GtDiffElement onDiff: activatableChange change gtDiff)
 						aptitude: GtDiffFlatAptitude;
 						vFitContent;
 						beSmallSize ]
