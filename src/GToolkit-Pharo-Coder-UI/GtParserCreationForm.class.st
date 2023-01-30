@@ -20,20 +20,35 @@ GtParserCreationForm class >> priority [
 
 { #category : #callbacks }
 GtParserCreationForm >> commit [
-	| category |
+	| category scannerClass parserClass |
 	category := self commitPackage categoryName.
-	Smalltalk classInstaller
-		make: [ :builder | 
-			builder
-				name: scanner trim;
-				superclass: SmaCCScanner;
-				category: category ].
-	^ Smalltalk classInstaller
-		make: [ :builder | 
-			builder
-				name: parser trim;
-				superclass: SmaCCParser;
-				category: category ]
+	scannerClass := Smalltalk classInstaller
+			make: [ :builder | 
+				builder
+					name: scanner trim;
+					superclass: SmaCCScanner;
+					category: category ].
+	parserClass := Smalltalk classInstaller
+			make: [ :builder | 
+				builder
+					name: parser trim;
+					superclass: SmaCCParser;
+					category: category ].
+	(RBAddMethodChange
+		compile: 'scannerClass
+	^' , scanner
+		in: parserClass class
+		classified: #generated) execute.
+
+	(RBAddMethodChange
+		compile: 'definitionComment
+	"Start 
+	:
+	;"'
+		in: parserClass class
+		classified: #generated) execute.
+
+	^ parserClass
 ]
 
 { #category : #accessing }
