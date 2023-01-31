@@ -111,6 +111,9 @@ GtMagritteElementBuilder >> visitGtPackageAndTagDescription: aDescription [
 	packageEditor := self newPackageNameWidget: aDescription.
 	tagEditor := self newTagNameWidget: aDescription.
 
+	self addShortcutsTo: packageEditor.
+	self addShortcutsTo: tagEditor.
+	
 	aContainer
 		beFocusable;
 		when: BlFocusInEvent do: [ :anEvent | packageEditor requestFocus ];
