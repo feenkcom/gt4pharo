@@ -25,7 +25,7 @@ GtCopyClassForm >> acceptAction [
 		action: [ :aModel :aButton | 
 			[ | aClass |
 			aClass := self copyClass.
-			onAccept ifNotNil: [ onAccept value: aClass ] ] on: Error do: #inspect ];
+			onAccept ifNotNil: [ onAccept value: aClass ] ] on: Error do: #debug ];
 		beCommitAction
 ]
 
