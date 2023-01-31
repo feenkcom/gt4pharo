@@ -1,13 +1,18 @@
 Extension { #name : #RBAddMethodChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBAddMethodChange >> gtDiff [
+RBAddMethodChange >> gtDiffChange [
 	| oldSource newSource |
 	oldSource := (self changeClass notNil
-		ifTrue: [ self methodSourceFor: self selector ]) ifNil: [ '' ].
+			ifTrue: [ self methodSourceFor: self selector ]) ifNil: [ '' ].
 	newSource := source.
-	^ PrettyTextDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: self changeClass
+		using: GtSmaCCDiffSplitter forPharo
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+RBAddMethodChange >> gtDiffStyler [
+	^ BrRBTextStyler new classOrMetaClass: self changeClass
 ]

@@ -17,3 +17,8 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock [
 			job progress: current / totalCount.
 			aBlock cull: current / totalCount ] ] asJob
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+RBRefactoryChange >> gtDiffStyler [
+	^ nil
+]

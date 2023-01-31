@@ -57,8 +57,8 @@ GtUserActivatableChange >> fromChange: anRBRefactoryChange [
 ]
 
 { #category : #testing }
-GtUserActivatableChange >> hasDiff [
-	^ self change respondsTo: #gtDiff
+GtUserActivatableChange >> hasDiffChange [
+	^ self change respondsTo: #gtDiffChange
 ]
 
 { #category : #initialization }

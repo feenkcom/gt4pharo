@@ -1,7 +1,7 @@
 Extension { #name : #RBRenameInstanceVariableChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBRenameInstanceVariableChange >> gtDiff [
+RBRenameInstanceVariableChange >> gtDiffChange [
 	| aClass aDefinition oldSource newSource |
 	
 	aClass := self changeClass.
@@ -11,8 +11,8 @@ RBRenameInstanceVariableChange >> gtDiff [
 	aDefinition slots renameSlotNamed: oldName asSymbol to: newName asSymbol.
 	newSource := aDefinition asDefinitionString.
 
-	^ ClassDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: aClass
+		using: GtSmaCCDiffSplitter forPharo
 ]
