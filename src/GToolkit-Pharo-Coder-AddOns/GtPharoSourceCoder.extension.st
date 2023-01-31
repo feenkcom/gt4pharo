@@ -707,17 +707,46 @@ GtPharoSourceCoder >> renameClassVariableIn: aSourceCoderViewModel node: aVariab
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode [
-	(GtRenameInstanceVariableController new
+GtPharoSourceCoder >> renameInstanceVariableControllerIn: aSourceCoderViewModel for: aVariableNode [
+	(Pragma allNamed: #gtRenameInstanceVariableController)
+		do: [ :each | 
+			each method methodClass isClassSide
+				ifTrue: [ (each method methodClass instanceSide
+						perform: each method selector
+						withArguments: {aSourceCoderViewModel.
+								aVariableNode}) ifNotNil: [ :controller | ^ controller ] ] ].
+	^ GtRenameInstanceVariableController new
 		sourceCoderViewModel: aSourceCoderViewModel;
-		originalNode: aVariableNode) execute
+		originalNode: aVariableNode
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode [
+	(self
+		renameInstanceVariableControllerIn: aSourceCoderViewModel
+		for: aVariableNode) execute
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel node: aMessageOrMethodOrMethodPatternNode [
-	(GtRenameMethodController new
+	(self
+		renameMethodControllerIn: aSourceCoderViewModel
+		for: aMessageOrMethodOrMethodPatternNode) execute
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMessageOrMethodOrMethodPatternNode [
+	(Pragma allNamed: #gtRenameMethodController)
+		do: [ :each | 
+			each method methodClass isClassSide
+				ifTrue: [ (each method methodClass instanceSide
+						perform: each method selector
+						withArguments: {aSourceCoderViewModel.
+								aMessageOrMethodOrMethodPatternNode})
+						ifNotNil: [ :controller | ^ controller ] ] ].
+	^ GtRenameMethodController new
 		sourceCoderViewModel: aSourceCoderViewModel;
-		originalNode: aMessageOrMethodOrMethodPatternNode) execute
+		originalNode: aMessageOrMethodOrMethodPatternNode
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
