@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'activatableChange'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
 { #category : #'instance creation' }
@@ -18,8 +18,8 @@ GtUserActivatableChangeElement >> activatableChange: aGtUserActivatableChange [
 
 	activatableChange := aGtUserActivatableChange.
 	
-	self addChild: ((aGtUserActivatableChange hasDiff)
-		ifTrue: [ aGtUserActivatableChange change gtDiff asElement vFitContent beSmallSize ]
+	self addChild: ((aGtUserActivatableChange hasDiffChange)
+		ifTrue: [ aGtUserActivatableChange change gtDiffChange asElement vFitContent beSmallSize ]
 		ifFalse: [ BrLabel new
 				aptitude: BrGlamorousLabelAptitude new;
 				text: aGtUserActivatableChange change displayString ])

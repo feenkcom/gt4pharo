@@ -1,7 +1,7 @@
 Extension { #name : #RBAddInstanceVariableChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBAddInstanceVariableChange >> gtDiff [
+RBAddInstanceVariableChange >> gtDiffChange [
 	| oldSource newSource aDefinition |
 	self changeClass
 		ifNil: [ oldSource := ''.
@@ -13,5 +13,8 @@ RBAddInstanceVariableChange >> gtDiff [
 			aDefinition slots addSlotNamed: variable asSymbol.
 			newSource := aDefinition asDefinitionString ].
 
-	^ ClassDiffBuilder from: oldSource to: newSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
+		to: newSource
+		using: GtSmaCCDiffSplitter forPharo
 ]

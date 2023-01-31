@@ -1,7 +1,7 @@
 Extension { #name : #RBRenameClassChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBRenameClassChange >> gtDiff [
+RBRenameClassChange >> gtDiffChange [
 	| aClass aDefinition oldSource newSource |
 	
 	aClass := self changeClass.
@@ -12,8 +12,8 @@ RBRenameClassChange >> gtDiff [
 	aDefinition name: newName.
 	newSource := aDefinition asDefinitionString.
 
-	^ ClassDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: Class
+		using: GtSmaCCDiffSplitter forPharo
 ]

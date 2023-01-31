@@ -1,12 +1,17 @@
 Extension { #name : #RBRemoveMethodChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBRemoveMethodChange >> gtDiff [
+RBRemoveMethodChange >> gtDiffChange [
 	| oldSource |
 	oldSource := (self changeClass notNil
 			ifTrue: [ self methodSourceFor: self selector ]) ifNil: [ '' ].
-	^ PrettyTextDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: ''
-		inClass: self changeClass
+		using: GtSmaCCDiffSplitter forPharo
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+RBRemoveMethodChange >> gtDiffStyler [
+	^ BrRBTextStyler new classOrMetaClass: self changeClass
 ]

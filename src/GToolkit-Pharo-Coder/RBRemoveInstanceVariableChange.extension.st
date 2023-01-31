@@ -1,18 +1,17 @@
 Extension { #name : #RBRemoveInstanceVariableChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBRemoveInstanceVariableChange >> gtDiff [
+RBRemoveInstanceVariableChange >> gtDiffChange [
 	| aClass aDefinition oldSource newSource |
-	
 	aClass := self changeClass.
 	aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
 	oldSource := aDefinition asDefinitionString.
-	
+
 	aDefinition slots removeSlotNamed: variable asSymbol.
 	newSource := aDefinition asDefinitionString.
 
-	^ ClassDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: aClass
+		using: GtSmaCCDiffSplitter forPharo
 ]

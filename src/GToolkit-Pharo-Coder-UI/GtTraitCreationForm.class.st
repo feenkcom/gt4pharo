@@ -50,7 +50,7 @@ GtTraitCreationForm >> initialize [
 { #category : #magritte }
 GtTraitCreationForm >> nameDescription [
 	<magritteDescription>
-	^ MAStringDescription new
+	^ GtMATextDescription new
 		label: 'Name*';
 		priority: 1;
 		accessor: #newClassName;
@@ -75,7 +75,7 @@ GtTraitCreationForm >> newClassName [
 
 { #category : #accessing }
 GtTraitCreationForm >> newClassName: aClassName [
-	newClassName := aClassName
+	newClassName := aClassName asString
 ]
 
 { #category : #accessing }

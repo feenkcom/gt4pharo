@@ -31,8 +31,9 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 	description text: label.
 
 	expander
-		content: [ activatableChange hasDiff
-				ifTrue: [ (GtDiffElement on: activatableChange change gtDiff)
+		content: [ activatableChange hasDiffChange
+				ifTrue: [ (GtDiffElement onChange: activatableChange change gtDiffChange)
+						styler: activatableChange change gtDiffStyler;
 						aptitude: GtDiffFlatAptitude;
 						vFitContent;
 						beSmallSize ]

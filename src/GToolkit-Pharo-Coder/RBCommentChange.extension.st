@@ -1,13 +1,12 @@
 Extension { #name : #RBCommentChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBCommentChange >> gtDiff [
+RBCommentChange >> gtDiffChange [
 	| oldSource newSource |
-	oldSource := (self changeClass ifNotNil: [ :cls | cls comment ])
-		ifNil: [ '' ].
+	oldSource := (self changeClass ifNotNil: [ :cls | cls comment ]) ifNil: [ '' ].
 	newSource := comment.
-	^ TextDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: self changeClass
+		using: GtCharacterGroupDiffSplitter words
 ]
