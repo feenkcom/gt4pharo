@@ -363,6 +363,30 @@ GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSource
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> extractProduction: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 200>
+	(aCoderViewModel behavior includesBehavior: PP2CompositeNode)
+		ifFalse: [ ^ self ].
+	(self extractableNodesFrom: aCoderViewModel)
+		ifNotEmpty: [ :nodes | 
+			(nodes size = 1 and: [ nodes first isVariable ]) ifTrue: [ ^ self ].
+			(nodes
+				anySatisfy: [ :each | each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ])
+				ifTrue: [ ^ self ].
+			coderAddOns
+				addContextMenuItem: 'Extract production'
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: nodes first startPosition
+						to: nodes last stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | 
+					(GtPP2ExtractProductionRefactoringController new
+						sourceCoderViewModel: aTextualViewModel) execute ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> extractableNodesFrom: aCoderViewModel [
 	| allSelections allCursors |
 
