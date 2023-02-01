@@ -1,7 +1,7 @@
 Extension { #name : #RBAddClassChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBAddClassChange >> gtDiff [
+RBAddClassChange >> gtDiffChange [
 	| aClass oldSource newSource |
 	aClass := self changeClass.
 
@@ -13,8 +13,8 @@ RBAddClassChange >> gtDiff [
 					gtDefinitionString ].
 	newSource := self definition.
 
-	^ ClassDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: Class
+		using: GtSmaCCDiffSplitter forPharo
 ]
