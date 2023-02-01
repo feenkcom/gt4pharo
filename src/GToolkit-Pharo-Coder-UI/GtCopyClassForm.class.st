@@ -4,10 +4,9 @@ Class {
 	#instVars : [
 		'innerClass',
 		'superClassName',
-		'packageName',
-		'tagName',
 		'onAccept',
-		'newClassName'
+		'newClassName',
+		'packageAndTag'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Behavior'
 }
@@ -43,9 +42,9 @@ GtCopyClassForm >> copyClass [
 					fillFor: innerClass;
 					name: newClassName trim;
 					superclass: superClassName trim asClass;
-					category: (tagName trim
-							ifEmpty: [ packageName trim ]
-							ifNotEmpty: [ packageName trim , '-' , tagName trim ]) ].
+					category: (packageAndTag tagName trim
+							ifEmpty: [ packageAndTag packageName trim ]
+							ifNotEmpty: [ packageAndTag fullName ]) ].
 	class copyAllCategoriesFrom: innerClass.
 	class class copyAllCategoriesFrom: innerClass class.
 	^ class
@@ -56,8 +55,9 @@ GtCopyClassForm >> for: aClass [
 	innerClass := aClass.
 	newClassName := aClass name asString.
 	superClassName := aClass superclass name asString.
-	packageName := aClass package name.
-	tagName := self treatTag: aClass 
+	packageAndTag := GtPackageAndTagName new
+			packageName: aClass package name;
+			tagName: (self treatTag: aClass)
 ]
 
 { #category : #magritte }
@@ -67,6 +67,7 @@ GtCopyClassForm >> nameDescription [
 		label: 'Name';
 		priority: 1;
 		accessor: #newClassName;
+		textStyler: #glamorousCodeFont;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
@@ -94,29 +95,25 @@ GtCopyClassForm >> onAccept: anAction [
 	onAccept := anAction
 ]
 
+{ #category : #accessing }
+GtCopyClassForm >> packageAndTag [
+	^ packageAndTag
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> packageAndTag: anObject [
+	packageAndTag := anObject
+]
+
 { #category : #magritte }
-GtCopyClassForm >> packageDescription [
+GtCopyClassForm >> packageAndTagDescription [
 	<magritteDescription>
-	^ MAStringDescription new
+	^ GtPackageAndTagDescription new
 		label: 'Package';
 		priority: 3;
-		accessor: #packageName;
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: RPackageOrganizer default packageNames) ];
-		addCondition: [ :aValue | (RPackageOrganizer default packageNamed: aValue trim ifAbsent: [ nil ]) isNotNil ]
-			labelled: 'Package does not exist'
-]
-
-{ #category : #accessing }
-GtCopyClassForm >> packageName [
-
-	^ packageName
-]
-
-{ #category : #accessing }
-GtCopyClassForm >> packageName: anObject [
-
-	packageName := anObject
+		accessor: #packageAndTag;
+		textStyler: #glamorousCodeFont;
+		beRequired
 ]
 
 { #category : #magritte }
@@ -126,6 +123,7 @@ GtCopyClassForm >> superClassDescription [
 		label: 'Superclass';
 		priority: 2;
 		accessor: #superClassName;
+		textStyler: #glamorousCodeFont;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
@@ -142,29 +140,6 @@ GtCopyClassForm >> superClassName [
 GtCopyClassForm >> superClassName: anObject [
 
 	superClassName := anObject
-]
-
-{ #category : #magritte }
-GtCopyClassForm >> tagDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Tag';
-		priority: 4;
-		accessor: #tagName;
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (packageName asPackage classTags collect: #name)) ]
-]
-
-{ #category : #accessing }
-GtCopyClassForm >> tagName [
-
-	^ tagName
-]
-
-{ #category : #accessing }
-GtCopyClassForm >> tagName: anObject [
-
-	tagName := anObject
 ]
 
 { #category : #accessing }

@@ -32,6 +32,11 @@ GtPackageAndTagName >> defaultTagName [
 ]
 
 { #category : #accessing }
+GtPackageAndTagName >> fullName [
+	^ packageName asString, '-', tagName asString
+]
+
+{ #category : #accessing }
 GtPackageAndTagName >> initialize [
 	packageName := ''.
 	tagName := ''
@@ -66,9 +71,7 @@ GtPackageAndTagName >> packageRope [
 { #category : #accessing }
 GtPackageAndTagName >> printOn: aStream [
 	aStream
-		nextPutAll: packageName asString;
-		nextPutAll: '-';
-		nextPutAll: tagName asString
+		nextPutAll: self fullName
 ]
 
 { #category : #accessing }
