@@ -32,7 +32,10 @@ GtDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
 	attribute isExpanded: true.
 	attribute createdAttributes: {adornmentAttribute}.
 	attribute attributesCreatingBlock: [ adornmentAttribute ].
-	
+
+	(text from: node name startPosition to: node name stopPosition)
+		highlight: (BrGlamorousColors errorBackgroundColor alpha: 0.5).
+
 	text
 		attributes: {attribute.
 				adornmentAttribute}
