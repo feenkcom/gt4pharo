@@ -20,21 +20,30 @@ GtSlotsDefinition >> createContextMenuContentFor: aDefinition editor: anElement 
 	items
 		addAll: {GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self pushUpSlotRefactoringFor: aDefinition name) ];
-					title: 'Push up ' , aDefinition name.
+					title: (self createLabelTextFor: 'Push up ' description: aDefinition name).
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self pushDownSlotRefactoringFor: aDefinition name) ];
-					title: 'Push down ' , aDefinition name.
+					title: (self createLabelTextFor: 'Push down ' description: aDefinition name).
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self generateAccessorsFor: aDefinition name) ];
-					title: 'Create accessors for ' , aDefinition name.
+					title: (self createLabelTextFor: 'Create accessors for ' description: aDefinition name).
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self abstractVariable: aDefinition name) ];
-					title: 'Abstract ' , aDefinition name.
+					title: (self createLabelTextFor: 'Abstract ' description: aDefinition name).
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self protectVariable: aDefinition name) ];
-					title: 'Protect ' , aDefinition name}.
+					title: (self createLabelTextFor: 'Protect ' description: aDefinition name)}.
 	theContextMenu items: items.
 	^ theContextMenu
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSlotsDefinition >> createLabelTextFor: aString description: description [
+	^ aString asRopedText glamorousRegularFont
+		, ((' ' , description) asRopedText
+				glamorousCodeFont;
+				foreground: Color gray;
+				glamorousCodeTinySize)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
