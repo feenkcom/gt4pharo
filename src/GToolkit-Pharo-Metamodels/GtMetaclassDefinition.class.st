@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtBehaviorDefinition,
 	#instVars : [
 		'slots',
-		'category'
+		'category',
+		'methods'
 	],
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Definitions'
 }
@@ -63,6 +64,23 @@ GtMetaclassDefinition >> createBehaviorChange [
 ]
 
 { #category : #'api - accepting' }
+GtMetaclassDefinition >> createChange [
+	| aCompositeChange theMethodsChange |
+
+	aCompositeChange := (RBCompositeRefactoryChange named: 'Define metaclass').	
+	aCompositeChange addChange: self createBehaviorChange.
+	
+	theMethodsChange := self methods createChange.
+	theMethodsChange changes do: [ :eachMethodChange |
+		eachMethodChange
+			behaviorName: self name;
+			isMeta: true ].
+	aCompositeChange addChange: theMethodsChange.
+
+	^ aCompositeChange
+]
+
+{ #category : #'api - accepting' }
 GtMetaclassDefinition >> differenceWith: aMetaclassDefinition [
 	| aDifference |
 	
@@ -89,6 +107,7 @@ GtMetaclassDefinition >> forNew [
 	
 	category := GtCategoryDefinition empty parent: self.
 	slots := GtSlotsDefinition empty parent: self.
+	methods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #initialization }
@@ -111,12 +130,23 @@ GtMetaclassDefinition >> fromMetaclass: aMetaclass in: anEnvironment [
 	originalName := name.
 	
 	category := (GtCategoryDefinition fromBehavior: aMetaclass) parent: self.
-	slots := (GtClassSlotsDefinition fromClass: aMetaclass) parent: self
+	slots := (GtClassSlotsDefinition fromClass: aMetaclass) parent: self.
+	methods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #testing }
 GtMetaclassDefinition >> isForMetaclass [
 	^ true
+]
+
+{ #category : #accessing }
+GtMetaclassDefinition >> methods [
+	^ methods
+]
+
+{ #category : #'private - accessing' }
+GtMetaclassDefinition >> methods: aGtMethodsDefinition [
+	methods := aGtMethodsDefinition parent: self
 ]
 
 { #category : #accessing }
@@ -128,6 +158,7 @@ GtMetaclassDefinition >> postCopy [
 	name := name copy.
 	originalName := originalName copy.
 	slots := slots copy parent: self.
+	methods := methods copy parent: self
 ]
 
 { #category : #accessing }
@@ -167,6 +198,11 @@ GtMetaclassDefinition >> storeOn: aStream [
 		nextPutAll: 'slots:';
 		space;
 		store: self slots.
+	aStream
+		space;
+		nextPutAll: 'methods:';
+		space;
+		store: self methods.
 	aStream
 		nextPut: $)
 ]

@@ -1,18 +1,17 @@
 Extension { #name : #RBAddClassVariableChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
-RBAddClassVariableChange >> gtDiff [
+RBAddClassVariableChange >> gtDiffChange [
 	| aClass aDefinition oldSource newSource |
-	
 	aClass := self changeClass.
 	aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
 	oldSource := aDefinition asDefinitionString.
-	
+
 	aDefinition classVariables addClassVariableNamed: variable asSymbol.
 	newSource := aDefinition asDefinitionString.
 
-	^ ClassDiffBuilder
-		from: oldSource
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
 		to: newSource
-		inClass: aClass
+		using: GtSmaCCDiffSplitter forPharo
 ]

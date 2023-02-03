@@ -205,11 +205,7 @@ GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddO
 						addContextMenuItem: (self
 								createLabel: 'Browse hierarchy implementors'
 								description: node selector)
-						hover: [ :textualCoderViewModel | 
-							textualCoderViewModel
-								addTextAttribute: self class nodeHighlight
-								from: highlightNode startPosition
-								to: highlightNode stopPosition ]
+						hover: (self highlightNodeBlock: highlightNode)
 						leave: self removeHighlightBlock
 						action: [ :aTextualViewModel | self perform: #browseHierarchyImplementorsAt: with: highlightNode startPosition ] ] ]
 ]
@@ -226,11 +222,7 @@ GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: code
 						addContextMenuItem: (self
 								createLabel: 'Browse hierarchy references'
 								description: node selector)
-						hover: [ :textualCoderViewModel | 
-							textualCoderViewModel
-								addTextAttribute: self class nodeHighlight
-								from: highlightNode startPosition
-								to: highlightNode stopPosition ]
+						hover: (self highlightNodeBlock: highlightNode)
 						leave: self removeHighlightBlock
 						action: [ :aTextualViewModel | self perform: #browseHierarchyReferencesAt: with: highlightNode startPosition ] ] ]
 ]

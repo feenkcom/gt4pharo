@@ -977,6 +977,11 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	^ aScripter
 ]
 
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> createdClassThatDoesntExist [
+	^ 'ClassThatDoesNotExist6561'
+]
+
 { #category : #'examples - complete method name' }
 GtPharoMethodCoderByScripterExamples >> emptyBodyMethod [
 	<gtExample>
@@ -1260,19 +1265,86 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 ]
 
 { #category : #'examples - fixit class' }
-GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
+GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_01_setup [
 	<gtExample>
 	| aScripter |
-
-	aScripter := self scripterForBlock: [
-		| aCoder |
-		aCoder := GtPharoMethodCoderExamples new emptyMethodCoder.
-		aCoder appendString: 'method'.
-		aCoder ].
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder new ].
 
 	aScripter do
 		label: 'Type in a class that does not exist';
-		action: [ :aCoder | aCoder appendString: (String cr, String tab, 'ClassThatDoesNotExist6561') ];
+		action: [ :aCoder | aCoder appendString: String cr , String tab , self createdClassThatDoesntExist ];
+		onModel;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_02_click_fixit [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self fixitCreateClassInPlayground_01_setup.
+	self clickFixItFor: aScripter.
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_03_click_define_class [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self fixitCreateClassInPlayground_02_click_fixit.
+	
+	"there is no create behavior element before clicking on the menu"
+	aScripter assert
+		onBreadthFirstChildOfClass: GtCreationFormWidget;
+		notExists;
+		play.
+	
+	aScripter click
+		onSpaceRoot;
+		id: (GtDefineClassFixItActionElementId indexed: 1);
+		play.
+		
+	"now it appeared"
+	aScripter assert
+		onBreadthFirstChildOfClass: GtCreationFormWidget;
+		exists;
+		play.
+		
+	"and it should be saveable"
+	aScripter assert
+		onBreadthFirstChildOfClass: GtCreationFormWidget;
+		id: #toolbar;
+		onChildAt: 1;
+		value: #isEnabled equals: false;
+		play.
+	
+	"context menu should disappear"
+	aScripter assert
+		onSpaceRoot;
+		onBreadthFirstChildOfClass: GtCoderContextMenuContent;
+		notExists;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new emptyMethodCoder.
+				aCoder appendString: 'method'.
+				aCoder ].
+
+	aScripter do
+		label: 'Type in a class that does not exist';
+		action: [ :aCoder | aCoder appendString: String cr , String tab , self createdClassThatDoesntExist ];
 		onModel;
 		play.
 
@@ -1307,12 +1379,18 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 		id: (GtDefineClassFixItActionElementId indexed: 1);
 		play.
 		
-	
-	
 	"now it appeared"
 	aScripter assert
 		onBreadthFirstChildOfClass: GtCreationFormWidget;
 		exists;
+		play.
+		
+	"and it should be saveable"
+	aScripter assert
+		onBreadthFirstChildOfClass: GtCreationFormWidget;
+		id: #toolbar;
+		onChildAt: 1;
+		satisfies: #isEnabled;
 		play.
 	
 	"context menu should disappear"

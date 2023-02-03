@@ -84,7 +84,7 @@ GtFullClassDefinition >> createChange [
 
 	aCompositeChange := (RBCompositeRefactoryChange named: 'Define full class').	
 	aCompositeChange addChange: self instanceSideDefinition createChange.
-	aCompositeChange addChange: self classSideDefinition createBehaviorChange.
+	aCompositeChange addChange: self classSideDefinition createChange.
 	^ aCompositeChange
 ]
 

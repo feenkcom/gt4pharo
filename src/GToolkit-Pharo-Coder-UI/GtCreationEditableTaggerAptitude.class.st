@@ -48,14 +48,10 @@ GtCreationEditableTaggerAptitude >> newAddTagButton [
 		when: BlFocusInEvent do: [ :anEvent | self addTagCreatorElement ];
 		addShortcut:
 			(BlShortcutWithAction new
-				combination: BlKeyCombination arrowLeft;
+				combination: BlKeyCombination shiftTab;
 				action: [ :anEvent | 
 					anEvent currentTarget
-						previousSiblingDo: [ :anElement | anElement requestFocus ] ]);
-		addShortcut:
-			(BlShortcutWithAction new
-				combination: BlKeyCombination enter;
-				action: [ :anEvent | self addTagCreatorElement ])
+						previousSiblingDo: [ :anElement | anElement requestFocus ] ])
 ]
 
 { #category : #'private - instance creation' }
@@ -87,7 +83,19 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 					addButton beFocusable.
 					self
 						removeTagElement: anEvent currentTarget
-						withSeparatorAt: tagElements size + 1 ].
+						withSeparatorAt: tagElements size + 1 ];
+			addShortcut: (BlShortcutWithAction new
+					combination: BlKeyCombination tab;
+					action: [ :anEvent | 
+						anEvent currentTarget
+							fireEvent: (BrEditorAcceptWish new text: anEvent currentTarget text).
+						anEvent currentTarget text
+							ifEmpty: [ BlFocusFinder new
+									direction: BlFocusSearchDirectionForward new;
+									root: tags parent parent parent;
+									referenceElement: addButton;
+									nextFocusDo: #requestFocus ifNone: [  ] ]
+							ifNotEmpty: [ self addTagCreatorElement ] ]).
 
 	aNewTagCreator navigator
 		moveTo: 0;

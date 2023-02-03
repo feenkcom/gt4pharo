@@ -6,7 +6,8 @@ Class {
 		'slots',
 		'traits',
 		'category',
-		'methods'
+		'methods',
+		'classMethods'
 	],
 	#category : #'GToolkit-Pharo-Metamodels-Behavior - Definitions'
 }
@@ -106,6 +107,16 @@ GtTraitDefinition >> category: aGtCategoryDefinition [
 ]
 
 { #category : #accessing }
+GtTraitDefinition >> classMethods [
+	^ classMethods
+]
+
+{ #category : #'private - accessing' }
+GtTraitDefinition >> classMethods: aGtMethodsDefinition [
+	classMethods := aGtMethodsDefinition parent: self
+]
+
+{ #category : #accessing }
 GtTraitDefinition >> comment [
 	<return: #GtCommentDefinition>
 	
@@ -124,7 +135,7 @@ GtTraitDefinition >> createBehaviorChange [
 
 { #category : #'api - accepting' }
 GtTraitDefinition >> createChange [
-	| aCompositeChange theMethodsChange |
+	| aCompositeChange theMethodsChange theClassMethodsChange |
 
 	aCompositeChange := (RBCompositeRefactoryChange named: 'Define trait').
 	self category isValidForCreation
@@ -139,6 +150,13 @@ GtTraitDefinition >> createChange [
 			behaviorName: self name;
 			isMeta: false ].
 	aCompositeChange addChange: theMethodsChange.
+	
+	theClassMethodsChange := self classMethods createChange.
+	theClassMethodsChange changes do: [ :eachMethodChange |
+		eachMethodChange
+			behaviorName: self name;
+			isMeta: true ].
+	aCompositeChange addChange: theClassMethodsChange.
 	
 	aCompositeChange addChange: (self comment createChange behaviorName: self name).
 
@@ -184,7 +202,8 @@ GtTraitDefinition >> forNew [
 	category := GtCategoryDefinition empty parent: self.
 	slots := GtSlotsDefinition empty parent: self.
 	traits := GtTraitsDefinition empty parent: self.
-	methods := GtPharoMethodsDefinition new parent: self
+	methods := GtPharoMethodsDefinition new parent: self.
+	classMethods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #initialization }
@@ -209,7 +228,8 @@ GtTraitDefinition >> fromTrait: aTrait in: anEnvironment [
 	comment := (GtCommentDefinition fromBehavior: aTrait) parent: self.
 	slots := (GtSlotsDefinition fromTrait: aTrait) parent: self.
 	traits := (GtTraitsDefinition fromTrait: aTrait in: anEnvironment) parent: self.
-	methods := GtPharoMethodsDefinition new parent: self
+	methods := GtPharoMethodsDefinition new parent: self.
+	classMethods := GtPharoMethodsDefinition new parent: self
 ]
 
 { #category : #testing }
@@ -274,6 +294,7 @@ GtTraitDefinition >> postCopy [
 	category := category copy parent: self.
 	comment := comment copy parent: self.
 	methods := methods copy parent: self.
+	classMethods := methods copy parent: self.
 	name := name copy.
 	originalName := originalName copy.
 	slots := slots copy parent: self.
@@ -344,6 +365,12 @@ GtTraitDefinition >> storeOn: aStream [
 		nextPut: $;.
 	aStream
 		space;
+		nextPutAll: 'classMethods:';
+		space;
+		store: self classMethods;
+		nextPut: $;.
+	aStream
+		space;
 		nextPutAll: 'name:';
 		space;
 		store: self name;
@@ -385,5 +412,6 @@ GtTraitDefinition >> traits: aGtTraitsDefinition [
 GtTraitDefinition >> withMethodsFromTrait: aTrait [
 	"Initialize methods from a given real Trait"
 	
-	methods := (GtPharoMethodsDefinition fromTrait: aTrait) parent: self
+	methods := (GtPharoMethodsDefinition fromTrait: aTrait) parent: self.
+	classMethods := (GtPharoMethodsDefinition fromTrait: aTrait class) parent: self
 ]
