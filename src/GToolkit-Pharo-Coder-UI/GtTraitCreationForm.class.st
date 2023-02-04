@@ -62,7 +62,7 @@ GtTraitCreationForm >> nameDescription [
 			labelled: 'Name is already taken';
 		addCondition: [ :aValue | aValue size > 0 ifTrue: [ aValue first isUppercase ] ifFalse: [ true ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue  asString isAllAlphaNumerics ]
+		addCondition: [ :aValue | aValue  asString allSatisfy: [:c | c isAlphaNumeric or: [c = $_ ] ] ]
 			labelled: 'Name must be alphanumeric';
 		addCondition: [ :aValue | (aValue = 'TNameOfTrait') not and: [ (aValue = 'NameOfSubclass') not ] ]
 			labelled: 'Name cannot be example value'
