@@ -50,8 +50,11 @@ GtCreationEditableTaggerAptitude >> newAddTagButton [
 			(BlShortcutWithAction new
 				combination: BlKeyCombination shiftTab;
 				action: [ :anEvent | 
-					anEvent currentTarget
-						previousSiblingDo: [ :anElement | anElement requestFocus ] ])
+						BlFocusFinder new
+							direction: BlFocusSearchDirectionBackward new;
+							root: tags parent parent parent;
+							referenceElement: anEvent currentTarget;
+							nextFocusDo: #requestFocus ifNone: [  ] ])
 ]
 
 { #category : #'private - instance creation' }
@@ -85,6 +88,14 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 						removeTagElement: anEvent currentTarget
 						withSeparatorAt: tagElements size + 1 ];
 			addShortcut: (BlShortcutWithAction new
+					combination: BlKeyCombination shiftTab;
+					action: [ :anEvent | 
+						BlFocusFinder new
+							direction: BlFocusSearchDirectionBackward new;
+							root: tags parent parent parent;
+							referenceElement: anEvent currentTarget;
+							nextFocusDo: #requestFocus ifNone: [  ] ]);
+			addShortcut: (BlShortcutWithAction new
 					combination: BlKeyCombination tab;
 					action: [ :anEvent | 
 						anEvent currentTarget
@@ -102,4 +113,25 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 		apply.
 
 	^ aNewTagCreator
+]
+
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
+	^ (super newTagElementFor: aTaggerTag)
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination shiftTab;
+				action: [ :anEvent | 
+					BlFocusFinder new
+						direction: BlFocusSearchDirectionBackward new;
+						root: tags parent parent parent;
+						referenceElement: anEvent currentTarget;
+						nextFocusDo: #requestFocus ifNone: [  ] ]);
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination tab;
+				action: [ :anEvent | 
+					BlFocusFinder new
+						direction: BlFocusSearchDirectionForward new;
+						root: tags parent parent parent;
+						referenceElement: anEvent currentTarget;
+						nextFocusDo: #requestFocus ifNone: [  ] ])
 ]
