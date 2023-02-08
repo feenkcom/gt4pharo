@@ -689,12 +689,9 @@ GtPharoMethodCoder >> browseFrom: anEditorElement [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> buildRemoveMethodLabel: anElement [
-	| isEmptyMethod selectorToRemove |
-	isEmptyMethod := self isNewMethod.
-	selectorToRemove := self selector.
 	^ GtPharoRemoveMethodPreviewStencil new
-		selectorToRemove: selectorToRemove;
-		isEmptyMethod: isEmptyMethod;
+		selectorToRemove: self selector;
+		isEmptyMethod: self isNewMethod;
 		anElement: anElement;
 		create
 ]
