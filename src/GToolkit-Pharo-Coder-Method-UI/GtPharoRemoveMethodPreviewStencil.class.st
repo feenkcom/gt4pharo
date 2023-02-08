@@ -1,6 +1,25 @@
-Extension { #name : #GtPharoRemoveMethodPreviewStencil }
+Class {
+	#name : #GtPharoRemoveMethodPreviewStencil,
+	#superclass : #BrStencil,
+	#instVars : [
+		'selectorToRemove',
+		'isEmptyMethod',
+		'anElement'
+	],
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Utilities'
+}
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #accessing }
+GtPharoRemoveMethodPreviewStencil >> anElement [
+	^ anElement
+]
+
+{ #category : #accessing }
+GtPharoRemoveMethodPreviewStencil >> anElement: anObject [
+	^ anElement := anObject
+]
+
+{ #category : #'as yet unclassified' }
 GtPharoRemoveMethodPreviewStencil >> create [
 	| referencesButton waitingLabel container noReferencesLabel selectorLabel references |
 	noReferencesLabel := BrLabel new
@@ -86,4 +105,24 @@ GtPharoRemoveMethodPreviewStencil >> create [
 				noReferencesLabel visibility: BlVisibility gone}.
 
 	^ container
+]
+
+{ #category : #accessing }
+GtPharoRemoveMethodPreviewStencil >> isEmptyMethod [
+	^ isEmptyMethod
+]
+
+{ #category : #accessing }
+GtPharoRemoveMethodPreviewStencil >> isEmptyMethod: anObject [
+	^ isEmptyMethod := anObject
+]
+
+{ #category : #accessing }
+GtPharoRemoveMethodPreviewStencil >> selectorToRemove [
+	^ selectorToRemove
+]
+
+{ #category : #accessing }
+GtPharoRemoveMethodPreviewStencil >> selectorToRemove: anObject [
+	^ selectorToRemove := anObject
 ]
