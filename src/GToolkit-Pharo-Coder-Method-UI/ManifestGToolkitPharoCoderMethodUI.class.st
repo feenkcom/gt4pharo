@@ -16,41 +16,6 @@ ManifestGToolkitPharoCoderMethodUI class >> mustNotDependOn [
 ]
 
 { #category : #accessing }
-ManifestGToolkitPharoCoderMethodUI class >> mustOnlyDependOn [
-		^ {
-		'Beacon-ExtraSignals'.
-		'Bloc'.
-		'Bloc-Layout'.
-		'Bloc-Text'.
-		'Bloc-Text-Elements'.
-		'Brick'.
-		'Brick-Core'.
-		'Brick-Editor'.
-		'Brick-Glamorous'.
-		'Brick-List'.
-		'Brick-List-Ungrouped'.
-		'Collections-Sequenceable'.
-		'Collections-Unordered'.
-		'Colors'.
-		'Futures'.
-		'GToolkit-Clipboard'.
-		'GToolkit-Coder'.
-		'GToolkit-Coder-StreamingCoders'.
-		'GToolkit-Coder-StreamingCoders-UI'.
-		'GToolkit-Coder-UI'.
-		'GToolkit-Completer'.
-		'GToolkit-Pharo-Coder-Method'.
-		'GToolkit-Pharo-Completer'.
-		'GToolkit-Pharo-Parser'.
-		'GToolkit-Pharo-SearchFilters'.
-		'GToolkit-Phlow'.
-		'GToolkit-VariableBindings'.
-		'Kernel'.
-		'TraitsV2'
-	}
-]
-
-{ #category : #accessing }
 ManifestGToolkitPharoCoderMethodUI class >> shouldDependOn [
 	^ {
 		'GToolkit-Coder'.
@@ -63,4 +28,9 @@ ManifestGToolkitPharoCoderMethodUI class >> shouldDependOn [
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-VariableBindings'.
 	}
+]
+
+{ #category : #testing }
+ManifestGToolkitPharoCoderMethodUI class >> shouldValidateBaseline [
+	^ true
 ]
