@@ -18,38 +18,18 @@ GtCreationEditableTaggerAptitude >> addTagCreatorElement [
 { #category : #'private - instance creation' }
 GtCreationEditableTaggerAptitude >> newAddTagButton [
 	^ addButton := BrButton new beFocusable
-		aptitude:
-			BrGlamorousButtonRectangularAptitude new
-				+ BrGlamorousButtonIconAptitude new
-				+ BrGlamorousButtonWithLabelTooltipAptitude new
-				+
-					(BrInteractiveCommonAptitude new
-						default: [ :aWidget | 
-							aWidget
-								border: BlBorder empty;
-								background: self theme status neutralBackgroundColor ];
-						hovered: [ :aWidget | 
-							aWidget background:
-								self theme status neutralBackgroundColor darker ];
-						pressed: [ :aWidget | 
-							aWidget
-								background:
-									self theme status neutralBackgroundColor darker darker ];
-						focused: [ :aWidget | 
-							aWidget
-								border: (BlBorder paint: self theme editor focusedBorderColor width: 1) ]);
-		icon: BrGlamorousVectorIcons add;
-		label: 'Add';
-		beSmallSize;
-		hExact: 20;
-		margin: margin;
-		constraintsDo: [ :c | c flow vertical alignCenter ];
-		action: [ :aButton | self addTagCreatorElement ];
-		when: BlFocusInEvent do: [ :anEvent | self addTagCreatorElement ];
-		addShortcut:
-			(BlShortcutWithAction new
-				combination: BlKeyCombination shiftTab;
-				action: [ :anEvent | 
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			icon: BrGlamorousVectorIcons add;
+			label: 'Add';
+			beSmallSize;
+			hExact: 20;
+			margin: margin;
+			constraintsDo: [ :c | c flow vertical alignCenter ];
+			action: [ :aButton | self addTagCreatorElement ];
+			when: BlFocusInEvent do: [ :anEvent | self addTagCreatorElement ];
+			addShortcut: (BlShortcutWithAction new
+					combination: BlKeyCombination shiftTab;
+					action: [ :anEvent | 
 						BlFocusFinder new
 							direction: BlFocusSearchDirectionBackward new;
 							root: tags parent parent parent;
