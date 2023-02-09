@@ -43,6 +43,18 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: anAnnounc
 		theClass: anAnnouncement classAffected)
 ]
 
+{ #category : #'api - subscriptions' }
+GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
+	(self packagesToShow includes: aClassRemoved packageAffected)
+		ifFalse: [ ^ self ].
+	self announcer
+		announce: (GtCoderNavigationClassRemoved new
+				coder: coder;
+				package: aClassRemoved packageAffected;
+				tag: aClassRemoved classTagAffected;
+				theClass: aClassRemoved classRemoved)
+]
+
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 	(self packagesToShow includes: aClassRenamed packageAffected) ifFalse: [ ^ self ].
@@ -397,6 +409,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
+		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
 		when: MethodAdded send: #methodAdded: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self
