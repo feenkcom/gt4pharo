@@ -69,7 +69,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkit-Pharo-Metamodels'
 					'GToolkit-Pharo-Parser'
 					'GToolkit-Pharo-SearchFilters'
-					'GToolkit-Pharo-System'). ];
+					'GToolkit-Pharo-System'
+					'GToolkit-Pharo-TestSuite'). ];
 
 			package: 'GToolkit-Pharo-Coder-Method-UI' with: [
 				spec requires: #(

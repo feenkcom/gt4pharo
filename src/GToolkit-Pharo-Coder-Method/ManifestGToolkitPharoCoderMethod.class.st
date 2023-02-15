@@ -37,6 +37,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-Pharo-System'.
+		'GToolkit-Pharo-TestSuite'.
 		'GToolkit-VariableBindings'.
 		'Kernel'.
 		'OpalCompiler-Core'.
