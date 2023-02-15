@@ -51,7 +51,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 		spec package: 'GToolkit-Pharo-TestSuite-UI' with: [
 			spec requires: #('Futures' 'GToolkitCoder' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-Remote') ].
 		spec package: 'GToolkit-Pharo-Coder-Method' with: [
-			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkitExamplesEngine' 'GToolkit-Pharo-Completer' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System') ].
+			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkitExamplesEngine' 'GToolkit-Pharo-Completer' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite') ].
 		spec package: 'GToolkit-Pharo-Coder-Method-UI' with: [
 			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters') ].
 		spec package: 'GToolkit-Pharo-Coder-Method-Examples' with: [
