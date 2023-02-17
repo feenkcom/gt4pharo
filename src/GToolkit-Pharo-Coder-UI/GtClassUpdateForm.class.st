@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtClassUpdateForm class >> isAdditionForm [
+	^ false
+]
+
+{ #category : #accessing }
 GtClassUpdateForm class >> onClass: aClass [
 	^ self new onClass: aClass
 ]

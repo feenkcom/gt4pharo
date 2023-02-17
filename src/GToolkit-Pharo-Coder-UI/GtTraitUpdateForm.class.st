@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtTraitUpdateForm class >> isAdditionForm [
+	^ false
+]
+
+{ #category : #accessing }
 GtTraitUpdateForm class >> onTrait: aTrait [
 	^ self new onTrait: aTrait
 ]
