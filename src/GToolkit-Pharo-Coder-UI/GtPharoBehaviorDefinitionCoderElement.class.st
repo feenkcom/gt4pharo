@@ -95,7 +95,7 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 	| theProperties theReaders |
 
 	theProperties := BlElement new
-		layout: (BlGridLayout new columnCount: 2);
+		layout: BlLinearLayout horizontal;
 		constraintsDo: [ :c |
 			c horizontal matchParent.
 			c vertical fitContent ].
