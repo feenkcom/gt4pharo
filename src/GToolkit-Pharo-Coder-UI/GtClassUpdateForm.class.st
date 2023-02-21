@@ -75,6 +75,19 @@ GtClassUpdateForm >> classVarsDescription [
 ]
 
 { #category : #accessing }
+GtClassUpdateForm >> commit [
+	| aClass |
+	aClass := newClassName asClass.
+	aClass classSide slots
+		do: [ :aSlot | (RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide) execute ].
+	aClass := super commit.
+
+	classSlots
+		do: [ :aSlot | (RBAddInstanceVariableChange add: aSlot to: aClass classSide) execute ].
+	^ aClass
+]
+
+{ #category : #accessing }
 GtClassUpdateForm >> createClassSlotsContextMenuContentFor: aSlotName editor: anElement [
 	| theContextMenu items |
 	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
@@ -162,6 +175,49 @@ GtClassUpdateForm >> createSlotsContextMenuContentFor: aSlotName editor: anEleme
 ]
 
 { #category : #accessing }
+GtClassUpdateForm >> definitionString [
+	| aStream aPackage |
+	aStream := (String new: 800) writeStream.
+	aStream nextPutAll: self superclassName.
+
+	aStream
+		nextPutAll: ' subclass: ';
+		store: self rawClassName asSymbol.
+
+	self traits isEmpty
+		ifFalse: [ aStream
+				cr;
+				tab;
+				nextPutAll: 'uses: ';
+				nextPutAll: (' + ' join: self traits) ].
+	aStream
+		cr;
+		tab;
+		nextPutAll: 'instanceVariableNames: ';
+		store: (' ' join: self slots).	"Class vars"
+	aStream
+		cr;
+		tab;
+		nextPutAll: 'classVariableNames: ';
+		store: (' ' join: self classVars).	"Pool Dictionaries"
+	aStream
+		cr;
+		tab;
+		nextPutAll: 'poolDictionaries: ';
+		store: (' ' join: self pools).
+
+	aPackage := self commitPackage.
+
+	aStream
+		cr;
+		tab;
+		nextPutAll: 'package: ';
+		store: aPackage categoryName asString.
+
+	^ aStream contents
+]
+
+{ #category : #accessing }
 GtClassUpdateForm >> executeRefactoring: refactoring [
 	[ refactoring execute ]
 		on: RBRefactoringError
@@ -227,7 +283,8 @@ GtClassUpdateForm >> onClass: aClass [
 				packageName: aClass package name;
 				tagName: (aClass package classTagForClass: aClass) name).
 	self pools: (aClass sharedPools collect: #name).
-	self classVars: (aClass classVarNames collect: #asString)
+	self classVars: (aClass classVarNames collect: #asString).
+	self classSlots: (aClass classSide slots collect: #name).
 ]
 
 { #category : #accessing }
