@@ -39,8 +39,7 @@ GtClassCreationForm >> classVarsDescription [
 		priority: 7;
 		accessor: #classVars;
 		classes: {String};
-		labelStyler: #glamorousFormLabelStyle;
-		blocListStencil: (self taggerStencilWithCompletion: nil)
+		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil)
 ]
 
 { #category : #accessing }
@@ -127,8 +126,9 @@ GtClassCreationForm >> poolsDescription [
 		priority: 7;
 		accessor: #pools;
 		classes: {String};
-		labelStyler: #glamorousFormLabelStyle;
-		blocListStencil: (self taggerStencilWithCompletion: GtPoolsCompletionStrategy new)
+		blocListStencil: (self
+				taggerStencilWithCompletion: GtPoolsCompletionStrategy new
+				andContextMenuBlock: nil)
 ]
 
 { #category : #accessing }

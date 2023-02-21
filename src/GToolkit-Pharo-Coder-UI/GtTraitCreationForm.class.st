@@ -56,7 +56,7 @@ GtTraitCreationForm >> nameDescription [
 		accessor: #newClassName;
 		kind: Object;
 		labelStyler: #glamorousFormLabelStyle;
-		textStyler: #glamorousCodeFont;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Name cannot be empty';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
@@ -103,9 +103,8 @@ GtTraitCreationForm >> slotsDescription [
 		label: 'Slots';
 		priority: 5;
 		accessor: #slots;
-		labelStyler: #glamorousFormLabelStyle;
 		classes: {String};
-		blocListStencil: (self taggerStencilWithCompletion: nil);
+		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
 ]
@@ -135,6 +134,7 @@ GtTraitCreationForm >> traitsDescription [
 		priority: 5;
 		accessor: #traits;
 		classes: {String};
-		labelStyler: #glamorousFormLabelStyle;
-		blocListStencil: (self taggerStencilWithCompletion: GtClassesCompletionStrategy new)
+		blocListStencil: (self
+				taggerStencilWithCompletion: GtClassesCompletionStrategy new
+				andContextMenuBlock: nil)
 ]
