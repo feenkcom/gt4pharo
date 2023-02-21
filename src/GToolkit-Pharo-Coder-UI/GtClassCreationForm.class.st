@@ -38,6 +38,7 @@ GtClassCreationForm >> classVarsDescription [
 		label: 'Class vars';
 		priority: 7;
 		accessor: #classVars;
+		labelStyler: #glamorousFormLabelStyle;
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil)
 ]
@@ -125,6 +126,7 @@ GtClassCreationForm >> poolsDescription [
 		label: 'Pools';
 		priority: 7;
 		accessor: #pools;
+		labelStyler: #glamorousFormLabelStyle;
 		classes: {String};
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtPoolsCompletionStrategy new

@@ -103,6 +103,7 @@ GtTraitCreationForm >> slotsDescription [
 		label: 'Slots';
 		priority: 5;
 		accessor: #slots;
+		labelStyler: #glamorousFormLabelStyle;
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
@@ -134,6 +135,7 @@ GtTraitCreationForm >> traitsDescription [
 		priority: 5;
 		accessor: #traits;
 		classes: {String};
+		labelStyler: #glamorousFormLabelStyle;
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtClassesCompletionStrategy new
 				andContextMenuBlock: nil)
