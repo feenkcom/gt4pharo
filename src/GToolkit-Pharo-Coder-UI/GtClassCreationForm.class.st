@@ -38,7 +38,9 @@ GtClassCreationForm >> classVarsDescription [
 		label: 'Class vars';
 		priority: 7;
 		accessor: #classVars;
-		blocListStencil: (self taggerStencilWithCompletion: nil)
+		labelStyler: #glamorousFormLabelStyle;
+		classes: {String};
+		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil)
 ]
 
 { #category : #accessing }
@@ -124,7 +126,11 @@ GtClassCreationForm >> poolsDescription [
 		label: 'Pools';
 		priority: 7;
 		accessor: #pools;
-		blocListStencil: (self taggerStencilWithCompletion: GtPoolsCompletionStrategy new)
+		labelStyler: #glamorousFormLabelStyle;
+		classes: {String};
+		blocListStencil: (self
+				taggerStencilWithCompletion: GtPoolsCompletionStrategy new
+				andContextMenuBlock: nil)
 ]
 
 { #category : #accessing }
@@ -136,9 +142,11 @@ GtClassCreationForm >> superclassDescription [
 		accessor: #superclassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
-			labelled: 'Unknown class'
+			labelled: 'Unknown class';
+		beRequired
 ]
 
 { #category : #accessing }

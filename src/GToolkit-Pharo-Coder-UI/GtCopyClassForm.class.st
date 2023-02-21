@@ -67,7 +67,8 @@ GtCopyClassForm >> nameDescription [
 		label: 'Name';
 		priority: 1;
 		accessor: #newClassName;
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
@@ -112,7 +113,8 @@ GtCopyClassForm >> packageAndTagDescription [
 		label: 'Package';
 		priority: 3;
 		accessor: #packageAndTag;
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		beRequired
 ]
 
@@ -123,7 +125,8 @@ GtCopyClassForm >> superClassDescription [
 		label: 'Superclass';
 		priority: 2;
 		accessor: #superClassName;
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]

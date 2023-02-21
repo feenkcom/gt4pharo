@@ -36,7 +36,8 @@ GtBaselineCreationForm >> baselineDescription [
 		label: 'Baseline';
 		priority: 1;
 		accessor: #baselineRope;
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]

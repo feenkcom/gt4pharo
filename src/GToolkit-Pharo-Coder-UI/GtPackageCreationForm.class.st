@@ -36,7 +36,10 @@ GtPackageCreationForm >> packageAndTagDescription [
 
 { #category : #accessing }
 GtPackageCreationForm >> selectInNavigationModel: aNavigationModel anInstance: anInstance [
-	^ aNavigationModel selectClass: anInstance
+	^ self packageAndTagName tagName
+		ifEmpty: [ aNavigationModel selectPackage: anInstance ]
+		ifNotEmpty: [ aNavigationModel
+				selectPackageTag: (anInstance classTagNamed: self packageAndTagName tagName) ]
 ]
 
 { #category : #accessing }
