@@ -55,6 +55,7 @@ GtTraitCreationForm >> nameDescription [
 		priority: 1;
 		accessor: #newClassName;
 		kind: Object;
+		labelStyler: #glamorousFormLabelStyle;
 		textStyler: #glamorousCodeFont;
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Name cannot be empty';
@@ -102,6 +103,7 @@ GtTraitCreationForm >> slotsDescription [
 		label: 'Slots';
 		priority: 5;
 		accessor: #slots;
+		labelStyler: #glamorousFormLabelStyle;
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
@@ -133,5 +135,6 @@ GtTraitCreationForm >> traitsDescription [
 		priority: 5;
 		accessor: #traits;
 		classes: {String};
+		labelStyler: #glamorousFormLabelStyle;
 		blocListStencil: (self taggerStencilWithCompletion: GtClassesCompletionStrategy new)
 ]

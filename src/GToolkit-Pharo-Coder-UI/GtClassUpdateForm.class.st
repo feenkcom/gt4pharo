@@ -15,11 +15,6 @@ GtClassUpdateForm class >> onClass: aClass [
 ]
 
 { #category : #accessing }
-GtClassUpdateForm >> commit [
-	self notYetImplemented
-]
-
-{ #category : #accessing }
 GtClassUpdateForm >> nameDescription [
 	^ nil
 ]
@@ -35,5 +30,5 @@ GtClassUpdateForm >> onClass: aClass [
 				packageName: aClass package name;
 				tagName: (aClass package classTagForClass: aClass) name).
 	self pools: aClass sharedPools.
-	self classVars: aClass classVarNames
+	self classVars: (aClass classVarNames collect: #asString)
 ]

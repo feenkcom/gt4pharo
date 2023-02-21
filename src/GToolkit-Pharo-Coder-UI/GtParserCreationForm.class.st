@@ -88,7 +88,8 @@ GtParserCreationForm >> parserDescription [
 		label: 'Parser';
 		priority: 1;
 		accessor: #parserRope;
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
@@ -132,7 +133,8 @@ GtParserCreationForm >> scannerDescription [
 		label: 'Scanner';
 		priority: 2;
 		accessor: #scannerRope;
-		textStyler: #glamorousCodeFont;
+		labelStyler: #glamorousFormLabelStyle;
+		textStyler: #glamorousFormEditorCodeFontAndSize;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
