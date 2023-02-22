@@ -85,6 +85,35 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
+	| variable uses |
+	aNode isAssignment ifTrue: [ variable := aNode variable ].
+	aNode isVariable
+		ifTrue: [ (aNode parent isAssignment and: [ aNode parent variable == aNode ])
+				ifTrue: [ ^ self ].
+			variable := aNode ].
+	variable isNil ifTrue: [ ^ self ].
+	uses := self allReferencesTo: variable.
+	uses size < 2 ifTrue: [ ^ self ].
+	uses first isAssignedTo ifFalse: [ ^ self ].
+	2 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ self ] ].
+	uses size >= 2
+		ifTrue: [ uses first stopPosition > uses second startPosition ifTrue: [ ^ self ] ].
+
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Inline assignment'
+				description: variable variableName)
+		hover: (self highlightNodesBlock: {uses first parent} , uses)
+		leave: self removeHighlightBlock
+		action: [ :aSourceCoderViewModel | 
+			(GtSnippetInlineVariableRefactoringController new
+				node: uses first parent;
+				sourceCoderViewModel: aSourceCoderViewModel) execute ]
+		id: #'context-menu--inline-temp'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 210>
 	(self extractableNodesFrom: aCoderViewModel)
@@ -110,6 +139,7 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 				addInlineMethodFor: node
 				to: coderAddOns
 				from: aCoderViewModel.
+			node withAllParentsDo: [ :n | self addInlineTempFor: n to: coderAddOns ].
 			node
 				withAllParentsDo: [ :n | self addConvertCascadesToStatementsFor: n to: coderAddOns ].
 			self addConvertStatementsToCascadesFor: nodes to: coderAddOns ]
