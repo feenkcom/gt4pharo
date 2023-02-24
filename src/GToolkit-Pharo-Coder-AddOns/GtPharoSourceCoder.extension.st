@@ -204,6 +204,15 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> allReferencesTo: aVariableNode [
+	| nodes |
+	nodes := OrderedCollection new.
+	(aVariableNode whoDefines ifNil: [ aVariableNode topParent ])
+		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ nodes add: each ] ].
+	^ nodes sort: [ :a :b | a startPosition < b startPosition ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
 	"Try to find a behavior reference at a given source text position and request to browse it"
 

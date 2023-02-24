@@ -662,15 +662,6 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> allReferencesTo: aVariableNode [
-	| nodes |
-	nodes := OrderedCollection new.
-	(aVariableNode whoDefines ifNil: [ aVariableNode topParent ])
-		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ nodes add: each ] ].
-	^ nodes sort: [ :a :b | a startPosition < b startPosition ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> baselineAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 
