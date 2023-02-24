@@ -59,7 +59,7 @@ GtClassUpdateForm >> classSlotsDescription [
 		priority: 10;
 		accessor: #classSlots;
 		classes: {String};
-		labelStyler: #glamorousFormLabelStyle;
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ]);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
