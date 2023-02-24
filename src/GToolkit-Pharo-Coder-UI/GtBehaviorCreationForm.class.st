@@ -11,8 +11,8 @@ Class {
 }
 
 { #category : #accessing }
-GtBehaviorCreationForm class >> isAdditionForm [
-	^ false
+GtBehaviorCreationForm class >> componentName [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -42,6 +42,11 @@ GtBehaviorCreationForm >> classSlotsDescription [
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
+]
+
+{ #category : #accessing }
+GtBehaviorCreationForm >> commit [
+	^ self subclassResponsibility
 ]
 
 { #category : #initialization }

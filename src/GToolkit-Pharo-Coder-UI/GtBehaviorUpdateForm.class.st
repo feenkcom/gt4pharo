@@ -52,6 +52,11 @@ GtBehaviorUpdateForm >> classVarsDescription [
 ]
 
 { #category : #accessing }
+GtBehaviorUpdateForm >> commit [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtBehaviorUpdateForm >> createClassSlotsContextMenuContentFor: aSlotName editor: anElement [
 	| theContextMenu items |
 	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
