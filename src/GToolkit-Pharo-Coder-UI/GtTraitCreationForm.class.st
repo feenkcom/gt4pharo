@@ -10,11 +10,6 @@ GtTraitCreationForm class >> componentName [
 ]
 
 { #category : #accessing }
-GtTraitCreationForm class >> isAdditionForm [
-	^ true
-]
-
-{ #category : #accessing }
 GtTraitCreationForm >> commit [
 	| category aClass |
 	category := self commitPackage categoryName.
