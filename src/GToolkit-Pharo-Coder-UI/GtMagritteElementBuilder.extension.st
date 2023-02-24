@@ -5,8 +5,10 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 	| aMemento packageEditor aCompletionStrategy aptitude |
 	aMemento := self memento.
 	packageEditor := BrEditor new.
-	aptitude := BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize.
-	aDescription textStyler ifNotNil: [ :aBlock | aBlock value: aptitude ].
+	aptitude := aDescription editorAptitude
+			ifNil: [ BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize ]
+			ifNotNil: #value.
+
 	packageEditor
 		inputFilter: BrPackageNameInputFilter new;
 		aptitude: aptitude;
@@ -52,8 +54,10 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 	| aMemento tagEditor aCompletionController aptitude |
 	aMemento := self memento.
 	tagEditor := BrEditor new.
-	aptitude := BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize.
-	aDescription textStyler ifNotNil: [ :aBlock | aBlock value: aptitude ].
+	aptitude := aDescription editorAptitude
+			ifNil: [ BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize ]
+			ifNotNil: #value.
+
 	tagEditor
 		inputFilter: BrPackageTagNameInputFilter new;
 		aptitude: aptitude;

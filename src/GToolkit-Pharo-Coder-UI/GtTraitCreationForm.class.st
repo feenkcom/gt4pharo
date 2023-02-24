@@ -55,15 +55,15 @@ GtTraitCreationForm >> nameDescription [
 		priority: 1;
 		accessor: #newClassName;
 		kind: Object;
-		labelStyler: #glamorousFormLabelStyle;
-		textStyler: #glamorousFormEditorCodeFontAndSize;
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Name cannot be empty';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
 			labelled: 'Name is already taken';
 		addCondition: [ :aValue | aValue size > 0 ifTrue: [ aValue first isUppercase ] ifFalse: [ true ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue  asString allSatisfy: [:c | c isAlphaNumeric or: [c = $_ ] ] ]
+		addCondition: [ :aValue | aValue asString allSatisfy: [ :c | c isAlphaNumeric or: [ c = $_ ] ] ]
 			labelled: 'Name must be alphanumeric';
 		addCondition: [ :aValue | (aValue = 'TNameOfTrait') not and: [ (aValue = 'NameOfSubclass') not ] ]
 			labelled: 'Name cannot be example value'
@@ -103,7 +103,7 @@ GtTraitCreationForm >> slotsDescription [
 		label: 'Slots';
 		priority: 5;
 		accessor: #slots;
-		labelStyler: #glamorousFormLabelStyle;
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
@@ -135,7 +135,7 @@ GtTraitCreationForm >> traitsDescription [
 		priority: 5;
 		accessor: #traits;
 		classes: {String};
-		labelStyler: #glamorousFormLabelStyle;
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtClassesCompletionStrategy new
 				andContextMenuBlock: nil)

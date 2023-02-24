@@ -35,59 +35,13 @@ GtPharoBehaviorDefinitionCoderElement >> addDefinitionEditorShortcutsTo: aProper
 
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
-	| theProperties toolbar |
-	modificationIndicator visibility: BlVisibility gone.
-	theProperties := BlElement new
-			layout: (BlGridLayout new columnCount: 2);
-			constraintsDo: [ :c | 
-				c horizontal matchParent.
-				c vertical fitContent ].
-	self addDefinitionEditorShortcutsTo: theProperties.
-	self editors
-		do: [ :eachEditor | 
-			eachEditor
-				definitionsDo: [ :each | 
-					each
-						when: GtBehaviorChangeEvent
-						do: [ :event | [ self updateModified ] on: Error do: [ :e |  ] ] ].
-			theProperties
-				addChildren: {self buildSectionLabel: eachEditor title.
-						eachEditor
-							aptitude: [ self editableLabelLook ];
-							margin: self buttonMargin;
-							asElement} ].
-	previewButton := BrButton new
-		aptitude: BrGlamorousButtonWithIconAptitude;
-		label: 'Accept Changes';
-		icon: BrGlamorousVectorIcons accept;
-		beSmallSize;
-		constraintsDo: [ :c | c grid horizontal span: 2 ];
-			action: [ self coderViewModel acceptChanges ];
-			margin: (BlInsets
-					top: 5
-					right: 5
-					bottom: 0
-					left: 5);
-			visibility: BlVisibility gone.
-	cancelButton := BrButton new
-			aptitude: BrGlamorousButtonWithIconAptitude;
-			label: 'Cancel';
-			icon: BrGlamorousVectorIcons cancel;
-			beSmallSize;
-			constraintsDo: [ :c | c grid horizontal span: 2 ];
-			action: [ self coderViewModel discardChanges ];
-			margin: (BlInsets
-					top: 5
-					right: 5
-					bottom: 0
-					left: 5);
-			visibility: BlVisibility gone.
-	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude.
-	toolbar
-		addItems: {previewButton.
-				cancelButton}.
-	theProperties addChild: toolbar.
-	^ theProperties
+	self coderViewModel coder behavior isObsolete ifTrue: [ ^ BlElement new ].
+	^ (self coderViewModel coder behavior isTrait
+		ifTrue: [ GtTraitUpdateForm onTrait: self coderViewModel coder behavior ]
+		ifFalse: [ GtClassUpdateForm onClass: self coderViewModel coder behavior ])
+		onElementCreated: [ :aFrame | 
+			(aFrame allChildrenBreadthFirstSelect: [ :aChild | aChild isKindOf: BrTagger ])
+				do: [ :aTagger | aTagger parent hMatchParent ] ]
 ]
 
 { #category : #'private - instance creation' }
