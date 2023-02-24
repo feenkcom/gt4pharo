@@ -1,13 +1,8 @@
 Class {
 	#name : #GtTraitUpdateForm,
-	#superclass : #GtTraitCreationForm,
+	#superclass : #GtBehaviorUpdateForm,
 	#category : #'GToolkit-Pharo-Coder-UI-Forms - Models'
 }
-
-{ #category : #accessing }
-GtTraitUpdateForm class >> isAdditionForm [
-	^ false
-]
 
 { #category : #accessing }
 GtTraitUpdateForm class >> onTrait: aTrait [
@@ -15,19 +10,29 @@ GtTraitUpdateForm class >> onTrait: aTrait [
 ]
 
 { #category : #accessing }
-GtTraitUpdateForm >> commit [
-	| category |
-	category := self commitPackage categoryName.
-	self newClassName asClass
-		category: category;
-		slots: slots;
-		traitComposition: self traitComposition;
-		beTrait
+GtTraitUpdateForm >> classVarsDescription [
+	^ nil
 ]
 
 { #category : #accessing }
-GtTraitUpdateForm >> nameDescription [
-	^ nil
+GtTraitUpdateForm >> commit [
+	| category aClass |
+	category := self commitPackage categoryName.
+	aClass := newClassName asClass.
+	aClass classSide slots
+		do: [ :aSlot | 
+			(RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide)
+				execute ].
+	aClass := Smalltalk classInstaller
+			make: [ :builder | 
+				builder
+					name: newClassName;
+					category: category;
+					slots: slots;
+					traitComposition: self traitComposition;
+					beTrait ].
+	self installClassSlotsOn: aClass.
+	^ aClass
 ]
 
 { #category : #accessing }
@@ -38,5 +43,16 @@ GtTraitUpdateForm >> onTrait: aTrait [
 	self
 		packageAndTagName: (GtPackageAndTagName new
 				packageName: aTrait package name;
-				tagName: (aTrait package classTagForClass: aTrait) name)
+				tagName: (aTrait package classTagForClass: aTrait) name).
+	self classSlots: (aTrait classSide slots collect: #name)
+]
+
+{ #category : #accessing }
+GtTraitUpdateForm >> poolsDescription [
+	^ nil
+]
+
+{ #category : #accessing }
+GtTraitUpdateForm >> superclassDescription [
+	^ nil
 ]
