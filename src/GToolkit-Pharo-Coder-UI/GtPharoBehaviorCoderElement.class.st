@@ -210,7 +210,10 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 			icon: BrGlamorousVectorIcons remove;
 			label: 'Remove';
 			changeAction: [ self removeClass ];
-			changeStencil: [ self buildRemoveClassLabel ].
+			changeStencil: [ GtPharoRemoveClassPreviewStencil new
+								classToRemove: classCoder theClass ;
+								anElement: self;
+								create ].
 
 	aContainer addChild: aClassNameEditor.
 	aContainer addChild: removeClassButton.
@@ -256,23 +259,6 @@ GtPharoBehaviorCoderElement >> buildDefinitionElement [
 	^ GtPharoBehaviorDefinitionCoderElement new
 		coderViewModel: behaviorCoderViewModel definitionCoderUIModel;
 		margin: (BlInsets top: 5 left: 5)
-]
-
-{ #category : #'building ui' }
-GtPharoBehaviorCoderElement >> buildRemoveClassLabel [
-	| labelText classCoder |
-	
-	classCoder := behaviorCoderViewModel coder.
-	labelText := (classCoder theClass isReferenced
-		ifTrue: [ '<1s> is referenced. Remove anyway?' ]
-		ifFalse: [ classCoder theClass subclasses isEmpty
-				ifTrue: [ 'Remove class <1s>' ]
-				ifFalse: [ '<1s> has subclasses. Remove anyway?' ] ])
-		expandMacrosWith: classCoder theClass name.
-	^ BrLabel new
-		margin: (BlInsets all: 10);
-		aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
-		text: labelText asRopedText
 ]
 
 { #category : #accessing }
