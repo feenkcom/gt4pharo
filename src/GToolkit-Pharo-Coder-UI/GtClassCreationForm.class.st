@@ -1,6 +1,6 @@
 Class {
 	#name : #GtClassCreationForm,
-	#superclass : #GtTraitCreationForm,
+	#superclass : #GtBehaviorCreationForm,
 	#instVars : [
 		'superclassName',
 		'classVars',
@@ -12,6 +12,11 @@ Class {
 { #category : #accessing }
 GtClassCreationForm class >> componentName [
 	^ 'Class'
+]
+
+{ #category : #accessing }
+GtClassCreationForm class >> isAdditionForm [
+	^ true
 ]
 
 { #category : #accessing }
@@ -45,8 +50,11 @@ GtClassCreationForm >> classVarsDescription [
 
 { #category : #accessing }
 GtClassCreationForm >> commit [
+	| aClass |
 	Smalltalk compiler evaluate: self definitionString.
-	^ Smalltalk classNamed: self rawClassName
+	aClass := Smalltalk classNamed: self rawClassName.
+	self installClassSlotsOn: aClass.
+	^ aClass
 ]
 
 { #category : #accessing }
