@@ -14,10 +14,13 @@ GtClassUpdateForm >> commit [
 	| aClass |
 	aClass := newClassName asClass.
 	aClass classSide slots
-		do: [ :aSlot | (RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide) execute ].
-	aClass := super commit.
-
+		do: [ :aSlot | 
+			(RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide)
+				execute ].
+	Smalltalk compiler evaluate: self definitionString.
+	aClass := Smalltalk classNamed: self rawClassName.
 	self installClassSlotsOn: aClass.
+
 	^ aClass
 ]
 
