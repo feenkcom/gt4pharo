@@ -28,7 +28,8 @@ GtClassUpdateForm >> commit [
 GtClassUpdateForm >> onClass: aClass [
 	self newClassName: aClass name.
 	self superclassName: aClass superclass name.
-	self slots: (aClass slots collect: #name).
+	self
+		slots: ((aClass slots select: [ :aSlot | aSlot definingClass = aClass ]) collect: #name).
 	self traits: (aClass traits collect: #name).
 	self
 		packageAndTagName: (GtPackageAndTagName new
@@ -36,5 +37,5 @@ GtClassUpdateForm >> onClass: aClass [
 				tagName: (aClass package classTagForClass: aClass) name).
 	self pools: (aClass sharedPools collect: #name).
 	self classVars: (aClass classVarNames collect: #asString).
-	self classSlots: (aClass classSide slots collect: #name).
+	self classSlots: (aClass classSide slots collect: #name)
 ]
