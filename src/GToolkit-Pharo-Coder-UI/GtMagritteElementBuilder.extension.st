@@ -27,6 +27,8 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 		constraintsDo: [ :c | 
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
+		when: BlFocusInEvent do: [ :anEvent | packageEditor selecter all select ];
+		when: BlFocusOutEvent do: [ :anEvent | packageEditor deselecter all deselect ];
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				sink: AsyncPeekSink new;
@@ -76,6 +78,8 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 		constraintsDo: [ :c | 
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
+		when: BlFocusInEvent do: [ :anEvent | tagEditor selecter all select ];
+		when: BlFocusOutEvent do: [ :anEvent | tagEditor deselecter all deselect ];
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				sink: AsyncPeekSink new;
