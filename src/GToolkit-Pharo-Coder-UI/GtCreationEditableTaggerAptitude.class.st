@@ -98,6 +98,14 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 { #category : #accessing }
 GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
 	^ (super newTagElementFor: aTaggerTag)
+		when: BrEditorAcceptWish
+			do: [ :aWish | 
+				aWish text asString
+					ifEmpty: [ self requestRemoveTag: aTaggerTag from: aWish currentTarget ]
+					ifNotEmpty: [ self
+							requestRenameTag: aTaggerTag
+							to: aWish text asString
+							from: aWish currentTarget ] ];
 		addShortcut: (BlShortcutWithAction new
 				combination: BlKeyCombination shiftTab;
 				action: [ :anEvent | 
