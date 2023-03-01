@@ -15,6 +15,12 @@ GtCreationEditableTaggerAptitude >> addTagCreatorElement [
 		withSeparatorAt: tagElements size + 1
 ]
 
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> margin: aBlInsets [
+	margin := aBlInsets.
+	tags replaceChild: addButton with: (addButton := self newAddTagButton)
+]
+
 { #category : #'private - instance creation' }
 GtCreationEditableTaggerAptitude >> newAddTagButton [
 	^ addButton := BrButton new beFocusable
