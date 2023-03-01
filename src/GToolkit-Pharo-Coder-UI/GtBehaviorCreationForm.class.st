@@ -40,23 +40,6 @@ GtBehaviorCreationForm >> classSlotsDescription [
 		classes: {String};
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
-		blocShortcuts: [ {BlShortcutWithAction new
-					name: 'Inspect slot';
-					description: 'Inspect the slot indicated by the editor';
-					combination: BlKeyCombination primaryG;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnObject: (self newClassName asString asClass classSide
-									slotNamed: anEvent target text asString) ].
-				BlShortcutWithAction new
-					name: 'Browse slot references';
-					description: 'Browses references to the slot indicated by the editor';
-					combination: BlKeyCombination primaryN;
-					action: [ :anEvent | 
-						anEvent currentTarget phlow
-							spawnObject: (GtSearchClassSlotReferenceFilter
-									forClassAndSubclasses: self newClassName asString asClass classSide
-									andVariable: anEvent target text asString) ]} ];
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
 ]
@@ -141,22 +124,6 @@ GtBehaviorCreationForm >> slotsDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
-		blocShortcuts: [ {BlShortcutWithAction new
-					name: 'Inspect slot';
-					description: 'Inspect the slot indicated by the editor';
-					combination: BlKeyCombination primaryG;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnObject: (self newClassName asString asClass slotNamed: anEvent target text asString) ].
-				BlShortcutWithAction new
-					name: 'Browse slot references';
-					description: 'Browses references to the slot indicated by the editor';
-					combination: BlKeyCombination primaryN;
-					action: [ :anEvent | 
-						anEvent currentTarget phlow
-							spawnObject: (GtSearchInstanceSlotReferenceFilter
-									forClassAndSubclasses: self newClassName asString asClass
-									andVariable: anEvent target text asString) ]} ];
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
 ]
