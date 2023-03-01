@@ -119,8 +119,8 @@ GtMagritteElementBuilder >> visitGtPackageAndTagDescription: aDescription [
 	packageEditor := self newPackageNameWidget: aDescription.
 	tagEditor := self newTagNameWidget: aDescription.
 
-	self addShortcutsTo: packageEditor.
-	self addShortcutsTo: tagEditor.
+	self addShortcutsTo: packageEditor using: aDescription.
+	self addShortcutsTo: tagEditor using: aDescription.
 	
 	aContainer
 		addChild: packageEditor as: #package;
