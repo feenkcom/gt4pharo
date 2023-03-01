@@ -23,7 +23,7 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 		vFitContent;
 		hFitContentLimited;
-		margin: (BlInsets bottom: 4);
+		margin: (BlInsets top: 2 bottom: 4);
 		constraintsDo: [ :c | 
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
@@ -74,7 +74,7 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 		vFitContent;
 		hFitContentLimited;
-		margin: (BlInsets bottom: 4);
+		margin: (BlInsets top: 2 bottom: 4);
 		constraintsDo: [ :c | 
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
