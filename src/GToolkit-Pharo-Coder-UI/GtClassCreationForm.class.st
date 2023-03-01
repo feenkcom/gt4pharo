@@ -145,6 +145,20 @@ GtClassCreationForm >> superclassDescription [
 		accessor: #superclassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		blocShortcuts: [ {BlShortcutWithAction new
+					name: 'Browse class';
+					description: 'Browses the class indicated by the editor';
+					combination: BlKeyCombination primaryB;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnTool: (GtClassCoderTool forClass: anEvent target text asString asClass) ].
+				BlShortcutWithAction new
+					name: 'Browse class references';
+					description: 'Browses references to the class indicated by the editor';
+					combination: BlKeyCombination primaryN;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: anEvent target text asString asClass gtReferences ]} ];
 		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
