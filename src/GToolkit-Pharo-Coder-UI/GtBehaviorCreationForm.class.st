@@ -156,5 +156,19 @@ GtBehaviorCreationForm >> traitsDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtClassesCompletionStrategy new
-				andContextMenuBlock: nil)
+				andContextMenuBlock: nil);
+		blocShortcuts: [ {BlShortcutWithAction new
+					name: 'Browse trait';
+					description: 'Browses the trait indicated by the editor';
+					combination: BlKeyCombination primaryB;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnTool: (GtClassCoderTool forClass: anEvent target text asString asClass) ].
+				BlShortcutWithAction new
+					name: 'Browse trait references';
+					description: 'Browses references to the trait indicated by the editor';
+					combination: BlKeyCombination primaryN;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: anEvent target text asString asClass gtReferences ]} ]
 ]
