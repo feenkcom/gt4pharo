@@ -179,7 +179,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 ]
 
 { #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPackageTagAndClassSelection [
+GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedPackageTagAndClassSelection [
 	<gtExample>
 	| anElement |
 	anElement := self elementNavigationModelInSpace.
@@ -193,15 +193,15 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPa
 ]
 
 { #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUnategorizedPackageTagAndClassSelection_BeforeInSpace [
+GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedPackageTagAndClassSelection_BeforeInSpace [
 	<gtExample>
 	| anElement |
 	anElement := self elementNavigationModel.
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
 	self putInSpace: anElement.
 	self 
-		assertSelectionOfPackage: self simplePackage
-		tag: nil  
+		assertSelectionOfPackage: nil
+		tag: nil
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
 	^ anElement
