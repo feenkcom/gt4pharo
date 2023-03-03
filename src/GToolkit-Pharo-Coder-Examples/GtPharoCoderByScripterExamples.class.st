@@ -122,10 +122,16 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 ]
 
 { #category : #'examples - context menu' }
-GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuToTheRight [
+GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x300Space [
 	<gtExample>
 	| aScripter |
 	aScripter := self coderWithAddMethod.
+	
+	aScripter do
+		label: 'Set space extent';
+		block: [ :aSpace | aSpace extent: 800 @ 300 ];
+		onSpace;
+		play.
 
 	aScripter click
 		label: 'Maximize Coder';
@@ -142,13 +148,56 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuToTheRight [
 		play.
 
 	aScripter assert
-		label: 'Assert context menu width';
-		value: [ :aContentElement | aContentElement width ]
+		label: 'Assert context menu extent';
+		value: [ :aContentElement | aContentElement extent ]
 			equals: [ :aContentElement | 
 				| aContextMenuQuery |
 				aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
 				self assert: aContextMenuQuery result size equals: 1.
-				aContextMenuQuery result first width ];
+				aContextMenuQuery result first extent ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Space [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderWithAddMethod.
+	
+	aScripter do
+		label: 'Set space extent';
+		block: [ :aSpace | aSpace extent: 800@600 ];
+		onSpace;
+		play.
+
+	aScripter click
+		label: 'Maximize Coder';
+		// GtPagerMaximizeButtonElementId;
+		play.
+
+	aScripter secondaryClick
+		label: 'Display context menu';
+		onSpaceRoot;
+		// GtPharoStreamingMethodsCoderElement;
+		// (GtSourceCoderId indexed: 1);
+		// GtSourceCoderEditorId;
+		onChildAt: 1;
+		play.
+
+	aScripter assert
+		label: 'Assert context menu extent';
+		value: [ :aContentElement | aContentElement extent ]
+			equals: [ :aContentElement | 
+				| aContextMenuQuery |
+				aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
+				self assert: aContextMenuQuery result size equals: 1.
+				aContextMenuQuery result first extent ];
 		onSpaceRoot;
 		// BrAnchoredOuterContainer;
 		// BrAnchoredElement;
