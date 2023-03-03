@@ -201,7 +201,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedP
 	self putInSpace: anElement.
 	self 
 		assertSelectionOfPackage: nil
-		tag: nil
+		tag: self uncategorizedPackageTag
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
 	^ anElement
