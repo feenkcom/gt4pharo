@@ -23,7 +23,7 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 		vFitContent;
 		hFitContentLimited;
-		margin: (BlInsets bottom: 4);
+		margin: (BlInsets top: 2 bottom: 4);
 		constraintsDo: [ :c | 
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
@@ -74,7 +74,7 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 		vFitContent;
 		hFitContentLimited;
-		margin: (BlInsets bottom: 4);
+		margin: (BlInsets top: 2 bottom: 4);
 		constraintsDo: [ :c | 
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
@@ -119,8 +119,8 @@ GtMagritteElementBuilder >> visitGtPackageAndTagDescription: aDescription [
 	packageEditor := self newPackageNameWidget: aDescription.
 	tagEditor := self newTagNameWidget: aDescription.
 
-	self addShortcutsTo: packageEditor.
-	self addShortcutsTo: tagEditor.
+	self addShortcutsTo: packageEditor using: aDescription.
+	self addShortcutsTo: tagEditor using: aDescription.
 	
 	aContainer
 		addChild: packageEditor as: #package;

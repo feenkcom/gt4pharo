@@ -39,7 +39,24 @@ GtBehaviorUpdateForm >> classSlotsDescription [
 	^ super classSlotsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ])
+				andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ]);
+		blocShortcuts: [ {BlShortcutWithAction new
+					name: 'Inspect slot';
+					description: 'Inspect the slot indicated by the editor';
+					combination: BlKeyCombination primaryG;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: (self newClassName asString asClass classSide
+									slotNamed: anEvent target text asString) ].
+				BlShortcutWithAction new
+					name: 'Browse slot references';
+					description: 'Browses references to the slot indicated by the editor';
+					combination: BlKeyCombination primaryN;
+					action: [ :anEvent | 
+						anEvent currentTarget phlow
+							spawnObject: (GtSearchClassSlotReferenceFilter
+									forClassAndSubclasses: self newClassName asString asClass classSide
+									andVariable: anEvent target text asString) ]} ]
 ]
 
 { #category : #accessing }
@@ -48,7 +65,22 @@ GtBehaviorUpdateForm >> classVarsDescription [
 	^ super classVarsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement | self createClassVarsContextMenuContentFor: aVariable editor: self ])
+				andContextMenuBlock: [ :aVariable :anElement | self createClassVarsContextMenuContentFor: aVariable editor: self ]);
+		blocShortcuts: [ {BlShortcutWithAction new
+					name: 'Inspect variable';
+					description: 'Inspect the variable indicated by the editor';
+					combination: BlKeyCombination primaryG;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: (self newClassName asString asClass classVarNamed: anEvent target text asString) ].
+				BlShortcutWithAction new
+					name: 'Browse variable references';
+					description: 'Browses references to the variable indicated by the editor';
+					combination: BlKeyCombination primaryN;
+					action: [ :anEvent | 
+						anEvent currentTarget phlow
+							spawnObject: (GtSearchReferencesFilter
+									literal: (self newClassName asString asClass bindingOf: anEvent target text asString)) ]} ]
 ]
 
 { #category : #accessing }
@@ -343,7 +375,23 @@ GtBehaviorUpdateForm >> slotsDescription [
 	^ super slotsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ])
+				andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ]);
+		blocShortcuts: [ {BlShortcutWithAction new
+					name: 'Inspect slot';
+					description: 'Inspect the slot indicated by the editor';
+					combination: BlKeyCombination primaryG;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: (self newClassName asString asClass slotNamed: anEvent target text asString) ].
+				BlShortcutWithAction new
+					name: 'Browse slot references';
+					description: 'Browses references to the slot indicated by the editor';
+					combination: BlKeyCombination primaryN;
+					action: [ :anEvent | 
+						anEvent currentTarget phlow
+							spawnObject: (GtSearchInstanceSlotReferenceFilter
+									forClassAndSubclasses: self newClassName asString asClass
+									andVariable: anEvent target text asString) ]} ]
 ]
 
 { #category : #accessing }
