@@ -9,7 +9,7 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #accessing }
+{ #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coder [
 	<gtExample>
 	^ self scripterForBlock: [ GtCoder forClass: GtPharoDummyClass ]
@@ -18,9 +18,15 @@ GtPharoCoderByScripterExamples >> coder [
 { #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coderInPager [
 	<gtExample>
+	^ self coderInPager: [ GtCoder forClass: GtPharoDummyClass ]
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> coderInPager: aCoderOrBlock [
+	<gtExample>
 	| aScripter |
 	aScripter := self
-			scripterForBlock: [ GtPager createWrappedOn: (GtCoder forClass: GtPharoDummyClass) ].
+			scripterForBlock: [ GtPager createWrappedOn: aCoderOrBlock value ].
 
 	aScripter assert
 		label: 'Assert one page';
@@ -91,6 +97,12 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 	^ aScripter
 ]
 
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> coderWithAddMethod [
+	<gtExample>
+	^ self coderInPager: [ GtCoder forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
+]
+
 { #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 	<gtExample>
@@ -105,6 +117,43 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 				// GtCoderToolbarElement;
 				// GtCoderClassHierarchyButtonId;
 				play ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuToTheRight [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderWithAddMethod.
+
+	aScripter click
+		label: 'Maximize Coder';
+		// GtPagerMaximizeButtonElementId;
+		play.
+
+	aScripter secondaryClick
+		label: 'Display context menu';
+		onSpaceRoot;
+		// GtPharoStreamingMethodsCoderElement;
+		// (GtSourceCoderId indexed: 1);
+		// GtSourceCoderEditorId;
+		onChildAt: 1;
+		play.
+
+	aScripter assert
+		label: 'Assert context menu width';
+		value: [ :aContentElement | aContentElement width ]
+			equals: [ :aContentElement | 
+				| aContextMenuQuery |
+				aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
+				self assert: aContextMenuQuery result size equals: 1.
+				aContextMenuQuery result first width ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play.
 
 	^ aScripter
 ]
