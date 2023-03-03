@@ -6,7 +6,9 @@ Class {
 	#instVars : [
 		'announcer',
 		'packages',
-		'coder'
+		'coder',
+		'selectedPackage',
+		'selectedTag'
 	],
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
@@ -250,17 +252,19 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
-	| aCoder aTag |
+	| aCoder |
 	(self showPackage: aClass package) ifFalse: [ ^ self ].
 	(coder isForClass and: [ coder theClass = aClass ]) ifTrue: [ ^ self ].
 	aCoder := GtPharoBehaviorCoder forClass: aClass.
 	self assertCoder: aCoder.
+	selectedPackage := selectedPackage ifNil: [ aClass package ].
 	self coder: aCoder.
-	aTag := aClass package classTagForClass: aClass.
+	selectedPackage
+		ifNotNil: [ selectedTag := selectedTag ifNil: [ selectedPackage classTagForClass: aClass ] ].
 	self
 		notifyClassSelected: aClass
-		package: aClass package
-		tag: (aTag isRoot ifTrue: [ nil ] ifFalse: [ aTag ])
+		package: selectedPackage
+		tag: (selectedTag isRoot ifTrue: [ nil ] ifFalse: [ selectedTag ])
 ]
 
 { #category : #'api - selection' }
@@ -269,24 +273,30 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 		ifTrue: [ (coder isForPackage and: [ aCoder package = coder package ])
 				ifTrue: [ ^ self ].
 			self assertCoder: aCoder.
+			selectedPackage := aCoder package.
+			selectedTag := nil.
 			self coder: aCoder.
-			^ self notifyPackageSelected: coder package ].
+			^ self notifyPackageSelected: selectedPackage ].
 	aCoder isForPackageTag
 		ifTrue:
 			[ (coder isForPackageTag and: [ aCoder packageTag = coder packageTag ])
 				ifTrue: [ ^ self ].
 			self assertCoder: aCoder.
+			selectedPackage := aCoder package.
+			selectedTag := aCoder packageTag.
 			self coder: aCoder.
-			^ self notifyTagSelected: coder packageTag package: coder package ].
+			^ self notifyTagSelected: selectedTag package: selectedPackage ].
 	aCoder isForClass
 		ifTrue: [ (coder isForClass and: [ aCoder theClass = coder theClass ])
 				ifTrue: [ ^ self ].
 			self assertCoder: aCoder.
 			self coder: aCoder.
+			selectedPackage := selectedPackage ifNil: [coder theClass package].
+			selectedTag := selectedTag ifNil: [coder packageTag].
 			^ self
 				notifyClassSelected: coder theClass
-				package: coder package
-				tag: coder packageTag ].
+				package: selectedPackage
+				tag: selectedTag ].
 	self assertCoder: aCoder.
 	self coder: aCoder.
 	self notifyCoderSelected
@@ -306,13 +316,13 @@ GtCoderNavigationPackagesTagsClassesModel >> selectMethodProtocol: aMethodProtoc
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectPackage: anRPackage [
 	| aCoder |
-	(self showPackage: anRPackage)
-		ifFalse: [ ^ self ].
-	(coder isForPackage and: [ coder package = anRPackage ])
-		ifTrue: [ ^ self ].
-	aCoder := (coder isForPackageTag and: [ coder package = anRPackage ])
-		ifTrue: [ coder packageCoder ]
-		ifFalse: [ GtPharoPackageCoder forPackage: anRPackage ].
+	(self showPackage: anRPackage) ifFalse: [ ^ self ].
+	(coder isForPackage and: [ selectedPackage = anRPackage ]) ifTrue: [ ^ self ].
+	selectedPackage := anRPackage.
+	selectedTag := nil.
+	aCoder := coder isForPackageTag
+			ifTrue: [ coder packageCoder ]
+			ifFalse: [ GtPharoPackageCoder forPackage: anRPackage ].
 	self assertCoder: aCoder.
 	self coder: aCoder.
 	self notifyPackageSelected: anRPackage
@@ -321,16 +331,15 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackage: anRPackage [
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 	| packageCoder aCoder |
-	(self showPackage: aRPackageTag package)
-		ifFalse: [ ^ self ].
+	(self showPackage: aRPackageTag package) ifFalse: [ ^ self ].
 	(coder isForPackageTag
-		and: [ coder package = aRPackageTag package
-				and: [ coder packageTag = aRPackageTag ] ])
+		and: [ selectedPackage = aRPackageTag package and: [ selectedTag = aRPackageTag ] ])
 		ifTrue: [ ^ self ].
+	selectedTag := aRPackageTag.
 	packageCoder := ((coder isForPackage
-		and: [ coder package = aRPackageTag package ])
-		ifTrue: [ coder ])
-		ifNil: [ GtPharoPackageCoder forPackage: aRPackageTag package ].
+			and: [ selectedPackage = aRPackageTag package ]) ifTrue: [ coder ])
+			ifNil: [ selectedPackage := aRPackageTag package.
+				GtPharoPackageCoder forPackage: aRPackageTag package ].
 	aCoder := packageCoder packageTagCoderFor: aRPackageTag.
 	self assertCoder: aCoder.
 	self coder: aCoder.
@@ -340,25 +349,6 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 { #category : #accessing }
 GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
 	self notifySlotSelected: aSlot source: aSource
-]
-
-{ #category : #'api - selection' }
-GtCoderNavigationPackagesTagsClassesModel >> selectTag: anRPackageTag [
-	| aCoder |
-	(self showPackage: anRPackageTag package)
-		ifFalse: [ ^ self ].
-
-	(coder isForPackageTag and: [ coder packageTag = anRPackageTag ])
-		ifTrue: [ ^ self ].
-
-	aCoder := ((coder isForPackage
-		and: [ coder package = anRPackageTag package ])
-			ifTrue: [ coder packageTagCoderFor: anRPackageTag ])
-		ifNil: [ GtPharoPackageTagCoder forPackageTag: anRPackageTag ].
-
-	self assertCoder: aCoder.
-	self coder: aCoder.
-	self notifyTagSelected: anRPackageTag package: anRPackageTag package
 ]
 
 { #category : #'api - accessing' }
@@ -372,10 +362,10 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
 	self selectedClass ifNotNil: aBlock
 ]
 
-{ #category : #'api - accessing' }
+{ #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
 	<return: #RPackage>
-	^ coder package
+	^ selectedPackage
 ]
 
 { #category : #'api - accessing' }
@@ -386,7 +376,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
 	<return: #RPackageTag>
-	^ coder packageTag
+	^ selectedTag
 ]
 
 { #category : #'api - accessing' }
