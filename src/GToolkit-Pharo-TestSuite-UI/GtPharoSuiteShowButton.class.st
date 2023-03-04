@@ -13,7 +13,7 @@ GtPharoSuiteShowButton >> initialize [
 	self initializeAsyncPromise.
 	self icon: BrGlamorousVectorIcons play.
 	self addAptitude: BrGlamorousButtonWithIconAptitude.
-	self addAptitude: (BrGlamorousWithDropdownAptitude
+	self addAptitude: ((BrGlamorousWithDropdownAptitude
 			 handle: [ BlElement new size: self extent ]
 			 content: [ "as tooltips/dropdowns attach to the space root element, phlow spawn will end up there and be swallowed"
 				 GtPharoSuiteOverviewElement new
@@ -22,7 +22,8 @@ GtPharoSuiteShowButton >> initialize [
 									  object: anEvent object;
 									  sourceElement: anEvent target) ];
 					 suiteViewModel: self suiteViewModel;
-					 margin: (BlInsets all: 10) ])
+					 margin: (BlInsets all: 10) ]) 
+					 	beNotResizable)
 ]
 
 { #category : #initialization }

@@ -133,12 +133,14 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
 		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
 		itemId: [ :eachCoderViewModel | eachCoderViewModel coder id ];
-		itemDataBinder: [ :aCoderElement :aCoderViewModel | 
+		itemDataBinder: [ :aCoderElement :aCoderViewModel :anItemIndex | 
 			BlFrameTelemetry
 				time: [ 'Set {1} as a view model of {2}'
 						format: {aCoderViewModel class name.
 								aCoderElement class name} ]
-				during: [ aCoderElement textualCoderViewModel: aCoderViewModel ] ];
+				during: [ aCoderElement 
+					id: (GtSourceCoderId indexed: anItemIndex);
+					textualCoderViewModel: aCoderViewModel ] ];
 		itemsProvider: listItemsProvider.
 
 	self addChild: list.
