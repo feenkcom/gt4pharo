@@ -1,6 +1,8 @@
 Class {
 	#name : #GtBaselineCreationFormExample,
 	#superclass : #GtCreationFormExample,
+	#traits : 'TBlDevScripterExamples',
+	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
@@ -18,7 +20,7 @@ GtBaselineCreationFormExample >> formClass [
 GtBaselineCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
-	scripter := BlScripter new element: self simpleForm.
+	scripter := self scripterWithModel: [ self simpleForm ].
 
 	scripter check
 		label: 'Check save button is disabled';
@@ -31,7 +33,7 @@ GtBaselineCreationFormExample >> scripterOnSimpleForm [
 { #category : #accessing }
 GtBaselineCreationFormExample >> simpleForm [
 	<gtExample>
-	^ self formClass new asElement
+	^ self formClass new
 ]
 
 { #category : #accessing }
@@ -67,7 +69,7 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineFilled [
 
 	scripter click
 		label: 'Select baseline editor';
-		id: #field;
+		// (GtMagritteFieldElementId new description: scripter model baselineDescription);
 		play.
 
 	scripter type
@@ -76,7 +78,7 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineFilled [
 		play.
 		
 	"we only have one field here, so we can use anyOne"
-	scripter check
+	scripter assert
 		label: 'Check that baseline is set';
 		satisfies: [ :aFrame | 
 			(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue

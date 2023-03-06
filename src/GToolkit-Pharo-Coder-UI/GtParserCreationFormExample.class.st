@@ -1,6 +1,8 @@
 Class {
 	#name : #GtParserCreationFormExample,
 	#superclass : #GtCreationFormExample,
+	#traits : 'TBlDevScripterExamples',
+	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
@@ -13,9 +15,9 @@ GtParserCreationFormExample >> formClass [
 GtParserCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
-	scripter := BlScripter new element: self simpleForm.
+	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter check
+	scripter assert
 		label: 'Check save button is disabled';
 		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ];
 		play.
@@ -26,5 +28,5 @@ GtParserCreationFormExample >> scripterOnSimpleForm [
 { #category : #accessing }
 GtParserCreationFormExample >> simpleForm [
 	<gtExample>
-	^ self formClass new asElement
+	^ self formClass new
 ]
