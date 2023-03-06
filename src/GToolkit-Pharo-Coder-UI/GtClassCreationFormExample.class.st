@@ -30,11 +30,22 @@ GtClassCreationFormExample >> scripterWithClassNameFilled [
 	<gtExample>
 	| scripter |
 	scripter := self scripterOnSimpleForm.
-
+	
+	scripter requestFocus
+		label: 'Focus name editor';
+		// (GtMagritteFieldElementId new description: scripter model nameDescription);
+		play.
+	
 	scripter type
 		label: 'Fill class name';
 		text: 'ExampleClass';
-		id: (GtMagritteFieldElementId new description: (scripter model nameDescription)) asSymbol;
+		// (GtMagritteFieldElementId new description: scripter model nameDescription);
+		play.
+
+	scripter assert
+		label: 'Assert class name';
+		value: [ :anEditor | anEditor text asString ] equals: [ 'ExampleClass' ];
+		// (GtMagritteFieldElementId new description: scripter model nameDescription);
 		play.
 
 	^ scripter
