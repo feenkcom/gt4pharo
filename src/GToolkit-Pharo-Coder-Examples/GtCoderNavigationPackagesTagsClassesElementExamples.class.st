@@ -78,6 +78,37 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModelInS
 ]
 
 { #category : #'examples - class selection' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPackageTagClassSelection [
+	<gtExample>
+	| anElement |
+	anElement := self elementWithExtensionPackageTagSelection.
+	anElement navigationModel selectClass: ByteString.
+	self
+		assertSelectionOfPackage: nil
+		tag: self extensionTag
+		class: ByteString
+		inElement: anElement.
+	"Should only contain the extension methods protocol"
+	"self assert: anElement methodProtocolsList viewModel entityCount = 1."
+	^ anElement
+]
+
+{ #category : #'examples - class selection' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPackageTagSelection [
+	<gtExample>
+	| anElement tag |
+	anElement := self elementNavigationModelInSpace.
+	tag := self extensionTag.
+	anElement navigationModel selectPackageTag: tag.
+	self
+		assertSelectionOfPackage: nil
+		tag: tag
+		class: nil
+		inElement: anElement.
+	^ anElement
+]
+
+{ #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection [
 	<gtExample>
 	| anElement |
@@ -207,6 +238,12 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedP
 	^ anElement
 ]
 
+{ #category : #'examples - system items' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> extensionTag [
+	<gtExample>
+	^ GtCoderPackageExtensionTag forPackage: self packageWithTagsAndExtensions.
+]
+
 { #category : #accessing }
 GtCoderNavigationPackagesTagsClassesElementExamples >> numberOfSubscriptions [
 	<gtExample>
@@ -224,6 +261,12 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> numberOfSubscriptions [
 GtCoderNavigationPackagesTagsClassesElementExamples >> packageTag [
 	<gtExample>
 	^ self packageWithTagsAndWithoutExtensions classTagNamed: 'Navigation'
+]
+
+{ #category : #'examples - system items' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithTagsAndExtensions [
+	<gtExample>
+	^ 'GToolkit-Pharo-Coder-AddOns' asPackage 
 ]
 
 { #category : #'examples - system items' }
