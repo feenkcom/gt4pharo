@@ -18,7 +18,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclass [
 		element: anElement.
 
 	aScripter assert
-		id: GtSourceCoderId index: 1;
+		// (GtSourceCoderId indexed: 1);
 		exists;
 		play.
 
@@ -33,25 +33,25 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckOverridden [
 	aScripter := self forSuperclass.
 
 	aScripter assert
-		id: GtSourceCoderId index: 1;
+		// (GtSourceCoderId indexed: 1);
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
 		play.
 
 	aScripter assert
-		id: GtSourceCoderId index: 2;
+		// (GtSourceCoderId indexed: 2);
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
 		play.
 
 	aScripter assert
-		id: GtSourceCoderId index: 3;
+		// (GtSourceCoderId indexed: 3);
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
 		play.
 
 	aScripter assert
-		id: GtSourceCoderId index: 4;
+		// (GtSourceCoderId indexed: 4);
 		id: GtMethodCoderOverridingOverriddenId;
 		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
 		play.
@@ -67,7 +67,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickFirstOverridden
 	aScripter := self forSuperclassCheckOverridden.
 
 	aScripter click
-		id: GtSourceCoderId index: 1;
+		// (GtSourceCoderId indexed: 1);
 		id: GtMethodCoderOverridingOverriddenId;
 		play.
 
@@ -88,7 +88,7 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickSecondOverridde
 	aScripter := self forSuperclassCheckOverridden.
 
 	aScripter click
-		id: GtSourceCoderId index: 4;
+		// (GtSourceCoderId indexed: 4);
 		id: GtMethodCoderOverridingOverriddenId;
 		play.
 
