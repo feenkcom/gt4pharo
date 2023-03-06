@@ -1,6 +1,8 @@
 Class {
 	#name : #GtClassCreationFormExample,
 	#superclass : #GtCreationFormExample,
+	#traits : 'TBlDevScripterExamples',
+	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
@@ -13,7 +15,7 @@ GtClassCreationFormExample >> formClass [
 GtClassCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
-	scripter := BlScripter new element: self simpleForm.
+	scripter := self scripterWithModel: [ self simpleForm ].
 
 	scripter check
 		label: 'Check save button is disabled';
@@ -24,7 +26,33 @@ GtClassCreationFormExample >> scripterOnSimpleForm [
 ]
 
 { #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassNameFilled [
+	<gtExample>
+	| scripter |
+	scripter := self scripterOnSimpleForm.
+	
+	scripter requestFocus
+		label: 'Focus name editor';
+		// (GtMagritteFieldElementId new description: scripter model nameDescription);
+		play.
+	
+	scripter type
+		label: 'Fill class name';
+		text: 'ExampleClass';
+		// (GtMagritteFieldElementId new description: scripter model nameDescription);
+		play.
+
+	scripter assert
+		label: 'Assert class name';
+		value: [ :anEditor | anEditor text asString ] equals: [ 'ExampleClass' ];
+		// (GtMagritteFieldElementId new description: scripter model nameDescription);
+		play.
+
+	^ scripter
+]
+
+{ #category : #accessing }
 GtClassCreationFormExample >> simpleForm [
 	<gtExample>
-	^ self formClass new asElement
+	^ self formClass new
 ]
