@@ -9,6 +9,81 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayPharoMethodContextMenuExtentIn800x600Space.
+
+	aScripter assert
+		onSpaceRoot;
+		// GtCoderContextMenuContent;
+		exists;
+		play.
+
+	aScripter shortcut
+		combination: BlKeyCombination escape;
+		play.
+
+	aScripter assert
+		onSpaceRoot;
+		// GtCoderContextMenuContent;
+		notExists;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayClassSidebarContextMenu.
+
+	aScripter assert
+		onSpaceRoot;
+		// GtCoderNavigationContextMenuContent;
+		exists;
+		play.
+
+	aScripter shortcut
+		combination: BlKeyCombination escape;
+		play.
+
+	aScripter assert
+		onSpaceRoot;
+		// GtCoderNavigationContextMenuContent;
+		notExists;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey_firstClickInsideOfMethodCoder [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayClassSidebarContextMenu_firstClickInsideOfMethodCoder.
+
+	aScripter assert
+		onSpaceRoot;
+		// GtCoderNavigationContextMenuContent;
+		exists;
+		play.
+
+	aScripter shortcut
+		combination: BlKeyCombination escape;
+		play.
+
+	aScripter assert
+		onSpaceRoot;
+		// GtCoderNavigationContextMenuContent;
+		notExists;
+		play.
+
+	^ aScripter
+]
+
 { #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coder [
 	<gtExample>
@@ -122,6 +197,69 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 ]
 
 { #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayMaximizedCoderWithMethodExpanded.
+	self displayClassSidebarContextMenu: aScripter.
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu: aScripter [
+	<gtExample>
+	aScripter secondaryClick
+		label: 'Display context menu';
+		// GtCoderNavigationClassesHierarchyTreeElement;
+		// (GtCoderNavigationClassesHierarchyTreeElementId indexed: 1);
+		play.
+
+	aScripter assert
+		label: 'Assert context menu extent';
+		value: [ :aContentElement | aContentElement extent ]
+			equals: [ :aContentElement | 
+				| aContextMenuQuery |
+				aContextMenuQuery := aContentElement query
+						// GtCoderNavigationContextMenuContent.
+				self assert: aContextMenuQuery result size equals: 1.
+				aContextMenuQuery result first extent ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu_firstClickInsideOfMethodCoder [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayMaximizedCoderWithMethodExpanded.
+	
+	aScripter click
+		label: 'Click inside of a method coder';
+		onSpaceRoot;
+		// GtPharoStreamingMethodsCoderElement;
+		// (GtSourceCoderId indexed: 1);
+		// GtSourceCoderEditorId;
+		onChildAt: 1;
+		play.
+	
+	self displayClassSidebarContextMenu: aScripter.
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> displayMaximizedCoderWithMethodExpanded [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderWithAddMethod.
+	self setSpace800x600Extent: aScripter.
+	self maximizePagerPane: aScripter.
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x300Space [
 	<gtExample>
 	| aScripter |
@@ -133,10 +271,7 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x300Sp
 		onSpace;
 		play.
 
-	aScripter click
-		label: 'Maximize Coder';
-		// GtPagerMaximizeButtonElementId;
-		play.
+	self maximizePagerPane: aScripter.
 
 	aScripter secondaryClick
 		label: 'Display context menu';
@@ -168,19 +303,8 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x300Sp
 GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Space [
 	<gtExample>
 	| aScripter |
-	aScripter := self coderWithAddMethod.
+	aScripter := self displayMaximizedCoderWithMethodExpanded.
 	
-	aScripter do
-		label: 'Set space extent';
-		block: [ :aSpace | aSpace extent: 800@600 ];
-		onSpace;
-		play.
-
-	aScripter click
-		label: 'Maximize Coder';
-		// GtPagerMaximizeButtonElementId;
-		play.
-
 	aScripter secondaryClick
 		label: 'Display context menu';
 		onSpaceRoot;
@@ -205,4 +329,23 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Sp
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
+	<gtExample>
+	aScripter click
+		label: 'Maximize Coder';
+		// GtPagerMaximizeButtonElementId;
+		play
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
+	<gtExample>
+	aScripter do
+		label: 'Set space extent';
+		block: [ :aSpace | aSpace extent: 800 @ 600 ];
+		onSpace;
+		play
 ]

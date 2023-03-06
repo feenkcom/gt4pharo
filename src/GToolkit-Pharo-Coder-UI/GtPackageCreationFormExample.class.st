@@ -1,6 +1,8 @@
 Class {
 	#name : #GtPackageCreationFormExample,
 	#superclass : #GtCreationFormExample,
+	#traits : 'TBlDevScripterExamples',
+	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
@@ -18,7 +20,7 @@ GtPackageCreationFormExample >> formClass [
 GtPackageCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
-	scripter := BlScripter new element: self simpleForm.
+	scripter := self scripterWithModel: [ self simpleForm ].
 
 	scripter check
 		label: 'Check save button is disabled';
@@ -31,7 +33,7 @@ GtPackageCreationFormExample >> scripterOnSimpleForm [
 { #category : #accessing }
 GtPackageCreationFormExample >> simpleForm [
 	<gtExample>
-	^ self formClass new asElement
+	^ self formClass new
 ]
 
 { #category : #accessing }
@@ -42,8 +44,8 @@ GtPackageCreationFormExample >> simpleFormWithPackageFilled [
 
 	scripter click
 		label: 'Select package editor';
-		id: #field;
-		id: #package;
+		// (GtMagritteFieldElementId new description: scripter model packageAndTagDescription);
+		// #package;
 		play.
 
 	scripter type

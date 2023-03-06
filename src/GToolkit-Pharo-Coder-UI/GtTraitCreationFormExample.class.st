@@ -1,6 +1,8 @@
 Class {
 	#name : #GtTraitCreationFormExample,
 	#superclass : #GtCreationFormExample,
+	#traits : 'TBlDevScripterExamples',
+	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
@@ -13,7 +15,7 @@ GtTraitCreationFormExample >> formClass [
 GtTraitCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
-	scripter := BlScripter new element: self simpleForm.
+	scripter := self scripterWithModel: [ self simpleForm ].
 
 	scripter check
 		label: 'Check save button is disabled';
@@ -26,5 +28,5 @@ GtTraitCreationFormExample >> scripterOnSimpleForm [
 { #category : #accessing }
 GtTraitCreationFormExample >> simpleForm [
 	<gtExample>
-	^ self formClass new asElement
+	^ self formClass new
 ]
