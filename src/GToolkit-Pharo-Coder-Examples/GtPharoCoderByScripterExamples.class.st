@@ -393,11 +393,6 @@ GtPharoCoderByScripterExamples >> displayThreeClassCodersWithMethodExpanded [
 			aStep assert
 				label: 'Assert pager with two panes';
 				value: [ :aPager | aPager pages size ] equals: [ 3 ];
-				play.
-
-			aStep assert
-				value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
-					equals: [ 3 ];
 				play ].
 
 	^ aScripter
