@@ -88,8 +88,9 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 		tag: self extensionTag
 		class: ByteString
 		inElement: anElement.
-	"Should only contain the extension methods protocol"
-	"self assert: anElement methodProtocolsList viewModel entityCount = 1."
+	"Should only contain the instance label and the extension methods protocol"
+	self assert: anElement methodProtocolsList viewModel entityCount = 2.
+	self assert: anElement selectedProtocol name = ('*', self packageWithTagsAndExtensions name). 
 	^ anElement
 ]
 
