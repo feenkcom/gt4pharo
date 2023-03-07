@@ -249,6 +249,43 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu_firstClickInsid
 	^ aScripter
 ]
 
+{ #category : #'examples - dropdown' }
+GtPharoCoderByScripterExamples >> displayFirstPaneMethodSpotterDropdown [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayThreeClassCodersWithMethodExpanded.
+	
+	aScripter do
+		label: 'Set space extent';
+		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
+		onSpace;
+		play.
+	
+	aScripter click 
+		label: 'Click on the search code button';
+		id: GtPagerPageElementId index: 2;
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+		
+	"aScripter assert
+		label: 'Assert dropdown extent';
+		value: [ :aContentElement | aContentElement extent ]
+			equals: [ :aContentElement | 
+				| aContextMenuQuery |
+				aContextMenuQuery := aContentElement query // GtStreamingSpotterElement.
+				self assert: aContextMenuQuery result size equals: 1.
+				aContextMenuQuery result first extent ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play."
+	
+	^ aScripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> displayMaximizedCoderWithMethodExpanded [
 	<gtExample>
@@ -327,6 +364,71 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Sp
 		// BrAnchoredElement;
 		/ #content asBlocElementId;
 		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> displayThreeClassCodersWithMethodExpanded [
+	<gtExample>
+	| aScripter |
+	aScripter := self displayTwoClassCodersWithMethodExpanded.
+
+	aScripter
+		substeps: 'Open the second coder pane'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on class name';
+				id: GtPagerPageElementId index: 2;
+				// GtBehaviorCoderBehaviorNameId;
+				play.
+
+			aStep shortcut
+				label: 'Spawn class coder';
+				combination: BlKeyCombination primaryB;
+				id: GtPagerPageElementId index: 2;
+				// GtBehaviorCoderBehaviorNameId;
+				play.
+
+			aStep assert
+				label: 'Assert pager with two panes';
+				value: [ :aPager | aPager pages size ] equals: [ 3 ];
+				play ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderWithAddMethod.
+	self setSpace800x600Extent: aScripter.
+	self maximizePagerPane: aScripter.
+
+	aScripter
+		substeps: 'Open the second coder pane'
+		do: [ :aStep | 
+			aStep click
+				label: 'Click on class name';
+				// GtBehaviorCoderBehaviorNameId;
+				play.
+
+			aStep shortcut
+				label: 'Spawn class coder';
+				combination: BlKeyCombination primaryB;
+				// GtBehaviorCoderBehaviorNameId;
+				play.
+
+			aStep assert
+				label: 'Assert pager with two panes';
+				value: [ :aPager | aPager pages size ] equals: [ 2 ];
+				play.
+
+			aStep assert
+				value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
+					equals: [ 2 ];
+				play ].
 
 	^ aScripter
 ]
