@@ -42,7 +42,7 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineAccepted [
 	<noTest>
 	| scripter baselineClass |
 	scripter := self simpleFormWithBaselineFilled.
-
+	
 	scripter check
 		label: 'Check save button is enabled';
 		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled ];
@@ -51,7 +51,7 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineAccepted [
 	scripter click
 		label: 'Click save button';
 		id: #toolbar;
-		index: 1;
+		onChildAt: 1;
 		play.
 	
 	baselineClass := (Smalltalk classNamed: self exampleBaselineName).	

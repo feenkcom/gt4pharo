@@ -28,7 +28,8 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 			c grid vertical alignCenter.
 			c minWidth: 20 ];
 		when: BlFocusInEvent do: [ :anEvent | packageEditor selecter all select ];
-		when: BlFocusOutEvent do: [ :anEvent | packageEditor deselecter all deselect ];
+		when: BlFocusOutEvent
+			do: [ :anEvent | packageEditor deselecter all deselect ];
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
 				sink: AsyncPeekSink new;
@@ -47,7 +48,9 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 			| aValue aNewValue |
 			aValue := aMemento readUsing: aDescription.
 			aNewValue := aValue copyWithNewPackageName: anEvent text asString.
-			aMemento write: aNewValue using: aDescription ].
+			packageEditor
+				enqueueTask: (BlPromiseTask new
+						promise: (aMemento write: aNewValue using: aDescription) asAsyncPromise) ].
 	^ packageEditor
 ]
 
@@ -107,7 +110,9 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 			| aValue aNewValue |
 			aValue := aMemento readUsing: aDescription.
 			aNewValue := aValue copyWithNewTagName: anEvent text asString.
-			aMemento write: aNewValue using: aDescription ].
+			tagEditor
+				enqueueTask: (BlPromiseTask new
+						promise: (aMemento write: aNewValue using: aDescription) asAsyncPromise) ].
 	^ tagEditor
 ]
 
