@@ -555,12 +555,13 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
 			(cls isKindOf: Class)
 				ifTrue: [ coderAddOns
 						addContextMenuItem: (self
-									createLabel: 'Rename class'
-									description: aNode variableName)
-							hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
-							leave: self removeHighlightBlock
-							action: [ :aCoderViewModel | self renameClassIn: aCoderViewModel node: aNode ];
-						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform gtDisplayString ] ]
+								createLabel: 'Rename class'
+								description: aNode variableName)
+						hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
+						leave: self removeHighlightBlock
+						action: [ :aCoderViewModel | self renameClassIn: aCoderViewModel node: aNode ]
+						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
+								gtDisplayString ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
