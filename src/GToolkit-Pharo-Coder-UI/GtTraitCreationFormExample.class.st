@@ -42,7 +42,6 @@ GtTraitCreationFormExample >> scripterOnSimpleForm [
 { #category : #accessing }
 GtTraitCreationFormExample >> scripterWithSlotsFilled [
 	<gtExample>
-	<noTest>
 	| scripter aDescription |
 	scripter := self scripterWithSlotsNavigated.
 	aDescription := scripter model slotsDescription.
@@ -52,9 +51,9 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 		text: 'abc';
 		play.
 
-	scripter shortcut
+	scripter keyClick
 		label: 'Tab to next slot';
-		combination: BlKeyCombination tab;
+		key: BlKeyboardKey tab;
 		play.
 
 	scripter type
@@ -62,13 +61,13 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 		text: 'bcd';
 		play.
 		
-	scripter shortcut
+	scripter keyClick
 		label: 'Tab to next slot again';
-		combination: BlKeyCombination tab;
+		key: BlKeyboardKey tab;
 		play.
 	
 	scripter assert
-		label: 'Check that package is set';
+		label: 'Check that slots are set';
 		satisfies: [ :aFrame | 
 			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
 				currentValue = {'abc' . 'bcd'} asOrderedCollection ];
@@ -82,22 +81,17 @@ GtTraitCreationFormExample >> scripterWithSlotsNavigated [
 	<gtExample>
 	| scripter aDescription anElementId |
 	scripter := self scripterWithTraitNameAndPackageFilled.
-	aDescription := scripter model slotsDescription.
+	aDescription := scripter model packageAndTagDescription.
 	anElementId := GtMagritteFieldElementId new description: aDescription.
 
-	"scripter shortcut
+	scripter keyClick
 		label: 'Tab to tag editor';
-		combination: BlKeyCombination tab;
+		key: BlKeyboardKey tab;
 		play.
 
-	scripter shortcut
+	scripter keyClick
 		label: 'Tab to slots';
-		combination: BlKeyCombination tab;
-		play."
-		
-	scripter click
-		label: 'Click on slots';
-		// anElementId;
+		key: BlKeyboardKey tab;
 		play.
 
 	^ scripter
@@ -105,19 +99,23 @@ GtTraitCreationFormExample >> scripterWithSlotsNavigated [
 
 { #category : #accessing }
 GtTraitCreationFormExample >> scripterWithTraitAccepted [
-	<gtExample>
 	<after: #removeTraitAndPackage>
+	<gtExample>
 	| scripter createdTrait |
-	scripter := self scripterWithTraitNameAndPackageFilled.
+	scripter := self scripterWithSlotsFilled.
 
 	scripter click
 		label: 'Click save button';
 		// #toolbar;
 		onChildAt: 1;
 		play.
-		
-	createdTrait := (Smalltalk classNamed: self exampleTraitName).	
+
+	createdTrait := Smalltalk classNamed: self exampleTraitName.
 	self assert: createdTrait isNotNil.
+	self
+		assert: (createdTrait slots collect: #name)
+		equals: {'abc'.
+				'bcd'}.
 
 	^ scripter
 ]
