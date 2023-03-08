@@ -42,6 +42,70 @@ GtTraitCreationFormExample >> scripterOnSimpleForm [
 ]
 
 { #category : #accessing }
+GtTraitCreationFormExample >> scripterWithSlotsFilled [
+	<gtExample>
+	<noTest>
+	| scripter aDescription |
+	scripter := self scripterWithSlotsNavigated.
+	aDescription := scripter model slotsDescription.
+
+	scripter type
+		label: 'Fill first slot';
+		text: 'abc';
+		play.
+
+	scripter shortcut
+		label: 'Tab to next slot';
+		combination: BlKeyCombination tab;
+		play.
+
+	scripter type
+		label: 'Fill second slot';
+		text: 'bcd';
+		play.
+		
+	scripter shortcut
+		label: 'Tab to next slot again';
+		combination: BlKeyCombination tab;
+		play.
+	
+	scripter assert
+		label: 'Check that package is set';
+		satisfies: [ :aFrame | 
+			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+				currentValue = {'abc' . 'bcd'} asOrderedCollection ];
+		play.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtTraitCreationFormExample >> scripterWithSlotsNavigated [
+	<gtExample>
+	| scripter aDescription anElementId |
+	scripter := self scripterWithTraitNameAndPackageFilled.
+	aDescription := scripter model slotsDescription.
+	anElementId := GtMagritteFieldElementId new description: aDescription.
+
+	"scripter shortcut
+		label: 'Tab to tag editor';
+		combination: BlKeyCombination tab;
+		play.
+
+	scripter shortcut
+		label: 'Tab to slots';
+		combination: BlKeyCombination tab;
+		play."
+		
+	scripter click
+		label: 'Click on slots';
+		// anElementId;
+		play.
+
+	^ scripter
+]
+
+{ #category : #accessing }
 GtTraitCreationFormExample >> scripterWithTraitAccepted [
 	<gtExample>
 	<after: #removeTraitAndPackage>
