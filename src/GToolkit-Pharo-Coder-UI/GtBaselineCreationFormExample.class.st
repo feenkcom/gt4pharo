@@ -1,8 +1,6 @@
 Class {
 	#name : #GtBaselineCreationFormExample,
 	#superclass : #GtCreationFormExample,
-	#traits : 'TBlDevScripterExamples',
-	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
