@@ -70,8 +70,8 @@ GtPharoCompleterExamples >> clickingSelectedCompletionItemTriggersCompletion [
 	
 	| aScripter |
 	aScripter := self completePrintOnMethodSelector.
-	(aScripter keyClick: BlKeyboardKey return) play.
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 	self enterText: 'is' in: aScripter.
 	self openCompletionIn: aScripter.
 	(aScripter check)
@@ -202,8 +202,8 @@ GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	| aScripter |
 
 	aScripter := self completePrintOnMethodSelector.
-	(aScripter keyClick: BlKeyboardKey return) play.
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 	self enterText: 'is' in: aScripter.
 	self openCompletionIn: aScripter.
 	self selectionCompletionItem: 'isMethod' in: aScripter.
@@ -263,7 +263,7 @@ GtPharoCompleterExamples >> completeMultipleKeywordMessageSend [
 	self selectionCompletionItem: 'ifTrue:ifFalse:' in: aScripter.
 	self completeWithTabIn: aScripter.
 	self enterText: '[^1]' in: aScripter.
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 	self enterText: '[^2]' in: aScripter.
 	aScripter check
 		do:
@@ -389,7 +389,7 @@ GtPharoCompleterExamples >> completeVariableFromBinding [
 
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> completeWithTabIn: aScripter [
-	(aScripter keyClick: BlKeyboardKey tab) play
+	(aScripter keyPress: BlKeyboardKey tab) play
 ]
 
 { #category : #smalltalk }
@@ -506,7 +506,7 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> openCompletionIn: aScripter [
 	(aScripter keyDown: BlKeyboardKey controlLeft) play.
-	(aScripter keyClick: BlKeyboardKey space) play.
+	(aScripter keyPress: BlKeyboardKey space) play.
 	(aScripter keyUp: BlKeyboardKey controlLeft) play.
 	aScripter check
 		label: 'Verify first item selected';

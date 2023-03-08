@@ -286,7 +286,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 				id: GtCodeDefinition behaviorNameEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert class name editor is in editable mode';
@@ -306,7 +306,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 				id: GtCodeDefinition behaviorNameEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert class name editor has focus';
@@ -320,7 +320,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNameForClass [
 				id: GtCodeDefinition behaviorNameEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey escape) play.
+			(aStep keyPress: BlKeyboardKey escape) play.
 
 			aStep assert
 				label: 'Assert class name editor does not have focus';
@@ -362,7 +362,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 				id: GtCodeDefinition packageEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert package name editor is in editable mode';
@@ -382,7 +382,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 				id: GtCodeDefinition packageEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert package name editor has focus';
@@ -396,7 +396,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 				id: GtCodeDefinition packageEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey escape) play.
+			(aStep keyPress: BlKeyboardKey escape) play.
 
 			aStep assert
 				label: 'Assert package name editor does not have focus';
@@ -438,7 +438,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 				id: GtCodeDefinition tagEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert tag name editor is in editable mode';
@@ -457,7 +457,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 				id: GtCodeDefinition tagEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert tag name editor has focus';
@@ -471,7 +471,7 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 				id: GtCodeDefinition tagEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey escape) play.
+			(aStep keyPress: BlKeyboardKey escape) play.
 
 			aStep assert
 				label: 'Assert tag name editor does not have focus';
@@ -513,7 +513,7 @@ GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 				id: GtCodeDefinition behaviorNameEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert class name editor is in editable mode';
@@ -533,7 +533,7 @@ GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 				id: GtCodeDefinition behaviorNameEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey return) play.
+			(aStep keyPress: BlKeyboardKey return) play.
 
 			aStep assert
 				label: 'Assert class name editor has focus';
@@ -547,7 +547,7 @@ GtCreateBehaviorElementByScripterExamples >> typePackageNameForClass [
 				id: GtCodeDefinition behaviorNameEditorName;
 				play.
 
-			(aStep keyClick: BlKeyboardKey escape) play.
+			(aStep keyPress: BlKeyboardKey escape) play.
 
 			aStep assert
 				label: 'Assert class name editor does not have focus';

@@ -362,7 +362,7 @@ GtPharoSnippetCoderByScripterExamples >> forClassExtraction_05_enter_name [
 	self checkRenameEditor: aScripter keyword: false.
 	(aScripter type: 'oneHundred') play.
 	self hasRefactoringChanges: aScripter.
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 
 	^ aScripter
 ]
@@ -466,11 +466,11 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramet
 	self hasRefactoringChanges: aScripter.
 	
 	self clickReorderParameter: aScripter.
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 	self checkRenameEditor: aScripter keyword: true.
 	
 	(aScripter type: 'to:') play.
-	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
 	self clickReorderParameter: aScripter.
 	self clickReorderParameter: aScripter.
 
@@ -573,7 +573,7 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_05_enter_name [
 	(aScripter type: 'oneHundred') play.
 	self hasRefactoringChanges: aScripter.
 	
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 
 	^ aScripter
 ]
@@ -656,13 +656,13 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	aScripter
 		substep: 'Enter new name'
 		do: [ :aStep | 
-			(aStep keyClick: BlKeyboardKey delete) play.
-			(aStep keyClick: BlKeyboardKey backspace) play.
+			(aStep keyPress: BlKeyboardKey delete) play.
+			(aStep keyPress: BlKeyboardKey backspace) play.
 			(aStep type: 'b') play ].
 
 	aScripter
 		substep: 'Apply rename'
-		do: [ :aStep | (aStep keyClick: BlKeyboardKey return) play ].
+		do: [ :aStep | (aStep keyPress: BlKeyboardKey return) play ].
 
 	^ aScripter
 ]

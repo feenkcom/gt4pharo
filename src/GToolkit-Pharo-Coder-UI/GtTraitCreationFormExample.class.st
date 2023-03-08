@@ -1,8 +1,6 @@
 Class {
 	#name : #GtTraitCreationFormExample,
 	#superclass : #GtCreationFormExample,
-	#traits : 'TBlDevScripterExamples',
-	#classTraits : 'TBlDevScripterExamples classTrait',
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
 
@@ -42,20 +40,82 @@ GtTraitCreationFormExample >> scripterOnSimpleForm [
 ]
 
 { #category : #accessing }
-GtTraitCreationFormExample >> scripterWithTraitAccepted [
+GtTraitCreationFormExample >> scripterWithSlotsFilled [
 	<gtExample>
-	<after: #removeTraitAndPackage>
-	| scripter createdTrait |
+	| scripter aDescription |
+	scripter := self scripterWithSlotsNavigated.
+	aDescription := scripter model slotsDescription.
+
+	scripter type
+		label: 'Fill first slot';
+		text: 'abc';
+		play.
+
+	scripter keyPress
+		label: 'Tab to next slot';
+		key: BlKeyboardKey tab;
+		play.
+
+	scripter type
+		label: 'Fill second slot';
+		text: 'bcd';
+		play.
+		
+	scripter keyPress
+		label: 'Tab to next slot again';
+		key: BlKeyboardKey tab;
+		play.
+	
+	scripter assert
+		label: 'Check that slots are set';
+		satisfies: [ :aFrame | 
+			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+				currentValue = {'abc' . 'bcd'} asOrderedCollection ];
+		play.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtTraitCreationFormExample >> scripterWithSlotsNavigated [
+	<gtExample>
+	| scripter aDescription anElementId |
 	scripter := self scripterWithTraitNameAndPackageFilled.
+	aDescription := scripter model packageAndTagDescription.
+	anElementId := GtMagritteFieldElementId new description: aDescription.
+
+	scripter keyPress
+		label: 'Tab to tag editor';
+		key: BlKeyboardKey tab;
+		play.
+
+	scripter keyPress
+		label: 'Tab to slots';
+		key: BlKeyboardKey tab;
+		play.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtTraitCreationFormExample >> scripterWithTraitAccepted [
+	<after: #removeTraitAndPackage>
+	<gtExample>
+	| scripter createdTrait |
+	scripter := self scripterWithSlotsFilled.
 
 	scripter click
 		label: 'Click save button';
 		// #toolbar;
 		onChildAt: 1;
 		play.
-		
-	createdTrait := (Smalltalk classNamed: self exampleTraitName).	
+
+	createdTrait := Smalltalk classNamed: self exampleTraitName.
 	self assert: createdTrait isNotNil.
+	self
+		assert: (createdTrait slots collect: #name)
+		equals: {'abc'.
+				'bcd'}.
 
 	^ scripter
 ]
