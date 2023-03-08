@@ -9,12 +9,12 @@ GtRenamerExamples >> applyRename [
 	<gtExample>
 	| scripter |
 	scripter := self startRename.
-	scripter keyClick
+	scripter keyPress
 		label: 'Delete char';
 		key: BlKeyboardKey backspace;
 		play.
 
-	scripter keyClick
+	scripter keyPress
 		label: 'Apply rename';
 		key: BlKeyboardKey return;
 		play.
@@ -30,12 +30,12 @@ GtRenamerExamples >> cancelRename [
 	<gtExample>
 	| scripter |
 	scripter := self startRename.
-	scripter keyClick
+	scripter keyPress
 		label: 'Delete char';
 		key: BlKeyboardKey backspace;
 		play.
 		
-	scripter keyClick
+	scripter keyPress
 		label: 'Cancel rename';
 		key: BlKeyboardKey escape;
 		play.
@@ -111,7 +111,7 @@ GtRenamerExamples >> startRename [
 
 	scripter
 		substep: 'Move cursor'
-		do: [ :aStep | 10 timesRepeat: [ (aStep keyClick: BlKeyboardKey arrowRight) play ] ].
+		do: [ :aStep | 10 timesRepeat: [ (aStep keyPress: BlKeyboardKey arrowRight) play ] ].
 
 	scripter shortcut
 		label: 'Start rename';

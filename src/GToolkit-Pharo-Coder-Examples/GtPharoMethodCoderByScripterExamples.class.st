@@ -1800,7 +1800,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 		id: GtSourceCoderEditorId;
 		play.
 
-	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
 
 	aScripter assert
 		label: 'Assert source code modified';
@@ -1991,7 +1991,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 		id: GtSourceCoderEditorId;
 		play.
 
-	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
 		
 	aScripter assert
 		label: 'Assert source code modified';
@@ -2335,10 +2335,10 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_06_type_variable_name [
 
 	aScripter := self forExtractTemp_05_click_extract_temp.
 
-	(aScripter keyClick: BlKeyboardKey delete) play.
-	(aScripter keyClick: BlKeyboardKey backspace) play.
+	(aScripter keyPress: BlKeyboardKey delete) play.
+	(aScripter keyPress: BlKeyboardKey backspace) play.
 	(aScripter type: 'a') play.
-	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
 
 	^ aScripter
 ]
@@ -2950,11 +2950,11 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramete
 
 	self clickReorderParameter: aScripter variables: #('temp' 'anObject').
 
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 	self checkKeywordRenameEditor: aScripter.
 
 	(aScripter type: 'b:') play.
-	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
 
 	self clickReorderParameter: aScripter variables: #('temp' 'anObject').
 
@@ -3071,11 +3071,11 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 		play.
 
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 	self checkKeywordRenameEditor: aScripter.
 
 	(aScripter type: 'b:') play.
-	(aScripter keyClick: BlKeyboardKey return) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
 
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
 
@@ -3154,8 +3154,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_03_move_cursor [
 	| aScripter |
 	aScripter := self forKeywordRename_02_shortcut.	
 	"this positions the cursor before `:`"
-	(aScripter keyClick: BlKeyboardKey arrowLeft) play.
-	(aScripter keyClick: BlKeyboardKey arrowRight) play.
+	(aScripter keyPress: BlKeyboardKey arrowLeft) play.
+	(aScripter keyPress: BlKeyboardKey arrowRight) play.
 
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
 
@@ -4154,7 +4154,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_07_01_accept_with_ent
 
 	aScripter := self forUnaryExtraction_06_type_method_name.
 
-	aScripter keyClick
+	aScripter keyPress
 		key: BlKeyboardKey return;
 		play.
 		
@@ -4489,7 +4489,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		play.
 		
 	(aScripter type: 'someNewMethodName') play.
-	(aScripter keyClick: BlKeyboardKey tab) play.
+	(aScripter keyPress: BlKeyboardKey tab) play.
 
 	aScripter assert
 		label: 'Assert refactoring changes attribute';

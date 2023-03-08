@@ -51,7 +51,7 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 		text: 'abc';
 		play.
 
-	scripter keyClick
+	scripter keyPress
 		label: 'Tab to next slot';
 		key: BlKeyboardKey tab;
 		play.
@@ -61,7 +61,7 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 		text: 'bcd';
 		play.
 		
-	scripter keyClick
+	scripter keyPress
 		label: 'Tab to next slot again';
 		key: BlKeyboardKey tab;
 		play.
@@ -84,12 +84,12 @@ GtTraitCreationFormExample >> scripterWithSlotsNavigated [
 	aDescription := scripter model packageAndTagDescription.
 	anElementId := GtMagritteFieldElementId new description: aDescription.
 
-	scripter keyClick
+	scripter keyPress
 		label: 'Tab to tag editor';
 		key: BlKeyboardKey tab;
 		play.
 
-	scripter keyClick
+	scripter keyPress
 		label: 'Tab to slots';
 		key: BlKeyboardKey tab;
 		play.
