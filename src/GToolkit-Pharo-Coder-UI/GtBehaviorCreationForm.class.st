@@ -150,7 +150,7 @@ GtBehaviorCreationForm >> traitsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
 		label: 'Traits';
-		priority: 5;
+		priority: 6;
 		accessor: #traits;
 		classes: {String};
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
