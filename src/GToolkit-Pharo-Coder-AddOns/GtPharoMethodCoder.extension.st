@@ -698,14 +698,12 @@ GtPharoMethodCoder >> copyMethodNameToClipboard [
 GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 	| anExample |
-	
-	self compiledMethod
-		ifNil: [ ^ self ].
-	
-	anAST methodNode
-		ifNil: [ ^ self ].
-		
-	(anAST methodNode pragmas anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtExample ] ])
+	self compiledMethod ifNil: [ ^ self ].
+
+	anAST methodNode ifNil: [ ^ self ].
+
+	(anAST methodNode pragmas
+		anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtExample ] ])
 		ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
@@ -716,33 +714,36 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addPreview: 'Example'
 		stencil: [ GtCoderExampleStateElement new ]
-		dataBinder: [ :anElement :aCoderViewModel |
-			| aHandler aCoder |						
-			anElement userData 
+		dataBinder: [ :anElement :aCoderViewModel | 
+			| aHandler aCoder |
+			anElement userData
 				at: #exampleAstFor_into_example_handler
 				ifPresent: [ :anOldHandler | 
-					anElement userData 
+					anElement userData
 						at: #exampleAstFor_into_example_coder
 						ifPresent: [ :anOldCoder | anOldCoder unsubscribe: anOldHandler ]
-						ifAbsent: [ "ignore" ] ]
-				ifAbsent: [ "ignore" ].
-			
+						ifAbsent: [  "ignore" ] ]
+				ifAbsent: [  "ignore" ].
+
 			aCoder := aCoderViewModel coderModel.
 
-			aHandler := [ :anAnnouncement | aCoder example 
-				ifNotNil: [ :aNewExample | 
-					anElement example: aNewExample; visibility: BlVisibility visible ]
-				ifNil: [ 
-					anElement visibility: BlVisibility hidden ] ].
-			anElement userData 
+			aHandler := [ :anAnnouncement | 
+				aCoder example
+					ifNotNil: [ :aNewExample | 
+						anElement
+							example: aNewExample;
+							visibility: BlVisibility visible ]
+					ifNil: [ anElement visibility: BlVisibility hidden ] ].
+			anElement userData
 				at: #exampleAstFor_into_example_handler put: aHandler;
 				at: #exampleAstFor_into_example_coder put: aCoder.
-			
-			(aCoder weak
-				when: GtCoderMethodAdded, GtCoderMethodRemoved, GtCoderMethodModified, GtPharoMethodCoderCompiled
+
+			aCoder weak
+				when: GtCoderMethodAdded , GtCoderMethodRemoved , GtCoderMethodModified
+						, GtPharoMethodCoderCompiled
 				send: #value:
-				to: aHandler).
-			 
+				to: aHandler.
+
 			anElement example: aCoder example ].
 
 	anExample := self example.
@@ -752,11 +753,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		icon: BrGlamorousVectorIcons play
 		action: [ :aCoderUIModel :anEvent | self playExample ]
 		id: GtMethodCoderPlayExampleActionId.
-	coderAddOns
-		addContextAction: 'Play and Inspect Example Result' translated
-		icon: BrGlamorousVectorIcons playinspect
-		action: [ :aCoderUIModel :anEvent | self playAndInspectExample ]
-		id: GtMethodCoderPlayAndInspectExampleActionId.
+	anExample hasAfterInDependencies
+		ifFalse: [ coderAddOns
+				addContextAction: 'Play and Inspect Example Result' translated
+				icon: BrGlamorousVectorIcons playinspect
+				action: [ :aCoderUIModel :anEvent | self playAndInspectExample ]
+				id: GtMethodCoderPlayAndInspectExampleActionId ].
 	coderAddOns
 		addContextAction: 'Inspect Example Object' translated
 		icon: BrGlamorousVectorIcons eg
