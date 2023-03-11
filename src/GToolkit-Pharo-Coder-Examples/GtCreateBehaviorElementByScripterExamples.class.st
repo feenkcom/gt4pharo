@@ -363,6 +363,9 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageForClass [
 				play.
 
 			(aStep keyPress: BlKeyboardKey return) play.
+			aStep click
+				id: GtCodeDefinition packageEditorName;
+				play.
 
 			aStep assert
 				label: 'Assert package name editor is in editable mode';
@@ -439,6 +442,9 @@ GtCreateBehaviorElementByScripterExamples >> typeNewClassNamePackageTagForClass 
 				play.
 
 			(aStep keyPress: BlKeyboardKey return) play.
+			aStep click
+				id: GtCodeDefinition tagEditorName;
+				play.
 
 			aStep assert
 				label: 'Assert tag name editor is in editable mode';
