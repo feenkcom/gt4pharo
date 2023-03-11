@@ -111,21 +111,5 @@ GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
 					ifNotEmpty: [ self
 							requestRenameTag: aTaggerTag
 							to: aWish text asString
-							from: aWish currentTarget ] ];
-		addShortcut: (BlShortcutWithAction new
-				combination: BlKeyCombination shiftTab;
-				action: [ :anEvent | 
-					BlFocusFinder new
-						direction: BlFocusSearchDirectionBackward new;
-						root: tags parent parent parent;
-						referenceElement: anEvent currentTarget;
-						nextFocusDo: #requestFocus ifNone: [  ] ]);
-		addShortcut: (BlShortcutWithAction new
-				combination: BlKeyCombination tab;
-				action: [ :anEvent | 
-					BlFocusFinder new
-						direction: BlFocusSearchDirectionForward new;
-						root: tags parent parent parent;
-						referenceElement: anEvent currentTarget;
-						nextFocusDo: #requestFocus ifNone: [  ] ])
+							from: aWish currentTarget ] ]
 ]
