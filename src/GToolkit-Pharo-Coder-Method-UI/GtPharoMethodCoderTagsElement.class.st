@@ -61,7 +61,7 @@ GtPharoMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 
 	^ aBoolean
 		ifTrue: [ 'class' ]
-		ifFalse: [ 'instance' ]
+		ifFalse: [ 'instance' ] 
 ]
 
 { #category : #'private - event handling' }
@@ -101,10 +101,11 @@ GtPharoMethodCoderTagsElement >> initialize [
 GtPharoMethodCoderTagsElement >> newClassTag [
 	^ BrButton new
 		beTinySize;
-		aptitude:
-			BrGlamorousButtonWithLabelAptitude
-				+
-					(BrGlamorousWithDropdownAptitude
+		withAsyncPromiseDo: [ :anElementPromise | 
+			anElementPromise
+				whenSuccess: [ :aButton :isModified | aButton enabled: isModified not ] ];
+		aptitude: BrGlamorousButtonWithLabelAptitude
+				+ (BrGlamorousWithDropdownAptitude
 						handle: [ BrButton new
 								beSmallSize;
 								disable;
@@ -175,13 +176,10 @@ GtPharoMethodCoderTagsElement >> newProtocolPickerList [
 GtPharoMethodCoderTagsElement >> newProtocolTag [
 	^ BrButton new
 		beTinySize;
-		aptitude: BrGlamorousButtonWithLabelAptitude + (BrGlamorousWithDropdownAptitude
-			handle: [ self newProtocolEditor ]
-			content: [ self newProtocolPickerList ]);
-		withAsyncPromiseDo: [ :anElementPromise |
-			anElementPromise
-				whenSuccess: [ :aButton :isModified |
-					aButton enabled: isModified not ] ]
+		aptitude: BrGlamorousButtonWithLabelAptitude
+				+ (BrGlamorousWithDropdownAptitude
+						handle: [ self newProtocolEditor ]
+						content: [ self newProtocolPickerList ])
 ]
 
 { #category : #'private - instance creation' }
@@ -212,22 +210,14 @@ GtPharoMethodCoderTagsElement >> onPharoMethodCoderViewModelChanged [
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 	
-	BlFrameTelemetry
-		time: [ self class name, ' #updateProtocolButton' ]
-		during: [ self updateProtocolButton ].
-
-	BlFrameTelemetry
-		time: [ self class name, ' #updateTraitMethodButton' ]
-		during: [ self updateTraitMethodButton ].
-
-	BlFrameTelemetry
-		time: [ self class name, ' #updateBehaviorSideButton' ]
-		during: [ self updateBehaviorSideButton ]
+	self updateProtocolButton.
+	self updateTraitMethodButton.
+	self updateBehaviorSideButton
 ]
 
 { #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> onViewModelTextChanged: anAnnouncement [
-	self updateProtocolButtonActivation
+	self updateBehaviorSideButtonActivation
 ]
 
 { #category : #private }
@@ -278,6 +268,7 @@ GtPharoMethodCoderTagsElement >> unsubscribeFromPharoMethodCoderViewModel [
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
 	classTag label: (self classTagStringFor: pharoMethodCoderViewModel).
+	self updateBehaviorSideButtonActivation.
 	
 	self flag: #TODO.
 	"canMoveMethodToInstanceOrClass is very expensive to compute"
@@ -286,14 +277,13 @@ GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
 ]
 
 { #category : #'private - update' }
-GtPharoMethodCoderTagsElement >> updateProtocolButton [
-	self updateProtocolButtonLabel.
-	self updateProtocolButtonActivation
+GtPharoMethodCoderTagsElement >> updateBehaviorSideButtonActivation [
+	classTag asyncPromise promise: pharoMethodCoderViewModel isTextModified
 ]
 
 { #category : #'private - update' }
-GtPharoMethodCoderTagsElement >> updateProtocolButtonActivation [
-	protocolTag asyncPromise promise: pharoMethodCoderViewModel isTextModified
+GtPharoMethodCoderTagsElement >> updateProtocolButton [
+	self updateProtocolButtonLabel.
 ]
 
 { #category : #'private - update' }
