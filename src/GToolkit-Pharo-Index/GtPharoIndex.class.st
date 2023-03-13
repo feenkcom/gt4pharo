@@ -1,10 +1,9 @@
 Class {
 	#name : #GtPharoIndex,
-	#superclass : #Object,
+	#superclass : #GtIndex,
 	#instVars : [
 		'globalCache',
 		'selectorCache',
-		'active',
 		'shouldRecomputeSubclasses',
 		'selectorWordCache',
 		'classWordCache'
@@ -142,59 +141,6 @@ GtPharoIndex >> asyncNamesForWord: aString usingPrefixCache: prefixCache andWord
 		merge: wordStream) withoutDuplicates
 ]
 
-{ #category : #private }
-GtPharoIndex >> asyncOrderedSearchForWords: aString in: prefixTree [
-	"Order the results by 1) names that begin with aString, 2) names that have aString in them,
-	3) names that have the words from aString in order and begins with the first word in aString,
-	4) names that have the words from aString in order, and 5) names that have all the words from
-	aString in any order. The stream returned may (and likely will) contain duplicates."
-
-	| matchStream substringMatchStream wordsInOrderStream startingSubstringMatchStream startingWordsInOrderStream |
-	matchStream := (self asyncSearchForWords: aString in: prefixTree) cached.
-	substringMatchStream := (matchStream asyncSimilarCopy
-			select: [ :each | self does: each includeString: aString ]) cached.
-	startingSubstringMatchStream := substringMatchStream asyncSimilarCopy
-			select: [ :each | self does: each beginWithWord: aString ].
-	wordsInOrderStream := (matchStream asyncSimilarCopy
-			select: [ :each | self does: each includeWordsInOrder: aString ]) cached.
-	startingWordsInOrderStream := wordsInOrderStream asyncSimilarCopy
-			select: [ :each | self does: each beginWithWord: aString ].
-	^ (((startingSubstringMatchStream merge: substringMatchStream)
-		merge: startingWordsInOrderStream) merge: wordsInOrderStream)
-		merge: matchStream
-]
-
-{ #category : #private }
-GtPharoIndex >> asyncSearchForSubstringWords: aString in: prefixTree [
-	"aString isn't a word, so look for other words in aString that are followed by the rest of aString"
-
-	^ ((aString size - 1 to: 1 by: -1) asAsyncStream
-		collect: [ :i | 
-			(prefixTree nodeFor: (aString copyFrom: 1 to: i))
-				ifNil: [ #() asAsyncStream ]
-				ifNotNil: [ :node | 
-					node namesCollection asArray asAsyncStream
-						select: [ :each | self does: each includeString: aString ] ] ])
-		flatten withoutDuplicates
-]
-
-{ #category : #private }
-GtPharoIndex >> asyncSearchForWords: aString in: prefixTree [
-	| words longest |
-	words := self searchWordsFrom: aString.
-	longest := words isEmpty ifTrue: [ '' ] ifFalse: [ words first ].
-	(words size = 1 and: [ (prefixTree first: 1 startingWith: longest) isEmpty ])
-		ifTrue: [ ^ self asyncSearchForSubstringWords: longest in: prefixTree ].
-	^ ((prefixTree asyncStreamStartingWith: longest)
-		collect: [ :each | 
-			(prefixTree nodeFor: each)
-				ifNil: [ #() asAsyncStream ]
-				ifNotNil: [ :node | 
-					node namesCollection asArray asAsyncStream
-						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
-		flatten withoutDuplicates
-]
-
 { #category : #accessing }
 GtPharoIndex >> asyncSelectorsForWord: aString [
 	^ self
@@ -211,6 +157,40 @@ GtPharoIndex >> asyncSendersForWord: aString [
 				ifNil: [ #() asAsyncStream ]
 				ifNotNil: [ :node | node referencesCollection asAsyncStream ] ]) flatten
 		withoutDuplicates
+]
+
+{ #category : #private }
+GtPharoIndex >> basicSubscribe [
+	SystemAnnouncer uniqueInstance weak
+		when: MethodAdded
+			send: #methodAdded:
+			to: self;
+		when: MethodModified
+			send: #methodModified:
+			to: self;
+		when: MethodRemoved
+			send: #methodRemoved:
+			to: self;
+		when: ClassAdded
+			send: #classAdded:
+			to: self;
+		when: ClassRemoved
+			send: #classRemoved:
+			to: self;
+		when: ClassRenamed
+			send: #classRenamed:
+			to: self;
+		when: ClassModifiedClassDefinition
+			send: #classModifiedClassDefinition:
+			to: self;
+		when: ClassModificationApplied
+			send: #classModified:
+			to: self
+]
+
+{ #category : #private }
+GtPharoIndex >> basicUnsubscribe [
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #accessing }
@@ -322,41 +302,21 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 											node addReference: each ] ] ] ] ]
 ]
 
-{ #category : #testing }
-GtPharoIndex >> does: aSymbol beginWithWord: aString [
-	| string |
-	string := aSymbol asString asLowercase.
-	self
-		wordsIn: aString
-		do: [ :each | ^ string beginsWith: each asLowercase ]
-		minSize: 1
-		includeSubStrings: false.
-	^ false
-]
-
-{ #category : #testing }
-GtPharoIndex >> does: aSymbol includeString: aString [
-	^ aSymbol includesSubstring: aString caseSensitive: false
-]
-
-{ #category : #testing }
-GtPharoIndex >> does: aSymbol includeWordsInOrder: wordString [
-	| string index |
-	string := aSymbol asString asLowercase.
-	index := 1.
-	self
-		wordsIn: wordString
-		do: [ :each | 
-			index := string indexOfSubCollection: each asLowercase startingAt: index.
-			index > 0 ifTrue: [ index := index + each size ] ifFalse: [ ^ false ] ]
-		minSize: 1
-		includeSubStrings: false.
-	^ true
-]
-
-{ #category : #testing }
-GtPharoIndex >> does: selector matchWords: words [
-	^ (self intervalsIn: selector matchingWords: words) notEmpty
+{ #category : #initialization }
+GtPharoIndex >> computeIndex [
+	selectorCache := GtReferencesAndImplementersPrefixTree new.
+	globalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
+	selectorWordCache := GtNamesPrefixTree new.
+	classWordCache := GtNamesPrefixTree new.
+	Smalltalk
+		allClassesDo: [ :each | 
+			self addClassWordsFor: each name.
+			each methodsDo: [ :method | self methodAdded: method ].
+			each class methodsDo: [ :method | self methodAdded: method ] ].
+	selectorCache allNodesDo: #compressData.
+	globalCache allNodesDo: #compressData.
+	selectorWordCache allNodesDo: #compressData.
+	classWordCache allNodesDo: #compressData
 ]
 
 { #category : #accessing }
@@ -392,65 +352,7 @@ GtPharoIndex >> initialize [
 	globalCache := GtReferencesPrefixTree new.
 	selectorWordCache := GtNamesPrefixTree new.
 	classWordCache := GtNamesPrefixTree new.
-	active := false.
 	shouldRecomputeSubclasses := false
-]
-
-{ #category : #initialization }
-GtPharoIndex >> initializeCache [
-	self unsubscribeFromSystem.
-	selectorCache := GtReferencesAndImplementersPrefixTree new.
-	globalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
-	selectorWordCache := GtNamesPrefixTree new.
-	classWordCache := GtNamesPrefixTree new.
-	Smalltalk
-		allClassesDo: [ :each | 
-			self addClassWordsFor: each name.
-			each methodsDo: [ :method | self methodAdded: method ].
-			each class methodsDo: [ :method | self methodAdded: method ] ].
-	selectorCache allNodesDo: #compressData.
-	globalCache allNodesDo: #compressData.
-	selectorWordCache allNodesDo: #compressData.
-	classWordCache allNodesDo: #compressData.
-	self subscribeToSystem
-]
-
-{ #category : #accessing }
-GtPharoIndex >> intervalsIn: selector matching: wordString [
-	| words |
-	words := self searchWordsFrom: wordString.
-	^ self intervalsIn: selector matchingWords: words
-]
-
-{ #category : #private }
-GtPharoIndex >> intervalsIn: selector matchingWords: words [
-	| selectorWords intervals |
-	intervals := OrderedCollection new: words size.
-	selectorWords := OrderedCollection new.
-	self
-		wordsIn: selector
-		do: [ :each :index | 
-			selectorWords
-				add: {index.
-						each asLowercase} ]
-		minSize: 1
-		includeSubStrings: true.
-	selectorWords
-		sort: [ :a :b | a last size > b last size or: [ a last = b last and: [ a first < b first ] ] ].
-	words
-		do: [ :each | 
-			| item |
-			item := selectorWords
-					detect: [ :sel | sel last beginsWith: each ]
-					ifNone: [ ^ #() ].
-			intervals add: (item first to: item first + each size - 1).
-			selectorWords remove: item ].
-	^ intervals
-]
-
-{ #category : #testing }
-GtPharoIndex >> isActive [
-	^ active
 ]
 
 { #category : #testing }
@@ -648,18 +550,6 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 ]
 
 { #category : #accessing }
-GtPharoIndex >> searchWordsFrom: aString [
-	| words |
-	words := OrderedCollection new.
-	self
-		wordsIn: aString
-		do: [ :each | words add: each asLowercase ]
-		minSize: 1
-		includeSubStrings: false.
-	^ words sort: [ :a :b | a size > b size ]
-]
-
-{ #category : #accessing }
 GtPharoIndex >> selectorCache [
 	^ selectorCache
 ]
@@ -671,71 +561,10 @@ GtPharoIndex >> sendersOf: aSelector [
 
 { #category : #private }
 GtPharoIndex >> subscribeToSystem [
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded send: #methodAdded: to: self;
-		when: MethodModified send: #methodModified: to: self;
-		when: MethodRemoved send: #methodRemoved: to: self;
-		when: ClassAdded send: #classAdded: to: self;
-		when: ClassRemoved send: #classRemoved: to: self;
-		when: ClassRenamed send: #classRenamed: to: self;
-		when: ClassModifiedClassDefinition send: #classModifiedClassDefinition: to: self;
-		when: ClassModificationApplied send: #classModified: to: self.
-	active := true
+	self subscribeToModel
 ]
 
 { #category : #private }
 GtPharoIndex >> unsubscribeFromSystem [
-	SystemAnnouncer uniqueInstance unsubscribe: self.
-	active := false
-]
-
-{ #category : #private }
-GtPharoIndex >> wordsIn: kw [
-	| myWords |
-	myWords := OrderedCollection new.
-	self
-		wordsIn: kw
-		do: [ :each | myWords add: each asLowercase ]
-		minSize: 1
-		includeSubStrings: false.
-	^ myWords
-]
-
-{ #category : #private }
-GtPharoIndex >> wordsIn: aSymbol do: aBlock [
-	self
-		wordsIn: aSymbol
-		do: aBlock
-		minSize: 1
-		includeSubStrings: true
-]
-
-{ #category : #private }
-GtPharoIndex >> wordsIn: aSymbol do: aBlock minSize: anInteger includeSubStrings: aBoolean [
-	| start end char size firstIsDigit |
-	size := aSymbol size.
-	start := 1.
-	[ start <= size ]
-		whileTrue: [ [ start <= size
-				and: [ ((char := aSymbol at: start) isLetter or: [ char isDigit ]) not ] ]
-				whileTrue: [ start := start + 1 ].
-			start > size ifTrue: [ ^ self ].
-			end := start + 1.
-			char isUppercase
-				ifTrue: [ [ end <= size and: [ (aSymbol at: end) isUppercase ] ]
-						whileTrue: [ end := end + 1 ] ].
-			firstIsDigit := char isDigit.
-			[ end <= size
-				and: [ char := aSymbol at: end.
-					firstIsDigit ifTrue: [ char isDigit ] ifFalse: [ char isLowercase ] ] ]
-				whileTrue: [ end := end + 1 ].
-			end := end - 1.
-			[ end - start + 1 >= anInteger ]
-				whileTrue: [ aBlock cull: (aSymbol copyFrom: start to: end) cull: start.
-					(aBoolean and: [ (aSymbol at: end) isUppercase not ])
-						ifTrue: [ start := start + 1.
-							(start < size and: [ (aSymbol at: start) isUppercase ])
-								ifFalse: [ start := end + 1 ] ]
-						ifFalse: [ start := end + 1 ] ].
-			start := end + 1 ]
+	self unsubscribeFromModel
 ]
