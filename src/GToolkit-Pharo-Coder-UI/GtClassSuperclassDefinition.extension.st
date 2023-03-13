@@ -23,11 +23,6 @@ GtClassSuperclassDefinition >> browseReferencesFrom: anEvent [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtClassSuperclassDefinition >> editors [
-	^ { self superclassEditor }
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtClassSuperclassDefinition >> newTabFrom: anEvent [
 	self class environment
 		at: self name
@@ -65,28 +60,6 @@ GtClassSuperclassDefinition >> replaceFrom: anEvent [
 			anEvent currentTarget fireEvent: aCoderEvent.
 			aCoderEvent isConsumed ifFalse: [ 
 				anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtClassSuperclassDefinition >> superclassEditor [
-	<return: #GtCodeDefinitionViewer>
-	
-	^ GtCodeDefinitionSingleEditor new
-			definition: self;
-			title: 'Superclass';
-			getSelector: #name;
-			setSelector: #name:;
-			renameEvent: GtBehaviorSuperclassRenamed;
-			completion: [ GtClassesCompletionStrategy new ];
-			whenKey: BlKeyCombination primaryB do: [ :anEvent :aDefinition  | 
-				aDefinition browseFrom: anEvent ];
-			whenKey: BlKeyCombination primaryN do: [ :anEvent :aDefinition  | 
-				aDefinition browseReferencesFrom: anEvent ];
-			whenPrimaryClickDo: [ :anEvent :aDefinition | 
-				aDefinition browseFrom: anEvent ];
-			whenKey: BlKeyCombination primaryC do: [ :anEvent :aDefinition  |
-				Clipboard clipboardText: aDefinition name asString ];
-		containerName: self class behaviorSuperclassEditorName
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

@@ -8,17 +8,6 @@ GtTraitDefinition >> browseFrom: anEvent [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtTraitDefinition >> editors [
-	<return: #Collection of: #GtCodeDefinitionViewer>
-
-	^ { 
-		self category categoryEditor.
-		self traits traitsEditor.
-		self slots slotsEditor.
-	}
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTraitDefinition >> readers [
 	<return: #Collection of: #GtCodeDefinitionViewer>
 
