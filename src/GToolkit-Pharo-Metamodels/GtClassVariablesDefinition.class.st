@@ -123,30 +123,6 @@ GtClassVariablesDefinition >> notifyClassVariableRenamed: aGtVariableDefinition 
 ]
 
 { #category : #'api - class vars' }
-GtClassVariablesDefinition >> pushDownClassVariableRefactoringFor: varName [ 
-	| aModel aClass |
-	aModel := self createRefactoringModel.
-	aClass := aModel classNamed: self definition topMostParent name.
-
-	^ RBPushDownClassVariableRefactoring
-		model: aModel
-		variable: varName
-		class: aClass
-]
-
-{ #category : #'api - class vars' }
-GtClassVariablesDefinition >> pushUpClassVariableRefactoringFor: varName [ 
-	| aModel aClass |
-	aModel := self createRefactoringModel.
-	aClass := aModel classNamed: self definition topMostParent name.
-
-	^ RBPullUpClassVariableRefactoring
-		model: aModel
-		variable: varName
-		class: aClass superclass
-]
-
-{ #category : #'api - class vars' }
 GtClassVariablesDefinition >> removeClassVariableNamed: aSymbol [
 	| aRemovedClassVariable |
 	

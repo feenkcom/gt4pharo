@@ -107,13 +107,6 @@ GtPharoBehaviorDefinitionCoderElement >> editableLabelLook [
 		fontSize: 10
 ]
 
-{ #category : #'private - accessing' }
-GtPharoBehaviorDefinitionCoderElement >> editors [
-	<return: #Collection of: #GtCodeDefinitionViewer>
-
-	^ behaviorCoderViewModel coder definition editors
-]
-
 { #category : #initialization }
 GtPharoBehaviorDefinitionCoderElement >> initialize [
 	super initialize.	

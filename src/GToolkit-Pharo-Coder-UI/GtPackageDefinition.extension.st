@@ -16,11 +16,6 @@ GtPackageDefinition >> browseFrom: anEvent [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPackageDefinition >> editors [
-	^ { self packageEditor }
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> newTabFrom: anEvent [
 	| aRealPackage aPackageCoder aSpace |
 	aRealPackage := RPackageOrganizer default
@@ -41,22 +36,6 @@ GtPackageDefinition >> newTabFrom: anEvent [
 						embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
 	aSpace withHalos.
 	anEvent target showSpace: aSpace
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPackageDefinition >> packageEditor [
-	^ GtCodeDefinitionSingleEditor new
-		title: 'Package';
-		definition: self;
-		getSelector: #name;
-		setSelector: #name:;
-		renameEvent: GtBehaviorPackageRenamed;
-		completion: [ GtPackagesCompletionStrategy new ];
-		whenKey: BlKeyCombination primaryB do: [ :anEvent :aDefinition  | aDefinition browseFrom: anEvent ];
-		whenPrimaryClickDo: [ :anEvent :aDefinition | aDefinition browseFrom: anEvent ];
-		whenKey: BlKeyCombination primaryC do: [ :anEvent :aDefinition  |
-			Clipboard clipboardText: aDefinition name asString ];
-		containerName: self class packageEditorName
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
