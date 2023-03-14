@@ -23,6 +23,10 @@ GtPharoProgramNode >> completeVariable: token for: aStrategy [
 	compositeTree := GtCompositePrefixTree
 			trees: {allLocalVariables.
 					aStrategy variables}.
+	aStrategy wasRequested
+		ifFalse: [ ((compositeTree includes: prefix)
+				or: [ GtPharoIndex current globalCache includes: prefix ])
+				ifTrue: [ ^ #() asAsyncStream ] ].
 	stream := (((((compositeTree
 			asyncStreamStartingWith: prefix
 			caseSensitive: true)
@@ -97,43 +101,16 @@ GtPharoProgramNode >> mergeKeywordCompletionsWith: completionsStream from: aMess
 ]
 
 { #category : #'*GToolkit-Pharo-Completer' }
-GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken for: strategy parentMessage: anObject [
-	| index type name completionsStream replacementsStream wordSelectorStream |
-	index := strategy index.
-	type := receiver guessType: strategy.
-	name := aToken source.
-	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
-			collect: [ :each | 
-				receiver
-					actionForSelector: each
-					startingWith: name
-					at: index
-					strategy: strategy ].
-	wordSelectorStream := (strategy
-			selectorStreamForReceiver: type
-			matchingWords: name) cached.
-	anObject ifNotNil: [  ].
-	replacementsStream := wordSelectorStream
-			collect: [ :each | 
-				(GtCompositeCompletionAction labeled: (strategy labelFor: each withWords: name))
-					addAction: (GtDeleteTextCompletionAction
-							labeled: ''
-							from: aToken startPosition
-							to: aToken stopPosition);
-					addAction: (receiver
-							actionForSelector: each
-							startingWith: ''
-							at: aToken startPosition - 1
-							strategy: strategy) ].
-	^ completionsStream merge: replacementsStream
-]
-
-{ #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken parentMessage: aMessage for: strategy [
 	| index type name completionsStream replacementsStream wordSelectorStream |
 	index := strategy index.
 	type := receiver guessType: strategy.
 	name := aToken source.
+	strategy wasRequested
+		ifFalse: [ (type
+				ifNil: [ (GtPharoIndex current implementersOf: name) notEmpty ]
+				ifNotNil: [ type canUnderstand: name asSymbol ])
+				ifTrue: [ ^ #() asAsyncStream ] ].
 	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
 			collect: [ :each | 
 				receiver
