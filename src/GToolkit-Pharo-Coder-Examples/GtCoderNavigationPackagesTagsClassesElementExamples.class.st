@@ -1,6 +1,6 @@
 Class {
 	#name : #GtCoderNavigationPackagesTagsClassesElementExamples,
-	#superclass : #GtCoderNavigationElementExamples,
+	#superclass : #GtCoderNavigationModelExamples,
 	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
