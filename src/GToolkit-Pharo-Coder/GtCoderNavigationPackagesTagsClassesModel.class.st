@@ -264,7 +264,9 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
 	self
 		notifyClassSelected: aClass
 		package: selectedPackage
-		tag: (selectedTag isRoot ifTrue: [ nil ] ifFalse: [ selectedTag ])
+		tag: ((selectedTag isNil or: [ selectedTag isRoot ])
+				ifTrue: [ nil ]
+				ifFalse: [ selectedTag ])
 ]
 
 { #category : #'api - selection' }
