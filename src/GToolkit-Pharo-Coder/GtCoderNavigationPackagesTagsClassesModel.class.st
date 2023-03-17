@@ -333,6 +333,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackage: anRPackage [
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 	| packageCoder aCoder |
+	aRPackageTag isNil ifTrue: [ ^ self ].
 	(self showPackage: aRPackageTag package) ifFalse: [ ^ self ].
 	(coder isForPackageTag
 		and: [ selectedPackage = aRPackageTag package and: [ selectedTag = aRPackageTag ] ])
