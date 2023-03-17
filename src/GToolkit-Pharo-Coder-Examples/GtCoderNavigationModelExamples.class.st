@@ -79,12 +79,13 @@ GtCoderNavigationModelExamples >> registerSpace: aSpace element: aBlElement [
 { #category : #'examples - navigation model' }
 GtCoderNavigationModelExamples >> selectClassInDifferentPackageWithNoTagsNavigationExample [
 	<gtExample>
-	| aModel |
+	| aModel aPackage |
 	aModel := self selectPackage.
 	aModel selectClass: CustomHelp.
+	aPackage := 'HelpSystem-Core' asPackage.
 	self
-		assertSelectionOfPackage: self examplePackage
-		tag: nil
+		assertSelectionOfPackage: aPackage
+		tag: (aPackage classTagNamed: 'Utilities')
 		class: CustomHelp
 		inModel: aModel.
 	^ aModel
@@ -101,6 +102,37 @@ GtCoderNavigationModelExamples >> selectClassNavigationExample [
 		assertSelectionOfPackage: aPackage
 		tag: (aPackage classTagNamed: 'Navigation')
 		class: GtCoderNavigationModelExamples
+		inModel: aModel.
+	^ aModel
+]
+
+{ #category : #'examples - navigation model' }
+GtCoderNavigationModelExamples >> selectExtendedClass [
+	<gtExample>
+	| aModel aPackage |
+	aModel := self basicPackageTagsClassesNavigation.
+	aPackage := 'GToolkit-Pharo-Coder' asPackage.
+	aModel selectPackage: aPackage.
+	aModel selectClass: RBRenameClassChange.
+	self
+		assertSelectionOfPackage: aPackage
+		tag: nil
+		class: RBRenameClassChange
+		inModel: aModel.
+	^ aModel
+]
+
+{ #category : #'examples - navigation model' }
+GtCoderNavigationModelExamples >> selectExtendedClassInSamePackage [
+	<gtExample>
+	| aModel aPackage |
+	aModel := self selectExtendedClass.
+	aPackage := aModel selectedPackage.
+	aModel selectClass: RBAddClassChange.
+	self
+		assertSelectionOfPackage: aPackage
+		tag: nil
+		class: RBAddClassChange
 		inModel: aModel.
 	^ aModel
 ]
@@ -141,6 +173,22 @@ GtCoderNavigationModelExamples >> selectPackageAndTag [
 		assertSelectionOfPackage: aPackage
 		tag: aTag
 		class: nil
+		inModel: aModel.
+	^ aModel
+]
+
+{ #category : #'examples - navigation model' }
+GtCoderNavigationModelExamples >> selectSuperclassInDifferentPackage [
+	<gtExample>
+	| aModel aPackage aTag |
+	aModel := self selectExtendedClass.
+	aPackage := 'Refactoring-Changes' asPackage.
+	aTag := (aPackage classTagNamed: 'Changes-Classes').
+	aModel selectClass: RBRefactoryDefinitionChange.
+	self
+		assertSelectionOfPackage: aPackage
+		tag: aTag
+		class: RBRefactoryDefinitionChange
 		inModel: aModel.
 	^ aModel
 ]
