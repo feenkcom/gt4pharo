@@ -33,7 +33,7 @@ Class {
 		'pharoTagsNavigationViewModel',
 		'parentPharoPackagesNavigationViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
 { #category : #'api - announcer' }
@@ -249,7 +249,7 @@ GtPharoPackageNavigationViewModel >> printOn: aStream [
 ]
 
 { #category : #'api - selection' }
-GtPharoPackageNavigationViewModel >> selectPackage [
+GtPharoPackageNavigationViewModel >> selectPackageWithExtension [
 	"Just select a package without changing children"
 	<propertySetter: #selectedPackageViewModel>
 
@@ -261,7 +261,7 @@ GtPharoPackageNavigationViewModel >> selectPackageWithoutOtherEntities [
 	"Select a package and deselect other selected children"
 
 	self deselectOtherEntities.
-	self selectPackage
+	self selectPackageWithExtension
 ]
 
 { #category : #'api - announcer' }

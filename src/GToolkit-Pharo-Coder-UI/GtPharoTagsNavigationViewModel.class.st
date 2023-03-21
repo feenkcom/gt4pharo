@@ -20,7 +20,7 @@ Class {
 		'pharoTagNavigationViewModels',
 		'parentPharoPackageNavigationViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
 { #category : #'api - announcer' }
@@ -125,7 +125,7 @@ GtPharoTagsNavigationViewModel >> onNewSelectedTagViewModelSet: aNewSelectedTagV
 	<propertySetHook: #selectedTagViewModel>
 
 	self hasParentPharoPackageNavigationViewModel
-		ifTrue: [ self parentPharoPackageNavigationViewModel selectPackage ].
+		ifTrue: [ self parentPharoPackageNavigationViewModel selectPackageWithExtension ].
 	aNewSelectedTagViewModel notifyTagSelected
 ]
 

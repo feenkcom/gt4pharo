@@ -87,10 +87,10 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 		assertSelectionOfPackage: nil
 		tag: self extensionTag
 		class: ByteString
-		inElement: anElement.
-	"Should only contain the instance label and the extension methods protocol"
+		inElement: anElement.	"Should only contain the instance label and the extension methods protocol"
 	self assert: anElement methodProtocolsList viewModel entityCount = 2.
-	self assert: anElement selectedProtocol name = ('*', self packageWithTagsAndExtensions name). 
+	self
+		assert: anElement selectedProtocol name = ('*' , self packageWithTagsAndExtensions name).
 	^ anElement
 ]
 
@@ -217,7 +217,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedP
 	anElement := self elementNavigationModelInSpace.
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
 	self 
-		assertSelectionOfPackage: nil
+		assertSelectionOfPackage: 'GToolkit-Coder-Examples' asPackage
 		tag: nil 
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.

@@ -80,7 +80,7 @@ GtCoderNavigationModelExamples >> registerSpace: aSpace element: aBlElement [
 GtCoderNavigationModelExamples >> selectClassInDifferentPackageWithNoTagsNavigationExample [
 	<gtExample>
 	| aModel aPackage |
-	aModel := self selectPackage.
+	aModel := self selectPackageWithExtension.
 	aModel selectClass: CustomHelp.
 	aPackage := 'HelpSystem-Core' asPackage.
 	self
@@ -116,7 +116,7 @@ GtCoderNavigationModelExamples >> selectExtendedClass [
 	aModel selectClass: RBRenameClassChange.
 	self
 		assertSelectionOfPackage: aPackage
-		tag: nil
+		tag: (GtCoderPackageExtensionTag forPackage: aPackage)
 		class: RBRenameClassChange
 		inModel: aModel.
 	^ aModel
@@ -131,22 +131,8 @@ GtCoderNavigationModelExamples >> selectExtendedClassInSamePackage [
 	aModel selectClass: RBAddClassChange.
 	self
 		assertSelectionOfPackage: aPackage
-		tag: nil
+		tag: (GtCoderPackageExtensionTag forPackage: aPackage)
 		class: RBAddClassChange
-		inModel: aModel.
-	^ aModel
-]
-
-{ #category : #'examples - navigation model' }
-GtCoderNavigationModelExamples >> selectPackage [
-	<gtExample>
-	| aModel |
-	aModel := self basicPackageTagsClassesNavigation.
-	aModel selectPackage: self examplePackage.
-	self
-		assertSelectionOfPackage: self examplePackage
-		tag: nil
-		class: nil
 		inModel: aModel.
 	^ aModel
 ]
@@ -172,6 +158,20 @@ GtCoderNavigationModelExamples >> selectPackageAndTag [
 	self
 		assertSelectionOfPackage: aPackage
 		tag: aTag
+		class: nil
+		inModel: aModel.
+	^ aModel
+]
+
+{ #category : #'examples - navigation model' }
+GtCoderNavigationModelExamples >> selectPackageWithExtension [
+	<gtExample>
+	| aModel |
+	aModel := self basicPackageTagsClassesNavigation.
+	aModel selectPackage: self examplePackage.
+	self
+		assertSelectionOfPackage: self examplePackage
+		tag: nil
 		class: nil
 		inModel: aModel.
 	^ aModel
