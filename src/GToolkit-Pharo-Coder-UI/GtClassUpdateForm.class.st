@@ -17,7 +17,7 @@ GtClassUpdateForm >> commit [
 		do: [ :aSlot | 
 			(RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide)
 				execute ].
-	Smalltalk compiler evaluate: self definitionString.
+	self defineClass.
 	aClass := Smalltalk classNamed: self rawClassName.
 	self installClassSlotsOn: aClass.
 

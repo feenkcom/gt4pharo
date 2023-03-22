@@ -46,7 +46,7 @@ GtClassCreationForm >> classVarsDescription [
 { #category : #accessing }
 GtClassCreationForm >> commit [
 	| aClass |
-	Smalltalk compiler evaluate: self definitionString.
+	self defineClass.
 	aClass := Smalltalk classNamed: self rawClassName.
 	self installClassSlotsOn: aClass.
 	^ aClass
@@ -58,46 +58,16 @@ GtClassCreationForm >> defaultName [
 ]
 
 { #category : #accessing }
-GtClassCreationForm >> definitionString [
-	| aStream aPackage |
-	aStream := (String new: 800) writeStream.
-	aStream nextPutAll: self superclassName.
-
-	aStream
-		nextPutAll: ' subclass: ';
-		store: self rawClassName asSymbol.
-
-	self traits isEmpty
-		ifFalse: [ aStream
-				cr;
-				tab;
-				nextPutAll: 'uses: ';
-				nextPutAll: (' + ' join: self traits) ].
-	aStream
-		cr;
-		tab;
-		nextPutAll: 'instanceVariableNames: ';
-		store: (' ' join: self slots).	"Class vars"
-	aStream
-		cr;
-		tab;
-		nextPutAll: 'classVariableNames: ';
-		store: (' ' join: self classVars).	"Pool Dictionaries"
-	aStream
-		cr;
-		tab;
-		nextPutAll: 'poolDictionaries: ';
-		store: (' ' join: self pools).
-
-	aPackage := self commitPackage.
-
-	aStream
-		cr;
-		tab;
-		nextPutAll: 'package: ';
-		store: aPackage categoryName asString.
-
-	^ aStream contents
+GtClassCreationForm >> defineClass [
+	| sup |
+	sup := Smalltalk classNamed: self superclassName asSymbol.
+	sup
+		subclass: self rawClassName asSymbol
+		uses: (self traits collect: [ :each | Smalltalk classNamed: each ]) asArray
+		instanceVariableNames: (' ' join: self slots)
+		classVariableNames: (' ' join: self classVars)
+		poolDictionaries: (' ' join: self pools)
+		package: self commitPackage categoryName asString
 ]
 
 { #category : #accessing }
