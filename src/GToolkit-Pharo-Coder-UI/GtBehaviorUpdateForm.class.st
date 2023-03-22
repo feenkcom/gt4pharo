@@ -39,7 +39,10 @@ GtBehaviorUpdateForm >> classSlotsDescription [
 	^ super classSlotsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ]);
+				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
+					aMemento overallStatus valueOrNil isChanged
+						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
+						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: self ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
@@ -86,31 +89,6 @@ GtBehaviorUpdateForm >> classVarsDescription [
 { #category : #accessing }
 GtBehaviorUpdateForm >> commit [
 	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> createClassSlotsContextMenuContentFor: aSlotName editor: anElement [
-	| theContextMenu items |
-	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
-	items := OrderedCollection new.
-	items
-		addAll: {GtCoderContextMenuAction new
-					action: [ self executeRefactoring: (self pushUpClassSlotRefactoringFor: aSlotName) ];
-					title: (self createLabelTextFor: 'Push up ' description: aSlotName).
-				GtCoderContextMenuAction new
-					action: [ self executeRefactoring: (self pushDownClassSlotRefactoringFor: aSlotName) ];
-					title: (self createLabelTextFor: 'Push down ' description: aSlotName).
-				GtCoderContextMenuAction new
-					action: [ self executeRefactoring: (self generateClassAccessorsFor: aSlotName) ];
-					title: (self createLabelTextFor: 'Create accessors for ' description: aSlotName).
-				GtCoderContextMenuAction new
-					action: [ self executeRefactoring: (self abstractClassVariable: aSlotName) ];
-					title: (self createLabelTextFor: 'Abstract ' description: aSlotName).
-				GtCoderContextMenuAction new
-					action: [ self executeRefactoring: (self protectClassVariable: aSlotName) ];
-					title: (self createLabelTextFor: 'Protect ' description: aSlotName)}.
-	theContextMenu items: items.
-	^ theContextMenu
 ]
 
 { #category : #accessing }
@@ -375,7 +353,10 @@ GtBehaviorUpdateForm >> slotsDescription [
 	^ super slotsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement | self createSlotsContextMenuContentFor: aVariable editor: self ]);
+				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
+					aMemento overallStatus valueOrNil isChanged
+						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
+						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: self ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
