@@ -260,7 +260,10 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
 			ifNil: [ aClass package ]
 			ifNotNil: [ :pkg | (pkg extendsClass: aClass) ifTrue: [ pkg ] ifFalse: [ aClass package ] ].
 	newPackage = selectedPackage ifFalse: [ selectedPackage := newPackage ].
-	selectedTag := selectedTag ifNil: [ selectedPackage classTagForClass: aClass ].
+	selectedTag := selectedPackage classTagForClass: aClass.
+	selectedTag := selectedTag
+			ifNil: [ (selectedPackage extendsClass: aClass)
+					ifTrue: [ GtCoderPackageExtensionTag forPackage: selectedPackage ] ].
 	self coder: aCoder.
 	self
 		notifyClassSelected: aClass

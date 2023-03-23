@@ -27,7 +27,7 @@ Class {
 		'parentPharoPackageNavigationViewModel',
 		'parentPharoTagNavigationViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
 { #category : #'api - announcer' }
@@ -143,7 +143,7 @@ GtPharoBehaviorsNavigationViewModel >> onNewSelectedBehaviorViewModelSet: aNewSe
 	<propertySetHook: #selectedBehaviorViewModel>
 
 	self hasParentPharoPackageNavigationViewModel
-		ifTrue: [ self parentPharoPackageNavigationViewModel selectPackage ].
+		ifTrue: [ self parentPharoPackageNavigationViewModel selectPackageWithExtension ].
 	self hasParentPharoTagNavigationViewModel
 		ifTrue: [ self parentPharoTagNavigationViewModel selectTag ].
 	aNewSelectedBehaviorViewModel notifyBehaviorSelected
