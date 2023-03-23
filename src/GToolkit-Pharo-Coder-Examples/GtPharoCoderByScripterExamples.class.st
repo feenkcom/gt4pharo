@@ -9,6 +9,34 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'examples - dropdown' }
+GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
+	aScripter do
+		label: 'Setup dropdown overview';
+		block: [ :aButton :aUserData | 
+			aUserData
+				at: BrAnchoredContainerOverview
+				put: (BrAnchoredContainerOverview new
+						scripter: aScripter;
+						elementWithDropdown: aButton) ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+
+	aScripter assert
+		label: 'Assert dropdown bounds';
+		satisfies: [ :aContentElement | 
+			aContentElement topMostParent bounds inSpace asRectangle
+				containsRect: aContentElement bounds inSpace asRectangle ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play
+]
+
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
 	<gtExample>
@@ -361,30 +389,20 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 		// #list;
 		play.
 		
-	aScripter assert
-		label: 'Assert dropdown width';
-		value: [ :aContentElement | aContentElement width ]
-			equals: [ :aContentElement | 
-				| aContextMenuQuery |
-				aContextMenuQuery := aContentElement query // GtStreamingSpotterElement.
-				self assert: aContextMenuQuery result size equals: 1.
-				aContextMenuQuery result first width ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
+	aScripter do
+		label: 'Setup dropdown overview';
+		block: [ :aButton :aUserData | 
+			aUserData at: BrAnchoredContainerOverview put: (
+				BrAnchoredContainerOverview new
+				scripter: aScripter;
+				elementWithDropdown: aButton) ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
 		play.
 		
-	aScripter assert
-		label: 'Assert dropdown bounds';
-		satisfies: [ :aContentElement | 
-			aContentElement topMostParent bounds inSpace asRectangle
-				containsRect: aContentElement bounds inSpace asRectangle ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play.
+	self assertDropdown: aScripter.
 	
 	^ aScripter
 ]
@@ -404,8 +422,8 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown_scrolle
 		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
 		onSpace;
 		play.
-	
-	aScripter click 
+		
+	aScripter click
 		label: 'Click on the search code button';
 		// (GtPagerPageElementId indexed: 2);
 		// GtPharoBehaviorCoderElement;
@@ -413,22 +431,14 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown_scrolle
 		// GtPharoSearchCodeButtonId;
 		play.
 		
-	aScripter do 
+	aScripter do
 		label: 'Scroll GtPager';
-		block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -371@0 ];
+		block: [ :anInfiniteElement | 
+			anInfiniteElement smoothScrollBy:  -371 @ 0 ];
 		// #list;
 		play.
 		
-	aScripter assert
-		label: 'Assert dropdown bounds';
-		satisfies: [ :aContentElement | 
-			aContentElement topMostParent bounds inSpace asRectangle
-				containsRect: aContentElement bounds inSpace asRectangle ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play.
+	self assertDropdown: aScripter.
 	
 	^ aScripter
 ]
