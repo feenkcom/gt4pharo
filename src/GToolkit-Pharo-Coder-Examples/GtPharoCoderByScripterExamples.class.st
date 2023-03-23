@@ -15,9 +15,8 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 		label: 'Setup dropdown overview';
 		block: [ :aButton :aUserData | 
 			aUserData
-				at: BrAnchoredContainerOverview
-				put: (BrAnchoredContainerOverview new
-						scripter: aScripter;
+				at: BrAnchoredVisualAnalysis
+				put: (BrAnchoredVisualAnalysis new
 						elementWithDropdown: aButton) ];
 		// (GtPagerPageElementId indexed: 2);
 		// GtPharoBehaviorCoderElement;
@@ -392,10 +391,9 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 	aScripter do
 		label: 'Setup dropdown overview';
 		block: [ :aButton :aUserData | 
-			aUserData at: BrAnchoredContainerOverview put: (
-				BrAnchoredContainerOverview new
-				scripter: aScripter;
-				elementWithDropdown: aButton) ];
+			aUserData at: BrAnchoredVisualAnalysis put: (
+				BrAnchoredVisualAnalysis new
+					elementWithDropdown: aButton) ];
 		// (GtPagerPageElementId indexed: 2);
 		// GtPharoBehaviorCoderElement;
 		// BrTabGroup;
