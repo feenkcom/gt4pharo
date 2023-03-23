@@ -9,6 +9,34 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'examples - dropdown' }
+GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
+	aScripter do
+		label: 'Setup dropdown overview';
+		block: [ :aButton :aUserData | 
+			aUserData
+				at: BrAnchoredContainerOverview
+				put: (BrAnchoredContainerOverview new
+						scripter: aScripter;
+						elementWithDropdown: aButton) ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+
+	aScripter assert
+		label: 'Assert dropdown bounds';
+		satisfies: [ :aContentElement | 
+			aContentElement topMostParent bounds inSpace asRectangle
+				containsRect: aContentElement bounds inSpace asRectangle ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play
+]
+
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
 	<gtExample>
@@ -249,43 +277,6 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu_firstClickInsid
 	^ aScripter
 ]
 
-{ #category : #'examples - dropdown' }
-GtPharoCoderByScripterExamples >> displayFirstPaneMethodSpotterDropdown [
-	<gtExample>
-	| aScripter |
-	aScripter := self displayThreeClassCodersWithMethodExpanded.
-	
-	aScripter do
-		label: 'Set space extent';
-		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
-		onSpace;
-		play.
-	
-	aScripter click 
-		label: 'Click on the search code button';
-		id: GtPagerPageElementId index: 2;
-		// GtPharoBehaviorCoderElement;
-		// BrTabGroup;
-		// GtPharoSearchCodeButtonId;
-		play.
-		
-	"aScripter assert
-		label: 'Assert dropdown extent';
-		value: [ :aContentElement | aContentElement extent ]
-			equals: [ :aContentElement | 
-				| aContextMenuQuery |
-				aContextMenuQuery := aContentElement query // GtStreamingSpotterElement.
-				self assert: aContextMenuQuery result size equals: 1.
-				aContextMenuQuery result first extent ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play."
-	
-	^ aScripter
-]
-
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> displayMaximizedCoderWithMethodExpanded [
 	<gtExample>
@@ -365,6 +356,90 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Sp
 		/ #content asBlocElementId;
 		play.
 
+	^ aScripter
+]
+
+{ #category : #'examples - dropdown' }
+GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
+	"Dropdown is displayed on the second pane.
+	The first and the third pane are partially visible.
+	The dropdown should be placed to the bottom left."
+
+	<gtExample>
+	| aScripter |
+	aScripter := self displayThreeClassCodersWithMethodExpanded.
+	
+	aScripter do
+		label: 'Set space extent';
+		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
+		onSpace;
+		play.
+	
+	aScripter click 
+		label: 'Click on the search code button';
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+		
+	aScripter do 
+		label: 'Scroll GtPager';
+		block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -370@0 ];
+		// #list;
+		play.
+		
+	aScripter do
+		label: 'Setup dropdown overview';
+		block: [ :aButton :aUserData | 
+			aUserData at: BrAnchoredContainerOverview put: (
+				BrAnchoredContainerOverview new
+				scripter: aScripter;
+				elementWithDropdown: aButton) ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+		
+	self assertDropdown: aScripter.
+	
+	^ aScripter
+]
+
+{ #category : #'examples - dropdown' }
+GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown_scrolledByOnePixel [
+	"Dropdown is displayed on the second pane.
+	The first and the third pane are partially visible.
+	The dropdown should be placed to the bottom left."
+
+	<gtExample>
+	| aScripter |
+	aScripter := self displayThreeClassCodersWithMethodExpanded.
+	
+	aScripter do
+		label: 'Set space extent';
+		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
+		onSpace;
+		play.
+		
+	aScripter click
+		label: 'Click on the search code button';
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+		
+	aScripter do
+		label: 'Scroll GtPager';
+		block: [ :anInfiniteElement | 
+			anInfiniteElement smoothScrollBy:  -371 @ 0 ];
+		// #list;
+		play.
+		
+	self assertDropdown: aScripter.
+	
 	^ aScripter
 ]
 
