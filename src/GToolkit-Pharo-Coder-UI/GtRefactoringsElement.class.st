@@ -15,6 +15,11 @@ GtRefactoringsElement >> applyRefactorings [
 	^ changesElement applyChanges
 ]
 
+{ #category : #accessing }
+GtRefactoringsElement >> changes: changes [
+	changesElement changes: changes
+]
+
 { #category : #initialization }
 GtRefactoringsElement >> initialize [
 	super initialize.
@@ -28,6 +33,8 @@ GtRefactoringsElement >> initialize [
 
 { #category : #accessing }
 GtRefactoringsElement >> refactorings: aCollectionOfRBRefactorings [
+	| changes |
 	aCollectionOfRBRefactorings isEmpty ifTrue: [ ^ self ].
-	changesElement changes: aCollectionOfRBRefactorings first model changes
+	changes := aCollectionOfRBRefactorings first model changes.
+	self changes: changes
 ]

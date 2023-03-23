@@ -67,11 +67,17 @@ GtRefactoringsPreviewButton >> buildCancelButton [
 
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
-	| theRefactoringsElement anAcceptButton aContainer label |
+	| theRefactoringsElement anAcceptButton aContainer label refactoringsOrChanges |
+	refactoringsOrChanges := self executedRefactorings.
 	theRefactoringsElement := GtRefactoringsElement new
 			hExact: self previewWidth * 1.25;
-			vFitContentLimited;
-			refactorings: self executedRefactorings.
+			vFitContentLimited.
+	(refactoringsOrChanges allSatisfy: [ :each | each isKindOf: RBRefactoring ])
+		ifTrue: [ theRefactoringsElement refactorings: refactoringsOrChanges ]
+		ifFalse: [ | change |
+			change := RBCompositeRefactoryChange named: 'Changes'.
+			refactoringsOrChanges do: [ :each | change addChange: each ].
+			theRefactoringsElement changes: change ].
 	anAcceptButton := self
 			buildAcceptForButton: aButton
 			andElement: theRefactoringsElement.
@@ -132,7 +138,7 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 	executedRefactorings := self refactorings.
 	executedRefactorings
 		do: [ :each | 
-			each model name: each printString.
+			(each isKindOf: RBRefactoring) ifTrue: [ each model name: each printString ].
 			[ [ each primitiveExecute ]
 				on: GtRefactoringNotification
 				do: [ :ex | 
