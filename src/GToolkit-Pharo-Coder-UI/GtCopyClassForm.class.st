@@ -16,18 +16,6 @@ GtCopyClassForm class >> for: aClass [
 	^ self new for: aClass
 ]
 
-{ #category : #accessing }
-GtCopyClassForm >> acceptAction [
-	<magritteActionDescription>
-	^ MAActionDescription new
-		label: 'Accept';
-		action: [ :aModel :aButton | 
-			[ | aClass |
-			aClass := self copyClass.
-			onAccept ifNotNil: [ onAccept value: aClass ] ] on: Error do: #debug ];
-		beCommitAction
-]
-
 { #category : #converting }
 GtCopyClassForm >> asElement [
 	^ self asGtMagritteViewModel asElement
@@ -58,6 +46,19 @@ GtCopyClassForm >> for: aClass [
 	packageAndTag := GtPackageAndTagName new
 			packageName: aClass package name;
 			tagName: (self treatTag: aClass)
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> magritteAcceptAction [
+	<magritteActionDescription>
+	^ super magritteAcceptAction
+		label: 'Copy';
+		onSuccessCallback: (GtMagritteActionExecutor new
+				beInUIProcess;
+				action: [ :aModel :aButton :aMemento :aDescription | 
+					[ | aClass |
+					aClass := self copyClass.
+					onAccept ifNotNil: [ onAccept value: aClass ] ] on: Error do: #debug ])
 ]
 
 { #category : #magritte }
