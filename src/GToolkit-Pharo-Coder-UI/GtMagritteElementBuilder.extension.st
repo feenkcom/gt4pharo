@@ -48,9 +48,11 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 			| aValue aNewValue |
 			aValue := aMemento readUsing: aDescription.
 			aNewValue := aValue copyWithNewPackageName: anEvent text asString.
-			packageEditor
-				enqueueTask: (BlPromiseTask new
-						promise: (aMemento write: aNewValue using: aDescription) asAsyncPromise) ].
+			GtMagritteBuilderUtility
+				write: aNewValue 
+				using: aDescription 
+				memento: aMemento 
+				element: packageEditor ].
 	^ packageEditor
 ]
 
@@ -110,9 +112,12 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 			| aValue aNewValue |
 			aValue := aMemento readUsing: aDescription.
 			aNewValue := aValue copyWithNewTagName: anEvent text asString.
-			tagEditor
-				enqueueTask: (BlPromiseTask new
-						promise: (aMemento write: aNewValue using: aDescription) asAsyncPromise) ].
+			
+			GtMagritteBuilderUtility 
+				write: aNewValue 
+				using: aDescription 
+				memento: aMemento 
+				element: tagEditor. ].
 	^ tagEditor
 ]
 
