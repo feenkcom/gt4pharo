@@ -115,3 +115,7 @@ GtSearchReferencesFilter >> printOn: stream [
 GtSearchReferencesFilter >> shouldFilterOutTraitMethods [
 	^ true
 ]
+
+{ #category : #'api - initialization' }
+GtSearchReferencesFilter >> withSubclasses [
+]
