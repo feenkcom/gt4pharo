@@ -83,7 +83,7 @@ GtPharoMethodCoderViewModel >> discardChanges [
 
 { #category : #accessing }
 GtPharoMethodCoderViewModel >> elementClass [
-	^ GtExpandableMethodCoderForBehaviorElement
+	^ GtExpandableMethodCoderElement
 ]
 
 { #category : #'private - evaluation' }
