@@ -267,18 +267,12 @@ GtPharoMethodCoderTagsElement >> unsubscribeFromPharoMethodCoderViewModel [
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
-	classTag label: (self classTagStringFor: pharoMethodCoderViewModel).
-	self updateBehaviorSideButtonActivation.
-	
-	self flag: #TODO.
-	"canMoveMethodToInstanceOrClass is very expensive to compute"
-
-	"classTag enabled: self methodCoderUIModel coder canMoveMethodToInstanceOrClass"
+	classTag label: (self classTagStringFor: pharoMethodCoderViewModel)
 ]
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButtonActivation [
-	classTag asyncPromise promise: pharoMethodCoderViewModel isTextModified
+	"classTag asyncPromise promise: pharoMethodCoderViewModel isTextModified"
 ]
 
 { #category : #'private - update' }

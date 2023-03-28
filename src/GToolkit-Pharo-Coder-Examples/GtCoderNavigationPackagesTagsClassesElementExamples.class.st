@@ -20,10 +20,9 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdates
 
 { #category : #asserting }
 GtCoderNavigationPackagesTagsClassesElementExamples >> assertSelectionOfPackage: aRPackage tag: aRPackageTag class: aClass inElement: anElement [
-
 	self assert: anElement selectedPackage equals: aRPackage.
 	self assert: anElement selectedPackageTag equals: aRPackageTag.
-	self assert: anElement selectedClass equals: aClass.
+	self assert: anElement selectedClass equals: aClass
 ]
 
 { #category : #'examples - basic' }
@@ -80,33 +79,61 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModelInS
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPackageTagClassSelection [
 	<gtExample>
-	| anElement |
-	anElement := self elementWithExtensionPackageTagSelection.
-	anElement navigationModel selectClass: ByteString.
-	self
-		assertSelectionOfPackage: nil
-		tag: self extensionTag
-		class: ByteString
-		inElement: anElement.	"Should only contain the instance label and the extension methods protocol"
-	self assert: anElement methodProtocolsList viewModel entityCount = 2.
-	self
-		assert: anElement selectedProtocol name = ('*' , self packageWithTagsAndExtensions name).
-	^ anElement
+	| aScripter |
+	aScripter := self elementWithExtensionPackageTagSelection.
+
+	aScripter do
+		label: 'Select  Class';
+		block: [ :anElement | anElement navigationModel selectClass: ByteString ];
+		play.
+
+	aScripter checks
+		label: 'Check Class and Package Tag Selection';
+		do: [ :anElement | 
+			self
+				assertSelectionOfPackage: nil
+				tag: self extensionTag
+				class: ByteString
+				inElement: aScripter ].
+				
+	"Should only contain the instance label and the extension methods protocol"
+	aScripter checks
+		label: 'Check list count is correct';
+		satisfies: [ :anElement | anElement methodProtocolsList viewModel entityCount = 2 ];
+		play.
+	aScripter checks
+		label: 'Check protocol name is correct';
+		satisfies: [ :anElement | anElement selectedProtocol name = ('*' , self packageWithTagsAndExtensions name) ].
+
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPackageTagSelection [
 	<gtExample>
-	| anElement tag |
-	anElement := self elementNavigationModelInSpace.
+	| aScripter tag |
+	aScripter := self scripterOnElementNavigationModelInSpace.
 	tag := self extensionTag.
-	anElement navigationModel selectPackageTag: tag.
-	self
-		assertSelectionOfPackage: nil
-		tag: tag
-		class: nil
-		inElement: anElement.
-	^ anElement
+	aScripter do
+		label: 'Select Package Tag';
+		block: [ :anElement | anElement navigationModel selectPackageTag: tag ];
+		play.
+
+	aScripter checks
+		label: 'Check Package Tag Selection';
+		do: [ :anElement | 
+			self
+				assertSelectionOfPackage: nil
+				tag: tag
+				class: nil
+				inElement: anElement ];
+		play.
+
+	aScripter checks
+		label: 'Check Method Protocol List not visible';
+		satisfies: [ :anElement | anElement methodProtocolsList isVisible not ];
+		play.
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
@@ -172,42 +199,67 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 { #category : #'examples - package tag selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSelection [
 	<gtExample>
-	| anElement |
-	anElement := self elementNavigationModelInSpace.
-	anElement navigationModel selectPackageTag: self packageTag.
-	self
-		assertSelectionOfPackage: nil
-		tag: self packageTag
-		class: nil
-		inElement: anElement.
-	self assert: anElement methodProtocolsList isVisible not.
-	^ anElement
+	| aScripter |
+	aScripter := self scripterOnElementNavigationModelInSpace.
+	aScripter do
+		label: 'Select Package Tag';
+		block: [ :anElement | anElement navigationModel selectPackageTag: self packageTag ];
+		play.
+
+	aScripter checks
+		label: 'Check Package Tag Selection';
+		do: [ :anElement | 
+			self
+				assertSelectionOfPackage: nil
+				tag: self packageTag
+				class: nil
+				inElement: anElement ];
+		play.
+
+	aScripter checks
+		label: 'Check Method Protocol List not visible';
+		satisfies: [ :anElement | anElement methodProtocolsList isVisible not ];
+		play.
+	^ aScripter
 ]
 
 { #category : #'examples - package selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithoutTagsAndExtensionsSelection [
 	<gtExample>
-	| anElement |
-	anElement := self elementNavigationModelInSpace.
-	anElement navigationModel selectPackage: self packageWithoutTagsAndExtensions.
-	self
-		assertSelectionOfPackage: self packageWithoutTagsAndExtensions
-		tag: nil
-		class: nil
-		inElement: anElement.
-	self assert: anElement methodProtocolsList isVisible not.
-	^ anElement
+	| aScripter |
+	aScripter := self scripterOnElementNavigationModelInSpace.
+	aScripter do
+		label: 'Select Package';
+		block: [ :anElement | anElement navigationModel selectPackage: self packageWithoutTagsAndExtensions ];
+		play.
+
+	aScripter checks
+		label: 'Check Package Selection';
+		do: [ :anElement | 
+			self
+				assertSelectionOfPackage: self packageWithoutTagsAndExtensions
+				tag: nil
+				class: nil
+				inElement: anElement ];
+		play.
+
+	aScripter checks
+		label: 'Check Method Protocol List not visible';
+		satisfies: [ :anElement | anElement methodProtocolsList isVisible not ];
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - package selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithoutTagsAndExtensionsSelection_Children [
 	<gtExample>
-	| anElement aPackageNode |
-	anElement := self elementWithPackageWithoutTagsAndExtensionsSelection.
-	aPackageNode := anElement selectedPackageNodeDo: [ :aNode | aNode ].
+	| aScripter aPackageNode |
+	aScripter := self elementWithPackageWithoutTagsAndExtensionsSelection.
+	aPackageNode := aScripter element selectedPackageNodeDo: [ :aNode | aNode ].
 	self assert: aPackageNode isNotNil.
 	self assert: aPackageNode childrenValues size equals: 0.
-	^ anElement
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
@@ -280,6 +332,12 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithTagsAndWithout
 GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithoutTagsAndExtensions [
 	<gtExample>
 	^ 'GToolkit-Coder-Examples-SystemS1' asPackage 
+]
+
+{ #category : #'examples - basic' }
+GtCoderNavigationPackagesTagsClassesElementExamples >> scripterOnElementNavigationModelInSpace [
+	<gtExample>
+	^ BlScripter new element: self elementNavigationModelInSpace
 ]
 
 { #category : #'examples - system items' }

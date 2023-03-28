@@ -53,8 +53,7 @@ GtCopyClassForm >> magritteAcceptAction [
 	<magritteActionDescription>
 	^ super magritteAcceptAction
 		label: 'Copy';
-		onSuccessCallback: (GtMagritteActionExecutor new
-				beInUIProcess;
+		onSuccessCallback: (GtMagritteCallback new
 				action: [ :aModel :aButton :aMemento :aDescription | 
 					[ | aClass |
 					aClass := self copyClass.
