@@ -58,12 +58,13 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 
 	scripter type
 		label: 'Fill second slot';
-		text: 'bcd';
+		text: 'b';
 		play.
 		
-	scripter keyPress
-		label: 'Tab to next slot again';
-		key: BlKeyboardKey tab;
+	
+	scripter type
+		label: 'Fill second slot';
+		text: 'cd';
 		play.
 	
 	scripter assert
