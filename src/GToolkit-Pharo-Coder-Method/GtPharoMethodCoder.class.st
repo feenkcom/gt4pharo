@@ -689,24 +689,20 @@ GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	| oldClass newClass model modelClass oldModelClass |
 	oldClass := self behavior.
 	newClass := oldClass isMeta
-		ifTrue: [ oldClass soleInstance ]
-		ifFalse: [ oldClass class ].
-	self isNewMethod
+			ifTrue: [ oldClass soleInstance ]
+			ifFalse: [ oldClass class ].
+	(self isNewMethod or: [ self isModified ])
 		ifTrue: [ self behavior: newClass.
 			^ true ].
-	self canMoveMethodToInstanceOrClass
-		ifFalse: [ ^ false ].
+	self canMoveMethodToInstanceOrClass ifFalse: [ ^ false ].
 	model := RBNamespace new.
 	modelClass := model classFor: newClass.
-	modelClass
-		compile: self currentSourceString
-		classified: self protocol.
+	modelClass compile: self currentSourceString classified: self protocol.
 	oldModelClass := model classFor: oldClass.
 	(oldModelClass directlyDefinesMethod: self currentSelector)
 		ifTrue: [ oldModelClass removeMethod: self currentSelector ].
 	self behavior: newClass.
-	[ model changes execute ]
-		ifCurtailed: [ self behavior: oldClass ].
+	[ model changes execute ] ifCurtailed: [ self behavior: oldClass ].
 	^ true
 ]
 
