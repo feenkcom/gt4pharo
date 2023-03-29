@@ -71,14 +71,25 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 			margin: margin;
 			constraintsDo: [ :c | c flow vertical alignCenter ];
 			addShortcut: (BlShortcutWithAction new
+					name: 'Move to previous form item';
+					description: 'Moves to the previous form item. If none is found, we cycle back to the last.';
 					combination: BlKeyCombination shiftTab;
 					action: [ :anEvent | 
 						BlFocusFinder new
 							direction: BlFocusSearchDirectionBackward new;
 							root: tags parent parent parent;
 							referenceElement: anEvent currentTarget;
-							nextFocusDo: #requestFocus ifNone: [  ] ]);
+							nextFocusDo: #requestFocus ifNone: [  ].
+						aNewTagCreator text
+							ifEmpty: [ self
+									removeTagCreatorElement: aNewTagCreator
+									withSeparatorAt: tagElements size + 1 ]
+							ifNotEmpty: [ self
+									requestAddTag: (BrTaggerTag named: aNewTagCreator text asString)
+									from: aNewTagCreator ] ]);
 			addShortcut: (BlShortcutWithAction new
+					name: 'Move to next form item';
+					description: 'Moves to the next form item. If none is found, we cycle back to the first.';
 					combination: BlKeyCombination tab;
 					action: [ :anEvent | 
 						anEvent currentTarget
@@ -88,19 +99,22 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 									direction: BlFocusSearchDirectionForward new;
 									root: tags parent parent parent;
 									referenceElement: addButton;
-									nextFocusDo: #requestFocus ifNone: [  ] ]
+									nextFocusDo: #requestFocus ifNone: [  ].
+								aNewTagCreator text
+									ifEmpty: [ self
+											removeTagCreatorElement: aNewTagCreator
+											withSeparatorAt: tagElements size + 1 ]
+									ifNotEmpty: [ self
+											requestAddTag: (BrTaggerTag named: aNewTagCreator text asString)
+											from: aNewTagCreator ] ]
 							ifNotEmpty: [ self addTagCreatorElement ] ]).
 
 	aNewTagCreator editor
 		when: BrTextEditorModifiedEvent
 		do: [ :aWish | 
-			aWish text
-				ifEmpty: [ self
-						removeTagCreatorElement: aNewTagCreator
-						withSeparatorAt: tagElements size + 1 ]
-				ifNotEmpty: [ self
-						requestAddTag: (BrTaggerTag named: aWish text asString)
-						from: aNewTagCreator ] ].
+			self
+				requestAddTag: (BrTaggerTag named: aWish text asString)
+				from: aNewTagCreator ].
 
 	aNewTagCreator navigator
 		moveTo: 0;
@@ -112,20 +126,20 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 { #category : #accessing }
 GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
 	| anEditor |
-	anEditor := (tagLabelStencil tag: aTaggerTag) asElement
-		margin: margin.
+	anEditor := (tagLabelStencil tag: aTaggerTag) asElement margin: margin.
 
 	anEditor
-		when: BlFocusInEvent do: [ :anEvent | anEditor selecter all select ];
+		when: BlClickEvent do: [ :anEvent | anEditor selecter all select ];
+		when: BlFocusInEvent do: [ :anEvent | anEditor navigator
+		moveTo: anEditor text size;
+		apply. ];
 		when: BlFocusOutEvent do: [ :anEvent | anEditor deselecter all deselect ].
 
 	anEditor editor
 		when: BrTextEditorModifiedEvent
 		do: [ :aWish | 
 			aWish text
-				ifEmpty: [ self
-						requestRemoveTag: aTaggerTag
-						from: anEditor ]
+				ifEmpty: [ self requestRemoveTag: aTaggerTag from: anEditor ]
 				ifNotEmpty: [ self
 						requestRenameTag: aTaggerTag
 						to: aWish text asString
