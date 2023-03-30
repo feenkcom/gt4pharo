@@ -58,20 +58,14 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 
 	scripter type
 		label: 'Fill second slot';
-		text: 'b';
-		play.
-		
-	
-	scripter type
-		label: 'Fill second slot';
-		text: 'cd';
+		text: 'bcd';
 		play.
 	
 	scripter assert
 		label: 'Check that slots are set';
 		satisfies: [ :aFrame | 
 			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-				currentValue = {'abc' . 'bcd'} asOrderedCollection ];
+				currentValue = {'abc' . 'bcd'} ];
 		play.
 
 	^ scripter

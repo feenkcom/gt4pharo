@@ -58,7 +58,8 @@ GtCreationEditableTaggerAptitude >> newAddTagButton [
 
 { #category : #'private - instance creation' }
 GtCreationEditableTaggerAptitude >> newTagCreatorElement [
-	| aNewTagCreator |
+	| aNewTagCreator done |
+	done := false.
 	aNewTagCreator := (tagLabelStencil tag: (BrTaggerTag named: '')) asElement
 			when: BlFocusInEvent do: [ :anEvent | aNewTagCreator selecter all select ];
 			when: BlFocusOutEvent
@@ -112,7 +113,11 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 	aNewTagCreator editor
 		when: BrTextEditorModifiedEvent
 		do: [ :aWish | 
-			aNewTagCreator dispatchEvent: (BrEditorAcceptWish new text: aNewTagCreator text) ].
+			done
+				ifFalse: [ done := true.
+					self
+						requestAddTag: (BrTaggerTag named: aWish text asString)
+						from: aNewTagCreator ] ].
 
 	aNewTagCreator navigator
 		moveTo: 0;
