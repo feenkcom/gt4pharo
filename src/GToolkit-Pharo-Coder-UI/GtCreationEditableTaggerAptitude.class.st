@@ -9,10 +9,23 @@ Class {
 
 { #category : #private }
 GtCreationEditableTaggerAptitude >> addTagCreatorElement [
-	addButton beNotFocusable.
 	self
 		addTagElement: self newTagCreatorElement
 		withSeparatorAt: tagElements size + 1
+]
+
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> focusNextFor: aTagElement [
+	aTagElement
+		nextSiblingSuchThat: [ :eachElement | eachElement isFocusable ]
+		do: [ :anElement | anElement requestFocus ]
+]
+
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> focusPreviousFor: aTagElement [ 
+	aTagElement
+		previousSiblingSuchThat: [ :eachElement | eachElement isFocusable ]
+		do: [ :anElement | anElement requestFocus ]
 ]
 
 { #category : #accessing }
@@ -45,10 +58,12 @@ GtCreationEditableTaggerAptitude >> newAddTagButton [
 
 { #category : #'private - instance creation' }
 GtCreationEditableTaggerAptitude >> newTagCreatorElement [
-	| aNewTagCreator |
+	| aNewTagCreator done |
+	done := false.
 	aNewTagCreator := (tagLabelStencil tag: (BrTaggerTag named: '')) asElement
-			requestFocus;
-			switchToEditor;
+			when: BlFocusInEvent do: [ :anEvent | aNewTagCreator selecter all select ];
+			when: BlFocusOutEvent
+				do: [ :anEvent | aNewTagCreator deselecter all deselect ];
 			padding: (BlInsets
 					top: 5
 					left: 6
@@ -56,32 +71,26 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 					right: 6);
 			margin: margin;
 			constraintsDo: [ :c | c flow vertical alignCenter ];
-			when: BrEditorAcceptWish
-				do: [ :aWish | 
-					addButton beFocusable.
-					aWish text
-						ifEmpty: [ self
-								removeTagCreatorElement: aWish currentTarget
-								withSeparatorAt: tagElements size + 1 ]
-						ifNotEmpty: [ self
-								requestAddTag: (BrTaggerTag named: aWish text asString)
-								from: aWish currentTarget ] ];
-			when: BrEditorCancelWish
-				do: [ :anEvent | 
-					anEvent currentTarget focusPrevious.
-					addButton beFocusable.
-					self
-						removeTagElement: anEvent currentTarget
-						withSeparatorAt: tagElements size + 1 ];
 			addShortcut: (BlShortcutWithAction new
+					name: 'Move to previous form item';
+					description: 'Moves to the previous form item. If none is found, we cycle back to the last.';
 					combination: BlKeyCombination shiftTab;
 					action: [ :anEvent | 
 						BlFocusFinder new
 							direction: BlFocusSearchDirectionBackward new;
 							root: tags parent parent parent;
 							referenceElement: anEvent currentTarget;
-							nextFocusDo: #requestFocus ifNone: [  ] ]);
+							nextFocusDo: #requestFocus ifNone: [  ].
+						aNewTagCreator text
+							ifEmpty: [ self
+									removeTagCreatorElement: aNewTagCreator
+									withSeparatorAt: tagElements size + 1 ]
+							ifNotEmpty: [ self
+									requestAddTag: (BrTaggerTag named: aNewTagCreator text asString)
+									from: aNewTagCreator ] ]);
 			addShortcut: (BlShortcutWithAction new
+					name: 'Move to next form item';
+					description: 'Moves to the next form item. If none is found, we cycle back to the first.';
 					combination: BlKeyCombination tab;
 					action: [ :anEvent | 
 						anEvent currentTarget
@@ -91,25 +100,77 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 									direction: BlFocusSearchDirectionForward new;
 									root: tags parent parent parent;
 									referenceElement: addButton;
-									nextFocusDo: #requestFocus ifNone: [  ] ]
+									nextFocusDo: #requestFocus ifNone: [  ].
+								aNewTagCreator text
+									ifEmpty: [ self
+											removeTagCreatorElement: aNewTagCreator
+											withSeparatorAt: tagElements size + 1 ]
+									ifNotEmpty: [ self
+											requestAddTag: (BrTaggerTag named: aNewTagCreator text asString)
+											from: aNewTagCreator ] ]
 							ifNotEmpty: [ self addTagCreatorElement ] ]).
+
+	aNewTagCreator editor
+		when: BrTextEditorModifiedEvent
+		do: [ :aWish | 
+			done
+				ifFalse: [ done := true.
+					self
+						requestAddTag: (BrTaggerTag named: aWish text asString)
+						from: aNewTagCreator ] ].
 
 	aNewTagCreator navigator
 		moveTo: 0;
 		apply.
 
-	^ aNewTagCreator
+	^ aNewTagCreator requestFocus
 ]
 
 { #category : #accessing }
 GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
-	^ (super newTagElementFor: aTaggerTag)
-		when: BrEditorAcceptWish
-			do: [ :aWish | 
-				aWish text asString
-					ifEmpty: [ self requestRemoveTag: aTaggerTag from: aWish currentTarget ]
-					ifNotEmpty: [ self
-							requestRenameTag: aTaggerTag
-							to: aWish text asString
-							from: aWish currentTarget ] ]
+	| anEditor |
+	anEditor := (tagLabelStencil tag: aTaggerTag) asElement margin: margin.
+
+	anEditor
+		when: BlFocusInEvent do: [ :anEvent | anEditor selecter all select ];
+		when: BlFocusOutEvent do: [ :anEvent | anEditor deselecter all deselect ].
+
+	anEditor editor
+		when: BrTextEditorModifiedEvent
+		do: [ :aWish | 
+			aWish text
+				ifEmpty: [ self requestRemoveTag: aTaggerTag from: anEditor ]
+				ifNotEmpty: [ self
+						requestRenameTag: aTaggerTag
+						to: aWish text asString
+						from: anEditor ] ].
+	^ anEditor
+]
+
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> onTagAdded: aTaggerTag at: aTagIndex [
+	| aTagElement |
+	aTagElement := self newTagElementFor: aTaggerTag.
+	self assignTag: aTaggerTag toElement: aTagElement.
+
+	self addTagElement: aTagElement withSeparatorAt: aTagIndex.
+	tagElements add: aTagElement beforeIndex: aTagIndex.
+
+	shouldGiveFocusToNewTag
+		ifTrue: [ aTagElement requestFocus deselecter all deselect ]
+]
+
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> onTagRemoved: aTaggerTag at: anIndex [
+	self
+		tagElementFor: aTaggerTag
+		ifFound: [ :aTagElement |
+			aTagElement hasFocus
+				ifTrue: [
+					anIndex = 1
+						ifFalse: [ self focusPreviousFor: aTagElement ]
+						ifTrue: [ self focusNextFor: aTagElement ] ].
+			
+			tagElements remove: aTagElement.
+			self removeTagElement: aTagElement withSeparatorAt: anIndex ]
 ]
