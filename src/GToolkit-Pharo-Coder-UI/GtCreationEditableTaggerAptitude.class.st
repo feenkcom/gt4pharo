@@ -112,9 +112,7 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 	aNewTagCreator editor
 		when: BrTextEditorModifiedEvent
 		do: [ :aWish | 
-			self
-				requestAddTag: (BrTaggerTag named: aWish text asString)
-				from: aNewTagCreator ].
+			aNewTagCreator dispatchEvent: (BrEditorAcceptWish new text: aNewTagCreator text) ].
 
 	aNewTagCreator navigator
 		moveTo: 0;
@@ -129,10 +127,7 @@ GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
 	anEditor := (tagLabelStencil tag: aTaggerTag) asElement margin: margin.
 
 	anEditor
-		when: BlClickEvent do: [ :anEvent | anEditor selecter all select ];
-		when: BlFocusInEvent do: [ :anEvent | anEditor navigator
-		moveTo: anEditor text size;
-		apply. ];
+		when: BlFocusInEvent do: [ :anEvent | anEditor selecter all select ];
 		when: BlFocusOutEvent do: [ :anEvent | anEditor deselecter all deselect ].
 
 	anEditor editor
@@ -145,6 +140,19 @@ GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
 						to: aWish text asString
 						from: anEditor ] ].
 	^ anEditor
+]
+
+{ #category : #accessing }
+GtCreationEditableTaggerAptitude >> onTagAdded: aTaggerTag at: aTagIndex [
+	| aTagElement |
+	aTagElement := self newTagElementFor: aTaggerTag.
+	self assignTag: aTaggerTag toElement: aTagElement.
+
+	self addTagElement: aTagElement withSeparatorAt: aTagIndex.
+	tagElements add: aTagElement beforeIndex: aTagIndex.
+
+	shouldGiveFocusToNewTag
+		ifTrue: [ aTagElement requestFocus deselecter all deselect ]
 ]
 
 { #category : #accessing }
