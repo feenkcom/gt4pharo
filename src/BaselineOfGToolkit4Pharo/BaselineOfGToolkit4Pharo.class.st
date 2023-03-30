@@ -19,21 +19,21 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.187/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1216/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1219/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.947/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.949/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.6.626/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.6.629/src' ].
 		spec
-			baseline: 'SmaCC' with: [
-				spec repository: 'github://j-brant/SmaCC:f9f3add535386d20d350904855495fb3409ec32f/src' ].
+			baseline: 'SmaCCRuntime' with: [
+				spec repository: 'github://j-brant/SmaCC:v3.0.1' ].
 
 		spec package: 'GToolkit-Pharo-System' with: [
 			spec requires: #('GToolkitExamplesEngine') ].
 		spec package: 'GToolkit-Pharo-Parser' with: [
-			spec requires: #('SmaCC') ].
+			spec requires: #('SmaCCRuntime') ].
 		spec package: 'GToolkit-Pharo-Metamodels' with: [
 			spec requires: #('GToolkitRefactoringsUtility' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Index' with: [
@@ -41,7 +41,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 		spec package: 'GToolkit-Pharo-SearchFilters' with: [
 			spec requires: #('GToolkitCoder' 'GToolkit-Pharo-System' 'GToolkit-Pharo-Index') ].
 		spec package: 'GToolkit-Pharo-Completer' with: [
-			spec requires: #('SmaCC' 'GToolkitCompleter' 'GToolkit-Pharo-Index' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
+			spec requires: #('SmaCCRuntime' 'GToolkitCompleter' 'GToolkit-Pharo-Index' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Completer-Examples' with: [
 			spec requires: #('GToolkit-Pharo-Completer') ].
 		spec package: 'GToolkit-Pharo-TestSuite' with: [
