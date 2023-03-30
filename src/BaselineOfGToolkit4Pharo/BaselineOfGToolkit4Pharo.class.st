@@ -22,7 +22,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			baseline: 'GToolkit4Magritte' with: [
 				spec repository: 'github://feenkcom/gt4magritte:main/src' ];
 			baseline: 'SmaCCRuntime' with: [
-				spec repository: 'github://j-brant/SmaCC:master/src' ].
+				spec repository: 'github://j-brant/SmaCC' ].
 		spec 
 			package: 'GToolkit-Pharo-System' with: [
 				spec requires: #('GToolkitExamplesEngine') ];
