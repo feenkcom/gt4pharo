@@ -34,7 +34,15 @@ GtBehaviorUpdateForm >> abstractVariable: varName [
 ]
 
 { #category : #accessing }
-GtBehaviorUpdateForm >> browseReferencesTo: aSlotName in: anElement [
+GtBehaviorUpdateForm >> browseReferencesToClassVar: aClassVarName in: anElement [
+	anElement phlow
+		spawnObject: (GtSearchClassVariableReferenceFilter
+				forClassAndSubclasses: (Smalltalk at: self rawClassName asSymbol)
+				andVariable: aClassVarName)
+]
+
+{ #category : #accessing }
+GtBehaviorUpdateForm >> browseReferencesToSlot: aSlotName in: anElement [
 	anElement phlow
 		spawnObject: (GtSearchInstanceSlotReferenceFilter
 				forClassAndSubclasses: (Smalltalk at: self rawClassName asSymbol)
@@ -50,7 +58,7 @@ GtBehaviorUpdateForm >> classSlotsDescription [
 				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
 					aMemento overallStatus valueOrNil isChanged
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
-						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: self ] ]);
+						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
@@ -76,7 +84,7 @@ GtBehaviorUpdateForm >> classVarsDescription [
 	^ super classVarsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement | self createClassVarsContextMenuContentFor: aVariable editor: self ]);
+				andContextMenuBlock: [ :aVariable :anElement :aMemento | self createClassVarsContextMenuContentFor: aVariable editor: anElement ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect variable';
 					description: 'Inspect the variable indicated by the editor';
@@ -102,21 +110,24 @@ GtBehaviorUpdateForm >> commit [
 { #category : #accessing }
 GtBehaviorUpdateForm >> createClassVarsContextMenuContentFor: aClassVarName editor: anElement [
 	| theContextMenu items |
-	theContextMenu := GtCoderContextMenuContent new editorElement: anElement.
+	theContextMenu := GtFormContextMenuContent new editorElement: anElement.
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
+					action: [ :form :elem | self browseReferencesToClassVar: aClassVarName in: elem ];
+					title: (self createLabelTextFor: 'Browse references' description: aClassVarName).
+				GtCoderContextMenuAction new
 					action: [ self
 							executeRefactoring: (self pushUpClassVariableRefactoringFor: aClassVarName) ];
-					title: 'Push up ' , aClassVarName.
+					title: (self createLabelTextFor: 'Push up' description: aClassVarName).
 				GtCoderContextMenuAction new
 					action: [ self
 							executeRefactoring: (self pushDownClassVariableRefactoringFor: aClassVarName) ];
-					title: 'Push down ' , aClassVarName.
+					title: (self createLabelTextFor: 'Push down' description: aClassVarName).
 				GtCoderContextMenuAction new
 					action: [ self
 							executeRefactoring: (self generateAccessorsFor: aClassVarName asClassVar: true) ];
-					title: 'Create accessors for ' , aClassVarName}.
+					title: (self createLabelTextFor: 'Create accessors' description: aClassVarName)}.
 	theContextMenu items: items.
 	^ theContextMenu
 ]
@@ -142,7 +153,7 @@ GtBehaviorUpdateForm >> createSlotsContextMenuContentFor: aSlotName editor: anEl
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
-					action: [ :form :elem | self browseReferencesTo: aSlotName in: elem ];
+					action: [ :form :elem | self browseReferencesToSlot: aSlotName in: elem ];
 					title: (self createLabelTextFor: 'Browse references' description: aSlotName).
 				GtCoderContextMenuAction new
 					action: [ self executeRefactoring: (self pushUpSlotRefactoringFor: aSlotName) ];
