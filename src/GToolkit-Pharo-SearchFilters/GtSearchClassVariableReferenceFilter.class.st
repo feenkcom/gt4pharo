@@ -28,6 +28,13 @@ GtSearchClassVariableReferenceFilter class >> forClass: aClass andVariable: aStr
 ]
 
 { #category : #accessing }
+GtSearchClassVariableReferenceFilter class >> forClassAndSubclasses: aClass andVariable: aClassVarName [
+	^ (self forClass: aClass andVariable: aClassVarName)
+	"	includeSubclasses: true;
+		yourself"
+]
+
+{ #category : #accessing }
 GtSearchClassVariableReferenceFilter >> filterValueString [
 	^ self variableName
 ]
