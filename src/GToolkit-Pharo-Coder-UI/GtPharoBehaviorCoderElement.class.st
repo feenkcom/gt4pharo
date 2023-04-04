@@ -162,7 +162,9 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 					defaultBackground: Color transparent;
 					glamorousCodeFont;
 					bold;
-					fontSize: 18);
+					fontSize: 18)	+ (BrGlamorousWithContextMenuAptitude
+								content: [ BrGlamorousSimpleContextMenuContent new
+										items: (self contextMenuItemsForClass) ]);
 			inputFilter: BrTextEditorClassNameInputFilter new;
 			text: classCoder name;
 			margin: (BlInsets all: 0);
@@ -314,6 +316,12 @@ GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
 	container ifNotNil: #removeFromParent.
 	container := self buildContentPane.
 	self addChildFirst: container
+]
+
+{ #category : #'building ui' }
+GtPharoBehaviorCoderElement >> contextMenuItemsForClass [
+	^ {'Browse references' -> [ :e | self browseClassReferences ].
+		'Rename' -> [ :e | e switchToEditor ]}
 ]
 
 { #category : #private }
