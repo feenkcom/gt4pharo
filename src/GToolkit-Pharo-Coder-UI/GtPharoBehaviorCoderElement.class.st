@@ -162,9 +162,9 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 					defaultBackground: Color transparent;
 					glamorousCodeFont;
 					bold;
-					fontSize: 18)	+ (BrGlamorousWithContextMenuAptitude
-								content: [ BrGlamorousSimpleContextMenuContent new
-										items: (self contextMenuItemsForClass) ]);
+					fontSize: 18)
+					+ (BrGlamorousWithContextMenuAptitude
+							content: [ BrGlamorousSimpleContextMenuContent new items: self contextMenuItemsForClass ]);
 			inputFilter: BrTextEditorClassNameInputFilter new;
 			text: classCoder name;
 			margin: (BlInsets all: 0);
@@ -204,8 +204,7 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 		do: [ :anEvent | 
 			anEvent text asString trimBoth asSymbol = classCoder name
 				ifTrue: [ aContainer removeChild: aPreviewButton ]
-				ifFalse: [  "show preview button when name is modified"(aContainer
-						hasChild: aPreviewButton)
+				ifFalse: [ (aContainer hasChild: aPreviewButton)
 						ifFalse: [ aContainer addChild: aPreviewButton after: aClassNameEditor ] ] ].
 
 	removeClassButton := GtPreviewChangeButton new
@@ -213,9 +212,9 @@ GtPharoBehaviorCoderElement >> buildClassLabel [
 			label: 'Remove';
 			changeAction: [ self removeClass ];
 			changeStencil: [ GtPharoRemoveClassPreviewStencil new
-								classToRemove: classCoder theClass ;
-								anElement: self;
-								create ].
+					classToRemove: classCoder theClass;
+					anElement: self;
+					create ].
 
 	aContainer addChild: aClassNameEditor.
 	aContainer addChild: removeClassButton.
