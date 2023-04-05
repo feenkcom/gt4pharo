@@ -53,6 +53,12 @@ GtClassCreationForm >> commit [
 ]
 
 { #category : #accessing }
+GtClassCreationForm >> contextMenuItemsForSuperclass [
+	^ {'Browse references'
+			-> [ :aBrEditor | aBrEditor phlow spawnObject: aBrEditor text asString asClass gtReferences ]}
+]
+
+{ #category : #accessing }
 GtClassCreationForm >> defaultName [
 	^ 'NameOfSubclass'
 ]
@@ -129,7 +135,9 @@ GtClassCreationForm >> superclassDescription [
 					action: [ :anEvent | 
 						anEvent target phlow
 							spawnObject: anEvent target text asString asClass gtReferences ]} ];
-		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize+ (BrGlamorousWithContextMenuAptitude
+								content: [ BrGlamorousSimpleContextMenuContent new
+										items: (self contextMenuItemsForSuperclass) ]) ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
 			labelled: 'Unknown class';
