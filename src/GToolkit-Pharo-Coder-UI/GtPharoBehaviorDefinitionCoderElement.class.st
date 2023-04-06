@@ -46,23 +46,30 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
-	| theProperties theReaders |
-
+	| theProperties theReaders superclass |
 	theProperties := BlElement new
-		layout: BlLinearLayout horizontal;
-		constraintsDo: [ :c |
-			c horizontal matchParent.
-			c vertical fitContent ].
+			layout: BlLinearLayout horizontal;
+			constraintsDo: [ :c | 
+				c horizontal matchParent.
+				c vertical fitContent ].
 
 	theReaders := self readers.
-	theReaders := theReaders first: (2 min: theReaders size).
-	theReaders do: [ :eachEditor |
-		theProperties addChildren: { 
-				(self buildSectionLabel: eachEditor title).
-				(eachEditor
-					aptitude: [ self readonlyLabelLook ];
+	superclass := theReaders first.
+	theProperties
+		addChildren: {self buildSectionLabel: superclass title.
+				superclass
+					aptitude: [ self readonlyLabelLook + (BrGlamorousWithContextMenuAptitude
+								content: [ BrGlamorousSimpleContextMenuContent new
+										items: (self contextMenuItemsForSuperclass) ])];
 					margin: self buttonMargin;
-					asElement) } ].
+					asElement}.
+	theReaders size > 1
+		ifTrue: [ theProperties
+				addChildren: {self buildSectionLabel: theReaders second title.
+						theReaders second
+							aptitude: [ self readonlyLabelLook ];
+							margin: self buttonMargin;
+							asElement} ].
 
 	^ theProperties
 ]
@@ -97,6 +104,12 @@ GtPharoBehaviorDefinitionCoderElement >> coderViewModel: aGtBehaviorDefinitionCo
 		send: #updateDefinition
 		to: self.
 	self initializeElements
+]
+
+{ #category : #'private - instance creation' }
+GtPharoBehaviorDefinitionCoderElement >> contextMenuItemsForSuperclass [
+	^ {'Browse references'
+			-> [ :aBrEditor | aBrEditor phlow spawnObject: aBrEditor text asString asClass gtReferences ]}
 ]
 
 { #category : #'private - ui' }

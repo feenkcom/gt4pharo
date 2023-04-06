@@ -15,6 +15,15 @@ GtCreationEditableTaggerAptitude >> addTagCreatorElement [
 ]
 
 { #category : #accessing }
+GtCreationEditableTaggerAptitude >> deletionShortcutUsing: aTag forLabel: aLabel [
+	^ BlShortcutWithAction new
+		name: 'Delete tag';
+		description: 'Delete tag if the editor is already empty.';
+		combination: BlKeyCombination backspace;
+		action: [ :anEvent | aLabel text ifEmpty: [ self requestRemoveTag: aTag from: aLabel ] ]
+]
+
+{ #category : #accessing }
 GtCreationEditableTaggerAptitude >> focusNextFor: aTagElement [
 	aTagElement
 		nextSiblingSuchThat: [ :eachElement | eachElement isFocusable ]
@@ -128,22 +137,29 @@ GtCreationEditableTaggerAptitude >> newTagCreatorElement [
 
 { #category : #accessing }
 GtCreationEditableTaggerAptitude >> newTagElementFor: aTaggerTag [
-	| anEditor |
+	| anEditor aShortcut |
 	anEditor := (tagLabelStencil tag: aTaggerTag) asElement margin: margin.
 
 	anEditor
 		when: BlFocusInEvent do: [ :anEvent | anEditor selecter all select ];
-		when: BlFocusOutEvent do: [ :anEvent | anEditor deselecter all deselect ].
+		when: BlFocusOutEvent
+			do: [ :anEvent | 
+				anEditor deselecter all deselect.
+				anEditor text ifEmpty: [ self requestRemoveTag: aTaggerTag from: anEditor ] ].
 
 	anEditor editor
 		when: BrTextEditorModifiedEvent
 		do: [ :aWish | 
 			aWish text
-				ifEmpty: [ self requestRemoveTag: aTaggerTag from: anEditor ]
-				ifNotEmpty: [ self
-						requestRenameTag: aTaggerTag
-						to: aWish text asString
-						from: anEditor ] ].
+				ifEmpty: [ anEditor
+						addShortcut: (aShortcut := self deletionShortcutUsing: aTaggerTag forLabel: anEditor) ]
+				ifNotEmpty: [ aShortcut
+						ifNotNil: [ anEditor removeShortcut: aShortcut.
+							aShortcut := nil ] ].
+			self
+				requestRenameTag: aTaggerTag
+				to: aWish text asString
+				from: anEditor ].
 	^ anEditor
 ]
 

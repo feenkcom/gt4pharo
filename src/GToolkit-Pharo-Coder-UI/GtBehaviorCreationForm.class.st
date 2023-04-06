@@ -49,6 +49,19 @@ GtBehaviorCreationForm >> commit [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtBehaviorCreationForm >> createTraitsContextMenuContentFor: aTrait editor: anElement [
+	| theContextMenu items |
+	theContextMenu := GtFormContextMenuContent new editorElement: anElement.
+	items := OrderedCollection new.
+	items
+		addAll: {GtCoderContextMenuAction new
+					action: [ :form :elem | elem phlow spawnObject: (Smalltalk at: aTrait asSymbol) users ];
+					title: 'Browse users' asText}.
+	theContextMenu items: items.
+	^ theContextMenu
+]
+
 { #category : #initialization }
 GtBehaviorCreationForm >> initialize [
 	super initialize.
@@ -156,7 +169,10 @@ GtBehaviorCreationForm >> traitsDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtClassesCompletionStrategy new
-				andContextMenuBlock: nil);
+				andContextMenuBlock: [ :aTrait :anElement :aMemento | 
+					aMemento overallStatus valueOrNil isChanged
+						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
+						ifFalse: [ self createTraitsContextMenuContentFor: aTrait editor: anElement ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Browse trait';
 					description: 'Browses the trait indicated by the editor';
