@@ -180,7 +180,8 @@ GtPharoStreamingMethodsCoderElement >> onFilterChanged: anAnnouncement [
 
 { #category : #'private - event handling' }
 GtPharoStreamingMethodsCoderElement >> onScrollTargetChanged: anAnnouncement [
-	self updateScrollTarget: anAnnouncement scrollTarget
+	anAnnouncement scrollTarget ifNotNil: [ :aScrollTarget |
+		self updateScrollTarget: aScrollTarget ]
 ]
 
 { #category : #'private - event handling' }
@@ -206,6 +207,11 @@ GtPharoStreamingMethodsCoderElement >> onStreamingCodersViewModelChanged [
 
 	listItemsProvider stream:
 		streamingCodersViewModel coderViewModelsStream.
+		
+	GtPharoStreamingMethodsChangedSignal new 
+		element: self;
+		scrollTarget: streamingCodersViewModel scrollTarget;
+		emit.
 
 	streamingCodersViewModel hasScrollTarget ifTrue: [ 
 		self updateScrollTarget: streamingCodersViewModel scrollTarget ]
@@ -271,5 +277,15 @@ GtPharoStreamingMethodsCoderElement >> updateCodersFilters: anEvent [
 
 { #category : #'private - update' }
 GtPharoStreamingMethodsCoderElement >> updateScrollTarget: aScrollTarget [
-	list scrollToItemSuchThat: [ :eachItem | aScrollTarget applicableTo: eachItem ]
+	
+	| aPromise |
+	aPromise := list scrollToItemSuchThat: [ :eachItem | aScrollTarget applicableTo: eachItem ].
+	
+	self enqueueTask: (BlPromiseTask new promise: aPromise).
+	
+	GtPharoStreamingMethodsScrollToTargetSignal new 
+		element: self;
+		scrollTarget: aScrollTarget;
+		promise: aPromise;
+		emit.
 ]
