@@ -24,20 +24,6 @@ GtCreationEditableTaggerAptitude >> deletionShortcutUsing: aTag forLabel: aLabel
 ]
 
 { #category : #accessing }
-GtCreationEditableTaggerAptitude >> focusNextFor: aTagElement [
-	aTagElement
-		nextSiblingSuchThat: [ :eachElement | eachElement isFocusable ]
-		do: [ :anElement | anElement requestFocus ]
-]
-
-{ #category : #accessing }
-GtCreationEditableTaggerAptitude >> focusPreviousFor: aTagElement [ 
-	aTagElement
-		previousSiblingSuchThat: [ :eachElement | eachElement isFocusable ]
-		do: [ :anElement | anElement requestFocus ]
-]
-
-{ #category : #accessing }
 GtCreationEditableTaggerAptitude >> margin: aBlInsets [
 	margin := aBlInsets.
 	tags replaceChild: addButton with: (addButton := self newAddTagButton)
@@ -180,13 +166,7 @@ GtCreationEditableTaggerAptitude >> onTagAdded: aTaggerTag at: aTagIndex [
 GtCreationEditableTaggerAptitude >> onTagRemoved: aTaggerTag at: anIndex [
 	self
 		tagElementFor: aTaggerTag
-		ifFound: [ :aTagElement |
-			aTagElement hasFocus
-				ifTrue: [
-					anIndex = 1
-						ifFalse: [ self focusPreviousFor: aTagElement ]
-						ifTrue: [ self focusNextFor: aTagElement ] ].
-			
+		ifFound: [ :aTagElement | 
 			tagElements remove: aTagElement.
 			self removeTagElement: aTagElement withSeparatorAt: anIndex ]
 ]
