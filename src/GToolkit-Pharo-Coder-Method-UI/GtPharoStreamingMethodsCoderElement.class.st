@@ -205,14 +205,14 @@ GtPharoStreamingMethodsCoderElement >> onStreamingCodersViewModelChanged [
 		time: [ 'Build filters widget' ]
 		during: [ self buildFilterAndIndicator ].
 
-	listItemsProvider stream:
-		streamingCodersViewModel coderViewModelsStream.
-		
 	GtPharoStreamingMethodsChangedSignal new 
 		element: self;
 		scrollTarget: streamingCodersViewModel scrollTarget;
 		emit.
 
+	listItemsProvider stream:
+		streamingCodersViewModel coderViewModelsStream.
+		
 	streamingCodersViewModel hasScrollTarget ifTrue: [ 
 		self updateScrollTarget: streamingCodersViewModel scrollTarget ]
 ]
