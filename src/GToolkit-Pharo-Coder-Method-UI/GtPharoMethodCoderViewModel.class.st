@@ -208,6 +208,17 @@ GtPharoMethodCoderViewModel >> preventSaveDueTo: aSavePreventor [
 	self notifySaveDisabled
 ]
 
+{ #category : #printing }
+GtPharoMethodCoderViewModel >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		nextPut: $(;
+		nextPutAll: self behavior asString;
+		nextPutAll: '>>#';
+		nextPutAll: self selector asString;
+		nextPut: $)
+]
+
 { #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> protocol [
 	<return: #String>
