@@ -279,7 +279,10 @@ GtPharoStreamingMethodsCoderElement >> updateCodersFilters: anEvent [
 GtPharoStreamingMethodsCoderElement >> updateScrollTarget: aScrollTarget [
 	
 	| aPromise |
-	aPromise := list scrollToItemSuchThat: [ :eachItem | aScrollTarget applicableTo: eachItem ].
+	aPromise := list 
+		scrollToItemSuchThat: [ :eachItem | 
+			aScrollTarget applicableTo: eachItem ]
+		offset: 0.
 	
 	self enqueueTask: (BlPromiseTask new promise: aPromise).
 	
