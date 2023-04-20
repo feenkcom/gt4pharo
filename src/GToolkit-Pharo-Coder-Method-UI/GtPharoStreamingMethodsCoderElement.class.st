@@ -143,7 +143,7 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 					textualCoderViewModel: aCoderViewModel ] ];
 		itemsProvider: listItemsProvider.
 
-	self addChild: list.
+	self addChild: list as: GtPharoStreamingMethodsCoderListId.
 	showIndicator := false
 ]
 
