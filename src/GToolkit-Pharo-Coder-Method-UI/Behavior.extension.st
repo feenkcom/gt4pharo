@@ -88,7 +88,7 @@ Behavior >> gtNewMethodDropdownOn: aButton withViewModel: aMethodsCoderViewModel
 	^ GtPharoNewMethodCoderElement new
 		behavior: self;
 		methodCoderViewModelValueHolder: aNewMethodCoderHolder;
-		onGtMethodCoderSaved: (GtPharoNewMethodCodeSavedHandler new
+		onMethodCoderSaved: (GtPharoNewMethodCodeSavedHandler new
 				methodsCoderViewModel: aMethodsCoderViewModel;
 				element: aButton;
 				methodCoderHolder: aNewMethodCoderHolder);

@@ -52,6 +52,14 @@ GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 		ifNotNil: [ :aValueHolder | aValueHolder contents: aNewMethodCoderViewModel ]
 ]
 
+{ #category : #'private - event handling' }
+GtPharoNewMethodCoderElement >> handleMethodCoderSaved: anAnnouncement [
+	onMethodCoderSaved
+		ifNotNil: [ :anAction | 
+			anAction cull: anAnnouncement 
+			cull: self pharoMethodCoderViewModel ]
+]
+
 { #category : #initialization }
 GtPharoNewMethodCoderElement >> initialize [
 	super initialize.
@@ -105,14 +113,6 @@ GtPharoNewMethodCoderElement >> onAddedToSceneGraph [
 	self ensureMethodCoderViewModel
 ]
 
-{ #category : #'private - event handling' }
-GtPharoNewMethodCoderElement >> onGtMethodCoderSaved: anAnnouncement [
-	onMethodCoderSaved ifNotNil: [ :anAction | 
-		anAction 
-			cull: anAnnouncement 
-			cull: self pharoMethodCoderViewModel ]
-]
-
 { #category : #'api - initialization' }
 GtPharoNewMethodCoderElement >> onMethodCoderSaved: anAction [
 	"Action is an object that undrestand #cull:cull:, e.g., 
@@ -139,7 +139,7 @@ GtPharoNewMethodCoderElement >> subscribeToPharoMethodCoderViewModel [
 
 	self pharoMethodCoderViewModel weak
 		when: GtMethodCoderSaved
-		send: #onGtMethodCoderSaved:
+		send: #handleMethodCoderSaved:
 		to: self
 ]
 
