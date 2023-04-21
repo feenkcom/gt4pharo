@@ -1,6 +1,89 @@
 Extension { #name : #Behavior }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
+	<gtClassView>
+	| aMethodsCoder aMethodsCoderViewModel aTestSuiteViewModel anExampleViewModel view aValueHolder |
+	aMethodsCoder := GtPharoStreamingMethodsCoder forBehavior: self.
+	aMethodsCoderViewModel := GtPharoStreamingMethodsCoderViewModel new
+			streamingCodersModel: aMethodsCoder;
+			shouldExpandByDefault: false;
+			shouldHaveHeaderByDefault: false;
+			selfObject: (aPhlowContext
+					optionAt: #behaviorCoder
+					ifPresent: [ :aBehaviorCoderUIModel | aBehaviorCoderUIModel coderModel object ]
+					ifAbsent: [ nil ]).
+
+	aTestSuiteViewModel := self
+			testSuiteViewModelWith: aMethodsCoder
+			fromContext: aPhlowContext.
+
+	anExampleViewModel := GtPharoCoderUIUtility
+			exampleViewModelCachedAs: #exampleViewModelHandler_gtCoderStreamingMethodsForContext
+			inPhlowContext: aPhlowContext
+			forMethodsCoder: aMethodsCoder.
+			
+	aValueHolder := ValueHolder new.
+
+
+	view := aView explicit
+			priority: 9;
+			title: 'Methods';
+			disableAsync;
+			actionDropdownButtonIcon: BrGlamorousVectorIcons filter
+				tooltip: 'Filter'
+				content: [ :element | aMethodsCoder filterDropDown: element ];
+			actionDropdownButtonDo: [ :aDrodownAction | 
+				aDrodownAction dropdown
+					name: GtPharoBehaviorCoder addNewMethodButtonName;
+					icon: BrGlamorousVectorIcons add;
+					tooltip: 'Add new method';
+					content: [ :aButton | 
+						self 
+							gtNewMethodDropdownOn: aButton 
+							withViewModel: aMethodsCoderViewModel
+							withNewMethodHolder: aValueHolder ] ].
+
+	(aMethodsCoder codeGeneratorsAvailableFor: aMethodsCoderViewModel)
+		ifTrue: [ view
+				actionDropdownButtonIcon: BrGlamorousVectorIcons robot
+				tooltip: 'Generate'
+				content: [ :anElement | aMethodsCoder codeGeneratorsDropDown: anElement for: aMethodsCoderViewModel ] ].
+	^ view
+		actionButtonDo: [ :aButtonAction | 
+			aButtonAction
+				icon: BrGlamorousVectorIcons inspect;
+				tooltip: 'Inspect view model';
+				action: [ :aButton | aButton phlow spawnObject: aMethodsCoderViewModel ] ];
+		actionStencil: [ :aBrTab | GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExampleViewModel ];
+		actionStencil: [ :aBrTab | GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ];
+		stencil: [ GtPharoStreamingMethodsCoderElement new
+				streamingCodersViewModel: aMethodsCoderViewModel ];
+		actionStencil: [ :aButton | 
+				GtSpotterDropdownButtonStencil new
+					object: self;
+					tooltip: 'Search Code';
+					id: GtPharoSearchCodeButtonId;
+					actOn: [ :anActOnEvent :anItem :theButton | 
+						| acted navigationModel |
+						acted := false.
+						navigationModel := theButton phlow firstParentWithView phlow
+								firstParentWithView navigationModel.
+						(anItem isKindOf: RPackage)
+							ifTrue: [ navigationModel selectPackage: anItem.
+								acted := true ].
+						(anItem isKindOf: ClassDescription)
+							ifTrue: [ navigationModel selectClass: anItem.
+								acted := true ].
+						(anItem isKindOf: CompiledMethod)
+							ifTrue: [ navigationModel selectMethod: anItem.
+								acted := true ].
+						acted ifTrue: [ anActOnEvent beActed ] ];
+					asElement ]
+			tooltip: 'Search Code'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 Behavior >> gtCopyButtonFor: anAction [
 	<gtClassAction>
 	^ anAction dropdown
@@ -14,4 +97,28 @@ Behavior >> gtCopyButtonFor: anAction [
 					aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
 					aButton inUIProcessDo: [ aButton dispatchEvent: BrDropdownHideWish new ] ])
 				asElement padding: (BlInsets all: 5) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+Behavior >> gtNewMethodDropdownOn: aButton withViewModel: aMethodsCoderViewModel withNewMethodHolder: aNewMethodCoderHolder [
+	^ GtPharoNewMethodCoderElement new
+		behavior: self;
+		methodCoderViewModelValueHolder: aNewMethodCoderHolder;
+		onMethodCoderSaved: (GtPharoNewMethodCodeSavedHandler new
+				methodsCoderViewModel: aMethodsCoderViewModel;
+				element: aButton;
+				methodCoderHolder: aNewMethodCoderHolder);
+		when: GtPhlowObjectToSpawn
+			do: [ :aSpawnEvent | 
+				aSpawnEvent consumed: true.
+				aButton
+					fireEvent: (GtPhlowObjectToSpawn new
+							previousSpawnEvent: aSpawnEvent;
+							tool: aSpawnEvent tool;
+							sourceElement: aSpawnEvent currentTarget;
+							spawnDestination: aSpawnEvent spawnDestination;
+							in: [ :anNewEvent | anNewEvent 
+								propertyAt: #spawnContainer 
+								put: aSpawnEvent currentTarget ];
+							yourself) ]
 ]
