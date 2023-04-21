@@ -13,6 +13,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
+{ #category : #initialization }
+GtPharoNewMethodCoderElement class >> preferredExtent [
+	^ 400 @ 150
+]
+
 { #category : #'api - initialization' }
 GtPharoNewMethodCoderElement >> behavior: aBehavior [
 	"Behavior is a class (or Trait) for which a new method will be created."
@@ -70,7 +75,7 @@ GtPharoNewMethodCoderElement >> initialize [
 	self addChild: sourceCoderElement.
 
 	self
-		hExact: 400;
+		hExact: self class preferredExtent x;
 		vFitContentLimited;
 		background: Color white;
 		addAptitude: BrGlamorousFocusableShadowAptitude new

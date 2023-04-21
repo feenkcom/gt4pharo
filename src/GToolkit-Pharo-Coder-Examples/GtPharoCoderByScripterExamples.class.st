@@ -223,6 +223,75 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 	^ aScripter
 ]
 
+{ #category : #'exaples - add new method' }
+GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
+	<gtExample>
+	| aScripter aScrollSpotterBy |
+	aScripter := self displayThreeClassCodersWithMethodExpanded.
+
+	aScripter click 
+		label: 'Click on the add new method button';
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter do 
+		label: 'Right-side button distace';
+		block: [ :aButton | 
+			| aButtonBounds aSpaceBounds aDistance aPreferredExtent |
+			aButtonBounds := aButton bounds inSpace asRectangle.
+			aSpaceBounds := aButton space root bounds inSpace asRectangle.
+			aDistance := aSpaceBounds right - aButtonBounds left.
+			
+			aButton aptitude withAllActorsBreadthFirstDo: [ :anAptitude | 
+				(anAptitude isKindOf: BrWithAnchoredAptitude) ifTrue: [ 
+					aPreferredExtent := anAptitude preferredExtent ] ].
+				
+			self 
+				assert: [ aPreferredExtent isNotNil ] 
+				description: [ '{1} kind of aptitude not found in {2}' 
+					format: { BrWithAnchoredAptitude. aButton } ].
+					
+			aScrollSpotterBy := aPreferredExtent - aDistance.
+			aScripter userData 
+				at: #displayAddMethodDropdown_Scroll
+				put: aScrollSpotterBy
+			 ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter do 
+		label: 'Scroll GtPager';
+		block: [ :anInfiniteElement | 
+			anInfiniteElement smoothScrollBy: aScrollSpotterBy x @ 0 ];
+		// #list;
+		play.
+		
+	aScripter do
+		label: 'Setup dropdown overview';
+		block: [ :aButton :aUserData | 
+			aUserData at: BrAnchoredVisualAnalysis put: (
+				BrAnchoredVisualAnalysis new
+					elementWithDropdown: aButton) ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter assert
+		label: 'Assert dropdown bounds';
+		satisfies: [ :aContentElement | 
+			aContentElement topMostParent bounds inSpace asRectangle
+				containsRect: aContentElement bounds inSpace asRectangle ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play.
+	
+	^ aScripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu [
 	<gtExample>

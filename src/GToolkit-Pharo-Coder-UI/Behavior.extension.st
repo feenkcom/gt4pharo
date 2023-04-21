@@ -35,9 +35,11 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 				content: [ :element | aMethodsCoder filterDropDown: element ];
 			actionDropdownButtonDo: [ :aDrodownAction | 
 				aDrodownAction dropdown
+					id: GtPharoAddNewMethodButtonId;
 					name: GtPharoBehaviorCoder addNewMethodButtonName;
 					icon: BrGlamorousVectorIcons add;
 					tooltip: 'Add new method';
+					preferredExtent: GtPharoNewMethodCoderElement preferredExtent;
 					content: [ :aButton | 
 						self 
 							gtNewMethodDropdownOn: aButton 
