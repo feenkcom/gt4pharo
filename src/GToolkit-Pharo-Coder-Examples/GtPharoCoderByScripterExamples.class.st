@@ -9,6 +9,57 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'exaples - add new method' }
+GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
+	"See [](https://github.com/feenkcom/gtoolkit/issues/3230)"
+	
+	<gtExample>
+	| aScripter |
+	aScripter := self displayThreeClassCodersWithMethodExpanded.
+
+	aScripter click 
+		label: 'Click on the add new method button';
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter type
+		text: 'myNewMethod';
+		play.
+		
+	aScripter assert
+		label: 'Assert new method source code';
+		value: [ :anEditor | anEditor text asString ]
+			equals: [ :anEditor | 'myNewMethod' ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// GtSourceCoderEditorId;
+		play.
+		
+	aScripter click
+		label: 'Close the dropdown';
+		// (GtPagerPageElementId indexed: 2);
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+		
+	aScripter click 
+		label: 'Reopen the add new method button';
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter assert
+		label: 'Assert new method source code';
+		value: [ :anEditor | anEditor text asString ]
+			equals: [ :anEditor | 'myNewMethod' ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// GtSourceCoderEditorId;
+		play.
+	
+	^ aScripter
+]
+
 { #category : #'examples - dropdown' }
 GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 	aScripter do
@@ -220,6 +271,77 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 				// GtCoderClassHierarchyButtonId;
 				play ].
 
+	^ aScripter
+]
+
+{ #category : #'exaples - add new method' }
+GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
+	"See [](https://github.com/feenkcom/gtoolkit/issues/3233)"
+
+	<gtExample>
+	| aScripter aScrollSpotterBy |
+	aScripter := self displayThreeClassCodersWithMethodExpanded.
+
+	aScripter click 
+		label: 'Click on the add new method button';
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter do 
+		label: 'Right-side button distace';
+		block: [ :aButton | 
+			| aButtonBounds aSpaceBounds aDistance aPreferredExtent |
+			aButtonBounds := aButton bounds inSpace asRectangle.
+			aSpaceBounds := aButton space root bounds inSpace asRectangle.
+			aDistance := aSpaceBounds right - aButtonBounds left.
+			
+			aButton aptitude withAllActorsBreadthFirstDo: [ :anAptitude | 
+				(anAptitude isKindOf: BrWithAnchoredAptitude) ifTrue: [ 
+					aPreferredExtent := anAptitude preferredExtent ] ].
+				
+			self 
+				assert: [ aPreferredExtent isNotNil ] 
+				description: [ '{1} kind of aptitude not found in {2}' 
+					format: { BrWithAnchoredAptitude. aButton } ].
+					
+			aScrollSpotterBy := aPreferredExtent - aDistance.
+			aScripter userData 
+				at: #displayAddMethodDropdown_Scroll
+				put: aScrollSpotterBy
+			 ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter do 
+		label: 'Scroll GtPager';
+		block: [ :anInfiniteElement | 
+			anInfiniteElement smoothScrollBy: aScrollSpotterBy x @ 0 ];
+		// #list;
+		play.
+		
+	aScripter do
+		label: 'Setup dropdown overview';
+		block: [ :aButton :aUserData | 
+			aUserData at: BrAnchoredVisualAnalysis put: (
+				BrAnchoredVisualAnalysis new
+					elementWithDropdown: aButton) ];
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+		
+	aScripter assert
+		label: 'Assert dropdown bounds';
+		satisfies: [ :aContentElement | 
+			aContentElement topMostParent bounds inSpace asRectangle
+				containsRect: aContentElement bounds inSpace asRectangle ];
+		onSpaceRoot;
+		// BrAnchoredOuterContainer;
+		// BrAnchoredElement;
+		/ #content asBlocElementId;
+		play.
+	
 	^ aScripter
 ]
 

@@ -13,11 +13,6 @@ Class {
 }
 
 { #category : #constants }
-GtPharoBehaviorCoder class >> addNewMethodButtonName [
-	^ #'button--add-new-method'
-]
-
-{ #category : #constants }
 GtPharoBehaviorCoder class >> behaviorNameEditorName [
 	^ #'behavior-coder--behavior-name-editor'
 ]
