@@ -46,7 +46,7 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_click_add_
 
 	aScripter click
 		label: 'Click add method button';
-		id: GtPharoBehaviorCoder addNewMethodButtonName;
+		id: GtPharoAddNewMethodButtonId;
 		play.
 
 	^ aScripter

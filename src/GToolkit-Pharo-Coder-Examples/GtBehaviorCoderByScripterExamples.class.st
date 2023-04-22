@@ -46,7 +46,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_add_method [
 		do: [ :aStep |
 			aStep click
 				label: 'Click add method button';
-				id: GtPharoBehaviorCoder addNewMethodButtonName;
+				id: GtPharoAddNewMethodButtonId;
 				play.
 	 ].	
 
