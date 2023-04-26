@@ -58,7 +58,7 @@ GtBehaviorUpdateForm >> classSlotsDescription [
 				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
 					aMemento overallStatus valueOrNil isChanged
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
-						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]);
+						ifFalse: [ self createClassSlotsContextMenuContentFor: aVariable editor: anElement ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
@@ -105,6 +105,35 @@ GtBehaviorUpdateForm >> classVarsDescription [
 { #category : #accessing }
 GtBehaviorUpdateForm >> commit [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtBehaviorUpdateForm >> createClassSlotsContextMenuContentFor: aSlotName editor: anElement [
+	| theContextMenu items |
+	theContextMenu := GtFormContextMenuContent new editorElement: anElement.
+	items := OrderedCollection new.
+	items
+		addAll: {GtCoderContextMenuAction new
+					action: [ :form :elem | self browseReferencesToSlot: aSlotName in: elem ];
+					title: (self createLabelTextFor: 'Browse references' description: aSlotName).
+				GtCoderContextMenuAction new
+					action: [ self executeRefactoring: (self pushUpClassSlotRefactoringFor: aSlotName) ];
+					title: (self createLabelTextFor: 'Push up' description: aSlotName).
+				GtCoderContextMenuAction new
+					action: [ self executeRefactoring: (self pushDownClassSlotRefactoringFor: aSlotName) ];
+					title: (self createLabelTextFor: 'Push down' description: aSlotName).
+				GtCoderContextMenuAction new
+					action: [ self
+							executeRefactoring: (self generateClassAccessorsFor: aSlotName asClassVar: false) ];
+					title: (self createLabelTextFor: 'Create accessors' description: aSlotName).
+				GtCoderContextMenuAction new
+					action: [ self executeRefactoring: (self abstractClassVariable: aSlotName) ];
+					title: (self createLabelTextFor: 'Abstract' description: aSlotName).
+				GtCoderContextMenuAction new
+					action: [ self executeRefactoring: (self protectClassVariable: aSlotName) ];
+					title: (self createLabelTextFor: 'Protect' description: aSlotName)}.
+	theContextMenu items: items.
+	^ theContextMenu
 ]
 
 { #category : #accessing }
@@ -211,6 +240,19 @@ GtBehaviorUpdateForm >> generateClassAccessorsFor: varName [
 		variable: varName
 		class: aClass
 		classVariable: false
+]
+
+{ #category : #accessing }
+GtBehaviorUpdateForm >> generateClassAccessorsFor: varName asClassVar: aBoolean [
+	| aModel aClass |
+	aModel := self createRefactoringModel.
+	aClass := (self modelClassFrom: aModel) classSide.
+
+	^ RBCreateAccessorsForVariableRefactoring
+		model: aModel
+		variable: varName
+		class: aClass
+		classVariable: aBoolean
 ]
 
 { #category : #accessing }
