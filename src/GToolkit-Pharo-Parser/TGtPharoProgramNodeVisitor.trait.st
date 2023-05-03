@@ -66,6 +66,11 @@ TGtPharoProgramNodeVisitor >> visitErrorPattern: anErrorPattern [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitGSPath: aGSPath [
+	^ self visitValue: aGSPath
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitKeywordMessage: aKeywordMessage [
 	^ self visitMessage: aKeywordMessage
 ]
