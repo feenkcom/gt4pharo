@@ -69,7 +69,7 @@ GtPharoBehaviorCoder >> forClass: aClass [
 GtPharoBehaviorCoder >> forObject: anObject [
 	object := anObject.
 	hasObject := true.
-	self initializeClass: anObject class.
+	self initializeClass: anObject class instanceSide.
 ]
 
 { #category : #'gt-extension' }
