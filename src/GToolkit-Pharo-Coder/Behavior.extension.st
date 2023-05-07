@@ -5,7 +5,7 @@ Behavior >> gtAdviceDefinitionsFor: aView [
 	<gtView>
 	<gtClassView>
 	^ aView forward
-		title: 'Advice Definitions';
+		title: 'Advice definitions';
 		tooltip: 'The methods that define custom advices for the object';
 		priority: 100;
 		object: [ 
