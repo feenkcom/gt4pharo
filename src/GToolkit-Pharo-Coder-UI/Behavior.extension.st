@@ -63,7 +63,7 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 		actionStencil: [ :aButton | 
 				GtSpotterDropdownButtonStencil new
 					object: self;
-					tooltip: 'Search Code';
+					tooltip: 'Search code';
 					id: GtPharoSearchCodeButtonId;
 					actOn: [ :anActOnEvent :anItem :theButton | 
 						| acted navigationModel |
@@ -81,7 +81,7 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 								acted := true ].
 						acted ifTrue: [ anActOnEvent beActed ] ];
 					asElement ]
-			tooltip: 'Search Code'
+			tooltip: 'Search code'
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
