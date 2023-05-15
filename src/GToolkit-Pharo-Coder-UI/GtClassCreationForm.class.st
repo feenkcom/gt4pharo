@@ -141,6 +141,16 @@ GtClassCreationForm >> superclassDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
 			labelled: 'Unknown class';
+		addCondition: [ :aValue | 
+			| aClass |
+			aClass := Smalltalk classNamed: aValue trim.
+			aClass isNil or: [ aClass isClass ] ]
+			labelled: 'Must be a class';
+		addCondition: [ :aValue | 
+			| aClass |
+			aClass := Smalltalk classNamed: aValue trim.
+			aClass isNil or: [ aClass isInstanceSide ] ]
+			labelled: 'Must be an instance-side class';
 		beRequired
 ]
 
