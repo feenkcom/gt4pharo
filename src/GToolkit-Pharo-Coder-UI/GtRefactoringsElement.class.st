@@ -27,7 +27,7 @@ GtRefactoringsElement >> initialize [
 	self matchParent.
 	self padding: (BlInsets all: 10).
 	changesElement := GtChangesElement new.
-	self addAptitude: (BrLayoutResizerAptitude inherit inherit: changesElement).
+	self addAptitude: (BrLayoutResizerAptitude new inherit: changesElement).
 	self addChild: changesElement
 ]
 

@@ -58,7 +58,6 @@ GtCoderCollapsedContentElementExamples >> textAndExampleLook_withExampleMethod [
 	aMethodCoder example run.
 	aContentElement := GtSourceCoderCollapsedContentElement new
 		coderViewModel: aMethodCoder asCoderViewModel.
-	aContentElement addAptitude: BrLayoutResizerAptitude inherit.
 	^ aContentElement
 ]
 

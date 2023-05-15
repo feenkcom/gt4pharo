@@ -39,7 +39,6 @@ GtPharoMethodTestCaseStateElement >> initialize [
 		
 	self initializeInteractiveLook.
 	self initializeTooltipLook.
-	self addAptitude: BrLayoutResizerAptitude inherit.
 ]
 
 { #category : #initialization }

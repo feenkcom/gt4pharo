@@ -58,6 +58,6 @@ GtChangesElement >> initialize [
 			nodeStencil: [ :aNodeType | aNodeType new ];
 			nodeDataBinder: [ :eachElement :eachUserActivatableChange | eachElement activatableChange: eachUserActivatableChange ];
 			yourself.
-	self addAptitude: (BrLayoutResizerAptitude inherit inherit: changesTree).
+	self addAptitude: (BrLayoutResizerAptitude new inherit: changesTree).
 	self addChild: changesTree
 ]
