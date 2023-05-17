@@ -114,7 +114,7 @@ GtRecentChanges >> groupedChanges [
 GtRecentChanges >> gtChangedClassesFor: aView [
 	<gtView>
 	^ aView list
-		title: 'Changed Classes';
+		title: 'Changed classes';
 		priority: 3;
 		items: [ self changedClasses asOrderedCollection ]
 ]
@@ -123,7 +123,7 @@ GtRecentChanges >> gtChangedClassesFor: aView [
 GtRecentChanges >> gtEventsFor: aView [
 	<gtView>
 	^ aView list
-		title: 'Change List';
+		title: 'Change list';
 		priority: 3;
 		items: [ changeList asOrderedCollection ]
 ]
@@ -132,7 +132,7 @@ GtRecentChanges >> gtEventsFor: aView [
 GtRecentChanges >> gtTreeFor: aView [
 	<gtView>
 	^ aView tree
-		title: 'Change Tree';
+		title: 'Change tree';
 		expandUpTo: 1;
 		priority: 3;
 		items: [ groupedChanges ];

@@ -8,7 +8,7 @@ Class {
 		'packageCoder',
 		'classesCoder'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -60,7 +60,7 @@ GtPharoPackageTagCoder >> coders [
 GtPharoPackageTagCoder >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
-		title: 'Package Tag';
+		title: 'Package tag';
 		priority: 1;
 		stencil: [ self ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect
