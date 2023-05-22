@@ -87,6 +87,19 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 Behavior >> gtCopyButtonFor: anAction [
 	<gtClassAction>
+	self isTrait ifTrue: [
+		^ anAction dropdown
+		tooltip: 'Copy Trait';
+		icon: BrGlamorousVectorIcons changes;
+		id: GtPharoCopyClassElementId;
+		priority: 4;
+		content: [ :aButton | 
+			((GtCopyTraitForm for: self)
+				onAccept: [ :aClass | 
+					aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
+					aButton inUIProcessDo: [ aButton dispatchEvent: BrDropdownHideWish new ] ])
+				asElement padding: (BlInsets all: 5) ]].
+
 	^ anAction dropdown
 		tooltip: 'Copy Class';
 		icon: BrGlamorousVectorIcons changes;
