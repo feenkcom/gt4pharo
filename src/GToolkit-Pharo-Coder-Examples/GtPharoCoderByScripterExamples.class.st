@@ -253,6 +253,7 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 { #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self coderInPager_clickOnGitButton.
 
