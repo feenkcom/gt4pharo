@@ -257,7 +257,7 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 	aScripter := self coderInPager_clickOnGitButton.
 
 	aScripter
-		substeps: 'Go to Git'
+		substeps: 'Expand Git'
 		do: [ :aStep | 
 			aStep click
 				// (GtPagerPageElementId indexed: 2);
@@ -269,7 +269,7 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 				satisfies: #hasChildren;
 				// GtPagerMaximizedPageElementId;
 				// GtPagerToolWrapperElementId;
-				// #sidebar;
+				id: #sidebar;
 				play ].
 
 	^ aScripter
