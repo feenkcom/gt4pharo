@@ -268,7 +268,8 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 				label: 'Assert sidebar is rendered';
 				satisfies: #hasChildren;
 				// GtPagerMaximizedPageElementId;
-				id: #sidebar;
+				// GtPagerToolWrapperElementId;
+				// #sidebar;
 				play ].
 
 	^ aScripter
