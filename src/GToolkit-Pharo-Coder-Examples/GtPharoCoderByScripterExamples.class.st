@@ -250,6 +250,32 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 	^ aScripter
 ]
 
+{ #category : #'examples - scripter' }
+GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self coderInPager_clickOnGitButton.
+
+	aScripter
+		substeps: 'Expand Git'
+		do: [ :aStep | 
+			aStep click
+				// (GtPagerPageElementId indexed: 2);
+				// GtPagerMaximizeButtonElementId;
+				play.
+				
+			aStep assert
+				label: 'Assert sidebar is rendered';
+				satisfies: #hasChildren;
+				// GtPagerMaximizedPageElementId;
+				// GtPagerToolWrapperElementId;
+				id: #sidebar;
+				play ].
+
+	^ aScripter
+]
+
 { #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coderWithAddMethod [
 	<gtExample>
