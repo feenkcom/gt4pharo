@@ -186,5 +186,11 @@ GtBehaviorCreationForm >> traitsDescription [
 					combination: BlKeyCombination primaryN;
 					action: [ :anEvent | 
 						anEvent target phlow
-							spawnObject: anEvent target text asString asClass gtReferences ]} ]
+							spawnObject: anEvent target text asString asClass gtReferences ]} ];
+		addCondition: [ :aValue | aValue asSet size = aValue size ]
+			labelled: 'All Trait names must be unique';
+		addCondition: [ :aValue | 
+			aValue allSatisfy: [ :eachTraitName |
+				(Smalltalk classOrTraitNamed: eachTraitName asString trim) isNotNil ] ]
+			labelled: 'Unknown trait(s)'
 ]

@@ -146,10 +146,9 @@ GtPharoMethodCoderTagsElement >> newProtocolEditor [
 		whenKey: BlKeyCombination primaryC
 			labelDo: [ :aShortcutEvent :aShortcut | 
 				Clipboard clipboardText: aShortcutEvent currentTarget text asString ].
-	(GtCompletionController
+	"(GtCompletionController
 		on: anEditor
-		strategy: GtMethodProtocolCompletionStrategy new) install.
-
+		strategy: GtMethodProtocolCompletionStrategy new) install."
 	^ anEditor
 ]
 
