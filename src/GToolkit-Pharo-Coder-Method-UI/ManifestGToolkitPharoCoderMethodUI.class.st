@@ -21,7 +21,7 @@ ManifestGToolkitPharoCoderMethodUI class >> shouldDependOn [
 		'GToolkit-Coder'.
 		'GToolkit-Coder-StreamingCoders-UI'.
 		'GToolkit-Coder-UI'.
-		'GToolkit-Completer'.
+		"'GToolkit-Completer'."
 		'GToolkit-Pharo-Coder-Method'.
 		'GToolkit-Pharo-Completer'.
 		'GToolkit-Pharo-Parser'.
