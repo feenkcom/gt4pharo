@@ -192,5 +192,11 @@ GtBehaviorCreationForm >> traitsDescription [
 		addCondition: [ :aValue | 
 			aValue allSatisfy: [ :eachTraitName |
 				(Smalltalk classOrTraitNamed: eachTraitName asString trim) isNotNil ] ]
-			labelled: 'Unknown trait(s)'
+			labelled: 'Unknown Trait(s)';
+		addCondition: [ :aValue | 
+			aValue allSatisfy: [ :eachTraitName |
+				| aTrait |
+				aTrait := (Smalltalk classOrTraitNamed: eachTraitName asString trim).
+				aTrait isNil or: [ aTrait isTrait ] ] ]
+			labelled: 'Only Traits are allowed'
 ]
