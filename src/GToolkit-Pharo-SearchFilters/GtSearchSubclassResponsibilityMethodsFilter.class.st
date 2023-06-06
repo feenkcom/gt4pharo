@@ -6,5 +6,5 @@ Class {
 
 { #category : #testing }
 GtSearchSubclassResponsibilityMethodsFilter >> includesMethod: aCompiledMethod [
-	^ aCompiledMethod isSubclassResponsibility
+	^ aCompiledMethod isAbstract
 ]
