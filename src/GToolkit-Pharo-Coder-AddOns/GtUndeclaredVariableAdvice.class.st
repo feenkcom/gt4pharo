@@ -81,9 +81,12 @@ GtUndeclaredVariableAdvice >> localFixItActionsFor: aVariableNode coderModel: co
 
 { #category : #testing }
 GtUndeclaredVariableAdvice >> matches: aNode from: aCriticRunner [
+	| position |
 	aCriticRunner hasRefactoring ifTrue: [ ^ false ].
-	((aCriticRunner textAttributesAt: aNode startPosition)
-		anySatisfy: [ :each | each isKindOf: GtCompletionPartAttribute ])
+	position := aNode startPosition.
+	(position < SmallInteger maxVal
+		and: [ (aCriticRunner textAttributesAt: position)
+				anySatisfy: [ :each | each isKindOf: GtCompletionPartAttribute ] ])
 		ifTrue: [ ^ false ].
 	aNode isVariable ifFalse: [ ^ false ].
 	aNode isUndeclared ifFalse: [ ^ false ].
