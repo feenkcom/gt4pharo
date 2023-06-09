@@ -31,6 +31,11 @@ String >> gtPragmas [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
+String >> gtPragmasWithArguments: anArray [
+	^ GtSearchPragmasWithArgumentsFilter forPragma: self withArguments: anArray
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
 String >> gtRBPatternMatches [
 	^ GtSearchRBPatternFilter pattern: self
 ]
