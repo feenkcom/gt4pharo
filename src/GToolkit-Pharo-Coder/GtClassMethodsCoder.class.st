@@ -112,8 +112,10 @@ GtClassMethodsCoder >> forObject: anObject [
 ]
 
 { #category : #printing }
-GtClassMethodsCoder >> gtDisplayString [
-	^ class name , ' methods'
+GtClassMethodsCoder >> gtDisplayOn: aStream [
+	aStream 
+		nextPutAll: class name;
+		nextPutAll: ' methods'
 ]
 
 { #category : #testing }
