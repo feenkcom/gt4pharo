@@ -166,7 +166,8 @@ GtPharoMethodTestCase >> play [
 
 { #category : #'private - execution' }
 GtPharoMethodTestCase >> rawDebug [
-	self result: self testCaseInstance debug
+	self testCaseInstance debug.
+	self result: TestResult new
 ]
 
 { #category : #'private - execution' }
