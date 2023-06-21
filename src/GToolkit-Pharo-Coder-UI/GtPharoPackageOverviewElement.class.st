@@ -281,7 +281,7 @@ GtPharoPackageOverviewElement >> createPackageTagNamed: aName stream: aStream [
 		aptitude: (BrGlamorousLabelAptitude new);
 		beSmallSize;
 		visibility: BlVisibility gone;
-		geometry: BlStadium new;
+		geometry: BlStadiumGeometry new;
 		background: self theme status neutralBackgroundColor;
 		padding: (BlInsets top: 1 bottom: 1 left: 6 right: 6);
 		margin: (BlInsets top: 0 bottom: 3 left: 0 right: 5);
