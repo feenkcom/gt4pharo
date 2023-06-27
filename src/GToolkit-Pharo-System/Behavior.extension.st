@@ -39,6 +39,7 @@ Behavior >> handleFailingBasicNewWithGC: sizeRequested [
 	<primitive: 71>
 	| bytesRequested |
 	bytesRequested := self byteSizeOfInstanceOfSize: sizeRequested.
+	Stdio stdout lf; << 'GtGc: Extra growth: '; print: bytesRequested; lf.
 	Smalltalk growMemoryByAtLeast: bytesRequested.
 	^self handleFailingFailingBasicNew: sizeRequested
 ]
