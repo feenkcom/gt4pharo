@@ -4,23 +4,67 @@ Class {
 	#instVars : [
 		'references'
 	],
+	#classVars : [
+		'MaxOCSize'
+	],
 	#category : #'GToolkit-Pharo-Index'
 }
+
+{ #category : #'class initialization' }
+GtReferencesPrefixTree class >> initialize [
+	MaxOCSize := 1000
+]
 
 { #category : #adding }
 GtReferencesPrefixTree >> addReference: aMethod [
 	references
 		ifNil: [ references := aMethod ]
-		ifNotNil: [ references class == OrderedCollection
+		ifNotNil: [ references isDictionary
+				ifTrue: [ | className |
+					className := aMethod methodClass instanceSide name.
+					^ references
+						at: className
+						ifPresent: [ :refs | 
+							refs isCompiledMethod
+								ifTrue: [ references at: className put: (OrderedCollection with: refs with: aMethod) ]
+								ifFalse: [ refs isArray
+										ifTrue: [ references
+												at: className
+												put: (refs asOrderedCollection
+														add: aMethod;
+														yourself) ]
+										ifFalse: [ refs add: aMethod ] ] ]
+						ifAbsentPut: [ aMethod ] ].
+			references class == OrderedCollection
 				ifFalse: [ references := references isArray
 							ifTrue: [ references := references asOrderedCollection ]
 							ifFalse: [ OrderedCollection with: references ] ].
-			references add: aMethod ]
+			references add: aMethod.
+			references size > MaxOCSize
+				ifTrue: [ | refs |
+					refs := references.
+					references := IdentityDictionary new.
+					refs do: [ :each | self addReference: each ] ] ]
+]
+
+{ #category : #accessing }
+GtReferencesPrefixTree >> classRenamedFrom: oldName to: newName [
+	self childrenDo: [ :each | each classRenamedFrom: oldName to: newName ].
+	references isDictionary ifFalse: [ ^ self ].
+	references
+		at: oldName
+		ifPresent: [ :value | 
+			references at: newName put: value.
+			references removeKey: oldName ifAbsent: [  ] ]
 ]
 
 { #category : #private }
 GtReferencesPrefixTree >> compressData [
 	super compressData.
+	references isDictionary
+		ifTrue: [ references := references
+					collect: [ :each | each isCollection ifTrue: [ each asArray ] ifFalse: [ each ] ].
+			^ self ].
 	references isCollection ifTrue: [ references := references asArray ]
 ]
 
@@ -62,19 +106,24 @@ GtReferencesPrefixTree >> gtReferencesFor: aView [
 	<gtView>
 	^ aView list
 		title: 'References';
-		items: [ references
-				ifNil: [ {} ]
-				ifNotNil: [ references isCollection
-						ifTrue: [ references ]
-						ifFalse: [ Array with: references ] ] ]
+		items: [ self referencesCollection ]
 ]
 
 { #category : #accessing }
 GtReferencesPrefixTree >> gtSpecificSizeInMemory [
 	^ super gtSpecificSizeInMemory
-		+ ((references isArray or: [ references class == OrderedCollection ])
-				ifTrue: [ references gtSpecificSizeInMemory ]
-				ifFalse: [ 0 ])
+		+ (references isDictionary
+				ifTrue: [ references gtSpecificSizeInMemory
+						+ (references
+								inject: 0
+								into: [ :sum :each | 
+									sum
+										+ ((each isArray or: [ each class == OrderedCollection ])
+												ifTrue: [ each gtSpecificSizeInMemory ]
+												ifFalse: [ 0 ]) ]) ]
+				ifFalse: [ (references isArray or: [ references class == OrderedCollection ])
+						ifTrue: [ references gtSpecificSizeInMemory ]
+						ifFalse: [ 0 ] ])
 ]
 
 { #category : #private }
@@ -96,47 +145,75 @@ GtReferencesPrefixTree >> references: aCollection [
 
 { #category : #accessing }
 GtReferencesPrefixTree >> referencesCollection [
-	^ references ifNil: [ #() ] ifNotNil: [ references asOrderedCollection ]
+	^ references
+		ifNil: [ #() ]
+		ifNotNil: [ references isDictionary
+				ifTrue: [ references
+						inject: OrderedCollection new
+						into: [ :sum :each | 
+							each isCompiledMethod ifTrue: [ sum add: each ] ifFalse: [ sum addAll: each ].
+							sum ] ]
+				ifFalse: [ references asOrderedCollection ] ]
 ]
 
 { #category : #accessing }
 GtReferencesPrefixTree >> referencesTo: aString [
-	^ ((self nodeFor: aString) ifNotNil: [ :node | node references ])
+	^ ((self nodeFor: aString) ifNotNil: [ :node | node referencesCollection ])
 		ifNil: [ #() ]
-		ifNotNil: [ :refs | refs asOrderedCollection ]
 ]
 
 { #category : #removing }
 GtReferencesPrefixTree >> removeReference: aMethod [
-	| index |
+	| index refs isDictionary className |
 	references ifNil: [ ^ self ].
 	references == aMethod ifTrue: [ ^ references := nil ].
-	references isArray ifTrue: [ references := references asOrderedCollection ].
-	references class == OrderedCollection ifFalse: [ ^ self ].
-	index := references identityIndexOf: aMethod.
-	index > 0 ifTrue: [ references removeAt: index ]
+	isDictionary := references isDictionary.
+	isDictionary
+		ifTrue: [ className := aMethod methodClass instanceSide name.
+			refs := references at: className ifAbsent: [  ].
+			refs == aMethod ifTrue: [ ^ references removeKey: className ifAbsent: [  ] ] ]
+		ifFalse: [ refs := references ].
+	refs isArray
+		ifTrue: [ refs := refs asOrderedCollection.
+			isDictionary
+				ifTrue: [ references at: className put: refs ]
+				ifFalse: [ references := refs ] ].
+	refs class == OrderedCollection ifFalse: [ ^ self ].
+	index := refs identityIndexOf: aMethod.
+	index > 0
+		ifTrue: [ refs removeAt: index.
+			(isDictionary and: [ refs isEmpty ])
+				ifTrue: [ references removeKey: className ifAbsent: [  ] ] ]
 ]
 
 { #category : #private }
 GtReferencesPrefixTree >> updateReference: aMethod [
+	| refs isDictionary className |
 	references
 		ifNil: [ self addReference: aMethod.
 			^ false ].
-	references isCompiledMethod
-		ifTrue: [ ^ (references methodClass = aMethod methodClass
-				and: [ references selector = aMethod selector ])
-				ifTrue: [ references := aMethod.
+	isDictionary := references isDictionary.
+	refs := isDictionary
+			ifTrue: [ className := aMethod methodClass instanceSide name.
+				references at: className ifAbsent: [ #() ] ]
+			ifFalse: [ references ].
+	refs isCompiledMethod
+		ifTrue: [ ^ (refs methodClass = aMethod methodClass
+				and: [ refs selector = aMethod selector ])
+				ifTrue: [ isDictionary
+						ifTrue: [ references at: className put: aMethod ]
+						ifFalse: [ references := aMethod ].
 					true ]
 				ifFalse: [ self addReference: aMethod.
 					false ] ].
 	1
-		to: references size
+		to: refs size
 		do: [ :i | 
 			| each |
-			each := references at: i.
+			each := refs at: i.
 			(each methodClass = aMethod methodClass
 				and: [ each selector = aMethod selector ])
-				ifTrue: [ references at: i put: aMethod.
+				ifTrue: [ refs at: i put: aMethod.
 					^ true ] ].
 	self addReference: aMethod.
 	^ false

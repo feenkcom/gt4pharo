@@ -74,7 +74,8 @@ GtPharoIndex >> addSendsFrom: aMethod [
 ]
 
 { #category : #private }
-GtPharoIndex >> addSymbolReferencesTo: newClassName [	| addedRefs |
+GtPharoIndex >> addSymbolReferencesTo: newClassName [
+	| addedRefs |
 	addedRefs := IdentitySet new.
 	(self sendersOf: newClassName)
 		do: [ :each | 
@@ -266,8 +267,14 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 { #category : #private }
 GtPharoIndex >> classRenamed: anAnnouncement [
 	| oldRefs addedRefs newClassName oldClassName |
-	"First remove the old entry"
 	oldClassName := anAnnouncement oldName.
+	newClassName := anAnnouncement newName.
+	
+	"Fix references using dictionaries"
+	selectorCache classRenamedFrom: oldClassName to: newClassName.
+	globalCache classRenamedFrom: oldClassName to: newClassName.
+	
+	"Remove the old entry"
 	(globalCache nodeFor: oldClassName)
 		ifNil: [ oldRefs := #() ]
 		ifNotNil: [ :node | 
@@ -275,9 +282,8 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 			node references: nil.
 			globalCache remove: oldClassName weight: node weight ].
 	self removeClassWordsFor: oldClassName.
-			
+	
 	"Add new entry"
-	newClassName := anAnnouncement newName.
 	globalCache add: newClassName weight: 1.
 	self addClassWordsFor: newClassName.
 	
