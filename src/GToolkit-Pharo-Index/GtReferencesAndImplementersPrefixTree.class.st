@@ -121,12 +121,14 @@ GtReferencesAndImplementersPrefixTree >> moveDataTo: newChild [
 
 { #category : #removing }
 GtReferencesAndImplementersPrefixTree >> removeImplementer: aMethod [
+	| index |
 	implementers ifNil: [ ^ self ].
 	implementers == aMethod ifTrue: [ ^ implementers := nil ].
 	implementers isArray
 		ifTrue: [ implementers := implementers asOrderedCollection ].
 	implementers class == OrderedCollection ifFalse: [ ^ self ].
-	implementers remove: aMethod ifAbsent: [  ]
+	index := implementers identityIndexOf: aMethod.
+	index > 0 ifTrue: [ implementers removeAt: index ]
 ]
 
 { #category : #accessing }
