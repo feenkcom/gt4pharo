@@ -65,7 +65,7 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 					object: self;
 					tooltip: 'Search code';
 					id: GtPharoSearchCodeButtonId;
-					actOn: [ :anActOnEvent :anItem :theButton | 
+					objectActOn: [ :anActOnEvent :anItem :theButton | 
 						| acted navigationModel |
 						acted := false.
 						navigationModel := theButton phlow firstParentWithView phlow
