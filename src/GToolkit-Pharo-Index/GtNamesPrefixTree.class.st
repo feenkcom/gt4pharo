@@ -26,8 +26,8 @@ GtNamesPrefixTree >> compressData [
 ]
 
 { #category : #accessing }
-GtNamesPrefixTree >> gtSpecificSizeInMemory [
-	^ super gtSpecificSizeInMemory
+GtNamesPrefixTree >> gtLocalSizeInMemory [
+	^ super gtLocalSizeInMemory
 		+ ((names isArray or: [ names class == OrderedCollection ])
 				ifTrue: [ names gtSpecificSizeInMemory ]
 				ifFalse: [ 0 ])

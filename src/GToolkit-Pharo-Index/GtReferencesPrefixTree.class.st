@@ -68,6 +68,23 @@ GtReferencesPrefixTree >> compressData [
 	references isCollection ifTrue: [ references := references asArray ]
 ]
 
+{ #category : #accessing }
+GtReferencesPrefixTree >> gtLocalSizeInMemory [
+	^ super gtLocalSizeInMemory
+		+ (references isDictionary
+				ifTrue: [ references gtSpecificSizeInMemory
+						+ (references
+								inject: 0
+								into: [ :sum :each | 
+									sum
+										+ ((each isArray or: [ each class == OrderedCollection ])
+												ifTrue: [ each gtSpecificSizeInMemory ]
+												ifFalse: [ 0 ]) ]) ]
+				ifFalse: [ (references isArray or: [ references class == OrderedCollection ])
+						ifTrue: [ references gtSpecificSizeInMemory ]
+						ifFalse: [ 0 ] ])
+]
+
 { #category : #inspector }
 GtReferencesPrefixTree >> gtNoDuplicateReferences: aGtAdvice [
 	<gtAdvice>
@@ -107,23 +124,6 @@ GtReferencesPrefixTree >> gtReferencesFor: aView [
 	^ aView list
 		title: 'References';
 		items: [ self referencesCollection ]
-]
-
-{ #category : #accessing }
-GtReferencesPrefixTree >> gtSpecificSizeInMemory [
-	^ super gtSpecificSizeInMemory
-		+ (references isDictionary
-				ifTrue: [ references gtSpecificSizeInMemory
-						+ (references
-								inject: 0
-								into: [ :sum :each | 
-									sum
-										+ ((each isArray or: [ each class == OrderedCollection ])
-												ifTrue: [ each gtSpecificSizeInMemory ]
-												ifFalse: [ 0 ]) ]) ]
-				ifFalse: [ (references isArray or: [ references class == OrderedCollection ])
-						ifTrue: [ references gtSpecificSizeInMemory ]
-						ifFalse: [ 0 ] ])
 ]
 
 { #category : #private }

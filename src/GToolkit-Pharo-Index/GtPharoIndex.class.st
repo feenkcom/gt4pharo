@@ -196,9 +196,19 @@ GtPharoIndex >> basicUnsubscribe [
 
 { #category : #accessing }
 GtPharoIndex >> cacheSizeInMemory [
-	^ globalCache gtSpecificSizeInMemory + selectorCache gtSpecificSizeInMemory
-		+ selectorWordCache gtSpecificSizeInMemory
-		+ classWordCache gtSpecificSizeInMemory
+	| strings size |
+	size := 0.
+	strings := IdentitySet new.
+	{globalCache.
+		selectorCache.
+		selectorWordCache.
+		classWordCache}
+		do: [ :tree | 
+			tree
+				allNodesDo: [ :each | each prefix isSymbol ifFalse: [ strings add: each prefix ] ].
+			size := size + tree gtSpecificSizeInMemory ].
+	strings do: [ :each | size := size + each sizeInMemory ].
+	^ size
 ]
 
 { #category : #iterating }
@@ -310,6 +320,7 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 
 { #category : #initialization }
 GtPharoIndex >> computeIndex [
+	| compressBlock prefixes |
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
 	globalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
 	selectorWordCache := GtNamesPrefixTree new.
@@ -319,10 +330,14 @@ GtPharoIndex >> computeIndex [
 			self addClassWordsFor: each name.
 			each methodsDo: [ :method | self methodAdded: method ].
 			each class methodsDo: [ :method | self methodAdded: method ] ].
-	selectorCache allNodesDo: #compressData.
-	globalCache allNodesDo: #compressData.
-	selectorWordCache allNodesDo: #compressData.
-	classWordCache allNodesDo: #compressData
+	prefixes := Dictionary new.
+	compressBlock := [ :each | 
+		each compressData.
+		each prefix: (prefixes at: each prefix ifAbsentPut: [ each prefix ]) ].
+	selectorCache allNodesDo: compressBlock.
+	globalCache allNodesDo: compressBlock.
+	selectorWordCache allNodesDo: compressBlock.
+	classWordCache allNodesDo: compressBlock
 ]
 
 { #category : #accessing }
