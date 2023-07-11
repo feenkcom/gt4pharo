@@ -108,11 +108,13 @@ GtReferencesPrefixTree >> referencesTo: aString [
 
 { #category : #removing }
 GtReferencesPrefixTree >> removeReference: aMethod [
+	| index |
 	references ifNil: [ ^ self ].
 	references == aMethod ifTrue: [ ^ references := nil ].
 	references isArray ifTrue: [ references := references asOrderedCollection ].
 	references class == OrderedCollection ifFalse: [ ^ self ].
-	references remove: aMethod ifAbsent: [  ]
+	index := references identityIndexOf: aMethod.
+	index > 0 ifTrue: [ references removeAt: index ]
 ]
 
 { #category : #private }
