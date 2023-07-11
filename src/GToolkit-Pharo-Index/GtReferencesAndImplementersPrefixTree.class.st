@@ -50,6 +50,14 @@ GtReferencesAndImplementersPrefixTree >> gtImplementersFor: aView [
 ]
 
 { #category : #accessing }
+GtReferencesAndImplementersPrefixTree >> gtLocalSizeInMemory [
+	^ super gtLocalSizeInMemory
+		+ ((implementers isArray or: [ implementers class == OrderedCollection ])
+				ifTrue: [ implementers gtSpecificSizeInMemory ]
+				ifFalse: [ 0 ])
+]
+
+{ #category : #accessing }
 GtReferencesAndImplementersPrefixTree >> gtMethodNotInCache: aGtAdvice [
 	<gtAdvice>
 	prefix = '' ifFalse: [ ^ aGtAdvice none ].
@@ -80,14 +88,6 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 						ifEmpty: [ false ]
 						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ];
 		action: [ :each | self gtPhlowInspectNodeAction: each ]
-]
-
-{ #category : #accessing }
-GtReferencesAndImplementersPrefixTree >> gtSpecificSizeInMemory [
-	^ super gtSpecificSizeInMemory
-		+ ((implementers isArray or: [ implementers class == OrderedCollection ])
-				ifTrue: [ implementers gtSpecificSizeInMemory ]
-				ifFalse: [ 0 ])
 ]
 
 { #category : #private }

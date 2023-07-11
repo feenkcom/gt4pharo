@@ -74,7 +74,8 @@ GtPharoIndex >> addSendsFrom: aMethod [
 ]
 
 { #category : #private }
-GtPharoIndex >> addSymbolReferencesTo: newClassName [	| addedRefs |
+GtPharoIndex >> addSymbolReferencesTo: newClassName [
+	| addedRefs |
 	addedRefs := IdentitySet new.
 	(self sendersOf: newClassName)
 		do: [ :each | 
@@ -195,9 +196,19 @@ GtPharoIndex >> basicUnsubscribe [
 
 { #category : #accessing }
 GtPharoIndex >> cacheSizeInMemory [
-	^ globalCache gtSpecificSizeInMemory + selectorCache gtSpecificSizeInMemory
-		+ selectorWordCache gtSpecificSizeInMemory
-		+ classWordCache gtSpecificSizeInMemory
+	| strings size |
+	size := 0.
+	strings := IdentitySet new.
+	{globalCache.
+		selectorCache.
+		selectorWordCache.
+		classWordCache}
+		do: [ :tree | 
+			tree
+				allNodesDo: [ :each | each prefix isSymbol ifFalse: [ strings add: each prefix ] ].
+			size := size + tree gtSpecificSizeInMemory ].
+	strings do: [ :each | size := size + each sizeInMemory ].
+	^ size
 ]
 
 { #category : #iterating }
@@ -266,8 +277,14 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 { #category : #private }
 GtPharoIndex >> classRenamed: anAnnouncement [
 	| oldRefs addedRefs newClassName oldClassName |
-	"First remove the old entry"
 	oldClassName := anAnnouncement oldName.
+	newClassName := anAnnouncement newName.
+	
+	"Fix references using dictionaries"
+	selectorCache classRenamedFrom: oldClassName to: newClassName.
+	globalCache classRenamedFrom: oldClassName to: newClassName.
+	
+	"Remove the old entry"
 	(globalCache nodeFor: oldClassName)
 		ifNil: [ oldRefs := #() ]
 		ifNotNil: [ :node | 
@@ -275,9 +292,8 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 			node references: nil.
 			globalCache remove: oldClassName weight: node weight ].
 	self removeClassWordsFor: oldClassName.
-			
+	
 	"Add new entry"
-	newClassName := anAnnouncement newName.
 	globalCache add: newClassName weight: 1.
 	self addClassWordsFor: newClassName.
 	
@@ -304,6 +320,7 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 
 { #category : #initialization }
 GtPharoIndex >> computeIndex [
+	| compressBlock prefixes |
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
 	globalCache := GtReferencesPrefixTree withAll: Smalltalk globals keys.
 	selectorWordCache := GtNamesPrefixTree new.
@@ -313,10 +330,14 @@ GtPharoIndex >> computeIndex [
 			self addClassWordsFor: each name.
 			each methodsDo: [ :method | self methodAdded: method ].
 			each class methodsDo: [ :method | self methodAdded: method ] ].
-	selectorCache allNodesDo: #compressData.
-	globalCache allNodesDo: #compressData.
-	selectorWordCache allNodesDo: #compressData.
-	classWordCache allNodesDo: #compressData
+	prefixes := Dictionary new.
+	compressBlock := [ :each | 
+		each compressData.
+		each prefix: (prefixes at: each prefix ifAbsentPut: [ each prefix ]) ].
+	selectorCache allNodesDo: compressBlock.
+	globalCache allNodesDo: compressBlock.
+	selectorWordCache allNodesDo: compressBlock.
+	classWordCache allNodesDo: compressBlock
 ]
 
 { #category : #accessing }
