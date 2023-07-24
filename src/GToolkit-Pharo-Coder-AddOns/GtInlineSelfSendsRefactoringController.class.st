@@ -12,7 +12,7 @@ GtInlineSelfSendsRefactoringController >> refactoring [
 		               model: model
 		               sendersOf: methodNode selector
 		               in: (model classFor: self methodClass).
-	refactoring options at: #inlineExpression put: [ :ref :msg | false ].
+	refactoring setOption: #inlineExpression toUse: [ :ref :msg | false ].
 	^ refactoring
 ]
 
