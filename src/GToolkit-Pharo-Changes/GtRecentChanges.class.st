@@ -51,6 +51,7 @@ GtRecentChanges >> changeFilter [
 
 { #category : #accessing }
 GtRecentChanges >> changedClasses [
+	changeList ifNil: [ ^ #() ].
 	^ (changeList collect: [:each | each method methodClass name ]) asSet
 ]
 
@@ -122,6 +123,9 @@ GtRecentChanges >> gtChangedClassesFor: aView [
 { #category : #accessing }
 GtRecentChanges >> gtEventsFor: aView [
 	<gtView>
+	
+	changeList ifNil: [ ^ aView empty ].
+	
 	^ aView list
 		title: 'Change list';
 		priority: 3;
@@ -151,7 +155,9 @@ GtRecentChanges >> initialize [
 { #category : #accessing }
 GtRecentChanges >> onChangeOrAdd: anAnnouncement [
 	| methodChange |
+	changeList ifNil: [ ^ self ].
 	(changeList includes: anAnnouncement method) ifTrue: [ ^ self ].
+	
 	changeList add: anAnnouncement method.
 	methodChange := GtRecentMethodChange
 			method: anAnnouncement method asRingDefinition
@@ -163,26 +169,33 @@ GtRecentChanges >> onChangeOrAdd: anAnnouncement [
 				add: (GtRecentChange
 						class: anAnnouncement method methodClass
 						methods: (OrderedCollection with: methodChange)) ].
+	
 	self announce: GtRecentChangesUpdated new
 ]
 
 { #category : #accessing }
 GtRecentChanges >> onClassRemove: anAnnouncement [
+	changeList ifNil: [ ^ self ].
+	
 	changeList := changeList reject: [ :each | each method isNil ].
 	groupedChanges := groupedChanges
 			reject: [ :each | each theClass = anAnnouncement classAffected ].
+	
 	self announce: GtRecentChangesUpdated new
 ]
 
 { #category : #accessing }
 GtRecentChanges >> onRemove: anAnnouncement [
+	changeList ifNil: [ ^ self ].
 	(changeList includes: anAnnouncement method) ifFalse: [ ^ self ].
+	
 	changeList remove: anAnnouncement method.
 	groupedChanges
 		detect: [ :each | each theClass = anAnnouncement method methodClass ]
 		ifFound: [ :each | 
 			each remove: anAnnouncement method asRingDefinition.
 			each ifEmpty: [ groupedChanges remove: each ] ].
+	
 	self announce: GtRecentChangesUpdated new
 ]
 
