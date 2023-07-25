@@ -27,10 +27,10 @@ GtSnippetInlineMessageRefactoringController >> refactoring [
 			inline: (self snippetIntervalFor: messageNode sourceInterval)
 			inMethod: self snippetSelector
 			forClass: self snippetClass.
-	refactoring options
-		at: #implementorToInline
-			put: [ :ref :classes | classes detect: [ :each | each realClass = implementorClass ] ifNone: [ nil ] ];
-		at: #inlineExpression put: [ :ref :msg | false ].
+	refactoring
+		setOption: #implementorToInline
+			toUse: [ :ref :classes | classes detect: [ :each | each realClass = implementorClass ] ifNone: [ nil ] ];
+		setOption: #inlineExpression toUse: [ :ref :msg | false ].
 	^ refactoring
 ]
 
