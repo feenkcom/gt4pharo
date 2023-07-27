@@ -6,5 +6,5 @@ Class >> gtMetaFor: aView [
 	^ aView explicit
 		title: 'Meta';
 		priority: 200;
-		stencil: [ (GtCoder forClass: self) disablePlayPage ]
+		stencil: [ (GtCoderElement forClass: self) disablePlayPage ]
 ]

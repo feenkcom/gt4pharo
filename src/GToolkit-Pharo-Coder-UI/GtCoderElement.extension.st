@@ -1,24 +1,24 @@
-Extension { #name : #GtCoder }
+Extension { #name : #GtCoderElement }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forAllPackages [
+GtCoderElement class >> forAllPackages [
 	^ self forCoder: GtPharoPackagesCoder forAllPackages
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forClass: aClass [
+GtCoderElement class >> forClass: aClass [
 	^ self forCoder: (GtPharoBehaviorCoder forClass: aClass)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forCoder: aCoder [
+GtCoderElement class >> forCoder: aCoder [
 	^ self basicNew initialize
 		navigationModel: GtCoderNavigationModel default;
 		pushCoder: aCoder
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forMethod: aCompiledMethod [
+GtCoderElement class >> forMethod: aCompiledMethod [
     | classCoder coder |
     classCoder := GtPharoBehaviorCoder forClass: aCompiledMethod methodClass instanceSide.
     coder := self forCoder: classCoder.
@@ -27,21 +27,21 @@ GtCoder class >> forMethod: aCompiledMethod [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forObject: anObject [
+GtCoderElement class >> forObject: anObject [
 	^ self forCoder: (GtPharoBehaviorCoder forObject: anObject)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forPackage: anRPackage [
+GtCoderElement class >> forPackage: anRPackage [
 	^ self forCoder: (GtPharoPackageCoder forPackage: anRPackage)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> forPackageTag: anRPackageTag [
+GtCoderElement class >> forPackageTag: anRPackageTag [
 	^ self forCoder: (GtPharoPackageTagCoder forPackageTag: anRPackageTag)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoder class >> new [
+GtCoderElement class >> new [
 	^ self forCoder: GtPharoPackagesCoder forAllPackages
 ]

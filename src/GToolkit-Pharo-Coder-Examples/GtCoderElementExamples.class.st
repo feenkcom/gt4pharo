@@ -5,7 +5,7 @@ I examplify {{gtClass:GtCoderElement}} and its subclasses.
 Class {
 	#name : #GtCoderElementExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'examples - content element' }
@@ -54,7 +54,7 @@ GtCoderElementExamples >> classCoder [
 GtCoderElementExamples >> coderElement [
 	<gtExample>
 	| anElement |
-	anElement := GtCoder new.
+	anElement := GtCoderElement new.
 	^ anElement
 ]
 
@@ -62,7 +62,7 @@ GtCoderElementExamples >> coderElement [
 GtCoderElementExamples >> coderElementWithObject [
 	<gtExample>
 	| anElement |
-	anElement := GtCoder forObject: self.
+	anElement := GtCoderElement forObject: self.
 	^ anElement
 ]
 

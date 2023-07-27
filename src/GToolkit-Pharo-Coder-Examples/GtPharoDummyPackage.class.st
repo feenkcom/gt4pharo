@@ -6,7 +6,7 @@ Class {
 		'realPackage',
 		'dummyClasses'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - classes' }
@@ -72,7 +72,7 @@ GtPharoDummyPackage >> gtCoderFor: aView [
 	^ aView explicit
 		title: 'Coder';
 		priority: 5;
-		stencil: [ GtCoder forPackage: aRealPackage ]
+		stencil: [ GtCoderElement forPackage: aRealPackage ]
 ]
 
 { #category : #initialization }

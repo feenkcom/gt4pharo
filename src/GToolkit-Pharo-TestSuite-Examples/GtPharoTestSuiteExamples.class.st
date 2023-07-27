@@ -108,7 +108,7 @@ GtPharoTestSuiteExamples >> classCoderWithTestCaseMethods [
 				aClass := self classWithTestCases.
 				aClass suite tests
 					do: [ :aTestCase | aTestCase gtCompiledMethod clearExampleAndTestCaches ].
-				GtCoder forClass: aClass ].
+				GtCoderElement forClass: aClass ].
 
 	aScripter set
 		label: 'Store suite view model';

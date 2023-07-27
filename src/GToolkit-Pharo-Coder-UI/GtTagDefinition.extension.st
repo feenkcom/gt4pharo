@@ -31,7 +31,7 @@ GtTagDefinition >> newTabFrom: anEvent [
 		classTagNamed: self name
 		ifPresent: [ :aTag | 
 			| aPackageTagCoder aSpace |
-			aPackageTagCoder := GtCoder forPackageTag: aTag.
+			aPackageTagCoder := GtCoderElement forPackageTag: aTag.
 
 
 			aSpace := BlSpace new.

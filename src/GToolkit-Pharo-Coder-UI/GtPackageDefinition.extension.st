@@ -22,7 +22,7 @@ GtPackageDefinition >> newTabFrom: anEvent [
 			packageNamed: self name
 			ifAbsent: [ ^ self ].
 
-	aPackageCoder := GtCoder forPackage: aRealPackage.
+	aPackageCoder := GtCoderElement forPackage: aRealPackage.
 
 	aSpace := BlSpace new.
 	aSpace title: self name.

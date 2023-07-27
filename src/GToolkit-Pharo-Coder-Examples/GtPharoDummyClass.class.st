@@ -9,7 +9,7 @@ Class {
 		'dummyClassMethods',
 		'instVarNames'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #accessing }
@@ -107,7 +107,7 @@ GtPharoDummyClass >> gtCoderFor: aView [
 	^ aView explicit
 		title: 'Coder';
 		priority: 5;
-		stencil: [ GtCoder forClass: aRealClass ]
+		stencil: [ GtCoderElement forClass: aRealClass ]
 ]
 
 { #category : #initialization }
