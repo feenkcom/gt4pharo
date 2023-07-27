@@ -674,7 +674,7 @@ GtPharoMethodCoder >> baselineAddOnFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> browseFrom: anEditorElement [ 
-	((GtCoder forMethod: self compiledMethod)
+	((GtCoderElement forMethod: self compiledMethod)
 		openInPagerFrom: anEditorElement)
 			maximized
 ]

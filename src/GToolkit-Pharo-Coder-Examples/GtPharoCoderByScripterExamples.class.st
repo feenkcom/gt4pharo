@@ -165,13 +165,13 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey_first
 { #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coder [
 	<gtExample>
-	^ self scripterForBlock: [ GtCoder forClass: GtPharoDummyClass ]
+	^ self scripterForBlock: [ GtCoderElement forClass: GtPharoDummyClass ]
 ]
 
 { #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coderInPager [
 	<gtExample>
-	^ self coderInPager: [ GtCoder forClass: GtPharoDummyClass ]
+	^ self coderInPager: [ GtCoderElement forClass: GtPharoDummyClass ]
 ]
 
 { #category : #'examples - support' }
@@ -279,7 +279,7 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 { #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coderWithAddMethod [
 	<gtExample>
-	^ self coderInPager: [ GtCoder forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
+	^ self coderInPager: [ GtCoderElement forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
 ]
 
 { #category : #'examples - scripter' }

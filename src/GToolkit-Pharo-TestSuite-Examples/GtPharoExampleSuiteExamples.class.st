@@ -100,7 +100,7 @@ GtPharoExampleSuiteExamples >> classCoderWithExampleMethods [
 				aClass := self classWithExamples.
 				aClass gtExamples
 					do: [ :eachExample | eachExample method clearExampleAndTestCaches ].
-				GtCoder forClass: aClass ].
+				GtCoderElement forClass: aClass ].
 
 	aScripter set
 		label: 'Store suite view model';

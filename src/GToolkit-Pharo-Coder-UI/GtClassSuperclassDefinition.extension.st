@@ -28,7 +28,7 @@ GtClassSuperclassDefinition >> newTabFrom: anEvent [
 		at: self name
 		ifPresent: [ :aClass | 
 			| aClassCoder aSpace |
-			aClassCoder := GtCoder forClass: aClass.
+			aClassCoder := GtCoderElement forClass: aClass.
 
 			aSpace := BlSpace new.
 			aSpace title: self name.

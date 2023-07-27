@@ -131,7 +131,7 @@ GtPharoPackageCoderElement >> buildParentLink [
 										aSpace
 											addChild: (GtPager
 													createOn: (GtPagerWrapperElement new
-															tool: GtCoder forAllPackages;
+															tool: GtCoderElement forAllPackages;
 															embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
 										aSpace withHalos.
 										anEvent target showSpace: aSpace ]
