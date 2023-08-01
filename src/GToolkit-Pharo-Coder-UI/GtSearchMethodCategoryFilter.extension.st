@@ -6,6 +6,7 @@ GtSearchMethodCategoryFilter class >> filterDescriptorFor: aMethodsCoder [
 		creator: [ :value | self forCategory: value ];
 		named: 'Category';
 		order: 15;
+		beNotDefault;
 		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder categories ] ];
 		emptyDefaultValue: 'All'
 ]
@@ -16,5 +17,6 @@ GtSearchMethodCategoryFilter class >> globalFilterDescriptor [
 		creator: [ :value | self forCategory: value ];
 		named: 'Category';
 		order: 15;
+		beNotDefault;
 		emptyDefaultValue: 'All'
 ]
