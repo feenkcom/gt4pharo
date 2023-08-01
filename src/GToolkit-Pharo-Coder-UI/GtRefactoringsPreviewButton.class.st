@@ -174,7 +174,7 @@ GtRefactoringsPreviewButton >> initialize [
 		id: #previewCheckButton;
 		beSmallSize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
-				+ (BrGlamorousWithDropdownAptitude
+				+ ((BrGlamorousWithDropdownAptitude
 						handle: [ BrButton new
 								icon: BrGlamorousIcons empty;
 								beSmallSize;
@@ -185,7 +185,8 @@ GtRefactoringsPreviewButton >> initialize [
 									c vertical exact: 50.
 									c horizontal exact: self previewWidth ];
 								postAction: [ :theLazyElement | theLazyElement constraintsDo: [ :c | c vertical fitContentLimited ] ];
-								stencil: [ self buildRefactoringsPreviewForButton: previewButton ] ]);
+								stencil: [ self buildRefactoringsPreviewForButton: previewButton ] ])
+									preferredExtent: self previewWidth @ 50);
 		label: 'Preview'.
 
 	previewButton
