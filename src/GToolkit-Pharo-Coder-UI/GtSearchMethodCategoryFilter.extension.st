@@ -16,5 +16,6 @@ GtSearchMethodCategoryFilter class >> globalFilterDescriptor [
 		creator: [ :value | self forCategory: value ];
 		named: 'Category';
 		order: 15;
+		beNotDefault;
 		emptyDefaultValue: 'All'
 ]
