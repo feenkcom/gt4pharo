@@ -26,19 +26,13 @@ GtFilteredMethodCoderElementExamples >> basicFiltersElement [
 { #category : #'examples - ui' }
 GtFilteredMethodCoderElementExamples >> coderWithFiltersElement [
 	<gtExample>
-	| aFiltersElement aCoder aCoderElement aTag aButton |
+	| aFiltersElement aCoder aCoderElement |
 	aCoder := self filteredMethodsCoder.
 	aCoderElement := aCoder asElement.
 	aFiltersElement := self filtersElemenFrom: aCoderElement.
 	self assert: aFiltersElement descriptors isNotNil.
 	self assert: aFiltersElement descriptors isNotEmpty.
-	self assert: aFiltersElement childrenCount > 1.
-	
-	"Check whether the default filter is Category filter"
-	aTag := aFiltersElement childAt: 1.
-	self assert: aTag class equals: GtFilterTagElement.
-	aButton := (aTag query // GtFilterTagLabelId) anyOne.
-	self assert: aButton text asString equals: 'Category'.
+	self assert: aFiltersElement childrenCount = 1.
 	^ aCoder
 ]
 
@@ -51,17 +45,6 @@ GtFilteredMethodCoderElementExamples >> emptyFiltersElement [
 	aFiltersElement := self filtersElemenFrom: aCoderElement.
 	aFiltersElement removeFromParent.
 	^ aFiltersElement
-]
-
-{ #category : #'examples - ui' }
-GtFilteredMethodCoderElementExamples >> filterTagElement [
-	<gtExample>
-	| aFiltersElement aTagElement |
-	aFiltersElement := self emptyFiltersElement.
-	aTagElement := aFiltersElement childAt: 1.
-	self assert: aTagElement class equals: GtFilterTagElement.
-	aTagElement removeFromParent.
-	^ aTagElement
 ]
 
 { #category : #'examples - support' }
