@@ -9,7 +9,7 @@ Class >> gtIsOrInheritsFrom [
 
 { #category : #'*GToolkit-Pharo-Coder' }
 Class >> gtReferences [
-	^ GtSearchReferencesFilter literal: self binding
+	^ (GtSearchReferencesFilter literal: self binding) | (GtSearchSubclassesFilter forClass: self)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }

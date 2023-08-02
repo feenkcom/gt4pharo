@@ -24,45 +24,15 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoder [
 ]
 
 { #category : #accessing }
-GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter [
-	<gtExample>
-	| aScripter |
-
-	aScripter := self methodsCoder.
-	aScripter click
-		label: 'Enter into Edit Mode';
-		id: GtFilterTagEditorId index: 1;
-		play.
-	
-	^ aScripter
-]
-
-{ #category : #accessing }
 GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_click_add_method [
 	<gtExample>
 	| aScripter |
 
-	aScripter := self methodsCoderWithFilledFilter_insert_text.
+	aScripter := self methodsCoder.
 
 	aScripter click
 		label: 'Click add method button';
 		id: GtPharoAddNewMethodButtonId;
-		play.
-
-	^ aScripter
-]
-
-{ #category : #accessing }
-GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_insert_text [
-	<gtExample>
-	| aScripter |
-
-	aScripter := self methodsCoderWithFilledFilter.
-
-	aScripter type
-		label: 'Insert new text';
-		text: 'foo';
-		id: GtFilterTagEditorId index: 1;
 		play.
 
 	^ aScripter
