@@ -143,6 +143,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 
 			package: 'GToolkit-Pharo-Changes' with: [
 				spec requires: #(
-					'GToolkitCoder' ). ]. ].
+					'GToolkitCoder' ). ];
+			
+			package: 'GToolkit-Pharo-Refactorings' ].
 
 ]
