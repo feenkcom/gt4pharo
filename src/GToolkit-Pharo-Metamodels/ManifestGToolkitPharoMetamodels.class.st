@@ -24,7 +24,7 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'Metacello-Base'.
 		'RPackage-Core'.
 		'Refactoring-Changes'.
-		'Refactoring-Core'.
+		'GToolkit-Pharo-Refactorings'.
 		'Ring-Core'
 	}
 ]
@@ -36,7 +36,7 @@ ManifestGToolkitPharoMetamodels class >> shouldDependOn [
 		'GToolkit-Pharo-System'.
 		'GToolkit-Utility-Refactorings'.
 		'Refactoring-Changes'.
-		'Refactoring-Core'.
+		'GToolkit-Pharo-Refactorings'.
 		'Ring-Core'
 	}
 ]
