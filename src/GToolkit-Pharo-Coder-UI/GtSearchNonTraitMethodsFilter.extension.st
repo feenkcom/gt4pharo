@@ -4,7 +4,7 @@ Extension { #name : #GtSearchNonTraitMethodsFilter }
 GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
-		named: 'Non-Trait Methods';
+		named: 'Non-trait methods';
 		order: 20;
 		valueNotRequired;
 		beNotDefault;

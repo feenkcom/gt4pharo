@@ -4,7 +4,7 @@ Extension { #name : #GtSearchInstanceMethodsFilter }
 GtSearchInstanceMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
-		named: 'Instance Methods';
+		named: 'Instance methods';
 		order: 16;
 		valueNotRequired;
 		beNotDefault;

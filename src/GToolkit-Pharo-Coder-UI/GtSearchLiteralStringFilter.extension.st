@@ -4,6 +4,6 @@ Extension { #name : #GtSearchLiteralStringFilter }
 GtSearchLiteralStringFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self substring: value ];
-		named: 'Substring Literal';
+		named: 'Substring literal';
 		order: 91
 ]
