@@ -41,6 +41,11 @@ GtSearchMethodsContainedInClassFilter >> forClass: aClass [
 	class := aClass
 ]
 
+{ #category : #comparing }
+GtSearchMethodsContainedInClassFilter >> hash [
+	^ class hash bitXor: self class
+]
+
 { #category : #enumerating }
 GtSearchMethodsContainedInClassFilter >> itemsDo: aBlock [
 	^ self methodsDo: aBlock
