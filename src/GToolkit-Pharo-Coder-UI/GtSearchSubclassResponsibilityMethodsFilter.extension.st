@@ -4,7 +4,7 @@ Extension { #name : #GtSearchSubclassResponsibilityMethodsFilter }
 GtSearchSubclassResponsibilityMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
-		named: 'Abstract Methods';
+		named: 'Abstract methods';
 		order: 18;
 		valueNotRequired;
 		beNotDefault;

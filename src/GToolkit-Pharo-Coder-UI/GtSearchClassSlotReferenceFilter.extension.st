@@ -10,7 +10,7 @@ GtSearchClassSlotReferenceFilter class >> filterDescriptorFor: aMethodsCoder [
 			self
 				forClassAndSubclasses: aMethodsCoder classOrMetaClass classSide
 				andVariable: value ];
-		named: 'Class Slots';
+		named: 'Class slots';
 		order: 27;
 		completion: [ GtStringsCompletionStrategy new completions: [ GtPrefixTree withAll: aMethodsCoder classOrMetaClass classSide allInstVarNames ] ]
 ]

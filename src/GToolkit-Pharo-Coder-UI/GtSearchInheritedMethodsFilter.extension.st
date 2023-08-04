@@ -1,7 +1,7 @@
 Extension { #name : #GtSearchInheritedMethodsFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchInheritedMethodsFilter classSide >> filterDescriptorFor: aMethodsCoder [
+GtSearchInheritedMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 	aMethodsCoder isForClass ifFalse: [ ^ nil ].
 
 	^ GtFilterDescriptor new

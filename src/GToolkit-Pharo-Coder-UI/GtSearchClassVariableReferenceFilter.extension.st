@@ -6,7 +6,7 @@ GtSearchClassVariableReferenceFilter class >> filterDescriptorFor: aMethodsCoder
 		ifFalse: [ ^ nil ].
 	^ GtFilterDescriptor new
 		creator: [ :value | self forClass: aMethodsCoder classOrMetaClass andVariable: value ];
-		named: 'Class Variable';
+		named: 'Class variable';
 		order: 26;
 		completion: [
 			(GtStringsCompletionStrategy new
