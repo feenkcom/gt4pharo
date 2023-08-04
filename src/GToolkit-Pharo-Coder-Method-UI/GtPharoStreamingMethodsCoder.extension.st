@@ -80,22 +80,14 @@ GtPharoStreamingMethodsCoder >> codeGeneratorsFor: aMethodsCoderViewModel [
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
 GtPharoStreamingMethodsCoder >> filterDescriptors [
-	| descriptors |
 	<return: #TAsyncStream>
-
+	| descriptors |
 	descriptors := SortedCollection sortBlock: [ :a :b | a order < b order ].
 
 	BlFrameTelemetry
 		time: [ 'Create filter descriptors' ]
-		during: [
-			GtSearchMethodsFilter
-				withAllSubclassesDo: [ :eachClass | 
-					BlFrameTelemetry
-						time: [ 'Filter descriptors of ', eachClass name ]
-						during: [
-							eachClass 
-								filterDescriptorsFor: self 
-								into: descriptors ] ] ].
+		during: [ GtSearchMethodsFilter
+				withAllSubclassesDo: [ :eachClass | eachClass filterDescriptorsFor: self into: descriptors ] ].
 
 	^ descriptors
 ]
