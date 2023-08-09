@@ -21,24 +21,25 @@ GtPharoStreamingMethodsCoderElement >> asScrollableElement [
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderElement >> buildFilter [
-
 	| filterElement filterDescriptors |
 	filterDescriptors := streamingCodersViewModel streamingCodersModel
-		                     filterDescriptors.
+			filterDescriptors.
 	filterDescriptors isEmpty ifTrue: [ ^ self ].
-
-	filterElement := BlFrameTelemetry
-		                 time: [ 'Create filters element' ]
-		                 during: [ 
-			                 GtFiltersElement new
-				                 padding: (BlInsets all: 2);
-				                 descriptors: filterDescriptors;
-				                 yourself ].
-
+	filterElement := GtFiltersElement new
+			padding: (BlInsets all: 2);
+			descriptors: filterDescriptors;
+			yourself.
+	filterElement
+		buildFilters: [ streamingCodersViewModel streamingCodersModel additionalFilters
+				do: [ :each | 
+					(each class filterDescriptorFor: streamingCodersViewModel streamingCodersModel)
+						ifNotNil: [ :descriptor | 
+							| label |
+							label := descriptor valueIsRequired ifTrue: [ each filterValueString ].
+							filterElement addFilterForDescriptor: descriptor andValue: label ] ] ].
 	filterElement
 		when: GtFiltersChangedEvent
 		do: [ :event | self updateCodersFilters: event ].
-
 	^ filterElement
 ]
 
