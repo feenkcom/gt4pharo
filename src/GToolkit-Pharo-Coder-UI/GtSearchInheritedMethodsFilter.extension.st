@@ -10,9 +10,9 @@ GtSearchInheritedMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 				withSuperclassesUpTo: (Smalltalk at: string asSymbol) ];
 		named: 'Methods up to';
 		order: 16;
-		beNotDefault;
 		completion: [ GtStringsCompletionStrategy new
 				completions: [ GtPrefixTree
 						withAll: (aMethodsCoder classOrMetaClass withAllSuperclasses collect: #name) ] ];
-		emptyDefaultValue: 'Object'
+		emptyDefaultValue: aMethodsCoder classOrMetaClass name;
+		beNotDefault
 ]

@@ -11,7 +11,14 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoder class >> forBehavior: aBehavior [
-	^ (self forFilter: (GtSearchSortedMethodsInInstanceAndClassSideFilter forClass: aBehavior)) behavior: aBehavior
+	^ (self forFilter: (GtSearchSortedMethodsInInstanceAndClassSideFilter forClass: aBehavior)) behavior: aBehavior.
+	
+"	^ (self
+		forFilter: ((GtSearchInheritedMethodsFilter forClass: aBehavior)
+				withSuperclassesUpToIncluding: Object))
+		additionalFilters: {(GtSearchInheritedMethodsFilter forClass: aBehavior)
+					withSuperclassesUpTo: aBehavior superclass};
+		behavior: aBehavior"
 ]
 
 { #category : #'api - accessing' }
