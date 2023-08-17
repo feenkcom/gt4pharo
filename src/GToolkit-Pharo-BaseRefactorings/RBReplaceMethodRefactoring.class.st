@@ -25,7 +25,7 @@ Class {
 		'replaceInAllClasses',
 		'initializers'
 	],
-	#category : #'GToolkit-Pharo-Refactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings'
 }
 
 { #category : #'instance creation' }

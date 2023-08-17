@@ -16,7 +16,7 @@ Class {
 		'superclass',
 		'subclasses'
 	],
-	#category : #'GToolkit-Pharo-Refactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings'
 }
 
 { #category : #'instance creation' }
