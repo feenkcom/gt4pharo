@@ -36,6 +36,17 @@ GtRBAddTraitUsageRefactoring >> checkClassDoesNotIncludeTrait [
 						refactoringError: traitName , ' is already included in ' , each name ] ]
 ]
 
+{ #category : #accessing }
+GtRBAddTraitUsageRefactoring >> gtDescription [
+	<return: #String or: #BlRunRopedText>
+	
+	^ ('Add' asRopedText glamorousRoundedBackground)
+		append: ' trait usage ' asRopedText;
+		append: traitName asRopedText glamorousRoundedBackground;
+		append: ' to ' asRopedText;
+		append: class name asRopedText
+]
+
 { #category : #preconditions }
 GtRBAddTraitUsageRefactoring >> preconditions [
 	^ (super preconditions

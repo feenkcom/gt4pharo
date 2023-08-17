@@ -23,6 +23,17 @@ GtRBChangeSuperclassRefactoring >> changeSuperclassOf: aClass to: superClass [
 	newSuperclass := self model classFor: superClass
 ]
 
+{ #category : #accessing }
+GtRBChangeSuperclassRefactoring >> gtDescription [
+	<return: #String or: #BlRunRopedText>
+	
+	^ ('Change' asRopedText glamorousRoundedBackground)
+		append: ' superclass of ' asRopedText;
+		append: className asRopedText;
+		append: ' to ' asRopedText;
+		append: newSuperclass name asRopedText glamorousRoundedBackground
+]
+
 { #category : #preconditions }
 GtRBChangeSuperclassRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
