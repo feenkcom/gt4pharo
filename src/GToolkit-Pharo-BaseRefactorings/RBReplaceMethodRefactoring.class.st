@@ -25,7 +25,7 @@ Class {
 		'replaceInAllClasses',
 		'initializers'
 	],
-	#category : #'GToolkit-Pharo-Refactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings'
 }
 
 { #category : #'instance creation' }
@@ -68,6 +68,15 @@ RBReplaceMethodRefactoring class >> replaceCallMethod: aSelector in: aClass to: 
 		to: newSelector
 		permutation: aMap
 		inAllClasses: aBoolean
+]
+
+{ #category : #'gt ' }
+RBReplaceMethodRefactoring >> gtPreconditions [
+	|conditions|
+	conditions := (RBCondition withBlock: [ self haveSameNumberOfArgs. true])
+						&(RBCondition definesSelector: oldSelector in: class )
+						& (RBCondition definesSelector: newSelector in: class ).
+	^ conditions
 ]
 
 { #category : #accessing }
