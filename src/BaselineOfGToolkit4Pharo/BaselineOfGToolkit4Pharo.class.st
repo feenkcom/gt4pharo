@@ -15,17 +15,14 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			baseline: 'GToolkitExamplesEngine' with: [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.78/src' ].
 		spec
-			baseline: 'GToolkitRefactoringsUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.216/src' ].
-		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1352/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1353/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1062/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1063/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.6.771/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.6.772/src' ].
 		spec
 			baseline: 'SmaCCRuntime' with: [
 				spec repository: 'github://j-brant/SmaCC:v3.0.18' ].
@@ -34,8 +31,6 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #('GToolkitExamplesEngine') ].
 		spec package: 'GToolkit-Pharo-Parser' with: [
 			spec requires: #('SmaCCRuntime') ].
-		spec package: 'GToolkit-Pharo-Metamodels' with: [
-			spec requires: #('GToolkitRefactoringsUtility' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Index' with: [
 			spec requires: #('GToolkitCompleter') ].
 		spec package: 'GToolkit-Pharo-SearchFilters' with: [
@@ -50,26 +45,30 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #('GToolkit-Pharo-TestSuite') ].
 		spec package: 'GToolkit-Pharo-TestSuite-UI' with: [
 			spec requires: #('Futures' 'GToolkitCoder' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-Remote') ].
+		spec package: 'GToolkit-Pharo-Changes' with: [
+			spec requires: #('GToolkitCoder') ].
+		spec package: 'GToolkit-Pharo-BaseRefactorings'.
+		spec package: 'GToolkit-Pharo-GtRefactorings' with: [
+			spec requires: #('GToolkit-Pharo-BaseRefactorings') ].
+		spec package: 'GToolkit-Pharo-Metamodels' with: [
+			spec requires: #('GToolkit-Pharo-GtRefactorings' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Coder-Method' with: [
 			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkitExamplesEngine' 'GToolkit-Pharo-Completer' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite') ].
-		spec package: 'GToolkit-Pharo-Coder-Method-UI' with: [
-			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters') ].
-		spec package: 'GToolkit-Pharo-Coder-Method-Examples' with: [
-			spec requires: #('GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-SearchFilters') ].
 		spec package: 'GToolkit-Pharo-Coder' with: [
 			spec requires: #('GToolkitCoder' 'GToolkit4Magritte' 'GToolkitCompleter' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System') ].
+		spec package: 'GToolkit-Pharo-Extensions' with: [
+			spec requires: #('GToolkitCoder' 'GToolkit-Pharo-Coder' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-BaseRefactorings') ].
+		spec package: 'GToolkit-Pharo-Coder-Method-Examples' with: [
+			spec requires: #('GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-SearchFilters') ].
+		spec package: 'GToolkit-Pharo-Coder-Method-UI' with: [
+			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters') ].
 		spec package: 'GToolkit-Pharo-Coder-UI' with: [
-			spec requires: #('GToolkitCoder' 'GToolkit4Magritte' 'GToolkitCompleter' 'GToolkitRefactoringsUtility' 'GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Coder-Method-UI' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-UI') ].
+			spec requires: #('GToolkitCoder' 'GToolkit4Magritte' 'GToolkitCompleter' 'GToolkit-Pharo-GtRefactorings' 'GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Coder-Method-UI' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-UI') ].
 		spec package: 'GToolkit-Pharo-Coder-AddOns' with: [
 			spec requires: #('GToolkit-Pharo-Coder-UI') ].
 		spec package: 'GToolkit-Pharo-Coder-Examples' with: [
 			spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-AddOns' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Coder-Method-UI' 'GToolkit-Pharo-Coder-UI' 'GToolkit-Pharo-Completer' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite') ].
 		spec package: 'GToolkit-Pharo-TestSuite-Examples' with: [
 			spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-Examples' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-UI') ].
-		spec package: 'GToolkit-Pharo-Extensions' with: [
-			spec requires: #('GToolkitCoder' 'GToolkit-Pharo-Coder' 'GToolkit-Pharo-Metamodels') ].
-		spec package: 'GToolkit-Pharo-Changes' with: [
-			spec requires: #('GToolkitCoder') ].
-		spec package: 'GToolkit-Pharo-Refactorings'.
 	]
 ]
