@@ -70,6 +70,15 @@ RBReplaceMethodRefactoring class >> replaceCallMethod: aSelector in: aClass to: 
 		inAllClasses: aBoolean
 ]
 
+{ #category : #'gt ' }
+RBReplaceMethodRefactoring >> gtPreconditions [
+	|conditions|
+	conditions := (RBCondition withBlock: [ self haveSameNumberOfArgs. true])
+						&(RBCondition definesSelector: oldSelector in: class )
+						& (RBCondition definesSelector: newSelector in: class ).
+	^ conditions
+]
+
 { #category : #accessing }
 RBReplaceMethodRefactoring >> initializers [
 
