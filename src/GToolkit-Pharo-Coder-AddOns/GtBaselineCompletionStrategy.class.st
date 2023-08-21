@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtBaselineCompletionStrategy >> completionActionStreamFor: aText at: positionInteger [
+GtBaselineCompletionStrategy >> completionActionStreamFor: aText at: positionInteger requested: aBoolean [
 	| string first partialName names last ch deleteAction |
 	string := aText asString.
 	first := positionInteger.
