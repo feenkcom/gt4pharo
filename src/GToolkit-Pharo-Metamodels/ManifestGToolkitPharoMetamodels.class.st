@@ -19,12 +19,12 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'Collections-Unordered'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-System'.
-		'GToolkit-Utility-Refactorings'.
+		'GToolkit-Pharo-GtRefactorings'.
+		'GToolkit-Pharo-BaseRefactorings'.
 		'Kernel'.
 		'Metacello-Base'.
 		'RPackage-Core'.
 		'Refactoring-Changes'.
-		'GToolkit-Pharo-Refactorings'.
 		'Ring-Core'
 	}
 ]
@@ -34,9 +34,9 @@ ManifestGToolkitPharoMetamodels class >> shouldDependOn [
 	^ {
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-System'.
-		'GToolkit-Utility-Refactorings'.
+		'GToolkit-Pharo-GtRefactorings'.
+		'GToolkit-Pharo-BaseRefactorings'.
 		'Refactoring-Changes'.
-		'GToolkit-Pharo-Refactorings'.
 		'Ring-Core'
 	}
 ]

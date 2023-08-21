@@ -13,8 +13,6 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/pharo-futures:main/src' ];
 			baseline: 'GToolkitExamplesEngine' with: [
 				spec repository: 'github://feenkcom/gtoolkit-examples:main/src' ];
-			baseline: 'GToolkitRefactoringsUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitCoder' with: [
 				spec repository: 'github://feenkcom/gtoolkit-coder:main/src' ];
 			baseline: 'GToolkitCompleter' with: [
@@ -28,9 +26,11 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #('GToolkitExamplesEngine') ];
 			package: 'GToolkit-Pharo-Parser' with: [
 				spec requires: #('SmaCCRuntime'). ];
+			package: 'GToolkit-Pharo-GtRefactorings' with: [
+				spec requires: #('GToolkit-Pharo-BaseRefactorings'). ];
 			package: 'GToolkit-Pharo-Metamodels' with: [
 				spec requires: #(
-					'GToolkitRefactoringsUtility'
+					'GToolkit-Pharo-GtRefactorings'
 					'GToolkit-Pharo-Parser'
 					'GToolkit-Pharo-System'). ];
 			package: 'GToolkit-Pharo-Index' with: [ 
@@ -100,7 +100,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkitCoder'
 					'GToolkit4Magritte'
 					'GToolkitCompleter'
-					'GToolkitRefactoringsUtility'
+					'GToolkit-Pharo-GtRefactorings'
 					'GToolkit-Pharo-Coder'
 					'GToolkit-Pharo-Coder-Method'
 					'GToolkit-Pharo-Coder-Method-UI'
@@ -139,12 +139,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #(
 					'GToolkitCoder'
 					'GToolkit-Pharo-Coder'
-					'GToolkit-Pharo-Metamodels' ). ];
+					'GToolkit-Pharo-Metamodels'
+					'GToolkit-Pharo-BaseRefactorings' ). ];
 
 			package: 'GToolkit-Pharo-Changes' with: [
 				spec requires: #(
 					'GToolkitCoder' ). ];
 			
-			package: 'GToolkit-Pharo-Refactorings' ].
+			package: 'GToolkit-Pharo-BaseRefactorings' ].
 
 ]
