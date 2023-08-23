@@ -92,6 +92,11 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	
 ]
 
+{ #category : #accessing }
+GtPharoMethodContextCoder >> elementClass [
+	^ GtExpandableContextMethodCoderElement
+]
+
 { #category : #'instance creation' }
 GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 
@@ -144,6 +149,15 @@ GtPharoMethodContextCoder >> needsUpdate [
 { #category : #private }
 GtPharoMethodContextCoder >> notifyDebugger [
 	announcer announce: GtCoderRefreshStackAnnouncement new.
+]
+
+{ #category : #'event handling' }
+GtPharoMethodContextCoder >> onMethodModified: aMethodModified [
+	| method |
+	method := self compiledMethod.
+	aMethodModified newMethod selector = method selector ifFalse: [ ^ self ].
+	aMethodModified classAffected = method methodClass ifFalse: [ ^ self ].
+	self notifyMethodModified
 ]
 
 { #category : #printing }
@@ -231,7 +245,12 @@ GtPharoMethodContextCoder >> stackVariableNodesDo: aBlock [
 
 { #category : #subscriptions }
 GtPharoMethodContextCoder >> subscribeToSystem [
-	"do nothing"
+	self unsubscribeFromSystem.
+
+	SystemAnnouncer uniqueInstance weak
+		when: MethodModified
+		send: #onMethodModified:
+		to: self
 ]
 
 { #category : #'accessing variables' }
