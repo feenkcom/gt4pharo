@@ -5,3 +5,8 @@ GtPharoMethodContextCoder >> asCoderViewModel [
 	^ (GtPharoMethodContextCoderViewModel new coder: self)
 		selfObject: self context receiver
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+GtPharoMethodContextCoder >> elementClass [
+	^ GtExpandableContextMethodCoderElement
+]
