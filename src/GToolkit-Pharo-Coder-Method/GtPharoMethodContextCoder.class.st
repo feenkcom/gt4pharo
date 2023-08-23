@@ -92,11 +92,6 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	
 ]
 
-{ #category : #accessing }
-GtPharoMethodContextCoder >> elementClass [
-	^ GtExpandableContextMethodCoderElement
-]
-
 { #category : #'instance creation' }
 GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 
