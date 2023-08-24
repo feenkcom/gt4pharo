@@ -23,7 +23,7 @@ GtExpandableContextMethodCoderElement >> initialize [
 	super initialize.
 	uninstalledIndicator := self newUninstalledIndicator.
 	uninstalledIndicator visibility: BlVisibility gone.
-	self addChild: uninstalledIndicator
+	self addChild: uninstalledIndicator before: modificationIndicator
 ]
 
 { #category : #accessing }

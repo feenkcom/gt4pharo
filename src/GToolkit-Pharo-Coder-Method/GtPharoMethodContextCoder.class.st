@@ -27,25 +27,27 @@ GtPharoMethodContextCoder >> close [
 { #category : #'api - actions' }
 GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	| withoutErrors compiledSuccesfully |
-	
 	self session
 		ifNil: [ ^ super compileInContext: aGtPharoSourceCoderEvaluationContext ].
-	
-	compiledSuccesfully := false.
-	withoutErrors := self handleCompilerErrorsDuring: [
-		| aSourceString |
-		aSourceString := self currentSourceString.
 
-		aGtPharoSourceCoderEvaluationContext
-			sourceString: aSourceString;
-			evaluatedInterval: (1 to: aSourceString size);
-			evaluatedSourceString: aSourceString.
-		
-		compiledSuccesfully := self session
-			gtRecompileMethodTo: aSourceString
-			inContext: aGtPharoSourceCoderEvaluationContext runtimeContext
-			notifying: aGtPharoSourceCoderEvaluationContext ].
-		
+	compiledSuccesfully := false.
+	withoutErrors := self
+			handleCompilerErrorsDuring: [ | aSourceString previousMethod |
+				aSourceString := self currentSourceString.
+
+				aGtPharoSourceCoderEvaluationContext
+					sourceString: aSourceString;
+					evaluatedInterval: (1 to: aSourceString size);
+					evaluatedSourceString: aSourceString.
+
+				previousMethod := super compiledMethod.
+				compiledSuccesfully := self session
+						gtRecompileMethodTo: aSourceString
+						inContext: aGtPharoSourceCoderEvaluationContext runtimeContext
+						notifying: aGtPharoSourceCoderEvaluationContext.
+				previousMethod ~~ super compiledMethod
+					ifTrue: [ self sourceCode: (GtCoderExplicitStringSource new source: aSourceString) ] ].
+
 	^ withoutErrors and: [ compiledSuccesfully ]
 ]
 
