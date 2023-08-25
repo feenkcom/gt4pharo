@@ -58,7 +58,7 @@ GtPharoStylerExamples >> temporariesAreLighterThanGlobalVariables [
 				attribute: (BlTextUnderlineAttribute new color: Color orange).
 			lightIntervals
 				add: (aStartPosition to: anEndPosition) -> highlightedSourceText ].
-	self assert: lightIntervals first key equals: (41 to: 47).
+	self assert: lightIntervals first key equals: (42 to: 47).
 
 	^ aSourceText
 ]
