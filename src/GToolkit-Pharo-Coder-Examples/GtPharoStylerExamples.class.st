@@ -52,12 +52,12 @@ GtPharoStylerExamples >> temporariesAreLighterThanGlobalVariables [
 				and: [ eachAttribute paint = Color blue twiceDarker ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | 
 			| highlightedSourceText |
+			"add highlightedSourceText just to make it easier to debug the test"
 			highlightedSourceText := aSourceText copy.
 			(highlightedSourceText from: aStartPosition to: anEndPosition)
 				attribute: (BlTextUnderlineAttribute new color: Color orange).
 			lightIntervals
 				add: (aStartPosition to: anEndPosition) -> highlightedSourceText ].
-
 	self assert: lightIntervals first key equals: (41 to: 47).
 
 	^ aSourceText
