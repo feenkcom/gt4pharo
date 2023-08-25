@@ -173,8 +173,11 @@ GtPharoStyler >> visitDeclaredGlobalVariable: aNamedVariable [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
+	| isLocallyDefined color |
+	isLocallyDefined := aNamedVariable allParents anySatisfy: [ :each | each isErrorNode not and: [ each defines: aNamedVariable name value ] ].
+	color := isLocallyDefined ifTrue: [ Color blue twiceDarker ] ifFalse: [ Color blue muchDarker ].
 	self
-		attributes: { BlTextForegroundAttribute color: Color blue muchDarker }
+		attributes: { BlTextForegroundAttribute color: color }
 		from: aNamedVariable name startPosition
 		to: aNamedVariable name stopPosition
 ]
