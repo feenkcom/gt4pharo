@@ -138,9 +138,8 @@ GtPharoMethodContextCoder >> isDead [
 
 { #category : #testing }
 GtPharoMethodContextCoder >> needsUpdate [
-	^ self isModified or: [ 
-		(super compiledMethod == self context method) not or: [ 
-			(self selector == self compiledMethod selector) not ]]
+	^ super compiledMethod ~~ self context method
+		or: [ self selector ~~ self compiledMethod selector ]
 ]
 
 { #category : #private }
