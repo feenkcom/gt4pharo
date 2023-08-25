@@ -48,8 +48,8 @@ GtPharoStylerExamples >> temporariesAreLighterThanGlobalVariables [
 	lightIntervals := OrderedCollection new.
 	aSourceText
 		findAttributesSuchThat: [ :eachAttribute | 
-			(eachAttribute isKindOf: BlTextForegroundAttribute)
-				and: [ eachAttribute paint = Color blue twiceDarker ] ]
+			(eachAttribute isKindOf: BlFontWeightAttribute)
+				and: [ eachAttribute weight = LogicalFont weightSemiBold ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | 
 			| highlightedSourceText |
 			"add highlightedSourceText just to make it easier to debug the example"
@@ -58,7 +58,7 @@ GtPharoStylerExamples >> temporariesAreLighterThanGlobalVariables [
 				attribute: (BlTextUnderlineAttribute new color: Color orange).
 			lightIntervals
 				add: (aStartPosition to: anEndPosition) -> highlightedSourceText ].
-	self assert: lightIntervals first key equals: (42 to: 47).
+	self assert: lightIntervals first key equals: (96 to: 114).
 
 	^ aSourceText
 ]
