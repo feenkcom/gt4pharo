@@ -415,3 +415,11 @@ GtPharoBehaviorCoderElement >> selectAndScrollToMethod: aMethod [
 				scrollToCompiledMethod: aMethod ] 
 		ifNone: [ "ignore" ]
 ]
+
+{ #category : #'building ui' }
+GtPharoBehaviorCoderElement >> streamingMethodCodersElement [
+	^ contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: #yourself
+		ifNone: [ nil ]
+]
