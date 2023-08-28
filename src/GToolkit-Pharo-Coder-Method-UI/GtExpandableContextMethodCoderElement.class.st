@@ -8,6 +8,13 @@ Class {
 }
 
 { #category : #accessing }
+GtExpandableContextMethodCoderElement >> buildUninstalledTooltip [
+	^ self
+		buildTooltip: 'This method differs from the method installed in the system.'
+		forMethod: self textualCoderViewModel coder installedMethod
+]
+
+{ #category : #accessing }
 GtExpandableContextMethodCoderElement >> coderViewModel: aCoderViewModel [
 	super coderViewModel: aCoderViewModel.
 	aCoderViewModel
@@ -35,9 +42,15 @@ GtExpandableContextMethodCoderElement >> newUninstalledIndicator [
 			c horizontal exact: 5.
 			c vertical matchParent.
 			c margin: (BlInsets left: 8) ];
-		preventMeAndChildrenMouseEvents;
 		background: self theme status errorBackgroundColor;
-		id: #'coder-uninstalled-indicator'
+		id: #'coder-uninstalled-indicator';
+		addAptitude: (BrGlamorousWithTooltipAptitude new
+				attachToLeftAndRight;
+				contentStencil: [ self buildUninstalledTooltip ]);
+		when: BlClickEvent
+			do: [ :evt | 
+				self textualCoderViewModel coder installedMethod
+					ifNotNil: [ :method | self phlow spawnTool: (GtMethodCoderTool compiledMethod: method) ] ]
 ]
 
 { #category : #accessing }

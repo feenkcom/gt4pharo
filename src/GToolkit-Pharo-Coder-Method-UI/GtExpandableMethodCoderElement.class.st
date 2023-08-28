@@ -23,12 +23,63 @@ GtExpandableMethodCoderElement >> alignTagsElementCenterRight: aTagsElement [
 			c ignored vertical alignCenter ]
 ]
 
+{ #category : #accessing }
+GtExpandableMethodCoderElement >> buildModifiedTooltip [
+	^ self
+		buildTooltip: 'The editor has code that is modified and unsaved.'
+		forMethod: self textualCoderViewModel coder compiledMethod
+]
+
+{ #category : #accessing }
+GtExpandableMethodCoderElement >> buildTooltip: label forMethod: method [
+	| text |
+	text := label asRopedText.
+	method
+		ifNotNil: [ text := text , String cr asRopedText
+					, ('Browse' asRopedText
+							replacingAdornment: [ BrButton new
+									aptitude: BrGlamorousLinkSquaredButtonWithLabelAptitude new glamorousRegularFont
+											glamorousRegularSmallSize;
+									beSmallSize;
+									margin: (BlInsets
+											top: 10
+											left: 2
+											bottom: 10
+											right: 10);
+									label: 'Browse';
+									action: [ self phlow spawnTool: (GtMethodCoderTool compiledMethod: method) ] ])
+					, ' the installed method.' asRopedText ].
+	text glamorousRegularFont.
+	^ BrEditor new
+		aptitude: BrGlamorousEditorAptitude new glamorousRegularSmallSize;
+		padding: (BlInsets all: 5);
+		fitContentLimited;
+		beReadOnlyWithSelection;
+		text: text
+]
+
 { #category : #initialization }
 GtExpandableMethodCoderElement >> initialize [
 	super initialize.
 	
 	tagsElement := self newTagsElement.
 	self addChild: tagsElement
+]
+
+{ #category : #accessing }
+GtExpandableMethodCoderElement >> newModificationIndicator [
+	| indicator |
+	indicator := super newModificationIndicator.
+	indicator
+		allowMouseEvents;
+		addAptitude: (BrGlamorousWithTooltipAptitude new
+				attachToLeftAndRight;
+				contentStencil: [ self buildModifiedTooltip ]);
+		when: BlClickEvent
+			do: [ :evt | 
+				self textualCoderViewModel coder compiledMethod
+					ifNotNil: [ :method | self phlow spawnTool: (GtMethodCoderTool compiledMethod: method) ] ].
+	^ indicator
 ]
 
 { #category : #'private - instance creation' }

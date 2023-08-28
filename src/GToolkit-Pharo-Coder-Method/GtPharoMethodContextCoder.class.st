@@ -40,12 +40,12 @@ GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationCont
 					evaluatedInterval: (1 to: aSourceString size);
 					evaluatedSourceString: aSourceString.
 
-				previousMethod := super compiledMethod.
+				previousMethod := self installedMethod.
 				compiledSuccesfully := self session
 						gtRecompileMethodTo: aSourceString
 						inContext: aGtPharoSourceCoderEvaluationContext runtimeContext
 						notifying: aGtPharoSourceCoderEvaluationContext.
-				previousMethod ~~ super compiledMethod
+				previousMethod ~~ self installedMethod
 					ifTrue: [ self sourceCode: (GtCoderExplicitStringSource new source: aSourceString) ] ].
 
 	^ withoutErrors and: [ compiledSuccesfully ]
@@ -110,6 +110,11 @@ GtPharoMethodContextCoder >> initializeAddOns: addOns [
 "	addOns addStyler: (GtCoderContextVariableValueStyler new methodCoder: self)"
 ]
 
+{ #category : #accessing }
+GtPharoMethodContextCoder >> installedMethod [
+	^ super compiledMethod
+]
+
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> instanceVariableNamesAndValuesDo: aBlock [
 	| receiver |
@@ -138,7 +143,7 @@ GtPharoMethodContextCoder >> isDead [
 
 { #category : #testing }
 GtPharoMethodContextCoder >> needsUpdate [
-	^ super compiledMethod ~~ self context method
+	^ self installedMethod ~~ self context method
 		or: [ self selector ~~ self compiledMethod selector ]
 ]
 
