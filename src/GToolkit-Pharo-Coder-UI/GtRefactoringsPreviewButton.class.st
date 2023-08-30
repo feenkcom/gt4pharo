@@ -106,7 +106,10 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 						fitWidth;
 						constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
 						constraintsDo: [ :c | c vertical fitContentLimited ]).
-			aContainer addChild: anAcceptButton ]
+			aContainer addChild: anAcceptButton.
+			anAcceptButton beFocusable.
+			anAcceptButton
+				enqueueTask: (BlTaskAction new action: [ anAcceptButton requestFocus ]) ]
 		ifFalse: [ self errorMessages
 				do: [ :each | 
 					label := BrLabel new
