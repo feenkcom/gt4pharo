@@ -446,6 +446,10 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_05_click_extract_m
 		id: GtMethodCoderExtractMethodContextMenuItemId;
 		play.
 
+	aScripter keyPress
+		key: BlKeyboardKey tab;
+		play.	"tab to selector"
+
 	self check: aScripter hasReorderAttributes: 2.
 	self checkRenameEditor: aScripter keyword: true.
 
@@ -456,19 +460,28 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_05_click_extract_m
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_06_reorder_parameters_and_enter_keywords [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self forKeywordExtraction_05_click_extract_method.
-	
+
 	self clickReorderParameter: aScripter.
+
+	aScripter keyPress
+		key: BlKeyboardKey tab;
+		play.	"tab to selector"
+
 	self checkRenameEditor: aScripter keyword: true.
-	
+
 	(aScripter type: 'substringFrom:') play.
 	self hasRefactoringChanges: aScripter.
-	
+
 	self clickReorderParameter: aScripter.
+
+	aScripter keyPress
+		key: BlKeyboardKey tab;
+		play.	"tab to selector"
+
 	(aScripter keyPress: BlKeyboardKey tab) play.
 	self checkRenameEditor: aScripter keyword: true.
-	
+
 	(aScripter type: 'to:') play.
 	(aScripter keyPress: BlKeyboardKey return) play.
 	self clickReorderParameter: aScripter.
