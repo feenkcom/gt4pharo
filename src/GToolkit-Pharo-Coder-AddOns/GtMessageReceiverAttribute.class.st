@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtMessageReceiverAttribute >> cancel [
+	refactoringController cancelRefactoring
+]
+
+{ #category : #accessing }
 GtMessageReceiverAttribute >> createDropDown [
 	| button dropDownLook |
 	button := self createDropDownButton.
@@ -64,9 +69,9 @@ GtMessageReceiverAttribute >> createDropDownButton [
 ]
 
 { #category : #accessing }
-GtMessageReceiverAttribute >> createEditableLabel [
+GtMessageReceiverAttribute >> createEditableLabelIn: anEditorElement [
 	| label |
-	label := BrEditableLabel new.
+	label := GtRenameEditor new.
 	label
 		aptitude: BrGlamorousEditableLabelAptitude new glamorousCodeFont glamorousRegularSmallSize.
 	label text: refactoringController receiverClassName.
@@ -76,24 +81,20 @@ GtMessageReceiverAttribute >> createEditableLabel [
 				left: 4
 				bottom: 2
 				right: 4).
-	label
-		when: BrEditorAcceptWish
-		do: [ :aWish | 
-			| className |
-			className := aWish text asString trim.
-			(self isClassName: className)
-				ifTrue: [ refactoringController receiverClassName: className ] ].
-
+	self setupHandlersFor: label in: anEditorElement.
 	(GtCompletionController
 		on: label
 		strategy: (GtStreamedBlockCompletionStrategy new
 				streamingBlock: [ :string | 
-					(refactoringController potentialTypes asyncStreamStartingWith: string)
+					((refactoringController potentialTypes asyncStreamStartingWith: string)
 						merge: ((GtPharoIndex current globalCache asyncWeightedStreamStartingWith: string)
 								collect: [ :each | 
 									{each.
-										each , ' class'} asAsyncStream ]) flatten ])) install.
-
+										each , ' class'} asAsyncStream ]) flatten) withoutDuplicates ]))
+		install.
+	label
+		switchToEditor;
+		requestFocus.
 	^ label
 ]
 
@@ -112,8 +113,35 @@ GtMessageReceiverAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorE
 				hovered: [ :aStyle | aStyle background: element theme status neutralBackgroundColor darker ]).
 	element addChild: self createDropDown.
 	refactoringController showReceiverType
-		ifTrue: [ element addChild: self createEditableLabel as: #editableLabel ].
+		ifTrue: [ element
+				addChild: (self createEditableLabelIn: anEditorElement)
+				as: #editableLabel ].
 	^ element
+]
+
+{ #category : #accessing }
+GtMessageReceiverAttribute >> focusNext: aBoolean in: anEditorElement from: currentEditor [
+	| first last previous |
+	anEditorElement
+		allChildrenBreadthFirstDo: [ :each | 
+			(each userData at: #isRefactoringEditor ifAbsent: [ false ])
+				ifTrue: [ first ifNil: [ first := each ].
+					last := each.
+					(aBoolean not and: [ each == currentEditor and: [ previous notNil ] ])
+						ifTrue: [ previous requestFocus.
+							^ true ].
+					(aBoolean and: [ previous == currentEditor ])
+						ifTrue: [ each requestFocus.
+							^ true ].
+					previous := each ] ].
+	aBoolean
+		ifTrue: [ first
+				ifNotNil: [ first requestFocus.
+					^ true ] ]
+		ifFalse: [ last
+				ifNotNil: [ last requestFocus.
+					^ true ] ].
+	^ false
 ]
 
 { #category : #accessing }
@@ -150,4 +178,85 @@ GtMessageReceiverAttribute >> refactoringController [
 { #category : #accessing }
 GtMessageReceiverAttribute >> refactoringController: aRefactoringController [
 	refactoringController := aRefactoringController
+]
+
+{ #category : #accessing }
+GtMessageReceiverAttribute >> setupHandlersFor: label in: anEditorElement [
+	label
+		whenKey: BlKeyCombination escape editorDo: [ :aShortcutEvent | self cancel ];
+		whenKey: BlKeyCombination builder shift tab build
+			editorDo: [ :aShortcutEvent | 
+				self
+					focusNext: false
+					in: anEditorElement
+					from: label ];
+		whenKey: BlKeyCombination tab
+			editorDo: [ :aShortcutEvent | 
+				self
+					focusNext: true
+					in: anEditorElement
+					from: label ];
+		whenKey: BlKeyCombination enter
+			editorDo: [ :aShortcutEvent | 
+				self
+					focusNext: true
+					in: anEditorElement
+					from: label ].
+
+	label when: BrEditorCancelWish do: [ :event | self cancel ].
+
+	label
+		when: BrEditorAcceptWish
+		do: [ :aWish | 
+			| className |
+			className := aWish text asString trim.
+			(self isClassName: className)
+				ifTrue: [ refactoringController receiverClassName: className ] ].
+
+	label
+		whenKey: BlKeyCombination arrowRight
+		editorDo: [ :aShortcutEvent | 
+			| cursors editor |
+			editor := aShortcutEvent source editor.
+			cursors := editor cursors positions.
+			(cursors includes: editor text size)
+				ifTrue: [ aShortcutEvent
+						consumed: (self
+								focusNext: true
+								in: anEditorElement
+								from: label) ]
+				ifFalse: [ cursors notEmpty
+						ifTrue: [ editor selectNone.
+							editor moveCursorTo: cursors first + 1 ] ] ].
+	label
+		whenKey: BlKeyCombination arrowLeft
+		editorDo: [ :aShortcutEvent | 
+			| cursors editor |
+			editor := aShortcutEvent source editor.
+			cursors := editor cursors positions.
+			(cursors includes: 0)
+				ifTrue: [ aShortcutEvent
+						consumed: (self
+								focusNext: false
+								in: anEditorElement
+								from: label) ]
+				ifFalse: [ cursors notEmpty
+						ifTrue: [ editor selectNone.
+							editor moveCursorTo: cursors first - 1 ] ] ].
+	label
+		whenKey: BlKeyCombination arrowDown
+		editorDo: [ :aShortcutEvent | 
+			aShortcutEvent
+				consumed: (self
+						focusNext: true
+						in: anEditorElement
+						from: label) ].
+	label
+		whenKey: BlKeyCombination arrowUp
+		editorDo: [ :aShortcutEvent | 
+			aShortcutEvent
+				consumed: (self
+						focusNext: false
+						in: anEditorElement
+						from: label) ]
 ]
