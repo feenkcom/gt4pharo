@@ -5,6 +5,32 @@ Class {
 }
 
 { #category : #accessing }
+GtRBNamespace >> allImplementorsOfIncludingTraits: aSelector [
+	| implementers |
+	implementers := Set new.
+	self newClasses
+		do: [ :each | 
+			each
+				do: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+	self changedClasses
+		do: [ :each | 
+			each
+				do: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+	(GtPharoIndex current implementersOf: aSelector)
+		do: [ :each | 
+			| cls |
+			((environment includesMethod: each)
+				and: [ each isFromTrait not
+						and: [ (self hasRemoved: each methodClass instanceSide name) not ] ])
+				ifTrue: [ each methodClass isTrait
+						ifTrue: [ each methodClass users
+								do: [ :user | (self classFor: user) ifNotNil: [ :c | implementers add: c ] ] ].
+					cls := self classNamed: each methodClass name.
+					(cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+	^ implementers
+]
+
+{ #category : #accessing }
 GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [
 	| refs |
 	refs := OrderedCollection new.
