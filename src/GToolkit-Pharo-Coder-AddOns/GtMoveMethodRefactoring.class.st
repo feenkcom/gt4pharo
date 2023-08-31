@@ -10,6 +10,18 @@ GtMoveMethodRefactoring >> checkAssignmentsToVariable [
 ]
 
 { #category : #accessing }
+GtMoveMethodRefactoring >> getClassesForInstanceVariable [
+	| definingClass typer types |
+	definingClass := class whoDefinesInstanceVariable: variable.
+	typer := GtRefactoryTyper newFor: self model.
+	types := typer guessTypesFor: variable in: definingClass.
+	types
+		ifEmpty: [ types := OrderedCollection with: (self model classNamed: #Object) ].
+	moveToClasses := self selectVariableTypesFrom: types selected: types copy.
+	moveToClasses ifNil: [ self refactoringFailure: 'Method not moved' ]
+]
+
+{ #category : #accessing }
 GtMoveMethodRefactoring >> getClassesToMoveTo [
 	moveToClasses := (self options
 			at: #variableTypesForReceiver
