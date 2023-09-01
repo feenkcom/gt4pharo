@@ -34,9 +34,10 @@ GtRefactoryTyper >> gatherSelectorsSentTo: anInstVarName in: aClass [
 	searcher
 		matches: '^' , anInstVarName , ' ifNil: ``@a'
 		do: [ :node :obj | getters add: node methodNode selector ].
-	cls withAllSubclasses
-		reverseDo: [ :each | 
-			(each whichSelectorsReferToInstanceVariable: anInstVarName)
+	cls
+		gtWithAllSubclassesDo: [ :each | 
+			each
+				gtSelectorsReferToInstanceVariable: anInstVarName
 				do: [ :sel | 
 					searcher executeTree: (each parseTreeFor: sel).
 					Time microsecondClockValue - startTime > self class timeout
@@ -48,9 +49,10 @@ GtRefactoryTyper >> gatherSelectorsSentTo: anInstVarName in: aClass [
 					searcher
 						matches: 'self ' , getter , ' `@msg: ``@args'
 						do: [ :msg :obj | selectors add: msg selector ].
-					cls withAllSubclasses
-						reverseDo: [ :each | 
-							(each whichSelectorsReferToSymbol: getter)
+					cls
+						gtWithAllSubclassesDo: [ :each | 
+							each
+								gtSelectorsReferToSymbol: getter
 								do: [ :sel | 
 									searcher executeTree: (each parseTreeFor: sel).
 									Time microsecondClockValue - startTime > self class timeout
