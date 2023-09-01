@@ -1,12 +1,26 @@
 Class {
 	#name : #GtRefactoryTyper,
 	#superclass : #RBRefactoryTyper,
+	#classVars : [
+		'Timeout'
+	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #accessing }
-GtRefactoryTyper >> guessTypesFor: anInstVarName in: aClass [
-	| selectors getters searcher cls |
+GtRefactoryTyper class >> timeout [
+	^ Timeout ifNil: [ 500000 ]
+]
+
+{ #category : #accessing }
+GtRefactoryTyper class >> timeout: microSeconds [
+	Timeout := microSeconds
+]
+
+{ #category : #accessing }
+GtRefactoryTyper >> gatherSelectorsSentTo: anInstVarName in: aClass [
+	| getters selectors searcher cls startTime |
+	startTime := Time microsecondClockValue.
 	cls := model classFor: aClass.
 	selectors := Set new.
 	getters := Set new.
@@ -21,9 +35,12 @@ GtRefactoryTyper >> guessTypesFor: anInstVarName in: aClass [
 		matches: '^' , anInstVarName , ' ifNil: ``@a'
 		do: [ :node :obj | getters add: node methodNode selector ].
 	cls withAllSubclasses
-		do: [ :each | 
+		reverseDo: [ :each | 
 			(each whichSelectorsReferToInstanceVariable: anInstVarName)
-				do: [ :sel | searcher executeTree: (each parseTreeFor: sel) ] ].
+				do: [ :sel | 
+					searcher executeTree: (each parseTreeFor: sel).
+					Time microsecondClockValue - startTime > self class timeout
+						ifTrue: [ ^ selectors ] ] ].
 	getters
 		do: [ :getter | 
 			getter numArgs = 0
@@ -32,9 +49,19 @@ GtRefactoryTyper >> guessTypesFor: anInstVarName in: aClass [
 						matches: 'self ' , getter , ' `@msg: ``@args'
 						do: [ :msg :obj | selectors add: msg selector ].
 					cls withAllSubclasses
-						do: [ :each | 
+						reverseDo: [ :each | 
 							(each whichSelectorsReferToSymbol: getter)
-								do: [ :sel | searcher executeTree: (each parseTreeFor: sel) ] ] ] ].
+								do: [ :sel | 
+									searcher executeTree: (each parseTreeFor: sel).
+									Time microsecondClockValue - startTime > self class timeout
+										ifTrue: [ ^ selectors ] ] ] ] ].
+	^ selectors
+]
+
+{ #category : #accessing }
+GtRefactoryTyper >> guessTypesFor: anInstVarName in: aClass [
+	| selectors |
+	selectors := self gatherSelectorsSentTo: anInstVarName in: aClass.
 	^ self findTypeFor: selectors
 ]
 
