@@ -447,7 +447,7 @@ GtPharoSourceCoder >> parseMethod: aString [
 ]
 
 { #category : #'private - actions' }
-GtPharoSourceCoder >> primitiveAnonymousCompile: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
+GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	<return: #CompiledMethod>
 	| isForMethod methodClass |
 
@@ -465,7 +465,7 @@ GtPharoSourceCoder >> primitiveAnonymousCompile: aSourceString inContext: aGtPha
 	^ GtPharoCodeModifier current critical: [
 		self class compiler
 			source: aSourceString;
-			class: methodClass newAnonymousSubclass;
+			class: methodClass;
 			context: aGtPharoSourceCoderEvaluationContext runtimeContext;
 			requestor: aGtPharoSourceCoderEvaluationContext;
 			noPattern: isForMethod not;
@@ -478,7 +478,7 @@ GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCod
 	| aCompiledMethodToDebug |
 
 	aCompiledMethodToDebug := self
-		primitiveAnonymousCompile: aSourceString
+		primitiveCompile: aSourceString
 		inContext: aGtPharoSourceCoderEvaluationContext
 		onFailDo: [ ^ anEvaluationFailBlock value ].
 
@@ -493,7 +493,7 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 	| aCompiledMethodToEvaluate |
 
 	aCompiledMethodToEvaluate := self
-		primitiveAnonymousCompile: aSourceString
+		primitiveCompile: aSourceString
 		inContext: aGtPharoSourceCoderEvaluationContext
 		onFailDo: [ ^ anEvaluationFailBlock value ].
 

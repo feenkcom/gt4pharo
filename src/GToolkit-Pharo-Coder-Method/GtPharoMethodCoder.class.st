@@ -967,6 +967,21 @@ GtPharoMethodCoder >> previewElement [
 		asElement
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
+	| isForMethod |
+	isForMethod := self isForMethod
+			and: [ aGtPharoSourceCoderEvaluationContext evaluatedInterval
+					= (1 to: aGtPharoSourceCoderEvaluationContext sourceString size) ].
+	isForMethod
+		ifTrue: [ self isModified
+				ifFalse: [ self compiledMethod ifNotNil: [ :method | ^ method ] ] ].
+	^ super
+		primitiveCompile: aSourceString
+		inContext: aGtPharoSourceCoderEvaluationContext
+		onFailDo: anEvaluationFailBlock
+]
+
 { #category : #printing }
 GtPharoMethodCoder >> printOn: aStream [
 	super printOn: aStream.

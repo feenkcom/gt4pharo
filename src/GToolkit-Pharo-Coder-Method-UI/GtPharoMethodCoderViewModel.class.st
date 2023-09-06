@@ -68,6 +68,12 @@ GtPharoMethodCoderViewModel >> contextualBehavior: aBehavior [
 	contextualBehavior := aBehavior
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> debugAll [
+	self isModified ifTrue: [ self save ifFalse: [ ^ self ] ].
+	^ super debugAll
+]
+
 { #category : #private }
 GtPharoMethodCoderViewModel >> defaultCompilationBehavior [
 	<return: #Behavior>
