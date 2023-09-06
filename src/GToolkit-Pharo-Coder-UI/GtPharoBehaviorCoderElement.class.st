@@ -83,6 +83,25 @@ GtPharoBehaviorCoderElement >> addFilters: filters [
 		ifNone: [  "ignore" ]
 ]
 
+{ #category : #'updating ui' }
+GtPharoBehaviorCoderElement >> addOrReplaceFilter: aFilter [
+	contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: [ :theElement | 
+			| vm existing changed |
+			vm := theElement streamingCodersViewModel.
+			changed := false.
+			existing := vm additionalFilters
+					collect: [ :each | 
+						each class = aFilter class
+							ifTrue: [ changed := true.
+								aFilter ]
+							ifFalse: [ each ] ].
+			changed ifFalse: [ existing := existing , {aFilter} ].
+			vm additionalFilters: existing ]
+		ifNone: [  "ignore" ]
+]
+
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> behavior [
 	<return: #Behavior>
@@ -348,7 +367,7 @@ GtPharoBehaviorCoderElement >> filterWithClassVariable: slotName source: aSource
 
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
-	self addFilters: {GtSearchMethodCategoryFilter forCategory: aMethodProtocol}
+	self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aMethodProtocol)
 ]
 
 { #category : #accessing }
