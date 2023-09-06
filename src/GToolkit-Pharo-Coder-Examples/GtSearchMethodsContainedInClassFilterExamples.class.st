@@ -65,23 +65,11 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInClassUpToFilter [
 		testFilter: ((GtSearchMethodsInClassFilter forClass: OrderedCollection)
 				withSuperclassesUpTo: Collection)
 		shouldInclude: {OrderedCollection >> #add:.
-				SequenceableCollection >> #first}
-		shouldExclude: {Collection >> #add:.
+				SequenceableCollection >> #first.
+				Collection >> #add:.}
+		shouldExclude: {
 				Object >> #->.
 				thisContext method}
-]
-
-{ #category : #accessing }
-GtSearchMethodsContainedInClassFilterExamples >> methodsInClassUpToIncludingFilter [
-	<gtExample>
-	^self
-		testFilter: ((GtSearchMethodsInClassFilter forClass: OrderedCollection)
-				withSuperclassesUpToIncluding: Collection)
-		shouldInclude: {OrderedCollection >> #add:.
-				SequenceableCollection >> #first.
-				Collection >> #add:}
-		shouldExclude: {Object >> #->.
-				thisContext method}.
 ]
 
 { #category : #examples }
