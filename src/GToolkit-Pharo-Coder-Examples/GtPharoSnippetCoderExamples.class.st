@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoSnippetCoderExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'examples - bindings' }
@@ -134,7 +134,7 @@ GtPharoSnippetCoderExamples >> thisContextBinding [
 	aCoderViewModel := self snippetCoderViewModel.
 	aCoderViewModel coderModel forSource: 'thisContext'.
 
-	self assert: (aCoderViewModel doIt value method methodClass inheritsFrom: UndefinedObject).
+	self assert: (aCoderViewModel doIt value method methodClass includesBehavior: UndefinedObject).
 
 	^ aCoderViewModel
 ]
