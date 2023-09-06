@@ -23,8 +23,8 @@ GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 				and: [ methodClass classSide includesBehavior: class classSide ])
 				or: [ includeSuperclass
 						and: [ (class classSide includesBehavior: methodClass classSide)
-								and: [ upToSuperclass isNil
-										or: [ (upToSuperclass classSide includesBehavior: methodClass classSide) not ] ] ] ] ]
+								and: [ upToSuperclass superclass isNil
+										or: [ (upToSuperclass superclass classSide includesBehavior: methodClass classSide) not ] ] ] ] ]
 ]
 
 { #category : #accessing }
