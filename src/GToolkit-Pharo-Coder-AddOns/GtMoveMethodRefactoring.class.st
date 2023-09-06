@@ -60,7 +60,9 @@ GtMoveMethodRefactoring >> getNewMethodName [
 		ifFalse: [ self refactoringWarning: newSelector , ' is not a valid selector name.'.
 			newSelector := nil ].
 	moveToClasses
-		detect: [ :each | each hierarchyDefinesMethod: newSelector ]
+		detect: [ :move | 
+			(model allImplementorsOf: newSelector)
+				anySatisfy: [ :each | (move includesClass: each) or: [ each includesClass: move ] ] ]
 		ifFound: [ :hierarchyClass | 
 			(self gtSignalMethodOverwritten: newSelector in: hierarchyClass)
 				ifFalse: [ self refactoringError: newSelector , ' is already defined in the hierarchy' ] ].

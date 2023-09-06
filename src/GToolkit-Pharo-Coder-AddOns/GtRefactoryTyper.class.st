@@ -69,9 +69,12 @@ GtRefactoryTyper >> guessTypesFor: anInstVarName in: aClass [
 
 { #category : #accessing }
 GtRefactoryTyper >> implementorsOf: aSelector [
-	| implementers topLevelImplementers |
+	| implementers topLevelImplementers superclassCounts |
+	superclassCounts := Dictionary new.
 	implementers := (model allImplementorsOfIncludingTraits: aSelector)
-			asSortedCollection: [ :a :b | (self superclassCount: a) < (self superclassCount: b) ].
+			asSortedCollection: [ :a :b | 
+				(superclassCounts at: a ifAbsentPut: [ self superclassCount: a ])
+					< (superclassCounts at: b ifAbsentPut: [ self superclassCount: b ]) ].
 	topLevelImplementers := Set new.
 	implementers
 		do: [ :each | 
@@ -82,7 +85,6 @@ GtRefactoryTyper >> implementorsOf: aSelector [
 				whileFalse: [ found := topLevelImplementers includes: current.
 					current := current superclass ].
 			found ifFalse: [ topLevelImplementers add: each ] ].
-
 	^ topLevelImplementers
 ]
 
