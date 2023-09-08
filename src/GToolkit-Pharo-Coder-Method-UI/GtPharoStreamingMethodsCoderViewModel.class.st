@@ -27,9 +27,14 @@ GtPharoStreamingMethodsCoderViewModel >> initialize [
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
+	| header |
+	"Show header for methods from other classes"
+	header := shouldHaveHeaderByDefault
+			or: [ aCoderModel methodBehavior behavior ~= streamingCodersModel behavior
+					and: [ aCoderModel methodBehavior behavior ~= streamingCodersModel behavior class ] ].
 	^ aCoderModel asCoderViewModel
 		expanded: shouldExpandByDefault;
-		shouldHaveHeader: shouldHaveHeaderByDefault;
+		shouldHaveHeader: header;
 		highlighter: highlighter;
 		selfObject: selfObject
 ]
