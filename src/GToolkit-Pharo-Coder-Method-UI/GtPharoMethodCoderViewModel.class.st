@@ -288,6 +288,5 @@ GtPharoMethodCoderViewModel >> sourceBehavior [
 { #category : #'api - header' }
 GtPharoMethodCoderViewModel >> wantsHeader [
 	<return: #Boolean>
-	
 	^ super wantsHeader or: [ self isFromTrait ]
 ]
