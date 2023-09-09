@@ -7,8 +7,11 @@ GtSearchInheritedMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 	currentClass := aMethodsCoder classOrMetaClass.
 	^ GtFilterDescriptor new
 		creator: [ :string | 
-			(self forClass: currentClass)
-				withSuperclassesUpTo: (Smalltalk at: string asSymbol ifAbsent: [ currentClass ]) ];
+			| upToClass |
+			upToClass := Smalltalk at: string asSymbol ifAbsent: [ currentClass ].
+			(currentClass withAllSuperclasses includes: upToClass)
+				ifFalse: [ upToClass := currentClass ].
+			(self forClass: currentClass) withSuperclassesUpTo: upToClass ];
 		named: 'Methods up to';
 		order: 16;
 		completion: [ GtStringsCompletionStrategy new
