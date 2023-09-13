@@ -478,7 +478,7 @@ GtPharoCompleterExamples >> instanceVariableReceiverSource [
 { #category : #smalltalk }
 GtPharoCompleterExamples >> methodSourceCompleter [
 	<gtExample>
-	| text styler editor editorElement completionStrategy completionController method ast |
+	| text styler editor editorElement completionStrategy method ast |
 	text := '' asRopedText.
 	text attribute: (BlFontSizeAttribute size: 14) beNotOverwritableByStyler.
 	method := OrderedCollection >> #addAll:.
@@ -498,7 +498,9 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 	completionStrategy := GtPharoCompletionStrategy new.
 	completionStrategy classOrMetaClass: method methodClass.
 	completionStrategy methodPattern: ast pattern.
-	completionController := GtCompletionController on: editorElement strategy: completionStrategy.
+	completionController := GtCompletionController
+			on: editorElement
+			strategy: completionStrategy.
 	completionController install.
 	^ editorElement
 ]
@@ -550,10 +552,9 @@ GtPharoCompleterExamples >> selectionCompletionItem: text in: aScripter [
 { #category : #smalltalk }
 GtPharoCompleterExamples >> smalltalkCompleter [
 	<gtExample>
-	| text styler editor editorElement completionStrategy completionController |
+	| text styler editor editorElement completionStrategy |
 	text := '' asRopedText.
-	text
-		attributes: { (BlFontSizeAttribute size: 14) beNotOverwritableByStyler }.
+	text attributes: {(BlFontSizeAttribute size: 14) beNotOverwritableByStyler}.
 	styler := BrRBTextStyler new.
 	styler classOrMetaClass: GtPharoCompletionStrategy.
 	editor := BrTextEditorModel new.
@@ -566,7 +567,9 @@ GtPharoCompleterExamples >> smalltalkCompleter [
 			c vertical matchParent ].
 	editorElement editor: editor.
 	completionStrategy := self smalltalkStrategy.
-	completionController := GtCompletionController on: editorElement strategy: completionStrategy.
+	completionController := GtCompletionController
+			on: editorElement
+			strategy: completionStrategy.
 	completionController install.
 	^ editorElement
 ]
