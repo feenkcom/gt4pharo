@@ -110,6 +110,17 @@ GtSearchMethodsContainedInClassFilterExamples >> methodsInTwoClassesUnionFilterR
 	^ filter
 ]
 
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> methodsWithAllSuperclasses [
+	<gtExample>
+	^ self
+		testFilter: ((GtSearchMethodsInClassFilter forClass: GtBytecodeDebugger) 
+	withSuperclasses
+	withSubclasses)
+		shouldInclude: {GtStackDebuggerElement >> #initializePanes}
+		shouldExclude: {}
+]
+
 { #category : #'examples - result' }
 GtSearchMethodsContainedInClassFilterExamples >> resultGroupForMethodsInClassFilter [
 	<gtExample>
