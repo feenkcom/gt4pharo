@@ -19,14 +19,12 @@ GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
 	^ (super includesMethod: aCompiledMethod)
-		or: [ aCompiledMethod isFromTrait not
-				and: [ (includeSubclasses
-						and: [ methodClass classSide includesBehavior: class classSide ])
-						or: [ includeSuperclass
-								and: [ (class classSide includesBehavior: methodClass classSide)
-										and: [ upToSuperclass superclass isNil
-												or: [ (upToSuperclass superclass classSide includesBehavior: methodClass classSide)
-														not ] ] ] ] ] ]
+		or: [ (includeSubclasses
+				and: [ methodClass classSide includesBehavior: class classSide ])
+				or: [ includeSuperclass
+						and: [ (class classSide includesBehavior: methodClass classSide)
+								and: [ upToSuperclass superclass isNil
+										or: [ (upToSuperclass superclass classSide includesBehavior: methodClass classSide) not ] ] ] ] ]
 ]
 
 { #category : #accessing }
