@@ -8,13 +8,13 @@ Class {
 GtSearchMethodsContainedInClassFilterExamples >> inheritedMethodsWithTraits [
 	<gtExample>
 	^ self
-		testFilter: ((GtSearchInheritedMethodsFilter forClass: GtBytecodeDebugger) 
-	withSuperclassesUpTo: ProtoObject)
+		testFilter: ((GtSearchInheritedMethodsFilter forClass: GtBytecodeDebugger)
+				withSuperclassesUpTo: ProtoObject)
 		shouldInclude: {GtStackDebuggerElement >> #initializePanes.
-						BlElement >> #zIndex: .
-						BlElement >> #addEventFilter: .
-						BlElement class >> #assert:}
-		shouldExclude: { TraitedClass >> #rebuildMethodDictionary}
+				BlElement >> #zIndex:.
+				BlElement >> #addEventFilter:.
+				BlElement class >> #assert:}
+		shouldExclude: {(Smalltalk at: #TraitedClass) >> #rebuildMethodDictionary}
 ]
 
 { #category : #examples }
