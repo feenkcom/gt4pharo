@@ -9,6 +9,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
 }
 
+{ #category : #accessing }
+GtPharoMethodCoderByScripterExamples class >> dummyMethod: arg [
+	self foo: arg
+]
+
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
@@ -632,6 +637,67 @@ GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
 		self checkFor: aStep textAttributesAt: (thisContext method sourceCode indexOfSubCollection: 'OrderedCollection') anySatisfies: [ :aTextAttribute | aTextAttribute class = BlTextDecorationAttribute ].
 		self checkFor: aStep numberfOfTextAttributes: 17 ofType: BlTextDecorationAttribute ].
 
+	^ aScripter
+]
+
+{ #category : #'examples - referenced example' }
+GtPharoMethodCoderByScripterExamples >> classSideExtractToComponent [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ (self coderOnMethod: self class class >> #dummyMethod:) asCoderViewModel ].
+	aScripter requestFocus
+		id: GtSourceCoderEditorId;
+		play.
+	aScripter keyPress
+		label: 'Goto next line';
+		key: BlKeyboardKey arrowDown;
+		play.
+	aScripter keyDown
+		key: BlKeyboardKey shiftLeft;
+		play.
+	aScripter keyPress
+		label: 'Goto next line';
+		key: BlKeyboardKey arrowDown;
+		play.
+	aScripter keyUp
+		key: BlKeyboardKey shiftLeft;
+		play.
+	aScripter keyDown
+		key: BlKeyboardKey primaryLeft;
+		play.
+	aScripter keyPress
+		label: 'Extract';
+		key: BlKeyboardKey e;
+		play.
+	aScripter keyUp
+		key: BlKeyboardKey primaryLeft;
+		play.
+	aScripter click
+		id: GtSourceCoderEditorId;
+		onChildFromBlock: [ :element | 
+			element
+				allChildrenBreadthFirstDetect: [ :each | each isKindOf: BrButton ]
+				ifFound: [ :each | each ] ];
+		play.
+	aScripter click
+		onChildFromBlock: [ :element | 
+			element parent
+				allChildrenBreadthFirstDetect: [ :each | each isKindOf: BrSimpleList ]
+				ifFound: [ :each | each children first children at: 2 ]
+				ifNone: [ self error: 'Drop down not found' ] ];
+		play.
+	aScripter check
+		label: 'Should have two rename editors (receiver type & selector)';
+		id: GtSourceCoderEditorId;
+		value: [ :each | 
+				| count |
+				count := 0.
+				each
+					allChildrenDepthFirstDo: [ :child | (child isKindOf: GtRenameEditor) ifTrue: [ count := count + 1 ] ].
+				count ]
+			equals: 2;
+		play.
 	^ aScripter
 ]
 

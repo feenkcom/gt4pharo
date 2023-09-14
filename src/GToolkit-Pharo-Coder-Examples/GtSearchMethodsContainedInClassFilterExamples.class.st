@@ -4,6 +4,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
+{ #category : #accessing }
+GtSearchMethodsContainedInClassFilterExamples >> inheritedMethodsWithTraits [
+	<gtExample>
+	^ self
+		testFilter: ((GtSearchInheritedMethodsFilter forClass: GtBytecodeDebugger) 
+	withSuperclassesUpTo: ProtoObject)
+		shouldInclude: {GtStackDebuggerElement >> #initializePanes.
+						BlElement >> #zIndex: .
+						BlElement >> #addEventFilter: .
+						BlElement class >> #assert:}
+		shouldExclude: { TraitedClass >> #rebuildMethodDictionary}
+]
+
 { #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilter [
 	<gtExample>
