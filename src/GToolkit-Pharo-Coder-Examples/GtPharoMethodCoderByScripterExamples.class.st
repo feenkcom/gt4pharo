@@ -569,7 +569,7 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval ifNil: [ anInterval := aStart to: anEnd ] ].
 				anInterval ]
 			equals: [ :aCoderEditor | 
@@ -584,7 +584,7 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -1799,7 +1799,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_pa
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
 			equals: [ :aCoderEditor | 1 to: (aCoderEditor text asString indexOf: $:) ];
@@ -1811,7 +1811,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_pa
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
 			equals: [ :aCoderEditor | 
@@ -1989,7 +1989,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | 1 to: (aCoderEditor text asString indexOf: $:) ];
@@ -2001,7 +2001,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | 
@@ -2355,7 +2355,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_05_click_extract_temp [
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor |
@@ -2436,7 +2436,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor | 
 				aCoderEditor text
-					hasAttributeSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ] ]
+					hasAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ] ]
 			equals: false;
 		id: GtSourceCoderEditorId;
 		play.
@@ -3146,6 +3146,70 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 	self clickReorderParameter: aScripter variables: #('self' 'anObject').
 
 	^ aScripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
+	<gtExample>
+	| scripter |
+	[ self ifNil: [ 1 ] ifNotNil: [ 2 ] ] value.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: thisContext method method ].
+
+	scripter click
+		label: 'Click on the coder editor to give it focus';
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination arrowUp;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter assert
+		label: 'Assert editor is focused';
+		satisfies: [ :anEditorElement | anEditorElement isFocused ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter do
+		label: 'Position cursor';
+		id: GtSourceCoderEditorId;
+		block: [ :each | 
+			each editor
+				moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'ifNil') + 1 ];
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+
+	^ scripter
 ]
 
 { #category : #'examples - rename method' }
@@ -4132,7 +4196,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -4144,7 +4208,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_05_click_extract_meth
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -4409,7 +4473,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -4421,7 +4485,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -4502,7 +4566,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -4514,7 +4578,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -4562,7 +4626,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryMoveMethod_03_context_menu_move_
 		value: [ :aCoderEditor |
 			| anInterval |
 			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 			anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
