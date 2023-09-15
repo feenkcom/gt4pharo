@@ -3149,6 +3149,70 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 ]
 
 { #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
+	<gtExample>
+	| scripter |
+	[ self ifNil: [ 1 ] ifNotNil: [ 2 ] ] value.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: thisContext method method ].
+
+	scripter click
+		label: 'Click on the coder editor to give it focus';
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination arrowUp;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter assert
+		label: 'Assert editor is focused';
+		satisfies: [ :anEditorElement | anEditorElement isFocused ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter do
+		label: 'Position cursor';
+		id: GtSourceCoderEditorId;
+		block: [ :each | 
+			each editor
+				moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'ifNil') + 1 ];
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 	<gtExample>
 	<after: #cleanUp>
