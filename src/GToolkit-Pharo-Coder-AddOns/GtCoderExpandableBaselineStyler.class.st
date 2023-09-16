@@ -39,9 +39,7 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 						at: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol) >> #baseline:.
 					aBaselineMethodCoder := GtPharoMethodCoder forMethod: aBaselineMethod.
 					aBaselineMethodCoder subscribeToSystem.
-					(aBaselineMethodCoder asCoderViewModel expanded: true) asElement
-						border: (BlBorder paint: Color veryLightGray width: 1);
-						margin: (BlInsets top: 3 right: 10 bottom: 10 left: 10) ] ]).
+					(aBaselineMethodCoder asCoderViewModel expanded: true) asElement. ] ]).
 
 	self
 		attribute: anExpanderAttribute
@@ -52,49 +50,42 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 { #category : #private }
 GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 	| aPackageNameNode aPackageName aPackage anExpanderAttribute |
-	
 	aPackageNameNode := aMessageNode arguments first.
 
-	(self isNonEmptyLiteralStringNode: aPackageNameNode)
-		ifFalse: [ ^ self ].
+	(self isNonEmptyLiteralStringNode: aPackageNameNode) ifFalse: [ ^ self ].
 
 	self
-		attribute: (GtCompletionStrategyAttribute new strategy: GtBaselinePackageCompletionStrategy new)
+		attribute: (GtCompletionStrategyAttribute new
+				strategy: GtBaselinePackageCompletionStrategy new)
 		from: aPackageNameNode value startPosition
-		to: aPackageNameNode value stopPosition.
-		
-	"Let's add expander for existing (and loaded) packages"
+		to: aPackageNameNode value stopPosition.	"Let's add expander for existing (and loaded) packages"
 	aPackageName := aPackageNameNode literalValue asString asSymbol.
-	aPackage := RPackageOrganizer default 
-		packageNamed: aPackageName  
-		ifAbsent: [ ^ self ].
+	aPackage := RPackageOrganizer default
+			packageNamed: aPackageName
+			ifAbsent: [ ^ self ].
 
 	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
-		id: GtSourceCoderEmbeddedExpanderToggleId;
-		attributesCreatingBlock: [
-			BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: [ | aModel aViewModel anElement aContainer |
-					aModel := GtPharoPackageCoder forPackage: aPackage.
-					aViewModel := aModel asCoderViewModel.
-					anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
-				
-					aContainer := BrVerticalPane new
-						hMatchParent;
-						vExact: 300;
-						background: Color white;
-						border: (BlBorder paint: Color veryLightGray width: 1);
-						margin: (BlInsets top: 3 right: 10 bottom: 10 left: 10);
-						constraintsDo: [ :c | c textFlow pushLine ];
-						addChild: anElement;
-						addAptitude: (BrGlamorousWithVerticalResizerAptitude new beBottom).
-				
-					aContainer ] ].
-
+			id: GtSourceCoderEmbeddedExpanderToggleId;
+			attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
+					beAppend;
+					stencil: [ | aModel aViewModel anElement |
+						aModel := GtPharoPackageCoder forPackage: aPackage.
+						aViewModel := aModel asCoderViewModel.
+						anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
+						anElement
+							height: 400;
+							background: Color white;
+							margin: (BlInsets
+									top: 3
+									right: 10
+									bottom: 10
+									left: 10);
+							addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom.
+						anElement ] ].
 	self
 		attribute: anExpanderAttribute
 		from: aPackageNameNode value stopPosition
-		to: aPackageNameNode value stopPosition.
+		to: aPackageNameNode value stopPosition
 ]
 
 { #category : #private }
