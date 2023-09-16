@@ -57,7 +57,7 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval ifNil: [ anInterval := aStart to: anEnd ] ].
 				anInterval ]
 			equals: [ :aCoderEditor | 
@@ -72,7 +72,7 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
@@ -640,7 +640,7 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRenameEditorAttribute ]
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
 			equals: [ :aCoderEditor | 1 to: 1 ];

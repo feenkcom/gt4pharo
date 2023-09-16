@@ -129,10 +129,9 @@ GtExtractMethodToComponentController >> findExtractedSend [
 							(each arguments at: i) source = (methodArguments at: i)
 								or: [ (each arguments at: i) source = 'self'
 										and: [ ((methodArguments at: i)
-												indexOfSubCollection: sourceCoderViewModel behavior name) > 0 ] ] ])
-						and: [ self isReceiver: each parent receiver ] ]) ifTrue: [ ^ each ] ] ]
-		on: SmaCCParserError
-		do: [ :ex | ^ nil ].
+												indexOfSubCollection: sourceCoderViewModel behavior instanceSide name)
+												> 0 ] ] ]) and: [ self isReceiver: each parent receiver ] ])
+				ifTrue: [ ^ each ] ] ] on: SmaCCParserError do: [ :ex | ^ nil ].
 	^ nil
 ]
 

@@ -72,8 +72,9 @@ GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 	^ (includeSubclasses and: [ methodClass includesBehavior: class ])
 		or: [ includeSuperclass
 				and: [ (class includesBehavior: methodClass)
-						and: [ upToSuperclass superclass isNil
-								or: [ (upToSuperclass superclass includesBehavior: methodClass) not ] ] ] ]
+						and: [ upToSuperclass isNil
+								or: [ upToSuperclass superclass isNil
+										or: [ (upToSuperclass superclass includesBehavior: methodClass) not ] ] ] ] ]
 ]
 
 { #category : #'initialize-release' }

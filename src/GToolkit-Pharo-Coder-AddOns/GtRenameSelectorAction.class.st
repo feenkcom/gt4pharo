@@ -32,12 +32,13 @@ GtRenameSelectorAction >> addRenameAttributes [
 	coderAttributes := originalLocations
 			collect: [ :each | 
 				| attribute |
-				attribute := GtRenameEditorAttribute new
+				attribute := GtRenameSelectorEditorAttribute new
 						action: self;
 						selectAll: selectAll;
 						filter: filter;
 						text: (text from: each first to: each last);
 						requestInitialFocus: index = focusedIndex;
+						focusedIndex: index;
 						coordinateFocus: true;
 						styler: styler.
 				index := index + 1.
