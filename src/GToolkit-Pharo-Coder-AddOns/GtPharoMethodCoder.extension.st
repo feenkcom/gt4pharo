@@ -2,21 +2,26 @@ Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
-	| method valueNode |
-	(aNode isMethod or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
-		ifFalse:
-			[ aNode isMessage ifTrue: [ valueNode := aNode parent ] ifFalse: [ aNode isValueNode ifTrue: [ valueNode := aNode ] ].
-			[ valueNode notNil and: [ valueNode parent isKindOf: GtPharoLiteralNode ] ] whileTrue: [ valueNode := valueNode parent ].
+	| method valueNode label |
+	(aNode isMethod
+		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
+		ifFalse: [ aNode isMessage
+				ifTrue: [ valueNode := aNode parent ]
+				ifFalse: [ aNode isValueNode ifTrue: [ valueNode := aNode ] ].
+			[ valueNode notNil and: [ valueNode parent isKindOf: GtPharoLiteralNode ] ]
+				whileTrue: [ valueNode := valueNode parent ].
 			(valueNode isNil or: [ valueNode isVariableDefinition ]) ifTrue: [ ^ self ] ].
 	method := aNode topParent.
 	method selector isBinary ifTrue: [ ^ self ].
+	label := valueNode
+			ifNil: [ self createLabel: 'Add parameter' description: method selector ]
+			ifNotNil: [ self createLabel: 'Extract as parameter' description: method selector ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Extract as parameter' description: method selector)
+		addContextMenuItem: label
 		hover: (valueNode ifNotNil: [ self highlightNodeBlock: valueNode ])
 		leave: self removeHighlightBlock
-		action:
-			[ :aCoderViewModel | 
-			((GtAddParameterRefactoringController new)
+		action: [ :aCoderViewModel | 
+			(GtAddParameterRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
 				parameterNode: valueNode;
 				methodNode: method) execute ]
