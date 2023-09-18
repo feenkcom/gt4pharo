@@ -2035,19 +2035,18 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 	<gtExample>
 	| aScripter |
-
-	aScripter := self forAddParameter_04_click_add_parameter .
+	aScripter := self forAddParameter_04_click_add_parameter.
 
 	(aScripter type: 'someOtherMethodName:') play.
-	
+
 	aScripter assert
 		label: 'Assert refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
@@ -2056,7 +2055,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 		play.
 
 	(aScripter keyPress: BlKeyboardKey return) play.
-		
+
 	aScripter assert
 		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
@@ -2065,17 +2064,34 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_05_enter_method_name [
 
 	aScripter assert
 		label: 'Assert refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
 				index to: index ];
 		id: GtSourceCoderEditorId;
+		play.
+
+	(aScripter type: 'parameter') play.
+
+	(aScripter keyPress: BlKeyboardKey return) play.
+
+	(aScripter type: '#()') play.
+
+	(aScripter keyPress: BlKeyboardKey return) play.
+
+	aScripter assert
+		onChildFromBlock: [ :element | 
+			element parent
+				allChildrenBreadthFirstDetect: [ :each | each id = GtRefactoringsPreviewAcceptId uniqueInstance ]
+				ifFound: [ :each | each ]
+				ifNone: [ self error: 'Apply button not found' ] ];
+		value: [ :button | button isVisible ] equals: true;
 		play.
 
 	^ aScripter

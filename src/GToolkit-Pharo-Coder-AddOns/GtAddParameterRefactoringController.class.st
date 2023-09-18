@@ -7,7 +7,8 @@ Class {
 		'parameterNode',
 		'renameSelectorAction',
 		'renameParamAction',
-		'argumentSource'
+		'argumentSource',
+		'sourceAction'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -41,7 +42,9 @@ GtAddParameterRefactoringController >> argumentSource: aString [
 
 { #category : #executing }
 GtAddParameterRefactoringController >> cancelRefactoring [
-	self isRenaming ifTrue: [ renameSelectorAction cancel ].
+	self isRenamingSelector ifTrue: [ renameSelectorAction cancel ].
+	self isRenamingParameter ifTrue: [ renameParamAction cancel ].
+	self isRenamingSource ifTrue: [ sourceAction cancel ].
 	super cancelRefactoring
 ]
 
@@ -60,6 +63,28 @@ GtAddParameterRefactoringController >> createRefactoringModel [
 				compile: originalSource asString
 				classified: sourceCoderViewModel protocol ].
 	^ model
+]
+
+{ #category : #executing }
+GtAddParameterRefactoringController >> installArgumentSource [
+	| ast |
+	parameterNode ifNotNil: [ ^ self ].
+	ast := sourceCoderViewModel astAwait.
+	sourceAction := GtCoderViewModelRenameAction
+			locations: {ast pattern variables last sourceInterval}
+			textualCoderViewModel: sourceCoderViewModel.
+	sourceAction selectAll: true.
+	sourceAction allowAccept: false.
+	sourceAction hasRefactoringPreview: true.
+	sourceAction requestInitialFocus: false.
+	sourceAction
+		when: GtRenameActionAnnouncement
+		do: [ :ann | 
+			#textUpdated = ann eventType
+				ifTrue: [ self argumentSource: sourceAction newName ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+	sourceAction install.
+	sourceAction updateName: self argumentSource
 ]
 
 { #category : #executing }
@@ -101,8 +126,18 @@ GtAddParameterRefactoringController >> installSelectorRenamer [
 ]
 
 { #category : #testing }
-GtAddParameterRefactoringController >> isRenaming [
+GtAddParameterRefactoringController >> isRenamingParameter [
+	^ renameParamAction notNil and: [ renameParamAction isInstalled ]
+]
+
+{ #category : #testing }
+GtAddParameterRefactoringController >> isRenamingSelector [
 	^ renameSelectorAction notNil and: [ renameSelectorAction isInstalled ]
+]
+
+{ #category : #testing }
+GtAddParameterRefactoringController >> isRenamingSource [
+	^ sourceAction notNil and: [ sourceAction isInstalled ]
 ]
 
 { #category : #accessing }
@@ -156,6 +191,7 @@ GtAddParameterRefactoringController >> safelyExecute [
 	sourceCoderViewModel selectNone.
 	self installSelectorRenamer.
 	self installParameterRenamer.
+	self installArgumentSource.
 	self addRefactoringPreview
 ]
 
