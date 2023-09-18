@@ -19,10 +19,6 @@ GtRenameSelectorAction class >> message: aGtPharoMessageNode textualCoderViewMod
 ]
 
 { #category : #accessing }
-GtRenameSelectorAction >> accept [
-]
-
-{ #category : #accessing }
 GtRenameSelectorAction >> addRenameAttributes [
 	| text index |
 	text := self pharoSourceCoderViewModel styledText
@@ -95,6 +91,7 @@ GtRenameSelectorAction >> forVariableOrUnaryMessage [
 { #category : #accessing }
 GtRenameSelectorAction >> initialize [
 	super initialize.
+	allowAccept := false.
 	focusedIndex := 1.
 	self hasRefactoringPreview: true
 ]

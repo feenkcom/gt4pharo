@@ -2,10 +2,12 @@ Class {
 	#name : #GtAddParameterRefactoringController,
 	#superclass : #GtMethodRefactoringController,
 	#instVars : [
-		'renameAction',
 		'newSelector',
 		'variableName',
-		'parameterNode'
+		'parameterNode',
+		'renameSelectorAction',
+		'renameParamAction',
+		'argumentSource'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -25,9 +27,21 @@ GtAddParameterRefactoringController >> addKeyword [
 	self setText: text
 ]
 
+{ #category : #accessing }
+GtAddParameterRefactoringController >> argumentSource [
+	^ argumentSource
+		ifNil: [ parameterNode ifNil: [ 'nil' ] ifNotNil: [ parameterNode source ] ]
+]
+
+{ #category : #accessing }
+GtAddParameterRefactoringController >> argumentSource: aString [
+	argumentSource := aString.
+	self addRefactoringPreview
+]
+
 { #category : #executing }
 GtAddParameterRefactoringController >> cancelRefactoring [
-	self isRenaming ifTrue: [ renameAction cancel ].
+	self isRenaming ifTrue: [ renameSelectorAction cancel ].
 	super cancelRefactoring
 ]
 
@@ -49,26 +63,46 @@ GtAddParameterRefactoringController >> createRefactoringModel [
 ]
 
 { #category : #executing }
-GtAddParameterRefactoringController >> installRenamer [
+GtAddParameterRefactoringController >> installParameterRenamer [
 	| ast |
 	ast := sourceCoderViewModel astAwait.
-	renameAction := GtRenameSelectorAction
+	renameParamAction := GtCoderViewModelRenameAction
+			locations: {ast pattern variables last sourceInterval}
+			textualCoderViewModel: sourceCoderViewModel.
+	renameParamAction selectAll: true.
+	renameParamAction allowAccept: false.
+	renameParamAction hasRefactoringPreview: true.
+	renameParamAction requestInitialFocus: false.
+	renameParamAction
+		when: GtRenameActionAnnouncement
+		do: [ :ann | 
+			#textUpdated = ann eventType
+				ifTrue: [ self variableName: renameParamAction newName ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+	renameParamAction install
+]
+
+{ #category : #executing }
+GtAddParameterRefactoringController >> installSelectorRenamer [
+	| ast |
+	ast := sourceCoderViewModel astAwait.
+	renameSelectorAction := GtRenameSelectorAction
 			message: ast pattern
 			textualCoderViewModel: sourceCoderViewModel.
-	renameAction selectAll: true.
-	renameAction focusedIndex: ast numArgs.
-	renameAction
+	renameSelectorAction selectAll: true.
+	renameSelectorAction focusedIndex: ast numArgs.
+	renameSelectorAction
 		when: GtRenameActionAnnouncement
 		do: [ :ann | 
 			ann eventType = #textUpdated
-				ifTrue: [ self updateSelector: renameAction newSelector ].
+				ifTrue: [ self updateSelector: renameSelectorAction newSelector ].
 			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
-	renameAction install
+	renameSelectorAction install
 ]
 
 { #category : #testing }
 GtAddParameterRefactoringController >> isRenaming [
-	^ renameAction notNil and: [ renameAction isInstalled ]
+	^ renameSelectorAction notNil and: [ renameSelectorAction isInstalled ]
 ]
 
 { #category : #accessing }
@@ -98,10 +132,10 @@ GtAddParameterRefactoringController >> previewPosition [
 GtAddParameterRefactoringController >> refactoring [
 	| newArg model |
 	model := self createRefactoringModel.
-	newArg := RBArgumentName
-		name: self variableName
-		value: (parameterNode ifNil: [ 'nil' ] ifNotNil: [ parameterNode source ]).
-	^ (parameterNode ifNil: [ RBAddParameterRefactoring ] ifNotNil: [ GtAddParameterRefactoring ])
+	newArg := RBArgumentName name: self variableName value: self argumentSource.
+	^ (parameterNode
+		ifNil: [ RBAddParameterRefactoring ]
+		ifNotNil: [ GtAddParameterRefactoring ])
 		model: model
 		addParameterToMethod: methodNode selector
 		in: (model classFor: self methodClass)
@@ -118,8 +152,11 @@ GtAddParameterRefactoringController >> refactoringName [
 { #category : #executing }
 GtAddParameterRefactoringController >> safelyExecute [
 	self addKeyword.
-	super safelyExecute.
-	self installRenamer
+	self preventSave.
+	sourceCoderViewModel selectNone.
+	self installSelectorRenamer.
+	self installParameterRenamer.
+	self addRefactoringPreview
 ]
 
 { #category : #executing }
@@ -145,4 +182,10 @@ GtAddParameterRefactoringController >> variableName [
 			  variableName := (prefix , index printString) asSymbol.
 			  index := index + 1 ].
 		  variableName ]
+]
+
+{ #category : #accessing }
+GtAddParameterRefactoringController >> variableName: aString [
+	variableName := aString asSymbol.
+	self addRefactoringPreview
 ]

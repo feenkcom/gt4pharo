@@ -1797,11 +1797,11 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_04_click_add_pa
 	aScripter assert
 		label: 'Assert rename editor attribute';
 		value: [ :aCoderEditor | 
-				| anInterval |
+				| interval |
 				aCoderEditor text
 					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
-					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-				anInterval ]
+					indicesDo: [ :aStart :anEnd | interval ifNil: [ interval := aStart to: anEnd ] ].
+				interval ]
 			equals: [ :aCoderEditor | 1 to: (aCoderEditor text asString indexOf: $:) ];
 		id: GtSourceCoderEditorId;
 		play.
@@ -1959,7 +1959,6 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_03_hover_add_parameter [
 GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self forAddParameter_03_hover_add_parameter.
 
 	aScripter click
@@ -1967,56 +1966,55 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_04_click_add_parameter [
 		onSpaceRoot;
 		id: #'context-menu--add-parameter';
 		play.
-	
+
 	aScripter assert
 		label: 'Assert current source in coder model';
-		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ] equals: [ :aCoder |
-('{1}Unique: anObject
-	^ self printString' format: {
-		(aCoder attributeNamed: #dummyMethod) selector
-	}) ];
+		value: [ :aCoder | aCoder currentSourceString gtRemoveEmptyLines ]
+			equals: [ :aCoder | 
+				'{1}Unique: anObject
+	^ self printString' format: {(aCoder attributeNamed: #dummyMethod) selector} ];
 		onModel;
 		play.
-		
+
 	aScripter assert
 		label: 'Assert source code modified';
 		satisfies: [ :aCoder | aCoder isModified ];
 		onModel;
 		play.
-	
+
 	aScripter assert
 		label: 'Assert rename editor attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+		value: [ :aCoderEditor | 
+				| interval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+					indicesDo: [ :aStart :anEnd | interval ifNil: [ interval := aStart to: anEnd ] ].
+				interval ]
 			equals: [ :aCoderEditor | 1 to: (aCoderEditor text asString indexOf: $:) ];
 		id: GtSourceCoderEditorId;
 		play.
 
 	aScripter assert
 		label: 'Assert refactoring changes attribute';
-		value: [ :aCoderEditor |
-			| anInterval |
-			aCoderEditor text
-				findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
-				indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-			anInterval ]
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRefactoringChangesAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
 			equals: [ :aCoderEditor | 
 				| index |
 				index := (aCoderEditor text asString indexOf: Character cr) - 1.
 				index to: index ];
 		id: GtSourceCoderEditorId;
 		play.
-		
+
 	aScripter assert
 		label: 'Assert source editor is not focused';
 		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 		id: GtSourceCoderEditorId;
 		play.
-		
+
 	aScripter assert
 		label: 'Assert source editor has focus';
 		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
