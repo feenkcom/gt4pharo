@@ -94,6 +94,15 @@ GtPharoCoderExplicitBehavior >> exists [
 	^ self behavior notNil and: [ self behavior isObsolete not ]
 ]
 
+{ #category : #printing }
+GtPharoCoderExplicitBehavior >> gtDisplayOn: aStream [
+	super gtDisplayOn: aStream.
+	
+	aStream 
+		parenthesize: [
+			aStream << self behaviorName]
+]
+
 { #category : #comparing }
 GtPharoCoderExplicitBehavior >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
