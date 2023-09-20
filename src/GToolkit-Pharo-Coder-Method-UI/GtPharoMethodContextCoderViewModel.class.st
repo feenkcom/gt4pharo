@@ -21,6 +21,19 @@ GtPharoMethodContextCoderViewModel >> evaluationContext [
 		runtimeContext: self context
 ]
 
+{ #category : #testing }
+GtPharoMethodContextCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
+	(super hasDeclaredVariableNamed: aVariableName) ifTrue: [ ^ true ].
+	
+	^ self 
+		forPharo11: [
+			self compiledMethod isDoIt and: [
+				self compiledMethod allLiterals anySatisfy: [ :aVariable |
+					(aVariable isKindOf: DoItVariable) and: [ 
+						aVariable name = aVariableName ] ] ] ]
+		forPharo10: [ false ]
+]
+
 { #category : #initialization }
 GtPharoMethodContextCoderViewModel >> initialize [
 	super initialize.
