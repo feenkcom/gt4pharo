@@ -490,17 +490,21 @@ GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCod
 
 { #category : #'private - actions' }
 GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
-	| aCompiledMethodToEvaluate |
+	| aCompiledMethodToEvaluate methodArguments |
 
 	aCompiledMethodToEvaluate := self
 		primitiveCompile: aSourceString
 		inContext: aGtPharoSourceCoderEvaluationContext
 		onFailDo: [ ^ anEvaluationFailBlock value ].
-
-	^ aGtPharoSourceCoderEvaluationContext receiverObject
-		withArgs: (aGtPharoSourceCoderEvaluationContext runtimeContext
+	
+	methodArguments := self 
+		forPharo11: [#()] 
+		forPharo10: [ (aGtPharoSourceCoderEvaluationContext runtimeContext
 			ifNil: [ #() ]
-			ifNotNil: [ { aGtPharoSourceCoderEvaluationContext runtimeContext } ])
+			ifNotNil: [ { aGtPharoSourceCoderEvaluationContext runtimeContext } ]) ].
+	
+	^ aGtPharoSourceCoderEvaluationContext receiverObject
+		withArgs: methodArguments
 		executeMethod: aCompiledMethodToEvaluate
 ]
 
