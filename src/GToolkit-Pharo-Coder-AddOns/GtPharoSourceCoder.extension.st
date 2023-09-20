@@ -404,11 +404,12 @@ GtPharoSourceCoder >> highlightNodesBlock: aCollection [
 GtPharoSourceCoder >> initializeAddOns: addOns [
 	| stylers |
 	super initializeAddOns: addOns.
-	stylers := {GtPharoStyler.
-			GtPharoDynamicHighlightStyler.
-			GtPharoDeprecationStyler.
-			GtPharoMethodExpanderStyler.
-			GtPharoClassExpanderStyler} collect: #new.
+	stylers := {
+		GtPharoStyler.
+		GtPharoDynamicHighlightStyler.
+		GtPharoDeprecationStyler.
+		GtPharoMethodExpanderStyler.
+		GtPharoClassExpanderStyler} collect: #new.
 
 	addOns addStylers: stylers
 ]
