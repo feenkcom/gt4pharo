@@ -249,7 +249,7 @@ GtPharoMethodContextCoder >> startingStateForAstComputation [
 	^ self 
 		forPharo11: [
 			self compiledMethod isDoIt
-				ifTrue: [ GtPharoParser startingStateForMethodSequence ]
+				ifTrue: [ GtPharoParser startingStateForDoItMethod ]
 				ifFalse: [ GtPharoParser startingStateForMethod ] ]
 		forPharo10: [
 			GtPharoParser startingStateForMethod]
