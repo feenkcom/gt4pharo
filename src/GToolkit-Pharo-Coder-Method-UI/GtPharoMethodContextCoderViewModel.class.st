@@ -29,8 +29,9 @@ GtPharoMethodContextCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 		forPharo11: [
 			self compiledMethod isDoIt and: [
 				self compiledMethod allLiterals anySatisfy: [ :aVariable |
-					(aVariable isKindOf: DoItVariable) and: [ 
-						aVariable name = aVariableName ] ] ] ]
+					((aVariable class = WorkspaceVariable) or: [
+						aVariable class = DoItVariable] ) and: [ 
+							aVariable name = aVariableName ] ] ] ]
 		forPharo10: [ false ]
 ]
 
