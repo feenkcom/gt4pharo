@@ -44,11 +44,12 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Refactoring-Changes'.
 		'Refactoring-Core'.
 		'Refactoring-Environment'.
-		'Refactoring2-Core'.
 		'SmaCC_Runtime'.
 		'System-Announcements'.
 		'Transcript-NonInteractive'
-	}
+	}, (self 
+		forPharo11: [ #() ] 
+		forPharo10: [ { 'Refactoring2-Core' } ])
 ]
 
 { #category : #asserting }

@@ -56,6 +56,11 @@ TGtPharoProgramNodeVisitor >> visitCharacterLiteral: aCharacterLiteral [
 ]
 
 { #category : #generated }
+TGtPharoProgramNodeVisitor >> visitDoItMethod: aDoItMethod [
+	^ self visitProgram: aDoItMethod
+]
+
+{ #category : #generated }
 TGtPharoProgramNodeVisitor >> visitError: anError [
 	^ self visitValue: anError
 ]

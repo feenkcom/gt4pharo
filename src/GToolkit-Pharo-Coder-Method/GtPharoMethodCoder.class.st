@@ -258,7 +258,7 @@ GtPharoMethodCoder >> compiledMethod [
 GtPharoMethodCoder >> computeAst: theSourceString [
 	^ GtPharoParser
 		parseWithErrors: theSourceString
-		startingAt: GtPharoParser startingStateForMethod
+		startingAt: self startingStateForAstComputation
 ]
 
 { #category : #private }
@@ -676,10 +676,12 @@ GtPharoMethodCoder >> methodOrigin [
 	aMethodBehavior := aCompiledMethod methodClass.
 
 	(anOriginBehavior = aMethodBehavior)
-		ifTrue: [ ^ GtPharoMethodSameOrigin new behavior: aMethodBehavior method: aCompiledMethod ].
+		ifTrue: [ ^ GtPharoMethodSameOrigin new 
+			behavior: aMethodBehavior method: aCompiledMethod ].
 
 	anOriginBehavior isTrait
-		ifTrue: [ ^ GtPharoMethodTraitOrigin new trait: anOriginBehavior method: aCompiledMethod ].	
+		ifTrue: [ ^ GtPharoMethodTraitOrigin new 
+			trait: anOriginBehavior method: aCompiledMethod ].	
 		
 	^ GtPharoMethodUnknownOrigin new
 ]
@@ -1116,6 +1118,11 @@ GtPharoMethodCoder >> sourceCode: aGtCoderSourceCode withStrategy: anUpdateStrag
 	self clearExample.
 	self clearTestCase.
 	super sourceCode: aGtCoderSourceCode withStrategy: anUpdateStragegy
+]
+
+{ #category : #'api - ast' }
+GtPharoMethodCoder >> startingStateForAstComputation [
+	^ GtPharoParser startingStateForMethod
 ]
 
 { #category : #'private - subscriptions' }
