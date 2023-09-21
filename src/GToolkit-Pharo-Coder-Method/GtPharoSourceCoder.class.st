@@ -25,7 +25,11 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 
 	guineaPig := [ aCompiledMethod
 		valueWithReceiver: anObject
-		arguments: (evalContext ifNil: [ #() ] ifNotNil: [ {evalContext} ]) ]
+		arguments: (evalContext 
+			ifNil: [ #() ] 
+			ifNotNil: [ aCompiledMethod numArgs = 0
+				ifTrue: [ #() ]
+				ifFalse: [ { evalContext } ]  ]) ]
 		newProcess.
 	suspendedContext := guineaPig suspendedContext.
 	

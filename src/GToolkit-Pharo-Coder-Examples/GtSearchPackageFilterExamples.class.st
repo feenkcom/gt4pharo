@@ -16,7 +16,9 @@ GtSearchPackageFilterExamples >> deprecatedPackagesFilter [
 	
 	filter := GtSearchDeprecatedPackagesFilter new.
 	
-	self assert: (filter matches: (RPackageOrganizer default packages select: [:p | p name beginsWith: 'Deprecated']) anyOne).
+	self assert: (filter matches: (RPackageOrganizer default packages 
+		select: [ :aPackage | 
+			aPackage name beginsWith: 'OldFileStream']) anyOne).
 	self assert: (filter matches: 'GToolkit-Docs' asPackage) not.
 	
 	^ filter.

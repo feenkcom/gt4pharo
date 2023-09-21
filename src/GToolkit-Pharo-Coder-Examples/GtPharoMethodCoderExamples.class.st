@@ -487,18 +487,26 @@ GtPharoMethodCoderExamples >> debugClassUnaryMethodPointCreation [
 	self assert: aCoder isModified.
 	
 	aCoderViewModel := aCoder asCoderViewModel.
-	aCoderViewModel select: 28 to: 46.
+	aCoderViewModel select: 13 to: 46.
 
 	aDummyDebugger := GtPharoDummyDebugger useDuring: [ aCoderViewModel debug ].
-
+	
 	"debugging does not save the method"
 	self assert: aCoder isModified.
-
-	self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt').
-	self assert: (aDummyDebugger sourceCode endsWith: '^ aPoint := 196 @ 400').
-	self assert: aDummyDebugger method selector equals: #DoIt.
-	self assert: (aDummyDebugger method methodClass includesBehavior: aCoder behavior).
-	self assert: aDummyDebugger receiver equals: aCoder behavior instanceSide.
+	
+	self 
+		forPharo11: [
+			self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt') not.
+			self assert: (aDummyDebugger sourceCode endsWith: 'aPoint := 196@400.').
+			self assert: aDummyDebugger method selector equals: #DoIt.
+			"self assert: (aDummyDebugger method methodClass includesBehavior: aCoder behavior)."
+			self assert: aDummyDebugger receiver equals: aCoder behavior instanceSide ] 
+		forPharo10: [
+			self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt').
+			self assert: (aDummyDebugger sourceCode endsWith: 'aPoint := 196 @ 400').
+			self assert: aDummyDebugger method selector equals: #DoIt.
+			self assert: (aDummyDebugger method methodClass includesBehavior: aCoder behavior).
+			self assert: aDummyDebugger receiver equals: aCoder behavior instanceSide ].
 
 	^ aCoder
 ]
