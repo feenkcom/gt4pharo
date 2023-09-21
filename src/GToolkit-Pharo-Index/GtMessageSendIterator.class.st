@@ -100,12 +100,17 @@ GtMessageSendIterator >> processBlocksAndOptimizedSends [
 				ifTrue: [ (ConditionalSelectors includes: value)
 						ifTrue: [ conditionalSelectors add: value ].
 					(LoopSelectors includes: value) ifTrue: [ loopSelectors add: value ] ]
-				ifFalse: [ (value isKindOf: CompiledCode)
+				ifFalse: [ value gtIsCompiledCode
 						ifTrue: [ self class
 								messageSendsIn: value
 								doReferences: referencesBlock
-								andVariables: globalsBlock ] ] ].
-								
+								andVariables: globalsBlock ]
+						ifFalse: [ value gtIsBlockClosure
+								ifTrue: [ self class
+										messageSendsIn: value compiledBlock
+										doReferences: referencesBlock
+										andVariables: globalsBlock ] ] ] ].
+
 	"We don't know which jumps correspond to which sends, so we just estimate them."
 	conditionalForwardJumps := conditionalForwardJumps - backwardJumps max: 0.
 	conditionalForwardJumps > 0
