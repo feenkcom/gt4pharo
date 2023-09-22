@@ -971,18 +971,24 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 	<gtExample>
 	<after: #cleanUp>
-	| aScripter |
+	| aScripter expectedCopiedString |
 
 	aScripter := self scripterForBlock: [
 		| aCoder |
 		aCoder := GtPharoMethodCoderExamples new coderOnClassUnaryMethodThatCreatesPoint.
 		environment := aCoder attributeNamed: #dummyEnvironment.
 		aCoder ].
-	self selectTextFor: aScripter from: 38 to: 45 andCheck: '196@400'.
+	
+	expectedCopiedString := '	| aPoint |
+	
+	aPoint := 196@400'.
+	self selectTextFor: aScripter from: 13 to: 45 andCheck: expectedCopiedString.
 	
 	Clipboard clipboardText: ''.
 	self openAndClickOnContextMenuItemFor: aScripter id: GtTextualCoderCopyContextMenuItemId.
-	self assert: Clipboard clipboardText asString equals: '196@400'.
+	self 
+		assert: Clipboard clipboardText asString 
+		equals: expectedCopiedString.
 	
 	^ aScripter
 ]
