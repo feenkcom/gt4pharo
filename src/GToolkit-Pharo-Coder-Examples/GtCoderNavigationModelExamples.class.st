@@ -33,7 +33,7 @@ GtCoderNavigationModelExamples >> closeSpaces [
 
 { #category : #'examples - navigation model' }
 GtCoderNavigationModelExamples >> examplePackage [
-	^ 'SUnit-Help' asPackage
+	^ 'GToolkit-Examples-Dummies-Package1' asPackage
 ]
 
 { #category : #initialization }
@@ -81,12 +81,12 @@ GtCoderNavigationModelExamples >> selectClassInDifferentPackageWithNoTagsNavigat
 	<gtExample>
 	| aModel aPackage |
 	aModel := self selectPackageWithExtension.
-	aModel selectClass: CustomHelp.
-	aPackage := 'HelpSystem-Core' asPackage.
+	aModel selectClass: GtExampleAnnouncement.
+	aPackage := 'GToolkit-Examples' asPackage.
 	self
 		assertSelectionOfPackage: aPackage
-		tag: (aPackage classTagNamed: 'Utilities')
-		class: CustomHelp
+		tag: (aPackage classTagNamed: 'Announcements')
+		class: GtExampleAnnouncement
 		inModel: aModel.
 	^ aModel
 ]
