@@ -66,20 +66,26 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 					tooltip: 'Search code';
 					id: GtPharoSearchCodeButtonId;
 					objectActOn: [ :anActOnEvent :anItem :theButton | 
-						| acted navigationModel |
-						acted := false.
+						| handled navigationModel |
+						handled := false.
+						
 						navigationModel := theButton phlow firstParentWithView phlow
 								firstParentWithView navigationModel.
 						(anItem isKindOf: RPackage)
-							ifTrue: [ navigationModel selectPackage: anItem.
-								acted := true ].
+							ifTrue: [ 
+								navigationModel selectPackage: anItem.
+								handled := true ].
 						(anItem isKindOf: ClassDescription)
-							ifTrue: [ navigationModel selectClass: anItem.
-								acted := true ].
+							ifTrue: [ 
+								navigationModel selectClass: anItem.
+								handled := true ].
 						(anItem isKindOf: CompiledMethod)
-							ifTrue: [ navigationModel selectMethod: anItem.
-								acted := true ].
-						acted ifTrue: [ anActOnEvent beActed ] ];
+							ifTrue: [ 
+								navigationModel selectMethod: anItem.
+								handled := true ].
+						anActOnEvent beActed.
+						handled ifFalse: [
+							aButton phlow spawnTool: anActOnEvent toolToSend ] ];
 					asElement ]
 			tooltip: 'Search code'
 ]
