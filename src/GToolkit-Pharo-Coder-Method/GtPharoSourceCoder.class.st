@@ -213,7 +213,7 @@ GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 { #category : #'api - actions' }
 GtPharoSourceCoder >> format [
 	| ast |
-	ast := self rbAST.
+	ast := RBParser parseFaultyExpression: self currentSourceString.
 	ast isFaulty ifTrue: [ ^ self ].
 	self currentSourceString: ast formattedCode
 ]
