@@ -123,9 +123,8 @@ GtRecentChanges >> gtChangedClassesFor: aView [
 { #category : #accessing }
 GtRecentChanges >> gtEventsFor: aView [
 	<gtView>
-	
 	changeList ifNil: [ ^ aView empty ].
-	
+
 	^ aView list
 		title: 'Change list';
 		priority: 3;
