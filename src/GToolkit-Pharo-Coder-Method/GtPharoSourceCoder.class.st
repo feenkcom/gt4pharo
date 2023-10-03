@@ -218,6 +218,19 @@ GtPharoSourceCoder >> format [
 	self currentSourceString: ast formattedCode
 ]
 
+{ #category : #private }
+GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock [
+	^ [
+			aBlock value.
+			true ]
+		on: OCSemanticWarning
+		do: [ :ex | 
+			self
+				notifyParseError: ex errorMessage
+				at: ex location.
+			ex return: false ]
+]
+
 { #category : #testing }
 GtPharoSourceCoder >> hasObjectAttribute [
 	<return: #Boolean>
@@ -495,18 +508,19 @@ GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCod
 { #category : #'private - actions' }
 GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	| aCompiledMethodToEvaluate methodArguments |
+	(self
+		handleCompilerErrorsDuring: [ aCompiledMethodToEvaluate := self
+					primitiveCompile: aSourceString
+					inContext: aGtPharoSourceCoderEvaluationContext
+					onFailDo: [ ^ anEvaluationFailBlock value ] ])
+		ifFalse: [ ^ anEvaluationFailBlock value ].
 
-	aCompiledMethodToEvaluate := self
-		primitiveCompile: aSourceString
-		inContext: aGtPharoSourceCoderEvaluationContext
-		onFailDo: [ ^ anEvaluationFailBlock value ].
-	
-	methodArguments := self 
-		forPharo11: [#()] 
-		forPharo10: [ (aGtPharoSourceCoderEvaluationContext runtimeContext
-			ifNil: [ #() ]
-			ifNotNil: [ { aGtPharoSourceCoderEvaluationContext runtimeContext } ]) ].
-	
+	methodArguments := self
+			forPharo11: [ #() ]
+			forPharo10: [ aGtPharoSourceCoderEvaluationContext runtimeContext
+					ifNil: [ #() ]
+					ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ].
+
 	^ aGtPharoSourceCoderEvaluationContext receiverObject
 		withArgs: methodArguments
 		executeMethod: aCompiledMethodToEvaluate

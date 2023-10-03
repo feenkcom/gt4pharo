@@ -542,19 +542,6 @@ GtPharoMethodCoder >> gtDiffViewFor: aView [
 				create ]"
 ]
 
-{ #category : #private }
-GtPharoMethodCoder >> handleCompilerErrorsDuring: aBlock [
-	^ [
-			aBlock value.
-			true ]
-		on: OCSemanticWarning
-		do: [ :ex | 
-			self
-				notifyParseError: ex errorMessage
-				at: ex location.
-			ex return: false ]
-]
-
 { #category : #'examples - event handling' }
 GtPharoMethodCoder >> handleExampleArgumentsChanged: aGtExampleArgumentsChanged [
 	self requestUpdateAddOns
