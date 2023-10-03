@@ -685,7 +685,7 @@ GtPharoMethodCoderExamples >> evaluateClassUnaryMethodMethodPointCreation [
 	self assert: aCoder isModified.
 
 	aCoderViewModel := aCoder asCoderViewModel.
-	aCoderViewModel select: 28 to: 46.
+	aCoderViewModel select: 38 to: 46.
 
 	aResult := aCoderViewModel doIt.
 
