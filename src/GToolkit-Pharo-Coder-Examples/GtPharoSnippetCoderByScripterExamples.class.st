@@ -686,30 +686,36 @@ GtPharoSnippetCoderByScripterExamples >> syntaxError [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ GtPharoSnippetCoder forSource: '3 + - 4' ].
-	aScripter click
-		label: 'Click on the play button';
-		id: GtSourceCoderDoItActionId;
-		play.
+	aScripter clickStep: [:s | 
+		s label: 'Click on the play button';
+		// GtSourceCoderDoItActionId].
 
-	aScripter assert
-		label: 'Assert source coder error attribute';
+	aScripter assertStep: [:s | 
+		s label: 'Assert source coder error attribute';
+		// GtSourceCoderEditorId;
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
 					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
-			equals: [ :aCoderEditor | 4 to: 4 ];
-		id: GtSourceCoderEditorId;
-		play.
+		equals: [ :aCoderEditor | 4 to: 4 ]
+		].
 
-	aScripter assert
-		label: 'Assert syntax error popup exists';
-		id: GtSourceCoderEditorId;
+	aScripter assertStep: [:s | 
+		s label: 'Assert syntax error button exists';
+		// GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: BrButton;
 		value: [ :aButton | aButton background paint color ]
-			equals: [ BrGlamorousColors errorBackgroundColor ];
-		play.
+			equals: [ BrGlamorousColors errorBackgroundColor ]].
+			
+	aScripter assertStep: [ :s | 
+		s label: 'Assert error text is correct';
+		onSpaceRoot;
+		// BrAnchoredElement;
+		// BlTextElement;
+		value: [ :editor | editor text asString ]
+		equals: [ 'Variable or expression expected ' ] ].
 
 	^ aScripter
 ]
@@ -720,30 +726,36 @@ GtPharoSnippetCoderByScripterExamples >> undefinedClass [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ GtPharoSnippetCoder forSource: 'x := OdoredCollection new.' ].
-	aScripter click
-		label: 'Click on the play button';
-		id: GtSourceCoderDoItActionId;
-		play.
 
-	aScripter assert
-		label: 'Assert source coder error attribute';
+	aScripter clickStep: [ :s | 
+		s label: 'Click on the play button';
+		// GtSourceCoderDoItActionId ].
+
+	aScripter assertStep: [ :s | 
+		s label: 'Assert source coder error attribute';
+		// GtSourceCoderEditorId;
 		value: [ :aCoderEditor | 
 				| anInterval |
 				aCoderEditor text
 					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
 					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 				anInterval ]
-			equals: [ :aCoderEditor | 5 to: 5 ];
-		id: GtSourceCoderEditorId;
-		play.
+		equals: [ :aCoderEditor | 5 to: 5 ] ].
 
-	aScripter assert
-		label: 'Assert syntax error popup exists';
-		id: GtSourceCoderEditorId;
+	aScripter assertStep: [ :s | 
+		s label: 'Assert error button exists';
+		// GtSourceCoderEditorId;
 		onBreadthFirstChildOfClass: BrButton;
 		value: [ :aButton | aButton background paint color ]
-			equals: [ BrGlamorousColors errorBackgroundColor ];
-		play.
+		equals: [ BrGlamorousColors errorBackgroundColor ] ].
+
+	aScripter assertStep: [ :s | 
+		s label: 'Assert error text is correct';
+		onSpaceRoot;
+		// BrAnchoredElement;
+		// BlTextElement;
+		value: [ :editor | editor text asString ]
+		equals: [ 'Undeclared temp: OdoredCollection' ] ].
 
 	^ aScripter
 ]
