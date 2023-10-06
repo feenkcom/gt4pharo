@@ -679,3 +679,71 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 
 	^ aScripter
 ]
+
+{ #category : #'examples - context menu' }
+GtPharoSnippetCoderByScripterExamples >> syntaxError [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder forSource: '3 + - 4' ].
+	aScripter click
+		label: 'Click on the play button';
+		id: GtSourceCoderDoItActionId;
+		play.
+
+	aScripter assert
+		label: 'Assert source coder error attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
+			equals: [ :aCoderEditor | 4 to: 4 ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter assert
+		label: 'Assert syntax error popup exists';
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: BrButton;
+		value: [ :aButton | aButton background paint color ]
+			equals: [ BrGlamorousColors errorBackgroundColor ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - context menu' }
+GtPharoSnippetCoderByScripterExamples >> undefinedClass [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder forSource: 'x := OdoredCollection new.' ].
+	aScripter click
+		label: 'Click on the play button';
+		id: GtSourceCoderDoItActionId;
+		play.
+
+	aScripter assert
+		label: 'Assert source coder error attribute';
+		value: [ :aCoderEditor | 
+				| anInterval |
+				aCoderEditor text
+					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
+					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+				anInterval ]
+			equals: [ :aCoderEditor | 5 to: 5 ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter assert
+		label: 'Assert syntax error popup exists';
+		id: GtSourceCoderEditorId;
+		onBreadthFirstChildOfClass: BrButton;
+		value: [ :aButton | aButton background paint color ]
+			equals: [ BrGlamorousColors errorBackgroundColor ];
+		play.
+
+	^ aScripter
+]
