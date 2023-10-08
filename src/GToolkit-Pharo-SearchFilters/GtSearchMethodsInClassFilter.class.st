@@ -39,6 +39,13 @@ GtSearchMethodsInClassFilter >> defaultFilterScope [
 	^ theStreams asAsyncStream flatten
 ]
 
+{ #category : #printing }
+GtSearchMethodsInClassFilter >> gtDisplayOn: stream [
+	stream
+		print: class;
+		nextPutAll: ' methodsInClass'
+]
+
 { #category : #comparing }
 GtSearchMethodsInClassFilter >> hash [
 	^ self class hash bitXor: self filterClass hash

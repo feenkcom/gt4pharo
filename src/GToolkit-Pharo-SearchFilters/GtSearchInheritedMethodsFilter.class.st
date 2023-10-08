@@ -14,6 +14,13 @@ GtSearchInheritedMethodsFilter >> filterValueString [
 	^ upToSuperclass name
 ]
 
+{ #category : #printing }
+GtSearchInheritedMethodsFilter >> gtDisplayOn: stream [
+	stream
+		print: class;
+		nextPutAll: ' inheritedMethods'
+]
+
 { #category : #accessing }
 GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
