@@ -40,6 +40,15 @@ GtSearchInstanceSlotReferenceFilter >> forClass: aClass andVariable: aString [
 	variableName := aString
 ]
 
+{ #category : #printing }
+GtSearchInstanceSlotReferenceFilter >> gtDisplayOn: stream [
+	stream
+		print: class;
+		nextPut: $.;
+		nextPutAll: variableName asString;
+		nextPutAll: ' instanceSlotReferences'
+]
+
 { #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> gtMessagesSentToSlotFor: aView [
 	<gtView>

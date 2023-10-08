@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
+{ #category : #printing }
+GtSearchMethodsInInstanceAndClassSideFilter >> gtDisplayOn: stream [
+	stream
+		print: class;
+		nextPutAll: ' methodsInBothClassSides'
+]
+
 { #category : #testing }
 GtSearchMethodsInInstanceAndClassSideFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
