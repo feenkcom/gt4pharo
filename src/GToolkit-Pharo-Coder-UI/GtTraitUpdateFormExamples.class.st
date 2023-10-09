@@ -20,10 +20,11 @@ GtTraitUpdateFormExamples >> scripterOnSimpleForm [
 	| scripter |
 	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter check
-		label: 'Check save button is enabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled ];
-		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button is enabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled ] ].
 
 	^ scripter
 ]
@@ -42,19 +43,21 @@ GtTraitUpdateFormExamples >> scripterWithClassNameAndPackageFilled [
 		onChildAt: 1;
 		play.
 
-	scripter type
-		label: 'Fill package name';
-		text: self examplePackageName;
-		// anElementId;
-		onChildAt: 1;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill package name';
+				text: self examplePackageName;
+				// anElementId;
+				onChildAt: 1 ].
 
-	scripter assert
-		label: 'Check that package is set';
-		satisfies: [ :aFrame | 
-			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-				currentValue packageName = self examplePackageName ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue packageName = self examplePackageName ] ].
 
 	^ scripter
 ]

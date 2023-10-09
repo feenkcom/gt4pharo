@@ -12,79 +12,86 @@ Class {
 { #category : #'exaples - add new method' }
 GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3230)"
-	
+
 	<gtExample>
 	| aScripter |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
 
-	aScripter click 
-		label: 'Click on the add new method button';
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoAddNewMethodButtonId;
-		play.
-		
-	aScripter type
-		text: 'myNewMethod';
-		play.
-		
-	aScripter assert
-		label: 'Assert new method source code';
-		value: [ :anEditor | anEditor text asString ]
-			equals: [ :anEditor | 'myNewMethod' ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// GtSourceCoderEditorId;
-		play.
-		
-	aScripter click
-		label: 'Close the dropdown';
-		// (GtPagerPageElementId indexed: 2);
-		// GtBehaviorCoderBehaviorNameId;
-		play.
-		
-	aScripter click 
-		label: 'Reopen the add new method button';
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoAddNewMethodButtonId;
-		play.
-		
-	aScripter assert
-		label: 'Assert new method source code';
-		value: [ :anEditor | anEditor text asString ]
-			equals: [ :anEditor | 'myNewMethod' ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// GtSourceCoderEditorId;
-		play.
-	
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the add new method button';
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoAddNewMethodButtonId ].
+
+	aScripter
+		typeStep: [ :s | 
+			s
+				text: 'myNewMethod' ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert new method source code';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ :anEditor | 'myNewMethod' ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// GtSourceCoderEditorId ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Close the dropdown';
+				// (GtPagerPageElementId indexed: 2);
+				// GtBehaviorCoderBehaviorNameId ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Reopen the add new method button';
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoAddNewMethodButtonId ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert new method source code';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ :anEditor | 'myNewMethod' ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// GtSourceCoderEditorId ].
+
 	^ aScripter
 ]
 
 { #category : #'examples - dropdown' }
 GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
-	aScripter do
-		label: 'Setup dropdown overview';
-		block: [ :aButton :aUserData | 
-			aUserData
-				at: BrAnchoredVisualAnalysis
-				put: (BrAnchoredVisualAnalysis new
-						elementWithDropdown: aButton) ];
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoBehaviorCoderElement;
-		// BrTabGroup;
-		// GtPharoSearchCodeButtonId;
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Setup dropdown overview';
+				block: [ :aButton :aUserData | 
+					aUserData
+						at: BrAnchoredVisualAnalysis
+						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoBehaviorCoderElement;
+				// BrTabGroup;
+				// GtPharoSearchCodeButtonId ].
 
-	aScripter assert
-		label: 'Assert dropdown bounds';
-		satisfies: [ :aContentElement | 
-			aContentElement topMostParent bounds inSpace asRectangle
-				containsRect: aContentElement bounds inSpace asRectangle ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert dropdown bounds';
+				satisfies: [ :aContentElement | 
+					aContentElement topMostParent bounds inSpace asRectangle
+						containsRect: aContentElement bounds inSpace asRectangle ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// BrAnchoredElement;
+				/ #content asBlocElementId ]
 ]
 
 { #category : #'examples - context menu' }
@@ -93,21 +100,23 @@ GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
 	| aScripter |
 	aScripter := self displayPharoMethodContextMenuExtentIn800x600Space.
 
-	aScripter assert
-		onSpaceRoot;
-		// GtCoderContextMenuContent;
-		exists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtCoderContextMenuContent;
+				exists ].
 
 	aScripter shortcut
 		combination: BlKeyCombination escape;
 		play.
 
-	aScripter assert
-		onSpaceRoot;
-		// GtCoderContextMenuContent;
-		notExists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtCoderContextMenuContent;
+				notExists ].
 
 	^ aScripter
 ]
@@ -118,21 +127,23 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey [
 	| aScripter |
 	aScripter := self displayClassSidebarContextMenu.
 
-	aScripter assert
-		onSpaceRoot;
-		// GtCoderNavigationContextMenuContent;
-		exists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtCoderNavigationContextMenuContent;
+				exists ].
 
 	aScripter shortcut
 		combination: BlKeyCombination escape;
 		play.
 
-	aScripter assert
-		onSpaceRoot;
-		// GtCoderNavigationContextMenuContent;
-		notExists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtCoderNavigationContextMenuContent;
+				notExists ].
 
 	^ aScripter
 ]
@@ -143,21 +154,23 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey_first
 	| aScripter |
 	aScripter := self displayClassSidebarContextMenu_firstClickInsideOfMethodCoder.
 
-	aScripter assert
-		onSpaceRoot;
-		// GtCoderNavigationContextMenuContent;
-		exists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtCoderNavigationContextMenuContent;
+				exists ].
 
 	aScripter shortcut
 		combination: BlKeyCombination escape;
 		play.
 
-	aScripter assert
-		onSpaceRoot;
-		// GtCoderNavigationContextMenuContent;
-		notExists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtCoderNavigationContextMenuContent;
+				notExists ].
 
 	^ aScripter
 ]
@@ -181,11 +194,12 @@ GtPharoCoderByScripterExamples >> coderInPager: aCoderOrBlock [
 	aScripter := self
 			scripterForBlock: [ GtPager createWrappedOn: aCoderOrBlock value ].
 
-	aScripter assert
-		label: 'Assert one page';
-		satisfies: [ :aPager | aPager pages size = 1 ];
-		onSelf;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert one page';
+				satisfies: [ :aPager | aPager pages size = 1 ];
+				onSelf ].
 
 	^ aScripter
 ]
@@ -199,11 +213,12 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnCopyClassButton [
 	aScripter
 		substeps: 'Click on Copy Class'
 		do: [ :aStep | 
-			aStep click
-				// GtPharoBehaviorCoderElement;
-				// GtCoderToolbarElement;
-				// GtPharoCopyClassElementId;
-				play ].
+			aStep
+				clickStep: [ :s | 
+					s
+						// GtPharoBehaviorCoderElement;
+						// GtCoderToolbarElement;
+						// GtPharoCopyClassElementId ] ].
 
 	^ aScripter
 ]
@@ -217,17 +232,19 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnGitButton [
 	aScripter
 		substeps: 'Go to Git'
 		do: [ :aStep | 
-			aStep click
-				// GtPharoBehaviorCoderElement;
-				// GtCoderToolbarElement;
-				// GtCoderGitButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						// GtPharoBehaviorCoderElement;
+						// GtCoderToolbarElement;
+						// GtCoderGitButtonId ].
 
-			aStep assert
-				label: 'Assert two pages';
-				satisfies: [ :aPager | aPager pages size = 2 ];
-				onSelf;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert two pages';
+						satisfies: [ :aPager | aPager pages size = 2 ];
+						onSelf ] ].
 
 	^ aScripter
 ]
@@ -241,11 +258,12 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnHierarchiesButton [
 	aScripter
 		substeps: 'Show Hierarchies'
 		do: [ :aStep | 
-			aStep click
-				// GtPharoBehaviorCoderElement;
-				// GtCoderToolbarElement;
-				// GtCoderClassHierarchyButtonId;
-				play ].
+			aStep
+				clickStep: [ :s | 
+					s
+						// GtPharoBehaviorCoderElement;
+						// GtCoderToolbarElement;
+						// GtCoderClassHierarchyButtonId ] ].
 
 	^ aScripter
 ]
@@ -260,18 +278,20 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 	aScripter
 		substeps: 'Expand Git'
 		do: [ :aStep | 
-			aStep click
-				// (GtPagerPageElementId indexed: 2);
-				// GtPagerMaximizeButtonElementId;
-				play.
-				
-			aStep assert
-				label: 'Assert sidebar is rendered';
-				satisfies: #hasChildren;
-				// GtPagerMaximizedPageElementId;
-				// GtPagerToolWrapperElementId;
-				id: #sidebar;
-				play ].
+			aStep
+				clickStep: [ :s | 
+					s
+						// (GtPagerPageElementId indexed: 2);
+						// GtPagerMaximizeButtonElementId ].
+
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert sidebar is rendered';
+						satisfies: #hasChildren;
+						// GtPagerMaximizedPageElementId;
+						// GtPagerToolWrapperElementId;
+						id: #sidebar ] ].
 
 	^ aScripter
 ]
@@ -291,11 +311,12 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 	aScripter
 		substeps: 'Show Hierarchies'
 		do: [ :aStep | 
-			aStep click
-				// GtPharoBehaviorCoderElement;
-				// GtCoderToolbarElement;
-				// GtCoderClassHierarchyButtonId;
-				play ].
+			aStep
+				clickStep: [ :s | 
+					s
+						// GtPharoBehaviorCoderElement;
+						// GtCoderToolbarElement;
+						// GtCoderClassHierarchyButtonId ] ].
 
 	^ aScripter
 ]
@@ -308,66 +329,71 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	| aScripter aScrollSpotterBy |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
 
-	aScripter click 
-		label: 'Click on the add new method button';
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoAddNewMethodButtonId;
-		play.
-		
-	aScripter do 
-		label: 'Right-side button distace';
-		block: [ :aButton | 
-			| aButtonBounds aSpaceBounds aDistance aPreferredExtent |
-			aButtonBounds := aButton bounds inSpace asRectangle.
-			aSpaceBounds := aButton space root bounds inSpace asRectangle.
-			aDistance := aSpaceBounds right - aButtonBounds left.
-			
-			aButton aptitude withAllActorsBreadthFirstDo: [ :anAptitude | 
-				(anAptitude isKindOf: BrWithAnchoredAptitude) ifTrue: [ 
-					aPreferredExtent := anAptitude preferredExtent ] ].
-				
-			self 
-				assert: [ aPreferredExtent isNotNil ] 
-				description: [ '{1} kind of aptitude not found in {2}' 
-					format: { BrWithAnchoredAptitude. aButton } ].
-					
-			aScrollSpotterBy := aPreferredExtent - aDistance.
-			aScripter userData 
-				at: #displayAddMethodDropdown_Scroll
-				put: aScrollSpotterBy
-			 ];
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoAddNewMethodButtonId;
-		play.
-		
-	aScripter do 
-		label: 'Scroll GtPager';
-		block: [ :anInfiniteElement | 
-			anInfiniteElement smoothScrollBy: aScrollSpotterBy x @ 0 ];
-		// #list;
-		play.
-		
-	aScripter do
-		label: 'Setup dropdown overview';
-		block: [ :aButton :aUserData | 
-			aUserData at: BrAnchoredVisualAnalysis put: (
-				BrAnchoredVisualAnalysis new
-					elementWithDropdown: aButton) ];
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoAddNewMethodButtonId;
-		play.
-		
-	aScripter assert
-		label: 'Assert dropdown bounds';
-		satisfies: [ :aContentElement | 
-			aContentElement topMostParent bounds inSpace asRectangle
-				containsRect: aContentElement bounds inSpace asRectangle ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play.
-	
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the add new method button';
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoAddNewMethodButtonId ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Right-side button distace';
+				block: [ :aButton | 
+					| aButtonBounds aSpaceBounds aDistance aPreferredExtent |
+					aButtonBounds := aButton bounds inSpace asRectangle.
+					aSpaceBounds := aButton space root bounds inSpace asRectangle.
+					aDistance := aSpaceBounds right - aButtonBounds left.
+
+					aButton aptitude
+						withAllActorsBreadthFirstDo: [ :anAptitude | 
+							(anAptitude isKindOf: BrWithAnchoredAptitude)
+								ifTrue: [ aPreferredExtent := anAptitude preferredExtent ] ].
+
+					self
+						assert: [ aPreferredExtent isNotNil ]
+						description: [ '{1} kind of aptitude not found in {2}'
+								format: {BrWithAnchoredAptitude.
+										aButton} ].
+
+					aScrollSpotterBy := aPreferredExtent - aDistance.
+					aScripter userData
+						at: #displayAddMethodDropdown_Scroll
+						put: aScrollSpotterBy ];
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoAddNewMethodButtonId ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Scroll GtPager';
+				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: aScrollSpotterBy x @ 0 ];
+				// #list ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Setup dropdown overview';
+				block: [ :aButton :aUserData | 
+					aUserData
+						at: BrAnchoredVisualAnalysis
+						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoAddNewMethodButtonId ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert dropdown bounds';
+				satisfies: [ :aContentElement | 
+					aContentElement topMostParent bounds inSpace asRectangle
+						containsRect: aContentElement bounds inSpace asRectangle ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// BrAnchoredElement;
+				/ #content asBlocElementId ].
+
 	^ aScripter
 ]
 
@@ -383,26 +409,28 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu [
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu: aScripter [
 	<gtExample>
-	aScripter secondaryClick
-		label: 'Display context menu';
-		// GtCoderNavigationClassesHierarchyTreeElement;
-		// (GtCoderNavigationClassesHierarchyTreeElementId indexed: 1);
-		play.
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Display context menu';
+				// GtCoderNavigationClassesHierarchyTreeElement;
+				// (GtCoderNavigationClassesHierarchyTreeElementId indexed: 1) ].
 
-	aScripter assert
-		label: 'Assert context menu extent';
-		value: [ :aContentElement | aContentElement extent ]
-			equals: [ :aContentElement | 
-				| aContextMenuQuery |
-				aContextMenuQuery := aContentElement query
-						// GtCoderNavigationContextMenuContent.
-				self assert: aContextMenuQuery result size equals: 1.
-				aContextMenuQuery result first extent ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert context menu extent';
+				value: [ :aContentElement | aContentElement extent ]
+					equals: [ :aContentElement | 
+						| aContextMenuQuery |
+						aContextMenuQuery := aContentElement query
+								// GtCoderNavigationContextMenuContent.
+						self assert: aContextMenuQuery result size equals: 1.
+						aContextMenuQuery result first extent ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// BrAnchoredElement;
+				/ #content asBlocElementId ]
 ]
 
 { #category : #'examples - context menu' }
@@ -410,16 +438,17 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu_firstClickInsid
 	<gtExample>
 	| aScripter |
 	aScripter := self displayMaximizedCoderWithMethodExpanded.
-	
-	aScripter click
-		label: 'Click inside of a method coder';
-		onSpaceRoot;
-		// GtPharoStreamingMethodsCoderElement;
-		// (GtSourceCoderId indexed: 1);
-		// GtSourceCoderEditorId;
-		onChildAt: 1;
-		play.
-	
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inside of a method coder';
+				onSpaceRoot;
+				// GtPharoStreamingMethodsCoderElement;
+				// (GtSourceCoderId indexed: 1);
+				// GtSourceCoderEditorId;
+				onChildAt: 1 ].
+
 	self displayClassSidebarContextMenu: aScripter.
 	^ aScripter
 ]
@@ -439,37 +468,40 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x300Sp
 	<gtExample>
 	| aScripter |
 	aScripter := self coderWithAddMethod.
-	
-	aScripter do
-		label: 'Set space extent';
-		block: [ :aSpace | aSpace extent: 800 @ 300 ];
-		onSpace;
-		play.
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 800 @ 300 ];
+				onSpace ].
 
 	self maximizePagerPane: aScripter.
 
-	aScripter secondaryClick
-		label: 'Display context menu';
-		onSpaceRoot;
-		// GtPharoStreamingMethodsCoderElement;
-		// (GtSourceCoderId indexed: 1);
-		// GtSourceCoderEditorId;
-		onChildAt: 1;
-		play.
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Display context menu';
+				onSpaceRoot;
+				// GtPharoStreamingMethodsCoderElement;
+				// (GtSourceCoderId indexed: 1);
+				// GtSourceCoderEditorId;
+				onChildAt: 1 ].
 
-	aScripter assert
-		label: 'Assert context menu extent';
-		value: [ :aContentElement | aContentElement extent ]
-			equals: [ :aContentElement | 
-				| aContextMenuQuery |
-				aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
-				self assert: aContextMenuQuery result size equals: 1.
-				aContextMenuQuery result first extent ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert context menu extent';
+				value: [ :aContentElement | aContentElement extent ]
+					equals: [ :aContentElement | 
+						| aContextMenuQuery |
+						aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
+						self assert: aContextMenuQuery result size equals: 1.
+						aContextMenuQuery result first extent ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// BrAnchoredElement;
+				/ #content asBlocElementId ].
 
 	^ aScripter
 ]
@@ -479,29 +511,31 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Sp
 	<gtExample>
 	| aScripter |
 	aScripter := self displayMaximizedCoderWithMethodExpanded.
-	
-	aScripter secondaryClick
-		label: 'Display context menu';
-		onSpaceRoot;
-		// GtPharoStreamingMethodsCoderElement;
-		// (GtSourceCoderId indexed: 1);
-		// GtSourceCoderEditorId;
-		onChildAt: 1;
-		play.
 
-	aScripter assert
-		label: 'Assert context menu extent';
-		value: [ :aContentElement | aContentElement extent ]
-			equals: [ :aContentElement | 
-				| aContextMenuQuery |
-				aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
-				self assert: aContextMenuQuery result size equals: 1.
-				aContextMenuQuery result first extent ];
-		onSpaceRoot;
-		// BrAnchoredOuterContainer;
-		// BrAnchoredElement;
-		/ #content asBlocElementId;
-		play.
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Display context menu';
+				onSpaceRoot;
+				// GtPharoStreamingMethodsCoderElement;
+				// (GtSourceCoderId indexed: 1);
+				// GtSourceCoderEditorId;
+				onChildAt: 1 ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert context menu extent';
+				value: [ :aContentElement | aContentElement extent ]
+					equals: [ :aContentElement | 
+						| aContextMenuQuery |
+						aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
+						self assert: aContextMenuQuery result size equals: 1.
+						aContextMenuQuery result first extent ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// BrAnchoredElement;
+				/ #content asBlocElementId ].
 
 	^ aScripter
 ]
@@ -515,41 +549,45 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 	<gtExample>
 	| aScripter |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
-	
-	aScripter do
-		label: 'Set space extent';
-		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
-		onSpace;
-		play.
-	
-	aScripter click 
-		label: 'Click on the search code button';
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoBehaviorCoderElement;
-		// BrTabGroup;
-		// GtPharoSearchCodeButtonId;
-		play.
-		
-	aScripter do 
-		label: 'Scroll GtPager';
-		block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -370@0 ];
-		// #list;
-		play.
-		
-	aScripter do
-		label: 'Setup dropdown overview';
-		block: [ :aButton :aUserData | 
-			aUserData at: BrAnchoredVisualAnalysis put: (
-				BrAnchoredVisualAnalysis new
-					elementWithDropdown: aButton) ];
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoBehaviorCoderElement;
-		// BrTabGroup;
-		// GtPharoSearchCodeButtonId;
-		play.
-		
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 1000 @ 600 ];
+				onSpace ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the search code button';
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoBehaviorCoderElement;
+				// BrTabGroup;
+				// GtPharoSearchCodeButtonId ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Scroll GtPager';
+				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -370 @ 0 ];
+				// #list ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Setup dropdown overview';
+				block: [ :aButton :aUserData | 
+					aUserData
+						at: BrAnchoredVisualAnalysis
+						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoBehaviorCoderElement;
+				// BrTabGroup;
+				// GtPharoSearchCodeButtonId ].
+
 	self assertDropdown: aScripter.
-	
+
 	^ aScripter
 ]
 
@@ -562,30 +600,32 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown_scrolle
 	<gtExample>
 	| aScripter |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
-	
-	aScripter do
-		label: 'Set space extent';
-		block: [ :aSpace | aSpace extent: 1000 @ 600 ];
-		onSpace;
-		play.
-		
-	aScripter click
-		label: 'Click on the search code button';
-		// (GtPagerPageElementId indexed: 2);
-		// GtPharoBehaviorCoderElement;
-		// BrTabGroup;
-		// GtPharoSearchCodeButtonId;
-		play.
-		
-	aScripter do
-		label: 'Scroll GtPager';
-		block: [ :anInfiniteElement | 
-			anInfiniteElement smoothScrollBy:  -371 @ 0 ];
-		// #list;
-		play.
-		
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 1000 @ 600 ];
+				onSpace ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the search code button';
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoBehaviorCoderElement;
+				// BrTabGroup;
+				// GtPharoSearchCodeButtonId ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Scroll GtPager';
+				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -371 @ 0 ];
+				// #list ].
+
 	self assertDropdown: aScripter.
-	
+
 	^ aScripter
 ]
 
@@ -598,11 +638,12 @@ GtPharoCoderByScripterExamples >> displayThreeClassCodersWithMethodExpanded [
 	aScripter
 		substeps: 'Open the second coder pane'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on class name';
-				id: GtPagerPageElementId index: 2;
-				// GtBehaviorCoderBehaviorNameId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on class name';
+						id: GtPagerPageElementId index: 2;
+						// GtBehaviorCoderBehaviorNameId ].
 
 			aStep shortcut
 				label: 'Spawn class coder';
@@ -611,10 +652,11 @@ GtPharoCoderByScripterExamples >> displayThreeClassCodersWithMethodExpanded [
 				// GtBehaviorCoderBehaviorNameId;
 				play.
 
-			aStep assert
-				label: 'Assert pager with two panes';
-				value: [ :aPager | aPager pages size ] equals: [ 3 ];
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert pager with two panes';
+						value: [ :aPager | aPager pages size ] equals: [ 3 ] ] ].
 
 	^ aScripter
 ]
@@ -630,10 +672,11 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 	aScripter
 		substeps: 'Open the second coder pane'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on class name';
-				// GtBehaviorCoderBehaviorNameId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on class name';
+						// GtBehaviorCoderBehaviorNameId ].
 
 			aStep shortcut
 				label: 'Spawn class coder';
@@ -641,15 +684,17 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 				// GtBehaviorCoderBehaviorNameId;
 				play.
 
-			aStep assert
-				label: 'Assert pager with two panes';
-				value: [ :aPager | aPager pages size ] equals: [ 2 ];
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert pager with two panes';
+						value: [ :aPager | aPager pages size ] equals: [ 2 ] ].
 
-			aStep assert
-				value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
-					equals: [ 2 ];
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
+							equals: [ 2 ] ] ].
 
 	^ aScripter
 ]
@@ -657,18 +702,20 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
 	<gtExample>
-	aScripter click
-		label: 'Maximize Coder';
-		// GtPagerMaximizeButtonElementId;
-		play
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Maximize Coder';
+				// GtPagerMaximizeButtonElementId ]
 ]
 
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 	<gtExample>
-	aScripter do
-		label: 'Set space extent';
-		block: [ :aSpace | aSpace extent: 800 @ 600 ];
-		onSpace;
-		play
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 800 @ 600 ];
+				onSpace ]
 ]

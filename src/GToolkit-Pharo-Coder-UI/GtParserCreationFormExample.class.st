@@ -36,10 +36,11 @@ GtParserCreationFormExample >> scripterOnSimpleForm [
 	| scripter |
 	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter assert
-		label: 'Check save button is disabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check save button is disabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ] ].
 
 	^ scripter
 ]
@@ -51,16 +52,17 @@ GtParserCreationFormExample >> scripterWithParserAccepted [
 	| scripter createdClass |
 	scripter := self scripterWithParserAndScannerNameAndPackageFilled.
 
-	scripter click
-		label: 'Click save button';
-		// #toolbar;
-		onChildAt: 1;
-		play.
-		
-	createdClass := (Smalltalk classNamed: self exampleParserName).	
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
+
+	createdClass := Smalltalk classNamed: self exampleParserName.
 	self assert: createdClass isNotNil.
-		
-	createdClass := (Smalltalk classNamed: self exampleScannerName).	
+
+	createdClass := Smalltalk classNamed: self exampleScannerName.
 	self assert: createdClass isNotNil.
 
 	^ scripter
@@ -83,19 +85,21 @@ GtParserCreationFormExample >> scripterWithParserAndScannerNameAndPackageFilled 
 		onChildAt: 1;
 		play.
 
-	scripter type
-		label: 'Fill package name';
-		text: self examplePackageName;
-		// anElementId;
-		onChildAt: 1;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill package name';
+				text: self examplePackageName;
+				// anElementId;
+				onChildAt: 1 ].
 
-	scripter assert
-		label: 'Check that package is set';
-		satisfies: [ :aFrame | 
-			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-				currentValue packageName = self examplePackageName ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue packageName = self examplePackageName ] ].
 
 	^ scripter
 ]
@@ -113,18 +117,20 @@ GtParserCreationFormExample >> scripterWithParserAndScannerNameFilled [
 		// anElementId;
 		play.
 
-	scripter type
-		label: 'Fill scanner name';
-		text: self exampleScannerName;
-		// anElementId;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill scanner name';
+				text: self exampleScannerName;
+				// anElementId ].
 
-	scripter assert
-		label: 'Assert scanner name';
-		value: [ :anEditor | anEditor text asString ]
-			equals: [ self exampleScannerName ];
-		// anElementId;
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert scanner name';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ self exampleScannerName ];
+				// anElementId ].
 
 	^ scripter
 ]
@@ -142,18 +148,20 @@ GtParserCreationFormExample >> scripterWithParserNameFilled [
 		// anElementId;
 		play.
 
-	scripter type
-		label: 'Fill parser name';
-		text: self exampleParserName;
-		// anElementId;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill parser name';
+				text: self exampleParserName;
+				// anElementId ].
 
-	scripter assert
-		label: 'Assert parser name';
-		value: [ :anEditor | anEditor text asString ]
-			equals: [ self exampleParserName ];
-		// anElementId;
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert parser name';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ self exampleParserName ];
+				// anElementId ].
 
 	^ scripter
 ]

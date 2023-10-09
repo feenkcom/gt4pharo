@@ -27,13 +27,13 @@ GtPharoMethodsCoderByScripterExamples >> methodsCoder [
 GtPharoMethodsCoderByScripterExamples >> methodsCoderWithFilledFilter_click_add_method [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self methodsCoder.
 
-	aScripter click
-		label: 'Click add method button';
-		id: GtPharoAddNewMethodButtonId;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click add method button';
+				id: GtPharoAddNewMethodButtonId ].
 
 	^ aScripter
 ]
