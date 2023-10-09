@@ -3393,32 +3393,29 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
 	scripter := self
 			scripterForBlock: [ GtPharoMethodCoder forMethod: thisContext method method ].
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click on the coder editor to give it focus';
-				id: GtSourceCoderEditorId ].
+	scripter click
+		label: 'Click on the coder editor to give it focus';
+		id: GtSourceCoderEditorId;
+		play.
 
 	scripter shortcut
 		combination: BlKeyCombination arrowUp;
 		id: GtSourceCoderEditorId;
 		play.
 
-	scripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert editor is focused';
-				satisfies: [ :anEditorElement | anEditorElement isFocused ];
-				id: GtSourceCoderEditorId ].
+	scripter assert
+		label: 'Assert editor is focused';
+		satisfies: [ :anEditorElement | anEditorElement isFocused ];
+		id: GtSourceCoderEditorId;
+		play.
 
-	scripter
-		doStep: [ :s | 
-			s
-				label: 'Position cursor';
-				id: GtSourceCoderEditorId;
-				block: [ :each | 
-					each editor
-						moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'ifNil') + 1 ] ].
+	scripter do
+		label: 'Position cursor';
+		id: GtSourceCoderEditorId;
+		block: [ :each | 
+			each editor
+				moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'ifNil') + 1 ];
+		play.
 
 	scripter shortcut
 		combination: BlKeyCombination primaryR;
@@ -3428,26 +3425,23 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
 	self checkFor: scripter renameEditorExists: true.
 	self checkFor: scripter refactoringPreviewButtonExists: false.
 
-	scripter
-		clickStep: [ :s | 
-			s
-				id: #'reorder-parameter-button' ].
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
 
 	self checkFor: scripter renameEditorExists: true.
 	self checkFor: scripter refactoringPreviewButtonExists: true.
 
-	scripter
-		clickStep: [ :s | 
-			s
-				id: #'reorder-parameter-button' ].
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
 
 	self checkFor: scripter renameEditorExists: true.
 	self checkFor: scripter refactoringPreviewButtonExists: false.
 
-	scripter
-		clickStep: [ :s | 
-			s
-				id: #'reorder-parameter-button' ].
+	scripter click
+		id: #'reorder-parameter-button';
+		play.
 
 	self checkFor: scripter renameEditorExists: true.
 	self checkFor: scripter refactoringPreviewButtonExists: true.
