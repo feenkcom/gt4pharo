@@ -8,18 +8,19 @@ Class {
 GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderChangeMethodAndCheckCollapsedText [
 	<gtExample>
 	| aScripter aNewMethod aCoder |
-	
 	aNewMethod := GtPharoCoderMockedClass >> #instanceMethodC.
-	
+
 	aScripter := self collapsedMethodCoderCheckCollapsedText.
 	aCoder := aScripter userData at: #coder.
-	
+
 	aCoder forMethod: aNewMethod.
-	
-	aScripter assert
-		id: GtSourceCoderCollapsedTextId;
-		value: [ :aLabel | aLabel text asString ] equals: [ aNewMethod selector asString ];
-		play.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				id: GtSourceCoderCollapsedTextId;
+				value: [ :aLabel | aLabel text asString ]
+					equals: [ aNewMethod selector asString ] ].
 
 	^ aScripter
 ]
@@ -28,22 +29,29 @@ GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderChangeMethodAndCheckColl
 GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderCheckCollapsedText [
 	<gtExample>
 	| aMethod aCoder aCoderViewModel aCoderElement aScripter |
-	
 	aMethod := GtPharoCoderMockedClass >> #instanceMethodA.
 	aCoder := GtPharoMethodCoder forMethod: aMethod.
 	aCoderViewModel := aCoder asCoderViewModel.
-	aCoderViewModel collapse; withoutHeader.
+	aCoderViewModel
+		collapse;
+		withoutHeader.
 	aCoderElement := aCoderViewModel asElement.
-	
+
 	aScripter := BlScripter new.
-	aScripter set key: #coder value: [ aCoder ]; play.
-	aScripter set key: #coderViewModel value: [ aCoderViewModel ]; play.
-	aScripter element: aCoderElement.
-	
-	aScripter assert
-		id: GtSourceCoderCollapsedTextId;
-		value: [ :aLabel | aLabel text asString ] equals: [ aMethod selector asString ];
+	aScripter set
+		key: #coder value: [ aCoder ];
 		play.
+	aScripter set
+		key: #coderViewModel value: [ aCoderViewModel ];
+		play.
+	aScripter element: aCoderElement.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				id: GtSourceCoderCollapsedTextId;
+				value: [ :aLabel | aLabel text asString ]
+					equals: [ aMethod selector asString ] ].
 
 	^ aScripter
 ]

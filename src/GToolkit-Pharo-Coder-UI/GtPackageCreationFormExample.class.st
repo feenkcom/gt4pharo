@@ -25,10 +25,11 @@ GtPackageCreationFormExample >> scripterOnSimpleForm [
 	| scripter |
 	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter check
-		label: 'Check save button is disabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ];
-		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button is disabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ] ].
 
 	^ scripter
 ]
@@ -46,15 +47,16 @@ GtPackageCreationFormExample >> simpleFormWithPackageAdded [
 	| scripter createdPackage |
 	scripter := self simpleFormWithPackageFilled.
 
-	scripter click
-		label: 'Click save button';
-		// #toolbar;
-		onChildAt: 1;
-		play.
-		
-	createdPackage := self examplePackageName asPackageIfAbsent: nil.	
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
+
+	createdPackage := self examplePackageName asPackageIfAbsent: nil.
 	self assert: createdPackage isNotNil.
-	
+
 	^ scripter
 ]
 
@@ -64,23 +66,27 @@ GtPackageCreationFormExample >> simpleFormWithPackageFilled [
 	| scripter |
 	scripter := self scripterOnSimpleForm.
 
-	scripter click
-		label: 'Select package editor';
-		// (GtMagritteFieldElementId new description: scripter model packageAndTagDescription);
-		// #package;
-		play.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select package editor';
+				// (GtMagritteFieldElementId new
+						description: scripter model packageAndTagDescription);
+				// #package ].
 
-	scripter type
-		label: 'Enter package name';
-		text: self examplePackageName;
-		play.
-		
-	scripter check
-		label: 'Check that package is set';
-		satisfies: [ :aFrame | 
-			(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue packageName
-				= self examplePackageName ];
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter package name';
+				text: self examplePackageName ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check that package is set';
+				satisfies: [ :aFrame | 
+					(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue
+						packageName = self examplePackageName ] ].
 
 	^ scripter
 ]
@@ -91,22 +97,25 @@ GtPackageCreationFormExample >> simpleFormWithPackageFilledValidationFailed [
 	| scripter |
 	scripter := self scripterOnSimpleForm.
 
-	scripter click
-		label: 'Select package editor';
-		// (GtMagritteFieldElementId new description: scripter model packageAndTagDescription);
-		// #package;
-		play.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select package editor';
+				// (GtMagritteFieldElementId new
+						description: scripter model packageAndTagDescription);
+				// #package ].
 
-	scripter type
-		label: 'Enter package name';
-		text: 'Kernel';
-		play.
-		
-	scripter check
-		label: 'Check that package is invalid';
-		satisfies: [ :aFrame | 
-			(aFrame userData at: #gtmemento) cache anyOne valueOrNil isValid not ];
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter package name';
+				text: 'Kernel' ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check that package is invalid';
+				satisfies: [ :aFrame | (aFrame userData at: #gtmemento) cache anyOne valueOrNil isValid not ] ].
 
 	^ scripter
 ]

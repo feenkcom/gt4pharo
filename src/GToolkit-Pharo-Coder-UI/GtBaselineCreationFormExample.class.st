@@ -31,10 +31,11 @@ GtBaselineCreationFormExample >> scripterOnSimpleForm [
 	| scripter |
 	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter check
-		label: 'Check save button is disabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ];
-		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button is disabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ] ].
 
 	^ scripter
 ]
@@ -51,19 +52,21 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineAccepted [
 	<after: #removeBaseline>
 	| scripter baselineClass |
 	scripter := self simpleFormWithBaselineFilled.
-	
-	scripter check
-		label: 'Check save button is enabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled ];
-		play.
-		
-	scripter click
-		label: 'Click save button';
-		id: #toolbar;
-		onChildAt: 1;
-		play.
-	
-	baselineClass := (Smalltalk classNamed: self exampleBaselineName).	
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button is enabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				id: #toolbar;
+				onChildAt: 1 ].
+
+	baselineClass := Smalltalk classNamed: self exampleBaselineName.
 	self assert: baselineClass isNotNil.
 
 	^ scripter
@@ -75,23 +78,24 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineFilled [
 	| scripter |
 	scripter := self scripterOnSimpleForm.
 
-	scripter click
-		label: 'Select baseline editor';
-		// (GtMagritteFieldElementId new description: scripter model baselineDescription);
-		play.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select baseline editor';
+				// (GtMagritteFieldElementId new description: scripter model baselineDescription) ].
 
-	scripter type
-		label: 'Enter baseline name';
-		text: self exampleBaselineName;
-		play.
-		
-	"we only have one field here, so we can use anyOne"
-	scripter assert
-		label: 'Check that baseline is set';
-		satisfies: [ :aFrame | 
-			(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue
-				= self exampleBaselineName ];
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter baseline name';
+				text: self exampleBaselineName ].	"we only have one field here, so we can use anyOne"
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that baseline is set';
+				satisfies: [ :aFrame | 
+					(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue
+						= self exampleBaselineName ] ].
 
 	^ scripter
 ]
@@ -102,22 +106,22 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineFilledValidationFailed [
 	| scripter |
 	scripter := self scripterOnSimpleForm.
 
-	scripter click
-		label: 'Select baseline editor';
-		// (GtMagritteFieldElementId new description: scripter model baselineDescription);
-		play.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select baseline editor';
+				// (GtMagritteFieldElementId new description: scripter model baselineDescription) ].
 
-	scripter type
-		label: 'Enter baseline name';
-		text: self exampleBaselineNameTaken;
-		play.
-		
-	"we only have one field here, so we can use anyOne"
-	scripter assert
-		label: 'Check that baseline is invalid';
-		satisfies: [ :aFrame | 
-			(aFrame userData at: #gtmemento) cache anyOne valueOrNil isValid not ];
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter baseline name';
+				text: self exampleBaselineNameTaken ].	"we only have one field here, so we can use anyOne"
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that baseline is invalid';
+				satisfies: [ :aFrame | (aFrame userData at: #gtmemento) cache anyOne valueOrNil isValid not ] ].
 
 	^ scripter
 ]
@@ -127,25 +131,26 @@ GtBaselineCreationFormExample >> simpleFormWithEditingCancelled [
 	<gtExample>
 	| scripter |
 	scripter := self simpleFormWithBaselineFilled.
-	
-	scripter check
-		label: 'Check cancel button is enabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 2) isEnabled ];
-		play.
-		
-	scripter click
-		label: 'Click cancel button';
-		id: #toolbar;
-		onChildAt: 2;
-		play.
 
-	"we only have one field here, so we can use anyOne"
-	scripter assert
-		label: 'Check that baseline is reset';
-		satisfies: [ :aFrame | 
-			(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue asString
-				= '' ];
-		play.
-		
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check cancel button is enabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 2) isEnabled ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click cancel button';
+				id: #toolbar;
+				onChildAt: 2 ].	"we only have one field here, so we can use anyOne"
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that baseline is reset';
+				satisfies: [ :aFrame | 
+					(aFrame userData at: #gtmemento) cache anyOne valueOrNil currentValue asString
+						= '' ] ].
+
 	^ scripter
 ]

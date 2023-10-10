@@ -9,15 +9,17 @@ GtRenamerExamples >> applyRename [
 	<gtExample>
 	| scripter |
 	scripter := self startRename.
-	scripter keyPress
-		label: 'Delete char';
-		key: BlKeyboardKey backspace;
-		play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Delete char';
+				key: BlKeyboardKey backspace ].
 
-	scripter keyPress
-		label: 'Apply rename';
-		key: BlKeyboardKey return;
-		play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Apply rename';
+				key: BlKeyboardKey return ].
 
 	self
 		assert: scripter element editor text asString
@@ -30,15 +32,17 @@ GtRenamerExamples >> cancelRename [
 	<gtExample>
 	| scripter |
 	scripter := self startRename.
-	scripter keyPress
-		label: 'Delete char';
-		key: BlKeyboardKey backspace;
-		play.
-		
-	scripter keyPress
-		label: 'Cancel rename';
-		key: BlKeyboardKey escape;
-		play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Delete char';
+				key: BlKeyboardKey backspace ].
+
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Cancel rename';
+				key: BlKeyboardKey escape ].
 
 	self assert: scripter element editor text asString = self methodText.
 	^ scripter

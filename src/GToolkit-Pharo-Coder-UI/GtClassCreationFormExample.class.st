@@ -31,10 +31,11 @@ GtClassCreationFormExample >> scripterOnSimpleForm [
 	| scripter |
 	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter check
-		label: 'Check save button is disabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ];
-		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button is disabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ] ].
 
 	^ scripter
 ]
@@ -46,13 +47,14 @@ GtClassCreationFormExample >> scripterWithClassAccepted [
 	| scripter createdClass |
 	scripter := self scripterWithClassNameAndPackageFilled.
 
-	scripter click
-		label: 'Click save button';
-		// #toolbar;
-		onChildAt: 1;
-		play.
-		
-	createdClass := (Smalltalk classNamed: self exampleClassName).	
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
+
+	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
 
 	^ scripter
@@ -72,19 +74,21 @@ GtClassCreationFormExample >> scripterWithClassNameAndPackageFilled [
 		onChildAt: 1;
 		play.
 
-	scripter type
-		label: 'Fill package name';
-		text: self examplePackageName;
-		// anElementId;
-		onChildAt: 1;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill package name';
+				text: self examplePackageName;
+				// anElementId;
+				onChildAt: 1 ].
 
-	scripter assert
-		label: 'Check that package is set';
-		satisfies: [ :aFrame | 
-			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-				currentValue packageName = self examplePackageName ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue packageName = self examplePackageName ] ].
 
 	^ scripter
 ]
@@ -102,18 +106,20 @@ GtClassCreationFormExample >> scripterWithClassNameFilled [
 		// anElementId;
 		play.
 
-	scripter type
-		label: 'Fill class name';
-		text: self exampleClassName;
-		// anElementId;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill class name';
+				text: self exampleClassName;
+				// anElementId ].
 
-	scripter assert
-		label: 'Assert class name';
-		value: [ :anEditor | anEditor text asString ]
-			equals: [ self exampleClassName ];
-		// anElementId;
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert class name';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ self exampleClassName ];
+				// anElementId ].
 
 	^ scripter
 ]
@@ -131,16 +137,18 @@ GtClassCreationFormExample >> scripterWithClassNameFilledValidationFailed [
 		// anElementId;
 		play.
 
-	scripter type
-		label: 'Fill class name';
-		text: 'Object';
-		// anElementId;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill class name';
+				text: 'Object';
+				// anElementId ].
 
-	scripter assert
-		label: 'Check that class name is invalid';
-		satisfies: [ :aFrame | ((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil isValid not ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that class name is invalid';
+				satisfies: [ :aFrame | ((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil isValid not ] ].
 
 	^ scripter
 ]

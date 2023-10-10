@@ -33,11 +33,11 @@ GtCoderNavigationExamplesWithScripter >> packageContextMenu [
 	<gtExample>
 	| aScripter |
 	aScripter := self coderWithIndex.
-	aScripter secondaryClick // GtCoderNavigationPackagesTreeElement;
-		label: 'Open Package Context Menu';
-		play.
-		
-	"aScripter assert
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				// GtCoderNavigationPackagesTreeElement;
+				label: 'Open Package Context Menu' ].	"aScripter assert
 		label: 'Check menu contents';
 		satisfies: [ :aThing |false ];
 		onChildOfClass: BlElement;
@@ -47,10 +47,11 @@ GtCoderNavigationExamplesWithScripter >> packageContextMenu [
 
 { #category : #accessing }
 GtCoderNavigationExamplesWithScripter >> scripter: scripter hasTextSelection: aString [
-	scripter assert
-		// BlTextElement;
-		anySatisfy: [ :l | l text asString = aString and: [ self elementHasSelectionBackground: l ] ];
-		play
+	scripter
+		assertStep: [ :s | 
+			s
+				// BlTextElement;
+				anySatisfy: [ :l | l text asString = aString and: [ self elementHasSelectionBackground: l ] ] ]
 ]
 
 { #category : #accessing }

@@ -9,39 +9,43 @@ Class {
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> assertIn: aStep localToggleActive: localActivated playEnabled: playIsEnabled withLabel: playLabel [
 	<gtExample>
-	aStep assert
-		label: ('Play button is {1} with label "{2}"'
-				format: {playIsEnabled ifTrue: [ 'enabled' ] ifFalse: [ 'disabled' ].
-						playLabel});
-		satisfies: [ :aPlayButton | 
-			aPlayButton isEnabled = playIsEnabled
-				and: [ aPlayButton label asString = playLabel ] ];
-		onSpaceRoot;
-		id: GtPharoSuitePlayButtonId;
-		play.
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Play button is {1} with label "{2}"'
+						format: {playIsEnabled ifTrue: [ 'enabled' ] ifFalse: [ 'disabled' ].
+								playLabel});
+				satisfies: [ :aPlayButton | 
+					aPlayButton isEnabled = playIsEnabled
+						and: [ aPlayButton label asString = playLabel ] ];
+				onSpaceRoot;
+				id: GtPharoSuitePlayButtonId ].
 
-	aStep assert
-		label: ('Local toggle is enabled and {1}'
-				format: {localActivated ifTrue: [ 'actived' ] ifFalse: [ 'inactivated' ]});
-		satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated ] ];
-		onSpaceRoot;
-		id: GtPharoSuiteLocalToggleId;
-		play.
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Local toggle is enabled and {1}'
+						format: {localActivated ifTrue: [ 'actived' ] ifFalse: [ 'inactivated' ]});
+				satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated ] ];
+				onSpaceRoot;
+				id: GtPharoSuiteLocalToggleId ].
 
-	aStep assert
-		label: ('Remote toggle is enabled and {1}'
-				format: {localActivated ifFalse: [ 'actived' ] ifTrue: [ 'inactivated' ]});
-		satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated not ] ];
-		onSpaceRoot;
-		id: GtPharoSuiteRemoteToggleId;
-		play.
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Remote toggle is enabled and {1}'
+						format: {localActivated ifFalse: [ 'actived' ] ifTrue: [ 'inactivated' ]});
+				satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated not ] ];
+				onSpaceRoot;
+				id: GtPharoSuiteRemoteToggleId ].
 
-	aStep assert
-		label: ('Suite view model with {1} executor'
-				format: {localActivated ifTrue: [ 'local' ] ifFalse: [ 'remote' ]});
-		satisfies: [ :aScripter | (aScripter userData at: #suiteViewModel) isLocal = localActivated ];
-		onScripter;
-		play
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Suite view model with {1} executor'
+						format: {localActivated ifTrue: [ 'local' ] ifFalse: [ 'remote' ]});
+				satisfies: [ :aScripter | (aScripter userData at: #suiteViewModel) isLocal = localActivated ];
+				onScripter ]
 ]
 
 { #category : #'examples - example suite' }
@@ -50,53 +54,59 @@ GtPharoTestSuiteExamples >> assertIn: aParentStep testCaseCountsOfAll: allCount 
 	aParentStep
 		checks: 'Assert displayed example results'
 		do: [ :aStep | 
-			aStep assert
-				label: 'All test case label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseAllState);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'All test case label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseAllState);
+						id: GtPharoSuiteStateAmountLabelId ].
 
-			aStep assert
-				label: 'Passed test case label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = passedCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCasePassedState );
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Passed test case label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = passedCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtPharoMethodTestCasePassedState);
+						id: GtPharoSuiteStateAmountLabelId ].
 
-			aStep assert
-				label: 'Skipped test case label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = skippedCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseSkippedState);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Skipped test case label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = skippedCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseSkippedState);
+						id: GtPharoSuiteStateAmountLabelId ].
 
-			aStep assert
-				label: 'Failure test case label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseFailureState);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Failure test case label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseFailureState);
+						id: GtPharoSuiteStateAmountLabelId ].
 
-			aStep assert
-				label: 'Error test case label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseErrorState);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Error test case label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtPharoMethodTestCaseErrorState);
+						id: GtPharoSuiteStateAmountLabelId ].
 
-			aStep assert
-				label: 'Not executed test case label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtPharoMethodNotExecutedState);
-				id: GtPharoSuiteStateAmountLabelId;
-				play ]
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Not executed test case label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtPharoMethodNotExecutedState);
+						id: GtPharoSuiteStateAmountLabelId ] ]
 ]
 
 { #category : #'examples - example suite' }
@@ -119,23 +129,26 @@ GtPharoTestSuiteExamples >> classCoderWithTestCaseMethods [
 	aScripter
 		checks: 'Initial state assertions'
 		do: [ :aStep | 
-			aStep assert
-				label: 'Assert test button exists';
-				exists;
-				id: GtPharoExampleSuiteShowButtonId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert test button exists';
+						exists;
+						id: GtPharoExampleSuiteShowButtonId ].
 
-			aStep assert
-				label: 'Test button is enabled and visible';
-				satisfies: [ :aButton | aButton isEnabled and: [ aButton visibility = BlVisibility visible ] ];
-				id: GtPharoTestSuiteShowButtonId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Test button is enabled and visible';
+						satisfies: [ :aButton | aButton isEnabled and: [ aButton visibility = BlVisibility visible ] ];
+						id: GtPharoTestSuiteShowButtonId ].
 
-			aStep assert
-				label: 'Example button is gone';
-				satisfies: [ :aButton | aButton visibility = BlVisibility gone ];
-				id: GtPharoExampleSuiteShowButtonId;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Example button is gone';
+						satisfies: [ :aButton | aButton visibility = BlVisibility gone ];
+						id: GtPharoExampleSuiteShowButtonId ] ].
 
 	^ aScripter
 ]
@@ -155,11 +168,12 @@ GtPharoTestSuiteExamples >> clickOnRemoteToggle [
 	aScripter
 		substep: 'Choose remote execution'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on remote toggle';
-				onSpaceRoot;
-				id: GtPharoSuiteRemoteToggleId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on remote toggle';
+						onSpaceRoot;
+						id: GtPharoSuiteRemoteToggleId ].
 
 			self
 				assertIn: aStep
@@ -189,16 +203,18 @@ GtPharoTestSuiteExamples >> closeDropdownWithLocallyExecutedTestCases [
 	aScripter
 		substep: 'Close test case dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click class name';
-				id: GtBehaviorCoderBehaviorNameId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click class name';
+						id: GtBehaviorCoderBehaviorNameId ].
 
-			aStep assert
-				label: 'Local toggle does not exist';
-				notExists;
-				id: GtPharoSuiteLocalToggleId;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Local toggle does not exist';
+						notExists;
+						id: GtPharoSuiteLocalToggleId ] ].
 
 	^ aScripter
 ]
@@ -213,16 +229,18 @@ GtPharoTestSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 	aScripter
 		substep: 'Close test case dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click class name';
-				id: GtBehaviorCoderBehaviorNameId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click class name';
+						id: GtBehaviorCoderBehaviorNameId ].
 
-			aStep assert
-				label: 'Remote toggle does not exist';
-				notExists;
-				id: GtPharoSuiteRemoteToggleId;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Remote toggle does not exist';
+						notExists;
+						id: GtPharoSuiteRemoteToggleId ] ].
 
 	^ aScripter
 ]
@@ -248,10 +266,11 @@ GtPharoTestSuiteExamples >> openTestCaseDropdown [
 	aScripter
 		substep: 'Display test dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on test button';
-				id: GtPharoTestSuiteShowButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on test button';
+						id: GtPharoTestSuiteShowButtonId ].
 
 			self
 				assertIn: aStep
@@ -281,10 +300,11 @@ GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithLocallyExecutedTestCases [
 	aScripter
 		substep: 'Display test case dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on test case button';
-				id: GtPharoTestSuiteShowButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on test case button';
+						id: GtPharoTestSuiteShowButtonId ].
 
 			self
 				assertIn: aStep
@@ -314,10 +334,11 @@ GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithRemoteToggleSelected [
 	aScripter
 		substep: 'Display test suite dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on test suite button';
-				id: GtPharoTestSuiteShowButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on test suite button';
+						id: GtPharoTestSuiteShowButtonId ].
 
 			self
 				assertIn: aStep
@@ -347,11 +368,12 @@ GtPharoTestSuiteExamples >> runTestCasesLocally [
 	aScripter
 		substep: 'Execute examples locally'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on run button';
-				onSpaceRoot;
-				id: GtPharoSuitePlayButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on run button';
+						onSpaceRoot;
+						id: GtPharoSuitePlayButtonId ].
 
 			self
 				assertIn: aStep
@@ -381,11 +403,12 @@ GtPharoTestSuiteExamples >> runTestCasesRemotely [
 	aScripter
 		substep: 'Execute test cases remotely'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on run button';
-				onSpaceRoot;
-				id: GtPharoSuitePlayButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on run button';
+						onSpaceRoot;
+						id: GtPharoSuitePlayButtonId ].
 
 			self
 				assertIn: aStep

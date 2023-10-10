@@ -8,13 +8,14 @@ Class {
 GtPharoMethodCoderModificationIndicatorExamples >> cleanMethodCoder [
 	<gtExample>
 	| aScripter |
-
 	aScripter := BlScripter new element: self methodCoderElement.
-	
-	aScripter assert
-		id: GtTextualCoderModificationIndicatorId;
-		value: [ :anIndicator | anIndicator visibility ] equals: [ BlVisibility gone ];
-		play.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				id: GtTextualCoderModificationIndicatorId;
+				value: [ :anIndicator | anIndicator visibility ]
+					equals: [ BlVisibility gone ] ].
 
 	^ aScripter
 ]
@@ -23,21 +24,24 @@ GtPharoMethodCoderModificationIndicatorExamples >> cleanMethodCoder [
 GtPharoMethodCoderModificationIndicatorExamples >> dirtyMethodCoder [
 	<gtExample>
 	| aScripter |
-	
 	aScripter := self cleanMethodCoder.
-	
-	aScripter do
-		onChildFromMessage: #textualCoderViewModel;
-		action: [ :aViewModel | aViewModel
-			sourceText: 'modified' asRopedText
-			from: aViewModel
-			synchronously: true ];
-		play.
 
-	aScripter assert
-		id: GtTextualCoderModificationIndicatorId;
-		value: [ :anIndicator | anIndicator visibility ] equals: [ BlVisibility visible ];
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				onChildFromMessage: #textualCoderViewModel;
+				action: [ :aViewModel | 
+					aViewModel
+						sourceText: 'modified' asRopedText
+						from: aViewModel
+						synchronously: true ] ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				id: GtTextualCoderModificationIndicatorId;
+				value: [ :anIndicator | anIndicator visibility ]
+					equals: [ BlVisibility visible ] ].
 
 	^ aScripter
 ]

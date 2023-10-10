@@ -8,19 +8,18 @@ Class {
 GtPharoStreamingMethodsCoderElementExamples >> forSuperclass [
 	<gtExample>
 	| aViewModel anElement aScripter |
-	
 	aViewModel := GtPharoStreamingMethodsCoderViewModelExamples new forSuperclass.
 
 	anElement := GtPharoStreamingMethodsCoderElement new
-		streamingCodersViewModel: aViewModel.
+			streamingCodersViewModel: aViewModel.
 
-	aScripter := BlScripter new
-		element: anElement.
+	aScripter := BlScripter new element: anElement.
 
-	aScripter assert
-		// (GtSourceCoderId indexed: 1);
-		exists;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 1);
+				exists ].
 
 	^ aScripter
 ]
@@ -29,32 +28,35 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclass [
 GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckOverridden [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self forSuperclass.
 
-	aScripter assert
-		// (GtSourceCoderId indexed: 1);
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 1);
+				id: GtMethodCoderOverridingOverriddenId;
+				value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ] ].
 
-	aScripter assert
-		// (GtSourceCoderId indexed: 2);
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 2);
+				id: GtMethodCoderOverridingOverriddenId;
+				value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ] ].
 
-	aScripter assert
-		// (GtSourceCoderId indexed: 3);
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ];
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 3);
+				id: GtMethodCoderOverridingOverriddenId;
+				value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ] ].
 
-	aScripter assert
-		// (GtSourceCoderId indexed: 4);
-		id: GtMethodCoderOverridingOverriddenId;
-		value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ];
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 4);
+				id: GtMethodCoderOverridingOverriddenId;
+				value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ] ].
 
 	^ aScripter
 ]
@@ -63,19 +65,20 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckOverridden [
 GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickFirstOverridden [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self forSuperclassCheckOverridden.
 
-	aScripter click
-		// (GtSourceCoderId indexed: 1);
-		id: GtMethodCoderOverridingOverriddenId;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 1);
+				id: GtMethodCoderOverridingOverriddenId ].
 
-	aScripter assert
-		onSpaceRoot;
-		id: GtMethodCoderOverriddenAmountId index: 1;
-		value: [ :aButton | aButton label asString ] equals: [ '1 method' ];
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: GtMethodCoderOverriddenAmountId index: 1;
+				value: [ :aButton | aButton label asString ] equals: [ '1 method' ] ].
 
 	^ aScripter
 ]
@@ -84,19 +87,20 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickFirstOverridden
 GtPharoStreamingMethodsCoderElementExamples >> forSuperclassClickSecondOverridden [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self forSuperclassCheckOverridden.
 
-	aScripter click
-		// (GtSourceCoderId indexed: 4);
-		id: GtMethodCoderOverridingOverriddenId;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				// (GtSourceCoderId indexed: 4);
+				id: GtMethodCoderOverridingOverriddenId ].
 
-	aScripter assert
-		onSpaceRoot;
-		id: GtMethodCoderOverriddenAmountId;
-		value: [ :aButton | aButton label asString ] equals: [ '1 method' ];
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: GtMethodCoderOverriddenAmountId;
+				value: [ :aButton | aButton label asString ] equals: [ '1 method' ] ].
 
 	^ aScripter
 ]

@@ -12,83 +12,92 @@ GtPharoExampleSuiteExamples >> assertIn: aParentStep exampleCountsOfAll: allCoun
 	aParentStep
 		checks: 'Assert displayed example results'
 		do: [ :aStep | 
-			aStep assert
-				label: 'All examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Success examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = successCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleSuccessState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Failure examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleFailureState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Error examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleErrorState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play.
-				
-			aStep assert
-				label: 'Not executed examples label';
-				satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
-				onSpaceRoot;
-				id: (GtPharoSuiteStateId new state: GtFilterExampleNotExecutedState uniqueInstance);
-				id: GtPharoSuiteStateAmountLabelId;
-				play ]
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'All examples label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = allCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtFilterExampleAllState uniqueInstance);
+						id: GtPharoSuiteStateAmountLabelId ].
+
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Success examples label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = successCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtFilterExampleSuccessState uniqueInstance);
+						id: GtPharoSuiteStateAmountLabelId ].
+
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Failure examples label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = failureCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtFilterExampleFailureState uniqueInstance);
+						id: GtPharoSuiteStateAmountLabelId ].
+
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Error examples label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = errorCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtFilterExampleErrorState uniqueInstance);
+						id: GtPharoSuiteStateAmountLabelId ].
+
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Not executed examples label';
+						satisfies: [ :aStateAmountLabel | aStateAmountLabel text asString = notExecutedCount asString ];
+						onSpaceRoot;
+						id: (GtPharoSuiteStateId new state: GtFilterExampleNotExecutedState uniqueInstance);
+						id: GtPharoSuiteStateAmountLabelId ] ]
 ]
 
 { #category : #'examples - example suite' }
 GtPharoExampleSuiteExamples >> assertIn: aStep localToggleActive: localActivated playEnabled: playIsEnabled withLabel: playLabel [
 	<gtExample>
-	aStep assert
-		label: ('Play button is {1} with label "{2}"'
-				format: {playIsEnabled ifTrue: [ 'enabled' ] ifFalse: [ 'disabled' ].
-						playLabel});
-		satisfies: [ :aPlayButton | 
-			aPlayButton isEnabled = playIsEnabled
-				and: [ aPlayButton label asString = playLabel ] ];
-		onSpaceRoot;
-		id: GtPharoSuitePlayButtonId;
-		play.
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Play button is {1} with label "{2}"'
+						format: {playIsEnabled ifTrue: [ 'enabled' ] ifFalse: [ 'disabled' ].
+								playLabel});
+				satisfies: [ :aPlayButton | 
+					aPlayButton isEnabled = playIsEnabled
+						and: [ aPlayButton label asString = playLabel ] ];
+				onSpaceRoot;
+				id: GtPharoSuitePlayButtonId ].
 
-	aStep assert
-		label: ('Local toggle is enabled and {1}'
-				format: {localActivated ifTrue: [ 'actived' ] ifFalse: [ 'inactivated' ]});
-		satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated ] ];
-		onSpaceRoot;
-		id: GtPharoSuiteLocalToggleId;
-		play.
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Local toggle is enabled and {1}'
+						format: {localActivated ifTrue: [ 'actived' ] ifFalse: [ 'inactivated' ]});
+				satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated ] ];
+				onSpaceRoot;
+				id: GtPharoSuiteLocalToggleId ].
 
-	aStep assert
-		label: ('Remote toggle is enabled and {1}'
-				format: {localActivated ifFalse: [ 'actived' ] ifTrue: [ 'inactivated' ]});
-		satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated not ] ];
-		onSpaceRoot;
-		id: GtPharoSuiteRemoteToggleId;
-		play.
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Remote toggle is enabled and {1}'
+						format: {localActivated ifFalse: [ 'actived' ] ifTrue: [ 'inactivated' ]});
+				satisfies: [ :aToggle | aToggle isEnabled and: [ aToggle isActivated = localActivated not ] ];
+				onSpaceRoot;
+				id: GtPharoSuiteRemoteToggleId ].
 
-	aStep assert
-		label: ('Suite view model with {1} executor'
-				format: {localActivated ifTrue: [ 'local' ] ifFalse: [ 'remote' ]});
-		satisfies: [ :aScripter | (aScripter userData at: #suiteViewModel) isLocal = localActivated ];
-		onScripter;
-		play
+	aStep
+		assertStep: [ :s | 
+			s
+				label: ('Suite view model with {1} executor'
+						format: {localActivated ifTrue: [ 'local' ] ifFalse: [ 'remote' ]});
+				satisfies: [ :aScripter | (aScripter userData at: #suiteViewModel) isLocal = localActivated ];
+				onScripter ]
 ]
 
 { #category : #'examples - example suite' }
@@ -111,23 +120,26 @@ GtPharoExampleSuiteExamples >> classCoderWithExampleMethods [
 	aScripter
 		checks: 'Initial state assertions'
 		do: [ :aStep | 
-			aStep assert
-				label: 'Assert example button exists';
-				exists;
-				id: GtPharoExampleSuiteShowButtonId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert example button exists';
+						exists;
+						id: GtPharoExampleSuiteShowButtonId ].
 
-			aStep assert
-				label: 'Example button is enabled and visible';
-				satisfies: [ :aButton | aButton isEnabled and: [ aButton visibility = BlVisibility visible ] ];
-				id: GtPharoExampleSuiteShowButtonId;
-				play.
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Example button is enabled and visible';
+						satisfies: [ :aButton | aButton isEnabled and: [ aButton visibility = BlVisibility visible ] ];
+						id: GtPharoExampleSuiteShowButtonId ].
 
-			aStep assert
-				label: 'Test button is gone';
-				satisfies: [ :aButton | aButton visibility = BlVisibility gone ];
-				id: GtPharoTestSuiteShowButtonId;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Test button is gone';
+						satisfies: [ :aButton | aButton visibility = BlVisibility gone ];
+						id: GtPharoTestSuiteShowButtonId ] ].
 
 	^ aScripter
 ]
@@ -147,11 +159,12 @@ GtPharoExampleSuiteExamples >> clickOnRemoteToggle [
 	aScripter
 		substep: 'Choose remote execution'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on remote toggle';
-				onSpaceRoot;
-				id: GtPharoSuiteRemoteToggleId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on remote toggle';
+						onSpaceRoot;
+						id: GtPharoSuiteRemoteToggleId ].
 
 			self
 				assertIn: aStep
@@ -179,16 +192,18 @@ GtPharoExampleSuiteExamples >> closeDropdownWithLocallyExecutedExamples [
 	aScripter
 		substep: 'Close example dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click class name';
-				id: GtBehaviorCoderBehaviorNameId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click class name';
+						id: GtBehaviorCoderBehaviorNameId ].
 
-			aStep assert
-				label: 'Local toggle does not exist';
-				notExists;
-				id: GtPharoSuiteLocalToggleId;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Local toggle does not exist';
+						notExists;
+						id: GtPharoSuiteLocalToggleId ] ].
 
 	^ aScripter
 ]
@@ -202,16 +217,18 @@ GtPharoExampleSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 	aScripter
 		substep: 'Close example dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click class name';
-				id: GtBehaviorCoderBehaviorNameId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click class name';
+						id: GtBehaviorCoderBehaviorNameId ].
 
-			aStep assert
-				label: 'Remote toggle does not exist';
-				notExists;
-				id: GtPharoSuiteRemoteToggleId;
-				play ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Remote toggle does not exist';
+						notExists;
+						id: GtPharoSuiteRemoteToggleId ] ].
 
 	^ aScripter
 ]
@@ -237,10 +254,11 @@ GtPharoExampleSuiteExamples >> openExampleDropdown [
 	aScripter
 		substep: 'Display example dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on example button';
-				id: GtPharoExampleSuiteShowButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on example button';
+						id: GtPharoExampleSuiteShowButtonId ].
 
 			self
 				assertIn: aStep
@@ -268,10 +286,11 @@ GtPharoExampleSuiteExamples >> reopenExampleDropdownWithLocallyExecutedExamples 
 	aScripter
 		substep: 'Display example Dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on example button';
-				id: GtPharoExampleSuiteShowButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on example button';
+						id: GtPharoExampleSuiteShowButtonId ].
 
 			self
 				assertIn: aStep
@@ -300,10 +319,11 @@ GtPharoExampleSuiteExamples >> reopenExampleDropdownWithRemoteToggleSelected [
 	aScripter
 		substep: 'Display example dropdown'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on example button';
-				id: GtPharoExampleSuiteShowButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on example button';
+						id: GtPharoExampleSuiteShowButtonId ].
 
 			self
 				assertIn: aStep
@@ -331,11 +351,12 @@ GtPharoExampleSuiteExamples >> runExamplesLocally [
 	aScripter
 		substep: 'Execute examples locally'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on run button';
-				onSpaceRoot;
-				id: GtPharoSuitePlayButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on run button';
+						onSpaceRoot;
+						id: GtPharoSuitePlayButtonId ].
 
 			self
 				assertIn: aStep
@@ -364,11 +385,12 @@ GtPharoExampleSuiteExamples >> runExamplesRemotely [
 	aScripter
 		substep: 'Execute examples remotely'
 		do: [ :aStep | 
-			aStep click
-				label: 'Click on run button';
-				onSpaceRoot;
-				id: GtPharoSuitePlayButtonId;
-				play.
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on run button';
+						onSpaceRoot;
+						id: GtPharoSuitePlayButtonId ].
 
 			self
 				assertIn: aStep

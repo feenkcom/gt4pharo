@@ -577,59 +577,66 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ GtPharoSnippetCoder forSource: 'a := 1. a + a' ].
-	aScripter click
-		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				id: GtSourceCoderEditorId ].
 
-	aScripter do
-		label: 'Move cursor to variable';
-		action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: 0 ];
-		id: GtSourceCoderEditorId;
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Move cursor to variable';
+				action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: 0 ];
+				id: GtSourceCoderEditorId ].
 
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
 		play.
 
-	aScripter assert
-		label: 'Assert rename editor exists';
-		exists;
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor exists';
+				exists;
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
 
-	aScripter assert
-		label: 'Assert rename editor attribute';
-		value: [ :aCoderEditor | 
-				| anInterval |
-				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
-					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-				anInterval ]
-			equals: [ :aCoderEditor | 1 to: 1 ];
-		id: GtSourceCoderEditorId;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 1 to: 1 ];
+				id: GtSourceCoderEditorId ].
 
-	aScripter assert
-		label: 'Assert source editor is not focused';
-		satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
-		id: GtSourceCoderEditorId;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor is not focused';
+				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+				id: GtSourceCoderEditorId ].
 
-	aScripter assert
-		label: 'Assert source editor has focus';
-		satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
-		id: GtSourceCoderEditorId;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor has focus';
+				satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
+				id: GtSourceCoderEditorId ].
 
-	aScripter assert
-		label: 'Assert method name editor source code';
-		value: [ :aNameEditor | aNameEditor text asString ] equals: 'a';
-		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRenameEditor;
-		play.
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert method name editor source code';
+				value: [ :aNameEditor | aNameEditor text asString ] equals: 'a';
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
 
 	aScripter
 		substep: 'Enter new name'

@@ -82,10 +82,11 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 	| aScripter |
 	aScripter := self elementWithExtensionPackageTagSelection.
 
-	aScripter do
-		label: 'Select  Class';
-		block: [ :anElement | anElement navigationModel selectClass: ByteString ];
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select  Class';
+				block: [ :anElement | anElement navigationModel selectClass: ByteString ] ].
 
 	aScripter checks
 		label: 'Check Class and Package Tag Selection';
@@ -94,9 +95,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 				assertSelectionOfPackage: nil
 				tag: self extensionTag
 				class: ByteString
-				inElement: aScripter ].
-				
-	"Should only contain the instance label and the extension methods protocol"
+				inElement: aScripter ].	"Should only contain the instance label and the extension methods protocol"
 	aScripter checks
 		label: 'Check list count is correct';
 		satisfies: [ :anElement | anElement methodProtocolsList viewModel entityCount = 2 ];
@@ -114,10 +113,11 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 	| aScripter tag |
 	aScripter := self scripterOnElementNavigationModelInSpace.
 	tag := self extensionTag.
-	aScripter do
-		label: 'Select Package Tag';
-		block: [ :anElement | anElement navigationModel selectPackageTag: tag ];
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select Package Tag';
+				block: [ :anElement | anElement navigationModel selectPackageTag: tag ] ].
 
 	aScripter checks
 		label: 'Check Package Tag Selection';
@@ -201,10 +201,11 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSele
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterOnElementNavigationModelInSpace.
-	aScripter do
-		label: 'Select Package Tag';
-		block: [ :anElement | anElement navigationModel selectPackageTag: self packageTag ];
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select Package Tag';
+				block: [ :anElement | anElement navigationModel selectPackageTag: self packageTag ] ].
 
 	aScripter checks
 		label: 'Check Package Tag Selection';
@@ -228,10 +229,11 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterOnElementNavigationModelInSpace.
-	aScripter do
-		label: 'Select Package';
-		block: [ :anElement | anElement navigationModel selectPackage: self packageWithoutTagsAndExtensions ];
-		play.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select Package';
+				block: [ :anElement | anElement navigationModel selectPackage: self packageWithoutTagsAndExtensions ] ].
 
 	aScripter checks
 		label: 'Check Package Selection';

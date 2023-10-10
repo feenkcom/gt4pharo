@@ -31,10 +31,11 @@ GtTraitCreationFormExample >> scripterOnSimpleForm [
 	| scripter |
 	scripter := self scripterWithModel: [ self simpleForm ].
 
-	scripter check
-		label: 'Check save button is disabled';
-		satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ];
-		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button is disabled';
+				satisfies: [ :aForm | ((aForm childNamed: #toolbar) childAt: 1) isEnabled not ] ].
 
 	^ scripter
 ]
@@ -46,27 +47,33 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 	scripter := self scripterWithSlotsNavigated.
 	aDescription := scripter model slotsDescription.
 
-	scripter type
-		label: 'Fill first slot';
-		text: 'abc';
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill first slot';
+				text: 'abc' ].
 
-	scripter keyPress
-		label: 'Tab to next slot';
-		key: BlKeyboardKey tab;
-		play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Tab to next slot';
+				key: BlKeyboardKey tab ].
 
-	scripter type
-		label: 'Fill second slot';
-		text: 'bcd';
-		play.
-	
-	scripter assert
-		label: 'Check that slots are set';
-		satisfies: [ :aFrame | 
-			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-				currentValue = {'abc' . 'bcd'} ];
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill second slot';
+				text: 'bcd' ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that slots are set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue
+						= {'abc'.
+								'bcd'} ] ].
 
 	^ scripter
 ]
@@ -79,15 +86,17 @@ GtTraitCreationFormExample >> scripterWithSlotsNavigated [
 	aDescription := scripter model packageAndTagDescription.
 	anElementId := GtMagritteFieldElementId new description: aDescription.
 
-	scripter keyPress
-		label: 'Tab to tag editor';
-		key: BlKeyboardKey tab;
-		play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Tab to tag editor';
+				key: BlKeyboardKey tab ].
 
-	scripter keyPress
-		label: 'Tab to slots';
-		key: BlKeyboardKey tab;
-		play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Tab to slots';
+				key: BlKeyboardKey tab ].
 
 	^ scripter
 ]
@@ -99,11 +108,12 @@ GtTraitCreationFormExample >> scripterWithTraitAccepted [
 	| scripter createdTrait |
 	scripter := self scripterWithSlotsFilled.
 
-	scripter click
-		label: 'Click save button';
-		// #toolbar;
-		onChildAt: 1;
-		play.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
 
 	createdTrait := Smalltalk classNamed: self exampleTraitName.
 	self assert: createdTrait isNotNil.
@@ -129,19 +139,21 @@ GtTraitCreationFormExample >> scripterWithTraitNameAndPackageFilled [
 		onChildAt: 1;
 		play.
 
-	scripter type
-		label: 'Fill package name';
-		text: self examplePackageName;
-		// anElementId;
-		onChildAt: 1;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill package name';
+				text: self examplePackageName;
+				// anElementId;
+				onChildAt: 1 ].
 
-	scripter assert
-		label: 'Check that package is set';
-		satisfies: [ :aFrame | 
-			((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-				currentValue packageName = self examplePackageName ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue packageName = self examplePackageName ] ].
 
 	^ scripter
 ]
@@ -159,18 +171,20 @@ GtTraitCreationFormExample >> scripterWithTraitNameFilled [
 		// anElementId;
 		play.
 
-	scripter type
-		label: 'Fill trait name';
-		text: self exampleTraitName;
-		// anElementId;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill trait name';
+				text: self exampleTraitName;
+				// anElementId ].
 
-	scripter assert
-		label: 'Assert trait name';
-		value: [ :anEditor | anEditor text asString ]
-			equals: [ self exampleTraitName ];
-		// anElementId;
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert trait name';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ self exampleTraitName ];
+				// anElementId ].
 
 	^ scripter
 ]
@@ -188,16 +202,18 @@ GtTraitCreationFormExample >> scripterWithTraitNameFilledValidationFailed [
 		// anElementId;
 		play.
 
-	scripter type
-		label: 'Fill trait name';
-		text: 'Object';
-		// anElementId;
-		play.
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill trait name';
+				text: 'Object';
+				// anElementId ].
 
-	scripter assert
-		label: 'Check that trait name is invalid';
-		satisfies: [ :aFrame | ((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil isValid not ];
-		play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that trait name is invalid';
+				satisfies: [ :aFrame | ((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil isValid not ] ].
 
 	^ scripter
 ]
