@@ -26,7 +26,9 @@ GtPharoSnippetCoderViewModel >> compositeVariableBindings [
 	theBindings := super compositeVariableBindings.
 	theBindings addBindings: sharedBindings.
 	
-	context ifNotNil: [ :aContext | theBindings addBindings: (GtContextVariablesBindings new context: aContext) ].
+	context ifNotNil: [ :aContext | 
+		theBindings addBindings: (GtContextVariablesBindings new 
+			context: aContext) ].
 	
 	^ theBindings
 ]
