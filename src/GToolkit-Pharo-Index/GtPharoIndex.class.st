@@ -181,11 +181,8 @@ GtPharoIndex >> basicSubscribe [
 		when: ClassRenamed
 			send: #classRenamed:
 			to: self;
-		when: ClassModifiedClassDefinition
-			send: #classModifiedClassDefinition:
-			to: self;
-		when: ClassModificationApplied
-			send: #classModified:
+		when: GtClassRecompiled
+			send: #classRecompiled:
 			to: self
 ]
 
@@ -234,27 +231,8 @@ GtPharoIndex >> classAdded: anAnnouncement [
 ]
 
 { #category : #private }
-GtPharoIndex >> classModified: anAnnouncement [
-	| class |
-	class := anAnnouncement classAffected.
-	shouldRecomputeSubclasses
-		ifTrue: [ class withAllSubclassesDo: [ :each | self recompileMethodsIn: each ] ]
-		ifFalse: [ self recompileMethodsIn: class ]
-]
-
-{ #category : #accessing }
-GtPharoIndex >> classModifiedClassDefinition: anAnnouncement [
-	"Adding class variables or pool variables only announce the class as being changed, 
-	but the subclasses are recompiled, so we need to know if we should also recache the 
-	subclasses when we get the modified event."
-
-	| oldClass newClass |
-	oldClass := anAnnouncement oldClassDefinition.
-	newClass := anAnnouncement newClassDefinition.
-	shouldRecomputeSubclasses := newClass isClassSide not
-			and: [ oldClass instVarNames = newClass instVarNames
-					and: [ oldClass classVarNames ~= newClass classVarNames
-							or: [ oldClass sharedPools ~= newClass sharedPools ] ] ]
+GtPharoIndex >> classRecompiled: anAnnouncement [
+	self recompileMethodsIn: anAnnouncement classAffected
 ]
 
 { #category : #private }
@@ -372,8 +350,7 @@ GtPharoIndex >> initialize [
 	selectorCache := GtReferencesAndImplementersPrefixTree new.
 	globalCache := GtReferencesPrefixTree new.
 	selectorWordCache := GtNamesPrefixTree new.
-	classWordCache := GtNamesPrefixTree new.
-	shouldRecomputeSubclasses := false
+	classWordCache := GtNamesPrefixTree new
 ]
 
 { #category : #testing }
