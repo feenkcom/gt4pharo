@@ -119,6 +119,11 @@ GtReferencesAndImplementersPrefixTree >> moveDataTo: newChild [
 	implementers := nil
 ]
 
+{ #category : #accessing }
+GtReferencesAndImplementersPrefixTree >> notInstalledMethods [
+	^ super notInstalledMethods, ((self gtImplementersAreInstalled: GtNoAdvice new) result contents)
+]
+
 { #category : #removing }
 GtReferencesAndImplementersPrefixTree >> removeImplementer: aMethod [
 	| index |
