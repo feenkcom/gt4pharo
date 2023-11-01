@@ -162,14 +162,6 @@ GtPharoBehaviorCoderElement >> buildDefinitionElement [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorCoderElement >> buildIconForBehaviour [
-	[ self behavior iconNamed: self behavior systemIconName ] 
-		on: Error
-		do: [ :error | 
-			Smalltalk ui icons iconNamed: #smallWarningIcon ]
-]
-
-{ #category : #accessing }
 GtPharoBehaviorCoderElement >> classCoder [
 	^ behaviorCoderViewModel classCoder
 ]

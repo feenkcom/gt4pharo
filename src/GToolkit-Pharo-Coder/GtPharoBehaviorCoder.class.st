@@ -48,6 +48,19 @@ GtPharoBehaviorCoder >> behavior [
 ]
 
 { #category : #accessing }
+GtPharoBehaviorCoder >> classIconAddOnsInto: coderAddOns for: aViewModel [ 
+	<gtAstCoderAddOns: 10>
+	
+	coderAddOns
+		addPreview: 'Class Icon'
+		stencil: [ 
+			([ aViewModel behavior iconNamed: self behavior systemIconName ] 
+				on: Error
+				do: [ :error | 
+					Smalltalk ui icons iconNamed: #smallWarningIcon ]) asElement ]
+]
+
+{ #category : #accessing }
 GtPharoBehaviorCoder >> coderName [
 	^ self theClass name
 ]
@@ -102,6 +115,25 @@ GtPharoBehaviorCoder >> initialize [
 	super initialize.
 
 	hasObject := false
+]
+
+{ #category : #initialize }
+GtPharoBehaviorCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
+
+	super
+		initializeAddOns: addOns
+		viewModel: aGtPharoMethodCoderViewModel.
+
+	addOns
+		addDropDownWithPreviewAction: 'Remove' translated
+		icon: BrGlamorousVectorIcons remove
+		action: [ :aButtonElement :aButtonModel :anEvent | 
+			self removeClass ]
+		stencil: [ :element | 
+			GtPharoRemoveClassPreviewStencil new
+				classToRemove: self theClass;
+				anElement: element;
+				create  ]
 ]
 
 { #category : #initialize }

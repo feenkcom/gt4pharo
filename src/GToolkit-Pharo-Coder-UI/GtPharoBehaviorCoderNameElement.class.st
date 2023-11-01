@@ -11,6 +11,14 @@ Class {
 GtPharoBehaviorCoderNameElement >> actOnCoderClassChangedFor: anAnnouncements [
 ]
 
+{ #category : #'building - ui' }
+GtPharoBehaviorCoderNameElement >> addAddOnsElementIn: aContainer [ 
+	| addonActionsElement |
+	addonActionsElement := self newAddonActionsElement.
+	addonActionsElement coderViewModel: self coderViewModel.
+	aContainer addChild: addonActionsElement
+]
+
 { #category : #accessing }
 GtPharoBehaviorCoderNameElement >> addAdviceDropDownIn: aContainer [ 
 	behaviorCoderViewModel behavior
@@ -24,13 +32,6 @@ GtPharoBehaviorCoderNameElement >> addAdviceDropDownIn: aContainer [
 						aContainer enqueueTask: (BlTaskAction new
 							action: [ aContainer addChild: (self 
 								buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ]) await ]
-]
-
-{ #category : #accessing }
-GtPharoBehaviorCoderNameElement >> addRemoveClassButtonIn: aContainer [ 
-	| removeClassButton |
-	removeClassButton := self buildRemoveClassButton.
-	aContainer addChild: removeClassButton.
 ]
 
 { #category : #accessing }
@@ -107,7 +108,7 @@ GtPharoBehaviorCoderNameElement >> buildContent [
 
 	nameContainer addChild: classNameEditor.
 	
-	self addRemoveClassButtonIn: nameContainer.
+	self addAddOnsElementIn: nameContainer.
 	self addAdviceDropDownIn: nameContainer.
 
 	^ nameContainer
@@ -145,18 +146,6 @@ GtPharoBehaviorCoderNameElement >> buildRefactoringPreviewButtonForNameEditor: a
 				do: [ :anEvent | 
 					aClassNameEditor text asString trimBoth asSymbol = self coderModel name
 						ifTrue: [ aContainer removeChild: anEvent currentTarget ] ]
-]
-
-{ #category : #'building - ui' }
-GtPharoBehaviorCoderNameElement >> buildRemoveClassButton [
-	^ GtPreviewChangeButton new
-			icon: BrGlamorousVectorIcons remove;
-			label: 'Remove';
-			changeAction: [ self removeClass ];
-			changeStencil: [ GtPharoRemoveClassPreviewStencil new
-					classToRemove: self coderModel theClass;
-					anElement: self;
-					create ]
 ]
 
 { #category : #accessing }
@@ -204,6 +193,13 @@ GtPharoBehaviorCoderNameElement >> instalCompletionControllerOnNameEditor: aClas
 		showOnTextModification: false.
 ]
 
+{ #category : #accessing }
+GtPharoBehaviorCoderNameElement >> newAddonActionsElement [
+	^ GtBehaviorCoderActionsElement new
+		id: #actions;
+		yourself
+]
+
 { #category : #shortcuts }
 GtPharoBehaviorCoderNameElement >> registerShortcutsForNameEditor: aClassNameEditor [ 
 	aClassNameEditor
@@ -219,20 +215,6 @@ GtPharoBehaviorCoderNameElement >> registerShortcutsForNameEditor: aClassNameEdi
 		whenKey: BlKeyCombination primaryC
 			labelDo: [ :aShortcutEvent | 
 				Clipboard clipboardText: self behavior name asString ]
-]
-
-{ #category : #actions }
-GtPharoBehaviorCoderNameElement >> removeClass [
-	| aClassCoder coder event |
-	
-	aClassCoder := behaviorCoderViewModel coder.
-	
-	coder := aClassCoder packageTag
-		ifNotNil: [ :tag | GtPharoPackageTagCoder forPackageTag: tag ]
-		ifNil: [ GtPharoPackageCoder forPackage: aClassCoder package ].
-	aClassCoder removeClass.
-	event := GtCoderToReplace new coder: coder.
-	self fireEvent: event
 ]
 
 { #category : #subscriptions }

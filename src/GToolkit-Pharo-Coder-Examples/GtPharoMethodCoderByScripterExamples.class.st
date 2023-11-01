@@ -422,7 +422,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 					s
 						label: 'Assert number of main actions';
 						childrenCount: aMainActionsCount;
-						onBreadthFirstChildOfClass: GtCoderActionsElement;
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
 						onChildAt: 1 ].
 
 			aStep
@@ -430,7 +430,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 					s
 						label: 'Assert number of addons actions';
 						childrenCount: anAddonsActionsCount;
-						onBreadthFirstChildOfClass: GtCoderActionsElement;
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
 						onChildAt: 3 ] ]
 ]
 
