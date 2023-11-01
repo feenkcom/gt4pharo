@@ -109,140 +109,20 @@ GtPharoBehaviorCoderElement >> behavior [
 	^ self coderViewModel coder behavior
 ]
 
-{ #category : #callbacks }
-GtPharoBehaviorCoderElement >> browseClassReferences [
-	| classCoder |
-	classCoder := behaviorCoderViewModel coder.
-
-	classCoder theClass
-		ifNotNil: [ :class | self phlow spawnObject: class gtReferences ]
-]
-
 { #category : #'building ui' }
-GtPharoBehaviorCoderElement >> buildAdviceDropDownFor: aContainer [
-	behaviorCoderViewModel behavior
-		ifNotNil: [ :class | 
-			| adviceStream |
-			adviceStream := ((GtAdvice adviceForClass: class) asAsyncStream
-					select: [ :each | each hasAdvice ]) cached.
-			(adviceStream asyncSimilarCopy hasNext
-				then: [ :bool | 
-					bool
-						ifTrue: [ aContainer
-								enqueueTask: (BlTaskAction new
-										action: [ aContainer addChild: (self buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ])
-				await ]
-]
+GtPharoBehaviorCoderElement >> buildClassHeader [
+	| headerContainer |
 
-{ #category : #'building ui' }
-GtPharoBehaviorCoderElement >> buildAdviceListFor: anAsyncStream [
-	| button dropDownAptitude |
-	button := GtFixItButton new.
-	button beTinySize.
-	button label: 'Advice'.
-	dropDownAptitude := BrGlamorousWithDropdownAptitude
-			handle: [ | dropdownButton |
-				dropdownButton := BrButton new.
-				dropdownButton beTinySize.
-				dropdownButton
-					aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
-							- BrGlamorousButtonExteriorAptitude.
-				dropdownButton icon: BrGlamorousVectorIcons repair.
-				dropdownButton ]
-			content: [ | element |
-				element := BrSimpleList new.
-				element padding: (BlInsets all: 3).
-				element vFitContentLimited.
-				element hExact: 300.
-				element
-					itemsProvider: (BrStreamItemsProvider new
-							preloadAmount: 1;
-							stream: anAsyncStream asyncSimilarCopy);
-					stencil: [ :eachImage | eachImage buildElementFor: button ].
-				element ].
-	button aptitude: BrGlamorousButtonWithIconAptitude + dropDownAptitude.
-	button icon: BrGlamorousVectorIcons repair.
-	button margin: (BlInsets left: 5).
-	^ button
-]
+	headerContainer := BrHorizontalPane new
+		hMatchParent;
+		alignCenterLeft;
+		vFitContent.
 
-{ #category : #'building ui' }
-GtPharoBehaviorCoderElement >> buildClassLabel [
-	| classCoder aClassNameEditor aContainer aPreviewButton removeClassButton |
-	classCoder := behaviorCoderViewModel coder.
+	headerContainer addChild: (GtPharoBehaviorCoderNameElement new 
+		coderViewModel: behaviorCoderViewModel).
+	headerContainer addChild: self toolbarElement.
 
-	aContainer := BrHorizontalPane new
-			hMatchParent;
-			alignCenterLeft;
-			vFitContent.
-
-	aClassNameEditor := BrEditableLabel new
-			aptitude: (BrGlamorousEditableLabelAptitude new
-					defaultBackground: Color transparent;
-					glamorousCodeFont;
-					bold;
-					fontSize: 18)
-					+ (BrGlamorousWithContextMenuAptitude
-							content: [ BrGlamorousSimpleContextMenuContent new items: self contextMenuItemsForClass ]);
-			inputFilter: BrTextEditorClassNameInputFilter new;
-			text: classCoder name;
-			margin: (BlInsets all: 0);
-			id: GtBehaviorCoderBehaviorNameId;
-			whenKey: BlKeyCombination primaryN
-				labelDo: [ :aShortcutEvent | self browseClassReferences ];
-			whenKey: BlKeyCombination primaryB
-				labelDo: [ :aShortcutEvent | self phlow spawnTool: (GtClassCoderTool observedClass: self behavior) ];
-			whenKey: BlKeyCombination primaryG
-				labelDo: [ :aShortcutEvent | self phlow spawnObject: self behavior ];
-			whenKey: BlKeyCombination primaryR
-				labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
-			whenKey: BlKeyCombination primaryC
-				labelDo: [ :aShortcutEvent | Clipboard clipboardText: self behavior name asString ].
-
-	(GtCompletionController
-		on: aClassNameEditor
-		strategy: GtClassesCompletionStrategy new) install
-		showOnTextModification: false.
-
-	aPreviewButton := GtRefactoringsPreviewButton new
-			id: GtBehaviorCoderBehaviorNameApplyPreviewId;
-			margin: (BlInsets left: 5);
-			refactorings: [ {GtRBRenameClassRefactoring
-						model: (RBClassModelFactory rbNamespace
-								onEnvironment: RBBrowserEnvironment new)
-						rename: classCoder theClass name
-						to: aClassNameEditor text asString} ];
-			cancelBlock: [ aClassNameEditor text: classCoder theClass name ];
-			when: GtRefactoringsAppliedEvent
-				do: [ :anEvent | 
-					aClassNameEditor text asString trimBoth asSymbol = classCoder name
-						ifTrue: [ aContainer removeChild: anEvent currentTarget ] ].
-
-	aClassNameEditor editor
-		when: BrTextEditorModifiedEvent
-		do: [ :anEvent | 
-			anEvent text asString trimBoth asSymbol = classCoder name
-				ifTrue: [ aContainer removeChild: aPreviewButton ]
-				ifFalse: [ (aContainer hasChild: aPreviewButton)
-						ifFalse: [ aContainer addChild: aPreviewButton after: aClassNameEditor ] ] ].
-
-	removeClassButton := GtPreviewChangeButton new
-			icon: BrGlamorousVectorIcons remove;
-			label: 'Remove';
-			changeAction: [ self removeClass ];
-			changeStencil: [ GtPharoRemoveClassPreviewStencil new
-					classToRemove: classCoder theClass;
-					anElement: self;
-					create ].
-
-	aContainer addChild: aClassNameEditor.
-	aContainer addChild: removeClassButton.
-
-	self buildAdviceDropDownFor: aContainer.
-
-	aContainer addChild: self toolbarElement.
-
-	^ aContainer
+	^ headerContainer
 ]
 
 { #category : #'building ui' }
@@ -255,7 +135,7 @@ GtPharoBehaviorCoderElement >> buildContentPane [
 		c vertical matchParent ].
 	contentPane padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
 	contentPane addChild: self makeLabel.
-	contentPane addChild: self buildClassLabel.
+	contentPane addChild: self buildClassHeader.
 	contentPane addChild: self buildDefinitionElement.
 	contentPane addChild: self buildContentTabs.
 
@@ -313,33 +193,12 @@ GtPharoBehaviorCoderElement >> coderViewModel [
 
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> coderViewModel: aGtBehaviorCoderViewModel [
-	behaviorCoderViewModel
-		ifNotNil: [ :aPreviousCoderViewModel | aPreviousCoderViewModel unsubscribe: self ].
+	self unsubscribeFromCoderViewModel.
 
 	behaviorCoderViewModel := aGtBehaviorCoderViewModel.
-	behaviorCoderViewModel coder weak
-		when: GtCoderPackageUpdatedAnnouncement
-			send: #actOnPackageUpdated:
-			to: self;
-		when: GtClassCoderMethodNavigationAnnouncement
-			send: #actOnSelectMethod:
-			to: self;
-		when: GtClassCoderMethodProtocolNavigationAnnouncement
-			send: #actOnMethodProtocol:
-			to: self;
-		when: GtClassCoderSlotNavigationAnnouncement
-			send: #actOnSlot:
-			to: self.
+	self subscribeToCoderViewModel.
 
-	container ifNotNil: #removeFromParent.
-	container := self buildContentPane.
-	self addChildFirst: container
-]
-
-{ #category : #'building ui' }
-GtPharoBehaviorCoderElement >> contextMenuItemsForClass [
-	^ {'Browse references' -> [ :e | self browseClassReferences ].
-		'Rename' -> [ :e | e switchToEditor ]}
+	self updateContent.
 ]
 
 { #category : #private }
@@ -402,24 +261,11 @@ GtPharoBehaviorCoderElement >> makeLabel [
 		padding: (BlInsets left: 5)
 ]
 
-{ #category : #actions }
-GtPharoBehaviorCoderElement >> removeClass [
-	| aClassCoder coder event |
-	
-	aClassCoder := behaviorCoderViewModel coder.
-	
-	coder := aClassCoder packageTag
-		ifNotNil: [ :tag | GtPharoPackageTagCoder forPackageTag: tag ]
-		ifNil: [ GtPharoPackageCoder forPackage: aClassCoder package ].
-	aClassCoder removeClass.
-	event := GtCoderToReplace new coder: coder.
-	self fireEvent: event
-]
-
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> removeContentTabs [
 	contentTabs
-		ifNotNil: [ contentPane removeChild: contentTabs.
+		ifNotNil: [ 
+			contentPane removeChild: contentTabs.
 			contentTabs := nil ]
 ]
 
@@ -441,4 +287,36 @@ GtPharoBehaviorCoderElement >> streamingMethodCodersElement [
 		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
 		ifFound: #yourself
 		ifNone: [ nil ]
+]
+
+{ #category : #subscriptions }
+GtPharoBehaviorCoderElement >> subscribeToCoderViewModel [	
+	behaviorCoderViewModel coder weak
+		when: GtCoderPackageUpdatedAnnouncement
+			send: #actOnPackageUpdated:
+			to: self;
+		when: GtClassCoderMethodNavigationAnnouncement
+			send: #actOnSelectMethod:
+			to: self;
+		when: GtClassCoderMethodProtocolNavigationAnnouncement
+			send: #actOnMethodProtocol:
+			to: self;
+		when: GtClassCoderSlotNavigationAnnouncement
+			send: #actOnSlot:
+			to: self.
+]
+
+{ #category : #subscriptions }
+GtPharoBehaviorCoderElement >> unsubscribeFromCoderViewModel [	
+	behaviorCoderViewModel
+		ifNotNil: [ :aPreviousCoderViewModel | 
+			aPreviousCoderViewModel unsubscribe: self ].
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderElement >> updateContent [
+	container ifNotNil: [ :anElement | anElement removeFromParent].
+	
+	container := self buildContentPane.
+	self addChildFirst: container
 ]
