@@ -133,6 +133,11 @@ GtReferencesPrefixTree >> moveDataTo: newChild [
 	references := nil
 ]
 
+{ #category : #accessing }
+GtReferencesPrefixTree >> notInstalledMethods [
+	^ (self gtReferencesAreInstalled: GtNoAdvice new) result contents
+]
+
 { #category : #private }
 GtReferencesPrefixTree >> references [
 	^ references
