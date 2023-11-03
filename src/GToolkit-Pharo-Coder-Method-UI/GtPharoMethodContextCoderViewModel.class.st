@@ -83,6 +83,11 @@ GtPharoMethodContextCoderViewModel >> programCounterTextAttribute [
 					thickness: 1.5) beNotOverwritableByStyler ]
 ]
 
+{ #category : #accessing }
+GtPharoMethodContextCoderViewModel >> receiverClass [
+	^ self coderModel receiverClass
+]
+
 { #category : #'api - coder model' }
 GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
 	super subscribeToCoderModel.

@@ -21,6 +21,30 @@ GtPharoMethodCoderHeaderElement >> behaviorButton [
 ]
 
 { #category : #initialization }
+GtPharoMethodCoderHeaderElement >> buildSeparatorElement [
+	^ BrLabel new
+			aptitude: (BrGlamorousLabelAptitude new thin foreground: self theme button defaultTextColor);
+			text: '>';
+			margin: (BlInsets left: 5 right: 5).
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> classDescriptionForMethodClass: aMethodClass [
+	| explicitProviderClass |
+	explicitProviderClass := textualCoderViewModel explicitProviderClass.
+	(explicitProviderClass isNil or: [
+		explicitProviderClass = aMethodClass ] )ifTrue: [
+			^ aMethodClass name ].
+		
+	^ String streamContents: [ :aStream |
+		aStream 
+			<< explicitProviderClass name;
+			<< ' (';
+			<< aMethodClass name;
+			<< ')' ]
+]
+
+{ #category : #initialization }
 GtPharoMethodCoderHeaderElement >> initialize [
 	super initialize.
 
@@ -32,10 +56,7 @@ GtPharoMethodCoderHeaderElement >> initialize [
 	
 	self addChildren: {
 		package.
-		BrLabel new
-			aptitude: (BrGlamorousLabelAptitude new thin foreground: self theme button defaultTextColor);
-			text: '>';
-			margin: (BlInsets left: 5 right: 5).
+		self buildSeparatorElement.
 		behavior }
 ]
 
@@ -137,6 +158,7 @@ GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
 	behavior
 		model: aMethodOrigin;
 		label: (aMethodOrigin
-			behaviorDo: [ :aBehavior | aBehavior name ]
+			behaviorDo: [ :aBehavior | 
+				self classDescriptionForMethodClass: aBehavior ]
 			ifUnknown: 'Unknown')
 ]

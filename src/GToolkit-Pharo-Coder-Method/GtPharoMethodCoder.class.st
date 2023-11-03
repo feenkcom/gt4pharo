@@ -435,6 +435,7 @@ GtPharoMethodCoder >> example: anExampleWithResult [
 	self
 		attributeNamed: #example
 		put: anExampleWithResult asExampleWithResult.
+	self explicitProviderClass: anExampleWithResult providerClass.
 	aCompiledMethod := anExampleWithResult method.
 	(aCompiledMethod selector = self selector
 		and: [ aCompiledMethod methodClass = self behavior ])
@@ -483,6 +484,16 @@ GtPharoMethodCoder >> explanationLink: anExplanation [
 	
 	self requestStyleSourceText.
 	self requestUpdateAddOns
+]
+
+{ #category : #'api - header' }
+GtPharoMethodCoder >> explicitProviderClass [
+	^ self attributeNamed: #providerClass.
+]
+
+{ #category : #'api - actions examples' }
+GtPharoMethodCoder >> explicitProviderClass: aClass [
+	self attributeNamed: #providerClass put: aClass 
 ]
 
 { #category : #private }

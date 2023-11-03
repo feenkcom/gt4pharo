@@ -99,6 +99,11 @@ GtPharoMethodCoderViewModel >> evaluationContext [
 		targetBehavior: self defaultCompilationBehavior
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> explicitProviderClass [
+	^ self coderModel explicitProviderClass
+]
+
 { #category : #'gt-extension' }
 GtPharoMethodCoderViewModel >> gtInfo [
 	^ super gtInfo, (Array streamContents: [ :aStream |

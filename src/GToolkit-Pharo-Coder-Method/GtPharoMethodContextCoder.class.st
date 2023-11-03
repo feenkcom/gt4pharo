@@ -94,6 +94,11 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	
 ]
 
+{ #category : #accessing }
+GtPharoMethodContextCoder >> explicitProviderClass [
+	^ self receiverClass
+]
+
 { #category : #'instance creation' }
 GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 
@@ -183,6 +188,11 @@ GtPharoMethodContextCoder >> programCounterRange [
 { #category : #accessing }
 GtPharoMethodContextCoder >> receiver [
 	^ self context receiver
+]
+
+{ #category : #accessing }
+GtPharoMethodContextCoder >> receiverClass [
+	^ self receiver class
 ]
 
 { #category : #'api - actions' }
