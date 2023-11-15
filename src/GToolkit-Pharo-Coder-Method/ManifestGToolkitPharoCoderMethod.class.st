@@ -44,7 +44,6 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Refactoring-Changes'.
 		'Refactoring-Core'.
 		'Refactoring-Environment'.
-		'SmaCC_Runtime'.
 		'System-Announcements'.
 		'Transcript-NonInteractive'
 	}, (self 
