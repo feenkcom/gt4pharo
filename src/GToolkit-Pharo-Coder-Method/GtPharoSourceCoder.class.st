@@ -218,7 +218,7 @@ GtPharoSourceCoder >> format [
 	self currentSourceString: ast formattedCode
 ]
 
-{ #category : #private }
+{ #category : #'private - actions' }
 GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock [
 	^ [
 			aBlock value.
@@ -398,14 +398,6 @@ GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneB
 				do: [ :ex | ex return ].
 
 	^ aNoneBlock value
-]
-
-{ #category : #'private - notifying' }
-GtPharoSourceCoder >> notifyParseError: aString at: anInteger [
-	self announce: (GtCoderParseError new
-		coder: self;
-		errorMessage: aString;
-		location: anInteger)
 ]
 
 { #category : #'private - notifying' }
@@ -602,18 +594,6 @@ GtPharoSourceCoder >> source [
 		transformWith: '`@receiver source' -> '`@receiver currentSourceString'.
 		
 	^ self currentSourceString
-]
-
-{ #category : #private }
-GtPharoSourceCoder >> validateSyntax [
-	<return: #Boolean>
-
-	[ self computeAst ]
-		on: SmaCCParserError
-		do: [ :ex | 
-			self notifyParseError: ex messageText at: ex tag position.
-			^ false ].
-	^ true
 ]
 
 { #category : #'private - ast' }
