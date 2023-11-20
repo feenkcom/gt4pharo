@@ -50,6 +50,12 @@ GtPharoBehaviorCoder >> behavior [
 { #category : #accessing }
 GtPharoBehaviorCoder >> classIconAddOnsInto: coderAddOns for: aViewModel [ 
 	<gtAstCoderAddOns: 10>
+	| iconName |
+	
+	iconName := self behavior systemIconName.
+	(iconName = Object systemIconName or: [ 
+		iconName =  AbstractLayout systemIconName ])
+			ifTrue: [ ^ self ].
 	
 	coderAddOns
 		addPreview: 'Class Icon'
