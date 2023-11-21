@@ -9,23 +9,28 @@ Class {
 	#traits : 'TGtWithTextualCoderViewModel',
 	#classTraits : 'TGtWithTextualCoderViewModel classTrait',
 	#instVars : [
-		'package',
-		'behavior'
+		'secondBehavior',
+		'secondIconContainer',
+		'secondContainer',
+		'packageButton',
+		'firstIconContainer',
+		'firstBehaviorButton'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
 { #category : #accessing }
 GtPharoMethodCoderHeaderElement >> behaviorButton [
-	^ behavior
+	^ firstBehaviorButton
 ]
 
 { #category : #initialization }
 GtPharoMethodCoderHeaderElement >> buildSeparatorElement [
 	^ BrLabel new
-			aptitude: (BrGlamorousLabelAptitude new thin foreground: self theme button defaultTextColor);
-			text: '>';
-			margin: (BlInsets left: 5 right: 5).
+			aptitude: (BrGlamorousLabelAptitude new thin 
+				padding: (BlInsets all:0 );
+				foreground: self theme button defaultTextColor);
+			text: '>'.
 ]
 
 { #category : #'event handling' }
@@ -51,13 +56,25 @@ GtPharoMethodCoderHeaderElement >> initialize [
 	self fitContent.
 	self alignCenterLeft.
 	
-	package := self newPackageButton.
-	behavior := self newBehaviorButton.
+	packageButton := self newPackageButton.
+	firstBehaviorButton := self newBehaviorButton.
+	firstIconContainer := self newIconContainer.
 	
-	self addChildren: {
-		package.
-		self buildSeparatorElement.
-		behavior }
+	self addChild: packageButton as: #packageButton.
+	self addChild: (self buildSeparatorElement
+		margin: (BlInsets left: 5 right: 5)) as: #separatorElement.
+	self addChild: firstBehaviorButton as: #behaviorButton.
+	self addChild: firstIconContainer as: #iconContainer.
+	
+	self addChild: (secondContainer := BrHorizontalPane new 
+		fitContent;
+		alignCenterLeft;
+		addChild: (self buildSeparatorElement 
+			text: '(');
+		addChild: (secondBehavior := self newBehaviorButton) 
+			as: #secondBehaviorButton;
+		addChild: (secondIconContainer := self newIconContainer);
+		addChild: (self buildSeparatorElement text: ')'))
 ]
 
 { #category : #'instance creation' }
@@ -68,6 +85,13 @@ GtPharoMethodCoderHeaderElement >> newBehaviorButton [
 			foreground: BrGlamorousColors defaultButtonTextColor;
 			fontSize: 12);
 		action: [ self spawnBehavior ]
+]
+
+{ #category : #initialization }
+GtPharoMethodCoderHeaderElement >> newIconContainer [
+	^ BrFrame new
+		fitContent;
+		layout: BlFrameLayout new
 ]
 
 { #category : #'instance creation' }
@@ -82,7 +106,8 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 
 { #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> onCoderClassChanged: anAnnouncement [
-	self enqueueTask: (BlTaskAction new action: [ self updateBreadcrumbElements ])
+	self enqueueTask: (BlTaskAction new action: [ 
+		self updateBreadcrumbElements ])
 ]
 
 { #category : #'api - textual coder view model' }
@@ -104,18 +129,34 @@ GtPharoMethodCoderHeaderElement >> onTextualCoderViewModelChanged [
 
 { #category : #accessing }
 GtPharoMethodCoderHeaderElement >> packageButton [
-	^ package
+	^ packageButton
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> showIconFor: aBehavior in: anIconContainer [
+	| iconName |
+	iconName := aBehavior systemIconName.
+	(iconName = Object systemIconName or: [ 
+		iconName = AbstractLayout systemIconName ])
+			ifTrue: [ ^ self ].
+	
+	anIconContainer addChild: ([ aBehavior 
+		iconNamed: aBehavior systemIconName ]
+			on: Error
+			do: [ :error | 
+				Smalltalk ui icons 
+					iconNamed: #smallWarningIcon ]) asElement 
 ]
 
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnBehavior [	
-	behavior model behaviorDo: [ :aBehavior |
+	firstBehaviorButton model behaviorDo: [ :aBehavior |
 		self phlow spawnTool: (GtMethodCoderTool compiledMethod: self textualCoderViewModel compiledMethod) ]
 ]
 
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnPackage [
-	package model behaviorDo: [ :aBehavior |
+	packageButton model behaviorDo: [ :aBehavior |
 		self phlow spawnTool: (GtPackageCoderTool package: aBehavior package) ]
 ]
 
@@ -149,16 +190,35 @@ GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
 	
 	aMethodOrigin := textualCoderViewModel methodOrigin.
 
-	package
+	packageButton
 		model: aMethodOrigin;
 		label: (aMethodOrigin
 			behaviorDo: [ :aBehavior | aBehavior package name ]
 			ifUnknown: 'Unknown').
 
-	behavior
-		model: aMethodOrigin;
-		label: (aMethodOrigin
-			behaviorDo: [ :aBehavior | 
-				self classDescriptionForMethodClass: aBehavior ]
-			ifUnknown: 'Unknown')
+	firstIconContainer removeChildren.
+	firstBehaviorButton model: aMethodOrigin.
+	secondBehavior model: aMethodOrigin.
+	secondContainer visibility: BlVisibility gone.
+	
+	aMethodOrigin
+		behaviorDo: [ :aBehavior | 
+			| explicitProviderClass firstBehaviorClass secondBehaviorClass |
+			secondBehaviorClass := nil.
+			explicitProviderClass := textualCoderViewModel explicitProviderClass.
+			(explicitProviderClass isNil or: [ explicitProviderClass = aBehavior ] )
+				ifTrue: [ firstBehaviorClass := aBehavior ]
+				ifFalse: [ 
+					firstBehaviorClass := explicitProviderClass.
+					secondBehaviorClass := aBehavior ].
+					
+			firstBehaviorButton label: firstBehaviorClass name.
+			self showIconFor: firstBehaviorClass in: firstIconContainer.
+					
+			secondBehaviorClass ifNotNil: [
+				secondContainer visibility: BlVisibility visible.
+				secondBehavior label: secondBehaviorClass name.
+				self showIconFor: secondBehaviorClass in: secondIconContainer ] ]
+		ifUnknown: [
+			firstBehaviorButton label: 'Unknown' ]
 ]
