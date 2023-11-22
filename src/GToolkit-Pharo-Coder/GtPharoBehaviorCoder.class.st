@@ -52,18 +52,15 @@ GtPharoBehaviorCoder >> classIconAddOnsInto: coderAddOns for: aViewModel [
 	<gtAstCoderAddOns: 10>
 	| iconName |
 	
-	iconName := self behavior systemIconName.
-	(iconName = Object systemIconName or: [ 
-		iconName =  AbstractLayout systemIconName ])
-			ifTrue: [ ^ self ].
+	iconName := self behavior gtCustomSystemIconNameOrNil.
+	iconName ifNil: [ 
+		"We only show the icon in case it is a custom one"
+		^ self ].
 	
 	coderAddOns
 		addPreview: 'Class Icon'
 		stencil: [ 
-			([ aViewModel behavior iconNamed: self behavior systemIconName ] 
-				on: Error
-				do: [ :error | 
-					Smalltalk ui icons iconNamed: #smallWarningIcon ]) asElement ]
+			(aViewModel behavior gtSafeIconNamed: iconName) asElement ]
 ]
 
 { #category : #accessing }
