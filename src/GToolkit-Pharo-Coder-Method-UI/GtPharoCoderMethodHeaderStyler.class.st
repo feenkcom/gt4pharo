@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'attributeElementStencil'
 	],
-	#category : #'GToolkit-Pharo-Coder-SelectorAttributes'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
 
 { #category : #accessing }

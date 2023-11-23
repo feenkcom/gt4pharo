@@ -61,14 +61,17 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 
 	self withAsyncFutureDo: [ :anElementFuture |
 		anElementFuture
-			executionConfiguration: (AsyncFutureExecutionConfiguration new customGroup: #CoderAddOn; lowPriority);
+			executionConfiguration: (AsyncFutureExecutionConfiguration new 
+				customGroup: #CoderAddOn; 
+				lowPriority);
 			whenSuccess: [ :anElement :anOrigin |
 				self updateFromOrigin:  anOrigin ];
 			whenError: [ :anElement :anError |
 				self removeChildren.
 				self visibility: BlVisibility visible.
 				anElement addChild: anError asDebuggableElement ];
-			whenPending: [ "self visibility: BlVisibility gone" ] ]
+			whenPending: [ 
+				"Preserve the existing visibility while pending to avoid flickering while typing" ] ]
 ]
 
 { #category : #'private - insance creation' }

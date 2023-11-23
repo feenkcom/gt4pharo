@@ -5,7 +5,7 @@ Class {
 		'coderViewModel',
 		'attributeElementStencil'
 	],
-	#category : #'GToolkit-Pharo-Coder-SelectorAttributes'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
 
 { #category : #accessing }
@@ -35,7 +35,7 @@ GtPharoCoderMethodHeaderTextAdornmentAttribute >> doAffect: aTBrTextEditorTextua
 
 { #category : #initialization }
 GtPharoCoderMethodHeaderTextAdornmentAttribute >> initialize [
-
 	super initialize.
+	
 	self beAppend
 ]
