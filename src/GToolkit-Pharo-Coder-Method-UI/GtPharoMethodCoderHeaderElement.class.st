@@ -135,17 +135,13 @@ GtPharoMethodCoderHeaderElement >> packageButton [
 { #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> showIconFor: aBehavior in: anIconContainer [
 	| iconName |
-	iconName := aBehavior systemIconName.
-	(iconName = Object systemIconName or: [ 
-		iconName = AbstractLayout systemIconName ])
-			ifTrue: [ ^ self ].
+	iconName := aBehavior gtCustomSystemIconNameOrNil.
+	iconName ifNil: [ 
+		"We only show the icon in case it is a custom one"
+		^ self ].
 	
-	anIconContainer addChild: ([ aBehavior 
-		iconNamed: aBehavior systemIconName ]
-			on: Error
-			do: [ :error | 
-				Smalltalk ui icons 
-					iconNamed: #smallWarningIcon ]) asElement 
+	anIconContainer addChild: (aBehavior 
+		gtSafeIconNamed: iconName) asElement 
 ]
 
 { #category : #'private - actions' }
