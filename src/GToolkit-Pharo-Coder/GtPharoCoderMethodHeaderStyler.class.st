@@ -2,7 +2,6 @@ Class {
 	#name : #GtPharoCoderMethodHeaderStyler,
 	#superclass : #GtGenericPharoStyler,
 	#instVars : [
-		'activationCodition',
 		'attributeElementStencil'
 	],
 	#category : #'GToolkit-Pharo-Coder-SelectorAttributes'
@@ -10,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtPharoCoderMethodHeaderStyler >> attributeElementStencil: aStencilOrBlock [
-	attributeElementStencil := aStencilOrBlock "asStencil"
+	attributeElementStencil := aStencilOrBlock asStencil
 ]
 
 { #category : #accessing }
@@ -20,25 +19,8 @@ GtPharoCoderMethodHeaderStyler >> instantiateMethodHeaderAttribute [
 			attributeElementStencil: attributeElementStencil
 ]
 
-{ #category : #testing }
-GtPharoCoderMethodHeaderStyler >> shouldShowAttribute [
-	^ activationCodition 
-		ifNil: [ true ]
-		ifNotNil: [ :aBlock | 
-			aBlock 
-				cull: self coderViewModel coderModel 
-				cull: self coderViewModel ]
-]
-
-{ #category : #configuration }
-GtPharoCoderMethodHeaderStyler >> showWhen: aBlock [
-	activationCodition := aBlock
-]
-
 { #category : #visiting }
 GtPharoCoderMethodHeaderStyler >> visitMethod: aMethodNode [
-	self shouldShowAttribute ifFalse: [ ^ self ].
-
 	self
 		attribute: self instantiateMethodHeaderAttribute
 		from: aMethodNode pattern stopPosition

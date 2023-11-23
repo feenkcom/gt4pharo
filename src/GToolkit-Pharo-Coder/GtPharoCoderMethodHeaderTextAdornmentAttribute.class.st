@@ -20,7 +20,7 @@ GtPharoCoderMethodHeaderTextAdornmentAttribute >> coderViewModel: aCoderViewMode
 
 { #category : #accessing }
 GtPharoCoderMethodHeaderTextAdornmentAttribute >> computeAttributeElement [
-	^ attributeElementStencil value
+	^ attributeElementStencil asElement
 ]
 
 { #category : #accessing }

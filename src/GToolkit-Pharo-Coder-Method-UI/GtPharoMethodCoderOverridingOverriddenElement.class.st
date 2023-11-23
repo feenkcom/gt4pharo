@@ -143,7 +143,6 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 	| methodOriginFuture |
 	 
-	"We first update the valued based on the cached method origin."
 	self pharoMethodCoderViewModel coderModel
 		attributeNamed: #cachedMethodOrigin
 		ifPresent: [ :aMethodOrigin |
