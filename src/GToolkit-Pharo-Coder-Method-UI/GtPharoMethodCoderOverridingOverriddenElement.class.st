@@ -76,7 +76,6 @@ GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceButton [
 	^ BrButton new
 		vFitContent;
 		hExact: 16;
-		"beSmallSize;"
 		aptitude: BrGlamorousButtonFlatExteriorAptitude 
 			+ BrGlamorousButtonIconAptitude 
 			+ (BrGlamorousButtonRectangularAptitude 
@@ -141,7 +140,6 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 	didn't get a chance to subscribe to any announcement. Override #onPostPharoMethodCoderViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
-	 | methodOriginFuture |
 	 
 	self pharoMethodCoderViewModel coderModel
 		attributeNamed: #cachedMethodOrigin
@@ -149,8 +147,7 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 			self updateFromOrigin:  aMethodOrigin ] 
 		ifAbsent: [ ].
 			 
-	methodOriginFuture:= self newMethodOriginFuture.
-	self asyncFuture future: (methodOriginFuture then: [ :anOrigin |
+	self asyncFuture future: (self newMethodOriginFuture then: [ :anOrigin |
 		| currentCoder |
 		currentCoder := self pharoMethodCoderViewModel coderModel.
 		currentCoder critical: [
