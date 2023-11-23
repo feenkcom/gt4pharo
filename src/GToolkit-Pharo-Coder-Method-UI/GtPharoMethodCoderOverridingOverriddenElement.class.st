@@ -68,7 +68,7 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 				self removeChildren.
 				self visibility: BlVisibility visible.
 				anElement addChild: anError asDebuggableElement ];
-			whenPending: [ self visibility: BlVisibility gone ] ]
+			whenPending: [ "self visibility: BlVisibility gone" ] ]
 ]
 
 { #category : #'private - insance creation' }
@@ -141,20 +141,21 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 	didn't get a chance to subscribe to any announcement. Override #onPostPharoMethodCoderViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
+	 | methodOriginFuture |
 	 
 	self pharoMethodCoderViewModel coderModel
 		attributeNamed: #cachedMethodOrigin
 		ifPresent: [ :aMethodOrigin |
 			self updateFromOrigin:  aMethodOrigin ] 
-		ifAbsent: [ 
-			| methodOriginFuture |
-			methodOriginFuture:= self newMethodOriginFuture.
-			self asyncFuture future: (methodOriginFuture then: [ :anOrigin |
-				| currentCoder |
-				currentCoder := self pharoMethodCoderViewModel coderModel.
-				currentCoder critical: [
-					currentCoder attributeNamed: #cachedMethodOrigin put: anOrigin ].
-				anOrigin ]) ]
+		ifAbsent: [ ].
+			 
+	methodOriginFuture:= self newMethodOriginFuture.
+	self asyncFuture future: (methodOriginFuture then: [ :anOrigin |
+		| currentCoder |
+		currentCoder := self pharoMethodCoderViewModel coderModel.
+		currentCoder critical: [
+			currentCoder attributeNamed: #cachedMethodOrigin put: anOrigin ].
+		anOrigin ])
 ]
 
 { #category : #updating }
