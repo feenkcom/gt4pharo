@@ -906,13 +906,19 @@ GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns [
+GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: aMainCoderViewModel [
 	<gtAstCoderAddOns: 1>
 
+	coderAddOns addStyler: (GtPharoCoderMethodHeaderStyler new 
+		attributeElementStencil: [ 
+			GtPharoMethodCoderOverridingOverriddenElement new
+				pharoMethodCoderViewModel: aMainCoderViewModel ]).
+			 
 	coderAddOns
 		addPreview: 'Inheritance'
 		stencil: [ GtPharoMethodCoderOverridingOverriddenElement new ]
-		dataBinder: [ :anElement :aCoderViewModel | anElement pharoMethodCoderViewModel: aCoderViewModel ]
+		dataBinder: [ :anElement :aCoderViewModel | 
+			anElement pharoMethodCoderViewModel: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

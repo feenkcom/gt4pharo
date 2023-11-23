@@ -35,28 +35,32 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclassCheckOverridden [
 			s
 				// (GtSourceCoderId indexed: 1);
 				id: GtMethodCoderOverridingOverriddenId;
-				value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ] ].
+				value: [ :aButton | aButton visibility ] 
+					equals: [ BlVisibility visible ] ].
 
 	aScripter
 		assertStep: [ :s | 
 			s
 				// (GtSourceCoderId indexed: 2);
 				id: GtMethodCoderOverridingOverriddenId;
-				value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ] ].
+				value: [ :aButton | aButton visibility ] 
+					equals: [ BlVisibility gone ] ].
 
 	aScripter
 		assertStep: [ :s | 
 			s
 				// (GtSourceCoderId indexed: 3);
 				id: GtMethodCoderOverridingOverriddenId;
-				value: [ :aButton | aButton visibility ] equals: [ BlVisibility gone ] ].
+				value: [ :aButton | aButton visibility ] 
+					equals: [ BlVisibility gone ] ].
 
 	aScripter
 		assertStep: [ :s | 
 			s
 				// (GtSourceCoderId indexed: 4);
 				id: GtMethodCoderOverridingOverriddenId;
-				value: [ :aButton | aButton visibility ] equals: [ BlVisibility visible ] ].
+				value: [ :aButton | aButton visibility ] 
+					equals: [ BlVisibility visible ] ].
 
 	^ aScripter
 ]

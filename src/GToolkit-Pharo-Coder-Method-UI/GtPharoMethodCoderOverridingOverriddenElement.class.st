@@ -61,45 +61,32 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 
 	self withAsyncFutureDo: [ :anElementFuture |
 		anElementFuture
-			executionConfiguration: (AsyncFutureExecutionConfiguration new customGroup: #CoderAddOn; lowPriority);
+			executionConfiguration: (AsyncFutureExecutionConfiguration new 
+				customGroup: #CoderAddOn; 
+				lowPriority);
 			whenSuccess: [ :anElement :anOrigin |
-				self removeChildren.
-
-				anOrigin isSameOrigin
-					ifTrue: [
-						(anOrigin isOverriding or: [ anOrigin isOverridden ])
-							ifTrue: [
-								| aButton |
-								
-								aButton := self newInheritanceButton.
-								
-								(anOrigin isOverriding and: [ anOrigin isOverridden ])
-									ifTrue: [ aButton icon: BrGlamorousVectorIcons upwardsDownwards ]
-									ifFalse: [
-										anOrigin isOverriding
-											ifTrue: [ aButton icon: BrGlamorousVectorIcons upwards ].
-										anOrigin isOverridden
-											ifTrue: [ aButton icon: BrGlamorousVectorIcons downwards ] ].
-								self addChild: aButton.
-								self visibility: BlVisibility visible ]
-							ifFalse: [ self visibility: BlVisibility gone ] ] ];
+				self updateFromOrigin:  anOrigin ];
 			whenError: [ :anElement :anError |
 				self removeChildren.
 				self visibility: BlVisibility visible.
 				anElement addChild: anError asDebuggableElement ];
-			whenPending: [ self visibility: BlVisibility gone ] ]
+			whenPending: [ 
+				"Preserve the existing visibility while pending to avoid flickering while typing" ] ]
 ]
 
 { #category : #'private - insance creation' }
 GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceButton [
 	^ BrButton new
 		vFitContent;
-		hExact: 18;
+		hExact: 16;
 		aptitude: BrGlamorousButtonFlatExteriorAptitude 
 			+ BrGlamorousButtonIconAptitude 
-			+ (BrGlamorousButtonRectangularAptitude cornerRadius: 3);
+			+ (BrGlamorousButtonRectangularAptitude 
+					paddingScale: 0
+					heightScale: 0.7
+					cornerRadius: 3);
 		addAptitude: (BrGlamorousWithDropdownAptitude
-			handle: [ BlElement new size: 18@18 ]
+			handle: [ BlElement new size: 16@16 ]
 			content: [ self newInheritanceDropdownContent 
 				withAsyncPromiseDo: [ :anElementPromise | 
 					anElementPromise promise: self newMethodOriginFuture ]])
@@ -156,6 +143,46 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 	didn't get a chance to subscribe to any announcement. Override #onPostPharoMethodCoderViewModelChanged if you
 	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
+	 
+	self pharoMethodCoderViewModel coderModel
+		attributeNamed: #cachedMethodOrigin
+		ifPresent: [ :aMethodOrigin |
+			self updateFromOrigin:  aMethodOrigin ] 
+		ifAbsent: [ ].
+			 
+	self asyncFuture future: (self newMethodOriginFuture then: [ :anOrigin |
+		| currentCoder |
+		currentCoder := self pharoMethodCoderViewModel coderModel.
+		currentCoder critical: [
+			currentCoder attributeNamed: #cachedMethodOrigin put: anOrigin ].
+		anOrigin ])
+]
 
-	self asyncFuture future: self newMethodOriginFuture
+{ #category : #updating }
+GtPharoMethodCoderOverridingOverriddenElement >> updateFromOrigin: anOrigin [ 
+	self removeChildren.
+	anOrigin isSameOrigin ifFalse: [ ^ self ].
+	
+	(anOrigin isOverriding or: [ anOrigin isOverridden ])
+		ifTrue: [
+			| aButton |
+								
+			aButton := self newInheritanceButton.
+			self updateIconForButton: aButton usingOrigin: anOrigin.
+			
+			self addChild: aButton.
+			self visibility: BlVisibility visible ]
+		ifFalse: [ 
+			self visibility: BlVisibility gone ] 
+]
+
+{ #category : #updating }
+GtPharoMethodCoderOverridingOverriddenElement >> updateIconForButton: aButton usingOrigin: anOrigin [
+	(anOrigin isOverriding and: [ anOrigin isOverridden ])
+		ifTrue: [ aButton icon: BrGlamorousVectorIcons upwardsDownwards ]
+		ifFalse: [ 
+			anOrigin isOverriding 
+				ifTrue: [ aButton icon: BrGlamorousVectorIcons upwards ].
+			anOrigin isOverridden
+				ifTrue: [ aButton icon: BrGlamorousVectorIcons downwards ] ]
 ]
