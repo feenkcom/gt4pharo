@@ -1343,7 +1343,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	self 
 		checkFor: aScripter 
 		numberOfMainActions: 4
-		contextAction: 4.
+		contextAction: 5.
 
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play Example'.
 	self checkFor: aScripter existenceOfContextActionNamed: 'Play and Inspect Example Result'.
@@ -5309,7 +5309,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			self
 				checkFor: aStep
 				numberOfMainActions: 4
-				contextAction: 4.
+				contextAction: 5.
 
 			self checkFor: aStep existenceOfContextActionNamed: 'Play Example' ].
 
