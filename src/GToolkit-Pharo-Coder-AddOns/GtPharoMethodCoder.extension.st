@@ -184,6 +184,37 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addExtractToPlaygroundFor: aNode to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 300>
+	(aNode isMethod
+		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
+		ifFalse: [ ^ self ].
+	(self behavior notNil
+		and: [ (self behavior includesBehavior: TestCase)
+				and: [ (aNode nodeOfType: GtPharoMethodNode)
+						ifNil: [ false ]
+						ifNotNil: [ :method | 
+							method selector
+								ifNil: [ false ]
+								ifNotNil: [ :sel | sel isUnary and: [ sel beginsWith: 'test' ] ] ] ] ])
+		ifTrue: [ ^ coderAddOns
+				addContextMenuItem: 'Extract to playground' translated
+				hover: nil
+				leave: nil
+				action: [ :aCoderUIModel :element | self extractTestToPlaygroundIn: element ]
+				id: nil ].
+	(aNode nodeOfType: GtPharoMethodNode)
+		ifNotNil: [ :method | 
+			(method pragmas anySatisfy: [ :each | each selector = #gtExample ])
+				ifTrue: [ ^ coderAddOns
+						addContextMenuItem: 'Extract to playground' translated
+						hover: nil
+						leave: nil
+						action: [ :aCoderUIModel :element | self extractExampleToPlaygroundIn: element ]
+						id: nil ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	"<gtCoderContextMenuAddOns: 18>"
 	| theNodes |
@@ -784,6 +815,54 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> extractExampleToPlaygroundIn: anElement [
+	| page cls varName inlinedSource |
+	cls := self behavior.
+	varName := cls isClassSide
+			ifTrue: [ self behavior instanceSide name ]
+			ifFalse: [ self safeVarNameBasedOn: 'example' in: self astAwait ].
+	inlinedSource := self inlinedPlaygroundSourceForReceiver: varName.
+	page := LePage
+			unnamedPageWithDefaultTitle: ('{1}>>{2} playground'
+					format: {cls name.
+							self astAwait selector}).
+	cls isClassSide
+		ifFalse: [ page addSnippet: (LePharoSnippet code: varName , ' := ' , cls name , ' new') ].
+	page addSnippet: (LePharoSnippet code: inlinedSource).
+	LeDatabasesRegistry uniqueInstance currentLoadedDefaultLogicalDatabase
+		playgroundDB addPage: page.
+	anElement phlow spawnTool: (LePagePhlowTool page: page)
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> extractTestToPlaygroundIn: anElement [
+	| page cls varName inlinedSource |
+	cls := self behavior.
+	varName := cls isClassSide
+			ifTrue: [ self behavior instanceSide name ]
+			ifFalse: [ self safeVarNameBasedOn: 'test' in: self astAwait ].
+	inlinedSource := self inlinedPlaygroundSourceForReceiver: varName.
+	page := LePage
+			unnamedPageWithDefaultTitle: ('{1}>>{2} playground'
+					format: {cls name.
+							self astAwait selector}).
+	page := LePage
+			unnamedPageWithDefaultTitle: ('{1}>>{2} playground'
+					format: {cls name.
+							self astAwait selector}).
+	page
+		addSnippet: (LePharoSnippet
+				code: varName , ' := ' , cls name
+						, ' new.
+' , varName , ' setUp.').
+	page addSnippet: (LePharoSnippet code: inlinedSource).
+	page addSnippet: (LePharoSnippet code: varName , ' tearDown').
+	LeDatabasesRegistry uniqueInstance currentLoadedDefaultLogicalDatabase
+		playgroundDB addPage: page.
+	anElement phlow spawnTool: (LePagePhlowTool page: page)
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 6>
 	| view |
@@ -890,6 +969,42 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> inlinedPlaygroundSourceForReceiver: varName [
+	| source ast tree coder editable node |
+	ast := self astAwait.
+	source := '^' , varName , ' ' , ast selector.
+	tree := GtPharoParser
+			parse: source
+			startingAt: GtPharoParser startingStateForStatement.
+	coder := GtPharoSnippetCoder forSource: source.
+	(GtSnippetInlineMessageRefactoringController new
+		messageNode: tree value;
+		implementorClass: self behavior;
+		modelUpdater: [ :model | 
+			self isModified
+				ifTrue: [ (model classFor: self behavior)
+						compile: self currentSourceText asString
+						classified: #accessing ] ];
+		sourceCoderViewModel: coder asCoderViewModel) execute.
+	source := coder currentSourceString.
+	editable := SmaCCString on: source.
+	tree := GtPharoParser
+			parse: source
+			startingAt: GtPharoParser startingStateForMethodSequence.
+	tree lastIsReturn
+		ifTrue: [ node := tree statements last value.
+			(node isVariable
+				and: [ tree statements size > 1 and: [ node name source = varName ] ])
+				ifTrue: [ editable
+						deleteFrom: (tree statements at: tree statements size - 1) stopPosition + 1
+						to: source size ]
+				ifFalse: [ editable
+						deleteFrom: node parent upArrow startPosition
+						to: node startPosition - 1 ] ].
+	^ editable asString
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> isMondrianPaintMethod: aMethodNode [
 	| variable |
 	aMethodNode arguments size ~= 1
@@ -963,6 +1078,22 @@ GtPharoMethodCoder >> runMondrianPaintFrom: anElement [
 	mondrian := GtMondrian new.
 	self object perform: self selector with: mondrian.
 	anElement phlow spawnObject: mondrian
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> safeVarNameBasedOn: aString in: ast [
+	| localVars name index |
+	localVars := Set new.
+	ast
+		allNodesOfType: GtPharoVariableNode
+		do: [ :each | localVars add: each name source ].
+	localVars addAll: self behavior allInstVarNames.
+	name := aString.
+	index := 1.
+	[ localVars includes: name ]
+		whileTrue: [ name := aString , index printString.
+			index := index + 1 ].
+	^ name
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
