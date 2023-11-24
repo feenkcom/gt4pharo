@@ -184,37 +184,6 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> addExtractToPlaygroundFor: aNode to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 300>
-	(aNode isMethod
-		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
-		ifFalse: [ ^ self ].
-	(self behavior notNil
-		and: [ (self behavior includesBehavior: TestCase)
-				and: [ (aNode nodeOfType: GtPharoMethodNode)
-						ifNil: [ false ]
-						ifNotNil: [ :method | 
-							method selector
-								ifNil: [ false ]
-								ifNotNil: [ :sel | sel isUnary and: [ sel beginsWith: 'test' ] ] ] ] ])
-		ifTrue: [ ^ coderAddOns
-				addContextMenuItem: 'Extract to playground' translated
-				hover: nil
-				leave: nil
-				action: [ :aCoderUIModel :element | self extractTestToPlaygroundIn: element ]
-				id: nil ].
-	(aNode nodeOfType: GtPharoMethodNode)
-		ifNotNil: [ :method | 
-			(method pragmas anySatisfy: [ :each | each selector = #gtExample ])
-				ifTrue: [ ^ coderAddOns
-						addContextMenuItem: 'Extract to playground' translated
-						hover: nil
-						leave: nil
-						action: [ :aCoderUIModel :element | self extractExampleToPlaygroundIn: element ]
-						id: nil ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	"<gtCoderContextMenuAddOns: 18>"
 	| theNodes |
@@ -803,7 +772,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		addContextAction: 'Debug Example' translated
 		icon: BrGlamorousVectorIcons debug
 		action: [ :aCoderUIModel :anEvent | self debugExample ]
-		id: GtMethodCoderDebugExampleActionId
+		id: GtMethodCoderDebugExampleActionId.
+	coderAddOns
+		addContextAction: 'Extract to playground' translated
+		icon: LeIcons lepiterPage
+		action: [ :aCoderUIModel :button | self extractExampleToPlaygroundIn: button ]
+		id: GtMethodCoderExtractPlaygroundActionId
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -1215,5 +1189,10 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 		addContextAction: 'Debug Unit Test' translated
 		icon: BrGlamorousVectorIcons debug
 		action: [ :aCoderUIModel :anEvent | self testCase debug ]
-		id: GtMethodCoderDebugExampleActionId
+		id: GtMethodCoderDebugExampleActionId.
+	coderAddOns
+		addContextAction: 'Extract to playground' translated
+		icon: LeIcons lepiterPage
+		action: [ :aCoderUIModel :button | self extractTestToPlaygroundIn: button ]
+		id: GtMethodCoderExtractPlaygroundActionId
 ]
