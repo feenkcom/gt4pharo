@@ -1,6 +1,9 @@
 Class {
 	#name : #GtPharoSourceCoderRefactoringController,
 	#superclass : #GtSourceCoderRefactoringController,
+	#instVars : [
+		'modelUpdater'
+	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
@@ -80,8 +83,10 @@ GtPharoSourceCoderRefactoringController >> createRefactoringModel [
 { #category : #private }
 GtPharoSourceCoderRefactoringController >> createSnippetRefactoringModel [
 	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
+	model := RBClassModelFactory rbNamespace
+			onEnvironment: RBBrowserEnvironment new.
 	self compileSnippetMethodIn: model.
+	modelUpdater cull: model.
 	^ model
 ]
 
@@ -99,6 +104,16 @@ GtPharoSourceCoderRefactoringController >> finishRefactoring: refactoring [
 { #category : #accessing }
 GtPharoSourceCoderRefactoringController >> isValidForPreview [
 	^ true
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> modelUpdater [
+	^ modelUpdater ifNil: [ [ :model |  ] ]
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> modelUpdater: aBlock [
+	modelUpdater := aBlock
 ]
 
 { #category : #testing }

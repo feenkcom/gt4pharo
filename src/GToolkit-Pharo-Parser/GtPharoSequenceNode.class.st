@@ -8,7 +8,7 @@ Class {
 		'variables',
 		'rightBar'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
@@ -47,6 +47,11 @@ GtPharoSequenceNode >> initialize [
 { #category : #testing }
 GtPharoSequenceNode >> isSequence [
 	^ true
+]
+
+{ #category : #testing }
+GtPharoSequenceNode >> lastIsReturn [
+	^ statements notEmpty and: [ statements last isReturn ]
 ]
 
 { #category : #generated }
