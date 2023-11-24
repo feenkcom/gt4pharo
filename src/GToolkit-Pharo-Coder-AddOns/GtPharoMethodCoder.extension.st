@@ -762,12 +762,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		ifFalse: [ coderAddOns
 				addContextAction: 'Play and Inspect Example Result' translated
 				icon: BrGlamorousVectorIcons playinspect
-				action: [ :aCoderUIModel :anEvent | self playAndInspectExample ]
+				action: [ :aCoderUIModel :button | self playAndInspectExample ]
 				id: GtMethodCoderPlayAndInspectExampleActionId ].
 	coderAddOns
 		addContextAction: 'Inspect Example Object' translated
 		icon: BrGlamorousVectorIcons eg
-		action: [ :aCoderUIModel :anEvent | self notifyObjectSpawn: self example ].
+		action: [ :aCoderUIModel :button | self notifyObjectSpawn: self example ].
 	coderAddOns
 		addContextAction: 'Debug Example' translated
 		icon: BrGlamorousVectorIcons debug
@@ -776,8 +776,9 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addContextAction: 'Extract to playground' translated
 		icon: LeIcons lepiterPage
-		action: [ :aCoderUIModel :button | self extractExampleToPlaygroundIn: button ]
+		action: [ :aCoderUIModel :button :event | self extractExampleToPlaygroundIn: button event: event ]
 		id: GtMethodCoderExtractPlaygroundActionId
+		allowPrimaryClick: true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -789,7 +790,7 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractExampleToPlaygroundIn: anElement [
+GtPharoMethodCoder >> extractExampleToPlaygroundIn: button event: anEvent [
 	| page cls varName inlinedSource |
 	cls := self behavior.
 	varName := cls isClassSide
@@ -805,11 +806,16 @@ GtPharoMethodCoder >> extractExampleToPlaygroundIn: anElement [
 	page addSnippet: (LePharoSnippet code: inlinedSource).
 	LeDatabasesRegistry uniqueInstance currentLoadedDefaultLogicalDatabase
 		playgroundDB addPage: page.
-	anElement phlow spawnTool: (LePagePhlowTool page: page)
+	anEvent modifiers isPrimaryModifier
+		ifTrue: [ ((LePageToolElement new pageViewModel: page asContentUIModel) matchParent
+				openInPagerFrom: button) maximized ]
+		ifFalse: [ self
+				notifyToolSpawn: (LePagePhlowTool page: page)
+				withDestination: self spawnDestination ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractTestToPlaygroundIn: anElement [
+GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent [
 	| page cls varName inlinedSource |
 	cls := self behavior.
 	varName := cls isClassSide
@@ -833,7 +839,12 @@ GtPharoMethodCoder >> extractTestToPlaygroundIn: anElement [
 	page addSnippet: (LePharoSnippet code: varName , ' tearDown').
 	LeDatabasesRegistry uniqueInstance currentLoadedDefaultLogicalDatabase
 		playgroundDB addPage: page.
-	anElement phlow spawnTool: (LePagePhlowTool page: page)
+	anEvent modifiers isPrimaryModifier
+		ifTrue: [ ((LePageToolElement new pageViewModel: page asContentUIModel) matchParent
+				openInPagerFrom: button) maximized ]
+		ifFalse: [ self
+				notifyToolSpawn: (LePagePhlowTool page: page)
+				withDestination: self spawnDestination ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -1141,7 +1152,6 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 9>
-
 	anAST methodNode ifNil: [ ^ self ].
 
 	self testCase ifNil: [ ^ self ].
@@ -1152,32 +1162,35 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 		addPreview: 'Test Case'
 		stencil: [ GtPharoMethodTestCaseStateElement new ]
 		dataBinder: [ :anElement :aCoderViewModel | 
-			| aHandler aCoder |						
-			anElement userData 
+			| aHandler aCoder |
+			anElement userData
 				at: #unitTestAstFor_into_testcase_handler
 				ifPresent: [ :anOldHandler | 
-					anElement userData 
+					anElement userData
 						at: #unitTestAstFor_into_testcase_coder
 						ifPresent: [ :anOldCoder | anOldCoder unsubscribe: anOldHandler ]
-						ifAbsent: [ "ignore" ] ]
-				ifAbsent: [ "ignore" ].
-			
+						ifAbsent: [  "ignore" ] ]
+				ifAbsent: [  "ignore" ].
+
 			aCoder := aCoderViewModel coderModel.
 
-			aHandler := [ :anAnnouncement | aCoder testCase 
-				ifNotNil: [ :aNewTestCase | 
-					anElement testCase: aNewTestCase; visibility: BlVisibility visible ]
-				ifNil: [ 
-					anElement visibility: BlVisibility hidden ] ].
-			anElement userData 
+			aHandler := [ :anAnnouncement | 
+				aCoder testCase
+					ifNotNil: [ :aNewTestCase | 
+						anElement
+							testCase: aNewTestCase;
+							visibility: BlVisibility visible ]
+					ifNil: [ anElement visibility: BlVisibility hidden ] ].
+			anElement userData
 				at: #unitTestAstFor_into_testcase_handler put: aHandler;
 				at: #unitTestAstFor_into_testcase_coder put: aCoder.
-			
-			(aCoder weak
-				when: GtCoderMethodAdded, GtCoderMethodRemoved, GtCoderMethodModified, GtPharoMethodCoderCompiled
+
+			aCoder weak
+				when: GtCoderMethodAdded , GtCoderMethodRemoved , GtCoderMethodModified
+						, GtPharoMethodCoderCompiled
 				send: #value:
-				to: aHandler).
-		
+				to: aHandler.
+
 			anElement testCase: self testCase ].
 
 	coderAddOns
@@ -1193,6 +1206,7 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addContextAction: 'Extract to playground' translated
 		icon: LeIcons lepiterPage
-		action: [ :aCoderUIModel :button | self extractTestToPlaygroundIn: button ]
+		action: [ :aCoderUIModel :button :event | self extractTestToPlaygroundIn: button event: event ]
 		id: GtMethodCoderExtractPlaygroundActionId
+		allowPrimaryClick: true
 ]
