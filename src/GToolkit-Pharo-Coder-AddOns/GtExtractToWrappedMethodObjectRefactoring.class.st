@@ -2,7 +2,8 @@ Class {
 	#name : #GtExtractToWrappedMethodObjectRefactoring,
 	#superclass : #GtExtractMethodObjectRefactoring,
 	#instVars : [
-		'methodObjectSelector'
+		'methodObjectSelector',
+		'useSetMethod'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
@@ -18,6 +19,69 @@ GtExtractToWrappedMethodObjectRefactoring >> addWrappedCall [
 						and: [ self isMethodObject: each receiver ] ])
 				ifTrue: [ self insertWrappedSendOn: each ] ].
 	class compileTree: ast
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> createConstructor: methodName [
+	super createConstructor: methodName.
+	self createSetMethod: methodName
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
+	| ast meta removeCascadeRefactoring cascade extractSetMethodRefactoring tempName |
+	(self useSetMethod not and: [ methodName arguments isEmpty ])
+		ifTrue: [ ^ self ].
+
+	meta := (self model classNamed: className) classSide.
+	ast := meta parseTreeFor: methodName selector.
+	cascade := ast statements last value.
+	cascade isCascade ifFalse: [ ^ self ].
+	removeCascadeRefactoring := GtConvertCascadesToStatementsRefactoring
+			model: self model
+			convert: cascade sourceInterval
+			inMethod: methodName selector
+			forClass: meta.
+	removeCascadeRefactoring
+		setOption: #receiverName
+		toUse: [ :ref | tempName := 'var' , UUID new asString36 ].
+	self performCompositeRefactoring: removeCascadeRefactoring.
+
+	ast := meta parseTreeFor: methodName selector.
+	extractSetMethodRefactoring := GtExtractMethodToComponentRefactoring
+			model: model
+			extract: (ast statements second start
+					to: (ast statements at: ast statements size - 1) stop)
+			from: methodName selector
+			in: meta.
+	extractSetMethodRefactoring
+		setOption: #methodName
+			toUse: [ :mn :ref | 
+				mn selector: ('set' , methodName selector asString capitalized) asSymbol.
+				mn arguments: methodName arguments.
+				mn ];
+		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | tempName ];
+		setOption: #variableTypes
+			toUse: [ :ref :types :selected | {meta instanceSide} ];
+		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
+	self performCompositeRefactoring: extractSetMethodRefactoring.
+
+	ast := meta parseTreeFor: methodName selector.
+	self
+		performCompositeRefactoring: (GtConvertStatementsToCascadesRefactoring
+				model: self model
+				convert: (ast statements first start
+						to: (ast statements at: ast statements size - 1) stop)
+				inMethod: methodName selector
+				forClass: meta).
+
+	ast := meta parseTreeFor: methodName selector.
+	self
+		performCompositeRefactoring: (RBInlineTemporaryRefactoring
+				model: self model
+				inline: ast statements first sourceInterval
+				from: methodName selector
+				in: meta)
 ]
 
 { #category : #accessing }
@@ -72,4 +136,14 @@ GtExtractToWrappedMethodObjectRefactoring >> transform [
 	super transform.
 	self addWrappedCall.
 	self gtCleanupChanges
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> useSetMethod [
+	^ useSetMethod ifNil: [ true ]
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> useSetMethod: aBoolean [
+	useSetMethod := aBoolean
 ]
