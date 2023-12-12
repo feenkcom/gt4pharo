@@ -135,7 +135,7 @@ GtReferencesPrefixTree >> moveDataTo: newChild [
 
 { #category : #accessing }
 GtReferencesPrefixTree >> notInstalledMethods [
-	^ (self gtReferencesAreInstalled: GtNoAdvice new) result contents
+	^ (self gtReferencesAreInstalled: GtNoAdvice new) result toArray wait
 ]
 
 { #category : #private }

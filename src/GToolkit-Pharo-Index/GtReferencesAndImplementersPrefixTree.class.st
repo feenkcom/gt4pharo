@@ -121,7 +121,7 @@ GtReferencesAndImplementersPrefixTree >> moveDataTo: newChild [
 
 { #category : #accessing }
 GtReferencesAndImplementersPrefixTree >> notInstalledMethods [
-	^ super notInstalledMethods, ((self gtImplementersAreInstalled: GtNoAdvice new) result contents)
+	^ super notInstalledMethods, ((self gtImplementersAreInstalled: GtNoAdvice new) result toArray wait)
 ]
 
 { #category : #removing }
