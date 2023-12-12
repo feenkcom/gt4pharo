@@ -154,13 +154,13 @@ GtPharoIndex >> asyncImplementersForWord: aString [
 { #category : #'accessing - implementers' }
 GtPharoIndex >> asyncInstalledImplementersForWord: aString [
 	^ (self asyncAllImplementersForWord: aString)
-		select: [ :aCompiledMethod | aCompiledMethod isInstalled ]
+		select: [ :aCompiledMethod | aCompiledMethod gtIsActive ]
 ]
 
 { #category : #'accessing - senders' }
 GtPharoIndex >> asyncInstalledSendersForWord: aString [
 	^ (self asyncAllSendersForWord: aString)
-		select: [ :aCompiledaMethod | aCompiledaMethod isInstalled ]
+		select: [ :aCompiledaMethod | aCompiledaMethod gtIsActive ]
 ]
 
 { #category : #accessing }
@@ -398,13 +398,13 @@ GtPharoIndex >> initialize [
 { #category : #'accessing - implementers' }
 GtPharoIndex >> installedImplementersOf: aSelector [
 	^ (self allImplementersOf: aSelector)
-		select: [ :each | each isInstalled ]
+		select: [ :each | each gtIsActive ]
 ]
 
 { #category : #'accessing - senders' }
 GtPharoIndex >> installedSendersOf: aSelector [
 	^ (self allSendersOf: aSelector) 
-		select: [ :each | each isInstalled ]
+		select: [ :each | each gtIsActive ]
 ]
 
 { #category : #testing }
@@ -605,7 +605,7 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 GtPharoIndex >> safeImplementersOf: aSelector [
 	^ (self allImplementersOf: aSelector)
 		collect: [ :each | 
-			each isInstalled
+			each gtIsActive
 				ifTrue: [ each ]
 				ifFalse: [ each methodClass compiledMethodAt: each selector ifAbsent: [ each ] ] ]
 ]
@@ -614,7 +614,7 @@ GtPharoIndex >> safeImplementersOf: aSelector [
 GtPharoIndex >> safeSendersOf: aSelector [
 	^ (self allSendersOf: aSelector)
 		collect: [ :each | 
-			each isInstalled
+			each gtIsActive
 				ifTrue: [ each ]
 				ifFalse: [ each methodClass 
 					compiledMethodAt: each selector 
