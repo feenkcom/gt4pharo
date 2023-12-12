@@ -92,6 +92,35 @@ GtPharoIndex >> addSymbolReferencesTo: newClassName [
 	^ addedRefs
 ]
 
+{ #category : #'accessing - implementers' }
+GtPharoIndex >> allImplementersOf: aSelector [
+	^ selectorCache implementersOf: aSelector
+]
+
+{ #category : #'accessing - senders' }
+GtPharoIndex >> allSendersOf: aSelector [
+	^ (selectorCache referencesTo: aSelector) asOrderedCollection
+]
+
+{ #category : #'accessing - implementers' }
+GtPharoIndex >> asyncAllImplementersForWord: aString [
+	^ ((self asyncSelectorsForWord: aString)
+		collect: [ :each | 
+			(selectorCache nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | node implementersCollection asAsyncStream ] ]) flatten
+]
+
+{ #category : #'accessing - senders' }
+GtPharoIndex >> asyncAllSendersForWord: aString [
+	^ ((self asyncSelectorsForWord: aString)
+		collect: [ :each | 
+			(selectorCache nodeFor: each)
+				ifNil: [ #() asAsyncStream ]
+				ifNotNil: [ :node | node referencesCollection asAsyncStream ] ]) flatten
+		withoutDuplicates
+]
+
 { #category : #accessing }
 GtPharoIndex >> asyncClassNamesForWord: aString [
 	^ self
@@ -107,13 +136,21 @@ GtPharoIndex >> asyncClassesForWord: aString [
 		select: [ :each | each notNil ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - implementers' }
 GtPharoIndex >> asyncImplementersForWord: aString [
-	^ ((self asyncSelectorsForWord: aString)
-		collect: [ :each | 
-			(selectorCache nodeFor: each)
-				ifNil: [ #() asAsyncStream ]
-				ifNotNil: [ :node | node implementersCollection asAsyncStream ] ]) flatten
+	^ self asyncInstalledImplementersForWord: aString
+]
+
+{ #category : #'accessing - implementers' }
+GtPharoIndex >> asyncInstalledImplementersForWord: aString [
+	^ (self asyncAllImplementersForWord: aString)
+		select: [ :aCompiledMethod | aCompiledMethod isInstalled ]
+]
+
+{ #category : #'accessing - senders' }
+GtPharoIndex >> asyncInstalledSendersForWord: aString [
+	^ (self asyncAllSendersForWord: aString)
+		select: [ :aCompiledaMethod | aCompiledaMethod isInstalled ]
 ]
 
 { #category : #accessing }
@@ -150,14 +187,9 @@ GtPharoIndex >> asyncSelectorsForWord: aString [
 		andWordCache: selectorWordCache
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - senders' }
 GtPharoIndex >> asyncSendersForWord: aString [
-	^ ((self asyncSelectorsForWord: aString)
-		collect: [ :each | 
-			(selectorCache nodeFor: each)
-				ifNil: [ #() asAsyncStream ]
-				ifNotNil: [ :node | node referencesCollection asAsyncStream ] ]) flatten
-		withoutDuplicates
+	^ self asyncInstalledSendersForWord: aString
 ]
 
 { #category : #private }
@@ -339,9 +371,9 @@ GtPharoIndex >> implementersDo: aBlock [
 		do: [ :each :weight :node | (node implementers ifNil: [ #() ]) isEmpty ifFalse: [ aBlock value: each ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - implementers' }
 GtPharoIndex >> implementersOf: aSelector [
-	^ selectorCache implementersOf: aSelector
+	^ self installedImplementersOf: aSelector
 ]
 
 { #category : #initialization }
@@ -351,6 +383,18 @@ GtPharoIndex >> initialize [
 	globalCache := GtReferencesPrefixTree new.
 	selectorWordCache := GtNamesPrefixTree new.
 	classWordCache := GtNamesPrefixTree new
+]
+
+{ #category : #'accessing - implementers' }
+GtPharoIndex >> installedImplementersOf: aSelector [
+	^ (self allImplementersOf: aSelector)
+		select: [ :each | each isInstalled ]
+]
+
+{ #category : #'accessing - senders' }
+GtPharoIndex >> installedSendersOf: aSelector [
+	^ (self allSendersOf: aSelector) 
+		select: [ :each | each isInstalled ]
 ]
 
 { #category : #testing }
@@ -547,14 +591,34 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 		andVariables: globalBlock
 ]
 
+{ #category : #'accessing - implementers' }
+GtPharoIndex >> safeImplementersOf: aSelector [
+	^ (self allImplementersOf: aSelector)
+		collect: [ :each | 
+			each isInstalled
+				ifTrue: [ each ]
+				ifFalse: [ each methodClass compiledMethodAt: each selector ifAbsent: [ each ] ] ]
+]
+
+{ #category : #'accessing - senders' }
+GtPharoIndex >> safeSendersOf: aSelector [
+	^ (self allSendersOf: aSelector)
+		collect: [ :each | 
+			each isInstalled
+				ifTrue: [ each ]
+				ifFalse: [ each methodClass 
+					compiledMethodAt: each selector 
+					ifAbsent: [ each ] ] ]
+]
+
 { #category : #accessing }
 GtPharoIndex >> selectorCache [
 	^ selectorCache
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - senders' }
 GtPharoIndex >> sendersOf: aSelector [
-	^ (selectorCache referencesTo: aSelector) asOrderedCollection
+	^ self installedSendersOf: aSelector
 ]
 
 { #category : #private }

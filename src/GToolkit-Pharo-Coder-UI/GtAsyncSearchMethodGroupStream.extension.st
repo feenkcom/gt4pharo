@@ -24,8 +24,8 @@ GtAsyncSearchMethodGroupStream >> gtItemsFor: aView context: aPhlowContext [
 		filter: filter
 		testsRunner: true
 		examplesRunner: true)
-		title: 'Live' translated;
-		priority: 10
+			title: 'Live' translated;
+			priority: 10
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
