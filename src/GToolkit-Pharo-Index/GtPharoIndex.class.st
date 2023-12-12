@@ -601,26 +601,6 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 		andVariables: globalBlock
 ]
 
-{ #category : #'accessing - implementers' }
-GtPharoIndex >> safeImplementersOf: aSelector [
-	^ (self allImplementersOf: aSelector)
-		collect: [ :each | 
-			each gtIsActive
-				ifTrue: [ each ]
-				ifFalse: [ each methodClass compiledMethodAt: each selector ifAbsent: [ each ] ] ]
-]
-
-{ #category : #'accessing - senders' }
-GtPharoIndex >> safeSendersOf: aSelector [
-	^ (self allSendersOf: aSelector)
-		collect: [ :each | 
-			each gtIsActive
-				ifTrue: [ each ]
-				ifFalse: [ each methodClass 
-					compiledMethodAt: each selector 
-					ifAbsent: [ each ] ] ]
-]
-
 { #category : #accessing }
 GtPharoIndex >> selectorCache [
 	^ selectorCache
