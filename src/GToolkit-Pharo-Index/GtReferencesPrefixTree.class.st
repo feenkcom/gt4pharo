@@ -5,14 +5,30 @@ Class {
 		'references'
 	],
 	#classVars : [
+		'DebugMode',
 		'MaxOCSize'
 	],
 	#category : #'GToolkit-Pharo-Index'
 }
 
+{ #category : #debugging }
+GtReferencesPrefixTree class >> disableDebugMode [
+	DebugMode := true
+]
+
+{ #category : #debugging }
+GtReferencesPrefixTree class >> enableDebugMode [
+	DebugMode := true
+]
+
 { #category : #'class initialization' }
 GtReferencesPrefixTree class >> initialize [
 	MaxOCSize := 1000
+]
+
+{ #category : #debugging }
+GtReferencesPrefixTree class >> isDebuggingEnabled [
+	^ DebugMode = true
 ]
 
 { #category : #adding }
@@ -85,7 +101,7 @@ GtReferencesPrefixTree >> gtLocalSizeInMemory [
 						ifFalse: [ 0 ] ])
 ]
 
-{ #category : #inspector }
+{ #category : #'gt - extensions' }
 GtReferencesPrefixTree >> gtNoDuplicateReferences: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
@@ -98,14 +114,14 @@ GtReferencesPrefixTree >> gtNoDuplicateReferences: aGtAdvice [
 		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
-{ #category : #inspector }
+{ #category : #'gt - extensions' }
 GtReferencesPrefixTree >> gtPhlowInspectNodeAction: aString [
 	^ (GtPhlowObjectAdviceAction object: (self nodeFor: aString))
 		title: aString asRopedText;
 		yourself
 ]
 
-{ #category : #inspector }
+{ #category : #'gt - extensions' }
 GtReferencesPrefixTree >> gtReferencesAreInstalled: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
@@ -118,7 +134,7 @@ GtReferencesPrefixTree >> gtReferencesAreInstalled: aGtAdvice [
 		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
-{ #category : #inspector }
+{ #category : #'gt - extensions' }
 GtReferencesPrefixTree >> gtReferencesFor: aView [
 	<gtView>
 	^ aView list

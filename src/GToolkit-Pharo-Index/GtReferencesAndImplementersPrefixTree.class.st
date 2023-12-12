@@ -15,7 +15,17 @@ GtReferencesAndImplementersPrefixTree >> addImplementer: aMethod [
 				ifFalse: [ implementers := implementers isArray
 							ifTrue: [ implementers := implementers asOrderedCollection ]
 							ifFalse: [ OrderedCollection with: implementers ] ].
-			implementers add: aMethod ]
+			implementers add: aMethod ].
+	
+	self checkForNotInstalledImplementers.
+]
+
+{ #category : #debugging }
+GtReferencesAndImplementersPrefixTree >> checkForNotInstalledImplementers [
+	self class isDebuggingEnabled ifFalse: [ ^ self ].
+	
+	self hasNotInstalledImplementers ifTrue: [
+		self notifyNotInstalledImplementers ]
 ]
 
 { #category : #private }
@@ -24,7 +34,7 @@ GtReferencesAndImplementersPrefixTree >> compressData [
 	implementers isCollection ifTrue: [ implementers := implementers asArray ]
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtReferencesAndImplementersPrefixTree >> gtImplementersAreInstalled: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
@@ -37,7 +47,7 @@ GtReferencesAndImplementersPrefixTree >> gtImplementersAreInstalled: aGtAdvice [
 		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
-{ #category : #inspector }
+{ #category : #'gt - extensions' }
 GtReferencesAndImplementersPrefixTree >> gtImplementersFor: aView [
 	<gtView>
 	^ aView list
@@ -57,7 +67,7 @@ GtReferencesAndImplementersPrefixTree >> gtLocalSizeInMemory [
 				ifFalse: [ 0 ])
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtReferencesAndImplementersPrefixTree >> gtMethodNotInCache: aGtAdvice [
 	<gtAdvice>
 	prefix = '' ifFalse: [ ^ aGtAdvice none ].
@@ -76,7 +86,7 @@ GtReferencesAndImplementersPrefixTree >> gtMethodNotInCache: aGtAdvice [
 				yourself ]
 ]
 
-{ #category : #inspector }
+{ #category : #'gt - extensions' }
 GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice asyncStream
@@ -88,6 +98,17 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 						ifEmpty: [ false ]
 						ifNotEmpty: [ :col | col size ~= col asIdentitySet size ] ] ];
 		action: [ :each | self gtPhlowInspectNodeAction: each ]
+]
+
+{ #category : #'debugging - testing' }
+GtReferencesAndImplementersPrefixTree >> hasNotInstalledImplementers [
+	implementers ifNil: [ ^ false ].
+	implementers isCompiledMethod ifTrue: [ 
+		^ implementers isInstalled not ].
+	((implementers isArray) or: [implementers class == OrderedCollection])
+		ifTrue: [ 
+			^ implementers anySatisfy: [ :each | each isInstalled not ] ].
+	^ false
 ]
 
 { #category : #private }
@@ -124,6 +145,19 @@ GtReferencesAndImplementersPrefixTree >> notInstalledMethods [
 	^ super notInstalledMethods, ((self gtImplementersAreInstalled: GtNoAdvice new) result toArray wait)
 ]
 
+{ #category : #debugging }
+GtReferencesAndImplementersPrefixTree >> notifyNotInstalledImplementers [
+	| notInstalledImplementors |
+	notInstalledImplementors := self implementersCollection 
+		reject: [ :each | each isInstalled ].
+	self inform: ('Found {1} implementors not installed in the image: {2}'
+		format: {
+			notInstalledImplementors size.
+			(notInstalledImplementors asArray collect: [:each |
+				each printString ]) asCommaString
+		})
+]
+
 { #category : #removing }
 GtReferencesAndImplementersPrefixTree >> removeImplementer: aMethod [
 	| index |
@@ -133,7 +167,7 @@ GtReferencesAndImplementersPrefixTree >> removeImplementer: aMethod [
 		ifTrue: [ implementers := implementers asOrderedCollection ].
 	implementers class == OrderedCollection ifFalse: [ ^ self ].
 	index := implementers identityIndexOf: aMethod.
-	index > 0 ifTrue: [ implementers removeAt: index ]
+	index > 0 ifTrue: [ implementers removeAt: index ].
 ]
 
 { #category : #accessing }
