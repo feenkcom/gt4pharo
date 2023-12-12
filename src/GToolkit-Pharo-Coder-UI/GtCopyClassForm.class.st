@@ -6,7 +6,8 @@ Class {
 		'superClassName',
 		'onAccept',
 		'newClassName',
-		'packageAndTag'
+		'packageAndTag',
+		'copyMethods'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Behavior'
 }
@@ -24,18 +25,44 @@ GtCopyClassForm >> asElement [
 { #category : #accessing }
 GtCopyClassForm >> copyClass [
 	| class |
-	class := Smalltalk classInstaller
-			make: [ :builder | 
-				builder
-					fillFor: innerClass;
-					name: newClassName trim;
-					superclass: superClassName trim asClass;
-					category: (packageAndTag tagName trim
-							ifEmpty: [ packageAndTag packageName trim ]
-							ifNotEmpty: [ packageAndTag fullName ]) ].
-	class copyAllCategoriesFrom: innerClass.
-	class class copyAllCategoriesFrom: innerClass class.
-	^ class
+	class := Smalltalk classInstaller make: 
+					[:builder |
+					builder
+						fillFor: innerClass;
+						name: newClassName trim;
+						superclass: superClassName trim asClass;
+						category: (packageAndTag tagName trim
+									ifEmpty: [packageAndTag packageName trim]
+									ifNotEmpty: [packageAndTag fullName])].
+	copyMethods
+		ifTrue: 
+			[class copyAllCategoriesFrom: innerClass.
+			class class copyAllCategoriesFrom: innerClass class].
+	^class
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> copyMethods [
+
+	^ copyMethods
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> copyMethods: anObject [
+
+	copyMethods := anObject
+]
+
+{ #category : #magritte }
+GtCopyClassForm >> copyMethodsDescription [
+	<magritteDescription>
+	^(MABooleanDescription new)
+		label: 'Copy methods';
+		priority: 3;
+		accessor: #copyMethods;
+		editorAptitude: 
+				[BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize];
+		labelAptitude: [BrGlamorousLabelAptitude new glamorousFormLabelStyle]
 ]
 
 { #category : #accessing }
@@ -43,6 +70,7 @@ GtCopyClassForm >> for: aClass [
 	innerClass := aClass.
 	newClassName := aClass name asString.
 	superClassName := aClass superclass name asString.
+	copyMethods := true.
 	packageAndTag := GtPackageAndTagName new
 			packageName: aClass package name;
 			tagName: (self treatTag: aClass)
