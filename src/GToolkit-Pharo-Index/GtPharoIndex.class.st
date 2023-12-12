@@ -25,6 +25,16 @@ GtPharoIndex class >> current [
 ]
 
 { #category : #accessing }
+GtPharoIndex class >> disableDebugMode [
+	GtReferencesAndImplementersPrefixTree disableDebugMode
+]
+
+{ #category : #accessing }
+GtPharoIndex class >> enableDebugMode [
+	GtReferencesAndImplementersPrefixTree enableDebugMode
+]
+
+{ #category : #accessing }
 GtPharoIndex class >> initializeCache [
 	self current initializeCache
 ]
