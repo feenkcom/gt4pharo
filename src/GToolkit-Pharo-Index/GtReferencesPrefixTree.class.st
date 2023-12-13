@@ -13,7 +13,7 @@ Class {
 
 { #category : #debugging }
 GtReferencesPrefixTree class >> disableDebugMode [
-	DebugMode := true
+	DebugMode := false
 ]
 
 { #category : #debugging }
