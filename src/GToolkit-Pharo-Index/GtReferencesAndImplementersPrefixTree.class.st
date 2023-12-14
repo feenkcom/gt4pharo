@@ -149,7 +149,7 @@ GtReferencesAndImplementersPrefixTree >> notInstalledMethods [
 GtReferencesAndImplementersPrefixTree >> notifyNotInstalledImplementers [
 	| notInstalledImplementors |
 	notInstalledImplementors := self implementersCollection 
-		reject: [ :each | each isInstalled ].
+		reject: [ :each | each gtIsActive ].
 	self inform: ('Found {1} implementors not installed in the image: {2}'
 		format: {
 			notInstalledImplementors size.
