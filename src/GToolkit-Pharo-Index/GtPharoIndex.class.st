@@ -238,14 +238,18 @@ GtPharoIndex >> cacheSizeInMemory [
 	| strings size |
 	size := 0.
 	strings := IdentitySet new.
-	{globalCache.
+	{
+		globalCache.
 		selectorCache.
 		selectorWordCache.
-		classWordCache}
+		classWordCache
+	}
 		do: [ :tree | 
-			tree
-				allNodesDo: [ :each | each prefix isSymbol ifFalse: [ strings add: each prefix ] ].
+			tree allNodesDo: [ :each | 
+				each prefix isSymbol 
+					ifFalse: [ strings add: each prefix ] ].
 			size := size + tree gtSpecificSizeInMemory ].
+	
 	strings do: [ :each | size := size + each sizeInMemory ].
 	^ size
 ]
@@ -336,6 +340,11 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 									(addedRefs includes: each)
 										ifFalse: [ addedRefs add: each.
 											node addReference: each ] ] ] ] ]
+]
+
+{ #category : #accessing }
+GtPharoIndex >> classWordCacheSpecificSize [
+	^ classWordCache gtSpecificSizeInMemory
 ]
 
 { #category : #initialization }

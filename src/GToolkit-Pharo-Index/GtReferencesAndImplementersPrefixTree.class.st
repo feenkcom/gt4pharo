@@ -104,10 +104,10 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 GtReferencesAndImplementersPrefixTree >> hasNotInstalledImplementers [
 	implementers ifNil: [ ^ false ].
 	implementers isCompiledMethod ifTrue: [ 
-		^ implementers isInstalled not ].
+		^ implementers gtIsActive not ].
 	((implementers isArray) or: [implementers class == OrderedCollection])
 		ifTrue: [ 
-			^ implementers anySatisfy: [ :each | each isInstalled not ] ].
+			^ implementers anySatisfy: [ :each | each gtIsActive not ] ].
 	^ false
 ]
 
