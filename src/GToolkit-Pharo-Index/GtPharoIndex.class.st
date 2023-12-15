@@ -233,7 +233,7 @@ GtPharoIndex >> basicUnsubscribe [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - metrics' }
 GtPharoIndex >> cacheSizeInMemory [
 	| strings size |
 	size := 0.
@@ -342,7 +342,7 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 											node addReference: each ] ] ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - metrics' }
 GtPharoIndex >> classWordCacheSpecificSize [
 	^ classWordCache gtSpecificSizeInMemory
 ]
@@ -372,6 +372,11 @@ GtPharoIndex >> computeIndex [
 { #category : #accessing }
 GtPharoIndex >> globalCache [
 	^ globalCache
+]
+
+{ #category : #'accessing - metrics' }
+GtPharoIndex >> globalCacheSpecificSize [
+	^ globalCache gtSpecificSizeInMemory
 ]
 
 { #category : #accessing }
@@ -482,6 +487,26 @@ GtPharoIndex >> methodModified: anAnnouncement [
 GtPharoIndex >> methodRemoved: anAnnouncement [
 	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
 	self removeMethodFromCache: anAnnouncement method
+]
+
+{ #category : #'accessing - metrics' }
+GtPharoIndex >> prefixStringsSizeInMemory [
+	| strings size |
+	size := 0.
+	strings := IdentitySet new.
+	{
+		globalCache.
+		selectorCache.
+		selectorWordCache.
+		classWordCache
+	}
+		do: [ :tree | 
+			tree allNodesDo: [ :each | 
+				each prefix isSymbol 
+					ifFalse: [ strings add: each prefix ] ] ].
+	
+	strings do: [ :each | size := size + each sizeInMemory ].
+	^ size
 ]
 
 { #category : #private }
@@ -613,6 +638,16 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 { #category : #accessing }
 GtPharoIndex >> selectorCache [
 	^ selectorCache
+]
+
+{ #category : #'accessing - metrics' }
+GtPharoIndex >> selectorCacheSpecificSize [
+	^ selectorCache gtSpecificSizeInMemory
+]
+
+{ #category : #'accessing - metrics' }
+GtPharoIndex >> selectorWordCacheSpecificSize [
+	^ selectorWordCache gtSpecificSizeInMemory
 ]
 
 { #category : #'accessing - senders' }
