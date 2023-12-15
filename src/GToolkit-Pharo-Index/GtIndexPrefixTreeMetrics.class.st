@@ -40,11 +40,23 @@ GtIndexPrefixTreeMetrics >> computeForPrefixTree: aPrefixTree [
 ]
 
 { #category : #'gt - extensions' }
+GtIndexPrefixTreeMetrics >> gtViewNodesSizeIntervalFor: aView [
+	<gtView>
+	
+	^ aView forward
+		title: 'Size intervals';
+		priority: 20;
+		object: [ sizeDistribution ];
+		view: #gtViewSizeIntervalsFor:
+]
+
+{ #category : #'gt - extensions' }
 GtIndexPrefixTreeMetrics >> gtViewSummaryFor: aView [
 	<gtView>
 	
 	^ aView columnedList
 		title: 'Summary';
+		priority: 10;
 		items: [ {
 			'Total nodes count' -> totalNodesCount.
 			'Nodes with nil references' -> nilReferencesCount.
