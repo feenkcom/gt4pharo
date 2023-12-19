@@ -20,11 +20,11 @@ GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderView
 			providerBehaviorClass := aBehavior ].
 	
 	targetBehaviourName := targetBehaviorClass name.
-	targetBehaviourIconName := targetBehaviorClass gtCustomSystemIconNameOrNil.
+	targetBehaviourIconName := targetBehaviorClass systemIconName.
 	
 	providerBehaviorClass ifNotNil: [
 		providerBehaviourName := providerBehaviorClass name.
-		providerBehaviourIconName := providerBehaviorClass gtCustomSystemIconNameOrNil. ]
+		providerBehaviourIconName := providerBehaviorClass systemIconName. ]
 ]
 
 { #category : #initialization }
