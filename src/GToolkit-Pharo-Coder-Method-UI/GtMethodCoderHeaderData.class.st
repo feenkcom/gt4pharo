@@ -39,6 +39,16 @@ GtMethodCoderHeaderData >> providerBehaviourName [
 	^ providerBehaviourName
 ]
 
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderData >> spawnBehaviorFor: aCoderViewModel  from: anElement [
+	self subclassResponsibility
+]
+
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderData >> spawnPackageFor: aCoderViewModel from: anElement [
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 GtMethodCoderHeaderData >> targetBehaviourIconName [
 	^ targetBehaviourIconName

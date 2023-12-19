@@ -44,3 +44,17 @@ GtPharoMethodCoderHeaderData >> initializeForUnknownBehaviour [
 	packageName := 'Unknown'.
 	targetBehaviourName := 'Unknown'.
 ]
+
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderData >> spawnBehaviorFor: aCoderViewModel  from: anElement [
+	aCoderViewModel methodOrigin behaviorDo: [ :aBehavior |
+		anElement phlow spawnTool: (GtMethodCoderTool 
+			compiledMethod: aCoderViewModel compiledMethod) ]
+]
+
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderData >> spawnPackageFor: aCoderViewModel from: anElement [
+	aCoderViewModel methodOrigin  behaviorDo: [ :aBehavior |
+		anElement phlow 
+			spawnTool: (GtPackageCoderTool package: aBehavior package) ]
+]

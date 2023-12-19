@@ -14,7 +14,8 @@ Class {
 		'providerBehaviourButton',
 		'targetBehaviorIconContainer',
 		'providerBehaviourIconContainer',
-		'providerBehaviourContainer'
+		'providerBehaviourContainer',
+		'headerCoderModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
@@ -117,28 +118,24 @@ GtPharoMethodCoderHeaderElement >> packageButton [
 ]
 
 { #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> showIconFor: aBehavior in: anIconContainer [
-	| iconName |
-	iconName := aBehavior gtCustomSystemIconNameOrNil.
-	iconName ifNil: [ 
-		"We only show the icon in case it is a custom one"
-		^ self ].
-	
-	anIconContainer addChild: (self 
-		gtSafeIconNamed: iconName) asElement 
+GtPharoMethodCoderHeaderElement >> resetBreadcrumbElements [
+	providerBehaviourContainer visibility: BlVisibility gone.
+	targetBehaviorIconContainer removeChildren.
+	providerBehaviourIconContainer removeChildren
 ]
 
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnBehavior [	
-	targetBehaviorButton model behaviorDo: [ :aBehavior |
-		self phlow spawnTool: (GtMethodCoderTool 
-			compiledMethod: self textualCoderViewModel compiledMethod) ]
+	headerCoderModel
+		spawnBehaviorFor: self textualCoderViewModel 
+		from: self.
 ]
 
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnPackage [
-	packageButton model behaviorDo: [ :aBehavior |
-		self phlow spawnTool: (GtPackageCoderTool package: aBehavior package) ]
+	headerCoderModel
+		spawnPackageFor: self textualCoderViewModel 
+		from: self
 ]
 
 { #category : #'api - textual coder view model' }
@@ -166,33 +163,44 @@ GtPharoMethodCoderHeaderElement >> unsubscribeFromTextualCoderViewModel [
 ]
 
 { #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [	
-	| currentMethodOrigin headerData |
-	
-	currentMethodOrigin := textualCoderViewModel methodOrigin.
-	headerData := textualCoderViewModel computeHeaderBreadcrumbData.
-		
-	packageButton model: currentMethodOrigin.
-	
-	targetBehaviorButton model: currentMethodOrigin.
-	providerBehaviourButton model: currentMethodOrigin.
+GtPharoMethodCoderHeaderElement >> updateBehaviorElements [
+	self updateTargetBehaviorContent.
 
-	packageButton label: headerData packageName.
+	headerCoderModel hasProviderBehaviourData 
+		ifTrue: [ self updateProviderBehaviorContent ]
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
+	headerCoderModel := textualCoderViewModel computeHeaderBreadcrumbData.
 	
-	providerBehaviourContainer visibility: BlVisibility gone.
-	targetBehaviorIconContainer removeChildren.
-	providerBehaviourIconContainer removeChildren.
+	self resetBreadcrumbElements.
 	
-	targetBehaviorButton label: headerData targetBehaviourName.
-	headerData targetBehaviourIconName ifNotNil: [ :anIconName |
-		targetBehaviorIconContainer addChild: (self 
-			gtSafeIconNamed: anIconName) asElement ].
+	self updatePackageLabel.
+	self updateBehaviorElements
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> updatePackageLabel [
+	packageButton label: headerCoderModel packageName
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> updateProviderBehaviorContent [
+	providerBehaviourContainer visibility: BlVisibility visible.
 	
-	headerData hasProviderBehaviourData ifTrue: [
-		providerBehaviourContainer visibility: BlVisibility visible.
-		
-		providerBehaviourButton label: headerData providerBehaviourName.
-		headerData providerBehaviourIconName ifNotNil: [ :anIconName |
-			providerBehaviourIconContainer addChild: (self 
-				gtSafeIconNamed: anIconName) asElement ] ]
+	providerBehaviourButton label: headerCoderModel providerBehaviourName.
+	headerCoderModel providerBehaviourIconName
+		ifNotNil: [ :anIconName | 
+			providerBehaviourIconContainer
+				addChild: (self gtSafeIconNamed: anIconName) asElement ]
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> updateTargetBehaviorContent [
+	targetBehaviorButton label: headerCoderModel targetBehaviourName.
+	headerCoderModel targetBehaviourIconName
+		ifNotNil: [ :anIconName | 
+			targetBehaviorIconContainer
+				addChild: (self gtSafeIconNamed: anIconName) asElement ]
 ]
