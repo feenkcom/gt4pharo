@@ -2,7 +2,7 @@
 Provides data for displaying the header of a coder. The target behavioyr is the main behavioyr on which coder was opened. The provider behaviour is the one containing the actual implementation of the method.
 "
 Class {
-	#name : #GtMethodCoderHeaderData,
+	#name : #GtMethodCoderHeaderModel,
 	#superclass : #Object,
 	#instVars : [
 		'providerBehaviourName',
@@ -15,46 +15,46 @@ Class {
 }
 
 { #category : #testing }
-GtMethodCoderHeaderData >> hasProviderBehaviourData [
+GtMethodCoderHeaderModel >> hasProviderBehaviourData [
 	^ self providerBehaviourName notNil
 ]
 
 { #category : #initialization }
-GtMethodCoderHeaderData >> initializeForCoderViewModel: aCoderViewModel [ 
+GtMethodCoderHeaderModel >> initializeForCoderViewModel: aCoderViewModel [ 
 	self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderData >> packageName [
+GtMethodCoderHeaderModel >> packageName [
 	^ packageName
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderData >> providerBehaviourIconName [
+GtMethodCoderHeaderModel >> providerBehaviourIconName [
 	^ providerBehaviourIconName
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderData >> providerBehaviourName [
+GtMethodCoderHeaderModel >> providerBehaviourName [
 	^ providerBehaviourName
 ]
 
 { #category : #'actions - spawning' }
-GtMethodCoderHeaderData >> spawnBehaviorFor: aCoderViewModel  from: anElement [
+GtMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel  from: anElement [
 	self subclassResponsibility
 ]
 
 { #category : #'actions - spawning' }
-GtMethodCoderHeaderData >> spawnPackageFor: aCoderViewModel from: anElement [
+GtMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
 	self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderData >> targetBehaviourIconName [
+GtMethodCoderHeaderModel >> targetBehaviourIconName [
 	^ targetBehaviourIconName
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderData >> targetBehaviourName [
+GtMethodCoderHeaderModel >> targetBehaviourName [
 	^ targetBehaviourName
 ]

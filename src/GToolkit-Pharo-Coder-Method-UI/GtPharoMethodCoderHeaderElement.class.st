@@ -172,7 +172,7 @@ GtPharoMethodCoderHeaderElement >> updateBehaviorElements [
 
 { #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
-	headerCoderModel := textualCoderViewModel computeHeaderBreadcrumbData.
+	headerCoderModel := textualCoderViewModel computeHeaderBreadcrumbModel.
 	
 	self resetBreadcrumbElements.
 	

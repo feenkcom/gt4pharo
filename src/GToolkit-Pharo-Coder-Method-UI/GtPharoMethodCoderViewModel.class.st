@@ -64,8 +64,8 @@ GtPharoMethodCoderViewModel >> compiledMethod [
 ]
 
 { #category : #accessing }
-GtPharoMethodCoderViewModel >> computeHeaderBreadcrumbData [
-	^ GtPharoMethodCoderHeaderData new 
+GtPharoMethodCoderViewModel >> computeHeaderBreadcrumbModel [
+	^ GtPharoMethodCoderHeaderModel new 
 		initializeForCoderViewModel: self.
 ]
 

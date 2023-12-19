@@ -1,11 +1,11 @@
 Class {
-	#name : #GtPharoMethodCoderHeaderData,
-	#superclass : #GtMethodCoderHeaderData,
+	#name : #GtPharoMethodCoderHeaderModel,
+	#superclass : #GtMethodCoderHeaderModel,
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Support'
 }
 
 { #category : #initialization }
-GtPharoMethodCoderHeaderData >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
+GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
 	| explicitProviderClass targetBehaviorClass providerBehaviorClass |
 	
 	packageName := aBehavior package name.
@@ -28,7 +28,7 @@ GtPharoMethodCoderHeaderData >> initializeForBehaviour: aBehavior fromCoderViewM
 ]
 
 { #category : #initialization }
-GtPharoMethodCoderHeaderData >> initializeForCoderViewModel: aCoderViewModel [
+GtPharoMethodCoderHeaderModel >> initializeForCoderViewModel: aCoderViewModel [
 
 	aCoderViewModel methodOrigin
 		behaviorDo: [ :aBehavior |
@@ -40,20 +40,20 @@ GtPharoMethodCoderHeaderData >> initializeForCoderViewModel: aCoderViewModel [
 ]
 
 { #category : #initialization }
-GtPharoMethodCoderHeaderData >> initializeForUnknownBehaviour [
+GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 	packageName := 'Unknown'.
 	targetBehaviourName := 'Unknown'.
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderData >> spawnBehaviorFor: aCoderViewModel  from: anElement [
+GtPharoMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel  from: anElement [
 	aCoderViewModel methodOrigin behaviorDo: [ :aBehavior |
 		anElement phlow spawnTool: (GtMethodCoderTool 
 			compiledMethod: aCoderViewModel compiledMethod) ]
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderData >> spawnPackageFor: aCoderViewModel from: anElement [
+GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
 	aCoderViewModel methodOrigin  behaviorDo: [ :aBehavior |
 		anElement phlow 
 			spawnTool: (GtPackageCoderTool package: aBehavior package) ]
