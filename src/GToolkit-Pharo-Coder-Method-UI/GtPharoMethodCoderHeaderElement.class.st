@@ -124,6 +124,18 @@ GtPharoMethodCoderHeaderElement >> resetBreadcrumbElements [
 	providerBehaviourIconContainer removeChildren
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoderHeaderElement >> showIconNamed: anIconName in: anIconContainer [
+	
+	(anIconName = Object systemIconName or: [ 
+		anIconName = AbstractLayout systemIconName ]) ifTrue: [ 
+			"We only show the icon in case it is a custom one"
+			^ self ].
+	
+	anIconContainer addChild: (self 
+		gtSafeIconNamed: anIconName) asElement 
+]
+
 { #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnBehavior [	
 	headerCoderModel
@@ -192,8 +204,7 @@ GtPharoMethodCoderHeaderElement >> updateProviderBehaviorContent [
 	providerBehaviourButton label: headerCoderModel providerBehaviourName.
 	headerCoderModel providerBehaviourIconName
 		ifNotNil: [ :anIconName | 
-			providerBehaviourIconContainer
-				addChild: (self gtSafeIconNamed: anIconName) asElement ]
+			self showIconNamed: anIconName in: providerBehaviourIconContainer ]
 ]
 
 { #category : #'event handling' }
@@ -201,6 +212,5 @@ GtPharoMethodCoderHeaderElement >> updateTargetBehaviorContent [
 	targetBehaviorButton label: headerCoderModel targetBehaviourName.
 	headerCoderModel targetBehaviourIconName
 		ifNotNil: [ :anIconName | 
-			targetBehaviorIconContainer
-				addChild: (self gtSafeIconNamed: anIconName) asElement ]
+			self showIconNamed: anIconName in: targetBehaviorIconContainer ]
 ]
