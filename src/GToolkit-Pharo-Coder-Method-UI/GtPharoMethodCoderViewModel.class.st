@@ -64,6 +64,12 @@ GtPharoMethodCoderViewModel >> compiledMethod [
 ]
 
 { #category : #accessing }
+GtPharoMethodCoderViewModel >> computeHeaderBreadcrumbModel [
+	^ GtPharoMethodCoderHeaderModel new 
+		initializeForCoderViewModel: self.
+]
+
+{ #category : #accessing }
 GtPharoMethodCoderViewModel >> contextualBehavior: aBehavior [
 	contextualBehavior := aBehavior
 ]

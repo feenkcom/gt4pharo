@@ -20,7 +20,7 @@ GtPharoMethodSameOrigin >> behavior: anObject [
 	behavior := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtPharoMethodSameOrigin >> behavior: anObject method: aCompiledMethod [
 
 	behavior := anObject.

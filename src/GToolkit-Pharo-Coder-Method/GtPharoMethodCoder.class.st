@@ -393,14 +393,16 @@ GtPharoMethodCoder >> evaluationContext [
 	
 	aMethodOrigin := self methodOrigin.
 	"By default we should aim to compile the method in the same behavior as the method's origin"
-	aMethodOrigin behaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ].
+	aMethodOrigin behaviorDo: [ :aBehavior | 
+		anEvaluationContext targetBehavior: aBehavior ].
 	
 	"however, when a compiled method does not exist it is not possible to determine its origin.
 	In that case we should rely solely on the defined method behavior, if any"
 	aMethodOrigin isUnknownOrigin
 		ifTrue: [
 			self methodBehavior
-				realBehaviorDo: [ :aBehavior | anEvaluationContext targetBehavior: aBehavior ] ].
+				realBehaviorDo: [ :aBehavior | 
+					anEvaluationContext targetBehavior: aBehavior ] ].
 
 	^ anEvaluationContext
 ]
