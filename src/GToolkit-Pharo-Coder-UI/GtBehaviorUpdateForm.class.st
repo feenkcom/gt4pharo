@@ -375,7 +375,7 @@ GtBehaviorUpdateForm >> slotsDescription [
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
 				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
-					aMemento overallStatus valueOrNil isChanged
+					(aMemento overallStatus valueOrNil ifNotNil: #isChanged ifNil: [ true ])
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
 						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
