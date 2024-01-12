@@ -6,12 +6,12 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoPackagesCoder class >> forAllPackages [
-	^ self forPackages: RPackageOrganizer default packages
+	^ self forPackages: RPackageOrganizer default gtSortedPackages
 ]
 
 { #category : #'instance creation' }
 GtPharoPackagesCoder class >> forPackages: aCollectionOfPackages [
-	^ self forItems: (aCollectionOfPackages asSortedCollection: [ :a :b | a name < b name ])
+	^ self forItems: aCollectionOfPackages
 ]
 
 { #category : #private }

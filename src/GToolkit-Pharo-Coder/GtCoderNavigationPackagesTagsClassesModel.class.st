@@ -5,7 +5,6 @@ Class {
 	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'announcer',
-		'packages',
 		'coder',
 		'selectedPackage',
 		'selectedTag'
@@ -125,13 +124,6 @@ GtCoderNavigationPackagesTagsClassesModel >> initialize [
 	self coder: GtPharoPackagesCoder forAllPackages
 ]
 
-{ #category : #initialization }
-GtCoderNavigationPackagesTagsClassesModel >> initializeWithPackages: aCollectionOfRPackage [
-	packages := aCollectionOfRPackage.
-	
-	
-]
-
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
 	self selectedClass == aMethodAdded methodAdded methodClass ifFalse: [ ^ self ].
@@ -247,7 +239,8 @@ GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnreg
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 	<return: #Collection of: #RPackage>
-	^ packages ifNil: [ RPackageOrganizer default packages ]
+
+	^ RPackageOrganizer default gtSortedPackages
 ]
 
 { #category : #'api - selection' }
@@ -393,7 +386,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedTagDo: aBlock [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> showPackage: anRPackage [
-	^ packages isNil or: [ packages includes: anRPackage ]
+	^ true
 ]
 
 { #category : #'api - subscriptions' }
