@@ -60,7 +60,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModel [
 	aModel := self basicPackageTagsClassesNavigation.
 	anElement navigationModel: aModel.
 	self assert: anElement navigationModel equals: aModel.
-	self assert: anElement navigationModel announcer numberOfSubscriptions equals: 0.
+	self assert: anElement navigationModel announcer numberOfSubscriptions > 0.
 	self assertSelectionOfPackage: nil tag: nil class: nil inElement: anElement.
 	^ anElement
 ]
