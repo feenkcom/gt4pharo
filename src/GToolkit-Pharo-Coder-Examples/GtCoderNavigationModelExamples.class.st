@@ -1,10 +1,6 @@
 Class {
 	#name : #GtCoderNavigationModelExamples,
 	#superclass : #Object,
-	#instVars : [
-		'elements',
-		'spaces'
-	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
@@ -25,55 +21,9 @@ GtCoderNavigationModelExamples >> basicPackageTagsClassesNavigation [
 	^ aModel
 ]
 
-{ #category : #'examples - space' }
-GtCoderNavigationModelExamples >> closeSpaces [
-	elements do: #removeFromParent.
-	spaces do: #close.
-]
-
 { #category : #'examples - navigation model' }
 GtCoderNavigationModelExamples >> examplePackage [
 	^ 'GToolkit-Examples-Dummies-Package1' asPackage
-]
-
-{ #category : #initialization }
-GtCoderNavigationModelExamples >> initialize [
-	super initialize.
-	elements := OrderedCollection new: 1.
-	spaces := OrderedCollection new: 1.
-]
-
-{ #category : #'examples - space' }
-GtCoderNavigationModelExamples >> newSpace [
-	<gtExample>
-	| aSpace |
-	aSpace := BlSpace new.
-	aSpace host: BlHeadlessHost new.
-	aSpace title: 'Documenter Examples'.
-	aSpace extent: 600@400.
-	aSpace withHalos.
-	^ aSpace
-]
-
-{ #category : #'examples - space' }
-GtCoderNavigationModelExamples >> putInSpace: aBlElement [
-	<gtExample>
-	| aSpace |
-	self 
-		assert: [ aBlElement isNotNil ]
-		description: [ 'Element must be non-nil' ].
-	aSpace := self newSpace.
-	aSpace root addChild: aBlElement.
-	self registerSpace: aSpace element: aBlElement.
-	^ aSpace
-]
-
-{ #category : #'examples - space' }
-GtCoderNavigationModelExamples >> registerSpace: aSpace element: aBlElement [
-	<gtExample>
-	<after: #closeSpaces>
-	spaces add: aSpace.
-	elements add: aBlElement.
 ]
 
 { #category : #'examples - navigation model' }
