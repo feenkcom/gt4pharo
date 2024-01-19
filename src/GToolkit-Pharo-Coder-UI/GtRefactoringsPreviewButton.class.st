@@ -22,7 +22,8 @@ GtRefactoringsPreviewButton >> beMiniSize [
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
 	| applyAction anAcceptButton |
-	applyAction := [ aButton fireEvent: BrDropdownHideWish new.
+	applyAction := [ 
+		aButton fireEvent: BrDropdownHideWish new.
 		theRefactoringsElement applyRefactorings
 			then: [ :ignore | self dispatchEvent: GtRefactoringsAppliedEvent new ] ].
 
@@ -41,10 +42,6 @@ GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefa
 			action: applyAction;
 			yourself.
 
-	anAcceptButton
-		addShortcut: (BlShortcutWithAction new
-				combination: BlKeyCombination enter;
-				action: applyAction).
 	^ anAcceptButton
 ]
 
