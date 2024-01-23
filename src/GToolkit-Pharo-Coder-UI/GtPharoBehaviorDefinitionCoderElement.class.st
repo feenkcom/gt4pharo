@@ -47,22 +47,23 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionEditor [
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 	| theProperties theReaders superclass |
-	theProperties := BlElement new
-			layout: BlLinearLayout horizontal;
-			constraintsDo: [ :c | 
-				c horizontal matchParent.
-				c vertical fitContent ].
+
+	theProperties := BrHorizontalPane new
+		hMatchParent;
+		vFitContent.
 
 	theReaders := self readers.
 	superclass := theReaders first.
 	theProperties
-		addChildren: {self buildSectionLabel: superclass title.
-				superclass
-					aptitude: [ self readonlyLabelLook + (BrGlamorousWithContextMenuAptitude
-								content: [ BrGlamorousSimpleContextMenuContent new
-										items: (self contextMenuItemsForSuperclass) ])];
-					margin: self buttonMargin;
-					asElement}.
+		addChildren: {
+			self buildSectionLabel: superclass title.
+			superclass
+				aptitude: [
+					self readonlyLabelLook + (BrGlamorousWithContextMenuAptitude
+						content: [ BrGlamorousSimpleContextMenuContent new items: (self contextMenuItemsForSuperclass) ])];
+				margin: self buttonMargin;
+				asElement
+		}.
 	theReaders size > 1
 		ifTrue: [ theProperties
 				addChildren: {self buildSectionLabel: theReaders second title.
@@ -128,6 +129,11 @@ GtPharoBehaviorDefinitionCoderElement >> initialize [
 		aptitude: GtCoderExpanderAptitude;
 		hMatchParent;
 		vFitContent.
+	
+	self when: BlClickEvent do: [ :anEvent |
+		anEvent consumed: true.
+		self expand ].
+	
 	modificationIndicator := self newModificationIndicator.
 	self addChild: modificationIndicator.
 ]

@@ -73,15 +73,6 @@ GtClassSuperclassDefinition >> superclassReader [
 		whenAltClickDo: [ :anEvent :aDefinition | aDefinition replaceFrom: anEvent ];
 		whenPrimaryClickDo: [ :anEvent :aDefinition | aDefinition newTabFrom: anEvent ];
 		whenClickDo: [ :anEvent :aDefinition | aDefinition browseFrom: anEvent ];
-		when: BlMouseEnterEvent
-			do: [ :anEvent | 
-				anEvent consumed: true.
-				anEvent target mouseCursor: nil.
-				anEvent target requestFocus ];
-		when: BlMouseLeaveEvent
-			do: [ :anEvent | 
-				anEvent consumed: true.
-				anEvent target loseFocus ];	
 		when: BlKeyUpEvent do: [ :anEvent | anEvent target mouseCursor: nil ];
 		when: BlKeyDownEvent
 			do: [ :anEvent | 
