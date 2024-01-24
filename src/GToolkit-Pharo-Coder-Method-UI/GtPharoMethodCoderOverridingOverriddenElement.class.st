@@ -4,7 +4,8 @@ Class {
 	#traits : 'TBrLayoutResizable + TGtWithPharoMethodCoderViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtWithPharoMethodCoderViewModel classTrait',
 	#instVars : [
-		'methodOrigin'
+		'methodOrigin',
+		'inheritanceButton'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
@@ -58,6 +59,7 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 
 	self fitContent.
 	self id: GtMethodCoderOverridingOverriddenId.
+	inheritanceButton := nil.
 
 	self withAsyncFutureDo: [ :anElementFuture |
 		anElementFuture
@@ -159,18 +161,19 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 ]
 
 { #category : #updating }
-GtPharoMethodCoderOverridingOverriddenElement >> updateFromOrigin: anOrigin [ 
-	self removeChildren.
-	anOrigin isSameOrigin ifFalse: [ ^ self ].
+GtPharoMethodCoderOverridingOverriddenElement >> updateFromOrigin: anOrigin [
+	anOrigin isSameOrigin
+		ifFalse: [ ^ self visibility: BlVisibility gone ].
 	
 	(anOrigin isOverriding or: [ anOrigin isOverridden ])
-		ifTrue: [
-			| aButton |
-								
-			aButton := self newInheritanceButton.
-			self updateIconForButton: aButton usingOrigin: anOrigin.
-			
-			self addChild: aButton.
+		ifTrue: [			
+			inheritanceButton ifNil: [
+				inheritanceButton := self newInheritanceButton.
+				self addChild: inheritanceButton.
+				inheritanceButton ].
+
+			self updateIconForButton: inheritanceButton usingOrigin: anOrigin.
+
 			self visibility: BlVisibility visible ]
 		ifFalse: [ 
 			self visibility: BlVisibility gone ] 
