@@ -102,8 +102,9 @@ Behavior >> gtCopyButtonFor: anAction [
 		content: [ :aButton | 
 			((GtCopyTraitForm for: self)
 				onAccept: [ :aClass | 
-					aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
-					aButton inUIProcessDo: [ aButton dispatchEvent: BrDropdownHideWish new ] ])
+					aButton inUIProcessDo: [
+						aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
+						aButton dispatchEvent: BrDropdownHideWish new ] ])
 				asElement padding: (BlInsets all: 5) ]].
 
 	^ anAction dropdown
@@ -113,9 +114,10 @@ Behavior >> gtCopyButtonFor: anAction [
 		priority: 4;
 		content: [ :aButton | 
 			((GtCopyClassForm for: self)
-				onAccept: [ :aClass | 
-					aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
-					aButton inUIProcessDo: [ aButton dispatchEvent: BrDropdownHideWish new ] ])
+				onAccept: [ :aClass |
+					aButton inUIProcessDo: [
+						aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
+						aButton dispatchEvent: BrDropdownHideWish new ] ])
 				asElement padding: (BlInsets all: 5) ]
 ]
 
