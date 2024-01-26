@@ -7,15 +7,22 @@ Class {
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdatesMethodList [
 	<gtExample>
-	| anElement |
-	anElement := self elementWithPackageTagAndClassSelection.
+	| aScripter anElement |
+	
+	aScripter := self elementWithPackageTagAndClassSelection.
+	anElement := aScripter element.
+	
 	self
 		assert: (anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ]).
-	[ self classInPackageTag compile: 'newMethod ^self'.
-	anElement methodList anySatisfy: [ :meth | meth selector == #newMethod ] ]
-		ensure: [ self classInPackageTag removeSelector: #newMethod ].
+	[
+		self classInPackageTag compile: 'newMethod ^self'.
+		aScripter play.
+		anElement methodList anySatisfy: [ :meth | meth selector == #newMethod ] ]
+			ensure: [ self classInPackageTag removeSelector: #newMethod ].
+	
+	aScripter play.
 	anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ].
-	^ anElement
+	^ aScripter
 ]
 
 { #category : #asserting }
@@ -60,7 +67,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModel [
 	aModel := self basicPackageTagsClassesNavigation.
 	anElement navigationModel: aModel.
 	self assert: anElement navigationModel equals: aModel.
-	self assert: anElement navigationModel announcer numberOfSubscriptions equals: 0.
+	self assert: anElement navigationModel announcer numberOfSubscriptions > 0.
 	self assertSelectionOfPackage: nil tag: nil class: nil inElement: anElement.
 	^ anElement
 ]
@@ -68,12 +75,15 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModel [
 { #category : #'examples - basic' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModelInSpace [
 	<gtExample>
-	| anElement |
+	| anElement aScripter |
 	anElement := self elementNavigationModel.
-	self putInSpace: anElement.
+	
+	aScripter := BlScripter new element: anElement.
+	
 	self assert: anElement navigationModel announcer numberOfSubscriptions equals: self numberOfSubscriptions.
 	self assertSelectionOfPackage: nil tag: nil class: nil inElement: anElement.
-	^ anElement
+
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
@@ -139,61 +149,79 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection [
 	<gtExample>
-	| anElement |
-	anElement := self elementNavigationModelInSpace.
+	| aScripter anElement |
+	
+	aScripter := self elementNavigationModelInSpace.
+	anElement := aScripter element.
+	
 	anElement navigationModel selectClass: self classInPackage.
+	aScripter play.
+	
 	self
 		assertSelectionOfPackage: self classInPackage package
 		tag: nil
 		class: self classInPackage
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	^ anElement
+	
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection_BeforeInSpace [
 	<gtExample>
-	| anElement |
+	| anElement aScripter |
 	anElement := self elementNavigationModel.
 	anElement navigationModel selectClass: self classInPackage.
-	self putInSpace: anElement.
+	
+	aScripter := BlScripter new element: anElement.
+	
 	self
 		assertSelectionOfPackage: self classInPackage package
 		tag: nil
 		class: self classInPackage
 		inElement: anElement.
-	^ anElement
+		
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndClassSelection [
 	<gtExample>
-	| anElement |
-	anElement := self elementNavigationModelInSpace.
+	| aScripter anElement |
+	
+	aScripter := self elementNavigationModelInSpace.
+	anElement := aScripter element.
+	
 	anElement navigationModel selectClass: self classInPackageTag.
+	aScripter play.
+	
 	self
 		assertSelectionOfPackage: nil
 		tag: self packageTag
 		class: self classInPackageTag
 		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
-	^ anElement
+
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndClassSelection_BeforeInSpace [
 	<gtExample>
-	| anElement |
+	| anElement aScripter |
 	anElement := self elementNavigationModel.
 	anElement navigationModel selectClass: self classInPackageTag.
-	self putInSpace: anElement.
+	
+	aScripter := BlScripter new element: anElement.
+	
 	self 
 		assertSelectionOfPackage: nil
 		tag: self packageTag 
 		class: self classInPackageTag 
 		inElement: anElement.
-	^ anElement
+	
+	^ aScripter
 ]
 
 { #category : #'examples - package tag selection' }
@@ -267,30 +295,39 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedPackageTagAndClassSelection [
 	<gtExample>
-	| anElement |
-	anElement := self elementNavigationModelInSpace.
+	| aScripter anElement |
+
+	aScripter := self elementNavigationModelInSpace.
+	anElement := aScripter element.
+	
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
+	aScripter play.
+	
 	self 
 		assertSelectionOfPackage: 'GToolkit-Coder-Examples' asPackage
 		tag: nil 
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
-	^ anElement
+
+	^ aScripter
 ]
 
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedPackageTagAndClassSelection_BeforeInSpace [
 	<gtExample>
-	| anElement |
+	| anElement aScripter |
 	anElement := self elementNavigationModel.
 	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
-	self putInSpace: anElement.
+	
+	aScripter := BlScripter new element: anElement.
+	
 	self 
-		assertSelectionOfPackage: nil
-		tag: self uncategorizedPackageTag
+		assertSelectionOfPackage: self classInUncategorizedPackageTag package
+		tag: nil
 		class: self classInUncategorizedPackageTag 
 		inElement: anElement.
-	^ anElement
+
+	^ aScripter
 ]
 
 { #category : #'examples - system items' }
@@ -339,7 +376,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithoutTagsAndExte
 { #category : #'examples - basic' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> scripterOnElementNavigationModelInSpace [
 	<gtExample>
-	^ BlScripter new element: self elementNavigationModelInSpace
+	^ self elementNavigationModelInSpace
 ]
 
 { #category : #'examples - system items' }

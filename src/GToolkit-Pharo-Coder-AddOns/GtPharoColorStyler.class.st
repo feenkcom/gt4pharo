@@ -11,7 +11,7 @@ The following example shows how a {{gtMethod:Color class >> #brickColorRegistry 
 Class {
 	#name : #GtPharoColorStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
 { #category : #'private - styling' }
@@ -23,16 +23,25 @@ GtPharoColorStyler >> styleFromString: aMessageSendNode [
 ]
 
 { #category : #'private - styling' }
-GtPharoColorStyler >> styleNode: aMessageSendNode withColor: color [
+GtPharoColorStyler >> styleNode: aMessageSendNode withColor: aColor [
 	self
 		attribute:
 			(BrTextAdornmentDynamicAttribute new
 				beAppend;
-				stencil: [ BlElement new
+				stencil: [
+					BlElement new
 						size: 10 @ 10;
-						background: color;
-						when: BlClickEvent
-							do: [ :e | e target phlow spawnObject: color ] ])
+						background: aColor;
+						addAptitude: (BrGlamorousWithDropdownAptitude
+							handle: [
+								BlElement new
+									size: 10 @ 10;
+									background: aColor ]
+							content: [
+								BlElement new
+									size: 100@100;
+									background: aColor
+						]) ])
 		from: aMessageSendNode stopPosition
 		to: aMessageSendNode stopPosition
 ]

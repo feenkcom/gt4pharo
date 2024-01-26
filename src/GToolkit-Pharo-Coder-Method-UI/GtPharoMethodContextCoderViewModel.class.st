@@ -108,8 +108,8 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
 		then: [ :aSourceText | 
 			self programCounterRange
 				ifNotNil: [ :anInterval | 
-					programCounterAttributes
-						ifNotNil: [ :theAttributes | self removeCoderTextAttributes: theAttributes ].
+					programCounterAttributes ifNotNil: [ :theAttributes | 
+						self removeCoderTextAttributes: theAttributes ].
 					programCounterAttributes := self
 							addTextAttribute: self programCounterTextAttribute
 							onText: aSourceText text

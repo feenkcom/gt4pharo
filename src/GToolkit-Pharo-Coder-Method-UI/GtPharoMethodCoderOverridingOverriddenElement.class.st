@@ -4,7 +4,9 @@ Class {
 	#traits : 'TBrLayoutResizable + TGtWithPharoMethodCoderViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtWithPharoMethodCoderViewModel classTrait',
 	#instVars : [
-		'methodOrigin'
+		'methodOrigin',
+		'inheritanceButton',
+		'currentIcon'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
@@ -58,6 +60,8 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 
 	self fitContent.
 	self id: GtMethodCoderOverridingOverriddenId.
+	inheritanceButton := nil.
+	currentIcon := #none.
 
 	self withAsyncFutureDo: [ :anElementFuture |
 		anElementFuture
@@ -159,30 +163,51 @@ GtPharoMethodCoderOverridingOverriddenElement >> onPharoMethodCoderViewModelChan
 ]
 
 { #category : #updating }
-GtPharoMethodCoderOverridingOverriddenElement >> updateFromOrigin: anOrigin [ 
-	self removeChildren.
-	anOrigin isSameOrigin ifFalse: [ ^ self ].
+GtPharoMethodCoderOverridingOverriddenElement >> updateFromOrigin: anOrigin [
+	anOrigin isSameOrigin
+		ifFalse: [ ^ self visibility: BlVisibility gone ].
 	
 	(anOrigin isOverriding or: [ anOrigin isOverridden ])
-		ifTrue: [
-			| aButton |
-								
-			aButton := self newInheritanceButton.
-			self updateIconForButton: aButton usingOrigin: anOrigin.
-			
-			self addChild: aButton.
+		ifTrue: [			
+			inheritanceButton ifNil: [
+				inheritanceButton := self newInheritanceButton.
+				self addChild: inheritanceButton.
+				inheritanceButton ].
+
+			self updateIconForButton: inheritanceButton usingOrigin: anOrigin.
+
 			self visibility: BlVisibility visible ]
 		ifFalse: [ 
 			self visibility: BlVisibility gone ] 
 ]
 
 { #category : #updating }
-GtPharoMethodCoderOverridingOverriddenElement >> updateIconForButton: aButton usingOrigin: anOrigin [
-	(anOrigin isOverriding and: [ anOrigin isOverridden ])
-		ifTrue: [ aButton icon: BrGlamorousVectorIcons upwardsDownwards ]
+GtPharoMethodCoderOverridingOverriddenElement >> updateIconForButton: aButton overriding: isOverriding overridden: isOverridden [
+	(isOverriding and: [ isOverridden ])
+		ifTrue: [		
+			currentIcon = #both
+				ifFalse: [
+					aButton icon: BrGlamorousVectorIcons upwardsDownwards.
+					currentIcon := #both ] ]
 		ifFalse: [ 
-			anOrigin isOverriding 
-				ifTrue: [ aButton icon: BrGlamorousVectorIcons upwards ].
-			anOrigin isOverridden
-				ifTrue: [ aButton icon: BrGlamorousVectorIcons downwards ] ]
+			isOverriding 
+				ifTrue: [
+					currentIcon = #overriding
+						ifFalse: [
+							aButton icon: BrGlamorousVectorIcons upwards.
+							currentIcon := #overriding ] ].
+			isOverridden
+				ifTrue: [
+					currentIcon = #overridden
+						ifFalse: [
+							aButton icon: BrGlamorousVectorIcons downwards.
+							currentIcon := #overridden ] ] ]
+]
+
+{ #category : #updating }
+GtPharoMethodCoderOverridingOverriddenElement >> updateIconForButton: aButton usingOrigin: anOrigin [			
+	self
+		updateIconForButton: aButton
+		overriding: anOrigin isOverriding
+		overridden: anOrigin isOverridden
 ]
