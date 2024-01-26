@@ -2,7 +2,6 @@ Class {
 	#name : #GtPharoSnippetCoder,
 	#superclass : #GtPharoSourceCoder,
 	#instVars : [
-		'xdocFilename',
 		'behavior'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
