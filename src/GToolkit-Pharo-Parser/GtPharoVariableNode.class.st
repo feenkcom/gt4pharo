@@ -52,6 +52,11 @@ GtPharoVariableNode >> isLocallyDefined [
 ]
 
 { #category : #testing }
+GtPharoVariableNode >> isSpecialVariable [
+	^ false
+]
+
+{ #category : #testing }
 GtPharoVariableNode >> isStatementListPattern [
 	^ self isStatementPattern and: [ self name source includes: $@ ]
 ]
