@@ -84,7 +84,7 @@ GtDefineMethodFixItAction >> methodSource [
 						nextPutAll: eachSelectorPart source;
 						space.
 					baseName := arg isVariable
-							ifTrue: [ arg variableName ]
+							ifTrue: [ arg isSpecialVariable ifTrue: [ 'anObject' ] ifFalse: [ arg variableName ] ]
 							ifFalse: [ arg isLiteral
 									ifTrue: [ arg literalValue class canonicalArgumentName ]
 									ifFalse: [ 'anObject' ] ].
