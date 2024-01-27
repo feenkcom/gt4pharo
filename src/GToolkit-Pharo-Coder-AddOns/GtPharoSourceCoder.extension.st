@@ -105,7 +105,8 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 				addLinkMenuAddOnsTo: coderAddOns
 				node: node
 				selector: #browseImplementorsAt:
-				shortcut: GtSourceCoderBrowseImplementorsShortcut new ]
+				shortcut: GtSourceCoderBrowseImplementorsShortcut new
+				requesterObject: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -140,14 +141,14 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 						description: node name value)
 				hover: (self highlightNodeBlock: node)
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition ]
+				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition requesterObject: aTextualViewModel ]
 				id: nil
 				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
 						combinationForPlatform gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut [
+GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
 	| highlightNode |
 	(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
 		ifFalse: [ ^ self ].
@@ -158,7 +159,7 @@ GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel 
 				description: node selector)
 		hover: (self highlightNodeBlock: highlightNode)
 		leave: self removeHighlightBlock
-		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition ]
+		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition with: aRequester ]
 		shortcutKey: aShortcut combinationForPlatform gtDisplayString
 ]
 
@@ -170,8 +171,9 @@ GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns f
 			self
 				addLinkMenuAddOnsTo: coderAddOns
 				node: node
-				selector: #browseReferencesAt:
-				shortcut: GtSourceCoderBrowseReferencesShortcut new ]
+				selector: #browseReferencesAt:requesterObject:
+				shortcut: GtSourceCoderBrowseReferencesShortcut new
+				requesterObject: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -239,43 +241,53 @@ GtPharoSourceCoder >> browseBehaviorIn: aSourceString [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> browseImplementorsAt: aTextPosition [
+GtPharoSourceCoder >> browseImplementorsAt: aTextPosition requesterObject: aRequester [
 	"Try to find a message selector at a given source text position and request to browse it"
 
 	self
 		detectSelectorAt: aTextPosition
-		ifFound: [ :aSelector | self notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector)  ]
+		ifFound: [ :aSelector | 
+			self
+				notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector)
+				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> browseImplementorsIn: aSourceString [
+GtPharoSourceCoder >> browseImplementorsIn: aSourceString requesterObject: aRequester [
 	"Try to find a message selector within a given source string and request to browse it"
 
 	self
 		detectSelectorIn: aSourceString
-		ifFound: [ :aSelector | self notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector) ]
+		ifFound: [ :aSelector | 
+			self
+				notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector)
+				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> browseReferencesAt: aTextPosition [
+GtPharoSourceCoder >> browseReferencesAt: aTextPosition requesterObject: aRequester [
 	"Try to create a references filter for an entity at the given text position and request to browse it"
 
-	self notifyObjectSpawn: (self
-		detectReferencesFilterAt: aTextPosition
-		ifFound: [ :aReferencesFilter | aReferencesFilter ]
-		ifNone: [ GtSearchNullFilter new ])
+	self
+		notifyObjectSpawn: (self
+				detectReferencesFilterAt: aTextPosition
+				ifFound: [ :aReferencesFilter | aReferencesFilter ]
+				ifNone: [ GtSearchNullFilter new ])
+		requesterObject: aRequester
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> browseReferencesIn: aSourceString [
+GtPharoSourceCoder >> browseReferencesIn: aSourceString requesterObject: aRequester [
 	"Try to create a references filter for an entity within a given source string and request to browse it"
 
-	self notifyObjectSpawn: (self
-		detectReferencesFilterIn: aSourceString
-		ifFound: [ :aReferencesFilter | aReferencesFilter ]
-		ifNone: [ GtSearchNullFilter new ])
+	self
+		notifyObjectSpawn: (self
+				detectReferencesFilterIn: aSourceString
+				ifFound: [ :aReferencesFilter | aReferencesFilter ]
+				ifNone: [ GtSearchNullFilter new ])
+		requesterObject: aRequester
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

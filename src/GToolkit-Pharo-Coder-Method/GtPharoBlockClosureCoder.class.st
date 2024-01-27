@@ -99,9 +99,11 @@ GtPharoBlockClosureCoder >> doItAndGoInContext: aGtSourceCoderEvaluationContext 
 	^ self
 		evaluate: [ :thisCoder | thisCoder blockSource ]
 		inContext: aGtSourceCoderEvaluationContext
-		thenDo: [ :anEvaluationResult |
+		thenDo: [ :anEvaluationResult | 
 			self notifyEvaluatedWithResult: anEvaluationResult.
-			self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
+			self
+				notifyObjectSpawnFromEvaluationResult: anEvaluationResult
+				requesterObject: aGtSourceCoderEvaluationContext requesterObject ]
 ]
 
 { #category : #'api - actions' }

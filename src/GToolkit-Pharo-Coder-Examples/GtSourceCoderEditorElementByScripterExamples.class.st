@@ -13,6 +13,13 @@ GtSourceCoderEditorElementByScripterExamples >> playExample [
 	aScripter
 		substep: 'Play example'
 		do: [ :aStep | 
+			aStep doStep: [ :s | 
+				s 
+					label: 'Remove example result cache';
+					block: [ :aUIModel | aUIModel coder compiledMethod clearExampleAndTestCaches ];
+					onModel
+			].
+		
 			aStep
 				assertStep: [ :s | 
 					s
