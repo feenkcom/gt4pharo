@@ -80,24 +80,26 @@ GtPharoMethodCoder >> behavior: aBehavior [
 ]
 
 { #category : #accessing }
-GtPharoMethodCoder >> browseHierarchyImplementorsAt: aTextPosition [
+GtPharoMethodCoder >> browseHierarchyImplementorsAt: aTextPosition requesterObject: aRequester [
 	self
 		detectSelectorAt: aTextPosition
 		ifFound: [ :aSelector | 
 			self
 				notifyObjectSpawn: (GtSearchMethodsInClassFilter forClass: self behavior) withSuperclasses
-						withSubclasses & aSelector gtImplementors ]
+						withSubclasses & aSelector gtImplementors
+				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
 
 { #category : #accessing }
-GtPharoMethodCoder >> browseHierarchyReferencesAt: aTextPosition [
+GtPharoMethodCoder >> browseHierarchyReferencesAt: aTextPosition requesterObject: aRequester [
 	self
 		detectSelectorAt: aTextPosition
 		ifFound: [ :aSelector | 
 			self
 				notifyObjectSpawn: (GtSearchMethodsInClassFilter forClass: self behavior) withSuperclasses
-						withSubclasses & aSelector gtSenders ]
+						withSubclasses & aSelector gtSenders
+				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
 
@@ -895,15 +897,15 @@ GtPharoMethodCoder >> performMethodRefactoring: refactoring [
 GtPharoMethodCoder >> playAllAndInspectInContext: aGtPharoSourceCoderEvaluationContext [
 	"Save and execute a method"
 
-	self isModified
-		ifTrue: [
-			self save
-				ifFalse: [ ^ self ] ].
+	self isModified ifTrue: [ self save ifFalse: [ ^ self ] ].
 
 	^ self
 		evaluateSelector: self selector
 		inContext: aGtPharoSourceCoderEvaluationContext
-		thenDo: [ :anEvaluationResult | self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
+		thenDo: [ :anEvaluationResult | 
+			self
+				notifyObjectSpawnFromEvaluationResult: anEvaluationResult
+				requesterObject: aGtPharoSourceCoderEvaluationContext requesterObject ]
 ]
 
 { #category : #'api - actions' }
@@ -920,33 +922,17 @@ GtPharoMethodCoder >> playAllInContext: aGtPharoSourceCoderEvaluationContext [
 ]
 
 { #category : #'api - actions examples' }
-GtPharoMethodCoder >> playAndInspectExample [
+GtPharoMethodCoder >> playAndInspectExampleWithRequesterObject: aRequester [
 	self playExample.
 	self exampleResult
-		ifNotNil: [ :anExampleResult | self notifyObjectSpawn: anExampleResult returnValue ]
+		ifNotNil: [ :anExampleResult | self notifyObjectSpawn: anExampleResult returnValue requesterObject: aRequester ]
 ]
 
 { #category : #'api - actions examples' }
-GtPharoMethodCoder >> playAndInspectSlide [
+GtPharoMethodCoder >> playAndInspectSlideWithRequesterObject: aRequester [
+	self isModified ifTrue: [ self save ifFalse: [ ^ self ] ].
 
-	self isModified
-		ifTrue: [
-			self save
-				ifFalse: [ ^ self ] ].
-
-	self notifyObjectSpawn: self compiledMethod gtSlide
-]
-
-{ #category : #'api - actions examples' }
-GtPharoMethodCoder >> playAndInspectSlideFrom: anEditorElement [
-
-	self isModified
-		ifTrue: [
-			self save
-				ifFalse: [ ^ self ] ].
-
-	self
-		notifyObjectSpawn: self compiledMethod gtSlide returnValue
+	self notifyObjectSpawn: self compiledMethod gtSlide requesterObject: aRequester
 ]
 
 { #category : #'api - actions examples' }

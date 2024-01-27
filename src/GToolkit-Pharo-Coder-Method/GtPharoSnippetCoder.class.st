@@ -77,7 +77,10 @@ GtPharoSnippetCoder >> newRbAST: aString [
 GtPharoSnippetCoder >> profileWithMessageTallyInContext: aGtPharoCoderEvaluationContext [
 	^ self
 		evaluate: [ :thisCoder | thisCoder currentSourceString ]
-		decorated: [ :aSourceString | 'MessageTally on: [ ', aSourceString, ']' ]
+		decorated: [ :aSourceString | 'MessageTally on: [ ' , aSourceString , ']' ]
 		inContext: aGtPharoCoderEvaluationContext
-		thenDo: [ :anEvaluationResult | self notifyObjectSpawnFromEvaluationResult: anEvaluationResult ]
+		thenDo: [ :anEvaluationResult | 
+			self
+				notifyObjectSpawnFromEvaluationResult: anEvaluationResult
+				requesterObject: aGtPharoCoderEvaluationContext requesterObject ]
 ]

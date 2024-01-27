@@ -212,7 +212,10 @@ GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddO
 								description: node selector)
 						hover: (self highlightNodeBlock: highlightNode)
 						leave: self removeHighlightBlock
-						action: [ :aTextualViewModel | self perform: #browseHierarchyImplementorsAt: with: highlightNode startPosition ] ] ]
+						action: [ :aTextualViewModel | 
+							self
+								browseHierarchyImplementorsAt: highlightNode startPosition
+								requesterObject: aTextualViewModel ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -229,7 +232,10 @@ GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: code
 								description: node selector)
 						hover: (self highlightNodeBlock: highlightNode)
 						leave: self removeHighlightBlock
-						action: [ :aTextualViewModel | self perform: #browseHierarchyReferencesAt: with: highlightNode startPosition ] ] ]
+						action: [ :aTextualViewModel | 
+							self
+								browseHierarchyReferencesAt: highlightNode startPosition
+								requesterObject: aCoderViewModel ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -762,12 +768,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		ifFalse: [ coderAddOns
 				addContextAction: 'Play and Inspect Example Result' translated
 				icon: BrGlamorousVectorIcons playinspect
-				action: [ :aCoderUIModel :button | self playAndInspectExample ]
+				action: [ :aCoderUIModel :button | self playAndInspectExampleWithRequesterObject: aCoderUIModel ]
 				id: GtMethodCoderPlayAndInspectExampleActionId ].
 	coderAddOns
 		addContextAction: 'Inspect Example Object' translated
 		icon: BrGlamorousVectorIcons eg
-		action: [ :aCoderUIModel :button | self notifyObjectSpawn: self example ].
+		action: [ :aCoderUIModel :button | self notifyObjectSpawn: self example requesterObject: aCoderUIModel ].
 	coderAddOns
 		addContextAction: 'Debug Example' translated
 		icon: BrGlamorousVectorIcons debug
@@ -915,16 +921,14 @@ GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns viewModel: aGtPhar
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
-
-	super
-		initializeAddOns: addOns
-		viewModel: aGtPharoMethodCoderViewModel.
+	super initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel.
 
 	addOns addStyler: (GtMethodAdviceStyler new isForWorkspace: false).
 
-	addOns addMainAction: (GtCoderCustomAction new stencil: [ 
-			 GtPharoMethodCoderSaveButton new pharoMethodCoderViewModel:
-				 aGtPharoMethodCoderViewModel ]).
+	addOns
+		addMainAction: (GtCoderCustomAction new
+				stencil: [ GtPharoMethodCoderSaveButton new
+						pharoMethodCoderViewModel: aGtPharoMethodCoderViewModel ]).
 	addOns
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons remove
@@ -933,13 +937,11 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
-		action: [ :aCoderUIModel :anElement | 
-			self notifyObjectSpawn: aCoderUIModel compiledMethod ].
+		action: [ :aCoderUIModel :anElement | self notifyObjectSpawn: aCoderUIModel compiledMethod requesterObject: aCoderUIModel ].
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
-		action: [ :aCoderUIModel :anElement | 
-		self copyMethodNameToClipboard ]
+		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -1086,18 +1088,16 @@ GtPharoMethodCoder >> slideAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 	(self compiledMethod notNil
 		and: [ anAST notNil
-				and: [ 
-					anAST methodNode
+				and: [ anAST methodNode
 						ifNotNil: [ :node | 
 							node pragmas
 								anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtSlide ] ] ]
-						ifNil: [ false ] ] ])
-		ifFalse: [ ^ self ].
-	(anAST methodNode numArgs = 1) ifFalse: [ ^ self ].
+						ifNil: [ false ] ] ]) ifFalse: [ ^ self ].
+	anAST methodNode numArgs = 1 ifFalse: [ ^ self ].
 	coderAddOns
 		addContextAction: 'Play and Inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
-		action: [ :aCoderUIModel :anEvent | self playAndInspectSlide ].
+		action: [ :aCoderUIModel :anEvent | self playAndInspectSlideWithRequesterObject: aCoderUIModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

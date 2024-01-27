@@ -21,7 +21,7 @@ GtSourceCoderFixItShortcut >> name [
 ]
 
 { #category : #evaluation }
-GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coder: aGtSourceCoder dueTo: aShortcutEvent [
+GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coder: aGtSourceCoder dueTo: aShortcutEvent requesterObject: aReceiver [
 	| text |
 	text := aBrTextEditor text.
 	aBrTextEditor cursors
