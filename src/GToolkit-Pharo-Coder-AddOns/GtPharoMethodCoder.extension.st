@@ -782,7 +782,11 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addContextAction: 'Extract to playground' translated
 		icon: LeIcons lepiterPage
-		action: [ :aCoderUIModel :button :event | self extractExampleToPlaygroundIn: button event: event ]
+		action: [ :aCoderUIModel :button :event | 
+			self
+				extractExampleToPlaygroundIn: button
+				event: event
+				requesterObject: aCoderUIModel ]
 		id: GtMethodCoderExtractPlaygroundActionId
 		allowPrimaryClick: true
 ]
@@ -796,7 +800,7 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractExampleToPlaygroundIn: button event: anEvent [
+GtPharoMethodCoder >> extractExampleToPlaygroundIn: button event: anEvent requesterObject: aRequester [
 	| page cls varName inlinedSource |
 	cls := self behavior.
 	varName := cls isClassSide
@@ -817,11 +821,12 @@ GtPharoMethodCoder >> extractExampleToPlaygroundIn: button event: anEvent [
 				openInPagerFrom: button) maximized ]
 		ifFalse: [ self
 				notifyToolSpawn: (LePagePhlowTool page: page)
-				withDestination: self spawnDestination ]
+				withDestination: self spawnDestination
+				requesterObject: aRequester ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent [
+GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent requesterObject: aRequester [
 	| page cls varName inlinedSource |
 	cls := self behavior.
 	varName := cls isClassSide
@@ -850,7 +855,8 @@ GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent [
 				openInPagerFrom: button) maximized ]
 		ifFalse: [ self
 				notifyToolSpawn: (LePagePhlowTool page: page)
-				withDestination: self spawnDestination ]
+				withDestination: self spawnDestination
+				requesterObject: aRequester ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -1206,7 +1212,11 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 	coderAddOns
 		addContextAction: 'Extract to playground' translated
 		icon: LeIcons lepiterPage
-		action: [ :aCoderUIModel :button :event | self extractTestToPlaygroundIn: button event: event ]
+		action: [ :aCoderUIModel :button :event | 
+			self
+				extractTestToPlaygroundIn: button
+				event: event
+				requesterObject: aCoderUIModel ]
 		id: GtMethodCoderExtractPlaygroundActionId
 		allowPrimaryClick: true
 ]

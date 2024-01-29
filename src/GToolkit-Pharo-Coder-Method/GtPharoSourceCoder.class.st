@@ -401,7 +401,7 @@ GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneB
 ]
 
 { #category : #'private - notifying' }
-GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination [
+GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination requesterObject: aRequester [
 	self announce: (GtCoderToolSpawnRequest new 
 		tool: aTool;
 		spawnDestination: aSpawnDestination;

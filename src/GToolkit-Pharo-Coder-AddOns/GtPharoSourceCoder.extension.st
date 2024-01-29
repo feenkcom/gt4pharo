@@ -66,7 +66,7 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 						description: foundClass name)
 				hover: (self highlightNodeBlock: node)
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self browseBehaviorAt: node startPosition ] ]
+				action: [ :aTextualViewModel | self browseBehaviorAt: node startPosition requesterObject: nil ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -215,28 +215,30 @@ GtPharoSourceCoder >> allReferencesTo: aVariableNode [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> browseBehaviorAt: aTextPosition [
+GtPharoSourceCoder >> browseBehaviorAt: aTextPosition requesterObject: aRequester [
 	"Try to find a behavior reference at a given source text position and request to browse it"
 
 	self
 		detectBehaviorAt: aTextPosition
-		ifFound: [ :aBehavior |
+		ifFound: [ :aBehavior | 
 			self
 				notifyToolSpawn: (GtClassCoderTool observedClass: aBehavior)
-				withDestination: self spawnDestination  ]
+				withDestination: self spawnDestination
+				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> browseBehaviorIn: aSourceString [
+GtPharoSourceCoder >> browseBehaviorIn: aSourceString requesterObject: aRequestor [
 	"Try to find a behavior reference within a given source code and request to browse it"
 
 	self
 		detectBehaviorIn: aSourceString
-		ifFound: [ :aBehavior |
+		ifFound: [ :aBehavior | 
 			self
 				notifyToolSpawn: (GtClassCoderTool observedClass: aBehavior)
-				withDestination: self spawnDestination  ]
+				withDestination: self spawnDestination
+				requesterObject: aRequestor ]
 		ifNone: [  ]
 ]
 
