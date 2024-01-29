@@ -104,7 +104,7 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
 				node: node
-				selector: #browseImplementorsAt:
+				selector: #browseImplementorsAt:requesterObject:
 				shortcut: GtSourceCoderBrowseImplementorsShortcut new
 				requesterObject: aCoderViewModel ]
 ]
