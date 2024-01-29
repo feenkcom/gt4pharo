@@ -206,7 +206,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
 			toggleModel: toggleModel;
 			activateBlock: [ :anEvent | toggleModel activate ];
 			deactivateBlock: [ :anEvent | toggleModel deactivate ];
-			id: GtSourceCoderProfileActionId.
+			id: GtSourceCoderVariableValuesActionnId.
 
 	addOns
 		updateActionList: #mainActions
