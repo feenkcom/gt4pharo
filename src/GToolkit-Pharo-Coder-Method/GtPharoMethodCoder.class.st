@@ -534,13 +534,14 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 GtPharoMethodCoder >> format [
 	| ast |
 	ast := [ RBParser parseMethod: self currentSourceString ]
-		on: SyntaxErrorNotification
-		do: [ :ex | 
-			^ self
-				notifyParseError: ex errorMessage
-				at: ex location ].
-			
-	self currentSourceString: ast formattedCode.
+			on: SyntaxErrorNotification
+			do: [ :ex | 
+				^ self
+					notifyParseError: ex errorMessage
+					at: ex location
+					requesterObject: nil ].
+
+	self currentSourceString: ast formattedCode
 ]
 
 { #category : #'gt-extensions' }
@@ -1066,7 +1067,7 @@ GtPharoMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to save the current method validating syntax and return `true` if save was succesful, false otherwise"
 	<return: #Boolean>
 
-	self validateSyntax
+	(self validateSyntaxInContext: aGtPharoSourceCoderEvaluationContext)
 		ifFalse: [ ^ false ].
 
 	(self compileInContext: aGtPharoSourceCoderEvaluationContext)

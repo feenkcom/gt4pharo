@@ -220,14 +220,14 @@ GtPharoSourceCoder >> format [
 
 { #category : #'private - actions' }
 GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock [
-	^ [
-			aBlock value.
-			true ]
+	^ [ aBlock value.
+	true ]
 		on: OCSemanticWarning
 		do: [ :ex | 
 			self
 				notifyParseError: ex errorMessage
-				at: ex location.
+				at: ex location
+				requesterObject: nil.
 			ex return: false ]
 ]
 
