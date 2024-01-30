@@ -132,7 +132,10 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 
 	list := BrSimpleList new
 		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
-		itemStencil: [ :anElementClass | anElementClass new id: GtSourceCoderId ];
+		itemStencil: [ :anElementClass |
+			anElementClass new
+				vFitContentLimited
+				id: GtSourceCoderId ];
 		itemId: [ :eachCoderViewModel | eachCoderViewModel coder id ];
 		itemDataBinder: [ :aCoderElement :aCoderViewModel :anItemIndex | 
 			BlFrameTelemetry
