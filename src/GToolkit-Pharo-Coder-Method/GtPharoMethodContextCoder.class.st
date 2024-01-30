@@ -46,7 +46,8 @@ GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationCont
 						inContext: aGtPharoSourceCoderEvaluationContext runtimeContext
 						notifying: aGtPharoSourceCoderEvaluationContext.
 				previousMethod ~~ self installedMethod
-					ifTrue: [ self sourceCode: (GtCoderExplicitStringSource new source: aSourceString) ] ].
+					ifTrue: [ self sourceCode: (GtCoderExplicitStringSource new source: aSourceString) ] ]
+			inContext: aGtPharoSourceCoderEvaluationContext.
 
 	^ withoutErrors and: [ compiledSuccesfully ]
 ]
