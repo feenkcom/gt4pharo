@@ -212,9 +212,20 @@ GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 
 { #category : #'api - actions' }
 GtPharoSourceCoder >> format [
+	self formatWithRequesterObject: nil
+]
+
+{ #category : #'api - actions' }
+GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
 	| ast |
-	ast := RBParser parseFaultyExpression: self currentSourceString.
-	ast isFaulty ifTrue: [ ^ self ].
+	ast := [ RBParser parseMethod: self currentSourceString ]
+			on: SyntaxErrorNotification
+			do: [ :ex |
+				^ self
+					notifyParseError: ex errorMessage
+					at: ex location
+					requesterObject: aRequester ].
+
 	self currentSourceString: ast formattedCode
 ]
 
