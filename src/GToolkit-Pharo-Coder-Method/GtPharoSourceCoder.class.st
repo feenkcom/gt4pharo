@@ -219,7 +219,7 @@ GtPharoSourceCoder >> format [
 ]
 
 { #category : #'private - actions' }
-GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock [
+GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock inContext: aGtPharoSourceCoderEvaluationContext [
 	^ [ aBlock value.
 	true ]
 		on: OCSemanticWarning
@@ -227,7 +227,7 @@ GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock [
 			self
 				notifyParseError: ex errorMessage
 				at: ex location
-				requesterObject: nil.
+				requesterObject: aGtPharoSourceCoderEvaluationContext requesterObject.
 			ex return: false ]
 ]
 
@@ -504,8 +504,8 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 		handleCompilerErrorsDuring: [ aCompiledMethodToEvaluate := self
 					primitiveCompile: aSourceString
 					inContext: aGtPharoSourceCoderEvaluationContext
-					onFailDo: [ ^ anEvaluationFailBlock value ] ])
-		ifFalse: [ ^ anEvaluationFailBlock value ].
+					onFailDo: [ ^ anEvaluationFailBlock value ] ]
+		inContext: aGtPharoSourceCoderEvaluationContext) ifFalse: [ ^ anEvaluationFailBlock value ].
 
 	methodArguments := self
 			forPharo11: [ #() ]
