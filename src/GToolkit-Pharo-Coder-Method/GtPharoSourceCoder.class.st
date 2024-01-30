@@ -212,22 +212,33 @@ GtPharoSourceCoder >> extractableNodesWithin: anInterval [
 
 { #category : #'api - actions' }
 GtPharoSourceCoder >> format [
+	self formatWithRequesterObject: nil
+]
+
+{ #category : #'api - actions' }
+GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
 	| ast |
-	ast := RBParser parseFaultyExpression: self currentSourceString.
-	ast isFaulty ifTrue: [ ^ self ].
+	ast := [ RBParser parseMethod: self currentSourceString ]
+			on: SyntaxErrorNotification
+			do: [ :ex |
+				^ self
+					notifyParseError: ex errorMessage
+					at: ex location
+					requesterObject: aRequester ].
+
 	self currentSourceString: ast formattedCode
 ]
 
 { #category : #'private - actions' }
-GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock [
-	^ [
-			aBlock value.
-			true ]
+GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock inContext: aGtPharoSourceCoderEvaluationContext [
+	^ [ aBlock value.
+	true ]
 		on: OCSemanticWarning
 		do: [ :ex | 
 			self
 				notifyParseError: ex errorMessage
-				at: ex location.
+				at: ex location
+				requesterObject: aGtPharoSourceCoderEvaluationContext requesterObject.
 			ex return: false ]
 ]
 
@@ -504,8 +515,8 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 		handleCompilerErrorsDuring: [ aCompiledMethodToEvaluate := self
 					primitiveCompile: aSourceString
 					inContext: aGtPharoSourceCoderEvaluationContext
-					onFailDo: [ ^ anEvaluationFailBlock value ] ])
-		ifFalse: [ ^ anEvaluationFailBlock value ].
+					onFailDo: [ ^ anEvaluationFailBlock value ] ]
+		inContext: aGtPharoSourceCoderEvaluationContext) ifFalse: [ ^ anEvaluationFailBlock value ].
 
 	methodArguments := self
 			forPharo11: [ #() ]

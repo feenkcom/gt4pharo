@@ -215,35 +215,30 @@ GtPharoMethodCoder >> compile [
 { #category : #'api - actions' }
 GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
+
 	<return: #Boolean>
 	| aPreviousCompiledMethod aChange aNewCompiledMethod |
-
-	aPreviousCompiledMethod := self compiledMethod.
-
-	"we should use #currentSelector instead of #selector because we care
+	aPreviousCompiledMethod := self compiledMethod.	"we should use #currentSelector instead of #selector because we care
 	about the `current` state of the coder (#selector may be nil for new methods)"
-	self currentSelector
-		ifNil: [ ^ false ].
+	self currentSelector ifNil: [ ^ false ].
 
 	aGtPharoSourceCoderEvaluationContext hasTargetBehavior
 		ifFalse: [ ^ GtPharoMethodCoderTargetBehaviorNotDefined signal ].
 
 	aChange := self
-		createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
-		inContext: aGtPharoSourceCoderEvaluationContext.
-
+			createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
+			inContext: aGtPharoSourceCoderEvaluationContext.
 	(self
-		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
-		ifFalse: [ ^ false ].
+		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ]
+		inContext: aGtPharoSourceCoderEvaluationContext) ifFalse: [ ^ false ].
 
-	aChange definedSelector
-		ifNil: [ ^ false ].
-	
+	aChange definedSelector ifNil: [ ^ false ].
+
 	aNewCompiledMethod := aChange changeClass >> aChange definedSelector.
 	self forMethod: aNewCompiledMethod.
-	
+
 	self notifyMethodRecompiledFrom: aPreviousCompiledMethod to: aNewCompiledMethod.
-	
+
 	^ true
 ]
 
@@ -528,19 +523,6 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self selector: aCompiledMethod selector.
 	self sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
 	self protocol: aCompiledMethod category
-]
-
-{ #category : #'api - actions' }
-GtPharoMethodCoder >> format [
-	| ast |
-	ast := [ RBParser parseMethod: self currentSourceString ]
-		on: SyntaxErrorNotification
-		do: [ :ex | 
-			^ self
-				notifyParseError: ex errorMessage
-				at: ex location ].
-			
-	self currentSourceString: ast formattedCode.
 ]
 
 { #category : #'gt-extensions' }
@@ -1066,7 +1048,7 @@ GtPharoMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to save the current method validating syntax and return `true` if save was succesful, false otherwise"
 	<return: #Boolean>
 
-	self validateSyntax
+	(self validateSyntaxInContext: aGtPharoSourceCoderEvaluationContext)
 		ifFalse: [ ^ false ].
 
 	(self compileInContext: aGtPharoSourceCoderEvaluationContext)

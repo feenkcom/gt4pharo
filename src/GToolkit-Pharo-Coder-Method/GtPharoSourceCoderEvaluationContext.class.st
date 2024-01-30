@@ -103,10 +103,10 @@ GtPharoSourceCoderEvaluationContext >> isForScripting [
 { #category : #hack }
 GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 	"Hack to work with pharo compiler"
+
 	| aCompleteTextIndex |
-	
 	aCompleteTextIndex := evaluatedInterval first + anIndex - 1.
-	
+
 	NonInteractiveTranscript stdout
 		nextPut: $[;
 		nextPutAll: self coder class name;
@@ -117,19 +117,19 @@ GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 		nextPutAll: 'at ';
 		print: aCompleteTextIndex;
 		cr.
-	
+
 	self coder
-		ifNil: [
-			^ SyntaxErrorNotification
+		ifNil: [ ^ SyntaxErrorNotification
 				inClass: UndefinedObject
 				withCode: aString
 				doitFlag: false
 				errorMessage: aString
 				location: anIndex ].
-	
+
 	self coder
 		notifyParseError: message
 		at: aCompleteTextIndex
+		requesterObject: self requesterObject
 ]
 
 { #category : #hack }
