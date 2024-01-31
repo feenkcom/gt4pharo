@@ -218,7 +218,7 @@ GtPharoSourceCoder >> format [
 { #category : #'api - actions' }
 GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
 	| ast |
-	ast := [ RBParser parseMethod: self currentSourceString ]
+	ast := [ RBParser parseExpression: self currentSourceString ]
 			on: SyntaxErrorNotification
 			do: [ :ex |
 				^ self

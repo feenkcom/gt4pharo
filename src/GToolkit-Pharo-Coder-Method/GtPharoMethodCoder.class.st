@@ -525,6 +525,20 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self protocol: aCompiledMethod category
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> formatWithRequesterObject: aRequester [
+	| ast |
+	ast := [ RBParser parseMethod: self currentSourceString ]
+			on: SyntaxErrorNotification
+			do: [ :ex | 
+				^ self
+					notifyParseError: ex errorMessage
+					at: ex location
+					requesterObject: aRequester ].
+
+	self currentSourceString: ast formattedCode
+]
+
 { #category : #'gt-extensions' }
 GtPharoMethodCoder >> gtDiffViewFor: aView [
 	"<gtView>
