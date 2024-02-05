@@ -1140,7 +1140,8 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 			GtCoderCodeExecutor playAll
 				coderViewModel: aCoderUIModel;
 				element: anElement;
-				execute ].
+				execute ]
+		id: GtPharoMethodPlayAllActionId.
 	coderAddOns
 		addContextAction: 'Play and Inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
@@ -1148,11 +1149,13 @@ GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: a
 			GtCoderCodeExecutor playAllAndInspect
 				coderViewModel: aCoderUIModel;
 				element: anElement;
-				execute ].
+				execute ]
+		id: GtPharoMethodPlayAndInspectActionId.
 	coderAddOns
 		addContextAction: 'Debug' translated
 		icon: BrGlamorousVectorIcons debug
 		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
+		id: GtPharoMethodDebugActionId
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
