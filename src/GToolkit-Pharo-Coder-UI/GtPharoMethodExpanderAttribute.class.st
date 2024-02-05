@@ -3,7 +3,8 @@ Class {
 	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
 	#instVars : [
 		'classOrMetaClass',
-		'selector'
+		'selector',
+		'selfObject'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
 }
@@ -17,12 +18,14 @@ GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 
 { #category : #private }
 GtPharoMethodExpanderAttribute >> buildMethodCoder [
-	| editorElement coder method |
+	| editorElement coder method viewModel |
 	(method := self compiledMethod)
 		ifNil: [ ^ BlElement new ].
 	coder := GtPharoMethodCoder forMethod: method.
 	coder subscribeToSystem.
-	editorElement := coder asElement.
+	viewModel := coder asCoderViewModel.
+	selfObject ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ].
+	editorElement := viewModel asElement.
 	editorElement
 		margin:
 			(BlInsets
@@ -61,4 +64,14 @@ GtPharoMethodExpanderAttribute >> initialize [
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> selector [
 	^ selector
+]
+
+{ #category : #accessing }
+GtPharoMethodExpanderAttribute >> selfObject [
+	^ selfObject
+]
+
+{ #category : #accessing }
+GtPharoMethodExpanderAttribute >> selfObject: anObject [
+	selfObject := anObject
 ]

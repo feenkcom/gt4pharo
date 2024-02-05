@@ -865,6 +865,64 @@ GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 	^ aScripter
 ]
 
+{ #category : #'examples - method expander' }
+GtPharoMethodCoderByScripterExamples >> coderElementWithSelfObject [
+	<gtExample>
+	| aScripter anObject |
+	anObject := GtPharoDummySelfCallsObject new.
+	
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithSelfCalls asCoderViewModel selfObject: anObject ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert view model has self object';
+				value: [ :aCoderViewModel | aCoderViewModel selfObject ] equals: anObject;
+				onModel ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert element has play and inspect button';
+				exists;
+				// GtPharoMethodPlayAndInspectActionId ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert element has method two expander';
+				exists;
+				// GtSourceCoderEditorId;
+				// (GtPharoMethodExpanderId indexed: 1) ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert element has method one expander';
+				exists;
+				// GtSourceCoderEditorId;
+				// (GtPharoMethodExpanderId indexed: 2) ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on method two expander';
+				// GtSourceCoderEditorId;
+				// (GtPharoMethodExpanderId indexed: 1) ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert embeded method has play and inspect button';
+				exists;
+				// GtSourceCoderEditorId;
+				// GtSourceCoderExpandedContentElement;
+				// GtPharoMethodPlayAndInspectActionId ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click embeded method play and inspect button';
+				// GtSourceCoderEditorId;
+				// GtSourceCoderExpandedContentElement;
+				// GtPharoMethodPlayAndInspectActionId ].
+	^ aScripter
+]
+
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnExpander [
 	<gtExample>
@@ -5043,6 +5101,22 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 		model: [ self basicMethodCoder ];
 		play.
 	^ aScripter
+]
+
+{ #category : #'examples - method expander' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithSelfCalls.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - method expander' }
+GtPharoMethodCoderByScripterExamples >> methodWithSelfCalls [
+	<gtExample>
+
+	^ GtPharoDummySelfCallsObject >> #three
 ]
 
 { #category : #'examples - move variable scope' }
