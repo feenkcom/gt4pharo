@@ -17,7 +17,7 @@ GtPharoMethodExpanderStyler >> initialize [
 ]
 
 { #category : #private }
-GtPharoMethodExpanderStyler >> method: aMessage parameterBindingsIntoAttribute: anAttribute [
+GtPharoMethodExpanderStyler >> method: aMessage argumentBindingsIntoAttribute: anAttribute [
 	| aBuilder |
 	aMessage arguments ifEmpty: [ ^ self ].
 	aBuilder := GtPharoArgumentBindingsBuilder new
@@ -62,7 +62,7 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
 	self coderViewModel selfObject
 		ifNotNil: [ :aSelfObject | anAttribute selfObject: aSelfObject ].
-	self method: aMessage parameterBindingsIntoAttribute: anAttribute.
+	self method: aMessage argumentBindingsIntoAttribute: anAttribute.
 	text
 		attribute: anAttribute
 		from: aMessage selectorParts last stopPosition
