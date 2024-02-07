@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtPharoMethodCoder,
 	#instVars : [
 		'context',
-		'session'
+		'session',
+		'originalCompiledCode'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
@@ -59,9 +60,11 @@ GtPharoMethodContextCoder >> compiledMethod [
 	as the method from the class can be changed. In that case the context will 
 	use its own method."
 
-	^ context isBlockContext
+	^ context compiledCode method
+		  
+	"^ context isBlockContext
 		  ifTrue: [ context home compiledCode ]
-		  ifFalse: [ context compiledCode ]
+		  ifFalse: [ context compiledCode ]"
 ]
 
 { #category : #accessing }
@@ -105,6 +108,7 @@ GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 
 	context := aContext.
 	session := aDebugSession.
+	originalCompiledCode := context compiledCode.
 	self forMethod: self compiledMethod
 ]
 
@@ -149,7 +153,7 @@ GtPharoMethodContextCoder >> isDead [
 
 { #category : #testing }
 GtPharoMethodContextCoder >> needsUpdate [
-	^ self installedMethod ~~ self context method
+	^  originalCompiledCode ~~ self context compiledCode
 		or: [ self selector ~~ self compiledMethod selector ]
 ]
 
@@ -165,6 +169,11 @@ GtPharoMethodContextCoder >> onMethodModified: aMethodModified [
 	aMethodModified newMethod selector = method selector ifFalse: [ ^ self ].
 	aMethodModified classAffected = method methodClass ifFalse: [ ^ self ].
 	self notifyMethodModified
+]
+
+{ #category : #accessing }
+GtPharoMethodContextCoder >> originalCompiledMethod [
+	^ originalCompiledCode
 ]
 
 { #category : #printing }
