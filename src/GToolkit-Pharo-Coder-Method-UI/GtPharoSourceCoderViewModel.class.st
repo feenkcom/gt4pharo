@@ -10,6 +10,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
 
+{ #category : #'api - bindings' }
+GtPharoSourceCoderViewModel >> addLocalBindings: aLocalBindings [
+	aLocalBindings bindingNamesAndValuesDo: [ :aName :aVariable | 
+		localBindings localAt: aName putVariable: aVariable ]
+]
+
 { #category : #'api - coder model' }
 GtPharoSourceCoderViewModel >> behavior [
 	"Return a class (or trait) in the context of which the coder is opened"

@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'classOrMetaClass',
 		'selector',
-		'selfObject'
+		'selfObject',
+		'localBindings'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
 }
@@ -25,6 +26,7 @@ GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	coder subscribeToSystem.
 	viewModel := coder asCoderViewModel.
 	selfObject ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ].
+	localBindings ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
 	editorElement := viewModel asElement.
 	editorElement
 		margin:
@@ -59,6 +61,17 @@ GtPharoMethodExpanderAttribute >> initialize [
 		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
 				beAppend;
 				stencil: [ self buildMethodCoder ] ]
+]
+
+{ #category : #accessing }
+GtPharoMethodExpanderAttribute >> localBindings [
+	<return: #GtLocalVariablesBindings>
+	^ localBindings
+]
+
+{ #category : #accessing }
+GtPharoMethodExpanderAttribute >> localBindings: anObject [
+	localBindings := anObject
 ]
 
 { #category : #accessing }
