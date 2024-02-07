@@ -355,23 +355,27 @@ GtPharoMethodCoder >> ensureSave [
 { #category : #'private - actions' }
 GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEvaluationContext thenDo: aThenBlock [
 	"Evaluate a given source code and show the print string if needed"
-	| aReceiver aSourceString aResult |
+	| aReceiver aSourceString aResult evaluationArguments |
 
 	"we can not wrap everything in a critical: because if there is an exception while evaluating
 	the source code the current running process will be suspended, meaning that the very next evaluation
 	will indefinitely wait when trying to enter a critical section."
 	self critical: [
 		aReceiver := aGtPharoSourceCoderEvaluationContext receiverObject.
-
-	aSourceString := self currentSourceString ].
+		aSourceString := self currentSourceString ].
 	
 	aGtPharoSourceCoderEvaluationContext
 		sourceString: aSourceString;
 		evaluatedSourceString: aSourceString;
 		evaluatedInterval: (1 to: aSourceString size).
+		
+	evaluationArguments := GtPharoMethodArgumentsCollector new
+		evaluationContext: aGtPharoSourceCoderEvaluationContext;
+		receiver: aReceiver selector: aSymbol;
+		collect.
 
 	aResult := self
-		evaluateBlock: [ aReceiver perform: aSymbol ]
+		evaluateBlock: [ aReceiver perform: aSymbol withArguments: evaluationArguments ]
 		onErrorDo: [ :aResultWithError | aResultWithError evaluationContext: aGtPharoSourceCoderEvaluationContext ].
 
 	aResult evaluationContext: aGtPharoSourceCoderEvaluationContext.
