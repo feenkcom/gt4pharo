@@ -11,7 +11,16 @@ Class {
 }
 
 { #category : #private }
-GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFrom: aParentArgument [
+GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLiteral: aParentArgument [
+	| aNewName |
+	aParentArgument isLiteral ifFalse: [ ^ self ].
+
+	aNewName := compiledMethod argumentNames at: anIndex.
+	localBindings localAt: aNewName put: aParentArgument literalValue
+]
+
+{ #category : #private }
+GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
 	aParentArgument isVariable ifFalse: [ ^ self ].
 	evaluationContext
 		variableValueOf: aParentArgument variableName
@@ -29,7 +38,8 @@ GtPharoArgumentBindingsBuilder >> build [
 
 	parentMessage arguments
 		doWithIndex: [ :anArgument :anIndex | 
-			self argumentAt: anIndex setValueFrom: anArgument ].
+			self argumentAt: anIndex setValueFromVariable: anArgument.
+			self argumentAt: anIndex setValueFromLiteral: anArgument ].
 ]
 
 { #category : #accessing }
