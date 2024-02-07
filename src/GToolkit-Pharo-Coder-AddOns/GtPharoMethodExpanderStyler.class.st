@@ -18,24 +18,13 @@ GtPharoMethodExpanderStyler >> initialize [
 
 { #category : #private }
 GtPharoMethodExpanderStyler >> method: aMessage parameterBindingsIntoAttribute: anAttribute [
-	| aLocalBindings |
+	| aBuilder |
 	aMessage arguments ifEmpty: [ ^ self ].
-	aLocalBindings := GtLocalVariablesBindings new.
-
-	aMessage arguments
-		doWithIndex: [ :anArgument :anIndex | 
-			anArgument isVariable
-				ifTrue: [ evaluationContext
-						variableValueOf: anArgument variableName
-						ifPresent: [ :aValue | 
-							| aNewName |
-							aNewName := anAttribute compiledMethod argumentNames at: anIndex.
-							aLocalBindings localAt: aNewName put: aValue ]
-						ifAbsent: [  "ignore" ] ] ].
-
-	aLocalBindings bindings ifEmpty: [ ^ self ].
-
-	anAttribute localBindings: aLocalBindings
+	aBuilder := GtPharoArgumentBindingsBuilder new
+		evaluationContext: evaluationContext;
+		parentMessage: aMessage.
+	
+	anAttribute argumentBindingsBuilder: aBuilder
 ]
 
 { #category : #private }
@@ -66,6 +55,7 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			bindings: variableBindings.
 	aMethodClass ifNil: [ ^ self ].
 	(aMethodClass canUnderstand: aMessage selector) ifFalse: [ ^ self ].
+	
 	anAttribute := GtPharoMethodExpanderAttribute
 			forClass: aMethodClass
 			andSelector: aMessage selector.

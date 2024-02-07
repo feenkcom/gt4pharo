@@ -516,13 +516,17 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 					primitiveCompile: aSourceString
 					inContext: aGtPharoSourceCoderEvaluationContext
 					onFailDo: [ ^ anEvaluationFailBlock value ] ]
-		inContext: aGtPharoSourceCoderEvaluationContext) ifFalse: [ ^ anEvaluationFailBlock value ].
+		inContext: aGtPharoSourceCoderEvaluationContext)
+		ifFalse: [ ^ anEvaluationFailBlock value ].
 
-	methodArguments := self
-			forPharo11: [ #() ]
-			forPharo10: [ aGtPharoSourceCoderEvaluationContext runtimeContext
-					ifNil: [ #() ]
-					ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ].
+	methodArguments := aCompiledMethodToEvaluate isDoIt
+			ifTrue: [ self
+					forPharo11: [ #() ]
+					forPharo10: [ aGtPharoSourceCoderEvaluationContext runtimeContext
+							ifNil: [ #() ]
+							ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ] ]
+			ifFalse: [ self flag: 'TODO: add method argument values'.
+				#() ].
 
 	^ aGtPharoSourceCoderEvaluationContext receiverObject
 		withArgs: methodArguments
