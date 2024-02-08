@@ -168,15 +168,15 @@ GtAddParameterRefactoringController >> refactoring [
 	| newArg model |
 	model := self createRefactoringModel.
 	newArg := RBArgumentName name: self variableName value: self argumentSource.
-	^ (parameterNode
-		ifNil: [ RBAddParameterRefactoring ]
-		ifNotNil: [ GtAddParameterRefactoring ])
+	^ (GtAddParameterRefactoring
 		model: model
 		addParameterToMethod: methodNode selector
 		in: (model classFor: self methodClass)
 		newSelector: self newSelector
 		permutation: (1 to: methodNode selector numArgs) , {-1}
-		newArgs: {newArg}
+		newArgs: {newArg})
+		shouldReplaceExpressions: parameterNode notNil;
+		yourself
 ]
 
 { #category : #accessing }
