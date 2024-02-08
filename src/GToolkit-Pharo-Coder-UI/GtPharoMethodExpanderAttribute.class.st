@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'classOrMetaClass',
 		'selector',
-		'selfObject'
+		'selfObject',
+		'argumentBindingsBuilder'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
 }
@@ -17,6 +18,26 @@ GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 ]
 
 { #category : #private }
+GtPharoMethodExpanderAttribute >> addArgumentBindingsIntoViewModel: viewModel [
+	argumentBindingsBuilder ifNil: [ ^ self ].
+	argumentBindingsBuilder compiledMethod: self compiledMethod.
+	argumentBindingsBuilder build.
+	argumentBindingsBuilder localBindings
+		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ]
+]
+
+{ #category : #accessing }
+GtPharoMethodExpanderAttribute >> argumentBindingsBuilder [
+	<return: #GtPharoArgumentBindingsBuilder>
+	^ argumentBindingsBuilder
+]
+
+{ #category : #accessing }
+GtPharoMethodExpanderAttribute >> argumentBindingsBuilder: anObject [
+	argumentBindingsBuilder := anObject
+]
+
+{ #category : #private }
 GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	| editorElement coder method viewModel |
 	(method := self compiledMethod)
@@ -25,6 +46,8 @@ GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	coder subscribeToSystem.
 	viewModel := coder asCoderViewModel.
 	selfObject ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ].
+	self addArgumentBindingsIntoViewModel: viewModel.
+	
 	editorElement := viewModel asElement.
 	editorElement
 		margin:

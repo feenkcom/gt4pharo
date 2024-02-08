@@ -95,7 +95,7 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 		addBindings: GtGlobalVariablesBindings new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtPharoSourceCoderEvaluationContext >> isForScripting [
 	^true
 ]
@@ -180,6 +180,19 @@ GtPharoSourceCoderEvaluationContext >> textMorph [
 	"Hack to handle inserting local variables"
 
 	^ self
+]
+
+{ #category : #binding }
+GtPharoSourceCoderEvaluationContext >> variableValueOf: aVariableName ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	^ self bindingStrategy
+		bindingValueOf: aVariableName
+		ifPresent: aPresentBlock
+		ifAbsent: [ self runtimeContext
+				ifNotNil: [ :aContext | 
+					(aContext hasTemporaryVariableNamed: aVariableName)
+						ifTrue: [ aPresentBlock cull: (aContext tempNamed: aVariableName) ]
+						ifFalse: anAbsentBlock ]
+				ifNil: anAbsentBlock ]
 ]
 
 { #category : #binding }

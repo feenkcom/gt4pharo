@@ -792,6 +792,41 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> executableMessageAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
+	<gtAstCoderAddOns: 20>
+	GtPharoExecutableMethodDetector new
+		methodCoder: self;
+		methodAst: anAST;
+		methodCoderViewModel: aGtPharoMethodCoderViewModel;
+		detect;
+		ifNotExecutable: [ ^ self ].
+
+	coderAddOns
+		addContextAction: 'Play' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor playAll
+				coderViewModel: aCoderUIModel;
+				element: anElement;
+				execute ]
+		id: GtPharoMethodPlayAllActionId.
+	coderAddOns
+		addContextAction: 'Play and Inspect' translated
+		icon: BrGlamorousVectorIcons playinspect
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor playAllAndInspect
+				coderViewModel: aCoderUIModel;
+				element: anElement;
+				execute ]
+		id: GtPharoMethodPlayAndInspectActionId.
+	coderAddOns
+		addContextAction: 'Debug' translated
+		icon: BrGlamorousVectorIcons debug
+		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
+		id: GtPharoMethodDebugActionId
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 
@@ -1116,46 +1151,6 @@ GtPharoMethodCoder >> testCase [
 			aMethod := self compiledMethod.
 			aMethod
 				ifNotNil: [ self attributeNamed: #testCase put: aMethod gtPharoMethodTestCase ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> unaryMessageAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
-	<gtAstCoderAddOns: 20>
-	| isUnaryInstanceSideMethod isUnaryClassSideMethod |
-	
-	self compiledMethod ifNil: [ ^ self ].
-	
-	isUnaryInstanceSideMethod := aGtPharoMethodCoderViewModel selfObject notNil and: [ 
-		anAST methodNode selector isNotNil and: [ anAST methodNode selector isUnary ] ].
-	isUnaryClassSideMethod := (anAST notNil
-		and: [ anAST methodNode
-			ifNotNil: [ :node | node variables isEmpty and: [ self compiledMethod methodClass isClassSide ] ]
-			ifNil: [ false ] ] ).
-	(isUnaryInstanceSideMethod or: [ isUnaryClassSideMethod ])		
-		ifFalse: [ ^ self ].
-	coderAddOns
-		addContextAction: 'Play' translated
-		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor playAll
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		id: GtPharoMethodPlayAllActionId.
-	coderAddOns
-		addContextAction: 'Play and Inspect' translated
-		icon: BrGlamorousVectorIcons playinspect
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor playAllAndInspect
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		id: GtPharoMethodPlayAndInspectActionId.
-	coderAddOns
-		addContextAction: 'Debug' translated
-		icon: BrGlamorousVectorIcons debug
-		action: [ :aCoderUIModel :anElement | aCoderUIModel debug ]
-		id: GtPharoMethodDebugActionId
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

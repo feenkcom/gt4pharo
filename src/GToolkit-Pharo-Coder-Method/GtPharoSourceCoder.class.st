@@ -516,7 +516,8 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 					primitiveCompile: aSourceString
 					inContext: aGtPharoSourceCoderEvaluationContext
 					onFailDo: [ ^ anEvaluationFailBlock value ] ]
-		inContext: aGtPharoSourceCoderEvaluationContext) ifFalse: [ ^ anEvaluationFailBlock value ].
+		inContext: aGtPharoSourceCoderEvaluationContext)
+		ifFalse: [ ^ anEvaluationFailBlock value ].
 
 	methodArguments := self
 			forPharo11: [ #() ]

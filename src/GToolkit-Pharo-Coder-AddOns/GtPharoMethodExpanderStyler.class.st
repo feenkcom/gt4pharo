@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtGenericPharoStyler,
 	#instVars : [
 		'variableBindings',
-		'lastIndex'
+		'lastIndex',
+		'evaluationContext'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
 }
@@ -16,6 +17,17 @@ GtPharoMethodExpanderStyler >> initialize [
 ]
 
 { #category : #private }
+GtPharoMethodExpanderStyler >> method: aMessage argumentBindingsIntoAttribute: anAttribute [
+	| aBuilder |
+	aMessage arguments ifEmpty: [ ^ self ].
+	aBuilder := GtPharoArgumentBindingsBuilder new
+		evaluationContext: evaluationContext;
+		parentMessage: aMessage.
+	
+	anAttribute argumentBindingsBuilder: aBuilder
+]
+
+{ #category : #private }
 GtPharoMethodExpanderStyler >> nextIndex [
 	^ lastIndex := (lastIndex ifNil: [ 0 ]) + 1
 ]
@@ -23,8 +35,11 @@ GtPharoMethodExpanderStyler >> nextIndex [
 { #category : #'api - styling' }
 GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 	variableBindings := self coderViewModel compositeVariableBindings.
+	evaluationContext := self coderViewModel evaluationContext.
 	[ super style: aText ast: theAst ]
-		ensure: [ variableBindings := nil ]
+		ensure: [ 
+			variableBindings := nil.
+			evaluationContext := nil ]
 ]
 
 { #category : #visiting }
@@ -40,13 +55,14 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			bindings: variableBindings.
 	aMethodClass ifNil: [ ^ self ].
 	(aMethodClass canUnderstand: aMessage selector) ifFalse: [ ^ self ].
+	
 	anAttribute := GtPharoMethodExpanderAttribute
 			forClass: aMethodClass
 			andSelector: aMessage selector.
-	anAttribute
-		id: (GtPharoMethodExpanderId indexed: self nextIndex).
+	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
 	self coderViewModel selfObject
 		ifNotNil: [ :aSelfObject | anAttribute selfObject: aSelfObject ].
+	self method: aMessage argumentBindingsIntoAttribute: anAttribute.
 	text
 		attribute: anAttribute
 		from: aMessage selectorParts last stopPosition
