@@ -509,8 +509,6 @@ GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCod
 			inContext: aGtPharoSourceCoderEvaluationContext
 			onFailDo: [ ^ anEvaluationFailBlock value ].
 
-	self haltOnce.
-
 	self class
 		debug: aCompiledMethodToDebug
 		receiver: aGtPharoSourceCoderEvaluationContext receiverObject
