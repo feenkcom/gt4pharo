@@ -20,26 +20,34 @@ Class {
 }
 
 { #category : #'private - actions' }
-GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalContext [
+GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalContext coderEvaluationContext: aCoderEvaluationContext [
 	| guineaPig suspendedContext debugSession |
+	guineaPig := aCompiledMethod isDoIt
+			ifTrue: [ [ aCompiledMethod
+					valueWithReceiver: anObject
+					arguments: (evalContext
+							ifNil: [ #() ]
+							ifNotNil: [ aCompiledMethod numArgs = 0 ifTrue: [ #() ] ifFalse: [ {evalContext} ] ]) ]
+					newProcess ]
+			ifFalse: [ | evaluationArguments |
+				evaluationArguments := GtPharoMethodArgumentsCollector new
+						evaluationContext: aCoderEvaluationContext;
+						compiledMethod: aCompiledMethod;
+						collect.
 
-	guineaPig := [ aCompiledMethod
-		valueWithReceiver: anObject
-		arguments: (evalContext 
-			ifNil: [ #() ] 
-			ifNotNil: [ aCompiledMethod numArgs = 0
-				ifTrue: [ #() ]
-				ifFalse: [ { evalContext } ]  ]) ]
-		newProcess.
+				[ aCompiledMethod 
+					valueWithReceiver: anObject 
+					arguments: evaluationArguments ]
+						newProcess ].
 	suspendedContext := guineaPig suspendedContext.
-	
-	debugSession := guineaPig newDebugSessionNamed: 'debug it' startedAt: suspendedContext.
-	debugSession stepIntoUntil: [:currentContext | 
-		currentContext method == aCompiledMethod ].
-	
-	Smalltalk tools debugger
-		openOn: debugSession
-		withFullView: true
+
+	debugSession := guineaPig
+			newDebugSessionNamed: 'debug it'
+			startedAt: suspendedContext.
+	debugSession
+		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ].
+
+	Smalltalk tools debugger openOn: debugSession withFullView: true
 ]
 
 { #category : #'api - accessing' }
@@ -496,16 +504,18 @@ GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceC
 { #category : #'private - actions' }
 GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	| aCompiledMethodToDebug |
-
 	aCompiledMethodToDebug := self
-		primitiveCompile: aSourceString
-		inContext: aGtPharoSourceCoderEvaluationContext
-		onFailDo: [ ^ anEvaluationFailBlock value ].
+			primitiveCompile: aSourceString
+			inContext: aGtPharoSourceCoderEvaluationContext
+			onFailDo: [ ^ anEvaluationFailBlock value ].
+
+	self haltOnce.
 
 	self class
 		debug: aCompiledMethodToDebug
 		receiver: aGtPharoSourceCoderEvaluationContext receiverObject
 		in: aGtPharoSourceCoderEvaluationContext runtimeContext
+		coderEvaluationContext: aGtPharoSourceCoderEvaluationContext
 ]
 
 { #category : #'private - actions' }
