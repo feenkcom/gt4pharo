@@ -15,9 +15,14 @@ GtRefactoringsWithInputPreviewElement >> buildPreviewForButton: previewButton [
 	editorElement
 		ifNotNil: [ editorElement removeFromParent.
 			pane addChild: editorElement ].
-	self refactorings notEmpty
-		ifTrue: [ pane addChild: (self buildAsyncPreviewForButton: previewButton) as: #preview ].
+	self buildRefactoringsFor: previewButton in: pane.
 	^ pane
+]
+
+{ #category : #accessing }
+GtRefactoringsWithInputPreviewElement >> buildRefactoringsFor: previewButton in: pane [
+	self refactorings notEmpty
+		ifTrue: [ pane addChild: (self buildAsyncPreviewForButton: previewButton) as: #preview ]
 ]
 
 { #category : #accessing }
@@ -39,9 +44,7 @@ GtRefactoringsWithInputPreviewElement >> refactorings: aBlock [
 	pane := editorElement parent.
 	pane ifNil: [ ^ self ].
 	pane removeChildNamed: #preview.
-	pane
-		addChild: (self buildPreviewForButton: (self childNamed: #previewCheckButton))
-		as: #preview
+	self buildRefactoringsFor: (self childNamed: #previewCheckButton) in: pane
 ]
 
 { #category : #testing }
