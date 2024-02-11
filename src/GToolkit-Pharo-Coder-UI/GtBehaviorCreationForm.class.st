@@ -181,6 +181,13 @@ GtBehaviorCreationForm >> traitsDescription [
 						anEvent target phlow
 							spawnTool: (GtClassCoderTool forClass: anEvent target text asString asClass) ].
 				BlShortcutWithAction new
+					name: 'Inspect trait';
+					description: 'Inspects the trait indicated by the editor';
+					combination: BlKeyCombination primaryG;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: anEvent target text asString asClass ].
+				BlShortcutWithAction new
 					name: 'Browse trait references';
 					description: 'Browses references to the trait indicated by the editor';
 					combination: BlKeyCombination primaryN;
