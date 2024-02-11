@@ -46,6 +46,17 @@ GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefa
 ]
 
 { #category : #initialization }
+GtRefactoringsPreviewButton >> buildAsyncPreviewForButton: previewButton [
+	^ BrAsyncWidget new
+		layout: BlLinearLayout vertical;
+		constraintsDo: [ :c | 
+			c vertical exact: 50.
+			c horizontal exact: self previewWidth ];
+		postAction: [ :theLazyElement | theLazyElement constraintsDo: [ :c | c vertical fitContentLimited ] ];
+		stencil: [ self buildRefactoringsPreviewForButton: previewButton ]
+]
+
+{ #category : #initialization }
 GtRefactoringsPreviewButton >> buildCancelButton [
 	| cancelAction |
 	cancelAction := [ self removeFromParent.
@@ -60,6 +71,11 @@ GtRefactoringsPreviewButton >> buildCancelButton [
 		margin: (BlInsets left: 5);
 		action: cancelAction;
 		yourself
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> buildPreviewForButton: previewButton [
+	^ self buildAsyncPreviewForButton: previewButton
 ]
 
 { #category : #initialization }
@@ -105,8 +121,9 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 						constraintsDo: [ :c | c vertical fitContentLimited ]).
 			aContainer addChild: anAcceptButton.
 			anAcceptButton beFocusable.
-			anAcceptButton
-				enqueueTask: (BlTaskAction new action: [ anAcceptButton requestFocus ]) ]
+			self shouldFocusAcceptButton
+				ifTrue: [ anAcceptButton
+						enqueueTask: (BlTaskAction new action: [ anAcceptButton requestFocus ]) ] ]
 		ifFalse: [ self errorMessages
 				do: [ :each | 
 					label := BrLabel new
@@ -179,14 +196,8 @@ GtRefactoringsPreviewButton >> initialize [
 								icon: BrGlamorousIcons empty;
 								beSmallSize;
 								aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
-						content: [ BrAsyncWidget new
-								layout: BlLinearLayout vertical;
-								constraintsDo: [ :c | 
-									c vertical exact: 50.
-									c horizontal exact: self previewWidth ];
-								postAction: [ :theLazyElement | theLazyElement constraintsDo: [ :c | c vertical fitContentLimited ] ];
-								stencil: [ self buildRefactoringsPreviewForButton: previewButton ] ])
-									preferredExtent: self previewWidth @ 50);
+						content: [ self buildPreviewForButton: previewButton ])
+						preferredExtent: self previewWidth @ 50);
 		label: 'Preview'.
 
 	previewButton
@@ -229,4 +240,9 @@ GtRefactoringsPreviewButton >> refactorings [
 { #category : #accessing }
 GtRefactoringsPreviewButton >> refactorings: aBlock [
 	refactoringsComputation := aBlock
+]
+
+{ #category : #testing }
+GtRefactoringsPreviewButton >> shouldFocusAcceptButton [
+	^ true
 ]
