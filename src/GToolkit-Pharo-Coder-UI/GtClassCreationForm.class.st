@@ -129,6 +129,13 @@ GtClassCreationForm >> superclassDescription [
 						anEvent target phlow
 							spawnTool: (GtClassCoderTool forClass: anEvent target text asString asClass) ].
 				BlShortcutWithAction new
+					name: 'Inspect class';
+					description: 'Inspects the class indicated by the editor';
+					combination: BlKeyCombination primaryG;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: anEvent target text asString asClass ].
+				BlShortcutWithAction new
 					name: 'Browse class references';
 					description: 'Browses references to the class indicated by the editor';
 					combination: BlKeyCombination primaryN;
