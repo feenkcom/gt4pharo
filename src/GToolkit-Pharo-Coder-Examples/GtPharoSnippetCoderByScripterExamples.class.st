@@ -462,6 +462,100 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramet
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forTempExtraction_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder
+					forSource: 'OrderedCollection new addAll: (1 to: 100); yourself' ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the snippet to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 30 to: 41;
+						select ] ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forTempExtraction_02_context_menu [
+	<gtExample>
+	| aScripter |
+	aScripter := self forTempExtraction_01_setup.
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover extract method';
+				onSpaceRoot;
+				id: #'context-menu--extract-variable' index: 1 ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				id: #'context-menu--extract-variable' index: 1 ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forTempExtraction_03_enter_name [
+	<gtExample>
+	| aScripter |
+	aScripter := self forTempExtraction_02_context_menu.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor exists';
+				exists;
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+
+	aScripter substep: 'Enter new name' do: [ :aStep | (aStep type: 'var') play ].
+
+	aScripter
+		substep: 'Apply rename'
+		do: [ :aStep | (aStep keyPress: BlKeyboardKey return) play ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor exists';
+				notExists;
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | RBParser parseExpression: aCoderEditor textualCoderViewModel sourceText asString ]
+					equals: [ :aCoderEditor | 
+						RBParser
+							parseExpression: 'var := 1 to: 100. OrderedCollection new addAll: var; yourself' ];
+				id: GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	<gtExample>
 	| aScripter |

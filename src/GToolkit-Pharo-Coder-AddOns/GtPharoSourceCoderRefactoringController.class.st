@@ -86,7 +86,7 @@ GtPharoSourceCoderRefactoringController >> createSnippetRefactoringModel [
 	model := RBClassModelFactory rbNamespace
 			onEnvironment: RBBrowserEnvironment new.
 	self compileSnippetMethodIn: model.
-	modelUpdater cull: model.
+	self modelUpdater cull: model.
 	^ model
 ]
 
