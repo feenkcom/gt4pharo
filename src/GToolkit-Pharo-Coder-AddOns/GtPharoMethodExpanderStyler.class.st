@@ -19,7 +19,7 @@ GtPharoMethodExpanderStyler >> initialize [
 { #category : #private }
 GtPharoMethodExpanderStyler >> method: aMessage argumentBindingsIntoAttribute: anAttribute [
 	| aBuilder |
-	aBuilder := GtPharoArgumentBindingsBuilder new
+	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
 		evaluationContext: evaluationContext;
 		parentMessage: aMessage.
 	
@@ -43,7 +43,7 @@ GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 
 { #category : #visiting }
 GtPharoMethodExpanderStyler >> visitMessage: aMessage [
-	| aMethodClass anAttribute |
+	| aMethodClass anAttribute aBuilder |
 	self visitProgram: aMessage.
 	aMessage parent isNil ifTrue: [ ^ self ].
 	aMethodClass := GtPharoProgramNode
@@ -54,12 +54,15 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			bindings: variableBindings.
 	aMethodClass ifNil: [ ^ self ].
 	(aMethodClass canUnderstand: aMessage selector) ifFalse: [ ^ self ].
-	
+
 	anAttribute := GtPharoMethodExpanderAttribute
 			forClass: aMethodClass
 			andSelector: aMessage selector.
 	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
-	self method: aMessage argumentBindingsIntoAttribute: anAttribute.
+	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
+			evaluationContext: evaluationContext;
+			parentMessage: aMessage.
+	anAttribute argumentBindingsBuilder: aBuilder.
 	text
 		attribute: anAttribute
 		from: aMessage selectorParts last stopPosition

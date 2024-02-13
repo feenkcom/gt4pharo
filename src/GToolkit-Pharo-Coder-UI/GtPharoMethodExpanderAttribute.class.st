@@ -30,7 +30,7 @@ GtPharoMethodExpanderAttribute >> addSelfObjectAndArgumentBindingsIntoViewModel:
 
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> argumentBindingsBuilder [
-	<return: #GtPharoArgumentBindingsBuilder>
+	<return: #GtPharoReceiverAndArgumentBindingsBuilder>
 	^ argumentBindingsBuilder
 ]
 

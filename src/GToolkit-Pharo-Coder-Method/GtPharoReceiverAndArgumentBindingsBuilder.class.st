@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoArgumentBindingsBuilder,
+	#name : #GtPharoReceiverAndArgumentBindingsBuilder,
 	#superclass : #Object,
 	#instVars : [
 		'evaluationContext',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #private }
-GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLiteral: aParentArgument [
+GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLiteral: aParentArgument [
 	| aNewName |
 	aParentArgument isLiteral ifFalse: [ ^ self ].
 
@@ -21,7 +21,7 @@ GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLiteral: aPare
 ]
 
 { #category : #private }
-GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
+GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
 	aParentArgument isVariable ifFalse: [ ^ self ].
 	evaluationContext
 		variableValueOf: aParentArgument variableName
@@ -33,13 +33,13 @@ GtPharoArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aPar
 ]
 
 { #category : #building }
-GtPharoArgumentBindingsBuilder >> build [
+GtPharoReceiverAndArgumentBindingsBuilder >> build [
 	self buildLocalBindings.
 	self buildReceiver.
 ]
 
 { #category : #building }
-GtPharoArgumentBindingsBuilder >> buildLocalBindings [
+GtPharoReceiverAndArgumentBindingsBuilder >> buildLocalBindings [
 	parentMessage arguments ifEmpty: [ ^ self ].
 	localBindings := GtLocalVariablesBindings new.
 
@@ -50,7 +50,7 @@ GtPharoArgumentBindingsBuilder >> buildLocalBindings [
 ]
 
 { #category : #building }
-GtPharoArgumentBindingsBuilder >> buildReceiver [
+GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 	"Inspired by {{gtMethod: GtPharoProgramNode class >> #typeOf:in:bindings:}}"
 
 	| aGtPharoProgramNode |
@@ -78,42 +78,42 @@ GtPharoArgumentBindingsBuilder >> buildReceiver [
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> compiledMethod [
+GtPharoReceiverAndArgumentBindingsBuilder >> compiledMethod [
 	^ compiledMethod
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> compiledMethod: anObject [
+GtPharoReceiverAndArgumentBindingsBuilder >> compiledMethod: anObject [
 	compiledMethod := anObject
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> evaluationContext [
+GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext [
 	^ evaluationContext
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> evaluationContext: anObject [
+GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext: anObject [
 	evaluationContext := anObject
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> localBindings [
+GtPharoReceiverAndArgumentBindingsBuilder >> localBindings [
 	<return: #GtLocalVariablesBindings>
 	^ localBindings
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> parentMessage [
+GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage [
 	^ parentMessage
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> parentMessage: anObject [
+GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 	parentMessage := anObject
 ]
 
 { #category : #accessing }
-GtPharoArgumentBindingsBuilder >> receiverObject [
+GtPharoReceiverAndArgumentBindingsBuilder >> receiverObject [
 	^ receiverObject
 ]
