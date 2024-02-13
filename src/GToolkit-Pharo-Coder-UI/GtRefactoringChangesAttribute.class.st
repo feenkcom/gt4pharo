@@ -50,6 +50,11 @@ GtRefactoringChangesAttribute >> initialize [
 ]
 
 { #category : #accessing }
+GtRefactoringChangesAttribute >> refactoring [
+	^ refactoring
+]
+
+{ #category : #accessing }
 GtRefactoringChangesAttribute >> refactoring: aRBRefactoring [
 	refactoring := aRBRefactoring
 ]

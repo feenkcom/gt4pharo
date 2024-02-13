@@ -11,7 +11,8 @@ Class {
 		'snippetMethodSource',
 		'snippetSelector',
 		'moveToClasses',
-		'movedSelector'
+		'movedSelector',
+		'returnPosition'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -26,6 +27,9 @@ GtExtractMethodFromSnippetRefactoring >> buildNewSnippetSource [
 	| ast |
 	ast := ((model classFor: nil class) methodFor: snippetSelector) ast body.
 	ast temporaryNames do: [ :each | ast removeTemporaryNamed: each ].
+	returnPosition
+		ifNotNil: [ (ast isSequence and: [ ast statements last isReturn ])
+				ifTrue: [ ast statements last replaceWith: ast statements last value copy ] ].
 	snippetSource := ast formattedCode
 ]
 
@@ -50,7 +54,14 @@ GtExtractMethodFromSnippetRefactoring >> cleanChanges [
 GtExtractMethodFromSnippetRefactoring >> extract: anInterval from: aString [
 	source := aString.
 	self buildSnippetMethod.
-	extractionInterval := anInterval first + offset to: anInterval last + offset
+	extractionInterval := anInterval first + offset
+			+ ((returnPosition notNil and: [ anInterval first >= returnPosition ])
+					ifTrue: [ 1 ]
+					ifFalse: [ 0 ])
+			to: anInterval last + offset
+					+ ((returnPosition notNil and: [ anInterval last >= returnPosition ])
+							ifTrue: [ 1 ]
+							ifFalse: [ 0 ])
 ]
 
 { #category : #transforming }
@@ -137,6 +148,9 @@ GtExtractMethodFromSnippetRefactoring >> snippetMethodSource [
 				insert: tempsSource
 				at: (ast rightBar ifNil: [ 1 ] ifNotNil: [ :token | token startPosition ]).
 			offset := offset + tempsSource size ].
+	(ast statements notEmpty and: [ ast lastIsReturn not ])
+		ifTrue: [ returnPosition := ast statements last startPosition.
+			newSource insert: '^' at: ast statements last startPosition ].
 	snippetMethodSource := newSource asString.
 	snippetSelector := (GtPharoParser parse: snippetMethodSource) selector.
 	^ snippetMethodSource
