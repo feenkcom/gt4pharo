@@ -371,7 +371,7 @@ GtPharoMethodCoder >> evaluateSelector: aSymbol inContext: aGtPharoSourceCoderEv
 		
 	evaluationArguments := GtPharoMethodArgumentsCollector new
 		evaluationContext: aGtPharoSourceCoderEvaluationContext;
-		receiver: aReceiver selector: aSymbol;
+		targetBehavior: aGtPharoSourceCoderEvaluationContext targetBehavior receiver: aReceiver selector: aSymbol;
 		collect.
 
 	aResult := self

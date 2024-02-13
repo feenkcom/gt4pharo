@@ -595,6 +595,71 @@ GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_06_reorder_paramet
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forMethodExtractionToClassMethod [
+	<gtExample>
+	| aScripter source selector result modelResult |
+	source := 'Object new printString'.
+	selector := 'asdf123'.
+	result := 'Object _'.
+	modelResult := selector , ' ^self new printString'.
+	aScripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: source ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the snippet to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: source size;
+						select ] ].
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover extract';
+				onSpaceRoot;
+				id: GtMethodCoderExtractMethodContextMenuItemId index: 1 ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract';
+				onSpaceRoot;
+				id: GtMethodCoderExtractMethodContextMenuItemId index: 1 ].
+	(aScripter type: selector) play.
+	(aScripter keyPress: BlKeyboardKey return) play.
+	self hasRefactoringChanges: aScripter.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring changes';
+				// GtSourceCoderEditorId;
+				value: [ :aCoderEditor | 
+						| model |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+							indicesDo: [ :aStart :anEnd :attr | model := attr refactoring model ].
+						((model classFor: Object class) methodFor: selector asSymbol) ast ]
+					equals: [ :aCoderEditor | RBParser parseMethod: modelResult ] ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert value';
+				value: [ :aCoderEditor | RBParser parseExpression: aCoderEditor textualCoderViewModel sourceText asString ]
+					equals: [ :aCoderEditor | RBParser parseExpression: result ];
+				id: GtSourceCoderEditorId ].
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forTempExtraction_01_setup [
 	<gtExample>
 	| aScripter |

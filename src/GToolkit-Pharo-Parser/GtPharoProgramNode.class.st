@@ -21,7 +21,12 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 		ifTrue: [ | aVariableName |
 			aVariableName := aGtPharoProgramNode name value asSymbol.
 
-			aGtPharoProgramNode whoDefines ifNotNil: [ ^ nil ].
+			aGtPharoProgramNode whoDefines
+				ifNotNil: [ :aNode | 
+					(theBindings notNil and: [ theBindings hasBindingOf: aVariableName ])
+						ifTrue: [ (theBindings bindingValueOf: aVariableName)
+								ifNotNil: [ :aValue | ^ aValue class ] ].
+					^ nil ].
 
 			self class environment
 				at: aVariableName

@@ -11,6 +11,24 @@ Class {
 }
 
 { #category : #accessing }
+GtPharoMethodContextCoderViewModel >> compositeVariableBindingsForStyling [
+	"The context variable bindings is added for styling purposes,
+	allowing expansion of methods that are defined on variable receivers, 
+	e.g., `aReceiver copyWith: aValue`.
+	
+	We cannot add the context variable bindings to the default composite variable
+	bindings, because it breaks tools. For example, then it is not possible to save 
+	(compile) methods, notifying that variables are shadowed."
+
+	| theBindings |
+	theBindings := super compositeVariableBindingsForStyling.
+	self context
+		ifNotNil: [ :aContext | theBindings addBindings: (GtContextVariablesBindings new context: aContext) ].
+
+	^ theBindings
+]
+
+{ #category : #accessing }
 GtPharoMethodContextCoderViewModel >> context [
 	^ self coderModel context
 ]

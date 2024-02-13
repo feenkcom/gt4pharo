@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'classOrMetaClass',
 		'selector',
-		'selfObject',
 		'argumentBindingsBuilder'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
@@ -18,17 +17,20 @@ GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 ]
 
 { #category : #private }
-GtPharoMethodExpanderAttribute >> addArgumentBindingsIntoViewModel: viewModel [
+GtPharoMethodExpanderAttribute >> addSelfObjectAndArgumentBindingsIntoViewModel: viewModel [
 	argumentBindingsBuilder ifNil: [ ^ self ].
 	argumentBindingsBuilder compiledMethod: self compiledMethod.
 	argumentBindingsBuilder build.
 	argumentBindingsBuilder localBindings
-		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ]
+		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
+
+	argumentBindingsBuilder receiverObject
+		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ]
 ]
 
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> argumentBindingsBuilder [
-	<return: #GtPharoArgumentBindingsBuilder>
+	<return: #GtPharoReceiverAndArgumentBindingsBuilder>
 	^ argumentBindingsBuilder
 ]
 
@@ -45,8 +47,7 @@ GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	coder := GtPharoMethodCoder forMethod: method.
 	coder subscribeToSystem.
 	viewModel := coder asCoderViewModel.
-	selfObject ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ].
-	self addArgumentBindingsIntoViewModel: viewModel.
+	self addSelfObjectAndArgumentBindingsIntoViewModel: viewModel.
 	
 	editorElement := viewModel asElement.
 	editorElement
@@ -87,14 +88,4 @@ GtPharoMethodExpanderAttribute >> initialize [
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> selector [
 	^ selector
-]
-
-{ #category : #accessing }
-GtPharoMethodExpanderAttribute >> selfObject [
-	^ selfObject
-]
-
-{ #category : #accessing }
-GtPharoMethodExpanderAttribute >> selfObject: anObject [
-	selfObject := anObject
 ]
