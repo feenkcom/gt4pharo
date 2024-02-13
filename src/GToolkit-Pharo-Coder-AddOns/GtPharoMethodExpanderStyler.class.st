@@ -17,23 +17,13 @@ GtPharoMethodExpanderStyler >> initialize [
 ]
 
 { #category : #private }
-GtPharoMethodExpanderStyler >> method: aMessage argumentBindingsIntoAttribute: anAttribute [
-	| aBuilder |
-	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
-		evaluationContext: evaluationContext;
-		parentMessage: aMessage.
-	
-	anAttribute argumentBindingsBuilder: aBuilder
-]
-
-{ #category : #private }
 GtPharoMethodExpanderStyler >> nextIndex [
 	^ lastIndex := (lastIndex ifNil: [ 0 ]) + 1
 ]
 
 { #category : #'api - styling' }
 GtPharoMethodExpanderStyler >> style: aText ast: theAst [
-	variableBindings := self coderViewModel compositeVariableBindings.
+	variableBindings := self coderViewModel compositeVariableBindingsForStyling.
 	evaluationContext := self coderViewModel evaluationContext.
 	[ super style: aText ast: theAst ]
 		ensure: [ 
@@ -44,6 +34,7 @@ GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 { #category : #visiting }
 GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 	| aMethodClass anAttribute aBuilder |
+	(aMessage selector = #raisedTo:) ifTrue: [ self haltOnce ].
 	self visitProgram: aMessage.
 	aMessage parent isNil ifTrue: [ ^ self ].
 	aMethodClass := GtPharoProgramNode
