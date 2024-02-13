@@ -19,7 +19,6 @@ GtPharoMethodExpanderStyler >> initialize [
 { #category : #private }
 GtPharoMethodExpanderStyler >> method: aMessage argumentBindingsIntoAttribute: anAttribute [
 	| aBuilder |
-	aMessage arguments ifEmpty: [ ^ self ].
 	aBuilder := GtPharoArgumentBindingsBuilder new
 		evaluationContext: evaluationContext;
 		parentMessage: aMessage.
@@ -60,8 +59,6 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			forClass: aMethodClass
 			andSelector: aMessage selector.
 	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
-	self coderViewModel selfObject
-		ifNotNil: [ :aSelfObject | anAttribute selfObject: aSelfObject ].
 	self method: aMessage argumentBindingsIntoAttribute: anAttribute.
 	text
 		attribute: anAttribute
