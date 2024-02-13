@@ -55,29 +55,29 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 	| class selector |
 	aNode isMessageSend ifFalse: [ ^ false ].
 	selector := aNode selector.
-	class := GtPharoProgramNode
-		typeOf: aNode receiver
-		in: self behavior
-		bindings: aCoderViewModel compositeVariableBindings.
+	class := aNode receiver isSuper
+			ifTrue: [ self behavior ]
+			ifFalse: [ GtPharoProgramNode
+					typeOf: aNode receiver
+					in: self behavior
+					bindings: aCoderViewModel compositeVariableBindings ].
 	class isNil
-		ifTrue:
-			[ Smalltalk globals
-				allBehaviorsDo:
-					[ :each | 
+		ifTrue: [ Smalltalk globals
+				allBehaviorsDo: [ :each | 
 					(each includesSelector: selector)
-						ifTrue:
-							[ class notNil ifTrue: [ ^ self ].
+						ifTrue: [ class notNil ifTrue: [ ^ self ].
 							class := each ] ] ].
 	class isNil ifTrue: [ ^ self ].
 	class := class whichClassIncludesSelector: selector.
 	class isNil ifTrue: [ ^ self ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Inline send' description: aNode selector)
+		addContextMenuItem: (self
+				createLabel: 'Inline send'
+				description: aNode selector)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action:
-			[ :each | 
-			((GtSnippetInlineMessageRefactoringController new)
+		action: [ :each | 
+			(GtSnippetInlineMessageRefactoringController new
 				messageNode: aNode;
 				implementorClass: class;
 				sourceCoderViewModel: each) execute ]

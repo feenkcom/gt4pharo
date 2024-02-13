@@ -6,6 +6,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #accessing }
+GtPharoSnippetCoderByScripterExamples class >> inlineTestMethod: a [
+	^ a
+]
+
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> check: aScripter hasReorderAttributes: anInteger [
 	<gtExample>
@@ -43,6 +48,64 @@ GtPharoSnippetCoderByScripterExamples >> checkExtractedSource: aScripter [
 									[ (variables includes: messageSend receiver variableName)
 										and: [ messageSend arguments allSatisfy: [ :each | variables includes: each variableName ] ] ] ] ] ].
 	^ text
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> checkInlineSnippet: source messageInterval: anInterval producing: result [
+	<gtExample>
+	| behavior |
+	behavior := nil class.
+	^ self
+		checkInlineSnippet: source
+		messageInterval: anInterval
+		producing: result
+		inClass: behavior
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> checkInlineSnippet: source messageInterval: anInterval producing: result inClass: behavior [
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ (GtPharoSnippetCoder forSource: source) behavior: behavior ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the snippet to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: anInterval first to: anInterval last;
+						select ] ].
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover inline';
+				onSpaceRoot;
+				id: #'context-menu--inline-send' index: 1 ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inline';
+				onSpaceRoot;
+				id: #'context-menu--inline-send' index: 1 ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert value';
+				value: [ :aCoderEditor | RBParser parseExpression: aCoderEditor textualCoderViewModel sourceText asString ]
+					equals: [ :aCoderEditor | RBParser parseExpression: result ];
+				id: GtSourceCoderEditorId ].
+	^ aScripter
 ]
 
 { #category : #'examples - extract method' }
@@ -344,6 +407,76 @@ GtPharoSnippetCoderByScripterExamples >> forClassExtraction_05_enter_name [
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forInlineCheckBlockValue [
+	<gtExample>
+	| message source |
+	message := 'GtPharoSnippetCoderByScripterExamples inlineTestMethod: a'.
+	source := '[1 a. ' , message , ']'.
+	^ self
+		checkInlineSnippet: source
+		messageInterval: (6 to: message size + 6)
+		producing: '[1 a. a]'
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forInlineCheckRemoveStatementInBlock [
+	<gtExample>
+	| message source |
+	message := 'GtPharoSnippetCoderByScripterExamples inlineTestMethod: a'.
+	source := '[' , message , '. b]'.
+	^ self
+		checkInlineSnippet: source
+		messageInterval: (1 to: message size + 1)
+		producing: '[b]'
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forInlineCheckSendIsRemoved [
+	<gtExample>
+	| message source |
+	message := 'GtPharoSnippetCoderByScripterExamples inlineTestMethod: a'.
+	source := message , '. 3'.
+	^ self
+		checkInlineSnippet: source
+		messageInterval: (0 to: message size)
+		producing: '3'
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forInlineCheckUnnecessaryAssignmentsAreRemoved [
+	<gtExample>
+	| message |
+	message := 'GtPharoSnippetCoderByScripterExamples inlineTestMethod: a'.
+	^ self
+		checkInlineSnippet: message
+		messageInterval: (0 to: message size)
+		producing: 'a'
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forInlineCheckVariableAccess [
+	<gtExample>
+	| message |
+	message := 'self value'.
+	^ self
+		checkInlineSnippet: message
+		messageInterval: (0 to: message size)
+		producing: 'value'
+		inClass: Association
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forInline_true_isNil [
+	<gtExample>
+	| message |
+	message := 'true isNil'.
+	^ self
+		checkInlineSnippet: message
+		messageInterval: (0 to: message size)
+		producing: 'false'
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forKeywordExtraction_01_setup [
 	<gtExample>
 	| aScripter |
@@ -501,13 +634,13 @@ GtPharoSnippetCoderByScripterExamples >> forTempExtraction_02_context_menu [
 	aScripter
 		mouseMoveOverStep: [ :s | 
 			s
-				label: 'Hover extract method';
+				label: 'Hover extract variable';
 				onSpaceRoot;
 				id: #'context-menu--extract-variable' index: 1 ].
 	aScripter
 		clickStep: [ :s | 
 			s
-				label: 'Click extract method';
+				label: 'Click extract variable';
 				onSpaceRoot;
 				id: #'context-menu--extract-variable' index: 1 ].
 
@@ -537,7 +670,7 @@ GtPharoSnippetCoderByScripterExamples >> forTempExtraction_03_enter_name [
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert rename editor exists';
+				label: 'Assert rename editor doesn''t exist';
 				notExists;
 				id: GtSourceCoderEditorId;
 				onBreadthFirstChildOfClass: GtRenameEditor ].
@@ -545,7 +678,7 @@ GtPharoSnippetCoderByScripterExamples >> forTempExtraction_03_enter_name [
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert rename editor attribute';
+				label: 'Assert refactoring value';
 				value: [ :aCoderEditor | RBParser parseExpression: aCoderEditor textualCoderViewModel sourceText asString ]
 					equals: [ :aCoderEditor | 
 						RBParser
