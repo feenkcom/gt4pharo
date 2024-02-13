@@ -17,24 +17,13 @@ GtPharoMethodExpanderStyler >> initialize [
 ]
 
 { #category : #private }
-GtPharoMethodExpanderStyler >> method: aMessage argumentBindingsIntoAttribute: anAttribute [
-	| aBuilder |
-	aMessage arguments ifEmpty: [ ^ self ].
-	aBuilder := GtPharoArgumentBindingsBuilder new
-		evaluationContext: evaluationContext;
-		parentMessage: aMessage.
-	
-	anAttribute argumentBindingsBuilder: aBuilder
-]
-
-{ #category : #private }
 GtPharoMethodExpanderStyler >> nextIndex [
 	^ lastIndex := (lastIndex ifNil: [ 0 ]) + 1
 ]
 
 { #category : #'api - styling' }
 GtPharoMethodExpanderStyler >> style: aText ast: theAst [
-	variableBindings := self coderViewModel compositeVariableBindings.
+	variableBindings := self coderViewModel compositeVariableBindingsForStyling.
 	evaluationContext := self coderViewModel evaluationContext.
 	[ super style: aText ast: theAst ]
 		ensure: [ 
@@ -44,7 +33,8 @@ GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 
 { #category : #visiting }
 GtPharoMethodExpanderStyler >> visitMessage: aMessage [
-	| aMethodClass anAttribute |
+	| aMethodClass anAttribute aBuilder |
+	(aMessage selector = #raisedTo:) ifTrue: [ self haltOnce ].
 	self visitProgram: aMessage.
 	aMessage parent isNil ifTrue: [ ^ self ].
 	aMethodClass := GtPharoProgramNode
@@ -55,14 +45,15 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			bindings: variableBindings.
 	aMethodClass ifNil: [ ^ self ].
 	(aMethodClass canUnderstand: aMessage selector) ifFalse: [ ^ self ].
-	
+
 	anAttribute := GtPharoMethodExpanderAttribute
 			forClass: aMethodClass
 			andSelector: aMessage selector.
 	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
-	self coderViewModel selfObject
-		ifNotNil: [ :aSelfObject | anAttribute selfObject: aSelfObject ].
-	self method: aMessage argumentBindingsIntoAttribute: anAttribute.
+	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
+			evaluationContext: evaluationContext;
+			parentMessage: aMessage.
+	anAttribute argumentBindingsBuilder: aBuilder.
 	text
 		attribute: anAttribute
 		from: aMessage selectorParts last stopPosition
