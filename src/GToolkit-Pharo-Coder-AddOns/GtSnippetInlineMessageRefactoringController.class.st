@@ -3,10 +3,26 @@ Class {
 	#superclass : #GtPharoSourceCoderRefactoringController,
 	#instVars : [
 		'messageNode',
-		'implementorClass'
+		'implementorClass',
+		'returnLocation'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
+
+{ #category : #accessing }
+GtSnippetInlineMessageRefactoringController >> compileSnippetMethodIn: model [
+	| cls ast source needsReturn |
+	super compileSnippetMethodIn: model.
+	cls := model classFor: self snippetClass.
+	ast := (cls methodFor: self snippetSelector) ast.
+	needsReturn := ast lastIsReturn not.
+	needsReturn ifFalse: [ ^ self ].
+	source := cls sourceCodeFor: self snippetSelector.
+	returnLocation := ast body statements last start - 1.
+	cls
+		compile: (source first: returnLocation) , '^' , (source allButFirst: returnLocation)
+		classified: #accessing
+]
 
 { #category : #accessing }
 GtSnippetInlineMessageRefactoringController >> implementorClass: aClass [
@@ -22,9 +38,16 @@ GtSnippetInlineMessageRefactoringController >> messageNode: aGtPharoMessageSendN
 GtSnippetInlineMessageRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createSnippetRefactoringModel.
-	refactoring := RBInlineMethodFromComponentRefactoring
+	refactoring := ((messageNode receiver isSelf
+			or: [ messageNode receiver isSuper ])
+			ifTrue: [ GtInlineMethodRefactoring ]
+			ifFalse: [ GtInlineMethodFromComponentRefactoring ])
 			model: model
 			inline: (self snippetIntervalFor: messageNode sourceInterval)
+					+ ((returnLocation notNil
+							and: [ returnLocation < (self snippetIntervalFor: messageNode sourceInterval) first ])
+							ifTrue: [ 1 ]
+							ifFalse: [ 0 ])
 			inMethod: self snippetSelector
 			forClass: self snippetClass.
 	refactoring
@@ -40,11 +63,30 @@ GtSnippetInlineMessageRefactoringController >> refactoringName [
 ]
 
 { #category : #executing }
+GtSnippetInlineMessageRefactoringController >> removeReturn: model [
+	| cls ast |
+	cls := model classFor: self snippetClass.
+	ast := (cls methodFor: self snippetSelector) ast.
+	(ast body statements notEmpty and: [ ast body statements last isReturn ])
+		ifFalse: [ ^ self ].
+	ast body statements last replaceWith: ast body statements last value copy.
+	cls compile: ast formattedCode classified: #accessing
+]
+
+{ #category : #executing }
 GtSnippetInlineMessageRefactoringController >> safelyExecute [
 	| refactoring |
 	refactoring := self refactoring.
-	[ refactoring primitiveExecute ] on: RBRefactoringError do: [ :ex | ^ self ].
+	[ refactoring primitiveExecute.
+	returnLocation ifNotNil: [ self removeReturn: refactoring model ] ]
+		on: RBRefactoringError
+		do: [ :ex | ^ self inform: ex messageText ].
 	self setText: (self refactoredSnippetCodeFrom: refactoring)
+]
+
+{ #category : #accessing }
+GtSnippetInlineMessageRefactoringController >> snippetClass [
+	^ implementorClass
 ]
 
 { #category : #private }

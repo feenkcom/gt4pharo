@@ -56,7 +56,7 @@ GtExtractMethodFromSnippetRefactoring >> extract: anInterval from: aString [
 { #category : #transforming }
 GtExtractMethodFromSnippetRefactoring >> inlineForwarder [
 	| refactoring |
-	refactoring := RBInlineMethodRefactoring
+	refactoring := GtInlineMethodRefactoring
 		model: self model
 		inline: self inlineInterval
 		inMethod: snippetSelector

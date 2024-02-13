@@ -41,8 +41,10 @@ GtPharoSourceCoderRefactoringController >> ast [
 { #category : #private }
 GtPharoSourceCoderRefactoringController >> compileSnippetMethodIn: model [
 	| cls |
-	cls := model classFor: nil class.
-	cls compile: self snippetSelector , ' ' , self sourceText asString classified: #accessing
+	cls := model classFor: self snippetClass.
+	cls
+		compile: self snippetSelector , ' ' , self sourceText asString
+		classified: #accessing
 ]
 
 { #category : #executing }

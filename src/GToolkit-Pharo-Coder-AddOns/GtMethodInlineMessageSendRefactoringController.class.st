@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtMethodInlineMessageSendRefactoringController >> inlineRefactoringClass [
-	^ RBInlineMethodRefactoring
+	^ GtInlineMethodRefactoring
 ]
 
 { #category : #accessing }
