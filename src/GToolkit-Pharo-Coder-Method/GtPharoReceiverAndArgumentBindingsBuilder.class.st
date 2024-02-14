@@ -57,10 +57,10 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 	aGtPharoProgramNode := parentMessage parent receiver.
 			
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
-		ifTrue: [ ^ receiverObject := evaluationContext receiverObject ].
+		ifTrue: [ ^ receiverObject := nil ].
 	
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
-		ifTrue: [ ^ receiverObject := evaluationContext receiverObject ].
+		ifTrue: [ ^ receiverObject := nil ].
 		
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ])
 		ifTrue: [ ^ receiverObject := evaluationContext receiverObject ].

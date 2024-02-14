@@ -5104,6 +5104,44 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 ]
 
 { #category : #'examples - method expander' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithSuperCalls asCoderViewModel ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert method expander';
+				exists;
+				// (GtPharoMethodExpanderId indexed: 1) ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on method expander';
+				// (GtPharoMethodExpanderId indexed: 1) ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert 1st method expander';
+				satisfies: [ :aCoderElement | 
+						1
+							to: 7
+							do: [ :anIndex | 
+								| aQuery |
+								aQuery := aCoderElement query // (GtPharoMethodExpanderId indexed: 1).
+								self assert: aQuery all size equals: 1 ].
+						true ]
+					description: '';
+				// GtSourceCoderEditorId;
+				// GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - method expander' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	<gtExample>
 	| aMethod aCoder |
@@ -5113,10 +5151,26 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 ]
 
 { #category : #'examples - method expander' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithSuperCalls [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithSuperCalls.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - method expander' }
 GtPharoMethodCoderByScripterExamples >> methodWithSelfCalls [
 	<gtExample>
 
 	^ GtPharoDummySelfCallsObject >> #three
+]
+
+{ #category : #'examples - method expander' }
+GtPharoMethodCoderByScripterExamples >> methodWithSuperCalls [
+	<gtExample>
+
+	^ GtPharoDummySuperCallsObject >> #anotherNumber
 ]
 
 { #category : #'examples - move variable scope' }
