@@ -34,7 +34,6 @@ GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 { #category : #visiting }
 GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 	| aMethodClass anAttribute aBuilder |
-	(aMessage selector = #raisedTo:) ifTrue: [ self haltOnce ].
 	self visitProgram: aMessage.
 	aMessage parent isNil ifTrue: [ ^ self ].
 	aMethodClass := GtPharoProgramNode
