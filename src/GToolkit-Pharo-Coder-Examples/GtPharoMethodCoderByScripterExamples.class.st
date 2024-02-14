@@ -865,7 +865,7 @@ GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 	^ aScripter
 ]
 
-{ #category : #'examples - method expander' }
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> coderElementWithSelfObject [
 	<gtExample>
 	| aScripter anObject |
@@ -5103,7 +5103,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 	^ aScripter
 ]
 
-{ #category : #'examples - method expander' }
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
 	<gtExample>
 	| aScripter |
@@ -5141,7 +5141,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
 	^ aScripter
 ]
 
-{ #category : #'examples - method expander' }
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	<gtExample>
 	| aMethod aCoder |
@@ -5150,7 +5150,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	^ aCoder
 ]
 
-{ #category : #'examples - method expander' }
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSuperCalls [
 	<gtExample>
 	| aMethod aCoder |
@@ -5159,14 +5159,14 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithSuperCalls [
 	^ aCoder
 ]
 
-{ #category : #'examples - method expander' }
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodWithSelfCalls [
 	<gtExample>
 
 	^ GtPharoDummySelfCallsObject >> #three
 ]
 
-{ #category : #'examples - method expander' }
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodWithSuperCalls [
 	<gtExample>
 
