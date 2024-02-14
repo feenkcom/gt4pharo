@@ -6,7 +6,8 @@ Class {
 		'compiledMethod',
 		'parentMessage',
 		'localBindings',
-		'receiverObject'
+		'receiverObject',
+		'selfObject'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -57,13 +58,13 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 	aGtPharoProgramNode := parentMessage parent receiver.
 			
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
-		ifTrue: [ ^ receiverObject := nil ].
+		ifTrue: [ ^ receiverObject := selfObject ].
 	
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
-		ifTrue: [ ^ receiverObject := nil ].
+		ifTrue: [ ^ receiverObject := selfObject ].
 		
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ])
-		ifTrue: [ ^ receiverObject := evaluationContext receiverObject ].
+		ifTrue: [ ^ receiverObject := selfObject ].
 		
 	aGtPharoProgramNode isVariable
 		ifTrue: [ | aVariableName |
@@ -97,7 +98,7 @@ GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext: anObject [
 	evaluationContext := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - results' }
 GtPharoReceiverAndArgumentBindingsBuilder >> localBindings [
 	<return: #GtLocalVariablesBindings>
 	^ localBindings
@@ -113,7 +114,17 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 	parentMessage := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - results' }
 GtPharoReceiverAndArgumentBindingsBuilder >> receiverObject [
 	^ receiverObject
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> selfObject [
+	^ selfObject
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> selfObject: anObject [
+	selfObject := anObject
 ]

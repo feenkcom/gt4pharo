@@ -5118,23 +5118,97 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
 				// (GtPharoMethodExpanderId indexed: 1) ].
 
 	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert method self-object';
+				value: #selfObject equals: nil;
+				// GtSourceCoderEditorId;
+				onChildFromMessage: #textualCoderViewModel ].
+
+	aScripter
 		clickStep: [ :s | 
 			s
 				label: 'Click on method expander';
 				// (GtPharoMethodExpanderId indexed: 1) ].
+
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert 1st method expander';
-				satisfies: [ :aCoderElement | 
-						1
-							to: 7
-							do: [ :anIndex | 
+				label: 'Assert expanded method self-object';
+				value: #selfObject equals: nil;
+				// GtSourceCoderEditorId;
+				// GtSourceCoderEditorId;
+				onChildFromMessage: #textualCoderViewModel ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert 7 method expanders';
+				value: [ :aCoderElement | 
+						(1 to: 7)
+							collect: [ :anIndex | 
 								| aQuery |
-								aQuery := aCoderElement query // (GtPharoMethodExpanderId indexed: 1).
-								self assert: aQuery all size equals: 1 ].
-						true ]
-					description: '';
+								aQuery := aCoderElement query
+										// (GtPharoMethodExpanderId indexed: anIndex).
+								aQuery all size ] ]
+					equals: [ Array new: 7 withAll: 1 ];
+				// GtSourceCoderEditorId;
+				// GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject [
+	<gtExample>
+	| aScripter anObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder | 
+				aCoder := self methodCoderWithSuperCalls.
+				aCoder asCoderViewModel selfObject: (anObject := aCoder behavior new) ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert method expander';
+				exists;
+				// (GtPharoMethodExpanderId indexed: 1) ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert method self-object';
+				value: #selfObject equals: anObject;
+				// GtSourceCoderEditorId;
+				onChildFromMessage: #textualCoderViewModel ].
+				
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on method expander';
+				// (GtPharoMethodExpanderId indexed: 1) ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert expanded method self-object';
+				value: #selfObject equals: anObject;
+				// GtSourceCoderEditorId;
+				// GtSourceCoderEditorId;
+				onChildFromMessage: #textualCoderViewModel ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert 7 method expanders';
+				value: [ :aCoderElement | 
+						(1 to: 7)
+							collect: [ :anIndex | 
+								| aQuery |
+								aQuery := aCoderElement query
+										// (GtPharoMethodExpanderId indexed: anIndex).
+								aQuery all size ] ]
+					equals: [ Array new: 7 withAll: 1 ];
 				// GtSourceCoderEditorId;
 				// GtSourceCoderEditorId ].
 
