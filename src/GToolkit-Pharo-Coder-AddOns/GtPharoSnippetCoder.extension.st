@@ -132,6 +132,19 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 						sourceCoderViewModel: aTextualViewModel) execute ]
 				id: GtMethodCoderExtractMethodContextMenuItemId.
 
+			coderAddOns
+				addContextMenuItem: 'Extract example'
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: nodes first startPosition
+						to: nodes last stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | 
+					(GtExtractExampleFromSnippetController new
+						sourceCoderViewModel: aTextualViewModel) execute ]
+				id: #'snippet-extract-example'.
+
 			node := nodes first.
 			node
 				withAllParentsDo: [ :aNode | self addExtractVariableFor: aNode to: coderAddOns ].
