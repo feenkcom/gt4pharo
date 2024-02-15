@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'receiverRenamer',
 		'exampleClass',
-		'completionStrategy'
+		'completionStrategy',
+		'packageForm',
+		'packageElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -32,10 +34,43 @@ GtExtractExampleFromSnippetController >> completionStrategy [
 ]
 
 { #category : #accessing }
+GtExtractExampleFromSnippetController >> createRefactoringChangesAttributeFor: aRefactoring onCompletion: aBlock [
+	| editorElement |
+	editorElement := packageForm asGtMagritteViewModel asElement.
+	editorElement
+		visibility: (self useExistingClass
+				ifTrue: [ BlVisibility gone ]
+				ifFalse: [ BlVisibility visible ]).
+	^ GtRefactoringWithInputChangesAttribute new
+		refactoring: (self isClassDefined ifTrue: [ aRefactoring ]);
+		completionAction: aBlock;
+		cancelAction: [ self cancelRefactoring ];
+		showWhenCreated: self previewDisplaysImmediately;
+		editorElement: (editorElement padding: (BlInsets all: 10))
+]
+
+{ #category : #accessing }
 GtExtractExampleFromSnippetController >> initialize [
 	super initialize.
 	exampleClass := #Object.
-	receiver := exampleClass asString , ' new'
+	receiver := exampleClass asString , ' new'.
+	packageForm := GtPackageTagForm new
+			onAccept: [ :model :button | 
+				button
+					allParentsDetect: [ :each | each anchor notNil ]
+					ifFound: [ :el | 
+						el anchor
+							allParentsDetect: [ :each | each isKindOf: GtRefactoringsWithInputPreviewElement ]
+							ifFound: [ :each | 
+								each
+									refactorings: (self isClassDefined
+											ifTrue: [ | ref |
+												ref := self refactoring.
+												self setPreviewOptionsOn: ref.
+												{ref} ]
+											ifFalse: [ #() ]) ]
+							ifNone: [  ] ]
+					ifNone: [  ] ]
 ]
 
 { #category : #accessing }
@@ -61,6 +96,11 @@ GtExtractExampleFromSnippetController >> installReceiverSelector [
 ]
 
 { #category : #accessing }
+GtExtractExampleFromSnippetController >> isClassDefined [
+	^ self useExistingClass or: [ packageForm packageAndTagName isEmpty not ]
+]
+
+{ #category : #accessing }
 GtExtractExampleFromSnippetController >> isReceiver: aNode [
 	^ aNode isMessageSend
 		and: [ aNode selector = #new
@@ -74,7 +114,9 @@ GtExtractExampleFromSnippetController >> refactoring [
 	| refactoring |
 	refactoring := GtExtractExampleFromSnippetRefactoring
 			extract: self extractionInterval
-			from: originalSource.
+			from: originalSource
+			into: exampleClass
+			category: packageForm category.
 	refactoring
 		setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | receiver ];
@@ -96,4 +138,9 @@ GtExtractExampleFromSnippetController >> updateReceiver: aString [
 	exampleClass := aString asSymbol.
 	self updateReceiverTo: exampleClass , ' new'.
 	self addRefactoringPreview
+]
+
+{ #category : #accessing }
+GtExtractExampleFromSnippetController >> useExistingClass [
+	^ Smalltalk includesKey: exampleClass asSymbol
 ]

@@ -36,7 +36,9 @@ GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdit
 	button beMiniSize.
 	button
 		when: GtRefactoringsAppliedEvent
-		do: [ :event | completionAction notNil ifTrue: [ completionAction cull: event ] ].
+		do: [ :event | 
+			completionAction notNil
+				ifTrue: [ completionAction cull: event cull: refactoring ] ].
 	showWhenCreated ifTrue: [ button enqueueTask: [ button openPreview ] asBlTask ].
 	^ button
 ]
