@@ -28,7 +28,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringPreview [
 	self
 		addRefactoringChangesPreview: refactoring
 		at: self previewPosition
-		whenComplete: [ :event :ref | self finishRefactoring: ref ]
+		whenComplete: [ :event | self finishRefactoring: event refactorings anyOne ]
 ]
 
 { #category : #private }

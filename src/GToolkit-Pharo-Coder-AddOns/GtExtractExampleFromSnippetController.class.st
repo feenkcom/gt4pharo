@@ -35,14 +35,24 @@ GtExtractExampleFromSnippetController >> completionStrategy [
 
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> createRefactoringChangesAttributeFor: aRefactoring onCompletion: aBlock [
-	| editorElement |
-	editorElement := packageForm asGtMagritteViewModel asElement.
+	| editorElement viewModel |
+	viewModel := packageForm asGtMagritteViewModel.
+	viewModel focusFirstInputField.
+	editorElement := viewModel asElement.
 	editorElement
 		visibility: (self useExistingClass
 				ifTrue: [ BlVisibility gone ]
 				ifFalse: [ BlVisibility visible ]).
 	^ GtRefactoringWithInputChangesAttribute new
 		refactoring: (self isClassDefined ifTrue: [ aRefactoring ]);
+		focusAction: [ :container :button | 
+			self isClassDefined
+				ifTrue: [ button focusAcceptButton: container ]
+				ifFalse: [ container
+						childWithId: #package
+						ifFound: [ :el | 
+							el
+								enqueueTask: [ el childWithId: #label ifFound: [ :label | label requestFocus ] ] asBlTask ] ] ];
 		completionAction: aBlock;
 		cancelAction: [ self cancelRefactoring ];
 		showWhenCreated: self previewDisplaysImmediately;

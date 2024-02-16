@@ -9,7 +9,8 @@ Class {
 		'cancelBlock',
 		'refactoringsComputation',
 		'notificationMessages',
-		'errorMessages'
+		'errorMessages',
+		'focusAction'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -22,10 +23,11 @@ GtRefactoringsPreviewButton >> beMiniSize [
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
 	| applyAction anAcceptButton |
-	applyAction := [ 
-		aButton fireEvent: BrDropdownHideWish new.
+	applyAction := [ aButton fireEvent: BrDropdownHideWish new.
 		theRefactoringsElement applyRefactorings
-			then: [ :ignore | self dispatchEvent: GtRefactoringsAppliedEvent new ] ].
+			then: [ :ignore | 
+				self
+					dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ] ].
 
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
@@ -120,10 +122,7 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 						constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
 						constraintsDo: [ :c | c vertical fitContentLimited ]).
 			aContainer addChild: anAcceptButton.
-			anAcceptButton beFocusable.
-			self shouldFocusAcceptButton
-				ifTrue: [ anAcceptButton
-						enqueueTask: (BlTaskAction new action: [ anAcceptButton requestFocus ]) ] ]
+			anAcceptButton beFocusable ]
 		ifFalse: [ self errorMessages
 				do: [ :each | 
 					label := BrLabel new
@@ -174,6 +173,24 @@ GtRefactoringsPreviewButton >> executedRefactorings [
 			executedRefactorings ]
 ]
 
+{ #category : #actions }
+GtRefactoringsPreviewButton >> focusAcceptButton: aContainer [
+	self shouldFocusAcceptButton
+		ifTrue: [ aContainer
+				childWithId: GtRefactoringsPreviewAcceptId
+				ifFound: [ :button | button enqueueTask: (BlTaskAction new action: [ button requestFocus ]) ] ]
+]
+
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> focusAction [
+	^ focusAction
+]
+
+{ #category : #accessing }
+GtRefactoringsPreviewButton >> focusAction: anObject [
+	focusAction := anObject
+]
+
 { #category : #initialization }
 GtRefactoringsPreviewButton >> initialize [
 	| previewButton |
@@ -196,8 +213,10 @@ GtRefactoringsPreviewButton >> initialize [
 								icon: BrGlamorousIcons empty;
 								beSmallSize;
 								aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
-						content: [ self buildPreviewForButton: previewButton ])
-						preferredExtent: self previewWidth @ 50);
+						content: [ | element |
+							element := self buildPreviewForButton: previewButton.
+							focusAction cull: element cull: self.
+							element ]) preferredExtent: self previewWidth @ 50);
 		label: 'Preview'.
 
 	previewButton
@@ -205,7 +224,9 @@ GtRefactoringsPreviewButton >> initialize [
 				combination: BlKeyCombination enter;
 				action: [ self openPreview ]).
 
-	self addChild: previewButton
+	self addChild: previewButton.
+
+	focusAction := [ :container | self focusAcceptButton: container ]
 ]
 
 { #category : #accessing }
