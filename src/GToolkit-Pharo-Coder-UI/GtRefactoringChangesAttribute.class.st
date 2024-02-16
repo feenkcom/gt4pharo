@@ -5,7 +5,8 @@ Class {
 		'refactoring',
 		'completionAction',
 		'cancelAction',
-		'showWhenCreated'
+		'showWhenCreated',
+		'focusAction'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -23,9 +24,10 @@ GtRefactoringChangesAttribute >> completionAction: aBlock [
 { #category : #accessing }
 GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| button |
-	button := GtRefactoringsPreviewButton new.
+	button := self previewButtonClass new.
 	button vMatchParent.
-	button refactorings: [ {refactoring} ].
+	focusAction ifNotNil: [ button focusAction: focusAction ].
+	button refactorings: [ self refactorings ].
 	button
 		padding: (BlInsets
 				top: 1
@@ -41,12 +43,27 @@ GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdit
 	^ button
 ]
 
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> focusAction [
+	^ focusAction
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> focusAction: anObject [
+	focusAction := anObject
+]
+
 { #category : #initialization }
 GtRefactoringChangesAttribute >> initialize [
 	super initialize.
 	self beAppend.
 	self beNotOverwritableByStyler.
 	showWhenCreated := false
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> previewButtonClass [
+	^ GtRefactoringsPreviewButton
 ]
 
 { #category : #accessing }
@@ -57,6 +74,11 @@ GtRefactoringChangesAttribute >> refactoring [
 { #category : #accessing }
 GtRefactoringChangesAttribute >> refactoring: aRBRefactoring [
 	refactoring := aRBRefactoring
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> refactorings [
+	^ {refactoring}
 ]
 
 { #category : #accessing }

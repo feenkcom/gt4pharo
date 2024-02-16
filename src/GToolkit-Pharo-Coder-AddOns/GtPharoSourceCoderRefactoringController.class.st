@@ -11,11 +11,9 @@ Class {
 GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefactoring at: aTextPosition whenComplete: aBlock [
 	self removeRefactoringAttribute.
 	refactoringPreviewAttributes := self sourceCoderViewModel
-			addTextAttribute: (GtRefactoringChangesAttribute new
-					refactoring: aRefactoring;
-					completionAction: aBlock;
-					cancelAction: [ self cancelRefactoring ];
-					showWhenCreated: self previewDisplaysImmediately)
+			addTextAttribute: (self
+					createRefactoringChangesAttributeFor: aRefactoring
+					onCompletion: aBlock)
 			from: aTextPosition
 			to: aTextPosition
 ]
@@ -30,7 +28,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringPreview [
 	self
 		addRefactoringChangesPreview: refactoring
 		at: self previewPosition
-		whenComplete: [ self finishRefactoring: refactoring ]
+		whenComplete: [ :event | self finishRefactoring: event refactorings anyOne ]
 ]
 
 { #category : #private }
@@ -61,6 +59,15 @@ GtPharoSourceCoderRefactoringController >> createModel [
 						compile: originalSource asString
 						classified: sourceCoderViewModel protocol ] ].
 	^ model
+]
+
+{ #category : #'private - attributes' }
+GtPharoSourceCoderRefactoringController >> createRefactoringChangesAttributeFor: aRefactoring onCompletion: aBlock [
+	^ GtRefactoringChangesAttribute new
+		refactoring: aRefactoring;
+		completionAction: aBlock;
+		cancelAction: [ self cancelRefactoring ];
+		showWhenCreated: self previewDisplaysImmediately
 ]
 
 { #category : #private }
