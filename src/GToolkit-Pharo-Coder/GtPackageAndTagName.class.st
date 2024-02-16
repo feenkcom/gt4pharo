@@ -12,6 +12,12 @@ Class {
 }
 
 { #category : #accessing }
+GtPackageAndTagName >> category [
+	^ packageName asString
+		, (tagName isEmpty ifTrue: [ '' ] ifFalse: [ '-' , tagName ])
+]
+
+{ #category : #accessing }
 GtPackageAndTagName >> copyWithNewPackageName: aPackageName [
 	^ self copy packageName: aPackageName
 ]

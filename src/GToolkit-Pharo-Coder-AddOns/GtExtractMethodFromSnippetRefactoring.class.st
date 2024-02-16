@@ -43,10 +43,7 @@ GtExtractMethodFromSnippetRefactoring >> buildSnippetMethod [
 GtExtractMethodFromSnippetRefactoring >> cleanChanges [
 	| changesToRemove |
 	changesToRemove := model changes changes
-		reject:
-			[ :each | 
-			(each isKindOf: RBAddMethodChange)
-				and: [ movedSelector = each selector and: [ moveToClasses anySatisfy: [ :cls | cls realClass = each changeClass ] ] ] ].
+			reject: [ :each | self shouldKeepChange: each ].
 	changesToRemove do: [ :each | model changes removeChange: each ]
 ]
 
@@ -97,6 +94,14 @@ GtExtractMethodFromSnippetRefactoring >> moveMethod [
 	self performCompositeRefactoring: refactoring.
 	moveToClasses := refactoring moveToClasses.
 	movedSelector := refactoring movedSelector
+]
+
+{ #category : #testing }
+GtExtractMethodFromSnippetRefactoring >> shouldKeepChange: aRBChangeObject [
+	^ (aRBChangeObject isKindOf: RBAddMethodChange)
+		and: [ movedSelector = aRBChangeObject selector
+				and: [ moveToClasses
+						anySatisfy: [ :cls | cls realClass = aRBChangeObject changeClass ] ] ]
 ]
 
 { #category : #private }
