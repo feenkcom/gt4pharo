@@ -23,11 +23,13 @@ GtRefactoringsPreviewButton >> beMiniSize [
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
 	| applyAction anAcceptButton |
-	applyAction := [ aButton fireEvent: BrDropdownHideWish new.
+	applyAction := [ anAcceptButton disable.
 		theRefactoringsElement applyRefactorings
 			then: [ :ignore | 
 				self
-					dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ] ].
+					dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
+				anAcceptButton enable.
+				aButton fireEvent: BrDropdownHideWish new ] ].
 
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
