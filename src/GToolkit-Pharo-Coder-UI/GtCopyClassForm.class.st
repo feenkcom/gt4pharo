@@ -19,7 +19,7 @@ GtCopyClassForm class >> for: aClass [
 
 { #category : #converting }
 GtCopyClassForm >> asElement [
-	^ self asGtMagritteViewModel asElement
+	^ self asGtMagritteViewModel focusFirstInputField asElement
 ]
 
 { #category : #accessing }
