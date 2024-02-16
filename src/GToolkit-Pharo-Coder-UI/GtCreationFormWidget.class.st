@@ -5,8 +5,7 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
 		'onAccept',
-		'form',
-		'onElementCreated'
+		'form'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Forms'
 }
@@ -43,10 +42,7 @@ GtCreationFormWidget class >> forTrait [
 
 { #category : #converting }
 GtCreationFormWidget >> createForm [
-	self
-		addChild: (self form
-				onAccept: self onAccept;
-				onElementCreated: self onElementCreated) asElement
+	self addChild: (self form onAccept: self onAccept) asElement
 ]
 
 { #category : #accessing }
@@ -85,18 +81,6 @@ GtCreationFormWidget >> onAccept [
 { #category : #accessing }
 GtCreationFormWidget >> onAccept: anObject [
 	onAccept := anObject.
-	self removeChildren.
-	self createForm
-]
-
-{ #category : #accessing }
-GtCreationFormWidget >> onElementCreated [
-	^ onElementCreated
-]
-
-{ #category : #accessing }
-GtCreationFormWidget >> onElementCreated: anObject [
-	onElementCreated := anObject.
 	self removeChildren.
 	self createForm
 ]

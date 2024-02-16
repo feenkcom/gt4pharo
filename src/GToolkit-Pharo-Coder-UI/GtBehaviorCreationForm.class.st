@@ -82,7 +82,8 @@ GtBehaviorCreationForm >> installClassSlotsOn: aClass [
 GtBehaviorCreationForm >> nameDescription [
 	<magritteDescription>
 	^ GtMATextDescription new
-		label: 'Name*';
+		label: 'Name';
+		beRequired;
 		priority: 1;
 		accessor: #newClassName;
 		kind: Object;
