@@ -90,7 +90,7 @@ GtExtractExampleFromSnippetController >> installReceiverSelector [
 	send := self findExtractedSend.
 	send ifNil: [ ^ self ].
 	receiverRenamer := GtRenameSelectorAction
-			variable: send parent receiver receiver
+			variable: (self receiverInSend: send)
 			textualCoderViewModel: sourceCoderViewModel.
 	receiverRenamer completionStrategy: self completionStrategy.
 	receiverRenamer newSelector: self newExtractedSelector.
@@ -120,9 +120,14 @@ GtExtractExampleFromSnippetController >> isReceiver: aNode [
 ]
 
 { #category : #accessing }
+GtExtractExampleFromSnippetController >> receiverInSend: send [
+	^ send parent receiver receiver
+]
+
+{ #category : #accessing }
 GtExtractExampleFromSnippetController >> refactoring [
 	| refactoring |
-	refactoring := GtExtractExampleFromSnippetRefactoring
+	refactoring := self refactoringClass
 			extract: self extractionInterval
 			from: originalSource
 			into: exampleClass
@@ -135,6 +140,11 @@ GtExtractExampleFromSnippetController >> refactoring [
 		setOption: #variableTypes
 			toUse: [ :ref :types :selected | {ref model classNamed: exampleClass} ].
 	^ refactoring
+]
+
+{ #category : #accessing }
+GtExtractExampleFromSnippetController >> refactoringClass [
+	^ GtExtractExampleFromSnippetRefactoring
 ]
 
 { #category : #accessing }

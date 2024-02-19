@@ -2,8 +2,8 @@ Class {
 	#name : #GtExtractExampleFromSnippetRefactoring,
 	#superclass : #GtExtractMethodFromSnippetRefactoring,
 	#instVars : [
-		'exampleClassName',
-		'category'
+		'category',
+		'className'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 GtExtractExampleFromSnippetRefactoring class >> extract: anInterval from: aString into: exampleClassName category: aSymbol [
 	^ (self extract: anInterval from: aString)
-		exampleClassName: exampleClassName;
+		className: exampleClassName;
 		category: aSymbol;
 		yourself
 ]
@@ -27,18 +27,39 @@ GtExtractExampleFromSnippetRefactoring >> category: anObject [
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> exampleClassName [
-	^ exampleClassName
+GtExtractExampleFromSnippetRefactoring >> className [
+	^ className
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> exampleClassName: anObject [
-	exampleClassName := anObject
+GtExtractExampleFromSnippetRefactoring >> className: anObject [
+	className := anObject
 ]
 
-{ #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> moveMethod [
-	super moveMethod.
+{ #category : #transforming }
+GtExtractExampleFromSnippetRefactoring >> createNewClassIfNecessary [
+	(self model classNamed: className)
+		ifNil: [ (category isNil or: [ category isEmpty ])
+				ifTrue: [ self refactoringError: 'No package specified for new class' ].
+			self
+				performCompositeRefactoring: (RBAddClassRefactoring
+						model: model
+						addClass: className
+						superclass: self defaultSuperclass
+						subclasses: #()
+						category: category) ]
+]
+
+{ #category : #transforming }
+GtExtractExampleFromSnippetRefactoring >> defaultSuperclass [
+	^ Object
+]
+
+{ #category : #transforming }
+GtExtractExampleFromSnippetRefactoring >> modifyMovedMethods [
+	movedSelector isUnary
+		ifFalse: [ ^ GtRefactoringNotification
+				signal: 'Example methods should not have arguments' ].
 	moveToClasses
 		do: [ :cls | 
 			| ast |
@@ -47,23 +68,20 @@ GtExtractExampleFromSnippetRefactoring >> moveMethod [
 			cls compile: ast formattedCode ]
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
+GtExtractExampleFromSnippetRefactoring >> moveMethod [
+	super moveMethod.
+	self modifyMovedMethods
+]
+
+{ #category : #testing }
 GtExtractExampleFromSnippetRefactoring >> shouldKeepChange: aRBChangeObject [
 	^ (aRBChangeObject isKindOf: RBAddClassChange)
 		or: [ super shouldKeepChange: aRBChangeObject ]
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
 GtExtractExampleFromSnippetRefactoring >> transform [
-	(self model classNamed: exampleClassName)
-		ifNil: [ (category isNil or: [ category isEmpty ])
-				ifTrue: [ self refactoringError: 'No package specified for new class' ].
-			self
-				performCompositeRefactoring: (RBAddClassRefactoring
-						model: model
-						addClass: exampleClassName
-						superclass: Object
-						subclasses: #()
-						category: category) ].
+	self createNewClassIfNecessary.
 	^ super transform
 ]

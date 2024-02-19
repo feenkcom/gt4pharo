@@ -183,7 +183,7 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 			[ [ each primitiveExecute ]
 				on: GtRefactoringNotification
 				do: [ :ex | 
-					notificationMessages add: ex tag.
+					notificationMessages add: ex messageBlock.
 					ex pass ] ]
 				on: RBRefactoringError
 				do: [ :ex | 
