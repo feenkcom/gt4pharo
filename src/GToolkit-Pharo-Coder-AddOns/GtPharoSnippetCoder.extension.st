@@ -36,6 +36,25 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	"<gtCoderContextMenuAddOns: 220>"
+	(self extractableNodesFrom: aCoderViewModel)
+		ifNotEmpty: [ :nodes | 
+			coderAddOns
+				addContextMenuItem: 'Extract test'
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: nodes first startPosition
+						to: nodes last stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel | 
+					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
+						execute ]
+				id: #'snippet-extract-test' ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
 	coderAddOns
