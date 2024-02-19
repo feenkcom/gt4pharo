@@ -9,10 +9,10 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 				description: (self nodeDescription: aNode))
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | 
+		action: [ :aCoderViewModel :element | 
 			(GtSnippetConvertCascadesToStatementsController new
 				node: aNode;
-				sourceCoderViewModel: aCoderViewModel) execute ]
+				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
 		id: #'context-menu--cascades-to-statements'
 ]
 
@@ -28,25 +28,46 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 				description: (self nodeDescription: nodes first))
 		hover: (self highlightNodesBlock: nodes)
 		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | 
+		action: [ :aCoderViewModel :element | 
 			(GtSnippetConvertStatementsToCascadesController new
 				nodes: nodes;
-				sourceCoderViewModel: aCoderViewModel) execute ]
+				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
 		id: #'context-menu--statements-to-cascade'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	"<gtCoderContextMenuAddOns: 220>"
+
+	(self extractableNodesFrom: aCoderViewModel)
+		ifNotEmpty: [ :nodes | 
+			coderAddOns
+				addContextMenuItem: 'Extract test'
+				hover: [ :textualCoderViewModel | 
+					textualCoderViewModel
+						addTextAttribute: self class nodeHighlight
+						from: nodes first startPosition
+						to: nodes last stopPosition ]
+				leave: self removeHighlightBlock
+				action: [ :aTextualViewModel :element | 
+					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
+						executeIn: element ]
+				id: #'snippet-extract-test' ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
 	coderAddOns
-		addContextMenuItem: (self createLabel: 'Extract variable' description: (self nodeDescription: aNode))
+		addContextMenuItem: (self
+				createLabel: 'Extract variable'
+				description: (self nodeDescription: aNode))
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action:
-			[ :aCoderViewModel | 
-			((GtSnippetExtractTemporaryRefactoringController new)
+		action: [ :aCoderViewModel :element | 
+			(GtSnippetExtractTemporaryRefactoringController new
 				node: aNode;
-				sourceCoderViewModel: aCoderViewModel) execute ]
+				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
 		id: #'context-menu--extract-variable'
 ]
 
@@ -76,11 +97,11 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 				description: aNode selector)
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :each | 
+		action: [ :each :element | 
 			(GtSnippetInlineMessageRefactoringController new
 				messageNode: aNode;
 				implementorClass: class;
-				sourceCoderViewModel: each) execute ]
+				sourceCoderViewModel: each) executeIn: element ]
 		id: #'context-menu--inline-send'
 ]
 
@@ -106,10 +127,10 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 				description: variable variableName)
 		hover: (self highlightNodesBlock: {uses first parent} , uses)
 		leave: self removeHighlightBlock
-		action: [ :aSourceCoderViewModel | 
+		action: [ :aSourceCoderViewModel :element | 
 			(GtSnippetInlineVariableRefactoringController new
 				node: uses first parent;
-				sourceCoderViewModel: aSourceCoderViewModel) execute ]
+				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
 		id: #'context-menu--inline-temp'
 ]
 
@@ -127,9 +148,9 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 						from: nodes first startPosition
 						to: nodes last stopPosition ]
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | 
+				action: [ :aTextualViewModel :element | 
 					(GtExtractMethodFromSnippetController new
-						sourceCoderViewModel: aTextualViewModel) execute ]
+						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
 				id: GtMethodCoderExtractMethodContextMenuItemId.
 
 			coderAddOns
@@ -140,9 +161,9 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 						from: nodes first startPosition
 						to: nodes last stopPosition ]
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | 
+				action: [ :aTextualViewModel :element | 
 					(GtExtractExampleFromSnippetController new
-						sourceCoderViewModel: aTextualViewModel) execute ]
+						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
 				id: #'snippet-extract-example'.
 
 			node := nodes first.
