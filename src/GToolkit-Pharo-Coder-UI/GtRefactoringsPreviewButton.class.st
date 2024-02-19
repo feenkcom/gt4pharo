@@ -42,15 +42,15 @@ GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefa
 								theAcceptButton enable.
 								theAcceptButton fireEvent: BrDropdownHideWish new ]) ]
 			otherwise: [ :anError | 
+				| aDebugElement |
+				aDebugElement := anError asDebuggableElement
+						margin: (BlInsets
+								top: 5
+								left: 10
+								bottom: 15
+								right: 10).
 				progressContainer
-					enqueueTask: (BlTaskAction new
-							action: [ progressContainer
-									addChild: (anError asDebuggableElement
-											margin: (BlInsets
-													top: 5
-													left: 10
-													bottom: 15
-													right: 10)) ]) ] ].
+					enqueueTask: (BlTaskAction new action: [ progressContainer addChild: aDebugElement ]) ] ].
 
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
