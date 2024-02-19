@@ -21,15 +21,36 @@ GtRefactoringsPreviewButton >> beMiniSize [
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement [
-	| applyAction anAcceptButton |
-	applyAction := [ anAcceptButton disable.
-		theRefactoringsElement applyRefactorings
+GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement progressContainer: progressContainer [
+	| applyAction anAcceptButton progress |
+	applyAction := [ :theAcceptButton | 
+		theAcceptButton disable.
+		theRefactoringsElement changesSize > 1
+			ifTrue: [ progress := self newProgressElement.
+				progressContainer addChild: progress after: theAcceptButton ].
+		progress ifNotNil: [ progress fraction: 0 ].
+		(theRefactoringsElement
+			applyRefactoringWithProgress: [ :fraction | 
+				progress
+					ifNotNil: [ progress
+							enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
 			then: [ :ignore | 
-				self
-					dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
-				anAcceptButton enable.
-				aButton fireEvent: BrDropdownHideWish new ] ].
+				progressContainer
+					enqueueTask: (BlTaskAction new
+							action: [ self
+									dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
+								theAcceptButton enable.
+								theAcceptButton fireEvent: BrDropdownHideWish new ]) ]
+			otherwise: [ :anError | 
+				| aDebugElement |
+				aDebugElement := anError asDebuggableElement
+						margin: (BlInsets
+								top: 5
+								left: 10
+								bottom: 15
+								right: 10).
+				progressContainer
+					enqueueTask: (BlTaskAction new action: [ progressContainer addChild: aDebugElement ]) ] ].
 
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
@@ -84,7 +105,7 @@ GtRefactoringsPreviewButton >> buildPreviewForButton: previewButton [
 
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
-	| theRefactoringsElement anAcceptButton aContainer label refactoringsOrChanges |
+	| theRefactoringsElement anAcceptButton aContainer label refactoringsOrChanges aToolbarElement |
 	refactoringsOrChanges := self executedRefactorings.
 	theRefactoringsElement := GtRefactoringsElement new
 			hExact: self previewWidth * 1.25;
@@ -95,9 +116,6 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 			change := RBCompositeRefactoryChange named: 'Changes'.
 			refactoringsOrChanges do: [ :each | change addChange: each ].
 			theRefactoringsElement changes: change ].
-	anAcceptButton := self
-			buildAcceptForButton: aButton
-			andElement: theRefactoringsElement.
 	aContainer := BlElement new
 			layout: BlLinearLayout vertical;
 			when: GtPhlowObjectToSpawn
@@ -105,6 +123,13 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 			constraintsDo: [ :c1 | 
 				c1 horizontal exact: self previewWidth.
 				c1 vertical fitContentLimited ].
+	aToolbarElement := BrHorizontalPane new
+			vFitContent;
+			hMatchParent.
+	anAcceptButton := self
+			buildAcceptForButton: aButton
+			andElement: theRefactoringsElement
+			progressContainer: aToolbarElement.
 	self errorMessages isEmpty
 		ifTrue: [ self notificationMessages
 				do: [ :each | 
@@ -123,7 +148,9 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 						fitWidth;
 						constraintsDo: [ :c | c vertical fitContentLimited ]) asScrollableElement
 						constraintsDo: [ :c | c vertical fitContentLimited ]).
-			aContainer addChild: anAcceptButton.
+
+			aToolbarElement addChild: anAcceptButton.
+			aContainer addChild: aToolbarElement.
 			anAcceptButton beFocusable ]
 		ifFalse: [ self errorMessages
 				do: [ :each | 
@@ -229,6 +256,24 @@ GtRefactoringsPreviewButton >> initialize [
 	self addChild: previewButton.
 
 	focusAction := [ :container | self focusAcceptButton: container ]
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> newProgressElement [
+	| progress |
+	progress := BrProgress new.
+	progress aptitude: BrGlamorousProgressBarAptitude.
+	progress
+		margin: (BlInsets
+				top: 5
+				left: 10
+				bottom: 15
+				right: 10).
+	progress
+		constraintsDo: [ :c | 
+			c horizontal matchParent.
+			c vertical matchParent ].
+	^ progress
 ]
 
 { #category : #accessing }

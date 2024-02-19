@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #accessing }
+GtRefactoringsElement >> applyRefactoringWithProgress: aBlock [
+	^ changesElement applyChangesWithProgress: aBlock
+]
+
+{ #category : #accessing }
 GtRefactoringsElement >> applyRefactorings [
 	^ changesElement applyChanges
 ]
@@ -18,6 +23,11 @@ GtRefactoringsElement >> applyRefactorings [
 { #category : #accessing }
 GtRefactoringsElement >> changes: changes [
 	changesElement changes: changes
+]
+
+{ #category : #accessing }
+GtRefactoringsElement >> changesSize [
+	^ changesElement changes changesSize
 ]
 
 { #category : #initialization }
