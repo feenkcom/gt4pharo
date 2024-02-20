@@ -2,10 +2,11 @@ Class {
 	#name : #GtRenameSelectorAction,
 	#superclass : #GtCoderViewModelRenameAction,
 	#instVars : [
-		'message',
 		'newSelector',
 		'styler',
-		'focusedIndex'
+		'focusedIndex',
+		'hasArguments',
+		'completionStrategy'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -14,6 +15,22 @@ Class {
 GtRenameSelectorAction class >> message: aGtPharoMessageNode textualCoderViewModel: aTextualCoderViewModel [
 	^ self new
 		message: aGtPharoMessageNode;
+		pharoSourceCoderViewModel: aTextualCoderViewModel;
+		yourself
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction class >> selector: aGtPharoLiteralNode textualCoderViewModel: aTextualCoderViewModel [
+	^ self new
+		selector: aGtPharoLiteralNode;
+		pharoSourceCoderViewModel: aTextualCoderViewModel;
+		yourself
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction class >> variable: aGtPharoVariableNode textualCoderViewModel: aTextualCoderViewModel [
+	^ self new
+		variable: aGtPharoVariableNode;
 		pharoSourceCoderViewModel: aTextualCoderViewModel;
 		yourself
 ]
@@ -36,7 +53,8 @@ GtRenameSelectorAction >> addRenameAttributes [
 						requestInitialFocus: index = focusedIndex;
 						focusedIndex: index;
 						coordinateFocus: true;
-						styler: styler.
+						styler: styler;
+						completionStrategy: completionStrategy.
 				index := index + 1.
 
 				self pharoSourceCoderViewModel
@@ -53,6 +71,16 @@ GtRenameSelectorAction >> addRenameAttributes [
 				do: [ :each :attr | 
 					attr
 						text: (each last = $: ifTrue: [ each allButLast ] ifFalse: [ each ]) asRopedText ] ]
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> completionStrategy [
+	^ completionStrategy
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> completionStrategy: anObject [
+	completionStrategy := anObject
 ]
 
 { #category : #accessing }
@@ -104,29 +132,22 @@ GtRenameSelectorAction >> isValid [
 ]
 
 { #category : #accessing }
-GtRenameSelectorAction >> message [
-	^ message
-]
-
-{ #category : #accessing }
 GtRenameSelectorAction >> message: aGtPharoMessageNode [
-	message := aGtPharoMessageNode.
-	originalLocations := message selectorParts
+	originalLocations := aGtPharoMessageNode selectorParts
 			collect: [ :each | each sourceInterval ].
-	message arguments isEmpty
-		ifTrue: [ self forVariableOrUnaryMessage ]
-		ifFalse: [ message arguments size = 1
+	hasArguments := aGtPharoMessageNode arguments notEmpty.
+	hasArguments
+		ifTrue: [ aGtPharoMessageNode arguments size = 1
 				ifTrue: [ self forBinaryOrKeyword ]
 				ifFalse: [ self forKeyword ] ]
+		ifFalse: [ self forVariableOrUnaryMessage ]
 ]
 
 { #category : #accessing }
 GtRenameSelectorAction >> newSelector [
 	^ renameAttributes
 		ifNil: [ newSelector ]
-		ifNotNil: [ | hasArguments |
-			hasArguments := message arguments size > 0.
-			(String
+		ifNotNil: [ (String
 				streamContents: [ :stream | 
 					renameAttributes
 						do: [ :each | 
@@ -143,10 +164,33 @@ GtRenameSelectorAction >> newSelector: aSymbol [
 ]
 
 { #category : #accessing }
+GtRenameSelectorAction >> newVariableName [
+	^ self newSelector
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> selector: aGtPharoLiteralNode [
+	| interval |
+	interval := aGtPharoLiteralNode sourceInterval.
+	aGtPharoLiteralNode value source first = $#
+		ifTrue: [ interval := interval first + 1 to: interval last ].
+	originalLocations := {interval}.
+	hasArguments := false.
+	self forVariableOrUnaryMessage
+]
+
+{ #category : #accessing }
 GtRenameSelectorAction >> tabAccept: forward [
 ]
 
 { #category : #accessing }
 GtRenameSelectorAction >> updateName: blText [
 	self announceEvent: #textUpdated
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> variable: aGtPharoVariableNode [
+	originalLocations := {aGtPharoVariableNode sourceInterval}.
+	hasArguments := false.
+	self forVariableOrUnaryMessage
 ]

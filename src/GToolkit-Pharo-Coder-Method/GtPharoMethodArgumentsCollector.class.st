@@ -47,3 +47,17 @@ GtPharoMethodArgumentsCollector >> evaluationContext: anObject [
 GtPharoMethodArgumentsCollector >> receiver: aReceiver selector: aSymbol [
 	self compiledMethod: (aReceiver class lookupSelector: aSymbol)
 ]
+
+{ #category : #convenience }
+GtPharoMethodArgumentsCollector >> targetBehavior: aBehavior receiver: aReceiver selector: aSymbol [
+	"It is recommended to use this method, since {{gtMethod: GtPharoMethodExpanderStyler >> #visitMessage:}} searches for a method class using the same logic."
+
+	aReceiver
+		ifNil: [ self targetBehavior: aBehavior selector: aSymbol ]
+		ifNotNil: [ self receiver: aReceiver selector: aSymbol ]
+]
+
+{ #category : #convenience }
+GtPharoMethodArgumentsCollector >> targetBehavior: aBehavior selector: aSymbol [
+	self compiledMethod: (aBehavior lookupSelector: aSymbol)
+]

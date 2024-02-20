@@ -64,8 +64,10 @@ GtExtractMethodFromSnippetController >> getTypeForReceiverFor: aRefactoring from
 	receiverClassName
 		ifNotNil: [ ^ {aRefactoring model classNamed: receiverClassName} ].
 	classes := types reject: [ :e | e isTrait ].
-	potentialTypes := GtPrefixTree withAll: (classes collect: #name).
-	classes size = 1 ifTrue: [ receiverClassName := classes anyOne name ].
+	potentialTypes := GtPrefixTree
+			withAll: (classes collect: [ :each | self typeNameFor: each ]).
+	classes size = 1
+		ifTrue: [ receiverClassName := self typeNameFor: classes anyOne ].
 	^ {aRefactoring model classNamed: self receiverClassName}
 ]
 
@@ -99,7 +101,10 @@ GtExtractMethodFromSnippetController >> potentialReceivers [
 	| names |
 	potentialReceivers ifNotNil: [ ^ potentialReceivers ].
 	names := super potentialReceivers.
-	receiver ~= 'self' ifTrue: [ names at: (names indexOf: 'self') put: receiver ].
+	receiver ~= 'self'
+		ifTrue: [ (names includes: receiver)
+				ifTrue: [ names remove: 'self' ]
+				ifFalse: [ names at: (names indexOf: 'self') put: receiver ] ].
 	self isForInspector
 		ifFalse: [ sourceCoderViewModel behavior allClassVarNames
 				do: [ :each | names remove: each ifAbsent: [  ] ] ].
@@ -129,6 +134,11 @@ GtExtractMethodFromSnippetController >> refactoring [
 					from: originalSource
 					in: sourceCoderViewModel behavior ].
 	^ refactoring
+]
+
+{ #category : #private }
+GtExtractMethodFromSnippetController >> typeNameFor: aRBClass [
+	^ aRBClass name , (aRBClass isMeta ifTrue: [ ' class' ] ifFalse: [ '' ])
 ]
 
 { #category : #accessing }

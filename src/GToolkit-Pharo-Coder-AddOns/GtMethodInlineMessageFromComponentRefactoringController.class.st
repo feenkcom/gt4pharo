@@ -88,7 +88,7 @@ GtMethodInlineMessageFromComponentRefactoringController >> refactoring [
 	| refactoring model |
 	model := self createRefactoringModel.
 
-	refactoring := RBInlineMethodFromComponentRefactoring
+	refactoring := GtInlineMethodFromComponentRefactoring
 			model: model
 			inline: node sourceInterval
 			inMethod: sourceCoderViewModel coderModel currentSelector

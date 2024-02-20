@@ -14,7 +14,11 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 									description: node literalValue)
 							hover: (self highlightNodeBlock: node)
 							leave: self removeHighlightBlock
-							action: [ :aTextualViewModel | self renamePackage: node in: aTextualViewModel ]
+							action: [ :aTextualViewModel :element | 
+								self
+									renamePackage: node
+									in: aTextualViewModel
+									from: element ]
 							shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
 									gtDisplayString;
 						addContextMenuItem: (self
@@ -33,7 +37,11 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 											description: node literalValue)
 									hover: (self highlightNodeBlock: node)
 									leave: self removeHighlightBlock
-									action: [ :aTextualViewModel | self renameBaseline: node in: aTextualViewModel ]
+									action: [ :aTextualViewModel :element | 
+										self
+											renameBaseline: node
+											in: aTextualViewModel
+											for: element ]
 									shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
 											gtDisplayString;
 								addContextMenuItem: (self
@@ -200,7 +208,11 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 						description: node selector)
 				hover: (self highlightNodeBlock: highlightNode)
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self renameNode: node in: aTextualViewModel ]
+				action: [ :aTextualViewModel :element | 
+					self
+						renameNode: node
+						in: aTextualViewModel
+						for: element ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 						gtDisplayString ]
 ]
@@ -680,43 +692,50 @@ GtPharoSourceCoder >> removeRefactoringAttribute [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel [
+GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel for: anElement [
 	self
 		nodeAt: aTextPosition
-		ifFound: [ :aNode | self renameNode: aNode in: aSourceCoderViewModel ]
+		ifFound: [ :aNode | 
+			self
+				renameNode: aNode
+				in: aSourceCoderViewModel
+				for: anElement ]
 		ifNone: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameBaseline: node in: aTextualViewModel [
+GtPharoSourceCoder >> renameBaseline: node in: aTextualViewModel for: anElement [
 	(GtRenameBaselineInMethodController new
 		sourceCoderViewModel: aTextualViewModel;
-		originalNode: node) execute
+		originalNode: node) executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameBaselineAt: anIndex in: aCoderViewModel [
+GtPharoSourceCoder >> renameBaselineAt: anIndex in: aCoderViewModel for: anElement [
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
 	(self nodeAt: anIndex)
 		ifNotNil: [ :node | 
 			(node isLiteral and: [ node gtIsBaselineName ]) ifFalse: [ ^ false ].
-			self renameBaseline: node in: aCoderViewModel.
+			self
+				renameBaseline: node
+				in: aCoderViewModel
+				for: anElement.
 			^ true ].
 	^ false
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameClassIn: aSourceCoderViewModel node: aVariableNode [
+GtPharoSourceCoder >> renameClassIn: aSourceCoderViewModel node: aVariableNode for: anElement [
 	(GtRenameClassController new
 		sourceCoderViewModel: aSourceCoderViewModel;
-		originalNode: aVariableNode) execute
+		originalNode: aVariableNode) executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameClassVariableIn: aSourceCoderViewModel node: aVariableNode [
+GtPharoSourceCoder >> renameClassVariableIn: aSourceCoderViewModel node: aVariableNode for: anElement [
 	(GtRenameClassVariableController new
 		sourceCoderViewModel: aSourceCoderViewModel;
-		originalNode: aVariableNode) execute
+		originalNode: aVariableNode) executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -734,17 +753,17 @@ GtPharoSourceCoder >> renameInstanceVariableControllerIn: aSourceCoderViewModel 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode [
+GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode for: anElement [
 	(self
 		renameInstanceVariableControllerIn: aSourceCoderViewModel
-		for: aVariableNode) execute
+		for: aVariableNode) executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel node: aMessageOrMethodOrMethodPatternNode [
+GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel node: aMessageOrMethodOrMethodPatternNode for: anElement [
 	(self
 		renameMethodControllerIn: aSourceCoderViewModel
-		for: aMessageOrMethodOrMethodPatternNode) execute
+		for: aMessageOrMethodOrMethodPatternNode) executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -763,37 +782,52 @@ GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMess
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel [
+GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel for: anElement [
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
-		ifTrue: [ ^ self renameMethod: aSourceCoderViewModel node: aNode ].
+		ifTrue: [ ^ self
+				renameMethod: aSourceCoderViewModel
+				node: aNode
+				for: anElement ].
 	aNode isVariable
 		ifTrue: [ (self isLocalVariable: aNode)
 				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
 			(self isInstanceVariable: aNode)
-				ifTrue: [ ^ self renameInstanceVariableIn: aSourceCoderViewModel node: aNode ].
+				ifTrue: [ ^ self
+						renameInstanceVariableIn: aSourceCoderViewModel
+						node: aNode
+						for: anElement ].
 			(self isClassVariable: aNode)
-				ifTrue: [ ^ self renameClassVariableIn: aSourceCoderViewModel node: aNode ].
+				ifTrue: [ ^ self
+						renameClassVariableIn: aSourceCoderViewModel
+						node: aNode
+						for: anElement ].
 			Smalltalk globals
 				at: aNode name value asSymbol
 				ifPresent: [ :cls | 
 					(cls isKindOf: Class)
-						ifTrue: [ ^ self renameClassIn: aSourceCoderViewModel node: aNode ] ] ]
+						ifTrue: [ ^ self
+								renameClassIn: aSourceCoderViewModel
+								node: aNode
+								for: anElement ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel [
+GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel from: anElement [
 	(GtRenamePackageInBaselineController new
 		sourceCoderViewModel: aTextualViewModel;
 		originalNode: node) execute
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel [
+GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anElement [
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ false ].
 	(self nodeAt: anIndex)
 		ifNotNil: [ :node | 
 			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ false ].
-			self renamePackage: node in: aCoderViewModel.
+			self
+				renamePackage: node
+				in: aCoderViewModel
+				from: anElement.
 			^ true ].
 	^ false
 ]

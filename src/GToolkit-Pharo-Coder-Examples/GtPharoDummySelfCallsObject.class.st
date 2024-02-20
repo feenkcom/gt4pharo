@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtPharoDummySelfCallsObject >> number [
+	^ self one
+]
+
+{ #category : #accessing }
 GtPharoDummySelfCallsObject >> one [
 	^ 1
 ]

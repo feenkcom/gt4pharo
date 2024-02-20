@@ -50,6 +50,13 @@ GtPharoSourceCoderViewModel >> compositeVariableBindings [
 	^ theBindings
 ]
 
+{ #category : #'private - bindings' }
+GtPharoSourceCoderViewModel >> compositeVariableBindingsForStyling [
+	"Subclasses may add extra variable bindings to style source code."
+
+	^ self compositeVariableBindings
+]
+
 { #category : #'private - evaluation' }
 GtPharoSourceCoderViewModel >> evaluationContext [
 	^ super evaluationContext

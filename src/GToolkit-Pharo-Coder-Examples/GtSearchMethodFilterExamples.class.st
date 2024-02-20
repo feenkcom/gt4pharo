@@ -49,6 +49,12 @@ GtSearchMethodFilterExamples >> assertMethodResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtAsyncSearchMethodGroupStream
 ]
 
+{ #category : #accessing }
+GtSearchMethodFilterExamples >> astFilterExample [
+	<gtExample>
+	^ '^0' gtASTMatches
+]
+
 { #category : #examples }
 GtSearchMethodFilterExamples >> astPatternFilter [
 	<gtExample>

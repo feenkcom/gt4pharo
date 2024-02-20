@@ -18,5 +18,5 @@ GtRefactoringNotification >> messageBlock [
 			label hMatchParent.
 			label vFitContent.
 			label editor text: self messageText asRopedText glamorousRegularFontAndSize.
-			^ label ] ]
+			label ] ]
 ]

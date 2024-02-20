@@ -16,3 +16,17 @@ Class >> gtReferences [
 Class >> gtReferencesAndComments [
 	^ self gtReferences & (GtSearchCommentsFilter new text: self name)
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+Class >> gtReferencesWithSubclasses [
+	^ self allSubclasses
+		inject: self gtReferences
+		into: [ :aFilter :aClass | aFilter | aClass gtReferences ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+Class >> gtReferencesWithSuperclasses [
+	^ self allSuperclasses
+		inject: self gtReferences
+		into: [ :aFilter :aClass | aFilter | aClass gtReferences ]
+]
