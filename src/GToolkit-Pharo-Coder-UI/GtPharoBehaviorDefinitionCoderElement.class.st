@@ -192,7 +192,7 @@ GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 
 { #category : #accessing }
 GtPharoBehaviorDefinitionCoderElement >> updateDefinition [
-	self initializeElements
+	self enqueueTask: (BlTaskAction new action: [ self initializeElements ])
 ]
 
 { #category : #'private - instance creation' }
