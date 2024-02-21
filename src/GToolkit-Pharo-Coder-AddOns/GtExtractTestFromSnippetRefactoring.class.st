@@ -18,19 +18,11 @@ GtExtractTestFromSnippetRefactoring class >> defaultTestCaseSuperclass: aSymbol 
 ]
 
 { #category : #accessing }
-GtExtractTestFromSnippetRefactoring >> buildNewSnippetSource [
-	| ast rewriter |
-	ast := ((model classFor: nil class) methodFor: snippetSelector) ast body.
-	rewriter := RBParseTreeRewriter new.
+GtExtractTestFromSnippetRefactoring >> addSnippetRewritesTo: rewriter [
 	rewriter
-		replace: className , ' new ' , movedSelector
-		with: className , ' run: #' , movedSelector.
-	(rewriter executeTree: ast) ifTrue: [ ast := rewriter tree ].
-	ast temporaryNames do: [ :each | ast removeTemporaryNamed: each ].
-	returnPosition
-		ifNotNil: [ (ast isSequence and: [ ast statements last isReturn ])
-				ifTrue: [ ast statements last replaceWith: ast statements last value copy ] ].
-	snippetSource := ast formattedCode
+		replace: '`{:node | node isMessage and: [node selector = #' , newExtractedSelector
+				, ' and: [node receiver isSelfVariable]]}'
+		with: className , ' run: #' , newExtractedSelector
 ]
 
 { #category : #transforming }
@@ -39,9 +31,9 @@ GtExtractTestFromSnippetRefactoring >> defaultSuperclass [
 ]
 
 { #category : #transforming }
-GtExtractTestFromSnippetRefactoring >> modifyMovedMethods [
-	movedSelector isUnary
+GtExtractTestFromSnippetRefactoring >> finishRefactoring [
+	newExtractedSelector isUnary
 		ifFalse: [ ^ self refactoringError: 'Test methods cannot have arguments.' ].
-	(movedSelector beginsWith: 'test')
+	(newExtractedSelector beginsWith: 'test')
 		ifFalse: [ ^ GtRefactoringNotification signal: 'Test methods should begin with "test".' ]
 ]
