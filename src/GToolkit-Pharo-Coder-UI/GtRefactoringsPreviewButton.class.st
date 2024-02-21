@@ -154,13 +154,11 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 			anAcceptButton beFocusable ]
 		ifFalse: [ self errorMessages
 				do: [ :each | 
-					label := BrLabel new
-							fitContent;
-							aptitude: BrGlamorousLabelAptitude new;
-							padding: (BlInsets all: 5);
-							text: each asRopedText glamorousRegularFontAndSize.
+					| element |
+					element := each cull: aButton.
+					element padding: (BlInsets all: 5).
 					aContainer background: BrGlamorousColors errorBackgroundColor.
-					aContainer addChild: label ] ].
+					aContainer addChild: element ] ].
 	^ aContainer
 ]
 
@@ -191,7 +189,7 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 					ex pass ] ]
 				on: RBRefactoringError
 				do: [ :ex | 
-					errorMessages add: ex messageText.
+					errorMessages add: ex messageBlock.
 					ex return ] ]
 ]
 

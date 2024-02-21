@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPushDownInstanceVariableRefactoringController,
 	#superclass : #GtVariableRefactoringController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
 { #category : #accessing }
@@ -11,7 +11,7 @@ GtPushDownInstanceVariableRefactoringController >> refactoring [
 	aModel := self createRefactoringModel.
 	aClass := aModel classFor: sourceCoderViewModel behavior.
 
-	^ RBPushDownInstanceVariableRefactoring 
+	^ GtPushDownInstanceVariableRefactoring 
 		model: aModel
 		variable: self variableName
 		class: (aClass whoDefinesInstanceVariable: self variableName)
