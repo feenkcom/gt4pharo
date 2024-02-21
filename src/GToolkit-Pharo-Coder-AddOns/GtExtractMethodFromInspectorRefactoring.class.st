@@ -9,7 +9,9 @@ Class {
 		'offset',
 		'snippetSelector',
 		'snippetMethodSource',
-		'snippetSource'
+		'snippetSource',
+		'originalInterval',
+		'returnPosition'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -27,6 +29,9 @@ GtExtractMethodFromInspectorRefactoring >> buildNewSnippetSource [
 	| ast |
 	ast := (class methodFor: snippetSelector) ast body.
 	ast temporaryNames do: [ :each | ast removeTemporaryNamed: each ].
+	returnPosition
+		ifNotNil: [ (ast isSequence and: [ ast statements last isReturn ])
+				ifTrue: [ ast statements last replaceWith: ast statements last value copy ] ].
 	snippetSource := ast formattedCode
 ]
 
@@ -51,7 +56,7 @@ GtExtractMethodFromInspectorRefactoring >> checkReturn [
 GtExtractMethodFromInspectorRefactoring >> cleanChanges [
 	| changesToRemove |
 	changesToRemove := model changes changes
-			reject: [ :each | (each isKindOf: RBAddMethodChange) and: [ selector ~= each selector ] ].
+			reject: [ :each | self shouldKeepChange: each ].
 	changesToRemove do: [ :each | model changes removeChange: each ]
 ]
 
@@ -59,67 +64,43 @@ GtExtractMethodFromInspectorRefactoring >> cleanChanges [
 GtExtractMethodFromInspectorRefactoring >> extract: anInterval from: aString in: aClass [
 	class := self classObjectFor: aClass.
 	source := aString.
+	originalInterval := anInterval
+]
+
+{ #category : #accessing }
+GtExtractMethodFromInspectorRefactoring >> preconditions [
 	self buildSnippetMethod.
-	extractionInterval := anInterval first + offset to: anInterval last + offset.
-	super
-		extract: extractionInterval
-		from: snippetSelector
-		in: aClass
+	extractionInterval := originalInterval first + offset
+			+ ((returnPosition notNil and: [ originalInterval first >= returnPosition ])
+					ifTrue: [ 1 ]
+					ifFalse: [ 0 ])
+			to: originalInterval last + offset
+					+ ((returnPosition notNil and: [ originalInterval last >= returnPosition ])
+							ifTrue: [ 1 ]
+							ifFalse: [ 0 ]).
+	selector := snippetSelector.
+	^ super preconditions
+]
+
+{ #category : #accessing }
+GtExtractMethodFromInspectorRefactoring >> shouldKeepChange: each [
+	^ (each isKindOf: RBAddMethodChange) and: [ selector ~= each selector ]
 ]
 
 { #category : #accessing }
 GtExtractMethodFromInspectorRefactoring >> snippetMethodSource [
-	| ast newSource temps written methodPattern tempsSource |
+	| ast expressionAST |
 	snippetMethodSource notNil ifTrue: [ ^ snippetMethodSource ].
-	temps := Set new.
-	newSource := SmaCCString on: source.
-	ast := GtPharoParser
+	snippetMethodSource := self snippetMethodSourceFrom: source.
+	ast := GtPharoParser parse: snippetMethodSource.
+	expressionAST := GtPharoParser
 			parse: source
 			startingAt: GtPharoParser startingStateForMethodSequence.
-	ast
-		allNodesOfType: GtPharoVariableNode
-		do: [ :each | 
-			(each whoDefines isNil
-				and: [ (#('self' 'super' 'thisContext') includes: each variableName) not
-						and: [ (Smalltalk globals includesKey: each variableName) not
-								and: [ (class definesInstanceVariable: each variableName) not
-										and: [ (class bindingOf: each variableName asSymbol) isNil ] ] ] ])
-				ifTrue: [ temps add: each ] ].
-	written := Set new.
-	ast
-		allNodesOfType: GtPharoAssignmentNode
-		do: [ :each | 
-			(temps includes: each variable)
-				ifTrue: [ written add: each variable.
-					temps remove: each variable ] ].
-	methodPattern := temps isEmpty
-			ifTrue: [ '__ ' ]
-			ifFalse: [ String
-					streamContents: [ :stream | 
-						temps
-							do: [ :each | 
-								stream
-									nextPutAll: '__: ';
-									nextPutAll: each variableName;
-									space ] ] ].
-	newSource insert: methodPattern at: 1.
-	offset := methodPattern size.
-	written notEmpty
-		ifTrue: [ tempsSource := String
-					streamContents: [ :stream | 
-						ast leftBar ifNil: [ stream nextPut: $| ].
-						written
-							do: [ :each | 
-								stream
-									space;
-									nextPutAll: each variableName ].
-						ast leftBar ifNil: [ stream nextPut: $| ] ].
-			newSource
-				insert: tempsSource
-				at: (ast rightBar ifNil: [ 1 ] ifNotNil: [ :token | token startPosition ]).
-			offset := offset + tempsSource size ].
-	snippetMethodSource := newSource asString.
-	snippetSelector := (GtPharoParser parse: snippetMethodSource) selector.
+	offset := ast body statements first startPosition
+			- expressionAST statements first startPosition.
+	snippetMethodSource first = $ 
+		ifTrue: [ returnPosition := ast body statements last upArrow startPosition - offset ].
+	snippetSelector := ast selector.
 	^ snippetMethodSource
 ]
 
