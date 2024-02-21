@@ -334,7 +334,7 @@ GtBehaviorUpdateForm >> pushDownClassSlotRefactoringFor: varName [
 	aModel := self createRefactoringModel.
 	aClass := (self modelClassFrom: aModel) classSide.
 
-	^ RBPushDownInstanceVariableRefactoring
+	^ GtPushDownInstanceVariableRefactoring
 		model: aModel
 		variable: varName
 		class: aClass
@@ -358,7 +358,7 @@ GtBehaviorUpdateForm >> pushDownSlotRefactoringFor: varName [
 	aModel := self createRefactoringModel.
 	aClass := self modelClassFrom: aModel.
 
-	^ RBPushDownInstanceVariableRefactoring
+	^ GtPushDownInstanceVariableRefactoring
 		model: aModel
 		variable: varName
 		class: aClass
