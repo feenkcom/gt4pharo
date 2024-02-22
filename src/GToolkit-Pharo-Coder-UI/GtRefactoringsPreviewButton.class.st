@@ -10,7 +10,9 @@ Class {
 		'refactoringsComputation',
 		'notificationMessages',
 		'errorMessages',
-		'focusAction'
+		'focusAction',
+		'runningElement',
+		'running'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -21,37 +23,46 @@ GtRefactoringsPreviewButton >> beMiniSize [
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefactoringsElement progressContainer: progressContainer [
+GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressContainer: progressContainer [
 	| applyAction anAcceptButton progress |
+	(running and: [ runningElement notNil ])
+		ifTrue: [ progressContainer
+				enqueueTask: [ runningElement ifNotNil: [ runningElement removeFromParent ].
+					progressContainer addChild: runningElement ] asBlTask ].
 	applyAction := [ :theAcceptButton | 
-		theAcceptButton disable.
-		theRefactoringsElement changesSize > 1
-			ifTrue: [ progress := self newProgressElement.
-				progressContainer addChild: progress after: theAcceptButton ].
-		progress ifNotNil: [ progress fraction: 0 ].
-		(theRefactoringsElement
-			applyRefactoringWithProgress: [ :fraction | 
-				progress
-					ifNotNil: [ progress
-							enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
-			then: [ :ignore | 
-				progressContainer
-					enqueueTask: (BlTaskAction new
-							action: [ self
-									dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
-								theAcceptButton enable.
-								theAcceptButton fireEvent: BrDropdownHideWish new ]) ]
-			otherwise: [ :anError | 
-				| aDebugElement |
-				aDebugElement := anError asDebuggableElement
-						margin: (BlInsets
-								top: 5
-								left: 10
-								bottom: 15
-								right: 10).
-				progressContainer
-					enqueueTask: (BlTaskAction new action: [ progressContainer addChild: aDebugElement ]) ] ].
-
+		running
+			ifFalse: [ running := true.
+				theAcceptButton disable.
+				theRefactoringsElement changesSize > 1
+					ifTrue: [ progress := self newProgressElement.
+						progressContainer addChild: progress after: theAcceptButton.
+						progress fraction: 0.
+						runningElement := progress ].
+				(theRefactoringsElement
+					applyRefactoringWithProgress: [ :fraction | 
+						progress
+							ifNotNil: [ progress
+									enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
+					then: [ :ignore | 
+						running := false.
+						self
+							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
+						progressContainer
+							enqueueTask: [ theAcceptButton enable.
+								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask ]
+					otherwise: [ :anError | 
+						| aDebugElement |
+						running := false.
+						aDebugElement := anError asDebuggableElement
+								margin: (BlInsets
+										top: 5
+										left: 10
+										bottom: 15
+										right: 10).
+						runningElement := aDebugElement.
+						progressContainer
+							enqueueTask: [ progress ifNotNil: [ progress removeFromParent ].
+								progressContainer addChild: aDebugElement ] asBlTask ] ] ].
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			id: GtRefactoringsPreviewAcceptId;
@@ -66,7 +77,7 @@ GtRefactoringsPreviewButton >> buildAcceptForButton: aButton andElement: theRefa
 					right: 0);
 			action: applyAction;
 			yourself.
-
+	running ifTrue: [ anAcceptButton disable ].
 	^ anAcceptButton
 ]
 
@@ -127,8 +138,7 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 			vFitContent;
 			hMatchParent.
 	anAcceptButton := self
-			buildAcceptForButton: aButton
-			andElement: theRefactoringsElement
+			buildAcceptFor: theRefactoringsElement
 			progressContainer: aToolbarElement.
 	self errorMessages isEmpty
 		ifTrue: [ self notificationMessages
@@ -253,7 +263,8 @@ GtRefactoringsPreviewButton >> initialize [
 
 	self addChild: previewButton.
 
-	focusAction := [ :container | self focusAcceptButton: container ]
+	focusAction := [ :container | self focusAcceptButton: container ].
+	running := false
 ]
 
 { #category : #initialization }
