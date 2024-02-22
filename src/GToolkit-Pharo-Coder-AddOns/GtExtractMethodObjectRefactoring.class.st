@@ -188,6 +188,11 @@ GtExtractMethodObjectRefactoring >> extractedMethodSelector [
 ]
 
 { #category : #accessing }
+GtExtractMethodObjectRefactoring >> gtDescription [
+	^ 'Extract method object ' , className
+]
+
+{ #category : #accessing }
 GtExtractMethodObjectRefactoring >> hasSelfReferenceIn: ast [
 	ast
 		nodesDo: [ :each | (each isVariable and: [ each isSelfVariable ]) ifTrue: [ ^ true ] ].

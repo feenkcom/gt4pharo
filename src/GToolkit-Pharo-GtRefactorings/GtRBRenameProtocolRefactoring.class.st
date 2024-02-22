@@ -17,6 +17,11 @@ GtRBRenameProtocolRefactoring class >> renameProtocol: oldName in: aClass to: ne
 		to: newName
 ]
 
+{ #category : #accessing }
+GtRBRenameProtocolRefactoring >> gtDescription [
+	^ 'Rename protocol ' , oldName , ' to ' , newName
+]
+
 { #category : #preconditions }
 GtRBRenameProtocolRefactoring >> preconditions [
 	^ RBCondition withBlock: [ class protocols includes: oldName ]

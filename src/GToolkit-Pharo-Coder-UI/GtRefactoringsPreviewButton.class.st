@@ -191,7 +191,8 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 	executedRefactorings := self refactorings.
 	executedRefactorings
 		do: [ :each | 
-			(each isKindOf: RBRefactoring) ifTrue: [ each model name: each printString ].
+			(each isKindOf: RBRefactoring)
+				ifTrue: [ each model name: each gtDescription asString ].
 			[ [ each primitiveExecute ]
 				on: GtRefactoringNotification
 				do: [ :ex | 

@@ -81,6 +81,11 @@ GtExtractSuperclassRefactoring >> createSubclassResponsibilityMethods: aClass [
 								inProtocols: method protocols) ] ]
 ]
 
+{ #category : #accessing }
+GtExtractSuperclassRefactoring >> gtDescription [
+	^ 'Extract superclass ' , className
+]
+
 { #category : #preconditions }
 GtExtractSuperclassRefactoring >> preconditions [
 	"handled by component refactorings"
