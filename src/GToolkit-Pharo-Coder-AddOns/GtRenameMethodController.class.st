@@ -109,8 +109,8 @@ GtRenameMethodController >> refactoring [
 	(newSelector = selector and: [ permutations = (1 to: permutations size) ])
 		ifTrue: [ ^ nil ].
 	model := self createModel.
-	isCoderMethodBeingRenamed := sourceCoderViewModel coderModel selector
-			= selector.
+	isCoderMethodBeingRenamed := sourceCoderViewModel coderModel isForMethod
+			and: [ sourceCoderViewModel coderModel selector = selector ].
 	refactoring := (isCoderMethodBeingRenamed
 			ifTrue: [ GtCoderRenameMethodRefactoring ]
 			ifFalse: [ RBRenameMethodRefactoring ])
