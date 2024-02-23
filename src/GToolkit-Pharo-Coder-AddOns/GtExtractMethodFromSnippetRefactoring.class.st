@@ -61,6 +61,11 @@ GtExtractMethodFromSnippetRefactoring >> extract: anInterval from: aString [
 							ifFalse: [ 0 ])
 ]
 
+{ #category : #accessing }
+GtExtractMethodFromSnippetRefactoring >> gtDescription [
+	^ 'Extract method from snippet'
+]
+
 { #category : #transforming }
 GtExtractMethodFromSnippetRefactoring >> inlineForwarder [
 	| refactoring |
