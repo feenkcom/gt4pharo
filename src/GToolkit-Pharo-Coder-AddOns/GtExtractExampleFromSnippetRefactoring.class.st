@@ -97,6 +97,11 @@ GtExtractExampleFromSnippetRefactoring >> finishRefactoring [
 ]
 
 { #category : #accessing }
+GtExtractExampleFromSnippetRefactoring >> gtDescription [
+	^ 'Extract example method from snippet'
+]
+
+{ #category : #accessing }
 GtExtractExampleFromSnippetRefactoring >> preconditions [
 	self createNewClassIfNecessary.
 	class := self model classNamed: className.

@@ -68,6 +68,11 @@ GtExtractMethodFromInspectorRefactoring >> extract: anInterval from: aString in:
 ]
 
 { #category : #accessing }
+GtExtractMethodFromInspectorRefactoring >> gtDescription [
+	^ 'Extract method from snippet'
+]
+
+{ #category : #accessing }
 GtExtractMethodFromInspectorRefactoring >> preconditions [
 	self buildSnippetMethod.
 	extractionInterval := originalInterval first + offset

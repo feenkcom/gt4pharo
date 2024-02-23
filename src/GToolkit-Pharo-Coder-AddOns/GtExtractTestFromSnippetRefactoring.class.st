@@ -37,3 +37,8 @@ GtExtractTestFromSnippetRefactoring >> finishRefactoring [
 	(newExtractedSelector beginsWith: 'test')
 		ifFalse: [ ^ GtRefactoringNotification signal: 'Test methods should begin with "test".' ]
 ]
+
+{ #category : #accessing }
+GtExtractTestFromSnippetRefactoring >> gtDescription [
+	^ 'Extract test method from snippet'
+]
