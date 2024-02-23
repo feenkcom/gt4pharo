@@ -85,11 +85,10 @@ GtPharoBehaviorCoderNameElement >> buildAdviceListFor: anAsyncStream [
 { #category : #'building - ui' }
 GtPharoBehaviorCoderNameElement >> buildContent [
 	| nameContainer classNameEditor previewButton |
-
 	nameContainer := BrHorizontalPane new
-		hMatchParent;
-		alignCenterLeft;
-		vFitContent.
+			hMatchParent;
+			alignCenterLeft;
+			vFitContent.
 
 	classNameEditor := self buildEditableNameLabel.
 	self registerShortcutsForNameEditor: classNameEditor.
@@ -97,17 +96,17 @@ GtPharoBehaviorCoderNameElement >> buildContent [
 		when: BrTextEditorModifiedEvent
 		do: [ :anEvent | 
 			anEvent text asString trimBoth asSymbol = self coderModel name
-				ifTrue: [ nameContainer removeChild: previewButton ]
+				ifTrue: [ previewButton removeFromParent ]
 				ifFalse: [ (nameContainer hasChild: previewButton)
 						ifFalse: [ nameContainer addChild: previewButton after: classNameEditor ] ] ].
 	self instalCompletionControllerOnNameEditor: classNameEditor.
 
-	previewButton := self 
-		buildRefactoringPreviewButtonForNameEditor: classNameEditor 
-		inContainer: nameContainer.
+	previewButton := self
+			buildRefactoringPreviewButtonForNameEditor: classNameEditor
+			inContainer: nameContainer.
 
 	nameContainer addChild: classNameEditor.
-	
+
 	self addAddOnsElementIn: nameContainer.
 	self addAdviceDropDownIn: nameContainer.
 
@@ -134,18 +133,19 @@ GtPharoBehaviorCoderNameElement >> buildEditableNameLabel [
 { #category : #'building - ui' }
 GtPharoBehaviorCoderNameElement >> buildRefactoringPreviewButtonForNameEditor: aClassNameEditor inContainer: aContainer [
 	^ GtRefactoringsPreviewButton new
-			id: GtBehaviorCoderBehaviorNameApplyPreviewId;
-			margin: (BlInsets left: 5);
-			refactorings: [ {GtRBRenameClassRefactoring
-						model: (RBClassModelFactory rbNamespace
-								onEnvironment: RBBrowserEnvironment new)
-						rename: self coderModel theClass name
-						to: aClassNameEditor text asString} ];
-			cancelBlock: [ aClassNameEditor text: self coderModel theClass name ];
-			when: GtRefactoringsAppliedEvent
-				do: [ :anEvent | 
-					aClassNameEditor text asString trimBoth asSymbol = self coderModel name
-						ifTrue: [ aContainer removeChild: anEvent currentTarget ] ]
+		id: GtBehaviorCoderBehaviorNameApplyPreviewId;
+		margin: (BlInsets left: 5);
+		refactorings: [ {GtRBRenameClassRefactoring
+					model: (RBClassModelFactory rbNamespace
+							onEnvironment: RBBrowserEnvironment new)
+					rename: self coderModel theClass name
+					to: aClassNameEditor text asString} ];
+		cancelBlock: [ aClassNameEditor text: self coderModel theClass name ];
+		when: GtRefactoringsAppliedEvent
+			do: [ :anEvent | 
+				| element |
+				element := anEvent currentTarget.
+				aContainer enqueueTask: [ aContainer removeChild: element ] asBlTask ]
 ]
 
 { #category : #accessing }

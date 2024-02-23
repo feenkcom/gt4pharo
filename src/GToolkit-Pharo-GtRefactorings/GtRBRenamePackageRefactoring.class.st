@@ -21,6 +21,11 @@ GtRBRenamePackageRefactoring >> from: oldPackageName to: newPackageName [
 	newName := newPackageName
 ]
 
+{ #category : #accessing }
+GtRBRenamePackageRefactoring >> gtDescription [
+	^ 'Rename package ' , oldName , ' to ' , newName
+]
+
 { #category : #transforming }
 GtRBRenamePackageRefactoring >> manifestClassNameFor: aPackageName [
 	"Returns a symbol representing a suitable name for a Manifest class for the given package"
