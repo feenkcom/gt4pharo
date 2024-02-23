@@ -660,6 +660,59 @@ GtPharoSnippetCoderByScripterExamples >> forMethodExtractionToClassMethod [
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forRenameMethod_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder forSource: '1 to: 10' ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forRenameMethod_02_start_rename [
+	<gtExample>
+	| aScripter |
+	aScripter := self forRenameMethod_01_setup.
+
+	aScripter shortcut
+		combination: (BlSingleKeyCombination new key: BlKeyboardKey home);
+		id: GtSourceCoderEditorId;
+		play.
+
+	3
+		timesRepeat: [ aScripter shortcut
+				combination: (BlSingleKeyCombination new key: BlKeyboardKey arrowRight);
+				id: GtSourceCoderEditorId;
+				play ].
+
+	aScripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forRenameMethod_03_perform_rename [
+	<gtExample>
+	| aScripter |
+	aScripter := self forRenameMethod_02_start_rename.
+
+	(aScripter type: 'tooo:') play.
+
+	(aScripter keyPress: BlKeyboardKey return) play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forTempExtraction_01_setup [
 	<gtExample>
 	| aScripter |
