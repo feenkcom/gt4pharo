@@ -403,6 +403,10 @@ GtPharoSnippetCoderByScripterExamples >> forClassExtraction_05_enter_name [
 	self hasRefactoringChanges: aScripter.
 	(aScripter keyPress: BlKeyboardKey tab) play.
 
+	(aScripter keyPress: BlKeyboardKey return) play.
+	
+	self hasRefactoringPreviewAccept: aScripter.
+
 	^ aScripter
 ]
 
@@ -708,6 +712,8 @@ GtPharoSnippetCoderByScripterExamples >> forRenameMethod_03_perform_rename [
 	(aScripter type: 'tooo:') play.
 
 	(aScripter keyPress: BlKeyboardKey return) play.
+	
+	self hasRefactoringPreviewAccept: aScripter.
 
 	^ aScripter
 ]
@@ -898,6 +904,10 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_05_enter_name [
 	
 	(aScripter keyPress: BlKeyboardKey tab) play.
 
+	(aScripter keyPress: BlKeyboardKey return) play.
+	
+	self hasRefactoringPreviewAccept: aScripter.
+
 	^ aScripter
 ]
 
@@ -914,6 +924,19 @@ GtPharoSnippetCoderByScripterExamples >> hasRefactoringChanges: aScripter [
 						indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 					anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ]]
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> hasRefactoringPreviewAccept: aScripter [
+	aScripter
+		assertStep: [ :step | 
+			step
+				onChildFromBlock: [ :element | 
+					element topMostParent
+						allChildrenBreadthFirstDetect: [ :each | each id = GtRefactoringsPreviewAcceptId uniqueInstance ]
+						ifFound: [ :each | each ]
+						ifNone: [ self error: 'Apply button not found' ] ];
+				value: [ :button | button isVisible ] equals: true ]
 ]
 
 { #category : #'examples - context menu' }
