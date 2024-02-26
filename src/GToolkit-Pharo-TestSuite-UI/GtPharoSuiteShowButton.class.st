@@ -56,7 +56,9 @@ GtPharoSuiteShowButton >> newForStatePlayIcon [
 
 { #category : #'private - announcement handling' }
 GtPharoSuiteShowButton >> onSuiteStreamChanged: anAnnouncement [
-	self asyncPromise promise: self suiteViewModel hasSuiteCases
+	self
+		enqueueTask: (BlTaskAction new
+				action: [ self asyncPromise promise: self suiteViewModel hasSuiteCases ])
 ]
 
 { #category : #'api - suite view model' }
