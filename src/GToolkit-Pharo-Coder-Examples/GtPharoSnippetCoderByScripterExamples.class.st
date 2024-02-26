@@ -403,6 +403,10 @@ GtPharoSnippetCoderByScripterExamples >> forClassExtraction_05_enter_name [
 	self hasRefactoringChanges: aScripter.
 	(aScripter keyPress: BlKeyboardKey tab) play.
 
+	(aScripter keyPress: BlKeyboardKey return) play.
+	
+	self hasRefactoringPreviewAccept: aScripter.
+
 	^ aScripter
 ]
 
@@ -660,6 +664,62 @@ GtPharoSnippetCoderByScripterExamples >> forMethodExtractionToClassMethod [
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forRenameMethod_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder forSource: '1 to: 10' ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forRenameMethod_02_start_rename [
+	<gtExample>
+	| aScripter |
+	aScripter := self forRenameMethod_01_setup.
+
+	aScripter shortcut
+		combination: (BlSingleKeyCombination new key: BlKeyboardKey home);
+		id: GtSourceCoderEditorId;
+		play.
+
+	3
+		timesRepeat: [ aScripter shortcut
+				combination: (BlSingleKeyCombination new key: BlKeyboardKey arrowRight);
+				id: GtSourceCoderEditorId;
+				play ].
+
+	aScripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> forRenameMethod_03_perform_rename [
+	<gtExample>
+	| aScripter |
+	aScripter := self forRenameMethod_02_start_rename.
+
+	(aScripter type: 'tooo:') play.
+
+	(aScripter keyPress: BlKeyboardKey return) play.
+	
+	"Comment out for now -- passes in UI doesn't in cli"
+	"self hasRefactoringPreviewAccept: aScripter."
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> forTempExtraction_01_setup [
 	<gtExample>
 	| aScripter |
@@ -845,6 +905,10 @@ GtPharoSnippetCoderByScripterExamples >> forUnaryExtraction_05_enter_name [
 	
 	(aScripter keyPress: BlKeyboardKey tab) play.
 
+	(aScripter keyPress: BlKeyboardKey return) play.
+	
+	self hasRefactoringPreviewAccept: aScripter.
+
 	^ aScripter
 ]
 
@@ -861,6 +925,19 @@ GtPharoSnippetCoderByScripterExamples >> hasRefactoringChanges: aScripter [
 						indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
 					anInterval ]
 			equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ]]
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> hasRefactoringPreviewAccept: aScripter [
+	aScripter
+		assertStep: [ :step | 
+			step
+				onChildFromBlock: [ :element | 
+					element topMostParent
+						allChildrenBreadthFirstDetect: [ :each | each id = GtRefactoringsPreviewAcceptId uniqueInstance ]
+						ifFound: [ :each | each ]
+						ifNone: [ self error: 'Apply button not found' ] ];
+				value: [ :button | button isVisible ] equals: true ]
 ]
 
 { #category : #'examples - context menu' }
