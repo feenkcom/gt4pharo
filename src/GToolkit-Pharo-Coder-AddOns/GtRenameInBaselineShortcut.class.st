@@ -19,10 +19,12 @@ GtRenameInBaselineShortcut >> performOnEditor: aBrTextEditor element: aBrEditorE
 	position notNil
 		ifTrue: [ (aSourceCoderViewModel coder
 				renamePackageAt: position
-				in: aSourceCoderViewModel) ifTrue: [ ^ self ].
+				in: aSourceCoderViewModel
+				from: aBrEditorElement) ifTrue: [ ^ self ].
 			(aSourceCoderViewModel coder
 				renameBaselineAt: position
-				in: aSourceCoderViewModel) ifTrue: [ ^ self ] ].
+				in: aSourceCoderViewModel
+				for: aBrEditorElement) ifTrue: [ ^ self ] ].
 	super
 		performOnEditor: aBrTextEditor
 		element: aBrEditorElement

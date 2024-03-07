@@ -97,6 +97,11 @@ GtConvertCascadesToStatementsRefactoring >> findNode [
 ]
 
 { #category : #accessing }
+GtConvertCascadesToStatementsRefactoring >> gtDescription [
+	^ 'Convert cascades to statements'
+]
+
+{ #category : #accessing }
 GtConvertCascadesToStatementsRefactoring >> preconditions [
 	^ RBCondition definesSelector: selector in: class
 ]

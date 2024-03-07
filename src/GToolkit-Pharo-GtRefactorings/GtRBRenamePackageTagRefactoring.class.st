@@ -16,6 +16,11 @@ GtRBRenamePackageTagRefactoring class >> packageName: aPackageName from: oldTagN
 		yourself
 ]
 
+{ #category : #accessing }
+GtRBRenamePackageTagRefactoring >> gtDescription [
+	^ 'Rename package tag ' , oldName , ' to ' , newName
+]
+
 { #category : #'initialize-release' }
 GtRBRenamePackageTagRefactoring >> packageName: aPackageName from: oldTagName to: newTagName [
 	packageName := aPackageName.

@@ -61,6 +61,11 @@ GtExtractMethodFromSnippetRefactoring >> extract: anInterval from: aString [
 							ifFalse: [ 0 ])
 ]
 
+{ #category : #accessing }
+GtExtractMethodFromSnippetRefactoring >> gtDescription [
+	^ 'Extract method from snippet'
+]
+
 { #category : #transforming }
 GtExtractMethodFromSnippetRefactoring >> inlineForwarder [
 	| refactoring |
@@ -106,58 +111,18 @@ GtExtractMethodFromSnippetRefactoring >> shouldKeepChange: aRBChangeObject [
 
 { #category : #private }
 GtExtractMethodFromSnippetRefactoring >> snippetMethodSource [
-	| ast newSource temps written methodPattern tempsSource |
+	| ast expressionAST |
 	snippetMethodSource notNil ifTrue: [ ^ snippetMethodSource ].
-	temps := Set new.
-	newSource := SmaCCString on: source.
-	ast := GtPharoParser
+	snippetMethodSource := self snippetMethodSourceFrom: source.
+	ast := GtPharoParser parse: snippetMethodSource.
+	expressionAST := GtPharoParser
 			parse: source
 			startingAt: GtPharoParser startingStateForMethodSequence.
-	ast
-		allNodesOfType: GtPharoVariableNode
-		do: [ :each | 
-			(each whoDefines isNil
-				and: [ (#(self super) includes: each variableName) not
-						and: [ (Smalltalk globals includesKey: each variableName) not ] ])
-				ifTrue: [ temps add: each ] ].
-	written := Set new.
-	ast
-		allNodesOfType: GtPharoAssignmentNode
-		do: [ :each | 
-			(temps includes: each variable)
-				ifTrue: [ written add: each variable.
-					temps remove: each variable ] ].
-	methodPattern := temps isEmpty
-			ifTrue: [ '__ ' ]
-			ifFalse: [ String
-					streamContents: [ :stream | 
-						temps
-							do: [ :each | 
-								stream
-									nextPutAll: '__: ';
-									nextPutAll: each variableName;
-									space ] ] ].
-	newSource insert: methodPattern at: 1.
-	offset := methodPattern size.
-	written notEmpty
-		ifTrue: [ tempsSource := String
-					streamContents: [ :stream | 
-						ast leftBar ifNil: [ stream nextPut: $| ].
-						written
-							do: [ :each | 
-								stream
-									space;
-									nextPutAll: each variableName ].
-						ast leftBar ifNil: [ stream nextPut: $| ] ].
-			newSource
-				insert: tempsSource
-				at: (ast rightBar ifNil: [ 1 ] ifNotNil: [ :token | token startPosition ]).
-			offset := offset + tempsSource size ].
-	(ast statements notEmpty and: [ ast lastIsReturn not ])
-		ifTrue: [ returnPosition := ast statements last startPosition.
-			newSource insert: '^' at: ast statements last startPosition ].
-	snippetMethodSource := newSource asString.
-	snippetSelector := (GtPharoParser parse: snippetMethodSource) selector.
+	offset := ast body statements first startPosition
+			- expressionAST statements first startPosition.
+	snippetMethodSource first = $ 
+		ifTrue: [ returnPosition := ast body statements last upArrow startPosition - offset ].
+	snippetSelector := ast selector.
 	^ snippetMethodSource
 ]
 

@@ -20,6 +20,14 @@ GtRenameSelectorAction class >> message: aGtPharoMessageNode textualCoderViewMod
 ]
 
 { #category : #accessing }
+GtRenameSelectorAction class >> selector: aGtPharoLiteralNode textualCoderViewModel: aTextualCoderViewModel [
+	^ self new
+		selector: aGtPharoLiteralNode;
+		pharoSourceCoderViewModel: aTextualCoderViewModel;
+		yourself
+]
+
+{ #category : #accessing }
 GtRenameSelectorAction class >> variable: aGtPharoVariableNode textualCoderViewModel: aTextualCoderViewModel [
 	^ self new
 		variable: aGtPharoVariableNode;
@@ -158,6 +166,17 @@ GtRenameSelectorAction >> newSelector: aSymbol [
 { #category : #accessing }
 GtRenameSelectorAction >> newVariableName [
 	^ self newSelector
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> selector: aGtPharoLiteralNode [
+	| interval |
+	interval := aGtPharoLiteralNode sourceInterval.
+	aGtPharoLiteralNode value source first = $#
+		ifTrue: [ interval := interval first + 1 to: interval last ].
+	originalLocations := {interval}.
+	hasArguments := false.
+	self forVariableOrUnaryMessage
 ]
 
 { #category : #accessing }

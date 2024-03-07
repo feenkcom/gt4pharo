@@ -9,8 +9,9 @@ RBRefactoryChange >> gtExecuteWithNotification [
 RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock [
 	| job notification |
 	job := self gtCompilationJobWithProgress: aBlock.
-	notification := GtNotificationJob new.
+	notification := GtCompilationNotificationJob new.
 	notification job: job.
+	notification registerNotifications.
 	^ [ job run ] asAsyncPromise
 ]
 

@@ -58,8 +58,9 @@ GtExpandableContextMethodCoderElement >> updateUninstalledIndicator [
 	| method |
 	method := self coderViewModel compiledMethod.
 	uninstalledIndicator
-		inUIProcessDo: [ uninstalledIndicator
-				visibility: ((method isDoIt or: [ method isInstalled ])
-						ifTrue: [ BlVisibility gone ]
-						ifFalse: [ BlVisibility visible ]) ]
+		enqueueTask: (BlTaskAction new
+				action: [ uninstalledIndicator
+						visibility: ((method isDoIt or: [ method isInstalled ])
+								ifTrue: [ BlVisibility gone ]
+								ifFalse: [ BlVisibility visible ]) ])
 ]
