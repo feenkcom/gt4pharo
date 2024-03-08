@@ -61,6 +61,11 @@ GtPharoMethodPasswordStyler >> gtSelectorsFor: aView [
 		  column: 'Password position' text: #position
 ]
 
+{ #category : #comparing }
+GtPharoMethodPasswordStyler >> hash [
+	^ self class hash
+]
+
 { #category : #initialization }
 GtPharoMethodPasswordStyler >> initialize [
 
