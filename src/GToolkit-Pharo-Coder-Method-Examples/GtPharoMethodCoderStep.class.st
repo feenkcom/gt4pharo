@@ -82,10 +82,13 @@ GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: 
 	self click
 		label: ('Click on expander number {1}' format: {anExpanderIndex});
 		onParentStepTarget: self;
+		referenceSender;
 		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
 		onTopMost.
 
-	self wait forEmptySpaceTaskQueueTimeout: 1 second.
+	self wait
+		forEmptySpaceTaskQueueTimeout: 1 second;
+		referenceSender.
 
 	aRootStep := self methodCoder
 			label: 'Embedded method coder';
