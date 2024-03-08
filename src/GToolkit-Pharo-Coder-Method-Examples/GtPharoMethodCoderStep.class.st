@@ -67,9 +67,14 @@ GtPharoMethodCoderStep >> clickOnExpander: anExpanderIndex insideDo: anInsideBlo
 		onParentStepTarget: self;
 		// (GtPharoMethodExpanderId indexed: anExpanderIndex).
 
+	self wait forEmptySpaceTaskQueueTimeout: 1 second.
+
 	aRootStep := self methodCoder
 			label: 'Embedded method coder';
-			onParentStepTarget: self.
+			referenceSender;
+			onParentStepTarget: self;
+			// GtSourceCoderEditorId;
+			// GtSourceCoderExpandedContentElement.
 
 	anInsideBlock value: aRootStep.
 
