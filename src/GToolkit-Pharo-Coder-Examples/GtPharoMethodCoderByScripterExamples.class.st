@@ -5216,6 +5216,58 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject2 [
+	<gtExample>
+	| aScripter aSelfObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithSuperCalls.
+				aCoder asCoderViewModel selfObject: (aSelfObject := aCoder behavior new) ].
+
+	aScripter methodCoder
+		assertMethodExpandersCountIs: 1;
+		assertSelfObjectIs: aSelfObject;
+		assertTargetBehaviorIs: aSelfObject class;
+		assertPlayAndInspectActionExists;
+		clickOnPlayAndInspectButton;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepSelfNumber | 
+				stepSelfNumber
+					assertMethodExpandersCountIs: 7;
+					assertSelfObjectIs: aSelfObject;
+					assertTargetBehaviorIs: aSelfObject class;
+					assertPlayAndInspectActionExists;
+					clickOnPlayAndInspectButton;
+					clickOnMethodCoderExpander: 1
+						insideDo: [ :stepSuperNumber | 
+							stepSuperNumber
+								assertMethodExpandersCountIs: 1;
+								assertSelfObjectIs: aSelfObject;
+								assertTargetBehaviorIs: aSelfObject class superclass;
+								assertPlayAndInspectActionExists;
+								clickOnPlayAndInspectButton;
+								clickOnMethodCoderExpander: 1
+									insideDo: [ :stepSelfOne | 
+										stepSelfOne
+											assertMethodExpandersCountIs: 0;
+											assertSelfObjectIs: aSelfObject;
+											assertTargetBehaviorIs: aSelfObject class;
+											assertPlayAndInspectActionExists;
+											clickOnPlayAndInspectButton ] ];
+					clickOnMethodCoderExpander: 2
+						insideDo: [ :stepSelfOne | 
+							stepSelfOne
+								assertMethodExpandersCountIs: 0;
+								assertSelfObjectIs: aSelfObject;
+								assertTargetBehaviorIs: aSelfObject class;
+								assertPlayAndInspectActionExists;
+								clickOnPlayAndInspectButton ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	<gtExample>
 	| aMethod aCoder |

@@ -17,3 +17,8 @@ GtPharoDummySuperCallsObject >> number [
 	thisContext compiledCode.
 	self class new one.
 ]
+
+{ #category : #accessing }
+GtPharoDummySuperCallsObject >> one [
+	^ 1.11
+]

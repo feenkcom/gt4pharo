@@ -17,13 +17,20 @@ GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 ]
 
 { #category : #private }
-GtPharoMethodExpanderAttribute >> addSelfObjectAndArgumentBindingsIntoViewModel: viewModel [
+GtPharoMethodExpanderAttribute >> addSelfObjectAndArgumentBindingsIntoViewModel: viewModel behaviorToCoder: coder [
 	argumentBindingsBuilder ifNil: [ ^ self ].
 	argumentBindingsBuilder compiledMethod: self compiledMethod.
 	argumentBindingsBuilder build.
+
+	argumentBindingsBuilder receiverBehavior
+		ifNotNil: [ :aReceiverBehavior | 
+			(aReceiverBehavior lookupSelector: selector)
+				ifNotNil: [ :aCompiledMethod | 
+					self compiledMethod = aCompiledMethod
+						ifFalse: [ coder forMethod: aCompiledMethod ] ] ].
+
 	argumentBindingsBuilder localBindings
 		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
-
 	argumentBindingsBuilder receiverObject
 		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ]
 ]
@@ -42,17 +49,22 @@ GtPharoMethodExpanderAttribute >> argumentBindingsBuilder: anObject [
 { #category : #private }
 GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	| editorElement coder method viewModel |
-	(method := self compiledMethod)
-		ifNil: [ ^ BlElement new ].
+	(method := self compiledMethod) ifNil: [ ^ BlElement new ].
 	coder := GtPharoMethodCoder forMethod: method.
 	coder subscribeToSystem.
 	viewModel := coder asCoderViewModel.
-	self addSelfObjectAndArgumentBindingsIntoViewModel: viewModel.
-	
+	self
+		addSelfObjectAndArgumentBindingsIntoViewModel: viewModel
+		behaviorToCoder: coder.
+
 	editorElement := viewModel asElement.
+
+	self id isIndexed
+		ifTrue: [ editorElement id: (GtPharoEmbeddedMethodId indexed: self id index) ]
+		ifFalse: [ editorElement id: GtPharoEmbeddedMethodId ].
+
 	editorElement
-		margin:
-			(BlInsets
+		margin: (BlInsets
 				top: 3
 				right: 10
 				bottom: 10
