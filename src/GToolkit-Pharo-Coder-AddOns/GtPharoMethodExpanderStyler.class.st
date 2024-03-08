@@ -55,7 +55,8 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
 			evaluationContext: evaluationContext;
 			selfObject: aSelfObject;
-			parentMessage: aMessage.
+			parentMessage: aMessage;
+			messageNode: aMessage.
 	anAttribute argumentBindingsBuilder: aBuilder.
 	text
 		attribute: anAttribute

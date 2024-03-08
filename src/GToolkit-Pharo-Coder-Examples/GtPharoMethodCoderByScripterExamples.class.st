@@ -5159,6 +5159,27 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls2 [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithSuperCalls asCoderViewModel ].
+
+	aScripter
+		methodCoderStep: [ :s | 
+			s
+				assertMethodExpandersCountIs: 1;
+				assertSelfObjectIs: nil;
+				clickOnMethodCoderExpander: 1
+					insideDo: [ :selfNumberStep | 
+						selfNumberStep
+							assertMethodExpandersCountIs: 7;
+							assertSelfObjectIs: nil ] ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject [
 	<gtExample>
 	| aScripter anObject |
@@ -5211,6 +5232,58 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 					equals: [ Array new: 7 withAll: 1 ];
 				// GtSourceCoderEditorId;
 				// GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject2 [
+	<gtExample>
+	| aScripter aSelfObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithSuperCalls.
+				aCoder asCoderViewModel selfObject: (aSelfObject := aCoder behavior new) ].
+
+	aScripter methodCoder
+		assertMethodExpandersCountIs: 1;
+		assertSelfObjectIs: aSelfObject;
+		assertTargetBehaviorIs: aSelfObject class;
+		assertPlayAndInspectActionExists;
+		clickOnPlayAndInspectButton;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepSelfNumber | 
+				stepSelfNumber
+					assertMethodExpandersCountIs: 7;
+					assertSelfObjectIs: aSelfObject;
+					assertTargetBehaviorIs: aSelfObject class;
+					assertPlayAndInspectActionExists;
+					clickOnPlayAndInspectButton;
+					clickOnMethodCoderExpander: 1
+						insideDo: [ :stepSuperNumber | 
+							stepSuperNumber
+								assertMethodExpandersCountIs: 1;
+								assertSelfObjectIs: aSelfObject;
+								assertTargetBehaviorIs: aSelfObject class superclass;
+								assertPlayAndInspectActionExists;
+								clickOnPlayAndInspectButton;
+								clickOnMethodCoderExpander: 1
+									insideDo: [ :stepSelfOne | 
+										stepSelfOne
+											assertMethodExpandersCountIs: 0;
+											assertSelfObjectIs: aSelfObject;
+											assertTargetBehaviorIs: aSelfObject class;
+											assertPlayAndInspectActionExists;
+											clickOnPlayAndInspectButton ] ];
+					clickOnMethodCoderExpander: 2
+						insideDo: [ :stepSelfOne | 
+							stepSelfOne
+								assertMethodExpandersCountIs: 0;
+								assertSelfObjectIs: aSelfObject;
+								assertTargetBehaviorIs: aSelfObject class;
+								assertPlayAndInspectActionExists;
+								clickOnPlayAndInspectButton ] ];
+		play.
 
 	^ aScripter
 ]

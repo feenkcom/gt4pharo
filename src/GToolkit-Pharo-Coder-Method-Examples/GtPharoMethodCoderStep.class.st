@@ -11,7 +11,11 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 			label: ('Assert binding {1} is {2}'
 					format: {aBindingKey.
 							anObject});
-			value: [ :aCoderElement | aCoderElement textualCoderViewModel localBindings bindingValueOf: aBindingKey ]
+			value: [ :aCoderElement | 
+					aCoderElement textualCoderViewModel evaluationContext
+						variableValueOf: aBindingKey
+						ifPresent: [ :aValue | aValue ]
+						ifAbsent: [ nil ] ]
 				equals: anObject;
 			referenceSender;
 			onParentStepTarget: self.
@@ -20,7 +24,7 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 ]
 
 { #category : #'steps - checks' }
-GtPharoMethodCoderStep >> assertExpandersCountIs: aNumber [
+GtPharoMethodCoderStep >> assertMethodExpandersCountIs: aNumber [
 	| anAssertStep |
 	anAssertStep := self check
 			label: ('Assert {1} method {2}'
@@ -59,22 +63,39 @@ GtPharoMethodCoderStep >> assertSelfObjectIs: anObject [
 	^ anAssertStep
 ]
 
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertTargetBehaviorIs: aBehavior [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert behavior is {1}' format: {aBehavior});
+			value: [ :aCoderElement | aCoderElement textualCoderViewModel evaluationContext targetBehavior ]
+				equals: aBehavior;
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
 { #category : #'steps - interactions' }
-GtPharoMethodCoderStep >> clickOnExpander: anExpanderIndex insideDo: anInsideBlock [
+GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
 	| aRootStep |
 	self click
 		label: ('Click on expander number {1}' format: {anExpanderIndex});
 		onParentStepTarget: self;
-		// (GtPharoMethodExpanderId indexed: anExpanderIndex).
+		referenceSender;
+		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
+		onTopMost.
 
-	self wait forEmptySpaceTaskQueueTimeout: 1 second.
+	self wait
+		forEmptySpaceTaskQueueTimeout: 1 second;
+		referenceSender.
 
 	aRootStep := self methodCoder
 			label: 'Embedded method coder';
 			referenceSender;
 			onParentStepTarget: self;
-			// GtSourceCoderEditorId;
-			// GtSourceCoderExpandedContentElement.
+			// (GtPharoEmbeddedMethodId indexed: anExpanderIndex);
+			onTopMost.
 
 	anInsideBlock value: aRootStep.
 
@@ -136,4 +157,33 @@ GtPharoMethodCoderStep >> privateAssertExpandersCount: aNumber coderElement: aCo
 		assert: unexpectedExpander all size = 0
 		description: [ 'There is at least one more expander compared to {1} expected expanders'
 				format: {aNumber} ]
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> toggleMethodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
+	| aRootStep |
+	self click
+		label: ('Expand method coder expander number {1}' format: {anExpanderIndex});
+		onParentStepTarget: self;
+		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
+		onTopMost.
+
+	self wait forEmptySpaceTaskQueueTimeout: 1 second.
+
+	aRootStep := self methodCoder
+			label: 'Embedded method coder';
+			referenceSender;
+			onParentStepTarget: self;
+			// GtSourceCoderEditorId;
+			// GtSourceCoderExpandedContentElement.
+
+	anInsideBlock value: aRootStep.
+
+	self click
+		label: ('Collapse method coder expander number {1}' format: {anExpanderIndex});
+		onParentStepTarget: self;
+		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
+		onTopMost.
+
+	^ aRootStep
 ]

@@ -7,7 +7,9 @@ Class {
 		'parentMessage',
 		'localBindings',
 		'receiverObject',
-		'selfObject'
+		'selfObject',
+		'receiverBehavior',
+		'messageNode'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -37,6 +39,7 @@ GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVar
 GtPharoReceiverAndArgumentBindingsBuilder >> build [
 	self buildLocalBindings.
 	self buildReceiver.
+	self buildReceiverBehavior.
 ]
 
 { #category : #building }
@@ -78,6 +81,15 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 		ifTrue: [ ^ receiverObject := aGtPharoProgramNode literalValue ].
 ]
 
+{ #category : #building }
+GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiverBehavior [
+	receiverBehavior ifNil: [ ^ self ].
+	messageNode ifNil: [ ^ self ].
+	(messageNode isVariable and: [ messageNode isSelf ]) ifFalse: [ ^ self ].
+
+	receiverBehavior := receiverObject class
+]
+
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> compiledMethod [
 	^ compiledMethod
@@ -105,6 +117,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> localBindings [
 ]
 
 { #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> messageNode [
+	^ messageNode
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> messageNode: anObject [
+	messageNode := anObject
+]
+
+{ #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage [
 	^ parentMessage
 ]
@@ -112,6 +134,11 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage [
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 	parentMessage := anObject
+]
+
+{ #category : #'accessing - results' }
+GtPharoReceiverAndArgumentBindingsBuilder >> receiverBehavior [
+	^ receiverBehavior
 ]
 
 { #category : #'accessing - results' }
