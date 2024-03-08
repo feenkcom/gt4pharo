@@ -24,6 +24,19 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert explicit provider class is {1}' format: {aBehavior});
+			value: [ :aCoderElement | aCoderElement textualCoderViewModel explicitProviderClass ]
+				equals: aBehavior;
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertMethodExpandersCountIs: aNumber [
 	| anAssertStep |
 	anAssertStep := self check

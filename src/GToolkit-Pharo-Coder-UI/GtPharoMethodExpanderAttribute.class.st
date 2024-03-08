@@ -29,6 +29,8 @@ GtPharoMethodExpanderAttribute >> addSelfObjectAndArgumentBindingsIntoViewModel:
 					self compiledMethod = aCompiledMethod
 						ifFalse: [ coder forMethod: aCompiledMethod ] ] ].
 
+	argumentBindingsBuilder explicitProviderClass
+		ifNotNil: [ :aClass | coder explicitProviderClass: aClass ].
 	argumentBindingsBuilder localBindings
 		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
 	argumentBindingsBuilder receiverObject
