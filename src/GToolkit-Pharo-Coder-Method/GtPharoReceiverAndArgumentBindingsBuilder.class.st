@@ -2,14 +2,15 @@ Class {
 	#name : #GtPharoReceiverAndArgumentBindingsBuilder,
 	#superclass : #Object,
 	#instVars : [
-		'evaluationContext',
 		'compiledMethod',
 		'parentMessage',
 		'localBindings',
 		'receiverObject',
-		'selfObject',
 		'receiverBehavior',
-		'messageNode'
+		'explicitProviderClass',
+		'parentExplicitProviderClass',
+		'parentSelfObject',
+		'parentEvaluationContext'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -26,7 +27,7 @@ GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLit
 { #category : #private }
 GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
 	aParentArgument isVariable ifFalse: [ ^ self ].
-	evaluationContext
+	parentEvaluationContext
 		variableValueOf: aParentArgument variableName
 		ifPresent: [ :aValue | 
 			| aNewName |
@@ -40,6 +41,20 @@ GtPharoReceiverAndArgumentBindingsBuilder >> build [
 	self buildLocalBindings.
 	self buildReceiver.
 	self buildReceiverBehavior.
+	self buildExplicitProviderClass
+]
+
+{ #category : #building }
+GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitProviderClass [
+	| tentativeExplicitProviderClass |
+	compiledMethod ifNil: [ ^ self ].
+	tentativeExplicitProviderClass := parentExplicitProviderClass
+			ifNil: [ receiverBehavior ].
+	tentativeExplicitProviderClass ifNil: [ ^ self ].
+
+	(tentativeExplicitProviderClass = compiledMethod methodClass
+		or: [ tentativeExplicitProviderClass inheritsFrom: compiledMethod methodClass ])
+		ifTrue: [ explicitProviderClass := tentativeExplicitProviderClass ]
 ]
 
 { #category : #building }
@@ -61,18 +76,18 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 	aGtPharoProgramNode := parentMessage parent receiver.
 			
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
-		ifTrue: [ ^ receiverObject := selfObject ].
+		ifTrue: [ ^ receiverObject := parentSelfObject ].
 	
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
-		ifTrue: [ ^ receiverObject := selfObject ].
+		ifTrue: [ ^ receiverObject := parentSelfObject ].
 		
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ])
-		ifTrue: [ ^ receiverObject := selfObject ].
+		ifTrue: [ ^ receiverObject := nil ].
 		
 	aGtPharoProgramNode isVariable
 		ifTrue: [ | aVariableName |
 			aVariableName := aGtPharoProgramNode name value asSymbol. 
-			evaluationContext
+			parentEvaluationContext
 				variableValueOf: aVariableName
 				ifPresent: [ :aValue | ^ receiverObject := aValue  ]
 				ifAbsent: [  "ignore" ] ].
@@ -83,9 +98,12 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiverBehavior [
-	receiverBehavior ifNil: [ ^ self ].
-	messageNode ifNil: [ ^ self ].
-	(messageNode isVariable and: [ messageNode isSelf ]) ifFalse: [ ^ self ].
+	| aGtPharoProgramNode |
+	parentMessage ifNil: [ ^ self ].
+	receiverObject ifNil: [ ^ self ].
+	aGtPharoProgramNode := parentMessage parent receiver.
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
+		ifFalse: [ ^ self ].
 
 	receiverBehavior := receiverObject class
 ]
@@ -102,12 +120,17 @@ GtPharoReceiverAndArgumentBindingsBuilder >> compiledMethod: anObject [
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext [
-	^ evaluationContext
+	^ parentEvaluationContext
 ]
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext: anObject [
-	evaluationContext := anObject
+	parentEvaluationContext := anObject
+]
+
+{ #category : #'accessing - results' }
+GtPharoReceiverAndArgumentBindingsBuilder >> explicitProviderClass [
+	^ explicitProviderClass
 ]
 
 { #category : #'accessing - results' }
@@ -117,13 +140,18 @@ GtPharoReceiverAndArgumentBindingsBuilder >> localBindings [
 ]
 
 { #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> messageNode [
-	^ messageNode
+GtPharoReceiverAndArgumentBindingsBuilder >> parentEvaluationContext: anObject [
+	parentEvaluationContext := anObject
 ]
 
 { #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> messageNode: anObject [
-	messageNode := anObject
+GtPharoReceiverAndArgumentBindingsBuilder >> parentExplicitProviderClass [
+	^ parentExplicitProviderClass
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentExplicitProviderClass: anObject [
+	parentExplicitProviderClass := anObject
 ]
 
 { #category : #accessing }
@@ -134,6 +162,11 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage [
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 	parentMessage := anObject
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentSelfObject: anObject [
+	parentSelfObject := anObject
 ]
 
 { #category : #'accessing - results' }
@@ -148,10 +181,10 @@ GtPharoReceiverAndArgumentBindingsBuilder >> receiverObject [
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> selfObject [
-	^ selfObject
+	^ parentSelfObject
 ]
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> selfObject: anObject [
-	selfObject := anObject
+	parentSelfObject := anObject
 ]

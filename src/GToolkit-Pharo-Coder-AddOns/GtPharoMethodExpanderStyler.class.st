@@ -53,10 +53,10 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			andSelector: aMessage selector.
 	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
 	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
-			evaluationContext: evaluationContext;
-			selfObject: aSelfObject;
+			parentEvaluationContext: evaluationContext;
+			parentSelfObject: aSelfObject;
 			parentMessage: aMessage;
-			messageNode: aMessage.
+			parentExplicitProviderClass: self coderViewModel explicitProviderClass.
 	anAttribute argumentBindingsBuilder: aBuilder.
 	text
 		attribute: anAttribute

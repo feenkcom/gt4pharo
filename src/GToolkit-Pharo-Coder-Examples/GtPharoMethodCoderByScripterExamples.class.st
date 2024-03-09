@@ -5249,6 +5249,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 		assertMethodExpandersCountIs: 1;
 		assertSelfObjectIs: aSelfObject;
 		assertTargetBehaviorIs: aSelfObject class;
+		assertExplicitProviderClassIs: nil;
 		assertPlayAndInspectActionExists;
 		clickOnPlayAndInspectButton;
 		clickOnMethodCoderExpander: 1
@@ -5257,6 +5258,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 					assertMethodExpandersCountIs: 7;
 					assertSelfObjectIs: aSelfObject;
 					assertTargetBehaviorIs: aSelfObject class;
+					assertExplicitProviderClassIs: aSelfObject class;
 					assertPlayAndInspectActionExists;
 					clickOnPlayAndInspectButton;
 					clickOnMethodCoderExpander: 1
@@ -5265,6 +5267,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 								assertMethodExpandersCountIs: 1;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class superclass;
+								assertExplicitProviderClassIs: aSelfObject class;
 								assertPlayAndInspectActionExists;
 								clickOnPlayAndInspectButton;
 								clickOnMethodCoderExpander: 1
@@ -5273,6 +5276,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 											assertMethodExpandersCountIs: 0;
 											assertSelfObjectIs: aSelfObject;
 											assertTargetBehaviorIs: aSelfObject class;
+											assertExplicitProviderClassIs: aSelfObject class;
 											assertPlayAndInspectActionExists;
 											clickOnPlayAndInspectButton ] ];
 					clickOnMethodCoderExpander: 2
@@ -5281,6 +5285,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 								assertMethodExpandersCountIs: 0;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class;
+								assertExplicitProviderClassIs: aSelfObject class;
 								assertPlayAndInspectActionExists;
 								clickOnPlayAndInspectButton ] ];
 		play.

@@ -24,6 +24,19 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert explicit provider class is {1}' format: {aBehavior});
+			value: [ :aCoderElement | aCoderElement textualCoderViewModel explicitProviderClass ]
+				equals: aBehavior;
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertMethodExpandersCountIs: aNumber [
 	| anAssertStep |
 	anAssertStep := self check
@@ -87,7 +100,10 @@ GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: 
 		onTopMost.
 
 	self wait
-		forEmptySpaceTaskQueueTimeout: 1 second;
+		forEnqueuedSpaceTaskTimeout: 0.2 seconds;
+		referenceSender.
+	self wait
+		forEmptySpaceTaskQueueTimeout: 0.2 seconds;
 		referenceSender.
 
 	aRootStep := self methodCoder
@@ -168,7 +184,12 @@ GtPharoMethodCoderStep >> toggleMethodCoderExpander: anExpanderIndex insideDo: a
 		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
 		onTopMost.
 
-	self wait forEmptySpaceTaskQueueTimeout: 1 second.
+	self wait
+		forEnqueuedSpaceTaskTimeout: 0.2 seconds;
+		referenceSender.
+	self wait
+		forEmptySpaceTaskQueueTimeout: 0.2 seconds;
+		referenceSender.
 
 	aRootStep := self methodCoder
 			label: 'Embedded method coder';
