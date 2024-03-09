@@ -100,7 +100,10 @@ GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: 
 		onTopMost.
 
 	self wait
-		forEmptySpaceTaskQueueTimeout: 1 second;
+		forEnqueuedSpaceTaskTimeout: 0.2 seconds;
+		referenceSender.
+	self wait
+		forEmptySpaceTaskQueueTimeout: 0.2 seconds;
 		referenceSender.
 
 	aRootStep := self methodCoder
@@ -181,7 +184,12 @@ GtPharoMethodCoderStep >> toggleMethodCoderExpander: anExpanderIndex insideDo: a
 		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
 		onTopMost.
 
-	self wait forEmptySpaceTaskQueueTimeout: 1 second.
+	self wait
+		forEnqueuedSpaceTaskTimeout: 0.2 seconds;
+		referenceSender.
+	self wait
+		forEmptySpaceTaskQueueTimeout: 0.2 seconds;
+		referenceSender.
 
 	aRootStep := self methodCoder
 			label: 'Embedded method coder';
