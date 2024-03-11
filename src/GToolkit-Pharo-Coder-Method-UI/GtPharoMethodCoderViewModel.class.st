@@ -105,7 +105,7 @@ GtPharoMethodCoderViewModel >> evaluationContext [
 		targetBehavior: self defaultCompilationBehavior
 ]
 
-{ #category : #accessing }
+{ #category : #'api - accessing' }
 GtPharoMethodCoderViewModel >> explicitProviderClass [
 	^ self coderModel explicitProviderClass
 ]

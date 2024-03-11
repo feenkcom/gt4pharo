@@ -64,6 +64,11 @@ GtPharoSourceCoderViewModel >> evaluationContext [
 		receiverObject: self selfObject
 ]
 
+{ #category : #'api - accessing' }
+GtPharoSourceCoderViewModel >> explicitProviderClass [
+	^ nil
+]
+
 { #category : #'gt-extension' }
 GtPharoSourceCoderViewModel >> gtInfo [
 	^ super gtInfo, {
