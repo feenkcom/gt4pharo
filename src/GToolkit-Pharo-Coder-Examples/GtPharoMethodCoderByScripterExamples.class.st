@@ -5106,6 +5106,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ self methodCoderWithSuperCalls asCoderViewModel ].
@@ -5182,6 +5183,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls2 [
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject [
 	<gtExample>
+	<noTest>
 	| aScripter anObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder | 
