@@ -87,7 +87,7 @@ GtMessageReceiverAttribute >> createEditableLabelIn: anEditorElement [
 		strategy: (GtStreamedBlockCompletionStrategy new
 				streamingBlock: [ :string | 
 					((refactoringController potentialTypes asyncStreamStartingWith: string)
-						merge: ((GtPharoIndex current globalCache asyncWeightedStreamStartingWith: string)
+						merge: ((GtPharoIndex current classNameTree asyncWeightedStreamStartingWith: string)
 								collect: [ :each | 
 									{each.
 										each , ' class'} asAsyncStream ]) flatten) withoutDuplicates ]))

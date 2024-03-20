@@ -120,7 +120,7 @@ GtClassCreationForm >> superclassDescription [
 		priority: 2;
 		accessor: #superclassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPharoIndex current globalCache) ];
+				completions: (GtPharoIndex current classNameTree) ];
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Browse class';
 					description: 'Browses the class indicated by the editor';

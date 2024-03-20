@@ -19,5 +19,5 @@ GtSearchMethodsWithClassPatternFilter class >> globalFilterDescriptor [
 		named: 'Class';
 		order: 20;
 		completion: [ GtStringsCompletionStrategy new
-				completions: [ GtPharoIndex current globalCache ] ]
+				completions: [ GtPharoIndex current classNameTree ] ]
 ]
