@@ -384,14 +384,16 @@ GtPharoIndex >> globalCacheSpecificSize [
 
 { #category : #accessing }
 GtPharoIndex >> globalVariableReferencesTo: aVariable [
-	| indirectReferences directReferences |
+	| indirectReferences directReferences allRefs |
 	directReferences := (globalCache referencesTo: aVariable name)
 			asOrderedCollection.
 	indirectReferences := self allSendersOf: aVariable name.
 	indirectReferences isEmpty ifTrue: [ ^ directReferences ].
 	directReferences isEmpty ifTrue: [ ^ indirectReferences ].
-	^ directReferences
-		, (indirectReferences reject: [ :each | directReferences includes: each ])
+	allRefs := IdentitySet new: directReferences size + indirectReferences size.
+	allRefs addAll: directReferences.
+	allRefs addAll: indirectReferences.
+	^ allRefs asOrderedCollection
 ]
 
 { #category : #testing }
