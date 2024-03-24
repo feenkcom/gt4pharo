@@ -58,7 +58,7 @@ GtPharoIndex >> addSendsFrom: aMethod [
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
-		(self isVariableForClass: global)
+		(self isGlobalVariable: global)
 			ifTrue: [ node := globalCache add: global name weight: 1.
 				(seen includes: global)
 					ifFalse: [ seen add: global.
@@ -72,9 +72,7 @@ GtPharoIndex >> addSendsFrom: aMethod [
 							wordsIn: selector
 							do: [ :word | (selectorWordCache add: word asLowercase weight: 1) addName: selector ] ].
 				seen add: selector.
-				node addReference: method ].
-		selector first isUppercase
-			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+				node addReference: method ] ].
 	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
@@ -272,8 +270,15 @@ GtPharoIndex >> classAdded: anAnnouncement [
 	| newName |
 	newName := anAnnouncement classAdded name.
 	globalCache add: newName.
-	self addClassWordsFor: newName.
-	self addSymbolReferencesTo: newName
+	self addClassWordsFor: newName
+]
+
+{ #category : #accessing }
+GtPharoIndex >> classNameTree [
+	^ GtPrefixTreeFilter new
+		tree: globalCache;
+		filter: [ :each | (Smalltalk at: each asSymbol ifAbsent: [  ]) isBehavior ];
+		yourself
 ]
 
 { #category : #private }
@@ -288,9 +293,7 @@ GtPharoIndex >> classRemoved: anAnnouncement [
 			copyReplaceAll: 'AnObsolete'
 			with: ''.
 	(globalCache nodeFor: className)
-		ifNotNil: [ :node | 
-			node references: nil.
-			globalCache remove: className weight: node weight ].
+		ifNotNil: [ :node | globalCache remove: className ].
 	self removeClassWordsFor: className.
 	anAnnouncement classRemoved instanceSide
 		methodsDo: [ :each | self removeMethodFromCache: each ].
@@ -334,7 +337,7 @@ GtPharoIndex >> classRenamed: anAnnouncement [
 				doReferences: [ :selector :count |  ]
 				andVariables: [ :global | 
 					| node |
-					(self isVariableForClass: global)
+					(self isGlobalVariable: global)
 						ifTrue: [ global name = newClassName
 								ifTrue: [ node := globalCache add: newClassName weight: 1.
 									(addedRefs includes: each)
@@ -381,7 +384,16 @@ GtPharoIndex >> globalCacheSpecificSize [
 
 { #category : #accessing }
 GtPharoIndex >> globalVariableReferencesTo: aVariable [
-	^ (globalCache referencesTo: aVariable name) asOrderedCollection
+	| indirectReferences directReferences allRefs |
+	directReferences := (globalCache referencesTo: aVariable name)
+			asOrderedCollection.
+	indirectReferences := self allSendersOf: aVariable name.
+	indirectReferences isEmpty ifTrue: [ ^ directReferences ].
+	directReferences isEmpty ifTrue: [ ^ indirectReferences ].
+	allRefs := IdentitySet new: directReferences size + indirectReferences size.
+	allRefs addAll: directReferences.
+	allRefs addAll: indirectReferences.
+	^ allRefs asOrderedCollection
 ]
 
 { #category : #testing }
@@ -422,10 +434,8 @@ GtPharoIndex >> installedSendersOf: aSelector [
 ]
 
 { #category : #testing }
-GtPharoIndex >> isVariableForClass: aVariable [
-	^ (aVariable isKindOf: GlobalVariable)
-		and: [ aVariable value isBehavior
-				and: [ (self class environment bindingOf: aVariable name) == aVariable ] ]
+GtPharoIndex >> isGlobalVariable: aVariable [
+	^ aVariable isKindOf: GlobalVariable
 ]
 
 { #category : #accessing }
@@ -545,7 +555,7 @@ GtPharoIndex >> recompiledMethod: aMethod [
 						(convertedFromClasses includes: global name)
 							ifTrue: [ globalCache remove: global name weight: 1 ] ] ]
 			ifFalse: [ seen add: global.
-				(self isVariableForClass: global)
+				(self isGlobalVariable: global)
 					ifTrue: [ (globalCache nodeFor: global name)
 							ifNotNil: [ :node | 
 								(node updateReference: method)
@@ -566,9 +576,7 @@ GtPharoIndex >> recompiledMethod: aMethod [
 		(seen includes: selector)
 			ifFalse: [ seen add: selector.
 				(selectorCache nodeFor: selector)
-					ifNotNil: [ :node | node updateReference: method ] ].
-		selector first isUppercase
-			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+					ifNotNil: [ :node | node updateReference: method ] ] ].
 	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
@@ -608,7 +616,7 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
-		(self isVariableForClass: global)
+		(self isGlobalVariable: global)
 			ifTrue: [ node := globalCache remove: global name weight: 1.
 				(seen includes: global)
 					ifFalse: [ seen add: global.
@@ -624,9 +632,7 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 									ifNotNil: [ :n | n removeName: selector ] ] ].
 				(seen includes: selector)
 					ifFalse: [ seen add: selector.
-						node removeReference: method ] ].
-		selector first isUppercase
-			ifTrue: [ Smalltalk globals associationAt: selector ifPresent: globalBlock ] ].
+						node removeReference: method ] ] ].
 	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator

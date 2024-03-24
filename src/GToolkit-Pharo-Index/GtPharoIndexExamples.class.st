@@ -69,6 +69,15 @@ GtPharoIndexExamples >> addingWords [
 	^ index
 ]
 
+{ #category : #examples }
+GtPharoIndexExamples >> checkGlobalAndClasses [
+	<gtExample>
+	self assert: (GtPharoIndex current globalCache includes: 'Transcript').
+	self assert: (GtPharoIndex current classNameTree includes: 'Transcript') not.
+	self assert: (GtPharoIndex current classNameTree includes: self class name).
+	^ GtPharoIndex current
+]
+
 { #category : #private }
 GtPharoIndexExamples >> checkGtMessageSendIteratorRefs: aBoolean [
 	| refs |
@@ -78,6 +87,40 @@ GtPharoIndexExamples >> checkGtMessageSendIteratorRefs: aBoolean [
 			globalVariableReferencesTo: (Object environment bindingOf: 'GtMessageSendIterator' asSymbol).
 	self assert: (refs includes: thisContext method) equals: aBoolean.
 	self assert: (refs allSatisfy: [ :each | each gtIsActive ])
+]
+
+{ #category : #accessing }
+GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
+	<gtExample>
+	| refs var |
+	[ Object
+		subclass: #GtFoo1
+		instanceVariableNames: ''
+		classVariableNames: ''
+		package: 'Foo'.
+	#GtFoo1 asClass compile: 'm1 
+	^ GtFoo2'.
+	Object
+		subclass: #GtFoo2
+		instanceVariableNames: ''
+		classVariableNames: ''
+		package: 'Foo'.
+	var := Smalltalk globals associationAt: #GtFoo2.
+	refs := GtPharoIndex current globalVariableReferencesTo: var.
+	self assert: (refs includes: thisContext method method).
+	self assert: (refs includes: #GtFoo1 asClass >> #m1).
+	refs := #GtFoo2 asClass gtReferences contents.
+	self assert: (refs includes: #GtFoo1 asClass >> #m1) ]
+		ensure: [ Smalltalk globals
+				associationAt: #GtFoo1
+				ifPresent: [ :assoc | assoc value removeFromSystem ].
+			Smalltalk globals
+				associationAt: #GtFoo2
+				ifPresent: [ :assoc | assoc value removeFromSystem ] ].
+	refs := GtPharoIndex current globalVariableReferencesTo: var.
+	self assert: (refs includes: thisContext method method).
+	self assert: refs size = 1.
+	^ refs
 ]
 
 { #category : #examples }
