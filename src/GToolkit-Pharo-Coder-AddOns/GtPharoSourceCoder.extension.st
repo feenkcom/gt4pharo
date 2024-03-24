@@ -312,15 +312,6 @@ GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> createLabel: aString description: description [
-	^ aString asRopedText glamorousRegularFont
-		, ((' ' , description) asRopedText
-				glamorousCodeFont;
-				foreground: Color gray;
-				glamorousCodeTinySize)
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> expandCascadeSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
 	| cascade siblings messageNode index |
 	messageNode := (self nodeAt: position) messageNode.
