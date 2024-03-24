@@ -50,6 +50,30 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 	Smalltalk tools debugger openOn: debugSession withFullView: true
 ]
 
+{ #category : #ast }
+GtPharoSourceCoder class >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock [
+	"Try to extract a message selector from a given AST node. If aNode is not suitable
+	for extracting a selector, also check all parents of that node. Evaluate aFoundBlock if a selector
+	is found and aNoneBlock otherwise, return the result of the block evaluation"
+	<return: #Object>
+	| aCurrentNode |
+
+	aCurrentNode := aNode.
+	[ aCurrentNode notNil ]
+		whileTrue: [
+			(aCurrentNode isKindOf: GtPharoVariableNode)
+				ifTrue: [ ^ aFoundBlock value: aCurrentNode name source asSymbol ].
+			(aCurrentNode isKindOf: GtPharoSymbolLiteralNode)
+				ifTrue: [ ^ aFoundBlock value: aNode asSymbol ].
+			(aCurrentNode isKindOf: GtPharoMessageSendNode)
+				ifTrue: [ aCurrentNode := aCurrentNode message ].
+			((aCurrentNode isKindOf: GtPharoMessageNode)
+				or: [ aCurrentNode isKindOf: GtPharoMethodPatternNode ])
+				ifTrue: [ ^ aFoundBlock value: aCurrentNode selector ].
+			aCurrentNode := aCurrentNode parent ].
+	^ aNoneBlock value
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
@@ -331,22 +355,8 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	for extracting a selector, also check all parents of that node. Evaluate aFoundBlock if a selector
 	is found and aNoneBlock otherwise, return the result of the block evaluation"
 	<return: #Object>
-	| aCurrentNode |
-
-	aCurrentNode := aNode.
-	[ aCurrentNode notNil ]
-		whileTrue: [
-			(aCurrentNode isKindOf: GtPharoVariableNode)
-				ifTrue: [ ^ aFoundBlock value: aCurrentNode name source asSymbol ].
-			(aCurrentNode isKindOf: GtPharoSymbolLiteralNode)
-				ifTrue: [ ^ aFoundBlock value: aNode asSymbol ].
-			(aCurrentNode isKindOf: GtPharoMessageSendNode)
-				ifTrue: [ aCurrentNode := aCurrentNode message ].
-			((aCurrentNode isKindOf: GtPharoMessageNode)
-				or: [ aCurrentNode isKindOf: GtPharoMethodPatternNode ])
-				ifTrue: [ ^ aFoundBlock value: aCurrentNode selector ].
-			aCurrentNode := aCurrentNode parent ].
-	^ aNoneBlock value
+	
+	^ self class nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock
 ]
 
 { #category : #accessing }
