@@ -330,14 +330,6 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	^ self class nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock
 ]
 
-{ #category : #'private - notifying' }
-GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination requesterObject: aRequester [
-	self announce: (GtCoderToolSpawnRequest new 
-		tool: aTool;
-		spawnDestination: aSpawnDestination;
-		coder: self)
-]
-
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> object [
 	"Deprecated! Use GtPharoSourceCoderViewModel>>#selfObject: instead"
