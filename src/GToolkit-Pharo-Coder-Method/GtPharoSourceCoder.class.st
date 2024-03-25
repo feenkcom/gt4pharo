@@ -213,35 +213,6 @@ GtPharoSourceCoder >> detectSelectorIn: aSourceString ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> extractableNodesAt: anIndex [
-	"Return a collection of extractable nodes that intersect a given interval"
-	<return: #Collection of: #GtPharoProgramNode>
-
-	^ self
-		nodeAt: anIndex
-		ifFound: [ :aNode |
-			aNode isSequence
-				ifTrue: [ aNode statements select: [ :eachNode | eachNode intersectsInterval: (anIndex to: anIndex) ] ]
-				ifFalse: [ { aNode isMessage ifTrue: [ aNode parent ] ifFalse: [ aNode ] } ] ]
-		ifNone: [ #() ]
-]
-
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> extractableNodesWithin: anInterval [
-	"Return a collection of extractable nodes that intersect a given interval"
-
-	<return: #Collection of: #GtPharoProgramNode>
-	^ self
-		nodeWithin: anInterval
-		ifFound: [ :aNode | 
-			aNode isSequence
-				ifTrue: [ aNode statements
-						select: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ {aNode} ] ]
-		ifNone: [ #() ] 
-]
-
 { #category : #'api - actions' }
 GtPharoSourceCoder >> format [
 	self formatWithRequesterObject: nil
@@ -357,43 +328,6 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	<return: #Object>
 	
 	^ self class nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock
-]
-
-{ #category : #accessing }
-GtPharoSourceCoder >> nodeWithin: anInterval [
-	^ self
-		nodeWithin: anInterval
-		ifFound: [ :aNode | 
-			aNode isSequence
-				ifTrue: [ aNode statements
-						detect: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ aNode ] ]
-		ifNone: [  ]
-]
-
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneBlock [
-	<return: #Object>
-
-	[
-		| theAST |
-		theAST := self astAwait.
-		^ theAST
-			bestNodeFor: anInterval
-			ifFound: aFoundBlock
-			ifNone: aNoneBlock ]
-				on: Error
-				do: [ :ex | ex return ].
-
-	^ aNoneBlock value
-]
-
-{ #category : #'private - notifying' }
-GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination requesterObject: aRequester [
-	self announce: (GtCoderToolSpawnRequest new 
-		tool: aTool;
-		spawnDestination: aSpawnDestination;
-		coder: self)
 ]
 
 { #category : #'api - accessing' }

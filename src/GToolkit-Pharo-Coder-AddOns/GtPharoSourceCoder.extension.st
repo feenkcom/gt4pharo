@@ -382,20 +382,6 @@ GtPharoSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSource
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> extractableNodesFrom: aCoderViewModel [
-	| allSelections allCursors |
-
-	allSelections := aCoderViewModel selection allSelections.
-	allCursors := aCoderViewModel cursors allCursors.
-
-	^ allSelections size = 1
-		ifTrue: [ self extractableNodesWithin: allSelections first interval ]
-		ifFalse: [ allCursors size = 1
-			ifTrue: [ self extractableNodesAt: allCursors first position ]
-			ifFalse: [ #() ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoGlamorousIconStyler new.
