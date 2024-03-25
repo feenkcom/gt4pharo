@@ -359,35 +359,6 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	^ self class nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock
 ]
 
-{ #category : #accessing }
-GtPharoSourceCoder >> nodeWithin: anInterval [
-	^ self
-		nodeWithin: anInterval
-		ifFound: [ :aNode | 
-			aNode isSequence
-				ifTrue: [ aNode statements
-						detect: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ aNode ] ]
-		ifNone: [  ]
-]
-
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> nodeWithin: anInterval ifFound: aFoundBlock ifNone: aNoneBlock [
-	<return: #Object>
-
-	[
-		| theAST |
-		theAST := self astAwait.
-		^ theAST
-			bestNodeFor: anInterval
-			ifFound: aFoundBlock
-			ifNone: aNoneBlock ]
-				on: Error
-				do: [ :ex | ex return ].
-
-	^ aNoneBlock value
-]
-
 { #category : #'private - notifying' }
 GtPharoSourceCoder >> notifyToolSpawn: aTool withDestination: aSpawnDestination requesterObject: aRequester [
 	self announce: (GtCoderToolSpawnRequest new 
