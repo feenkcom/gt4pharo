@@ -50,6 +50,30 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 	Smalltalk tools debugger openOn: debugSession withFullView: true
 ]
 
+{ #category : #ast }
+GtPharoSourceCoder class >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock [
+	"Try to extract a message selector from a given AST node. If aNode is not suitable
+	for extracting a selector, also check all parents of that node. Evaluate aFoundBlock if a selector
+	is found and aNoneBlock otherwise, return the result of the block evaluation"
+	<return: #Object>
+	| aCurrentNode |
+
+	aCurrentNode := aNode.
+	[ aCurrentNode notNil ]
+		whileTrue: [
+			(aCurrentNode isKindOf: GtPharoVariableNode)
+				ifTrue: [ ^ aFoundBlock value: aCurrentNode name source asSymbol ].
+			(aCurrentNode isKindOf: GtPharoSymbolLiteralNode)
+				ifTrue: [ ^ aFoundBlock value: aNode asSymbol ].
+			(aCurrentNode isKindOf: GtPharoMessageSendNode)
+				ifTrue: [ aCurrentNode := aCurrentNode message ].
+			((aCurrentNode isKindOf: GtPharoMessageNode)
+				or: [ aCurrentNode isKindOf: GtPharoMethodPatternNode ])
+				ifTrue: [ ^ aFoundBlock value: aCurrentNode selector ].
+			aCurrentNode := aCurrentNode parent ].
+	^ aNoneBlock value
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> behavior [
 	"Return an optional Behavior in context of which this coder operates.
@@ -275,36 +299,6 @@ GtPharoSourceCoder >> newRbAST: aString [
 	^ ast
 ]
 
-{ #category : #accessing }
-GtPharoSourceCoder >> nodeAt: anIndex [
-	^ self
-		nodeAt: anIndex
-		ifFound: [ :aNode | 
-			aNode isSequence
-				ifTrue: [ aNode statements
-						detect: [ :eachNode | eachNode intersectsInterval: (anIndex to: anIndex) ] ]
-				ifFalse: [ aNode ] ]
-		ifNone: [ nil ]
-]
-
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> nodeAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
-	<return: #Object>
-	[
-		| theAST innerNode |
-		theAST := self astAwait.
-		theAST
-			withAllNodesDo: [ :node | 
-				(aTextPosition between: node startPosition - 1 and: node stopPosition)
-					ifTrue: [ innerNode := node ] ].
-		
-		^ innerNode ifNil: aNoneBlock ifNotNil: aFoundBlock ]
-			on: Error
-			do: [ :ex | ex return ].
-
-	^ aNoneBlock value
-]
-
 { #category : #'private - refactorings' }
 GtPharoSourceCoder >> nodeDescription: aNode [
 	| description |
@@ -314,17 +308,6 @@ GtPharoSourceCoder >> nodeDescription: aNode [
 	^ ((description copyReplaceAll: String cr with: ' ')
 		copyReplaceAll: String lf
 		with: ' ') copyReplaceAll: '	' with: ' '
-]
-
-{ #category : #accessing }
-GtPharoSourceCoder >> nodeFrom: aCoderViewModel [
-	| allSelections allCursors |
-	allSelections := aCoderViewModel selection allSelections.
-	allCursors := aCoderViewModel cursors allCursors.
-
-	^ allSelections size = 1
-		ifTrue: [ self nodeWithin: allSelections first interval ]
-		ifFalse: [ allCursors size = 1 ifTrue: [ self nodeAt: allCursors first position ] ]
 ]
 
 { #category : #'private - ast' }
@@ -372,22 +355,8 @@ GtPharoSourceCoder >> nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBl
 	for extracting a selector, also check all parents of that node. Evaluate aFoundBlock if a selector
 	is found and aNoneBlock otherwise, return the result of the block evaluation"
 	<return: #Object>
-	| aCurrentNode |
-
-	aCurrentNode := aNode.
-	[ aCurrentNode notNil ]
-		whileTrue: [
-			(aCurrentNode isKindOf: GtPharoVariableNode)
-				ifTrue: [ ^ aFoundBlock value: aCurrentNode name source asSymbol ].
-			(aCurrentNode isKindOf: GtPharoSymbolLiteralNode)
-				ifTrue: [ ^ aFoundBlock value: aNode asSymbol ].
-			(aCurrentNode isKindOf: GtPharoMessageSendNode)
-				ifTrue: [ aCurrentNode := aCurrentNode message ].
-			((aCurrentNode isKindOf: GtPharoMessageNode)
-				or: [ aCurrentNode isKindOf: GtPharoMethodPatternNode ])
-				ifTrue: [ ^ aFoundBlock value: aCurrentNode selector ].
-			aCurrentNode := aCurrentNode parent ].
-	^ aNoneBlock value
+	
+	^ self class nodeToSelector: aNode ifFound: aFoundBlock ifNone: aNoneBlock
 ]
 
 { #category : #accessing }
