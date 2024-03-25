@@ -213,35 +213,6 @@ GtPharoSourceCoder >> detectSelectorIn: aSourceString ifFound: aFoundBlock ifNon
 		ifNone: aNoneBlock
 ]
 
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> extractableNodesAt: anIndex [
-	"Return a collection of extractable nodes that intersect a given interval"
-	<return: #Collection of: #GtPharoProgramNode>
-
-	^ self
-		nodeAt: anIndex
-		ifFound: [ :aNode |
-			aNode isSequence
-				ifTrue: [ aNode statements select: [ :eachNode | eachNode intersectsInterval: (anIndex to: anIndex) ] ]
-				ifFalse: [ { aNode isMessage ifTrue: [ aNode parent ] ifFalse: [ aNode ] } ] ]
-		ifNone: [ #() ]
-]
-
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> extractableNodesWithin: anInterval [
-	"Return a collection of extractable nodes that intersect a given interval"
-
-	<return: #Collection of: #GtPharoProgramNode>
-	^ self
-		nodeWithin: anInterval
-		ifFound: [ :aNode | 
-			aNode isSequence
-				ifTrue: [ aNode statements
-						select: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ {aNode} ] ]
-		ifNone: [ #() ] 
-]
-
 { #category : #'api - actions' }
 GtPharoSourceCoder >> format [
 	self formatWithRequesterObject: nil
