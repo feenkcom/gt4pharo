@@ -422,7 +422,8 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 	| shortcuts |
 	super initializeShortcuts: addOns.
 
-	shortcuts := {GtSourceCoderBrowseImplementorsShortcut.
+	shortcuts := {
+			GtSourceCoderBrowseImplementorsShortcut.
 			GtSourceCoderBrowseReferencesShortcut.
 			GtSourceCoderBrowseBehaviorShortcut.
 			GtSourceCoderDiscardChangesShortcut.
