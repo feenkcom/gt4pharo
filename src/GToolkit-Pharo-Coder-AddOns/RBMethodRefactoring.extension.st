@@ -13,7 +13,8 @@ RBMethodRefactoring >> snippetMethodSourceFrom: source [
 		do: [ :each | 
 			(each whoDefines isNil
 				and: [ (#(self super) includes: each variableName) not
-						and: [ (Smalltalk globals includesKey: each variableName) not ] ])
+						and: [ (Smalltalk globals includesKey: each variableName) not
+								and: [ (class definesInstanceVariable: each variableName) not ] ] ])
 				ifTrue: [ temps add: each ] ].
 	written := Set new.
 	ast
