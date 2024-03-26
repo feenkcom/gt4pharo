@@ -74,7 +74,9 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 						description: foundClass name)
 				hover: (self highlightNodeBlock: node)
 				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | self browseBehaviorAt: node startPosition requesterObject: nil ] ]
+				action: [ :aTextualViewModel | 
+					self browseBehaviorAt: node startPosition requesterObject: nil ]
+				shortcutKey: GtSourceCoderBrowseBehaviorShortcut new combinationForPlatform gtDisplayString ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
