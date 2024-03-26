@@ -71,6 +71,15 @@ GtSmalltalkSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSo
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> highlightNodeBlock: aNode [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel
+		  addTextAttribute: self class nodeHighlight
+		  from: aNode startPosition
+		  to: aNode stopPosition ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> isIntervalCompleteCascades: aSelectionInterval [
 	"Test to see if the current selection boundaries end exactly on cascaded message nodes"
 
@@ -240,6 +249,19 @@ GtSmalltalkSourceCoder >> moveStatementsOrCascadesUpWithin: aSelectionInterval i
 				moveStatementNodes: (self extractableNodesWithin: aSelectionInterval)
 				upIn: aSourceCoderViewModel ]
 		ifFalse: [ self moveCascadeNodes: cascades upIn: aSourceCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder class >> nodeHighlight [
+	^ NodeHighlight
+		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
+				paint: BrGlamorousColors textHighlightColor ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> removeHighlightBlock [
+	^ [ :textualCoderViewModel | 
+	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
