@@ -13,9 +13,6 @@ It is important to notice that I do not directly reference a text editor and I s
 Class {
 	#name : #GtPharoSourceCoder,
 	#superclass : #GtSmalltalkSourceCoder,
-	#classVars : [
-		'NodeHighlight'
-	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
 

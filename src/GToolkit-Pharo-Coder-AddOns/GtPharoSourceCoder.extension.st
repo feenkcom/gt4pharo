@@ -320,15 +320,6 @@ GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> highlightNodeBlock: aNode [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel
-		  addTextAttribute: self class nodeHighlight
-		  from: aNode startPosition
-		  to: aNode stopPosition ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> highlightNodesBlock: aCollection [
 	^ [ :textualCoderViewModel | 
 	aCollection
@@ -398,13 +389,6 @@ GtPharoSourceCoder >> nodeAfter: aStatementNodeCollection [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder class >> nodeHighlight [
-	^ NodeHighlight
-		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
-				paint: BrGlamorousColors textHighlightColor ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoNonBreakableSpaceStyler new.
@@ -415,12 +399,6 @@ GtPharoSourceCoder >> passwordAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoMethodPasswordStyler new.
 	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> removeHighlightBlock [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
