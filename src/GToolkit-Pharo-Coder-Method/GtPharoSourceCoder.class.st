@@ -12,7 +12,7 @@ It is important to notice that I do not directly reference a text editor and I s
 "
 Class {
 	#name : #GtPharoSourceCoder,
-	#superclass : #GtSourceCoder,
+	#superclass : #GtSmalltalkSourceCoder,
 	#traits : 'TGtPharoSourceCoderAstNodesDetection',
 	#classTraits : 'TGtPharoSourceCoderAstNodesDetection classTrait',
 	#classVars : [
