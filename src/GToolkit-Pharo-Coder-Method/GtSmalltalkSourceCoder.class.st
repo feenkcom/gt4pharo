@@ -1,6 +1,8 @@
 Class {
 	#name : #GtSmalltalkSourceCoder,
 	#superclass : #GtSourceCoder,
+	#traits : 'TGtPharoSourceCoderAstNodesDetection',
+	#classTraits : 'TGtPharoSourceCoderAstNodesDetection classTrait',
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
 
