@@ -1085,7 +1085,7 @@ GtPharoMethodCoder >> methodInheritanceFor: anAST into: coderAddOns viewModel: a
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 1>
+	<gtAstCoderAddOns: 2>
 
 	self isModified
 		ifFalse: [ ^ self ].
