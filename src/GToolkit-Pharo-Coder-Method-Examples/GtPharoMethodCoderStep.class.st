@@ -50,6 +50,32 @@ GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderProviderBehaviorIs: aBehavior [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert header provider class is {1}' format: {aBehavior});
+			value: [ :aButton | aButton label asString ] equals: aBehavior name asString;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderProviderBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderReceiverBehaviorIs: aBehavior [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert header receiver class is {1}' format: {aBehavior});
+			value: [ :aButton | aButton label asString ] equals: aBehavior name asString;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderReceiverBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertMethodExpandersCountIs: aNumber [
 	| anAssertStep |
 	anAssertStep := self check

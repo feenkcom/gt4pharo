@@ -45,10 +45,10 @@ GtPharoMethodCoderHeaderElement >> initialize [
 	targetBehaviorButton := self newBehaviorButton.
 	targetBehaviorIconContainer := self newIconContainer.
 	
-	self addChild: packageButton as: #packageButton.
+	self addChild: packageButton as: GtPharoHeaderPackageId.
 	self addChild: (self buildSeparatorElement
 		margin: (BlInsets left: 5 right: 5)) as: #separatorElement.
-	self addChild: targetBehaviorButton as: #behaviorButton.
+	self addChild: targetBehaviorButton as: GtPharoHeaderReceiverBehaviorId.
 	self addChild: targetBehaviorIconContainer as: #iconContainer.
 	
 	self addChild: (providerBehaviourContainer := BrHorizontalPane new 
@@ -57,7 +57,7 @@ GtPharoMethodCoderHeaderElement >> initialize [
 		addChild: (self buildSeparatorElement 
 			text: '(');
 		addChild: (providerBehaviourButton := self newBehaviorButton) 
-			as: #secondBehaviorButton;
+			as: GtPharoHeaderProviderBehaviorId;
 		addChild: (providerBehaviourIconContainer := self newIconContainer);
 		addChild: (self buildSeparatorElement text: ')'))
 ]
