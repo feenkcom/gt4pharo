@@ -161,11 +161,6 @@ GtPharoMethodCoder >> category: aSymbol [
 	self protocol: aSymbol
 ]
 
-{ #category : #'private - actions' }
-GtPharoMethodCoder >> changeManager [
-	^ RBRefactoryChangeManager instance
-]
-
 { #category : #private }
 GtPharoMethodCoder >> changedSourceForCurrentMethod: aRefactoryChange [
 	aRefactoryChange changes
