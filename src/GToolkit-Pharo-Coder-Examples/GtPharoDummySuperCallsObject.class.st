@@ -22,3 +22,8 @@ GtPharoDummySuperCallsObject >> number [
 GtPharoDummySuperCallsObject >> one [
 	^ 1.11
 ]
+
+{ #category : #accessing }
+GtPharoDummySuperCallsObject >> printString [
+	^ super printString
+]
