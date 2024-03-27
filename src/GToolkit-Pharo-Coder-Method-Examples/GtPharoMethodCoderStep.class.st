@@ -24,6 +24,19 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertCompiledMethodIs: aCompiledMethod [
+	| anAssertStep |
+	anAssertStep := self check
+			label: ('Assert compiled method is {1}' format: {aCompiledMethod printString});
+			value: [ :aCoderElement | aCoderElement textualCoderViewModel compiledMethod ]
+				equals: aCompiledMethod;
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
 	| anAssertStep |
 	anAssertStep := self assert

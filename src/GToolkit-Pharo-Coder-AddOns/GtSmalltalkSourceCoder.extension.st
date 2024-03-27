@@ -252,7 +252,7 @@ GtSmalltalkSourceCoder >> moveStatementsOrCascadesUpWithin: aSelectionInterval i
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder classSide >> nodeHighlight [
+GtSmalltalkSourceCoder class >> nodeHighlight [
 	^ NodeHighlight
 		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
 				paint: BrGlamorousColors textHighlightColor ]

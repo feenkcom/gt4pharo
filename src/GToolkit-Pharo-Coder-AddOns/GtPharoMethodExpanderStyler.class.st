@@ -33,16 +33,21 @@ GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 
 { #category : #visiting }
 GtPharoMethodExpanderStyler >> visitMessage: aMessage [
-	| aMethodClass anAttribute aBuilder aClass aSelfObject |
+	| aMethodClass anAttribute aBuilder aClass aSelfObject aLookupStartClass |
 	self visitProgram: aMessage.
 	aMessage parent isNil ifTrue: [ ^ self ].
 	aSelfObject := self coderViewModel selfObject.
 	aClass := aSelfObject
 			ifNil: [ self coderViewModel coderModel behavior ]
 			ifNotNil: [ :theSelfObject | theSelfObject class ].
+	aLookupStartClass := (aMessage parent receiver isVariable
+			and: [ aMessage parent receiver isSuper ])
+			ifTrue: [ self coderViewModel compiledMethod ifNotNil: #methodClass ifNil: [ aClass ] ]
+			ifFalse: [ aClass ].
+
 	aMethodClass := GtPharoProgramNode
 			typeOf: aMessage parent receiver
-			in: aClass
+			in: aLookupStartClass
 			bindings: variableBindings.
 
 	aMethodClass ifNil: [ ^ self ].
