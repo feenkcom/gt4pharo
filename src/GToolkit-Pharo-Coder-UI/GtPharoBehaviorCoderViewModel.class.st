@@ -15,41 +15,10 @@ GtPharoBehaviorCoderViewModel >> behavior [
 
 { #category : #accessing }
 GtPharoBehaviorCoderViewModel >> computeAddOns [
+	<return: #TAsyncPromise>
 
-	^ coderModel asAsyncPromise asyncThen: [ :aCoderModel  | 
-		|  newAddOns pragmas |
-
-		pragmas := aCoderModel
-			pragmasNamed: #gtAstCoderAddOns:
-			inHierarchy: aCoderModel class.
-		newAddOns := aCoderModel newAddOns.
-		
-		"extra addons"
-		newAddOns addAddOns: aCoderModel addOns.
-		"aCoderModel initializeShortcuts: newAddOns."
-		aCoderModel initializeAddOns: newAddOns viewModel: self.
-		
-		pragmas reverseDo: [ :eachPragma |
-			[ aCoderModel
-					perform: eachPragma methodSelector
-					withEnoughArguments: { newAddOns . self } ]
-			on: Error
-			do: [ :anError |
-				"emit as a beacon signal"
-				anError emit.
-					
-				NonInteractiveTranscript stderr
-					nextPut: $[;
-					print: eachPragma method printString;
-					nextPut: $];
-					space;
-					print: anError;
-					cr ] ].
-
-		"view model add-ons override coder model add-ons"
-		newAddOns addAddOns: extraAddOns.
-		newAddOns markAsUpdated.
-		newAddOns ].
+	^ [ self syncComputeAddOnsFor: coderModel ] asAsyncFuture
+		await: (self class addOnsExecutionConfiguration)
 ]
 
 { #category : #accessing }
@@ -101,4 +70,41 @@ GtPharoBehaviorCoderViewModel >> previews [
 { #category : #'api - coder model' }
 GtPharoBehaviorCoderViewModel >> protocols [
 	^ self coderModel behavior protocols
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderViewModel >> syncComputeAddOnsFor: aCoderModel [
+	| newAddOns pragmas |
+
+	pragmas := aCoderModel
+		pragmasNamed: #gtAstCoderAddOns:
+		inHierarchy: aCoderModel class.
+	newAddOns := aCoderModel newAddOns.
+	
+	"extra addons"
+	newAddOns addAddOns: aCoderModel addOns.
+	"aCoderModel initializeShortcuts: newAddOns."
+	aCoderModel initializeAddOns: newAddOns viewModel: self.
+	
+	pragmas reverseDo: [ :eachPragma |
+		[ aCoderModel
+				perform: eachPragma methodSelector
+				withEnoughArguments: { newAddOns . self } ]
+		on: Error
+		do: [ :anError |
+			"emit as a beacon signal"
+			anError emit.
+				
+			NonInteractiveTranscript stderr
+				nextPut: $[;
+				print: eachPragma method printString;
+				nextPut: $];
+				space;
+				print: anError;
+				cr ] ].
+
+	"view model add-ons override coder model add-ons"
+	newAddOns addAddOns: extraAddOns.
+	newAddOns markAsUpdated.
+	^ newAddOns
 ]
