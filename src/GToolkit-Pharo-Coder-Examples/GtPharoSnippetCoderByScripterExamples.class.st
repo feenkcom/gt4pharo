@@ -216,6 +216,65 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 	^ aScripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> extractMethodFromInspector_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ ((GtPharoSnippetCoder forSource: 'array size - self size')
+					behavior: OrderedCollection;
+					yourself) asCoderViewModel
+					selfObject: OrderedCollection new;
+					yourself ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: aSourceEditor text size;
+						select ] ].
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> extractMethodFromInspector_02_extract [
+	<gtExample>
+	| aScripter |
+	aScripter := self extractMethodFromInspector_01_setup.
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover extract method';
+				onSpaceRoot;
+				// GtMethodCoderExtractMethodContextMenuItemId ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				// GtMethodCoderExtractMethodContextMenuItemId ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source code modified';
+				onModel;
+				satisfies: [ :aCoder | (RBParser parseExpression: aCoder sourceText asString) selector isUnary ] ].
+	^ aScripter
+]
+
 { #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
 	<gtExample>
