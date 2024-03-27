@@ -12,12 +12,7 @@ It is important to notice that I do not directly reference a text editor and I s
 "
 Class {
 	#name : #GtPharoSourceCoder,
-	#superclass : #GtSourceCoder,
-	#traits : 'TGtPharoSourceCoderAstNodesDetection',
-	#classTraits : 'TGtPharoSourceCoderAstNodesDetection classTrait',
-	#classVars : [
-		'NodeHighlight'
-	],
+	#superclass : #GtSmalltalkSourceCoder,
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
 
@@ -67,21 +62,6 @@ GtPharoSourceCoder >> canExecuteExample [
 	<return: #Boolean>
 
 	^ false
-]
-
-{ #category : #'private - ast' }
-GtPharoSourceCoder >> cascadedMessagesWithin: anInterval [
-	"Return a collection of cascaded messages nodes that intersect a given interval"
-
-	<return: #Collection of: #GtPharoProgramNode>
-	^ self
-		nodeWithin: anInterval
-		ifFound: [ :aNode | 
-			aNode cascadeNode notNil
-				ifTrue: [ aNode cascadeNode messages
-						select: [ :eachNode | eachNode intersectsInterval: anInterval ] ]
-				ifFalse: [ #() ] ]
-		ifNone: [ #() ]
 ]
 
 { #category : #private }
