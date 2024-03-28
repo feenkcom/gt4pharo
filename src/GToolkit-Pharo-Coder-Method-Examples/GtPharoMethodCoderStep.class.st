@@ -63,6 +63,20 @@ GtPharoMethodCoderStep >> assertHeaderProviderBehaviorIs: aBehavior [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderProviderIsNotVisible [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert header provider class is not visible';
+			satisfies: [ :aButton | aButton parent visibility = BlVisibility gone ]
+				description: [ :aButton | 'Provider class header must be hidden: {1}' format: {aButton parent} ];
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderProviderBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertHeaderReceiverBehaviorIs: aBehavior [
 	| anAssertStep |
 	anAssertStep := self assert
