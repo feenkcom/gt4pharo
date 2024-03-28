@@ -169,10 +169,10 @@ GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: 
 		onTopMost.
 
 	self wait
-		forEnqueuedSpaceTaskTimeout: 0.2 seconds;
+		forEnqueuedSpaceTaskTimeout: 0.4 seconds;
 		referenceSender.
 	self wait
-		forEmptySpaceTaskQueueTimeout: 0.2 seconds;
+		forEmptySpaceTaskQueueTimeout: 0.4 seconds;
 		referenceSender.
 
 	aRootStep := self methodCoder
