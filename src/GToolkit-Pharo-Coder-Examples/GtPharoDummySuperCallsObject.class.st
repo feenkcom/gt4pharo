@@ -20,7 +20,8 @@ GtPharoDummySuperCallsObject >> number [
 
 { #category : #accessing }
 GtPharoDummySuperCallsObject >> one [
-	^ 1.11
+	super one.
+	^ 1.1
 ]
 
 { #category : #accessing }
