@@ -5104,11 +5104,11 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls2 [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethodAnotherNumber [
 	<gtExample>
 	| aScripter |
 	aScripter := self
-			scripterForBlock: [ self methodCoderWithSuperCalls asCoderViewModel ].
+			scripterForBlock: [ self methodCoderWithTwoObjectAndMethodAnotherNumber asCoderViewModel ].
 
 	aScripter
 		methodCoderStep: [ :s | 
@@ -5125,12 +5125,12 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls2 [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject2 [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethodAnotherNumberAndSelfObject [
 	<gtExample>
 	| aScripter aSelfObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSuperCalls.
+				aCoder := self methodCoderWithTwoObjectAndMethodAnotherNumber.
 				aCoder asCoderViewModel selfObject: (aSelfObject := aCoder behavior new) ].
 
 	aScripter methodCoder
@@ -5182,12 +5182,12 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCalls [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne [
 	<gtExample>
 	| aScripter aSelfObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSuperCallsOne ].
+				aCoder := self methodCoderWithTwoObjectMethodOne ].
 	aSelfObject := nil.
 
 	aScripter methodCoder
@@ -5228,12 +5228,12 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCalls [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCallsAndExplicitProviderClass [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOneAndExplicitProviderClass [
 	<gtExample>
 	| aScripter aSelfObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSuperCallsOne.
+				aCoder := self methodCoderWithTwoObjectMethodOne.
 				aCoder explicitProviderClass: GtPharoDummyThreeObject ].
 	aSelfObject := nil.
 
@@ -5277,12 +5277,12 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCallsAndEx
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCallsAndSelfObject [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOneAndSelfObject [
 	<gtExample>
 	| aScripter aSelfObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSuperCallsOne.
+				aCoder := self methodCoderWithTwoObjectMethodOne.
 				aCoder asCoderViewModel selfObject: (aSelfObject := GtPharoDummyThreeObject new) ].
 
 	aScripter methodCoder
@@ -5324,12 +5324,12 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCallsAndSe
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCallsAndSelfObjectAndExplicitProviderBehavior [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOneAndSelfObjectAndExplicitProviderBehavior [
 	<gtExample>
 	| aScripter aSelfObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSuperCallsOne.
+				aCoder := self methodCoderWithTwoObjectMethodOne.
 				aCoder explicitProviderClass: GtPharoDummyThreeObject.
 				aCoder asCoderViewModel selfObject: (aSelfObject := GtPharoDummyThreeObject new) ].
 
@@ -5376,45 +5376,45 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoSuperCallsAndSe
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	<gtExample>
 	| aMethod aCoder |
-	aMethod := self methodWithSelfCalls.
+	aMethod := self methodWithOneObjectMethodThree.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderWithSuperCalls [
+GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectAndMethodAnotherNumber [
 	<gtExample>
 	| aMethod aCoder |
-	aMethod := self methodWithSuperCalls.
+	aMethod := self methodWithTwoObjectMethodAnotherNumber.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderWithSuperCallsOne [
+GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodOne [
 	<gtExample>
 	| aMethod aCoder |
-	aMethod := self methodWithSuperCallsOne.
+	aMethod := self methodWithTwoObjectMethodOne.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodWithSelfCalls [
+GtPharoMethodCoderByScripterExamples >> methodWithOneObjectMethodThree [
 	<gtExample>
 
 	^ GtPharoDummyOneObject >> #three
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodWithSuperCalls [
+GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodAnotherNumber [
 	<gtExample>
 
 	^ GtPharoDummyTwoObject >> #anotherNumber
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodWithSuperCallsOne [
+GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodOne [
 	<gtExample>
 
 	^ GtPharoDummyTwoObject >> #one
