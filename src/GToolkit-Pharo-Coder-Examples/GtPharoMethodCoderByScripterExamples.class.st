@@ -5275,7 +5275,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :stepSelfOne | 
 										stepSelfOne
-											assertMethodExpandersCountIs: 0;
+											assertMethodExpandersCountIs: 1;
 											assertSelfObjectIs: aSelfObject;
 											assertTargetBehaviorIs: aSelfObject class;
 											assertExplicitProviderClassIs: aSelfObject class;
