@@ -27,6 +27,14 @@ GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLit
 { #category : #private }
 GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
 	aParentArgument isVariable ifFalse: [ ^ self ].
+
+	(aParentArgument isSelf or: [ aParentArgument isSuper ])
+		ifTrue: [ parentSelfObject
+				ifNotNil: [ | aNewName |
+					aNewName := compiledMethod argumentNames at: anIndex.
+					localBindings localAt: aNewName put: parentSelfObject ].
+					^ self ].
+
 	parentEvaluationContext
 		variableValueOf: aParentArgument variableName
 		ifPresent: [ :aValue | 

@@ -24,6 +24,29 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertBindingIsNotDefined: aBindingKey [
+	| anAssertStep aBindingValue |
+	anAssertStep := self check
+			label: ('Assert binding {1} is not defined' format: {aBindingKey});
+			satisfies: [ :aCoderElement | 
+					| isDefined |
+					aCoderElement textualCoderViewModel evaluationContext
+						variableValueOf: aBindingKey
+						ifPresent: [ :aValue | 
+							isDefined := true.
+							aBindingValue := aValue ]
+						ifAbsent: [ isDefined := false ].
+					isDefined not ]
+				description: [ 'Binding {1} value must not be defined. Its value is {2}.'
+						format: {aBindingKey.
+								aBindingValue} ];
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertCompiledMethodIs: aCompiledMethod [
 	| anAssertStep |
 	anAssertStep := self check
@@ -125,6 +148,19 @@ GtPharoMethodCoderStep >> assertPlayAndInspectActionExists [
 	anAssertStep := self check
 			label: 'Assert play and inspect button exists';
 			exists;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoMethodPlayAndInspectActionId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertPlayAndInspectActionNotExists [
+	| anAssertStep |
+	anAssertStep := self check
+			label: 'Assert play and inspect button exists';
+			notExists;
 			referenceSender;
 			onParentStepTarget: self;
 			// GtPharoMethodPlayAndInspectActionId.

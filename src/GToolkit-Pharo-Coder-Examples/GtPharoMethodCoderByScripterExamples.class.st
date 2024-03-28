@@ -5104,6 +5104,96 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSumOneTwoOnSelfArgument [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument asCoderViewModel ].
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionNotExists;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepA | 
+				stepA
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyOneObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+					assertHeaderMethodBehaviorIsNotVisible;
+					assertMethodExpandersCountIs: 1;
+					assertBindingIsNotDefined: #anObject;
+					assertPlayAndInspectActionNotExists ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSumOneTwoOnSelfArgumentWithExplicitProviderClass [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder | 
+				aCoder := self methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument.
+				aCoder explicitProviderClass: GtPharoDummyThreeObject.
+				aCoder asCoderViewModel ].
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+		assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+		assertPlayAndInspectActionNotExists;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepA | 
+				stepA
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertMethodExpandersCountIs: 1;
+					assertBindingIsNotDefined: #anObject;
+					assertPlayAndInspectActionNotExists ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSumOneTwoOnSuperArgument [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithOneObjectMethodSumOneTwoOnSuperArgument asCoderViewModel ].
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionNotExists;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepA | 
+				stepA
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyOneObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+					assertHeaderMethodBehaviorIsNotVisible;
+					assertMethodExpandersCountIs: 1;
+					assertBindingIsNotDefined: #anObject;
+					assertPlayAndInspectActionNotExists ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethodAnotherNumber [
 	<gtExample>
 	| aScripter |
@@ -5373,6 +5463,24 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithOneObjectMethodSumOneTwoOnSelfArgument.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithOneObjectMethodSumOneTwoOnSuperArgument [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithOneObjectMethodSumOneTwoOnSuperArgument.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	<gtExample>
 	| aMethod aCoder |
@@ -5397,6 +5505,20 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodOne [
 	aMethod := self methodWithTwoObjectMethodOne.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithOneObjectMethodSumOneTwoOnSelfArgument [
+	<gtExample>
+
+	^ GtPharoDummyOneObject >> #sumOneTwoOnSelfArgument
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithOneObjectMethodSumOneTwoOnSuperArgument [
+	<gtExample>
+
+	^ GtPharoDummyOneObject >> #sumOneTwoOnSuperArgument
 ]
 
 { #category : #'examples - expansion' }

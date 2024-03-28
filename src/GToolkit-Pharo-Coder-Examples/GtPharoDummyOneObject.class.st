@@ -88,6 +88,21 @@ GtPharoDummyOneObject >> sumC: tempA d: tempB [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject >> sumOneTwoOnSelfArgument [
+	^ self sumOneTwoOnSelfObject: self
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject >> sumOneTwoOnSelfObject: anObject [
+	^ self sumC: anObject one d: anObject two
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject >> sumOneTwoOnSuperArgument [
+	^ self sumOneTwoOnSelfObject: super
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject >> tempReceiver [
 	| a b |
 	a := 3.
