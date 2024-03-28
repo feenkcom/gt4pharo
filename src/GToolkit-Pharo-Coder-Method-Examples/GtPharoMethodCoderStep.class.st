@@ -24,6 +24,42 @@ GtPharoMethodCoderStep >> assertBinding: aBindingKey is: anObject [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertBindingIsNotDefined: aBindingKey [
+	| anAssertStep aBindingValue |
+	anAssertStep := self check
+			label: ('Assert binding {1} is not defined' format: {aBindingKey});
+			satisfies: [ :aCoderElement | 
+					| isDefined |
+					aCoderElement textualCoderViewModel evaluationContext
+						variableValueOf: aBindingKey
+						ifPresent: [ :aValue | 
+							isDefined := true.
+							aBindingValue := aValue ]
+						ifAbsent: [ isDefined := false ].
+					isDefined not ]
+				description: [ 'Binding {1} value must not be defined. Its value is {2}.'
+						format: {aBindingKey.
+								aBindingValue} ];
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertCompiledMethodIs: aCompiledMethod [
+	| anAssertStep |
+	anAssertStep := self check
+			label: ('Assert compiled method is {1}' format: {aCompiledMethod printString});
+			value: [ :aCoderElement | aCoderElement textualCoderViewModel compiledMethod ]
+				equals: aCompiledMethod;
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
 	| anAssertStep |
 	anAssertStep := self assert
@@ -32,6 +68,62 @@ GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
 				equals: aBehavior;
 			referenceSender;
 			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIs: aBehavior [
+	| anAssertStep |
+	self assertHeaderProviderIsVisible referenceSender.
+
+	anAssertStep := self assert
+			label: ('Assert header provider class is {1}' format: {aBehavior});
+			value: [ :aButton | aButton label asString ] equals: aBehavior name asString;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderMethodBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIsNotVisible [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert header provider class is not visible';
+			satisfies: [ :aButton | aButton parent visibility = BlVisibility gone ]
+				description: [ :aButton | 'Provider class header must be hidden: {1}' format: {aButton parent} ];
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderMethodBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderProviderBehaviorIs: aBehavior [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert header receiver class is {1}' format: {aBehavior});
+			value: [ :aButton | aButton label asString ] equals: aBehavior name asString;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderProviderBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderProviderIsVisible [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert header provider class is not visible';
+			satisfies: [ :aButton | aButton parent visibility = BlVisibility visible ]
+				description: [ :aButton | 'Provider class header must be hidden: {1}' format: {aButton parent} ];
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderMethodBehaviorId.
 
 	^ anAssertStep
 ]
@@ -56,6 +148,19 @@ GtPharoMethodCoderStep >> assertPlayAndInspectActionExists [
 	anAssertStep := self check
 			label: 'Assert play and inspect button exists';
 			exists;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoMethodPlayAndInspectActionId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertPlayAndInspectActionNotExists [
+	| anAssertStep |
+	anAssertStep := self check
+			label: 'Assert play and inspect button exists';
+			notExists;
 			referenceSender;
 			onParentStepTarget: self;
 			// GtPharoMethodPlayAndInspectActionId.
@@ -100,10 +205,10 @@ GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: 
 		onTopMost.
 
 	self wait
-		forEnqueuedSpaceTaskTimeout: 0.2 seconds;
+		forEnqueuedSpaceTaskTimeout: 0.4 seconds;
 		referenceSender.
 	self wait
-		forEmptySpaceTaskQueueTimeout: 0.2 seconds;
+		forEmptySpaceTaskQueueTimeout: 0.4 seconds;
 		referenceSender.
 
 	aRootStep := self methodCoder

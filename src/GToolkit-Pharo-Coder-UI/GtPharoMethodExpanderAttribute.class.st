@@ -16,27 +16,6 @@ GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 		yourself
 ]
 
-{ #category : #private }
-GtPharoMethodExpanderAttribute >> addSelfObjectAndArgumentBindingsIntoViewModel: viewModel behaviorToCoder: coder [
-	argumentBindingsBuilder ifNil: [ ^ self ].
-	argumentBindingsBuilder compiledMethod: self compiledMethod.
-	argumentBindingsBuilder build.
-
-	argumentBindingsBuilder receiverBehavior
-		ifNotNil: [ :aReceiverBehavior | 
-			(aReceiverBehavior lookupSelector: selector)
-				ifNotNil: [ :aCompiledMethod | 
-					self compiledMethod = aCompiledMethod
-						ifFalse: [ coder forMethod: aCompiledMethod ] ] ].
-
-	argumentBindingsBuilder explicitProviderClass
-		ifNotNil: [ :aClass | coder explicitProviderClass: aClass ].
-	argumentBindingsBuilder localBindings
-		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
-	argumentBindingsBuilder receiverObject
-		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ]
-]
-
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> argumentBindingsBuilder [
 	<return: #GtPharoReceiverAndArgumentBindingsBuilder>
@@ -56,8 +35,8 @@ GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	coder subscribeToSystem.
 	viewModel := coder asCoderViewModel.
 	self
-		addSelfObjectAndArgumentBindingsIntoViewModel: viewModel
-		behaviorToCoder: coder.
+		configureViewModel: viewModel
+		andCoder: coder.
 
 	editorElement := viewModel asElement.
 
@@ -82,6 +61,20 @@ GtPharoMethodExpanderAttribute >> classOrMetaClass [
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> compiledMethod [
 	^ classOrMetaClass lookupSelector: selector
+]
+
+{ #category : #private }
+GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder [
+	argumentBindingsBuilder ifNil: [ ^ self ].
+	argumentBindingsBuilder compiledMethod: self compiledMethod.
+	argumentBindingsBuilder build.
+
+	argumentBindingsBuilder explicitProviderClass
+		ifNotNil: [ :aClass | coder explicitProviderClass: aClass ].
+	argumentBindingsBuilder localBindings
+		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
+	argumentBindingsBuilder receiverObject
+		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ]
 ]
 
 { #category : #'initialize-release' }

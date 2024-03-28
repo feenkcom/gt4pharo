@@ -5,23 +5,33 @@ Class {
 	#name : #GtMethodCoderHeaderModel,
 	#superclass : #Object,
 	#instVars : [
+		'packageName',
+		'methodBehaviourName',
+		'methodBehaviourIconName',
 		'providerBehaviourName',
-		'providerBehaviourIconName',
-		'targetBehaviourName',
-		'targetBehaviourIconName',
-		'packageName'
+		'providerBehaviourIconName'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Support'
 }
 
 { #category : #testing }
-GtMethodCoderHeaderModel >> hasProviderBehaviourData [
-	^ self providerBehaviourName notNil
+GtMethodCoderHeaderModel >> hasMethodBehaviourData [
+	^ self methodBehaviourName notNil
 ]
 
 { #category : #initialization }
 GtMethodCoderHeaderModel >> initializeForCoderViewModel: aCoderViewModel [ 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtMethodCoderHeaderModel >> methodBehaviourIconName [
+	^ methodBehaviourIconName
+]
+
+{ #category : #accessing }
+GtMethodCoderHeaderModel >> methodBehaviourName [
+	^ methodBehaviourName
 ]
 
 { #category : #accessing }
@@ -47,14 +57,4 @@ GtMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel  from: anElement [
 { #category : #'actions - spawning' }
 GtMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
 	self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtMethodCoderHeaderModel >> targetBehaviourIconName [
-	^ targetBehaviourIconName
-]
-
-{ #category : #accessing }
-GtMethodCoderHeaderModel >> targetBehaviourName [
-	^ targetBehaviourName
 ]

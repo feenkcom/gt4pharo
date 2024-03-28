@@ -869,7 +869,7 @@ GtPharoMethodCoderByScripterExamples >> coderCollapseProgrammatically [
 GtPharoMethodCoderByScripterExamples >> coderElementWithSelfObject [
 	<gtExample>
 	| aScripter anObject |
-	anObject := GtPharoDummySelfCallsObject new.
+	anObject := GtPharoDummyOneObject new.
 	
 	aScripter := self
 			scripterForBlock: [ self methodCoderWithSelfCalls asCoderViewModel selfObject: anObject ].
@@ -5104,67 +5104,101 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSumOneTwoOnSelfArgument [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self
-			scripterForBlock: [ self methodCoderWithSuperCalls asCoderViewModel ].
+			scripterForBlock: [ self methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument asCoderViewModel ].
 
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert method expander';
-				exists;
-				// (GtPharoMethodExpanderId indexed: 1) ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert method self-object';
-				value: #selfObject equals: nil;
-				// GtSourceCoderEditorId;
-				onChildFromMessage: #textualCoderViewModel ].
-
-	aScripter
-		clickStep: [ :s | 
-			s
-				label: 'Click on method expander';
-				// (GtPharoMethodExpanderId indexed: 1) ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert expanded method self-object';
-				value: #selfObject equals: nil;
-				// GtSourceCoderEditorId;
-				// GtSourceCoderEditorId;
-				onChildFromMessage: #textualCoderViewModel ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert 7 method expanders';
-				value: [ :aCoderElement | 
-						(1 to: 7)
-							collect: [ :anIndex | 
-								| aQuery |
-								aQuery := aCoderElement query
-										// (GtPharoMethodExpanderId indexed: anIndex).
-								aQuery all size ] ]
-					equals: [ Array new: 7 withAll: 1 ];
-				// GtSourceCoderEditorId;
-				// GtSourceCoderEditorId ].
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionNotExists;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepA | 
+				stepA
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyOneObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+					assertHeaderMethodBehaviorIsNotVisible;
+					assertMethodExpandersCountIs: 1;
+					assertBindingIsNotDefined: #anObject;
+					assertPlayAndInspectActionNotExists ];
+		play.
 
 	^ aScripter
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls2 [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSumOneTwoOnSelfArgumentWithExplicitProviderClass [
 	<gtExample>
 	| aScripter |
 	aScripter := self
-			scripterForBlock: [ self methodCoderWithSuperCalls asCoderViewModel ].
+			scripterForBlock: [ | aCoder | 
+				aCoder := self methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument.
+				aCoder explicitProviderClass: GtPharoDummyThreeObject.
+				aCoder asCoderViewModel ].
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+		assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+		assertPlayAndInspectActionNotExists;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepA | 
+				stepA
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertMethodExpandersCountIs: 1;
+					assertBindingIsNotDefined: #anObject;
+					assertPlayAndInspectActionNotExists ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSumOneTwoOnSuperArgument [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithOneObjectMethodSumOneTwoOnSuperArgument asCoderViewModel ].
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionNotExists;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :stepA | 
+				stepA
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyOneObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+					assertHeaderMethodBehaviorIsNotVisible;
+					assertMethodExpandersCountIs: 1;
+					assertBindingIsNotDefined: #anObject;
+					assertPlayAndInspectActionNotExists ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethodAnotherNumber [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithTwoObjectAndMethodAnotherNumber asCoderViewModel ].
 
 	aScripter
 		methodCoderStep: [ :s | 
@@ -5181,70 +5215,12 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCalls2 [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject [
-	<gtExample>
-	<noTest>
-	| aScripter anObject |
-	aScripter := self
-			scripterForBlock: [ | aCoder | 
-				aCoder := self methodCoderWithSuperCalls.
-				aCoder asCoderViewModel selfObject: (anObject := aCoder behavior new) ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert method expander';
-				exists;
-				// (GtPharoMethodExpanderId indexed: 1) ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert method self-object';
-				value: #selfObject equals: anObject;
-				// GtSourceCoderEditorId;
-				onChildFromMessage: #textualCoderViewModel ].
-				
-	aScripter
-		clickStep: [ :s | 
-			s
-				label: 'Click on method expander';
-				// (GtPharoMethodExpanderId indexed: 1) ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert expanded method self-object';
-				value: #selfObject equals: anObject;
-				// GtSourceCoderEditorId;
-				// GtSourceCoderEditorId;
-				onChildFromMessage: #textualCoderViewModel ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert 7 method expanders';
-				value: [ :aCoderElement | 
-						(1 to: 7)
-							collect: [ :anIndex | 
-								| aQuery |
-								aQuery := aCoderElement query
-										// (GtPharoMethodExpanderId indexed: anIndex).
-								aQuery all size ] ]
-					equals: [ Array new: 7 withAll: 1 ];
-				// GtSourceCoderEditorId;
-				// GtSourceCoderEditorId ].
-
-	^ aScripter
-]
-
-{ #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfObject2 [
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethodAnotherNumberAndSelfObject [
 	<gtExample>
 	| aScripter aSelfObject |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSuperCalls.
+				aCoder := self methodCoderWithTwoObjectAndMethodAnotherNumber.
 				aCoder asCoderViewModel selfObject: (aSelfObject := aCoder behavior new) ].
 
 	aScripter methodCoder
@@ -5275,7 +5251,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :stepSelfOne | 
 										stepSelfOne
-											assertMethodExpandersCountIs: 0;
+											assertMethodExpandersCountIs: 1;
 											assertSelfObjectIs: aSelfObject;
 											assertTargetBehaviorIs: aSelfObject class;
 											assertExplicitProviderClassIs: aSelfObject class;
@@ -5284,7 +5260,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 					clickOnMethodCoderExpander: 2
 						insideDo: [ :stepSelfOne | 
 							stepSelfOne
-								assertMethodExpandersCountIs: 0;
+								assertMethodExpandersCountIs: 1;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class;
 								assertExplicitProviderClassIs: aSelfObject class;
@@ -5296,35 +5272,274 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSuperCallsAndSelfO
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne [
+	<gtExample>
+	| aScripter aSelfObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithTwoObjectMethodOne ].
+	aSelfObject := nil.
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertSelfObjectIs: aSelfObject;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :s | 
+				s
+					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
+					assertSelfObjectIs: aSelfObject;
+					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertMethodExpandersCountIs: 1;
+					clickOnMethodCoderExpander: 1
+						insideDo: [ :printStringStep | 
+							printStringStep
+								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
+								assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+								assertHeaderMethodBehaviorIsNotVisible;
+								assertSelfObjectIs: aSelfObject;
+								assertMethodExpandersCountIs: 1;
+								clickOnMethodCoderExpander: 1
+									insideDo: [ :objectPrintStringStep | 
+										objectPrintStringStep
+											assertCompiledMethodIs: Object >> #printString;
+											assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+											assertHeaderMethodBehaviorIs: Object;
+											assertSelfObjectIs: aSelfObject;
+											assertMethodExpandersCountIs: 1 ] ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOneAndExplicitProviderClass [
+	<gtExample>
+	| aScripter aSelfObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithTwoObjectMethodOne.
+				aCoder explicitProviderClass: GtPharoDummyThreeObject ].
+	aSelfObject := nil.
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
+		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+		assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+		assertSelfObjectIs: aSelfObject;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :s | 
+				s
+					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
+					assertSelfObjectIs: aSelfObject;
+					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertMethodExpandersCountIs: 1;
+					clickOnMethodCoderExpander: 1
+						insideDo: [ :printStringStep | 
+							printStringStep
+								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
+								assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+								assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+								assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+								assertSelfObjectIs: aSelfObject;
+								assertMethodExpandersCountIs: 1;
+								clickOnMethodCoderExpander: 1
+									insideDo: [ :objectPrintStringStep | 
+										objectPrintStringStep
+											assertCompiledMethodIs: Object >> #printString;
+											assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+											assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+											assertHeaderMethodBehaviorIs: Object;
+											assertSelfObjectIs: aSelfObject;
+											assertMethodExpandersCountIs: 1 ] ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOneAndSelfObject [
+	<gtExample>
+	| aScripter aSelfObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithTwoObjectMethodOne.
+				aCoder asCoderViewModel selfObject: (aSelfObject := GtPharoDummyThreeObject new) ].
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertSelfObjectIs: aSelfObject;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :s | 
+				s
+					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
+					assertSelfObjectIs: aSelfObject;
+					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertMethodExpandersCountIs: 1;
+					clickOnMethodCoderExpander: 1
+						insideDo: [ :printStringStep | 
+							printStringStep
+								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
+								assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+								assertHeaderMethodBehaviorIsNotVisible;
+								assertSelfObjectIs: aSelfObject;
+								assertMethodExpandersCountIs: 1;
+								clickOnMethodCoderExpander: 1
+									insideDo: [ :objectPrintStringStep | 
+										objectPrintStringStep
+											assertCompiledMethodIs: Object >> #printString;
+											assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+											assertHeaderMethodBehaviorIs: Object;
+											assertSelfObjectIs: aSelfObject;
+											assertMethodExpandersCountIs: 1;
+											assertPlayAndInspectActionExists ] ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOneAndSelfObjectAndExplicitProviderBehavior [
+	<gtExample>
+	| aScripter aSelfObject |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithTwoObjectMethodOne.
+				aCoder explicitProviderClass: GtPharoDummyThreeObject.
+				aCoder asCoderViewModel selfObject: (aSelfObject := GtPharoDummyThreeObject new) ].
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
+		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+		assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+		assertSelfObjectIs: aSelfObject;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :s | 
+				s
+					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
+					assertSelfObjectIs: aSelfObject;
+					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertMethodExpandersCountIs: 1;
+					clickOnMethodCoderExpander: 1
+						insideDo: [ :printStringStep | 
+							printStringStep
+								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
+								assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+								assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+								assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+								assertSelfObjectIs: aSelfObject;
+								assertMethodExpandersCountIs: 1;
+								clickOnMethodCoderExpander: 1
+									insideDo: [ :objectPrintStringStep | 
+										objectPrintStringStep
+											assertCompiledMethodIs: Object >> #printString;
+											assertExplicitProviderClassIs: GtPharoDummyThreeObject;
+											assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
+											assertHeaderMethodBehaviorIs: Object;
+											assertSelfObjectIs: aSelfObject;
+											assertMethodExpandersCountIs: 1 ] ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithOneObjectMethodSumOneTwoOnSelfArgument.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithOneObjectMethodSumOneTwoOnSuperArgument [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithOneObjectMethodSumOneTwoOnSuperArgument.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithSelfCalls [
 	<gtExample>
 	| aMethod aCoder |
-	aMethod := self methodWithSelfCalls.
+	aMethod := self methodWithOneObjectMethodThree.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodCoderWithSuperCalls [
+GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectAndMethodAnotherNumber [
 	<gtExample>
 	| aMethod aCoder |
-	aMethod := self methodWithSuperCalls.
+	aMethod := self methodWithTwoObjectMethodAnotherNumber.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodWithSelfCalls [
+GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodOne [
 	<gtExample>
-
-	^ GtPharoDummySelfCallsObject >> #three
+	| aMethod aCoder |
+	aMethod := self methodWithTwoObjectMethodOne.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> methodWithSuperCalls [
+GtPharoMethodCoderByScripterExamples >> methodWithOneObjectMethodSumOneTwoOnSelfArgument [
 	<gtExample>
 
-	^ GtPharoDummySuperCallsObject >> #anotherNumber
+	^ GtPharoDummyOneObject >> #sumOneTwoOnSelfArgument
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithOneObjectMethodSumOneTwoOnSuperArgument [
+	<gtExample>
+
+	^ GtPharoDummyOneObject >> #sumOneTwoOnSuperArgument
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithOneObjectMethodThree [
+	<gtExample>
+
+	^ GtPharoDummyOneObject >> #three
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodAnotherNumber [
+	<gtExample>
+
+	^ GtPharoDummyTwoObject >> #anotherNumber
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodOne [
+	<gtExample>
+
+	^ GtPharoDummyTwoObject >> #one
 ]
 
 { #category : #'examples - move variable scope' }

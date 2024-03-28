@@ -27,6 +27,14 @@ GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLit
 { #category : #private }
 GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
 	aParentArgument isVariable ifFalse: [ ^ self ].
+
+	(aParentArgument isSelf or: [ aParentArgument isSuper ])
+		ifTrue: [ parentSelfObject
+				ifNotNil: [ | aNewName |
+					aNewName := compiledMethod argumentNames at: anIndex.
+					localBindings localAt: aNewName put: parentSelfObject ].
+					^ self ].
+
 	parentEvaluationContext
 		variableValueOf: aParentArgument variableName
 		ifPresent: [ :aValue | 
@@ -46,15 +54,17 @@ GtPharoReceiverAndArgumentBindingsBuilder >> build [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitProviderClass [
-	| tentativeExplicitProviderClass |
+	| aGtPharoProgramNode |
 	compiledMethod ifNil: [ ^ self ].
-	tentativeExplicitProviderClass := parentExplicitProviderClass
-			ifNil: [ receiverBehavior ].
-	tentativeExplicitProviderClass ifNil: [ ^ self ].
 
-	(tentativeExplicitProviderClass = compiledMethod methodClass
-		or: [ tentativeExplicitProviderClass inheritsFrom: compiledMethod methodClass ])
-		ifTrue: [ explicitProviderClass := tentativeExplicitProviderClass ]
+	aGtPharoProgramNode := parentMessage parent receiver.
+	(aGtPharoProgramNode isVariable
+		and: [ aGtPharoProgramNode isSelf or: [ aGtPharoProgramNode isSuper ] ])
+		ifFalse: [ explicitProviderClass := receiverBehavior.
+			^ self ].
+
+	explicitProviderClass := parentExplicitProviderClass
+			ifNil: [ parentEvaluationContext targetBehavior ].
 ]
 
 { #category : #building }
@@ -100,12 +110,19 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiverBehavior [
 	| aGtPharoProgramNode |
 	parentMessage ifNil: [ ^ self ].
-	receiverObject ifNil: [ ^ self ].
+
+	receiverObject
+		ifNotNil: [ receiverBehavior := receiverObject class.
+			^ self ].
+
 	aGtPharoProgramNode := parentMessage parent receiver.
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
-		ifFalse: [ ^ self ].
+		ifTrue: [ receiverBehavior := parentEvaluationContext targetBehavior.
+			^ self ].
 
-	receiverBehavior := receiverObject class
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
+		ifTrue: [ receiverBehavior := parentEvaluationContext targetBehavior superclass.
+			^ self ]
 ]
 
 { #category : #accessing }
