@@ -6,25 +6,25 @@ Class {
 
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
-	| explicitProviderClass targetBehaviorClass providerBehaviorClass |
+	| explicitProviderClass providerBehaviorClass methodBehaviorClass |
 	
 	packageName := aBehavior package name.
 	
 	explicitProviderClass := aCoderViewModel explicitProviderClass.
 	(explicitProviderClass isNil or: [ explicitProviderClass = aBehavior ])
 		ifTrue: [ 
-			targetBehaviorClass := aBehavior.
-			providerBehaviorClass := nil. ]
+			providerBehaviorClass := aBehavior.
+			methodBehaviorClass := nil. ]
 		ifFalse: [ 
-			targetBehaviorClass := explicitProviderClass.
-			providerBehaviorClass := aBehavior ].
+			providerBehaviorClass := explicitProviderClass.
+			methodBehaviorClass := aBehavior ].
 	
-	targetBehaviourName := targetBehaviorClass name.
-	targetBehaviourIconName := targetBehaviorClass systemIconName.
+	providerBehaviourName := providerBehaviorClass name.
+	providerBehaviourIconName := providerBehaviorClass systemIconName.
 	
-	providerBehaviorClass ifNotNil: [
-		providerBehaviourName := providerBehaviorClass name.
-		providerBehaviourIconName := providerBehaviorClass systemIconName. ]
+	methodBehaviorClass ifNotNil: [
+		methodBehaviourName := methodBehaviorClass name.
+		methodBehaviourIconName := methodBehaviorClass systemIconName. ]
 ]
 
 { #category : #initialization }
@@ -42,7 +42,7 @@ GtPharoMethodCoderHeaderModel >> initializeForCoderViewModel: aCoderViewModel [
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 	packageName := 'Unknown'.
-	targetBehaviourName := 'Unknown'.
+	providerBehaviourName := 'Unknown'.
 ]
 
 { #category : #'actions - spawning' }

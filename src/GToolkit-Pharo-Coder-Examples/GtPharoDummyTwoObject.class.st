@@ -1,16 +1,16 @@
 Class {
-	#name : #GtPharoDummySuperCallsObject,
-	#superclass : #GtPharoDummySelfCallsObject,
+	#name : #GtPharoDummyTwoObject,
+	#superclass : #GtPharoDummyOneObject,
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #accessing }
-GtPharoDummySuperCallsObject >> anotherNumber [
+GtPharoDummyTwoObject >> anotherNumber [
 	self number
 ]
 
 { #category : #accessing }
-GtPharoDummySuperCallsObject >> number [
+GtPharoDummyTwoObject >> number [
 	super number.
 	self one.
 	self three.
@@ -19,12 +19,12 @@ GtPharoDummySuperCallsObject >> number [
 ]
 
 { #category : #accessing }
-GtPharoDummySuperCallsObject >> one [
+GtPharoDummyTwoObject >> one [
 	super one.
 	^ 1.1
 ]
 
 { #category : #accessing }
-GtPharoDummySuperCallsObject >> printString [
+GtPharoDummyTwoObject >> printString [
 	^ super printString
 ]

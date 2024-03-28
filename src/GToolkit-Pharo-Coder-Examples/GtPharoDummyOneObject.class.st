@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoDummySelfCallsObject,
+	#name : #GtPharoDummyOneObject,
 	#superclass : #Object,
 	#instVars : [
 		'instA'
@@ -8,53 +8,53 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> * anObject [
+GtPharoDummyOneObject >> * anObject [
 	self shouldNotImplement
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> enumerate [
+GtPharoDummyOneObject >> enumerate [
 	^ #(3 6 9) inject: 1 into: [ :result :value | result raisedTo: value ]
 ]
 
 { #category : #initialization }
-GtPharoDummySelfCallsObject >> initialize [
+GtPharoDummyOneObject >> initialize [
 	super initialize.
 	instA := 42
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> instAPlusOne [
+GtPharoDummyOneObject >> instAPlusOne [
 	^ self sumA: instA b: instA
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> instAReceiver [
+GtPharoDummyOneObject >> instAReceiver [
 	| a |
 	a := 3.
 	^ instA raisedTo: a
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> number [
+GtPharoDummyOneObject >> number [
 	^ self one
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> one [
+GtPharoDummyOneObject >> one [
 	self printString.
 	^ 1
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> sum21 [
+GtPharoDummyOneObject >> sum21 [
 	| a |
 	a := 2.
 	^ self sumC: a d: 1
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> sum39 [
+GtPharoDummyOneObject >> sum39 [
 	| a b |
 	a := 3.
 	b := 9.
@@ -62,7 +62,7 @@ GtPharoDummySelfCallsObject >> sum39 [
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> sum42 [
+GtPharoDummyOneObject >> sum42 [
 	| a b |
 	a := 4.
 	b := 2.
@@ -70,17 +70,17 @@ GtPharoDummySelfCallsObject >> sum42 [
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> sumA: valueA b: valueB [
+GtPharoDummyOneObject >> sumA: valueA b: valueB [
 	^ valueA + valueB
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> sumC: tempA d: tempB [
+GtPharoDummyOneObject >> sumC: tempA d: tempB [
 	^ self sumA: tempA b: tempB
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> tempReceiver [
+GtPharoDummyOneObject >> tempReceiver [
 	| a b |
 	a := 3.
 	b := 9.
@@ -88,11 +88,11 @@ GtPharoDummySelfCallsObject >> tempReceiver [
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> three [
+GtPharoDummyOneObject >> three [
 	^ self two + self one
 ]
 
 { #category : #accessing }
-GtPharoDummySelfCallsObject >> two [
+GtPharoDummyOneObject >> two [
 	^ self one + self one
 ]

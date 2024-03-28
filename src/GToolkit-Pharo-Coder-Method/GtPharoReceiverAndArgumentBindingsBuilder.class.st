@@ -46,15 +46,19 @@ GtPharoReceiverAndArgumentBindingsBuilder >> build [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitProviderClass [
-	| tentativeExplicitProviderClass |
+	| aGtPharoProgramNode |
 	compiledMethod ifNil: [ ^ self ].
-	tentativeExplicitProviderClass := parentExplicitProviderClass
-			ifNil: [ receiverBehavior ].
-	tentativeExplicitProviderClass ifNil: [ ^ self ].
 
-	(tentativeExplicitProviderClass = compiledMethod methodClass
-		or: [ tentativeExplicitProviderClass inheritsFrom: compiledMethod methodClass ])
-		ifTrue: [ explicitProviderClass := tentativeExplicitProviderClass ]
+	aGtPharoProgramNode := parentMessage parent receiver.
+	(aGtPharoProgramNode isVariable
+		and: [ aGtPharoProgramNode isSelf or: [ aGtPharoProgramNode isSuper ] ])
+		ifFalse: [ explicitProviderClass := receiverBehavior.
+			^ self ].
+
+	explicitProviderClass := parentExplicitProviderClass
+			ifNil: [ parentEvaluationContext targetBehavior ]."tentativeExplicitProviderClass
+		ifNil: [ explicitProviderClass := parentEvaluationContext targetBehavior.
+			^ self ]"
 ]
 
 { #category : #building }
@@ -100,12 +104,19 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiverBehavior [
 	| aGtPharoProgramNode |
 	parentMessage ifNil: [ ^ self ].
-	receiverObject ifNil: [ ^ self ].
+
+	receiverObject
+		ifNotNil: [ receiverBehavior := receiverObject class.
+			^ self ].
+
 	aGtPharoProgramNode := parentMessage parent receiver.
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
-		ifFalse: [ ^ self ].
+		ifTrue: [ receiverBehavior := parentEvaluationContext targetBehavior.
+			^ self ].
 
-	receiverBehavior := receiverObject class
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
+		ifTrue: [ receiverBehavior := parentEvaluationContext targetBehavior superclass.
+			^ self ]
 ]
 
 { #category : #accessing }
