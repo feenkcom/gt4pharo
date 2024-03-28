@@ -69,13 +69,6 @@ GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder 
 	argumentBindingsBuilder compiledMethod: self compiledMethod.
 	argumentBindingsBuilder build.
 
-	argumentBindingsBuilder receiverBehavior
-		ifNotNil: [ :aReceiverBehavior | 
-			"(aReceiverBehavior lookupSelector: selector)
-				ifNotNil: [ :aCompiledMethod | 
-					self compiledMethod = aCompiledMethod
-						ifFalse: [ coder forMethod: aCompiledMethod ] ]" ].
-
 	argumentBindingsBuilder explicitProviderClass
 		ifNotNil: [ :aClass | coder explicitProviderClass: aClass ].
 	argumentBindingsBuilder localBindings

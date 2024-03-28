@@ -13,6 +13,14 @@ GtPharoDummyOneObject >> * anObject [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject >> dummyThree [
+	| a |
+	a := GtPharoDummyThreeObject new.
+	a printString.
+	^ a
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject >> enumerate [
 	^ #(3 6 9) inject: 1 into: [ :result :value | result raisedTo: value ]
 ]
