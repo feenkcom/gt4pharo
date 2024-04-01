@@ -46,10 +46,10 @@ GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel  from: anElement [
-	aCoderViewModel methodOrigin behaviorDo: [ :aBehavior |
-		anElement phlow spawnTool: (GtMethodCoderTool 
-			compiledMethod: aCoderViewModel compiledMethod) ]
+GtPharoMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel from: anElement [
+	aCoderViewModel methodOrigin
+		originalMethodDo: [ :aBehavior :aMethod | anElement phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod) ]
+		ifUnknown: [  ]
 ]
 
 { #category : #'actions - spawning' }

@@ -27,6 +27,19 @@ GtPharoMethodTraitOrigin >> method [
 ]
 
 { #category : #accessing }
+GtPharoMethodTraitOrigin >> originalMethod [
+
+	^ trait >> method selector
+]
+
+{ #category : #enumerating }
+GtPharoMethodTraitOrigin >> originalMethodDo: aBlock ifUnknown: anUnknownBlock [
+	"Evaluate a given block with the origin behavior and method"
+
+	^ aBlock value: trait value: self originalMethod
+]
+
+{ #category : #accessing }
 GtPharoMethodTraitOrigin >> trait [
 
 	^ trait

@@ -45,6 +45,18 @@ GtPharoMethodSameOrigin >> method [
 ]
 
 { #category : #accessing }
+GtPharoMethodSameOrigin >> originalMethod [
+	^ method
+]
+
+{ #category : #accessing }
+GtPharoMethodSameOrigin >> originalMethodDo: aBlock ifUnknown: anUnknownBlock [
+	"Evaluate a given block with the origin behavior and method"
+
+	^ aBlock value: behavior value: method
+]
+
+{ #category : #accessing }
 GtPharoMethodSameOrigin >> overriddenMethods [
 	^ AsyncOverriddenMethodsStream forCompiledMethod: method
 ]
