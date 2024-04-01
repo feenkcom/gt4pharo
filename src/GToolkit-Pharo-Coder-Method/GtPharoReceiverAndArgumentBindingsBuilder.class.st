@@ -64,7 +64,7 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitProviderClass [
 			^ self ].
 
 	explicitProviderClass := parentExplicitProviderClass
-			ifNil: [ parentEvaluationContext targetBehavior ].
+			ifNil: [ parentEvaluationContext targetBehavior ifNil: [ receiverBehavior ] ].
 ]
 
 { #category : #building }
