@@ -41,6 +41,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromSameClass [
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: GtPharoCoderMockedClass.
 	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #instanceMethodC.
+	self assert: aMethodOrigin originalMethod equals: GtPharoCoderMockedClass >> #instanceMethodC.
 	
 	^ aMethodOrigin
 ]
@@ -56,6 +57,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromSameTrait [
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: TGtPharoCoderMockedTrait.
 	self assert: aMethodOrigin method equals: TGtPharoCoderMockedTrait >> #traitMethodA.
+	self assert: aMethodOrigin originalMethod equals: TGtPharoCoderMockedTrait >> #traitMethodA.
 	
 	^ aMethodOrigin
 ]
@@ -71,6 +73,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromTrait [
 	self assert: aMethodOrigin isTraitOrigin.
 	self assert: aMethodOrigin trait equals: TGtPharoCoderMockedTrait.
 	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #traitMethodA.
+	self assert: aMethodOrigin originalMethod equals: TGtPharoCoderMockedTrait >> #traitMethodA.
 	
 	^ aMethodOrigin
 ]
@@ -86,6 +89,7 @@ GtPharoMethodCoderOriginExamples >> methodOriginFromTraitOverridden [
 	self assert: aMethodOrigin isSameOrigin.
 	self assert: aMethodOrigin behavior equals: GtPharoCoderMockedClass.
 	self assert: aMethodOrigin method equals: GtPharoCoderMockedClass >> #traitMethodB.
+	self assert: aMethodOrigin originalMethod equals: GtPharoCoderMockedClass >> #traitMethodB.
 	
 	^ aMethodOrigin
 ]

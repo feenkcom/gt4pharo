@@ -34,3 +34,10 @@ GtPharoMethodOrigin >> isTraitOrigin [
 GtPharoMethodOrigin >> isUnknownOrigin [
 	^ false
 ]
+
+{ #category : #accessing }
+GtPharoMethodOrigin >> originalMethodDo: aBlock ifUnknown: anUnknownBlock [
+	"Evaluate a given block with the origin behavior and method"
+	
+	^ self subclassResponsibility
+]

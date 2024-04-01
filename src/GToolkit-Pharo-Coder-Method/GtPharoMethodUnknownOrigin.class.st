@@ -15,3 +15,10 @@ GtPharoMethodUnknownOrigin >> behaviorDo: aBlock ifUnknown: anUnknownBlock [
 GtPharoMethodUnknownOrigin >> isUnknownOrigin [
 	^ true
 ]
+
+{ #category : #accessing }
+GtPharoMethodUnknownOrigin >> originalMethodDo: aBlock ifUnknown: anUnknownBlock [
+	"Evaluate a given block with the origin behavior and method"
+	
+	^ anUnknownBlock value
+]
