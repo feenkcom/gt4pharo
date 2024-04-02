@@ -45,11 +45,6 @@ GtBehaviorCreationForm >> classSlotsDescription [
 ]
 
 { #category : #accessing }
-GtBehaviorCreationForm >> commit [
-	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
 GtBehaviorCreationForm >> createTraitsContextMenuContentFor: aTrait editor: anElement [
 	| theContextMenu items |
 	theContextMenu := GtFormContextMenuContent new editorElement: anElement.
@@ -74,8 +69,15 @@ GtBehaviorCreationForm >> initialize [
 
 { #category : #accessing }
 GtBehaviorCreationForm >> installClassSlotsOn: aClass [
-	classSlots
-		do: [ :aSlot | (RBAddInstanceVariableChange add: aSlot to: aClass classSide) execute ]
+	| changes |
+	classSlots isEmpty ifTrue: [ ^ self ].
+	changes := classSlots
+			collect: [ :aSlot | RBAddInstanceVariableChange add: aSlot to: aClass classSide ].
+	GtRefactoryChangeManager instance
+		performChange: (RBCompositeRefactoryChange new
+				name: 'Add class slots';
+				changes: changes;
+				yourself)
 ]
 
 { #category : #magritte }

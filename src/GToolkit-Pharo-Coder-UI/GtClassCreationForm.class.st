@@ -65,15 +65,17 @@ GtClassCreationForm >> defaultName [
 
 { #category : #accessing }
 GtClassCreationForm >> defineClass [
-	| sup |
-	sup := Smalltalk classNamed: self superclassName asSymbol.
-	sup
-		subclass: self rawClassName asSymbol
-		uses: (self traits collect: [ :each | Smalltalk classNamed: each ]) asArray
-		instanceVariableNames: (' ' join: self slots)
-		classVariableNames: (' ' join: self classVars)
-		poolDictionaries: (' ' join: self pools)
-		package: self commitPackage categoryName asString
+	GtRefactoryChangeManager instance
+		performChange: (GtRBAddClassWithSlotsChange
+				definition: (String
+						streamContents: [ :stream | 
+							stream << self superclassName << ' subclass: '
+								<< self rawClassName asSymbol storeString << ' uses: '
+								<< ('{' , (' ' join: self traits) , '}') << ' instanceVariableNames: '
+								<< (' ' join: self slots) storeString << ' classVariableNames: '
+								<< (' ' join: self classVars) storeString << ' poolDictionaries: '
+								<< (' ' join: self pools) storeString << ' package: '
+								<< self commitPackage categoryName asString storeString ]))
 ]
 
 { #category : #accessing }
