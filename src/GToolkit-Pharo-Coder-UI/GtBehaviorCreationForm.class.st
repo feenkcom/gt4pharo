@@ -73,11 +73,10 @@ GtBehaviorCreationForm >> installClassSlotsOn: aClass [
 	classSlots isEmpty ifTrue: [ ^ self ].
 	changes := classSlots
 			collect: [ :aSlot | RBAddInstanceVariableChange add: aSlot to: aClass classSide ].
-	GtRefactoryChangeManager instance
-		performChange: (RBCompositeRefactoryChange new
-				name: 'Add class slots';
-				changes: changes;
-				yourself)
+	(RBCompositeRefactoryChange new
+		name: 'Add class slots';
+		changes: changes;
+		yourself) gtExecuteWithUndo
 ]
 
 { #category : #magritte }
