@@ -37,7 +37,10 @@ GtClassUpdateForm >> onClass: aClass [
 				tagName: (tagName = packageName ifTrue: [ '' ] ifFalse: [ tagName ])).
 	self pools: (aClass sharedPools collect: #name).
 	self classVars: (aClass classVarNames collect: #asString).
-	self classSlots: (aClass classSide slots collect: #name)
+	self classSlots: (aClass classSide slots collect: #name).
+	self
+		superSlots: ((aClass allSlots collect: #name) asSet
+				difference: (aClass slots collect: #name) asSet)
 ]
 
 { #category : #accessing }

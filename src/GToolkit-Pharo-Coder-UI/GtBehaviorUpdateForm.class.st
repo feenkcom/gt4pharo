@@ -1,6 +1,9 @@
 Class {
 	#name : #GtBehaviorUpdateForm,
 	#superclass : #GtClassCreationForm,
+	#instVars : [
+		'superSlots'
+	],
 	#category : #'GToolkit-Pharo-Coder-UI-Forms - Models'
 }
 
@@ -425,7 +428,19 @@ GtBehaviorUpdateForm >> slotsDescription [
 						anEvent currentTarget phlow
 							spawnObject: (GtSearchInstanceSlotReferenceFilter
 									forClassAndSubclasses: self newClassName asString asClass
-									andVariable: anEvent target text asString) ]} ]
+									andVariable: anEvent target text asString) ]} ];
+		addCondition: [ :aValue | aValue noneSatisfy: [ :aSlot | superSlots includes: aSlot ] ]
+			labelled: 'Slot names are already taken in superclass'
+]
+
+{ #category : #accessing }
+GtBehaviorUpdateForm >> superSlots [
+	^ superSlots
+]
+
+{ #category : #accessing }
+GtBehaviorUpdateForm >> superSlots: anObject [
+	superSlots := anObject
 ]
 
 { #category : #accessing }
