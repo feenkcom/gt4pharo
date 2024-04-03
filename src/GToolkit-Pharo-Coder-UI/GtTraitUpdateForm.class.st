@@ -44,7 +44,10 @@ GtTraitUpdateForm >> onTrait: aTrait [
 		packageAndTagName: (GtPackageAndTagName new
 				packageName: aTrait package name;
 				tagName: (aTrait package classTagForClass: aTrait) name).
-	self classSlots: (aTrait classSide slots collect: #name)
+	self classSlots: (aTrait classSide slots collect: #name).
+	self
+		superSlots: ((aTrait allSlots collect: #name) asSet
+				difference: (aTrait slots collect: #name) asSet)
 ]
 
 { #category : #accessing }
