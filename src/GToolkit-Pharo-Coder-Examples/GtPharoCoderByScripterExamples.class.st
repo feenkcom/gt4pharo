@@ -6,6 +6,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
+	#instVars : [
+		'environment'
+	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
@@ -92,6 +95,11 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 				// BrAnchoredOuterContainer;
 				// BrAnchoredElement;
 				/ #content asBlocElementId ]
+]
+
+{ #category : #accessing }
+GtPharoCoderByScripterExamples >> cleanUp [
+	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]
 
 { #category : #'examples - context menu' }
@@ -718,4 +726,103 @@ GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 				label: 'Set space extent';
 				block: [ :aSpace | aSpace extent: 800 @ 600 ];
 				onSpace ]
+]
+
+{ #category : #accessing }
+GtPharoCoderByScripterExamples >> undoRedoRemoveClass [
+	<gtExample>
+	<after: #cleanUp>
+	| rootClass coder class className selectors classSelectors |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	rootClass := environment anyDummyLeafClass.
+	class := rootClass realClass.
+	selectors := class selectors asSortedCollection asArray.
+	classSelectors := class class selectors asSortedCollection asArray.
+	className := rootClass realClass name.
+	coder := GtCoderElement forClass: rootClass realClass.
+	self assert: (Smalltalk includesKey: className).
+	coder
+		allChildrenBreadthFirstDetect: [ :each | each isKindOf: GtPharoBehaviorCoderElement ]
+		ifFound: [ :elmt | elmt coderViewModel coder removeClass ]
+		ifNone: [ self error: 'Could not find element' ].
+	self assert: (Smalltalk includesKey: className) not.
+	GtRefactoryChangeManager instance undoChange.
+	self assert: (Smalltalk includesKey: className).
+	self
+		assert: (Smalltalk at: className) selectors asSortedCollection asArray = selectors.
+	self
+		assert: (Smalltalk at: className) class selectors asSortedCollection asArray
+				= classSelectors.
+	GtRefactoryChangeManager instance redoChange.
+	self assert: (Smalltalk includesKey: className) not.
+	^ coder
+]
+
+{ #category : #accessing }
+GtPharoCoderByScripterExamples >> undoRedoRemoveClassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter rootClass class className selectors classSelectors |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	rootClass := environment anyDummyLeafClass.
+	class := rootClass realClass.
+	selectors := class selectors asSortedCollection asArray.
+	classSelectors := class class selectors asSortedCollection asArray.
+	className := rootClass realClass name.
+	scripter := self
+			scripterForBlock: [ GtCoderElement forClass: rootClass realClass ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Show sidebar';
+				action: [ :el | el showSidebar ] ].
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Pick remove class';
+				id: GtCoderNavigationClassesHierarchyTreeElementId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click remove class';
+				onSpaceRoot;
+				// [ :each | 
+					(each isKindOf: BrLabel)
+						and: [ (each text asString beginsWith: 'Remove class')
+								and: [ each
+										allParentsDetect: [ :p | p isKindOf: GtCoderNavigationContextMenuContent ]
+										ifFound: [ :p | true ]
+										ifNone: [ false ] ] ] ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click remove preview';
+				// [ :each | 
+					(each isKindOf: GtPreviewChangeButton)
+						and: [ each
+								allParentsDetect: [ :p | p isKindOf: GtCoderNavigationClassesHierarchyTreeElement ]
+								ifFound: [ :p | true ]
+								ifNone: [ false ] ] ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove class';
+				onSpaceRoot;
+				id: #'change-button-action' ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Undo & Redo';
+				action: [ :el | 
+					self assert: (Smalltalk includesKey: className) not.
+					GtRefactoryChangeManager instance undoChange.
+					self assert: (Smalltalk includesKey: className).
+					self
+						assert: (Smalltalk at: className) selectors asSortedCollection asArray = selectors.
+					self
+						assert: (Smalltalk at: className) class selectors asSortedCollection asArray
+								= classSelectors.
+					GtRefactoryChangeManager instance redoChange.
+					self assert: (Smalltalk includesKey: className) not ] ].
+	^ scripter
 ]

@@ -49,9 +49,8 @@ GtClassUpdateForm >> removeClassSlots: aClass [
 	aClass classSide slots isEmpty ifTrue: [ ^ self ].
 	changes := aClass classSide slots
 			collect: [ :aSlot | RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide ].
-	GtRefactoryChangeManager instance
-		performChange: (RBCompositeRefactoryChange new
-				name: 'Remove class slots';
-				changes: changes;
-				yourself)
+	(RBCompositeRefactoryChange new
+		name: 'Remove class slots';
+		changes: changes;
+		yourself) gtExecuteWithUndo
 ]

@@ -26,3 +26,8 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock [
 RBRefactoryChange >> gtDiffStyler [
 	^ nil
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+RBRefactoryChange >> gtExecuteWithUndo [
+	GtRefactoryChangeManager instance performChange: self
+]

@@ -65,17 +65,17 @@ GtClassCreationForm >> defaultName [
 
 { #category : #accessing }
 GtClassCreationForm >> defineClass [
-	GtRefactoryChangeManager instance
-		performChange: (GtRBAddClassWithSlotsChange
-				definition: (String
-						streamContents: [ :stream | 
-							stream << self superclassName << ' subclass: '
-								<< self rawClassName asSymbol storeString << ' uses: '
-								<< ('{' , (' ' join: self traits) , '}') << ' instanceVariableNames: '
-								<< (' ' join: self slots) storeString << ' classVariableNames: '
-								<< (' ' join: self classVars) storeString << ' poolDictionaries: '
-								<< (' ' join: self pools) storeString << ' package: '
-								<< self commitPackage categoryName asString storeString ]))
+	(GtRBAddClassWithSlotsChange
+		definition: (String
+				streamContents: [ :stream | 
+					stream << self superclassName << ' subclass: '
+						<< self rawClassName asSymbol storeString << ' uses: '
+						<< ('{' , (' ' join: self traits) , '}') << ' instanceVariableNames: '
+						<< (' ' join: self slots) storeString << ' classVariableNames: '
+						<< (' ' join: self classVars) storeString << ' poolDictionaries: '
+						<< (' ' join: self pools) storeString << ' package: '
+						<< self commitPackage categoryName asString storeString ]))
+		gtExecuteWithUndo
 ]
 
 { #category : #accessing }

@@ -161,7 +161,7 @@ GtPharoCodeModifier >> initialize [
 
 { #category : #'api - refactoring' }
 GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange [
-	^ self deferFlushDuring: [ GtRefactoryChangeManager instance performChange: aRefactoryChange ]
+	^ self deferFlushDuring: [ aRefactoryChange gtExecuteWithUndo ]
 ]
 
 { #category : #'api - package' }
@@ -197,8 +197,7 @@ GtPharoCodeModifier >> removeMethod: aMethod [
 { #category : #'api - method' }
 GtPharoCodeModifier >> removeMethodFrom: aBehavior selector: aSelector [
 	^ self
-		critical: [ GtRefactoryChangeManager instance
-				performChange: (RBRemoveMethodChange remove: aSelector from: aBehavior) ]
+		critical: [ (RBRemoveMethodChange remove: aSelector from: aBehavior) gtExecuteWithUndo ]
 ]
 
 { #category : #'api - package' }
