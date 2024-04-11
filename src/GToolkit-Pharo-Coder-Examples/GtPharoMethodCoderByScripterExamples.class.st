@@ -5986,3 +5986,128 @@ GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoRecompileMethod [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter rootClass originalSource |
+	scripter := self
+			scripterForBlock: [ | method coder |
+				environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+				rootClass := environment anyDummyLeafClass.
+				method := rootClass anyDummyUnaryMethod realMethod.
+				coder := GtPharoMethodCoder forMethod: method.
+				coder attributeNamed: #dummyEnvironment put: environment.
+				coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+				coder ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method';
+				action: [ :coder | 
+					originalSource := coder currentSourceText asString.
+					coder
+						appendString: '
+	"This is a comment"' ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method';
+				action: [ :coder | coder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Check source is different';
+				action: [ :coder | self assert: originalSource ~= coder currentSourceText asString ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Undo change';
+				action: [ :coder | 
+					self assert: GtRefactoryChangeManager instance hasUndoableOperations.
+					GtRefactoryChangeManager instance undoChange ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Check source is equal to original';
+				action: [ :coder | self assert: originalSource = coder currentSourceText asString ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Redo change';
+				action: [ :coder | 
+					self assert: GtRefactoryChangeManager instance hasRedoableOperations.
+					GtRefactoryChangeManager instance redoChange ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Check source is different after redo';
+				action: [ :coder | self assert: originalSource ~= coder currentSourceText asString ];
+				onModel ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoRemoveMethod [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter rootClass selector originalSource |
+	scripter := self
+			scripterForBlock: [ | method coder |
+				environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+				rootClass := environment anyDummyLeafClass.
+				method := rootClass anyDummyUnaryMethod realMethod.
+				selector := method selector.
+				originalSource := method sourceCode.
+				coder := GtPharoMethodCoder forMethod: method.
+				coder attributeNamed: #dummyEnvironment put: environment.
+				coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+				coder ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Remove method';
+				action: [ :coder | coder remove ];
+				onModel ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check method no longer exists';
+				do: [ :coder | self assert: (rootClass realClass includesSelector: selector) not ] ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Undo change';
+				action: [ :coder | 
+					self assert: GtRefactoryChangeManager instance hasUndoableOperations.
+					GtRefactoryChangeManager instance undoChange ];
+				onModel ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check method exists';
+				do: [ :coder | 
+					self assert: (rootClass realClass includesSelector: selector).
+					self assert: (rootClass realClass sourceCodeAt: selector) = originalSource ] ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Redo change';
+				action: [ :coder | 
+					self assert: GtRefactoryChangeManager instance hasRedoableOperations.
+					GtRefactoryChangeManager instance redoChange ];
+				onModel ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check method no longer exists after redo';
+				do: [ :coder | self assert: (rootClass realClass includesSelector: selector) not ] ].
+	^ scripter
+]
