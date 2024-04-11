@@ -20,7 +20,9 @@ GtRenameMessageFixItAction class >> renameCollect [
 { #category : #'api - action' }
 GtRenameMessageFixItAction >> description [
 	^ 'Rename #'
-		, (node isMessage ifTrue: [ node selector ] ifFalse: [ node literalValue ])
+		, (node isMessage 
+				ifTrue: [ node selector ] 
+				ifFalse: [ node literalValue ])
 		, ' to #' , selector
 ]
 
