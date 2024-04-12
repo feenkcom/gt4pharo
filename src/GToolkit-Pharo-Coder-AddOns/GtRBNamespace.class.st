@@ -83,11 +83,11 @@ GtRBNamespace >> privateImplementorsOf: aSelector [
 	self newClasses
 		do: [ :each | 
 			each
-				do: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+				do: [ :cls | (cls gtDirectlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
 	self changedClasses
 		do: [ :each | 
 			each
-				do: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+				do: [ :cls | (cls gtDirectlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
 	(GtPharoIndex current implementersOf: aSelector)
 		do: [ :each | 
 			| cls |
