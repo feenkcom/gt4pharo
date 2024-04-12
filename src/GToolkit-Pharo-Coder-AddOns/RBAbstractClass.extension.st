@@ -1,6 +1,15 @@
 Extension { #name : #RBAbstractClass }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBAbstractClass >> gtDirectlyDefinesMethod: aSelector [
+	self isDefined
+		ifTrue: [ (self hasRemoved: aSelector) ifTrue: [ ^ false ].
+			((self realClass includesSelector: aSelector)
+				and: [ (self realClass >> aSelector) isFromTrait not ]) ifTrue: [ ^ true ] ].
+	^ newMethods notNil and: [ newMethods includesKey: aSelector ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBAbstractClass >> gtSelectorsReferToInstanceVariable: aString do: aBlock [
 	newMethods
 		ifNotNil: [ newMethods
