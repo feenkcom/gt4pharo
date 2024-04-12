@@ -12,6 +12,7 @@ GtMessageNotImplementedAdvice >> description [
 { #category : #private }
 GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderModel: coderModel type: type [
 	| actions |
+	
 	actions := OrderedCollection new.
 	type
 		ifNotNil: [ actions

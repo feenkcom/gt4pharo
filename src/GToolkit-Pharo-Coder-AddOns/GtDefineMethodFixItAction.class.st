@@ -32,11 +32,16 @@ GtDefineMethodFixItAction >> classOrMetaClass: anObject [
 { #category : #private }
 GtDefineMethodFixItAction >> compileMethod [
 	| refactoring |
-	refactoring := RBAddMethodRefactoring
+	refactoring := self createRefactoring.
+	refactoring execute
+]
+
+{ #category : #private }
+GtDefineMethodFixItAction >> createRefactoring [
+	^ RBAddMethodRefactoring
 		addMethod: self methodSource
 		toClass: classOrMetaClass
-		inProtocols: {(sourceCoder protocol ifNil: [ #accessing ])}.
-	refactoring execute
+		inProtocols: {self targetProtocol}
 ]
 
 { #category : #accessing }
@@ -49,6 +54,53 @@ GtDefineMethodFixItAction >> executeOn: anEditorElement [
 	self compileMethod.
 	self clearFixItAttributeInEditor: anEditorElement editor.
 	self addCoderAttributeInEditor: anEditorElement editor.
+]
+
+{ #category : #'gt - extensions' }
+GtDefineMethodFixItAction >> gtViewDiffFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Diff';
+		priority: 1;
+		stencil: [ | previousContent newContent change |
+			previousContent := ''.
+			newContent := String
+					streamContents: [ :stream | 
+						stream
+							nextPutAll: '"protocol: ';
+							nextPutAll: self targetProtocol;
+							nextPut: $";
+							cr;
+							cr;
+							nextPutAll: self createRefactoring gtSource ].
+
+			change := GtDiffBuilder
+					computeDifferencesFrom: previousContent
+					to: newContent
+					using: GtSmaCCDiffSplitter forPharo.
+			GtDiffElementWithLabelStencil new
+				fromLabelText: 'Current:';
+				toLabelText: 'Change:';
+				change: change;
+				styler: GtCodeDiffRBTextStyler new ];
+		actionButtonIcon: BrGlamorousIcons inspect
+			label: 'Refactoring'
+			tooltip: 'Inspect the refactoring that is executed by this action'
+			action: [ :aButton | 
+				| newRefactoring |
+				newRefactoring := self createRefactoring.
+				newRefactoring primitiveExecute.
+				aButton phlow spawnObject: newRefactoring model ]
+]
+
+{ #category : #'gt - extensions' }
+GtDefineMethodFixItAction >> gtViewMethodCodeFor: aView [ 
+	<gtView>
+	
+	^ aView forward 
+		title: 'Method Code';
+		object: [ self createRefactoring ];
+		view: #gtViewMethodCodeFor:
 ]
 
 { #category : #accessing }
@@ -102,4 +154,9 @@ GtDefineMethodFixItAction >> methodSource [
 { #category : #accessing }
 GtDefineMethodFixItAction >> selector [
 	^ node isMessage ifTrue: [ node selector ] ifFalse: [ node literalValue ]
+]
+
+{ #category : #private }
+GtDefineMethodFixItAction >> targetProtocol [
+	^ (sourceCoder protocol ifNil: [ #accessing ])
 ]

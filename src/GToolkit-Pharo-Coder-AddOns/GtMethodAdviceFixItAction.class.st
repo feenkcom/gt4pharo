@@ -55,6 +55,42 @@ GtMethodAdviceFixItAction >> executeOn: anEditorElement [
 	sourceCoder currentSourceString: newSource
 ]
 
+{ #category : #'gt - extensions' }
+GtMethodAdviceFixItAction >> gtViewDiffFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Diff';
+		priority: 1;
+		stencil: [ | previousContent newContent change |
+			previousContent := self printForDiffSource: self updateSource.
+			newContent := self printForDiffSource: sourceCoder currentSourceString.
+
+			change := GtDiffBuilder
+					computeDifferencesFrom: previousContent
+					to: newContent
+					using: GtSmaCCDiffSplitter forPharo.
+			GtDiffElementWithLabelStencil new
+				fromLabelText: 'Current:';
+				toLabelText: 'Change:';
+				change: change;
+				styler: GtCodeDiffRBTextStyler new ]
+]
+
+{ #category : #'gt - extensions' }
+GtMethodAdviceFixItAction >> printForDiffSource: aString [
+	^ String
+		streamContents: [ :aStream | 
+			sourceCoder isForMethod ifTrue: [
+				aStream
+					nextPutAll: '"protocol: ';
+					nextPutAll: sourceCoder protocol;
+					nextPut: $";
+					cr;
+					cr ].
+			aStream
+				nextPutAll: aString ]
+]
+
 { #category : #executing }
 GtMethodAdviceFixItAction >> updateSource [
 	^ self subclassResponsibility
