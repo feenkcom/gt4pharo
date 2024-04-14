@@ -50,26 +50,56 @@ GtMethodAdvice >> description [
 
 { #category : #styling }
 GtMethodAdvice >> descriptionBlock [
-	^ [ :editorElement | self descriptionWithEditor: editorElement ]
+	^ [ :editorElement :computedFixItActions | 
+		self 
+			descriptionWithEditor: editorElement
+			andFixItActions: computedFixItActions ]
 ]
 
 { #category : #styling }
-GtMethodAdvice >> descriptionWithEditor: anEditorElement [
-	| text browseAttribute |
+GtMethodAdvice >> descriptionWithEditor: anEditorElement andFixItActions: aCollectionOfFixItActions [
+	| text browseAttribute inspectAttribute |
 	text := self description asRopedText.
+	
 	browseAttribute := GtButtonAttribute new
-			beAppend;
-			stencil: [ BrButton new
+		beAppend;
+		stencil: [ 
+			BrFrame new 
+				fitContent;
+				addChild:
+				(BrButton new
 					aptitude: BrGlamorousButtonWithIconAptitude new;
-					beTinySize;
 					margin: (BlInsets left: 5);
+					beTinySize;
 					icon: BrGlamorousVectorIcons browse;
-					action: [ anEditorElement phlow spawnTool: (GtClassCoderTool forClass: self class) ];
-					label: 'Browse rule definition' ].
+					action: [ anEditorElement phlow 
+						spawnTool: (GtClassCoderTool forClass: self class) ];
+					label: 'Browse rule definition') ].
+
+	inspectAttribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ 
+				BrFrame new 
+				fitContent;
+				addChild: (BrButton new
+					aptitude: BrGlamorousButtonWithIconAptitude new;
+					margin: (BlInsets left: 5);
+					beTinySize;
+					icon: BrGlamorousVectorIcons inspect;
+					action: [ anEditorElement phlow 
+						spawnObject: aCollectionOfFixItActions ];
+					label: 'Inspect rules') ].
+				
 	text
 		attribute: browseAttribute
 		from: text size
 		to: text size.
+		
+	text
+		attribute: inspectAttribute
+		from: text size
+		to: text size.
+		
 	^ text
 ]
 
