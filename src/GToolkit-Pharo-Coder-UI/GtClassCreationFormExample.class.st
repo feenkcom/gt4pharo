@@ -159,7 +159,77 @@ GtClassCreationFormExample >> scripterWithClassNameFilledValidationFailed [
 ]
 
 { #category : #accessing }
-GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilledFilled [
+GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoConflictingTraitsFilled [
+	<gtExample>
+	| scripter aDescription aFieldElementId aValidatorElementId |
+	scripter := self scripterWithClassNameAndPackageFilled.
+	aDescription := scripter model traitsDescription.
+	aFieldElementId := GtMagritteFieldElementId new description: aDescription.
+	aValidatorElementId := GtMagritteValidatorElementId new description: aDescription.
+
+	scripter click
+		label: 'Add Trait';
+		// aFieldElementId;
+		onChildAt: 1;
+		play.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill Trait name';
+				text: TGtPharoDummyTraitOne name;
+				// aFieldElementId;
+				onChildAt: 1 ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert that Trait is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue = {TGtPharoDummyTraitOne name} ] ].
+
+	scripter
+		shortcutStep: [ :s | 
+			s
+				label: 'Next Trait';
+				combination: BlKeyCombination tab;
+				// aFieldElementId;
+				/ #tags;
+				onChildAt: 1 ].
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill Trait name';
+				text: TGtPharoDummyTraitThree name;
+				// aFieldElementId;
+				/ #tags;
+				onChildAt: 2 ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert that both Traits are set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue
+						= {TGtPharoDummyTraitOne name.
+								TGtPharoDummyTraitThree name} ] ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert conflicting Traits message';
+				value: [ :anEditor | anEditor text asString ] equals: 'Conflicting Traits';
+				// aValidatorElementId;
+				// GtMagritteIssuesExplanationId ].
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 	<gtExample>
 	| scripter aDescription anElementId |
 	scripter := self scripterWithClassNameAndPackageFilled.
