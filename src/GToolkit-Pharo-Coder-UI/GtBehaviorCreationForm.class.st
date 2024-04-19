@@ -144,13 +144,35 @@ GtBehaviorCreationForm >> slotsDescription [
 ]
 
 { #category : #accessing }
+GtBehaviorCreationForm >> traitClassesOrNils [
+	"Return collection of Traits. If a Trait does not exist, `nil` value is used."
+
+	<return: #Collection of: #Trait>
+	^ self traitClassesOrNilsFor: self traits
+]
+
+{ #category : #accessing }
+GtBehaviorCreationForm >> traitClassesOrNilsFor: aCollectionOfTraitNames [
+	"Return collection of Traits. If a Trait does not exist, `nil` value is used."
+
+	<return: #Collection of: #Trait>
+	^ aCollectionOfTraitNames
+		collect: [ :eachTraitName | Smalltalk classOrTraitNamed: eachTraitName asString trimBoth ]
+]
+
+{ #category : #accessing }
 GtBehaviorCreationForm >> traitComposition [
-	^ (self traits collect: #asClass) asArray asTraitComposition
+	^ self traitCompositionFor: self traitClassesOrNils
+]
+
+{ #category : #accessing }
+GtBehaviorCreationForm >> traitCompositionFor: aCollectionOfTraits [
+	^ (aCollectionOfTraits reject: #isNil) asArray asTraitComposition
 ]
 
 { #category : #accessing }
 GtBehaviorCreationForm >> traits [
-
+	<return: #Collection of: #String>
 	^ traits
 ]
 
@@ -186,9 +208,7 @@ GtBehaviorCreationForm >> traitsDescription [
 					name: 'Inspect trait';
 					description: 'Inspects the trait indicated by the editor';
 					combination: BlKeyCombination primaryG;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnObject: anEvent target text asString asClass ].
+					action: [ :anEvent | anEvent target phlow spawnObject: anEvent target text asString asClass ].
 				BlShortcutWithAction new
 					name: 'Browse trait references';
 					description: 'Browses references to the trait indicated by the editor';
@@ -199,13 +219,25 @@ GtBehaviorCreationForm >> traitsDescription [
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All Trait names must be unique';
 		addCondition: [ :aValue | 
-			aValue allSatisfy: [ :eachTraitName |
-				(Smalltalk classOrTraitNamed: eachTraitName asString trim) isNotNil ] ]
+				aValue
+					allSatisfy: [ :eachTraitName | (Smalltalk classOrTraitNamed: eachTraitName asString trim) isNotNil ] ]
 			labelled: 'Unknown Trait(s)';
 		addCondition: [ :aValue | 
-			aValue allSatisfy: [ :eachTraitName |
-				| aTrait |
-				aTrait := (Smalltalk classOrTraitNamed: eachTraitName asString trim).
-				aTrait isNil or: [ aTrait isTrait ] ] ]
-			labelled: 'Only Traits are allowed'
+				| givenTraitsOrNils |
+				givenTraitsOrNils := self traitClassesOrNilsFor: aValue.
+				givenTraitsOrNils allSatisfy: [ :each | each isNil or: [ each isTrait ] ] ]
+			labelled: 'Only Traits are allowed';
+		addCondition: [ :aValue | 
+				aValue size > 1
+					ifTrue: [ | givenTraits aTraitComposition |
+						givenTraits := self traitClassesOrNilsFor: aValue.
+
+						((givenTraits allSatisfy: #isNotNil)
+							and: [ givenTraits size = givenTraits asSet size ])
+							ifTrue: [ aTraitComposition := self traitCompositionFor: givenTraits.
+								aTraitComposition methods
+									allSatisfy: [ :each | (aTraitComposition isConflictingSelector: each selector) not ] ]
+							ifFalse: [ true ] ]
+					ifFalse: [ true ] ]
+			labelled: 'Conflicting Traits'
 ]
