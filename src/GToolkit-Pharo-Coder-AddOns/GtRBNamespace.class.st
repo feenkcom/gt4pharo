@@ -35,13 +35,17 @@ GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [
 	| refs |
 	refs := OrderedCollection new.
 	self newClasses
-		do: [ :each | each do: [ :cls | refs addAll: (cls whichSelectorsReferToClass: aRBClass) ] ].
+		do: [ :each | each do: [ :cls | (cls whichSelectorsReferToClass: aRBClass) 
+			do: [ :aSelector | 
+				refs add: (cls methodFor: aSelector)] ] ].
+				
 	self changedClasses
 		do: [ :each | 
 			each
 				do: [ :cls | 
 					cls newMethods
-						do: [ :method | (method refersToClassNamed: aRBClass name) ifTrue: [ refs add: each selector ] ] ] ].
+						do: [ :method | (method refersToClassNamed: aRBClass name) ifTrue: [ refs add: method ] ] ] ].
+						
 	(GtPharoIndex current globalVariableReferencesTo: aRBClass)
 		do: [ :each | 
 			| name cls |
