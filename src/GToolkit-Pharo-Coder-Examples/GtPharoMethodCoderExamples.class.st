@@ -495,7 +495,7 @@ GtPharoMethodCoderExamples >> debugClassUnaryMethodPointCreation [
 	self assert: aCoder isModified.
 	
 	self 
-		forPharo11: [
+		forPharo11AndPharo12: [
 			self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt') not.
 			self assert: (aDummyDebugger sourceCode endsWith: 'aPoint := 196@400.').
 			self assert: aDummyDebugger method selector equals: #DoIt.

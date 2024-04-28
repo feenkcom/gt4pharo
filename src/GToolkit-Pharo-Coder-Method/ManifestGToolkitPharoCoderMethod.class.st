@@ -47,7 +47,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'System-Announcements'.
 		'Transcript-NonInteractive'
 	}, (self 
-		forPharo11: [ #() ] 
+		forPharo11AndPharo12: [ #() ] 
 		forPharo10: [ { 'Refactoring2-Core' } ])
 ]
 
