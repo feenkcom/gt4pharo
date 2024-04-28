@@ -44,7 +44,7 @@ GtPharoMethodContextCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	(super hasDeclaredVariableNamed: aVariableName) ifTrue: [ ^ true ].
 	
 	^ self 
-		forPharo11: [
+		forPharo11AndPharo12: [
 			self compiledMethod isDoIt and: [
 				self compiledMethod allLiterals anySatisfy: [ :aVariable |
 					((aVariable class = WorkspaceVariable) or: [
