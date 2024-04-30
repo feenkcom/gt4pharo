@@ -77,7 +77,7 @@ GtPharoBehaviorCoderViewModel >> syncComputeAddOnsFor: aCoderModel [
 	| newAddOns pragmas |
 
 	pragmas := aCoderModel
-		pragmasNamed: #gtAstCoderAddOns:
+		pragmasNamed: GtCoderModel astExtensionsPragma
 		inHierarchy: aCoderModel class.
 	newAddOns := aCoderModel newAddOns.
 	
