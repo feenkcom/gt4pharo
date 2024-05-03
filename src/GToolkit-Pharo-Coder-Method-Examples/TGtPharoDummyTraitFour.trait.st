@@ -8,7 +8,7 @@ TGtPharoDummyTraitFour classSide >> classSideMethodOne [
 	^ 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TGtPharoDummyTraitFour >> instanceSideMethodOne [
 	^ 3
 ]
