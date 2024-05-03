@@ -7,7 +7,7 @@ Class {
 { #category : #printing }
 GtSearchMethodsInInstanceAndClassSideFilter >> gtDisplayOn: stream [
 	stream
-		print: class;
+		print: filterClass;
 		nextPutAll: ' methodsInBothClassSides'
 ]
 
@@ -15,14 +15,14 @@ GtSearchMethodsInInstanceAndClassSideFilter >> gtDisplayOn: stream [
 GtSearchMethodsInInstanceAndClassSideFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
-	^ (methodClass = class instanceSide) or: [ 
-		methodClass = class classSide ]
+	^ (methodClass = filterClass instanceSide) or: [ 
+		methodClass = filterClass classSide ]
 ]
 
 { #category : #enumerating }
 GtSearchMethodsInInstanceAndClassSideFilter >> methodsDo: aBlock [
-	class instanceSide methods do: aBlock.
+	filterClass instanceSide methods do: aBlock.
 
 	"#methods includes ones from TraitedClass"
-	class classSide visibleMethods do: aBlock
+	filterClass classSide visibleMethods do: aBlock
 ]

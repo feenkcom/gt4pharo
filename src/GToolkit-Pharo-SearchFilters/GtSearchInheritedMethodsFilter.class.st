@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtSearchInheritedMethodsFilter >> defaultFilterScope [
-	^ AsyncBehaviorAllSortedInheritedMethodsStream forBehavior: class
+	^ AsyncBehaviorAllSortedInheritedMethodsStream forBehavior: filterClass
 ]
 
 { #category : #accessing }
@@ -17,7 +17,7 @@ GtSearchInheritedMethodsFilter >> filterValueString [
 { #category : #printing }
 GtSearchInheritedMethodsFilter >> gtDisplayOn: stream [
 	stream
-		print: class;
+		print: filterClass;
 		nextPutAll: ' inheritedMethods'
 ]
 
@@ -28,9 +28,9 @@ GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 	^ (super includesMethod: aCompiledMethod)
 		or: [ aCompiledMethod origin name ~= 'TraitedClass'
 				and: [ (includeSubclasses
-						and: [ methodClass classSide includesBehavior: class classSide ])
+						and: [ methodClass classSide includesBehavior: filterClass classSide ])
 						or: [ includeSuperclass
-								and: [ (class classSide includesBehavior: methodClass classSide)
+								and: [ (filterClass classSide isTrait ifFalse: [ filterClass classSide includesBehavior: methodClass classSide ] ifTrue: [ filterClass classSide == methodClass classSide ])
 										and: [ upToSuperclass superclass isNil
 												or: [ (upToSuperclass superclass classSide includesBehavior: methodClass classSide)
 														not ] ] ] ] ] ]
@@ -39,8 +39,8 @@ GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 { #category : #accessing }
 GtSearchInheritedMethodsFilter >> methodsDo: aBlock [
 	super methodsDo: aBlock.
-	class classSide methods do: aBlock.
-	includeSuperclass ifTrue: [ class classSide superclass methods do: aBlock ].
+	filterClass classSide methods do: aBlock.
+	includeSuperclass ifTrue: [ filterClass classSide superclass methods do: aBlock ].
 	includeSubclasses
-		ifTrue: [ (class classSide allSubclasses flatCollect: #methods) do: aBlock ]
+		ifTrue: [ (filterClass classSide allSubclasses flatCollect: #methods) do: aBlock ]
 ]
