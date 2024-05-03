@@ -5,6 +5,50 @@ Class {
 }
 
 { #category : #examples }
+GtPharoStreamingMethodsCoderExamples >> forClassWithTrait [
+	<gtExample>
+	| aMethodsCoder theMethodCoders |
+	aMethodsCoder := GtPharoStreamingMethodsCoder
+			forBehavior: GtPharoDummyObjectFour.
+
+	self assert: aMethodsCoder behavior equals: GtPharoDummyObjectFour.
+	self assert: aMethodsCoder classOrMetaClass equals: GtPharoDummyObjectFour.
+	self assert: aMethodsCoder isForClass.
+	self
+		assert: aMethodsCoder filter
+		equals: ((GtSearchInheritedMethodsFilter forClass: GtPharoDummyObjectFour)
+				withSuperclassesUpTo: ProtoObject).
+	self
+		assert: aMethodsCoder additionalFilters
+		equals: {(GtSearchInheritedMethodsFilter forClass: GtPharoDummyObjectFour)
+					withSuperclassesUpTo: GtPharoDummyObjectFour}.
+
+	self
+		assert: aMethodsCoder itemsStream toArray wait
+		equals: {GtPharoDummyObjectFour >> #instanceSideMethodOne.
+				GtPharoDummyObjectFour >> #instanceSideMethodTwo.
+				GtPharoDummyObjectFour class >> #classSideMethodOne.
+				GtPharoDummyObjectFour class >> #classSideMethodTwo}.
+
+	theMethodCoders := aMethodsCoder codersStream toArray wait.
+	self assert: theMethodCoders size equals: 4.
+	self assert: theMethodCoders first behavior equals: GtPharoDummyObjectFour.
+	self assert: theMethodCoders first selector equals: #instanceSideMethodOne.
+	self assert: theMethodCoders second behavior equals: GtPharoDummyObjectFour.
+	self assert: theMethodCoders second selector equals: #instanceSideMethodTwo.
+	self
+		assert: theMethodCoders third behavior
+		equals: GtPharoDummyObjectFour class.
+	self assert: theMethodCoders third selector equals: #classSideMethodOne.
+	self
+		assert: theMethodCoders fourth behavior
+		equals: GtPharoDummyObjectFour class.
+	self assert: theMethodCoders fourth selector equals: #classSideMethodTwo.
+
+	^ aMethodsCoder
+]
+
+{ #category : #examples }
 GtPharoStreamingMethodsCoderExamples >> forSuperclass [
 	<gtExample>
 	| aMethodsCoder theMethodCoders |
