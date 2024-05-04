@@ -11,6 +11,7 @@ Class {
 
 { #category : #comparing }
 GtSearchMethodsInClassFilter >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
 	^ self class = anObject class
 		and: [ self filterClass = anObject filterClass
 				and: [ self includeSubclasses = anObject includeSubclasses
@@ -22,17 +23,17 @@ GtSearchMethodsInClassFilter >> defaultFilterScope [
 	| theStreams |
 	theStreams := OrderedCollection new.
 
-	theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: class).
+	theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: filterClass).
 
 	includeSuperclass
 		ifTrue: [ theStreams
-				add: (class allSuperclasses asAsyncStream
+				add: (filterClass allSuperclasses asAsyncStream
 						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
 						flatten ].
 
 	includeSubclasses
 		ifTrue: [ theStreams
-				add: (class allSubclasses asAsyncStream
+				add: (filterClass allSubclasses asAsyncStream
 						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
 						flatten ].
 
@@ -42,13 +43,16 @@ GtSearchMethodsInClassFilter >> defaultFilterScope [
 { #category : #printing }
 GtSearchMethodsInClassFilter >> gtDisplayOn: stream [
 	stream
-		print: class;
+		print: filterClass;
 		nextPutAll: ' methodsInClass'
 ]
 
 { #category : #comparing }
 GtSearchMethodsInClassFilter >> hash [
-	^ self class hash bitXor: self filterClass hash
+	^ self class hash
+		bitXor: (self filterClass hash
+				bitXor: (self includeSubclasses hash 
+					bitXor: self includeSuperclass))
 ]
 
 { #category : #testing }
@@ -67,18 +71,18 @@ GtSearchMethodsInClassFilter >> includeSuperclass [
 ]
 
 { #category : #'initialize-release' }
-GtSearchMethodsInClassFilter >> includeSuperclass: anObject [
-	includeSuperclass := anObject
+GtSearchMethodsInClassFilter >> includeSuperclass: aBoolean [
+	includeSuperclass := aBoolean
 ]
 
 { #category : #testing }
 GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
-	methodClass = class ifTrue: [ ^ true ].
-	^ (includeSubclasses and: [ methodClass includesBehavior: class ])
+	methodClass = filterClass ifTrue: [ ^ true ].
+	^ (includeSubclasses and: [ methodClass includesBehavior: filterClass ])
 		or: [ includeSuperclass
-				and: [ (class includesBehavior: methodClass)
+				and: [ (filterClass includesBehavior: methodClass)
 						and: [ upToSuperclass isNil
 								or: [ upToSuperclass superclass isNil
 										or: [ (upToSuperclass superclass includesBehavior: methodClass) not ] ] ] ] ]
@@ -93,11 +97,11 @@ GtSearchMethodsInClassFilter >> initialize [
 
 { #category : #enumerating }
 GtSearchMethodsInClassFilter >> methodsDo: aBlock [
-	class methods do: aBlock.
+	filterClass methods do: aBlock.
 	includeSuperclass
-		ifTrue: [ class superclass methods do: aBlock ].
+		ifTrue: [ filterClass superclass methods do: aBlock ].
 	includeSubclasses
-		ifTrue: [ (class allSubclasses flatCollect: #methods) do: aBlock ]
+		ifTrue: [ (filterClass allSubclasses flatCollect: #methods) do: aBlock ]
 ]
 
 { #category : #scripting }

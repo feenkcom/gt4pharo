@@ -2,7 +2,7 @@ Class {
 	#name : #GtSearchMethodsContainedInClassFilter,
 	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
-		'class'
+		'filterClass'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
@@ -23,27 +23,27 @@ GtSearchMethodsContainedInClassFilter class >> forClass: aClass [
 GtSearchMethodsContainedInClassFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
-	^ class = anObject filterClass
+	^ filterClass = anObject filterClass
 ]
 
 { #category : #accessing }
 GtSearchMethodsContainedInClassFilter >> defaultFilterScope [
-	^ AsyncBehaviorAllMethodsStream forBehavior: class
+	^ AsyncBehaviorAllMethodsStream forBehavior: filterClass
 ]
 
 { #category : #accessing }
 GtSearchMethodsContainedInClassFilter >> filterClass [
-	^ class
+	^ filterClass
 ]
 
 { #category : #'initialize-release' }
 GtSearchMethodsContainedInClassFilter >> forClass: aClass [
-	class := aClass
+	filterClass := aClass
 ]
 
 { #category : #comparing }
 GtSearchMethodsContainedInClassFilter >> hash [
-	^ class hash bitXor: self class
+	^ self class hash bitXor: self filterClass hash
 ]
 
 { #category : #enumerating }

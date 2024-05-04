@@ -7,7 +7,7 @@ Class {
 { #category : #printing }
 GtSearchClassSlotReferenceFilter >> gtDisplayOn: stream [
 	stream
-		print: class;
+		print: filterClass;
 		nextPut: $.;
 		nextPutAll: variableName asString;
 		nextPutAll: ' classSlotReferences'

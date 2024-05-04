@@ -43,7 +43,7 @@ GtSearchInstanceSlotReferenceFilter >> forClass: aClass andVariable: aString [
 { #category : #printing }
 GtSearchInstanceSlotReferenceFilter >> gtDisplayOn: stream [
 	stream
-		print: class;
+		print: filterClass;
 		nextPut: $.;
 		nextPutAll: variableName asString;
 		nextPutAll: ' instanceSlotReferences'
@@ -137,7 +137,7 @@ GtSearchInstanceSlotReferenceFilter >> includeWriters: aBoolean [
 GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	| index |
 	(super includesMethod: aCompiledMethod) ifFalse: [ ^ false ].
-	index := class instVarIndexFor: variableName ifAbsent: [ ^ false ].
+	index := filterClass instVarIndexFor: variableName ifAbsent: [ ^ false ].
 	^ (includeReaders and: [ aCompiledMethod readsField: index ])
 		or: [ includeWriters and: [ aCompiledMethod writesField: index ] ]
 ]
