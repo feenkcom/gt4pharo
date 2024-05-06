@@ -370,7 +370,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter absenceOfContextActi
 				label: 'Assert Context Action Existence Named ' , anActionName asString;
 				nonSatisfies: [ :aContextActions | 
 					aContextActions title = anActionName translated
-						and: [ aContextActions action method = (GtPharoMethodCoder >> #exampleAstFor:into:) ] ];
+						and: [ aContextActions action method = (GtPharoMethodCoder >> #exampleAstFor:into:viewModel:) ] ];
 				onModel;
 				onChildFromMessage: #contextActions ]
 ]
@@ -406,7 +406,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextAc
 				anySatisfy: [ :aContextActions | 
 					aContextActions title = anActionName translated
 						and: [ aContextActions action blocDefiningMethod
-								= (GtPharoMethodCoder >> #exampleAstFor:into:) ] ];
+								= (GtPharoMethodCoder >> #exampleAstFor:into:viewModel:) ] ];
 				onModel;
 				onChildFromMessage: #contextActions ]
 ]

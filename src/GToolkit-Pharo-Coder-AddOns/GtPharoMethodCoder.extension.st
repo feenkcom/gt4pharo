@@ -725,7 +725,7 @@ GtPharoMethodCoder >> copyMethodNameToClipboard [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
+GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 10>
 	| anExample |
 	self compiledMethod ifNil: [ ^ self ].
@@ -737,7 +737,7 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
-	"coderAddOns addStyler: GtCoderExampleFailureStyler new."
+	coderAddOns addStyler: GtCoderExampleFailureStyler new.
 
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
@@ -784,12 +784,29 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		icon: BrGlamorousVectorIcons play
 		action: [ :aCoderUIModel :anEvent | self playExample ]
 		id: GtMethodCoderPlayExampleActionId.
+	
 	anExample hasAfterInDependencies
+		ifTrue: [
+			coderAddOns
+				addContextDropDownWithPreviewAction: 'Play and Inspect Example Result' translated
+				icon: BrGlamorousVectorIcons playinspect
+				action: [ 
+					self playAndInspectExampleWithRequesterObject: aGtPharoMethodCoderViewModel ]
+				stencil: [ :element | 
+					BrEditor new 
+						aptitude: BrGlamorousRegularEditorAptitude new;
+						constraintsDo: [:c | 
+							c horizontal exact: 500. 
+							c vertical fitContent];
+						text: 'This example has an "after:" method that can perform cleanups. The returned object may be in an invalid state.';
+						margin: (BlInsets all: 5) ] ]
 		ifFalse: [ coderAddOns
 				addContextAction: 'Play and Inspect Example Result' translated
 				icon: BrGlamorousVectorIcons playinspect
-				action: [ :aCoderUIModel :button | self playAndInspectExampleWithRequesterObject: aCoderUIModel ]
+				action: [ :aCoderUIModel :button | 
+					self playAndInspectExampleWithRequesterObject: aCoderUIModel ]
 				id: GtMethodCoderPlayAndInspectExampleActionId ].
+	
 	coderAddOns
 		addContextAction: 'Inspect Example Object' translated
 		icon: BrGlamorousVectorIcons eg
