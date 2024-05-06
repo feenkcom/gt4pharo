@@ -37,7 +37,7 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 					arguments: evaluationArguments ]
 						newProcess ].
 	suspendedContext := guineaPig suspendedContext.
-
+	GtProcessStackOverflowChecker startForProcess: guineaPig.
 	debugSession := guineaPig
 			newDebugSessionNamed: 'debug it'
 			startedAt: suspendedContext.
@@ -251,6 +251,7 @@ GtPharoSourceCoder >> primitiveDebug: aSourceString inContext: aGtPharoSourceCod
 { #category : #'private - actions' }
 GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	| aCompiledMethodToEvaluate methodArguments |
+
 	(self
 		handleCompilerErrorsDuring: [ aCompiledMethodToEvaluate := self
 					primitiveCompile: aSourceString
@@ -265,9 +266,10 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 					ifNil: [ #() ]
 					ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ].
 
-	^ aGtPharoSourceCoderEvaluationContext receiverObject
-		withArgs: methodArguments
-		executeMethod: aCompiledMethodToEvaluate
+	^ GtProcessStackOverflowChecker checkDuring:		[
+		aGtPharoSourceCoderEvaluationContext receiverObject
+			withArgs: methodArguments
+			executeMethod: aCompiledMethodToEvaluate ].
 ]
 
 { #category : #accessing }
