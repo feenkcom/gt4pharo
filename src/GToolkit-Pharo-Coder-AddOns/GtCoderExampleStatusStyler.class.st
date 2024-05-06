@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderExampleStatusStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
 { #category : #'method coder styler' }
@@ -17,14 +17,14 @@ GtCoderExampleStatusStyler class >> examplePatternStylerFor: aMethodCoder [
 
 { #category : #generated }
 GtCoderExampleStatusStyler >> visitMethod: aMethodNode [
-	| anExample |
+	| currentExample |
 
-	anExample := self coderViewModel coderModel example.
-	anExample
+	currentExample := self coderViewModel coderModel example.
+	currentExample
 		ifNil: [ ^ self ].
 	
 	self
-		attribute: (GtCoderExampleStatusAttribute forExample: anExample)
+		attribute: (GtCoderExampleStatusAttribute forExample: currentExample)
 		from: aMethodNode pattern stopPosition
 		to: aMethodNode pattern stopPosition
 ]

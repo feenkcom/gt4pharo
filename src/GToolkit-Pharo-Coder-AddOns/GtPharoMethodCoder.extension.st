@@ -737,6 +737,7 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns [
 		ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
+	"coderAddOns addStyler: GtCoderExampleFailureStyler new."
 
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
