@@ -9,27 +9,28 @@ Class {
 
 { #category : #accessing }
 GtCoderExampleFailureStyler >> extraStyle: aText ast: theAst [
-	| currentExample exampleStackFrame pcRangeInterval |
-	
-	programCounterAttribute ifNotNil: [ :theAttribute | 
-		aText removeAttribute: theAttribute ].
-	
+	| currentExample exampleStackFrame pcRangeInterval highlightColor |
+	programCounterAttribute
+		ifNotNil: [ :theAttribute | aText removeAttribute: theAttribute ].
+
 	super extraStyle: aText ast: theAst.
-	
+
 	self coderViewModel ifNil: [ ^ self ].
-	
+
 	currentExample := self coderViewModel coderModel example.
 	currentExample ifNil: [ ^ self ].
-	
+
 	(self hasFailureOrErrorResultInExample: currentExample) ifFalse: [ ^ self ].
-	
+
 	exampleStackFrame := self locateFailureStackFrameForExample: currentExample.
-	(exampleStackFrame isNil or: [ 
-		exampleStackFrame isDead ]) ifTrue: [ ^ self ].
-	
+	(exampleStackFrame isNil or: [ exampleStackFrame isDead ]) ifTrue: [ ^ self ].
+
 	pcRangeInterval := exampleStackFrame pcRangeContextIsActive: false.
-	programCounterAttribute := (BlTextHighlightAttribute 
-		paint: BrGlamorousColors debuggerTextHighlightColor)
+	highlightColor :=  (currentExample returnValue isKindOf: AssertionFailure)
+		ifTrue: [ BrGlamorousColors debuggerTextHighlightColor ]
+		ifFalse: [ BrGlamorousColors errorBackgroundColor ].
+		
+	programCounterAttribute := (BlTextHighlightAttribute paint: highlightColor)
 			beNotOverwritableByStyler.
 	aText
 		attribute: programCounterAttribute
