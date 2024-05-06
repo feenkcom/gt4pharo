@@ -17,11 +17,11 @@ GtExtractToTemporaryRefactoring >> insertTemporary [
 	[ nodeReferences first statementNode parent ~= sequenceNode ]
 		whileTrue: [ nodeReferences removeFirst ].
 	node := nodeReferences first.
+	sequenceNode addTemporaryNamed: newVariableName.
 	(node isVariable and: [ node isWrite ])
 		ifFalse: [ sequenceNode
-				addTemporaryNamed: newVariableName;
 				addNode: (self constructAssignmentFrom: node copy)
-					before: node statementNode ].
+				before: node statementNode ].
 	nodeReferences
 		do: [ :each | 
 			(each isVariable and: [ each isWrite ])
