@@ -25,6 +25,7 @@ GtPharoMethodExpanderStyler >> nextIndex [
 GtPharoMethodExpanderStyler >> style: aText ast: theAst [
 	variableBindings := self coderViewModel compositeVariableBindingsForStyling.
 	evaluationContext := self coderViewModel evaluationContext.
+	lastIndex := 0.
 	[ super style: aText ast: theAst ]
 		ensure: [ 
 			variableBindings := nil.
