@@ -72,7 +72,7 @@ GtPharoFlushChangesFileSignal >> printOn: stream [
 { #category : #accessing }
 GtPharoFlushChangesFileSignal >> relevantStackWithoutSelf [
 	| s |
-	s := thisContext stack.
+	s := thisContext stack collect: #copy.
 	^ s allButFirst: (s findLast: [ :each | each receiver = self class ])
 ]
 
