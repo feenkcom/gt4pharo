@@ -13,7 +13,7 @@ GtPushDownMethodRefactoringController >> previewDisplaysImmediately [
 GtPushDownMethodRefactoringController >> refactoring [
 	| model |
 	model := self createRefactoringModel.
-	^ RBPushDownMethodRefactoring
+	^ GtRBPushDownMethodRefactoring
 		  model: model
 		  pushDown: { self methodSelector }
 		  from: (model classFor: self methodClass)
