@@ -359,6 +359,7 @@ GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithRemoteToggleSelected [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> runTestCasesLocally [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self openTestCaseDropdown.
 
