@@ -17,7 +17,6 @@ GtPharoMethodCoderByScripterExamples class >> dummyMethod: arg [
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
-	<noTest>
 	| filter aScripter |
 
 	filter := GtSearchIntersectionFilter new
