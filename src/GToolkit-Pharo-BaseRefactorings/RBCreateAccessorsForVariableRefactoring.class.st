@@ -118,6 +118,11 @@ RBCreateAccessorsForVariableRefactoring >> getterMethod [
 	^getterMethod
 ]
 
+{ #category : #accessing }
+RBCreateAccessorsForVariableRefactoring >> gtDescription [
+	^ 'Create accessors for ' , variableName
+]
+
 { #category : #'private - accessing' }
 RBCreateAccessorsForVariableRefactoring >> methodsReferencingVariable [
 	^classVariable 

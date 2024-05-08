@@ -63,6 +63,11 @@ RBAbstractClassVariableRefactoring >> createAccessors [
 	self performCompositeRefactoring: self accessorsRefactoring
 ]
 
+{ #category : #accessing }
+RBAbstractClassVariableRefactoring >> gtDescription [
+	^ 'Abstract class variable ' , variableName
+]
+
 { #category : #preconditions }
 RBAbstractClassVariableRefactoring >> preconditions [
 	^(RBCondition isMetaclass: class) not 
