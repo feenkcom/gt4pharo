@@ -75,6 +75,11 @@ RBMoveVariableDefinitionRefactoring >> class: aClass selector: aSelector interva
 	selector := aSelector
 ]
 
+{ #category : #accessing }
+RBMoveVariableDefinitionRefactoring >> gtDescription [
+	^ 'Move variable declaration of ' , name , ' to inner scope'
+]
+
 { #category : #preconditions }
 RBMoveVariableDefinitionRefactoring >> preconditions [
 	^(RBCondition definesSelector: selector in: class) 

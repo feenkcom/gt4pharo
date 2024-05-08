@@ -222,7 +222,6 @@ GtPharoTestSuiteExamples >> closeDropdownWithLocallyExecutedTestCases [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
@@ -327,7 +326,6 @@ GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithLocallyExecutedTestCases [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> reopenTestCaseDropdownWithRemoteToggleSelected [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self closeDropdownWithRemoteToggleSelected.
 
