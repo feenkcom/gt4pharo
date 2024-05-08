@@ -92,6 +92,13 @@ GtPharoMethodExpanderAttribute >> initialize [
 				stencil: [ self buildMethodCoder ] ]
 ]
 
+{ #category : #printing }
+GtPharoMethodExpanderAttribute >> printOn: aStream [
+	aStream
+		nextPutAll: 'method-expander: ';
+		print: self id
+]
+
 { #category : #accessing }
 GtPharoMethodExpanderAttribute >> selector [
 	^ selector
