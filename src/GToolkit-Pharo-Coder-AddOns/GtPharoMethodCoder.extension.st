@@ -738,7 +738,8 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
 	coderAddOns addStyler: GtCoderExampleFailureStyler new.
-
+	coderAddOns addStyler: GtCoderExampleAfterStyler new.
+	
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
 
@@ -780,7 +781,7 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 	anExample := self example.
 
 	coderAddOns
-		addContextAction: 'Play Example' translated
+		addContextAction: 'Evaluate example' translated
 		icon: BrGlamorousVectorIcons play
 		action: [ :aCoderUIModel :anEvent | self playExample ]
 		id: GtMethodCoderPlayExampleActionId.
@@ -788,7 +789,7 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 	anExample hasAfterInDependencies
 		ifTrue: [
 			coderAddOns
-				addContextDropDownWithPreviewAction: 'Play and Inspect Example Result' translated
+				addContextDropDownWithPreviewAction: 'Evaluate and inspect example result' translated
 				icon: BrGlamorousVectorIcons playinspect
 				action: [ 
 					self playAndInspectExampleWithRequesterObject: aGtPharoMethodCoderViewModel ]
@@ -801,23 +802,23 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 						text: 'This example has an "after:" method that can perform cleanups. The returned object may be in an invalid state.';
 						margin: (BlInsets all: 5) ] ]
 		ifFalse: [ coderAddOns
-				addContextAction: 'Play and Inspect Example Result' translated
+				addContextAction: 'Evaluate and inspect example result' translated
 				icon: BrGlamorousVectorIcons playinspect
 				action: [ :aCoderUIModel :button | 
 					self playAndInspectExampleWithRequesterObject: aCoderUIModel ]
 				id: GtMethodCoderPlayAndInspectExampleActionId ].
 	
 	coderAddOns
-		addContextAction: 'Inspect Example Object' translated
+		addContextAction: 'Inspect example object' translated
 		icon: BrGlamorousVectorIcons eg
 		action: [ :aCoderUIModel :button | self notifyObjectSpawn: self example requesterObject: aCoderUIModel ].
 	coderAddOns
-		addContextAction: 'Debug Example' translated
+		addContextAction: 'Debug example' translated
 		icon: BrGlamorousVectorIcons debug
 		action: [ :aCoderUIModel :anEvent | self debugExample ]
 		id: GtMethodCoderDebugExampleActionId.
 	coderAddOns
-		addContextAction: 'Extract to playground' translated
+		addContextAction: 'Extract code to playground' translated
 		icon: LeIcons lepiterPage
 		action: [ :aCoderUIModel :button :event | 
 			self

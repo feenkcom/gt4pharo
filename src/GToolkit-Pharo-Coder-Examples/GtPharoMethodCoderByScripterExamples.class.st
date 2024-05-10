@@ -1402,8 +1402,8 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 		numberOfMainActions: 4
 		contextAction: 5.
 
-	self checkFor: aScripter existenceOfContextActionNamed: 'Play Example'.
-	self checkFor: aScripter existenceOfContextActionNamed: 'Play and Inspect Example Result'.
+	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate example'.
+	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate and inspect example result'.
 
 	^ aScripter
 ]
@@ -1417,7 +1417,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 	aScripter
 		clickStep: [ :s | 
 			s
-				label: 'Click play and inspect';
+				label: 'Click evaluate and inspect';
 				id: GtMethodCoderPlayAndInspectExampleActionId ].
 
 	^ aScripter
@@ -5807,7 +5807,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 				numberOfMainActions: 4
 				contextAction: 5.
 
-			self checkFor: aStep existenceOfContextActionNamed: 'Play Example' ].
+			self checkFor: aStep existenceOfContextActionNamed: 'Evaluate example' ].
 
 	aScripter
 		checks: 'Check Example Status Is Present'
