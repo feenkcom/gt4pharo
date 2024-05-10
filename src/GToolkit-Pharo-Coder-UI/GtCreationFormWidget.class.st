@@ -63,7 +63,6 @@ GtCreationFormWidget >> initialize [
 	super initialize.
 
 	onAccept := [ :aValue | self phlow spawnObject: aValue ].
-	onElementCreated := [ :aFrame |  ].
 	self layout: BlFlowLayout vertical.
 	self margin: (BlInsets all: 5).
 	self

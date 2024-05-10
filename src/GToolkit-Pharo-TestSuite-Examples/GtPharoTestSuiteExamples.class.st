@@ -195,6 +195,8 @@ GtPharoTestSuiteExamples >> clickOnRemoteToggle [
 
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> closeDropdownWithLocallyExecutedTestCases [
+	"It produced BlDevScripterPulseTimeoutError on CI."
+
 	<gtExample>
 	<noTest>
 	| aScripter |
