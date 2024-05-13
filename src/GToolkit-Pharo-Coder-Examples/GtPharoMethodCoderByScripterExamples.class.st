@@ -32,7 +32,7 @@ GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 
 	self
 		checkFor: aScripter
-		numberfOfTextAttributes: 14
+		numberfOfTextAttributes: 13
 		ofType: BlTextDecorationAttribute.
 
 	^ aScripter
