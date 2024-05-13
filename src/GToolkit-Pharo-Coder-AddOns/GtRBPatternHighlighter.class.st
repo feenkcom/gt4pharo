@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'ast'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
 { #category : #accessing }
@@ -26,7 +26,7 @@ GtRBPatternHighlighter >> style: aText ast: theAst [
 	intervals := OrderedCollection new.
 	tree nodesDo: [ :each | 
 		(ast match: each inContext: Dictionary new) ifTrue: [ 
-			intervals add: (each start to: each stop) ] ].
+			intervals addAll: each gtInterestingHighlightingIntervals ] ].
 	self style: aText intervals: intervals.
 	^ aText
 ]
