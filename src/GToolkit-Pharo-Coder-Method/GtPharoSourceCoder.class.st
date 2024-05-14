@@ -37,7 +37,7 @@ GtPharoSourceCoder class >> debug: aCompiledMethod receiver: anObject in: evalCo
 					arguments: evaluationArguments ]
 						newProcess ].
 	suspendedContext := guineaPig suspendedContext.
-	GtProcessStackOverflowChecker startForProcess: guineaPig.
+	GtProcessStackOverflowChecker currentCheckerClass startForProcess: guineaPig.
 	debugSession := guineaPig
 			newDebugSessionNamed: 'debug it'
 			startedAt: suspendedContext.
@@ -265,14 +265,8 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 			forPharo10: [ aGtPharoSourceCoderEvaluationContext runtimeContext
 					ifNil: [ #() ]
 					ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ].
-	
-	aGtPharoSourceCoderEvaluationContext evaluatedCode: (
-		GtPharoEvaluatedCode new 
-			receiverObject: aGtPharoSourceCoderEvaluationContext receiverObject;
-			compiledMethod: aCompiledMethodToEvaluate;
-			methodArguments: methodArguments).
-	
-	^ GtProcessStackOverflowChecker checkDuring:		[
+
+	^ GtProcessStackOverflowChecker currentCheckerClass checkDuring:		[
 		aGtPharoSourceCoderEvaluationContext receiverObject
 			withArgs: methodArguments
 			executeMethod: aCompiledMethodToEvaluate ].
