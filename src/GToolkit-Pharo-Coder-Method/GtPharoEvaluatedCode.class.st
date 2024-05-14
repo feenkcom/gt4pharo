@@ -31,6 +31,14 @@ GtPharoEvaluatedCode >> findRelevantContextInStack: aStack [
 	^ nil
 ]
 
+{ #category : #accessing }
+GtPharoEvaluatedCode >> findSourceAstForContext: aContext [
+	"Return an AST node that corresponds to a given executed code."
+
+	<return: #RBMessageNode>
+	^ aContext method sourceNodeForPC: aContext pc
+]
+
 { #category : #printing }
 GtPharoEvaluatedCode >> gtDisplayOn: stream [
 	self compiledMethod ifNil: [ ^ super gtDisplayOn: stream ].
