@@ -234,6 +234,18 @@ GtPharoMethodCoderStep >> clickOnPlayAndInspectButton [
 	^ aClickStep
 ]
 
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> clickOnPlayAndInspectExampleButton [
+	| aClickStep |
+	aClickStep := self click
+			referenceSender;
+			label: 'Click on play and inspect example button';
+			onParentStepTarget: self;
+			// GtMethodCoderPlayAndInspectExampleActionId;
+			onTopMost.
+	^ aClickStep
+]
+
 { #category : #'steps - checks' }
 GtPharoMethodCoderStep >> privateAssertExpandersCount: aNumber coderElement: aCoderElement [
 	| allCounts missingExpanders extraExpanders unexpectedExpander |
