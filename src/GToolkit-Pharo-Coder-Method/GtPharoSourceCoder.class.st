@@ -265,7 +265,13 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 			forPharo10: [ aGtPharoSourceCoderEvaluationContext runtimeContext
 					ifNil: [ #() ]
 					ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ].
-
+	
+	aGtPharoSourceCoderEvaluationContext evaluatedCode: (
+		GtPharoEvaluatedCode new 
+			receiverObject: aGtPharoSourceCoderEvaluationContext receiverObject;
+			compiledMethod: aCompiledMethodToEvaluate;
+			methodArguments: methodArguments).
+	
 	^ GtProcessStackOverflowChecker checkDuring:		[
 		aGtPharoSourceCoderEvaluationContext receiverObject
 			withArgs: methodArguments

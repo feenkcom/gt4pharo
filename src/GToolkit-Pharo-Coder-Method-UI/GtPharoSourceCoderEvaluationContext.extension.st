@@ -24,6 +24,7 @@ GtPharoSourceCoderEvaluationContext >> gtInfo [
 			aStream nextPut: #sourceInterval -> self sourceInterval.
 			aStream nextPut: #evaluatedSourceString -> self evaluatedSourceString.
 			aStream nextPut: #evaluatedInterval -> self evaluatedInterval.
+			aStream nextPut: #evaluatedCode -> self evaluatedCode.
 			aStream nextPut: #requesterObject -> self requesterObject ]
 ]
 
