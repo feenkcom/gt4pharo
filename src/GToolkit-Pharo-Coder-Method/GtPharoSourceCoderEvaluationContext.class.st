@@ -79,12 +79,6 @@ GtPharoSourceCoderEvaluationContext >> editor [
 	^ self
 ]
 
-{ #category : #'api - context' }
-GtPharoSourceCoderEvaluationContext >> evaluatedCompiledMethod [
-	<return: #GtPharoEvaluatedCode>
-	^ self evaluatedCode
-]
-
 { #category : #binding }
 GtPharoSourceCoderEvaluationContext >> hasBindingOf: aSymbol [
 	<return: #Boolean>
