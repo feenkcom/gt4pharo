@@ -6,13 +6,15 @@ The following example shows how a {{gtMethod:BrGlamorousColors class >> #pressed
 Class {
 	#name : #GtPharoGlamorousColorStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
 { #category : #'private - styling' }
 GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode [
 	| color |
-	color := BrGlamorousColors perform: aMessageSendNode message selector.
+	color := [ BrGlamorousColors perform: aMessageSendNode message selector ]
+			on: Error
+			do: [ :anException | anException return: nil ].
 	(color isKindOf: Color) ifFalse: [ ^ self ].
 	self styleNode: aMessageSendNode withColor: color
 ]
