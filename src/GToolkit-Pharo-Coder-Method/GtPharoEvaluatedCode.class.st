@@ -32,11 +32,17 @@ GtPharoEvaluatedCode >> findRelevantContextInStack: aStack [
 ]
 
 { #category : #accessing }
-GtPharoEvaluatedCode >> findSourceAstForContext: aContext [
-	"Return an AST node that corresponds to a given executed code."
+GtPharoEvaluatedCode >> findSourceIntervalForContext: aContext sourceString: aSourceString [
+	"Return source code interval that corresponds to a given executed code."
 
-	<return: #RBMessageNode>
-	^ aContext method sourceNodeForPC: aContext pc
+	<return: #Interval or: nil>
+	| aUsedAst anInterval |
+	aUsedAst := aContext method sourceNodeForPC: aContext pc.
+	anInterval := GtPharoMethodNodeSourceIntervalFinder new
+			methodNode: aUsedAst;
+			sourceString: aSourceString;
+			find.
+	^ anInterval last isZero ifTrue: [ nil ] ifFalse: [ anInterval ]
 ]
 
 { #category : #printing }
