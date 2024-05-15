@@ -38,7 +38,7 @@ GtPharoEvaluatedCode >> findSourceIntervalForContext: aContext sourceString: aSo
 	<return: #Interval or: nil>
 	| aUsedAst anInterval |
 	aUsedAst := aContext method sourceNodeForPC: aContext pc.
-	anInterval := SmaCCMethodNodeSourceIntervalFinder new
+	anInterval := GtPharoMethodNodeSourceIntervalFinder new
 			methodNode: aUsedAst;
 			sourceString: aSourceString;
 			find.
