@@ -1,9 +1,6 @@
 Class {
 	#name : #GtJob,
 	#superclass : #Job,
-	#instVars : [
-		'announcer'
-	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
