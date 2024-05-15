@@ -7,7 +7,7 @@ RBRefactoryChange >> gtCompilationJob [
 
 { #category : #'*GToolkit-Pharo-Coder' }
 RBRefactoryChange >> gtCompilationJobWithProgress: aBlock [
-	^ GtJob
+	^ (GtJob
 		block: [ :job | 
 			GtRefactoryChangeManager instance
 				ignoreChangesWhile: [ | totalCount current |
@@ -19,7 +19,8 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock [
 						addUndo: (self
 								executeNotifying: [ current := current + 1 min: totalCount.
 									job currentValue: current.
-									aBlock cull: current / totalCount ]) ] ]
+									aBlock cull: current / totalCount ]) ] ])
+		announcer: Announcer new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
