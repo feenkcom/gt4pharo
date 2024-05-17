@@ -15,8 +15,16 @@ Class {
 		'collector',
 		'definitions'
 	],
+	#classInstVars : [
+		'pragmaCollector'
+	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
+
+{ #category : #accessing }
+GtPharoMethodPasswordStyler class >> cleanUp: aggressive [
+	pragmaCollector := nil
+]
 
 { #category : #'gt - extensions' }
 GtPharoMethodPasswordStyler class >> gtSelectorsFor: aView [
@@ -29,6 +37,21 @@ GtPharoMethodPasswordStyler class >> gtSelectorsFor: aView [
 		  priority: 30;
 		  object: [ self new ];
 		  view: #gtSelectorsFor:
+]
+
+{ #category : #accessing }
+GtPharoMethodPasswordStyler class >> newPragmaCollector [
+	| aCollector |
+	aCollector := PragmaCollector
+			selectors: #(#gtMethodPassword)
+			filter: [ :aPragma | aPragma methodClass = self and: [ aPragma methodSelector numArgs = 0 ] ].
+	aCollector reset.
+	^ aCollector
+]
+
+{ #category : #accessing }
+GtPharoMethodPasswordStyler class >> pragmaCollector [
+	^ pragmaCollector ifNil: [ pragmaCollector := self newPragmaCollector ]
 ]
 
 { #category : #comparing }
@@ -68,19 +91,13 @@ GtPharoMethodPasswordStyler >> hash [
 
 { #category : #initialization }
 GtPharoMethodPasswordStyler >> initialize [
-
 	super initialize.
 
-	collector := PragmaCollector
-		             selectors: #( #gtMethodPassword )
-		             filter: [ :aPragma | 
-			             aPragma methodClass = self class and: [ 
-				             aPragma methodSelector numArgs = 0 ] ].
-	collector announcer
+	collector := self class pragmaCollector.
+	collector announcer weak
 		when: PragmaCollectorReset , PragmaAnnouncement
 		send: #onPragmaCollectorChanged:
-		to: self.
-	collector reset
+		to: self
 ]
 
 { #category : #'private - announcement handling' }
@@ -94,6 +111,11 @@ GtPharoMethodPasswordStyler >> password [
 
 	<gtMethodPassword>
 	^ self registerSelector: #password: position: 1
+]
+
+{ #category : #accessing }
+GtPharoMethodPasswordStyler >> pragmaCollector [
+	^ self class pragmaCollector
 ]
 
 { #category : #convenience }
