@@ -2,7 +2,8 @@ Extension { #name : #TFPool }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
 TFPool >> returnOne: anObject [
-
+	<gtPharoPatch: #Pharo>
+	
 	mutex critical: [ 
 		| index |
 		index := pointer - 1. 

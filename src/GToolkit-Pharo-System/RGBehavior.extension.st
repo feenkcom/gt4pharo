@@ -2,6 +2,7 @@ Extension { #name : #RGBehavior }
 
 { #category : #'*GToolkit-Pharo-System' }
 RGBehavior >> inheritsFrom: aClass [ 
+	<gtPharoPatch: #Pharo>
 	"Answer whether the argument, aClass, is on the receiver's superclass 
 	chain."
 	| aSuperclass |
@@ -22,5 +23,7 @@ RGBehavior >> inheritsFrom: aClass [
 
 { #category : #'*GToolkit-Pharo-System' }
 RGBehavior >> subclasses [
+	<gtPharoPatch: #Pharo>
+	
 	^ self backend forBehavior subclassesFor: self
 ]

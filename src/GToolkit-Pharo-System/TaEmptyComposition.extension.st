@@ -2,6 +2,8 @@ Extension { #name : #TaEmptyComposition }
 
 { #category : #'*GToolkit-Pharo-System' }
 TaEmptyComposition >> asRingMinimalDefinitionIn: anRGEnvironment [
+	<gtPharoPatch: #Pharo>
+	
 	^ anRGEnvironment backend
 		definitionFor: self
 		ifAbsentRegister: [
