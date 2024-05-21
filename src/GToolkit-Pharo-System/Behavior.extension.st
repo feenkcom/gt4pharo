@@ -15,6 +15,7 @@ Behavior >> handleFailingBasicNew: sizeRequested [
 	 enough memory available. Essential. See Object documentation whatIsAPrimitive."
 
 	<primitive: 71>
+	<gtPharoPatch: #Pharo>
 	| bytesRequested |
 	bytesRequested := self byteSizeOfInstanceOfSize: sizeRequested.
 	^Smalltalk garbageCollect < bytesRequested ifTrue:
