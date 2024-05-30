@@ -78,11 +78,11 @@ GtMoveMethodRefactoring >> isExpression [
 ]
 
 { #category : #accessing }
-GtMoveMethodRefactoring >> moveToClasses [
-	^ moveToClasses
+GtMoveMethodRefactoring >> movedSelector [
+	^ parseTree selector
 ]
 
 { #category : #accessing }
-GtMoveMethodRefactoring >> movedSelector [
-	^ parseTree selector
+GtMoveMethodRefactoring >> moveToClasses [
+	^ moveToClasses
 ]
