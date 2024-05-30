@@ -185,6 +185,13 @@ GtRefactoringsPreviewButton >> errorMessages [
 ]
 
 { #category : #initialization }
+GtRefactoringsPreviewButton >> executedRefactorings [
+	^ executedRefactorings
+		ifNil: [ self executeRefactorings.
+			executedRefactorings ]
+]
+
+{ #category : #initialization }
 GtRefactoringsPreviewButton >> executeRefactorings [
 	errorMessages := OrderedCollection new.
 	notificationMessages := OrderedCollection new.
@@ -205,13 +212,6 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 				do: [ :ex | 
 					errorMessages add: ex messageBlock.
 					ex return ] ]
-]
-
-{ #category : #initialization }
-GtRefactoringsPreviewButton >> executedRefactorings [
-	^ executedRefactorings
-		ifNil: [ self executeRefactorings.
-			executedRefactorings ]
 ]
 
 { #category : #actions }

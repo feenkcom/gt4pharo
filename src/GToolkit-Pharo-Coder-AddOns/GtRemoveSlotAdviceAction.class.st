@@ -2,8 +2,7 @@ Class {
 	#name : #GtRemoveSlotAdviceAction,
 	#superclass : #GtAdviceAction,
 	#instVars : [
-		'slot',
-		'class'
+		'slot'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
@@ -13,11 +12,6 @@ GtRemoveSlotAdviceAction class >> remove: aSlot [
 	^(self new)
 		slot: aSlot;
 		yourself
-]
-
-{ #category : #'instace creation' }
-GtRemoveSlotAdviceAction >> class: aClass [
-	class := aClass
 ]
 
 { #category : #accessing }

@@ -29,6 +29,11 @@ GtListAdvice >> initialize [
 	compute := [ #() ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtListAdvice >> refresh [
+	items := nil
+]
+
 { #category : #accessing }
 GtListAdvice >> result [
 	^ items ifNil: [ items := compute value ]

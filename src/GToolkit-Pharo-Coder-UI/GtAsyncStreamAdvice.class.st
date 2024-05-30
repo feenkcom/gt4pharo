@@ -30,6 +30,11 @@ GtAsyncStreamAdvice >> initialize [
 ]
 
 { #category : #accessing }
+GtAsyncStreamAdvice >> refresh [
+	stream := nil
+]
+
+{ #category : #accessing }
 GtAsyncStreamAdvice >> result [
 	stream ifNil: [ stream := compute value cached ].
 	^ stream asyncSimilarCopy
