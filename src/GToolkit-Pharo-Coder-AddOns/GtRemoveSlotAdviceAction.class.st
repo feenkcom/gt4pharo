@@ -9,10 +9,9 @@ Class {
 }
 
 { #category : #'instace creation' }
-GtRemoveSlotAdviceAction class >> remove: aSlot in: aClass [
-	^ self new
+GtRemoveSlotAdviceAction class >> remove: aSlot [
+	^(self new)
 		slot: aSlot;
-		class: aClass;
 		yourself
 ]
 
@@ -23,12 +22,13 @@ GtRemoveSlotAdviceAction >> class: aClass [
 
 { #category : #accessing }
 GtRemoveSlotAdviceAction >> defaultTitle [
-	^ ('Remove ' , slot name, ' in ' , class name) asRopedText
+	^ ('Remove ' , slot name, ' in ' , slot owningClass name) asRopedText
 ]
 
 { #category : #executing }
 GtRemoveSlotAdviceAction >> executeOn: anElement [
-	(RBRemoveInstanceVariableRefactoring remove:  slot from: class) execute
+	(RBRemoveInstanceVariableRefactoring remove: slot name from: slot owningClass)
+		execute
 ]
 
 { #category : #initialization }

@@ -51,5 +51,5 @@ Class >> gtSlotNotReferenced: aGtAdvice [
 		action: 
 				[:each |
 				(self allSlots includes: each)
-					ifTrue: [GtRemoveSlotAdviceAction remove: each in: self]]
+					ifTrue: [GtRemoveSlotAdviceAction remove: each]]
 ]
