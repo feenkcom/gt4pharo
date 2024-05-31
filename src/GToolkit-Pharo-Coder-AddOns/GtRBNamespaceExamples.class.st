@@ -5,6 +5,25 @@ Class {
 }
 
 { #category : #accessing }
+GtRBNamespaceExamples >> convertToSiblingRefactoring [
+	<gtExample>
+	| model ref allChanges |
+	model := GtRBNamespace new.
+	ref := RBChildrenToSiblingsRefactoring
+			model: model
+			name: #Asdfdsa
+			class: RBNamespace
+			subclasses: {GtRBNamespace}.
+	ref primitiveExecute.
+	allChanges := model changes deepCollectAsSet: #changes.
+	self
+		assert: (allChanges
+				anySatisfy: [ :each | (each isKindOf: RBCommentChange) and: [ each comment isNil ] ])
+				not.
+	^ model
+]
+
+{ #category : #accessing }
 GtRBNamespaceExamples >> implementersOfPrintOn [
 	<gtExample>
 	| model implementers |
