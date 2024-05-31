@@ -81,6 +81,15 @@ GtRBNamespace >> createNewClassFor: aBehavior [
 ]
 
 { #category : #accessing }
+GtRBNamespace >> defineClass: aString withComment: aCommentString [
+	| change newClass |
+	change := self defineClass: aString.
+	newClass := self classNamed: change changeClassName.
+	aCommentString ifNotNil: [ newClass comment: aCommentString ].
+	^ change
+]
+
+{ #category : #accessing }
 GtRBNamespace >> privateImplementorsOf: aSelector [
 	| implementers |
 	implementers := Set new.
