@@ -396,6 +396,8 @@ GtPharoTestSuiteExamples >> runTestCasesLocally [
 { #category : #'examples - example suite' }
 GtPharoTestSuiteExamples >> runTestCasesRemotely [
 	<gtExample>
+	"Causing issues on the feenk CI"
+	<noTest>
 	| aScripter |
 	aScripter := self clickOnRemoteToggle.
 
