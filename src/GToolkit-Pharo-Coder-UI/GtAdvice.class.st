@@ -87,8 +87,9 @@ GtAdvice >> buildActions: adviceActions in: anElement for: aButton [
 								do: [ :anEvent | 
 									anEvent consumed: true.
 									each executeOn: aButton.
+									self refresh.
 									aButton fireEvent: BrDropdownHideWish new.
-									aButton fireEvent: BrContextMenuHideWish new ];
+									aButton fireEvent: BrContextMenuHideWish new];
 							addChild: (BrLabel new
 									aptitude: BrGlamorousLabelAptitude;
 									text: each title glamorousCodeSmallSize;
@@ -204,6 +205,11 @@ GtAdvice >> priority [
 { #category : #accessing }
 GtAdvice >> priority: anInteger [
 	priority := anInteger
+]
+
+{ #category : #accessing }
+GtAdvice >> refresh [
+	
 ]
 
 { #category : #accessing }

@@ -40,3 +40,16 @@ Class >> gtNotReferenced: aGtAdvice [
 		compute: [ self gtIsReferenced ifFalse: [ self ] ];
 		action: [ :class | class isObsolete ifFalse: [ GtRemoveClassAdviceAction remove: class ] ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+Class >> gtSlotNotReferenced: aGtAdvice [
+	<gtAdvice>
+	^(aGtAdvice list)
+		priority: 30;
+		description: [:each | 'Slot is not referenced' asRopedText];
+		compute: [self allUnreferencedInstanceVariables];
+		action: 
+				[:each |
+				(self allSlots includes: each)
+					ifTrue: [GtRemoveSlotAdviceAction remove: each]]
+]
