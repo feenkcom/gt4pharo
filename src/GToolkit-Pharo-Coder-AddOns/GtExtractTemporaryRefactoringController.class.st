@@ -38,21 +38,6 @@ GtExtractTemporaryRefactoringController >> refactoringName [
 	^ 'Create temporary from ' , node source
 ]
 
-{ #category : #private }
-GtExtractTemporaryRefactoringController >> safeTemporaryName [
-	| name index found ast |
-	name := '_'.
-	index := 0.
-	ast := self ast.
-	[ found := false.
-	ast nodesDo: [ :each | (each defines: name) ifTrue: [ found := true ] ].
-	found or: [ (self behavior allInstVarNames includes: name) or: [ self behavior allClassVarNames includes: name asSymbol ] ] ]
-		whileTrue:
-			[ name := 't' , index printString.
-			index := index + 1 ].
-	^ name
-]
-
 { #category : #executing }
 GtExtractTemporaryRefactoringController >> safelyExecute [
 	| refactoring model |
@@ -69,6 +54,21 @@ GtExtractTemporaryRefactoringController >> safelyExecute [
 					action
 						when: GtRenameActionAnnouncement
 						do: [ :ann | ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ] ] ]
+]
+
+{ #category : #private }
+GtExtractTemporaryRefactoringController >> safeTemporaryName [
+	| name index found ast |
+	name := '_'.
+	index := 0.
+	ast := self ast.
+	[ found := false.
+	ast nodesDo: [ :each | (each defines: name) ifTrue: [ found := true ] ].
+	found or: [ (self behavior allInstVarNames includes: name) or: [ self behavior allClassVarNames includes: name asSymbol ] ] ]
+		whileTrue:
+			[ name := 't' , index printString.
+			index := index + 1 ].
+	^ name
 ]
 
 { #category : #accessing }

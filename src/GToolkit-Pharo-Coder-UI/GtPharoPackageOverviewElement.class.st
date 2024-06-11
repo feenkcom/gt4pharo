@@ -109,14 +109,6 @@ GtPharoPackageOverviewElement >> buildPackageTagsIn: aContainer [
 		stream: self metadataStream)
 ]
 
-{ #category : #'private - utilities' }
-GtPharoPackageOverviewElement >> classGroupForStream: aStream named: aName [
-	^ self
-		behaviorGroupForStream: aStream
-		named: aName
-		ofType: 'classes'
-]
-
 { #category : #'private - streams' }
 GtPharoPackageOverviewElement >> classesAndTraitsStream [
 	^ AsyncPackageBehaviorsStream forPackage: package
@@ -126,6 +118,14 @@ GtPharoPackageOverviewElement >> classesAndTraitsStream [
 GtPharoPackageOverviewElement >> classesStream [
 	^ self classesAndTraitsStream
 		select: [ :eachBehavior | eachBehavior isClass ]
+]
+
+{ #category : #'private - utilities' }
+GtPharoPackageOverviewElement >> classGroupForStream: aStream named: aName [
+	^ self
+		behaviorGroupForStream: aStream
+		named: aName
+		ofType: 'classes'
 ]
 
 { #category : #'private - instance creation' }

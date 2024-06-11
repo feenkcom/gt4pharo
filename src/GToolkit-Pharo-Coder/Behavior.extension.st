@@ -4,14 +4,16 @@ Extension { #name : #Behavior }
 Behavior >> gtAdviceDefinitionsFor: aView [
 	<gtView>
 	<gtClassView>
-	^ aView forward
+	^(aView forward)
 		title: 'Advice definitions';
 		tooltip: 'The methods that define custom advices for the object';
 		priority: 100;
-		object: [ 
-			(GtSearchMethodsInClassFilter new 
-					forClass: self;
-					includeSuperclass: true) & 
-					#gtAdvice gtPragmas];
+		object: 
+				[((GtSearchMethodsInClassFilter new)
+					forClass: self class;
+					includeSuperclass: true) | ((GtSearchMethodsInClassFilter new)
+								forClass: self;
+								includeSuperclass: true)
+					& #gtAdvice gtPragmas];
 		view: #gtItemsFor:
 ]

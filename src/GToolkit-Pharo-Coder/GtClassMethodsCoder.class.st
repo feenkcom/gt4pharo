@@ -42,11 +42,6 @@ GtClassMethodsCoder >> addNewCoder [
 	^ aCoder
 ]
 
-{ #category : #accessing }
-GtClassMethodsCoder >> classOrMetaClass [
-	^ class
-]
-
 { #category : #private }
 GtClassMethodsCoder >> classesFilter [
 	| filter |
@@ -59,6 +54,11 @@ GtClassMethodsCoder >> classesFilter [
 				ifTrue: [ classFilter ]
 				ifFalse: [ filter | classFilter ] ].
 	^ filter
+]
+
+{ #category : #accessing }
+GtClassMethodsCoder >> classOrMetaClass [
+	^ class
 ]
 
 { #category : #accessing }
@@ -85,17 +85,17 @@ GtClassMethodsCoder >> combinedFilter [
 			[ :filter | combined ifNil: [ filter ] ifNotNil: [ filter & combined ] ]
 ]
 
+{ #category : #testing }
+GtClassMethodsCoder >> filteredClass: aBehavior [
+	^ filteredClasses includes: aBehavior
+]
+
 { #category : #elements }
 GtClassMethodsCoder >> filterTypes [
 	^ GtPhlowViewsCollector new
 		fromObject: self;
 		pragmaName: #gtFilterTypes;
 		collect
-]
-
-{ #category : #testing }
-GtClassMethodsCoder >> filteredClass: aBehavior [
-	^ filteredClasses includes: aBehavior
 ]
 
 { #category : #initialize }
