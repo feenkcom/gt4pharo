@@ -75,14 +75,6 @@ TGtPharoWithSelectedTagViewModel >> onPreviousSelectedTagViewModelUnset: aPrevio
 ]
 
 { #category : #'api - selected tag view model' }
-TGtPharoWithSelectedTagViewModel >> selectedTagViewModel [
-	<return: #GtPharoTagNavigationViewModel>
-	<propertyGetter: #selectedTagViewModel>
-
-	^ selectedTagViewModel
-]
-
-{ #category : #'api - selected tag view model' }
 TGtPharoWithSelectedTagViewModel >> selectTagViewModel: aNewSelectedTagViewModel [
 	<propertySetter: #selectedTagViewModel>
 
@@ -98,4 +90,12 @@ TGtPharoWithSelectedTagViewModel >> selectTagViewModel: aNewSelectedTagViewModel
 	selectedTagViewModel := aNewSelectedTagViewModel.
 	self onNewSelectedTagViewModelSet: aNewSelectedTagViewModel.
 	self notifySelectedTagViewModelChanged
+]
+
+{ #category : #'api - selected tag view model' }
+TGtPharoWithSelectedTagViewModel >> selectedTagViewModel [
+	<return: #GtPharoTagNavigationViewModel>
+	<propertyGetter: #selectedTagViewModel>
+
+	^ selectedTagViewModel
 ]

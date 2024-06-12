@@ -11,13 +11,13 @@ Class {
 }
 
 { #category : #accessing }
-GtRefactoringsElement >> applyRefactorings [
-	^ changesElement applyChanges
+GtRefactoringsElement >> applyRefactoringWithProgress: aBlock [
+	^ changesElement applyChangesWithProgress: aBlock
 ]
 
 { #category : #accessing }
-GtRefactoringsElement >> applyRefactoringWithProgress: aBlock [
-	^ changesElement applyChangesWithProgress: aBlock
+GtRefactoringsElement >> applyRefactorings [
+	^ changesElement applyChanges
 ]
 
 { #category : #accessing }

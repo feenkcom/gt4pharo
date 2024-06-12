@@ -75,14 +75,6 @@ TGtPharoWithSelectedPackageViewModel >> onPreviousSelectedPackageViewModelUnset:
 ]
 
 { #category : #'api - selected package view model' }
-TGtPharoWithSelectedPackageViewModel >> selectedPackageViewModel [
-	<return: #GtPharoPackageNavigationViewModel>
-	<propertyGetter: #selectedPackageViewModel>
-
-	^ selectedPackageViewModel
-]
-
-{ #category : #'api - selected package view model' }
 TGtPharoWithSelectedPackageViewModel >> selectPackageViewModel: aNewSelectedPackageViewModel [
 	<propertySetter: #selectedPackageViewModel>
 
@@ -98,4 +90,12 @@ TGtPharoWithSelectedPackageViewModel >> selectPackageViewModel: aNewSelectedPack
 	selectedPackageViewModel := aNewSelectedPackageViewModel.
 	self onNewSelectedPackageViewModelSet: aNewSelectedPackageViewModel.
 	self notifySelectedPackageViewModelChanged
+]
+
+{ #category : #'api - selected package view model' }
+TGtPharoWithSelectedPackageViewModel >> selectedPackageViewModel [
+	<return: #GtPharoPackageNavigationViewModel>
+	<propertyGetter: #selectedPackageViewModel>
+
+	^ selectedPackageViewModel
 ]

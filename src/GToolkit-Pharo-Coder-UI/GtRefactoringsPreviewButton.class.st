@@ -45,11 +45,11 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 									enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
 					then: [ :ignore | 
 						running := false.
-						self
-							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
 						progressContainer
 							enqueueTask: [ theAcceptButton enable.
-								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask ]
+								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask.
+						self
+							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ]
 					otherwise: [ :anError | 
 						| aDebugElement |
 						running := false.
@@ -185,13 +185,6 @@ GtRefactoringsPreviewButton >> errorMessages [
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewButton >> executedRefactorings [
-	^ executedRefactorings
-		ifNil: [ self executeRefactorings.
-			executedRefactorings ]
-]
-
-{ #category : #initialization }
 GtRefactoringsPreviewButton >> executeRefactorings [
 	errorMessages := OrderedCollection new.
 	notificationMessages := OrderedCollection new.
@@ -212,6 +205,13 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 				do: [ :ex | 
 					errorMessages add: ex messageBlock.
 					ex return ] ]
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewButton >> executedRefactorings [
+	^ executedRefactorings
+		ifNil: [ self executeRefactorings.
+			executedRefactorings ]
 ]
 
 { #category : #actions }

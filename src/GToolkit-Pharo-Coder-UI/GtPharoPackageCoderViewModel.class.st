@@ -78,14 +78,6 @@ GtPharoPackageCoderViewModel >> isPharoPackageCoderViewModel [
 ]
 
 { #category : #'api - testing' }
-GtPharoPackageCoderViewModel >> isPharoPackagesCoderViewModel [
-	"Return true if this is a view model of Packages, false otherwise"
-	<return: #Boolean>
-
-	^ false
-]
-
-{ #category : #'api - testing' }
 GtPharoPackageCoderViewModel >> isPharoPackageTagCoderViewModel [
 	"Return true if this is a view model of PackageTag, false otherwise"
 	<return: #Boolean>
@@ -96,6 +88,14 @@ GtPharoPackageCoderViewModel >> isPharoPackageTagCoderViewModel [
 { #category : #'api - testing' }
 GtPharoPackageCoderViewModel >> isPharoPackageTagsCoderViewModel [
 	"Return true if this is a view model of PackageTags, false otherwise"
+	<return: #Boolean>
+
+	^ false
+]
+
+{ #category : #'api - testing' }
+GtPharoPackageCoderViewModel >> isPharoPackagesCoderViewModel [
+	"Return true if this is a view model of Packages, false otherwise"
 	<return: #Boolean>
 
 	^ false
