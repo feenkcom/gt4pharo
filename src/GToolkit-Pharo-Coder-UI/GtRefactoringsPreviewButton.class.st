@@ -45,11 +45,11 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 									enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
 					then: [ :ignore | 
 						running := false.
-						self
-							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
 						progressContainer
 							enqueueTask: [ theAcceptButton enable.
-								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask ]
+								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask.
+						self
+							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ]
 					otherwise: [ :anError | 
 						| aDebugElement |
 						running := false.
