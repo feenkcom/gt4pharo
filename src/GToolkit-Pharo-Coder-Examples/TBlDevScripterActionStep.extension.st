@@ -4,7 +4,7 @@ Extension { #name : #TBlDevScripterActionStep }
 TBlDevScripterActionStep >> methodCoders [
 	^ self
 		addStep: (GtPharoMethodCodersStep new
-				label: 'Pharo method coder';
+				label: 'Pharo method coders';
 				referenceSender)
 ]
 
