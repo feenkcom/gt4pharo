@@ -50,6 +50,23 @@ GtMethodsCoderExamples >> gtExamplesFilter [
 	^ #gtExample gtPragmas
 ]
 
+{ #category : #accessing }
+GtMethodsCoderExamples >> inheritedMethods [
+	<gtExample>
+	| coders associationMethod compilationTargets |
+	coders := GtPharoStreamingMethodsCoder
+			forBehavior: GtPharoStreamingMethodsCoder.
+	coders additionalFilters: OrderedCollection new.
+	associationMethod := (coders codersStream
+			select: [ :each | each selector = #'->' and: [ each behavior = Object ] ])
+			toArray wait.
+	self assert: associationMethod size equals: 1.
+	compilationTargets := associationMethod first methodBehavior asyncSubclasses
+			toArray wait.
+	self assert: (compilationTargets includes: GtPharoStreamingMethodsCoder).
+	^ coders
+]
+
 { #category : #'examples - filters' }
 GtMethodsCoderExamples >> instanceVariableFilter [
 	<gtExample>

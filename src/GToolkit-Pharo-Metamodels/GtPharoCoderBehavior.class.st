@@ -10,6 +10,16 @@ GtPharoCoderBehavior class >> explicit: aBehavior [
 ]
 
 { #category : #'instance creation' }
+GtPharoCoderBehavior class >> from: subclass to: implementingClass [
+	(subclass == implementingClass or: [ subclass == UndefinedObject ])
+		ifTrue: [ ^ self explicit: implementingClass ].
+	^ GtPharoCoderSubclassBehavior new
+		subclassBehavior: (self explicit: subclass);
+		coderBehavior: (self explicit: implementingClass);
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtPharoCoderBehavior class >> named: aBehaviorName [
 	^ GtPharoCoderNamedBehavior new behaviorName: aBehaviorName
 ]
@@ -47,6 +57,11 @@ GtPharoCoderBehavior >> affectedByClassRemoved: aClassRemovedAnnouncement [
 { #category : #testing }
 GtPharoCoderBehavior >> affectedByClassRenamed: aClassRenamedAnnouncement [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtPharoCoderBehavior >> asyncSubclasses [
+	^ #() asAsyncStream
 ]
 
 { #category : #accessing }
