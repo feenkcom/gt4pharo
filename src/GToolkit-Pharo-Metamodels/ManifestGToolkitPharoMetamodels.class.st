@@ -17,6 +17,7 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'Collections-Sequenceable'.
 		'Collections-Strings'.
 		'Collections-Unordered'.
+		'Futures'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-System'.
 		'GToolkit-Pharo-GtRefactorings'.

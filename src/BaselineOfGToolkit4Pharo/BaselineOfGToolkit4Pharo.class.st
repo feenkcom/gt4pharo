@@ -30,6 +30,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #('GToolkit-Pharo-BaseRefactorings'). ];
 			package: 'GToolkit-Pharo-Metamodels' with: [
 				spec requires: #(
+					'Futures'
 					'GToolkit-Pharo-GtRefactorings'
 					'GToolkit-Pharo-Parser'
 					'GToolkit-Pharo-System'). ];
