@@ -16,13 +16,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.95/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1653/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1654/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1279/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1280/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.6.995/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.6.996/src' ].
 		spec
 			baseline: 'SmaCCRuntime' with: [
 				spec repository: 'github://j-brant/SmaCC:v3.0.57' ].
@@ -51,7 +51,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 		spec package: 'GToolkit-Pharo-GtRefactorings' with: [
 			spec requires: #('GToolkit-Pharo-BaseRefactorings') ].
 		spec package: 'GToolkit-Pharo-Metamodels' with: [
-			spec requires: #('GToolkit-Pharo-GtRefactorings' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
+			spec requires: #('Futures' 'GToolkit-Pharo-GtRefactorings' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Coder-Method' with: [
 			spec requires: #('GToolkitCoder' 'GToolkitCompleter' 'GToolkitExamplesEngine' 'GToolkit-Pharo-Completer' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-Parser' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite') ].
 		spec package: 'GToolkit-Pharo-Coder' with: [
