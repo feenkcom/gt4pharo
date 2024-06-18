@@ -38,6 +38,7 @@ GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 	
 	^ ({ 
 		contextualBehavior asAsyncFuture asAsyncStream.
+		self coderModel methodBehavior asyncSubclasses.
 		self behavior asAsyncFuture asAsyncStream.
 		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ]) asAsyncFuture asAsyncStream.
 	

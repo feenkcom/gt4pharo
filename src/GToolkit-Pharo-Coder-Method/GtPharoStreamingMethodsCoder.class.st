@@ -83,13 +83,12 @@ GtPharoStreamingMethodsCoder >> newCoderCacheKeyFor: aCompiledMethod [
 { #category : #'private - instance creation' }
 GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
 	| aMethodCoder |
-	
-	aMethodCoder := GtPharoMethodCoder forMethod: aCompiledMethod.
+	aMethodCoder := GtPharoMethodCoder forMethod: aCompiledMethod in: behavior.
 	aMethodCoder weak
 		when: GtPharoMethodCoderCompiled
 		send: #onPharoMethodCoderCompiled:
 		to: self.
-	
+
 	^ aMethodCoder
 ]
 

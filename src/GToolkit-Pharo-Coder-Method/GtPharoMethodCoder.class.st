@@ -33,6 +33,13 @@ GtPharoMethodCoder class >> forMethod: aCompiledMethod [
 ]
 
 { #category : #'instance creation' }
+GtPharoMethodCoder class >> forMethod: aCompiledMethod in: aBehavior [
+	^ self new
+		forMethod: aCompiledMethod in: aBehavior;
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtPharoMethodCoder class >> forNewMethod: aBehavior [
 	^ self forClass: aBehavior source: ''
 ]
@@ -527,6 +534,20 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
 	self selector: aCompiledMethod selector.
 	self sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
+	self protocol: aCompiledMethod category
+]
+
+{ #category : #initialize }
+GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
+	self
+		methodBehavior: (GtPharoCoderBehavior
+				from: (aCompiledMethod methodClass isClassSide
+						ifTrue: [ aBehavior classSide ]
+						ifFalse: [ aBehavior instanceSide ])
+				to: aCompiledMethod methodClass).
+	self selector: aCompiledMethod selector.
+	self
+		sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
 	self protocol: aCompiledMethod category
 ]
 
