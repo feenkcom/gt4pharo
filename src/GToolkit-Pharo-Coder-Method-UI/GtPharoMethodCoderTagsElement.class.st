@@ -9,7 +9,6 @@ Class {
 	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait',
 	#instVars : [
 		'protocolTag',
-		'traitMethodTag',
 		'classTag'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
@@ -42,10 +41,9 @@ GtPharoMethodCoderTagsElement >> behaviorSideName [
 { #category : #initialization }
 GtPharoMethodCoderTagsElement >> buildTags [	
 	protocolTag := self newProtocolTag.
-	traitMethodTag := self newTraitMethodTag.
 	classTag := self newClassTag.
 
-	^ { traitMethodTag. protocolTag. classTag }
+	^ { protocolTag. classTag }
 ]
 
 { #category : #private }
@@ -182,23 +180,9 @@ GtPharoMethodCoderTagsElement >> newProtocolTag [
 						content: [ self newProtocolPickerList ])
 ]
 
-{ #category : #'private - instance creation' }
-GtPharoMethodCoderTagsElement >> newTraitMethodTag [
-	^ BrButton new
-		beTinySize;
-		disable;
-		aptitude:
-			(BrGlamorousLabelAptitude new
-				foreground: BrGlamorousColors disabledButtonTextColor);
-		action:
-				[ :aButton | self handleTraitMethodTagButtonClick: aButton ];
-		label: '';
-		fitContent
-]
-
 { #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
-	self updateTraitMethodButton
+	
 ]
 
 { #category : #'api - pharo method coder view model' }
@@ -211,7 +195,6 @@ GtPharoMethodCoderTagsElement >> onPharoMethodCoderViewModelChanged [
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#onObjectChangedTemplate'>
 	
 	self updateProtocolButton.
-	self updateTraitMethodButton.
 	self updateBehaviorSideButton
 ]
 
@@ -283,12 +266,4 @@ GtPharoMethodCoderTagsElement >> updateProtocolButton [
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateProtocolButtonLabel [
 	protocolTag label: (self protocolStringFor: pharoMethodCoderViewModel)
-]
-
-{ #category : #'private - update' }
-GtPharoMethodCoderTagsElement >> updateTraitMethodButton [
-	traitMethodTag label: (self traitMethodStringFor: pharoMethodCoderViewModel).
-	pharoMethodCoderViewModel coder isFromTrait
-		ifTrue: [ traitMethodTag enable ]
-		ifFalse: [ traitMethodTag disable ]
 ]
