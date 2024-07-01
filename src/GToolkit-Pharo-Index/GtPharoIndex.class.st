@@ -435,7 +435,8 @@ GtPharoIndex >> installedSendersOf: aSelector [
 
 { #category : #testing }
 GtPharoIndex >> isGlobalVariable: aVariable [
-	^ aVariable isKindOf: GlobalVariable
+	^ (aVariable isKindOf: GlobalVariable) or: [
+		(aVariable isKindOf: UndeclaredVariable) ]
 ]
 
 { #category : #accessing }

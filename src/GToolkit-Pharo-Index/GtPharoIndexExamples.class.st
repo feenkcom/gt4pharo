@@ -116,7 +116,8 @@ GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
 				ifPresent: [ :assoc | assoc value removeFromSystem ].
 			Smalltalk globals
 				associationAt: #GtFoo2
-				ifPresent: [ :assoc | assoc value removeFromSystem ] ].
+				ifPresent: [ :assoc | assoc value removeFromSystem ].
+			Undeclared removeKey: #GtFoo2 ifAbsent: [] ].
 	refs := GtPharoIndex current globalVariableReferencesTo: var.
 	self assert: (refs includes: thisContext method method).
 	self assert: refs size = 1.
