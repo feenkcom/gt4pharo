@@ -67,8 +67,14 @@ GtPharoMethodCoderHeaderElement >> newBehaviorButton [
 	^ BrButton new
 		fitContent;
 		aptitude: (BrGlamorousLabelAptitude new
-			foreground: BrGlamorousColors defaultButtonTextColor;
-			fontSize: 12);
+				foreground: BrGlamorousColors defaultButtonTextColor;
+				glamorousRegularSmallSize)
+				+ (BrStyleCommonAptitude new
+						default: [ :aStyle | 
+							aStyle
+								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+								border: BlBorder empty ];
+						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
 		action: [ self spawnBehavior ]
 ]
 
@@ -84,8 +90,14 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 	^ BrButton new
 		fitContent;
 		aptitude: (BrGlamorousLabelAptitude new
-			foreground: BrGlamorousColors defaultButtonTextColor;
-			fontSize: 12);
+				foreground: BrGlamorousColors defaultButtonTextColor;
+				glamorousRegularSmallSize)
+				+ (BrStyleCommonAptitude new
+						default: [ :aStyle | 
+							aStyle
+								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+								border: BlBorder empty ];
+						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
 		action: [ self spawnPackage ]
 ]
 
