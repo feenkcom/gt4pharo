@@ -10,19 +10,20 @@ GtMessageNotImplementedAdvice >> description [
 ]
 
 { #category : #private }
-GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderModel: coderModel type: type [
+GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderViewModel: coderViewModel type: type [
 	| actions |
 	
 	actions := OrderedCollection new.
 	type
 		ifNotNil: [ actions
-				add: ((GtDefineMethodFixItAction forCoder: coderModel node: aNode)
+				add: ((GtDefineMethodFixItAction forCoder: coderViewModel coderModel node: aNode)
+						coderViewModel: coderViewModel;
 						classOrMetaClass: type) ].
 	actions
 		addAll: (self
 				potentialRenameActionsFor: aNode
 				type: type
-				coderModel: coderModel).
+				coderModel: coderViewModel coderModel).
 	^ actions
 ]
 
@@ -30,9 +31,9 @@ GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderModel: coderMod
 GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode styler: aCriticStyler [
 	^ MessageSend
 		receiver: self
-		selector: #fixItActionsForNode:coderModel:type:
+		selector: #fixItActionsForNode:coderViewModel:type:
 		arguments: {aNode.
-				aCriticStyler coderModel.
+				aCriticStyler coderViewModel.
 				aCriticStyler
 					typeOf: (aNode isMessage
 							ifTrue: [ aNode parent receiver ]

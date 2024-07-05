@@ -104,6 +104,11 @@ GtMethodAdvice >> descriptionWithEditor: anEditorElement andFixItActions: aColle
 ]
 
 { #category : #styling }
+GtMethodAdvice >> elementIdUsing: aCriticStyler [
+	^ GtMethodAdviceElementId indexed: aCriticStyler nextIndex.
+]
+
+{ #category : #styling }
 GtMethodAdvice >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
 ]
@@ -183,6 +188,7 @@ GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 	hoverAttribute := self errorHighlightAttribute.
 	fixItAttribute := GtFixItAttribute new
 			label: self name;
+			elementId: (self elementIdUsing: aCriticStyler);
 			hoverMarker: hoverMarker;
 			hoverAttribute: hoverAttribute;
 			description: self descriptionBlock;
