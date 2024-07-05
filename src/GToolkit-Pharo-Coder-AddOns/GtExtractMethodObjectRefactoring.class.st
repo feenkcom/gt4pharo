@@ -138,19 +138,6 @@ GtExtractMethodObjectRefactoring >> extract: anInterval from: aSelector in: aCla
 ]
 
 { #category : #transforming }
-GtExtractMethodObjectRefactoring >> extractedAst [
-	| source modelClass |
-	modelClass := self modelClass.
-	source := modelClass sourceCodeFor: extractedMethodSelector.
-	^ RBParser parseMethod: source
-]
-
-{ #category : #accessing }
-GtExtractMethodObjectRefactoring >> extractedMethodSelector [
-	^ extractedMethodSelector
-]
-
-{ #category : #transforming }
 GtExtractMethodObjectRefactoring >> extractMethod [
 	| refactoring |
 	refactoring := RBExtractMethodRefactoring
@@ -185,6 +172,19 @@ GtExtractMethodObjectRefactoring >> extractToNewClass [
 			toUse: [ :ref :types :selected | {self methodObjectClass} ];
 		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
 	self performCompositeRefactoring: refactoring
+]
+
+{ #category : #transforming }
+GtExtractMethodObjectRefactoring >> extractedAst [
+	| source modelClass |
+	modelClass := self modelClass.
+	source := modelClass sourceCodeFor: extractedMethodSelector.
+	^ RBParser parseMethod: source
+]
+
+{ #category : #accessing }
+GtExtractMethodObjectRefactoring >> extractedMethodSelector [
+	^ extractedMethodSelector
 ]
 
 { #category : #accessing }

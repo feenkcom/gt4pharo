@@ -2,19 +2,44 @@ Class {
 	#name : #GtDefineMethodFixItAction,
 	#superclass : #GtFixItAction,
 	#instVars : [
-		'classOrMetaClass'
+		'classOrMetaClass',
+		'coderViewModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #executing }
 GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
-	| position |
+	| position aLastIndex anAttribute |
 	position := self attributePosition.
-	(aBrTextEditor text from: position to: position)
-		attributes: {(GtPharoMethodExpanderAttribute
+	
+	"Find an indexed attribute with max. index."
+	aLastIndex := 0.
+	aBrTextEditor text
+		findAttributesSuchThat: [ :eachAttribute | 
+			(eachAttribute isKindOf: GtPharoMethodExpanderAttribute)
+				and: [ eachAttribute id isKindOf: BlElementIndexedId ] ]
+		indicesDo: [ :aStart :aStop :eachAttribute | 
+			aLastIndex := eachAttribute id index max: aLastIndex ].
+	
+	anAttribute := GtPharoMethodExpanderAttribute
 					forClass: classOrMetaClass
-					andSelector: self selector) isExpanded: true}
+					andSelector: self selector.
+	anAttribute 
+		isExpanded: true;
+		id: (GtPharoMethodExpanderId indexed: aLastIndex + 1).
+	coderViewModel ifNotNil: [ 
+		| aBuilder |
+		"Provide bindings and other context to the expandable method coder"
+		aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
+				parentEvaluationContext: coderViewModel compositeVariableBindings;
+				parentSelfObject: coderViewModel selfObject;
+				parentMessage: node;
+				parentExplicitProviderClass: self coderViewModel explicitProviderClass.
+		anAttribute argumentBindingsBuilder: aBuilder ].
+	
+	(aBrTextEditor text from: position to: position)
+		attributes: { anAttribute }
 ]
 
 { #category : #accessing }
@@ -27,6 +52,16 @@ GtDefineMethodFixItAction >> attributePosition [
 { #category : #accessing }
 GtDefineMethodFixItAction >> classOrMetaClass: anObject [
 	classOrMetaClass := anObject
+]
+
+{ #category : #accessing }
+GtDefineMethodFixItAction >> coderViewModel [
+	^ coderViewModel
+]
+
+{ #category : #accessing }
+GtDefineMethodFixItAction >> coderViewModel: anObject [
+	coderViewModel := anObject
 ]
 
 { #category : #private }

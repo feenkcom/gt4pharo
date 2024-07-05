@@ -246,6 +246,21 @@ GtPharoMethodCoderStep >> clickOnPlayAndInspectExampleButton [
 	^ aClickStep
 ]
 
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> methodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
+	| aRootStep |
+	aRootStep := self methodCoder
+			label: 'Embedded method coder';
+			referenceSender;
+			onParentStepTarget: self;
+			// (GtPharoEmbeddedMethodId indexed: anExpanderIndex);
+			onTopMost.
+
+	anInsideBlock value: aRootStep.
+
+	^ aRootStep
+]
+
 { #category : #'steps - checks' }
 GtPharoMethodCoderStep >> privateAssertExpandersCount: aNumber coderElement: aCoderElement [
 	| allCounts missingExpanders extraExpanders unexpectedExpander |

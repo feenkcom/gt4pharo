@@ -8,7 +8,8 @@ Class {
 		'hasRefactoring',
 		'variableBindings',
 		'isDoIt',
-		'advices'
+		'advices',
+		'lastIndex'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
@@ -73,7 +74,8 @@ GtMethodAdviceStyler >> initialize [
 	super initialize.
 	advices := GtMethodAdvice activeCritics.
 	isDoIt := false.
-	isForWorkspace := false
+	isForWorkspace := false.
+	lastIndex := 0.
 ]
 
 { #category : #accessing }
@@ -86,12 +88,21 @@ GtMethodAdviceStyler >> isForWorkspace: aBoolean [
 	isForWorkspace := aBoolean
 ]
 
+{ #category : #accessing }
+GtMethodAdviceStyler >> nextIndex [
+	<return: #Integer>
+	^ lastIndex := (lastIndex ifNil: [ 0 ]) + 1
+]
+
 { #category : #styling }
 GtMethodAdviceStyler >> style: aText ast: theAst [
 	hasRefactoring := nil.
+	lastIndex := 0.
 	variableBindings := self coderViewModel compositeVariableBindings.
 	[ super style: aText ast: theAst ]
-		ensure: [ variableBindings := nil ]
+		ensure: [ 
+			variableBindings := nil. 
+			lastIndex := 0 ]
 ]
 
 { #category : #accessing }
