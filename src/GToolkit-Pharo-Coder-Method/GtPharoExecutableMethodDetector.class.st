@@ -69,8 +69,9 @@ GtPharoExecutableMethodDetector >> isUnaryClassSideMethod [
 { #category : #private }
 GtPharoExecutableMethodDetector >> isUnaryInstanceSideMethod [
 	^ methodCoderViewModel selfObject notNil
-		and: [ methodAst methodNode selector isNotNil
-				and: [ methodAst methodNode selector isUnary ] ]
+		and: [ methodAst methodNode isNotNil
+			and: [ methodAst methodNode selector isNotNil
+					and: [ methodAst methodNode selector isUnary ] ] ]
 ]
 
 { #category : #accessing }
