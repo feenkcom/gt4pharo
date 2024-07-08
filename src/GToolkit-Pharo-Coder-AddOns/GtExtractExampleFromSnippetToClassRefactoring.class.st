@@ -1,5 +1,5 @@
 Class {
-	#name : #GtExtractExampleFromSnippetRefactoring,
+	#name : #GtExtractExampleFromSnippetToClassRefactoring,
 	#superclass : #GtExtractMethodFromInspectorRefactoring,
 	#instVars : [
 		'category',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring class >> extract: anInterval from: aString into: exampleClassName category: aSymbol [
+GtExtractExampleFromSnippetToClassRefactoring class >> extract: anInterval from: aString into: exampleClassName category: aSymbol [
 	^ self new
 		extract: anInterval from: aString;
 		className: exampleClassName;
@@ -18,7 +18,7 @@ GtExtractExampleFromSnippetRefactoring class >> extract: anInterval from: aStrin
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> addSnippetRewritesTo: rewriter [
+GtExtractExampleFromSnippetToClassRefactoring >> addSnippetRewritesTo: rewriter [
 	rewriter
 		replace: 'self `{:node | node parent isMessage and: [node parent selector = #'
 				, newExtractedSelector , ']}'
@@ -26,7 +26,7 @@ GtExtractExampleFromSnippetRefactoring >> addSnippetRewritesTo: rewriter [
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> buildNewSnippetSource [
+GtExtractExampleFromSnippetToClassRefactoring >> buildNewSnippetSource [
 	| ast rewriter |
 	ast := (class methodFor: snippetSelector) ast body.
 	rewriter := RBParseTreeRewriter new.
@@ -40,27 +40,27 @@ GtExtractExampleFromSnippetRefactoring >> buildNewSnippetSource [
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> category [
+GtExtractExampleFromSnippetToClassRefactoring >> category [
 	^ category
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> category: anObject [
+GtExtractExampleFromSnippetToClassRefactoring >> category: anObject [
 	category := anObject
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> className [
+GtExtractExampleFromSnippetToClassRefactoring >> className [
 	^ className
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> className: anObject [
+GtExtractExampleFromSnippetToClassRefactoring >> className: anObject [
 	className := anObject
 ]
 
 { #category : #transforming }
-GtExtractExampleFromSnippetRefactoring >> createNewClassIfNecessary [
+GtExtractExampleFromSnippetToClassRefactoring >> createNewClassIfNecessary [
 	(self model classNamed: className)
 		ifNil: [ (category isNil or: [ category isEmpty ])
 				ifTrue: [ self refactoringError: 'No package specified for new class' ].
@@ -74,18 +74,18 @@ GtExtractExampleFromSnippetRefactoring >> createNewClassIfNecessary [
 ]
 
 { #category : #transforming }
-GtExtractExampleFromSnippetRefactoring >> defaultSuperclass [
+GtExtractExampleFromSnippetToClassRefactoring >> defaultSuperclass [
 	^ Object
 ]
 
 { #category : #initialization }
-GtExtractExampleFromSnippetRefactoring >> extract: anInterval from: aString [
+GtExtractExampleFromSnippetToClassRefactoring >> extract: anInterval from: aString [
 	source := aString.
 	originalInterval := anInterval
 ]
 
 { #category : #transforming }
-GtExtractExampleFromSnippetRefactoring >> finishRefactoring [
+GtExtractExampleFromSnippetToClassRefactoring >> finishRefactoring [
 	| ast |
 	newExtractedSelector isUnary
 		ifFalse: [ ^ GtRefactoringNotification
@@ -97,19 +97,19 @@ GtExtractExampleFromSnippetRefactoring >> finishRefactoring [
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> gtDescription [
+GtExtractExampleFromSnippetToClassRefactoring >> gtDescription [
 	^ 'Extract example method from snippet'
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetRefactoring >> preconditions [
+GtExtractExampleFromSnippetToClassRefactoring >> preconditions [
 	self createNewClassIfNecessary.
 	class := self model classNamed: className.
 	^ super preconditions
 ]
 
 { #category : #transforming }
-GtExtractExampleFromSnippetRefactoring >> replaceSelfReferences [
+GtExtractExampleFromSnippetToClassRefactoring >> replaceSelfReferences [
 	| ast rewriter |
 	ast := (class methodFor: newExtractedSelector) ast.
 	rewriter := RBParseTreeRewriter new.
@@ -119,13 +119,13 @@ GtExtractExampleFromSnippetRefactoring >> replaceSelfReferences [
 ]
 
 { #category : #testing }
-GtExtractExampleFromSnippetRefactoring >> shouldKeepChange: aRBChangeObject [
+GtExtractExampleFromSnippetToClassRefactoring >> shouldKeepChange: aRBChangeObject [
 	^ (aRBChangeObject isKindOf: RBAddClassChange)
 		or: [ super shouldKeepChange: aRBChangeObject ]
 ]
 
 { #category : #transforming }
-GtExtractExampleFromSnippetRefactoring >> transform [
+GtExtractExampleFromSnippetToClassRefactoring >> transform [
 	self createNewClassIfNecessary.
 	super transform.
 	self finishRefactoring.
