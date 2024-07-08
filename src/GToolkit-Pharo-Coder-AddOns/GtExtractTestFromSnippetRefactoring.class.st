@@ -1,6 +1,6 @@
 Class {
 	#name : #GtExtractTestFromSnippetRefactoring,
-	#superclass : #GtExtractExampleFromSnippetRefactoring,
+	#superclass : #GtExtractExampleFromSnippetToClassRefactoring,
 	#classInstVars : [
 		'defaultTestCaseSuperclass'
 	],
