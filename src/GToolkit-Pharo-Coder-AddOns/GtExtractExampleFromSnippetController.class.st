@@ -181,7 +181,6 @@ GtExtractExampleFromSnippetController >> refactoringClass [
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> shouldCreateClass [
 	| refactoring |
-true ifTrue: [^true].
 	^ shouldCreateClass
 		ifNil: [ shouldCreateClass := true.
 			refactoring := GtExtractMethodFromSnippetRefactoring
