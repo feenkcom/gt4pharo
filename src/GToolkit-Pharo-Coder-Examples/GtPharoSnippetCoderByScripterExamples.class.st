@@ -217,6 +217,71 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> extractExample_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder
+					forSource: 'theData := example examplePackage.
+dataGroup := GtPlotterDataGroup new values: theData asOrderedCollection' ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: aSourceEditor text size;
+						select ] ].
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover extract method';
+				onSpaceRoot;
+				// #'snippet-extract-example' ].
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> extractExample_02_execute [
+	<gtExample>
+	| aScripter |
+	aScripter := self extractExample_01_setup.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				// #'snippet-extract-example' ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source code modified';
+				onModel;
+				satisfies: #isModified ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Verify extractring to example variable';
+				// GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: 'example _' ].
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> extractMethodFromInspector_01_setup [
 	<gtExample>
 	| aScripter |
