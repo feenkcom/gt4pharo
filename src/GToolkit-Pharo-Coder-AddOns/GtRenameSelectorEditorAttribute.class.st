@@ -2,14 +2,14 @@ Class {
 	#name : #GtRenameSelectorEditorAttribute,
 	#superclass : #GtRenameEditorAttribute,
 	#instVars : [
-		'focusedIndex'
+		'focusedIndex',
+		'editor'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #accessing }
 GtRenameSelectorEditorAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	| editor |
 	editor := super doAffect: aTBrTextEditorTextualPiece in: anEditorElement.
 	editor
 		when: BlFocusInEvent
@@ -25,4 +25,10 @@ GtRenameSelectorEditorAttribute >> focusedIndex [
 { #category : #accessing }
 GtRenameSelectorEditorAttribute >> focusedIndex: anObject [
 	focusedIndex := anObject
+]
+
+{ #category : #accessing }
+GtRenameSelectorEditorAttribute >> resetText: aString [
+	self text: aString.
+	editor enqueueTask: (BlTaskAction new action: [ editor text: aString ])
 ]
