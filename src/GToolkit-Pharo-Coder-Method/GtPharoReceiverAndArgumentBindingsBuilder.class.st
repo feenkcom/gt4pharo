@@ -46,6 +46,12 @@ GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVar
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> build [
+	"Likely related to the https://github.com/feenkcom/gtoolkit/issues/3862
+	changes. We need to review whether we can pass context information also
+	to cases like 
+		`self announcer weak when: Announcement send: #onAnnouncement: to: self`."
+	(parentMessage respondsTo: #arguments) ifFalse: [ ^ self ].
+
 	self buildLocalBindings.
 	self buildReceiver.
 	self buildReceiverBehavior.
