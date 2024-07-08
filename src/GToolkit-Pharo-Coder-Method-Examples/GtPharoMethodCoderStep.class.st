@@ -169,6 +169,17 @@ GtPharoMethodCoderStep >> assertPlayAndInspectActionNotExists [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertPrintItString: aString [
+	^ self assert
+		label: ('Assert print-it is {1}' format: { aString });
+		value: [ :aLabel | aLabel text asString ] equals: aString;
+		onParentStepTarget: self;
+		// GtSourceCoderEditorId;
+		// GtCoderPrintStringElementId;
+		onTopMost.
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertSelfObjectIs: anObject [
 	| anAssertStep |
 	anAssertStep := self assert
@@ -261,6 +272,16 @@ GtPharoMethodCoderStep >> methodCoderExpander: anExpanderIndex insideDo: anInsid
 	^ aRootStep
 ]
 
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> printIt [
+	^ self shortcut
+		label: 'Print result';
+		combination: BlKeyCombination primaryP;
+		onParentStepTarget: self;
+		// GtSourceCoderEditorId;
+		onTopMost
+]
+
 { #category : #'steps - checks' }
 GtPharoMethodCoderStep >> privateAssertExpandersCount: aNumber coderElement: aCoderElement [
 	| allCounts missingExpanders extraExpanders unexpectedExpander |
@@ -305,6 +326,22 @@ GtPharoMethodCoderStep >> privateAssertExpandersCount: aNumber coderElement: aCo
 		assert: unexpectedExpander all size = 0
 		description: [ 'There is at least one more expander compared to {1} expected expanders'
 				format: {aNumber} ]
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> select: aString from: aFromIndex to: aToIndex [
+	^ self do
+		referenceSender;
+		label: ('Select text "{3}" from {1} to {2}'
+				format: {aFromIndex. aToIndex. aString});
+		block: [ :anEditor | 
+			anEditor selecter
+				from: aFromIndex to: aToIndex;
+				select.
+			self assert: anEditor editor selectedText asString equals: aString ];
+		onParentStepTarget: self;
+		// GtSourceCoderEditorId;
+		onTopMost
 ]
 
 { #category : #'steps - interactions' }
