@@ -137,12 +137,12 @@ GtPharoReceiverAndArgumentBindingsBuilder >> compiledMethod: anObject [
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext [
-	^ parentEvaluationContext
+	^ self parentEvaluationContext
 ]
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext: anObject [
-	parentEvaluationContext := anObject
+	self parentEvaluationContext: anObject
 ]
 
 { #category : #'accessing - results' }
@@ -157,7 +157,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> localBindings [
 ]
 
 { #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentEvaluationContext [
+	<return: #GtPharoSourceCoderEvaluationContext>
+	^ parentEvaluationContext
+]
+
+{ #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentEvaluationContext: anObject [
+	self assert: [ anObject isKindOf: GtPharoSourceCoderEvaluationContext ]
+		description: [ 'Expected {1} kind of object, but received: {2}' 
+			format: { GtPharoSourceCoderEvaluationContext. anObject } ].
 	parentEvaluationContext := anObject
 ]
 
