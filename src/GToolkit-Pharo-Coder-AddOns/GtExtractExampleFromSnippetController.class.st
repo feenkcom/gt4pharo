@@ -6,7 +6,8 @@ Class {
 		'exampleClass',
 		'completionStrategy',
 		'packageForm',
-		'packageElement'
+		'packageElement',
+		'shouldCreateClass'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -86,6 +87,7 @@ GtExtractExampleFromSnippetController >> initialize [
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> installReceiverSelector [
 	| send |
+	self shouldCreateClass ifFalse: [ ^ super installReceiverSelector ].
 	self uninstallReceiverRenamer.
 	send := self findExtractedSend.
 	send ifNil: [ ^ self ].
@@ -112,11 +114,24 @@ GtExtractExampleFromSnippetController >> isClassDefined [
 
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> isReceiver: aNode [
+	self shouldCreateClass ifFalse: [ ^ super isReceiver: aNode ].
 	^ aNode isMessageSend
 		and: [ aNode selector = #new
 				and: [ aNode receiver isVariable
 						and: [ {'Object'.
 								exampleClass} includes: aNode receiver name value ] ] ]
+]
+
+{ #category : #accessing }
+GtExtractExampleFromSnippetController >> potentialReceivers [
+	| names |
+	names := super potentialReceivers.
+	self extractedAst pattern variables
+		ifNotEmpty: [ :vars | 
+			vars size = 1
+				ifTrue: [ names remove: vars first source ifAbsent: [  ].
+					names addFirst: vars first source ] ].
+	^ names
 ]
 
 { #category : #accessing }
@@ -127,6 +142,22 @@ GtExtractExampleFromSnippetController >> receiverInSend: send [
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> refactoring [
 	| refactoring |
+	self shouldCreateClass
+		ifFalse: [ refactoring := GtExtractExampleFromSnippetToVariableRefactoring
+					extract: self extractionInterval
+					from: originalSource.
+			refactoring
+				setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
+				setOption: #selectVariableToMoveTo
+					toUse: [ :ref :cls :sel | self getReceiverVariableFor: cls selector: sel ];
+				setOption: #variableTypesForReceiver
+					toUse: [ :ref :block | 
+						| classes |
+						classes := (self getTypeForReceiverIn: ref model) ifNil: block.
+						self getTypeForReceiverFor: ref from: classes ];
+				setOption: #variableTypes
+					toUse: [ :ref :types :selected | self getTypeForReceiverFor: ref from: types ].
+			^ refactoring ].
 	refactoring := self refactoringClass
 			extract: self extractionInterval
 			from: originalSource
@@ -144,7 +175,39 @@ GtExtractExampleFromSnippetController >> refactoring [
 
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> refactoringClass [
-	^ GtExtractExampleFromSnippetRefactoring
+	^ GtExtractExampleFromSnippetToClassRefactoring
+]
+
+{ #category : #accessing }
+GtExtractExampleFromSnippetController >> shouldCreateClass [
+	| refactoring |
+	^ shouldCreateClass
+		ifNil: [ shouldCreateClass := true.
+			refactoring := GtExtractMethodFromSnippetRefactoring
+					extract: self extractionInterval
+					from: originalSource.
+			refactoring
+				setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
+				setOption: #selectVariableToMoveTo
+					toUse: [ :ref :cls :sel | 
+						(cls methodFor: sel) ast arguments
+							ifNotEmpty: [ :args | 
+								args size = 1
+									ifTrue: [ shouldCreateClass := false.
+										receiver := nil.
+										receiverClassName := nil ] ].
+						ref refactoringError: 'cancel' ];
+				setOption: #variableTypesForReceiver
+					toUse: [ :ref :block | 
+						| classes |
+						classes := (self getTypeForReceiverIn: ref model) ifNil: block.
+						self getTypeForReceiverFor: ref from: classes ];
+				setOption: #variableTypes
+					toUse: [ :ref :types :selected | self getTypeForReceiverFor: ref from: types ].
+			[ refactoring primitiveExecute ]
+				on: RBRefactoringError
+				do: [ :ex | ex return ].
+			shouldCreateClass ]
 ]
 
 { #category : #accessing }
