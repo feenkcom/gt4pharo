@@ -174,7 +174,7 @@ GtPharoMethodCoderStep >> assertPrintItString: aString [
 		label: ('Assert print-it is {1}' format: { aString });
 		value: [ :aLabel | aLabel text asString ] equals: aString;
 		onParentStepTarget: self;
-		// GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
 		// GtCoderPrintStringElementId;
 		onTopMost.
 ]
@@ -278,7 +278,7 @@ GtPharoMethodCoderStep >> printIt [
 		label: 'Print result';
 		combination: BlKeyCombination primaryP;
 		onParentStepTarget: self;
-		// GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
 		onTopMost
 ]
 
