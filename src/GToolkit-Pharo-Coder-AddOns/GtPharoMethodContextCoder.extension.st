@@ -39,6 +39,12 @@ GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAdd
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodContextCoder >> exampleFailureStylerFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [ 
+	coderAddOns addStyler: (GtCoderExampleFailureStyler new
+		styleBlock: [ :aText :aColor | aText underlineColor: aColor thickness: 3 ]).
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodContextCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 	

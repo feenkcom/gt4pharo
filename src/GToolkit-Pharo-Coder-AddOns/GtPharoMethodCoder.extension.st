@@ -737,8 +737,8 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 		ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
-	coderAddOns addStyler: GtCoderExampleFailureStyler new.
 	coderAddOns addStyler: GtCoderExampleAfterStyler new.
+	self exampleFailureStylerFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel.
 	
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
@@ -827,6 +827,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 				requesterObject: aCoderUIModel ]
 		id: GtMethodCoderExtractPlaygroundActionId
 		allowPrimaryClick: true
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> exampleFailureStylerFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [ 
+	coderAddOns addStyler: (GtCoderExampleFailureStyler new
+		styleBlock: [ :aText :aColor | aText highlight: aColor ]).
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
