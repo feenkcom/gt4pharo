@@ -153,6 +153,12 @@ GtPharoSourceCoderViewModel >> newCompletionStrategy [
 		yourself
 ]
 
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> parentExample [
+	<return: #GtExampleWithResult or: nil>
+	^ nil
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> selfObject [
 	"Return an object that should be bound to `self` during code evaluation"
