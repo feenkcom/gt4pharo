@@ -35,7 +35,8 @@ GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
 				parentEvaluationContext: coderViewModel evaluationContext;
 				parentSelfObject: coderViewModel selfObject;
 				parentMessage: node;
-				parentExplicitProviderClass: self coderViewModel explicitProviderClass.
+				parentExplicitProviderClass: coderViewModel explicitProviderClass;
+				parentExample: coderViewModel example.
 		anAttribute argumentBindingsBuilder: aBuilder ].
 	
 	(aBrTextEditor text from: position to: position)

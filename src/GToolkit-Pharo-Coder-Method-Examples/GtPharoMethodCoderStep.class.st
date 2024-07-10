@@ -60,6 +60,72 @@ GtPharoMethodCoderStep >> assertCompiledMethodIs: aCompiledMethod [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertExampleAssertionHighlightFrom: aStartIndex to: aStopIndex [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert example highlight between {1} and {2}'
+					format: { aStartIndex. aStopIndex });
+			satisfies: [ :aCoderElement | 
+					| isStartIndexValid isStopIndexValid |
+					isStartIndexValid := false.
+					isStopIndexValid := false.
+					aCoderElement text attributesFinder
+						findAttributesSuchThat: [ :anAttribute | anAttribute isKindOf: BlTextHighlightAttribute]
+						indicesDo: [ :aStart :aStop :anAttribute |
+							isStartIndexValid := isStartIndexValid | (aStart = aStartIndex).
+							isStopIndexValid := isStopIndexValid | (aStop = aStopIndex) ].
+					isStartIndexValid & isStopIndexValid ]
+				description: [ :aCoderElement |
+					String streamContents: [ :aStream | 
+						| isRepeated |
+						isRepeated := false.
+						aStream 
+							nextPutAll: 'Example highlight must be from ';
+							print: aStartIndex;
+							nextPutAll: ' to ';
+							print: aStopIndex;
+							nextPutAll: ', but is: '.
+						aCoderElement text attributesFinder
+							findAttributesSuchThat: [ :anAttribute | 
+								anAttribute isKindOf: BlTextHighlightAttribute]
+							indicesDo: [ :aStart :aStop :anAttribute |
+								isRepeated ifTrue: [ aStream nextPutAll: ', ' ].
+								isRepeated := true.
+								aStream print: aStart; nextPut: $-; print: aStop ] ] ];
+			referenceSender;
+			onParentStepTarget: self;
+			onThisOrDeepChildElementId: GtSourceCoderEditorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertExampleReturnValueIsKindOf: aReturnValueClass [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert example return value is kind of {1}'
+					format: { aReturnValueClass });
+			satisfies: [ :aCoderElement | 
+					| anExample |
+					anExample := aCoderElement textualCoderViewModel example.
+					anExample isNotNil and: [ anExample returnValue isKindOf: aReturnValueClass ] ]
+				description: [ :aCoderElement |
+					| anExample aReturnValue |
+					anExample := aCoderElement textualCoderViewModel example.
+					anExample 
+						ifNil: [ 'Example must be non-nil with {1} kind of return value'
+							format: { aReturnValueClass } ]
+						ifNotNil: [
+							aReturnValue := anExample returnValue.
+							'Example return value is kind of {1}, but must be kind of {2}: {3}'
+							format: { aReturnValue class. aReturnValueClass. aReturnValue } ] ];
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
 	| anAssertStep |
 	anAssertStep := self assert
@@ -143,6 +209,32 @@ GtPharoMethodCoderStep >> assertMethodExpandersCountIs: aNumber [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertParentExampleValueIsKindOf: aReturnValueClass [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert parent example return value is kind of {1}'
+					format: { aReturnValueClass });
+			satisfies: [ :aCoderElement | 
+					| aParentExample |
+					aParentExample := aCoderElement textualCoderViewModel parentExample.
+					aParentExample isNotNil and: [ aParentExample returnValue isKindOf: aReturnValueClass ] ]
+				description: [ :aCoderElement |
+					| anExample aReturnValue |
+					anExample := aCoderElement textualCoderViewModel parentExample.
+					anExample 
+						ifNil: [ 'Parent example must be non-nil with {1} kind of return value'
+							format: { aReturnValueClass } ]
+						ifNotNil: [
+							aReturnValue := anExample returnValue.
+							'Parent example return value is kind of {1}, but must be kind of {2}: {3}'
+							format: { aReturnValue class. aReturnValueClass. aReturnValue } ] ];
+			referenceSender;
+			onParentStepTarget: self.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertPlayAndInspectActionExists [
 	| anAssertStep |
 	anAssertStep := self check
@@ -159,11 +251,37 @@ GtPharoMethodCoderStep >> assertPlayAndInspectActionExists [
 GtPharoMethodCoderStep >> assertPlayAndInspectActionNotExists [
 	| anAssertStep |
 	anAssertStep := self check
-			label: 'Assert play and inspect button exists';
+			label: 'Assert play and inspect button does not exist';
 			notExists;
 			referenceSender;
 			onParentStepTarget: self;
 			// GtPharoMethodPlayAndInspectActionId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertPlayAndInspectExampleActionExists [
+	| anAssertStep |
+	anAssertStep := self check
+			label: 'Assert play and inspect example button exists';
+			exists;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtMethodCoderPlayAndInspectExampleActionId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertPlayAndInspectExampleActionNotExists [
+	| anAssertStep |
+	anAssertStep := self check
+			label: 'Assert play and inspect example button does not exist';
+			notExists;
+			referenceSender;
+			onParentStepTarget: self;
+			// GtMethodCoderPlayAndInspectExampleActionId.
 
 	^ anAssertStep
 ]

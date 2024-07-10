@@ -74,7 +74,9 @@ GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder 
 	argumentBindingsBuilder localBindings
 		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
 	argumentBindingsBuilder receiverObject
-		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ]
+		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ].
+	argumentBindingsBuilder parentExample
+		ifNotNil: [ :anExample | viewModel parentExample: anExample ].
 ]
 
 { #category : #'initialize-release' }

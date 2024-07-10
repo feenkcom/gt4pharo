@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtCoderExampleFailureStyler >> extraStyle: aText ast: theAst [
-	| currentExample exampleStackFrame pcRangeInterval highlightColor subText |
+	| usedExample exampleStackFrame pcRangeInterval highlightColor subText |
 	super extraStyle: aText ast: theAst.
 
 	self coderViewModel ifNil: [ ^ self ].
@@ -18,16 +18,20 @@ GtCoderExampleFailureStyler >> extraStyle: aText ast: theAst [
 	since the text range does not corresponds to the PC range interval."
 	self coderViewModel isModified ifTrue: [ ^ self ].
 
-	currentExample := self coderViewModel coderModel example.
-	currentExample ifNil: [ ^ self ].
+	"We want to highlight preferable current coder example.
+	In case it does not exist, we highlight coder example or our parent coder
+	(which is a case of expanded method coders)."
+	usedExample := self coderViewModel example 
+		ifNil: [ self coderViewModel parentExample ].
+	usedExample ifNil: [ ^ self ].
 
-	(self hasFailureOrErrorResultInExample: currentExample) ifFalse: [ ^ self ].
+	(self hasFailureOrErrorResultInExample: usedExample) ifFalse: [ ^ self ].
 
-	exampleStackFrame := self locateFailureStackFrameForExample: currentExample.
+	exampleStackFrame := self locateFailureStackFrameForExample: usedExample.
 	(exampleStackFrame isNil or: [ exampleStackFrame isDead ]) ifTrue: [ ^ self ].
 
 	pcRangeInterval := exampleStackFrame pcRangeContextIsActive: false.
-	highlightColor :=  (currentExample returnValue isKindOf: AssertionFailure)
+	highlightColor :=  (usedExample returnValue isKindOf: AssertionFailure)
 		ifTrue: [ BrGlamorousColors debuggerTextHighlightColor ]
 		ifFalse: [ BrGlamorousColors errorBackgroundColor ].
 		
@@ -48,8 +52,8 @@ GtCoderExampleFailureStyler >> hasFailureOrErrorResultInExample: anExample [
 { #category : #accessing }
 GtCoderExampleFailureStyler >> locateFailureStackFrameForExample: anExample [
 	| targetMethod |
-	targetMethod := anExample method.
-			
+	targetMethod := self coderViewModel compiledMethod.
+	
 	^ anExample returnValue signalerContext stack
 		detect: [ :aContext | 
 			self flag: 'We may want to re-use {{gtMethod:GtPharoEvaluatedCode>>#isRelevantContextInStack:}} (TGtSourceCoderEvaluatedCode objects).'.

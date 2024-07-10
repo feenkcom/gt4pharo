@@ -9,6 +9,17 @@ GtPharoDummyTwoObject >> anotherNumber [
 	self number
 ]
 
+{ #category : #examples }
+GtPharoDummyTwoObject >> failingExample [
+	<gtExample>
+	<noTest>
+	| aValue |
+	aValue := 1.
+	aValue := aValue + 1.
+	self assertValue: aValue.
+	^ aValue
+]
+
 { #category : #accessing }
 GtPharoDummyTwoObject >> number [
 	super number.

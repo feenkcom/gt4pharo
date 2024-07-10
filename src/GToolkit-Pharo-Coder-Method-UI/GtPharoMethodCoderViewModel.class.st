@@ -106,6 +106,12 @@ GtPharoMethodCoderViewModel >> evaluationContext [
 		targetBehavior: self defaultCompilationBehavior
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> example [
+	<return: #GtExampleWithResult or: nil>
+	^ self coderModel example
+]
+
 { #category : #'api - accessing' }
 GtPharoMethodCoderViewModel >> explicitProviderClass [
 	^ self coderModel explicitProviderClass
@@ -197,6 +203,24 @@ GtPharoMethodCoderViewModel >> notifySaveEnabled [
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
 	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> parentExample [
+	<return: #GtExampleWithResult or: nil>
+	^ self
+		optionAt: #parentExample
+		ifPresent: [ :aWeak | aWeak at: 1 ]
+		ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> parentExample: anExample [
+	"In case of method coders expanded inside of another method coder,
+	the parent-method-coder example is set, to be able to highlight failing code
+	in those expanded method coders."
+
+	self optionAt: #parentExample put: anExample asWeakReference
 ]
 
 { #category : #'api - actions' }

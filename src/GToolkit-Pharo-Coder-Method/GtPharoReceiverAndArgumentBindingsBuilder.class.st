@@ -10,7 +10,8 @@ Class {
 		'explicitProviderClass',
 		'parentExplicitProviderClass',
 		'parentSelfObject',
-		'parentEvaluationContext'
+		'parentEvaluationContext',
+		'parentExample'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -174,6 +175,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentEvaluationContext: anObject [
 		description: [ 'Expected {1} kind of object, but received: {2}' 
 			format: { GtPharoSourceCoderEvaluationContext. anObject } ].
 	parentEvaluationContext := anObject
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentExample [
+	^ parentExample
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentExample: anExample [
+	parentExample := anExample
 ]
 
 { #category : #accessing }
