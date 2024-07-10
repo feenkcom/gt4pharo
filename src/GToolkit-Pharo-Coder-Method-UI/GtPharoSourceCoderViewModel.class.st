@@ -64,6 +64,12 @@ GtPharoSourceCoderViewModel >> evaluationContext [
 		receiverObject: self selfObject
 ]
 
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> example [
+	<return: #GtExampleWithResult or: nil>
+	^ nil
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> explicitProviderClass [
 	^ nil
