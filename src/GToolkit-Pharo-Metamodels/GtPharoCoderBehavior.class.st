@@ -11,7 +11,8 @@ GtPharoCoderBehavior class >> explicit: aBehavior [
 
 { #category : #'instance creation' }
 GtPharoCoderBehavior class >> from: subclass to: implementingClass [
-	(subclass == implementingClass or: [ subclass == UndefinedObject ])
+	(subclass == implementingClass
+		or: [ subclass == UndefinedObject or: [ subclass == UndefinedObject class ] ])
 		ifTrue: [ ^ self explicit: implementingClass ].
 	^ GtPharoCoderSubclassBehavior new
 		subclassBehavior: (self explicit: subclass);
