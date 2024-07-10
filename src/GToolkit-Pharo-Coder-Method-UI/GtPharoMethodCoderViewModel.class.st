@@ -185,6 +185,11 @@ GtPharoMethodCoderViewModel >> methodOrigin [
 ]
 
 { #category : #'private - notifying' }
+GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
+	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
+]
+
+{ #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveDisabled [
 	self announce: (GtMethodCoderSaveDisabled new preventors: savePreventors asArray)
 ]
@@ -192,11 +197,6 @@ GtPharoMethodCoderViewModel >> notifySaveDisabled [
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveEnabled [
 	self announce: (GtMethodCoderSaveEnabled new)
-]
-
-{ #category : #'private - notifying' }
-GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
-	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
 ]
 
 { #category : #'api - actions' }

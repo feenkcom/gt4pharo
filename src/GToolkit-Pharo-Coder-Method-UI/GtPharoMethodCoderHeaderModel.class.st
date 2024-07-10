@@ -53,6 +53,13 @@ GtPharoMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel from: anEleme
 ]
 
 { #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> spawnContainerBehaviorFor: aCoderViewModel from: anElement [
+	aCoderViewModel methodOrigin
+		originalMethodDo: [ :aBehavior :aMethod | anElement phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod) ]
+		ifUnknown: [  ]
+]
+
+{ #category : #'actions - spawning' }
 GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
 	aCoderViewModel methodOrigin  behaviorDo: [ :aBehavior |
 		anElement phlow 

@@ -37,29 +37,30 @@ GtPharoMethodCoderHeaderElement >> buildSeparatorElement [
 { #category : #initialization }
 GtPharoMethodCoderHeaderElement >> initialize [
 	super initialize.
+	self initializeWidget
+]
 
+{ #category : #initialization }
+GtPharoMethodCoderHeaderElement >> initializeWidget [
 	self fitContent.
 	self alignCenterLeft.
-	
 	packageButton := self newPackageButton.
 	providerBehaviorButton := self newBehaviorButton.
 	providerBehaviorIconContainer := self newIconContainer.
-	
 	self addChild: packageButton as: GtPharoHeaderPackageId.
-	self addChild: (self buildSeparatorElement
-		margin: (BlInsets left: 5 right: 5)) as: #separatorElement.
+	self
+		addChild: (self buildSeparatorElement margin: (BlInsets left: 5 right: 5))
+		as: #separatorElement.
 	self addChild: providerBehaviorButton as: GtPharoHeaderProviderBehaviorId.
 	self addChild: providerBehaviorIconContainer as: #iconContainer.
-	
-	self addChild: (methodBehaviourContainer := BrHorizontalPane new 
-		fitContent;
-		alignCenterLeft;
-		addChild: (self buildSeparatorElement 
-			text: '(');
-		addChild: (methodBehaviourButton := self newBehaviorButton) 
-			as: GtPharoHeaderMethodBehaviorId;
-		addChild: (methodBehaviourIconContainer := self newIconContainer);
-		addChild: (self buildSeparatorElement text: ')'))
+	self addChild: (methodBehaviourContainer := (BrHorizontalPane new)
+						fitContent;
+						alignCenterLeft;
+						addChild: (self buildSeparatorElement text: '(');
+						addChild: (methodBehaviourButton := self newBehaviorContainerButton)
+							as: GtPharoHeaderMethodBehaviorId;
+						addChild: (methodBehaviourIconContainer := self newIconContainer);
+						addChild: (self buildSeparatorElement text: ')'))
 ]
 
 { #category : #'instance creation' }
@@ -76,6 +77,22 @@ GtPharoMethodCoderHeaderElement >> newBehaviorButton [
 								border: BlBorder empty ];
 						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
 		action: [ self spawnBehavior ]
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> newBehaviorContainerButton [
+	^ BrButton new
+		fitContent;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors defaultButtonTextColor;
+				glamorousRegularSmallSize)
+				+ (BrStyleCommonAptitude new
+						default: [ :aStyle | 
+							aStyle
+								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+								border: BlBorder empty ];
+						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
+		action: [ self spawnContainerBehavior ]
 ]
 
 { #category : #initialization }
@@ -153,6 +170,13 @@ GtPharoMethodCoderHeaderElement >> showIconNamed: anIconName in: anIconContainer
 GtPharoMethodCoderHeaderElement >> spawnBehavior [	
 	headerCoderModel
 		spawnBehaviorFor: self textualCoderViewModel 
+		from: self.
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> spawnContainerBehavior [	
+	headerCoderModel
+		spawnContainerBehaviorFor: self textualCoderViewModel 
 		from: self.
 ]
 
