@@ -12,6 +12,14 @@ GtPharoDummyOneObject >> * anObject [
 	self shouldNotImplement
 ]
 
+{ #category : #examples }
+GtPharoDummyOneObject >> assertValue: aValue [
+	self assert: aValue isNotNil description: [ 'Value must not be nil' ].
+	self assert: aValue > 0 description: [ 'Value must be positive number' ].
+	self assert: aValue > 5 description: [ 'Value must be bigger than 5' ].
+	self assert: aValue < 10 description: [ 'Value must be less than 10' ]
+]
+
 { #category : #accessing }
 GtPharoDummyOneObject >> dummyThree [
 	| a |

@@ -64,6 +64,12 @@ GtPharoSourceCoderViewModel >> evaluationContext [
 		receiverObject: self selfObject
 ]
 
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> example [
+	<return: #GtExampleWithResult or: nil>
+	^ nil
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> explicitProviderClass [
 	^ nil
@@ -145,6 +151,12 @@ GtPharoSourceCoderViewModel >> newCompletionStrategy [
 		classOrMetaClass: self behavior;
 		selfObject: self selfObject;
 		yourself
+]
+
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> parentExample [
+	<return: #GtExampleWithResult or: nil>
+	^ nil
 ]
 
 { #category : #'api - accessing' }

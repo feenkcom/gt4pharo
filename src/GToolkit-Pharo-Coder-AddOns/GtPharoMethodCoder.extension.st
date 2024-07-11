@@ -732,14 +732,18 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 
 	anAST methodNode ifNil: [ ^ self ].
 
+	"Example failure styler can also highlight code in expanded method coders, 
+	using `aGtPharoMethodCoderViewModel parentExample` information. For that reason, 
+	the <gtExample> pragma is not required for this styler."
+	self exampleFailureStylerFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel.
+	
 	(anAST methodNode pragmas
 		anySatisfy: [ :each | each isErrorNode not and: [ each selector = #gtExample ] ])
 		ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
 	coderAddOns addStyler: GtCoderExampleAfterStyler new.
-	self exampleFailureStylerFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel.
-	
+
 	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
 
