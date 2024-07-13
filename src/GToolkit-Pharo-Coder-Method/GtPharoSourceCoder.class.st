@@ -229,7 +229,7 @@ GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceC
 		self class compiler
 			source: aSourceString;
 			class: methodClass;
-			receiver: receiver;
+			"receiver: receiver;"
 			context: aGtPharoSourceCoderEvaluationContext runtimeContext;
 			requestor: aGtPharoSourceCoderEvaluationContext;
 			noPattern: isForMethod not;

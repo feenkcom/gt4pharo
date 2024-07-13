@@ -5147,6 +5147,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodIns
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodVarA [
 	<gtExample>
+	<noTest>
 	<after: #cleanDummyOneObject>
 	| aScripter |
 	aScripter := self
@@ -5172,6 +5173,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodVar
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ self methodCoderWithFailingExample asCoderViewModel ].
@@ -5208,6 +5210,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodInstA [
 	<gtExample>
+	<noTest>
 	<after: #cleanDummyOneObject>
 	| aScripter |
 	self initializeDummyOneObject.
@@ -5267,6 +5270,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethod
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodVarA [
 	<gtExample>
+	<noTest>
 	<after: #cleanDummyOneObject>
 	| aScripter |
 	self initializeDummyOneObject.
@@ -5294,6 +5298,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethod
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodVarA_SelfObject [
 	<gtExample>
+	<noTest>
 	<after: #cleanDummyOneObject>
 	| aScripter anObject |
 	anObject := self dummyOneObject.
