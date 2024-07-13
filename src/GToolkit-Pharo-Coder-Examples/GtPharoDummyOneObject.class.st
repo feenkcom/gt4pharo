@@ -4,8 +4,34 @@ Class {
 	#instVars : [
 		'instA'
 	],
+	#classVars : [
+		'VarA'
+	],
+	#classInstVars : [
+		'instA'
+	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
+
+{ #category : #accessing }
+GtPharoDummyOneObject class >> instA [
+	^ instA
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject class >> instA: anObject [
+	instA := anObject
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject class >> varA [
+	^ VarA
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject class >> varA: anObject [
+	VarA := anObject
+]
 
 { #category : #accessing }
 GtPharoDummyOneObject >> * anObject [
@@ -37,6 +63,16 @@ GtPharoDummyOneObject >> enumerate [
 GtPharoDummyOneObject >> initialize [
 	super initialize.
 	instA := 42
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject >> instA [
+	^ instA
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject >> instA: anObject [
+	instA := anObject
 ]
 
 { #category : #accessing }
@@ -126,4 +162,9 @@ GtPharoDummyOneObject >> three [
 { #category : #accessing }
 GtPharoDummyOneObject >> two [
 	^ self one + self one
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject >> varA [
+	^ VarA
 ]

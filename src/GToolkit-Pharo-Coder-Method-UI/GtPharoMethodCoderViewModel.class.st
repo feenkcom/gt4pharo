@@ -205,6 +205,17 @@ GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
 	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
 ]
 
+{ #category : #'private - evaluation' }
+GtPharoMethodCoderViewModel >> objectVariableBindingsTo: theBindings [
+	super objectVariableBindingsTo: theBindings.
+	
+	"Avoid #isNil #notNil in case we are dealing with a proxy"
+	self selfObject == nil ifTrue: [ 
+		self defaultCompilationBehavior isClassSide ifTrue: [ 
+			theBindings addBindings: (GtSlotVariablesBindings new 
+				object: self defaultCompilationBehavior instanceSide) ] ].
+]
+
 { #category : #accessing }
 GtPharoMethodCoderViewModel >> parentExample [
 	<return: #GtExampleWithResult or: nil>

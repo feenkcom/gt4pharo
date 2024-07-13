@@ -749,6 +749,12 @@ GtPharoMethodCoderByScripterExamples >> classSideExtractToComponent [
 	^ aScripter
 ]
 
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> cleanDummyOneObject [
+	GtPharoDummyOneObject instA: nil.
+	GtPharoDummyOneObject varA: nil
+]
+
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
@@ -1197,6 +1203,11 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> createdClassThatDoesntExist [
 	^ 'ClassThatDoesNotExist6561'
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> dummyOneObject [
+	^ GtPharoDummyOneObject new instA: 12
 ]
 
 { #category : #'examples - complete method name' }
@@ -5091,6 +5102,12 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 	^ aScripter
 ]
 
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
+	GtPharoDummyOneObject instA: 72.
+	GtPharoDummyOneObject varA: 144
+]
+
 { #category : #'examples - basic' }
 GtPharoMethodCoderByScripterExamples >> methodCoder [
 	<gtExample>
@@ -5102,9 +5119,61 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 	^ aScripter
 ]
 
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodInstA [
+	<gtExample>
+	<after: #cleanDummyOneObject>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithClassSideMethodInstA asCoderViewModel ].
+
+	self initializeDummyOneObject.
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject class;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionExists;
+		assertPlayAndInspectExampleActionNotExists;
+		select: 'instA' from: 9 to: 14;
+		printIt;
+		assertPrintItString: GtPharoDummyOneObject instA printString;
+		play.
+		
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodVarA [
+	<gtExample>
+	<noTest>
+	<after: #cleanDummyOneObject>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ self methodCoderWithClassSideMethodVarA asCoderViewModel ].
+
+	self initializeDummyOneObject.
+
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject class;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionExists;
+		assertPlayAndInspectExampleActionNotExists;
+		select: 'VarA' from: 8 to: 12;
+		printIt;
+		assertPrintItString: GtPharoDummyOneObject varA printString;
+		play.
+
+	^ aScripter
+]
+
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ self methodCoderWithFailingExample asCoderViewModel ].
@@ -5133,6 +5202,124 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 					assertBindingIsNotDefined: #aValue;
 					assertPlayAndInspectActionNotExists;
 					assertPlayAndInspectExampleActionNotExists ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodInstA [
+	<gtExample>
+	<noTest>
+	<after: #cleanDummyOneObject>
+	| aScripter |
+	self initializeDummyOneObject.
+
+	aScripter := self
+			scripterForBlock: [ | aCoderViewModel |
+				aCoderViewModel := self methodCoderWithInstanceSideMethodInstA asCoderViewModel.
+				aCoderViewModel ].
+				
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionNotExists;
+		assertPlayAndInspectExampleActionNotExists;
+		select: 'instA' from: 9 to: 14;
+		printIt;
+		flag: 'The print-it value should be either nil or undeclared temp error. The existing behavior is not correct.';
+		assertPrintItString: GtPharoDummyOneObject instA printString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodInstA_SelfObject [
+	<gtExample>
+	<after: #cleanDummyOneObject>
+	| aScripter anObject |
+	anObject := self dummyOneObject.
+	self initializeDummyOneObject.
+
+	aScripter := self
+			scripterForBlock: [ | aCoderViewModel |
+				aCoderViewModel := self methodCoderWithInstanceSideMethodInstA asCoderViewModel.
+				aCoderViewModel selfObject: anObject.
+				aCoderViewModel ].
+				
+	aScripter methodCoder
+		assertSelfObjectIs: anObject;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionExists;
+		assertPlayAndInspectExampleActionNotExists;
+		select: 'instA'
+			from: 9
+			to: 14;
+		printIt;
+		assertPrintItString: 12 printString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodVarA [
+	<gtExample>
+	<noTest>
+	<after: #cleanDummyOneObject>
+	| aScripter |
+	self initializeDummyOneObject.
+
+	aScripter := self
+			scripterForBlock: [ | aCoderViewModel |
+				aCoderViewModel := self methodCoderWithInstanceSideMethodVarA asCoderViewModel.
+				aCoderViewModel ].
+				
+	aScripter methodCoder
+		assertSelfObjectIs: nil;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionNotExists;
+		assertPlayAndInspectExampleActionNotExists;
+		select: 'VarA' from: 8 to: 12;
+		printIt;
+		assertPrintItString: GtPharoDummyOneObject varA printString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodVarA_SelfObject [
+	<gtExample>
+	<noTest>
+	<after: #cleanDummyOneObject>
+	| aScripter anObject |
+	anObject := self dummyOneObject.
+	self initializeDummyOneObject.
+
+	aScripter := self
+			scripterForBlock: [ | aCoderViewModel |
+				aCoderViewModel := self methodCoderWithInstanceSideMethodVarA asCoderViewModel.
+				aCoderViewModel selfObject: anObject.
+				aCoderViewModel ].
+				
+	aScripter methodCoder
+		assertSelfObjectIs: anObject;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertPlayAndInspectActionExists;
+		assertPlayAndInspectExampleActionNotExists;
+		select: 'VarA' from: 8 to: 12;
+		printIt;
+		assertPrintItString: GtPharoDummyOneObject varA printString;
 		play.
 
 	^ aScripter
@@ -5497,11 +5684,47 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 	^ aScripter
 ]
 
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithClassSideMethodInstA [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithClassSideMethodInstA.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithClassSideMethodVarA [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithClassSideMethodVarA.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithFailingExample [
 	<gtExample>
 	| aMethod aCoder |
 	aMethod := self methodWithFailingExample.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithInstanceSideMethodInstA [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithInstanceSideMethodInstA.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithInstanceSideMethodVarA [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithInstanceSideMethodVarA.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
@@ -5551,10 +5774,34 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodOne [
 	^ aCoder
 ]
 
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodWithClassSideMethodInstA [
+	<gtExample>
+	^ GtPharoDummyOneObject class >> #instA
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodWithClassSideMethodVarA [
+	<gtExample>
+	^ GtPharoDummyOneObject class >> #varA
+]
+
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodWithFailingExample [
 	<gtExample>
 	^ GtPharoDummyTwoObject >> #failingExample
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodWithInstanceSideMethodInstA [
+	<gtExample>
+	^ GtPharoDummyOneObject >> #instA
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoMethodCoderByScripterExamples >> methodWithInstanceSideMethodVarA [
+	<gtExample>
+	^ GtPharoDummyOneObject >> #varA
 ]
 
 { #category : #'examples - expansion' }

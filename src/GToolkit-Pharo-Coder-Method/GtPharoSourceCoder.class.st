@@ -209,8 +209,7 @@ GtPharoSourceCoder >> parseMethod: aString [
 { #category : #'private - actions' }
 GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	<return: #CompiledMethod>
-	| isForMethod methodClass |
-
+	| isForMethod methodClass receiver |
 	isForMethod := self isForMethod and: [
 		aGtPharoSourceCoderEvaluationContext evaluatedInterval = (1 to: aGtPharoSourceCoderEvaluationContext sourceString size) ].
 	
@@ -221,11 +220,16 @@ GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceC
 	methodClass := aGtPharoSourceCoderEvaluationContext runtimeContext
 		ifNil: [ aGtPharoSourceCoderEvaluationContext receiverObject class ]
 		ifNotNil: [ :aContext | aContext methodClass ].
+		
+	receiver := aGtPharoSourceCoderEvaluationContext runtimeContext
+		ifNil: [ aGtPharoSourceCoderEvaluationContext receiverObject ]
+		ifNotNil: [ :aContext | aContext receiver ].
 
 	^ GtPharoCodeModifier current critical: [
 		self class compiler
 			source: aSourceString;
 			class: methodClass;
+			"receiver: receiver;"
 			context: aGtPharoSourceCoderEvaluationContext runtimeContext;
 			requestor: aGtPharoSourceCoderEvaluationContext;
 			noPattern: isForMethod not;
