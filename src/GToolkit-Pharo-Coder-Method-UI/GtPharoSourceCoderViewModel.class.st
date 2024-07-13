@@ -41,9 +41,7 @@ GtPharoSourceCoderViewModel >> compositeVariableBindings [
 	theBindings addBindings: GtReservedVariablesBindings new.
 	theBindings addBindings: GtGlobalVariablesBindings new.
 	
-	"Avoid #isNil #notNil in case we are dealing with a proxy"
-	self selfObject == nil
-		ifFalse: [ theBindings addBindings: (GtSlotVariablesBindings new object: self selfObject) ].
+	self objectVariableBindingsTo: theBindings.
 
 	theBindings addBindings: localBindings.
 	
@@ -151,6 +149,14 @@ GtPharoSourceCoderViewModel >> newCompletionStrategy [
 		classOrMetaClass: self behavior;
 		selfObject: self selfObject;
 		yourself
+]
+
+{ #category : #'private - bindings' }
+GtPharoSourceCoderViewModel >> objectVariableBindingsTo: theBindings [ 
+	"Avoid #isNil #notNil in case we are dealing with a proxy"
+	self selfObject == nil ifFalse: [ 
+		theBindings addBindings: (GtSlotVariablesBindings new 
+			object: self selfObject) ].
 ]
 
 { #category : #'api - coder model' }
