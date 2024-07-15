@@ -324,6 +324,30 @@ GtPharoMethodCoderStep >> assertTargetBehaviorIs: aBehavior [
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> clickOnHeaderMethodBehavior [
+	| aClickStep |
+	aClickStep := self click
+			label: 'Click on header method behavior';
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderMethodBehaviorId.
+
+	^ aClickStep
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> clickOnHeaderProviderBehavior [
+	| aClickStep |
+	aClickStep := self click
+			label: 'Click on header provider behavior';
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderProviderBehaviorId.
+
+	^ aClickStep
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
 	| aRootStep |
 	self click

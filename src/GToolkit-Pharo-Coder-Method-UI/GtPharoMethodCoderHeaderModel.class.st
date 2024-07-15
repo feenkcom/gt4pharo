@@ -46,20 +46,11 @@ GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel from: anElement [
-	aCoderViewModel selfObject
-		ifNotNil: 
-			[:clazz |
-			anElement phlow
-				spawnTool: (GtClassCoderTool forClass: clazz class instanceSide).
-			^self].
-	self spawnContainerBehaviorFor: aCoderViewModel from: anElement
-]
-
-{ #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> spawnContainerBehaviorFor: aCoderViewModel from: anElement [
+GtPharoMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel from: anElement [
+	"Spawn a behavior that implements a method. Display also the given method."
 	aCoderViewModel methodOrigin
-		originalMethodDo: [ :aBehavior :aMethod | anElement phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod) ]
+		originalMethodDo: [ :aMethodBehavior :aMethod | 
+			anElement phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod) ]
 		ifUnknown: [  ]
 ]
 
@@ -68,4 +59,22 @@ GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElemen
 	aCoderViewModel methodOrigin  behaviorDo: [ :aBehavior |
 		anElement phlow 
 			spawnTool: (GtPackageCoderTool package: aBehavior package) ]
+]
+
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from: anElement [
+	"Spawn a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
+	| aProviderBehavior |
+	aCoderViewModel selfObject 
+		ifNotNil: [ :anObjectOrClass |
+			aProviderBehavior := anObjectOrClass class instanceSide ]
+		ifNil: [ 
+			aProviderBehavior :=  aCoderViewModel behavior ].
+	
+	aCoderViewModel methodOrigin
+		originalMethodDo: [ :aMethodBehavior :aMethod | 
+			aMethodBehavior = aProviderBehavior 
+				ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
+				ifFalse: [ anElement phlow spawnTool: (GtClassCoderTool forClass: aProviderBehavior) ] ]
+		ifUnknown: [  ]
 ]

@@ -50,16 +50,16 @@ GtMethodCoderHeaderModel >> providerBehaviourName [
 ]
 
 { #category : #'actions - spawning' }
-GtMethodCoderHeaderModel >> spawnBehaviorFor: aCoderViewModel  from: anElement [
-	self subclassResponsibility
-]
-
-{ #category : #'actions - spawning' }
-GtMethodCoderHeaderModel >> spawnContainerBehaviorFor: aCoderViewModel  from: anElement [
+GtMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel  from: anElement [
 	self subclassResponsibility
 ]
 
 { #category : #'actions - spawning' }
 GtMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
+	self subclassResponsibility
+]
+
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel  from: anElement [
 	self subclassResponsibility
 ]
