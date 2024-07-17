@@ -35,21 +35,12 @@ GtPharoBehaviorCoderElement >> actOnPackageUpdated: ann [
 
 { #category : #callbacks }
 GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationAnnouncement [
-	| aMethod tab selectTabBlock selectMethodBlock |
-
+	| aMethod aTask |
 	aMethod := aGtClassCoderMethodNavigationAnnouncement method.
-
-	tab := contentTabs viewModel tabs
-		detect: [ :each | each widget label asString = 'Methods' ]
-		ifNone: [ ^ self ].
-	
-	tab isSelected
-		ifFalse: [
-			selectTabBlock := [ tab select ].
-			self executeTask: selectTabBlock ].
-	
-	selectMethodBlock := [ self selectAndScrollToMethod: aMethod ].
-	self executeTask: selectMethodBlock
+	aTask := GtPharoSelectAndScrollToMethodRepeatedTask new
+		method: aMethod;
+		contentTabs: contentTabs.
+	self enqueueTask: aTask.
 ]
 
 { #category : #accessing }
@@ -267,18 +258,6 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 		ifNotNil: [ 
 			contentPane removeChild: contentTabs.
 			contentTabs := nil ]
-]
-
-{ #category : #'updating ui' }
-GtPharoBehaviorCoderElement >> selectAndScrollToMethod: aMethod [
-
-	contentTabs content 
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ] 
-		ifFound: [ :theElement |
-			theElement streamingCodersViewModel
-				expandAndFocusCompiledMethod: aMethod;
-				scrollToCompiledMethod: aMethod ] 
-		ifNone: [ "ignore" ]
 ]
 
 { #category : #'building ui' }
