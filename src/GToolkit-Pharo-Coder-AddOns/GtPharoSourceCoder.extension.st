@@ -158,22 +158,6 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
-	| highlightNode |
-	(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
-		ifFalse: [ ^ self ].
-	highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
-	coderAddOns
-		addContextMenuItem: (self
-				createLabel: aShortcut name
-				description: node selector)
-		hover: (self highlightNodeBlock: highlightNode)
-		leave: self removeHighlightBlock
-		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition with: aRequester ]
-		shortcutKey: aShortcut combinationForPlatform gtDisplayString
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 15>
 	(self nodeFrom: aCoderViewModel)

@@ -1,6 +1,35 @@
 Extension { #name : #GtSmalltalkSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	| highlightNode nodeDescription |
+	
+	(node isMessage or: [ 
+		node isMessageSend or: [ 
+			node isMethodPattern or: [ 
+				node isSymbol ] ] ])
+		ifFalse: [ ^ self ].
+	
+	highlightNode := node isMessageSend 
+		ifTrue: [ node message ] ifFalse: [ node ].
+	nodeDescription := node isSymbol
+		ifTrue: [ node literalValue ] ifFalse: [ node selector ].
+	
+	coderAddOns
+		addContextMenuItem: (self 
+			createLabel: aShortcut name 
+			description: nodeDescription)
+		hover: (self highlightNodeBlock: highlightNode)
+		leave: self removeHighlightBlock
+		action: [ :aTextualViewModel | 
+			self
+				perform: sel
+				with: highlightNode startPosition
+				with: aRequester ]
+		shortcutKey: aShortcut combinationForPlatform gtDisplayString
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> expandCascadeSelection: aSelectionInterval at: position directionOffset: offset in: aSourceCoderViewModel [
 	| cascade siblings messageNode index |
 	messageNode := (self nodeAt: position) messageNode.
