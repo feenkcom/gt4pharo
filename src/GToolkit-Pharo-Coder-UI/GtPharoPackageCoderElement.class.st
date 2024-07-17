@@ -62,7 +62,7 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 						to: packageNameEditor text asString} ];
 			cancelBlock: [ packageNameEditor text: packageCoder package name ];
 			when: GtRefactoringsAppliedEvent
-				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility hidden ].
+				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility gone ].
 
 	packageNameEditor editor
 		when: BrTextEditorModifiedEvent

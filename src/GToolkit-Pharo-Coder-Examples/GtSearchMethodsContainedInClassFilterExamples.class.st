@@ -18,6 +18,16 @@ GtSearchMethodsContainedInClassFilterExamples >> inheritedMethodsWithTraits [
 ]
 
 { #category : #examples }
+GtSearchMethodsContainedInClassFilterExamples >> methodOnlyIncludedOnceInFilter [
+	<gtExample>
+	| filter |
+	filter := (GtSearchMethodsInClassFilter forClass: Object) withSuperclasses
+			withSubclasses & thisContext method selector gtImplementors.
+	self assert: filter contents size equals: 1.
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilter [
 	<gtExample>
 	^ self

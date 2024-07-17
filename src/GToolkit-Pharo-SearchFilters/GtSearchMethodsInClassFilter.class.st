@@ -33,7 +33,9 @@ GtSearchMethodsInClassFilter >> defaultFilterScope [
 
 	includeSubclasses
 		ifTrue: [ theStreams
-				add: (filterClass allSubclasses asAsyncStream
+				add: ((AsyncDepthFirstTraversalStream
+						root: Object
+						children: [ :each | each subclasses select: [ :sub | sub isClassSide = each isClassSide ] ])
 						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
 						flatten ].
 

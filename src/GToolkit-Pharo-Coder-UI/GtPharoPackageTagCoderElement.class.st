@@ -31,41 +31,44 @@ GtPharoPackageTagCoderElement >> buildContentTabs [
 { #category : #'build ui' }
 GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 	| tagNameEditor container previewButton unloadButton |
-		
 	container := BrHorizontalPane new
-		hMatchParent;
-		alignCenterLeft;
-		vFitContent.
-	
+			hMatchParent;
+			alignCenterLeft;
+			vFitContent.
+
 	tagNameEditor := BrEditableLabel new
-		aptitude: (BrGlamorousEditableLabelAptitude new
-			defaultBackground: Color transparent;
-			glamorousCodeFont;
-			bold;
-			fontSize: 18);
-		inputFilter: BrTextEditorAlphaNumericInputFilter new;
-		text: packageTagCoder packageTag name;
-		margin: (BlInsets all: 0).
+			aptitude: (BrGlamorousEditableLabelAptitude new
+					defaultBackground: Color transparent;
+					glamorousCodeFont;
+					bold;
+					fontSize: 18);
+			inputFilter: BrTextEditorAlphaNumericInputFilter new;
+			text: packageTagCoder packageTag name;
+			margin: (BlInsets all: 0).
 
 	previewButton := GtRefactoringsPreviewButton new
-		margin: (BlInsets left: 5);
-		visibility: BlVisibility gone;
-		refactorings: [ { GtRBRenamePackageTagRefactoring packageName: packageTagCoder package name from: packageTagCoder packageTag gtTagName to: tagNameEditor text asString } ];
-		cancelBlock: [ tagNameEditor text: packageTagCoder packageTag name];
-		when: GtRefactoringsAppliedEvent do: [ :anEvent | anEvent currentTarget visibility: BlVisibility hidden ].
-		
+			margin: (BlInsets left: 5);
+			visibility: BlVisibility gone;
+			refactorings: [ {GtRBRenamePackageTagRefactoring
+						packageName: packageTagCoder package name
+						from: packageTagCoder packageTag gtTagName
+						to: tagNameEditor text asString} ];
+			cancelBlock: [ tagNameEditor text: packageTagCoder packageTag name ];
+			when: GtRefactoringsAppliedEvent
+				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility gone ].
+
 	tagNameEditor editor
-		when: BrTextEditorModifiedEvent 
-		do: [ :anEvent |
+		when: BrTextEditorModifiedEvent
+		do: [ :anEvent | 
 			anEvent text asString = packageTagCoder packageTag name
 				ifTrue: [ previewButton visibility: BlVisibility gone ]
-				ifFalse: [  previewButton visibility: BlVisibility visible ] ].
+				ifFalse: [ previewButton visibility: BlVisibility visible ] ].
 
 	unloadButton := GtPreviewChangeButton new
-		icon: BrGlamorousVectorIcons remove;
-		label: 'Unload';
-		changeAction: [ self unloadPackageTag ];
-		changeStencil: [ self buildRemovePackageTagLabel ].
+			icon: BrGlamorousVectorIcons remove;
+			label: 'Unload';
+			changeAction: [ self unloadPackageTag ];
+			changeStencil: [ self buildRemovePackageTagLabel ].
 
 	container addChild: tagNameEditor.
 	container addChild: previewButton.

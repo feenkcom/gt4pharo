@@ -34,18 +34,6 @@ GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
 		theClass: aClassAdded classAdded)
 ]
 
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
-	<return: #Collection of: #Class>
-
-	self hasSelectedPackage
-		ifFalse: [ ^ #() ].
-		
-	^ self hasSelectedTag
-		ifTrue: [ self selectedTag classes ]
-		ifFalse: [ self selectedPackage definedClasses ]
-]
-
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: anAnnouncement [
 	(self packagesToShow includes: anAnnouncement packageAffected) ifFalse: [ ^ self ].
@@ -78,6 +66,18 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 		theClass: aClassRenamed classRenamed;
 		oldName: aClassRenamed oldName;
 		newName: aClassRenamed newName)
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
+	<return: #Collection of: #Class>
+
+	self hasSelectedPackage
+		ifFalse: [ ^ #() ].
+		
+	^ self hasSelectedTag
+		ifTrue: [ self selectedTag classes ]
+		ifFalse: [ self selectedPackage definedClasses ]
 ]
 
 { #category : #'private - accessing' }
@@ -211,13 +211,6 @@ GtCoderNavigationPackagesTagsClassesModel >> packageRenamed: aRPackageRenamed [
 		newName: aRPackageRenamed newName)
 ]
 
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
-	<return: #Collection of: #RPackage>
-
-	^ RPackageOrganizer default gtSortedPackages
-]
-
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> packageTagAdded: aClassTagAdded [
 	(self packagesToShow includes: aClassTagAdded package) ifFalse: [ ^ self ].
@@ -237,10 +230,28 @@ GtCoderNavigationPackagesTagsClassesModel >> packageTagRemoved: aClassTagRemoved
 ]
 
 { #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> packageTagRenamed: aClassTagRenamed [
+	(self packagesToShow includes: aClassTagRenamed package) ifFalse: [ ^ self ].
+	self announcer
+		announce: (GtCoderNavigationPackageTagRenamed new
+				coder: coder;
+				package: aClassTagRenamed package;
+				oldName: aClassTagRenamed tag;
+				newName: aClassTagRenamed newName)
+]
+
+{ #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnregistered [
 	self announcer announce: (GtCoderNavigationPackageUnregistered new 
 		coder: coder;
 		package: aRPackageUnregistered package)
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
+	<return: #Collection of: #RPackage>
+
+	^ RPackageOrganizer default gtSortedPackages
 ]
 
 { #category : #'api - selection' }
@@ -301,39 +312,6 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 	self notifyCoderSelected
 ]
 
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedClass [
-	<return: #Class>
-	^ coder theClass
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
-	self selectedClass ifNotNil: aBlock
-]
-
-{ #category : #'api - selection' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
-	<return: #RPackage>
-	^ selectedPackage
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
-	self selectedPackage ifNotNil: aBlock
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
-	<return: #RPackageTag>
-	^ selectedTag
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedTagDo: aBlock [
-	self selectedTag ifNotNil: aBlock
-]
-
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod [
 	self selectClass: aMethod methodClass instanceSide.
@@ -384,6 +362,39 @@ GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
 	self notifySlotSelected: aSlot source: aSource
 ]
 
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedClass [
+	<return: #Class>
+	^ coder theClass
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
+	self selectedClass ifNotNil: aBlock
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
+	<return: #RPackage>
+	^ selectedPackage
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
+	self selectedPackage ifNotNil: aBlock
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
+	<return: #RPackageTag>
+	^ selectedTag
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedTagDo: aBlock [
+	self selectedTag ifNotNil: aBlock
+]
+
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> showPackage: anRPackage [
 	^ true
@@ -395,6 +406,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: RPackageRegistered send: #packageRegistered: to: self;
 		when: RPackageUnregistered send: #packageUnregistered: to: self;
 		when: RPackageRenamed send: #packageRenamed: to: self;
+		when: ClassTagRenamed send: #packageTagRenamed: to: self;
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
