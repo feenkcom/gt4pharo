@@ -406,7 +406,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: RPackageRegistered send: #packageRegistered: to: self;
 		when: RPackageUnregistered send: #packageUnregistered: to: self;
 		when: RPackageRenamed send: #packageRenamed: to: self;
-		when: ClassTagAnnouncement send: #packageTagRenamed: to: self;
+		when: ClassTagRenamed send: #packageTagRenamed: to: self;
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
