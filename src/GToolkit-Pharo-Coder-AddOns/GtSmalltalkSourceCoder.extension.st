@@ -1,7 +1,18 @@
 Extension { #name : #GtSmalltalkSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel label: aLabel requesterObject: aRequester [
+	self 
+		addLinkMenuAddOnsTo: coderAddOns 
+		node: node 
+		selector: sel 
+		label: aLabel
+		shortcut: nil 
+		requesterObject: aRequester
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel label: aLabel shortcut: aShortcut requesterObject: aRequester [
 	| highlightNode nodeDescription |
 	
 	(node isMessage or: [ 
@@ -17,7 +28,7 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: 
 	
 	coderAddOns
 		addContextMenuItem: (self 
-			createLabel: aShortcut name 
+			createLabel: aLabel
 			description: nodeDescription)
 		hover: (self highlightNodeBlock: highlightNode)
 		leave: self removeHighlightBlock
@@ -26,7 +37,19 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: 
 				perform: sel
 				with: highlightNode startPosition
 				with: aRequester ]
-		shortcutKey: aShortcut combinationForPlatform gtDisplayString
+		shortcutKey: (aShortcut ifNotNil: [
+			aShortcut combinationForPlatform gtDisplayString ])
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	self 
+		addLinkMenuAddOnsTo: coderAddOns 
+		node: node 
+		selector: sel 
+		label: aShortcut name 
+		shortcut: aShortcut 
+		requesterObject: aRequester
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
