@@ -204,41 +204,29 @@ GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coder
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 11>
+	
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			| highlightNode |
-			(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
-				ifTrue: [ highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
-					coderAddOns
-						addContextMenuItem: (self
-								createLabel: 'Browse hierarchy implementors'
-								description: node selector)
-						hover: (self highlightNodeBlock: highlightNode)
-						leave: self removeHighlightBlock
-						action: [ :aTextualViewModel | 
-							self
-								browseHierarchyImplementorsAt: highlightNode startPosition
-								requesterObject: aTextualViewModel ] ] ]
+			self 
+				addLinkMenuAddOnsTo: coderAddOns 
+				node: node 
+				selector: #browseHierarchyImplementorsAt:requesterObject: 
+				label: 'Browse hierarchy implementors' 
+				requesterObject: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 16>
+	
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			| highlightNode |
-			(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
-				ifTrue: [ highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
-					coderAddOns
-						addContextMenuItem: (self
-								createLabel: 'Browse hierarchy references'
-								description: node selector)
-						hover: (self highlightNodeBlock: highlightNode)
-						leave: self removeHighlightBlock
-						action: [ :aTextualViewModel | 
-							self
-								browseHierarchyReferencesAt: highlightNode startPosition
-								requesterObject: aCoderViewModel ] ] ]
+			self 
+				addLinkMenuAddOnsTo: coderAddOns 
+				node: node 
+				selector: #browseHierarchyReferencesAt:requesterObject: 
+				label: 'Browse hierarchy references' 
+				requesterObject: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

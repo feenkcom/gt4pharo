@@ -58,25 +58,54 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 13>
-	| foundClass |
+	
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
-			| node |
-			node := nodes first.
-			node isVariable ifFalse: [ ^ self ].
-			self
-				variableNodeToBehavior: node
-				ifFound: [ :aClass | foundClass := aClass ]
-				ifNone: [ ^ self ].
-			coderAddOns
-				addContextMenuItem: (self
-						createLabel: 'Browse class'
-						description: foundClass name)
-				hover: (self highlightNodeBlock: node)
-				leave: self removeHighlightBlock
-				action: [ :aTextualViewModel | 
-					self browseBehaviorAt: node startPosition requesterObject: nil ]
-				shortcutKey: GtSourceCoderBrowseBehaviorShortcut new combinationForPlatform gtDisplayString ]
+			self 
+				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+				node: nodes first 
+				selector: #browseBehaviorAt:requesterObject: 
+				shortcut: GtSourceCoderBrowseBehaviorShortcut new 
+				requesterObject: aCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	| foundClass |
+
+
+	node isVariable ifFalse: [ ^ self ].
+	self
+		variableNodeToBehavior: node
+		ifFound: [ :aClass | foundClass := aClass ]
+		ifNone: [ ^ self ].
+
+	coderAddOns
+		addContextMenuItem: (self
+			createLabel: aShortcut name 
+			description: foundClass name)
+		hover: (self highlightNodeBlock: node)
+		leave: self removeHighlightBlock
+			action: [ :aTextualViewModel | 
+				self
+					perform: sel
+					with: node startPosition
+					with: aRequester  ]
+		shortcutKey: aShortcut  combinationForPlatform gtDisplayString 
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 13>
+	
+	(self extractableNodesFrom: aCoderViewModel)
+		ifNotEmpty: [ :nodes | 
+			self 
+				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+				node: nodes first 
+				selector: #browseReferencesAt:requesterObject:
+				shortcut: GtSourceCoderBrowseReferencesShortcut new 
+				requesterObject: aCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -155,22 +184,6 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				id: nil
 				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
 						combinationForPlatform gtDisplayString ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
-	| highlightNode |
-	(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
-		ifFalse: [ ^ self ].
-	highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
-	coderAddOns
-		addContextMenuItem: (self
-				createLabel: aShortcut name
-				description: node selector)
-		hover: (self highlightNodeBlock: highlightNode)
-		leave: self removeHighlightBlock
-		action: [ :aTextualViewModel | self perform: sel with: highlightNode startPosition with: aRequester ]
-		shortcutKey: aShortcut combinationForPlatform gtDisplayString
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

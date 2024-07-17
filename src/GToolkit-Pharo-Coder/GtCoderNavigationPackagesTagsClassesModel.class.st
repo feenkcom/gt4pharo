@@ -230,6 +230,17 @@ GtCoderNavigationPackagesTagsClassesModel >> packageTagRemoved: aClassTagRemoved
 ]
 
 { #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> packageTagRenamed: aClassTagRenamed [
+	(self packagesToShow includes: aClassTagRenamed package) ifFalse: [ ^ self ].
+	self announcer
+		announce: (GtCoderNavigationPackageTagRenamed new
+				coder: coder;
+				package: aClassTagRenamed package;
+				oldName: aClassTagRenamed tag;
+				newName: aClassTagRenamed newName)
+]
+
+{ #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnregistered [
 	self announcer announce: (GtCoderNavigationPackageUnregistered new 
 		coder: coder;
@@ -395,6 +406,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: RPackageRegistered send: #packageRegistered: to: self;
 		when: RPackageUnregistered send: #packageUnregistered: to: self;
 		when: RPackageRenamed send: #packageRenamed: to: self;
+		when: ClassTagRenamed send: #packageTagRenamed: to: self;
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
