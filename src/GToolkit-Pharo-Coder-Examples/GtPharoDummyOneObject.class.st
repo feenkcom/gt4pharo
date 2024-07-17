@@ -88,6 +88,36 @@ GtPharoDummyOneObject >> instAReceiver [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject >> longMethod [
+	| aValue |
+	aValue := 1.
+	aValue := aValue + 1.
+	aValue := aValue + 2.
+	aValue := aValue + 3.
+	aValue := self togetherWith: aValue.
+	#(5 6) 
+		inject: aValue 
+		into: [ :aSum :anotherValue |
+			aSum + anotherValue ].
+	aValue := aValue + 7.
+	aValue := aValue + 8.
+	aValue := aValue + 9.
+	aValue := aValue + 10.
+	aValue := aValue + 11.
+	aValue := aValue + 12.
+	aValue := aValue + 13.
+	aValue := aValue + 14.
+	aValue := aValue + 15.
+	aValue := aValue + 16.
+	aValue := aValue + 17.
+	aValue := aValue + 18.
+	aValue := aValue + 19.
+	aValue := aValue + 20.
+	aValue := aValue + 21.
+	^ aValue
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject >> number [
 	^ self one
 ]
@@ -157,6 +187,13 @@ GtPharoDummyOneObject >> tempReceiver [
 { #category : #accessing }
 GtPharoDummyOneObject >> three [
 	^ self two + self one
+]
+
+{ #category : #accessing }
+GtPharoDummyOneObject >> togetherWith: aValue [
+	| anotherValue |
+	anotherValue := aValue + 4.
+	^ anotherValue
 ]
 
 { #category : #accessing }
