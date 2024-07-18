@@ -28,6 +28,18 @@ GtSearchMethodsContainedInClassFilterExamples >> methodOnlyIncludedOnceInFilter 
 ]
 
 { #category : #examples }
+GtSearchMethodsContainedInClassFilterExamples >> methodOnlyIncludedOnceInInstVarFilter [
+	<gtExample>
+	| filter methods |
+	filter := GtSearchInstanceSlotReferenceFilter
+			forClass: OrderedCollection
+			andVariable: 'array'.
+	methods := filter contents.
+	self assert: methods size equals: methods asSet size.
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodsInClassFilter [
 	<gtExample>
 	^ self
