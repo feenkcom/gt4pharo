@@ -10,20 +10,21 @@ GtMessageNotImplementedAdvice >> description [
 ]
 
 { #category : #private }
-GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderViewModel: coderViewModel type: type [
+GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode coderViewModel: weakCoderViewModelRef type: type [
 	| actions |
-	
 	actions := OrderedCollection new.
-	type
-		ifNotNil: [ actions
-				add: ((GtDefineMethodFixItAction forCoder: coderViewModel coderModel node: aNode)
-						coderViewModel: coderViewModel;
-						classOrMetaClass: type) ].
-	actions
-		addAll: (self
-				potentialRenameActionsFor: aNode
-				type: type
-				coderModel: coderViewModel coderModel).
+	weakCoderViewModelRef first
+		ifNotNil: [ :coderViewModel | 
+			type
+				ifNotNil: [ actions
+						add: ((GtDefineMethodFixItAction forCoder: coderViewModel coderModel node: aNode)
+								coderViewModel: coderViewModel;
+								classOrMetaClass: type) ].
+			actions
+				addAll: (self
+						potentialRenameActionsFor: aNode
+						type: type
+						coderModel: coderViewModel coderModel) ].
 	^ actions
 ]
 
@@ -33,7 +34,7 @@ GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode styler: aCriticStyle
 		receiver: self
 		selector: #fixItActionsForNode:coderViewModel:type:
 		arguments: {aNode.
-				aCriticStyler coderViewModel.
+				WeakArray with: aCriticStyler coderViewModel.
 				aCriticStyler
 					typeOf: (aNode isMessage
 							ifTrue: [ aNode parent receiver ]
