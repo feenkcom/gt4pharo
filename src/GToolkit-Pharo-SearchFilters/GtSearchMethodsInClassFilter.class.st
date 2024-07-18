@@ -20,7 +20,7 @@ GtSearchMethodsInClassFilter >> = anObject [
 
 { #category : #accessing }
 GtSearchMethodsInClassFilter >> defaultFilterScope [
-	| theStreams |
+	| theStreams isClassSide subclassesBlock |
 	theStreams := OrderedCollection new.
 
 	theStreams add: (AsyncBehaviorAllMethodsStream forBehavior: filterClass).
@@ -32,10 +32,12 @@ GtSearchMethodsInClassFilter >> defaultFilterScope [
 						flatten ].
 
 	includeSubclasses
-		ifTrue: [ theStreams
-				add: ((AsyncDepthFirstTraversalStream
-						root: Object
-						children: [ :each | each subclasses select: [ :sub | sub isClassSide = each isClassSide ] ])
+		ifTrue: [ isClassSide := filterClass isClassSide.
+			subclassesBlock := [ :each | each subclasses select: [ :sub | sub isClassSide = isClassSide ] ].
+			theStreams
+				add: ((AsyncDepthFirstTraversalStream new
+						roots: (subclassesBlock value: filterClass)
+						children: subclassesBlock)
 						map: [ :eachBehavior | AsyncBehaviorAllMethodsStream forBehavior: eachBehavior ])
 						flatten ].
 
