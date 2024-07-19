@@ -115,8 +115,7 @@ GtPharoCompletionStrategy >> gtViewChildrenFor: aView [
 { #category : #testing }
 GtPharoCompletionStrategy >> hasCompletionsAt: anInteger in: aText [
 	| char |
-	anInteger < 1
-		ifTrue: [ ^ false ].
+	(anInteger < 1 or: [ anInteger > aText size ]) ifTrue: [ ^ false ].
 	char := aText at: anInteger.
 	^ char isLetter or: [ char isDigit ]
 ]
