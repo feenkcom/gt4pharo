@@ -11,8 +11,11 @@ GtImplicitColonAttribute >> = anObject [
 
 { #category : #accessing }
 GtImplicitColonAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	^ BlTextElement new
-		text: (':' asRopedText foreground: BrGlamorousColors disabledButtonTextColor);
+	^ BrVerticalPane new
+		fitContent;
+		addChild: (BlTextElement new
+				text: (':' asRopedText foreground: BrGlamorousColors disabledButtonTextColor);
+				yourself);
 		yourself
 ]
 
