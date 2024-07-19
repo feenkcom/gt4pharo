@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoStreamingMethodsCoderElementSignal,
-	#superclass : #BeaconSignal,
+	#superclass : #ContextStackSignal,
 	#instVars : [
 		'element'
 	],
