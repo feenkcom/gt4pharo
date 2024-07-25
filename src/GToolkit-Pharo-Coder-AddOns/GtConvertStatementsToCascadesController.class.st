@@ -8,6 +8,21 @@ Class {
 }
 
 { #category : #accessing }
+GtConvertStatementsToCascadesController >> foo [
+	| str |
+	str := WriteStream on: ''.
+	str nextPutAll: 'bar'.
+	str nextPutAll: 'bar'.
+	str nextPutAll: 'bar'.
+	str
+		nextPutAll: 'bar';
+		nextPutAll: 'bar'.
+	str nextPutAll: 'bar'.
+	str cr.
+	^ str contents
+]
+
+{ #category : #accessing }
 GtConvertStatementsToCascadesController >> nodes: aCollection [
 	nodes := aCollection
 ]
