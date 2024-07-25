@@ -22,14 +22,20 @@ GtConvertStatementsToCascadesRefactoring class >> model: model convert: anInterv
 GtConvertStatementsToCascadesRefactoring >> cascadeWithAssignment: nodes [
 	| cascade sends |
 	sends := nodes allButFirst.
-	self checkAllAreMessageSends: sends.
+	self checkAllAreMessageSendsOrCascades: sends.
 	self checkAllHaveSameReceiver: sends.
 	nodes first variable = nodes last receiver
 		ifFalse: [ self refactoringError: 'Variable assigned is not used as the receiver' ].
+	sends := Array
+			streamContents: [ :str | 
+				sends
+					do: [ :each | 
+						each isMessage ifTrue: [ str nextPut: each ].
+						each isCascade ifTrue: [ str nextPutAll: each messages ] ] ].
 	cascade := RBCascadeNode
 			messages: (sends collect: [ :each | each copy receiver: nodes first value copy ])
 					, {RBMessageNode receiver: nodes first value copy selector: #yourself}.
-	sends do: [ :each | each parent removeNode: each ].
+	2 to: nodes size do: [ :i | nodes first parent removeNode: (nodes at: i) ].
 	nodes first parent
 		replaceNode: nodes first
 		withNode: (RBAssignmentNode variable: nodes first variable copy value: cascade).
@@ -38,22 +44,28 @@ GtConvertStatementsToCascadesRefactoring >> cascadeWithAssignment: nodes [
 
 { #category : #accessing }
 GtConvertStatementsToCascadesRefactoring >> cascadeWithoutAssignment: nodes [
-	| cascade |
-	self checkAllAreMessageSends: nodes.
+	| cascade messages |
+	self checkAllAreMessageSendsOrCascades: nodes.
 	self checkAllHaveSameReceiver: nodes.
 	nodes first receiver isVariable
 		ifTrue: [ self
 				refactoringWarning: 'The receiver is not a variable and will only be executed once in a cascade.' ].
-	cascade := RBCascadeNode messages: (nodes collect: [ :each | each copy ]).
+	messages := Array
+			streamContents: [ :str | 
+				nodes
+					do: [ :each | 
+						each isMessage ifTrue: [ str nextPut: each copy ].
+						each isCascade ifTrue: [ str nextPutAll: (each messages collect: #copy) ] ] ].
+	cascade := RBCascadeNode messages: messages.
 	2 to: nodes size do: [ :i | nodes first parent removeNode: (nodes at: i) ].
 	nodes first parent replaceNode: nodes first withNode: cascade.
 	^ cascade
 ]
 
 { #category : #accessing }
-GtConvertStatementsToCascadesRefactoring >> checkAllAreMessageSends: nodes [
-	(nodes allSatisfy: [ :each | each isMessage ])
-		ifFalse: [ self refactoringError: 'All statements are not message sends' ]
+GtConvertStatementsToCascadesRefactoring >> checkAllAreMessageSendsOrCascades: nodes [
+	(nodes allSatisfy: [ :each | each isMessage or: [ each isCascade ] ])
+		ifFalse: [ self refactoringError: 'All statements are not message sends or cascades' ]
 ]
 
 { #category : #accessing }
@@ -72,7 +84,7 @@ GtConvertStatementsToCascadesRefactoring >> convert: anInterval inMethod: aSelec
 { #category : #accessing }
 GtConvertStatementsToCascadesRefactoring >> findNodes [
 	| sourceTree |
-	sourceTree := class parseTreeFor: selector.
+	sourceTree := class parseTreeForSelector: selector.
 	sourceTree ifNil: [ self refactoringFailure: 'Could not parse source' ].
 	sourceTree
 		nodesDo: [ :each | 

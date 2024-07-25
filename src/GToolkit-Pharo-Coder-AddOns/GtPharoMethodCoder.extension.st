@@ -77,9 +77,14 @@ GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
+	| sends |
 	nodes size > 1 ifFalse: [ ^ self ].
-	(nodes allSatisfy: [ :each | each isMessageSend ]) ifFalse: [ ^ self ].
-	(nodes allSatisfy: [ :each | each receiver = nodes first receiver ])
+	sends := nodes first isAssignment
+			ifTrue: [ nodes allButFirst ]
+			ifFalse: [ nodes ].
+	(sends allSatisfy: [ :each | each isMessageSend or: [ each isCascade ] ])
+		ifFalse: [ ^ self ].
+	(sends allSatisfy: [ :each | each receiver = sends first receiver ])
 		ifFalse: [ ^ self ].
 	coderAddOns
 		addContextMenuItem: (self

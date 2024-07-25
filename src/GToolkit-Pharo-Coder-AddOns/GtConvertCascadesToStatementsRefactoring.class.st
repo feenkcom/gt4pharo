@@ -87,7 +87,7 @@ GtConvertCascadesToStatementsRefactoring >> extractTempForReceiver: aNode [
 { #category : #accessing }
 GtConvertCascadesToStatementsRefactoring >> findNode [
 	| sourceTree |
-	sourceTree := class parseTreeFor: selector.
+	sourceTree := class parseTreeForSelector: selector.
 	sourceTree ifNil: [ self refactoringFailure: 'Could not parse source' ].
 	sourceTree
 		nodesDo: [ :each | 
