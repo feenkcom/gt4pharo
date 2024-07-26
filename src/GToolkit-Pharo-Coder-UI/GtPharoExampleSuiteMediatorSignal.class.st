@@ -2,7 +2,7 @@ Class {
 	#name : #GtPharoExampleSuiteMediatorSignal,
 	#superclass : #BeaconSignal,
 	#instVars : [
-		'medator'
+		'mediator'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
@@ -15,13 +15,13 @@ GtPharoExampleSuiteMediatorSignal >> id [
 { #category : #accessing }
 GtPharoExampleSuiteMediatorSignal >> mediator [
 
-	^ medator
+	^ mediator
 ]
 
 { #category : #accessing }
 GtPharoExampleSuiteMediatorSignal >> mediator: anObject [
 
-	medator := anObject
+	mediator := anObject
 ]
 
 { #category : #accessing }
