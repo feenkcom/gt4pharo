@@ -1,6 +1,8 @@
 Class {
 	#name : #GtVmMemoryManagementExamples,
 	#superclass : #Object,
+	#traits : 'TAssertable',
+	#classTraits : 'TAssertable classTrait',
 	#instVars : [
 		'previousConfiguration'
 	],
@@ -52,7 +54,7 @@ GtVmMemoryManagementExamples >> growWithoutGc [
 { #category : #'tests - writing to the VM' }
 GtVmMemoryManagementExamples >> testActiveDuring [
 	<gtExample>
-	| new old vm |
+	| new old vm flagObject activeDuringResult |
 
 	vm := Smalltalk vm.
 	new := GtVmMemoryManagement readFromVm.
@@ -64,15 +66,18 @@ GtVmMemoryManagementExamples >> testActiveDuring [
 	new newSpaceSize: new newSpaceSize * 2.
 	new maxOldSpaceSize: Smalltalk vm oldSpace * 3.
 	new minOldSpaceForGc: new minOldSpaceForGc + 100000.
+	flagObject := Object new.
 	
-	new activeDuring: 
+	activeDuringResult := new activeDuring: 
 		[ self assert: new growthHeadroom equals: (vm parameterAt: 25).
 		self assert: new shrinkThreshhold equals: (vm parameterAt: 24).
 		self assert: new fullGcRatio equals: (vm parameterAt: 55).
 		self assert: new newSpaceSize equals: (vm parameterAt: 45).
 		self assert: new maxOldSpaceSize equals: (vm parameterAt: 67).
-		self assert: new minOldSpaceForGc equals: GtVmMemoryManagement minOldSpaceForGc ].
+		self assert: new minOldSpaceForGc equals: GtVmMemoryManagement minOldSpaceForGc.
+		flagObject ].
 
+	self assert: activeDuringResult identicalTo: flagObject.
 	self assert: (vm parameterAt: 25) equals: old growthHeadroom.
 	self assert: (vm parameterAt: 24) equals: old shrinkThreshhold.
 	self assert: (vm parameterAt: 55) equals: old fullGcRatio.
