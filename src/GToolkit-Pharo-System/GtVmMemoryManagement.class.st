@@ -20,10 +20,10 @@ GtVmMemoryManagement class >> forLargeObjectAllocation [
 
 	"I create a configuration for executing the allocation of large objects as I expand the size of the new segments and the available space without executing a GC. Also I change the ratio to detect the execution of a Full GC, in this case the old space have to double itself before executing a FULL GC (grow a 100%)"
 
-	^ self readFromVM
+	^ self readFromVm
 		growthHeadroom: 128 * 1024 * 1024;
-		shrinkThreadshold: 100 * 1024 * 1024;
-		fullGCRatio: 1.0;
+		shrinkThreshhold: 100 * 1024 * 1024;
+		fullGcRatio: 1.0;
 		yourself.
 ]
 
@@ -45,10 +45,10 @@ GtVmMemoryManagement class >> minOldSpaceForGc: anInteger [
 ]
 
 { #category : #'instance creation' }
-GtVmMemoryManagement class >> readFromVM [
+GtVmMemoryManagement class >> readFromVm [
 
 	^ self new
-		readFromVM;
+		readFromVm;
 		yourself.
 ]
 
@@ -67,17 +67,17 @@ GtVmMemoryManagement class >> validateMinOldSpaceForGc: anInteger [
 GtVmMemoryManagement >> activeDuring: aBlock [ 
 	| old |
 
-	old := self writeToVM.
-	aBlock ensure: [ old writeToVM ]
+	old := self writeToVm.
+	aBlock ensure: [ old writeToVm ]
 ]
 
 { #category : #accessing }
-GtVmMemoryManagement >> fullGCRatio [
+GtVmMemoryManagement >> fullGcRatio [
 	^ fullGCRatio 
 ]
 
 { #category : #accessing }
-GtVmMemoryManagement >> fullGCRatio: aNumber [ 
+GtVmMemoryManagement >> fullGcRatio: aNumber [ 
 	fullGCRatio := aNumber
 ]
 
@@ -140,7 +140,7 @@ GtVmMemoryManagement >> newSpaceSize: anInteger [
 ]
 
 { #category : #'from-to-the-vm' }
-GtVmMemoryManagement >> readFromVM [
+GtVmMemoryManagement >> readFromVm [
 	| vm |
 
 	vm := Smalltalk vm.
@@ -153,17 +153,17 @@ GtVmMemoryManagement >> readFromVM [
 ]
 
 { #category : #accessing }
-GtVmMemoryManagement >> shrinkThreadshold [
+GtVmMemoryManagement >> shrinkThreshhold [
 	^ shrinkThreadshold
 ]
 
 { #category : #accessing }
-GtVmMemoryManagement >> shrinkThreadshold: anInteger [ 
+GtVmMemoryManagement >> shrinkThreshhold: anInteger [ 
 	shrinkThreadshold := anInteger
 ]
 
 { #category : #'from-to-the-vm' }
-GtVmMemoryManagement >> writeToVM [
+GtVmMemoryManagement >> writeToVm [
 	| vm oldConfig oldNewSpaceSize oldGrowthHeadroom oldShrinkThreadshold oldFullGCRatio oldMaxOldSpaceSize oldMinOldSpaceForGc |
 
 	vm := Smalltalk vm.
@@ -181,8 +181,8 @@ GtVmMemoryManagement >> writeToVM [
 		newSpaceSize: oldNewSpaceSize;
 		maxOldSpaceSize: oldMaxOldSpaceSize;
 		growthHeadroom: oldGrowthHeadroom;
-		shrinkThreadshold: oldShrinkThreadshold;
-		fullGCRatio: oldFullGCRatio;
+		shrinkThreshhold: oldShrinkThreadshold;
+		fullGcRatio: oldFullGCRatio;
 		minOldSpaceForGc: oldMinOldSpaceForGc;
 		yourself.
 ]

@@ -18,12 +18,14 @@ Behavior >> handleFailingBasicNew: sizeRequested [
 	<gtPharoPatch: #Pharo>
 	| bytesRequested |
 	bytesRequested := self byteSizeOfInstanceOfSize: sizeRequested.
-	^Smalltalk garbageCollect < bytesRequested ifTrue:
+	^ Smalltalk vm oldSpace < self minOldSpaceForGc ifTrue:
+		[ Smalltalk growMemoryByAtLeast: bytesRequested.
+		self handleFailingFailingBasicNew: sizeRequested ]
+	ifFalse: [ Smalltalk garbageCollect < bytesRequested ifTrue:
 		[Smalltalk growMemoryByAtLeast: bytesRequested.
-		"retry after global garbage collect and possible grow"
 		self handleFailingFailingBasicNew: sizeRequested]
 	ifFalse:
-		[self handleFailingBasicNewWithGC: sizeRequested]
+		[self handleFailingBasicNewWithGC: sizeRequested] ]
 ]
 
 { #category : #'*GToolkit-Pharo-System' }
