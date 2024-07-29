@@ -45,3 +45,16 @@ Behavior >> handleFailingBasicNewWithGC: sizeRequested [
 		self handleFailingFailingBasicNew: sizeRequested ]
 			valueUnpreemptively.
 ]
+
+{ #category : #'*GToolkit-Pharo-System' }
+Behavior >> minOldSpaceForGc [
+	"Answer the value below which old space will be grown instead of garbage collecting"
+
+	^ [ | minOldSpaceForGc |
+	minOldSpaceForGc := GtVmMemoryManagement minOldSpaceForGc.
+	minOldSpaceForGc isInteger 
+		ifTrue: [ minOldSpaceForGc ]
+		ifFalse: [ 0 ] ]
+			on: Error
+			do: [ :ex | 0 ]
+]
