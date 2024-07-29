@@ -68,7 +68,7 @@ GtVmMemoryManagement >> activeDuring: aBlock [
 	| old |
 
 	old := self writeToVm.
-	aBlock ensure: [ old writeToVm ]
+	^ aBlock ensure: [ old writeToVm ]
 ]
 
 { #category : #accessing }
