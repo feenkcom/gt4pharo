@@ -18,12 +18,14 @@ Behavior >> handleFailingBasicNew: sizeRequested [
 	<gtPharoPatch: #Pharo>
 	| bytesRequested |
 	bytesRequested := self byteSizeOfInstanceOfSize: sizeRequested.
-	^Smalltalk garbageCollect < bytesRequested ifTrue:
+	^ Smalltalk vm oldSpace < self minOldSpaceForGc ifTrue:
+		[ Smalltalk growMemoryByAtLeast: bytesRequested.
+		self handleFailingFailingBasicNew: sizeRequested ]
+	ifFalse: [ Smalltalk garbageCollect < bytesRequested ifTrue:
 		[Smalltalk growMemoryByAtLeast: bytesRequested.
-		"retry after global garbage collect and possible grow"
 		self handleFailingFailingBasicNew: sizeRequested]
 	ifFalse:
-		[self handleFailingBasicNewWithGC: sizeRequested]
+		[self handleFailingBasicNewWithGC: sizeRequested] ]
 ]
 
 { #category : #'*GToolkit-Pharo-System' }
@@ -44,4 +46,17 @@ Behavior >> handleFailingBasicNewWithGC: sizeRequested [
 	^ [ Smalltalk growMemoryByAtLeast: bytesRequested.
 		self handleFailingFailingBasicNew: sizeRequested ]
 			valueUnpreemptively.
+]
+
+{ #category : #'*GToolkit-Pharo-System' }
+Behavior >> minOldSpaceForGc [
+	"Answer the value below which old space will be grown instead of garbage collecting"
+
+	^ [ | minOldSpaceForGc |
+	minOldSpaceForGc := GtVmMemoryManagement minOldSpaceForGc.
+	minOldSpaceForGc isInteger 
+		ifTrue: [ minOldSpaceForGc ]
+		ifFalse: [ 0 ] ]
+			on: Error
+			do: [ :ex | 0 ]
 ]
