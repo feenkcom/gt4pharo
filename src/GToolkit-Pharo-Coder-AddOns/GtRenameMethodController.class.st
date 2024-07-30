@@ -113,7 +113,7 @@ GtRenameMethodController >> refactoring [
 			and: [ sourceCoderViewModel coderModel selector = selector ].
 	refactoring := (isCoderMethodBeingRenamed
 			ifTrue: [ GtCoderRenameMethodRefactoring ]
-			ifFalse: [ RBRenameMethodRefactoring ])
+			ifFalse: [ GtRBRenameMethodRefactoring ])
 			model: model
 			renameMethod: selector
 			in: (model classFor: implementor)
