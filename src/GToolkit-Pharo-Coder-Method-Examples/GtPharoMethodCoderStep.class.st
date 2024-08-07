@@ -324,6 +324,16 @@ GtPharoMethodCoderStep >> assertTargetBehaviorIs: aBehavior [
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> browseBehavior [
+	^ self shortcut
+		label: 'Browse behavior';
+		combination: BlKeyCombination primaryB;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> clickOnHeaderMethodBehavior [
 	| aClickStep |
 	aClickStep := self click
@@ -415,6 +425,16 @@ GtPharoMethodCoderStep >> methodCoderExpander: anExpanderIndex insideDo: anInsid
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> playAndInspect [
+	^ self shortcut
+		label: 'Play and inspect';
+		combination: BlKeyCombination primaryG;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> printIt [
 	^ self shortcut
 		label: 'Print result';
@@ -483,6 +503,16 @@ GtPharoMethodCoderStep >> select: aString from: aFromIndex to: aToIndex [
 			self assert: anEditor editor selectedText asString equals: aString ];
 		onParentStepTarget: self;
 		// GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> selectAll [
+	^ self shortcut
+		label: 'Select all editor text';
+		combination: BlKeyCombination primaryA;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
 		onTopMost
 ]
 
