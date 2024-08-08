@@ -399,7 +399,6 @@ GtPharoMethodCoderStep >> clickOnPlayAndInspectExampleButton [
 	aClickStep := self click
 			referenceSender;
 			label: 'Click on play and inspect example button';
-			onParentStepTarget: self;
 			// GtMethodCoderPlayAndInspectExampleActionId;
 			onTopMost.
 	^ aClickStep
