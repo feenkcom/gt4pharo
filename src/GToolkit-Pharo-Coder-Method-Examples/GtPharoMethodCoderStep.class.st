@@ -339,7 +339,6 @@ GtPharoMethodCoderStep >> clickOnHeaderMethodBehavior [
 	aClickStep := self click
 			label: 'Click on header method behavior';
 			referenceSender;
-			onParentStepTarget: self;
 			// GtPharoHeaderMethodBehaviorId.
 
 	^ aClickStep
@@ -351,7 +350,6 @@ GtPharoMethodCoderStep >> clickOnHeaderProviderBehavior [
 	aClickStep := self click
 			label: 'Click on header provider behavior';
 			referenceSender;
-			onParentStepTarget: self;
 			// GtPharoHeaderProviderBehaviorId.
 
 	^ aClickStep
@@ -362,7 +360,6 @@ GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: 
 	| aRootStep |
 	self click
 		label: ('Click on expander number {1}' format: {anExpanderIndex});
-		onParentStepTarget: self;
 		referenceSender;
 		// (GtPharoMethodExpanderId indexed: anExpanderIndex);
 		onTopMost.
@@ -392,7 +389,6 @@ GtPharoMethodCoderStep >> clickOnPlayAndInspectButton [
 	aClickStep := self click
 			referenceSender;
 			label: 'Click on play and inspect button';
-			onParentStepTarget: self;
 			// GtPharoMethodPlayAndInspectActionId.
 	^ aClickStep
 ]
