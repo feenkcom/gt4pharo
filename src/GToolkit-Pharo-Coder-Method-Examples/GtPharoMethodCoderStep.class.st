@@ -405,6 +405,32 @@ GtPharoMethodCoderStep >> clickOnPlayAndInspectExampleButton [
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> clickOnPlayButton [
+	| aClickStep |
+	aClickStep := self click
+			referenceSender;
+			label: 'Click on play button';
+			// GtSourceCoderDoItActionId.
+	^ aClickStep
+]
+
+{ #category : #'steps - accessing' }
+GtPharoMethodCoderStep >> coderModelDo: aBlock [
+	^ self do
+		label: 'Access coder model';
+		block: [ :anElement | aBlock cull: anElement textualCoderViewModel coderModel ];
+		onParentStepTarget: self
+]
+
+{ #category : #'steps - accessing' }
+GtPharoMethodCoderStep >> coderViewModelDo: aBlock [
+	^ self do
+		label: 'Access coder view model';
+		block: [ :anElement | aBlock cull: anElement textualCoderViewModel ];
+		onParentStepTarget: self
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> methodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
 	| aRootStep |
 	aRootStep := self methodCoder
