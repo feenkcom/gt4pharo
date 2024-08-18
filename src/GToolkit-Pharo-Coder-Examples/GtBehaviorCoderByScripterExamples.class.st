@@ -53,6 +53,39 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_add_method [
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_expand_definition [
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI.
+
+	aScripter
+		substep: 'Expand class definition'
+		do: [ :aStep | 
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click expand class definition';
+						id: GtSourceCoderExpanderToggleId ] ].
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_slot [
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI_click_expand_definition.
+	aScripter
+		substep: ''
+		do: [ :aStep | 
+			aStep
+				clickStep: [ :s | 
+					s
+						// (GtMagritteFieldElementId new description: GtBehaviorCreationForm new slotsDescription) ] ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_copyClassName [
 	<gtExample>
 	| aScripter |

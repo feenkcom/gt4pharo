@@ -1205,6 +1205,11 @@ GtPharoMethodCoderByScripterExamples >> createdClassThatDoesntExist [
 	^ 'ClassThatDoesNotExist6561'
 ]
 
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> createdMethodThatIsNotImplemented [
+	^ 'messageThatIsNotImplmented6561'
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> dummyOneObject [
 	^ GtPharoDummyOneObject new instA: 12
@@ -1721,6 +1726,32 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 				satisfies: [ :aCoderViewModel | aCoderViewModel hasSelection not ];
 				onModel ].
 
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateMethodInPlayground_01_setup [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterForBlock: [ GtPharoSnippetCoder new ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method that does not exist';
+				action: [ :aCoder | aCoder appendString: 'Object new ', self createdMethodThatIsNotImplemented ];
+				onModel ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateMethodInPlayground_02_click_fixit [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self fixitCreateMethodInPlayground_01_setup.
+	self clickFixItFor: aScripter.
 	^ aScripter
 ]
 
