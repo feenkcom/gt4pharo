@@ -28,33 +28,31 @@ GtPharoNewMethodCoderElement >> behavior: aBehavior [
 { #category : #'private - updating' }
 GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 	| aNewMethodCoderViewModel aNewMethodCoder newMethodText |
-	aNewMethodCoderViewModel := methodCoderViewModelValueHolder ifNotNil: #contents.
-
-	aNewMethodCoderViewModel ifNotNil: [ 
-		self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
-		^ self ].
-
-	newMethodText := '' asRopedText
-			glamorousCodeFontAndSize;
-			attribute: (BrGhostTextAttribute
-					for: ('newMethod' asRopedText glamorousCodeFontAndSize foreground: Color lightGray))
-					beNotOverwritableByStyler.
-
-	aNewMethodCoder := (GtPharoMethodCoder forNewMethod: (behavior ifNil: [ Object ]))
-			currentSourceText: newMethodText;
-			protocol: #accessing;
-			yourself.
-
-	aNewMethodCoderViewModel := aNewMethodCoder asCoderViewModel
-			withoutHeader;
-			expanded: true;
-			focused: true;
-			moveCursorAtEnd.
-
+	aNewMethodCoderViewModel := methodCoderViewModelValueHolder
+				ifNotNil: #contents.
+	aNewMethodCoderViewModel
+		ifNotNil: 
+			[self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
+			^self].
+	newMethodText := ('' asRopedText)
+				glamorousCodeFontAndSize;
+				attribute: (BrGhostTextAttribute
+							for: ('newMethod' asRopedText glamorousCodeFontAndSize
+									foreground: Color lightGray))
+								beNotOverwritableByStyler.
+	aNewMethodCoder := (GtPharoMethodCoder
+				forNewMethod: (behavior ifNil: [Object]))
+				currentSourceText: newMethodText;
+				protocol: AbstractProtocol unclassified;
+				yourself.
+	aNewMethodCoderViewModel := (aNewMethodCoder asCoderViewModel)
+				withoutHeader;
+				expanded: true;
+				focused: true;
+				moveCursorAtEnd.
 	self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
-
 	methodCoderViewModelValueHolder
-		ifNotNil: [ :aValueHolder | aValueHolder contents: aNewMethodCoderViewModel ]
+		ifNotNil: [:aValueHolder | aValueHolder contents: aNewMethodCoderViewModel]
 ]
 
 { #category : #'private - event handling' }
