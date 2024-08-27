@@ -50,6 +50,14 @@ GtBehaviorUpdateForm >> addRefactoringPreviewFor: aRefactoring in: anElement [
 ]
 
 { #category : #accessing }
+GtBehaviorUpdateForm >> browseReferencesToClassSlot: aSlotName in: anElement [
+	anElement phlow
+		spawnObject: (GtSearchClassSlotReferenceFilter
+				forClassAndSubclasses: (Smalltalk at: self rawClassName asSymbol) class
+				andVariable: aSlotName)
+]
+
+{ #category : #accessing }
 GtBehaviorUpdateForm >> browseReferencesToClassVar: aClassVarName in: anElement [
 	anElement phlow
 		spawnObject: (GtSearchClassVariableReferenceFilter
@@ -130,7 +138,7 @@ GtBehaviorUpdateForm >> createClassSlotsContextMenuContentFor: aSlotName editor:
 	items := OrderedCollection new.
 	items
 		addAll: {GtCoderContextMenuAction new
-					action: [ :form :elem | self browseReferencesToSlot: aSlotName in: elem ];
+					action: [ :form :elem | self browseReferencesToClassSlot: aSlotName in: elem ];
 					title: (self createLabelTextFor: 'Browse references' description: aSlotName).
 				GtCoderContextMenuAction new
 					action: [ self
