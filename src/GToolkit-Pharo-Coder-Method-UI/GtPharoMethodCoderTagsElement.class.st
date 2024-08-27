@@ -116,7 +116,7 @@ GtPharoMethodCoderTagsElement >> newClassTag [
 								action: [ :aButton | 
 									aButton fireEvent: BrDropdownHideWish new.
 									pharoMethodCoderViewModel coder moveMethodToInstanceOrClass.
-									classTag label: self behaviorSideName ] ])
+									classTag label: self behaviorSideName ] ]) beNotResizable
 ]
 
 { #category : #'private - instance creation' }
