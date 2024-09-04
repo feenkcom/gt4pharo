@@ -206,7 +206,7 @@ GtPharoIndex >> basicSubscribe [
 		when: MethodAdded
 			send: #methodAdded:
 			to: self;
-		when: MethodModified
+		when: MethodModified , GtReflectiveMethodInstalled
 			send: #methodModified:
 			to: self;
 		when: MethodRemoved
@@ -613,6 +613,7 @@ GtPharoIndex >> removeMethodFromCache: method [
 { #category : #private }
 GtPharoIndex >> removeSendsFrom: aMethod [
 	| seen globalBlock selectorBlock method |
+	aMethod ifNil: [ ^ self ].
 	method := aMethod gtOriginalMethod.
 	seen := Set new.
 	globalBlock := [ :global | 
