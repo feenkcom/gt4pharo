@@ -1,6 +1,11 @@
 Extension { #name : #CompiledMethod }
 
 { #category : #'*GToolkit-Pharo-Index' }
+CompiledMethod >> gtIndexMethod [
+	^ self gtOriginalMethod
+]
+
+{ #category : #'*GToolkit-Pharo-Index' }
 CompiledMethod >> gtIsActive [
 	^ self isInstalled
 		or: [ self isFFIMethod

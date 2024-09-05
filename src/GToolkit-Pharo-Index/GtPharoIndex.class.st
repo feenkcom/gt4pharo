@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'globalCache',
 		'selectorCache',
-		'shouldRecomputeSubclasses',
 		'selectorWordCache',
 		'classWordCache'
 	],
@@ -53,8 +52,9 @@ GtPharoIndex >> addClassWordsFor: newClassName [
 
 { #category : #private }
 GtPharoIndex >> addSendsFrom: aMethod [
-	| seen globalBlock selectorBlock method |
+	| seen globalBlock selectorBlock method indexMethod |
 	method := aMethod gtOriginalMethod.
+	indexMethod := aMethod gtIndexMethod.
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
@@ -62,7 +62,7 @@ GtPharoIndex >> addSendsFrom: aMethod [
 			ifTrue: [ node := globalCache add: global name weight: 1.
 				(seen includes: global)
 					ifFalse: [ seen add: global.
-						node addReference: method ] ] ].
+						node addReference: indexMethod ] ] ].
 	selectorBlock := [ :selector :count | 
 		| node |
 		node := selectorCache add: selector weight: count.
@@ -72,7 +72,7 @@ GtPharoIndex >> addSendsFrom: aMethod [
 							wordsIn: selector
 							do: [ :word | (selectorWordCache add: word asLowercase weight: 1) addName: selector ] ].
 				seen add: selector.
-				node addReference: method ] ].
+				node addReference: indexMethod ] ].
 	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
@@ -206,7 +206,7 @@ GtPharoIndex >> basicSubscribe [
 		when: MethodAdded
 			send: #methodAdded:
 			to: self;
-		when: MethodModified
+		when: MethodModified , GtReflectiveMethodInstalled
 			send: #methodModified:
 			to: self;
 		when: MethodRemoved
@@ -478,7 +478,7 @@ GtPharoIndex >> methodAdded: anAnnouncement [
 		ifTrue: [ self
 				wordsIn: anAnnouncement method selector
 				do: [ :word | (selectorWordCache add: word asLowercase weight: 1) addName: anAnnouncement method selector ] ].
-	node addImplementer: anAnnouncement method gtOriginalMethod.
+	node addImplementer: anAnnouncement method gtIndexMethod.
 	self addSendsFrom: anAnnouncement method
 ]
 
@@ -488,8 +488,8 @@ GtPharoIndex >> methodModified: anAnnouncement [
 	(selectorCache nodeFor: anAnnouncement newMethod selector)
 		ifNotNil: [ :node | 
 			node
-				removeImplementer: anAnnouncement oldMethod gtOriginalMethod;
-				addImplementer: anAnnouncement newMethod gtOriginalMethod ].
+				removeImplementer: anAnnouncement oldMethod gtIndexMethod;
+				addImplementer: anAnnouncement newMethod gtIndexMethod ].
 	self removeSendsFrom: anAnnouncement oldMethod.
 	self addSendsFrom: anAnnouncement newMethod
 ]
@@ -540,11 +540,12 @@ GtPharoIndex >> recompileMethodsIn: aBehavior [
 
 { #category : #accessing }
 GtPharoIndex >> recompiledMethod: aMethod [
-	| seen selectorBlock globalBlock method convertedToClasses convertedFromClasses |
+	| seen selectorBlock globalBlock method convertedToClasses convertedFromClasses indexMethod |
 	aMethod isFromTrait ifTrue: [ ^ self ].
 	method := aMethod gtOriginalMethod.
+	indexMethod := aMethod gtIndexMethod.
 	(selectorCache nodeFor: method selector)
-		ifNotNil: [ :node | node updateImplementer: method ].
+		ifNotNil: [ :node | node updateImplementer: indexMethod ].
 	seen := Set new.
 	convertedFromClasses := Set new.
 	convertedToClasses := Set new.
@@ -559,7 +560,7 @@ GtPharoIndex >> recompiledMethod: aMethod [
 				(self isGlobalVariable: global)
 					ifTrue: [ (globalCache nodeFor: global name)
 							ifNotNil: [ :node | 
-								(node updateReference: method)
+								(node updateReference: indexMethod)
 									ifFalse: [ globalCache add: global name weight: 1.
 										convertedToClasses add: global name ] ] ]
 					ifFalse: [ ((global isKindOf: LiteralVariable) and: [ global name notNil ])
@@ -577,7 +578,7 @@ GtPharoIndex >> recompiledMethod: aMethod [
 		(seen includes: selector)
 			ifFalse: [ seen add: selector.
 				(selectorCache nodeFor: selector)
-					ifNotNil: [ :node | node updateReference: method ] ] ].
+					ifNotNil: [ :node | node updateReference: indexMethod ] ] ].
 	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
@@ -600,7 +601,7 @@ GtPharoIndex >> removeMethodFromCache: method [
 	method isFromTrait ifTrue: [ ^ self ].
 	(selectorCache remove: method selector weight: 1)
 		ifNotNil: [ :node | 
-			node removeImplementer: method gtOriginalMethod.
+			node removeImplementer: method gtIndexMethod.
 			node weight = 0
 				ifTrue: [ self
 						wordsIn: method selector
@@ -612,8 +613,10 @@ GtPharoIndex >> removeMethodFromCache: method [
 
 { #category : #private }
 GtPharoIndex >> removeSendsFrom: aMethod [
-	| seen globalBlock selectorBlock method |
+	| seen globalBlock selectorBlock method indexMethod |
+	aMethod ifNil: [ ^ self ].
 	method := aMethod gtOriginalMethod.
+	indexMethod := aMethod gtIndexMethod.
 	seen := Set new.
 	globalBlock := [ :global | 
 		| node |
@@ -621,7 +624,7 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 			ifTrue: [ node := globalCache remove: global name weight: 1.
 				(seen includes: global)
 					ifFalse: [ seen add: global.
-						node ifNotNil: [ node removeReference: method ] ] ] ].
+						node ifNotNil: [ node removeReference: indexMethod ] ] ] ].
 	selectorBlock := [ :selector :count | 
 		(selectorCache remove: selector weight: count)
 			ifNotNil: [ :node | 
@@ -633,7 +636,7 @@ GtPharoIndex >> removeSendsFrom: aMethod [
 									ifNotNil: [ :n | n removeName: selector ] ] ].
 				(seen includes: selector)
 					ifFalse: [ seen add: selector.
-						node removeReference: method ] ] ].
+						node removeReference: indexMethod ] ] ].
 	method
 		pragmasDo: [ :each | self processPragma: each selectorsDo: selectorBlock ].
 	GtMessageSendIterator
