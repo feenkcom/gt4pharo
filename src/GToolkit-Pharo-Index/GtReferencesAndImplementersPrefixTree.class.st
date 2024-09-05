@@ -79,7 +79,7 @@ GtReferencesAndImplementersPrefixTree >> gtMethodNotInCache: aGtAdvice [
 					each isFromTrait not
 						and: [ (self nodeFor: each selector)
 								ifNil: [ true ]
-								ifNotNil: [ :node | (node implementersCollection includes: each gtOriginalMethod) not ] ] ] ];
+								ifNotNil: [ :node | (node implementersCollection includes: each gtIndexMethod) not ] ] ] ];
 		action: [ :each | 
 			(GtPhlowObjectAdviceAction object: each)
 				title: each printString asRopedText;

@@ -182,7 +182,7 @@ GtPharoMethodCoderTagsElement >> newProtocolTag [
 
 { #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
-	
+	self enqueueTask: (BlTaskAction new action: [ self updateProtocolButtonLabel ])
 ]
 
 { #category : #'api - pharo method coder view model' }
@@ -196,6 +196,11 @@ GtPharoMethodCoderTagsElement >> onPharoMethodCoderViewModelChanged [
 	
 	self updateProtocolButton.
 	self updateBehaviorSideButton
+]
+
+{ #category : #'api - pharo method coder view model' }
+GtPharoMethodCoderTagsElement >> onProtocolChanged: anAnnouncement [
+	self enqueueTask: (BlTaskAction new action: [ self updateProtocolButtonLabel ])
 ]
 
 { #category : #'private - event handling' }
@@ -215,9 +220,9 @@ GtPharoMethodCoderTagsElement >> subscribeToPharoMethodCoderViewModel [
 	"Is sent after a new pharoMethodCoderViewModel is assigned to the receiver.
 	It is required to unsubscribe from the previously subscribed objects by implementing
 	#unsubscribeFromPharoMethodCoderViewModel if the receiver subscribes to them"
+
 	<modelSubscriber: #methodCoderViewModel>
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#subscribeToObjectTemplate'>
-	
 	pharoMethodCoderViewModel weak
 		when: GtTextualCoderViewModelTextChanged
 		send: #onViewModelTextChanged:
@@ -227,6 +232,11 @@ GtPharoMethodCoderTagsElement >> subscribeToPharoMethodCoderViewModel [
 		when: GtCoderMethodModified
 		send: #onCoderMethodModified:
 		to: self.
+
+	pharoMethodCoderViewModel coder weak
+		when: GtCoderProtocolChanged
+		send: #onProtocolChanged:
+		to: self
 ]
 
 { #category : #private }
