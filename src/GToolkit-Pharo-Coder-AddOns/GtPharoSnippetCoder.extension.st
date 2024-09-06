@@ -213,7 +213,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 		addMainAction: 'Profile' translated
 		icon: BrGlamorousVectorIcons performance
 		action: [ :aCoderUIModel :anElement | 
-		aCoderUIModel profileWithMessageTally ]
+			aCoderUIModel profileWithMessageTally ]
 		id: GtSourceCoderProfileActionId
 ]
 
