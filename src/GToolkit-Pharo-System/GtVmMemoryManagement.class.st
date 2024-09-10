@@ -15,6 +15,16 @@ Class {
 	#category : #'GToolkit-Pharo-System'
 }
 
+{ #category : #'memory management' }
+GtVmMemoryManagement class >> dontGroupPinnedObjects [
+	"Set the flag to avoid grouping pinned objects.
+	For backward compatibility with VMs and images that don't support this flag, ignore errors"
+	
+	[ Smalltalk vm avoidSearchingSegmentsWithPinnedObjects: true ]
+		on: PrimitiveFailed, MessageNotUnderstood
+		do: [ :ex | "nothing" ]
+]
+
 { #category : #'instance creation' }
 GtVmMemoryManagement class >> forLargeObjectAllocation [
 
@@ -25,6 +35,12 @@ GtVmMemoryManagement class >> forLargeObjectAllocation [
 		shrinkThreshhold: 100 * 1024 * 1024;
 		fullGcRatio: 1.0;
 		yourself.
+]
+
+{ #category : #initialization }
+GtVmMemoryManagement class >> initialize [
+	SessionManager default
+		registerUserClassNamed: self name
 ]
 
 { #category : #accessing }
@@ -50,6 +66,12 @@ GtVmMemoryManagement class >> readFromVm [
 	^ self new
 		readFromVm;
 		yourself.
+]
+
+{ #category : #initialization }
+GtVmMemoryManagement class >> startUp: resuming [
+
+	resuming ifTrue: [ self dontGroupPinnedObjects ]
 ]
 
 { #category : #accessing }
