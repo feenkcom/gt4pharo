@@ -27,7 +27,7 @@ GtIndexPrefixTreeMetrics >> computeForPrefixTree: aPrefixTree [
 	aNode references 
 		ifNil: [ nilReferencesCount := nilReferencesCount + 1 ]
 		ifNotNil: [
-			(self targetDataForNode: aNode) isCompiledMethod
+			(self targetDataForNode: aNode) gtIsIndexMethod
 				ifTrue: [ compiledMethodsCount := compiledMethodsCount + 1]
 				ifFalse: [
 					| currentCount|

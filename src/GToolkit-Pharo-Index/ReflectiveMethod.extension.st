@@ -15,6 +15,11 @@ ReflectiveMethod >> gtIsActive [
 ]
 
 { #category : #'*GToolkit-Pharo-Index' }
+ReflectiveMethod >> gtIsIndexMethod [
+	^ true
+]
+
+{ #category : #'*GToolkit-Pharo-Index' }
 ReflectiveMethod >> gtOriginalMethod [
 	^ compiledMethod gtOriginalMethod
 ]

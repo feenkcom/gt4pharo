@@ -41,7 +41,7 @@ GtReferencesPrefixTree >> addReference: aMethod [
 					^ references
 						at: className
 						ifPresent: [ :refs | 
-							refs isCompiledMethod
+							refs gtIsIndexMethod
 								ifTrue: [ references at: className put: (OrderedCollection with: refs with: aMethod) ]
 								ifFalse: [ refs isArray
 										ifTrue: [ references
@@ -172,7 +172,7 @@ GtReferencesPrefixTree >> referencesCollection [
 				ifTrue: [ references
 						inject: OrderedCollection new
 						into: [ :sum :each | 
-							each isCompiledMethod ifTrue: [ sum add: each ] ifFalse: [ sum addAll: each ].
+							each gtIsIndexMethod ifTrue: [ sum add: each ] ifFalse: [ sum addAll: each ].
 							sum ] ]
 				ifFalse: [ references asOrderedCollection ] ]
 ]
@@ -218,7 +218,7 @@ GtReferencesPrefixTree >> updateReference: aMethod [
 			ifTrue: [ className := aMethod methodClass instanceSide name.
 				references at: className ifAbsent: [ #() ] ]
 			ifFalse: [ references ].
-	refs isCompiledMethod
+	refs gtIsIndexMethod
 		ifTrue: [ ^ (refs methodClass = aMethod methodClass
 				and: [ refs selector = aMethod selector ])
 				ifTrue: [ isDictionary
