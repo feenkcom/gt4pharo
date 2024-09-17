@@ -2,7 +2,8 @@ Class {
 	#name : #GtParenthesisFolderAttribute,
 	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
 	#instVars : [
-		'attribute'
+		'attribute',
+		'hideAttribute'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
@@ -23,16 +24,9 @@ GtParenthesisFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEd
 				ifTrue: [ text
 						clearAttributes: aParenthesesStart
 						to: aParenthesesEnd
-						if: [ :att | att class == BrTextHideAttribute ].
-					aTextEditor styleText ]
+						if: [ :att | att == hideAttribute ] ]
 				ifFalse: [ text
-						clearAttributes: aParenthesesStart
-						to: aParenthesesEnd
-						if: [ :att | 
-							att ~= attribute
-								and: [ att isOverwritableByStyler or: [ att class == GtParenthesisFolderAttribute ] ] ].
-					text
-						attribute: BrTextHideAttribute new beNotOverwritableByStyler
+						attribute: hideAttribute
 						from: aParenthesesStart
 						to: aParenthesesEnd ] ]
 ]
@@ -46,5 +40,6 @@ GtParenthesisFolderAttribute >> attribute: anAttribute [
 GtParenthesisFolderAttribute >> initialize [
 	super initialize.
 	self beNotOverwritableByStyler.
-	isExpanded := true
+	isExpanded := true.
+	hideAttribute := BrTextHideAttribute new beNotOverwritableByStyler
 ]
