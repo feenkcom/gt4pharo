@@ -49,7 +49,7 @@ GtMessageSendIterator class >> initialize [
 { #category : #processing }
 GtMessageSendIterator class >> messageSendsIn: aCompiledCode doReferences: aBlock andVariables: globalsBlock [
 	| code |
-	code := aCompiledCode isCompiledMethod
+	code := aCompiledCode gtIsIndexMethod
 			ifTrue: [ aCompiledCode gtOriginalMethod ]
 			ifFalse: [ aCompiledCode ].
 	self new

@@ -9,3 +9,8 @@ Object >> gtIsBlockClosure [
 Object >> gtIsCompiledCode [
 	^ false
 ]
+
+{ #category : #'*GToolkit-Pharo-Index' }
+Object >> gtIsIndexMethod [
+	^ self isCompiledMethod
+]
