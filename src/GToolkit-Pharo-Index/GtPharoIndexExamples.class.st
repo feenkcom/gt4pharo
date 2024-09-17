@@ -124,6 +124,22 @@ GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
 	^ refs
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoIndexExamples >> checkReflectiveMethodReferences [
+	<gtExample>
+	| node reflectiveMethod |
+	node := GtReferencesPrefixTree new.
+	reflectiveMethod := ReflectiveMethod on: Object >> #printString.
+	node addReference: reflectiveMethod.
+	self assert: node referencesCollection size equals: 1.
+	1
+		to: 10000
+		do: [ :i | 
+			node addReference: thisContext method.
+			self assert: node referencesCollection size equals: i + 1 ].
+	^ node
+]
+
 { #category : #examples }
 GtPharoIndexExamples >> classReferenceInsideBlock [
 	<gtExample>

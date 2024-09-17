@@ -103,7 +103,7 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 { #category : #'debugging - testing' }
 GtReferencesAndImplementersPrefixTree >> hasNotInstalledImplementers [
 	implementers ifNil: [ ^ false ].
-	implementers isCompiledMethod ifTrue: [ 
+	implementers gtIsIndexMethod ifTrue: [ 
 		^ implementers gtIsActive not ].
 	((implementers isArray) or: [implementers class == OrderedCollection])
 		ifTrue: [ 
@@ -175,7 +175,7 @@ GtReferencesAndImplementersPrefixTree >> removeImplementer: aMethod [
 { #category : #accessing }
 GtReferencesAndImplementersPrefixTree >> updateImplementer: aMethod [
 	implementers ifNil: [ ^ self addImplementer: aMethod ].
-	implementers isCompiledMethod
+	implementers gtIsIndexMethod
 		ifTrue: [ ^ implementers methodClass = aMethod methodClass
 				ifTrue: [ implementers := aMethod ]
 				ifFalse: [ self addImplementer: aMethod ] ].
