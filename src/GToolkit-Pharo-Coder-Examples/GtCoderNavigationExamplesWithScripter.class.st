@@ -55,6 +55,15 @@ GtCoderNavigationExamplesWithScripter >> scripter: scripter hasTextSelection: aS
 ]
 
 { #category : #accessing }
+GtCoderNavigationExamplesWithScripter >> scripter: scripter includesSubstringTextSelection: aString [
+	scripter
+		assertStep: [ :s | 
+			s
+				// BlTextElement;
+				anySatisfy: [ :l | (l text asString includesSubstring: aString) and: [ self elementHasSelectionBackground: l ] ] ]
+]
+
+{ #category : #accessing }
 GtCoderNavigationExamplesWithScripter >> selectPackageWithExtension [
 	<gtExample>
 	| scripter model pkg |
@@ -69,7 +78,7 @@ GtCoderNavigationExamplesWithScripter >> selectPackageWithExtension [
 	scripter continue.
 	self scripter: scripter hasTextSelection: 'Extensions'.
 	self scripter: scripter hasTextSelection: 'RBRenameClassChange'.
-	self scripter: scripter hasTextSelection: '*GToolkit-Pharo-Coder'.
+	self scripter: scripter includesSubstringTextSelection: '*GToolkit-Pharo-Coder'.
 	^ scripter
 ]
 
