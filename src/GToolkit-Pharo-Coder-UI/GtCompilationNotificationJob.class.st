@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GtCompilationNotificationJob >> registerNotifications [
-	GtWorld allInstancesDo: [ :world | world showNotification: self ]
-]
-
-{ #category : #accessing }
 GtCompilationNotificationJob >> summaryClass [
 	^ GtCompilationNotificationSummary
 ]
