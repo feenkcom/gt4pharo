@@ -7,7 +7,10 @@ Class {
 		'announcer',
 		'coder',
 		'selectedPackage',
-		'selectedTag'
+		'selectedTag',
+		'selectedProtocol',
+		'selectedMethod',
+		'selectedSlot'
 	],
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
@@ -74,7 +77,7 @@ GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
 
 	self hasSelectedPackage
 		ifFalse: [ ^ #() ].
-		
+
 	^ self hasSelectedTag
 		ifTrue: [ self selectedTag classes ]
 		ifFalse: [ self selectedPackage definedClasses ]
@@ -132,10 +135,56 @@ GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
 ]
 
 { #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecategorized [
+	| theClass aPackage aTag |
+	self selectedClass == aMethodRecategorized methodRecategorized methodClass
+		ifFalse: [ ^ self ].
+	
+	theClass := aMethodRecategorized methodRecategorized methodClass.
+	aPackage := theClass package.
+	aTag := (GtTagDefinition fromBehavior: theClass) name.
+	
+	self announcer announce: (GtCoderNavigationClassModified new 
+		coder: coder;
+		package: aPackage;
+		tag: aTag;
+		theClass: theClass)
+]
+
+{ #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodRemoved: aMethodRemoved [
 	self selectedClass == aMethodRemoved methodRemoved methodClass ifFalse: [ ^ self ].
 	self announcer
 		announce: (GtCoderNavigationMethodModification new methodModified: aMethodRemoved)
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> methodsToShow [
+	| anInstanceSideClass aClassSideClass |
+	anInstanceSideClass := (self selectedClass ifNil: [ ^ #() ]) instanceSide.
+	aClassSideClass := anInstanceSideClass classSide.
+
+	self selectedSlot
+		ifNotNil: [ :aSlot | 
+			^ Array
+				streamContents: [ :aStream | 
+					aStream nextPutAll: (anInstanceSideClass methodsAccessingSlot: aSlot).
+					aStream nextPutAll: (aClassSideClass methodsAccessingSlot: aSlot) ] ].
+
+	^ Array
+		streamContents: [ :aStream | 
+			| aProtocol |
+			aProtocol := self selectedProtocol
+					ifNil: [ GtPharoProtocol
+							protocol: (AllProtocol
+									protocolOrganizer: anInstanceSideClass organization protocolOrganizer)
+							class: anInstanceSideClass ].
+			aProtocol methodSelectors
+				do: [ :eachSelector | 
+					| eachMethod |
+					eachMethod := aProtocol protocolClass >> eachSelector.
+					(eachMethod methodClass isClassSide and: [ eachMethod isFromTrait ])
+						ifFalse: [ aStream nextPut: eachMethod ] ] ]
 ]
 
 { #category : #'private - notifying' }
@@ -149,12 +198,12 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass package
 				theClass: aClass)
 ]
 
-{ #category : #'api - selection' }
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyCoderSelected [
 	self announce: (GtCoderNavigationPackagesSelected new coder: coder)
 ]
 
-{ #category : #'api - selection' }
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyMethodProtocolSelected: aMethodProtocol source: aSource [
 	coder withMethodProtocol: aMethodProtocol source: aSource
 ]
@@ -173,7 +222,7 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyPackageSelected: anRPackage [
 				package: anRPackage)
 ]
 
-{ #category : #accessing }
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifySlotSelected: aSlot source: aSource [
 	coder withSlot: aSlot source: aSource
 ]
@@ -254,6 +303,50 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 	^ RPackageOrganizer default gtSortedPackages
 ]
 
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
+	<return: #Collection of: #GtPharoProtocol>
+	| currentClass classProtocols methodProtocols extension allProtocol |
+
+	self hasSelectedClass
+		ifFalse: [ ^ #() ].
+
+	currentClass := self selectedClass.
+
+	classProtocols := currentClass class organization protocols
+			reject: [ :prot | 
+				(self selectedClass class methods
+					select: [ :meth | (prot includesSelector: meth selector) and: [ meth isFromTrait not ] ])
+					isEmpty ].
+	methodProtocols := currentClass organization protocols.
+	extension := false.
+	self
+		selectedPackageDo: [ :pkg | 
+			pkg ~= currentClass package
+				ifTrue: [ | protocolName |
+					extension := true.
+					protocolName := '*' , pkg name.
+					methodProtocols := methodProtocols
+							select: [ :each | each name beginsWith: protocolName ].
+					classProtocols := classProtocols
+							select: [ :each | each name beginsWith: protocolName ] ] ].
+
+	methodProtocols := methodProtocols collect: [ :eachProtocol |
+		GtPharoProtocol
+			protocol: eachProtocol
+			class: currentClass instanceSide ].
+
+	classProtocols := classProtocols collect: [ :eachProtocol |
+		GtPharoProtocol
+			protocol: eachProtocol
+			class: currentClass classSide ].
+	
+	allProtocol := GtPharoProtocol
+		protocol: (AllProtocol protocolOrganizer: currentClass instanceSide organization protocolOrganizer) class: currentClass.
+
+	^ {allProtocol}, methodProtocols, classProtocols
+]
+
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
 	| aCoder newPackage |
@@ -314,13 +407,9 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod [
+	selectedMethod := aMethod.
 	self selectClass: aMethod methodClass instanceSide.
 	self notifyMethodSelected: aMethod
-]
-
-{ #category : #'api - selection' }
-GtCoderNavigationPackagesTagsClassesModel >> selectMethodProtocol: aMethodProtocol source: aSource [
-	self notifyMethodProtocolSelected: aMethodProtocol source: aSource
 ]
 
 { #category : #'api - selection' }
@@ -357,8 +446,23 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 	self notifyTagSelected: aRPackageTag package: aRPackageTag package
 ]
 
-{ #category : #accessing }
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol [
+	self selectProtocol: aPharoProtocol source: nil
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol source: aSource [
+	self selectClass: aPharoProtocol protocolClass instanceSide.
+	selectedProtocol := aPharoProtocol.
+	selectedSlot := nil.
+	self notifyMethodProtocolSelected: aPharoProtocol source: aSource.
+]
+
+{ #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
+	selectedSlot := aSlot.
+	selectedProtocol := nil.
 	self notifySlotSelected: aSlot source: aSource
 ]
 
@@ -373,7 +477,14 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
 	self selectedClass ifNotNil: aBlock
 ]
 
-{ #category : #'api - selection' }
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
+	<return: #CompiledMethod>
+
+	^ selectedMethod
+]
+
+{ #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
 	<return: #RPackage>
 	^ selectedPackage
@@ -382,6 +493,18 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
 	self selectedPackage ifNotNil: aBlock
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedProtocol [
+	<return: #GtPharoProtocol>
+
+	^ selectedProtocol
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedSlot [
+	^ selectedSlot
 ]
 
 { #category : #'api - accessing' }
@@ -414,7 +537,8 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
 		when: MethodAdded send: #methodAdded: to: self;
-		when: MethodRemoved send: #methodRemoved: to: self
+		when: MethodRemoved send: #methodRemoved: to: self;
+		when: MethodRecategorized send: #methodRecategorized: to: self
 ]
 
 { #category : #'api - subscriptions' }
