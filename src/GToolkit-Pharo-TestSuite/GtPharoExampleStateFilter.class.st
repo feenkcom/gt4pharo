@@ -77,6 +77,7 @@ GtPharoExampleStateFilter >> resultStateString: aString [
 GtPharoExampleStateFilter >> satisfiesFilter: aCompiledMethod [
 	| anExample |
 
+	self pharoExampleSuite ifNil: [ ^ true ].
 	anExample := self pharoExampleSuite exampleWithResultForMethod: aCompiledMethod.
 	anExample ifNil: [ ^ false ].
 	^ self resultState includesExampleWithResult: anExample

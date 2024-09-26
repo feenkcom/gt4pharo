@@ -10,3 +10,15 @@ GtSearchClassMethodsFilter class >> globalFilterDescriptor [
 		beNotDefault;
 		yourself
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchClassMethodsFilter class >> globalFilterDescriptor2 [
+	^ GtFilterShortListModel new
+		creator: [ :anItem | anItem isInstanceSideMethod
+			ifTrue: [ GtSearchInstanceMethodsFilter new ] 
+			ifFalse: [ self new ] ];
+		named: 'Inst./Class methods';
+		order: 17;
+		items: { GtFilterShortListInstanceSideItem new. GtFilterShortListClassSideItem new };
+		selectFirstItem
+]
