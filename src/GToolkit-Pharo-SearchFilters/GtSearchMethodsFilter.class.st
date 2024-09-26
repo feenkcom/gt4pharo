@@ -10,6 +10,12 @@ GtSearchMethodsFilter class >> createFilterFor: aMethodCoder [
 ]
 
 { #category : #accessing }
+GtSearchMethodsFilter class >> filterDescriptors2For: aMethodsCoder into: aCollection [
+	(self filterDescriptor2For: aMethodsCoder) 
+		ifNotNil: [ :aDescriptor | aCollection add: aDescriptor ]
+]
+
+{ #category : #accessing }
 GtSearchMethodsFilter class >> filterDescriptorsFor: aMethodsCoder into: aCollection [
 	(self filterDescriptorFor: aMethodsCoder) 
 		ifNotNil: [ :aDescriptor | aCollection add: aDescriptor ]

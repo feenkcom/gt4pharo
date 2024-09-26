@@ -17,6 +17,15 @@ GtSearchInstanceSlotReferenceFilter class >> forClass: aClass andVariable: aStri
 ]
 
 { #category : #'instance creation' }
+GtSearchInstanceSlotReferenceFilter class >> forClassAndHierarchy: aClass andVariable: aString [
+	^ self new
+		forClass: aClass andVariable: aString;
+		includeSubclasses: true;
+		includeSuperclass: true;
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtSearchInstanceSlotReferenceFilter class >> forClassAndSubclasses: aClass andVariable: aString [
 	^ self new
 		forClass: aClass andVariable: aString;
