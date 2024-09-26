@@ -30,7 +30,7 @@ GtPharoProtocol class >> protocolNamed: aProtocolName class: aClass [
 		protocolClass: aClass
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtPharoProtocol >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
@@ -39,7 +39,7 @@ GtPharoProtocol >> = anObject [
 				and: [ isClassSide = anObject isClassSide ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtPharoProtocol >> classSide [
 	| aClassSideProtocol aClass |
 	self isClassSide ifTrue: [ ^ self ].
@@ -52,7 +52,7 @@ GtPharoProtocol >> classSide [
 		class: aClass
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtPharoProtocol >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
@@ -64,7 +64,7 @@ GtPharoProtocol >> isClassSide [
 	^ isClassSide
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtPharoProtocol >> isVirtualProtocol [
 	^ protocol isVirtualProtocol
 ]
