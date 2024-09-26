@@ -174,21 +174,16 @@ GtCoderNavigationPackagesTagsClassesModel >> methodsToShow [
 	^ Array
 		streamContents: [ :aStream | 
 			| aProtocol |
-			"instance side methods"
 			aProtocol := self selectedProtocol
 					ifNil: [ GtPharoProtocol
 							protocol: (AllProtocol
 									protocolOrganizer: anInstanceSideClass organization protocolOrganizer)
 							class: anInstanceSideClass ].
 			aProtocol methodSelectors
-				do: [ :eachSelector | aStream nextPut: anInstanceSideClass >> eachSelector ].	"class side methods"
-
-			aProtocol := aProtocol classSide.
-			aProtocol methodSelectors
-				do: [ :eachSelector |
+				do: [ :eachSelector | 
 					| eachMethod |
-					eachMethod := aClassSideClass >> eachSelector.
-					eachMethod isFromTrait
+					eachMethod := aProtocol protocolClass >> eachSelector.
+					(eachMethod methodClass isClassSide and: [ eachMethod isFromTrait ])
 						ifFalse: [ aStream nextPut: eachMethod ] ] ]
 ]
 
@@ -311,7 +306,7 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 	<return: #Collection of: #GtPharoProtocol>
-	| currentClass classProtocols methodProtocols extension |
+	| currentClass classProtocols methodProtocols extension allProtocol |
 
 	self hasSelectedClass
 		ifFalse: [ ^ #() ].
@@ -345,8 +340,11 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 		GtPharoProtocol
 			protocol: eachProtocol
 			class: currentClass classSide ].
-			
-	^ methodProtocols, classProtocols
+	
+	allProtocol := GtPharoProtocol
+		protocol: (AllProtocol protocolOrganizer: currentClass instanceSide organization protocolOrganizer) class: currentClass.
+
+	^ {allProtocol}, methodProtocols, classProtocols
 ]
 
 { #category : #'api - selection' }

@@ -11,8 +11,6 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoProtocol class >> protocol: aProtocol class: aClass [
-	
-
 	^ self new
 		protocol: aProtocol;
 		protocolClass: aClass
@@ -66,6 +64,11 @@ GtPharoProtocol >> isClassSide [
 	^ isClassSide
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoProtocol >> isVirtualProtocol [
+	^ protocol isVirtualProtocol
+]
+
 { #category : #accessing }
 GtPharoProtocol >> methodSelectors [
 	^ protocol methodSelectors
@@ -88,7 +91,9 @@ GtPharoProtocol >> protocol: anObject [
 
 { #category : #accessing }
 GtPharoProtocol >> protocolClass [
-	^ protocolClass
+	^ self isClassSide
+		ifTrue: [ protocolClass classSide ]
+		ifFalse: [ protocolClass instanceSide ]
 ]
 
 { #category : #accessing }
