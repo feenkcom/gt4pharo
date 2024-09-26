@@ -42,6 +42,7 @@ GtFilterElementByScripterExamples >> newFilterItemsElementForFiltersModel: aFilt
 
 	^ BrVerticalPane new
 		matchParent;
+		clipChildren: false;
 		addChild: aFiltersModel asFiltersElement;
 		addChild: aList
 ]
