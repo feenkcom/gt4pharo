@@ -480,6 +480,13 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
 ]
 
 { #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
+	<return: #CompiledMethod>
+
+	^ selectedMethod
+]
+
+{ #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
 	<return: #RPackage>
 	^ selectedPackage
@@ -488,6 +495,13 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
 	self selectedPackage ifNotNil: aBlock
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedProtocol [
+	<return: #GtPharoProtocol>
+
+	^ selectedProtocol
 ]
 
 { #category : #'api - accessing' }
