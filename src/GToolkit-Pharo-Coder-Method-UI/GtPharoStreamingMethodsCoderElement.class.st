@@ -21,26 +21,9 @@ GtPharoStreamingMethodsCoderElement >> asScrollableElement [
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderElement >> buildFilter [
-	| filterElement filterDescriptors |
-	filterDescriptors := streamingCodersViewModel streamingCodersModel
-			filterDescriptors.
-	filterDescriptors isEmpty ifTrue: [ ^ self ].
-	filterElement := GtFiltersElement new
-			padding: (BlInsets all: 2);
-			descriptors: filterDescriptors;
-			yourself.
-	filterElement
-		buildFilters: [ streamingCodersViewModel streamingCodersModel additionalFilters
-				do: [ :each | 
-					(each class filterDescriptorFor: streamingCodersViewModel streamingCodersModel)
-						ifNotNil: [ :descriptor | 
-							| label |
-							label := descriptor valueIsRequired ifTrue: [ each filterValueString ].
-							filterElement addFilterForDescriptor: descriptor andValue: label ] ] ].
-	filterElement
-		when: GtFiltersChangedEvent
-		do: [ :event | self updateCodersFilters: event ].
-	^ filterElement
+	^ GtPharoStreamingMethodsFiltersElementStencil defaultStencil
+		streamingCodersViewModel: streamingCodersViewModel;
+		asElement.
 ]
 
 { #category : #'instance creation' }
@@ -167,18 +150,9 @@ GtPharoStreamingMethodsCoderElement >> onFilterChanged: anAnnouncement [
 	self
 		childWithId: #filter
 		ifFound: [ :aFiltersElement |
-			aFiltersElement
-				buildFilters: [
-					streamingCodersViewModel additionalFilters do: [ :each | 
-						(each filterDescriptorFor: streamingCodersViewModel streamingCodersModel)
-							ifNotNil: [ :descriptor | 
-								| label |
-								label := descriptor valueIsRequired
-									ifTrue: [ each filterValueString ].
-									
-								aFiltersElement
-									addFilterForDescriptor: descriptor
-									andValue: label ] ] ] ]
+			aFiltersElement filterUpdater 
+				streamingCodersViewModel: streamingCodersViewModel;
+				updateFiltersElement: aFiltersElement ]
 		ifNone: [  ]
 ]
 
@@ -270,7 +244,7 @@ GtPharoStreamingMethodsCoderElement >> unsubscribeFromStreamingCodersViewModel [
 { #category : #'private - update' }
 GtPharoStreamingMethodsCoderElement >> updateCodersFilters: anEvent [
 	| filters |
-	
+	self flag: 'Can be deleted since it is moved to GtPharoStreamingMethodsFiltersElementFromDescriptorsStencil>>#updateCodersFilters:'.
 	filters := OrderedCollection new.
 
 	anEvent filterElement filtersDo: [ :descriptor :value |
