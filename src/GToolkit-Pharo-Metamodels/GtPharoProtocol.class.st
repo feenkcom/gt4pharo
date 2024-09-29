@@ -39,6 +39,16 @@ GtPharoProtocol >> = anObject [
 				and: [ isClassSide = anObject isClassSide ] ]
 ]
 
+{ #category : #testing }
+GtPharoProtocol >> canBeRemoved [
+	^ protocol canBeRemoved
+]
+
+{ #category : #testing }
+GtPharoProtocol >> canBeRenamed [
+	^ protocol canBeRenamed
+]
+
 { #category : #accessing }
 GtPharoProtocol >> classSide [
 	| aClassSideProtocol aClass |

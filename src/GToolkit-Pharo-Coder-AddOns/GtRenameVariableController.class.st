@@ -14,11 +14,11 @@ GtRenameVariableController >> addRefactoringPreview [
 GtRenameVariableController >> allRenameIntervals [
 	| intervals |
 	intervals := OrderedCollection new.
-	intervals add: self originalNode sourceInterval.
+	intervals add: self originalNode name sourceInterval.
 	self originalNode topParent
 		withAllNodesDo: [ :each | 
 			(each ~~ self originalNode and: [ each = self originalNode ])
-				ifTrue: [ intervals add: each sourceInterval ] ].
+				ifTrue: [ intervals add: each name sourceInterval ] ].
 	^ intervals
 ]
 
@@ -37,7 +37,7 @@ GtRenameVariableController >> originalName [
 
 { #category : #executing }
 GtRenameVariableController >> originalSourcePosition [
-	^ self originalNode sourceInterval
+	^ self originalNode name sourceInterval
 ]
 
 { #category : #accessing }
