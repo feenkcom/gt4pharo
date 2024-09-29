@@ -1,6 +1,16 @@
 Extension { #name : #GtSearchFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchFilter class >> filterDescriptor2For: aMethodsCoder [
+	^ self globalFilterDescriptor2
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchFilter >> filterDescriptor2For: aMethodsCoder [
+	^ self class filterDescriptor2For: aMethodsCoder
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchFilter >> filterDescriptorFor: aMethodsCoder [
 	^ self class filterDescriptorFor: aMethodsCoder
 ]
@@ -12,6 +22,11 @@ GtSearchFilter class >> filterDescriptorFor: aMethodsCoder [
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchFilter class >> globalFilterDescriptor [
+	^ nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchFilter class >> globalFilterDescriptor2 [
 	^ nil
 ]
 

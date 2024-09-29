@@ -7,3 +7,11 @@ GtSearchLiteralStringFilter class >> globalFilterDescriptor [
 		named: 'Substring literal';
 		order: 91
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchLiteralStringFilter class >> globalFilterDescriptor2 [
+	^ GtFilterTextModel new
+		creator: [ :value | self substring: value ];
+		named: 'Substring literal';
+		order: 91
+]

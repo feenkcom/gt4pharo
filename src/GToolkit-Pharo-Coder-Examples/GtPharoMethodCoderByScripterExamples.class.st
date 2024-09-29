@@ -3484,6 +3484,48 @@ GtPharoMethodCoderByScripterExamples >> forKeywordMoveMethod_04_reorder_paramete
 	^ aScripter
 ]
 
+{ #category : #'examples - rename variable' }
+GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: thisContext method method ].
+	[ (scripter) yourself ] argumentCount.	"leave parens around variable".
+
+	scripter click
+		label: 'Click on the coder editor to give it focus';
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination arrowUp;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter assert
+		label: 'Assert editor is focused';
+		satisfies: [ :anEditorElement | anEditorElement isFocused ];
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter do
+		label: 'Position cursor';
+		id: GtSourceCoderEditorId;
+		block: [ :each | 
+			each editor
+				moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'scripter') + 1 ];
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+
+	^ scripter
+]
+
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
 	<gtExample>

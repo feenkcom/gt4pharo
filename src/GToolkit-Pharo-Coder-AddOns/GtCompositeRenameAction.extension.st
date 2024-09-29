@@ -16,7 +16,7 @@ GtCompositeRenameAction class >> coderRenameLocalsOnPattern: aTextEditorElement 
 		withAllNodesDo: [ :node | 
 			((node isKindOf: GtPharoVariableNode)
 				and: [ node name source = variable and: [ node isLocallyDefined not ] ])
-				ifTrue: [ intervals add: node sourceInterval ] ].
+				ifTrue: [ intervals add: node name sourceInterval ] ].
 	action addLocations: intervals to: sourceEditor ]
 		on: Error
 		do: [ :ex | 

@@ -18,7 +18,12 @@ GtSearchInheritedMethodsFilter >> filterValueString [
 GtSearchInheritedMethodsFilter >> gtDisplayOn: stream [
 	stream
 		print: filterClass;
-		nextPutAll: ' inheritedMethods'
+		nextPutAll: ' inheritedMethods'.
+		
+	self includeSuperclass ifTrue: [ 
+		stream 
+			nextPutAll: ' up to '; 
+			print: upToSuperclass ]
 ]
 
 { #category : #accessing }

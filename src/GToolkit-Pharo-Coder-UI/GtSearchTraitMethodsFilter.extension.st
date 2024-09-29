@@ -10,3 +10,9 @@ GtSearchTraitMethodsFilter class >> globalFilterDescriptor [
 		beNotDefault;
 		yourself
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchTraitMethodsFilter class >> globalFilterDescriptor2 [
+	"See GtSearchNonTraitMethodsFilter class>>#globalFilterDescriptor"
+	^ nil
+]
