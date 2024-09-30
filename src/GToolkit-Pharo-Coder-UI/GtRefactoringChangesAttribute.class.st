@@ -56,7 +56,7 @@ GtRefactoringChangesAttribute >> focusAction: anObject [
 { #category : #initialization }
 GtRefactoringChangesAttribute >> initialize [
 	super initialize.
-	self beAppend.
+	self beReplace.
 	self beNotOverwritableByStyler.
 	showWhenCreated := false
 ]
