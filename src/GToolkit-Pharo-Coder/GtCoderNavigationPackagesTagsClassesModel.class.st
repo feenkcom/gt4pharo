@@ -103,6 +103,12 @@ GtCoderNavigationPackagesTagsClassesModel >> coderDo: aBlock [
 	coder ifNotNil: aBlock
 ]
 
+{ #category : #initialization }
+GtCoderNavigationPackagesTagsClassesModel >> createAllProtocol: aClass [
+	^ GtPharoProtocol
+		protocol: (AllProtocol protocolOrganizer: aClass instanceSide organization protocolOrganizer) class: aClass
+]
+
 { #category : #'api - testing' }
 GtCoderNavigationPackagesTagsClassesModel >> hasSelectedClass [
 	<return: #Boolean>
@@ -341,8 +347,7 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 			protocol: eachProtocol
 			class: currentClass classSide ].
 	
-	allProtocol := GtPharoProtocol
-		protocol: (AllProtocol protocolOrganizer: currentClass instanceSide organization protocolOrganizer) class: currentClass.
+	allProtocol := self createAllProtocol: currentClass.
 
 	^ {allProtocol}, methodProtocols, classProtocols
 ]
@@ -367,7 +372,16 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
 		package: selectedPackage
 		tag: ((selectedTag isNil or: [ selectedTag isRoot ])
 				ifTrue: [ nil ]
-				ifFalse: [ selectedTag ])
+				ifFalse: [ selectedTag ]).
+
+	"attempt to select a protocol with the same name as previous class"
+	self selectedProtocol
+		ifNil: [ self selectProtocol: (self createAllProtocol: aClass) ]
+		ifNotNil: [ :aCurrentlySelectedProtocol |
+			self protocolsToShow
+				detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
+				ifFound: [ :aSimilarProtocol | self selectProtocol: aSimilarProtocol ]
+				ifNone: [ self selectProtocol: (self createAllProtocol: aClass) ] ]
 ]
 
 { #category : #'api - selection' }
