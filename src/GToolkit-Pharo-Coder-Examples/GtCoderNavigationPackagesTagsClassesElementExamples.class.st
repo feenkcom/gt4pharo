@@ -216,7 +216,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 	
 	self 
 		assertSelectionOfPackage: nil
-		tag: self packageTag 
+		tag: self packageTag
 		class: self classInPackageTag 
 		inElement: anElement.
 	

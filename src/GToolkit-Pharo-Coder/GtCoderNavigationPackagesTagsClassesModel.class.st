@@ -40,19 +40,24 @@ GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
 ]
 
 { #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: anAnnouncement [
-	(self packagesToShow includes: anAnnouncement packageAffected) ifFalse: [ ^ self ].
+GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassModificationApplied [
+	self selectedPackage
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aPackage |
+			(aPackage includesClassesAffectedBy: aClassModificationApplied)
+				ifFalse: [ ^ self ] ].
+
+	self notifyClassesToShowChanged.
+
 	self announcer announce: (GtCoderNavigationClassModified new 
 		coder: coder;
-		package: anAnnouncement packageAffected;
-		tag: anAnnouncement classTagAffected;
-		theClass: anAnnouncement classAffected)
+		package: aClassModificationApplied packageAffected;
+		tag: aClassModificationApplied classTagAffected;
+		theClass: aClassModificationApplied classAffected)
 ]
 
 { #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
-	self haltOnce.
-	
+GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [	
 	self selectedPackage
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aPackage |
@@ -219,9 +224,29 @@ GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecategorized [
 	| theClass aPackage aTag |
-	self selectedClass == aMethodRecategorized methodRecategorized methodClass
-		ifFalse: [ ^ self ].
 	
+	self selectedClass
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aClass |
+			(aClass includesMethodsAffectedBy: aMethodRecategorized)
+				ifFalse: [ ^ self ] ].
+				
+	self selectedMethod = aMethodRecategorized methodRecategorized
+		ifTrue: [ self deselectMethod ].
+
+	self selectedProtocol ifNotNil: [ :aProtocol |
+		(aProtocol name = aMethodRecategorized oldProtocol
+			and: [ aProtocol methodSelectors isEmpty ])
+				ifTrue: [
+					| aNewProtocol |
+					
+					aNewProtocol := self privateProtocolOfMethod: aMethodRecategorized methodRecategorized.
+
+					self selectProtocol: aNewProtocol ] ].
+
+	self notifyProtocolsToShowChanged.
+	self notifyMethodsToShowChanged.
+
 	theClass := aMethodRecategorized methodRecategorized methodClass.
 	aPackage := theClass package.
 	aTag := (GtTagDefinition fromBehavior: theClass) name.
@@ -401,6 +426,7 @@ GtCoderNavigationPackagesTagsClassesModel >> onCoderAnnouncement: anAnnouncement
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> packageRegistered: aRPackageRegistered [
 	(self packagesToShow includes: aRPackageRegistered package) ifFalse: [ ^ self ].
+	
 	self announcer announce: (GtCoderNavigationPackageRegistered new 
 		coder: coder;
 		package: aRPackageRegistered package)
@@ -518,17 +544,38 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustDeselectSlot [
 { #category : #'private - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass [
 	"Just select a class and its corresponding package or tag and notify about the changes"
-	| aPackageToSelect aTagToSelect |
+	| aPackageToSelect aTagToSelect shouldSelectTag |
 	<return: #Boolean>
 	
 	aPackageToSelect := selectedPackage
-			ifNil: [ aClass package ]
-			ifNotNil: [ :pkg | (pkg extendsClass: aClass) ifTrue: [ pkg ] ifFalse: [ aClass package ] ].
+		ifNil: [ aClass package ]
+		ifNotNil: [ :pkg |
+			(pkg extendsClass: aClass)
+				ifTrue: [ pkg ]
+				ifFalse: [ aClass package ] ].
 
-	aTagToSelect := aPackageToSelect classTagForClass: aClass.
-	aTagToSelect
-		ifNil: [ (aPackageToSelect extendsClass: aClass)
-				ifTrue: [ GtCoderPackageExtensionTag forPackage: aPackageToSelect ] ].
+	"Pre-select a tag under the following conditions:
+	 - class comes from a different package than the selected one
+	 - there is a selected tag from the same package as a class"
+	shouldSelectTag := aPackageToSelect ~= self selectedPackage.
+	shouldSelectTag ifFalse: [
+			shouldSelectTag := aPackageToSelect = self selectedPackage
+				and: [ self hasSelectedTag ] ].
+	shouldSelectTag := shouldSelectTag and: [ self hasPackageTagsIn: aPackageToSelect ].
+
+
+	shouldSelectTag
+		ifTrue: [
+			aTagToSelect := aPackageToSelect classTagForClass: aClass.
+			"pharo issue: tag of an uncategorized classe is the same as a package.
+			we have to compare names to make sure we don't select a tag that doesn't exist"
+			aTagToSelect name = aPackageToSelect name
+				ifTrue: [ aTagToSelect := nil ].
+			aTagToSelect := aTagToSelect
+				ifNil: [
+					(aPackageToSelect extendsClass: aClass)
+						ifTrue: [ GtCoderPackageExtensionTag forPackage: aPackageToSelect ] ].
+		].
 	
 	aTagToSelect
 		ifNil:  [ self privateJustSelectPackage: aPackageToSelect ]
@@ -578,6 +625,16 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectProtocol: aGtPharo
 	selectedProtocol := aGtPharoProtocol.
 	self notifyProtocolSelected: aGtPharoProtocol source: aSourceObject.
 	^ true
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateProtocolOfMethod: aCompiledMethod [
+	| aProtocol |
+	aProtocol := aCompiledMethod methodClass organization
+			protocolNamed: aCompiledMethod protocol.
+
+	^ aProtocol
+		ifNotNil: [ GtPharoProtocol protocol: aProtocol class: aCompiledMethod methodClass ]
 ]
 
 { #category : #'api - accessing' }
