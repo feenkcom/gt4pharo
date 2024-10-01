@@ -19,6 +19,6 @@ GtSearchSubclassResponsibilityMethodsFilter class >> globalFilterDescriptor2 [
 			ifFalse: [ self new not ] ];
 		named: 'Non/Abstract methods';
 		order: 18;
-		items: { GtFilterShortListModelDefinedMethodItem new. GtFilterShortListModelAbstractMethodItem new };
+		items: { GtFilterModelDefinedMethodItem new. GtFilterModelAbstractMethodItem new };
 		selectFirstItem
 ]
