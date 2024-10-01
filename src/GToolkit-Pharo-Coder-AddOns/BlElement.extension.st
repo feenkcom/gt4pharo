@@ -1,6 +1,21 @@
 Extension { #name : #BlElement }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+BlElement >> gtCheckChildMatchParentInParentFitContentConstraints: aGtAdvice [
+	<gtAdvice>
+	^ aGtAdvice list
+		priority: 10;
+		description: [ :each | (each printString , ' matches parent that fits content') asRopedText ];
+		compute: [ | elements |
+			elements := OrderedCollection new.
+			self withAllChildrenDepthFirstDo: [ :each |
+				each gtHasMatchParentChildrenInParentWithFitContent
+					ifTrue: [ elements add: each ] ].
+			elements ];
+		action: [ :each | GtPhlowObjectAdviceAction object: each ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 BlElement >> gtCheckLayoutConstraints: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice list
@@ -28,4 +43,17 @@ BlElement >> gtHasBasicLayoutWithFitContents [
 			(constraint isKindOf: BlLayoutCommonConstraintsAxis)
 				and: [ (constraint resizer isKindOf: BlLayoutFitContentResizer)
 						or: [ constraint resizer isKindOf: BlLayoutFitContentLimitedResizer ] ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+BlElement >> gtHasMatchParentChildrenInParentWithFitContent [
+	self hasParent ifFalse: [ ^ false ].
+
+	^ #(horizontal vertical)
+		anySatisfy: [ :each | 
+			| myConstraint parentConstraint |
+			myConstraint := self constraints perform: each.
+			parentConstraint := self parent constraints perform: each.
+			myConstraint resizer isMatchParent
+				and: [ parentConstraint resizer isFitContent ] ]
 ]
