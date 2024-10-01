@@ -51,6 +51,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: anAnnounc
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
+	self haltOnce.
+	
 	self selectedPackage
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aPackage |
@@ -203,9 +205,15 @@ GtCoderNavigationPackagesTagsClassesModel >> initialize [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
-	self selectedClass == aMethodAdded methodAdded methodClass ifFalse: [ ^ self ].
-	self announcer
-		announce: (GtCoderNavigationMethodModification new methodModified: aMethodAdded)
+	self selectedClass
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aClass |
+			(aClass includesMethodsAffectedBy: aMethodAdded)
+				ifFalse: [ ^ self ] ].
+	
+	self notifyProtocolsToShowChanged.
+	self notifySlotsToShowChanged.
+	self notifyMethodsToShowChanged
 ]
 
 { #category : #'event handling' }
@@ -227,9 +235,18 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodRemoved: aMethodRemoved [
-	self selectedClass == aMethodRemoved methodRemoved methodClass ifFalse: [ ^ self ].
-	self announcer
-		announce: (GtCoderNavigationMethodModification new methodModified: aMethodRemoved)
+	self selectedClass
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aClass |
+			(aClass includesMethodsAffectedBy: aMethodRemoved)
+				ifFalse: [ ^ self ] ].
+
+	self selectedMethod = aMethodRemoved
+		ifTrue: [ self deselectMethod ].
+	
+	self notifyProtocolsToShowChanged.
+	self notifySlotsToShowChanged.
+	self notifyMethodsToShowChanged
 ]
 
 { #category : #'api - accessing' }
@@ -759,7 +776,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedClass [
 	<return: #Class>
-	^ coder theClass
+	^ selectedClass
 ]
 
 { #category : #'api - accessing' }
