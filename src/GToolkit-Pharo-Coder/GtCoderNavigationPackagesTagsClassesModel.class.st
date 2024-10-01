@@ -569,7 +569,7 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass [
 			aTagToSelect := aPackageToSelect classTagForClass: aClass.
 			"pharo issue: tag of an uncategorized classe is the same as a package.
 			we have to compare names to make sure we don't select a tag that doesn't exist"
-			aTagToSelect name = aPackageToSelect name
+			(aTagToSelect isNotNil and: [ aTagToSelect name = aPackageToSelect name ])
 				ifTrue: [ aTagToSelect := nil ].
 			aTagToSelect := aTagToSelect
 				ifNil: [
