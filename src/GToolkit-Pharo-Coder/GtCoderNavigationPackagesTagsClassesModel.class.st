@@ -65,7 +65,15 @@ GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
-	(self packagesToShow includes: aClassRenamed packageAffected) ifFalse: [ ^ self ].
+	self selectedPackage
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aPackage |
+			(aPackage includesClassesAffectedBy: aClassRenamed)
+				ifFalse: [ ^ self ] ].
+
+	self notifyClassesToShowChanged.
+	
+	"we should still emit it, because GtCoderElement listens to it to update the label"
 	self announcer announce: (GtCoderNavigationClassRenamed new 
 		coder: coder;
 		package: aClassRenamed packageAffected;

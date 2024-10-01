@@ -36,6 +36,7 @@ GtPharoBehaviorCoderElement >> actOnPackageUpdated: ann [
 { #category : #callbacks }
 GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationAnnouncement [
 	| aMethod aTask |
+	
 	aMethod := aGtClassCoderMethodNavigationAnnouncement method.
 	aTask := GtPharoSelectAndScrollToMethodRepeatedTask new
 		method: aMethod;
