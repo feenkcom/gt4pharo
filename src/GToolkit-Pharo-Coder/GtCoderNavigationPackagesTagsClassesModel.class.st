@@ -556,12 +556,17 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass [
 
 	"Pre-select a tag under the following conditions:
 	 - class comes from a different package than the selected one
-	 - there is a selected tag from the same package as a class"
+	 - there is a selected tag from the same package as a class
+	 - class package extends the class"
 	shouldSelectTag := aPackageToSelect ~= self selectedPackage.
-	shouldSelectTag ifFalse: [
-			shouldSelectTag := aPackageToSelect = self selectedPackage
-				and: [ self hasSelectedTag ] ].
-	shouldSelectTag := shouldSelectTag and: [ self hasPackageTagsIn: aPackageToSelect ].
+	shouldSelectTag := shouldSelectTag
+		or: [ (aPackageToSelect = self selectedPackage and: [ self hasSelectedTag ]) ].
+	
+	shouldSelectTag := shouldSelectTag
+		and: [ self hasPackageTagsIn: aPackageToSelect ].
+	
+	shouldSelectTag := shouldSelectTag
+		or: [ aPackageToSelect extendsClass: aClass ].
 
 
 	shouldSelectTag
@@ -637,6 +642,31 @@ GtCoderNavigationPackagesTagsClassesModel >> privateProtocolOfMethod: aCompiledM
 		ifNotNil: [ GtPharoProtocol protocol: aProtocol class: aCompiledMethod methodClass ]
 ]
 
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateSelectDefaultProtocolOfClass: aClass [
+	| aProtocolToSelect thisPackageExtensionProtocol aDefaultProtocol |
+	
+	thisPackageExtensionProtocol := self selectedPackage
+		ifNotNil: [ :aPackage |
+			(aClass organization protocolNamed: '*', aPackage name)
+				ifNotNil: [ :aProtocol |
+					GtPharoProtocol
+		 				protocol: aProtocol
+		 				class: aClass ] ].
+
+	aDefaultProtocol := thisPackageExtensionProtocol ifNil: [ self createAllProtocol: aClass ].
+
+	aProtocolToSelect := selectedProtocol
+		ifNil: [ aDefaultProtocol ]
+		ifNotNil: [ :aCurrentlySelectedProtocol | 
+			self protocolsToShow
+				detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
+				ifFound: [ :aSimilarProtocol | aSimilarProtocol ]
+				ifNone: [ aDefaultProtocol ] ].
+
+	aProtocolToSelect ifNotNil: [ :aProtocol | self selectProtocol: aProtocol ]
+]
+
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 	<return: #Collection of: #GtPharoProtocol>
@@ -690,27 +720,18 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass withCoder: aBlockThatCreatesCoder [
 	"Do nothing if a class is already selected"
+
 	(selectedClass = aClass
-		and: [ coder isForClass
-			and: [ coder theClass = aClass ] ])
-		ifTrue: [ ^ self ].
+		and: [ coder isForClass and: [ coder theClass = aClass ] ]) ifTrue: [ ^ self ].
 
 	self coder: (aBlockThatCreatesCoder cull: aClass).
-	
-	(self privateJustSelectClass: aClass)
-		ifFalse: [ ^ self ].
+
+	(self privateJustSelectClass: aClass) ifFalse: [ ^ self ].
 
 	self deselectSlot.
 	self notifySlotsToShowChanged.
 	self notifyProtocolsToShowChanged.
-
-	selectedProtocol
-		ifNil: [ self selectProtocol: (self createAllProtocol: aClass) ]
-		ifNotNil: [ :aCurrentlySelectedProtocol | 
-			self protocolsToShow
-				detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
-				ifFound: [ :aSimilarProtocol | self selectProtocol: aSimilarProtocol ]
-				ifNone: [ self selectProtocol: (self createAllProtocol: aClass) ] ]
+	self privateSelectDefaultProtocolOfClass: aClass
 ]
 
 { #category : #'api - selection' }
