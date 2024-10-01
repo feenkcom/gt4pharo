@@ -19,7 +19,7 @@ GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor2 [
 			ifFalse: [ self new ] ];
 		named: 'Non/Trait methods';
 		order: 20;
-		items: { GtFilterShortListModelTraitOriginItem new. GtFilterShortListModelClassOriginItem new };
+		items: { GtFilterModelTraitOriginItem new. GtFilterModelClassOriginItem new };
 		selectLastItem;
 		yourself
 ]
