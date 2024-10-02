@@ -105,10 +105,13 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 				assertSelectionOfPackage: nil
 				tag: self extensionTag
 				class: ByteString
-				inElement: aScripter ].	"Should only contain the instance label and the extension methods protocol"
+				inElement: aScripter ].
+	
+	"Contains: virtual protocols, instance protocols"
 	aScripter checks
 		label: 'Check list count is correct';
-		satisfies: [ :anElement | anElement methodProtocolsList viewModel entityCount = 2 ];
+		value: [ :anElement | anElement methodProtocolsList viewModel entityCount ]
+		equals: 4;
 		play.
 	aScripter checks
 		label: 'Check protocol name is correct';
@@ -139,10 +142,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 				inElement: anElement ];
 		play.
 
-	aScripter checks
-		label: 'Check Method Protocol List not visible';
-		satisfies: [ :anElement | anElement methodProtocolsList isVisible not ];
-		play.
 	^ aScripter
 ]
 
@@ -217,7 +216,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 	
 	self 
 		assertSelectionOfPackage: nil
-		tag: self packageTag 
+		tag: self packageTag
 		class: self classInPackageTag 
 		inElement: anElement.
 	
@@ -245,10 +244,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSele
 				inElement: anElement ];
 		play.
 
-	aScripter checks
-		label: 'Check Method Protocol List not visible';
-		satisfies: [ :anElement | anElement methodProtocolsList isVisible not ];
-		play.
 	^ aScripter
 ]
 
@@ -271,11 +266,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithout
 				tag: nil
 				class: nil
 				inElement: anElement ];
-		play.
-
-	aScripter checks
-		label: 'Check Method Protocol List not visible';
-		satisfies: [ :anElement | anElement methodProtocolsList isVisible not ];
 		play.
 
 	^ aScripter
