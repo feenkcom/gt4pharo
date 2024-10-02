@@ -9,6 +9,10 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
 	| aModel aMethodsCoder aBuilder anUpdater aFiltersElement |
 	aModel := GtFilterItemsModel new.
 	aFiltersElement := aModel asFiltersElement.
+	aFiltersElement 
+		hMatchParent; 
+		constraintsDo: [ :c | 
+			c linear vertical alignCenter ].
 	aMethodsCoder := streamingCodersViewModel streamingCodersModel.
 	self updateFiltersElement: aFiltersElement.
 	aBuilder := GtFilterMethodsCoderAvailableFiltersBuilder new
@@ -17,10 +21,6 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
 	anUpdater := GtFilterMethodCodersAdditionalFiltersUpdater new
 			coders: aMethodsCoder;
 			filtersModel: aModel.
-	aModel weak
-		when: GtFiltersModelUpdated
-		send: #onFiltersUpdated:
-		to: anUpdater.
 	aFiltersElement userData at: GtFilterMethodCodersAdditionalFiltersUpdater put: anUpdater.
 	
 	^ aFiltersElement
@@ -35,8 +35,6 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> updateFiltersElement: a
 
 	aFiltersElement hasFiltersViewModel ifFalse: [ ^ self ].
 	aFiltersModel := aFiltersElement filtersViewModel filtersModel.
-	
-	"aFiltersModel items ifNotEmpty: [ ^ self ]."
 
 	someFilterModels := streamingCodersViewModel streamingCodersModel
 			additionalFilters

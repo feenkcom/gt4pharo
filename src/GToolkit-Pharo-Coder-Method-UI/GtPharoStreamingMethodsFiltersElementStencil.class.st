@@ -12,12 +12,12 @@ Class {
 
 { #category : #defaults }
 GtPharoStreamingMethodsFiltersElementStencil class >> beDescriptorsStencilDefault [
-	DefaultBuilderClass := GtPharoStreamingMethodsFiltersElementFromDescriptorsStencil
+	self defaultStencilClass: GtPharoStreamingMethodsFiltersElementFromDescriptorsStencil
 ]
 
 { #category : #defaults }
 GtPharoStreamingMethodsFiltersElementStencil class >> beModelStencilDefault [
-	DefaultBuilderClass := GtPharoStreamingMethodsFiltersElementFromModelStencil
+	self defaultStencilClass: GtPharoStreamingMethodsFiltersElementFromModelStencil
 ]
 
 { #category : #defaults }
@@ -29,6 +29,20 @@ GtPharoStreamingMethodsFiltersElementStencil class >> defaultStencil [
 GtPharoStreamingMethodsFiltersElementStencil class >> defaultStencilClass [
 	^ DefaultBuilderClass
 		ifNil: [ DefaultBuilderClass := GtPharoStreamingMethodsFiltersElementFromDescriptorsStencil ]
+]
+
+{ #category : #defaults }
+GtPharoStreamingMethodsFiltersElementStencil class >> defaultStencilClass: aClassOrNil [
+	GtPharoStreamingMethodsFiltersElementStencilDefaultChangedSignal new
+		previousClass: DefaultBuilderClass;
+		newClass: aClassOrNil;
+		emit.
+	DefaultBuilderClass := aClassOrNil
+]
+
+{ #category : #defaults }
+GtPharoStreamingMethodsFiltersElementStencil class >> defaultStencilClassOrNil [
+	^ DefaultBuilderClass
 ]
 
 { #category : #accessing }

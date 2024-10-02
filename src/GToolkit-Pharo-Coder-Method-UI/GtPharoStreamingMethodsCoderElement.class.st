@@ -23,7 +23,7 @@ GtPharoStreamingMethodsCoderElement >> asScrollableElement [
 GtPharoStreamingMethodsCoderElement >> buildFilter [
 	^ GtPharoStreamingMethodsFiltersElementStencil defaultStencil
 		streamingCodersViewModel: streamingCodersViewModel;
-		asElement.
+		asElement
 ]
 
 { #category : #'instance creation' }

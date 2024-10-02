@@ -133,6 +133,18 @@ GtPharoStreamingMethodsCoder >> packageNames [
 ]
 
 { #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> possibleCategories [
+	"I return possible method protocols (categories), excluding method protocol filter.
+	I am used to construck list of available method protocols that can be filtered using
+	a method protocol filter."
+	<return: #Array or: #String>
+	| someAdditionalFilters aCompositeFilter |
+	someAdditionalFilters := additionalFilters reject: #isMethodProtocolFilter.
+	aCompositeFilter := self createCombinedFilterFor: filter andAdditionalFilters: someAdditionalFilters.
+	^ ((aCompositeFilter asAsyncStream map: [ :eachMethod | eachMethod category ]) to: GtPrefixTree) wait
+]
+
+{ #category : #'api - completion' }
 GtPharoStreamingMethodsCoder >> pragmaNames [
 	^ (((self itemsStream
 		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
