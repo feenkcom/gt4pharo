@@ -57,3 +57,8 @@ GtSearchMethodCategoryFilter >> includesMethod: aCompiledMethod [
 
 	^ (aCompiledMethod methodClass whichCategoryIncludesSelector: aCompiledMethod selector) = category
 ]
+
+{ #category : #testing }
+GtSearchMethodCategoryFilter >> isMethodProtocolFilter [
+	^ true
+]

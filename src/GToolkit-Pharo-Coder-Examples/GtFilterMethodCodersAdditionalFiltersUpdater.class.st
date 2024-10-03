@@ -5,7 +5,7 @@ Class {
 		'coders',
 		'filtersModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters - Helpers'
+	#category : #'GToolkit-Pharo-Coder-Examples-Support'
 }
 
 { #category : #accessing }
@@ -29,13 +29,19 @@ GtFilterMethodCodersAdditionalFiltersUpdater >> filtersModel [
 ]
 
 { #category : #accessing }
-GtFilterMethodCodersAdditionalFiltersUpdater >> filtersModel: anObject [
-	filtersModel := anObject
+GtFilterMethodCodersAdditionalFiltersUpdater >> filtersModel: aModel [
+	filtersModel := aModel.
+
+	aModel weak
+		when: GtFiltersModelUpdated
+		send: #onFiltersUpdated:
+		to: self
 ]
 
 { #category : #'event handling' }
 GtFilterMethodCodersAdditionalFiltersUpdater >> onFiltersUpdated: anAnnouncement [
 	| someFilters |
+	coders ifNil: [ ^ self ].
 	someFilters := self filtersModel items
 			collect: [ :eachFilterModel | self createFilterFromModel: eachFilterModel ]
 			thenReject: #isNil.

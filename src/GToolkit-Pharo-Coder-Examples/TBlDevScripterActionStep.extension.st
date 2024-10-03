@@ -2,10 +2,7 @@ Extension { #name : #TBlDevScripterActionStep }
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 TBlDevScripterActionStep >> methodCoders [
-	^ self
-		addStep: (GtPharoMethodCodersStep new
-				label: 'Pharo method coders';
-				referenceSender)
+	^ self methodsCoder
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
@@ -15,4 +12,12 @@ TBlDevScripterActionStep >> methodCodersStep: aBlock [
 	step referenceSender.
 	aBlock value: step.
 	step play
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+TBlDevScripterActionStep >> methodsCoder [
+	^ self
+		addStep: (GtPharoMethodsCoderStep new
+				label: 'Pharo methods coder';
+				referenceSender)
 ]
