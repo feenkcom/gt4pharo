@@ -10,7 +10,8 @@ Class {
 		'selectedTag',
 		'selectedProtocol',
 		'selectedMethod',
-		'selectedSlot'
+		'selectedSlot',
+		'selectedClass'
 	],
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
@@ -29,39 +30,57 @@ GtCoderNavigationPackagesTagsClassesModel >> assertCoder: aCoder [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
-	(self packagesToShow includes: aClassAdded packageAffected) ifFalse: [ ^ self ].
-	self announcer announce: (GtCoderNavigationClassAdded new 
-		coder: coder;
-		package: aClassAdded packageAffected;
-		tag: aClassAdded classTagAffected;
-		theClass: aClassAdded classAdded)
+	self selectedPackage
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aPackage |
+			(aPackage includesClassesAffectedBy: aClassAdded)
+				ifFalse: [ ^ self ] ].
+
+	self notifyClassesToShowChanged
 ]
 
 { #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: anAnnouncement [
-	(self packagesToShow includes: anAnnouncement packageAffected) ifFalse: [ ^ self ].
+GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassModificationApplied [
+	self selectedPackage
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aPackage |
+			(aPackage includesClassesAffectedBy: aClassModificationApplied)
+				ifFalse: [ ^ self ] ].
+
+	self notifyClassesToShowChanged.
+
 	self announcer announce: (GtCoderNavigationClassModified new 
 		coder: coder;
-		package: anAnnouncement packageAffected;
-		tag: anAnnouncement classTagAffected;
-		theClass: anAnnouncement classAffected)
+		package: aClassModificationApplied packageAffected;
+		tag: aClassModificationApplied classTagAffected;
+		theClass: aClassModificationApplied classAffected)
 ]
 
-{ #category : #'api - subscriptions' }
-GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
-	(self packagesToShow includes: aClassRemoved packageAffected)
-		ifFalse: [ ^ self ].
-	self announcer
-		announce: (GtCoderNavigationClassRemoved new
-				coder: coder;
-				package: aClassRemoved packageAffected;
-				tag: aClassRemoved classTagAffected;
-				theClass: aClassRemoved classRemoved)
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [	
+	self selectedPackage
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aPackage |
+			(aPackage includesClassesAffectedBy: aClassRemoved)
+				ifFalse: [ ^ self ] ].
+
+	aClassRemoved classRemoved = self selectedClass
+		ifTrue: [ self deselectClass ].
+
+	self notifyClassesToShowChanged
 ]
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
-	(self packagesToShow includes: aClassRenamed packageAffected) ifFalse: [ ^ self ].
+	self selectedPackage
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aPackage |
+			(aPackage includesClassesAffectedBy: aClassRenamed)
+				ifFalse: [ ^ self ] ].
+
+	self notifyClassesToShowChanged.
+	
+	"we should still emit it, because GtCoderElement listens to it to update the label"
 	self announcer announce: (GtCoderNavigationClassRenamed new 
 		coder: coder;
 		package: aClassRenamed packageAffected;
@@ -95,7 +114,9 @@ GtCoderNavigationPackagesTagsClassesModel >> coder: aCoder [
 	aCoder announcer weak
 		when: Announcement
 		send: #onCoderAnnouncement:
-		to: self
+		to: self.
+		
+	self announce: (GtCoderNavigationCoderChanged new coder: aCoder)
 ]
 
 { #category : #'api - accessing' }
@@ -106,7 +127,61 @@ GtCoderNavigationPackagesTagsClassesModel >> coderDo: aBlock [
 { #category : #initialization }
 GtCoderNavigationPackagesTagsClassesModel >> createAllProtocol: aClass [
 	^ GtPharoProtocol
-		protocol: (AllProtocol protocolOrganizer: aClass instanceSide organization protocolOrganizer) class: aClass
+		protocol: (AllProtocol protocolOrganizer: aClass organization protocolOrganizer)
+		class: aClass
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> deselectClass [
+	"Deselect any currently selected class and other entities such as protocols, slots and methods. Deselecting a class means that the model no longer shows any methods, slots or protocols but still continues to display classes".
+
+	(self privateJustDeselectClass)
+		ifFalse: [ ^ self ].
+	
+	self deselectProtocol.
+	self notifyProtocolsToShowChanged.
+	self deselectSlot.
+	self notifySlotsToShowChanged
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> deselectMethod [
+	"Deselect any currently selected method and notify about the changes.
+	Deselecting a method has no influence on the currently selected protocol, slot or package."
+
+	self privateJustDeselectMethod
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> deselectProtocol [
+	"Deselect a currently selected protocol and no longer display methods"
+	
+	(self privateJustDeselectProtocol)
+		ifFalse: [ ^ self ].
+	
+	self deselectMethod.
+	self notifyMethodsToShowChanged
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> deselectSlot [
+	"Deselect a currently selected slot and no longer display methods"
+	
+	(self privateJustDeselectSlot)
+		ifFalse: [ ^ self ].
+	
+	self deselectMethod.
+	self notifyMethodsToShowChanged
+]
+
+{ #category : #'api - testing' }
+GtCoderNavigationPackagesTagsClassesModel >> hasPackageTagsIn: aRPackage [
+	<return: #Boolean>
+	| hasTags hasExtensions |
+	hasTags := (aRPackage classTags size = 1
+			and: [ aRPackage classTags anyOne name = aRPackage name ]) not.
+	hasExtensions := aRPackage gtDoesExtendClasses.
+	^ hasTags or: [ hasExtensions ]
 ]
 
 { #category : #'api - testing' }
@@ -135,17 +210,43 @@ GtCoderNavigationPackagesTagsClassesModel >> initialize [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
-	self selectedClass == aMethodAdded methodAdded methodClass ifFalse: [ ^ self ].
-	self announcer
-		announce: (GtCoderNavigationMethodModification new methodModified: aMethodAdded)
+	self selectedClass
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aClass |
+			(aClass includesMethodsAffectedBy: aMethodAdded)
+				ifFalse: [ ^ self ] ].
+	
+	self notifyProtocolsToShowChanged.
+	self notifySlotsToShowChanged.
+	self notifyMethodsToShowChanged
 ]
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecategorized [
 	| theClass aPackage aTag |
-	self selectedClass == aMethodRecategorized methodRecategorized methodClass
-		ifFalse: [ ^ self ].
 	
+	self selectedClass
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aClass |
+			(aClass includesMethodsAffectedBy: aMethodRecategorized)
+				ifFalse: [ ^ self ] ].
+				
+	self selectedMethod = aMethodRecategorized methodRecategorized
+		ifTrue: [ self deselectMethod ].
+
+	self selectedProtocol ifNotNil: [ :aProtocol |
+		(aProtocol name = aMethodRecategorized oldProtocol
+			and: [ aProtocol methodSelectors isEmpty ])
+				ifTrue: [
+					| aNewProtocol |
+					
+					aNewProtocol := self privateProtocolOfMethod: aMethodRecategorized methodRecategorized.
+
+					self selectProtocol: aNewProtocol ] ].
+
+	self notifyProtocolsToShowChanged.
+	self notifyMethodsToShowChanged.
+
 	theClass := aMethodRecategorized methodRecategorized methodClass.
 	aPackage := theClass package.
 	aTag := (GtTagDefinition fromBehavior: theClass) name.
@@ -159,9 +260,18 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodRemoved: aMethodRemoved [
-	self selectedClass == aMethodRemoved methodRemoved methodClass ifFalse: [ ^ self ].
-	self announcer
-		announce: (GtCoderNavigationMethodModification new methodModified: aMethodRemoved)
+	self selectedClass
+		ifNil: [ ^ self ]
+		ifNotNil: [ :aClass |
+			(aClass includesMethodsAffectedBy: aMethodRemoved)
+				ifFalse: [ ^ self ] ].
+
+	self selectedMethod = aMethodRemoved
+		ifTrue: [ self deselectMethod ].
+	
+	self notifyProtocolsToShowChanged.
+	self notifySlotsToShowChanged.
+	self notifyMethodsToShowChanged
 ]
 
 { #category : #'api - accessing' }
@@ -194,6 +304,24 @@ GtCoderNavigationPackagesTagsClassesModel >> methodsToShow [
 ]
 
 { #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyClassDeselected: aPreviouslySelectedClass [
+	self announce: (GtCoderNavigationClassDeselected new
+		theClass: aPreviouslySelectedClass;
+		coder: coder)
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass [
+	self
+		announce:
+			(GtCoderNavigationClassSelected new
+				coder: coder;
+				package: selectedPackage;
+				tag: selectedTag;
+				theClass: aClass)
+]
+
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass package: anRPackage tag: anRPackageTag [
 	self
 		announce:
@@ -205,18 +333,32 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass package
 ]
 
 { #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyClassesToShowChanged [
+	self announce: (GtCoderNavigationClassesToShowChanged new coder: coder)
+]
+
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyCoderSelected [
 	self announce: (GtCoderNavigationPackagesSelected new coder: coder)
 ]
 
 { #category : #'private - notifying' }
-GtCoderNavigationPackagesTagsClassesModel >> notifyMethodProtocolSelected: aMethodProtocol source: aSource [
-	coder withMethodProtocol: aMethodProtocol source: aSource
+GtCoderNavigationPackagesTagsClassesModel >> notifyMethodDeselected: aPreviouslySelectedMethod [ 
 ]
 
 { #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyMethodSelected: aMethod [
-	coder withSelectedMethod: aMethod
+	coder withSelectedMethod: aMethod.
+	self
+		announce:
+			(GtCoderNavigationMethodSelected new
+				coder: coder;
+				method: aMethod)
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyMethodsToShowChanged [
+	self announce: (GtCoderNavigationMethodsToShowChanged new coder: coder)
 ]
 
 { #category : #'private - notifying' }
@@ -229,18 +371,51 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyPackageSelected: anRPackage [
 ]
 
 { #category : #'private - notifying' }
-GtCoderNavigationPackagesTagsClassesModel >> notifySlotSelected: aSlot source: aSource [
-	coder withSlot: aSlot source: aSource
-]
-
-{ #category : #'private - notifying' }
-GtCoderNavigationPackagesTagsClassesModel >> notifyTagSelected: anRPackageTag package: anRPackage [
+GtCoderNavigationPackagesTagsClassesModel >> notifyPackageSelected: anRPackage tag: anRPackageTag [
 	self
 		announce:
 			(GtCoderNavigationPackageTagSelected new
 				coder: coder;
 				package: anRPackage;
 				tag: anRPackageTag)
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyProtocolDeselected: aGtPharoProtocol [
+	self
+		announce:
+			(GtCoderNavigationProtocolDeselected new
+				coder: coder;
+				protocol: aGtPharoProtocol)
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyProtocolSelected: aGtPharoProtocol source: aSource [
+	self
+		announce:
+			(GtCoderNavigationProtocolSelected new
+				coder: coder;
+				protocol: aGtPharoProtocol).
+	
+	coder withMethodProtocol: aGtPharoProtocol source: aSource
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyProtocolsToShowChanged [
+	self announce: (GtCoderNavigationProtocolsToShowChanged new coder: coder)
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifySlotDeselected: aPreviouslySelectedProtocol [ 
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifySlotSelected: aSlot source: aSource [
+	coder withSlot: aSlot source: aSource
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifySlotsToShowChanged [
 ]
 
 { #category : #'private - announcement handling' }
@@ -251,6 +426,7 @@ GtCoderNavigationPackagesTagsClassesModel >> onCoderAnnouncement: anAnnouncement
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> packageRegistered: aRPackageRegistered [
 	(self packagesToShow includes: aRPackageRegistered package) ifFalse: [ ^ self ].
+	
 	self announcer announce: (GtCoderNavigationPackageRegistered new 
 		coder: coder;
 		package: aRPackageRegistered package)
@@ -309,6 +485,188 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 	^ RPackageOrganizer default gtSortedPackages
 ]
 
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustDeselectClass [
+	"Just deselect any currently selected class and notify about the changes/
+	Return true if there was a class to deselect"
+	<return: #Boolean>
+	| aPreviouslySelectedClass |
+
+	selectedClass ifNil: [ ^ false ].
+	aPreviouslySelectedClass := selectedClass.
+	selectedClass := nil.
+	self notifyClassDeselected: aPreviouslySelectedClass.
+	^ true
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustDeselectMethod [
+	"Just deselect any currently selected method and notify about the changes.
+	Return true if there was a method to deselect"
+	<return: #Boolean>
+	| aPreviouslySelectedMethod |
+
+	selectedMethod ifNil: [ ^ false ].
+	aPreviouslySelectedMethod := selectedMethod.
+	selectedMethod := nil.
+	self notifyMethodDeselected: aPreviouslySelectedMethod.
+	^ true
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustDeselectProtocol [
+	"Just deselect any currently selected protocol and notify about the changes.
+	Return true if there was a protocol to deselect"
+	<return: #Boolean>
+	| aPreviouslySelectedProtocol |
+
+	selectedProtocol ifNil: [ ^ false ].
+	aPreviouslySelectedProtocol := selectedProtocol.
+	selectedProtocol := nil.
+	self notifyProtocolDeselected: aPreviouslySelectedProtocol.
+	^ true
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustDeselectSlot [
+	"Just deselect any currently selected slot and notify about the changes.
+	Return true if there was a slot to deselect"
+	<return: #Boolean>
+	| aPreviouslySelectedSlot |
+
+	selectedSlot ifNil: [ ^ false ].
+	aPreviouslySelectedSlot := selectedSlot.
+	selectedSlot := nil.
+	self notifySlotDeselected: aPreviouslySelectedSlot.
+	^ true
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass [
+	"Just select a class and its corresponding package or tag and notify about the changes"
+	| aPackageToSelect aTagToSelect shouldSelectTag |
+	<return: #Boolean>
+	
+	aPackageToSelect := selectedPackage
+		ifNil: [ aClass package ]
+		ifNotNil: [ :pkg |
+			(pkg extendsClass: aClass)
+				ifTrue: [ pkg ]
+				ifFalse: [ aClass package ] ].
+
+	"Pre-select a tag under the following conditions:
+	 - class comes from a different package than the selected one
+	 - there is a selected tag from the same package as a class
+	 - class package extends the class"
+	shouldSelectTag := aPackageToSelect ~= self selectedPackage.
+	shouldSelectTag := shouldSelectTag
+		or: [ (aPackageToSelect = self selectedPackage and: [ self hasSelectedTag ]) ].
+	
+	shouldSelectTag := shouldSelectTag
+		and: [ self hasPackageTagsIn: aPackageToSelect ].
+	
+	shouldSelectTag := shouldSelectTag
+		or: [ aPackageToSelect extendsClass: aClass ].
+
+
+	shouldSelectTag
+		ifTrue: [
+			aTagToSelect := aPackageToSelect classTagForClass: aClass.
+			"pharo issue: tag of an uncategorized classe is the same as a package.
+			we have to compare names to make sure we don't select a tag that doesn't exist"
+			(aTagToSelect isNotNil and: [ aTagToSelect name = aPackageToSelect name ])
+				ifTrue: [ aTagToSelect := nil ].
+			aTagToSelect := aTagToSelect
+				ifNil: [
+					(aPackageToSelect extendsClass: aClass)
+						ifTrue: [ GtCoderPackageExtensionTag forPackage: aPackageToSelect ] ].
+		].
+	
+	aTagToSelect
+		ifNil:  [ self privateJustSelectPackage: aPackageToSelect ]
+		ifNotNil: [ self privateJustSelectPackage: aPackageToSelect tag: aTagToSelect ].
+	
+	selectedClass = aClass
+		ifTrue: [ ^ false ].
+
+	selectedClass := aClass.
+	self notifyClassSelected: aClass.
+	^ true
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectPackage: aPackage [
+	"Just select a class a notify about the changes"
+
+	selectedPackage = aPackage
+		ifTrue: [ ^ self ].
+
+	selectedPackage := aPackage.
+	selectedTag := nil.
+	self notifyPackageSelected: aPackage.
+	self notifyClassesToShowChanged
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectPackage: aPackage tag: aTag [
+	"Just select a package and a tag a notify about the changes"
+
+	(selectedPackage = aPackage and: [ selectedTag = aTag ])
+		ifTrue: [ ^ self ].
+
+	selectedPackage := aPackage.
+	selectedTag := aTag.
+	self notifyPackageSelected: aPackage tag: aTag.
+	self notifyClassesToShowChanged
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectProtocol: aGtPharoProtocol source: aSourceObject [
+	"Just select a protocol a notify about the changes"
+
+	selectedProtocol = aGtPharoProtocol
+		ifTrue: [ ^ false ].
+
+	selectedProtocol := aGtPharoProtocol.
+	self notifyProtocolSelected: aGtPharoProtocol source: aSourceObject.
+	^ true
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateProtocolOfMethod: aCompiledMethod [
+	| aProtocol |
+	aProtocol := aCompiledMethod methodClass organization
+			protocolNamed: aCompiledMethod protocol.
+
+	^ aProtocol
+		ifNotNil: [ GtPharoProtocol protocol: aProtocol class: aCompiledMethod methodClass ]
+]
+
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateSelectDefaultProtocolOfClass: aClass [
+	| aProtocolToSelect thisPackageExtensionProtocol aDefaultProtocol |
+	
+	thisPackageExtensionProtocol := self selectedPackage
+		ifNotNil: [ :aPackage |
+			(aClass organization protocolNamed: '*', aPackage name)
+				ifNotNil: [ :aProtocol |
+					GtPharoProtocol
+		 				protocol: aProtocol
+		 				class: aClass ] ].
+
+	aDefaultProtocol := thisPackageExtensionProtocol ifNil: [ self createAllProtocol: aClass ].
+
+	aProtocolToSelect := selectedProtocol
+		ifNil: [ aDefaultProtocol ]
+		ifNotNil: [ :aCurrentlySelectedProtocol | 
+			self protocolsToShow
+				detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
+				ifFound: [ :aSimilarProtocol | aSimilarProtocol ]
+				ifNone: [ aDefaultProtocol ] ].
+
+	aProtocolToSelect ifNotNil: [ :aProtocol | self selectProtocol: aProtocol ]
+]
+
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 	<return: #Collection of: #GtPharoProtocol>
@@ -354,34 +712,26 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass [
-	| aCoder newPackage |
-	(coder isForClass and: [ coder theClass = aClass ]) ifTrue: [ ^ self ].
-	aCoder := GtPharoBehaviorCoder forClass: aClass.
-	self assertCoder: aCoder.
-	newPackage := selectedPackage
-			ifNil: [ aClass package ]
-			ifNotNil: [ :pkg | (pkg extendsClass: aClass) ifTrue: [ pkg ] ifFalse: [ aClass package ] ].
-	newPackage = selectedPackage ifFalse: [ selectedPackage := newPackage ].
-	selectedTag := selectedPackage classTagForClass: aClass.
-	selectedTag := selectedTag
-			ifNil: [ (selectedPackage extendsClass: aClass)
-					ifTrue: [ GtCoderPackageExtensionTag forPackage: selectedPackage ] ].
-	self coder: aCoder.
 	self
-		notifyClassSelected: aClass
-		package: selectedPackage
-		tag: ((selectedTag isNil or: [ selectedTag isRoot ])
-				ifTrue: [ nil ]
-				ifFalse: [ selectedTag ]).
+		selectClass: aClass
+		withCoder: [ GtPharoBehaviorCoder forClass: aClass ]
+]
 
-	"attempt to select a protocol with the same name as previous class"
-	self selectedProtocol
-		ifNil: [ self selectProtocol: (self createAllProtocol: aClass) ]
-		ifNotNil: [ :aCurrentlySelectedProtocol |
-			self protocolsToShow
-				detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
-				ifFound: [ :aSimilarProtocol | self selectProtocol: aSimilarProtocol ]
-				ifNone: [ self selectProtocol: (self createAllProtocol: aClass) ] ]
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass withCoder: aBlockThatCreatesCoder [
+	"Do nothing if a class is already selected"
+
+	(selectedClass = aClass
+		and: [ coder isForClass and: [ coder theClass = aClass ] ]) ifTrue: [ ^ self ].
+
+	self coder: (aBlockThatCreatesCoder cull: aClass).
+
+	(self privateJustSelectClass: aClass) ifFalse: [ ^ self ].
+
+	self deselectSlot.
+	self notifySlotsToShowChanged.
+	self notifyProtocolsToShowChanged.
+	self privateSelectDefaultProtocolOfClass: aClass
 ]
 
 { #category : #'api - selection' }
@@ -402,18 +752,14 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 			selectedPackage := aCoder package.
 			selectedTag := aCoder packageTag.
 			self coder: aCoder.
-			^ self notifyTagSelected: selectedTag package: selectedPackage ].
+			^ self notifyPackageSelected: selectedPackage tag: selectedTag ].
+
 	aCoder isForClass
-		ifTrue: [ (coder isForClass and: [ aCoder theClass = coder theClass ])
-				ifTrue: [ ^ self ].
-			self assertCoder: aCoder.
-			self coder: aCoder.
-			selectedPackage := selectedPackage ifNil: [coder theClass package].
-			selectedTag := selectedTag ifNil: [coder packageTag].
+		ifTrue: [
 			^ self
-				notifyClassSelected: coder theClass
-				package: selectedPackage
-				tag: selectedTag ].
+				selectClass: aCoder theClass
+				withCoder: [ aCoder ] ].
+
 	self assertCoder: aCoder.
 	self coder: aCoder.
 	self notifyCoderSelected
@@ -421,43 +767,65 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod [
-	selectedMethod := aMethod.
 	self selectClass: aMethod methodClass instanceSide.
+
+	selectedMethod := aMethod.
 	self notifyMethodSelected: aMethod
 ]
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectPackage: anRPackage [
 	| aCoder |
-	(self showPackage: anRPackage) ifFalse: [ ^ self ].
-	(coder isForPackage and: [ selectedPackage = anRPackage ]) ifTrue: [ ^ self ].
+
+	(self showPackage: anRPackage)
+		ifFalse: [ ^ self ].
+
+	(coder isForPackage and: [ selectedPackage = anRPackage ])
+		ifTrue: [ ^ self ].
+
 	selectedPackage := anRPackage.
 	selectedTag := nil.
 	aCoder := coder isForPackageTag
 			ifTrue: [ coder packageCoder ]
 			ifFalse: [ GtPharoPackageCoder forPackage: anRPackage ].
-	self assertCoder: aCoder.
 	self coder: aCoder.
+
+	self deselectClass.
+	self notifyClassesToShowChanged.
+
 	self notifyPackageSelected: anRPackage
 ]
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 	| packageCoder aCoder |
-	aRPackageTag isNil ifTrue: [ ^ self ].
-	(self showPackage: aRPackageTag package) ifFalse: [ ^ self ].
+
+	aRPackageTag
+		ifNil: [ ^ self ].
+
+	(self showPackage: aRPackageTag package)
+		ifFalse: [ ^ self ].
+
 	(coder isForPackageTag
 		and: [ selectedPackage = aRPackageTag package and: [ selectedTag = aRPackageTag ] ])
 		ifTrue: [ ^ self ].
-	selectedTag := aRPackageTag.
+
 	packageCoder := ((coder isForPackage
 			and: [ selectedPackage = aRPackageTag package ]) ifTrue: [ coder ])
 			ifNil: [ selectedPackage := aRPackageTag package.
 				GtPharoPackageCoder forPackage: aRPackageTag package ].
 	aCoder := packageCoder packageTagCoderFor: aRPackageTag.
-	self assertCoder: aCoder.
 	self coder: aCoder.
-	self notifyTagSelected: aRPackageTag package: aRPackageTag package
+	
+	selectedPackage := aRPackageTag package.
+	selectedTag := aRPackageTag.
+	
+	self deselectClass.
+	self notifyClassesToShowChanged.
+
+	self
+		notifyPackageSelected: aRPackageTag package
+		tag: aRPackageTag
 ]
 
 { #category : #'api - selection' }
@@ -467,10 +835,13 @@ GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol source: aSource [
-	self selectClass: aPharoProtocol protocolClass instanceSide.
-	selectedProtocol := aPharoProtocol.
-	selectedSlot := nil.
-	self notifyMethodProtocolSelected: aPharoProtocol source: aSource.
+	self privateJustSelectClass: aPharoProtocol protocolClass instanceSide.
+	
+	(self privateJustSelectProtocol: aPharoProtocol source: aSource)
+		ifFalse: [ ^ self ].
+		
+	self privateJustDeselectSlot.
+	self notifyMethodsToShowChanged
 ]
 
 { #category : #'api - selection' }
@@ -483,7 +854,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedClass [
 	<return: #Class>
-	^ coder theClass
+	^ selectedClass
 ]
 
 { #category : #'api - accessing' }

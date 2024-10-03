@@ -27,7 +27,9 @@ GtSearchMethodCategoryFilter >> category [
 
 { #category : #accessing }
 GtSearchMethodCategoryFilter >> category: aSymbol [
-	category := aSymbol
+	(AllProtocol isAllProtocolName: aSymbol)
+		ifTrue: [ category := AllProtocol gtDefaultName ]
+		ifFalse: [ category := aSymbol ]
 ]
 
 { #category : #accessing }
@@ -50,8 +52,13 @@ GtSearchMethodCategoryFilter >> hash [
 { #category : #testing }
 GtSearchMethodCategoryFilter >> includesMethod: aCompiledMethod [
 	"terrible hack :)"
-	(AllProtocol defaultName = category)
+	(AllProtocol isAllProtocolName: category)
 		ifTrue: [ ^ true ].
 
 	^ (aCompiledMethod methodClass whichCategoryIncludesSelector: aCompiledMethod selector) = category
+]
+
+{ #category : #testing }
+GtSearchMethodCategoryFilter >> isMethodProtocolFilter [
+	^ true
 ]

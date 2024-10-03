@@ -6,7 +6,7 @@ GtSearchMethodCategoryFilter class >> filterDescriptor2For: aMethodsCoder [
 		creator: [ :anItem | anItem ifSome: [ :aName | self forCategory: aName ] ];
 		named: 'Category';
 		order: 15;
-		items: aMethodsCoder categories;
+		items: (GtPharoStreamingMethodsCoderPossibleCategoriesBuilder new methodsCoder: aMethodsCoder);
 		selectFirstItem
 ]
 
@@ -37,5 +37,5 @@ GtSearchMethodCategoryFilter class >> globalFilterDescriptor2 [
 		creator: [ :value | self forCategory: value ];
 		named: 'Category';
 		order: 15;
-		text: 'All'
+		text: AllProtocol gtDefaultName
 ]

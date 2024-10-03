@@ -1,6 +1,137 @@
 Extension { #name : #GtFilterElementByScripterExamples }
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoder [
+	<gtExample>
+	| aScripter |
+	aScripter := self dummyTwoClassCoderDuring: [ :aStep |  ].
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self classCoderSelectSuperclass.
+	
+	aScripter filterStep
+		clickOnAddFilter;
+		clickOnDropdownFilterItemAtIndex: 5;
+		assertFilterModelAtIndex: 2 itemsCountIs: 4;
+		clickOnFilterSettingsAtIndex: 2;
+		clickOnDropdownFilterItemAtIndex: 3;
+		assertFilterModelAtIndex: 2
+			selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
+		play.
+		
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsExactly: 1;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self classCoderSelectProtoObjectSuperclass.
+	
+	aScripter filterStep
+		clickOnFilterSettingsAtIndex: 2;
+		assertFilterModelAtIndex: 2 itemsCountIsAtLeast: 20;
+		clickOnDropdownFilterItemAtIndex: 1;
+		assertFilterModelAtIndex: 2
+			selectedValueIs: (GtFilterModelStringItem new string: AllProtocol gtDefaultName);
+		play.
+		
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsAtLeast: 8;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self classCoderAddMethodProtocolFilter.
+
+	aScripter filterStep
+		clickOnFilterSettingsAtIndex: 1;
+		clickOnDropdownFilterItemAtIndex: 3;
+		assertFilterModelAtIndex: 1
+			selectedValueIs: (GtFilterModelClassItem new itemClass: ProtoObject);
+		play.
+
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsExactly: 2;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoderSelectSuperclass [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self classCoder.
+
+	aScripter filterStep
+		clickOnFilterSettingsAtIndex: 1;
+		clickOnDropdownFilterItemAtIndex: 1;
+		assertFilterModelAtIndex: 1
+			selectedValueIs: (GtFilterModelClassItem new itemClass: GtPharoDummyOneObject);
+		play.
+
+	aScripter methodsCoder
+		waitForEnqueuedAndProcessedSpaceTasks;
+		assertNumberOfVisibleMethodsIsAtLeast: GtPharoDummyTwoObject methodDict size + 1;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> dummyTwoClassCoderDuring: aBlock [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripter.
+	aScripter
+		substeps: 'Use filter model'
+		before: [ | aDefaultClass |
+			aDefaultClass := GtPharoStreamingMethodsFiltersElementStencil
+					defaultStencilClassOrNil.
+			GtPharoStreamingMethodsFiltersElementStencil beModelStencilDefault.
+			aDefaultClass ]
+		play: [ :aStep | 
+			aStep memoryLogger
+				runFor: GtFilterSignal
+				during: [ :aLoggerStep | 
+					aLoggerStep do
+						label: 'Initialize coder';
+						element: [ GtCoder forClass: GtPharoDummyTwoObject ].
+					aStep assert
+						label: 'Assert methods coder element exists';
+						exists;
+						// GtPharoStreamingMethodsCoderElement.
+					aStep assert
+						label: 'Assert filter items element exists';
+						exists;
+						// GtFilterItemsElement.
+					aLoggerStep substeps: 'Interactions' do: aBlock ] ]
+		ensure: [ :aDefaultClass | GtPharoStreamingMethodsFiltersElementStencil defaultStencilClass: aDefaultClass ].
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
 GtFilterElementByScripterExamples >> itemsModelWithMethodsCoder [
 	<gtExample>
 	| aScripter |

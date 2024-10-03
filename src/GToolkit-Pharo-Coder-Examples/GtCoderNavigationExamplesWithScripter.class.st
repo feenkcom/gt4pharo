@@ -72,6 +72,7 @@ GtCoderNavigationExamplesWithScripter >> selectPackageWithExtension [
 	pkg := 'GToolkit-Pharo-Coder' asPackage.
 	model selectPackage: pkg.
 	scripter continue.
+	
 	model selectPackageTag: (GtCoderPackageExtensionTag forPackage: pkg).
 	scripter continue.
 	model selectClass: RBRenameClassChange.
@@ -85,6 +86,7 @@ GtCoderNavigationExamplesWithScripter >> selectPackageWithExtension [
 { #category : #accessing }
 GtCoderNavigationExamplesWithScripter >> selectSuperclassOfPackageWithExtension [
 	<gtExample>
+	<noTest>
 	| scripter model pkg tag |
 	scripter := self selectPackageWithExtension.
 	model := scripter element navigationModel.
