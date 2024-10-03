@@ -86,6 +86,7 @@ GtCoderNavigationExamplesWithScripter >> selectPackageWithExtension [
 { #category : #accessing }
 GtCoderNavigationExamplesWithScripter >> selectSuperclassOfPackageWithExtension [
 	<gtExample>
+	<noTest>
 	| scripter model pkg tag |
 	scripter := self selectPackageWithExtension.
 	model := scripter element navigationModel.
