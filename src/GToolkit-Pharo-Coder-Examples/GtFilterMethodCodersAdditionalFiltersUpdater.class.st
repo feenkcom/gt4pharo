@@ -42,6 +42,8 @@ GtFilterMethodCodersAdditionalFiltersUpdater >> filtersModel: aModel [
 GtFilterMethodCodersAdditionalFiltersUpdater >> onFiltersUpdated: anAnnouncement [
 	| someFilters |
 	coders ifNil: [ ^ self ].
+	self assert: [ anAnnouncement model == self filtersModel ].
+	
 	someFilters := self filtersModel items
 			collect: [ :eachFilterModel | self createFilterFromModel: eachFilterModel ]
 			thenReject: #isNil.
