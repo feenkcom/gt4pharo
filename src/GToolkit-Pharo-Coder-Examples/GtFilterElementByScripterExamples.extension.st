@@ -12,19 +12,21 @@ GtFilterElementByScripterExamples >> classCoder [
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self classCoderSelectSuperclass.
 	
-	aScripter filterStep
-		clickOnAddFilter;
-		clickOnDropdownFilterItemAtIndex: 5;
-		assertFilterModelAtIndex: 2 itemsCountIs: 4;
-		clickOnFilterSettingsAtIndex: 2;
-		clickOnDropdownFilterItemAtIndex: 3;
-		assertFilterModelAtIndex: 2
-			selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
-		play.
+	aScripter memoryLogger
+		runFor: GtJustContextStackSignal, GtFilterSignal
+		during: [ :aStep |
+			aStep filterStep
+				clickOnAddFilter;
+				clickOnDropdownFilterItemAtIndex: 5;
+				assertFilterModelAtIndex: 2 itemsCountIs: 4;
+				clickOnFilterSettingsAtIndex: 2;
+				clickOnDropdownFilterItemAtIndex: 3;
+				assertFilterModelAtIndex: 2
+					selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
+				play ].
 		
 	aScripter methodsCoder
 		assertNumberOfVisibleMethodsIsExactly: 1;
@@ -36,7 +38,6 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self classCoderSelectProtoObjectSuperclass.
 	
@@ -58,7 +59,6 @@ GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self classCoderAddMethodProtocolFilter.
 
@@ -79,7 +79,6 @@ GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 GtFilterElementByScripterExamples >> classCoderSelectSuperclass [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self classCoder.
 
