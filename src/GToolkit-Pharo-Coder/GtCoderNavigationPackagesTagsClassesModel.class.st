@@ -104,19 +104,10 @@ GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
 
 { #category : #'private - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> coder: aCoder [
-	coder == aCoder ifTrue: [ ^ self ].
-	coder ifNotNil: [ :oldCoder | 
-		oldCoder announcer unsubscribe: self ].
-	
-	coder := aCoder.
-	
-	"forward coder announcements"
-	aCoder announcer weak
-		when: Announcement
-		send: #onCoderAnnouncement:
-		to: self.
-		
-	self announce: (GtCoderNavigationCoderChanged new coder: aCoder)
+	(self setCoder: aCoder)
+		ifFalse: [ ^ self ].
+
+	self notifyCoderChanged
 ]
 
 { #category : #'api - accessing' }
@@ -187,7 +178,7 @@ GtCoderNavigationPackagesTagsClassesModel >> hasPackageTagsIn: aRPackage [
 { #category : #'api - testing' }
 GtCoderNavigationPackagesTagsClassesModel >> hasSelectedClass [
 	<return: #Boolean>
-	^ self selectedClass notNil
+	^ self selectedClass isNotNil
 ]
 
 { #category : #'api - testing' }
@@ -338,6 +329,11 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyClassesToShowChanged [
 ]
 
 { #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyCoderChanged [
+	self announce: (GtCoderNavigationCoderChanged new coder: coder)
+]
+
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyCoderSelected [
 	self announce: (GtCoderNavigationPackagesSelected new coder: coder)
 ]
@@ -396,7 +392,7 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyProtocolSelected: aGtPharoPro
 			(GtCoderNavigationProtocolSelected new
 				coder: coder;
 				protocol: aGtPharoProtocol).
-	
+
 	coder withMethodProtocol: aGtPharoProtocol source: aSource
 ]
 
@@ -722,16 +718,20 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClass: aClass withCoder: aBlo
 	"Do nothing if a class is already selected"
 
 	(selectedClass = aClass
-		and: [ coder isForClass and: [ coder theClass = aClass ] ]) ifTrue: [ ^ self ].
+		and: [ coder isForClass and: [ coder theClass = aClass ] ]) ifTrue: [ ^ self ].	
 
-	self coder: (aBlockThatCreatesCoder cull: aClass).
+	"we should set a new coder as soon as possible, this is because selection and notification methods rely on a specific coder class. but we shouldn't notify that the coder has changed just yet"
+	self setCoder: (aBlockThatCreatesCoder cull: aClass).
 
-	(self privateJustSelectClass: aClass) ifFalse: [ ^ self ].
+	(self privateJustSelectClass: aClass)
+		ifTrue: [ self deselectSlot.
+			self notifySlotsToShowChanged.
+			self notifyProtocolsToShowChanged.
+			self privateSelectDefaultProtocolOfClass: aClass ].
 
-	self deselectSlot.
-	self notifySlotsToShowChanged.
-	self notifyProtocolsToShowChanged.
-	self privateSelectDefaultProtocolOfClass: aClass
+	"we should notify that the coder chnaged after we select packages / tags and protocols, otherwise parts of the coder that update when coder is changed will not have
+	access to selected class / package"
+	self notifyCoderChanged
 ]
 
 { #category : #'api - selection' }
@@ -901,6 +901,24 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedTagDo: aBlock [
 	self selectedTag ifNotNil: aBlock
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> setCoder: aCoder [
+	coder == aCoder
+		ifTrue: [ ^ false ].
+	coder ifNotNil: [ :oldCoder | 
+		oldCoder announcer unsubscribe: self ].
+	
+	coder := aCoder.
+	
+	"forward coder announcements"
+	aCoder announcer weak
+		when: Announcement
+		send: #onCoderAnnouncement:
+		to: self.
+
+	^ true
 ]
 
 { #category : #'api - selection' }
