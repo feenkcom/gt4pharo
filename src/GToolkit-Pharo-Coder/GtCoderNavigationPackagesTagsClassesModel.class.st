@@ -90,6 +90,14 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 		newName: aClassRenamed newName)
 ]
 
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized [
+	self selectedClass = aClassReorganized classReorganized
+		ifFalse: [ ^ self ].
+
+	self notifyProtocolsToShowChanged
+]
+
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
 	<return: #Collection of: #Class>
@@ -939,6 +947,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassRenamed send: #classRenamed: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
+		when: ClassReorganized send: #classReorganized: to: self;
 		when: MethodAdded send: #methodAdded: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self;
 		when: MethodRecategorized send: #methodRecategorized: to: self
