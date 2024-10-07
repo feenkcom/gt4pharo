@@ -4,7 +4,7 @@ Extension { #name : #GtSearchMethodCategoryFilter }
 GtSearchMethodCategoryFilter class >> filterDescriptor2For: aMethodsCoder [
 	^ GtFilterShortListModel new
 		creator: [ :anItem | anItem ifSome: [ :aName | self forCategory: aName ] ];
-		named: 'Category';
+		named: self filterName;
 		order: 15;
 		items: (GtPharoStreamingMethodsCoderPossibleCategoriesBuilder new methodsCoder: aMethodsCoder);
 		selectFirstItem
@@ -22,6 +22,11 @@ GtSearchMethodCategoryFilter class >> filterDescriptorFor: aMethodsCoder [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodCategoryFilter class >> filterName [
+	^ 'Category'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodCategoryFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self forCategory: value ];
@@ -35,7 +40,7 @@ GtSearchMethodCategoryFilter class >> globalFilterDescriptor [
 GtSearchMethodCategoryFilter class >> globalFilterDescriptor2 [
 	^ GtFilterTextModel new
 		creator: [ :value | self forCategory: value ];
-		named: 'Category';
+		named: self filterName;
 		order: 15;
 		text: AllProtocol gtDefaultName
 ]

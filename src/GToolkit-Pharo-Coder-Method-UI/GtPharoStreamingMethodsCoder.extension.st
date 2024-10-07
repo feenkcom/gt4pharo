@@ -17,7 +17,7 @@ GtPharoStreamingMethodsCoder >> categoryFilter: aView [
 				matchParent;
 				items: categories 
 				title: [ :aCategory | aCategory ]
-				action: [ :aCategory | self additionalFilters: { (GtSearchMethodCategoryFilter forCategory: aCategory) } ] ]
+				action: [ :aCategory | self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aCategory) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }

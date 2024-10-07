@@ -20,12 +20,15 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 		during: [ :aStep |
 			aStep filterStep
 				clickOnAddFilter;
-				clickOnDropdownFilterItemAtIndex: 5;
+				clickOnDropdownMethodProtocolItem;
 				assertFilterModelAtIndex: 2 itemsCountIs: 4;
 				clickOnFilterSettingsAtIndex: 2;
 				clickOnDropdownFilterItemAtIndex: 3;
 				assertFilterModelAtIndex: 2
 					selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
+				assertFilterModelsCountIs: 2;
+				assertMethodsUpToFilterModel;
+				assertMethodProtocolFilterModel;
 				play ].
 		
 	aScripter methodsCoder
@@ -67,6 +70,9 @@ GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 		clickOnDropdownFilterItemAtIndex: 3;
 		assertFilterModelAtIndex: 1
 			selectedValueIs: (GtFilterModelClassItem new itemClass: ProtoObject);
+		assertFilterModelsCountIs: 2;
+		assertMethodsUpToFilterModel;
+		assertMethodProtocolFilterModel;
 		play.
 
 	aScripter methodsCoder
