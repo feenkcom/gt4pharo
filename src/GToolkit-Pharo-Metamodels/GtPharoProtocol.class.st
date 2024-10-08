@@ -1,12 +1,16 @@
+"
+A wrapper around Pharo's {{gtClass:Protocol}}.
+
+"
 Class {
 	#name : #GtPharoProtocol,
-	#superclass : #Object,
+	#superclass : #GtAbstractProtocol,
 	#instVars : [
-		'protocolClass',
 		'protocol',
+		'protocolClass',
 		'isClassSide'
 	],
-	#category : #'GToolkit-Pharo-Metamodels-Meta'
+	#category : #'GToolkit-Pharo-Metamodels-Protocols'
 }
 
 { #category : #'instance creation' }
@@ -37,6 +41,14 @@ GtPharoProtocol >> = anObject [
 	^ protocol name = anObject protocol name
 		and: [ protocolClass = anObject protocolClass
 				and: [ isClassSide = anObject isClassSide ] ]
+]
+
+{ #category : #accessing }
+GtPharoProtocol >> allMethods [
+	| theClass |
+	theClass := self protocolClass.
+	^ protocol methodSelectors collect: [ :eachSelector |
+		theClass >> eachSelector ]
 ]
 
 { #category : #testing }
@@ -109,5 +121,5 @@ GtPharoProtocol >> protocolClass [
 { #category : #accessing }
 GtPharoProtocol >> protocolClass: aClass [
 	isClassSide := aClass isClassSide.
-	protocolClass := aClass instanceSide.
+	protocolClass := aClass instanceSide
 ]
