@@ -1,14 +1,19 @@
 Extension { #name : #GtSearchClassVariableReferenceFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchClassVariableReferenceFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self variableName ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchClassVariableReferenceFilter class >> filterDescriptor2For: aMethodsCoder [
 	aMethodsCoder isForClass ifFalse: [ ^ nil ].
 	^ GtFilterShortListModel new
 		creator: [ :anItem | 
-			anItem ifSome: [ :aName |
-				self
-					forClass: aMethodsCoder classOrMetaClass
-					andVariable: aName ] ];
+			anItem
+				ifSome: [ :aName | self forClass: aMethodsCoder classOrMetaClass andVariable: aName ]
+				ifNone: [ self forClass: aMethodsCoder classOrMetaClass andVariable: '' ] ];
 		named: 'Class variable';
 		order: 26;
 		items: aMethodsCoder classOrMetaClass allClassVarNames;

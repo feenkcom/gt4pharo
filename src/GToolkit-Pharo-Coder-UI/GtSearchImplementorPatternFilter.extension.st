@@ -2,11 +2,15 @@ Extension { #name : #GtSearchImplementorPatternFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchImplementorPatternFilter class >> filterDescriptor2For: aMethodsCoder [
-	^ GtFilterTextModel new
-		creator: [ :value | self pattern: value ];
-		named: 'Implementor';
-		order: 10;
-		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder selectorNames ] ]
+	^ self globalFilterDescriptor2
+		completion: [ GtStringsCompletionStrategy new 
+			completions: [ aMethodsCoder selectorNames ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchImplementorPatternFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder) 
+		text: self pattern
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

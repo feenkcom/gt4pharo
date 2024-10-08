@@ -1,6 +1,12 @@
 Extension { #name : #GtSearchSubclassResponsibilityMethodsFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchSubclassResponsibilityMethodsFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: GtFilterModelAbstractMethodItem default ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchSubclassResponsibilityMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
@@ -16,9 +22,9 @@ GtSearchSubclassResponsibilityMethodsFilter class >> globalFilterDescriptor2 [
 	^ GtFilterShortListModel new
 		creator: [ :anItem | anItem isSubclassResponsibilityMethod
 			ifTrue: [ self new ]
-			ifFalse: [ self new not ] ];
+			ifFalse: [ GtSearchDefinedMethodsFilter new ] ];
 		named: 'Non/Abstract methods';
 		order: 18;
-		items: { GtFilterModelDefinedMethodItem new. GtFilterModelAbstractMethodItem new };
+		items: { GtFilterModelAbstractMethodItem default. GtFilterModelDefinedMethodItem default };
 		selectFirstItem
 ]

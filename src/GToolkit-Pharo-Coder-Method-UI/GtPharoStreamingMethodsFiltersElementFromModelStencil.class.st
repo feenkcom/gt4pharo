@@ -39,8 +39,7 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> updateFiltersElement: a
 	someFilterModels := streamingCodersViewModel streamingCodersModel
 			additionalFilters
 			collect: [ :eachFilter | 
-				eachFilter class
-					filterDescriptor2For: streamingCodersViewModel streamingCodersModel ]
+				eachFilter filterDescriptor2For: streamingCodersViewModel streamingCodersModel ]
 			thenReject: #isNil.
 	
 	aFiltersModel items: someFilterModels.
