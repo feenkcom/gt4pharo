@@ -92,7 +92,7 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized [
-	self selectedClass = aClassReorganized classReorganized
+	self selectedClass = aClassReorganized classReorganized instanceSide
 		ifFalse: [ ^ self ].
 
 	self notifyProtocolsToShowChanged
@@ -125,9 +125,7 @@ GtCoderNavigationPackagesTagsClassesModel >> coderDo: aBlock [
 
 { #category : #initialization }
 GtCoderNavigationPackagesTagsClassesModel >> createAllProtocol: aClass [
-	^ GtPharoProtocol
-		protocol: (AllProtocol protocolOrganizer: aClass organization protocolOrganizer)
-		class: aClass
+	^ GtAllProtocol ofClass: aClass
 ]
 
 { #category : #'api - selection' }
@@ -190,9 +188,27 @@ GtCoderNavigationPackagesTagsClassesModel >> hasSelectedClass [
 ]
 
 { #category : #'api - testing' }
+GtCoderNavigationPackagesTagsClassesModel >> hasSelectedMethod [
+	<return: #Boolean>
+	^ self selectedMethod isNotNil
+]
+
+{ #category : #'api - testing' }
 GtCoderNavigationPackagesTagsClassesModel >> hasSelectedPackage [
 	<return: #Boolean>
 	^ self selectedPackage notNil
+]
+
+{ #category : #'api - testing' }
+GtCoderNavigationPackagesTagsClassesModel >> hasSelectedProtocol [
+	<return: #Boolean>
+	^ self selectedProtocol isNotNil
+]
+
+{ #category : #'api - testing' }
+GtCoderNavigationPackagesTagsClassesModel >> hasSelectedSlot [
+	<return: #Boolean>
+	^ self selectedSlot isNotNil
 ]
 
 { #category : #'api - testing' }
@@ -227,9 +243,17 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 	self selectedClass
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aClass |
-			(aClass includesMethodsAffectedBy: aMethodRecategorized)
-				ifFalse: [ ^ self ] ].
+			| isInstanceSideAffected isClassSideAffected|
+			
+			isInstanceSideAffected := aClass instanceSide
+				includesMethodsAffectedBy: aMethodRecategorized.
 				
+			isClassSideAffected := aClass classSide
+				includesMethodsAffectedBy: aMethodRecategorized.
+			
+			(isInstanceSideAffected or: isClassSideAffected)
+				ifFalse: [ ^ self ] ].
+
 	self selectedMethod = aMethodRecategorized methodRecategorized
 		ifTrue: [ self deselectMethod ].
 
@@ -240,8 +264,7 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 					| aNewProtocol |
 					
 					aNewProtocol := self privateProtocolOfMethod: aMethodRecategorized methodRecategorized.
-
-					self selectProtocol: aNewProtocol ] ].
+					aNewProtocol ifNotNil: [ self selectProtocol: aNewProtocol ] ] ].
 
 	self notifyProtocolsToShowChanged.
 	self notifyMethodsToShowChanged.
@@ -285,21 +308,8 @@ GtCoderNavigationPackagesTagsClassesModel >> methodsToShow [
 				streamContents: [ :aStream | 
 					aStream nextPutAll: (anInstanceSideClass methodsAccessingSlot: aSlot).
 					aStream nextPutAll: (aClassSideClass methodsAccessingSlot: aSlot) ] ].
-
-	^ Array
-		streamContents: [ :aStream | 
-			| aProtocol |
-			aProtocol := self selectedProtocol
-					ifNil: [ GtPharoProtocol
-							protocol: (AllProtocol
-									protocolOrganizer: anInstanceSideClass organization protocolOrganizer)
-							class: anInstanceSideClass ].
-			aProtocol methodSelectors
-				do: [ :eachSelector | 
-					| eachMethod |
-					eachMethod := aProtocol protocolClass >> eachSelector.
-					(eachMethod methodClass isClassSide and: [ eachMethod isFromTrait ])
-						ifFalse: [ aStream nextPut: eachMethod ] ] ]
+					
+	^ self selectedProtocol allMethods
 ]
 
 { #category : #'private - notifying' }
@@ -675,9 +685,7 @@ GtCoderNavigationPackagesTagsClassesModel >> privateSelectDefaultProtocolOfClass
 GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 	<return: #Collection of: #GtPharoProtocol>
 	| currentClass classProtocols methodProtocols extension allProtocol |
-
-	self hasSelectedClass
-		ifFalse: [ ^ #() ].
+	self hasSelectedClass ifFalse: [ ^ #() ].
 
 	currentClass := self selectedClass.
 
@@ -699,19 +707,30 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 					classProtocols := classProtocols
 							select: [ :each | each name beginsWith: protocolName ] ] ].
 
-	methodProtocols := methodProtocols collect: [ :eachProtocol |
-		GtPharoProtocol
-			protocol: eachProtocol
-			class: currentClass instanceSide ].
+	methodProtocols := methodProtocols
+			collect: [ :eachProtocol | GtPharoProtocol protocol: eachProtocol class: currentClass instanceSide ].
 
-	classProtocols := classProtocols collect: [ :eachProtocol |
-		GtPharoProtocol
-			protocol: eachProtocol
-			class: currentClass classSide ].
-	
+	classProtocols := classProtocols
+			collect: [ :eachProtocol | GtPharoProtocol protocol: eachProtocol class: currentClass classSide ].
+
 	allProtocol := self createAllProtocol: currentClass.
 
-	^ {allProtocol}, methodProtocols, classProtocols
+	^ {allProtocol} , methodProtocols , classProtocols
+]
+
+{ #category : #'api - refactorings' }
+GtCoderNavigationPackagesTagsClassesModel >> renameProtocol: aPharoProtocol to: aNewName [
+	| refactoring |
+
+	refactoring := GtRBRenameProtocolRefactoring
+		renameProtocol: aPharoProtocol name
+		in: aPharoProtocol protocolClass
+		to: aNewName.
+	refactoring execute.
+
+	self selectProtocol: (GtPharoProtocol 
+		protocolNamed: aNewName
+		class: aPharoProtocol protocolClass)
 ]
 
 { #category : #'api - selection' }
@@ -838,6 +857,10 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol [
+	self
+		assert: [ aPharoProtocol isNotNil ]
+		description: [ 'Protocol must not be nil' ].
+
 	self selectProtocol: aPharoProtocol source: nil
 ]
 

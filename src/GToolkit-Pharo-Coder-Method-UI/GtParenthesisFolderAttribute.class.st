@@ -36,10 +36,31 @@ GtParenthesisFolderAttribute >> attribute: anAttribute [
 	attribute := anAttribute
 ]
 
+{ #category : #'as yet unclassified' }
+GtParenthesisFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
+	| aToggle |
+	aToggle := BrTriangle new
+			id: self id;
+			aptitude: BrGlamorousEllipsesExpanderAptitude ;
+			expanded: self isExpanded;
+			padding: (BlInsets all: 2);
+			margin: (BlInsets top: 2);
+			mouseCursor: BlCursor default;
+			toggleAction: [ self
+					toggleExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece
+					in: anEditorElement editor ].
+
+	self
+		applyExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece
+		in: anEditorElement editor.
+
+	^ aToggle
+]
+
 { #category : #accessing }
 GtParenthesisFolderAttribute >> initialize [
 	super initialize.
 	self beNotOverwritableByStyler.
 	isExpanded := true.
-	hideAttribute := BrTextHideAttribute new beNotOverwritableByStyler
+	hideAttribute := BrTextFoldAttribute new beNotOverwritableByStyler
 ]

@@ -49,5 +49,5 @@ GtSearchMethodCategoryFilter class >> globalFilterDescriptor2 [
 		creator: [ :value | self forCategory: value ];
 		named: self filterName;
 		order: 15;
-		text: AllProtocol gtDefaultName
+		text: GtAllProtocol defaultName
 ]
