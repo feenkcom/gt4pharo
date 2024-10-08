@@ -78,20 +78,13 @@ GtPharoBehaviorCoderElement >> addFilters: filters [
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> addOrReplaceFilter: aFilter [
 	contentTabs content
-		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		allChildrenBreadthFirstDetect: [ :eachElement | 
+			eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
 		ifFound: [ :theElement | 
-			| vm existing changed |
-			vm := theElement streamingCodersViewModel.
-			changed := false.
-			existing := vm additionalFilters
-					collect: [ :each | 
-						each class = aFilter class
-							ifTrue: [ changed := true.
-								aFilter ]
-							ifFalse: [ each ] ].
-			changed ifFalse: [ existing := existing , {aFilter} ].
-			vm additionalFilters: existing ]
-		ifNone: [  "ignore" ]
+			| aViewModel |
+			aViewModel := theElement streamingCodersViewModel.
+			aViewModel addOrReplaceFilter: aFilter ]
+		ifNone: [ "ignore" ]
 ]
 
 { #category : #accessing }
