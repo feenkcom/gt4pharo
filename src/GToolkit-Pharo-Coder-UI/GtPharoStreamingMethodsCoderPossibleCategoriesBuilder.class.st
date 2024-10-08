@@ -10,7 +10,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> create [
-	^ {AllProtocol gtDefaultName} , methodsCoder possibleCategories asArray
+	^ {GtAllProtocol defaultName} , methodsCoder possibleCategories asArray
 		collect: #asFilterModelItem
 ]
 

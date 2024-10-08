@@ -126,7 +126,11 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkit-Pharo-Parser'
 					'GToolkit-Pharo-SearchFilters'
 					'GToolkit-Pharo-System'
-					'GToolkit-Pharo-TestSuite' ). ];
+					'GToolkit-Pharo-TestSuite'
+					'GT-PackageWithSuperclasses'
+					'GT-PackageWithSubclasses'
+					'GT-PackageWithExtensions'
+					 ). ];
 
 			package: 'GToolkit-Pharo-TestSuite-Examples' with: [
 				spec requires: #(
@@ -147,6 +151,14 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #(
 					'GToolkitCoder' ). ];
 			
-			package: 'GToolkit-Pharo-BaseRefactorings' ].
+			package: 'GToolkit-Pharo-BaseRefactorings';
+			
+			package: 'GT-PackageWithSuperclasses';
+			package: 'GT-PackageWithSubclasses' with: [
+				spec requires: #('GT-PackageWithSuperclasses') ];
+			package: 'GT-PackageWithExtensions' with: [
+				spec requires: #(
+					'GT-PackageWithSuperclasses'
+					'GT-PackageWithSubclasses') ] ].
 
 ]
