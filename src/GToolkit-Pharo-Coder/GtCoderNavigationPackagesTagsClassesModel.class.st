@@ -264,8 +264,7 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 					| aNewProtocol |
 					
 					aNewProtocol := self privateProtocolOfMethod: aMethodRecategorized methodRecategorized.
-
-					self selectProtocol: aNewProtocol ] ].
+					aNewProtocol ifNotNil: [ self selectProtocol: aNewProtocol ] ] ].
 
 	self notifyProtocolsToShowChanged.
 	self notifyMethodsToShowChanged.
@@ -858,6 +857,10 @@ GtCoderNavigationPackagesTagsClassesModel >> selectPackageTag: aRPackageTag [
 
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol [
+	self
+		assert: [ aPharoProtocol isNotNil ]
+		description: [ 'Protocol must not be nil' ].
+
 	self selectProtocol: aPharoProtocol source: nil
 ]
 
