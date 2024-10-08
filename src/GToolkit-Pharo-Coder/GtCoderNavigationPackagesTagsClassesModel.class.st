@@ -92,7 +92,7 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized [
-	self selectedClass = aClassReorganized classReorganized
+	self selectedClass = aClassReorganized classReorganized instanceSide
 		ifFalse: [ ^ self ].
 
 	self notifyProtocolsToShowChanged
@@ -227,9 +227,17 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 	self selectedClass
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aClass |
-			(aClass includesMethodsAffectedBy: aMethodRecategorized)
-				ifFalse: [ ^ self ] ].
+			| isInstanceSideAffected isClassSideAffected|
+			
+			isInstanceSideAffected := aClass instanceSide
+				includesMethodsAffectedBy: aMethodRecategorized.
 				
+			isClassSideAffected := aClass classSide
+				includesMethodsAffectedBy: aMethodRecategorized.
+			
+			(isInstanceSideAffected or: isClassSideAffected)
+				ifFalse: [ ^ self ] ].
+
 	self selectedMethod = aMethodRecategorized methodRecategorized
 		ifTrue: [ self deselectMethod ].
 
@@ -712,6 +720,21 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 	allProtocol := self createAllProtocol: currentClass.
 
 	^ {allProtocol}, methodProtocols, classProtocols
+]
+
+{ #category : #'api - refactorings' }
+GtCoderNavigationPackagesTagsClassesModel >> renameProtocol: aPharoProtocol to: aNewName [
+	| refactoring |
+
+	refactoring := GtRBRenameProtocolRefactoring
+		renameProtocol: aPharoProtocol name
+		in: aPharoProtocol protocolClass
+		to: aNewName.
+	refactoring execute.
+
+	self selectProtocol: (GtPharoProtocol 
+		protocolNamed: aNewName
+		class: aPharoProtocol protocolClass)
 ]
 
 { #category : #'api - selection' }
