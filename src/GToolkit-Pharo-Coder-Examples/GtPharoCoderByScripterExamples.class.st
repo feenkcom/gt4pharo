@@ -421,8 +421,8 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu: aScripter [
 		secondaryClickStep: [ :s | 
 			s
 				label: 'Display context menu';
-				// GtCoderNavigationClassesHierarchyTreeElement;
-				// (GtCoderNavigationClassesHierarchyTreeElementId indexed: 1) ].
+				// GtCoderClassesTreeElement;
+				// (GtCoderNavigationClassesTreeElementId indexed: 1) ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -783,7 +783,7 @@ GtPharoCoderByScripterExamples >> undoRedoRemoveClassInIndex [
 		secondaryClickStep: [ :s | 
 			s
 				label: 'Pick remove class';
-				id: GtCoderNavigationClassesHierarchyTreeElementId ].
+				id: GtCoderNavigationClassesTreeElementId ].
 	scripter
 		clickStep: [ :s | 
 			s
@@ -803,7 +803,7 @@ GtPharoCoderByScripterExamples >> undoRedoRemoveClassInIndex [
 				// [ :each | 
 					(each isKindOf: GtPreviewChangeButton)
 						and: [ each
-								allParentsDetect: [ :p | p isKindOf: GtCoderNavigationClassesHierarchyTreeElement ]
+								allParentsDetect: [ :p | p isKindOf: GtCoderClassesTreeElement ]
 								ifFound: [ :p | true ]
 								ifNone: [ false ] ] ] ].
 	scripter
