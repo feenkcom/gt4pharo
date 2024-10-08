@@ -24,7 +24,11 @@ GtRBRenameProtocolRefactoring >> gtDescription [
 
 { #category : #preconditions }
 GtRBRenameProtocolRefactoring >> preconditions [
-	^ RBCondition withBlock: [ class protocols includes: oldName ]
+	^ RBCondition
+		withBlock: [ (class protocols includes: oldName)
+				or: [ class realClass
+						ifNil: [ false ]
+						ifNotNil: [ :cls | cls organization categories includes: oldName ] ] ]
 ]
 
 { #category : #initialization }
@@ -37,11 +41,20 @@ GtRBRenameProtocolRefactoring >> renameProtocol: anOldName in: aClass to: aNewNa
 
 { #category : #transforming }
 GtRBRenameProtocolRefactoring >> transform [
-	class allSelectors
+	| hasMethod |
+	hasMethod := false.
+	class selectors
 		select: [ :each | (class protocolsFor: each) includes: oldName ]
 		thenDo: [ :each | 
+			hasMethod := true.
 			model
 				selector: each
 				in: class
-				classified: newName ]
+				classified: newName ].
+	hasMethod
+		ifFalse: [ model changes
+				addChange: (RBAddProtocolChange addProtocolNamed: newName in: class).
+			oldName = Protocol unclassified
+				ifFalse: [ model changes
+						addChange: (RBRemoveProtocolChange removeProtocolNamed: oldName in: class) ] ]
 ]
