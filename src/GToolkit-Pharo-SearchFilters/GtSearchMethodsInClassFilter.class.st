@@ -14,8 +14,9 @@ GtSearchMethodsInClassFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	^ self class = anObject class
 		and: [ self filterClass = anObject filterClass
-				and: [ self includeSubclasses = anObject includeSubclasses
-						and: [ self includeSuperclass = anObject includeSuperclass ] ] ]
+		and: [ self includeSubclasses = anObject includeSubclasses
+		and: [ self includeSuperclass = anObject includeSuperclass
+		and: [ self upToSuperclass = anObject upToSuperclass ] ] ] ]
 ]
 
 { #category : #accessing }
@@ -106,6 +107,11 @@ GtSearchMethodsInClassFilter >> methodsDo: aBlock [
 		ifTrue: [ filterClass superclass methods do: aBlock ].
 	includeSubclasses
 		ifTrue: [ (filterClass allSubclasses flatCollect: #methods) do: aBlock ]
+]
+
+{ #category : #accessing }
+GtSearchMethodsInClassFilter >> upToSuperclass [
+	^ upToSuperclass
 ]
 
 { #category : #scripting }

@@ -1,6 +1,12 @@
 Extension { #name : #GtSearchNonTraitMethodsFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchNonTraitMethodsFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		selectedItem: GtFilterModelClassOriginItem default
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
@@ -19,7 +25,7 @@ GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor2 [
 			ifFalse: [ self new ] ];
 		named: 'Non/Trait methods';
 		order: 20;
-		items: { GtFilterModelTraitOriginItem new. GtFilterModelClassOriginItem new };
+		items: { GtFilterModelTraitOriginItem default. GtFilterModelClassOriginItem default };
 		selectLastItem;
 		yourself
 ]

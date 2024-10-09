@@ -1,14 +1,17 @@
 Extension { #name : #GtSearchMethodsWithClassPatternFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodsWithClassPatternFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel text: self pattern ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodsWithClassPatternFilter class >> filterDescriptor2For: aMethodsCoder [
-	aMethodsCoder isForClass
+	aMethodsCoder isForClass 
 		ifTrue: [ ^ nil ].
 
-	^ GtFilterTextModel new
-		creator: [ :value | self pattern: value ];
-		named: 'Class';
-		order: 20;
+	^ self globalFilterDescriptor2
 		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder classNames ] ]
 ]
 
@@ -25,6 +28,11 @@ GtSearchMethodsWithClassPatternFilter class >> filterDescriptorFor: aMethodsCode
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodsWithClassPatternFilter class >> filterName [
+	^ 'Class'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodsWithClassPatternFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self pattern: value ];
@@ -38,7 +46,7 @@ GtSearchMethodsWithClassPatternFilter class >> globalFilterDescriptor [
 GtSearchMethodsWithClassPatternFilter class >> globalFilterDescriptor2 [
 	^ GtFilterTextModel new
 		creator: [ :value | self pattern: value ];
-		named: 'Class';
+		named: self filterName;
 		order: 20;
 		completion: [ GtStringsCompletionStrategy new
 				completions: [ GtPharoIndex current classNameTree ] ]

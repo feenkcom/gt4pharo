@@ -1,6 +1,12 @@
 Extension { #name : #GtSearchClassMethodsFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchClassMethodsFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (GtSearchClassMethodsFilter filterDescriptor2For: aMethodsCoder)
+		selectedItem: GtFilterModelClassSideItem default
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchClassMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
@@ -19,6 +25,6 @@ GtSearchClassMethodsFilter class >> globalFilterDescriptor2 [
 			ifFalse: [ self new ] ];
 		named: 'Inst./Class methods';
 		order: 17;
-		items: { GtFilterModelInstanceSideItem new. GtFilterModelClassSideItem new };
+		items: { GtFilterModelInstanceSideItem default. GtFilterModelClassSideItem default };
 		selectFirstItem
 ]
