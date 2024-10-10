@@ -25,6 +25,8 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 							methodsCoder: aMethodsCoder
 							into: aStream ] ].
 
+	aCollection
+		sort: [ :a :b | a searchFilterClass name < b searchFilterClass name ].
 	^ GtSearchFilterAndFilterModelConversionResults new results: aCollection
 ]
 
@@ -36,6 +38,7 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass metho
 
 	aResult := GtSearchFilterAndFilterModelConversionResult new.
 	aResult searchFilterClass: aSearchClass.
+	aStream nextPut: aResult.
 
 	"Two filter model instances of the same search class are equal."
 	aFilterModelOne := aSearchClass filterDescriptor2For: aMethodsCoder.
@@ -123,15 +126,11 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass metho
 						format: {aFilterModelTwo.
 								aFilterModelFive} ]. ].
 
-	aResult := GtSearchFilterAndFilterModelConversionResult new.
-	aResult searchFilterClass: aSearchClass.
 	aResult filterModelOne: aFilterModelOne.
 	aResult filterModelTwo: aFilterModelTwo.
 	aResult isFilterModelTwoChanged: isFilterModelTwoChanged.
 	aResult searchFilterOne: aSearchFilterOne.
 	aResult searchFilterTwo: aSearchFilterTwo.
-								
-	aStream nextPut: aResult.
-
+	
 	^ aResult
 ]

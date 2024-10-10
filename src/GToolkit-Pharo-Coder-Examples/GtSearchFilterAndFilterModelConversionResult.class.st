@@ -45,11 +45,11 @@ GtSearchFilterAndFilterModelConversionResult >> gtOverview [
 			value: self filterModelTwo.
 		GtPhlowOverviewItem new
 			name: 'Is filter model two changed';
+			boolean: self isFilterModelTwoChanged;
 			if: self isFilterModelTwoChanged
 				description: 'Filter model two is different compared to the filter model one';
-			if: self isFilterModelTwoChanged not
-				description: 'Filter model two is same as the filter model one';
-			value: self isFilterModelTwoChanged.
+			ifNot: self isFilterModelTwoChanged
+				description: 'Filter model two is same as the filter model one'.
 		GtPhlowOverviewItem new
 			name: 'Search filter one';
 			value: self searchFilterOne.
@@ -63,12 +63,24 @@ GtSearchFilterAndFilterModelConversionResult >> gtOverviewFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Overview';
+		priority: 1;
 		items: [ self gtOverview ];
 		column: 'Name'
 			text: #name
 			weight: 0.5;
 		column: 'Description' text: #description;
 		send: #value
+]
+
+{ #category : #'gt - extensions' }
+GtSearchFilterAndFilterModelConversionResult >> gtSearchFilterFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Search filters';
+		priority: 10;
+		stencil: [ self isWithResults
+				ifTrue: [ GtCoder forObject: self searchFilterOne ]
+				ifFalse: [ GtCoder forClass: self searchFilterClass ] ]
 ]
 
 { #category : #accessing }
@@ -79,6 +91,16 @@ GtSearchFilterAndFilterModelConversionResult >> isFilterModelTwoChanged [
 { #category : #accessing }
 GtSearchFilterAndFilterModelConversionResult >> isFilterModelTwoChanged: anObject [
 	isFilterModelTwoChanged := anObject
+]
+
+{ #category : #testing }
+GtSearchFilterAndFilterModelConversionResult >> isWithDescriptorClassSideMethod [
+	^ self searchFilterClass class includesSelector: #filterDescriptor2For:
+]
+
+{ #category : #testing }
+GtSearchFilterAndFilterModelConversionResult >> isWithResults [
+	^ self filterModelOne isNotNil
 ]
 
 { #category : #accessing }
