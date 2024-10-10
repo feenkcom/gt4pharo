@@ -7,9 +7,15 @@ Class {
 { #category : #examples }
 GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 	<gtExample>
-	| aMethodsCoder aCollection |
+	| aMethodsCoder aCollection anExamplesSuiteModel aTestSuiteModel |
 	aMethodsCoder := GtPharoStreamingMethodsCoder
 			forBehavior: GtPharoDummyTwoObject.
+	anExamplesSuiteModel := GtPharoExampleSuite
+			forStream: aMethodsCoder itemsStream.
+	aMethodsCoder exampleSuite: anExamplesSuiteModel.
+	aTestSuiteModel := GtPharoTestSuite forStream: aMethodsCoder itemsStream.
+	aMethodsCoder testSuite: aTestSuiteModel.
+
 	aCollection := Array
 			streamContents: [ :aStream | 
 				GtSearchMethodsFilter
@@ -19,18 +25,21 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 							methodsCoder: aMethodsCoder
 							into: aStream ] ].
 
-	^ aCollection
+	^ GtSearchFilterAndFilterModelConversionResults new results: aCollection
 ]
 
 { #category : #examples }
 GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass methodsCoder: aMethodsCoder into: aStream [
 	<gtExample>
-	| aFilterModelOne aFilterModelTwo isFilterModelTwoChanged aSearchFilterOne aSearchFilterTwo aSearchFilterThree aFilterModelThree aFilterModelFour aFilterModelFive |
+	| aFilterModelOne aFilterModelTwo isFilterModelTwoChanged aSearchFilterOne aSearchFilterTwo aSearchFilterThree aFilterModelThree aFilterModelFour aFilterModelFive aResult |
 	aSearchClass isAbstract ifTrue: [ ^ nil ].
+
+	aResult := GtSearchFilterAndFilterModelConversionResult new.
+	aResult searchFilterClass: aSearchClass.
 
 	"Two filter model instances of the same search class are equal."
 	aFilterModelOne := aSearchClass filterDescriptor2For: aMethodsCoder.
-	aFilterModelOne ifNil: [ ^ nil ].
+	aFilterModelOne ifNil: [ ^ aResult ].
 	aFilterModelTwo := aSearchClass filterDescriptor2For: aMethodsCoder.
 	self assert: aFilterModelOne equals: aFilterModelTwo.
 	self assert: (aFilterModelOne equals: aFilterModelTwo).
@@ -114,11 +123,15 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass metho
 						format: {aFilterModelTwo.
 								aFilterModelFive} ]. ].
 
-	aStream nextPut: aFilterModelOne.
-	aStream nextPut: aFilterModelTwo.
-	aStream nextPut: isFilterModelTwoChanged.
-	aStream nextPut: aSearchFilterOne.
-	aStream nextPut: aSearchFilterTwo.
+	aResult := GtSearchFilterAndFilterModelConversionResult new.
+	aResult searchFilterClass: aSearchClass.
+	aResult filterModelOne: aFilterModelOne.
+	aResult filterModelTwo: aFilterModelTwo.
+	aResult isFilterModelTwoChanged: isFilterModelTwoChanged.
+	aResult searchFilterOne: aSearchFilterOne.
+	aResult searchFilterTwo: aSearchFilterTwo.
+								
+	aStream nextPut: aResult.
 
-	^ aFilterModelOne
+	^ aResult
 ]
