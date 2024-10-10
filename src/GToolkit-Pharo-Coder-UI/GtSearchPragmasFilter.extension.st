@@ -1,23 +1,23 @@
 Extension { #name : #GtSearchPragmasFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchPragmasFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self symbol ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchPragmasFilter class >> filterDescriptor2For: aMethodsCoder [
 	| somePragmaNames |
 	^ GtFilterShortListModel new
 		creator: [ :anItem |
 			anItem 
 				ifSome: [ :aName | self forPragma: aName ]
-				ifNone: [ self class new ] ];
+				ifNone: [ self new ] ];
 		named: 'Pragma';
 		order: 11;
 		items: (somePragmaNames := aMethodsCoder pragmaNames);
 		selectFirstItem
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchPragmasFilter >> filterDescriptor2For: aMethodsCoder [
-	^ (super filterDescriptor2For: aMethodsCoder)
-		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self symbol ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
