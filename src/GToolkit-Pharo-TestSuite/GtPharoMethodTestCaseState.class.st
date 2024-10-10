@@ -23,6 +23,14 @@ GtPharoMethodTestCaseState class >> allLabels [
 ]
 
 { #category : #accessing }
+GtPharoMethodTestCaseState class >> allStates [
+
+	^ Array streamContents: [ :aStream | 
+		  self stateClassesDo: [ :eachClass | 
+			  aStream nextPut: eachClass ] ]
+]
+
+{ #category : #accessing }
 GtPharoMethodTestCaseState class >> allTestCasesIn: aTestSuite [
 	<return: #TAsyncFuture>
 
