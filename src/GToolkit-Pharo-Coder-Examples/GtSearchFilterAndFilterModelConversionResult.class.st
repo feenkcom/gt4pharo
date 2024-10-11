@@ -95,7 +95,13 @@ GtSearchFilterAndFilterModelConversionResult >> isFilterModelTwoChanged: anObjec
 
 { #category : #testing }
 GtSearchFilterAndFilterModelConversionResult >> isWithDescriptorClassSideMethod [
-	^ self searchFilterClass class includesSelector: #filterDescriptor2For:
+	^ (self searchFilterClass class includesSelector: #filterDescriptor2For:)
+		or: [ self searchFilterClass class includesSelector: #globalFilterDescriptor2 ]
+]
+
+{ #category : #testing }
+GtSearchFilterAndFilterModelConversionResult >> isWithDescriptorInstanceSideMethod [
+	^ self searchFilterClass includesSelector: #filterDescriptor2For:
 ]
 
 { #category : #testing }
