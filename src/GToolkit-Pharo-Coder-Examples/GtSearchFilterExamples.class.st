@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 	<gtExample>
-	| aMethodsCoder aCollection anExamplesSuiteModel aTestSuiteModel |
+	| aMethodsCoder aCollection anExamplesSuiteModel aTestSuiteModel aGtSearchFilter aMethodsCoder2 allClasses |
 	aMethodsCoder := GtPharoStreamingMethodsCoder
 			forBehavior: GtPharoDummyTwoObject.
 	anExamplesSuiteModel := GtPharoExampleSuite
@@ -16,29 +16,54 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 	aTestSuiteModel := GtPharoTestSuite forStream: aMethodsCoder itemsStream.
 	aMethodsCoder testSuite: aTestSuiteModel.
 
+	aGtSearchFilter := GtSearchDeprecatedMethodsFilter new.
+	aMethodsCoder2 := GtPharoStreamingMethodsCoder forFilter: aGtSearchFilter.
+
+	self assert: aMethodsCoder isForClass.
+	self assert: aMethodsCoder2 isForClass not.
+
+	allClasses := GtSearchMethodsFilter allSubclasses.
+	allClasses sort: [ :a :b | a name < b name ].
+
 	aCollection := Array
 			streamContents: [ :aStream | 
-				GtSearchMethodsFilter
-					allSubclassesDo: [ :eachClass | 
+				allClasses
+					do: [ :eachSearchClass | 
 						self
-							searchToFilterModelAndViceVersaFor: eachClass
-							methodsCoder: aMethodsCoder
+							searchToFilterModelAndViceVersaFor: eachSearchClass
+							methodsCoders: {aMethodsCoder.
+									aMethodsCoder2}
 							into: aStream ] ].
 
-	aCollection
-		sort: [ :a :b | a searchFilterClass name < b searchFilterClass name ].
+
 	^ GtSearchFilterAndFilterModelConversionResults new results: aCollection
 ]
 
 { #category : #examples }
-GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass methodsCoder: aMethodsCoder into: aStream [
+GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass methodsCoders: someMethodsCoders into: aStream [
 	<gtExample>
-	| aFilterModelOne aFilterModelTwo isFilterModelTwoChanged aSearchFilterOne aSearchFilterTwo aSearchFilterThree aFilterModelThree aFilterModelFour aFilterModelFive aResult |
+	| aResult |
 	aSearchClass isAbstract ifTrue: [ ^ nil ].
 
 	aResult := GtSearchFilterAndFilterModelConversionResult new.
 	aResult searchFilterClass: aSearchClass.
 	aStream nextPut: aResult.
+
+	someMethodsCoders
+		do: [ :eachMethodsCoder | 
+			aResult methodsCoder: eachMethodsCoder.
+			self searchToFilterModelAndViceVersaIntoResult: aResult.
+			aResult isWithResults ifTrue: [ ^ aResult ] ].
+
+	^ aResult
+]
+
+{ #category : #examples }
+GtSearchFilterExamples >> searchToFilterModelAndViceVersaIntoResult: aResult [
+	<gtExample>
+	| aSearchClass aMethodsCoder aFilterModelOne aFilterModelTwo isFilterModelTwoChanged aSearchFilterOne aSearchFilterTwo aSearchFilterThree aFilterModelThree aFilterModelFour aFilterModelFive |
+	aSearchClass := aResult searchFilterClass.
+	aMethodsCoder := aResult methodsCoder.
 
 	"Two filter model instances of the same search class are equal."
 	aFilterModelOne := aSearchClass filterDescriptor2For: aMethodsCoder.
@@ -128,9 +153,13 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaFor: aSearchClass metho
 
 	aResult filterModelOne: aFilterModelOne.
 	aResult filterModelTwo: aFilterModelTwo.
+	aResult filterModelThree: aFilterModelThree.
+	aResult filterModelFour: aFilterModelFour.
+	aResult filterModelFive: aFilterModelFive.
 	aResult isFilterModelTwoChanged: isFilterModelTwoChanged.
 	aResult searchFilterOne: aSearchFilterOne.
 	aResult searchFilterTwo: aSearchFilterTwo.
+	aResult searchFilterThree: aSearchFilterThree.
 	
 	^ aResult
 ]
