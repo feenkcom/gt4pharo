@@ -13,7 +13,9 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 	^ aView columnedTree
 		title: 'Results';
 		items: [ self results ];
-		column: 'Search filter class' text: #searchFilterClass;
+		column: 'Search filter class'
+			text: #searchFilterClass
+			weight: 1.5;
 		column: 'Evaluation status'
 			text: [ :aResult | 
 				aResult isWithResults
@@ -23,11 +25,20 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 						aResult isWithDescriptorClassSideMethod
 							ifTrue: [ aText foreground: BrGlamorousColors failureBackgroundColor ].
 						aText ] ];
-		column: 'Has filter model definition'
+		column: 'Has class-side definition'
 			text: [ :aResult | 
 				aResult isWithDescriptorClassSideMethod
 					ifTrue: [ 'yes' asRopedText foreground: BrGlamorousColors disabledButtonTextColor ]
-					ifFalse: [ 'no' ] ]
+					ifFalse: [ 'no' ] ];
+		column: 'Has instance-side definition'
+			text: [ :aResult | 
+				aResult isWithDescriptorInstanceSideMethod
+					ifTrue: [ 'yes' asRopedText foreground: BrGlamorousColors disabledButtonTextColor ]
+					ifFalse: [ | aText |
+						aText := 'no' asRopedText.
+						aResult isWithDescriptorClassSideMethod
+							ifTrue: [ aText foreground: BrGlamorousColors failureBackgroundColor ].
+						aText ] ]
 ]
 
 { #category : #accessing }
