@@ -101,6 +101,18 @@ GtPharoStreamingMethodsCoderElement >> doNotShowIndicator [
 	showIndicator := false
 ]
 
+{ #category : #'event handling' }
+GtPharoStreamingMethodsCoderElement >> filterElementDo: aBlock [
+	self
+		childWithId: #headerContainer
+		ifFound: [ :aContainer | 
+			aContainer
+				childWithId: #filter
+				ifFound: [ :aFilter | aBlock cull: aFilter ]
+				ifNone: [  "ignore" ] ]
+		ifNone: [  "ignore" ]
+]
+
 { #category : #initialization }
 GtPharoStreamingMethodsCoderElement >> initialize [
 	super initialize.
@@ -131,7 +143,22 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 		itemsProvider: listItemsProvider.
 
 	self addChild: list as: GtPharoStreamingMethodsCoderListId.
-	showIndicator := false
+	showIndicator := false.
+	self initializeShortcuts
+]
+
+{ #category : #initialization }
+GtPharoStreamingMethodsCoderElement >> initializeShortcuts [
+	self
+		addShortcut: (BlShortcutWithAction new
+				name: 'Focus filters';
+				description: 'Move focus to filters widget';
+				combination: (BlKeyCombination builder
+						shift;
+						primary;
+						s;
+						build);
+				action: [ :anEvent | self onFocusFiltersShortcutEvent: anEvent ])
 ]
 
 { #category : #initialization }
@@ -154,6 +181,20 @@ GtPharoStreamingMethodsCoderElement >> onFilterChanged: anAnnouncement [
 				streamingCodersViewModel: streamingCodersViewModel;
 				updateFiltersElement: aFiltersElement ]
 		ifNone: [  ]
+]
+
+{ #category : #'event handling' }
+GtPharoStreamingMethodsCoderElement >> onFocusFiltersShortcutEvent: anEvent [
+	self
+		filterElementDo: [ :aFilterElement | 
+			aFilterElement hasFocus ifTrue: [ ^ self ].
+			anEvent consumed: true.
+
+			BlFocusFinder new
+				direction: BlFocusSearchDirectionForward new;
+				root: aFilterElement;
+				referenceElement: aFilterElement;
+				nextFocusDo: #requestFocus ifNone: [  ] ]
 ]
 
 { #category : #'private - event handling' }
