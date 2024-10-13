@@ -15,6 +15,11 @@ GtClassCreationFormExample >> exampleClassName [
 ]
 
 { #category : #accessing }
+GtClassCreationFormExample >> exampleClassNameWithUnderscore [
+	^ 'Example_Class'
+]
+
+{ #category : #accessing }
 GtClassCreationFormExample >> examplePackageName [
 	^ 'ExamplePackage'
 ]
@@ -124,6 +129,37 @@ GtClassCreationFormExample >> scripterWithClassNameFilled [
 				label: 'Assert class name';
 				value: [ :anEditor | anEditor text asString ]
 					equals: [ self exampleClassName ];
+				// anElementId ].
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassNameFilledIncludingUnderscore [
+	<gtExample>
+	| scripter aDescription anElementId |
+	scripter := self scripterOnSimpleForm.
+	aDescription := scripter model nameDescription.
+	anElementId := GtMagritteFieldElementId new description: aDescription.
+
+	scripter requestFocus
+		label: 'Focus name editor';
+		// anElementId;
+		play.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill class name';
+				text: self exampleClassNameWithUnderscore;
+				// anElementId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert class name';
+				value: [ :anEditor | anEditor text asString ]
+					equals: [ self exampleClassNameWithUnderscore ];
 				// anElementId ].
 
 	^ scripter
