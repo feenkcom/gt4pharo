@@ -2,18 +2,16 @@ Extension { #name : #GtSearchInheritedMethodsFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchInheritedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
-	| currentClass |
+	| aCurrentClass |
 	aMethodsCoder isForClass ifFalse: [ ^ nil ].
-	currentClass := aMethodsCoder classOrMetaClass.
+	aCurrentClass := aMethodsCoder classOrMetaClass.
 	^ GtFilterShortListModel new
 		creator: [ :anItem | 
-			| upToClass |
-			upToClass := Smalltalk at: anItem itemSymbol ifAbsent: [ currentClass ].
-			(currentClass withAllSuperclasses includes: upToClass)
-				ifFalse: [ upToClass := currentClass ].
-			(self forClass: currentClass) withSuperclassesUpTo: upToClass ];
-		items: currentClass withAllSuperclasses;
-		selectedItem: currentClass;
+			anItem
+				ifSome: [ :anUpToClass | (self forClass: aCurrentClass) withSuperclassesUpTo: anUpToClass ]
+				ifNone: [ (self forClass: aCurrentClass) withSuperclassesUpTo: aCurrentClass ] ];
+		items: aCurrentClass withAllSuperclasses;
+		selectedItem: aCurrentClass;
 		label: 'Methods up to';
 		order: 16
 ]

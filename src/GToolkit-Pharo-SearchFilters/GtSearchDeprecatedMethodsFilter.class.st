@@ -16,5 +16,5 @@ GtSearchDeprecatedMethodsFilter >> hash [
 
 { #category : #testing }
 GtSearchDeprecatedMethodsFilter >> includesMethod: aMethod [
-	^ aMethod isDeprecated
+	^ aMethod isFromTrait not and: [ aMethod isDeprecated ]
 ]

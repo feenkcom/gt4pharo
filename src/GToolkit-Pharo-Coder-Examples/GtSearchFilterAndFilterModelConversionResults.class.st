@@ -13,10 +13,20 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 	^ aView columnedTree
 		title: 'Results';
 		items: [ self results ];
+		column: 'Index'
+			text: [ :_ :anIndex | anIndex ]
+			width: 40;
 		column: 'Search filter class'
-			text: #searchFilterClass
-			weight: 1.5;
-		column: 'Evaluation status'
+			text: [ :aResult | 
+				| aText |
+				aText := aResult searchFilterClass asRopedText.
+				aResult searchFilterClass isAbstract
+					ifTrue: [ aText
+							foreground: BrGlamorousColors disabledButtonTextColor;
+							italic ].
+				aText ]
+			weight: 2.5;
+		column: 'Evaluation'
 			text: [ :aResult | 
 				aResult isWithResults
 					ifTrue: [ 'OK' ]
@@ -24,13 +34,14 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 						aText := 'Skipped' asRopedText.
 						aResult isWithDescriptorClassSideMethod
 							ifTrue: [ aText foreground: BrGlamorousColors failureBackgroundColor ].
-						aText ] ];
-		column: 'Has class-side definition'
+						aText ] ]
+			weight: 0.7;
+		column: 'Has class method'
 			text: [ :aResult | 
 				aResult isWithDescriptorClassSideMethod
 					ifTrue: [ 'yes' asRopedText foreground: BrGlamorousColors disabledButtonTextColor ]
 					ifFalse: [ 'no' ] ];
-		column: 'Has instance-side definition'
+		column: 'Has instance method'
 			text: [ :aResult | 
 				aResult isWithDescriptorInstanceSideMethod
 					ifTrue: [ 'yes' asRopedText foreground: BrGlamorousColors disabledButtonTextColor ]
@@ -38,7 +49,12 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 						aText := 'no' asRopedText.
 						aResult isWithDescriptorClassSideMethod
 							ifTrue: [ aText foreground: BrGlamorousColors failureBackgroundColor ].
-						aText ] ]
+						aText ] ];
+		column: 'Coder with class'
+			text: [ :aResult | 
+				aResult methodsCoder isForClass
+					ifTrue: [ 'yes' asRopedText foreground: BrGlamorousColors disabledButtonTextColor ]
+					ifFalse: [ 'no' ] ]
 ]
 
 { #category : #accessing }

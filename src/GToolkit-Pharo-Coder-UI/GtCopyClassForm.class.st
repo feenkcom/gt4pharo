@@ -103,7 +103,7 @@ GtCopyClassForm >> nameDescription [
 			labelled: 'Class name is already taken';
 		addCondition: [ :aValue | aValue isEmpty or: [ aValue first isUppercase ] ]
 			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue isAllAlphaNumerics ]
+		addCondition: [ :aValue | aValue asString allSatisfy: [ :c | c isAlphaNumeric or: [ c = $_ ] ] ]
 			labelled: 'Class name must be alphanumeric'
 ]
 

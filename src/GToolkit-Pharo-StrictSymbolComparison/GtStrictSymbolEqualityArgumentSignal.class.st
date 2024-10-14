@@ -8,13 +8,30 @@ Class {
 		'rightClassName',
 		'methodName',
 		'pc',
-		'sourceIntervals'
+		'sourceIntervals',
+		'methodStack'
 	],
 	#classVars : [
 		'isRunning'
 	],
+	#classInstVars : [
+		'StringOnly',
+		'StringSymbolOnly'
+	],
 	#category : #'GToolkit-Pharo-StrictSymbolComparison-Signals'
 }
+
+{ #category : #logging }
+GtStrictSymbolEqualityArgumentSignal class >> clearLogStringOnly [
+
+	StringOnly := StringSymbolOnly := false.
+]
+
+{ #category : #logging }
+GtStrictSymbolEqualityArgumentSignal class >> clearLogStringSymbolOnly [
+
+	StringSymbolOnly := false.
+]
 
 { #category : #accessing }
 GtStrictSymbolEqualityArgumentSignal class >> flagPragmaName [
@@ -34,8 +51,12 @@ GtStrictSymbolEqualityArgumentSignal class >> isRunning [
 GtStrictSymbolEqualityArgumentSignal class >> left: leftObject right: rightObject [
 
 	self isRunning ifFalse: [ ^ self ].
-	"(leftObject isString or: [ leftObject isSymbol ]) ifFalse: [ ^ self ].
-	(rightObject isString or: [ rightObject isSymbol ]) ifFalse: [ ^ self ]."
+	self logStringOnly ifTrue:
+		[ (leftObject isString or: [ leftObject isSymbol ]) ifFalse: [ ^ self ].
+		(rightObject isString or: [ rightObject isSymbol ]) ifFalse: [ ^ self ] ].
+	(self logStringSymbolOnly and:
+		[ (leftObject isSymbol xor: [ rightObject isSymbol ]) not ]) 
+			ifTrue: [ ^ self ].
 
 	self new
 		left: leftObject;
@@ -43,10 +64,38 @@ GtStrictSymbolEqualityArgumentSignal class >> left: leftObject right: rightObjec
 		emit.
 ]
 
+{ #category : #testing }
+GtStrictSymbolEqualityArgumentSignal class >> logStringOnly [
+	"Answer a boolean indicating whether to only emit the signal if both arguments are a kind of String.
+	Handle nil value"
+
+	^ StringOnly == true
+]
+
+{ #category : #testing }
+GtStrictSymbolEqualityArgumentSignal class >> logStringSymbolOnly [
+	"Answer a boolean indicating whether to only emit the signal if one argument is a string and the other is a symbol.
+	Handle nil value"
+
+	^ StringSymbolOnly == true
+]
+
 { #category : #accessing }
 GtStrictSymbolEqualityArgumentSignal class >> sameContentSelector [
 
 	^ #sameContentAs:
+]
+
+{ #category : #logging }
+GtStrictSymbolEqualityArgumentSignal class >> setLogStringOnly [
+
+	StringOnly := true
+]
+
+{ #category : #logging }
+GtStrictSymbolEqualityArgumentSignal class >> setLogStringSymbolOnly [
+
+	StringOnly := StringSymbolOnly := true
 ]
 
 { #category : #'start - stop' }
@@ -109,6 +158,30 @@ GtStrictSymbolEqualityArgumentSignal >> callingContextOfSelector: aSymbol receiv
 	^ context
 ]
 
+{ #category : #ui }
+GtStrictSymbolEqualityArgumentSignal >> gtMethodStackFor: aView [
+	<gtView>
+
+	methodStack ifNil: [ ^ aView empty ].
+	^ aView list
+		title: 'Method Stack';
+		priority: 20;
+		items: [ methodStack ];
+		send: [ :item | self methodFor: item ]
+]
+
+{ #category : #ui }
+GtStrictSymbolEqualityArgumentSignal >> gtSourceCodeFor: aView [
+	<gtView>
+
+	methodName ifNil: [ ^ aView empty ].
+	^ aView forward
+		title: 'Source Code';
+		priority: 20;
+		object: [ self method ];
+		view: #gtSourceCodeFor:
+]
+
 { #category : #accessing }
 GtStrictSymbolEqualityArgumentSignal >> id [
 
@@ -155,8 +228,30 @@ GtStrictSymbolEqualityArgumentSignal >> leftType [
 ]
 
 { #category : #accessing }
+GtStrictSymbolEqualityArgumentSignal >> method [
+
+	^ self class compiler evaluate: methodName.
+]
+
+{ #category : #accessing }
+GtStrictSymbolEqualityArgumentSignal >> methodFor: aContextPrintString [
+	| fields |
+
+	fields := '>>' split: aContextPrintString.
+	^ (self class environment classOrTraitNamed: 
+			(Character space split: ('(' split: fields first) first) last)
+				lookupSelector: fields second asSymbol
+]
+
+{ #category : #accessing }
 GtStrictSymbolEqualityArgumentSignal >> methodName [
 	^ methodName
+]
+
+{ #category : #private }
+GtStrictSymbolEqualityArgumentSignal >> methodStackFrom: callingContext [
+
+	^ (callingContext stackOfSize: 10) collect: #printString
 ]
 
 { #category : #accessing }
@@ -175,17 +270,8 @@ GtStrictSymbolEqualityArgumentSignal >> prepareForDelivery [
 	[ callingContext := self callingContext.
 	callingContext ifNil: [ ^ self ].
 	methodName := callingContext homeMethod printString.
-	false ifTrue:
-		[ Stdio stdout
-			<< '---------------------';
-			lf;
-			<< methodName;
-			lf;
-			<< callingContext stackString withUnixLineEndings;
-			lf;
-			<< '======================';
-			lf ].
 	pc := callingContext pc.
+	methodStack := self methodStackFrom: callingContext.
 	node := callingContext compiledCode sourceNodeForPC: pc.
 	sourceIntervals := (node isMessage and: [ node selector == #= ])
 		ifTrue: [ node keywordsIntervals ]
@@ -195,6 +281,18 @@ GtStrictSymbolEqualityArgumentSignal >> prepareForDelivery [
 		ifNone: [].
 		 ]
 		ensure: [ wasRunning ifTrue: [ self class start ] ].
+]
+
+{ #category : #printing }
+GtStrictSymbolEqualityArgumentSignal >> printOneLineContentsOn: stream [
+
+	methodName ifNil: [ ^ super printOneLineContentsOn: stream ].
+	stream
+		<< methodName;
+		<< ' ';
+		print: leftClassName;
+		<< ' = ';
+		print: rightClassName.
 ]
 
 { #category : #accessing }
