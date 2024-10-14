@@ -12,18 +12,23 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtStrictSymbolSummaryGroup class >> loadFromFile: aFilename [
-	| allItems validItems invalidItems |
+GtStrictSymbolSummaryGroup class >> allItems: aCollection [
+	| validItems invalidItems |
 
-	allItems := aFilename asFileReference readStreamDo: [ :stream |
-		STON fromStream: stream ].
-	validItems := allItems select: #isValid.
-	invalidItems := allItems copy.
+	validItems := aCollection select: #isValid.
+	invalidItems := aCollection copy.
 	validItems keysAndValuesDo: [ :key :value |
 		invalidItems removeKey: key ].
 	^ self new 
 		invalidItems: invalidItems;
 		items: validItems.
+]
+
+{ #category : #'instance creation' }
+GtStrictSymbolSummaryGroup class >> loadFromFile: aFilename [
+
+	^ self allItems: (aFilename asFileReference readStreamDo: [ :stream |
+		STON fromStream: stream ])
 ]
 
 { #category : #accessing }
