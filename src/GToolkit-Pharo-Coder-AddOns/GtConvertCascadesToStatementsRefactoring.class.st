@@ -72,7 +72,7 @@ GtConvertCascadesToStatementsRefactoring >> extractTempForReceiver: aNode [
 				to: tempName
 				from: selector
 				in: class).
-	sourceTree := class parseTreeFor: selector.
+	sourceTree := class parseTreeForSelector: selector.
 	sourceTree
 		nodesDo: [ :each | 
 			(each isCascade
