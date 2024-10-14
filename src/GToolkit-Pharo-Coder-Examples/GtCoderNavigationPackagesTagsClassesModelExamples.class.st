@@ -4,6 +4,74 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
+{ #category : #'examples - protocols' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> addNewClassSideProtocol [
+	"Tests what happens when we add a new empty class side protocol"
+	<gtExample>
+	| aModel protocolsToShow newProtocolName announcements |
+	
+	aModel := self navigateToClass_03_selectClass.
+	
+	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
+	
+	newProtocolName := 'new class side protocol'.
+	
+	self assert: (protocolsToShow includes: newProtocolName) not.
+	
+	[
+		announcements := self recordAnnouncementsOf: aModel during: [
+			(RBAddProtocolChange
+				addProtocolNamed: newProtocolName
+				in: self dummySuperclass classSide) execute ].
+
+		protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
+		self assert: (protocolsToShow includes: newProtocolName).
+		
+		self assert: announcements size equals: 1.
+		self assert: (announcements first isKindOf: GtCoderNavigationProtocolsToShowChanged).
+
+	] ensure: [
+		(RBRemoveProtocolChange
+			removeProtocolNamed: newProtocolName
+			in: self dummySuperclass classSide) execute ].
+
+	^ aModel
+]
+
+{ #category : #'examples - protocols' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> addNewInstanceSideProtocol [
+	"Tests what happens when we add a new empty instance side protocol"
+	<gtExample>
+	| aModel protocolsToShow newProtocolName announcements |
+	
+	aModel := self navigateToClass_03_selectClass.
+	
+	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
+	
+	newProtocolName := 'new instance side protocol'.
+	
+	self assert: (protocolsToShow includes: newProtocolName) not.
+	
+	[	
+		announcements := self recordAnnouncementsOf: aModel during: [
+			(RBAddProtocolChange
+				addProtocolNamed: newProtocolName
+				in: self dummySuperclass instanceSide) execute ].
+
+		protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
+		self assert: (protocolsToShow includes: newProtocolName).
+		
+		self assert: announcements size equals: 1.
+		self assert: (announcements first isKindOf: GtCoderNavigationProtocolsToShowChanged).
+
+	] ensure: [
+		(RBRemoveProtocolChange
+			removeProtocolNamed: newProtocolName
+			in: self dummySuperclass instanceSide) execute ].
+
+	^ aModel
+]
+
 { #category : #utilities }
 GtCoderNavigationPackagesTagsClassesModelExamples >> assertNoMethods: aNavigationModel [
 	self assert: aNavigationModel hasSelectedProtocol not.
@@ -149,4 +217,20 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> packageNameWithSuperclasses
 { #category : #utilities }
 GtCoderNavigationPackagesTagsClassesModelExamples >> packageWithSuperclasses [
 	^ self packageNameWithSuperclasses asPackage
+]
+
+{ #category : #utilities }
+GtCoderNavigationPackagesTagsClassesModelExamples >> recordAnnouncementsOf: aModel during: aBlock [
+	| announcements |
+	
+	announcements := OrderedCollection new.
+	
+	aModel announcer when: Announcement send: #add: to: announcements.
+	aModel subscribeToSystem.
+	
+	aBlock ensure: [
+		aModel unsubscribeFromSystem.
+		aModel announcer unsubscribe: announcements ].
+	
+	^ announcements
 ]

@@ -689,11 +689,13 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 
 	currentClass := self selectedClass.
 
-	classProtocols := currentClass class organization protocols
-			reject: [ :prot | 
-				(self selectedClass class methods
-					select: [ :meth | (prot includesSelector: meth selector) and: [ meth isFromTrait not ] ])
-					isEmpty ].
+	classProtocols := currentClass classSide organization protocols
+			reject: [ :prot |
+				prot isEmpty not and: [
+					(currentClass classSide methods
+						select: [ :meth | (prot includesSelector: meth selector) and: [ meth isFromTrait not ] ])
+						isEmpty ] ].
+	
 	methodProtocols := currentClass organization protocols.
 	extension := false.
 	self
@@ -715,7 +717,7 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 
 	allProtocol := self createAllProtocol: currentClass.
 
-	^ {allProtocol} , methodProtocols , classProtocols
+	^ { allProtocol } , methodProtocols , classProtocols
 ]
 
 { #category : #'api - refactorings' }
