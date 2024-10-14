@@ -1,11 +1,14 @@
 Extension { #name : #GtSearchMethodsWithPackagePatternFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodsWithPackagePatternFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel text: self pattern ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodsWithPackagePatternFilter class >> filterDescriptor2For: aMethodsCoder [
-	^ GtFilterTextModel new
-		creator: [ :value | self pattern: value ];
-		named: 'Package';
-		order: 30;
+	^ self globalFilterDescriptor2
 		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder packageNames ] ]
 ]
 

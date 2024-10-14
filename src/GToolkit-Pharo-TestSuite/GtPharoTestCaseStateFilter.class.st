@@ -27,6 +27,11 @@ GtPharoTestCaseStateFilter >> filterValueString [
 	^ self resultState label
 ]
 
+{ #category : #printing }
+GtPharoTestCaseStateFilter >> gtDisplayOn: stream [
+	stream nextPutAll: (self resultState ifNotNil: #label)
+]
+
 { #category : #comparing }
 GtPharoTestCaseStateFilter >> hash [
 	^ (self class hash bitXor: self resultState hash)

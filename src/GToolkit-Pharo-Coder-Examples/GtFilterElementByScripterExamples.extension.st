@@ -16,7 +16,7 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 	aScripter := self classCoderSelectSuperclass.
 	
 	aScripter memoryLogger
-		runFor: GtJustContextStackSignal, GtFilterSignal
+		runFor: GtFilterSignal
 		during: [ :aStep |
 			aStep filterStep
 				clickOnAddFilter;

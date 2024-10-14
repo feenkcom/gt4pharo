@@ -3,17 +3,31 @@ Extension { #name : #GtPharoTestCaseStateFilter }
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoTestCaseStateFilter class >> filterDescriptor2For: aMethodsCoder [
 	aMethodsCoder testSuite ifNil: [ ^ nil ].
-	
+
 	^ GtFilterShortListModel new
 		creator: [ :anItem | 
-			anItem ifSome: [ :aName |
-				self new
-					resultStateString: aName;
-					pharoTestSuite: aMethodsCoder testSuite ] ];
+			anItem
+				ifSome: [ :aResultState | 
+					self new
+						resultState: aResultState;
+						pharoTestSuite: aMethodsCoder testSuite ]
+				ifNone: [ 
+					self new
+						resultState: self defaultState;
+						pharoTestSuite: aMethodsCoder testSuite ] ];
 		named: 'Tests';
 		order: 13;
-		items: GtPharoMethodTestCaseState allLabels;
-		selectedItem: self defaultState label
+		items: (GtFilterModelTestCaseResultStateItem
+				fromCollection: GtPharoMethodTestCaseState allStates);
+		selectedItem: (GtFilterModelTestCaseResultStateItem new resultState: self defaultState)
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtPharoTestCaseStateFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | 
+			aFilterModel
+				selectedItem: (GtFilterModelTestCaseResultStateItem new resultState: self resultState) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
