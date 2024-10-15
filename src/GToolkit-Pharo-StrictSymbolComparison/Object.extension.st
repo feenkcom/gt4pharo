@@ -34,12 +34,6 @@ Object >> assertStringOrSymbolWhenStrict: leftValue and: rightValue [
 ]
 
 { #category : #'*GToolkit-Pharo-StrictSymbolComparison' }
-Object >> sameContentAs: anObject [
-
-	^ self = anObject
-]
-
-{ #category : #'*GToolkit-Pharo-StrictSymbolComparison' }
 Object >> strictSymbolComparisonClass [
 
 	^ self class

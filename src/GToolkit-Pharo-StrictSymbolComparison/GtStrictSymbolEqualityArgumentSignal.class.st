@@ -23,14 +23,20 @@ Class {
 
 { #category : #logging }
 GtStrictSymbolEqualityArgumentSignal class >> clearLogStringOnly [
+	| old |
 
+	old := { StringOnly. StringSymbolOnly. }.
 	StringOnly := StringSymbolOnly := false.
+	^ old
 ]
 
 { #category : #logging }
 GtStrictSymbolEqualityArgumentSignal class >> clearLogStringSymbolOnly [
+	| old |
 
+	old := { StringOnly. StringSymbolOnly. }.
 	StringSymbolOnly := false.
+	^ old
 ]
 
 { #category : #accessing }
@@ -87,15 +93,28 @@ GtStrictSymbolEqualityArgumentSignal class >> sameContentSelector [
 ]
 
 { #category : #logging }
-GtStrictSymbolEqualityArgumentSignal class >> setLogStringOnly [
+GtStrictSymbolEqualityArgumentSignal class >> setFrom: anArray [
 
-	StringOnly := true
+	StringOnly := anArray first.
+	StringSymbolOnly := anArray second.
+]
+
+{ #category : #logging }
+GtStrictSymbolEqualityArgumentSignal class >> setLogStringOnly [
+	| old |
+
+	old := { StringOnly. StringSymbolOnly. }.
+	StringOnly := true.
+	^ old
 ]
 
 { #category : #logging }
 GtStrictSymbolEqualityArgumentSignal class >> setLogStringSymbolOnly [
+	| old |
 
-	StringOnly := StringSymbolOnly := true
+	old := { StringOnly. StringSymbolOnly. }.
+	StringOnly := StringSymbolOnly := true.
+	^ old
 ]
 
 { #category : #'start - stop' }
@@ -235,12 +254,12 @@ GtStrictSymbolEqualityArgumentSignal >> method [
 
 { #category : #accessing }
 GtStrictSymbolEqualityArgumentSignal >> methodFor: aContextPrintString [
-	| fields |
+	| fields className |
 
 	fields := '>>' split: aContextPrintString.
-	^ (self class environment classOrTraitNamed: 
-			(Character space split: ('(' split: fields first) first) last)
-				lookupSelector: fields second asSymbol
+	className := ('(' split: ('] in ' split: fields first) last) first.
+	^ (self class environment classOrTraitNamed: className)
+		lookupSelector: fields second asSymbol
 ]
 
 { #category : #accessing }

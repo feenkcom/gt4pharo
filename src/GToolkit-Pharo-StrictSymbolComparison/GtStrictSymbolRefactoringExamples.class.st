@@ -8,16 +8,18 @@ Class {
 
 { #category : #'private - support' }
 GtStrictSymbolRefactoringExamples >> logMessages: aCollection [
-	| scenario logger |
+	| scenario logger signalState |
 
 	scenario := GtStrictSymbolScenarios new.
 	logger := GtStrictSymbolComparisonSummaryLogger new.
 	logger start.
-	[ GtStrictSymbolEqualityArgumentSignal start.
+	[ signalState := GtStrictSymbolEqualityArgumentSignal clearLogStringOnly.
+	GtStrictSymbolEqualityArgumentSignal start.
 	aCollection do: [ :message |
 		message sendTo: scenario ] ]
 			ensure: 
 				[ GtStrictSymbolEqualityArgumentSignal stop.
+				GtStrictSymbolEqualityArgumentSignal setFrom: signalState.
 				logger stop ].
 	^ logger
 ]

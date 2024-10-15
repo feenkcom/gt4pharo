@@ -8,6 +8,15 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtStrictSymbolInstallation >> createExtensionPackage [
+
+	RPackageOrganizer default
+		packageNamed: GtStrictSymbolRefactor refactoredPackageName
+		ifAbsent: [ RPackageOrganizer default createPackageNamed:
+			GtStrictSymbolRefactor refactoredPackageName ].
+]
+
+{ #category : #'as yet unclassified' }
 GtStrictSymbolInstallation >> initializeFfiCallout [
 
 	FFICallout initializeTypeAliases.
@@ -16,6 +25,7 @@ GtStrictSymbolInstallation >> initializeFfiCallout [
 { #category : #'as yet unclassified' }
 GtStrictSymbolInstallation >> installFromFile: aFileReference [
 
+	self createExtensionPackage.
 	self loadEqualityStatsFromFile: aFileReference.
 	self refactorEqualityCalls.
 	"self refactorDictionaryReferences.
