@@ -52,10 +52,12 @@ GtSearchMethodCategoryFilter >> hash [
 { #category : #testing }
 GtSearchMethodCategoryFilter >> includesMethod: aCompiledMethod [
 	"terrible hack :)"
-	(AllProtocol isAllProtocolName: category)
-		ifTrue: [ ^ true ].
 
-	^ (aCompiledMethod methodClass whichCategoryIncludesSelector: aCompiledMethod selector) = category
+	(AllProtocol isAllProtocolName: category) ifTrue: [ ^ true ].
+
+	^ (aCompiledMethod methodClass
+		whichCategoryIncludesSelector: aCompiledMethod selector)
+		sameContentAs: category
 ]
 
 { #category : #testing }

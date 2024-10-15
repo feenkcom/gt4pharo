@@ -9,7 +9,7 @@ The following example shows how a vector {{gtMethod:BrGlamorousVectorIcons class
 Class {
 	#name : #GtPharoGlamorousIconStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Icon'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Icon'
 }
 
 { #category : #'private - styling' }
@@ -39,16 +39,16 @@ GtPharoGlamorousIconStyler >> styleNode: aMessageSendNode withIconLibrary: anIco
 GtPharoGlamorousIconStyler >> visitMessageSend: aMessageSendNode [
 	| receiver anIconLibrary aMethod |
 	super visitMessageSend: aMessageSendNode.
-	aMessageSendNode receiver isVariable
-		ifFalse: [ ^ self ].
+	aMessageSendNode receiver isVariable ifFalse: [ ^ self ].
 	receiver := aMessageSendNode receiver variableName.
-	(receiver = BrGlamorousIcons name or: [ receiver = BrGlamorousVectorIcons name ])
-		ifFalse: [ ^ self ].
-	(aMessageSendNode message arguments size isZero)
-		ifFalse: [ ^ self ].
+	(receiver = BrGlamorousIcons name
+		or: [ receiver = BrGlamorousVectorIcons name ]) ifFalse: [ ^ self ].
+	aMessageSendNode message arguments size isZero ifFalse: [ ^ self ].
 	anIconLibrary := self class environment at: receiver ifAbsent: [ ^ self ].
-	aMethod := anIconLibrary class compiledMethodAt: aMessageSendNode message selector ifAbsent: [ ^ self ]. 
-	aMethod category = 'icons' ifFalse: [ ^ self ].
-		
-	self styleNode: aMessageSendNode withIconLibrary: anIconLibrary.
+	aMethod := anIconLibrary class
+			compiledMethodAt: aMessageSendNode message selector
+			ifAbsent: [ ^ self ].
+	aMethod category = #icons ifFalse: [ ^ self ].
+
+	self styleNode: aMessageSendNode withIconLibrary: anIconLibrary
 ]

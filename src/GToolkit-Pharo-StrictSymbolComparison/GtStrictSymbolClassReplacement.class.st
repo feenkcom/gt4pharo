@@ -51,7 +51,7 @@ GtStrictSymbolClassReplacement >> refactorMethod: method [
 	methodAst ~= originalAst ifTrue:
 		[ method methodClass
 			compile: methodAst newSource
-			classified: '*StrictSymbol-Refactored' ].
+			classified: GtStrictSymbolRefactor refactoredExtensionPackageName ].
 ]
 
 { #category : #accessing }

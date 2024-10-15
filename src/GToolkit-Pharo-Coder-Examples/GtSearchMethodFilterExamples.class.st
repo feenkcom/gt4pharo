@@ -153,15 +153,15 @@ GtSearchMethodFilterExamples >> methodConditionsFilter_SubclassRerence [
 GtSearchMethodFilterExamples >> methodConditionsFilter_TwoConditions [
 	<gtExample>
 	| filter |
-	
-	filter := GtSearchMethodConditionsFilter new 
-		condition: [ :aMethod | aMethod numArgs = 1 ];
-		condition: [ :aMethod | aMethod protocol = 'api - accessing' ].
-	
-	self assert: (filter matches: GtSearchMethodConditionsFilter>>#condition:).
-	self assert: (filter matches: GtSearchMethodConditionsFilter>>#conditions) not.
-	
-	^ filter.
+	filter := GtSearchMethodConditionsFilter new
+			condition: [ :aMethod | aMethod numArgs = 1 ];
+			condition: [ :aMethod | aMethod protocol = #'api - accessing' ].
+
+	self assert: (filter matches: GtSearchMethodConditionsFilter >> #condition:).
+	self
+		assert: (filter matches: GtSearchMethodConditionsFilter >> #conditions) not.
+
+	^ filter
 ]
 
 { #category : #examples }

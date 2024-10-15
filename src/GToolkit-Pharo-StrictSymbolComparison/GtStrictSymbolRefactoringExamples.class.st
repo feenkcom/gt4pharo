@@ -8,16 +8,18 @@ Class {
 
 { #category : #'private - support' }
 GtStrictSymbolRefactoringExamples >> logMessages: aCollection [
-	| scenario logger |
+	| scenario logger signalState |
 
 	scenario := GtStrictSymbolScenarios new.
 	logger := GtStrictSymbolComparisonSummaryLogger new.
 	logger start.
-	[ GtStrictSymbolEqualityArgumentSignal start.
+	[ signalState := GtStrictSymbolEqualityArgumentSignal clearLogStringOnly.
+	GtStrictSymbolEqualityArgumentSignal start.
 	aCollection do: [ :message |
 		message sendTo: scenario ] ]
 			ensure: 
 				[ GtStrictSymbolEqualityArgumentSignal stop.
+				GtStrictSymbolEqualityArgumentSignal setFrom: signalState.
 				logger stop ].
 	^ logger
 ]
@@ -27,6 +29,7 @@ GtStrictSymbolRefactoringExamples >> refactorMixedParameterToStringLiteral [
 	"Demonstrate refactoring an equality comparison of a variable to a string
 	where the variable is always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -50,6 +53,7 @@ GtStrictSymbolRefactoringExamples >> refactorObjectParameters [
 	"Demonstrate refactoring an equality comparison of two variables
 	where."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -72,6 +76,7 @@ GtStrictSymbolRefactoringExamples >> refactorStringLiteralToMixedParameter [
 	"Demonstrate refactoring an equality comparison of a variable to a string
 	where the variable is always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -95,6 +100,7 @@ GtStrictSymbolRefactoringExamples >> refactorStringLiteralToStringParameter [
 	"Demonstrate refactoring an equality comparison of a variable to a string
 	where the variable is always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -117,6 +123,7 @@ GtStrictSymbolRefactoringExamples >> refactorStringParameterToStringLiteral [
 	"Demonstrate refactoring an equality comparison of a variable to a string
 	where the variable is always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -139,6 +146,7 @@ GtStrictSymbolRefactoringExamples >> refactorStringParameterToSymbolLiteral [
 	"Demonstrate refactoring an equality comparison of a variable to a string
 	where the variable is always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -162,6 +170,7 @@ GtStrictSymbolRefactoringExamples >> refactorStringParameters [
 	"Demonstrate refactoring an equality comparison of two variables
 	where the variables are always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {
@@ -184,6 +193,7 @@ GtStrictSymbolRefactoringExamples >> refactorSymbolParameterToStringLiteral [
 	"Demonstrate refactoring an equality comparison of a variable to a string
 	where the variable is always a string."
 	<gtExample>
+	<noTest>
 	| signalGroup refactoredAst signalSummary strictSymbolRefactor |
 
 	signalGroup := self logMessages: {

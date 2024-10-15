@@ -50,10 +50,11 @@ GtPharoSnippetCoder >> implicitVariableNames [
 
 { #category : #'private - event handling' }
 GtPharoSnippetCoder >> implicitVariableReferencesTo: aString do: aBlock [
-
 	self astAwait
-		allNodesDo:
-			[ :each | (each isVariable and: [ aString = each variableName asString and: [ each whoDefines isNil ] ]) ifTrue: [ aBlock value: each ] ]
+		allNodesDo: [ :each | 
+			(each isVariable
+				and: [ (aString sameContentAs: each variableName asString)
+						and: [ each whoDefines isNil ] ]) ifTrue: [ aBlock value: each ] ]
 ]
 
 { #category : #initialization }

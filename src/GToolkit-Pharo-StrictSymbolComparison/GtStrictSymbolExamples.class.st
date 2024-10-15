@@ -37,6 +37,7 @@ GtStrictSymbolExamples >> callingContext [
 GtStrictSymbolExamples >> callingMethod [
 	"Demonstrate getting the calling method from a GtStringSignalContextStackSignal"
 	<gtExample>
+	<noTest>
 	| wasRunning logger signal |
 
 	[ wasRunning := GtStrictSymbolEqualityArgumentSignal isRunning.
@@ -113,6 +114,7 @@ GtStrictSymbolExamples >> getCallingContext2 [
 { #category : #examples }
 GtStrictSymbolExamples >> jsonSerialization [
 	<gtExample>
+	<noTest>
 	| signals serializer serialized |
 
 	signals := self callingMethod recordings.

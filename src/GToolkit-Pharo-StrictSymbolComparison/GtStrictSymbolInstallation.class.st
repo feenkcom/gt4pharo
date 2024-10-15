@@ -7,15 +7,35 @@ Class {
 	#category : #'GToolkit-Pharo-StrictSymbolComparison-Installation'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
+GtStrictSymbolInstallation >> createExtensionPackage [
+
+	RPackageOrganizer default
+		packageNamed: GtStrictSymbolRefactor refactoredPackageName
+		ifAbsent: [ RPackageOrganizer default createPackageNamed:
+			GtStrictSymbolRefactor refactoredPackageName ].
+]
+
+{ #category : #managing }
+GtStrictSymbolInstallation >> enableStrictSymbolComparison [
+
+	self refactorSymbol.
+	self switchSymbolTables.
+	self initializeFfiCallout.
+	self registerStartup.
+	self installStringAndSymbolEquals.
+]
+
+{ #category : #'managing - steps' }
 GtStrictSymbolInstallation >> initializeFfiCallout [
 
 	FFICallout initializeTypeAliases.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> installFromFile: aFileReference [
 
+	"self createExtensionPackage."
 	self loadEqualityStatsFromFile: aFileReference.
 	self refactorEqualityCalls.
 	"self refactorDictionaryReferences.
@@ -29,7 +49,7 @@ GtStrictSymbolInstallation >> installFromFile: aFileReference [
 	self installStringAndSymbolEquals.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> installStringAndSymbolEquals [
 
 	String compile:
@@ -57,13 +77,13 @@ GtStrictSymbolInstallation >> installStringAndSymbolEquals [
 		classified: 'gt-stringsymbol-patch'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> loadEqualityStatsFromFile: aFileReference [
 
 	statsSummary := GtStrictSymbolSummaryGroup loadFromFile: aFileReference.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> refactorDictionaryReferences [
 
 	GtStrictSymbolClassReplacement new 
@@ -72,13 +92,13 @@ GtStrictSymbolInstallation >> refactorDictionaryReferences [
 		refactorAll.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> refactorEqualityCalls [
 
 	statsSummary refactorAll
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> refactorSetReferences [
 
 	GtStrictSymbolClassReplacement new 
@@ -87,7 +107,7 @@ GtStrictSymbolInstallation >> refactorSetReferences [
 		refactorAll.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> refactorSymbol [
 
 	Symbol class compile:
@@ -108,7 +128,7 @@ GtStrictSymbolInstallation >> refactorSymbol [
 		classified: 'gt-stringsymbol-patch'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> refactorWeakSetReferences [
 
 	GtStrictSymbolClassReplacement new 
@@ -117,13 +137,13 @@ GtStrictSymbolInstallation >> refactorWeakSetReferences [
 		refactorAll.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'managing - steps' }
 GtStrictSymbolInstallation >> registerStartup [
 
 	GtStrictSymbolComparisonFlag initialize.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #refactoring }
 GtStrictSymbolInstallation >> replaceLepiterDatabase [
 	| currentDatabase databaseProperties |
 
@@ -136,7 +156,7 @@ GtStrictSymbolInstallation >> replaceLepiterDatabase [
 	GtWorld allInstances do: [:each | each knowledgeBase: LeDatabasesRegistry defaultLogicalDatabase ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'managing - steps' }
 GtStrictSymbolInstallation >> switchSymbolTables [
 	"Switch the existing Symbol tables to use the StringContent version"
 

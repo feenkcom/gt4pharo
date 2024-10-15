@@ -23,7 +23,7 @@ GtPharoSequenceNode >> compositeNodeVariables [
 
 { #category : #testing }
 GtPharoSequenceNode >> defines: aString [
-	^ variables anySatisfy: [ :each | each name value = aString ]
+	^ variables anySatisfy: [ :each | each name value sameContentAs: aString ]
 ]
 
 { #category : #generated }

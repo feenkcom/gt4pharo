@@ -33,6 +33,18 @@ GtStrictSymbolRefactor class >> equalityNodesFor: methodAst sourceInterval: anIn
 
 ]
 
+{ #category : #accessing }
+GtStrictSymbolRefactor class >> refactoredExtensionPackageName [
+
+	^ '*', self refactoredPackageName
+]
+
+{ #category : #accessing }
+GtStrictSymbolRefactor class >> refactoredPackageName [
+
+	^ 'GToolkit-Pharo-StrictSymbolRefactored'
+]
+
 { #category : #refactoring }
 GtStrictSymbolRefactor >> addAssertionTo: receiver type: type equalityNode: equalityNode comparisonSelector: comparisonSelector change: change [
 	| assertionNode |
@@ -219,11 +231,14 @@ GtStrictSymbolRefactor >> originalAst [
 
 { #category : #'as yet unclassified' }
 GtStrictSymbolRefactor >> refactor [
+	| protocol |
 
+	"protocol := self class refactoredExtensionPackageName."
+	protocol := self method protocol.
 	(self shouldRefactor and: [ self isChanged ]) ifFalse: [ ^ self ].
 	self method methodClass
 		compile: self refactoredAst sourceCode
-		classified: '*StrictSymbol-Refactored'.
+		classified: protocol.
 ]
 
 { #category : #refactoring }
