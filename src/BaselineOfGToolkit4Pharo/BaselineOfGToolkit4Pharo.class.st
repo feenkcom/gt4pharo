@@ -16,13 +16,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.96/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1800/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.1801/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1370/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1371/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.6.1088/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.6.1089/src' ].
 		spec
 			baseline: 'SmaCCRuntime' with: [
 				spec repository: 'github://j-brant/SmaCC:v3.0.82' ].
@@ -66,6 +66,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #('GToolkitCoder' 'GToolkit4Magritte' 'GToolkitCompleter' 'GToolkit-Pharo-GtRefactorings' 'GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-Method' 'GToolkit-Pharo-Coder-Method-UI' 'GToolkit-Pharo-Metamodels' 'GToolkit-Pharo-SearchFilters' 'GToolkit-Pharo-System' 'GToolkit-Pharo-TestSuite' 'GToolkit-Pharo-TestSuite-UI') ].
 		spec package: 'GToolkit-Pharo-Coder-AddOns' with: [
 			spec requires: #('GToolkit-Pharo-Coder-UI') ].
+		spec package: 'GToolkit-Pharo-StrictSymbolComparison' with: [
+			spec requires: #('GToolkit-Pharo-Coder-AddOns') ].
 		spec package: 'GT-PackageWithSuperclasses'.
 		spec package: 'GT-PackageWithSubclasses' with: [
 			spec requires: #('GT-PackageWithSuperclasses') ].
