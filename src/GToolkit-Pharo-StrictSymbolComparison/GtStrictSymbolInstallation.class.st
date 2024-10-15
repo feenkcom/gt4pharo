@@ -25,7 +25,7 @@ GtStrictSymbolInstallation >> initializeFfiCallout [
 { #category : #'as yet unclassified' }
 GtStrictSymbolInstallation >> installFromFile: aFileReference [
 
-	self createExtensionPackage.
+	"self createExtensionPackage."
 	self loadEqualityStatsFromFile: aFileReference.
 	self refactorEqualityCalls.
 	"self refactorDictionaryReferences.

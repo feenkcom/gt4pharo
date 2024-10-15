@@ -231,11 +231,14 @@ GtStrictSymbolRefactor >> originalAst [
 
 { #category : #'as yet unclassified' }
 GtStrictSymbolRefactor >> refactor [
+	| protocol |
 
+	"protocol := self class refactoredExtensionPackageName."
+	protocol := self method protocol.
 	(self shouldRefactor and: [ self isChanged ]) ifFalse: [ ^ self ].
 	self method methodClass
 		compile: self refactoredAst sourceCode
-		classified: self class refactoredExtensionPackageName.
+		classified: protocol.
 ]
 
 { #category : #refactoring }
