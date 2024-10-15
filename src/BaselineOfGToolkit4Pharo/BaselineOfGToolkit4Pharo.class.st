@@ -152,6 +152,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkitCoder' ). ];
 			
 			package: 'GToolkit-Pharo-BaseRefactorings';
+			package: 'GToolkit-Pharo-StrictSymbolComparison';
 			
 			package: 'GT-PackageWithSuperclasses';
 			package: 'GT-PackageWithSubclasses' with: [
