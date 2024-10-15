@@ -6,6 +6,13 @@ Class {
 	#category : #'GToolkit-Pharo-Changes-Examples'
 }
 
+{ #category : #asserting }
+GtRecentMethodChangeExamples >> assert: actual equals: expected [
+	^ self
+		assert: (expected sameContentAs: actual)
+		description: [ self comparingStringBetween: actual and: expected ]
+]
+
 { #category : #accessing }
 GtRecentMethodChangeExamples >> simpleMethodChange [
 	<gtExample>

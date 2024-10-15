@@ -68,18 +68,14 @@ GtPharoColorStyler >> styleRgbRange: aMessageSendNode [
 GtPharoColorStyler >> visitMessageSend: aMessageSendNode [
 	| receiver |
 	super visitMessageSend: aMessageSendNode.
-	aMessageSendNode receiver isVariable
-		ifFalse: [ ^ self ].
+	aMessageSendNode receiver isVariable ifFalse: [ ^ self ].
 	receiver := aMessageSendNode receiver variableName.
-	receiver = #Color
-		ifFalse: [ ^ self ].
-	(aMessageSendNode message arguments allSatisfy: #isLiteral)
-		ifFalse: [ ^ self ].
-	aMessageSendNode message selector = 'r:g:b:range:'
+	receiver = #Color ifFalse: [ ^ self ].
+	(aMessageSendNode message arguments allSatisfy: #isLiteral) ifFalse: [ ^ self ].
+	aMessageSendNode message selector = #r:g:b:range:
 		ifTrue: [ self styleRgbRange: aMessageSendNode ].
 	aMessageSendNode message selector = #fromHexString:
 		ifTrue: [ self styleFromString: aMessageSendNode ].
-	(Color brickColorRegistry
-		includesKey: aMessageSendNode message selector)
+	(Color brickColorRegistry includesKey: aMessageSendNode message selector)
 		ifTrue: [ self styleRegisteredColor: aMessageSendNode ]
 ]

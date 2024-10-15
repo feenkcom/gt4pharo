@@ -48,7 +48,7 @@ GtPharoVariableReferenceHighlighter >> variableName: anObject [
 GtPharoVariableReferenceHighlighter >> visitSymbolLiteral: aNode [
 	super visitSymbolLiteral: aNode.
 	searchSymbols ifFalse: [ ^ self ].
-	aNode symbol = variableName
+	(aNode symbol sameContentAs: variableName)
 		ifTrue: [ stream nextPut: (aNode startPosition to: aNode stopPosition) ]
 ]
 
@@ -56,7 +56,7 @@ GtPharoVariableReferenceHighlighter >> visitSymbolLiteral: aNode [
 GtPharoVariableReferenceHighlighter >> visitVariable: aVariableNode [
 	super visitVariable: aVariableNode.
 
-	aVariableNode variableName = variableName
-		ifTrue: [
-			stream nextPut: (aVariableNode name startPosition to: aVariableNode name stopPosition) ]
+	(aVariableNode variableName sameContentAs: variableName)
+		ifTrue: [ stream
+				nextPut: (aVariableNode name startPosition to: aVariableNode name stopPosition) ]
 ]

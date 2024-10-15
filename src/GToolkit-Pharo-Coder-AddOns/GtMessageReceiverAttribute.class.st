@@ -157,7 +157,7 @@ GtMessageReceiverAttribute >> isClassName: aSymbol [
 	(name endsWith: ' class') ifTrue: [ name := name allButLast: 6 ].
 	^ (self class environment bindingOf: name asSymbol) value
 		ifNil: [ false ]
-		ifNotNil: [ :value | value isBehavior and: [ value name = name ] ]
+		ifNotNil: [ :value | value isBehavior and: [ value name sameContentAs: name ] ]
 ]
 
 { #category : #accessing }

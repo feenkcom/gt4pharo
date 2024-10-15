@@ -27,7 +27,7 @@ GtPharoMethodNode >> body: aGtPharoSequenceNode [
 
 { #category : #testing }
 GtPharoMethodNode >> defines: aString [
-	(self variables anySatisfy: [ :each | each name value = aString ])
+	(self variables anySatisfy: [ :each | each name value sameContentAs: aString ])
 		ifTrue: [ ^ true ].
 	body pragmas
 		do: [ :each | 

@@ -72,7 +72,8 @@ GtExtractMethodToComponentController >> cancelRenaming [
 
 { #category : #accessing }
 GtExtractMethodToComponentController >> defaultReceiverClassName [
-	receiver = 'self' ifTrue: [ ^ sourceCoderViewModel behavior name ].
+	(receiver sameContentAs: 'self')
+		ifTrue: [ ^ sourceCoderViewModel behavior name ].
 	(sourceCoderViewModel behavior bindingOf: receiver asSymbol) value
 		ifNotNil: [ :value | ^ value class name ].
 	potentialTypes size = 1 ifTrue: [ ^ (potentialTypes first: 1) first asSymbol ].
@@ -204,7 +205,7 @@ GtExtractMethodToComponentController >> installRenamer [
 { #category : #private }
 GtExtractMethodToComponentController >> isReceiver: aNode [
 	^ (aNode isKindOf: GtPharoVariableNode)
-		and: [ aNode name value = self receiver ]
+		and: [ aNode name value sameContentAs: self receiver ]
 ]
 
 { #category : #testing }
@@ -453,7 +454,7 @@ GtExtractMethodToComponentController >> setPreviewOptionsOn: aRefactoring [
 
 { #category : #testing }
 GtExtractMethodToComponentController >> showReceiverType [
-	receiver = 'self' ifTrue: [ ^ false ].
+	(receiver sameContentAs: 'self') ifTrue: [ ^ false ].
 	^ (sourceCoderViewModel behavior bindingOf: receiver asSymbol) value
 		ifNotNil: [ :value | (value isBehavior and: [ value name = receiver ]) not ]
 		ifNil: [ true ]
