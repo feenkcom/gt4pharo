@@ -42,7 +42,7 @@ GtStrictSymbolRefactor class >> refactoredExtensionPackageName [
 { #category : #accessing }
 GtStrictSymbolRefactor class >> refactoredPackageName [
 
-	^ 'GToolkit-Pharo-StrictSymbolRefactored'
+	^ 'GToolkit-PharoBasePatch-StrictSymbol-Overrides'
 ]
 
 { #category : #refactoring }
@@ -233,8 +233,8 @@ GtStrictSymbolRefactor >> originalAst [
 GtStrictSymbolRefactor >> refactor [
 	| protocol |
 
-	"protocol := self class refactoredExtensionPackageName."
-	protocol := self method protocol.
+	protocol := self class refactoredExtensionPackageName.
+	"protocol := self method protocol."
 	(self shouldRefactor and: [ self isChanged ]) ifFalse: [ ^ self ].
 	self method methodClass
 		compile: self refactoredAst sourceCode
