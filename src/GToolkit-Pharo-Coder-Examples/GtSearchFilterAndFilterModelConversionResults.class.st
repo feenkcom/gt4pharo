@@ -26,6 +26,7 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 							italic ].
 				aText ]
 			weight: 2.5;
+		column: 'Name' text: [ :aResult | aResult filterModelName ];
 		column: 'Evaluation'
 			text: [ :aResult | 
 				aResult isWithResults

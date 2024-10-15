@@ -24,6 +24,7 @@ GtSearchSubclassResponsibilityMethodsFilter class >> globalFilterDescriptor2 [
 			ifTrue: [ self new ]
 			ifFalse: [ GtSearchDefinedMethodsFilter new ] ];
 		named: 'Non/Abstract methods';
+		suffixLabel: 'methods';
 		order: 18;
 		items: { GtFilterModelAbstractMethodItem default. GtFilterModelDefinedMethodItem default };
 		selectFirstItem

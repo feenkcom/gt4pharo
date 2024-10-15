@@ -7,7 +7,7 @@ GtSearchDefinedMethodsFilter >> filterDescriptor2For: aMethodsCoder [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchDefinedMethodsFilter classSide >> globalFilterDescriptor [
+GtSearchDefinedMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
 		named: 'Defined methods';

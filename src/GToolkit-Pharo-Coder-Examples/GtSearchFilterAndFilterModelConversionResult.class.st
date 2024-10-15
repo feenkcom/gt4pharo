@@ -37,6 +37,11 @@ GtSearchFilterAndFilterModelConversionResult >> filterModelFour: anObject [
 	filterModelFour := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtSearchFilterAndFilterModelConversionResult >> filterModelName [
+	^ self filterModelOne ifNotNil: #name ifNil: [ '' ]
+]
+
 { #category : #accessing }
 GtSearchFilterAndFilterModelConversionResult >> filterModelOne [
 	^ filterModelOne
