@@ -58,6 +58,7 @@ GtIndex >> asyncSearchForWords: aString in: prefixTree [
 					node namesCollection asArray asAsyncStream
 						select: [ :selector | words size <= 1 or: [ self does: selector matchWords: words ] ] ] ])
 		flatten withoutDuplicates
+			useContentComparison
 ]
 
 { #category : #private }

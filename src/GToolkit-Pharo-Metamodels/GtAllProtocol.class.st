@@ -34,5 +34,5 @@ GtAllProtocol >> canBeShownWhenEmpty [
 
 { #category : #'as yet unclassified' }
 GtAllProtocol >> name [
-	^ 'All'
+	^ #'All'
 ]
