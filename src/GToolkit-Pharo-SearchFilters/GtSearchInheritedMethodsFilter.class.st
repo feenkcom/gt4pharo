@@ -31,7 +31,7 @@ GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
 	methodClass := aCompiledMethod methodClass.
 	^ (super includesMethod: aCompiledMethod)
-		or: [ aCompiledMethod origin name ~= #TraitedClass
+		or: [ (aCompiledMethod origin name sameContentAs:  #TraitedClass) not
 				and: [ (includeSubclasses
 						and: [ methodClass classSide includesBehavior: filterClass classSide ])
 						or: [ includeSuperclass
