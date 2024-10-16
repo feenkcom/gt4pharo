@@ -52,5 +52,5 @@ GtSearchClassScopedMethodsItem >> label [
 
 { #category : #accessing }
 GtSearchClassScopedMethodsItem >> order [
-	^ 80
+	^ 20
 ]
