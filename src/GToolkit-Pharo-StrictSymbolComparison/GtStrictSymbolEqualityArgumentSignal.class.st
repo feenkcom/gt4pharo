@@ -256,6 +256,7 @@ GtStrictSymbolEqualityArgumentSignal >> method [
 GtStrictSymbolEqualityArgumentSignal >> methodFor: aContextPrintString [
 	| fields className |
 
+	aContextPrintString class = Context ifTrue: [ ^ aContextPrintString ].
 	fields := '>>' split: aContextPrintString.
 	className := ('(' split: ('] in ' split: fields first) last) first.
 	^ (self class environment classOrTraitNamed: className)
@@ -270,7 +271,7 @@ GtStrictSymbolEqualityArgumentSignal >> methodName [
 { #category : #private }
 GtStrictSymbolEqualityArgumentSignal >> methodStackFrom: callingContext [
 
-	^ (callingContext stackOfSize: 10) collect: #printString
+	^ (callingContext stackOfSize: 10) copy "collect: #printString"
 ]
 
 { #category : #accessing }
