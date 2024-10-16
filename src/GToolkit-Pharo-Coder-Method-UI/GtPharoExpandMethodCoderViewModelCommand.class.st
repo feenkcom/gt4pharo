@@ -10,8 +10,8 @@ Class {
 
 { #category : #'api - testing' }
 GtPharoExpandMethodCoderViewModelCommand >> applicableTo: aCoderViewModel [
-	^ (aCoderViewModel behavior name = behaviorName
-		and: [ aCoderViewModel selector = selector ])
+	^ (aCoderViewModel behavior name sameContentAs: behaviorName)
+		and: [ aCoderViewModel selector = selector ]
 ]
 
 { #category : #hook }

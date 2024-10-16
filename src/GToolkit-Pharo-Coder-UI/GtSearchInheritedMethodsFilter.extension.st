@@ -12,7 +12,7 @@ GtSearchInheritedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 				ifNone: [ (self forClass: aCurrentClass) withSuperclassesUpTo: aCurrentClass ] ];
 		items: aCurrentClass withAllSuperclasses;
 		selectedItem: aCurrentClass;
-		label: 'Methods up to';
+		name: 'Methods up to';
 		order: 16
 ]
 

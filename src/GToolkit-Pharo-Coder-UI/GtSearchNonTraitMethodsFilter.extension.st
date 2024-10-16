@@ -24,6 +24,7 @@ GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor2 [
 			ifTrue: [ GtSearchTraitMethodsFilter new ]
 			ifFalse: [ self new ] ];
 		named: 'Non/Trait methods';
+		suffixLabel: 'methods';
 		order: 20;
 		items: { GtFilterModelTraitOriginItem default. GtFilterModelClassOriginItem default };
 		selectLastItem;

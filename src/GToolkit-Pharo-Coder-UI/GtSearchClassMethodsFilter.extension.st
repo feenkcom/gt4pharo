@@ -24,6 +24,7 @@ GtSearchClassMethodsFilter class >> globalFilterDescriptor2 [
 			ifTrue: [ GtSearchInstanceMethodsFilter new ] 
 			ifFalse: [ self new ] ];
 		named: 'Inst./Class methods';
+		suffixLabel: 'methods';
 		order: 17;
 		items: { GtFilterModelInstanceSideItem default. GtFilterModelClassSideItem default };
 		selectFirstItem
