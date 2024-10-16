@@ -83,6 +83,44 @@ GtStrictSymbolInstallation >> loadEqualityStatsFromFile: aFileReference [
 	statsSummary := GtStrictSymbolSummaryGroup loadFromFile: aFileReference.
 ]
 
+{ #category : #'managing - steps' }
+GtStrictSymbolInstallation >> patchIcebergPackageNames [
+	| packagesToPatch |
+	packagesToPatch := IceRepository registry flatCollect: [ :aRepository | 
+		((aRepository packages) select: [:aPackage | 
+			aPackage name class = ByteString ]) ].
+		
+	packagesToPatch do: [ :aPackage |
+		aPackage package: (aPackage package ifNotNil: #asSymbol) ]
+]
+
+{ #category : #'managing - steps' }
+GtStrictSymbolInstallation >> patchIcebergRepositories [
+	self patchIcebergPackageNames.
+	self patchIcebergWorkingCopyPackages.
+	self patchIcebergWorkingCopyProperties.
+]
+
+{ #category : #'managing - steps' }
+GtStrictSymbolInstallation >> patchIcebergWorkingCopyPackages [
+	IceRepository registry  do: [ :aRepository |
+		aRepository workingCopy 
+			instVarNamed: #packages 
+			put: (((aRepository workingCopy 
+				instVarNamed: #packages) associations collect: [ :assoc |
+				assoc key asSymbol -> assoc value]) 
+					as: GtStringContentDictionary)]
+]
+
+{ #category : #'managing - steps' }
+GtStrictSymbolInstallation >> patchIcebergWorkingCopyProperties [
+	IceRepository registry  do: [ :aRepository |
+		| projectProperties |
+		projectProperties := aRepository workingCopy project properties: (
+			aRepository workingCopy project properties 
+				as: GtStringContentDictionary) ]
+]
+
 { #category : #refactoring }
 GtStrictSymbolInstallation >> refactorDictionaryReferences [
 
@@ -96,6 +134,25 @@ GtStrictSymbolInstallation >> refactorDictionaryReferences [
 GtStrictSymbolInstallation >> refactorEqualityCalls [
 
 	statsSummary refactorAll
+]
+
+{ #category : #refactoring }
+GtStrictSymbolInstallation >> refactorOCAbstractMethodScope [
+
+	OCAbstractMethodScope addSlot: #tempVectorName.
+	OCAbstractMethodScope 
+		compile: 'id: int
+	<gtPharoPatch: #StrictComparison>
+	id := int.
+	tempVectorName := (''0vector'', id asString) asSymbol.'
+		classified: 'accessing'.
+	OCAbstractMethodScope 
+		compile: 'tempVectorName
+	<gtPharoPatch: #StrictComparison>
+	"the name of the tempVector is not a valid name of a temp variable
+	 This way we avoid name clashes "
+	^ tempVectorName'
+		classified: 'temp vars - vector'
 ]
 
 { #category : #refactoring }
