@@ -185,6 +185,7 @@ GtPharoIndex >> asyncNamesForWord: aString usingPrefixCache: prefixCache andWord
 				ifNotNil: [ :str | {str} ] ]) asAsyncStream
 		merge: (prefixCache asyncWeightedStreamStartingWith: trimmedString caseSensitive: false))
 		merge: wordStream) withoutDuplicates
+			useContentComparison
 ]
 
 { #category : #accessing }
