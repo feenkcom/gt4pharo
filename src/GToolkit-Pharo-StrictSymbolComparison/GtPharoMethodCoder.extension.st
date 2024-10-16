@@ -6,8 +6,11 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns 
 	aNode selector == #= ifFalse: [ ^ self ].
 	coderAddOns
 		addContextMenuItem: (self
-				createLabel: 'Convert #= to #sameContentAs:'
-				description: '(self nodeDescription: nodes first)')
+				createLabel: ('Convert ' asRopedText, 
+					'#=' asRopedText glamorousCodeFont,
+					' to ' asRopedText,
+					'#sameContentAs:' asRopedText glamorousCodeFont)
+				description: (self nodeDescription: aNode))
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element |
