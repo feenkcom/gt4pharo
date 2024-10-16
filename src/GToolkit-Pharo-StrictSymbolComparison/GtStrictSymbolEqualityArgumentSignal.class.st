@@ -271,7 +271,7 @@ GtStrictSymbolEqualityArgumentSignal >> methodName [
 { #category : #private }
 GtStrictSymbolEqualityArgumentSignal >> methodStackFrom: callingContext [
 
-	^ (callingContext stackOfSize: 10) copy "collect: #printString"
+	^ (callingContext stackOfSize: 250) copy "collect: #printString"
 ]
 
 { #category : #accessing }

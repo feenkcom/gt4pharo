@@ -54,7 +54,9 @@ GtNamesPrefixTree >> names: anObject [
 GtNamesPrefixTree >> namesCollection [
 	^ names
 		ifNil: [ #() ]
-		ifNotNil: [ names isString ifTrue: [ ^ {names} ] ifFalse: [ names asSet ] ]
+		ifNotNil: [ names isString 
+			ifTrue: [ ^ {names} ] 
+			ifFalse: [ names as: GtStringContentSet ] ]
 ]
 
 { #category : #accessing }
