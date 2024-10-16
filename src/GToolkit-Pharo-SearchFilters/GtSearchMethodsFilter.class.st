@@ -1,6 +1,9 @@
 Class {
 	#name : #GtSearchMethodsFilter,
 	#superclass : #GtSearchTypedEntitiesFilter,
+	#instVars : [
+		'requesterContext'
+	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
@@ -41,6 +44,24 @@ GtSearchMethodsFilter >> matches: anObject [
 	^ anObject isCompiledMethod
 		and: [ (self shouldFilterOutTraitMethods not or: [ anObject isFromTrait not ])
 				and: [ self includesMethod: anObject ] ]
+]
+
+{ #category : #accessing }
+GtSearchMethodsFilter >> requesterContext [
+	<return: #GtSearchMethodCoderFilterContext or: nil>
+	^ requesterContext
+]
+
+{ #category : #accessing }
+GtSearchMethodsFilter >> requesterContext: anObject [
+	requesterContext := anObject
+]
+
+{ #category : #'api - accessing' }
+GtSearchMethodsFilter >> requesterContextDo: aBlock [
+	"Pass a requester context to aBlock if the  context is available"
+
+	^ self requesterContext ifNotNil: aBlock
 ]
 
 { #category : #accessing }

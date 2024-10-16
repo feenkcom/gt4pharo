@@ -1136,6 +1136,12 @@ GtPharoMethodCoder >> mondrianPaintAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> newFilterContext [
+	^ super newFilterContext 
+		selector: self selector
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> runMondrianPaintFrom: anElement [
 	| mondrian |
 	
