@@ -47,7 +47,7 @@ GtSearchClassScopedMethodsItem >> itemValue [
 
 { #category : #accessing }
 GtSearchClassScopedMethodsItem >> label [
-	^ self itemClass name
+	^ 'Class: ', self itemClass name
 ]
 
 { #category : #accessing }

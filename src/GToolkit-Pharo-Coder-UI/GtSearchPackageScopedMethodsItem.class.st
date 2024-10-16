@@ -43,7 +43,7 @@ GtSearchPackageScopedMethodsItem >> itemValue [
 
 { #category : #accessing }
 GtSearchPackageScopedMethodsItem >> label [
-	^ self package name
+	^ 'Package: ', self package name
 ]
 
 { #category : #accessing }

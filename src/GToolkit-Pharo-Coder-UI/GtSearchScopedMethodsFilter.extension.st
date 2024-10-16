@@ -10,6 +10,7 @@ GtSearchScopedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 					ifNone: [ self new ] ];
 				named: 'Scope';
 				order: 11;
+				beDefault;
 				items: aContext scopedMethodsItems;
 				selectFirstItem ].
 
