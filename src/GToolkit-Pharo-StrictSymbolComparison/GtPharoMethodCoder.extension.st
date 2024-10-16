@@ -7,9 +7,9 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns 
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: ('Convert ' asRopedText, 
-					'#=' asRopedText glamorousCodeFont,
+					'#=' asRopedText glamorousCodeFontAndSize,
 					' to ' asRopedText,
-					'#sameContentAs:' asRopedText glamorousCodeFont)
+					'#sameContentAs:' asRopedText glamorousCodeFontAndSize)
 				description: (self nodeDescription: aNode))
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
