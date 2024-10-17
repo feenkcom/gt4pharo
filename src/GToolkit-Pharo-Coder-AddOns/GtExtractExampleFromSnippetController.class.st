@@ -23,7 +23,7 @@ GtExtractExampleFromSnippetController >> completionStrategy [
 	^ completionStrategy
 		ifNil: [ | classes |
 			classes := GtPrefixTree new.
-			(Pragma allNamed: 'gtExample')
+			(Pragma allNamed: #gtExample)
 				do: [ :each | 
 					| cls |
 					cls := each method methodClass.
