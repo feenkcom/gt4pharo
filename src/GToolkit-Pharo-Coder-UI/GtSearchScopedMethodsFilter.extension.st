@@ -11,6 +11,7 @@ GtSearchScopedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 				named: 'Scope';
 				order: 11;
 				beDefault;
+				displayAllItems;
 				items: aContext scopedMethodsItems;
 				selectFirstItem ].
 

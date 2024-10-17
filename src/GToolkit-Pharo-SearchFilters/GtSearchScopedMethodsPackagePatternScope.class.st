@@ -10,21 +10,22 @@ Class {
 
 { #category : #factory }
 GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForFilterContext: aFilterContext into: aStream [
-	| aBehaviorPackage |
+	| aBehaviorPackage anExistingPatterns |
+	anExistingPatterns := OrderedCollection new.
 	aFilterContext
 		behaviorDo: [ :aBehavior | 
 			aBehaviorPackage := aBehavior package.
-			self itemInstancesForPackage: aBehaviorPackage into: aStream ].
+			self itemInstancesForPackage: aBehaviorPackage into: aStream patterns: anExistingPatterns ].
 	aFilterContext
 		compiledMethodDo: [ :aMethod | 
 			| aMethodPackage |
 			aMethodPackage := aMethod package.
 			aBehaviorPackage = aMethodPackage
-				ifFalse: [ self itemInstancesForPackage: aMethodPackage into: aStream ] ]
+				ifFalse: [ self itemInstancesForPackage: aMethodPackage into: aStream patterns: anExistingPatterns ] ]
 ]
 
 { #category : #factory }
-GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPackage into: aStream [
+GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPackage into: aStream patterns: anExistingPatterns [
 	| aName aCollection |
 	aName := aPackage name.
 	aCollection := $- split: aName.
@@ -35,8 +36,11 @@ GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPack
 			aPattern
 				ifNil: [ aPart ]
 				ifNotNil: [ 
-					aStream nextPut: (self new pattern: aPattern).
-					aPattern , '-' , aPart ] ]
+					(anExistingPatterns includes: aPattern)
+						ifFalse: [ 
+							aStream nextPut: (self new pattern: aPattern).
+							anExistingPatterns add: aPattern ].
+							aPattern , '-' , aPart ] ]
 ]
 
 { #category : #'as yet unclassified' }
