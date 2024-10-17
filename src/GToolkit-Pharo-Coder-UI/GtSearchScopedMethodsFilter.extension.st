@@ -6,7 +6,7 @@ GtSearchScopedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 		requesterContextDo: [ :aContext | 
 			^ GtFilterShortListModel new
 				creator: [ :anItem | anItem 
-					ifSome: [ :anObject | self new scope: anItem ] 
+					ifSome: [ :aScope | self new scope: aScope ] 
 					ifNone: [ self new ] ];
 				named: 'Scope';
 				order: 11;

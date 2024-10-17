@@ -1,15 +1,15 @@
 Class {
-	#name : #GtSearchPackagePatternScopedMethodsItem,
-	#superclass : #GtSearchScopedMethodsItem,
+	#name : #GtSearchScopedMethodsPackagePatternScope,
+	#superclass : #GtSearchScopedMethodsScope,
 	#instVars : [
 		'pattern',
 		'filter'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Filters'
+	#category : #'GToolkit-Pharo-SearchFilters-Support'
 }
 
 { #category : #factory }
-GtSearchPackagePatternScopedMethodsItem class >> itemInstancesForFilterContext: aFilterContext into: aStream [
+GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForFilterContext: aFilterContext into: aStream [
 	| aBehaviorPackage |
 	aFilterContext
 		behaviorDo: [ :aBehavior | 
@@ -24,7 +24,7 @@ GtSearchPackagePatternScopedMethodsItem class >> itemInstancesForFilterContext: 
 ]
 
 { #category : #factory }
-GtSearchPackagePatternScopedMethodsItem class >> itemInstancesForPackage: aPackage into: aStream [
+GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPackage into: aStream [
 	| aName aCollection |
 	aName := aPackage name.
 	aCollection := $- split: aName.
@@ -39,41 +39,46 @@ GtSearchPackagePatternScopedMethodsItem class >> itemInstancesForPackage: aPacka
 					aPattern , '-' , aPart ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtSearchScopedMethodsPackagePatternScope >> gtIconName [
+	^ #package
+]
+
 { #category : #testing }
-GtSearchPackagePatternScopedMethodsItem >> includesMethod: aCompiledMethod [
+GtSearchScopedMethodsPackagePatternScope >> includesMethod: aCompiledMethod [
 	<return: #Boolean>
 	^ filter includesMethod: aCompiledMethod
 ]
 
 { #category : #initialization }
-GtSearchPackagePatternScopedMethodsItem >> initialize [
+GtSearchScopedMethodsPackagePatternScope >> initialize [
 	super initialize.
 
 	filter := GtSearchMethodsWithPackagePatternFilter new
 ]
 
 { #category : #accessing }
-GtSearchPackagePatternScopedMethodsItem >> itemValue [
+GtSearchScopedMethodsPackagePatternScope >> itemValue [
 	^ self pattern
 ]
 
 { #category : #accessing }
-GtSearchPackagePatternScopedMethodsItem >> label [
+GtSearchScopedMethodsPackagePatternScope >> label [
 	^ 'Package: *', self pattern, '*'
 ]
 
 { #category : #accessing }
-GtSearchPackagePatternScopedMethodsItem >> order [
+GtSearchScopedMethodsPackagePatternScope >> order [
 	^ 70
 ]
 
 { #category : #accessing }
-GtSearchPackagePatternScopedMethodsItem >> pattern [
+GtSearchScopedMethodsPackagePatternScope >> pattern [
 	^ pattern
 ]
 
 { #category : #accessing }
-GtSearchPackagePatternScopedMethodsItem >> pattern: aString [
+GtSearchScopedMethodsPackagePatternScope >> pattern: aString [
 	pattern := aString.
 	filter pattern: aString.
 ]

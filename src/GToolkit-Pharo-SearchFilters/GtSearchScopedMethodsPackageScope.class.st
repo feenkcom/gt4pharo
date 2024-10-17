@@ -1,15 +1,15 @@
 Class {
-	#name : #GtSearchPackageScopedMethodsItem,
-	#superclass : #GtSearchScopedMethodsItem,
+	#name : #GtSearchScopedMethodsPackageScope,
+	#superclass : #GtSearchScopedMethodsScope,
 	#instVars : [
 		'package',
 		'filter'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Filters'
+	#category : #'GToolkit-Pharo-SearchFilters-Support'
 }
 
 { #category : #factory }
-GtSearchPackageScopedMethodsItem class >> itemInstancesForFilterContext: aFilterContext into: aStream [
+GtSearchScopedMethodsPackageScope class >> itemInstancesForFilterContext: aFilterContext into: aStream [
 	| aBehaviorPackage |
 	aFilterContext
 		behaviorDo: [ :aBehavior | 
@@ -23,41 +23,46 @@ GtSearchPackageScopedMethodsItem class >> itemInstancesForFilterContext: aFilter
 				ifFalse: [ aStream nextPut: (self new package: aMethodPackage) ] ]
 ]
 
+{ #category : #accessing }
+GtSearchScopedMethodsPackageScope >> gtIconName [
+	^ #package
+]
+
 { #category : #testing }
-GtSearchPackageScopedMethodsItem >> includesMethod: aCompiledMethod [
+GtSearchScopedMethodsPackageScope >> includesMethod: aCompiledMethod [
 	<return: #Boolean>
 	^ filter includesMethod: aCompiledMethod
 ]
 
 { #category : #initialization }
-GtSearchPackageScopedMethodsItem >> initialize [
+GtSearchScopedMethodsPackageScope >> initialize [
 	super initialize.
 
 	filter := GtSearchMethodsInPackageFilter new
 ]
 
 { #category : #accessing }
-GtSearchPackageScopedMethodsItem >> itemValue [
+GtSearchScopedMethodsPackageScope >> itemValue [
 	^ self package
 ]
 
 { #category : #accessing }
-GtSearchPackageScopedMethodsItem >> label [
+GtSearchScopedMethodsPackageScope >> label [
 	^ 'Package: ', self package name
 ]
 
 { #category : #accessing }
-GtSearchPackageScopedMethodsItem >> order [
+GtSearchScopedMethodsPackageScope >> order [
 	^ 50
 ]
 
 { #category : #accessing }
-GtSearchPackageScopedMethodsItem >> package [
+GtSearchScopedMethodsPackageScope >> package [
 	^ package
 ]
 
 { #category : #accessing }
-GtSearchPackageScopedMethodsItem >> package: aPackage [
+GtSearchScopedMethodsPackageScope >> package: aPackage [
 	package := aPackage.
 	filter package: aPackage
 ]

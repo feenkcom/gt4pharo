@@ -63,11 +63,11 @@ GtSearchMethodCoderFilterContext >> object: anObject [
 
 { #category : #accessing }
 GtSearchMethodCoderFilterContext >> scopedMethodsItems [
-	<return: #Collection of: #GtSearchScopedMethodsItem>
+	<return: #Collection of: #GtSearchScopedMethodsScope>
 	| aCollection |
 	aCollection := Array
 		streamContents: [ :aStream | 
-			GtSearchScopedMethodsItem
+			GtSearchScopedMethodsScope
 				allSubclassesDo: [ :aClass | 
 					aClass isAbstract
 						ifFalse: [ aClass itemInstancesForFilterContext: self into: aStream ] ] ].

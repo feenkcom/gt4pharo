@@ -26,12 +26,12 @@ GtSearchScopedMethodsFilter >> includesMethod: aCompiledMethod [
 { #category : #initialization }
 GtSearchScopedMethodsFilter >> initialize [
 	super initialize.
-	scope := GtSearchAllScopedMethodsItem default
+	scope := GtSearchScopedMethodsAllScope default
 ]
 
 { #category : #accessing }
 GtSearchScopedMethodsFilter >> scope [
-	<return: #GtSearchScopedMethodsItem>
+	<return: #GtSearchScopedMethodsScope>
 	^ scope
 ]
 
