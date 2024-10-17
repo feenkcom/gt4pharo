@@ -165,6 +165,8 @@ GtSearchInstanceSlotReferenceFilter >> variableName [
 ]
 
 { #category : #accessing }
-GtSearchInstanceSlotReferenceFilter >> variableName: aString [
-	variableName := aString
+GtSearchInstanceSlotReferenceFilter >> variableName: aSymbol [
+	<gtPharoPatch: #StrictComparison>
+
+	variableName := aSymbol asSymbol
 ]

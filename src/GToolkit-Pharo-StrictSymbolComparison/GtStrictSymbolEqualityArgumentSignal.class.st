@@ -268,10 +268,21 @@ GtStrictSymbolEqualityArgumentSignal >> methodName [
 	^ methodName
 ]
 
+{ #category : #accessing }
+GtStrictSymbolEqualityArgumentSignal >> methodNamesStack [
+	"Answer a collection of all the method names in the receiver's stack"
+
+	^ methodStack collect: [ :context | String streamContents: [ :stream |
+		stream
+			<< context homeMethod methodClass name;
+			<< '>>';
+			print: context homeMethod selector ] ]
+]
+
 { #category : #private }
 GtStrictSymbolEqualityArgumentSignal >> methodStackFrom: callingContext [
 
-	^ (callingContext stackOfSize: 10) copy "collect: #printString"
+	^ (callingContext stackOfSize: 20) copy "collect: #printString"
 ]
 
 { #category : #accessing }
