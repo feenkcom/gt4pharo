@@ -3,29 +3,34 @@ Class {
 	#superclass : #GtSearchScopedMethodsScope,
 	#instVars : [
 		'pattern',
-		'filter'
+		'filter',
+		'order'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Support'
 }
 
 { #category : #factory }
 GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForFilterContext: aFilterContext into: aStream [
-	| aBehaviorPackage anExistingPatterns |
-	anExistingPatterns := OrderedCollection new.
+	| aBehaviorPackage anExistingPatterns aCollection |
+	anExistingPatterns := Set new.
 	aFilterContext
 		behaviorDo: [ :aBehavior | 
 			aBehaviorPackage := aBehavior package.
-			self itemInstancesForPackage: aBehaviorPackage into: aStream patterns: anExistingPatterns ].
+			self itemInstancesForPackage: aBehaviorPackage patterns: anExistingPatterns ].
 	aFilterContext
 		compiledMethodDo: [ :aMethod | 
 			| aMethodPackage |
 			aMethodPackage := aMethod package.
-			aBehaviorPackage = aMethodPackage
-				ifFalse: [ self itemInstancesForPackage: aMethodPackage into: aStream patterns: anExistingPatterns ] ]
+			aBehaviorPackage = aMethodPackage ifFalse: [ 
+				self itemInstancesForPackage: aMethodPackage patterns: anExistingPatterns ] ].
+	
+	aCollection := anExistingPatterns sorted: [ :a :b | a pattern size < b pattern size ].
+	aCollection doWithIndex: [ :aScope :anIndex | aScope order: aScope order + (0.1 * anIndex) ].
+	aStream nextPutAll: aCollection
 ]
 
 { #category : #factory }
-GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPackage into: aStream patterns: anExistingPatterns [
+GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPackage patterns: anExistingPatterns [
 	| aName aCollection |
 	aName := aPackage name.
 	aCollection := $- split: aName.
@@ -36,11 +41,13 @@ GtSearchScopedMethodsPackagePatternScope class >> itemInstancesForPackage: aPack
 			aPattern
 				ifNil: [ aPart ]
 				ifNotNil: [ 
-					(anExistingPatterns includes: aPattern)
-						ifFalse: [ 
-							aStream nextPut: (self new pattern: aPattern).
-							anExistingPatterns add: aPattern ].
-							aPattern , '-' , aPart ] ]
+					anExistingPatterns add: (self new pattern: aPattern).
+					aPattern , '-' , aPart ] ]
+]
+
+{ #category : #accessing }
+GtSearchScopedMethodsPackagePatternScope class >> order [
+	^ 100
 ]
 
 { #category : #'as yet unclassified' }
@@ -68,12 +75,17 @@ GtSearchScopedMethodsPackagePatternScope >> itemValue [
 
 { #category : #accessing }
 GtSearchScopedMethodsPackagePatternScope >> label [
-	^ 'Package: *', self pattern, '*'
+	^ 'Package: *', (self pattern ifNil: [ 'none' ]), '*'
 ]
 
 { #category : #accessing }
 GtSearchScopedMethodsPackagePatternScope >> order [
-	^ 70
+	^ order ifNil: [ super order ]
+]
+
+{ #category : #accessing }
+GtSearchScopedMethodsPackagePatternScope >> order: anObject [
+	order := anObject
 ]
 
 { #category : #accessing }

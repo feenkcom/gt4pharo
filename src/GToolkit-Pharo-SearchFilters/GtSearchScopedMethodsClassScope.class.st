@@ -15,6 +15,11 @@ GtSearchScopedMethodsClassScope class >> itemInstancesForFilterContext: aFilterC
 ]
 
 { #category : #accessing }
+GtSearchScopedMethodsClassScope class >> order [
+	^ 300
+]
+
+{ #category : #accessing }
 GtSearchScopedMethodsClassScope >> gtIconName [
 	^ #class
 ]
@@ -52,10 +57,5 @@ GtSearchScopedMethodsClassScope >> itemValue [
 
 { #category : #accessing }
 GtSearchScopedMethodsClassScope >> label [
-	^ 'Class: ', self itemClass name
-]
-
-{ #category : #accessing }
-GtSearchScopedMethodsClassScope >> order [
-	^ 20
+	^ 'Class: ' , (self itemClass ifNotNil: #name ifNil: [ 'none' ])
 ]

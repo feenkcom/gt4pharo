@@ -24,6 +24,11 @@ GtSearchScopedMethodsPackageScope class >> itemInstancesForFilterContext: aFilte
 ]
 
 { #category : #accessing }
+GtSearchScopedMethodsPackageScope class >> order [
+	^ 200
+]
+
+{ #category : #accessing }
 GtSearchScopedMethodsPackageScope >> gtIconName [
 	^ #package
 ]
@@ -48,12 +53,7 @@ GtSearchScopedMethodsPackageScope >> itemValue [
 
 { #category : #accessing }
 GtSearchScopedMethodsPackageScope >> label [
-	^ 'Package: ', self package name
-]
-
-{ #category : #accessing }
-GtSearchScopedMethodsPackageScope >> order [
-	^ 50
+	^ 'Package: ', (self package ifNotNil: #name ifNil: [ 'none' ])
 ]
 
 { #category : #accessing }

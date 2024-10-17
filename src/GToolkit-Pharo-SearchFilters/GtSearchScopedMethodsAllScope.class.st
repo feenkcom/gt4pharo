@@ -12,6 +12,11 @@ GtSearchScopedMethodsAllScope class >> itemInstancesForFilterContext: aFilterCon
 ]
 
 { #category : #accessing }
+GtSearchScopedMethodsAllScope class >> order [
+	^ 1
+]
+
+{ #category : #accessing }
 GtSearchScopedMethodsAllScope >> gtIconName [
 	^ #empty
 ]
@@ -24,10 +29,5 @@ GtSearchScopedMethodsAllScope >> includesMethod: aCompiledMethod [
 
 { #category : #accessing }
 GtSearchScopedMethodsAllScope >> label [
-	^ 'All'
-]
-
-{ #category : #accessing }
-GtSearchScopedMethodsAllScope >> order [
-	^ 1
+	^ 'Current image'
 ]
