@@ -151,7 +151,7 @@ GtStrictSymbolInstallation >> refactorOCAbstractMethodScope [
 	<gtPharoPatch: #StrictComparison>
 	"the name of the tempVector is not a valid name of a temp variable
 	 This way we avoid name clashes "
-	^ tempVectorName'
+	^ tempVectorName ifNil: [ tempVectorName := ''0vector'', id asString ]'
 		classified: 'temp vars - vector'
 ]
 
