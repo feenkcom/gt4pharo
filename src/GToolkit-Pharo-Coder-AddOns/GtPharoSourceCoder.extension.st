@@ -277,7 +277,9 @@ GtPharoSourceCoder >> browseImplementorsAt: aTextPosition requesterObject: aRequ
 		detectSelectorAt: aTextPosition
 		ifFound: [ :aSelector | 
 			self
-				notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector)
+				notifyObjectSpawn: (GtSearchImplementorsFilter new
+						selector: aSelector;
+						requesterContext: self newFilterContext)
 				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
@@ -290,7 +292,9 @@ GtPharoSourceCoder >> browseImplementorsIn: aSourceString requesterObject: aRequ
 		detectSelectorIn: aSourceString
 		ifFound: [ :aSelector | 
 			self
-				notifyObjectSpawn: (GtSearchImplementorsFilter selector: aSelector)
+				notifyObjectSpawn: (GtSearchImplementorsFilter new
+						selector: aSelector;
+						requesterContext: self newFilterContext)
 				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
@@ -302,7 +306,8 @@ GtPharoSourceCoder >> browseReferencesAt: aTextPosition requesterObject: aReques
 	self
 		notifyObjectSpawn: (self
 				detectReferencesFilterAt: aTextPosition
-				ifFound: [ :aReferencesFilter | aReferencesFilter ]
+				ifFound: [ :aReferencesFilter | aReferencesFilter 
+					requesterContext: self newFilterContext ]
 				ifNone: [ GtSearchNullFilter new ])
 		requesterObject: aRequester
 ]
@@ -314,7 +319,8 @@ GtPharoSourceCoder >> browseReferencesIn: aSourceString requesterObject: aReques
 	self
 		notifyObjectSpawn: (self
 				detectReferencesFilterIn: aSourceString
-				ifFound: [ :aReferencesFilter | aReferencesFilter ]
+				ifFound: [ :aReferencesFilter | aReferencesFilter
+					requesterContext: self newFilterContext ]
 				ifNone: [ GtSearchNullFilter new ])
 		requesterObject: aRequester
 ]
@@ -390,6 +396,11 @@ GtPharoSourceCoder >> isInstanceVariable: aNode [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> newFilterContext [
+	^ GtSearchMethodCoderFilterContext new behavior: self behavior
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

@@ -6,7 +6,7 @@ Class {
 
 { #category : #'api - instantiation' }
 GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
-	| aModel aMethodsCoder aBuilder anUpdater aFiltersElement |
+	| aModel aMethodsCoder aBuilder anUpdater aFiltersElement defaultModels allModels |
 	aModel := GtFilterItemsModel new.
 	aFiltersElement := aModel asFiltersElement.
 	aFiltersElement 
@@ -18,6 +18,15 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
 	aBuilder := GtFilterMethodsCoderAvailableFiltersBuilder new
 			coders: aMethodsCoder.
 	aModel availableFiltersBuilder: aBuilder.
+	defaultModels := aModel availableFilters select: [ :aFilterModel | 
+		aFilterModel isDefaultFilterModel
+			and: [ (aModel items includes: aFilterModel) not ] ].
+	defaultModels ifNotEmpty: [ 
+		allModels := Array streamContents: [ :aStream |
+			aStream nextPutAll: aModel items.
+			aStream nextPutAll: defaultModels ].
+		aModel items: allModels ].
+	
 	anUpdater := GtFilterMethodCodersAdditionalFiltersUpdater new
 			coders: aMethodsCoder;
 			filtersModel: aModel.
