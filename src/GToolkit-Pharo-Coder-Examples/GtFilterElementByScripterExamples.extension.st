@@ -67,7 +67,7 @@ GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 1;
-		clickOnDropdownFilterItemAtIndex: 3;
+		clickOnDropdownFilterItemAtIndex: 4;
 		assertFilterModelAtIndex: 1
 			selectedValueIs: (GtFilterModelClassItem new itemClass: ProtoObject);
 		assertFilterModelsCountIs: 2;
@@ -90,7 +90,7 @@ GtFilterElementByScripterExamples >> classCoderSelectSuperclass [
 
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 1;
-		clickOnDropdownFilterItemAtIndex: 1;
+		clickOnDropdownFilterItemAtIndex: 2;
 		assertFilterModelAtIndex: 1
 			selectedValueIs: (GtFilterModelClassItem new itemClass: GtPharoDummyOneObject);
 		play.
