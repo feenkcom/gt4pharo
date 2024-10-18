@@ -32,7 +32,7 @@ GtStrictSymbolComparisonFlag class >> startUp: resuming [
 
 	"Any string comparisons made while processing the command line should not force strict comparison"
 	UseStrictComparison := false.
-	UseStrictComparison := Smalltalk commandLine argumentsInclude: '--symbolStrictComparison'.
+	UseStrictComparison := Smalltalk commandLine argumentsInclude: '--strictSymbolComparison'.
 ]
 
 { #category : #testing }
