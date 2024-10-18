@@ -38,7 +38,7 @@ GtPharoProgramNode >> completeVariable: token for: aStrategy [
 							and: [ aStrategy isCamelCaseSubsequence: prefix of: each ] ]))
 			merge: ((aStrategy variables asyncStreamStartingWith: '')
 					filter: [ :each | (each beginsWith: prefix) not and: [ aStrategy isSubsequence: prefix of: each ] ]))
-			withoutDuplicates.
+			withoutDuplicates useContentComparison.
 	^ stream
 		collect: [ :each | 
 			(each beginsWith: prefix)
