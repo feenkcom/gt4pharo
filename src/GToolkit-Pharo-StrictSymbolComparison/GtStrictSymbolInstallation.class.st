@@ -69,7 +69,8 @@ GtStrictSymbolInstallation >> installStringAndSymbolEquals [
 	Symbol compile:
 '= aSymbol
 	"Compare the receiver and aSymbol."
-	
+
+	Symbol strictComparison ifTrue: [ ^ self == aSymbol ].
 	self == aSymbol ifTrue: [^ true].
 	self class == aSymbol class ifTrue: [^ false].
 	"Use String comparison otherwise"
@@ -151,7 +152,7 @@ GtStrictSymbolInstallation >> refactorOCAbstractMethodScope [
 	<gtPharoPatch: #StrictComparison>
 	"the name of the tempVector is not a valid name of a temp variable
 	 This way we avoid name clashes "
-	^ tempVectorName'
+	^ tempVectorName ifNil: [ tempVectorName := ''0vector'', id asString ]'
 		classified: 'temp vars - vector'
 ]
 
