@@ -209,9 +209,69 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	^ aModel
 ]
 
+{ #category : #'examples - navigate to extensions' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToPackageWithExtensions_01_selectPackage [
+	<gtExample>
+	| aModel classesToShow |
+
+	aModel := self defaultModel.
+	aModel selectPackage: self packageWithExtensions.
+
+	self assert: aModel hasSelectedPackage.
+	self assert: aModel selectedPackage equals: self packageWithExtensions.
+
+	self assert: aModel hasSelectedTag not.
+	self assert: aModel hasSelectedClass not.
+
+	classesToShow := aModel classesToShow.
+	self assert: (classesToShow includes: self dummySuperclass).
+	self assert: (classesToShow includes: self dummySuperclass class) not.
+
+	self assertNoProtocolsNoSlotsNoMethods: aModel.
+
+	^ aModel
+]
+
+{ #category : #'examples - navigate to extensions' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToPackageWithExtensions_02_selectTag [
+	<gtExample>
+	| aModel aTag classesToShow |
+
+	aModel := self navigateToPackageWithExtensions_01_selectPackage.
+	
+	aTag := GtCoderPackageExtensionTag forPackage: self packageWithExtensions.
+	
+	aModel selectPackageTag: aTag.
+
+	self assert: aModel hasSelectedPackage.
+	self assert: aModel selectedPackage equals: self packageWithExtensions.
+	self assert: aModel hasSelectedTag.
+	self assert: aModel selectedTag equals: aTag.
+	
+	self assert: aModel hasSelectedClass not.
+
+	classesToShow := aModel classesToShow.
+	self assert: (classesToShow includes: self dummySuperclass).
+	self assert: (classesToShow includes: self dummySuperclass class) not.
+
+	self assertNoProtocolsNoSlotsNoMethods: aModel.
+
+	^ aModel
+]
+
+{ #category : #utilities }
+GtCoderNavigationPackagesTagsClassesModelExamples >> packageNameWithExtensions [
+	^ 'GT-PackageWithExtensions'
+]
+
 { #category : #utilities }
 GtCoderNavigationPackagesTagsClassesModelExamples >> packageNameWithSuperclasses [
 	^ 'GT-PackageWithSuperclasses'
+]
+
+{ #category : #utilities }
+GtCoderNavigationPackagesTagsClassesModelExamples >> packageWithExtensions [
+	^ self packageNameWithExtensions asPackage
 ]
 
 { #category : #utilities }

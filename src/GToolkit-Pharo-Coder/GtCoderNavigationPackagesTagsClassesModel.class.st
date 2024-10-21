@@ -106,8 +106,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
 		ifFalse: [ ^ #() ].
 
 	^ self hasSelectedTag
-		ifTrue: [ self selectedTag classes ]
-		ifFalse: [ self selectedPackage definedClasses ]
+		ifTrue: [ self privateClassesInPackageTag: self selectedTag ]
+		ifFalse: [ self privateClassesInPackage: self selectedPackage ]
 ]
 
 { #category : #'private - accessing' }
@@ -497,6 +497,26 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 	<return: #Collection of: #RPackage>
 
 	^ RPackageOrganizer default gtSortedPackages
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateClassesInPackage: aPackage [
+	| allClasses |
+	allClasses := aPackage definedClasses asSet.
+	aPackage extendedClasses do: [ :eachClass |
+		allClasses add: eachClass instanceSide ].
+	^ allClasses asArray
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateClassesInPackageTag: aPackageTag [
+	aPackageTag = (GtCoderPackageExtensionTag forPackage: aPackageTag package)
+		ifTrue: [
+			^ (aPackageTag package extendedClasses
+				collect: [ :eachClass | eachClass instanceSide ])
+					copyWithoutDuplicates ].
+
+	^ aPackageTag classes
 ]
 
 { #category : #'private - selection' }
