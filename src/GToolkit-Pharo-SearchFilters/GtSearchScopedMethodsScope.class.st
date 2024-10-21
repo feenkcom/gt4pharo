@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Support'
 }
 
+{ #category : #testing }
+GtSearchScopedMethodsScope class >> isAbstract [
+	^ self name = #GtSearchScopedMethodsScope
+]
+
 { #category : #factory }
 GtSearchScopedMethodsScope class >> itemInstancesForFilterContext: aFilterContext into: aStream [
 	self subclassResponsibility
