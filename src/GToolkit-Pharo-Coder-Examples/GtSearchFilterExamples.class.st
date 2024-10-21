@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 	<gtExample>
-	| aMethodsCoder aCollection anExamplesSuiteModel aTestSuiteModel aGtSearchFilter aMethodsCoder2 allClasses |
+	| aMethodsCoder aCollection anExamplesSuiteModel aTestSuiteModel aGtSearchFilter2 aMethodsCoder2 allClasses aGtSearchFilter3 aMethodsCoder3 |
 	aMethodsCoder := GtPharoStreamingMethodsCoder
 			forBehavior: GtPharoDummyTwoObject.
 	anExamplesSuiteModel := GtPharoExampleSuite
@@ -16,8 +16,13 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 	aTestSuiteModel := GtPharoTestSuite forStream: aMethodsCoder itemsStream.
 	aMethodsCoder testSuite: aTestSuiteModel.
 
-	aGtSearchFilter := GtSearchDeprecatedMethodsFilter new.
-	aMethodsCoder2 := GtPharoStreamingMethodsCoder forFilter: aGtSearchFilter.
+	aGtSearchFilter2 := GtSearchDeprecatedMethodsFilter new.
+	aMethodsCoder2 := GtPharoStreamingMethodsCoder forFilter: aGtSearchFilter2.
+	
+	aGtSearchFilter3 := GtSearchDeprecatedMethodsFilter new
+		requesterContext: (GtSearchMethodCoderFilterContext new
+			behavior: BlElement).
+	aMethodsCoder3 := GtPharoStreamingMethodsCoder forFilter: aGtSearchFilter3.
 
 	self assert: aMethodsCoder isForClass.
 	self assert: aMethodsCoder2 isForClass not.
@@ -31,8 +36,7 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 					do: [ :eachSearchClass | 
 						self
 							searchToFilterModelAndViceVersaFor: eachSearchClass
-							methodsCoders: {aMethodsCoder.
-									aMethodsCoder2}
+							methodsCoders: {aMethodsCoder. aMethodsCoder2. aMethodsCoder3}
 							into: aStream ] ].
 
 
