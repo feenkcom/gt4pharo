@@ -85,6 +85,13 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 			actionStencil: [ 
 				GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExamplesSuiteViewModel ] ].
 
+		anItemsView 
+			actionButtonIcon: BrGlamorousVectorIcons inspect
+			label: 'Filter' 
+			tooltip: 'Inspect the current search filter'
+			action: [ :aButton |
+				aButton phlow spawnObject: (aButton phlow firstParentWithView content phlow firstChildWithView phlow element query // GtPharoStreamingMethodsCoderElement) anyOne streamingCodersViewModel streamingCodersModel compositeFilter ].
+				
 	^ anItemsView
 ]
 
