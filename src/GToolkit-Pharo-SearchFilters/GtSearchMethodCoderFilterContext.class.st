@@ -13,7 +13,7 @@ GtSearchMethodCoderFilterContext >> behavior [
 
 { #category : #accessing }
 GtSearchMethodCoderFilterContext >> behavior: aBehavior [
-	^ self optionAt: #behavior put: aBehavior
+	self optionAt: #behavior put: aBehavior
 ]
 
 { #category : #accessing }
@@ -52,13 +52,31 @@ GtSearchMethodCoderFilterContext >> hasSelector [
 ]
 
 { #category : #accessing }
+GtSearchMethodCoderFilterContext >> nodeInPosition: anAstNode [
+	self optionAt: #nodeInPosition put: anAstNode
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> nodeInPositionDo: aBlock [
+	^ self nodeInPositionDo: aBlock ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> nodeInPositionDo: aPresentBlock ifNone: anAbsentBlock [
+	^ self
+		optionAt: #nodeInPosition
+		ifPresent: aPresentBlock
+		ifAbsent: anAbsentBlock
+]
+
+{ #category : #accessing }
 GtSearchMethodCoderFilterContext >> object [
 	^ self optionAt: #object ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
 GtSearchMethodCoderFilterContext >> object: anObject [
-	^ self optionAt: #object put: anObject
+	self optionAt: #object put: anObject
 ]
 
 { #category : #accessing }
@@ -76,13 +94,31 @@ GtSearchMethodCoderFilterContext >> scopedMethodsItems [
 ]
 
 { #category : #accessing }
+GtSearchMethodCoderFilterContext >> selectedScope: aScope [
+	self optionAt: #selectedScope put: aScope
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> selectedScopeDo: aBlock [
+	^ self selectedScopeDo: aBlock ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> selectedScopeDo: aPresentBlock ifNone: anAbsentBlock [
+	^ self
+		optionAt: #selectedScope
+		ifPresent: aPresentBlock
+		ifAbsent: anAbsentBlock
+]
+
+{ #category : #accessing }
 GtSearchMethodCoderFilterContext >> selector [
 	^ self optionAt: #selector ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
 GtSearchMethodCoderFilterContext >> selector: aMethodSelector [
-	^ self optionAt: #selector put: aMethodSelector
+	self optionAt: #selector put: aMethodSelector
 ]
 
 { #category : #accessing }
@@ -91,4 +127,22 @@ GtSearchMethodCoderFilterContext >> selectorDo: aBlock [
 		optionAt: #selector
 		ifPresent: aBlock
 		ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> selectorInPosition: aSelector [
+	self optionAt: #selectorInPosition put: aSelector
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> selectorInPositionDo: aBlock [
+	^ self selectorInPositionDo: aBlock ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtSearchMethodCoderFilterContext >> selectorInPositionDo: aPresentBlock ifNone: anAbsentBlock [
+	^ self
+		optionAt: #selectorInPosition
+		ifPresent: aPresentBlock
+		ifAbsent: anAbsentBlock
 ]

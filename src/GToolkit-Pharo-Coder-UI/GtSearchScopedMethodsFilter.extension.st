@@ -13,7 +13,11 @@ GtSearchScopedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 				beDefault;
 				displayAllItems;
 				items: aContext scopedMethodsItems;
-				selectFirstItem ].
+				in: [ :theModel |
+					aContext 
+						selectedScopeDo: [ :aScope | theModel selectedItem: aScope ]
+						ifNone: [ theModel selectFirstItem ] ];
+				yourself ].
 
 	^ nil
 ]
