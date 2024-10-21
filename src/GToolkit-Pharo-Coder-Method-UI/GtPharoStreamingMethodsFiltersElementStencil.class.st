@@ -28,7 +28,7 @@ GtPharoStreamingMethodsFiltersElementStencil class >> defaultStencil [
 { #category : #defaults }
 GtPharoStreamingMethodsFiltersElementStencil class >> defaultStencilClass [
 	^ DefaultBuilderClass
-		ifNil: [ DefaultBuilderClass := GtPharoStreamingMethodsFiltersElementFromDescriptorsStencil ]
+		ifNil: [ DefaultBuilderClass := GtPharoStreamingMethodsFiltersElementFromModelStencil ]
 ]
 
 { #category : #defaults }
