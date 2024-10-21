@@ -21,16 +21,17 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
 	defaultModels := aModel availableFilters select: [ :aFilterModel | 
 		aFilterModel isDefaultFilterModel
 			and: [ (aModel items includes: aFilterModel) not ] ].
-	defaultModels ifNotEmpty: [ 
-		allModels := Array streamContents: [ :aStream |
-			aStream nextPutAll: aModel items.
-			aStream nextPutAll: defaultModels ].
-		aModel items: allModels ].
 	
 	anUpdater := GtFilterMethodCodersAdditionalFiltersUpdater new
 			coders: aMethodsCoder;
 			filtersModel: aModel.
 	aFiltersElement userData at: GtFilterMethodCodersAdditionalFiltersUpdater put: anUpdater.
+	
+	defaultModels ifNotEmpty: [ 
+		allModels := Array streamContents: [ :aStream |
+			aStream nextPutAll: aModel items.
+			aStream nextPutAll: defaultModels ].
+		aModel items: allModels ].
 	
 	^ aFiltersElement
 ]
