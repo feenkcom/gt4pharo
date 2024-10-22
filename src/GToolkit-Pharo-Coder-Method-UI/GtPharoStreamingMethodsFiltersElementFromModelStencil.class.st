@@ -21,7 +21,7 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
 	defaultModels := aModel availableFilters select: [ :aFilterModel | 
 		aFilterModel isDefaultFilterModel
 			and: [ (aModel items includes: aFilterModel) not ] ].
-	globalDefaultModels := GtFilterDefaultSearchFilters searchFilters 
+	globalDefaultModels := GtFilterDefaultSearchFilters coderSearchFilters 
 		collect: [ :eachFilter | 
 				eachFilter filterDescriptor2For: streamingCodersViewModel streamingCodersModel ]
 		thenReject: #isNil.
