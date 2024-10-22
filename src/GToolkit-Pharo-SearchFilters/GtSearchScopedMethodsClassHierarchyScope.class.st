@@ -24,11 +24,6 @@ GtSearchScopedMethodsClassHierarchyScope >> gtIconName [
 	^ #class
 ]
 
-{ #category : #accessing }
-GtSearchScopedMethodsClassHierarchyScope >> icon [
-	^ BrGlamorousIcons verticaltree asElement
-]
-
 { #category : #testing }
 GtSearchScopedMethodsClassHierarchyScope >> includesMethod: aCompiledMethod [
 	<return: #Boolean>
