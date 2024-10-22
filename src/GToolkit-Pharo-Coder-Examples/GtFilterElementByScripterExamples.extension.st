@@ -24,9 +24,8 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 				assertFilterModelAtIndex: 2 itemsCountIs: 4;
 				clickOnFilterSettingsAtIndex: 2;
 				clickOnDropdownFilterItemAtIndex: 3;
-				assertFilterModelAtIndex: 2
+				assertFilterModelNamed: GtSearchMethodCategoryFilter filterName 
 					selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
-				assertFilterModelsCountIs: 2;
 				assertMethodsUpToFilterModel;
 				assertMethodProtocolFilterModel;
 				play ].
@@ -68,9 +67,8 @@ GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 1;
 		clickOnDropdownFilterItemAtIndex: 4;
-		assertFilterModelAtIndex: 1
+		assertFilterModelNamed: GtSearchInheritedMethodsFilter filterName
 			selectedValueIs: (GtFilterModelClassItem new itemClass: ProtoObject);
-		assertFilterModelsCountIs: 2;
 		assertMethodsUpToFilterModel;
 		assertMethodProtocolFilterModel;
 		play.

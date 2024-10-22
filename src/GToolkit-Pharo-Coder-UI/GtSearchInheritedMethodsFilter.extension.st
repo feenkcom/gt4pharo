@@ -13,7 +13,7 @@ GtSearchInheritedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 		items: aCurrentClass withAllSuperclasses;
 		selectedItem: aCurrentClass;
 		displayAllItems;
-		name: 'Methods up to';
+		name: self filterName;
 		order: 16
 ]
 
@@ -35,4 +35,9 @@ GtSearchInheritedMethodsFilter class >> filterDescriptorFor: aMethodsCoder [
 				completions: [ GtPrefixTree withAll: (currentClass withAllSuperclasses collect: #name) ] ];
 		emptyDefaultValue: currentClass name;
 		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchInheritedMethodsFilter class >> filterName [
+	^ 'Methods up to'
 ]
