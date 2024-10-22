@@ -14,8 +14,10 @@ GtPharoStreamingMethodsCoder class >> forBehavior: aBehavior [
 	^ (self
 		forFilter: ((GtSearchInheritedMethodsFilter forClass: aBehavior)
 				withSuperclassesUpTo: ProtoObject))
-		additionalFilters: {(GtSearchInheritedMethodsFilter forClass: aBehavior)
-					withSuperclassesUpTo: aBehavior};
+		additionalFilters: {
+			(GtSearchInheritedMethodsFilter forClass: aBehavior)
+				withSuperclassesUpTo: aBehavior.
+			GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName};
 		behavior: aBehavior
 ]
 

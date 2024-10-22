@@ -16,12 +16,12 @@ GtSearchScopedMethodsClassScope class >> itemInstancesForFilterContext: aFilterC
 
 { #category : #accessing }
 GtSearchScopedMethodsClassScope class >> order [
-	^ 300
+	^ 400
 ]
 
 { #category : #accessing }
 GtSearchScopedMethodsClassScope >> gtIconName [
-	^ #class
+	^ self itemClass gtSystemIconName ifNil: #class
 ]
 
 { #category : #testing }
@@ -34,9 +34,7 @@ GtSearchScopedMethodsClassScope >> includesMethod: aCompiledMethod [
 GtSearchScopedMethodsClassScope >> initialize [
 	super initialize.
 
-	filter := GtSearchInheritedMethodsFilter new
-			withSubclasses;
-			withSuperclasses
+	filter := GtSearchMethodsInClassFilter new
 ]
 
 { #category : #accessing }

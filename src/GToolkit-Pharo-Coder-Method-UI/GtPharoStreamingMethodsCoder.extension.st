@@ -33,10 +33,9 @@ GtPharoStreamingMethodsCoder >> classSlotFilter: aView [
 				items: (self behavior classSide allInstVarNames sorted: [ :a :b | a < b ])
 					title: [ :aVariable | aVariable ]
 					action: [ :aVariable | 
-						self
-							additionalFilters: {GtSearchClassSlotReferenceFilter
+						self addOrReplaceFilter: (GtSearchClassSlotReferenceFilter
 										forClass: self behavior classSide
-										andVariable: aVariable} ] ]
+										andVariable: aVariable) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
@@ -53,10 +52,9 @@ GtPharoStreamingMethodsCoder >> classVariableFilter: aView [
 				items: (self behavior instanceSide allClassVarNames sorted: [ :a :b | a < b ])
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable |
-					self additionalFilters: {
-						(GtSearchClassVariableReferenceFilter
+					self addOrReplaceFilter: (GtSearchClassVariableReferenceFilter
 							forClass: self behavior instanceSide
-							andVariable: aVariable) } ] ]
+							andVariable: aVariable) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
@@ -143,7 +141,7 @@ GtPharoStreamingMethodsCoder >> instanceSlotFilter: aView [
 				items: (self behavior instanceSide allInstVarNames sorted: [ :a :b | a < b ])
 				title: [ :aVariable | aVariable ]
 				action: [ :aVariable | self 
-					additionalFilters: { GtSearchInstanceSlotReferenceFilter
+					addOrReplaceFilter: (GtSearchInstanceSlotReferenceFilter
 						forClass: self behavior instanceSide
-						andVariable: aVariable } ] ]
+						andVariable: aVariable) ] ]
 ]

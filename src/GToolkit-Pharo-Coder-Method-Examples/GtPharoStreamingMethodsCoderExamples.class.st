@@ -21,7 +21,8 @@ GtPharoStreamingMethodsCoderExamples >> forClassWithTrait [
 	self
 		assert: aMethodsCoder additionalFilters
 		equals: {(GtSearchInheritedMethodsFilter forClass: GtPharoDummyObjectFour)
-					withSuperclassesUpTo: GtPharoDummyObjectFour}.
+					withSuperclassesUpTo: GtPharoDummyObjectFour.
+					GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName }.
 
 	self
 		assert: aMethodsCoder itemsStream toArray wait
@@ -67,7 +68,8 @@ GtPharoStreamingMethodsCoderExamples >> forSuperclass [
 	self
 		assert: aMethodsCoder additionalFilters
 		equals: {(GtSearchInheritedMethodsFilter forClass: GtPharoCoderMockedSuperclass)
-					withSuperclassesUpTo: GtPharoCoderMockedSuperclass}.
+					withSuperclassesUpTo: GtPharoCoderMockedSuperclass.
+					GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName}.
 	self
 		assert: aMethodsCoder itemsStream toArray wait
 		equals: {GtPharoCoderMockedSuperclass >> #instanceMethodA.
@@ -115,7 +117,8 @@ GtPharoStreamingMethodsCoderExamples >> forTrait [
 	self
 		assert: aMethodsCoder additionalFilters
 		equals: {(GtSearchInheritedMethodsFilter forClass: TGtPharoDummyTraitFour)
-					withSuperclassesUpTo: TGtPharoDummyTraitFour}.
+					withSuperclassesUpTo: TGtPharoDummyTraitFour.
+					GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName}.
 					
 	self
 		assert: aMethodsCoder itemsStream toArray wait
