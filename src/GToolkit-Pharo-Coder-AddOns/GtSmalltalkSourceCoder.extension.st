@@ -304,6 +304,11 @@ GtSmalltalkSourceCoder >> moveStatementsOrCascadesUpWithin: aSelectionInterval i
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> newFilterContext [
+	^ GtSearchMethodCoderFilterContext new 
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder class >> nodeHighlight [
 	^ NodeHighlight
 		ifNil: [ NodeHighlight := BlTextHighlightAttribute new

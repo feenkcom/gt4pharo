@@ -107,7 +107,7 @@ GtPharoMethodCoder >> browseHierarchyReferencesAt: aTextPosition requesterObject
 		detectSelectorAt: aTextPosition
 		ifFound: [ :aSelector :anAstNode | 
 			self
-				notifyObjectSpawn: (aSelector gtImplementors
+				notifyObjectSpawn: (aSelector gtSenders
 						requesterContext: (self newFilterContext
 							selectorInPosition: aSelector;
 							nodeInPosition: anAstNode;
