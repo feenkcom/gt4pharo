@@ -166,8 +166,21 @@ GtPharoMethodTestCase >> play [
 
 { #category : #'private - execution' }
 GtPharoMethodTestCase >> rawDebug [
-	self testCaseInstance debug.
-	self result: TestResult new
+	| newResult testCase |
+	newResult := nil.
+	testCase := self testCaseInstance.
+	[ 
+		testCase setUp.
+		[
+			testCase tests do: [:each |
+				newResult := testCase resultClass new.
+				each debug: newResult.
+				testCase announceTest: each.
+				testCase changed: each]
+		] ensure: [testCase tearDown].
+	] ensure: [
+		self result: (newResult ifNil: [
+			testCase resultClass new ]) ]
 ]
 
 { #category : #'private - execution' }
