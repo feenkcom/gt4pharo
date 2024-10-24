@@ -150,6 +150,19 @@ GtPharoIndex >> asyncImplementersForWord: aString [
 ]
 
 { #category : #'accessing - implementers' }
+GtPharoIndex >> asyncImplementersForWord: aString convertUsing: aWordToCompiledMethodBlock [
+	"Return an async stream with compiled methods.
+	aWordToCompiledMethodBlock receives a selector and returns compiled method or nil."
+
+	^ ((self
+		asyncSearchForWords: aString
+		in: selectorWordCache)
+		collect: aWordToCompiledMethodBlock)
+		select: [ :aCompiledMethodOrNil | 
+			aCompiledMethodOrNil notNil and: [ aCompiledMethodOrNil gtIsActive ] ].
+]
+
+{ #category : #'accessing - implementers' }
 GtPharoIndex >> asyncInstalledImplementersForWord: aString [
 	^ (self asyncAllImplementersForWord: aString)
 		select: [ :aCompiledMethod | aCompiledMethod gtIsActive ]
