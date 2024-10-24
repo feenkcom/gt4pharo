@@ -406,7 +406,8 @@ GtPharoSourceCoder >> isLocalVariable: aNode [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> newFilterContext [
-	^ GtSearchMethodCoderFilterContext new behavior: self behavior
+	^ super newFilterContext 
+		behavior: self behavior
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

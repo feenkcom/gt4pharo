@@ -16,7 +16,7 @@ GtSearchScopedMethodsClassHierarchyScope class >> itemInstancesForFilterContext:
 
 { #category : #accessing }
 GtSearchScopedMethodsClassHierarchyScope class >> order [
-	^ 300
+	^ 50
 ]
 
 { #category : #accessing }

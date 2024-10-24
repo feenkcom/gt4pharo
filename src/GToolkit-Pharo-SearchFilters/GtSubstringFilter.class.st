@@ -37,6 +37,8 @@ GtSubstringFilter >> hash [
 
 { #category : #testing }
 GtSubstringFilter >> includesMethod: aCompiledMethod [
+	aCompiledMethod isSourceSearchable ifFalse: [ ^ false ].
+
 	^ (aCompiledMethod sourceCode
 		findString: self substring
 		startingAt: 1
