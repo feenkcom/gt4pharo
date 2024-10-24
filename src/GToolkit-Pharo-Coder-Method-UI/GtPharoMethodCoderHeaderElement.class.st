@@ -157,8 +157,8 @@ GtPharoMethodCoderHeaderElement >> resetBreadcrumbElements [
 GtPharoMethodCoderHeaderElement >> showIconNamed: anIconName in: anIconContainer [
 	(anIconName isNil or:[ anIconName isEmpty ])
 		ifTrue: [ ^ self ].
-	(anIconName = Object systemIconName or: [ 
-		anIconName = AbstractLayout systemIconName ]) ifTrue: [ 
+	((anIconName sameContentAs: Object systemIconName) or: [ 
+		anIconName sameContentAs: AbstractLayout systemIconName ]) ifTrue: [ 
 			"We only show the icon in case it is a custom one"
 			^ self ].
 	
