@@ -82,7 +82,7 @@ TGtPharoSourceCoderAstNodesDetection >> detectSelectorAt: aTextPosition ifFound:
 		ifFound: [ :aNode |
 			self
 				nodeToSelector: aNode
-				ifFound: aFoundBlock
+				ifFound: [ :aSelector | aFoundBlock cull: aSelector cull: aNode ]
 				ifNone: aNoneBlock ]
 		ifNone: aNoneBlock
 ]
@@ -100,7 +100,7 @@ TGtPharoSourceCoderAstNodesDetection >> detectSelectorIn: aSourceString ifFound:
 
 	^ self
 		nodeToSelector: aNode
-		ifFound: aFoundBlock
+		ifFound: [ :aSelector | aFoundBlock cull: aSelector cull: aNode ]
 		ifNone: aNoneBlock
 ]
 
@@ -123,20 +123,20 @@ TGtPharoSourceCoderAstNodesDetection >> nodeToReferencesFilter: aNode withBehavi
 					ifFound: aFoundBlock
 					ifNone: aNoneBlock ].
 		(aCurrentNode isKindOf: GtPharoPragmaNode)
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForPragma: aCurrentNode selector) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForPragma: aCurrentNode selector) cull: aCurrentNode ].
 		(aCurrentNode isKindOf: GtPharoSymbolLiteralNode)
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForLiteral: aCurrentNode asSymbol) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForLiteral: aCurrentNode asSymbol) cull: aCurrentNode ].
 		(aCurrentNode isKindOf: GtPharoStringLiteralNode)
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForString: aCurrentNode value value) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForString: aCurrentNode value value) cull: aCurrentNode ].
 		(aCurrentNode isKindOf: GtPharoCharacterLiteralNode)
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForCharacter: aCurrentNode value value) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForCharacter: aCurrentNode value value) cull: aCurrentNode ].
 		(aCurrentNode isKindOf: GtPharoBooleanLiteralNode)
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForBoolean: aCurrentNode value value) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForBoolean: aCurrentNode value value) cull: aCurrentNode ].
 		(aCurrentNode isKindOf: GtPharoNumberLiteralNode)
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForNumber: aCurrentNode value value) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForNumber: aCurrentNode value value) cull: aCurrentNode ].
 		((aCurrentNode isKindOf: GtPharoMessageNode)
 			or: [ aCurrentNode isKindOf: GtPharoMethodPatternNode ])
-			ifTrue: [ ^ aFoundBlock value: (self referencesFilterForLiteral: aCurrentNode selector) ].
+			ifTrue: [ ^ aFoundBlock cull: (self referencesFilterForLiteral: aCurrentNode selector) cull: aCurrentNode ].
 		(aCurrentNode isKindOf: GtPharoMessageSendNode)
 			ifTrue: [ aCurrentNode := aCurrentNode message ]
 			ifFalse: [ aCurrentNode := aCurrentNode parent ] ].
@@ -287,16 +287,22 @@ TGtPharoSourceCoderAstNodesDetection >> variableNodeToReferencesFilter: aVariabl
 	aVariableIndex > 0
 		ifTrue: [
 			aDefiningClass := aTargetBehaviour whichClassDefinesInstVar: aVariableName.
-			^ aFoundBlock value: (GtSearchInstanceSlotReferenceFilter
-				forClassAndSubclasses: aDefiningClass
-				andVariable: aVariableName) ].
+			^ aFoundBlock 
+				cull: (GtSearchInstanceSlotReferenceFilter
+					forClassAndSubclasses: aDefiningClass
+					andVariable: aVariableName)
+				 cull: aVariableNode ].
 
 	aBinding := aTargetBehaviour bindingOf: aVariableName.
 	aBinding notNil
-		ifTrue: [ ^ aFoundBlock value: (GtSearchReferencesFilter literal: aBinding) ].
+		ifTrue: [ ^ aFoundBlock 
+			cull: (GtSearchReferencesFilter literal: aBinding) 
+			cull: aVariableNode ].
 		
-	"At this point we know that it is not an instance/class varaible, nor it is a binding.
+	"At this point we know that it is not an instance/class variable, nor it is a binding.
 	We therefore fallback to the basic literal references filter"
 
-	^ aFoundBlock value: (self referencesFilterForLiteral: aVariableName asSymbol)
+	^ aFoundBlock 
+		cull: (self referencesFilterForLiteral: aVariableName asSymbol)
+		cull: aVariableNode
 ]

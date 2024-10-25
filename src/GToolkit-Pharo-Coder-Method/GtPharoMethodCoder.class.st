@@ -90,10 +90,13 @@ GtPharoMethodCoder >> behavior: aBehavior [
 GtPharoMethodCoder >> browseHierarchyImplementorsAt: aTextPosition requesterObject: aRequester [
 	self
 		detectSelectorAt: aTextPosition
-		ifFound: [ :aSelector | 
+		ifFound: [ :aSelector :anAstNode | 
 			self
-				notifyObjectSpawn: (GtSearchMethodsInClassFilter forClass: self behavior) withSuperclasses
-						withSubclasses & aSelector gtImplementors
+				notifyObjectSpawn: (aSelector gtImplementors
+						requesterContext: (self newFilterContext
+							selectorInPosition: aSelector;
+							nodeInPosition: anAstNode;
+							selectedScope: (GtSearchScopedMethodsClassHierarchyScope new itemClass: self behavior)))
 				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
@@ -102,10 +105,13 @@ GtPharoMethodCoder >> browseHierarchyImplementorsAt: aTextPosition requesterObje
 GtPharoMethodCoder >> browseHierarchyReferencesAt: aTextPosition requesterObject: aRequester [
 	self
 		detectSelectorAt: aTextPosition
-		ifFound: [ :aSelector | 
+		ifFound: [ :aSelector :anAstNode | 
 			self
-				notifyObjectSpawn: (GtSearchMethodsInClassFilter forClass: self behavior) withSuperclasses
-						withSubclasses & aSelector gtSenders
+				notifyObjectSpawn: (aSelector gtSenders
+						requesterContext: (self newFilterContext
+							selectorInPosition: aSelector;
+							nodeInPosition: anAstNode;
+							selectedScope: (GtSearchScopedMethodsClassHierarchyScope new itemClass: self behavior)))
 				requesterObject: aRequester ]
 		ifNone: [  ]
 ]

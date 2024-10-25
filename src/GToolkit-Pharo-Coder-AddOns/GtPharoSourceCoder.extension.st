@@ -275,11 +275,13 @@ GtPharoSourceCoder >> browseImplementorsAt: aTextPosition requesterObject: aRequ
 
 	self
 		detectSelectorAt: aTextPosition
-		ifFound: [ :aSelector | 
+		ifFound: [ :aSelector :anAstNode | 
 			self
 				notifyObjectSpawn: (GtSearchImplementorsFilter new
 						selector: aSelector;
-						requesterContext: self newFilterContext)
+						requesterContext: (self newFilterContext
+							nodeInPosition: anAstNode;
+							selectorInPosition: aSelector))
 				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
@@ -290,11 +292,13 @@ GtPharoSourceCoder >> browseImplementorsIn: aSourceString requesterObject: aRequ
 
 	self
 		detectSelectorIn: aSourceString
-		ifFound: [ :aSelector | 
+		ifFound: [ :aSelector :anAstNode | 
 			self
 				notifyObjectSpawn: (GtSearchImplementorsFilter new
 						selector: aSelector;
-						requesterContext: self newFilterContext)
+						requesterContext: (self newFilterContext
+							nodeInPosition: anAstNode;
+							selectorInPosition: aSelector))
 				requesterObject: aRequester ]
 		ifNone: [  ]
 ]
@@ -306,8 +310,9 @@ GtPharoSourceCoder >> browseReferencesAt: aTextPosition requesterObject: aReques
 	self
 		notifyObjectSpawn: (self
 				detectReferencesFilterAt: aTextPosition
-				ifFound: [ :aReferencesFilter | aReferencesFilter 
-					requesterContext: self newFilterContext ]
+				ifFound: [ :aReferencesFilter :anAstNode | aReferencesFilter 
+					requesterContext: (self newFilterContext
+							nodeInPosition: anAstNode) ]
 				ifNone: [ GtSearchNullFilter new ])
 		requesterObject: aRequester
 ]
@@ -319,8 +324,9 @@ GtPharoSourceCoder >> browseReferencesIn: aSourceString requesterObject: aReques
 	self
 		notifyObjectSpawn: (self
 				detectReferencesFilterIn: aSourceString
-				ifFound: [ :aReferencesFilter | aReferencesFilter
-					requesterContext: self newFilterContext ]
+				ifFound: [ :aReferencesFilter :anAstNode | aReferencesFilter 
+					requesterContext: (self newFilterContext
+							nodeInPosition: anAstNode) ]
 				ifNone: [ GtSearchNullFilter new ])
 		requesterObject: aRequester
 ]
@@ -400,7 +406,8 @@ GtPharoSourceCoder >> isLocalVariable: aNode [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> newFilterContext [
-	^ GtSearchMethodCoderFilterContext new behavior: self behavior
+	^ super newFilterContext 
+		behavior: self behavior
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

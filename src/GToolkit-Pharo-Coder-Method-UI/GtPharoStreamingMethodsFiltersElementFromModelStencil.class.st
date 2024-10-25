@@ -6,7 +6,7 @@ Class {
 
 { #category : #'api - instantiation' }
 GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
-	| aModel aMethodsCoder aBuilder anUpdater aFiltersElement defaultModels allModels |
+	| aModel aMethodsCoder aBuilder anUpdater aFiltersElement defaultModels allModels globalDefaultModels |
 	aModel := GtFilterItemsModel new.
 	aFiltersElement := aModel asFiltersElement.
 	aFiltersElement 
@@ -21,16 +21,22 @@ GtPharoStreamingMethodsFiltersElementFromModelStencil >> create [
 	defaultModels := aModel availableFilters select: [ :aFilterModel | 
 		aFilterModel isDefaultFilterModel
 			and: [ (aModel items includes: aFilterModel) not ] ].
-	defaultModels ifNotEmpty: [ 
-		allModels := Array streamContents: [ :aStream |
-			aStream nextPutAll: aModel items.
-			aStream nextPutAll: defaultModels ].
-		aModel items: allModels ].
+	globalDefaultModels := GtFilterDefaultSearchFilters coderSearchFilters 
+		collect: [ :eachFilter | 
+				eachFilter filterDescriptor2For: streamingCodersViewModel streamingCodersModel ]
+		thenReject: #isNil.
 	
 	anUpdater := GtFilterMethodCodersAdditionalFiltersUpdater new
 			coders: aMethodsCoder;
 			filtersModel: aModel.
 	aFiltersElement userData at: GtFilterMethodCodersAdditionalFiltersUpdater put: anUpdater.
+	
+	(defaultModels isNotNil or: [ globalDefaultModels isNotNil ]) ifTrue: [ 
+		allModels := Array streamContents: [ :aStream |
+			aStream nextPutAll: aModel items.
+			aStream nextPutAll: defaultModels.
+			aStream nextPutAll: globalDefaultModels ].
+		aModel items: allModels ].
 	
 	^ aFiltersElement
 ]

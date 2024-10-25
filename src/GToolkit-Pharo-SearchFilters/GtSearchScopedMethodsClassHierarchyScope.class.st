@@ -16,17 +16,12 @@ GtSearchScopedMethodsClassHierarchyScope class >> itemInstancesForFilterContext:
 
 { #category : #accessing }
 GtSearchScopedMethodsClassHierarchyScope class >> order [
-	^ 300
+	^ 50
 ]
 
 { #category : #accessing }
 GtSearchScopedMethodsClassHierarchyScope >> gtIconName [
 	^ #class
-]
-
-{ #category : #accessing }
-GtSearchScopedMethodsClassHierarchyScope >> icon [
-	^ BrGlamorousIcons verticaltree asElement
 ]
 
 { #category : #testing }
