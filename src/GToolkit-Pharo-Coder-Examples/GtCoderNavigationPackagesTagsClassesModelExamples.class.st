@@ -213,7 +213,26 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	self assert: (slotsToShow detect: [ :each| each name = #classVarA ]) isNotNil.
 	self assert: (slotsToShow detect: [ :each| each name = #staticVarA ]) isNotNil.
 
-	^ slotsToShow
+	^ aModel
+]
+
+{ #category : #'examples - navigate to class' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_04_selectSlot [
+	<gtExample>
+	| aModel aSlotToSelect |
+
+	
+	aModel := self navigateToClass_03_selectClass.
+	
+	aSlotToSelect := aModel slotsToShow detect: [ :each | each name = #varA ].
+	aModel selectSlot: aSlotToSelect.
+	
+	self assert: aModel hasSelectedProtocol not.
+	self assert: aModel hasSelectedMethod not.
+	
+	self assert: aModel selectedSlot equals: aSlotToSelect.
+
+	^ aModel
 ]
 
 { #category : #'examples - navigate to extensions' }

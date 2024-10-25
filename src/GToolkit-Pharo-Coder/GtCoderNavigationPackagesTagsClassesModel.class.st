@@ -667,6 +667,21 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectProtocol: aGtPharo
 	^ true
 ]
 
+{ #category : #'private - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectSlot: aSlot source: aSourceObject [
+	"Just select a slot a notify about the changes"
+	self
+		assert: [ aSlot isNotNil ]
+		description: [ 'Slot must not be nil' ].
+		
+	selectedSlot = aSlot
+		ifTrue: [ ^ false ].
+
+	selectedSlot := aSlot.
+	self notifySlotSelected: aSlot source: aSourceObject.
+	^ true
+]
+
 { #category : #'private - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> privateProtocolOfMethod: aCompiledMethod [
 	| aProtocol |
@@ -899,10 +914,20 @@ GtCoderNavigationPackagesTagsClassesModel >> selectProtocol: aPharoProtocol sour
 ]
 
 { #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot [
+	self
+		selectSlot: aSlot
+		source: self
+]
+
+{ #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
-	selectedSlot := aSlot.
-	selectedProtocol := nil.
-	self notifySlotSelected: aSlot source: aSource
+	(self privateJustSelectSlot: aSlot source: aSource)
+		ifFalse: [ ^ self ].
+
+	self privateJustDeselectProtocol.
+	self deselectMethod.
+	self notifyMethodsToShowChanged.
 ]
 
 { #category : #'api - accessing' }
