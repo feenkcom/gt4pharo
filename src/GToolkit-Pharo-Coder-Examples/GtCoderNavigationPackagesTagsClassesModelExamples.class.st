@@ -186,10 +186,10 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	aModel selectClass: aClassToSelect.
 
 	self assertSelectedPackageTagClass: aModel ofClass: aClassToSelect.
-	
+
 	classesToShow := aModel classesToShow.
 	self assert: (classesToShow includes: aClassToSelect).
-	
+
 	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
 
 	self assert: (protocolsToShow includes: 'All').
@@ -209,8 +209,11 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	self assert: (methodsToShow includes: aClassToSelect class >> #instanceCreationMethod).
 	
 	slotsToShow := aModel slotsToShow.
+	self assert: (slotsToShow detect: [ :each| each name = #varA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classVarA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #staticVarA ]) isNotNil.
 
-	^ aModel
+	^ slotsToShow
 ]
 
 { #category : #'examples - navigate to extensions' }

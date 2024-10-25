@@ -430,6 +430,7 @@ GtCoderNavigationPackagesTagsClassesModel >> notifySlotSelected: aSlot source: a
 
 { #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifySlotsToShowChanged [
+	self announce: (GtCoderNavigationSlotsToShowChanged new coder: coder)
 ]
 
 { #category : #'private - announcement handling' }
@@ -982,18 +983,18 @@ GtCoderNavigationPackagesTagsClassesModel >> showPackage: anRPackage [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> slotsToShow [
 	<return: #Collection of: #GtPharoProtocol>
-	| currentClass instanceSlots classInstanceSlots classSlots |
+	| currentClass instanceSideSlots classSideSlots staticSlots |
 	
 	self hasSelectedClass
 		ifFalse: [ ^ #() ].
 
 	currentClass := self selectedClass.
 
-	instanceSlots := currentClass instanceSide instanceVariables.
-	classInstanceSlots := currentClass classSide instanceVariables.
-	classSlots := currentClass classVariables.
+	instanceSideSlots := currentClass instanceSide instanceVariables.
+	classSideSlots := currentClass classSide instanceVariables.
+	staticSlots := currentClass classVariables.
 	
-	^ instanceSlots, classInstanceSlots, classSlots
+	^ instanceSideSlots, classSideSlots, staticSlots
 ]
 
 { #category : #'api - subscriptions' }

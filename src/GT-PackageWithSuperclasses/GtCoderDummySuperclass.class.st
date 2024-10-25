@@ -4,6 +4,12 @@ Class {
 	#instVars : [
 		'varA'
 	],
+	#classVars : [
+		'staticVarA'
+	],
+	#classInstVars : [
+		'classVarA'
+	],
 	#category : #'GT-PackageWithSuperclasses-Classes'
 }
 
