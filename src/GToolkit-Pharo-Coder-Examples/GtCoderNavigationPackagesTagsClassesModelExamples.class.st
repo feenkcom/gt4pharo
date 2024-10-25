@@ -178,7 +178,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_02_selectTa
 { #category : #'examples - navigate to class' }
 GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectClass [
 	<gtExample>
-	| aModel classesToShow protocolsToShow aClassToSelect methodsToShow |
+	| aModel classesToShow protocolsToShow aClassToSelect methodsToShow slotsToShow |
 
 	aClassToSelect := self dummySuperclass.
 	
@@ -200,11 +200,15 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	self assert: aModel hasSelectedProtocol.
 	self assert: aModel selectedProtocol name equals: 'All'.
 	
+	self assert: aModel hasSelectedSlot not.
+	
 	methodsToShow := aModel methodsToShow.
 	
 	self assert: (methodsToShow includes: aClassToSelect >> #unclassifiedMethod).
 	self assert: (methodsToShow includes: aClassToSelect >> #methodInApiProtocol).
 	self assert: (methodsToShow includes: aClassToSelect class >> #instanceCreationMethod).
+	
+	slotsToShow := aModel slotsToShow.
 
 	^ aModel
 ]

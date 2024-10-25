@@ -1,6 +1,9 @@
 Class {
 	#name : #GtCoderDummySuperclass,
 	#superclass : #Object,
+	#instVars : [
+		'varA'
+	],
 	#category : #'GT-PackageWithSuperclasses-Classes'
 }
 

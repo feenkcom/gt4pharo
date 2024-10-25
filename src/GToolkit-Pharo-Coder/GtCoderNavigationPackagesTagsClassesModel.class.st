@@ -979,6 +979,23 @@ GtCoderNavigationPackagesTagsClassesModel >> showPackage: anRPackage [
 	^ true
 ]
 
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> slotsToShow [
+	<return: #Collection of: #GtPharoProtocol>
+	| currentClass instanceSlots classInstanceSlots classSlots |
+	
+	self hasSelectedClass
+		ifFalse: [ ^ #() ].
+
+	currentClass := self selectedClass.
+
+	instanceSlots := currentClass instanceSide instanceVariables.
+	classInstanceSlots := currentClass classSide instanceVariables.
+	classSlots := currentClass classVariables.
+	
+	^ instanceSlots, classInstanceSlots, classSlots
+]
+
 { #category : #'api - subscriptions' }
 GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 	SystemAnnouncer uniqueInstance weak
