@@ -50,10 +50,10 @@ GtClassCreationForm >> classVars: anObject [
 GtClassCreationForm >> classVarsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Class vars';
+		label: 'Class-side vars';
 		priority: 7;
 		accessor: #classVars;
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
+		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose values are shared across all instances of a class and that class itself. Subclasses allocate their own memory for the class-side vars of the superclasses and don''t inherit their values.') ];
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil)
 ]
@@ -110,7 +110,7 @@ GtClassCreationForm >> pools: anObject [
 GtClassCreationForm >> poolsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Pools';
+		label: 'Shared var. pools';
 		priority: 7;
 		accessor: #pools;
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];

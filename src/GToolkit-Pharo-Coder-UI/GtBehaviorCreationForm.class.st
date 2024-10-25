@@ -34,11 +34,11 @@ GtBehaviorCreationForm >> classSlots: anObject [
 GtBehaviorCreationForm >> classSlotsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Class Slots';
+		label: 'Static vars';
 		priority: 10;
 		accessor: #classSlots;
 		classes: {String};
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
+		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose values (memory) is shared across all instances of a class and its subclasses.') ];
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
@@ -133,10 +133,10 @@ GtBehaviorCreationForm >> slots: anObject [
 GtBehaviorCreationForm >> slotsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Slots';
+		label: 'Instance-side vars';
 		priority: 5;
 		accessor: #slots;
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle +  (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose value is scoped to an instance of a class.')];
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
