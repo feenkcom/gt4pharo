@@ -35,7 +35,7 @@ GtBehaviorCreationForm >> classSlotsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
 		label: 'Class-side vars';
-		priority: 6;
+		priority: 7;
 		accessor: #classSlots;
 		classes: {String};
 		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose values are shared across all instances of a class and that class itself. Subclasses allocate their own memory for the class-side vars of the superclasses and don''t inherit their values.') ];
