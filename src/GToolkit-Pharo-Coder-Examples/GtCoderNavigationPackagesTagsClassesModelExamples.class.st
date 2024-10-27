@@ -178,7 +178,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_02_selectTa
 { #category : #'examples - navigate to class' }
 GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectClass [
 	<gtExample>
-	| aModel classesToShow protocolsToShow aClassToSelect methodsToShow |
+	| aModel classesToShow protocolsToShow aClassToSelect methodsToShow slotsToShow |
 
 	aClassToSelect := self dummySuperclass.
 	
@@ -186,10 +186,10 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	aModel selectClass: aClassToSelect.
 
 	self assertSelectedPackageTagClass: aModel ofClass: aClassToSelect.
-	
+
 	classesToShow := aModel classesToShow.
 	self assert: (classesToShow includes: aClassToSelect).
-	
+
 	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
 
 	self assert: (protocolsToShow includes: 'All').
@@ -200,11 +200,37 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	self assert: aModel hasSelectedProtocol.
 	self assert: aModel selectedProtocol name equals: 'All'.
 	
+	self assert: aModel hasSelectedSlot not.
+	
 	methodsToShow := aModel methodsToShow.
 	
 	self assert: (methodsToShow includes: aClassToSelect >> #unclassifiedMethod).
 	self assert: (methodsToShow includes: aClassToSelect >> #methodInApiProtocol).
 	self assert: (methodsToShow includes: aClassToSelect class >> #instanceCreationMethod).
+	
+	slotsToShow := aModel slotsToShow.
+	self assert: (slotsToShow detect: [ :each| each name = #varA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classVarA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #staticVarA ]) isNotNil.
+
+	^ aModel
+]
+
+{ #category : #'examples - navigate to class' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_04_selectSlot [
+	<gtExample>
+	| aModel aSlotToSelect |
+
+	
+	aModel := self navigateToClass_03_selectClass.
+	
+	aSlotToSelect := aModel slotsToShow detect: [ :each | each name = #varA ].
+	aModel selectSlot: aSlotToSelect.
+	
+	self assert: aModel hasSelectedProtocol not.
+	self assert: aModel hasSelectedMethod not.
+	
+	self assert: aModel selectedSlot equals: aSlotToSelect.
 
 	^ aModel
 ]

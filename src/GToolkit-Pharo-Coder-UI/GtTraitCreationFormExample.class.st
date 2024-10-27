@@ -69,11 +69,10 @@ GtTraitCreationFormExample >> scripterWithSlotsFilled [
 		assertStep: [ :s | 
 			s
 				label: 'Check that slots are set';
-				satisfies: [ :aFrame | 
+				value: [ :aFrame | 
 					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-						currentValue
-						= {'abc'.
-								'bcd'} ] ].
+						currentValue ] 
+					equals: {'abc'. 'bcd'} ].
 
 	^ scripter
 ]
@@ -92,6 +91,12 @@ GtTraitCreationFormExample >> scripterWithSlotsNavigated [
 				label: 'Tab to tag editor';
 				key: BlKeyboardKey tab ].
 
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Tab to slots';
+				key: BlKeyboardKey tab ].
+				
 	scripter
 		keyPressStep: [ :s | 
 			s

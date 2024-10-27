@@ -146,6 +146,7 @@ GtSearchInstanceSlotReferenceFilter >> includeWriters: aBoolean [
 GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 	| index |
 	(super includesMethod: aCompiledMethod) ifFalse: [ ^ false ].
+	variableName ifEmpty: [ ^ true ].
 	index := filterClass instVarIndexFor: variableName ifAbsent: [ ^ false ].
 	^ (includeReaders and: [ aCompiledMethod readsField: index ])
 		or: [ includeWriters and: [ aCompiledMethod writesField: index ] ]
@@ -154,6 +155,7 @@ GtSearchInstanceSlotReferenceFilter >> includesMethod: aCompiledMethod [
 { #category : #'initialize-release' }
 GtSearchInstanceSlotReferenceFilter >> initialize [
 	super initialize.
+	variableName := '' asSymbol.
 	includeSubclasses := true.
 	includeReaders := true.
 	includeWriters := true
