@@ -143,7 +143,7 @@ GtExtractExampleFromSnippetController >> receiverInSend: send [
 GtExtractExampleFromSnippetController >> refactoring [
 	| refactoring |
 	self shouldCreateClass
-		ifFalse: [ refactoring := GtExtractExampleFromSnippetToVariableRefactoring
+		ifFalse: [ refactoring := self refactoringClassForExistingClass
 					extract: self extractionInterval
 					from: originalSource.
 			refactoring
@@ -176,6 +176,11 @@ GtExtractExampleFromSnippetController >> refactoring [
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> refactoringClass [
 	^ GtExtractExampleFromSnippetToClassRefactoring
+]
+
+{ #category : #accessing }
+GtExtractExampleFromSnippetController >> refactoringClassForExistingClass [
+	^ GtExtractExampleFromSnippetToVariableRefactoring
 ]
 
 { #category : #accessing }
