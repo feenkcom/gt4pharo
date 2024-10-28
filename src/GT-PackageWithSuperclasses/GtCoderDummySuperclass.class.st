@@ -2,16 +2,21 @@ Class {
 	#name : #GtCoderDummySuperclass,
 	#superclass : #Object,
 	#instVars : [
-		'varA'
+		'slotA'
 	],
 	#classVars : [
-		'staticVarA'
+		'classVarA'
 	],
 	#classInstVars : [
-		'classVarA'
+		'classSlotA'
 	],
 	#category : #'GT-PackageWithSuperclasses-Classes'
 }
+
+{ #category : #initialization }
+GtCoderDummySuperclass class >> initialize [
+	"Class side initialization"
+]
 
 { #category : #'instance creation' }
 GtCoderDummySuperclass class >> instanceCreationMethod [
@@ -19,8 +24,13 @@ GtCoderDummySuperclass class >> instanceCreationMethod [
 ]
 
 { #category : #'methods reading slots' }
-GtCoderDummySuperclass class >> methodReadingClassVarA [
-	^ classVarA
+GtCoderDummySuperclass class >> methodReadingClassSlotA [
+	^ classSlotA
+]
+
+{ #category : #initialization }
+GtCoderDummySuperclass >> initialize [
+	"Instance side initialization"
 ]
 
 { #category : #api }
@@ -28,13 +38,13 @@ GtCoderDummySuperclass >> methodInApiProtocol [
 ]
 
 { #category : #'methods reading slots' }
-GtCoderDummySuperclass >> methodReadingStaticVarA [
-	^ staticVarA
+GtCoderDummySuperclass >> methodReadingClassVarA [
+	^ classVarA
 ]
 
 { #category : #'methods reading slots' }
-GtCoderDummySuperclass >> methodReadingVarA [
-	^ varA
+GtCoderDummySuperclass >> methodReadingSlotA [
+	^ slotA
 ]
 
 { #category : #api }

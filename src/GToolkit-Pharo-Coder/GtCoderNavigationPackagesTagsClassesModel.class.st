@@ -308,8 +308,10 @@ GtCoderNavigationPackagesTagsClassesModel >> methodsToShow [
 				streamContents: [ :aStream | 
 					aStream nextPutAll: (anInstanceSideClass methodsAccessingSlot: aSlot).
 					aStream nextPutAll: (aClassSideClass methodsAccessingSlot: aSlot) ] ].
-					
-	^ self selectedProtocol allMethods
+	
+	^ self selectedProtocol
+		ifNil: [ #() ]
+		ifNotNil: [ :aProtocol | aProtocol allMethods ]
 ]
 
 { #category : #'private - notifying' }
@@ -498,6 +500,38 @@ GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 	<return: #Collection of: #RPackage>
 
 	^ RPackageOrganizer default gtSortedPackages
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateAllClassSlotsOf: aBehavior [
+	| allSlots |
+	
+	allSlots := OrderedCollection new.
+
+	aBehavior withAllSuperclassesDo: [ :eachClass |
+		eachClass = Object class
+			ifTrue: [ ^ allSlots ].
+		allSlots addAll: eachClass slots ].
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateAllClassVariablesOf: aBehavior [
+	^ Array streamContents: [ :aStream |
+		aBehavior withAllSuperclassesDo: [ :eachClass |
+			eachClass ~= Object
+				ifTrue: [ aStream nextPutAll: eachClass classVariables ] ] ]
+]
+
+{ #category : #'private - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> privateAllSlotsOf: aBehavior [
+	| allSlots |
+	
+	allSlots := OrderedCollection new.
+
+	aBehavior withAllSuperclassesDo: [ :eachClass |
+		eachClass = Object
+			ifTrue: [ ^ allSlots ].
+		allSlots addAll: eachClass slots ].
 ]
 
 { #category : #'private - accessing' }
@@ -1008,18 +1042,18 @@ GtCoderNavigationPackagesTagsClassesModel >> showPackage: anRPackage [
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> slotsToShow [
 	<return: #Collection of: #GtPharoProtocol>
-	| currentClass instanceSideSlots classSideSlots staticSlots |
-	
+	| currentClass instanceSideSlots classSideSlots classVars |
+
 	self hasSelectedClass
 		ifFalse: [ ^ #() ].
 
 	currentClass := self selectedClass.
 
-	instanceSideSlots := currentClass instanceSide instanceVariables.
-	classSideSlots := currentClass classSide instanceVariables.
-	staticSlots := currentClass classVariables.
+	instanceSideSlots := self privateAllSlotsOf: currentClass instanceSide.
+	classSideSlots := self privateAllClassSlotsOf: currentClass classSide.
+	classVars := self privateAllClassVariablesOf:currentClass.
 	
-	^ instanceSideSlots, classSideSlots, staticSlots
+	^ instanceSideSlots, classSideSlots, classVars
 ]
 
 { #category : #'api - subscriptions' }

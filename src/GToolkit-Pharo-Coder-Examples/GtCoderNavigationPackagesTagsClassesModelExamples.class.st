@@ -123,6 +123,11 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> defaultModel [
 ]
 
 { #category : #utilities }
+GtCoderNavigationPackagesTagsClassesModelExamples >> dummySubclass [
+	^ GtCoderDummySubclass
+]
+
+{ #category : #utilities }
 GtCoderNavigationPackagesTagsClassesModelExamples >> dummySuperclass [
 	^ GtCoderDummySuperclass
 ]
@@ -209,9 +214,9 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	self assert: (methodsToShow includes: aClassToSelect class >> #instanceCreationMethod).
 	
 	slotsToShow := aModel slotsToShow.
-	self assert: (slotsToShow detect: [ :each| each name = #varA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #slotA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classSlotA ]) isNotNil.
 	self assert: (slotsToShow detect: [ :each| each name = #classVarA ]) isNotNil.
-	self assert: (slotsToShow detect: [ :each| each name = #staticVarA ]) isNotNil.
 
 	^ aModel
 ]
@@ -221,10 +226,9 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_04_selectSl
 	<gtExample>
 	| aModel aSlotToSelect |
 
-	
 	aModel := self navigateToClass_03_selectClass.
 	
-	aSlotToSelect := aModel slotsToShow detect: [ :each | each name = #varA ].
+	aSlotToSelect := aModel slotsToShow detect: [ :each | each name = #slotA ].
 	aModel selectSlot: aSlotToSelect.
 	
 	self assert: aModel hasSelectedProtocol not.
@@ -319,4 +323,25 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> recordAnnouncementsOf: aMod
 		aModel announcer unsubscribe: announcements ].
 	
 	^ announcements
+]
+
+{ #category : #'examples - slots' }
+GtCoderNavigationPackagesTagsClassesModelExamples >> slotsToShowShouldIncludeSuperclasses [
+	<gtExample>
+	| aModel slotsToShow |
+
+	aModel := self defaultModel.
+	aModel selectClass: self dummySubclass.
+	
+	slotsToShow := aModel slotsToShow.
+	"from selected class"
+	self assert: (slotsToShow detect: [ :each| each name = #slotB ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classSlotB ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classVarB ]) isNotNil.
+	"from superclass"
+	self assert: (slotsToShow detect: [ :each| each name = #slotA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classSlotA ]) isNotNil.
+	self assert: (slotsToShow detect: [ :each| each name = #classVarA ]) isNotNil.
+	
+	^ aModel
 ]

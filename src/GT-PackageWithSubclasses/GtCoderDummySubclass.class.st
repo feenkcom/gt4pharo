@@ -2,7 +2,13 @@ Class {
 	#name : #GtCoderDummySubclass,
 	#superclass : #GtCoderDummySuperclass,
 	#instVars : [
-		'varB'
+		'slotB'
+	],
+	#classVars : [
+		'classVarB'
+	],
+	#classInstVars : [
+		'classSlotB'
 	],
 	#category : #'GT-PackageWithSubclasses-Classes'
 }
