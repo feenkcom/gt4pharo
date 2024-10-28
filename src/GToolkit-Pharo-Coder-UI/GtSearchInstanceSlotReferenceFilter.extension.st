@@ -3,7 +3,9 @@ Extension { #name : #GtSearchInstanceSlotReferenceFilter }
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchInstanceSlotReferenceFilter >> filterDescriptor2For: aMethodsCoder [
 	^ (super filterDescriptor2For: aMethodsCoder)
-		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self variableName ]
+		ifNotNil: [ :aFilterModel | 
+			aFilterModel
+				selectedItem: (self variableName ifEmpty: [ GtFilterModelAllItem methodsLabel ]) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
@@ -17,8 +19,9 @@ GtSearchInstanceSlotReferenceFilter class >> filterDescriptor2For: aMethodsCoder
 				ifNone: [ self forClassAndHierarchy: aMethodsCoder classOrMetaClass andVariable: '' ] ];
 		named: 'Instance slots';
 		order: 25;
-		items: aMethodsCoder classOrMetaClass allInstVarNames;
-		selectFirstItem
+		items: [ GtFilterModelAllItem methodsLabel withAll: aMethodsCoder classOrMetaClass allInstVarNames ];
+		selectedItem: GtFilterModelAllItem methodsLabel;
+		displayAllItems
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
