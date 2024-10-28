@@ -50,7 +50,7 @@ GtClassCreationForm >> classVars: anObject [
 GtClassCreationForm >> classVarsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Static vars';
+		label: 'Class vars';
 		priority: 8;
 		accessor: #classVars;
 		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose values (memory) is shared across all instances of a class and its subclasses.') ];

@@ -34,7 +34,7 @@ GtBehaviorCreationForm >> classSlots: anObject [
 GtBehaviorCreationForm >> classSlotsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Class-side vars';
+		label: 'Class-side slots';
 		priority: 7;
 		accessor: #classSlots;
 		classes: {String};
@@ -133,7 +133,7 @@ GtBehaviorCreationForm >> slots: anObject [
 GtBehaviorCreationForm >> slotsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
-		label: 'Instance-side vars';
+		label: 'Instance-side slots';
 		priority: 6;
 		accessor: #slots;
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle +  (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose value is scoped to an instance of a class.')];
