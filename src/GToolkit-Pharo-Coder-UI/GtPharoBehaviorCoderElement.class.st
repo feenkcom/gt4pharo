@@ -71,7 +71,7 @@ GtPharoBehaviorCoderElement >> actOnSlot: anAnnouncement [
 GtPharoBehaviorCoderElement >> addFilters: filters [
 	contentTabs content
 		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
-		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: filters ]
+		ifFound: [ :theElement | theElement streamingCodersViewModel addOrReplaceFilters: filters ]
 		ifNone: [  "ignore" ]
 ]
 
