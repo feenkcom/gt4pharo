@@ -223,7 +223,7 @@ GtPharoBehaviorCoderElement >> filterWithClassVariable: slotName source: aSource
 
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
-	self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aMethodProtocol)
+	self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aMethodProtocol name)
 ]
 
 { #category : #accessing }
