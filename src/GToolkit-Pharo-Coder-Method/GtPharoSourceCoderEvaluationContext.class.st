@@ -25,6 +25,13 @@ GtPharoSourceCoderEvaluationContext >> bindingOf: aSymbol [
 ]
 
 { #category : #accessing }
+GtPharoSourceCoderEvaluationContext >> bindings [
+	<return: #TGtVariablesBindings>
+
+	^ bindingStrategy
+]
+
+{ #category : #accessing }
 GtPharoSourceCoderEvaluationContext >> bindingStrategy [
 	<return: #TGtVariablesBindings>
 
@@ -38,13 +45,6 @@ GtPharoSourceCoderEvaluationContext >> bindingStrategy: aGtBindingStrategy [
 		description: [ 'Must implement variable bindings trait' ].
 
 	bindingStrategy := aGtBindingStrategy
-]
-
-{ #category : #accessing }
-GtPharoSourceCoderEvaluationContext >> bindings [
-	<return: #TGtVariablesBindings>
-
-	^ bindingStrategy
 ]
 
 { #category : #hack }

@@ -10,6 +10,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
 
+{ #category : #'as yet unclassified' }
+GtPharoMethodContextCoderViewModel >> addBreakpointAtCursorLocation [
+	super addBreakpointAtCursorLocation.
+	
+	self coderModel gtUpdateContextWithCurrentMethod.
+]
+
 { #category : #accessing }
 GtPharoMethodContextCoderViewModel >> compositeVariableBindingsForStyling [
 	"The context variable bindings is added for styling purposes,
