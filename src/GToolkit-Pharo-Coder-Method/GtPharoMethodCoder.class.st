@@ -220,6 +220,15 @@ GtPharoMethodCoder >> compile [
 	^ self compileInContext: self evaluationContext
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> compiledMethod [
+	<return: #CompiledMethod or: nil>
+	
+	^ self existsInTheSystem
+		ifTrue: [ self behavior >> self selector ]
+		ifFalse: [ nil ]
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	"Try to compile the current source code and return true if it was successful, false otherwise"
@@ -248,15 +257,6 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	self notifyMethodRecompiledFrom: aPreviousCompiledMethod to: aNewCompiledMethod.
 
 	^ true
-]
-
-{ #category : #accessing }
-GtPharoMethodCoder >> compiledMethod [
-	<return: #CompiledMethod or: nil>
-	
-	^ self existsInTheSystem
-		ifTrue: [ self behavior >> self selector ]
-		ifFalse: [ nil ]
 ]
 
 { #category : #'api - ast' }
@@ -535,6 +535,20 @@ GtPharoMethodCoder >> forExample: anExampleWithResult [
 	self example: anExampleWithResult
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> formatWithRequesterObject: aRequester [
+	| ast |
+	ast := [ RBParser parseMethod: self currentSourceString ]
+			on: SyntaxErrorNotification
+			do: [ :ex | 
+				^ self
+					notifyParseError: ex errorMessage
+					at: ex location
+					requesterObject: aRequester ].
+
+	self currentSourceString: ast formattedCode
+]
+
 { #category : #initialize }
 GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
@@ -555,20 +569,6 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
 	self
 		sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
 	self protocol: aCompiledMethod category
-]
-
-{ #category : #accessing }
-GtPharoMethodCoder >> formatWithRequesterObject: aRequester [
-	| ast |
-	ast := [ RBParser parseMethod: self currentSourceString ]
-			on: SyntaxErrorNotification
-			do: [ :ex | 
-				^ self
-					notifyParseError: ex errorMessage
-					at: ex location
-					requesterObject: aRequester ].
-
-	self currentSourceString: ast formattedCode
 ]
 
 { #category : #'gt-extensions' }

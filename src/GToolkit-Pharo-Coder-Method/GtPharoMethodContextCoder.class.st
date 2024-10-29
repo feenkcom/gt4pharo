@@ -25,6 +25,20 @@ GtPharoMethodContextCoder >> close [
 	self updateSelection"
 ]
 
+{ #category : #accessing }
+GtPharoMethodContextCoder >> compiledMethod [
+
+	"The context coder should allways return the compiled method from the context 
+	as the method from the class can be changed. In that case the context will 
+	use its own method."
+
+	^ context compiledCode method
+		  
+	"^ context isBlockContext
+		  ifTrue: [ context home compiledCode ]
+		  ifFalse: [ context compiledCode ]"
+]
+
 { #category : #'api - actions' }
 GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	| withoutErrors compiledSuccesfully |
@@ -51,20 +65,6 @@ GtPharoMethodContextCoder >> compileInContext: aGtPharoSourceCoderEvaluationCont
 			inContext: aGtPharoSourceCoderEvaluationContext.
 
 	^ withoutErrors and: [ compiledSuccesfully ]
-]
-
-{ #category : #accessing }
-GtPharoMethodContextCoder >> compiledMethod [
-
-	"The context coder should allways return the compiled method from the context 
-	as the method from the class can be changed. In that case the context will 
-	use its own method."
-
-	^ context compiledCode method
-		  
-	"^ context isBlockContext
-		  ifTrue: [ context home compiledCode ]
-		  ifFalse: [ context compiledCode ]"
 ]
 
 { #category : #accessing }
@@ -110,6 +110,16 @@ GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 	session := aDebugSession.
 	originalCompiledCode := context compiledCode.
 	self forMethod: self compiledMethod
+]
+
+{ #category : #'api - actions' }
+GtPharoMethodContextCoder >> gtUpdateContextWithCurrentMethod [
+	| currentMethod |
+	self existsInTheSystem ifFalse: [^self].
+	currentMethod := self behavior >> self selector.
+	self session gtUpdateContext: self context withMethod: currentMethod.
+	
+	self notifyDebugger.
 ]
 
 { #category : #initialize }

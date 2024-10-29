@@ -8,6 +8,28 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
 
+{ #category : #'api - debugging' }
+GtPharoMethodCoderViewModel >> addBreakpointAtCursorLocation [
+	| node breakpoint |
+	
+	self cursors allCursors ifNotEmpty: 
+			[:currentCursors |
+			| position |
+			position := currentCursors first position.
+			node := self compiledMethod ast
+						bestNodeForPosition: position].
+						
+	node hasBreakpoint ifTrue: [^self].
+	node isMessage | node isVariable | node isLiteralNode ifFalse: [^self].
+	
+	breakpoint := Breakpoint new.
+	breakpoint node: node.
+	breakpoint once: true.
+	breakpoint install.
+	
+	self coderModel requestStyleSourceText
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> allowSave [
 	"Remove all save prventors and recompute the updated save availability"
@@ -191,6 +213,11 @@ GtPharoMethodCoderViewModel >> methodOrigin [
 ]
 
 { #category : #'private - notifying' }
+GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
+	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
+]
+
+{ #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveDisabled [
 	self announce: (GtMethodCoderSaveDisabled new preventors: savePreventors asArray)
 ]
@@ -198,11 +225,6 @@ GtPharoMethodCoderViewModel >> notifySaveDisabled [
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveEnabled [
 	self announce: (GtMethodCoderSaveEnabled new)
-]
-
-{ #category : #'private - notifying' }
-GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
-	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
 ]
 
 { #category : #'private - evaluation' }
