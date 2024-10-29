@@ -81,6 +81,7 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaIntoResult: aResult [
 	aSearchFilterTwo := aFilterModelTwo asSearchFilter.
 	self assert: aSearchFilterOne isNotNil.
 	self assert: aSearchFilterOne equals: aSearchFilterTwo.
+	self assert: aSearchFilterOne filterType equals: aSearchFilterTwo filterType.
 	
 	"Two filter model instances of equal search filter instances are equal."
 	aFilterModelThree := aSearchFilterOne filterDescriptor2For: aMethodsCoder.
@@ -138,6 +139,11 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaIntoResult: aResult [
 			self
 				assert: aSearchFilterTwo ~= aSearchFilterThree
 				description: [ 'The two search filters must not be equal: {1} ~= {2}'
+						format: {aSearchFilterTwo.
+								aSearchFilterThree} ].
+			self
+				assert: aSearchFilterTwo filterType = aSearchFilterThree filterType
+				description: [ 'The two search filters must be of the same type: {1} filterType = {2} filterType'
 						format: {aSearchFilterTwo.
 								aSearchFilterThree} ].
 								

@@ -23,7 +23,7 @@ GtPharoBehaviorCoderElement >> actOnMethodProtocol: anAnnouncement [
 			self executeTask: selectTabBlock ].
 
 	selectMethodBlock := [ self
-			filterWithMethodProtocol: anAnnouncement methodProtocol name
+			filterWithMethodProtocol: anAnnouncement methodProtocol
 			source: anAnnouncement source ].
 	self executeTask: selectMethodBlock
 ]
@@ -84,6 +84,18 @@ GtPharoBehaviorCoderElement >> addOrReplaceFilter: aFilter [
 			| aViewModel |
 			aViewModel := theElement streamingCodersViewModel.
 			aViewModel addOrReplaceFilter: aFilter ]
+		ifNone: [ "ignore" ]
+]
+
+{ #category : #'updating ui' }
+GtPharoBehaviorCoderElement >> addOrReplaceFilters: aCollectionOfFilters [
+	contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | 
+			eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: [ :theElement | 
+			| aViewModel |
+			aViewModel := theElement streamingCodersViewModel.
+			aViewModel addOrReplaceFilters: aCollectionOfFilters ]
 		ifNone: [ "ignore" ]
 ]
 

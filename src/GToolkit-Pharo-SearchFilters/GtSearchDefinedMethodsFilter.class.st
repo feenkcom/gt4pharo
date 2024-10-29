@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
+{ #category : #accessing }
+GtSearchDefinedMethodsFilter >> filterType [
+	^ GtSearchSubclassResponsibilityMethodsFilter
+]
+
 { #category : #testing }
 GtSearchDefinedMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod isAbstract not

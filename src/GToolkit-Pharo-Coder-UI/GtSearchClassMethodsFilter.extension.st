@@ -2,8 +2,8 @@ Extension { #name : #GtSearchClassMethodsFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchClassMethodsFilter >> filterDescriptor2For: aMethodsCoder [
-	^ (GtSearchClassMethodsFilter filterDescriptor2For: aMethodsCoder)
-		selectedItem: GtFilterModelClassSideItem default
+	^ (super filterDescriptor2For: aMethodsCoder) ifNotNil: [ :aFilterModel | 
+		aFilterModel selectedItem: GtFilterModelClassSideItem default ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
