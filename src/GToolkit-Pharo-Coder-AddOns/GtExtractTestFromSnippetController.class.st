@@ -17,6 +17,7 @@ GtExtractTestFromSnippetController >> completionStrategy [
 
 { #category : #accessing }
 GtExtractTestFromSnippetController >> findExtractedSend [
+	self shouldCreateClass ifFalse: [ ^ super findExtractedSend ].
 	[ self sourceAst
 		withAllNodesOfType: GtPharoMessageNode
 		do: [ :each | 
@@ -32,6 +33,7 @@ GtExtractTestFromSnippetController >> findExtractedSend [
 { #category : #accessing }
 GtExtractTestFromSnippetController >> installRenamer [
 	| message |
+	self shouldCreateClass ifFalse: [ ^ super installRenamer ].
 	self addRefactoringPreview.
 
 	message := self findExtractedSend.
@@ -57,6 +59,7 @@ GtExtractTestFromSnippetController >> installRenamer [
 
 { #category : #accessing }
 GtExtractTestFromSnippetController >> isReceiver: aNode [
+	self shouldCreateClass ifFalse: [ ^ super isReceiver: aNode ].
 	^ (aNode isKindOf: GtPharoVariableNode)
 		and: [ {'Object'.
 				exampleClass} includes: aNode name value ]
@@ -64,10 +67,16 @@ GtExtractTestFromSnippetController >> isReceiver: aNode [
 
 { #category : #accessing }
 GtExtractTestFromSnippetController >> receiverInSend: send [
+	self shouldCreateClass ifFalse: [ ^ super receiverInSend: send ].
 	^ send parent receiver
 ]
 
 { #category : #accessing }
 GtExtractTestFromSnippetController >> refactoringClass [
 	^ GtExtractTestFromSnippetRefactoring
+]
+
+{ #category : #accessing }
+GtExtractTestFromSnippetController >> refactoringClassForExistingClass [
+	^ GtExtractTestFromSnippetToVariableRefactoring
 ]

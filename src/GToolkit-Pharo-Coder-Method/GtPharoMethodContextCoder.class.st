@@ -112,6 +112,16 @@ GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 	self forMethod: self compiledMethod
 ]
 
+{ #category : #'api - actions' }
+GtPharoMethodContextCoder >> gtUpdateContextWithCurrentMethod [
+	| currentMethod |
+	self existsInTheSystem ifFalse: [^self].
+	currentMethod := self behavior >> self selector.
+	self session gtUpdateContext: self context withMethod: currentMethod.
+	
+	self notifyDebugger.
+]
+
 { #category : #initialize }
 GtPharoMethodContextCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.

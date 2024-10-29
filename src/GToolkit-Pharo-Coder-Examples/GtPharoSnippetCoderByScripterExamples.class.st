@@ -340,6 +340,51 @@ GtPharoSnippetCoderByScripterExamples >> extractMethodFromInspector_02_extract [
 	^ aScripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> extractTestToVariable [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoSnippetCoder
+					forSource: 'theData := test examplePackage.
+dataGroup := GtPlotterDataGroup new values: theData asOrderedCollection' ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: aSourceEditor text size;
+						select ] ].
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Run extract test';
+				action: [ :element | 
+					(GtExtractTestFromSnippetController new
+						sourceCoderViewModel: element textualCoderViewModel) executeIn: element ] ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source code modified';
+				onModel;
+				satisfies: #isModified ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Verify extractring to example variable';
+				// GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: 'test _' ].
+	^ aScripter
+]
+
 { #category : #'examples - fixit method' }
 GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToBlockClosure01setup [
 	<gtExample>

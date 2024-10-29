@@ -9,6 +9,11 @@ GtSearchClassMethodsFilter >> = anObject [
 	^ self class = anObject class
 ]
 
+{ #category : #printing }
+GtSearchClassMethodsFilter >> gtDisplayOn: stream [
+	stream nextPutAll: 'class methods'
+]
+
 { #category : #comparing }
 GtSearchClassMethodsFilter >> hash [
 	^ self class hash

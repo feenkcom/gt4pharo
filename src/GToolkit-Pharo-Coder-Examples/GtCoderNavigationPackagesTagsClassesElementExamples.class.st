@@ -7,21 +7,25 @@ Class {
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdatesMethodList [
 	<gtExample>
-	| aScripter anElement |
+	| aScripter anElement aMethodsElement aQuery |
 	
 	aScripter := self elementWithPackageTagAndClassSelection.
 	anElement := aScripter element.
+	aQuery := anElement query // GtCoderMethodsGroupedListElement.
+	self assert: aQuery isEmpty not.
+	self assert: aQuery result size equals: 1.
+	aMethodsElement := aQuery result anyOne.
 	
 	self
-		assert: (anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ]).
+		assert: (aMethodsElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ]).
 	[
 		self classInPackageTag compile: 'newMethod ^self'.
 		aScripter play.
-		anElement methodList anySatisfy: [ :meth | meth selector == #newMethod ] ]
+		aMethodsElement methodList anySatisfy: [ :meth | meth selector == #newMethod ] ]
 			ensure: [ self classInPackageTag removeSelector: #newMethod ].
 	
 	aScripter play.
-	anElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ].
+	aMethodsElement methodList noneSatisfy: [ :meth | meth selector == #newMethod ].
 	^ aScripter
 ]
 
@@ -329,13 +333,19 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> extensionTag [
 { #category : #accessing }
 GtCoderNavigationPackagesTagsClassesElementExamples >> numberOfSubscriptions [
 	<gtExample>
-	| aMethodOne aMethodTwo theGlobalsOne theGlobalsTwo theGlobals |
+	| aMethodOne aMethodTwo theGlobalsOne theGlobalsTwo theGlobals aMethodThree theGlobalsThree aMethodFour theGlobalsFour aMethodFive theGlobalsFive |
 	aMethodOne := GtCoderNavigationElement >> #subscribeToNavigationModel.
 	theGlobalsOne := aMethodOne ast allVariables select: #isGlobal.
 	aMethodTwo := GtCoderNavigationPackagesTagsClassesElement >> #subscribeToNavigationModel.
 	theGlobalsTwo := aMethodTwo ast allVariables select: #isGlobal.
-	theGlobals := theGlobalsOne, theGlobalsTwo.
-	self assert: theGlobals size > 9.
+	aMethodThree := GtCoderMethodsGroupedListElement>>#subscribeToNavigationModel.
+	theGlobalsThree := aMethodThree ast allVariables select: #isGlobal.
+	aMethodFour := GtCoderProtocolsGroupedListElement>>#subscribeToNavigationModel.
+	theGlobalsFour := aMethodFour ast allVariables select: #isGlobal.
+	aMethodFive := GtCoderSlotsGroupedListElement>>#subscribeToNavigationModel.
+	theGlobalsFive := aMethodFive ast allVariables select: #isGlobal.
+	theGlobals := theGlobalsOne, theGlobalsTwo, theGlobalsThree, theGlobalsFour, theGlobalsFive.
+	self assert: theGlobals size > 20.
 	^ theGlobals size
 ]
 

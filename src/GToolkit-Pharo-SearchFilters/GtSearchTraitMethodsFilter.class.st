@@ -9,6 +9,11 @@ GtSearchTraitMethodsFilter >> = anObject [
 	^ self class = anObject class
 ]
 
+{ #category : #accessing }
+GtSearchTraitMethodsFilter >> filterType [
+	^ GtSearchNonTraitMethodsFilter
+]
+
 { #category : #comparing }
 GtSearchTraitMethodsFilter >> hash [
 	^ self class hash

@@ -17,6 +17,11 @@ GtExtractExampleFromSnippetToVariableRefactoring >> finishRefactoring [
 			each compile: ast formattedCode ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtExtractExampleFromSnippetToVariableRefactoring >> gtDescription [
+	^ 'Extract example method from snippet'
+]
+
 { #category : #transforming }
 GtExtractExampleFromSnippetToVariableRefactoring >> transform [
 	super transform.
