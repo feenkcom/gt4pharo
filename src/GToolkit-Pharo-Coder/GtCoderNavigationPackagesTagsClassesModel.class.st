@@ -512,6 +512,8 @@ GtCoderNavigationPackagesTagsClassesModel >> privateAllClassSlotsOf: aBehavior [
 		eachClass = Object class
 			ifTrue: [ ^ allSlots ].
 		allSlots addAll: eachClass slots ].
+		
+	^ allSlots
 ]
 
 { #category : #'private - accessing' }
@@ -532,6 +534,8 @@ GtCoderNavigationPackagesTagsClassesModel >> privateAllSlotsOf: aBehavior [
 		eachClass = Object
 			ifTrue: [ ^ allSlots ].
 		allSlots addAll: eachClass slots ].
+		
+	^ allSlots
 ]
 
 { #category : #'private - accessing' }
