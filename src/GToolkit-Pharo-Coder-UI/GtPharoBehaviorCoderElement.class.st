@@ -23,7 +23,7 @@ GtPharoBehaviorCoderElement >> actOnMethodProtocol: anAnnouncement [
 			self executeTask: selectTabBlock ].
 
 	selectMethodBlock := [ self
-			filterWithMethodProtocol: anAnnouncement methodProtocol name
+			filterWithMethodProtocol: anAnnouncement methodProtocol
 			source: anAnnouncement source ].
 	self executeTask: selectMethodBlock
 ]
@@ -71,7 +71,7 @@ GtPharoBehaviorCoderElement >> actOnSlot: anAnnouncement [
 GtPharoBehaviorCoderElement >> addFilters: filters [
 	contentTabs content
 		allChildrenBreadthFirstDetect: [ :eachElement | eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
-		ifFound: [ :theElement | theElement streamingCodersViewModel additionalFilters: filters ]
+		ifFound: [ :theElement | theElement streamingCodersViewModel addOrReplaceFilters: filters ]
 		ifNone: [  "ignore" ]
 ]
 
@@ -84,6 +84,18 @@ GtPharoBehaviorCoderElement >> addOrReplaceFilter: aFilter [
 			| aViewModel |
 			aViewModel := theElement streamingCodersViewModel.
 			aViewModel addOrReplaceFilter: aFilter ]
+		ifNone: [ "ignore" ]
+]
+
+{ #category : #'updating ui' }
+GtPharoBehaviorCoderElement >> addOrReplaceFilters: aCollectionOfFilters [
+	contentTabs content
+		allChildrenBreadthFirstDetect: [ :eachElement | 
+			eachElement isKindOf: GtPharoStreamingMethodsCoderElement ]
+		ifFound: [ :theElement | 
+			| aViewModel |
+			aViewModel := theElement streamingCodersViewModel.
+			aViewModel addOrReplaceFilters: aCollectionOfFilters ]
 		ifNone: [ "ignore" ]
 ]
 
@@ -211,7 +223,7 @@ GtPharoBehaviorCoderElement >> filterWithClassVariable: slotName source: aSource
 
 { #category : #'updating ui' }
 GtPharoBehaviorCoderElement >> filterWithMethodProtocol: aMethodProtocol source: aSource [
-	self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aMethodProtocol)
+	self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aMethodProtocol name)
 ]
 
 { #category : #accessing }
