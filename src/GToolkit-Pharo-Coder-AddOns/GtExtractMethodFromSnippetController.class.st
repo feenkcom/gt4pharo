@@ -138,7 +138,7 @@ GtExtractMethodFromSnippetController >> refactoring [
 
 { #category : #private }
 GtExtractMethodFromSnippetController >> typeNameFor: aRBClass [
-	^ aRBClass name , (aRBClass isMeta ifTrue: [ ' class' ] ifFalse: [ '' ])
+	^ (aRBClass name , (aRBClass isMeta ifTrue: [ ' class' ] ifFalse: [ '' ])) asSymbol
 ]
 
 { #category : #accessing }
