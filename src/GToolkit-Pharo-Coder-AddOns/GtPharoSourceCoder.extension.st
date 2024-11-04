@@ -345,6 +345,12 @@ GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> hidingAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoHidingStyler new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> highlightNodesBlock: aCollection [
 	^ [ :textualCoderViewModel | 
 	aCollection
@@ -360,7 +366,8 @@ GtPharoSourceCoder >> initializeAddOns: addOns [
 		GtPharoDynamicHighlightStyler.
 		GtPharoDeprecationStyler.
 		GtPharoMethodExpanderStyler.
-		GtPharoClassExpanderStyler} collect: #new.
+		GtPharoClassExpanderStyler.
+		GtPharoHidingStyler} collect: #new.
 
 	addOns addStylers: stylers
 ]

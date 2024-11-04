@@ -1,5 +1,5 @@
 Class {
-	#name : #GtParenthesisFolderAttribute,
+	#name : #GtTextFolderAttribute,
 	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
 	#instVars : [
 		'attribute',
@@ -9,12 +9,12 @@ Class {
 }
 
 { #category : #accessing }
-GtParenthesisFolderAttribute class >> forAttribute: anAttribute [
+GtTextFolderAttribute class >> forAttribute: anAttribute [
 	^self new attribute: anAttribute
 ]
 
 { #category : #accessing }
-GtParenthesisFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece in: aTextEditor [
+GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece in: aTextEditor [
 	| text |
 	text := aTextEditor text.
 	text
@@ -32,12 +32,12 @@ GtParenthesisFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEd
 ]
 
 { #category : #accessing }
-GtParenthesisFolderAttribute >> attribute: anAttribute [
+GtTextFolderAttribute >> attribute: anAttribute [
 	attribute := anAttribute
 ]
 
 { #category : #'as yet unclassified' }
-GtParenthesisFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
+GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| aToggle |
 	aToggle := BrTriangle new
 			id: self id;
@@ -58,7 +58,7 @@ GtParenthesisFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdito
 ]
 
 { #category : #accessing }
-GtParenthesisFolderAttribute >> initialize [
+GtTextFolderAttribute >> initialize [
 	super initialize.
 	self beNotOverwritableByStyler.
 	isExpanded := true.
