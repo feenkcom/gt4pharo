@@ -14,9 +14,9 @@ GtPharoStyler >> collapserForParenthesesLeft: aLeftIndex right: aRightIndex [
 		to: aRightIndex - 1.
 
 	folder := (text attributesAt: aLeftIndex)
-			detect: [ :each | each class == GtParenthesisFolderAttribute ]
+			detect: [ :each | each class == GtTextFolderAttribute ]
 			ifNone: [ | att |
-				att := GtParenthesisFolderAttribute new beNotOverwritableByStyler.
+				att := GtTextFolderAttribute new beNotOverwritableByStyler.
 				text
 					attribute: att
 					from: aLeftIndex
