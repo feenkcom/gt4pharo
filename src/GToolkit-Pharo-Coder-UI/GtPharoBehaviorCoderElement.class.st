@@ -142,10 +142,29 @@ GtPharoBehaviorCoderElement >> buildContentPane [
 { #category : #'building ui' }
 GtPharoBehaviorCoderElement >> buildContentTabs [
 	<return: #BrTabGroup>
-
+	| classCoder context object aListener |
+	classCoder := behaviorCoderViewModel coder.
+	context := GtPhlowContext new.
+	context optionAt: #behaviorCoder put: behaviorCoderViewModel.
+	object := classCoder theClass.
 	contentTabs := GtPhlowCompositeView new
-		views: self classViewItems;
-		asElementDo: [ :aBrTabGroup | aBrTabGroup ].
+			object: object
+				arguments: {GtPhlowView empty.
+						context};
+			collectorDo: [ :aCollector | 
+				aCollector
+					context: context;
+					fromObject: object;
+					from: object class;
+					to: Behavior;
+					pragmaName: #gtClassView ];
+			asElementDo: [ :aBrTabGroup | aBrTabGroup ].
+
+	aListener := GtPhlowChangeMethodSystemAnnouncerListener
+			installOnCompositeElement: contentTabs.
+	aListener
+		interestingPragmas: { #gtClassView }
+		andObject: object.
 
 	^ contentTabs
 ]
@@ -161,26 +180,6 @@ GtPharoBehaviorCoderElement >> buildDefinitionElement [
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> classCoder [
 	^ behaviorCoderViewModel classCoder
-]
-
-{ #category : #private }
-GtPharoBehaviorCoderElement >> classViewItems [
-	| classCoder collector context |
-	
-	classCoder := behaviorCoderViewModel coder.
-
-	collector := GtPhlowViewsCollector new
-		fromObject: classCoder theClass;
-		from: classCoder theClass class;
-		to: Behavior;
-		pragmaName: #gtClassView.
-
-	context := GtPhlowContext new.
-	context optionAt: #behaviorCoder put: behaviorCoderViewModel.
-
-	collector context: context.
-
-	^ collector collect
 ]
 
 { #category : #accessing }

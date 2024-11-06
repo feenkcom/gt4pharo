@@ -25,7 +25,7 @@ GtClassUpdateForm >> commit [
 GtClassUpdateForm >> onClass: aClass [
 	| packageName tagName |
 	self newClassName: aClass name.
-	self superclassName: aClass superclass name.
+	self superclassName: (aClass superclass ifNotNil: #name).
 	self
 		slots: ((aClass slots select: [ :aSlot | aSlot definingClass = aClass ]) collect: #name).
 	self traits: (aClass traits collect: #name).
