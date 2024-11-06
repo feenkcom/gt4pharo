@@ -190,7 +190,11 @@ GtRenameMethodController >> swapParameterWithNext: anInteger [
 { #category : #private }
 GtRenameMethodController >> updateCurrentNodeFor: aString [
 	| method |
-	method := GtPharoParser parse: aString.
+	method := GtPharoParser
+			parse: aString
+			startingAt: (self sourceCoderViewModel coder isForMethod
+					ifTrue: [ GtPharoParser startingStateForMethod ]
+					ifFalse: [ GtPharoParser startingStateForMethodSequence ]).
 	method
 		withAllNodesDo: [ :each | 
 			(each class = self originalNode class

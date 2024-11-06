@@ -10,7 +10,7 @@ ProtoObject >> gtAdviceActionFor: anAction [
 			cached.
 	^ anAction explicit
 		priority: 0;
-		stencil: [ | button dropDownAptitude |
+		stencil: [ | button dropDownAptitude promise |
 			button := GtFixItButton new.
 			button visibility: BlVisibility hidden.
 			button label: 'Advice'.
@@ -35,11 +35,12 @@ ProtoObject >> gtAdviceActionFor: anAction [
 						element ].
 			button aptitude: BrGlamorousButtonWithIconAptitude + dropDownAptitude.
 			button icon: BrGlamorousVectorIcons repair.
-			(actionStream asyncSimilarCopy hasNext
+			promise := (actionStream asyncSimilarCopy hasNext
 				then: [ :bool | 
 					bool
 						ifTrue: [ button
 								enqueueTask: (BlTaskAction new action: [ button visibility: BlVisibility visible ]) ] ])
-				await.
+				await: GtSingleCoderViewModel addOnsExecutionConfiguration.
+			button enqueueTask: (BlPromiseTask new promise: promise).
 			button ]
 ]

@@ -82,7 +82,7 @@ GtPharoMethodContextCoder >> currentContext [
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> debuggerVariableNodes [
 	| variablesList |
-
+	
 	variablesList := OrderedCollection new.
 	self instanceVariableNodesDo: [ :aNode | variablesList add: aNode ].
 	self temporaryVariableNodesDo: [ :aNode | variablesList add: aNode ].
@@ -91,11 +91,14 @@ GtPharoMethodContextCoder >> debuggerVariableNodes [
 	variablesList sort: [:node1 :node2 | node1 key < node2 key].
 	variablesList 
 		addFirst: (GtInspectorSelfNode hostObject: self receiver);
-		addLast: (GtInspectorDynamicNode hostObject: self context label: 'thisContext' value: self context).
+		addLast: (GtInspectorDynamicNode 
+			hostObject: self context 
+			label: 'thisContext' 
+			value: self context
+			tag: 'stack').
 	self stackVariableNodesDo: [ :aNode | variablesList add: aNode ].
+	
 	^ variablesList
-	
-	
 ]
 
 { #category : #accessing }
@@ -145,7 +148,7 @@ GtPharoMethodContextCoder >> instanceVariableNamesAndValuesDo: aBlock [
 
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> instanceVariableNodesDo: aBloc [
-	self receiver class allSlots collect: [ :aSlot | 
+	self receiver class allSlots do: [ :aSlot | 
 		aBloc value: (GtInspectorSlotNode 
 			hostObject: self receiver 
 			slot: aSlot) ]
@@ -270,7 +273,8 @@ GtPharoMethodContextCoder >> stackVariableNodesDo: aBlock [
 				(stackPosition > 0
 					ifTrue: [ ' - ' , stackPosition printString ]
 					ifFalse: [ '' ])) 
-			value: (self context at: i)).
+			value: (self context at: i)
+			tag: 'stack').
 		stackPosition := stackPosition + 1 ]
 ]
 
@@ -330,10 +334,9 @@ GtPharoMethodContextCoder >> updateSourceFromContext [
 { #category : #'accessing variables' }
 GtPharoMethodContextCoder >> workspaceDoItNodesDo: aBloc [
 	self context gtDebuggerDoItBindings do: [:aBinding |
-		aBloc value: ((GtInspectorDynamicNode 
+		aBloc value: (GtInspectorDynamicNode 
 			hostObject: self context 
 			label: aBinding key 
-			value: aBinding value)
-				variableTag: 'temp';
-				yourself) ]
+			value: aBinding value
+			tag: 'temporary') ]
 ]

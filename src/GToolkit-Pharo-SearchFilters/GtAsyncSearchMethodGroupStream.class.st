@@ -31,6 +31,7 @@ GtAsyncSearchMethodGroupStream >> metrics [
 	<return: #TAsyncFuture>
 	| metrics |
 	metrics := GtAsyncSearchMethodGroupMetrics new.
-	(self filteredItemsStream forEach: [ :eachMethod | metrics accumulateMethod: eachMethod ]) await.
+	(self filteredItemsStream forEach: [ :eachMethod | metrics accumulateMethod: eachMethod ]) 
+		await: GtSearchConfiguration defaultFutureExecutionConfiguration.
 	^ metrics
 ]
