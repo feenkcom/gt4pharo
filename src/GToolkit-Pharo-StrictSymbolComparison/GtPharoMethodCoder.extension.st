@@ -3,7 +3,7 @@ Extension { #name : #GtPharoMethodCoder }
 { #category : #'*GToolkit-Pharo-StrictSymbolComparison' }
 GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns [
 
-	aNode selector == #= ifFalse: [ ^ self ].
+	(aNode isMessage and: [ aNode selector == #= ]) ifFalse: [ ^ self ].
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: ('Convert ' asRopedText, 
