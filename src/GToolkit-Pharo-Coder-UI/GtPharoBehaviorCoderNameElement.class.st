@@ -23,15 +23,17 @@ GtPharoBehaviorCoderNameElement >> addAddOnsElementIn: aContainer [
 GtPharoBehaviorCoderNameElement >> addAdviceDropDownIn: aContainer [ 
 	behaviorCoderViewModel behavior
 		ifNotNil: [ :class | 
-			| adviceStream |
+			| adviceStream future promise |
 			adviceStream := ((GtAdvice adviceForClass: class) asAsyncStream
 					select: [ :each | each hasAdvice ]) cached.
-			(adviceStream asyncSimilarCopy hasNext
+			future := (adviceStream asyncSimilarCopy hasNext
 				then: [ :bool | 
 					bool ifTrue: [ 
 						aContainer enqueueTask: (BlTaskAction new
 							action: [ aContainer addChild: (self 
-								buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ]) await ]
+								buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ]).
+			promise := future await: GtSingleCoderViewModel addOnsExecutionConfiguration.
+			self enqueueTask: (BlPromiseTask new promise: promise) ]
 ]
 
 { #category : #accessing }
