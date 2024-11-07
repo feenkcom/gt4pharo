@@ -76,9 +76,11 @@ GtParserCreationForm >> parser [
 ]
 
 { #category : #accessing }
-GtParserCreationForm >> parser: anObject [
-
-	parser := anObject
+GtParserCreationForm >> parser: aString [
+	| isEmpty |
+	isEmpty := parser isEmpty.
+	parser := aString.
+	isEmpty ifTrue: [ self updateScannerFromParser ]
 ]
 
 { #category : #magritte }
@@ -157,4 +159,12 @@ GtParserCreationForm >> scannerRope [
 { #category : #accessing }
 GtParserCreationForm >> scannerRope: aRope [
 	self scanner: aRope asString
+]
+
+{ #category : #private }
+GtParserCreationForm >> updateScannerFromParser [
+	self scanner ifNotEmpty: [ ^ self ].
+	self parser ifEmpty: [ ^ self ].
+	(self parser endsWith: 'Parser' caseSensitive: true) ifFalse: [ ^ self ].
+	self scanner: (self parser first: self parser size - 6) , 'Scanner'
 ]
