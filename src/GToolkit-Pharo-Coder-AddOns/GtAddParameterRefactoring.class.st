@@ -31,6 +31,15 @@ GtAddParameterRefactoring >> checkSendersAccessTo: name [
 								with: each modelClass) ] ]
 ]
 
+{ #category : #transforming }
+GtAddParameterRefactoring >> executeRenameExtensions [
+	(Pragma
+		allNamed: #gtRename
+		from: self class
+		to: GtAddParameterRefactoring)
+		do: [ :each | self perform: each method selector ]
+]
+
 { #category : #accessing }
 GtAddParameterRefactoring >> initialize [
 	super initialize.
@@ -42,6 +51,12 @@ GtAddParameterRefactoring >> modifyImplementorParseTree: parseTree in: aClass [
 	super modifyImplementorParseTree: parseTree in: aClass.
 	shouldReplaceExpressions ifFalse: [ ^ self ].
 	newArgs do: [ :each | self replaceReference: each in: parseTree ]
+]
+
+{ #category : #transforming }
+GtAddParameterRefactoring >> renameMessageSends [
+	super renameMessageSends.
+	self executeRenameExtensions
 ]
 
 { #category : #private }
