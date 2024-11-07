@@ -102,7 +102,6 @@ GtParserCreationForm >> parserDescription [
 			labelled: 'First character must be uppercase';
 		addCondition: [ :aValue | aValue asString isAllAlphaNumerics ]
 			labelled: 'Class name must be alphanumeric';
-		kind: BlText;
 		beRequired
 ]
 
@@ -148,7 +147,6 @@ GtParserCreationForm >> scannerDescription [
 			labelled: 'First character must be uppercase';
 		addCondition: [ :aValue | aValue asString isAllAlphaNumerics ]
 			labelled: 'Class name must be alphanumeric';
-		kind: BlText;
 		beRequired
 ]
 
