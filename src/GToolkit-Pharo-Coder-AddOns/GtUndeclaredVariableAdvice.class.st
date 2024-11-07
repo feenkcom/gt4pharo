@@ -30,6 +30,11 @@ GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode coderModel: c
 	theFixitActions := OrderedCollection new.
 	theFixitActions
 		add: (GtDefineClassFixItAction forCoder: coderModel node: aVariableNode).
+	
+	(aVariableNode name value endsWith: 'Parser' caseSensitive: true)
+		ifTrue: [ 
+			theFixitActions
+				add: (GtDefineParserFixItAction forCoder: coderModel node: aVariableNode). ].
 
 	coderModel class = GtPharoSnippetCoder
 		ifFalse: [ | aDefineClassAction |
