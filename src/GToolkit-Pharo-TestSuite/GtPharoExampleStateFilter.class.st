@@ -25,6 +25,15 @@ GtPharoExampleStateFilter >> filterValueString [
 	^ self resultState label
 ]
 
+{ #category : #printing }
+GtPharoExampleStateFilter >> gtDisplayOn: aStream [
+	| aLabel |
+	aLabel := (self resultState ifNotNil: #label).
+	aLabel gtDisplayOn: aStream.
+	(aLabel includesSubstring: 'examples') 
+		ifFalse: [ aStream nextPutAll: ' examples' ]
+]
+
 { #category : #comparing }
 GtPharoExampleStateFilter >> hash [
 	^ (super hash bitXor: self resultState hash)
