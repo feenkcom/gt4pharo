@@ -65,7 +65,7 @@ GtPharoExampleSuite >> exampleWithResultForMethod: aCompiledMethod [
 	^ examplesWithResultCache
 		at: {aCompiledMethod methodClass.
 				aCompiledMethod}
-		ifAbsent: [ nil ]
+		ifAbsent: [ aCompiledMethod gtExampleWithResult  ]
 ]
 
 { #category : #'api - testing' }
