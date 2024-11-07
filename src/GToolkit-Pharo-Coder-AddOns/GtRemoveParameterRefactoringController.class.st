@@ -10,7 +10,7 @@ GtRemoveParameterRefactoringController >> refactoring [
 	aModel := self createRefactoringModel.
 	aClass := aModel classFor: sourceCoderViewModel behavior.
 
-	^ RBRemoveParameterRefactoring
+	^ GtRemoveParameterRefactoring
 		model: aModel
 		removeParameter: self variableName
 		in: aClass
