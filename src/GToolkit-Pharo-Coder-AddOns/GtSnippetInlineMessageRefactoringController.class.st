@@ -6,7 +6,8 @@ Class {
 		'implementorClass',
 		'returnLocation',
 		'setterSelectors',
-		'getterSelectors'
+		'getterSelectors',
+		'snippetClass'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -134,12 +135,18 @@ GtSnippetInlineMessageRefactoringController >> setterSendFor: aString to: aNode 
 
 { #category : #accessing }
 GtSnippetInlineMessageRefactoringController >> snippetClass [
-	^ implementorClass
+	^ snippetClass ifNil: [ implementorClass ]
+]
+
+{ #category : #accessing }
+GtSnippetInlineMessageRefactoringController >> snippetClass: aClass [
+	snippetClass := aClass
 ]
 
 { #category : #private }
 GtSnippetInlineMessageRefactoringController >> updateVariableReferencesIn: model [
 	| cls method ast rewriter |
+	(self snippetClass includesBehavior: implementorClass) ifTrue: [ ^ self ].
 	cls := model classFor: implementorClass.
 	method := cls methodFor: messageNode selector.
 	ast := method ast.
