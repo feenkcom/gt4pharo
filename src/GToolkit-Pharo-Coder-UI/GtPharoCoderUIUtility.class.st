@@ -87,7 +87,7 @@ GtPharoCoderUIUtility class >> filteredMethodsPhlowViewFor: aView context: aPhlo
 
 		anItemsView 
 			actionButtonIcon: BrGlamorousVectorIcons inspect
-			label: 'Filter' 
+			label: 'UI filter' 
 			tooltip: 'Inspect the current search filter'
 			action: [ :aButton |
 				aButton phlow spawnObject: (aButton phlow firstParentWithView content phlow firstChildWithView phlow element query // GtPharoStreamingMethodsCoderElement) anyOne streamingCodersViewModel streamingCodersModel compositeFilter ].
