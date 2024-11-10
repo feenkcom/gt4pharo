@@ -1049,6 +1049,7 @@ GtPharoMethodCoder >> inlinedPlaygroundSourceForReceiver: varName for: anElement
 	(GtSnippetInlineMessageRefactoringController new
 		messageNode: tree value;
 		implementorClass: self behavior;
+		snippetClass: nil class;
 		modelUpdater: [ :model | 
 			self isModified
 				ifTrue: [ (model classFor: self behavior)

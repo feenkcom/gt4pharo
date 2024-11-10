@@ -101,6 +101,7 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 			(GtSnippetInlineMessageRefactoringController new
 				messageNode: aNode;
 				implementorClass: class;
+				snippetClass: self behavior;
 				sourceCoderViewModel: each) executeIn: element ]
 		id: #'context-menu--inline-send'
 ]

@@ -4,7 +4,10 @@ Class {
 	#instVars : [
 		'messageNode',
 		'implementorClass',
-		'returnLocation'
+		'returnLocation',
+		'setterSelectors',
+		'getterSelectors',
+		'snippetClass'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -13,6 +16,7 @@ Class {
 GtSnippetInlineMessageRefactoringController >> compileSnippetMethodIn: model [
 	| cls ast source needsReturn |
 	super compileSnippetMethodIn: model.
+	self updateVariableReferencesIn: model.
 	cls := model classFor: self snippetClass.
 	ast := (cls methodFor: self snippetSelector) ast.
 	needsReturn := ast lastIsReturn not.
@@ -24,9 +28,33 @@ GtSnippetInlineMessageRefactoringController >> compileSnippetMethodIn: model [
 		classified: #accessing
 ]
 
+{ #category : #private }
+GtSnippetInlineMessageRefactoringController >> getterSelectorFor: aString in: aRBClass [
+	^ (aRBClass getterMethodFor: aString)
+		ifNil: [ aRBClass superclass
+				ifNotNil: [ :spr | 
+					(spr definesInstanceVariable: aString)
+						ifTrue: [ self getterSelectorFor: aString in: spr ] ] ]
+]
+
+{ #category : #private }
+GtSnippetInlineMessageRefactoringController >> getterSendFor: aString in: aRBClass [
+	^ (getterSelectors
+		at: aString
+		ifAbsentPut: [ self getterSelectorFor: aString in: aRBClass ])
+		ifNotNil: [ :selector | RBMessageNode receiver: (RBVariableNode named: 'self') selector: selector ]
+]
+
 { #category : #accessing }
 GtSnippetInlineMessageRefactoringController >> implementorClass: aClass [
 	implementorClass := aClass
+]
+
+{ #category : #'as yet unclassified' }
+GtSnippetInlineMessageRefactoringController >> initialize [
+	super initialize.
+	setterSelectors := Dictionary new.
+	getterSelectors := Dictionary new
 ]
 
 { #category : #accessing }
@@ -84,24 +112,56 @@ GtSnippetInlineMessageRefactoringController >> safelyExecute [
 	self setText: (self refactoredSnippetCodeFrom: refactoring)
 ]
 
+{ #category : #private }
+GtSnippetInlineMessageRefactoringController >> setterSelectorFor: aString in: aRBClass [
+	^ (aRBClass setterMethodFor: aString)
+		ifNil: [ aRBClass superclass
+				ifNotNil: [ :spr | 
+					(spr definesInstanceVariable: aString)
+						ifTrue: [ self setterSelectorFor: aString in: spr ] ] ]
+]
+
+{ #category : #private }
+GtSnippetInlineMessageRefactoringController >> setterSendFor: aString to: aNode in: aRBClass [
+	^ (setterSelectors
+		at: aString
+		ifAbsentPut: [ self setterSelectorFor: aString in: aRBClass ])
+		ifNotNil: [ :selector | 
+			RBMessageNode
+				receiver: (RBVariableNode named: 'self')
+				selector: selector
+				arguments: {aNode value copy} ]
+]
+
 { #category : #accessing }
 GtSnippetInlineMessageRefactoringController >> snippetClass [
-	^ implementorClass
+	^ snippetClass ifNil: [ implementorClass ]
+]
+
+{ #category : #accessing }
+GtSnippetInlineMessageRefactoringController >> snippetClass: aClass [
+	snippetClass := aClass
 ]
 
 { #category : #private }
 GtSnippetInlineMessageRefactoringController >> updateVariableReferencesIn: model [
 	| cls method ast rewriter |
+	(self snippetClass includesBehavior: implementorClass) ifTrue: [ ^ self ].
 	cls := model classFor: implementorClass.
 	method := cls methodFor: messageNode selector.
 	ast := method ast.
 	rewriter := RBParseTreeRewriter new.
 	implementorClass allInstVarNames
-		do:
-			[ :each | 
+		do: [ :each | 
 			rewriter
-				replace: each , ' := ``@a' with: 'self instVarNamed: ''' , each , ''' put: ``@a';
-				replace: each with: 'self instVarNamed: ''' , each , '''' ].
+				replace: each , ' := ``@a'
+					withValueFrom: [ :node | 
+						(self
+							setterSendFor: each
+							to: node value
+							in: cls) ifNil: [ node copy ] ];
+				replace: each
+					withValueFrom: [ :node | (self getterSendFor: each in: cls) ifNil: [ node copy ] ] ].
 	rewriter executeTree: ast.
 	cls compile: ast formattedCode
 ]
