@@ -21,14 +21,8 @@ GtPharoCompleterExamples >> binaryCompletion [
 
 { #category : #'private-source' }
 GtPharoCompleterExamples >> checkCompletionsIn: aString areSameAs: selectors [
-	| text strategy items |
-	text := (aString copyReplaceAll: '`' with: '') asRopedText.
-	strategy := self smalltalkStrategy.
-	items := strategy
-			completionActionStreamFor: text
-			at: (aString indexOf: $`) - 1
-			requested: true.
-	items := items toArray wait.
+	| items |
+	items := (self completionStreamFor: aString) toArray wait.
 	self assert: items size equals: selectors size.
 	self
 		assert: (items allSatisfy: [ :each | selectors includes: each label asString asSymbol ]).
@@ -37,14 +31,8 @@ GtPharoCompleterExamples >> checkCompletionsIn: aString areSameAs: selectors [
 
 { #category : #'private-source' }
 GtPharoCompleterExamples >> checkCompletionsIn: aString areSupersetOf: selectors [
-	| text strategy items itemsSelectors |
-	text := (aString copyReplaceAll: '`' with: '') asRopedText.
-	strategy := self smalltalkStrategy.
-	items := strategy
-			completionActionStreamFor: text
-			at: (aString indexOf: $`) - 1
-			requested: true.
-	items := items toArray wait.
+	| items itemsSelectors |
+	items := (self completionStreamFor: aString) toArray wait.
 	itemsSelectors := items collect: [ :each | each label asString asSymbol ].
 	self assert: itemsSelectors size >= selectors size.
 	self assert: (selectors allSatisfy: [ :each | itemsSelectors includes: each ]).
@@ -53,15 +41,12 @@ GtPharoCompleterExamples >> checkCompletionsIn: aString areSupersetOf: selectors
 
 { #category : #'private-source' }
 GtPharoCompleterExamples >> checkCompletionsIn: aString contains: completionString [
-	| text strategy items |
-	text := (aString copyReplaceAll: '`' with: '') asRopedText.
-	strategy := self smalltalkStrategy.
-	items := strategy
-		completionActionStreamFor: text
-		at: (aString indexOf: $`) - 1
-		requested: true.
-	self assert: ((items asyncSimilarCopy take: 30) toArray wait anySatisfy: [ :each | each label = completionString ]).
-	^ items
+	| stream |
+	stream := self completionStreamFor: aString.
+	self
+		assert: ((stream asyncSimilarCopy take: 30) toArray wait
+				anySatisfy: [ :each | each label = completionString ]).
+	^ stream
 ]
 
 { #category : #smalltalk }
@@ -400,6 +385,17 @@ GtPharoCompleterExamples >> completeWithTabIn: aScripter [
 	(aScripter keyPress: BlKeyboardKey tab) play
 ]
 
+{ #category : #'private-source' }
+GtPharoCompleterExamples >> completionStreamFor: aString [
+	| text strategy |
+	text := (aString copyReplaceAll: '`' with: '') asRopedText.
+	strategy := self smalltalkStrategy.
+	^ strategy
+		completionActionStreamFor: text
+		at: (aString indexOf: $`) - 1
+		requested: true
+]
+
 { #category : #smalltalk }
 GtPharoCompleterExamples >> crLfMessageCompletion [
 	<gtExample>
@@ -532,6 +528,26 @@ GtPharoCompleterExamples >> openCompletionIn: aScripter [
 { #category : #'private-source' }
 GtPharoCompleterExamples >> printOnMethodSelectorSource [
 	^ 'printOn: aStream'
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> returnPragma [
+	<gtExample>
+	<return: #GtPharoCompleterExamples>
+	| selectors retSelectors |
+	selectors := self class allSelectors.
+	retSelectors := selectors
+			select: [ :e | (e asString asLowercase beginsWith: 'ret') or: [ e includesSubstring: 'Ret' ] ].
+
+	self
+		checkCompletionsIn: 'a
+				GtPharoCompleterExamples new returnPragma `'
+		areSameAs: selectors.
+
+	self
+		checkCompletionsIn: 'a
+				GtPharoCompleterExamples new returnPragma ret`'
+		areSameAs: retSelectors
 ]
 
 { #category : #'private-scripting' }

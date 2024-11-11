@@ -267,6 +267,17 @@ GtPharoProgramNode >> nestingLevel [
 		ifFalse: [ 0 ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoProgramNode >> pragmasNamed: aSelector [
+	^ parent
+		ifNil: [ #() ]
+		ifNotNil: [ | method |
+			method := self topParent.
+			method isErrorNode
+				ifTrue: [ #() ]
+				ifFalse: [ method pragmasNamed: aSelector ] ]
+]
+
 { #category : #accessing }
 GtPharoProgramNode >> priority [
 	^ SmallInteger maxVal
