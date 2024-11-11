@@ -390,7 +390,8 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 			GtSourceCoderSelectStatementUpShortcut.
 			GtSourceCoderSelectStatementDownShortcut.
 			GtSourceCoderFixItShortcut.
-			GtSourceCoderPrintItShortcut} collect: #new.
+			GtSourceCoderPrintItShortcut.
+			GtSourceCoderFoldNoiseShortcut} collect: #new.
 
 	addOns addShortcuts: shortcuts
 ]
