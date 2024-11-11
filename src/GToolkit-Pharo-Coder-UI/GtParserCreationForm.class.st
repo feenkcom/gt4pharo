@@ -94,6 +94,7 @@ GtParserCreationForm >> parserDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		default: '';
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Parser name must be set';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
@@ -107,13 +108,18 @@ GtParserCreationForm >> parserDescription [
 
 { #category : #accessing }
 GtParserCreationForm >> parserRope [
-	^ self parser asRopedText
-		ifEmpty: [ self parser asRopedText attribute: (self ghostTextFor: self defaultParser) ]
+	"We do not mind to return a BlText instance in case of empty parser name
+	since we do not allow empty class names."
+
+	<return: #String or: #BlText>
+	^ self parser
+		ifEmpty: [ self parser asRopedText 
+			attribute: (self ghostTextFor: self defaultParser) ]
 ]
 
 { #category : #accessing }
-GtParserCreationForm >> parserRope: aRope [
-	self parser: aRope asString
+GtParserCreationForm >> parserRope: aBlText [
+	self parser: aBlText asString
 ]
 
 { #category : #accessing }
@@ -139,6 +145,7 @@ GtParserCreationForm >> scannerDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		default: '';
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Scanner name must be set';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
@@ -152,8 +159,13 @@ GtParserCreationForm >> scannerDescription [
 
 { #category : #accessing }
 GtParserCreationForm >> scannerRope [
-	^ self scanner asRopedText
-		ifEmpty: [ self scanner asRopedText attribute: (self ghostTextFor: self defaultScanner) ]
+	"We do not mind to return a BlText instance in case of empty scanner name
+	since we do not allow empty class names."
+	
+	<return: #String or: #BlText>
+	^ self scanner
+		ifEmpty: [ self scanner asRopedText 
+			attribute: (self ghostTextFor: self defaultScanner) ]
 ]
 
 { #category : #accessing }
