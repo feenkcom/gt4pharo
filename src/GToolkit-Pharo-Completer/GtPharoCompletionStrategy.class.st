@@ -290,10 +290,12 @@ GtPharoCompletionStrategy >> typeOfVariable: aNode [
 	self selfObject class
 		slotNamed: name
 		ifFound: [ :slot | ^ (slot read: self selfObject) ifNotNil: [ :obj | obj class ] ].
-	(Pragma allNamed: #gtVariableType in: self class)
+	(Pragma allNamed: #gtVariableType)
 		do: [ :each | 
-			(each method valueWithReceiver: self arguments: {aNode})
-				ifNotNil: [ :cls | ^ cls ] ].
+			each method methodClass isClassSide
+				ifTrue: [ (each method methodClass instanceSide
+						perform: each method selector
+						withArguments: {aNode}) ifNotNil: [ :cls | ^ cls ] ] ].
 	^ nil
 ]
 
