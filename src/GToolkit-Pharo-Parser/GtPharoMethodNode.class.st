@@ -82,6 +82,11 @@ GtPharoMethodNode >> pragmas [
 ]
 
 { #category : #accessing }
+GtPharoMethodNode >> pragmasNamed: aSelector [
+	^ self body pragmas select: [ :each | each selector = aSelector ]
+]
+
+{ #category : #accessing }
 GtPharoMethodNode >> selector [
 	"Return a method selector if method pattern parsing was successful or nil otherwise.
 	Consider using #selectorDo: instead, as it does not return nil"

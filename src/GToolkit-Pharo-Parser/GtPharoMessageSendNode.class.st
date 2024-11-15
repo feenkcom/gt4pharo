@@ -22,7 +22,15 @@ GtPharoMessageSendNode >> arguments [
 GtPharoMessageSendNode >> guessType: completionStrategy [
 	message isConstructorMessage
 		ifTrue: [ (self receiver guessType: completionStrategy)
-				ifNotNil: [ :type | type isClassSide ifTrue: [ ^ type instanceSide ] ] ].
+				ifNotNil: [ :type | type isClassSide ifTrue: [ ^ type instanceSide ] ] ]
+		ifFalse: [ (self receiver guessType: completionStrategy)
+				ifNotNil: [ :type | 
+					type
+						compiledMethodAt: self selector
+						ifPresent: [ :method | 
+							method pragmas
+								detect: [ :each | each selector = #return: ]
+								ifFound: [ :pragma | (Smalltalk at: pragma arguments first ifAbsent: [  ]) ifNotNil: [ :cls | ^ cls ] ] ] ] ].
 	^ super guessType: completionStrategy
 ]
 

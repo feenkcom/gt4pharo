@@ -30,7 +30,8 @@ GtPharoVariableNode >> findVariableNodeAt: anInteger [
 
 { #category : #accessing }
 GtPharoVariableNode >> guessType: completionStrategy [
-	^ (completionStrategy typeOfVariable: name value) ifNil: [ super guessType: completionStrategy ]
+	^ (completionStrategy typeOfVariable: self)
+		ifNil: [ super guessType: completionStrategy ]
 ]
 
 { #category : #testing }

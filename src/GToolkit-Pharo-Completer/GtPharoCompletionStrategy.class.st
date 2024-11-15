@@ -275,19 +275,27 @@ GtPharoCompletionStrategy >> signatureFor: aMethod [
 ]
 
 { #category : #typing }
-GtPharoCompletionStrategy >> typeOfVariable: aString [
-	aString = 'self' ifTrue: [ ^ self classOrMetaClass ].
-	aString = 'super' ifTrue: [ ^ self classOrMetaClass superclass ].
+GtPharoCompletionStrategy >> typeOfVariable: aNode [
+	| name |
+	name := aNode name value.
+	name = 'self' ifTrue: [ ^ self classOrMetaClass ].
+	name = 'super' ifTrue: [ ^ self classOrMetaClass superclass ].
 	self classOrMetaClass notNil
-		ifTrue: [ (self classOrMetaClass bindingOf: aString asSymbol)
+		ifTrue: [ (self classOrMetaClass bindingOf: name asSymbol)
 				ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ].
 	bindings notNil
-		ifTrue: [ (bindings hasBindingOf: aString asSymbol)
-				ifTrue: [ (bindings bindingOf: aString asSymbol)
+		ifTrue: [ (bindings hasBindingOf: name asSymbol)
+				ifTrue: [ (bindings bindingOf: name asSymbol)
 						ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ] ].
 	self selfObject class
-		slotNamed: aString
+		slotNamed: name
 		ifFound: [ :slot | ^ (slot read: self selfObject) ifNotNil: [ :obj | obj class ] ].
+	(Pragma allNamed: #gtVariableType)
+		do: [ :each | 
+			each method methodClass isClassSide
+				ifTrue: [ (each method methodClass instanceSide
+						perform: each method selector
+						withArguments: {aNode}) ifNotNil: [ :cls | ^ cls ] ] ].
 	^ nil
 ]
 
