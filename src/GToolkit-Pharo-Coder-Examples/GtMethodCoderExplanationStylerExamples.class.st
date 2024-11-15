@@ -180,45 +180,40 @@ GtMethodCoderExplanationStylerExamples >> hasUnderlineAttributeIn: coder [
 GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 	<gtExample>
 	| resultElement resultInspectorTree titleTab avatarLabel phoneLabel nameLabel avatarElementsCollection listLabelsCollection |
-	
-	resultElement := BlUseAsyncFeatures
-		disableDuring: [ (GtPhlowView empty composite
-				views:
-					{(GtABCartoonAddressBookExample new cartoonAddressBook
-						gtViewContactsOn: GtPhlowView empty)};
-				labelled: 'a GtABAddressBook (Cartoons)' asRopedText)
-				asElementDo: [ :e | e ] ].
-	resultElement forceLayout.
-	resultInspectorTree := resultElement phlow firstChildWithView.
-	
+	resultElement := (GtPhlowView empty composite
+			views: {GtABCartoonAddressBookExample new cartoonAddressBook
+						gtViewContactsOn: GtPhlowView empty};
+			labelled: 'a GtABAddressBook (Cartoons)' asRopedText) asElementDo: [ :e | e ].
+
+	BlScripter new
+		element: resultElement;
+		elementWithoutParent.
+
+	resultInspectorTree := resultElement phlow firstChildWithViewContent.
+
 	titleTab := resultInspectorTree
-		allChildrenBreadthFirstDetect: [ :aChild | 
-			(aChild isKindOf: BrTab)
-				and: [ aChild label asString = 'Contacts with details' ] ]
-		ifFound: [ :aChild | aChild ].
+			allChildrenBreadthFirstDetect: [ :aChild | 
+				(aChild isKindOf: BrTab)
+					and: [ aChild label asString = 'Contacts with details' ] ]
+			ifFound: [ :aChild | aChild ].
 	avatarLabel := resultInspectorTree
-		allChildrenBreadthFirstDetect:
-			[ :aChild | (aChild isKindOf: BrLabel) and: [ aChild text asString = 'Avatar' ] ]
-		ifFound: [ :aChild | aChild ].
+			allChildrenBreadthFirstDetect: [ :aChild | (aChild isKindOf: BrLabel) and: [ aChild text asString = 'Avatar' ] ]
+			ifFound: [ :aChild | aChild ].
 	nameLabel := resultInspectorTree
-		allChildrenBreadthFirstDetect:
-			[ :aChild | (aChild isKindOf: BrLabel) and: [ aChild text asString = 'Name' ] ]
-		ifFound: [ :aChild | aChild ].
+			allChildrenBreadthFirstDetect: [ :aChild | (aChild isKindOf: BrLabel) and: [ aChild text asString = 'Name' ] ]
+			ifFound: [ :aChild | aChild ].
 	phoneLabel := resultInspectorTree
-		allChildrenBreadthFirstDetect:
-			[ :aChild | (aChild isKindOf: BrLabel) and: [ aChild text asString = 'Phone' ] ]
-		ifFound: [ :aChild | aChild ].
+			allChildrenBreadthFirstDetect: [ :aChild | (aChild isKindOf: BrLabel) and: [ aChild text asString = 'Phone' ] ]
+			ifFound: [ :aChild | aChild ].
 	avatarElementsCollection := resultInspectorTree
-		allChildrenBreadthFirstSelect: [ :aChild | 
-			(aChild isKindOf: BrHorizontalPane) ].
+			allChildrenBreadthFirstSelect: [ :aChild | aChild isKindOf: BrHorizontalPane ].
 	listLabelsCollection := resultInspectorTree
-		allChildrenBreadthFirstSelect: [ :aChild | 
-			(aChild isKindOf: BlTextElement)
-				and: [ aChild parent parent isKindOf: GtPhlowCellElement ] ].
+			allChildrenBreadthFirstSelect: [ :aChild | 
+				(aChild isKindOf: BlTextElement)
+					and: [ aChild parent parent isKindOf: GtPhlowCellElement ] ].
 
 	titleTab
-		addChild:
-			(BrButton new
+		addChild: (BrButton new
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
@@ -226,8 +221,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #title:);
 				relocate: 10 @ titleTab extent y / 2).
 	avatarLabel
-		addChild:
-			(BrButton new
+		addChild: (BrButton new
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
@@ -235,8 +229,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #columns);
 				relocate: 5 @ avatarLabel extent y / 2).
 	nameLabel
-		addChild:
-			(BrButton new
+		addChild: (BrButton new
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
@@ -244,8 +237,7 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 				aptitude: (GtExplainerTargetAptitude new explanationModel: #columns);
 				relocate: 5 @ nameLabel extent y / 2).
 	phoneLabel
-		addChild:
-			(BrButton new
+		addChild: (BrButton new
 				constraintsDo: [ :c | c ignoreByLayout ];
 				size: 5 @ 5;
 				elevation: (BlRelativeElevation elevation: 10);
@@ -255,31 +247,29 @@ GtMethodCoderExplanationStylerExamples >> inspectorOnViewMethod [
 	avatarElementsCollection
 		do: [ :eachAvatar | 
 			eachAvatar parent
-				addChild:
-					(BrButton new
+				addChild: (BrButton new
 						constraintsDo: [ :c | c ignoreByLayout ];
 						size: 5 @ 5;
 						elevation: (BlRelativeElevation elevation: 10);
 						geometry: BlCircleGeometry new;
 						aptitude: (GtExplainerTargetAptitude new explanationModel: #avatar);
-						relocate: 0 @ eachAvatar extent y / 2) ].			
+						relocate: 0 @ eachAvatar extent y / 2) ].
 	listLabelsCollection
 		do: [ :eachLabel | 
 			| modelName |
 			modelName := (eachLabel text asString beginsWith: '+' asString)
-				ifTrue: [ #telephone ]
-				ifFalse: [ #fullName ].
+					ifTrue: [ #telephone ]
+					ifFalse: [ #fullName ].
 			eachLabel
-				addChild:
-					(BrButton new
+				addChild: (BrButton new
 						constraintsDo: [ :c | c ignoreByLayout ];
 						size: 5 @ 5;
 						elevation: (BlRelativeElevation elevation: 10);
 						geometry: BlCircleGeometry new;
 						aptitude: (GtExplainerTargetAptitude new explanationModel: modelName);
 						relocate: -5 @ eachLabel extent y / 2) ].
-	
-	^ resultElement.
+
+	^ resultElement
 ]
 
 { #category : #dummies }
