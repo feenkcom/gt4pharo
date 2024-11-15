@@ -61,7 +61,7 @@ GtStrictSymbolEqualityArgumentSignal class >> left: leftObject right: rightObjec
 		[ (leftObject isString or: [ leftObject isSymbol ]) ifFalse: [ ^ self ].
 		(rightObject isString or: [ rightObject isSymbol ]) ifFalse: [ ^ self ] ].
 	(self logStringSymbolOnly and:
-		[ (leftObject isSymbol xor: [ rightObject isSymbol ]) not ]) 
+		[ (leftObject isSymbol lazyXor: [ rightObject isSymbol ]) not ]) 
 			ifTrue: [ ^ self ].
 
 	self new
