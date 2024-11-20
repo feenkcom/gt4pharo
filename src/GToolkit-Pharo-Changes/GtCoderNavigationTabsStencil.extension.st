@@ -3,6 +3,7 @@ Extension { #name : #GtCoderNavigationTabsStencil }
 { #category : #'*GToolkit-Pharo-Changes' }
 GtCoderNavigationTabsStencil >> gtRecentChangesFor: aView [
 	<gtCoderNavigation>
+	<gtCoderDropdownNavigation>
 	self navigationModel ifNil: [ ^ aView empty ].
 	^ aView explicit
 		priority: 10;
