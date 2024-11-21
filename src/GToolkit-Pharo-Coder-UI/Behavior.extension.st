@@ -72,8 +72,8 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 						| handled navigationModel |
 						handled := false.
 						
-						navigationModel := theButton phlow firstParentWithView phlow
-								firstParentWithView navigationModel.
+						navigationModel := theButton phlow firstParentWithViewContent phlow
+								firstParentWithViewContent navigationModel.
 						(anItem isKindOf: RPackage)
 							ifTrue: [ 
 								navigationModel selectPackage: anItem.

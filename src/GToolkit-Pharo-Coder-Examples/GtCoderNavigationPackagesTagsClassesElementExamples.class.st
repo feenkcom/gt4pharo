@@ -1,6 +1,6 @@
 Class {
 	#name : #GtCoderNavigationPackagesTagsClassesElementExamples,
-	#superclass : #GtCoderNavigationModelExamples,
+	#superclass : #GtCoderNavigationBasicPackagesTagsClassesElementExamples,
 	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
@@ -29,13 +29,6 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> addAndRemoveMethodUpdates
 	^ aScripter
 ]
 
-{ #category : #asserting }
-GtCoderNavigationPackagesTagsClassesElementExamples >> assertSelectionOfPackage: aRPackage tag: aRPackageTag class: aClass inElement: anElement [
-	self assert: anElement selectedPackage equals: aRPackage.
-	self assert: anElement selectedPackageTag equals: aRPackageTag.
-	self assert: anElement selectedClass equals: aClass
-]
-
 { #category : #'examples - basic' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> basicElement [
 	<gtExample>
@@ -45,72 +38,12 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> basicElement [
 	^ anElement
 ]
 
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> classInPackage [
-	<gtExample>
-	^ BaselineOfGToolkitCoder
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> classInPackageTag [
-	<gtExample>
-	^ self class
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> classInUncategorizedPackageTag [
-	<gtExample>
-	^ GtCoderUncategorizedDummyClass
-]
-
-{ #category : #'examples - basic' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModel [
-	<gtExample>
-	| anElement aModel |
-	anElement := self basicElement.
-	aModel := self basicPackageTagsClassesNavigation.
-	anElement navigationModel: aModel.
-	self assert: anElement navigationModel equals: aModel.
-	self assert: anElement navigationModel announcer numberOfSubscriptions > 0.
-	self assertSelectionOfPackage: nil tag: nil class: nil inElement: anElement.
-	^ anElement
-]
-
-{ #category : #'examples - basic' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementNavigationModelInSpace [
-	<gtExample>
-	| anElement aScripter |
-	anElement := self elementNavigationModel.
-	
-	aScripter := BlScripter new element: anElement.
-	
-	self assert: anElement navigationModel announcer numberOfSubscriptions equals: self numberOfSubscriptions.
-	self assertSelectionOfPackage: nil tag: nil class: nil inElement: anElement.
-
-	^ aScripter
-]
-
 { #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPackageTagClassSelection [
 	<gtExample>
 	| aScripter |
-	aScripter := self elementWithExtensionPackageTagSelection.
+	aScripter := super elementWithExtensionPackageTagClassSelection.
 
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select  Class';
-				block: [ :anElement | anElement navigationModel selectClass: ByteString ] ].
-
-	aScripter checks
-		label: 'Check Class and Package Tag Selection';
-		do: [ :anElement | 
-			self
-				assertSelectionOfPackage: nil
-				tag: self extensionTag
-				class: ByteString
-				inElement: aScripter ].
-	
 	"Contains: virtual protocols, instance protocols"
 	aScripter checks
 		label: 'Check list count is correct';
@@ -125,66 +58,15 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPacka
 ]
 
 { #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithExtensionPackageTagSelection [
-	<gtExample>
-	| aScripter tag |
-	aScripter := self scripterOnElementNavigationModelInSpace.
-	tag := self extensionTag.
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select Package Tag';
-				block: [ :anElement | anElement navigationModel selectPackageTag: tag ] ].
-
-	aScripter checks
-		label: 'Check Package Tag Selection';
-		do: [ :anElement | 
-			self
-				assertSelectionOfPackage: nil
-				tag: tag
-				class: nil
-				inElement: anElement ];
-		play.
-
-	^ aScripter
-]
-
-{ #category : #'examples - class selection' }
 GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection [
 	<gtExample>
 	| aScripter anElement |
 	
-	aScripter := self elementNavigationModelInSpace.
+	aScripter := super elementWithPackageAndClassSelection.
 	anElement := aScripter element.
 	
-	anElement navigationModel selectClass: self classInPackage.
-	aScripter play.
-	
-	self
-		assertSelectionOfPackage: self classInPackage package
-		tag: nil
-		class: self classInPackage
-		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
 	
-	^ aScripter
-]
-
-{ #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageAndClassSelection_BeforeInSpace [
-	<gtExample>
-	| anElement aScripter |
-	anElement := self elementNavigationModel.
-	anElement navigationModel selectClass: self classInPackage.
-	
-	aScripter := BlScripter new element: anElement.
-	
-	self
-		assertSelectionOfPackage: self classInPackage package
-		tag: nil
-		class: self classInPackage
-		inElement: anElement.
-		
 	^ aScripter
 ]
 
@@ -193,190 +75,26 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndC
 	<gtExample>
 	| aScripter anElement |
 	
-	aScripter := self elementNavigationModelInSpace.
+	aScripter := super elementWithPackageTagAndClassSelection.
 	anElement := aScripter element.
-	
-	anElement navigationModel selectClass: self classInPackageTag.
-	aScripter play.
-	
-	self
-		assertSelectionOfPackage: nil
-		tag: self packageTag
-		class: self classInPackageTag
-		inElement: anElement.
 	self assert: anElement methodProtocolsList isVisible.
 
 	^ aScripter
 ]
 
-{ #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagAndClassSelection_BeforeInSpace [
-	<gtExample>
-	| anElement aScripter |
-	anElement := self elementNavigationModel.
-	anElement navigationModel selectClass: self classInPackageTag.
-	
-	aScripter := BlScripter new element: anElement.
-	
-	self 
-		assertSelectionOfPackage: nil
-		tag: self packageTag
-		class: self classInPackageTag 
-		inElement: anElement.
-	
-	^ aScripter
-]
-
-{ #category : #'examples - package tag selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageTagSelection [
-	<gtExample>
-	| aScripter |
-	aScripter := self scripterOnElementNavigationModelInSpace.
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select Package Tag';
-				block: [ :anElement | anElement navigationModel selectPackageTag: self packageTag ] ].
-
-	aScripter checks
-		label: 'Check Package Tag Selection';
-		do: [ :anElement | 
-			self
-				assertSelectionOfPackage: nil
-				tag: self packageTag
-				class: nil
-				inElement: anElement ];
-		play.
-
-	^ aScripter
-]
-
-{ #category : #'examples - package selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithoutTagsAndExtensionsSelection [
-	<gtExample>
-	| aScripter |
-	aScripter := self scripterOnElementNavigationModelInSpace.
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select Package';
-				block: [ :anElement | anElement navigationModel selectPackage: self packageWithoutTagsAndExtensions ] ].
-
-	aScripter checks
-		label: 'Check Package Selection';
-		do: [ :anElement | 
-			self
-				assertSelectionOfPackage: self packageWithoutTagsAndExtensions
-				tag: nil
-				class: nil
-				inElement: anElement ];
-		play.
-
-	^ aScripter
-]
-
-{ #category : #'examples - package selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithPackageWithoutTagsAndExtensionsSelection_Children [
-	<gtExample>
-	| aScripter aPackageNode |
-	aScripter := self elementWithPackageWithoutTagsAndExtensionsSelection.
-	aPackageNode := aScripter element selectedPackageNodeDo: [ :aNode | aNode ].
-	self assert: aPackageNode isNotNil.
-	self assert: aPackageNode childrenValues size equals: 0.
-	^ aScripter
-]
-
-{ #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedPackageTagAndClassSelection [
-	<gtExample>
-	| aScripter anElement |
-
-	aScripter := self elementNavigationModelInSpace.
-	anElement := aScripter element.
-	
-	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
-	aScripter play.
-	
-	self 
-		assertSelectionOfPackage: 'GToolkit-Coder-Examples' asPackage
-		tag: nil 
-		class: self classInUncategorizedPackageTag 
-		inElement: anElement.
-
-	^ aScripter
-]
-
-{ #category : #'examples - class selection' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> elementWithUncategorizedPackageTagAndClassSelection_BeforeInSpace [
-	<gtExample>
-	| anElement aScripter |
-	anElement := self elementNavigationModel.
-	anElement navigationModel selectClass: self classInUncategorizedPackageTag.
-	
-	aScripter := BlScripter new element: anElement.
-	
-	self 
-		assertSelectionOfPackage: self classInUncategorizedPackageTag package
-		tag: nil
-		class: self classInUncategorizedPackageTag 
-		inElement: anElement.
-
-	^ aScripter
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> extensionTag [
-	<gtExample>
-	^ GtCoderPackageExtensionTag forPackage: self packageWithTagsAndExtensions.
-]
-
 { #category : #accessing }
 GtCoderNavigationPackagesTagsClassesElementExamples >> numberOfSubscriptions [
 	<gtExample>
-	| aMethodOne aMethodTwo theGlobalsOne theGlobalsTwo theGlobals aMethodThree theGlobalsThree aMethodFour theGlobalsFour aMethodFive theGlobalsFive |
-	aMethodOne := GtCoderNavigationElement >> #subscribeToNavigationModel.
-	theGlobalsOne := aMethodOne ast allVariables select: #isGlobal.
-	aMethodTwo := GtCoderNavigationPackagesTagsClassesElement >> #subscribeToNavigationModel.
-	theGlobalsTwo := aMethodTwo ast allVariables select: #isGlobal.
+	| theGlobals aMethodThree theGlobalsThree aMethodFour theGlobalsFour aMethodFive theGlobalsFive |
 	aMethodThree := GtCoderMethodsGroupedListElement>>#subscribeToNavigationModel.
 	theGlobalsThree := aMethodThree ast allVariables select: #isGlobal.
 	aMethodFour := GtCoderProtocolsGroupedListElement>>#subscribeToNavigationModel.
 	theGlobalsFour := aMethodFour ast allVariables select: #isGlobal.
 	aMethodFive := GtCoderSlotsGroupedListElement>>#subscribeToNavigationModel.
 	theGlobalsFive := aMethodFive ast allVariables select: #isGlobal.
-	theGlobals := theGlobalsOne, theGlobalsTwo, theGlobalsThree, theGlobalsFour, theGlobalsFive.
-	self assert: theGlobals size > 20.
-	^ theGlobals size
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> packageTag [
-	<gtExample>
-	^ self packageWithTagsAndWithoutExtensions classTagNamed: 'Navigation'
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithTagsAndExtensions [
-	<gtExample>
-	^ 'GToolkit-Pharo-Coder-AddOns' asPackage 
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithTagsAndWithoutExtensions [
-	<gtExample>
-	^ 'GToolkit-Pharo-Coder-Examples' asPackage 
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> packageWithoutTagsAndExtensions [
-	<gtExample>
-	^ 'GToolkit-Coder-Examples-SystemS1' asPackage 
-]
-
-{ #category : #'examples - basic' }
-GtCoderNavigationPackagesTagsClassesElementExamples >> scripterOnElementNavigationModelInSpace [
-	<gtExample>
-	^ self elementNavigationModelInSpace
+	theGlobals := theGlobalsThree, theGlobalsFour, theGlobalsFive.
+	self assert: theGlobals size > 6.
+	^ theGlobals size + super numberOfSubscriptions
 ]
 
 { #category : #'examples - system items' }

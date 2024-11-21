@@ -5246,7 +5246,6 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodVar
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ self methodCoderWithFailingExample asCoderViewModel ].
