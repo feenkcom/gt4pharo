@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtPharoDummyTwoObject class >> sum21Reference [
+	^ self sum21
+]
+
+{ #category : #accessing }
 GtPharoDummyTwoObject >> anotherNumber [
 	self number
 ]
@@ -38,4 +43,9 @@ GtPharoDummyTwoObject >> one [
 { #category : #accessing }
 GtPharoDummyTwoObject >> printString [
 	^ super printString
+]
+
+{ #category : #accessing }
+GtPharoDummyTwoObject >> sum21Reference [
+	^ self sum21
 ]
