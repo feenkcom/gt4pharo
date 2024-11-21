@@ -5,7 +5,7 @@ GtPharoTestCaseUtility class >> newColoredIcon: aColor [
 
 	^ BlElement new
 		  background: aColor;
-		  geometry: BlSquare new;
+		  geometry: BlSquareGeometry new;
 		  margin: (BlInsets all: 1);
 		  size: 8 @ 8
 ]
@@ -16,7 +16,7 @@ GtPharoTestCaseUtility class >> newColoredIconFor: aState [
 	^ BlElement new
 		  background: aState color;
 		  border: aState border;
-		  geometry: BlSquare new;
+		  geometry: BlSquareGeometry new;
 		  margin: (BlInsets all: 1);
 		  size: 8 @ 8
 ]
@@ -26,7 +26,7 @@ GtPharoTestCaseUtility class >> newColoredIconWithMargin: aColor [
 
 	^ BlElement new
 		  background: aColor;
-		  geometry: BlSquare new;
+		  geometry: BlSquareGeometry new;
 		  margin: ((BlInsets all: 1) withTop: 2);
 		  size: 8 @ 8
 ]
