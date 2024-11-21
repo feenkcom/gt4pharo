@@ -114,7 +114,6 @@ GtTextFolderAttribute >> hoverTextStencil [
 { #category : #accessing }
 GtTextFolderAttribute >> initialize [
 	super initialize.
-	self beNotOverwritableByStyler.
 	isExpanded := true.
-	hideAttribute := BrTextFoldAttribute new beNotOverwritableByStyler
+	hideAttribute := BrTextFoldAttribute new
 ]
