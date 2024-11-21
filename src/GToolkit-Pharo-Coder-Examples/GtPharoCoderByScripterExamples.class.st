@@ -97,6 +97,35 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 				/ #content asBlocElementId ]
 ]
 
+{ #category : #'examples - evaluation context' }
+GtPharoCoderByScripterExamples >> classSideMethodsShouldHaveSelfAsBehaviorNotAnInstance [
+	"See https://github.com/feenkcom/gtoolkit/issues/4127"
+
+	<gtExample>
+	| aScripter aClassSideMethod aReferencedMethod |
+	aScripter := self coderWithDummyTwoObjectInstanceInPager.
+	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
+	aReferencedMethod := GtPharoDummyOneObject class >> #sum21.
+
+	aScripter pager
+		setPageAt: 1 widthInSpaceRatio: 1.0;
+		play.
+
+	aScripter methodsCoder
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aClassSideMethod;
+		scrollToCompiledMethod: aClassSideMethod;
+		forCompiledMethod: aClassSideMethod
+			do: [ :aMethodCoder | 
+				aMethodCoder
+					clickOnMethodCoderExpander: 1
+					insideDo: [ :aStep1 | aStep1 assertCompiledMethodIs: aReferencedMethod ] ];
+		scrollToCompiledMethod: aClassSideMethod;
+		play.
+
+	^ aScripter
+]
+
 { #category : #accessing }
 GtPharoCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
@@ -308,6 +337,12 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 GtPharoCoderByScripterExamples >> coderWithAddMethod [
 	<gtExample>
 	^ self coderInPager: [ GtCoderElement forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
+]
+
+{ #category : #'examples - scripter' }
+GtPharoCoderByScripterExamples >> coderWithDummyTwoObjectInstanceInPager [
+	<gtExample>
+	^ self coderInPager: [ GtCoderElement forObject: GtPharoDummyTwoObject new ]
 ]
 
 { #category : #'examples - scripter' }
@@ -703,6 +738,36 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 					s
 						value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
 							equals: [ 2 ] ] ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoCoderByScripterExamples >> instanceSideMethodsExpandsInstanceSideMethods [
+	"Accompanying example for https://github.com/feenkcom/gtoolkit/issues/4127"
+
+	<gtExample>
+	| aScripter anInstanceSideMethod aReferencedMethod aClassSideMethod |
+	aScripter := self coderWithDummyTwoObjectInstanceInPager.
+	anInstanceSideMethod := GtPharoDummyTwoObject >> #sum21Reference.
+	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
+	aReferencedMethod := GtPharoDummyOneObject >> #sum21.
+
+	aScripter pager
+		setPageAt: 1 widthInSpaceRatio: 1.0;
+		play.
+
+	aScripter methodsCoder
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: anInstanceSideMethod;
+		scrollToCompiledMethod: anInstanceSideMethod;
+		forCompiledMethod: anInstanceSideMethod
+			do: [ :aMethodCoder | 
+				aMethodCoder
+					clickOnMethodCoderExpander: 1
+					insideDo: [ :aStep1 | aStep1 assertCompiledMethodIs: aReferencedMethod ] ];
+		scrollToCompiledMethod: aClassSideMethod;
+		play.
 
 	^ aScripter
 ]

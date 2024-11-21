@@ -24,6 +24,11 @@ GtPharoDummyOneObject class >> instA: anObject [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject class >> sum21 [
+	^ 12
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject class >> varA [
 	^ VarA
 ]
