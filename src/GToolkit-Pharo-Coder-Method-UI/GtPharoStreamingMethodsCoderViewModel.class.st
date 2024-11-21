@@ -27,16 +27,22 @@ GtPharoStreamingMethodsCoderViewModel >> initialize [
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
-	| header |
+	| header aCoderViewModel |
 	"Show header for methods from other classes"
 	header := shouldHaveHeaderByDefault
 			or: [ aCoderModel methodBehavior behavior ~= streamingCodersModel behavior
 					and: [ aCoderModel methodBehavior behavior ~= streamingCodersModel behavior class ] ].
-	^ aCoderModel asCoderViewModel
+	aCoderViewModel := aCoderModel asCoderViewModel
 		expanded: shouldExpandByDefault;
 		shouldHaveHeader: header;
-		highlighter: highlighter;
-		selfObject: selfObject
+		highlighter: highlighter.
+		
+	"Set selfObject only on the instance side methods.
+	See https://github.com/feenkcom/gtoolkit/issues/4127"
+	aCoderModel isMeta ifFalse: [
+		aCoderViewModel selfObject: selfObject ].
+		
+	^ aCoderViewModel
 ]
 
 { #category : #'private - event handling' }
@@ -75,7 +81,10 @@ GtPharoStreamingMethodsCoderViewModel >> selfObject [
 GtPharoStreamingMethodsCoderViewModel >> selfObject: anObject [
 	selfObject := anObject.
 	coderViewModels valuesDo: [ :eachCoderViewModel |
-		eachCoderViewModel selfObject: anObject ]
+		"Set selfObject only on the instance side methods.
+		See https://github.com/feenkcom/gtoolkit/issues/4127"
+		eachCoderViewModel isMeta ifFalse: [
+			eachCoderViewModel selfObject: anObject ] ]
 ]
 
 { #category : #'api - accessing' }
