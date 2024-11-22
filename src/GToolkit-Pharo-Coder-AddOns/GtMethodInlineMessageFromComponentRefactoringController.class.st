@@ -18,8 +18,8 @@ GtMethodInlineMessageFromComponentRefactoringController >> addReceiverTypeAttrib
 					classes: self potentialImplementors;
 					selected: self implementor;
 					yourself)
-			from: node receiver stopPosition
-			to: node receiver stopPosition
+			from: self receiverAttributePosition
+			to: self receiverAttributePosition
 ]
 
 { #category : #accessing }
@@ -84,11 +84,16 @@ GtMethodInlineMessageFromComponentRefactoringController >> previewPosition [
 ]
 
 { #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> receiverAttributePosition [
+	^ node receiver stopPosition
+]
+
+{ #category : #accessing }
 GtMethodInlineMessageFromComponentRefactoringController >> refactoring [
 	| refactoring model |
 	model := self createRefactoringModel.
 
-	refactoring := GtInlineMethodFromComponentRefactoring
+	refactoring := self refactoringClass
 			model: model
 			inline: node sourceInterval
 			inMethod: sourceCoderViewModel coderModel currentSelector
@@ -99,6 +104,11 @@ GtMethodInlineMessageFromComponentRefactoringController >> refactoring [
 		setOption: #implementorToInline
 		toUse: [ :ref :classes | classes detect: [ :each | each realClass = self implementor ] ifNone: [ nil ] ].
 	^ refactoring
+]
+
+{ #category : #accessing }
+GtMethodInlineMessageFromComponentRefactoringController >> refactoringClass [
+	^ GtInlineMethodFromComponentRefactoring
 ]
 
 { #category : #accessing }
