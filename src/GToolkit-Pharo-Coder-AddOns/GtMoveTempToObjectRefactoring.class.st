@@ -37,7 +37,7 @@ GtMoveTempToObjectRefactoring >> addNewVariableAndAccessors [
 
 { #category : #transforming }
 GtMoveTempToObjectRefactoring >> buildAst [
-	ast := class parseTreeFor: selector
+	ast := class parseTreeForSelector: selector
 ]
 
 { #category : #transforming }
