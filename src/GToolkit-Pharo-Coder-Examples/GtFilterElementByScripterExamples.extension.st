@@ -14,22 +14,31 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 	<gtExample>
 	| aScripter |
 	aScripter := self classCoderSelectSuperclass.
-	
+
 	aScripter memoryLogger
 		runFor: GtFilterSignal
-		during: [ :aStep |
+		during: [ :aStep | 
 			aStep filterStep
 				clickOnAddFilter;
 				clickOnDropdownMethodProtocolItem;
 				assertFilterModelAtIndex: 2 itemsCountIs: 4;
+				play.
+			aStep filterStep
 				clickOnFilterSettingsAtIndex: 2;
-				clickOnDropdownFilterItemAtIndex: 3;
-				assertFilterModelNamed: GtSearchMethodCategoryFilter filterName 
+				play.
+
+			aStep filterStep
+				clickOnDropdownFilterItemAtIndex: 4;
+				assertFilterModelNamed: GtSearchMethodCategoryFilter filterName
 					selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
+				play.
+			aStep filterStep
 				assertMethodsUpToFilterModel;
+				play.
+			aStep filterStep
 				assertMethodProtocolFilterModel;
 				play ].
-		
+
 	aScripter methodsCoder
 		assertNumberOfVisibleMethodsIsExactly: 1;
 		play.
