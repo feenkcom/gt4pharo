@@ -16,7 +16,7 @@ Class {
 { #category : #accessing }
 GtExtractMethodObjectRefactoring >> abstractVariablesInExtractedMethod [
 	| refactoring ast |
-	ast := class parseTreeFor: extractedMethodSelector.
+	ast := class parseTreeForSelector: extractedMethodSelector.
 	refactoring := RBAbstractVariablesRefactoring
 			model: self model
 			abstractVariablesIn: ast
@@ -43,7 +43,7 @@ GtExtractMethodObjectRefactoring >> addClass [
 GtExtractMethodObjectRefactoring >> cascadeExtractedMessage [
 	| rewriter ast |
 	self shouldEliminateYourselfFromConstructor ifFalse: [ ^ self ].
-	ast := self modelClass parseTreeFor: extractedMethodSelector.
+	ast := self modelClass parseTreeForSelector: extractedMethodSelector.
 	rewriter := RBParseTreeRewriter new.
 	rewriter
 		replace: '((' , className , ' `@msg: `@args) `@;messages; yourself) `@msg2: `@args2'
@@ -292,7 +292,7 @@ GtExtractMethodObjectRefactoring >> transform [
 GtExtractMethodObjectRefactoring >> variablesToMove [
 	^ variablesToMove
 		ifNil: [ | vars ast |
-			ast := class parseTreeFor: extractedMethodSelector.
+			ast := class parseTreeForSelector: extractedMethodSelector.
 			vars := (ast arguments collect: #name) asOrderedCollection.
 			(self hasSelfReferenceIn: ast) ifTrue: [ vars add: 'self' ].
 			variablesToMove := (self options at: #variablesToMove) cull: vars cull: self ]
