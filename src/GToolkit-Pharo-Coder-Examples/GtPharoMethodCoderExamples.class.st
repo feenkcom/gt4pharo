@@ -96,10 +96,10 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderModifiedWhenSubscribedToSyst
 		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
 	self
-		assert: aMethodCoder sourceCode currentSourceString wait string
+		assert: aMethodCoder sourceCode currentSourceString string
 		equals: anOldMethod sourceCode , '"modified"'.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: anOldMethod sourceCode , '"modified"'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
@@ -159,10 +159,10 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderWhenSubscribedToSystem [
 		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
 	self
-		assert: aMethodCoder sourceCode currentSourceString wait string
+		assert: aMethodCoder sourceCode currentSourceString string
 		equals: anOldMethod sourceCode.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: anOldMethod sourceCode.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
@@ -251,8 +251,8 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderModifiedWhenSubscribedToS
 	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder isModified.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
-	self assert: aMethodCoder sourceCode currentSourceString wait string equals: anOldMethod sourceCode , '"modified"'.
-	self assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString equals: anOldMethod sourceCode , '"new method"'.
+	self assert: aMethodCoder sourceCode currentSourceString string equals: anOldMethod sourceCode , '"modified"'.
+	self assert: aMethodCoder sourceCode originalSourceText text asString equals: anOldMethod sourceCode , '"new method"'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderMethodModified.
@@ -310,10 +310,10 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribed
 		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
 	self
-		assert: aMethodCoder sourceCode currentSourceString wait string
+		assert: aMethodCoder sourceCode currentSourceString string
 		equals: anOldMethod sourceCode , '"new method"'.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: anOldMethod sourceCode , '"new method"'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
@@ -370,10 +370,10 @@ GtPharoMethodCoderExamples >> compileModifiedNewMethodWithCoderWhenSubscribedToS
 		equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod == aNewMethod.
 	self
-		assert: aMethodCoder sourceCode currentSourceString wait string
+		assert: aMethodCoder sourceCode currentSourceString string
 		equals: aNewMethodSelector.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: aNewMethodSelector.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
@@ -996,13 +996,13 @@ GtPharoMethodCoderExamples >> modifyBackCompiledMethodWithoutCoderModifiedWhenSu
 		assert: aMethodCoder sourceCode class
 		equals: GtCoderCompiledMethodTextSource.
 	self
-		assert: aMethodCoder sourceCode currentSourceString wait string
+		assert: aMethodCoder sourceCode currentSourceString string
 		equals: anOldMethod sourceCode.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: anOldMethod sourceCode , '"new method"'.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: aNewMethod sourceCode.
 
 	aMethodCoder appendString: '"new method"'.
@@ -1016,13 +1016,13 @@ GtPharoMethodCoderExamples >> modifyBackCompiledMethodWithoutCoderModifiedWhenSu
 		assert: aMethodCoder sourceCode class
 		equals: GtCoderCompiledMethodTextSource.
 	self
-		assert: aMethodCoder sourceCode currentSourceString wait string
+		assert: aMethodCoder sourceCode currentSourceString string
 		equals: aNewMethod sourceCode.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: anOldMethod sourceCode , '"new method"'.
 	self
-		assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString
+		assert: aMethodCoder sourceCode originalSourceText text asString
 		equals: aNewMethod sourceCode.
 
 	^ aMethodCoder
@@ -1059,8 +1059,8 @@ GtPharoMethodCoderExamples >> modifyNewMethod [
 	self assert: aMethodCoder currentSourceString equals: aMethodName.
 	self assert: aMethodCoder sourceCode class equals: GtCoderExplicitStringSource.
 	self assert: aMethodCoder sourceCode source equals: ''.
-	self assert: aMethodCoder sourceCode currentSourceString wait string equals: aMethodName.
-	self assert: aMethodCoder sourceCode originalSourceTextPromise wait text asString equals: ''.
+	self assert: aMethodCoder sourceCode currentSourceString string equals: aMethodName.
+	self assert: aMethodCoder sourceCode originalSourceText text asString equals: ''.
 
 	^ aMethodCoder
 ]
