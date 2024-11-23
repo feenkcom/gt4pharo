@@ -33,7 +33,7 @@ GtPharoMethodTestCaseStateElement >> initialize [
 
 	self 
 		layout: BlLinearLayout horizontal;
-		geometry: BlSquare new;
+		geometry: BlSquareGeometry new;
 		margin: (BlInsets all: 1);
 		exact: 12@12.
 		

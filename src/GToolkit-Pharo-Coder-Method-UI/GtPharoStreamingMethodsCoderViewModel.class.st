@@ -25,6 +25,18 @@ GtPharoStreamingMethodsCoderViewModel >> initialize [
 	shouldHaveHeaderByDefault := false
 ]
 
+{ #category : #'private - updating' }
+GtPharoStreamingMethodsCoderViewModel >> initializeSelfObjectForCoderViewModel: aCoderViewModel [
+	"Set selfObject only on the instance side methods.
+	See https://github.com/feenkcom/gtoolkit/issues/4127"
+	
+	^ aCoderViewModel isMeta
+		ifTrue: [ selfObject
+				ifNotNil: [ :theObject | aCoderViewModel selfObject: theObject class ]
+				ifNil: [ aCoderViewModel selfObject: streamingCodersModel behavior ] ]
+		ifFalse: [ aCoderViewModel selfObject: selfObject ]
+]
+
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
 	| header aCoderViewModel |
@@ -32,16 +44,14 @@ GtPharoStreamingMethodsCoderViewModel >> newCoderViewModelFor: aCoderModel [
 	header := shouldHaveHeaderByDefault
 			or: [ aCoderModel methodBehavior behavior ~= streamingCodersModel behavior
 					and: [ aCoderModel methodBehavior behavior ~= streamingCodersModel behavior class ] ].
+	
 	aCoderViewModel := aCoderModel asCoderViewModel
 		expanded: shouldExpandByDefault;
 		shouldHaveHeader: header;
 		highlighter: highlighter.
 		
-	"Set selfObject only on the instance side methods.
-	See https://github.com/feenkcom/gtoolkit/issues/4127"
-	aCoderModel isMeta ifFalse: [
-		aCoderViewModel selfObject: selfObject ].
-		
+	self initializeSelfObjectForCoderViewModel: aCoderViewModel.
+	
 	^ aCoderViewModel
 ]
 
@@ -80,11 +90,8 @@ GtPharoStreamingMethodsCoderViewModel >> selfObject [
 { #category : #accessing }
 GtPharoStreamingMethodsCoderViewModel >> selfObject: anObject [
 	selfObject := anObject.
-	coderViewModels valuesDo: [ :eachCoderViewModel |
-		"Set selfObject only on the instance side methods.
-		See https://github.com/feenkcom/gtoolkit/issues/4127"
-		eachCoderViewModel isMeta ifFalse: [
-			eachCoderViewModel selfObject: anObject ] ]
+	coderViewModels valuesDo: [ :eachCoderViewModel | 
+		self initializeSelfObjectForCoderViewModel: eachCoderViewModel ]
 ]
 
 { #category : #'api - accessing' }

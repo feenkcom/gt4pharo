@@ -13,6 +13,7 @@ GtSearchMethodCategoryFilter class >> filterDescriptor2For: aMethodsCoder [
 		creator: [ :anItem | anItem ifSome: [ :aName | self forCategory: aName ] ];
 		named: self filterName;
 		order: 15;
+		displayAllItems;
 		items: (GtPharoStreamingMethodsCoderPossibleCategoriesBuilder new methodsCoder: aMethodsCoder);
 		selectFirstItem
 ]

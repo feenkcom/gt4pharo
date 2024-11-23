@@ -36,7 +36,7 @@ GtCoderNavigationExamplesWithScripter >> packageContextMenu [
 	aScripter
 		secondaryClickStep: [ :s | 
 			s
-				// GtCoderNavigationPackagesTreeElement;
+				// GtCoderPackagesTreeElement;
 				label: 'Open Package Context Menu' ].	"aScripter assert
 		label: 'Check menu contents';
 		satisfies: [ :aThing |false ];

@@ -75,7 +75,7 @@ GtPharoSuiteFourStateElement >> newNeutralIconElement [
 { #category : #'private - instance creation' }
 GtPharoSuiteFourStateElement >> newOneStateIconElement [
 	^ BlElement new
-		  geometry: BlSquare new;
+		  geometry: BlSquareGeometry new;
 		  margin: (BlInsets all: 1);
 		  size: 16 @ 16
 ]

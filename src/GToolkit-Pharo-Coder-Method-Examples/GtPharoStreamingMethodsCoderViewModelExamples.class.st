@@ -38,14 +38,14 @@ GtPharoStreamingMethodsCoderViewModelExamples >> forSuperclass [
 	self assert: theCoderViewModels third expanded not.
 	self assert: theCoderViewModels third wantsHeader not.
 	self assert: theCoderViewModels third highlighter isNil.
-	self assert: theCoderViewModels third selfObject isNil.
+	self assert: theCoderViewModels third selfObject equals: GtPharoCoderMockedSuperclass.
 	self assert: theCoderViewModels third behavior equals: GtPharoCoderMockedSuperclass class.
 	self assert: theCoderViewModels third selector equals: #classMethodA.
 
 	self assert: theCoderViewModels fourth expanded not.
 	self assert: theCoderViewModels fourth wantsHeader not.
 	self assert: theCoderViewModels fourth highlighter isNil.
-	self assert: theCoderViewModels fourth selfObject isNil.
+	self assert: theCoderViewModels fourth selfObject equals: GtPharoCoderMockedSuperclass.
 	self assert: theCoderViewModels fourth behavior equals: GtPharoCoderMockedSuperclass class.
 	self assert: theCoderViewModels fourth selector equals: #classMethodB.
 

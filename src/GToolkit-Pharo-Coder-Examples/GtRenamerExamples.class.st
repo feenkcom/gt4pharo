@@ -9,6 +9,12 @@ GtRenamerExamples >> applyRename [
 	<gtExample>
 	| scripter |
 	scripter := self startRename.
+	
+	scripter
+		keyPressStep: [ :s | 
+			s
+				key: BlKeyboardKey arrowLeft ].
+	
 	scripter
 		keyPressStep: [ :s | 
 			s
@@ -23,7 +29,7 @@ GtRenamerExamples >> applyRename [
 
 	self
 		assert: scripter element editor text asString
-				= (self methodText copyReplaceAll: 'anInteger' with: 'aInteger').
+				equals: (self methodText copyReplaceAll: 'anInteger' with: 'anIntege').
 	^ scripter
 ]
 
@@ -64,32 +70,13 @@ GtRenamerExamples >> scripter [
 { #category : #examples }
 GtRenamerExamples >> smalltalkRenamer [
 	<gtExample>
-	| text styler editorElement completionStrategy completionController |
+	| text editorElement |
 
 	text := self methodText asRopedText.
 
-	styler := BrRBTextStyler new.
-	styler classOrMetaClass: GtPharoCompletionStrategy.
-
 	editorElement := GtSourceCoderEditorElement new
-		textualCoderViewModel: (GtPharoMethodCoderViewModel new coder: GtPharoMethodCoder new);
-		styler: styler;
-		text: text;
+		textualCoderViewModel: (GtPharoMethodCoderViewModel new coder: (GtPharoMethodCoder forClass: self class source: text));
 		fitContent.
-
-	editorElement editor
-		addEditorShortcut:
-			(BlShortcutWithAction new
-				combination: BlKeyCombination primaryR;
-				action: [ :aShortcutEvent | GtRenameAction pharoRenameLocalsOn: aShortcutEvent currentTarget ]).
-
-	completionStrategy := GtPharoCompletionStrategy newForMethod.
-	completionStrategy classOrMetaClass: GtPharoCompletionStrategy.
-	completionController := GtCompletionController
-		on: editorElement
-		strategy: completionStrategy.
-
-	completionController install.
 
 	^ editorElement
 ]
@@ -100,7 +87,7 @@ GtRenamerExamples >> smalltalkRenamerScripter [
 	| scripter |
 	scripter := self scripter.
 	scripter element: self smalltalkRenamer.
-	^ scripter pulse
+	^ scripter
 ]
 
 { #category : #accessing }

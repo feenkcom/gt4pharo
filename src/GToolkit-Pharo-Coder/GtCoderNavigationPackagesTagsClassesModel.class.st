@@ -30,7 +30,12 @@ GtCoderNavigationPackagesTagsClassesModel >> assertCoder: aCoder [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
-	self selectedPackage
+	| aSelectedPackage |
+	
+	aSelectedPackage := self selectedPackage
+		ifNil: [ self selectedTag ifNotNil: [ :aTag | aTag package ] ].
+	
+	aSelectedPackage
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aPackage |
 			(aPackage includesClassesAffectedBy: aClassAdded)
@@ -41,7 +46,12 @@ GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassModificationApplied [
-	self selectedPackage
+	| aSelectedPackage |
+	
+	aSelectedPackage := self selectedPackage
+		ifNil: [ self selectedTag ifNotNil: [ :aTag | aTag package ] ].
+	
+	aSelectedPackage
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aPackage |
 			(aPackage includesClassesAffectedBy: aClassModificationApplied)
@@ -57,8 +67,13 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 ]
 
 { #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [	
-	self selectedPackage
+GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
+	| aSelectedPackage |
+	
+	aSelectedPackage := self selectedPackage
+		ifNil: [ self selectedTag ifNotNil: [ :aTag | aTag package ] ].
+	
+	aSelectedPackage
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aPackage |
 			(aPackage includesClassesAffectedBy: aClassRemoved)
@@ -72,7 +87,12 @@ GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
 
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
-	self selectedPackage
+	| aSelectedPackage |
+	
+	aSelectedPackage := self selectedPackage
+		ifNil: [ self selectedTag ifNotNil: [ :aTag | aTag package ] ].
+	
+	aSelectedPackage
 		ifNil: [ ^ self ]
 		ifNotNil: [ :aPackage |
 			(aPackage includesClassesAffectedBy: aClassRenamed)
