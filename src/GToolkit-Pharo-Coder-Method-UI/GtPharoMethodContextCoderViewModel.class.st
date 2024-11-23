@@ -85,8 +85,8 @@ GtPharoMethodContextCoderViewModel >> onSourceCodeChanged: anSourceCodeChangedAn
 	super onSourceCodeChanged: anSourceCodeChangedAnnouncement.
 
 	aSourceCode := self coderModel sourceCode.
-	aSourceCode isModifiedPromise then: [ :isModified |
-		isModified ifFalse: [ self updateProgramCounterRange: aSourceCode ] ]
+	aSourceCode isModified
+		ifFalse: [ self updateProgramCounterRange: aSourceCode ]
 ]
 
 { #category : #'private - event handling' }
@@ -129,15 +129,15 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
 
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
-	aSourceCode currentSourceText
-		then: [ :aSourceText | 
-			self programCounterRange
-				ifNotNil: [ :anInterval | 
-					programCounterAttributes ifNotNil: [ :theAttributes | 
-						self removeCoderTextAttributes: theAttributes ].
-					programCounterAttributes := self
-							addTextAttribute: self programCounterTextAttribute
-							onText: aSourceText text
-							from: (anInterval first min: aSourceText text size)
-							to: (anInterval last min: aSourceText text size) ] ]
+	| aSourceText |
+	aSourceText := aSourceCode currentSourceText.
+	self programCounterRange
+		ifNotNil: [ :anInterval | 
+			programCounterAttributes ifNotNil: [ :theAttributes | 
+				self removeCoderTextAttributes: theAttributes ].
+			programCounterAttributes := self
+					addTextAttribute: self programCounterTextAttribute
+					onText: aSourceText text
+					from: (anInterval first min: aSourceText text size)
+					to: (anInterval last min: aSourceText text size) ]
 ]

@@ -206,6 +206,13 @@ GtPharoMethodCoder >> clearTestCase [
 ]
 
 { #category : #'api - text' }
+GtPharoMethodCoder >> collapsedText [
+	<return: #BlText>
+
+	^ self collapsedTextPromise wait
+]
+
+{ #category : #'api - text' }
 GtPharoMethodCoder >> collapsedTextPromise [
 	<return: #TAsyncPromise of: #BlText>
 
