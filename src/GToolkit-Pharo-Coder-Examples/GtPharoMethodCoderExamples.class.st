@@ -783,6 +783,21 @@ GtPharoMethodCoderExamples >> forExampleMethodCoder [
 ]
 
 { #category : #'examples - instance creation' }
+GtPharoMethodCoderExamples >> forInstrumentedMethodCoder [
+	<gtExample>
+	| method methodCoder |
+
+	method := GtPharoMethodCoderExamples >> #instrumentedMethod.
+
+	methodCoder := GtPharoMethodCoder forMethod: method.
+
+	self assert: methodCoder collapsedText asString equals: 'instrumentedMethod'.
+	self assert: methodCoder currentSourceString equals: method sourceCode.
+
+	^ methodCoder
+]
+
+{ #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forKeywordMethodInPackagedClass [
 	<gtExample>
 	<after: #cleanUp>
@@ -951,6 +966,15 @@ GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
 	^ aMethodCoder
+]
+
+{ #category : #'sample methods' }
+GtPharoMethodCoderExamples >> instrumentedMethod [
+	self 
+		assert: [ #() isNotNil ] 
+		description: [ 'Segment must be bound!' ].
+
+	1 to: 10 do: [ :i | i + 1 ]
 ]
 
 { #category : #'sample methods' }
