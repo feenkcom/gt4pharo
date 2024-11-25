@@ -28,7 +28,7 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 				play.
 
 			aStep filterStep
-				clickOnDropdownFilterItemAtIndex: 4;
+				clickOnDropdownFilterItem: (GtFilterModelStringItem new string: 'initialization');
 				assertFilterModelNamed: GtSearchMethodCategoryFilter filterName
 					selectedValueIs: (GtFilterModelStringItem new string: 'initialization');
 				play.
@@ -55,7 +55,7 @@ GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 2;
 		assertFilterModelAtIndex: 2 itemsCountIsAtLeast: 20;
-		clickOnDropdownFilterItemAtIndex: 1;
+		clickOnDropdownFilterItem: (GtFilterModelStringItem new string: AllProtocol gtDefaultName);
 		assertFilterModelAtIndex: 2
 			selectedValueIs: (GtFilterModelStringItem new string: AllProtocol gtDefaultName);
 		play.
@@ -75,7 +75,7 @@ GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 1;
-		clickOnDropdownFilterItemAtIndex: 4;
+		clickOnDropdownFilterItem: (GtFilterModelClassItem new itemClass: ProtoObject);
 		assertFilterModelNamed: GtSearchInheritedMethodsFilter filterName
 			selectedValueIs: (GtFilterModelClassItem new itemClass: ProtoObject);
 		assertMethodsUpToFilterModel;
@@ -97,7 +97,7 @@ GtFilterElementByScripterExamples >> classCoderSelectSuperclass [
 
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 1;
-		clickOnDropdownFilterItemAtIndex: 2;
+		clickOnDropdownFilterItem: (GtFilterModelClassItem new itemClass: GtPharoDummyOneObject);
 		assertFilterModelAtIndex: 1
 			selectedValueIs: (GtFilterModelClassItem new itemClass: GtPharoDummyOneObject);
 		play.
