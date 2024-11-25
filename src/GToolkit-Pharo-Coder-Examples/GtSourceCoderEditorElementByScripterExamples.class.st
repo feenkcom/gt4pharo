@@ -5,6 +5,44 @@ Class {
 }
 
 { #category : #'example - play example' }
+GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterWithElementContainingInstrumentation.
+
+	aScripter
+		substep: 'Fold noise'
+		do: [ :aStep | 
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Fold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines after folding';
+						value: [ :editor | editor children size ] equals: 4 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Unfold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6 ] ].
+
+	^ aScripter
+]
+
+{ #category : #'example - play example' }
 GtSourceCoderEditorElementByScripterExamples >> playExample [
 	<gtExample>
 	| aScripter |
@@ -72,6 +110,71 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElement [
 			model: [ :anElement | anElement textualCoderViewModel ];
 			onSelf;
 			play ].
+
+	^ aScripter
+]
+
+{ #category : #'example - instance creation' }
+GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingInstrumentation [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripter.
+	aScripter substep: 'Initialize Coder Model and UI' do: [ :aStep | 		
+		aStep set
+			label: 'Initialize Coder Editor UI';
+			element: [ GtSourceCoderEditorElementExamples new editorForInstrumentedMethodCoder ];
+			onSelf;
+			play.
+
+		aStep set
+			label: 'Initialize Coder UI Model';
+			model: [ :anElement | anElement textualCoderViewModel ];
+			onSelf;
+			play ].
+
+	^ aScripter
+]
+
+{ #category : #'example - play example' }
+GtSourceCoderEditorElementByScripterExamples >> unfoldNoiseTextOnSourceModified [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterWithElementContainingInstrumentation.
+
+	aScripter
+		substep: 'Unfold noise on modify'
+		do: [ :aStep | 
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Fold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Focus editor';
+						onChildAt: 4 ].
+			aStep
+				doStep: [ :s | 
+					s
+						label: 'Move to end of editor';
+						block: [ :e | e navigator moveToEnd ] ].
+			aStep
+				typeStep: [ :s | 
+					s
+						label: 'Modify text';
+						text: '"Comment"' ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines after modification unfolding';
+						value: [ :editor | editor children size ] equals: 6 ] ].
 
 	^ aScripter
 ]
