@@ -18,7 +18,7 @@ GtPharoGlamorousColorStylerExamples >> colorFromDefaultButtonBorderColor [
 		          (BrGlamorousColors name , ' ' , #defaultButtonBorderColor)
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoGlamorousColorStyler new

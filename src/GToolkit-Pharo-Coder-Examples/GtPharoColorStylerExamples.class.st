@@ -17,7 +17,7 @@ GtPharoColorStylerExamples >> colorFromColorRegistry [
 	
 	aCoder := GtPharoSnippetCoder forSource: 'Color brown' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
@@ -51,7 +51,7 @@ GtPharoColorStylerExamples >> colorFromHexHighlighted [
 	
 	aCoder := GtPharoSnippetCoder forSource: 'Color fromHexString: #''5533ee''' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new
@@ -94,7 +94,7 @@ GtPharoColorStylerExamples >> colorRGBRangeHighlighted [
 	
 	aCoder := GtPharoSnippetCoder forSource: 'Color r: 100 g: 30 b: 200 range: 255' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoColorStyler new

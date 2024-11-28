@@ -124,6 +124,20 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_copyClassName [
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_deleteClass_01_clickButton [
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI.
+
+	aScripter click
+		label: 'Click remove class button';
+		id: GtBehaviorCoderBehaviorDeleteButtonId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_doubleClick [
 	<gtExample>
 	| aScripter |

@@ -38,7 +38,7 @@ GtPharoSnippetCoder >> forSource: aString [
 GtPharoSnippetCoder >> implicitVariableNames [
 	| variables |
 	variables := Set new.
-	self astAwait
+	self astSync
 		allNodesDo: [ :each | 
 			(each isErrorNode not
 				and: [ each isVariable
@@ -50,7 +50,7 @@ GtPharoSnippetCoder >> implicitVariableNames [
 
 { #category : #'private - event handling' }
 GtPharoSnippetCoder >> implicitVariableReferencesTo: aString do: aBlock [
-	self astAwait
+	self astSync
 		allNodesDo: [ :each | 
 			(each isVariable
 				and: [ (aString sameContentAs: each variableName asString)

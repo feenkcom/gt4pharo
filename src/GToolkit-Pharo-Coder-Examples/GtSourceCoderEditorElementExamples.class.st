@@ -15,7 +15,6 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	scripter
 		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
-	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait not.
 
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
@@ -38,7 +37,6 @@ GtSourceCoderEditorElementExamples >> editorForInstrumentedMethodCoder [
 	scripter
 		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
-	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait not.
 
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
@@ -62,7 +60,7 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	scripter
 		element: (GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
-	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated wait not.
+
 	self assert: anEditorElement hasFocus not.
 	self assert: anEditorElement padding equals: BlInsets empty.
 	self assert: anEditorElement margin equals: BlInsets empty.

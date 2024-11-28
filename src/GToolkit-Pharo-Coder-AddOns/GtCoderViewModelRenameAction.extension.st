@@ -11,7 +11,7 @@ GtCoderViewModelRenameAction class >> pharoRenameLocalVariableAt: aTextIndex tex
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtCoderViewModelRenameAction class >> pharoRenameLocalVariableAt: aTextIndex textualCoderViewModel: aTextualCoderViewModel selectAll: aBoolean [
 	^ [ | ast items action |
-	ast := aTextualCoderViewModel astAwait.
+	ast := aTextualCoderViewModel astSync.
 	items := OrderedCollection new.
 	(ast findVariableNodeAt: aTextIndex)
 		ifNotNil: [ :node | 
@@ -68,7 +68,7 @@ GtCoderViewModelRenameAction class >> pharoRenameTemporaryVariable: aVariableNam
 	^ [
 		| ast items action |
 	
-		ast := aTextualCoderViewModel astAwait.
+		ast := aTextualCoderViewModel astSync.
 		items := OrderedCollection new.
 		
 		ast

@@ -13,7 +13,7 @@ GtPharoHaltAdviceStylerExamples >> haltNowHighlighted [
 	
 	aCoder := GtPharoSnippetCoder forSource: 'x := 42. Halt now. y := 42' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodAdviceStyler new
@@ -39,7 +39,7 @@ GtPharoHaltAdviceStylerExamples >> haltOnceHighlighted [
 	
 	aCoder := GtPharoSnippetCoder forSource: 'x := 42. Halt once. y := 42' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodAdviceStyler new
@@ -65,7 +65,7 @@ GtPharoHaltAdviceStylerExamples >> selfHaltHighlighted [
 	
 	aCoder := GtPharoSnippetCoder forSource: 'x := 42. self halt. y := 42' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtMethodAdviceStyler new
@@ -92,7 +92,7 @@ GtPharoHaltAdviceStylerExamples >> selfHaltOnceHighlighted [
 	aCoder := GtPharoSnippetCoder forSource:
 		          'x := 42. self haltOnce. y := 42' asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtMethodAdviceStyler new

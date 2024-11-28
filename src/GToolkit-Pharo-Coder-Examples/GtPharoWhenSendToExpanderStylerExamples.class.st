@@ -23,7 +23,7 @@ GtPharoWhenSendToExpanderStylerExamples >> styleCascadeWhenSendTo [
 		           ' new when: Announcement send: #onAnnouncement: to: self; yourself')
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel selfObject: self.
@@ -55,7 +55,7 @@ GtPharoWhenSendToExpanderStylerExamples >> styleWhenSendTo [
 		           ' new when: Announcement send: #onAnnouncement: to: self')
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	aCoderViewModel := aCoder asCoderViewModel.
 	aCoderViewModel selfObject: self.
