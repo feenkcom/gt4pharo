@@ -160,8 +160,20 @@ GtPharoSourceCoderViewModel >> objectVariableBindingsTo: theBindings [
 ]
 
 { #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> parentCoderViewModel [
+	<return: #GtPharoMethodCoderViewModel or: nil>
+	^ nil
+]
+
+{ #category : #'api - coder model' }
 GtPharoSourceCoderViewModel >> parentExample [
 	<return: #GtExampleWithResult or: nil>
+	^ nil
+]
+
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> parentTestCase [
+	<return: #GtPharoMethodTestCase or: nil>
 	^ nil
 ]
 
@@ -181,4 +193,10 @@ GtPharoSourceCoderViewModel >> selfObject: anObject [
 		ifNotNil: [ completionStrategy
 				classOrMetaClass: self behavior;
 				selfObject: anObject ]
+]
+
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> testCase [
+	<return: #GtPharoMethodTestCase or: nil>
+	^ nil
 ]

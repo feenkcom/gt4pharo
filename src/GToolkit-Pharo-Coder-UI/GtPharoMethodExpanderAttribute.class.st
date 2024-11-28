@@ -77,6 +77,10 @@ GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder 
 		ifNotNil: [ :aSelfObject | viewModel selfObject: aSelfObject ].
 	argumentBindingsBuilder parentExample
 		ifNotNil: [ :anExample | viewModel parentExample: anExample ].
+	argumentBindingsBuilder parentTestCase
+		ifNotNil: [ :aTestCase | viewModel parentTestCase: aTestCase ].
+	argumentBindingsBuilder parentCoderViewModel
+		ifNotNil: [ :aCoderViewModel | viewModel parentCoderViewModel: aCoderViewModel ].
 ]
 
 { #category : #'initialize-release' }
