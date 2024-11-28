@@ -14,7 +14,7 @@ GtPharoStylerExamples >> invalidSyntaxWithCascade [
 	notNil
 Object new'.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 	
 	GtPharoStyler new
@@ -38,7 +38,7 @@ GtPharoStylerExamples >> temporariesAreLighterThanGlobalVariables [
 	| aCoder anAst aSourceText lightIntervals |
 	aCoder := GtPharoMethodCoder
 			forMethod: GtPharoStylerExamples >> #invalidSyntaxWithCascade.
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoStyler new

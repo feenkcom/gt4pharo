@@ -2,8 +2,7 @@ Class {
 	#name : #GtPharoBehaviorCoderViewModel,
 	#superclass : #GtSingleCoderViewModel,
 	#instVars : [
-		'definitionCoderUIModel',
-		'currentAddOns'
+		'definitionCoderUIModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
@@ -19,6 +18,13 @@ GtPharoBehaviorCoderViewModel >> computeAddOns [
 
 	^ [ self syncComputeAddOnsFor: coderModel ] asAsyncFuture
 		await: (self class addOnsExecutionConfiguration)
+]
+
+{ #category : #accessing }
+GtPharoBehaviorCoderViewModel >> computeAddOnsFuture [
+	<return: #TAsyncFuture>
+
+	^ [ self syncComputeAddOnsFor: coderModel ] asAsyncFuture
 ]
 
 { #category : #accessing }
@@ -46,19 +52,15 @@ GtPharoBehaviorCoderViewModel >> mainActions [
 
 { #category : #accessing }
 GtPharoBehaviorCoderViewModel >> onAddOnsChanged: theAddOns [
-	"Is sent when new add-ons are computed"
+	super onAddOnsChanged: theAddOns.
 
-	currentAddOns := theAddOns.
 	self announce: (GtPharoBehaviorCoderViewModelAddonsChangedAnnouncement new
-		pharoBehaviorCoderViewModel: self) 
+		pharoBehaviorCoderViewModel: self)
 ]
 
 { #category : #'api - coder model' }
 GtPharoBehaviorCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
-	
-	addOnPromise := nil.
-	self ensureAddOns.
 ]
 
 { #category : #accessing }

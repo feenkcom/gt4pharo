@@ -39,7 +39,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleId [
 		           , 'at: ''client_id'' put: ''a secret token''')
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
@@ -67,7 +67,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> stylePassword [
 		           , 'at: ''password'' put: ''a secret password''')
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
@@ -95,7 +95,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleSecret [
 		           , 'at: ''client_secret'' put: ''a secret value''')
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new
@@ -123,7 +123,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStylerExamples >> styleToken [
 		           , 'at: ''client_token'' put: ''a secret token''')
 			          asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoZincApplicationFormUrlEncodedEntityStyler new

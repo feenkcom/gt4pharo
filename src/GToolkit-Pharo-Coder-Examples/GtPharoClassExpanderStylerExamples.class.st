@@ -28,7 +28,7 @@ GtPharoClassExpanderStylerExamples >> existingClass [
 
 	GtPharoClassExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self classExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -49,7 +49,7 @@ GtPharoClassExpanderStylerExamples >> missingClass [
 
 	GtPharoClassExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self classExpanderAttributesIn: text) noneSatisfy: [ :each | 

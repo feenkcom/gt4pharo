@@ -127,7 +127,7 @@ GtPharoBehaviorCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderV
 		initializeAddOns: addOns
 		viewModel: aGtPharoMethodCoderViewModel.
 
-	addOns
+	(addOns
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons remove
 		action: [ :aButtonElement :aButtonModel :anEvent | 
@@ -136,7 +136,7 @@ GtPharoBehaviorCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderV
 			GtPharoRemoveClassPreviewStencil new
 				classToRemove: self theClass;
 				anElement: element;
-				create  ]
+				create ]) id: GtBehaviorCoderBehaviorDeleteButtonId
 ]
 
 { #category : #initialize }

@@ -52,7 +52,7 @@ GtPharoMethodPasswordStylerExamples >> styleSourceCode: aSourceString attributeI
 	| aCoder anAst aSourceText allIntervals |
 	aCoder := GtPharoSnippetCoder forSource: aSourceString asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoMethodPasswordStyler new

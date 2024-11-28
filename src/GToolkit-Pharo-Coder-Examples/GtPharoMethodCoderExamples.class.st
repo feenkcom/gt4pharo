@@ -1070,11 +1070,14 @@ GtPharoMethodCoderExamples >> modifyNewMethod [
 	self assert: aMethodCoder isModified not.
 	aMethodCoder appendString: aMethodName.
 
-	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder numberOfEvents equals: 2.
 	self assert: anEventsRecoder first class equals: GtCoderSourceCodeChanged.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
 	self assert: anEventsRecoder first isSynchronous not.
 	self assert: anEventsRecoder first newText asString equals: aMethodName.
+	
+	self assert: anEventsRecoder second class equals: GtCoderAddOnsUpdateRequest.
+	self assert: anEventsRecoder second coder equals: aMethodCoder.
 
 	self assert: aMethodCoder isModified.
 	self assert: aMethodCoder selector equals: nil.

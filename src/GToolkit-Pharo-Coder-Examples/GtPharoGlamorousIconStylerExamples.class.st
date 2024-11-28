@@ -35,7 +35,7 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	aCoder := GtPharoSnippetCoder forSource:
 		          (BrGlamorousIcons name , ' ' , #refresh) asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoGlamorousIconStyler new
@@ -62,7 +62,7 @@ GtPharoGlamorousIconStylerExamples >> vectorRefreshIcon [
 	aCoder := GtPharoSnippetCoder forSource:
 		          (BrGlamorousVectorIcons name , ' ' , #refresh) asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoGlamorousIconStyler new
