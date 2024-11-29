@@ -237,6 +237,7 @@ GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
 GtPharoBehaviorCoderElement >> initialize [
 	super initialize.
 	self initializeToolbarElement.
+	self beFocusable.
 
 	self
 		layout: BlLinearLayout vertical;

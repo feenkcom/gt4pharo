@@ -11,7 +11,9 @@ Class {
 		'parentExplicitProviderClass',
 		'parentSelfObject',
 		'parentEvaluationContext',
-		'parentExample'
+		'parentExample',
+		'parentTestCase',
+		'parentCoderViewModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -164,6 +166,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> localBindings [
 ]
 
 { #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentCoderViewModel [
+	^ parentCoderViewModel
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentCoderViewModel: anObject [
+	parentCoderViewModel := anObject
+]
+
+{ #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentEvaluationContext [
 	<return: #GtPharoSourceCoderEvaluationContext>
 	^ parentEvaluationContext
@@ -210,6 +222,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentSelfObject: anObject [
 	parentSelfObject := anObject
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentTestCase [
+	^ parentTestCase
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentTestCase: anObject [
+	parentTestCase := anObject
 ]
 
 { #category : #'accessing - results' }

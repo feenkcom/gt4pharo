@@ -881,12 +881,12 @@ GtPharoMethodCoder >> extractExampleToPlaygroundIn: button event: anEvent reques
 	cls := self behavior.
 	varName := cls isClassSide
 			ifTrue: [ self behavior instanceSide name ]
-			ifFalse: [ self safeVarNameBasedOn: 'example' in: self astAwait ].
+			ifFalse: [ self safeVarNameBasedOn: 'example' in: self astSync ].
 	inlinedSource := self inlinedPlaygroundSourceForReceiver: varName for: button.
 	page := LePage
 			unnamedPageWithDefaultTitle: ('{1}>>{2} playground'
 					format: {cls name.
-							self astAwait selector}).
+							self astSync selector}).
 	cls isClassSide
 		ifFalse: [ page addSnippet: (LePharoSnippet code: varName , ' := ' , cls name , ' new') ].
 	page addSnippet: (LePharoSnippet code: inlinedSource).
@@ -907,16 +907,16 @@ GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent requester
 	cls := self behavior.
 	varName := cls isClassSide
 			ifTrue: [ self behavior instanceSide name ]
-			ifFalse: [ self safeVarNameBasedOn: 'test' in: self astAwait ].
+			ifFalse: [ self safeVarNameBasedOn: 'test' in: self astSync ].
 	inlinedSource := self inlinedPlaygroundSourceForReceiver: varName for: button.
 	page := LePage
 			unnamedPageWithDefaultTitle: ('{1}>>{2} playground'
 					format: {cls name.
-							self astAwait selector}).
+							self astSync selector}).
 	page := LePage
 			unnamedPageWithDefaultTitle: ('{1}>>{2} playground'
 					format: {cls name.
-							self astAwait selector}).
+							self astSync selector}).
 	page
 		addSnippet: (LePharoSnippet
 				code: varName , ' := ' , cls name
@@ -1040,7 +1040,7 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> inlinedPlaygroundSourceForReceiver: varName for: anElement [
 	| source ast tree coder editable node |
-	ast := self astAwait.
+	ast := self astSync.
 	source := '^' , varName , ' ' , ast selector.
 	tree := GtPharoParser
 			parse: source

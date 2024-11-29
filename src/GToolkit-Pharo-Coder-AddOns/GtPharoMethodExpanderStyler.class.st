@@ -60,11 +60,13 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			andSelector: aMessage selector.
 	anAttribute id: (GtPharoMethodExpanderId indexed: self nextIndex).
 	aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
+			parentCoderViewModel: coderViewModel;
 			parentEvaluationContext: evaluationContext;
 			parentSelfObject: aSelfObject;
 			parentMessage: aMessage;
 			parentExplicitProviderClass: self coderViewModel explicitProviderClass;
-			parentExample: (coderViewModel example ifNil: [ coderViewModel parentExample ]).
+			parentExample: (coderViewModel example ifNil: [ coderViewModel parentExample ]);
+			parentTestCase: (coderViewModel testCase ifNil: [ coderViewModel parentTestCase ]).
 	anAttribute argumentBindingsBuilder: aBuilder.
 	text
 		attribute: anAttribute

@@ -14,7 +14,7 @@ GtPharoMethodExpanderStylerExamples >> expanderAttribute [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	index := text asString indexOfSubCollection: 'do:'.
 	self assert: (self indexOfExpanderIn: text) equals: (index + 2).
@@ -41,7 +41,7 @@ GtPharoMethodExpanderStylerExamples >> messageToArrayLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self
 		assert:
@@ -62,7 +62,7 @@ GtPharoMethodExpanderStylerExamples >> messageToByteArrayLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -82,7 +82,7 @@ GtPharoMethodExpanderStylerExamples >> messageToCharacterLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -102,7 +102,7 @@ GtPharoMethodExpanderStylerExamples >> messageToFalseLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -122,7 +122,7 @@ GtPharoMethodExpanderStylerExamples >> messageToFloatLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -142,7 +142,7 @@ GtPharoMethodExpanderStylerExamples >> messageToGlobal [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -161,7 +161,7 @@ GtPharoMethodExpanderStylerExamples >> messageToIntegerLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -179,7 +179,7 @@ GtPharoMethodExpanderStylerExamples >> messageToNilLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -199,7 +199,7 @@ GtPharoMethodExpanderStylerExamples >> messageToStringLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -219,7 +219,7 @@ GtPharoMethodExpanderStylerExamples >> messageToSymbolLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -239,7 +239,7 @@ GtPharoMethodExpanderStylerExamples >> messageToTrueLiteral [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) anySatisfy: [ :each | 
@@ -272,7 +272,7 @@ GtPharoMethodExpanderStylerExamples >> missingSelfSend [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) allSatisfy: [ :each | 
@@ -292,7 +292,7 @@ GtPharoMethodExpanderStylerExamples >> missingSuperSend [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	self assert:
 		((self methodExpanderAttributesIn: text) allSatisfy: [ :each | 
@@ -312,7 +312,7 @@ GtPharoMethodExpanderStylerExamples >> superExpanderAttribute [
 
 	GtPharoMethodExpanderStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 
 	index := text asString indexOfSubCollection: 'do:'.
 	self assert: (self indexOfExpanderIn: text) equals: index + 2.

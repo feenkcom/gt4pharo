@@ -239,6 +239,23 @@ GtPharoMethodCoderViewModel >> objectVariableBindingsTo: theBindings [
 ]
 
 { #category : #accessing }
+GtPharoMethodCoderViewModel >> parentCoderViewModel [
+	<return: #GtPharoMethodCoderViewModel or: nil>
+	^ self
+		optionAt: #parentCoderViewModel
+		ifPresent: [ :aWeak | aWeak at: 1 ]
+		ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> parentCoderViewModel: aCoderViewModel [
+	"In case of method coders expanded inside of another method coder,
+	the parent-method-coder view model is set, to be able to get an extra information."
+
+	self optionAt: #parentCoderViewModel put: aCoderViewModel asWeakReference
+]
+
+{ #category : #accessing }
 GtPharoMethodCoderViewModel >> parentExample [
 	<return: #GtExampleWithResult or: nil>
 	^ self
@@ -254,6 +271,24 @@ GtPharoMethodCoderViewModel >> parentExample: anExample [
 	in those expanded method coders."
 
 	self optionAt: #parentExample put: anExample asWeakReference
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> parentTestCase [
+	<return: #GtPharoMethodTestCase or: nil>
+	^ self
+		optionAt: #parentTestCase
+		ifPresent: [ :aWeak | aWeak at: 1 ]
+		ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> parentTestCase: aTestCase [
+	"In case of method coders expanded inside of another method coder,
+	the parent-method-coder test case is set, to be able to highlight failing code
+	in those expanded method coders."
+
+	self optionAt: #parentTestCase put: aTestCase asWeakReference
 ]
 
 { #category : #'api - actions' }
@@ -352,6 +387,12 @@ GtPharoMethodCoderViewModel >> sourceBehavior [
 			(aTraitCompositionElement
 				traitDefining: coderModel selector
 				ifNone: [ nil ]) innerClass ]
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderViewModel >> testCase [
+	<return: #GtPharoMethodTestCase or: nil>
+	^ self coderModel testCase
 ]
 
 { #category : #'api - header' }

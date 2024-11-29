@@ -224,7 +224,7 @@ TGtPharoSourceCoderAstNodesDetection >> variableNodeAt: aTextPosition ifFound: a
 	<return: #Object>
 	[
 		| theAST |
-		theAST := self astAwait.
+		theAST := self astSync.
 		theAST
 			withAllNodesOfType: GtPharoVariableNode
 			do: [ :node | 

@@ -69,7 +69,7 @@ GtAddParameterRefactoringController >> createRefactoringModel [
 GtAddParameterRefactoringController >> installArgumentSource [
 	| ast |
 	parameterNode ifNotNil: [ ^ self ].
-	ast := sourceCoderViewModel astAwait.
+	ast := sourceCoderViewModel astSync.
 	sourceAction := GtCoderViewModelRenameAction
 			locations: {ast pattern variables last sourceInterval}
 			textualCoderViewModel: sourceCoderViewModel.
@@ -90,7 +90,7 @@ GtAddParameterRefactoringController >> installArgumentSource [
 { #category : #executing }
 GtAddParameterRefactoringController >> installParameterRenamer [
 	| ast |
-	ast := sourceCoderViewModel astAwait.
+	ast := sourceCoderViewModel astSync.
 	renameParamAction := GtCoderViewModelRenameAction
 			locations: {ast pattern variables last sourceInterval}
 			textualCoderViewModel: sourceCoderViewModel.
@@ -110,7 +110,7 @@ GtAddParameterRefactoringController >> installParameterRenamer [
 { #category : #executing }
 GtAddParameterRefactoringController >> installSelectorRenamer [
 	| ast |
-	ast := sourceCoderViewModel astAwait.
+	ast := sourceCoderViewModel astSync.
 	renameSelectorAction := GtRenameSelectorAction
 			message: ast pattern
 			textualCoderViewModel: sourceCoderViewModel.
@@ -160,7 +160,7 @@ GtAddParameterRefactoringController >> parameterNode: aRBValueNode [
 
 { #category : #executing }
 GtAddParameterRefactoringController >> previewPosition [
-	^ sourceCoderViewModel astAwait pattern stopPosition
+	^ sourceCoderViewModel astSync pattern stopPosition
 ]
 
 { #category : #accessing }

@@ -33,7 +33,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringPreview [
 
 { #category : #private }
 GtPharoSourceCoderRefactoringController >> ast [
-	^ sourceCoderViewModel astAwait
+	^ sourceCoderViewModel astSync
 ]
 
 { #category : #private }

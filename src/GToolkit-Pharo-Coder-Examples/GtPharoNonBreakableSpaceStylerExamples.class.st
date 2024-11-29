@@ -22,7 +22,7 @@ GtPharoNonBreakableSpaceStylerExamples >> styleNonBreakableSpace [
 		          (Object name , Character nbsp asString , 'new'
 		           , Character nbsp asString , '') asRopedText.
 
-	anAst := aCoder astAwait.
+	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.
 
 	GtPharoNonBreakableSpaceStyler new 

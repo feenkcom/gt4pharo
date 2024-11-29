@@ -12,7 +12,7 @@ GtCoderExampleAfterStylerExamples >> afterWithExpander [
 	text := coder currentSourceText copy.
 	GtCoderExampleAfterStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 	allExpandedIntervals := OrderedCollection new.
 	text
 		findAttributesSuchThat: [ :eachAttribute | 
@@ -34,7 +34,7 @@ GtCoderExampleAfterStylerExamples >> afterWithoutExpander [
 	text := coder currentSourceText copy.
 	GtCoderExampleAfterStyler new
 		coderViewModel: coder asCoderViewModel;
-		style: text ast: coder astAwait.
+		style: text ast: coder astSync.
 	allExpandedIntervals := OrderedCollection new.
 	text
 		findAttributesSuchThat: [ :eachAttribute | 
