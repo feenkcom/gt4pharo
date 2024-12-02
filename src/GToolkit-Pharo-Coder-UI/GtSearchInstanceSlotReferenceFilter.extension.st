@@ -19,7 +19,7 @@ GtSearchInstanceSlotReferenceFilter class >> filterDescriptor2For: aMethodsCoder
 				ifNone: [ self forClassAndHierarchy: aMethodsCoder classOrMetaClass andVariable: '' ] ];
 		named: 'Instance slots';
 		order: 25;
-		items: [ GtFilterModelAllItem methodsLabel withAll: aMethodsCoder classOrMetaClass allInstVarNames ];
+		items: [ GtFilterModelAllItem methodsLabel withAll: (aMethodsCoder classOrMetaClass allInstVarNames sort: [ :a :b | a < b ]) ];
 		selectedItem: GtFilterModelAllItem methodsLabel;
 		displayAllItems
 ]
