@@ -1,14 +1,6 @@
 Extension { #name : #GtSearchInstanceSlotReferenceFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchInstanceSlotReferenceFilter >> filterDescriptor2For: aMethodsCoder [
-	^ (super filterDescriptor2For: aMethodsCoder)
-		ifNotNil: [ :aFilterModel | 
-			aFilterModel
-				selectedItem: (self variableName ifEmpty: [ GtFilterModelAllItem methodsLabel ]) ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchInstanceSlotReferenceFilter class >> filterDescriptor2For: aMethodsCoder [
 	aMethodsCoder isForClass ifFalse: [ ^ nil ].
 
@@ -19,9 +11,18 @@ GtSearchInstanceSlotReferenceFilter class >> filterDescriptor2For: aMethodsCoder
 				ifNone: [ self forClassAndHierarchy: aMethodsCoder classOrMetaClass andVariable: '' ] ];
 		named: 'Instance slots';
 		order: 25;
-		items: [ GtFilterModelAllItem methodsLabel withAll: aMethodsCoder classOrMetaClass allInstVarNames ];
+		items: [ GtFilterModelAllItem methodsLabel withAll: (aMethodsCoder classOrMetaClass allInstVarNames sort: [ :a :b | a < b ]) ];
 		selectedItem: GtFilterModelAllItem methodsLabel;
-		displayAllItems
+		displayAllItems;
+		beDefault
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchInstanceSlotReferenceFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | 
+			aFilterModel
+				selectedItem: (self variableName ifEmpty: [ GtFilterModelAllItem methodsLabel ]) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

@@ -27,6 +27,7 @@ GtSearchFilterAndFilterModelConversionResults >> gtResultsFor: aView [
 				aText ]
 			weight: 2.5;
 		column: 'Name' text: [ :aResult | aResult filterModelName ];
+		column: 'Priority' text: [ :aResult | aResult filterModelOrder ] weight: 0.7;
 		column: 'Evaluation'
 			text: [ :aResult | 
 				aResult isWithResults

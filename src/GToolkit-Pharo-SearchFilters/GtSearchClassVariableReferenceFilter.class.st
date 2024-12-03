@@ -46,9 +46,16 @@ GtSearchClassVariableReferenceFilter >> forClass: aClass [
 
 { #category : #testing }
 GtSearchClassVariableReferenceFilter >> includesMethod: aCompiledMethod [
+	variableName ifEmpty: [ ^ true ].
 	self object isNil
 		ifTrue: [ ^ false ].
 	^ super includesMethod: aCompiledMethod
+]
+
+{ #category : #initialization }
+GtSearchClassVariableReferenceFilter >> initialize [
+	super initialize.
+	variableName := '' asSymbol
 ]
 
 { #category : #accessing }

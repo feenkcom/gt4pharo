@@ -17,6 +17,25 @@ GtMethodsCoderExamples >> doImplementorsCoder [
 ]
 
 { #category : #'examples - filters' }
+GtMethodsCoderExamples >> emptyInstanceSlotsFilter [
+	"Empty variable names implies that all method matches.
+	This is due to filter descriptors that can have 'All methods' selected item.
+	See GtSearchInstanceSlotReferenceFilter class>>#filterDescriptor2For:"
+	<gtExample>
+
+	| aFilter |
+	aFilter := GtSearchInstanceSlotReferenceFilter
+			forClass: HashedCollection
+			andVariable: ''.
+
+	self assert: (aFilter matches: HashedCollection  >> #grow).
+	self assert: (aFilter matches: HashedCollection  >> #union:).
+	self assert: (aFilter matches: HashedCollection class >> #empty).
+
+	^ aFilter
+]
+
+{ #category : #'examples - filters' }
 GtMethodsCoderExamples >> errorFilter [
 	<gtExample>
 	^ GtSearchReferencesFilter literal: #error:
@@ -68,21 +87,28 @@ GtMethodsCoderExamples >> inheritedMethods [
 ]
 
 { #category : #'examples - filters' }
-GtMethodsCoderExamples >> instanceVariableFilter [
+GtMethodsCoderExamples >> instanceSlotsFilter [
 	<gtExample>
-	^ GtSearchInstanceSlotReferenceFilter forClass: HashedCollection andVariable: 'array'
+	| aFilter |
+	aFilter := GtSearchInstanceSlotReferenceFilter forClass: HashedCollection andVariable: 'array'.
+	
+	self assert: (aFilter matches: HashedCollection  >> #grow).
+	self assert: (aFilter matches: HashedCollection  >> #union:) not.
+	self assert: (aFilter matches: HashedCollection class >> #empty) not.
+
+	^ aFilter
 ]
 
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> instanceVariableReferenceCoder [
 	<gtExample>
-	^ self instanceVariableFilter asCoder
+	^ self instanceSlotsFilter asCoder
 ]
 
 { #category : #'examples - coder' }
 GtMethodsCoderExamples >> intersectionCoder [
 	<gtExample>
-	^ (self instanceVariableFilter & self doFilter) asCoder
+	^ (self instanceSlotsFilter & self doFilter) asCoder
 ]
 
 { #category : #'examples - class coder' }
