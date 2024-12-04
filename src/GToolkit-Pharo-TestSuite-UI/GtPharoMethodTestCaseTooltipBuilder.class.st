@@ -104,9 +104,7 @@ GtPharoMethodTestCaseTooltipBuilder >> visitTestCaseResultState: aState [
 	aContainer := BrFrame new
 		              fitContent;
 		              when: GtPhlowObjectToSpawn do: [ :anEvent | 
-			              self element fireEvent: (GtPhlowObjectToSpawn new
-						               object: anEvent object;
-						               sourceElement: anEvent target) ].
+			              self element phlow spawnPreviousEvent: anEvent ].
 	aContainer addChild:
 		(((GtInspector forObject: self result) exact: 400 @ 400)
 			 asScalableElement size: 200 @ 200).
