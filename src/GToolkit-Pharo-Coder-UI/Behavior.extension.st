@@ -135,15 +135,7 @@ Behavior >> gtNewMethodDropdownOn: aButton withViewModel: aMethodsCoderViewModel
 				methodCoderHolder: aNewMethodCoderHolder);
 		when: GtPhlowObjectToSpawn
 			do: [ :aSpawnEvent | 
-				aSpawnEvent consumed: true.
-				aButton
-					fireEvent: (GtPhlowObjectToSpawn new
-							previousSpawnEvent: aSpawnEvent;
-							tool: aSpawnEvent tool;
-							sourceElement: aSpawnEvent currentTarget;
-							spawnDestination: aSpawnEvent spawnDestination;
-							in: [ :anNewEvent | anNewEvent 
-								propertyAt: #spawnContainer 
-								put: aSpawnEvent currentTarget ];
-							yourself) ]
+				aButton fireEvent: (GtPhlowObjectToSpawn new
+					fromPreviousSpawnEvent: aSpawnEvent;
+					spawnContainer: aSpawnEvent currentTarget) ]
 ]

@@ -18,9 +18,7 @@ GtPharoSuiteShowButton >> initialize [
 			 content: [ "as tooltips/dropdowns attach to the space root element, phlow spawn will end up there and be swallowed"
 				 GtPharoSuiteOverviewElement new
 					 when: GtPhlowObjectToSpawn do: [ :anEvent | 
-						 self fireEvent: (GtPhlowObjectToSpawn new
-									  object: anEvent object;
-									  sourceElement: anEvent target) ];
+						 self phlow spawnPreviousEvent: anEvent ];
 					 suiteViewModel: self suiteViewModel;
 					 margin: (BlInsets all: 10) ]) 
 					 	beNotResizable)
