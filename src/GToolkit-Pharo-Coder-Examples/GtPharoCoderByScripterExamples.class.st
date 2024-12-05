@@ -782,6 +782,30 @@ GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
 				// GtPagerMaximizeButtonElementId ]
 ]
 
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
+	<gtExample>
+	| aScripter objectToSpawn method |
+	method := Object class >> #initialize.
+	aScripter := self
+			scripterForBlock: [ GtPharoStreamingMethodsCoderElement new
+					streamingCodersViewModel: (GtPharoStreamingMethodsCoderViewModel new
+							streamingCodersModel: (GtPharoStreamingMethodsCoder
+									forFilter: #initialize gtImplementors & Object class gtMethodsInClass)) ].
+
+	aScripter element
+		when: GtPhlowObjectToSpawn
+		do: [ :event | objectToSpawn := event object ].
+
+	aScripter click
+		// GtPharoHeaderProviderBehaviorId;
+		play.
+
+	self assert: objectToSpawn = method.
+
+	^ aScripter
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 	<gtExample>
