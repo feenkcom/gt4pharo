@@ -17,7 +17,8 @@ BrMenuExamples >> definingPharoMethodCoderMenu [
 				geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 				clipChildren: false;
 				background: Color white;
-				addAptitude: BrMenuPinnableAptitude new ].
+				addAptitude: BrMenuPinnableAptitude new;
+				addAptitude: BrShadowAptitude new ].
 
 	self assert: aMenu stencil isNotNil.
 	self assert: (aMenu asElement isKindOf: BlElement).
