@@ -64,16 +64,15 @@ GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElemen
 { #category : #'actions - spawning' }
 GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from: anElement [
 	"Spawn a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
+
 	| aProviderBehavior |
-	aCoderViewModel selfObject 
-		ifNotNil: [ :anObjectOrClass |
-			aProviderBehavior := anObjectOrClass class instanceSide ]
-		ifNil: [ 
-			aProviderBehavior :=  aCoderViewModel behavior ].
-	
+	aCoderViewModel hasSelfObject
+		ifTrue: [ aProviderBehavior := aCoderViewModel selfObject class instanceSide ]
+		ifFalse: [ aProviderBehavior := aCoderViewModel behavior ].
+
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
-			aMethodBehavior = aProviderBehavior 
+			aMethodBehavior = aProviderBehavior
 				ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
 				ifFalse: [ anElement phlow spawnTool: (GtClassCoderTool forClass: aProviderBehavior) ] ]
 		ifUnknown: [  ]

@@ -189,6 +189,7 @@ GtPharoSourceCoderViewModel >> selfObject: anObject [
 	"Assign an object that should be bound to `self` during code evaluation"
 
 	selfObject := anObject.
+	hasSelfObject := true.
 	completionStrategy
 		ifNotNil: [ completionStrategy
 				classOrMetaClass: self behavior;
