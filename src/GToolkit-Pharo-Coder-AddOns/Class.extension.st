@@ -47,7 +47,7 @@ Class >> gtSlotNotReferenced: aGtAdvice [
 	^(aGtAdvice list)
 		priority: 30;
 		description: [:each | 'Slot is not referenced' asRopedText];
-		compute: [self allUnreferencedInstanceVariables];
+		compute: [self gtAllUnreferencedInstanceVariables];
 		action: 
 				[:each |
 				(self allSlots includes: each)
