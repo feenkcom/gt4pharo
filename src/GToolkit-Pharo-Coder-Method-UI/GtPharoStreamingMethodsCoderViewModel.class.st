@@ -34,11 +34,11 @@ GtPharoStreamingMethodsCoderViewModel >> initializeSelfObjectForCoderViewModel: 
 		ifTrue: [ 
 			self 
 				ifSelfObject: [ :aSelfObject | 
-					aCoderViewModel behavior: aSelfObject class ] 
+					aCoderViewModel selfObject: aSelfObject class instanceSide ] 
 				ifNone: [
 					streamingCodersModel 
 						ifBehavior: [ :aBehavior |
-							aCoderViewModel behavior: aBehavior ] 
+							aCoderViewModel selfObject: aBehavior instanceSide ] 
 						ifNone: [] ] ]
 		ifFalse: [ 
 			selfObjectHolder ifNotNil: [ :aHolder | 
