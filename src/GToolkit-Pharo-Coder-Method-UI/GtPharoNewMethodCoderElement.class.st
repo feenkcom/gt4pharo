@@ -59,8 +59,10 @@ GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 GtPharoNewMethodCoderElement >> handleMethodCoderSaved: anAnnouncement [
 	onMethodCoderSaved
 		ifNotNil: [ :anAction | 
-			anAction cull: anAnnouncement 
-			cull: self pharoMethodCoderViewModel ]
+			anAction 
+				cull: anAnnouncement 
+				cull: self pharoMethodCoderViewModel
+				cull: self ]
 ]
 
 { #category : #initialization }
@@ -75,7 +77,7 @@ GtPharoNewMethodCoderElement >> initialize [
 	self
 		hExact: self class preferredExtent x;
 		vFitContentLimited;
-		background: Color white;
+		background: self theme default contentBackgroundColor;
 		addAptitude: BrGlamorousFocusableShadowAptitude new
 ]
 
@@ -86,7 +88,7 @@ GtPharoNewMethodCoderElement >> initializeMethodCoderTagsElement [
 				c ignoreByLayout.
 				c ignored horizontal alignRight.
 				c ignored vertical alignBottom.
-				c margin: (BlInsets bottom: -2) ]
+				c margin: (BlInsets bottom: 0) ]
 ]
 
 { #category : #initialization }
@@ -119,7 +121,7 @@ GtPharoNewMethodCoderElement >> onAddedToSceneGraph [
 { #category : #'api - initialization' }
 GtPharoNewMethodCoderElement >> onMethodCoderSaved: anAction [
 	"Action is an object that undrestand #cull:cull:, e.g., 
-	[ :anAnnouncement :aMethodCoderViewModel | ]"
+	[ :anAnnouncement :aMethodCoderViewModel :anElement | ]"
 
 	onMethodCoderSaved := anAction
 ]

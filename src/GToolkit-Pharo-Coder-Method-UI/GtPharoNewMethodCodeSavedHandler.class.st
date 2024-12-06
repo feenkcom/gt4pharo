@@ -18,6 +18,15 @@ GtPharoNewMethodCodeSavedHandler >> cull: aSavedEvent cull: aMethodCoderViewMode
 	self methodCoderHolder contents: nil
 ]
 
+{ #category : #'api - announcement handling' }
+GtPharoNewMethodCodeSavedHandler >> cull: aSavedEvent cull: aMethodCoderViewModel cull: anElement [
+	self methodsCoderViewModel
+		expandAndFocusCompiledMethod: aSavedEvent method;
+		scrollToCompiledMethod: aSavedEvent method.
+	self element fireEvent: BrDropdownHideWish new.
+	self methodCoderHolder contents: nil
+]
+
 { #category : #accessing }
 GtPharoNewMethodCodeSavedHandler >> element [
 
