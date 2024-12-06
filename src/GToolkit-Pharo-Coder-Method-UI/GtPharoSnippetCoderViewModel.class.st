@@ -16,7 +16,7 @@ GtPharoSnippetCoderViewModel >> allowSaveDueTo: anObject [
 
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> behavior [
-	^ self selfObject class
+	^ self ifSelfObject: #class ifNone: [ UndefinedObject ]
 ]
 
 { #category : #'private - bindings' }
@@ -114,6 +114,13 @@ GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 ]
 
 { #category : #accessing }
+GtPharoSnippetCoderViewModel >> onSelfObjectHolderChanged [
+	super onSelfObjectHolderChanged.
+
+	coderModel ifNotNil: [ coderModel behavior: self behavior ]
+]
+
+{ #category : #accessing }
 GtPharoSnippetCoderViewModel >> preventSaveDueTo: anObject [
 	"do nothing"
 ]
@@ -123,12 +130,6 @@ GtPharoSnippetCoderViewModel >> profileWithMessageTally [
 	<return: #Boolean>
 
 	^ self coderModel profileWithMessageTallyInContext: self evaluationContext
-]
-
-{ #category : #accessing }
-GtPharoSnippetCoderViewModel >> selfObject: anObject [
-	super selfObject: anObject.
-	coderModel ifNotNil: [ coderModel behavior: self behavior ]
 ]
 
 { #category : #'api - bindings' }

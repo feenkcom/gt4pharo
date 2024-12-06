@@ -72,6 +72,11 @@ GtPharoMethodCoderViewModel >> behavior [
 	^ self coderModel behavior
 ]
 
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> behavior: aBehavior [
+	^ self coderModel behavior: aBehavior
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> compile [
 	<return: #Boolean>
@@ -124,7 +129,7 @@ GtPharoMethodCoderViewModel >> elementClass [
 { #category : #'private - evaluation' }
 GtPharoMethodCoderViewModel >> evaluationContext [
 	^ super evaluationContext
-		receiverObject: (self selfObject ifNil: [ self behavior instanceSide ]);
+		receiverObject: (self selfObjectIfNone: [ self behavior instanceSide ]);
 		targetBehavior: self defaultCompilationBehavior
 ]
 
@@ -232,10 +237,12 @@ GtPharoMethodCoderViewModel >> objectVariableBindingsTo: theBindings [
 	super objectVariableBindingsTo: theBindings.
 	
 	"Avoid #isNil #notNil in case we are dealing with a proxy"
-	self selfObject == nil ifTrue: [ 
-		self defaultCompilationBehavior isClassSide ifTrue: [ 
-			theBindings addBindings: (GtSlotVariablesBindings new 
-				object: self defaultCompilationBehavior instanceSide) ] ].
+	self 
+		ifSelfObject: [ :aSelfObject | ] 
+		ifNone: [ 
+			self defaultCompilationBehavior isClassSide ifTrue: [ 
+				theBindings addBindings: (GtSlotVariablesBindings new 
+					object: self defaultCompilationBehavior instanceSide) ] ].
 ]
 
 { #category : #accessing }
@@ -339,8 +346,7 @@ GtPharoMethodCoderViewModel >> protocol [
 { #category : #private }
 GtPharoMethodCoderViewModel >> receiverObjectToPlay [
 	self isMeta ifTrue: [ ^ self behavior instanceSide ].
-	^ self selfObject
-		ifNil: [ self behavior new ]
+	^ self selfObjectIfNone: [ self behavior new ].
 ]
 
 { #category : #'api - actions' }

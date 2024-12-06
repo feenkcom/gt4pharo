@@ -29,9 +29,9 @@ GtPharoWhenSendToExpanderStyler >> visitKeywordMessage: aMessageNode [
 
 	aMessageNode selector = #when:send:to: ifFalse: [ ^ self ].
 
-	aMethodClass := self coderViewModel hasSelfObject
-		ifTrue: [ self coderViewModel selfObject class ]
-		ifFalse: [ self coderViewModel behavior ].
+	aMethodClass := self coderViewModel 
+		ifSelfObject: #class 
+		ifNone: [ self coderViewModel behavior ].
 	
 	aMethodClass ifNil: [ ^ self ].
 

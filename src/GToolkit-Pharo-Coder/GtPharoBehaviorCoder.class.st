@@ -1,12 +1,10 @@
 Class {
 	#name : #GtPharoBehaviorCoder,
 	#superclass : #GtCoderModel,
-	#traits : 'TGtCoderTrait',
-	#classTraits : 'TGtCoderTrait classTrait',
+	#traits : 'TGtCoderTrait + TGtCoderWithObjectHolder',
+	#classTraits : 'TGtCoderTrait classTrait + TGtCoderWithObjectHolder classTrait',
 	#instVars : [
 		'class',
-		'object',
-		'hasObject',
 		'definitionCoder'
 	],
 	#category : #'GToolkit-Pharo-Coder-Coders'
@@ -77,15 +75,13 @@ GtPharoBehaviorCoder >> definitionCoder [
 
 { #category : #initialize }
 GtPharoBehaviorCoder >> forClass: aClass [
-	hasObject := false.
+	self objectHolder: GtCoderUndefinedObject default.
 	self initializeClass: aClass.
 ]
 
 { #category : #initialize }
 GtPharoBehaviorCoder >> forObject: anObject [
-	object := anObject.
-	hasObject := true.
-	self initializeClass: anObject class instanceSide.
+	self object: anObject.
 ]
 
 { #category : #'gt-extension' }
@@ -101,23 +97,9 @@ GtPharoBehaviorCoder >> gtLiveFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self theClass ]
 ]
 
-{ #category : #testing }
-GtPharoBehaviorCoder >> hasObject [
-	<return: #Boolean>
-
-	^ hasObject
-]
-
 { #category : #accessing }
 GtPharoBehaviorCoder >> icon [
 	^ BrGlamorousIcons classicon
-]
-
-{ #category : #initialize }
-GtPharoBehaviorCoder >> initialize [
-	super initialize.
-
-	hasObject := false
 ]
 
 { #category : #initialize }
@@ -159,16 +141,19 @@ GtPharoBehaviorCoder >> name [
 	^ self theClass name
 ]
 
-{ #category : #accessing }
-GtPharoBehaviorCoder >> object [
-	<return: #Object>
-
-	^ object
-]
-
 { #category : #'private - announcement handling' }
 GtPharoBehaviorCoder >> onMethodsCoderFiltersChanged: aGtCodersFiltersChanged [
 	self announcer announce: aGtCodersFiltersChanged.
+]
+
+{ #category : #'api - object' }
+GtPharoBehaviorCoder >> onObjectHolderChanged [
+	"Trait users can perform other actions using this hook."
+
+	self
+		ifObject: [ :anObject | 
+			self initializeClass: anObject class instanceSide ]
+		ifNone: [  ]
 ]
 
 { #category : #accessing }

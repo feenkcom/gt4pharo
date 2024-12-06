@@ -15,10 +15,10 @@ GtCoderExampleAfterStyler >> visitPragma: aPragmaNode [
 
 	aPragmaNode selector = #after: ifFalse: [ ^ self ].
 
-	aMethodClass := self coderViewModel hasSelfObject
-		ifTrue: [ self coderViewModel selfObject class ]
-		ifFalse: [ self coderViewModel behavior ].
-		
+	aMethodClass := self coderViewModel
+		ifSelfObject: [ :aSelfObject | aSelfObject class ]
+		ifNone: [ self coderViewModel behavior ].
+	
 	aMethodClass ifNil: [ ^ self ].
 
 	aSelectorNode := aPragmaNode values first.
