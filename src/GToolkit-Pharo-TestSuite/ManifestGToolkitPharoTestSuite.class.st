@@ -27,6 +27,7 @@ ManifestGToolkitPharoTestSuite class >> shouldDependOn [
 	^ {
 		'Futures'.
 		'GToolkit-Pharo-SearchFilters'.
+		'GToolkit-Utility-StackOverflow'.
 		'SUnit-Core'
 	}
 ]
