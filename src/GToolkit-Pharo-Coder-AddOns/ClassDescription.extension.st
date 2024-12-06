@@ -23,6 +23,12 @@ ClassDescription >> gtAllSubclassesDefineVariable: aGtAdvice [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+ClassDescription >> gtAllUnreferencedInstanceVariables [
+	^ self allSlots
+		select: [ :slot | slot owningClass == self and: [ slot gtIsReferenced not ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 ClassDescription >> gtInstanceVariableCase: aGtAdvice [
 	<gtAdvice>
 	^ aGtAdvice list

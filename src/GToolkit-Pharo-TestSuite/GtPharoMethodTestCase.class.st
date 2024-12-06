@@ -170,14 +170,16 @@ GtPharoMethodTestCase >> rawDebug [
 	newResult := nil.
 	testCase := self testCaseInstance.
 	[ 
-		testCase setUp.
-		[
-			testCase tests do: [:each |
-				newResult := testCase resultClass new.
-				each debug: newResult.
-				testCase announceTest: each.
-				testCase changed: each]
-		] ensure: [testCase tearDown].
+		self withStackOverflowCheckExecute: [
+			testCase setUp.
+			[
+				testCase tests do: [:each |
+					newResult := testCase resultClass new.
+					self withStackOverflowCheckExecute:[
+						each debug: newResult ].
+					testCase announceTest: each.
+					testCase changed: each]
+			] ensure: [testCase tearDown] ].
 	] ensure: [
 		self result: (newResult ifNil: [
 			testCase resultClass new ]) ]
@@ -185,7 +187,8 @@ GtPharoMethodTestCase >> rawDebug [
 
 { #category : #'private - execution' }
 GtPharoMethodTestCase >> rawPlay [
-	self result: self testCaseInstance run
+	self result: (self 
+		withStackOverflowCheckExecute: [ self testCaseInstance run] )
 ]
 
 { #category : #'api - accessing' }
@@ -280,4 +283,10 @@ GtPharoMethodTestCase >> when: anAnnouncementClass send: aSelector to: anObject 
 	<generatedFrom: #'TGtRobocoderAnnouncerTemplate>>#whenSendToTemplate'>
 	^ (announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject
+]
+
+{ #category : #'private - execution' }
+GtPharoMethodTestCase >> withStackOverflowCheckExecute: aBlock [
+	^ GtProcessStackOverflowChecker currentCheckerClass 
+		checkDuring: aBlock
 ]
