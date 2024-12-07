@@ -47,6 +47,36 @@ GtPharoMethodCoderStep >> assertBindingIsNotDefined: aBindingKey [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertCoderIsModified [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert method is modified';
+			satisfies: [ :aCoderElement | aCoderElement textualCoderViewModel isModified ]
+				description: [ 'Source code must be modified' ];
+			referenceSender;
+			onParentStepTarget: self;
+			onThisOrDeepChildElementId: GtSourceCoderEditorId;
+			onTopMost.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertCoderIsWithouthModifications [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert method is not modified';
+			satisfies: [ :aCoderElement | aCoderElement textualCoderViewModel isModified not ]
+				description: [ 'Source code must not be modified' ];
+			referenceSender;
+			onParentStepTarget: self;
+			onThisOrDeepChildElementId: GtSourceCoderEditorId;
+			onTopMost.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertCompiledMethodIs: aCompiledMethod [
 	| anAssertStep |
 	anAssertStep := self check
@@ -334,6 +364,26 @@ GtPharoMethodCoderStep >> browseBehavior [
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> browseImplementors [
+	^ self shortcut
+		label: 'Browse implementors';
+		combination: BlKeyCombination primaryM;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> browseSenders [
+	^ self shortcut
+		label: 'Browse senders';
+		combination: BlKeyCombination primaryN;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> clickOnHeaderMethodBehavior [
 	| aClickStep |
 	aClickStep := self click
@@ -414,6 +464,17 @@ GtPharoMethodCoderStep >> clickOnPlayButton [
 	^ aClickStep
 ]
 
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> clickOnSaveButton [
+	| aClickStep |
+	aClickStep := self click
+			referenceSender;
+			label: 'Click on save button';
+			// GtMethodCoderSaveActionId;
+			onTopMost.
+	^ aClickStep
+]
+
 { #category : #'steps - accessing' }
 GtPharoMethodCoderStep >> coderModelDo: aBlock [
 	^ self do
@@ -431,6 +492,16 @@ GtPharoMethodCoderStep >> coderViewModelDo: aBlock [
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> formatCode [
+	^ self shortcut
+		label: 'Format code';
+		combination: BlKeyCombination primaryShiftF;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> methodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
 	| aRootStep |
 	aRootStep := self methodCoder
@@ -443,6 +514,20 @@ GtPharoMethodCoderStep >> methodCoderExpander: anExpanderIndex insideDo: anInsid
 	anInsideBlock value: aRootStep.
 
 	^ aRootStep
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> moveCursorToEnd [
+	^ self do
+		referenceSender;
+		label: 'Move cursor to end';
+		block: [ :anEditor | 
+			anEditor navigator
+				moveToEnd;
+				apply ];
+		onParentStepTarget: self;
+		// GtSourceCoderEditorId;
+		onTopMost
 ]
 
 { #category : #'steps - interactions' }
@@ -569,4 +654,15 @@ GtPharoMethodCoderStep >> toggleMethodCoderExpander: anExpanderIndex insideDo: a
 		onTopMost.
 
 	^ aRootStep
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> typeText: aString [
+	^ self type
+		referenceSender;
+		label: ('Type text: {1}' format: { aString });
+		text: aString;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
 ]

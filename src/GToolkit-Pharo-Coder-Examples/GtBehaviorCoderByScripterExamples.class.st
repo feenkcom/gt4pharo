@@ -282,6 +282,51 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_03_click_r
 	^ aScripter
 ]
 
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripterInPagerForBlock: [ 
+		self classCoderForClass ].
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceMethodImplementors [
+	<gtExample>
+	| aScripter aBehavior aMethod |
+	aScripter := self classCoderInPagerForClassUI.
+
+	aBehavior := aScripter model behavior.
+	aMethod := aBehavior methods anyOne.
+
+	aScripter methodsCoder
+		// (GtPagerPageElementId indexed: 1);
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethod;
+		forCompiledMethod: aMethod do: [ :aMethodCoderStep | 
+			aMethodCoderStep browseImplementors ];
+		play.
+
+	aScripter methodsCoder
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethod;
+		scrollToCompiledMethod: aMethod;
+		forCompiledMethod: aMethod do: [ :aMethodCoderStep | 
+			aMethodCoderStep 
+				moveCursorToEnd;
+				typeText: ' self yourself';
+				formatCode;
+				assertCoderIsModified;
+				clickOnSaveButton;
+				assertCoderIsWithouthModifications ];
+		play.
+
+	^ aScripter
+]
+
 { #category : #utilities }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
