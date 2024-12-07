@@ -65,7 +65,7 @@ GtPharoMethodCoderOverridingOverriddenElement >> initialize [
 
 	self withAsyncFutureDo: [ :anElementFuture |
 		anElementFuture
-			executionConfiguration: (GtSingleCoderViewModel addOnsExecutionConfiguration);
+			executionConfiguration: (GtSingleCoderViewModel secondaryMethodAddOnsExecutionConfiguration);
 			whenSuccess: [ :anElement :anOrigin |
 				self updateFromOrigin:  anOrigin ];
 			whenError: [ :anElement :anError |

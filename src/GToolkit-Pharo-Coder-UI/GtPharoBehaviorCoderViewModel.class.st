@@ -13,14 +13,6 @@ GtPharoBehaviorCoderViewModel >> behavior [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorCoderViewModel >> computeAddOns [
-	<return: #TAsyncPromise>
-
-	^ [ self syncComputeAddOnsFor: coderModel ] asAsyncFuture
-		await: (self class addOnsExecutionConfiguration)
-]
-
-{ #category : #accessing }
 GtPharoBehaviorCoderViewModel >> computeAddOnsFuture [
 	<return: #TAsyncFuture>
 
