@@ -32,7 +32,7 @@ GtPharoBehaviorCoderNameElement >> addAdviceDropDownIn: aContainer [
 						aContainer enqueueTask: (BlTaskAction new
 							action: [ aContainer addChild: (self 
 								buildAdviceListFor: adviceStream asyncSimilarCopy) ]) ] ]).
-			promise := future await: GtSingleCoderViewModel addOnsExecutionConfiguration.
+			promise := future await: GtSingleCoderViewModel behaviourAddOnsExecutionConfiguration.
 			self enqueueTask: (BlPromiseTask new promise: promise) ]
 ]
 
