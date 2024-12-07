@@ -33,7 +33,7 @@ GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
 		"Provide bindings and other context to the expandable method coder"
 		aBuilder := GtPharoReceiverAndArgumentBindingsBuilder new
 				parentEvaluationContext: coderViewModel evaluationContext;
-				parentSelfObject: coderViewModel selfObject;
+				parentSelfObjectHolder: coderViewModel selfObjectHolder;
 				parentMessage: node;
 				parentExplicitProviderClass: coderViewModel explicitProviderClass;
 				parentExample: coderViewModel example.

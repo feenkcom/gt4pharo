@@ -1,10 +1,11 @@
 Class {
 	#name : #GtPharoStreamingMethodsCoderViewModel,
 	#superclass : #GtFilteredCodersViewModel,
+	#traits : 'TGtCoderWithSelfObjectHolder',
+	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
 	#instVars : [
 		'shouldExpandByDefault',
-		'shouldHaveHeaderByDefault',
-		'selfObject'
+		'shouldHaveHeaderByDefault'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
 }
@@ -20,7 +21,6 @@ GtPharoStreamingMethodsCoderViewModel >> expandAndFocusCompiledMethod: aCompiled
 GtPharoStreamingMethodsCoderViewModel >> initialize [
 	super initialize.
 	
-	selfObject := nil.
 	shouldExpandByDefault := false.
 	shouldHaveHeaderByDefault := false
 ]
@@ -31,10 +31,18 @@ GtPharoStreamingMethodsCoderViewModel >> initializeSelfObjectForCoderViewModel: 
 	See https://github.com/feenkcom/gtoolkit/issues/4127"
 	
 	^ aCoderViewModel isMeta
-		ifTrue: [ selfObject
-				ifNotNil: [ :theObject | aCoderViewModel selfObject: theObject class ]
-				ifNil: [ aCoderViewModel selfObject: streamingCodersModel behavior ] ]
-		ifFalse: [ aCoderViewModel selfObject: selfObject ]
+		ifTrue: [ 
+			self 
+				ifSelfObject: [ :aSelfObject | 
+					aCoderViewModel selfObject: aSelfObject class instanceSide ] 
+				ifNone: [
+					streamingCodersModel 
+						ifBehavior: [ :aBehavior |
+							aCoderViewModel selfObject: aBehavior instanceSide ] 
+						ifNone: [] ] ]
+		ifFalse: [ 
+			selfObjectHolder ifNotNil: [ :aHolder | 
+				aCoderViewModel selfObjectHolder: aHolder ] ]
 ]
 
 { #category : #'instance creation' }
@@ -74,24 +82,17 @@ GtPharoStreamingMethodsCoderViewModel >> onCodersStreamChanged: anAnnouncement [
 				ifTrue: [ self scrollToCompiledMethod: aCoderViewModelB compiledMethod ] ]
 ]
 
+{ #category : #'api - self object' }
+GtPharoStreamingMethodsCoderViewModel >> onSelfObjectHolderChanged [
+	coderViewModels valuesDo: [ :eachCoderViewModel | 
+		self initializeSelfObjectForCoderViewModel: eachCoderViewModel ]
+]
+
 { #category : #'api - coders' }
 GtPharoStreamingMethodsCoderViewModel >> scrollToCompiledMethod: aCompiledMethod [
 	self scrollToTarget: (GtPharoMethodCoderViewModelScrollTarget new
 		behaviorName: aCompiledMethod methodClass name;
 		selector: aCompiledMethod selector)
-]
-
-{ #category : #accessing }
-GtPharoStreamingMethodsCoderViewModel >> selfObject [
-
-	^ selfObject
-]
-
-{ #category : #accessing }
-GtPharoStreamingMethodsCoderViewModel >> selfObject: anObject [
-	selfObject := anObject.
-	coderViewModels valuesDo: [ :eachCoderViewModel | 
-		self initializeSelfObjectForCoderViewModel: eachCoderViewModel ]
 ]
 
 { #category : #'api - accessing' }

@@ -66,13 +66,12 @@ GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from:
 	"Spawn a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
 
 	| aProviderBehavior |
-	aProviderBehavior := aCoderViewModel selfObject
-			ifNotNil: [ :anObjectOrClass | 
-				anObjectOrClass = UndefinedObject
-					ifTrue: [ aCoderViewModel behavior ]
-					ifFalse: [ anObjectOrClass class instanceSide ] ]
-			ifNil: [ aCoderViewModel behavior ].
 
+	aProviderBehavior := aCoderViewModel 
+		ifSelfObject: [ :aSelfObject |
+			aSelfObject class instanceSide ]
+		ifNone: [ aCoderViewModel behavior ].
+	
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
 			aMethodBehavior = aProviderBehavior

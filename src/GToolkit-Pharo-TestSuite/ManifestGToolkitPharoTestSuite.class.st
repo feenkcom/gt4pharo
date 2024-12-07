@@ -17,6 +17,7 @@ ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
 		'Collections-Unordered'.
 		'Futures'.
 		'GToolkit-Pharo-SearchFilters'.
+		'GToolkit-Utility-StackOverflow'.
 		'Kernel'.
 		'SUnit-Core'
 	}
@@ -27,6 +28,7 @@ ManifestGToolkitPharoTestSuite class >> shouldDependOn [
 	^ {
 		'Futures'.
 		'GToolkit-Pharo-SearchFilters'.
+		'GToolkit-Utility-StackOverflow'.
 		'SUnit-Core'
 	}
 ]

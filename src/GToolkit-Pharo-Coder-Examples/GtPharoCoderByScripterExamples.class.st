@@ -785,7 +785,8 @@ GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
 { #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 	<gtExample>
-	| aScripter objectToSpawn method |
+	| aScripter objectToSpawn method events |
+	events := OrderedCollection new.
 	method := Object class >> #initialize.
 	aScripter := self
 			scripterForBlock: [ GtPharoStreamingMethodsCoderElement new
@@ -795,13 +796,16 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 
 	aScripter element
 		when: GtPhlowObjectToSpawn
-		do: [ :event | objectToSpawn := event object ].
+		do: [ :event | 
+			events add: event.
+			objectToSpawn := event object ].
 
 	aScripter click
 		// GtPharoHeaderProviderBehaviorId;
 		play.
 
-	self assert: objectToSpawn = method.
+	self assert: events size equals: 1.
+	self assert: objectToSpawn equals: method.
 
 	^ aScripter
 ]

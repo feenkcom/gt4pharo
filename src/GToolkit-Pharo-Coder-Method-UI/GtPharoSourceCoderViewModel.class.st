@@ -1,10 +1,10 @@
 Class {
 	#name : #GtPharoSourceCoderViewModel,
 	#superclass : #GtSourceCoderViewModel,
+	#traits : 'TGtCoderWithSelfObjectHolder',
+	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
 	#instVars : [
-		'selfObject',
 		'localBindings',
-		'hasSelfObject',
 		'highlighter'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! View Models'
@@ -77,6 +77,7 @@ GtPharoSourceCoderViewModel >> explicitProviderClass [
 GtPharoSourceCoderViewModel >> gtInfo [
 	^ super gtInfo, {
 		#bindings -> self compositeVariableBindings.
+		#selfObjectHolder -> self selfObjectHolder.
 		#selfObject -> self selfObject
 	}
 ]
@@ -92,12 +93,6 @@ GtPharoSourceCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	<return: #Boolean>
 
 	^ false
-]
-
-{ #category : #'api - testing' }
-GtPharoSourceCoderViewModel >> hasSelfObject [
-
-	^ hasSelfObject ifNil: [ false ]
 ]
 
 { #category : #'api - accessing' }
@@ -124,8 +119,8 @@ GtPharoSourceCoderViewModel >> initialize [
 	super initialize.
 
 	localBindings := GtLocalVariablesBindings new.
-	hasSelfObject := false.
-	highlighter := nil
+	highlighter := nil.
+	selfObjectHolder := GtCoderUndefinedObject default.
 ]
 
 { #category : #'api - coder model' }
@@ -152,11 +147,21 @@ GtPharoSourceCoderViewModel >> newCompletionStrategy [
 ]
 
 { #category : #'private - bindings' }
-GtPharoSourceCoderViewModel >> objectVariableBindingsTo: theBindings [ 
+GtPharoSourceCoderViewModel >> objectVariableBindingsTo: theBindings [
 	"Avoid #isNil #notNil in case we are dealing with a proxy"
-	self selfObject == nil ifFalse: [ 
-		theBindings addBindings: (GtSlotVariablesBindings new 
-			object: self selfObject) ].
+
+	self
+		ifSelfObject: [ :aSelfObject | 
+			theBindings addBindings: (GtSlotVariablesBindings new object: aSelfObject) ]
+		ifNone: [  ].
+]
+
+{ #category : #'api - self object' }
+GtPharoSourceCoderViewModel >> onSelfObjectHolderChanged [
+	completionStrategy
+		ifNotNil: [ completionStrategy
+				classOrMetaClass: self behavior;
+				selfObject: self selfObject ]
 ]
 
 { #category : #'api - coder model' }
@@ -175,24 +180,6 @@ GtPharoSourceCoderViewModel >> parentExample [
 GtPharoSourceCoderViewModel >> parentTestCase [
 	<return: #GtPharoMethodTestCase or: nil>
 	^ nil
-]
-
-{ #category : #'api - accessing' }
-GtPharoSourceCoderViewModel >> selfObject [
-	"Return an object that should be bound to `self` during code evaluation"
-
-	^ selfObject
-]
-
-{ #category : #'api - accessing' }
-GtPharoSourceCoderViewModel >> selfObject: anObject [
-	"Assign an object that should be bound to `self` during code evaluation"
-
-	selfObject := anObject.
-	completionStrategy
-		ifNotNil: [ completionStrategy
-				classOrMetaClass: self behavior;
-				selfObject: anObject ]
 ]
 
 { #category : #'api - coder model' }
