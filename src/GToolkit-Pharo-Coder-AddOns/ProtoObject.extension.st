@@ -40,7 +40,7 @@ ProtoObject >> gtAdviceActionFor: anAction [
 					bool
 						ifTrue: [ button
 								enqueueTask: (BlTaskAction new action: [ button visibility: BlVisibility visible ]) ] ])
-				await: GtSingleCoderViewModel addOnsExecutionConfiguration.
+				await: GtSingleCoderViewModel methodAddOnsExecutionConfiguration.
 			button enqueueTask: (BlPromiseTask new promise: promise).
 			button ]
 ]
