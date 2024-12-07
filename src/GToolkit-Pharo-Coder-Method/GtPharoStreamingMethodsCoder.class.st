@@ -1,6 +1,8 @@
 Class {
 	#name : #GtPharoStreamingMethodsCoder,
 	#superclass : #GtFilteredCodersModel,
+	#traits : 'TGtCoderWithBehaviorHolder',
+	#classTraits : 'TGtCoderWithBehaviorHolder classTrait',
 	#instVars : [
 		'behavior',
 		'exampleSuite',
@@ -19,16 +21,6 @@ GtPharoStreamingMethodsCoder class >> forBehavior: aBehavior [
 				withSuperclassesUpTo: aBehavior.
 			GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName};
 		behavior: aBehavior
-]
-
-{ #category : #'api - accessing' }
-GtPharoStreamingMethodsCoder >> behavior [
-	^ behavior
-]
-
-{ #category : #'api - accessing' }
-GtPharoStreamingMethodsCoder >> behavior: aBehavior [
-	behavior := aBehavior
 ]
 
 { #category : #'api - completion' }
@@ -65,8 +57,6 @@ GtPharoStreamingMethodsCoder >> exampleSuite: aGtPharoExampleSuite [
 GtPharoStreamingMethodsCoder >> initialize [
 	super initialize.
 	
-	behavior := UndefinedObject.
-	
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded send: #onMethodAdded: to: self;
 		when: MethodRemoved send: #onMethodRemoved: to: self
@@ -74,7 +64,7 @@ GtPharoStreamingMethodsCoder >> initialize [
 
 { #category : #'api - accessing' }
 GtPharoStreamingMethodsCoder >> isForClass [
-	^ behavior notNil and: [ behavior ~~ UndefinedObject ]
+	^ self hasBehavior
 ]
 
 { #category : #'private - instance creation' }
@@ -85,7 +75,7 @@ GtPharoStreamingMethodsCoder >> newCoderCacheKeyFor: aCompiledMethod [
 { #category : #'private - instance creation' }
 GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
 	| aMethodCoder |
-	aMethodCoder := GtPharoMethodCoder forMethod: aCompiledMethod in: behavior.
+	aMethodCoder := GtPharoMethodCoder forMethod: aCompiledMethod in: self behavior.
 	aMethodCoder weak
 		when: GtPharoMethodCoderCompiled
 		send: #onPharoMethodCoderCompiled:

@@ -8,11 +8,15 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 	aMethodsCoderViewModel := GtPharoStreamingMethodsCoderViewModel new
 			streamingCodersModel: aMethodsCoder;
 			shouldExpandByDefault: false;
-			shouldHaveHeaderByDefault: false;
-			selfObject: (aPhlowContext
-					optionAt: #behaviorCoder
-					ifPresent: [ :aBehaviorCoderUIModel | aBehaviorCoderUIModel coderModel object ]
-					ifAbsent: [ nil ]).
+			shouldHaveHeaderByDefault: false.
+			
+	aPhlowContext
+		optionAt: #behaviorCoder
+		ifPresent: [ :aBehaviorCoderUIModel | 
+			aBehaviorCoderUIModel coderModel 
+				ifObject: [ :anObject | aMethodsCoderViewModel selfObject: anObject ] 
+				ifNone: [ ] ]
+		ifAbsent: [ nil ].
 
 	aTestSuiteViewModel := self
 			testSuiteViewModelWith: aMethodsCoder

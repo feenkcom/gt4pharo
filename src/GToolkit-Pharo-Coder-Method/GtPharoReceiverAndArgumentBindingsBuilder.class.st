@@ -5,15 +5,15 @@ Class {
 		'compiledMethod',
 		'parentMessage',
 		'localBindings',
-		'receiverObject',
 		'receiverBehavior',
 		'explicitProviderClass',
 		'parentExplicitProviderClass',
-		'parentSelfObject',
 		'parentEvaluationContext',
 		'parentExample',
 		'parentTestCase',
-		'parentCoderViewModel'
+		'parentCoderViewModel',
+		'parentSelfObjectHolder',
+		'receiverObjectHolder'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -31,12 +31,15 @@ GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromLit
 GtPharoReceiverAndArgumentBindingsBuilder >> argumentAt: anIndex setValueFromVariable: aParentArgument [
 	aParentArgument isVariable ifFalse: [ ^ self ].
 
-	(aParentArgument isSelf or: [ aParentArgument isSuper ])
-		ifTrue: [ parentSelfObject
-				ifNotNil: [ | aNewName |
+	(aParentArgument isSelf or: [ aParentArgument isSuper ]) ifTrue: [ 
+		parentSelfObjectHolder ifNotNil: [ :aHolder | 
+			aHolder 
+				ifDefined: [ :aSelfObject |
+					| aNewName |
 					aNewName := compiledMethod argumentNames at: anIndex.
-					localBindings localAt: aNewName put: parentSelfObject ].
-					^ self ].
+					localBindings localAt: aNewName put: aSelfObject ] 
+				ifNone: [ ] ].
+		^ self ].
 
 	parentEvaluationContext
 		variableValueOf: aParentArgument variableName
@@ -95,24 +98,25 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 	aGtPharoProgramNode := parentMessage parent receiver.
 			
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
-		ifTrue: [ ^ receiverObject := parentSelfObject ].
+		ifTrue: [ ^ receiverObjectHolder := parentSelfObjectHolder ].
 	
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
-		ifTrue: [ ^ receiverObject := parentSelfObject ].
+		ifTrue: [ ^ receiverObjectHolder := parentSelfObjectHolder ].
 		
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ])
-		ifTrue: [ ^ receiverObject := nil ].
+		ifTrue: [ ^ receiverObjectHolder := nil ].
 		
 	aGtPharoProgramNode isVariable
 		ifTrue: [ | aVariableName |
 			aVariableName := aGtPharoProgramNode name value asSymbol. 
 			parentEvaluationContext
 				variableValueOf: aVariableName
-				ifPresent: [ :aValue | ^ receiverObject := aValue  ]
+				ifPresent: [ :aValue | 
+					^ receiverObjectHolder := GtCoderObject forValue: aValue  ]
 				ifAbsent: [  "ignore" ] ].
 				
-	aGtPharoProgramNode isLiteral
-		ifTrue: [ ^ receiverObject := aGtPharoProgramNode literalValue ].
+	aGtPharoProgramNode isLiteral ifTrue: [ 
+		^ receiverObjectHolder := GtCoderObject forValue: aGtPharoProgramNode literalValue ].
 ]
 
 { #category : #building }
@@ -120,9 +124,12 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiverBehavior [
 	| aGtPharoProgramNode |
 	parentMessage ifNil: [ ^ self ].
 
-	receiverObject
-		ifNotNil: [ receiverBehavior := receiverObject class.
-			^ self ].
+	receiverObjectHolder ifNotNil: [ 
+		receiverObjectHolder 
+			ifDefined: [ :aSelfObject | 
+				receiverBehavior := aSelfObject class.
+				^ self ] 
+			ifNone: [ "ignore" ] ].
 
 	aGtPharoProgramNode := parentMessage parent receiver.
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
@@ -220,8 +227,13 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 ]
 
 { #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> parentSelfObject: anObject [
-	parentSelfObject := anObject
+GtPharoReceiverAndArgumentBindingsBuilder >> parentSelfObjectHolder [
+	^ parentSelfObjectHolder ifNil: [ GtCoderUndefinedObject default ]
+]
+
+{ #category : #accessing }
+GtPharoReceiverAndArgumentBindingsBuilder >> parentSelfObjectHolder: anObject [
+	parentSelfObjectHolder := anObject
 ]
 
 { #category : #accessing }
@@ -240,16 +252,7 @@ GtPharoReceiverAndArgumentBindingsBuilder >> receiverBehavior [
 ]
 
 { #category : #'accessing - results' }
-GtPharoReceiverAndArgumentBindingsBuilder >> receiverObject [
-	^ receiverObject
-]
-
-{ #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> selfObject [
-	^ parentSelfObject
-]
-
-{ #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> selfObject: anObject [
-	parentSelfObject := anObject
+GtPharoReceiverAndArgumentBindingsBuilder >> receiverObjectHolder [
+	<return: #TGtCoderObject>
+	^ receiverObjectHolder ifNil: [ GtCoderUndefinedObject default ]
 ]

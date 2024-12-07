@@ -30,7 +30,7 @@ GtClassUpdateForm >> onClass: aClass [
 		slots: ((aClass slots select: [ :aSlot | aSlot definingClass = aClass ]) collect: #name).
 	self traits: (aClass traits collect: #name).
 	packageName := aClass package name.
-	tagName := (aClass package classTagForClass: aClass) name.
+	tagName := (aClass package classTagForClass: aClass) ifNotNil: #name.
 	self
 		packageAndTagName: (GtPackageAndTagName new
 				packageName: packageName;
