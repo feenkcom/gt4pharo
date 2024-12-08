@@ -295,7 +295,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI [
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceMethodImplementors [
 	<gtExample>
-	| aScripter aBehavior aMethod |
+	| aScripter aBehavior aMethod aNewMethod aNewSourceCode |
 	aScripter := self classCoderInPagerForClassUI.
 
 	aBehavior := aScripter model behavior.
@@ -321,7 +321,22 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceM
 				formatCode;
 				assertCoderIsModified;
 				clickOnSaveButton;
-				assertCoderIsWithouthModifications ];
+				assertCoderIsWithouthModifications;
+				editorTextDo: [ :aText | aNewSourceCode := aText asString ] ];
+		play.
+		
+	self assert: (aNewSourceCode includesSubstring: 'self yourself').
+	aNewMethod := aBehavior methodDict at: aMethod selector.
+	self assert: aNewMethod sourceCode ~= aMethod sourceCode.
+	self assert: aNewMethod sourceCode equals: aNewSourceCode.
+		
+	aScripter methodsCoder
+		// (GtPagerPageElementId indexed: 1);
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethod;
+		forCompiledMethod: aNewMethod do: [ :aMethodCoderStep |
+			aMethodCoderStep
+				assertEditorTextAsStringIs: aNewSourceCode ];
 		play.
 
 	^ aScripter

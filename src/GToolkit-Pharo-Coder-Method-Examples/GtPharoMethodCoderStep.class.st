@@ -90,6 +90,21 @@ GtPharoMethodCoderStep >> assertCompiledMethodIs: aCompiledMethod [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertEditorTextAsStringIs: aString [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: ('Assert editor text is: {1}' format: {aString});
+			value: [ :aCoderElement | aCoderElement text asString ]
+				equals: aString;
+			referenceSender;
+			onParentStepTarget: self;
+			onThisOrDeepChildElementId: GtSourceCoderEditorId;
+			onTopMost.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertExampleAssertionHighlightFrom: aStartIndex to: aStopIndex [
 	| anAssertStep |
 	anAssertStep := self assert
@@ -489,6 +504,17 @@ GtPharoMethodCoderStep >> coderViewModelDo: aBlock [
 		label: 'Access coder view model';
 		block: [ :anElement | aBlock cull: anElement textualCoderViewModel ];
 		onParentStepTarget: self
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> editorTextDo: aBlock [
+	^ self do
+		referenceSender;
+		label: 'Access editor text';
+		block: [ :anEditor | aBlock cull: anEditor text ];
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
 ]
 
 { #category : #'steps - interactions' }
