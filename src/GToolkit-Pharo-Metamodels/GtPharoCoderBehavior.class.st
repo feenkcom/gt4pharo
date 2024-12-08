@@ -84,6 +84,29 @@ GtPharoCoderBehavior >> exists [
 	^ self subclassResponsibility
 ]
 
+{ #category : #printing }
+GtPharoCoderBehavior >> gtDisplayOn: aStream [
+	self exists
+		ifTrue: [ aStream nextPutAll: 'Existing: ' ]
+		ifFalse: [ aStream nextPutAll: 'Missing: ' ].
+
+	self
+		behaviorNameDo: [ :aName | aStream nextPutAll: aName asString ]
+		ifAbsent: [ aStream nextPutAll: '<missing name>' ]
+]
+
+{ #category : #printing }
+GtPharoCoderBehavior >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPutAll: '(name: ';
+		nextPutAll: (self behaviorNameDo: #yourself ifAbsent: [ '<missing name>' ]) asString;
+		nextPutAll: ', exists: ';
+		print: self exists;
+		nextPut: $)
+]
+
 { #category : #accessing }
 GtPharoCoderBehavior >> realBehaviorDo: aBlock [
 	^ self subclassResponsibility
