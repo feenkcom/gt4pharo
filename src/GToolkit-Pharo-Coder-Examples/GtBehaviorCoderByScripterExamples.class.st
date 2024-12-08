@@ -293,6 +293,58 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI [
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseClassMethodImplementors [
+	"See https://github.com/feenkcom/gtoolkit/issues/4231"
+	
+	<gtExample>
+	| aScripter aBehavior aMethod aNewMethod aNewSourceCode |
+	aScripter := self classCoderInPagerForClassUI.
+
+	aBehavior := aScripter model behavior classSide.
+	aMethod := aBehavior methods anyOne.
+
+	aScripter methodsCoder
+		// (GtPagerPageElementId indexed: 1);
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethod;
+		forCompiledMethod: aMethod do: [ :aMethodCoderStep | 
+			aMethodCoderStep browseImplementors ];
+		play.
+
+	aScripter methodsCoder
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethod;
+		scrollToCompiledMethod: aMethod;
+		forCompiledMethod: aMethod do: [ :aMethodCoderStep | 
+			aMethodCoderStep 
+				moveCursorToEnd;
+				typeText: ' self yourself';
+				formatCode;
+				assertCoderIsModified;
+				clickOnSaveButton;
+				assertCoderIsWithouthModifications;
+				editorTextDo: [ :aText | aNewSourceCode := aText asString ] ];
+		play.
+		
+	self assert: (aNewSourceCode includesSubstring: 'self yourself').
+	aNewMethod := aBehavior methodDict at: aMethod selector.
+	self assert: aNewMethod sourceCode ~= aMethod sourceCode.
+	self assert: aNewMethod sourceCode equals: aNewSourceCode.
+		
+	aScripter methodsCoder
+		// (GtPagerPageElementId indexed: 1);
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethod;
+		forCompiledMethod: aNewMethod do: [ :aMethodCoderStep |
+			aMethodCoderStep
+				assertEditorTextAsStringIs: aNewSourceCode ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceMethodImplementors [
 	"See https://github.com/feenkcom/gtoolkit/issues/4231"
 	
