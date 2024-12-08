@@ -294,6 +294,8 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI [
 
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceMethodImplementors [
+	"See https://github.com/feenkcom/gtoolkit/issues/4231"
+	
 	<gtExample>
 	| aScripter aBehavior aMethod aNewMethod aNewSourceCode |
 	aScripter := self classCoderInPagerForClassUI.
