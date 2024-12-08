@@ -149,7 +149,8 @@ GtPharoMethodCoderViewModel >> gtInfo [
 	^ super gtInfo, (Array streamContents: [ :aStream |
 		aStream nextPut: (#saveEnabled -> self isSaveEnabled).
 		self isSaveEnabled
-			ifFalse: [ aStream nextPut: (#savePreventors -> savePreventors asArray) ] ])
+			ifFalse: [ aStream nextPut: (#savePreventors -> savePreventors asArray) ].
+		aStream nextPut: (#availableCompilationBehaviors -> self availableCompilationBehaviors) ])
 ]
 
 { #category : #'api - coder model' }

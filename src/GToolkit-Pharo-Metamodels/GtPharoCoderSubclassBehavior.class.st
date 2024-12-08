@@ -85,7 +85,7 @@ GtPharoCoderSubclassBehavior >> behavior [
 
 { #category : #accessing }
 GtPharoCoderSubclassBehavior >> behaviorNameDo: aBlock [
-	coderBehavior behaviorNameDo: aBlock
+	^ coderBehavior behaviorNameDo: aBlock
 ]
 
 { #category : #accessing }
