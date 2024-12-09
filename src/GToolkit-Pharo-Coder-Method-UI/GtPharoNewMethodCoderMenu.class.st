@@ -21,6 +21,7 @@ GtPharoNewMethodCoderMenu >> asElement [
 			onMethodCoderSaved: onMethodCoderSaved;
 			when: GtPhlowObjectToSpawn do: onObjectToSpawn.
 	aNewMethodElement addAptitude: BrMenuPinnableAptitude new.
+	aNewMethodElement addAptitude: BrMenuCommonAptitude new.
 
 	self announcer weak
 		when: BrMenuHideRequest
