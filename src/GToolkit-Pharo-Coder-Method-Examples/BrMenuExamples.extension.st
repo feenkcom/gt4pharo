@@ -4,23 +4,9 @@ Extension { #name : #BrMenuExamples }
 BrMenuExamples >> definingPharoMethodCoderMenu [
 	<gtExample>
 	| aMenu |
-	aMenu := BrMenuExplicit new.
-	aMenu
-		stencil: [
-			| aCoder aCoderViewModel aCoderElement |
-			aCoder := GtPharoMethodCoder forMethod: BlElement >> #gtPreviewFor:.
-			aCoderViewModel := aCoder asCoderViewModel.
-			aCoderElement := aCoderViewModel asExpandedOnlyElement
-				hExact: 500;
-				vExact: 400;
-				border: (BlBorder paint: Color veryLightGray width: 1);
-				geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-				clipChildren: false;
-				background: Color white;
-				addAptitude: BrMenuPinnableAptitude new;
-				addAptitude: BrShadowAptitude new ].
+	aMenu := GtPharoMethodCoderMenu new 
+		forMethod: BlElement >> #gtPreviewFor:.
 
-	self assert: aMenu stencil isNotNil.
 	self assert: (aMenu asElement isKindOf: BlElement).
 
 	^ aMenu
