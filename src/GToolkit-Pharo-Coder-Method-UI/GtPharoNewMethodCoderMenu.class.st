@@ -16,13 +16,12 @@ GtPharoNewMethodCoderMenu >> asElement [
 	self ensureCoderViewModel.
 	aNewMethodElement := GtPharoNewMethodCoderElement new
 			geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-			border: (BlBorder paint: Color veryLightGray width: 1);
-			outskirts: BlOutskirts outside;
 			behavior: self behavior;
 			methodCoderViewModelValueHolder: valueHolder;
 			onMethodCoderSaved: onMethodCoderSaved;
 			when: GtPhlowObjectToSpawn do: onObjectToSpawn.
 	aNewMethodElement addAptitude: BrMenuPinnableAptitude new.
+	aNewMethodElement addAptitude: BrMenuCommonAptitude new.
 
 	self announcer weak
 		when: BrMenuHideRequest

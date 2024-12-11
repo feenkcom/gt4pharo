@@ -35,7 +35,7 @@ GtPharoCoderUIUtility class >> exampleViewModelCachedAs: aSymbol inPhlowContext:
 					forMethodsCoder: aMethodsCoder
 					suiteModel: aViewModel pharoExampleSuite
 					viewModel: aViewModel.
-			aPhlowContext optionAt: aSymbol , #_handler put: aHandler.
+			aPhlowContext optionAt: (aSymbol , #_handler) asSymbol put: aHandler.
 
 			aViewModel ]
 ]

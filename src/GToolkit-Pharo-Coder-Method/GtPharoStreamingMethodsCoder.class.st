@@ -4,7 +4,6 @@ Class {
 	#traits : 'TGtCoderWithBehaviorHolder',
 	#classTraits : 'TGtCoderWithBehaviorHolder classTrait',
 	#instVars : [
-		'behavior',
 		'exampleSuite',
 		'testSuite'
 	],
@@ -75,7 +74,12 @@ GtPharoStreamingMethodsCoder >> newCoderCacheKeyFor: aCompiledMethod [
 { #category : #'private - instance creation' }
 GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
 	| aMethodCoder |
-	aMethodCoder := GtPharoMethodCoder forMethod: aCompiledMethod in: self behavior.
+	aMethodCoder := self 
+		ifBehavior: [ :aBehavior |
+			GtPharoMethodCoder forMethod: aCompiledMethod in: self behavior ] 
+		ifNone: [
+			GtPharoMethodCoder forMethod: aCompiledMethod ].
+
 	aMethodCoder weak
 		when: GtPharoMethodCoderCompiled
 		send: #onPharoMethodCoderCompiled:
