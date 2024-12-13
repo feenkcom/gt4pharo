@@ -71,7 +71,8 @@ GtExtractMethodObjectRefactoringController >> basicAddInstanceVariable: aString 
 { #category : #accessing }
 GtExtractMethodObjectRefactoringController >> cancelRenaming [
 	super cancelRenaming.
-	variableRenamers do: [ :each | each isInstalled ifTrue: [ each cancel ] ]
+	variableRenamers
+		ifNotNil: [ variableRenamers do: [ :each | each isInstalled ifTrue: [ each cancel ] ] ]
 ]
 
 { #category : #accessing }
@@ -223,7 +224,8 @@ GtExtractMethodObjectRefactoringController >> removeInstanceVariable: aString [
 { #category : #accessing }
 GtExtractMethodObjectRefactoringController >> removeRenaming [
 	super removeRenaming.
-	variableRenamers do: [ :each | each uninstall ]
+	variableRenamers
+		ifNotNil: [ variableRenamers do: [ :each | each isInstalled ifTrue: [ each cancel ] ] ]
 ]
 
 { #category : #private }
