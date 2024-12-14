@@ -85,7 +85,6 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: 
 		addContextMenuItem: (self 
 			createLabel: aLabel
 			description: nodeDescription)
-		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: highlightNode)
 		leave: self removeHighlightBlock
 		action: [ :aTextualViewModel | 

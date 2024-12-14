@@ -238,6 +238,7 @@ GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: code
 		ifNotNil: [ :node | 
 			self 
 				addLinkMenuAddOnsTo: coderAddOns 
+				group: BrMenuItemGroupConfiguration navigation
 				node: node 
 				selector: #browseHierarchyReferencesAt:requesterObject: 
 				label: 'Browse hierarchy references' 

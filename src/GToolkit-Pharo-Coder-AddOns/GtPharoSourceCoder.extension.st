@@ -216,7 +216,7 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				addContextMenuItem: (self
 						createLabel: 'Browse references'
 						description: node name value)
-				group: BrMenuItemGroupConfiguration refactoring
+				group: BrMenuItemGroupConfiguration navigation
 				hover: (self highlightNodeBlock: node)
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition requesterObject: aTextualViewModel ]
