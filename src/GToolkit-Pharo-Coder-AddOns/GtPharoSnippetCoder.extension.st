@@ -7,6 +7,7 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 		addContextMenuItem: (self
 				createLabel: 'Convert cascade to statements'
 				description: (self nodeDescription: aNode))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -26,6 +27,7 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 		addContextMenuItem: (self
 				createLabel: 'Convert statements to cascade'
 				description: (self nodeDescription: nodes first))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: nodes)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -62,6 +64,7 @@ GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Extract variable'
 				description: (self nodeDescription: aNode))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -95,6 +98,7 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 		addContextMenuItem: (self
 				createLabel: 'Inline send'
 				description: aNode selector)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :each :element | 
@@ -126,6 +130,7 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Inline assignment'
 				description: variable variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: {uses first parent} , uses)
 		leave: self removeHighlightBlock
 		action: [ :aSourceCoderViewModel :element | 
@@ -143,6 +148,7 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 			| node |
 			coderAddOns
 				addContextMenuItem: 'Extract method'
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: [ :textualCoderViewModel | 
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
@@ -156,6 +162,7 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 
 			coderAddOns
 				addContextMenuItem: 'Extract example'
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: [ :textualCoderViewModel | 
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight

@@ -1,6 +1,61 @@
 Extension { #name : #GtSmalltalkSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel requesterObject: aRequester [
+	self 
+		addLinkMenuAddOnsTo: coderAddOns 
+		group: menuGroup
+		node: node 
+		selector: sel 
+		label: aLabel
+		shortcut: nil 
+		requesterObject: aRequester
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel shortcut: aShortcut requesterObject: aRequester [
+	| highlightNode nodeDescription |
+	
+	(node isMessage or: [ 
+		node isMessageSend or: [ 
+			node isMethodPattern or: [ 
+				node isSymbol ] ] ])
+		ifFalse: [ ^ self ].
+	
+	highlightNode := node isMessageSend 
+		ifTrue: [ node message ] ifFalse: [ node ].
+	nodeDescription := node isSymbol
+		ifTrue: [ node literalValue ] ifFalse: [ node selector ].
+	
+	coderAddOns
+		addContextMenuItem: (self 
+			createLabel: aLabel
+			description: nodeDescription)
+		group: menuGroup
+		hover: (self highlightNodeBlock: highlightNode)
+		leave: self removeHighlightBlock
+		action: [ :aTextualViewModel | 
+			self
+				perform: sel
+				with: highlightNode startPosition
+				with: aRequester ]
+		shortcutKey: (aShortcut ifNotNil: [
+			aShortcut combinationForPlatform gtDisplayString ])
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	self 
+		addLinkMenuAddOnsTo: coderAddOns 
+		group: menuGroup
+		node: node 
+		selector: sel 
+		label: aShortcut name 
+		shortcut: aShortcut 
+		requesterObject: aRequester
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel label: aLabel requesterObject: aRequester [
 	self 
 		addLinkMenuAddOnsTo: coderAddOns 
@@ -30,6 +85,7 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: 
 		addContextMenuItem: (self 
 			createLabel: aLabel
 			description: nodeDescription)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: highlightNode)
 		leave: self removeHighlightBlock
 		action: [ :aTextualViewModel | 

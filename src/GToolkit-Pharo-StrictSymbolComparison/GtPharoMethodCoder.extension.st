@@ -11,6 +11,7 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns 
 					' to ' asRopedText,
 					'#sameContentAs:' asRopedText glamorousCodeFontAndSize)
 				description: (self nodeDescription: aNode))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element |

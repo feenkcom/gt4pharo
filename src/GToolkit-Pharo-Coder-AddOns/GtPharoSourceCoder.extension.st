@@ -12,6 +12,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 						addContextMenuItem: (self
 									createLabel: 'Rename package'
 									description: node literalValue)
+							group: BrMenuItemGroupConfiguration refactoring
 							hover: (self highlightNodeBlock: node)
 							leave: self removeHighlightBlock
 							action: [ :aTextualViewModel :element | 
@@ -24,6 +25,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 						addContextMenuItem: (self
 									createLabel: 'Browse package'
 									description: node literalValue)
+							group: BrMenuItemGroupConfiguration navigation
 							hover: (self highlightNodeBlock: node)
 							leave: self removeHighlightBlock
 							action: [ :model :element | 
@@ -35,6 +37,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 								addContextMenuItem: (self
 											createLabel: 'Rename baseline class'
 											description: node literalValue)
+									group: BrMenuItemGroupConfiguration refactoring
 									hover: (self highlightNodeBlock: node)
 									leave: self removeHighlightBlock
 									action: [ :aTextualViewModel :element | 
@@ -47,6 +50,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 								addContextMenuItem: (self
 											createLabel: 'Browse baseline'
 											description: node literalValue)
+									group: BrMenuItemGroupConfiguration navigation
 									hover: (self highlightNodeBlock: node)
 									leave: self removeHighlightBlock
 									action: [ :model :element | 
@@ -63,10 +67,37 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 		ifNotEmpty: [ :nodes | 
 			self 
 				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+				group: BrMenuItemGroupConfiguration navigation
 				node: nodes first 
 				selector: #browseBehaviorAt:requesterObject: 
 				shortcut: GtSourceCoderBrowseBehaviorShortcut new 
 				requesterObject: aCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	| foundClass |
+
+
+	node isVariable ifFalse: [ ^ self ].
+	self
+		variableNodeToBehavior: node
+		ifFound: [ :aClass | foundClass := aClass ]
+		ifNone: [ ^ self ].
+
+	coderAddOns
+		addContextMenuItem: (self
+			createLabel: aShortcut name 
+			description: foundClass name)
+		group: menuGroup
+		hover: (self highlightNodeBlock: node)
+		leave: self removeHighlightBlock
+			action: [ :aTextualViewModel | 
+				self
+					perform: sel
+					with: node startPosition
+					with: aRequester  ]
+		shortcutKey: aShortcut  combinationForPlatform gtDisplayString 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -102,6 +133,7 @@ GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns fro
 		ifNotEmpty: [ :nodes | 
 			self 
 				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+				group: BrMenuItemGroupConfiguration navigation
 				node: nodes first 
 				selector: #browseReferencesAt:requesterObject:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new 
@@ -113,15 +145,19 @@ GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 800>
 	self
 		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
+			group: BrMenuItemGroupConfiguration evaluation
 			withId: nil
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
+			group: BrMenuItemGroupConfiguration evaluation
 			withId: nil
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
+			group: BrMenuItemGroupConfiguration evaluation
 			withId: nil
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderDebugShortcut new
+			group: BrMenuItemGroupConfiguration evaluation
 			withId: nil
 			to: coderAddOns
 ]
@@ -131,6 +167,7 @@ GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 250>
 	self
 		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
+		group: BrMenuItemGroupConfiguration refactoring
 		withId: nil
 		to: coderAddOns
 ]
@@ -142,6 +179,7 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 		ifNotNil: [ :node | 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
+				group: BrMenuItemGroupConfiguration navigation
 				node: node
 				selector: #browseImplementorsAt:requesterObject:
 				shortcut: GtSourceCoderBrowseImplementorsShortcut new
@@ -178,6 +216,7 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				addContextMenuItem: (self
 						createLabel: 'Browse references'
 						description: node name value)
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: node)
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition requesterObject: aTextualViewModel ]
@@ -193,6 +232,7 @@ GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns f
 		ifNotNil: [ :node | 
 			self
 				addLinkMenuAddOnsTo: coderAddOns
+				group: BrMenuItemGroupConfiguration navigation
 				node: node
 				selector: #browseReferencesAt:requesterObject:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new
@@ -221,6 +261,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				addContextMenuItem: (self
 						createLabel: 'Rename message'
 						description: node selector)
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: highlightNode)
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel :element | 
