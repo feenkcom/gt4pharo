@@ -141,7 +141,8 @@ GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
 		assertStep: [ :s | 
 			s
 				onSpaceRoot;
-				// GtCoderContextMenuContent;
+				// BrMenuSteppedElement;
+				onThisOrBreadthFirstChildOfKind: BrList;
 				exists ].
 
 	aScripter shortcut
@@ -152,7 +153,7 @@ GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
 		assertStep: [ :s | 
 			s
 				onSpaceRoot;
-				// GtCoderContextMenuContent;
+				// BrMenuSteppedElement;
 				notExists ].
 
 	^ aScripter
@@ -535,16 +536,16 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x300Sp
 		assertStep: [ :s | 
 			s
 				label: 'Assert context menu extent';
-				value: [ :aContentElement | aContentElement extent ]
-					equals: [ :aContentElement | 
-						| aContextMenuQuery |
-						aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
-						self assert: aContextMenuQuery result size equals: 1.
-						aContextMenuQuery result first extent ];
+				satisfies: [ :aSteppedElement | 
+					| aMenuElement |
+					aMenuElement := aSteppedElement childAt: 1.
+					aMenuElement isVisibleInSpace and: [
+						aMenuElement isVisibleFullyInParent: aSteppedElement ] ]
+					description: [ :aSteppedElement | 
+						'Context menu element is not fully visible in its stepped element parent: {1}'
+							format: { aSteppedElement childAt: 1 } ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
-				// BrAnchoredElement;
-				/ #content asBlocElementId ].
+				// BrMenuSteppedElement ].
 
 	^ aScripter
 ]
@@ -569,16 +570,16 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x600Sp
 		assertStep: [ :s | 
 			s
 				label: 'Assert context menu extent';
-				value: [ :aContentElement | aContentElement extent ]
-					equals: [ :aContentElement | 
-						| aContextMenuQuery |
-						aContextMenuQuery := aContentElement query // GtCoderContextMenuContent.
-						self assert: aContextMenuQuery result size equals: 1.
-						aContextMenuQuery result first extent ];
+				satisfies: [ :aSteppedElement | 
+					| aMenuElement |
+					aMenuElement := aSteppedElement childAt: 1.
+					aMenuElement isVisibleInSpace and: [
+						aMenuElement isVisibleFullyInParent: aSteppedElement ] ]
+					description: [ :aSteppedElement | 
+						'Context menu element is not fully visible in its stepped element parent: {1}'
+							format: { aSteppedElement childAt: 1 } ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
-				// BrAnchoredElement;
-				/ #content asBlocElementId ].
+				// BrMenuSteppedElement ].
 
 	^ aScripter
 ]
