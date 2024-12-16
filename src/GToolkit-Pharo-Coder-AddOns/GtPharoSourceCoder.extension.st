@@ -150,7 +150,7 @@ GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
 			group: BrMenuItemGroupConfiguration evaluation
-			withId: nil
+			withId: GtSourceCoderDoItAndGoActionId
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
 			group: BrMenuItemGroupConfiguration evaluation
