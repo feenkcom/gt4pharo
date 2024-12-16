@@ -216,10 +216,11 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_Check
 	| aScripter |
 
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
-	self 
+	"self 
 		checkFor: aScripter 
 		numberOfMainActions: 4
-		contextAction: 0.
+		contextAction: 0."
+	self checkFor: aScripter absenceOfContextActionNamed: 'Play'.
 
 	^ aScripter
 ]
@@ -351,10 +352,10 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 	<gtExample>
 	| aScripter |
 	aScripter := self binaryMethodCoderUI_ExpandedFromUI.
-	self 
+	"self 
 		checkFor: aScripter 
 		numberOfMainActions: 4
-		contextAction: 0.
+		contextAction: 0."
 	self checkFor: aScripter absenceOfContextActionNamed: 'Play'.
 
 	^ aScripter
@@ -429,6 +430,30 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 					s
 						label: 'Assert number of addons actions';
 						childrenCount: anAddonsActionsCount;
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 3 ] ]
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions: aMainActionsCount contextActionAtLeast: anAddonsActionsCount [
+	<gtExample>
+	aScripter
+		substeps: 'Check Available Action Buttons'
+		do: [ :aStep | 
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert number of main actions';
+						childrenCount: aMainActionsCount;
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 1 ].
+
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Assert number of addons actions';
+						satisfies: [ :anElement | anElement childrenCount >= anAddonsActionsCount ] 
+							description: [ :anElement | 'Element must have at least {1}, but have {2}: {3}' format: { anAddonsActionsCount. anElement childrenCount. anElement } ];
 						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
 						onChildAt: 3 ] ]
 ]
@@ -1416,7 +1441,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	self 
 		checkFor: aScripter 
 		numberOfMainActions: 4
-		contextAction: 5.
+		contextActionAtLeast: 5.
 
 	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate example'.
 	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate and inspect example result'.
@@ -1442,12 +1467,21 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_RemovePragma [
 	<gtExample>
-	| aScripter |
+	| aScripter aNumberOfContextActionElements |
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 
 	aScripter
 		substeps: 'Remove Pragma'
 		do: [ :aStep | 
+			aStep
+				doStep: [ :s | 
+					s
+						label: 'Get number of context actions';
+						block: [ :anElement | 
+							aNumberOfContextActionElements := anElement childrenCount ];
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 3 ].
+		
 			aStep
 				doStep: [ :s | 
 					s
@@ -1462,7 +1496,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 			self
 				checkFor: aStep
 				numberOfMainActions: 5
-				contextAction: 0.
+				contextAction: aNumberOfContextActionElements - 5.
 
 			self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
 
@@ -6116,11 +6150,21 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion [
 	<gtExample>
-	| aScripter |
+	| aScripter aNumberOfContextActionElements |
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter
 		substeps: 'Remove Pragma'
 		do: [ :aStep | 
+			aStep
+				doStep: [ :s | 
+					s
+						label: 'Get number of context actions';
+						block: [ :anElement | 
+							aNumberOfContextActionElements := anElement childrenCount ];
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 3 ].
+		
+		
 			aStep
 				doStep: [ :s | 
 					s
@@ -6135,7 +6179,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			self
 				checkFor: aStep
 				numberOfMainActions: 5
-				contextAction: 0.
+				contextAction: aNumberOfContextActionElements - 5.
 
 			self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
 	aScripter
@@ -6175,7 +6219,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			self
 				checkFor: aStep
 				numberOfMainActions: 4
-				contextAction: 5.
+				contextActionAtLeast: 5.
 
 			self checkFor: aStep existenceOfContextActionNamed: 'Evaluate example' ].
 

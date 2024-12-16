@@ -18,6 +18,7 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 			ifNotNil: [ self createLabel: 'Extract as parameter' description: method selector ].
 	coderAddOns
 		addContextMenuItem: label
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (valueNode ifNotNil: [ self highlightNodeBlock: valueNode ])
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -38,6 +39,7 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Abstract variable'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -50,6 +52,7 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 				addContextMenuItem: (self
 						createLabel: 'Create accessors'
 						description: aNode variableName)
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
 				action: [ :aCoderViewModel :element | 
@@ -66,6 +69,7 @@ GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Convert cascade to statements'
 				description: (self nodeDescription: aNode))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -90,6 +94,7 @@ GtPharoMethodCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Convert statements to cascade'
 				description: (self nodeDescription: nodes first))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: nodes)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -108,6 +113,7 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 		addContextMenuItem: (self
 				createLabel: 'Convert to instance variable'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -125,6 +131,7 @@ GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns fr
 	theNodes
 		ifNotEmpty: [ coderAddOns
 				addContextMenuItem: 'Extract method object' asRopedText
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: nil
 				leave: nil
 				action: [ :model :element | 
@@ -144,6 +151,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 			shortcut := GtSourceCoderExtractMethodShortcut new.
 			coderAddOns
 				addContextMenuItem: shortcut name
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: [ :textualCoderViewModel | 
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
@@ -181,6 +189,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Extract temporary'
 				description: (self nodeDescription: aNode))
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: nodes)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -214,6 +223,7 @@ GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddO
 		ifNotNil: [ :node | 
 			self 
 				addLinkMenuAddOnsTo: coderAddOns 
+				group: BrMenuItemGroupConfiguration navigation
 				node: node 
 				selector: #browseHierarchyImplementorsAt:requesterObject: 
 				label: 'Browse hierarchy implementors' 
@@ -228,6 +238,7 @@ GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: code
 		ifNotNil: [ :node | 
 			self 
 				addLinkMenuAddOnsTo: coderAddOns 
+				group: BrMenuItemGroupConfiguration navigation
 				node: node 
 				selector: #browseHierarchyReferencesAt:requesterObject: 
 				label: 'Browse hierarchy references' 
@@ -245,6 +256,7 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Inline All self Sends'
 				description: method selector)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: nil
 		leave: nil
 		action: [ :aSourceCoderViewModel :element | 
@@ -262,6 +274,7 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 				addContextMenuItem: (self
 						createLabel: 'Inline message'
 						description: aNode message selector)
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
 				action: [ :aSourceCoderViewModel :element | 
@@ -283,6 +296,7 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 						addContextMenuItem: (self
 								createLabel: 'Inline message'
 								description: aNode message selector)
+						group: BrMenuItemGroupConfiguration refactoring
 						hover: (self highlightNodeBlock: aNode)
 						leave: self removeHighlightBlock
 						action: [ :aSourceCoderViewModel :element | 
@@ -300,6 +314,7 @@ GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Inline parameter'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -331,6 +346,7 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Inline assignment'
 				description: variable variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: {uses second parent} , uses)
 		leave: self removeHighlightBlock
 		action: [ :aSourceCoderViewModel :element | 
@@ -353,6 +369,7 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 		addContextMenuItem: (self
 				createLabel: 'Abstract variable'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -365,6 +382,7 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 				addContextMenuItem: (self
 						createLabel: 'Protect variable'
 						description: aNode variableName)
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
 				action: [ :aCoderViewModel :element | 
@@ -376,6 +394,7 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 				addContextMenuItem: (self
 						createLabel: 'Create accessors'
 						description: aNode variableName)
+				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: aNode)
 				leave: self removeHighlightBlock
 				action: [ :aCoderViewModel :element | 
@@ -396,6 +415,7 @@ GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Move method into'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -419,6 +439,7 @@ GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns 
 		addContextMenuItem: (self
 				createLabel: 'Pull down variable declaration'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -443,6 +464,7 @@ GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Push down method'
 				description: method selector)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: nil
 		leave: nil
 		action: [ :aCoderViewModel :element | 
@@ -469,6 +491,7 @@ GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Push up method'
 				description: aNode selector)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: nil
 		leave: nil
 		action: [ :aCoderViewModel :element | 
@@ -494,6 +517,7 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Push up variable declaration'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -547,6 +571,7 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Remove parameter'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -567,6 +592,7 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
 						addContextMenuItem: (self
 								createLabel: 'Rename class'
 								description: aNode variableName)
+						group: BrMenuItemGroupConfiguration refactoring
 						hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 						leave: self removeHighlightBlock
 						action: [ :aCoderViewModel :element | 
@@ -585,6 +611,7 @@ GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOn
 		addContextMenuItem: (self
 				createLabel: 'Rename class variable'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -604,6 +631,7 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 		addContextMenuItem: (self
 				createLabel: 'Rename instance variable'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel :element | 
@@ -638,6 +666,7 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Rename local'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
@@ -676,6 +705,7 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 		addContextMenuItem: (self
 				createLabel: 'Move declaration to inner scope'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aSourceCoderViewModel :element | 
