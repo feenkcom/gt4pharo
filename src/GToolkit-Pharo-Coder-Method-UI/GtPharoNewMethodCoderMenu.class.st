@@ -48,6 +48,12 @@ GtPharoNewMethodCoderMenu >> coderViewModel [
 	^ valueHolder contents
 ]
 
+{ #category : #accessing }
+GtPharoNewMethodCoderMenu >> coderViewModel: aCoderViewModel [
+	coder := aCoderViewModel coderModel.
+	valueHolder contents: aCoderViewModel
+]
+
 { #category : #private }
 GtPharoNewMethodCoderMenu >> ensureCoderViewModel [
 	self coderViewModel ifNotNil: [ ^ self ].
