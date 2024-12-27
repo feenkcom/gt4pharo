@@ -38,22 +38,29 @@ GtMethodCoderExplanationStylerExamples >> b [
 GtMethodCoderExplanationStylerExamples >> coderOnViewMethod [
 	<gtExample>
 	| selectors variables coder coderViewModel coderElement |
-	
 	selectors := GtSelectorExplanationLinkStyler new.
-	selectors addSelectors: #(gtView columnedList title: items: contacts fullName avatar telephone contacts).
+	selectors
+		addSelectors: #(gtView columnedList title: items: contacts fullName avatar telephone contacts).
 	selectors addSelector: #column:icon: withIdentifier: #columns.
 	selectors addSelector: #column:icon:width: withIdentifier: #columns.
 	selectors addSelector: #column:text: withIdentifier: #columns.
-	
+
 	variables := GtVariableExplanationLinkStyler new.
-	variables addVariables: {'aView' . 'aContact'}.
-	
-	coder := GtPharoMethodCoder forMethod: (GtABAddressBook>>#gtViewContactsOn:).
+	variables
+		addVariables: {'aView'.
+				'aContact'}.
+
+	coder := GtPharoMethodCoder forMethod: GtABAddressBook >> #gtViewContactsOn:.
 	coderViewModel := coder asCoderViewModel.
-	coderViewModel addStylers: { selectors. variables }.
+	coderViewModel
+		addStylers: {selectors.
+				variables}.
 	coderViewModel expanded: true.
 
 	coderElement := coderViewModel asElement.
+	(coderElement query // GtSourceCoderEditorElement) anyOne parent
+		addAptitude: (BrGlamorousWithVerticalScrollbarAptitude new
+				scrollableName: GtSourceCoderEditorId new).
 	coderElement margin: (BlInsets all: 10).
 	coderElement vMatchParent.
 

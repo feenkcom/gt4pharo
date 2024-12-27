@@ -20,13 +20,10 @@ GtPharoNewMethodCoderMenu >> asElement [
 			methodCoderViewModelValueHolder: valueHolder;
 			onMethodCoderSaved: onMethodCoderSaved;
 			when: GtPhlowObjectToSpawn do: onObjectToSpawn.
-	aNewMethodElement addAptitude: BrMenuPinnableAptitude new.
+	aNewMethodElement addAptitude: (BrMenuPinnableAptitude new menuModel: self).
+	aNewMethodElement addAptitude: (BrMenuHideableAptitude new menuModel: self).
 	aNewMethodElement addAptitude: BrMenuCommonAptitude new.
 
-	self announcer weak
-		when: BrMenuHideRequest
-		send: #removeFromParent
-		to: aNewMethodElement.
 	^ aNewMethodElement
 ]
 
