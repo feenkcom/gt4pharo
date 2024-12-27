@@ -58,9 +58,6 @@ GtMethodCoderExplanationStylerExamples >> coderOnViewMethod [
 	coderViewModel expanded: true.
 
 	coderElement := coderViewModel asElement.
-	(coderElement query // GtSourceCoderEditorElement) anyOne parent
-		addAptitude: (BrGlamorousWithVerticalScrollbarAptitude new
-				scrollableName: GtSourceCoderEditorId new).
 	coderElement margin: (BlInsets all: 10).
 	coderElement vMatchParent.
 

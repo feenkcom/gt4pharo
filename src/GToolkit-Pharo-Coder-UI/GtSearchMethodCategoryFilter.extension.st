@@ -4,7 +4,7 @@ Extension { #name : #GtSearchMethodCategoryFilter }
 GtSearchMethodCategoryFilter >> filterDescriptor2For: aMethodsCoder [
 	^ (super filterDescriptor2For: aMethodsCoder)
 		ifNotNil: [ :aFilterModel | 
-			aFilterModel selectedItem: (category ifNil: [ AllProtocol gtDefaultName ]) ]
+			aFilterModel selectedItem: (category ifNil: [ Protocol gtAllProtocolDefaultName ]) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

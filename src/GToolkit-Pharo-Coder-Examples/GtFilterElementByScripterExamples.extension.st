@@ -55,9 +55,9 @@ GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 2;
 		assertFilterModelAtIndex: 2 itemsCountIsAtLeast: 20;
-		clickOnDropdownFilterItem: (GtFilterModelStringItem new string: AllProtocol gtDefaultName);
+		clickOnDropdownFilterItem: (GtFilterModelStringItem new string: Protocol gtAllProtocolDefaultName);
 		assertFilterModelAtIndex: 2
-			selectedValueIs: (GtFilterModelStringItem new string: AllProtocol gtDefaultName);
+			selectedValueIs: (GtFilterModelStringItem new string: Protocol gtAllProtocolDefaultName);
 		play.
 		
 	aScripter methodsCoder
