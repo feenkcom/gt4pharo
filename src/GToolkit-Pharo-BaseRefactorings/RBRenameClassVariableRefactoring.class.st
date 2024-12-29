@@ -32,6 +32,19 @@ RBRenameClassVariableRefactoring class >> rename: aVarName to: aName in: aClass 
 		in: aClass
 ]
 
+{ #category : #'gt - extensions' }
+RBRenameClassVariableRefactoring >> gtDescription [
+	<return: #String or: #BlRunRopedText>
+	
+	^ ('Rename' asRopedText glamorousRoundedBackground)
+		append: ' class variable ' asRopedText;
+		append: variableName asRopedText glamorousRoundedBackground;
+		append: ' to ' asRopedText;
+		append: newName asRopedText glamorousRoundedBackground;
+		append: ' in ' asRopedText;
+		append: class name asRopedText
+]
+
 { #category : #accessing }
 RBRenameClassVariableRefactoring >> newName [
 	^ newName

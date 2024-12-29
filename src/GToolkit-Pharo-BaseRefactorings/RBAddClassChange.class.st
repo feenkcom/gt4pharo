@@ -171,6 +171,16 @@ RBAddClassChange >> fillOutDefinition: aDictionary [
 			asSymbol
 ]
 
+{ #category : #'gt - extensions' }
+RBAddClassChange >> gtViewDefinitionFor: aView [
+	<gtView>
+	^ aView textEditor
+		priority: 50;
+		title: 'Definition';
+		aptitude: BrGlamorousCodeEditorAptitude;
+		text: [ self definition asRopedText ]
+]
+
 { #category : #accessing }
 RBAddClassChange >> instanceVariableNames [
 

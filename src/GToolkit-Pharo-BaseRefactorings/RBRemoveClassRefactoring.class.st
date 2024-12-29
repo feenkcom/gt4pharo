@@ -55,6 +55,11 @@ RBRemoveClassRefactoring >> environmentWithUsersOf: aTrait [
 		classes: aTrait realClass users
 ]
 
+{ #category : #'gt - extensions' }
+RBRemoveClassRefactoring >> gtDescription [
+	^ 'Remove class ' , classNames anyOne
+]
+
 { #category : #preconditions }
 RBRemoveClassRefactoring >> preconditionEmptyOrHasNoSubclasses: aClass [
 	^ (RBCondition hasSubclasses: aClass excluding: classNames) not

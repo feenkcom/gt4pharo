@@ -58,6 +58,11 @@ RBRenameMethodRefactoring class >> renameMethod: aSelector in: aClass to: newSel
 		permutation: aMap
 ]
 
+{ #category : #'gt - extensions' }
+RBRenameMethodRefactoring >> gtDescription [
+	^ 'Rename method ' , oldSelector , ' to ' , newSelector
+]
+
 { #category : #testing }
 RBRenameMethodRefactoring >> hasPermutedArguments [
 

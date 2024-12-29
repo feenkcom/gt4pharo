@@ -42,6 +42,17 @@ RBRenameClassRefactoring >> className: aName newName: aNewName [
 	newName := aNewName asSymbol
 ]
 
+{ #category : #'gt - extensions' }
+RBRenameClassRefactoring >> gtDescription [
+	<return: #String or: #BlRunRopedText>
+	
+	^ ('Rename' asRopedText glamorousRoundedBackground)
+		append: ' class ' asRopedText;
+		append: className asRopedText;
+		append: ' to ' asRopedText;
+		append: newName asRopedText glamorousRoundedBackground
+]
+
 { #category : #preconditions }
 RBRenameClassRefactoring >> preconditions [
 	^((RBCondition withBlock: [class notNil and: [class isMeta not]])

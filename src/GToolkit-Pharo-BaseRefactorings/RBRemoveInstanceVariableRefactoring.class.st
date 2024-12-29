@@ -19,6 +19,27 @@ RBRemoveInstanceVariableRefactoring class >> remove: variable from: class [
 	^ self variable: variable class: class
 ]
 
+{ #category : #'gt - extensions' }
+RBRemoveInstanceVariableRefactoring >> gtDescription [
+	<return: #String or: #BlRunRopedText>
+	
+	^ ('Remove' asRopedText glamorousRoundedBackground)
+		append: ' instance variable ' asRopedText;
+		append: variableName asRopedText glamorousRoundedBackground;
+		append: ' from ' asRopedText;
+		append: class printString asRopedText
+]
+
+{ #category : #'gt - extensions' }
+RBRemoveInstanceVariableRefactoring >> gtPreconditions [
+	| references |
+
+	references := RBCondition hierarchyOf: class referencesInstanceVariable: variableName.
+	references errorMacro: ( '<1s> is referenced.' expandMacrosWith: variableName).
+
+	^ ( RBCondition definesInstanceVariable: variableName asString in: class ) & references not
+]
+
 { #category : #preconditions }
 RBRemoveInstanceVariableRefactoring >> preconditions [
 
