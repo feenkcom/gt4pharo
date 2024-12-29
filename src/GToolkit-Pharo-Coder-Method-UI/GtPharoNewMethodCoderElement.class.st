@@ -1,12 +1,11 @@
 Class {
 	#name : #GtPharoNewMethodCoderElement,
 	#superclass : #BrFrame,
-	#traits : 'TGtWithPharoMethodCoderViewModel',
-	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait',
+	#traits : 'TGtWithPharoMethodCoderViewModel + TGtCoderWithSelfObjectHolder + TGtCoderWithBehaviorHolder',
+	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait + TGtCoderWithSelfObjectHolder classTrait + TGtCoderWithBehaviorHolder classTrait',
 	#instVars : [
 		'sourceCoderElement',
 		'tagsElement',
-		'behavior',
 		'methodCoderViewModelValueHolder',
 		'onMethodCoderSaved'
 	],
@@ -18,38 +17,32 @@ GtPharoNewMethodCoderElement class >> preferredExtent [
 	^ 400 @ 150
 ]
 
-{ #category : #'api - initialization' }
-GtPharoNewMethodCoderElement >> behavior: aBehavior [
-	"Behavior is a class (or Trait) for which a new method will be created."
-
-	behavior := aBehavior
-]
-
 { #category : #'private - updating' }
 GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 	| aNewMethodCoderViewModel aNewMethodCoder newMethodText |
 	aNewMethodCoderViewModel := methodCoderViewModelValueHolder
 				ifNotNil: #contents.
-	aNewMethodCoderViewModel
-		ifNotNil: 
-			[self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
-			^self].
+	aNewMethodCoderViewModel ifNotNil: [
+		self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
+		^ self ].
+	
 	newMethodText := ('' asRopedText)
-				glamorousCodeFontAndSize;
-				attribute: (BrGhostTextAttribute
-							for: ('newMethod' asRopedText glamorousCodeFontAndSize
-									foreground: Color lightGray))
-								beNotOverwritableByStyler.
+		glamorousCodeFontAndSize;
+		attribute: (BrGhostTextAttribute
+			for: ('newMethod' asRopedText glamorousCodeFontAndSize
+				foreground: Color lightGray))
+			beNotOverwritableByStyler.
 	aNewMethodCoder := (GtPharoMethodCoder
-				forNewMethod: (behavior ifNil: [Object]))
-				currentSourceText: newMethodText;
-				protocol: AbstractProtocol unclassified;
-				yourself.
-	aNewMethodCoderViewModel := (aNewMethodCoder asCoderViewModel)
-				withoutHeader;
-				expanded: true;
-				focused: true;
-				moveCursorAtEnd.
+		forNewMethod: (self behaviorIfNone: [ Object ]))
+		currentSourceText: newMethodText;
+		protocol: AbstractProtocol unclassified;
+		yourself.
+	aNewMethodCoderViewModel := aNewMethodCoder asCoderViewModel
+		selfObjectHolder: self selfObjectHolder;
+		withoutHeader;
+		expanded: true;
+		focused: true;
+		moveCursorAtEnd.
 	self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
 	methodCoderViewModelValueHolder
 		ifNotNil: [:aValueHolder | aValueHolder contents: aNewMethodCoderViewModel]
@@ -114,7 +107,7 @@ GtPharoNewMethodCoderElement >> onAddedToSceneGraph [
 	super onAddedToSceneGraph.
 
 	self hasPharoMethodCoderViewModel ifTrue: [ ^ self ].
-	behavior ifNil: [ ^ self ].
+	self behaviorIfNone: [ ^ self ].
 	self ensureMethodCoderViewModel
 ]
 
