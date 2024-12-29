@@ -134,11 +134,11 @@ GtCoderNavigationModelExamples >> selectSuperclassInDifferentPackage [
 	aModel := self selectExtendedClass.
 	aPackage := 'Refactoring-Changes' asPackage.
 	aTag := (aPackage classTagNamed: 'Changes-Classes').
-	aModel selectClass: RBRefactoryDefinitionChange.
+	aModel selectClass: RBAddTraitChange.
 	self
 		assertSelectionOfPackage: aPackage
 		tag: aTag
-		class: RBRefactoryDefinitionChange
+		class: RBAddTraitChange
 		inModel: aModel.
 	^ aModel
 ]

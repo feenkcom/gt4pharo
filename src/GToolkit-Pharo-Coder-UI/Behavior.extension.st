@@ -132,6 +132,7 @@ Behavior >> gtCopyButtonFor: anAction [
 Behavior >> gtNewMethodDropdownOn: aButton withViewModel: aMethodsCoderViewModel withNewMethodHolder: aNewMethodCoderHolder [
 	^ GtPharoNewMethodCoderElement new
 		behavior: self;
+		selfObjectHolder: aMethodsCoderViewModel selfObjectHolder;
 		methodCoderViewModelValueHolder: aNewMethodCoderHolder;
 		onMethodCoderSaved: (GtPharoNewMethodCodeSavedHandler new
 				methodsCoderViewModel: aMethodsCoderViewModel;
