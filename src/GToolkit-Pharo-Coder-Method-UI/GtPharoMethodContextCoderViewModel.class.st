@@ -67,11 +67,6 @@ GtPharoMethodContextCoderViewModel >> initialize [
 	expanded := false
 ]
 
-{ #category : #'private - event handling' }
-GtPharoMethodContextCoderViewModel >> onBehaviorChanged: aBehaviorChangedAnnouncement [
-	self announce: ((GtTextualCoderViewModelBehaviorChanged new newBehavior: (aBehaviorChangedAnnouncement newBehavior)))
-]
-
 { #category : #'api - coder model' }
 GtPharoMethodContextCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
@@ -109,16 +104,6 @@ GtPharoMethodContextCoderViewModel >> programCounterTextAttribute [
 { #category : #accessing }
 GtPharoMethodContextCoderViewModel >> receiverClass [
 	^ self coderModel receiverClass
-]
-
-{ #category : #'api - coder model' }
-GtPharoMethodContextCoderViewModel >> subscribeToCoderModel [
-	super subscribeToCoderModel.
-
-	self coderModel weak
-		when: GtCoderBehaviorChanged
-		send: #onBehaviorChanged:
-		to: self
 ]
 
 { #category : #'private - updating' }

@@ -698,7 +698,8 @@ GtPharoMethodCoder >> methodBehavior: aGtMethodCoderBehavior [
 		methodBehavior := aGtMethodCoderBehavior. 
 		self announce: (GtCoderBehaviorChanged new 
 			newBehavior: aGtMethodCoderBehavior;
-			coder: self) ]
+			coder: self).
+		self requestStyleSourceText ]
 ]
 
 { #category : #'api - accessing' }

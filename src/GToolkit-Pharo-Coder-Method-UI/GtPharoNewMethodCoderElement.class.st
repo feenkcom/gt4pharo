@@ -49,6 +49,20 @@ GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 ]
 
 { #category : #'private - event handling' }
+GtPharoNewMethodCoderElement >> handleCoderBehaviorChanged: anAnnouncement [
+	anAnnouncement newBehavior
+		realBehaviorDo: [ :aNewBehavior | 
+			self
+				ifBehavior: [ :anOriginalBehavior | 
+					self 
+						switchBehaviorFrom: anOriginalBehavior 
+						to: aNewBehavior ]
+				ifNone: [ 
+					self switchBehaviorTo: aNewBehavior ] ]
+		ifAbsent: [ "ignore" ]
+]
+
+{ #category : #'private - event handling' }
 GtPharoNewMethodCoderElement >> handleMethodCoderSaved: anAnnouncement [
 	onMethodCoderSaved
 		ifNotNil: [ :anAction | 
@@ -138,7 +152,28 @@ GtPharoNewMethodCoderElement >> subscribeToPharoMethodCoderViewModel [
 	self pharoMethodCoderViewModel weak
 		when: GtMethodCoderSaved
 		send: #handleMethodCoderSaved:
-		to: self
+		to: self;
+		when: GtTextualCoderViewModelBehaviorChanged
+		send: #handleCoderBehaviorChanged:
+		to: self.
+]
+
+{ #category : #'private - event handling' }
+GtPharoNewMethodCoderElement >> switchBehaviorFrom: anOriginalBehavior to: aNewBehavior [
+	self switchBehaviorTo: aNewBehavior
+]
+
+{ #category : #'private - event handling' }
+GtPharoNewMethodCoderElement >> switchBehaviorTo: aNewBehavior [
+	aNewBehavior isMeta 
+		ifTrue: [ 
+			self 
+				ifSelfObject: [ :aSelfObject | 
+					self pharoMethodCoderViewModel selfObject: aSelfObject class ] 
+				ifNone: [ 
+					self pharoMethodCoderViewModel selfObject: aNewBehavior instanceSide ] ]
+		ifFalse: [
+			self pharoMethodCoderViewModel selfObjectHolder: self selfObjectHolder ]
 ]
 
 { #category : #'api - pharo method coder view model' }
@@ -146,5 +181,5 @@ GtPharoNewMethodCoderElement >> unsubscribeFromPharoMethodCoderViewModel [
 	"Is sent before a new pharoMethodCoderViewModel is assigned to the receiver.
 	Objects that subscribe to pharoMethodCoderViewModel are required to implement this method."
 
-	self pharoMethodCoderViewModel unsubscribe: self
+	self pharoMethodCoderViewModel unsubscribe: self.
 ]

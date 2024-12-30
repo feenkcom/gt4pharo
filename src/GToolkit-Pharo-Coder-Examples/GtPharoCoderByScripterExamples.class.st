@@ -12,6 +12,54 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'examples - evaluation context' }
+GtPharoCoderByScripterExamples >> addBackNewInstanceSideMethod [
+	"See https://github.com/feenkcom/gtoolkit/issues/4257"
+
+	<gtExample>
+	| aScripter anInstanceSideMethod aClassSideMethod anObject aMethodsCoderQuery |
+	aScripter := self addNewClassSideMethod.
+	anInstanceSideMethod := GtPharoDummyTwoObject >> #sum21Reference.
+	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
+	
+	aMethodsCoderQuery := aScripter element query // GtPharoStreamingMethodsCoderElement.
+	anObject := aMethodsCoderQuery anyOne streamingCodersViewModel selfObjectIfNone: [ self error: 'Self object must be defined' ].
+	
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the switch method side button';
+				onSpaceRoot;
+				/ BrAnchoredOuterContainer;
+				// GtPharoSideTagId;
+				onTopMost ].
+				
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the instance-side button';
+				onSpaceRoot;
+				/ BrAnchoredOuterContainer;
+				/ BrAnchoredElement;
+				/ #content;
+				/ BrButton ].
+
+	aScripter methodCoder
+		onSpaceRoot;
+		/ BrAnchoredOuterContainer;
+		// GtSourceCoderEditorId;
+		assertSelfObjectIs: anObject;
+		assertTargetBehaviorIs: anObject class instanceSide;
+		clickOnMethodCoderExpander: 1 insideDo: [ :aMethodCoder | 
+			aMethodCoder 
+				assertCompiledMethodIs: anInstanceSideMethod;
+				assertSelfObjectIs: anObject;
+				assertTargetBehaviorIs: anObject class instanceSide ];
+		play.
+
+	^ aScripter
+]
+
 { #category : #'exaples - add new method' }
 GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3230)"
@@ -65,6 +113,94 @@ GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 				onSpaceRoot;
 				// BrAnchoredOuterContainer;
 				// GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoCoderByScripterExamples >> addNewClassSideMethod [
+	"See https://github.com/feenkcom/gtoolkit/issues/4257"
+
+	<gtExample>
+	| aScripter anInstanceSideMethod aClassSideMethod anObject aMethodsCoderQuery |
+	aScripter := self addNewInstanceSideMethod.
+	anInstanceSideMethod := GtPharoDummyTwoObject >> #sum21Reference.
+	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
+	
+	aMethodsCoderQuery := aScripter element query // GtPharoStreamingMethodsCoderElement.
+	anObject := aMethodsCoderQuery anyOne streamingCodersViewModel selfObjectIfNone: [ self error: 'Self object must be defined' ].
+	
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the switch method side button';
+				onSpaceRoot;
+				/ BrAnchoredOuterContainer;
+				// GtPharoSideTagId;
+				onTopMost ].
+				
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the class-side button';
+				onSpaceRoot;
+				/ BrAnchoredOuterContainer;
+				/ BrAnchoredElement;
+				/ #content;
+				/ BrButton ].
+
+	aScripter methodCoder
+		onSpaceRoot;
+		/ BrAnchoredOuterContainer;
+		// GtSourceCoderEditorId;
+		assertSelfObjectIs: anObject class instanceSide;
+		assertTargetBehaviorIs: anObject class classSide;
+		clickOnMethodCoderExpander: 1 insideDo: [ :aMethodCoder | 
+			aMethodCoder 
+				assertCompiledMethodIs: aClassSideMethod;
+				assertSelfObjectIs: anObject class instanceSide;
+				assertTargetBehaviorIs: anObject class classSide ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - evaluation context' }
+GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
+	"See https://github.com/feenkcom/gtoolkit/issues/4257"
+
+	<gtExample>
+	| aScripter anInstanceSideMethod aClassSideMethod anObject aMethodsCoderQuery |
+	aScripter := self coderWithDummyTwoObjectInstanceInPager.
+	anInstanceSideMethod := GtPharoDummyTwoObject >> #sum21Reference.
+	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
+
+	aMethodsCoderQuery := aScripter element query // GtPharoStreamingMethodsCoderElement.
+	anObject := aMethodsCoderQuery anyOne streamingCodersViewModel selfObjectIfNone: [ self error: 'Self object must be defined' ].
+	
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the add new method button';
+				// (GtPagerPageElementId indexed: 1);
+				// GtPharoAddNewMethodButtonId ].
+
+	aScripter methodCoder
+		onSpaceRoot;
+		/ BrAnchoredOuterContainer;
+		// GtSourceCoderEditorId;
+		click;
+		assertHasFocus;
+		selectAll;
+		typeText: 'newMethod self ', #sum21Reference;
+		assertSelfObjectIs: anObject;
+		assertTargetBehaviorIs: anObject class;
+		clickOnMethodCoderExpander: 1 insideDo: [ :aMethodCoder | 
+			aMethodCoder 
+				assertCompiledMethodIs: anInstanceSideMethod;
+				assertSelfObjectIs: anObject;
+				assertTargetBehaviorIs: anObject class ];
+		play.
 
 	^ aScripter
 ]

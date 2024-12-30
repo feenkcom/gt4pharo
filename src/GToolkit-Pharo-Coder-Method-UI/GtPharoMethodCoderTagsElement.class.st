@@ -98,6 +98,7 @@ GtPharoMethodCoderTagsElement >> initialize [
 { #category : #'instance creation' }
 GtPharoMethodCoderTagsElement >> newClassTag [
 	^ BrButton new
+		id: GtPharoSideTagId;
 		beTinySize;
 		withAsyncPromiseDo: [ :anElementPromise | 
 			anElementPromise
