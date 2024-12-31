@@ -22,7 +22,8 @@ GtPharoNewMethodCoderMenu >> asElement [
 			when: GtPhlowObjectToSpawn do: onObjectToSpawn.
 	aNewMethodElement addAptitude: (BrMenuPinnableAptitude new 
 		menuModel: self;
-		withAllExtraEventHandlers).
+		withResizers;
+		withAllPinActions).
 	aNewMethodElement addAptitude: (BrMenuHideableAptitude new menuModel: self).
 	aNewMethodElement addAptitude: BrMenuCommonAptitude new.
 
