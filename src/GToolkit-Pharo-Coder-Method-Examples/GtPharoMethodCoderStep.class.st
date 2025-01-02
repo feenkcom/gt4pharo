@@ -684,6 +684,9 @@ GtPharoMethodCoderStep >> toggleMethodCoderExpander: anExpanderIndex insideDo: a
 
 { #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> typeText: aString [
+	"The event is eventually handled in {{gtMethod:BrTextEditorInsertionHandler>>#textInputEvent:}}. 
+	Note that all characters must be printable, otherwise the event is ignored."
+
 	^ self type
 		referenceSender;
 		label: ('Type text: {1}' format: { aString });

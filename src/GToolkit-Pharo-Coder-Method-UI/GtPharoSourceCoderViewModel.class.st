@@ -161,7 +161,8 @@ GtPharoSourceCoderViewModel >> onSelfObjectHolderChanged [
 	completionStrategy
 		ifNotNil: [ completionStrategy
 				classOrMetaClass: self behavior;
-				selfObject: self selfObject ]
+				selfObject: self selfObject ].
+	self coderModel requestStyleSourceText
 ]
 
 { #category : #'api - coder model' }

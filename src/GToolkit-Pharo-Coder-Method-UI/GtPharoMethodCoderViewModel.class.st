@@ -147,9 +147,26 @@ GtPharoMethodCoderViewModel >> explicitProviderClass [
 { #category : #'gt-extension' }
 GtPharoMethodCoderViewModel >> gtInfo [
 	^ super gtInfo, (Array streamContents: [ :aStream |
-		aStream nextPut: (#saveEnabled -> self isSaveEnabled).
+		aStream nextPut: #behavior -> self behavior.
+		aStream nextPut: #sourceBehavior -> self sourceBehavior.
+		aStream nextPut: #compiledMethod -> self compiledMethod.
+		aStream nextPut: #selector -> self selector.
+		aStream nextPut: #protocol -> self protocol.
+		aStream nextPut: #methodOrigin -> self methodOrigin.
+	
+		aStream nextPut: #isMeta -> self isMeta.
+		aStream nextPut: #isFromTrait -> self isFromTrait.
+		
+		aStream nextPut: #isOverridden -> self isOverridden.
+		aStream nextPut: #isOverriding -> self isOverriding.
+		
+		aStream nextPut: (#isSaveEnabled -> self isSaveEnabled).
 		self isSaveEnabled
 			ifFalse: [ aStream nextPut: (#savePreventors -> savePreventors asArray) ].
+		
+		aStream nextPut: #parentCoderViewModel -> self parentCoderViewModel.
+		aStream nextPut: #parentExample -> self parentExample.
+		aStream nextPut: #parentTestCase -> self parentTestCase.
 		aStream nextPut: (#availableCompilationBehaviors -> self availableCompilationBehaviors) ])
 ]
 
@@ -244,6 +261,11 @@ GtPharoMethodCoderViewModel >> objectVariableBindingsTo: theBindings [
 			self defaultCompilationBehavior isClassSide ifTrue: [ 
 				theBindings addBindings: (GtSlotVariablesBindings new 
 					object: self defaultCompilationBehavior instanceSide) ] ].
+]
+
+{ #category : #'private - event handling' }
+GtPharoMethodCoderViewModel >> onBehaviorChanged: aBehaviorChangedAnnouncement [
+	self announce: ((GtTextualCoderViewModelBehaviorChanged new newBehavior: (aBehaviorChangedAnnouncement newBehavior)))
 ]
 
 { #category : #accessing }
@@ -394,6 +416,16 @@ GtPharoMethodCoderViewModel >> sourceBehavior [
 			(aTraitCompositionElement
 				traitDefining: coderModel selector
 				ifNone: [ nil ]) innerClass ]
+]
+
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> subscribeToCoderModel [
+	super subscribeToCoderModel.
+
+	self coderModel weak
+		when: GtCoderBehaviorChanged
+		send: #onBehaviorChanged:
+		to: self
 ]
 
 { #category : #accessing }
