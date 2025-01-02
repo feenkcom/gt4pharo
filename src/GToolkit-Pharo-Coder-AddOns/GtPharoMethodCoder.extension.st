@@ -968,7 +968,10 @@ GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent requester
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 6>
-	| view |
+	aGtPharoMethodCoderViewModel 
+		ifSelfObject: [ "ignore" ] 
+		ifNone: [ ^ self ].
+	
 	(self compiledMethod notNil
 		and: [ anAST notNil
 				and: [ anAST methodNode
@@ -984,10 +987,15 @@ GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns viewModel: aGtPhar
 		action: [ :aCoderUIModel :aButton | 
 			self isModified
 				ifTrue: [ self save ]
-				ifFalse: [ view := aGtPharoMethodCoderViewModel selfObject
-									perform: self selector
-									with: GtPhlowEmptyView new.
-							aButton phlow spawnObject: view ] ]
+				ifFalse: [ 
+					aGtPharoMethodCoderViewModel 
+						ifSelfObject: [ :aSelfObject | 
+							| view |
+							aSelfObject 
+								perform: self selector
+								with: GtPhlowEmptyView new.
+							aButton phlow spawnObject: view ] 
+						ifNone: [ ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
