@@ -142,7 +142,8 @@ GtStrictSymbolInstallation >> refactorEqualityCalls [
 { #category : #refactoring }
 GtStrictSymbolInstallation >> refactorOCAbstractMethodScope [
 
-	OCAbstractMethodScope addSlot: #tempVectorName.
+	(OCAbstractMethodScope hasSlotNamed: #tempVectorName) ifFalse:
+		[ OCAbstractMethodScope addSlot: #tempVectorName ].
 	OCAbstractMethodScope 
 		compile: 'id: int
 	<gtPharoPatch: #StrictComparison>
