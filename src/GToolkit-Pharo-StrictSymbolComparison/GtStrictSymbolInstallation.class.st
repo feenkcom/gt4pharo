@@ -116,10 +116,12 @@ GtStrictSymbolInstallation >> patchIcebergWorkingCopyPackages [
 { #category : #'managing - steps' }
 GtStrictSymbolInstallation >> patchIcebergWorkingCopyProperties [
 	IceRepository registry  do: [ :aRepository |
-		| projectProperties |
-		projectProperties := aRepository workingCopy project properties: (
+		| project |
+		project := aRepository workingCopy project.
+		project isUnborn ifFalse:
+			[ project properties: (
 			aRepository workingCopy project properties 
-				as: GtStringContentDictionary) ]
+				as: GtStringContentDictionary) ] ]
 ]
 
 { #category : #refactoring }
