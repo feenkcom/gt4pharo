@@ -116,10 +116,12 @@ GtStrictSymbolInstallation >> patchIcebergWorkingCopyPackages [
 { #category : #'managing - steps' }
 GtStrictSymbolInstallation >> patchIcebergWorkingCopyProperties [
 	IceRepository registry  do: [ :aRepository |
-		| projectProperties |
-		projectProperties := aRepository workingCopy project properties: (
+		| project |
+		project := aRepository workingCopy project.
+		project isUnborn ifFalse:
+			[ project properties: (
 			aRepository workingCopy project properties 
-				as: GtStringContentDictionary) ]
+				as: GtStringContentDictionary) ] ]
 ]
 
 { #category : #refactoring }
@@ -140,7 +142,8 @@ GtStrictSymbolInstallation >> refactorEqualityCalls [
 { #category : #refactoring }
 GtStrictSymbolInstallation >> refactorOCAbstractMethodScope [
 
-	OCAbstractMethodScope addSlot: #tempVectorName.
+	(OCAbstractMethodScope hasSlotNamed: #tempVectorName) ifFalse:
+		[ OCAbstractMethodScope addSlot: #tempVectorName ].
 	OCAbstractMethodScope 
 		compile: 'id: int
 	<gtPharoPatch: #StrictComparison>
