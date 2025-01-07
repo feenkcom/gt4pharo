@@ -690,6 +690,63 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 						ifFound: [ :each | each ] ] ]
 ]
 
+{ #category : #'examples - rename variable' }
+GtPharoMethodCoderByScripterExamples >> checkRefactoringAttributesForRenamingInstVar [
+	<gtExample>
+	| scripter |
+	[ environment printString ] value.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: thisContext method method ].
+
+	scripter click
+		label: 'Click on the coder editor to give it focus';
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination arrowUp;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter do
+		label: 'Position cursor';
+		id: GtSourceCoderEditorId;
+		block: [ :each | 
+			each editor
+				moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'environment') + 1 ];
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+	self checkFor: scripter saveButtonEnabled: false.
+
+	(scripter type: 'env') play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+	self checkFor: scripter saveButtonEnabled: false.
+
+	(scripter type: 'ironment') play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+	self checkFor: scripter saveButtonEnabled: false.
+
+	(scripter type: '1') play.
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+	self checkFor: scripter saveButtonEnabled: false.
+
+	^ scripter
+]
+
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
 	<gtExample>
