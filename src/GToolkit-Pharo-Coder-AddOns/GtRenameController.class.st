@@ -126,5 +126,7 @@ GtRenameController >> tab: forward [
 { #category : #private }
 GtRenameController >> updateName: aString [
 	newName := aString.
-	self addRefactoringPreview
+	newName = self originalName
+		ifTrue: [ self removeRefactoringAttribute ]
+		ifFalse: [ self addRefactoringPreview ]
 ]
