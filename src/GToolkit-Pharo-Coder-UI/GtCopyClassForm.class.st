@@ -27,13 +27,19 @@ GtCopyClassForm >> copyClass [
 	| class |
 	class := Smalltalk classInstaller make: 
 					[:builder |
-					builder
-						fillFor: innerClass;
-						name: newClassName trim;
-						superclass: superClassName trim asClass;
-						category: (packageAndTag tagName trim
-									ifEmpty: [packageAndTag packageName trim]
-									ifNotEmpty: [packageAndTag fullName])].
+				self 
+					forPharo12: [
+						builder fillFor: innerClass ] 
+					forPharo11: [
+						builder gtFillFor: innerClass] 
+					forPharo10: [
+						builder fillFor: innerClass] .
+				builder
+					name: newClassName trim;
+					superclass: superClassName trim asClass;
+					category: (packageAndTag tagName trim
+							ifEmpty: [packageAndTag packageName trim]
+							ifNotEmpty: [packageAndTag fullName])].
 	copyMethods
 		ifTrue: 
 			[class copyAllCategoriesFrom: innerClass.
