@@ -664,7 +664,14 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass [
 
 	shouldSelectTag
 		ifTrue: [
-			aTagToSelect := aPackageToSelect classTagForClass: aClass.
+			aTagToSelect := self 
+				forPharo12: [ 
+					aPackageToSelect tags
+		  			detect: [ :tag | tag includesClass: aClass ]
+		  			ifNone: [ nil ] ]
+				forPharo11AndPharo10: [ 
+					aPackageToSelect classTagForClass: aClass ].
+					
 			"pharo issue: tag of an uncategorized classe is the same as a package.
 			we have to compare names to make sure we don't select a tag that doesn't exist"
 			(aTagToSelect isNotNil and: [ aTagToSelect name = aPackageToSelect name ])
@@ -753,24 +760,30 @@ GtCoderNavigationPackagesTagsClassesModel >> privateProtocolOfMethod: aCompiledM
 { #category : #'private - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> privateSelectDefaultProtocolOfClass: aClass [
 	| aProtocolToSelect thisPackageExtensionProtocol aDefaultProtocol |
-	
-	thisPackageExtensionProtocol := self selectedPackage
-		ifNotNil: [ :aPackage |
-			(aClass organization protocolNamed: '*', aPackage name)
-				ifNotNil: [ :aProtocol |
-					GtPharoProtocol
-		 				protocol: aProtocol
-		 				class: aClass ] ].
+	thisPackageExtensionProtocol := self selectedPackage 
+		ifNotNil: [ :aPackage | 
+			(self 
+				forPharo12: [
+					aClass 
+						protocolNamed: '*' , aPackage name
+						ifAbsent: [ nil ] ] 
+				forPharo11AndPharo10: [
+					(aClass organization protocolNamed: '*' , aPackage name)])
+						ifNotNil: [ :aProtocol | 
+							GtPharoProtocol 
+								protocol: aProtocol 
+								class: aClass ] ].
 
-	aDefaultProtocol := thisPackageExtensionProtocol ifNil: [ self createAllProtocol: aClass ].
+	aDefaultProtocol := thisPackageExtensionProtocol
+			ifNil: [ self createAllProtocol: aClass ].
 
 	aProtocolToSelect := selectedProtocol
-		ifNil: [ aDefaultProtocol ]
-		ifNotNil: [ :aCurrentlySelectedProtocol | 
-			self protocolsToShow
-				detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
-				ifFound: [ :aSimilarProtocol | aSimilarProtocol ]
-				ifNone: [ aDefaultProtocol ] ].
+			ifNil: [ aDefaultProtocol ]
+			ifNotNil: [ :aCurrentlySelectedProtocol | 
+				self protocolsToShow
+					detect: [ :eachProtocol | eachProtocol name = aCurrentlySelectedProtocol name ]
+					ifFound: [ :aSimilarProtocol | aSimilarProtocol ]
+					ifNone: [ aDefaultProtocol ] ].
 
 	aProtocolToSelect ifNotNil: [ :aProtocol | self selectProtocol: aProtocol ]
 ]

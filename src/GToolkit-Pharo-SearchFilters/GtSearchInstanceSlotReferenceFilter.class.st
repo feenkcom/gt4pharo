@@ -35,7 +35,10 @@ GtSearchInstanceSlotReferenceFilter class >> forClassAndSubclasses: aClass andVa
 
 { #category : #comparing }
 GtSearchInstanceSlotReferenceFilter >> = anObject [
-	^ super = anObject and: [ self variableName = anObject variableName ]
+	^ super = anObject 
+		and: [ self variableName = anObject variableName
+		and: [ self includeReaders = anObject includeReaders
+		and: [ self includeWriters = anObject includeWriters ] ] ]
 ]
 
 { #category : #accessing }
@@ -119,7 +122,10 @@ GtSearchInstanceSlotReferenceFilter >> gtWritersFor: aView [
 
 { #category : #comparing }
 GtSearchInstanceSlotReferenceFilter >> hash [
-	^ super hash bitXor: self variableName
+	^ ((super hash 
+		bitXor: self variableName hash)
+		bitXor: self includeReaders hash)
+		bitXor: self includeWriters hash
 ]
 
 { #category : #accessing }

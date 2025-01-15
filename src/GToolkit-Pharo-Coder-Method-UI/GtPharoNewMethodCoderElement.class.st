@@ -103,7 +103,7 @@ GtPharoNewMethodCoderElement >> initializeSourceCoderElement [
 	sourceCoderElement := GtSourceCoderExpandedContentElement new
 		hMatchParent;
 		vFitContentLimited;
-		background: Color white;
+		background: self theme default contentBackgroundColor;
 		addAptitude: BrGlamorousFocusableShadowAptitude new
 ]
 
