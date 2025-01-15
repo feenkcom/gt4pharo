@@ -294,18 +294,32 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 		evaluatedInterval: (1 to: aSourceString size);
 		evaluatedSourceString: aSourceString.
 
-	^ self protocol
-		ifNil: [
-			RBAddMethodChange
-				compile: aSourceString
-				in: aBehavior
-				for: aGtPharoSourceCoderEvaluationContext ]
-		ifNotNil: [ :aCategory | 
-			RBAddMethodChange
-				compile: aSourceString
-				in: aBehavior
-				classified: aCategory
-				for: aGtPharoSourceCoderEvaluationContext ]
+	^ self 
+		forPharo12: [
+			"TODO: check what happends when we get errors during compilation"
+			self protocol
+				ifNil: [
+					RBAddMethodChange
+						compile: aSourceString
+						in: aBehavior ]
+				ifNotNil: [ :aCategory | 
+					RBAddMethodChange
+						compile: aSourceString
+						in: aBehavior
+						classified: aCategory ] ] 
+		forPharo11AndPharo10: [ 
+			self protocol
+				ifNil: [
+					RBAddMethodChange
+						compile: aSourceString
+						in: aBehavior
+						for: aGtPharoSourceCoderEvaluationContext ]
+				ifNotNil: [ :aCategory | 
+					RBAddMethodChange
+						compile: aSourceString
+						in: aBehavior
+						classified: aCategory
+						for: aGtPharoSourceCoderEvaluationContext ] ]
 ]
 
 { #category : #private }
