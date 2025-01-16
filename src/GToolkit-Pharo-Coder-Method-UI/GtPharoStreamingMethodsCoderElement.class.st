@@ -158,7 +158,27 @@ GtPharoStreamingMethodsCoderElement >> initializeShortcuts [
 						primary;
 						s;
 						build);
-				action: [ :anEvent | self onFocusFiltersShortcutEvent: anEvent ])
+				action: [ :anEvent | self onFocusFiltersShortcutEvent: anEvent ]).
+
+	self
+		addShortcut: (BlShortcutWithAction new
+				combination: (BlKeyCombination builder
+						shift;
+						meta;
+						enter;
+						build);
+				action: [ :anEvent :aShortcut | 
+					self
+						allParentsDetect: [ :each | each class = BrTabGroup ]
+						ifFound: [ :aTabGroup | 
+							| toolbar |
+							toolbar := aTabGroup childNamed: #toolbar.
+							toolbar children size > 0
+								ifTrue: [ toolbar children first
+										childNamed: GtPharoSearchCodeButtonId
+										ifFound: [ :aButton | aButton dispatchEvent: BrDropdownShowWish new ]
+										ifNone: [  ] ] ]
+						ifNone: [  ] ])
 ]
 
 { #category : #initialization }
