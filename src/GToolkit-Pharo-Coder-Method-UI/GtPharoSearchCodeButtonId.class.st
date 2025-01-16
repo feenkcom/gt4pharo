@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoSearchCodeButtonId,
 	#superclass : #BlElementUniqueId,
-	#category : #'GToolkit-Pharo-Coder-UI-Coder - Ids'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-IDs'
 }
 
 { #category : #converting }
