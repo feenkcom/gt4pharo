@@ -482,6 +482,24 @@ GtPharoCoderByScripterExamples >> coderWithDummyTwoObjectInstanceInPager [
 	^ self coderInPager: [ GtCoderElement forObject: GtPharoDummyTwoObject new ]
 ]
 
+{ #category : #'examples - scrolling' }
+GtPharoCoderByScripterExamples >> coderWithVeryLongMethod [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
+
+	aScripter pager
+		setPageAt: 1 widthInSpaceRatio: 1.0;
+		play.
+	aScripter methodsCoder
+		expandAndFocusCompiledMethod: GtPharoDummyFiveObject >> #veryLongMethod;
+		// GtPharoStreamingMethodsCoderElement;
+		play.
+
+	^ aScripter
+]
+
 { #category : #'examples - scripter' }
 GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 	<gtExample>
@@ -875,6 +893,70 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 					s
 						value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
 							equals: [ 2 ] ] ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
+	"Related to https://github.com/feenkcom/gtoolkit/issues/4267"
+
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self coderWithVeryLongMethod.
+
+	aScripter methodsCoder
+		forCompiledMethod: GtPharoDummyFiveObject >> #veryLongMethod
+			do: [ :aMethodCoder | 
+				aMethodCoder do
+					label: 'Insert empty lines';
+					block: [ :anEditor | 
+						anEditor navigator
+							moveTo: 79;
+							apply.
+						anEditor inserter
+							atCursor;
+							text: (String
+									streamContents: [ :aStream | 7 timesRepeat: [ aStream nextPutAll: OSPlatform current lineEnding ] ]);
+							insert ];
+					onParentStepTarget: aMethodCoder;
+					// GtSourceCoderEditorId.
+
+				aMethodCoder mouseWheel
+					downBy: 500;
+					onParentStepTarget: aMethodCoder;
+					// GtSourceCoderEditorId.
+
+				aMethodCoder assert
+					label: '';
+					do: [ :aCoderElement | 
+						| aQuery aToolbar |
+						aQuery := aCoderElement query // #actions.
+						self
+							assert: aQuery isEmpty not
+							description: [ 'Actions toolbar must exists' ].
+						self assert: aQuery result size equals: 1.
+						aToolbar := aQuery anyOne.
+						self
+							assert: aToolbar isVisibleInSpace
+							description: ('Actions must be visible in space: {1}' format: {aToolbar}).
+						aToolbar
+							allParentsDo: [ :aParent | 
+								self
+									assert: (aToolbar isVisibleFullyInParent: aParent)
+									description: ('Actions `{1}` must be visible in parent `{2}`'
+											format: {aToolbar.
+													aParent}) ] ];
+					onParentStepTarget: aMethodCoder;
+					// GtSourceCoderExpandedContentElement ];
+		assertNumberOfVisibleMethodsIsExactly: 2;
+		assertScrollableDo: [ :aScrollable | 
+			self
+				assert: aScrollable children last textualCoderViewModel compiledMethod
+				equals: GtPharoDummyFiveObject >> #yetAnotherLongMethod ];
+		// GtPharoStreamingMethodsCoderElement;
+		play.
 
 	^ aScripter
 ]

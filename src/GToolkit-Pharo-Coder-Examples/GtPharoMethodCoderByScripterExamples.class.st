@@ -6581,3 +6581,91 @@ GtPharoMethodCoderByScripterExamples >> undoRedoRemoveMethod [
 				do: [ :coder | self assert: (rootClass realClass includesSelector: selector) not ] ].
 	^ scripter
 ]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethod [
+	<gtExample>
+	^ GtPharoDummyFiveObject >> #veryLongMethod
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoder [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self veryLongMethod.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripterForBlock: [ self veryLongMethodCoder ].
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines [
+	<gtExample>
+	| aScripter |
+	aScripter := self veryLongMethodCoderUI.
+
+	aScripter do
+		label: 'Insert empty lines';
+		block: [ :anEditor | 
+			anEditor navigator
+				moveTo: 79;
+				apply.
+			anEditor inserter
+				atCursor;
+				text: (String
+						streamContents: [ :aStream | 7 timesRepeat: [ aStream nextPutAll: OSPlatform current lineEnding ] ]);
+				insert ];
+		// GtSourceCoderEditorId;
+		play.
+
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_scrollToTheEnd [
+	"See https://github.com/feenkcom/gtoolkit/issues/4267"
+
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self veryLongMethodCoderUI_insertEmptyLines.
+
+	aScripter mouseWheel
+		downBy: 500;
+		// GtSourceCoderEditorId;
+		play.
+
+	aScripter assert
+		label: '';
+		do: [ :aCoderElement | 
+			| aQuery aToolbar |
+			aQuery := aCoderElement query // #actions.
+			self
+				assert: aQuery isEmpty not
+				description: [ 'Actions toolbar must exists' ].
+			self assert: aQuery result size equals: 1.
+			aToolbar := aQuery anyOne.
+			self
+				assert: aToolbar isVisibleInSpace
+				description: ('Actions must be visible in space: {1}' format: {aToolbar}).
+			aToolbar
+				allParentsDo: [ :aParent | 
+					self
+						assert: (aToolbar isVisibleFullyInParent: aParent)
+						description: ('Actions `{1}` must be visible in parent `{2}`'
+								format: {aToolbar.
+										aParent}) ] ];
+		// GtSourceCoderExpandedContentElement;
+		play.
+
+	^ aScripter
+]

@@ -34,6 +34,17 @@ GtPharoMethodsCoderStep >> assertNumberOfVisibleMethodsIsExactly: aNumber [
 		/ #scrollable
 ]
 
+{ #category : #'steps - checks' }
+GtPharoMethodsCoderStep >> assertScrollableDo: aBlock [
+	^ self assert
+		label: ('Visible methods satisfy {1}' format: {aBlock});
+		do: aBlock;
+		referenceSender;
+		onParentStepTarget: self;
+		// GtPharoStreamingMethodsCoderListId;
+		/ #scrollable
+]
+
 { #category : #'steps - interactions' }
 GtPharoMethodsCoderStep >> expandAndFocusCompiledMethod: aCompiledMethod [
 	^ self do
