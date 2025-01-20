@@ -164,7 +164,7 @@ GtPharoStreamingMethodsCoderElement >> initializeShortcuts [
 		addShortcut: (BlShortcutWithAction new
 				combination: (BlKeyCombination builder
 						shift;
-						meta;
+						primary;
 						enter;
 						build);
 				action: [ :anEvent :aShortcut | 

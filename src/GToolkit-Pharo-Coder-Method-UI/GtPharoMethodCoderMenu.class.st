@@ -8,11 +8,3 @@ Class {
 GtPharoMethodCoderMenu >> forMethod: aCompiledMethod [
 	self coder: (GtPharoMethodCoder forMethod: aCompiledMethod)
 ]
-
-{ #category : #views }
-GtPharoMethodCoderMenu >> gtLiveFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Live';
-		stencil: [ self asElement ]
-]
