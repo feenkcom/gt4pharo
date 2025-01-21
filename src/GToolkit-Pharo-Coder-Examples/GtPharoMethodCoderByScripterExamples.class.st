@@ -6700,8 +6700,21 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insert
 { #category : #'examples - scrolling' }
 GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI [
 	<gtExample>
-	| aScripter |
-	aScripter := self scripterForBlock: [ self veryLongMethodCoder ].
+	| aScripter aScripter1 |
+	aScripter1 := self scripter.
+	aScripter1
+		substep: 'Initialize Coder Model and UI'
+		do: [ :aStep | 
+			aStep set
+				label: 'Initialize Coder Model';
+				model: [ self veryLongMethodCoder ];
+				play.
+			aStep set
+				label: 'Initialize Coder UI';
+				element: [ :aCoder | aCoder asElement fitContentLimited ];
+				onModel;
+				play ].
+	aScripter := aScripter1.
 
 	aScripter editor
 		assertFullyVisibleParagraphAt: #first
@@ -6748,7 +6761,6 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderUI_insertEmptyLines.
 
