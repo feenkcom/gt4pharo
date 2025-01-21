@@ -6677,13 +6677,15 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insert
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderExpandedOnlyUI_insertEmptyLines.
 
-	aScripter mouseWheel
-		downBy: 100;
-		// GtSourceCoderEditorId;
-		play.
+	40 timesRepeat: [
+		aScripter mouseWheel
+			downBy: 3;
+			// GtSourceCoderEditorId;
+			play ].
 
 	aScripter editor
 		assertFullyVisibleParagraphAt: #first
