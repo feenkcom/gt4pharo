@@ -6726,6 +6726,59 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insert
 ]
 
 { #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insertEmptyLines_scrollToTheEnd_oneBigScroll_scrollToTheBeginning [
+	"See https://github.com/feenkcom/gtoolkit/issues/4267"
+
+	<gtExample>
+	| aScripter |
+	aScripter := self veryLongMethodCoderExpandedOnlyUI_insertEmptyLines_scrollToTheEnd_oneBigScroll.
+
+	aScripter mouseWheel
+		upBy: 100;
+		// GtSourceCoderEditorId;
+		play.
+
+	aScripter editor
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		play.
+	aScripter editor
+		assertFullyVisibleParagraphAt: #last
+			hasNotText: self veryLongMethodLastLineString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insertEmptyLines_scrollToTheEnd_scrollToTheBeginning [
+	"See https://github.com/feenkcom/gtoolkit/issues/4267"
+
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self veryLongMethodCoderExpandedOnlyUI_insertEmptyLines_scrollToTheEnd.
+
+	aScripter substeps: 'Small scroll events' do: [ :aStep | 
+		40 timesRepeat: [
+			aStep mouseWheel
+				upBy: 3;
+				// GtSourceCoderEditorId;
+				play ] ].
+
+	aScripter editor
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		play.
+	aScripter editor
+		assertFullyVisibleParagraphAt: #last
+			hasNotText: self veryLongMethodLastLineString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
 GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI [
 	<gtExample>
 	| aScripter aScripter1 |
@@ -6789,13 +6842,14 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderUI_insertEmptyLines.
 
 	aScripter substeps: 'Small scroll events' do: [ :aStep | 
 		40 timesRepeat: [
 			aStep mouseWheel
-				downBy: 3;
+				downBy: 1;
 				// GtSourceCoderEditorId;
 				play ] ].
 
@@ -6875,6 +6929,33 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 								format: {aToolbar.
 										aParent}) ] ];
 		// GtSourceCoderExpandedContentElement;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_scrollToTheEnd_scrollToTheBeginning [
+	"See https://github.com/feenkcom/gtoolkit/issues/4267"
+
+	<gtExample>
+	<noTest>
+	| aScripter |
+	aScripter := self veryLongMethodCoderUI_insertEmptyLines_scrollToTheEnd.
+
+	aScripter substeps: 'Small scroll events' do: [ :aStep | 
+		40 timesRepeat: [
+			aStep mouseWheel
+				upBy: 1;
+				// GtSourceCoderEditorId;
+				play ] ].
+
+	aScripter editor
+		// GtSourceCoderEditorId;
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		assertFullyVisibleParagraphAt: #last
+			hasNotText: self veryLongMethodLastLineString;
 		play.
 
 	^ aScripter
