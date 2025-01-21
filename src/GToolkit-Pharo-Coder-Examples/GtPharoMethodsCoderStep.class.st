@@ -37,7 +37,7 @@ GtPharoMethodsCoderStep >> assertNumberOfVisibleMethodsIsExactly: aNumber [
 { #category : #'steps - checks' }
 GtPharoMethodsCoderStep >> assertScrollableDo: aBlock [
 	^ self assert
-		label: ('Visible methods satisfy {1}' format: {aBlock});
+		label: ('Scrollable element satisfies {1}' format: {aBlock printStringLimitedTo: 30});
 		do: aBlock;
 		referenceSender;
 		onParentStepTarget: self;

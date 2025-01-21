@@ -493,8 +493,16 @@ GtPharoCoderByScripterExamples >> coderWithVeryLongMethod [
 		setPageAt: 1 widthInSpaceRatio: 1.0;
 		play.
 	aScripter methodsCoder
-		expandAndFocusCompiledMethod: GtPharoDummyFiveObject >> #veryLongMethod;
 		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: self veryLongMethod;
+		forCompiledMethod: self veryLongMethod
+			do: [ :aMethodCoder | 
+				aMethodCoder editor
+					// GtSourceCoderEditorId;
+					assertFullyVisibleParagraphAt: #first
+						hasText: self veryLongMethodFirstLineString;
+					assertFullyVisibleParagraphAt: #last
+						hasNotText: self veryLongMethodLastLineString ];
 		play.
 
 	^ aScripter
@@ -907,7 +915,7 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 	aScripter := self coderWithVeryLongMethod.
 
 	aScripter methodsCoder
-		forCompiledMethod: GtPharoDummyFiveObject >> #veryLongMethod
+		forCompiledMethod: self veryLongMethod
 			do: [ :aMethodCoder | 
 				aMethodCoder do
 					label: 'Insert empty lines';
@@ -923,13 +931,27 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 					onParentStepTarget: aMethodCoder;
 					// GtSourceCoderEditorId.
 
+				aMethodCoder editor
+					// GtSourceCoderEditorId;
+					assertFullyVisibleParagraphAt: #first
+						hasText: self veryLongMethodFirstLineString;
+					assertFullyVisibleParagraphAt: #last
+						hasNotText: self veryLongMethodLastLineString.
+					
 				aMethodCoder mouseWheel
 					downBy: 500;
 					onParentStepTarget: aMethodCoder;
 					// GtSourceCoderEditorId.
+					
+				aMethodCoder editor
+					// GtSourceCoderEditorId;
+					assertFullyVisibleParagraphAt: #first
+						hasNotText: self veryLongMethodFirstLineString;
+					assertFullyVisibleParagraphAt: #last
+						hasText: self veryLongMethodLastLineString.
 
 				aMethodCoder assert
-					label: '';
+					label: 'Assert visible toolbar';
 					do: [ :aCoderElement | 
 						| aQuery aToolbar |
 						aQuery := aCoderElement query // #actions.
@@ -1140,4 +1162,28 @@ GtPharoCoderByScripterExamples >> undoRedoRemoveClassInIndex [
 					GtRefactoryChangeManager instance redoChange.
 					self assert: (Smalltalk includesKey: className) not ] ].
 	^ scripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoCoderByScripterExamples >> veryLongMethod [
+	<gtExample>
+	^ GtPharoDummyFiveObject >> #veryLongMethod
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoCoderByScripterExamples >> veryLongMethodFirstLineString [
+	<gtExample>
+	| aLine |
+	aLine := self veryLongMethod sourceCode lines first.
+	self assert: (aLine includesSubstring: self veryLongMethod selector asString).
+	^ aLine
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoCoderByScripterExamples >> veryLongMethodLastLineString [
+	<gtExample>
+	| aLine |
+	aLine := self veryLongMethod sourceCode lines last.
+	self assert: (aLine includesSubstring: '^').
+	^ aLine
 ]
