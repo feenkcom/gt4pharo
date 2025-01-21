@@ -8,9 +8,9 @@ GtSearchInstanceSlotReferenceFilter >> filterDescriptor2For: aMethodsCoder [
 				selectedItem: (self variableName ifEmpty: [ GtFilterModelAllItem methodsLabel ]);
 				parameterAt: 1 do: [ :aParameter | 
 					self includeReaders & self includeWriters not
-						ifFalse: [ aParameter selectItemAt: 2 ].
+						ifTrue: [ aParameter selectItemAt: 2 ].
 					self includeReaders not & self includeWriters 
-						ifFalse: [ aParameter selectItemAt: 3 ].
+						ifTrue: [ aParameter selectItemAt: 3 ].
 				] ]
 ]
 
@@ -42,12 +42,12 @@ GtSearchInstanceSlotReferenceFilter class >> filterDescriptor2For: aMethodsCoder
 						aFilter includeReaders: true.
 						aFilter includeWriters: true ].
 				GtFilterModelPluggableItem new
-					label: 'readers only';
+					label: 'readers';
 					filterUpdater: [ :aFilter | 
 						aFilter includeReaders: true.
 						aFilter includeWriters: false ].
 				GtFilterModelPluggableItem new
-					label: 'writers only';
+					label: 'writers';
 					filterUpdater: [ :aFilter | 
 						aFilter includeReaders: false.
 						aFilter includeWriters: true ] } ];
