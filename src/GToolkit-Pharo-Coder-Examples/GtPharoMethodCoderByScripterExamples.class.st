@@ -5272,6 +5272,20 @@ GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 	GtPharoDummyOneObject varA: 144
 ]
 
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> insertedText [
+	<gtExample>
+	^ String
+		streamContents: [ :aStream | 
+			1
+				to: 12
+				do: [ :anIndex | 
+					aStream
+						nextPutAll: OSPlatform current lineEnding;
+						print: anIndex;
+						nextPutAll: '.' ] ]
+]
+
 { #category : #'examples - basic' }
 GtPharoMethodCoderByScripterExamples >> methodCoder [
 	<gtExample>
@@ -6598,11 +6612,104 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoder [
 ]
 
 { #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripter.
+	aScripter
+		substep: 'Initialize Coder Model and UI'
+		do: [ :aStep | 
+			aStep set
+				label: 'Initialize Coder Model';
+				model: [ self veryLongMethodCoder ];
+				play.
+			aStep set
+				label: 'Initialize Coder UI';
+				element: [ :aCoder | aCoder asExpandedOnlyElement vFitContentLimited ];
+				onModel;
+				play ].
+
+	aScripter editor
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		play.
+	aScripter editor
+		assertFullyVisibleParagraphAt: #last
+			hasText: self veryLongMethodLastLineString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insertEmptyLines [
+	<gtExample>
+	| aScripter |
+	aScripter := self veryLongMethodCoderExpandedOnlyUI.
+
+	aScripter do
+		label: 'Insert new lines';
+		block: [ :anEditor | 
+			anEditor navigator
+				moveTo: 79;
+				apply.
+			anEditor inserter
+				atCursor;
+				text: self insertedText;
+				insert ];
+		// GtSourceCoderEditorId;
+		play.
+
+	aScripter editor
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		play.
+	aScripter editor
+		assertFullyVisibleParagraphAt: #last
+			hasNotText: self veryLongMethodLastLineString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insertEmptyLines_scrollToTheEnd [
+	"See https://github.com/feenkcom/gtoolkit/issues/4267"
+
+	<gtExample>
+	| aScripter |
+	aScripter := self veryLongMethodCoderExpandedOnlyUI_insertEmptyLines.
+
+	aScripter mouseWheel
+		downBy: 100;
+		// GtSourceCoderEditorId;
+		play.
+
+	aScripter editor
+		assertFullyVisibleParagraphAt: #first
+			hasNotText: self veryLongMethod selector asString;
+		play.
+	aScripter editor
+		assertFullyVisibleParagraphAt: #last
+			hasText: self veryLongMethodLastLineString;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
 GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI [
 	<gtExample>
 	| aScripter |
-
 	aScripter := self scripterForBlock: [ self veryLongMethodCoder ].
+
+	aScripter editor
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		assertFullyVisibleParagraphAt: #last
+			hasText: self veryLongMethodLastLineString asString;
+		play.
+
 	^ aScripter
 ]
 
@@ -6613,19 +6720,25 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines [
 	aScripter := self veryLongMethodCoderUI.
 
 	aScripter do
-		label: 'Insert empty lines';
+		label: 'Insert new lines';
 		block: [ :anEditor | 
 			anEditor navigator
 				moveTo: 79;
 				apply.
 			anEditor inserter
 				atCursor;
-				text: (String
-						streamContents: [ :aStream | 7 timesRepeat: [ aStream nextPutAll: OSPlatform current lineEnding ] ]);
+				text: self insertedText;
 				insert ];
 		// GtSourceCoderEditorId;
 		play.
 
+	aScripter editor
+		// GtSourceCoderEditorId;
+		assertFullyVisibleParagraphAt: #first
+			hasText: self veryLongMethod selector asString;
+		assertFullyVisibleParagraphAt: #last
+			hasNotText: self veryLongMethodLastLineString;
+		play.
 
 	^ aScripter
 ]
@@ -6642,6 +6755,14 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	aScripter mouseWheel
 		downBy: 500;
 		// GtSourceCoderEditorId;
+		play.
+
+	aScripter editor
+		// GtSourceCoderEditorId;
+		assertFullyVisibleParagraphAt: #first
+			hasNotText: self veryLongMethod selector asString;
+		assertFullyVisibleParagraphAt: #last
+			hasText: self veryLongMethodLastLineString;
 		play.
 
 	aScripter assert
@@ -6668,4 +6789,13 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> veryLongMethodLastLineString [
+	<gtExample>
+	| aLine |
+	aLine := self veryLongMethod sourceCode lines last.
+	self assert: (aLine includesSubstring: '^').
+	^ aLine
 ]
