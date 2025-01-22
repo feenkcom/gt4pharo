@@ -6677,7 +6677,6 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insert
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderExpandedOnlyUI_insertEmptyLines.
 
@@ -6755,7 +6754,6 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderExpandedOnlyUI_insert
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderExpandedOnlyUI_insertEmptyLines_scrollToTheEnd.
 
@@ -6842,7 +6840,6 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderUI_insertEmptyLines.
 
@@ -6939,7 +6936,6 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	"See https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self veryLongMethodCoderUI_insertEmptyLines_scrollToTheEnd.
 
