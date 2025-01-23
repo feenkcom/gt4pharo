@@ -58,6 +58,7 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 				ifFalse: [ ^ self ] ].
 
 	self notifyClassesToShowChanged.
+	self notifySlotsToShowChanged.
 
 	self announcer announce: (GtCoderNavigationClassModified new 
 		coder: coder;
