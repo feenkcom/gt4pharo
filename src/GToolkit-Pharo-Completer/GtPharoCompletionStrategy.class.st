@@ -65,19 +65,7 @@ GtPharoCompletionStrategy >> classOrMetaClass [
 
 { #category : #accessing }
 GtPharoCompletionStrategy >> classOrMetaClass: aClass [
-	class
-		ifNotNil: [ localVariables removeAll: class allInstVarNames.
-			class isMeta
-				ifTrue: [ localVariables removeAll: class instanceSide allClassVarNames ]
-				ifFalse: [ localVariables removeAll: class allClassVarNames ].
-			class superclass ifNotNil: [ localVariables remove: 'super' ] ].
-	class := aClass.
-	class
-		ifNotNil: [ localVariables addAll: class allInstVarNames.
-			class isMeta
-				ifTrue: [ localVariables addAll: class instanceSide allClassVarNames ]
-				ifFalse: [ localVariables addAll: class allClassVarNames ].
-			class superclass ifNotNil: [ localVariables add: 'super' ] ]
+	class := aClass
 ]
 
 { #category : #accessing }
@@ -314,7 +302,22 @@ GtPharoCompletionStrategy >> variableCompletionActionStreamFor: anAST [
 
 { #category : #accessing }
 GtPharoCompletionStrategy >> variables [
-	^ variables
+	^ class
+		ifNil: [ variables ]
+		ifNotNil: [ GtCompositePrefixTree
+				trees: {self variablesForClass.
+						variables} ]
+]
+
+{ #category : #accessing }
+GtPharoCompletionStrategy >> variablesForClass [
+	| vars |
+	vars := GtPrefixTree new.
+	class
+		ifNotNil: [ vars addAll: class allInstVarNames.
+			vars addAll: class instanceSide allClassVarNames.
+			class superclass ifNotNil: [ vars add: 'super' ] ].
+	^ vars
 ]
 
 { #category : #testing }
