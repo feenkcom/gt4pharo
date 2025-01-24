@@ -1,6 +1,12 @@
 Extension { #name : #RGBehavior }
 
 { #category : #'*GToolkit-Pharo-System' }
+RGBehavior >> asEpiceaRingDefinition [
+
+	^ self
+]
+
+{ #category : #'*GToolkit-Pharo-System' }
 RGBehavior >> inheritsFrom: aClass [ 
 	<gtPharoPatch: #Pharo>
 	"Answer whether the argument, aClass, is on the receiver's superclass 
