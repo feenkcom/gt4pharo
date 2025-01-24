@@ -910,7 +910,6 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 	"Related to https://github.com/feenkcom/gtoolkit/issues/4267"
 
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self coderWithVeryLongMethod.
 
@@ -939,7 +938,12 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 						hasNotText: self veryLongMethodLastLineString.
 					
 				aMethodCoder mouseWheel
-					downBy: 500;
+					downBy: 30;
+					onParentStepTarget: aMethodCoder;
+					// GtSourceCoderEditorId.
+					
+				aMethodCoder mouseWheel
+					downBy: 10;
 					onParentStepTarget: aMethodCoder;
 					// GtSourceCoderEditorId.
 					
