@@ -1,12 +1,6 @@
 Extension { #name : #RGBehavior }
 
 { #category : #'*GToolkit-Pharo-System' }
-RGBehavior >> asEpiceaRingDefinition [
-
-	^ self
-]
-
-{ #category : #'*GToolkit-Pharo-System' }
 RGBehavior >> asRingDefinition [
 	"Answer the receiver as a RGClassDefinition"
 	| ring |
