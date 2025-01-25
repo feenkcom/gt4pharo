@@ -247,17 +247,17 @@ GtRefactoringsPreviewButton >> initialize [
 	previewButton
 		icon: BrGlamorousVectorIcons accept;
 		id: #previewCheckButton;
-		beSmallSize;
+		beTinySize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
-				+ ((BrGlamorousWithDropdownAptitude
+				+ ((BrWithExplicitDropdownAptitude
 						handle: [ BrButton new
 								icon: BrGlamorousIcons empty;
-								beSmallSize;
+								beTinySize;
 								aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
 						content: [ | element |
 							element := self buildPreviewForButton: previewButton.
 							focusAction cull: element cull: self.
-							element ]) preferredExtent: self previewWidth @ 50);
+							element ]));
 		label: 'Preview'.
 
 	previewButton
