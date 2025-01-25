@@ -249,7 +249,7 @@ GtRefactoringsPreviewButton >> initialize [
 		id: #previewCheckButton;
 		beTinySize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
-				+ ((BrWithExplicitDropdownAptitude
+				+ ((BrGlamorousWithExplicitDropdownAptitude
 						handle: [ BrButton new
 								icon: BrGlamorousIcons empty;
 								beTinySize;

@@ -10,6 +10,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Support'
 }
 
+{ #category : #visiting }
+GtPharoNewMethodCoderMenu >> acceptVisitor: aVisitor [
+	^ aVisitor visitPharoNewMethodCoderMenu: self
+]
+
 { #category : #'api - converting' }
 GtPharoNewMethodCoderMenu >> asElement [
 	| aNewMethodElement |
