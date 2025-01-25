@@ -11,7 +11,7 @@ BrGlamorousMenuElementBuilder >> visitPharoNewMethodCoderMenu: aMenuModel [
 			onMethodCoderSaved: aMenuModel onMethodCoderSaved;
 			when: GtPhlowObjectToSpawn do: aMenuModel onObjectToSpawn.
 	aNewMethodElement
-		addAptitude: (BrMenuPinnableAptitude new
+		addAptitude: (BrGlamorousMenuPinnableAptitude new
 				menuModel: aMenuModel;
 				withResizers;
 				withAllPinActions).

@@ -15,26 +15,6 @@ GtPharoNewMethodCoderMenu >> acceptVisitor: aVisitor [
 	^ aVisitor visitPharoNewMethodCoderMenu: self
 ]
 
-{ #category : #'api - converting' }
-GtPharoNewMethodCoderMenu >> asElement [
-	| aNewMethodElement |
-	self ensureCoderViewModel.
-	aNewMethodElement := GtPharoNewMethodCoderElement new
-			geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-			behavior: self behavior;
-			methodCoderViewModelValueHolder: valueHolder;
-			onMethodCoderSaved: onMethodCoderSaved;
-			when: GtPhlowObjectToSpawn do: onObjectToSpawn.
-	aNewMethodElement addAptitude: (BrMenuPinnableAptitude new 
-		menuModel: self;
-		withResizers;
-		withAllPinActions).
-	aNewMethodElement addAptitude: (BrMenuHideableAptitude new menuModel: self).
-	aNewMethodElement addAptitude: BrMenuCommonAptitude new.
-
-	^ aNewMethodElement
-]
-
 { #category : #accessing }
 GtPharoNewMethodCoderMenu >> behavior [
 	^ self coder behavior
