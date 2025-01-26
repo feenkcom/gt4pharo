@@ -225,12 +225,14 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 			s
 				label: 'Assert dropdown bounds';
 				satisfies: [ :aContentElement | 
-					aContentElement topMostParent bounds inSpace asRectangle
-						containsRect: aContentElement bounds inSpace asRectangle ];
+					| aTopMostRectangle |
+					aTopMostRectangle := aContentElement topMostParent bounds inSpace
+							asRectangle.
+					(aTopMostRectangle containsRect: aContentElement bounds inSpace asRectangle)
+						and: [ aContentElement children
+								allSatisfy: [ :aChild | aTopMostRectangle containsRect: aChild bounds inSpace asRectangle ] ] ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
-				// BrAnchoredElement;
-				/ #content asBlocElementId ]
+				onDropdown: true ]
 ]
 
 { #category : #'examples - evaluation context' }
