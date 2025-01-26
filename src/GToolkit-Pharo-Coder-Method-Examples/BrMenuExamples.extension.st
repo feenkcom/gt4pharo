@@ -7,7 +7,7 @@ BrMenuExamples >> definingPharoMethodCoderMenu [
 	aMenu := GtPharoMethodCoderMenu new 
 		forMethod: BlElement >> #gtPreviewFor:.
 
-	self assert: (aMenu asElement isKindOf: BlElement).
+	self assertGlamorousElementForMenuModel: aMenu.
 
 	^ aMenu
 ]
