@@ -1109,6 +1109,52 @@ GtPharoSnippetCoderByScripterExamples >> hasRefactoringPreviewAccept: aScripter 
 				value: [ :button | button isVisible ] equals: true ]
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> inlineAssignmentForLocalVariable [
+	<gtExample>
+	| source scripter |
+	source := '| localVariable |
+localVariable := 4.
+localVariable + 2'.
+	scripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: source ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Move cursor to temp var';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: 6 ] ].
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover inline';
+				onSpaceRoot;
+				id: #'context-menu--inline-temp' index: 1 ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inline';
+				onSpaceRoot;
+				id: #'context-menu--inline-temp' index: 1 ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert value';
+				value: [ :aCoderEditor | RBParser parseExpression: aCoderEditor textualCoderViewModel sourceText asString ]
+					equals: [ :aCoderEditor | RBParser parseExpression: '4 + 2' ];
+				id: GtSourceCoderEditorId ].
+	^ scripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	<gtExample>

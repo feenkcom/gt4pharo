@@ -120,6 +120,7 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 			variable := aNode ].
 	variable isNil ifTrue: [ ^ self ].
 	uses := self allReferencesTo: variable.
+	uses first isDeclaration ifTrue: [ uses removeFirst ].
 	uses size < 2 ifTrue: [ ^ self ].
 	uses first isAssignedTo ifFalse: [ ^ self ].
 	2 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ self ] ].
