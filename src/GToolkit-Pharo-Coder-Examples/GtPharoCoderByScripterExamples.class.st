@@ -235,6 +235,44 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 				onDropdown: true ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoCoderByScripterExamples >> checkSlotsUpdateAfterClassChange [
+	<gtExample>
+	| scripter aScripter |
+	aScripter := self
+			coderInPager: [ GtCoderElement
+					forMethod: GtCoderNavigationExamplesWithScripter >> #coderWithIndex ].
+	self setSpace800x600Extent: aScripter.
+	self maximizePagerPane: aScripter.
+	scripter := aScripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				// #slots;
+				label: 'Click slots' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				// GtCoderSlotsGroupedListElement;
+				label: 'Slots list is empty';
+				do: [ :list | self assert: list maxSelectionIndex equals: 0 ] ].
+	[ GtCoderNavigationExamplesWithScripter addInstVarNamed: 'aaazzz'.
+	scripter
+		checkStep: [ :s | 
+			s
+				// GtCoderSlotsGroupedListElement;
+				label: 'Slots list is empty';
+				do: [ :list | self assert: list maxSelectionIndex > 0 ] ] ]
+		ensure: [ GtCoderNavigationExamplesWithScripter removeInstVarNamed: 'aaazzz' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				// GtCoderSlotsGroupedListElement;
+				label: 'Slots list is empty';
+				do: [ :list | self assert: list maxSelectionIndex equals: 0 ] ].
+	^ scripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoCoderByScripterExamples >> classSideMethodsShouldHaveSelfAsBehaviorNotAnInstance [
 	"See https://github.com/feenkcom/gtoolkit/issues/4127"
