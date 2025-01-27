@@ -235,6 +235,78 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 				onDropdown: true ]
 ]
 
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> checkCompletionUpdatesForNewInstanceVariables [
+	<gtExample>
+	| scripter |
+	scripter := self displayMaximizedCoderWithMethodExpanded.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Reset text';
+				// GtSourceCoderEditorId;
+				block: [ :editor | 
+					editor editor
+						text: 'a ^aaa' asRopedText;
+						moveCursorTo: 6 ] ].
+	(scripter keyDown: BlKeyboardKey controlLeft) play.
+	(scripter keyPress: BlKeyboardKey space) play.
+	(scripter keyUp: BlKeyboardKey controlLeft) play.
+	scripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: #'completion-list';
+				do: [ :element | 
+					| items item i |
+					i := 1.
+					items := element items.
+					[ item isNil and: [ i < items size ] ]
+						whileTrue: [ (items at: i) label = 'aaazzz'
+								ifTrue: [ item := items at: i ]
+								ifFalse: [ i := i + 1 ] ].
+					self assert: item isNil ] ].
+	(scripter keyPress: BlKeyboardKey escape) play.
+	[ GtPharoDummyClass addInstVarNamed: 'aaazzz'.
+	(scripter keyDown: BlKeyboardKey controlLeft) play.
+	(scripter keyPress: BlKeyboardKey space) play.
+	(scripter keyUp: BlKeyboardKey controlLeft) play.
+	scripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: #'completion-list';
+				do: [ :element | 
+					| items item i |
+					i := 1.
+					items := element items.
+					[ item isNil and: [ i < items size ] ]
+						whileTrue: [ (items at: i) label = 'aaazzz'
+								ifTrue: [ item := items at: i ]
+								ifFalse: [ i := i + 1 ] ].
+					self assert: item notNil ] ].
+	(scripter keyPress: BlKeyboardKey escape) play ]
+		ensure: [ GtPharoDummyClass removeInstVarNamed: 'aaazzz' ].
+	(scripter keyDown: BlKeyboardKey controlLeft) play.
+	(scripter keyPress: BlKeyboardKey space) play.
+	(scripter keyUp: BlKeyboardKey controlLeft) play.
+	scripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: #'completion-list';
+				do: [ :element | 
+					| items item i |
+					i := 1.
+					items := element items.
+					[ item isNil and: [ i < items size ] ]
+						whileTrue: [ (items at: i) label = 'aaazzz'
+								ifTrue: [ item := items at: i ]
+								ifFalse: [ i := i + 1 ] ].
+					self assert: item isNil ] ].
+	^ scripter
+]
+
 { #category : #'as yet unclassified' }
 GtPharoCoderByScripterExamples >> checkSlotsUpdateAfterClassChange [
 	<gtExample>
