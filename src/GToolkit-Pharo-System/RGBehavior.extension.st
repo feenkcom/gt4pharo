@@ -14,9 +14,9 @@ RGBehavior >> asRingDefinition [
 		addInstanceVariables: self instVarNames;
 		addClassVariables: self classVarNames;
 		addSharedPools: self sharedPoolNames;
-		comment: self comment;
+		comment: self comment content;
 		definitionSource: self definitionString;
-		package: self package;
+		package: (RGPackageDefinition named: self category asSymbol);
 		withMetaclass.
 	ring classSide
 		traitCompositionSource: self classSide traitCompositionString;
