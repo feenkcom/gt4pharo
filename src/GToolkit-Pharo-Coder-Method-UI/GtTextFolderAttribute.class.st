@@ -15,9 +15,7 @@ GtTextFolderAttribute class >> forAttribute: anAttribute [
 ]
 
 { #category : #accessing }
-GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece in: aTextEditor [
-	| text |
-	text := aTextEditor text.
+GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOnText: text [
 	text
 		findAttribute: attribute
 		indicesDo: [ :start :end | 
@@ -60,9 +58,8 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 			padding: (BlInsets all: 2);
 			margin: (BlInsets top: 2);
 			mouseCursor: BlCursor default;
-			toggleAction: [ self
-					toggleExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece
-					in: anEditorElement editor ].
+			toggleAction: [ self isExpanded: isExpanded not.
+				self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text ].
 	hoverText
 		ifNotNil: [ aToggle
 				addAptitude: (BrGlamorousWithTooltipAptitude content: self hoverTextStencil) ].
@@ -72,13 +69,11 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 			self
 				highlightFoldableTextOn: aTBrTextEditorTextualPiece
 				in: anEditorElement editor ].
-	aToggle when: BlMouseLeaveEvent do: [ :evt | self
-				clearHighlightOn: aTBrTextEditorTextualPiece
-				in: anEditorElement editor ].
+	aToggle
+		when: BlMouseLeaveEvent
+		do: [ :evt | self clearHighlightOn: aTBrTextEditorTextualPiece in: anEditorElement editor ].
 
-	self
-		applyExpandedOrCollapsedAttributesOn: aTBrTextEditorTextualPiece
-		in: anEditorElement editor.
+	self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text.
 
 	^ aToggle
 ]

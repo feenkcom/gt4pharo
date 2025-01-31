@@ -66,6 +66,15 @@ GtPharoBehaviorCoder >> coderName [
 	^ self theClass name
 ]
 
+{ #category : #initialize }
+GtPharoBehaviorCoder >> createRemoveClassPreviewElementWithSource: anElement [ 
+	"Hook method that can be replaced in case another element is needed"
+	^ GtPharoRemoveClassPreviewStencil new
+			classToRemove: self theClass;
+			anElement: anElement;
+			create
+]
+
 { #category : #accessing }
 GtPharoBehaviorCoder >> definitionCoder [
 	<return: #GtPharoBehaviorDefinitionCoder>
@@ -115,10 +124,8 @@ GtPharoBehaviorCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderV
 		action: [ :aButtonElement :aButtonModel :anEvent | 
 			self removeClass ]
 		stencil: [ :element | 
-			GtPharoRemoveClassPreviewStencil new
-				classToRemove: self theClass;
-				anElement: element;
-				create ]) id: GtBehaviorCoderBehaviorDeleteButtonId
+			self createRemoveClassPreviewElementWithSource: element ]) 
+				id: GtBehaviorCoderBehaviorDeleteButtonId
 ]
 
 { #category : #initialize }
