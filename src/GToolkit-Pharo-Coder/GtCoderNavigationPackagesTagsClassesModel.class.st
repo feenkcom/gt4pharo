@@ -44,6 +44,18 @@ GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
 	self notifyClassesToShowChanged
 ]
 
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
+	<return: #Collection of: #Class>
+
+	self hasSelectedPackage
+		ifFalse: [ ^ #() ].
+
+	^ self hasSelectedTag
+		ifTrue: [ self privateClassesInPackageTag: self selectedTag ]
+		ifFalse: [ self privateClassesInPackage: self selectedPackage ]
+]
+
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassModificationApplied [
 	| aSelectedPackage |
@@ -117,18 +129,6 @@ GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized
 		ifFalse: [ ^ self ].
 
 	self notifyProtocolsToShowChanged
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
-	<return: #Collection of: #Class>
-
-	self hasSelectedPackage
-		ifFalse: [ ^ #() ].
-
-	^ self hasSelectedTag
-		ifTrue: [ self privateClassesInPackageTag: self selectedTag ]
-		ifFalse: [ self privateClassesInPackage: self selectedPackage ]
 ]
 
 { #category : #'private - accessing' }
@@ -343,6 +343,11 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyClassDeselected: aPreviouslyS
 ]
 
 { #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyClassesToShowChanged [
+	self announce: (GtCoderNavigationClassesToShowChanged new coder: coder)
+]
+
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass [
 	self
 		announce:
@@ -362,11 +367,6 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyClassSelected: aClass package
 				package: anRPackage;
 				tag: anRPackageTag;
 				theClass: aClass)
-]
-
-{ #category : #'private - notifying' }
-GtCoderNavigationPackagesTagsClassesModel >> notifyClassesToShowChanged [
-	self announce: (GtCoderNavigationClassesToShowChanged new coder: coder)
 ]
 
 { #category : #'private - notifying' }
@@ -480,6 +480,13 @@ GtCoderNavigationPackagesTagsClassesModel >> packageRenamed: aRPackageRenamed [
 		newName: aRPackageRenamed newName)
 ]
 
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
+	<return: #Collection of: #RPackage>
+
+	^ RPackageOrganizer default gtSortedPackages
+]
+
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> packageTagAdded: aClassTagAdded [
 	(self packagesToShow includes: aClassTagAdded package) ifFalse: [ ^ self ].
@@ -514,13 +521,6 @@ GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnreg
 	self announcer announce: (GtCoderNavigationPackageUnregistered new 
 		coder: coder;
 		package: aRPackageUnregistered package)
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
-	<return: #Collection of: #RPackage>
-
-	^ RPackageOrganizer default gtSortedPackages
 ]
 
 { #category : #'private - accessing' }
@@ -902,6 +902,58 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 	self notifyCoderSelected
 ]
 
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedClass [
+	<return: #Class>
+	^ selectedClass
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
+	self selectedClass ifNotNil: aBlock
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
+	<return: #CompiledMethod>
+
+	^ selectedMethod
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
+	<return: #RPackage>
+	^ selectedPackage
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
+	self selectedPackage ifNotNil: aBlock
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedProtocol [
+	<return: #GtPharoProtocol>
+
+	^ selectedProtocol
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedSlot [
+	^ selectedSlot
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
+	<return: #RPackageTag>
+	^ selectedTag
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedTagDo: aBlock [
+	self selectedTag ifNotNil: aBlock
+]
+
 { #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod [
 	self selectClass: aMethod methodClass instanceSide.
@@ -1000,58 +1052,6 @@ GtCoderNavigationPackagesTagsClassesModel >> selectSlot: aSlot source: aSource [
 	self privateJustDeselectProtocol.
 	self deselectMethod.
 	self notifyMethodsToShowChanged.
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedClass [
-	<return: #Class>
-	^ selectedClass
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
-	self selectedClass ifNotNil: aBlock
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
-	<return: #CompiledMethod>
-
-	^ selectedMethod
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
-	<return: #RPackage>
-	^ selectedPackage
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedPackageDo: aBlock [
-	self selectedPackage ifNotNil: aBlock
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedProtocol [
-	<return: #GtPharoProtocol>
-
-	^ selectedProtocol
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedSlot [
-	^ selectedSlot
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
-	<return: #RPackageTag>
-	^ selectedTag
-]
-
-{ #category : #'api - accessing' }
-GtCoderNavigationPackagesTagsClassesModel >> selectedTagDo: aBlock [
-	self selectedTag ifNotNil: aBlock
 ]
 
 { #category : #'private - accessing' }
