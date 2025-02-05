@@ -695,3 +695,13 @@ GtPharoMethodCoderStep >> typeText: aString [
 		onThisOrDeepChildElementId: GtSourceCoderEditorId;
 		onTopMost
 ]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> unfoldNoise [
+	^ self shortcut
+		label: 'Unfold Noise';
+		combination: BlKeyCombinationBuilder new primary shift n build;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
