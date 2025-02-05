@@ -1,94 +1,84 @@
 Class {
 	#name : #GtPharoHidingStyler,
 	#superclass : #GtGenericPharoStyler,
+	#classVars : [
+		'InitiallyFolded'
+	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
 
+{ #category : #initalization }
+GtPharoHidingStyler class >> initialize [
+	InitiallyFolded := true
+]
+
+{ #category : #accessing }
+GtPharoHidingStyler class >> initiallyFolded [
+	^ InitiallyFolded
+]
+
+{ #category : #accessing }
+GtPharoHidingStyler class >> initiallyFolded: aBoolean [
+	InitiallyFolded := aBoolean
+]
+
 { #category : #'as yet unclassified' }
-GtPharoHidingStyler >> styleAssert: aMessage [
-	| messageMarker folder |
-	((text attributesAt: aMessage startPosition - 1)
+GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
+	| folder messageMarker |
+	((text attributesAt: aCollectionOfRanges first first - 1)
 		anySatisfy: [ :each | each class == GtTextFolderAttribute ])
 		ifTrue: [ ^ self ].
 	messageMarker := BrTextInvisibleMarkerAttribute new.
-	self
-		attributes: {messageMarker}
-		from: aMessage startPosition
-		to: aMessage stopPosition.
+	aCollectionOfRanges
+		do: [ :foldedRange | 
+			self
+				attributes: {messageMarker}
+				from: foldedRange first
+				to: foldedRange last ].
 	folder := GtTextFolderAttribute new
 			attribute: messageMarker;
-			hoverText: 'Assert'.
+			hoverText: aString.
 	self
 		attribute: folder
-		from: aMessage startPosition - 1
-		to: aMessage startPosition - 1
+		from: aCollectionOfRanges first first - 1
+		to: aCollectionOfRanges first first - 1.
+	(InitiallyFolded
+		and: [ self
+				anyCursorsInRange: (aCollectionOfRanges first first to: aCollectionOfRanges last last) ])
+		ifTrue: [ folder isExpanded: false.
+			folder applyExpandedOrCollapsedAttributesOnText: text ]
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoHidingStyler >> styleAssert: aMessage [
+	self
+		foldRanges: {aMessage startPosition to: aMessage stopPosition}
+		withHoverText: 'Assert'
 ]
 
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> styleBeaconSignal: aMessage [
-	| messageMarker folder |
-	((text attributesAt: aMessage startPosition - 1)
-		anySatisfy: [ :each | each class == GtTextFolderAttribute ])
-		ifTrue: [ ^ self ].
-	messageMarker := BrTextInvisibleMarkerAttribute new.
 	self
-		attributes: {messageMarker}
-		from: aMessage startPosition
-		to: aMessage stopPosition.
-	folder := GtTextFolderAttribute new
-			attribute: messageMarker;
-			hoverText: 'Beacon'.
-	self
-		attribute: folder
-		from: aMessage startPosition - 1
-		to: aMessage startPosition - 1
+		foldRanges: {aMessage startPosition to: aMessage stopPosition}
+		withHoverText: 'Beacon'
 ]
 
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> styleTimeDuring: aMessage [
-	| messageMarker folder |
-	((text attributesAt: aMessage startPosition - 1)
-		anySatisfy: [ :each | each class == GtTextFolderAttribute ])
-		ifTrue: [ ^ self ].
-	messageMarker := BrTextInvisibleMarkerAttribute new.
 	self
-		attributes: {messageMarker}
-		from: aMessage startPosition
-		to: aMessage message values second leftBracket position.
-	self
-		attributes: {messageMarker}
-		from: aMessage message values second rightBracket position
-		to: aMessage message values second rightBracket position.
-	folder := GtTextFolderAttribute new
-			attribute: messageMarker;
-			hoverText: 'Telemetry'.
-	self
-		attribute: folder
-		from: aMessage startPosition - 1
-		to: aMessage startPosition - 1
+		foldRanges: {aMessage startPosition to: aMessage message values second leftBracket position.
+				aMessage message values second rightBracket position
+					to: aMessage message values second rightBracket position}
+		withHoverText: 'Telemetry'
 ]
 
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> visitCascade: aCascade [
-	| nodeMarker folder |
 	super visitCascade: aCascade.
 	aCascade messages last selector == #emit ifFalse: [ ^ self ].
-
-	((text attributesAt: aCascade startPosition - 1)
-		anySatisfy: [ :each | each class == GtTextFolderAttribute ])
-		ifTrue: [ ^ self ].
-	nodeMarker := BrTextInvisibleMarkerAttribute new.
 	self
-		attributes: {nodeMarker}
-		from: aCascade startPosition
-		to: aCascade stopPosition.
-	folder := GtTextFolderAttribute new
-			attribute: nodeMarker;
-			hoverText: 'Beacon'.
-	self
-		attribute: folder
-		from: aCascade startPosition - 1
-		to: aCascade startPosition - 1
+		foldRanges: {aCascade startPosition to: aCascade stopPosition}
+		withHoverText: 'Beacon'
 ]
 
 { #category : #'as yet unclassified' }
