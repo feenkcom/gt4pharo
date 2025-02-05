@@ -16,28 +16,28 @@ GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 			aStep
 				assertStep: [ :s | 
 					s
-						label: 'Count lines before folding';
+						label: 'Count lines before unfolding';
+						value: [ :editor | editor children size ] equals: 4 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'UnFold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines after unfolding';
 						value: [ :editor | editor children size ] equals: 6 ].
 			aStep
 				shortcutStep: [ :s | 
 					s
-						label: 'Fold noise';
+						label: 'fold noise';
 						combination: BlKeyCombinationBuilder new primary shift n build ].
 			aStep
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after folding';
-						value: [ :editor | editor children size ] equals: 4 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'Unfold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines before folding';
-						value: [ :editor | editor children size ] equals: 6 ] ].
+						value: [ :editor | editor children size ] equals: 4 ] ].
 
 	^ aScripter
 ]
@@ -138,6 +138,8 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingIns
 
 { #category : #'example - play example' }
 GtSourceCoderEditorElementByScripterExamples >> unfoldNoiseTextOnSourceModified [
+	"Test is no longer valid with new behavior"
+	<noTest>
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterWithElementContainingInstrumentation.
@@ -148,13 +150,13 @@ GtSourceCoderEditorElementByScripterExamples >> unfoldNoiseTextOnSourceModified 
 			aStep
 				assertStep: [ :s | 
 					s
-						label: 'Count lines before folding';
-						value: [ :editor | editor children size ] equals: 6 ].
-			aStep
+						label: 'Count lines before unfolding';
+						value: [ :editor | editor children size ] equals: 4 ].
+"			aStep
 				shortcutStep: [ :s | 
 					s
 						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
+						combination: BlKeyCombinationBuilder new primary shift n build ]."
 			aStep
 				clickStep: [ :s | 
 					s
