@@ -5,6 +5,69 @@ Class {
 }
 
 { #category : #'example - play example' }
+GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContainingCursor [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterWithElementContainingInstrumentation.
+
+	aScripter
+		substep: 'Do not fold with cursor'
+		do: [ :aStep | 
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before unfolding';
+						value: [ :editor | editor children size ] equals: 4 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'unFold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Focus editor';
+						onChildAt: 4 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Fold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				doStep: [ :s | 
+					s
+						label: 'Move to end of editor';
+						block: [ :e | e navigator moveToEnd ] ].
+			aStep
+				typeStep: [ :s | 
+					s
+						label: 'Modify text';
+						text: '"Comment"' ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines after modification unfolding';
+						value: [ :editor | editor children size ] equals: 6 ].
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Focus editor';
+						onChildAt: 6 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Fold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before unfolding';
+						value: [ :editor | editor children size ] equals: 4 ] ].
+
+	^ aScripter
+]
+
+{ #category : #'example - play example' }
 GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 	<gtExample>
 	| aScripter |
@@ -132,51 +195,6 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingIns
 			model: [ :anElement | anElement textualCoderViewModel ];
 			onSelf;
 			play ].
-
-	^ aScripter
-]
-
-{ #category : #'example - play example' }
-GtSourceCoderEditorElementByScripterExamples >> unfoldNoiseTextOnSourceModified [
-	"Test is no longer valid with new behavior"
-	<noTest>
-	<gtExample>
-	| aScripter |
-	aScripter := self scripterWithElementContainingInstrumentation.
-
-	aScripter
-		substep: 'Unfold noise on modify'
-		do: [ :aStep | 
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ].
-"			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ]."
-			aStep
-				clickStep: [ :s | 
-					s
-						label: 'Focus editor';
-						onChildAt: 4 ].
-			aStep
-				doStep: [ :s | 
-					s
-						label: 'Move to end of editor';
-						block: [ :e | e navigator moveToEnd ] ].
-			aStep
-				typeStep: [ :s | 
-					s
-						label: 'Modify text';
-						text: '"Comment"' ].
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines after modification unfolding';
-						value: [ :editor | editor children size ] equals: 6 ] ].
 
 	^ aScripter
 ]
