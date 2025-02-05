@@ -387,7 +387,7 @@ GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> hidingAddOnFor: anAST into: coderAddOns [
-	<gtAstCoderAddOns: 100>
+	<gtAstCoderAddOns: 1>
 	coderAddOns addStyler: GtPharoHidingStyler new
 ]
 
@@ -407,8 +407,7 @@ GtPharoSourceCoder >> initializeAddOns: addOns [
 		GtPharoDynamicHighlightStyler.
 		GtPharoDeprecationStyler.
 		GtPharoMethodExpanderStyler.
-		GtPharoClassExpanderStyler.
-		GtPharoHidingStyler} collect: #new.
+		GtPharoClassExpanderStyler} collect: #new.
 
 	addOns addStylers: stylers
 ]

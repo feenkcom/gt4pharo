@@ -23,6 +23,16 @@ GtPharoHidingStyler class >> initiallyFolded: aBoolean [
 ]
 
 { #category : #'as yet unclassified' }
+GtPharoHidingStyler >> anyDecorationsInRange: aRange [
+	"Doesn't work yet since the styledText might not be there and sourceText doesn't have styled attributes"
+	(self coderViewModel sourceText from: aRange first to: aRange last)
+		attributesDo: [ :attrs | 
+			(attrs anySatisfy: [ :each | each class == BlTextDecorationAttribute ])
+				ifTrue: [ ^ true ] ].
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
 GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
 	| folder messageMarker |
 	((text attributesAt: aCollectionOfRanges first first - 1)
@@ -43,8 +53,12 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
 		from: aCollectionOfRanges first first - 1
 		to: aCollectionOfRanges first first - 1.
 	(InitiallyFolded
-		and: [ self
-				anyCursorsInRange: (aCollectionOfRanges first first to: aCollectionOfRanges last last) ])
+		and: [ (self
+				anyCursorsInRange: (aCollectionOfRanges first first to: aCollectionOfRanges last last))
+				not
+				and: [ (self
+						anyDecorationsInRange: (aCollectionOfRanges first first to: aCollectionOfRanges last last))
+						not ] ])
 		ifTrue: [ folder isExpanded: false.
 			folder applyExpandedOrCollapsedAttributesOnText: text ]
 ]
