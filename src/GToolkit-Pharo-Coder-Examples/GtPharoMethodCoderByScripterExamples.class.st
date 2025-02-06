@@ -5369,6 +5369,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :stepA | 
 				stepA
+					unfoldNoise;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
 					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;

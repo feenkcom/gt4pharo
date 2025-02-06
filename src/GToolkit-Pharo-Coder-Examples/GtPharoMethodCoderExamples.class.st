@@ -798,6 +798,22 @@ GtPharoMethodCoderExamples >> forInstrumentedMethodCoder [
 ]
 
 { #category : #'examples - instance creation' }
+GtPharoMethodCoderExamples >> forInstrumentedMethodCoderWithHighlighting [
+	<gtExample>
+	| method methodCoder |
+
+	method := GtPharoMethodCoderExamples >> #instrumentedMethod.
+
+	methodCoder := GtPharoMethodCoder forMethod: method.
+	methodCoder highlighter: (GtPharoSelectorReferenceAndLiteralHighlighter forSelector: #assert:description:).
+
+	self assert: methodCoder collapsedText asString equals: 'instrumentedMethod'.
+	self assert: methodCoder currentSourceString equals: method sourceCode.
+
+	^ methodCoder
+]
+
+{ #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forKeywordMethodInPackagedClass [
 	<gtExample>
 	<after: #cleanUp>

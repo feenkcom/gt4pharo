@@ -31,6 +31,11 @@ GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOnText: text [
 ]
 
 { #category : #accessing }
+GtTextFolderAttribute >> attribute [
+	^ attribute
+]
+
+{ #category : #accessing }
 GtTextFolderAttribute >> attribute: anAttribute [
 	attribute := anAttribute
 ]

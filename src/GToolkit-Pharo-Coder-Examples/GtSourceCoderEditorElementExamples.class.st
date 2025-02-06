@@ -49,6 +49,28 @@ GtSourceCoderEditorElementExamples >> editorForInstrumentedMethodCoder [
 ]
 
 { #category : #'example - instance creation' }
+GtSourceCoderEditorElementExamples >> editorForInstrumentedMethodCoderWithHighlighting [
+	<gtExample>
+	| aMethodCoder aMethodCoderUIModel anEditorElement scripter |
+	aMethodCoder := GtPharoMethodCoderExamples new forInstrumentedMethodCoderWithHighlighting.
+	aMethodCoderUIModel := aMethodCoder asCoderViewModel.
+	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
+	scripter := BlScripter new.
+	scripter
+		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
+	anEditorElement := scripter elementWithoutParent.
+
+	self assert: anEditorElement hasFocus not.
+	self assert: anEditorElement padding equals: BlInsets empty.
+	self assert: anEditorElement margin equals: BlInsets empty.
+	self
+		assert: anEditorElement text characters
+		equals: aMethodCoder currentSourceText characters.
+
+	^ anEditorElement
+]
+
+{ #category : #'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	<gtExample>
 	| aSnippetCoder aSnippetCoderUIModel scripter anEditorElement |
