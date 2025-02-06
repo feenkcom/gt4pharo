@@ -5,69 +5,6 @@ Class {
 }
 
 { #category : #'example - play example' }
-GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContainingCursor [
-	<gtExample>
-	| aScripter |
-	aScripter := self scripterWithElementContainingInstrumentation.
-
-	aScripter
-		substep: 'Do not fold with cursor'
-		do: [ :aStep | 
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'unFold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				clickStep: [ :s | 
-					s
-						label: 'Focus editor';
-						onChildAt: 4 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				doStep: [ :s | 
-					s
-						label: 'Move to end of editor';
-						block: [ :e | e navigator moveToEnd ] ].
-			aStep
-				typeStep: [ :s | 
-					s
-						label: 'Modify text';
-						text: '"Comment"' ].
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines after modification unfolding';
-						value: [ :editor | editor children size ] equals: 6 ].
-			aStep
-				clickStep: [ :s | 
-					s
-						label: 'Focus editor';
-						onChildAt: 6 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ] ].
-
-	^ aScripter
-]
-
-{ #category : #'example - play example' }
 GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 	<gtExample>
 	| aScripter |
@@ -79,28 +16,28 @@ GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 			aStep
 				assertStep: [ :s | 
 					s
-						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'UnFold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				assertStep: [ :s | 
-					s
-						label: 'Count lines after unfolding';
+						label: 'Count lines before folding';
 						value: [ :editor | editor children size ] equals: 6 ].
 			aStep
 				shortcutStep: [ :s | 
 					s
-						label: 'fold noise';
+						label: 'Fold noise';
 						combination: BlKeyCombinationBuilder new primary shift n build ].
 			aStep
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after folding';
-						value: [ :editor | editor children size ] equals: 4 ] ].
+						value: [ :editor | editor children size ] equals: 4 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Unfold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6 ] ].
 
 	^ aScripter
 ]
@@ -195,6 +132,49 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingIns
 			model: [ :anElement | anElement textualCoderViewModel ];
 			onSelf;
 			play ].
+
+	^ aScripter
+]
+
+{ #category : #'example - play example' }
+GtSourceCoderEditorElementByScripterExamples >> unfoldNoiseTextOnSourceModified [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterWithElementContainingInstrumentation.
+
+	aScripter
+		substep: 'Unfold noise on modify'
+		do: [ :aStep | 
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6 ].
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Fold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build ].
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Focus editor';
+						onChildAt: 4 ].
+			aStep
+				doStep: [ :s | 
+					s
+						label: 'Move to end of editor';
+						block: [ :e | e navigator moveToEnd ] ].
+			aStep
+				typeStep: [ :s | 
+					s
+						label: 'Modify text';
+						text: '"Comment"' ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines after modification unfolding';
+						value: [ :editor | editor children size ] equals: 6 ] ].
 
 	^ aScripter
 ]
