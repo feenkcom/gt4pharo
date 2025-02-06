@@ -9,7 +9,7 @@ Class {
 
 { #category : #initalization }
 GtPharoHidingStyler class >> initialize [
-	InitiallyFolded := true
+	InitiallyFolded := false
 ]
 
 { #category : #accessing }
