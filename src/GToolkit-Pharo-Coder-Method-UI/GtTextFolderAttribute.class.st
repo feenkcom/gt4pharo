@@ -1,6 +1,6 @@
 Class {
 	#name : #GtTextFolderAttribute,
-	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
+	#superclass : #BrTextExpandButtonAttribute,
 	#instVars : [
 		'attribute',
 		'hideAttribute',
