@@ -1,6 +1,6 @@
 Class {
 	#name : #GtTextFolderAttribute,
-	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
+	#superclass : #BrTextExpandButtonAttribute,
 	#instVars : [
 		'attribute',
 		'hideAttribute',
@@ -31,6 +31,11 @@ GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOnText: text [
 ]
 
 { #category : #accessing }
+GtTextFolderAttribute >> attribute [
+	^ attribute
+]
+
+{ #category : #accessing }
 GtTextFolderAttribute >> attribute: anAttribute [
 	attribute := anAttribute
 ]
@@ -51,7 +56,7 @@ GtTextFolderAttribute >> clearHighlightOn: aTBrTextEditorTextualPiece in: aTextE
 { #category : #'as yet unclassified' }
 GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| aToggle |
-	aToggle := BrTriangle new
+	aToggle := BrInlineExpanderElement new
 			id: self id;
 			aptitude: BrGlamorousEllipsesExpanderAptitude;
 			expanded: self isExpanded;

@@ -98,7 +98,7 @@ GtRefactoringsPreviewButtonExamples >> switchToMethodNameRefactoringMode [
 						onSpaceRoot;
 						onDropdown: true;
 						// GtChangesElement;
-						// BrTriangle ].
+						// BrInlineExpanderElement ].
 
 			aStep
 				doStep: [ :s | 

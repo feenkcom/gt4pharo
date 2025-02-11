@@ -5,6 +5,35 @@ Class {
 }
 
 { #category : #'example - play example' }
+GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnHighlightedSource [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterWithElementContainingInstrumentationAndHighlighting.
+
+	aScripter
+		substep: 'Do not fold with highlight'
+		do: [ :aStep | 
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines before unfolding';
+						value: [ :editor | editor children size ] equals: 6 ].
+
+			aStep
+				shortcutStep: [ :s | 
+					s
+						label: 'Reformat';
+						combination: BlKeyCombinationBuilder new primary shift f build ].
+			aStep
+				assertStep: [ :s | 
+					s
+						label: 'Count lines after styling';
+						value: [ :editor | editor children size ] equals: 4 ] ].
+
+	^ aScripter
+]
+
+{ #category : #'example - play example' }
 GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContainingCursor [
 	<gtExample>
 	| aScripter |
@@ -17,12 +46,7 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContai
 				assertStep: [ :s | 
 					s
 						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
-						label: 'unFold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
+						value: [ :editor | editor children size ] equals: 6 ].
 			aStep
 				clickStep: [ :s | 
 					s
@@ -79,18 +103,18 @@ GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 			aStep
 				assertStep: [ :s | 
 					s
-						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ].
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6 ].
 			aStep
 				shortcutStep: [ :s | 
 					s
-						label: 'UnFold noise';
+						label: 'Fold noise';
 						combination: BlKeyCombinationBuilder new primary shift n build ].
 			aStep
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after unfolding';
-						value: [ :editor | editor children size ] equals: 6 ].
+						value: [ :editor | editor children size ] equals: 4 ].
 			aStep
 				shortcutStep: [ :s | 
 					s
@@ -100,7 +124,7 @@ GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after folding';
-						value: [ :editor | editor children size ] equals: 4 ] ].
+						value: [ :editor | editor children size ] equals: 6 ] ].
 
 	^ aScripter
 ]
@@ -187,6 +211,28 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingIns
 		aStep set
 			label: 'Initialize Coder Editor UI';
 			element: [ GtSourceCoderEditorElementExamples new editorForInstrumentedMethodCoder ];
+			onSelf;
+			play.
+
+		aStep set
+			label: 'Initialize Coder UI Model';
+			model: [ :anElement | anElement textualCoderViewModel ];
+			onSelf;
+			play ].
+
+	^ aScripter
+]
+
+{ #category : #'example - instance creation' }
+GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingInstrumentationAndHighlighting [
+	<gtExample>
+	| aScripter |
+
+	aScripter := self scripter.
+	aScripter substep: 'Initialize Coder Model and UI' do: [ :aStep | 		
+		aStep set
+			label: 'Initialize Coder Editor UI';
+			element: [ GtSourceCoderEditorElementExamples new editorForInstrumentedMethodCoderWithHighlighting ];
 			onSelf;
 			play.
 

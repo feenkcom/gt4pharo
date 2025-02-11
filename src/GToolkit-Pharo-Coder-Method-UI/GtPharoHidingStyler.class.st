@@ -9,7 +9,7 @@ Class {
 
 { #category : #initalization }
 GtPharoHidingStyler class >> initialize [
-	InitiallyFolded := true
+	InitiallyFolded := false
 ]
 
 { #category : #accessing }
@@ -23,13 +23,33 @@ GtPharoHidingStyler class >> initiallyFolded: aBoolean [
 ]
 
 { #category : #'as yet unclassified' }
-GtPharoHidingStyler >> anyDecorationsInRange: aRange [
-	"Doesn't work yet since the styledText might not be there and sourceText doesn't have styled attributes"
-	(self coderViewModel sourceText from: aRange first to: aRange last)
+GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
+	(aText from: aRange first to: aRange last)
 		attributesDo: [ :attrs | 
-			(attrs anySatisfy: [ :each | each class == BlTextDecorationAttribute ])
-				ifTrue: [ ^ true ] ].
+			(attrs
+				anySatisfy: [ :each | 
+					each class == BlTextHighlightAttribute
+						or: [ each class == BlTextDecorationAttribute ] ]) ifTrue: [ ^ true ] ].
 	^ false
+]
+
+{ #category : #'api - styling' }
+GtPharoHidingStyler >> extraStyle: aText ast: theAst [
+	| folders |
+	folders := OrderedCollection new.
+	aText
+		findAttributesSuchThat: [ :att | att class == GtTextFolderAttribute ]
+		indicesDo: [ :_start :_end :att | folders add: att ].
+
+	folders
+		do: [ :each | 
+			aText
+				findAttribute: each attribute
+				indicesDo: [ :start :end | 
+					((self anyCursorsInRange: (start to: end))
+						or: [ self anyDecorationsInRange: (start to: end) ofText: aText ])
+						ifTrue: [ each isExpanded: true.
+							each applyExpandedOrCollapsedAttributesOnText: aText ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,13 +72,7 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
 		attribute: folder
 		from: aCollectionOfRanges first first - 1
 		to: aCollectionOfRanges first first - 1.
-	(InitiallyFolded
-		and: [ (self
-				anyCursorsInRange: (aCollectionOfRanges first first to: aCollectionOfRanges last last))
-				not
-				and: [ (self
-						anyDecorationsInRange: (aCollectionOfRanges first first to: aCollectionOfRanges last last))
-						not ] ])
+	InitiallyFolded
 		ifTrue: [ folder isExpanded: false.
 			folder applyExpandedOrCollapsedAttributesOnText: text ]
 ]
