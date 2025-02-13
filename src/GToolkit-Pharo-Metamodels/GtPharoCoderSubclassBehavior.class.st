@@ -114,6 +114,11 @@ GtPharoCoderSubclassBehavior >> realBehaviorDo: aBlock [
 ]
 
 { #category : #accessing }
+GtPharoCoderSubclassBehavior >> realSubclassBehaviorDo: aBlock [
+	subclassBehavior realSubclassBehaviorDo: aBlock
+]
+
+{ #category : #accessing }
 GtPharoCoderSubclassBehavior >> subclassBehavior [
 	^ subclassBehavior
 ]

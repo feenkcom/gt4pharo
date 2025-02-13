@@ -446,24 +446,33 @@ GtPharoMethodCoder >> evaluationContext [
 { #category : #'api - actions examples' }
 GtPharoMethodCoder >> example [
 	<return: #GtExampleWithResult or: nil>
-	| anExample |
-	anExample := self attributeNamed: #example.
-	anExample
-		ifNil: [ anExample := self compiledMethod
-					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExampleWithResult 
-						ifNotNil: #asExampleWithResult ].
-			anExample ifNotNil: [ self example: anExample ] ].
+	| anExampleWithResult |
+	anExampleWithResult := self attributeNamed: #example.
+	anExampleWithResult ifNil: [ 
+		anExampleWithResult := self compiledMethod ifNotNil: [ :aCompiledMethod | 
+			self methodBehavior 
+				ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | 
+					aCompiledMethod gtExampleWithResult ]
+				ifDifferentDo: [ :aSubclassBehavior |
+					aCompiledMethod gtExampleWithResultForExample: (aCompiledMethod gtExampleWithProviderClass: aSubclassBehavior) ]
+				ifAbsent: [ nil ] ].
+		
+		anExampleWithResult ifNotNil: [ 
+			self 
+				assert: [ anExampleWithResult asExampleWithResult == anExampleWithResult ]
+				description: [ 'Example with result expected: {1}' 
+					format: { anExampleWithResult } ].
+			self example: anExampleWithResult ] ].
 
-	self compiledMethod
-		ifNotNil: [ :aCompiledMethod | 
-			self
-				assert: [ aCompiledMethod selector = self selector
-						and: [ aCompiledMethod methodClass = self behavior ] ]
-				description: [ 'Example and compiled method are out of sync: example is {1}; method is {2}'
-						format: {anExample gtDisplayString.
-								aCompiledMethod} ] ].
+	self compiledMethod ifNotNil: [ :aCompiledMethod | 
+		self
+			assert: [ aCompiledMethod selector = self selector
+					and: [ aCompiledMethod methodClass = self behavior ] ]
+			description: [ 'Example and compiled method are out of sync: example is {1}; method is {2}'
+					format: {anExampleWithResult gtDisplayString.
+							aCompiledMethod} ] ].
 
-	^ anExample
+	^ anExampleWithResult
 ]
 
 { #category : #'api - actions examples' }
@@ -552,7 +561,13 @@ GtPharoMethodCoder >> forClass: aBehavior source: aString [
 
 { #category : #initialize }
 GtPharoMethodCoder >> forExample: anExampleWithResult [
-	self forMethod: anExampleWithResult method.
+	anExampleWithResult methodClass = anExampleWithResult providerClass
+		ifTrue: [ 
+			self forMethod: anExampleWithResult method ]
+		ifFalse: [ 
+			self
+				forMethod: anExampleWithResult method
+				in: anExampleWithResult providerClass ].
 	self example: anExampleWithResult
 ]
 
@@ -575,7 +590,12 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
 	self selector: aCompiledMethod selector.
 	self
 		sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
-	self protocol: aCompiledMethod category
+	self protocol: aCompiledMethod category.
+
+	self methodBehavior
+		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aRealBehavior |  ]
+		ifDifferentDo: [ :aRealBehavior | self explicitProviderClass: aRealBehavior ]
+		ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }

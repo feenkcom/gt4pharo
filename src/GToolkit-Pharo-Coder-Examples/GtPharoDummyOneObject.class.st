@@ -133,6 +133,12 @@ GtPharoDummyOneObject >> one [
 	^ 1
 ]
 
+{ #category : #examples }
+GtPharoDummyOneObject >> successfulExample [
+	<gtExample>
+	^ self one + self three
+]
+
 { #category : #accessing }
 GtPharoDummyOneObject >> sum21 [
 	| a |
