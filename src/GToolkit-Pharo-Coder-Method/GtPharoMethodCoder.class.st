@@ -454,7 +454,9 @@ GtPharoMethodCoder >> example [
 				ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | 
 					aCompiledMethod gtExampleWithResult ]
 				ifDifferentDo: [ :aSubclassBehavior |
-					aCompiledMethod gtExampleWithResultForExample: (aCompiledMethod gtExampleWithProviderClass: aSubclassBehavior) ]
+					(aCompiledMethod gtExampleWithProviderClass: aSubclassBehavior) 
+						ifNotNil: [ :anExample | 
+							aCompiledMethod gtExampleWithResultForExample: anExample ] ]
 				ifAbsent: [ nil ] ].
 		
 		anExampleWithResult ifNotNil: [ 
