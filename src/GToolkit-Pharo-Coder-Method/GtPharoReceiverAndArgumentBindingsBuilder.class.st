@@ -13,7 +13,8 @@ Class {
 		'parentTestCase',
 		'parentCoderViewModel',
 		'parentSelfObjectHolder',
-		'receiverObjectHolder'
+		'receiverObjectHolder',
+		'subclassBehavior'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -61,7 +62,8 @@ GtPharoReceiverAndArgumentBindingsBuilder >> build [
 	self buildLocalBindings.
 	self buildReceiver.
 	self buildReceiverBehavior.
-	self buildExplicitProviderClass
+	self buildExplicitProviderClass.
+	self buildMethodBehavior.
 ]
 
 { #category : #building }
@@ -88,6 +90,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildLocalBindings [
 		doWithIndex: [ :anArgument :anIndex | 
 			self argumentAt: anIndex setValueFromVariable: anArgument.
 			self argumentAt: anIndex setValueFromLiteral: anArgument ].
+]
+
+{ #category : #building }
+GtPharoReceiverAndArgumentBindingsBuilder >> buildMethodBehavior [
+	parentCoderViewModel ifNil: [ ^ self ].
+	
+	parentCoderViewModel coderModel methodBehavior
+		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | subclassBehavior := aBehavior ]
+		ifDifferentDo: [ :aSubclassBehavior | subclassBehavior := aSubclassBehavior ]
+		ifAbsent: [ nil ]
 ]
 
 { #category : #building }
@@ -255,4 +267,9 @@ GtPharoReceiverAndArgumentBindingsBuilder >> receiverBehavior [
 GtPharoReceiverAndArgumentBindingsBuilder >> receiverObjectHolder [
 	<return: #TGtCoderObject>
 	^ receiverObjectHolder ifNil: [ GtCoderUndefinedObject default ]
+]
+
+{ #category : #'accessing - results' }
+GtPharoReceiverAndArgumentBindingsBuilder >> subclassBehavior [
+	^ subclassBehavior
 ]

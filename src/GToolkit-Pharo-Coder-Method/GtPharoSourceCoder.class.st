@@ -135,6 +135,16 @@ GtPharoSourceCoder >> isForMethod [
 	^ false
 ]
 
+{ #category : #'api - accessing' }
+GtPharoSourceCoder >> methodBehavior [
+	"Return an optional method behavior in context of which this coder operates.
+	The method behavior (class, metaclass or trait) helps various add-ons and styler to provide users with better
+	contextual information"
+
+	<return: #GtPharoCoderBehavior>
+	^ GtPharoCoderBehavior unspecified
+]
+
 { #category : #'private - actions' }
 GtPharoSourceCoder >> newEvaluationContext [
 	^ GtPharoSourceCoderEvaluationContext new
