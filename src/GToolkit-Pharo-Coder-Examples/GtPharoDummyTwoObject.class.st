@@ -14,6 +14,12 @@ GtPharoDummyTwoObject class >> sum21Reference [
 	^ self sum21
 ]
 
+{ #category : #examples }
+GtPharoDummyTwoObject >> anotherExampleCallingSuperclassExample [
+	<gtExample>
+	^ self successfulExample
+]
+
 { #category : #accessing }
 GtPharoDummyTwoObject >> anotherNumber [
 	self number

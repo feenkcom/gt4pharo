@@ -95,6 +95,18 @@ GtPharoCoderBehavior >> gtDisplayOn: aStream [
 		ifAbsent: [ aStream nextPutAll: '<missing name>' ]
 ]
 
+{ #category : #accessing }
+GtPharoCoderBehavior >> ifRealSubclassBehaviorSameAsRealBehaviorDo: aSameBlock ifDifferentDo: aDifferentBlock ifAbsent: anAbsentBlock [
+	^ self 
+		realBehaviorDo: [ :aMethodBehavior |
+			self realSubclassBehaviorDo: [ :aSubclassBehavior |
+				aMethodBehavior == aSubclassBehavior
+					ifTrue: [ aSameBlock cull: aSubclassBehavior cull: aMethodBehavior ] 
+					ifFalse: [ aDifferentBlock cull: aSubclassBehavior cull: aMethodBehavior ] ]
+			ifAbsent: anAbsentBlock ]
+		ifAbsent: anAbsentBlock
+]
+
 { #category : #printing }
 GtPharoCoderBehavior >> printOn: aStream [
 	super printOn: aStream.
@@ -115,5 +127,16 @@ GtPharoCoderBehavior >> realBehaviorDo: aBlock [
 { #category : #accessing }
 GtPharoCoderBehavior >> realBehaviorDo: aBlock ifAbsent: anAbsentBlock [
 	self realBehaviorDo: [ :aBehavior | ^ aBlock value: aBehavior ].
+	^ anAbsentBlock value
+]
+
+{ #category : #accessing }
+GtPharoCoderBehavior >> realSubclassBehaviorDo: aBlock [
+	^ self realBehaviorDo: aBlock
+]
+
+{ #category : #accessing }
+GtPharoCoderBehavior >> realSubclassBehaviorDo: aBlock ifAbsent: anAbsentBlock [
+	self realSubclassBehaviorDo: [ :aBehavior | ^ aBlock value: aBehavior ].
 	^ anAbsentBlock value
 ]

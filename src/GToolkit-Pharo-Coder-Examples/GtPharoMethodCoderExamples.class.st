@@ -882,6 +882,40 @@ GtPharoMethodCoderExamples >> forNewMethod [
 	^ aMethodCoder
 ]
 
+{ #category : #'examples - example' }
+GtPharoMethodCoderExamples >> forSameClassCallingSuperclassExample [
+	<gtExample>
+	| method methodCoder exampleWithResult example |
+	method := GtPharoDummyTwoObject >> #anotherExampleCallingSuperclassExample.
+
+	methodCoder := GtPharoMethodCoder forMethod: method.
+	exampleWithResult := methodCoder example.
+	example := exampleWithResult example.
+
+	self assert: exampleWithResult providerClass equals: GtPharoDummyTwoObject.
+	self assert: exampleWithResult methodClass equals: GtPharoDummyTwoObject.
+	self assert: example run returnValue equals: 4.4.
+
+	^ methodCoder
+]
+
+{ #category : #'examples - example' }
+GtPharoMethodCoderExamples >> forSameClassExample [
+	<gtExample>
+	| method methodCoder exampleWithResult example |
+	method := GtPharoDummyOneObject >> #successfulExample.
+
+	methodCoder := GtPharoMethodCoder forMethod: method in: GtPharoDummyOneObject.
+	exampleWithResult := methodCoder example.
+	example := exampleWithResult example.
+
+	self assert: exampleWithResult providerClass equals: GtPharoDummyOneObject.
+	self assert: exampleWithResult methodClass equals: GtPharoDummyOneObject.
+	self assert: example run returnValue equals: 4.
+
+	^ methodCoder
+]
+
 { #category : #'examples - instance creation' }
 GtPharoMethodCoderExamples >> forSelfReturnMethodCoder [
 	<gtExample>
@@ -892,6 +926,23 @@ GtPharoMethodCoderExamples >> forSelfReturnMethodCoder [
 
 	self assert: methodCoder collapsedText asString equals: 'returnSelf'.
 	self assert: methodCoder currentSourceString equals: method sourceCode.
+	^ methodCoder
+]
+
+{ #category : #'examples - example' }
+GtPharoMethodCoderExamples >> forSuperclassExample [
+	<gtExample>
+	| method methodCoder exampleWithResult example |
+	method := GtPharoDummyOneObject >> #successfulExample.
+
+	methodCoder := GtPharoMethodCoder forMethod: method in: GtPharoDummyTwoObject.
+	exampleWithResult := methodCoder example.
+	example := exampleWithResult example.
+
+	self assert: exampleWithResult providerClass equals: GtPharoDummyTwoObject.
+	self assert: exampleWithResult methodClass equals: GtPharoDummyOneObject.
+	self assert: example run returnValue equals: 4.4.
+
 	^ methodCoder
 ]
 

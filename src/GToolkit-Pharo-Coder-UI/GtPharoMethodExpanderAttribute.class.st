@@ -31,12 +31,11 @@ GtPharoMethodExpanderAttribute >> argumentBindingsBuilder: anObject [
 GtPharoMethodExpanderAttribute >> buildMethodCoder [
 	| editorElement coder method viewModel |
 	(method := self compiledMethod) ifNil: [ ^ BlElement new ].
-	coder := GtPharoMethodCoder forMethod: method.
+	self prepareConfigurationBuilder.
+	coder := self createCoderForMethod: method.
 	coder subscribeToSystem.
 	viewModel := coder asCoderViewModel.
-	self
-		configureViewModel: viewModel
-		andCoder: coder.
+	self configureViewModel: viewModel andCoder: coder.
 
 	editorElement := viewModel asElement.
 
@@ -66,8 +65,7 @@ GtPharoMethodExpanderAttribute >> compiledMethod [
 { #category : #private }
 GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder [
 	argumentBindingsBuilder ifNil: [ ^ self ].
-	argumentBindingsBuilder compiledMethod: self compiledMethod.
-	argumentBindingsBuilder build.
+	argumentBindingsBuilder compiledMethod ifNil: [ ^ self ].
 
 	argumentBindingsBuilder explicitProviderClass
 		ifNotNil: [ :aClass | coder explicitProviderClass: aClass ].
@@ -83,6 +81,18 @@ GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder 
 		ifNotNil: [ :aCoderViewModel | viewModel parentCoderViewModel: aCoderViewModel ].
 ]
 
+{ #category : #private }
+GtPharoMethodExpanderAttribute >> createCoderForMethod: method [
+	argumentBindingsBuilder ifNil: [ 
+		^ GtPharoMethodCoder forMethod: method ].
+	
+	^ argumentBindingsBuilder subclassBehavior
+		ifNotNil: [ :aSubclassBehavior | 
+			GtPharoMethodCoder forMethod: method in: aSubclassBehavior ]
+		ifNil: [
+			GtPharoMethodCoder forMethod: method ].
+]
+
 { #category : #'initialize-release' }
 GtPharoMethodExpanderAttribute >> forClass: aClass andSelector: aSymbol [
 	classOrMetaClass := aClass.
@@ -96,6 +106,22 @@ GtPharoMethodExpanderAttribute >> initialize [
 		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
 				beAppend;
 				stencil: [ self buildMethodCoder ] ]
+]
+
+{ #category : #private }
+GtPharoMethodExpanderAttribute >> prepareConfigurationBuilder [
+	argumentBindingsBuilder ifNil: [ ^ self ].
+	argumentBindingsBuilder compiledMethod: self compiledMethod.
+	argumentBindingsBuilder build.
+]
+
+{ #category : #private }
+GtPharoMethodExpanderAttribute >> prepareConfigurationBuilderForMethod: aMethod [
+	self assert: [ aMethod isNotNil ] description: [ 'Method must be non-nil' ].
+	
+	argumentBindingsBuilder ifNil: [ ^ self ].
+	argumentBindingsBuilder compiledMethod: aMethod.
+	argumentBindingsBuilder build
 ]
 
 { #category : #printing }
