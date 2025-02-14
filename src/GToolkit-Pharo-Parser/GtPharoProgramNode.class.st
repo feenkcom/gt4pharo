@@ -123,6 +123,15 @@ GtPharoProgramNode >> implicitLocalVariables [
 	^ variables
 ]
 
+{ #category : #accessing }
+GtPharoProgramNode >> indexOfTrailingPeriodIfAny [
+	| index |
+	parent isSequence ifFalse: [ ^ self sourceInterval last ].
+	index := parent children indexOf: self.
+	index < parent periods size ifFalse: [ ^ self sourceInterval last ].
+	^ (parent periods at: index) sourceInterval last
+]
+
 { #category : #testing }
 GtPharoProgramNode >> intersectsInterval: anInterval [
 	<return: #Boolean>

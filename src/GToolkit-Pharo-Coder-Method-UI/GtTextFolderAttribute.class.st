@@ -58,7 +58,7 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 	| aToggle |
 	aToggle := BrInlineExpanderElement new
 			id: self id;
-			aptitude: BrGlamorousEllipsesExpanderAptitude;
+			aptitude: (BrLabelExpanderAptitude new text: hoverText);
 			expanded: self isExpanded;
 			padding: (BlInsets all: 2);
 			margin: (BlInsets top: 2);

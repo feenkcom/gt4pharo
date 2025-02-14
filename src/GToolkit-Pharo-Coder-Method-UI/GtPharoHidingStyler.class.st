@@ -80,14 +80,14 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> styleAssert: aMessage [
 	self
-		foldRanges: {aMessage startPosition to: aMessage stopPosition}
+		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
 		withHoverText: 'Assert'
 ]
 
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> styleBeaconSignal: aMessage [
 	self
-		foldRanges: {aMessage startPosition to: aMessage stopPosition}
+		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
 		withHoverText: 'Beacon'
 ]
 
