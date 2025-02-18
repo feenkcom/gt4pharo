@@ -1,6 +1,18 @@
 Extension { #name : #BrGlamorousMenuElementBuilder }
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+BrGlamorousMenuElementBuilder >> visitPharoMethodCoderMenu: aMenuModel [
+	| aCoderElement |
+	aCoderElement := self visitTextualCoderMenu: aMenuModel.
+	
+	aCoderElement ifNotNil: [ 
+		aCoderElement coderViewModel 
+			selfObjectHolder: aMenuModel selfObjectHolder ].
+	
+	^ aCoderElement
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
 BrGlamorousMenuElementBuilder >> visitPharoNewMethodCoderMenu: aMenuModel [
 	| aNewMethodElement |
 	aMenuModel ensureCoderViewModel.

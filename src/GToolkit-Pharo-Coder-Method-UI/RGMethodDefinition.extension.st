@@ -4,3 +4,10 @@ Extension { #name : #RGMethodDefinition }
 RGMethodDefinition >> asBrMenu [
 	^ GtPharoMethodCoderMenu new forMethod: self compiledMethod
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+RGMethodDefinition >> asBrMenuWithSelfObjectHolder: aSelfObjectHolder [
+	^ GtPharoMethodCoderMenu new 
+		forMethod: self compiledMethod;
+		selfObjectHolder: aSelfObjectHolder
+]
