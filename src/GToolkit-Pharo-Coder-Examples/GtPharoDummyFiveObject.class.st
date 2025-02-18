@@ -3,9 +3,14 @@ I have couple of long methods to exemplify scrolling actions.
 "
 Class {
 	#name : #GtPharoDummyFiveObject,
-	#superclass : #Object,
+	#superclass : #GtPharoDummyFourObject,
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
+
+{ #category : #accessing }
+GtPharoDummyFiveObject class >> sum21Reference [
+	^ GtPharoDummyTwoObject sum21Reference
+]
 
 { #category : #accessing }
 GtPharoDummyFiveObject >> anotherLongMethod [

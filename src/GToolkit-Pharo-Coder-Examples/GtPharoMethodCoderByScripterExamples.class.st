@@ -5456,6 +5456,53 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 	^ aScripter
 ]
 
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFiveObjectSum21Reference [
+	"See https://github.com/feenkcom/gtoolkit/issues/4306#issuecomment-2663548829.
+	Ensure expanded methods have meanigful compile behaviors."
+	
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithFiveObjectSum21Reference. ].
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyFiveObject class>>#sum21Reference;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyFiveObject class;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertSelfObjectIs: nil;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtPharoDummyTwoObject class>>#sum21Reference;
+					assertSelfObjectIs: GtPharoDummyTwoObject;
+					assertExplicitProviderClassIs: GtPharoDummyTwoObject class;
+					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject class;
+					assertHeaderMethodBehaviorIsNotVisible;
+					assertMethodExpandersCountIs: 1;
+					coderModelDo: [ :aCoder | 
+						aCoder methodBehavior 
+							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | 
+								self assert: aSubclassBehavior equals: GtPharoDummyTwoObject class ]
+							ifDifferentDo: [ :aSubclassBehavior :aMethodBehavior | 
+								AssertionFailure signal: (
+									'Subclass behavior must not be different from the method behavior: {1} ~= {2}' 
+										format: { aSubclassBehavior. aMethodBehavior } ) ]
+							ifAbsent: [ 
+								AssertionFailure signal: 'Real method behavior must exist' ] ];
+					coderViewModelDo: [ :aCoder | 
+						| someBehaviors |
+						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						self assert: someBehaviors size equals: 1.
+						self assert: someBehaviors first equals: GtPharoDummyTwoObject class ] ];
+		play.
+
+	^ aScripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethodInstA [
 	<gtExample>
@@ -6027,6 +6074,15 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithFailingExample [
 	^ aCoder
 ]
 
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithFiveObjectSum21Reference [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithFiveObjectSum21Reference.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithInstanceSideMethodInstA [
 	<gtExample>
@@ -6122,6 +6178,13 @@ GtPharoMethodCoderByScripterExamples >> methodWithClassSideMethodVarA [
 GtPharoMethodCoderByScripterExamples >> methodWithFailingExample [
 	<gtExample>
 	^ GtPharoDummyTwoObject >> #failingExample
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithFiveObjectSum21Reference [
+	<gtExample>
+
+	^ GtPharoDummyFiveObject class>>#sum21Reference
 ]
 
 { #category : #'examples - evaluation context' }

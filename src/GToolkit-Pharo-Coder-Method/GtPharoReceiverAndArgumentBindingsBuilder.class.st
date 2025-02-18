@@ -14,7 +14,7 @@ Class {
 		'parentCoderViewModel',
 		'parentSelfObjectHolder',
 		'receiverObjectHolder',
-		'subclassBehavior'
+		'receiverSubclassBehavior'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -94,12 +94,27 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildLocalBindings [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildMethodBehavior [
+	| aSelectedBehavior aGtPharoProgramNode |
+	compiledMethod ifNil: [ ^ self ].
 	parentCoderViewModel ifNil: [ ^ self ].
+	receiverBehavior ifNil: [ ^ self ].
+	
+	aGtPharoProgramNode := parentMessage parent receiver.
+	
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf or: [ aGtPharoProgramNode isSuper ] ])
+		ifFalse: [ ^ self ].
 	
 	parentCoderViewModel coderModel methodBehavior
-		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | subclassBehavior := aBehavior ]
-		ifDifferentDo: [ :aSubclassBehavior | subclassBehavior := aSubclassBehavior ]
-		ifAbsent: [ nil ]
+		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | aSelectedBehavior := aBehavior ]
+		ifDifferentDo: [ :aSubclassBehavior | aSelectedBehavior := aSubclassBehavior ]
+		ifAbsent: [ receiverBehavior ].
+	
+	aSelectedBehavior ifNil: [ ^ self ].
+	
+	(aSelectedBehavior inheritsFrom: compiledMethod methodClass)
+		ifFalse: [ ^ self ].
+
+	receiverSubclassBehavior := aSelectedBehavior
 ]
 
 { #category : #building }
@@ -270,6 +285,6 @@ GtPharoReceiverAndArgumentBindingsBuilder >> receiverObjectHolder [
 ]
 
 { #category : #'accessing - results' }
-GtPharoReceiverAndArgumentBindingsBuilder >> subclassBehavior [
-	^ subclassBehavior
+GtPharoReceiverAndArgumentBindingsBuilder >> receiverSubclassBehavior [
+	^ receiverSubclassBehavior
 ]

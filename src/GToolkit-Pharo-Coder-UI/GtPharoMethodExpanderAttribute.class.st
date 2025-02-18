@@ -86,7 +86,7 @@ GtPharoMethodExpanderAttribute >> createCoderForMethod: method [
 	argumentBindingsBuilder ifNil: [ 
 		^ GtPharoMethodCoder forMethod: method ].
 	
-	^ argumentBindingsBuilder subclassBehavior
+	^ argumentBindingsBuilder receiverSubclassBehavior
 		ifNotNil: [ :aSubclassBehavior | 
 			GtPharoMethodCoder forMethod: method in: aSubclassBehavior ]
 		ifNil: [
