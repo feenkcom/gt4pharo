@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoring >> addWrappedCall [
 	| ast |
-	ast := class parseTreeFor: selector.
+	ast := class parseTreeForSelector: selector.
 	ast
 		nodesDo: [ :each | 
 			(each isMessage
@@ -34,7 +34,8 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 		ifTrue: [ ^ self ].
 
 	meta := (self model classNamed: className) classSide.
-	ast := meta parseTreeFor: methodName selector.
+	ast := meta parseTreeForSelector: methodName selector.
+	ast ifNil: [ ^ self ].
 	cascade := ast statements last value.
 	cascade isCascade ifFalse: [ ^ self ].
 	removeCascadeRefactoring := GtConvertCascadesToStatementsRefactoring
@@ -47,7 +48,7 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 		toUse: [ :ref | tempName := 'var' , UUID new asString36 ].
 	self performCompositeRefactoring: removeCascadeRefactoring.
 
-	ast := meta parseTreeFor: methodName selector.
+	ast := meta parseTreeForSelector: methodName selector.
 	extractSetMethodRefactoring := GtExtractMethodToComponentRefactoring
 			model: model
 			extract: (ast statements second start
@@ -55,6 +56,7 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 			from: methodName selector
 			in: meta.
 	extractSetMethodRefactoring
+		setOption: #renameTemporaries toUse: [ :ref | true ];
 		setOption: #methodName
 			toUse: [ :mn :ref | 
 				mn selector: ('set' , methodName selector asString capitalized) asSymbol.
@@ -66,7 +68,7 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
 	self performCompositeRefactoring: extractSetMethodRefactoring.
 
-	ast := meta parseTreeFor: methodName selector.
+	ast := meta parseTreeForSelector: methodName selector.
 	self
 		performCompositeRefactoring: (GtConvertStatementsToCascadesRefactoring
 				model: self model
@@ -75,7 +77,7 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 				inMethod: methodName selector
 				forClass: meta).
 
-	ast := meta parseTreeFor: methodName selector.
+	ast := meta parseTreeForSelector: methodName selector.
 	self
 		performCompositeRefactoring: (RBInlineTemporaryRefactoring
 				model: self model
@@ -117,6 +119,24 @@ GtExtractToWrappedMethodObjectRefactoring >> isMethodObject: aNode [
 	^ false
 ]
 
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> removeNewClassAccessors [
+	| cls |
+	cls := self model classNamed: className.
+	cls instanceVariableNames
+		do: [ :each | 
+			{cls getterMethodFor: each.
+				cls setterMethodFor: each}
+				do: [ :sel | 
+					sel
+						ifNotNil: [ self
+								performCompositeRefactoring: (RBInlineAllSendersRefactoring
+										model: self model
+										sendersOf: sel
+										in: cls).
+							(cls directlyDefinesMethod: sel) ifTrue: [ cls removeMethod: sel ] ] ] ]
+]
+
 { #category : #testing }
 GtExtractToWrappedMethodObjectRefactoring >> shouldEliminateYourselfFromConstructor [
 	^ false
@@ -135,6 +155,7 @@ GtExtractToWrappedMethodObjectRefactoring >> transform [
 					result ] ].
 	super transform.
 	self addWrappedCall.
+	self removeNewClassAccessors.
 	self gtCleanupChanges
 ]
 
