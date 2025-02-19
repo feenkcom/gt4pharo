@@ -53,7 +53,7 @@ GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 { #category : #'actions - spawning' }
 GtPharoMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel from: anElement [
 	"Spawn a behavior that implements a method. Display also the given method."
-	self haltOnce.
+	
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
 			anElement phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod) ]
@@ -81,7 +81,7 @@ GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from:
 	"Spawn a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
 
 	| aProviderBehavior |
-	self haltOnce.
+	
 	aProviderBehavior := aCoderViewModel 
 		ifSelfObject: [ :aSelfObject |
 			aSelfObject class instanceSide ]
