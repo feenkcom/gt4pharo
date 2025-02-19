@@ -1088,11 +1088,17 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 													aParent}) ] ];
 					onParentStepTarget: aMethodCoder;
 					// GtSourceCoderExpandedContentElement ];
-		assertNumberOfVisibleMethodsIsExactly: 2;
+		assertNumberOfVisibleMethodsIsExactly: 3;
 		assertScrollableDo: [ :aScrollable | 
 			self
-				assert: aScrollable children last textualCoderViewModel compiledMethod
-				equals: GtPharoDummyFiveObject >> #yetAnotherLongMethod ];
+				assert: aScrollable children first textualCoderViewModel compiledMethod
+				equals: GtPharoDummyFiveObject >> #veryLongMethod.
+			self
+				assert: aScrollable children second textualCoderViewModel compiledMethod
+				equals: GtPharoDummyFiveObject >> #yetAnotherLongMethod.
+			self
+				assert: aScrollable children third textualCoderViewModel compiledMethod
+				equals: GtPharoDummyFiveObject class>>#sum21Reference ];
 		// GtPharoStreamingMethodsCoderElement;
 		play.
 

@@ -5427,31 +5427,32 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 	aScripter := self
 			scripterForBlock: [ self methodCoderWithFailingExample asCoderViewModel ].
 
-	aScripter methodCoder
-		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
-		assertHeaderMethodBehaviorIsNotVisible;
-		assertPlayAndInspectActionNotExists;
-		assertPlayAndInspectExampleActionExists;
-		assertMethodExpandersCountIs: 1;
-		clickOnPlayAndInspectExampleButton;
-		assertExampleReturnValueIsKindOf: AssertionFailure;
-		assertExampleAssertionHighlightFrom: 94 to: 112;
-		clickOnMethodCoderExpander: 1
-			insideDo: [ :stepA | 
-				stepA
-					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
-					assertParentExampleValueIsKindOf: AssertionFailure;
-					assertExampleAssertionHighlightFrom: 174 to: 238;
-					assertMethodExpandersCountIs: 4;
-					assertBindingIsNotDefined: #aValue;
-					assertPlayAndInspectActionNotExists;
-					assertPlayAndInspectExampleActionNotExists ];
-		play.
+	aScripter 
+		unfoldedInitialStylingPlay: [ :aStep |
+			aStep methodCoder
+				assertSelfObjectIs: nil;
+				assertExplicitProviderClassIs: GtPharoDummyTwoObject;
+				assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+				assertHeaderMethodBehaviorIsNotVisible;
+				assertPlayAndInspectActionNotExists;
+				assertPlayAndInspectExampleActionExists;
+				assertMethodExpandersCountIs: 1;
+				clickOnPlayAndInspectExampleButton;
+				assertExampleReturnValueIsKindOf: AssertionFailure;
+				assertExampleAssertionHighlightFrom: 94 to: 112;
+				clickOnMethodCoderExpander: 1
+					insideDo: [ :stepA | 
+						stepA
+							assertSelfObjectIs: nil;
+							assertExplicitProviderClassIs: GtPharoDummyTwoObject;
+							assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+							assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+							assertParentExampleValueIsKindOf: AssertionFailure;
+							assertExampleAssertionHighlightFrom: 174 to: 238;
+							assertMethodExpandersCountIs: 4;
+							assertBindingIsNotDefined: #aValue;
+							assertPlayAndInspectActionNotExists;
+							assertPlayAndInspectExampleActionNotExists ] ].
 
 	^ aScripter
 ]
