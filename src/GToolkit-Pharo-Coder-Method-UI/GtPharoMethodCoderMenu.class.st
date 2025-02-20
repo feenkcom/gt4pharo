@@ -1,6 +1,8 @@
 Class {
 	#name : #GtPharoMethodCoderMenu,
 	#superclass : #GtTextualCoderMenu,
+	#traits : 'TGtCoderWithSelfObjectHolder',
+	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Menu'
 }
 

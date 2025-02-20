@@ -9,6 +9,12 @@ GtMoveMethodRefactoring >> checkAssignmentsToVariable [
 	self isExpression ifFalse: [ super checkAssignmentsToVariable ]
 ]
 
+{ #category : #transforming }
+GtMoveMethodRefactoring >> checkTemporaryVariableNames [
+	self shouldRenameTemps ifTrue: [ ^ self ].
+	^ super checkTemporaryVariableNames
+]
+
 { #category : #accessing }
 GtMoveMethodRefactoring >> getClassesForInstanceVariable [
 	| definingClass typer types |
@@ -85,4 +91,37 @@ GtMoveMethodRefactoring >> moveToClasses [
 { #category : #accessing }
 GtMoveMethodRefactoring >> movedSelector [
 	^ parseTree selector
+]
+
+{ #category : #transforming }
+GtMoveMethodRefactoring >> renameTemps [
+	| varNames varsToRename |
+	self shouldRenameTemps ifFalse: [ ^ self ].
+	varNames := parseTree allDefinedVariables.
+	selfVariableName ifNotNil: [ varNames add: selfVariableName ].
+	varsToRename := varNames
+			select: [ :name | moveToClasses anySatisfy: [ :each | self canReferenceVariable: name in: each ] ].
+	varsToRename
+		do: [ :each | 
+			| newName |
+			newName := (((each beginsWith: 'an')
+					ifTrue: [ each at: 3 ifAbsent: [  ] ]
+					ifFalse: [ each first = $a ifTrue: [ each at: 2 ifAbsent: [  ] ] ])
+					ifNotNil: [ :c | c isUppercase ifTrue: [ '_' , each ] ])
+					ifNil: [ (each first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , each capitalized ].
+			parseTree
+				nodesDo: [ :node | 
+					(node isVariable and: [ node name = each ])
+						ifTrue: [ node replaceWith: (RBVariableNode named: newName) ] ] ]
+]
+
+{ #category : #transforming }
+GtMoveMethodRefactoring >> shouldRenameTemps [
+	^ (self options at: #renameTemporaries ifAbsent: [ [ false ] ]) cull: self
+]
+
+{ #category : #transforming }
+GtMoveMethodRefactoring >> transform [
+	self renameTemps.
+	super transform
 ]

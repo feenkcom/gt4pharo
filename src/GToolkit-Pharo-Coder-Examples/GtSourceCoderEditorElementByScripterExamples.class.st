@@ -39,52 +39,44 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContai
 	| aScripter |
 	aScripter := self scripterWithElementContainingInstrumentation.
 
-	aScripter
-		substep: 'Do not fold with cursor'
-		do: [ :aStep | 
-			aStep
-				assertStep: [ :s | 
-					s
+	aScripter unfoldedInitialStylingPlay: [ :anUnfoldedStep | 
+		anUnfoldedStep
+			substep: 'Do not fold with cursor'
+			do: [ :aStep | 
+				aStep
+					assert
 						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 6 ].
-			aStep
-				clickStep: [ :s | 
-					s
+						value: [ :editor | editor children size ] equals: 6.
+				aStep
+					click
 						label: 'Focus editor';
-						onChildAt: 4 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
+						onChildAt: 4.
+				aStep
+					shortcut
 						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				doStep: [ :s | 
-					s
+						combination: BlKeyCombinationBuilder new primary shift n build.
+				aStep
+					do
 						label: 'Move to end of editor';
-						block: [ :e | e navigator moveToEnd ] ].
-			aStep
-				typeStep: [ :s | 
-					s
+						block: [ :e | e navigator moveToEnd ].
+				aStep
+					type
 						label: 'Modify text';
-						text: '"Comment"' ].
-			aStep
-				assertStep: [ :s | 
-					s
+						text: '"Comment"'.
+				aStep
+					assert
 						label: 'Count lines after modification unfolding';
-						value: [ :editor | editor children size ] equals: 6 ].
-			aStep
-				clickStep: [ :s | 
-					s
+						value: [ :editor | editor children size ] equals: 6.
+				aStep
+					click
 						label: 'Focus editor';
-						onChildAt: 6 ].
-			aStep
-				shortcutStep: [ :s | 
-					s
+						onChildAt: 6.
+				aStep
+					shortcut
 						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
-			aStep
-				assertStep: [ :s | 
-					s
+						combination: BlKeyCombinationBuilder new primary shift n build.
+				aStep
+					assert
 						label: 'Count lines before unfolding';
 						value: [ :editor | editor children size ] equals: 4 ] ].
 
@@ -207,18 +199,17 @@ GtSourceCoderEditorElementByScripterExamples >> scripterWithElementContainingIns
 	| aScripter |
 
 	aScripter := self scripter.
-	aScripter substep: 'Initialize Coder Model and UI' do: [ :aStep | 		
-		aStep set
-			label: 'Initialize Coder Editor UI';
-			element: [ GtSourceCoderEditorElementExamples new editorForInstrumentedMethodCoder ];
-			onSelf;
-			play.
-
-		aStep set
-			label: 'Initialize Coder UI Model';
-			model: [ :anElement | anElement textualCoderViewModel ];
-			onSelf;
-			play ].
+	aScripter unfoldedInitialStylingPlay: [ :anUnfoldedStep | 
+		anUnfoldedStep substep: 'Initialize Coder Model and UI' do: [ :aStep | 		
+			aStep set
+				label: 'Initialize Coder Editor UI';
+				element: [ GtSourceCoderEditorElementExamples new editorForInstrumentedMethodCoder ];
+				onSelf.
+	
+			aStep set
+				label: 'Initialize Coder UI Model';
+				model: [ :anElement | anElement textualCoderViewModel ];
+				onSelf ] ].
 
 	^ aScripter
 ]

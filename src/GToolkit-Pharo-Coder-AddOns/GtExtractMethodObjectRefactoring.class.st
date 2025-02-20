@@ -100,7 +100,7 @@ GtExtractMethodObjectRefactoring >> createClassInstance [
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> createConstructor: methodName [
 	| node ast refactoring |
-	ast := self modelClass parseTreeFor: extractedMethodSelector.
+	ast := self modelClass parseTreeForSelector: extractedMethodSelector.
 	ast
 		nodesDo: [ :each | 
 			(each isMessage
