@@ -202,9 +202,23 @@ GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIs: aBehavior [
 GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIsNotVisible [
 	| anAssertStep |
 	anAssertStep := self assert
-			label: 'Assert header provider class is not visible';
+			label: 'Assert header method class is not visible';
 			satisfies: [ :aButton | aButton parent visibility = BlVisibility gone ]
-				description: [ :aButton | 'Provider class header must be hidden: {1}' format: {aButton parent} ];
+				description: [ :aButton | 'Method class header must be hidden: {1}' format: {aButton parent} ];
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderMethodBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIsVisible [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert header method class is visible';
+			satisfies: [ :aButton | aButton parent visibility = BlVisibility visible ]
+				description: [ :aButton | 'Method class header must be visible: {1}' format: {aButton parent} ];
 			referenceSender;
 			onParentStepTarget: self;
 			// GtPharoHeaderMethodBehaviorId.
@@ -226,15 +240,29 @@ GtPharoMethodCoderStep >> assertHeaderProviderBehaviorIs: aBehavior [
 ]
 
 { #category : #'steps - checks' }
-GtPharoMethodCoderStep >> assertHeaderProviderIsVisible [
+GtPharoMethodCoderStep >> assertHeaderProviderIsNotVisible [
 	| anAssertStep |
 	anAssertStep := self assert
 			label: 'Assert header provider class is not visible';
-			satisfies: [ :aButton | aButton parent visibility = BlVisibility visible ]
+			satisfies: [ :aButton | aButton parent visibility = BlVisibility gone ]
 				description: [ :aButton | 'Provider class header must be hidden: {1}' format: {aButton parent} ];
 			referenceSender;
 			onParentStepTarget: self;
-			// GtPharoHeaderMethodBehaviorId.
+			// GtPharoHeaderProviderBehaviorId.
+
+	^ anAssertStep
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertHeaderProviderIsVisible [
+	| anAssertStep |
+	anAssertStep := self assert
+			label: 'Assert header provider class is visible';
+			satisfies: [ :aButton | aButton parent visibility = BlVisibility visible ]
+				description: [ :aButton | 'Provider class header must be visible: {1}' format: {aButton parent} ];
+			referenceSender;
+			onParentStepTarget: self;
+			// GtPharoHeaderProviderBehaviorId.
 
 	^ anAssertStep
 ]
