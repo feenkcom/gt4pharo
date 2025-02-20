@@ -112,6 +112,10 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildMethodBehavior [
 		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | aSelectedBehavior := nil ]
 		ifDifferentDo: [ :aSubclassBehavior | aSelectedBehavior := aSubclassBehavior ]
 		ifAbsent: [ aSelectedBehavior := nil ].
+		
+	aSelectedBehavior ifNil: [
+		(compiledMethod isSubclassResponsibility and: [ explicitProviderClass ~= compiledMethod methodClass ])
+			ifTrue: [ aSelectedBehavior := explicitProviderClass ] ].
 
 	aSelectedBehavior ifNil: [ ^ self ].
 

@@ -123,6 +123,11 @@ GtPharoDummyOneObject >> longMethod [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject >> methodWithSubclassResponsibility [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject >> number [
 	^ self one
 ]
