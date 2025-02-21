@@ -68,17 +68,25 @@ GtPharoReceiverAndArgumentBindingsBuilder >> build [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitProviderClass [
-	| aGtPharoProgramNode |
 	compiledMethod ifNil: [ ^ self ].
+	parentMessage ifNil: [ ^ self ].
+	self isSelfOrSuperReceiver ifFalse: [ 
+		explicitProviderClass := receiverBehavior.
+		^ self ].
 
-	aGtPharoProgramNode := parentMessage parent receiver.
-	(aGtPharoProgramNode isVariable
-		and: [ aGtPharoProgramNode isSelf or: [ aGtPharoProgramNode isSuper ] ])
-		ifFalse: [ explicitProviderClass := receiverBehavior.
-			^ self ].
-
-	explicitProviderClass := parentExplicitProviderClass
-			ifNil: [ parentEvaluationContext targetBehavior ifNil: [ receiverBehavior ] ].
+	explicitProviderClass := parentExplicitProviderClass.
+	explicitProviderClass ifNil: [ 
+		explicitProviderClass := parentEvaluationContext targetBehavior ].
+	explicitProviderClass ifNil: [
+		parentCoderViewModel ifNotNil: [
+			parentCoderViewModel coderModel methodBehavior
+				ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | "ignore" ]
+				ifDifferentDo: [ :aSubclassBehavior | 
+					(aSubclassBehavior inheritsFrom: compiledMethod methodClass)
+						ifTrue: [ explicitProviderClass := aSubclassBehavior ] ]
+				ifAbsent: [ "ignore" ] ] ].
+	explicitProviderClass ifNil: [
+		explicitProviderClass := receiverBehavior ].
 ]
 
 { #category : #building }
@@ -94,23 +102,23 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildLocalBindings [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildMethodBehavior [
-	| aSelectedBehavior aGtPharoProgramNode |
+	| aSelectedBehavior |
 	compiledMethod ifNil: [ ^ self ].
 	parentCoderViewModel ifNil: [ ^ self ].
-	receiverBehavior ifNil: [ ^ self ].
-	
-	aGtPharoProgramNode := parentMessage parent receiver.
-	
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf or: [ aGtPharoProgramNode isSuper ] ])
-		ifFalse: [ ^ self ].
-	
+
+	self isSelfOrSuperReceiver ifFalse: [ ^ self ].
+
 	parentCoderViewModel coderModel methodBehavior
-		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | aSelectedBehavior := aBehavior ]
+		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | aSelectedBehavior := nil ]
 		ifDifferentDo: [ :aSubclassBehavior | aSelectedBehavior := aSubclassBehavior ]
-		ifAbsent: [ receiverBehavior ].
-	
+		ifAbsent: [ aSelectedBehavior := nil ].
+		
+	aSelectedBehavior ifNil: [
+		(compiledMethod isSubclassResponsibility and: [ explicitProviderClass ~= compiledMethod methodClass ])
+			ifTrue: [ aSelectedBehavior := explicitProviderClass ] ].
+
 	aSelectedBehavior ifNil: [ ^ self ].
-	
+
 	(aSelectedBehavior inheritsFrom: compiledMethod methodClass)
 		ifFalse: [ ^ self ].
 
@@ -148,22 +156,19 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 
 { #category : #building }
 GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiverBehavior [
-	| aGtPharoProgramNode |
 	parentMessage ifNil: [ ^ self ].
 
-	receiverObjectHolder ifNotNil: [ 
-		receiverObjectHolder 
-			ifDefined: [ :aSelfObject | 
-				receiverBehavior := aSelfObject class.
-				^ self ] 
-			ifNone: [ "ignore" ] ].
+	receiverObjectHolder
+		ifNotNil: [ receiverObjectHolder
+				ifDefined: [ :aSelfObject | 
+					receiverBehavior := aSelfObject class.
+					^ self ]
+				ifNone: [ "ignore" ] ].
 
-	aGtPharoProgramNode := parentMessage parent receiver.
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSelf ])
+	self isSelfReceiver
 		ifTrue: [ receiverBehavior := parentEvaluationContext targetBehavior.
 			^ self ].
-
-	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isSuper ])
+	self isSuperReceiver
 		ifTrue: [ receiverBehavior := parentEvaluationContext targetBehavior superclass.
 			^ self ]
 ]
@@ -191,6 +196,27 @@ GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext: anObject [
 { #category : #'accessing - results' }
 GtPharoReceiverAndArgumentBindingsBuilder >> explicitProviderClass [
 	^ explicitProviderClass
+]
+
+{ #category : #'private - testing' }
+GtPharoReceiverAndArgumentBindingsBuilder >> isSelfOrSuperReceiver [
+	| aReceiverNode |
+	aReceiverNode := parentMessage parent receiver.
+	^ aReceiverNode isVariable and: [ aReceiverNode isSelf or: [ aReceiverNode isSuper ] ]
+]
+
+{ #category : #'private - testing' }
+GtPharoReceiverAndArgumentBindingsBuilder >> isSelfReceiver [
+	| aReceiverNode |
+	aReceiverNode := parentMessage parent receiver.
+	^ aReceiverNode isVariable and: [ aReceiverNode isSelf ]
+]
+
+{ #category : #'private - testing' }
+GtPharoReceiverAndArgumentBindingsBuilder >> isSuperReceiver [
+	| aReceiverNode |
+	aReceiverNode := parentMessage parent receiver.
+	^ aReceiverNode isVariable and: [ aReceiverNode isSuper ]
 ]
 
 { #category : #'accessing - results' }

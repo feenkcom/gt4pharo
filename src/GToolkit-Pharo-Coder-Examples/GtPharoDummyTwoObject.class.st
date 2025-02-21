@@ -25,6 +25,11 @@ GtPharoDummyTwoObject >> anotherNumber [
 	self number
 ]
 
+{ #category : #accessing }
+GtPharoDummyTwoObject >> callMethodWithSubclassResponsibility [
+	self methodWithSubclassResponsibility
+]
+
 { #category : #examples }
 GtPharoDummyTwoObject >> failingExample [
 	<gtExample>

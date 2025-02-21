@@ -5348,11 +5348,11 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 						| anExample |
 						aCoder methodBehavior 
 							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | 
+								self assert: aSubclassBehavior equals: GtPharoDummyOneObject ]
+							ifDifferentDo: [ :aSubclassBehavior :aMethodBehavior |
 								AssertionFailure signal: (
-									'Subclass behavior must be different from the method behavior: {1} ~= {2}' 
+									'Subclass behavior must not be different from the method behavior: {1} ~= {2}' 
 										format: { aSubclassBehavior. aMethodBehavior } ) ]
-							ifDifferentDo: [ :aSubclassBehavior |
-								self assert: aSubclassBehavior equals: GtPharoDummyTwoObject ]
 							ifAbsent: [ 
 								AssertionFailure signal: 'Real method behavior must exist' ].
 						
@@ -5849,6 +5849,106 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodCallMethodWithSubclassResponsibility [
+	"Related to https://github.com/feenkcom/gtoolkit/issues/4306#issuecomment-2671710301.
+	For expanded subclass responsibility methods, users might want to save changes in such
+	methods into its subclass (provider behavior)."
+	
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithTwoObjectMethodCallMethodWithSubclassResponsibility. ].
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyTwoObject>>#callMethodWithSubclassResponsibility;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderProviderIsVisible;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertSelfObjectIs: nil;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtPharoDummyOneObject>>#methodWithSubclassResponsibility;
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodBehaviorIsVisible;
+					assertHeaderProviderIsVisible;
+					assertMethodExpandersCountIs: 1;
+					coderModelDo: [ :aCoder | 
+						aCoder methodBehavior 
+							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | 
+								AssertionFailure signal: (
+									'Subclass behavior must be different from the method behavior: {1} ~= {2}' 
+										format: { aSubclassBehavior. aMethodBehavior } ) ]
+							ifDifferentDo: [ :aSubclassBehavior :aMethodBehavior |
+								self assert: aSubclassBehavior equals: GtPharoDummyTwoObject  ]
+							ifAbsent: [ 
+								AssertionFailure signal: 'Real method behavior must exist' ] ];
+					coderViewModelDo: [ :aCoder | 
+						| someBehaviors |
+						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						self assert: someBehaviors size equals: 2.
+						self assert: someBehaviors first equals: GtPharoDummyTwoObject.
+						self assert: someBehaviors second equals: GtPharoDummyOneObject ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodNumber [
+	"See https://github.com/feenkcom/gtoolkit/issues/4306#issuecomment-2671710301.
+	Ensure expanded methods have meanigful compile behaviors."
+	
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := self methodCoderWithTwoObjectMethodNumber. ].
+
+	aScripter methodCoder
+		assertCompiledMethodIs: GtPharoDummyTwoObject >>#number;
+		assertExplicitProviderClassIs: nil;
+		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderProviderIsVisible;
+		assertHeaderMethodBehaviorIsNotVisible;
+		assertSelfObjectIs: nil;
+		assertMethodExpandersCountIs: 7;
+		clickOnMethodCoderExpander: 3
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtPharoDummyOneObject>>#three;
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
+					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodBehaviorIsVisible;
+					assertHeaderProviderIsVisible;
+					assertMethodExpandersCountIs: 2;
+					coderModelDo: [ :aCoder | 
+						aCoder methodBehavior 
+							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | 
+								self assert: aSubclassBehavior equals: GtPharoDummyOneObject ]
+							ifDifferentDo: [ :aSubclassBehavior :aMethodBehavior | 
+								AssertionFailure signal: (
+									'Subclass behavior must not be different from the method behavior: {1} ~= {2}' 
+										format: { aSubclassBehavior. aMethodBehavior } ) ]
+							ifAbsent: [ 
+								AssertionFailure signal: 'Real method behavior must exist' ] ];
+					coderViewModelDo: [ :aCoder | 
+						| someBehaviors |
+						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						self assert: someBehaviors size equals: 1.
+						self assert: someBehaviors first equals: GtPharoDummyOneObject ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne [
 	<gtExample>
 	| aScripter aSelfObject |
@@ -6148,6 +6248,24 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectAndMethodAnother
 ]
 
 { #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodCallMethodWithSubclassResponsibility [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithTwoObjectMethodCallMethodWithSubclassResponsibility.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodNumber [
+	<gtExample>
+	| aMethod aCoder |
+	aMethod := self methodWithTwoObjectMethodNumber.
+	aCoder := self coderOnMethod: aMethod.
+	^ aCoder
+]
+
+{ #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderWithTwoObjectMethodOne [
 	<gtExample>
 	| aMethod aCoder |
@@ -6226,6 +6344,20 @@ GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodAnotherNumber [
 	<gtExample>
 
 	^ GtPharoDummyTwoObject >> #anotherNumber
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodCallMethodWithSubclassResponsibility [
+	<gtExample>
+
+	^ GtPharoDummyTwoObject>>#callMethodWithSubclassResponsibility
+]
+
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodNumber [
+	<gtExample>
+
+	^ GtPharoDummyTwoObject>>#number
 ]
 
 { #category : #'examples - expansion' }
