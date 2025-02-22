@@ -127,8 +127,9 @@ GtPharoProgramNode >> implicitLocalVariables [
 GtPharoProgramNode >> indexOfTrailingPeriodIfAny [
 	| index |
 	parent isSequence ifFalse: [ ^ self sourceInterval last ].
-	index := parent children indexOf: self.
-	index < parent periods size ifFalse: [ ^ self sourceInterval last ].
+	index := parent periods
+			findFirst: [ :each | each startPosition > self stopPosition ].
+	index isZero ifTrue: [ ^ self sourceInterval last ].
 	^ (parent periods at: index) sourceInterval last
 ]
 
