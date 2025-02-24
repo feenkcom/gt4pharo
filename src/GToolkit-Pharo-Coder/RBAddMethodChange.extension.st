@@ -5,7 +5,7 @@ RBAddMethodChange >> gtDiffChange [
 	| oldSource newSource |
 	oldSource := (self changeClass notNil
 			ifTrue: [ self methodSourceFor: self selector ]) ifNil: [ '' ].
-	newSource := source.
+	newSource := self source.
 	^ GtDiffBuilder
 		computeDifferencesFrom: oldSource
 		to: newSource

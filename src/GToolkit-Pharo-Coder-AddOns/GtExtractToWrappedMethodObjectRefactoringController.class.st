@@ -188,6 +188,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> refactoring [
 			toUse: [ :ref :types :selected | 
 				potentialTypes := GtPrefixTree withAll: (types collect: [ :each | each name ]).
 				{ref model classNamed: self receiverClassName} ];
+		setOption: #methodProtocol toUse: [ :sel :ref | self wrappedMethodProtocol ];
 		yourself
 ]
 
@@ -330,6 +331,11 @@ GtExtractToWrappedMethodObjectRefactoringController >> wrappedMethodName: method
 	methodName
 		selector: (self wrappedMethodSelectorFor: methodName in: aRefactoring).
 	^ methodName
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoringController >> wrappedMethodProtocol [
+	^ #writing
 ]
 
 { #category : #customization }
