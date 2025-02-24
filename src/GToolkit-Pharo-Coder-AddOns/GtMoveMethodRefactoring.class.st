@@ -15,6 +15,14 @@ GtMoveMethodRefactoring >> checkTemporaryVariableNames [
 	^ super checkTemporaryVariableNames
 ]
 
+{ #category : #transforming }
+GtMoveMethodRefactoring >> compileNewMethods [
+	| newSource |
+	newSource := self movedAST newSource.
+	moveToClasses
+		do: [ :each | each compile: newSource withAttributesFrom: (class methodFor: selector) ]
+]
+
 { #category : #accessing }
 GtMoveMethodRefactoring >> getClassesForInstanceVariable [
 	| definingClass typer types |
@@ -24,6 +32,21 @@ GtMoveMethodRefactoring >> getClassesForInstanceVariable [
 	types
 		ifEmpty: [ types := OrderedCollection with: (self model classNamed: #Object) ].
 	moveToClasses := self selectVariableTypesFrom: types selected: types copy.
+	moveToClasses ifNil: [ self refactoringFailure: 'Method not moved' ]
+]
+
+{ #category : #'private - accessing' }
+GtMoveMethodRefactoring >> getClassesForTemporaryVariable [
+	"Same as superclass but using GtRefactoryTyper instead"
+
+	| types |
+	types := GtRefactoryTyper
+			typesFor: variable
+			in: parseTree
+			model: self model.
+	types
+		ifEmpty: [ types := OrderedCollection with: (self model classNamed: #Object) ].
+	moveToClasses := self selectVariableTypesFrom: types selected: types.
 	moveToClasses ifNil: [ self refactoringFailure: 'Method not moved' ]
 ]
 
@@ -88,16 +111,12 @@ GtMoveMethodRefactoring >> moveToClasses [
 	^ moveToClasses
 ]
 
-{ #category : #accessing }
-GtMoveMethodRefactoring >> movedSelector [
-	^ parseTree selector
-]
-
 { #category : #transforming }
-GtMoveMethodRefactoring >> renameTemps [
-	| varNames varsToRename |
-	self shouldRenameTemps ifFalse: [ ^ self ].
-	varNames := parseTree allDefinedVariables.
+GtMoveMethodRefactoring >> movedAST [
+	| varNames varsToRename ast |
+	self shouldRenameTemps ifFalse: [ ^ parseTree ].
+	ast := parseTree copy.
+	varNames := ast allDefinedVariables.
 	selfVariableName ifNotNil: [ varNames add: selfVariableName ].
 	varsToRename := varNames
 			select: [ :name | moveToClasses anySatisfy: [ :each | self canReferenceVariable: name in: each ] ].
@@ -109,19 +128,19 @@ GtMoveMethodRefactoring >> renameTemps [
 					ifFalse: [ each first = $a ifTrue: [ each at: 2 ifAbsent: [  ] ] ])
 					ifNotNil: [ :c | c isUppercase ifTrue: [ '_' , each ] ])
 					ifNil: [ (each first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ]) , each capitalized ].
-			parseTree
+			ast
 				nodesDo: [ :node | 
 					(node isVariable and: [ node name = each ])
-						ifTrue: [ node replaceWith: (RBVariableNode named: newName) ] ] ]
+						ifTrue: [ node replaceWith: (RBVariableNode named: newName) ] ] ].
+	^ ast
+]
+
+{ #category : #accessing }
+GtMoveMethodRefactoring >> movedSelector [
+	^ parseTree selector
 ]
 
 { #category : #transforming }
 GtMoveMethodRefactoring >> shouldRenameTemps [
 	^ (self options at: #renameTemporaries ifAbsent: [ [ false ] ]) cull: self
-]
-
-{ #category : #transforming }
-GtMoveMethodRefactoring >> transform [
-	self renameTemps.
-	super transform
 ]

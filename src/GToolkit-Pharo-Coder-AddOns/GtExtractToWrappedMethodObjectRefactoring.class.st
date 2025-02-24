@@ -24,12 +24,13 @@ GtExtractToWrappedMethodObjectRefactoring >> addWrappedCall [
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoring >> createConstructor: methodName [
 	super createConstructor: methodName.
-	self createSetMethod: methodName
+	self createSetMethod: methodName.
+	self fixConstructorArguments: methodName
 ]
 
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
-	| ast meta removeCascadeRefactoring cascade extractSetMethodRefactoring tempName |
+	| ast meta removeCascadeRefactoring cascade extractSetMethodRefactoring tempName setSelector |
 	(self useSetMethod not and: [ methodName arguments isEmpty ])
 		ifTrue: [ ^ self ].
 
@@ -59,7 +60,8 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 		setOption: #renameTemporaries toUse: [ :ref | true ];
 		setOption: #methodName
 			toUse: [ :mn :ref | 
-				mn selector: ('set' , methodName selector asString capitalized) asSymbol.
+				setSelector := ('set' , methodName selector asString capitalized) asSymbol.
+				mn selector: setSelector.
 				mn arguments: methodName arguments.
 				mn ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | tempName ];
@@ -83,7 +85,46 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 				model: self model
 				inline: ast statements first sourceInterval
 				from: methodName selector
-				in: meta)
+				in: meta).
+	self model changes
+		gtSelector: setSelector
+		in: (self model classNamed: className)
+		classified: #private
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> extractToNewClass [
+	super extractToNewClass.
+	self options
+		at: #methodProtocol
+		ifPresent: [ :block | 
+			(block cull: methodObjectSelector cull: self)
+				ifNotNil: [ :protocol | 
+					self model changes
+						gtSelector: methodObjectSelector
+						in: (self model classNamed: className)
+						classified: protocol ] ]
+]
+
+{ #category : #accessing }
+GtExtractToWrappedMethodObjectRefactoring >> fixConstructorArguments: methodName [
+	| meta ast |
+	meta := (self model classNamed: className) classSide.
+	ast := meta parseTreeForSelector: methodName selector.
+	ast ifNil: [ ^ self ].
+	ast arguments
+		do: [ :each | 
+			| name newName |
+			name := each name.
+			(((name beginsWith: 'an') and: [ (name at: 3 ifAbsent: [ $a ]) isUppercase ])
+				or: [ (name beginsWith: 'a') and: [ (name at: 2 ifAbsent: [ $a ]) isUppercase ] ])
+				ifFalse: [ newName := (name first isVowel ifTrue: [ 'an' ] ifFalse: [ 'a' ])
+							, name capitalized.
+					ast
+						nodesDo: [ :node | 
+							(node isVariable and: [ node name = name ])
+								ifTrue: [ node replaceWith: (RBVariableNode named: newName) ] ] ] ].
+	meta compileTree: ast
 ]
 
 { #category : #accessing }

@@ -38,12 +38,25 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithOneArgConstructo
 	refactoring primitiveExecute.
 	cls := model classNamed: #NewClass.
 	self assert: (cls directlyDefinesMethod: #writeOn:).
+	self assert: (cls protocolsFor: #writeOn:) asArray equals: #(#writing).
 	self
 		assert: (cls parseTreeForSelector: #writeOn:)
 		equals: (RBParser
 				parseMethod: 'writeOn: aStream aStream nextPutAll: a; nextPutAll: ''b''').
 	self assert: (cls directlyDefinesMethod: #setA:).
+	self assert: (cls protocolsFor: #setA:) asArray equals: #(#private).
+	self
+		assert: ((cls parseTreeForSelector: #setA:)
+				equalTo: (RBParser parseMethod: 'setA: anA  a := anA')
+				exceptForVariables: #()).
 	self assert: (cls classSide directlyDefinesMethod: #a:).
+	self
+		assert: (cls classSide protocolsFor: #a:) asArray
+		equals: #(#'instance creation').
+	self
+		assert: ((cls classSide parseTreeForSelector: #a:)
+				equalTo: (RBParser parseMethod: 'a: anA  ^self new setA: anA; yourself')
+				exceptForVariables: #()).
 	self
 		assert: ((model classFor: self class) parseTreeForSelector: #writeOn1:)
 		equals: (RBParser
@@ -65,11 +78,27 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithTwoArgConstructo
 	refactoring primitiveExecute.
 	cls := model classNamed: #NewClass.
 	self assert: (cls directlyDefinesMethod: #writeOn:).
+	self assert: (cls protocolsFor: #writeOn:) asArray equals: #(#writing).
 	self
 		assert: (cls parseTreeForSelector: #writeOn:)
 		equals: (RBParser parseMethod: 'writeOn: aStream aStream nextPutAll: a; nextPutAll: b').
 	self assert: (cls directlyDefinesMethod: #setA:b:).
+	self
+		assert: (((cls parseTreeForSelector: #setA:b:)
+				equalTo: (RBParser parseMethod: 'setA: aB b: anA  a := anA. b := aB')
+				exceptForVariables: #())
+				or: [ (cls parseTreeForSelector: #setA:b:)
+						equalTo: (RBParser parseMethod: 'setA: aB b: anA  b := aB. a := anA')
+						exceptForVariables: #() ]).
+	self assert: (cls protocolsFor: #setA:b:) asArray equals: #(#private).
 	self assert: (cls classSide directlyDefinesMethod: #a:b:).
+	self
+		assert: (cls classSide protocolsFor: #a:b:) asArray
+		equals: #(#'instance creation').
+	self
+		assert: ((cls classSide parseTreeForSelector: #a:b:)
+				equalTo: (RBParser parseMethod: 'a: aB  b: anA ^self new setA: aB b: anA; yourself')
+				exceptForVariables: #()).
 	self
 		assert: ((model classFor: self class) parseTreeForSelector: #writeOn2:)
 		equals: (RBParser
@@ -127,6 +156,7 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> refactoringFor: aSelector [
 				methodName selector: #writeOn:.
 				methodName ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | 'aStream' ];
+		setOption: #methodProtocol toUse: [ :sel :ref | #writing ];
 		yourself
 ]
 
