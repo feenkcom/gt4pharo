@@ -3,6 +3,9 @@ Class {
 	#superclass : #BrButton,
 	#traits : 'TGtWithPharoMethodCoderViewModel',
 	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait',
+	#instVars : [
+		'dropdownIndicatorFuture'
+	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
@@ -18,9 +21,22 @@ GtPharoMethodCoderSaveButton >> initialize [
 		beTinySize;
 		action: [ self pharoMethodCoderViewModel requestSave ].
 		
-	self addAptitude: (BrGlamorousWithDropdownAptitude
+	self addAptitude: (BrGlamorousWithExplicitDropdownAptitude
 		handle: [ BlElement new size: self extent ]
-		content: [ self newSaveDestinationPickerElement ]) doNotShowOnClick
+		content: [ self newSaveDestinationPickerElement ]) doNotShowOnClick.
+	
+	dropdownIndicatorFuture := (BrAsyncElementFuture on: self)
+		whenError: [ :theElement :anError | NonInteractiveTranscript stdout 
+			show: '[GtPharoMethodCoderSaveButton>>#initialize] ';
+			show: anError; 
+			cr ];
+		whenSuccess: [ :theElement :aCount | 
+			theElement
+				aptitudeDo: [ :anAptitude | 
+					aCount > 1
+						ifTrue: [ (anAptitude hasActorOfKind: BrGlamorousButtonIconDropdownAptitude)
+								ifFalse: [ anAptitude + BrGlamorousButtonIconDropdownAptitude ] ]
+						ifFalse: [ anAptitude - BrGlamorousButtonIconDropdownAptitude ] ] ]
 ]
 
 { #category : #'private - instance creation' }
@@ -48,6 +64,12 @@ GtPharoMethodCoderSaveButton >> newSaveDestinationPickerElement [
 					model: eachBehavior;
 					label: eachBehavior name ];
 			stream: pharoMethodCoderViewModel availableCompilationBehaviors)
+]
+
+{ #category : #'api - pharo method coder view model' }
+GtPharoMethodCoderSaveButton >> onPharoMethodCoderViewModelChanged [
+	dropdownIndicatorFuture ifNotNil: [ :aFuture | 
+		aFuture future: self pharoMethodCoderViewModel availableCompilationBehaviors size ]
 ]
 
 { #category : #'private - event handling' }
