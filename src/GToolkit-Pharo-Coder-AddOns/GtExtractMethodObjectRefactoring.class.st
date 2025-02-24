@@ -127,7 +127,11 @@ GtExtractMethodObjectRefactoring >> createConstructor: methodName [
 		setOption: #variableTypes
 			toUse: [ :ref :types :selected | {self methodObjectClass classSide} ];
 		setOption: #useExistingMethod toUse: [ :ref :sel | false ].
-	self performCompositeRefactoring: refactoring
+	self performCompositeRefactoring: refactoring.
+	self model changes
+		gtSelector: methodName selector
+		in: (self model classNamed: className) classSide
+		classified: #'instance creation'
 ]
 
 { #category : #initialization }

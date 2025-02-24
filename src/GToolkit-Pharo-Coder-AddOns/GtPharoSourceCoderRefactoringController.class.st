@@ -48,8 +48,7 @@ GtPharoSourceCoderRefactoringController >> compileSnippetMethodIn: model [
 { #category : #executing }
 GtPharoSourceCoderRefactoringController >> createModel [
 	| model modelClass |
-	model := RBClassModelFactory rbNamespace
-			onEnvironment: RBBrowserEnvironment new.
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
 	model name: self refactoringName.
 	sourceCoderViewModel coderModel isForMethod
 		ifTrue: [ modelClass := model classFor: sourceCoderViewModel behavior.
