@@ -220,8 +220,7 @@ GtExtractMethodToComponentController >> isValidForPreview [
 
 { #category : #accessing }
 GtExtractMethodToComponentController >> newExtractedSelector [
-	^ newSelector
-		ifNil: [ self dummySelectorForArgs: self extractedSelector numArgs ]
+	^ newSelector ifNil: [ self extractedSelector ]
 ]
 
 { #category : #private }
@@ -408,8 +407,20 @@ GtExtractMethodToComponentController >> setDefaultOptionsOn: aRefactoring [
 			| selector |
 			(methodArguments size = methodName arguments size
 				and: [ methodArguments allSatisfy: [ :each | methodName arguments includes: each ] ])
-				ifTrue: [ methodName arguments: methodArguments ]
-				ifFalse: [ methodArguments := Array withAll: methodName arguments ].
+				ifFalse: [ | positions |
+					positions := Dictionary new.
+					self ast
+						withAllNodesDo: [ :each | 
+							(each isVariable and: [ methodName arguments includes: each variableName ])
+								ifTrue: [ positions at: each variableName ifAbsentPut: each startPosition ] ].
+					methodArguments := Array
+							withAll: (methodName arguments
+									asSortedCollection: [ :a :b | 
+										| aValue bValue |
+										aValue := positions at: a ifAbsent: [ 0 ].
+										bValue := positions at: b ifAbsent: [ 0 ].
+										aValue < bValue or: [ aValue = bValue and: [ a < b ] ] ]) ].
+			methodName arguments: methodArguments.
 			selector := self
 					safeMethodName: methodName
 					in: (aRefactoring model classFor: sourceCoderViewModel behavior).
