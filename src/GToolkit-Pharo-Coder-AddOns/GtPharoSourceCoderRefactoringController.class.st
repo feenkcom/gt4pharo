@@ -145,19 +145,28 @@ GtPharoSourceCoderRefactoringController >> refactoredSnippetCodeFrom: refactorin
 
 { #category : #private }
 GtPharoSourceCoderRefactoringController >> safeMethodName: methodName in: modelClass [
-	| index selector name argCount |
+	| selector name argCount |
 	argCount := methodName arguments size.
-	name := '_'.
-	index := 0.
-	[ selector := (String
-			streamContents: [ :stream | 
-				stream nextPutAll: name.
-				argCount >= 1
-					ifTrue: [ stream nextPut: $:.
-						2 to: argCount do: [ :i | stream nextPutAll: '_:' ] ] ]) asSymbol.
+	argCount = 0
+		ifTrue: [ name := '_' ]
+		ifFalse: [ | ast |
+			ast := self ast.
+			name := String
+					streamContents: [ :stream | 
+						methodName arguments
+							do: [ :each | 
+								| part |
+								part := '_:'.
+								ast variables
+									doWithIndex: [ :var :index | 
+										var variableName asString = each
+											ifTrue: [ part := (ast selectorParts at: index) source ] ].
+								stream nextPutAll: part ] ] ].
+	[ selector := name asSymbol.
 	modelClass hierarchyDefinesMethod: selector ]
-		whileTrue: [ name := name , index printString.
-			index := index + 1 ].
+		whileTrue: [ name last = $:
+				ifTrue: [ name := name allButLast , '_:' ]
+				ifFalse: [ name := name , '_' ] ].
 	^ selector
 ]
 

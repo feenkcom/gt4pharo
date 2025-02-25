@@ -625,20 +625,30 @@ GtPharoMethodCoderByScripterExamples >> checkHasTwoReorderAttributes: aScripter 
 
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
+	| selectorParts |
 	aScripter
 		checkStep: [ :s | 
 			s
 				label: 'Check rename editor attribute';
-				value: [ :aCoderEditor | 
-						| anInterval |
-						aCoderEditor text
-							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
-							indicesDo: [ :aStart :anEnd | anInterval ifNil: [ anInterval := aStart to: anEnd ] ].
-						anInterval ]
-					equals: [ :aCoderEditor | 
-						| index |
-						index := aCoderEditor text asString indexOfSubCollection: '_:'.
-						index to: index + 1 ];
+				do: [ :aCoderEditor | 
+					| intervals ast found |
+					intervals := OrderedCollection new.
+					aCoderEditor text
+						findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+						indicesDo: [ :aStart :anEnd | intervals add: (aStart to: anEnd) ].
+					self assert: intervals notEmpty.
+					ast := GtPharoParser parse: aCoderEditor text asString.
+					found := false.
+					ast
+						allNodesOfType: GtPharoKeywordMessageNode
+						do: [ :each | 
+							each selectorParts first startPosition = intervals first first
+								ifTrue: [ found := true.
+									selectorParts := each selectorParts.
+									each selectorParts
+										with: intervals
+										do: [ :part :interval | self assert: part sourceInterval equals: interval ] ] ].
+					self assert: found ];
 				id: GtSourceCoderEditorId ].
 
 	aScripter
@@ -672,7 +682,10 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 		checkStep: [ :s | 
 			s
 				label: 'Check method name editor source code';
-				value: [ :aNameEditor | aNameEditor text asString first ] equals: $_;
+				do: [ :aNameEditor | 
+					self
+						assert: (selectorParts
+								anySatisfy: [ :e | e source beginsWith: aNameEditor text asString ]) ];
 				onChildFromBlock: [ :element | 
 					element
 						allChildrenBreadthFirstDetect: [ :each | (each isKindOf: GtRenameEditor) and: [ each isFocused ] ]
@@ -682,8 +695,10 @@ GtPharoMethodCoderByScripterExamples >> checkKeywordRenameEditor: aScripter [
 		checkStep: [ :s | 
 			s
 				label: 'Check method name editor selected text';
-				value: [ :aNameEditor | aNameEditor editor selectedText asString first ]
-					equals: $_;
+				do: [ :aNameEditor | 
+					self
+						assert: aNameEditor editor selectedText asString
+						equals: aNameEditor editor text asString ];
 				onChildFromBlock: [ :element | 
 					element
 						allChildrenBreadthFirstDetect: [ :each | (each isKindOf: GtRenameEditor) and: [ each isFocused ] ]
