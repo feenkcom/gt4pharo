@@ -12,6 +12,7 @@ GtDuplicateCodeInConditionalAdvice >> description [
 { #category : #accessing }
 GtDuplicateCodeInConditionalAdvice >> matches: aNode from: aCriticRunner [
 	| first last |
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aNode isMessage ifFalse: [ ^ false ].
 	(#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: aNode selector)
 		ifFalse: [ ^ false ].

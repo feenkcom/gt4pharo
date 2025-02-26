@@ -16,6 +16,7 @@ GtValueNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
 
 { #category : #testing }
 GtValueNotUsedAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aNode isVariable
 		ifTrue: [ ^ aNode isUsed not
 				and: [ aNode parent isValueNode or: [ aNode parent isMessage ] ] ].

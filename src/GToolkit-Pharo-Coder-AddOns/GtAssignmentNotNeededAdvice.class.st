@@ -27,9 +27,10 @@ GtAssignmentNotNeededAdvice >> highlightPositionsFor: aSmaCCNode [
 
 { #category : #testing }
 GtAssignmentNotNeededAdvice >> matches: aNode from: aCriticRunner [
-	^ aNode isAssignment
-		and: [ aNode parent notNil
-				and: [ aNode parent isReturn and: [ aNode variable whoDefines notNil ] ] ]
+	^ aNode isErrorNode not
+		and: [ aNode isAssignment
+				and: [ aNode parent notNil
+						and: [ aNode parent isReturn and: [ aNode variable whoDefines notNil ] ] ] ]
 ]
 
 { #category : #accessing }
