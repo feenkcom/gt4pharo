@@ -46,6 +46,11 @@ String >> gtReferences [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
+String >> gtRepositoryMatches [
+	^ GtSearchMethodsWithRepositoryPatternFilter pattern: self
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
 String >> gtStringLiteralCaseSensitiveMatch [
 	^ GtSearchLiteralExactStringFilter string: self caseSensitive: true
 ]
