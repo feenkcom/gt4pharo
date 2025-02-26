@@ -11,6 +11,8 @@ GtHaltAdvice >> description [
 
 { #category : #accessing }
 GtHaltAdvice >> haltSelectors [
+	<gtIgnoreConstraint: #GtSendersOfHaltSelectorsInGtPackagesConstraint>
+	
 	^ #(halt haltOnce haltIf:)
 ]
 
