@@ -33,6 +33,7 @@ GtUnoptimizedToDoAdvice >> isLikelyNumber: aNode [
 
 { #category : #accessing }
 GtUnoptimizedToDoAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	(aNode isMessageSend and: [ aNode receiver isMessageSend ])
 		ifFalse: [ ^ false ].
 	^ aNode message selector = #do:

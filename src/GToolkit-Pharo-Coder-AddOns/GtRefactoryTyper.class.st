@@ -39,7 +39,7 @@ GtRefactoryTyper >> gatherSelectorsSentTo: anInstVarName in: aClass [
 			each
 				gtSelectorsReferToInstanceVariable: anInstVarName
 				do: [ :sel | 
-					searcher executeTree: (each parseTreeFor: sel).
+					searcher executeTree: (each parseTreeForSelector: sel).
 					Time microsecondClockValue - startTime > self class timeout
 						ifTrue: [ ^ selectors ] ] ].
 	getters

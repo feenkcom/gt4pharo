@@ -30,6 +30,7 @@ GtPhlowSameViewReturnMethodAdvice >> fixItActionsForNode: aNode coderModel: code
 
 { #category : #testing }
 GtPhlowSameViewReturnMethodAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	argumentName ifNil: [ ^ false ].
 	
 	^ (aNode isReturn and: [ 

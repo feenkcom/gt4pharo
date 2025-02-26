@@ -44,6 +44,7 @@ GtMessageNotImplementedAdvice >> fixItActionsForNode: aNode styler: aCriticStyle
 { #category : #testing }
 GtMessageNotImplementedAdvice >> matches: aNode from: aCriticRunner [
 	| receiverType selector |
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aCriticRunner hasRefactoring ifTrue: [ ^ false ].
 	aNode isMessage
 		ifTrue: [ receiverType := aCriticRunner typeOf: aNode parent receiver.

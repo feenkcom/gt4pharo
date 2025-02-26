@@ -35,6 +35,7 @@ GtTemporaryNotUsedAdvice >> initialize [
 
 { #category : #accessing }
 GtTemporaryNotUsedAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	(aNode isSequence and: [ aNode variables notEmpty ])
 		ifTrue: [ aNode variables do: [ :each | variables add: each variableName ] ].
 	aNode isVariable
