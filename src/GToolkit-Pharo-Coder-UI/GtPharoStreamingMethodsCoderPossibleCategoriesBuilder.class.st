@@ -8,9 +8,9 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - instantiation' }
 GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> create [
-	^ {GtAllProtocol defaultName} , methodsCoder possibleCategories asArray
+	^ {self firstItem} , methodsCoder possibleCategories asArray
 		collect: #asFilterModelItem
 ]
 
@@ -25,6 +25,16 @@ GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> filterModel: aFilterMod
 		assert: [ filterModel isNil ]
 		description: [ 'Filter model can be initialized only once' ].
 	filterModel := aFilterModel
+]
+
+{ #category : #'api - instantiation' }
+GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> firstItem [
+	^ GtAllProtocol defaultName asFilterModelItem
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> firstItemDo: aBlock [
+	aBlock cull: self firstItem
 ]
 
 { #category : #accessing }

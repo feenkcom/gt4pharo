@@ -26,6 +26,7 @@ GtSearchPragmasWithArgumentsFilter >> arguments: anObject [
 
 { #category : #accessing }
 GtSearchPragmasWithArgumentsFilter >> includesMethod: aCompiledMethod [
+	symbol ifNil: [ ^ true ].
 	^ (super includesMethod: aCompiledMethod)
 		and: [ (aCompiledMethod pragmaAt: symbol) arguments includesAll: self arguments ]
 ]

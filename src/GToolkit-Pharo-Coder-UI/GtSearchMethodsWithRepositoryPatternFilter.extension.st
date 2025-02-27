@@ -7,13 +7,13 @@ GtSearchMethodsWithRepositoryPatternFilter >> filterDescriptor2For: aMethodsCode
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodsWithRepositoryPatternFilter classSide >> filterDescriptor2For: aMethodsCoder [
+GtSearchMethodsWithRepositoryPatternFilter class >> filterDescriptor2For: aMethodsCoder [
 	^ self globalFilterDescriptor2
 		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder packageNames ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodsWithRepositoryPatternFilter classSide >> filterDescriptorFor: aMethodsCoder [
+GtSearchMethodsWithRepositoryPatternFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ GtFilterDescriptor new
 		creator: [ :value | self pattern: value ];
 		named: 'Repository';
@@ -22,7 +22,7 @@ GtSearchMethodsWithRepositoryPatternFilter classSide >> filterDescriptorFor: aMe
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodsWithRepositoryPatternFilter classSide >> globalFilterDescriptor [
+GtSearchMethodsWithRepositoryPatternFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self pattern: value ];
 		named: 'Repository';
@@ -32,7 +32,7 @@ GtSearchMethodsWithRepositoryPatternFilter classSide >> globalFilterDescriptor [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodsWithRepositoryPatternFilter classSide >> globalFilterDescriptor2 [
+GtSearchMethodsWithRepositoryPatternFilter class >> globalFilterDescriptor2 [
 	^ GtFilterTextModel new
 		creator: [ :value | self pattern: value ];
 		named: 'Repository';
@@ -42,7 +42,7 @@ GtSearchMethodsWithRepositoryPatternFilter classSide >> globalFilterDescriptor2 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodsWithRepositoryPatternFilter classSide >> packageFilterDescriptor [
+GtSearchMethodsWithRepositoryPatternFilter class >> packageFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self pattern: value ];
 		named: 'Repository';
