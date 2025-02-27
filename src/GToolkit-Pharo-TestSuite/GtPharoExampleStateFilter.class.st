@@ -50,7 +50,7 @@ GtPharoExampleStateFilter >> includesMethod: aCompiledMethod [
 GtPharoExampleStateFilter >> initialize [
 	super initialize.
 
-	symbol := nil.
+	symbol := #gtExample.
 	resultState := self class defaultState
 ]
 
