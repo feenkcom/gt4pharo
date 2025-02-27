@@ -10,7 +10,7 @@ GtSearchInheritedMethodsFilter class >> filterDescriptor2For: aMethodsCoder [
 			anItem
 				ifSome: [ :anUpToClass | (self forClass: aCurrentClass) withSuperclassesUpTo: anUpToClass ]
 				ifNone: [ (self forClass: aCurrentClass) withSuperclassesUpTo: aCurrentClass ] ];
-		items: aCurrentClass withAllSuperclasses;
+		items: [ aCurrentClass withAllSuperclasses ];
 		selectedItem: aCurrentClass;
 		displayAllItems;
 		name: self filterName;
