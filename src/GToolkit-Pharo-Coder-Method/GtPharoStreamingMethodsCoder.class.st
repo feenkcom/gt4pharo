@@ -156,11 +156,35 @@ GtPharoStreamingMethodsCoder >> possibleCategoriesUnorderedStream [
 
 { #category : #'api - completion' }
 GtPharoStreamingMethodsCoder >> pragmaNames [
+	"We use this method to demo a UI blocking issue.
+	See https://github.com/feenkcom/gtoolkit/issues/4327.
+	Use #pragmaNamesOrderedFuture instead."
+	
 	^ (((self itemsStream
 		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
 		flatten
 		map: [ :eachPragma | eachPragma selector ])
 		to: GtPrefixTree) wait
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> pragmaNamesOrderedFuture [
+	<return: #TAsyncFuture of: #GtPrefixTree>
+	| aStream |
+	aStream := self pragmaNamesUnorderedStream.
+	^ aStream to: GtPrefixTree
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> pragmaNamesUnorderedStream [
+	<return: #TAsyncStream of: #String>
+	| aStream |
+	aStream := (self itemsStream
+		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
+		flatten
+		map: [ :eachPragma | eachPragma selector ].
+	
+	^ aStream asAsyncStream withoutDuplicates useContentComparison
 ]
 
 { #category : #'api - completion' }

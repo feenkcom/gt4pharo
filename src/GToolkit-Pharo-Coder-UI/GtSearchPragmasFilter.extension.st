@@ -9,7 +9,8 @@ GtSearchPragmasFilter class >> filterDescriptor2For: aMethodsCoder [
 				ifNone: [ self new ] ];
 		named: 'Pragma';
 		order: 11;
-		items: [ GtFilterModelAllItem methodsLabel withAll: aMethodsCoder pragmaNames asArray ];
+		items: [ aMethodsCoder pragmaNamesOrderedFuture map: [ :aPrefixTree | 
+			GtFilterModelAllItem methodsLabel withAll: aPrefixTree asArray ] ];
 		selectedItem: GtFilterModelAllItem methodsLabel
 ]
 
