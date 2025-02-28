@@ -41,10 +41,9 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 
 	"For some reason we need to wait to propagate search filter changes.
 	Is there any background computation that the UI is not aware of?"
-	aScripter wait 
-		forEnqueuedSpaceTaskTimeout: 1 second; 
-		play.
-				
+	aScripter wait forEnqueuedSpaceTaskTimeout: 1 second; play.
+	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
+	
 	aScripter methodsCoder
 		assertNumberOfVisibleMethodsIsExactly: 1;
 		play.
@@ -65,6 +64,11 @@ GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 		assertFilterModelAtIndex: 2
 			selectedValueIs: (GtFilterModelStringItem new string: Protocol gtAllProtocolDefaultName);
 		play.
+		
+	"For some reason we need to wait to propagate search filter changes.
+	Is there any background computation that the UI is not aware of?"
+	aScripter wait forEnqueuedSpaceTaskTimeout: 1 second; play.
+	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
 		
 	aScripter methodsCoder
 		assertNumberOfVisibleMethodsIsAtLeast: 8;
@@ -87,6 +91,11 @@ GtFilterElementByScripterExamples >> classCoderSelectProtoObjectSuperclass [
 		assertMethodsUpToFilterModel;
 		assertMethodProtocolFilterModel;
 		play.
+		
+	"For some reason we need to wait to propagate search filter changes.
+	Is there any background computation that the UI is not aware of?"
+	aScripter wait forEnqueuedSpaceTaskTimeout: 1 second; play.
+	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
 
 	aScripter methodsCoder
 		assertNumberOfVisibleMethodsIsExactly: 2;
