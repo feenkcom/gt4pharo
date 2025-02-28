@@ -10,8 +10,17 @@ Class {
 
 { #category : #'api - instantiation' }
 GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> create [
-	^ {self firstItem} , methodsCoder possibleCategories asArray
-		collect: #asFilterModelItem
+	"Note that this method is deprecated and therefore does not return categories.
+	Use #createFuture instead."
+
+	^ {self firstItem}
+]
+
+{ #category : #'api - instantiation' }
+GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> createFuture [
+	^ methodsCoder possibleCategoriesOrderedFuture map: [ :aPrefixTree |
+		(Array with: self firstItem withAll: aPrefixTree asArray)
+			collect: #asFilterModelItem ].
 ]
 
 { #category : #accessing }
