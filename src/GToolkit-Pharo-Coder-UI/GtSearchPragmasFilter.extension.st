@@ -20,6 +20,22 @@ GtSearchPragmasFilter >> filterDescriptor2For: aMethodsCoder [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchPragmasFilter class >> filterDescriptor2ForOldWay: aMethodsCoder [
+	"We use this method to demo a UI blocking issue.
+	See https://github.com/feenkcom/gtoolkit/issues/4327"
+	
+	^ GtFilterShortListModel new
+		creator: [ :anItem |
+			anItem 
+				ifSome: [ :aName | self forPragma: aName ]
+				ifNone: [ self new ] ];
+		named: 'Pragma';
+		order: 11;
+		items: (GtFilterModelAllItem methodsLabel withAll: aMethodsCoder pragmaNames asArray);
+		selectFirstItem
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchPragmasFilter class >> filterDescriptorFor: aMethodsCoder [
 	^ GtFilterDescriptor new
 		creator: [ :value | self forPragma: value ];
