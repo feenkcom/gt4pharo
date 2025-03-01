@@ -782,7 +782,7 @@ GtPharoCoderByScripterExamples >> displayMaximizedCoderWithMethodExpanded [
 ]
 
 { #category : #'examples - context menu' }
-GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x330Space [
+GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x345Space [
 	<gtExample>
 	| aScripter |
 	aScripter := self coderWithAddMethod.
@@ -791,7 +791,7 @@ GtPharoCoderByScripterExamples >> displayPharoMethodContextMenuExtentIn800x330Sp
 		doStep: [ :s | 
 			s
 				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 800 @ 330 ];
+				block: [ :aSpace | aSpace extent: 800 @ 345 ];
 				onSpace ].
 
 	self maximizePagerPane: aScripter.
