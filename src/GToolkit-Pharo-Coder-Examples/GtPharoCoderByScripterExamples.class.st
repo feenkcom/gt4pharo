@@ -1163,6 +1163,11 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 			events add: event.
 			objectToSpawn := event object ].
 
+	"For some reason we need to wait to propagate search filter changes.
+	Is there any background computation that the UI is not aware of?"
+	aScripter wait forEnqueuedSpaceTaskTimeout: 1 second; play.
+	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
+			
 	aScripter click
 		// GtPharoHeaderProviderBehaviorId;
 		play.
