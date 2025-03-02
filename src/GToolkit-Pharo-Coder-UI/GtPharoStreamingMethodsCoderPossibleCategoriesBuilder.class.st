@@ -38,7 +38,7 @@ GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> filterModel: aFilterMod
 
 { #category : #'api - instantiation' }
 GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> firstItem [
-	^ GtAllProtocol defaultName asFilterModelItem
+	^ GtFilterModelAllItem methodsLabel asFilterModelItem
 ]
 
 { #category : #accessing }
