@@ -21,6 +21,7 @@ GtOverridesSpecialSelectorAdvice >> instanceSideSelectors [
 
 { #category : #testing }
 GtOverridesSpecialSelectorAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aNode isMethodPattern ifFalse: [ ^ false ].
 	^ aCriticRunner behavior superclass notNil
 		and: [ ((aCriticRunner behavior isClassSide

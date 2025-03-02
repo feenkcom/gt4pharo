@@ -16,6 +16,7 @@ GtRedundantAssignmentAdvice >> fixItActionsForNode: aNode coderModel: coderModel
 
 { #category : #testing }
 GtRedundantAssignmentAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	^ aNode isAssignment and: [ aNode variable = aNode value ]
 ]
 

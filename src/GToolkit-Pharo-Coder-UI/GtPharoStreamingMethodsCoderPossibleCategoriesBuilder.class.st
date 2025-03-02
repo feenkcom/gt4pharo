@@ -8,10 +8,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - instantiation' }
 GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> create [
-	^ {GtAllProtocol defaultName} , methodsCoder possibleCategories asArray
-		collect: #asFilterModelItem
+	"Note that this method is deprecated and therefore does not return categories.
+	Use #createFuture instead."
+
+	^ {self firstItem}
+]
+
+{ #category : #'api - instantiation' }
+GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> createFuture [
+	^ methodsCoder possibleCategoriesOrderedFuture map: [ :aPrefixTree |
+		(Array with: self firstItem withAll: aPrefixTree asArray)
+			collect: #asFilterModelItem ].
 ]
 
 { #category : #accessing }
@@ -25,6 +34,16 @@ GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> filterModel: aFilterMod
 		assert: [ filterModel isNil ]
 		description: [ 'Filter model can be initialized only once' ].
 	filterModel := aFilterModel
+]
+
+{ #category : #'api - instantiation' }
+GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> firstItem [
+	^ GtAllProtocol defaultName asFilterModelItem
+]
+
+{ #category : #accessing }
+GtPharoStreamingMethodsCoderPossibleCategoriesBuilder >> firstItemDo: aBlock [
+	aBlock cull: self firstItem
 ]
 
 { #category : #accessing }

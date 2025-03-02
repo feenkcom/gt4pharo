@@ -102,7 +102,7 @@ GtSearchFilterExamples >> searchToFilterModelAndViceVersaIntoResult: aResult [
 		or: [ aFilterModelTwo isKindOf: GtFilterToggleModel ])
 		ifTrue: [ isFilterModelTwoChanged := true.
 			aFilterModelTwo
-				selectedItem: ((aFilterModelTwo items reject: [ :each | each = aFilterModelTwo selectedItem ])
+				selectedItem: ((aFilterModelTwo itemsFuture wait reject: [ :each | each = aFilterModelTwo selectedItem ])
 						ifNotEmpty: #anyOne
 						ifEmpty: [ 'random value' ]) ].
 	(aFilterModelTwo isKindOf: GtFilterBooleanModel)

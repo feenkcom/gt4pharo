@@ -16,6 +16,7 @@ GtSendNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
 
 { #category : #accessing }
 GtSendNotUsedAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aNode isMessage ifFalse: [ ^ false ].
 	aNode isUsed ifTrue: [ ^ false ].
 	^ self selectors includes: aNode selector

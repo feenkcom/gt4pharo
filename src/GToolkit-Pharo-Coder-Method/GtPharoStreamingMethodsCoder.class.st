@@ -129,24 +129,62 @@ GtPharoStreamingMethodsCoder >> packageNames [
 ]
 
 { #category : #'api - completion' }
-GtPharoStreamingMethodsCoder >> possibleCategories [
+GtPharoStreamingMethodsCoder >> possibleCategoriesOrderedFuture [
+	"I return possible method protocols (categories), excluding method protocol filter.
+	I am used to construct list of available method protocols that can be filtered using
+	a method protocol filter."
+	<return: #TAsyncFuture of: #GtPrefixTree>
+	| aStream |
+	aStream := self possibleCategoriesUnorderedStream.
+	^ aStream to: GtPrefixTree
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> possibleCategoriesUnorderedStream [
 	"I return possible method protocols (categories), excluding method protocol filter.
 	I am used to construck list of available method protocols that can be filtered using
-	a method protocol filter."
-	<return: #Array or: #String>
-	| someAdditionalFilters aCompositeFilter |
+	a method protocol filter.
+	Note that the list is unordered"
+	
+	<return: #TAsyncStream of: #String>
+	| someAdditionalFilters aCompositeFilter aStream |
 	someAdditionalFilters := additionalFilters reject: #isMethodProtocolFilter.
 	aCompositeFilter := self createCombinedFilterFor: filter andAdditionalFilters: someAdditionalFilters.
-	^ ((aCompositeFilter asAsyncStream map: [ :eachMethod | eachMethod category ]) to: GtPrefixTree) wait
+	aStream := (aCompositeFilter asAsyncStream map: [ :eachMethod | eachMethod category ]).
+	^ aStream asAsyncStream withoutDuplicates useContentComparison
 ]
 
 { #category : #'api - completion' }
 GtPharoStreamingMethodsCoder >> pragmaNames [
+	"We use this method to demo a UI blocking issue.
+	See https://github.com/feenkcom/gtoolkit/issues/4327.
+	Use #pragmaNamesOrderedFuture instead."
+	
 	^ (((self itemsStream
 		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
 		flatten
 		map: [ :eachPragma | eachPragma selector ])
 		to: GtPrefixTree) wait
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> pragmaNamesOrderedFuture [
+	<return: #TAsyncFuture of: #GtPrefixTree>
+	| aStream |
+	aStream := self pragmaNamesUnorderedStream.
+	^ aStream to: GtPrefixTree
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> pragmaNamesUnorderedStream [
+	<return: #TAsyncStream of: #String>
+	| aStream |
+	aStream := (self itemsStream
+		map: [ :eachMethod | eachMethod pragmas asAsyncStream ])
+		flatten
+		map: [ :eachPragma | eachPragma selector ].
+	
+	^ aStream asAsyncStream withoutDuplicates useContentComparison
 ]
 
 { #category : #'api - completion' }

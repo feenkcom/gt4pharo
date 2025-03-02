@@ -38,6 +38,7 @@ GtSearchPragmasFilter >> hash [
 
 { #category : #testing }
 GtSearchPragmasFilter >> includesMethod: aCompiledMethod [
+	symbol ifNil: [ ^ true ].
 	^ aCompiledMethod hasPragmaNamed: symbol
 ]
 

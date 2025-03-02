@@ -25,6 +25,7 @@ GtUnoptimizedConditionalAdvice >> highlightPositionsFor: aSmaCCNode [
 { #category : #accessing }
 GtUnoptimizedConditionalAdvice >> matches: aNode from: aCriticRunner [
 	| conditionals |
+	aNode isErrorNode ifTrue: [ ^ false ].
 	(aNode isMessageSend and: [ aNode receiver isMessageSend ])
 		ifFalse: [ ^ false ].
 	conditionals := #(and: or:).

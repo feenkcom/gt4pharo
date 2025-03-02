@@ -23,6 +23,7 @@ GtMethodNotUsedAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
 
 { #category : #testing }
 GtMethodNotUsedAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	(aNode isMethodPattern
 		and: [ (GtPharoIndex current sendersOf: aNode selector) isEmpty ])
 		ifFalse: [ ^ false ].

@@ -11,6 +11,8 @@ GtHaltAdvice >> description [
 
 { #category : #accessing }
 GtHaltAdvice >> haltSelectors [
+	<gtIgnoreConstraint: #GtSendersOfHaltSelectorsInGtPackagesConstraint>
+	
 	^ #(halt haltOnce haltIf:)
 ]
 
@@ -26,6 +28,7 @@ GtHaltAdvice >> includeFixIt [
 
 { #category : #accessing }
 GtHaltAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aNode isMessage ifTrue: [ ^ self haltSelectors includes: aNode selector ].
 	aNode isMessageSend
 		ifTrue: [ | receiver method |

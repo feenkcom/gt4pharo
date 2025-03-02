@@ -11,6 +11,7 @@ GtDefinesEqualButNotHashAdvice >> description [
 
 { #category : #testing }
 GtDefinesEqualButNotHashAdvice >> matches: aNode from: aCriticRunner [
+	aNode isErrorNode ifTrue: [ ^ false ].
 	aNode isMethodPattern ifFalse: [ ^ false ].
 	aNode selector = #= ifFalse: [ ^ false ].
 	^ (aCriticRunner behavior includesSelector: #hash) not

@@ -14,6 +14,12 @@ GtPharoStreamingMethodsCoderElementExamples >> forSuperclass [
 			streamingCodersViewModel: aViewModel.
 
 	aScripter := BlScripter new element: anElement.
+	
+	"For some reason we need to wait to propagate search filter changes.
+	Is there any background computation that the UI is not aware of?"
+	aScripter wait 
+		forEnqueuedSpaceTaskTimeout: 1 second; 
+		play.
 
 	aScripter
 		assertStep: [ :s | 
