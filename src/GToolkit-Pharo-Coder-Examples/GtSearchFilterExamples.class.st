@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #examples }
+GtSearchFilterExamples >> repositoryPatternFilter [
+	<gtExample>
+	| filter |
+	filter := 'gt4pharo' gtRepositoryMatches.
+	self assert: filter notEmpty
+		description: 'Filter should not be empty'.
+	self assert: (filter matches: thisContext method)
+		description: 'Filter should match this method'.
+	self assert: (filter result toArray wait includes: thisContext method)
+		description: 'Filter results should include this method'.
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchFilterExamples >> searchToFilterModelAndViceVersa [
 	<gtExample>
 	| aMethodsCoder aCollection anExamplesSuiteModel aTestSuiteModel aGtSearchFilter2 aMethodsCoder2 allClasses aGtSearchFilter3 aMethodsCoder3 |
