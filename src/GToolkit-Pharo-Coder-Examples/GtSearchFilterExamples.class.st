@@ -7,7 +7,13 @@ Class {
 { #category : #examples }
 GtSearchFilterExamples >> repositoryPatternFilter [
 	<gtExample>
-	| filter |
+	| filter repository |
+
+	"This example is only valid if the repository actually exists"
+	repository := IceRepository registry detect: [ :each | each name = 'gt4pharo' ]
+		ifNone: [ ].
+	(repository isNil or: [ repository location isDirectory not ]) ifTrue: [ ^ self ].
+
 	filter := 'gt4pharo' gtRepositoryMatches.
 	self assert: filter notEmpty
 		description: 'Filter should not be empty'.
