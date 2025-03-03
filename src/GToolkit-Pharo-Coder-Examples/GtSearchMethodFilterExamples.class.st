@@ -210,6 +210,7 @@ GtSearchMethodFilterExamples >> packagePatternFilter [
 { #category : #examples }
 GtSearchMethodFilterExamples >> repositoryPatternFilter [
 	<gtExample>
+	<noTest>
 	| filter |
 	filter := 'gt4pharo' gtRepositoryMatches.
 	self assert: filter notEmpty.
