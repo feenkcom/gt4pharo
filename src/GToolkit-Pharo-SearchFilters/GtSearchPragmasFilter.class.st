@@ -42,6 +42,11 @@ GtSearchPragmasFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod hasPragmaNamed: symbol
 ]
 
+{ #category : #'*GToolkit-Pharo-SearchFilters' }
+GtSearchPragmasFilter >> isMethodPragmaFilter [
+	^ self className = #GtSearchPragmasFilter
+]
+
 { #category : #printing }
 GtSearchPragmasFilter >> printOn: aStream [
 	aStream 

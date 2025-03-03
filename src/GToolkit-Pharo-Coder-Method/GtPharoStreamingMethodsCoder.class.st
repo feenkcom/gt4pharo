@@ -142,7 +142,7 @@ GtPharoStreamingMethodsCoder >> possibleCategoriesOrderedFuture [
 { #category : #'api - completion' }
 GtPharoStreamingMethodsCoder >> possibleCategoriesUnorderedStream [
 	"I return possible method protocols (categories), excluding method protocol filter.
-	I am used to construck list of available method protocols that can be filtered using
+	I am used to construct list of available method protocols that can be filtered using
 	a method protocol filter.
 	Note that the list is unordered"
 	
@@ -151,6 +151,32 @@ GtPharoStreamingMethodsCoder >> possibleCategoriesUnorderedStream [
 	someAdditionalFilters := additionalFilters reject: #isMethodProtocolFilter.
 	aCompositeFilter := self createCombinedFilterFor: filter andAdditionalFilters: someAdditionalFilters.
 	aStream := (aCompositeFilter asAsyncStream map: [ :eachMethod | eachMethod category ]).
+	^ aStream asAsyncStream withoutDuplicates useContentComparison
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> possiblePragmaNamesOrderedFuture [
+	<return: #TAsyncFuture of: #GtPrefixTree>
+	| aStream |
+	aStream := self possiblePragmaNamesUnorderedStream.
+	^ aStream to: GtPrefixTree
+]
+
+{ #category : #'api - completion' }
+GtPharoStreamingMethodsCoder >> possiblePragmaNamesUnorderedStream [
+	"I return possible method pragma selectors (names), excluding method pragma filter.
+	I am used to construct list of available method pragma selectors (names) that can be filtered using
+	a method pragma filter.
+	Note that the list is unordered"
+	
+	<return: #TAsyncStream of: #String>
+	| someAdditionalFilters aCompositeFilter aStream |
+	someAdditionalFilters := additionalFilters reject: #isMethodPragmaFilter.
+	aCompositeFilter := self createCombinedFilterFor: filter andAdditionalFilters: someAdditionalFilters.
+	aStream := (aCompositeFilter asAsyncStream 
+		map: [ :eachMethod | eachMethod pragmas asAsyncStream ]) 
+		flatten
+		map: [ :eachPragma | eachPragma selector ].
 	^ aStream asAsyncStream withoutDuplicates useContentComparison
 ]
 
