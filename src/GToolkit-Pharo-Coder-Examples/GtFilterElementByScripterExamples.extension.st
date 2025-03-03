@@ -60,9 +60,9 @@ GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 	aScripter filterStep
 		clickOnFilterSettingsAtIndex: 2;
 		assertFilterModelAtIndex: 2 itemsCountIsAtLeast: 20;
-		clickOnDropdownFilterItem: (GtFilterModelStringItem new string: Protocol gtAllProtocolDefaultName);
+		clickOnDropdownFilterItem: (GtFilterModelAllItem methodsLabel);
 		assertFilterModelAtIndex: 2
-			selectedValueIs: (GtFilterModelStringItem new string: Protocol gtAllProtocolDefaultName);
+			selectedValueIs: (GtFilterModelAllItem methodsLabel);
 		play.
 		
 	"For some reason we need to wait to propagate search filter changes.
