@@ -4,13 +4,18 @@ Extension { #name : #GtSearchMethodCategoryFilter }
 GtSearchMethodCategoryFilter >> filterDescriptor2For: aMethodsCoder [
 	^ (super filterDescriptor2For: aMethodsCoder)
 		ifNotNil: [ :aFilterModel | 
-			aFilterModel selectedItem: (category ifNil: [ Protocol gtAllProtocolDefaultName ]) ]
+			category ifNotNil: [ :aCategory |
+				(Protocol gtAllProtocolDefaultName = aCategory) ifFalse: [
+					aFilterModel selectedItem: aCategory ] ].
+			aFilterModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodCategoryFilter class >> filterDescriptor2For: aMethodsCoder [
 	^ GtFilterShortListModel new
-		creator: [ :anItem | anItem ifSome: [ :aName | self forCategory: aName ] ];
+		creator: [ :anItem | anItem 
+			ifSome: [ :aName | self forCategory: aName ]
+			ifNone: [ self new ] ];
 		named: self filterName;
 		order: 15;
 		displayAllItems;

@@ -206,3 +206,15 @@ GtSearchMethodFilterExamples >> packagePatternFilter [
 	self assert: (filter matches: thisContext method).
 	^ filter
 ]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> repositoryPatternFilter [
+	<gtExample>
+	<noTest>
+	| filter |
+	filter := 'gt4pharo' gtRepositoryMatches.
+	self assert: filter notEmpty.
+	self assert: (filter matches: thisContext method).
+	self assert: (filter result toArray wait includes: thisContext method).
+	^ filter
+]
