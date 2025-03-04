@@ -25,7 +25,7 @@ GtPharoHidingStyler class >> initiallyFolded: aBoolean [
 	InitiallyFolded := aBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
 	(aText from: aRange first to: aRange last)
 		attributesDo: [ :attrs | 
@@ -52,7 +52,7 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 							each applyExpandedOrCollapsedAttributesOnText: aText ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString forNode: aNode [
 	| folder messageMarker |
 	messageMarker := BrTextInvisibleMarkerAttribute new.
@@ -80,20 +80,20 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 					folder applyExpandedOrCollapsedAttributesOnText: text ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initalization }
 GtPharoHidingStyler >> initialize [
 	super initialize.
 	oldNodeMap := Dictionary new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - styling' }
 GtPharoHidingStyler >> style: aText ast: theAst [
 	oldNodeMap := coderViewModel nodeAttributeMap.
 	coderViewModel resetNodeAttributeMap.
 	super style: aText ast: theAst
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtPharoHidingStyler >> styleAssert: aMessage [
 	self
 		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
@@ -101,7 +101,7 @@ GtPharoHidingStyler >> styleAssert: aMessage [
 		forNode: aMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtPharoHidingStyler >> styleBeaconSignal: aMessage [
 	self
 		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
@@ -109,7 +109,7 @@ GtPharoHidingStyler >> styleBeaconSignal: aMessage [
 		forNode: aMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtPharoHidingStyler >> styleTimeDuring: aMessage [
 	self
 		foldRanges: {aMessage startPosition
@@ -120,7 +120,7 @@ GtPharoHidingStyler >> styleTimeDuring: aMessage [
 		forNode: aMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 GtPharoHidingStyler >> visitCascade: aCascade [
 	super visitCascade: aCascade.
 	aCascade messages last selector == #emit ifFalse: [ ^ self ].
@@ -130,7 +130,7 @@ GtPharoHidingStyler >> visitCascade: aCascade [
 		forNode: aCascade
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 GtPharoHidingStyler >> visitMessageSend: aMessageSend [
 	super visitMessageSend: aMessageSend.
 	aMessageSend selector == #assert:description:
