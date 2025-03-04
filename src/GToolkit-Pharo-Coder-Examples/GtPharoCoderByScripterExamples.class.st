@@ -207,18 +207,6 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 
 { #category : #'examples - dropdown' }
 GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Setup dropdown overview';
-				block: [ :aButton :aUserData | 
-					aUserData
-						at: BrAnchoredVisualAnalysis
-						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
-				// (GtPagerPageElementId indexed: 2);
-				// GtPharoBehaviorCoderElement;
-				// BrTabGroup;
-				// GtPharoSearchCodeButtonId ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -875,6 +863,13 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 				block: [ :aSpace | aSpace extent: 1000 @ 600 ];
 				onSpace ].
 
+	aScripter prepareSteppedLayoutDropdownAnalyzer
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoBehaviorCoderElement;
+		// BrTabGroup;
+		// GtPharoSearchCodeButtonId;
+		play.
+
 	aScripter
 		clickStep: [ :s | 
 			s
@@ -890,19 +885,6 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 				label: 'Scroll GtPager';
 				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -370 @ 0 ];
 				// #list ].
-
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Setup dropdown overview';
-				block: [ :aButton :aUserData | 
-					aUserData
-						at: BrAnchoredVisualAnalysis
-						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
-				// (GtPagerPageElementId indexed: 2);
-				// GtPharoBehaviorCoderElement;
-				// BrTabGroup;
-				// GtPharoSearchCodeButtonId ].
 
 	self assertDropdown: aScripter.
 
