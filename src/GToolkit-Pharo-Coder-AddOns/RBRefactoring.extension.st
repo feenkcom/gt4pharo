@@ -98,3 +98,16 @@ RBRefactoring >> gtSignalMethodOverwritten: aSelector in: aClass [
 			container addChild: label.
 			container ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBRefactoring >> gtUsesSendOf: aSymbol [
+	self model
+		allReferencesTo: aSymbol
+		do: [ :method | 
+			method ast
+				nodesDo: [ :node | 
+					(node isMessage and: [ node selector = aSymbol and: [ node isUsed ] ])
+						ifTrue: [ ^ true ].
+					(node isLiteralNode and: [ node value = aSymbol ]) ifTrue: [ ^ true ] ] ].
+	^ false
+]

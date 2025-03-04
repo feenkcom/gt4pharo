@@ -5,6 +5,19 @@ Class {
 }
 
 { #category : #transforming }
+GtExtractMethodToComponentRefactoring >> extractMethod [
+	| ast |
+	super extractMethod.
+	ast := class parseTreeForSelector: selector.
+	ast body statements last isReturn ifFalse: [ ^ self ].
+	(ast body statements last value isMessage
+		and: [ ast body statements last value selector = extractedMethodSelector ])
+		ifFalse: [ ^ self ].
+	"ast body statements last replaceWith: ast body statements last value copy.
+	class compileTree: ast"
+]
+
+{ #category : #transforming }
 GtExtractMethodToComponentRefactoring >> inlineForwarder [
 	"Changing to use Gt inline all variant"
 	| refactoring |
