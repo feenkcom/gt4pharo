@@ -1,6 +1,10 @@
 Class {
 	#name : #GtPharoHidingStyler,
 	#superclass : #GtGenericPharoStyler,
+	#instVars : [
+		'nodeMap',
+		'oldNodeMap'
+	],
 	#classVars : [
 		'InitiallyFolded'
 	],
@@ -36,10 +40,7 @@ GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
 { #category : #'api - styling' }
 GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 	| folders |
-	folders := OrderedCollection new.
-	aText
-		findAttributesSuchThat: [ :att | att class == GtTextFolderAttribute ]
-		indicesDo: [ :_start :_end :att | folders add: att ].
+	folders := nodeMap values.
 
 	folders
 		do: [ :each | 
@@ -53,11 +54,8 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 ]
 
 { #category : #'as yet unclassified' }
-GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
+GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString forNode: aNode [
 	| folder messageMarker |
-	((text attributesAt: aCollectionOfRanges first first - 1)
-		anySatisfy: [ :each | each class == GtTextFolderAttribute ])
-		ifTrue: [ ^ self ].
 	messageMarker := BrTextInvisibleMarkerAttribute new.
 	aCollectionOfRanges
 		do: [ :foldedRange | 
@@ -68,13 +66,33 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString [
 	folder := GtTextFolderAttribute new
 			attribute: messageMarker;
 			hoverText: aString.
+	nodeMap at: aNode put: folder.
 	self
 		attribute: folder
 		from: aCollectionOfRanges first first - 1
 		to: aCollectionOfRanges first first - 1.
-	InitiallyFolded
-		ifTrue: [ folder isExpanded: false.
+	oldNodeMap
+		at: aNode
+		ifPresent: [ :oldFolder | 
+			folder isExpanded: oldFolder isExpanded.
 			folder applyExpandedOrCollapsedAttributesOnText: text ]
+		ifAbsent: [ InitiallyFolded
+				ifTrue: [ folder isExpanded: false.
+					folder applyExpandedOrCollapsedAttributesOnText: text ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoHidingStyler >> initialize [
+	super initialize.
+	nodeMap := Dictionary new.
+	oldNodeMap := Dictionary new
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoHidingStyler >> style: aText ast: theAst [
+	oldNodeMap := nodeMap.
+	nodeMap := Dictionary new.
+	super style: aText ast: theAst
 ]
 
 { #category : #'as yet unclassified' }
@@ -82,6 +100,7 @@ GtPharoHidingStyler >> styleAssert: aMessage [
 	self
 		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
 		withHoverText: 'Assert'
+		forNode: aMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -89,15 +108,18 @@ GtPharoHidingStyler >> styleBeaconSignal: aMessage [
 	self
 		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
 		withHoverText: 'Beacon'
+		forNode: aMessage
 ]
 
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> styleTimeDuring: aMessage [
 	self
-		foldRanges: {aMessage startPosition to: aMessage message values second leftBracket position.
+		foldRanges: {aMessage startPosition
+					to: aMessage message values second leftBracket position.
 				aMessage message values second rightBracket position
 					to: aMessage message values second rightBracket position}
 		withHoverText: 'Telemetry'
+		forNode: aMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -107,6 +129,7 @@ GtPharoHidingStyler >> visitCascade: aCascade [
 	self
 		foldRanges: {aCascade startPosition to: aCascade stopPosition}
 		withHoverText: 'Beacon'
+		forNode: aCascade
 ]
 
 { #category : #'as yet unclassified' }
