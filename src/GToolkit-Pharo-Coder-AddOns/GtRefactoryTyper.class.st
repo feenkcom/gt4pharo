@@ -54,7 +54,7 @@ GtRefactoryTyper >> gatherSelectorsSentTo: anInstVarName in: aClass [
 							each
 								gtSelectorsReferToSymbol: getter
 								do: [ :sel | 
-									searcher executeTree: (each parseTreeFor: sel).
+									searcher executeTree: (each parseTreeForSelector: sel).
 									Time microsecondClockValue - startTime > self class timeout
 										ifTrue: [ ^ selectors ] ] ] ] ].
 	^ selectors
