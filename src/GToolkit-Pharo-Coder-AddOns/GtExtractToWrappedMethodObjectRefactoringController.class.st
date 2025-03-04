@@ -349,5 +349,8 @@ GtExtractToWrappedMethodObjectRefactoringController >> wrappedMethodSelectorFor:
 GtExtractToWrappedMethodObjectRefactoringController >> wrappedReceiverFrom: receivers [
 	"^receivers detect: [:each | each includesSubstring: 'var' caseSensitive: false]"
 
+	self ast variables
+		do: [ :each | (receivers includes: each variableName) ifTrue: [ ^ each variableName ] ].
+
 	^ receivers first
 ]

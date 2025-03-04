@@ -40,6 +40,19 @@ GtExtractMethodObjectRefactoring >> addClass [
 ]
 
 { #category : #transforming }
+GtExtractMethodObjectRefactoring >> addSelfReturn [
+	| ast hasReturn |
+	ast := class parseTreeForSelector: extractedMethodSelector.
+	hasReturn := false.
+	ast nodesDo: [ :each | each isReturn ifTrue: [ hasReturn := true ] ].
+	hasReturn ifFalse: [ ^ self ].
+	((self gtUsesSendOf: extractedMethodSelector)
+		or: [ self hasSelfReferenceIn: ast ])
+		ifTrue: [ ast addSelfReturn.
+			class compileTree: ast ]
+]
+
+{ #category : #transforming }
 GtExtractMethodObjectRefactoring >> cascadeExtractedMessage [
 	| rewriter ast |
 	self shouldEliminateYourselfFromConstructor ifFalse: [ ^ self ].
@@ -196,10 +209,18 @@ GtExtractMethodObjectRefactoring >> gtDescription [
 	^ 'Extract method object ' , className
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtExtractMethodObjectRefactoring >> hasSelfReferenceIn: ast [
+	| checkedReturn |
+	checkedReturn := false.
 	ast
-		nodesDo: [ :each | (each isVariable and: [ each isSelfVariable ]) ifTrue: [ ^ true ] ].
+		nodesDo: [ :each | 
+			(each isVariable and: [ each isSelfVariable ])
+				ifTrue: [ each parent isReturn
+						ifTrue: [ checkedReturn
+								ifFalse: [ checkedReturn := true.
+									(self gtUsesSendOf: extractedMethodSelector) ifTrue: [ ^ true ] ] ]
+						ifFalse: [ ^ true ] ] ].
 	^ false
 ]
 
@@ -236,6 +257,7 @@ GtExtractMethodObjectRefactoring >> modelClass [
 
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> moveDataToClass [
+	self addSelfReturn.
 	self variablesToMove
 		do: [ :oldName | 
 			self
