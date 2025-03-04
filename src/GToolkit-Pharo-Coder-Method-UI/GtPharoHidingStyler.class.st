@@ -2,7 +2,6 @@ Class {
 	#name : #GtPharoHidingStyler,
 	#superclass : #GtGenericPharoStyler,
 	#instVars : [
-		'nodeMap',
 		'oldNodeMap'
 	],
 	#classVars : [
@@ -40,7 +39,7 @@ GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
 { #category : #'api - styling' }
 GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 	| folders |
-	folders := nodeMap values.
+	folders := coderViewModel allSavedAttributes.
 
 	folders
 		do: [ :each | 
@@ -66,7 +65,7 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 	folder := GtTextFolderAttribute new
 			attribute: messageMarker;
 			hoverText: aString.
-	nodeMap at: aNode put: folder.
+	coderViewModel saveAttribute: folder forNode: aNode.
 	self
 		attribute: folder
 		from: aCollectionOfRanges first first - 1
@@ -84,14 +83,13 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> initialize [
 	super initialize.
-	nodeMap := Dictionary new.
 	oldNodeMap := Dictionary new
 ]
 
 { #category : #'as yet unclassified' }
 GtPharoHidingStyler >> style: aText ast: theAst [
-	oldNodeMap := nodeMap.
-	nodeMap := Dictionary new.
+	oldNodeMap := coderViewModel nodeAttributeMap.
+	coderViewModel resetNodeAttributeMap.
 	super style: aText ast: theAst
 ]
 
