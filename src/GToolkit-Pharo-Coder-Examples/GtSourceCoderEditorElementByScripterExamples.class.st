@@ -171,6 +171,42 @@ GtSourceCoderEditorElementByScripterExamples >> playExample [
 	^ aScripter
 ]
 
+{ #category : #'example - play example' }
+GtSourceCoderEditorElementByScripterExamples >> retainFoldedStatusOnTextChange [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterWithElementContainingInstrumentation.
+
+	aScripter
+		unfoldedInitialStylingPlay: [ :aFoldedStep | 
+			aFoldedStep
+				substep: 'Retain unfolded status on edit'
+				do: [ :aStep | 
+					aStep assert
+						label: 'Count lines before folding';
+						value: [ :editor | editor children size ] equals: 6.
+					aStep click
+						label: 'Focus editor';
+						onChildAt: 1.
+					aStep shortcut
+						label: 'Unfold noise';
+						combination: BlKeyCombinationBuilder new primary shift n build.
+					aStep assert
+						label: 'Count lines after unfolding';
+						value: [ :editor | editor children size ] equals: 4.
+					aStep do
+						label: 'Move to end of editor';
+						block: [ :e | e navigator moveToEnd ].
+					aStep type
+						label: 'Modify text';
+						text: '"Comment"'.
+					aStep assert
+						label: 'Count lines after modification unfolding';
+						value: [ :editor | editor children size ] equals: 4 ] ].
+
+	^ aScripter
+]
+
 { #category : #'example - instance creation' }
 GtSourceCoderEditorElementByScripterExamples >> scripterWithElement [
 	<gtExample>
