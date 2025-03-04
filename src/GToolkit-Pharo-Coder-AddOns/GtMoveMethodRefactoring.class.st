@@ -4,6 +4,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
+{ #category : #transforming }
+GtMoveMethodRefactoring >> addSelfReturn [
+	self hasOnlySelfReturns ifTrue: [ ^ self ].
+	parseTree lastIsReturn ifTrue: [ ^ self ].
+	(self gtUsesSendOf: selector) ifFalse: [ ^ self ].
+	parseTree addSelfReturn.
+	selfVariableName ifNil: [ self getArgumentNameForSelf ]
+]
+
 { #category : #accessing }
 GtMoveMethodRefactoring >> checkAssignmentsToVariable [
 	self isExpression ifFalse: [ super checkAssignmentsToVariable ]
