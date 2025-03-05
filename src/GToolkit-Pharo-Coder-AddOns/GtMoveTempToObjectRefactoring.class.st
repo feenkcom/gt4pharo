@@ -41,10 +41,18 @@ GtMoveTempToObjectRefactoring >> buildAst [
 ]
 
 { #category : #transforming }
+GtMoveTempToObjectRefactoring >> canSplitLifetimes [
+	^ (self options at: #splitVariableLifetimes ifAbsent: [ [ false ] ]) cull: self
+]
+
+{ #category : #transforming }
 GtMoveTempToObjectRefactoring >> changeReferences [
 	| rewriter |
 	rewriter := RBParseTreeRewriter new.
-	(self isForSelf not and: [ self findVariableToMove parent isSequence ])
+	(self isForSelf not
+		and: [ self findVariableToMove
+				ifNil: [ false ]
+				ifNotNil: [ :node | node parent isSequence ] ])
 		ifFalse: [ rewriter
 				replace: objectTemp , ' := ' , newClass name , ' new'
 				with: objectTemp , ' := ' , newClass name , ' new ' , instVar , ': ' , temp
@@ -101,6 +109,7 @@ GtMoveTempToObjectRefactoring >> findVariable: aString [
 			each isSequence
 				ifTrue: [ (each temporaries detect: [ :arg | arg name = aString ] ifNone: [  ])
 						ifNotNil: [ :arg | ^ arg ] ] ].
+	self canSplitLifetimes ifTrue: [ ^ nil ].
 	self refactoringError: 'Could not find ' , aString , ' in the method'
 ]
 
@@ -161,6 +170,7 @@ GtMoveTempToObjectRefactoring >> validateLifetimes [
 	| variableToMove objectVariable |
 	objectVariable := self findVariableForConstructedObject.
 	self isForSelf ifTrue: [ ^ self ].
+	self canSplitLifetimes ifTrue: [ ^ self ].
 	variableToMove := self findVariableToMove.
 	objectVariable parent = variableToMove parent
 		ifTrue: [ self validate: variableToMove isAssignedAfter: objectVariable ]

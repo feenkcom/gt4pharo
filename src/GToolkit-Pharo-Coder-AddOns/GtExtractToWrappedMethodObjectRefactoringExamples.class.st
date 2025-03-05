@@ -2,7 +2,8 @@ Class {
 	#name : #GtExtractToWrappedMethodObjectRefactoringExamples,
 	#superclass : #Object,
 	#instVars : [
-		'model'
+		'model',
+		'testVar'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
 }

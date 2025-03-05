@@ -32,6 +32,56 @@ GtExtractMethodObjectRefactoringExamples >> methodObjectForTestMethod [
 ]
 
 { #category : #examples }
+GtExtractMethodObjectRefactoringExamples >> methodObjectForTestMethodReadsIVars [
+	<gtExample>
+	| model selector cls refactoring |
+	selector := #testMethodReadsIVars.
+	refactoring := self refactoringForExtracting: selector.
+	refactoring setOption: #splitVariableLifetimes toUse: [ true ].
+	refactoring primitiveExecute.
+	model := refactoring model.
+	cls := model classNamed: #NewClass.
+	self assert: (cls directlyDefinesMethod: #z).
+	self
+		assert: (cls parseTreeForSelector: #z)
+		equals: (RBParser
+				parseMethod: 'z 
+						self test1 printString < self test2 printString ifTrue: [ ^ -1 ].
+						^ self test1 printString = self test2 printString ifTrue: [ 0 ] ifFalse: [ 1 ]').
+	self
+		assert: ((model classFor: self class) parseTreeForSelector: selector)
+		equals: (RBParser
+				parseMethod: 'testMethodReadsIVars
+					^NewClass new test1: test1; test2: test2; z').
+	^ model
+]
+
+{ #category : #examples }
+GtExtractMethodObjectRefactoringExamples >> methodObjectForTestMethodReadsIVarsDoNotSplit [
+	<gtExample>
+	| model selector cls refactoring |
+	selector := #testMethodReadsIVars.
+	refactoring := self refactoringForExtracting: selector.
+	refactoring setOption: #splitVariableLifetimes toUse: [ false ].
+	refactoring primitiveExecute.
+	model := refactoring model.
+	cls := model classNamed: #NewClass.
+	self assert: (cls directlyDefinesMethod: #z).
+	self
+		assert: (cls parseTreeForSelector: #z)
+		equals: (RBParser
+				parseMethod: 'z 
+						self myself test1 printString < self myself test2 printString ifTrue: [ ^ -1 ].
+						^ self myself test1 printString = self myself test2 printString ifTrue: [ 0 ] ifFalse: [ 1 ]').
+	self
+		assert: ((model classFor: self class) parseTreeForSelector: selector)
+		equals: (RBParser
+				parseMethod: 'testMethodReadsIVars
+					^NewClass new myself: self; z').
+	^ model
+]
+
+{ #category : #examples }
 GtExtractMethodObjectRefactoringExamples >> methodObjectForTestMethodReturnLiteral [
 	<gtExample>
 	| model selector cls |
@@ -80,8 +130,40 @@ GtExtractMethodObjectRefactoringExamples >> methodObjectForTestMethodReturnSelf 
 	^ model
 ]
 
+{ #category : #examples }
+GtExtractMethodObjectRefactoringExamples >> methodObjectForTestMethodWritesIVars [
+	<gtExample>
+	| model selector cls refactoring |
+	selector := #testMethodWritesIVars.
+	refactoring := self refactoringForExtracting: selector.
+	refactoring setOption: #splitVariableLifetimes toUse: [ true ].
+	refactoring primitiveExecute.
+	model := refactoring model.
+	cls := model classNamed: #NewClass.
+	self assert: (cls directlyDefinesMethod: #z).
+	self
+		assert: (cls parseTreeForSelector: #z)
+		equals: (RBParser
+				parseMethod: 'z 
+						self myself test1: self test2').
+	self
+		assert: ((model classFor: self class) parseTreeForSelector: selector)
+		equals: (RBParser
+				parseMethod: 'testMethodWritesIVars
+					NewClass new myself: self; test2: test2; z').
+	^ model
+]
+
 { #category : #private }
 GtExtractMethodObjectRefactoringExamples >> modelFromExtracting: selector [
+	| refactoring |
+	refactoring := self refactoringForExtracting: selector.
+	refactoring primitiveExecute.
+	^ refactoring model
+]
+
+{ #category : #private }
+GtExtractMethodObjectRefactoringExamples >> refactoringForExtracting: selector [
 	| model ast refactoring |
 	ast := self class parseTreeForSelector: selector.
 	model := GtRBNamespace new.
@@ -101,14 +183,19 @@ GtExtractMethodObjectRefactoringExamples >> modelFromExtracting: selector [
 					methodName
 						selector: (('z:' repeat: methodName arguments size) ifEmpty: [ 'z' ]) asSymbol;
 						yourself ].
-	refactoring primitiveExecute.
-	^ model
+	^ refactoring
 ]
 
 { #category : #samples }
 GtExtractMethodObjectRefactoringExamples >> testMethod [
 	self printString size > 10 ifTrue: [^self].
 	Transcript print: test1
+]
+
+{ #category : #samples }
+GtExtractMethodObjectRefactoringExamples >> testMethodReadsIVars [
+	test1 printString < test2 printString ifTrue: [ ^ -1 ].
+	^ test1 printString = test2 printString ifTrue: [ 0 ] ifFalse: [ 1 ]
 ]
 
 { #category : #samples }
@@ -125,4 +212,9 @@ GtExtractMethodObjectRefactoringExamples >> testMethodReturnSelf [
 	col := Array new: 100 atRandom.
 	col size > 10 ifTrue: [ ^ self ].
 	Transcript print: col
+]
+
+{ #category : #samples }
+GtExtractMethodObjectRefactoringExamples >> testMethodWritesIVars [
+	test1 := test2
 ]
