@@ -58,7 +58,7 @@ GtPharoBehaviorCoderNameElement >> buildAdviceListFor: anAsyncStream [
 	button := GtFixItButton new.
 	button beTinySize.
 	button label: 'Advice'.
-	dropDownAptitude := BrGlamorousWithDropdownAptitude
+	dropDownAptitude := BrGlamorousWithExplicitDropdownAptitude
 			handle: [ | dropdownButton |
 				dropdownButton := BrButton new.
 				dropdownButton beTinySize.
