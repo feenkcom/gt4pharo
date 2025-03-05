@@ -17,7 +17,7 @@ GtMessageReceiverAttribute >> cancel [
 GtMessageReceiverAttribute >> createDropDown [
 	| button dropDownLook |
 	button := self createDropDownButton.
-	dropDownLook := BrGlamorousWithDropdownAptitude
+	dropDownLook := BrGlamorousWithExplicitDropdownAptitude
 			handle: [ self createDropDownButton ]
 			content: [ | list |
 				list := BrSimpleList new.

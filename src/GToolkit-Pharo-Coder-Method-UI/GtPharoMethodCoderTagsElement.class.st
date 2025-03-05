@@ -104,7 +104,7 @@ GtPharoMethodCoderTagsElement >> newClassTag [
 			anElementPromise
 				whenSuccess: [ :aButton :isModified | aButton enabled: isModified not ] ];
 		aptitude: BrGlamorousButtonWithLabelAptitude
-				+ (BrGlamorousWithDropdownAptitude
+				+ (BrGlamorousWithExplicitDropdownAptitude
 						handle: [ BrButton new
 								beSmallSize;
 								disable;
@@ -117,7 +117,7 @@ GtPharoMethodCoderTagsElement >> newClassTag [
 								action: [ :aButton | 
 									aButton fireEvent: BrDropdownHideWish new.
 									pharoMethodCoderViewModel coder moveMethodToInstanceOrClass.
-									classTag label: self behaviorSideName ] ]) beNotResizable
+									classTag label: self behaviorSideName ] ])
 ]
 
 { #category : #'private - instance creation' }
@@ -176,9 +176,10 @@ GtPharoMethodCoderTagsElement >> newProtocolTag [
 	^ BrButton new
 		beTinySize;
 		aptitude: BrGlamorousButtonWithLabelAptitude
-				+ (BrGlamorousWithDropdownAptitude
+				+ (BrGlamorousWithExplicitDropdownAptitude
 						handle: [ self newProtocolEditor ]
-						content: [ self newProtocolPickerList ])
+						content: [ self newProtocolPickerList ]
+						do: [ :theAptitude | theAptitude withContainerDownUpDropdown ])
 ]
 
 { #category : #'private - event handling' }
