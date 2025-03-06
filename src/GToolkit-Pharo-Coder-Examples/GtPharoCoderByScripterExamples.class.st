@@ -366,7 +366,7 @@ GtPharoCoderByScripterExamples >> cleanUp [
 ]
 
 { #category : #'examples - context menu' }
-GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
+GtPharoCoderByScripterExamples >> closeContextMenuPressingEscapeKey [
 	<gtExample>
 	| aScripter |
 	aScripter := self displayPharoMethodContextMenuExtentIn800x600Space.
@@ -394,7 +394,7 @@ GtPharoCoderByScripterExamples >> closeContextMenuPressingExcapeKey [
 ]
 
 { #category : #'examples - context menu' }
-GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey [
+GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingEscapeKey [
 	<gtExample>
 	| aScripter |
 	aScripter := self displayClassSidebarContextMenu.
@@ -403,7 +403,8 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey [
 		assertStep: [ :s | 
 			s
 				onSpaceRoot;
-				// GtCoderNavigationContextMenuContent;
+				onDropdown: true;
+				// BrMenuItemsListElement;
 				exists ].
 
 	aScripter shortcut
@@ -421,7 +422,7 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey [
 ]
 
 { #category : #'examples - context menu' }
-GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey_firstClickInsideOfMethodCoder [
+GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingEscapeKey_firstClickInsideOfMethodCoder [
 	<gtExample>
 	| aScripter |
 	aScripter := self displayClassSidebarContextMenu_firstClickInsideOfMethodCoder.
@@ -430,7 +431,8 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey_first
 		assertStep: [ :s | 
 			s
 				onSpaceRoot;
-				// GtCoderNavigationContextMenuContent;
+				onDropdown: true;
+				// BrMenuItemsListElement;
 				exists ].
 
 	aScripter shortcut
@@ -441,7 +443,7 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingExcapeKey_first
 		assertStep: [ :s | 
 			s
 				onSpaceRoot;
-				// GtCoderNavigationContextMenuContent;
+				onDropdown: true;
 				notExists ].
 
 	^ aScripter
@@ -716,18 +718,13 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu: aScripter [
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert context menu extent';
-				value: [ :aContentElement | aContentElement extent ]
-					equals: [ :aContentElement | 
-						| aContextMenuQuery |
-						aContextMenuQuery := aContentElement query
-								// GtCoderNavigationContextMenuContent.
-						self assert: aContextMenuQuery result size equals: 1.
-						aContextMenuQuery result first extent ];
+				label: 'Assert context menu bounds';
+				satisfies: [ :aContentElement | 
+					(aContentElement isVisibleFullyInParent: aContentElement parent)
+						and: [ aContentElement isVisibleInSpace ] ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
-				// BrAnchoredElement;
-				/ #content asBlocElementId ]
+				onDropdown: true;
+				onChildAt: 2 ]
 ]
 
 { #category : #'examples - context menu' }
