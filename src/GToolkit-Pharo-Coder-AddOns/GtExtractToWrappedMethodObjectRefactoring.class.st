@@ -127,6 +127,12 @@ GtExtractToWrappedMethodObjectRefactoring >> fixConstructorArguments: methodName
 	meta compileTree: ast
 ]
 
+{ #category : #initialization }
+GtExtractToWrappedMethodObjectRefactoring >> initialize [
+	super initialize.
+	self setOption: #splitVariableLifetimes toUse: [ true ]
+]
+
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoring >> insertWrappedSendOn: aMessageNode [
 	| newReceiver newMethodName newNode |
@@ -170,11 +176,13 @@ GtExtractToWrappedMethodObjectRefactoring >> removeNewClassAccessors [
 				cls setterMethodFor: each}
 				do: [ :sel | 
 					sel
-						ifNotNil: [ self
-								performCompositeRefactoring: (RBInlineAllSendersRefactoring
-										model: self model
-										sendersOf: sel
-										in: cls).
+						ifNotNil: [ | refactoring |
+							refactoring := RBInlineAllSendersRefactoring
+									model: self model
+									sendersOf: sel
+									in: cls.
+							refactoring setOption: #inlineExpression toUse: [ :ref :str | true ].
+							self performCompositeRefactoring: refactoring.
 							(cls directlyDefinesMethod: sel) ifTrue: [ cls removeMethod: sel ] ] ] ]
 ]
 

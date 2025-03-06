@@ -9,6 +9,45 @@ Class {
 }
 
 { #category : #examples }
+GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithIVarRef [
+	<gtExample>
+	| refactoring cls |
+	refactoring := self refactoringFor: #writeOnVar:.
+	refactoring
+		setOption: #constructorMethodName
+		toUse: [ :methodName :ref | 
+			methodName selector: #var:.
+			methodName ].
+	refactoring primitiveExecute.
+	cls := model classNamed: #NewClass.
+	self assert: (cls directlyDefinesMethod: #writeOn:).
+	self assert: (cls protocolsFor: #writeOn:) asArray equals: #(#writing).
+	self
+		assert: (cls parseTreeForSelector: #writeOn:)
+		equals: (RBParser
+				parseMethod: 'writeOn: aStream aStream nextPutAll: ''a''; nextPutAll:  testVar').
+	self assert: (cls directlyDefinesMethod: #setVar:).
+	self
+		assert: ((cls parseTreeForSelector: #setVar:)
+				equalTo: (RBParser parseMethod: 'setVar: aTestVar  testVar := aTestVar')
+				exceptForVariables: #()).
+	self assert: (cls protocolsFor: #setVar:) asArray equals: #(#private).
+	self assert: (cls classSide directlyDefinesMethod: #var:).
+	self
+		assert: (cls classSide protocolsFor: #var:) asArray
+		equals: #(#'instance creation').
+	self
+		assert: ((cls classSide parseTreeForSelector: #var:)
+				equalTo: (RBParser parseMethod: 'var: aTestVar ^self new setVar: aTestVar; yourself')
+				exceptForVariables: #()).
+	self
+		assert: ((model classFor: self class) parseTreeForSelector: #writeOnVar:)
+		equals: (RBParser
+				parseMethod: 'writeOnVar: aStream aStream writeOn: (NewClass var: testVar)').
+	^ model
+]
+
+{ #category : #examples }
 GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithNoArgConstructor [
 	<gtExample>
 	| refactoring cls |
@@ -114,23 +153,6 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-GtExtractToWrappedMethodObjectRefactoringExamples >> refactoring [
-	^ GtExtractToWrappedMethodObjectRefactoring new
-		model: model;
-		className: #NewClass;
-		superclass: #Object;
-		category: 'Test';
-		setOption: #wrappedReceiver
-			toUse: [ :receivers :ref | receivers detect: [ :each | each = 'aStream' ] ];
-		setOption: #wrappedMethodName
-			toUse: [ :methodName :ref | 
-				methodName selector: #writeOn:.
-				methodName ];
-		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | 'aStream' ];
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
 GtExtractToWrappedMethodObjectRefactoringExamples >> refactoringFor: aSelector [
 	| class ast |
 	class := model classFor: self class.
@@ -158,6 +180,7 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> refactoringFor: aSelector [
 				methodName ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | 'aStream' ];
 		setOption: #methodProtocol toUse: [ :sel :ref | #writing ];
+		setOption: #selfArgumentName toUse: [ :ref | 'a' , self class name ];
 		yourself
 ]
 
@@ -185,4 +208,11 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> writeOn: aStream [
 	aStream
 		nextPutAll: 'a';
 		nextPutAll: 'b'
+]
+
+{ #category : #'sample methods' }
+GtExtractToWrappedMethodObjectRefactoringExamples >> writeOnVar: aStream [
+	aStream
+		nextPutAll: 'a';
+		nextPutAll: testVar
 ]

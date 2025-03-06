@@ -41,11 +41,6 @@ GtMoveTempToObjectRefactoring >> buildAst [
 ]
 
 { #category : #transforming }
-GtMoveTempToObjectRefactoring >> canSplitLifetimes [
-	^ (self options at: #splitVariableLifetimes ifAbsent: [ [ false ] ]) cull: self
-]
-
-{ #category : #transforming }
 GtMoveTempToObjectRefactoring >> changeReferences [
 	| rewriter |
 	rewriter := RBParseTreeRewriter new.
