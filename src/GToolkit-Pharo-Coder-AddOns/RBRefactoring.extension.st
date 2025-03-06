@@ -1,6 +1,11 @@
 Extension { #name : #RBRefactoring }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+RBRefactoring >> canSplitLifetimes [
+	^ (self options at: #splitVariableLifetimes ifAbsent: [ [ false ] ]) cull: self
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBRefactoring >> gtCleanupChanges [
 	self model gtCleanupChanges
 ]

@@ -27,8 +27,7 @@ GtExtractMethodObjectRefactoring >> abstractVariablesInExtractedMethod [
 			ignoring: ''.
 	refactoring hasVariablesToAbstract
 		ifTrue: [ refactoring copyOptionsFrom: self options.
-			((self options at: #splitVariableLifetimes ifAbsent: [ [ false ] ])
-				cull: self)
+			self canSplitLifetimes
 				ifTrue: [ refactoring abstractClassVariables.
 					ivarsToMove := refactoring gtInstanceVariableReaders
 							reject: [ :each | refactoring gtInstanceVariableWriters includes: each ].
@@ -99,8 +98,8 @@ GtExtractMethodObjectRefactoring >> className: aSymbol [
 GtExtractMethodObjectRefactoring >> convertCascadedConstructor [
 	| constructorName |
 	constructorName := RBMethodName new.
-	constructorName selector: (self uniqueMethodNameFor: (self variablesToMove) size).
-	constructorName arguments: self variablesToMove.
+	constructorName selector: (self uniqueMethodNameFor: self variablesToMove size).
+	constructorName arguments: self variablesToMove , ivarsToMove asArray.
 	((self options
 		at: #constructorMethodName
 		ifAbsent: [ [ :methodName :ref | nil ] ]) cull: constructorName cull: self)

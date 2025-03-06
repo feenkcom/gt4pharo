@@ -173,6 +173,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> refactoring [
 		className: self className;
 		superclass: self superclass;
 		category: self category;
+		setOption: #splitVariableLifetimes toUse: [ true ];
 		setOption: #variablesToMove
 			toUse: [ :potential :ref | self variablesToMove: potential ];
 		setOption: #newVariableName
