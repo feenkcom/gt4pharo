@@ -30,7 +30,7 @@ GtPharoCoderByScripterExamples >> addBackNewInstanceSideMethod [
 			s
 				label: 'Click on the switch method side button';
 				onSpaceRoot;
-				/ BrAnchoredOuterContainer;
+				onDropdown: true;
 				// GtPharoSideTagId;
 				onTopMost ].
 				
@@ -39,14 +39,13 @@ GtPharoCoderByScripterExamples >> addBackNewInstanceSideMethod [
 			s
 				label: 'Click on the instance-side button';
 				onSpaceRoot;
-				/ BrAnchoredOuterContainer;
-				/ BrAnchoredElement;
-				/ #content;
-				/ BrButton ].
+				onDropdown: true;
+				@ 2;
+				onBrButtonName: 'instance' ].
 
 	aScripter methodCoder
 		onSpaceRoot;
-		/ BrAnchoredOuterContainer;
+		onDropdown: true;
 		// GtSourceCoderEditorId;
 		assertSelfObjectIs: anObject;
 		assertTargetBehaviorIs: anObject class instanceSide;
@@ -87,7 +86,7 @@ GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 				value: [ :anEditor | anEditor text asString ]
 					equals: [ :anEditor | 'myNewMethod' ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
+				onDropdown: true;
 				// GtSourceCoderEditorId ].
 
 	aScripter
@@ -111,7 +110,7 @@ GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 				value: [ :anEditor | anEditor text asString ]
 					equals: [ :anEditor | 'myNewMethod' ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
+				onDropdown: true;
 				// GtSourceCoderEditorId ].
 
 	^ aScripter
@@ -135,7 +134,7 @@ GtPharoCoderByScripterExamples >> addNewClassSideMethod [
 			s
 				label: 'Click on the switch method side button';
 				onSpaceRoot;
-				/ BrAnchoredOuterContainer;
+				onDropdown: true;
 				// GtPharoSideTagId;
 				onTopMost ].
 				
@@ -144,14 +143,13 @@ GtPharoCoderByScripterExamples >> addNewClassSideMethod [
 			s
 				label: 'Click on the class-side button';
 				onSpaceRoot;
-				/ BrAnchoredOuterContainer;
-				/ BrAnchoredElement;
-				/ #content;
-				/ BrButton ].
+				onDropdown: true;
+				@ 2;
+				onBrButtonName: 'class' ].
 
 	aScripter methodCoder
 		onSpaceRoot;
-		/ BrAnchoredOuterContainer;
+		onDropdown: true;
 		// GtSourceCoderEditorId;
 		assertSelfObjectIs: anObject class instanceSide;
 		assertTargetBehaviorIs: anObject class classSide;
@@ -187,7 +185,7 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 
 	aScripter methodCoder
 		onSpaceRoot;
-		/ BrAnchoredOuterContainer;
+		onDropdown: true;
 		// GtSourceCoderEditorId;
 		click;
 		assertHasFocus;
@@ -635,6 +633,11 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	| aScripter aScrollSpotterBy |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
 
+	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
+		// (GtPagerPageElementId indexed: 2);
+		// GtPharoAddNewMethodButtonId;
+		play.
+	
 	aScripter
 		clickStep: [ :s | 
 			s
@@ -678,17 +681,6 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 				// #list ].
 
 	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Setup dropdown overview';
-				block: [ :aButton :aUserData | 
-					aUserData
-						at: BrAnchoredVisualAnalysis
-						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
-				// (GtPagerPageElementId indexed: 2);
-				// GtPharoAddNewMethodButtonId ].
-
-	aScripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert dropdown bounds';
@@ -696,9 +688,8 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 					aContentElement topMostParent bounds inSpace asRectangle
 						containsRect: aContentElement bounds inSpace asRectangle ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
-				// BrAnchoredElement;
-				/ #content asBlocElementId ].
+				onDropdown: true;
+				onChildAt: 2 ].
 
 	^ aScripter
 ]
@@ -863,7 +854,7 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 				block: [ :aSpace | aSpace extent: 1000 @ 600 ];
 				onSpace ].
 
-	aScripter prepareSteppedLayoutDropdownAnalyzer
+	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
 		// (GtPagerPageElementId indexed: 2);
 		// GtPharoBehaviorCoderElement;
 		// BrTabGroup;

@@ -16,7 +16,8 @@ GtPharoSuiteOverviewElement >> initialize [
 	
 	self
 		vFitContent;
-		hExact: 250.
+		hExact: 250;
+		padding: (BlInsets all: 10).
 
 	content := GtPharoSuiteOverviewContentElement new.
 	self addChild: (fromStream := BrFromStream new

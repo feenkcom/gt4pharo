@@ -8,7 +8,8 @@ Class {
 		'superclass',
 		'category',
 		'className',
-		'variablesToMove'
+		'variablesToMove',
+		'ivarsToMove'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
@@ -16,6 +17,7 @@ Class {
 { #category : #accessing }
 GtExtractMethodObjectRefactoring >> abstractVariablesInExtractedMethod [
 	| refactoring ast |
+	ivarsToMove := Set new.
 	ast := class parseTreeForSelector: extractedMethodSelector.
 	refactoring := RBAbstractVariablesRefactoring
 			model: self model
@@ -24,7 +26,15 @@ GtExtractMethodObjectRefactoring >> abstractVariablesInExtractedMethod [
 			toAll: {self model classNamed: className}
 			ignoring: ''.
 	refactoring hasVariablesToAbstract
-		ifTrue: [ self performCompositeRefactoring: refactoring.
+		ifTrue: [ refactoring copyOptionsFrom: self options.
+			((self options at: #splitVariableLifetimes ifAbsent: [ [ false ] ])
+				cull: self)
+				ifTrue: [ refactoring abstractClassVariables.
+					ivarsToMove := refactoring gtInstanceVariableReaders
+							reject: [ :each | refactoring gtInstanceVariableWriters includes: each ].
+					refactoring gtInstanceVariableWriters
+						do: [ :each | refactoring abstractInstanceVariable: each ] ]
+				ifFalse: [ self performCompositeRefactoring: refactoring ].
 			class compileTree: ast ]
 ]
 
@@ -257,17 +267,20 @@ GtExtractMethodObjectRefactoring >> modelClass [
 
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> moveDataToClass [
-	self addSelfReturn.
-	self variablesToMove
-		do: [ :oldName | 
-			self
-				performCompositeRefactoring: (GtMoveTempToObjectRefactoring
-						model: self model
-						class: self modelClass
-						selector: extractedMethodSelector
-						temp: oldName
-						intoTemp: self newClassInstanceTemp
-						instVar: ((self options at: #newVariableName) cull: oldName cull: self)) ]
+	self variablesToMove do: [ :each | self moveVariableToClass: each ].
+	ivarsToMove do: [ :each | self moveVariableToClass: each ]
+]
+
+{ #category : #transforming }
+GtExtractMethodObjectRefactoring >> moveVariableToClass: oldName [
+	^ self
+		performCompositeRefactoring: (GtMoveTempToObjectRefactoring
+				model: self model
+				class: self modelClass
+				selector: extractedMethodSelector
+				temp: oldName
+				intoTemp: self newClassInstanceTemp
+				instVar: ((self options at: #newVariableName) cull: oldName cull: self))
 ]
 
 { #category : #transforming }
@@ -306,6 +319,7 @@ GtExtractMethodObjectRefactoring >> transform [
 	self addClass.
 	self abstractVariablesInExtractedMethod.
 	self createClassInstance.
+	self addSelfReturn.
 	self moveDataToClass.
 	self extractToNewClass.
 	self inlineAssignment.

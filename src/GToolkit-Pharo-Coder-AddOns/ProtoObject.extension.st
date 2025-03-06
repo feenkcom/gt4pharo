@@ -14,7 +14,7 @@ ProtoObject >> gtAdviceActionFor: anAction [
 			button := GtFixItButton new.
 			button visibility: BlVisibility hidden.
 			button label: 'Advice'.
-			dropDownAptitude := BrGlamorousWithDropdownAptitude
+			dropDownAptitude := BrGlamorousWithExplicitDropdownAptitude
 					handle: [ | dropdownButton |
 						dropdownButton := BrButton new.
 						dropdownButton

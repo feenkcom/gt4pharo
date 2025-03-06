@@ -87,7 +87,7 @@ GtPharoMethodCoderOverridingOverriddenElement >> newInheritanceButton [
 					paddingScale: 0
 					heightScale: 0.7
 					cornerRadius: 3);
-		addAptitude: (BrGlamorousWithDropdownAptitude
+		addAptitude: (BrGlamorousWithExplicitDropdownAptitude
 			handle: [ BlElement new size: 16@16 ]
 			content: [ self newInheritanceDropdownContent 
 				withAsyncPromiseDo: [ :anElementPromise | 
