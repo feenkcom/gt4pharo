@@ -123,9 +123,8 @@ GtPharoBehaviorCoderNameElement >> buildEditableNameLabel [
 					glamorousCodeFont;
 					bold;
 					fontSize: 18)
-					+ (BrGlamorousWithContextMenuAptitude
-							content: [ BrGlamorousSimpleContextMenuContent new 
-								items: self contextMenuItemsForClass ]);
+					+ (BrGlamorousWithExplicitContextMenuAptitude
+							itemsWithAnchorActions: [ self contextMenuItemsForClass ]);
 			inputFilter: BrTextEditorClassNameInputFilter new;
 			text: self coderModel name;
 			margin: (BlInsets all: 0);

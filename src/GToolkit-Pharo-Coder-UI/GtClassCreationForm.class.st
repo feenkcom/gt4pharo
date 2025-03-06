@@ -150,9 +150,8 @@ GtClassCreationForm >> superclassDescription [
 					action: [ :anEvent | 
 						anEvent target phlow
 							spawnObject: anEvent target text asString asClass gtReferences ]} ];
-		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize+ (BrGlamorousWithContextMenuAptitude
-								content: [ BrGlamorousSimpleContextMenuContent new
-										items: (self contextMenuItemsForSuperclass) ]) ];
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize+ (BrGlamorousWithExplicitContextMenuAptitude
+								itemsWithAnchorActions: [ self contextMenuItemsForSuperclass ]) ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
 			labelled: 'Unknown class';
