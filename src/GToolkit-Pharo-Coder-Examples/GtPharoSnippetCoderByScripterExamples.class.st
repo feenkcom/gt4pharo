@@ -1268,7 +1268,7 @@ GtPharoSnippetCoderByScripterExamples >> syntaxError [
 	aScripter assertStep: [ :s | 
 		s label: 'Assert error text is correct';
 		onSpaceRoot;
-		// BrAnchoredElement;
+		// BrMenuSteppedElement;
 		// BlTextElement;
 		value: [ :editor | editor text asString ]
 		equals: [ 'Variable or expression expected ' ] ].
@@ -1308,7 +1308,7 @@ GtPharoSnippetCoderByScripterExamples >> undefinedClass [
 	aScripter assertStep: [ :s | 
 		s label: 'Assert error text is correct';
 		onSpaceRoot;
-		// BrAnchoredElement;
+		// BrMenuSteppedElement;
 		// BlTextElement;
 		value: [ :editor | editor text asString ]
 		equals: [ 'Undeclared temp: OdoredCollection' ] ].
