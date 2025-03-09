@@ -80,10 +80,18 @@ GtMoveMethodRefactoring >> getClassesToMoveTo [
 GtMoveMethodRefactoring >> getNewMethodName [
 	"Copied from superclass to change how overriding selectors work."
 
-	| newSelector parameters methodName newMethodName |
+	| newSelector parameters methodName newMethodName abstractRef |
 	self removeArgument.
-	parameters := parseTree argumentNames asOrderedCollection.	"parameters remove: variable ifAbsent: []."
-	self needsToReplaceSelfReferences ifTrue: [ parameters add: selfVariableName ].
+	parameters := parseTree argumentNames asOrderedCollection.
+	self canSplitLifetimes
+		ifTrue: [ abstractRef := self abstractVariablesRefactoring.
+			abstractRef copyOptionsFrom: self options.
+			abstractRef gtHasVariablesToAbstract
+				ifTrue: [ parameters add: selfVariableName ]
+				ifFalse: [ self hasSelfReferences ifTrue: [ parameters add: selfVariableName ] ].
+			parameters addAll: abstractRef gtOnlyReadVariables ]
+		ifFalse: [ self needsToReplaceSelfReferences
+				ifTrue: [ parameters add: selfVariableName ] ].
 	methodName := RBMethodName
 			selector: (self uniqueMethodNameFor: parameters size)
 			arguments: parameters.

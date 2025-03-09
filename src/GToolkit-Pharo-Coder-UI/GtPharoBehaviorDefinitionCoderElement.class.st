@@ -59,8 +59,8 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 			self buildSectionLabel: superclass title.
 			superclass
 				aptitude: [
-					self readonlyLabelLook + (BrGlamorousWithContextMenuAptitude
-						content: [ BrGlamorousSimpleContextMenuContent new items: (self contextMenuItemsForSuperclass) ])];
+					self readonlyLabelLook + (BrGlamorousWithExplicitContextMenuAptitude
+						itemsWithAnchorActions: [ self contextMenuItemsForSuperclass ])];
 				margin: self buttonMargin;
 				asElement
 		}.
