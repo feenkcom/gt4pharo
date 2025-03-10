@@ -219,32 +219,29 @@ GtPharoSourceCoder >> parseMethod: aString [
 { #category : #'private - actions' }
 GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	<return: #CompiledMethod>
-	| isForMethod methodClass receiver |
-	isForMethod := self isForMethod and: [
-		aGtPharoSourceCoderEvaluationContext evaluatedInterval = (1 to: aGtPharoSourceCoderEvaluationContext sourceString size) ].
-	
+	| isForMethod methodClass |
+	isForMethod := self isForMethod
+			and: [ aGtPharoSourceCoderEvaluationContext evaluatedInterval
+					= (1 to: aGtPharoSourceCoderEvaluationContext sourceString size) ].
+
 	(isForMethod not
-		and: [ aGtPharoSourceCoderEvaluationContext receiverObject isNil ])
+		and: [ aGtPharoSourceCoderEvaluationContext receiverObject isNil
+				and: [ aGtPharoSourceCoderEvaluationContext runtimeContext isNil ] ])
 		ifTrue: [ aGtPharoSourceCoderEvaluationContext withSnippetBindingStrategy ].
 
 	methodClass := aGtPharoSourceCoderEvaluationContext runtimeContext
-		ifNil: [ aGtPharoSourceCoderEvaluationContext receiverObject class ]
-		ifNotNil: [ :aContext | aContext methodClass ].
-		
-	receiver := aGtPharoSourceCoderEvaluationContext runtimeContext
-		ifNil: [ aGtPharoSourceCoderEvaluationContext receiverObject ]
-		ifNotNil: [ :aContext | aContext receiver ].
+			ifNil: [ aGtPharoSourceCoderEvaluationContext receiverObject class ]
+			ifNotNil: [ :aContext | aContext methodClass ].
 
-	^ GtPharoCodeModifier current critical: [
-		self class compiler
-			source: aSourceString;
-			class: methodClass;
-			"receiver: receiver;"
-			context: aGtPharoSourceCoderEvaluationContext runtimeContext;
-			requestor: aGtPharoSourceCoderEvaluationContext;
-			noPattern: isForMethod not;
-			failBlock: anEvaluationFailBlock;
-			compile ]
+	^ GtPharoCodeModifier current
+		critical: [ self class compiler
+				source: aSourceString;
+				class: methodClass;
+				context: aGtPharoSourceCoderEvaluationContext runtimeContext;
+				requestor: aGtPharoSourceCoderEvaluationContext;
+				noPattern: isForMethod not;
+				failBlock: anEvaluationFailBlock;
+				compile ]
 ]
 
 { #category : #'private - actions' }
