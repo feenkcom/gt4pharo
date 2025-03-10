@@ -121,7 +121,9 @@ GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 		typeOf: aGtPharoProgramNode
 		in: (isForWorkspace
 				ifTrue: [ self coderViewModel selfObject class ]
-				ifFalse: [ self coderModel behavior ])
+				ifFalse: [ self coderModel
+						ifObject: [ :obj | obj class ]
+						ifNone: [ self coderModel behavior ] ])
 		bindings: (variableBindings
 				ifNil: [ self coderViewModel compositeVariableBindings ])
 ]
