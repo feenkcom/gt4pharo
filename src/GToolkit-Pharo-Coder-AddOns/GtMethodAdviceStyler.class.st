@@ -119,11 +119,9 @@ GtMethodAdviceStyler >> textAttributesAt: anInteger [
 GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
 		typeOf: aGtPharoProgramNode
-		in: (isForWorkspace
-				ifTrue: [ self coderViewModel selfObject class ]
-				ifFalse: [ self coderModel
-						ifObject: [ :obj | obj class ]
-						ifNone: [ self coderModel behavior ] ])
+		in: (self coderViewModel
+				ifSelfObject: [ :obj | obj class ]
+				ifNone: [ self coderModel behavior ])
 		bindings: (variableBindings
 				ifNil: [ self coderViewModel compositeVariableBindings ])
 ]
