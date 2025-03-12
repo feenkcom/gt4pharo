@@ -112,7 +112,8 @@ GtPharoMethodContextCoder >> forContext: aContext session: aDebugSession [
 	context := aContext.
 	session := aDebugSession.
 	originalCompiledCode := context compiledCode.
-	self forMethod: self compiledMethod
+	self forMethod: self compiledMethod.
+	self behavior: context receiver class
 ]
 
 { #category : #'api - actions' }

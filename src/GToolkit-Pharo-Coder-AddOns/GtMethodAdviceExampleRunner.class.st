@@ -166,6 +166,33 @@ GtMethodAdviceExampleRunner >> contextCoderMessagesNotImplementedExample [
 ]
 
 { #category : #examples }
+GtMethodAdviceExampleRunner >> contextCoderUndeclaredVariableExample [
+	<gtExample>
+	| coder context receiver |
+	critic := GtUndeclaredVariableAdvice new.
+	receiver := OrderedCollection new.
+	method := receiver class compiler
+			source: '
+				firstIndex < lastIndex ifTrue: [firstIndex] ifFalse: [unknown]';
+			class: Integer;
+			receiver: receiver;
+			noPattern: true;
+			compile.
+	context := Context
+			sender: nil
+			receiver: receiver
+			method: method
+			arguments: #().
+	coder := GtPharoMethodContextCoder forContext: context session: nil.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | 
+			block
+				value: ast body statements last message arguments last body statements last ]
+		isWorkspace: false
+]
+
+{ #category : #examples }
 GtMethodAdviceExampleRunner >> duplicateCodeInCondition [
 	<gtExample>
 	^ self
@@ -272,6 +299,12 @@ GtMethodAdviceExampleRunner >> styleAndCompareResultsFrom: coder to: aBlock isWo
 		withAllNodesOfType: GtPharoMessageNode
 		do: [ :node | 
 			((text attributesAt: node selectorParts last stopPosition)
+				anySatisfy: [ :attr | attr class = GtFixItAttribute ])
+				ifTrue: [ nodes add: node ] ].
+	ast
+		withAllNodesOfType: GtPharoVariableNode
+		do: [ :node | 
+			((text attributesAt: node stopPosition)
 				anySatisfy: [ :attr | attr class = GtFixItAttribute ])
 				ifTrue: [ nodes add: node ] ].
 	foundNodes := nodes copy.
