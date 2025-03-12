@@ -86,6 +86,21 @@ GtMethodAdviceExampleRunner >> checkPoolVarRefIsValid [
 		to: [ :ast :block |  ]
 ]
 
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> coderMessagesNotImplementedExample [
+	<gtExample>
+	| coder |
+	critic := GtMessageNotImplementedAdvice new.
+	method := self class class >> #newExampleMethod.
+	coder := GtPharoMethodCoder forMethod: method.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | 
+			ast body statements last value values
+				keysAndValuesDo: [ :i :node | i > 2 ifTrue: [ block value: node message ] ] ]
+		isWorkspace: false
+]
+
 { #category : #private }
 GtMethodAdviceExampleRunner >> compareResultsFrom: aCritic method: aCompiledMethod to: aBlock [
 	| source ast foundNodes |
@@ -122,6 +137,58 @@ GtMethodAdviceExampleRunner >> compareResultsFrom: aCritic source: aString to: a
 			foundNodes remove: found ].
 	self assert: foundNodes isEmpty.
 	^ nodes
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> contextCoderMessagesNotImplementedExample [
+	<gtExample>
+	| coder context |
+	critic := GtMessageNotImplementedAdvice new.
+	method := 10 class compiler
+			source: '
+				self sqrt. 
+				self notImplementedMessage	"This one is not implemented"';
+			class: Integer;
+			receiver: 10;
+			noPattern: true;
+			compile.
+	context := Context
+			sender: nil
+			receiver: 10
+			method: method
+			arguments: #().
+	coder := GtPharoMethodContextCoder forContext: context session: nil.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | block value: ast body statements last message ]
+		isWorkspace: false
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> contextCoderUndeclaredVariableExample [
+	<gtExample>
+	| coder context receiver |
+	critic := GtUndeclaredVariableAdvice new.
+	receiver := OrderedCollection new.
+	method := receiver class compiler
+			source: '
+				firstIndex < lastIndex ifTrue: [firstIndex] ifFalse: [unknown]';
+			class: Integer;
+			receiver: receiver;
+			noPattern: true;
+			compile.
+	context := Context
+			sender: nil
+			receiver: receiver
+			method: method
+			arguments: #().
+	coder := GtPharoMethodContextCoder forContext: context session: nil.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | 
+			block
+				value: ast body statements last message arguments last body statements last ]
+		isWorkspace: false
 ]
 
 { #category : #examples }
@@ -200,6 +267,54 @@ GtMethodAdviceExampleRunner >> rejectNotUsedExample [
 		compareResultsFrom: GtCollectSelectNotUsedAdvice new
 		source: 'a (1 to: 10) reject: [:each | each isOdd]'
 		to: [ :ast :block | block value: ast body statements last message ]
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> snippetCoderMessagesNotImplementedExample [
+	<gtExample>
+	| coder |
+	critic := GtMessageNotImplementedAdvice new.
+	coder := GtPharoSnippetCoder
+			forSource: '
+				OrderedCollection new add: 1. 
+				foo add: 2. 
+				OrderedCollection add: 3 "This one is the only one that should be flagged"'.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | block value: ast statements last message ]
+		isWorkspace: true
+]
+
+{ #category : #private }
+GtMethodAdviceExampleRunner >> styleAndCompareResultsFrom: coder to: aBlock isWorkspace: aBoolean [
+	| ast foundNodes viewModel styler text |
+	viewModel := coder asCoderViewModel.
+	styler := GtMethodAdviceStyler new isForWorkspace: aBoolean.
+	styler coderViewModel: viewModel.
+	text := coder sourceCode currentSourceString string asRopedText.
+	styler style: text.
+	ast := coder ast wait ast.
+	ast
+		withAllNodesOfType: GtPharoMessageNode
+		do: [ :node | 
+			((text attributesAt: node selectorParts last stopPosition)
+				anySatisfy: [ :attr | attr class = GtFixItAttribute ])
+				ifTrue: [ nodes add: node ] ].
+	ast
+		withAllNodesOfType: GtPharoVariableNode
+		do: [ :node | 
+			((text attributesAt: node stopPosition)
+				anySatisfy: [ :attr | attr class = GtFixItAttribute ])
+				ifTrue: [ nodes add: node ] ].
+	foundNodes := nodes copy.
+	aBlock
+		value: ast
+		value: [ :found | 
+			self assert: (foundNodes includes: found).
+
+			foundNodes remove: found ].
+	self assert: foundNodes isEmpty.
+	^ text
 ]
 
 { #category : #examples }

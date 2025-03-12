@@ -234,14 +234,18 @@ GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceC
 			ifNotNil: [ :aContext | aContext methodClass ].
 
 	^ GtPharoCodeModifier current
-		critical: [ self class compiler
-				source: aSourceString;
-				class: methodClass;
-				context: aGtPharoSourceCoderEvaluationContext runtimeContext;
-				requestor: aGtPharoSourceCoderEvaluationContext;
-				noPattern: isForMethod not;
-				failBlock: anEvaluationFailBlock;
-				compile ]
+		critical: [ | compiler |
+			compiler := self class compiler.
+			compiler source: aSourceString.
+			compiler class: methodClass.
+			(isForMethod not
+				and: [ aGtPharoSourceCoderEvaluationContext receiverObject notNil ])
+				ifTrue: [ compiler receiver: aGtPharoSourceCoderEvaluationContext receiverObject ].
+			compiler context: aGtPharoSourceCoderEvaluationContext runtimeContext.
+			compiler requestor: aGtPharoSourceCoderEvaluationContext.
+			compiler noPattern: isForMethod not.
+			compiler failBlock: anEvaluationFailBlock.
+			compiler compile ]
 ]
 
 { #category : #'private - actions' }
