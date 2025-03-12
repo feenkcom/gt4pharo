@@ -158,7 +158,6 @@ GtMethodAdviceExampleRunner >> contextCoderMessagesNotImplementedExample [
 			method: method
 			arguments: #().
 	coder := GtPharoMethodContextCoder forContext: context session: nil.
-	coder behavior: nil.
 	^ self
 		styleAndCompareResultsFrom: coder
 		to: [ :ast :block | block value: ast body statements last message ]
