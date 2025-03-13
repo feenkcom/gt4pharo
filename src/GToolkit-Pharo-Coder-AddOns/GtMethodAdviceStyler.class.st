@@ -44,7 +44,9 @@ GtMethodAdviceStyler >> advices: aCollection [
 
 { #category : #accessing }
 GtMethodAdviceStyler >> behavior [
-	^ self coderViewModel behavior
+	^ self coderViewModel
+		ifSelfObject: [ :obj | obj class ]
+		ifNone: [ self coderModel behavior ]
 ]
 
 { #category : #accessing }
@@ -119,9 +121,7 @@ GtMethodAdviceStyler >> textAttributesAt: anInteger [
 GtMethodAdviceStyler >> typeOf: aGtPharoProgramNode [
 	^ GtPharoProgramNode
 		typeOf: aGtPharoProgramNode
-		in: (isForWorkspace
-				ifTrue: [ self coderViewModel selfObject class ]
-				ifFalse: [ self coderModel behavior ])
+		in: self behavior
 		bindings: (variableBindings
 				ifNil: [ self coderViewModel compositeVariableBindings ])
 ]
