@@ -97,6 +97,7 @@ GtSearchInstanceSlotReferenceFilter >> gtMessagesSentToSlotFor: aView [
 { #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> gtReadersFor: aView [
 	<gtView>
+	<gtToolView>
 	^ aView forward
 		title: 'Readers';
 		priority: 11;
@@ -110,6 +111,7 @@ GtSearchInstanceSlotReferenceFilter >> gtReadersFor: aView [
 { #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> gtWritersFor: aView [
 	<gtView>
+	<gtToolView>
 	^ aView forward
 		title: 'Writers';
 		priority: 12;
