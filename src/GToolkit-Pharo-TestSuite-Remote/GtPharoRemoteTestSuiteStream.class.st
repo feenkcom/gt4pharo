@@ -91,7 +91,7 @@ GtPharoRemoteTestSuiteStream >> onTaskFailedAnnouncement: anAnnouncement [
 
 	Stdio stdout
 		<< 'GtPharoRemoteTestSuiteStream>>onTaskFailedAnnouncement:'; lf.
-	self halt.
+	self notYetImplemented.
 
 ]
 
