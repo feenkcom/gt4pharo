@@ -768,6 +768,14 @@ GtPharoMethodCoder >> methodOrigin [
 	^ GtPharoMethodUnknownOrigin new
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoder >> methodReference [
+	<return: #RGMethodDefinition or: nil>
+	
+	^ self compiledMethod ifNotNil: [ :aCompiledMethod |
+			aCompiledMethod methodReference ]
+]
+
 { #category : #'api - refactorings' }
 GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	| oldClass newClass model modelClass oldModelClass |

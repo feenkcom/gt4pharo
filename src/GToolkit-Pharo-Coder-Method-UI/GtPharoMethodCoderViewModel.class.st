@@ -236,6 +236,13 @@ GtPharoMethodCoderViewModel >> methodOrigin [
 	^ coderModel methodOrigin
 ]
 
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> methodReference [
+	<return: #RGMethodDefinition or: nil>
+
+	^ self coderModel methodReference
+]
+
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaveDisabled [
 	self announce: (GtMethodCoderSaveDisabled new preventors: savePreventors asArray)
