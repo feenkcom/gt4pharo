@@ -308,7 +308,7 @@ GtStrictSymbolEqualityArgumentSignal >> prepareForDelivery [
 		ifTrue: [ node keywordsIntervals ]
 		ifFalse: [ (node allChildren select: [ :each | each isMessage and: [ each selector == #= ] ]) flatCollect: #keywordsIntervals ].
 	sourceIntervals detect: [ :each | each size > 1 ]
-		ifFound: [ :int | self halt ]
+		ifFound: [ :int | self notYetImplemented ]
 		ifNone: [].
 		 ]
 		ensure: [ wasRunning ifTrue: [ self class start ] ].
