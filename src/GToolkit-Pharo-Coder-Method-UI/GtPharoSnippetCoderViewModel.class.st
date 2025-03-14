@@ -16,7 +16,7 @@ GtPharoSnippetCoderViewModel >> allowSaveDueTo: anObject [
 
 { #category : #'api - coder model' }
 GtPharoSnippetCoderViewModel >> behavior [
-	^ self ifSelfObject: #class ifNone: [ UndefinedObject ]
+	^ self ifSelfObject: [ :each | each class ] ifNone: [ UndefinedObject ]
 ]
 
 { #category : #'private - bindings' }
