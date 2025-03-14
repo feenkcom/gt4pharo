@@ -1057,7 +1057,10 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
-		action: [ :aCoderUIModel :anElement | self notifyObjectSpawn: aCoderUIModel compiledMethod requesterObject: aCoderUIModel ].
+		action: [ :aCoderUIModel :anElement | 
+			self 
+				notifyObjectSpawn: aCoderUIModel methodReference
+				requesterObject: aCoderUIModel ].
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
