@@ -3,28 +3,29 @@ Class {
 	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
 		'defaultFilterScope',
-		'label'
+		'label',
+		'highlighter'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
-{ #category : #accesing }
+{ #category : #accessing }
 GtSearchCustomScopedMethodsFilter >> defaultFilterScope [
 	^ defaultFilterScope ifNil: [
 		super defaultFilterScope ]
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 GtSearchCustomScopedMethodsFilter >> defaultFilterScope: aFilterScope [
 	defaultFilterScope := aFilterScope
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtSearchCustomScopedMethodsFilter >> filterLabel [
 	^ label
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtSearchCustomScopedMethodsFilter >> filterLabel: aLabel [
 	label := aLabel
 ]
@@ -38,7 +39,17 @@ GtSearchCustomScopedMethodsFilter >> gtDisplayOn: stream [
 				nextPutAll: aLabel ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtSearchCustomScopedMethodsFilter >> highlighter [
+	^ highlighter
+]
+
+{ #category : #accessing }
+GtSearchCustomScopedMethodsFilter >> highlighter: aHighlighter [
+	highlighter := aHighlighter
+]
+
+{ #category : #testing }
 GtSearchCustomScopedMethodsFilter >> includesMethod: aCompiledMethod [
 	^ true 
 ]
