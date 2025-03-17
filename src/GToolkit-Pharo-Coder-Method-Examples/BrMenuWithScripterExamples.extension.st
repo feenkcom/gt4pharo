@@ -2,6 +2,8 @@ Extension { #name : #BrMenuWithScripterExamples }
 
 { #category : #'*GToolkit-Pharo-Coder-Method-Examples' }
 BrMenuWithScripterExamples >> hoverDefiningPharoMethodCoderMenuItem [
+	"See https://github.com/feenkcom/gtoolkit/issues/4359"
+
 	<gtExample>
 	| aScripter |
 	aScripter := self
@@ -23,7 +25,7 @@ BrMenuWithScripterExamples >> hoverDefiningPharoMethodCoderMenuItem [
 		onSpaceRoot;
 		id: #'menu--pinned-handle';
 		play.
-		
+
 	aScripter assert
 		label: 'Dropdown container does not exist';
 		exists;
