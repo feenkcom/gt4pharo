@@ -17,9 +17,10 @@ BrMenuExamples >> menuItems_withPharoMethodCoder [
 	<gtExample>
 	| aMenuItems |
 	aMenuItems := self menuItems.
-	aMenuItems items last
-		label: 'Defining method';
-		submenu: self definingPharoMethodCoderMenu.
+	aMenuItems addItem: (BrMenuSubmenuItem new
+			id: #'menu-defining-method-item';
+			label: 'Defining method';
+			submenu: self definingPharoMethodCoderMenu).
 
 	^ aMenuItems
 ]

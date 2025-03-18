@@ -6,5 +6,5 @@ Class {
 
 { #category : #accessing }
 GtPharoSuitePlayButtonId >> asSymbol [
-	^ #'coder--suite--remote-toggle'
+	^ #'coder--suite--remote-play'
 ]
