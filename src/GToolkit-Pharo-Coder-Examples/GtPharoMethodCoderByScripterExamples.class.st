@@ -1235,7 +1235,7 @@ GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 	Clipboard clipboardText: ''.
 	self openAndClickOnContextMenuItemFor: aScripter id: GtTextualCoderCopyContextMenuItemId.
 	self 
-		assert: Clipboard clipboardText asString 
+		assert: Clipboard clipboardText asString withInternalLineEndings
 		equals: expectedCopiedString.
 	
 	^ aScripter
