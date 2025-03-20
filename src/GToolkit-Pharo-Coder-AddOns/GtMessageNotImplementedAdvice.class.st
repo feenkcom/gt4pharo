@@ -59,7 +59,7 @@ GtMessageNotImplementedAdvice >> matches: aNode from: aCriticRunner [
 			receiverType := aCriticRunner typeOf: aNode parent arguments last.
 			selector := aNode literalValue ].
 	receiverType
-		ifNil: [ ^ (GtPharoIndex current implementersOf: selector) isEmpty ].
+		ifNil: [ ^ (GtPharoIndex current allImplementersOf: selector) isEmpty ].
 	^ (receiverType whichClassIncludesSelector: selector) isNil
 		and: [ receiverType isTrait not
 				or: [ (Object whichClassIncludesSelector: selector) isNil ] ]
