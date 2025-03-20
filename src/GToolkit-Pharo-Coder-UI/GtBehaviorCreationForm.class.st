@@ -57,6 +57,11 @@ GtBehaviorCreationForm >> createTraitsContextMenuContentFor: aTrait editor: anEl
 	^ theContextMenu
 ]
 
+{ #category : #accessing }
+GtBehaviorCreationForm >> defaultName [
+	^ ''
+]
+
 { #category : #initialization }
 GtBehaviorCreationForm >> initialize [
 	super initialize.
