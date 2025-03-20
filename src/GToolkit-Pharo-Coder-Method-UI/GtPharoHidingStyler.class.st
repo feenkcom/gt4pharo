@@ -39,7 +39,7 @@ GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
 { #category : #'api - styling' }
 GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 	| folders |
-	folders := coderViewModel allSavedAttributes.
+	folders := coderViewModel allSavedAttributesForStyler: self.
 
 	folders
 		do: [ :each | 
@@ -65,7 +65,10 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 	folder := GtTextFolderAttribute new
 			attribute: messageMarker;
 			hoverText: aString.
-	coderViewModel saveAttribute: folder forNode: aNode.
+	coderViewModel
+		saveAttribute: folder
+		forNode: aNode
+		andStyler: self.
 	self
 		attribute: folder
 		from: aCollectionOfRanges first first - 1
@@ -88,8 +91,8 @@ GtPharoHidingStyler >> initialize [
 
 { #category : #'api - styling' }
 GtPharoHidingStyler >> style: aText ast: theAst [
-	oldNodeMap := coderViewModel nodeAttributeMap.
-	coderViewModel resetNodeAttributeMap.
+	oldNodeMap := coderViewModel nodeAttributeMapForStyler: self.
+	coderViewModel resetNodeAttributeMapForStyler: self.
 	super style: aText ast: theAst
 ]
 
