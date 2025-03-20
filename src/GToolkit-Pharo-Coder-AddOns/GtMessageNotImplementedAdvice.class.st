@@ -59,7 +59,9 @@ GtMessageNotImplementedAdvice >> matches: aNode from: aCriticRunner [
 			receiverType := aCriticRunner typeOf: aNode parent arguments last.
 			selector := aNode literalValue ].
 	receiverType
-		ifNil: [ ^ (GtPharoIndex current implementersOf: selector) isEmpty ].
+		ifNil: [ 
+			"If there is no cache corruption, #allImplementersOf: and #implementersOf: should be the same, so changing to #allImplementersOf: should be safe for an advice. If there was cache corruption, then we may miss marking something as not understood. There wouldn't be any that get marked as not understood that wouldn't also be marked as not understood with the implementersOf:"
+			^ (GtPharoIndex current allImplementersOf: selector) isEmpty ].
 	^ (receiverType whichClassIncludesSelector: selector) isNil
 		and: [ receiverType isTrait not
 				or: [ (Object whichClassIncludesSelector: selector) isNil ] ]
