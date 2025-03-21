@@ -113,6 +113,14 @@ GtPharoHidingStyler >> styleBeaconSignal: aMessage [
 ]
 
 { #category : #private }
+GtPharoHidingStyler >> styleTelemetryComputation: aMessage [
+	self
+		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
+		withHoverText: 'Telemetry'
+		forNode: aMessage
+]
+
+{ #category : #private }
 GtPharoHidingStyler >> styleTimeDuring: aMessage [
 	self
 		foldRanges: {aMessage startPosition
@@ -142,5 +150,8 @@ GtPharoHidingStyler >> visitMessageSend: aMessageSend [
 		ifTrue: [ self styleTimeDuring: aMessageSend ].
 	aMessageSend selector == #timeSync:during:
 		ifTrue: [ self styleTimeDuring: aMessageSend ].
+	(aMessageSend selector == #telemetryComputationStartSignal:
+		or: [ aMessageSend selector == #telemetryComputationEndSignal: ])
+		ifTrue: [ self styleTelemetryComputation: aMessageSend ].
 	aMessageSend selector == #emit ifTrue: [ self styleBeaconSignal: aMessageSend ]
 ]
