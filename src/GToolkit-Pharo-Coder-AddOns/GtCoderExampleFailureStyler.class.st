@@ -7,6 +7,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
+{ #category : #comparing }
+GtCoderExampleFailureStyler >> = anObject [
+	^ self class == anObject class
+]
+
 { #category : #accessing }
 GtCoderExampleFailureStyler >> extraStyle: aText ast: theAst [
 	| usedExample exampleStackFrame pcRangeInterval highlightColor subText |
@@ -47,6 +52,12 @@ GtCoderExampleFailureStyler >> hasFailureOrErrorResultInExample: anExample [
 	^ anExample hasResult and: [
 		anExample result isError or: [ 
 			anExample result isFailure  ]]
+]
+
+{ #category : #'as yet unclassified' }
+GtCoderExampleFailureStyler >> hash [
+	"To satisfy advices about implementing along with ="
+	^ super hash
 ]
 
 { #category : #accessing }

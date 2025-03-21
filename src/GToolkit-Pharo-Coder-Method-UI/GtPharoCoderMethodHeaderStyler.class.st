@@ -7,9 +7,20 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
 
+{ #category : #'as yet unclassified' }
+GtPharoCoderMethodHeaderStyler >> = anObject [
+	^ self class == anObject class
+]
+
 { #category : #accessing }
 GtPharoCoderMethodHeaderStyler >> attributeElementStencil: aStencilOrBlock [
 	attributeElementStencil := aStencilOrBlock asStencil
+]
+
+{ #category : #comparing }
+GtPharoCoderMethodHeaderStyler >> hash [
+	"To satisfy advices about implementing along with ="
+	^ super hash
 ]
 
 { #category : #accessing }
