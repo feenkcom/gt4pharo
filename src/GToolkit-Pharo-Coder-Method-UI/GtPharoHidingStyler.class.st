@@ -25,6 +25,11 @@ GtPharoHidingStyler class >> initiallyFolded: aBoolean [
 	InitiallyFolded := aBoolean
 ]
 
+{ #category : #comparing }
+GtPharoHidingStyler >> = anObject [
+	^ self class == anObject class
+]
+
 { #category : #private }
 GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
 	(aText from: aRange first to: aRange last)
@@ -81,6 +86,12 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 		ifAbsent: [ InitiallyFolded
 				ifTrue: [ folder isExpanded: false.
 					folder applyExpandedOrCollapsedAttributesOnText: text ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoHidingStyler >> hash [
+	"To satisfy advices about implementing along with ="
+	^ super hash
 ]
 
 { #category : #initalization }
