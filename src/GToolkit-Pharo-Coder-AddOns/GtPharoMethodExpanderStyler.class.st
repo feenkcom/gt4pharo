@@ -9,6 +9,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
+{ #category : #'as yet unclassified' }
+GtPharoMethodExpanderStyler >> = anObject [
+	^self class == anObject class
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoMethodExpanderStyler >> hash [
+	^self class hash
+]
+
 { #category : #initialization }
 GtPharoMethodExpanderStyler >> initialize [
 	super initialize.

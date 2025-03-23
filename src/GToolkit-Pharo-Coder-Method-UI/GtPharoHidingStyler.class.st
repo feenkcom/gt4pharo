@@ -25,6 +25,11 @@ GtPharoHidingStyler class >> initiallyFolded: aBoolean [
 	InitiallyFolded := aBoolean
 ]
 
+{ #category : #comparing }
+GtPharoHidingStyler >> = anObject [
+	^ self class == anObject class
+]
+
 { #category : #private }
 GtPharoHidingStyler >> anyDecorationsInRange: aRange ofText: aText [
 	(aText from: aRange first to: aRange last)
@@ -83,6 +88,12 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 					folder applyExpandedOrCollapsedAttributesOnText: text ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoHidingStyler >> hash [
+	"To satisfy advices about implementing along with ="
+	^ super hash
+]
+
 { #category : #initalization }
 GtPharoHidingStyler >> initialize [
 	super initialize.
@@ -109,6 +120,14 @@ GtPharoHidingStyler >> styleBeaconSignal: aMessage [
 	self
 		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
 		withHoverText: 'Beacon'
+		forNode: aMessage
+]
+
+{ #category : #private }
+GtPharoHidingStyler >> styleTelemetryComputation: aMessage [
+	self
+		foldRanges: {aMessage startPosition to: aMessage indexOfTrailingPeriodIfAny}
+		withHoverText: 'Telemetry'
 		forNode: aMessage
 ]
 
@@ -142,5 +161,8 @@ GtPharoHidingStyler >> visitMessageSend: aMessageSend [
 		ifTrue: [ self styleTimeDuring: aMessageSend ].
 	aMessageSend selector == #timeSync:during:
 		ifTrue: [ self styleTimeDuring: aMessageSend ].
+	(aMessageSend selector == #telemetryComputationStartSignal:
+		or: [ aMessageSend selector == #telemetryComputationEndSignal: ])
+		ifTrue: [ self styleTelemetryComputation: aMessageSend ].
 	aMessageSend selector == #emit ifTrue: [ self styleBeaconSignal: aMessageSend ]
 ]
