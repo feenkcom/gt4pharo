@@ -46,7 +46,7 @@ GtAbstractVariableValueStyler >> visitVariable: aVariableNode [
 							foreground: Color red ].
 			aValueElement := BlShrinkingTextElement new text: displayText.
 			aValueElement
-				aptitude: ((BrGlamorousWithTooltipAptitude
+				aptitude: ((BrGlamorousWithExplicitTooltipAptitude
 						content: [ | aTooltipContainer |
 							aTooltipContainer := BlElement new
 									layout: BlFrameLayout new;

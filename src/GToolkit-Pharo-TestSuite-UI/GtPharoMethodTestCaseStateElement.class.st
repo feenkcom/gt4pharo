@@ -50,7 +50,7 @@ GtPharoMethodTestCaseStateElement >> initializeInteractiveLook [
 { #category : #initialization }
 GtPharoMethodTestCaseStateElement >> initializeTooltipLook [
 	self addAptitude:
-		(BrGlamorousWithTooltipAptitude content: [
+		(BrGlamorousWithExplicitTooltipAptitude content: [
 			self newTooltipContent ])
 ]
 

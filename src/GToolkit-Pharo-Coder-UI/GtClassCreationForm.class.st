@@ -53,7 +53,7 @@ GtClassCreationForm >> classVarsDescription [
 		label: 'Class vars';
 		priority: 8;
 		accessor: #classVars;
-		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose values (memory) is shared across all instances of a class and its subclasses.') ];
+		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithExplicitTooltipAptitude text: 'Variables whose values (memory) is shared across all instances of a class and its subclasses.') ];
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil)
 ]

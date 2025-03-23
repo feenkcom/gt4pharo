@@ -44,9 +44,8 @@ GtExpandableContextMethodCoderElement >> newUninstalledIndicator [
 			c margin: (BlInsets left: 8) ];
 		background: self theme status errorBackgroundColor;
 		id: #'coder-uninstalled-indicator';
-		addAptitude: (BrGlamorousWithTooltipAptitude new
-				attachToLeftAndRight;
-				contentStencil: [ self buildUninstalledTooltip ]);
+		addAptitude: (BrGlamorousWithExplicitTooltipAptitude 
+			content: [ self buildUninstalledTooltip ]);
 		when: BlClickEvent
 			do: [ :evt | 
 				self textualCoderViewModel coder installedMethod

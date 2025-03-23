@@ -38,7 +38,7 @@ GtBehaviorCreationForm >> classSlotsDescription [
 		priority: 7;
 		accessor: #classSlots;
 		classes: {String};
-		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose values are shared across all instances of a class and that class itself. Subclasses allocate their own memory for the class-side vars of the superclasses and don''t inherit their values.') ];
+		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithExplicitTooltipAptitude text: 'Variables whose values are shared across all instances of a class and that class itself. Subclasses allocate their own memory for the class-side vars of the superclasses and don''t inherit their values.') ];
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
@@ -141,7 +141,7 @@ GtBehaviorCreationForm >> slotsDescription [
 		label: 'Instance-side slots';
 		priority: 6;
 		accessor: #slots;
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle +  (BrGlamorousWithLabelTooltipAptitude new text: 'Variables whose value is scoped to an instance of a class.')];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle +  (BrGlamorousWithExplicitTooltipAptitude text: 'Variables whose value is scoped to an instance of a class.')];
 		classes: {String};
 		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]

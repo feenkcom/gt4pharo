@@ -66,15 +66,14 @@ GtExpandableMethodCoderElement >> initialize [
 	self addChild: tagsElement
 ]
 
-{ #category : #accessing }
+{ #category : #'private - instance creation' }
 GtExpandableMethodCoderElement >> newModificationIndicator [
 	| indicator |
 	indicator := super newModificationIndicator.
 	indicator
 		allowMouseEvents;
-		addAptitude: (BrGlamorousWithTooltipAptitude new
-				attachToLeftAndRight;
-				contentStencil: [ self buildModifiedTooltip ]);
+		addAptitude: (BrGlamorousWithExplicitTooltipAptitude
+				content: [ self buildModifiedTooltip ]);
 		when: BlClickEvent
 			do: [ :evt | 
 				self textualCoderViewModel coder compiledMethod
