@@ -632,14 +632,14 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3233)"
 
 	<gtExample>
-	| aScripter aScrollSpotterBy |
+	| aScripter aScrollSpotterBy aButtonBoundsInSpace |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
 
 	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
 		// (GtPagerPageElementId indexed: 2);
 		// GtPharoAddNewMethodButtonId;
 		play.
-	
+
 	aScripter
 		clickStep: [ :s | 
 			s
@@ -650,28 +650,14 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	aScripter
 		doStep: [ :s | 
 			s
-				label: 'Right-side button distace';
+				label: 'Compute right-side button distace';
 				block: [ :aButton | 
-					| aButtonBounds aSpaceBounds aDistance aPreferredExtent |
+					| aButtonBounds aSpaceBounds aDistance |
+					aButtonBoundsInSpace := aButton boundsInSpace.
 					aButtonBounds := aButton bounds inSpace asRectangle.
 					aSpaceBounds := aButton space root bounds inSpace asRectangle.
-					aDistance := aSpaceBounds right - aButtonBounds left.
-
-					aButton aptitude
-						withAllActorsBreadthFirstDo: [ :anAptitude | 
-							(anAptitude isKindOf: BrWithAnchoredAptitude)
-								ifTrue: [ aPreferredExtent := anAptitude preferredExtent ] ].
-
-					self
-						assert: [ aPreferredExtent isNotNil ]
-						description: [ '{1} kind of aptitude not found in {2}'
-								format: {BrWithAnchoredAptitude.
-										aButton} ].
-
-					aScrollSpotterBy := aPreferredExtent - aDistance.
-					aScripter userData
-						at: #displayAddMethodDropdown_Scroll
-						put: aScrollSpotterBy ];
+					aDistance := aSpaceBounds right - aButtonBounds right.
+					aScrollSpotterBy := aDistance negated ];
 				// (GtPagerPageElementId indexed: 2);
 				// GtPharoAddNewMethodButtonId ].
 
@@ -679,8 +665,23 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 		doStep: [ :s | 
 			s
 				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: aScrollSpotterBy x @ 0 ];
+				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: aScrollSpotterBy @ 0 ];
 				// #list ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert the add new method button moved';
+				satisfies: [ :aButton | 
+						(aButton boundsInSpace left closeTo: aButtonBoundsInSpace left precision: 1.0)
+							not ]
+					description: [ :aButton | 
+						'Button did not move, original position is {1}, new position is {2}, scrolled by {3}'
+							format: {aButtonBoundsInSpace left.
+									aButton boundsInSpace left.
+									aScrollSpotterBy} ];
+				// (GtPagerPageElementId indexed: 2);
+				// GtPharoAddNewMethodButtonId ].
 
 	aScripter
 		assertStep: [ :s | 
