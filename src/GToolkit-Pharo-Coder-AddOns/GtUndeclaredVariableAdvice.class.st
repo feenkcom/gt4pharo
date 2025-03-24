@@ -18,6 +18,22 @@ GtUndeclaredVariableAdvice >> description [
 ]
 
 { #category : #styling }
+GtUndeclaredVariableAdvice >> findPotentialMatchesFor: aVariableNode in: possibleNames [
+	| possible min name |
+	name := aVariableNode variableName.
+	min := name size / 2.0.
+	possible := possibleNames
+			collect: [ :each | 
+				{each.
+					name alike: each.
+					each alike: name} ].
+	possible := possible
+			select: [ :each | each second >= min and: [ each first size / 2.0 < each third ] ].
+	^ ((possible asSortedCollection: [ :a :b | a second > b second ])
+		collect: #first) first: (5 min: possible size)
+]
+
+{ #category : #styling }
 GtUndeclaredVariableAdvice >> fixItActionsForNode: aVariableNode coderModel: coderModel [
 	^ aVariableNode variableName first isUppercase
 		ifTrue: [ self globalFixItActionsFor: aVariableNode coderModel: coderModel ]
@@ -76,7 +92,7 @@ GtUndeclaredVariableAdvice >> localFixItActionsFor: aVariableNode coderModel: co
 			, coderModel behavior allInstVarNames.
 
 	theFixitActions
-		addAll: ((aVariableNode variableName correctAgainst: possibleNames)
+		addAll: ((self findPotentialMatchesFor: aVariableNode in: possibleNames)
 				collect: [ :each | 
 					(GtRenameVariableFixItAction forCoder: coderModel node: aVariableNode)
 						newName: each ]).
