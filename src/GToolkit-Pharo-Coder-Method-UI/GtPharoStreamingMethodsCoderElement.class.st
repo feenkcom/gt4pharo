@@ -42,41 +42,41 @@ GtPharoStreamingMethodsCoderElement >> buildFilterAndIndicator [
 
 { #category : #accessing }
 GtPharoStreamingMethodsCoderElement >> buildWorkingIndicator [
-
 	| state label updater |
 	state := #inProgress.
 	label := BrButton new
-		         aptitude: BrGlamorousButtonWithIconAptitude new
-			         + BrGlamorousButtonWithLabelTooltipAptitude new
-			         - BrGlamorousButtonExteriorAptitude;
-		         icon: BrGlamorousVectorIcons refresh;
-		         label: 'In Progress';
-		         disable;
-		         margin: (BlInsets all: 4).
+			aptitude: BrGlamorousButtonWithIconAptitude new
+					+ BrGlamorousButtonWithLabelTooltipAptitude2 new
+					- BrGlamorousButtonExteriorAptitude;
+			icon: BrGlamorousVectorIcons refresh;
+			label: 'In Progress';
+			disable;
+			margin: (BlInsets all: 4).
 
-	list viewModel when: BrListModelItemsAddedEvent do: [ 
-		state := #paused.
-		updater requestUpdate ].
-	list viewModel when: BrItemsProviderStartedLoadingEvent do: [ 
-		state := #inProgress.
-		updater requestUpdate ].
 	list viewModel
-		when: BrItemsProviderDoneEvent
-		do: [ label removeFromParent ].
+		when: BrListModelItemsAddedEvent
+		do: [ state := #paused.
+			updater requestUpdate ].
+	list viewModel
+		when: BrItemsProviderStartedLoadingEvent
+		do: [ state := #inProgress.
+			updater requestUpdate ].
+	list viewModel when: BrItemsProviderDoneEvent do: [ label removeFromParent ].
 
 	updater := BrElementUpdater new.
 	updater postponedDuration: 100 milliSeconds.
 	updater element: label.
-	updater action: [ :e | 
-		state = #inProgress ifTrue: [ 
-			label
-				icon: BrGlamorousVectorIcons refresh;
-				label: 'In progress' ].
-		state = #paused ifTrue: [ 
-			label
-				icon: BrGlamorousVectorIcons pause;
-				label: 'Paused' ].
-		updater resetUpdateRequested ].
+	updater
+		action: [ :e | 
+			state = #inProgress
+				ifTrue: [ label
+						icon: BrGlamorousVectorIcons refresh;
+						label: 'In progress' ].
+			state = #paused
+				ifTrue: [ label
+						icon: BrGlamorousVectorIcons pause;
+						label: 'Paused' ].
+			updater resetUpdateRequested ].
 
 	^ label
 ]

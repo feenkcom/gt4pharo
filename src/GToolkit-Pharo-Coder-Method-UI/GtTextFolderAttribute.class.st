@@ -67,7 +67,7 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 				self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text ].
 	hoverText
 		ifNotNil: [ aToggle
-				addAptitude: (BrGlamorousWithTooltipAptitude content: self hoverTextStencil) ].
+				addAptitude: (BrGlamorousWithExplicitTooltipAptitude content: self hoverTextStencil) ].
 	aToggle
 		when: BlMouseEnterEvent
 		do: [ :evt | 

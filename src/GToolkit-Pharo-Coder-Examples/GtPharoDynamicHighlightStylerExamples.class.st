@@ -67,35 +67,6 @@ GtPharoDynamicHighlightStylerExamples >> keywordWithOnePartNotHighlighted [
 ]
 
 { #category : #accessing }
-GtPharoDynamicHighlightStylerExamples >> oneOccurrenceNotHighlighted [
-	<gtExample>
-	| aScripter |
-	aScripter := self
-			scripterForBlock: [ (GtPharoSnippetCoder forSource: 'var := 42') asCoderViewModel ].
-
-	aScripter
-		doStep: [ :s | 
-			s
-				action: [ :aCoderViewModel | aCoderViewModel moveCursorTo: 2 ];
-				onModel ].
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert variable not highlighted';
-				satisfies: [ :aCoderEditor | 
-					| highlights |
-					highlights := OrderedCollection new.
-					aCoderEditor text
-						findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtPharoDynamicHighlightAttribute ]
-						indicesDo: [ :aStart :anEnd | highlights add: (aStart to: anEnd) ].
-					highlights isEmpty ];
-				id: GtSourceCoderEditorId ].
-
-	^ aScripter
-]
-
-{ #category : #accessing }
 GtPharoDynamicHighlightStylerExamples >> twoOccurrencesHighlighted [
 	<gtExample>
 	| aScripter |

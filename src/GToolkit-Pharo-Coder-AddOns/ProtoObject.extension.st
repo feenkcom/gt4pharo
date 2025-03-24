@@ -18,7 +18,7 @@ ProtoObject >> gtAdviceActionFor: anAction [
 					handle: [ | dropdownButton |
 						dropdownButton := BrButton new.
 						dropdownButton
-							aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+							aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
 									- BrGlamorousButtonExteriorAptitude.
 						dropdownButton icon: BrGlamorousVectorIcons repair.
 						dropdownButton ]
@@ -36,11 +36,11 @@ ProtoObject >> gtAdviceActionFor: anAction [
 			button aptitude: BrGlamorousButtonWithIconAptitude + dropDownAptitude.
 			button icon: BrGlamorousVectorIcons repair.
 			promise := (actionStream asyncSimilarCopy hasNext
-				then: [ :bool | 
-					bool
-						ifTrue: [ button
-								enqueueTask: (BlTaskAction new action: [ button visibility: BlVisibility visible ]) ] ])
-				await: GtSingleCoderViewModel methodAddOnsExecutionConfiguration.
+					then: [ :bool | 
+						bool
+							ifTrue: [ button
+									enqueueTask: (BlTaskAction new action: [ button visibility: BlVisibility visible ]) ] ])
+					await: GtSingleCoderViewModel methodAddOnsExecutionConfiguration.
 			button enqueueTask: (BlPromiseTask new promise: promise).
 			button ]
 ]

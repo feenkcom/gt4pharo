@@ -44,7 +44,7 @@ GtReorderParametersAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdito
 		aptitude: BrGlamorousButtonExteriorAptitude
 				+ ((BrGlamorousButtonRectangularAptitude paddingScale: 2 / 3)
 						+ BrGlamorousButtonIconAptitude
-						+ BrGlamorousButtonWithLabelTooltipAptitude);
+						+ BrGlamorousButtonWithLabelTooltipAptitude2);
 		beMiniSize;
 		margin: (BlInsets
 				top: 1

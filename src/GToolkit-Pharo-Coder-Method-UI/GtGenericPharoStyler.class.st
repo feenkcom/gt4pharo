@@ -6,14 +6,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Stylers'
 }
 
-{ #category : #comparing }
-GtGenericPharoStyler >> = anObject [
-	^ self class == anObject class
-		and:
-			[ (GtGenericPharoStyler superclass instSize + 1 to: self class instSize)
-				allSatisfy: [ :i | (self instVarAt: i) == (anObject instVarAt: i) ] ]
-]
-
 { #category : #visiting }
 GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
 	<gtIgnoreConstraint: #GtRBAcceptVisitorCalledFromNonVisitingMethods>
@@ -23,11 +15,6 @@ GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
 	^ BlTextStylerTelemetry
 		time: [ 'Visit ', aSmaCCParseNode class name ]
 		during: [	 aSmaCCParseNode acceptVisitor: self ]
-]
-
-{ #category : #comparing }
-GtGenericPharoStyler >> hash [
-	^ self class hash
 ]
 
 { #category : #'api - styling' }
