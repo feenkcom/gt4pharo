@@ -762,6 +762,60 @@ GtPharoMethodCoderByScripterExamples >> checkRefactoringAttributesForRenamingIns
 	^ scripter
 ]
 
+{ #category : #'examples - remove parameter' }
+GtPharoMethodCoderByScripterExamples >> checkRemoveParameterDisabled [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type-in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: ': arg
+	^ arg' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the parameter node';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 10 to: 11;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover remove parameter';
+				onSpaceRoot;
+				id: #'context-menu--remove-parameter' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check remove parameter disabled';
+				onSpaceRoot;
+				id: #'context-menu--remove-parameter';
+				value: [ :anElement | anElement isDisabled ] equals: true ].
+
+	^ scripter
+]
+
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
 	<gtExample>
@@ -4574,6 +4628,13 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_param
 				label: 'Hover remove parameter';
 				onSpaceRoot;
 				id: #'context-menu--remove-parameter' ].
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check remove parameter enabled';
+				onSpaceRoot;
+				id: #'context-menu--remove-parameter';
+				value: [ :anElement | anElement isDisabled ] equals: false ].
 
 	^ aScripter
 ]

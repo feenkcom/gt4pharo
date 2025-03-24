@@ -563,22 +563,25 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
+	| disabled action |
 	aNode isVariable ifFalse: [ ^ self ].
 	aNode parent isMethodPattern ifFalse: [ ^ self ].
+	disabled := false.
 	aNode parent parent body
-		allNodesDo: [ :each | each = aNode ifTrue: [ ^ self ] ].
-	coderAddOns
-		addContextMenuItem: (self
-				createLabel: 'Remove parameter'
-				description: aNode variableName)
-		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel :element | 
-			(GtRemoveParameterRefactoringController new
-				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
-		id: #'context-menu--remove-parameter'
+		allNodesDo: [ :each | each = aNode ifTrue: [ disabled := true ] ].
+	action := coderAddOns
+			addContextMenuItem: (self
+					createLabel: 'Remove parameter'
+					description: aNode variableName)
+			group: BrMenuItemGroupConfiguration refactoring
+			hover: (self highlightNodeBlock: aNode)
+			leave: self removeHighlightBlock
+			action: [ :aCoderViewModel :element | 
+				(GtRemoveParameterRefactoringController new
+					sourceCoderViewModel: aCoderViewModel;
+					variableNode: aNode) executeIn: element ]
+			id: #'context-menu--remove-parameter'.
+	disabled ifTrue: [ action disableAction ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
