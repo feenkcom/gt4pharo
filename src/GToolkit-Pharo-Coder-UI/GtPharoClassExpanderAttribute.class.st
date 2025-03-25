@@ -11,6 +11,7 @@ Class {
 GtPharoClassExpanderAttribute class >> forClass: aClass [
 	^ self new
 		forClass: aClass;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect;
 		yourself
 ]
 

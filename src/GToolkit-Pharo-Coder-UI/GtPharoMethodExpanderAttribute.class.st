@@ -13,6 +13,7 @@ Class {
 GtPharoMethodExpanderAttribute class >> forClass: aClass andSelector: aSymbol [
 	^ self new
 		forClass: aClass andSelector: aSymbol;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect;
 		yourself
 ]
 
