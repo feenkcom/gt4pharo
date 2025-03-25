@@ -77,13 +77,14 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 	aToggle
 		when: BlMouseLeaveEvent
 		do: [ :evt | self clearHighlightOn: aTBrTextEditorTextualPiece in: anEditorElement editor ].
-	
+
 	aToggle
 		when: BlClickEvent
 		do: [ :anEvent | 
 			anEvent modifiers isAlt
 				ifTrue: [ anEvent consumed: true.
-					anEvent target phlow spawnObject: self ] ].
+					anEvent target phlow
+						spawnObject: (self definingMethod ifNil: [ self ] ifNotNil: [ :meth | meth ]) ] ].
 
 	self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text.
 
