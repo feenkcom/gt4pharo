@@ -69,7 +69,8 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 				to: foldedRange last ].
 	folder := GtTextFolderAttribute new
 			attribute: messageMarker;
-			hoverText: aString.
+			hoverText: aString;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext ) collect.
 	coderViewModel
 		saveAttribute: folder
 		forNode: aNode

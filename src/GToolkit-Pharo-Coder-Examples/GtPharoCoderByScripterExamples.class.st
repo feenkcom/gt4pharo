@@ -221,6 +221,38 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 				onDropdown: true ]
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> cancelRenameClassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self startRenamingClassInIndex.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Open refactoring preview';
+				key: BlKeyboardKey escape ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor is removed';
+				notExists;
+				id: #renameClassEditor ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> checkClassListIn: scripter containsName: aSymbol [
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check class list has ' , aSymbol;
+				exists;
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | each text asString = aSymbol asString ] ]
+]
+
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> checkCompletionUpdatesForNewInstanceVariables [
 	<gtExample>
@@ -1149,6 +1181,64 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 	^ aScripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameClassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self startRenamingClassInIndex.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Open refactoring preview';
+				key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Refactoring preview exists';
+				exists;
+				// #preview;
+				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open refactoring preview';
+				id: #previewCheckButton ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button exists';
+				onSpaceRoot;
+				exists;
+				elementSatisfies: [ :element | element isEnabled ];
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open refactoring preview';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 500) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor is removed';
+				notExists;
+				id: #renameClassEditor ].
+	self
+		checkClassListIn: scripter
+		containsName: environment anyDummyLeafClass realClass name.
+	^ scripter
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 	<gtExample>
@@ -1158,6 +1248,63 @@ GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 				label: 'Set space extent';
 				block: [ :aSpace | aSpace extent: 800 @ 600 ];
 				onSpace ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class rootClass |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	rootClass := environment anyDummyLeafClass.
+	class := rootClass realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	self checkClassListIn: scripter containsName: class name.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open class menu';
+				// GtCoderNavigationClassesTreeElementId;
+				// BrLabel;
+				@ [ :each | each text asString = class name ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click rename class';
+				onSpaceRoot;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Rename class' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor has focus';
+				id: #renameClassEditor;
+				hasFocus ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Move to end';
+				key: BlKeyboardKey arrowRight ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new class name';
+				text: '1234' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Refactoring preview does not exists';
+				notExists;
+				// #preview;
+				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
+	^ scripter
 ]
 
 { #category : #accessing }
