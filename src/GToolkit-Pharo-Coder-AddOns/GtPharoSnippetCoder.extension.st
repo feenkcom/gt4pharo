@@ -2,7 +2,7 @@ Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
-	aNode isCascade ifFalse: [ ^ self ].
+	aNode isCascade ifFalse: [ ^ false ].
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Convert cascade to statements'
@@ -14,7 +14,8 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 			(GtSnippetConvertCascadesToStatementsController new
 				node: aNode;
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
-		id: #'context-menu--cascades-to-statements'
+		id: #'context-menu--cascades-to-statements'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -59,7 +60,7 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
-	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ self ].
+	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ false ].
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Extract variable'
@@ -71,7 +72,8 @@ GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 			(GtSnippetExtractTemporaryRefactoringController new
 				node: aNode;
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
-		id: #'context-menu--extract-variable'
+		id: #'context-menu--extract-variable'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -116,16 +118,16 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 	aNode isAssignment ifTrue: [ variable := aNode variable ].
 	aNode isVariable
 		ifTrue: [ (aNode parent isAssignment and: [ aNode parent variable == aNode ])
-				ifTrue: [ ^ self ].
+				ifTrue: [ ^ false ].
 			variable := aNode ].
-	variable isNil ifTrue: [ ^ self ].
+	variable isNil ifTrue: [ ^ false ].
 	uses := self allReferencesTo: variable.
 	uses first isDeclaration ifTrue: [ uses removeFirst ].
-	uses size < 2 ifTrue: [ ^ self ].
-	uses first isAssignedTo ifFalse: [ ^ self ].
-	2 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ self ] ].
+	uses size < 2 ifTrue: [ ^ false ].
+	uses first isAssignedTo ifFalse: [ ^ false ].
+	2 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ false ] ].
 	uses size >= 2
-		ifTrue: [ uses first stopPosition > uses second startPosition ifTrue: [ ^ self ] ].
+		ifTrue: [ uses first stopPosition > uses second startPosition ifTrue: [ ^ false ] ].
 
 	coderAddOns
 		addContextMenuItem: (self
@@ -138,7 +140,8 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 			(GtSnippetInlineVariableRefactoringController new
 				node: uses first parent;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-temp'
+		id: #'context-menu--inline-temp'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -146,7 +149,7 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 	<gtCoderContextMenuAddOns: 210>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
-			| node |
+			| node allParents |
 			coderAddOns
 				addContextMenuItem: 'Extract method'
 				group: BrMenuItemGroupConfiguration refactoring
@@ -176,15 +179,20 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 				id: #'snippet-extract-example'.
 
 			node := nodes first.
-			node
-				withAllParentsDo: [ :aNode | self addExtractVariableFor: aNode to: coderAddOns ].
+			allParents := node withAllParents.
+			allParents
+				detect: [ :aNode | self addExtractVariableFor: aNode to: coderAddOns ]
+				ifNone: [  ].
 			self
 				addInlineMethodFor: node
 				to: coderAddOns
 				from: aCoderViewModel.
-			node withAllParentsDo: [ :n | self addInlineTempFor: n to: coderAddOns ].
-			node
-				withAllParentsDo: [ :n | self addConvertCascadesToStatementsFor: n to: coderAddOns ].
+			allParents
+				detect: [ :n | self addInlineTempFor: n to: coderAddOns ]
+				ifNone: [  ].
+			allParents
+				detect: [ :n | self addConvertCascadesToStatementsFor: n to: coderAddOns ]
+				ifNone: [  ].
 			self addConvertStatementsToCascadesFor: nodes to: coderAddOns ]
 ]
 

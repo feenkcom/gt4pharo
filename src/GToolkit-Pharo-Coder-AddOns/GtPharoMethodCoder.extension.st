@@ -64,7 +64,7 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
-	aNode isCascade ifFalse: [ ^ self ].
+	aNode isCascade ifFalse: [ ^ false ].
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Convert cascade to statements'
@@ -76,7 +76,8 @@ GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
 			(GtConvertCascadesToStatementsController new
 				node: aNode;
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
-		id: #'context-menu--cascades-to-statements'
+		id: #'context-menu--cascades-to-statements'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -175,7 +176,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 		and: [ aNode isVariable not
 				or: [ (aNode isAssignedTo or: [ aNode isDeclaration ]) not
 						and: [ aNode whoDefines ifNil: [ true ] ifNotNil: [ :def | def isSequence not ] ] ] ])
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ false ].
 	nodes := OrderedCollection new.
 	sequenceNode := aNode statementNode parent.
 	sequenceNode
@@ -196,7 +197,8 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 			(GtExtractTemporaryRefactoringController new
 				node: nodes first;
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
-		id: #'context-menu--extract-temp'
+		id: #'context-menu--extract-temp'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -268,7 +270,7 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
-	aNode isMessageSend ifFalse: [ ^ self ].
+	aNode isMessageSend ifFalse: [ ^ false ].
 	(aNode receiver isSelf or: [ aNode receiver isSuper ])
 		ifTrue: [ coderAddOns
 				addContextMenuItem: (self
@@ -281,7 +283,8 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 					(GtMethodInlineMessageSendRefactoringController new
 						node: aNode;
 						sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-				id: #'context-menu--inline-message' ]
+				id: #'context-menu--inline-message'.
+			^ true ]
 		ifFalse: [ (GtPharoIndex current implementersOf: aNode selector)
 				ifNotEmpty: [ :classes | 
 					| defaultClass |
@@ -304,7 +307,9 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 								implementor: defaultClass;
 								node: aNode;
 								sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-						id: #'context-menu--inline-message' ] ]
+						id: #'context-menu--inline-message'.
+					^ true ] ].
+	^ false
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -330,17 +335,17 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 	aNode isAssignment ifTrue: [ variable := aNode variable ].
 	aNode isVariable
 		ifTrue: [ (aNode parent isAssignment and: [ aNode parent variable == aNode ])
-				ifTrue: [ ^ self ].
+				ifTrue: [ ^ false ].
 			variable := aNode ].
 	(variable isNil or: [ (definer := variable whoDefines) isNil ])
-		ifTrue: [ ^ self ].
+		ifTrue: [ ^ false ].
 	uses := self allReferencesTo: variable.
-	uses size < 2 ifTrue: [ ^ self ].
-	uses first isDeclaration ifFalse: [ ^ self ].
-	uses second isAssignedTo ifFalse: [ ^ self ].
-	3 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ self ] ].
+	uses size < 2 ifTrue: [ ^ false ].
+	uses first isDeclaration ifFalse: [ ^ false ].
+	uses second isAssignedTo ifFalse: [ ^ false ].
+	3 to: uses size do: [ :i | (uses at: i) isAssignedTo ifTrue: [ ^ false ] ].
 	uses size >= 3
-		ifTrue: [ uses second stopPosition > uses third startPosition ifTrue: [ ^ self ] ].
+		ifTrue: [ uses second stopPosition > uses third startPosition ifTrue: [ ^ false ] ].
 
 	coderAddOns
 		addContextMenuItem: (self
@@ -353,7 +358,8 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 			(GtMethodInlineTemporaryVariableRefactoringController new
 				node: uses second parent;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-temp'
+		id: #'context-menu--inline-temp'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -534,7 +540,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
-			| aNode |
+			| aNode allParents |
 			aNode := theNodes first.
 
 			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
@@ -550,14 +556,19 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns.
 			self addVariableScopingFor: aNode to: coderAddOns.
-			aNode
-				withAllParentsDo: [ :node | self addInlineMessageFor: node to: coderAddOns ].
-			aNode
-				withAllParentsDo: [ :node | self addInlineTempFor: node to: coderAddOns ].
-			aNode
-				withAllParentsDo: [ :node | self addExtractTempFor: node to: coderAddOns ].
-			aNode
-				withAllParentsDo: [ :node | self addConvertCascadesToStatementsFor: node to: coderAddOns ].
+			allParents := aNode withAllParents.
+			allParents
+				detect: [ :node | self addInlineMessageFor: node to: coderAddOns ]
+				ifNone: [  ].
+			allParents
+				detect: [ :node | self addInlineTempFor: node to: coderAddOns ]
+				ifNone: [  ].
+			allParents
+				detect: [ :node | self addExtractTempFor: node to: coderAddOns ]
+				ifNone: [  ].
+			allParents
+				detect: [ :node | self addConvertCascadesToStatementsFor: node to: coderAddOns ]
+				ifNone: [  ].
 			self addConvertStatementsToCascadesFor: theNodes to: coderAddOns ]
 ]
 
