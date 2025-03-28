@@ -19,6 +19,19 @@ GtPharoMessageNode >> arguments [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtPharoMessageNode >> bestNodeFor: anInterval ifFound: aFoundBlock ifNone: aNoneBlock [
+	(self selectorParts
+		anySatisfy: [ :token | 
+			(anInterval last < token startPosition
+				or: [ anInterval first > token stopPosition ]) not ])
+		ifTrue: [ ^ aFoundBlock value: self ].
+	^ super
+		bestNodeFor: anInterval
+		ifFound: aFoundBlock
+		ifNone: aNoneBlock
+]
+
 { #category : #testing }
 GtPharoMessageNode >> isBinary [
 	^ false
