@@ -230,7 +230,7 @@ GtPharoCoderByScripterExamples >> cancelRenameClassInIndex [
 	scripter
 		keyPressStep: [ :s | 
 			s
-				label: 'Open refactoring preview';
+				label: 'Cancel rename';
 				key: BlKeyboardKey escape ].
 	scripter
 		checkStep: [ :s | 
@@ -322,6 +322,141 @@ GtPharoCoderByScripterExamples >> checkCompletionUpdatesForNewInstanceVariables 
 								ifTrue: [ item := items at: i ]
 								ifFalse: [ i := i + 1 ] ].
 					self assert: item isNil ] ].
+	^ scripter
+]
+
+{ #category : #'examples - refactoring' }
+GtPharoCoderByScripterExamples >> checkSelectionForExtractTemporary [
+	<gtExample>
+	| scripter source method from to |
+	method := self class >> #sampleMethodForRefactoringExample.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	source := method sourceCode.
+	from := source indexOfSubCollection: 'e:'.
+	to := source indexOf: $n startingAt: from.
+	self
+		selectTextFor: scripter
+		from: from - 1
+		to: to
+		andCheck: 'e: 16 n'.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Display context menu';
+				// GtPharoStreamingMethodsCoderElement;
+				// GtSourceCoderExpandedContentElement;
+				// GtSourceCoderEditorId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check extract temporary exists';
+				onSpaceRoot;
+				exists;
+				// BrMenuTextLabelElement;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Extract temporary ' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start extract temporary';
+				onSpaceRoot;
+				// BrMenuTextLabelElement;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Extract temporary ' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactored code';
+				// GtPharoStreamingMethodsCoderElement;
+				// GtSourceCoderExpandedContentElement;
+				// GtSourceCoderEditorId;
+				value: [ :editor | 
+						| ast node |
+						ast := GtPharoParser parse: editor text asString.
+						ast
+							withAllNodesOfType: GtPharoAssignmentNode
+							do: [ :n | n variable source = '_' ifTrue: [ node := n value ] ].
+						node source ]
+					equals: 'value printStringBase: 16 nDigits: 2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor exists';
+				exists;
+				// GtRenameEditor ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Cancel extract';
+				key: BlKeyboardKey escape ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor removed';
+				notExists;
+				// GtRenameEditor ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check source reverted';
+				// GtPharoStreamingMethodsCoderElement;
+				// GtSourceCoderExpandedContentElement;
+				// GtSourceCoderEditorId;
+				value: [ :editor | editor text asString ] equals: source ].
+
+
+	from := source indexOf: $,.	"Now test a binary selector"
+	to := from + 5.
+	self
+		selectTextFor: scripter
+		from: from - 1
+		to: to
+		andCheck: ', '' = '.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Display context menu';
+				// GtPharoStreamingMethodsCoderElement;
+				// GtSourceCoderExpandedContentElement;
+				// GtSourceCoderEditorId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check extract temporary exists';
+				onSpaceRoot;
+				exists;
+				// BrMenuTextLabelElement;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Extract temporary ' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start extract temporary';
+				onSpaceRoot;
+				// BrMenuTextLabelElement;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Extract temporary ' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactored code';
+				// GtPharoStreamingMethodsCoderElement;
+				// GtSourceCoderExpandedContentElement;
+				// GtSourceCoderEditorId;
+				value: [ :editor | 
+						| ast node |
+						ast := GtPharoParser parse: editor text asString.
+						ast
+							withAllNodesOfType: GtPharoAssignmentNode
+							do: [ :n | n variable source = '_' ifTrue: [ node := n value ] ].
+						node source ]
+					equals: '(value printStringBase: 16 nDigits: 2) , '' = ''''0F''''''' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor exists';
+				exists;
+				// GtRenameEditor ].
 	^ scripter
 ]
 
@@ -1321,6 +1456,15 @@ GtPharoCoderByScripterExamples >> repackageNonSelectedClassInPackageUpdatesIndex
 				@ [ :each | (each containsClass: cls realClass) not ] ].
 
 	^ scripter
+]
+
+{ #category : #'examples - refactoring' }
+GtPharoCoderByScripterExamples >> sampleMethodForRefactoringExample [
+	| value stream |
+	value := 15.
+	stream := WriteStream on: String new.
+	stream nextPutAll: (value printStringBase: 16 nDigits: 2) , ' = ''0F'''.
+	^ stream contents
 ]
 
 { #category : #'examples - support' }
