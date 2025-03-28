@@ -119,6 +119,14 @@ GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized
 	self notifyProtocolsToShowChanged
 ]
 
+{ #category : #'api - subscriptions' }
+GtCoderNavigationPackagesTagsClassesModel >> classRepackaged: aClassRepackaged [
+	self selectedPackage = aClassRepackaged oldPackage ifFalse: [ ^ self ].
+	self selectedClass = aClassRepackaged classAffected
+		ifTrue: [ self privateJustSelectPackage: aClassRepackaged newPackage ]
+		ifFalse: [ self notifyClassesToShowChanged ]
+]
+
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> classesToShow [
 	<return: #Collection of: #Class>
@@ -1104,6 +1112,7 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassTagAdded send: #packageTagAdded: to: self;
 		when: ClassTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
+		when: ClassRepackaged send: #classRepackaged: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;

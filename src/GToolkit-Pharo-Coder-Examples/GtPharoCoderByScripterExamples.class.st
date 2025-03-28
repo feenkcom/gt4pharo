@@ -1138,6 +1138,16 @@ GtPharoCoderByScripterExamples >> instanceSideMethodsExpandsInstanceSideMethods 
 	^ aScripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> isPackageNamed: aString selectedIn: scripter [
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check package (' , aString , ') is selected';
+				// GtCoderPackagesTreeElement;
+				@ [ :each | each selectedPackage name = aString asSymbol ] ]
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
 	<gtExample>
@@ -1239,6 +1249,80 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 	^ scripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> repackageClassUpdatesIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter cls package newPackage packages |
+	scripter := self setupForPackageTests.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	newPackage := packages second.
+	cls := package anyDummyClass.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand class definition';
+				id: GtSourceCoderExpanderToggleId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Activate package editor';
+				id: #package ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new package name';
+				text: newPackage packageName ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Save changes';
+				id: (GtMagritteActionElementId new
+						description: (MAActionDescription new label: 'Create')) ].
+	self isPackageNamed: newPackage packageName selectedIn: scripter.
+
+
+	cls realClass category: package packageName.	"Updating outside of coder, also should update"
+	scripter pulse.
+	self isPackageNamed: package packageName selectedIn: scripter.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> repackageNonSelectedClassInPackageUpdatesIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter cls package newPackage packages |
+	scripter := self setupForPackageTests.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	newPackage := packages second.
+	cls := package dummyClasses detect: [ :each | each ~~ package anyDummyClass ].
+
+
+	cls realClass category: newPackage packageName.	"Changing non-selected class doesn't change package"
+	scripter pulse.
+	self isPackageNamed: package packageName selectedIn: scripter.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class list should contain ' , package anyDummyClass className;
+				// GtCoderClassesTreeElement;
+				@ [ :each | each containsClass: package anyDummyClass realClass ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class list should not contain ' , cls className;
+				// GtCoderClassesTreeElement;
+				@ [ :each | (each containsClass: cls realClass) not ] ].
+
+	^ scripter
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 	<gtExample>
@@ -1248,6 +1332,27 @@ GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 				label: 'Set space extent';
 				block: [ :aSpace | aSpace extent: 800 @ 600 ];
 				onSpace ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> setupForPackageTests [
+	| scripter class cls package packages |
+	environment := GtPharoDummiesGenerator withPackages: 2 classHierarchy: 2.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	cls := package anyDummyClass.
+	class := cls realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 1400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	self isPackageNamed: package packageName selectedIn: scripter.
+	^ scripter
 ]
 
 { #category : #'examples - index' }
