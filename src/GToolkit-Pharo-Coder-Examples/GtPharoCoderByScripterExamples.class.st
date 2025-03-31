@@ -1467,6 +1467,71 @@ GtPharoCoderByScripterExamples >> sampleMethodForRefactoringExample [
 	^ stream contents
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectClassInCoderUpdatesIndex [
+	<gtExample>
+	| scripter |
+	scripter := self coderInPager: [ GtCoderElement new ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 1400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'No package is selected';
+				// GtCoderPackagesTreeElement;
+				@ [ :each | each selectedPackage isNil ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select a package';
+				onBreadthFirstChildOfClass: GtPackagesCoderElement;
+				// #coder;
+				// #scrollable;
+				onChildAt: 1 ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Package is selected';
+				// GtCoderPackagesTreeElement;
+				@ [ :each | each selectedPackage notNil ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class list not empty';
+				// GtCoderClassesTreeElement;
+				// #scrollable;
+				@ [ :each | each children notEmpty ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class is not selected';
+				// GtCoderClassesTreeElement;
+				@ [ :each | each selectedClass isNil ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select a class';
+				onBreadthFirstChildOfClass: GtClassCardElement ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class is selected';
+				// GtCoderClassesTreeElement;
+				@ [ :each | each selectedClass notNil ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class is selected';
+				// GtCoderClassesTreeElement;
+				@ [ :each | each selectedClass notNil ] ].
+	^ scripter
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 	<gtExample>
