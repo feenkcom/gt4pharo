@@ -468,10 +468,9 @@ GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> passwordAddOnFor: anAST into: coderAddOns [
+GtPharoSourceCoder >> passwordHiddingAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoMethodPasswordStyler new.
-	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -677,4 +676,10 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 GtPharoSourceCoder >> whenSendToAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoWhenSendToExpanderStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> zincFormSecretsHiddingAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
 ]
