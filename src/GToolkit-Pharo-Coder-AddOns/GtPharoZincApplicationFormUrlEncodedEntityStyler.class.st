@@ -6,12 +6,12 @@ The following code includes a secret information that should be hidden by defaul
 Class {
 	#name : #GtPharoZincApplicationFormUrlEncodedEntityStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Zinc'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
 
 { #category : #accessing }
 GtPharoZincApplicationFormUrlEncodedEntityStyler >> secretKeys [
-	^ #( 'secret' 'token' 'id' 'password' )
+	^ #( 'secret' 'token' 'password' )
 ]
 
 { #category : #accessing }
@@ -24,7 +24,7 @@ GtPharoZincApplicationFormUrlEncodedEntityStyler >> visitKeywordMessage: aMessag
 			aMessage arguments last isString ]) ifFalse: [ ^ self ].
 
 	(self secretKeys anySatisfy: [ :eachKey | 
-		aMessage arguments first string includesSubstring: eachKey caseSensitive: false ]) ifFalse: [ ^ self ].
+		aMessage arguments first string sameAs:  eachKey]) ifFalse: [ ^ self ].
 	
 	self 
 		attribute: (BrTextReplacingAttribute new withCharacter: $*)
