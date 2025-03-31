@@ -1155,6 +1155,63 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 	^ aScripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> doubleClickInClassHierarchy [
+	<gtExample>
+	| scripter |
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: SequenceableCollection ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to class hierarchy';
+				// #Sidebar;
+				// BrTab;
+				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+	self isClass: SequenceableCollection selectedIn: scripter.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				label: 'Double click ArrayedCollection';
+				// GtCoderNavigationClassesTreeElementId;
+				// BrLabel;
+				@ [ :each | each text asString = 'ArrayedCollection' ] ].
+	self isClass: ArrayedCollection selectedIn: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> doubleClickInClasses [
+	<gtExample>
+	| scripter |
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: SequenceableCollection ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	self isClass: SequenceableCollection selectedIn: scripter.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				label: 'Double click ArrayedCollection';
+				// GtCoderNavigationClassesTreeElementId;
+				// BrLabel;
+				@ [ :each | each text asString = 'ArrayedCollection' ] ].
+	self isClass: ArrayedCollection selectedIn: scripter.
+	^ scripter
+]
+
 { #category : #'examples - scrolling' }
 GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 	"Related to https://github.com/feenkcom/gtoolkit/issues/4267"
@@ -1271,6 +1328,17 @@ GtPharoCoderByScripterExamples >> instanceSideMethodsExpandsInstanceSideMethods 
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> isClass: class selectedIn: scripter [
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check ' , class name , ' is selected';
+				exists;
+				// GtCoderClassesTreeElement;
+				@ [ :each | each selectedClass = class ] ]
 ]
 
 { #category : #'examples - index' }
