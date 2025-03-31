@@ -888,22 +888,22 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 			selectedPackage := aCoder package.
 			selectedTag := nil.
 			self coder: aCoder.
+			self deselectClass.
+			self notifyClassesToShowChanged.
 			^ self notifyPackageSelected: selectedPackage ].
 	aCoder isForPackageTag
-		ifTrue:
-			[ (coder isForPackageTag and: [ aCoder packageTag = coder packageTag ])
+		ifTrue: [ (coder isForPackageTag and: [ aCoder packageTag = coder packageTag ])
 				ifTrue: [ ^ self ].
 			self assertCoder: aCoder.
 			selectedPackage := aCoder package.
 			selectedTag := aCoder packageTag.
 			self coder: aCoder.
+			self deselectClass.
+			self notifyClassesToShowChanged.
 			^ self notifyPackageSelected: selectedPackage tag: selectedTag ].
 
 	aCoder isForClass
-		ifTrue: [
-			^ self
-				selectClass: aCoder theClass
-				withCoder: [ aCoder ] ].
+		ifTrue: [ ^ self selectClass: aCoder theClass withCoder: [ aCoder ] ].
 
 	self assertCoder: aCoder.
 	self coder: aCoder.
