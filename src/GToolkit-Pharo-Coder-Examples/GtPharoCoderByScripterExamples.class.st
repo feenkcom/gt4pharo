@@ -1517,6 +1517,67 @@ GtPharoCoderByScripterExamples >> removePackageInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeSelectorInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method scripter step |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open selector menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = method selector asString ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove method menu item';
+				exists;
+				onSpaceRoot;
+				// #'menu--list';
+				// #'menu--label';
+				@ [ :each | each text asString = ('Remove method ' , method selector) ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover method class'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Remove method ' , method selector) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove method button';
+				exists;
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	self assert: method isInstalled equals: true.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove method';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	(Delay forMilliseconds: 500) wait.
+	scripter pulse.
+
+	self assert: method isInstalled equals: false.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> renameClassInIndex [
 	<gtExample>
 	<after: #cleanUp>
