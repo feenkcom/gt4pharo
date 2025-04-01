@@ -1395,6 +1395,66 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removePackageInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter package packageName step |
+	scripter := self setupForPackageTests.
+	package := environment anyDummyPackage realPackage.
+	packageName := package name.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open package menu';
+				// GtCoderPackagesTreeItemElement;
+				@ [ :each | each packageOrTag = package ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove package menu item';
+				exists;
+				onSpaceRoot;
+				// #'menu--list';
+				// #'menu--label';
+				@ [ :each | each text asString = ('Remove package ' , packageName) ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover remove package'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Remove package ' , packageName) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove package button';
+				exists;
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove package';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	(Delay forMilliseconds: 500) wait.
+	scripter pulse.
+
+	self
+		assert: (RPackageOrganizer default includesPackageNamed: packageName)
+		equals: false.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> renameClassInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -1428,7 +1488,7 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 	scripter
 		clickStep: [ :s | 
 			s
-				label: 'Open refactoring preview';
+				label: 'Perform refactoring';
 				onSpaceRoot;
 				id: GtRefactoringsPreviewAcceptId ].
 	(Delay forMilliseconds: 500) wait.
