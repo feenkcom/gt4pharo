@@ -1395,6 +1395,68 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| rootClass class scripter step className |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	rootClass := environment anyDummyLeafClass.
+	class := rootClass realClass.
+	className := class name.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open class menu';
+				// GtCoderClassesTreeItemElement;
+				@ [ :each | each theClass = class ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove class menu item';
+				exists;
+				onSpaceRoot;
+				// #'menu--list';
+				// #'menu--label';
+				@ [ :each | each text asString = ('Remove class ' , className) ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover remove class'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Remove class ' , className) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove class button';
+				exists;
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	self assert: (Smalltalk includesKey: className) equals: true.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove class';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	(Delay forMilliseconds: 500) wait.
+	scripter pulse.
+
+	self assert: (Smalltalk includesKey: className) equals: false.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> removePackageInIndex [
 	<gtExample>
 	<after: #cleanUp>
