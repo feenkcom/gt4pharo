@@ -136,8 +136,9 @@ GtRBNamespace >> privateReferencesTo: aSelector [
 			((self newClasses includesKey: name)
 				or: [ (environment includesMethod: each) not
 						or: [ cls := self classNamed: each methodClass name.
-							(cls hasRemoved: each selector)
-								or: [ cls newMethods includesKey: each selector ] ] ])
+							cls isNil
+								or: [ (cls hasRemoved: each selector)
+										or: [ cls newMethods includesKey: each selector ] ] ] ])
 				ifFalse: [ refs add: (cls methodFor: each selector) ] ].
 	^ refs
 ]
