@@ -4,7 +4,6 @@ Class {
 	#traits : 'TBrLayoutResizable',
 	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
-		'activatableRefactorings',
 		'changesElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
