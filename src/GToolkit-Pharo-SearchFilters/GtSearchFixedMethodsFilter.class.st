@@ -62,3 +62,11 @@ GtSearchFixedMethodsFilter >> methods: anOrderedCollection [
 GtSearchFixedMethodsFilter >> methodsDo: aBlock [
 	self methods do: aBlock.
 ]
+
+{ #category : #accessing }
+GtSearchFixedMethodsFilter >> withDefinedMethodsFrom: aCollectionOfMethods [
+	self methods: ((aCollectionOfMethods
+		collect: [ :aMethod | aMethod methodReference  ])
+		select: [ :aMethodReference | aMethodReference isDefined]
+			thenCollect: [:aMethodReference| aMethodReference method ])
+]
