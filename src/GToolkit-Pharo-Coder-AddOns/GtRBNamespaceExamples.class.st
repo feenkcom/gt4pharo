@@ -294,3 +294,25 @@ GtRBNamespaceExamples >> referencesToPrintOnWithRemovedMethod [
 	self assert: refs size + 1 equals: self referencesToPrintOn size.
 	^ refs
 ]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> referencesToQQQZZZFromObsoleteClass [
+	<gtExample>
+	| model references cls method |
+	cls := Object subclass: #QQQZZZReferences.
+	[ method := cls
+			compile: 'referencingQQQZZZ ^self QQQZZZ'
+			classified: #accessing.
+	model := GtRBNamespace onEnvironment: RBBrowserEnvironment new.
+	references := model privateReferencesTo: 'QQQZZZ' asSymbol.
+	self assert: references notEmpty.
+	references do: [ :each | self assert: (each isKindOf: RBMethod) ].
+	cls removeFromSystem: false.	"Force it to not update the cache"
+	self assert: (model privateReferencesTo: 'QQQZZZ' asSymbol) isEmpty ]
+		ensure: [ GtPharoIndex current
+				classRemoved: (ClassRemoved class: cls category: cls category).
+			cls removeSelector: 'referencingQQQZZZ' asSymbol.
+			cls removeFromSystem ].
+	self assert: (model privateReferencesTo: 'QQQZZZ' asSymbol) isEmpty.
+	^ references
+]
