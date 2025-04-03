@@ -47,7 +47,6 @@ GtVmMemoryManagement class >> initialize [
 GtVmMemoryManagement class >> minOldSpaceForGc [
 
 	MinOldSpaceForGc ifNil: [ ^ 0 ].
-	self validateMinOldSpaceForGc: MinOldSpaceForGc.
 	^ MinOldSpaceForGc
 ]
 
@@ -193,14 +192,14 @@ GtVmMemoryManagement >> writeToVm [
 	vm := Smalltalk vm.
 	oldConfig := self class new.
 
+	oldMinOldSpaceForGc := self class minOldSpaceForGc.
 	oldNewSpaceSize := vm parameterAt: 45 put: newSpaceSize.
 	oldMaxOldSpaceSize := vm parameterAt: 67 put: maxOldSpaceSize.
 	oldGrowthHeadroom := vm parameterAt: 25 put: growthHeadroom. 
 	oldShrinkThreadshold := vm parameterAt: 24 put: shrinkThreadshold.
 	oldFullGCRatio := vm parameterAt: 55 put: fullGCRatio asFloat.
-	oldMinOldSpaceForGc := self class minOldSpaceForGc.
 	self class minOldSpaceForGc: minOldSpaceForGc.
-	
+
 	^ oldConfig
 		newSpaceSize: oldNewSpaceSize;
 		maxOldSpaceSize: oldMaxOldSpaceSize;
