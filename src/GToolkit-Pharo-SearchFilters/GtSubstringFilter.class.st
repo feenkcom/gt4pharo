@@ -2,7 +2,8 @@ Class {
 	#name : #GtSubstringFilter,
 	#superclass : #GtSearchMethodsFilter,
 	#instVars : [
-		'substring'
+		'substring',
+		'includesNotSearchableMethods'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
@@ -16,6 +17,11 @@ GtSubstringFilter class >> substring: aString [
 GtSubstringFilter >> = anObject [
 	^ self class = anObject class
 		and: [ self substring asLowercase = anObject substring asLowercase ]
+]
+
+{ #category : #configuring }
+GtSubstringFilter >> excludeNotSearchableMethods [
+	includesNotSearchableMethods := false
 ]
 
 { #category : #accessing }
@@ -35,9 +41,15 @@ GtSubstringFilter >> hash [
 	^ self class hash bitXor: self substring asLowercase hash
 ]
 
+{ #category : #configuring }
+GtSubstringFilter >> includeNotSearchableMethods [
+	includesNotSearchableMethods := true
+]
+
 { #category : #testing }
 GtSubstringFilter >> includesMethod: aCompiledMethod [
-	aCompiledMethod isSourceSearchable ifFalse: [ ^ false ].
+	(self shouldExcludeNotSearchableMethods and: [
+		aCompiledMethod isSourceSearchable not]) ifTrue: [ ^ false ].
 
 	^ (aCompiledMethod sourceCode
 		findString: self substring
@@ -50,6 +62,11 @@ GtSubstringFilter >> printOn: aStream [
 	aStream
 		print: self substring;
 		nextPutAll: ' gtSubstringMatch'
+]
+
+{ #category : #testing }
+GtSubstringFilter >> shouldExcludeNotSearchableMethods [
+	^ includesNotSearchableMethods ifNil: [ true ]
 ]
 
 { #category : #accessing }
