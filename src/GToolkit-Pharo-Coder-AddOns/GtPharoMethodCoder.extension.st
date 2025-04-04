@@ -197,7 +197,10 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 			(GtExtractTemporaryRefactoringController new
 				node: nodes first;
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
-		id: #'context-menu--extract-temp'.
+		id: #'context-menu--extract-temp'
+		shortcutKey: (self extractToTemporaryShortcut
+			ifNotNil: [ :aShortcut | 
+				 aShortcut combinationForPlatform gtDisplayString]).
 	^ true
 ]
 
@@ -977,6 +980,11 @@ GtPharoMethodCoder >> extractTestToPlaygroundIn: button event: anEvent requester
 				notifyToolSpawn: (LePagePhlowTool page: page)
 				withDestination: self spawnDestination
 				requesterObject: aRequester ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> extractToTemporaryShortcut [
+	^nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
