@@ -1696,6 +1696,14 @@ GtPharoCoderByScripterExamples >> removeClassInIndex [
 
 	self assert: (Smalltalk includesKey: className) equals: false.
 
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
 	^ scripter
 ]
 
@@ -1755,6 +1763,14 @@ GtPharoCoderByScripterExamples >> removePackageInIndex [
 	self
 		assert: (RPackageOrganizer default includesPackageNamed: packageName)
 		equals: false.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
 
 	^ scripter
 ]
@@ -1816,6 +1832,14 @@ GtPharoCoderByScripterExamples >> removeSelectorInIndex [
 	scripter pulse.
 
 	self assert: method isInstalled equals: false.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
 
 	^ scripter
 ]
