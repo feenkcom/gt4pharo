@@ -38,6 +38,8 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 						progressContainer addChild: progress after: theAcceptButton.
 						progress fraction: 0.
 						runningElement := progress ].
+				self
+					dispatchEvent: (GtRefactoringsAboutToApplyEvent new refactorings: executedRefactorings).
 				(theRefactoringsElement
 					applyRefactoringWithProgress: [ :fraction | 
 						progress
@@ -116,7 +118,7 @@ GtRefactoringsPreviewButton >> buildPreviewForButton: previewButton [
 
 { #category : #initialization }
 GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
-	| theRefactoringsElement anAcceptButton aContainer label refactoringsOrChanges aToolbarElement |
+	| theRefactoringsElement anAcceptButton aContainer refactoringsOrChanges aToolbarElement |
 	refactoringsOrChanges := self executedRefactorings.
 	theRefactoringsElement := GtRefactoringsElement new
 			hExact: self previewWidth * 1.25;

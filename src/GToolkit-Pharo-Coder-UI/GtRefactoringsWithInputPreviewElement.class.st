@@ -8,10 +8,72 @@ Class {
 }
 
 { #category : #accessing }
+GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock labeled: aString initialValue: initialValueString from: anElement beforeApplyingDo: applyBlock [
+	| refactoring label refactoringButton edit acceptButton |
+	refactoringButton := self new.
+	refactoringButton cancelBlock: [  ].
+	edit := BrHorizontalPane new.
+	edit padding: (BlInsets all: 10).
+	edit fitContent.
+	edit
+		addChild: (BrLabel new
+				fitContent;
+				aptitude: BrGlamorousLabelAptitude;
+				text: aString).
+	label := BrEditableLabel new.
+	label
+		aptitude: (BrGlamorousEditableLabelAptitude new
+				fontSize: 11.9;
+				background: Color transparent);
+		text: initialValueString;
+		focused: true;
+		when: BrEditorAcceptWish
+			do: [ :aWish | 
+				acceptButton removeFromParent.
+				edit
+					padding: (BlInsets
+							top: 10
+							bottom: 0
+							left: 10
+							right: 10).
+				refactoring := refactoringBlock value: aWish text asString.
+				refactoringButton refactorings: [ {refactoring} ].
+				label switchToLabel ];
+		switchToEditor.
+	label viewModel
+		when: BrEditorModeChanged
+		do: [ :event | 
+			event mode isEditable
+				ifTrue: [ edit padding: (BlInsets all: 10).
+					refactoringButton refactorings: [ #() ].
+					edit addChild: acceptButton ] ].
+	edit addChild: label as: #refactoringEditor.
+	acceptButton := BrButton new
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			id: GtRefactoringsPreviewAcceptId;
+			icon: BrGlamorousVectorIcons accept;
+			beSmallSize;
+			requestFocus;
+			label: 'Save';
+			margin: (BlInsets
+					top: 0
+					left: 10
+					bottom: 10
+					right: 0);
+			action: [ label acceptEdition ].
+	edit addChild: acceptButton.
+	refactoringButton editorElement: edit.
+	refactoringButton
+		when: GtRefactoringsAboutToApplyEvent
+		do: [ :event | applyBlock value ].
+	^ refactoringButton buildPreviewForButton: anElement
+]
+
+{ #category : #accessing }
 GtRefactoringsWithInputPreviewElement >> buildPreviewForButton: previewButton [
 	| pane |
 	pane := BrVerticalPane new.
-	pane fitContent.
+	pane fitContentLimited.
 	editorElement
 		ifNotNil: [ editorElement removeFromParent.
 			pane addChild: editorElement ].
