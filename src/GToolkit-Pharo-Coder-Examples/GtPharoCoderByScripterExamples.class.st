@@ -543,6 +543,56 @@ GtPharoCoderByScripterExamples >> classHierarchyInIndexUpdatesClassListOnClassCh
 	^ scripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> classHierarchyIndexSelectionDoesNotUpdateClassList [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter cls package packages |
+	scripter := self setupForPackageTests.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	cls := package anyDummyClass realClass.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to class hierarchy';
+				// BrTab;
+				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check hierarchy only has limited classes';
+				notExists;
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | 
+					#('ProtoObject' 'Object' 'Temporary*Class*')
+						noneSatisfy: [ :e | e match: each text asString ] ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select Object';
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'Object' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check hierarchy only has limited classes';
+				notExists;
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | 
+					#('ProtoObject' 'Object' 'Temporary*Class*')
+						noneSatisfy: [ :e | e match: each text asString ] ] ].
+
+	^ scripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoCoderByScripterExamples >> classSideMethodsShouldHaveSelfAsBehaviorNotAnInstance [
 	"See https://github.com/feenkcom/gtoolkit/issues/4127"
