@@ -1495,13 +1495,8 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| rootClass class scripter step className |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	rootClass := environment anyDummyLeafClass.
-	class := rootClass realClass.
+GtPharoCoderByScripterExamples >> extractSuperclassFrom: class [
+	| className scripter step |
 	className := class name.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
 	self maximizePagerPane: scripter.
@@ -1572,7 +1567,7 @@ GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
 				notExists;
 				// #preview;
 				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
-				
+
 	scripter
 		keyPressStep: [ :s | 
 			s
@@ -1591,6 +1586,22 @@ GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
 				id: GtRefactoringsPreviewAcceptId ].
 
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	^ self extractSuperclassFrom: environment anyDummyLeafClass realClass
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> extractSuperclassWithSubclassesInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	^ self extractSuperclassFrom: environment anyDummyRootClass realClass
 ]
 
 { #category : #'examples - evaluation context' }
@@ -1685,6 +1696,130 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 	self assert: objectToSpawn equals: method.
 
 	^ aScripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method step selector |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open method menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = selector ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover push down method'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Push down method ' , selector) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check confirm button visible';
+				onSpaceRoot;
+				exists;
+				// #'confirm-preview' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click confirm button';
+				onSpaceRoot;
+				// #'confirm-preview' ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method step selector |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open method menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = selector ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover push up method'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Push up method ' , selector) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check confirm button visible';
+				onSpaceRoot;
+				exists;
+				// #'confirm-preview' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Confirm refactoring';
+				onSpaceRoot;
+				// #'confirm-preview' ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+
+	^ scripter
 ]
 
 { #category : #'examples - index' }
@@ -1826,6 +1961,81 @@ GtPharoCoderByScripterExamples >> removePackageInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeProtocolsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method step selector |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	method methodClass addCategory: #'some protocol' before: nil.
+	scripter pulse.
+
+	self
+		assert: (method methodClass organization categories includes: #'some protocol')
+		equals: true.
+
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open protocol menu';
+				// GtCoderProtocolsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'some protocol 0' ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover remove protocol'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Remove some protocol' ].
+	step play.
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove button';
+				exists;
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Do remove';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	(Delay forMilliseconds: 500) wait.
+	scripter pulse.
+
+	self
+		assert: (method methodClass organization categories includes: #'some protocol')
+		equals: false.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> removeSelectorInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -1947,6 +2157,99 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method step selector |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open method menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = selector ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover rename method'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Rename message ' , selector) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor is visible';
+				onSpaceRoot;
+				exists;
+				// #refactoringEditor ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click in rename editor';
+				onSpaceRoot;
+				// #refactoringEditor ].
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor has focus';
+				onSpaceRoot;
+				// #refactoringEditor;
+				hasFocus ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Move to end';
+				key: BlKeyboardKey end ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new selector name';
+				text: '1234' ].
+
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Show refactoring preview';
+				key: BlKeyboardKey return ].
+
+	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor is removed';
+				notExists;
+				id: #renameClassEditor ].
+				
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> renamePackageInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -2053,6 +2356,99 @@ GtPharoCoderByScripterExamples >> renamePackageInIndex [
 				label: 'Check editor is removed';
 				notExists;
 				id: #renameClassEditor ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameProtocolsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method step selector |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open protocol menu';
+				// GtCoderProtocolsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = ('api - ' , selector , ' 1') ] ].
+
+	step := scripter menuStep.
+	step label: 'Hover rename method'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = ('Rename api - ' , selector) ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor is visible';
+				onSpaceRoot;
+				exists;
+				// #refactoringEditor ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click in rename editor';
+				onSpaceRoot;
+				// #refactoringEditor ].
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor has focus';
+				onSpaceRoot;
+				// #refactoringEditor;
+				hasFocus ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Move to end';
+				key: BlKeyboardKey end ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new selector name';
+				text: '1234' ].
+
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Show refactoring preview';
+				key: BlKeyboardKey return ].
+
+	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor is removed';
+				notExists;
+				id: #renameClassEditor ].
+
 	^ scripter
 ]
 

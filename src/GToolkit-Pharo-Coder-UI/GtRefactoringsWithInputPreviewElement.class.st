@@ -8,6 +8,42 @@ Class {
 }
 
 { #category : #accessing }
+GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock confirmationLabeled: aString from: anElement beforeApplyingDo: applyBlock [
+	| refactoring refactoringButton edit acceptButton |
+	refactoringButton := self new.
+	refactoringButton cancelBlock: [  ].
+	edit := BrHorizontalPane new.
+	edit padding: (BlInsets all: 10).
+	edit fitContent.
+	edit
+		addChild: (BrLabel new
+				fitContent;
+				aptitude: BrGlamorousLabelAptitude;
+				text: aString).
+	acceptButton := BrButton new
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			id: #'confirm-preview';
+			icon: BrGlamorousVectorIcons accept;
+			beSmallSize;
+			requestFocus;
+			label: 'Save';
+			margin: (BlInsets
+					top: 0
+					left: 10
+					bottom: 0
+					right: 0);
+			action: [ acceptButton visibility: BlVisibility gone.
+				refactoring := refactoringBlock value.
+				refactoringButton refactorings: [ {refactoring} ] ].
+	edit addChild: acceptButton.
+	refactoringButton editorElement: edit.
+	refactoringButton
+		when: GtRefactoringsAboutToApplyEvent
+		do: [ :event | applyBlock value ].
+	^ refactoringButton buildPreviewForButton: anElement
+]
+
+{ #category : #accessing }
 GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock labeled: aString initialValue: initialValueString from: anElement beforeApplyingDo: applyBlock [
 	| refactoring label refactoringButton edit acceptButton |
 	refactoringButton := self new.
