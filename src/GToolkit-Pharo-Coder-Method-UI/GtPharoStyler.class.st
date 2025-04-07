@@ -73,10 +73,10 @@ GtPharoStyler >> definitionTooltipAttributeFor: aNamedVariable [
 						c horizontal matchParent.
 						c vertical matchParent ].
 			tooltipContent := [ BrLabel new
-					aptitude: BrGlamorousLabelAptitude new glamorousRegularFontAndSize;
+					aptitude: BrLabelAptitude;
 					padding: (BlInsets all: 5);
 					text: (aNamedVariable name value , ' defined in ') asRopedText
-							, (definer name asRopedText attribute: BlFontWeightAttribute bold);
+							, definer name asRopedText glamorousCodeFont;
 					alignCenter ] asStencil.
 			aValueElement
 				addAptitude: (BrGlamorousWithExplicitTooltipAptitude content: tooltipContent).
