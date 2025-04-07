@@ -1,5 +1,5 @@
 Class {
-	#name : #GtRefactoringsAppliedEvent,
+	#name : #GtRefactoringsAboutToApplyEvent,
 	#superclass : #GtRefactoringsEvent,
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }

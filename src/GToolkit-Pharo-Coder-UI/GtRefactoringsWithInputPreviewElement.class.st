@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #accessing }
-GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock labeled: aString initialValue: initialValueString from: anElement whenFinished: finishBlock [
+GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock labeled: aString initialValue: initialValueString from: anElement beforeApplyingDo: applyBlock [
 	| refactoring label refactoringButton edit acceptButton |
 	refactoringButton := self new.
 	refactoringButton cancelBlock: [  ].
@@ -64,8 +64,8 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 	edit addChild: acceptButton.
 	refactoringButton editorElement: edit.
 	refactoringButton
-		when: GtRefactoringsAppliedEvent
-		do: [ :event | finishBlock value ].
+		when: GtRefactoringsAboutToApplyEvent
+		do: [ :event | applyBlock value ].
 	^ refactoringButton buildPreviewForButton: anElement
 ]
 

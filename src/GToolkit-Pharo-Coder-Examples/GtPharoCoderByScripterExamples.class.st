@@ -243,12 +243,12 @@ GtPharoCoderByScripterExamples >> cancelRenameClassInIndex [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> checkClassListIn: scripter containsName: aSymbol [
+GtPharoCoderByScripterExamples >> checkClassListIn: scripter containsName: aSymbol exists: aBoolean [
 	scripter
 		checkStep: [ :s | 
+			aBoolean ifTrue: [ s exists ] ifFalse: [ s notExists ].
 			s
 				label: 'Check class list has ' , aSymbol;
-				exists;
 				// GtCoderClassesTreeElement;
 				// BrLabel;
 				@ [ :each | each text asString = aSymbol asString ] ]
@@ -508,6 +508,88 @@ GtPharoCoderByScripterExamples >> checkSlotsUpdateAfterClassChange [
 				// GtCoderSlotsGroupedListElement;
 				label: 'Slots list is empty';
 				do: [ :list | self assert: list maxSelectionIndex equals: 0 ] ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> classHierarchyInIndexUpdatesClassListOnClassChanges [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter cls package packages |
+	scripter := self setupForPackageTests.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	cls := package anyDummyClass realClass.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to class hierarchy';
+				// BrTab;
+				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+	self
+		checkClassListIn: scripter
+		containsName: #OrderedCollection
+		exists: false.
+
+	cls superclass: OrderedCollection.
+	scripter pulse.
+	
+	self
+		checkClassListIn: scripter
+		containsName: #OrderedCollection
+		exists: true.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> classHierarchyIndexSelectionDoesNotUpdateClassList [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter cls package packages |
+	scripter := self setupForPackageTests.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	cls := package anyDummyClass realClass.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to class hierarchy';
+				// BrTab;
+				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check hierarchy only has limited classes';
+				notExists;
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | 
+					#('ProtoObject' 'Object' 'Temporary*Class*')
+						noneSatisfy: [ :e | e match: each text asString ] ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select Object';
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'Object' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check hierarchy only has limited classes';
+				notExists;
+				// GtCoderClassesTreeElement;
+				// BrLabel;
+				@ [ :each | 
+					#('ProtoObject' 'Object' 'Temporary*Class*')
+						noneSatisfy: [ :e | e match: each text asString ] ] ].
+
 	^ scripter
 ]
 
@@ -1664,6 +1746,14 @@ GtPharoCoderByScripterExamples >> removeClassInIndex [
 
 	self assert: (Smalltalk includesKey: className) equals: false.
 
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
 	^ scripter
 ]
 
@@ -1723,6 +1813,14 @@ GtPharoCoderByScripterExamples >> removePackageInIndex [
 	self
 		assert: (RPackageOrganizer default includesPackageNamed: packageName)
 		equals: false.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
 
 	^ scripter
 ]
@@ -1785,6 +1883,14 @@ GtPharoCoderByScripterExamples >> removeSelectorInIndex [
 
 	self assert: method isInstalled equals: false.
 
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
 	^ scripter
 ]
 
@@ -1835,7 +1941,8 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 				id: #renameClassEditor ].
 	self
 		checkClassListIn: scripter
-		containsName: environment anyDummyLeafClass realClass name.
+		containsName: environment anyDummyLeafClass realClass name
+		exists: true.
 	^ scripter
 ]
 
@@ -2145,7 +2252,10 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
 				onSpace ].
 	self maximizePagerPane: scripter.
-	self checkClassListIn: scripter containsName: class name.
+	self
+		checkClassListIn: scripter
+		containsName: class name
+		exists: true.
 	scripter
 		secondaryClickStep: [ :s | 
 			s
