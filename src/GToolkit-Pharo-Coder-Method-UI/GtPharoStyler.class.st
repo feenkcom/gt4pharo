@@ -216,7 +216,7 @@ GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
 		ifFalse: [ self
 				attributes: {BlTextForegroundAttribute color: Color blue muchDarker.
 						BlFontWeightAttribute semiBold.
-						self definitionTooltipAttributeFor: aNamedVariable}
+						"self definitionTooltipAttributeFor: aNamedVariable"}
 				from: aNamedVariable name startPosition
 				to: aNamedVariable name stopPosition ]
 ]
