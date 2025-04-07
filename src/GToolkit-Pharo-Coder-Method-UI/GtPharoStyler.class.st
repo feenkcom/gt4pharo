@@ -51,6 +51,38 @@ GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLe
 		foreground: color
 ]
 
+{ #category : #'visiting - variables' }
+GtPharoStyler >> definitionTooltipAttributeFor: aNamedVariable [
+	| definer |
+	definer := self coderViewModel behavior
+			whichClassDefinesInstVar: aNamedVariable name value.
+	definer ifNil: [ ^ BlFontWeightAttribute semiBold ].
+	^ BrTextAdornmentDynamicAttribute new
+		beOverlay;
+		stencil: [ :aTextPiece :anEditorElement | 
+			| aContainer aValueElement tooltipContent |
+			aContainer := BlElement new
+					clipChildren: false;
+					layout: BlFrameLayout new;
+					constraintsDo: [ :c | 
+						c horizontal exact: aTextPiece textLength * 10.
+						c vertical exact: 15 ].
+			aValueElement := BlElement new
+					clipChildren: true;
+					constraintsDo: [ :c | 
+						c horizontal matchParent.
+						c vertical matchParent ].
+			tooltipContent := [ BrLabel new
+					aptitude: BrGlamorousLabelAptitude new glamorousRegularFontAndSize;
+					padding: (BlInsets all: 5);
+					text: (aNamedVariable name value , ' defined in ') asRopedText
+							, (definer name asRopedText attribute: BlFontWeightAttribute bold);
+					alignCenter ] asStencil.
+			aValueElement
+				addAptitude: (BrGlamorousWithExplicitTooltipAptitude content: tooltipContent).
+			aContainer addChild: aValueElement ]
+]
+
 { #category : #private }
 GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 	| theParanthesesMarker cursorEnterAction cursorLeaveAction |
@@ -173,18 +205,20 @@ GtPharoStyler >> visitDeclaredGlobalVariable: aNamedVariable [
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
-	| isLocallyDefined color |
+	| isLocallyDefined |
 	isLocallyDefined := aNamedVariable allParents
 			anySatisfy: [ :each | each isErrorNode not and: [ each defines: aNamedVariable name value ] ].
-	color := isLocallyDefined
-			ifFalse: [ self
-					attributes: {BlTextForegroundAttribute color: Color blue muchDarker. BlFontWeightAttribute semiBold}
-					from: aNamedVariable name startPosition
-					to: aNamedVariable name stopPosition ]
-			ifTrue: [ self
-					attributes: {BlTextForegroundAttribute color: Color blue muchDarker}
-					from: aNamedVariable name startPosition
-					to: aNamedVariable name stopPosition ]
+	isLocallyDefined
+		ifTrue: [ self
+				attributes: {BlTextForegroundAttribute color: Color blue muchDarker}
+				from: aNamedVariable name startPosition
+				to: aNamedVariable name stopPosition ]
+		ifFalse: [ self
+				attributes: {BlTextForegroundAttribute color: Color blue muchDarker.
+						BlFontWeightAttribute semiBold.
+						self definitionTooltipAttributeFor: aNamedVariable}
+				from: aNamedVariable name startPosition
+				to: aNamedVariable name stopPosition ]
 ]
 
 { #category : #visiting }
