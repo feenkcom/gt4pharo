@@ -188,7 +188,7 @@ GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 ]
 
 { #category : #'examples - context menu' }
-GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
+GtPharoSnippetCoderByScripterExamples >> contextMenuInspectAClassShouldSpawnCompositeTool [
 	<gtExample>
 	| aScripter |
 	aScripter := self
@@ -203,15 +203,26 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspect [
 		openAndClickOnContextMenuItemFor: aScripter
 		id: GtSourceCoderDoItAndGoActionId.
 
-	aScripter assertStep: [:s | 
-		s label: 'Assert Triggered Spawn Object Event';
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert Triggered Spawn Object Event';
 				onScripter;
-		satisfies: [ :theScripter | 
-			theScripter events reversed
-				detectEventOfClass: GtPhlowObjectToSpawn
-				ifFound: [ :theEvent | theEvent object = Object ]
-				ifNone: [ AssertionFailure
-						signal: GtPhlowObjectToSpawn name , ' event was not found' ] ] ].
+				satisfies: [ :theScripter | 
+					theScripter events reversed
+						detectEventOfClass: GtPhlowObjectToSpawn
+						ifFound: [ :theEvent | 
+							theEvent tool class = GtPhlowCompositeTool
+								and: [ | firstTool |
+									firstTool := theEvent tool tools first.
+									firstTool class = GtClassCoderTool
+										and: [ firstTool observedClass = Object
+												and: [ | secondTool |
+													secondTool := theEvent tool tools second.
+													secondTool class = GtInspectorTool
+														and: [ secondTool object = Object ] ] ] ] ]
+						ifNone: [ AssertionFailure
+								signal: GtPhlowObjectToSpawn name , ' event was not found' ] ] ].
 
 	^ aScripter
 ]

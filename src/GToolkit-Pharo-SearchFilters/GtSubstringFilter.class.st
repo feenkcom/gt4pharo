@@ -49,8 +49,8 @@ GtSubstringFilter >> includeNotSearchableMethods [
 { #category : #testing }
 GtSubstringFilter >> includesMethod: aCompiledMethod [
 	(self shouldExcludeNotSearchableMethods and: [
-		aCompiledMethod isSourceSearchable not]) ifTrue: [ ^ false ].
-
+		aCompiledMethod isSourceSearchable not ])  ifTrue: [ ^ false ].
+		
 	^ (aCompiledMethod sourceCode
 		findString: self substring
 		startingAt: 1
@@ -66,7 +66,12 @@ GtSubstringFilter >> printOn: aStream [
 
 { #category : #testing }
 GtSubstringFilter >> shouldExcludeNotSearchableMethods [
-	^ includesNotSearchableMethods ifNil: [ true ]
+	^ self shouldIncludeNotSearchableMethods not
+]
+
+{ #category : #testing }
+GtSubstringFilter >> shouldIncludeNotSearchableMethods [
+	^ includesNotSearchableMethods ifNil: [ false ]
 ]
 
 { #category : #accessing }
