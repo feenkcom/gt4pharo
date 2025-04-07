@@ -1495,13 +1495,8 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| rootClass class scripter step className |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	rootClass := environment anyDummyLeafClass.
-	class := rootClass realClass.
+GtPharoCoderByScripterExamples >> extractSuperclassFrom: class [
+	| className scripter step |
 	className := class name.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
 	self maximizePagerPane: scripter.
@@ -1572,7 +1567,7 @@ GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
 				notExists;
 				// #preview;
 				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
-				
+
 	scripter
 		keyPressStep: [ :s | 
 			s
@@ -1591,6 +1586,22 @@ GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
 				id: GtRefactoringsPreviewAcceptId ].
 
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	^ self extractSuperclassFrom: environment anyDummyLeafClass realClass
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> extractSuperclassWithSubclassesInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	^ self extractSuperclassFrom: environment anyDummyRootClass realClass
 ]
 
 { #category : #'examples - evaluation context' }
