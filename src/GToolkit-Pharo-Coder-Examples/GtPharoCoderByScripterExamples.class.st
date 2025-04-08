@@ -12,6 +12,24 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> abstractForSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter step |
+	scripter := self startWithMenuOnInstVar1Slot.
+	step := scripter menuStep.
+	step label: 'Hover abstract'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Abstract instVar1' ].
+	step play.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoCoderByScripterExamples >> addBackNewInstanceSideMethod [
 	"See https://github.com/feenkcom/gtoolkit/issues/4257"
@@ -890,6 +908,35 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> confirmAndRunRefactoring: scripter [
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check confirm button visible';
+				onSpaceRoot;
+				exists;
+				// #'confirm-preview' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click confirm button';
+				onSpaceRoot;
+				// #'confirm-preview' ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ]
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -985,6 +1032,24 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 				onSpaceRoot;
 				id: GtRefactoringsPreviewAcceptId ].
 
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter step |
+	scripter := self startWithMenuOnInstVar1Slot.
+	step := scripter menuStep.
+	step label: 'Hover create accessors'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Create accessors instVar1' ].
+	step play.
+	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
 
@@ -1699,6 +1764,24 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> protectForSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter step |
+	scripter := self startWithMenuOnInstVar1Slot.
+	step := scripter menuStep.
+	step label: 'Hover protect'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Protect instVar1' ].
+	step play.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushDownMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -1721,7 +1804,6 @@ GtPharoCoderByScripterExamples >> pushDownMethodInIndex [
 				// GtCoderMethodsGroupedListElement;
 				// BrLabel;
 				@ [ :each | each text asString = selector ] ].
-
 	step := scripter menuStep.
 	step label: 'Hover push down method'.
 	step hoverMenuItem
@@ -1730,33 +1812,25 @@ GtPharoCoderByScripterExamples >> pushDownMethodInIndex [
 		// #'menu--label';
 		@ [ :each | each text asString = ('Push down method ' , selector) ].
 	step play.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check confirm button visible';
-				onSpaceRoot;
-				exists;
-				// #'confirm-preview' ].
-
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click confirm button';
-				onSpaceRoot;
-				// #'confirm-preview' ].
-
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter step |
+	scripter := self startWithMenuOnInstVar1Slot.
+	step := scripter menuStep.
+	step label: 'Hover push down'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Push down instVar1' ].
+	step play.
+	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
 
@@ -1783,7 +1857,6 @@ GtPharoCoderByScripterExamples >> pushUpMethodInIndex [
 				// GtCoderMethodsGroupedListElement;
 				// BrLabel;
 				@ [ :each | each text asString = selector ] ].
-
 	step := scripter menuStep.
 	step label: 'Hover push up method'.
 	step hoverMenuItem
@@ -1792,33 +1865,46 @@ GtPharoCoderByScripterExamples >> pushUpMethodInIndex [
 		// #'menu--label';
 		@ [ :each | each text asString = ('Push up method ' , selector) ].
 	step play.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class step |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	class := environment anyDummyLeafClass realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
 	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check confirm button visible';
-				onSpaceRoot;
-				exists;
-				// #'confirm-preview' ].
-
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
 	scripter
 		clickStep: [ :s | 
 			s
-				label: 'Confirm refactoring';
-				onSpaceRoot;
-				// #'confirm-preview' ].
-
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
-
+				label: 'Switch to slots';
+				// #slots ].
 	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar3' ] ].
+	step := scripter menuStep.
+	step label: 'Hover push down'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Push up instVar3' ].
+	step play.
+	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
 
@@ -1880,6 +1966,50 @@ GtPharoCoderByScripterExamples >> removeClassInIndex [
 	scripter pulse.
 
 	self assert: (Smalltalk includesKey: className) equals: false.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeForSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter step |
+	scripter := self startWithMenuOnInstVar1Slot.
+
+	step := scripter menuStep.
+	step label: 'Hover re4move'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Remove instVar1' ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check remove button exists';
+				exists;
+				onSpaceRoot;
+				id: #removeButton ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click remove button';
+				onSpaceRoot;
+				// #removeButton ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
 
 	scripter
 		checkStep: [ :s | 
@@ -2453,6 +2583,99 @@ GtPharoCoderByScripterExamples >> renameProtocolsInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter step |
+	scripter := self startWithMenuOnInstVar1Slot.
+
+	step := scripter menuStep.
+	step label: 'Hover rename'.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = 'Rename instVar1' ].
+	step play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor is visible';
+				onSpaceRoot;
+				exists;
+				// #refactoringEditor ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click in rename editor';
+				onSpaceRoot;
+				// #refactoringEditor ].
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor has focus';
+				onSpaceRoot;
+				// #refactoringEditor;
+				hasFocus ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Move to end';
+				key: BlKeyboardKey end ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new name';
+				text: '1234' ].
+
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Show refactoring preview';
+				key: BlKeyboardKey return ].
+
+	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Perform refactoring';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+
+	(Delay forMilliseconds: 300) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check editor is removed';
+				notExists;
+				id: #renameClassEditor ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> repackageClassUpdatesIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -2710,6 +2933,34 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 				notExists;
 				// #preview;
 				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> startWithMenuOnInstVar1Slot [
+	| scripter class |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	class := environment anyDummyRootClass realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to slots';
+				// #slots ].
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar1' ] ].
 	^ scripter
 ]
 
