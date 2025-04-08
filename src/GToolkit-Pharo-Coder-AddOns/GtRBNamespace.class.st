@@ -103,12 +103,11 @@ GtRBNamespace >> privateImplementorsOf: aSelector [
 				do: [ :cls | (cls gtDirectlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
 	(GtPharoIndex current implementersOf: aSelector)
 		do: [ :each | 
-			| cls |
 			((environment includesMethod: each)
 				and: [ each isFromTrait not
 						and: [ (self hasRemoved: each methodClass instanceSide name) not ] ])
-				ifTrue: [ cls := self classNamed: each methodClass name.
-					(cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ].
+				ifTrue: [ (self classNamed: each methodClass name)
+						ifNotNil: [ :cls | (cls directlyDefinesMethod: aSelector) ifTrue: [ implementers add: cls ] ] ] ].
 	^ implementers
 ]
 
