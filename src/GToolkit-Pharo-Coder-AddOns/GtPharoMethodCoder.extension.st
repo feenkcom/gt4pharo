@@ -693,6 +693,41 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns: 221>
+	| node cursors splitBeforeMessage position |
+	cursors := aCoderViewModel cursors allCursors.
+	cursors size = 1 ifFalse: [ ^ self ].
+	position := cursors first position.
+	node := self nodeAt: position.
+	node ifNil: [ ^ self ].
+	(node isMessage
+		and: [ node parent isCascade
+				and: [ (node parent messages identityIndexOf: node) > 1 ] ])
+		ifTrue: [ splitBeforeMessage := node ].
+	node isCascade
+		ifTrue: [ node messages
+				doWithIndex: [ :each :i | 
+					(i > 1
+						and: [ each startPosition > position
+								and: [ (node messages at: i - 1) stopPosition < position ] ])
+						ifTrue: [ splitBeforeMessage := each ] ] ].
+	splitBeforeMessage ifNil: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Split cascade'
+				description: splitBeforeMessage source)
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: splitBeforeMessage)
+		leave: self removeHighlightBlock
+		action: [ :cvm :element | 
+			(GtSplitCascadesController new
+				node: splitBeforeMessage;
+				sourceCoderViewModel: cvm) executeIn: element ]
+		id: #'context-menu--split-cascade'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 	| uses groups |
 	aNode isVariable ifFalse: [ ^ self ].
