@@ -9,6 +9,18 @@ Class {
 
 { #category : #accessing }
 GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock labeled: aString initialValue: initialValueString from: anElement beforeApplyingDo: applyBlock [
+	^ self
+		elementForRefactoring: refactoringBlock
+		labeled: aString
+		initialValue: initialValueString
+		from: anElement
+		beforeApplyingDo: applyBlock
+		focusedEditor: true
+		focusedAcceptButton: false
+]
+
+{ #category : #accessing }
+GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock labeled: aString initialValue: initialValueString from: anElement beforeApplyingDo: applyBlock focusedEditor: isEditorFocusedByDefault focusedAcceptButton: isAcceptButtonFocused [
 	| refactoring label refactoringButton edit acceptButton |
 	refactoringButton := self new.
 	refactoringButton cancelBlock: [  ].
@@ -26,7 +38,7 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 				fontSize: 11.9;
 				background: Color transparent);
 		text: initialValueString;
-		focused: true;
+		focused: isEditorFocusedByDefault;
 		when: BrEditorAcceptWish
 			do: [ :aWish | 
 				acceptButton removeFromParent.
@@ -48,12 +60,12 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 					refactoringButton refactorings: [ #() ].
 					edit addChild: acceptButton ] ].
 	edit addChild: label as: #refactoringEditor.
+	
 	acceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			id: GtRefactoringsPreviewAcceptId;
 			icon: BrGlamorousVectorIcons accept;
 			beSmallSize;
-			requestFocus;
 			label: 'Save';
 			margin: (BlInsets
 					top: 0
@@ -61,6 +73,10 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 					bottom: 10
 					right: 0);
 			action: [ label acceptEdition ].
+			
+	isAcceptButtonFocused ifTrue: [
+		acceptButton requestFocus ].
+			
 	edit addChild: acceptButton.
 	refactoringButton editorElement: edit.
 	refactoringButton
