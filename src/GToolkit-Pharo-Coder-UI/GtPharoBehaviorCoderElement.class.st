@@ -178,11 +178,6 @@ GtPharoBehaviorCoderElement >> buildDefinitionElement [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorCoderElement >> classCoder [
-	^ behaviorCoderViewModel classCoder
-]
-
-{ #category : #accessing }
 GtPharoBehaviorCoderElement >> coderViewModel [
 	^ behaviorCoderViewModel
 ]
