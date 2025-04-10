@@ -4680,6 +4680,185 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 	^ aScripter
 ]
 
+{ #category : #'examples - split cascade' }
+GtPharoMethodCoderByScripterExamples >> forSplitCascade_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	^ (WriteStream on: String new) print: self; space; print: self identityHash; cr; print: self class; space; print: self class identityHash; contents' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Position the cursor';
+				action: [ :aSourceEditor | 
+					| index |
+					index := (aSourceEditor text asString indexOfSubCollection: 'cr;') + 3.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	^ scripter
+]
+
+{ #category : #'examples - split cascade' }
+GtPharoMethodCoderByScripterExamples >> forSplitCascade_02_start [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self forSplitCascade_01_setup.
+	self openContextMenu: scripter.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover split cascade';
+				onSpaceRoot;
+				id: #'context-menu--split-cascade' ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click split cascade';
+				onSpaceRoot;
+				id: #'context-menu--split-cascade' ].
+	^ scripter
+]
+
+{ #category : #'examples - split cascade' }
+GtPharoMethodCoderByScripterExamples >> forSplitCascade_03_enter_variable [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self forSplitCascade_02_start.
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source code modified';
+				satisfies: [ :aCoder | aCoder isModified ];
+				onModel ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString indexOfSubCollection: '_ :='.
+						index to: index ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor is not focused';
+				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor has focus';
+				satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert variable name editor source code';
+				value: [ :aNameEditor | aNameEditor text asString ] equals: '_';
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert variable name editor has focus';
+				satisfies: [ :aNameEditor | aNameEditor isFocused ];
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+
+	(scripter keyPress: BlKeyboardKey delete) play.
+	(scripter keyPress: BlKeyboardKey backspace) play.
+	(scripter type: 'temp') play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	^ scripter
+]
+
+{ #category : #'examples - split cascade' }
+GtPharoMethodCoderByScripterExamples >> forSplitCascade_04_check_results [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self forSplitCascade_03_enter_variable.
+
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert current source in coder model';
+				value: [ :aCoder | RBParser parseMethod: aCoder currentSourceString ]
+					equals: [ :aCoder | 
+						RBParser
+							parseMethod: 'method1
+								| temp | 
+								temp := WriteStream on: String new.
+								temp print: self; space; print: self identityHash; cr.
+								^temp print: self class; space; print: self class identityHash; contents' ];
+				onModel ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source code modified';
+				satisfies: [ :aCoder | aCoder isModified ];
+				onModel ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | 
+						aCoderEditor text
+							hasAttributeSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ] ]
+					equals: false;
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor is focused';
+				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
+				id: GtSourceCoderEditorId ].
+	^ scripter
+]
+
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_01_setup [
 	<gtExample>
