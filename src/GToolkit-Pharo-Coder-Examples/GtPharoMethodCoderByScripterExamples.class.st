@@ -4041,6 +4041,111 @@ GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_04_click_move_varia
 	^ aScripter
 ]
 
+{ #category : #'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableToOuterScope_01_setup [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: (self moveVariableSource
+								format: {''.
+										'|temp|'}) ];
+				onModel ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableToOuterScope_02_cursor [
+	<gtExample>
+	| aScripter |
+	aScripter := self forMoveVariableToOuterScope_01_setup.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the variable node';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOfSubCollection: 'temp'.
+					aSourceEditor selecter
+						from: index - 1 to: index + 3;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableToOuterScope_03_hover_move_variable_declaration [
+	<gtExample>
+	| aScripter |
+	aScripter := self openContextMenu: self forMoveVariableToOuterScope_02_cursor.
+
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover protect';
+				onSpaceRoot;
+				id: #'context-menu--move-to-outer-scope' ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - move variable scope' }
+GtPharoMethodCoderByScripterExamples >> forMoveVariableToOuterScope_04_click_move_variable_declaration [
+	<gtExample>
+	| aScripter |
+	aScripter := self forMoveVariableToOuterScope_03_hover_move_variable_declaration.
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click move variable';
+				onSpaceRoot;
+				id: #'context-menu--move-to-outer-scope' ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert there is no selected text';
+				value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+					equals: [ false ];
+				id: GtSourceCoderEditorId ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert current source in coder model';
+				value: [ :aCoder | (GtPharoParser parse: aCoder currentSourceString) body ]
+					equals: [ :aCoder | 
+						GtPharoParser
+							parse: (self moveVariableSource
+									format: {'|temp|'.
+											''})
+							startingAt: GtPharoParser startingStateForMethodSequence ];
+				onModel ].
+
+	^ aScripter
+]
+
 { #category : #'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 	<gtExample>

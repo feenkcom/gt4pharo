@@ -9,11 +9,6 @@ Class {
 }
 
 { #category : #accessing }
-GtExtractTemporaryRefactoringController >> behavior [
-	^ sourceCoderViewModel behavior
-]
-
-{ #category : #accessing }
 GtExtractTemporaryRefactoringController >> node: aProgramNode [
 	node := aProgramNode
 ]
@@ -69,11 +64,6 @@ GtExtractTemporaryRefactoringController >> safelyExecute [
 					action
 						when: GtRenameActionAnnouncement
 						do: [ :ann | ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ] ] ]
-]
-
-{ #category : #accessing }
-GtExtractTemporaryRefactoringController >> selector [
-	^ sourceCoderViewModel selector
 ]
 
 { #category : #accessing }
