@@ -36,6 +36,11 @@ GtPharoSourceCoderRefactoringController >> ast [
 	^ sourceCoderViewModel astSync
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> behavior [
+	^ sourceCoderViewModel behavior
+]
+
 { #category : #private }
 GtPharoSourceCoderRefactoringController >> compileSnippetMethodIn: model [
 	| cls |
@@ -168,6 +173,11 @@ GtPharoSourceCoderRefactoringController >> safeMethodName: methodName in: modelC
 				ifTrue: [ name := name allButLast , '_:' ]
 				ifFalse: [ name := name , '_' ] ].
 	^ selector
+]
+
+{ #category : #accessing }
+GtPharoSourceCoderRefactoringController >> selector [
+	^ sourceCoderViewModel selector
 ]
 
 { #category : #accessing }

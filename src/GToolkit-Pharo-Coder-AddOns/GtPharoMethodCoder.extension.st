@@ -435,6 +435,26 @@ GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns [
+	aNode isVariable ifFalse: [ ^ self ].
+	(aNode parent isSequence
+		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ self ].
+	(aNode parent parentOfType: GtPharoSequenceNode) ifNil: [ ^ self ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Move to outer scope'
+				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel :element | 
+			(GtMoveTemporaryToOuterScopeRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) executeIn: element ]
+		id: #'context-menu--move-to-outer-scope'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns [
 	| class |
 	aNode isVariable ifFalse: [ ^ self ].
@@ -558,6 +578,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
 			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
 			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns.
+			self addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns.
 			self addVariableScopingFor: aNode to: coderAddOns.
 			allParents := aNode withAllParents.
 			allParents
