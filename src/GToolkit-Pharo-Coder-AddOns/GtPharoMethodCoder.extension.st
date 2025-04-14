@@ -398,19 +398,19 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 					(GtProtectInstanceVariableRefactoringController new
 						sourceCoderViewModel: aCoderViewModel;
 						variableNode: aNode) executeIn: element ]
-				id: #'context-menu--protect-variable' ]
-		ifFalse: [ coderAddOns
-				addContextMenuItem: (self
-						createLabel: 'Create accessors'
-						description: aNode variableName)
-				group: BrMenuItemGroupConfiguration refactoring
-				hover: (self highlightNodeBlock: aNode)
-				leave: self removeHighlightBlock
-				action: [ :aCoderViewModel :element | 
-					(GtCreateInstanceVariableAccessorsRefactoringController new
-						sourceCoderViewModel: aCoderViewModel;
-						variableNode: aNode) executeIn: element ]
-				id: #'context-menu--create-accessors' ]
+				id: #'context-menu--protect-variable' ].
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Create accessors'
+				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel :element | 
+			(GtCreateInstanceVariableAccessorsRefactoringController new
+				sourceCoderViewModel: aCoderViewModel;
+				variableNode: aNode) executeIn: element ]
+		id: #'context-menu--create-accessors'
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
