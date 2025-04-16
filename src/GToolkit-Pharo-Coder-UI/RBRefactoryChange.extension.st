@@ -13,8 +13,8 @@ RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock [
 			summaryClass: GtCompilationNotificationSummary;
 			job: job;
 			registerNotifications;
-			showNotifications;
 			yourself.
+	self changesSize > 1 ifTrue: [ notification showNotifications ].
 	^ [ job run ] asAsyncPromise
 ]
 
