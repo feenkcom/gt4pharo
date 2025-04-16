@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'changes'
 	],
-	#category : #'GToolkit-Pharo-Coder-Announcements'
+	#category : #'GToolkit-Pharo-Coder-Method-Announcements'
 }
 
 { #category : #accessing }
