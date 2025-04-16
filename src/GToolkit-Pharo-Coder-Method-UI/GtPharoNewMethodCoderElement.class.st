@@ -9,12 +9,26 @@ Class {
 		'methodCoderViewModelValueHolder',
 		'onMethodCoderSaved'
 	],
+	#classVars : [
+		'PreferredExtent'
+	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
 { #category : #initialization }
-GtPharoNewMethodCoderElement class >> preferredExtent [
+GtPharoNewMethodCoderElement class >> defaultExtent [
 	^ 400 @ 150
+]
+
+{ #category : #initialization }
+GtPharoNewMethodCoderElement class >> preferredExtent [
+	^ PreferredExtent ifNil: [ 
+		PreferredExtent := self defaultExtent ]
+]
+
+{ #category : #initialization }
+GtPharoNewMethodCoderElement class >> preferredExtent: anExtent [
+	PreferredExtent := anExtent
 ]
 
 { #category : #'private - updating' }

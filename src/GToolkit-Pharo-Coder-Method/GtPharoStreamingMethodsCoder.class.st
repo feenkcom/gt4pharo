@@ -5,7 +5,9 @@ Class {
 	#classTraits : 'TGtCoderWithBehaviorHolder classTrait',
 	#instVars : [
 		'exampleSuite',
-		'testSuite'
+		'testSuite',
+		'performingBulkChanges',
+		'needsUpdate'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
@@ -55,10 +57,22 @@ GtPharoStreamingMethodsCoder >> exampleSuite: aGtPharoExampleSuite [
 { #category : #initialization }
 GtPharoStreamingMethodsCoder >> initialize [
 	super initialize.
-	
+	performingBulkChanges := false.
+	needsUpdate := false.
+
 	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded send: #onMethodAdded: to: self;
-		when: MethodRemoved send: #onMethodRemoved: to: self
+		when: MethodAdded
+			send: #onMethodAdded:
+			to: self;
+		when: MethodRemoved
+			send: #onMethodRemoved:
+			to: self;
+		when: GtAboutToPerformBulkChangesAnnouncement
+			send: #onAboutToPerformBulkChanges:
+			to: self;
+		when: GtFinishedBulkChangesAnnouncement
+			send: #onFinishedBulkChanges:
+			to: self
 ]
 
 { #category : #'api - accessing' }
@@ -89,19 +103,35 @@ GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
 ]
 
 { #category : #'private - event handling' }
-GtPharoStreamingMethodsCoder >> onMethodAdded: aMethodAddedAnnouncement [
-	(filter matches: aMethodAddedAnnouncement methodAdded)
-		ifFalse: [ ^ self ].
+GtPharoStreamingMethodsCoder >> onAboutToPerformBulkChanges: anAnnouncement [
+	needsUpdate := false.
+	performingBulkChanges := true
+]
 
-	self privateAddCoderFor: aMethodAddedAnnouncement methodAdded
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoder >> onFinishedBulkChanges: anAnnouncement [
+	performingBulkChanges := false.
+	needsUpdate
+		ifTrue: [ self refreshItemsStreamDueTo: GtFinishedBulkUpdateReason new ].
+	needsUpdate := false
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoder >> onMethodAdded: aMethodAddedAnnouncement [
+	(filter matches: aMethodAddedAnnouncement methodAdded) ifFalse: [ ^ self ].
+
+	performingBulkChanges
+		ifTrue: [ needsUpdate := true ]
+		ifFalse: [ self privateAddCoderFor: aMethodAddedAnnouncement methodAdded ]
 ]
 
 { #category : #'private - event handling' }
 GtPharoStreamingMethodsCoder >> onMethodRemoved: aMethodRemovedAnnouncement [
-	(filter matches: aMethodRemovedAnnouncement methodRemoved)
-		ifFalse: [ ^ self ].
+	(filter matches: aMethodRemovedAnnouncement methodRemoved) ifFalse: [ ^ self ].
 
-	self privateRemoveCoderFor: aMethodRemovedAnnouncement methodRemoved
+	performingBulkChanges
+		ifTrue: [ needsUpdate := true ]
+		ifFalse: [ self privateRemoveCoderFor: aMethodRemovedAnnouncement methodRemoved ]
 ]
 
 { #category : #'private - event handling' }
