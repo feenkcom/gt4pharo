@@ -156,7 +156,7 @@ GtPharoCodeModifier >> deferFlushDuring: aBlock [
 GtPharoCodeModifier >> initialize [
 	super initialize.
 	
-	monitor := Monitor new
+	monitor := Mutex new
 ]
 
 { #category : #'api - refactoring' }
