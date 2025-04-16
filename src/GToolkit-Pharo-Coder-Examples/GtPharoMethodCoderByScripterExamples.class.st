@@ -3665,7 +3665,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
 	| scripter |
 	scripter := self
 			scripterForBlock: [ GtPharoMethodCoder forMethod: thisContext method method ].
-	[ (scripter) yourself ] argumentCount.	"leave parens around variable".
+	[ (scripter) yourself ] argumentCount.	"leave parens around variable"
 
 	scripter click
 		label: 'Click on the coder editor to give it focus';
@@ -3697,6 +3697,24 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter _ as variable name';
+				text: '_temp_' ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Perform rename';
+				key: BlKeyboardKey return ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Editor has new text';
+				satisfies: [ :anEditorElement | (anEditorElement text asString lines collect: #trim) includes: '| _temp_ |' ];
+				id: GtSourceCoderEditorId ].
 
 	^ scripter
 ]
