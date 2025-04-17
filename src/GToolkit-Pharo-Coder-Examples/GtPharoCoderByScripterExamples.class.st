@@ -240,6 +240,145 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> bulkRenameUpdatesIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	class := environment anyDummyRootClass realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	EpMonitor
+		disableDuring: [ class compile: 'azsxcdfv' classified: #accessing.
+			1
+				to: 30
+				do: [ :i | 
+					class
+						compile: 'azsxcdfv' , i printString , ' ^self azsxcdfv'
+						classified: #accessing ] ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 1200 @ 1000 ];
+				onSpace ].
+	self maximizePagerPane: scripter.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand one sender';
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'azsxcdfv1' ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand method to rename';
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'azsxcdfv' ] ].
+	scripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Rename editor has focus';
+				hasFocus;
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new name';
+				text: 'aabbcc' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check methods index not updated before refactoring';
+				notExists;
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'aabbcc' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check methods index not updated before refactoring';
+				exists;
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'azsxcdfv' ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute rename refactoring';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+
+	(Delay forMilliseconds: 200) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Source is updated';
+				// GtSourceCoderEditorId;
+				value: [ :each | RBParser parseMethod: each text asString ]
+					equals: [ RBParser parseMethod: 'azsxcdfv1 ^self aabbcc' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check methods coder updated';
+				exists;
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'aabbcc' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check methods coder updated';
+				notExists;
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'azsxcdfv' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check methods index updated';
+				exists;
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'aabbcc' ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check methods index updated';
+				notExists;
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'azsxcdfv' ] ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> cancelRenameClassInIndex [
 	<gtExample>
 	<after: #cleanUp>
