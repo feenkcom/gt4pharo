@@ -17,5 +17,12 @@ GtDefineClassFixItAction >> formCreationElement [
 				element
 					enqueueTask: (BlTaskAction new action: [ sourceCoder requestStyleSourceText ]) ].
 	element form newClassName: node name value asSymbol.
+	sourceCoder behavior
+		ifNotNil: [ :cls | 
+			cls ~~ nil class
+				ifTrue: [ cls package
+						ifNotNil: [ :pkg | element form packageAndTagName packageName: pkg name ].
+					cls tags
+						ifNotEmpty: [ :tags | element form packageAndTagName tagName: tags first ] ] ].
 	^ element
 ]

@@ -1685,6 +1685,58 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 ]
 
 { #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateClassInInspectorPlayground_click_define_class [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ ((GtPharoSnippetCoder forSource: 'Foo1234')
+					behavior: self class;
+					yourself) asCoderViewModel
+					selfObject: self;
+					yourself ].
+	self clickFixItFor: aScripter.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onBreadthFirstChildOfClass: GtCreationFormWidget;
+				notExists ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: (GtDefineClassFixItActionElementId indexed: 1) ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				onBreadthFirstChildOfClass: GtCreationFormWidget;
+				exists ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				onBreadthFirstChildOfClass: GtCoderContextMenuContent;
+				notExists ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check package name';
+				// #package;
+				value: [ :e | e text asString ] equals: self class package name ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check tag name';
+				// #tag;
+				value: [ :e | e text asString ]
+					equals: (self class tags at: 1 ifAbsent: [ '' ]) ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_01_setup [
 	<gtExample>
 	| aScripter |
@@ -1745,6 +1797,20 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_03_click_de
 				onBreadthFirstChildOfClass: GtCoderContextMenuContent;
 				notExists ].
 
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check package name';
+				// #package;
+				value: [ :e | e text asString ] equals: '' ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check tag name';
+				// #tag;
+				value: [ :e | e text asString ] equals: '' ].
+
 	^ aScripter
 ]
 
@@ -1754,8 +1820,8 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := GtPharoMethodCoderExamples new emptyMethodCoder.
-				aCoder appendString: 'method'.
+				aCoder := GtPharoMethodCoder forMethod: thisContext method method.
+				aCoder currentSourceText: 'method' asRopedText.
 				aCoder ].
 
 	aScripter
@@ -1812,6 +1878,21 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 				onSpaceRoot;
 				onBreadthFirstChildOfClass: GtCoderContextMenuContent;
 				notExists ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check package name';
+				// #package;
+				value: [ :e | e text asString ] equals: self class package name ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check tag name';
+				// #tag;
+				value: [ :e | e text asString ]
+					equals: (self class tags at: 1 ifAbsent: [ '' ]) ].
 
 	^ aScripter
 ]
