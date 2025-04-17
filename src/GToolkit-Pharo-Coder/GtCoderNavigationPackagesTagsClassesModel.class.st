@@ -265,7 +265,7 @@ GtCoderNavigationPackagesTagsClassesModel >> hasSelectedTag [
 GtCoderNavigationPackagesTagsClassesModel >> initialize [
 	super initialize.
 	needsUpdate := false.
-	performingBulkChanges := true.
+	performingBulkChanges := false.
 	self coder: GtPharoPackagesCoder forAllPackages
 ]
 
