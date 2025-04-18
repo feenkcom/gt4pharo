@@ -1069,7 +1069,7 @@ GtPharoMethodCoder >> gtViewAddOnFor: anAST into: coderAddOns viewModel: aGtPhar
 					aGtPharoMethodCoderViewModel 
 						ifSelfObject: [ :aSelfObject | 
 							| view |
-							aSelfObject 
+							view := aSelfObject 
 								perform: self selector
 								with: GtPhlowEmptyView new.
 							aButton phlow spawnObject: view ] 
