@@ -8,7 +8,7 @@ RBCompositeRefactoryChange >> gtAllChanges [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBCompositeRefactoryChange >> gtCopyWithout: changesCollection [
 	| newChanges |
-	(changesCollection includes: self) ifTrue: [ ^ nil ].
+	(changesCollection identityIncludes: self) ifTrue: [ ^ nil ].
 	newChanges := (changes
 			collect: [ :each | each gtCopyWithout: changesCollection ]) select: #notNil.
 	^ self copy
