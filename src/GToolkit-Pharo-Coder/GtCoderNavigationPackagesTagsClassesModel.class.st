@@ -11,7 +11,9 @@ Class {
 		'selectedProtocol',
 		'selectedMethod',
 		'selectedSlot',
-		'selectedClass'
+		'selectedClass',
+		'needsUpdate',
+		'performingBulkChanges'
 	],
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
@@ -41,6 +43,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classAdded: aClassAdded [
 			(aPackage includesClassesAffectedBy: aClassAdded)
 				ifFalse: [ ^ self ] ].
 
+	performingBulkChanges ifTrue: [^needsUpdate := true].
+	
 	self notifyClassesToShowChanged
 ]
 
@@ -57,6 +61,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 			(aPackage includesClassesAffectedBy: aClassModificationApplied)
 				ifFalse: [ ^ self ] ].
 
+	performingBulkChanges ifTrue: [^needsUpdate := true].
+
 	self notifyClassesToShowChanged.
 	self notifySlotsToShowChanged.
 
@@ -70,6 +76,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> classRemoved: aClassRemoved [
 	| aSelectedPackage |
+
+	performingBulkChanges ifTrue: [^needsUpdate := true].
 	
 	aSelectedPackage := self selectedPackage
 		ifNil: [ self selectedTag ifNotNil: [ :aTag | aTag package ] ].
@@ -99,6 +107,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 			(aPackage includesClassesAffectedBy: aClassRenamed)
 				ifFalse: [ ^ self ] ].
 
+	performingBulkChanges ifTrue: [^needsUpdate := true].
+
 	self notifyClassesToShowChanged.
 	
 	"we should still emit it, because GtCoderElement listens to it to update the label"
@@ -116,12 +126,17 @@ GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized
 	self selectedClass = aClassReorganized classReorganized instanceSide
 		ifFalse: [ ^ self ].
 
+	performingBulkChanges ifTrue: [^needsUpdate := true].
+
 	self notifyProtocolsToShowChanged
 ]
 
 { #category : #'api - subscriptions' }
 GtCoderNavigationPackagesTagsClassesModel >> classRepackaged: aClassRepackaged [
 	self selectedPackage = aClassRepackaged oldPackage ifFalse: [ ^ self ].
+
+	performingBulkChanges ifTrue: [^needsUpdate := true].
+	
 	self selectedClass = aClassRepackaged classAffected
 		ifTrue: [ self privateJustSelectPackage: aClassRepackaged newPackage ]
 		ifFalse: [ self notifyClassesToShowChanged ]
@@ -249,6 +264,8 @@ GtCoderNavigationPackagesTagsClassesModel >> hasSelectedTag [
 { #category : #initialization }
 GtCoderNavigationPackagesTagsClassesModel >> initialize [
 	super initialize.
+	needsUpdate := false.
+	performingBulkChanges := false.
 	self coder: GtPharoPackagesCoder forAllPackages
 ]
 
@@ -259,6 +276,8 @@ GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
 		ifNotNil: [ :aClass |
 			(aClass includesMethodsAffectedBy: aMethodAdded)
 				ifFalse: [ ^ self ] ].
+
+	performingBulkChanges ifTrue: [^needsUpdate := true].
 	
 	self notifyProtocolsToShowChanged.
 	self notifySlotsToShowChanged.
@@ -282,6 +301,8 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 			
 			(isInstanceSideAffected or: isClassSideAffected)
 				ifFalse: [ ^ self ] ].
+
+	performingBulkChanges ifTrue: [^needsUpdate := true].
 
 	self selectedMethod = aMethodRecategorized methodRecategorized
 		ifTrue: [ self deselectMethod ].
@@ -316,6 +337,8 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRemoved: aMethodRemoved [
 		ifNotNil: [ :aClass |
 			(aClass includesMethodsAffectedBy: aMethodRemoved)
 				ifFalse: [ ^ self ] ].
+
+	performingBulkChanges ifTrue: [^needsUpdate := true].
 
 	self selectedMethod = aMethodRemoved
 		ifTrue: [ self deselectMethod ].
@@ -464,9 +487,29 @@ GtCoderNavigationPackagesTagsClassesModel >> notifySlotsToShowChanged [
 	self announce: (GtCoderNavigationSlotsToShowChanged new coder: coder)
 ]
 
+{ #category : #'api - subscriptions' }
+GtCoderNavigationPackagesTagsClassesModel >> onAboutToPerformBulkChanges: anAnnouncement [
+	performingBulkChanges := true.
+	needsUpdate := false
+]
+
 { #category : #'private - announcement handling' }
 GtCoderNavigationPackagesTagsClassesModel >> onCoderAnnouncement: anAnnouncement [
 	self announcer announce: anAnnouncement
+]
+
+{ #category : #'api - subscriptions' }
+GtCoderNavigationPackagesTagsClassesModel >> onFinishedBulkChanges: anAnnouncement [
+	performingBulkChanges := false.
+	needsUpdate ifFalse: [ ^ self ].
+
+	self selectedClass
+		ifNotNil: [ :cls | cls isObsolete ifTrue: [ self deselectClass ] ].
+	self notifyClassesToShowChanged.
+	self notifySlotsToShowChanged.
+	self notifyProtocolsToShowChanged.
+	self notifyMethodsToShowChanged.
+	needsUpdate := false
 ]
 
 { #category : #'event handling' }
@@ -1119,7 +1162,13 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassReorganized send: #classReorganized: to: self;
 		when: MethodAdded send: #methodAdded: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self;
-		when: MethodRecategorized send: #methodRecategorized: to: self
+		when: MethodRecategorized send: #methodRecategorized: to: self;
+		when: GtAboutToPerformBulkChangesAnnouncement
+			send: #onAboutToPerformBulkChanges:
+			to: self;
+		when: GtFinishedBulkChangesAnnouncement
+			send: #onFinishedBulkChanges:
+			to: self
 ]
 
 { #category : #'api - subscriptions' }

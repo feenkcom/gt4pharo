@@ -7,6 +7,6 @@ RBRefactoryChange >> gtAllChanges [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 RBRefactoryChange >> gtCopyWithout: changesCollection [
-	(changesCollection includes: self) ifTrue: [ ^ nil ].
+	(changesCollection identityIncludes: self) ifTrue: [ ^ nil ].
 	^ self copy
 ]

@@ -1673,6 +1673,83 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 	^ aScripter
 ]
 
+{ #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractMethodObjectWhenHasNewClass [
+	<gtExample>
+	| scripter hasNewClass ast method |
+	method := thisContext method method.
+	ast := method ast.
+	hasNewClass := Smalltalk includesKey: #NewClass.
+	scripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: method ].
+	[ hasNewClass ifFalse: [ Smalltalk at: #NewClass put: 1 ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select all code to extract';
+				action: [ :editor | 
+					editor selecter
+						from: ast body statements first start - 1 to: ast stop;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+
+	self openContextMenu: scripter.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start extract method object';
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString = 'Extract method object' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	self checkFor: scripter refactoringPreviewButtonExists: true ]
+		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
+	^ scripter
+]
+
+{ #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClass [
+	<gtExample>
+	| scripter hasNewClass ast method |
+	method := thisContext method method.
+	ast := method ast.
+	hasNewClass := Smalltalk includesKey: #NewClass.
+	scripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: method ].
+	[ hasNewClass ifFalse: [ Smalltalk at: #NewClass put: 1 ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select all code to extract';
+				action: [ :editor | 
+					editor selecter
+						from: ast body statements first start - 1 to: ast stop;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Start extract wrapped method object';
+				action: [ :each | 
+					(GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: each textualCoderViewModel) executeIn: each ];
+				// GtSourceCoderExpandedContentElement ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	self checkFor: scripter refactoringPreviewButtonExists: true ]
+		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
+	^ scripter
+]
+
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
 	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
@@ -1682,6 +1759,58 @@ GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCode
 GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 
 	^ 'emptyBody GtPharoMethodCoderExamples new many: ''arg1'' many: ''arg2'' many: ''arg3'' many: ''arg4'' many: ''arg5'' many: ''arg6'' arguments: ''arg7'''
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateClassInInspectorPlayground_click_define_class [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ ((GtPharoSnippetCoder forSource: 'Foo1234')
+					behavior: self class;
+					yourself) asCoderViewModel
+					selfObject: self;
+					yourself ].
+	self clickFixItFor: aScripter.
+	aScripter
+		assertStep: [ :s | 
+			s
+				onBreadthFirstChildOfClass: GtCreationFormWidget;
+				notExists ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: (GtDefineClassFixItActionElementId indexed: 1) ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				onBreadthFirstChildOfClass: GtCreationFormWidget;
+				exists ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				onSpaceRoot;
+				onBreadthFirstChildOfClass: GtCoderContextMenuContent;
+				notExists ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check package name';
+				// #package;
+				value: [ :e | e text asString ] equals: self class package name ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check tag name';
+				// #tag;
+				value: [ :e | e text asString ]
+					equals: (self class tags at: 1 ifAbsent: [ '' ]) ].
+
+	^ aScripter
 ]
 
 { #category : #'examples - fixit class' }
@@ -1745,6 +1874,20 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_03_click_de
 				onBreadthFirstChildOfClass: GtCoderContextMenuContent;
 				notExists ].
 
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check package name';
+				// #package;
+				value: [ :e | e text asString ] equals: '' ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check tag name';
+				// #tag;
+				value: [ :e | e text asString ] equals: '' ].
+
 	^ aScripter
 ]
 
@@ -1754,8 +1897,8 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := GtPharoMethodCoderExamples new emptyMethodCoder.
-				aCoder appendString: 'method'.
+				aCoder := GtPharoMethodCoder forMethod: thisContext method method.
+				aCoder currentSourceText: 'method' asRopedText.
 				aCoder ].
 
 	aScripter
@@ -1812,6 +1955,21 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 				onSpaceRoot;
 				onBreadthFirstChildOfClass: GtCoderContextMenuContent;
 				notExists ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check package name';
+				// #package;
+				value: [ :e | e text asString ] equals: self class package name ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Check tag name';
+				// #tag;
+				value: [ :e | e text asString ]
+					equals: (self class tags at: 1 ifAbsent: [ '' ]) ].
 
 	^ aScripter
 ]

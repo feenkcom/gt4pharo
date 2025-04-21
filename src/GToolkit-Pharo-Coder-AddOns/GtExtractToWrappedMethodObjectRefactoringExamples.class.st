@@ -105,6 +105,48 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithOneArgConstructo
 ]
 
 { #category : #examples }
+GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithTemps [
+	<gtExample>
+	| refactoring cls |
+	refactoring := self refactoringFor: #writeOnExtractWithTemps:.
+	refactoring
+		setOption: #constructorMethodName
+		toUse: [ :methodName :ref | 
+			methodName selector: #a:b:.
+			methodName arguments: methodName arguments asSortedCollection reversed.
+			methodName ].
+	refactoring primitiveExecute.
+	cls := model classNamed: #NewClass.
+	self assert: (cls directlyDefinesMethod: #writeOn:).
+	self assert: (cls protocolsFor: #writeOn:) asArray equals: #(#writing).
+	self
+		assert: (cls parseTreeForSelector: #writeOn:)
+		equals: (RBParser parseMethod: 'writeOn: aStream aStream nextPutAll: (OrderedCollection with: aB1 with: aB2)').
+	self assert: (cls directlyDefinesMethod: #setA:b:).
+	self
+		assert: (((cls parseTreeForSelector: #setA:b:)
+				equalTo: (RBParser parseMethod: 'setA: _aB2 b: _aB1 aB1 := _aB1. aB2 := _aB2')
+				exceptForVariables: #())
+				or: [ (cls parseTreeForSelector: #setA:b:)
+						equalTo: (RBParser parseMethod: 'setA: _aB1 b: _aB2 aB1 := _aB1. aB2 := _aB2')
+						exceptForVariables: #() ]).
+	self assert: (cls protocolsFor: #setA:b:) asArray equals: #(#private).
+	self assert: (cls classSide directlyDefinesMethod: #a:b:).
+	self
+		assert: (cls classSide protocolsFor: #a:b:) asArray
+		equals: #(#'instance creation').
+	self
+		assert: ((cls classSide parseTreeForSelector: #a:b:)
+				equalTo: (RBParser parseMethod: 'a: aB2  b: aB1 ^self new setA: aB2 b: aB1; yourself')
+				exceptForVariables: #()).
+	self
+		assert: ((model classFor: self class) parseTreeForSelector: #writeOnExtractWithTemps:)
+		equals: (RBParser
+				parseMethod: 'writeOnExtractWithTemps: aStream | aB1 aB2 | aB1 := 1. aB2 := 2. aStream writeOn: (NewClass a: aB2 b: aB1)').
+	^ model
+]
+
+{ #category : #examples }
 GtExtractToWrappedMethodObjectRefactoringExamples >> extractWithTwoArgConstructor [
 	<gtExample>
 	| refactoring cls |
@@ -208,6 +250,14 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> writeOn: aStream [
 	aStream
 		nextPutAll: 'a';
 		nextPutAll: 'b'
+]
+
+{ #category : #'sample methods' }
+GtExtractToWrappedMethodObjectRefactoringExamples >> writeOnExtractWithTemps: aStream [
+	| aB1 aB2 |
+	aB1 := 1.
+	aB2 := 2.
+	aStream nextPutAll: (OrderedCollection with: aB1 with: aB2)
 ]
 
 { #category : #'sample methods' }

@@ -15,7 +15,7 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock [
 					totalCount := self changesSize max: 1.
 					job max: totalCount.
 					current := 0.
-					shouldSignalBulkChanges := totalCount > 1.
+					shouldSignalBulkChanges := totalCount >= 10.
 					shouldSignalBulkChanges
 						ifTrue: [ SystemAnnouncer uniqueInstance
 								announce: (GtAboutToPerformBulkChangesAnnouncement new changes: self) ].
