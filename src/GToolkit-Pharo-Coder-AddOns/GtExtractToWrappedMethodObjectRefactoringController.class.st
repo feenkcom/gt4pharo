@@ -8,7 +8,8 @@ Class {
 		'constructorMethodArguments',
 		'actions',
 		'generatedConstructorSelector',
-		'constructorSelector'
+		'constructorSelector',
+		'initialClassName'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -95,7 +96,14 @@ GtExtractToWrappedMethodObjectRefactoringController >> findExtractedSend [
 
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoringController >> initialClassName [
-	^ #NewClass
+	^ initialClassName
+		ifNil: [ | index |
+			index := 1.
+			initialClassName := #NewClass.
+			[ Smalltalk includesKey: initialClassName ]
+				whileTrue: [ initialClassName := ('NewClass' , index printString) asSymbol.
+					index := index + 1 ].
+			initialClassName ]
 ]
 
 { #category : #initialization }

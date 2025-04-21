@@ -1673,6 +1673,83 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 	^ aScripter
 ]
 
+{ #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractMethodObjectWhenHasNewClass [
+	<gtExample>
+	| scripter hasNewClass ast method |
+	method := thisContext method method.
+	ast := method ast.
+	hasNewClass := Smalltalk includesKey: #NewClass.
+	scripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: method ].
+	[ hasNewClass ifFalse: [ Smalltalk at: #NewClass put: 1 ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select all code to extract';
+				action: [ :editor | 
+					editor selecter
+						from: ast body statements first start - 1 to: ast stop;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+
+	self openContextMenu: scripter.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start extract method object';
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString = 'Extract method object' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	self checkFor: scripter refactoringPreviewButtonExists: true ]
+		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
+	^ scripter
+]
+
+{ #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClass [
+	<gtExample>
+	| scripter hasNewClass ast method |
+	method := thisContext method method.
+	ast := method ast.
+	hasNewClass := Smalltalk includesKey: #NewClass.
+	scripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: method ].
+	[ hasNewClass ifFalse: [ Smalltalk at: #NewClass put: 1 ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select all code to extract';
+				action: [ :editor | 
+					editor selecter
+						from: ast body statements first start - 1 to: ast stop;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Start extract wrapped method object';
+				action: [ :each | 
+					(GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: each textualCoderViewModel) executeIn: each ];
+				// GtSourceCoderExpandedContentElement ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	self checkFor: scripter refactoringPreviewButtonExists: true ]
+		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
+	^ scripter
+]
+
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
 	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized

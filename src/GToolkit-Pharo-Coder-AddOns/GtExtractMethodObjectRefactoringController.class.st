@@ -9,7 +9,8 @@ Class {
 		'variables',
 		'variableNames',
 		'variableRenamers',
-		'firstRun'
+		'firstRun',
+		'initialClassName'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
@@ -97,7 +98,14 @@ GtExtractMethodObjectRefactoringController >> className: aSymbol [
 
 { #category : #accessing }
 GtExtractMethodObjectRefactoringController >> initialClassName [
-	^ #NewClass
+	^ initialClassName
+		ifNil: [ | index |
+			index := 1.
+			initialClassName := #NewClass.
+			[ Smalltalk includesKey: initialClassName ]
+				whileTrue: [ initialClassName := ('NewClass' , index printString) asSymbol.
+					index := index + 1 ].
+			initialClassName ]
 ]
 
 { #category : #initialization }
