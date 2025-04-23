@@ -14,7 +14,9 @@ RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock [
 			job: job;
 			registerNotifications;
 			yourself.
-	self changesSize > 1 ifTrue: [ notification showNotifications ].
+	self changesSize > 1
+		ifTrue: [ notification showNotifications.
+			notification hideNotificationsOnRemoval ].
 	^ [ job run ] asAsyncPromise
 ]
 
