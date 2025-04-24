@@ -1125,6 +1125,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 
 	addOns
 		addMainAction: (GtCoderCustomAction new
+				title: 'Save';
 				stencil: [ GtPharoMethodCoderSaveButton new
 						pharoMethodCoderViewModel: aGtPharoMethodCoderViewModel ]).
 	addOns
