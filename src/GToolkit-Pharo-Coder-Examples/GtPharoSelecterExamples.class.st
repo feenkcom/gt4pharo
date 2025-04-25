@@ -53,10 +53,11 @@ GtPharoSelecterExamples >> editorOnCode [
 
 { #category : #examples }
 GtPharoSelecterExamples >> exampleSmalltalkCode [
+	<gtExample>
 	^'at: anIndex put: aValue
 	| x |
 	self do: [:each | each foo].
-	x := anIndex.
+	x := anIndex + (anIndex * 2).
 	^x'
 ]
 
@@ -66,11 +67,11 @@ GtPharoSelecterExamples >> selectWordAtEnd [
 	| editor |
 	editor := self editorOnCode.
 	editor selecter
-		selectionUnitAt: 79;
+		selectionUnitAt: 95;
 		select.
 	self 
 		assert: editor selection 
-		equals: (BlCompositeSelection new select: 77 to: 79).
+		equals: (BlCompositeSelection new select: 94 to: 95).
 	^ editor
 ]
 
@@ -89,6 +90,20 @@ GtPharoSelecterExamples >> selectWordAtIndex [
 ]
 
 { #category : #examples }
+GtPharoSelecterExamples >> selectWordAtNextToEnd [
+	<gtExample>
+	| editor |
+	editor := self editorOnCode.
+	editor selecter
+		selectionUnitAt: 94;
+		select.
+	self 
+		assert: editor selection 
+		equals: (BlCompositeSelection new select: 94 to: 95).
+	^ editor
+]
+
+{ #category : #examples }
 GtPharoSelecterExamples >> selectWordWithLeadingColon [
 	<gtExample>
 	| editor |
@@ -99,6 +114,20 @@ GtPharoSelecterExamples >> selectWordWithLeadingColon [
 	self 
 		assert: editor selection 
 		equals: (BlCompositeSelection new select: 43 to: 47).
+	^ editor
+]
+
+{ #category : #examples }
+GtPharoSelecterExamples >> selectWordWithLeadingParenthesis [
+	<gtExample>
+	| editor |
+	editor := self editorOnCode.
+	editor selecter
+		selectionUnitAt: 81;
+		select.
+	self 
+		assert: editor selection 
+		equals: (BlCompositeSelection new select: 78 to: 85).
 	^ editor
 ]
 
