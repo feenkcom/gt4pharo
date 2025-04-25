@@ -61,6 +61,20 @@ GtPharoSelecterExamples >> exampleSmalltalkCode [
 ]
 
 { #category : #examples }
+GtPharoSelecterExamples >> selectWordAtEnd [
+	<gtExample>
+	| editor |
+	editor := self editorOnCode.
+	editor selecter
+		selectionUnitAt: 79;
+		select.
+	self 
+		assert: editor selection 
+		equals: (BlCompositeSelection new select: 77 to: 79).
+	^ editor
+]
+
+{ #category : #examples }
 GtPharoSelecterExamples >> selectWordAtIndex [
 	<gtExample>
 	| editor |
