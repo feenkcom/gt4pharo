@@ -8,7 +8,7 @@ Class {
 		'hasArguments',
 		'completionStrategy'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
 { #category : #accessing }
@@ -90,7 +90,8 @@ GtRenameSelectorAction >> focusedIndex [
 
 { #category : #accessing }
 GtRenameSelectorAction >> focusedIndex: anInteger [
-	focusedIndex := anInteger
+	focusedIndex := anInteger.
+	self announce: (GtRenameSelectorKeywordFocused new keyword: anInteger)
 ]
 
 { #category : #accessing }
@@ -177,6 +178,15 @@ GtRenameSelectorAction >> selector: aGtPharoLiteralNode [
 	originalLocations := {interval}.
 	hasArguments := false.
 	self forVariableOrUnaryMessage
+]
+
+{ #category : #'as yet unclassified' }
+GtRenameSelectorAction >> swapKeywordWithNext: anInteger [
+	| text |
+	text := (renameAttributes at: anInteger) text copy.
+	(renameAttributes at: anInteger)
+		text: (renameAttributes at: anInteger + 1) text copy.
+	(renameAttributes at: anInteger + 1) text: text
 ]
 
 { #category : #accessing }
