@@ -6,7 +6,7 @@ Class {
 		'icon',
 		'label'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
 { #category : #'instance creation' }
