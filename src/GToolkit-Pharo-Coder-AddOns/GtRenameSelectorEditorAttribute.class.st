@@ -5,7 +5,7 @@ Class {
 		'focusedIndex',
 		'editor'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
 { #category : #accessing }
