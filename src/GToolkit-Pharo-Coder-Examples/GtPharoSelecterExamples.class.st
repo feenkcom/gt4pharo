@@ -44,6 +44,23 @@ GtPharoSelecterExamples >> editorOnCode [
 	anEditorElement := self editorFor: self exampleSmalltalkCode.
 	anEditor := anEditorElement editor.
 	anEditor doubleClickWordClassifier: anEditor smalltalkWordClassifier.
+	anEditor movementWordClassifier: anEditor smalltalkWordClassifier.
+	
+	self assert: anEditor cursors isEmpty.
+	self assert: anEditor selection isEmpty.
+	^anEditorElement
+	
+]
+
+{ #category : #examples }
+GtPharoSelecterExamples >> editorOnEmpty [
+	<gtExample>
+	| anEditor anEditorElement |
+	
+	anEditorElement := self editorFor: ''.
+	anEditor := anEditorElement editor.
+	anEditor doubleClickWordClassifier: anEditor smalltalkWordClassifier.
+	anEditor movementWordClassifier: anEditor smalltalkWordClassifier.
 	
 	self assert: anEditor cursors isEmpty.
 	self assert: anEditor selection isEmpty.
@@ -100,6 +117,18 @@ GtPharoSelecterExamples >> selectWordAtNextToEnd [
 	self 
 		assert: editor selection 
 		equals: (BlCompositeSelection new select: 94 to: 95).
+	^ editor
+]
+
+{ #category : #examples }
+GtPharoSelecterExamples >> selectWordOnEmpty [
+	<gtExample>
+	| editor |
+	editor := self editorOnEmpty.
+	editor selecter
+		selectionUnitAt: 1;
+		select.
+	self assert: editor selection isEmpty.
 	^ editor
 ]
 
