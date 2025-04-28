@@ -8,7 +8,9 @@ Class {
 		'icon',
 		'label',
 		'visible',
-		'announcer'
+		'announcer',
+		'enterBlock',
+		'leaveBlock'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
@@ -65,6 +67,12 @@ GtRefactoringButtonAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdito
 				left: 4).
 	button action: [ :anEvent | actionBlock cull: anEvent ].
 	button id: #'reorder-parameter-button'.
+	button
+		when: BlMouseEnterEvent
+		do: [ :event | enterBlock ifNotNil: [ enterBlock cull: event ] ].
+	button
+		when: BlMouseLeaveEvent
+		do: [ :event | leaveBlock ifNotNil: [ leaveBlock cull: event ] ].
 	self updateButton: button.
 	self
 		when: GtRefactoringButtonVisibilityChanged
@@ -102,6 +110,16 @@ GtRefactoringButtonAttribute >> label [
 { #category : #accessing }
 GtRefactoringButtonAttribute >> label: aString [
 	label := aString
+]
+
+{ #category : #accessing }
+GtRefactoringButtonAttribute >> onEnter: aBlock [
+	enterBlock := aBlock
+]
+
+{ #category : #accessing }
+GtRefactoringButtonAttribute >> onLeave: aBlock [
+	leaveBlock := aBlock
 ]
 
 { #category : #private }

@@ -6,7 +6,8 @@ Class {
 		'styler',
 		'focusedIndex',
 		'hasArguments',
-		'completionStrategy'
+		'completionStrategy',
+		'highlighted'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
@@ -118,10 +119,23 @@ GtRenameSelectorAction >> forVariableOrUnaryMessage [
 ]
 
 { #category : #accessing }
+GtRenameSelectorAction >> highlighted [
+	^ highlighted
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> highlighted: anInteger [
+	highlighted := anInteger.
+	renameAttributes
+		ifNotNil: [ renameAttributes doWithIndex: [ :each :i | each highlight: i = anInteger ] ]
+]
+
+{ #category : #accessing }
 GtRenameSelectorAction >> initialize [
 	super initialize.
 	allowAccept := false.
 	focusedIndex := 1.
+	highlighted := 0.
 	self hasRefactoringPreview: true
 ]
 
