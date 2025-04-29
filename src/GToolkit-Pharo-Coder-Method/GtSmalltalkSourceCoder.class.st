@@ -4,10 +4,38 @@ Class {
 	#traits : 'TGtPharoSourceCoderAstNodesDetection',
 	#classTraits : 'TGtPharoSourceCoderAstNodesDetection classTrait',
 	#classVars : [
-		'NodeHighlight'
+		'DoubleClickClassifier',
+		'NodeHighlight',
+		'WordMovementClassifier'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
+
+{ #category : #accessing }
+GtSmalltalkSourceCoder class >> doubleClickClassifier [
+	^ DoubleClickClassifier
+]
+
+{ #category : #accessing }
+GtSmalltalkSourceCoder class >> doubleClickClassifier: anObject [
+	DoubleClickClassifier := anObject
+]
+
+{ #category : #initialization }
+GtSmalltalkSourceCoder class >> initialize [
+	WordMovementClassifier := BrTextEditorModel smalltalkWordClassifier.
+	DoubleClickClassifier := BrTextEditorModel smalltalkWordClassifier
+]
+
+{ #category : #accessing }
+GtSmalltalkSourceCoder class >> wordMovementClassifier [
+	^ WordMovementClassifier
+]
+
+{ #category : #accessing }
+GtSmalltalkSourceCoder class >> wordMovementClassifier: anObject [
+	WordMovementClassifier := anObject
+]
 
 { #category : #'private - ast' }
 GtSmalltalkSourceCoder >> cascadedMessagesWithin: anInterval [
