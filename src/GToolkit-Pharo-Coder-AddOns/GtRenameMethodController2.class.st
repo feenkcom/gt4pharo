@@ -97,7 +97,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 							action: [ renameAction focusedIndex: i - 1.
 								self swapKeywordAndParameterWithNext: i - 1 ]
 							icon: BrGlamorousVectorIcons left
-							label: 'Swap keyword and parameter with previous'.
+							label: 'Swap keyword and parameter with previous'
+							id: 'move-keyword-and-parameter-left-' , i printString.
 					attribute
 						onEnter: [ renameAction highlighted: i.
 							self sourceCoderViewModel
@@ -116,7 +117,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 							action: [ renameAction focusedIndex: i - 1.
 								self swapParameterWithNext: i - 1 ]
 							icon: BrGlamorousVectorIcons left
-							label: 'Swap parameter with previous'.
+							label: 'Swap parameter with previous'
+							id: 'move-parameter-left-' , i printString.
 					attribute
 						onEnter: [ self sourceCoderViewModel
 								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
@@ -134,7 +136,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 							action: [ renameAction focusedIndex: i + 1.
 								self swapParameterWithNext: i ]
 							icon: BrGlamorousVectorIcons right
-							label: 'Swap parameter with next'.
+							label: 'Swap parameter with next'
+							id: 'move-parameter-right-' , i printString.
 					attribute
 						onEnter: [ self sourceCoderViewModel
 								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
@@ -151,7 +154,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 							action: [ renameAction focusedIndex: i + 1.
 								self swapKeywordAndParameterWithNext: i ]
 							icon: BrGlamorousVectorIcons right
-							label: 'Swap keyword and parameter with next'.
+							label: 'Swap keyword and parameter with next'
+							id: 'move-keyword-and-parameter-right-' , i printString.
 					attribute
 						onEnter: [ renameAction highlighted: i.
 							self sourceCoderViewModel
@@ -260,6 +264,7 @@ GtRenameMethodController2 >> swapKeywordAndParameterWithNext: anInteger [
 	self
 		swapNode: (self currentNode arguments at: anInteger)
 		with: (self currentNode arguments at: anInteger + 1).
+	self updateSelector.
 	newSelectorParts swap: anInteger with: anInteger + 1.
 	renameAction swapKeywordWithNext: anInteger.
 	renameAction newSelector: self newSelectorName.

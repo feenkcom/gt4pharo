@@ -53,7 +53,7 @@ GtRenameSelectorEditorAttribute >> highlight: aBoolean [
 						ifTrue: [ BrGlamorousColors textHighlightColor ]
 						ifFalse: [ renameEditor isFocused
 								ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
-								ifFalse: [ BrGlamorousColors editorBorderColor ] ]))	"renameEditor invalidate"
+								ifFalse: [ BrGlamorousColors editorBorderColor ] ]))
 ]
 
 { #category : #'as yet unclassified' }

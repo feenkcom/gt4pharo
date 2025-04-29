@@ -10,7 +10,8 @@ Class {
 		'visible',
 		'announcer',
 		'enterBlock',
-		'leaveBlock'
+		'leaveBlock',
+		'id'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
@@ -29,6 +30,16 @@ GtRefactoringButtonAttribute class >> action: aBlock icon: anIcon label: aString
 		actionBlock: aBlock;
 		icon: anIcon;
 		label: aString;
+		yourself
+]
+
+{ #category : #'instance creation' }
+GtRefactoringButtonAttribute class >> action: aBlock icon: anIcon label: aString id: aSymbol [
+	^ self new
+		actionBlock: aBlock;
+		icon: anIcon;
+		label: aString;
+		id: aSymbol;
 		yourself
 ]
 
@@ -66,7 +77,7 @@ GtRefactoringButtonAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdito
 				bottom: 0
 				left: 4).
 	button action: [ :anEvent | actionBlock cull: anEvent ].
-	button id: #'reorder-parameter-button'.
+	button id: id.
 	button
 		when: BlMouseEnterEvent
 		do: [ :event | enterBlock ifNotNil: [ enterBlock cull: event ] ].
@@ -94,12 +105,23 @@ GtRefactoringButtonAttribute >> icon: anObject [
 	icon := anObject
 ]
 
+{ #category : #accessing }
+GtRefactoringButtonAttribute >> id [
+	^ id
+]
+
+{ #category : #accessing }
+GtRefactoringButtonAttribute >> id: aString [
+	id := aString asSymbol
+]
+
 { #category : #'initialize-release' }
 GtRefactoringButtonAttribute >> initialize [
 	super initialize.
 	visible := true.
 	self beAppend.
-	self beNotOverwritableByStyler
+	self beNotOverwritableByStyler.
+	id := #'reorder-parameter-button'
 ]
 
 { #category : #accessing }
