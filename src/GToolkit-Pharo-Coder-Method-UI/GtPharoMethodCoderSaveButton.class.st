@@ -21,7 +21,9 @@ GtPharoMethodCoderSaveButton >> initialize [
 		beTinySize;
 		action: [ self pharoMethodCoderViewModel requestSave ].
 		
-	self addAptitude: (BrGlamorousWithExplicitDropdownAptitude
+	self addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
+		withVisibleWidgetBoundsRelocator;
+		withContainerPermanentVisibilityUpdater;
 		handle: [ BlElement new size: self extent ]
 		content: [ self newSaveDestinationPickerElement ]) doNotShowOnClick.
 	

@@ -60,7 +60,8 @@ GtRenameMethodController2 >> installRenamer [
 	oldAction
 		ifNil: [ renameAction newSelector: message selector ]
 		ifNotNil: [ renameAction newSelector: oldAction newSelector.
-			renameAction focusedIndex: oldAction focusedIndex ].
+			renameAction focusedIndex: oldAction focusedIndex.
+			renameAction highlighted: oldAction highlighted ].
 	renameAction selectAll: true.
 	renameAction
 		when: GtRenameActionAnnouncement
@@ -68,8 +69,18 @@ GtRenameMethodController2 >> installRenamer [
 				ann eventType = #textUpdated ifTrue: [ self updateSelector ].
 				ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ];
 		when: GtRenameSelectorKeywordFocused
-			do: [ :ann | self updateFocused: ann keyword ].
-	renameAction install
+			do: [ :ann | self updateFocused: ann keyword ];
+		when: GtRenameSelectorMoved
+			do: [ :ann | 
+				ann forward
+					ifTrue: [ self currentNode arguments size > ann keyword
+							ifTrue: [ renameAction focusedIndex: ann keyword + 1.
+								self swapKeywordAndParameterWithNext: ann keyword ] ]
+					ifFalse: [ ann keyword > 1
+							ifTrue: [ renameAction focusedIndex: ann keyword - 1.
+								self swapKeywordAndParameterWithNext: ann keyword - 1 ] ] ].
+	renameAction install.
+	self installReorderAttributes
 ]
 
 { #category : #executing }
@@ -83,18 +94,36 @@ GtRenameMethodController2 >> installReorderAttributes [
 		keysAndValuesDo: [ :i :each | 
 			i > 1
 				ifTrue: [ attribute := GtRefactoringButtonAttribute
-							action: [ self swapKeywordAndParameterWithNext: i - 1 ]
+							action: [ renameAction focusedIndex: i - 1.
+								self swapKeywordAndParameterWithNext: i - 1 ]
 							icon: BrGlamorousVectorIcons left
 							label: 'Swap keyword and parameter with previous'.
+					attribute
+						onEnter: [ renameAction highlighted: i.
+							self sourceCoderViewModel
+								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+								from: (message selectorParts at: i) startPosition
+								to: each stopPosition ];
+						onLeave: [ renameAction highlighted: 0.
+							self sourceCoderViewModel
+								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: (message selectorParts at: i) startPosition - 1
 						to: (message selectorParts at: i) startPosition - 1.
 					attribute := GtRefactoringButtonAttribute
-							action: [ self swapParameterWithNext: i - 1 ]
+							action: [ renameAction focusedIndex: i - 1.
+								self swapParameterWithNext: i - 1 ]
 							icon: BrGlamorousVectorIcons left
 							label: 'Swap parameter with previous'.
+					attribute
+						onEnter: [ self sourceCoderViewModel
+								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+								from: each startPosition
+								to: each stopPosition ];
+						onLeave: [ self sourceCoderViewModel
+								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
@@ -102,18 +131,36 @@ GtRenameMethodController2 >> installReorderAttributes [
 						to: each startPosition - 1 ].
 			i < message arguments size
 				ifTrue: [ attribute := GtRefactoringButtonAttribute
-							action: [ self swapParameterWithNext: i ]
+							action: [ renameAction focusedIndex: i + 1.
+								self swapParameterWithNext: i ]
 							icon: BrGlamorousVectorIcons right
 							label: 'Swap parameter with next'.
+					attribute
+						onEnter: [ self sourceCoderViewModel
+								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+								from: each startPosition
+								to: each stopPosition ];
+						onLeave: [ self sourceCoderViewModel
+								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
 						to: each stopPosition.
 					attribute := GtRefactoringButtonAttribute
-							action: [ self swapKeywordAndParameterWithNext: i ]
+							action: [ renameAction focusedIndex: i + 1.
+								self swapKeywordAndParameterWithNext: i ]
 							icon: BrGlamorousVectorIcons right
 							label: 'Swap keyword and parameter with next'.
+					attribute
+						onEnter: [ renameAction highlighted: i.
+							self sourceCoderViewModel
+								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+								from: (message selectorParts at: i) startPosition
+								to: each stopPosition ];
+						onLeave: [ renameAction highlighted: 0.
+							self sourceCoderViewModel
+								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
@@ -198,12 +245,6 @@ GtRenameMethodController2 >> renamePosition [
 	^ self currentNode selectorParts last stopPosition
 ]
 
-{ #category : #executing }
-GtRenameMethodController2 >> safelyExecute [
-	super safelyExecute.
-	self installReorderAttributes
-]
-
 { #category : #private }
 GtRenameMethodController2 >> someImplementor [
 	^ someImplementor
@@ -249,8 +290,7 @@ GtRenameMethodController2 >> swapNode: firstNode with: secondNode [
 					ifFalse: [ aNewSourceText copyFrom: aSecondNode stopPosition + 1 to: aNewSourceText size ]).
 	self setText: aNewSourceText.
 	self updateCurrentNodeFor: aNewSourceText asString.
-	self installRenamer.
-	self installReorderAttributes
+	self installRenamer
 ]
 
 { #category : #private }
