@@ -43,8 +43,8 @@ GtPharoSelecterExamples >> editorOnCode [
 	
 	anEditorElement := self editorFor: self exampleSmalltalkCode.
 	anEditor := anEditorElement editor.
-	anEditor doubleClickWordClassifier: anEditor smalltalkWordClassifier.
-	anEditor movementWordClassifier: anEditor smalltalkWordClassifier.
+	anEditor doubleClickWordClassifier: BrTextEditorModel smalltalkWordClassifier.
+	anEditor movementWordClassifier: BrTextEditorModel smalltalkWordClassifier.
 	
 	self assert: anEditor cursors isEmpty.
 	self assert: anEditor selection isEmpty.
@@ -59,8 +59,8 @@ GtPharoSelecterExamples >> editorOnEmpty [
 	
 	anEditorElement := self editorFor: ''.
 	anEditor := anEditorElement editor.
-	anEditor doubleClickWordClassifier: anEditor smalltalkWordClassifier.
-	anEditor movementWordClassifier: anEditor smalltalkWordClassifier.
+	anEditor doubleClickWordClassifier: BrTextEditorModel smalltalkWordClassifier.
+	anEditor movementWordClassifier: BrTextEditorModel smalltalkWordClassifier.
 	
 	self assert: anEditor cursors isEmpty.
 	self assert: anEditor selection isEmpty.

@@ -361,6 +361,43 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 	^ aScripter
 ]
 
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> checkButtonVisibility: aCollection in: scripter [
+	1
+		to: 3
+		do: [ :i | 
+			i = 1
+				ifFalse: [ scripter
+						checkStep: [ :s | 
+							s
+								label: 'Check left parameter visibility';
+								exists;
+								// ('move-parameter-left-' , i printString) asSymbol;
+								@ [ :each | each isVisible = (aCollection includes: i) ] ].
+					scripter
+						checkStep: [ :s | 
+							s
+								label: 'Check left keyword visibility';
+								exists;
+								// ('move-keyword-and-parameter-left-' , i printString) asSymbol;
+								@ [ :each | each isVisible = (aCollection includes: i) ] ] ].
+			i = 3
+				ifFalse: [ scripter
+						checkStep: [ :s | 
+							s
+								label: 'Check right parameter visibility';
+								exists;
+								// ('move-parameter-right-' , i printString) asSymbol;
+								@ [ :each | each isVisible = (aCollection includes: i) ] ].
+					scripter
+						checkStep: [ :s | 
+							s
+								label: 'Check right keyword visibility';
+								exists;
+								// ('move-keyword-and-parameter-right-' , i printString) asSymbol;
+								@ [ :each | each isVisible = (aCollection includes: i) ] ] ] ]
+]
+
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter absenceOfContextActionNamed: anActionName [
 	<gtExample>
@@ -621,6 +658,58 @@ GtPharoMethodCoderByScripterExamples >> checkHasTwoReorderAttributes: aScripter 
 						count ]
 					equals: [ :aCoderEditor | 2 ];
 				id: GtSourceCoderEditorId ]
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> checkHighlighted: anInteger includeKeyword: aBoolean in: scripter [
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Check attributes';
+				block: [ :each | 
+					| ast text found |
+					text := each editor text.
+					ast := GtPharoParser parse: text asString.
+					found := false.
+					text
+						findAttributesSuchThat: [ :attr | attr == GtSmalltalkSourceCoder nodeHighlight ]
+						indicesDo: [ :start :end :attr | 
+							| interval |
+							interval := ((aBoolean
+									ifTrue: [ ast pattern selectorParts ]
+									ifFalse: [ ast pattern arguments ]) at: anInteger) startPosition
+									to: (ast pattern arguments at: anInteger) stopPosition.
+							self assert: (interval includes: start).
+							self assert: (interval includes: end).
+							found := true ].
+					self assert: (found or: [ anInteger isNil ]) ];
+				id: GtSourceCoderEditorId ].
+	aBoolean ifFalse: [ ^ self ].
+	1
+		to: 3
+		do: [ :i | 
+			scripter
+				checkStep: [ :s | 
+					s
+						label: 'Check editor border - ' , i printString;
+						on: GtRenameEditor index: i;
+						value: [ :each | each border paint color ]
+							equals: [ i = anInteger
+									ifTrue: [ BrGlamorousColors textHighlightColor ]
+									ifFalse: [ i = 1
+											ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
+											ifFalse: [ BrGlamorousColors editorBorderColor ] ] ] ].
+			scripter
+				checkStep: [ :s | 
+					s
+						label: 'Check editor border - ' , i printString;
+						on: GtRenameEditor index: i;
+						value: [ :each | each border paint color ]
+							equals: [ i = anInteger
+									ifTrue: [ BrGlamorousColors textHighlightColor ]
+									ifFalse: [ i = 1
+											ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
+											ifFalse: [ BrGlamorousColors editorBorderColor ] ] ] ] ]
 ]
 
 { #category : #'examples - extract method' }
@@ -5817,6 +5906,24 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 	^ aScripter
 ]
 
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> hoverButton: aString index: anInteger in: scripter [
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover editor';
+				on: GtRenameEditor index: anInteger ].
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover move button ' , aString;
+				// (aString , '-' , anInteger printString) asSymbol ].
+	self
+		checkHighlighted: anInteger
+		includeKeyword: (aString includesSubstring: 'keyword')
+		in: scripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 	GtPharoDummyOneObject instA: 72.
@@ -7187,6 +7294,141 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 			self checkFor: aStep textExpandAttributeAt: 24.
 			self checkFor: aStep textExampleStatusAttributeAt: 1 ].
 	^ aScripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: Collection >> #detect:ifFound:ifNone: ].
+	scripter
+		doStep: [ :s | 
+			s
+				action: [ :each | 
+					| ast |
+					ast := GtPharoParser parse: each editor text asString.
+					(GtRenameMethodController2 new
+						sourceCoderViewModel: each textualCoderViewModel;
+						originalNode: ast pattern) executeIn: each ];
+				id: GtSourceCoderEditorId ].
+	self checkButtonVisibility: #(1) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(2) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(3) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(1) in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMethodPatternChangeSelectorAndOrder [
+	<gtExample>
+	| scripter changes change ast |
+	scripter := self renameMethodPattern.
+	scripter
+		doStep: [ :s | 
+			s
+				id: GtSourceCoderEditorId;
+				action: [ :each | ast := GtPharoParser parse: each editor text asString ] ].
+	scripter typeStep: [ :s | s text: 'a' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'b' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'c' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 1 ].
+	scripter clickStep: [ :s | s // #'move-parameter-right-1' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-right-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 3 ].
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-parameter-left-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-left-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	scripter clickStep: [ :s | s // #previewCheckButton ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	change := changes gtAllChanges
+			detect: [ :each | (each isKindOf: RBAddMethodChange) and: [ each changeClassName = #Collection ] ].
+	self assert: change parseTree selector equals: #c:a:b:.
+	change parseTree arguments
+		with: #(2 3 1)
+		do: [ :new :i | self assert: new name asString equals: (ast pattern variables at: i) name source ].
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMethodPatternHoverButtonShowsHighlight [
+	<gtExample>
+	| scripter |
+	scripter := self renameMethodPattern.
+	self hoverButton: 'move-keyword-and-parameter-left' index: 2 in: scripter.
+	self hoverButton: 'move-keyword-and-parameter-left' index: 3 in: scripter.
+	self hoverButton: 'move-parameter-left' index: 2 in: scripter.
+	self hoverButton: 'move-parameter-left' index: 3 in: scripter.
+	"self hoverButton: 'move-keyword-and-parameter-right' index: 1 in: scripter."
+	self hoverButton: 'move-keyword-and-parameter-right' index: 2 in: scripter.
+	self hoverButton: 'move-parameter-right' index: 1 in: scripter.
+	self hoverButton: 'move-parameter-right' index: 2 in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMethodPatternHoverShowsButtons [
+	<gtExample>
+	| scripter |
+	scripter := self renameMethodPattern.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover second item';
+				on: GtRenameEditor index: 2 ].
+	self checkButtonVisibility: #(1 2) in: scripter.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover third item';
+				on: GtRenameEditor index: 3 ].
+	self checkButtonVisibility: #(1 3) in: scripter.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover third item';
+				on: GtRenameEditor index: 1 ].
+	self checkButtonVisibility: #(1) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(1 2) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(1 3) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(1) in: scripter.
+	^ scripter
 ]
 
 { #category : #utilities }
