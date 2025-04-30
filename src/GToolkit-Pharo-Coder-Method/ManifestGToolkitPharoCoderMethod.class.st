@@ -23,6 +23,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 	^ {
 		'AST-Core'.
 		'Announcements-Core'.
+		'Brick-Classifiers'.
 		'Collections-Sequenceable'.
 		'Collections-Strings'.
 		'Collections-Unordered'.

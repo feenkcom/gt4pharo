@@ -23,16 +23,8 @@ GtSmalltalkSourceCoder class >> doubleClickClassifier: anObject [
 
 { #category : #initialization }
 GtSmalltalkSourceCoder class >> initialize [
-	WordMovementClassifier := self smalltalkWordClassifier.
-	DoubleClickClassifier := self smalltalkWordClassifier
-]
-
-{ #category : #private }
-GtSmalltalkSourceCoder class >> smalltalkWordClassifier [
-	^ [ :c1 :c2 | 
-	c1 isSeparator ~= c2 isSeparator
-		or: [ ((c1 isAlphaNumeric | (c1 = $_)) not and: [ c2 isAlphaNumeric | (c2 = $_) ])
-				or: [ c1 isAlphaNumeric | (c1 = $_) and: [ c2 tokenish not ] ] ] ]
+	WordMovementClassifier := CamelCaseWordClassifier new.
+	DoubleClickClassifier := SmalltalkWordClassifier new
 ]
 
 { #category : #accessing }
