@@ -12,6 +12,11 @@ GtUserActivatableChangeElement class >> fromActivatableChange: aGtUserActivatabl
 	^ self new activatableChange: aGtUserActivatableChange
 ]
 
+{ #category : #accessing }
+GtUserActivatableChangeElement >> activatableChange [
+	^ activatableChange
+]
+
 { #category : #'instance creation' }
 GtUserActivatableChangeElement >> activatableChange: aGtUserActivatableChange [
 	self removeChildren.

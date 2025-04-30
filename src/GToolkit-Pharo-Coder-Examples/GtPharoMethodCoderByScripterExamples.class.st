@@ -362,6 +362,109 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_WithoutExampleAction
 ]
 
 { #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> changeKeywordOrderIn: scripter [
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-right-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 3 ].
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-left-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	self
+		performRefactoringAndCheckSelector: #ifNone:detect:ifFound:
+		permutation: #(3 1 2)
+		in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> changeOrderIn: scripter [
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 1 ].
+	scripter clickStep: [ :s | s // #'move-parameter-right-1' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 2 ].
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 3 ].
+	scripter clickStep: [ :s | s // #'move-parameter-left-3' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 2 ].
+	self
+		performRefactoringAndCheckSelector: #detect:ifFound:ifNone:
+		permutation: #(2 3 1)
+		in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> changeSelectorAndOrderIn: scripter [
+	scripter typeStep: [ :s | s text: 'a' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'b' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'c' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 1 ].
+	scripter clickStep: [ :s | s // #'move-parameter-right-1' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-right-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 3 ].
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-parameter-left-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
+	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-left-2' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	self
+		performRefactoringAndCheckSelector: #c:a:b:
+		permutation: #(2 3 1)
+		in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> changeSelectorIn: scripter [
+	scripter typeStep: [ :s | s text: 'a' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'b' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'c' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self
+		performRefactoringAndCheckSelector: #a:b:c:
+		permutation: #(1 2 3)
+		in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> checkButtonVisibility: aCollection in: scripter [
 	1
 		to: 3
@@ -7167,6 +7270,42 @@ GtPharoMethodCoderByScripterExamples >> patternHighlighterPrintStringMethodCoder
 	^ aScripter
 ]
 
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> performRefactoringAndCheckSelector: newSelector permutation: newOrder in: scripter [
+	| changes ast change |
+	ast := GtPharoParser parse: (Collection sourceCodeAt: #detect:ifFound:ifNone:).
+	scripter clickStep: [ :s | s // #previewCheckButton ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand preview';
+				onSpaceRoot;
+				// GtChangesElement;
+				// #triangle ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	change := changes gtAllChanges
+			detect: [ :each | (each isKindOf: RBAddMethodChange) and: [ each changeClassName = #Collection ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expanding Collection change';
+				onSpaceRoot;
+				// GtUserActivatableChangeWithExpanderElement;
+				@ [ :each | each activatableChange change = change ];
+				// GtSourceCoderExpanderToggleId ].
+	self assert: change parseTree selector equals: newSelector.
+	change parseTree arguments
+		with: newOrder
+		do: [ :new :i | self assert: new name asString equals: (ast pattern variables at: i) name source ]
+]
+
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethod [
 	<gtExample>
@@ -7297,6 +7436,88 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 ]
 
 { #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSend [
+	<gtExample>
+	| scripter method ast node |
+	method := [ (1 to: 100)
+			detect: [ :each | each odd and: [ (each >> 2) odd ] ]
+			ifFound: [ :each | 
+				Transcript
+					print: each;
+					cr;
+					flush ]
+			ifNone: [ Transcript
+					show: 'Not found';
+					cr;
+					flush ] ] method.
+	ast := GtPharoParser parse: method sourceCode.
+	node := ast body statements first value receiver body statements first.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: method method ].
+	scripter
+		doStep: [ :s | 
+			s
+				action: [ :each | 
+					(GtRenameMethodController2 new
+						sourceCoderViewModel: each textualCoderViewModel;
+						originalNode: node) executeIn: each ];
+				id: GtSourceCoderEditorId ].
+	self checkButtonVisibility: #(1) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(2) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(3) in: scripter.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self checkButtonVisibility: #(1) in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendAfterOpenedPreview [
+	<gtExample>
+	| scripter |
+	scripter := self renameMessageSendChangeKeywordOrder.
+	scripter clickStep: [ :s | s on: GtRenameEditor index: 1 ].
+	scripter typeStep: [ :s | s text: 'a' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'b' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter typeStep: [ :s | s text: 'c' ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	self
+		performRefactoringAndCheckSelector: #a:b:c:
+		permutation: #(3 1 2)
+		in: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendChangeKeywordOrder [
+	<gtExample>
+	^ self changeKeywordOrderIn: self renameMessageSend
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendChangeOrder [
+	<gtExample>
+	^ self changeOrderIn: self renameMessageSend
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendChangeSelector [
+	<gtExample>
+	| scripter |
+	scripter := self renameMessageSend.
+	^ self changeSelectorIn: scripter
+]
+
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendChangeSelectorAndOrder [
+	<gtExample>
+	^ self changeSelectorAndOrderIn: self renameMessageSend
+]
+
+{ #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
 	<gtExample>
 	| scripter |
@@ -7325,62 +7546,7 @@ GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> renameMethodPatternChangeSelectorAndOrder [
 	<gtExample>
-	| scripter changes change ast |
-	scripter := self renameMethodPattern.
-	scripter
-		doStep: [ :s | 
-			s
-				id: GtSourceCoderEditorId;
-				action: [ :each | ast := GtPharoParser parse: each editor text asString ] ].
-	scripter typeStep: [ :s | s text: 'a' ].
-	(scripter keyPress: BlKeyboardKey tab) play.
-	scripter typeStep: [ :s | s text: 'b' ].
-	(scripter keyPress: BlKeyboardKey tab) play.
-	scripter typeStep: [ :s | s text: 'c' ].
-	(scripter keyPress: BlKeyboardKey tab) play.
-	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 1 ].
-	scripter clickStep: [ :s | s // #'move-parameter-right-1' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				hasFocus;
-				on: GtRenameEditor index: 2 ].
-	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-right-2' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				hasFocus;
-				on: GtRenameEditor index: 3 ].
-	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
-	scripter clickStep: [ :s | s // #'move-parameter-left-2' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				hasFocus;
-				on: GtRenameEditor index: 1 ].
-	scripter mouseMoveOverStep: [ :s | s on: GtRenameEditor index: 2 ].
-	scripter clickStep: [ :s | s // #'move-keyword-and-parameter-left-2' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				hasFocus;
-				on: GtRenameEditor index: 1 ].
-	scripter clickStep: [ :s | s // #previewCheckButton ].
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
-	scripter
-		doStep: [ :s | 
-			s
-				onSpaceRoot;
-				// GtChangesElement;
-				block: [ :each | changes := each changes ] ].
-	change := changes gtAllChanges
-			detect: [ :each | (each isKindOf: RBAddMethodChange) and: [ each changeClassName = #Collection ] ].
-	self assert: change parseTree selector equals: #c:a:b:.
-	change parseTree arguments
-		with: #(2 3 1)
-		do: [ :new :i | self assert: new name asString equals: (ast pattern variables at: i) name source ].
-	^ scripter
+	^ self changeSelectorAndOrderIn: self renameMethodPattern
 ]
 
 { #category : #'examples - rename method' }
