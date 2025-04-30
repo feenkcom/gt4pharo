@@ -63,7 +63,6 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			
 			package: 'GToolkit-Pharo-Coder-Method' with: [
 				spec requires: #(
-					'Brick-classifiers'
 					'GToolkitCoder'
 					'GToolkitCompleter'
 					'GToolkitExamplesEngine'
