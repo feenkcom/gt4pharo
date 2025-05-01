@@ -613,11 +613,7 @@ GtPharoMethodCoder >> formatWithRequesterObject: aRequester [
 	| ast |
 	ast := [ RBParser parseMethod: self currentSourceString ]
 			on: SyntaxErrorNotification
-			do: [ :ex | 
-				^ self
-					notifyParseError: ex errorMessage
-					at: ex location
-					requesterObject: aRequester ].
+			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
 
 	self currentSourceString: ast formattedCode
 ]
