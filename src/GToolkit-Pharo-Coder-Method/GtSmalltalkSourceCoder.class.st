@@ -23,8 +23,8 @@ GtSmalltalkSourceCoder class >> doubleClickClassifier: anObject [
 
 { #category : #initialization }
 GtSmalltalkSourceCoder class >> initialize [
-	WordMovementClassifier := CamelCaseWordClassifier new.
-	DoubleClickClassifier := SmalltalkWordClassifier new
+	WordMovementClassifier := BrCamelCaseWordClassifier new.
+	DoubleClickClassifier := BrSmalltalkWordClassifier new
 ]
 
 { #category : #accessing }
