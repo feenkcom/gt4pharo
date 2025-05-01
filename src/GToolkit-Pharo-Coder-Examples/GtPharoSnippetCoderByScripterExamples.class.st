@@ -1320,9 +1320,9 @@ GtPharoSnippetCoderByScripterExamples >> undefinedClass [
 		s label: 'Assert error text is correct';
 		onSpaceRoot;
 		onDropdown: true;
-		// BlTextElement;
+		// BrEditor;
 		value: [ :editor | editor text asString ]
-		equals: [ 'Undeclared temp: OdoredCollection' ] ].
+		equals: [ 'Variable is undeclared.' ] ].
 
 	^ aScripter
 ]
