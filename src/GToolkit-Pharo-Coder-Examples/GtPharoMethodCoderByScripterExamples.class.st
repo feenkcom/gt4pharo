@@ -1461,6 +1461,57 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 	^ aScripter
 ]
 
+{ #category : #'examples - compiler errors' }
+GtPharoMethodCoderByScripterExamples >> compileUndeclaredLocalError [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoder forMethod: thisContext method method.
+				aCoder
+					currentSourceText: 'method
+	| temp |
+	tmp := #().
+	^temp' asRopedText.
+				aCoder ].
+
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				id: GtSourceCoderEditorId ].
+
+	aScripter shortcut
+		combination: BlKeyCombination primaryS;
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check has add temp option';
+				exists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	aScripter shortcut
+		combination: BlKeyCombination escape;
+		onSpaceRoot;
+		// #'error-fix-it';
+		play.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check popup dismissed';
+				notExists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	^ aScripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 	<gtExample>

@@ -46,11 +46,10 @@ GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode coderModel: c
 	theFixitActions := OrderedCollection new.
 	theFixitActions
 		add: (GtDefineClassFixItAction forCoder: coderModel node: aVariableNode).
-	
+
 	(aVariableNode name value endsWith: 'Parser' caseSensitive: true)
-		ifTrue: [ 
-			theFixitActions
-				add: (GtDefineParserFixItAction forCoder: coderModel node: aVariableNode). ].
+		ifTrue: [ theFixitActions
+				add: (GtDefineParserFixItAction forCoder: coderModel node: aVariableNode) ].
 
 	coderModel class = GtPharoSnippetCoder
 		ifFalse: [ | aDefineClassAction |
@@ -59,16 +58,12 @@ GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode coderModel: c
 					node: aVariableNode.
 			theFixitActions add: aDefineClassAction ].
 
-	results := aVariableNode variableName
-			correctAgainst: aVariableNode localVariables
-			continuedFrom: nil.
-
-	results := coderModel behavior
-			possibleVariablesFor: aVariableNode variableName
-			continuedFrom: results.
+	results := OrderedCollection
+			withAll: (self localNamesFor: aVariableNode coderModel: coderModel).
+	results addAll: (self globalNamesFor: aVariableNode coderModel: coderModel).
 
 	theFixitActions
-		addAll: ((aVariableNode variableName correctAgainst: nil continuedFrom: results)
+		addAll: (results
 				collect: [ :each | 
 					(GtRenameVariableFixItAction forCoder: coderModel node: aVariableNode)
 						newName: each ]).
@@ -77,27 +72,59 @@ GtUndeclaredVariableAdvice >> globalFixItActionsFor: aVariableNode coderModel: c
 ]
 
 { #category : #styling }
+GtUndeclaredVariableAdvice >> globalNamesFor: aVariableNode coderModel: coderModel [
+	| items word min nameBlock cls |
+	items := Array new: 5 withAll: '' -> -1.
+	word := aVariableNode variableName.
+	min := word size / 2.0.
+	nameBlock := [ :each | 
+		| value |
+		((value := word alike: each) >= min
+			and: [ (each alike: word) >= (each size / 2.0) ])
+			ifTrue: [ | index |
+				index := items size.
+				[ index > 0 and: [ (items at: index) value < value ] ]
+					whileTrue: [ index = items size
+							ifTrue: [ items at: index put: each -> value ]
+							ifFalse: [ items swap: index with: index + 1 ].
+						index := index - 1 ] ] ].
+
+	cls := coderModel behavior ifNotNil: [ :each | each instanceSide ].
+	[ cls notNil ]
+		whileTrue: [ cls classPool keysDo: nameBlock.
+			cls sharedPools do: [ :pool | pool keysDo: nameBlock ].
+			cls := cls superclass ].
+
+	Smalltalk globals keysDo: nameBlock.
+	^ (items reject: [ :each | each value < 0 ]) collect: #key
+]
+
+{ #category : #styling }
 GtUndeclaredVariableAdvice >> localFixItActionsFor: aVariableNode coderModel: coderModel [
-	| theFixitActions possibleNames |
+	| theFixitActions localItems |
 	theFixitActions := OrderedCollection new.
 	theFixitActions
 		add: (GtDefineTemporaryFixItAction forCoder: coderModel node: aVariableNode).
-
 	(self
 		canAddInstanceVariable: aVariableNode variableName
 		to: coderModel behavior)
 		ifTrue: [ theFixitActions
 				add: (GtDefineInstanceVariableFixItAction forCoder: coderModel node: aVariableNode) ].
-	possibleNames := aVariableNode localVariables
-			, coderModel behavior allInstVarNames.
-
+	localItems := self localNamesFor: aVariableNode coderModel: coderModel.
 	theFixitActions
-		addAll: ((self findPotentialMatchesFor: aVariableNode in: possibleNames)
+		addAll: (localItems
 				collect: [ :each | 
 					(GtRenameVariableFixItAction forCoder: coderModel node: aVariableNode)
 						newName: each ]).
-
 	^ theFixitActions
+]
+
+{ #category : #styling }
+GtUndeclaredVariableAdvice >> localNamesFor: aVariableNode coderModel: coderModel [
+	| possibleNames |
+	possibleNames := aVariableNode localVariables
+			, coderModel behavior allInstVarNames.
+	^ self findPotentialMatchesFor: aVariableNode in: possibleNames
 ]
 
 { #category : #testing }

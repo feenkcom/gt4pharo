@@ -101,11 +101,7 @@ GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
 	| ast |
 	ast := [ RBParser parseExpression: self currentSourceString ]
 			on: SyntaxErrorNotification
-			do: [ :ex |
-				^ self
-					notifyParseError: ex errorMessage
-					at: ex location
-					requesterObject: aRequester ].
+			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
 
 	self currentSourceString: ast formattedCode
 ]
@@ -117,8 +113,7 @@ GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock inContext: aGtPharoSour
 		on: OCSemanticWarning
 		do: [ :ex | 
 			self
-				notifyParseError: ex errorMessage
-				at: ex location
+				notifyParseError: ex
 				requesterObject: aGtPharoSourceCoderEvaluationContext requesterObject.
 			ex return: false ]
 ]

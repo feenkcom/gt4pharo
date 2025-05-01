@@ -109,6 +109,19 @@ GtMethodAdvice >> elementIdUsing: aCriticStyler [
 ]
 
 { #category : #styling }
+GtMethodAdvice >> errorAttribute: aNode coderModel: aCoderModel [
+	| fixItAttribute |
+	fixItAttribute := GtFixItAttribute new
+			label: self name;
+			description: self descriptionBlock;
+			placeholderAlignment: #alignMiddle;
+			fixItActions: (self fixItActionsForNode: aNode coderModel: aCoderModel);
+			yourself.
+	^ (GtSourceCoderErrorFixItAttribute for: 'Undeclared variable')
+		fixItAttribute: fixItAttribute
+]
+
+{ #category : #styling }
 GtMethodAdvice >> errorHighlightAttribute [
 	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
 ]
