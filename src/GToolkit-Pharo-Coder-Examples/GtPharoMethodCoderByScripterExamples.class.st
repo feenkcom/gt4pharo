@@ -4228,6 +4228,68 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 ]
 
 { #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_menu [
+	<gtExample>
+	| aScripter |
+	aScripter := self forKeywordRename_01_setup.
+
+	aScripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open menu';
+				id: GtSourceCoderEditorId ].
+	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover rename';
+				onSpaceRoot;
+				// GtCoderMenuActionItemElement;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Rename message' ] ].
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check node is highlighted';
+				id: GtSourceCoderEditorId;
+				do: [ :each | 
+					self
+						assert: ((each editor text attributesAt: 1)
+								includes: GtSmalltalkSourceCoder nodeHighlight) ] ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click rename';
+				onSpaceRoot;
+				// GtCoderMenuActionItemElement;
+				// BrLabel;
+				@ [ :each | each text asString beginsWith: 'Rename message' ] ].
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check rename editor does not contain highlight';
+				// GtRenameEditor;
+				do: [ :each | 
+					self
+						assert: ((each editor text attributesAt: 1)
+								includes: GtSmalltalkSourceCoder nodeHighlight) not ] ].
+
+	self checkFor: aScripter saveButtonEnabled: false.
+	self checkFor: aScripter renameEditorExists: true.
+	self checkFor: aScripter discardButtonExists: false.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor all selected';
+				value: [ :anEditor | anEditor editor selectedText asString ]
+					equals: [ (aScripter model attributeNamed: #dummyMethod) selector allButLast ];
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	<gtExample>
 	| aScripter |
