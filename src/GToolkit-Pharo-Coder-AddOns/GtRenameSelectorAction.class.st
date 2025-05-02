@@ -50,7 +50,7 @@ GtRenameSelectorAction >> addRenameAttributes [
 						action: self;
 						selectAll: selectAll;
 						filter: filter;
-						text: (text from: each first to: each last);
+						text: (self removeHighlightFrom: (text from: each first to: each last));
 						requestInitialFocus: index = focusedIndex;
 						focusedIndex: index;
 						coordinateFocus: true;
@@ -181,6 +181,12 @@ GtRenameSelectorAction >> newSelector: aSymbol [
 { #category : #accessing }
 GtRenameSelectorAction >> newVariableName [
 	^ self newSelector
+]
+
+{ #category : #accessing }
+GtRenameSelectorAction >> removeHighlightFrom: aText [
+	^ aText asRopedText copy
+		clearAttributes: [ :each | each class = BlTextHighlightAttribute ]
 ]
 
 { #category : #accessing }
