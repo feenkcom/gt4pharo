@@ -8,19 +8,12 @@ Class {
 		'currentNode',
 		'moveAttributes',
 		'permutations',
-		'mouseHandler',
-		'mouseOverActions',
 		'hovered',
-		'focused'
+		'focused',
+		'hoverAttributes'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
-
-{ #category : #'as yet unclassified' }
-GtRenameMethodController2 >> cleanUp [
-	super cleanUp.
-	mouseHandler ifNotNil: [ element removeEventHandler: mouseHandler ]
-]
 
 { #category : #accessing }
 GtRenameMethodController2 >> currentNode [
@@ -30,15 +23,8 @@ GtRenameMethodController2 >> currentNode [
 { #category : #initialization }
 GtRenameMethodController2 >> initialize [
 	super initialize.
-	moveAttributes := #()
-]
-
-{ #category : #executing }
-GtRenameMethodController2 >> installMouseMoveHandler [
-	mouseHandler := BlEventHandler
-			on: BlMouseMoveEvent
-			do: [ :event | self mouseMoved: event ].
-	element addEventHandler: mouseHandler
+	moveAttributes := #().
+	hoverAttributes := #()
 ]
 
 { #category : #executing }
@@ -88,8 +74,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 	| attribute message |
 	message := self currentNode.
 	message arguments size > 1 ifFalse: [ ^ self ].
-	self mouseOverActions removeAll.
 	moveAttributes := OrderedCollection new.
+	hoverAttributes := OrderedCollection new.
 	message arguments
 		keysAndValuesDo: [ :i :each | 
 			i > 1
@@ -170,27 +156,15 @@ GtRenameMethodController2 >> installReorderAttributes [
 						addTextAttribute: attribute
 						from: each stopPosition
 						to: each stopPosition ].
-			self
-				whenMouseOver: ((message selectorParts at: i) startPosition - 1 to: each stopPosition)
-				do: [ self updateHovered: i ] ].
-	self installMouseMoveHandler
-]
-
-{ #category : #private }
-GtRenameMethodController2 >> mouseMoved: anEvent [
-	| index |
-	index := element editor navigator
-			findTextIndexAtScreenPosition: anEvent localPosition
-			ifAbsent: [ -1 ].
-	self mouseOverActions
-		detect: [ :each | each key includes: index ]
-		ifFound: [ :each | each value cull: index ]
-		ifNone: [ self updateHovered: -1 ]
-]
-
-{ #category : #accessing }
-GtRenameMethodController2 >> mouseOverActions [
-	^ mouseOverActions ifNil: [ mouseOverActions := OrderedCollection new ]
+			attribute := BrTextHoverAttribute new
+					beNotOverwritableByStyler;
+					enterAction: [ :evt | self updateHovered: i ];
+					leaveAction: [ :evt | self updateHovered: -1 ].
+			hoverAttributes add: attribute.
+			self sourceCoderViewModel
+				addTextAttribute: attribute
+				from: (message selectorParts at: i) startPosition - 1
+				to: each stopPosition ]
 ]
 
 { #category : #accessing }
@@ -241,7 +215,8 @@ GtRenameMethodController2 >> refactoringName [
 
 { #category : #executing }
 GtRenameMethodController2 >> removeReorderParametersAttributes [
-	moveAttributes do: [ :each | self sourceCoderViewModel removeAttribute: each ]
+	moveAttributes do: [ :each | self sourceCoderViewModel removeAttribute: each ].
+	hoverAttributes do: [ :each | self sourceCoderViewModel removeAttribute: each ]
 ]
 
 { #category : #accessing }
@@ -352,9 +327,4 @@ GtRenameMethodController2 >> updateVisibleMoveAttributes [
 			| index |
 			index := (i + 1) // 4 + 1.
 			each visible: (index = hovered or: [ index = focused ]) ]
-]
-
-{ #category : #executing }
-GtRenameMethodController2 >> whenMouseOver: anInterval do: aBlock [
-	self mouseOverActions add: anInterval -> aBlock
 ]
