@@ -4161,21 +4161,21 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
 	self checkFor: scripter refactoringPreviewButtonExists: false.
 
 	scripter click
-		id: #'reorder-parameter-button';
+		id: #'move-parameter-right-1';
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
 	self checkFor: scripter refactoringPreviewButtonExists: true.
 
 	scripter click
-		id: #'reorder-parameter-button';
+		id: #'move-parameter-left-2';
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
 	self checkFor: scripter refactoringPreviewButtonExists: false.
 
 	scripter click
-		id: #'reorder-parameter-button';
+		id: #'move-parameter-right-1';
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
