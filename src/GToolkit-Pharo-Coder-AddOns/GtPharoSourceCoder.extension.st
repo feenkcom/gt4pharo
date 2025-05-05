@@ -564,7 +564,7 @@ GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMess
 						withArguments: {aSourceCoderViewModel.
 								aMessageOrMethodOrMethodPatternNode})
 						ifNotNil: [ :controller | ^ controller ] ] ].
-	^ GtRenameMethodController new
+	^ GtRenameMethodController2 new
 		sourceCoderViewModel: aSourceCoderViewModel;
 		originalNode: aMessageOrMethodOrMethodPatternNode
 ]
