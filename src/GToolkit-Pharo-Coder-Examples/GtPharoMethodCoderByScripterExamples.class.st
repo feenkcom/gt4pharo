@@ -7535,7 +7535,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 4
+				numberOfMainActions: 5
 				contextActionAtLeast: 5.
 
 			self checkFor: aStep existenceOfContextActionNamed: 'Evaluate example' ].
