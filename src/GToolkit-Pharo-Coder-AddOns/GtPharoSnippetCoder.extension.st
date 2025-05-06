@@ -262,7 +262,9 @@ GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
 	addOns
 		updateActionList: #mainActions
 		withAction: action
-		onlyNew: true
+		onlyNew: true.
+	
+	self initializeSearchTextAddOns: addOns viewModel: aViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

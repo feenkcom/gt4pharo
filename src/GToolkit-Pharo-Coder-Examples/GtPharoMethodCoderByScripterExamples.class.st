@@ -1824,7 +1824,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 	self 
 		checkFor: aScripter 
-		numberOfMainActions: 4
+		numberOfMainActions: 5
 		contextActionAtLeast: 5.
 
 	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate example'.
@@ -1879,7 +1879,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 5
+				numberOfMainActions: 6
 				contextAction: aNumberOfContextActionElements - 5.
 
 			self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
@@ -7495,7 +7495,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 5
+				numberOfMainActions: 6
 				contextAction: aNumberOfContextActionElements - 5.
 
 			self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
@@ -7535,7 +7535,7 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 4
+				numberOfMainActions: 5
 				contextActionAtLeast: 5.
 
 			self checkFor: aStep existenceOfContextActionNamed: 'Evaluate example' ].
