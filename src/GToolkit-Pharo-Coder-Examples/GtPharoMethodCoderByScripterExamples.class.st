@@ -1824,7 +1824,7 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 	self 
 		checkFor: aScripter 
-		numberOfMainActions: 4
+		numberOfMainActions: 5
 		contextActionAtLeast: 5.
 
 	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate example'.
