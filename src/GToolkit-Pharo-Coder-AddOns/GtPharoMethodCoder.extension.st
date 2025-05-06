@@ -1143,7 +1143,9 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
-		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
+		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ].
+		
+	self initializeSearchTextAddOns: addOns viewModel: aGtPharoMethodCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

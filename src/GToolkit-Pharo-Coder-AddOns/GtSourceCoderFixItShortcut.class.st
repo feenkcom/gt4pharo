@@ -37,5 +37,10 @@ GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorE
 										ifFound: [ :element | 
 											element userData
 												at: #dropDownAptitude
-												ifPresent: [ :attr | ^ attr canShow ifTrue: [ attr show ] ifFalse: [ attr hide ] ] ] ] ] ] ]
+												ifPresent: [ :attr | ^ attr canShow ifTrue: [ attr show ] ifFalse: [ attr hide ] ] ] ] ] ] ].
+												
+	"Since we use the same Primary+T shortcut for the world tool menu and this fix-it command, 
+	we want to keep propagating the shortcut event in case there is no fix-it attribute.
+	See https://github.com/feenkcom/gtoolkit/issues/4521"
+	aShortcutEvent beNotConsumed
 ]
