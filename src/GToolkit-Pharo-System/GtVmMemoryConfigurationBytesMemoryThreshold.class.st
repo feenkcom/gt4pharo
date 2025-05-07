@@ -4,10 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-System'
 }
 
-{ #category : #comparison }
-GtVmMemoryConfigurationBytesMemoryThreshold >> = anObject [
-]
-
 { #category : #printing }
 GtVmMemoryConfigurationBytesMemoryThreshold >> description [
 	^ String streamContents: [ :aStream |

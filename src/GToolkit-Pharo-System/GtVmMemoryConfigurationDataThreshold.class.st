@@ -15,6 +15,12 @@ GtVmMemoryConfigurationDataThreshold >> = anObject [
 	^ self thresholdValue = anObject thresholdValue
 ]
 
+{ #category : #comparison }
+GtVmMemoryConfigurationDataThreshold >> hash [
+	
+	^ self thresholdValue hash
+]
+
 { #category : #accessing }
 GtVmMemoryConfigurationDataThreshold >> thresholdValue [
 	^thresholdValue
