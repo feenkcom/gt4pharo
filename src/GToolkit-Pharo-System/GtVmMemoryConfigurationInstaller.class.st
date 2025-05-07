@@ -76,6 +76,11 @@ GtVmMemoryConfigurationInstaller >> applyWithId: aMemoryConfigurationId during: 
 		when: aBoolean
 ]
 
+{ #category : #configuring }
+GtVmMemoryConfigurationInstaller >> configurationBuilderWithId: anId put: anObject [ 
+	configurationsRegistry builderWithId: anId put: anObject 
+]
+
 { #category : #api }
 GtVmMemoryConfigurationInstaller >> dataThresholdAt: aString above: aValue [
 	^ self 
