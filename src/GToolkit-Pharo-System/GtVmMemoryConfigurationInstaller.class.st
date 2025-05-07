@@ -80,7 +80,7 @@ GtVmMemoryConfigurationInstaller >> applyWithId: aMemoryConfigurationId during: 
 GtVmMemoryConfigurationInstaller >> dataThresholdAt: aString above: aValue [
 	^ self 
 		dataThresholdAt: aString 
-		ifPresent: [ :each | aValue > each ] 
+		ifPresent: [ :each | aValue > each thresholdValue ] 
 		ifAbsent: [ false ]
 ]
 
@@ -118,6 +118,20 @@ GtVmMemoryConfigurationInstaller >> gtConfigurationBuildersFor: aView [
 		view: #gtConfigurationsBuildersByIdFor:
 ]
 
+{ #category : #views }
+GtVmMemoryConfigurationInstaller >> gtDataThresholdsFor: aView [
+	<gtView>
+	
+	^aView columnedList
+		title: 'Data Thresholds';
+		priority: 1;
+		items: [ dataThresholds associations ];
+		column: 'Key' text: [ :assoc | assoc key ];
+		column: 'Value' text: [ :assoc | assoc value description ] weight: 3;
+		send: [ :assoc | assoc value  ].
+		
+]
+
 { #category : #initialization }
 GtVmMemoryConfigurationInstaller >> initialize [
 	super initialize.
@@ -126,7 +140,10 @@ GtVmMemoryConfigurationInstaller >> initialize [
 	configurationsRegistry := GtVmMemoryConfigurationRegistry new.
 	dataThresholds := Dictionary new.
 	
-	self dataThresholdAt: #epiceaMethodSourcesSize put: 5* 1024 * 1024 "5 MiB"
+	self 
+		dataThresholdAt: #epiceaMethodSourcesSize 
+		put: (GtVmMemoryConfigurationBytesMemoryThreshold new 
+			thresholdValue: 5* 1024 * 1024) "5 MiB"
 ]
 
 { #category : #testing }
