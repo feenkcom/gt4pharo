@@ -53,49 +53,42 @@ GtPharoStyler >> colorParenthesesLeft: aLeftIndex right: aRightIndex atNestingLe
 
 { #category : #'visiting - variables' }
 GtPharoStyler >> definitionTooltipAttributeFor: aNamedVariable [
-	| definer |
+	| definer aptitude |
 	definer := self coderViewModel behavior
 			whichClassDefinesInstVar: aNamedVariable name value.
 	definer ifNil: [ ^ BlFontWeightAttribute semiBold ].
-	^ BrTextAdornmentDynamicAttribute new
-		beOverlay;
-		stencil: [ :aTextPiece :anEditorElement | 
-			| aContainer aValueElement tooltipContent |
-			aContainer := BlElement new
-					clipChildren: false;
-					layout: BlFrameLayout new;
-					constraintsDo: [ :c | 
-						c horizontal exact: aTextPiece textLength * 10.
-						c vertical exact: 15 ].
-			aValueElement := BlElement new
-					clipChildren: true;
-					constraintsDo: [ :c | 
-						c horizontal matchParent.
-						c vertical matchParent ].
-			tooltipContent := [ BrLabel new
-					aptitude: BrLabelAptitude;
-					padding: (BlInsets all: 5);
-					text: (aNamedVariable name value , ' defined in ') asRopedText
-							, definer name asRopedText glamorousCodeFont;
-					alignCenter ] asStencil.
-			aValueElement
-				addAptitude: (BrGlamorousWithExplicitTooltipAptitude content: tooltipContent).
-			aContainer addChild: aValueElement ]
+	aptitude := BrGlamorousWithExplicitTooltipAptitude new
+			stencil: [ :aContext | 
+				BrMenuExplicitHandle new
+					menu: (BrMenuLabelItem new
+							label: 'Defined in ' asRopedText , definer asRopedText glamorousCodeDefaultFont) ].
+	^ BrTextHoverAttribute new
+		enterAction: [ :aText :aTextElement :aTextEditor :anEvent | 
+			| bounds offset |
+			offset := aText textOffset - aTextElement text textOffset + (aText size / 2).
+			bounds := aTextElement globalCursorBoundsForIndex: offset.
+			aptitude relocator: (BrPopoverExplicitRelocator new globalBounds: bounds).
+			aTextElement addAptitude: aptitude.
+			aptitude show ];
+		leaveAction: [ :aText :aTextElement :aTextEditor :anEvent | 
+			aTextElement dispatchEvent: BrTooltipHideWish new.
+			aTextElement removeAptitude: aptitude ];
+		yourself
 ]
 
 { #category : #private }
 GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
-	| theParanthesesMarker cursorEnterAction cursorLeaveAction |
+	| theParenthesesMarker cursorEnterAction cursorLeaveAction |
 	
-	theParanthesesMarker := BrTextInvisibleMarkerAttribute new.
+	theParenthesesMarker := BrTextInvisibleMarkerAttribute new.
 	text
-		attribute: theParanthesesMarker
+		attribute: theParenthesesMarker
 		from: aLeftIndex + 1
 		to: aRightIndex - 1.
 
 	cursorEnterAction := [ :aTextEditor |
 		aTextEditor text
-			findAttribute: theParanthesesMarker
+			findAttribute: theParenthesesMarker
 			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
 				aTextEditor text
 					attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor)
@@ -104,7 +97,7 @@ GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 
 	cursorLeaveAction := [ :aTextEditor | 
 		aTextEditor text
-			findAttribute: theParanthesesMarker
+			findAttribute: theParenthesesMarker
 			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
 				(aTextEditor text
 					from: aParanthesesStart
