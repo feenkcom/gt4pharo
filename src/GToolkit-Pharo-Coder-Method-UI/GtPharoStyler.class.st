@@ -57,6 +57,15 @@ GtPharoStyler >> definitionTooltipAttributeFor: aNamedVariable [
 	definer := self coderViewModel behavior
 			whichClassDefinesInstVar: aNamedVariable name value.
 	definer ifNil: [ ^ BlFontWeightAttribute semiBold ].
+	
+	true ifTrue: [ 
+		^ BrTextTooltipAttribute new
+			stencil: [ :aContext | 
+					BrMenuExplicitHandle new
+						menu: (BrMenuLabelItem new
+								label: 'Defined in ' asRopedText , definer asRopedText glamorousCodeDefaultFont) ] ].
+	
+	
 	aptitude := BrGlamorousWithExplicitTooltipAptitude new
 			stencil: [ :aContext | 
 				BrMenuExplicitHandle new
