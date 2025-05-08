@@ -43,12 +43,12 @@ GtVmMemoryConfigurationInstaller >> applyForLargeObjectAllocationsDuring: aCompu
 ]
 
 { #category : #api }
-GtVmMemoryConfigurationInstaller >> applyForLargeObjectAllocationsDuring: aComputationBlock epiceaMethodSourcesSize: aNumber [
+GtVmMemoryConfigurationInstaller >> applyForLargeObjectAllocationsDuring: aComputationBlock methodSourcesSize: aNumber [
 
 	^ self 
 		applyForLargeObjectAllocationsDuring: aComputationBlock 
 		when: (self 
-			dataThresholdAt: #epiceaMethodSourcesSize 
+			dataThresholdAt: #methodSourcesSize 
 			above: aNumber)
 ]
 
@@ -145,8 +145,21 @@ GtVmMemoryConfigurationInstaller >> initialize [
 	configurationsRegistry := GtVmMemoryConfigurationRegistry new.
 	dataThresholds := Dictionary new.
 	
+	self initializeForLargeObjectAllocationsConfiguration.
+	self initializeMethodSourcesSizeThreshold.
+]
+
+{ #category : #initialization }
+GtVmMemoryConfigurationInstaller >> initializeForLargeObjectAllocationsConfiguration [
 	self 
-		dataThresholdAt: #epiceaMethodSourcesSize 
+		configurationBuilderWithId: #forLargeObjectAllocation 
+		put: [GtVmMemoryManagement forLargeObjectAllocation].
+]
+
+{ #category : #initialization }
+GtVmMemoryConfigurationInstaller >> initializeMethodSourcesSizeThreshold [
+	self 
+		dataThresholdAt: #methodSourcesSize 
 		put: (GtVmMemoryConfigurationBytesMemoryThreshold new 
 			thresholdValue: 5* 1024 * 1024) "5 MiB"
 ]
