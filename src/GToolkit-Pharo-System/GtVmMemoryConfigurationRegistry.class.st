@@ -34,7 +34,4 @@ GtVmMemoryConfigurationRegistry >> initialize [
 	super initialize.
 
 	configurationsBuildersById := Dictionary new.
-	self 
-		builderWithId: #forLargeObjectAllocation 
-		put: [GtVmMemoryManagement forLargeObjectAllocation]
 ]
