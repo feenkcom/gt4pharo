@@ -16,13 +16,13 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.106/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.2083/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.2084/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1586/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1587/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.6.1309/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.6.1310/src' ].
 		spec
 			baseline: 'SmaCCRuntime' with: [
 				spec repository: 'github://j-brant/SmaCC:v3.0.101' ].
@@ -58,14 +58,14 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #(#GToolkitCoder #GToolkit4Magritte #GToolkitCompleter #'GToolkit-Pharo-Coder-Method' #'GToolkit-Pharo-Metamodels' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-SearchFilters' #'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Extensions' with: [
 			spec requires: #(#GToolkitCoder #'GToolkit-Pharo-Coder' #'GToolkit-Pharo-Metamodels' #'GToolkit-Pharo-BaseRefactorings') ].
-		spec package: 'GToolkit-Pharo-Coder-Method-Examples' with: [
-			spec requires: #(#'GToolkit-Pharo-Coder-Method' #'GToolkit-Pharo-SearchFilters') ].
 		spec package: 'GToolkit-Pharo-Coder-Method-UI' with: [
 			spec requires: #(#GToolkitCoder #GToolkitCompleter #'GToolkit-Pharo-Coder-Method' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-SearchFilters') ].
 		spec package: 'GToolkit-Pharo-Coder-UI' with: [
 			spec requires: #(#GToolkitCoder #GToolkit4Magritte #GToolkitCompleter #'GToolkit-Pharo-GtRefactorings' #'GToolkit-Pharo-Coder' #'GToolkit-Pharo-Coder-Method' #'GToolkit-Pharo-Coder-Method-UI' #'GToolkit-Pharo-Metamodels' #'GToolkit-Pharo-SearchFilters' #'GToolkit-Pharo-System' #'GToolkit-Pharo-TestSuite' #'GToolkit-Pharo-TestSuite-UI') ].
 		spec package: 'GToolkit-Pharo-Coder-AddOns' with: [
 			spec requires: #(#'GToolkit-Pharo-Coder-UI') ].
+		spec package: 'GToolkit-Pharo-Coder-Method-Examples' with: [
+			spec requires: #(#'GToolkit-Pharo-Coder-Method' #'GToolkit-Pharo-SearchFilters' #'GToolkit-Pharo-Coder-AddOns') ].
 		spec package: 'GToolkit-Pharo-StrictSymbolComparison' with: [
 			spec requires: #(#'GToolkit-Pharo-Coder-AddOns') ].
 		spec package: 'GT-PackageWithSuperclasses'.
