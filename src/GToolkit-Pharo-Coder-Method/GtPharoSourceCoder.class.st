@@ -73,6 +73,13 @@ GtPharoSourceCoder >> classOrMetaClass [
 	^ self behavior
 ]
 
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> compilerErrorsToHandle [
+	^ self 
+		forPharo12: [OCUndeclaredVariableWarning, #CodeError asClass] 
+		forPharo11AndPharo10: [OCSemanticWarning]
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> detectReferencesFilterAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	^ self 
@@ -110,7 +117,7 @@ GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
 GtPharoSourceCoder >> handleCompilerErrorsDuring: aBlock inContext: aGtPharoSourceCoderEvaluationContext [
 	^ [ aBlock value.
 	true ]
-		on: OCSemanticWarning
+		on: self compilerErrorsToHandle
 		do: [ :ex | 
 			self
 				notifyParseError: ex
