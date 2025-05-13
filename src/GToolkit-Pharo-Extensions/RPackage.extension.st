@@ -9,7 +9,13 @@ RPackage >> packageManifestOrNil [
 	Related issue: https://github.com/feenkcom/gtoolkit/issues/4369"
 	<gtPharoPatch: #Pharo>
 	
-	self gtDefinedClassesWithPossibleDuplicatesDo: [:aClass|
-		aClass  isManifest ifTrue: [ ^ aClass ] ].
-	^ nil
+	^ self 
+		forPharo12: [ 
+			self definedClasses
+				detect: [ :each | each isManifest ]
+				ifNone: [ nil ] ] 
+		forPharo11AndPharo10: [
+			self gtDefinedClassesWithPossibleDuplicatesDo: [:aClass|
+				aClass  isManifest ifTrue: [ ^ aClass ] ].
+			nil]
 ]
