@@ -84,7 +84,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			package: 'GToolkit-Pharo-Coder-Method-Examples' with: [
 				spec requires: #(
 					'GToolkit-Pharo-Coder-Method'
-					'GToolkit-Pharo-SearchFilters') ];
+					'GToolkit-Pharo-SearchFilters'
+					'GToolkit-Pharo-Coder-AddOns') ];
 
 			package: 'GToolkit-Pharo-Coder' with: [
 				spec requires: #(
