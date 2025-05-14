@@ -13,6 +13,7 @@ ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
 
 	^ {
 		'Announcements-Core'.
+		'Brick-Glamorous'.
 		'Collections-Sequenceable'.
 		'Collections-Unordered'.
 		'Futures'.
