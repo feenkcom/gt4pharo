@@ -270,15 +270,14 @@ GtCoderNavigationPackagesTagsClassesModel >> initialize [
 ]
 
 { #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
-	self selectedClass
-		ifNil: [ ^ self ]
-		ifNotNil: [ :aClass |
-			(aClass includesMethodsAffectedBy: aMethodAdded)
-				ifFalse: [ ^ self ] ].
+GtCoderNavigationPackagesTagsClassesModel >> methodChanged: aMethodAnnouncement [
+	self hasSelectedClass ifFalse: [ ^ self ].
+	(self selectedClassIsAffectedBy: aMethodAnnouncement) ifFalse: [ ^ self ].
 
-	performingBulkChanges ifTrue: [^needsUpdate := true].
-	
+	performingBulkChanges
+		ifTrue: [ needsUpdate := true.
+			^ self ].
+
 	self notifyProtocolsToShowChanged.
 	self notifySlotsToShowChanged.
 	self notifyMethodsToShowChanged
@@ -287,34 +286,22 @@ GtCoderNavigationPackagesTagsClassesModel >> methodAdded: aMethodAdded [
 { #category : #'event handling' }
 GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecategorized [
 	| theClass aPackage aTag |
-	
-	self selectedClass
-		ifNil: [ ^ self ]
-		ifNotNil: [ :aClass |
-			| isInstanceSideAffected isClassSideAffected|
-			
-			isInstanceSideAffected := aClass instanceSide
-				includesMethodsAffectedBy: aMethodRecategorized.
-				
-			isClassSideAffected := aClass classSide
-				includesMethodsAffectedBy: aMethodRecategorized.
-			
-			(isInstanceSideAffected or: isClassSideAffected)
-				ifFalse: [ ^ self ] ].
+	self hasSelectedClass ifFalse: [ ^ self ].
+	(self selectedClassIsAffectedBy: aMethodRecategorized) ifFalse: [ ^ self ].
 
-	performingBulkChanges ifTrue: [^needsUpdate := true].
+	performingBulkChanges
+		ifTrue: [ needsUpdate := true.
+			^ self ].
 
 	self selectedMethod = aMethodRecategorized methodRecategorized
 		ifTrue: [ self deselectMethod ].
 
-	self selectedProtocol ifNotNil: [ :aProtocol |
-		(aProtocol name = aMethodRecategorized oldProtocol
-			and: [ aProtocol methodSelectors isEmpty ])
-				ifTrue: [
-					| aNewProtocol |
-					
-					aNewProtocol := self privateProtocolOfMethod: aMethodRecategorized methodRecategorized.
-					aNewProtocol ifNotNil: [ self selectProtocol: aNewProtocol ] ] ].
+	self selectedProtocol
+		ifNotNil: [ :aProtocol | 
+			(aProtocol name = aMethodRecategorized oldProtocol
+				and: [ aProtocol methodSelectors isEmpty ])
+				ifTrue: [ (self privateProtocolOfMethod: aMethodRecategorized methodRecategorized)
+						ifNotNil: [ :aNewProtocol | self selectProtocol: aNewProtocol ] ] ].
 
 	self notifyProtocolsToShowChanged.
 	self notifyMethodsToShowChanged.
@@ -322,30 +309,13 @@ GtCoderNavigationPackagesTagsClassesModel >> methodRecategorized: aMethodRecateg
 	theClass := aMethodRecategorized methodRecategorized methodClass.
 	aPackage := theClass package.
 	aTag := (GtTagDefinition fromBehavior: theClass) name.
-	
-	self announcer announce: (GtCoderNavigationClassModified new 
-		coder: coder;
-		package: aPackage;
-		tag: aTag;
-		theClass: theClass)
-]
 
-{ #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> methodRemoved: aMethodRemoved [
-	self selectedClass
-		ifNil: [ ^ self ]
-		ifNotNil: [ :aClass |
-			(aClass includesMethodsAffectedBy: aMethodRemoved)
-				ifFalse: [ ^ self ] ].
-
-	performingBulkChanges ifTrue: [^needsUpdate := true].
-
-	self selectedMethod = aMethodRemoved
-		ifTrue: [ self deselectMethod ].
-	
-	self notifyProtocolsToShowChanged.
-	self notifySlotsToShowChanged.
-	self notifyMethodsToShowChanged
+	self announcer
+		announce: (GtCoderNavigationClassModified new
+				coder: coder;
+				package: aPackage;
+				tag: aTag;
+				theClass: theClass)
 ]
 
 { #category : #'api - accessing' }
@@ -1064,6 +1034,17 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedClassDo: aBlock [
 	self selectedClass ifNotNil: aBlock
 ]
 
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedClassIsAffectedBy: aSystemAnnouncement [
+	| isClassSideAffected isInstanceSideAffected |
+	isInstanceSideAffected := selectedClass instanceSide
+			includesMethodsAffectedBy: aSystemAnnouncement.
+
+	isClassSideAffected := selectedClass classSide
+			includesMethodsAffectedBy: aSystemAnnouncement.
+	^ isInstanceSideAffected or: isClassSideAffected
+]
+
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
 	<return: #CompiledMethod>
@@ -1160,8 +1141,8 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
 		when: ClassReorganized send: #classReorganized: to: self;
-		when: MethodAdded send: #methodAdded: to: self;
-		when: MethodRemoved send: #methodRemoved: to: self;
+		when: MethodAdded send: #methodChanged: to: self;
+		when: MethodRemoved send: #methodChanged: to: self;
 		when: MethodRecategorized send: #methodRecategorized: to: self;
 		when: GtAboutToPerformBulkChangesAnnouncement
 			send: #onAboutToPerformBulkChanges:
