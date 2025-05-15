@@ -16,16 +16,12 @@ Class {
 GtPharoCoderByScripterExamples >> abstractForSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter step |
+	| scripter |
 	scripter := self startWithMenuOnInstVar1Slot.
-	step := scripter menuStep.
-	step label: 'Hover abstract'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Abstract instVar1' ].
-	step play.
+	self
+		hoverMenu: 'Abstract instVar1'
+		labelled: 'Hover abstract'
+		in: scripter.
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
@@ -678,12 +674,7 @@ GtPharoCoderByScripterExamples >> classHierarchyInIndexUpdatesClassListOnClassCh
 			asSortedCollection: [ :a :b | a packageName < b packageName ].
 	package := packages first.
 	cls := package anyDummyClass realClass.
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Switch to class hierarchy';
-				// BrTab;
-				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+	self switchToClassHierarchy: scripter.
 	self
 		checkClassListIn: scripter
 		containsName: #OrderedCollection
@@ -691,7 +682,7 @@ GtPharoCoderByScripterExamples >> classHierarchyInIndexUpdatesClassListOnClassCh
 
 	cls superclass: OrderedCollection.
 	scripter pulse.
-	
+
 	self
 		checkClassListIn: scripter
 		containsName: #OrderedCollection
@@ -710,12 +701,7 @@ GtPharoCoderByScripterExamples >> classHierarchyIndexSelectionDoesNotUpdateClass
 			asSortedCollection: [ :a :b | a packageName < b packageName ].
 	package := packages first.
 	cls := package anyDummyClass realClass.
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Switch to class hierarchy';
-				// BrTab;
-				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+	self switchToClassHierarchy: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -1079,19 +1065,14 @@ GtPharoCoderByScripterExamples >> confirmAndRunRefactoring: scripter [
 GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| rootClass class scripter step className |
+	| rootClass class scripter className |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	rootClass := environment anyDummyRootClass.
 	class := rootClass realClass.
 	className := class name.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
 	self maximizePagerPane: scripter.
-	scripter
-		secondaryClickStep: [ :s | 
-			s
-				label: 'Open class menu';
-				// GtCoderClassesTreeItemElement;
-				@ [ :each | each theClass = class ] ].
+	self openClassMenuOn: class in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -1103,14 +1084,10 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 				// #'menu--label';
 				@ [ :each | each text asString = ('Convert to sibling ' , className) ] ].
 
-	step := scripter menuStep.
-	step label: 'Hover convert to sibling'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Convert to sibling ' , className) ].
-	step play.
+	self
+		hoverMenu: 'Convert to sibling ' , className
+		labelled: 'Hover convert to sibling'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -1153,7 +1130,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 				notExists;
 				// #preview;
 				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
-				
+
 	scripter
 		keyPressStep: [ :s | 
 			s
@@ -1178,16 +1155,12 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter step |
+	| scripter |
 	scripter := self startWithMenuOnInstVar1Slot.
-	step := scripter menuStep.
-	step label: 'Hover create accessors'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Create accessors instVar1' ].
-	step play.
+	self
+		hoverMenu: 'Create accessors instVar1'
+		labelled: 'Hover create accessors'
+		in: scripter.
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
@@ -1273,7 +1246,6 @@ GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu [
 
 { #category : #'examples - context menu' }
 GtPharoCoderByScripterExamples >> displayClassSidebarContextMenu: aScripter [
-	<gtExample>
 	aScripter
 		secondaryClickStep: [ :s | 
 			s
@@ -1559,20 +1531,9 @@ GtPharoCoderByScripterExamples >> doubleClickInClassHierarchy [
 	| scripter |
 	scripter := self
 			coderInPager: [ GtCoderElement forClass: SequenceableCollection ].
-	scripter
-		doStep: [ :s | 
-			s
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Switch to class hierarchy';
-				// #Sidebar;
-				// BrTab;
-				@ [ :each | each label asString = 'Class Hierarchy' ] ].
+	self switchToClassHierarchy: scripter.
 	self isClass: SequenceableCollection selectedIn: scripter.
 	scripter
 		doubleClickStep: [ :s | 
@@ -1591,12 +1552,7 @@ GtPharoCoderByScripterExamples >> doubleClickInClasses [
 	| scripter |
 	scripter := self
 			coderInPager: [ GtCoderElement forClass: SequenceableCollection ].
-	scripter
-		doStep: [ :s | 
-			s
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self isClass: SequenceableCollection selectedIn: scripter.
 	scripter
@@ -1699,17 +1655,12 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> extractSuperclassFrom: class [
-	| className scripter step |
-	className := class name.
-	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+GtPharoCoderByScripterExamples >> extractSuperclassFrom: aClass [
+	| className scripter |
+	className := aClass name.
+	scripter := self coderInPager: [ GtCoderElement forClass: aClass ].
 	self maximizePagerPane: scripter.
-	scripter
-		secondaryClickStep: [ :s | 
-			s
-				label: 'Open class menu';
-				// GtCoderClassesTreeItemElement;
-				@ [ :each | each theClass = class ] ].
+	self openClassMenuOn: aClass in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -1720,15 +1671,10 @@ GtPharoCoderByScripterExamples >> extractSuperclassFrom: class [
 				// #'menu--list';
 				// #'menu--label';
 				@ [ :each | each text asString = ('Extract superclass ' , className) ] ].
-
-	step := scripter menuStep.
-	step label: 'Hover extract superclass'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Extract superclass ' , className) ].
-	step play.
+	self
+		hoverMenu: 'Extract superclass ' , className
+		labelled: 'Hover extract superclass'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -1808,6 +1754,19 @@ GtPharoCoderByScripterExamples >> extractSuperclassWithSubclassesInIndex [
 	^ self extractSuperclassFrom: environment anyDummyRootClass realClass
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> hoverMenu: menuString labelled: stepString in: scripter [
+	| step |
+	step := scripter menuStep.
+	step label: stepString.
+	step hoverMenuItem
+		onSpaceRoot;
+		// #'menu--list';
+		// #'menu--label';
+		@ [ :each | each text asString = menuString ].
+	step play
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoCoderByScripterExamples >> instanceSideMethodsExpandsInstanceSideMethods [
 	"Accompanying example for https://github.com/feenkcom/gtoolkit/issues/4127"
@@ -1861,7 +1820,6 @@ GtPharoCoderByScripterExamples >> isPackageNamed: aString selectedIn: scripter [
 
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
-	<gtExample>
 	aScripter
 		clickStep: [ :s | 
 			s
@@ -1903,125 +1861,137 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> protectForSlotInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| scripter step |
-	scripter := self startWithMenuOnInstVar1Slot.
-	step := scripter menuStep.
-	step label: 'Hover protect'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Protect instVar1' ].
-	step play.
-	self confirmAndRunRefactoring: scripter.
-	^ scripter
+GtPharoCoderByScripterExamples >> openClassMenuOn: class in: scripter [
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open class menu';
+				// GtCoderClassesTreeItemElement;
+				@ [ :each | each theClass = class ] ]
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pushDownMethodInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| scripter method step selector |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
-	method := environment anyDummyUnaryMethod realMethod.
-	selector := method selector.
-	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
-	self maximizePagerPane: scripter.
+GtPharoCoderByScripterExamples >> openMethodMenuOn: selector in: scripter [
 	scripter
 		secondaryClickStep: [ :s1 | 
 			s1
 				label: 'Open method menu';
 				// GtCoderMethodsGroupedListElement;
 				// BrLabel;
-				@ [ :each | each text asString = selector ] ].
-	step := scripter menuStep.
-	step label: 'Hover push down method'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Push down method ' , selector) ].
-	step play.
+				@ [ :each | each text asString = selector ] ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> protectForSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self startWithMenuOnInstVar1Slot.
+	self
+		hoverMenu: 'Protect instVar1'
+		labelled: 'Hover protect'
+		in: scripter.
+
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownClassMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryClassMethod realMethod.
+	^ self pushDownInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownInIndexMethod: method [
+	| selector scripter |
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self openMethodMenuOn: selector in: scripter.
+
+	self
+		hoverMenu: 'Push down method ' , selector
+		labelled: 'Hover push down method'
+		in: scripter.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownInstanceMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	^ self pushDownInIndexMethod: method
 ]
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushDownSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter step |
+	| scripter |
 	scripter := self startWithMenuOnInstVar1Slot.
-	step := scripter menuStep.
-	step label: 'Hover push down'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Push down instVar1' ].
-	step play.
+	self
+		hoverMenu: 'Push down instVar1'
+		labelled: 'Hover push down'
+		in: scripter.
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pushUpMethodInIndex [
+GtPharoCoderByScripterExamples >> pushUpClassMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter method step selector |
+	| method |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+	method := environment anyDummyLeafClass anyDummyUnaryClassMethod realMethod.
+	^ self pushUpInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
+	| selector scripter |
 	selector := method selector.
 	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
-	scripter
-		secondaryClickStep: [ :s1 | 
-			s1
-				label: 'Open method menu';
-				// GtCoderMethodsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = selector ] ].
-	step := scripter menuStep.
-	step label: 'Hover push up method'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Push up method ' , selector) ].
-	step play.
+	self openMethodMenuOn: selector in: scripter.
+	self
+		hoverMenu: 'Push up method ' , selector
+		labelled: 'Hover push up method'
+		in: scripter.
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+	^ self pushUpInIndexMethod: method
 ]
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter class step |
+	| scripter class |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	class := environment anyDummyLeafClass realClass.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	scripter
 		clickStep: [ :s | 
@@ -2035,14 +2005,12 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
 				// GtCoderSlotsGroupedListElement;
 				// BrLabel;
 				@ [ :each | each text asString = 'instVar3' ] ].
-	step := scripter menuStep.
-	step label: 'Hover push down'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Push up instVar3' ].
-	step play.
+
+	self
+		hoverMenu: 'Push up instVar3'
+		labelled: 'Hover push down'
+		in: scripter.
+
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
 ]
@@ -2051,19 +2019,14 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
 GtPharoCoderByScripterExamples >> removeClassInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| rootClass class scripter step className |
+	| rootClass class scripter className |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	rootClass := environment anyDummyLeafClass.
 	class := rootClass realClass.
 	className := class name.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
 	self maximizePagerPane: scripter.
-	scripter
-		secondaryClickStep: [ :s | 
-			s
-				label: 'Open class menu';
-				// GtCoderClassesTreeItemElement;
-				@ [ :each | each theClass = class ] ].
+	self openClassMenuOn: class in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2075,14 +2038,10 @@ GtPharoCoderByScripterExamples >> removeClassInIndex [
 				// #'menu--label';
 				@ [ :each | each text asString = ('Remove class ' , className) ] ].
 
-	step := scripter menuStep.
-	step label: 'Hover remove class'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Remove class ' , className) ].
-	step play.
+	self
+		hoverMenu: 'Remove class ' , className
+		labelled: 'Hover remove class'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2118,20 +2077,25 @@ GtPharoCoderByScripterExamples >> removeClassInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassSelectorInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryClassMethod realMethod.
+	^ self removeFromIndexMethod: method
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> removeForSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter step |
+	| scripter |
 	scripter := self startWithMenuOnInstVar1Slot.
-
-	step := scripter menuStep.
-	step label: 'Hover re4move'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Remove instVar1' ].
-	step play.
+	self
+		hoverMenu: 'Remove instVar1'
+		labelled: 'Hover remove'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2159,6 +2123,78 @@ GtPharoCoderByScripterExamples >> removeForSlotInIndex [
 				// #'menu--list' ].
 
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeFromIndexMethod: method [
+	| scripter |
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open selector menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = method selector asString ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove method menu item';
+				exists;
+				onSpaceRoot;
+				// #'menu--list';
+				// #'menu--label';
+				@ [ :each | each text asString = ('Remove method ' , method selector) ] ].
+
+	self
+		hoverMenu: 'Remove method ' , method selector
+		labelled: 'Hover remove method'
+		in: scripter.
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove method button';
+				exists;
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	self assert: method isInstalled equals: true.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove method';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// #removeButton ].
+	(Delay forMilliseconds: 500) wait.
+	scripter pulse.
+
+	self assert: method isInstalled equals: false.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeInstanceSelectorInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	^ self removeFromIndexMethod: method
 ]
 
 { #category : #'examples - index' }
@@ -2233,17 +2269,12 @@ GtPharoCoderByScripterExamples >> removePackageInIndex [
 GtPharoCoderByScripterExamples >> removeProtocolsInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter method step selector |
+	| scripter method selector |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	method := environment anyDummyUnaryMethod realMethod.
 	selector := method selector.
 	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	method methodClass addCategory: #'some protocol' before: nil.
 	scripter pulse.
@@ -2260,15 +2291,10 @@ GtPharoCoderByScripterExamples >> removeProtocolsInIndex [
 				// BrLabel;
 				@ [ :each | each text asString = 'some protocol 0' ] ].
 
-	step := scripter menuStep.
-	step label: 'Hover remove protocol'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Remove some protocol' ].
-	step play.
-
+	self
+		hoverMenu: 'Remove some protocol'
+		labelled: 'Hover remove protocol'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2292,75 +2318,6 @@ GtPharoCoderByScripterExamples >> removeProtocolsInIndex [
 	self
 		assert: (method methodClass organization categories includes: #'some protocol')
 		equals: false.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has removed context menu';
-				notExists;
-				onSpaceRoot;
-				// #'menu--list' ].
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> removeSelectorInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| method scripter step |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
-	method := environment anyDummyUnaryMethod realMethod.
-	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	self maximizePagerPane: scripter.
-	scripter
-		secondaryClickStep: [ :s | 
-			s
-				label: 'Open selector menu';
-				// GtCoderMethodsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = method selector asString ] ].
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has remove method menu item';
-				exists;
-				onSpaceRoot;
-				// #'menu--list';
-				// #'menu--label';
-				@ [ :each | each text asString = ('Remove method ' , method selector) ] ].
-
-	step := scripter menuStep.
-	step label: 'Hover remove method'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Remove method ' , method selector) ].
-	step play.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has remove method button';
-				exists;
-				onSpaceRoot;
-				// BrMenuSteppedElement;
-				// #removeButton ].
-	self assert: method isInstalled equals: true.
-
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Remove method';
-				onSpaceRoot;
-				// BrMenuSteppedElement;
-				// #removeButton ].
-	(Delay forMilliseconds: 500) wait.
-	scripter pulse.
-
-	self assert: method isInstalled equals: false.
 
 	scripter
 		checkStep: [ :s | 
@@ -2426,37 +2383,28 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> renameMethodInIndex [
+GtPharoCoderByScripterExamples >> renameClassMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter method step selector |
+	| method |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
-	method := environment anyDummyUnaryMethod realMethod.
+	method := environment anyDummyUnaryClassMethod realMethod.
+	^ self renameInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameInIndexMethod: method [
+	| selector scripter |
 	selector := method selector.
 	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
-	scripter
-		secondaryClickStep: [ :s1 | 
-			s1
-				label: 'Open method menu';
-				// GtCoderMethodsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = selector ] ].
+	self openMethodMenuOn: selector in: scripter.
 
-	step := scripter menuStep.
-	step label: 'Hover rename method'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Rename message ' , selector) ].
-	step play.
+	self
+		hoverMenu: 'Rename message ' , selector
+		labelled: 'Hover rename method'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2514,25 +2462,30 @@ GtPharoCoderByScripterExamples >> renameMethodInIndex [
 				label: 'Check editor is removed';
 				notExists;
 				id: #renameClassEditor ].
-				
+
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameInstanceMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyUnaryMethod realMethod.
+	^ self renameInIndexMethod: method
 ]
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> renamePackageInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter package step packageName |
+	| scripter package packageName |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	package := environment anyDummyPackage realPackage.
 	packageName := package name.
 	scripter := self coderInPager: [ GtCoderElement forPackage: package ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self checkPackageListIn: scripter containsName: packageName.
 	scripter
@@ -2543,14 +2496,10 @@ GtPharoCoderByScripterExamples >> renamePackageInIndex [
 				// BrLabel;
 				@ [ :each | each text asString = packageName ] ].
 
-	step := scripter menuStep.
-	step label: 'Hover rename package'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Rename package ' , packageName) ].
-	step play.
+	self
+		hoverMenu: ('Rename package ' , packageName)
+		labelled: 'Hover rename package'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2611,7 +2560,7 @@ GtPharoCoderByScripterExamples >> renamePackageInIndex [
 
 	(Delay forMilliseconds: 300) wait.
 	scripter pulse.
-	
+
 	scripter
 		checkStep: [ :s | 
 			s
@@ -2632,17 +2581,12 @@ GtPharoCoderByScripterExamples >> renamePackageInIndex [
 GtPharoCoderByScripterExamples >> renameProtocolsInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter method step selector |
+	| scripter method selector |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	method := environment anyDummyUnaryMethod realMethod.
 	selector := method selector.
 	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	scripter
 		secondaryClickStep: [ :s1 | 
@@ -2652,14 +2596,10 @@ GtPharoCoderByScripterExamples >> renameProtocolsInIndex [
 				// BrLabel;
 				@ [ :each | each text asString = ('api - ' , selector , ' 1') ] ].
 
-	step := scripter menuStep.
-	step label: 'Hover rename method'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Rename api - ' , selector) ].
-	step play.
+	self
+		hoverMenu: 'Rename api - ' , selector
+		labelled: 'Hover rename method'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2725,17 +2665,13 @@ GtPharoCoderByScripterExamples >> renameProtocolsInIndex [
 GtPharoCoderByScripterExamples >> renameSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter step |
+	| scripter |
 	scripter := self startWithMenuOnInstVar1Slot.
 
-	step := scripter menuStep.
-	step label: 'Hover rename'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = 'Rename instVar1' ].
-	step play.
+	self
+		hoverMenu: 'Rename instVar1'
+		labelled: 'Hover rename'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -2974,6 +2910,16 @@ GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> setSpaceExtent: scripter [
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ]
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> setupForPackageTests [
 	| scripter class cls package packages |
 	environment := GtPharoDummiesGenerator withPackages: 2 classHierarchy: 2.
@@ -2998,17 +2944,12 @@ GtPharoCoderByScripterExamples >> setupForPackageTests [
 GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter class rootClass step |
+	| scripter class rootClass |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	rootClass := environment anyDummyLeafClass.
 	class := rootClass realClass.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
-	scripter
-		doStep: [ :s | 
-			s
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self
 		checkClassListIn: scripter
@@ -3022,14 +2963,11 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 				// BrLabel;
 				@ [ :each | each text asString = class name ] ].
 
-	step := scripter menuStep.
-	step label: 'Hover rename class'.
-	step hoverMenuItem
-		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = ('Rename class ' , class name) ].
-	step play.
+	
+	self
+		hoverMenu: ('Rename class ' , class name)
+		labelled: 'Hover rename class'
+		in: scripter.
 
 	scripter
 		checkStep: [ :s | 
@@ -3081,12 +3019,7 @@ GtPharoCoderByScripterExamples >> startWithMenuOnInstVar1Slot [
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	class := environment anyDummyRootClass realClass.
 	scripter := self coderInPager: [ GtCoderElement forClass: class ].
-	scripter
-		doStep: [ :s1 | 
-			s1
-				label: 'Set space extent';
-				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
-				onSpace ].
+	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	scripter
 		clickStep: [ :s | 
@@ -3101,6 +3034,16 @@ GtPharoCoderByScripterExamples >> startWithMenuOnInstVar1Slot [
 				// BrLabel;
 				@ [ :each | each text asString = 'instVar1' ] ].
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> switchToClassHierarchy: scripter [
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to class hierarchy';
+				// BrTab;
+				@ [ :each | each label asString = 'Class Hierarchy' ] ]
 ]
 
 { #category : #accessing }
