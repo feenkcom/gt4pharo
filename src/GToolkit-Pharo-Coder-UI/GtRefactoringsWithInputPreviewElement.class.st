@@ -8,8 +8,8 @@ Class {
 }
 
 { #category : #accessing }
-GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringBlock confirmationLabeled: aString from: anElement beforeApplyingDo: applyBlock [
-	| refactoring refactoringButton edit acceptButton |
+GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactoringsBlock confirmationLabeled: aString from: anElement beforeApplyingDo: applyBlock [
+	| refactorings refactoringButton edit acceptButton |
 	refactoringButton := self new.
 	refactoringButton cancelBlock: [  ].
 	edit := BrHorizontalPane new.
@@ -33,8 +33,8 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 					bottom: 0
 					right: 0);
 			action: [ acceptButton visibility: BlVisibility gone.
-				refactoring := refactoringBlock value.
-				refactoringButton refactorings: [ {refactoring} ] ].
+				refactorings := refactoringsBlock value.
+				refactoringButton refactorings: [ refactorings asCollection ] ].
 	edit addChild: acceptButton.
 	refactoringButton editorElement: edit.
 	refactoringButton
