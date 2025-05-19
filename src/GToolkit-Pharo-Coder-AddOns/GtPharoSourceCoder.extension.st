@@ -212,6 +212,21 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
+			(aCoderViewModel behavior whichClassDefinesInstVar: node name value)
+				ifNotNil: [ :definer | 
+					coderAddOns
+						addContextMenuItem: (self
+								createLabel: 'Browse defined class'
+								description: definer name)
+						group: BrMenuItemGroupConfiguration navigation
+						hover: (self highlightNodeBlock: node)
+						leave: self removeHighlightBlock
+						action: [ :aTextualViewModel |
+							self
+								notifyToolSpawn: (GtClassCoderTool observedClass: definer)
+								withDestination: self spawnDestination
+								requesterObject: aCoderViewModel ]
+						id: nil ].
 			coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Browse references'
