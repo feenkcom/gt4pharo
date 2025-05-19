@@ -44,6 +44,17 @@ GtPharoBehaviorCoderElement >> actOnSelectMethod: aGtClassCoderMethodNavigationA
 	self enqueueTask: aTask.
 ]
 
+{ #category : #callbacks }
+GtPharoBehaviorCoderElement >> actOnSelectMethods: aGtClassCoderMethodsNavigationAnnouncement [
+	| selectedMethods aTask |
+	
+	selectedMethods := aGtClassCoderMethodsNavigationAnnouncement methods.
+	aTask := GtPharoSelectAndScrollToMethodsRepeatedTask new
+		methods: selectedMethods;
+		contentTabs: contentTabs.
+	self enqueueTask: aTask.
+]
+
 { #category : #accessing }
 GtPharoBehaviorCoderElement >> actOnSlot: anAnnouncement [
 	| tab selectTabBlock selectMethodBlock |
@@ -277,6 +288,9 @@ GtPharoBehaviorCoderElement >> subscribeToCoderViewModel [
 			to: self;
 		when: GtClassCoderMethodNavigationAnnouncement
 			send: #actOnSelectMethod:
+			to: self;
+		when: GtClassCoderMethodsNavigationAnnouncement
+			send: #actOnSelectMethods:
 			to: self;
 		when: GtClassCoderMethodProtocolNavigationAnnouncement
 			send: #actOnMethodProtocol:

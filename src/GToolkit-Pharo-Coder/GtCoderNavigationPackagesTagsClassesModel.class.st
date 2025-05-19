@@ -13,7 +13,8 @@ Class {
 		'selectedSlot',
 		'selectedClass',
 		'needsUpdate',
-		'performingBulkChanges'
+		'performingBulkChanges',
+		'selectedMethods'
 	],
 	#category : #'GToolkit-Pharo-Coder-Navigation'
 }
@@ -395,6 +396,16 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyMethodSelected: aMethod [
 ]
 
 { #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyMethodsSelected: aCollectionOfMethods [
+	coder withSelectedMethods: aCollectionOfMethods.
+	self
+		announce:
+			(GtCoderNavigationMethodsSelected new
+				coder: coder;
+				methods: aCollectionOfMethods)
+]
+
+{ #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyMethodsToShowChanged [
 	self announce: (GtCoderNavigationMethodsToShowChanged new coder: coder)
 ]
@@ -624,6 +635,7 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustDeselectMethod [
 	selectedMethod ifNil: [ ^ false ].
 	aPreviouslySelectedMethod := selectedMethod.
 	selectedMethod := nil.
+	selectedMethods := #().
 	self notifyMethodDeselected: aPreviouslySelectedMethod.
 	^ true
 ]
@@ -932,6 +944,20 @@ GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod [
 ]
 
 { #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectMethods: aCollectionOfMethods [
+	aCollectionOfMethods ifEmpty: [ ^ self ].
+	aCollectionOfMethods size = 1 ifTrue: [
+		self selectMethod: aCollectionOfMethods anyOne.
+		^ self ].
+
+	self selectClass: aCollectionOfMethods anyOne methodClass instanceSide.
+
+	selectedMethod := aCollectionOfMethods anyOne.
+	selectedMethods := aCollectionOfMethods.
+	self notifyMethodsSelected: aCollectionOfMethods
+]
+
+{ #category : #'api - selection' }
 GtCoderNavigationPackagesTagsClassesModel >> selectPackage: anRPackage [
 	| aCoder |
 
@@ -1050,6 +1076,13 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
 	<return: #CompiledMethod>
 
 	^ selectedMethod
+]
+
+{ #category : #'api - accessing' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedMethods [
+	<return: #Collection of: #CompiledMethod>
+
+	^ selectedMethods ifNil: [ #() ]
 ]
 
 { #category : #'api - accessing' }
