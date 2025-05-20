@@ -3,9 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'amountOfPackages',
-		'amountOfClasses'
+		'amountOfClasses',
+		'amountOfMethods'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - generation' }
@@ -204,6 +205,16 @@ GtPharoDummiesGenerator >> amountOfClasses: anObject [
 ]
 
 { #category : #accessing }
+GtPharoDummiesGenerator >> amountOfMethods [
+	^ amountOfMethods
+]
+
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfMethods: anObject [
+	amountOfMethods := anObject
+]
+
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfPackages [
 	^ amountOfPackages
 ]
@@ -315,7 +326,7 @@ GtPharoDummiesGenerator >> fakeKeywordMethodsInFakeClass: aFakeClass [
 
 { #category : #'private - set up' }
 GtPharoDummiesGenerator >> fakeMethodCount [
-	^ 2
+	^ self amountOfMethods
 ]
 
 { #category : #'private - set up' }
@@ -359,6 +370,13 @@ GtPharoDummiesGenerator >> fakeRegisteredPackage [
 		self addFakeClassesToPackage: aPackage ].
 	
 	^ aPackage
+]
+
+{ #category : #'private - set up' }
+GtPharoDummiesGenerator >> fakeUnaryMethodNames [
+	<script: 'self new fakeUnaryMethodNames inspect'>
+	^ (1 to: self fakeMethodCount)
+		collect: [ :index | (#method , index asString) asSymbol ]
 ]
 
 { #category : #'private - set up' }
@@ -413,7 +431,8 @@ GtPharoDummiesGenerator >> initialize [
 	super initialize.
 	
 	amountOfPackages := 2.
-	amountOfClasses := 2
+	amountOfClasses := 2.
+	amountOfMethods := 2.
 ]
 
 { #category : #'private - set up' }
