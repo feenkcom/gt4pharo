@@ -1607,6 +1607,44 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toClass: targetClass
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetProtocol [
+	| selector scripter originalClass originalProtocol |
+	originalClass := method methodClass.
+	originalProtocol := method protocol.
+	selector := method selector.
+
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+
+	scripter mouseMoveOver
+		label: 'Hover ' , selector asString;
+		// GtCoderMethodsGroupedListElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = selector asString ];
+		play.
+
+	scripter mouseDown
+		label: 'Pick ' , selector asString;
+		play.
+
+	scripter mouseMoveOver
+		label: 'Drag ' , selector asString , ' to ' , targetProtocol;
+		// GtCoderProtocolsGroupedListElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = (targetProtocol , ' 1') ];
+		play.
+
+	scripter mouseUp
+		label: 'Drop ' , selector asString , ' in ' , targetProtocol;
+		play.
+
+	self assert: (originalClass >> selector) protocol equals: targetProtocol.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toClass: targetClass [
 	<gtExample>
 	| scripter selector originalMethods |
@@ -1659,6 +1697,54 @@ GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toClass: targetCla
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toProtocol: targetProtocol [
+	| selector scripter originalMethods |
+	originalMethods := methods
+			collect: [ :each | 
+				{each methodClass.
+					each selector.
+					each protocol} ].
+	selector := methods anyOne selector.
+
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: methods anyOne methodClass instanceSide ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: methods in: scripter.
+
+	scripter mouseMoveOver
+		label: 'Hover ' , selector asString;
+		// GtCoderMethodsGroupedListElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = selector asString ];
+		play.
+
+	scripter mouseDown
+		label: ('Pick {1} methods' format: {methods size});
+		play.
+
+	scripter mouseMoveOver
+		label: ('Drag {1} methods to {2}'
+				format: {methods size.
+						targetProtocol});
+		// GtCoderProtocolsGroupedListElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = (targetProtocol , ' 1') ];
+		play.
+
+	scripter mouseUp
+		label: ('Drop {1} methods in {2}'
+				format: {methods size.
+						targetProtocol});
+		play.
+
+	originalMethods
+		do: [ :eachArray | self assert: (eachArray first >> eachArray second) protocol equals: targetProtocol ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass [
 	<gtExample>
 	<after: #cleanUp>
@@ -1697,6 +1783,18 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass_clickOnTarget
 		play.
 
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocol [
+	<gtExample>
+	<after: #cleanUp>
+	| method protocol |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+	protocol := (environment anyDummyLeafClass dummyMethods
+			detect: [ :each | each protocol ~= method protocol ]) protocol.
+	^ self dragInIndexMethod: method toProtocol: protocol
 ]
 
 { #category : #'examples - index' }
@@ -1744,6 +1842,24 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass_clickOnTarge
 		play.
 
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToProtocol [
+	<gtExample>
+	<after: #cleanUp>
+	| methods protocol |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	methods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods last: 4.
+	protocol := (environment anyDummyLeafClass dummyMethods
+			detect: [ :each | (methods includes: each protocol) not ]) protocol.
+	^ self dragInIndexMethods: methods toProtocol: protocol
 ]
 
 { #category : #'examples - scrolling' }
