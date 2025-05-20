@@ -1924,6 +1924,24 @@ GtPharoCoderByScripterExamples >> pushDownInIndexMethod: method [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownInIndexMethods: methods [
+	| scripter |
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: methods anyOne methodClass ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: methods in: scripter.
+	self openMethodMenuOn: methods anyOne selector in: scripter.
+
+	self
+		hoverMenu: ('Push down methods {1} methods' format: {methods size})
+		labelled: 'Hover push down methods'
+		in: scripter.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushDownInstanceMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -1931,6 +1949,22 @@ GtPharoCoderByScripterExamples >> pushDownInstanceMethodInIndex [
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	method := environment anyDummyUnaryMethod realMethod.
 	^ self pushDownInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownInstanceMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| methods |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	methods := environment anyDummyRootClass dummyMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods first: 4.
+	^ self pushDownInIndexMethods: methods
 ]
 
 { #category : #'examples - index' }
@@ -1974,6 +2008,23 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInIndexMethods: methods [
+	| scripter |
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: methods anyOne methodClass ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: methods in: scripter.
+	self openMethodMenuOn: methods anyOne selector in: scripter.
+	self
+		hoverMenu: ('Pull up methods {1} methods' format: {methods size})
+		labelled: 'Hover pull up methods'
+		in: scripter.
+	self confirmAndRunRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushUpInstanceMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -1981,6 +2032,22 @@ GtPharoCoderByScripterExamples >> pushUpInstanceMethodInIndex [
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
 	^ self pushUpInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| methods |
+	environment := GtPharoDummiesGenerator new
+		amountOfPackages: 1;
+		amountOfClasses: 2;
+		amountOfMethods: 4;
+		generateHierarchy.
+	methods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods first: 4.
+	^ self pushUpInIndexMethods: methods
 ]
 
 { #category : #'examples - index' }
@@ -2895,6 +2962,35 @@ GtPharoCoderByScripterExamples >> selectClassInCoderUpdatesIndex [
 				label: 'Class is selected';
 				// GtCoderClassesTreeElement;
 				@ [ :each | each selectedClass notNil ] ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectInIndexMethods: methods in: scripter [
+	scripter
+		clickStep: [ :s1 | 
+			s1
+				label: 'Select first method';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = methods first selector ] ].
+
+	scripter
+		clickStep: [ :s1 | 
+			s1
+				label: 'Select the other methods';
+				modifiers: (BlKeyModifiers primary shift: true);
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = methods last selector ] ].
+
+
+	scripter assert
+		label: 'Assert list selection';
+		value: [ :aList | aList selectedItems asArray ] equals: methods asArray;
+		// GtCoderMethodsGroupedListElement;
+		play.
+
 	^ scripter
 ]
 
