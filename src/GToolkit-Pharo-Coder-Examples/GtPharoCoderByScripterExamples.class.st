@@ -626,7 +626,7 @@ GtPharoCoderByScripterExamples >> checkSelectionForExtractTemporary [
 	^ scripter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> checkSlotsUpdateAfterClassChange [
 	<gtExample>
 	| scripter aScripter |
@@ -1563,6 +1563,186 @@ GtPharoCoderByScripterExamples >> doubleClickInClasses [
 				// BrLabel;
 				@ [ :each | each text asString = 'ArrayedCollection' ] ].
 	self isClass: ArrayedCollection selectedIn: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexMethod: method toClass: targetClass [
+	| selector scripter originalClass |
+	originalClass := method methodClass.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+
+	scripter mouseMoveOver
+		label: 'Hover ' , selector asString;
+		// GtCoderMethodsGroupedListElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = selector asString ];
+		play.
+
+	scripter mouseDown
+		label: 'Pick ' , selector asString;
+		play.
+
+	scripter mouseMoveOver
+		label: 'Drag ' , selector asString , ' to ' , targetClass name;
+		// GtCoderClassesTreeElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = targetClass name asString ];
+		play.
+
+	scripter mouseUp
+		label: 'Drop ' , selector asString , ' in ' , targetClass name;
+		play.
+
+	self
+		assert: (originalClass includesSelector: selector) not
+		description: [ 'Class {1} must not include {2}'
+				format: {originalClass.
+						selector} ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toClass: targetClass [
+	<gtExample>
+	| scripter selector originalMethods |
+	originalMethods := methods
+			collect: [ :each | 
+				{each methodClass.
+					each selector} ].
+	selector := methods anyOne selector.
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: methods anyOne methodClass ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: methods in: scripter.
+
+	scripter mouseMoveOver
+		label: ('Hover {1} methods' format: {methods size});
+		// GtCoderMethodsGroupedListElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = selector asString ];
+		play.
+
+	scripter mouseDown
+		label: ('Pick {1} methods' format: {methods size});
+		play.
+
+	scripter mouseMoveOver
+		label: ('Hover {1} methods to {2}'
+				format: {methods size.
+						targetClass name});
+		// GtCoderClassesTreeElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = targetClass name asString ];
+		play.
+
+	scripter mouseUp
+		label: ('Drop {1} methods in {2}'
+				format: {methods size.
+						targetClass name});
+		play.
+
+	originalMethods
+		do: [ :eachArray | 
+			self
+				assert: (eachArray first includesSelector: eachArray second) not
+				description: [ 'Class {1} must not include {2}'
+						format: {eachArray first.
+								eachArray second} ] ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass [
+	<gtExample>
+	<after: #cleanUp>
+	| method targetClass |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+	targetClass := environment anyDummyRootClass realClass.
+	^ self dragInIndexMethod: method toClass: targetClass
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass_clickOnTargetClass [
+	<gtExample>
+	| scripter sourceClass targetClass |
+	scripter := self dragInstanceMethodInIndexToClass.
+	sourceClass := environment anyDummyLeafClass realClass.
+	targetClass := environment anyDummyRootClass realClass.
+
+	scripter assert
+		label: 'Assert selected source class: ' , sourceClass name;
+		value: [ :aLabel | aLabel text asString ] equals: sourceClass name;
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+
+	scripter click
+		label: 'Select ' , targetClass name;
+		// GtCoderClassesTreeElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = targetClass name asString ];
+		play.
+
+	scripter assert
+		label: 'Assert selected target class: ' , targetClass name;
+		value: [ :aLabel | aLabel text asString ] equals: targetClass name;
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass [
+	<gtExample>
+	<after: #cleanUp>
+	| methods targetClass |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	methods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods last: 4.
+	targetClass := environment anyDummyRootClass realClass.
+	^ self dragInIndexMethods: methods toClass: targetClass
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass_clickOnTargetClass [
+	<gtExample>
+	| scripter sourceClass targetClass |
+	scripter := self dragInstanceMethodsInIndexToClass.
+	sourceClass := environment anyDummyLeafClass realClass.
+	targetClass := environment anyDummyRootClass realClass.
+
+	scripter assert
+		label: 'Assert selected source class: ' , sourceClass name;
+		value: [ :aLabel | aLabel text asString ] equals: sourceClass name;
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+
+	scripter click
+		label: 'Select ' , targetClass name;
+		// GtCoderClassesTreeElement;
+		// BrLabel;
+		@ [ :aLabel | aLabel text asString = targetClass name asString ];
+		play.
+
+	scripter assert
+		label: 'Assert selected target class: ' , targetClass name;
+		value: [ :aLabel | aLabel text asString ] equals: targetClass name;
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+
 	^ scripter
 ]
 
@@ -3018,6 +3198,7 @@ GtPharoCoderByScripterExamples >> selectClassInCoderUpdatesIndex [
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> selectInIndexMethods: methods in: scripter [
+	<gtExample>
 	scripter
 		clickStep: [ :s1 | 
 			s1
