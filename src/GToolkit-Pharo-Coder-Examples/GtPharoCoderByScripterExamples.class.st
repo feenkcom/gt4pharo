@@ -1659,7 +1659,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toClass: targetCla
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> dragInstanceMethodInIndex [
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass [
 	<gtExample>
 	<after: #cleanUp>
 	| method targetClass |
@@ -1670,10 +1670,10 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndex [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> dragInstanceMethodInIndex_clickOnTargetClass [
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass_clickOnTargetClass [
 	<gtExample>
 	| scripter sourceClass targetClass |
-	scripter := self dragInstanceMethodInIndex.
+	scripter := self dragInstanceMethodInIndexToClass.
 	sourceClass := environment anyDummyLeafClass realClass.
 	targetClass := environment anyDummyRootClass realClass.
 
@@ -1700,7 +1700,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndex_clickOnTargetClass [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndex [
+GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass [
 	<gtExample>
 	<after: #cleanUp>
 	| methods targetClass |
@@ -1717,10 +1717,10 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndex [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndex_clickOnTargetClass [
+GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass_clickOnTargetClass [
 	<gtExample>
 	| scripter sourceClass targetClass |
-	scripter := self dragInstanceMethodsInIndex.
+	scripter := self dragInstanceMethodsInIndexToClass.
 	sourceClass := environment anyDummyLeafClass realClass.
 	targetClass := environment anyDummyRootClass realClass.
 
