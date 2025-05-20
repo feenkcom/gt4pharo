@@ -1966,8 +1966,8 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
 	self maximizePagerPane: scripter.
 	self openMethodMenuOn: selector in: scripter.
 	self
-		hoverMenu: 'Push up method ' , selector
-		labelled: 'Hover push up method'
+		hoverMenu: 'Pull up method ' , selector
+		labelled: 'Hover pull up method'
 		in: scripter.
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
