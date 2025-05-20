@@ -1907,6 +1907,22 @@ GtPharoCoderByScripterExamples >> pushDownClassMethodInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownClassMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| methods |
+	environment := GtPharoDummiesGenerator new
+		amountOfPackages: 1;
+		amountOfClasses: 2;
+		amountOfMethods: 4;
+		generateHierarchy.
+	methods := environment anyDummyLeafClass dummyClassMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods first: 4.
+	^ self pushDownInIndexMethods: methods
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushDownInIndexMethod: method [
 	| selector scripter |
 	selector := method selector.
@@ -1992,6 +2008,22 @@ GtPharoCoderByScripterExamples >> pushUpClassMethodInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpClassMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| methods |
+	environment := GtPharoDummiesGenerator new
+		amountOfPackages: 1;
+		amountOfClasses: 2;
+		amountOfMethods: 4;
+		generateHierarchy.
+	methods := environment anyDummyLeafClass dummyClassMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods first: 4.
+	^ self pushUpInIndexMethods: methods
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
 	| selector scripter |
 	selector := method selector.
@@ -2022,6 +2054,25 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethods: methods [
 		in: scripter.
 	self confirmAndRunRefactoring: scripter.
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceAndClassMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| instanceMethods classMethods |
+	environment := environment := GtPharoDummiesGenerator new
+		amountOfPackages: 1;
+		amountOfClasses: 2;
+		amountOfMethods: 4;
+		generateHierarchy.
+	instanceMethods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
+	instanceMethods sort: [ :a :b | a selector < b selector ].
+	instanceMethods := instanceMethods last: 2.
+	classMethods := environment anyDummyLeafClass dummyClassMethods collect: #realMethod.
+	classMethods sort: [ :a :b | a selector < b selector ].
+	classMethods := classMethods first: 2.
+	^ self pushUpInIndexMethods: instanceMethods, classMethods
 ]
 
 { #category : #'examples - index' }
