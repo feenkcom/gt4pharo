@@ -3,15 +3,13 @@ Class {
 	#superclass : #BrSimpleTree,
 	#traits : 'TGtWithPharoPackagesNavigationViewModel',
 	#classTraits : 'TGtWithPharoPackagesNavigationViewModel classTrait',
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
 { #category : #initialization }
 GtPharoPackagesNavigationElement >> initialize [
 	super initialize.
 	
-	self withoutSelection.
-
 	self nodeType: [ :aTypeFactory :aTreeNode |
 		{
 			#package -> GtPharoPackageNavigationElement.
@@ -27,6 +25,13 @@ GtPharoPackagesNavigationElement >> initialize [
 			#tag -> #pharoTagNavigationViewModel:.
 		} asDictionary at: eachTreeNode value viewModelName.
 		eachNodeElement perform: aViewModelSetter with: eachTreeNode value ]
+]
+
+{ #category : #initialization }
+GtPharoPackagesNavigationElement >> initializeAptitude: aGroupedListAptitude [
+	super initializeAptitude: aGroupedListAptitude.
+
+	self withoutSelection
 ]
 
 { #category : #'api - pharo packages navigation view model' }
