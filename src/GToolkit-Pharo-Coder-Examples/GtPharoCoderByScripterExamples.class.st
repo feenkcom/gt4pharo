@@ -1720,6 +1720,16 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toClass: targetClass
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetProtocol [
+	<gtExample>
+	^ self
+		dragInIndexMethod: method
+		toProtocol: targetProtocol
+		scripterDo: [  ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetProtocol scripterDo: scripterBlock [
+	<gtExample>
 	| selector scripter originalClass originalProtocol |
 	originalClass := method methodClass.
 	originalProtocol := method protocol.
@@ -1729,6 +1739,9 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetPr
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 
+	"Extra configuration before drag and drop action"
+	scripterBlock cull: scripter.
+	
 	scripter mouseMoveOver
 		label: 'Hover ' , selector asString;
 		// GtCoderMethodsGroupedListElement;
@@ -1907,6 +1920,58 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocol [
 	protocol := (environment anyDummyLeafClass dummyMethods
 			detect: [ :each | each protocol ~= method protocol ]) protocol.
 	^ self dragInIndexMethod: method toProtocol: protocol
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocolWithClassSiblings [
+	<gtExample>
+	<after: #cleanUp>
+	| method protocol dummyClass rootClass scripter expectedClasses |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 6;
+			amountOfMethods: 4;
+			generateSiblings.
+	dummyClass := environment anyDummyLeafClass.
+	method := dummyClass anyDummyUnaryMethod realMethod.
+	rootClass := method methodClass superclass.
+	protocol := (dummyClass dummyMethods
+			detect: [ :each | each protocol ~= method protocol ]) protocol.
+	expectedClasses := environment anyDummyPackage dummyClasses collect: #realClass.
+
+	scripter := self
+			dragInIndexMethod: method
+			toProtocol: protocol
+			scripterDo: [ :doScripter | 
+				doScripter click
+					label: 'Select root class ' , rootClass name;
+					// GtCoderClassesTreeElement;
+					// BrLabel;
+					@ [ :aLabel | aLabel text asString = rootClass name asString ];
+					play.
+
+				self switchToClassHierarchy: doScripter.
+
+				doScripter click
+					label: 'Select sibling class ' , dummyClass realClass name;
+					// GtCoderClassesTreeElement;
+					// BrLabel;
+					@ [ :aLabel | aLabel text asString = dummyClass realClass name asString ];
+					play ].
+
+	scripter assert
+		label: 'Assert all dummy classes are visible';
+		satisfies: [ :aTree | 
+			| query visibleClasses |
+			query := aTree query // GtCoderClassesTreeItemElement.
+			visibleClasses := query result collect: #theClass.
+			query isNotEmpty
+				and: [ expectedClasses
+						allSatisfy: [ :eachClass | visibleClasses includes: eachClass ] ] ];
+		// GtCoderClassesTreeElement;
+		play.
+
+	^ scripter
 ]
 
 { #category : #'examples - index' }
