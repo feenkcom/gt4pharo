@@ -1962,12 +1962,36 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocolWithClassSi
 	scripter assert
 		label: 'Assert all dummy classes are visible';
 		satisfies: [ :aTree | 
-			| query visibleClasses |
-			query := aTree query // GtCoderClassesTreeItemElement.
-			visibleClasses := query result collect: #theClass.
-			query isNotEmpty
-				and: [ expectedClasses
-						allSatisfy: [ :eachClass | visibleClasses includes: eachClass ] ] ];
+				| query visibleClasses missingClasses |
+				query := aTree query // GtCoderClassesTreeItemElement.
+				visibleClasses := query result collect: #theClass.
+				missingClasses := expectedClasses
+						reject: [ :eachClass | visibleClasses includes: eachClass ].
+				missingClasses
+					ifNotEmpty: [ aTree userData at: #missingClasses put: missingClasses ].
+				query isNotEmpty and: [ missingClasses isEmpty ] ]
+			description: [ :aTree | 
+				String
+					streamContents: [ :aStream | 
+						aStream
+							nextPutAll: 'The following classes must be visible in the Class Hierarchy: '.
+
+						expectedClasses
+							do: [ :eachClass | aStream print: eachClass ]
+							separatedBy: [ aStream nextPutAll: ', ' ].
+						aStream
+							nextPut: $.;
+							cr.
+
+						aTree userData
+							at: #missingClasses
+							ifPresent: [ :missingClasses | 
+								aStream nextPutAll: 'The following classes are missing: '.
+								missingClasses
+									do: [ :eachClass | aStream print: eachClass ]
+									separatedBy: [ aStream nextPutAll: ', ' ].
+								aStream nextPut: $. ]
+							ifAbsent: [  ] ] ];
 		// GtCoderClassesTreeElement;
 		play.
 
