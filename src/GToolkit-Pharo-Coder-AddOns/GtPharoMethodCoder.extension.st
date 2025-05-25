@@ -1132,18 +1132,21 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons remove
 		action: [ :aButtonElement :aButtonModel :anEvent | self remove ]
-		stencil: [ :element | self buildRemoveMethodLabel: element ].
+		stencil: [ :element | self buildRemoveMethodLabel: element ]
+		id: GtMethodCoderRemoveActionId.
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
 		action: [ :aCoderUIModel :anElement | 
 			self 
 				notifyObjectSpawn: aCoderUIModel methodReference
-				requesterObject: aCoderUIModel ].
+				requesterObject: aCoderUIModel ]
+		id: GtMethodCoderInspectActionId.
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
-		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ].
+		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
+		id: GtMethodCoderCopyActionId.
 		
 	self initializeSearchTextAddOns: addOns viewModel: aGtPharoMethodCoderViewModel
 ]
