@@ -1567,6 +1567,118 @@ GtPharoCoderByScripterExamples >> doubleClickInClasses [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassInIndexToPackage [
+	<gtExample>
+	<after: #cleanUp>
+	| oneClass targetPackage |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 2;
+			amountOfClasses: 3;
+			amountOfMethods: 1;
+			generate.
+
+	oneClass := environment anyDummyLeafClass realClass.
+	targetPackage := (environment dummyPackages
+			detect: [ :each | each packageName ~= oneClass package name ]) realPackage.
+
+	^ self dragInIndexClasses: {oneClass} toPackage: targetPackage
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassesInIndexToPackage [
+	<gtExample>
+	<after: #cleanUp>
+	| classes targetPackage |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 2;
+			amountOfClasses: 6;
+			amountOfMethods: 1;
+			generate.
+
+	classes := environment anyDummyPackage dummyClasses collect: #realClass.
+	classes sort: [ :a :b | a name < b name ].
+	classes := classes first: 4.
+	targetPackage := (environment dummyPackages
+			detect: [ :each | each packageName ~= classes anyOne package name ]) realPackage.
+
+	^ self dragInIndexClasses: classes toPackage: targetPackage
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetPackage [
+	<gtExample>
+	| originalPackages scripter stepLabel |
+	originalPackages := classes
+			collect: [ :each | 
+				{each.
+					each package} ].
+
+	scripter := self coderInPager: [ GtCoderElement forClass: classes anyOne ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexClasses: classes in: scripter.
+
+	stepLabel := '{1} {2}'
+			format: {classes size = 1 ifTrue: [ classes first ] ifFalse: [ classes size ].
+					'class' asPluralBasedOn: classes size}.
+
+	scripter mouseMoveOver
+		label: ('Hover {1}' format: {stepLabel});
+		// GtCoderClassesTreeElement;
+		// GtCoderClassesTreeItemElement;
+		@ [ :each | each theClass = classes first ];
+		play.
+
+	scripter mouseDown
+		label: ('Pick {1}' format: {stepLabel});
+		play.
+
+	scripter mouseMoveOver
+		label: ('Hover {1} to {2}'
+				format: {stepLabel.
+						targetPackage});
+		// GtCoderPackagesTreeElement;
+		// GtCoderPackagesTreeItemElement;
+		@ [ :anElement | anElement packageOrTag = targetPackage ];
+		play.
+
+	scripter mouseUp
+		label: ('Drop {1} in {2}'
+				format: {stepLabel.
+						targetPackage});
+		play.
+
+	originalPackages
+		do: [ :eachArray | 
+			self
+				assert: (eachArray first package = eachArray second) not
+				description: [ 'Class {1} must not be in the {2} package'
+						format: {eachArray first.
+								eachArray second} ].
+			self
+				assert: eachArray first package = targetPackage
+				description: [ 'Class {1} must be in the {2} package, but is in the {3} package'
+						format: {eachArray first.
+								targetPackage.
+								eachArray first package} ] ].
+
+	scripter assert
+		label: ('Assert selected {1} package' format: {targetPackage});
+		value: [ :aList | aList selectedPackage ] equals: targetPackage;
+		// GtCoderPackagesTreeElement;
+		play.
+
+	scripter assert
+		label: ('Assert selected {1}' format: {stepLabel});
+		value: [ :aList | aList selectedItems collect: #rootClass as: Array ]
+			equals: classes asArray;
+		// GtCoderClassesTreeElement;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInIndexMethod: method toClass: targetClass [
 	| selector scripter originalClass |
 	originalClass := method methodClass.
@@ -1608,6 +1720,16 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toClass: targetClass
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetProtocol [
+	<gtExample>
+	^ self
+		dragInIndexMethod: method
+		toProtocol: targetProtocol
+		scripterDo: [  ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetProtocol scripterDo: scripterBlock [
+	<gtExample>
 	| selector scripter originalClass originalProtocol |
 	originalClass := method methodClass.
 	originalProtocol := method protocol.
@@ -1617,6 +1739,9 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetPr
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 
+	"Extra configuration before drag and drop action"
+	scripterBlock cull: scripter.
+	
 	scripter mouseMoveOver
 		label: 'Hover ' , selector asString;
 		// GtCoderMethodsGroupedListElement;
@@ -1795,6 +1920,82 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocol [
 	protocol := (environment anyDummyLeafClass dummyMethods
 			detect: [ :each | each protocol ~= method protocol ]) protocol.
 	^ self dragInIndexMethod: method toProtocol: protocol
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocolWithClassSiblings [
+	<gtExample>
+	<after: #cleanUp>
+	| method protocol dummyClass rootClass scripter expectedClasses |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 6;
+			amountOfMethods: 4;
+			generateSiblings.
+	dummyClass := environment anyDummyLeafClass.
+	method := dummyClass anyDummyUnaryMethod realMethod.
+	rootClass := method methodClass superclass.
+	protocol := (dummyClass dummyMethods
+			detect: [ :each | each protocol ~= method protocol ]) protocol.
+	expectedClasses := environment anyDummyPackage dummyClasses collect: #realClass.
+
+	scripter := self
+			dragInIndexMethod: method
+			toProtocol: protocol
+			scripterDo: [ :doScripter | 
+				doScripter click
+					label: 'Select root class ' , rootClass name;
+					// GtCoderClassesTreeElement;
+					// BrLabel;
+					@ [ :aLabel | aLabel text asString = rootClass name asString ];
+					play.
+
+				self switchToClassHierarchy: doScripter.
+
+				doScripter click
+					label: 'Select sibling class ' , dummyClass realClass name;
+					// GtCoderClassesTreeElement;
+					// BrLabel;
+					@ [ :aLabel | aLabel text asString = dummyClass realClass name asString ];
+					play ].
+
+	scripter assert
+		label: 'Assert all dummy classes are visible';
+		satisfies: [ :aTree | 
+				| query visibleClasses missingClasses |
+				query := aTree query // GtCoderClassesTreeItemElement.
+				visibleClasses := query result collect: #theClass.
+				missingClasses := expectedClasses
+						reject: [ :eachClass | visibleClasses includes: eachClass ].
+				missingClasses
+					ifNotEmpty: [ aTree userData at: #missingClasses put: missingClasses ].
+				query isNotEmpty and: [ missingClasses isEmpty ] ]
+			description: [ :aTree | 
+				String
+					streamContents: [ :aStream | 
+						aStream
+							nextPutAll: 'The following classes must be visible in the Class Hierarchy: '.
+
+						expectedClasses
+							do: [ :eachClass | aStream print: eachClass ]
+							separatedBy: [ aStream nextPutAll: ', ' ].
+						aStream
+							nextPut: $.;
+							cr.
+
+						aTree userData
+							at: #missingClasses
+							ifPresent: [ :missingClasses | 
+								aStream nextPutAll: 'The following classes are missing: '.
+								missingClasses
+									do: [ :eachClass | aStream print: eachClass ]
+									separatedBy: [ aStream nextPutAll: ', ' ].
+								aStream nextPut: $. ]
+							ifAbsent: [  ] ] ];
+		// GtCoderClassesTreeElement;
+		play.
+
+	^ scripter
 ]
 
 { #category : #'examples - index' }
@@ -3309,6 +3510,37 @@ GtPharoCoderByScripterExamples >> selectClassInCoderUpdatesIndex [
 				label: 'Class is selected';
 				// GtCoderClassesTreeElement;
 				@ [ :each | each selectedClass notNil ] ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectInIndexClasses: classes in: scripter [
+	<gtExample>
+	scripter
+		clickStep: [ :s1 | 
+			s1
+				label: ('Select first class: {1}' format: {classes first});
+				// GtCoderClassesTreeElement;
+				// GtCoderClassesTreeItemElement;
+				@ [ :each | each theClass = classes first ] ].
+
+	classes size > 1
+		ifTrue: [ scripter
+				clickStep: [ :s1 | 
+					s1
+						label: ('Select the other classes clicking on: {1}' format: {classes last});
+						modifiers: (BlKeyModifiers primary shift: true);
+						// GtCoderClassesTreeElement;
+						// GtCoderClassesTreeItemElement;
+						@ [ :each | each theClass = classes last ] ] ].
+
+	scripter assert
+		label: 'Assert list selection';
+		value: [ :aList | aList selectedItems collect: #rootClass as: Array ]
+			equals: classes asArray;
+		// GtCoderClassesTreeElement;
+		play.
+
 	^ scripter
 ]
 

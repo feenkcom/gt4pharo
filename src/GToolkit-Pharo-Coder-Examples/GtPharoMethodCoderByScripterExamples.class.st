@@ -14,6 +14,111 @@ GtPharoMethodCoderByScripterExamples class >> dummyMethod: arg [
 	self foo: arg
 ]
 
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> assertFor: aStep expectedElementIds: expectedElementIds labeled: aLabel [
+	"Create an assertion step that checks that an element has all expected children in its children tree."
+
+	^ aStep assert
+		referenceSender;
+		label: aLabel;
+		satisfies: [ :anElement | 
+				| missingIds tooManyOccurrences |
+				missingIds := OrderedCollection new.
+				tooManyOccurrences := OrderedCollection new.
+				expectedElementIds
+					do: [ :eachActionId | 
+						| aQuery |
+						aQuery := anElement query // eachActionId asBlocElementId.
+						aQuery isEmpty
+							ifTrue: [ missingIds add: eachActionId ]
+							ifFalse: [ aQuery result size > 1
+									ifTrue: [ tooManyOccurrences add: eachActionId -> aQuery result ] ] ].
+				missingIds
+					ifNotEmpty: [ anElement userData at: #missingIds put: missingIds ].
+				tooManyOccurrences
+					ifNotEmpty: [ anElement userData at: #tooManyOccurrences put: tooManyOccurrences ].
+				missingIds isEmpty and: [ tooManyOccurrences isEmpty ] ]
+			description: [ :anElement | 
+				String
+					streamContents: [ :aStream | 
+						aStream nextPutAll: 'Expected the following element IDs: '.
+						expectedElementIds
+							do: [ :eachId | aStream print: eachId ]
+							separatedBy: [ aStream nextPutAll: ', ' ].
+						aStream nextPutAll: '. '.
+						anElement userData
+							at: #missingIds
+							ifPresent: [ :missingIds | 
+								aStream
+									cr;
+									nextPutAll: 'The following IDs are missing: '.
+
+								missingIds
+									do: [ :eachId | aStream print: eachId ]
+									separatedBy: [ aStream nextPutAll: ', ' ].
+								aStream nextPutAll: '. ' ]
+							ifAbsent: [  ].
+						anElement userData
+							at: #tooManyOccurrences
+							ifPresent: [ :tooManyOccurrences | 
+								aStream
+									cr;
+									nextPutAll: 'The following IDs have too many occurrences: '.
+								tooManyOccurrences
+									do: [ :eachAssoc | 
+										'{1}x {2}'
+											format: {eachAssoc value size.
+													eachAssoc key} ]
+									separatedBy: [ aStream nextPutAll: ', ' ].
+								aStream nextPutAll: '. ' ]
+							ifAbsent: [  ] ] ]
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> assertFor: aStep unexpectedElementIds: unexpectedElementIds labeled: aLabel [
+	"Create an assertion step that checks that an element has non of a given children in its children tree."
+
+	^ aStep assert
+		referenceSender;
+		label: aLabel;
+		satisfies: [ :anElement | 
+				| shouldNotExistIds |
+				shouldNotExistIds := OrderedCollection new.
+				unexpectedElementIds
+					do: [ :eachActionId | 
+						| aQuery |
+						aQuery := anElement query // eachActionId asBlocElementId.
+						aQuery isEmpty
+							ifFalse: [ shouldNotExistIds add: eachActionId -> aQuery result ] ].
+				shouldNotExistIds
+					ifNotEmpty: [ anElement userData at: #shouldNotExistIds put: shouldNotExistIds ].
+				shouldNotExistIds isEmpty ]
+			description: [ :anElement | 
+				String
+					streamContents: [ :aStream | 
+						aStream nextPutAll: 'The following element IDs should not exist: '.
+						unexpectedElementIds
+							do: [ :eachId | aStream print: eachId ]
+							separatedBy: [ aStream nextPutAll: ', ' ].
+						aStream nextPutAll: '. '.
+						anElement userData
+							at: #shouldNotExistIds
+							ifPresent: [ :shouldNotExistIds | 
+								aStream
+									cr;
+									nextPutAll: 'But some of them exist: '.
+
+								shouldNotExistIds
+									do: [ :eachAssoc | 
+										aStream
+											print: eachAssoc value size;
+											nextPutAll: 'x ';
+											print: eachAssoc key ]
+									separatedBy: [ aStream nextPutAll: ', ' ].
+								aStream nextPutAll: '. ' ]
+							ifAbsent: [  ] ] ]
+]
+
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 	<gtExample>
@@ -36,6 +141,15 @@ GtPharoMethodCoderByScripterExamples >> astMatchesHasUnderlineAttribute [
 		ofType: BlTextDecorationAttribute.
 
 	^ aScripter
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderByScripterExamples >> basicExpectedMainActions [
+	^ {GtMethodCoderSaveActionId.
+		GtMethodCoderRemoveActionId.
+		GtMethodCoderInspectActionId.
+		GtMethodCoderCopyActionId.
+		GtCoderSearchActionId}
 ]
 
 { #category : #'examples - basic' }
@@ -549,6 +663,53 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter existenceOfContextAc
 								= (GtPharoMethodCoder >> #exampleAstFor:into:viewModel:) ] ];
 				onModel;
 				onChildFromMessage: #contextActions ]
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripter expectedMainActions: expectedMainActionIds expectedContextActions: expectedContextActionIds unexpectedMainActions: unexpectedMainActionIds unexpectedContextActions: unexpectedContextActionIds [
+	<gtExample>
+	aScripter
+		substeps: 'Check Available Action Buttons'
+		do: [ :aStep | 
+			expectedMainActionIds
+				ifNotEmpty: [ (self
+						assertFor: aStep
+						expectedElementIds: expectedMainActionIds
+						labeled: ('Assert {1} expected main actions exist'
+								format: {expectedMainActionIds size}))
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 1;
+						play ].
+
+			unexpectedMainActionIds
+				ifNotEmpty: [ (self
+						assertFor: aStep
+						unexpectedElementIds: unexpectedMainActionIds
+						labeled: ('Assert {1} unexpected main actions do not exist'
+								format: {unexpectedMainActionIds size}))
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 1;
+						play ].
+
+			expectedContextActionIds
+				ifNotEmpty: [ (self
+						assertFor: aStep
+						expectedElementIds: expectedContextActionIds
+						labeled: ('Assert {1} expected context actions exist'
+								format: {expectedContextActionIds size}))
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 3;
+						play ].
+
+			unexpectedContextActionIds
+				ifNotEmpty: [ (self
+						assertFor: aStep
+						unexpectedElementIds: unexpectedContextActionIds
+						labeled: ('Assert {1} unexpected context actions do not exist'
+								format: {unexpectedContextActionIds size}))
+						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
+						onChildAt: 3;
+						play ] ]
 ]
 
 { #category : #utilities }
@@ -1822,13 +1983,18 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Chec
 	<gtExample>
 	| aScripter |
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
-	self 
-		checkFor: aScripter 
-		numberOfMainActions: 5
-		contextActionAtLeast: 5.
+
+	self
+		checkFor: aScripter
+		expectedMainActions: self basicExpectedMainActions
+		expectedContextActions: self exampleMethodContextActions
+		unexpectedMainActions: #()
+		unexpectedContextActions: #().
 
 	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate example'.
-	self checkFor: aScripter existenceOfContextActionNamed: 'Evaluate and inspect example result'.
+	self
+		checkFor: aScripter
+		existenceOfContextActionNamed: 'Evaluate and inspect example result'.
 
 	^ aScripter
 ]
@@ -1851,21 +2017,12 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_RemovePragma [
 	<gtExample>
-	| aScripter aNumberOfContextActionElements |
+	| aScripter |
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI.
 
 	aScripter
 		substeps: 'Remove Pragma'
 		do: [ :aStep | 
-			aStep
-				doStep: [ :s | 
-					s
-						label: 'Get number of context actions';
-						block: [ :anElement | 
-							aNumberOfContextActionElements := anElement childrenCount ];
-						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
-						onChildAt: 3 ].
-		
 			aStep
 				doStep: [ :s | 
 					s
@@ -1879,12 +2036,22 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 6
-				contextAction: aNumberOfContextActionElements - 5.
+				expectedMainActions: self modifiedCodeExpectedMainActions
+				expectedContextActions: #()
+				unexpectedMainActions: #()
+				unexpectedContextActions: self exampleMethodContextActions.
 
 			self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
 
 	^ aScripter
+]
+
+{ #category : #accessing }
+GtPharoMethodCoderByScripterExamples >> exampleMethodContextActions [
+	^ {GtMethodCoderPlayExampleActionId.
+		GtMethodCoderPlayAndInspectExampleActionId.
+		GtMethodCoderDebugExampleActionId.
+		GtMethodCoderExtractPlaygroundActionId}
 ]
 
 { #category : #utilities }
@@ -7226,6 +7393,11 @@ GtPharoMethodCoderByScripterExamples >> methodWithTwoObjectMethodOne [
 	^ GtPharoDummyTwoObject >> #one
 ]
 
+{ #category : #accessing }
+GtPharoMethodCoderByScripterExamples >> modifiedCodeExpectedMainActions [
+	^ self basicExpectedMainActions copyWith: GtMethodCoderDiscardChangesActionId
+]
+
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> moveVariableSource [
 	^ '
@@ -7467,21 +7639,11 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_CheckExam
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExampleStatusAfterPragmaDeletion [
 	<gtExample>
-	| aScripter aNumberOfContextActionElements |
+	| aScripter |
 	aScripter := self referencedExampleMethodCoderUI.
 	aScripter
 		substeps: 'Remove Pragma'
 		do: [ :aStep | 
-			aStep
-				doStep: [ :s | 
-					s
-						label: 'Get number of context actions';
-						block: [ :anElement | 
-							aNumberOfContextActionElements := anElement childrenCount ];
-						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
-						onChildAt: 3 ].
-		
-		
 			aStep
 				doStep: [ :s | 
 					s
@@ -7495,8 +7657,10 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 6
-				contextAction: aNumberOfContextActionElements - 5.
+				expectedMainActions: self modifiedCodeExpectedMainActions
+				expectedContextActions: #()
+				unexpectedMainActions: #()
+				unexpectedContextActions: self exampleMethodContextActions.
 
 			self checkFor: aStep absenceOfContextActionNamed: 'Play Example' ].
 	aScripter
@@ -7535,8 +7699,10 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 
 			self
 				checkFor: aStep
-				numberOfMainActions: 5
-				contextActionAtLeast: 5.
+				expectedMainActions: self basicExpectedMainActions
+				expectedContextActions: self exampleMethodContextActions
+				unexpectedMainActions: #()
+				unexpectedContextActions: #().
 
 			self checkFor: aStep existenceOfContextActionNamed: 'Evaluate example' ].
 

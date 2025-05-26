@@ -62,6 +62,42 @@ GtPharoDummiesGenerator >> addDummyClassHierarchyToPackage: aDummyPackage [
 ]
 
 { #category : #'private - generation' }
+GtPharoDummiesGenerator >> addDummyClassSiblingsToPackage: aDummyPackage [
+	| theDummyClasses currentClass index |
+	currentClass := Object.
+	index := 0.
+	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackage packageName) collect: [ :eachClassName |
+		| aNewClass aDummyClass ivars |
+
+		ivars := (1 to: self fakeInstVarCount) collect: [ :i | 'instVar' , (index + i) printString ].
+		index := index + self fakeInstVarCount.
+
+		aNewClass := GtPharoCodeModifier current
+			createSubclassOf: currentClass
+			named: eachClassName
+			instanceVariableNames: (String streamContents: [ :aStream |
+				ivars
+					do: [ :each | aStream nextPutAll: each ]
+					separatedBy: [ aStream space ] ])
+			package: aDummyPackage packageName.
+
+		aDummyClass := GtPharoDummyClass new
+			instVarNames: ivars;
+			realClass: aNewClass;
+			className: eachClassName.
+		
+		self addDummyUnaryMethodsToClass: aDummyClass.
+		self addDummyUnaryClassMethodsToClass: aDummyClass.
+		self addDummyKeywordMethodsToClass: aDummyClass.
+		
+		currentClass = Object ifTrue: [ currentClass := aNewClass ].
+		
+		aDummyClass ].
+	
+	aDummyPackage dummyClasses: theDummyClasses
+]
+
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyClassesToPackage: aDummyPackage [
 	| theDummyClasses |
 	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackage packageName) collect: [ :eachClassName |
@@ -143,6 +179,23 @@ GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDum
 			packageName: eachPackageName;
 			realPackage: eachPackage.
 		self addDummyClassHierarchyToPackage: eachDummyPackage.
+		eachDummyPackage ].
+	
+	aDummyEnvironment dummyPackages: theDummyPackages
+]
+
+{ #category : #'private - generation' }
+GtPharoDummiesGenerator >> addDummyPackagesWithClassSiblingsToEnvironment: aDummyEnvironment [
+	| theDummyPackages |
+
+	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
+		| eachPackage eachDummyPackage |
+		self assert: (RPackageOrganizer default includesPackageNamed: eachPackageName) not.
+		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
+		eachDummyPackage := GtPharoDummyPackage new
+			packageName: eachPackageName;
+			realPackage: eachPackage.
+		self addDummyClassSiblingsToPackage: eachDummyPackage.
 		eachDummyPackage ].
 	
 	aDummyEnvironment dummyPackages: theDummyPackages
@@ -422,6 +475,19 @@ GtPharoDummiesGenerator >> generateHierarchy [
 	EpMonitor disableDuring: [
 		GtPharoCodeModifier current deferFlushDuring: [
 			self addDummyPackagesWithClassHierarchyToEnvironment: aDummyEnvironment ] ]. 
+
+	^ aDummyEnvironment
+]
+
+{ #category : #'api - generation' }
+GtPharoDummiesGenerator >> generateSiblings [
+	| aDummyEnvironment |
+	
+	aDummyEnvironment := GtPharoDummyEnvironment new.
+
+	EpMonitor disableDuring: [
+		GtPharoCodeModifier current deferFlushDuring: [
+			self addDummyPackagesWithClassSiblingsToEnvironment: aDummyEnvironment ] ]. 
 
 	^ aDummyEnvironment
 ]
