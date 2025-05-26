@@ -61,6 +61,14 @@ GtVmMemoryConfigurationInstaller >> applyForLargeObjectAllocationsDuring: aCompu
 ]
 
 { #category : #api }
+GtVmMemoryConfigurationInstaller >> applyIfPresentForLargeObjectAllocation [ 
+	self 
+		configurationBuilderWithId: #forLargeObjectAllocation  
+		ifPresentDo: [ :aConfig | 
+			aConfig writeToVm ]
+]
+
+{ #category : #api }
 GtVmMemoryConfigurationInstaller >> applyWithId: aMemoryConfigurationId during: aComputationBlock when: aBoolean [
 	| currentMemoryConfiguration |
 	self isEnabled ifFalse: [ ^ aComputationBlock value ].
@@ -77,8 +85,21 @@ GtVmMemoryConfigurationInstaller >> applyWithId: aMemoryConfigurationId during: 
 ]
 
 { #category : #configuring }
+GtVmMemoryConfigurationInstaller >> configurationBuilderWithId: anId ifPresentDo: aBlockClosure [ 
+	^ (configurationsRegistry 
+		configurationWithId: #forLargeObjectAllocation  
+		ifAbsent: [nil])
+			ifNotNil: [ :aConfig | aBlockClosure cull: aConfig ]
+]
+
+{ #category : #configuring }
 GtVmMemoryConfigurationInstaller >> configurationBuilderWithId: anId put: anObject [ 
 	configurationsRegistry builderWithId: anId put: anObject 
+]
+
+{ #category : #accessing }
+GtVmMemoryConfigurationInstaller >> configurationsRegistry [
+	^ configurationsRegistry
 ]
 
 { #category : #api }
