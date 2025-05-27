@@ -187,6 +187,72 @@ GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 	self check: aScripter hasReorderAttributes: 2
 ]
 
+{ #category : #'examples - completion' }
+GtPharoSnippetCoderByScripterExamples >> completionAttributeIsNotPropagated [
+	<gtExample>
+	| scripter source |
+	source := '({} = OrderedCollection new) ifTrFals'.
+	scripter := self scripterForBlock: [ GtPharoSnippetCoder forSource: source ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Move cursor to end';
+				action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: source size ];
+				id: GtSourceCoderEditorId ].
+
+	scripter shortcut
+		combination: BlKeyCombination builder control space build;
+		id: GtSourceCoderEditorId;
+		play.
+
+	(scripter keyPress: BlKeyboardKey tab) play.
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Verify first arg is selected';
+				// GtSourceCoderEditorId;
+				action: [ :editor | self assert: (editor selection containsIndex: 38) ] ].
+
+	(scripter type: '[') play.
+	(scripter type: '1') play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Verify second arg is selected';
+				// GtSourceCoderEditorId;
+				action: [ :editor | self assert: (editor selection containsIndex: 51) ] ].
+
+	(scripter type: '[') play.
+	(scripter type: '2') play.
+	(scripter keyPress: BlKeyboardKey tab) play.	"No more args to complete so it should enter a tab instead of moving the cursor"
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Verify no selection';
+				// GtSourceCoderEditorId;
+				action: [ :editor | self assert: editor selection isEmpty ] ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check text';
+				// GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ '({} = OrderedCollection new) ifTrue: [1] ifFalse: [2	]' ] ].
+
+	^ scripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoSnippetCoderByScripterExamples >> contextMenuInspectAClassShouldSpawnCompositeTool [
 	<gtExample>
