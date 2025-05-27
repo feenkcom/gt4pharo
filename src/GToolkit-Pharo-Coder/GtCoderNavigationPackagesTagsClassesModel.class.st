@@ -135,7 +135,9 @@ GtCoderNavigationPackagesTagsClassesModel >> classReorganized: aClassReorganized
 
 { #category : #'api - subscriptions' }
 GtCoderNavigationPackagesTagsClassesModel >> classRepackaged: aClassRepackaged [
-	self selectedPackage = aClassRepackaged oldPackage ifFalse: [ ^ self ].
+	(self selectedPackage = aClassRepackaged oldPackage 
+		or: [ self selectedPackage = aClassRepackaged newPackage ]) 
+			ifFalse: [ ^ self ].
 
 	performingBulkChanges ifTrue: [^needsUpdate := true].
 	
