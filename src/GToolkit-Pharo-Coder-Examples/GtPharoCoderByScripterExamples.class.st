@@ -2063,6 +2063,28 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToProtocol [
 	^ self dragInIndexMethods: methods toProtocol: protocol
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragSiblingClassesInIndexToPackage [
+	<gtExample>
+	<after: #cleanUp>
+	| classes targetPackage |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 2;
+			amountOfClasses: 7;
+			amountOfMethods: 0;
+			generateSiblings.
+
+	classes := environment anyDummyPackage dummyClasses collect: #realClass.
+	classes := classes select: [ :eachClass | eachClass allSubclasses size = 0 ].
+	classes sort: [ :a :b | a name < b name ].
+	self assert: classes size > 4.
+	classes := classes last: 4.
+	targetPackage := (environment dummyPackages
+			detect: [ :each | each packageName ~= classes anyOne package name ]) realPackage.
+
+	^ self dragInIndexClasses: classes toPackage: targetPackage
+]
+
 { #category : #'examples - scrolling' }
 GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 	"Related to https://github.com/feenkcom/gtoolkit/issues/4267"
