@@ -1620,7 +1620,7 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetP
 
 	stepLabel := '{1} {2}'
 			format: {classes size = 1 ifTrue: [ classes first ] ifFalse: [ classes size ].
-					'class' asPluralBasedOn: classes size}.
+					classes size = 1 ifTrue: [ 'class' ] ifFalse: [ 'classes' ]}.
 
 	scripter mouseMoveOver
 		label: ('Hover {1}' format: {stepLabel});
@@ -1663,15 +1663,46 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetP
 								eachArray first package} ] ].
 
 	scripter assert
-		label: ('Assert selected {1} package' format: {targetPackage});
-		value: [ :aList | aList selectedPackage ] equals: targetPackage;
+		label: ('Assert selected {1} package' format: {originalPackages anyOne second name});
+		value: [ :aList | aList selectedPackage ]
+			equals: originalPackages anyOne second;
 		// GtCoderPackagesTreeElement;
 		play.
 
 	scripter assert
-		label: ('Assert selected {1}' format: {stepLabel});
+		label: 'Assert empty class list selection';
 		value: [ :aList | aList selectedItems collect: #rootClass as: Array ]
-			equals: classes asArray;
+			equals: #();
+		// GtCoderClassesTreeElement;
+		play.
+
+	scripter assert
+		label: ('Assert class list does not include {1}' format: {stepLabel});
+		satisfies: [ :aList | 
+				| unexpectedClasses |
+				unexpectedClasses := OrderedCollection new.
+				classes
+					do: [ :eachClass | 
+						aList viewModel
+							indexOfSuchThat: [ :eachItem | eachItem rootClass = eachClass ]
+							do: [ :anIndex | unexpectedClasses add: eachClass ] ].
+				unexpectedClasses
+					ifNotEmpty: [ aList userData at: #unexpectedClasses put: unexpectedClasses ].
+				unexpectedClasses isEmpty ]
+			description: [ :aList | 
+				String
+					streamContents: [ :aStream | 
+						aStream nextPutAll: 'Class list must not include moved classes.'.
+						aList userData
+							at: #unexpectedClasses
+							ifPresent: [ :unexpectedClasses | 
+								aStream cr.
+								aStream nextPutAll: 'Unexpected classes: '.
+								unexpectedClasses
+									do: [ :eachClass | aStream print: eachClass ]
+									separatedBy: [ aStream nextPutAll: ', ' ].
+								aStream nextPut: $. ]
+							ifAbsent: [  ] ] ];
 		// GtCoderClassesTreeElement;
 		play.
 
@@ -2061,6 +2092,28 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToProtocol [
 	protocol := (environment anyDummyLeafClass dummyMethods
 			detect: [ :each | (methods includes: each protocol) not ]) protocol.
 	^ self dragInIndexMethods: methods toProtocol: protocol
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragSiblingClassesInIndexToPackage [
+	<gtExample>
+	<after: #cleanUp>
+	| classes targetPackage |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 2;
+			amountOfClasses: 7;
+			amountOfMethods: 0;
+			generateSiblings.
+
+	classes := environment anyDummyPackage dummyClasses collect: #realClass.
+	classes := classes select: [ :eachClass | eachClass allSubclasses size = 0 ].
+	classes sort: [ :a :b | a name < b name ].
+	self assert: classes size > 4.
+	classes := classes last: 4.
+	targetPackage := (environment dummyPackages
+			detect: [ :each | each packageName ~= classes anyOne package name ]) realPackage.
+
+	^ self dragInIndexClasses: classes toPackage: targetPackage
 ]
 
 { #category : #'examples - scrolling' }

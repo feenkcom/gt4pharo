@@ -2,13 +2,29 @@ Extension { #name : #RBRefactoryChange }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 RBRefactoryChange >> gtExecuteWithNotification [
-	^ self gtExecuteWithNotificationWithProgress: [  ]
+	<return: #TAsyncPromise>
+	^ self gtExecuteWithNotificationThreshold: self gtDefaultBulkExecutionThreshold
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+RBRefactoryChange >> gtExecuteWithNotificationThreshold: aThreshold [
+	<return: #TAsyncPromise>
+	^ self gtExecuteWithNotificationWithProgress: [  ] threshold: aThreshold
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock [
+	<return: #TAsyncPromise>
+	^ self
+		gtExecuteWithNotificationWithProgress: aBlock
+		threshold: self gtDefaultBulkExecutionThreshold
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock threshold: aThreshold [
+	<return: #TAsyncPromise>
 	| job notification |
-	job := self gtCompilationJobWithProgress: aBlock.
+	job := self gtCompilationJobWithProgress: aBlock threshold: aThreshold.
 	notification := GtNotificationJob new
 			summaryClass: GtCompilationNotificationSummary;
 			job: job;
@@ -17,7 +33,10 @@ RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock [
 	self changesSize > 1
 		ifTrue: [ notification showNotifications.
 			notification hideNotificationsOnRemoval ].
-	^ [ job run ] asAsyncPromise
+	^ [ job run ] asAsyncFuture
+		await: (AsyncFutureExecutionConfiguration new
+				customGroup: #CodeChange;
+				highPriority)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
