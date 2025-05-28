@@ -77,6 +77,11 @@ GtPharoCodeModifier class >> removePackageNamed: aPackageName [
 ]
 
 { #category : #'api - package' }
+GtPharoCodeModifier class >> removePackageTag: aPackageTag [
+	^ self current removePackageTag: aPackageTag
+]
+
+{ #category : #'api - package' }
 GtPharoCodeModifier class >> renamePackage: aPackage to: aNewPackageName [
 	^ self current renamePackage: aPackage to: aNewPackageName
 ]
@@ -102,6 +107,13 @@ GtPharoCodeModifier >> compileMethodSource: aSourceCode in: aClass protocol: aMe
 { #category : #'api - package' }
 GtPharoCodeModifier >> createPackageNamed: aPackageName [
 	^ self critical: [ RPackageOrganizer default createPackageNamed: aPackageName ]
+]
+
+{ #category : #'api - package' }
+GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
+	<return: #RPackageTag>
+	<exception: #RPackageConflictError>
+	^ self critical: [ aPackage addClassTag: aTagName ]
 ]
 
 { #category : #'api - class' }
@@ -211,6 +223,26 @@ GtPharoCodeModifier >> removePackageNamed: aPackageName [
 		(RPackage organizer
 			packageNamed: aPackageName
 			ifAbsent: [ ^ self ]) removeFromSystem ]
+]
+
+{ #category : #'api - package' }
+GtPharoCodeModifier >> removePackageTag: aPackageTag [
+	"Remove empty package tag.
+	Note: Package tag must be without classes.
+	Note: Use #removePackageTagIncludingClasses: if you want to remove also its classes."
+
+	self critical: [ aPackageTag removeFromPackage ]
+]
+
+{ #category : #'api - package' }
+GtPharoCodeModifier >> removePackageTagIncludingClasses: aPackageTag [
+	"Remove package tag including its classes."
+	
+	self
+		critical: [ 
+			aPackageTag isEmpty ifFalse: [ 
+				aPackageTag package removeClassesMatchingTag: aPackageTag ].
+			aPackageTag removeFromPackage ]
 ]
 
 { #category : #'api - package' }
