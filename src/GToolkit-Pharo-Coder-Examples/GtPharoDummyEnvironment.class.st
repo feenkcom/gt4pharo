@@ -35,6 +35,11 @@ GtPharoDummyEnvironment >> anyDummyPackage [
 ]
 
 { #category : #'api - classes' }
+GtPharoDummyEnvironment >> anyDummyPackageTag [
+	^ self anyDummyPackage dummyPackageTags anyOne
+]
+
+{ #category : #'api - classes' }
 GtPharoDummyEnvironment >> anyDummyRootClass [
 	^ self anyDummyPackage dummyClasses detect: [ :each | each realClass superclass = Object ]
 ]
@@ -81,7 +86,8 @@ GtPharoDummyEnvironment >> gtClassesFor: aView [
 	^ aView list
 		title: 'Classes';
 		priority: 20;
-		items: [ self dummyPackages flatCollect: #dummyClasses ];
+		items: [ self dummyPackages
+				flatCollect: [ :each | each dummyClasses , (each dummyPackageTags flatCollect: #dummyClasses) ] ];
 		itemText: #className
 ]
 
@@ -96,14 +102,25 @@ GtPharoDummyEnvironment >> gtMethodsFor: aView [
 ]
 
 { #category : #accessing }
+GtPharoDummyEnvironment >> gtPackageTagsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Package tags';
+		priority: 15;
+		items: [ self dummyPackages flatCollect: #dummyPackageTags ];
+		itemText: #packageTagName
+]
+
+{ #category : #accessing }
 GtPharoDummyEnvironment >> gtPackagesFor: aView [
 	<gtView>
 
-	^ aView list
+	^ aView tree
 		title: 'Packages';
 		priority: 10;
 		items: [ self dummyPackages ];
-		itemText: #packageName
+		children: #gtPackagesViewChildren;
+		itemText: #gtPackagesViewItemText
 ]
 
 { #category : #initialization }

@@ -110,6 +110,16 @@ GtPharoDummyClass >> gtCoderFor: aView [
 		stencil: [ GtCoderElement forClass: aRealClass ]
 ]
 
+{ #category : #'gt-extensions' }
+GtPharoDummyClass >> gtPackagesViewChildren [
+	^ self dummyMethods , self dummyClassMethods
+]
+
+{ #category : #'gt-extensions' }
+GtPharoDummyClass >> gtPackagesViewItemText [
+	^ self className
+]
+
 { #category : #initialization }
 GtPharoDummyClass >> initialize [
 	super initialize.

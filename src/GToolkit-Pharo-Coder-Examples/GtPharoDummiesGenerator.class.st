@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'amountOfPackages',
 		'amountOfClasses',
-		'amountOfMethods'
+		'amountOfMethods',
+		'amountOfPackageTags'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
@@ -127,6 +128,35 @@ GtPharoDummiesGenerator >> addDummyClassesToPackage: aDummyPackage [
 ]
 
 { #category : #'private - generation' }
+GtPharoDummiesGenerator >> addDummyClassesToPackageTag: aDummyPackageTag [
+	| theDummyClasses |
+	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackageTag packageTagName) collect: [ :eachClassName |
+		| aNewClass aDummyClass |
+
+		aNewClass := GtPharoCodeModifier current
+			createSubclassOf: Object
+			named: eachClassName
+			instanceVariableNames: (String streamContents: [ :aStream |
+				self fakeInstVarNames
+					do: [ :each | aStream nextPutAll: each ]
+					separatedBy: [ aStream space ] ])
+			package: aDummyPackageTag packageTagName.
+
+		aDummyClass := GtPharoDummyClass new
+			instVarNames: self fakeInstVarNames;
+			realClass: aNewClass;
+			className: eachClassName.
+		
+		self addDummyUnaryMethodsToClass: aDummyClass.
+		self addDummyUnaryClassMethodsToClass: aDummyClass.
+		self addDummyKeywordMethodsToClass: aDummyClass.
+
+		aDummyClass ].
+	
+	aDummyPackageTag dummyClasses: theDummyClasses
+]
+
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyKeywordMethodsToClass: aDummyClass [
 	| theDummyMethods |
 	
@@ -151,6 +181,27 @@ GtPharoDummiesGenerator >> addDummyKeywordMethodsToClass: aDummyClass [
 ]
 
 { #category : #'private - generation' }
+GtPharoDummiesGenerator >> addDummyPackageTagsToPackage: aDummyPackage [
+	| theDummyTags |
+	theDummyTags := (self dummyPackageTagNamesForPackageName: aDummyPackage packageName) collect: [ :eachTagName |
+		| aNewTag aDummyPackageTag |
+
+		aNewTag := GtPharoCodeModifier current
+			createPackageTagOf: aDummyPackage realPackage
+			named: eachTagName.
+
+		aDummyPackageTag := GtPharoDummyPackageTag new
+			realPackageTag: aNewTag;
+			packageTagName: eachTagName.
+		
+		self addDummyClassesToPackageTag: aDummyPackageTag.
+
+		aDummyPackageTag ].
+	
+	aDummyPackage dummyPackageTags: theDummyTags
+]
+
+{ #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
 
@@ -162,6 +213,8 @@ GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 			packageName: eachPackageName;
 			realPackage: eachPackage.
 		self addDummyClassesToPackage: eachDummyPackage.
+		self amountOfPackageTags isZero ifFalse: [ 
+			self addDummyPackageTagsToPackage: eachDummyPackage ].
 		eachDummyPackage ].
 	
 	aDummyEnvironment dummyPackages: theDummyPackages
@@ -268,6 +321,16 @@ GtPharoDummiesGenerator >> amountOfMethods: anObject [
 ]
 
 { #category : #accessing }
+GtPharoDummiesGenerator >> amountOfPackageTags [
+	^ amountOfPackageTags
+]
+
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfPackageTags: anObject [
+	amountOfPackageTags := anObject
+]
+
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfPackages [
 	^ amountOfPackages
 ]
@@ -302,6 +365,12 @@ GtPharoDummiesGenerator >> dummyPackageNames [
 			ifFalse: [ thePackageNames add: aGeneratedPackageName ] ].
 
 	^ thePackageNames
+]
+
+{ #category : #'private - names' }
+GtPharoDummiesGenerator >> dummyPackageTagNamesForPackageName: aPackageName [
+	amountOfPackageTags isZero ifTrue: [ ^ #() ].
+	^ (1 to: amountOfPackageTags) collect: [ :index | (aPackageName, '-Tag', index asString) asSymbol ]
 ]
 
 { #category : #'private - set up' }
@@ -497,6 +566,7 @@ GtPharoDummiesGenerator >> initialize [
 	super initialize.
 	
 	amountOfPackages := 2.
+	amountOfPackageTags := 0.
 	amountOfClasses := 2.
 	amountOfMethods := 2.
 ]

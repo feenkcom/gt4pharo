@@ -7,7 +7,7 @@ Class {
 		'selector',
 		'protocol'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - inst vars' }
@@ -30,6 +30,29 @@ GtPharoDummyMethod >> dummyClass [
 { #category : #accessing }
 GtPharoDummyMethod >> dummyClass: anObject [
 	dummyClass := anObject
+]
+
+{ #category : #'gt - extensions' }
+GtPharoDummyMethod >> gtCoderFor: aView [
+	<gtView>
+	| aRealMethod |
+
+	(aRealMethod := realMethod) ifNil: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Coder';
+		priority: 5;
+		stencil: [ GtCoderElement forMethod: aRealMethod ]
+]
+
+{ #category : #'gt - extensions' }
+GtPharoDummyMethod >> gtPackagesViewChildren [
+	^ #()
+]
+
+{ #category : #'gt - extensions' }
+GtPharoDummyMethod >> gtPackagesViewItemText [
+	^ self selector
 ]
 
 { #category : #testing }
