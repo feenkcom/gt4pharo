@@ -76,9 +76,8 @@ GtPharoMethodCoderHeaderElement >> newIconContainer [
 GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
 	^ BrButton new
 		fitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: self theme label metadataTextForeground;
-				glamorousRegularSmallSize)
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
 				+ (BrStyleCommonAptitude new
 						default: [ :aStyle | 
 							aStyle
@@ -92,9 +91,8 @@ GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
 GtPharoMethodCoderHeaderElement >> newPackageButton [
 	^ BrButton new
 		fitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: self theme label metadataTextForeground;
-				glamorousRegularSmallSize)
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
 				+ (BrStyleCommonAptitude new
 						default: [ :aStyle | 
 							aStyle
@@ -108,9 +106,8 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 GtPharoMethodCoderHeaderElement >> newProviderBehaviorButton [
 	^ BrButton new
 		fitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: self theme label metadataTextForeground;
-				glamorousRegularSmallSize)
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
 				+ (BrStyleCommonAptitude new
 						default: [ :aStyle | 
 							aStyle
