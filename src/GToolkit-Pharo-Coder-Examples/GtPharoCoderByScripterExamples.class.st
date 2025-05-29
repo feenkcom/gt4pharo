@@ -1605,6 +1605,86 @@ GtPharoCoderByScripterExamples >> dragClassesInIndexToPackage [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageExtentionTag [
+	<gtExample>
+	<after: #cleanUp>
+	| classes targetPackageTag dummyPackage dummyPackageTag anotherDummyPackage extensionMethod |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 2;
+			amountOfPackageTags: 2;
+			amountOfClasses: 6;
+			amountOfMethods: 3;
+			generate.
+
+	dummyPackage := environment anyDummyPackage.
+	dummyPackageTag := dummyPackage anyDummyPackageTag.
+	classes := dummyPackageTag dummyClasses collect: #realClass.
+	classes sort: [ :a :b | a name < b name ].
+	classes := classes first: 4.
+
+	anotherDummyPackage := environment dummyPackages
+			detect: [ :eachPackage | eachPackage ~= dummyPackage ].
+	extensionMethod := anotherDummyPackage anyDummyClass anyDummyUnaryMethod
+			realMethod.
+	GtPharoCodeModifier current
+		moveMethod: extensionMethod
+		toExtensionPackage: dummyPackage realPackage.
+
+	targetPackageTag := GtCoderPackageExtensionTag
+			forPackage: dummyPackage realPackage.
+
+	^ self dragInIndexClasses: classes toPackageTag: targetPackageTag
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageTag [
+	<gtExample>
+	<after: #cleanUp>
+	| classes targetPackageTag dummyPackage dummyPackageTag |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfPackageTags: 2;
+			amountOfClasses: 6;
+			amountOfMethods: 1;
+			generate.
+
+	dummyPackage := environment anyDummyPackage.
+	dummyPackageTag := dummyPackage anyDummyPackageTag.
+	classes := dummyPackageTag dummyClasses collect: #realClass.
+	classes sort: [ :a :b | a name < b name ].
+	classes := classes first: 4.
+	targetPackageTag := (dummyPackage dummyPackageTags
+			detect: [ :each | each packageTagName ~= dummyPackageTag packageTagName ]) realPackageTag.
+
+	^ self dragInIndexClasses: classes toPackageTag: targetPackageTag
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageUncategorizedTag [
+	<gtExample>
+	<after: #cleanUp>
+	| classes targetPackageTag dummyPackage dummyPackageTag |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfPackageTags: 2;
+			amountOfClasses: 6;
+			amountOfMethods: 1;
+			generate.
+
+	dummyPackage := environment anyDummyPackage.
+	dummyPackageTag := dummyPackage anyDummyPackageTag.
+	classes := dummyPackageTag dummyClasses collect: #realClass.
+	classes sort: [ :a :b | a name < b name ].
+	classes := classes first: 4.
+	targetPackageTag := dummyPackage realPackage classTags
+			detect: [ :eachTag | eachTag name = dummyPackage realPackage name ].
+	targetPackageTag := GtCoderPackageUncategorizedTag
+			forPackageTag: targetPackageTag.
+
+	^ self dragInIndexClasses: classes toPackageTag: targetPackageTag
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetPackage [
 	<gtExample>
 	| originalPackages scripter stepLabel |
@@ -1617,6 +1697,12 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetP
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self selectInIndexClasses: classes in: scripter.
+	
+	scripter do 
+		label: ('Scroll to {1}' format: { targetPackage name });
+		block: [ :aList | aList scrollToItem: targetPackage ];
+		// GtCoderClassesTreeElement;
+		play.
 
 	stepLabel := '{1} {2}'
 			format: {classes size = 1 ifTrue: [ classes first ] ifFalse: [ classes size ].
@@ -1636,7 +1722,7 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetP
 	scripter mouseMoveOver
 		label: ('Hover {1} to {2}'
 				format: {stepLabel.
-						targetPackage});
+						targetPackage name});
 		// GtCoderPackagesTreeElement;
 		// GtCoderPackagesTreeItemElement;
 		@ [ :anElement | anElement packageOrTag = targetPackage ];
@@ -1705,6 +1791,163 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackage: targetP
 							ifAbsent: [  ] ] ];
 		// GtCoderClassesTreeElement;
 		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackageTag: targetPackageTag [
+	<gtExample>
+	| originalPackages scripter stepLabel realTargetPackageTag isAllowedTarget |
+	isAllowedTarget := true.
+	originalPackages := classes
+			collect: [ :each | 
+				{each.
+					each package.
+					each package classTagForClass: each} ].
+	(targetPackageTag isKindOf: GtCoderPackageUncategorizedTag)
+		ifTrue: [ realTargetPackageTag := targetPackageTag packageTag ].
+	(targetPackageTag isKindOf: GtCoderPackageExtensionTag)
+		ifTrue: [ realTargetPackageTag := originalPackages anyOne third.
+			isAllowedTarget := false ].
+	realTargetPackageTag ifNil: [ realTargetPackageTag := targetPackageTag ].
+
+	scripter := self coderInPager: [ GtCoderElement forClass: classes anyOne ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexClasses: classes in: scripter.
+
+	stepLabel := '{1} {2}'
+			format: {classes size = 1 ifTrue: [ classes first ] ifFalse: [ classes size ].
+					classes size = 1 ifTrue: [ 'class' ] ifFalse: [ 'classes' ]}.
+
+	scripter mouseMoveOver
+		label: ('Hover {1}' format: {stepLabel});
+		// GtCoderClassesTreeElement;
+		// GtCoderClassesTreeItemElement;
+		@ [ :each | each theClass = classes first ];
+		play.
+
+	scripter mouseDown
+		label: ('Pick {1}' format: {stepLabel});
+		play.
+
+	scripter mouseMoveOver
+		label: ('Hover {1} to {2}'
+				format: {stepLabel.
+						targetPackageTag categoryName});
+		// GtCoderPackagesTreeElement;
+		// GtCoderPackagesTreeItemElement;
+		@ [ :anElement | anElement packageOrTag = targetPackageTag ];
+		play.
+
+	scripter mouseUp
+		label: ('Drop {1} in {2}'
+				format: {stepLabel.
+						targetPackageTag categoryName});
+		play.
+
+	originalPackages
+		do: [ :eachArray | 
+			| eachClass previousPackage previousPackageTag currentPackage currentPackageTag |
+			eachClass := eachArray first.
+			previousPackage := eachArray second.
+			previousPackageTag := eachArray third.
+			currentPackage := eachClass package.
+			currentPackageTag := currentPackage classTagForClass: eachClass.
+			self
+				assert: currentPackage = previousPackage
+				description: [ 'Class {1} must be in the {2} package'
+						format: {eachArray first.
+								eachArray second} ].
+			self
+				assert: currentPackageTag = realTargetPackageTag
+				description: [ 'Class {1} must be in the {2} package tag, but is in the {3} package tag'
+						format: {eachClass name.
+								realTargetPackageTag name.
+								currentPackageTag name} ] ].
+
+	scripter assert
+		label: ('Assert selected {1} package tag'
+				format: {originalPackages anyOne third categoryName});
+		value: [ :aList | aList selectedPackageTag ]
+			equals: originalPackages anyOne third;
+		// GtCoderPackagesTreeElement;
+		play.
+
+	isAllowedTarget
+		ifTrue: [ scripter assert
+				label: 'Assert empty class list selection';
+				value: [ :aList | aList selectedItems collect: #rootClass as: Array ]
+					equals: #();
+				// GtCoderClassesTreeElement;
+				play ]
+		ifFalse: [ scripter assert
+				label: 'Assert same class list selection';
+				value: [ :aList | aList selectedItems collect: #rootClass as: Array ]
+					equals: classes;
+				// GtCoderClassesTreeElement;
+				play ].
+
+	isAllowedTarget
+		ifTrue: [ scripter assert
+				label: ('Assert class list does not include {1}' format: {stepLabel});
+				satisfies: [ :aList | 
+						| unexpectedClasses |
+						unexpectedClasses := OrderedCollection new.
+						classes
+							do: [ :eachClass | 
+								aList viewModel
+									indexOfSuchThat: [ :eachItem | eachItem rootClass = eachClass ]
+									do: [ :anIndex | unexpectedClasses add: eachClass ] ].
+						unexpectedClasses
+							ifNotEmpty: [ aList userData at: #unexpectedClasses put: unexpectedClasses ].
+						unexpectedClasses isEmpty ]
+					description: [ :aList | 
+						String
+							streamContents: [ :aStream | 
+								aStream nextPutAll: 'Class list must not include moved classes.'.
+								aList userData
+									at: #unexpectedClasses
+									ifPresent: [ :unexpectedClasses | 
+										aStream cr.
+										aStream nextPutAll: 'Unexpected classes: '.
+										unexpectedClasses
+											do: [ :eachClass | aStream print: eachClass ]
+											separatedBy: [ aStream nextPutAll: ', ' ].
+										aStream nextPut: $. ]
+									ifAbsent: [  ] ] ];
+				// GtCoderClassesTreeElement;
+				play ]
+		ifFalse: [ scripter assert
+				label: ('Assert class list does include {1}' format: {stepLabel});
+				satisfies: [ :aList | 
+						| foundClasses missingClasses |
+						foundClasses := OrderedCollection new.
+						classes
+							do: [ :eachClass | 
+								aList viewModel
+									indexOfSuchThat: [ :eachItem | eachItem rootClass = eachClass ]
+									do: [ :anIndex | foundClasses add: eachClass ] ].
+						missingClasses := classes reject: [ :eachClass | foundClasses includes: eachClass ].
+						missingClasses ifEmpty: [ aList userData at: #missingClasses put: foundClasses ].
+						missingClasses isEmpty ]
+					description: [ :aList | 
+						String
+							streamContents: [ :aStream | 
+								aStream nextPutAll: 'Class list must include not-moved classes.'.
+								aList userData
+									at: #missingClasses
+									ifPresent: [ :missingClasses | 
+										aStream cr.
+										aStream nextPutAll: 'Missing classes: '.
+										missingClasses
+											do: [ :eachClass | aStream print: eachClass ]
+											separatedBy: [ aStream nextPutAll: ', ' ].
+										aStream nextPut: $. ]
+									ifAbsent: [  ] ] ];
+				// GtCoderClassesTreeElement;
+				play ].
 
 	^ scripter
 ]

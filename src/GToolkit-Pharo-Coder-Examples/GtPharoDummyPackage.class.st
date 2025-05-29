@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'packageName',
 		'realPackage',
-		'dummyClasses'
+		'dummyClasses',
+		'dummyPackageTags'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
@@ -24,6 +25,11 @@ GtPharoDummyPackage >> anyDummyKeywordMethod [
 	<return: #GtPharoDummyMethod>
 
 	^ self dummyClasses anyOne anyDummyKeywordMethod
+]
+
+{ #category : #'api - classes' }
+GtPharoDummyPackage >> anyDummyPackageTag [
+	^ self dummyPackageTags anyOne
 ]
 
 { #category : #'api - methods' }
@@ -51,6 +57,17 @@ GtPharoDummyPackage >> dummyClasses: aCollectionOfDummyClasses [
 	aCollectionOfDummyClasses do: [ :eachDummyClass | eachDummyClass dummyPackage: self ]
 ]
 
+{ #category : #accessing }
+GtPharoDummyPackage >> dummyPackageTags [
+	<return: #OrderedCollection of: #GtPharoDummyPackageTag>
+	^ dummyPackageTags
+]
+
+{ #category : #accessing }
+GtPharoDummyPackage >> dummyPackageTags: anObject [
+	dummyPackageTags := anObject
+]
+
 { #category : #'gt-extensions' }
 GtPharoDummyPackage >> gtClassesFor: aView [
 	<gtView>
@@ -75,11 +92,22 @@ GtPharoDummyPackage >> gtCoderFor: aView [
 		stencil: [ GtCoderElement forPackage: aRealPackage ]
 ]
 
+{ #category : #'gt-extensions' }
+GtPharoDummyPackage >> gtPackagesViewChildren [
+	^ self dummyClasses , self dummyPackageTags
+]
+
+{ #category : #'gt-extensions' }
+GtPharoDummyPackage >> gtPackagesViewItemText [
+	^ self packageName
+]
+
 { #category : #initialization }
 GtPharoDummyPackage >> initialize [
 	super initialize.
 	
-	dummyClasses := OrderedCollection new
+	dummyClasses := OrderedCollection new.
+	dummyPackageTags := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -90,6 +118,14 @@ GtPharoDummyPackage >> packageName [
 { #category : #accessing }
 GtPharoDummyPackage >> packageName: anObject [
 	packageName := anObject
+]
+
+{ #category : #printing }
+GtPharoDummyPackage >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPut: $(.
+	aStream nextPutAll: self packageName.
+	aStream nextPut: $)
 ]
 
 { #category : #accessing }
@@ -108,6 +144,7 @@ GtPharoDummyPackage >> removeFromSystem [
 		ifNil: [ ^ self ].
 		
 	dummyClasses do: [ :eachClass | eachClass removeFromSystem ].
+	dummyPackageTags do: [ :eachPackageTag | eachPackageTag removeFromSystem ].
 	GtPharoCodeModifier removePackage: realPackage.
 	realPackage := nil
 ]
