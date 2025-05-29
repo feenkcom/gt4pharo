@@ -171,6 +171,23 @@ GtPharoCodeModifier >> initialize [
 	monitor := Monitor new
 ]
 
+{ #category : #'api - method' }
+GtPharoCodeModifier >> moveMethod: aMethod toExtensionPackage: aPackage [
+	"We could use `aPackage methodCategoryPrefix` but it calls #asLowercase,
+	which is something we do not do in other places."
+
+	aMethod package = aPackage ifTrue: [ ^ aMethod ].
+
+	^ self
+		critical: [ 
+			(GtMethodProtocolChange
+				selector: aMethod selector
+				in: aMethod methodClass
+				classified: '*' , aPackage packageName) gtExecuteWithUndo.
+
+			aMethod methodClass compiledMethodAt: aMethod selector ]
+]
+
 { #category : #'api - refactoring' }
 GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange [
 	^ self deferFlushDuring: [ aRefactoryChange gtExecuteWithUndo ]
