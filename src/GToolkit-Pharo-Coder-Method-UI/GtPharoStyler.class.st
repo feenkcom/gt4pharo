@@ -213,11 +213,11 @@ GtPharoStyler >> visitDeclaredVariable: aNamedVariable [
 			anySatisfy: [ :each | each isErrorNode not and: [ each defines: aNamedVariable name value ] ].
 	isLocallyDefined
 		ifTrue: [ self
-				attributes: {BlTextForegroundAttribute color: Color blue muchDarker}
+				attributes: {BlTextForegroundAttribute color: self theme editor pharoDeclaredVariableForeground}
 				from: aNamedVariable name startPosition
 				to: aNamedVariable name stopPosition ]
 		ifFalse: [ self
-				attributes: {BlTextForegroundAttribute color: Color blue muchDarker.
+				attributes: {BlTextForegroundAttribute color: self theme editor pharoDeclaredVariableForeground.
 						BlFontWeightAttribute semiBold.
 						"self definitionTooltipAttributeFor: aNamedVariable"}
 				from: aNamedVariable name startPosition
@@ -335,7 +335,7 @@ GtPharoStyler >> visitReturnUpArrow: aSmaCCToken [
 GtPharoStyler >> visitSelfVariable: aSelfVariable [
 	super visitSelfVariable: aSelfVariable.
 	self
-		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoSelfVariableForeground }
 		from: aSelfVariable name startPosition
 		to: aSelfVariable name stopPosition
 ]
@@ -372,7 +372,7 @@ GtPharoStyler >> visitStringLiteral: aStringLiteral [
 GtPharoStyler >> visitSuperVariable: aSuperVariable [
 	super visitSuperVariable: aSuperVariable.
 	self
-		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoSuperVariableForeground }
 		from: aSuperVariable name startPosition
 		to: aSuperVariable name stopPosition
 ]
@@ -390,7 +390,7 @@ GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 GtPharoStyler >> visitThisContextVariable: aThisContextVariable [
 	super visitThisContextVariable: aThisContextVariable.
 	self
-		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoThisContextVariableForeground }
 		from: aThisContextVariable name startPosition
 		to: aThisContextVariable name stopPosition
 ]

@@ -1,6 +1,8 @@
 "
-# Source coder breadcrumb
-{{gtExample:GtMethodCoderHeaderElementExamples>>#headerForMethodCoder}}
+# Pharo Method Coder Header 
+
+
+{{gtExample:GtMethodCoderHeaderElementExamples>>#headerForMethodFromClass|previewExpanded|previewShow=#gtLiveFor:|codeExpanded=false|previewHeight=60}}
 
 "
 Class {
@@ -30,7 +32,7 @@ GtPharoMethodCoderHeaderElement >> buildSeparatorElement [
 	^ BrLabel new
 			aptitude: (BrGlamorousLabelAptitude new thin 
 				padding: (BlInsets all:0 );
-				foreground: self theme button defaultTextColor);
+				foreground: self theme label metadataTextForeground);
 			text: '>'.
 ]
 
@@ -74,9 +76,8 @@ GtPharoMethodCoderHeaderElement >> newIconContainer [
 GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
 	^ BrButton new
 		fitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: BrGlamorousColors defaultButtonTextColor;
-				glamorousRegularSmallSize)
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
 				+ (BrStyleCommonAptitude new
 						default: [ :aStyle | 
 							aStyle
@@ -90,9 +91,8 @@ GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
 GtPharoMethodCoderHeaderElement >> newPackageButton [
 	^ BrButton new
 		fitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: BrGlamorousColors defaultButtonTextColor;
-				glamorousRegularSmallSize)
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
 				+ (BrStyleCommonAptitude new
 						default: [ :aStyle | 
 							aStyle
@@ -106,9 +106,8 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 GtPharoMethodCoderHeaderElement >> newProviderBehaviorButton [
 	^ BrButton new
 		fitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: BrGlamorousColors defaultButtonTextColor;
-				glamorousRegularSmallSize)
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
 				+ (BrStyleCommonAptitude new
 						default: [ :aStyle | 
 							aStyle
