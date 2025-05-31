@@ -6,11 +6,25 @@ Class {
 		'subTheme',
 		'subThemeClass',
 		'themeableValues',
-		'themeableAst',
-		'themeableAssignments'
+		'themeableAssignments',
+		'constantAssignments'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
 }
+
+{ #category : #accessing }
+GtBlocSubThemeModel >> computeConstantAssignments [
+	| assignments currentClass|
+	
+	assignments := OrderedCollection new.
+	
+	currentClass := subThemeClass.
+	[ currentClass = BlSubTheme ] whileFalse: [
+		assignments addAll: (self detectConstantAssignmentsIn: currentClass).
+		currentClass := currentClass superclass ].
+	
+	^ assignments groupedBy: [ :each | each valueName ]
+]
 
 { #category : #accessing }
 GtBlocSubThemeModel >> computeThemeableAssignments [
@@ -41,23 +55,53 @@ GtBlocSubThemeModel >> computeThemeableValues [
 ]
 
 { #category : #accessing }
-GtBlocSubThemeModel >> detectThemeableAssignmentsIn: aSubThemeClass [
-	| assignments initializeMethod |
+GtBlocSubThemeModel >> detectConstantAssignmentsIn: aSubThemeClass [
+	| assignments selectors |
 	
 	assignments := OrderedCollection new.
 	
-	initializeMethod := aSubThemeClass
-		compiledMethodAt: #initializeThemeable
-		ifAbsent: [ ^ assignments ].
+	selectors := #(initializeConstants).
 	
-	themeableAst := GtPharoParser parse: initializeMethod sourceCode.
-	themeableAst allNodesDo: [ :each |
-		each isAssignment
-			ifTrue: [
-				assignments add: (GtBlocThemeableValueAssignment new
-				subThemeClass: aSubThemeClass;
-				valueName: each variable variableName;
-				valueAst: each value) ] ].
+	selectors do: [ :eachSelector |
+		aSubThemeClass
+			compiledMethodAt: eachSelector
+			ifPresent: [ :initializeMethod |
+				| ast |
+				ast := GtPharoParser parse: initializeMethod sourceCode.
+				ast allNodesDo: [ :each |
+					(each isMessageSend and: [ each selector = #constantsAt:put: ])
+						ifTrue: [
+							assignments add: (GtBlocThemeableConstantAssignment new
+								subThemeClass: aSubThemeClass;
+								subThemeSelector: eachSelector;
+								valueName: each variable variableName;
+								valueAst: each value) ] ] ] ].
+	
+	^ assignments
+]
+
+{ #category : #accessing }
+GtBlocSubThemeModel >> detectThemeableAssignmentsIn: aSubThemeClass [
+	| assignments selectors |
+	
+	assignments := OrderedCollection new.
+	
+	selectors := #(initialize initializeThemeable initializeColors).
+	
+	selectors do: [ :eachSelector |
+		aSubThemeClass
+		compiledMethodAt: eachSelector
+		ifPresent: [ :initializeMethod |
+			| ast |
+			ast := GtPharoParser parse: initializeMethod sourceCode.
+			ast allNodesDo: [ :each |
+				each isAssignment
+					ifTrue: [
+						assignments add: (GtBlocThemeableValueAssignment new
+							subThemeClass: aSubThemeClass;
+							subThemeSelector: eachSelector;
+							valueName: each variable variableName;
+							valueAst: each value) ] ] ] ].
 	
 	^ assignments
 ]
@@ -83,6 +127,7 @@ GtBlocSubThemeModel >> subTheme: aBlSubTheme name: aSubThemeName [
 	subThemeClass := aBlSubTheme class.
 	
 	themeableAssignments := self computeThemeableAssignments.
+	constantAssignments := self computeConstantAssignments.
 	themeableValues := self computeThemeableValues
 ]
 
