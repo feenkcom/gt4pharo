@@ -9,6 +9,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
 }
 
+{ #category : #views }
+GtBlocThemeModel >> gtSubThemeModelsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Sub-Themes';
+		priority: 3;
+		object: [ subThemeModels ];
+		view: #gtItemsFor:
+]
+
 { #category : #'as yet unclassified' }
 GtBlocThemeModel >> initializeForTheme: aBlTheme [
 	theme := aBlTheme.

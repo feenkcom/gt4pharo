@@ -1,19 +1,22 @@
 Class {
-	#name : #GtBlocThemeableColorType,
+	#name : #GtBlocThemeableBackgroundType,
 	#superclass : #GtBlocThemeableValueType,
 	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
 }
 
 { #category : #'as yet unclassified' }
-GtBlocThemeableColorType >> simplifiedAssignmentAst: aThemeableAssignment [
+GtBlocThemeableBackgroundType >> simplifiedAssignmentAst: aThemeableAssignment [
 	| anAst |
 
 	anAst := aThemeableAssignment valueAst.
 	anAst isMessageSend
 		ifFalse: [ ^ anAst ].
 		
-	anAst selector = #color:source:
+	anAst selector = #background:source:
 		ifFalse: [ ^ anAst ].
 
-	^ anAst arguments first
+	anAst arguments first isBlock
+		ifFalse: [ ^ anAst ].
+		
+	^ anAst arguments first body
 ]
