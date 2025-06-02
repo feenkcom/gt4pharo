@@ -2,22 +2,35 @@ Class {
 	#name : #GtBlocThemeValueNotThemeableIssue,
 	#superclass : #GtBlocThemeIssue,
 	#instVars : [
-		'themeableValue'
+		'typedThemeProperty'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
 }
 
+{ #category : #'as yet unclassified' }
+GtBlocThemeValueNotThemeableIssue >> canFixIt [
+	^ self typedThemeProperty isStaticType
+]
+
 { #category : #accessing }
 GtBlocThemeValueNotThemeableIssue >> description [
-	^ 'Not a themeable value' format: { self themeableValue valueName }
+	^ 'Not a themeable value' format: { self typedThemeProperty propertyName }
+]
+
+{ #category : #'as yet unclassified' }
+GtBlocThemeValueNotThemeableIssue >> fixIt [
+	self typedThemeProperty isStaticType
+		ifFalse: [ ^ nil ].
+		
+	^ self typedThemeProperty transformToThemeable
 ]
 
 { #category : #accessing }
-GtBlocThemeValueNotThemeableIssue >> themeableValue [
-	^ themeableValue
+GtBlocThemeValueNotThemeableIssue >> typedThemeProperty [
+	^ typedThemeProperty
 ]
 
 { #category : #accessing }
-GtBlocThemeValueNotThemeableIssue >> themeableValue: anObject [
-	themeableValue := anObject
+GtBlocThemeValueNotThemeableIssue >> typedThemeProperty: anObject [
+	typedThemeProperty := anObject
 ]

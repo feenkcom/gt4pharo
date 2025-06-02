@@ -47,17 +47,21 @@ GtBlocThemeEditorElement >> compileChanges [
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> createCollapsedHeaderForThemeableValue: eachThemeableValue [
+GtBlocThemeEditorElement >> createCollapsedHeaderForProperty: aTypedThemeProperty [
 	| header |
 	
-	header := self createProtoHeaderForThemeableValue: eachThemeableValue.
+	header := self createProtoHeaderForProperty: aTypedThemeProperty.
 	
 	^ header
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> createEditorForThemeableValue: aThemeableValue assignment: eachValueAssignment [
-	| container valueSourceCoder valueSourceCoderElement valueSourceCoderViewModel |
+GtBlocThemeEditorElement >> createEditorForProperty: aTypedThemeProperty assignment: eachValueAssignment [
+	| assignmentForCoder container valueSourceCoderElement  valueSourceCoderViewModel  |
+	
+	assignmentForCoder := (aTypedThemeProperty transformAssignmentForCoder: eachValueAssignment)
+		asCoderAssignmentFor: aTypedThemeProperty.
+	
 	container := BrVerticalPane new
 		hMatchParent;
 		vFitContent.
@@ -66,25 +70,20 @@ GtBlocThemeEditorElement >> createEditorForThemeableValue: aThemeableValue assig
 		fitContent;
 		beSmallSize;
 		margin: (BlInsets top: 6 left: 3);
-		label: eachValueAssignment subThemeMethod printString;
+		label: assignmentForCoder subThemeMethod printString;
 		aptitude: BrGlamorousMetadataLabelAptitude + (BrLazyStyleCommonAptitude new hovered: [ :s :t | s border: t button hoveredBorderColor ]);
 		action: [ :aButton |
 			aButton phlow spawnTool: 
-				(GtMethodCoderTool compiledMethod: eachValueAssignment subThemeMethod)]).
+				(GtMethodCoderTool compiledMethod: assignmentForCoder subThemeMethod)]).
 	
-	valueSourceCoder := GtPharoSnippetCoder forSource: (aThemeableValue valueAssignmentSourceCodeOf: eachValueAssignment).
-	
-	valueSourceCoderViewModel := valueSourceCoder asCoderViewModel.
-	valueSourceCoderViewModel selfObject: aThemeableValue subThemeModel subTheme.
+	valueSourceCoderViewModel := aTypedThemeProperty
+		createCoderViewModel: assignmentForCoder.
 	
 	valueSourceCoderElement := GtSourceCoderEditorElement new
 		id: editorId;
 		hMatchParent;
 		vFitContent;
 		padding: (BlInsets top: 2 bottom: 2 left: 4 right: 4);
-		"addAptitude: (BrLazyStyleCommonAptitude new
-			default: [ :s :t | s border: (BlBorder paint: t editor borderColor) ];
-			focused: [ :s :t | s border: (BlBorder paint: t editor focusedBorderColor) ]);"
 		textualCoderViewModel: valueSourceCoderViewModel.
 
 	container addChild: valueSourceCoderElement.
@@ -104,17 +103,17 @@ GtBlocThemeEditorElement >> createEditorsForSubTheme: aSubThemeModel [
 
 	container addChild: (BrLabel new
 		aptitude: BrGlamorousMetadataLabelAptitude;
-		text: aSubThemeModel name).
+		text: aSubThemeModel subThemeName).
 
-	container addChildren: (aSubThemeModel themeableValues collect: [ :eachThemeableValue | self createExpanderForThemeableValue: eachThemeableValue ]).
+	container addChildren: (aSubThemeModel themeProperties collect: [ :eachThemeableValue | self createExpanderForProperty: eachThemeableValue valueType ]).
 	
 	^ container
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> createExpandedHeaderForThemeableValue: eachThemeableValue [
+GtBlocThemeEditorElement >> createExpandedHeaderForProperty: aTypedThemeProperty [
 	| header |
-	header := self createProtoHeaderForThemeableValue: eachThemeableValue.
+	header := self createProtoHeaderForProperty: aTypedThemeProperty.
 	header
 		addChild: (BrFrame new
 				hMatchParent;
@@ -124,27 +123,27 @@ GtBlocThemeEditorElement >> createExpandedHeaderForThemeableValue: eachThemeable
 				beSmallSize;
 				aptitude: BrGlamorousMetadataLabelAptitude + (BrLazyStyleCommonAptitude new hovered: [ :s :t | s border: t button hoveredBorderColor ]);
 				vFitContent;
-				label: eachThemeableValue printShortThemeableValue;
-				action: [ :aButton | aButton phlow spawnObject: eachThemeableValue themeableValue ]).
+				label: aTypedThemeProperty printShortThemeableValue;
+				action: [ :aButton | aButton phlow spawnObject: aTypedThemeProperty propertyValue ]).
 	^ header
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> createExpanderExpandedForThemeableValue: eachThemeableValue [
+GtBlocThemeEditorElement >> createExpanderExpandedForProperty: aTypedThemeProperty [
 	| container issuesContainer assignmentsContainer |
 	
 	container := BrVerticalPane new
 		hMatchParent;
 		vFitContent.
 
-	container addChild: (self createExpandedHeaderForThemeableValue: eachThemeableValue).
+	container addChild: (self createExpandedHeaderForProperty: aTypedThemeProperty).
 	
 	issuesContainer := BrVerticalPane new
 		hMatchParent;
 		vFitContent;
 		margin: (BlInsets left: 3).
 
-	eachThemeableValue issues do: [ :eachIssue |
+	aTypedThemeProperty issues do: [ :eachIssue |
 		issuesContainer addChild: (self createIssueSummary: eachIssue) ].
 		
 	container addChild: issuesContainer.
@@ -153,14 +152,14 @@ GtBlocThemeEditorElement >> createExpanderExpandedForThemeableValue: eachThemeab
 		hMatchParent;
 		vFitContent.
 	
-	eachThemeableValue valueAssignments
+	aTypedThemeProperty valueAssignments
 		ifEmpty: [
 			assignmentsContainer addChild: (BrLabel new
 				aptitude: BrGlamorousSummaryLabelAptitude;
 				text: 'Not initialized yet') ].
 	
-	eachThemeableValue valueAssignments do: [ :eachAssignment |
-		assignmentsContainer addChild: (self createEditorForThemeableValue: eachThemeableValue assignment: eachAssignment) ].
+	aTypedThemeProperty valueAssignments do: [ :eachAssignment |
+		assignmentsContainer addChild: (self createEditorForProperty: aTypedThemeProperty assignment: eachAssignment) ].
 
 	container addChild: assignmentsContainer.
 		
@@ -168,10 +167,10 @@ GtBlocThemeEditorElement >> createExpanderExpandedForThemeableValue: eachThemeab
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> createExpanderForThemeableValue: eachThemeableValue [
+GtBlocThemeEditorElement >> createExpanderForProperty: aTypedThemeProperty [
 	| anExpander anExpanderBackground |
 	
-	anExpanderBackground := eachThemeableValue issues
+	anExpanderBackground := aTypedThemeProperty issues
 		ifEmpty: [ self theme default lightBorderColor ]
 		ifNotEmpty: [ :theIssues |
 			(theIssues anySatisfy: [ :eachIssue | eachIssue isSeriousIssue ])
@@ -184,8 +183,8 @@ GtBlocThemeEditorElement >> createExpanderForThemeableValue: eachThemeableValue 
 		margin: (BlInsets top: 3 bottom: 3).
 
 	anExpander
-		header: [ self createCollapsedHeaderForThemeableValue: eachThemeableValue ];
-		content: [ self createExpanderExpandedForThemeableValue: eachThemeableValue ];
+		header: [ self createCollapsedHeaderForProperty: aTypedThemeProperty ];
+		content: [ self createExpanderExpandedForProperty: aTypedThemeProperty ];
 		aptitude: (GtCoderExpanderAptitude new borderPaint: anExpanderBackground).
 
 	^ anExpander
@@ -193,15 +192,34 @@ GtBlocThemeEditorElement >> createExpanderForThemeableValue: eachThemeableValue 
 
 { #category : #'as yet unclassified' }
 GtBlocThemeEditorElement >> createIssueSummary: eachIssue [
-	^ BrButton new
+	| container |
+	
+	container := BrHorizontalPane new
+		vFitContent;
+		hMatchParent.
+	
+	container addChild: (BrButton new
 		aptitude: (BrGlamorousLabelAptitude new foreground: self theme status errorBorderColor);
 		label: eachIssue description;
 		fitContent;
-		action: [ :aButton | aButton phlow spawnObject: eachIssue ]
+		action: [ :aButton | aButton phlow spawnObject: eachIssue ]).
+	
+	eachIssue canFixIt
+		ifTrue: [
+			container addChild: (BrButton new
+				beSmallSize;
+				label: 'Fix it';
+				icon: BrGlamorousVectorIcons repair ;
+				fitContent;
+				margin: (BlInsets left: 5);
+				aptitude: BrGlamorousButtonWithLabelAndIconAptitude;
+				action: [ :aButton | aButton phlow spawnObject: eachIssue fixIt ]) ].
+	
+	^ container
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> createProtoHeaderForThemeableValue: eachThemeableValue [
+GtBlocThemeEditorElement >> createProtoHeaderForProperty: eachProperty [
 	| header |
 	header := BrHorizontalPane new
 			hMatchParent;
@@ -222,9 +240,9 @@ GtBlocThemeEditorElement >> createProtoHeaderForThemeableValue: eachThemeableVal
 		addChild: (BrLabel new
 				aptitude: BrGlamorousLabelAptitude;
 				margin: (BlInsets left: 3);
-				text: eachThemeableValue valueName).
+				text: eachProperty propertyName).
 
-	eachThemeableValue themeableValue isColor
+	eachProperty propertyValue isColor
 		ifTrue: [ header
 				addChild: (BrButton new
 						exact: 12 @ 12;
@@ -233,8 +251,8 @@ GtBlocThemeEditorElement >> createProtoHeaderForThemeableValue: eachThemeableVal
 								left: 4
 								bottom: 0
 								right: 4);
-						background: eachThemeableValue themeableValue;
-						action: [ :aButton | aButton phlow spawnObject: eachThemeableValue themeableValue ]) ].
+						background: eachProperty propertyValue;
+						action: [ :aButton | aButton phlow spawnObject: eachProperty themeableValue ]) ].
 	^ header
 ]
 
