@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtBlocThemeValueNotAssignedIssue >> description [
-	^ 'Value is not assigned' format: { self themeableValue valueName }
+	^ 'Value is not assigned' format: { self themeableValue propertyName }
 ]
 
 { #category : #'as yet unclassified' }

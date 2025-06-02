@@ -1,5 +1,0 @@
-Class {
-	#name : #GtBlocThemeableValueAssignment,
-	#superclass : #GtBlocThemeableAssignment,
-	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
-}

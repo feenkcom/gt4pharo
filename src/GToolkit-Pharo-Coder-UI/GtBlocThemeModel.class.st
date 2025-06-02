@@ -9,6 +9,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
 }
 
+{ #category : #accessing }
+GtBlocThemeModel class >> theme: aBlTheme [
+	^ self new initializeForTheme: aBlTheme 
+]
+
 { #category : #views }
 GtBlocThemeModel >> gtSubThemeModelsFor: aView [
 	<gtView>
