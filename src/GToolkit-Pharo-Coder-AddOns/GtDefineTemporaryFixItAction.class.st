@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDefineTemporaryFixItAction,
 	#superclass : #GtFixItVariableNodeAction,
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #accessing }
@@ -11,20 +11,14 @@ GtDefineTemporaryFixItAction >> description [
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> executeOn: anEditorElement [
-	| ast newSource location declaration |
-
+	| ast newSource statementNode sequenceNode varNode |
 	ast := sourceCoder rbAST.
 	newSource := sourceCoder currentSourceString.
-	ast body rightBar isNil
-		ifTrue: [ location := ast body start - 1.
-			declaration := '| ' , self nodeName , ' |' , String cr , String tab ]
-		ifFalse: [ location := ast body rightBar - 1.
-			declaration := ((newSource at: location) isSeparator
-				ifTrue: [ '' ]
-				ifFalse: [ ' ' ]) , self nodeName , ' ' ].
-
-	newSource := (newSource first: location) , declaration
-		, (newSource allButFirst: location).
+	varNode := ast nodeForOffset: node startPosition.
+	statementNode := varNode statementNode.
+	sequenceNode := statementNode parent.
+	sequenceNode addTemporaryNamed: node value.
+	newSource := ast newSource.
 	sourceCoder currentSourceString: newSource
 ]
 

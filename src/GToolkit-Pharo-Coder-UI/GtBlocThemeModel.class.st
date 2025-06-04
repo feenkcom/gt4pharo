@@ -41,3 +41,8 @@ GtBlocThemeModel >> initializeForTheme: aBlTheme [
 GtBlocThemeModel >> subThemeModels [
 	^ subThemeModels
 ]
+
+{ #category : #'as yet unclassified' }
+GtBlocThemeModel >> theme [
+	^ theme
+]
