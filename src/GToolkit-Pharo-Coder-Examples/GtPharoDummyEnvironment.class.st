@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'dummyPackages'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - generation' }
@@ -32,6 +32,11 @@ GtPharoDummyEnvironment >> anyDummyLeafClass [
 { #category : #'api - packages' }
 GtPharoDummyEnvironment >> anyDummyPackage [
 	^ self dummyPackages anyOne
+]
+
+{ #category : #'api - classes' }
+GtPharoDummyEnvironment >> anyDummyPackageTag [
+	^ self anyDummyPackage dummyPackageTags anyOne
 ]
 
 { #category : #'api - classes' }
@@ -76,13 +81,46 @@ GtPharoDummyEnvironment >> finalize [
 ]
 
 { #category : #accessing }
+GtPharoDummyEnvironment >> gtClassesFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Classes';
+		priority: 20;
+		items: [ self dummyPackages
+				flatCollect: [ :each | each dummyClasses , (each dummyPackageTags flatCollect: #dummyClasses) ] ];
+		itemText: #className
+]
+
+{ #category : #accessing }
+GtPharoDummyEnvironment >> gtMethodsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Methods';
+		priority: 30;
+		items: [ (self dummyPackages flatCollect: #dummyClasses) flatCollect: #dummyMethods ];
+		itemText: [ :aDummyMethod | aDummyMethod className , ' >> #' , aDummyMethod selector ]
+]
+
+{ #category : #accessing }
+GtPharoDummyEnvironment >> gtPackageTagsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Package tags';
+		priority: 15;
+		items: [ self dummyPackages flatCollect: #dummyPackageTags ];
+		itemText: #packageTagName
+]
+
+{ #category : #accessing }
 GtPharoDummyEnvironment >> gtPackagesFor: aView [
 	<gtView>
 
-	^ aView list
+	^ aView tree
 		title: 'Packages';
+		priority: 10;
 		items: [ self dummyPackages ];
-		itemText: #packageName
+		children: #gtPackagesViewChildren;
+		itemText: #gtPackagesViewItemText
 ]
 
 { #category : #initialization }

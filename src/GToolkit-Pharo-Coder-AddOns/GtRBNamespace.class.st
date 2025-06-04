@@ -31,6 +31,21 @@ GtRBNamespace >> allImplementorsOfIncludingTraits: aSelector [
 ]
 
 { #category : #accessing }
+GtRBNamespace >> allMethodsWithPragma: aSymbol [
+	| methods |
+	methods := IdentitySet new.
+	self allMethodsWithPragma: aSymbol do: [ :each | methods add: each ].
+	^ methods
+]
+
+{ #category : #accessing }
+GtRBNamespace >> allMethodsWithPragma: aSymbol do: aBlock [
+	self
+		allReferencesTo: aSymbol
+		do: [ :each | each ast pragmaNamed: aSymbol ifPresent: [ :pragma | aBlock value: each ] ]
+]
+
+{ #category : #accessing }
 GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [
 	| refs |
 	refs := OrderedCollection new.
@@ -140,4 +155,21 @@ GtRBNamespace >> privateReferencesTo: aSelector [
 										or: [ cls newMethods includesKey: each selector ] ] ] ])
 				ifFalse: [ refs add: (cls methodFor: each selector) ] ].
 	^ refs
+]
+
+{ #category : #accessing }
+GtRBNamespace >> selectorsWithKeyword: aString [
+	| selectors |
+	selectors := Set
+			withAll: ((GtPharoIndex current asyncSelectorsForWord: aString)
+					select: [ :each | each keywords includes: aString ]) toArray wait.
+	changedClasses
+		do: [ :each | 
+			each
+				do: [ :cls | 
+					cls newMethods
+						do: [ :method | 
+							(method selector keywords includes: aString)
+								ifTrue: [ selectors add: method selector ] ] ] ].
+	^ selectors
 ]

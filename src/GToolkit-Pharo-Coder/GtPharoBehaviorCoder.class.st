@@ -215,6 +215,17 @@ GtPharoBehaviorCoder >> withSelectedMethod: aMethod [
 	self announce: (GtClassCoderMethodNavigationAnnouncement new method: aMethod)
 ]
 
+{ #category : #'api - navigation' }
+GtPharoBehaviorCoder >> withSelectedMethods: aCollectionOfMethods [
+	self
+		assert: [ aCollectionOfMethods
+				allSatisfy: [ :eachMethod | class instanceSide = eachMethod methodClass instanceSide ] ]
+		description: [ 'Can not select a method from a different class' ].
+
+	self
+		announce: (GtClassCoderMethodsNavigationAnnouncement new methods: aCollectionOfMethods)
+]
+
 { #category : #accessing }
 GtPharoBehaviorCoder >> withSlot: aSlot source: aSource [ 
 	self announce: (GtClassCoderSlotNavigationAnnouncement new 
