@@ -38,24 +38,28 @@ GtBlocThemeableProperty class >> generateValueComputation: sourceCode [
 { #category : #'as yet unclassified' }
 GtBlocThemeableProperty >> changeConstantNamed: aConstantName to: anObject [
 	self subThemeModel subTheme
-		constantAt: aConstantName put: anObject.
-
-	self subThemeModel subTheme theme themeModified
+		constantAt: aConstantName put: anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeableProperty >> changeThemeableValueTo: anObject [
+GtBlocThemeableProperty >> compileConstantAssignment: aCoderAssignment to: anAST [
+	aCoderAssignment valueAst: anAST.
+	self subThemeModel generateThemeMethods changes execute
 ]
 
 { #category : #'as yet unclassified' }
-GtBlocThemeableProperty >> createCoderViewModel: aCoderModel coderAssignment: aCoderAssignment [
+GtBlocThemeableProperty >> createCoderViewModel: aCoderModel coderAssignment: aForCoderAssignment [
 	| coderViewModel |
 	
 	coderViewModel := super
 		createCoderViewModel: aCoderModel
-		coderAssignment: aCoderAssignment.
+		coderAssignment: aForCoderAssignment.
 	
 	self issues ifNotEmpty: [ ^ coderViewModel ].
+	
+	self
+		assert: [ aForCoderAssignment isConstantAssignment ]
+		description: [ 'Must be a constant assignment' ].	
 	
 	aCoderModel 
 		when: GtCoderEvaluationAnnouncement
@@ -63,8 +67,31 @@ GtBlocThemeableProperty >> createCoderViewModel: aCoderModel coderAssignment: aC
 			anAnnouncement evaluationResult isSuccess
 				ifTrue: [				
 					self
-						changeConstantNamed: aCoderAssignment propertyName
-						to: anAnnouncement evaluationResult value  ] ].
+						changeConstantNamed: aForCoderAssignment propertyName
+						to: anAnnouncement evaluationResult value.
+					self subThemeModel subTheme theme themeModified  ] ].
+						
+	coderViewModel addShortcut: (GtSourceCoderSaveShortcut new).
+	coderViewModel announcer
+		when: GtSourceCoderViewModelSaveRequested
+		do: [ :anAnnouncement |
+			anAnnouncement consumed: true.
+			
+			 coderViewModel
+				handleCoderEvaluationUnhandledErrorDuring: [ 
+					coderViewModel coder
+						doItInContext: (coderViewModel evaluationContext
+							all;
+							requesterObject: coderViewModel)
+						thenDo: [ :anEvaluationResult |
+							self
+								compileConstantAssignment: aForCoderAssignment originalAssignment
+								to: (RBParser parseExpression: coderViewModel sourceText asString).
+							self
+								changeConstantNamed: aForCoderAssignment propertyName
+								to: anEvaluationResult value.
+							self subThemeModel subTheme theme themeModified ] ].
+			 ].
 	
 	^ coderViewModel
 ]
