@@ -23,6 +23,19 @@ GtBlocThemeableProperty class >> computePropertyAccessApiFromSourceBlock: aBlock
 		with: replacement
 ]
 
+{ #category : #'as yet unclassified' }
+GtBlocThemeableProperty class >> computePropertyNameSourceBlock: aBlockClosure [
+	| pattern match |
+	
+	pattern := RBPatternParser parseExpression: '[ :`arg | ``@expr `name ]'.
+	match := Dictionary new.
+	
+	(pattern match: aBlockClosure sourceNode inContext: match)
+		ifFalse: [ self error: 'Failed to parse' ].
+
+	^ match at: '`name'
+]
+
 { #category : #generation }
 GtBlocThemeableProperty class >> generateSourceComputationFor: aThemeProperty [
 	^ '[ :aTheme | aTheme {1} {2} ]' format: {
