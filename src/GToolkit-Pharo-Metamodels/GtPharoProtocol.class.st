@@ -45,10 +45,13 @@ GtPharoProtocol >> = anObject [
 
 { #category : #accessing }
 GtPharoProtocol >> allMethods [
-	| theClass |
-	theClass := self protocolClass.
-	^ protocol methodSelectors collect: [ :eachSelector |
-		theClass >> eachSelector ]
+	| class selectors methods |
+	class := self protocolClass.
+	selectors := protocol methodSelectors.
+	methods := OrderedCollection new: selectors size.
+	selectors
+		do: [ :each | class compiledMethodAt: each ifPresent: [ :m | methods add: m ] ].
+	^ methods
 ]
 
 { #category : #testing }
