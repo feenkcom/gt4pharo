@@ -11,12 +11,18 @@ GtDefineTemporaryFixItAction >> description [
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> executeOn: anEditorElement [
-	| ast newSource statementNode sequenceNode varNode |
+	| ast newSource sequenceNode varNode nodeReferences bestNode |
 	ast := sourceCoder rbAST.
 	newSource := sourceCoder currentSourceString.
 	varNode := ast nodeForOffset: node startPosition.
-	statementNode := varNode statementNode.
-	sequenceNode := statementNode parent.
+	nodeReferences := (ast allChildren select: [ :each | each = varNode ])
+			sort: [ :a :b | a start < b start ].
+	bestNode := ast
+			bestNodeFor: (nodeReferences first start to: nodeReferences last stop).
+	sequenceNode := bestNode isSequence
+			ifTrue: [ bestNode ]
+			ifFalse: [ bestNode statementNode parent ].
+
 	sequenceNode addTemporaryNamed: node value.
 	newSource := ast newSource.
 	sourceCoder currentSourceString: newSource
