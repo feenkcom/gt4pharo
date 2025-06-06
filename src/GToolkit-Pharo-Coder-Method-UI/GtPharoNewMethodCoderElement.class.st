@@ -49,7 +49,7 @@ GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 	aNewMethodCoder := (GtPharoMethodCoder
 		forNewMethod: (self behaviorIfNone: [ Object ]))
 		currentSourceText: newMethodText;
-		protocol: AbstractProtocol unclassified;
+		protocol: Protocol unclassified;
 		yourself.
 	aNewMethodCoderViewModel := aNewMethodCoder asCoderViewModel
 		selfObjectHolder: self selfObjectHolder;
