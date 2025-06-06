@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDefineTemporaryFixItAction,
 	#superclass : #GtFixItVariableNodeAction,
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #accessing }
@@ -11,20 +11,20 @@ GtDefineTemporaryFixItAction >> description [
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> executeOn: anEditorElement [
-	| ast newSource location declaration |
-
+	| ast newSource sequenceNode varNode nodeReferences bestNode |
 	ast := sourceCoder rbAST.
 	newSource := sourceCoder currentSourceString.
-	ast body rightBar isNil
-		ifTrue: [ location := ast body start - 1.
-			declaration := '| ' , self nodeName , ' |' , String cr , String tab ]
-		ifFalse: [ location := ast body rightBar - 1.
-			declaration := ((newSource at: location) isSeparator
-				ifTrue: [ '' ]
-				ifFalse: [ ' ' ]) , self nodeName , ' ' ].
+	varNode := ast nodeForOffset: node startPosition.
+	nodeReferences := (ast allChildren select: [ :each | each = varNode ])
+			sort: [ :a :b | a start < b start ].
+	bestNode := ast
+			bestNodeFor: (nodeReferences first start to: nodeReferences last stop).
+	sequenceNode := bestNode isSequence
+			ifTrue: [ bestNode ]
+			ifFalse: [ bestNode statementNode parent ].
 
-	newSource := (newSource first: location) , declaration
-		, (newSource allButFirst: location).
+	sequenceNode addTemporaryNamed: node value.
+	newSource := ast newSource.
 	sourceCoder currentSourceString: newSource
 ]
 

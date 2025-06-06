@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'node'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #private }
@@ -16,6 +16,12 @@ GtMethodInlineRefactoringController >> changedSourceForCurrentMethod: aRefactory
 						and: [ sourceCoderViewModel behavior = each changeClass ] ])
 				ifTrue: [ ^ each source ] ].
 	^ nil
+]
+
+{ #category : #'as yet unclassified' }
+GtMethodInlineRefactoringController >> executeIn: anElement [
+	[ super executeIn: anElement ]
+		ensure: [ anElement enqueueTask: [ anElement requestFocus ] asBlTask ]
 ]
 
 { #category : #accessing }
@@ -34,7 +40,9 @@ GtMethodInlineRefactoringController >> node: anObject [
 GtMethodInlineRefactoringController >> performMethodRefactoring: aRefactoring [
 	[ aRefactoring primitiveExecute ]
 		on: RBRefactoringError
-		do: [ :ex | ^ false ].
+		do: [ :ex | 
+			self inform: self refactoringName , ': ' , ex messageText.
+			^ false ].
 	(self changedSourceForCurrentMethod: aRefactoring model changes)
 		ifNotNil: [ :source | 
 			self setText: source.

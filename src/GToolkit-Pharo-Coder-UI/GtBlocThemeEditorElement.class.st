@@ -24,28 +24,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Utilities'
 }
 
-{ #category : #accessing }
-GtBlocThemeEditorElement >> colors [
-	^ colors
-]
-
-{ #category : #accessing }
-GtBlocThemeEditorElement >> colors: aBlThemeColors [
-	colors := aBlThemeColors.
-	colorsClass := colors class.
-	colorNames := (colorsClass allInstVarNames reject: [ :each | each = #theme ]).
-	
-	initializationAst := GtPharoParser parse: (colorsClass >> #initialize) sourceCode.
-	initializationAssignments := ((Array streamContents: [ :s | initializationAst allNodesDo: [ :each | each isAssignment ifTrue: [ s nextPut: each ] ] ]) collect: [ :each | each variable variableName -> each value ]) asDictionary.
-	
-	editorsPane addChildren: (colorNames collect: [ :eachName | self editorForColorNamed: eachName ])
-]
-
-{ #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> compileChanges [
-	colorsClass compile: self generateInitializeSource
-]
-
 { #category : #'as yet unclassified' }
 GtBlocThemeEditorElement >> createCollapsedHeaderForProperty: aTypedThemeProperty [
 	| header |
@@ -57,7 +35,7 @@ GtBlocThemeEditorElement >> createCollapsedHeaderForProperty: aTypedThemePropert
 
 { #category : #'as yet unclassified' }
 GtBlocThemeEditorElement >> createEditorForProperty: aTypedThemeProperty assignment: eachValueAssignment [
-	| assignmentForCoder container valueSourceCoderElement  valueSourceCoderViewModel  |
+	| assignmentForCoder container  valueSourceCoderViewModel modificationIndicator valueSourceCoderElement editorContainer |
 	
 	assignmentForCoder := (aTypedThemeProperty transformAssignmentForCoder: eachValueAssignment)
 		asCoderAssignmentFor: aTypedThemeProperty.
@@ -76,8 +54,20 @@ GtBlocThemeEditorElement >> createEditorForProperty: aTypedThemeProperty assignm
 			aButton phlow spawnTool: 
 				(GtMethodCoderTool compiledMethod: assignmentForCoder subThemeMethod)]).
 	
+	editorContainer := BrHorizontalPane new
+		hMatchParent;
+		vFitContent.
+		
+	modificationIndicator := self newModificationIndicator.
+	modificationIndicator visibility: BlVisibility gone.
+	editorContainer addChild: modificationIndicator.
+	
 	valueSourceCoderViewModel := aTypedThemeProperty
 		createCoderViewModel: assignmentForCoder.
+		
+	valueSourceCoderViewModel
+		when: GtTextualCoderViewModelTextChanged
+		do: [ modificationIndicator asyncPromise promise: valueSourceCoderViewModel isTextModifiedPromise  ].
 	
 	valueSourceCoderElement := GtSourceCoderEditorElement new
 		id: editorId;
@@ -86,7 +76,8 @@ GtBlocThemeEditorElement >> createEditorForProperty: aTypedThemeProperty assignm
 		padding: (BlInsets top: 2 bottom: 2 left: 4 right: 4);
 		textualCoderViewModel: valueSourceCoderViewModel.
 
-	container addChild: valueSourceCoderElement.
+	editorContainer addChild: valueSourceCoderElement.
+	container addChild: editorContainer.
 	
 	^ container
 ]
@@ -245,6 +236,7 @@ GtBlocThemeEditorElement >> createProtoHeaderForProperty: eachProperty [
 	eachProperty propertyValue isColor
 		ifTrue: [ header
 				addChild: (BrButton new
+						theme: themeModel theme;
 						exact: 12 @ 12;
 						margin: (BlInsets
 								top: 4
@@ -261,65 +253,6 @@ GtBlocThemeEditorElement >> editTheme: aBlTheme [
 	themeModel := GtBlocThemeModel new initializeForTheme: aBlTheme.
 	
 	editorsPane addChildren: (themeModel subThemeModels collect: [ :eachSubThemeModel | self createEditorsForSubTheme: eachSubThemeModel ])
-]
-
-{ #category : #accessing }
-GtBlocThemeEditorElement >> editorForColorNamed: aColorName [
-	| container colorName colorSource colorSourceCoder colorSourceCoderElement |
-	
-	colorName := BrLabel new
-		id: nameId;
-		aptitude: BrGlamorousLabelAptitude;
-		hMatchParent;
-		text: aColorName.
-
-	colorSource := initializationAssignments
-		at: aColorName
-		ifPresent: [ :anAssignment | anAssignment source ]
-		ifAbsent: [ '' ].
-		
-	colorSourceCoder := GtPharoSnippetCoder forSource: colorSource.
-	colorSourceCoder
-		when: GtCoderEvaluationAnnouncement
-		do: [ :anAnnouncement |
-			anAnnouncement evaluationResult isSuccess
-				ifTrue: [
-					self
-						onColor: aColorName
-						changedTo: anAnnouncement evaluationResult value  ] ].
-	
-	colorSourceCoderElement := GtSourceCoderEditorElement new
-		id: editorId;
-		textualCoderViewModel: colorSourceCoder asCoderViewModel.
-	colorSourceCoderElement
-		hMatchParent;
-		vFitContent.
-
-	container := BrHorizontalPane new
-		hMatchParent;
-		vFitContent.
-	
-	container addChild: colorName.
-	container addChild: colorSourceCoderElement.
-	
-	^ container
-]
-
-{ #category : #'as yet unclassified' }
-GtBlocThemeEditorElement >> generateInitializeSource [
-	^ String streamContents: [ :s | 
-		s
-			nextPutAll: 'initialize'; cr;
-			tab; nextPutAll: 'super initialize.'; cr; cr.
-			
-		editorsPane children do: [ :each |
-			| eachName eachSource | 
-			eachName := (each childWithId: nameId) text asString.
-			eachSource := (each childWithId: editorId) textualCoderViewModel sourceText asString.
-			
-			eachSource ifEmpty: [ eachSource := 'nil' ].
-			
-			s tab; nextPutAll: eachName; nextPutAll: ' := '; nextPutAll: eachSource; nextPutAll: '.'; cr ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -345,8 +278,21 @@ GtBlocThemeEditorElement >> initialize [
 		content: editorsPane)
 ]
 
-{ #category : #accessing }
-GtBlocThemeEditorElement >> onColor: aColorName changedTo: aColor [
-	colors instVarNamed: aColorName put: aColor.
-	colors theme themeModified
+{ #category : #'as yet unclassified' }
+GtBlocThemeEditorElement >> newModificationIndicator [
+	^ BlElement new
+		constraintsDo: [ :c |
+			c ignoreByLayout.
+			c ignored horizontal alignLeft.
+			c horizontal exact: 3.
+			c vertical matchParent ];
+		preventMeAndChildrenMouseEvents;
+		background: self theme status changesBackgroundColor;
+		id: GtTextualCoderModificationIndicatorId;
+		withAsyncPromiseDo: [ :anElementPromise |
+			anElementPromise
+				whenSuccess: [ :anIndicator :isModified |
+					anIndicator visibility: (isModified
+						ifTrue: [ BlVisibility visible ]
+						ifFalse: [ BlVisibility gone ]) ] ]
 ]

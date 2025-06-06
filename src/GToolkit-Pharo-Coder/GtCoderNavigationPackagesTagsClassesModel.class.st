@@ -910,12 +910,16 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClasses: aCollectionOfClasses
 	"Do nothing if a class is already selected"
 
 	| aClass |
-	aClass := aCollectionOfClasses first.
+	aClass := (aCollectionOfClasses includes: selectedClass)
+			ifTrue: [ selectedClass ]
+			ifFalse: [ aCollectionOfClasses first ].
 	selectedClasses := aCollectionOfClasses.
-	
+
 	(selectedClass = aClass
-		and: [ coder isForClass and: [ coder theClass = aClass ] ]) ifTrue: [ ^ self ].
-		
+			and: [ coder isForClass 
+			and: [ coder theClass = aClass ] ]) 
+				ifTrue: [ ^ self ].
+	
 	"we should set a new coder as soon as possible, this is because selection and notification methods rely on a specific coder class. but we shouldn't notify that the coder has changed just yet"
 	self setCoder: (aBlockThatCreatesCoder cull: aClass).
 	(self privateJustSelectClass: aClass outOfClasses: aCollectionOfClasses)
@@ -924,8 +928,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectClasses: aCollectionOfClasses
 			self notifyProtocolsToShowChanged.
 			self privateSelectDefaultProtocolOfClass: aClass ].
 			
-	"we should notify that the coder changed after we select packages / tags and protocols, otherwise parts of the coder that update when coder is changed will not have
-	access to selected class / package"
+	"we should notify that the coder changed after we select packages / tags and protocols, otherwise parts of the coder that update when coder is changed will not have access to selected class / package"
 	self notifyCoderChanged
 ]
 
