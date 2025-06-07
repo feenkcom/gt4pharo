@@ -2556,7 +2556,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Make sure the method still mofied';
+				label: 'Make sure the method still modified';
 				satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
 				onModel ].
 
