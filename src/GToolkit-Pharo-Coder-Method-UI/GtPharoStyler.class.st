@@ -179,7 +179,7 @@ GtPharoStyler >> visitBlock: aBlock [
 GtPharoStyler >> visitBooleanLiteral: aBooleanLiteral [
 	super visitBooleanLiteral: aBooleanLiteral.
 	self
-		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoBooleanLiteralForeground }
 		from: aBooleanLiteral value startPosition
 		to: aBooleanLiteral value stopPosition
 ]
@@ -188,7 +188,7 @@ GtPharoStyler >> visitBooleanLiteral: aBooleanLiteral [
 GtPharoStyler >> visitCharacterLiteral: aCharacterLiteral [
 	super visitCharacterLiteral: aCharacterLiteral.
 	self
-		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoCharacterLiteralForeground }
 		from: aCharacterLiteral value startPosition
 		to: aCharacterLiteral value stopPosition
 ]
@@ -196,7 +196,7 @@ GtPharoStyler >> visitCharacterLiteral: aCharacterLiteral [
 { #category : #visiting }
 GtPharoStyler >> visitCommentFrom: aCommentStart to: aCommentEnd [
 	self
-		attributes: { BlTextForegroundAttribute color: Color gray darker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoCommentForeground }
 		from: aCommentStart
 		to: aCommentEnd
 ]
@@ -232,7 +232,7 @@ GtPharoStyler >> visitError: anError [
 { #category : #visiting }
 GtPharoStyler >> visitErrorToken: anErrorToken [
 	self
-		attributes: { BlTextForegroundAttribute color: Color red }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoErrorTokenForeground }
 		from: anErrorToken startPosition
 		to: anErrorToken stopPosition
 ]
@@ -277,7 +277,7 @@ GtPharoStyler >> visitNamedVariable: aNamedVariable [
 GtPharoStyler >> visitNilLiteral: aNilLiteral [
 	super visitNilLiteral: aNilLiteral.
 	self
-		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoNilLiteralForeground }
 		from: aNilLiteral value startPosition
 		to: aNilLiteral value stopPosition
 ]
@@ -286,7 +286,7 @@ GtPharoStyler >> visitNilLiteral: aNilLiteral [
 GtPharoStyler >> visitNumberLiteral: aNumberLiteral [
 	super visitNumberLiteral: aNumberLiteral.
 	self
-		attributes: { BlTextForegroundAttribute color: Color red muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoNumberLiteralForeground }
 		from: aNumberLiteral value startPosition
 		to: aNumberLiteral value stopPosition
 ]
@@ -311,7 +311,7 @@ GtPharoStyler >> visitPragma: aPragma [
 { #category : #visiting }
 GtPharoStyler >> visitPragmaSelectorPart: aSmaCCToken [
 	self
-		attributes: { BlTextForegroundAttribute color: Color green muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoPragmaForeground }
 		from: aSmaCCToken startPosition
 		to: aSmaCCToken stopPosition
 ]
@@ -326,7 +326,7 @@ GtPharoStyler >> visitReturn: aReturn [
 { #category : #visiting }
 GtPharoStyler >> visitReturnUpArrow: aSmaCCToken [
 	self
-		attributes: { BlTextForegroundAttribute color: Color cyan muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoReturnArrowForeground }
 		from: aSmaCCToken startPosition
 		to: aSmaCCToken stopPosition
 ]
@@ -363,7 +363,7 @@ GtPharoStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 GtPharoStyler >> visitStringLiteral: aStringLiteral [
 	super visitStringLiteral: aStringLiteral.
 	self
-		attributes: { BlTextForegroundAttribute color: Color magenta muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoStringLiteralForeground }
 		from: aStringLiteral value startPosition
 		to: aStringLiteral value stopPosition
 ]
@@ -381,7 +381,7 @@ GtPharoStyler >> visitSuperVariable: aSuperVariable [
 GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 	super visitSymbolLiteral: aSymbolLiteral.
 	self
-		attributes: { BlTextForegroundAttribute color: Color magenta muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoSymbolLiteralForeground }
 		from: aSymbolLiteral value startPosition
 		to: aSymbolLiteral value stopPosition
 ]
@@ -399,7 +399,7 @@ GtPharoStyler >> visitThisContextVariable: aThisContextVariable [
 GtPharoStyler >> visitUndeclaredVariable: aVariableNode [
 	"We do not color undeclared variables in red because we already have critics"
 	self
-		attributes: { BlTextForegroundAttribute color: Color blue muchDarker }
+		attributes: { BlTextForegroundAttribute color: self theme editor pharoUndeclaredVariableForeground }
 		from: aVariableNode name startPosition
 		to: aVariableNode name stopPosition
 ]
