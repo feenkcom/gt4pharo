@@ -360,7 +360,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 				assertStep: [ :s | 
 					s
 						label: 'Assert Comment Attributes';
-						anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
+						anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: BlTheme default editor pharoCommentForeground) ];
 						id: GtSourceCoderEditorId;
 						onBrTextEditor;
 						onBrTextEditorText;
