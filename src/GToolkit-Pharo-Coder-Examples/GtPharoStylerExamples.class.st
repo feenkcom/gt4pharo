@@ -24,7 +24,7 @@ Object new'.
 	
 	aRedIntervals := OrderedCollection new.
 	aSourceText
-		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextForegroundAttribute) and: [ eachAttribute paint = Color red ] ]
+		findAttributesSuchThat: [ :eachAttribute | (eachAttribute isKindOf: BlTextForegroundAttribute) and: [ eachAttribute paint = BlTheme default editor pharoErrorTokenForeground ] ]
 		indicesDo: [ :aStartPosition :anEndPosition | aRedIntervals add: (aStartPosition to: anEndPosition) ].	
 
 	self assert: aRedIntervals first equals: (38 to: 43).

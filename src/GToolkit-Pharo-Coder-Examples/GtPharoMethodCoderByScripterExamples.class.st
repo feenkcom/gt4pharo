@@ -360,7 +360,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_ExpandedFromUI_CodeS
 				assertStep: [ :s | 
 					s
 						label: 'Assert Comment Attributes';
-						anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: Color gray darker) ];
+						anySatisfy: [ :aTextAttribute | aTextAttribute = (BlTextForegroundAttribute new paint: BlTheme default editor pharoCommentForeground) ];
 						id: GtSourceCoderEditorId;
 						onBrTextEditor;
 						onBrTextEditorText;
@@ -2556,7 +2556,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Make sure the method still mofied';
+				label: 'Make sure the method still modified';
 				satisfies: [ :aCoderViewModel | aCoderViewModel coderModel isModified ];
 				onModel ].
 
