@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Metamodels-Meta'
 }
 
+{ #category : #accessing }
+GtPharoCoderBehavior class >> classSideNamed: aString [
+	^ GtPharoCoderNamedClassBehavior new behaviorName: aString
+]
+
 { #category : #'instance creation' }
 GtPharoCoderBehavior class >> explicit: aBehavior [
 	^ GtPharoCoderExplicitBehavior new behavior: aBehavior
@@ -22,6 +27,10 @@ GtPharoCoderBehavior class >> from: subclass to: implementingClass [
 
 { #category : #'instance creation' }
 GtPharoCoderBehavior class >> named: aBehaviorName [
+	"delegate to class side if needed"
+	(aBehaviorName endsWith: ' class')
+		ifTrue: [ ^ self classSideNamed: (aBehaviorName removeSuffix: ' class') ].
+
 	^ GtPharoCoderNamedBehavior new behaviorName: aBehaviorName
 ]
 
