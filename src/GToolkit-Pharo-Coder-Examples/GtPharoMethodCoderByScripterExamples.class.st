@@ -3693,7 +3693,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineMessageSend_04_click_inline_mes
 	aScripter
 		clickStep: [ :s | 
 			s
-				label: 'Click inline temp';
+				label: 'Click inline message';
 				onSpaceRoot;
 				id: #'context-menu--inline-message' ].
 
@@ -6313,6 +6313,188 @@ GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 	GtPharoDummyOneObject varA: 144
 ]
 
+{ #category : #'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentExecution [
+	<gtExample>
+	| scripter found count change changes |
+	scripter := self startInlineMessageFromComponent.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	count := 0.
+	found := false.
+
+	[ found or: [ count > 20 ] ]
+		whileFalse: [ scripter
+				doStep: [ :s | 
+					s
+						onSpaceRoot;
+						// #classList;
+						block: [ :list | found := list selectedItems first = OrderedCollection ] ].
+			found ifFalse: [ (scripter keyPress: BlKeyboardKey arrowDown) play ].
+			count := count + 1 ].
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open refactoring';
+				// #previewCheckButton ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand preview';
+				onSpaceRoot;
+				// GtChangesElement;
+				// #triangle ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	change := changes gtAllChanges
+			detect: [ :each | 
+				(each isKindOf: RBAddMethodChange)
+					and: [ each changeClassName = #OrderedCollection ] ].
+
+	^ scripter
+]
+
+{ #category : #'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentInteraction [
+	<gtExample>
+	| scripter selectionIndex |
+	scripter := self startInlineMessageFromComponent.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// #classList ].
+
+	(scripter keyPress: BlKeyboardKey escape) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				onSpaceRoot;
+				// #classList ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// #classList ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #classList;
+				block: [ :list | selectionIndex := list selectedIndices first ] ].
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	selectionIndex := selectionIndex + 1.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				onSpaceRoot;
+				// #classList ].
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check initial selection';
+				onSpaceRoot;
+				// #classList;
+				do: [ :list | self assert: list selectedIndices first equals: selectionIndex ] ].
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check initial selection';
+				onSpaceRoot;
+				// #classList;
+				do: [ :list | self assert: list selectedIndices first equals: selectionIndex + 1 ] ].
+
+	(scripter keyPress: BlKeyboardKey escape) play.
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check selection did not change';
+				onSpaceRoot;
+				// #classList;
+				do: [ :list | self assert: list selectedIndices first equals: selectionIndex ] ].
+
+	(scripter keyPress: BlKeyboardKey escape) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				onSpaceRoot;
+				// #classList ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+	(scripter keyPress: BlKeyboardKey escape) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				onSpaceRoot;
+				// #classPicker ].
+
+	^ scripter
+]
+
 { #category : #'examples - scrolling' }
 GtPharoMethodCoderByScripterExamples >> insertedText [
 	<gtExample>
@@ -8034,6 +8216,52 @@ GtPharoMethodCoderByScripterExamples >> selectStatementsWithError [
 				id: GtSourceCoderEditorId ].
 
 	^ aScripter
+]
+
+{ #category : #'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> startInlineMessageFromComponent [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forNewMethod: self class ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: 'addFirst: anObject to: aCollection
+	^ aCollection addFirst: anObject' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the message node';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 51 to: 52;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover inline message send';
+				onSpaceRoot;
+				id: #'context-menu--inline-message' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inline message';
+				onSpaceRoot;
+				id: #'context-menu--inline-message' ].
+
+	^ scripter
 ]
 
 { #category : #'examples - statement selection/motion' }

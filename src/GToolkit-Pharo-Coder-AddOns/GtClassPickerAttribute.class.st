@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'refactoringController',
 		'classes',
-		'selected'
+		'selected',
+		'focusOnFirstShow'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -20,8 +21,9 @@ GtClassPickerAttribute >> createDropDown [
 	button := self createDropDownButton.
 	dropDownLook := BrGlamorousWithExplicitDropdownAptitude
 			handle: [ self createDropDownButton ]
-			content: [ | list |
+			content: [ | list selection |
 				list := BrSimpleList new.
+				list id: #classList.
 				list fitContent.
 				list
 					stencil: [ :each | 
@@ -32,6 +34,7 @@ GtClassPickerAttribute >> createDropDown [
 							aptitude: (BrStyleCommonAptitude new
 									default: [ :s | s background: Color transparent ];
 									hovered: [ :s | s background: button theme button defaultBorderColor ];
+									selected: [ :s | s background: BrGlamorousColors selectedListItemColor ];
 									yourself);
 							when: BlClickEvent
 								do: [ :anEvent | 
@@ -45,12 +48,43 @@ GtClassPickerAttribute >> createDropDown [
 									yourself);
 							yourself ].
 				list items: classes.
-				list asScrollableElement ].
+				selection := (classes indexOf: refactoringController implementor) max: 1.
+				list selectOne: selection.
+				list
+					addShortcut: (BlShortcutWithAction new
+							combination: BlKeyCombination return;
+							action: [ :anEvent :aShortcut | 
+								list selectedItems
+									ifNotEmpty: [ :selections | 
+										| cls |
+										cls := selections anyOne.
+										anEvent consumed: true.
+										button label: cls.
+										anEvent currentTarget fireEvent: BrDropdownHideWish new.
+										refactoringController selectClass: cls  ] ]).
+				list asScrollableElement
+					when: BrPopoverGainFocusWish
+						do: [ :anEvent | 
+							anEvent consumed: true.
+							list requestFocus ];
+					yourself ].
+	dropDownLook withGainFocusOnShow.
 	button addAptitude: dropDownLook.
 	button
 		addAptitude: (BrStyleCommonAptitude new
 				default: [ :s | s background: Color transparent ];
 				hovered: [ :s | s background: button theme status neutralBackgroundColor darker ]).
+	button
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination escape;
+				action: [ :anEvent :aShortcut | refactoringController cancelRefactoring ]);
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination return;
+				action: [ :anEvent :aShortcut | dropDownLook show ]);
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination arrowDown;
+				action: [ :anEvent :aShortcut | dropDownLook show ]).
+	button id: #classPicker.
 	^ button
 ]
 
@@ -71,22 +105,52 @@ GtClassPickerAttribute >> createDropDownButton [
 
 { #category : #accessing }
 GtClassPickerAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	| element |
+	| element handlers |
 	element := self createDropDown.
-	^ element
+	element
 		addAptitude: (BrStyleCommonAptitude new
 				default: [ :aStyle | 
 					aStyle geometry: (BlRoundedRectangleGeometry cornerRadius: 4).
 					aStyle background: element theme status neutralBackgroundColor.
 					aStyle border: BlBorder empty ];
-				hovered: [ :aStyle | aStyle background: element theme status neutralBackgroundColor darker ]);
-		yourself
+				hovered: [ :aStyle | aStyle background: element theme status neutralBackgroundColor darker ]).
+	focusOnFirstShow
+		ifTrue: [ element beFocusable.
+			element
+				enqueueTask: [ focusOnFirstShow := false.
+					element requestFocus ] asBlTask ].
+	handlers := {BrTextEditorDeletedEvent.
+			BrTextEditorInsertedEvent}
+			collect: [ :each | BlEventHandler on: each do: [ :event | refactoringController cancelRefactoring ] ].
+	element
+		when: BlElementAddedToSceneGraphEvent
+			do: [ :anEvent | handlers do: [ :each | anEditorElement editor addEventHandler: each ] ];
+		when: BlElementRemovedFromSceneGraphEvent
+			do: [ :anEvent | handlers do: [ :each | anEditorElement editor removeEventHandler: each ] ].
+	^ element
+]
+
+{ #category : #accessing }
+GtClassPickerAttribute >> focusOnFirstShow [
+	^ focusOnFirstShow
+]
+
+{ #category : #accessing }
+GtClassPickerAttribute >> focusOnFirstShow: aBoolean [
+	focusOnFirstShow := aBoolean
 ]
 
 { #category : #accessing }
 GtClassPickerAttribute >> initialize [
 	super initialize.
-	self beAppend
+	self beNotOverwritableByStyler.
+	self beAppend.
+	focusOnFirstShow := true
+]
+
+{ #category : #'as yet unclassified' }
+GtClassPickerAttribute >> isFocusable [
+	^ true
 ]
 
 { #category : #initialization }

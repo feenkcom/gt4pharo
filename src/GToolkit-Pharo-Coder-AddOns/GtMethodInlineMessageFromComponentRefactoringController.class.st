@@ -125,6 +125,7 @@ GtMethodInlineMessageFromComponentRefactoringController >> removeReceiverTypeAtt
 
 { #category : #accessing }
 GtMethodInlineMessageFromComponentRefactoringController >> safelyExecute [
+	self preventSave.
 	self installAttributes
 ]
 
