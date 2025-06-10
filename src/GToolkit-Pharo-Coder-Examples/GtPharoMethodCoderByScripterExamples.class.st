@@ -2172,6 +2172,52 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 ]
 
 { #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixFromUndeclaredVariable [
+	<gtExample>
+	| scripter source |
+	source := 'foo 
+	^arry'.
+
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forClass: OrderedCollection source: source ].
+
+	scripter shortcut
+		combination: BlKeyCombination primaryS;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s exists
+				onSpaceRoot;
+				// #'error-fix-it' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #'error-fix-it';
+				// BrLabel;
+				@ [ :each | 'Use array instead of arry' = each text asString ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				value: [ :each | each text asString ]
+					equals: (source copyReplaceAll: 'arry' with: 'array');
+				id: GtSourceCoderEditorId ].
+
+	^ scripter
+]
+
+{ #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClassInInspectorPlayground_click_define_class [
 	<gtExample>
 	| aScripter |

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'newName'
 	],
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #accessing }
@@ -18,7 +18,8 @@ GtRenameVariableFixItAction >> executeOn: anEditorElement [
 	newSource := sourceCoder currentSourceString.
 	newSource := (newSource first: self startPosition - 1) , newName
 		, (newSource allButFirst: self stopPosition).
-	sourceCoder currentSourceString: newSource
+	sourceCoder currentSourceString: newSource.
+	anEditorElement requestFocus
 ]
 
 { #category : #accessing }
