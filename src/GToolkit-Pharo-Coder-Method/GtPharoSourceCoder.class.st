@@ -300,6 +300,12 @@ GtPharoSourceCoder >> protocol [
 	^ #accessing
 ]
 
+{ #category : #accessing }
+GtPharoSourceCoder >> protocolName [
+	"Exists as in Pharo 12 CompiledMethod>>protocol returns a protocol Object"
+	^ self protocol
+]
+
 { #category : #'private - ast rb' }
 GtPharoSourceCoder >> rbAST [
 	| source |
