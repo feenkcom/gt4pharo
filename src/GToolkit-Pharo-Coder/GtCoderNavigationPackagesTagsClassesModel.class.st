@@ -223,8 +223,8 @@ GtCoderNavigationPackagesTagsClassesModel >> deselectSlot [
 GtCoderNavigationPackagesTagsClassesModel >> hasPackageTagsIn: aRPackage [
 	<return: #Boolean>
 	| hasTags hasExtensions |
-	hasTags := (aRPackage classTags size = 1
-			and: [ aRPackage classTags anyOne name = aRPackage name ]) not.
+	hasTags := (aRPackage tags size = 1
+			and: [ aRPackage tags anyOne name = aRPackage name ]) not.
 	hasExtensions := aRPackage gtDoesExtendClasses.
 	^ hasTags or: [ hasExtensions ]
 ]

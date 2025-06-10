@@ -359,7 +359,7 @@ GtPharoDummiesGenerator >> dummyPackageNames [
 	[ thePackageNames size < amountOfPackages ] whileTrue: [
 		| aGeneratedPackageName |
 		
-		aGeneratedPackageName := (self dummyPackageNamePrefix, '-', (UUIDGenerator next asString36 last: 8) capitalized) asSymbol.
+		aGeneratedPackageName := (self dummyPackageNamePrefix, '-', (UUID new asString36 last: 8) capitalized) asSymbol.
 
 		(RPackageOrganizer default includesPackageNamed: aGeneratedPackageName)
 			ifFalse: [ thePackageNames add: aGeneratedPackageName ] ].

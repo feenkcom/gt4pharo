@@ -118,12 +118,23 @@ GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
 
 { #category : #'api - class' }
 GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName instanceVariableNames: instVarNameList classVariableNames: classVarNames package: aPackageSymbol [
-	^ self critical: [
-		anExistingClass
-			subclass:aSubclassName
-			instanceVariableNames: instVarNameList
-			classVariableNames: classVarNames
-			package: aPackageSymbol ]
+	^ self
+		critical: [ self
+				forPharo12: [ 
+					anExistingClass classInstaller
+						make: [ :builder | 
+							builder
+								superclass: anExistingClass;
+								name: aSubclassName;
+								slotsFromString: instVarNameList;
+								sharedVariablesFromString: classVarNames;
+								package: aPackageSymbol;
+								environment: anExistingClass environment ] ]
+				forPharo11AndPharo10: [ anExistingClass
+						subclass: aSubclassName
+						instanceVariableNames: instVarNameList
+						classVariableNames: classVarNames
+						package: aPackageSymbol ] ]
 ]
 
 { #category : #'api - class' }
