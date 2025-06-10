@@ -28,7 +28,8 @@ GtPharoCoderExplicitBehavior >> affectByClassAdded: aClassAddedAnnouncement [
 
 { #category : #transformation }
 GtPharoCoderExplicitBehavior >> affectByClassRemoved: aClassRemovedAnnouncement [
-	^ self behavior = aClassRemovedAnnouncement classRemoved
+	^ (self behavior = aClassRemovedAnnouncement classRemoved
+		or: [ self behavior = aClassRemovedAnnouncement classRemoved class ])
 		ifTrue: [ self class named: behaviorName ]
 		ifFalse: [ self ]
 ]
@@ -49,6 +50,7 @@ GtPharoCoderExplicitBehavior >> affectedByClassAdded: aClassRemovedAnnouncement 
 { #category : #testing }
 GtPharoCoderExplicitBehavior >> affectedByClassRemoved: aClassRemovedAnnouncement [
 	^ self behavior = aClassRemovedAnnouncement classRemoved
+		or: [ self behavior = aClassRemovedAnnouncement classRemoved class ]
 ]
 
 { #category : #testing }
