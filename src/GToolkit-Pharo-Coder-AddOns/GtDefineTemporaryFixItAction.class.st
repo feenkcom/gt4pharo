@@ -30,7 +30,8 @@ GtDefineTemporaryFixItAction >> executeOn: anEditorElement [
 	ast := sourceCoder rbAST.
 	variableNode := node.
 	self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
-	sourceCoder currentSourceString: ast newSource
+	sourceCoder currentSourceString: ast newSource.
+	anEditorElement requestFocus
 ]
 
 { #category : #accessing }

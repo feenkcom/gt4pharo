@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDefineClassVariableFixItAction,
 	#superclass : #GtFixItVariableNodeAction,
-	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #accessing }
@@ -11,7 +11,8 @@ GtDefineClassVariableFixItAction >> description [
 
 { #category : #accessing }
 GtDefineClassVariableFixItAction >> executeOn: anEditorElement [
-	sourceCoder addClassVariable: self nodeName
+	sourceCoder addClassVariable: self nodeName.
+	anEditorElement requestFocus
 ]
 
 { #category : #accessing }
