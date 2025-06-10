@@ -13,7 +13,7 @@ GtSearchPackageTagTestSuiteFilter >> includesMethod: aCompiledMethod [
 		^ false ].
 	aCompiledMethod selector isTestSelector ifFalse: [ ^ false ].
 	
-	^ (self packageTag hasClass: aCompiledMethod methodClass)
+	^ (self packageTag includesClass: aCompiledMethod methodClass)
 ]
 
 { #category : #accessing }
