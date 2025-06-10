@@ -95,7 +95,7 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 					aPackage
 						ifNotNil: [ aCompletionController ifNotNil: [ aCompletionController uninstall ].
 							aCompletionStrategy := GtStringsCompletionStrategy new
-									completions: (GtPrefixTree withAll: (aPackage classTags collect: #name)).
+									completions: (GtPrefixTree withAll: (aPackage tags collect: #name)).
 
 							aCompletionController := (GtCompletionController
 									on: tagEditor
