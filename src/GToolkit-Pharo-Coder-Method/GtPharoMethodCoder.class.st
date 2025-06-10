@@ -600,7 +600,7 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
 	self selector: aCompiledMethod selector.
 	self
 		sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
-	self protocol: aCompiledMethod category.
+	self protocol: aCompiledMethod protocolName.
 
 	self methodBehavior
 		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aRealBehavior |  ]
