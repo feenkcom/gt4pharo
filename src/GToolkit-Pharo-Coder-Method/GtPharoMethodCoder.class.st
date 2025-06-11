@@ -586,7 +586,7 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 	self methodBehavior:(GtPharoCoderBehavior explicit: aCompiledMethod methodClass).
 	self selector: aCompiledMethod selector.
 	self sourceCode: (GtCoderCompiledMethodTextSource new compiledMethod: aCompiledMethod).
-	self protocol: aCompiledMethod category
+	self protocol: aCompiledMethod protocolName
 ]
 
 { #category : #initialize }

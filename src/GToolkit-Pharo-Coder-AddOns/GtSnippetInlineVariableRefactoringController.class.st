@@ -7,12 +7,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #accessing }
 GtSnippetInlineVariableRefactoringController >> node: aNode [
 	node := aNode 
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #accessing }
 GtSnippetInlineVariableRefactoringController >> refactoring [
 	| aModel |
 	aModel := self createSnippetRefactoringModel.
@@ -24,12 +24,12 @@ GtSnippetInlineVariableRefactoringController >> refactoring [
 		in: (aModel classFor: self snippetClass)
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #accessing }
 GtSnippetInlineVariableRefactoringController >> refactoringName [
 	^ 'Inline temporary variable'
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #accessing }
 GtSnippetInlineVariableRefactoringController >> safelyExecute [
 	| refactoring |
 	refactoring := self refactoring.
