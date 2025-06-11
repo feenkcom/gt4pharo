@@ -42,7 +42,7 @@ GtSearchPragmasFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod hasPragmaNamed: symbol
 ]
 
-{ #category : #'*GToolkit-Pharo-SearchFilters' }
+{ #category : #testing }
 GtSearchPragmasFilter >> isMethodPragmaFilter [
 	^ self className = #GtSearchPragmasFilter
 ]
