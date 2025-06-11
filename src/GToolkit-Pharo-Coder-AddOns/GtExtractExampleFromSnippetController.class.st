@@ -103,7 +103,8 @@ GtExtractExampleFromSnippetController >> installReceiverSelector [
 			ann eventType = #textUpdated
 				ifTrue: [ receiverRenamer isValid
 						ifTrue: [ self updateReceiver: receiverRenamer newVariableName ] ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	receiverRenamer install
 ]
 

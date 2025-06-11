@@ -222,7 +222,8 @@ GtExtractToWrappedMethodObjectRefactoringController >> renameActionForConstructo
 				ifTrue: [ action isValid
 						ifTrue: [ constructorSelector := action newSelector.
 							self addRefactoringPreview ] ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	action install.
 	^ action
 ]
@@ -250,7 +251,8 @@ GtExtractToWrappedMethodObjectRefactoringController >> renameActionForReceiver: 
 				ifTrue: [ action isValid
 						ifTrue: [ self className: action newClassName asSymbol.
 							self addRefactoringPreview ] ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	action install.
 	^ action
 ]

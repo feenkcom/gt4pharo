@@ -57,7 +57,8 @@ GtRenameController >> installRenameAction [
 				ifTrue: [ self updateName: renameAction newName ].
 			(#(#tab #shiftTab) includes: ann eventType)
 				ifTrue: [ self tab: ann eventType = #tab ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 
 	self installValidation.
 	renameAction install

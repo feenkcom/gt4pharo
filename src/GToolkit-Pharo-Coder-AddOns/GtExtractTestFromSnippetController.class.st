@@ -53,7 +53,8 @@ GtExtractTestFromSnippetController >> installRenamer [
 		do: [ :ann | 
 			ann eventType = #textUpdated
 				ifTrue: [ renameAction isValid ifTrue: [ self updateSelector: renameAction newSelector ] ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	renameAction install
 ]
 

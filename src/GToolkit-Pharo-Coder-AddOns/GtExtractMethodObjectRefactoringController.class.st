@@ -183,7 +183,8 @@ GtExtractMethodObjectRefactoringController >> receiverRenamerOn: aVariable [
 				ifTrue: [ action isValid
 						ifTrue: [ self className: action newClassName asSymbol.
 							self addRefactoringPreview ] ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	action install.
 	^ action
 ]
@@ -258,7 +259,8 @@ GtExtractMethodObjectRefactoringController >> renameActionForSetter: node [
 								at: node arguments first source
 								put: action newSelector asString allButLast.
 							self addRefactoringPreview ] ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	action install.
 	^ action
 ]
