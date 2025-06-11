@@ -682,7 +682,8 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 							each sourceChangedTo: each currentSourceText ] ].
 			ann eventType = #accept
 				ifTrue: [ otherCoders
-						do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ].
+						do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ]
+		for: self.
 	action install.
 	^ action
 ]

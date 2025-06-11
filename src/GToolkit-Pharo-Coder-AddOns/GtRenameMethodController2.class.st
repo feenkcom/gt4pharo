@@ -53,9 +53,11 @@ GtRenameMethodController2 >> installRenamer [
 		when: GtRenameActionAnnouncement
 			do: [ :ann | 
 				ann eventType = #textUpdated ifTrue: [ self updateSelector ].
-				ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ];
+				ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+			for: self;
 		when: GtRenameSelectorKeywordFocused
-			do: [ :ann | self updateFocused: ann keyword ];
+			do: [ :ann | self updateFocused: ann keyword ]
+			for: self;
 		when: GtRenameSelectorMoved
 			do: [ :ann | 
 				ann forward
@@ -64,7 +66,8 @@ GtRenameMethodController2 >> installRenamer [
 								self swapKeywordAndParameterWithNext: ann keyword ] ]
 					ifFalse: [ ann keyword > 1
 							ifTrue: [ renameAction focusedIndex: ann keyword - 1.
-								self swapKeywordAndParameterWithNext: ann keyword - 1 ] ] ].
+								self swapKeywordAndParameterWithNext: ann keyword - 1 ] ] ]
+			for: self.
 	renameAction install.
 	self installReorderAttributes
 ]

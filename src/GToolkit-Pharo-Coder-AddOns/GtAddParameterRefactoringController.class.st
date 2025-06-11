@@ -82,7 +82,8 @@ GtAddParameterRefactoringController >> installArgumentSource [
 		do: [ :ann | 
 			#textUpdated = ann eventType
 				ifTrue: [ self argumentSource: sourceAction newName ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	sourceAction install.
 	sourceAction updateName: self argumentSource
 ]
@@ -103,7 +104,8 @@ GtAddParameterRefactoringController >> installParameterRenamer [
 		do: [ :ann | 
 			#textUpdated = ann eventType
 				ifTrue: [ self variableName: renameParamAction newName ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	renameParamAction install
 ]
 
@@ -121,7 +123,8 @@ GtAddParameterRefactoringController >> installSelectorRenamer [
 		do: [ :ann | 
 			ann eventType = #textUpdated
 				ifTrue: [ self updateSelector: renameSelectorAction newSelector ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	renameSelectorAction install
 ]
 
