@@ -2548,6 +2548,86 @@ GtPharoCoderByScripterExamples >> extractSuperclassWithSubclassesInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> hierarchyImplementors [
+	<gtExample>
+	| scripter |
+	scripter := self coderInPager: [ GtCoderElement forClass: Character ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'characterSet' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Spawn hierarchy implementers';
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString beginsWith: 'Browse hierarchy implementors' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check that instance and class side methods are included';
+				// GtPhlowSearchFilterToolElement;
+				value: [ :each | (each searchFilter contents collectAsSet: [ :method | method methodClass ]) size ]
+					equals: 2 ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check that instance and class side methods are included';
+				// GtPhlowSearchFilterToolElement;
+				value: [ :each | 
+						(each searchFilter contents
+							collectAsSet: [ :method | method methodClass instanceSide ]) size ]
+					equals: 1 ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> hierarchySenders [
+	<gtExample>
+	| scripter |
+	scripter := self coderInPager: [ GtCoderElement forClass: AsyncFutureThreadPool ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open menu';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'shutdown' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Spawn hierarchy references';
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString beginsWith: 'Browse hierarchy references' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check that instance and class side methods are included';
+				// GtPhlowSearchFilterToolElement;
+				value: [ :each | (each searchFilter contents collectAsSet: [ :method | method methodClass ]) size ]
+					equals: 2 ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check that instance and class side methods are included';
+				// GtPhlowSearchFilterToolElement;
+				value: [ :each | 
+						(each searchFilter contents
+							collectAsSet: [ :method | method methodClass instanceSide ]) size ]
+					equals: 1 ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> hoverMenu: menuString labelled: stepString in: scripter [
 	| step |
 	step := scripter menuStep.
