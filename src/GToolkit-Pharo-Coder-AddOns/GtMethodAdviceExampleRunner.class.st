@@ -150,7 +150,7 @@ GtMethodAdviceExampleRunner >> contextCoderMessagesNotImplementedExample [
 				self notImplementedMessage	"This one is not implemented"';
 			class: Integer;
 			receiver: 10;
-			noPattern: true;
+			isScripting: true;
 			compile.
 	context := Context
 			sender: nil
@@ -175,7 +175,7 @@ GtMethodAdviceExampleRunner >> contextCoderUndeclaredVariableExample [
 				firstIndex < lastIndex ifTrue: [firstIndex] ifFalse: [unknown]';
 			class: Integer;
 			receiver: receiver;
-			noPattern: true;
+			isScripting: true;
 			compile.
 	context := Context
 			sender: nil
