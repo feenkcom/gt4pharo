@@ -91,3 +91,8 @@ GtCodeDefinition >> topMostParent [
 GtCodeDefinition >> when: anEventClass do: aBlock [
 	self announcer when: anEventClass do: aBlock
 ]
+
+{ #category : #'announcer - subscription' }
+GtCodeDefinition >> when: anEventClass do: aBlock for: aSubscriber [
+	self announcer when: anEventClass do: aBlock for: aSubscriber
+]
