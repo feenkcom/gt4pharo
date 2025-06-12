@@ -1073,7 +1073,12 @@ GtPharoMethodCoder >> protocol [
 		attributeNamed: #category
 		ifAbsent: [
 			(self behavior notNil and: [ self selector notNil ])
-				ifTrue: [ self behavior whichCategoryIncludesSelector: self selector ] ]
+				ifTrue: [ 
+					self 
+						forPharo12: [
+							self behavior protocolNameOfSelector: self selector] 
+						forPharo11AndPharo10: [
+							self behavior whichCategoryIncludesSelector: self selector ] ] ]
 ]
 
 { #category : #'api - accessing' }
