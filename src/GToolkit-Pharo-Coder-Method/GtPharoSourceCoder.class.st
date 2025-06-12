@@ -202,7 +202,7 @@ GtPharoSourceCoder >> packageTag [
 GtPharoSourceCoder >> parse: aString asExpression: isExpression requestor: aRequestor [
 	^ (self behavior ifNil: [ UndefinedObject ]) compiler
 		source: aString;
-		noPattern: isExpression;
+		isScripting: isExpression;
 		options: #(+ optionParseErrors + optionSkipSemanticWarnings);
 		requestor: aRequestor;
 		parse
@@ -245,7 +245,7 @@ GtPharoSourceCoder >> primitiveCompile: aSourceString inContext: aGtPharoSourceC
 				ifTrue: [ compiler receiver: aGtPharoSourceCoderEvaluationContext receiverObject ].
 			compiler context: aGtPharoSourceCoderEvaluationContext runtimeContext.
 			compiler requestor: aGtPharoSourceCoderEvaluationContext.
-			compiler noPattern: isForMethod not.
+			compiler isScripting: isForMethod not.
 			compiler failBlock: anEvaluationFailBlock.
 			compiler compile ]
 ]
