@@ -47,6 +47,11 @@ GtPharoSourceCoderEvaluationContext >> bindings [
 	^ bindingStrategy
 ]
 
+{ #category : #testing }
+GtPharoSourceCoderEvaluationContext >> canAddBindingOf: aSymbol [
+	^ true
+]
+
 { #category : #hack }
 GtPharoSourceCoderEvaluationContext >> correctFrom: fromIndex to: toIndex with: aString [
 	NonInteractiveTranscript stdout
@@ -97,6 +102,11 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 
 { #category : #testing }
 GtPharoSourceCoderEvaluationContext >> isForScripting [
+	^true
+]
+
+{ #category : #testing }
+GtPharoSourceCoderEvaluationContext >> needRequestorScope [
 	^true
 ]
 
