@@ -145,18 +145,10 @@ GtRefactoringDropDownAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdi
 		addShortcut: (BlShortcutWithAction new
 				combination: (BlKeyCombination tab or: BlKeyCombination return);
 				action: [ :anEvent :aShortcut | 
-					self
+					(self
 						focusNext: true
 						in: anEditorElement
-						from: dropdown ]).
-	dropdown
-		addShortcut: (BlShortcutWithAction new
-				combination: (BlKeyCombination shiftTab or: BlKeyCombination shiftReturn);
-				action: [ :anEvent :aShortcut | 
-					self
-						focusNext: false
-						in: anEditorElement
-						from: dropdown ]).
+						from: dropdown) ifFalse: [ refactoringController openRefactoringPreview ] ]).
 	focusOnFirstShow
 		ifTrue: [ dropdown
 				enqueueTask: [ focusOnFirstShow := false.
@@ -189,11 +181,11 @@ GtRefactoringDropDownAttribute >> focusNext: aBoolean in: anEditorElement from: 
 							^ true ].
 					previous := each ] ].
 	aBoolean
-		ifTrue: [ first
-				ifNotNil: [ first requestFocus.
+		ifTrue: [ (first notNil and: [ first ~~ currentEditor ])
+				ifTrue: [ first requestFocus.
 					^ true ] ]
-		ifFalse: [ last
-				ifNotNil: [ last requestFocus.
+		ifFalse: [ (last notNil and: [ last ~~ currentEditor ])
+				ifTrue: [ last requestFocus.
 					^ true ] ].
 	^ false
 ]

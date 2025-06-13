@@ -2171,6 +2171,30 @@ GtPharoMethodCoderByScripterExamples >> extractToComponent [
 				hasFocus;
 				// #receiverDropDown ].
 
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Selector has focus';
+				hasFocus;
+				// GtRenameEditor ].
+
+	scripter keyDown
+		key: BlKeyboardKey shiftLeft;
+		play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter keyUp
+		key: BlKeyboardKey shiftLeft;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Receiver has focus';
+				hasFocus;
+				// #receiverDropDown ].
+
 	(scripter keyPress: BlKeyboardKey arrowDown) play.
 
 	count := 0.
@@ -6472,6 +6496,31 @@ GtPharoMethodCoderByScripterExamples >> hoverButton: aString index: anInteger in
 GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 	GtPharoDummyOneObject instA: 72.
 	GtPharoDummyOneObject varA: 144
+]
+
+{ #category : #'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentEnterOpensPreview [
+	<gtExample>
+	| scripter |
+	scripter := self startInlineMessageFromComponent.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check preview is showing';
+				exists;
+				onSpaceRoot;
+				// GtRefactoringsElement ].
+	^ scripter
 ]
 
 { #category : #'examples - inline message send' }
