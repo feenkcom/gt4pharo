@@ -71,7 +71,9 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 	self announcer announce: (GtCoderNavigationClassModified new 
 		coder: coder;
 		package: aClassModificationApplied packageAffected;
-		tag: aClassModificationApplied classTagAffected;
+		tag: (self 
+			forPharo12: [aClassModificationApplied packageTagAffected name] 
+			forPharo11AndPharo10:  [ aClassModificationApplied classTagAffected]);
 		theClass: aClassModificationApplied classAffected)
 ]
 
@@ -117,7 +119,9 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 	self announcer announce: (GtCoderNavigationClassRenamed new 
 		coder: coder;
 		package: aClassRenamed packageAffected;
-		tag: aClassRenamed classTagAffected;
+		tag: (self 
+			forPharo12: [aClassRenamed packageTagAffected name] 
+			forPharo11AndPharo10:  [ aClassRenamed classTagAffected]);
 		theClass: aClassRenamed classRenamed;
 		oldName: aClassRenamed oldName;
 		newName: aClassRenamed newName)
