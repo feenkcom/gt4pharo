@@ -1586,7 +1586,7 @@ GtPharoMethodCoderByScripterExamples >> coderOnMethod: aMethod in: aBehavior [
 	aCoder forMethod: aMethod in: aBehavior.
 	self assert: aCoder selector equals: aMethod selector.
 	self assert: aCoder behavior equals: aMethod methodClass.
-	self assert: aCoder protocol equals: aMethod protocol.
+	self assert: aCoder protocolName equals: aMethod protocolName.
 
 	"a coder is not displayed and its source text is not initialized"
 	self assert: aCoder sourceCode hasSourceText not.
