@@ -2123,6 +2123,145 @@ GtPharoMethodCoderByScripterExamples >> extractMethodObjectWhenHasNewClass [
 	^ scripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> extractToComponent [
+	<gtExample>
+	| scripter source count found stillFocused changes change |
+	source := self class sourceCodeAt: #sampleMethod.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: self class >> #sampleMethod ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: (source indexOf: $.) + 1 to: source size;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Selector has focus';
+				hasFocus;
+				// GtRenameEditor ].
+
+	scripter keyDown
+		key: BlKeyboardKey shiftLeft;
+		play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter keyUp
+		key: BlKeyboardKey shiftLeft;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Receiver has focus';
+				hasFocus;
+				// #receiverDropDown ].
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Selector has focus';
+				hasFocus;
+				// GtRenameEditor ].
+
+	scripter keyDown
+		key: BlKeyboardKey shiftLeft;
+		play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter keyUp
+		key: BlKeyboardKey shiftLeft;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Receiver has focus';
+				hasFocus;
+				// #receiverDropDown ].
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+
+	count := 0.
+	found := false.
+
+	[ found or: [ count > 20 ] ]
+		whileFalse: [ scripter
+				doStep: [ :s | 
+					s
+						onSpaceRoot;
+						// #receiverList;
+						block: [ :list | found := list selectedItems first = 'oc' ] ].
+			found ifFalse: [ (scripter keyPress: BlKeyboardKey arrowDown) play ].
+			count := count + 1 ].
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Class type has focus';
+				hasFocus;
+				// #editableLabel ].
+
+	(scripter type: 'OrderedCollection') play.
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		doStep: [ :s | 
+			s
+				block: [ :editor | stillFocused := editor hasFocus ];
+				// #editableLabel ].
+
+	stillFocused ifTrue: [ (scripter keyPress: BlKeyboardKey return) play ].
+
+	(scripter type: 'someNewMethodName') play.
+
+	(scripter keyPress: BlKeyboardKey return) play.
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand preview';
+				onSpaceRoot;
+				// GtChangesElement;
+				// #triangle ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	change := changes gtAllChanges
+			detect: [ :each | 
+				(each isKindOf: RBAddMethodChange)
+					and: [ each changeClassName = #OrderedCollection ] ].
+	self
+		assert: (RBParser parseMethod: change source) formattedCode
+		equals: (RBParser
+				parseMethod: 'someNewMethodName: aGtPharoMethodCoderByScripterExamples self add: aGtPharoMethodCoderByScripterExamples. self add: Object. ^self')
+				formattedCode.
+
+	^ scripter
+]
+
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClass [
 	<gtExample>
@@ -6360,9 +6499,9 @@ GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 ]
 
 { #category : #'examples - inline message send' }
-GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentExecution [
+GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentEnterOpensPreview [
 	<gtExample>
-	| scripter found count change changes |
+	| scripter |
 	scripter := self startInlineMessageFromComponent.
 
 	scripter
@@ -6373,6 +6512,31 @@ GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentExecution [
 
 
 	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check preview is showing';
+				exists;
+				onSpaceRoot;
+				// GtRefactoringsElement ].
+	^ scripter
+]
+
+{ #category : #'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentExecution [
+	<gtExample>
+	| scripter found count changes |
+	scripter := self startInlineMessageFromComponent.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
 
 	count := 0.
 	found := false.
@@ -6410,10 +6574,11 @@ GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentExecution [
 				onSpaceRoot;
 				// GtChangesElement;
 				block: [ :each | changes := each changes ] ].
-	change := changes gtAllChanges
-			detect: [ :each | 
-				(each isKindOf: RBAddMethodChange)
-					and: [ each changeClassName = #OrderedCollection ] ].
+	changes gtAllChanges
+		detect: [ :each | 
+			(each isKindOf: RBAddMethodChange)
+				and: [ each changeClassName = #OrderedCollection ] ]
+		ifNone: [ self error: 'change not found' ].
 
 	^ scripter
 ]
@@ -6431,7 +6596,7 @@ GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentInteraction [
 				// #classPicker ].
 
 
-	(scripter keyPress: BlKeyboardKey return) play.
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
 
 	scripter
 		checkStep: [ :s | 
@@ -6504,7 +6669,7 @@ GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentInteraction [
 
 	(scripter keyPress: BlKeyboardKey escape) play.
 
-	(scripter keyPress: BlKeyboardKey return) play.
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
 
 	scripter
 		checkStep: [ :s | 
@@ -8102,6 +8267,15 @@ GtPharoMethodCoderByScripterExamples >> renameMethodPatternHoverShowsButtons [
 	(scripter keyPress: BlKeyboardKey tab) play.
 	self checkButtonVisibility: #(1) in: scripter.
 	^ scripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> sampleMethod [
+	| oc |
+	oc := OrderedCollection new.
+	oc add: self.
+	oc add: Object.
+	^ oc
 ]
 
 { #category : #utilities }

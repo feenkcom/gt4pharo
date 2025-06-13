@@ -1,71 +1,17 @@
 Class {
 	#name : #GtMessageReceiverAttribute,
-	#superclass : #BrTextAdornmentAttribute,
-	#instVars : [
-		'receivers',
-		'refactoringController'
-	],
+	#superclass : #GtRefactoringDropDownAttribute,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #accessing }
-GtMessageReceiverAttribute >> cancel [
-	refactoringController cancelRefactoring
+GtMessageReceiverAttribute >> buttonId [
+	^ #receiverDropDown
 ]
 
 { #category : #accessing }
-GtMessageReceiverAttribute >> createDropDown [
-	| button dropDownLook |
-	button := self createDropDownButton.
-	dropDownLook := BrGlamorousWithExplicitDropdownAptitude
-			handle: [ self createDropDownButton ]
-			content: [ | list |
-				list := BrSimpleList new.
-				list fitContent.
-				list
-					stencil: [ :each | 
-						BrHorizontalPane new
-							hMatchParent;
-							vFitContent;
-							padding: (BlInsets all: 5);
-							aptitude: (BrStyleCommonAptitude new
-									default: [ :s | s background: Color transparent ];
-									hovered: [ :s | s background: button theme button defaultBorderColor ];
-									yourself);
-							when: BlClickEvent
-								do: [ :anEvent | 
-									anEvent consumed: true.
-									button label: each.
-									anEvent currentTarget fireEvent: BrDropdownHideWish new.
-									refactoringController receiver: each ];
-							addChild: (BrLabel new
-									aptitude: BrGlamorousLabelAptitude new glamorousCodeFont glamorousCodeSmallSize;
-									text: each;
-									yourself);
-							yourself ].
-				list items: receivers.
-				list asScrollableElement ].
-	button addAptitude: dropDownLook.
-	button
-		addAptitude: (BrStyleCommonAptitude new
-				default: [ :s | s background: Color transparent ];
-				hovered: [ :s | s background: button theme status neutralBackgroundColor darker ]).
-	^ button
-]
-
-{ #category : #accessing }
-GtMessageReceiverAttribute >> createDropDownButton [
-	| button |
-	button := BrButton new.
-	button
-		aptitude: BrTextLabelAptitude new glamorousCodeFont glamorousCodeSmallSize
-				+ BrGlamorousButtonIconAptitude + BrGlamorousButtonLayoutAptitude.
-	button vExact: 20.
-	button padding: (BlInsets left: 4 right: 2).
-	button label: refactoringController receiver.
-	button icon: BrGlamorousVectorIcons downwards.
-	button beSmallSize.
-	^ button
+GtMessageReceiverAttribute >> buttonLabel [
+	^ refactoringController receiver
 ]
 
 { #category : #accessing }
@@ -99,19 +45,14 @@ GtMessageReceiverAttribute >> createEditableLabelIn: anEditorElement [
 ]
 
 { #category : #accessing }
+GtMessageReceiverAttribute >> currentSelection [
+	^ refactoringController receiver
+]
+
+{ #category : #accessing }
 GtMessageReceiverAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| element |
-	element := BrHorizontalPane new.
-	element fitContent.
-	element margin: (BlInsets all: 3).
-	element
-		addAptitude: (BrStyleCommonAptitude new
-				default: [ :aStyle | 
-					aStyle geometry: (BlRoundedRectangleGeometry cornerRadius: 4).
-					aStyle background: element theme status neutralBackgroundColor.
-					aStyle border: BlBorder empty ];
-				hovered: [ :aStyle | aStyle background: element theme status neutralBackgroundColor darker ]).
-	element addChild: self createDropDown.
+	element := super doAffect: aTBrTextEditorTextualPiece in: anEditorElement.
 	refactoringController showReceiverType
 		ifTrue: [ element
 				addChild: (self createEditableLabelIn: anEditorElement)
@@ -119,35 +60,10 @@ GtMessageReceiverAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorE
 	^ element
 ]
 
-{ #category : #accessing }
-GtMessageReceiverAttribute >> focusNext: aBoolean in: anEditorElement from: currentEditor [
-	| first last previous |
-	anEditorElement
-		allChildrenBreadthFirstDo: [ :each | 
-			(each userData at: #isRefactoringEditor ifAbsent: [ false ])
-				ifTrue: [ first ifNil: [ first := each ].
-					last := each.
-					(aBoolean not and: [ each == currentEditor and: [ previous notNil ] ])
-						ifTrue: [ previous requestFocus.
-							^ true ].
-					(aBoolean and: [ previous == currentEditor ])
-						ifTrue: [ each requestFocus.
-							^ true ].
-					previous := each ] ].
-	aBoolean
-		ifTrue: [ first
-				ifNotNil: [ first requestFocus.
-					^ true ] ]
-		ifFalse: [ last
-				ifNotNil: [ last requestFocus.
-					^ true ] ].
-	^ false
-]
-
-{ #category : #accessing }
+{ #category : #initialization }
 GtMessageReceiverAttribute >> initialize [
 	super initialize.
-	self beNotOverwritableByStyler
+	self focusOnFirstShow: false
 ]
 
 { #category : #testing }
@@ -160,24 +76,24 @@ GtMessageReceiverAttribute >> isClassName: aSymbol [
 		ifNotNil: [ :value | value isBehavior and: [ value name sameContentAs: name ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtMessageReceiverAttribute >> listId [
+	^ #receiverList
+]
+
 { #category : #accessing }
 GtMessageReceiverAttribute >> receivers [
-	^ receivers
+	^ self items
 ]
 
 { #category : #accessing }
 GtMessageReceiverAttribute >> receivers: aCollection [
-	receivers := aCollection
+	self items: aCollection
 ]
 
-{ #category : #accessing }
-GtMessageReceiverAttribute >> refactoringController [
-	^ refactoringController
-]
-
-{ #category : #accessing }
-GtMessageReceiverAttribute >> refactoringController: aRefactoringController [
-	refactoringController := aRefactoringController
+{ #category : #private }
+GtMessageReceiverAttribute >> select: anObject [
+	refactoringController receiver: anObject
 ]
 
 { #category : #accessing }
