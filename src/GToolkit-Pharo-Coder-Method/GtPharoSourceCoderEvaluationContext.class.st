@@ -103,6 +103,12 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 ]
 
 { #category : #testing }
+GtPharoSourceCoderEvaluationContext >> interactive [
+	"If this is set to true in Pharo 12 OpalCompiler>>#checkNotice: will use the reparator to open a menu."
+	^ false
+]
+
+{ #category : #testing }
 GtPharoSourceCoderEvaluationContext >> isForScripting [
 	^true
 ]
