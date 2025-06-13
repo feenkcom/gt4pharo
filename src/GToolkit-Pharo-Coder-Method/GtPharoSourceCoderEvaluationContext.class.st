@@ -48,8 +48,10 @@ GtPharoSourceCoderEvaluationContext >> bindings [
 ]
 
 { #category : #testing }
-GtPharoSourceCoderEvaluationContext >> canAddBindingOf: aSymbol [
-	^ true
+GtPharoSourceCoderEvaluationContext >> canAddBindingOf: aBindingName [
+
+	"Check is a special variable named `name` can be declared but without declaring it."
+	^ aBindingName first isUppercase not.
 ]
 
 { #category : #hack }
