@@ -47,6 +47,13 @@ GtPharoSourceCoderEvaluationContext >> bindings [
 	^ bindingStrategy
 ]
 
+{ #category : #testing }
+GtPharoSourceCoderEvaluationContext >> canAddBindingOf: aBindingName [
+
+	"Check is a special variable named `name` can be declared but without declaring it."
+	^ aBindingName first isUppercase not.
+]
+
 { #category : #hack }
 GtPharoSourceCoderEvaluationContext >> correctFrom: fromIndex to: toIndex with: aString [
 	NonInteractiveTranscript stdout
@@ -96,7 +103,18 @@ GtPharoSourceCoderEvaluationContext >> initialize [
 ]
 
 { #category : #testing }
+GtPharoSourceCoderEvaluationContext >> interactive [
+	"If this is set to true in Pharo 12 OpalCompiler>>#checkNotice: will use the reparator to open a menu."
+	^ false
+]
+
+{ #category : #testing }
 GtPharoSourceCoderEvaluationContext >> isForScripting [
+	^true
+]
+
+{ #category : #testing }
+GtPharoSourceCoderEvaluationContext >> needRequestorScope [
 	^true
 ]
 

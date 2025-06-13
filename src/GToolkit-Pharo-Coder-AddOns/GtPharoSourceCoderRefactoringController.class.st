@@ -129,6 +129,17 @@ GtPharoSourceCoderRefactoringController >> modelUpdater: aBlock [
 	modelUpdater := aBlock
 ]
 
+{ #category : #executing }
+GtPharoSourceCoderRefactoringController >> openRefactoringPreview [
+	element ifNil: [ ^ false ].
+	element
+		allChildrenBreadthFirstDo: [ :each | 
+			(each isKindOf: GtRefactoringsPreviewButton)
+				ifTrue: [ each openPreview.
+					^ true ] ].
+	^ false
+]
+
 { #category : #testing }
 GtPharoSourceCoderRefactoringController >> previewDisplaysImmediately [
 	^ false

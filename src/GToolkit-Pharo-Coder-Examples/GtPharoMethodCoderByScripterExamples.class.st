@@ -1586,7 +1586,7 @@ GtPharoMethodCoderByScripterExamples >> coderOnMethod: aMethod in: aBehavior [
 	aCoder forMethod: aMethod in: aBehavior.
 	self assert: aCoder selector equals: aMethod selector.
 	self assert: aCoder behavior equals: aMethod methodClass.
-	self assert: aCoder protocol equals: aMethod protocol.
+	self assert: aCoder protocolName equals: aMethod protocolName.
 
 	"a coder is not displayed and its source text is not initialized"
 	self assert: aCoder sourceCode hasSourceText not.
@@ -2148,6 +2148,30 @@ GtPharoMethodCoderByScripterExamples >> extractToComponent [
 				label: 'Click extract method';
 				onSpaceRoot;
 				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Selector has focus';
+				hasFocus;
+				// GtRenameEditor ].
+
+	scripter keyDown
+		key: BlKeyboardKey shiftLeft;
+		play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter keyUp
+		key: BlKeyboardKey shiftLeft;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Receiver has focus';
+				hasFocus;
+				// #receiverDropDown ].
+
+	(scripter keyPress: BlKeyboardKey return) play.
 
 	scripter
 		checkStep: [ :s | 
@@ -6472,6 +6496,31 @@ GtPharoMethodCoderByScripterExamples >> hoverButton: aString index: anInteger in
 GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 	GtPharoDummyOneObject instA: 72.
 	GtPharoDummyOneObject varA: 144
+]
+
+{ #category : #'examples - inline message send' }
+GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentEnterOpensPreview [
+	<gtExample>
+	| scripter |
+	scripter := self startInlineMessageFromComponent.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check preview is showing';
+				exists;
+				onSpaceRoot;
+				// GtRefactoringsElement ].
+	^ scripter
 ]
 
 { #category : #'examples - inline message send' }
