@@ -287,32 +287,32 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 						node: aNode;
 						sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
 				id: #'context-menu--inline-message'.
-			^ true ]
-		ifFalse: [ (GtPharoIndex current implementersOf: aNode selector)
-				ifNotEmpty: [ :classes | 
-					| defaultClass |
-					defaultClass := classes size = 1
-							ifTrue: [ classes anyOne methodClass ]
-							ifFalse: [ (GtPharoProgramNode
-									typeOf: aNode receiver
-									in: self behavior
-									bindings: nil)
-									ifNotNil: [ :cls | cls whichClassIncludesSelector: aNode selector ] ].
-					coderAddOns
-						addContextMenuItem: (self
-								createLabel: 'Inline message'
-								description: aNode message selector)
-						group: BrMenuItemGroupConfiguration refactoring
-						hover: (self highlightNodeBlock: aNode)
-						leave: self removeHighlightBlock
-						action: [ :aSourceCoderViewModel :element | 
-							(GtMethodInlineMessageFromComponentRefactoringController new
-								implementor: defaultClass;
-								node: aNode;
-								sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-						id: #'context-menu--inline-message'.
-					^ true ] ].
-	^ false
+			^ true ].
+	(GtPharoIndex current implementersOf: aNode selector) ifEmpty: [ ^ false ].
+
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Inline message'
+				description: aNode message selector)
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aSourceCoderViewModel :element | 
+			| classes defaultClass | 
+			classes := GtPharoIndex current implementersOf: aNode selector.
+			defaultClass := classes size = 1
+					ifTrue: [ classes anyOne methodClass ]
+					ifFalse: [ (GtPharoProgramNode
+							typeOf: aNode receiver
+							in: self behavior
+							bindings: aSourceCoderViewModel compositeVariableBindings)
+							ifNotNil: [ :cls | cls whichClassIncludesSelector: aNode selector ] ].
+			(GtMethodInlineMessageFromComponentRefactoringController new
+				implementor: defaultClass;
+				node: aNode;
+				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+		id: #'context-menu--inline-message'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
