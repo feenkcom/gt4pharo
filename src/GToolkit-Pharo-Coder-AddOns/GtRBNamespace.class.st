@@ -76,23 +76,26 @@ GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [
 
 { #category : #accessing }
 GtRBNamespace >> createNewClassFor: aBehavior [
-	| nonMeta meta className rbType rbMetaType category behaviorName |
-	className := aBehavior instanceSide name.
-	aBehavior isTrait
-		ifTrue: [ rbType := modelFactory rbTrait.
-			rbMetaType := modelFactory rbTraitMetaclass ]
-		ifFalse: [ rbType := modelFactory rbClass.
-			rbMetaType := modelFactory rbMetaclass ].
-	nonMeta := rbType existingNamed: className model: self.
-	meta := rbMetaType existingNamed: className model: self.	"category := aBehavior category."
-	category := aBehavior package name.
-	behaviorName := aBehavior name.
-	aBehavior package classTags
-		detect: [ :each | each classNames includes: behaviorName ]
-		ifFound: [ :tag | tag isRoot ifFalse: [ category := category , '-' , tag name ] ]
-		ifNone: [  ].
-	nonMeta category: category.
-	^ changedClasses at: className put: (Array with: nonMeta with: meta)
+	^ self 
+		forPharo12: [ super createNewClassFor: aBehavior] 
+		forPharo11AndPharo10: [
+			| nonMeta meta className rbType rbMetaType category behaviorName |
+			className := aBehavior instanceSide name.
+			aBehavior isTrait
+				ifTrue: [ rbType := modelFactory rbTrait.
+					rbMetaType := modelFactory rbTraitMetaclass ]
+				ifFalse: [ rbType := modelFactory rbClass.
+					rbMetaType := modelFactory rbMetaclass ].
+			nonMeta := rbType existingNamed: className model: self.
+			meta := rbMetaType existingNamed: className model: self.	"category := aBehavior category."
+			category := aBehavior package name.
+			behaviorName := aBehavior name.
+			aBehavior package classTags
+				detect: [ :each | each classNames includes: behaviorName ]
+				ifFound: [ :tag | tag isRoot ifFalse: [ category := category , '-' , tag name ] ]
+				ifNone: [  ].
+			nonMeta category: category.
+			changedClasses at: className put: (Array with: nonMeta with: meta) ]
 ]
 
 { #category : #accessing }
