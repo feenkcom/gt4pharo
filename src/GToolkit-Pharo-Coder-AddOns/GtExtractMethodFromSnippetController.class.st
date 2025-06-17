@@ -25,7 +25,7 @@ GtExtractMethodFromSnippetController >> boundReceiverValueFor: aString [
 { #category : #executing }
 GtExtractMethodFromSnippetController >> createModel [
 	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new.
+	model := Smalltalk createRbNamespace onEnvironment: RBBrowserEnvironment new.
 	model name: self refactoringName.
 	^ model
 ]
