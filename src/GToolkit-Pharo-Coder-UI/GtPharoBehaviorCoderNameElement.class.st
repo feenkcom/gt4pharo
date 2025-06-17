@@ -137,7 +137,7 @@ GtPharoBehaviorCoderNameElement >> buildRefactoringPreviewButtonForNameEditor: a
 		id: GtBehaviorCoderBehaviorNameApplyPreviewId;
 		margin: (BlInsets left: 5);
 		refactorings: [ {GtRBRenameClassRefactoring
-					model: (RBClassModelFactory rbNamespace
+					model: (Smalltalk createRbNamespace
 							onEnvironment: RBBrowserEnvironment new)
 					rename: self coderModel theClass name
 					to: aClassNameEditor text asString} ];

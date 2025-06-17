@@ -208,7 +208,7 @@ GtBehaviorUpdateForm >> createLabelTextFor: aString description: description [
 
 { #category : #accessing }
 GtBehaviorUpdateForm >> createRefactoringModel [
-	^ RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new
+	^ Smalltalk createRbNamespace onEnvironment: RBBrowserEnvironment new
 ]
 
 { #category : #accessing }
