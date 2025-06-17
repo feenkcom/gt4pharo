@@ -16,3 +16,9 @@ RBAddMethodChange >> gtDiffChange [
 RBAddMethodChange >> gtDiffStyler [
 	^ BrRBTextStyler new classOrMetaClass: self changeClass
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+RBAddMethodChange >> protocolName [
+	<gtPharoPatch: #Pharo>
+	^ self protocol
+]

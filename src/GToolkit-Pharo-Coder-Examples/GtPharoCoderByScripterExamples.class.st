@@ -2006,7 +2006,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetPr
 	<gtExample>
 	| selector scripter originalClass originalProtocol |
 	originalClass := method methodClass.
-	originalProtocol := method protocol.
+	originalProtocol := method protocolName.
 	selector := method selector.
 
 	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
@@ -2038,7 +2038,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetPr
 		label: 'Drop ' , selector asString , ' in ' , targetProtocol;
 		play.
 
-	self assert: (originalClass >> selector) protocol equals: targetProtocol.
+	self assert: (originalClass >> selector) protocolName equals: targetProtocol.
 
 	^ scripter
 ]
@@ -2102,7 +2102,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toProtocol: target
 			collect: [ :each | 
 				{each methodClass.
 					each selector.
-					each protocol} ].
+					each protocolName} ].
 	selector := methods anyOne selector.
 
 	scripter := self
@@ -2138,7 +2138,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toProtocol: target
 		play.
 
 	originalMethods
-		do: [ :eachArray | self assert: (eachArray first >> eachArray second) protocol equals: targetProtocol ].
+		do: [ :eachArray | self assert: (eachArray first >> eachArray second) protocolName equals: targetProtocol ].
 
 	^ scripter
 ]
@@ -2192,7 +2192,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocol [
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
 	protocol := (environment anyDummyLeafClass dummyMethods
-			detect: [ :each | each protocol ~= method protocol ]) protocol.
+			detect: [ :each | each protocolName ~= method protocolName ]) protocolName.
 	^ self dragInIndexMethod: method toProtocol: protocol
 ]
 
@@ -2210,7 +2210,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocolWithClassSi
 	method := dummyClass anyDummyUnaryMethod realMethod.
 	rootClass := method methodClass superclass.
 	protocol := (dummyClass dummyMethods
-			detect: [ :each | each protocol ~= method protocol ]) protocol.
+			detect: [ :each | each protocolName ~= method protocolName ]) protocolName.
 	expectedClasses := environment anyDummyPackage dummyClasses collect: #realClass.
 
 	scripter := self
@@ -2333,7 +2333,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToProtocol [
 	methods sort: [ :a :b | a selector < b selector ].
 	methods := methods last: 4.
 	protocol := (environment anyDummyLeafClass dummyMethods
-			detect: [ :each | (methods includes: each protocol) not ]) protocol.
+			detect: [ :each | (methods includes: each protocolName) not ]) protocolName.
 	^ self dragInIndexMethods: methods toProtocol: protocol
 ]
 
