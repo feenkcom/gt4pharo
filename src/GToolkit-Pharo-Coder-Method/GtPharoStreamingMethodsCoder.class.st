@@ -180,7 +180,7 @@ GtPharoStreamingMethodsCoder >> possibleCategoriesUnorderedStream [
 	| someAdditionalFilters aCompositeFilter aStream |
 	someAdditionalFilters := additionalFilters reject: #isMethodProtocolFilter.
 	aCompositeFilter := self createCombinedFilterFor: filter andAdditionalFilters: someAdditionalFilters.
-	aStream := (aCompositeFilter asAsyncStream map: [ :eachMethod | eachMethod category ]).
+	aStream := (aCompositeFilter asAsyncStream map: [ :eachMethod | eachMethod protocolName ]).
 	^ aStream asAsyncStream withoutDuplicates useContentComparison
 ]
 
