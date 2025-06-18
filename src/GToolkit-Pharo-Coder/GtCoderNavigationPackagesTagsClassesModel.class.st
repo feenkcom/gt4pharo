@@ -561,7 +561,7 @@ GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnreg
 GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
 	<return: #Collection of: #RPackage>
 
-	^ RPackageOrganizer default gtSortedPackages
+	^ self packageOrganizer gtSortedPackages
 ]
 
 { #category : #'private - accessing' }

@@ -31,7 +31,7 @@ GtRBRenamePackageTagRefactoring >> packageName: aPackageName from: oldTagName to
 { #category : #preconditions }
 GtRBRenamePackageTagRefactoring >> preconditions [
 	| package |
-	package := RPackage organizer
+	package := self packageOrganizer
 		packageNamed: packageName asSymbol
 		ifAbsent: [  ].
 	^ ((RBCondition withBlock: [ package notNil ])

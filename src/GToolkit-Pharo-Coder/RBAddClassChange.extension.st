@@ -18,3 +18,13 @@ RBAddClassChange >> gtDiffChange [
 		to: newSource
 		using: GtSmaCCDiffSplitter forPharo
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+RBAddClassChange >> gtViewDefinitionFor: aView [
+	<gtView>
+	^ aView textEditor
+		priority: 50;
+		title: 'Definition';
+		aptitude: BrGlamorousCodeEditorAptitude;
+		text: [ self definition asRopedText ]
+]

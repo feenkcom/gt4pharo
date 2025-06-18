@@ -48,7 +48,7 @@ GtPharoGlamorousIconStyler >> visitMessageSend: aMessageSendNode [
 	aMethod := anIconLibrary class
 			compiledMethodAt: aMessageSendNode message selector
 			ifAbsent: [ ^ self ].
-	aMethod category = #icons ifFalse: [ ^ self ].
+	aMethod protocolName = #icons ifFalse: [ ^ self ].
 
 	self styleNode: aMessageSendNode withIconLibrary: anIconLibrary
 ]
