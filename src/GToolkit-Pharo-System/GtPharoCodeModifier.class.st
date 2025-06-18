@@ -248,7 +248,7 @@ GtPharoCodeModifier >> removePackage: aPackage [
 { #category : #'api - package' }
 GtPharoCodeModifier >> removePackageNamed: aPackageName [
 	^ self critical: [
-		(RPackage organizer
+		(self packageOrganizer
 			packageNamed: aPackageName
 			ifAbsent: [ ^ self ]) removeFromSystem ]
 ]

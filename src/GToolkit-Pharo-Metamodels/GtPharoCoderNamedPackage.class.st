@@ -66,7 +66,7 @@ GtPharoCoderNamedPackage >> exists [
 	"Return true if there is a real Package in the system corresponding to my definition"
 	<return: #Boolean>
 	
-	^ RPackage organizer includesPackageNamed: self packageName
+	^ self packageOrganizer includesPackageNamed: self packageName
 ]
 
 { #category : #comparing }
@@ -99,7 +99,7 @@ GtPharoCoderNamedPackage >> packageName: aPackageName [
 
 	packageName := aPackageName asSymbol.
 	
-	package := RPackage organizer
+	package := self packageOrganizer
 		packageNamed: packageName
 		ifAbsent: [ nil ]
 ]
@@ -108,7 +108,7 @@ GtPharoCoderNamedPackage >> packageName: aPackageName [
 GtPharoCoderNamedPackage >> packageNameDo: aBlock [
 	| aRealPackage |
 
-	aRealPackage := RPackage organizer
+	aRealPackage := self packageOrganizer
 		packageNamed: packageName
 		ifAbsent: [ package ifNil: [ nil ] ].
 
@@ -117,7 +117,7 @@ GtPharoCoderNamedPackage >> packageNameDo: aBlock [
 
 { #category : #accessing }
 GtPharoCoderNamedPackage >> realPackageDo: aBlock [
-	^ aBlock value: (RPackage organizer
+	^ aBlock value: (self packageOrganizer
 		packageNamed: packageName
 		ifAbsent: [ package ifNil: [ ^ nil ] ])
 ]

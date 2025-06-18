@@ -31,7 +31,7 @@ GtRBPackageChange >> executeNotifying: aBlock [
 
 { #category : #accessing }
 GtRBPackageChange >> package [
-	^ RPackage organizer packageNamed: packageName ifAbsent: [  ]
+	^ self packageOrganizer packageNamed: packageName ifAbsent: [  ]
 ]
 
 { #category : #accessing }

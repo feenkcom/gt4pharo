@@ -37,7 +37,7 @@ GtSearchPackageFilterExamples >> groupResultForPackagesInImageFilter [
 	self assert: resultStream scope equals: AsyncImagePackagesStream new.
 	
 	result := resultStream toArray wait.
-	self assert: result size equals: RPackage organizer packages size.
+	self assert: result size equals: self packageOrganizer packages size.
 	self assert: (result includes: 'GToolkit-Coder-Examples' asPackage).
 	self assert: (result includes: (RPackage named: 'A-Package-ThatDoesNotExist')) not.
 	

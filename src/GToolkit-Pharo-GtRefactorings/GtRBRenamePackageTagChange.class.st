@@ -50,6 +50,6 @@ GtRBRenamePackageTagChange >> oldName: aString [
 { #category : #private }
 GtRBRenamePackageTagChange >> primitiveExecute [
 	| package |
-	package := RPackage organizer packageNamed: packageName asSymbol.
+	package := self packageOrganizer packageNamed: packageName asSymbol.
 	(package classTagNamed: oldName asSymbol) renameTo: newName asSymbol
 ]

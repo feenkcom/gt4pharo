@@ -36,11 +36,11 @@ GtRBRenamePackageRefactoring >> manifestClassNameFor: aPackageName [
 { #category : #accessing }
 GtRBRenamePackageRefactoring >> preconditions [
 	^ ((RBCondition
-		withBlock: [ (RPackage organizer packageNamed: oldName asSymbol ifAbsent: [  ])
+		withBlock: [ (self packageOrganizer packageNamed: oldName asSymbol ifAbsent: [  ])
 				notNil ]) errorMacro: 'Package ' , oldName , ' does not exist')
 		&
 			((RBCondition
-				withBlock: [ (RPackage organizer packageNamed: newName asSymbol ifAbsent: [  ])
+				withBlock: [ (self packageOrganizer packageNamed: newName asSymbol ifAbsent: [  ])
 						isNil ]) errorMacro: 'Package ' , newName , ' already exists')
 ]
 
