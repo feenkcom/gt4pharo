@@ -2084,6 +2084,120 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 ]
 
 { #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractMethodObjectUpdatesSource [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter newName changes change |
+	newName := #MethodObjectUpdatesSource.
+	self assert: (Smalltalk globals includesKey: newName) not.
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	^ BlElement new background: Color red' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select code';
+				action: [ :editor | 
+					editor selecter
+						from: (editor text asString indexOf: $^) + 1 to: editor text size;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start extract method object';
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString = 'Extract method object' ] ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Switch to class label';
+				key: BlKeyboardKey tab ].
+
+	(scripter type: newName) play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Switch to class label';
+				key: BlKeyboardKey tab ].
+
+	(scripter type: 'create') play.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Perform rename';
+				key: BlKeyboardKey return ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand preview';
+				onSpaceRoot;
+				// GtChangesElement;
+				// #triangle ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	change := changes gtAllChanges
+			detect: [ :each | (each isKindOf: RBAddMethodChange) and: [ each changeClassName = newName ] ]
+			ifNone: [ self error: 'change not found' ].
+
+	self
+		assert: change parseTree
+		equals: (RBParser parseMethod: 'create ^ BlElement new background: Color red').
+
+	[ scripter
+		clickStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	self
+		assert: ((Smalltalk at: newName) parseTreeForSelector: #create)
+		equals: (RBParser parseMethod: 'create ^ BlElement new background: Color red') ]
+		ensure: [ Smalltalk at: newName ifPresent: [ :cls | cls removeFromSystem ] ].
+	^ scripter
+]
+
+{ #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractMethodObjectWhenHasNewClass [
 	<gtExample>
 	| scripter hasNewClass ast method |

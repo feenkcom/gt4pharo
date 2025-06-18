@@ -2,7 +2,7 @@ Extension { #name : #GtCompositeDefinition }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtCompositeDefinition >> createRefactoringModel [
-	^ RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new
+	^ Smalltalk createRbNamespace onEnvironment: RBBrowserEnvironment new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

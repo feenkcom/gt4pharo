@@ -84,7 +84,7 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderModifiedWhenSubscribedToSyst
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder selector equals: anOldMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
-	self assert: aMethodCoder protocol equals: aNewMethod protocol.
+	self assert: aMethodCoder protocol equals: aNewMethod protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
@@ -147,7 +147,7 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderWhenSubscribedToSystem [
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder selector equals: anOldMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
-	self assert: aMethodCoder protocol equals: aNewMethod protocol.
+	self assert: aMethodCoder protocol equals: aNewMethod protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
@@ -242,7 +242,7 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderModifiedWhenSubscribedToS
 		equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
-	self assert: aMethodCoder protocol equals: aNewMethod protocol.
+	self assert: aMethodCoder protocol equals: aNewMethod protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 
 	"Make sure that the coder's source code was updated accordingly"
@@ -286,7 +286,7 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribed
 		                     compileMethodSource:
 		                     anOldMethod sourceCode , '"new method"'
 		                     in: anOldMethod methodClass
-		                     protocol: anOldMethod protocol ] ensure: [ 
+		                     protocol: anOldMethod protocolName ] ensure: [ 
 		                     aMethodCoder unsubscribeFromSystem ].
 
 	self assert: aCompiledSelector equals: anOldMethod selector.
@@ -298,7 +298,7 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribed
 		equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
-	self assert: aMethodCoder protocol equals: aNewMethod protocol.
+	self assert: aMethodCoder protocol equals: aNewMethod protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
@@ -358,7 +358,7 @@ GtPharoMethodCoderExamples >> compileModifiedNewMethodWithCoderWhenSubscribedToS
 	self assert: aMethodCoder selector equals: aNewMethod selector.
 	self assert: aMethodCoder selector equals: aNewMethodSelector.
 	self assert: aMethodCoder compiledMethod equals: aNewMethod.
-	self assert: aMethodCoder protocol equals: aNewMethod protocol.
+	self assert: aMethodCoder protocol equals: aNewMethod protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 	self assert: aMethodCoder isModified not.
 
@@ -410,7 +410,7 @@ GtPharoMethodCoderExamples >> compileRemovedMethodWithCoderWhenSubscribedToSyste
 	
 	self assert: aMethodCoder behavior equals: UndefinedObject.
 	self assert: aMethodCoder selector equals: nil.
-	self assert: aMethodCoder protocol equals: nil.
+	self assert: aMethodCoder protocolName equals: nil.
 	self assert: aMethodCoder compiledMethod equals: nil.
 	self assert: aMethodCoder existsInTheSystem not.
 
@@ -432,7 +432,7 @@ GtPharoMethodCoderExamples >> compileRemovedMethodWithoutCoderWhenSubscribedToSy
 	aCompileChange := aMethodCoder createCompileMethodChange.
 	self assert: aCompileChange changeClass equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aCompileChange selector equals: (aMethodCoder attributeNamed: #dummyMethod) selector.
-	self assert: aCompileChange protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocol.
+	self assert: aCompileChange protocolName equals: (aMethodCoder attributeNamed: #dummyMethod) protocolName.
 	self assert: aCompileChange isMeta not.
 	
 	aMethodCoder weak
@@ -448,7 +448,7 @@ GtPharoMethodCoderExamples >> compileRemovedMethodWithoutCoderWhenSubscribedToSy
 	self assert: aMethodCoder behavior equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: (aMethodCoder attributeNamed: #dummyMethod) selector.
 	self assert: aMethodCoder compiledMethod equals: (aMethodCoder attributeNamed: #dummyMethod) realMethod.
-	self assert: aMethodCoder protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocol.
+	self assert: aMethodCoder protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
@@ -833,7 +833,7 @@ GtPharoMethodCoderExamples >> forKeywordMethodInPackagedClass [
 	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aClass).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
-	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
+	self assert: aMethodCoder protocol equals: aDummyMethod protocolName.
 	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
@@ -1001,7 +1001,7 @@ GtPharoMethodCoderExamples >> forUnaryClassMethod [
 	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aDummyMethod realClass class).
 	self assert: aMethodCoder selector equals: aDummyMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aDummyMethod realMethod.
-	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
+	self assert: aMethodCoder protocol equals: aDummyMethod protocolName.
 	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aDummyMethod realMethod.
 
@@ -1028,7 +1028,7 @@ GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: aClass).
 	self assert: aMethodCoder selector equals: aMethod selector.
 	self assert: aMethodCoder compiledMethod equals: aMethod.
-	self assert: aMethodCoder protocol equals: aDummyMethod protocol.
+	self assert: aMethodCoder protocol equals: aDummyMethod protocolName.
 	self assert: aMethodCoder sourceCode class equals: GtCoderCompiledMethodTextSource.
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
@@ -1309,7 +1309,7 @@ GtPharoMethodCoderExamples >> removeMethodWithoutCoderWhenSubscribedToSystem [
 	self assert: aMethodCoder behavior equals: aMethod methodClass.
 	self assert: aMethodCoder methodBehavior equals: (GtPharoCoderBehavior explicit: (aMethodCoder attributeNamed: #dummyMethod) realClass).
 	self assert: aMethodCoder selector equals: aMethod selector.
-	self assert: aMethodCoder protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocol.
+	self assert: aMethodCoder protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocolName.
 	self assert: aMethodCoder compiledMethod equals: nil.
 	self assert: aMethodCoder existsInTheSystem not.
 

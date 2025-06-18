@@ -10,7 +10,7 @@ Class {
 { #category : #private }
 GtConvertEqualsToSameContentAsController >> createRefactoringModel [
 
-	^ RBClassModelFactory rbNamespace onEnvironment: RBBrowserEnvironment new
+	^ Smalltalk createRbNamespace onEnvironment: RBBrowserEnvironment new
 ]
 
 { #category : #accessing }

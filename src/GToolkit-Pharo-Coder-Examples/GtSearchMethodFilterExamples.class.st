@@ -155,7 +155,7 @@ GtSearchMethodFilterExamples >> methodConditionsFilter_TwoConditions [
 	| filter |
 	filter := GtSearchMethodConditionsFilter new
 			condition: [ :aMethod | aMethod numArgs = 1 ];
-			condition: [ :aMethod | aMethod protocol = #'api - accessing' ].
+			condition: [ :aMethod | aMethod protocolName = #'api - accessing' ].
 
 	self assert: (filter matches: GtSearchMethodConditionsFilter >> #condition:).
 	self

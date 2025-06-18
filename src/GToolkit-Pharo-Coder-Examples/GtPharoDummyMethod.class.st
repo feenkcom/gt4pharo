@@ -75,6 +75,11 @@ GtPharoDummyMethod >> protocol: anObject [
 	protocol := anObject
 ]
 
+{ #category : #accessing }
+GtPharoDummyMethod >> protocolName [
+	^ self protocol
+]
+
 { #category : #'api - class' }
 GtPharoDummyMethod >> realClass [
 	<return: #Class>

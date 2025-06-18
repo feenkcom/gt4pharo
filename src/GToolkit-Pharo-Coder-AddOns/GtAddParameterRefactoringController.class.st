@@ -52,7 +52,7 @@ GtAddParameterRefactoringController >> cancelRefactoring [
 GtAddParameterRefactoringController >> createRefactoringModel [
 	| model modelClass |
 	
-	model := RBClassModelFactory rbNamespace
+	model := Smalltalk createRbNamespace
 		onEnvironment: RBBrowserEnvironment new.
 	model name: self refactoringName.
 	

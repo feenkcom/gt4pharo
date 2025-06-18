@@ -326,7 +326,7 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 GtPharoMethodCoder >> createRefactoringModel [
 
 	| model |
-	model := RBClassModelFactory rbNamespace onEnvironment:
+	model := Smalltalk createRbNamespace onEnvironment:
 		         RBBrowserEnvironment new.
 	(((model classFor: self behavior) directlyDefinesMethod:
 		  self currentSelector) not or: [ 
