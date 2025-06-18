@@ -13,7 +13,7 @@ GtSearchImagePackagesFilter >> = anObject [
 
 { #category : #testing }
 GtSearchImagePackagesFilter >> includesPackage: aPackage [
-	^ RPackage organizer includesPackage: aPackage 
+	^ self packageOrganizer includesPackage: aPackage 
 ]
 
 { #category : #enumerating }

@@ -102,7 +102,7 @@ GtPackageDefinition >> postCopy [
 
 { #category : #accessing }
 GtPackageDefinition >> rpackage [
-	^ RPackage organizer
+	^ self packageOrganizer
 		packageNamed: self name asSymbol
 		ifAbsent: [ nil ]
 ]

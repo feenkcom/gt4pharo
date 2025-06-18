@@ -11,8 +11,8 @@ GtRBAddPackageChange >> asUndoOperation [
 
 { #category : #private }
 GtRBAddPackageChange >> primitiveExecute [	
-	(RPackage organizer includesPackageNamed: packageName)
+	(self packageOrganizer includesPackageNamed: packageName)
 		ifTrue: [ ^ self ].
 
-	RPackage organizer createPackageNamed: packageName
+	self packageOrganizer createPackageNamed: packageName
 ]

@@ -84,10 +84,20 @@ RBAddClassRefactoring >> storeOn: aStream [
 
 { #category : #transforming }
 RBAddClassRefactoring >> transform [
-	(self model)
-		defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>' 
-					expandMacrosWith: superclass
-					with: className
-					with: category asString);
-		reparentClasses: subclasses to: (self model classNamed: className asSymbol)
+	<gtPharoPatch: #Pharo>
+	self
+		forPharo12: [ 
+			self model
+				defineClass: ('<1s> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
+						expandMacrosWith: superclass name
+						with: className
+						with: category asString);
+				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
+		forPharo11AndPharo10: [ 
+			self model
+				defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
+						expandMacrosWith: superclass
+						with: className
+						with: category asString);
+				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
 ]
