@@ -6,7 +6,7 @@ Class {
 
 { #category : #private }
 GtPharoIndexExamples >> addClassVar [
-	Object
+	Smalltalk compiler
 		evaluate: (self class definitionString
 				copyReplaceAll: 'classVariableNames: '''''
 				with: 'classVariableNames: ''GtMessageSendIterator''')
@@ -14,7 +14,7 @@ GtPharoIndexExamples >> addClassVar [
 
 { #category : #private }
 GtPharoIndexExamples >> addPoolVar [
-	Object
+	Smalltalk compiler
 		evaluate: (self class definitionString
 				copyReplaceAll: 'package: '
 				with: 'poolDictionaries: ''GtPharoIndexExamplesPool'' package: ')
@@ -295,13 +295,13 @@ GtPharoIndexExamples >> referenceInLiteralArray [
 
 { #category : #private }
 GtPharoIndexExamples >> removeClassVar [
-	Object
+	Smalltalk compiler
 		evaluate: (self class definitionString copyReplaceAll: 'GtMessageSendIterator' with: '')
 ]
 
 { #category : #private }
 GtPharoIndexExamples >> removePoolVar [
-	Object
+	Smalltalk compiler
 		evaluate: (self class definitionString copyReplaceAll: 'GtPharoIndexExamplesPool' with: '')
 ]
 

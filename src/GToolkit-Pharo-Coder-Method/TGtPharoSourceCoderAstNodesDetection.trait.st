@@ -172,14 +172,14 @@ TGtPharoSourceCoderAstNodesDetection >> nodeToSelector: aNode ifFound: aFoundBlo
 TGtPharoSourceCoderAstNodesDetection >> referencesFilterForBoolean: aBooleanAsString [
 	"aBooleanAsString would be a string 'true', which should be evaluated to get a boolean"
 
-	^ self referencesFilterForLiteral: (Object evaluate: aBooleanAsString)
+	^ self referencesFilterForLiteral: (Smalltalk compiler evaluate: aBooleanAsString)
 ]
 
 { #category : #'private - ast' }
 TGtPharoSourceCoderAstNodesDetection >> referencesFilterForCharacter: aCharacterAsString [
 	"aCharacterAsString would be a string '$a', which should be evaluated to get a character"
 
-	^ self referencesFilterForLiteral: (Object evaluate: aCharacterAsString)
+	^ self referencesFilterForLiteral: (Smalltalk compiler evaluate: aCharacterAsString)
 ]
 
 { #category : #'private - ast' }
@@ -191,7 +191,7 @@ TGtPharoSourceCoderAstNodesDetection >> referencesFilterForLiteral: anObject [
 TGtPharoSourceCoderAstNodesDetection >> referencesFilterForNumber: aNumberAsString [
 	"aNumberAsString would be a string '42', which should be evaluated to get a boolean"
 
-	^ self referencesFilterForLiteral: (Object evaluate: aNumberAsString)
+	^ self referencesFilterForLiteral: (Smalltalk compiler evaluate: aNumberAsString)
 ]
 
 { #category : #'private - ast' }
@@ -204,7 +204,7 @@ TGtPharoSourceCoderAstNodesDetection >> referencesFilterForString: aString [
 	"we have to dispatch through the compiler and to evaluate: the string, otherwise it will not be searched for
 	because it is compared by identity and compiler does some string optimizations"
 
-	^ self referencesFilterForLiteral: (Object evaluate: aString)
+	^ self referencesFilterForLiteral: (Smalltalk compiler evaluate: aString)
 ]
 
 { #category : #'private - ast' }
