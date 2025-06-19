@@ -58,7 +58,7 @@ GtRBRemovePoolVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBRemovePoolVariableRefactoring >> privateTranform [
+GtRBRemovePoolVariableRefactoring >> privateTransform [
 	self basicTransform
 ]
 

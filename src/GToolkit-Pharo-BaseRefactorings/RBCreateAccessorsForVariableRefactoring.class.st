@@ -164,7 +164,7 @@ RBCreateAccessorsForVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBCreateAccessorsForVariableRefactoring >> privateTranform [
+RBCreateAccessorsForVariableRefactoring >> privateTransform [
 	self basicTransform
 ]
 

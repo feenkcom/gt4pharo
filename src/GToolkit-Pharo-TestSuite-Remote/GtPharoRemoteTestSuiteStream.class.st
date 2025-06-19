@@ -89,9 +89,7 @@ GtPharoRemoteTestSuiteStream >> onTaskCompletedAnnouncement: anAnnouncement [
 { #category : #private }
 GtPharoRemoteTestSuiteStream >> onTaskFailedAnnouncement: anAnnouncement [
 
-	Stdio stdout
-		<< 'GtPharoRemoteTestSuiteStream>>onTaskFailedAnnouncement:'; lf.
-	self notYetImplemented.
+	self onTaskCompletedAnnouncement: anAnnouncement.
 
 ]
 

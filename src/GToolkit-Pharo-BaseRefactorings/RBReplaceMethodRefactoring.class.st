@@ -156,7 +156,7 @@ RBReplaceMethodRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBReplaceMethodRefactoring >> privateTranform [
+RBReplaceMethodRefactoring >> privateTransform [
 	self basicTransform
 ]
 

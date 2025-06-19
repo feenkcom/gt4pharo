@@ -102,7 +102,7 @@ GtExtractSuperclassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtExtractSuperclassRefactoring >> privateTranform [
+GtExtractSuperclassRefactoring >> privateTransform [
 	self basicTransform
 ]
 

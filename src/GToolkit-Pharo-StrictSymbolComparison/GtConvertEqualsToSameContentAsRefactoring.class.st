@@ -56,7 +56,7 @@ GtConvertEqualsToSameContentAsRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtConvertEqualsToSameContentAsRefactoring >> privateTranform [
+GtConvertEqualsToSameContentAsRefactoring >> privateTransform [
 	self basicTransform
 ]
 

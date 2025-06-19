@@ -120,7 +120,7 @@ GtConvertStatementsToCascadesRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtConvertStatementsToCascadesRefactoring >> privateTranform [
+GtConvertStatementsToCascadesRefactoring >> privateTransform [
 	self basicTransform
 ]
 

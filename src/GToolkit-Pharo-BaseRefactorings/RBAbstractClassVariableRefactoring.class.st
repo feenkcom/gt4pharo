@@ -85,7 +85,7 @@ RBAbstractClassVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBAbstractClassVariableRefactoring >> privateTranform [
+RBAbstractClassVariableRefactoring >> privateTransform [
 	self basicTransform
 ]
 

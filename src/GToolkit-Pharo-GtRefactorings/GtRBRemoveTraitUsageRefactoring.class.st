@@ -39,7 +39,7 @@ GtRBRemoveTraitUsageRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBRemoveTraitUsageRefactoring >> privateTranform [
+GtRBRemoveTraitUsageRefactoring >> privateTransform [
 	self basicTransform
 ]
 

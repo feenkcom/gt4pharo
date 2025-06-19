@@ -66,7 +66,7 @@ GtRBAddPoolVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBAddPoolVariableRefactoring >> privateTranform [
+GtRBAddPoolVariableRefactoring >> privateTransform [
 	self basicTransform
 ]
 

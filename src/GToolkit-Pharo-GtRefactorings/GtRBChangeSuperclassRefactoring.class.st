@@ -56,7 +56,7 @@ GtRBChangeSuperclassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBChangeSuperclassRefactoring >> privateTranform [
+GtRBChangeSuperclassRefactoring >> privateTransform [
 	self basicTransform
 ]
 

@@ -52,7 +52,7 @@ GtRBRenamePackageRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBRenamePackageRefactoring >> privateTranform [
+GtRBRenamePackageRefactoring >> privateTransform [
 	self basicTransform
 ]
 
