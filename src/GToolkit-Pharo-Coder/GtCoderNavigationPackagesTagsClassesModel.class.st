@@ -228,7 +228,7 @@ GtCoderNavigationPackagesTagsClassesModel >> hasPackageTagsIn: aRPackage [
 	<return: #Boolean>
 	| hasTags hasExtensions |
 	hasTags := (aRPackage tags size = 1
-			and: [ aRPackage tags anyOne name = aRPackage name ]) not.
+			and: [ aRPackage tags anyOne isRoot ]) not.
 	hasExtensions := aRPackage gtDoesExtendClasses.
 	^ hasTags or: [ hasExtensions ]
 ]
@@ -718,9 +718,9 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass outO
 				forPharo11AndPharo10: [ 
 					aPackageToSelect classTagForClass: aClass ].
 					
-			"pharo issue: tag of an uncategorized classe is the same as a package.
-			we have to compare names to make sure we don't select a tag that doesn't exist"
-			(aTagToSelect isNotNil and: [ aTagToSelect name = aPackageToSelect name ])
+			"pharo issue: the root tag has the same name as the package in Pharo 11
+			and Uncategoried in Pharo 12."
+			(aTagToSelect isNotNil and: [ aTagToSelect isRoot ])
 				ifTrue: [ aTagToSelect := nil ].
 			aTagToSelect := aTagToSelect
 				ifNil: [
