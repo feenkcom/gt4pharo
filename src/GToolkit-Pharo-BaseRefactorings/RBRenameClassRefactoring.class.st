@@ -70,7 +70,7 @@ RBRenameClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRenameClassRefactoring >> privateTranform [
+RBRenameClassRefactoring >> privateTransform [
 	self basicTransform
 ]
 

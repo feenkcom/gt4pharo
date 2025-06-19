@@ -75,7 +75,7 @@ GtRBAddClassWithVarsRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBAddClassWithVarsRefactoring >> privateTranform [
+GtRBAddClassWithVarsRefactoring >> privateTransform [
 	self basicTransform
 ]
 

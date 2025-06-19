@@ -54,7 +54,7 @@ GtRBDefineClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBDefineClassRefactoring >> privateTranform [
+GtRBDefineClassRefactoring >> privateTransform [
 	self basicTransform
 ]
 

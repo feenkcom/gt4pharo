@@ -76,7 +76,7 @@ GtRBAddTraitUsageToClassByNameRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBAddTraitUsageToClassByNameRefactoring >> privateTranform [
+GtRBAddTraitUsageToClassByNameRefactoring >> privateTransform [
 	self basicTransform
 ]
 

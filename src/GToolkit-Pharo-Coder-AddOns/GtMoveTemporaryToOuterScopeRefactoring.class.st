@@ -171,7 +171,7 @@ GtMoveTemporaryToOuterScopeRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtMoveTemporaryToOuterScopeRefactoring >> privateTranform [
+GtMoveTemporaryToOuterScopeRefactoring >> privateTransform [
 	self basicTransform
 ]
 

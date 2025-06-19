@@ -308,7 +308,7 @@ GtExtractMethodObjectRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtExtractMethodObjectRefactoring >> privateTranform [
+GtExtractMethodObjectRefactoring >> privateTransform [
 	self basicTransform
 ]
 

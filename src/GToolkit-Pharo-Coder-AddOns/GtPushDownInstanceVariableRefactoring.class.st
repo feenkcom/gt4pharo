@@ -50,7 +50,7 @@ GtPushDownInstanceVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtPushDownInstanceVariableRefactoring >> privateTranform [
+GtPushDownInstanceVariableRefactoring >> privateTransform [
 	self basicTransform
 ]
 

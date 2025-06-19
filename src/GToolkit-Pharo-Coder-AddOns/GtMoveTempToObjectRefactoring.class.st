@@ -147,7 +147,7 @@ GtMoveTempToObjectRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtMoveTempToObjectRefactoring >> privateTranform [
+GtMoveTempToObjectRefactoring >> privateTransform [
 	self basicTransform
 ]
 

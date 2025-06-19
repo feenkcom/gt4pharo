@@ -43,7 +43,7 @@ GtRBPackageClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBPackageClassRefactoring >> privateTranform [
+GtRBPackageClassRefactoring >> privateTransform [
 	self basicTransform
 ]
 

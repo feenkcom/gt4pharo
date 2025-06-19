@@ -106,7 +106,7 @@ RBMoveVariableDefinitionRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBMoveVariableDefinitionRefactoring >> privateTranform [
+RBMoveVariableDefinitionRefactoring >> privateTransform [
 	self basicTransform
 ]
 

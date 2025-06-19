@@ -74,7 +74,7 @@ GtCascadesRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtCascadesRefactoring >> privateTranform [
+GtCascadesRefactoring >> privateTransform [
 	self basicTransform
 ]
 

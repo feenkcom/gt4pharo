@@ -61,7 +61,7 @@ RBRemoveClassKeepingSubclassesRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRemoveClassKeepingSubclassesRefactoring >> privateTranform [
+RBRemoveClassKeepingSubclassesRefactoring >> privateTransform [
 	self basicTransform
 ]
 

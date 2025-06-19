@@ -117,7 +117,7 @@ RBRemoveClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRemoveClassRefactoring >> privateTranform [
+RBRemoveClassRefactoring >> privateTransform [
 	self basicTransform
 ]
 
