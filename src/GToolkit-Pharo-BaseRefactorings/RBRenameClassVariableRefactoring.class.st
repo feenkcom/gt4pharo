@@ -32,6 +32,14 @@ RBRenameClassVariableRefactoring class >> rename: aVarName to: aName in: aClass 
 		in: aClass
 ]
 
+{ #category : #transforming }
+RBRenameClassVariableRefactoring >> basicTransform [
+	class
+		renameClassVariable: variableName
+		to: newName
+		around: [ self renameReferences ]
+]
+
 { #category : #'gt - extensions' }
 RBRenameClassVariableRefactoring >> gtDescription [
 	<return: #String or: #BlRunRopedText>
@@ -62,6 +70,11 @@ RBRenameClassVariableRefactoring >> preconditions [
 			& (RBCondition definesClassVariable: variableName asString in: class)
 			& (RBCondition hierarchyOf: class definesVariable: newName asString) not
 			& (RBCondition isGlobal: newName asString in: self model) not
+]
+
+{ #category : #transforming }
+RBRenameClassVariableRefactoring >> privateTranform [
+	self basicTransform
 ]
 
 { #category : #initialization }
@@ -99,8 +112,5 @@ RBRenameClassVariableRefactoring >> storeOn: aStream [
 
 { #category : #transforming }
 RBRenameClassVariableRefactoring >> transform [
-	class
-		renameClassVariable: variableName
-		to: newName
-		around: [self renameReferences]
+	self basicTransform
 ]

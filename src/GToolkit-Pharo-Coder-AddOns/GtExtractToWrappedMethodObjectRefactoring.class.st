@@ -166,6 +166,23 @@ GtExtractToWrappedMethodObjectRefactoring >> isMethodObject: aNode [
 	^ false
 ]
 
+{ #category : #transforming }
+GtExtractToWrappedMethodObjectRefactoring >> privateTransform [
+	| methodNameBlock |
+	methodNameBlock := self options at: #methodName.
+	self
+		setOption: #methodName
+		toUse: [ :methodName :ref | 
+			(methodNameBlock cull: methodName cull: ref)
+				ifNotNil: [ :result | 
+					methodObjectSelector := result selector.
+					result ] ].
+	super transform.
+	self addWrappedCall.
+	self removeNewClassAccessors.
+	self gtCleanupChanges
+]
+
 { #category : #accessing }
 GtExtractToWrappedMethodObjectRefactoring >> removeNewClassAccessors [
 	| cls |

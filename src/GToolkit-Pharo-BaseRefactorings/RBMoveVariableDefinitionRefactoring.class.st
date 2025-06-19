@@ -36,6 +36,13 @@ RBMoveVariableDefinitionRefactoring class >> model: aRBSmalltalk bindTight: anIn
 ]
 
 { #category : #transforming }
+RBMoveVariableDefinitionRefactoring >> basicTransform [
+	definingNode removeTemporaryNamed: name.
+	blockNodes do: [ :each | each body addTemporaryNamed: name ].
+	class compileTree: parseTree
+]
+
+{ #category : #transforming }
 RBMoveVariableDefinitionRefactoring >> checkNodes: sequenceNodes [ 
 	(sequenceNodes 
 		anySatisfy: [:each | RBReadBeforeWrittenTester isVariable: name readBeforeWrittenIn: each]) 
@@ -98,6 +105,11 @@ RBMoveVariableDefinitionRefactoring >> preconditions [
 					true ])
 ]
 
+{ #category : #transforming }
+RBMoveVariableDefinitionRefactoring >> privateTranform [
+	self basicTransform
+]
+
 { #category : #printing }
 RBMoveVariableDefinitionRefactoring >> storeOn: aStream [ 
 	aStream nextPut: $(.
@@ -129,9 +141,7 @@ RBMoveVariableDefinitionRefactoring >> subblocksIn: aParseTree [
 
 { #category : #transforming }
 RBMoveVariableDefinitionRefactoring >> transform [
-	definingNode removeTemporaryNamed: name.
-	blockNodes do: [:each | each body addTemporaryNamed: name].
-	class compileTree: parseTree
+	self basicTransform
 ]
 
 { #category : #transforming }

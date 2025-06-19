@@ -4,6 +4,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
+{ #category : #transforming }
+GtPushDownInstanceVariableRefactoring >> basicTransform [
+	class removeInstanceVariable: variableName.
+	class subclasses
+		do: [ :each | 
+			(each withAllSubclasses
+				anySatisfy: [ :cls | (cls whichSelectorsReferToInstanceVariable: variableName) notEmpty ])
+				ifTrue: [ each addInstanceVariable: variableName ] ]
+]
+
 { #category : #accessing }
 GtPushDownInstanceVariableRefactoring >> preconditions [
 	(class whichSelectorsReferToInstanceVariable: variableName) notEmpty
@@ -39,12 +49,12 @@ GtPushDownInstanceVariableRefactoring >> preconditions [
 	^ RBCondition definesInstanceVariable: variableName in: class
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
+GtPushDownInstanceVariableRefactoring >> privateTranform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtPushDownInstanceVariableRefactoring >> transform [
-	class removeInstanceVariable: variableName.
-	class subclasses
-		do: [ :each | 
-			(each withAllSubclasses
-				anySatisfy: [ :cls | (cls whichSelectorsReferToInstanceVariable: variableName) notEmpty ])
-				ifTrue: [ each addInstanceVariable: variableName ] ]
+	self basicTransform
 ]
