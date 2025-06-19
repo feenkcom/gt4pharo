@@ -4,6 +4,16 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #transforming }
+GtRBAddTraitUsageRefactoring >> basicTransform [
+	| newExpression |
+	newExpression := class traitExpression
+			ifNil: [ traitName ]
+			ifNotNil: [ :exp | exp , ' + ' , traitName ].
+	class traitExpression: newExpression.
+	self model changes defineClass: class gtDefinitionString
+]
+
 { #category : #private }
 GtRBAddTraitUsageRefactoring >> checkClassDoesNotHaveSameSlotsAsTrait [
 	| aTrait theTraitSlots aClass |
@@ -61,11 +71,11 @@ GtRBAddTraitUsageRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBAddTraitUsageRefactoring >> privateTranform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBAddTraitUsageRefactoring >> transform [
-	| newExpression |
-	newExpression := class traitExpression
-		ifNil: [ traitName ]
-		ifNotNil: [ :exp | exp , ' + ' , traitName ].
-	class traitExpression: newExpression.
-	self model changes defineClass: class gtDefinitionString
+	self basicTransform
 ]

@@ -35,6 +35,13 @@ RBRemoveClassRefactoring class >> model: aRBSmalltalk classNames: aClassNameColl
 		yourself
 ]
 
+{ #category : #transforming }
+RBRemoveClassRefactoring >> basicTransform [
+	self
+		reparentSubclasses;
+		removeClasses
+]
+
 { #category : #initialization }
 RBRemoveClassRefactoring >> classNames: aClassNameCollection [
 	classNames := aClassNameCollection
@@ -110,6 +117,11 @@ RBRemoveClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+RBRemoveClassRefactoring >> privateTranform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 RBRemoveClassRefactoring >> removeClasses [
 	classNames do: [:each | self model removeClassNamed: each]
 ]
@@ -134,7 +146,5 @@ RBRemoveClassRefactoring >> storeOn: aStream [
 
 { #category : #transforming }
 RBRemoveClassRefactoring >> transform [
-	self
-		reparentSubclasses;
-		removeClasses
+	self basicTransform
 ]

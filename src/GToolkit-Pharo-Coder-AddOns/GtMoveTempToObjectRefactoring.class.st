@@ -36,6 +36,14 @@ GtMoveTempToObjectRefactoring >> addNewVariableAndAccessors [
 ]
 
 { #category : #transforming }
+GtMoveTempToObjectRefactoring >> basicTransform [
+	self buildAst.
+	self validateLifetimes.
+	self addNewVariableAndAccessors.
+	self changeReferences
+]
+
+{ #category : #transforming }
 GtMoveTempToObjectRefactoring >> buildAst [
 	ast := class parseTreeForSelector: selector
 ]
@@ -139,11 +147,13 @@ GtMoveTempToObjectRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtMoveTempToObjectRefactoring >> privateTranform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtMoveTempToObjectRefactoring >> transform [
-	self buildAst.
-	self validateLifetimes.
-	self addNewVariableAndAccessors.
-	self changeReferences
+	self basicTransform
 ]
 
 { #category : #transforming }

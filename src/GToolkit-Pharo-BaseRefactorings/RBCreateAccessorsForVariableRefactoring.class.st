@@ -56,6 +56,13 @@ RBCreateAccessorsForVariableRefactoring class >> variable: aVarName class: aClas
 		classVariable: aBoolean; yourself
 ]
 
+{ #category : #transforming }
+RBCreateAccessorsForVariableRefactoring >> basicTransform [
+	self
+		createGetterAccessor;
+		createSetterAccessor
+]
+
 { #category : #initialization }
 RBCreateAccessorsForVariableRefactoring >> classVariable: aBoolean [ 
 	classVariable := aBoolean
@@ -157,6 +164,11 @@ RBCreateAccessorsForVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+RBCreateAccessorsForVariableRefactoring >> privateTranform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 RBCreateAccessorsForVariableRefactoring >> selector [ 
 	^ selector ifNil: [ 
 		selector := self safeMethodNameFor: self definingClass
@@ -183,9 +195,7 @@ RBCreateAccessorsForVariableRefactoring >> storeOn: aStream [
 
 { #category : #transforming }
 RBCreateAccessorsForVariableRefactoring >> transform [
-	self
-		createGetterAccessor;
-		createSetterAccessor
+	self basicTransform
 ]
 
 { #category : #testing }

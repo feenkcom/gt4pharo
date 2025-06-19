@@ -19,6 +19,11 @@ RBRemoveInstanceVariableRefactoring class >> remove: variable from: class [
 	^ self variable: variable class: class
 ]
 
+{ #category : #transforming }
+RBRemoveInstanceVariableRefactoring >> basicTransform [
+	class removeInstanceVariable: variableName
+]
+
 { #category : #'gt - extensions' }
 RBRemoveInstanceVariableRefactoring >> gtDescription [
 	<return: #String or: #BlRunRopedText>
@@ -57,6 +62,11 @@ RBRemoveInstanceVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+RBRemoveInstanceVariableRefactoring >> privateTranform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 RBRemoveInstanceVariableRefactoring >> transform [
-	class removeInstanceVariable: variableName
+	self basicTransform
 ]

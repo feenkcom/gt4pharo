@@ -4,6 +4,12 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #transforming }
+GtRBRemoveTraitUsageRefactoring >> basicTransform [
+	class traitExpression: self traitExpressionAfterRemoval.
+	self model changes defineClass: class gtDefinitionString
+]
+
 { #category : #preconditions }
 GtRBRemoveTraitUsageRefactoring >> checkClassIncludesTrait [
 	class := class asClassWithTrait.
@@ -30,6 +36,11 @@ GtRBRemoveTraitUsageRefactoring >> preconditions [
 			(RBCondition
 				withBlock: [ self checkClassIncludesTrait.
 					true ])
+]
+
+{ #category : #transforming }
+GtRBRemoveTraitUsageRefactoring >> privateTranform [
+	self basicTransform
 ]
 
 { #category : #transforming }
@@ -70,6 +81,5 @@ GtRBRemoveTraitUsageRefactoring >> traitExpressionAfterRemoval [
 
 { #category : #transforming }
 GtRBRemoveTraitUsageRefactoring >> transform [
-	class traitExpression: self traitExpressionAfterRemoval.
-	self model changes defineClass: class gtDefinitionString
+	self basicTransform
 ]

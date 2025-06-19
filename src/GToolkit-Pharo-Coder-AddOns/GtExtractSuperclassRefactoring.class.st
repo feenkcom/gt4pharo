@@ -27,6 +27,14 @@ GtExtractSuperclassRefactoring class >> model: aRBSmalltalk addClass: aName supe
 		yourself
 ]
 
+{ #category : #transforming }
+GtExtractSuperclassRefactoring >> basicTransform [
+	self createNewClass.
+	self pullUpCommonVariables.
+	self pullUpCommonMethods.
+	self createSubclassResponsibilityMethods
+]
+
 { #category : #accessing }
 GtExtractSuperclassRefactoring >> category [
 	^ category
@@ -91,6 +99,11 @@ GtExtractSuperclassRefactoring >> preconditions [
 	"handled by component refactorings"
 
 	^ RBCondition empty
+]
+
+{ #category : #transforming }
+GtExtractSuperclassRefactoring >> privateTranform [
+	self basicTransform
 ]
 
 { #category : #transforming }
@@ -177,8 +190,5 @@ GtExtractSuperclassRefactoring >> superclass: anObject [
 
 { #category : #transforming }
 GtExtractSuperclassRefactoring >> transform [
-	self createNewClass.
-	self pullUpCommonVariables.
-	self pullUpCommonMethods.
-	self createSubclassResponsibilityMethods
+	self basicTransform
 ]

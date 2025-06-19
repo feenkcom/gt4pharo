@@ -70,6 +70,13 @@ RBReplaceMethodRefactoring class >> replaceCallMethod: aSelector in: aClass to: 
 		inAllClasses: aBoolean
 ]
 
+{ #category : #transforming }
+RBReplaceMethodRefactoring >> basicTransform [
+	self replaceInAllClasses
+		ifTrue: [ self renameMessageSends ]
+		ifFalse: [ self renameMessageSendsIn: {class} ]
+]
+
 { #category : #'gt ' }
 RBReplaceMethodRefactoring >> gtPreconditions [
 	|conditions|
@@ -148,6 +155,11 @@ RBReplaceMethodRefactoring >> preconditions [
 		true])
 ]
 
+{ #category : #transforming }
+RBReplaceMethodRefactoring >> privateTranform [
+	self basicTransform
+]
+
 { #category : #initialization }
 RBReplaceMethodRefactoring >> replaceCallMethod: aSelector in: aClass to: newSel permutation: aMap [
 	oldSelector := aSelector asSymbol.
@@ -172,7 +184,5 @@ RBReplaceMethodRefactoring >> replaceInAllClasses [
 
 { #category : #transforming }
 RBReplaceMethodRefactoring >> transform [
-	self replaceInAllClasses 
-		ifTrue: [ self renameMessageSends ]
-		ifFalse: [ self renameMessageSendsIn: {class} ]
+	self basicTransform
 ]
