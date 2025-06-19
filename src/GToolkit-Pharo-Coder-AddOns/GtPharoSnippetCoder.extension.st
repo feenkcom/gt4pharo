@@ -87,29 +87,50 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 					typeOf: aNode receiver
 					in: self behavior
 					bindings: aCoderViewModel compositeVariableBindings ].
-	class isNil
-		ifTrue: [ Smalltalk globals
-				allBehaviorsDo: [ :each | 
-					(each includesSelector: selector)
-						ifTrue: [ class notNil ifTrue: [ ^ self ].
-							class := each ] ] ].
-	class isNil ifTrue: [ ^ self ].
+	class
+		ifNil: [ ^ self
+				addInlineMethodUnknownReceiverFor: aNode
+				to: coderAddOns
+				from: aCoderViewModel ].
 	class := class whichClassIncludesSelector: selector.
-	class isNil ifTrue: [ ^ self ].
+	class
+		ifNil: [ (GtPharoIndex current implementersOf: aNode selector) ifEmpty: [ ^ false ] ].
+
 	coderAddOns
 		addContextMenuItem: (self
-				createLabel: 'Inline send'
-				description: aNode selector)
+				createLabel: 'Inline message'
+				description: aNode message selector)
 		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
-		action: [ :each :element | 
+		action: [ :aSourceCoderViewModel :element | 
 			(GtSnippetInlineMessageRefactoringController new
 				messageNode: aNode;
 				implementorClass: class;
 				snippetClass: self behavior;
-				sourceCoderViewModel: each) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
 		id: #'context-menu--inline-send'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns from: aCoderViewModel [
+	coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Inline message'
+				description: aNode message selector)
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aSourceCoderViewModel :element | 
+			| classes defaultClass |
+			classes := GtPharoIndex current implementersOf: aNode selector.
+			defaultClass := classes anyOne methodClass.
+			(GtSnippetUnknownReceiverInlineMessageRefactoringController new
+				implementor: defaultClass;
+				node: aNode;
+				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+		id: #'context-menu--inline-message'.
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
