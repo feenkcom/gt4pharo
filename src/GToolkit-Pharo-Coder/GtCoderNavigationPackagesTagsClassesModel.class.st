@@ -716,7 +716,7 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass outO
 		  			detect: [ :tag | tag includesClass: aClass ]
 		  			ifNone: [ nil ] ]
 				forPharo11AndPharo10: [ 
-					aPackageToSelect classTagForClass: aClass ].
+					aPackageToSelect tagOrNilOf: aClass ].
 					
 			"pharo issue: the root tag has the same name as the package in Pharo 11
 			and Uncategoried in Pharo 12."

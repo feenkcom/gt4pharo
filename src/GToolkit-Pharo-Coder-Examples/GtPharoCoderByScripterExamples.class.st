@@ -1804,7 +1804,7 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackageTag: targ
 			collect: [ :each | 
 				{each.
 					each package.
-					each package classTagForClass: each} ].
+					each package tagOrNilOf: each} ].
 	(targetPackageTag isKindOf: GtCoderPackageUncategorizedTag)
 		ifTrue: [ realTargetPackageTag := targetPackageTag packageTag ].
 	(targetPackageTag isKindOf: GtCoderPackageExtensionTag)
@@ -1854,7 +1854,7 @@ GtPharoCoderByScripterExamples >> dragInIndexClasses: classes toPackageTag: targ
 			previousPackage := eachArray second.
 			previousPackageTag := eachArray third.
 			currentPackage := eachClass package.
-			currentPackageTag := currentPackage classTagForClass: eachClass.
+			currentPackageTag := currentPackage tagOf: eachClass.
 			self
 				assert: currentPackage = previousPackage
 				description: [ 'Class {1} must be in the {2} package'

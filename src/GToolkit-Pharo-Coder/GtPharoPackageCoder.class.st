@@ -6,7 +6,7 @@ Class {
 		'classesCoder',
 		'packageTagsCoder'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -186,7 +186,7 @@ GtPharoPackageCoder >> packageTagCoderFor: aPackageTag [
 
 { #category : #accessing }
 GtPharoPackageCoder >> packageTagForClass: aClass [
-	^ (package classTagForClass: aClass)
+	^ (package tagOrNilOf: aClass)
 		ifNotNil: [ :tag | 
 			self packageTagsCoder coders
 				detect: [ :each | each packageTag = tag ]

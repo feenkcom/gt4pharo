@@ -97,7 +97,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> assertSelectedPackageTagCla
 	self assert: aModel hasSelectedPackage.
 	self assert: aModel selectedPackage equals: aClassToSelect package.
 
-	aTag := aClassToSelect package classTagForClass: aClassToSelect.
+	aTag := aClassToSelect package tagOf: aClassToSelect.
 	self assert: aModel hasSelectedTag.
 	self assert: aModel selectedTag equals: aTag.
 

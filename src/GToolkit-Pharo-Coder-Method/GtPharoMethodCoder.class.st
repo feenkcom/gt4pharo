@@ -962,7 +962,7 @@ GtPharoMethodCoder >> packageTag [
 									| cls |
 									cls := self behavior.
 									cls category asString = package name asString
-										ifFalse: [ package classTagForClass: cls ] ] ] ] ]
+										ifFalse: [ package tagOrNilOf: cls ] ] ] ] ]
 ]
 
 { #category : #private }
