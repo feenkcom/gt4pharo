@@ -113,7 +113,7 @@ GtRBPushDownMethodRefactoring >> privateTransform [
 					vertPane
 						addChildren: {label.
 								container} ] ].
-	super transform
+	super privateTransform
 ]
 
 { #category : #accessing }

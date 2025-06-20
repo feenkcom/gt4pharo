@@ -111,7 +111,7 @@ GtExtractExampleFromSnippetToClassRefactoring >> preconditions [
 { #category : #transforming }
 GtExtractExampleFromSnippetToClassRefactoring >> privateTransform [
 	self createNewClassIfNecessary.
-	super transform.
+	super privateTransform.
 	self finishRefactoring.
 	self gtCleanupChanges
 ]
