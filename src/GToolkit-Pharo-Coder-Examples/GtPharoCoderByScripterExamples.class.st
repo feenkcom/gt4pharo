@@ -1676,8 +1676,8 @@ GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageUncategorizedTag [
 	classes := dummyPackageTag dummyClasses collect: #realClass.
 	classes sort: [ :a :b | a name < b name ].
 	classes := classes first: 4.
-	targetPackageTag := dummyPackage realPackage classTags
-			detect: [ :eachTag | eachTag name = dummyPackage realPackage name ].
+	targetPackageTag := dummyPackage realPackage tags
+			detect: [ :eachTag | eachTag isRoot ].
 	targetPackageTag := GtCoderPackageUncategorizedTag
 			forPackageTag: targetPackageTag.
 
