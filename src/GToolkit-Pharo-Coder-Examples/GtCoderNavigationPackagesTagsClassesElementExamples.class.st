@@ -108,7 +108,7 @@ GtCoderNavigationPackagesTagsClassesElementExamples >> uncategorizedPackageTag [
 	<gtExample>
 	| aPackage aPackageTag aTag |
 	aPackage := self classInUncategorizedPackageTag package.
-	aPackageTag := aPackage classTags detect: [ :eachTag | eachTag name = aPackage name ].
+	aPackageTag := aPackage tags detect: [ :eachTag | eachTag isRoot ].
 	aTag := GtCoderPackageUncategorizedTag forPackageTag: aPackageTag.
 	self assert: (aTag = aPackageTag).
 	self assert: (aTag = aPackage) not.
