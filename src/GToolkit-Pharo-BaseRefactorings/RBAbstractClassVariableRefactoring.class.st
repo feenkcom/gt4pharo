@@ -59,6 +59,13 @@ RBAbstractClassVariableRefactoring >> accessorsRefactoring [
 ]
 
 { #category : #transforming }
+RBAbstractClassVariableRefactoring >> basicTransform [
+	self createAccessors.
+	self abstractInstanceReferences.
+	self abstractClassReferences
+]
+
+{ #category : #transforming }
 RBAbstractClassVariableRefactoring >> createAccessors [
 	self performCompositeRefactoring: self accessorsRefactoring
 ]
@@ -78,8 +85,11 @@ RBAbstractClassVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+RBAbstractClassVariableRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 RBAbstractClassVariableRefactoring >> transform [
-	self createAccessors.
-	self abstractInstanceReferences.
-	self abstractClassReferences
+	self basicTransform
 ]

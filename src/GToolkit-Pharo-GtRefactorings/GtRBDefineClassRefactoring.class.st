@@ -29,6 +29,11 @@ GtRBDefineClassRefactoring >> addClass: aName superclass: aSuperclassName catego
 	definitionString := aString
 ]
 
+{ #category : #transforming }
+GtRBDefineClassRefactoring >> basicTransform [
+	self model changes defineClass: definitionString
+]
+
 { #category : #accessing }
 GtRBDefineClassRefactoring >> definition: aString [
 	definitionString := aString
@@ -49,6 +54,11 @@ GtRBDefineClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBDefineClassRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBDefineClassRefactoring >> transform [
-	self model changes defineClass: definitionString
+	self basicTransform
 ]

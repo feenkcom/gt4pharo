@@ -19,6 +19,19 @@ GtConvertEqualsToSameContentAsRefactoring class >> model: model convert: node in
 		yourself
 ]
 
+{ #category : #transforming }
+GtConvertEqualsToSameContentAsRefactoring >> basicTransform [
+	| startPosition rbComparisonNode methodAst |
+	methodAst := RBParser parseMethod: comparisonNode methodNode source.
+	startPosition := comparisonNode message startPosition.
+	rbComparisonNode := methodAst allChildren
+			detect: [ :node | node isMessage and: [ node keywordsIntervals first first = startPosition ] ].
+	rbComparisonNode
+		selector: GtStrictSymbolEqualityArgumentSignal sameContentSelector.
+
+	newSource := methodAst newSource
+]
+
 { #category : #initialization }
 GtConvertEqualsToSameContentAsRefactoring >> convert: node inMethod: aSelector forClass: aClassOrSelector [
 	comparisonNode := node.
@@ -42,17 +55,12 @@ GtConvertEqualsToSameContentAsRefactoring >> preconditions [
 		[ comparisonNode selector == #= ].
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
+GtConvertEqualsToSameContentAsRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtConvertEqualsToSameContentAsRefactoring >> transform [
-	| startPosition rbComparisonNode methodAst |
-
-
-	methodAst := RBParser parseMethod: comparisonNode methodNode source.
-	startPosition := comparisonNode message startPosition.
-	rbComparisonNode := methodAst allChildren detect: [ :node |
-		node isMessage and:
-			[ node keywordsIntervals first first = startPosition ] ].
-	rbComparisonNode selector: GtStrictSymbolEqualityArgumentSignal sameContentSelector.
-
-	newSource := methodAst newSource.
+	self basicTransform
 ]

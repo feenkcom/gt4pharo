@@ -15,6 +15,17 @@ GtRBAddTraitUsageToClassByNameRefactoring class >> traitName: aTraitName inClass
 		traitName: aTraitName asSymbol
 ]
 
+{ #category : #transforming }
+GtRBAddTraitUsageToClassByNameRefactoring >> basicTransform [
+	| newExpression class |
+	class := self model classNamed: className.
+	newExpression := class traitExpression
+			ifNil: [ traitName ]
+			ifNotNil: [ :exp | exp , ' + ' , traitName ].
+	class traitExpression: newExpression.
+	self model changes defineClass: class gtDefinitionString
+]
+
 { #category : #private }
 GtRBAddTraitUsageToClassByNameRefactoring >> checkClassDoesNotIncludeTraitFor: aClass [ 
 	aClass withAllSuperclasses
@@ -65,12 +76,11 @@ GtRBAddTraitUsageToClassByNameRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBAddTraitUsageToClassByNameRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBAddTraitUsageToClassByNameRefactoring >> transform [
-	| newExpression class |
-	class := self model classNamed: className.
-	newExpression := class traitExpression
-		ifNil: [ traitName ]
-		ifNotNil: [ :exp | exp , ' + ' , traitName ].
-	class traitExpression: newExpression.
-	self model changes defineClass: class gtDefinitionString
+	self basicTransform
 ]

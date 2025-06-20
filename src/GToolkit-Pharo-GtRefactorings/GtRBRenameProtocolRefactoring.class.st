@@ -17,30 +17,8 @@ GtRBRenameProtocolRefactoring class >> renameProtocol: oldName in: aClass to: ne
 		to: newName
 ]
 
-{ #category : #accessing }
-GtRBRenameProtocolRefactoring >> gtDescription [
-	^ 'Rename protocol ' , oldName , ' to ' , newName
-]
-
-{ #category : #preconditions }
-GtRBRenameProtocolRefactoring >> preconditions [
-	^ RBCondition
-		withBlock: [ (class protocols includes: oldName)
-				or: [ class realClass
-						ifNil: [ false ]
-						ifNotNil: [ :cls | cls organization categories includes: oldName ] ] ]
-]
-
-{ #category : #initialization }
-GtRBRenameProtocolRefactoring >> renameProtocol: anOldName in: aClass to: aNewName [
-	className := aClass name.
-	class := self model classFor: aClass.
-	oldName := anOldName.
-	newName := aNewName
-]
-
 { #category : #transforming }
-GtRBRenameProtocolRefactoring >> transform [
+GtRBRenameProtocolRefactoring >> basicTransform [
 	| hasMethod |
 	hasMethod := false.
 	class selectors
@@ -57,4 +35,36 @@ GtRBRenameProtocolRefactoring >> transform [
 			oldName = Protocol unclassified
 				ifFalse: [ model changes
 						addChange: (RBRemoveProtocolChange removeProtocolNamed: oldName in: class) ] ]
+]
+
+{ #category : #accessing }
+GtRBRenameProtocolRefactoring >> gtDescription [
+	^ 'Rename protocol ' , oldName , ' to ' , newName
+]
+
+{ #category : #preconditions }
+GtRBRenameProtocolRefactoring >> preconditions [
+	^ RBCondition
+		withBlock: [ (class protocols includes: oldName)
+				or: [ class realClass
+						ifNil: [ false ]
+						ifNotNil: [ :cls | cls organization categories includes: oldName ] ] ]
+]
+
+{ #category : #transforming }
+GtRBRenameProtocolRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #initialization }
+GtRBRenameProtocolRefactoring >> renameProtocol: anOldName in: aClass to: aNewName [
+	className := aClass name.
+	class := self model classFor: aClass.
+	oldName := anOldName.
+	newName := aNewName
+]
+
+{ #category : #transforming }
+GtRBRenameProtocolRefactoring >> transform [
+	self basicTransform
 ]

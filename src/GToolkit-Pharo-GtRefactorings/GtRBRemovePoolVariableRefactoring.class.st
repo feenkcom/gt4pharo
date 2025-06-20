@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #transforming }
+GtRBRemovePoolVariableRefactoring >> basicTransform [
+	class removePoolDictionary: variableName asSymbol
+]
+
 { #category : #preconditions }
 GtRBRemovePoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociation [
 	class withAllSubclasses
@@ -53,6 +58,11 @@ GtRBRemovePoolVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBRemovePoolVariableRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBRemovePoolVariableRefactoring >> transform [
-	class removePoolDictionary: variableName asSymbol
+	self basicTransform
 ]

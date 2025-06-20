@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : #transforming }
+GtCascadesRefactoring >> basicTransform [
+	| node |
+	node := self findNode.
+	node isCascade
+		ifFalse: [ ^ self refactoringError: 'Node is not a cascade message send' ].
+	node receiver isVariable
+		ifFalse: [ node := self extractReceiverIntoVariable: node ].
+	self transformNode: node
+]
+
+{ #category : #transforming }
 GtCascadesRefactoring >> extractReceiverIntoVariable: aNode [
 	| statement newAssignment oldReceiver variable |
 	(aNode parent isAssignment and: [ aNode messages last selector = #yourself ])
@@ -63,14 +74,13 @@ GtCascadesRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtCascadesRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtCascadesRefactoring >> transform [
-	| node |
-	node := self findNode.
-	node isCascade
-		ifFalse: [ ^ self refactoringError: 'Node is not a cascade message send' ].
-	node receiver isVariable
-		ifFalse: [ node := self extractReceiverIntoVariable: node ].
-	self transformNode: node
+	self basicTransform
 ]
 
 { #category : #transforming }

@@ -101,6 +101,13 @@ GtExtractMethodFromSnippetRefactoring >> moveMethod [
 	movedSelector := refactoring movedSelector
 ]
 
+{ #category : #transforming }
+GtExtractMethodFromSnippetRefactoring >> privateTransform [
+	super privateTransform.
+	self buildNewSnippetSource.
+	self cleanChanges
+]
+
 { #category : #testing }
 GtExtractMethodFromSnippetRefactoring >> shouldKeepChange: aRBChangeObject [
 	^ (aRBChangeObject isKindOf: RBAddMethodChange)

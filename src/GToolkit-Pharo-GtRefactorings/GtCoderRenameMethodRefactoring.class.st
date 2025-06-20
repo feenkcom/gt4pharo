@@ -18,6 +18,16 @@ GtCoderRenameMethodRefactoring >> methodCoder: anObject [
 ]
 
 { #category : #transforming }
+GtCoderRenameMethodRefactoring >> privateTransform [
+	self changes
+		addChange: (GtCoderRenameMethodChange new
+				methodCoder: self methodCoder;
+				newSelector: newSelector;
+				oldSelector: oldSelector).
+	super privateTransform
+]
+
+{ #category : #transforming }
 GtCoderRenameMethodRefactoring >> transform [
 	self changes addChange: (GtCoderRenameMethodChange new
 		methodCoder: self methodCoder;

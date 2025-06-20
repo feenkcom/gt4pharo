@@ -15,6 +15,13 @@ GtRBRenamePackageRefactoring class >> from: oldName to: newName [
 		yourself
 ]
 
+{ #category : #transforming }
+GtRBRenamePackageRefactoring >> basicTransform [
+	self renamePackage.
+	self renameManifestClass.
+	self renameBaselineReferences
+]
+
 { #category : #'initialize-release' }
 GtRBRenamePackageRefactoring >> from: oldPackageName to: newPackageName [
 	oldName := oldPackageName.
@@ -42,6 +49,11 @@ GtRBRenamePackageRefactoring >> preconditions [
 			((RBCondition
 				withBlock: [ (self packageOrganizer packageNamed: newName asSymbol ifAbsent: [  ])
 						isNil ]) errorMacro: 'Package ' , newName , ' already exists')
+]
+
+{ #category : #transforming }
+GtRBRenamePackageRefactoring >> privateTransform [
+	self basicTransform
 ]
 
 { #category : #transforming }
@@ -92,7 +104,5 @@ GtRBRenamePackageRefactoring >> renamePackage [
 
 { #category : #transforming }
 GtRBRenamePackageRefactoring >> transform [
-	self renamePackage.
-	self renameManifestClass.
-	self renameBaselineReferences
+	self basicTransform
 ]

@@ -87,6 +87,13 @@ GtExtractMethodFromInspectorRefactoring >> preconditions [
 	^ super preconditions
 ]
 
+{ #category : #transforming }
+GtExtractMethodFromInspectorRefactoring >> privateTransform [
+	super privateTransform.
+	self buildNewSnippetSource.
+	self cleanChanges
+]
+
 { #category : #accessing }
 GtExtractMethodFromInspectorRefactoring >> shouldKeepChange: each [
 	^ (each isKindOf: RBAddMethodChange) and: [ selector ~= each selector ]

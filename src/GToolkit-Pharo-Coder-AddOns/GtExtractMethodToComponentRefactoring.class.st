@@ -45,6 +45,12 @@ GtExtractMethodToComponentRefactoring >> moveMethod [
 ]
 
 { #category : #transforming }
+GtExtractMethodToComponentRefactoring >> privateTransform [
+	super privateTransform.
+	self gtCleanupChanges
+]
+
+{ #category : #transforming }
 GtExtractMethodToComponentRefactoring >> transform [
 	super transform.
 	self gtCleanupChanges

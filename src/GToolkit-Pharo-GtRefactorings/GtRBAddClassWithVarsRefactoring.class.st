@@ -9,6 +9,19 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #transforming }
+GtRBAddClassWithVarsRefactoring >> basicTransform [
+	self model
+		defineClass: ('<1p> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>'
+				expandMacrosWithArguments: (Array
+						with: superclass
+						with: className
+						with: self instanceVariableNamesString
+						with: self classVariableNamesString
+						with: category asString));
+		reparentClasses: subclasses to: (self model classNamed: className asSymbol)
+]
+
 { #category : #accessing }
 GtRBAddClassWithVarsRefactoring >> classVariableNames [
 	^ classVariableNames
@@ -62,15 +75,11 @@ GtRBAddClassWithVarsRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBAddClassWithVarsRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBAddClassWithVarsRefactoring >> transform [
-	(self model)
-		defineClass: ('<1p> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>' 
-					expandMacrosWithArguments: (
-						Array 
-							with: superclass
-							with: className
-							with: self instanceVariableNamesString
-							with: self classVariableNamesString
-							with: category asString));
-		reparentClasses: subclasses to: (self model classNamed: className asSymbol)
+	self basicTransform
 ]

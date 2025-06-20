@@ -15,6 +15,13 @@ GtRBChangeSuperclassRefactoring class >> changeSuperclassOf: aClass to: superCla
 		yourself
 ]
 
+{ #category : #transforming }
+GtRBChangeSuperclassRefactoring >> basicTransform [
+	class superclass: newSuperclass.
+	class classSide superclass: newSuperclass classSide.
+	self model changes defineClass: class gtDefinitionString
+]
+
 { #category : #'initialize-release' }
 GtRBChangeSuperclassRefactoring >> changeSuperclassOf: aClass to: superClass [
 	className := aClass name.
@@ -49,8 +56,11 @@ GtRBChangeSuperclassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBChangeSuperclassRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBChangeSuperclassRefactoring >> transform [
-	class superclass: newSuperclass.
-	class classSide superclass: newSuperclass classSide.
-	self model changes defineClass: class gtDefinitionString
+	self basicTransform
 ]

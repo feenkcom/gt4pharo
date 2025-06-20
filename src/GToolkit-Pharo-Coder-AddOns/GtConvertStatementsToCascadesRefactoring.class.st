@@ -18,6 +18,17 @@ GtConvertStatementsToCascadesRefactoring class >> model: model convert: anInterv
 		yourself
 ]
 
+{ #category : #transforming }
+GtConvertStatementsToCascadesRefactoring >> basicTransform [
+	| nodes cascade |
+	nodes := self findNodes.
+	nodes size < 2 ifTrue: [ ^ self refactoringError: 'Only one node is selected' ].
+	(nodes first isAssignment and: [ nodes first value isMessage ])
+		ifTrue: [ cascade := self cascadeWithAssignment: nodes ]
+		ifFalse: [ cascade := self cascadeWithoutAssignment: nodes ].
+	class compileTree: cascade methodNode
+]
+
 { #category : #accessing }
 GtConvertStatementsToCascadesRefactoring >> cascadeWithAssignment: nodes [
 	| cascade sends |
@@ -108,13 +119,12 @@ GtConvertStatementsToCascadesRefactoring >> preconditions [
 	^ RBCondition definesSelector: selector in: class
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
+GtConvertStatementsToCascadesRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtConvertStatementsToCascadesRefactoring >> transform [
-	| nodes cascade |
-	nodes := self findNodes.
-	nodes size < 2 ifTrue: [ ^ self refactoringError: 'Only one node is selected' ].
-	(nodes first isAssignment and: [ nodes first value isMessage ])
-		ifTrue: [ cascade := self cascadeWithAssignment: nodes ]
-		ifFalse: [ cascade := self cascadeWithoutAssignment: nodes ].
-	class compileTree: cascade methodNode
+	self basicTransform
 ]

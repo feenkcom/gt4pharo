@@ -21,6 +21,14 @@ Class {
 	#category : #'GToolkit-Pharo-BaseRefactorings'
 }
 
+{ #category : #transforming }
+RBRemoveClassKeepingSubclassesRefactoring >> basicTransform [
+	self initalizeRefactorings.
+	refactorings do: [ :ref | ref primitiveExecute ].
+	self reparentSubclasses.
+	self removeClasses
+]
+
 { #category : #preconditions }
 RBRemoveClassKeepingSubclassesRefactoring >> initalizeRefactorings [
 
@@ -50,6 +58,11 @@ RBRemoveClassKeepingSubclassesRefactoring >> preconditions [
 		   & (self preconditionHasNoReferences: each)
 		   & (self preconditionHasNoUsers: aClassOrTrait))
 		  "& ( self preconditionEmptyOrHasNoSubclasses: aClassOrTrait )" ]
+]
+
+{ #category : #transforming }
+RBRemoveClassKeepingSubclassesRefactoring >> privateTransform [
+	self basicTransform
 ]
 
 { #category : #preconditions }
@@ -82,10 +95,7 @@ RBRemoveClassKeepingSubclassesRefactoring >> removeClasses [
 	classNames do: [:each | self model removeClassKeepingSubclassesNamed: each]
 ]
 
-{ #category : #preconditions }
+{ #category : #transforming }
 RBRemoveClassKeepingSubclassesRefactoring >> transform [
-	self initalizeRefactorings.
-	refactorings do: [ :ref | ref primitiveExecute ].
-	self reparentSubclasses.
-	self removeClasses
+	self basicTransform
 ]

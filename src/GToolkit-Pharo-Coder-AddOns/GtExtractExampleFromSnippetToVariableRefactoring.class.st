@@ -23,6 +23,13 @@ GtExtractExampleFromSnippetToVariableRefactoring >> gtDescription [
 ]
 
 { #category : #transforming }
+GtExtractExampleFromSnippetToVariableRefactoring >> privateTransform [
+	super privateTransform.
+	self finishRefactoring.
+	self gtCleanupChanges
+]
+
+{ #category : #transforming }
 GtExtractExampleFromSnippetToVariableRefactoring >> transform [
 	super transform.
 	self finishRefactoring.

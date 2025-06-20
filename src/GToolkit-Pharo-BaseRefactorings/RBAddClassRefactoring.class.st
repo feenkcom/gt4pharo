@@ -47,6 +47,24 @@ RBAddClassRefactoring >> addClass: aName superclass: aClass subclasses: aCollect
 	category := aSymbol
 ]
 
+{ #category : #transforming }
+RBAddClassRefactoring >> basicTransform [
+	<gtPharoPatch: #Pharo>
+	self
+		forPharo12: [ self model
+				defineClass: ('<1s> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
+						expandMacrosWith: superclass name
+						with: className
+						with: category asString);
+				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
+		forPharo11AndPharo10: [ self model
+				defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
+						expandMacrosWith: superclass
+						with: className
+						with: category asString);
+				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
+]
+
 { #category : #preconditions }
 RBAddClassRefactoring >> preconditions [
 	| cond |
@@ -64,6 +82,11 @@ RBAddClassRefactoring >> preconditions [
 			& (RBCondition isSymbol: category) 
 			& ((RBCondition withBlock: [category isNotEmpty ]) 
 					errorMacro: 'Invalid category name')
+]
+
+{ #category : #transforming }
+RBAddClassRefactoring >> privateTransform [
+	self basicTransform
 ]
 
 { #category : #printing }
@@ -84,20 +107,5 @@ RBAddClassRefactoring >> storeOn: aStream [
 
 { #category : #transforming }
 RBAddClassRefactoring >> transform [
-	<gtPharoPatch: #Pharo>
-	self
-		forPharo12: [ 
-			self model
-				defineClass: ('<1s> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
-						expandMacrosWith: superclass name
-						with: className
-						with: category asString);
-				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
-		forPharo11AndPharo10: [ 
-			self model
-				defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
-						expandMacrosWith: superclass
-						with: className
-						with: category asString);
-				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
+	self basicTransform
 ]

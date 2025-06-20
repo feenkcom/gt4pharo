@@ -9,6 +9,11 @@ Class {
 	#category : #'GToolkit-Pharo-BaseRefactorings'
 }
 
+{ #category : #transforming }
+RBRemoveClassVariableRefactoring >> basicTransform [
+	class removeClassVariable: variableName
+]
+
 { #category : #'gt - extensions' }
 RBRemoveClassVariableRefactoring >> gtDescription [
 	<return: #String or: #BlRunRopedText>
@@ -49,6 +54,11 @@ RBRemoveClassVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+RBRemoveClassVariableRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 RBRemoveClassVariableRefactoring >> transform [
-	class removeClassVariable: variableName
+	self basicTransform
 ]

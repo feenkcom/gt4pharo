@@ -35,6 +35,14 @@ RBRenameClassRefactoring class >> rename: aClassName to: aNewName [
 		newName: aNewName
 ]
 
+{ #category : #transforming }
+RBRenameClassRefactoring >> basicTransform [
+	self model
+		renameClass: class
+		to: newName
+		around: [ self renameReferences ]
+]
+
 { #category : #initialization }
 RBRenameClassRefactoring >> className: aName newName: aNewName [
 	className := aName asSymbol.
@@ -59,6 +67,11 @@ RBRenameClassRefactoring >> preconditions [
 			& (RBCondition isValidClassName: newName)
 			& (RBCondition isGlobal: newName in: self model) not) |
 			(RBCondition withBlock: [ self refactoringFailure: newName , ' is not a valid class name'])
+]
+
+{ #category : #transforming }
+RBRenameClassRefactoring >> privateTransform [
+	self basicTransform
 ]
 
 { #category : #transforming }
@@ -99,8 +112,5 @@ RBRenameClassRefactoring >> storeOn: aStream [
 
 { #category : #transforming }
 RBRenameClassRefactoring >> transform [
-	self model
-		renameClass: class
-		to: newName
-		around: [self renameReferences]
+	self basicTransform
 ]

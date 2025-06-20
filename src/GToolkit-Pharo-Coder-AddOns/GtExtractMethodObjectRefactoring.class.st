@@ -62,6 +62,21 @@ GtExtractMethodObjectRefactoring >> addSelfReturn [
 ]
 
 { #category : #transforming }
+GtExtractMethodObjectRefactoring >> basicTransform [
+	self extractMethod.
+	self addClass.
+	self abstractVariablesInExtractedMethod.
+	self createClassInstance.
+	self addSelfReturn.
+	self moveDataToClass.
+	self extractToNewClass.
+	self inlineAssignment.
+	self convertCascadedConstructor.
+	self inlineMessage.
+	self gtCleanupChanges
+]
+
+{ #category : #transforming }
 GtExtractMethodObjectRefactoring >> cascadeExtractedMessage [
 	| rewriter ast |
 	self shouldEliminateYourselfFromConstructor ifFalse: [ ^ self ].
@@ -292,6 +307,11 @@ GtExtractMethodObjectRefactoring >> preconditions [
 	^ self emptyCondition
 ]
 
+{ #category : #transforming }
+GtExtractMethodObjectRefactoring >> privateTransform [
+	self basicTransform
+]
+
 { #category : #accessing }
 GtExtractMethodObjectRefactoring >> selector [
 	^ selector
@@ -314,17 +334,7 @@ GtExtractMethodObjectRefactoring >> superclass: aSymbol [
 
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> transform [
-	self extractMethod.
-	self addClass.
-	self abstractVariablesInExtractedMethod.
-	self createClassInstance.
-	self addSelfReturn.
-	self moveDataToClass.
-	self extractToNewClass.
-	self inlineAssignment.
-	self convertCascadedConstructor.
-	self inlineMessage.
-	self gtCleanupChanges
+	self basicTransform
 ]
 
 { #category : #accessing }

@@ -126,6 +126,30 @@ GtMoveTemporaryToOuterScopeRefactoring class >> tempIsAlsoBlockVarExample [
 	^ refactoring
 ]
 
+{ #category : #transforming }
+GtMoveTemporaryToOuterScopeRefactoring >> basicTransform [
+	| definers definer newDefiner name |
+	name := self variableNode name.
+	definer := self variableNode parent.
+	newDefiner := definer allParents detect: [ :each | each isSequence ].
+	definers := IdentitySet with: definer.
+	self variableNode methodNode
+		nodesDo: [ :each | 
+			(each isVariable and: [ each name = name ])
+				ifTrue: [ (each whoDefines: name)
+						ifNil: [ self
+								refactoringError: 'Cannot move variable scope as it would change other references' ]
+						ifNotNil: [ :node | 
+							node isBlock
+								ifTrue: [ self
+										refactoringError: 'Cannot move variable scope as a block in that scope uses it as an argument.' ].
+							definers add: node ] ] ].
+	definers := definers select: [ :each | each allParents includes: newDefiner ].
+	definers do: [ :each | each removeTemporaryNamed: name ].
+	newDefiner addTemporaryNamed: name.
+	(class methodFor: selector) compileTree: newDefiner methodNode
+]
+
 { #category : #initialization }
 GtMoveTemporaryToOuterScopeRefactoring >> moveVariableAt: anInterval in: aSelector class: aClass [
 	interval := anInterval.
@@ -147,27 +171,13 @@ GtMoveTemporaryToOuterScopeRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtMoveTemporaryToOuterScopeRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtMoveTemporaryToOuterScopeRefactoring >> transform [
-	| definers definer newDefiner name |
-	name := self variableNode name.
-	definer := self variableNode parent.
-	newDefiner := definer allParents detect: [ :each | each isSequence ].
-	definers := IdentitySet with: definer.
-	self variableNode methodNode
-		nodesDo: [ :each | 
-			(each isVariable and: [ each name = name ])
-				ifTrue: [ (each whoDefines: name)
-						ifNil: [ self
-								refactoringError: 'Cannot move variable scope as it would change other references' ]
-						ifNotNil: [ :node | 
-							node isBlock
-								ifTrue: [ self
-										refactoringError: 'Cannot move variable scope as a block in that scope uses it as an argument.' ].
-							definers add: node ] ] ].
-	definers := definers select: [ :each | each allParents includes: newDefiner ].
-	definers do: [ :each | each removeTemporaryNamed: name ].
-	newDefiner addTemporaryNamed: name.
-	(class methodFor: selector) compileTree: newDefiner methodNode
+	self basicTransform
 ]
 
 { #category : #private }

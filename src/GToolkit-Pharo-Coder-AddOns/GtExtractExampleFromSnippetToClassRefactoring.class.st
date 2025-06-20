@@ -109,6 +109,14 @@ GtExtractExampleFromSnippetToClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtExtractExampleFromSnippetToClassRefactoring >> privateTransform [
+	self createNewClassIfNecessary.
+	super privateTransform.
+	self finishRefactoring.
+	self gtCleanupChanges
+]
+
+{ #category : #transforming }
 GtExtractExampleFromSnippetToClassRefactoring >> replaceSelfReferences [
 	| ast rewriter |
 	ast := (class methodFor: newExtractedSelector) ast.

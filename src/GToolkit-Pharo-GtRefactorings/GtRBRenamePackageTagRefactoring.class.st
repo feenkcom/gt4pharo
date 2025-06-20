@@ -16,6 +16,15 @@ GtRBRenamePackageTagRefactoring class >> packageName: aPackageName from: oldTagN
 		yourself
 ]
 
+{ #category : #transforming }
+GtRBRenamePackageTagRefactoring >> basicTransform [
+	self model changes
+		addChange: (GtRBRenamePackageTagChange
+				packageName: packageName
+				from: oldName
+				to: newName)
+]
+
 { #category : #accessing }
 GtRBRenamePackageTagRefactoring >> gtDescription [
 	^ 'Rename package tag ' , oldName , ' to ' , newName
@@ -49,11 +58,11 @@ GtRBRenamePackageTagRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBRenamePackageTagRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBRenamePackageTagRefactoring >> transform [
-	self model changes
-		addChange:
-			(GtRBRenamePackageTagChange
-				packageName: packageName
-				from: oldName
-				to: newName)
+	self basicTransform
 ]

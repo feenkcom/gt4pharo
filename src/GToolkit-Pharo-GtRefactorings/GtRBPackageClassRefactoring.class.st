@@ -16,6 +16,19 @@ GtRBPackageClassRefactoring class >> class: aClass packageName: packageString ta
 		yourself
 ]
 
+{ #category : #transforming }
+GtRBPackageClassRefactoring >> basicTransform [
+	RPackageOrganizer default
+		packageNamed: packageName asSymbol
+		ifAbsent: [ self model changes addChange: (GtRBAddPackageChange packageName: packageName) ].
+	class
+		category: packageName
+				, ((tagName isNil or: [ tagName isEmpty ])
+						ifTrue: [ '' ]
+						ifFalse: [ '-' , tagName ]).
+	self model changes defineClass: class gtDefinitionString
+]
+
 { #category : #'initialize-release' }
 GtRBPackageClassRefactoring >> class: aClass packageName: packageString tagName: tagString [
 	class := self model classFor: aClass.
@@ -30,17 +43,11 @@ GtRBPackageClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBPackageClassRefactoring >> privateTransform [
+	self basicTransform
+]
+
+{ #category : #transforming }
 GtRBPackageClassRefactoring >> transform [
-	RPackageOrganizer default
-		packageNamed: packageName asSymbol
-		ifAbsent: [ self model changes
-				addChange: (GtRBAddPackageChange packageName: packageName) ].
-	class
-		category:
-			packageName
-				,
-					((tagName isNil or: [ tagName isEmpty ])
-						ifTrue: [ '' ]
-						ifFalse: [ '-' , tagName ]).
-	self model changes defineClass: class gtDefinitionString
+	self basicTransform
 ]
