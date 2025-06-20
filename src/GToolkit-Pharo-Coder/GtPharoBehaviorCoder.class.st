@@ -171,7 +171,7 @@ GtPharoBehaviorCoder >> package [
 { #category : #accessing }
 GtPharoBehaviorCoder >> packageTag [
 	| tag |
-	tag := self package classTagForClass: self theClass.
+	tag := self package tagOrNilOf: self theClass.
 	(tag isNil or: [ tag isRoot ]) ifTrue: [ ^ nil ].
 	^ tag
 ]

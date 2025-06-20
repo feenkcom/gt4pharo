@@ -121,15 +121,11 @@ GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName in
 	^ self
 		critical: [ self
 				forPharo12: [ 
-					anExistingClass classInstaller
-						make: [ :builder | 
-							builder
-								superclass: anExistingClass;
-								name: aSubclassName;
-								slotsFromString: instVarNameList;
-								sharedVariablesFromString: classVarNames;
-								package: aPackageSymbol;
-								environment: anExistingClass environment ] ]
+					anExistingClass
+						subclass: aSubclassName
+						instanceVariableNames: instVarNameList
+						classVariableNames: classVarNames
+						package: aPackageSymbol ]
 				forPharo11AndPharo10: [ anExistingClass
 						subclass: aSubclassName
 						instanceVariableNames: instVarNameList

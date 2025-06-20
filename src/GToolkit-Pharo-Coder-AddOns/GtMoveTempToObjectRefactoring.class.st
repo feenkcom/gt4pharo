@@ -143,7 +143,7 @@ GtMoveTempToObjectRefactoring >> isForSelf [
 
 { #category : #preconditions }
 GtMoveTempToObjectRefactoring >> preconditions [
-	^ RBCondition empty
+	^ RBCondition true
 ]
 
 { #category : #transforming }

@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
@@ -20,7 +20,7 @@ GtPharoPackageTagsCoder class >> forPackage: aRPackage [
 
 { #category : #initialization }
 GtPharoPackageTagsCoder >> forPackage: aRPackage [
-	self forItems: aRPackage classTags asOrderedCollection
+	self forItems: aRPackage tags asOrderedCollection
 ]
 
 { #category : #'gt-extensions' }

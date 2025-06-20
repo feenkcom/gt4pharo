@@ -30,7 +30,7 @@ GtPackageCreationForm >> packageAndTagDescription [
 				ifNil: [ true ]
 				ifNotNil: [ aValue tagName
 						ifEmpty: [ false ]
-						ifNotEmpty: [ (aPackage classTagNamed: aValue tagName ifAbsent: [ nil ]) isNil ] ] ]
+						ifNotEmpty: [ (aPackage tagNamed: aValue tagName ifAbsent: [ nil ]) isNil ] ] ]
 		labelled: 'Package and tag exist'
 ]
 

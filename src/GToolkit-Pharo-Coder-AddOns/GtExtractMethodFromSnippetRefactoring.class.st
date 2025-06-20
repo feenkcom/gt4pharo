@@ -103,7 +103,7 @@ GtExtractMethodFromSnippetRefactoring >> moveMethod [
 
 { #category : #transforming }
 GtExtractMethodFromSnippetRefactoring >> privateTransform [
-	super transform.
+	super privateTransform.
 	self buildNewSnippetSource.
 	self cleanChanges
 ]

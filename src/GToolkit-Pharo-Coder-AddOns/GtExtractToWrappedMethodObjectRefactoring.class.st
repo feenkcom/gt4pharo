@@ -177,7 +177,7 @@ GtExtractToWrappedMethodObjectRefactoring >> privateTransform [
 				ifNotNil: [ :result | 
 					methodObjectSelector := result selector.
 					result ] ].
-	super transform.
+	super privateTransform.
 	self addWrappedCall.
 	self removeNewClassAccessors.
 	self gtCleanupChanges

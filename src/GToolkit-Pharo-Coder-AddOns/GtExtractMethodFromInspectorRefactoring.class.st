@@ -89,7 +89,7 @@ GtExtractMethodFromInspectorRefactoring >> preconditions [
 
 { #category : #transforming }
 GtExtractMethodFromInspectorRefactoring >> privateTransform [
-	super transform.
+	super privateTransform.
 	self buildNewSnippetSource.
 	self cleanChanges
 ]

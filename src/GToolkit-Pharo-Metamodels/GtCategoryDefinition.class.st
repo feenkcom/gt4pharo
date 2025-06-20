@@ -78,7 +78,7 @@ GtCategoryDefinition >> isValidForCreation [
 	tagName := tag name.
 	tagName isEmpty
 		ifTrue: [ ^ false ].
-	rpackage classTagNamed: tagName ifAbsent: [ ^ true ].
+	rpackage tagNamed: tagName ifAbsent: [ ^ true ].
 	^ false
 ]
 

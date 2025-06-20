@@ -63,7 +63,9 @@ GtExtractTemporaryRefactoringController >> safelyExecute [
 				ifNotNil: [ :action | 
 					action
 						when: GtRenameActionAnnouncement
-						do: [ :ann | ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ] ] ]
+						do: [ :ann | 
+							ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+						for: self ] ]
 ]
 
 { #category : #accessing }
