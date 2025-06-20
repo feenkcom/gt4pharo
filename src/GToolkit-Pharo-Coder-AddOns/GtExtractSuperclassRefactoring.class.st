@@ -98,7 +98,7 @@ GtExtractSuperclassRefactoring >> gtDescription [
 GtExtractSuperclassRefactoring >> preconditions [
 	"handled by component refactorings"
 
-	^ RBCondition empty
+	^ RBCondition true
 ]
 
 { #category : #transforming }
