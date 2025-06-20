@@ -31,7 +31,7 @@ GtRBAddPackageTagChange >> primitiveExecute [
 { #category : #accessing }
 GtRBAddPackageTagChange >> tag [
 	^ self package
-		ifNotNil: [ :pkg | pkg classTagNamed: tagName ifAbsent: [  ] ]
+		ifNotNil: [ :pkg | pkg tagNamed: tagName ifAbsent: [  ] ]
 ]
 
 { #category : #accessing }

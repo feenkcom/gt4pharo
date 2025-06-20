@@ -48,12 +48,12 @@ GtRBRenamePackageTagRefactoring >> preconditions [
 		&
 			((RBCondition
 				withBlock:
-					[ (package classTagNamed: oldName asSymbol ifAbsent: [  ]) notNil ])
+					[ (package tagNamed: oldName asSymbol ifAbsent: [  ]) notNil ])
 				errorMacro: 'Package tag ' , oldName , ' does not exist')
 		&
 			((RBCondition
 				withBlock:
-					[ (package classTagNamed: newName asSymbol ifAbsent: [  ]) isNil ])
+					[ (package tagNamed: newName asSymbol ifAbsent: [  ]) isNil ])
 				errorMacro: 'Package tag ' , newName , ' already exists')
 ]
 
