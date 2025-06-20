@@ -35,7 +35,7 @@ GtCoderNavigationModelExamples >> selectClassInDifferentPackageWithNoTagsNavigat
 	aPackage := 'GToolkit-Examples' asPackage.
 	self
 		assertSelectionOfPackage: aPackage
-		tag: (aPackage classTagNamed: 'Announcements')
+		tag: (aPackage tagNamed: 'Announcements')
 		class: GtExampleAnnouncement
 		inModel: aModel.
 	^ aModel
@@ -50,7 +50,7 @@ GtCoderNavigationModelExamples >> selectClassNavigationExample [
 	aPackage := 'GToolkit-Pharo-Coder-Examples' asPackage.
 	self
 		assertSelectionOfPackage: aPackage
-		tag: (aPackage classTagNamed: 'Navigation')
+		tag: (aPackage tagNamed: 'Navigation')
 		class: GtCoderNavigationModelExamples
 		inModel: aModel.
 	^ aModel
@@ -103,7 +103,7 @@ GtCoderNavigationModelExamples >> selectPackageAndTag [
 	aModel := self basicPackageTagsClassesNavigation.
 	aPackage := 'GToolkit-Pharo-Coder-Examples' asPackage.
 	aModel selectPackage: aPackage.
-	aTag := aPackage classTagNamed: 'Navigation'.
+	aTag := aPackage tagNamed: 'Navigation'.
 	aModel selectPackageTag: aTag.
 	self
 		assertSelectionOfPackage: aPackage

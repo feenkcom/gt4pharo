@@ -309,7 +309,7 @@ GtCoderNavigationBasicPackagesTagsClassesElementExamples >> numberOfSubscription
 { #category : #'examples - system items' }
 GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageTag [
 	<gtExample>
-	^ self packageWithTagsAndWithoutExtensions classTagNamed: 'Navigation'
+	^ self packageWithTagsAndWithoutExtensions tagNamed: 'Navigation'
 ]
 
 { #category : #'examples - system items' }
