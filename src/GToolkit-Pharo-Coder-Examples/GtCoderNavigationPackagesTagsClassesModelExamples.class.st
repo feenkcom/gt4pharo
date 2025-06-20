@@ -159,7 +159,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_02_selectTa
 	<gtExample>
 	| aModel aTag classesToShow |
 	
-	aTag := self packageWithSuperclasses classTagNamed: 'Classes'.
+	aTag := self packageWithSuperclasses tagNamed: 'Classes'.
 
 	aModel := self navigateToClass_01_selectPackage.
 	aModel selectPackageTag: aTag.
