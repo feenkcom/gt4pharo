@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
-{ #category : #accessing }
+{ #category : #transforming }
 GtRBRenameMethodRefactoring >> executeRenameExtensions [
 	(Pragma
 		allNamed: #gtRename
@@ -25,8 +25,16 @@ GtRBRenameMethodRefactoring >> renameLepiterReferences [
 				ifNotNil: [ :change | self model changes addChange: change ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #transforming }
 GtRBRenameMethodRefactoring >> renameMessageSends [
+	"Pharo 11"
 	super renameMessageSends.
+	self executeRenameExtensions
+]
+
+{ #category : #transforming }
+GtRBRenameMethodRefactoring >> replaceMessageSends [
+	"Pharo 12"
+	super replaceMessageSends.
 	self executeRenameExtensions
 ]

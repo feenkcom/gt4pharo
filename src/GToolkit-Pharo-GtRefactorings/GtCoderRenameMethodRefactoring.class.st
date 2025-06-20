@@ -24,7 +24,7 @@ GtCoderRenameMethodRefactoring >> privateTransform [
 				methodCoder: self methodCoder;
 				newSelector: newSelector;
 				oldSelector: oldSelector).
-	super transform
+	super privateTransform
 ]
 
 { #category : #transforming }

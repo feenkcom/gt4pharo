@@ -15,6 +15,14 @@ GtRemoveParameterRefactoring >> executeRenameExtensions [
 
 { #category : #transforming }
 GtRemoveParameterRefactoring >> renameMessageSends [
+	"Pharo 11"
 	super renameMessageSends.
+	self executeRenameExtensions
+]
+
+{ #category : #transforming }
+GtRemoveParameterRefactoring >> replaceMessageSends [
+	"Pharo 12"
+	super replaceMessageSends.
 	self executeRenameExtensions
 ]
