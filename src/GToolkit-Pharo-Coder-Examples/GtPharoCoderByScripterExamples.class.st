@@ -3267,7 +3267,9 @@ GtPharoCoderByScripterExamples >> removeProtocolsInIndex [
 	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
-	method methodClass addCategory: #'some protocol' before: nil.
+	self
+		forPharo12: [ method methodClass addProtocol: #'some protocol' ]
+		forPharo11AndPharo10: [ method methodClass addCategory: #'some protocol' before: nil ].
 	scripter pulse.
 
 	self
