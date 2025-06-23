@@ -80,7 +80,7 @@ GtClassCreationForm >> defaultName [
 
 { #category : #accessing }
 GtClassCreationForm >> defineClass [
-	(GtRBAddClassWithSlotsChange definition: self classDefinitionString)
+	(GtRBAddClassWithSlotsChange definitionString: self classDefinitionString)
 		gtExecuteWithUndo
 ]
 
