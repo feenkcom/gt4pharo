@@ -126,7 +126,7 @@ GtMessageSendIterator >> processBlocksAndOptimizedSends [
 
 { #category : #processing }
 GtMessageSendIterator >> processNormalSends [
-	| instruction instructionStream endPc |
+	| instruction instructionStream endPc pc |
 	instructionStream := InstructionStream on: code.
 	endPc := instructionStream method endPC.
 	[ instructionStream pc > endPc ]
@@ -141,7 +141,11 @@ GtMessageSendIterator >> processNormalSends [
 								ifFalse: [ #pushConstant: = instruction selector
 										ifTrue: [ self pushLiteral: instruction arguments first ]
 										ifFalse: [ #pushLiteralVariable: = instruction selector
-												ifTrue: [ self pushLiteralVariable: instruction arguments first ] ] ] ] ] ]
+												ifTrue: [ pc := instructionStream pc.
+													instructionStream decodeNextInstruction selector
+														= #directedSuperSend:numArgs:
+														ifFalse: [ self pushLiteralVariable: instruction arguments first ].
+													instructionStream pc: pc ] ] ] ] ] ]
 ]
 
 { #category : #processing }

@@ -7,9 +7,9 @@ Class {
 { #category : #private }
 GtPharoIndexExamples >> addClassVar [
 	self
-		forPharo12: [ Smalltalk compiler
-				evaluate: self class definitionString
-						, '; sharedVariables: {GtMessageSendIterator}; build' ]
+		forPharo12: [ self class classInstaller new
+				makeWithBuilder: (Smalltalk compiler
+						evaluate: self class definitionString , '; sharedVariables: { #GtMessageSendIterator }') ]
 		forPharo11AndPharo10: [ Smalltalk compiler
 				evaluate: (self class definitionString
 						copyReplaceAll: 'classVariableNames: '''''
@@ -19,8 +19,9 @@ GtPharoIndexExamples >> addClassVar [
 { #category : #private }
 GtPharoIndexExamples >> addPoolVar [
 	self
-		forPharo12: [ Smalltalk compiler
-				evaluate: self class definitionString , '; sharedPools: {GtPharoIndexExamplesPool}; build' ]
+		forPharo12: [ self class classInstaller new
+				makeWithBuilder: (Smalltalk compiler
+						evaluate: self class definitionString , '; sharedPools: {GtPharoIndexExamplesPool}') ]
 		forPharo11AndPharo10: [ Smalltalk compiler
 				evaluate: (self class definitionString
 						copyReplaceAll: 'package: '
@@ -266,10 +267,12 @@ GtPharoIndexExamples >> noSenders [
 { #category : #examples }
 GtPharoIndexExamples >> notAClassReference [
 	<gtExample>
-	| refs |
+	| refs index|
+	index := GtPharoIndex new.
+	index addSendsFrom: thisContext method.
 	super printString.
 	[ super printString ] value.
-	refs := GtPharoIndex current globalVariableReferencesTo: self class binding.
+	refs := index globalVariableReferencesTo: self class binding.
 	self assert: (refs includes: thisContext method) not.
 	^ refs
 ]
@@ -315,12 +318,16 @@ GtPharoIndexExamples >> referenceInLiteralArray [
 { #category : #private }
 GtPharoIndexExamples >> removeClassVar [
 	| definition |
-	definition := self class definitionString
-			copyReplaceAll: 'GtMessageSendIterator'
-			with: ''.
 	self
-		forPharo12: [ Smalltalk compiler evaluate: definition , '; build' ]
-		forPharo11AndPharo10: [ Smalltalk compiler evaluate: definition ]
+		forPharo12: [ definition := self class definitionString
+					copyReplaceAll: '#GtMessageSendIterator'
+					with: ''.
+			self class classInstaller new
+				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
+		forPharo11AndPharo10: [ definition := self class definitionString
+					copyReplaceAll: 'GtMessageSendIterator'
+					with: ''.
+			Smalltalk compiler evaluate: definition ]
 ]
 
 { #category : #private }
@@ -330,7 +337,8 @@ GtPharoIndexExamples >> removePoolVar [
 			copyReplaceAll: 'GtPharoIndexExamplesPool'
 			with: ''.
 	self
-		forPharo12: [ Smalltalk compiler evaluate: definition , '; build' ]
+		forPharo12: [ self class classInstaller new
+				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
 		forPharo11AndPharo10: [ Smalltalk compiler evaluate: definition ]
 ]
 
