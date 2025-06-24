@@ -7,7 +7,7 @@ FluidBuilder >> install [
 	
 	^ self 
 		forPharo12: [
-			ShiftClassInstaller new makeWithBuilder: self ] 
+			GtShiftClassInstaller12 new makeWithBuilder: self ] 
 		forPharo11AndPharo10: [ 
 			GtShiftClassInstaller new makeWithBuilder: self shiftClassBuilder ]
 ]
