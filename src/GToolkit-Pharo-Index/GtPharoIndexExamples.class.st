@@ -318,13 +318,16 @@ GtPharoIndexExamples >> referenceInLiteralArray [
 { #category : #private }
 GtPharoIndexExamples >> removeClassVar [
 	| definition |
-	definition := self class definitionString
-			copyReplaceAll: '#GtMessageSendIterator'
-			with: ''.
 	self
-		forPharo12: [ self class classInstaller new
+		forPharo12: [ definition := self class definitionString
+					copyReplaceAll: '#GtMessageSendIterator'
+					with: ''.
+			self class classInstaller new
 				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
-		forPharo11AndPharo10: [ Smalltalk compiler evaluate: definition ]
+		forPharo11AndPharo10: [ definition := self class definitionString
+					copyReplaceAll: 'GtMessageSendIterator'
+					with: ''.
+			Smalltalk compiler evaluate: definition ]
 ]
 
 { #category : #private }
