@@ -5,7 +5,6 @@ RBAddClassChange class >> definitionBlockFrom: aString [
 	^ [ :builder | 
 	| ast |
 	ast := RBParser parseExpression: aString.
-	builder superclass: (Smalltalk at: ast receiver name asSymbol).
 	ast
 		nodesDo: [ :node | 
 			node isMessage
@@ -14,7 +13,8 @@ RBAddClassChange class >> definitionBlockFrom: aString [
 						do: [ :key :arg | 
 							(#(subclass: variableByteSubclass: variableSubclass: variableWordSubclass: weakSubclass: #'<<')
 								includes: key)
-								ifTrue: [ builder name: arg value.
+								ifTrue: [ builder superclass: (Smalltalk at: node receiver name asSymbol).
+									builder name: arg value.
 									key = 'variableByteSubclass:'
 										ifTrue: [ builder layoutClass: ByteLayout ].
 									key = 'variableSubclass:'
@@ -25,18 +25,20 @@ RBAddClassChange class >> definitionBlockFrom: aString [
 							key = 'instanceVariableNames:'
 								ifTrue: [ builder slotsFromString: arg value ].
 							key = 'classVariables:'
-								ifTrue: [ builder sharedVariables: arg value ].
+								ifTrue: [ builder sharedVariables: (self evaluateNode: arg) ].
 							key = 'classVariableNames:'
 								ifTrue: [ builder sharedVariablesFromString: arg value ].
-							key = 'sharedPools:' ifTrue: [ builder sharedPoolsFromString: arg value ].
+							key = 'sharedPools:'
+								ifTrue: [ builder sharedPoolsFromString: (self evaluateNode: arg) ].
 							key = 'sharedVariables:'
-								ifTrue: [ builder sharedVariablesFromString: arg value ].
+								ifTrue: [ builder sharedVariables: (self evaluateNode: arg) ].
 							key = 'poolDictionaries:'
 								ifTrue: [ builder sharedPoolsFromString: arg value ].
 							key = 'package:' ifTrue: [ builder package: arg value ].
 							key = 'category:' ifTrue: [ builder category: arg value ].
-							key = 'slots:' ifTrue: [ builder slots: arg value ].
-							key = 'uses:' ifTrue: [ builder traitComposition: arg value ] ] ] ] ]
+							key = 'slots:' ifTrue: [ builder slots: (self evaluateNode: arg) ].
+							key = 'uses:'
+								ifTrue: [ builder traitComposition: (self evaluateNode: arg) ] ] ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
@@ -44,4 +46,9 @@ RBAddClassChange class >> definitionString: aString [
 	^ self
 		forPharo12: [ self make: (self definitionBlockFrom: aString) ]
 		forPharo11AndPharo10: [ self definition: aString ]
+]
+
+{ #category : #'*GToolkit-Pharo-BaseRefactorings' }
+RBAddClassChange class >> evaluateNode: aNode [
+	^ self evaluate: aNode sourceCode
 ]
