@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #private }
+GtRBClassPackageChange >> generateChanges [
+	"Pharo 12"
+
+	self primitiveExecute
+]
+
+{ #category : #private }
 GtRBClassPackageChange >> primitiveExecute [
 	| class |
 	class := self changeClass.
