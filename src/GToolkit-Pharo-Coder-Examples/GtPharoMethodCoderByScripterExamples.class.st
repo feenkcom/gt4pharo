@@ -713,6 +713,28 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter expectedMainActions:
 ]
 
 { #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
+	aScripterOrStep
+		assertStep: [ :s | 
+			s
+				label: 'Assert Editor Text Attributes Count';
+				value: [ :aText | 
+						| anIterator aCounter |
+						aCounter := 0.
+						anIterator := aText iterator.
+						[ anIterator hasNext ]
+							whileTrue: [ (anIterator attributes
+									anySatisfy: [ :eachAttribute | eachAttribute class = aClass ])
+									ifTrue: [ aCounter := aCounter + 1 ].
+								anIterator next ].
+						aCounter ]
+					equals: aNumber;
+				id: GtSourceCoderEditorId;
+				onBrTextEditor;
+				onBrTextEditorText ]
+]
+
+{ #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions: aMainActionsCount contextAction: anAddonsActionsCount [
 	<gtExample>
 	aScripter
@@ -757,28 +779,6 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 							description: [ :anElement | 'Element must have at least {1}, but have {2}: {3}' format: { anAddonsActionsCount. anElement childrenCount. anElement } ];
 						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
 						onChildAt: 3 ] ]
-]
-
-{ #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
-	aScripterOrStep
-		assertStep: [ :s | 
-			s
-				label: 'Assert Editor Text Attributes Count';
-				value: [ :aText | 
-						| anIterator aCounter |
-						aCounter := 0.
-						anIterator := aText iterator.
-						[ anIterator hasNext ]
-							whileTrue: [ (anIterator attributes
-									anySatisfy: [ :eachAttribute | eachAttribute class = aClass ])
-									ifTrue: [ aCounter := aCounter + 1 ].
-								anIterator next ].
-						aCounter ]
-					equals: aNumber;
-				id: GtSourceCoderEditorId;
-				onBrTextEditor;
-				onBrTextEditorText ]
 ]
 
 { #category : #utilities }
@@ -1497,17 +1497,10 @@ GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnHeader [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
+GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 	<gtExample>
 	| aScripter |
-	aScripter := self coderCollapseProgrammatically.
-
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Expand view model';
-				action: [ :aCoderViewModel | aCoderViewModel expand ];
-				onModel ].
+	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1534,10 +1527,17 @@ GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
+GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 	<gtExample>
 	| aScripter |
-	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
+	aScripter := self coderCollapseProgrammatically.
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Expand view model';
+				action: [ :aCoderViewModel | aCoderViewModel expand ];
+				onModel ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -2083,6 +2083,11 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 	^ aScripter
 ]
 
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
+	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
+]
+
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractMethodObjectUpdatesSource [
 	<gtExample>
@@ -2411,11 +2416,6 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClas
 	self checkFor: scripter refactoringPreviewButtonExists: true ]
 		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
 	^ scripter
-]
-
-{ #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
-	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
 ]
 
 { #category : #'examples - complete method name' }
@@ -3564,6 +3564,34 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 	^ aScripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
+	<gtExample>
+	| aScripter |
+	aScripter := self forUnaryExtraction_01_setup.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 9 to: 17;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: aScripter.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert extract method doesn''t exist';
+				onSpaceRoot;
+				notExists;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	^ aScripter
+]
+
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 	<gtExample>
@@ -3789,34 +3817,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 				label: 'Assert source editor is focused';
 				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 				id: GtSourceCoderEditorId ].
-
-	^ aScripter
-]
-
-{ #category : #'examples - extract method' }
-GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
-	<gtExample>
-	| aScripter |
-	aScripter := self forUnaryExtraction_01_setup.
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select part of the method to extract';
-				action: [ :aSourceEditor | 
-					aSourceEditor selecter
-						from: 9 to: 17;
-						select ];
-				id: GtSourceCoderEditorId ].
-
-	self openContextMenu: aScripter.
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert extract method doesn''t exist';
-				onSpaceRoot;
-				notExists;
-				id: GtMethodCoderExtractMethodContextMenuItemId ].
 
 	^ aScripter
 ]
@@ -7914,6 +7914,194 @@ GtPharoMethodCoderByScripterExamples >> moveVariableSource [
 			^ 3 + temp] 
 		ifFalse: [{2} temp := 2. 
 			^ temp + 40]'
+]
+
+{ #category : #'examples - statement selection/motion' }
+GtPharoMethodCoderByScripterExamples >> nodeAtForSelection [
+	<gtExample>
+	| coder aScripter |
+	coder := GtPharoMethodCoder
+				forMethod: GtPharoMethodCoderExamples >> #sampleMethodWithCascades.
+	aScripter := self scripterForBlock: [coder].
+	aScripter
+		substeps: 'Tight Selection'
+			do: 
+				[:aStep |
+				aStep doStep: 
+						[:s |
+						s
+							label: 'Select text string';
+							action: 
+									[:aSourceEditor |
+									| index |
+									index := aSourceEditor text asString indexOfSubCollection: 'Testing'.
+									aSourceEditor textualCoderViewModel select: index - 2
+										to: index + 'Testing' size];
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected text';
+							value: [:aSourceEditor | aSourceEditor editor selectedText asString]
+								equals: '''Testing''';
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected node';
+							satisfies: 
+									[:aSourceEditor |
+									| literalNode |
+									literalNode := aSourceEditor textualCoderViewModel coderModel
+												nodeFrom: aSourceEditor textualCoderViewModel.
+									literalNode isString and: [literalNode value value = '''Testing''']];
+							id: GtSourceCoderEditorId]];
+		substeps: 'Enlarged Selection'
+			do: 
+				[:aStep |
+				aStep doStep: 
+						[:s |
+						s
+							label: 'Select text string';
+							action: 
+									[:aSourceEditor |
+									| index |
+									index := aSourceEditor text asString indexOfSubCollection: 'Testing'.
+									aSourceEditor textualCoderViewModel select: index - 3
+										to: index + 'Testing' size];
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected text';
+							value: [:aSourceEditor | aSourceEditor editor selectedText asString]
+								equals: ' ''Testing''';
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected node';
+							satisfies: 
+									[:aSourceEditor |
+									| literalNode |
+									literalNode := aSourceEditor textualCoderViewModel coderModel
+												nodeFrom: aSourceEditor textualCoderViewModel.
+									literalNode isString and: [literalNode value value = '''Testing''']];
+							id: GtSourceCoderEditorId]].
+	^aScripter
+]
+
+{ #category : #'examples - statement selection/motion' }
+GtPharoMethodCoderByScripterExamples >> nodeAtForSelectionWithReturn [
+	<gtExample>
+	| coder aScripter |
+	coder := GtPharoMethodCoder
+				forMethod: GtPharoMethodCoderExamples >> #sampleMethodWithCascades.
+	aScripter := self scripterForBlock: [coder].
+	aScripter
+		substeps: 'Tight Selection'
+			do: 
+				[:aStep |
+				aStep doStep: 
+						[:s |
+						s
+							label: 'Select text string';
+							action: 
+									[:aSourceEditor |
+									| index |
+									index := aSourceEditor text asString
+												indexOfSubCollection: 'stream contents'.
+									aSourceEditor textualCoderViewModel select: index - 1
+										to: index + 'stream contents' size];
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected text';
+							value: [:aSourceEditor | aSourceEditor editor selectedText asString]
+								equals: 'stream contents';
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected node';
+							satisfies: 
+									[:aSourceEditor |
+									| messageSendNode |
+									messageSendNode := aSourceEditor textualCoderViewModel coderModel
+												nodeFrom: aSourceEditor textualCoderViewModel.
+									messageSendNode isMessageSend
+										and: [messageSendNode source = 'stream contents']];
+							id: GtSourceCoderEditorId]];
+		substeps: 'Enlarged Selection'
+			do: 
+				[:aStep |
+				aStep doStep: 
+						[:s |
+						s
+							label: 'Select text string';
+							action: 
+									[:aSourceEditor |
+									| index |
+									index := aSourceEditor text asString
+												indexOfSubCollection: 'stream contents'.
+									aSourceEditor textualCoderViewModel select: index - 2
+										to: index + 'stream contents' size];
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected text';
+							value: [:aSourceEditor | aSourceEditor editor selectedText asString]
+								equals: ' stream contents';
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected node';
+							satisfies: 
+									[:aSourceEditor |
+									| messageSendNode |
+									messageSendNode := aSourceEditor textualCoderViewModel coderModel
+												nodeFrom: aSourceEditor textualCoderViewModel.
+									messageSendNode isMessageSend
+										and: [messageSendNode source = 'stream contents']];
+							id: GtSourceCoderEditorId]];
+		substeps: 'Selection with return'
+			do: 
+				[:aStep |
+				aStep doStep: 
+						[:s |
+						s
+							label: 'Select text string';
+							action: 
+									[:aSourceEditor |
+									| index |
+									index := aSourceEditor text asString
+												indexOfSubCollection: 'stream contents'.
+									aSourceEditor textualCoderViewModel select: index - 3
+										to: index + 'stream contents' size];
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected text';
+							value: [:aSourceEditor | aSourceEditor editor selectedText asString]
+								equals: '^ stream contents';
+							id: GtSourceCoderEditorId].
+				aStep assertStep: 
+						[:s |
+						s
+							label: 'Assert selected node';
+							satisfies: 
+									[:aSourceEditor |
+									| messageSendNode |
+									messageSendNode := aSourceEditor textualCoderViewModel coderModel
+												nodeFrom: aSourceEditor textualCoderViewModel.
+									messageSendNode isReturn
+										and: [messageSendNode source = '^ stream contents']];
+							id: GtSourceCoderEditorId]].
+	^aScripter
 ]
 
 { #category : #'examples - fixit class' }
