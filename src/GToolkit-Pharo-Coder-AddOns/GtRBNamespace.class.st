@@ -102,7 +102,7 @@ GtRBNamespace >> createNewClassFor: aBehavior [
 GtRBNamespace >> defineClass: aStringOrBlock [
 	^ self
 		forPharo12: [ aStringOrBlock isString
-				ifTrue: [ super defineClass: (RBAddClassChange definitionBlockFrom: aStringOrBlock) ]
+				ifTrue: [ self defineClassWithDefinition: aStringOrBlock ]
 				ifFalse: [ super defineClass: aStringOrBlock ] ]
 		forPharo11AndPharo10: [ super defineClass: aStringOrBlock ]
 ]
@@ -113,6 +113,37 @@ GtRBNamespace >> defineClass: aString withComment: aCommentString [
 	change := self defineClass: aString.
 	newClass := self classNamed: change changeClassName.
 	aCommentString ifNotNil: [ newClass comment: aCommentString ].
+	^ change
+]
+
+{ #category : #accessing }
+GtRBNamespace >> defineClassWithDefinition: aString [
+	"Mostly copied from superclass' defineClass:, but handles strings instead of blocks"
+
+	| change newClass newClassName |
+	change := GtRBAddClassChange definitionString: aString.
+	changes addChange: change.
+	newClassName := change changeClassName.
+	newClass := self classNamed: newClassName.
+	newClass
+		ifNil: [ | newMetaclass |
+			self unmarkAsRemoved: newClassName.
+			newClass := self rbClassClass named: newClassName.
+			newMetaclass := self rbMetaclassClass named: newClassName.
+			newClass model: self.
+			newMetaclass model: self.
+			newClasses at: newClassName put: (Array with: newClass with: newMetaclass) ].
+	newClass superclass: (self classNamed: change superclassName).
+	newClass superclass
+		ifNil: [ self rootClasses add: newClass.
+			newClass classSide superclass: (self classFor: Object class superclass) ]
+		ifNotNil: [ newClass classSide superclass: newClass superclass classSide ].
+	newClass instanceVariableNames: (change instanceVariableNames ifNil: [ '' ]).
+	newClass classVariableNames: (change classVariableNames ifNil: [ '' ]).
+	newClass poolDictionaryNames: (change sharedPoolNames ifNil: [ '' ]).
+	change comment ifNotNil: [ :comment | newClass comment: comment ].
+	newClass packageName: change package.
+	newClass tagName: change tag.
 	^ change
 ]
 

@@ -48,6 +48,8 @@ GtRBAddClassChangeExamples >> verifyChanges [
 				equals: cls sharedPoolNames asSortedCollection.
 			self
 				assert: (change packageTagName
-						ifNil: [ cls tags isEmpty ]
+						ifNil: [ self
+								forPharo12: [ cls packageTag isRoot ]
+								forPharo11AndPharo10: [ cls tags isEmpty ] ]
 						ifNotNil: [ :t | (cls isTaggedWith: t) or: [ change packageName = t ] ]) ]
 ]

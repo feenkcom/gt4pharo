@@ -32,7 +32,7 @@ GtRBAddClassChange class >> definitionString: aString [
 		forPharo11AndPharo10: [ super definitionString: aString ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> category [
 	^ properties
 		at: #category
@@ -47,7 +47,7 @@ GtRBAddClassChange >> category [
 				ifNil: [ self forPharo12: [  ] forPharo11AndPharo10: [ super category ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> classInstanceVariableNames [
 	"Pharo 12"
 
@@ -58,7 +58,7 @@ GtRBAddClassChange >> classInstanceVariableNames [
 				forPharo11AndPharo10: [ #() ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> classVariableNames [
 	^ (properties
 		at: #classVariableNames
@@ -66,16 +66,14 @@ GtRBAddClassChange >> classVariableNames [
 		ifNil: [ #() ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> comment [
 	"Pharo 12"
 
-	^ properties
-		at: #comment
-		ifAbsent: [ self forPharo12: [ super comment ] forPharo11AndPharo10: [  ] ]
+	^ properties at: #comment ifAbsent: [  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> definition [
 	^ definitionString ifNil: [ super definition ]
 ]
@@ -104,7 +102,7 @@ GtRBAddClassChange >> fillOutDefinition [
 				ifTrue: [ self updateDefinitionFromMessage: each ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 GtRBAddClassChange >> generateChanges [
 	"Pharo 12"
 
@@ -116,18 +114,18 @@ GtRBAddClassChange >> generateChanges [
 		ifNil: [ super generateChanges ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #comparing }
 GtRBAddClassChange >> hash [
 	^ definitionString ifNil: [ super hash ] ifNotNil: [ definitionString hash ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtRBAddClassChange >> initialize [
 	super initialize.
 	properties := Dictionary new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> instanceVariableNames [
 	^ properties
 		at: #instanceVariableNames
@@ -141,10 +139,10 @@ GtRBAddClassChange >> namesInArray: arg [
 			| node |
 			node := each.
 			[ node isMessage ] whileTrue: [ node := node receiver ].
-			node value asString ]
+			node isVariable ifTrue: [ node name ] ifFalse: [ node value asString ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtRBAddClassChange >> namesInString: aString [
 	| names scanner token |
 	names := OrderedCollection new.
@@ -155,7 +153,7 @@ GtRBAddClassChange >> namesInString: aString [
 	^ names asArray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> package [
 	"Pharo 12"
 
@@ -164,13 +162,13 @@ GtRBAddClassChange >> package [
 		ifNotNil: [ :packageName | RPackageOrganizer default packageNamed: packageName ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> packageName [
 	^ (properties at: #category ifPresent: [ :cat | self packageNameFor: cat ])
 		ifNotNil: [ :packageName | packageName asSymbol ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #convenience }
 GtRBAddClassChange >> packageNameFor: aString [
 	| index |
 	(RPackageOrganizer default includesPackageNamed: aString) ifTrue: [ ^ aString ].
@@ -179,7 +177,7 @@ GtRBAddClassChange >> packageNameFor: aString [
 	^ self packageNameFor: (aString first: index - 1)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> packageTagName [
 	^ properties
 		at: #packageTagName
@@ -190,14 +188,14 @@ GtRBAddClassChange >> packageTagName [
 						ifNotNil: [ :packageName | packageName size = cat size ifFalse: [ cat allButFirst: packageName size + 1 ] ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtRBAddClassChange >> printOn: aStream [
 	definitionString
 		ifNotNil: [ aStream nextPutAll: definitionString ]
 		ifNil: [ super printOn: aStream ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> sharedPoolNames [
 	^ (properties
 		at: #sharedPoolNames
@@ -205,11 +203,20 @@ GtRBAddClassChange >> sharedPoolNames [
 		ifNil: [ #() ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtRBAddClassChange >> superclassName [
 	^ properties
 		at: #superclassName
 		ifAbsent: [ self forPharo12: [  ] forPharo11AndPharo10: [ super superclassName ] ]
+]
+
+{ #category : #accessing }
+GtRBAddClassChange >> tag [
+	"Pharo 12"
+
+	^ self package
+		ifNil: [  ]
+		ifNotNil: [ :package | self packageTagName ifNotNil: [ :tag | package tagNamed: tag ifAbsent: [  ] ] ]
 ]
 
 { #category : #private }
