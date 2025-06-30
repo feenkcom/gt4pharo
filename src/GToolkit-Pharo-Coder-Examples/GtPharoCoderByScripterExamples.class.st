@@ -665,6 +665,33 @@ GtPharoCoderByScripterExamples >> checkSlotsUpdateAfterClassChange [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> classHierarchyInIndexUpdatesClassListOnClassChanges [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter cls package packages |
+	scripter := self setupForPackageTests.
+	packages := environment dummyPackages
+			asSortedCollection: [ :a :b | a packageName < b packageName ].
+	package := packages first.
+	cls := package anyDummyClass realClass.
+	self switchToClassHierarchy: scripter.
+	self
+		checkClassListIn: scripter
+		containsName: #OrderedCollection
+		exists: false.
+
+	cls superclass: OrderedCollection.
+	scripter pulse.
+
+	self
+		checkClassListIn: scripter
+		containsName: #OrderedCollection
+		exists: true.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> classHierarchyIndexSelectionDoesNotUpdateClassList [
 	<gtExample>
 	<after: #cleanUp>
@@ -705,33 +732,6 @@ GtPharoCoderByScripterExamples >> classHierarchyIndexSelectionDoesNotUpdateClass
 				@ [ :each | 
 					#('ProtoObject' 'Object' 'Temporary*Class*')
 						noneSatisfy: [ :e | e match: each text asString ] ] ].
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> classHierarchyInIndexUpdatesClassListOnClassChanges [
-	<gtExample>
-	<after: #cleanUp>
-	| scripter cls package packages |
-	scripter := self setupForPackageTests.
-	packages := environment dummyPackages
-			asSortedCollection: [ :a :b | a packageName < b packageName ].
-	package := packages first.
-	cls := package anyDummyClass realClass.
-	self switchToClassHierarchy: scripter.
-	self
-		checkClassListIn: scripter
-		containsName: #OrderedCollection
-		exists: false.
-
-	cls superclass: OrderedCollection.
-	scripter pulse.
-
-	self
-		checkClassListIn: scripter
-		containsName: #OrderedCollection
-		exists: true.
 
 	^ scripter
 ]
@@ -1526,6 +1526,27 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> doubleClickInClassHierarchy [
+	<gtExample>
+	| scripter |
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: SequenceableCollection ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self switchToClassHierarchy: scripter.
+	self isClass: SequenceableCollection selectedIn: scripter.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				label: 'Double click ArrayedCollection';
+				// GtCoderNavigationClassesTreeElementId;
+				// BrLabel;
+				@ [ :each | each text asString = 'ArrayedCollection' ] ].
+	self isClass: ArrayedCollection selectedIn: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> doubleClickInClasses [
 	<gtExample>
 	| scripter |
@@ -1546,24 +1567,21 @@ GtPharoCoderByScripterExamples >> doubleClickInClasses [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> doubleClickInClassHierarchy [
+GtPharoCoderByScripterExamples >> dragClassInIndexToPackage [
 	<gtExample>
-	| scripter |
-	scripter := self
-			coderInPager: [ GtCoderElement forClass: SequenceableCollection ].
-	self setSpaceExtent: scripter.
-	self maximizePagerPane: scripter.
-	self switchToClassHierarchy: scripter.
-	self isClass: SequenceableCollection selectedIn: scripter.
-	scripter
-		doubleClickStep: [ :s | 
-			s
-				label: 'Double click ArrayedCollection';
-				// GtCoderNavigationClassesTreeElementId;
-				// BrLabel;
-				@ [ :each | each text asString = 'ArrayedCollection' ] ].
-	self isClass: ArrayedCollection selectedIn: scripter.
-	^ scripter
+	<after: #cleanUp>
+	| oneClass targetPackage |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 2;
+			amountOfClasses: 3;
+			amountOfMethods: 1;
+			generate.
+
+	oneClass := environment anyDummyLeafClass realClass.
+	targetPackage := (environment dummyPackages
+			detect: [ :each | each packageName ~= oneClass package name ]) realPackage.
+
+	^ self dragInIndexClasses: {oneClass} toPackage: targetPackage
 ]
 
 { #category : #'examples - index' }
@@ -1664,24 +1682,6 @@ GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageUncategorizedTag [
 			forPackageTag: targetPackageTag.
 
 	^ self dragInIndexClasses: classes toPackageTag: targetPackageTag
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> dragClassInIndexToPackage [
-	<gtExample>
-	<after: #cleanUp>
-	| oneClass targetPackage |
-	environment := GtPharoDummiesGenerator new
-			amountOfPackages: 2;
-			amountOfClasses: 3;
-			amountOfMethods: 1;
-			generate.
-
-	oneClass := environment anyDummyLeafClass realClass.
-	targetPackage := (environment dummyPackages
-			detect: [ :each | each packageName ~= oneClass package name ]) realPackage.
-
-	^ self dragInIndexClasses: {oneClass} toPackage: targetPackage
 ]
 
 { #category : #'examples - index' }

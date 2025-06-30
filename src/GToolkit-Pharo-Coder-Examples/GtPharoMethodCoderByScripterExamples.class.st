@@ -713,28 +713,6 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter expectedMainActions:
 ]
 
 { #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
-	aScripterOrStep
-		assertStep: [ :s | 
-			s
-				label: 'Assert Editor Text Attributes Count';
-				value: [ :aText | 
-						| anIterator aCounter |
-						aCounter := 0.
-						anIterator := aText iterator.
-						[ anIterator hasNext ]
-							whileTrue: [ (anIterator attributes
-									anySatisfy: [ :eachAttribute | eachAttribute class = aClass ])
-									ifTrue: [ aCounter := aCounter + 1 ].
-								anIterator next ].
-						aCounter ]
-					equals: aNumber;
-				id: GtSourceCoderEditorId;
-				onBrTextEditor;
-				onBrTextEditorText ]
-]
-
-{ #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions: aMainActionsCount contextAction: anAddonsActionsCount [
 	<gtExample>
 	aScripter
@@ -779,6 +757,28 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 							description: [ :anElement | 'Element must have at least {1}, but have {2}: {3}' format: { anAddonsActionsCount. anElement childrenCount. anElement } ];
 						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
 						onChildAt: 3 ] ]
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
+	aScripterOrStep
+		assertStep: [ :s | 
+			s
+				label: 'Assert Editor Text Attributes Count';
+				value: [ :aText | 
+						| anIterator aCounter |
+						aCounter := 0.
+						anIterator := aText iterator.
+						[ anIterator hasNext ]
+							whileTrue: [ (anIterator attributes
+									anySatisfy: [ :eachAttribute | eachAttribute class = aClass ])
+									ifTrue: [ aCounter := aCounter + 1 ].
+								anIterator next ].
+						aCounter ]
+					equals: aNumber;
+				id: GtSourceCoderEditorId;
+				onBrTextEditor;
+				onBrTextEditorText ]
 ]
 
 { #category : #utilities }
@@ -1497,10 +1497,17 @@ GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnHeader [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
+GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 	<gtExample>
 	| aScripter |
-	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
+	aScripter := self coderCollapseProgrammatically.
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Expand view model';
+				action: [ :aCoderViewModel | aCoderViewModel expand ];
+				onModel ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1527,17 +1534,10 @@ GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
+GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 	<gtExample>
 	| aScripter |
-	aScripter := self coderCollapseProgrammatically.
-
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Expand view model';
-				action: [ :aCoderViewModel | aCoderViewModel expand ];
-				onModel ].
+	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -2083,11 +2083,6 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 	^ aScripter
 ]
 
-{ #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
-	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
-]
-
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractMethodObjectUpdatesSource [
 	<gtExample>
@@ -2381,6 +2376,46 @@ GtPharoMethodCoderByScripterExamples >> extractToComponent [
 	^ scripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> extractToExisting [
+	<gtExample>
+	| scripter source |
+	source := self class sourceCodeAt: #sampleMethod2.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: self class >> #sampleMethod2 ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: (source indexOf: $[) to: (source indexOf: $]) - 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check selected text';
+				elementSatisfies: [ :aSourceEditor | 
+					| string |
+					string := aSourceEditor text asString.
+					(RBParser parseMethod: string)
+						= (RBParser parseMethod: 'sampleMethod2 ^ [self sampleMethod] value') ];
+				id: GtSourceCoderEditorId ].
+
+	^ scripter
+]
+
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClass [
 	<gtExample>
@@ -2416,6 +2451,11 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClas
 	self checkFor: scripter refactoringPreviewButtonExists: true ]
 		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
 	^ scripter
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
+	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
 ]
 
 { #category : #'examples - complete method name' }
@@ -3564,34 +3604,6 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 	^ aScripter
 ]
 
-{ #category : #'examples - extract method' }
-GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
-	<gtExample>
-	| aScripter |
-	aScripter := self forUnaryExtraction_01_setup.
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select part of the method to extract';
-				action: [ :aSourceEditor | 
-					aSourceEditor selecter
-						from: 9 to: 17;
-						select ];
-				id: GtSourceCoderEditorId ].
-
-	self openContextMenu: aScripter.
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert extract method doesn''t exist';
-				onSpaceRoot;
-				notExists;
-				id: GtMethodCoderExtractMethodContextMenuItemId ].
-
-	^ aScripter
-]
-
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 	<gtExample>
@@ -3817,6 +3829,34 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 				label: 'Assert source editor is focused';
 				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 				id: GtSourceCoderEditorId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
+	<gtExample>
+	| aScripter |
+	aScripter := self forUnaryExtraction_01_setup.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 9 to: 17;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: aScripter.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert extract method doesn''t exist';
+				onSpaceRoot;
+				notExists;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
 
 	^ aScripter
 ]
@@ -8578,6 +8618,15 @@ GtPharoMethodCoderByScripterExamples >> sampleMethod [
 	oc add: self.
 	oc add: Object.
 	^ oc
+]
+
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> sampleMethod2 [
+	| oc |
+	^ [ oc := OrderedCollection new.
+	oc add: self.
+	oc add: Object.
+	oc ] value
 ]
 
 { #category : #utilities }

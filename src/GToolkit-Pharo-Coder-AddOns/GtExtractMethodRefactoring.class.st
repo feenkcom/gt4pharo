@@ -11,3 +11,19 @@ GtExtractMethodRefactoring >> initialize [
 		setOption: #alreadyDefined
 		toUse: [ :ref :cls :sel | self gtSignalMethodOverwritten: sel in: cls ]
 ]
+
+{ #category : #transforming }
+GtExtractMethodRefactoring >> isParseTreeEquivalentTo: aSelector [
+	| result |
+	result := super isParseTreeEquivalentTo: aSelector.
+	^ self
+		forPharo12: [ result and: [ self shouldUseExistingMethod: aSelector ] ]
+		forPharo11AndPharo10: [ result ]
+]
+
+{ #category : #transforming }
+GtExtractMethodRefactoring >> shouldUseExistingMethod: aSelector [
+	^ (self options at: #useExistingMethod ifAbsent: [ true ])
+		cull: self
+		cull: aSelector
+]
