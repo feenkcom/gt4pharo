@@ -2376,6 +2376,46 @@ GtPharoMethodCoderByScripterExamples >> extractToComponent [
 	^ scripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> extractToExisting [
+	<gtExample>
+	| scripter source |
+	source := self class sourceCodeAt: #sampleMethod2.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: self class >> #sampleMethod2 ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: (source indexOf: $[) to: (source indexOf: $]) - 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check selected text';
+				elementSatisfies: [ :aSourceEditor | 
+					| string |
+					string := aSourceEditor text asString.
+					(RBParser parseMethod: string)
+						= (RBParser parseMethod: 'sampleMethod2 ^ [self sampleMethod] value') ];
+				id: GtSourceCoderEditorId ].
+
+	^ scripter
+]
+
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClass [
 	<gtExample>
@@ -8578,6 +8618,15 @@ GtPharoMethodCoderByScripterExamples >> sampleMethod [
 	oc add: self.
 	oc add: Object.
 	^ oc
+]
+
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> sampleMethod2 [
+	| oc |
+	^ [ oc := OrderedCollection new.
+	oc add: self.
+	oc add: Object.
+	oc ] value
 ]
 
 { #category : #utilities }
