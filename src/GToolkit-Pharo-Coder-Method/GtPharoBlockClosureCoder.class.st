@@ -17,13 +17,16 @@ GtPharoBlockClosureCoder >> addParameter: aString ofType: aBehavior [
 
 { #category : #accessing }
 GtPharoBlockClosureCoder >> block [
-	self validateSyntax
-		ifFalse: [ ^ nil ].
+	self validateSyntax ifFalse: [ ^ nil ].
 
 	^ (class ifNil: [ Object ]) compiler
 		source: self blockSource;
 		logged: false;
-		failBlock: [ ^ nil ];
+		failBlock: (self
+				forPharo12: [ [ :notice | 
+					notice signalError.
+					^ nil ] ]
+				forPharo11AndPharo10: [ [ ^ nil ] ]);
 		evaluate
 ]
 

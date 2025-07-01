@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBlockCoderExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #examples }
@@ -19,15 +19,16 @@ GtBlockCoderExamples >> compileBlock [
 GtBlockCoderExamples >> syntaxError [
 	<gtExample>
 	| aBlockClosureCoder wasSignalled |
-	
 	aBlockClosureCoder := GtPharoBlockClosureCoder new
-		addParameter: 'a' ofType: Integer;
-		addParameter: 'b' ofType: Integer;
-		forSource: '2 * (+a sqrt + b)'.
-	
+			addParameter: 'a' ofType: Integer;
+			addParameter: 'b' ofType: Integer;
+			forSource: '2 * (+a sqrt + b)'.
+
 	wasSignalled := false.
 	[ aBlockClosureCoder block ]
-		on: SyntaxErrorNotification
+		on: (self
+				forPharo12: [ #CodeError asClass ]
+				forPharo11AndPharo10: [ SyntaxErrorNotification ])
 		do: [ :e | wasSignalled := true ].
 
 	self assert: wasSignalled.
