@@ -1392,3 +1392,59 @@ GtPharoSnippetCoderByScripterExamples >> undefinedClass [
 
 	^ aScripter
 ]
+
+{ #category : #'examples - context menu' }
+GtPharoSnippetCoderByScripterExamples >> undefinedTemp [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ GtPharoMethodCoder forNewMethod: self class ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Focus editor';
+				// GtSourceCoderEditorId ].
+
+	(aScripter type: 'a ^someVarThatDoesNotExist') play.
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the save button';
+				// GtMethodCoderSaveActionId ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source coder error attribute';
+				// GtSourceCoderEditorId;
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 3 to: 3 ] ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error button exists';
+				// GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: BrButton;
+				value: [ :aButton | aButton background paint color ]
+					equals: [ BrGlamorousColors errorBackgroundColor ] ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error text is correct';
+				onSpaceRoot;
+				onDropdown: true;
+				// BrEditor;
+				value: [ :editor | editor text asString ]
+					equals: [ 'Variable is undeclared.' ] ].
+
+	^ aScripter
+]
