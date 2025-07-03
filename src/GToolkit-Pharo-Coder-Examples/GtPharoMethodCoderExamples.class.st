@@ -447,7 +447,7 @@ GtPharoMethodCoderExamples >> compileRemovedMethodWithoutCoderWhenSubscribedToSy
 
 	self assert: aMethodCoder behavior equals: (aMethodCoder attributeNamed: #dummyMethod) realClass.
 	self assert: aMethodCoder selector equals: (aMethodCoder attributeNamed: #dummyMethod) selector.
-	self assert: aMethodCoder compiledMethod equals: (aMethodCoder attributeNamed: #dummyMethod) realMethod.
+	self assert: (aMethodCoder compiledMethod equivalentTo: (aMethodCoder attributeNamed: #dummyMethod) realMethod).
 	self assert: aMethodCoder protocol equals: (aMethodCoder attributeNamed: #dummyMethod) protocolName.
 	self assert: aMethodCoder existsInTheSystem.
 

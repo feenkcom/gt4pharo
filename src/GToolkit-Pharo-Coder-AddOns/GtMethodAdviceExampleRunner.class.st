@@ -8,6 +8,9 @@ Class {
 		'method',
 		'nodes'
 	],
+	#classVars : [
+		'TestClassVar'
+	],
 	#pools : [
 		'TextConstants'
 	],
@@ -73,7 +76,7 @@ GtMethodAdviceExampleRunner >> checkClassVarRefIsValid [
 	<gtExample>
 	^ self
 		compareResultsFrom: GtUndeclaredVariableAdvice new
-		source: 'classVarReference ^ DependentsFields'
+		source: 'classVarReference ^ TestClassVar'
 		to: [ :ast :block |  ]
 ]
 

@@ -22,7 +22,7 @@ TMethodAdviceRunner >> hasDeclaredVariableNamed: aString [
 	| class |
 	class := self behavior.
 	(class classThatDefinesInstVarNamed: aString) ifNotNil: [ ^ true ].
-	(class classThatDefinesClassVariable: aString) ifNotNil: [ ^ true ].
+	(class instanceSide classThatDefinesClassVariable: aString) ifNotNil: [ ^ true ].
 	^ class instanceSide allSharedPools
 		anySatisfy: [ :each | each classPool includesKey: aString asSymbol ]
 ]

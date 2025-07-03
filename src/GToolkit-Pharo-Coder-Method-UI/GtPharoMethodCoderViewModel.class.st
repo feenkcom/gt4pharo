@@ -182,7 +182,7 @@ GtPharoMethodCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	(self behavior classThatDefinesInstVarNamed: aVariableName)
 		 ifNotNil: [ ^ true ].
 		
-	(self behavior classThatDefinesClassVariable: aVariableName)
+	(self behavior instanceSide classThatDefinesClassVariable: aVariableName)
 		 ifNotNil: [ ^ true ].
 
 	^ self behavior instanceSide allSharedPools

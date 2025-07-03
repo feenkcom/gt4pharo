@@ -158,7 +158,6 @@ GtRBAddClassChange >> package [
 	"Pharo 12"
 
 	^ self packageName
-		ifNil: [ super package ]
 		ifNotNil: [ :packageName | RPackageOrganizer default packageNamed: packageName ]
 ]
 

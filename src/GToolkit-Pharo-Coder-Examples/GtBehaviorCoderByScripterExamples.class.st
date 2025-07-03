@@ -347,20 +347,20 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseClassMeth
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceMethodImplementors [
 	"See https://github.com/feenkcom/gtoolkit/issues/4231"
-	
+
 	<gtExample>
 	| aScripter aBehavior aMethod aNewMethod aNewSourceCode |
 	aScripter := self classCoderInPagerForClassUI.
 
 	aBehavior := aScripter model behavior.
-	aMethod := aBehavior methods anyOne.
+	aMethod := aBehavior methods detect: [ :e | e selector = #method2: ].
 
 	aScripter methodsCoder
 		// (GtPagerPageElementId indexed: 1);
 		// GtPharoStreamingMethodsCoderElement;
 		expandAndFocusCompiledMethod: aMethod;
-		forCompiledMethod: aMethod do: [ :aMethodCoderStep | 
-			aMethodCoderStep browseImplementors ];
+		forCompiledMethod: aMethod
+			do: [ :aMethodCoderStep | aMethodCoderStep browseImplementors ];
 		play.
 
 	aScripter methodsCoder
@@ -368,29 +368,29 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceM
 		// GtPharoStreamingMethodsCoderElement;
 		expandAndFocusCompiledMethod: aMethod;
 		scrollToCompiledMethod: aMethod;
-		forCompiledMethod: aMethod do: [ :aMethodCoderStep | 
-			aMethodCoderStep 
-				moveCursorToEnd;
-				typeText: ' self yourself';
-				formatCode;
-				assertCoderIsModified;
-				clickOnSaveButton;
-				assertCoderIsWithouthModifications;
-				editorTextDo: [ :aText | aNewSourceCode := aText asString ] ];
+		forCompiledMethod: aMethod
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
+					moveCursorToEnd;
+					typeText: ' self yourself';
+					formatCode;
+					assertCoderIsModified;
+					clickOnSaveButton;
+					assertCoderIsWithouthModifications;
+					editorTextDo: [ :aText | aNewSourceCode := aText asString ] ];
 		play.
-		
+
 	self assert: (aNewSourceCode includesSubstring: 'self yourself').
 	aNewMethod := aBehavior methodDict at: aMethod selector.
 	self assert: aNewMethod sourceCode ~= aMethod sourceCode.
 	self assert: aNewMethod sourceCode equals: aNewSourceCode.
-		
+
 	aScripter methodsCoder
 		// (GtPagerPageElementId indexed: 1);
 		// GtPharoStreamingMethodsCoderElement;
 		expandAndFocusCompiledMethod: aMethod;
-		forCompiledMethod: aNewMethod do: [ :aMethodCoderStep |
-			aMethodCoderStep
-				assertEditorTextAsStringIs: aNewSourceCode ];
+		forCompiledMethod: aNewMethod
+			do: [ :aMethodCoderStep | aMethodCoderStep assertEditorTextAsStringIs: aNewSourceCode ];
 		play.
 
 	^ aScripter

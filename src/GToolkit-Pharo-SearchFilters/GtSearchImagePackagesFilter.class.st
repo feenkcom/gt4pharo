@@ -11,9 +11,14 @@ GtSearchImagePackagesFilter >> = anObject [
 	^ true
 ]
 
+{ #category : #comparing }
+GtSearchImagePackagesFilter >> hash [
+	^ self class hash
+]
+
 { #category : #testing }
 GtSearchImagePackagesFilter >> includesPackage: aPackage [
-	^ self packageOrganizer includesPackage: aPackage 
+	^ self packageOrganizer includesPackage: aPackage
 ]
 
 { #category : #enumerating }
