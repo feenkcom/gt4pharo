@@ -22,20 +22,21 @@ GtPharoMethodCoderTagsElement >> behaviorOtherSideName [
 { #category : #private }
 GtPharoMethodCoderTagsElement >> behaviorProtocols [
 	| allSubAndSuperclassProtocols excludedClasses |
-	
 	allSubAndSuperclassProtocols := Set new.
-	excludedClasses := Set withAll: { ProtoObject . Object }.
-	
-	pharoMethodCoderViewModel coder behavior withAllSubAndSuperclassesDo: [ :eachBehavior |
-		(excludedClasses includes: eachBehavior)
-			ifFalse: [ allSubAndSuperclassProtocols addAll: eachBehavior protocols ] ].
+	excludedClasses := Set
+			withAll: {ProtoObject.
+					Object}.
 
-	^ self 
-		forPharo12: [
-			allSubAndSuperclassProtocols asArray sorted: [ :aProtocol |
-				aProtocol name ] ascending ] 
-		forPharo11AndPharo10: [ 
-			allSubAndSuperclassProtocols asArray sorted ] 
+	pharoMethodCoderViewModel coder behavior
+		withAllSubAndSuperclassesDo: [ :eachBehavior | 
+			(excludedClasses includes: eachBehavior)
+				ifFalse: [ allSubAndSuperclassProtocols addAll: eachBehavior protocols ] ].
+	self
+		forPharo12: [ allSubAndSuperclassProtocols := allSubAndSuperclassProtocols collect: #name ]
+		forPharo11AndPharo10: [  ].
+
+
+	^ allSubAndSuperclassProtocols asArray sorted
 ]
 
 { #category : #private }
