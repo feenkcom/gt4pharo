@@ -202,7 +202,12 @@ GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange [
 
 { #category : #'api - package' }
 GtPharoCodeModifier >> registerPackage: aPackage [
-	^ self critical: [ aPackage register ]
+	^ self critical: [ 
+		self 
+			forPharo12: [	
+				self class environment organization addPackage: aPackage] 
+			forPharo11AndPharo10: [ 
+				aPackage register ] ]
 ]
 
 { #category : #'api - class' }
