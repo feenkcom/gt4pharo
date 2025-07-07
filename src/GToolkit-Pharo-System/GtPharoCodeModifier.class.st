@@ -205,7 +205,12 @@ GtPharoCodeModifier >> registerPackage: aPackage [
 	^ self critical: [ 
 		self 
 			forPharo12: [	
-				self class environment organization addPackage: aPackage] 
+				aPackage organizer 
+					ifNil: [
+						self class environment organization 
+							addPackage: aPackage ]
+					ifNotNil: [ :anOrganizer |
+						anOrganizer addPackage: aPackage ] ] 
 			forPharo11AndPharo10: [ 
 				aPackage register ] ]
 ]
@@ -284,5 +289,15 @@ GtPharoCodeModifier >> renamePackage: aPackage to: aNewPackageName [
 
 { #category : #'api - package' }
 GtPharoCodeModifier >> unregisterPackage: aPackage [
-	^ self critical: [ aPackage unregister ]
+	^ self critical: [ 
+		self 
+			forPharo12: [	
+				aPackage organizer 
+					ifNil: [
+						self class environment organization 
+							unregisterPackage: aPackage ]
+					ifNotNil: [ :anOrganizer |
+						anOrganizer unregisterPackage: aPackage ] ] 
+			forPharo11AndPharo10: [ 
+				aPackage unregister ] ]
 ]

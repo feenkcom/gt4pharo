@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'private - set up' }
@@ -452,7 +452,11 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenUnsubs
 	aPackageCoder := self coderOnRegisteredPackage.
 	aPackageCoder when: GtCoderPackageUnregistered send: #record: to: anEventsRecoder.
 
-	aPackageCoder package unregister.
+	self 
+		forPharo12: [
+			aPackageCoder package organizer unregisterPackage: aPackageCoder package ] 
+		forPharo11AndPharo10: [
+			aPackageCoder package unregister ].
 
 	self assert: aPackageCoder isRegistered not.
 	self assert: anEventsRecoder numberOfEvents equals: 0.

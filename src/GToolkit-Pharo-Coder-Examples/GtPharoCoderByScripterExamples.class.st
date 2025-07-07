@@ -3273,7 +3273,7 @@ GtPharoCoderByScripterExamples >> removeProtocolsInIndex [
 	scripter pulse.
 
 	self
-		assert: (method methodClass organization categories includes: #'some protocol')
+		assert: (method methodClass protocolNames includes: #'some protocol')
 		equals: true.
 
 	scripter
