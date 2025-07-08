@@ -25,3 +25,15 @@ CompiledMethod >> gtOriginalMethod [
 	(other isNil or: [ self == other ]) ifTrue: [ ^ self ].
 	^ other gtOriginalMethod
 ]
+
+{ #category : #'*GToolkit-Pharo-Index' }
+CompiledMethod >> recompile [
+	<gtPharoPatch: #Pharo>
+	| result |
+	result := self methodClass recompile: self selector.
+	SystemAnnouncer uniqueInstance
+		announce: (GtMethodRecompiled
+				methodChangedFrom: self
+				to: (self methodClass compiledMethodAt: self selector)).
+	^ result
+]
