@@ -220,7 +220,7 @@ GtPharoIndex >> basicSubscribe [
 		when: MethodAdded
 			send: #methodAdded:
 			to: self;
-		when: MethodModified , GtReflectiveMethodInstalled
+		when: MethodModified , GtReflectiveMethodInstalled , GtMethodRecompiled
 			send: #methodModified:
 			to: self;
 		when: MethodRemoved
