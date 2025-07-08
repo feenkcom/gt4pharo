@@ -170,16 +170,24 @@ GtMethodAdviceExampleRunner >> contextCoderMessagesNotImplementedExample [
 { #category : #examples }
 GtMethodAdviceExampleRunner >> contextCoderUndeclaredVariableExample [
 	<gtExample>
-	| coder context receiver |
+	| coder context receiver compiler |
 	critic := GtUndeclaredVariableAdvice new.
 	receiver := OrderedCollection new.
-	method := receiver class compiler
+	compiler := receiver class compiler
 			source: '
 				firstIndex < lastIndex ifTrue: [firstIndex] ifFalse: [unknown]';
 			class: Integer;
 			receiver: receiver;
-			isScripting: true;
-			compile.
+			isScripting: true.
+			
+	self 
+		forPharo12: [
+			"Undeclared in scripting mode are permited by default in Pharo 11,
+			but not in Pharo 12"
+			compiler permitUndeclared: true] 
+		forPharo11AndPharo10: [].
+		
+	method := compiler compile.
 	context := Context
 			sender: nil
 			receiver: receiver
