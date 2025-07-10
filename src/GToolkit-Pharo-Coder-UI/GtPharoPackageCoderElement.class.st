@@ -195,7 +195,7 @@ GtPharoPackageCoderElement >> makeLabel [
 
 { #category : #accessing }
 GtPharoPackageCoderElement >> package [
-	<return: #RPackage>
+	<return: #Package>
 
 	^ self packageCoder package
 ]

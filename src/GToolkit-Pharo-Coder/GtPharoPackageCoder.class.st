@@ -148,7 +148,7 @@ GtPharoPackageCoder >> onSystemPackageUnregistered: anAnnouncement [
 
 { #category : #accessing }
 GtPharoPackageCoder >> package [
-	<return: #RPackage>
+	<return: #Package>
 
 	^ package realPackageDo: [ :aRPackage | ^ aRPackage ]
 ]
