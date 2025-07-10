@@ -305,7 +305,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 							theScripter events reversed
 								detectEventOfClass: GtPhlowObjectToSpawn
 								ifFound: [ :theEvent | 
-									theEvent object class = RPackage
+									theEvent object isPharoPackageModel
 										and: [ theEvent object name = self class package name ] ]
 								ifNone: [ AssertionFailure
 										signal: GtPhlowObjectToSpawn name , ' event was not found' ] ];
@@ -452,7 +452,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbO
 							theScripter events reversed
 								detectEventOfClass: GtPhlowObjectToSpawn
 								ifFound: [ :theEvent | 
-									theEvent object class = RPackage
+									theEvent object isPharoPackageModel
 										and: [ theEvent object name = self class package name ] ]
 								ifNone: [ AssertionFailure
 										signal: GtPhlowObjectToSpawn name , ' event was not found' ] ];

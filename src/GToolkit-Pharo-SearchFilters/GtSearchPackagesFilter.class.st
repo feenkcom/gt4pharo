@@ -21,5 +21,5 @@ GtSearchPackagesFilter >> includesPackage: aPackage [
 
 { #category : #testing }
 GtSearchPackagesFilter >> matches: anObject [
-	^ (anObject isKindOf: RPackage) and: [ self includesPackage: anObject ]
+	^ (anObject isPharoPackageModel) and: [ self includesPackage: anObject ]
 ]
