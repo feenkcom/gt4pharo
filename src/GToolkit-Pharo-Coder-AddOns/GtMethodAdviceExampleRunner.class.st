@@ -365,6 +365,15 @@ GtMethodAdviceExampleRunner >> valueNotUsedExample [
 ]
 
 { #category : #examples }
+GtMethodAdviceExampleRunner >> variableIsShadowed [
+	<gtExample>
+	^ self
+		compareResultsFrom: GtVariableIsShadowedAdvice new
+		source: 'a | a | [:a | a] value: 42'
+		to: [ :ast :block | block value: ast body statements last receiver variables first ]
+]
+
+{ #category : #examples }
 GtMethodAdviceExampleRunner >> yourselfNotUsedExample [
 	<gtExample>
 	^ self
