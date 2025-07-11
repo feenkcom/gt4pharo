@@ -296,6 +296,34 @@ GtMethodAdviceExampleRunner >> snippetCoderMessagesNotImplementedExample [
 		isWorkspace: true
 ]
 
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> snippetCoderTempIsNotShadowed [
+	<gtExample>
+	| coder |
+	critic := GtVariableIsShadowedAdvice new.
+	coder := GtPharoSnippetCoder
+			forSource: '
+				| a | a := 42. a'.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block |  ]
+		isWorkspace: true
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> snippetCoderTempIsShadowed [
+	<gtExample>
+	| coder |
+	critic := GtVariableIsShadowedAdvice new.
+	coder := GtPharoSnippetCoder
+			forSource: '
+				| a | a := 42. [:b | | a | a := b] value: 43. a '.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | block value: ast statements second receiver body variables first ]
+		isWorkspace: true
+]
+
 { #category : #private }
 GtMethodAdviceExampleRunner >> styleAndCompareResultsFrom: coder to: aBlock isWorkspace: aBoolean [
 	| ast foundNodes viewModel styler text |
@@ -322,7 +350,6 @@ GtMethodAdviceExampleRunner >> styleAndCompareResultsFrom: coder to: aBlock isWo
 		value: ast
 		value: [ :found | 
 			self assert: (foundNodes includes: found).
-
 			foundNodes remove: found ].
 	self assert: foundNodes isEmpty.
 	^ text

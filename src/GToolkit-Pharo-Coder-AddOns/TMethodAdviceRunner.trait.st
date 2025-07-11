@@ -28,6 +28,11 @@ TMethodAdviceRunner >> hasDeclaredVariableNamed: aString [
 ]
 
 { #category : #testing }
+TMethodAdviceRunner >> hasExplicitlyDeclaredVariableNamed: aString [
+	^ self hasDeclaredVariableNamed: aString
+]
+
+{ #category : #testing }
 TMethodAdviceRunner >> hasRefactoring [
 	^ false
 ]
