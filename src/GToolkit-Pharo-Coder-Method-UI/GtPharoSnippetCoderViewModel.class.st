@@ -72,6 +72,13 @@ GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
+{ #category : #'api - coder model' }
+GtPharoSnippetCoderViewModel >> hasExplicitlyDeclaredVariableNamed: aVariableName [
+	"Don't return true for implicitly defined variables"
+
+	^ super hasDeclaredVariableNamed: aVariableName
+]
+
 { #category : #initialization }
 GtPharoSnippetCoderViewModel >> initialize [
 	super initialize.

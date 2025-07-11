@@ -65,6 +65,11 @@ GtMethodAdviceStyler >> hasDeclaredVariableNamed: aString [
 ]
 
 { #category : #testing }
+GtMethodAdviceStyler >> hasExplicitlyDeclaredVariableNamed: aString [
+	^ self coderViewModel hasExplicitlyDeclaredVariableNamed: aString
+]
+
+{ #category : #testing }
 GtMethodAdviceStyler >> hasRefactoring [
 	^ hasRefactoring
 		ifNil: [ hasRefactoring := text
