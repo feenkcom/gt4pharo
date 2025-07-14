@@ -51,6 +51,43 @@ GtMergeVariablesRefactoring >> ast [
 	^ ast ifNil: [ ast := class parseTreeForSelector: selector ]
 ]
 
+{ #category : #transforming }
+GtMergeVariablesRefactoring >> basicTransform [
+	| source definer toDefiner var |
+	source := SmaCCString on: self ast source.
+	definer := self fromNode whoDefines: self fromNode name.
+	isArgVariable
+		ifTrue: [ toDefiner := self toNode whoDefines: self toNode name.
+			toDefiner isSequence
+				ifTrue: [ var := toDefiner temporaries detect: [ :each | each = self toNode ].
+					source deleteFrom: var start to: var stop.
+					source deleteWhitespaceAfterIndex: var start ] ].
+	self ast
+		nodesDo: [ :each | 
+			each = self fromNode
+				ifTrue: [ (each whoDefines: each name) == definer
+						ifTrue: [ (each parent == definer and: [ definer temporaries identityIncludes: each ])
+								ifTrue: [ source deleteFrom: each start to: each stop.
+									source deleteWhitespaceAfterIndex: each start ]
+								ifFalse: [ (each parent isAssignment
+										and: [ each parent variable = self toNode or: [ each parent value = self toNode ] ])
+										ifTrue: [ each parent isUsed
+												ifTrue: [ source
+														replaceFrom: each parent start
+														to: each parent stop
+														with: self toNode name ]
+												ifFalse: [ source deleteFrom: each parent start to: each parent stop.
+													each parent parent periods
+														detect: [ :p | p > each start ]
+														ifFound: [ :p | source deleteFrom: p to: p ].
+													source deleteWhitespaceAfterIndex: each start ] ]
+										ifFalse: [ source
+												replaceFrom: each start
+												to: each stop
+												with: self toNode name ] ] ] ] ].
+	class compile: source asString
+]
+
 { #category : #preconditions }
 GtMergeVariablesRefactoring >> checkAssignments [
 	| fromAssignments toAssignments |
@@ -155,6 +192,11 @@ GtMergeVariablesRefactoring >> preconditions [
 					true ])
 ]
 
+{ #category : #transforming }
+GtMergeVariablesRefactoring >> privateTransform [
+	self basicTransform
+]
+
 { #category : #preconditions }
 GtMergeVariablesRefactoring >> readersFor: aVariable [
 	| readers definer |
@@ -196,39 +238,7 @@ GtMergeVariablesRefactoring >> toNode [
 
 { #category : #transforming }
 GtMergeVariablesRefactoring >> transform [
-	| source definer toDefiner var |
-	source := SmaCCString on: self ast source.
-	definer := self fromNode whoDefines: self fromNode name.
-	isArgVariable
-		ifTrue: [ toDefiner := self toNode whoDefines: self toNode name.
-			toDefiner isSequence
-				ifTrue: [ var := toDefiner temporaries detect: [ :each | each = self toNode ].
-					source deleteFrom: var start to: var stop.
-					source deleteWhitespaceAfterIndex: var start ] ].
-	self ast
-		nodesDo: [ :each | 
-			each = self fromNode
-				ifTrue: [ (each whoDefines: each name) == definer
-						ifTrue: [ (each parent == definer and: [ definer temporaries identityIncludes: each ])
-								ifTrue: [ source deleteFrom: each start to: each stop.
-									source deleteWhitespaceAfterIndex: each start ]
-								ifFalse: [ (each parent isAssignment
-										and: [ each parent variable = self toNode or: [ each parent value = self toNode ] ])
-										ifTrue: [ each parent isUsed
-												ifTrue: [ source
-														replaceFrom: each parent start
-														to: each parent stop
-														with: self toNode name ]
-												ifFalse: [ source deleteFrom: each parent start to: each parent stop.
-													each parent parent periods
-														detect: [ :p | p > each start ]
-														ifFound: [ :p | source deleteFrom: p to: p ].
-													source deleteWhitespaceAfterIndex: each start ] ]
-										ifFalse: [ source
-												replaceFrom: each start
-												to: each stop
-												with: self toNode name ] ] ] ] ].
-	class compile: source asString
+	self basicTransform
 ]
 
 { #category : #preconditions }
