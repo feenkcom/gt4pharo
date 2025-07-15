@@ -136,12 +136,17 @@ GtMethodAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
 ]
 
 { #category : #styling }
+GtMethodAdvice >> fixItActionsForNode: aNode coderViewModel: coderViewModel [
+	^ self fixItActionsForNode: aNode coderModel: coderViewModel coderModel
+]
+
+{ #category : #styling }
 GtMethodAdvice >> fixItActionsForNode: aNode styler: aCriticStyler [
 	^ MessageSend
 		receiver: self
-		selector: #fixItActionsForNode:coderModel:
+		selector: #fixItActionsForNode:coderViewModel:
 		arguments: {aNode.
-				aCriticStyler coderModel}
+				aCriticStyler coderViewModel}
 ]
 
 { #category : #styling }

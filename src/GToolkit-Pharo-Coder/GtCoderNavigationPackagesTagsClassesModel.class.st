@@ -559,7 +559,7 @@ GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnreg
 
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> packagesToShow [
-	<return: #Collection of: #RPackage>
+	<return: #Collection of: #Package>
 
 	^ self packageOrganizer gtSortedPackages
 ]
@@ -1127,7 +1127,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedMethods [
 
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedPackage [
-	<return: #RPackage>
+	<return: #Package>
 	^ selectedPackage
 ]
 

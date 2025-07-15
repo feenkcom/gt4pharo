@@ -95,6 +95,11 @@ GtPharoSourceCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	^ false
 ]
 
+{ #category : #'api - coder model' }
+GtPharoSourceCoderViewModel >> hasExplicitlyDeclaredVariableNamed: aVariableName [
+	^ self hasDeclaredVariableNamed: aVariableName
+]
+
 { #category : #'api - accessing' }
 GtPharoSourceCoderViewModel >> highlighter [
 	<return: #GtSourceReferenceHighlighter>

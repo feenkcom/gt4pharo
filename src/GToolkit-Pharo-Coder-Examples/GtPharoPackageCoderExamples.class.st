@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #'private - set up' }
@@ -374,28 +374,51 @@ GtPharoPackageCoderExamples >> unloadRegisteredPackageWhenUnsubscribedToSystem [
 GtPharoPackageCoderExamples >> unregisterRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>
 	| aPackageCoder anEventsRecoder |
-	
 	anEventsRecoder := self eventsRecorder.
-	
+
 	aPackageCoder := self coderOnRegisteredPackage.
 	aPackageCoder subscribeToSystem.
 
-	aPackageCoder when: GtCoderPackageUnregistered send: #record: to: anEventsRecoder.
+	aPackageCoder
+		when: GtCoderPackageUnregistered
+		send: #record:
+		to: anEventsRecoder.
 
-	[ aPackageCoder unregister ] ensure: [
-		aPackageCoder unsubscribeFromSystem ].
+	[ aPackageCoder unregister ] ensure: [ aPackageCoder unsubscribeFromSystem ].
 
-	self assert: aPackageCoder isRegistered not.
-	"classes are not removed from the system when unregistering package"
-	self assert: aPackageCoder classes size equals: (aPackageCoder attributeNamed: #dummyPackage) amountOfClasses.
-	
-	"When unregistering a package with classes, those classes are moved to unpackaged package"
-	self assert: (aPackageCoder classes collect: [ :each | each package name ]) asSet equals: { #'_UnpackagedPackage' } asSet. 
-	
+	self assert: aPackageCoder isRegistered not.	"classes are not removed from the system when unregistering package"
+	self
+		assert: aPackageCoder classes size
+		equals: (aPackageCoder attributeNamed: #dummyPackage) amountOfClasses.
+
+	"When unregistering a package with classes, 
+	those classes are moved to unpackaged package 
+	in the global package organizer."
+	self
+		assert: (aPackageCoder classes
+				collect: [ :each | (self class packageOrganizer packageOf: each) name ])
+		equals: {#_UnpackagedPackage} asSet.
+
+	self 
+		forPharo12: [
+			"In Pharo 12 asking the class for a package returns its stored package."
+			self
+				assert: (aPackageCoder classes 
+					collect: [ :each | each package name ]) asSet
+				equals: {aPackageCoder packageName} asSet.]
+		forPharo11AndPharo10: [	
+			"In Pharo 11 asking the class for a package goes through the global
+			package organizer, and the package is the unpackaged package."
+			self
+				assert: (aPackageCoder classes 
+					collect: [ :each | each package name ]) asSet
+				equals: {#_UnpackagedPackage} asSet].
+
+
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderPackageUnregistered.
 	self assert: anEventsRecoder first coder equals: aPackageCoder.
-	
+
 	^ aPackageCoder
 ]
 
@@ -452,7 +475,11 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenUnsubs
 	aPackageCoder := self coderOnRegisteredPackage.
 	aPackageCoder when: GtCoderPackageUnregistered send: #record: to: anEventsRecoder.
 
-	aPackageCoder package unregister.
+	self 
+		forPharo12: [
+			aPackageCoder package organizer unregisterPackage: aPackageCoder package ] 
+		forPharo11AndPharo10: [
+			aPackageCoder package unregister ].
 
 	self assert: aPackageCoder isRegistered not.
 	self assert: anEventsRecoder numberOfEvents equals: 0.

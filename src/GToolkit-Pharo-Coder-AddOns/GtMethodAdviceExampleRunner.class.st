@@ -170,16 +170,24 @@ GtMethodAdviceExampleRunner >> contextCoderMessagesNotImplementedExample [
 { #category : #examples }
 GtMethodAdviceExampleRunner >> contextCoderUndeclaredVariableExample [
 	<gtExample>
-	| coder context receiver |
+	| coder context receiver compiler |
 	critic := GtUndeclaredVariableAdvice new.
 	receiver := OrderedCollection new.
-	method := receiver class compiler
+	compiler := receiver class compiler
 			source: '
 				firstIndex < lastIndex ifTrue: [firstIndex] ifFalse: [unknown]';
 			class: Integer;
 			receiver: receiver;
-			isScripting: true;
-			compile.
+			isScripting: true.
+			
+	self 
+		forPharo12: [
+			"Undeclared in scripting mode are permited by default in Pharo 11,
+			but not in Pharo 12"
+			compiler permitUndeclared: true] 
+		forPharo11AndPharo10: [].
+		
+	method := compiler compile.
 	context := Context
 			sender: nil
 			receiver: receiver
@@ -288,6 +296,34 @@ GtMethodAdviceExampleRunner >> snippetCoderMessagesNotImplementedExample [
 		isWorkspace: true
 ]
 
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> snippetCoderTempIsNotShadowed [
+	<gtExample>
+	| coder |
+	critic := GtVariableIsShadowedAdvice new.
+	coder := GtPharoSnippetCoder
+			forSource: '
+				| a | a := 42. a'.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block |  ]
+		isWorkspace: true
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> snippetCoderTempIsShadowed [
+	<gtExample>
+	| coder |
+	critic := GtVariableIsShadowedAdvice new.
+	coder := GtPharoSnippetCoder
+			forSource: '
+				| a | a := 42. [:b | | a | a := b] value: 43. a '.
+	^ self
+		styleAndCompareResultsFrom: coder
+		to: [ :ast :block | block value: ast statements second receiver body variables first ]
+		isWorkspace: true
+]
+
 { #category : #private }
 GtMethodAdviceExampleRunner >> styleAndCompareResultsFrom: coder to: aBlock isWorkspace: aBoolean [
 	| ast foundNodes viewModel styler text |
@@ -314,7 +350,6 @@ GtMethodAdviceExampleRunner >> styleAndCompareResultsFrom: coder to: aBlock isWo
 		value: ast
 		value: [ :found | 
 			self assert: (foundNodes includes: found).
-
 			foundNodes remove: found ].
 	self assert: foundNodes isEmpty.
 	^ text
@@ -354,6 +389,15 @@ GtMethodAdviceExampleRunner >> valueNotUsedExample [
 		compareResultsFrom: GtValueNotUsedAdvice new
 		source: 'a #()'
 		to: [ :ast :block | block value: ast body statements last ]
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> variableIsShadowed [
+	<gtExample>
+	^ self
+		compareResultsFrom: GtVariableIsShadowedAdvice new
+		source: 'a | a | [:a | a] value: 42'
+		to: [ :ast :block | block value: ast body statements last receiver variables first ]
 ]
 
 { #category : #examples }
