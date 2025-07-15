@@ -9,6 +9,11 @@ GtDefinesEqualButNotHashAdvice >> description [
 	^ 'Class defines #=, but not a corresponding #hash method. This may cause problems when using hashed collections.'
 ]
 
+{ #category : #'as yet unclassified' }
+GtDefinesEqualButNotHashAdvice >> fixItActionsForNode: aNode coderModel: coderModel [
+	^ {GtDefineHashFunctionFixItAction new methodClass: coderModel behavior}
+]
+
 { #category : #testing }
 GtDefinesEqualButNotHashAdvice >> matches: aNode from: aCriticRunner [
 	aNode isErrorNode ifTrue: [ ^ false ].
