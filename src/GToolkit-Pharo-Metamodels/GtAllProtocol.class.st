@@ -14,12 +14,12 @@ GtAllProtocol >> allMethods [
 	^ Array streamContents: [ :aStream |
 		| anInstanceSide aClassSide|
 		anInstanceSide := theClass instanceSide.
-		anInstanceSide organization allMethodSelectors
+		anInstanceSide selectors
 			do: [ :eachSelector | 
 				aStream nextPut: anInstanceSide >> eachSelector ].
 
 		aClassSide := theClass classSide.
-		aClassSide organization allMethodSelectors
+		aClassSide selectors
 			do: [ :eachSelector | 
 				| eachMethod |
 				eachMethod := aClassSide >> eachSelector.
