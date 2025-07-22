@@ -3242,7 +3242,7 @@ GtPharoCoderByScripterExamples >> removePackageInIndex [
 	scripter pulse.
 
 	self
-		assert: (RPackageOrganizer default includesPackageNamed: packageName)
+		assert: (self packageOrganizer includesPackageNamed: packageName)
 		equals: false.
 
 	scripter

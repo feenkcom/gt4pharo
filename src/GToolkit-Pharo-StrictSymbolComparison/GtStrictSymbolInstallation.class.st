@@ -10,9 +10,9 @@ Class {
 { #category : #refactoring }
 GtStrictSymbolInstallation >> createExtensionPackage [
 
-	RPackageOrganizer default
+	self packageOrganizer
 		packageNamed: GtStrictSymbolRefactor refactoredPackageName
-		ifAbsent: [ RPackageOrganizer default createPackageNamed:
+		ifAbsent: [ self packageOrganizer createPackageNamed:
 			GtStrictSymbolRefactor refactoredPackageName ].
 ]
 

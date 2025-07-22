@@ -28,5 +28,5 @@ GtSearchImagePackagesFilter >> itemsDo: aBlock [
 
 { #category : #enumerating }
 GtSearchImagePackagesFilter >> packagesDo: aBlock [
-	RPackageOrganizer default packages do: aBlock
+	self packageOrganizer packages do: aBlock
 ]

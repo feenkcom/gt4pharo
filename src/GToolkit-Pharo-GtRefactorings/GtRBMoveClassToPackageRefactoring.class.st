@@ -31,7 +31,7 @@ GtRBMoveClassToPackageRefactoring >> ensurePackageCreated [
 
 { #category : #testing }
 GtRBMoveClassToPackageRefactoring >> isPackage: aSymbol [
-	RPackageOrganizer default
+	self packageOrganizer
 		packageNamed: aSymbol
 		ifAbsent: [ | index |
 			index := aSymbol lastIndexOf: $-.

@@ -18,7 +18,7 @@ GtRBPackageClassRefactoring class >> class: aClass packageName: packageString ta
 
 { #category : #transforming }
 GtRBPackageClassRefactoring >> basicTransform [
-	RPackageOrganizer default
+	self packageOrganizer
 		packageNamed: packageName asSymbol
 		ifAbsent: [ self model changes addChange: (GtRBAddPackageChange packageName: packageName) ].
 	class
