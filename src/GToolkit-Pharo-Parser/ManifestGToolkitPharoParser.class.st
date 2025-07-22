@@ -15,7 +15,6 @@ ManifestGToolkitPharoParser class >> mustOnlyDependOn [
 		'Collections-Strings'.
 		'Collections-Unordered'.
 		'Kernel'.
-		'RPackage-Core'.
 		'SmaCC_GLR_Runtime'.
 		'SmaCC_Runtime'
 	}

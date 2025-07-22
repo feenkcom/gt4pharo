@@ -35,7 +35,6 @@ ManifestGToolkitPharoSearchFilters class >> mustOnlyDependOn [
 		'GToolkit-SearchFilters'.
 		'GToolkit-Utility-Basic'.
 		'Kernel'.
-		'RPackage-Core'
 	}
 ]
 
