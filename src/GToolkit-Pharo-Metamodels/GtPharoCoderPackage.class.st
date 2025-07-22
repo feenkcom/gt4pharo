@@ -86,7 +86,7 @@ GtPharoCoderPackage >> renamePackageTo: aNewName [
 
 { #category : #accessing }
 GtPharoCoderPackage >> tags [
-	<return: #Collection of: #RPackageTag>
+	<return: #Collection of: #PackageTag>
 
 	^ self explicitRequirement
 ]

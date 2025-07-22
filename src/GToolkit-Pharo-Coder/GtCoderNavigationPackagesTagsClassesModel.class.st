@@ -1150,7 +1150,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedSlot [
 
 { #category : #'api - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> selectedTag [
-	<return: #RPackageTag>
+	<return: #PackageTag>
 	^ selectedTag
 ]
 
