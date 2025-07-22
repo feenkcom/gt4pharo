@@ -207,7 +207,7 @@ GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 
 	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
 		| eachPackage eachDummyPackage |
-		self assert: (RPackageOrganizer default includesPackageNamed: eachPackageName) not.
+		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
 		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
 		eachDummyPackage := GtPharoDummyPackage new
 			packageName: eachPackageName;
@@ -226,7 +226,7 @@ GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDum
 
 	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
 		| eachPackage eachDummyPackage |
-		self assert: (RPackageOrganizer default includesPackageNamed: eachPackageName) not.
+		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
 		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
 		eachDummyPackage := GtPharoDummyPackage new
 			packageName: eachPackageName;
@@ -243,7 +243,7 @@ GtPharoDummiesGenerator >> addDummyPackagesWithClassSiblingsToEnvironment: aDumm
 
 	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
 		| eachPackage eachDummyPackage |
-		self assert: (RPackageOrganizer default includesPackageNamed: eachPackageName) not.
+		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
 		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
 		eachDummyPackage := GtPharoDummyPackage new
 			packageName: eachPackageName;
@@ -361,7 +361,7 @@ GtPharoDummiesGenerator >> dummyPackageNames [
 		
 		aGeneratedPackageName := (self dummyPackageNamePrefix, '-', (UUID new asString36 last: 8) capitalized) asSymbol.
 
-		(RPackageOrganizer default includesPackageNamed: aGeneratedPackageName)
+		(self packageOrganizer includesPackageNamed: aGeneratedPackageName)
 			ifFalse: [ thePackageNames add: aGeneratedPackageName ] ].
 
 	^ thePackageNames
@@ -486,9 +486,9 @@ GtPharoDummiesGenerator >> fakeRegisteredPackage [
 		amountOfPackages timesCollect: [  ].
 
 		aFakePackageName := self fakePackageName.
-		self assert: (RPackageOrganizer default includesPackageNamed: aFakePackageName) not.
+		self assert: (self packageOrganizer includesPackageNamed: aFakePackageName) not.
 		
-		aPackage := RPackageOrganizer default createPackageNamed: aFakePackageName.
+		aPackage := self packageOrganizer createPackageNamed: aFakePackageName.
 		self addFakeClassesToPackage: aPackage ].
 	
 	^ aPackage
@@ -514,9 +514,9 @@ GtPharoDummiesGenerator >> fakeUnregisteredPackage [
 	
 	aFakePackageName := self fakePackageName.
 	
-	self assert: (RPackageOrganizer default includesPackageNamed: aFakePackageName) not.
+	self assert: (self packageOrganizer includesPackageNamed: aFakePackageName) not.
 	
-	aPackage := RPackageOrganizer default packageClass named: aFakePackageName.
+	aPackage := self packageOrganizer packageClass named: aFakePackageName.
 	
 	^ aPackage
 ]

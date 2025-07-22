@@ -37,7 +37,7 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 			(aMemento readObservableValueUsing: aDescription) observe: anElementSink ].
 
 	aCompletionStrategy := GtStringsCompletionStrategy new
-			completions: (GtPrefixTree withAll: RPackageOrganizer default packageNames).
+			completions: (GtPrefixTree withAll: self packageOrganizer packageNames).
 
 	(GtCompletionController on: packageEditor strategy: aCompletionStrategy)
 		install.

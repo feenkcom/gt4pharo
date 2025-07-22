@@ -6,7 +6,7 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoPackagesCoder class >> forAllPackages [
-	^ self forPackages: RPackageOrganizer default gtSortedPackages
+	^ self forPackages: self packageOrganizer gtSortedPackages
 ]
 
 { #category : #'instance creation' }

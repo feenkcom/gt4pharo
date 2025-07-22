@@ -31,7 +31,7 @@ GtPharoLiteralNode >> gtIsBaselineName [
 { #category : #testing }
 GtPharoLiteralNode >> gtIsBaselinePackageName [
 	(self isString or: [ self isSymbol ]) ifFalse: [ ^ false ].
-	RPackageOrganizer default packageNamed: self literalValue ifAbsent: [ ^ false ].
+	self packageOrganizer packageNamed: self literalValue ifAbsent: [ ^ false ].
 	self topParent
 		withAllNodesDo: [ :each | 
 			(each isErrorNode not

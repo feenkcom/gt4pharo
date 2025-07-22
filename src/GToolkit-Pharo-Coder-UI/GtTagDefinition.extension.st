@@ -4,7 +4,7 @@ Extension { #name : #GtTagDefinition }
 GtTagDefinition >> browseFrom: anEvent [
 	| aRealPackage |
 
-	aRealPackage := RPackageOrganizer default
+	aRealPackage := self packageOrganizer
 		packageNamed: self parent category package name
 		ifAbsent: [ ^ self ].
 
@@ -23,7 +23,7 @@ GtTagDefinition >> browseFrom: anEvent [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> newTabFrom: anEvent [
 	| aRealPackage |
-	aRealPackage := RPackageOrganizer default
+	aRealPackage := self packageOrganizer
 			packageNamed: self parent category package name
 			ifAbsent: [ ^ self ].
 
@@ -57,7 +57,7 @@ GtTagDefinition >> readers [
 GtTagDefinition >> replaceFrom: anEvent [
 	| aRealPackage |
 
-	aRealPackage := RPackageOrganizer default
+	aRealPackage := self packageOrganizer
 		packageNamed: self parent category package name
 		ifAbsent: [ ^ self ].
 

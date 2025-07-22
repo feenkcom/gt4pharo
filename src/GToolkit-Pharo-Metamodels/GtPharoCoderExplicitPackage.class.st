@@ -117,7 +117,7 @@ GtPharoCoderExplicitPackage >> renamePackageTo: aNewName [
 
 { #category : #accessing }
 GtPharoCoderExplicitPackage >> tags [
-	<return: #Collection of: #RPackageTag>
+	<return: #Collection of: #PackageTag>
 	
 	^ self package classTags
 ]

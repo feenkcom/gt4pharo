@@ -158,7 +158,7 @@ GtRBAddClassChange >> package [
 	"Pharo 12"
 
 	^ self packageName
-		ifNotNil: [ :packageName | RPackageOrganizer default packageNamed: packageName ]
+		ifNotNil: [ :packageName | self packageOrganizer packageNamed: packageName ]
 ]
 
 { #category : #accessing }
@@ -170,7 +170,7 @@ GtRBAddClassChange >> packageName [
 { #category : #convenience }
 GtRBAddClassChange >> packageNameFor: aString [
 	| index |
-	(RPackageOrganizer default includesPackageNamed: aString) ifTrue: [ ^ aString ].
+	(self packageOrganizer includesPackageNamed: aString) ifTrue: [ ^ aString ].
 	index := aString lastIndexOf: $-.
 	index <= 1 ifTrue: [ ^ nil ].
 	^ self packageNameFor: (aString first: index - 1)

@@ -106,12 +106,12 @@ GtPharoCodeModifier >> compileMethodSource: aSourceCode in: aClass protocol: aMe
 
 { #category : #'api - package' }
 GtPharoCodeModifier >> createPackageNamed: aPackageName [
-	^ self critical: [ RPackageOrganizer default createPackageNamed: aPackageName ]
+	^ self critical: [ self packageOrganizer createPackageNamed: aPackageName ]
 ]
 
 { #category : #'api - package' }
 GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
-	<return: #RPackageTag>
+	<return: #PackageTag>
 	<exception: #RPackageConflictError>
 	^ self critical: [ aPackage addClassTag: aTagName ]
 ]

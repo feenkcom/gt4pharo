@@ -20,7 +20,7 @@ RBLiteralValueNode >> gtIsBaselineName [
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBLiteralValueNode >> gtIsBaselinePackageName [
 	self value isString ifFalse: [ ^ false ].
-	RPackageOrganizer default packageNamed: self value ifAbsent: [ ^ false ].
+	self packageOrganizer packageNamed: self value ifAbsent: [ ^ false ].
 	self withAllParents first
 		nodesDo: [ :each | 
 			(each isLiteralNode

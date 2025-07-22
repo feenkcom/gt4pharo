@@ -4,7 +4,7 @@ Extension { #name : #GtPackageDefinition }
 GtPackageDefinition >> browseFrom: anEvent [
 	| aRealPackage aCoderEvent aPackageCoder |
 
-	aRealPackage := RPackageOrganizer default
+	aRealPackage := self packageOrganizer
 		packageNamed: self name
 		ifAbsent: [ ^ self ].
 
@@ -18,7 +18,7 @@ GtPackageDefinition >> browseFrom: anEvent [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPackageDefinition >> newTabFrom: anEvent [
 	| aRealPackage aPackageCoder aSpace |
-	aRealPackage := RPackageOrganizer default
+	aRealPackage := self packageOrganizer
 			packageNamed: self name
 			ifAbsent: [ ^ self ].
 
@@ -68,7 +68,7 @@ GtPackageDefinition >> readers [
 GtPackageDefinition >> replaceFrom: anEvent [
 	| aRealPackage aCoderEvent aPackageCoder |
 
-	aRealPackage := RPackageOrganizer default
+	aRealPackage := self packageOrganizer
 		packageNamed: self name
 		ifAbsent: [ ^ self ].
 

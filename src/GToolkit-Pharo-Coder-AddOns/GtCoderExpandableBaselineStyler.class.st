@@ -60,7 +60,7 @@ GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 		from: aPackageNameNode value startPosition
 		to: aPackageNameNode value stopPosition.	"Let's add expander for existing (and loaded) packages"
 	aPackageName := aPackageNameNode literalValue asString asSymbol.
-	aPackage := RPackageOrganizer default
+	aPackage := self packageOrganizer
 			packageNamed: aPackageName
 			ifAbsent: [ ^ self ].
 

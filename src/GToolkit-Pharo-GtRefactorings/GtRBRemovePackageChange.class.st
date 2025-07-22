@@ -11,7 +11,7 @@ GtRBRemovePackageChange >> asUndoOperation [
 
 { #category : #private }
 GtRBRemovePackageChange >> primitiveExecute [
-	(RPackageOrganizer default
+	(self packageOrganizer
 		packageNamed: packageName asSymbol
 		ifAbsent: [ ^ self ]) unregister
 ]

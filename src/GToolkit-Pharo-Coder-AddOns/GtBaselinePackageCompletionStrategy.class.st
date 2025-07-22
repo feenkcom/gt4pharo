@@ -6,6 +6,6 @@ Class {
 
 { #category : #private }
 GtBaselinePackageCompletionStrategy >> nameStreamMatching: aString [
-	^ (RPackageOrganizer default packages asAsyncStream select: [ :each | each name beginsWith: aString ])
+	^ (self packageOrganizer packages asAsyncStream select: [ :each | each name beginsWith: aString ])
 		collect: [ :each | each name ]
 ]

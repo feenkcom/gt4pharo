@@ -28,7 +28,7 @@ GtSearchMethodsWithRepositoryPatternFilter class >> globalFilterDescriptor [
 		named: 'Repository';
 		order: 30;
 		completion: [ GtStringsCompletionStrategy new
-				completions: [ GtPrefixTree withAll: RPackageOrganizer default packageNames ] ]
+				completions: [ GtPrefixTree withAll: self packageOrganizer packageNames ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
@@ -38,7 +38,7 @@ GtSearchMethodsWithRepositoryPatternFilter class >> globalFilterDescriptor2 [
 		named: 'Repository';
 		order: 30;
 		completion: [ GtStringsCompletionStrategy new
-				completions: [ GtPrefixTree withAll: RPackageOrganizer default packageNames ] ]
+				completions: [ GtPrefixTree withAll: self packageOrganizer packageNames ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
@@ -48,5 +48,5 @@ GtSearchMethodsWithRepositoryPatternFilter class >> packageFilterDescriptor [
 		named: 'Repository';
 		order: 30;
 		completion: [ GtStringsCompletionStrategy new
-				completions: [ GtPrefixTree withAll: RPackageOrganizer default packageNames ] ]
+				completions: [ GtPrefixTree withAll: self packageOrganizer packageNames ] ]
 ]
