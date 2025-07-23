@@ -30,7 +30,7 @@ CompiledMethod >> gtOriginalMethod [
 CompiledMethod >> recompile [
 	<gtPharoPatch: #Pharo>
 	| result |
-	result := self methodClass recompile: self selector.
+	result := self origin recompile: self selector.
 	SystemAnnouncer uniqueInstance
 		announce: (GtMethodRecompiled
 				methodChangedFrom: self
