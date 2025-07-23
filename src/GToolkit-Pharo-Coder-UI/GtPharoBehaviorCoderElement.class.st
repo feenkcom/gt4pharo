@@ -245,9 +245,33 @@ GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
 
 { #category : #'private - updating' }
 GtPharoBehaviorCoderElement >> hideDefinitionElements [
+	| someChildren aTab |
 	contentPane ifNil: [ ^ self ].
-	contentPane
-		childrenDo: [ :eachChild | contentTabs == eachChild ifFalse: [ eachChild visibility: BlVisibility gone ] ]
+	contentTabs ifNil: [ ^ self ].
+
+	someChildren := Array
+			streamContents: [ :aStream | 
+				contentPane
+					childrenDo: [ :eachChild | contentTabs == eachChild ifFalse: [ aStream nextPut: eachChild ] ] ].
+
+	someChildren ifEmpty: [ ^ self ].
+
+	someChildren do: #removeFromParent.
+
+	aTab := BrTab new
+			id: #'coder--definition-tab';
+			aptitude: BrGlamorousTabAptitude new;
+			label: 'Definition';
+			stencil: [ BrVerticalPane new
+					matchParent;
+					alignTopLeft;
+					addChildren: someChildren ].
+
+	contentTabs userData
+		at: #behaviorDefinitionElements put: someChildren;
+		at: #behaviorDefinitionTab put: aTab.
+
+	contentTabs addTab: aTab at: 1
 ]
 
 { #category : #initialization }
@@ -291,9 +315,20 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 
 { #category : #'private - updating' }
 GtPharoBehaviorCoderElement >> showDefinitionElement [
+	| someElements aTab |
 	contentPane ifNil: [ ^ self ].
-	contentPane
-		childrenDo: [ :eachChild | eachChild visibility: BlVisibility visible ]
+	contentTabs ifNil: [ ^ self ].
+
+	someElements := contentTabs userData
+			at: #behaviorDefinitionElements
+			ifAbsent: [ ^ self ].
+	aTab := contentTabs userData at: #behaviorDefinitionTab ifAbsent: [ ^ self ].
+
+	contentTabs removeTab: aTab.
+	someElements
+		reverseDo: [ :eachChild | 
+			eachChild removeFromParent.
+			contentPane addChildFirst: eachChild ]
 ]
 
 { #category : #'building ui' }
