@@ -322,7 +322,9 @@ GtPharoBehaviorCoderElement >> showDefinitionElement [
 	someElements := contentTabs userData
 			at: #behaviorDefinitionElements
 			ifAbsent: [ ^ self ].
+	contentTabs userData removeKey: #behaviorDefinitionElements.
 	aTab := contentTabs userData at: #behaviorDefinitionTab ifAbsent: [ ^ self ].
+	contentTabs userData removeKey: #behaviorDefinitionTab.
 
 	contentTabs removeTab: aTab.
 	someElements
