@@ -176,6 +176,10 @@ GtPharoBehaviorCoderElement >> buildContentTabs [
 	aListener
 		interestingPragmas: { #gtClassView }
 		andObject: object.
+		
+	"We do not want to propagate detail states to children."
+	contentTabs states addState: GtPhlowToolDetailState normal.
+	contentTabs states addState: GtPhlowToolDetailPositionState left.
 
 	^ contentTabs
 ]
@@ -239,6 +243,13 @@ GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
 					andVariable: slotName}
 ]
 
+{ #category : #'private - updating' }
+GtPharoBehaviorCoderElement >> hideDefinitionElements [
+	contentPane ifNil: [ ^ self ].
+	contentPane
+		childrenDo: [ :eachChild | contentTabs == eachChild ifFalse: [ eachChild visibility: BlVisibility gone ] ]
+]
+
 { #category : #initialization }
 GtPharoBehaviorCoderElement >> initialize [
 	super initialize.
@@ -250,8 +261,14 @@ GtPharoBehaviorCoderElement >> initialize [
 		constraintsDo: [ :c | 
 			c horizontal matchParent.
 			c vertical matchParent ].
-		
-	self when: BlClickEvent do: [ self requestFocus ]
+
+	self when: BlClickEvent do: [ self requestFocus ].
+
+	self
+		addAptitude: (GtPhlowToolDetailAptitude new
+				topDetailed: [ :aStyle | aStyle do: [ self hideDefinitionElements ] ];
+				normal: [ :aStyle | aStyle do: [ self showDefinitionElement ] ];
+				left: [ :aStyle | aStyle do: [ self showDefinitionElement ] ])
 ]
 
 { #category : #'building ui' }
@@ -270,6 +287,13 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 		ifNotNil: [ 
 			contentPane removeChild: contentTabs.
 			contentTabs := nil ]
+]
+
+{ #category : #'private - updating' }
+GtPharoBehaviorCoderElement >> showDefinitionElement [
+	contentPane ifNil: [ ^ self ].
+	contentPane
+		childrenDo: [ :eachChild | eachChild visibility: BlVisibility visible ]
 ]
 
 { #category : #'building ui' }
