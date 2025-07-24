@@ -291,20 +291,12 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 
 { #category : #'private - updating' }
 GtPharoBehaviorCoderElement >> showDefinitionElement [
-	| someElements aTab |
 	contentPane ifNil: [ ^ self ].
 	contentTabs ifNil: [ ^ self ].
 
-	someElements := contentTabs userData
-			at: #behaviorDefinitionElements
-			ifAbsent: [ ^ self ].
-	aTab := contentTabs userData at: #behaviorDefinitionTab ifAbsent: [ ^ self ].
-
-	contentTabs removeTab: aTab.
-	someElements
-		reverseDo: [ :eachChild | 
-			eachChild removeFromParent.
-			contentPane addChildFirst: eachChild ]
+	contentPane ifNil: [ ^ self ].
+	contentPane
+		childrenDo: [ :eachChild | contentTabs == eachChild ifFalse: [ eachChild visibility: BlVisibility visible ] ]
 ]
 
 { #category : #'building ui' }
