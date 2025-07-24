@@ -247,7 +247,7 @@ GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
 GtPharoBehaviorCoderElement >> hideDefinitionElements [
 	| someChildren aTab |
 	contentPane ifNil: [ ^ self ].
-	contentTabs ifNil: [ ^ self ].
+"	contentTabs ifNil: [ ^ self ]."
 
 	someChildren := Array
 			streamContents: [ :aStream | 
@@ -258,7 +258,7 @@ GtPharoBehaviorCoderElement >> hideDefinitionElements [
 
 	someChildren do: #removeFromParent.
 
-	aTab := BrTab new
+	"aTab := BrTab new
 			id: #'coder--definition-tab';
 			aptitude: BrGlamorousTabAptitude new;
 			label: 'Definition';
@@ -271,7 +271,7 @@ GtPharoBehaviorCoderElement >> hideDefinitionElements [
 		at: #behaviorDefinitionElements put: someChildren;
 		at: #behaviorDefinitionTab put: aTab.
 
-	contentTabs addTab: aTab at: 1
+	contentTabs addTab: aTab at: 1"
 ]
 
 { #category : #initialization }
@@ -317,7 +317,7 @@ GtPharoBehaviorCoderElement >> removeContentTabs [
 GtPharoBehaviorCoderElement >> showDefinitionElement [
 	| someElements aTab |
 	contentPane ifNil: [ ^ self ].
-	contentTabs ifNil: [ ^ self ].
+	"contentTabs ifNil: [ ^ self ].
 
 	someElements := contentTabs userData
 			at: #behaviorDefinitionElements
@@ -326,7 +326,7 @@ GtPharoBehaviorCoderElement >> showDefinitionElement [
 	aTab := contentTabs userData at: #behaviorDefinitionTab ifAbsent: [ ^ self ].
 	contentTabs userData removeKey: #behaviorDefinitionTab.
 
-	contentTabs removeTab: aTab.
+	contentTabs removeTab: aTab."
 	someElements
 		reverseDo: [ :eachChild | 
 			eachChild removeFromParent.
