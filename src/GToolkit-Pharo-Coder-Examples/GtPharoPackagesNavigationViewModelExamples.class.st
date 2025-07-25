@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'GToolkit-Pharo-Coder-Examples-Navigation'
+	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
 { #category : #cleanup }

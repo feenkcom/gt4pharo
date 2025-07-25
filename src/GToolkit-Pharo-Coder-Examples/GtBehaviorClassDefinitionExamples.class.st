@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBehaviorClassDefinitionExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'examples - validation' }

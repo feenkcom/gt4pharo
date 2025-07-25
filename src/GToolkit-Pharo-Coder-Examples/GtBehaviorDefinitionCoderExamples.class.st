@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBehaviorDefinitionCoderExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples'
+	#category : #'GToolkit-Pharo-Coder-Examples'
 }
 
 { #category : #'instance creation' }

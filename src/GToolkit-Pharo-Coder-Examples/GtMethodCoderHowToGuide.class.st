@@ -10,7 +10,7 @@ See {{gtClass:GtMethodCoderUIModelHowToGuide}} for how to deal with method coder
 Class {
 	#name : #GtMethodCoderHowToGuide,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Coder-Examples-! HowTo'
+	#category : #'GToolkit-Pharo-Coder-Examples-! HowTo'
 }
 
 { #category : #'instance creation' }
