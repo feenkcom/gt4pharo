@@ -144,6 +144,52 @@ GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
 	^ refs
 ]
 
+{ #category : #accessing }
+GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclaredInsideTrait [
+	<gtExample>
+	| refs var |
+	[ Trait
+		named: #TGtFoo
+		instanceVariableNames: ''
+		package: 'Foo'.
+	Object
+		subclass: #GtFoo1T
+		uses: (Smalltalk globals at: #TGtFoo)
+		instanceVariableNames: ''
+		classVariableNames: ''
+		package: 'Foo'.
+	#TGtFoo asClass class
+		compile: 'm1 
+	^ GtFoo2T'.
+	self assert: #GtFoo1T asClass class localMethods isEmpty.
+	Object
+		subclass: #GtFoo2T
+		instanceVariableNames: ''
+		classVariableNames: ''
+		package: 'Foo'.
+	self assert: #GtFoo1T asClass class localMethods isEmpty.
+	var := Smalltalk globals associationAt: #GtFoo2T.
+	refs := GtPharoIndex current globalVariableReferencesTo: var.
+	self assert: (refs includes: thisContext method method).
+	self assert: (refs includes: (Smalltalk globals at: #TGtFoo) class >> #m1).
+	refs := #GtFoo2T asClass gtReferences contents.
+	self assert: (refs includes: (Smalltalk globals at: #TGtFoo) class >> #m1) ]
+		ensure: [ Smalltalk globals
+				associationAt: #GtFoo1T
+				ifPresent: [ :assoc | assoc value removeFromSystem ].
+			Smalltalk globals
+				associationAt: #GtFoo2T
+				ifPresent: [ :assoc | assoc value removeFromSystem ].
+			Smalltalk globals
+				associationAt: #TGtFoo
+				ifPresent: [ :assoc | assoc value removeFromSystem ].
+			Undeclared removeKey: #GtFoo2T ifAbsent: [  ] ].
+	refs := GtPharoIndex current globalVariableReferencesTo: var.
+	self assert: (refs includes: thisContext method method).
+	self assert: refs size = 1.
+	^ refs
+]
+
 { #category : #'as yet unclassified' }
 GtPharoIndexExamples >> checkReflectiveMethodReferences [
 	<gtExample>
