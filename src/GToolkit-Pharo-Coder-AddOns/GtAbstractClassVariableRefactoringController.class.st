@@ -1,7 +1,7 @@
 Class {
 	#name : #GtAbstractClassVariableRefactoringController,
 	#superclass : #GtVariableRefactoringController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
 { #category : #accessing }
