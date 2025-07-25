@@ -4,19 +4,24 @@ Extension { #name : #Class }
 Class >> gtCoderSidebarIndexConvertToSiblingClassFrom: aGtCoderClassesTreeElement [
 	<gtCoderSidebarIndexOneSubjectContextMenuItem: 6>
 	self subclasses notEmpty ifFalse: [ ^ nil ].
-	
+
 	^ BrMenuSubmenuItem new
-		label: 'Convert to sibling' preview: self name;
-		submenu: (aGtCoderClassesTreeElement convertToSiblingSubmenuFor: self siblings: self subclasses)
+		icon: BrGlamorousVectorIcons empty
+			label: 'Convert to sibling'
+			preview: self name;
+		submenu: (aGtCoderClassesTreeElement
+				convertToSiblingSubmenuFor: self
+				siblings: self subclasses)
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 Class >> gtCoderSidebarIndexCopyClassOrTraitFrom: aGtCoderClassesTreeElement [
 	<gtCoderSidebarIndexOneSubjectContextMenuItem: 8>
-	self subclasses notEmpty ifFalse: [ ^ nil ].
-
+	self superclass ifNil: [ ^ nil ].
+	
 	^ BrMenuSubmenuItem new
-		label: (self isTrait ifTrue: [ 'Copy trait' ] ifFalse: [ 'Copy class' ])
+		icon: BrGlamorousVectorIcons changes
+			label: (self isTrait ifTrue: [ 'Copy trait' ] ifFalse: [ 'Copy class' ])
 			preview: self name;
 		submenu: (aGtCoderClassesTreeElement copyClassOrTraitSubmenuFor: self)
 ]
