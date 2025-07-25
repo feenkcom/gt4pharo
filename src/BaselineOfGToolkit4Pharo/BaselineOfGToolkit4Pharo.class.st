@@ -147,10 +147,6 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkit-Pharo-Coder'
 					'GToolkit-Pharo-Metamodels'
 					'GToolkit-Pharo-BaseRefactorings' ). ];
-
-			package: 'GToolkit-Pharo-Changes' with: [
-				spec requires: #(
-					'GToolkitCoder' ). ];
 			
 			package: 'GToolkit-Pharo-BaseRefactorings';
 			package: 'GToolkit-Pharo-StrictSymbolComparison' with: [
