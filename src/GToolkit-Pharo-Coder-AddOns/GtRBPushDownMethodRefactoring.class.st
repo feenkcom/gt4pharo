@@ -8,7 +8,7 @@ Class {
 GtRBPushDownMethodRefactoring >> preconditions [
 	| condition |
 	condition := selectors
-			inject: self emptyCondition
+			inject: self trueCondition
 			into: [ :cond :each | 
 				cond & (RBCondition definesSelector: each in: class)
 					& (self

@@ -304,7 +304,7 @@ GtExtractMethodObjectRefactoring >> newClassInstanceTemp [
 
 { #category : #preconditions }
 GtExtractMethodObjectRefactoring >> preconditions [
-	^ self emptyCondition
+	^ self trueCondition
 ]
 
 { #category : #transforming }

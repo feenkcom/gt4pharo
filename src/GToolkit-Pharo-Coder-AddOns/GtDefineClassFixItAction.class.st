@@ -20,9 +20,10 @@ GtDefineClassFixItAction >> formCreationElement [
 	sourceCoder behavior
 		ifNotNil: [ :cls | 
 			cls ~~ nil class
-				ifTrue: [ cls package
+				ifTrue: [ 
+					cls package
 						ifNotNil: [ :pkg | element form packageAndTagName packageName: pkg name ].
-					cls tags
-						ifNotEmpty: [ :tags | element form packageAndTagName tagName: tags first ] ] ].
+					cls packageTag
+						isRoot ifFalse: [ element form packageAndTagName tagName: cls packageTag name ] ] ].
 	^ element
 ]
