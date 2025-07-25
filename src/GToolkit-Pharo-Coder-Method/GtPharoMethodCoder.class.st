@@ -49,6 +49,16 @@ GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
 	^ self forMethod: anObject class >> aSymbol
 ]
 
+{ #category : #'coder selection' }
+GtPharoMethodCoder class >> isCoderValidFor: aCompiledMethod in: aClass [
+	^true
+]
+
+{ #category : #'coder selection' }
+GtPharoMethodCoder class >> priority [
+	^1000
+]
+
 { #category : #'api - refactorings' }
 GtPharoMethodCoder >> addClassVariable: aString [
 	| refactoring |

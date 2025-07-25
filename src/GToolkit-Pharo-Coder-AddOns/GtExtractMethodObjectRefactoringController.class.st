@@ -168,7 +168,8 @@ GtExtractMethodObjectRefactoringController >> receiverRenamerOn: aVariable [
 			variable: aVariable
 			textualCoderViewModel: sourceCoderViewModel.
 	action package: sourceCoderViewModel behavior package name.
-	sourceCoderViewModel behavior tags ifNotEmpty: [ :col | action tag: col first ].
+	sourceCoderViewModel behavior packageTag isRoot 
+		ifFalse: [ action tag: sourceCoderViewModel behavior packageTag name ].
 	action selectAll: true.
 	action
 		when: GtRenameActionAnnouncement

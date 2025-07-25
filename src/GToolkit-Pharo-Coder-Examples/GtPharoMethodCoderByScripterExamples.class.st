@@ -2557,7 +2557,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClassInInspectorPlayground_cl
 				label: 'Check tag name';
 				// #tag;
 				value: [ :e | e text asString ]
-					equals: (self class tags at: 1 ifAbsent: [ '' ]) ].
+					equals: (self class packageTag name) ].
 
 	^ aScripter
 ]
@@ -2718,7 +2718,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 				label: 'Check tag name';
 				// #tag;
 				value: [ :e | e text asString ]
-					equals: (self class tags at: 1 ifAbsent: [ '' ]) ].
+					equals: (self class packageTag name) ].
 
 	^ aScripter
 ]
