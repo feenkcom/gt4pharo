@@ -2,8 +2,9 @@ Extension { #name : #CompiledMethod }
 
 { #category : #'*GToolkit-Pharo-Coder' }
 CompiledMethod >> gtBigMethodCoder [
-	<gtMethodCoder: 5>
-	^ self sourceCode size > 10000 ifTrue: [ GtPharoBigMethodCoder ] ifFalse: [ nil ]
+	"<gtMethodCoder: 5>"
+	"Commented out until element it better"
+	^ self sourceCode size > 10000 ifTrue: [ GtPharoBigMethodCoder ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder' }
