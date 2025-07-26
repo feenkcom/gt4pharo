@@ -38,7 +38,7 @@ GtMethodCoderRegistry >> initialize [
 GtMethodCoderRegistry >> newCoderFor: aCompiledMethod in: behavior [
 	| coderClass |
 	coderClass := coderClasses
-			detect: [ :each | each isCoderValidFor: aCompiledMethod in: behavior]
+			detect: [ :each | each isCoderValidFor: aCompiledMethod ]
 			ifNone: [ GtPharoMethodCoder ].
 	^ coderClass forMethod: aCompiledMethod in: behavior
 ]
