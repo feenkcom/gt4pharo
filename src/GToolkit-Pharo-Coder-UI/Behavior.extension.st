@@ -100,6 +100,8 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 Behavior >> gtCopyButtonFor: anAction [
 	<gtClassAction>
+	self superclass ifNil: [ ^ anAction noAction ].
+	
 	self isTrait ifTrue: [
 		^ anAction dropdown
 		tooltip: 'Copy Trait';
