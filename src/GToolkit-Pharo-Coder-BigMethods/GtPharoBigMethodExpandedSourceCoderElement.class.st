@@ -5,7 +5,7 @@ Class {
 		'label',
 		'selectorLabel'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Big Methods'
+	#category : #'GToolkit-Pharo-Coder-BigMethods'
 }
 
 { #category : #initialization }
