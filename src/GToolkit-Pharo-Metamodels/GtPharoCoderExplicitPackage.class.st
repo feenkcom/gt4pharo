@@ -64,7 +64,7 @@ GtPharoCoderExplicitPackage >> exists [
 	"Return true if there is a real package in the system corresponding to my definition"
 	<return: #Boolean>
 	
-	^ self package organizer includesPackage: self package
+	^ self package organizer hasPackage: self package
 ]
 
 { #category : #comparing }

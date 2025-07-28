@@ -50,7 +50,7 @@ GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
 ]
 
 { #category : #'coder selection' }
-GtPharoMethodCoder class >> isCoderValidFor: aCompiledMethod in: aClass [
+GtPharoMethodCoder class >> isCoderValidFor: aCompiledMethod [
 	^true
 ]
 
