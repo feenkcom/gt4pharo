@@ -18,7 +18,7 @@ GtSearchImagePackagesFilter >> hash [
 
 { #category : #testing }
 GtSearchImagePackagesFilter >> includesPackage: aPackage [
-	^ self packageOrganizer includesPackage: aPackage
+	^ self packageOrganizer hasPackage: aPackage
 ]
 
 { #category : #enumerating }
