@@ -210,6 +210,8 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSub
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder |
 	
+	self forPharo12: [  ] forPharo11AndPharo10: [ ^ self ].
+	
 	anEventsRecoder := self eventsRecorder.
 
 	aMethodCoder := self forNewMethod.
