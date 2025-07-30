@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 	^ {
-		'Collections-Abstract'.
+		
 		'Collections-Sequenceable'.
 		'Collections-Strings'.
 		'Collections-Unordered'.
@@ -19,7 +19,11 @@ ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 		'GToolkit-Pharo-Parser'.
 		'Kernel'.
 		'SmaCC_Runtime'.
-	}
+	}, (self  
+		forPharo12: [{
+			'Kernel-CodeModel'.}] 
+		forPharo11AndPharo10: [{
+			'Collections-Abstract'.}])
 ]
 
 { #category : #accessing }
