@@ -44,6 +44,7 @@ GtPharoBigMethodExpandedSourceCoderElement >> initialize [
 			aptitude: (BrGlamorousRegularEditorAptitude new
 					glamorousCodeFont;
 					foreground: self theme label defaultTextForeground);
+			beReadOnlyWithoutSelection;
 			text: coderText.
 	self removeChild: editorElement.
 	self addChildFirst: label.
