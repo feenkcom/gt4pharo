@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoBigMethodCoderViewModel,
 	#superclass : #GtPharoMethodCoderViewModel,
-	#category : #'GToolkit-Pharo-Coder-BigMethods'
+	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
 { #category : #'as yet unclassified' }

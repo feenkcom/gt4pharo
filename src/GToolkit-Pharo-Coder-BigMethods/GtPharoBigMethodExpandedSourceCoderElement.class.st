@@ -5,7 +5,7 @@ Class {
 		'label',
 		'selectorLabel'
 	],
-	#category : #'GToolkit-Pharo-Coder-BigMethods'
+	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
 { #category : #initialization }
@@ -44,6 +44,7 @@ GtPharoBigMethodExpandedSourceCoderElement >> initialize [
 			aptitude: (BrGlamorousRegularEditorAptitude new
 					glamorousCodeFont;
 					foreground: self theme label defaultTextForeground);
+			beReadOnlyWithoutSelection;
 			text: coderText.
 	self removeChild: editorElement.
 	self addChildFirst: label.
