@@ -5,7 +5,7 @@ Class {
 		'selectorPart',
 		'value'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #accessing }

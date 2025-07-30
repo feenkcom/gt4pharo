@@ -17,7 +17,10 @@ ManifestGToolkitPharoParser class >> mustOnlyDependOn [
 		'Kernel'.
 		'SmaCC_GLR_Runtime'.
 		'SmaCC_Runtime'
-	}
+	}, (self  
+		forPharo12: [{
+			'Kernel-CodeModel'.}] 
+		forPharo11AndPharo10: [{}])
 ]
 
 { #category : #accessing }

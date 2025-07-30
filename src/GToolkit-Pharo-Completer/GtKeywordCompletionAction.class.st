@@ -1,7 +1,7 @@
 Class {
 	#name : #GtKeywordCompletionAction,
 	#superclass : #GtParenthesizedMessageCompletionAction,
-	#category : 'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
 { #category : #private }

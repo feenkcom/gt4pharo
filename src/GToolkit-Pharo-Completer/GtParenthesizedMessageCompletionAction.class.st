@@ -5,7 +5,7 @@ Class {
 		'endPosition',
 		'parenIndex'
 	],
-	#category : 'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
 { #category : #adding }
