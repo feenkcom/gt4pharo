@@ -159,6 +159,14 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			package: 'GT-PackageWithExtensions' with: [
 				spec requires: #(
 					'GT-PackageWithSuperclasses'
-					'GT-PackageWithSubclasses') ] ].
+					'GT-PackageWithSubclasses') ] ];
+			package: 'GToolkit-Pharo-Coder-BigMethods' with: [ 
+				spec requires: #(
+					'GToolkit-Coder-UI'
+					'GToolkit-Pharo-Coder-Method'
+					'GToolkit-Pharo-Coder-Method-UI'
+				 )
+			].
+			.
 
 ]
