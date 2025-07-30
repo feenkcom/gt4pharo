@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoBigMethodExpandableSourceCoderElement,
 	#superclass : #GtExpandableMethodCoderElement,
-	#category : #'GToolkit-Pharo-Coder-BigMethods'
+	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
 { #category : #'private - instance creation' }
