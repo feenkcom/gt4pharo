@@ -148,25 +148,39 @@ GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
 GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclaredInsideTrait [
 	<gtExample>
 	| refs var |
-	[ Trait
-		named: #TGtFoo
-		instanceVariableNames: ''
-		package: 'Foo'.
-	Object
-		subclass: #GtFoo1T
-		uses: (Smalltalk globals at: #TGtFoo)
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Foo'.
+	
+	[ Trait classInstaller
+		make: [ :builder | 
+			builder
+				beTrait;
+				name: #TGtFoo;
+				slots: #();
+				package: 'Foo';
+				environment: Trait environment ].
+	Object classInstaller
+		make: [ :builder | 
+			builder
+				superclass: Object;
+				name: #GtFoo1T;
+				slots: #();
+				sharedVariables: #();
+				traitComposition: (Smalltalk globals at: #TGtFoo);
+				package: 'Foo';
+				environment: Object environment ].
 	#TGtFoo asClass class
 		compile: 'm1 
 	^ GtFoo2T'.
 	self assert: #GtFoo1T asClass class localMethods isEmpty.
-	Object
-		subclass: #GtFoo2T
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Foo'.
+	
+	Object classInstaller
+		make: [ :builder | 
+			builder
+				superclass: Object;
+				name: #GtFoo2T;
+				slots: #();
+				package: 'Foo';
+				environment: Object environment ].
+		
 	self assert: #GtFoo1T asClass class localMethods isEmpty.
 	var := Smalltalk globals associationAt: #GtFoo2T.
 	refs := GtPharoIndex current globalVariableReferencesTo: var.
