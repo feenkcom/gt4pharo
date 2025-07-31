@@ -101,7 +101,8 @@ GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
 			ifBehavior: [ :aBehavior | 
 				| coderClass |
 				coderClass := self selectCoderClassFor: aCompiledMethod.
-				coderClass forMethod: aCompiledMethod in: self behavior ]
+				[ coderClass forMethod: aCompiledMethod in: self behavior ]
+					onErrorDo: [ aCompiledMethod gtMethodCoder forMethod: aCompiledMethod in: self behavior ] ]
 			ifNone: [ GtPharoMethodCoder forMethod: aCompiledMethod ].
 
 	aMethodCoder weak
