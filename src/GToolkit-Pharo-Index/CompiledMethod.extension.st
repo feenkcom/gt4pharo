@@ -29,11 +29,16 @@ CompiledMethod >> gtOriginalMethod [
 { #category : #'*GToolkit-Pharo-Index' }
 CompiledMethod >> recompile [
 	<gtPharoPatch: #Pharo>
-	| result |
-	result := self origin recompile: self selector.
+	| result oldMethod newMethod origin |
+	origin := self origin.
+	self isFromTrait
+		ifTrue: [ oldMethod := origin compiledMethodAt: self selector ifAbsent: [ self ] ]
+		ifFalse: [ oldMethod := self ].
+	result := origin recompile: self selector.
+	newMethod := origin
+			compiledMethodAt: self selector
+			ifAbsent: [ self methodClass compiledMethodAt: self selector ].
 	SystemAnnouncer uniqueInstance
-		announce: (GtMethodRecompiled
-				methodChangedFrom: self
-				to: (self methodClass compiledMethodAt: self selector)).
+		announce: (GtMethodRecompiled methodChangedFrom: oldMethod to: newMethod).
 	^ result
 ]
