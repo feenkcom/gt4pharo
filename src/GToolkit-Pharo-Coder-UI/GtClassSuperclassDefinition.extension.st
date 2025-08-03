@@ -27,21 +27,16 @@ GtClassSuperclassDefinition >> newTabFrom: anEvent [
 	self class environment
 		at: self name
 		ifPresent: [ :aClass | 
-			| aClassCoder aSpace |
-			aClassCoder := GtCoderElement forClass: aClass.
-
+			| aSpace |
+			
 			aSpace := BlSpace new.
 			aSpace title: self name.
 			aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
 			aSpace extent: 1200 @ 600.
 			aSpace root background: Color transparent.
-			aSpace
-				addChild: (GtPager
-						createOn: (GtPagerWrapperElement new
-								tool: aClassCoder;
-								embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
-			aSpace withHalos.
-			anEvent target showSpace: aSpace ]
+			aSpace inPager: (GtClassCoderTool forClass: aClass).
+			aSpace withSceneDriller.
+			aSpace showFrom: anEvent target ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

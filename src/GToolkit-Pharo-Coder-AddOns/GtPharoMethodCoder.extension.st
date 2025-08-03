@@ -799,10 +799,13 @@ GtPharoMethodCoder >> baselineAddOnFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoMethodCoder >> browseFrom: anEditorElement [ 
-	((GtCoderElement forMethod: self compiledMethod)
-		openInPagerFrom: anEditorElement)
-			maximized
+GtPharoMethodCoder >> browseFrom: anEditorElement [
+	BlSpace new
+		withSceneDriller;
+		inPager: [ GtMethodCoderTool compiledMethod: self compiledMethod ];
+		title: self behavior printString;
+		icon: BrGlamorousVectorIcons browse;
+		showFrom: anEditorElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
