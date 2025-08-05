@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtPharoBigMethodCoderViewModel >> addOns [
+	^#()
+]
+
+{ #category : #'as yet unclassified' }
 GtPharoBigMethodCoderViewModel >> elementClass [
 	^ GtPharoBigMethodExpandableSourceCoderElement
 ]
