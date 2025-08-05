@@ -4,6 +4,7 @@ Extension { #name : #CompiledMethod }
 CompiledMethod >> gtBigMethodCoder [
 	<gtMethodCoder: 5>
 	self isSourceSearchable
-		ifTrue: [ self sourceCode size > 10000 ifTrue: [ ^ GtPharoBigMethodCoder ] ].
+		ifTrue: [ self sourceCode size > 10000 ifTrue: [ ^ GtPharoBigMethodCoder ] ]
+		ifFalse: [ ^ GtPharoBigMethodCoder ].
 	^ nil
 ]

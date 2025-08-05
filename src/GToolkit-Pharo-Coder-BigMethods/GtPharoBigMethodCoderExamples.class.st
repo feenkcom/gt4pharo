@@ -50,7 +50,7 @@ GtPharoBigMethodCoderExamples >> forClassWithUnsearchableMethod [
 
 	theMethodCoders := aMethodsCoder codersStream toArray wait.
 	self assert: theMethodCoders size equals: 3.
-	self assert: theMethodCoders first class equals: GtPharoMethodCoder.
+	self assert: theMethodCoders first class equals: GtPharoBigMethodCoder.
 	self assert: theMethodCoders first selector equals: #reduceTable.
 	self assert: theMethodCoders second class equals: GtPharoMethodCoder.
 	self assert: theMethodCoders second selector equals: #testMethod1.
