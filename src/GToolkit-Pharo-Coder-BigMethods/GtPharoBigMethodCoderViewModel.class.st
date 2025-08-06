@@ -70,6 +70,11 @@ GtPharoBigMethodCoderViewModel >> methodReference [
 	^ self coderModel methodReference
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoBigMethodCoderViewModel >> selector [
+	^ self coderModel selector
+]
+
 { #category : #accessing }
 GtPharoBigMethodCoderViewModel >> shortcuts [
 	^#()
