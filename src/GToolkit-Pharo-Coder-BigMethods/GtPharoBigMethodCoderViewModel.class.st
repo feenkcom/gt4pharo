@@ -16,6 +16,16 @@ GtPharoBigMethodCoderViewModel >> asEditorState [
 	^BrTextEditorCompositeMemento new
 ]
 
+{ #category : #'api - coder model' }
+GtPharoBigMethodCoderViewModel >> behavior [
+	^ self coderModel behavior
+]
+
+{ #category : #'api - coder model' }
+GtPharoBigMethodCoderViewModel >> behavior: aBehavior [
+	^ self coderModel behavior: aBehavior
+]
+
 { #category : #accessing }
 GtPharoBigMethodCoderViewModel >> completionStrategy [
 	^GtCompletionStrategy new
