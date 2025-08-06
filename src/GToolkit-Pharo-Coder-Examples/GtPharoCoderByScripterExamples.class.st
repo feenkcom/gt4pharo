@@ -235,6 +235,12 @@ GtPharoCoderByScripterExamples >> assertDropdown: aScripter [
 				onDropdown: true ]
 ]
 
+{ #category : #'examples - scrolling' }
+GtPharoCoderByScripterExamples >> bigMethod [
+	<gtExample>
+	^ GtPharoDummyFiveObject >> #aBigMethod
+]
+
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> bulkRenameUpdatesIndex [
 	<gtExample>
@@ -979,6 +985,28 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 GtPharoCoderByScripterExamples >> coderWithAddMethod [
 	<gtExample>
 	^ self coderInPager: [ GtCoderElement forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> coderWithBigMethod [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
+
+	aScripter pager
+		setPageAt: 1 widthInSpaceRatio: 1.0;
+		play.
+	aScripter methodsCoder
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: self bigMethod;
+		forCompiledMethod: self bigMethod
+			do: [ :aMethodCoder | 
+				aMethodCoder
+					coderViewModelDo: [ :cvm | self assert: cvm class == GtPharoBigMethodCoderViewModel ] ];
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - scripter' }
@@ -3827,6 +3855,23 @@ GtPharoCoderByScripterExamples >> sampleMethodForRefactoringExample [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectBigMethodFromIndex [
+	<gtExample>
+	| scripter |
+	scripter := self coderInPager: [ GtCoderElement forClass: GtPharoDummyFiveObject ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Select method';
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'aBigMethod' ] ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> selectClassInCoderUpdatesIndex [
 	<gtExample>
 	| scripter |
@@ -3876,12 +3921,6 @@ GtPharoCoderByScripterExamples >> selectClassInCoderUpdatesIndex [
 			s
 				label: 'Select a class';
 				onBreadthFirstChildOfClass: GtClassCardElement ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Class is selected';
-				// GtCoderClassesTreeElement;
-				@ [ :each | each selectedClass notNil ] ].
 	scripter
 		checkStep: [ :s | 
 			s

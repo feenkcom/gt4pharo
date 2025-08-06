@@ -27,6 +27,11 @@ GtPharoBigMethodCoderViewModel >> behavior: aBehavior [
 ]
 
 { #category : #accessing }
+GtPharoBigMethodCoderViewModel >> compiledMethod [
+	^self coderModel compiledMethod
+]
+
+{ #category : #accessing }
 GtPharoBigMethodCoderViewModel >> completionStrategy [
 	^GtCompletionStrategy new
 ]
