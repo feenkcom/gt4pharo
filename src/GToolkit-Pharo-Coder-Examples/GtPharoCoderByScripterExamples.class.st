@@ -2425,7 +2425,7 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 					// GtSourceCoderEditorId.
 					
 				aMethodCoder mouseWheel
-					downBy: 10;
+					downBy: 30;
 					onParentStepTarget: aMethodCoder;
 					// GtSourceCoderEditorId.
 					
