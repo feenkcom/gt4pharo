@@ -122,6 +122,7 @@ GtPharoBehaviorCoderElement >> buildClassHeader [
 	| headerContainer |
 
 	headerContainer := BrHorizontalPane new
+		id: GtPharoHeaderContainerElementId;
 		hMatchParent;
 		alignCenterLeft;
 		vFitContent.
@@ -247,7 +248,9 @@ GtPharoBehaviorCoderElement >> filterWithSlot: slotName source: aSource [
 GtPharoBehaviorCoderElement >> hideDefinitionElements [
 	contentPane ifNil: [ ^ self ].
 	contentPane
-		childrenDo: [ :eachChild | contentTabs == eachChild ifFalse: [ eachChild visibility: BlVisibility gone ] ]
+		childrenDo: [ :eachChild | 
+			(contentTabs == eachChild or: [ eachChild id = GtPharoHeaderContainerElementId asBlocElementId ])
+				ifFalse: [ eachChild visibility: BlVisibility gone ] ]
 ]
 
 { #category : #initialization }
@@ -296,7 +299,7 @@ GtPharoBehaviorCoderElement >> showDefinitionElement [
 
 	contentPane ifNil: [ ^ self ].
 	contentPane
-		childrenDo: [ :eachChild | contentTabs == eachChild ifFalse: [ eachChild visibility: BlVisibility visible ] ]
+		childrenDo: [ :eachChild | (contentTabs == eachChild or: [ eachChild id = GtPharoHeaderContainerElementId asBlocElementId ]) ifFalse: [ eachChild visibility: BlVisibility visible ] ]
 ]
 
 { #category : #'building ui' }
