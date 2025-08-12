@@ -180,6 +180,7 @@ GtPharoMethodCoderTagsElement >> newProtocolPickerList [
 { #category : #'private - instance creation' }
 GtPharoMethodCoderTagsElement >> newProtocolTag [
 	^ BrButton new
+		id: GtPharoProtocolTagId;
 		beTinySize;
 		aptitude: BrGlamorousButtonWithLabelAptitude
 				+ (BrGlamorousWithExplicitDropdownAptitude

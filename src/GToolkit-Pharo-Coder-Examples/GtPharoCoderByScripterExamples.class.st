@@ -73,7 +73,7 @@ GtPharoCoderByScripterExamples >> addBackNewInstanceSideMethod [
 	^ aScripter
 ]
 
-{ #category : #'exaples - add new method' }
+{ #category : #'examples - add new method' }
 GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3230)"
 
@@ -1193,7 +1193,7 @@ GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex [
 	^ scripter
 ]
 
-{ #category : #'exaples - add new method' }
+{ #category : #'examples - add new method' }
 GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3233)"
 
