@@ -401,6 +401,105 @@ GtPharoCoderByScripterExamples >> cancelRenameClassInIndex [
 	^ scripter
 ]
 
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> changeMethodProtocol [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self dummyClassWithMethod1Expanded.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click protocol button';
+				// GtExpandableSourceCoderElement;
+				@ [ :each | each isExpanded ];
+				// GtPharoProtocolTagId ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill new protocol';
+				text: 'foo' ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Complete name';
+				key: BlKeyboardKey return ].
+	self
+		assert: (environment anyDummyClass realClass >> #method1) protocol
+		equals: 'foo'.
+	^ scripter
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> changeMethodToClassSide [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self dummyClassWithMethod1Expanded.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click side button';
+				// GtExpandableSourceCoderElement;
+				@ [ :each | each isExpanded ];
+				// GtPharoSideTagId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click side button';
+				onSpaceRoot;
+				onDropdown: true;
+				onBrButtonName: 'class' ].
+	self
+		assert: (environment anyDummyClass realClass selectors includes: #method1) not.
+	self
+		assert: (environment anyDummyClass realClass class selectors includes: #method1).
+	^ scripter
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> changeMethodToInstanceSide [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyClass realClass class >> #classMethod1.
+	scripter := self
+			scripterInPagerForBlock: [ GtCoderElement forClass: environment anyDummyRootClass realClass ].
+	scripter
+		doStep: [ :s1 | 
+			s1
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	scripter
+		clickStep: [ :s1 | 
+			s1
+				label: 'Expand classMethod1 coder';
+				// GtExpandableSourceCoderElement;
+				// BlAttributedTextElement;
+				@ [ :each1 | each1 text asString = 'classMethod1' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click side button';
+				// GtExpandableSourceCoderElement;
+				@ [ :each | each isExpanded ];
+				// GtPharoSideTagId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click side button';
+				onSpaceRoot;
+				onDropdown: true;
+				onBrButtonName: 'instance' ].
+	self
+		assert: (environment anyDummyClass realClass class selectors includes: #classMethod1) not.
+	self
+		assert: (environment anyDummyClass realClass selectors includes: #classMethod1).
+	^ scripter
+]
+
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> checkClassListIn: scripter containsName: aSymbol exists: aBoolean [
 	scripter
@@ -2385,6 +2484,33 @@ GtPharoCoderByScripterExamples >> dragSiblingClassesInIndexToPackage [
 			detect: [ :each | each packageName ~= classes anyOne package name ]) realPackage.
 
 	^ self dragInIndexClasses: classes toPackage: targetPackage
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> dummyClassWithMethod1Expanded [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter method |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyClass realClass >> #method1.
+	self assert: method protocol equals: 'api - method1'.
+
+	scripter := self
+			scripterInPagerForBlock: [ GtCoderElement forClass: environment anyDummyRootClass realClass ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 2400 @ 1000 ];
+				onSpace ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand method1 coder';
+				// GtExpandableSourceCoderElement;
+				// BlAttributedTextElement;
+				@ [ :each | each text asString = 'method1' ] ].
+	^ scripter
 ]
 
 { #category : #'examples - scrolling' }
