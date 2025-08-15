@@ -6,11 +6,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
-{ #category : #accessing }
-GtPharoBigMethodCoderViewModel >> addOns [
-	^#()
-]
-
 { #category : #converting }
 GtPharoBigMethodCoderViewModel >> asEditorState [
 	^BrTextEditorCompositeMemento new
@@ -38,7 +33,15 @@ GtPharoBigMethodCoderViewModel >> completionStrategy [
 
 { #category : #'private - addons' }
 GtPharoBigMethodCoderViewModel >> computeAddOnsFuture [
-	^[GtCoderAddOns new] asAsyncFuture
+	"Return a future that will be resolved to coder addons"
+
+	<return: #TAsyncFuture>
+	^ [ | newAddOns aCoderModel |
+	aCoderModel := self coderModel.
+	newAddOns := aCoderModel newAddOns.
+	aCoderModel initializeAddOns: newAddOns viewModel: self.
+	newAddOns markAsUpdated.
+	newAddOns ] asAsyncFuture
 ]
 
 { #category : #'api - actions' }
@@ -67,7 +70,7 @@ GtPharoBigMethodCoderViewModel >> isTextModifiedPromise [
 
 { #category : #'api - actions' }
 GtPharoBigMethodCoderViewModel >> mainActions [
-	^#()
+	^ self addOns wait mainActions
 ]
 
 { #category : #accessing }
