@@ -13,7 +13,6 @@ GtPharoBigMethodCoder >> asCoderViewModel [
 
 { #category : #'as yet unclassified' }
 GtPharoBigMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
-
 	addOns
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons remove
@@ -23,14 +22,11 @@ GtPharoBigMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoder
 	addOns
 		addMainAction: 'Inspect Method' translated
 		icon: BrGlamorousVectorIcons inspect
-		action: [ :aCoderUIModel :anElement | 
-			self 
-				notifyObjectSpawn: aCoderUIModel methodReference
-				requesterObject: aCoderUIModel ]
+		action: [ :aCoderUIModel :anElement | anElement phlow spawnObject: self methodReference ]
 		id: GtMethodCoderInspectActionId.
 	addOns
 		addMainAction: 'Copy Method Name' translated
 		icon: BrGlamorousVectorIcons clipboard
 		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
-		id: GtMethodCoderCopyActionId.
+		id: GtMethodCoderCopyActionId
 ]
