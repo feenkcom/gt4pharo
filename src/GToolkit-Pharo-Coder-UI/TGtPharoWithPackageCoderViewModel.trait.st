@@ -28,7 +28,7 @@ Trait {
 	#instVars : [
 		'packageCoderViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-View Models'
 }
 
 { #category : #'api - package coder view model' }

@@ -3,7 +3,7 @@ Class {
 	#superclass : #BrSimpleTree,
 	#traits : 'TGtWithPharoBehaviorsNavigationViewModel',
 	#classTraits : 'TGtWithPharoBehaviorsNavigationViewModel classTrait',
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
 { #category : #initialization }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoClassesCoder,
 	#superclass : #GtCodersModel,
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #accessing }

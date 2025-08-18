@@ -84,14 +84,17 @@ GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder 
 
 { #category : #private }
 GtPharoMethodExpanderAttribute >> createCoderForMethod: method [
-	argumentBindingsBuilder ifNil: [ 
-		^ GtPharoMethodCoder forMethod: method ].
-	
+	| coderClass |
+	coderClass := method gtSelectCoderClass.
+
+	[ argumentBindingsBuilder ifNil: [ ^ coderClass forMethod: method ].
+
 	^ argumentBindingsBuilder receiverSubclassBehavior
-		ifNotNil: [ :aSubclassBehavior | 
-			GtPharoMethodCoder forMethod: method in: aSubclassBehavior ]
-		ifNil: [
-			GtPharoMethodCoder forMethod: method ].
+		ifNotNil: [ :aSubclassBehavior | coderClass forMethod: method in: aSubclassBehavior ]
+		ifNil: [ coderClass forMethod: method ] ]
+		onErrorDo: [ :ex | 
+			ex inspect.
+			^ method gtMethodCoder forMethod: method ]
 ]
 
 { #category : #'initialize-release' }

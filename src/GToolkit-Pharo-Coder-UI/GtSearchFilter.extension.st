@@ -11,13 +11,13 @@ GtSearchFilter >> filterDescriptor2For: aMethodsCoder [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchFilter >> filterDescriptorFor: aMethodsCoder [
-	^ self class filterDescriptorFor: aMethodsCoder
+GtSearchFilter class >> filterDescriptorFor: aMethodsCoder [
+	^ self globalFilterDescriptor
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchFilter class >> filterDescriptorFor: aMethodsCoder [
-	^ self globalFilterDescriptor
+GtSearchFilter >> filterDescriptorFor: aMethodsCoder [
+	^ self class filterDescriptorFor: aMethodsCoder
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

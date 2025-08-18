@@ -25,7 +25,7 @@ Class {
 		'announcer',
 		'parentPharoBehaviorsNavigationViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - View Models'
 }
 
 { #category : #'api - announcer' }

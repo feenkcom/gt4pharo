@@ -7,7 +7,7 @@ Class {
 		'watchVariablesElement',
 		'watchExpressions'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! Views'
+	#category : #'GToolkit-Pharo-Coder-UI-! Views'
 }
 
 { #category : #private }

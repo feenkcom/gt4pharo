@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExampleGroupCoder,
 	#superclass : #GtPharoMethodsCoder,
-	#category : 'GToolkit-Pharo-Coder-Coders'
+	#category : #'GToolkit-Pharo-Coder-Coders'
 }
 
 { #category : #'instance creation' }
