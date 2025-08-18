@@ -35,6 +35,28 @@ GtPharoBigMethodCoderExamples >> checkActionsPresentForBigMethodCoder [
 ]
 
 { #category : #examples }
+GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
+	<gtExample>
+	| scripter |
+	scripter := self checkActionsPresentForBigMethodCoder.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Inspect Big Method';
+				// GtMethodCoderInspectActionId ].
+	scripter
+		assertStep: [ :s | 
+			s
+				// (GtPagerPageElementId indexed: 2);
+				satisfies: [ :element | 
+					element
+						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderEditorElement ]
+						ifFound: [:child | false ]
+						ifNone: [ true ] ] ].
+	^ scripter
+]
+
+{ #category : #examples }
 GtPharoBigMethodCoderExamples >> forClassWithBigMethod [
 	<gtExample>
 	| aMethodsCoder theMethodCoders |
