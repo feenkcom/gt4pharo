@@ -425,7 +425,7 @@ GtPharoCoderByScripterExamples >> changeMethodProtocol [
 				label: 'Complete name';
 				key: BlKeyboardKey return ].
 	self
-		assert: (environment anyDummyClass realClass >> #method1) protocol
+		assert: (environment anyDummyClass realClass >> #method1) protocolName
 		equals: 'foo'.
 	^ scripter
 ]
@@ -2493,7 +2493,7 @@ GtPharoCoderByScripterExamples >> dummyClassWithMethod1Expanded [
 	| scripter method |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	method := environment anyDummyClass realClass >> #method1.
-	self assert: method protocol equals: 'api - method1'.
+	self assert: method protocolName equals: 'api - method1'.
 
 	scripter := self
 			scripterInPagerForBlock: [ GtCoderElement forClass: environment anyDummyRootClass realClass ].
