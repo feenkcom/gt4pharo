@@ -81,15 +81,6 @@ GtPharoStreamingMethodsCoder >> isForClass [
 ]
 
 { #category : #'private - instance creation' }
-GtPharoStreamingMethodsCoder >> methodCoderPragmas [
-	^ Pragma
-		allNamed: #gtMethodCoder:
-		from: CompiledMethod
-		to: CompiledMethod
-		sortedByArgument: 1
-]
-
-{ #category : #'private - instance creation' }
 GtPharoStreamingMethodsCoder >> newCoderCacheKeyFor: aCompiledMethod [
 	^ GtPharoMethodDescription forCompiledMethod: aCompiledMethod
 ]
@@ -100,7 +91,7 @@ GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
 	aMethodCoder := self
 			ifBehavior: [ :aBehavior | 
 				| coderClass |
-				coderClass := self selectCoderClassFor: aCompiledMethod.
+				coderClass := aCompiledMethod gtSelectCoderClass.
 				[ coderClass forMethod: aCompiledMethod in: self behavior ]
 					onErrorDo: [ aCompiledMethod gtMethodCoder forMethod: aCompiledMethod in: self behavior ] ]
 			ifNone: [ GtPharoMethodCoder forMethod: aCompiledMethod ].
@@ -252,17 +243,6 @@ GtPharoStreamingMethodsCoder >> pragmaNamesUnorderedStream [
 		map: [ :eachPragma | eachPragma selector ].
 	
 	^ aStream asAsyncStream withoutDuplicates useContentComparison
-]
-
-{ #category : #'private - instance creation' }
-GtPharoStreamingMethodsCoder >> selectCoderClassFor: aCompiledMethod [
-	| coderClasses |
-	coderClasses := self methodCoderPragmas.
-	coderClasses
-		reverseDo: [ :each | 
-			(each method valueWithReceiver: aCompiledMethod arguments: #())
-				ifNotNil: [ :cls | ^ cls ] ].
-	^ aCompiledMethod gtMethodCoder
 ]
 
 { #category : #'api - completion' }

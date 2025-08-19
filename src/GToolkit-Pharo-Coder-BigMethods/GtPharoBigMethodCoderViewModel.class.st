@@ -79,6 +79,11 @@ GtPharoBigMethodCoderViewModel >> methodReference [
 ]
 
 { #category : #'as yet unclassified' }
+GtPharoBigMethodCoderViewModel >> parentCoderViewModel: aCoderViewModel [
+	self optionAt: #parentCoderViewModel put: aCoderViewModel asWeakReference
+]
+
+{ #category : #'as yet unclassified' }
 GtPharoBigMethodCoderViewModel >> selector [
 	^ self coderModel selector
 ]

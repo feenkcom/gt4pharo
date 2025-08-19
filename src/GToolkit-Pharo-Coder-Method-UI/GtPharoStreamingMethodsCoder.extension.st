@@ -8,8 +8,8 @@ GtPharoStreamingMethodsCoder >> categoryFilter: aView [
 		priority: 10;
 		stencil: [
 			|  categories anElement |
-			categories := self behavior instanceSide organization categories asSet.
-			categories addAll: self behavior classSide organization categories.
+			categories := self behavior instanceSide protocolNames asSet.
+			categories addAll: self behavior classSide protocolNames.
 			categories := categories asSortedCollection.
 
 			anElement := GtCoderFilterList new.
@@ -17,7 +17,10 @@ GtPharoStreamingMethodsCoder >> categoryFilter: aView [
 				matchParent;
 				items: categories 
 				title: [ :aCategory | aCategory ]
-				action: [ :aCategory | self addOrReplaceFilter: (GtSearchMethodCategoryFilter forCategory: aCategory) ] ]
+				action: [ :aCategory | 
+					self 
+						addOrReplaceFilter: (GtSearchMethodCategoryFilter 
+							forCategory: aCategory) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
