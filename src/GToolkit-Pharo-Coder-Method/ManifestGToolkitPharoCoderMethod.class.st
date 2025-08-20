@@ -50,8 +50,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Transcript-NonInteractive'
 	}, (self 
 		forPharo12: [ {
-			'Deprecated12'.
-			'Kernel-CodeModel'} ] 
+			'Deprecated12' } ] 
 		forPharo11AndPharo10: [ { } ])
 ]
 
