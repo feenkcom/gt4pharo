@@ -607,6 +607,11 @@ GtPharoDummyFiveObject >> aBigMethod [
 	).
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoDummyFiveObject >> aBigMethodReference [
+	self aBigMethod
+]
+
 { #category : #accessing }
 GtPharoDummyFiveObject >> anotherLongMethod [
 	| aValue |
