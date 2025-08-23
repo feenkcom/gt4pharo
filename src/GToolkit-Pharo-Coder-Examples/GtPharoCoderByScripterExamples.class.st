@@ -241,6 +241,11 @@ GtPharoCoderByScripterExamples >> bigMethod [
 	^ GtPharoDummyFiveObject >> #aBigMethod
 ]
 
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> bigMethodReference [
+	^GtPharoDummyFiveObject >> #aBigMethodReference
+]
+
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> bulkRenameUpdatesIndex [
 	<gtExample>
@@ -1103,6 +1108,24 @@ GtPharoCoderByScripterExamples >> coderWithBigMethod [
 			do: [ :aMethodCoder | 
 				aMethodCoder
 					coderViewModelDo: [ :cvm | self assert: cvm class == GtPharoBigMethodCoderViewModel ] ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> coderWithBigMethodReference [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
+
+	aScripter pager
+		setPageAt: 1 widthInSpaceRatio: 1.0;
+		play.
+	aScripter methodsCoder
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: self bigMethodReference;
 		play.
 
 	^ aScripter
@@ -2599,6 +2622,25 @@ GtPharoCoderByScripterExamples >> editAndScrollToEndOfVeryLongMethod [
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> expandBigMethodReference [
+	<gtExample>
+	| scripter |
+	scripter := self coderWithBigMethodReference.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click Method Expander';
+				// BrInlineExpanderElement ];
+		assertStep: [ :s | 
+			s
+				label: 'Check for Big Coder in expansion';
+				// GtExpandableSourceCoderElement;
+				// GtPharoBigMethodExpandedSourceCoderElement;
+				exists ].
+	^ scripter
 ]
 
 { #category : #'examples - index' }
