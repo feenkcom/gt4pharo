@@ -44,6 +44,12 @@ GtPharoBigMethodCoderViewModel >> computeAddOnsFuture [
 	newAddOns ] asAsyncFuture
 ]
 
+{ #category : #accessing }
+GtPharoBigMethodCoderViewModel >> computeHeaderBreadcrumbModel [
+	^ GtPharoMethodCoderHeaderModel new 
+		initializeForCoderViewModel: self.
+]
+
 { #category : #'api - actions' }
 GtPharoBigMethodCoderViewModel >> contextActions [
 	^#()
@@ -52,6 +58,16 @@ GtPharoBigMethodCoderViewModel >> contextActions [
 { #category : #accessing }
 GtPharoBigMethodCoderViewModel >> elementClass [
 	^ GtPharoBigMethodExpandableSourceCoderElement
+]
+
+{ #category : #accessing }
+GtPharoBigMethodCoderViewModel >> explicitProviderClass [
+	^ self coderModel explicitProviderClass
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoBigMethodCoderViewModel >> headerElementClass [
+	^ GtPharoMethodCoderHeaderElement
 ]
 
 { #category : #accessing }
@@ -71,6 +87,11 @@ GtPharoBigMethodCoderViewModel >> isTextModifiedPromise [
 { #category : #'api - actions' }
 GtPharoBigMethodCoderViewModel >> mainActions [
 	^ self addOns wait mainActions
+]
+
+{ #category : #'api - coder model' }
+GtPharoBigMethodCoderViewModel >> methodOrigin [
+	^ coderModel methodOrigin
 ]
 
 { #category : #accessing }

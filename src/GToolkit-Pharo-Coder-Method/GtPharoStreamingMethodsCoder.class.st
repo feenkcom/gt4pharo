@@ -87,14 +87,12 @@ GtPharoStreamingMethodsCoder >> newCoderCacheKeyFor: aCompiledMethod [
 
 { #category : #'private - instance creation' }
 GtPharoStreamingMethodsCoder >> newCoderFor: aCompiledMethod [
-	| aMethodCoder |
-	aMethodCoder := self
-			ifBehavior: [ :aBehavior | 
-				| coderClass |
-				coderClass := aCompiledMethod gtSelectCoderClass.
-				[ coderClass forMethod: aCompiledMethod in: self behavior ]
-					onErrorDo: [ aCompiledMethod gtMethodCoder forMethod: aCompiledMethod in: self behavior ] ]
-			ifNone: [ GtPharoMethodCoder forMethod: aCompiledMethod ].
+	| aMethodCoder coderClass |
+	coderClass := aCompiledMethod gtSelectCoderClass.
+	aMethodCoder := [ self
+			ifBehavior: [ :aBehavior | coderClass forMethod: aCompiledMethod in: self behavior ]
+			ifNone: [ coderClass forMethod: aCompiledMethod ] ]
+			onErrorDo: [ aCompiledMethod gtMethodCoder forMethod: aCompiledMethod in: self behavior ].
 
 	aMethodCoder weak
 		when: GtPharoMethodCoderCompiled
