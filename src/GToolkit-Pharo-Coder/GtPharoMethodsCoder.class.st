@@ -39,8 +39,10 @@ GtPharoMethodsCoder >> methodRemoved: aValueRemoved [
 
 { #category : #private }
 GtPharoMethodsCoder >> newCoderFor: aMethod [
-	| coder |
-	coder := GtPharoMethodCoder forMethod: aMethod.
+	| coder coderClass |
+	coderClass := aMethod gtSelectCoderClass.
+	coder := [ coderClass forMethod: aMethod ]
+			onErrorDo: [ aMethod gtMethodCoder forMethod: aMethod ].
 	coder coders: self.
 	^ coder
 ]
