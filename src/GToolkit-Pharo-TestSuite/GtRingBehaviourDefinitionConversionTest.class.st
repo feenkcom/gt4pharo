@@ -26,7 +26,7 @@ GtRingBehaviourDefinitionConversionTest >> createRingClassEntityForExistingClass
 
 { #category : #utils }
 GtRingBehaviourDefinitionConversionTest >> currentClass [
-	^ BlElement
+	^ GtPharoTestSuite
 ]
 
 { #category : #examples }
