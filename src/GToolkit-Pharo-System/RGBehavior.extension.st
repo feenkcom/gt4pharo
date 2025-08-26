@@ -3,10 +3,21 @@ Extension { #name : #RGBehavior }
 { #category : #'*GToolkit-Pharo-System' }
 RGBehavior >> asRingDefinition [
 	"Answer the receiver as a RGClassDefinition"
-	| ring |
+	| ringDefinition |
 
-	ring := (RGClassDefinition named: self name)
-		category: self category;
+	ringDefinition := (RGClassDefinition named: self name).
+	self 
+		forPharo12: [
+			ringDefinition
+				package: (RGPackageDefinition 
+					named: self package name asSymbol);
+				packageTag: self packageTag ] 
+		forPharo11AndPharo10: [
+			ringDefinition
+				category: self category;
+				package: (RGPackageDefinition 
+					named: self category asSymbol) ].
+	ringDefinition
 		superclassName: (self superclass
 			ifNil: [ nil printString ]
 			ifNotNil: [ self superclass name ]);
@@ -16,13 +27,12 @@ RGBehavior >> asRingDefinition [
 		addSharedPools: self sharedPoolNames;
 		comment: self comment content;
 		definitionSource: self definitionString;
-		package: (RGPackageDefinition named: self category asSymbol);
 		withMetaclass.
-	ring classSide
+	ringDefinition classSide
 		traitCompositionSource: self classSide traitCompositionString;
 		definitionSource: self classSide definitionString;
 		addInstanceVariables: self classSide instVarNames.
-	^ ring
+	^ ringDefinition
 ]
 
 { #category : #'*GToolkit-Pharo-System' }

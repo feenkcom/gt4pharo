@@ -20,7 +20,8 @@ ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-Utility-StackOverflow'.
 		'Kernel'.
-		'SUnit-Core'
+		'SUnit-Core'.
+		'Ring-Core'
 	}, (self  
 		forPharo12: [{
 			'Kernel-CodeModel'.}] 

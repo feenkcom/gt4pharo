@@ -9,7 +9,7 @@ RGMetaclassStrategy >> definitionString [
 		strm 
 			<< baseClass name;
 			<< ' class'.
-		(self owner slotsNeedFullDefinition or: [ ClassDefinitionPrinter showFluidClassDefinition ])
+		(self owner slotsNeedFullDefinition or: [ self forPharo12: [false] forPharo11AndPharo10: [ClassDefinitionPrinter showFluidClassDefinition] ])
 			ifFalse: [
 						strm
 							crtab;
