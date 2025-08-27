@@ -57,6 +57,69 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 ]
 
 { #category : #examples }
+GtPharoBigMethodCoderExamples >> coderOnExampleMethodWithSelfLargeMethodCall [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ 
+				GtPharoMethodCoder forMethod: GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder ].
+	scripter methodCoder
+		assertCompiledMethodIs: GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtBigMethodTestClass>>#reduceTable;
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtBigMethodTestClass;
+					assertHeaderProviderBehaviorIs: GtBigMethodTestClass;
+					assertMethodExpandersCountIs: 0;
+					coderViewModelDo: [ :aCoderViewModel | 
+						self assert: aCoderViewModel parentCoderViewModel notNil .
+						self 
+							assert: aCoderViewModel parentExample
+							equals: (GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder ) gtExampleWithResult.
+						self assert: aCoderViewModel parentTestCase isNil ] ];
+		play.
+	scripter assert
+		// GtPharoBigMethodExpandedSourceCoderElement;
+		exists.
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoBigMethodCoderExamples >> coderOnMethodWithSelfLargeMethodCall [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ 
+				GtPharoMethodCoder forMethod: GtBigMethodTestClass>>#callToMethodWithBigCoder ].
+	
+	scripter methodCoder
+		assertCompiledMethodIs: GtBigMethodTestClass>>#callToMethodWithBigCoder;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtBigMethodTestClass>>#reduceTable;
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtBigMethodTestClass;
+					assertHeaderProviderBehaviorIs: GtBigMethodTestClass;
+					assertMethodExpandersCountIs: 0;
+					coderViewModelDo: [ :aCoderViewModel | 
+						self assert: aCoderViewModel parentCoderViewModel notNil .
+						self assert: aCoderViewModel parentExample isNil.
+						self assert: aCoderViewModel parentTestCase isNil ] ];
+		play.
+		
+	scripter assert
+		// GtPharoBigMethodExpandedSourceCoderElement;
+		exists.
+	
+	^ scripter
+]
+
+{ #category : #examples }
 GtPharoBigMethodCoderExamples >> forClassWithBigMethod [
 	<gtExample>
 	| aMethodsCoder theMethodCoders |

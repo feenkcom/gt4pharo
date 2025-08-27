@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoBigMethodCoderViewModel,
 	#superclass : #GtExpandableCoderViewModel,
-	#traits : 'TGtCoderWithSelfObjectHolder',
-	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
+	#traits : 'TGtCoderWithSelfObjectHolder + TGtCoderViewModelWithParentProperties',
+	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait + TGtCoderViewModelWithParentProperties classTrait',
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
@@ -97,11 +97,6 @@ GtPharoBigMethodCoderViewModel >> methodOrigin [
 { #category : #accessing }
 GtPharoBigMethodCoderViewModel >> methodReference [
 	^ self coderModel methodReference
-]
-
-{ #category : #'as yet unclassified' }
-GtPharoBigMethodCoderViewModel >> parentCoderViewModel: aCoderViewModel [
-	self optionAt: #parentCoderViewModel put: aCoderViewModel asWeakReference
 ]
 
 { #category : #'as yet unclassified' }
