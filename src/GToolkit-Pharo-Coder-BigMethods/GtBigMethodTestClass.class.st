@@ -4,7 +4,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtBigMethodTestClass >> callToMethodWithBigCoder [
+	self reduceTable
+]
+
+{ #category : #accessing }
+GtBigMethodTestClass >> exampleWithCallToMethodWithBigCoder [
+	<gtExample>
+	<noTest>
+	self reduceTable
+]
+
+{ #category : #accessing }
 GtBigMethodTestClass >> reduceTable [
 ^#(
 	#(170 0 #reduceActionForUsesList1: 5972993 false) 
@@ -598,12 +610,12 @@ GtBigMethodTestClass >> reduceTable [
 	).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtBigMethodTestClass >> testMethod1 [
 	^#foo
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtBigMethodTestClass >> testMethod2 [
 	^42
 ]

@@ -57,30 +57,104 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 ]
 
 { #category : #examples }
+GtPharoBigMethodCoderExamples >> coderOnExampleMethodWithSelfLargeMethodCall [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ 
+				GtPharoMethodCoder forMethod: GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder ].
+	scripter methodCoder
+		assertCompiledMethodIs: GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtBigMethodTestClass>>#reduceTable;
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtBigMethodTestClass;
+					assertHeaderProviderBehaviorIs: GtBigMethodTestClass;
+					assertMethodExpandersCountIs: 0;
+					coderViewModelDo: [ :aCoderViewModel | 
+						self assert: aCoderViewModel parentCoderViewModel notNil .
+						self 
+							assert: aCoderViewModel parentExample
+							equals: (GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder ) gtExampleWithResult.
+						self assert: aCoderViewModel parentTestCase isNil ] ];
+		play.
+	scripter assert
+		// GtPharoBigMethodExpandedSourceCoderElement;
+		exists.
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoBigMethodCoderExamples >> coderOnMethodWithSelfLargeMethodCall [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ 
+				GtPharoMethodCoder forMethod: GtBigMethodTestClass>>#callToMethodWithBigCoder ].
+	
+	scripter methodCoder
+		assertCompiledMethodIs: GtBigMethodTestClass>>#callToMethodWithBigCoder;
+		assertMethodExpandersCountIs: 1;
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aStep | 
+				aStep
+					assertCompiledMethodIs: GtBigMethodTestClass>>#reduceTable;
+					assertSelfObjectIs: nil;
+					assertExplicitProviderClassIs: GtBigMethodTestClass;
+					assertHeaderProviderBehaviorIs: GtBigMethodTestClass;
+					assertMethodExpandersCountIs: 0;
+					coderViewModelDo: [ :aCoderViewModel | 
+						self assert: aCoderViewModel parentCoderViewModel notNil .
+						self assert: aCoderViewModel parentExample isNil.
+						self assert: aCoderViewModel parentTestCase isNil ] ];
+		play.
+		
+	scripter assert
+		// GtPharoBigMethodExpandedSourceCoderElement;
+		exists.
+	
+	^ scripter
+]
+
+{ #category : #examples }
 GtPharoBigMethodCoderExamples >> forClassWithBigMethod [
 	<gtExample>
 	| aMethodsCoder theMethodCoders |
 	aMethodsCoder := GtPharoStreamingMethodsCoder forBehavior: GtBigMethodTestClass.
 	self
 		assert: aMethodsCoder itemsStream toArray wait
-		equals: {GtBigMethodTestClass >> #reduceTable.
-				GtBigMethodTestClass >> #testMethod1.
-				GtBigMethodTestClass >> #testMethod2}.
+		equals: {
+			GtBigMethodTestClass>>#callToMethodWithBigCoder.
+			GtBigMethodTestClass>>#exampleWithCallToMethodWithBigCoder.
+			GtBigMethodTestClass >> #reduceTable.
+			GtBigMethodTestClass >> #testMethod1.
+			GtBigMethodTestClass >> #testMethod2}.
 
 	theMethodCoders := aMethodsCoder codersStream toArray wait.
-	self assert: theMethodCoders size equals: 3.
+	self assert: theMethodCoders size equals: 5.
 	self
 		assert: theMethodCoders first class
-		equals: GtPharoBigMethodCoder.
-	self assert: theMethodCoders first selector equals: #reduceTable.
+		equals: GtPharoMethodCoder.
+	self assert: theMethodCoders first selector equals: #callToMethodWithBigCoder.
 	self
 		assert: theMethodCoders second class
 		equals: GtPharoMethodCoder.
-	self assert: theMethodCoders second selector equals: #testMethod1.
+	self assert: theMethodCoders second selector equals: #exampleWithCallToMethodWithBigCoder.
 	self
 		assert: theMethodCoders third class
+		equals: GtPharoBigMethodCoder.
+	self assert: theMethodCoders third selector equals: #reduceTable.
+	self
+		assert: theMethodCoders fourth class
 		equals: GtPharoMethodCoder.
-	self assert: theMethodCoders third selector equals: #testMethod2.
+	self assert: theMethodCoders fourth selector equals: #testMethod1.
+	self
+		assert: theMethodCoders fifth class
+		equals: GtPharoMethodCoder.
+	self assert: theMethodCoders fifth selector equals: #testMethod2.
 	^ aMethodsCoder
 ]
 
@@ -96,17 +170,21 @@ GtPharoBigMethodCoderExamples >> forClassWithUnsearchableMethod [
 	
 	self
 		assert: aMethodsCoder itemsStream toArray wait
-		equals: {aClass >> #reduceTable.
+		equals: {
+				aClass>>#callToMethodWithBigCoder.
+				aClass>>#exampleWithCallToMethodWithBigCoder.
+				aClass >> #reduceTable.
 				aClass >> #testMethod1.
 				aClass >> #testMethod2}.
 
 	theMethodCoders := aMethodsCoder codersStream toArray wait.
-	self assert: theMethodCoders size equals: 3.
-	self assert: theMethodCoders first class equals: GtPharoBigMethodCoder.
-	self assert: theMethodCoders first selector equals: #reduceTable.
-	self assert: theMethodCoders second class equals: GtPharoMethodCoder.
-	self assert: theMethodCoders second selector equals: #testMethod1.
-	self assert: theMethodCoders third class equals: GtPharoMethodCoder.
-	self assert: theMethodCoders third selector equals: #testMethod2.
+	self assert: theMethodCoders size equals: 5.
+	
+	self assert: theMethodCoders third class equals: GtPharoBigMethodCoder.
+	self assert: theMethodCoders third selector equals: #reduceTable.
+	self assert: theMethodCoders fourth class equals: GtPharoMethodCoder.
+	self assert: theMethodCoders fourth selector equals: #testMethod1.
+	self assert: theMethodCoders fifth class equals: GtPharoMethodCoder.
+	self assert: theMethodCoders fifth selector equals: #testMethod2.
 	^ aMethodsCoder
 ]

@@ -1,6 +1,8 @@
 Class {
 	#name : #GtPharoMethodCoderViewModel,
 	#superclass : #GtPharoSourceCoderViewModel,
+	#traits : 'TGtCoderViewModelWithParentProperties',
+	#classTraits : 'TGtCoderViewModelWithParentProperties classTrait',
 	#instVars : [
 		'savePreventors',
 		'contextualBehavior'
@@ -274,59 +276,6 @@ GtPharoMethodCoderViewModel >> objectVariableBindingsTo: theBindings [
 { #category : #'private - event handling' }
 GtPharoMethodCoderViewModel >> onBehaviorChanged: aBehaviorChangedAnnouncement [
 	self announce: ((GtTextualCoderViewModelBehaviorChanged new newBehavior: (aBehaviorChangedAnnouncement newBehavior)))
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderViewModel >> parentCoderViewModel [
-	<return: #GtPharoMethodCoderViewModel or: nil>
-	^ self
-		optionAt: #parentCoderViewModel
-		ifPresent: [ :aWeak | aWeak at: 1 ]
-		ifAbsent: [ nil ]
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderViewModel >> parentCoderViewModel: aCoderViewModel [
-	"In case of method coders expanded inside of another method coder,
-	the parent-method-coder view model is set, to be able to get an extra information."
-
-	self optionAt: #parentCoderViewModel put: aCoderViewModel asWeakReference
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderViewModel >> parentExample [
-	<return: #GtExampleWithResult or: nil>
-	^ self
-		optionAt: #parentExample
-		ifPresent: [ :aWeak | aWeak at: 1 ]
-		ifAbsent: [ nil ]
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderViewModel >> parentExample: anExample [
-	"In case of method coders expanded inside of another method coder,
-	the parent-method-coder example is set, to be able to highlight failing code
-	in those expanded method coders."
-
-	self optionAt: #parentExample put: anExample asWeakReference
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderViewModel >> parentTestCase [
-	<return: #GtPharoMethodTestCase or: nil>
-	^ self
-		optionAt: #parentTestCase
-		ifPresent: [ :aWeak | aWeak at: 1 ]
-		ifAbsent: [ nil ]
-]
-
-{ #category : #accessing }
-GtPharoMethodCoderViewModel >> parentTestCase: aTestCase [
-	"In case of method coders expanded inside of another method coder,
-	the parent-method-coder test case is set, to be able to highlight failing code
-	in those expanded method coders."
-
-	self optionAt: #parentTestCase put: aTestCase asWeakReference
 ]
 
 { #category : #'api - actions' }
