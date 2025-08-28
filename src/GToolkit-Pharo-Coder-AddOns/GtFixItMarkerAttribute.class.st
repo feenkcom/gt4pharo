@@ -16,3 +16,8 @@ GtFixItMarkerAttribute >> fixItAttribute [
 GtFixItMarkerAttribute >> fixItAttribute: aFixItAttribute [
 	fixItAttribute := aFixItAttribute
 ]
+
+{ #category : #testing }
+GtFixItMarkerAttribute >> mayHaveExternalReferences [
+	^ true
+]
