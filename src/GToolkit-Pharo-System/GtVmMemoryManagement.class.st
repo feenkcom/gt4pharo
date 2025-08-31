@@ -59,6 +59,13 @@ GtVmMemoryManagement class >> minOldSpaceForGc: anInteger [
 	^ MinOldSpaceForGc := anInteger.
 ]
 
+{ #category : #accessing }
+GtVmMemoryManagement class >> oldSpaceMinMaxRatio [
+	"When validating the min and max old space sizes for GC, minOldSpace must be greater than maxOldSpaceSize * this ratio"
+
+	^0.95
+]
+
 { #category : #'instance creation' }
 GtVmMemoryManagement class >> readFromVm [
 
@@ -82,7 +89,7 @@ GtVmMemoryManagement class >> validateMinOldSpaceForGc: anInteger [
 	| maxOldSpaceSize |
 
 	maxOldSpaceSize := Smalltalk vm maxOldSpaceSize.
-	(maxOldSpaceSize > 0 and: [ anInteger > (0.95 * maxOldSpaceSize) ]) ifTrue:
+	(maxOldSpaceSize > 0 and: [ anInteger > (self oldSpaceMinMaxRatio * maxOldSpaceSize) rounded ]) ifTrue:
 		[ self error: 'MinOldSpaceForGc must be less than maxOldSpace' ].
 ]
 
