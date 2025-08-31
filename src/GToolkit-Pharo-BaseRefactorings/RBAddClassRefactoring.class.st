@@ -52,10 +52,11 @@ RBAddClassRefactoring >> basicTransform [
 	<gtPharoPatch: #Pharo>
 	self
 		forPharo12: [ self model
-				defineClass: ('<1s> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
-						expandMacrosWith: superclass name
-						with: className
-						with: category asString);
+			defineClass: [ :aBuilder |
+				aBuilder
+					superclassName: superclass name;
+					name: className;
+					category: category asString ];
 				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
 		forPharo11AndPharo10: [ self model
 				defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
