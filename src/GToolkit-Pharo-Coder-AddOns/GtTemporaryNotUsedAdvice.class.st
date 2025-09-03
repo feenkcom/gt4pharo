@@ -14,6 +14,7 @@ GtTemporaryNotUsedAdvice >> description [
 
 { #category : #accessing }
 GtTemporaryNotUsedAdvice >> finish: aNode from: criticRunner [
+	aNode isErrorNode ifTrue: [ ^ self ].
 	(aNode isSequence and: [ aNode variables notEmpty ]) ifFalse: [ ^ self ].
 	aNode variables
 		do: [ :each | 
