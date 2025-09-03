@@ -58,11 +58,11 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 				tooltip: 'Generate'
 				content: [ :anElement | aMethodsCoder codeGeneratorsDropDown: anElement for: aMethodsCoderViewModel ] ].
 	^ view
-		actionButtonDo: [ :aButtonAction | 
+		"actionButtonDo: [ :aButtonAction | 
 			aButtonAction
 				icon: BrGlamorousVectorIcons inspect;
 				tooltip: 'Inspect view model';
-				action: [ :aButton | aButton phlow spawnObject: aMethodsCoderViewModel ] ];
+				action: [ :aButton | aButton phlow spawnObject: aMethodsCoderViewModel ] ];"
 		actionStencil: [ :aBrTab | GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExampleViewModel ];
 		actionStencil: [ :aBrTab | GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ];
 		stencil: [ GtPharoStreamingMethodsCoderElement new

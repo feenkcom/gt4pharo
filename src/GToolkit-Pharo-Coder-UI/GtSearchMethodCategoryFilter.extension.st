@@ -1,6 +1,16 @@
 Extension { #name : #GtSearchMethodCategoryFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodCategoryFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | 
+			category ifNotNil: [ :aCategory |
+				(Protocol gtAllProtocolDefaultName = aCategory) ifFalse: [
+					aFilterModel selectedItem: aCategory ] ].
+			aFilterModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodCategoryFilter class >> filterDescriptor2For: aMethodsCoder [
 	^ GtFilterShortListModel new
 		creator: [ :anItem | anItem 
@@ -11,16 +21,6 @@ GtSearchMethodCategoryFilter class >> filterDescriptor2For: aMethodsCoder [
 		displayAllItems;
 		items: (GtPharoStreamingMethodsCoderPossibleCategoriesBuilder new methodsCoder: aMethodsCoder);
 		selectFirstItem
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodCategoryFilter >> filterDescriptor2For: aMethodsCoder [
-	^ (super filterDescriptor2For: aMethodsCoder)
-		ifNotNil: [ :aFilterModel | 
-			category ifNotNil: [ :aCategory |
-				(Protocol gtAllProtocolDefaultName = aCategory) ifFalse: [
-					aFilterModel selectedItem: aCategory ] ].
-			aFilterModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
