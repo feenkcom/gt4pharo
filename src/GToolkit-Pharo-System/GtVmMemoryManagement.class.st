@@ -86,11 +86,13 @@ GtVmMemoryManagement class >> validateMinOldSpaceForGc: anInteger [
 	The VM currently will abort if tenuring fails, which can be triggered by setting MaxOldSpaceSize and allowing old space to grow to that size.
 	Having a MinOldSpaceSizeForGc >= MaxOldSpaceSize pretty much guarantees that the abort will be triggered,
 	so don't allow it."
-	| maxOldSpaceSize |
 
+	| maxOldSpaceSize |
 	maxOldSpaceSize := Smalltalk vm maxOldSpaceSize.
-	(maxOldSpaceSize > 0 and: [ anInteger > (self oldSpaceMinMaxRatio * maxOldSpaceSize) rounded ]) ifTrue:
-		[ self error: 'MinOldSpaceForGc must be less than maxOldSpace' ].
+	"Add 0.001 to the minMaxRatio to avoid false positives due to floating point representation (we don't care about a few bytes)"
+	(maxOldSpaceSize > 0 and: 
+	[ anInteger > ((self oldSpaceMinMaxRatio + 0.001) * maxOldSpaceSize) rounded ])
+		ifTrue: [ self error: 'MinOldSpaceForGc must be less than maxOldSpace' ]
 ]
 
 { #category : #'from-to-the-vm' }
