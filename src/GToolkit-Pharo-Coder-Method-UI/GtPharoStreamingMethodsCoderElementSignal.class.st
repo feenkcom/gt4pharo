@@ -7,6 +7,14 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Beacon Signals'
 }
 
+{ #category : #testing }
+GtPharoStreamingMethodsCoderElementSignal class >> gtNormalOperationSignal [
+	"Answer a Boolean indicating whether this signal is generated as part of normal operations.
+	See {{gtMethod:BeaconSignal class>>gtNormalOperationSignal}} for a description"
+
+	^ true.
+]
+
 { #category : #accessing }
 GtPharoStreamingMethodsCoderElementSignal >> element [
 	^ element
