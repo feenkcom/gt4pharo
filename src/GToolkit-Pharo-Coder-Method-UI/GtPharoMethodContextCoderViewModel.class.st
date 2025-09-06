@@ -50,14 +50,11 @@ GtPharoMethodContextCoderViewModel >> evaluationContext [
 GtPharoMethodContextCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	(super hasDeclaredVariableNamed: aVariableName) ifTrue: [ ^ true ].
 	
-	^ self 
-		forPharo11AndPharo12: [
-			self compiledMethod isDoIt and: [
-				self compiledMethod allLiterals anySatisfy: [ :aVariable |
-					((aVariable class = WorkspaceVariable) or: [
-						aVariable class = DoItVariable] ) and: [ 
-							aVariable name = aVariableName ] ] ] ]
-		forPharo10: [ false ]
+	^ self compiledMethod isDoIt and: [
+		self compiledMethod allLiterals anySatisfy: [ :aVariable |
+			((aVariable class = WorkspaceVariable) or: [
+				aVariable class = DoItVariable] ) and: [ 
+					aVariable name = aVariableName ] ] ] 
 ]
 
 { #category : #initialization }
