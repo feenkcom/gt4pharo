@@ -277,11 +277,7 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 		inContext: aGtPharoSourceCoderEvaluationContext)
 		ifFalse: [ ^ anEvaluationFailBlock value ].
 
-	methodArguments := self
-			forPharo11AndPharo12: [ #() ]
-			forPharo10: [ aGtPharoSourceCoderEvaluationContext runtimeContext
-					ifNil: [ #() ]
-					ifNotNil: [ {aGtPharoSourceCoderEvaluationContext runtimeContext} ] ].
+	methodArguments := #().
 
 	aGtPharoSourceCoderEvaluationContext evaluatedCode: (
 		GtPharoEvaluatedCode new 

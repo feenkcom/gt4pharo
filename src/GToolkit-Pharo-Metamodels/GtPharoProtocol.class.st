@@ -95,11 +95,8 @@ GtPharoProtocol >> isClassSide [
 
 { #category : #testing }
 GtPharoProtocol >> isVirtualProtocol [
-	^ self 
-		forPharo11AndPharo12: [ 
-			"for the moment "
-			false ] 
-		forPharo10: [ protocol isVirtualProtocol ]
+	"for the moment "
+	^ false
 ]
 
 { #category : #accessing }
