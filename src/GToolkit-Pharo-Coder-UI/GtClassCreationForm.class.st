@@ -26,12 +26,14 @@ GtClassCreationForm >> classDefinitionString [
 			stream << self superclassName << ' subclass: '
 				<< self rawClassName asSymbol storeString.
 
-			self traits ifNotEmpty: [ stream << ' uses: ' << (' + ' join: self traits) ].
+			self traits ifNotEmpty: [ 
+				stream << ' uses: ' << (' + ' join: self traits) ].
 
-			stream << ' instanceVariableNames: ' << (' ' join: self slots) storeString
+			stream 
+				<< ' instanceVariableNames: ' << (' ' join: self slots) storeString
 				<< ' classVariableNames: ' << (' ' join: self classVars) storeString
 				<< ' poolDictionaries: ' << (' ' join: self pools) storeString
-				<< ' package: ' << self commitPackage categoryName asString storeString ]
+				<< ' category: ' << self commitPackage categoryName asString storeString ]
 ]
 
 { #category : #accessing }

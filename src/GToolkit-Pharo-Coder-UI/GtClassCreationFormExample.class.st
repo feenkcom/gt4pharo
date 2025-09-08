@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtClassCreationFormExample >> classWithTwoTraitsDefinitionString [
-	^ 'Object subclass: #ExampleClass uses: TGtPharoDummyTraitOne + TGtPharoDummyTraitTwo instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' package: ''ExamplePackage'''
+	^ 'Object subclass: #ExampleClass uses: TGtPharoDummyTraitOne + TGtPharoDummyTraitTwo instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''ExamplePackage'''
 ]
 
 { #category : #accessing }
@@ -22,6 +22,11 @@ GtClassCreationFormExample >> exampleClassNameWithUnderscore [
 { #category : #accessing }
 GtClassCreationFormExample >> examplePackageName [
 	^ 'ExamplePackage'
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> examplePackageTagName [
+	^ 'ExampleTag'
 ]
 
 { #category : #accessing }
@@ -66,6 +71,34 @@ GtClassCreationFormExample >> scripterWithClassAccepted [
 
 	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
+	self assert: createdClass packageName equals: self examplePackageName.
+	self assert: createdClass packageTag isRoot.
+	self assert: createdClass category equals: self examplePackageName.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassAcceptedWithPackageAndTag [
+	<gtExample>
+	<after: #removeClassAndPackage>
+	| scripter createdClass | 
+	scripter := self scripterWithClassNamePackageFilledAndTagFilled.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
+self packageOrganizer  includesPackageNamed: #'ExamplePackage'.
+	createdClass := Smalltalk classNamed: self exampleClassName.
+	self assert: createdClass isNotNil.
+	self assert: createdClass packageName equals: self examplePackageName.
+	self assert: createdClass packageTagName equals: self examplePackageTagName.
+	self 
+		assert: createdClass category 
+		equals: (self examplePackageName, '-',self examplePackageTagName) asSymbol.
 
 	^ scripter
 ]
@@ -335,6 +368,39 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 				value: [ :aModel | aModel classDefinitionString ]
 					equals: self classWithTwoTraitsDefinitionString;
 				onModel ].
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilled [
+	<gtExample>
+	| scripter aDescription anElementId |
+	scripter := self scripterWithClassNameAndPackageFilled.
+	aDescription := scripter model packageAndTagDescription.
+	anElementId := GtMagritteFieldElementId new description: aDescription.
+
+	scripter requestFocus
+		label: 'Focus tag editor';
+		// anElementId;
+		/ #tag;
+		play.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill tag name';
+				text: self examplePackageTagName;
+				// anElementId;
+				/ #tag ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package tag is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue tagName = self examplePackageTagName ] ].
 
 	^ scripter
 ]
