@@ -11,10 +11,25 @@ Class {
 		'isPreviewButtonFocused',
 		'inputLabel',
 		'refactoringTitle',
-		'targetName'
+		'targetName',
+		'menuModel',
+		'anchorElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> anchorElement [
+	<return: #BlElement or: nil>
+	^ anchorElement
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> anchorElement: anElement [
+	"Set an anchor element from where a refactoring is displayed"
+
+	anchorElement := anElement
+]
 
 { #category : #accessing }
 GtRefactoringsViewModel >> beforeApplyBlock [
@@ -107,6 +122,24 @@ GtRefactoringsViewModel >> isPreviewButtonFocused [
 { #category : #accessing }
 GtRefactoringsViewModel >> isPreviewButtonFocused: anObject [
 	isPreviewButtonFocused := anObject
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> menuModel [
+	<return: #BrMenu or: nil>
+	^ menuModel
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> menuModel: aBrMenu [
+	"Set a menu model where a refactorings element is displayed"
+
+	menuModel := aBrMenu
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> menuModelDo: aBlock [
+	menuModel ifNotNil: aBlock
 ]
 
 { #category : #accessing }
