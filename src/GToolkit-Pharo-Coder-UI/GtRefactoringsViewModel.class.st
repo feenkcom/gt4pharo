@@ -9,7 +9,9 @@ Class {
 		'inputFilter',
 		'cancelBlock',
 		'isPreviewButtonFocused',
-		'inputLabel'
+		'inputLabel',
+		'refactoringTitle',
+		'targetName'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -51,7 +53,9 @@ GtRefactoringsViewModel >> initialText: anObject [
 GtRefactoringsViewModel >> initialize [
 	super initialize.
 
-	isEditorFocused := true.
+	refactoringTitle := nil.
+	targetName := nil.
+	isEditorFocused := false.
 	isPreviewButtonFocused := false.
 	beforeApplyBlock := [  ].
 	cancelBlock := [ ].
@@ -114,4 +118,40 @@ GtRefactoringsViewModel >> refactoringBlock [
 { #category : #accessing }
 GtRefactoringsViewModel >> refactoringBlock: anObject [
 	refactoringBlock := anObject
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> refactoringTitle [
+	<return: #String or: nil>
+	^ refactoringTitle
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> refactoringTitle: aString [
+	"Set the refactoring title, e.g., Convert to sibling"
+
+	refactoringTitle := aString
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> refactoringTitleDo: aBlock [
+	refactoringTitle ifNotNil: aBlock
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> targetName [
+	<return: #String or: nil>
+	^ targetName
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> targetName: aString [
+	"Set the refactoring target name, e.g., class name"
+
+	targetName := aString
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> targetNameDo: aBlock [
+	targetName ifNotNil: aBlock
 ]

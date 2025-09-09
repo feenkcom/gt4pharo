@@ -9,6 +9,8 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 		stencil: [ :anExplicitMenu | 
 			| aViewModel anInputElement |
 			aViewModel := GtRefactoringsViewModel new
+					refactoringTitle: 'Convert to sibling';
+					targetName: aClass name;
 					inputLabel: 'Superclass: ';
 					initialText: 'NewClass';
 					refactoringBlock: [ :anInput | 
@@ -40,8 +42,7 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 										aMenuElement := anEvent currentTarget.
 										BlTaskAction
 											enqueueElement: aMenuElement
-											action: [ 
-												anInputElement enableEditing.
+											action: [ anInputElement enableEditing.
 												aMenuElement removeFromParent ] ];
 								when: GtRefactoringsFailedEvent
 									do: [ :anEvent | 

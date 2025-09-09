@@ -1,12 +1,11 @@
 Class {
 	#name : #GtRefactoringsInputElement,
-	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable + TGtWithRefactoringsViewModel',
-	#classTraits : 'TBrLayoutResizable classTrait + TGtWithRefactoringsViewModel classTrait',
+	#superclass : #GtRefactoringsBasicElement,
 	#instVars : [
 		'inputEditorElement',
 		'previewButtonElement',
-		'inputLabelElement'
+		'inputLabelElement',
+		'titleElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -42,6 +41,7 @@ GtRefactoringsInputElement >> initialize [
 	| inputContainer |
 	super initialize.
 
+	self initializeTitleElement.
 	self initializeInputLabelElement.
 	self initializeInputEditorElement.
 	self initializePreviewButton.
@@ -50,6 +50,7 @@ GtRefactoringsInputElement >> initialize [
 			alignTopCenter;
 			hMatchParent;
 			vFitContent;
+			margin: (BlInsets top: 5);
 			addChild: inputLabelElement;
 			addChild: inputEditorElement as: #refactoringEditor;
 			addAptitude: (BrLayoutResizerAptitude new
@@ -58,6 +59,7 @@ GtRefactoringsInputElement >> initialize [
 					hFitContentToFitContent: inputEditorElement;
 					hFitContentLimitedToFitContentLimited: inputEditorElement).
 
+	self addChild: titleElement.
 	self addChild: inputContainer as: #refactoringInputLine.
 	self addChild: previewButtonElement as: #refactoringPreviewButton.
 
@@ -72,7 +74,7 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 			beFocusable;
 			hMatchParent;
 			vFitContent;
-			aptitude: BrGlamorousCodeEditorAptitude new;
+			aptitude: BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize;
 			text: '';
 			beMode: BrTextEditorEditableSingleLineMode new;
 			inputFilter: BrTextEditorNoLineBreakInputFilter new;
@@ -81,12 +83,12 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 					description: 'Accept new text and perform preview refactoring';
 					combination: BlKeyCombination enter;
 					action: [ :anEvent | self onAcceptInputTextShortcutEvent: anEvent ]);
-			constraintsDo: [ :c | c padding: (BlInsets top: 0 right: 3 bottom: 0 left: 3) ].
+			constraintsDo: [ :c | c padding: (BlInsets all: 5) ].
 
-	inputEditorElement editor 
-		when: BrTextEditorModifiedEvent 
+	inputEditorElement editor
+		when: BrTextEditorModifiedEvent
 		do: [ :anEvent | self onInputTextModifiedEvent: anEvent ].
-	
+
 	GtMagritteBuilderUtility styleEditorWidget: inputEditorElement
 ]
 
@@ -94,8 +96,8 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 GtRefactoringsInputElement >> initializeInputLabelElement [
 	inputLabelElement := BrLabel new
 			fitContent;
-			margin: (BlInsets right: 5);
-			aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
+			margin: (BlInsets top: 2 right: 5);
+			aptitude: BrGlamorousLabelAptitude new glamorousFormLabelStyle;
 			text: 'Input:'
 ]
 
@@ -108,12 +110,15 @@ GtRefactoringsInputElement >> initializePreviewButton [
 			icon: BrGlamorousVectorIcons accept;
 			beSmallSize;
 			label: 'Preview changes';
-			margin: (BlInsets
-					top: 5
-					left: 0
-					bottom: 0
-					right: 0);
+			margin: (BlInsets top: 5);
 			action: [ :aButtonElement :aButtonModel :anEvent | self onPreviewButtonClick ]
+]
+
+{ #category : #initialization }
+GtRefactoringsInputElement >> initializeTitleElement [
+	titleElement := BrLabel new
+			aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
+			text: ''
 ]
 
 { #category : #'api - hooks' }
@@ -164,13 +169,42 @@ GtRefactoringsInputElement >> previewRefactoring [
 
 { #category : #'private - updating' }
 GtRefactoringsInputElement >> updateElement [
-	inputLabelElement text: self refactoringsViewModel inputLabel.
+	self updateTitleElement.
+	self updateInputLabelElement.
+	self updateInputEditorElement.
+	self updatePreviewButtonElement
+]
 
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateInputEditorElement [
 	inputEditorElement inputFilter: self refactoringsViewModel inputFilter.
 	inputEditorElement text: self refactoringsViewModel initialText.
 	self refactoringsViewModel isEditorFocused
-		ifTrue: [ inputEditorElement requestFocus ].
+		ifTrue: [ inputEditorElement requestFocus ]
+]
 
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateInputLabelElement [
+	inputLabelElement text: self refactoringsViewModel inputLabel
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updatePreviewButtonElement [
 	self refactoringsViewModel isPreviewButtonFocused
 		ifTrue: [ previewButtonElement requestFocus ]
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateTitleElement [
+	| aFormatedText |
+	aFormatedText := ''.
+	self refactoringsViewModel refactoringTitleDo: [ :aText | 
+		aFormatedText := aText asRopedText glamorousRegularFont.
+		self refactoringsViewModel targetNameDo: [ :aPreview | 
+		aFormatedText append: ((' ' , aPreview asString) asRopedText
+			glamorousCodeFont;
+			foreground: Color gray;
+			glamorousCodeTinySize) ] ].
+	
+	titleElement text: aFormatedText
 ]
