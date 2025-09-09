@@ -86,7 +86,7 @@ GtClassCreationFormExample >> scripterWithClassAccepted [
 
 	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
-	self assert: createdClass packageName equals: self examplePackageName.
+	self assert: createdClass package name equals: self examplePackageName.
 	self assert: createdClass packageTag isRoot.
 	self assert: createdClass category equals: self examplePackageName.
 
