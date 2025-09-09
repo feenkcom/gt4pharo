@@ -6,12 +6,15 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFrom: aGtCoderClassesTreeElemen
 	self subclasses notEmpty ifFalse: [ ^ nil ].
 
 	^ BrMenuSubmenuItem new
+		id: #'coder--context-menu-convert-to-sibling';
 		icon: BrGlamorousVectorIcons empty
 			label: 'Convert to sibling'
 			preview: self name;
 		submenu: (aGtCoderClassesTreeElement
 				convertToSiblingSubmenuFor: self
-				siblings: self subclasses)
+				siblings: self subclasses);
+		bePinSubmenuAction;
+		hideOnClick: true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

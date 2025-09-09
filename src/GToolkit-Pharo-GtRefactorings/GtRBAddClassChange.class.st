@@ -114,6 +114,18 @@ GtRBAddClassChange >> generateChanges [
 		ifNil: [ super generateChanges ]
 ]
 
+{ #category : #views }
+GtRBAddClassChange >> gtPropertiesFor: aView [
+	<gtView>
+	properties ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Properties';
+		items: [ properties associations ];
+		column: 'Key' text: [ :each | each key gtDisplayString ];
+		column: 'Value' text: [ :each | each value gtDisplayString ];
+		send: [ :each | each value ]
+]
+
 { #category : #comparing }
 GtRBAddClassChange >> hash [
 	^ definitionString ifNil: [ super hash ] ifNotNil: [ definitionString hash ]

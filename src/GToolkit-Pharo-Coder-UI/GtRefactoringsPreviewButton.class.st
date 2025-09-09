@@ -31,40 +31,54 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 					progressContainer addChild: runningElement ] asBlTask ].
 	applyAction := [ :theAcceptButton | 
 		running
-			ifFalse: [ running := true.
+			ifFalse: [ | promise topElement |
+				running := true.
 				theAcceptButton disable.
 				theRefactoringsElement changesSize > 1
 					ifTrue: [ progress := self newProgressElement.
 						progressContainer addChild: progress after: theAcceptButton.
 						progress fraction: 0.
 						runningElement := progress ].
+				topElement := theAcceptButton topMostParent.
 				self
 					dispatchEvent: (GtRefactoringsAboutToApplyEvent new refactorings: executedRefactorings).
-				(theRefactoringsElement
-					applyRefactoringWithProgress: [ :fraction | 
-						progress
-							ifNotNil: [ progress
-									enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
-					then: [ :ignore | 
-						running := false.
-						progressContainer
-							enqueueTask: [ theAcceptButton enable.
-								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask.
-						self
-							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ]
-					otherwise: [ :anError | 
-						| aDebugElement |
-						running := false.
-						aDebugElement := anError asDebuggableElement
-								margin: (BlInsets
-										top: 5
-										left: 10
-										bottom: 15
-										right: 10).
-						runningElement := aDebugElement.
-						progressContainer
-							enqueueTask: [ progress ifNotNil: [ progress removeFromParent ].
-								progressContainer addChild: aDebugElement ] asBlTask ] ] ].
+				theRefactoringsElement
+					fireEvent: (GtRefactoringsAboutToApplyEvent new refactorings: executedRefactorings).
+				promise := (theRefactoringsElement
+						applyRefactoringWithProgress: [ :fraction | 
+							progress
+								ifNotNil: [ progress
+										enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ] ])
+						then: [ :ignore | 
+							running := false.
+							progressContainer
+								enqueueTask: [ theAcceptButton enable.
+									theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask.
+							BlTaskAction
+								enqueueElement: theRefactoringsElement
+								action: [ self
+										dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
+									theRefactoringsElement
+										fireEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ] ]
+						otherwise: [ :anError | 
+							| aDebugElement |
+							running := false.
+							aDebugElement := anError asDebuggableElement
+									margin: (BlInsets
+											top: 5
+											left: 10
+											bottom: 15
+											right: 10).
+							runningElement := aDebugElement.
+							progressContainer
+								enqueueTask: [ progress ifNotNil: [ progress removeFromParent ].
+									progressContainer addChild: aDebugElement.
+									self
+										dispatchEvent: (GtRefactoringsFailedEvent new refactorings: executedRefactorings).
+									theRefactoringsElement
+										fireEvent: (GtRefactoringsFailedEvent new refactorings: executedRefactorings) ]
+										asBlTask ].
+				topElement enqueueTask: (BlPromiseTask new promise: promise) ] ].
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			id: GtRefactoringsPreviewAcceptId;

@@ -17,6 +17,7 @@ GtChangesElement >> applyChanges [
 
 { #category : #executing }
 GtChangesElement >> applyChangesWithProgress: aBlock [
+	<return: #TAsyncPromise>
 	| changesToCompile disabledChanges |
 	changesToCompile := RBCompositeRefactoryChange named: changes name.
 	disabledChanges := (changesTree viewModel root value flatCollect: #allChanges)

@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtClassCreationFormExample >> classWithTwoTraitsDefinitionString [
-	^ 'Object subclass: #ExampleClass uses: TGtPharoDummyTraitOne + TGtPharoDummyTraitTwo instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' package: ''ExamplePackage'''
+	^ 'Object subclass: #ExampleClass uses: TGtPharoDummyTraitOne + TGtPharoDummyTraitTwo instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''ExamplePackage'''
 ]
 
 { #category : #accessing }
@@ -25,6 +25,21 @@ GtClassCreationFormExample >> examplePackageName [
 ]
 
 { #category : #accessing }
+GtClassCreationFormExample >> examplePackageNameWithDash [
+	^ 'ExamplePackage-PartA'
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> examplePackageTagName [
+	^ 'ExampleTag'
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> examplePackageTagNameWithDash [
+	^ 'ExampleTag-PartB'
+]
+
+{ #category : #accessing }
 GtClassCreationFormExample >> formClass [
 	^ GtClassCreationForm
 ]
@@ -32,7 +47,12 @@ GtClassCreationFormExample >> formClass [
 { #category : #accessing }
 GtClassCreationFormExample >> removeClassAndPackage [
 	Smalltalk removeClassNamed: self exampleClassName.
-	self examplePackageName asPackage removeFromSystem
+	
+	{self examplePackageName. self examplePackageNameWithDash} do: [ :aPackageName |
+		self packageOrganizer  
+			packageNamed:  aPackageName
+			ifPresent: [ :aPackage |
+				aPackage removeFromSystem ] ]
 ]
 
 { #category : #accessing }
@@ -66,6 +86,86 @@ GtClassCreationFormExample >> scripterWithClassAccepted [
 
 	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
+	self assert: createdClass package name equals: self examplePackageName.
+	self assert: createdClass packageTag isRoot.
+	self assert: createdClass category equals: self examplePackageName.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassAcceptedWithPackageAndTag [
+	<gtExample>
+	<after: #removeClassAndPackage>
+	| scripter createdClass | 
+	scripter := self scripterWithClassNamePackageFilledAndTagFilled.
+	
+	self assert: (self packageOrganizer 
+		packageMatchingExtensionName: self examplePackageName) isNil.
+
+	self 
+		assert: (self packageOrganizer  
+			includesPackageNamed: self examplePackageName) not
+		description: 'We assume the target package is not present in the system'.
+self 
+		assert: (self packageOrganizer  
+			includesPackageNamed: ((self examplePackageName
+				, '-'
+				,self examplePackageTagName) asSymbol)) not
+		description: 'We assume there is no package with the package-tag combination from this test in the system'.
+		
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
+
+	createdClass := Smalltalk classNamed: self exampleClassName.
+	self assert: createdClass isNotNil.
+	self assert: createdClass package name equals: self examplePackageName.
+	self assert: createdClass packageTag name equals: self examplePackageTagName.
+	self 
+		assert: createdClass category 
+		equals: (self examplePackageName, '-',self examplePackageTagName) asSymbol.
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassAcceptedWithPackageAndTagWithDashInBothNames [
+	<gtExample>
+	<after: #removeClassAndPackage>
+	| scripter createdClass | 
+	scripter := self scripterWithClassNamePackageFilledAndTagFilledWithDashName.
+
+	self assert: (self packageOrganizer 
+		packageMatchingExtensionName: self examplePackageName) isNil.
+	self 
+		assert: (self packageOrganizer  
+			includesPackageNamed: self examplePackageNameWithDash) not
+		description: 'We assume the target package is not present in the system'.
+self 
+		assert: (self packageOrganizer  
+			includesPackageNamed: ((self examplePackageNameWithDash
+				, '-'
+				,self examplePackageTagNameWithDash) asSymbol)) not
+		description: 'We assume there is not package with the package-tag combination from this test in the system'.
+	
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click save button';
+				// #toolbar;
+				onChildAt: 1 ].
+
+	createdClass := Smalltalk classNamed: self exampleClassName.
+	self assert: createdClass isNotNil.
+	self assert: createdClass package name equals: self examplePackageNameWithDash.
+	self assert: createdClass packageTag name equals: self examplePackageTagNameWithDash.
+	self 
+		assert: createdClass category 
+		equals: (self examplePackageNameWithDash, '-',self examplePackageTagNameWithDash) asSymbol.
 
 	^ scripter
 ]
@@ -335,6 +435,94 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 				value: [ :aModel | aModel classDefinitionString ]
 					equals: self classWithTwoTraitsDefinitionString;
 				onModel ].
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilled [
+	<gtExample>
+	| scripter aDescription anElementId |
+	scripter := self scripterWithClassNameAndPackageFilled.
+	aDescription := scripter model packageAndTagDescription.
+	anElementId := GtMagritteFieldElementId new description: aDescription.
+
+	scripter requestFocus
+		label: 'Focus tag editor';
+		// anElementId;
+		/ #tag;
+		play.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill tag name';
+				text: self examplePackageTagName;
+				// anElementId;
+				/ #tag ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package tag is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue tagName = self examplePackageTagName ] ].
+
+	^ scripter
+]
+
+{ #category : #accessing }
+GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilledWithDashName [
+	<gtExample>
+	| scripter aDescription anElementId |
+	scripter := self scripterWithClassNameFilled.
+	aDescription := scripter model packageAndTagDescription.
+	anElementId := GtMagritteFieldElementId new description: aDescription.
+
+	scripter requestFocus
+		label: 'Focus package editor';
+		// anElementId;
+		/ #package;
+		play.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill package name';
+				text: self examplePackageNameWithDash;
+				// anElementId;
+				/ #package ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue packageName = self examplePackageNameWithDash ] ].
+	
+	scripter requestFocus
+		label: 'Focus tag editor';
+		// anElementId;
+		/ #tag;
+		play.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Fill tag name';
+				text: self examplePackageTagNameWithDash;
+				// anElementId;
+				/ #tag ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Check that package tag is set';
+				satisfies: [ :aFrame | 
+					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
+						currentValue tagName = self examplePackageTagNameWithDash ] ].
 
 	^ scripter
 ]
