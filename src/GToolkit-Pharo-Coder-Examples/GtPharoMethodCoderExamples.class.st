@@ -560,19 +560,11 @@ GtPharoMethodCoderExamples >> debugClassUnaryMethodPointCreation [
 	"debugging does not save the method"
 	self assert: aCoder isModified.
 	
-	self 
-		forPharo11AndPharo12: [
-			self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt') not.
-			self assert: (aDummyDebugger sourceCode endsWith: 'aPoint := 196@400.').
-			self assert: aDummyDebugger method selector equals: #DoIt.
-			"self assert: (aDummyDebugger method methodClass includesBehavior: aCoder behavior)."
-			self assert: aDummyDebugger receiver equals: aCoder behavior instanceSide ] 
-		forPharo10: [
-			self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt').
-			self assert: (aDummyDebugger sourceCode endsWith: 'aPoint := 196 @ 400').
-			self assert: aDummyDebugger method selector equals: #DoIt.
-			self assert: (aDummyDebugger method methodClass includesBehavior: aCoder behavior).
-			self assert: aDummyDebugger receiver equals: aCoder behavior instanceSide ].
+	self assert: (aDummyDebugger sourceCode beginsWith: 'DoIt') not.
+	self assert: (aDummyDebugger sourceCode endsWith: 'aPoint := 196@400.').
+	self assert: aDummyDebugger method selector equals: #DoIt.
+	"self assert: (aDummyDebugger method methodClass includesBehavior: aCoder behavior)."
+	self assert: aDummyDebugger receiver equals: aCoder behavior instanceSide.
 
 	^ aCoder
 ]

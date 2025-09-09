@@ -280,13 +280,9 @@ GtPharoMethodContextCoder >> stackVariableNodesDo: aBlock [
 
 { #category : #accessing }
 GtPharoMethodContextCoder >> startingStateForAstComputation [
-	^ self 
-		forPharo11AndPharo12: [
-			self compiledMethod isDoIt
-				ifTrue: [ GtPharoParser startingStateForDoItMethod ]
-				ifFalse: [ GtPharoParser startingStateForMethod ] ]
-		forPharo10: [
-			GtPharoParser startingStateForMethod]
+	^ self compiledMethod isDoIt
+		ifTrue: [ GtPharoParser startingStateForDoItMethod ]
+		ifFalse: [ GtPharoParser startingStateForMethod ] 
 ]
 
 { #category : #subscriptions }

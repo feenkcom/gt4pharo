@@ -35,6 +35,41 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI [
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_advices_removeClass_01_showAdvices [
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI.
+
+	aScripter click
+		label: 'Click advice button';
+		// GtFixItButton;
+		play.
+		
+	aScripter check
+		label: 'Assert remove class advice is present';
+		onSpaceRoot;
+		// BrLabel;
+		@ [:aLabel |
+			aLabel text asString = ('Remove ', aScripter model behavior name)];
+		exists;
+		play.
+	
+	aScripter click
+		label: 'Click remove class advice';
+		onSpaceRoot;
+		// BrLabel;
+		@ [:aLabel |
+			aLabel text asString = ('Remove ', aScripter model behavior name)];
+		play.
+		
+	self
+		assert: (Smalltalk globals 
+			hasClassNamed: (aScripter model behavior name)) not.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_click_add_method [
 	<gtExample>
 	| aScripter |
@@ -133,6 +168,27 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_deleteClass_01_clickBu
 		label: 'Click remove class button';
 		id: GtBehaviorCoderBehaviorDeleteButtonId;
 		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_deleteClass_02_clickButton_confirmRemoval [
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI_deleteClass_01_clickButton.
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click the confirmation button';
+				onSpaceRoot;
+				onDropdown: true;
+				// #'change-button-action' ].
+
+	self
+		assert: (Smalltalk globals 
+			hasClassNamed: (aScripter model behavior name)) not.
 
 	^ aScripter
 ]
