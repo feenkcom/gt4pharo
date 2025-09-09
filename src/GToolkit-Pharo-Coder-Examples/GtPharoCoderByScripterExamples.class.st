@@ -1086,6 +1086,44 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 ]
 
 { #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> coderRightSide [
+	"Display coder with sidebar index on the top.
+	The coder occupies right part of the window, keeping empty space to the left."
+
+	<gtExample>
+	^ self coderRightSideForClass: GtPharoDummyClass leftSpaceWeight: 0.2
+]
+
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> coderRightSideForClass: aClass leftSpaceWeight: aWeight [
+	"Display coder with sidebar index on the top.
+	The coder occupies right part of the window, keeping empty space to the left."
+
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ BrHorizontalPane new
+					matchParent;
+					in: [ :thePane | thePane states addState: GtPhlowToolDetailState detailed ];
+					addChild: (BrFrame new
+							matchParent;
+							constraintsDo: [ :c | c linear weight: aWeight ]);
+					addChild: (GtCoderElement forClass: aClass) ].
+
+	aScripter do
+		label: 'Set window extent';
+		block: [ :aSpace | aSpace windowExtent: 1200 @ 600 ];
+		onSpace;
+		play.
+
+	aScripter pharoCoder
+		toggleHierarchies;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coderWithAddMethod [
 	<gtExample>
 	^ self coderInPager: [ GtCoderElement forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
@@ -1297,6 +1335,307 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 				exists;
 				onSpaceRoot;
 				id: GtRefactoringsPreviewAcceptId ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition [
+	"See https://github.com/feenkcom/gtoolkit/issues/4689"
+
+	<gtExample>
+	<after: #cleanUp>
+	| scripter rootClass realClass className |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	rootClass := environment anyDummyRootClass.
+	realClass := rootClass realClass.
+	className := realClass name.
+	scripter := self coderRightSideForClass: realClass leftSpaceWeight: 0.0155.
+	scripter userData at: #realClass put: realClass.
+	scripter userData at: #dummyClass put: rootClass.
+
+	scripter pharoCoder
+		openSidebarIndexContextMenuOnClass: realClass;
+		play.
+
+	scripter menuStep
+		hoverMenuItemWithId: #'coder--context-menu-convert-to-sibling';
+		onSpaceRoot;
+		play.
+
+	scripter do
+		label: 'Get dialog element position';
+		block: [ :anElement :aUserData | aUserData at: #siblingFormPosition put: anElement position ];
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	scripter assert
+		label: 'Assert dialog element position is to the right';
+		satisfies: [ :anElement :aUserData | 
+			anElement childrenCount = 3
+				and: [ (anElement childAt: 2) bounds inSpace right
+						<= (anElement childAt: 3) bounds inSpace left ] ];
+		onPopover;
+		play.
+
+	scripter editor
+		assertHasFocus;
+		selectAll;
+		typeText: className;
+		typeText: self extraLongClassName;
+		onSpaceRoot;
+		// #refactoringEditor;
+		play.
+
+	scripter assert
+		label: 'Assert dialog element position';
+		value: [ :anElement :aUserData | anElement position ]
+			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	scripter assert
+		label: 'Assert preview button is visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility visible;
+		onPopover;
+		// #refactoringPreviewButton;
+		play.
+
+	scripter editor
+		assertHasFocus;
+		onPopover;
+		// #refactoringEditor;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu [
+	"See https://github.com/feenkcom/gtoolkit/issues/4689"
+
+	<gtExample>
+	| scripter realClass |
+	scripter := self convertToSiblingInIndex_preserveContextMenuElementPosition.
+	realClass := scripter userData at: #realClass.
+
+	scripter menuStep
+		clickMenuItemWithId: #'coder--context-menu-convert-to-sibling';
+		assertClosedMenuContainer;
+		onSpaceRoot;
+		play.
+
+	scripter assert
+		label: 'Assert dialog element position';
+		value: [ :anElement :aUserData | anElement position ]
+			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	scripter assert
+		label: 'Assert preview button is visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility visible;
+		onSpaceRoot;
+		// #refactoringPreviewButton;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu_withPreview [
+	"See https://github.com/feenkcom/gtoolkit/issues/4689"
+
+	<gtExample>
+	| scripter realClass |
+	scripter := self
+			convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu.
+	realClass := scripter userData at: #realClass.
+
+	false
+		ifTrue: [ scripter editor
+				assertHasFocus;
+				pressReturn;
+				onSpaceRoot;
+				// #'coder--context-menu-convert-to-sibling-form';
+				// #refactoringEditor;
+				play ]
+		ifFalse: [ scripter click
+				label: 'Click preview button';
+				onSpaceRoot;
+				// #'coder--context-menu-convert-to-sibling-form';
+				// #refactoringPreviewButton;
+				play ].
+
+	scripter assert
+		label: 'Assert dialog element position';
+		value: [ :anElement :aUserData | anElement position ]
+			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	scripter assert
+		label: 'Assert preview button is not visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		// #refactoringPreviewButton;
+		play.
+
+	scripter assert
+		label: 'Assert refactoring preview is visible';
+		exists;
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		// #preview;
+		play.
+
+	scripter assert
+		hasFocus;
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		// GtRefactoringsPreviewAcceptId;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu_withPreview_performRefactoring [
+	"See https://github.com/feenkcom/gtoolkit/issues/4689"
+
+	<gtExample>
+	| scripter realClass newClass rootClass newDummyClass |
+	scripter := self
+			convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu_withPreview.
+	realClass := scripter userData at: #realClass.
+	rootClass := scripter userData at: #dummyClass.
+
+	self assert: realClass subclasses size > 0.
+
+	scripter assert
+		label: 'Assert refactoring pinned form is visible';
+		exists;
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	scripter keyPress
+		label: 'Press return to perform refactoring';
+		key: BlKeyboardKey return;
+		play.
+
+	self assert: realClass subclasses size equals: 0.
+
+	newClass := Smalltalk globals
+			classNamed: ('{1}{2}'
+					format: {realClass name.
+							self extraLongClassName}).
+	self assert: newClass isNotNil.
+	self assert: newClass package equals: realClass package.
+
+	newDummyClass := GtPharoDummyClass new
+			realClass: newClass;
+			className: newClass name.
+	rootClass dummyPackage dummyClasses: {newDummyClass}.
+
+	scripter assert
+		label: 'Assert refactoring pinned form is closed';
+		notExists;
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition_withPreview [
+	"See https://github.com/feenkcom/gtoolkit/issues/4689"
+
+	<gtExample>
+	| scripter realClass |
+	scripter := self convertToSiblingInIndex_preserveContextMenuElementPosition.
+	realClass := scripter userData at: #realClass.
+
+	scripter editor
+		assertHasFocus;
+		pressReturn;
+		onPopover;
+		// #refactoringEditor;
+		play.
+
+	scripter assert
+		label: 'Assert dialog element position';
+		value: [ :anElement :aUserData | anElement position ]
+			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		play.
+
+	scripter assert
+		label: 'Assert preview button is not visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
+		onPopover;
+		// #refactoringPreviewButton;
+		play.
+
+	scripter assert
+		label: 'Assert refactoring preview is visible';
+		exists;
+		onPopover;
+		// #preview;
+		play.
+
+	scripter assert
+		hasFocus;
+		onPopover;
+		// GtRefactoringsPreviewAcceptId;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition_withPreview_performRefactoring [
+	"See https://github.com/feenkcom/gtoolkit/issues/4689"
+
+	<gtExample>
+	| scripter realClass newClass rootClass newDummyClass |
+	scripter := self
+			convertToSiblingInIndex_preserveContextMenuElementPosition_withPreview.
+	realClass := scripter userData at: #realClass.
+	rootClass := scripter userData at: #dummyClass.
+
+	self assert: realClass subclasses size > 0.
+
+	scripter keyPress
+		label: 'Press return to perform refactoring';
+		key: BlKeyboardKey return;
+		play.
+
+	self assert: realClass subclasses size equals: 0.
+
+	newClass := Smalltalk globals
+			classNamed: ('{1}{2}'
+					format: {realClass name.
+							self extraLongClassName}).
+	self assert: newClass isNotNil.
+	self assert: newClass package equals: realClass package.
+
+	newDummyClass := GtPharoDummyClass new
+			realClass: newClass;
+			className: newClass name.
+	rootClass dummyPackage dummyClasses: {newDummyClass}.
+
+	scripter menuStep
+		assertClosedMenuContainer;
+		onSpaceRoot;
+		play.
 
 	^ scripter
 ]
@@ -2641,6 +2980,11 @@ GtPharoCoderByScripterExamples >> expandBigMethodReference [
 				// GtPharoBigMethodExpandedSourceCoderElement;
 				exists ].
 	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> extraLongClassName [
+	^ 'WithVeryVeryVeryLongName1234'
 ]
 
 { #category : #'examples - index' }
@@ -4367,29 +4711,19 @@ GtPharoCoderByScripterExamples >> undoRedoRemoveClassInIndex [
 		clickStep: [ :s | 
 			s
 				label: 'Click remove class';
-				onSpaceRoot;
-				// [ :each | 
-					(each isKindOf: BrLabel)
-						and: [ (each text asString beginsWith: 'Remove class')
-								and: [ each
-										allParentsDetect: [ :p | p isKindOf: GtCoderNavigationContextMenuContent ]
-										ifFound: [ :p | true ]
-										ifNone: [ false ] ] ] ] ].
+				onPopover;
+				// #'coder--context-menu-remove-class' ].
 	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Click remove preview';
-				// [ :each | 
-					(each isKindOf: GtPreviewChangeButton)
-						and: [ each
-								allParentsDetect: [ :p | p isKindOf: GtCoderClassesTreeElement ]
-								ifFound: [ :p | true ]
-								ifNone: [ false ] ] ] ].
+				onPopover;
+				// GtPreviewChangeButton ].
 	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Remove class';
-				onSpaceRoot;
+				onPopover;
 				id: #'change-button-action' ].
 	scripter
 		doStep: [ :s | 

@@ -11,6 +11,7 @@ Class {
 
 { #category : #accessing }
 GtRefactoringsElement >> applyRefactoringWithProgress: aBlock [
+	<return: #TAsyncPromise>
 	^ changesElement applyChangesWithProgress: aBlock
 ]
 
