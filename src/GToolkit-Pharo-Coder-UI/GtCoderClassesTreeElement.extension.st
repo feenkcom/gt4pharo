@@ -7,7 +7,7 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 	submenu
 		id: #'coder--context-menu-convert-to-sibling-form';
 		stencil: [ :anExplicitMenu | 
-			| aViewModel anElement |
+			| aViewModel anInputElement |
 			aViewModel := GtRefactoringsViewModel new
 					inputLabel: 'Superclass: ';
 					initialText: 'NewClass';
@@ -17,27 +17,42 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 							class: aClass
 							subclasses: aCollection ];
 					beforeApplyBlock: [ submenu hideAll ].
-			anElement := GtRefactoringsInputElement new
+			anInputElement := GtRefactoringsInputElement new
 					refactoringsViewModel: aViewModel;
 					hExact: 350;
 					margin: (BlInsets all: 5).
 
 			(GtRefactoringsWithInputPreviewElement
-				elementForRefactoringInputElement: anElement
+				elementForRefactoringInputElement: anInputElement
 				from: self
 				beforeApplyingDo: [ submenu hideAll ])
-				background: anElement theme default contentBackground;
+				in: [ :aMenuElement | 
+					aMenuElement
+						when: GtRefactoringsAboutToApplyEvent
+						do: [ :anEvent | anInputElement disableEditing ] ];
+				background: anInputElement theme default contentBackground;
 				addAptitude: (BrGlamorousPopoverPinnableAptitude new
 						withPostEndPinBlock: [ :aContext | 
 							aContext menuElement
 								when: GtRefactoringsAppliedEvent
-								do: [ :anEvent | 
-									| aMenuElement |
-									aMenuElement := anEvent currentTarget.
-									BlTaskAction
-										enqueueElement: aMenuElement
-										action: [ aMenuElement removeFromParent ] ].
-							BlTaskAction enqueueElement: anElement action: [ anElement focusTarget ] ];
+									do: [ :anEvent | 
+										| aMenuElement |
+										aMenuElement := anEvent currentTarget.
+										BlTaskAction
+											enqueueElement: aMenuElement
+											action: [ 
+												anInputElement enableEditing.
+												aMenuElement removeFromParent ] ];
+								when: GtRefactoringsFailedEvent
+									do: [ :anEvent | 
+										| aMenuElement |
+										aMenuElement := anEvent currentTarget.
+										BlTaskAction
+											enqueueElement: aMenuElement
+											action: [ anInputElement enableEditing ] ].
+							BlTaskAction
+								enqueueElement: anInputElement
+								action: [ anInputElement focusTarget ] ];
 						withResizers;
 						withAllPinActions;
 						menuModel: anExplicitMenu) ].

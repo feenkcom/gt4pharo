@@ -16,6 +16,22 @@ GtRefactoringsInputElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
+{ #category : #'api - hooks' }
+GtRefactoringsInputElement >> disableEditing [
+	"Ensure that it is not possible to edit or trigger a new editing"
+	
+	inputEditorElement beReadOnlyWithSelection.
+	previewButtonElement disable
+]
+
+{ #category : #'api - hooks' }
+GtRefactoringsInputElement >> enableEditing [
+	"Ensure that it is possible to edit or trigger a new editing"
+	
+	inputEditorElement beMode: BrTextEditorEditableSingleLineMode new.
+	previewButtonElement enable
+]
+
 { #category : #'focus requesting' }
 GtRefactoringsInputElement >> focusTarget [
 	^ inputEditorElement
@@ -67,6 +83,10 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 					action: [ :anEvent | self onAcceptInputTextShortcutEvent: anEvent ]);
 			constraintsDo: [ :c | c padding: (BlInsets top: 0 right: 3 bottom: 0 left: 3) ].
 
+	inputEditorElement editor 
+		when: BrTextEditorModifiedEvent 
+		do: [ :anEvent | self onInputTextModifiedEvent: anEvent ].
+	
 	GtMagritteBuilderUtility styleEditorWidget: inputEditorElement
 ]
 
@@ -96,11 +116,27 @@ GtRefactoringsInputElement >> initializePreviewButton [
 			action: [ :aButtonElement :aButtonModel :anEvent | self onPreviewButtonClick ]
 ]
 
+{ #category : #'api - hooks' }
+GtRefactoringsInputElement >> isEditingEnabled [
+	^ (previewButtonElement states hasState: BlElementState disabled) not
+]
+
 { #category : #'private - event handling' }
 GtRefactoringsInputElement >> onAcceptInputTextShortcutEvent: anEvent [
 	anEvent consumed: true.
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
 	self previewRefactoring
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsInputElement >> onInputTextModifiedEvent: anEvent [
+	| aWish |
+	self isEditingEnabled ifFalse: [ ^ self ].
+	aWish := GtRefactoringsPreviewRefactoringsWish new refactoringsBlock: [ #() ].
+
+	self fireEvent: aWish.
+	aWish isConsumed ifFalse: [ ^ self ].
+	previewButtonElement visibility: BlVisibility visible
 ]
 
 { #category : #'private - event handling' }
