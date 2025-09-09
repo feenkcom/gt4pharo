@@ -21,3 +21,11 @@ TBlDevScripterActionStep >> methodsCoder [
 				label: 'Pharo methods coder';
 				referenceSender)
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+TBlDevScripterActionStep >> pharoCoder [
+	^ self
+		addStep: (GtPharoCoderStep new
+				label: 'Pharo coder';
+				referenceSender)
+]

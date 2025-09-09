@@ -5,16 +5,42 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 	| submenu |
 	submenu := BrMenuExplicit new.
 	submenu
-		stencil: [ GtRefactoringsWithInputPreviewElement
-				elementForRefactoring: [ :each | 
-					GtChildrenToSiblingsRefactoring
-						name: each
-						class: aClass
-						subclasses: aCollection ]
-				labeled: 'Superclass: '
-				initialValue: 'NewClass'
+		id: #'coder--context-menu-convert-to-sibling-form';
+		stencil: [ :anExplicitMenu | 
+			| aViewModel anElement |
+			aViewModel := GtRefactoringsViewModel new
+					inputLabel: 'Superclass: ';
+					initialText: 'NewClass';
+					refactoringBlock: [ :anInput | 
+						GtChildrenToSiblingsRefactoring
+							name: anInput
+							class: aClass
+							subclasses: aCollection ];
+					beforeApplyBlock: [ submenu hideAll ].
+			anElement := GtRefactoringsInputElement new
+					refactoringsViewModel: aViewModel;
+					hExact: 350;
+					margin: (BlInsets all: 5).
+
+			(GtRefactoringsWithInputPreviewElement
+				elementForRefactoringInputElement: anElement
 				from: self
-				beforeApplyingDo: [ submenu hideAll ] ].
+				beforeApplyingDo: [ submenu hideAll ])
+				background: anElement theme default contentBackground;
+				addAptitude: (BrGlamorousPopoverPinnableAptitude new
+						withPostEndPinBlock: [ :aContext | 
+							aContext menuElement
+								when: GtRefactoringsAppliedEvent
+								do: [ :anEvent | 
+									| aMenuElement |
+									aMenuElement := anEvent currentTarget.
+									BlTaskAction
+										enqueueElement: aMenuElement
+										action: [ aMenuElement removeFromParent ] ].
+							BlTaskAction enqueueElement: anElement action: [ anElement focusTarget ] ];
+						withResizers;
+						withAllPinActions;
+						menuModel: anExplicitMenu) ].
 	^ submenu
 ]
 

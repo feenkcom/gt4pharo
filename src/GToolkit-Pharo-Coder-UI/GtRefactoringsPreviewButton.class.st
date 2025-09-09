@@ -17,6 +17,16 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
+{ #category : #'api - convenience' }
+GtRefactoringsPreviewButton class >> onPreviewElement: anElement do: aBlock [
+	| aResult |
+	(anElement isKindOf: self) ifTrue: [ ^ aBlock value: anElement ].
+
+	aResult := (anElement query // self) result.
+	self assert: aResult size equals: 1.
+	^ aBlock value: aResult anyOne
+]
+
 { #category : #accessing }
 GtRefactoringsPreviewButton >> beMiniSize [
 	self childrenDo: #beMiniSize
@@ -29,18 +39,22 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 		ifTrue: [ progressContainer
 				enqueueTask: [ runningElement ifNotNil: [ runningElement removeFromParent ].
 					progressContainer addChild: runningElement ] asBlTask ].
-	applyAction := [ :theAcceptButton | 
+	applyAction := [ :theAcceptButton |  
 		running
-			ifFalse: [ running := true.
+			ifFalse: [ 
+				| promise topElement |
+				running := true.
 				theAcceptButton disable.
 				theRefactoringsElement changesSize > 1
 					ifTrue: [ progress := self newProgressElement.
 						progressContainer addChild: progress after: theAcceptButton.
 						progress fraction: 0.
 						runningElement := progress ].
+				topElement := theAcceptButton topMostParent.
 				self
 					dispatchEvent: (GtRefactoringsAboutToApplyEvent new refactorings: executedRefactorings).
-				(theRefactoringsElement
+				theRefactoringsElement fireEvent: (GtRefactoringsAboutToApplyEvent new refactorings: executedRefactorings).
+				promise := (theRefactoringsElement
 					applyRefactoringWithProgress: [ :fraction | 
 						progress
 							ifNotNil: [ progress
@@ -51,7 +65,8 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 							enqueueTask: [ theAcceptButton enable.
 								theAcceptButton fireEvent: BrDropdownHideWish new ] asBlTask.
 						self
-							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ]
+							dispatchEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings).
+						theRefactoringsElement fireEvent: (GtRefactoringsAppliedEvent new refactorings: executedRefactorings) ]
 					otherwise: [ :anError | 
 						| aDebugElement |
 						running := false.
@@ -64,7 +79,8 @@ GtRefactoringsPreviewButton >> buildAcceptFor: theRefactoringsElement progressCo
 						runningElement := aDebugElement.
 						progressContainer
 							enqueueTask: [ progress ifNotNil: [ progress removeFromParent ].
-								progressContainer addChild: aDebugElement ] asBlTask ] ] ].
+								progressContainer addChild: aDebugElement ] asBlTask ].
+				topElement enqueueTask: (BlPromiseTask new promise: promise) ] ].
 	anAcceptButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			id: GtRefactoringsPreviewAcceptId;
