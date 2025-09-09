@@ -17,16 +17,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
-{ #category : #'api - convenience' }
-GtRefactoringsPreviewButton class >> onPreviewElement: anElement do: aBlock [
-	| aResult |
-	(anElement isKindOf: self) ifTrue: [ ^ aBlock value: anElement ].
-
-	aResult := (anElement query // self) result.
-	self assert: aResult size equals: 1.
-	^ aBlock value: aResult anyOne
-]
-
 { #category : #accessing }
 GtRefactoringsPreviewButton >> beMiniSize [
 	self childrenDo: #beMiniSize
