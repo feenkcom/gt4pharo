@@ -32,8 +32,8 @@ GtPharoMethodCoderTagsElement >> behaviorProtocols [
 			(excludedClasses includes: eachBehavior)
 				ifFalse: [ allSubAndSuperclassProtocols addAll: eachBehavior protocols ] ].
 	self
-		forPharo12: [ allSubAndSuperclassProtocols := allSubAndSuperclassProtocols collect: #name ]
-		forPharo11AndPharo10: [  ].
+		forPharo12AndNewer: [ allSubAndSuperclassProtocols := allSubAndSuperclassProtocols collect: #name ]
+		forPharo11: [  ].
 
 
 	^ allSubAndSuperclassProtocols asArray sorted

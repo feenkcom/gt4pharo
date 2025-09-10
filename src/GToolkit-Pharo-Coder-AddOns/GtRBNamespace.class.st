@@ -77,8 +77,8 @@ GtRBNamespace >> allReferencesToClass: aRBClass do: aBlock [
 { #category : #accessing }
 GtRBNamespace >> createNewClassFor: aBehavior [
 	^ self 
-		forPharo12: [ super createNewClassFor: aBehavior] 
-		forPharo11AndPharo10: [
+		forPharo12AndNewer: [ super createNewClassFor: aBehavior] 
+		forPharo11: [
 			| nonMeta meta className rbType rbMetaType category behaviorName |
 			className := aBehavior instanceSide name.
 			aBehavior isTrait
@@ -101,10 +101,10 @@ GtRBNamespace >> createNewClassFor: aBehavior [
 { #category : #accessing }
 GtRBNamespace >> defineClass: aStringOrBlock [
 	^ self
-		forPharo12: [ aStringOrBlock isString
+		forPharo12AndNewer: [ aStringOrBlock isString
 				ifTrue: [ self defineClassWithDefinition: aStringOrBlock ]
 				ifFalse: [ super defineClass: aStringOrBlock ] ]
-		forPharo11AndPharo10: [ super defineClass: aStringOrBlock ]
+		forPharo11: [ super defineClass: aStringOrBlock ]
 ]
 
 { #category : #accessing }

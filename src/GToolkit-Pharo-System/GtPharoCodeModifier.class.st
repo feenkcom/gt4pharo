@@ -120,13 +120,13 @@ GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
 GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName instanceVariableNames: instVarNameList classVariableNames: classVarNames package: aPackageSymbol [
 	^ self
 		critical: [ self
-				forPharo12: [ 
+				forPharo12AndNewer: [ 
 					anExistingClass
 						subclass: aSubclassName
 						instanceVariableNames: instVarNameList
 						classVariableNames: classVarNames
 						package: aPackageSymbol ]
-				forPharo11AndPharo10: [ anExistingClass
+				forPharo11: [ anExistingClass
 						subclass: aSubclassName
 						instanceVariableNames: instVarNameList
 						classVariableNames: classVarNames
@@ -204,14 +204,14 @@ GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange [
 GtPharoCodeModifier >> registerPackage: aPackage [
 	^ self critical: [ 
 		self 
-			forPharo12: [	
+			forPharo12AndNewer: [	
 				aPackage organizer 
 					ifNil: [
 						self class environment organization 
 							addPackage: aPackage ]
 					ifNotNil: [ :anOrganizer |
 						anOrganizer addPackage: aPackage ] ] 
-			forPharo11AndPharo10: [ 
+			forPharo11: [ 
 				aPackage register ] ]
 ]
 
@@ -291,13 +291,13 @@ GtPharoCodeModifier >> renamePackage: aPackage to: aNewPackageName [
 GtPharoCodeModifier >> unregisterPackage: aPackage [
 	^ self critical: [ 
 		self 
-			forPharo12: [	
+			forPharo12AndNewer: [	
 				aPackage organizer 
 					ifNil: [
 						self class environment organization 
 							unregisterPackage: aPackage ]
 					ifNotNil: [ :anOrganizer |
 						anOrganizer unregisterPackage: aPackage ] ] 
-			forPharo11AndPharo10: [ 
+			forPharo11: [ 
 				aPackage unregister ] ]
 ]

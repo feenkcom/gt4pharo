@@ -20,9 +20,9 @@ ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 		'Kernel'.
 		'SmaCC_Runtime'.
 	}, (self  
-		forPharo12: [{
+		forPharo12AndNewer: [{
 			'Kernel-CodeModel'.}] 
-		forPharo11AndPharo10: [{
+		forPharo11: [{
 			'Collections-Abstract'.}])
 ]
 

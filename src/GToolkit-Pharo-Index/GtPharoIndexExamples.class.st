@@ -7,10 +7,10 @@ Class {
 { #category : #private }
 GtPharoIndexExamples >> addClassVar [
 	self
-		forPharo12: [ self class classInstaller new
+		forPharo12AndNewer: [ self class classInstaller new
 				makeWithBuilder: (Smalltalk compiler
 						evaluate: self class definitionString , '; sharedVariables: { #GtMessageSendIterator }') ]
-		forPharo11AndPharo10: [ Smalltalk compiler
+		forPharo11: [ Smalltalk compiler
 				evaluate: (self class definitionString
 						copyReplaceAll: 'classVariableNames: '''''
 						with: 'classVariableNames: ''GtMessageSendIterator''') ]
@@ -19,10 +19,10 @@ GtPharoIndexExamples >> addClassVar [
 { #category : #private }
 GtPharoIndexExamples >> addPoolVar [
 	self
-		forPharo12: [ self class classInstaller new
+		forPharo12AndNewer: [ self class classInstaller new
 				makeWithBuilder: (Smalltalk compiler
 						evaluate: self class definitionString , '; sharedPools: {GtPharoIndexExamplesPool}') ]
-		forPharo11AndPharo10: [ Smalltalk compiler
+		forPharo11: [ Smalltalk compiler
 				evaluate: (self class definitionString
 						copyReplaceAll: 'package: '
 						with: 'poolDictionaries: ''GtPharoIndexExamplesPool'' package: ') ]
@@ -37,8 +37,8 @@ GtPharoIndexExamples >> addingAndRemovingClassWords [
 		withAllSubclassesDo: [ :each | 
 			index
 				classAdded: (self
-						forPharo12: [ ClassAdded class: each ]
-						forPharo11AndPharo10: [ ClassAdded class: each category: nil ]) ].
+						forPharo12AndNewer: [ ClassAdded class: each ]
+						forPharo11: [ ClassAdded class: each category: nil ]) ].
 	names := (index asyncClassNamesForWord: '') toArray wait.
 	self assert: (names includes: #OrderedCollection).
 	self assert: (names includes: #Array).
@@ -46,8 +46,8 @@ GtPharoIndexExamples >> addingAndRemovingClassWords [
 		withAllSubclassesDo: [ :each | 
 			index
 				classRemoved: (self
-						forPharo12: [ ClassRemoved class: each ]
-						forPharo11AndPharo10: [ ClassRemoved class: each category: nil ]) ].
+						forPharo12AndNewer: [ ClassRemoved class: each ]
+						forPharo11: [ ClassRemoved class: each category: nil ]) ].
 	self assert: (index asyncClassNamesForWord: '') toArray wait isEmpty.
 	^ index
 ]
@@ -64,10 +64,10 @@ GtPharoIndexExamples >> addingAndRemovingDuplicateWords [
 	self assert: (selectors includes: #with:with:with:with:).
 	index
 		methodRemoved: (self
-				forPharo12: [ MethodRemoved
+				forPharo12AndNewer: [ MethodRemoved
 						methodRemoved: Collection class >> #with:with:with:with:
 						origin: Collection class ]
-				forPharo11AndPharo10: [ MethodRemoved
+				forPharo11: [ MethodRemoved
 						methodRemoved: Collection class >> #with:with:with:with:
 						protocol: #private
 						origin: Collection class ]).
@@ -379,12 +379,12 @@ GtPharoIndexExamples >> referenceInLiteralArray [
 GtPharoIndexExamples >> removeClassVar [
 	| definition |
 	self
-		forPharo12: [ definition := self class definitionString
+		forPharo12AndNewer: [ definition := self class definitionString
 					copyReplaceAll: '#GtMessageSendIterator'
 					with: ''.
 			self class classInstaller new
 				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
-		forPharo11AndPharo10: [ definition := self class definitionString
+		forPharo11: [ definition := self class definitionString
 					copyReplaceAll: 'GtMessageSendIterator'
 					with: ''.
 			Smalltalk compiler evaluate: definition ]
@@ -397,9 +397,9 @@ GtPharoIndexExamples >> removePoolVar [
 			copyReplaceAll: 'GtPharoIndexExamplesPool'
 			with: ''.
 	self
-		forPharo12: [ self class classInstaller new
+		forPharo12AndNewer: [ self class classInstaller new
 				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
-		forPharo11AndPharo10: [ Smalltalk compiler evaluate: definition ]
+		forPharo11: [ Smalltalk compiler evaluate: definition ]
 ]
 
 { #category : #examples }
@@ -409,8 +409,8 @@ GtPharoIndexExamples >> removingWords [
 	index := self addingWords.
 	index
 		methodRemoved: (self
-				forPharo12: [ MethodRemoved methodRemoved: self class >> #dummyMethod origin: self class ]
-				forPharo11AndPharo10: [ MethodRemoved
+				forPharo12AndNewer: [ MethodRemoved methodRemoved: self class >> #dummyMethod origin: self class ]
+				forPharo11: [ MethodRemoved
 						methodRemoved: self class >> #dummyMethod
 						protocol: #private
 						origin: self class ]).

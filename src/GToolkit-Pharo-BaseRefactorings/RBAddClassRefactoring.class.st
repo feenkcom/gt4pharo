@@ -51,14 +51,14 @@ RBAddClassRefactoring >> addClass: aName superclass: aClass subclasses: aCollect
 RBAddClassRefactoring >> basicTransform [
 	<gtPharoPatch: #Pharo>
 	self
-		forPharo12: [ self model
+		forPharo12AndNewer: [ self model
 			defineClass: [ :aBuilder |
 				aBuilder
 					superclassName: superclass name;
 					name: className;
 					category: category asString ];
 				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
-		forPharo11AndPharo10: [ self model
+		forPharo11: [ self model
 				defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
 						expandMacrosWith: superclass
 						with: className

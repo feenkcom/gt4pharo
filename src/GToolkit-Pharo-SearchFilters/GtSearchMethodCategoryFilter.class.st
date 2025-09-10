@@ -57,10 +57,10 @@ GtSearchMethodCategoryFilter >> includesMethod: aCompiledMethod [
 	(Protocol isAllProtocolName: category) ifTrue: [ ^ true ].
 
 	^ (self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			aCompiledMethod methodClass 
 				protocolNameOfSelector: aCompiledMethod selector] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 			aCompiledMethod methodClass 
 				whichCategoryIncludesSelector: aCompiledMethod selector ])
 	sameContentAs: category
