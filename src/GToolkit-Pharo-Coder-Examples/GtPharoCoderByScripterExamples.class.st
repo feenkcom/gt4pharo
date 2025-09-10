@@ -1380,6 +1380,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 		play.
 
 	scripter editor
+		click;
 		assertHasFocus;
 		selectAll;
 		typeText: className;
