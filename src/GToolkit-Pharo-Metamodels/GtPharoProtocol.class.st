@@ -57,15 +57,15 @@ GtPharoProtocol >> allMethods [
 { #category : #testing }
 GtPharoProtocol >> canBeRemoved [
 	^ self 
-		forPharo12: [ true ] 
-		forPharo11AndPharo10: [ protocol canBeRemoved ]
+		forPharo12AndNewer: [ true ] 
+		forPharo11: [ protocol canBeRemoved ]
 ]
 
 { #category : #testing }
 GtPharoProtocol >> canBeRenamed [
 	^ self 
-		forPharo12: [ true ] 
-		forPharo11AndPharo10: [ protocol canBeRenamed ]
+		forPharo12AndNewer: [ true ] 
+		forPharo11: [ protocol canBeRenamed ]
 ]
 
 { #category : #accessing }

@@ -17,8 +17,8 @@ GtPushDownMethodRefactoringController >> refactoring [
 		model: model
 		pushDown: {self methodSelector}
 		from: (self
-				forPharo12: [ (model classFor: self methodClass) name ]
-				forPharo11AndPharo10: [ model classFor: self methodClass ])
+				forPharo12AndNewer: [ (model classFor: self methodClass) name ]
+				forPharo11: [ model classFor: self methodClass ])
 ]
 
 { #category : #accessing }

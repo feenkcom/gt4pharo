@@ -10,11 +10,11 @@ RPackage >> packageManifestOrNil [
 	<gtPharoPatch: #Pharo>
 	
 	^ self 
-		forPharo12: [ 
+		forPharo12AndNewer: [ 
 			self definedClasses
 				detect: [ :each | each isManifest ]
 				ifNone: [ nil ] ] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 			self gtDefinedClassesWithPossibleDuplicatesDo: [:aClass|
 				aClass  isManifest ifTrue: [ ^ aClass ] ].
 			nil]

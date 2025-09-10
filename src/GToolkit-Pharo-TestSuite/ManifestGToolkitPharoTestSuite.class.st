@@ -23,9 +23,9 @@ ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
 		'SUnit-Core'.
 		'Ring-Core'
 	}, (self  
-		forPharo12: [{
+		forPharo12AndNewer: [{
 			'Kernel-CodeModel'.}] 
-		forPharo11AndPharo10: [{}])
+		forPharo11: [{}])
 ]
 
 { #category : #accessing }

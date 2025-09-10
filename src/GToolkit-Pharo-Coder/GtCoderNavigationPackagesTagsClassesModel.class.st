@@ -72,8 +72,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 		coder: coder;
 		package: aClassModificationApplied packageAffected;
 		tag: (self 
-			forPharo12: [aClassModificationApplied packageTagAffected name] 
-			forPharo11AndPharo10:  [ aClassModificationApplied classTagAffected]);
+			forPharo12AndNewer: [aClassModificationApplied packageTagAffected name] 
+			forPharo11:  [ aClassModificationApplied classTagAffected]);
 		theClass: aClassModificationApplied classAffected)
 ]
 
@@ -120,8 +120,8 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 		coder: coder;
 		package: aClassRenamed packageAffected;
 		tag: (self 
-			forPharo12: [aClassRenamed packageTagAffected name] 
-			forPharo11AndPharo10:  [ aClassRenamed classTagAffected]);
+			forPharo12AndNewer: [aClassRenamed packageTagAffected name] 
+			forPharo11:  [ aClassRenamed classTagAffected]);
 		theClass: aClassRenamed classRenamed;
 		oldName: aClassRenamed oldName;
 		newName: aClassRenamed newName)
@@ -711,11 +711,11 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass outO
 	shouldSelectTag
 		ifTrue: [
 			aTagToSelect := self 
-				forPharo12: [ 
+				forPharo12AndNewer: [ 
 					aPackageToSelect tags
 		  			detect: [ :tag | tag includesClass: aClass ]
 		  			ifNone: [ nil ] ]
-				forPharo11AndPharo10: [ 
+				forPharo11: [ 
 					aPackageToSelect tagOrNilOf: aClass ].
 					
 			"pharo issue: the root tag has the same name as the package in Pharo 11
@@ -809,11 +809,11 @@ GtCoderNavigationPackagesTagsClassesModel >> privateSelectDefaultProtocolOfClass
 	thisPackageExtensionProtocol := self selectedPackage 
 		ifNotNil: [ :aPackage | 
 			(self 
-				forPharo12: [
+				forPharo12AndNewer: [
 					aClass 
 						protocolNamed: '*' , aPackage name
 						ifAbsent: [ nil ] ] 
-				forPharo11AndPharo10: [
+				forPharo11: [
 					(aClass organization protocolNamed: '*' , aPackage name)])
 						ifNotNil: [ :aProtocol | 
 							GtPharoProtocol 

@@ -44,8 +44,8 @@ RBAddClassChange class >> definitionBlockFrom: aString [
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
 RBAddClassChange class >> definitionString: aString [
 	^ self
-		forPharo12: [ self make: (self definitionBlockFrom: aString) ]
-		forPharo11AndPharo10: [ self definition: aString ]
+		forPharo12AndNewer: [ self make: (self definitionBlockFrom: aString) ]
+		forPharo11: [ self definition: aString ]
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
