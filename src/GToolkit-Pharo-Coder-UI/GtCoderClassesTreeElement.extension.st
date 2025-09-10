@@ -11,7 +11,7 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 			aViewModel := GtRefactoringsViewModel new
 					refactoringTitle: 'Convert to sibling';
 					targetName: aClass name;
-					inputLabel: 'Superclass: ';
+					inputLabel: 'Superclass:';
 					initialText: 'NewClass';
 					refactoringBlock: [ :anInput | 
 						GtChildrenToSiblingsRefactoring
