@@ -19,10 +19,7 @@ GtTraitUpdateForm >> commit [
 	| category aClass |
 	category := self commitPackage categoryName.
 	aClass := newClassName asClass.
-	aClass classSide slots
-		do: [ :aSlot | 
-			(RBRemoveInstanceVariableChange remove: aSlot name from: aClass classSide)
-				execute ].
+				
 	aClass := Smalltalk classInstaller
 			make: [ :builder | 
 				builder
@@ -31,7 +28,9 @@ GtTraitUpdateForm >> commit [
 					slots: slots;
 					traitComposition: self traitComposition;
 					beTrait ].
-	self installClassSlotsOn: aClass.
+					
+	self updateClassSlotsOn: aClass.
+	
 	^ aClass
 ]
 
