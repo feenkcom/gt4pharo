@@ -1,19 +1,19 @@
 Extension { #name : #GtCoderClassesTreeElement }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aCollection [
+GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aCollection title: aTitle [
 	| submenu |
 	submenu := BrMenuExplicit new.
 	submenu
 		id: #'coder--context-menu-convert-to-sibling-form';
 		stencil: [ :anExplicitMenu | 
 			| aViewModel |
-			aViewModel := GtRefactoringsViewModel new
-					refactoringTitle: 'Convert to sibling';
+			aViewModel := GtRefactoringsWithInputViewModel new
+					refactoringTitle: aTitle;
 					targetName: aClass name;
 					inputLabel: 'Superclass:';
 					initialText: 'NewClass';
-					refactoringBlock: [ :anInput | 
+					refactoringWithInput: [ :anInput | 
 						GtChildrenToSiblingsRefactoring
 							name: anInput
 							class: aClass

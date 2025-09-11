@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'inputElement'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
 { #category : #initialization }
@@ -49,12 +49,21 @@ GtRefactoringsPreviewWithInputElement >> updateInputElement [
 
 { #category : #'private - updating' }
 GtRefactoringsPreviewWithInputElement >> updatePreviewElement [
-	| aPreviewPane |
+	| aPreviewPane refactoringButton |
 	self removeChildren.
-	aPreviewPane := GtRefactoringsWithInputPreviewElement
-			elementForRefactoringInputElement: inputElement removeFromParent
-			from: (self refactoringsViewModel anchorElement ifNil: [ self ])
-			beforeApplyingDo: self refactoringsViewModel beforeApplyBlock.
+	refactoringButton := GtRefactoringsWithInputPreviewElement new.
+	refactoringButton cancelBlock: [  ].
+	refactoringButton editorElement: inputElement removeFromParent.
+	inputElement
+		when: GtRefactoringsPreviewRefactoringsWish
+		do: [ :event | 
+			event consumed: true.
+			refactoringButton refactorings: event refactoringsBlock ].
+	refactoringButton
+		when: GtRefactoringsAboutToApplyEvent
+		do: [ :event | self refactoringsViewModel beforeApplyBlock value ].
+	aPreviewPane := refactoringButton
+			buildPreviewForButton: (self refactoringsViewModel anchorElement ifNil: [ self ]).
 
 	aPreviewPane
 		when: GtRefactoringsAboutToApplyEvent

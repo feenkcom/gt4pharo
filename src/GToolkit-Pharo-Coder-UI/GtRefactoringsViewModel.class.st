@@ -1,22 +1,36 @@
 Class {
 	#name : #GtRefactoringsViewModel,
 	#superclass : #Object,
+	#traits : 'TGtAnnouncer + TGtOptions',
+	#classTraits : 'TGtAnnouncer classTrait + TGtOptions classTrait',
 	#instVars : [
-		'isEditorFocused',
 		'beforeApplyBlock',
-		'initialText',
-		'refactoringBlock',
-		'inputFilter',
 		'cancelBlock',
 		'isPreviewButtonFocused',
-		'inputLabel',
 		'refactoringTitle',
 		'targetName',
 		'menuModel',
-		'anchorElement'
+		'anchorElement',
+		'executedRefactorings',
+		'announcer'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> aboutToApplyRefactorings: anExecutedRefactorings [
+	"Return true if refactorings may be applied."
+
+	<return: #Boolean>
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ false ].
+
+	anExecutedRefactorings canBeApplied ifFalse: [ ^ false ].
+	anExecutedRefactorings beAboutToApply.
+
+	self notifyAboutToApplyRefactorings.
+
+	^ true
+]
 
 { #category : #accessing }
 GtRefactoringsViewModel >> anchorElement [
@@ -31,6 +45,22 @@ GtRefactoringsViewModel >> anchorElement: anElement [
 	anchorElement := anElement
 ]
 
+{ #category : #announcer }
+GtRefactoringsViewModel >> announcer [
+	<return: #Announcer>
+	^ announcer
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> appliedRefactorings: anExecutedRefactorings [
+	GtJustContextStackSignal emit.
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+
+	anExecutedRefactorings beApplied.
+
+	self notifyAppliedRefactorings
+]
+
 { #category : #accessing }
 GtRefactoringsViewModel >> beforeApplyBlock [
 	<return: #BlockClosure>
@@ -40,6 +70,14 @@ GtRefactoringsViewModel >> beforeApplyBlock [
 { #category : #accessing }
 GtRefactoringsViewModel >> beforeApplyBlock: anObject [
 	beforeApplyBlock := anObject
+]
+
+{ #category : #'api - testing' }
+GtRefactoringsViewModel >> canExecutedRefactoringsBeReplaced [
+	"Return true if existing executed refactorings can be replaced by another executed refactorings"
+
+	<return: #Boolean>
+	^ self executedRefactorings canBeReplaced
 ]
 
 { #category : #accessing }
@@ -53,64 +91,52 @@ GtRefactoringsViewModel >> cancelBlock: anObject [
 	cancelBlock := anObject
 ]
 
-{ #category : #accessing }
-GtRefactoringsViewModel >> initialText [
-	<return: #String or: #BlText>
-	^ initialText
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> executedRefactorings [
+	"Return a object that can compute a collection of refactoring objects"
+
+	<return: #GtExecutedRefactorings>
+	^ executedRefactorings
 ]
 
-{ #category : #accessing }
-GtRefactoringsViewModel >> initialText: anObject [
-	initialText := anObject
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> failedRefactorings: anExecutedRefactorings exception: anError [
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+
+	anExecutedRefactorings beFailed: anError.
+	
+	self notifyFailedRefactorings
+]
+
+{ #category : #'api - testing' }
+GtRefactoringsViewModel >> hasPreviewedExecutedRefactorings [
+	"Return true if existing executed refactorings is previewed"
+
+	<return: #Boolean>
+	^ self executedRefactorings isPreviewed
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> ifComputedRefactorings: aComputedBlock ifNotComputed: aNotComputedBlock ifInProgress: aProgressBlock ifFailed: aFailedBlock [
+	^ self executedRefactorings
+		ifComputedRefactorings: aComputedBlock
+		ifNotComputed: aNotComputedBlock
+		ifInProgress: aProgressBlock
+		ifFailed: aFailedBlock
 ]
 
 { #category : #initialization }
 GtRefactoringsViewModel >> initialize [
 	super initialize.
 
+	announcer := Announcer new.
+	executedRefactorings := GtExecutedRefactorings new.
+	
 	refactoringTitle := nil.
 	targetName := nil.
-	isEditorFocused := false.
-	isPreviewButtonFocused := false.
+	isPreviewButtonFocused := true.
 	beforeApplyBlock := [  ].
-	cancelBlock := [ ].
-	refactoringBlock := [ :anInput | nil ].
-	inputLabel := 'Input:'.
-	initialText := ''.
-	inputFilter := BrTextEditorNoLineBreakInputFilter new
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> inputFilter [
-	<return: #BrTextEditorInputFilter>
-	^ inputFilter
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> inputFilter: anObject [
-	inputFilter := anObject
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> inputLabel [
-	<return: #String>
-	^ inputLabel
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> inputLabel: anObject [
-	inputLabel := anObject
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> isEditorFocused [
-	<return: #Boolean>
-	^ isEditorFocused
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> isEditorFocused: anObject [
-	isEditorFocused := anObject
+	cancelBlock := [  ]
 ]
 
 { #category : #accessing }
@@ -142,15 +168,76 @@ GtRefactoringsViewModel >> menuModelDo: aBlock [
 	menuModel ifNotNil: aBlock
 ]
 
-{ #category : #accessing }
-GtRefactoringsViewModel >> refactoringBlock [
-	<return: #BlockClosure of: #RBRefactoring>
-	^ refactoringBlock
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifyAboutToApplyRefactorings [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsAboutToApply new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
 ]
 
-{ #category : #accessing }
-GtRefactoringsViewModel >> refactoringBlock: anObject [
-	refactoringBlock := anObject
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifyAppliedRefactorings [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsApplied new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifyComputedRefactorings: anExecutedRefactorings [
+	| anAnnouncement |
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+	
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsComputed new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifyComputingRefactoringsFailed: anException [
+	| anAnnouncement |
+	
+	self executedRefactorings beComputingFailed: anException.
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsComputationFailed new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifyExecutedRefactoringsChanged [
+	<return: #Boolean>
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsChanged new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement.
+	^ anAnnouncement isPreviewed
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifyFailedRefactorings [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsFailed new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> refactoring: aBlock [
+	"Set a block that returns a collection of refactorings.
+	The block must not have arguments.
+	Return true if the new refactorings is (about to be) previewed."
+
+	<return: #Boolean>
+	executedRefactorings := GtExecutedRefactorings new refactoring: aBlock.
+
+	^ self notifyExecutedRefactoringsChanged
 ]
 
 { #category : #accessing }
@@ -169,6 +256,18 @@ GtRefactoringsViewModel >> refactoringTitle: aString [
 { #category : #accessing }
 GtRefactoringsViewModel >> refactoringTitleDo: aBlock [
 	refactoringTitle ifNotNil: aBlock
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> refactorings: aBlock [
+	"Set a block that returns a collection of refactorings.
+	Block must have no arguments.
+	Return true if the new refactorings is (about to be) previewed."
+
+	<return: #Boolean>
+	executedRefactorings := GtExecutedRefactorings new refactorings: aBlock.
+
+	^ self notifyExecutedRefactoringsChanged
 ]
 
 { #category : #accessing }
