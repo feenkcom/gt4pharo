@@ -72,26 +72,57 @@ GtExecutedRefactoringsState >> canBeReplaced [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsState >> ifAppliedDo: aBlock [
+	"Evaluate block if refactorings are successfully applied"
+
+	
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsState >> ifApplyingDo: aBlock [
+	"Evaluate block if refactorings are in a process of application 
+	(of saving changes to the system)"
+
+	
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsState >> ifBeforeApplyingDo: aBlock [
+	"Evaluate block if refactorings are not:
+	- in a process of application (of saving changes to the system), or
+	- applied (successfully or with a failure).
+	Block receives an exception: [ :anException | ... ]"
+
+	
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsState >> ifComputationFailedDo: aBlock [
-	"Block receives an exception: [ :anException | ... ]"
+	"Evaluate block if refactorings computation failed.
+	Block receives an exception: [ :anException | ... ]"
 
 	
 ]
 
 { #category : #'api - state' }
 GtExecutedRefactoringsState >> ifComputationInProgressDo: aBlock [
+	"Evaluate block if refactorings computation is in progress."
+
 	
 ]
 
 { #category : #'api - state' }
 GtExecutedRefactoringsState >> ifFailedStateDo: aBlock [
-	"Block receives an exception: [ :anException | ... ]"
+	"Evaluate block if anything failed (raised an exception).
+	Block receives an exception: [ :anException | ... ]"
 
 	
 ]
 
 { #category : #'api - state' }
 GtExecutedRefactoringsState >> ifNotComputedDo: aBlock [
+	"Evaluate block if refactorings were not computed yet."
+
 	
 ]
 

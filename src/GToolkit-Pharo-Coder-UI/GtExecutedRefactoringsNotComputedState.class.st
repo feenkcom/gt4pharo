@@ -19,6 +19,11 @@ GtExecutedRefactoringsNotComputedState >> canBeReplaced [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsNotComputedState >> ifBeforeApplyingDo: aBlock [
+	aBlock value
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsNotComputedState >> ifNotComputedDo: aBlock [
 	aBlock value
 ]

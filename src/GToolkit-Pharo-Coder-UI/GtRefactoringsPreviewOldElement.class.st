@@ -50,7 +50,7 @@ GtRefactoringsPreviewOldElement >> initialize [
 	scrollablePreviewElement := scalablePreviewElement asScrollableElement
 			constraintsDo: [ :c | c vertical fitContentLimited ].
 
-	toolbarElement addChild: acceptButton as: #acceptButton.
+	toolbarElement addChild: acceptButton.
 	toolbarElement addChild: progressElement as: #progress.
 
 	self addChild: scrollablePreviewElement as: #preview.
@@ -240,7 +240,6 @@ GtRefactoringsPreviewOldElement >> onFutureSuccessWithoutErrorMessages: anExecut
 
 { #category : #'private - event handling' }
 GtRefactoringsPreviewOldElement >> onGtRefactoringsViewModelExecutedRefactoringsApplied: anAnnouncement [
-	GtJustContextStackSignal emit.
 	anAnnouncement refactoringsViewModel == self refactoringsViewModel
 		ifFalse: [ ^ self ].
 

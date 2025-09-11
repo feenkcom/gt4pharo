@@ -27,7 +27,7 @@ GtRefactoringsViewModel >> aboutToApplyRefactorings: anExecutedRefactorings [
 	anExecutedRefactorings canBeApplied ifFalse: [ ^ false ].
 	anExecutedRefactorings beAboutToApply.
 
-	self notifyAboutToApplyRefactorings.
+	self privateNotifyAboutToApplyRefactorings.
 
 	^ true
 ]
@@ -58,7 +58,7 @@ GtRefactoringsViewModel >> appliedRefactorings: anExecutedRefactorings [
 
 	anExecutedRefactorings beApplied.
 
-	self notifyAppliedRefactorings
+	self privateNotifyAppliedRefactorings
 ]
 
 { #category : #accessing }
@@ -105,7 +105,7 @@ GtRefactoringsViewModel >> failedRefactorings: anExecutedRefactorings exception:
 
 	anExecutedRefactorings beFailed: anError.
 	
-	self notifyFailedRefactorings
+	self privateNotifyFailedRefactorings
 ]
 
 { #category : #'api - testing' }
@@ -169,21 +169,17 @@ GtRefactoringsViewModel >> menuModelDo: aBlock [
 ]
 
 { #category : #'api - refactorings' }
-GtRefactoringsViewModel >> notifyAboutToApplyRefactorings [
-	| anAnnouncement |
-	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsAboutToApply new
-			refactoringsViewModel: self;
-			executedRefactorings: self executedRefactorings.
-	self announce: anAnnouncement
-]
-
-{ #category : #'api - refactorings' }
-GtRefactoringsViewModel >> notifyAppliedRefactorings [
-	| anAnnouncement |
-	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsApplied new
-			refactoringsViewModel: self;
-			executedRefactorings: self executedRefactorings.
-	self announce: anAnnouncement
+GtRefactoringsViewModel >> notifyApplyChangesRequested [
+	self executedRefactorings
+		ifComputedRefactorings: [ :anExecutedRefactorings | 
+			anExecutedRefactorings
+				ifBeforeApplying: [ self privateNotifyApplyChangesRequested ]
+				ifApplying: [  ]
+				ifApplied: [  ]
+				ifFailed: [ self privateNotifyApplyChangesRequested ] ]
+		ifNotComputed: [  ]
+		ifInProgress: [  ]
+		ifFailed: [  ]
 ]
 
 { #category : #'api - refactorings' }
@@ -209,7 +205,46 @@ GtRefactoringsViewModel >> notifyComputingRefactoringsFailed: anException [
 ]
 
 { #category : #'api - refactorings' }
-GtRefactoringsViewModel >> notifyExecutedRefactoringsChanged [
+GtRefactoringsViewModel >> notifyRefactorings: anExecutedRefactorings progressFraction: aFraction [
+	| anAnnouncement |
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsProgressChanged new
+			refactoringsViewModel: self;
+			executedRefactorings: anExecutedRefactorings;
+			fraction: aFraction.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyAboutToApplyRefactorings [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsAboutToApply new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyAppliedRefactorings [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsApplied new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyApplyChangesRequested [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelApplyChangesRequested new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyExecutedRefactoringsChanged [
 	<return: #Boolean>
 	| anAnnouncement |
 	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsChanged new
@@ -219,8 +254,8 @@ GtRefactoringsViewModel >> notifyExecutedRefactoringsChanged [
 	^ anAnnouncement isPreviewed
 ]
 
-{ #category : #'api - refactorings' }
-GtRefactoringsViewModel >> notifyFailedRefactorings [
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyFailedRefactorings [
 	| anAnnouncement |
 	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsFailed new
 			refactoringsViewModel: self;
@@ -237,7 +272,7 @@ GtRefactoringsViewModel >> refactoring: aBlock [
 	<return: #Boolean>
 	executedRefactorings := GtExecutedRefactorings new refactoring: aBlock.
 
-	^ self notifyExecutedRefactoringsChanged
+	^ self privateNotifyExecutedRefactoringsChanged
 ]
 
 { #category : #accessing }
@@ -267,7 +302,7 @@ GtRefactoringsViewModel >> refactorings: aBlock [
 	<return: #Boolean>
 	executedRefactorings := GtExecutedRefactorings new refactorings: aBlock.
 
-	^ self notifyExecutedRefactoringsChanged
+	^ self privateNotifyExecutedRefactoringsChanged
 ]
 
 { #category : #accessing }

@@ -2,14 +2,7 @@ Class {
 	#name : #GtRefactoringsJustPreviewElement,
 	#superclass : #GtRefactoringsBasicElement,
 	#instVars : [
-		'refactoringsElement',
-		'toolbarElement',
-		'acceptButton',
-		'messagesElement',
-		'scalablePreviewElement',
-		'scrollablePreviewElement',
-		'running',
-		'progressElement'
+		'refactoringsElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -55,6 +48,33 @@ GtRefactoringsJustPreviewElement >> initializeRefactoringsElement [
 ]
 
 { #category : #'private - event handling' }
+GtRefactoringsJustPreviewElement >> onApplyChangesRequest: anExecutedRefactorings [
+	| aViewModel aTopElement aPromise |
+	aViewModel := self refactoringsViewModel.
+	aViewModel executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+
+	aTopElement := self topMostParent.
+
+	(aViewModel aboutToApplyRefactorings: anExecutedRefactorings)
+		ifFalse: [ ^ self ].
+
+	aPromise := (refactoringsElement
+			applyRefactoringWithProgress: [ :fraction | 
+				aViewModel notifyRefactorings: anExecutedRefactorings progressFraction: fraction ])
+			then: [ :ignore | 
+				anExecutedRefactorings beApplied.
+				aViewModel appliedRefactorings: anExecutedRefactorings ]
+			otherwise: [ :anError | 
+				| anErrorCopy |
+				anErrorCopy := GtSystemUtility freeze: anError.
+				anExecutedRefactorings beFailed: anErrorCopy.
+				aViewModel failedRefactorings: anExecutedRefactorings exception: anErrorCopy ].
+
+	anExecutedRefactorings beRunning: aPromise.
+	aTopElement enqueueTask: (BlPromiseTask new promise: aPromise)
+]
+
+{ #category : #'private - event handling' }
 GtRefactoringsJustPreviewElement >> onFutureError: anError [
 	| aCopyError |
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
@@ -73,6 +93,16 @@ GtRefactoringsJustPreviewElement >> onFutureSuccess: anExecutedRefactorings [
 	self refactoringsViewModel executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
 	
 	self refactoringsViewModel notifyComputedRefactorings: anExecutedRefactorings
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsJustPreviewElement >> onGtRefactoringsViewModelApplyChangesRequested: anAnnouncement [
+	anAnnouncement refactoringsViewModel == self refactoringsViewModel
+		ifFalse: [ ^ self ].
+
+	BlTaskAction
+		enqueueElement: self
+		action: [ self onApplyChangesRequest: anAnnouncement executedRefactorings  ]
 ]
 
 { #category : #'private - event handling' }
@@ -120,6 +150,9 @@ GtRefactoringsJustPreviewElement >> subscribeToRefactoringsViewModel [
 			to: self;
 		when: GtRefactoringsViewModelExecutedRefactoringsComputationFailed
 			send: #onGtRefactoringsViewModelExecutedRefactoringsComputationFailed:
+			to: self;
+		when: GtRefactoringsViewModelApplyChangesRequested
+			send: #onGtRefactoringsViewModelApplyChangesRequested:
 			to: self
 ]
 

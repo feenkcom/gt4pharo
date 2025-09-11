@@ -52,6 +52,15 @@ GtRefactoringsExamples >> basicJustPreviewElement [
 	^ anElement
 ]
 
+{ #category : #'examples - elements' }
+GtRefactoringsExamples >> basicToolbarElement [
+	<gtExample>
+	| anElement |
+	anElement := GtRefactoringsToolbarElement new.
+
+	^ anElement
+]
+
 { #category : #'examples - environment' }
 GtRefactoringsExamples >> environment [
 	<gtExample>
@@ -228,4 +237,15 @@ GtRefactoringsExamples >> rootClass [
 	self assert: rootClass subclasses size > 0.
 	
 	^ rootClass
+]
+
+{ #category : #'examples - elements' }
+GtRefactoringsExamples >> toolbarElement [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicToolbarElement.
+	aViewModel := self inputViewModel.
+	anElement refactoringsViewModel: aViewModel.
+
+	^ anElement
 ]

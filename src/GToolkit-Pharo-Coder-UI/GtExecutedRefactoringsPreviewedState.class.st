@@ -19,6 +19,11 @@ GtExecutedRefactoringsPreviewedState >> canBeReplaced [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsPreviewedState >> ifBeforeApplyingDo: aBlock [
+	aBlock value
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsPreviewedState >> isPreviewed [
 	"Return true if corresponding executed refactorings is previewed"
 

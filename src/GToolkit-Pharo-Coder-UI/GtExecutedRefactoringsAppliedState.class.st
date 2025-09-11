@@ -11,3 +11,8 @@ GtExecutedRefactoringsAppliedState >> canBeReplaced [
 	<return: #Boolean>
 	^ true
 ]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsAppliedState >> ifAppliedDo: aBlock [
+	aBlock value
+]

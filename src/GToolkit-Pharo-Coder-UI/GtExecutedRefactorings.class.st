@@ -88,6 +88,16 @@ GtExecutedRefactorings >> executedRefactorings [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactorings >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock [
+	state ifBeforeApplyingDo: [ ^ aBeforeApplyingBlock value ].
+	state ifApplyingDo: [ ^ anApplyingBlock value ].
+	state ifAppliedDo: [ ^ anAppliedBlock value ].
+	state ifFailedStateDo: [ :anException | ^ aFailedBlock cull: anException ].
+	
+	self error: 'Must not reach this point'
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactorings >> ifComputedRefactorings: aComputedBlock ifNotComputed: aNotComputedBlock ifInProgress: aProgressBlock ifFailed: aFailedBlock [
 	state ifNotComputedDo: [ ^ aNotComputedBlock value ].
 	state ifComputationInProgressDo: [ ^ aProgressBlock value ].

@@ -13,6 +13,11 @@ GtExecutedRefactoringsAboutToComputeState >> canBeReplaced [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsAboutToComputeState >> ifBeforeApplyingDo: aBlock [
+	aBlock value
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsAboutToComputeState >> ifComputationInProgressDo: aBlock [
 	aBlock value
 ]

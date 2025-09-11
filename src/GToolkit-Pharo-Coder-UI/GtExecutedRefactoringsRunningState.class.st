@@ -7,6 +7,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
+{ #category : #'api - state' }
+GtExecutedRefactoringsRunningState >> ifApplyingDo: aBlock [
+	aBlock value
+]
+
 { #category : #accessing }
 GtExecutedRefactoringsRunningState >> promise [
 	^ promise

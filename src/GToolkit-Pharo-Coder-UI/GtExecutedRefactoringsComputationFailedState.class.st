@@ -26,6 +26,11 @@ GtExecutedRefactoringsComputationFailedState >> exception: anObject [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsComputationFailedState >> ifBeforeApplyingDo: aBlock [
+	aBlock value
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsComputationFailedState >> ifComputationFailedDo: aBlock [
 	"Block receives an exception: [ :anException | ... ]"
 
