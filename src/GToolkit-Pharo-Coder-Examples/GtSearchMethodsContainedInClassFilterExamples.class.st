@@ -1,8 +1,13 @@
 Class {
 	#name : #GtSearchMethodsContainedInClassFilterExamples,
-	#superclass : #GtSearchMethodFilterExamples,
+	#superclass : #Object,
 	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
+
+{ #category : #assertions }
+GtSearchMethodsContainedInClassFilterExamples >> assertMethodResultTypeForFilter: aFilter [
+	self assert: aFilter resultType equals: GtAsyncSearchMethodGroupStream
+]
 
 { #category : #accessing }
 GtSearchMethodsContainedInClassFilterExamples >> inheritedMethodsWithTraits [

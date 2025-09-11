@@ -52,6 +52,40 @@ GtFilterElementByScripterExamples >> classCoderAddMethodProtocolFilter [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoderSelectAccessingMethodsCategory [
+	<gtExample>
+	| aScripter |
+	aScripter := self 
+		scripterWithElement: [GtCoder forClass: GtPharoDummySixObject].
+
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsExactly: 3;
+		play.
+		
+	aScripter filterStep
+		clickOnFilterSettingsAtIndex: 2;
+		clickOnDropdownFilterItem: (GtFilterModelStringItem new 
+			string: 'accessing');
+		assertFilterModelNamed: GtSearchMethodCategoryFilter filterName
+			selectedValueIs: (GtFilterModelStringItem new 
+			string: 'accessing');
+		assertMethodsUpToFilterModel;
+		assertMethodProtocolFilterModel;
+		play.
+		
+	"For some reason we need to wait to propagate search filter changes.
+	Is there any background computation that the UI is not aware of?"
+	aScripter wait forEnqueuedSpaceTaskTimeout: 1 second; play.
+	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
+
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsExactly: 1;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
 GtFilterElementByScripterExamples >> classCoderSelectAnotherMethodProtocol [
 	<gtExample>
 	| aScripter |
@@ -120,6 +154,40 @@ GtFilterElementByScripterExamples >> classCoderSelectSuperclass [
 	aScripter methodsCoder
 		waitForEnqueuedAndProcessedSpaceTasks;
 		assertNumberOfVisibleMethodsIsAtLeast: GtPharoDummyTwoObject methodDict size + 1;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+GtFilterElementByScripterExamples >> classCoderSelectUncategoriedMethodsCategory [
+	<gtExample>
+	| aScripter |
+	aScripter := self 
+		scripterWithElement: [GtCoder forClass: GtPharoDummySixObject].
+
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsExactly: 3;
+		play.
+		
+	aScripter filterStep
+		clickOnFilterSettingsAtIndex: 2;
+		clickOnDropdownFilterItem: (GtFilterModelStringItem new 
+			string: Protocol unclassified);
+		assertFilterModelNamed: GtSearchMethodCategoryFilter filterName
+			selectedValueIs: (GtFilterModelStringItem new 
+			string: Protocol unclassified);
+		assertMethodsUpToFilterModel;
+		assertMethodProtocolFilterModel;
+		play.
+		
+	"For some reason we need to wait to propagate search filter changes.
+	Is there any background computation that the UI is not aware of?"
+	aScripter wait forEnqueuedSpaceTaskTimeout: 1 second; play.
+	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
+
+	aScripter methodsCoder
+		assertNumberOfVisibleMethodsIsExactly: 2;
 		play.
 
 	^ aScripter
