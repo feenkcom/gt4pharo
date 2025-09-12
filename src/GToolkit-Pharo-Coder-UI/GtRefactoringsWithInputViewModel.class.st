@@ -19,6 +19,26 @@ GtRefactoringsWithInputViewModel >> canEditInput [
 	^ self canExecutedRefactoringsBeReplaced
 ]
 
+{ #category : #views }
+GtRefactoringsWithInputViewModel >> gtOverview [
+	^ super gtOverview
+		, {GtPhlowOverviewItem new
+					name: 'Input label';
+					value: inputLabel.
+				GtPhlowOverviewItem new
+					name: 'Initial text';
+					value: initialText.
+				GtPhlowOverviewItem new
+					name: 'Input filter';
+					value: inputFilter.
+				GtPhlowOverviewItem new
+					name: 'Is input editor focused';
+					boolean: isEditorFocused.
+				GtPhlowOverviewItem new
+					name: 'Refactorings with input computation';
+					value: refactoringsWithInputComputation}
+]
+
 { #category : #accessing }
 GtRefactoringsWithInputViewModel >> initialText [
 	<return: #String or: #BlText>

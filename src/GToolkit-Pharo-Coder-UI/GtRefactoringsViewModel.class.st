@@ -132,6 +132,52 @@ GtRefactoringsViewModel >> failedRefactorings: anExecutedRefactorings exception:
 	self privateNotifyFailedRefactorings
 ]
 
+{ #category : #views }
+GtRefactoringsViewModel >> gtOverview [
+	^ {GtPhlowOverviewItem new
+			name: 'Refactorings title';
+			value: refactoringTitle.
+		GtPhlowOverviewItem new
+			name: 'Target name';
+			value: targetName.
+		GtPhlowOverviewItem new
+			name: 'Executed refactorings';
+			value: executedRefactorings;
+			childrenItems: (executedRefactorings ifNotNil: #gtOverview).
+		GtPhlowOverviewItem new
+			name: 'Is preview button focused';
+			boolean: isPreviewButtonFocused.
+		GtPhlowOverviewItem new
+			name: 'Before apply block';
+			value: beforeApplyBlock.
+		GtPhlowOverviewItem new
+			name: 'Cancel block';
+			value: cancelBlock.
+		GtPhlowOverviewItem new
+			name: 'Context menu model';
+			value: menuModel.
+		GtPhlowOverviewItem new
+			name: 'Anchor element';
+			value: anchorElement.
+		GtPhlowOverviewItem new
+			name: 'Announcer';
+			value: announcer}
+]
+
+{ #category : #views }
+GtRefactoringsViewModel >> gtOverviewFor: aView [
+	<gtView>
+	^ aView columnedTree
+		title: 'Overview';
+		priority: 10;
+		items: [ self gtOverview ];
+		children: #children;
+		expandUpTo: 1;
+		column: 'Name' text: #name;
+		column: 'Description' text: #description;
+		send: #value
+]
+
 { #category : #'api - testing' }
 GtRefactoringsViewModel >> hasPreviewedExecutedRefactorings [
 	"Return true if existing executed refactorings is previewed"

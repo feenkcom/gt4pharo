@@ -13,7 +13,7 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings'
 }
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - input element' }
 GtRefactoringsExamples >> basicInputElement [
 	<gtExample>
 	| anElement |
@@ -39,7 +39,7 @@ GtRefactoringsExamples >> basicInputViewModel [
 	^ aViewModel
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - just preview element' }
 GtRefactoringsExamples >> basicJustPreviewElement [
 	<gtExample>
 	| anElement |
@@ -52,7 +52,7 @@ GtRefactoringsExamples >> basicJustPreviewElement [
 	^ anElement
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> basicToolbarElement [
 	<gtExample>
 	| anElement |
@@ -84,7 +84,7 @@ GtRefactoringsExamples >> environment [
 	^ environment
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - input element' }
 GtRefactoringsExamples >> inputElement [
 	<gtExample>
 	| anElement aViewModel |
@@ -99,7 +99,7 @@ GtRefactoringsExamples >> inputElement [
 	^ anElement
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - input element' }
 GtRefactoringsExamples >> inputElementScripter [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements |
@@ -184,7 +184,42 @@ GtRefactoringsExamples >> inputViewModelEmptyComputedRefactorings [
 
 	aCollection := aViewModel executedRefactorings executedRefactorings.
 	self assert: aCollection size equals: 0.
+	self assert: aViewModel executedRefactorings errorMessages size equals: 0.
 
+	^ aViewModel
+]
+
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> inputViewModelFaultyComputedRefactorings [
+	<gtExample>
+	| aViewModel aCollection allAnnouncements anotherClass |
+	aViewModel := self inputViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel optionAt: #allAnnouncements put: allAnnouncements.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	anotherClass := self environment anyDummyPackage dummyClasses
+			detect: [ :eachDummyClass | eachDummyClass realClass ~= self rootClass ].
+
+	aViewModel refactoringsForInput: ('{1}' format: {anotherClass realClass name}).
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements anyOne class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+
+	aViewModel computeRefactoringsFrom: self.
+	self assert: allAnnouncements size equals: 2.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+
+	aCollection := aViewModel executedRefactorings executedRefactorings.
+	self assert: aCollection size equals: 1.
+	self assert: aViewModel executedRefactorings errorMessages size equals: 1.
+	
 	^ aViewModel
 ]
 
@@ -216,10 +251,12 @@ GtRefactoringsExamples >> inputViewModelSomeComputedRefactorings [
 	aCollection := aViewModel executedRefactorings executedRefactorings.
 	self assert: aCollection size equals: 1.
 
+	self assert: aViewModel executedRefactorings errorMessages size equals: 0.
+	
 	^ aViewModel
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - just preview element' }
 GtRefactoringsExamples >> justPreviewElement [
 	<gtExample>
 	| anElement aViewModel |
@@ -234,7 +271,93 @@ GtRefactoringsExamples >> justPreviewElement [
 	^ anElement
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - just preview element' }
+GtRefactoringsExamples >> justPreviewElementEmptyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicJustPreviewElement.
+	aViewModel := self inputViewModelEmptyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement childWithId: #preview) visibility
+		equals: BlVisibility gone.
+	
+	^ anElement
+]
+
+{ #category : #'examples - just preview element' }
+GtRefactoringsExamples >> justPreviewElementEmptyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self justPreviewElementEmptyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	self
+		assert: (anElement query / #preview) anyOne visibility
+		equals: BlVisibility gone.
+	self assert: anElement height equals: 0.
+	self assert: anElement width equals: 0.
+
+	self
+		assert: (anElement query // GtUserActivatableChangeWithExpanderElement) isEmpty.
+
+	^ aScripter
+]
+
+{ #category : #'examples - just preview element' }
+GtRefactoringsExamples >> justPreviewElementFaultyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicJustPreviewElement.
+	aViewModel := self inputViewModelFaultyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement childWithId: #preview) visibility
+		equals: BlVisibility gone.
+	
+	^ anElement
+]
+
+{ #category : #'examples - just preview element' }
+GtRefactoringsExamples >> justPreviewElementFaultyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self justPreviewElementFaultyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	self
+		assert: (anElement query / #preview) anyOne visibility
+		equals: BlVisibility gone.
+	self assert: anElement height equals: 0.
+	self assert: anElement width equals: 0.
+
+	self
+		assert: (anElement query // GtUserActivatableChangeWithExpanderElement) isEmpty.
+
+	^ aScripter
+]
+
+{ #category : #'examples - just preview element' }
 GtRefactoringsExamples >> justPreviewElementScripter [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements anAnnouncement |
@@ -296,7 +419,7 @@ GtRefactoringsExamples >> rootClass [
 	^ rootClass
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElement [
 	<gtExample>
 	| anElement aViewModel |
@@ -321,7 +444,7 @@ GtRefactoringsExamples >> toolbarElement [
 	^ anElement
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElementScripter [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements |
@@ -354,7 +477,7 @@ GtRefactoringsExamples >> toolbarElementScripter [
 	^ aScripter
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactorings [
 	<gtExample>
 	| anElement aViewModel |
@@ -379,7 +502,7 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactorings [
 	^ anElement
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements |
@@ -412,7 +535,7 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter [
 	^ aScripter
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_requestRefactorings [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements |

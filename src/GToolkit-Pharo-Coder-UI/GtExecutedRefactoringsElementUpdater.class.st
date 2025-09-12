@@ -60,3 +60,7 @@ GtExecutedRefactoringsElementUpdater >> refactoringsViewModel: anObject [
 GtExecutedRefactoringsElementUpdater >> update [
 	self visitState: executedRefactorings state
 ]
+
+{ #category : #private }
+GtExecutedRefactoringsElementUpdater >> updateToDisplayPreview [
+]

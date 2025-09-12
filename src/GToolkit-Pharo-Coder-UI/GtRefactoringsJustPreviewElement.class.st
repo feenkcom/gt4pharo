@@ -120,7 +120,9 @@ GtRefactoringsJustPreviewElement >> onGtRefactoringsViewModelExecutedRefactoring
 	anAnnouncement refactoringsViewModel == self refactoringsViewModel
 		ifFalse: [ ^ self ].
 
-	BlTaskAction enqueueElement: self action: [ self updateDisplayedRefactorings ]
+	BlTaskAction 
+		enqueueElement: self 
+		action: [ self updateDisplayedRefactorings ]
 ]
 
 { #category : #'private - event handling' }
@@ -129,7 +131,9 @@ GtRefactoringsJustPreviewElement >> onGtRefactoringsViewModelExecutedRefactoring
 	anAnnouncement refactoringsViewModel == self refactoringsViewModel
 		ifFalse: [ ^ self ].
 
-	BlTaskAction enqueueElement: self action: [ self updateDisplayedRefactorings ]
+	BlTaskAction 
+		enqueueElement: self 
+		action: [ self updateDisplayedRefactorings ]
 ]
 
 { #category : #'accessing - refactorings view model' }
@@ -176,6 +180,12 @@ GtRefactoringsJustPreviewElement >> updateAsHiddenRefactorings [
 
 { #category : #'private - updating' }
 GtRefactoringsJustPreviewElement >> updateComputedRefactorings [
+	self refactoringsViewModel
+		ifComputedRefactorings: [ :anExecutedRefactorings | ^ self ]
+		ifNotComputed: [  ]
+		ifInProgress: [ ^ self ]
+		ifFailed: [  ].
+
 	refactoringsElement asyncFuture future: [ self computeExecutedRefactorings ]
 ]
 
@@ -190,7 +200,8 @@ GtRefactoringsJustPreviewElement >> updateDisplayedRefactorings [
 				changesDo: [ :aChanges | 
 					self updateAsDisplayedProgress.
 					refactoringsElement changes: aChanges ]
-				emptyDo: [ self updateAsHiddenRefactorings ] ]
+				emptyDo: [ self updateAsHiddenRefactorings ]
+				errorMessagesDo: [ self updateAsHiddenRefactorings ] ]
 		ifNotComputed: [ self updateAsHiddenRefactorings ]
 		ifInProgress: [ self updateAsHiddenRefactorings ]
 		ifFailed: [ :anException | self updateAsHiddenRefactorings ]

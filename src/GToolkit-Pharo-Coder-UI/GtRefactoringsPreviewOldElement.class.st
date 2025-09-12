@@ -212,13 +212,16 @@ GtRefactoringsPreviewOldElement >> onFutureSuccessWithoutErrorMessages: anExecut
 	messagesElement visibility: BlVisibility gone.
 	scrollablePreviewElement visibility: BlVisibility visible.
 	toolbarElement visibility: BlVisibility visible.
-	acceptButton enable; requestFocus.
+	acceptButton
+		enable;
+		requestFocus.
 	messagesElement removeChildren.
 
 	anExecutedRefactorings
 		refactoringsDo: [ :aCollection | refactoringsElement refactorings: aCollection ]
 		changesDo: [ :aChanges | refactoringsElement changes: aChanges ]
-		emptyDo: [  ].
+		emptyDo: [  ]
+		errorMessagesDo: [  ].
 
 	anExecutedRefactorings notificationMessages ifEmpty: [ ^ self ].
 

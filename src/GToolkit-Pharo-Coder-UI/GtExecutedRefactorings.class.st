@@ -99,6 +99,56 @@ GtExecutedRefactorings >> executedRefactorings [
 	^ executedRefactorings
 ]
 
+{ #category : #views }
+GtExecutedRefactorings >> gtOverview [
+	^ {GtPhlowOverviewItem new
+			name: 'State';
+			value: state.
+		GtPhlowOverviewItem new
+			name: 'Refactorings computation';
+			value: refactoringsComputation.
+		GtPhlowOverviewItem new
+			name: 'Executed refactorings';
+			value: executedRefactorings;
+			childrenObjects: executedRefactorings;
+			if: executedRefactorings isNil subduedDescription: 'Not initialized';
+			if: executedRefactorings isNotNil
+				description: [ '{1} {2}'
+						format: {executedRefactorings size.
+								'item' asPluralBasedOn: executedRefactorings size} ].
+		GtPhlowOverviewItem new
+			name: 'Notification messages';
+			value: notificationMessages;
+			childrenObjects: notificationMessages;
+			if: notificationMessages isNil subduedDescription: 'Not initialized';
+			if: notificationMessages isNotNil
+				description: [ '{1} {2}'
+						format: {notificationMessages size.
+								'item' asPluralBasedOn: notificationMessages size} ].
+		GtPhlowOverviewItem new
+			name: 'Error messages';
+			value: errorMessages;
+			childrenObjects: errorMessages;
+			if: errorMessages isNil subduedDescription: 'Not initialized';
+			if: errorMessages isNotNil
+				description: [ '{1} {2}'
+						format: {errorMessages size.
+								'item' asPluralBasedOn: executedRefactorings size} ]}
+]
+
+{ #category : #views }
+GtExecutedRefactorings >> gtOverviewFor: aView [
+	<gtView>
+	^ aView columnedTree
+		title: 'Overview';
+		items: [ self gtOverview ];
+		children: #children;
+		expandUpTo: 1;
+		column: 'Name' text: #name;
+		column: 'Description' text: #description;
+		send: #value
+]
+
 { #category : #'api - state' }
 GtExecutedRefactorings >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock [
 	state ifBeforeApplyingDo: [ ^ aBeforeApplyingBlock value ].
@@ -176,7 +226,9 @@ GtExecutedRefactorings >> refactoringsComputation [
 ]
 
 { #category : #'api - compute' }
-GtExecutedRefactorings >> refactoringsDo: aRefactoringsBlock changesDo: aChangesBlock emptyDo: anEmptyBlock [
+GtExecutedRefactorings >> refactoringsDo: aRefactoringsBlock changesDo: aChangesBlock emptyDo: anEmptyBlock errorMessagesDo: anErrorsBlock [
+	self errorMessages ifNotEmpty: [ :aCollection | 
+		^ anErrorsBlock cull: aCollection  ].
 	self executedRefactorings ifEmpty: [ ^ anEmptyBlock value ].
 
 	^ (self executedRefactorings
