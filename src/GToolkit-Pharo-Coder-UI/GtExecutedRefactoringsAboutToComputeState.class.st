@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
+{ #category : #visiting }
+GtExecutedRefactoringsAboutToComputeState >> acceptVisitor: aVisitor [
+	^ aVisitor visitExecutedRefactoringsAboutToComputeState: self
+]
+
 { #category : #'api - state' }
 GtExecutedRefactoringsAboutToComputeState >> canBeReplaced [
 	"Return true if corresponding executed refactorings can be replaced by another executed refactorings"

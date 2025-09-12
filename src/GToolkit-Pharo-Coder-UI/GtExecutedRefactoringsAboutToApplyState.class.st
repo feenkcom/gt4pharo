@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
+{ #category : #visiting }
+GtExecutedRefactoringsAboutToApplyState >> acceptVisitor: aVisitor [
+	^ aVisitor visitExecutedRefactoringsAboutToApplyState: self
+]
+
 { #category : #'api - state' }
 GtExecutedRefactoringsAboutToApplyState >> ifApplyingDo: aBlock [
 	aBlock value

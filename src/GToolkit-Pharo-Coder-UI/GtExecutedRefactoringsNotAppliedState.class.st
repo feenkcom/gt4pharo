@@ -4,6 +4,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
+{ #category : #visiting }
+GtExecutedRefactoringsNotAppliedState >> acceptVisitor: aVisitor [
+	^ aVisitor visitExecutedRefactoringsNotAppliedState: self
+]
+
 { #category : #'api - state' }
 GtExecutedRefactoringsNotAppliedState >> canBeApplied [
 	<return: #Boolean>

@@ -57,6 +57,27 @@ GtExecutedRefactoringsState class >> running: aPromise [
 	^ GtExecutedRefactoringsRunningState new promise: aPromise
 ]
 
+{ #category : #visiting }
+GtExecutedRefactoringsState >> acceptVisitor: aVisitor [
+	^ aVisitor visitExecutedRefactoringsState: self
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsState >> applyingProgress [
+	"Return progress of applied changes.
+	Fraction is number between 0 and 1: <0;1>"
+
+	<return: #Number>
+	^ 0
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsState >> applyingProgress: aFraction [
+	"Set progress of applied changes.
+	Fraction is number between 0 and 1: <0;1>"
+	^ self
+]
+
 { #category : #'api - state' }
 GtExecutedRefactoringsState >> canBeApplied [
 	<return: #Boolean>

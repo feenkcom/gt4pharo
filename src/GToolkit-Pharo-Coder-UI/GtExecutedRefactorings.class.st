@@ -22,6 +22,11 @@ GtExecutedRefactorings >> beApplied [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactorings >> beApplyingProgress: aFraction [
+	state := state applyingProgress: aFraction
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactorings >> beComputingFailed: anException [
 	state := GtExecutedRefactoringsState computingFailed: anException
 ]
@@ -58,6 +63,13 @@ GtExecutedRefactorings >> errorMessages [
 
 { #category : #private }
 GtExecutedRefactorings >> executeRefactorings [
+	"Execution should be triggered using `GtRefactoringsViewModel>>#computeRefactorings`.
+	Users can ask about the execution state calling:
+	- `GtRefactoringsViewModel>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:`,
+	- `GtRefactoringsViewModel>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:`,
+	- `GtExecutedRefactorings>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:`, and
+	- `GtExecutedRefactorings>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:`."
+
 	state := GtExecutedRefactoringsState aboutToCompute.
 	errorMessages := OrderedCollection new.
 	notificationMessages := OrderedCollection new.
@@ -174,4 +186,10 @@ GtExecutedRefactorings >> refactoringsDo: aRefactoringsBlock changesDo: aChanges
 			change := RBCompositeRefactoryChange named: 'Changes'.
 			self executedRefactorings do: [ :each | change addChange: each ].
 			change ]
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactorings >> state [
+	<return: #GtExecutedRefactoringsState>
+	^ state
 ]

@@ -9,10 +9,8 @@ Class {
 
 { #category : #'private - updating' }
 GtRefactoringsJustPreviewElement >> computeExecutedRefactorings [
-	| aRefactorings refactoringsOrChanges |
-	aRefactorings := self refactoringsViewModel executedRefactorings.
-	refactoringsOrChanges := aRefactorings executedRefactorings.
-	^ aRefactorings
+	<return: #GtExecutedRefactorings>
+	^ self refactoringsViewModel computeRefactoringsFrom: self
 ]
 
 { #category : #initialization }
@@ -59,8 +57,10 @@ GtRefactoringsJustPreviewElement >> onApplyChangesRequest: anExecutedRefactoring
 		ifFalse: [ ^ self ].
 
 	aPromise := (refactoringsElement
-			applyRefactoringWithProgress: [ :fraction | 
-				aViewModel notifyRefactorings: anExecutedRefactorings progressFraction: fraction ])
+			applyRefactoringWithProgress: [ :aFraction | 
+				aViewModel 
+					notifyRefactorings: anExecutedRefactorings 
+					applyingProgress: aFraction ])
 			then: [ :ignore | 
 				anExecutedRefactorings beApplied.
 				aViewModel appliedRefactorings: anExecutedRefactorings ]
@@ -89,10 +89,10 @@ GtRefactoringsJustPreviewElement >> onFuturePending [
 
 { #category : #'private - event handling' }
 GtRefactoringsJustPreviewElement >> onFutureSuccess: anExecutedRefactorings [
-	self hasRefactoringsViewModel ifFalse: [ ^ self ].
-	self refactoringsViewModel executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
-	
-	self refactoringsViewModel notifyComputedRefactorings: anExecutedRefactorings
+	self refactoringsViewModel executedRefactorings == anExecutedRefactorings
+		ifFalse: [ ^ self ].
+
+	self updateDisplayedRefactorings
 ]
 
 { #category : #'private - event handling' }
@@ -125,6 +125,7 @@ GtRefactoringsJustPreviewElement >> onGtRefactoringsViewModelExecutedRefactoring
 
 { #category : #'private - event handling' }
 GtRefactoringsJustPreviewElement >> onGtRefactoringsViewModelExecutedRefactoringsComputed: anAnnouncement [
+	anAnnouncement source == self ifTrue: [ ^ self ].
 	anAnnouncement refactoringsViewModel == self refactoringsViewModel
 		ifFalse: [ ^ self ].
 
@@ -164,7 +165,7 @@ GtRefactoringsJustPreviewElement >> unsubscribeFromRefactoringsViewModel [
 ]
 
 { #category : #'private - updating' }
-GtRefactoringsJustPreviewElement >> updateAsDisplayedRefactorings [
+GtRefactoringsJustPreviewElement >> updateAsDisplayedProgress [
 	refactoringsElement visibility: BlVisibility visible
 ]
 
@@ -184,10 +185,10 @@ GtRefactoringsJustPreviewElement >> updateDisplayedRefactorings [
 		ifComputedRefactorings: [ :anExecutedRefactorings | 
 			anExecutedRefactorings
 				refactoringsDo: [ :aCollection | 
-					self updateAsDisplayedRefactorings.
+					self updateAsDisplayedProgress.
 					refactoringsElement refactorings: aCollection ]
 				changesDo: [ :aChanges | 
-					self updateAsDisplayedRefactorings.
+					self updateAsDisplayedProgress.
 					refactoringsElement changes: aChanges ]
 				emptyDo: [ self updateAsHiddenRefactorings ] ]
 		ifNotComputed: [ self updateAsHiddenRefactorings ]

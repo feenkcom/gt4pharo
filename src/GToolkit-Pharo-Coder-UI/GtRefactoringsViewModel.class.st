@@ -92,6 +92,30 @@ GtRefactoringsViewModel >> cancelBlock: anObject [
 ]
 
 { #category : #'api - refactorings' }
+GtRefactoringsViewModel >> computeRefactoringsFrom: aSource [
+	"Computation of refactorings should be triggered using this method.
+	Users can ask about the execution state calling:
+	- `GtRefactoringsViewModel>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:`,
+	- `GtRefactoringsViewModel>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:`,
+	- `GtExecutedRefactorings>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:`, and
+	- `GtExecutedRefactorings>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:`."
+
+	| anExecutedRefactorings |
+	anExecutedRefactorings := self executedRefactorings.
+
+	anExecutedRefactorings
+		ifComputedRefactorings: [  ]
+		ifNotComputed: [ anExecutedRefactorings executedRefactorings.
+			self
+				privateNotifyComputedRefactorings: anExecutedRefactorings
+				source: aSource ]
+		ifInProgress: [  ]
+		ifFailed: [  ].
+
+	^ anExecutedRefactorings
+]
+
+{ #category : #'api - refactorings' }
 GtRefactoringsViewModel >> executedRefactorings [
 	"Return a object that can compute a collection of refactoring objects"
 
@@ -114,6 +138,15 @@ GtRefactoringsViewModel >> hasPreviewedExecutedRefactorings [
 
 	<return: #Boolean>
 	^ self executedRefactorings isPreviewed
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock [
+	^ self executedRefactorings
+		ifBeforeApplying: aBeforeApplyingBlock
+		ifApplying: anApplyingBlock
+		ifApplied: anAppliedBlock
+		ifFailed: aFailedBlock
 ]
 
 { #category : #'api - refactorings' }
@@ -183,17 +216,6 @@ GtRefactoringsViewModel >> notifyApplyChangesRequested [
 ]
 
 { #category : #'api - refactorings' }
-GtRefactoringsViewModel >> notifyComputedRefactorings: anExecutedRefactorings [
-	| anAnnouncement |
-	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
-	
-	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsComputed new
-			refactoringsViewModel: self;
-			executedRefactorings: self executedRefactorings.
-	self announce: anAnnouncement
-]
-
-{ #category : #'api - refactorings' }
 GtRefactoringsViewModel >> notifyComputingRefactoringsFailed: anException [
 	| anAnnouncement |
 	
@@ -205,10 +227,12 @@ GtRefactoringsViewModel >> notifyComputingRefactoringsFailed: anException [
 ]
 
 { #category : #'api - refactorings' }
-GtRefactoringsViewModel >> notifyRefactorings: anExecutedRefactorings progressFraction: aFraction [
+GtRefactoringsViewModel >> notifyRefactorings: anExecutedRefactorings applyingProgress: aFraction [
 	| anAnnouncement |
 	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
 
+	anExecutedRefactorings beApplyingProgress: aFraction.
+	
 	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsProgressChanged new
 			refactoringsViewModel: self;
 			executedRefactorings: anExecutedRefactorings;
@@ -240,6 +264,18 @@ GtRefactoringsViewModel >> privateNotifyApplyChangesRequested [
 	anAnnouncement := GtRefactoringsViewModelApplyChangesRequested new
 			refactoringsViewModel: self;
 			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyComputedRefactorings: anExecutedRefactorings source: aSource [
+	| anAnnouncement |
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+	
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsComputed new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings;
+			source: aSource.
 	self announce: anAnnouncement
 ]
 

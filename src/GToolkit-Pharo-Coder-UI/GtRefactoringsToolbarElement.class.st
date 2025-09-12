@@ -3,7 +3,9 @@ Class {
 	#superclass : #GtRefactoringsBasicElement,
 	#instVars : [
 		'applyButton',
-		'progressElement'
+		'progressElement',
+		'exceptionElement',
+		'finishedElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -19,16 +21,27 @@ GtRefactoringsToolbarElement >> initialize [
 
 	self initializeApplyButton.
 	self initializeProgressElement.
+	self initializeExceptionElement.
+	self initializeFinishedElement.
 
 	self addChild: applyButton as: GtRefactoringsPreviewAcceptId.
 	self addChild: progressElement as: #progress.
+	self addChild: exceptionElement as: #exception.
+	self addChild: finishedElement as: #finished.
+
+	exceptionElement
+		addAptitude: (BrLayoutResizerAptitude new inherit: [ exceptionElement children ]).
 
 	self
 		addAptitude: (BrLayoutResizerAptitude new
 				hMatchParentToMatchParent: progressElement;
 				hExactToMatchParent: progressElement;
 				hFitContent: progressElement toExact: 100;
-				hFitContentLimited: progressElement toExact: 100).
+				hFitContentLimited: progressElement toExact: 100;
+				hMatchParentToMatchParent: exceptionElement;
+				hExactToMatchParent: exceptionElement;
+				hFitContentToFitContent: exceptionElement;
+				hFitContentLimitedToFitContentLimited: exceptionElement).
 
 	self fitContentLimited
 ]
@@ -38,6 +51,7 @@ GtRefactoringsToolbarElement >> initializeApplyButton [
 	applyButton := BrButton new
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			icon: BrGlamorousVectorIcons accept;
+			margin: (BlInsets right: 5);
 			beSmallSize;
 			beFocusable;
 			label: 'Save';
@@ -47,12 +61,29 @@ GtRefactoringsToolbarElement >> initializeApplyButton [
 ]
 
 { #category : #initialization }
+GtRefactoringsToolbarElement >> initializeExceptionElement [
+	exceptionElement := BrFrame new
+			visibility: BlVisibility gone;
+			hFitContentLimited;
+			vFitContent
+]
+
+{ #category : #initialization }
+GtRefactoringsToolbarElement >> initializeFinishedElement [
+	finishedElement := BrLabel new
+			visibility: BlVisibility gone;
+			fitContent;
+			beSmallSize;
+			aptitude: BrGlamorousLabelAptitude;
+			text: 'Changes applied'
+]
+
+{ #category : #initialization }
 GtRefactoringsToolbarElement >> initializeProgressElement [
 	progressElement := BrProgress new
 			visibility: BlVisibility gone;
 			aptitude: BrGlamorousProgressBarAptitude;
 			fraction: 0;
-			margin: (BlInsets left: 5);
 			constraintsDo: [ :c | 
 				c horizontal matchParent.
 				c vertical matchParent ]
@@ -82,11 +113,7 @@ GtRefactoringsToolbarElement >> onGtRefactoringsViewModelExecutedRefactoringsPro
 	anAnnouncement executedRefactorings
 		== self refactoringsViewModel executedRefactorings ifFalse: [ ^ self ].
 
-	BlTaskAction
-		enqueueElement: self
-		action: [ self
-				updateRefactorings: anAnnouncement executedRefactorings
-				progressFraction: anAnnouncement fraction ]
+	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'private - event handling' }
@@ -96,7 +123,7 @@ GtRefactoringsToolbarElement >> onGtRefactoringsViewModelExecutedRefactoringsSta
 
 	BlTaskAction
 		enqueueElement: self
-		action: [ self updateDisplayedRefactorings ]
+		action: [ self updateElement ]
 ]
 
 { #category : #'accessing - refactorings view model' }
@@ -134,7 +161,12 @@ GtRefactoringsToolbarElement >> updateAsDisabledApplyButton [
 ]
 
 { #category : #'private - updating' }
-GtRefactoringsToolbarElement >> updateAsDisplayedRefactorings [
+GtRefactoringsToolbarElement >> updateAsDisplayedFinishedLabel [
+	finishedElement visibility: BlVisibility visible
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsDisplayedProgress [
 	progressElement visibility: BlVisibility visible
 ]
 
@@ -144,54 +176,36 @@ GtRefactoringsToolbarElement >> updateAsEnabledApplyButton [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsHiddenException [
+	exceptionElement visibility: BlVisibility gone.
+	exceptionElement removeChildren.
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsHiddenFinishedLabel [
+	finishedElement visibility: BlVisibility gone
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsHiddenProgress [
 	progressElement visibility: BlVisibility gone
 ]
 
 { #category : #'private - updating' }
-GtRefactoringsToolbarElement >> updateDisplayedRefactorings [
-	self refactoringsViewModel
-		ifComputedRefactorings: [ :anExecutedRefactorings | 
-			anExecutedRefactorings
-				ifBeforeApplying: [ 
-					anExecutedRefactorings
-						refactoringsDo: [ :aCollection | 
-							self updateAsEnabledApplyButton ]
-						changesDo: [ :aChanges | 
-							self updateAsEnabledApplyButton ]
-						emptyDo: [ 
-							self updateAsDisabledApplyButton ].
-					self updateAsHiddenProgress ]
-				ifApplying: [ 
-					self updateAsDisabledApplyButton.
-					self updateAsHiddenProgress ]
-				ifApplied: [ 
-					self updateAsDisabledApplyButton.
-					self updateAsHiddenProgress ]
-				ifFailed: [ 
-					self updateAsEnabledApplyButton.
-					self updateAsHiddenProgress ] ]
-		ifNotComputed: [ 
-			self updateAsDisabledApplyButton.
-			self updateAsHiddenProgress ]
-		ifInProgress: [ 
-			self updateAsDisabledApplyButton.
-			self updateAsHiddenProgress ]
-		ifFailed: [ :anException | 
-			self updateAsDisabledApplyButton.
-			self updateAsHiddenProgress ]
-]
-
-{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateElement [
-	self updateDisplayedRefactorings
+	GtExecutedRefactoringsToolbarElementUpdater new
+		forRefactoringsElement: self;
+		update
 ]
 
 { #category : #'private - updating' }
-GtRefactoringsToolbarElement >> updateRefactorings: anExecutedRefactorings progressFraction: aFraction [
-	self refactoringsViewModel executedRefactorings == anExecutedRefactorings
-		ifFalse: [ ^ self ].
-
-	self updateAsDisplayedRefactorings.
+GtRefactoringsToolbarElement >> updateProgressFraction: aFraction [
 	progressElement fraction: aFraction
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateWithException: anException [
+	exceptionElement visibility: BlVisibility visible.
+	exceptionElement removeChildren.
+	exceptionElement addChild: (anException asDebuggableElement)
 ]
