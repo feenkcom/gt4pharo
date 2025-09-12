@@ -503,6 +503,36 @@ GtRefactoringsExamples >> previewWithInputElementScripter [
 	^ aScripter
 ]
 
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementSomeComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicPreviewWithInputElement.
+	aViewModel := self inputViewModelSomeComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementSomeComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self previewWithInputElementSomeComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+	
+	^ aScripter
+]
+
 { #category : #'examples - environment' }
 GtRefactoringsExamples >> rootClass [
 	<gtExample>

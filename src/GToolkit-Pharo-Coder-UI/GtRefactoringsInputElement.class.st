@@ -153,7 +153,7 @@ GtRefactoringsInputElement >> onGtRefactoringsViewModelExecutedRefactoringsChang
 	self refactoringsViewModel == anAnnouncement refactoringsViewModel
 		ifFalse: [ ^ self ].
 
-	BlTaskAction enqueueElement: self action: [ self updateEditability ]
+	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'private - event handling' }
@@ -246,6 +246,9 @@ GtRefactoringsInputElement >> updateElement [
 
 { #category : #'private - updating' }
 GtRefactoringsInputElement >> updateInputEditorElement [
+	"Note: at some point, we may also want to store the current text,
+	maybe only when we press enter (or click the preview button)."
+
 	inputEditorElement inputFilter: self refactoringsViewModel inputFilter.
 	inputEditorElement text: self refactoringsViewModel initialText.
 	self refactoringsViewModel isEditorFocused
