@@ -76,7 +76,13 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsFailedSt
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsNotAppliedState: aState [
-	self updateAsApplicable
+	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
+
+	executedRefactorings
+		refactoringsDo: [ self updateAsApplicable ]
+		changesDo: [ self updateAsApplicable ]
+		emptyDo: [ self updateAsNotApplicable ]
+		errorMessagesDo: [ self updateAsNotApplicable ]
 ]
 
 { #category : #visiting }

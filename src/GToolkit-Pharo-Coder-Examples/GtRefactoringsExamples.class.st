@@ -445,6 +445,122 @@ GtRefactoringsExamples >> toolbarElement [
 ]
 
 { #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementEmptyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicToolbarElement.
+	aViewModel := self inputViewModelEmptyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+	
+	self
+		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query / #progress) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #exception) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #finished) anyOne visibility
+		equals: BlVisibility gone.
+
+	^ anElement
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementEmptyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self toolbarElementEmptyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	self
+		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query / #progress) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #exception) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #finished) anyOne visibility
+		equals: BlVisibility gone.
+	
+	^ aScripter
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementFaultyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicToolbarElement.
+	aViewModel := self inputViewModelFaultyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+	
+	self
+		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query / #progress) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #exception) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #finished) anyOne visibility
+		equals: BlVisibility gone.
+
+	^ anElement
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementFaultyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self toolbarElementFaultyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	self
+		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query / #progress) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #exception) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #finished) anyOne visibility
+		equals: BlVisibility gone.
+	
+	^ aScripter
+]
+
+{ #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElementScripter [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements |

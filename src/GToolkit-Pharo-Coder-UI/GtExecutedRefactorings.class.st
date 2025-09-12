@@ -233,11 +233,11 @@ GtExecutedRefactorings >> refactoringsDo: aRefactoringsBlock changesDo: aChanges
 
 	^ (self executedRefactorings
 		allSatisfy: [ :each | each isKindOf: RBRefactoring ])
-		ifTrue: [ aRefactoringsBlock value: self executedRefactorings ]
+		ifTrue: [ aRefactoringsBlock cull: self executedRefactorings ]
 		ifFalse: [ | change |
 			change := RBCompositeRefactoryChange named: 'Changes'.
 			self executedRefactorings do: [ :each | change addChange: each ].
-			change ]
+			aChangesBlock cull: change ]
 ]
 
 { #category : #'api - state' }
