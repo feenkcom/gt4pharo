@@ -21,7 +21,7 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 					beforeApplyBlock: [ anExplicitMenu hideAll ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
-			GtRefactoringsPreviewWithInputElement new 
+			GtRefactoringsPreviewWithInputOldElement new 
 				refactoringsViewModel: aViewModel ].
 	^ submenu
 ]

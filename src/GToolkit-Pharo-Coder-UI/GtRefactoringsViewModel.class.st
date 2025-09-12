@@ -53,7 +53,6 @@ GtRefactoringsViewModel >> announcer [
 
 { #category : #'api - refactorings' }
 GtRefactoringsViewModel >> appliedRefactorings: anExecutedRefactorings [
-	GtJustContextStackSignal emit.
 	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
 
 	anExecutedRefactorings beApplied.
@@ -286,6 +285,16 @@ GtRefactoringsViewModel >> notifyRefactorings: anExecutedRefactorings applyingPr
 	self announce: anAnnouncement
 ]
 
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> previewedRefactorings: anExecutedRefactorings [
+	self executedRefactorings == anExecutedRefactorings ifFalse: [ ^ self ].
+	anExecutedRefactorings isPreviewed ifTrue: [ ^ self ].
+	
+	anExecutedRefactorings bePreviewed ifFalse: [ ^ self ].
+
+	self privateNotifyPreviewedRefactorings
+]
+
 { #category : #'private - notifying' }
 GtRefactoringsViewModel >> privateNotifyAboutToApplyRefactorings [
 	| anAnnouncement |
@@ -340,6 +349,15 @@ GtRefactoringsViewModel >> privateNotifyExecutedRefactoringsChanged [
 GtRefactoringsViewModel >> privateNotifyFailedRefactorings [
 	| anAnnouncement |
 	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsFailed new
+			refactoringsViewModel: self;
+			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyPreviewedRefactorings [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsPreviewed new
 			refactoringsViewModel: self;
 			executedRefactorings: self executedRefactorings.
 	self announce: anAnnouncement

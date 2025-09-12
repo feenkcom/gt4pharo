@@ -37,6 +37,19 @@ GtExecutedRefactorings >> beFailed: anException [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactorings >> bePreviewed [
+	"Corresponding refactoring changes are displayed,
+	ready to be reviewed by a user, and
+	ready to be applyied.
+	
+	Return true if the resulting state is a preview state."
+
+	<return: #Boolean>
+	state := state previewed.
+	^ state isPreviewed
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactorings >> beRunning: aPromise [
 	state := state running: aPromise
 ]
@@ -183,7 +196,11 @@ GtExecutedRefactorings >> initialize [
 
 { #category : #'api - state' }
 GtExecutedRefactorings >> isPreviewed [
-	"Return true if existing executed refactorings is previewed"
+	"Corresponding refactoring changes are displayed,
+	ready to be reviewed by a user, and
+	ready to be applyied.
+	
+	Return true if the resulting state is a preview state."
 
 	<return: #Boolean>
 	^ state isPreviewed

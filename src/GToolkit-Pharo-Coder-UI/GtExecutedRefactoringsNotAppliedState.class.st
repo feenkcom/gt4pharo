@@ -27,3 +27,8 @@ GtExecutedRefactoringsNotAppliedState >> canBeReplaced [
 GtExecutedRefactoringsNotAppliedState >> ifBeforeApplyingDo: aBlock [
 	aBlock value
 ]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsNotAppliedState >> previewed [
+	^ GtExecutedRefactoringsState previewed
+]

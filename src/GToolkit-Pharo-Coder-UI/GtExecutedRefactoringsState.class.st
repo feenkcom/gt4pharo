@@ -156,6 +156,15 @@ GtExecutedRefactoringsState >> isPreviewed [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsState >> previewed [
+	"Corresponding refactoring changes are displayed,
+	ready to be reviewed by a user, and
+	ready to be applyied."
+
+	^ self
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsState >> running: aPromise [
 	^ self
 ]

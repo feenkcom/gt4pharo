@@ -5,7 +5,8 @@ Class {
 		'applyButton',
 		'progressElement',
 		'exceptionElement',
-		'finishedElement'
+		'finishedElement',
+		'containerElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -23,16 +24,19 @@ GtRefactoringsToolbarElement >> initialize [
 	self initializeProgressElement.
 	self initializeExceptionElement.
 	self initializeFinishedElement.
+	self initializeContainer.
 
-	self addChild: applyButton as: GtRefactoringsPreviewAcceptId.
-	self addChild: progressElement as: #progress.
-	self addChild: exceptionElement as: #exception.
-	self addChild: finishedElement as: #finished.
+	containerElement addChild: applyButton as: GtRefactoringsPreviewAcceptId.
+	containerElement addChild: progressElement as: #progress.
+	containerElement addChild: exceptionElement as: #exception.
+	containerElement addChild: finishedElement as: #finished.
+
+	self addChild: containerElement as: #container.
 
 	exceptionElement
 		addAptitude: (BrLayoutResizerAptitude new inherit: [ exceptionElement children ]).
 
-	self
+	containerElement
 		addAptitude: (BrLayoutResizerAptitude new
 				hMatchParentToMatchParent: progressElement;
 				hExactToMatchParent: progressElement;
@@ -42,6 +46,9 @@ GtRefactoringsToolbarElement >> initialize [
 				hExactToMatchParent: exceptionElement;
 				hFitContentToFitContent: exceptionElement;
 				hFitContentLimitedToFitContentLimited: exceptionElement).
+
+	self addAptitude: (BrLayoutResizerAptitude new 
+				inherit: containerElement).
 
 	self fitContentLimited
 ]
@@ -58,6 +65,13 @@ GtRefactoringsToolbarElement >> initializeApplyButton [
 			action: [ self onApplyButtonClick ];
 			disable;
 			yourself
+]
+
+{ #category : #initialization }
+GtRefactoringsToolbarElement >> initializeContainer [
+	containerElement := BrHorizontalPane new
+			hFitContentLimited;
+			vFitContent
 ]
 
 { #category : #initialization }
@@ -176,6 +190,11 @@ GtRefactoringsToolbarElement >> updateAsEnabledApplyButton [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsHiddenContainer [
+	containerElement visibility: BlVisibility gone
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsHiddenException [
 	exceptionElement visibility: BlVisibility gone.
 	exceptionElement removeChildren.
@@ -189,6 +208,11 @@ GtRefactoringsToolbarElement >> updateAsHiddenFinishedLabel [
 { #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsHiddenProgress [
 	progressElement visibility: BlVisibility gone
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsVisibleContainer [
+	containerElement visibility: BlVisibility visible
 ]
 
 { #category : #'private - updating' }

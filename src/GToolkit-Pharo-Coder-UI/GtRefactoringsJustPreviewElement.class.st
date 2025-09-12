@@ -196,10 +196,12 @@ GtRefactoringsJustPreviewElement >> updateDisplayedRefactorings [
 			anExecutedRefactorings
 				refactoringsDo: [ :aCollection | 
 					self updateAsDisplayedProgress.
-					refactoringsElement refactorings: aCollection ]
+					refactoringsElement refactorings: aCollection.
+					self refactoringsViewModel previewedRefactorings: anExecutedRefactorings ]
 				changesDo: [ :aChanges | 
 					self updateAsDisplayedProgress.
-					refactoringsElement changes: aChanges ]
+					refactoringsElement changes: aChanges.
+					self refactoringsViewModel previewedRefactorings: anExecutedRefactorings ]
 				emptyDo: [ self updateAsHiddenRefactorings ]
 				errorMessagesDo: [ self updateAsHiddenRefactorings ] ]
 		ifNotComputed: [ self updateAsHiddenRefactorings ]

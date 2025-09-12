@@ -8,6 +8,7 @@ Class {
 GtExecutedRefactoringsToolbarElementUpdater >> updateAppyingProgress: aState [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
+	element updateAsVisibleContainer.
 	element updateAsDisabledApplyButton.
 	element updateAsDisplayedProgress.
 	element updateProgressFraction: aState applyingProgress.
@@ -19,6 +20,7 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAppyingProgress: aState [
 GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplicable [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
+	element updateAsVisibleContainer.
 	element updateAsEnabledApplyButton.
 	element updateAsHiddenProgress.
 	element updateProgressFraction: 0.
@@ -28,6 +30,7 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplicable [
 
 { #category : #private }
 GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplied [
+	element updateAsVisibleContainer.
 	element updateAsEnabledApplyButton.
 	element updateAsHiddenProgress.
 	element updateAsHiddenException.
@@ -38,6 +41,7 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplied [
 GtExecutedRefactoringsToolbarElementUpdater >> updateAsNotApplicable [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
+	element updateAsHiddenContainer.
 	element updateAsDisabledApplyButton.
 	element updateAsHiddenProgress.
 	element updateProgressFraction: 0.
@@ -47,6 +51,7 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsNotApplicable [
 
 { #category : #private }
 GtExecutedRefactoringsToolbarElementUpdater >> updateWithException: aState [
+	element updateAsVisibleContainer.
 	element updateAsEnabledApplyButton.
 	element updateAsHiddenProgress.
 	aState ifFailedStateDo: [ :anException | 
@@ -66,6 +71,11 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsAppliedS
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsComputationFailedState: aState [
+	"I think I should display this error in another place.
+	The preview with input element should display:
+	- input element
+	- error"
+
 	self updateWithException: aState
 ]
 
@@ -78,6 +88,9 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsFailedSt
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsNotAppliedState: aState [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
+	"Changes must be previewed to make it applicable."
+	self updateAsNotApplicable.
+	true ifTrue: [ ^ self ].
 	executedRefactorings
 		refactoringsDo: [ self updateAsApplicable ]
 		changesDo: [ self updateAsApplicable ]

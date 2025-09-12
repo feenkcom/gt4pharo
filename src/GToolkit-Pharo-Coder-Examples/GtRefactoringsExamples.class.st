@@ -52,6 +52,22 @@ GtRefactoringsExamples >> basicJustPreviewElement [
 	^ anElement
 ]
 
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> basicPreviewWithInputElement [
+	<gtExample>
+	| anElement |
+	anElement := GtRefactoringsPreviewWithInputElement new.
+
+	self
+		assert: (anElement query / GtRefactoringsToolbarElement) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #progress) anyOne visibility
+		equals: BlVisibility gone.
+	
+	^ anElement
+]
+
 { #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> basicToolbarElement [
 	<gtExample>
@@ -59,17 +75,17 @@ GtRefactoringsExamples >> basicToolbarElement [
 	anElement := GtRefactoringsToolbarElement new.
 
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 
 	^ anElement
@@ -190,6 +206,27 @@ GtRefactoringsExamples >> inputViewModelEmptyComputedRefactorings [
 ]
 
 { #category : #'examples - view model' }
+GtRefactoringsExamples >> inputViewModelExceptionComputedRefactorings [
+	<gtExample>
+	| aViewModel allAnnouncements |
+	aViewModel := self inputViewModelWithException.
+	allAnnouncements := OrderedCollection new.
+	aViewModel optionAt: #allAnnouncements put: allAnnouncements.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aViewModel refactoringsForInput: ('{1}Superclass' format: {self rootClass name}).
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements anyOne class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+
+	^ aViewModel
+]
+
+{ #category : #'examples - view model' }
 GtRefactoringsExamples >> inputViewModelFaultyComputedRefactorings [
 	<gtExample>
 	| aViewModel aCollection allAnnouncements anotherClass |
@@ -253,6 +290,32 @@ GtRefactoringsExamples >> inputViewModelSomeComputedRefactorings [
 
 	self assert: aViewModel executedRefactorings errorMessages size equals: 0.
 	
+	^ aViewModel
+]
+
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> inputViewModelWithException [
+	<gtExample>
+	| aViewModel |
+	aViewModel := self basicInputViewModel.
+	aViewModel optionAt: #dummyEnvironment put: self environment.
+
+	aViewModel
+		refactoringTitle: 'Create as sibling';
+		targetName: self rootClass name;
+		inputLabel: 'Superclass:';
+		initialText: 'NewClass';
+		refactoringWithInput: [ :anInput | 
+			1/0.
+			GtChildrenToSiblingsRefactoring
+				name: anInput
+				class: self rootClass
+				subclasses: self rootClass subclasses ].
+	
+	self assert: aViewModel refactoringTitle equals: 'Create as sibling'.
+	self assert: aViewModel targetName equals: self rootClass name.
+	self assert: aViewModel refactoringsWithInputComputation isNotNil.
+
 	^ aViewModel
 ]
 
@@ -409,6 +472,37 @@ GtRefactoringsExamples >> justPreviewElementScripter [
 	^ aScripter
 ]
 
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElement [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicPreviewWithInputElement.
+	aViewModel := self inputViewModel.
+	anElement refactoringsViewModel: aViewModel.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self previewWithInputElement.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 1.
+	self assert: allAnnouncements anyOne class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	
+	^ aScripter
+]
+
 { #category : #'examples - environment' }
 GtRefactoringsExamples >> rootClass [
 	<gtExample>
@@ -428,17 +522,17 @@ GtRefactoringsExamples >> toolbarElement [
 	anElement refactoringsViewModel: aViewModel.
 	
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 
 	^ anElement
@@ -451,19 +545,24 @@ GtRefactoringsExamples >> toolbarElementEmptyComputedRefactorings [
 	anElement := self basicToolbarElement.
 	aViewModel := self inputViewModelEmptyComputedRefactorings.
 	anElement refactoringsViewModel: aViewModel.
-	
+
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
+		equals: BlVisibility gone.
+
+	self
+		assert: (anElement query / #container) anyOne visibility
 		equals: BlVisibility gone.
 
 	^ anElement
@@ -486,17 +585,17 @@ GtRefactoringsExamples >> toolbarElementEmptyComputedRefactoringsScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 	
 	^ aScripter
@@ -511,17 +610,17 @@ GtRefactoringsExamples >> toolbarElementFaultyComputedRefactorings [
 	anElement refactoringsViewModel: aViewModel.
 	
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 
 	^ anElement
@@ -544,17 +643,17 @@ GtRefactoringsExamples >> toolbarElementFaultyComputedRefactoringsScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 	
 	^ aScripter
@@ -577,17 +676,17 @@ GtRefactoringsExamples >> toolbarElementScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 	
 	^ aScripter
@@ -602,17 +701,17 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactorings [
 	anElement refactoringsViewModel: aViewModel.
 	
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isEnabled.
+	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
 
 	^ anElement
@@ -635,19 +734,23 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isEnabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
-	
+	self
+		assert: (anElement query / #container) anyOne visibility
+		equals: BlVisibility gone.
+
 	^ aScripter
 ]
 
@@ -663,29 +766,43 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_req
 		when: Announcement
 		send: #add:
 		to: allAnnouncements.
+	
+	aScripter do
+		label: 'Simulate a previewed changes';
+		block: [ aViewModel previewedRefactorings: aViewModel executedRefactorings ];
+		play.
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements anyOne class
+		equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
 
 	aScripter click
 		label: 'Request accept changes';
 		// GtRefactoringsPreviewAcceptId;
 		play.
-	self assert: allAnnouncements size equals: 1.
+
+	self assert: allAnnouncements size equals: 2.
 	self
-		assert: allAnnouncements anyOne class
+		assert: allAnnouncements second class
 		equals: GtRefactoringsViewModelApplyChangesRequested.
 
 	self
-		assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query / GtRefactoringsPreviewAcceptId) anyOne isEnabled.
 	self
-		assert: (anElement query / #progress) anyOne visibility
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isEnabled.
+	self
+		assert: (anElement query // #progress) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #exception) anyOne visibility
+		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #finished) anyOne visibility
+		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #container) anyOne visibility
+		equals: BlVisibility visible.
 
 	^ aScripter
 ]
