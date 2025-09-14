@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'packageTagName',
 		'realPackageTag',
-		'dummyClasses'
+		'dummyClasses',
+		'packageName',
+		'tagName'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
@@ -89,6 +91,16 @@ GtPharoDummyPackageTag >> initialize [
 ]
 
 { #category : #accessing }
+GtPharoDummyPackageTag >> packageName [
+	^ packageName
+]
+
+{ #category : #accessing }
+GtPharoDummyPackageTag >> packageName: anObject [
+	packageName := anObject
+]
+
+{ #category : #accessing }
 GtPharoDummyPackageTag >> packageTagName [
 	^ packageTagName
 ]
@@ -123,4 +135,14 @@ GtPharoDummyPackageTag >> removeFromSystem [
 	dummyClasses do: [ :eachClass | eachClass removeFromSystem ].
 	GtPharoCodeModifier removePackageTag: realPackageTag.
 	realPackageTag := nil
+]
+
+{ #category : #accessing }
+GtPharoDummyPackageTag >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+GtPharoDummyPackageTag >> tagName: anObject [
+	tagName := anObject
 ]

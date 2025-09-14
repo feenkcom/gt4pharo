@@ -117,39 +117,67 @@ GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
 ]
 
 { #category : #'api - class' }
-GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName instanceVariableNames: instVarNameList classVariableNames: classVarNames package: aPackageSymbol [
-	^ self
-		critical: [ self
-				forPharo12AndNewer: [ 
-					anExistingClass
-						subclass: aSubclassName
-						instanceVariableNames: instVarNameList
-						classVariableNames: classVarNames
-						package: aPackageSymbol ]
-				forPharo11: [ anExistingClass
-						subclass: aSubclassName
-						instanceVariableNames: instVarNameList
-						classVariableNames: classVarNames
-						package: aPackageSymbol ] ]
-]
-
-{ #category : #'api - class' }
-GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName instanceVariableNames: instVarNameList package: aPackageSymbol [
-	^ self 
-		createSubclassOf: anExistingClass
-		named: aSubclassName
-		instanceVariableNames: instVarNameList
-		classVariableNames: ''
-		package: aPackageSymbol
-]
-
-{ #category : #'api - class' }
 GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName package: aPackageSymbol [
 	^ self 
 		createSubclassOf: anExistingClass
 		named: aSubclassName
-		instanceVariableNames: ''
+		slots: ''
 		package: aPackageSymbol
+]
+
+{ #category : #'api - class' }
+GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName slots: slotNameList package: aPackageSymbol [
+	^ self 
+		createSubclassOf: anExistingClass 
+		named: aSubclassName 
+		slots: slotNameList 
+		sharedVariables: #() 
+		package: aPackageSymbol 
+		tag: nil
+]
+
+{ #category : #'api - class' }
+GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName slots: slotNameList package: aPackageSymbol tag: aPackageTag [
+	^ self 
+		createSubclassOf: anExistingClass 
+		named: aSubclassName 
+		slots: slotNameList 
+		sharedVariables: #() 
+		package: aPackageSymbol 
+		tag: aPackageTag
+]
+
+{ #category : #'api - class' }
+GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName slots: slotNameList sharedVariables: sharedVariablesList package: aPackageSymbol tag: aPackageTag [
+	^ self
+		critical: [ self
+				forPharo12AndNewer: [ ((anExistingClass << aSubclassName)
+						slots: slotNameList;
+						sharedVariables: sharedVariablesList;
+						package: aPackageSymbol;
+						tag: aPackageTag) install ]
+				forPharo11: [ | slotsString classVarsString |
+					slotsString := String
+							streamContents: [ :aStream | 
+								slotNameList
+									do: [ :each | aStream nextPutAll: each ]
+									separatedBy: [ aStream space ] ].
+					classVarsString := String
+							streamContents: [ :aStream | 
+								sharedVariablesList
+									do: [ :each | aStream nextPutAll: each ]
+									separatedBy: [ aStream space ] ].
+					aPackageTag
+						ifNil: [ anExistingClass
+								subclass: aSubclassName
+								instanceVariableNames: slotsString
+								classVariableNames: classVarsString
+								package: aPackageSymbol ]
+						ifNotNil: [ anExistingClass
+								subclass: aSubclassName
+								instanceVariableNames: slotsString
+								classVariableNames: classVarsString
+								package: aPackageSymbol , '-' , aPackageTag ] ] ]
 ]
 
 { #category : #'mutual exclusion' }
