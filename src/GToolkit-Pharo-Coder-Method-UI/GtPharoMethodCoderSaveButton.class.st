@@ -76,7 +76,7 @@ GtPharoMethodCoderSaveButton >> onPharoMethodCoderViewModelChanged [
 
 { #category : #'private - event handling' }
 GtPharoMethodCoderSaveButton >> onSaveAbilityChanged: anAnnouncement [
-	self updateSaveAbility
+	BlTaskAction enqueueElement: self action: [ self updateSaveAbility ]
 ]
 
 { #category : #'private - event handling' }
@@ -107,11 +107,13 @@ GtPharoMethodCoderSaveButton >> subscribeToPharoMethodCoderViewModel [
 	"Is sent after a new pharoMethodCoderViewModel is assigned to the receiver.
 	It is required to unsubscribe from the previously subscribed objects by implementing
 	#unsubscribeFromPharoMethodCoderViewModel if the receiver subscribes to them"
+
 	<modelSubscriber: #methodCoderViewModel>
 	<generatedFrom: #'TGtRobocoderWithObjectTraitTemplate>>#subscribeToObjectTemplate'>
-	
 	pharoMethodCoderViewModel weak
 		when: GtMethodCoderSaveAbilityChanged
+				, GtMethodCoderSaveDisabled
+				, GtMethodCoderSaveEnabled
 			send: #onSaveAbilityChanged:
 			to: self;
 		when: GtSourceCoderViewModelSaveRequested
