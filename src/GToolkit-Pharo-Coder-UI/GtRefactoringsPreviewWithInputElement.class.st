@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'inputElement',
 		'previewElement',
-		'toolbarElement'
+		'toolbarElement',
+		'messagesElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -21,11 +22,13 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 
 	self initializeInputElement.
 	self initializePreviewElement.
+	self initializeMessagesElement.
 	self initializeToolbarElement.
 
-	self addChild: inputElement as: #input.
-	self addChild: previewElement as: #previewContainer.
-	self addChild: toolbarElement as: #toolbar.
+	self addChild: inputElement as: #refactoringInput.
+	self addChild: previewElement as: #refactoringPreviewContainer.
+	self addChild: messagesElement as: #refactoringMessages.
+	self addChild: toolbarElement as: #refactoringToolbar.
 
 	self
 		addAptitude: (BrLayoutResizerAptitude new
@@ -34,6 +37,10 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 				hFitContentToFitContent: inputElement;
 				hFitContentLimitedToFitContentLimited: inputElement;
 				inherit: previewElement;
+				hMatchParentToMatchParent: messagesElement;
+				hExactToMatchParent: messagesElement;
+				hFitContentToFitContent: messagesElement;
+				hFitContentLimitedToFitContentLimited: messagesElement;
 				hMatchParentToMatchParent: toolbarElement;
 				hExactToMatchParent: toolbarElement;
 				hFitContentToFitContent: toolbarElement;
@@ -45,8 +52,12 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 
 { #category : #initialization }
 GtRefactoringsPreviewWithInputElement >> initializeInputElement [
-	inputElement := GtRefactoringsInputElement new 
-		margin: (BlInsets all: 5)
+	inputElement := GtRefactoringsInputElement new
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewWithInputElement >> initializeMessagesElement [
+	messagesElement := GtRefactoringsMessagesElement new
 ]
 
 { #category : #initialization }
@@ -66,5 +77,6 @@ GtRefactoringsPreviewWithInputElement >> onRefactoringsViewModelChanged [
 	toolbarElement visibility: BlVisibility visible.
 	inputElement refactoringsViewModel: self refactoringsViewModel.
 	previewElement refactoringsViewModel: self refactoringsViewModel.
+	messagesElement refactoringsViewModel: self refactoringsViewModel.
 	toolbarElement refactoringsViewModel: self refactoringsViewModel.
 ]

@@ -71,12 +71,7 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsAppliedS
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsComputationFailedState: aState [
-	"I think I should display this error in another place.
-	The preview with input element should display:
-	- input element
-	- error"
-
-	self updateWithException: aState
+	self updateAsNotApplicable
 ]
 
 { #category : #visiting }

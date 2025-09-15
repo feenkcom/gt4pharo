@@ -6,7 +6,8 @@ Class {
 		'inputLabel',
 		'inputFilter',
 		'isEditorFocused',
-		'refactoringsWithInputComputation'
+		'refactoringsWithInputComputation',
+		'currentText'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -19,6 +20,14 @@ GtRefactoringsWithInputViewModel >> canEditInput [
 	^ self canExecutedRefactoringsBeReplaced
 ]
 
+{ #category : #accessing }
+GtRefactoringsWithInputViewModel >> currentText [
+	"Return a current text that is used as input to compute
+	refactorings with input."
+
+	^ currentText ifNil: [ self initialText ]
+]
+
 { #category : #views }
 GtRefactoringsWithInputViewModel >> gtOverview [
 	^ super gtOverview
@@ -28,6 +37,9 @@ GtRefactoringsWithInputViewModel >> gtOverview [
 				GtPhlowOverviewItem new
 					name: 'Initial text';
 					value: initialText.
+				GtPhlowOverviewItem new
+					name: 'Current text';
+					value: self currentText.
 				GtPhlowOverviewItem new
 					name: 'Input filter';
 					value: inputFilter.
@@ -41,13 +53,19 @@ GtRefactoringsWithInputViewModel >> gtOverview [
 
 { #category : #accessing }
 GtRefactoringsWithInputViewModel >> initialText [
-	<return: #String or: #BlText>
+	"Return an initial text that is used as a suggested input to compute
+	refactoringss with input."
+
+	<return: #String>
 	^ initialText
 ]
 
 { #category : #accessing }
-GtRefactoringsWithInputViewModel >> initialText: anObject [
-	initialText := anObject
+GtRefactoringsWithInputViewModel >> initialText: aString [
+	"Set an initial text that is used as a suggested input to compute
+	refactoringss with input."
+
+	initialText := aString
 ]
 
 { #category : #initialization }
@@ -60,6 +78,7 @@ GtRefactoringsWithInputViewModel >> initialize [
 	isEditorFocused := false.
 	inputLabel := 'Input:'.
 	initialText := ''.
+	currentText := nil.
 	inputFilter := BrTextEditorNoLineBreakInputFilter new
 ]
 
@@ -111,6 +130,7 @@ GtRefactoringsWithInputViewModel >> refactoringsForInput: anInput [
 
 	<return: #Boolean>
 	| aBlockWithInput |
+	currentText := anInput asString.
 	aBlockWithInput := self refactoringsWithInputComputation.
 	^ self refactorings: [ aBlockWithInput value: anInput ]
 ]

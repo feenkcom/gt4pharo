@@ -143,7 +143,7 @@ GtExecutedRefactorings >> gtOverview [
 			value: errorMessages;
 			childrenObjects: errorMessages;
 			if: errorMessages isNil subduedDescription: 'Not initialized';
-			if: errorMessages isNotNil
+			if: executedRefactorings isNotNil & errorMessages isNotNil
 				description: [ '{1} {2}'
 						format: {errorMessages size.
 								'item' asPluralBasedOn: executedRefactorings size} ]}

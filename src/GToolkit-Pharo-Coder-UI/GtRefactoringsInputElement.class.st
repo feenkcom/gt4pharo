@@ -5,7 +5,8 @@ Class {
 		'inputEditorElement',
 		'previewButtonElement',
 		'inputLabelElement',
-		'titleElement'
+		'titleElement',
+		'exceptionElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -46,18 +47,18 @@ GtRefactoringsInputElement >> focusTarget [
 
 { #category : #initialization }
 GtRefactoringsInputElement >> initialize [
-	| inputContainer |
+	| inputContainer toolbarContainer |
 	super initialize.
 
 	self initializeTitleElement.
 	self initializeInputLabelElement.
 	self initializeInputEditorElement.
 	self initializePreviewButton.
+	self initializeExceptionElement.
 
 	inputContainer := BrHorizontalPane new
 			alignTopCenter;
 			fitContentLimited;
-			margin: (BlInsets top: 5);
 			addChild: inputLabelElement;
 			addChild: inputEditorElement as: #refactoringEditor;
 			addAptitude: (BrLayoutResizerAptitude new
@@ -66,18 +67,42 @@ GtRefactoringsInputElement >> initialize [
 					hFitContentToFitContent: inputEditorElement;
 					hFitContentLimitedToFitContentLimited: inputEditorElement).
 
+	exceptionElement addAptitude: (BrLayoutResizerAptitude new
+		hInherit: [ exceptionElement children ]).
+					
+	toolbarContainer := BrHorizontalPane new
+			margin: (BlInsets top: 5);
+			alignCenterLeft;
+			fitContentLimited;
+			addChild: previewButtonElement as: #refactoringPreviewButton;
+			addChild: exceptionElement as: #refactoringException;
+			addAptitude: (BrLayoutResizerAptitude new 
+					hMatchParentToMatchParent: exceptionElement;
+					hExactToMatchParent: exceptionElement;
+					hFitContentToFitContent: exceptionElement;
+					hFitContentLimitedToFitContentLimited: exceptionElement).
+
 	self addChild: titleElement as: #refactoringTitle.
 	self addChild: inputContainer as: #refactoringInputLine.
-	self addChild: previewButtonElement as: #refactoringPreviewButton.
+	self addChild: toolbarContainer as: #refactoringPreviewToolbar.
 
 	self
 		addAptitude: (BrLayoutResizerAptitude new
 				matchParentToMatchParent: inputContainer;
 				exactToMatchParent: inputContainer;
 				fitContentToFitContent: inputContainer;
-				fitContentLimitedToFitContentLimited: inputContainer).
+				fitContentLimitedToFitContentLimited: inputContainer;
+				hInherit: toolbarContainer).
 
 	self fitContentLimited
+]
+
+{ #category : #initialization }
+GtRefactoringsInputElement >> initializeExceptionElement [
+	exceptionElement := BrFrame new
+			visibility: BlVisibility gone;
+			hFitContentLimited;
+			vFitContent
 ]
 
 { #category : #initialization }
@@ -106,6 +131,8 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 
 { #category : #initialization }
 GtRefactoringsInputElement >> initializeInputLabelElement [
+	"The top padding is used to center the text with the input editor"
+
 	inputLabelElement := BrLabel new
 			fitContent;
 			margin: (BlInsets top: 2 right: 5);
@@ -118,12 +145,12 @@ GtRefactoringsInputElement >> initializePreviewButton [
 	previewButtonElement := BrButton new
 			fitContent;
 			beFocusable;
+			margin: (BlInsets right: 5);
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			id: GtRefactoringsPreviewAcceptId;
 			icon: BrGlamorousVectorIcons accept;
 			beSmallSize;
 			label: 'Preview changes';
-			margin: (BlInsets top: 5);
 			action: [ :aButtonElement :aButtonModel :anEvent | self onPreviewButtonClick ]
 ]
 
@@ -182,6 +209,7 @@ GtRefactoringsInputElement >> onPreviewButtonClick [
 
 { #category : #'accessing - refactorings view model' }
 GtRefactoringsInputElement >> onRefactoringsViewModelChanged [
+	super onRefactoringsViewModelChanged.
 	self updateElement
 ]
 
@@ -223,16 +251,30 @@ GtRefactoringsInputElement >> unsubscribeFromRefactoringsViewModel [
 { #category : #'private - updating' }
 GtRefactoringsInputElement >> updateEditability [
 	self refactoringsViewModel canEditInput
-		ifTrue: [ 
-			inputEditorElement beMode: BrTextEditorEditableSingleLineMode new.
+		ifTrue: [ inputEditorElement beMode: BrTextEditorEditableSingleLineMode new.
 			previewButtonElement enable ]
-		ifFalse: [ 
-			inputEditorElement beReadOnlyWithSelection.
+		ifFalse: [ inputEditorElement beReadOnlyWithSelection.
 			previewButtonElement disable ].
 
 	self refactoringsViewModel hasPreviewedExecutedRefactorings
 		ifTrue: [ previewButtonElement visibility: BlVisibility gone ]
-		ifFalse: [ previewButtonElement visibility: BlVisibility visible ]
+		ifFalse: [ previewButtonElement visibility: BlVisibility visible ].
+
+	self refactoringsViewModel
+		ifComputedRefactorings: [ exceptionElement
+				visibility: BlVisibility gone;
+				removeChildren ]
+		ifNotComputed: [ exceptionElement
+				visibility: BlVisibility gone;
+				removeChildren ]
+		ifInProgress: [ exceptionElement
+				visibility: BlVisibility gone;
+				removeChildren ]
+		ifFailed: [ :anException | 
+			exceptionElement
+				visibility: BlVisibility visible;
+				removeChildren;
+				addChild: anException asDebuggableElement fitContentLimited ]
 ]
 
 { #category : #'private - updating' }
@@ -250,7 +292,7 @@ GtRefactoringsInputElement >> updateInputEditorElement [
 	maybe only when we press enter (or click the preview button)."
 
 	inputEditorElement inputFilter: self refactoringsViewModel inputFilter.
-	inputEditorElement text: self refactoringsViewModel initialText.
+	inputEditorElement text: self refactoringsViewModel currentText.
 	self refactoringsViewModel isEditorFocused
 		ifTrue: [ inputEditorElement requestFocus ]
 ]

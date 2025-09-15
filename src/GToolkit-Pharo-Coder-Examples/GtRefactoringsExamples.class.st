@@ -52,6 +52,22 @@ GtRefactoringsExamples >> basicJustPreviewElement [
 	^ anElement
 ]
 
+{ #category : #'examples - messages element' }
+GtRefactoringsExamples >> basicMessagesElement [
+	<gtExample>
+	| anElement |
+	anElement := GtRefactoringsMessagesElement new.
+
+	self
+		assert: (anElement query / #refactoringMessagesContainer) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #refactoringMessagesContainer) anyOne childrenCount
+		equals: 0.
+
+	^ anElement
+]
+
 { #category : #'examples - preview with input element' }
 GtRefactoringsExamples >> basicPreviewWithInputElement [
 	<gtExample>
@@ -450,13 +466,16 @@ GtRefactoringsExamples >> justPreviewElementScripter [
 				refactoringsForInput: ('{1}Superclass' format: {self rootClass name}) ];
 		play.
 		
-	self assert: allAnnouncements size equals: 3.
+	self assert: allAnnouncements size equals: 4.
 	self
 		assert: allAnnouncements second class
 		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
 	self
 		assert: allAnnouncements third class
 		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self
+		assert: allAnnouncements fourth class
+		equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
 
 	self
 		assert: (anElement query / #preview) anyOne visibility
@@ -472,6 +491,42 @@ GtRefactoringsExamples >> justPreviewElementScripter [
 	^ aScripter
 ]
 
+{ #category : #'examples - messages element' }
+GtRefactoringsExamples >> messagesElementExceptionComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicMessagesElement.
+	aViewModel := self inputViewModelExceptionComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement query / #refactoringMessagesContainer) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query / #refactoringMessagesContainer) anyOne childrenCount
+		equals: 0.
+
+	^ anElement
+]
+
+{ #category : #'examples - messages element' }
+GtRefactoringsExamples >> messagesElementFaultyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicMessagesElement.
+	aViewModel := self inputViewModelFaultyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement query / #refactoringMessagesContainer) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query / #refactoringMessagesContainer) anyOne childrenCount
+		equals: 1.
+
+	^ anElement
+]
+
 { #category : #'examples - preview with input element' }
 GtRefactoringsExamples >> previewWithInputElement [
 	<gtExample>
@@ -481,6 +536,71 @@ GtRefactoringsExamples >> previewWithInputElement [
 	anElement refactoringsViewModel: aViewModel.
 
 	^ anElement
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementExceptionComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicPreviewWithInputElement.
+	aViewModel := self inputViewModelExceptionComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementFaultyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicPreviewWithInputElement.
+	aViewModel := self inputViewModelFaultyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement query // #refactoringMessagesContainer) anyOne visibility
+		equals: BlVisibility visible.
+
+	self
+		assert: (anElement query // #refactoringMessagesContainer) anyOne childrenCount
+		equals: 1.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementFaultyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self previewWithInputElementFaultyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	self
+		assert: (anElement query // #refactoringMessagesContainer) anyOne visibility
+		equals: BlVisibility visible.
+
+	self
+		assert: (anElement query // #refactoringMessagesContainer) anyOne childrenCount
+		equals: 1.
+
+	self
+		assert: ((anElement query // #refactoringMessagesContainer) anyOne childAt: 1) height
+				> 5.
+
+	self
+		assert: ((anElement query // #refactoringMessagesContainer) anyOne childAt: 1) width
+				> 5.
+
+	^ aScripter
 ]
 
 { #category : #'examples - preview with input element' }
