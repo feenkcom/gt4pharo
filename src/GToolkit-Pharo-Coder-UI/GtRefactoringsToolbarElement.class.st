@@ -99,8 +99,10 @@ GtRefactoringsToolbarElement >> initializeProgressElement [
 			aptitude: BrGlamorousProgressBarAptitude;
 			fraction: 0;
 			constraintsDo: [ :c | 
+				c linear horizontal alignLeft.
+				c linear vertical alignCenter.
 				c horizontal matchParent.
-				c vertical matchParent ]
+				c vertical exact: 5 ]
 ]
 
 { #category : #'private - event handling' }

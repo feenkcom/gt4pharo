@@ -256,9 +256,15 @@ GtRefactoringsInputElement >> updateEditability [
 		ifFalse: [ inputEditorElement beReadOnlyWithSelection.
 			previewButtonElement disable ].
 
-	self refactoringsViewModel hasPreviewedExecutedRefactorings
-		ifTrue: [ previewButtonElement visibility: BlVisibility gone ]
-		ifFalse: [ previewButtonElement visibility: BlVisibility visible ].
+
+	self refactoringsViewModel
+		ifBeforeApplying: [ self refactoringsViewModel
+				hasPreviewedExecutedRefactorings
+				ifTrue: [ previewButtonElement visibility: BlVisibility gone ]
+				ifFalse: [ previewButtonElement visibility: BlVisibility visible ] ]
+		ifApplying: [ previewButtonElement visibility: BlVisibility gone ]
+		ifApplied: [ previewButtonElement visibility: BlVisibility gone ]
+		ifFailed: [ previewButtonElement visibility: BlVisibility gone ].
 
 	self refactoringsViewModel
 		ifComputedRefactorings: [ exceptionElement
@@ -288,9 +294,6 @@ GtRefactoringsInputElement >> updateElement [
 
 { #category : #'private - updating' }
 GtRefactoringsInputElement >> updateInputEditorElement [
-	"Note: at some point, we may also want to store the current text,
-	maybe only when we press enter (or click the preview button)."
-
 	inputEditorElement inputFilter: self refactoringsViewModel inputFilter.
 	inputEditorElement text: self refactoringsViewModel currentText.
 	self refactoringsViewModel isEditorFocused
