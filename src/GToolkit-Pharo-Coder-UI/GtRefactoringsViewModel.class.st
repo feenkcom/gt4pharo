@@ -12,7 +12,8 @@ Class {
 		'menuModel',
 		'anchorElement',
 		'executedRefactorings',
-		'announcer'
+		'announcer',
+		'afterAppliedBlock'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -28,8 +29,33 @@ GtRefactoringsViewModel >> aboutToApplyRefactorings: anExecutedRefactorings [
 	anExecutedRefactorings beAboutToApply.
 
 	self privateNotifyAboutToApplyRefactorings.
-
+	
+	self beforeApplyBlock value.
+	
 	^ true
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> afterAppliedBlock [
+	"Return a block that is evaluated after refactorings are successfully applied.
+	The block must understands the #value message.
+	Note: the block is currently evaluated in a UI process. See:
+		- `GtRefactoringsJustPreviewElement>>#onApplyChangesRequest:`, and
+		- `GtRefactoringsViewModel>>#appliedRefactorings:`"
+
+	<return: #BlockClosure>
+	^ afterAppliedBlock
+]
+
+{ #category : #accessing }
+GtRefactoringsViewModel >> afterAppliedBlock: aBlock [
+	"Set a block that is evaluated after refactorings are successfully applied.
+	The block must understands the #value message.
+	Note: the block is currently evaluated in a UI process. See:
+		- `GtRefactoringsJustPreviewElement>>#onApplyChangesRequest:`, and
+		- `GtRefactoringsViewModel>>#appliedRefactorings:`"
+
+	afterAppliedBlock := aBlock
 ]
 
 { #category : #accessing }
@@ -57,18 +83,32 @@ GtRefactoringsViewModel >> appliedRefactorings: anExecutedRefactorings [
 
 	anExecutedRefactorings beApplied.
 
-	self privateNotifyAppliedRefactorings
+	self privateNotifyAppliedRefactorings.
+	
+	self afterAppliedBlock value
 ]
 
 { #category : #accessing }
 GtRefactoringsViewModel >> beforeApplyBlock [
+	"Return a block that is evaluated before refactorings are applied.
+	The block must understands the #value message.
+	Note: the block is currently evaluated in a UI process. See:
+		- `GtRefactoringsJustPreviewElement>>#onApplyChangesRequest:`, and
+		- `GtRefactoringsViewModel>>#aboutToApplyRefactorings:`"
+
 	<return: #BlockClosure>
 	^ beforeApplyBlock
 ]
 
 { #category : #accessing }
-GtRefactoringsViewModel >> beforeApplyBlock: anObject [
-	beforeApplyBlock := anObject
+GtRefactoringsViewModel >> beforeApplyBlock: aBlock [
+	"Set a block that is evaluated before refactorings are applied.
+	The block must understands the #value message.
+	Note: the block is currently evaluated in a UI process. See:
+		- `GtRefactoringsJustPreviewElement>>#onApplyChangesRequest:`, and
+		- `GtRefactoringsViewModel>>#aboutToApplyRefactorings:`"
+
+	beforeApplyBlock := aBlock
 ]
 
 { #category : #'api - testing' }
@@ -214,6 +254,7 @@ GtRefactoringsViewModel >> initialize [
 	targetName := nil.
 	isPreviewButtonFocused := true.
 	beforeApplyBlock := [  ].
+	afterAppliedBlock := [ ].
 	cancelBlock := [  ]
 ]
 

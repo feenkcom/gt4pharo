@@ -85,7 +85,7 @@ GtRefactoringsInputElement >> initialize [
 
 	self addChild: titleElement as: #refactoringTitle.
 	self addChild: inputContainer as: #refactoringInputLine.
-	self addChild: toolbarContainer as: #refactoringPreviewToolbar.
+	self addChild: toolbarContainer as: #refactoringInputToolbar.
 
 	self
 		addAptitude: (BrLayoutResizerAptitude new

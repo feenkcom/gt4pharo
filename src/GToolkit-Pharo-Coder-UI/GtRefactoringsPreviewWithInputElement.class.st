@@ -1,6 +1,8 @@
 Class {
 	#name : #GtRefactoringsPreviewWithInputElement,
 	#superclass : #GtRefactoringsBasicElement,
+	#traits : 'TGtRefactoringsPinnableElement',
+	#classTraits : 'TGtRefactoringsPinnableElement classTrait',
 	#instVars : [
 		'inputElement',
 		'previewElement',
@@ -46,6 +48,7 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 				hFitContentToFitContent: toolbarElement;
 				hFitContentLimitedToFitContentLimited: toolbarElement).
 
+	self padding: (BlInsets all: 5).
 	self hExact: 350.
 	self vFitContentLimited
 ]
