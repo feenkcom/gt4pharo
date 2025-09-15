@@ -27,7 +27,6 @@ GtRefactoringsToolbarElement >> initialize [
 	self initializeContainer.
 
 	containerElement addChild: applyButton as: GtRefactoringsPreviewAcceptId.
-	containerElement addChild: progressElement as: #progress.
 	containerElement addChild: exceptionElement as: #exception.
 	containerElement addChild: finishedElement as: #finished.
 
@@ -95,7 +94,7 @@ GtRefactoringsToolbarElement >> initializeFinishedElement [
 { #category : #initialization }
 GtRefactoringsToolbarElement >> initializeProgressElement [
 	progressElement := BrProgress new
-			visibility: BlVisibility gone;
+			id: #progress;
 			aptitude: BrGlamorousProgressBarAptitude;
 			fraction: 0;
 			constraintsDo: [ :c | 
@@ -183,7 +182,8 @@ GtRefactoringsToolbarElement >> updateAsDisplayedFinishedLabel [
 
 { #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsDisplayedProgress [
-	progressElement visibility: BlVisibility visible
+	progressElement hasParent ifTrue: [ ^ self ].
+	containerElement addChild: progressElement after: applyButton.
 ]
 
 { #category : #'private - updating' }
@@ -214,7 +214,10 @@ GtRefactoringsToolbarElement >> updateAsHiddenFinishedLabel [
 
 { #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsHiddenProgress [
-	progressElement visibility: BlVisibility gone
+	"The progress element is removed (instead of a visibility gone),
+	because it has a repeated animation task that would continue running in a background."
+
+	progressElement removeFromParent
 ]
 
 { #category : #'private - updating' }

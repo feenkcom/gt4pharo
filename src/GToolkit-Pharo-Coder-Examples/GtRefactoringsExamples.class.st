@@ -77,10 +77,8 @@ GtRefactoringsExamples >> basicPreviewWithInputElement [
 	self
 		assert: (anElement query / GtRefactoringsToolbarElement) anyOne visibility
 		equals: BlVisibility gone.
-	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
-	
+	self assert: (anElement query // #progress) isEmpty.
+
 	^ anElement
 ]
 
@@ -93,10 +91,11 @@ GtRefactoringsExamples >> basicToolbarElement [
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
@@ -670,14 +669,15 @@ GtRefactoringsExamples >> toolbarElement [
 	anElement := self basicToolbarElement.
 	aViewModel := self inputViewModel.
 	anElement refactoringsViewModel: aViewModel.
-	
+
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
@@ -702,8 +702,8 @@ GtRefactoringsExamples >> toolbarElementEmptyComputedRefactorings [
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
@@ -737,17 +737,18 @@ GtRefactoringsExamples >> toolbarElementEmptyComputedRefactoringsScripter [
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
 		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
-	
+
 	^ aScripter
 ]
 
@@ -758,14 +759,15 @@ GtRefactoringsExamples >> toolbarElementFaultyComputedRefactorings [
 	anElement := self basicToolbarElement.
 	aViewModel := self inputViewModelFaultyComputedRefactorings.
 	anElement refactoringsViewModel: aViewModel.
-	
+
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
@@ -795,17 +797,18 @@ GtRefactoringsExamples >> toolbarElementFaultyComputedRefactoringsScripter [
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
 		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
-	
+
 	^ aScripter
 ]
 
@@ -828,17 +831,18 @@ GtRefactoringsExamples >> toolbarElementScripter [
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
 	self
 		assert: (anElement query // #finished) anyOne visibility
 		equals: BlVisibility gone.
-	
+
 	^ aScripter
 ]
 
@@ -849,14 +853,15 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactorings [
 	anElement := self basicToolbarElement.
 	aViewModel := self inputViewModelSomeComputedRefactorings.
 	anElement refactoringsViewModel: aViewModel.
-	
+
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
-	self assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
@@ -889,8 +894,8 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter [
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
@@ -916,7 +921,7 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_req
 		when: Announcement
 		send: #add:
 		to: allAnnouncements.
-	
+
 	aScripter do
 		label: 'Simulate a previewed changes';
 		block: [ aViewModel previewedRefactorings: aViewModel executedRefactorings ];
@@ -942,8 +947,8 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_req
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isEnabled.
 	self
-		assert: (anElement query // #progress) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // #progress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
 	self
 		assert: (anElement query // #exception) anyOne visibility
 		equals: BlVisibility gone.
