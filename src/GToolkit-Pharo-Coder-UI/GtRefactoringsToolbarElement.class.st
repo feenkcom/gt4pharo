@@ -192,6 +192,11 @@ GtRefactoringsToolbarElement >> updateAsEnabledApplyButton [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsFocusedApplyButton [
+	applyButton requestFocus
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsHiddenContainer [
 	containerElement visibility: BlVisibility gone
 ]
@@ -222,6 +227,14 @@ GtRefactoringsToolbarElement >> updateElement [
 	GtExecutedRefactoringsToolbarElementUpdater new
 		forRefactoringsElement: self;
 		update
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsToolbarElement >> updateElement: isJustPreviewed [
+	"The isJustPreviewed argument indicates whether a changes preview
+	was just displayed and therefore a apply button should be get focus."
+
+	
 ]
 
 { #category : #'private - updating' }

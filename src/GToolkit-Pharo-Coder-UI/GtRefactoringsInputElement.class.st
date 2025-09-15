@@ -6,7 +6,8 @@ Class {
 		'previewButtonElement',
 		'inputLabelElement',
 		'titleElement',
-		'exceptionElement'
+		'exceptionElement',
+		'toolbarContainer'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -47,7 +48,7 @@ GtRefactoringsInputElement >> focusTarget [
 
 { #category : #initialization }
 GtRefactoringsInputElement >> initialize [
-	| inputContainer toolbarContainer |
+	| inputContainer |
 	super initialize.
 
 	self initializeTitleElement.
@@ -111,6 +112,7 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 			beFocusable;
 			hMatchParent;
 			vFitContent;
+			padding: (BlInsets all: 5);
 			aptitude: BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize;
 			text: '';
 			beMode: BrTextEditorEditableSingleLineMode new;
@@ -119,8 +121,7 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 					name: 'Accept new text';
 					description: 'Accept new text and perform preview refactoring';
 					combination: BlKeyCombination enter;
-					action: [ :anEvent | self onAcceptInputTextShortcutEvent: anEvent ]);
-			constraintsDo: [ :c | c padding: (BlInsets all: 5) ].
+					action: [ :anEvent | self onAcceptInputTextShortcutEvent: anEvent ]).
 
 	inputEditorElement editor
 		when: BrTextEditorModifiedEvent
@@ -249,38 +250,55 @@ GtRefactoringsInputElement >> unsubscribeFromRefactoringsViewModel [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsDisabledPreviewButton [
+	previewButtonElement disable
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsDisplayedToolbarContainer [
+	toolbarContainer visibility: BlVisibility visible
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsEditableInputEditor [
+	inputEditorElement beMode: BrTextEditorEditableSingleLineMode new
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsEnabledPreviewButton [
+	previewButtonElement enable
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsHiddenToolbarContainer [
+	toolbarContainer visibility: BlVisibility gone
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsReadOnlyInputEditor [
+	inputEditorElement beReadOnlyWithSelection
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsWithException: anException [
+	exceptionElement
+		visibility: BlVisibility visible;
+		removeChildren;
+		addChild: anException asDebuggableElement fitContentLimited
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsInputElement >> updateAsWithoutExceptions [
+	exceptionElement
+		visibility: BlVisibility gone;
+		removeChildren
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsInputElement >> updateEditability [
-	self refactoringsViewModel canEditInput
-		ifTrue: [ inputEditorElement beMode: BrTextEditorEditableSingleLineMode new.
-			previewButtonElement enable ]
-		ifFalse: [ inputEditorElement beReadOnlyWithSelection.
-			previewButtonElement disable ].
-
-
-	self refactoringsViewModel
-		ifBeforeApplying: [ self refactoringsViewModel
-				hasPreviewedExecutedRefactorings
-				ifTrue: [ previewButtonElement visibility: BlVisibility gone ]
-				ifFalse: [ previewButtonElement visibility: BlVisibility visible ] ]
-		ifApplying: [ previewButtonElement visibility: BlVisibility gone ]
-		ifApplied: [ previewButtonElement visibility: BlVisibility gone ]
-		ifFailed: [ previewButtonElement visibility: BlVisibility gone ].
-
-	self refactoringsViewModel
-		ifComputedRefactorings: [ exceptionElement
-				visibility: BlVisibility gone;
-				removeChildren ]
-		ifNotComputed: [ exceptionElement
-				visibility: BlVisibility gone;
-				removeChildren ]
-		ifInProgress: [ exceptionElement
-				visibility: BlVisibility gone;
-				removeChildren ]
-		ifFailed: [ :anException | 
-			exceptionElement
-				visibility: BlVisibility visible;
-				removeChildren;
-				addChild: anException asDebuggableElement fitContentLimited ]
+	GtRefactoringsInputElementUpdater new
+		forRefactoringsElement: self;
+		update
 ]
 
 { #category : #'private - updating' }
@@ -288,8 +306,8 @@ GtRefactoringsInputElement >> updateElement [
 	self updateTitleElement.
 	self updateInputLabelElement.
 	self updateInputEditorElement.
-	self updatePreviewButtonElement.
 	self updateEditability.
+	self updatePreviewButtonElement.
 ]
 
 { #category : #'private - updating' }

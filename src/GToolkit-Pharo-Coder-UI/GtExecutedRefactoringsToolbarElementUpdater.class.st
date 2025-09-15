@@ -100,7 +100,8 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsNotCompu
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsPreviewedState: aState [
-	self updateAsApplicable
+	self updateAsApplicable.
+	element updateAsFocusedApplyButton
 ]
 
 { #category : #visiting }
