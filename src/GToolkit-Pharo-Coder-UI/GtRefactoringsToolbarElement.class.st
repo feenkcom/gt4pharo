@@ -36,6 +36,7 @@ GtRefactoringsToolbarElement >> initialize [
 		addAptitude: (BrLayoutResizerAptitude new inherit: [ exceptionElement children ]).
 
 	containerElement
+		margin: (BlInsets top: 5);
 		addAptitude: (BrLayoutResizerAptitude new
 				hMatchParentToMatchParent: progressElement;
 				hExactToMatchParent: progressElement;
