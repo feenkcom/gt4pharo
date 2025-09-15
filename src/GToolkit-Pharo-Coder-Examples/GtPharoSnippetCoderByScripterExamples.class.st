@@ -1186,6 +1186,68 @@ GtPharoSnippetCoderByScripterExamples >> hasRefactoringPreviewAccept: aScripter 
 				value: [ :button | button isVisible ] equals: true ]
 ]
 
+{ #category : #'examples - inline temp' }
+GtPharoSnippetCoderByScripterExamples >> inlineAssignment [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoSnippetCoder forSource: 'aaaa := ''aaa''.
+''bbb'', aaaa, ''ccc''' ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select var to inline';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: 4;
+						select ] ].
+
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover inline assignment';
+				onSpaceRoot;
+				// #'context-menu--inline-temp' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inline assignment';
+				onSpaceRoot;
+				// #'context-menu--inline-temp' ].
+
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check text';
+				// GtSourceCoderEditorId;
+				elementSatisfies: [ :aSourceEditor | 
+					| text |
+					text := aSourceEditor text asString.
+					(GtPharoParser
+						parse: text
+						startingAt: GtPharoParser startingStateForMethodSequence)
+						= (GtPharoParser
+								parse: '''bbb'', ''aaa'', ''ccc'''
+								startingAt: GtPharoParser startingStateForMethodSequence) ] ].
+
+	^ scripter
+]
+
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> inlineAssignmentForLocalVariable [
 	<gtExample>
