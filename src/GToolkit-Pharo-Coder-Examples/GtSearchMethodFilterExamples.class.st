@@ -206,3 +206,28 @@ GtSearchMethodFilterExamples >> packagePatternFilter [
 	self assert: (filter matches: thisContext method).
 	^ filter
 ]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> uncategorizedMethodsFilter_doNotMatchCategorizedMethod [
+	<gtExample>
+	| filter |
+	filter := GtSearchMethodCategoryFilter forCategory: Protocol unclassified.
+	
+	self assert: filter notEmpty.
+	self assert: (filter matches: thisContext method) not.
+	
+	^ filter.
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> uncategorizedMethodsilter_matchUncategorizedMethod [
+	<gtExample>
+	| filter |
+	filter := GtSearchMethodCategoryFilter forCategory: Protocol unclassified.
+
+	self assert: filter notEmpty.
+	self assert: (filter 
+		matches: GtFilterStubSampleA>>#uncategoriedMethodForFilter).
+	
+	^ filter.
+]

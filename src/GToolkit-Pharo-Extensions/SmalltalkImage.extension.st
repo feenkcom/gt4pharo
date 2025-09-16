@@ -6,9 +6,8 @@ SmalltalkImage >> classInstaller [
 	"Answer the class responsible of creating classes in the system."
 	
 	^ self 
-		forPharo12: [ GtShiftClassInstaller12] 
+		forPharo12AndNewer: [ GtShiftClassInstaller12] 
 		forPharo11: [ GtShiftClassInstaller] 
-		forPharo10: [ GtShiftClassInstaller] 
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }

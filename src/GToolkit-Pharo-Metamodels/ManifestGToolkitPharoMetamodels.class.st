@@ -27,10 +27,10 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'Refactoring-Changes'.
 		'Ring-Core'.
 	}, (self  
-		forPharo12: [{
+		forPharo12AndNewer: [{
 			'Kernel-CodeModel'.
 			'GToolkit-Pharo11Stubs'}] 
-		forPharo11AndPharo10: [{
+		forPharo11: [{
 			'RPackage-Core'.
 			'GToolkit-Pharo12Stubs'}])
 ]
@@ -45,8 +45,8 @@ ManifestGToolkitPharoMetamodels class >> shouldDependOn [
 		'Refactoring-Changes'.
 		'Ring-Core'.
 	}, (self  
-		forPharo12: [{
+		forPharo12AndNewer: [{
 			'GToolkit-Pharo11Stubs'}] 
-		forPharo11AndPharo10: [{
+		forPharo11: [{
 			'GToolkit-Pharo12Stubs'}])
 ]

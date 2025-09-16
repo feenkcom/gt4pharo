@@ -311,8 +311,8 @@ GtRBNamespaceExamples >> referencesToQQQZZZFromObsoleteClass [
 	self assert: (model privateReferencesTo: 'QQQZZZ' asSymbol) isEmpty ]
 		ensure: [ GtPharoIndex current
 				classRemoved: (self
-						forPharo12: [ ClassRemoved class: cls ]
-						forPharo11AndPharo10: [ ClassRemoved class: cls category: cls category ]).
+						forPharo12AndNewer: [ ClassRemoved class: cls ]
+						forPharo11: [ ClassRemoved class: cls category: cls category ]).
 			cls removeSelector: 'referencingQQQZZZ' asSymbol.
 			cls removeFromSystem ].
 	self assert: (model privateReferencesTo: 'QQQZZZ' asSymbol) isEmpty.

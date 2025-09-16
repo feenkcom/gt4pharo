@@ -6,11 +6,11 @@ RPackage >> gtDoesExtendClasses [
 	<return: #Boolean>
 
 	^ self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			"Pharo 12 has only a single slot 'extensionSelectors', while Pharo 11 has
 			two distict slots for class and metaclass extensions"
 			self extensionSelectors notEmpty ] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 			self classExtensionSelectors isNotEmpty or: [ 
 			self metaclassExtensionSelectors isNotEmpty ] ]
 ]

@@ -38,11 +38,11 @@ GtRingBehaviourDefinitionConversionTest >> testRingClassToRingClassDefinitionCon
 	ringDefinition := ringClass asRingDefinition.
 	
 	self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			self 
 				assert: ringDefinition package name 
 				equals: self currentClass package name] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 			self 
 				assert: ringDefinition package name 
 				equals: self currentClass category ].

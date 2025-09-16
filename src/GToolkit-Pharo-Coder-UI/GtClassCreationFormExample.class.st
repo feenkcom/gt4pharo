@@ -44,7 +44,7 @@ GtClassCreationFormExample >> formClass [
 	^ GtClassCreationForm
 ]
 
-{ #category : #accessing }
+{ #category : #'tear down' }
 GtClassCreationFormExample >> removeClassAndPackage [
 	Smalltalk removeClassNamed: self exampleClassName.
 	
@@ -55,7 +55,7 @@ GtClassCreationFormExample >> removeClassAndPackage [
 				aPackage removeFromSystem ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterOnSimpleForm [
 	<gtExample>
 	| scripter |
@@ -70,7 +70,7 @@ GtClassCreationFormExample >> scripterOnSimpleForm [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassAccepted [
 	<gtExample>
 	<after: #removeClassAndPackage>
@@ -93,7 +93,7 @@ GtClassCreationFormExample >> scripterWithClassAccepted [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassAcceptedWithPackageAndTag [
 	<gtExample>
 	<after: #removeClassAndPackage>
@@ -132,7 +132,7 @@ self
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassAcceptedWithPackageAndTagWithDashInBothNames [
 	<gtExample>
 	<after: #removeClassAndPackage>
@@ -170,7 +170,7 @@ self
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNameAndPackageFilled [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -203,7 +203,7 @@ GtClassCreationFormExample >> scripterWithClassNameAndPackageFilled [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNameFilled [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -234,7 +234,7 @@ GtClassCreationFormExample >> scripterWithClassNameFilled [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNameFilledIncludingUnderscore [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -265,7 +265,7 @@ GtClassCreationFormExample >> scripterWithClassNameFilledIncludingUnderscore [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNameFilledValidationFailed [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -294,7 +294,7 @@ GtClassCreationFormExample >> scripterWithClassNameFilledValidationFailed [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoConflictingTraitsFilled [
 	<gtExample>
 	| scripter aDescription aFieldElementId aValidatorElementId |
@@ -364,7 +364,7 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoConflictingTrait
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -439,7 +439,7 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilled [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -472,7 +472,7 @@ GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilled [
 	^ scripter
 ]
 
-{ #category : #accessing }
+{ #category : #'examples - scripter' }
 GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilledWithDashName [
 	<gtExample>
 	| scripter aDescription anElementId |
@@ -529,6 +529,5 @@ GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilledWith
 
 { #category : #accessing }
 GtClassCreationFormExample >> simpleForm [
-	<gtExample>
 	^ self formClass new
 ]

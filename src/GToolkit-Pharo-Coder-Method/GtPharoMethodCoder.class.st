@@ -305,7 +305,7 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 		evaluatedSourceString: aSourceString.
 
 	^ self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			"TODO: check what happends when we get errors during compilation"
 			self protocol
 				ifNil: [
@@ -317,7 +317,7 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 						compile: aSourceString
 						in: aBehavior
 						classified: aCategory ] ] 
-		forPharo11AndPharo10: [ 
+		forPharo11: [ 
 			self protocol
 				ifNil: [
 					RBAddMethodChange
@@ -1085,9 +1085,9 @@ GtPharoMethodCoder >> protocol [
 			(self behavior notNil and: [ self selector notNil ])
 				ifTrue: [ 
 					self 
-						forPharo12: [
+						forPharo12AndNewer: [
 							self behavior protocolNameOfSelector: self selector] 
-						forPharo11AndPharo10: [
+						forPharo11: [
 							self behavior whichCategoryIncludesSelector: self selector ] ] ]
 ]
 

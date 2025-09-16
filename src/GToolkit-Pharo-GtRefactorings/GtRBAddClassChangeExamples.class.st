@@ -49,7 +49,7 @@ GtRBAddClassChangeExamples >> verifyChanges [
 			self
 				assert: (change packageTagName
 						ifNil: [ self
-								forPharo12: [ cls packageTag isRoot ]
-								forPharo11AndPharo10: [ cls tags isEmpty ] ]
+								forPharo12AndNewer: [ cls packageTag isRoot ]
+								forPharo11: [ cls tags isEmpty ] ]
 						ifNotNil: [ :t | (cls isTaggedWith: t) or: [ change packageName = t ] ]) ]
 ]

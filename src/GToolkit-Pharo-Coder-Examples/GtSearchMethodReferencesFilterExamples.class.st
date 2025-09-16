@@ -1,14 +1,24 @@
 Class {
 	#name : #GtSearchMethodReferencesFilterExamples,
-	#superclass : #GtSearchMethodFilterExamples,
+	#superclass : #Object,
 	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
 }
+
+{ #category : #examples }
+GtSearchMethodReferencesFilterExamples >> gtExamplePragmas [
+	<gtExample>
+	| filter |
+	filter := #gtExample gtPragmas.
+	self assert: filter notEmpty.
+	self assert: (filter matches: thisContext method).
+	^ filter
+]
 
 { #category : #examples }
 GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToMethodCoder [
 	<gtExample>
 	| filter |
-	filter := #gtExample gtPragmas & GtPharoMethodCoder gtReferences.
+	filter := self gtExamplePragmas & GtPharoMethodCoder gtReferences.
 	self assert: (filter matches: thisContext method).
 	self assert: filter notEmpty.
 	^ filter

@@ -49,9 +49,9 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'System-Announcements'.
 		'Transcript-NonInteractive'
 	}, (self 
-		forPharo12: [ {
+		forPharo12AndNewer: [ {
 			'Deprecated12' } ] 
-		forPharo11AndPharo10: [ { } ])
+		forPharo11: [ { } ])
 ]
 
 { #category : #asserting }

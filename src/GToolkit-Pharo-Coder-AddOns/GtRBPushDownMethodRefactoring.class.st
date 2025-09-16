@@ -12,8 +12,8 @@ GtRBPushDownMethodRefactoring >> preconditions [
 			into: [ :cond :each | 
 				cond & (RBCondition definesSelector: each in: class)
 					& (self
-							forPharo12: [ RBCondition subclassesOf: class isDoingASuperSendFor: each ]
-							forPharo11AndPharo10: [ RBCondition subclassesOf: class referToSelector: each ])
+							forPharo12AndNewer: [ RBCondition subclassesOf: class isDoingASuperSendFor: each ]
+							forPharo11: [ RBCondition subclassesOf: class referToSelector: each ])
 							not ].
 	^ condition
 ]

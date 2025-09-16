@@ -179,7 +179,7 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsConflictWhenSubsc
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder |
 	
-	self forPharo12: [ ^ self ] forPharo11AndPharo10: [ ].
+	self forPharo12AndNewer: [ ^ self ] forPharo11: [ ].
 	
 	anEventsRecoder := self eventsRecorder.
 
@@ -210,7 +210,7 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSub
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder |
 	
-	self forPharo12: [  ] forPharo11AndPharo10: [ ^ self ].
+	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
 	
 	anEventsRecoder := self eventsRecorder.
 
@@ -257,11 +257,11 @@ GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribe
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
 	
 	self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			self 
 				assert: anEventsRecoder first errorMessage 
 				equals: 'Undeclared temp: new' ] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 			self 
 				assert: anEventsRecoder first errorMessage 
 				equals: nil].
