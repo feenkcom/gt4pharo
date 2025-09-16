@@ -1360,54 +1360,30 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 
 	scripter menuStep
 		hoverMenuItemWithId: #'coder--context-menu-convert-to-sibling';
-		onSpaceRoot;
-		play.
-
-	scripter do
-		label: 'Get dialog element position';
-		block: [ :anElement :aUserData | aUserData at: #siblingFormPosition put: anElement position ];
-		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		play.
-
-	scripter assert
-		label: 'Assert dialog element position is to the right';
-		satisfies: [ :anElement :aUserData | 
-			anElement childrenCount = 3
-				and: [ (anElement childAt: 2) bounds inSpace right
-						<= (anElement childAt: 3) bounds inSpace left ] ];
+		storePositionOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
+		assertSamePositionOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
+		assertPositionToTheRightOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
 		onPopover;
 		play.
 
-	scripter editor
-		click;
-		assertHasFocus;
-		selectAll;
-		typeText: className;
-		typeText: self extraLongClassName;
-		onSpaceRoot;
-		// #refactoringEditor;
-		play.
-
-	scripter assert
-		label: 'Assert dialog element position';
-		value: [ :anElement :aUserData | anElement position ]
-			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
-		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		play.
-
-	scripter assert
-		label: 'Assert preview button is visible';
-		value: [ :anElement | anElement visibility ] equals: BlVisibility visible;
+	scripter refactorings
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				selectAll;
+				typeText: className;
+				typeText: self extraLongClassName;
+				assertHasFocus ];
+		assertInputToolbarIsVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
 		onPopover;
-		// #refactoringPreviewButton;
 		play.
 
-	scripter editor
-		assertHasFocus;
+	scripter menuStep
+		assertSamePositionOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
 		onPopover;
-		// #refactoringEditor;
 		play.
 
 	^ scripter
@@ -1425,22 +1401,20 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 	scripter menuStep
 		clickMenuItemWithId: #'coder--context-menu-convert-to-sibling';
 		assertClosedMenuContainer;
+		onPopover;
+		play.
+
+	scripter menuStep
+		assertSamePositionOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
 		onSpaceRoot;
 		play.
 
-	scripter assert
-		label: 'Assert dialog element position';
-		value: [ :anElement :aUserData | anElement position ]
-			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+	scripter refactorings
+		assertInputToolbarIsVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
 		onSpaceRoot;
 		// #'coder--context-menu-convert-to-sibling-form';
-		play.
-
-	scripter assert
-		label: 'Assert preview button is visible';
-		value: [ :anElement | anElement visibility ] equals: BlVisibility visible;
-		onSpaceRoot;
-		// #refactoringPreviewButton;
 		play.
 
 	^ scripter
@@ -1456,42 +1430,18 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 			convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu.
 	realClass := scripter userData at: #realClass.
 
-	scripter click
-		label: 'Click preview button';
-		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		// #refactoringPreviewButton;
-		play.
-
-	scripter assert
-		label: 'Assert dialog element position';
-		value: [ :anElement :aUserData | anElement position ]
-			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+	scripter refactorings
+		clickPreviewButton;
+		assertInputToolbarIsNotVisible;
+		assertChangesPreviewIsVisible;
+		assertAcceptButtonHasFocus;
 		onSpaceRoot;
 		// #'coder--context-menu-convert-to-sibling-form';
 		play.
 
-	scripter assert
-		label: 'Assert preview button is not visible';
-		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
+	scripter menuStep
+		assertSamePositionOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
 		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		// #refactoringInputToolbar;
-		play.
-
-	scripter assert
-		label: 'Assert refactoring preview is visible';
-		exists;
-		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		// #preview;
-		play.
-
-	scripter assert
-		hasFocus;
-		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		// GtRefactoringsPreviewAcceptId;
 		play.
 
 	^ scripter
@@ -1510,16 +1460,12 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 
 	self assert: realClass subclasses size > 0.
 
-	scripter assert
-		label: 'Assert refactoring pinned form is visible';
-		exists;
+	scripter refactorings
+		assertFormIsOpened;
+		pressReturnToApplyChanges;
+		assertFormIsClosed;
 		onSpaceRoot;
 		// #'coder--context-menu-convert-to-sibling-form';
-		play.
-
-	scripter keyPress
-		label: 'Press return to perform refactoring';
-		key: BlKeyboardKey return;
 		play.
 
 	self assert: realClass subclasses size equals: 0.
@@ -1535,13 +1481,6 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 			realClass: newClass;
 			className: newClass name.
 	rootClass dummyPackage dummyClasses: {newDummyClass}.
-
-	scripter assert
-		label: 'Assert refactoring pinned form is closed';
-		notExists;
-		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		play.
 
 	^ scripter
 ]
@@ -1555,39 +1494,20 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 	scripter := self convertToSiblingInIndex_preserveContextMenuElementPosition.
 	realClass := scripter userData at: #realClass.
 
-	scripter editor
-		assertHasFocus;
-		pressReturn;
+	scripter refactorings
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				assertHasFocus;
+				pressReturn ];
+		assertInputToolbarIsNotVisible;
+		assertChangesPreviewIsVisible;
+		assertAcceptButtonHasFocus;
 		onPopover;
-		// #refactoringEditor;
 		play.
 
-	scripter assert
-		label: 'Assert dialog element position';
-		value: [ :anElement :aUserData | anElement position ]
-			equals: [ :anElement :aUserData | aUserData at: #siblingFormPosition ];
+	scripter menuStep
+		assertSamePositionOfElementWithId: #'coder--context-menu-convert-to-sibling-form';
 		onSpaceRoot;
-		// #'coder--context-menu-convert-to-sibling-form';
-		play.
-
-	scripter assert
-		label: 'Assert preview button is not visible';
-		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
-		onPopover;
-		// #refactoringInputToolbar;
-		play.
-
-	scripter assert
-		label: 'Assert refactoring preview is visible';
-		exists;
-		onPopover;
-		// #preview;
-		play.
-
-	scripter assert
-		hasFocus;
-		onPopover;
-		// GtRefactoringsPreviewAcceptId;
 		play.
 
 	^ scripter
@@ -1598,7 +1518,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 	"See https://github.com/feenkcom/gtoolkit/issues/4689"
 
 	<gtExample>
-	| scripter realClass newClass rootClass newDummyClass |
+	| scripter realClass newClass rootClass |
 	scripter := self
 			convertToSiblingInIndex_preserveContextMenuElementPosition_withPreview.
 	realClass := scripter userData at: #realClass.
@@ -1606,9 +1526,9 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 
 	self assert: realClass subclasses size > 0.
 
-	scripter keyPress
-		label: 'Press return to perform refactoring';
-		key: BlKeyboardKey return;
+	scripter refactorings
+		pressReturnToApplyChanges;
+		onPopover;
 		play.
 
 	self assert: realClass subclasses size equals: 0.
@@ -1620,10 +1540,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 	self assert: newClass isNotNil.
 	self assert: newClass package equals: realClass package.
 
-	newDummyClass := GtPharoDummyClass new
-			realClass: newClass;
-			className: newClass name.
-	rootClass dummyPackage dummyClasses: {newDummyClass}.
+	rootClass dummyPackage addRealClass: newClass.
 
 	scripter menuStep
 		assertClosedMenuContainer;

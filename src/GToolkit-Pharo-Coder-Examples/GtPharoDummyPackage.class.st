@@ -10,6 +10,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
+{ #category : #'api - modifications' }
+GtPharoDummyPackage >> addRealClass: newClass [
+	"I register a new class as a dummy class.
+	I can be used when, for example, refactorings add a new class to the system,
+	that should be registered as a dummy class."
+
+	| newDummyClass |
+	newDummyClass := GtPharoDummyClass new
+			realClass: newClass;
+			className: newClass name.
+	self dummyClasses: {newDummyClass}
+]
+
 { #category : #'api - classes' }
 GtPharoDummyPackage >> amountOfClasses [
 	^ self dummyClasses size
