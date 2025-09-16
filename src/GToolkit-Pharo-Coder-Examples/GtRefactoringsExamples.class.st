@@ -115,6 +115,11 @@ GtRefactoringsExamples >> environment [
 	^ environment
 ]
 
+{ #category : #'examples - support' }
+GtRefactoringsExamples >> extraLongClassName [
+	^ 'WithVeryVeryVeryLongName1234'
+]
+
 { #category : #'examples - input element' }
 GtRefactoringsExamples >> inputElement [
 	<gtExample>
@@ -619,6 +624,140 @@ GtRefactoringsExamples >> previewWithInputElementScripter [
 	self assert: allAnnouncements size equals: 1.
 	self assert: allAnnouncements anyOne class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
 	
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self previewWithInputElementScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter refactorings
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				selectAll;
+				typeText: self rootClass name;
+				typeText: self extraLongClassName;
+				assertTextEqualsTo: ('{1}{2}'
+						format: {self rootClass name.
+								self extraLongClassName});
+				assertHasFocus ];
+		assertInputToolbarIsVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName_preview [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self previewWithInputElementScripter_typeSuperclassName.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter refactorings
+		clickPreviewButton;
+		assertInputToolbarIsNotVisible;
+		assertChangesPreviewIsVisible;
+		assertAcceptButtonHasFocus;
+		play.
+		
+	self assert: allAnnouncements size equals: 3.
+	self assert: allAnnouncements first class equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self assert: allAnnouncements third class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName_preview_editInput [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self previewWithInputElementScripter_typeSuperclassName_preview.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter refactorings
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				moveToEnd;
+				typeText: '5';
+				typeText: '6';
+				assertTextEqualsTo: ('{1}{2}{3}'
+						format: {self rootClass name.
+								self extraLongClassName.
+								56});
+				assertHasFocus ];
+		assertInputToolbarIsVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertChangesPreviewIsNotVisible;
+		play.
+
+	self assert: allAnnouncements size equals: 2.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input element' }
+GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName_preview_editInput_preview [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self previewWithInputElementScripter_typeSuperclassName_preview_editInput.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter refactorings
+		clickPreviewButton;
+		assertInputToolbarIsNotVisible;
+		assertChangesPreviewIsVisible;
+		assertAcceptButtonHasFocus;
+		play.
+	
+	self assert: allAnnouncements size equals: 3.
+	self assert: allAnnouncements first class equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self assert: allAnnouncements third class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+
 	^ aScripter
 ]
 

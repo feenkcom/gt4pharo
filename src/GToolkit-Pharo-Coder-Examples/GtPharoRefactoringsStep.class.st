@@ -15,6 +15,16 @@ GtPharoRefactoringsStep >> assertAcceptButtonHasFocus [
 ]
 
 { #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertChangesPreviewIsNotVisible [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert changes preview is visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
+		// #preview
+]
+
+{ #category : #'steps - checks' }
 GtPharoRefactoringsStep >> assertChangesPreviewIsVisible [
 	^ self assert
 		referenceSender;
