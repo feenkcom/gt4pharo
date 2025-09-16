@@ -1484,7 +1484,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
 		onSpaceRoot;
 		// #'coder--context-menu-convert-to-sibling-form';
-		// #refactoringPreviewButton;
+		// #refactoringInputToolbar;
 		play.
 
 	scripter assert
@@ -1582,7 +1582,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 		label: 'Assert preview button is not visible';
 		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
 		onPopover;
-		// #refactoringPreviewButton;
+		// #refactoringInputToolbar;
 		play.
 
 	scripter assert

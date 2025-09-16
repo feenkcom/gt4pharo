@@ -122,23 +122,6 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 ]
 
 { #category : #accessing }
-GtRefactoringsWithInputPreviewElement class >> elementForRefactoringInputElement: inputElement from: anElement beforeApplyingDo: applyBlock [
-	| refactoringButton |
-	refactoringButton := self new.
-	refactoringButton cancelBlock: [ ].
-	refactoringButton editorElement: inputElement.
-	inputElement
-		when: GtRefactoringsPreviewRefactoringsWish
-		do: [ :event | 
-			event consumed: true.
-			refactoringButton refactorings: event refactoringsBlock ].
-	refactoringButton
-		when: GtRefactoringsAboutToApplyEvent
-		do: [ :event | applyBlock value ].
-	^ refactoringButton buildPreviewForButton: anElement
-]
-
-{ #category : #accessing }
 GtRefactoringsWithInputPreviewElement >> buildPreviewForButton: previewButton [
 	| pane |
 	pane := BrVerticalPane new.

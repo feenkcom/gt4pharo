@@ -845,6 +845,26 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep saveButtonEnab
 ]
 
 { #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep sourceCodeIsModified: isModified [
+	| anAssertion |
+
+	anAssertion := aScripterOrStep assert
+		id: GtSourceCoderEditorId.
+
+	isModified
+		ifTrue: [
+			anAssertion
+				satisfies: [ :anElement | anElement textualCoderViewModel isModified ];
+				label: 'Assert source code is modified' ]
+		ifFalse: [
+			anAssertion
+				satisfies: [ :anElement | anElement textualCoderViewModel isModified not ];
+				label: 'Assert source code is not modified' ].
+
+	anAssertion play
+]
+
+{ #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textAttributesAt: anIndex anySatisfies: aBlock [
 	<gtExample>
 	aScripterOrStep
@@ -4904,7 +4924,6 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_05_click_preview [
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forKeywordRename_05_click_preview.
 
@@ -4917,6 +4936,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 
 	self checkFor: aScripter renameEditorExists: false.
 	self checkFor: aScripter refactoringPreviewButtonExists: false.
+	self checkFor: aScripter sourceCodeIsModified: false.
 	self checkFor: aScripter saveButtonEnabled: true.
 	self checkFor: aScripter discardButtonExists: false.
 
@@ -6244,7 +6264,6 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_08_preview_refactorin
 { #category : #'examples - extract method' }
 GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	aScripter := self forUnaryExtraction_08_preview_refactoring.
 
@@ -6272,6 +6291,10 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 			s
 				onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
 				notExists ].
+
+	self checkFor: aScripter sourceCodeIsModified: false.
+	self checkFor: aScripter saveButtonEnabled: true.
+	self checkFor: aScripter discardButtonExists: false.
 
 	^ aScripter
 ]

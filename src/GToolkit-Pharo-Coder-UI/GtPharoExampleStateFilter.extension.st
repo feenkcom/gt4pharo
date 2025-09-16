@@ -1,12 +1,6 @@
 Extension { #name : #GtPharoExampleStateFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtPharoExampleStateFilter >> filterDescriptor2For: aMethodsCoder [
-	^ (super filterDescriptor2For: aMethodsCoder)
-		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self resultState ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtPharoExampleStateFilter class >> filterDescriptor2For: aMethodsCoder [
 	aMethodsCoder exampleSuite ifNil: [ ^ nil ].
 
@@ -25,6 +19,12 @@ GtPharoExampleStateFilter class >> filterDescriptor2For: aMethodsCoder [
 		order: 12;
 		items: GtExampleState default allStates;
 		selectedItem: self defaultState
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtPharoExampleStateFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self resultState ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
