@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPackageCreationForm,
-	#superclass : #GtCreationForm,
+	#superclass : #GtPharoCreationForm,
 	#category : #'GToolkit-Pharo-Coder-UI-Forms - Models'
 }
 

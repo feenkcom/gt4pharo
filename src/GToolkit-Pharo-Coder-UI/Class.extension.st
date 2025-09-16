@@ -12,7 +12,8 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFrom: aGtCoderClassesTreeElemen
 			preview: self name;
 		submenu: (aGtCoderClassesTreeElement
 				convertToSiblingSubmenuFor: self
-				siblings: self subclasses);
+				siblings: self subclasses
+				title: 'Convert to sibling');
 		bePinSubmenuAction;
 		hideOnClick: true
 ]

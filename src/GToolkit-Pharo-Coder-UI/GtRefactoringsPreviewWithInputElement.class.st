@@ -1,10 +1,15 @@
 Class {
 	#name : #GtRefactoringsPreviewWithInputElement,
 	#superclass : #GtRefactoringsBasicElement,
+	#traits : 'TGtRefactoringsPinnableElement',
+	#classTraits : 'TGtRefactoringsPinnableElement classTrait',
 	#instVars : [
-		'inputElement'
+		'inputElement',
+		'previewElement',
+		'toolbarElement',
+		'messagesElement'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
 { #category : #initialization }
@@ -18,75 +23,63 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 	self background: self theme default contentBackground.
 
 	self initializeInputElement.
+	self initializePreviewElement.
+	self initializeMessagesElement.
+	self initializeToolbarElement.
 
-	self addAptitude: (BrLayoutResizerAptitude new hInherit: inputElement).
+	self addChild: inputElement as: #refactoringInput.
+	self addChild: previewElement as: #refactoringPreviewContainer.
+	self addChild: messagesElement as: #refactoringMessages.
+	self addChild: toolbarElement as: #refactoringToolbar.
+
+	self
+		addAptitude: (BrLayoutResizerAptitude new
+				hMatchParentToMatchParent: inputElement;
+				hExactToMatchParent: inputElement;
+				hFitContentToFitContent: inputElement;
+				hFitContentLimitedToFitContentLimited: inputElement;
+				inherit: previewElement;
+				hMatchParentToMatchParent: messagesElement;
+				hExactToMatchParent: messagesElement;
+				hFitContentToFitContent: messagesElement;
+				hFitContentLimitedToFitContentLimited: messagesElement;
+				hMatchParentToMatchParent: toolbarElement;
+				hExactToMatchParent: toolbarElement;
+				hFitContentToFitContent: toolbarElement;
+				hFitContentLimitedToFitContentLimited: toolbarElement).
+
+	self padding: (BlInsets all: 5).
 	self hExact: 350.
 	self vFitContentLimited
 ]
 
 { #category : #initialization }
 GtRefactoringsPreviewWithInputElement >> initializeInputElement [
-	inputElement := GtRefactoringsInputElement new 
-		margin: (BlInsets all: 5)
+	inputElement := GtRefactoringsInputElement new
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewWithInputElement >> initializeMessagesElement [
+	messagesElement := GtRefactoringsMessagesElement new
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewWithInputElement >> initializePreviewElement [
+	previewElement := GtRefactoringsJustPreviewElement new
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewWithInputElement >> initializeToolbarElement [
+	toolbarElement := GtRefactoringsToolbarElement new
+			visibility: BlVisibility gone
 ]
 
 { #category : #'accessing - refactorings view model' }
 GtRefactoringsPreviewWithInputElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
-	self updateElement
-]
-
-{ #category : #'private - updating' }
-GtRefactoringsPreviewWithInputElement >> updateElement [
-	self updateInputElement.
-	self updatePreviewElement.
-]
-
-{ #category : #'private - updating' }
-GtRefactoringsPreviewWithInputElement >> updateInputElement [
-	inputElement refactoringsViewModel: self refactoringsViewModel
-]
-
-{ #category : #'private - updating' }
-GtRefactoringsPreviewWithInputElement >> updatePreviewElement [
-	| aPreviewPane |
-	self removeChildren.
-	aPreviewPane := GtRefactoringsWithInputPreviewElement
-			elementForRefactoringInputElement: inputElement removeFromParent
-			from: (self refactoringsViewModel anchorElement ifNil: [ self ])
-			beforeApplyingDo: self refactoringsViewModel beforeApplyBlock.
-
-	aPreviewPane
-		when: GtRefactoringsAboutToApplyEvent
-		do: [ :anEvent | inputElement disableEditing ].
-
-	self refactoringsViewModel
-		menuModelDo: [ :aMenuModel | 
-			self
-				addAptitude: (BrGlamorousPopoverPinnableAptitude new
-						withPostEndPinBlock: [ :aContext | 
-							aContext menuElement
-								when: GtRefactoringsAppliedEvent
-									do: [ :anEvent | 
-										| aMenuElement |
-										aMenuElement := anEvent currentTarget.
-										BlTaskAction
-											enqueueElement: aMenuElement
-											action: [ inputElement enableEditing.
-												aMenuElement removeFromParent ] ];
-								when: GtRefactoringsFailedEvent
-									do: [ :anEvent | 
-										| aMenuElement |
-										aMenuElement := anEvent currentTarget.
-										BlTaskAction
-											enqueueElement: aMenuElement
-											action: [ inputElement enableEditing ] ].
-							BlTaskAction
-								enqueueElement: inputElement
-								action: [ inputElement requestFocus ] ];
-						withResizers;
-						withAllPinActions;
-						menuModel: aMenuModel) ].
-
-	self addChild: aPreviewPane
+	toolbarElement visibility: BlVisibility visible.
+	inputElement refactoringsViewModel: self refactoringsViewModel.
+	previewElement refactoringsViewModel: self refactoringsViewModel.
+	messagesElement refactoringsViewModel: self refactoringsViewModel.
+	toolbarElement refactoringsViewModel: self refactoringsViewModel.
 ]

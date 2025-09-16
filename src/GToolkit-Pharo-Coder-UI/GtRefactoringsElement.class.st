@@ -25,6 +25,11 @@ GtRefactoringsElement >> changes: changes [
 	changesElement changes: changes
 ]
 
+{ #category : #initialization }
+GtRefactoringsElement >> changesElementDo: aBlock [
+	changesElement ifNotNil: aBlock
+]
+
 { #category : #accessing }
 GtRefactoringsElement >> changesSize [
 	^ changesElement changes changesSize

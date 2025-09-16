@@ -1,6 +1,6 @@
 Class {
 	#name : #GtParserCreationForm,
-	#superclass : #GtCreationForm,
+	#superclass : #GtPharoCreationForm,
 	#instVars : [
 		'parser',
 		'scanner'
@@ -92,8 +92,9 @@ GtParserCreationForm >> parserDescription [
 		accessor: #parserRope;
 		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		blocCompletion: [ GtPharoCodeModifier current
+				critical: [ GtStringsCompletionStrategy new
+						completions: (GtPrefixTree withAll: Smalltalk classNames) ] ];
 		default: '';
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Parser name must be set';
@@ -143,8 +144,9 @@ GtParserCreationForm >> scannerDescription [
 		accessor: #scannerRope;
 		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		blocCompletion: [ GtPharoCodeModifier current
+				critical: [ GtStringsCompletionStrategy new
+						completions: (GtPrefixTree withAll: Smalltalk classNames) ] ];
 		default: '';
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Scanner name must be set';
