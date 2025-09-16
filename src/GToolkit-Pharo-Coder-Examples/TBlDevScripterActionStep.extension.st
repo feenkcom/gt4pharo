@@ -29,3 +29,12 @@ TBlDevScripterActionStep >> pharoCoder [
 				label: 'Pharo coder';
 				referenceSender)
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-Examples' }
+TBlDevScripterActionStep >> refactorings [
+	^ self
+		addStep: (GtPharoRefactoringsStep new
+				label: 'Pharo refactorings';
+				referenceSender;
+				onParentStepTarget: self)
+]
