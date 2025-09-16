@@ -88,7 +88,7 @@ GtCopyClassForm >> magritteAcceptAction [
 		onSuccessCallback: (GtMagritteCallback new
 				action: [ :aModel :aButton :aMemento :aDescription | 
 					[ | aClass |
-					aClass := self copyClass.
+					aClass := GtPharoCodeModifier current critical: [ self copyClass ].
 					onAccept ifNotNil: [ onAccept value: aClass ] ] on: Error do: #debug ])
 ]
 
@@ -99,10 +99,11 @@ GtCopyClassForm >> nameDescription [
 		label: 'Name';
 		priority: 1;
 		accessor: #newClassName;
-		editorAptitude:  [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		blocCompletion: [ GtPharoCodeModifier current
+				critical: [ GtStringsCompletionStrategy new
+						completions: (GtPrefixTree withAll: Smalltalk classNames) ] ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNil ]
 			labelled: 'Class name is already taken';
 		addCondition: [ :aValue | aValue isEmpty or: [ aValue first isUppercase ] ]
@@ -159,10 +160,11 @@ GtCopyClassForm >> superClassDescription [
 		accessor: #superClassName;
 		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		blocCompletion: [ GtPharoCodeModifier current
+				critical: [ GtStringsCompletionStrategy new
+						completions: (GtPrefixTree withAll: Smalltalk classNames) ] ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
-		labelled: 'Class does not exist'		
+			labelled: 'Class does not exist'
 ]
 
 { #category : #accessing }
