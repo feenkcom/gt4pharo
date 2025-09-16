@@ -1,6 +1,6 @@
 Class {
 	#name : #GtBehaviorCreationForm,
-	#superclass : #GtCreationForm,
+	#superclass : #GtPharoCreationForm,
 	#instVars : [
 		'traits',
 		'slots',

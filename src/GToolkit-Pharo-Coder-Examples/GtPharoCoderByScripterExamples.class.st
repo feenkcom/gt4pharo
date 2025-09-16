@@ -1456,20 +1456,12 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 			convertToSiblingInIndex_preserveContextMenuElementPosition_withPinnedMenu.
 	realClass := scripter userData at: #realClass.
 
-	false
-		ifTrue: [ scripter editor
-				assertHasFocus;
-				pressReturn;
-				onSpaceRoot;
-				// #'coder--context-menu-convert-to-sibling-form';
-				// #refactoringEditor;
-				play ]
-		ifFalse: [ scripter click
-				label: 'Click preview button';
-				onSpaceRoot;
-				// #'coder--context-menu-convert-to-sibling-form';
-				// #refactoringPreviewButton;
-				play ].
+	scripter click
+		label: 'Click preview button';
+		onSpaceRoot;
+		// #'coder--context-menu-convert-to-sibling-form';
+		// #refactoringPreviewButton;
+		play.
 
 	scripter assert
 		label: 'Assert dialog element position';

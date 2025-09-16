@@ -1,6 +1,6 @@
 Class {
 	#name : #GtBaselineCreationForm,
-	#superclass : #GtCreationForm,
+	#superclass : #GtPharoCreationForm,
 	#instVars : [
 		'baseline'
 	],
@@ -38,8 +38,9 @@ GtBaselineCreationForm >> baselineDescription [
 		accessor: #baselineRope;
 		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPrefixTree withAll: (Smalltalk allClasses collect: #name)) ];
+		blocCompletion: [ GtPharoCodeModifier current
+				critical: [ GtStringsCompletionStrategy new
+						completions: (GtPrefixTree withAll: Smalltalk classNames) ] ];
 		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
 			labelled: 'Baseline name must be set';
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
