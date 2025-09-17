@@ -54,7 +54,13 @@ GtRefactoringsInputElement >> initializeInputEditorElement [
 					name: 'Accept new text';
 					description: 'Accept new text and perform preview refactoring';
 					combination: BlKeyCombination enter;
-					action: [ :anEvent | self onAcceptInputTextShortcutEvent: anEvent ]).
+					action: [ :anEvent | self onAcceptInputTextShortcutEvent: anEvent ]);
+			withAsyncFutureDo: [ :anElementFuture | 
+				anElementFuture
+					executionConfiguration: GtRefactoringsConstants futureExecutionConfiguration;
+					whenPending: [ :anElement | self onFuturePending ];
+					whenError: [ :anElement :anError | self onFutureError: anError ];
+					whenSuccess: [ :anElement :aResult | self onFutureSuccess: aResult ] ].
 
 	inputEditorElement editor
 		when: BrTextEditorModifiedEvent
@@ -79,6 +85,23 @@ GtRefactoringsInputElement >> onAcceptInputTextShortcutEvent: anEvent [
 	anEvent consumed: true.
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
 	self previewRefactoring
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsInputElement >> onFutureError: anError [
+	| aCopyError |
+	self hasRefactoringsViewModel ifFalse: [ ^ self ].
+
+	aCopyError := GtSystemUtility freeze: anError.
+	self refactoringsViewModel notifyComputingRefactoringsFailed: aCopyError
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsInputElement >> onFuturePending [
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsInputElement >> onFutureSuccess: aResult [
 ]
 
 { #category : #'private - event handling' }
@@ -126,7 +149,7 @@ GtRefactoringsInputElement >> onRefactoringsViewModelChanged [
 GtRefactoringsInputElement >> previewRefactoring [
 	| anInput |
 	anInput := inputEditorElement text asString.
-	self refactoringsViewModel refactoringsForInput: anInput.
+	inputEditorElement asyncFuture future: [ self refactoringsViewModel refactoringsForInput: anInput ] asAsyncFuture.
 ]
 
 { #category : #'accessing - refactorings view model' }

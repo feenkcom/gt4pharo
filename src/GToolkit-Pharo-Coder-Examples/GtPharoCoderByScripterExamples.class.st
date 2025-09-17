@@ -1222,31 +1222,18 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> confirmAndRunRefactoring: scripter [
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check confirm button visible';
-				onSpaceRoot;
-				exists;
-				// #'confirm-preview' ].
+	"Preview refactorings"
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click confirm button';
-				onSpaceRoot;
-				// #'confirm-preview' ].
-
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ]
+	scripter refactorings
+		assertPreviewButtonIsEnabled;
+		assertPreviewButtonIsVisible;
+		clickPreviewButton;
+		assertPreviewButtonIsDisabled;
+		assertPreviewButtonIsNotVisible;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertAcceptButtonHasFocus;
+		play
 ]
 
 { #category : #'examples - index' }
