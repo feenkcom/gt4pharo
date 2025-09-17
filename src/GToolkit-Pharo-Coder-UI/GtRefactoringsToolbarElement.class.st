@@ -17,6 +17,14 @@ GtRefactoringsToolbarElement >> defaultLayout [
 	^ BlLinearLayout horizontal
 ]
 
+{ #category : #'focus requesting' }
+GtRefactoringsToolbarElement >> focusTarget [
+	previewButtonElement isEnabled ifTrue: [ ^ previewButtonElement ].
+	applyButton isEnabled ifTrue: [ ^ applyButton ].
+
+	^ super focusTarget
+]
+
 { #category : #initialization }
 GtRefactoringsToolbarElement >> initialize [
 	super initialize.

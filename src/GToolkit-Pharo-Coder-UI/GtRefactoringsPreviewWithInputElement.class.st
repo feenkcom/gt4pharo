@@ -18,6 +18,11 @@ GtRefactoringsPreviewWithInputElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
+{ #category : #'focus requesting' }
+GtRefactoringsPreviewWithInputElement >> focusTarget [
+	^ inputElement focusTarget
+]
+
 { #category : #initialization }
 GtRefactoringsPreviewWithInputElement >> initialize [
 	super initialize.

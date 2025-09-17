@@ -77,6 +77,26 @@ GtPharoRefactoringsStep >> assertChangesPreviewIsVisible [
 ]
 
 { #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertErrorMessagesAreNotVisible [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert error messages are visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
+		// #refactoringMessagesContainer
+]
+
+{ #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertErrorMessagesAreVisible [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert error messages are visible';
+		value: [ :anElement | anElement visibility ] equals: BlVisibility visible;
+		// #refactoringMessagesContainer
+]
+
+{ #category : #'steps - checks' }
 GtPharoRefactoringsStep >> assertFinishedLabelIsNotVisible [
 	^ self assert
 		referenceSender;

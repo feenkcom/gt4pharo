@@ -26,6 +26,13 @@ GtRefactoringsConstants class >> contextMenuWidth [
 	^ 350
 ]
 
+{ #category : #initialization }
+GtRefactoringsConstants class >> futureExecutionConfiguration [
+	^ AsyncFutureExecutionConfiguration new
+		customGroup: #CodeChange;
+		highPriority
+]
+
 { #category : #constants }
 GtRefactoringsConstants class >> spaceBetweenComposedElements [
 	^ 5

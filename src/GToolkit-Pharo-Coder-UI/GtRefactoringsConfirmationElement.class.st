@@ -28,7 +28,31 @@ GtRefactoringsConfirmationElement >> initializeConfirmationLabelElement [
 	confirmationLabelElement := BrLabel new
 			fitContent;
 			aptitude: BrGlamorousLabelAptitude new;
-			text: 'Confirmation'
+			text: 'Confirmation';
+			withAsyncFutureDo: [ :anElementFuture | 
+				anElementFuture
+					executionConfiguration: GtRefactoringsConstants futureExecutionConfiguration;
+					whenPending: [ :anElement | self onFuturePending ];
+					whenError: [ :anElement :anError | self onFutureError: anError ];
+					whenSuccess: [ :anElement :aResult | self onFutureSuccess: aResult ] ]
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsConfirmationElement >> onFutureError: anError [
+	| aCopyError |
+	self hasRefactoringsViewModel ifFalse: [ ^ self ].
+
+	aCopyError := GtSystemUtility freeze: anError.
+	self refactoringsViewModel notifyComputingRefactoringsFailed: aCopyError
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsConfirmationElement >> onFuturePending [
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsConfirmationElement >> onFutureSuccess: aResult [
+	
 ]
 
 { #category : #'private - event handling' }
@@ -47,7 +71,7 @@ GtRefactoringsConfirmationElement >> onRefactoringsViewModelChanged [
 
 { #category : #'private - event handling' }
 GtRefactoringsConfirmationElement >> previewRefactoring [
-	self refactoringsViewModel confirmRefactorings
+	confirmationLabelElement asyncFuture future: [ self refactoringsViewModel confirmRefactorings ] asAsyncFuture
 ]
 
 { #category : #'accessing - refactorings view model' }

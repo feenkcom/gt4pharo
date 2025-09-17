@@ -18,6 +18,11 @@ GtRefactoringsPreviewWithConfirmationElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
+{ #category : #'focus requesting' }
+GtRefactoringsPreviewWithConfirmationElement >> focusTarget [
+	^ toolbarElement focusTarget
+]
+
 { #category : #initialization }
 GtRefactoringsPreviewWithConfirmationElement >> initialize [
 	super initialize.

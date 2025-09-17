@@ -22,7 +22,25 @@ GtPharoCoderByScripterExamples >> abstractForSlotInIndex [
 		hoverMenu: 'Abstract instVar1'
 		labelled: 'Hover abstract'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> abstractForSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self abstractForSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass lookupSelector: #instVar1) isNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNil.
+
+	self applyRefactoring: scripter.
+	
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+
 	^ scripter
 ]
 
@@ -215,6 +233,23 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> applyRefactoring: scripter [
+	scripter refactorings
+		assertPreviewButtonIsDisabled;
+		assertPreviewButtonIsNotVisible;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertAcceptButtonHasFocus;
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
+
+	scripter menuStep
+		assertClosedMenuContainer;
+		play
 ]
 
 { #category : #'examples - dropdown' }
@@ -1221,32 +1256,22 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> confirmAndRunRefactoring: scripter [
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check confirm button visible';
-				onSpaceRoot;
-				exists;
-				// #'confirm-preview' ].
+GtPharoCoderByScripterExamples >> confirmAndPreviewRefactoring: scripter [
+	"Preview refactorings"
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click confirm button';
-				onSpaceRoot;
-				// #'confirm-preview' ].
-
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ]
+	scripter refactorings
+		assertPreviewButtonIsEnabled;
+		assertPreviewButtonIsVisible;
+		assertChangesPreviewIsNotVisible;
+		clickPreviewButton;
+		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsDisabled;
+		assertPreviewButtonIsNotVisible;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertAcceptButtonHasFocus;
+		onPopover;
+		play
 ]
 
 { #category : #'examples - index' }
@@ -1566,7 +1591,25 @@ GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex [
 		hoverMenu: 'Create accessors instVar1'
 		labelled: 'Hover create accessors'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self createAccessorsForSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass lookupSelector: #instVar1) isNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNil.
+
+	self applyRefactoring: scripter.
+	
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+
 	^ scripter
 ]
 
@@ -3214,14 +3257,102 @@ GtPharoCoderByScripterExamples >> openMethodMenuOn: selector in: scripter [
 GtPharoCoderByScripterExamples >> protectForSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter |
-	scripter := self startWithMenuOnInstVar1Slot.
+	| scripter aClass |
+	scripter := self createAccessorsForSlotInIndex_apply.
+
+	aClass := environment anyDummyRootClass realClass.
+
+	GtPharoCodeModifier current
+		compileMethodSource: 'sumInstVars
+	self instVar1: self instVar1 + instVar2'
+		in: aClass
+		protocol: 'methods'.
+
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar1' ] ].
+	
 	self
 		hoverMenu: 'Protect instVar1'
 		labelled: 'Hover protect'
 		in: scripter.
 
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> protectForSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass aMethod |
+	scripter := self protectForSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
+
+	self applyRefactoring: scripter.
+
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+	aMethod := aClass lookupSelector: #sumInstVars.
+	self assert: aMethod isNotNil.
+	self assert: aMethod sourceCode equals: 'sumInstVars
+	instVar1 := instVar1 + instVar2'.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pullUpSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	class := environment anyDummyLeafClass realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to slots';
+				// #slots ].
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar3' ] ].
+
+	self
+		hoverMenu: 'Pull up instVar3'
+		labelled: 'Hover pull up'
+		in: scripter.
+
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pullUpSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self pullUpSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass instVarNames includes: 'instVar3') not.
+
+	self applyRefactoring: scripter.
+
+	self assert: (aClass instVarNames includes: 'instVar3').
+
 	^ scripter
 ]
 
@@ -3264,7 +3395,7 @@ GtPharoCoderByScripterExamples >> pushDownInIndexMethod: method [
 		hoverMenu: 'Push down method ' , selector
 		labelled: 'Hover push down method'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3282,7 +3413,7 @@ GtPharoCoderByScripterExamples >> pushDownInIndexMethods: methods [
 		hoverMenu: ('Push down methods {1} methods' format: {methods size})
 		labelled: 'Hover push down methods'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3316,13 +3447,49 @@ GtPharoCoderByScripterExamples >> pushDownInstanceMethodsInIndex [
 GtPharoCoderByScripterExamples >> pushDownSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter |
+	| scripter aClass |
 	scripter := self startWithMenuOnInstVar1Slot.
+
+	aClass := environment anyDummyLeafClass realClass.
+
+	GtPharoCodeModifier current
+		compileMethodSource: 'sumInstVars
+	instVar1 := instVar1 + instVar2'
+		in: aClass
+		protocol: 'methods'.
+	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
+
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar1' ] ].
+		
 	self
 		hoverMenu: 'Push down instVar1'
 		labelled: 'Hover push down'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self pushDownSlotInIndex.
+
+	aClass := environment anyDummyLeafClass realClass.
+	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
+	self assert: (aClass instVarNames includes: 'instVar1') not.
+
+	self applyRefactoring: scripter.
+
+	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
+	self assert: (aClass instVarNames includes: 'instVar1').
+
 	^ scripter
 ]
 
@@ -3364,7 +3531,7 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
 		hoverMenu: 'Pull up method ' , selector
 		labelled: 'Hover pull up method'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3381,7 +3548,7 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethods: methods [
 		hoverMenu: ('Pull up methods {1} methods' format: {methods size})
 		labelled: 'Hover pull up methods'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3428,38 +3595,6 @@ GtPharoCoderByScripterExamples >> pushUpInstanceMethodsInIndex [
 	methods sort: [ :a :b | a selector < b selector ].
 	methods := methods first: 4.
 	^ self pushUpInIndexMethods: methods
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| scripter class |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	class := environment anyDummyLeafClass realClass.
-	scripter := self coderInPager: [ GtCoderElement forClass: class ].
-	self setSpaceExtent: scripter.
-	self maximizePagerPane: scripter.
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Switch to slots';
-				// #slots ].
-	scripter
-		secondaryClickStep: [ :s1 | 
-			s1
-				label: 'Open menu';
-				// GtCoderSlotsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = 'instVar3' ] ].
-
-	self
-		hoverMenu: 'Push up instVar3'
-		labelled: 'Hover push down'
-		in: scripter.
-
-	self confirmAndRunRefactoring: scripter.
-	^ scripter
 ]
 
 { #category : #'examples - index' }
@@ -4122,79 +4257,156 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex [
 		labelled: 'Hover rename'
 		in: scripter.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check rename editor is visible';
-				onSpaceRoot;
-				exists;
-				// #refactoringEditor ].
+	scripter refactorings
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertAcceptButtonIsNotVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsNotVisible;
+		assertErrorMessagesAreNotVisible;
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				selectAll;
+				type: 'a1234';
+				pressReturn ];
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertChangesPreviewIsVisible;
+		assertErrorMessagesAreNotVisible;
+		assertAcceptButtonHasFocus;
+		onPopover;
+		play.
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click in rename editor';
-				onSpaceRoot;
-				// #refactoringEditor ].
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameSlotInIndex_apply [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter aClass |
+	scripter := self renameSlotInIndex.
 
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor has focus';
-				onSpaceRoot;
-				// #refactoringEditor;
-				hasFocus ].
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Move to end';
-				key: BlKeyboardKey end ].
-	scripter
-		typeStep: [ :s | 
-			s
-				label: 'Enter new name';
-				text: '1234' ].
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass instVarNames includes: 'instVar1').
+	self assert: (aClass instVarNames includes: 'a1234') not.
 
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Show refactoring preview';
-				key: BlKeyboardKey return ].
+	scripter refactorings
+		assertAcceptButtonHasFocus;
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
+		
+	self assert: (aClass instVarNames includes: 'instVar1') not.
+	self assert: (aClass instVarNames includes: 'a1234').
 
-	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
-	scripter pulse.
+	scripter menuStep
+		assertClosedMenuContainer;
+		play.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Perform refactoring';
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
+	^ scripter
+]
 
-	(Delay forMilliseconds: 300) wait.
-	scripter pulse.
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self startWithMenuOnInstVar1Slot.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check refactoring apply button does not exists';
-				onSpaceRoot;
-				notExists;
-				id: GtRefactoringsPreviewAcceptId ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor is removed';
-				notExists;
-				id: #renameClassEditor ].
+	self
+		hoverMenu: 'Rename instVar1'
+		labelled: 'Hover rename'
+		in: scripter.
+
+
+	scripter refactorings
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertAcceptButtonIsNotVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsNotVisible;
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				moveToEnd;
+				type: '1234';
+				pressReturn ];
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertAcceptButtonIsNotVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsNotVisible;
+		assertErrorMessagesAreVisible;
+		onPopover;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput_fixInput [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self renameSlotInIndex_wrongInput.
+
+	self
+		hoverMenu: 'Rename instVar1'
+		labelled: 'Hover rename'
+		in: scripter.
+
+
+	scripter refactorings
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				assertHasFocus;
+				selectAll;
+				type: 'a1234';
+				pressReturn ];
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertChangesPreviewIsVisible;
+		assertErrorMessagesAreNotVisible;
+		assertAcceptButtonHasFocus;
+		onPopover;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput_fixInput_apply [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter aClass |
+	scripter := self renameSlotInIndex_wrongInput_fixInput.
+
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass instVarNames includes: 'instVar1').
+	self assert: (aClass instVarNames includes: 'a1234') not.
+
+	scripter refactorings
+		assertAcceptButtonHasFocus;
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
+		
+	self assert: (aClass instVarNames includes: 'instVar1') not.
+	self assert: (aClass instVarNames includes: 'a1234').
+
+	scripter menuStep
+		assertClosedMenuContainer;
+		play.
 
 	^ scripter
 ]
@@ -4536,6 +4748,7 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> startWithMenuOnInstVar1Slot [
+	<gtExample>
 	| scripter class |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	class := environment anyDummyRootClass realClass.

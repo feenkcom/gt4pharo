@@ -121,6 +121,15 @@ GtRefactoringsWithInputPreviewElement class >> elementForRefactoring: refactorin
 	^ refactoringButton buildPreviewForButton: anElement
 ]
 
+{ #category : #testing }
+GtRefactoringsWithInputPreviewElement class >> isDeprecated [
+	"Use:
+	- GtRefactoringsWithInputPreviewElement,
+	- GtRefactoringsWithConfirmationViewModel."
+
+	^ true
+]
+
 { #category : #accessing }
 GtRefactoringsWithInputPreviewElement >> buildPreviewForButton: previewButton [
 	| pane |
