@@ -26,6 +26,7 @@ TGtRefactoringsPopoverElement >> bePinnable: anExplicitMenu [
 				withResizers;
 				menuModel: anExplicitMenu;
 				withPostEndPinBlock: [
+					self requestFocus.
 					self refactoringsViewModel weak
 						when: GtRefactoringsViewModelExecutedRefactoringsApplied
 						send: #onClosePinnedElement:
