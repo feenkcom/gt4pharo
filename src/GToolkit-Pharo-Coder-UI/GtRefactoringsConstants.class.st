@@ -29,7 +29,7 @@ GtRefactoringsConstants class >> contextMenuWidth [
 { #category : #initialization }
 GtRefactoringsConstants class >> futureExecutionConfiguration [
 	^ AsyncFutureExecutionConfiguration new
-		customGroup: #Refactorings;
+		customGroup: #CodeChange;
 		highPriority
 ]
 

@@ -34,9 +34,7 @@ RBRefactoryChange >> gtExecuteWithNotificationWithProgress: aBlock threshold: aT
 		ifTrue: [ notification showNotifications.
 			notification hideNotificationsOnRemoval ].
 	^ [ job run ] asAsyncFuture
-		await: (AsyncFutureExecutionConfiguration new
-				customGroup: #CodeChange;
-				highPriority)
+		await: GtRefactoringsConstants futureExecutionConfiguration
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
