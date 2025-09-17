@@ -16,7 +16,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.117/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.2291/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.8.2292/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
 				spec repository: 'github://feenkcom/gtoolkit-completer:v0.8.1729/src' ].
@@ -35,6 +35,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #(#GToolkitCompleter) ].
 		spec package: 'GToolkit-Pharo-SearchFilters' with: [
 			spec requires: #(#Futures #GToolkitCoder #'GToolkit-Pharo-System' #'GToolkit-Pharo-Index') ].
+		spec package: 'GToolkit-Pharo-SearchFilters-Examples' with: [
+			spec requires: #(#'GToolkit-Pharo-SearchFilters') ].
 		spec package: 'GToolkit-Pharo-Completer' with: [
 			spec requires: #(#SmaCCRuntime #GToolkitCompleter #'GToolkit-Pharo-Index' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Completer-Examples' with: [
