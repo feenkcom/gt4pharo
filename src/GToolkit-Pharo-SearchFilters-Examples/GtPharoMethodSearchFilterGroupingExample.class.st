@@ -7,22 +7,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtPharoMethodSearchFilterGroupingExample >> filterInScripterOnDummyExamplesPackagesWithPragmaFilter [
-	<gtExample>
-	| filter scripter |
-	
-	filter := self filterOnDummyExamplesPackages & #gtExample gtPragmas.
-	scripter := self 
-		scripter: (self scripter
-			extent: 1000@800) 
-		withModel: [filter] 
-		element: [ GtPager 
-			createWrappedOn: filter gtDefaultInspectorTool asElement ].
-			
-	^ scripter
-]
-
-{ #category : #'as yet unclassified' }
 GtPharoMethodSearchFilterGroupingExample >> filterOnDummyExamplesPackages [
 	<gtExample>
 	| filter |
@@ -102,27 +86,33 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView [
 { #category : #'as yet unclassified' }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMultipleMethods [
 	<gtExample>
-	| scripter |
+	| scripter firstMethod secondMethod |
 
-	scripter := self filterInScripterOnDummyExamplesPackagesWithPragmaFilter.
+	scripter := self pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter.
 		
 	scripter inspectorStep
 		onPagerPaneWithIndex: 1;
 		clickOnTabWithName: 'By Method';
 		play.
 		
+	firstMethod := GtDummyAbstractClassWithExamples>>#basicValue.
+	secondMethod := GtDummyIntermediateClassWithExamples>>#basicValue.
 	scripter
 		doubleClickStep: [ :s | 
 			s
 				//GtPhlowColumnedListId;
 				id: #scrollable;
-				onChildAt: 1 ].
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = firstMethod name ] ].
 	scripter
 		clickStep: [ :s | 
 			s
 				//GtPhlowColumnedListId;
 				id: #scrollable;
-				onChildAt: 2;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = secondMethod name ];
 				modifiers: BlKeyModifiers primary ].
 				
 	scripter pager
@@ -135,10 +125,11 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMul
 		assertInspectedObjectOfType: GtRGMethodDefinitionWithComparisonGroup;
 		assertInspectedObjectValueFor: [ :aMethodGroup | aMethodGroup size ] 
 			equals: 2;
-		assertInspectedObjectValueFor: [ :aMethodGroup | aMethodGroup asArray ] 
+		assertInspectedObjectValueFor: [ :aMethodGroup | aMethodGroup asArray asSet ] 
 			equals: {
-				(GtDummyAbstractClassWithExamples>>#basicValue) methodReference.
-				(GtDummyIntermediateClassWithExamples>>#basicValue) methodReference};
+				firstMethod methodReference.
+				secondMethod methodReference
+			} asSet;
 		assertInspectedObjectValueFor: [ :aMethodGroup | 
 				aMethodGroup highlighter symbol ] 
 			equals: #gtExample;
@@ -154,21 +145,24 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMul
 { #category : #'as yet unclassified' }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSingleMethod [
 	<gtExample>
-	| scripter |
+	| scripter targetMethod |
 
-	scripter := self filterInScripterOnDummyExamplesPackagesWithPragmaFilter.
-		
+	scripter := self pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter.
+
 	scripter inspectorStep
 		onPagerPaneWithIndex: 1;
 		clickOnTabWithName: 'By Method';
 		play.
 		
+	targetMethod := GtDummyAbstractClassWithExamples>>#basicValue.
 	scripter
 		doubleClickStep: [ :s | 
 			s
 				//GtPhlowColumnedListId;
 				id: #scrollable;
-				onChildAt: 1 ].
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = targetMethod name ] ].
 	
 	scripter pager
 		assertPageCountIs: 2;
@@ -178,7 +172,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSin
 		onPagerPaneWithIndex: 2;
 		assertSelectedTabWithName: 'Source';
 		assertInspectedObjectValueFor: [ :aMethod | aMethod ] 
-			equals: (GtDummyAbstractClassWithExamples>>#basicValue) methodReference;
+			equals: targetMethod methodReference;
 		assertInspectedObjectValueFor: [ :aMethodGroup | 
 				aMethodGroup gtHighlighter symbol ] 
 			equals: #gtExample;
@@ -214,5 +208,21 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView [
 		value: [ :aLabelWithIcon | aLabelWithIcon nameLabelText asString ]
 			equals: 'GToolkit-Examples-Dummies-Package1'.
 	
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
+GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter [
+	<gtExample>
+	| filter scripter |
+	
+	filter := self filterOnDummyExamplesPackages & #gtExample gtPragmas.
+	scripter := self 
+		scripter: (self scripter
+			extent: 1000@800) 
+		withModel: [filter] 
+		element: [ GtPager 
+			createWrappedOn: filter gtDefaultInspectorTool asElement ].
+			
 	^ scripter
 ]
