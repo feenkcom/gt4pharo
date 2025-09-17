@@ -7,6 +7,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtPharoMethodSearchFilterGroupingExample >> filterInScripterOnDummyExamplesPackagesWithPragmaFilter [
+	<gtExample>
+	| filter scripter |
+	
+	filter := self filterOnDummyExamplesPackages & #gtExample gtPragmas.
+	scripter := self 
+		scripter: (self scripter
+			extent: 1000@800) 
+		withModel: [filter] 
+		element: [ GtPager 
+			createWrappedOn: filter gtDefaultInspectorTool asElement ].
+			
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
 GtPharoMethodSearchFilterGroupingExample >> filterOnDummyExamplesPackages [
 	<gtExample>
 	| filter |
@@ -86,15 +102,9 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView [
 { #category : #'as yet unclassified' }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMultipleMethods [
 	<gtExample>
-	| filter scripter |
-	
-	filter := self filterOnDummyExamplesPackages & #gtExample gtPragmas.
-	scripter := self 
-		scripter: (self scripter
-			extent: 1000@800) 
-		withModel: [filter] 
-		element: [ GtPager 
-			createWrappedOn: filter gtDefaultInspectorTool asElement ].
+	| scripter |
+
+	scripter := self filterInScripterOnDummyExamplesPackagesWithPragmaFilter.
 		
 	scripter inspectorStep
 		onPagerPaneWithIndex: 1;
@@ -144,15 +154,9 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMul
 { #category : #'as yet unclassified' }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSingleMethod [
 	<gtExample>
-	| filter scripter |
-	
-	filter := self filterOnDummyExamplesPackages & #gtExample gtPragmas.
-	scripter := self 
-		scripter: (self scripter
-			extent: 1000@800) 
-		withModel: [filter] 
-		element: [ GtPager 
-			createWrappedOn: filter gtDefaultInspectorTool asElement ].
+	| scripter |
+
+	scripter := self filterInScripterOnDummyExamplesPackagesWithPragmaFilter.
 		
 	scripter inspectorStep
 		onPagerPaneWithIndex: 1;
