@@ -1593,6 +1593,24 @@ GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex [
 	^ scripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self createAccessorsForSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass lookupSelector: #instVar1) isNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNil.
+
+	self applyRefactoring: scripter.
+	
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+
+	^ scripter
+]
+
 { #category : #'examples - add new method' }
 GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3233)"
@@ -3237,14 +3255,54 @@ GtPharoCoderByScripterExamples >> openMethodMenuOn: selector in: scripter [
 GtPharoCoderByScripterExamples >> protectForSlotInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| scripter |
-	scripter := self startWithMenuOnInstVar1Slot.
+	| scripter aClass |
+	scripter := self createAccessorsForSlotInIndex_apply.
+
+	aClass := environment anyDummyRootClass realClass.
+
+	GtPharoCodeModifier current
+		compileMethodSource: 'sumInstVars
+	self instVar1: self instVar1 + instVar2'
+		in: aClass
+		protocol: 'methods'.
+
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar1' ] ].
+	
 	self
 		hoverMenu: 'Protect instVar1'
 		labelled: 'Hover protect'
 		in: scripter.
 
 	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> protectForSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass aMethod |
+	scripter := self protectForSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
+
+	self applyRefactoring: scripter.
+
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+	aMethod := aClass lookupSelector: #sumInstVars.
+	self assert: aMethod isNotNil.
+	self assert: aMethod sourceCode equals: 'sumInstVars
+	instVar1 := instVar1 + instVar2'.
+
 	^ scripter
 ]
 
