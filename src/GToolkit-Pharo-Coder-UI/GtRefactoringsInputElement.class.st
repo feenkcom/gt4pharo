@@ -71,8 +71,15 @@ GtRefactoringsInputElement >> initialize [
 	exceptionElement addAptitude: (BrLayoutResizerAptitude new
 		hInherit: [ exceptionElement children ]).
 					
+	"21.86 is a height of a collapsed preview of collapsed refactoring changes.
+	The reason is for this constant is, 
+	that we want the preview button to be at the same place as the apply changes button.
+	
+	Currently, this constant is considered a hack.
+	We would need to split input toolbar from the rest of this widget 
+	and maybe use the `GtRefactoringsToolbarElement` also for this purpose."
 	toolbarContainer := BrHorizontalPane new
-			margin: (BlInsets top: 5);
+			margin: (BlInsets top: 5 + 21.86);
 			alignCenterLeft;
 			fitContentLimited;
 			addChild: previewButtonElement as: #refactoringPreviewButton;
@@ -164,11 +171,6 @@ GtRefactoringsInputElement >> initializeTitleElement [
 			text: ''
 ]
 
-{ #category : #'api - hooks' }
-GtRefactoringsInputElement >> isEditingEnabled [
-	^ (previewButtonElement states hasState: BlElementState disabled) not
-]
-
 { #category : #'private - event handling' }
 GtRefactoringsInputElement >> onAcceptInputTextShortcutEvent: anEvent [
 	anEvent consumed: true.
@@ -181,14 +183,13 @@ GtRefactoringsInputElement >> onGtRefactoringsViewModelExecutedRefactoringsChang
 	self refactoringsViewModel == anAnnouncement refactoringsViewModel
 		ifFalse: [ ^ self ].
 
-	BlTaskAction enqueueElement: self action: [ self updateElement ]
+	BlTaskAction enqueueElement: self action: [ self updateEditability ]
 ]
 
 { #category : #'private - event handling' }
 GtRefactoringsInputElement >> onInputTextModifiedEvent: anEvent [
 	| aWish isPreviewed |
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
-	self isEditingEnabled ifFalse: [ ^ self ].
 	self refactoringsViewModel canEditInput ifFalse: [ ^ self ].
 
 	self refactoringsViewModel hasPreviewedExecutedRefactorings ifFalse: [ ^ self ].

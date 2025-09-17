@@ -22,10 +22,12 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'GToolkit-Pharo-System'.
 		'GToolkit-Pharo-GtRefactorings'.
 		'GToolkit-Pharo-BaseRefactorings'.
+		'GToolkit-Utility-System'.
 		'Kernel'.
 		'Metacello-Base'.
 		'Refactoring-Changes'.
 		'Ring-Core'.
+		'Ring-Definitions-Core'
 	}, (self  
 		forPharo12AndNewer: [{
 			'Kernel-CodeModel'.
