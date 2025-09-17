@@ -7,14 +7,6 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
-{ #category : #'accessing - refactorings view model' }
-GtRefactoringsMessagesElement >> GtRefactoringsViewModelExecutedRefactoringsStateAnnouncement: anAnnouncement [
-	self refactoringsViewModel == anAnnouncement refactoringsViewModel
-		ifFalse: [ ^ self ].
-
-	BlTaskAction enqueueElement: self action: [ self updateElement ]
-]
-
 { #category : #initialization }
 GtRefactoringsMessagesElement >> defaultLayout [
 	^ BlLinearLayout vertical
@@ -53,6 +45,14 @@ GtRefactoringsMessagesElement >> onGtRefactoringsViewModelExecutedRefactoringsCh
 ]
 
 { #category : #'accessing - refactorings view model' }
+GtRefactoringsMessagesElement >> onGtRefactoringsViewModelExecutedRefactoringsStateAnnouncement: anAnnouncement [
+	self refactoringsViewModel == anAnnouncement refactoringsViewModel
+		ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateElement ]
+]
+
+{ #category : #'accessing - refactorings view model' }
 GtRefactoringsMessagesElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
 	self updateElement
@@ -67,7 +67,7 @@ GtRefactoringsMessagesElement >> subscribeToRefactoringsViewModel [
 			send: #onGtRefactoringsViewModelExecutedRefactoringsChanged:
 			to: self;
 		when: GtRefactoringsViewModelExecutedRefactoringsStateAnnouncement
-			send: #GtRefactoringsViewModelExecutedRefactoringsStateAnnouncement:
+			send: #onGtRefactoringsViewModelExecutedRefactoringsStateAnnouncement:
 			to: self
 ]
 

@@ -1,10 +1,20 @@
 Trait {
-	#name : #TGtRefactoringsPinnableElement,
+	#name : #TGtRefactoringsPopoverElement,
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
 { #category : #'api - initialization' }
-TGtRefactoringsPinnableElement >> bePinnable: anExplicitMenu [
+TGtRefactoringsPopoverElement >> beContextMenuElement [
+	"The element is part of a popover, e.g., context menu.
+	Make the element defaults."
+	
+	self padding: (BlInsets all: GtRefactoringsConstants contextMenuPadding).
+	self hExact: GtRefactoringsConstants contextMenuWidth.
+	self vFitContentLimited
+]
+
+{ #category : #'api - initialization' }
+TGtRefactoringsPopoverElement >> bePinnable: anExplicitMenu [
 	"The element is part of a popover, e.g., context menu.
 	Make the element pinnable."
 
@@ -23,6 +33,6 @@ TGtRefactoringsPinnableElement >> bePinnable: anExplicitMenu [
 ]
 
 { #category : #'private - event handling' }
-TGtRefactoringsPinnableElement >> onClosePinnedElement: anAnnouncement [
+TGtRefactoringsPopoverElement >> onClosePinnedElement: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self removeFromParent ]
 ]

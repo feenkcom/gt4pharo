@@ -5,78 +5,61 @@ Class {
 }
 
 { #category : #private }
-GtRefactoringsInputElementUpdater >> updateAsEditableWithException: anException [
-	element updateAsDisplayedToolbarContainer.
-	element updateAsWithException: anException.
-	element updateAsEnabledPreviewButton.
+GtRefactoringsInputElementUpdater >> updateAsEditable [
 	element updateAsEditableInputEditor
 ]
 
 { #category : #private }
-GtRefactoringsInputElementUpdater >> updateAsEditableWithoutExceptions [
-	element updateAsDisplayedToolbarContainer.
-	element updateAsWithoutExceptions.
-	element updateAsEnabledPreviewButton.
+GtRefactoringsInputElementUpdater >> updateAsPreviewed [
 	element updateAsEditableInputEditor
 ]
 
 { #category : #private }
-GtRefactoringsInputElementUpdater >> updateAsPreviewedWithoutExceptions [
-	element updateAsHiddenToolbarContainer.
-	element updateAsWithoutExceptions.
-	element updateAsDisabledPreviewButton.
-	element updateAsEditableInputEditor
-]
-
-{ #category : #private }
-GtRefactoringsInputElementUpdater >> updateAsReadOnlyWithoutExceptions [
-	element updateAsHiddenToolbarContainer.
-	element updateAsWithoutExceptions.
-	element updateAsDisabledPreviewButton.
+GtRefactoringsInputElementUpdater >> updateAsReadOnly [
 	element updateAsReadOnlyInputEditor
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsAboutToApplyState: aState [
-	self updateAsReadOnlyWithoutExceptions
+	self updateAsReadOnly
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsAboutToComputeState: aState [
-	self updateAsReadOnlyWithoutExceptions
+	self updateAsReadOnly
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsAppliedState: aState [
-	self updateAsReadOnlyWithoutExceptions
+	self updateAsReadOnly
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsComputationFailedState: aState [
-	self updateAsEditableWithException: aState exception
+	self updateAsEditable
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsFailedState: aState [
-	self updateAsReadOnlyWithoutExceptions
+	self updateAsReadOnly
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsNotAppliedState: aState [
-	self updateAsEditableWithoutExceptions
+	self updateAsEditable
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsNotComputedState: aState [
-	self updateAsEditableWithoutExceptions
+	self updateAsEditable
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsPreviewedState: aState [
-	self updateAsPreviewedWithoutExceptions
+	self updateAsPreviewed
 ]
 
 { #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsRunningState: aState [
-	self updateAsReadOnlyWithoutExceptions
+	self updateAsReadOnly
 ]
