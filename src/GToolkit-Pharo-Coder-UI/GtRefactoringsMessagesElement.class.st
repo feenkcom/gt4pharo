@@ -21,7 +21,7 @@ GtRefactoringsMessagesElement >> initialize [
 
 	containerElement
 		margin: (BlInsets top: 5);
-		addAptitude: (BrLayoutResizerAptitude new hInherit: [ containerElement children ]).
+		addAptitude: (BrLayoutResizerAptitude new inherit: [ containerElement children ]).
 
 	self addAptitude: (BrLayoutResizerAptitude new hInherit: containerElement).
 
