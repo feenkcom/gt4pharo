@@ -6,7 +6,7 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'examples - setup' }
 GtPharoMethodSearchFilterGroupingExample >> filterOnDummyExamplesPackages [
 	<gtExample>
 	| filter |
@@ -19,7 +19,7 @@ GtPharoMethodSearchFilterGroupingExample >> filterOnDummyExamplesPackages [
 	^ filter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView [
 	<gtExample>
 	| numberOfClasses filter scripter |
@@ -51,7 +51,94 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView [
 	^ scripter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
+GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView_selectMultipleClasses [
+	<gtExample>
+	| scripter firstClass secondClass |
+
+	scripter := self pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter.
+	
+	scripter inspectorStep
+		clickOnTabWithName: 'By Class';
+		assertSelectedTabWithName: 'By Class';
+		play.
+		
+	firstClass := GtDummyAbstractClassWithExamples.
+	secondClass := GtDummyAnnouncingExamplesA.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				//GtPhlowColumnedListId;
+				id: #scrollable;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = firstClass name ] ].
+				
+	scripter
+		clickStep: [ :s | 
+			s
+				//GtPhlowColumnedListId;
+				id: #scrollable;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = secondClass name ];
+				modifiers: BlKeyModifiers primary ].
+				
+	scripter pager
+		assertPageCountIs: 2;
+		play.
+		
+	scripter phlowCompositeToolStep
+		onPagerPaneWithIndex: 2;
+		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
+			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
+		assertPhlowToolValue: [ :aCompositePhlowTool |
+				aCompositePhlowTool tools first searchFilter contents size ] 
+			equals: [ 4 ];
+		play.
+	
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView_selectSingleClass [
+	<gtExample>
+	| scripter targetClass |
+
+	scripter := self pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter.
+	
+	scripter inspectorStep
+		clickOnTabWithName: 'By Class';
+		assertSelectedTabWithName: 'By Class';
+		play.
+		
+	targetClass := GtDummyAbstractClassWithExamples.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				//GtPhlowColumnedListId;
+				id: #scrollable;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = targetClass name ] ].
+				
+	scripter pager
+		assertPageCountIs: 2;
+		play.
+	
+	scripter phlowCompositeToolStep
+		onPagerPaneWithIndex: 2;
+		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
+			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
+		assertPhlowToolValue: [ :aCompositePhlowTool |
+				aCompositePhlowTool tools first searchFilter contents size ] 
+			equals: [ 2 ];
+		play.
+	
+	^ scripter
+]
+
+{ #category : #examples }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView [
 	<gtExample>
 	| numberOfMethods filter scripter |
@@ -83,7 +170,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView [
 	^ scripter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMultipleMethods [
 	<gtExample>
 	| scripter firstMethod secondMethod |
@@ -142,7 +229,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMul
 	^ scripter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSingleMethod [
 	<gtExample>
 	| scripter targetMethod |
@@ -181,7 +268,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSin
 	^ scripter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView [
 	<gtExample>
 	| filter scripter |
@@ -211,7 +298,93 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView [
 	^ scripter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
+GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_multiplePackages [
+	<gtExample>
+	| scripter firstPackage secondPackage |
+	
+	scripter := self pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter.
+		
+	scripter inspectorStep
+		clickOnTabWithName: 'By Package';
+		assertSelectedTabWithName: 'By Package';
+		play.
+		
+	firstPackage := 'GToolkit-Examples-Dummies-Package1' asPackage.
+	secondPackage := 'GToolkit-Examples-Dummies-Package2' asPackage.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				//GtPhlowColumnedListId;
+				id: #scrollable;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = firstPackage name ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				//GtPhlowColumnedListId;
+				id: #scrollable;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = secondPackage name ];
+				modifiers: BlKeyModifiers primary ].
+	
+	scripter pager
+		assertPageCountIs: 2;
+		play.
+		
+	scripter phlowCompositeToolStep
+		onPagerPaneWithIndex: 2;
+		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
+			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
+		assertPhlowToolValue: [ :aCompositePhlowTool |
+				aCompositePhlowTool tools first searchFilter contents size ] 
+			equals: [ 4 ];
+		play.
+	
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_singlePackage [
+	<gtExample>
+	| scripter targetPackage |
+	
+	scripter := self pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter.
+		
+	scripter inspectorStep
+		clickOnTabWithName: 'By Package';
+		assertSelectedTabWithName: 'By Package';
+		play.
+		
+	targetPackage := 'GToolkit-Examples-Dummies-Package1' asPackage.
+	scripter
+		doubleClickStep: [ :s | 
+			s
+				//GtPhlowColumnedListId;
+				id: #scrollable;
+				// GtPhlowCellElement;
+				@ [ :aCellElement | 
+					aCellElement content nameLabelText asString = targetPackage name ] ].
+	
+	scripter pager
+		assertPageCountIs: 2;
+		play.
+		
+	scripter phlowCompositeToolStep
+		onPagerPaneWithIndex: 2;
+		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
+			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
+		assertPhlowToolValue: [ :aCompositePhlowTool |
+				aCompositePhlowTool tools first searchFilter contents size ] 
+			equals: [ 2 ];
+		play.
+	
+	^ scripter
+]
+
+{ #category : #'examples - setup' }
 GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExamplesPackagesWithPragmaFilter [
 	<gtExample>
 	| filter scripter |
