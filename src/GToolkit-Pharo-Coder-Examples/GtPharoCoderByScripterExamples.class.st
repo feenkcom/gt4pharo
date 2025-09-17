@@ -1375,7 +1375,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 				typeText: className;
 				typeText: self extraLongClassName;
 				assertHasFocus ];
-		assertInputToolbarIsVisible;
+		assertToolbarIsVisible;
 		assertPreviewButtonIsVisible;
 		assertPreviewButtonIsEnabled;
 		onPopover;
@@ -1410,7 +1410,7 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 		play.
 
 	scripter refactorings
-		assertInputToolbarIsVisible;
+		assertToolbarIsVisible;
 		assertPreviewButtonIsVisible;
 		assertPreviewButtonIsEnabled;
 		onSpaceRoot;
@@ -1432,8 +1432,11 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 
 	scripter refactorings
 		clickPreviewButton;
-		assertInputToolbarIsNotVisible;
+		assertToolbarIsVisible;
 		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsNotVisible;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
 		assertAcceptButtonHasFocus;
 		onSpaceRoot;
 		// #'coder--context-menu-convert-to-sibling-form';
@@ -1499,8 +1502,11 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuEle
 			anEditorStep
 				assertHasFocus;
 				pressReturn ];
-		assertInputToolbarIsNotVisible;
+		assertToolbarIsVisible;
 		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsNotVisible;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
 		assertAcceptButtonHasFocus;
 		onPopover;
 		play.

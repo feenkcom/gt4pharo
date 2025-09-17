@@ -91,7 +91,6 @@ GtRefactoringsJustPreviewElement >> onFuturePending [
 GtRefactoringsJustPreviewElement >> onFutureSuccess: anExecutedRefactorings [
 	self refactoringsViewModel executedRefactorings == anExecutedRefactorings
 		ifFalse: [ ^ self ].
-
 	self updateDisplayedRefactorings
 ]
 

@@ -14,8 +14,7 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFrom: aGtCoderClassesTreeElemen
 				convertToSiblingSubmenuFor: self
 				siblings: self subclasses
 				title: 'Convert to sibling');
-		bePinSubmenuAction;
-		hideOnClick: true
+		bePinSubmenuAction
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }

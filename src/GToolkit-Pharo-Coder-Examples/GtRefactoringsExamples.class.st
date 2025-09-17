@@ -8,10 +8,27 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'environment',
-		'rootClass'
+		'rootClass',
+		'nonRootClass',
+		'leafClass',
+		'leafClassInstVarName'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings'
 }
+
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> basicConfirmationViewModel [
+	<gtExample>
+	| aViewModel |
+	aViewModel := GtRefactoringsWithConfirmationViewModel new.
+
+	self assert: aViewModel refactoringTitle isNil.
+	self assert: aViewModel targetName isNil.
+	self assert: aViewModel confirmationLabel equals: 'Confirm'.
+	self assert: aViewModel refactoringsWithConfirmationComputation isNotNil.
+
+	^ aViewModel
+]
 
 { #category : #'examples - input element' }
 GtRefactoringsExamples >> basicInputElement [
@@ -20,8 +37,14 @@ GtRefactoringsExamples >> basicInputElement [
 	anElement := GtRefactoringsInputElement new.
 
 	self
-		assert: (anElement childWithId: #refactoringTitle) visibility
-		equals: BlVisibility gone.
+		assert: (anElement childWithId: #refactoringEditor) viewModel mode class
+		equals: BrTextEditorEditableSingleLineMode.
+	self
+		assert: (anElement childWithId: #refactoringEditor) text asString
+		equals: ''.
+	self
+		assert: (anElement childWithId: #refactoringInputLabel) text asString
+		equals: 'Input:'.
 
 	^ anElement
 ]
@@ -68,6 +91,17 @@ GtRefactoringsExamples >> basicMessagesElement [
 	^ anElement
 ]
 
+{ #category : #'examples - preview with confirmation element' }
+GtRefactoringsExamples >> basicPreviewWithConfirmationElement [
+	<gtExample>
+	| anElement |
+	anElement := GtRefactoringsPreviewWithConfirmationElement new.
+
+	self assert: (anElement query // #progress) isEmpty.
+
+	^ anElement
+]
+
 { #category : #'examples - preview with input element' }
 GtRefactoringsExamples >> basicPreviewWithInputElement [
 	<gtExample>
@@ -76,7 +110,7 @@ GtRefactoringsExamples >> basicPreviewWithInputElement [
 
 	self
 		assert: (anElement query / GtRefactoringsToolbarElement) anyOne visibility
-		equals: BlVisibility gone.
+		equals: BlVisibility visible.
 	self assert: (anElement query // #progress) isEmpty.
 
 	^ anElement
@@ -89,21 +123,54 @@ GtRefactoringsExamples >> basicToolbarElement [
 	anElement := GtRefactoringsToolbarElement new.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isDisabled.
 
 	^ anElement
+]
+
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> confirmationViewModel [
+	<gtExample>
+	| aViewModel aConfirmationLabel aTargetName |
+	aViewModel := self basicConfirmationViewModel.
+	aViewModel optionAt: #dummyEnvironment put: self environment.
+	aConfirmationLabel := 'Pull up {1}' format: {self leafClassInstVarName}.
+	aTargetName := '{1}''s {2} instance variable'
+			format: {self leafClass name.
+					self leafClassInstVarName}.
+
+	aViewModel
+		refactoringTitle: 'Pull up';
+		targetName: aTargetName;
+		confirmationLabel: aConfirmationLabel;
+		refactoringWithConfirmation: [ RBPullUpInstanceVariableRefactoring
+				variable: self leafClassInstVarName
+				class: self leafClass superclass ].
+
+	self assert: aViewModel confirmationLabel equals: aConfirmationLabel.
+	self assert: aViewModel targetName equals: aTargetName.
+	self assert: aViewModel refactoringsWithConfirmationComputation isNotNil.
+
+	^ aViewModel
 ]
 
 { #category : #'examples - environment' }
@@ -129,10 +196,214 @@ GtRefactoringsExamples >> inputElement [
 	anElement refactoringsViewModel: aViewModel.
 
 	self
-		assert: (anElement childWithId: #refactoringTitle) visibility
-		equals: BlVisibility visible.
+		assert: (anElement childWithId: #refactoringEditor) viewModel mode class
+		equals: BrTextEditorEditableSingleLineMode.
+	self
+		assert: (anElement childWithId: #refactoringEditor) text asString
+		equals: 'NewClass'.
+	self
+		assert: (anElement childWithId: #refactoringInputLabel) text asString
+		equals: 'Superclass:'.
 
 	^ anElement
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementEmptyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicInputElement.
+	aViewModel := self inputViewModelEmptyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement childWithId: #refactoringEditor) viewModel mode class
+		equals: BrTextEditorEditableSingleLineMode.
+	self
+		assert: (anElement childWithId: #refactoringEditor) text asString
+		equals: 'NewClass'.
+	self
+		assert: (anElement childWithId: #refactoringInputLabel) text asString
+		equals: 'Superclass:'.
+
+	^ anElement
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementEmptyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self inputElementEmptyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter editor
+		requestFocus;
+		assertHasFocus;
+		assertTextEqualsTo: 'NewClass';
+		selectAll;
+		assertIsEditableSingleLineMode;
+		type: self rootClass name;
+		type: 'Superclass';
+		assertTextEqualsTo: self superclassFromRootClassName;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	aScripter editor
+		assertHasFocus;
+		pressReturn;
+		assertIsEditableSingleLineMode;
+		assertTextEqualsTo: self superclassFromRootClassName;
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	^ aScripter
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementExceptionComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicInputElement.
+	aViewModel := self inputViewModelExceptionComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement childWithId: #refactoringEditor) viewModel mode class
+		equals: BrTextEditorEditableSingleLineMode.
+	self
+		assert: (anElement childWithId: #refactoringEditor) text asString
+		equals: self superclassFromRootClassName.
+	self
+		assert: (anElement childWithId: #refactoringInputLabel) text asString
+		equals: 'Superclass:'.
+
+	^ anElement
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementExceptionComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self inputElementExceptionComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter editor
+		requestFocus;
+		assertHasFocus;
+		assertIsEditableSingleLineMode;
+		assertTextEqualsTo: self superclassFromRootClassName;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	aScripter editor
+		assertHasFocus;
+		pressReturn;
+		assertIsEditableSingleLineMode;
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	^ aScripter
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementFaultyComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicInputElement.
+	aViewModel := self inputViewModelFaultyComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement childWithId: #refactoringEditor) viewModel mode class
+		equals: BrTextEditorEditableSingleLineMode.
+	self
+		assert: (anElement childWithId: #refactoringEditor) text asString
+		equals: self nonRootClass name.
+	self
+		assert: (anElement childWithId: #refactoringInputLabel) text asString
+		equals: 'Superclass:'.
+
+	^ anElement
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementFaultyComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self inputElementFaultyComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter editor
+		requestFocus;
+		assertHasFocus;
+		assertTextEqualsTo: self nonRootClass name;
+		assertIsEditableSingleLineMode;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	aScripter editor
+		assertHasFocus;
+		pressReturn;
+		assertIsEditableSingleLineMode;
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+	self assert: aViewModel executedRefactorings errorMessages size equals: 1.
+
+	^ aScripter
 ]
 
 { #category : #'examples - input element' }
@@ -155,8 +426,10 @@ GtRefactoringsExamples >> inputElementScripter [
 		requestFocus;
 		assertHasFocus;
 		selectAll;
+		assertIsEditableSingleLineMode;
 		type: self rootClass name;
 		type: 'Superclass';
+		assertTextEqualsTo: self superclassFromRootClassName;
 		play.
 
 	self assert: allAnnouncements size equals: 0.
@@ -166,11 +439,118 @@ GtRefactoringsExamples >> inputElementScripter [
 	aScripter editor
 		assertHasFocus;
 		pressReturn;
+		assertIsEditableSingleLineMode;
 		play.
 
 	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
 	self assert: aViewModel hasPreviewedExecutedRefactorings not.
 	self assert: aViewModel canEditInput.
+
+	^ aScripter
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementScripter_submit [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self inputElementScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter do 
+		label: 'Notify submit executed refactorings requested';
+		block: [ aViewModel notifySubmitExecutedRefactoringsRequested ];
+		play.
+		
+	aScripter editor
+		requestFocus;
+		assertHasFocus;
+		assertIsEditableSingleLineMode;
+		assertTextEqualsTo: self superclassFromRootClassName;
+		play.
+
+	self assert: allAnnouncements size equals: 2.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelSubmitExecutedRefactoringsRequested.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	^ aScripter
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementSomeComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicInputElement.
+	aViewModel := self inputViewModelSomeComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement childWithId: #refactoringEditor) viewModel mode class
+		equals: BrTextEditorEditableSingleLineMode.
+	self
+		assert: (anElement childWithId: #refactoringEditor) text asString
+		equals: self superclassFromRootClassName.
+	self
+		assert: (anElement childWithId: #refactoringInputLabel) text asString
+		equals: 'Superclass:'.
+
+	^ anElement
+]
+
+{ #category : #'examples - input element' }
+GtRefactoringsExamples >> inputElementSomeComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self inputElementSomeComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter editor
+		requestFocus;
+		assertHasFocus;
+		assertTextEqualsTo: self superclassFromRootClassName;
+		assertIsEditableSingleLineMode;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+
+	aScripter editor
+		assertHasFocus;
+		pressReturn;
+		assertIsEditableSingleLineMode;
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: aViewModel hasPreviewedExecutedRefactorings not.
+	self assert: aViewModel canEditInput.
+	self assert: aViewModel executedRefactorings errorMessages size equals: 0.
 
 	^ aScripter
 ]
@@ -237,7 +617,7 @@ GtRefactoringsExamples >> inputViewModelExceptionComputedRefactorings [
 		send: #add:
 		to: allAnnouncements.
 
-	aViewModel refactoringsForInput: ('{1}Superclass' format: {self rootClass name}).
+	aViewModel refactoringsForInput: self superclassFromRootClassName.
 	self assert: allAnnouncements size equals: 1.
 	self
 		assert: allAnnouncements anyOne class
@@ -257,9 +637,8 @@ GtRefactoringsExamples >> inputViewModelFaultyComputedRefactorings [
 		when: Announcement
 		send: #add:
 		to: allAnnouncements.
-
-	anotherClass := self environment anyDummyPackage dummyClasses
-			detect: [ :eachDummyClass | eachDummyClass realClass ~= self rootClass ].
+	
+	anotherClass := self nonRootClass.
 
 	aViewModel refactoringsForInput: ('{1}' format: {anotherClass realClass name}).
 	self assert: allAnnouncements size equals: 1.
@@ -292,8 +671,7 @@ GtRefactoringsExamples >> inputViewModelSomeComputedRefactorings [
 		send: #add:
 		to: allAnnouncements.
 
-	aViewModel
-		refactoringsForInput: ('{1}Superclass' format: {self rootClass name}).
+	aViewModel refactoringsForInput: self superclassFromRootClassName.
 	self assert: allAnnouncements size equals: 1.
 	self
 		assert: allAnnouncements anyOne class
@@ -309,7 +687,7 @@ GtRefactoringsExamples >> inputViewModelSomeComputedRefactorings [
 	self assert: aCollection size equals: 1.
 
 	self assert: aViewModel executedRefactorings errorMessages size equals: 0.
-	
+
 	^ aViewModel
 ]
 
@@ -466,10 +844,9 @@ GtRefactoringsExamples >> justPreviewElementScripter [
 
 	aScripter do
 		label: 'Set refactorings with superclass name';
-		block: [ aViewModel
-				refactoringsForInput: ('{1}Superclass' format: {self rootClass name}) ];
+		block: [ aViewModel refactoringsForInput: self superclassFromRootClassName ];
 		play.
-		
+
 	self assert: allAnnouncements size equals: 4.
 	self
 		assert: allAnnouncements second class
@@ -493,6 +870,27 @@ GtRefactoringsExamples >> justPreviewElementScripter [
 				isVisibleInSpace.
 
 	^ aScripter
+]
+
+{ #category : #'examples - environment' }
+GtRefactoringsExamples >> leafClass [
+	<gtExample>
+	leafClass ifNil: [ leafClass := self environment anyDummyLeafClass realClass ].
+	
+	self assert: leafClass subclasses size equals: 0.
+	
+	^ leafClass
+]
+
+{ #category : #'examples - environment' }
+GtRefactoringsExamples >> leafClassInstVarName [
+	<gtExample>
+	leafClassInstVarName ifNil: [ 
+		leafClassInstVarName := self leafClass instVarNames anyOne.
+		self assert: leafClassInstVarName isNotNil.
+		self assert: leafClassInstVarName isNotEmpty ].
+	
+	^ leafClassInstVarName
 ]
 
 { #category : #'examples - messages element' }
@@ -529,6 +927,148 @@ GtRefactoringsExamples >> messagesElementFaultyComputedRefactorings [
 		equals: 1.
 
 	^ anElement
+]
+
+{ #category : #'examples - environment' }
+GtRefactoringsExamples >> nonRootClass [
+	<gtExample>
+	nonRootClass ifNil: [ 
+		nonRootClass := self environment anyDummyPackage dummyClasses
+			detect: [ :eachDummyClass | eachDummyClass realClass ~= self rootClass ]
+			ifFound: #realClass 
+			ifNone: [ NotFound signalFor: 'A non root class' in: self environment anyDummyPackage ] ].
+	
+	^ nonRootClass
+]
+
+{ #category : #'examples - preview with confirmation element' }
+GtRefactoringsExamples >> previewWithConfirmationElement [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := GtRefactoringsPreviewWithConfirmationElement new.
+	aViewModel := self confirmationViewModel.
+	anElement refactoringsViewModel: aViewModel.
+
+	self assert: (anElement query // #progress) isEmpty.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with confirmation element' }
+GtRefactoringsExamples >> previewWithConfirmationElementScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self previewWithConfirmationElement.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements anyOne class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+
+	aScripter refactorings
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertAcceptButtonIsNotVisible;
+		assertChangesPreviewIsNotVisible;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with confirmation element' }
+GtRefactoringsExamples >> previewWithConfirmationElementScripter_preview [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self previewWithConfirmationElementScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter refactorings
+		clickPreviewButton;
+		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertAcceptButtonHasFocus;
+		play.
+
+	self assert: allAnnouncements size equals: 4.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelSubmitExecutedRefactoringsRequested.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self
+		assert: allAnnouncements third class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self
+		assert: allAnnouncements fourth class
+		equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with confirmation element' }
+GtRefactoringsExamples >> previewWithConfirmationElementScripter_preview_apply [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self previewWithConfirmationElementScripter_preview.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+
+	aScripter refactorings
+		assertFinishedLabelIsNotVisible;
+		assertAcceptButtonHasFocus;
+		pressReturnToApplyChanges;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsVisible;
+		assertFinishedLabelIsVisible;
+		play.
+
+	self assert: allAnnouncements size equals: 5.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelApplyChangesRequested.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsAboutToApply.
+	self
+		assert: allAnnouncements third class
+		equals: GtRefactoringsViewModelExecutedRefactoringsProgressChanged.
+	self
+		assert: allAnnouncements fourth class
+		equals: GtRefactoringsViewModelExecutedRefactoringsProgressChanged.
+	self
+		assert: allAnnouncements fifth class
+		equals: GtRefactoringsViewModelExecutedRefactoringsApplied.
+
+	^ aScripter
 ]
 
 { #category : #'examples - preview with input element' }
@@ -652,7 +1192,7 @@ GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName [
 						format: {self rootClass name.
 								self extraLongClassName});
 				assertHasFocus ];
-		assertInputToolbarIsVisible;
+		assertToolbarIsVisible;
 		assertPreviewButtonIsVisible;
 		assertPreviewButtonIsEnabled;
 		play.
@@ -677,15 +1217,16 @@ GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName_pre
 
 	aScripter refactorings
 		clickPreviewButton;
-		assertInputToolbarIsNotVisible;
+		assertToolbarIsVisible;
 		assertChangesPreviewIsVisible;
 		assertAcceptButtonHasFocus;
 		play.
 		
-	self assert: allAnnouncements size equals: 3.
-	self assert: allAnnouncements first class equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
-	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
-	self assert: allAnnouncements third class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+	self assert: allAnnouncements size equals: 4.
+	self assert: allAnnouncements first class equals: GtRefactoringsViewModelSubmitExecutedRefactoringsRequested.
+	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: allAnnouncements third class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self assert: allAnnouncements fourth class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
 
 	^ aScripter
 ]
@@ -716,7 +1257,7 @@ GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName_pre
 								self extraLongClassName.
 								56});
 				assertHasFocus ];
-		assertInputToolbarIsVisible;
+		assertToolbarIsVisible;
 		assertPreviewButtonIsVisible;
 		assertPreviewButtonIsEnabled;
 		assertChangesPreviewIsNotVisible;
@@ -748,15 +1289,20 @@ GtRefactoringsExamples >> previewWithInputElementScripter_typeSuperclassName_pre
 
 	aScripter refactorings
 		clickPreviewButton;
-		assertInputToolbarIsNotVisible;
+		assertToolbarIsVisible;
 		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsEnabled;
+		assertAcceptButtonIsVisible;
 		assertAcceptButtonHasFocus;
 		play.
 	
-	self assert: allAnnouncements size equals: 3.
-	self assert: allAnnouncements first class equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
-	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
-	self assert: allAnnouncements third class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+	self assert: allAnnouncements size equals: 4.
+	self assert: allAnnouncements first class equals: GtRefactoringsViewModelSubmitExecutedRefactoringsRequested.
+	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self assert: allAnnouncements third class equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self assert: allAnnouncements fourth class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
 
 	^ aScripter
 ]
@@ -801,6 +1347,12 @@ GtRefactoringsExamples >> rootClass [
 	^ rootClass
 ]
 
+{ #category : #'examples - environment' }
+GtRefactoringsExamples >> superclassFromRootClassName [
+	<gtExample>
+	^ '{1}Superclass' format: {self rootClass name}
+]
+
 { #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElement [
 	<gtExample>
@@ -810,19 +1362,26 @@ GtRefactoringsExamples >> toolbarElement [
 	anElement refactoringsViewModel: aViewModel.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ anElement
 ]
@@ -836,24 +1395,27 @@ GtRefactoringsExamples >> toolbarElementEmptyComputedRefactorings [
 	anElement refactoringsViewModel: aViewModel.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
 		assert: (anElement query // #progress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
-
 	self
-		assert: (anElement query / #container) anyOne visibility
-		equals: BlVisibility gone.
-
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
+	
 	^ anElement
 ]
 
@@ -874,19 +1436,154 @@ GtRefactoringsExamples >> toolbarElementEmptyComputedRefactoringsScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
 		assert: (anElement query // #progress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
+
+	^ aScripter
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementExceptionComputedRefactorings [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicToolbarElement.
+	aViewModel := self inputViewModelExceptionComputedRefactorings.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #refactoringProgress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
+	self
+		assert: (anElement query // #refactoringException) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringFinished) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
+
+	^ anElement
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementExceptionComputedRefactoringsScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self toolbarElementExceptionComputedRefactorings.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	self assert: allAnnouncements size equals: 0.
+
+	self
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #refactoringProgress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
+	self
+		assert: (anElement query // #refactoringException) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringFinished) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
+
+	^ aScripter
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementExceptionComputedRefactoringsScripter_compute [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self toolbarElementExceptionComputedRefactoringsScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter do
+		label: 'Simulate a refactoring computation';
+		block: [ [ aViewModel computeRefactoringsFrom: self ]
+				onErrorDo: [ :anException | 
+					aViewModel
+						notifyComputingRefactoringsFailed: (GtSystemUtility freeze: anException) ] ];
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements anyOne class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputationFailed.
+
+	self
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #refactoringProgress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
+	self
+		assert: (anElement query // #refactoringException) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query // #refactoringException) anyOne children size
+		equals: 1.
+	self
+		assert: (anElement query // #refactoringFinished) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ aScripter
 ]
@@ -900,19 +1597,26 @@ GtRefactoringsExamples >> toolbarElementFaultyComputedRefactorings [
 	anElement refactoringsViewModel: aViewModel.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ anElement
 ]
@@ -934,19 +1638,26 @@ GtRefactoringsExamples >> toolbarElementFaultyComputedRefactoringsScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ aScripter
 ]
@@ -968,19 +1679,26 @@ GtRefactoringsExamples >> toolbarElementScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ aScripter
 ]
@@ -994,19 +1712,26 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactorings [
 	anElement refactoringsViewModel: aViewModel.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ anElement
 ]
@@ -1028,28 +1753,32 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter [
 	self assert: allAnnouncements size equals: 0.
 
 	self
-		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #container) anyOne visibility
-		equals: BlVisibility gone.
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ aScripter
 ]
 
 { #category : #'examples - toolbar element' }
-GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_requestRefactorings [
+GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_previewed [
 	<gtExample>
 	| anElement aViewModel aScripter allAnnouncements |
 	aScripter := self toolbarElementWithSomeComputedRefactoringsScripter.
@@ -1070,33 +1799,123 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_req
 		assert: allAnnouncements anyOne class
 		equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
 
-	aScripter click
-		label: 'Request accept changes';
-		// GtRefactoringsPreviewAcceptId;
-		play.
-
-	self assert: allAnnouncements size equals: 2.
 	self
-		assert: allAnnouncements second class
-		equals: GtRefactoringsViewModelApplyChangesRequested.
-
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
+		equals: BlVisibility visible.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
 		equals: BlVisibility visible.
 	self
 		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isEnabled.
 	self
-		assert: (anElement query // #progress) isEmpty
+		assert: (anElement query // #refactoringProgress) isEmpty
 		description: [ 'Progress element must not be hidden' ].
 	self
-		assert: (anElement query // #exception) anyOne visibility
+		assert: (anElement query // #refactoringException) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query // #finished) anyOne visibility
+		assert: (anElement query // #refactoringFinished) anyOne visibility
 		equals: BlVisibility gone.
 	self
-		assert: (anElement query / #container) anyOne visibility
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility gone.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isDisabled.
+
+	^ aScripter
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_previewed_requestRefactorings [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self toolbarElementWithSomeComputedRefactoringsScripter_previewed.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter click
+		label: 'Request accept changes';
+		// GtRefactoringsPreviewAcceptId;
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelApplyChangesRequested.
+
+	self
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
 		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isEnabled.
+	self
+		assert: (anElement query // #refactoringProgress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
+	self
+		assert: (anElement query // #refactoringException) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringFinished) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility gone.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isDisabled.
+
+	^ aScripter
+]
+
+{ #category : #'examples - toolbar element' }
+GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_requestPreview [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	aScripter := self toolbarElementWithSomeComputedRefactoringsScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter click
+		label: 'Request preview changes';
+		// #refactoringPreviewButton;
+		play.
+
+	self assert: allAnnouncements size equals: 1.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelSubmitExecutedRefactoringsRequested.
+
+	self
+		assert: (anElement query // #refactoringToolbarContainer) anyOne visibility
+		equals: BlVisibility visible.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // GtRefactoringsPreviewAcceptId) anyOne isDisabled.
+	self
+		assert: (anElement query // #refactoringProgress) isEmpty
+		description: [ 'Progress element must not be hidden' ].
+	self
+		assert: (anElement query // #refactoringException) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringFinished) anyOne visibility
+		equals: BlVisibility gone.
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility visible.
+	self assert: (anElement query // #refactoringPreviewButton) anyOne isEnabled.
 
 	^ aScripter
 ]

@@ -6,7 +6,8 @@ Class {
 		'progressElement',
 		'exceptionElement',
 		'finishedElement',
-		'containerElement'
+		'containerElement',
+		'previewButtonElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -20,17 +21,19 @@ GtRefactoringsToolbarElement >> defaultLayout [
 GtRefactoringsToolbarElement >> initialize [
 	super initialize.
 
+	self initializePreviewButton.
 	self initializeApplyButton.
 	self initializeProgressElement.
 	self initializeExceptionElement.
 	self initializeFinishedElement.
 	self initializeContainer.
 
+	containerElement addChild: previewButtonElement as: #refactoringPreviewButton.
 	containerElement addChild: applyButton as: GtRefactoringsPreviewAcceptId.
-	containerElement addChild: exceptionElement as: #exception.
-	containerElement addChild: finishedElement as: #finished.
+	containerElement addChild: exceptionElement as: #refactoringException.
+	containerElement addChild: finishedElement as: #refactoringFinished.
 
-	self addChild: containerElement as: #container.
+	self addChild: containerElement as: #refactoringToolbarContainer.
 
 	exceptionElement
 		addAptitude: (BrLayoutResizerAptitude new inherit: [ exceptionElement children ]).
@@ -64,6 +67,7 @@ GtRefactoringsToolbarElement >> initializeApplyButton [
 			label: 'Save';
 			action: [ self onApplyButtonClick ];
 			disable;
+			visibility: BlVisibility gone;
 			yourself
 ]
 
@@ -93,9 +97,24 @@ GtRefactoringsToolbarElement >> initializeFinishedElement [
 ]
 
 { #category : #initialization }
+GtRefactoringsToolbarElement >> initializePreviewButton [
+	previewButtonElement := BrButton new
+			fitContent;
+			beFocusable;
+			margin: (BlInsets right: 5);
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			id: GtRefactoringsPreviewAcceptId;
+			icon: BrGlamorousVectorIcons accept;
+			beSmallSize;
+			label: 'Preview changes';
+			disable;
+			action: [ self onPreviewButtonClick ]
+]
+
+{ #category : #initialization }
 GtRefactoringsToolbarElement >> initializeProgressElement [
 	progressElement := BrProgress new
-			id: #progress;
+			id: #refactoringProgress;
 			aptitude: BrGlamorousProgressBarAptitude;
 			fraction: 0;
 			constraintsDo: [ :c | 
@@ -142,6 +161,13 @@ GtRefactoringsToolbarElement >> onGtRefactoringsViewModelExecutedRefactoringsSta
 		action: [ self updateElement ]
 ]
 
+{ #category : #'private - event handling' }
+GtRefactoringsToolbarElement >> onPreviewButtonClick [
+	self hasRefactoringsViewModel ifFalse: [ ^ self ].
+	
+	self refactoringsViewModel notifySubmitExecutedRefactoringsRequested
+]
+
 { #category : #'accessing - refactorings view model' }
 GtRefactoringsToolbarElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
@@ -177,6 +203,11 @@ GtRefactoringsToolbarElement >> updateAsDisabledApplyButton [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsDisabledPreviewButton [
+	previewButtonElement disable
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsDisplayedFinishedLabel [
 	finishedElement visibility: BlVisibility visible
 ]
@@ -193,8 +224,18 @@ GtRefactoringsToolbarElement >> updateAsEnabledApplyButton [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsEnabledPreviewButton [
+	previewButtonElement enable
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsFocusedApplyButton [
 	applyButton requestFocus
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsHiddenApplyButton [
+	applyButton visibility: BlVisibility gone
 ]
 
 { #category : #'private - updating' }
@@ -214,6 +255,11 @@ GtRefactoringsToolbarElement >> updateAsHiddenFinishedLabel [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsHiddenPreviewButton [
+	previewButtonElement visibility: BlVisibility gone
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsHiddenProgress [
 	"The progress element is removed (instead of a visibility gone),
 	because it has a repeated animation task that would continue running in a background."
@@ -222,8 +268,18 @@ GtRefactoringsToolbarElement >> updateAsHiddenProgress [
 ]
 
 { #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsVisibleApplyButton [
+	applyButton visibility: BlVisibility visible
+]
+
+{ #category : #'private - updating' }
 GtRefactoringsToolbarElement >> updateAsVisibleContainer [
 	containerElement visibility: BlVisibility visible
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsToolbarElement >> updateAsVisiblePreviewButton [
+	previewButtonElement visibility: BlVisibility visible
 ]
 
 { #category : #'private - updating' }
@@ -231,14 +287,6 @@ GtRefactoringsToolbarElement >> updateElement [
 	GtExecutedRefactoringsToolbarElementUpdater new
 		forRefactoringsElement: self;
 		update
-]
-
-{ #category : #'private - event handling' }
-GtRefactoringsToolbarElement >> updateElement: isJustPreviewed [
-	"The isJustPreviewed argument indicates whether a changes preview
-	was just displayed and therefore a apply button should be get focus."
-
-	
 ]
 
 { #category : #'private - updating' }
