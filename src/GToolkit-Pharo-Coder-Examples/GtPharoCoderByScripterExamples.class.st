@@ -22,7 +22,25 @@ GtPharoCoderByScripterExamples >> abstractForSlotInIndex [
 		hoverMenu: 'Abstract instVar1'
 		labelled: 'Hover abstract'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> abstractForSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self abstractForSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass lookupSelector: #instVar1) isNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNil.
+
+	self applyRefactoring: scripter.
+	
+	self assert: (aClass lookupSelector: #instVar1) isNotNil.
+	self assert: (aClass lookupSelector: #instVar1:) isNotNil.
+
 	^ scripter
 ]
 
@@ -215,6 +233,23 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> applyRefactoring: scripter [
+	scripter refactorings
+		assertPreviewButtonIsDisabled;
+		assertPreviewButtonIsNotVisible;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertAcceptButtonHasFocus;
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
+
+	scripter menuStep
+		assertClosedMenuContainer;
+		play
 ]
 
 { #category : #'examples - dropdown' }
@@ -1221,7 +1256,7 @@ GtPharoCoderByScripterExamples >> coder_clickOnHierarchiesButton [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> confirmAndRunRefactoring: scripter [
+GtPharoCoderByScripterExamples >> confirmAndPreviewRefactoring: scripter [
 	"Preview refactorings"
 
 	scripter refactorings
@@ -1233,6 +1268,7 @@ GtPharoCoderByScripterExamples >> confirmAndRunRefactoring: scripter [
 		assertAcceptButtonIsVisible;
 		assertAcceptButtonIsEnabled;
 		assertAcceptButtonHasFocus;
+		onPopover;
 		play
 ]
 
@@ -1553,7 +1589,7 @@ GtPharoCoderByScripterExamples >> createAccessorsForSlotInIndex [
 		hoverMenu: 'Create accessors instVar1'
 		labelled: 'Hover create accessors'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3208,7 +3244,7 @@ GtPharoCoderByScripterExamples >> protectForSlotInIndex [
 		labelled: 'Hover protect'
 		in: scripter.
 
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3251,7 +3287,7 @@ GtPharoCoderByScripterExamples >> pushDownInIndexMethod: method [
 		hoverMenu: 'Push down method ' , selector
 		labelled: 'Hover push down method'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3269,7 +3305,7 @@ GtPharoCoderByScripterExamples >> pushDownInIndexMethods: methods [
 		hoverMenu: ('Push down methods {1} methods' format: {methods size})
 		labelled: 'Hover push down methods'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3309,7 +3345,7 @@ GtPharoCoderByScripterExamples >> pushDownSlotInIndex [
 		hoverMenu: 'Push down instVar1'
 		labelled: 'Hover push down'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3351,7 +3387,7 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
 		hoverMenu: 'Pull up method ' , selector
 		labelled: 'Hover pull up method'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3368,7 +3404,7 @@ GtPharoCoderByScripterExamples >> pushUpInIndexMethods: methods [
 		hoverMenu: ('Pull up methods {1} methods' format: {methods size})
 		labelled: 'Hover pull up methods'
 		in: scripter.
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -3445,7 +3481,7 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
 		labelled: 'Hover push down'
 		in: scripter.
 
-	self confirmAndRunRefactoring: scripter.
+	self confirmAndPreviewRefactoring: scripter.
 	^ scripter
 ]
 
@@ -4523,6 +4559,7 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> startWithMenuOnInstVar1Slot [
+	<gtExample>
 	| scripter class |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
 	class := environment anyDummyRootClass realClass.
