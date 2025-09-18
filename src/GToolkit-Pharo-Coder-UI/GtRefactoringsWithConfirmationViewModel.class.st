@@ -56,6 +56,10 @@ GtRefactoringsWithConfirmationViewModel >> refactoringWithConfirmation: aBlock [
 	"Set a block that returns a refactoring instance.
 	The block must have zero arguments."
 
+	self
+		assert: [ aBlock numArgs = 0 ]
+		description: [ 'Block must have zero arguments: {1}' format: {aBlock} ].
+
 	refactoringsWithConfirmationComputation := [ Array with: aBlock value ]
 ]
 
@@ -63,6 +67,10 @@ GtRefactoringsWithConfirmationViewModel >> refactoringWithConfirmation: aBlock [
 GtRefactoringsWithConfirmationViewModel >> refactoringsWithConfirmation: aBlock [
 	"Set a block that returns a collection of refactoring instances.
 	The block must have zero arguments."
+	
+	self
+		assert: [ aBlock numArgs = 0 ]
+		description: [ 'Block must have zero arguments: {1}' format: {aBlock} ].
 
 	refactoringsWithConfirmationComputation := aBlock
 ]
