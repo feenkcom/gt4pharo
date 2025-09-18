@@ -15,10 +15,13 @@ GtPharoSuiteShowButton >> initialize [
 	self addAptitude: BrGlamorousButtonWithIconAptitude.
 	self addAptitude: (BrGlamorousWithExplicitDropdownAptitude
 			 handle: [ BlElement new size: self extent ]
-			 content: [ 
+			 content: [ :anExplicitMenu |
 				 GtPharoSuiteOverviewElement new
 					 suiteViewModel: self suiteViewModel;
-					 margin: (BlInsets all: 10) ])
+					 margin: (BlInsets all: 10);
+					 addAptitude: (BrGlamorousPopoverPinnableAptitude new
+					 	withAllPinActions;
+					 	menuModel: anExplicitMenu) ])
 ]
 
 { #category : #initialization }

@@ -6,8 +6,8 @@ Class {
 		'inputLabel',
 		'inputFilter',
 		'isEditorFocused',
-		'refactoringsWithInputComputation',
-		'currentText'
+		'currentText',
+		'refactoringsWithInputComputation'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
@@ -95,13 +95,17 @@ GtRefactoringsWithInputViewModel >> inputFilter: anObject [
 
 { #category : #accessing }
 GtRefactoringsWithInputViewModel >> inputLabel [
+	"Return a short string that explains what input text is expected"
+
 	<return: #String>
 	^ inputLabel
 ]
 
 { #category : #accessing }
-GtRefactoringsWithInputViewModel >> inputLabel: anObject [
-	inputLabel := anObject
+GtRefactoringsWithInputViewModel >> inputLabel: aString [
+	"Set a short string that explains what input text is expected"
+
+	inputLabel := aString
 ]
 
 { #category : #accessing }
@@ -119,6 +123,10 @@ GtRefactoringsWithInputViewModel >> isEditorFocused: anObject [
 GtRefactoringsWithInputViewModel >> refactoringWithInput: aBlock [
 	"Set a block that returns a refactoring instance.
 	The block must have one argument that is an input value, e.g., class name."
+	
+	self
+		assert: [ aBlock numArgs = 1 ]
+		description: [ 'Block must have one argument: {1}' format: {aBlock} ].
 
 	refactoringsWithInputComputation := [ :anInput | Array with: (aBlock value: anInput) ]
 ]

@@ -23,6 +23,7 @@ GtCoderClassesTreeElement >> convertToSiblingSubmenuFor: aClass siblings: aColle
 					anchorElement: self.
 			GtRefactoringsPreviewWithInputElement new
 				refactoringsViewModel: aViewModel;
+				beContextMenuElement;
 				bePinnable: anExplicitMenu ].
 	^ submenu
 ]

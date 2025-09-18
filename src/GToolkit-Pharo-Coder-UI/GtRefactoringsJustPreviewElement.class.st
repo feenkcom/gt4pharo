@@ -89,9 +89,9 @@ GtRefactoringsJustPreviewElement >> onFuturePending [
 
 { #category : #'private - event handling' }
 GtRefactoringsJustPreviewElement >> onFutureSuccess: anExecutedRefactorings [
+	self hasRefactoringsViewModel ifFalse: [ ^ self ].
 	self refactoringsViewModel executedRefactorings == anExecutedRefactorings
 		ifFalse: [ ^ self ].
-
 	self updateDisplayedRefactorings
 ]
 

@@ -190,6 +190,9 @@ GtRefactoringsViewModel >> gtOverview [
 			name: 'Before apply block';
 			value: beforeApplyBlock.
 		GtPhlowOverviewItem new
+			name: 'After applied block';
+			value: afterAppliedBlock.
+		GtPhlowOverviewItem new
 			name: 'Cancel block';
 			value: cancelBlock.
 		GtPhlowOverviewItem new
@@ -249,12 +252,12 @@ GtRefactoringsViewModel >> initialize [
 
 	announcer := Announcer new.
 	executedRefactorings := GtExecutedRefactorings new.
-	
+
 	refactoringTitle := nil.
 	targetName := nil.
 	isPreviewButtonFocused := true.
 	beforeApplyBlock := [  ].
-	afterAppliedBlock := [ ].
+	afterAppliedBlock := [  ].
 	cancelBlock := [  ]
 ]
 
@@ -289,6 +292,9 @@ GtRefactoringsViewModel >> menuModelDo: aBlock [
 
 { #category : #'api - refactorings' }
 GtRefactoringsViewModel >> notifyApplyChangesRequested [
+	"I notify that executed refactoring changes can be applied.
+	In other words, a user agreed to apply the refactoring changes."
+	
 	self executedRefactorings
 		ifComputedRefactorings: [ :anExecutedRefactorings | 
 			anExecutedRefactorings
@@ -323,6 +329,19 @@ GtRefactoringsViewModel >> notifyRefactorings: anExecutedRefactorings applyingPr
 			refactoringsViewModel: self;
 			executedRefactorings: anExecutedRefactorings;
 			fraction: aFraction.
+	self announce: anAnnouncement
+]
+
+{ #category : #'api - refactorings' }
+GtRefactoringsViewModel >> notifySubmitExecutedRefactoringsRequested [
+	"I notify that {{gtMethod:GtRefactoringsViewModel >> refactorings:}} should be updated.
+	I am used:
+	- to confirm that refactorings can be computed (and then previewed), see {{gtMethod:GtRefactoringsWithInputViewModel >> refactoringsForInput:}},
+	- to update refactorings based on a user input, see {{gtMethod:GtRefactoringsWithConfirmationViewModel>>#confirmRefactorings}}."
+
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelSubmitExecutedRefactoringsRequested new
+			refactoringsViewModel: self.
 	self announce: anAnnouncement
 ]
 

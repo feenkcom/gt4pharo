@@ -1189,6 +1189,31 @@ GtPharoMethodCoderByScripterExamples >> checkRemoveParameterDisabled [
 	^ scripter
 ]
 
+{ #category : #'examples - rename variable' }
+GtPharoMethodCoderByScripterExamples >> checkRenamePragmasExecuted [
+	<gtExample>
+	| scripter |
+	GtRenameInstanceVariableRefactoring
+		compile: '___example <gtRename> self refactoringError: ''Rename pragma was executed'''
+		classified: #examples.
+	[ scripter := self checkRefactoringAttributesForRenamingInstVar.
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Open preview';
+				key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				exists;
+				// BrEditor;
+				@ [ :each | each text asString = 'Rename pragma was executed' ] ] ]
+		ensure: [ GtRenameInstanceVariableRefactoring removeSelector: #___example ].
+
+	^ scripter
+]
+
 { #category : #'examples - reference highlighter' }
 GtPharoMethodCoderByScripterExamples >> classReferenceHasUnderlineAttribute [
 	<gtExample>

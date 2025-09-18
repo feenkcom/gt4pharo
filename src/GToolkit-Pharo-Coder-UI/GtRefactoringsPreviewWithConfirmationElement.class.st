@@ -1,49 +1,49 @@
 Class {
-	#name : #GtRefactoringsPreviewWithInputElement,
+	#name : #GtRefactoringsPreviewWithConfirmationElement,
 	#superclass : #GtRefactoringsBasicElement,
 	#traits : 'TGtRefactoringsPopoverElement',
 	#classTraits : 'TGtRefactoringsPopoverElement classTrait',
 	#instVars : [
-		'inputElement',
-		'previewElement',
 		'toolbarElement',
 		'messagesElement',
-		'titleElement'
+		'previewElement',
+		'titleElement',
+		'confirmationElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
 }
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> defaultLayout [
+GtRefactoringsPreviewWithConfirmationElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'focus requesting' }
-GtRefactoringsPreviewWithInputElement >> focusTarget [
-	^ inputElement focusTarget
+GtRefactoringsPreviewWithConfirmationElement >> focusTarget [
+	^ toolbarElement focusTarget
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> initialize [
+GtRefactoringsPreviewWithConfirmationElement >> initialize [
 	super initialize.
 	self background: self theme default contentBackground.
 
 	self initializeTitleElement.
-	self initializeInputElement.
+	self initializeConfirmationElement.
 	self initializePreviewElement.
 	self initializeMessagesElement.
 	self initializeToolbarElement.
 
 	previewElement
 		constraintsDo: [ :c | 
-			c minHeight: GtRefactoringsConstants collapsedPreviewHeight.
 			c
 				margin: (BlInsets
 						top: GtRefactoringsConstants spaceBetweenComposedElements
-						bottom: GtRefactoringsConstants spaceBetweenComposedElements) ].
+						bottom: GtRefactoringsConstants spaceBetweenComposedElements).
+			c minHeight: GtRefactoringsConstants collapsedPreviewHeight ].
 
-	self addChild: titleElement as: #refactoringTitle.
-	self addChild: inputElement as: #refactoringInput.
+	self addChild: titleElement as: #refactoringInput.
+	self addChild: confirmationElement as: #refactoringConfirmation.
 	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: messagesElement as: #refactoringMessages.
 	self addChild: toolbarElement as: #refactoringToolbar.
@@ -54,10 +54,10 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 				hExactToMatchParent: titleElement;
 				hFitContentToFitContent: titleElement;
 				hFitContentLimitedToFitContentLimited: titleElement;
-				hMatchParentToMatchParent: inputElement;
-				hExactToMatchParent: inputElement;
-				hFitContentToFitContent: inputElement;
-				hFitContentLimitedToFitContentLimited: inputElement;
+				hMatchParentToMatchParent: confirmationElement;
+				hExactToMatchParent: confirmationElement;
+				hFitContentToFitContent: confirmationElement;
+				hFitContentLimitedToFitContentLimited: confirmationElement;
 				inherit: previewElement;
 				hMatchParentToMatchParent: messagesElement;
 				hExactToMatchParent: messagesElement;
@@ -72,35 +72,35 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> initializeInputElement [
-	inputElement := GtRefactoringsInputElement new
+GtRefactoringsPreviewWithConfirmationElement >> initializeConfirmationElement [
+	confirmationElement := GtRefactoringsConfirmationElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> initializeMessagesElement [
+GtRefactoringsPreviewWithConfirmationElement >> initializeMessagesElement [
 	messagesElement := GtRefactoringsMessagesElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> initializePreviewElement [
+GtRefactoringsPreviewWithConfirmationElement >> initializePreviewElement [
 	previewElement := GtRefactoringsJustPreviewElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> initializeTitleElement [
+GtRefactoringsPreviewWithConfirmationElement >> initializeTitleElement [
 	titleElement := GtRefactoringsTitleElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithInputElement >> initializeToolbarElement [
+GtRefactoringsPreviewWithConfirmationElement >> initializeToolbarElement [
 	toolbarElement := GtRefactoringsToolbarElement new
 ]
 
 { #category : #'accessing - refactorings view model' }
-GtRefactoringsPreviewWithInputElement >> onRefactoringsViewModelChanged [
+GtRefactoringsPreviewWithConfirmationElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
 	titleElement refactoringsViewModel: self refactoringsViewModel.
-	inputElement refactoringsViewModel: self refactoringsViewModel.
+	confirmationElement refactoringsViewModel: self refactoringsViewModel.
 	previewElement refactoringsViewModel: self refactoringsViewModel.
 	messagesElement refactoringsViewModel: self refactoringsViewModel.
 	toolbarElement refactoringsViewModel: self refactoringsViewModel.

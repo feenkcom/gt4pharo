@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenameInstanceVariableController,
 	#superclass : #GtRenameVariableController,
-	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #accessing }
@@ -17,7 +17,7 @@ GtRenameInstanceVariableController >> rename: anOldName to: aNewName [
 	aClass := (aModel classFor: sourceCoderViewModel behavior)
 		whoDefinesInstanceVariable: anOldName.
 
-	^ RBRenameInstanceVariableRefactoring
+	^ GtRenameInstanceVariableRefactoring
 		model: aModel
 		rename: anOldName
 		to: aNewName

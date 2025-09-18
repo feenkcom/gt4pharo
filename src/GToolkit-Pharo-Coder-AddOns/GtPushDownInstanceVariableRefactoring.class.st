@@ -22,6 +22,7 @@ GtPushDownInstanceVariableRefactoring >> preconditions [
 				withTag: [ :button | 
 					| container selectorButton label |
 					container := BrHorizontalPane new.
+					container alignCenterLeft.
 					container matchParent.
 					selectorButton := BrButton new
 							aptitude: BrGlamorousLinkSquaredButtonWithLabelAptitude new glamorousCodeFont;

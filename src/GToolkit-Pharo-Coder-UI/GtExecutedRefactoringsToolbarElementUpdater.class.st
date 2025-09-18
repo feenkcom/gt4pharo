@@ -5,11 +5,14 @@ Class {
 }
 
 { #category : #private }
-GtExecutedRefactoringsToolbarElementUpdater >> updateAppyingProgress: aState [
+GtExecutedRefactoringsToolbarElementUpdater >> updateApplyingProgress: aState [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
 	element updateAsVisibleContainer.
+	element updateAsDisabledPreviewButton.
+	element updateAsHiddenPreviewButton.
 	element updateAsDisabledApplyButton.
+	element updateAsVisibleApplyButton.
 	element updateAsDisplayedProgress.
 	element updateProgressFraction: aState applyingProgress.
 	element updateAsHiddenException.
@@ -21,7 +24,10 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplicable [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
 	element updateAsVisibleContainer.
+	element updateAsDisabledPreviewButton.
+	element updateAsHiddenPreviewButton.
 	element updateAsEnabledApplyButton.
+	element updateAsVisibleApplyButton.
 	element updateAsHiddenProgress.
 	element updateProgressFraction: 0.
 	element updateAsHiddenException.
@@ -31,7 +37,9 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplicable [
 { #category : #private }
 GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplied [
 	element updateAsVisibleContainer.
-	element updateAsEnabledApplyButton.
+	element updateAsDisabledPreviewButton.
+	element updateAsHiddenPreviewButton.
+	element updateAsDisabledApplyButton.
 	element updateAsHiddenProgress.
 	element updateAsHiddenException.
 	element updateAsDisplayedFinishedLabel
@@ -50,18 +58,48 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsNotApplicable [
 ]
 
 { #category : #private }
-GtExecutedRefactoringsToolbarElementUpdater >> updateWithException: aState [
+GtExecutedRefactoringsToolbarElementUpdater >> updateAsPreviewable [
+	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
+
 	element updateAsVisibleContainer.
-	element updateAsEnabledApplyButton.
+	element updateAsEnabledPreviewButton.
+	element updateAsVisiblePreviewButton.
+	element updateAsDisabledApplyButton.
+	element updateAsHiddenApplyButton.
+	element updateAsHiddenProgress.
+	element updateProgressFraction: 0.
+	element updateAsHiddenException.
+	element updateAsHiddenFinishedLabel
+]
+
+{ #category : #private }
+GtExecutedRefactoringsToolbarElementUpdater >> updateWithComputationFailedException: aState [
+	element updateAsVisibleContainer.
+	element updateAsVisiblePreviewButton.
+	element updateAsDisabledApplyButton.
+	element updateAsHiddenApplyButton.
 	element updateAsHiddenProgress.
 	aState ifFailedStateDo: [ :anException | 
 		element updateWithException: anException ].
 	element updateAsHiddenFinishedLabel.
 ]
 
+{ #category : #private }
+GtExecutedRefactoringsToolbarElementUpdater >> updateWithFailedException: aState [
+	element updateAsVisibleContainer.
+	element updateAsDisabledPreviewButton.
+	element updateAsHiddenPreviewButton.
+	element updateAsEnabledApplyButton.
+	element updateAsVisibleApplyButton.
+	element updateAsHiddenProgress.
+	aState ifFailedStateDo: [ :anException | 
+		element updateWithException: anException ].
+	element updateAsHiddenFinishedLabel
+]
+
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsAboutToApplyState: aState [
-	self updateAppyingProgress: aState
+	self updateApplyingProgress: aState
 ]
 
 { #category : #visiting }
@@ -71,31 +109,24 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsAppliedS
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsComputationFailedState: aState [
-	self updateAsNotApplicable
+	self updateWithComputationFailedException: aState
 ]
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsFailedState: aState [
-	self updateWithException: aState
+	self updateWithFailedException: aState
 ]
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsNotAppliedState: aState [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
-	"Changes must be previewed to make it applicable."
-	self updateAsNotApplicable.
-	true ifTrue: [ ^ self ].
-	executedRefactorings
-		refactoringsDo: [ self updateAsApplicable ]
-		changesDo: [ self updateAsApplicable ]
-		emptyDo: [ self updateAsNotApplicable ]
-		errorMessagesDo: [ self updateAsNotApplicable ]
+	self updateAsPreviewable.
 ]
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsNotComputedState: aState [
-	self updateAsNotApplicable
+	self updateAsPreviewable
 ]
 
 { #category : #visiting }
@@ -106,7 +137,7 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsPreviewe
 
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsRunningState: aState [
-	self updateAppyingProgress: aState
+	self updateApplyingProgress: aState
 ]
 
 { #category : #visiting }

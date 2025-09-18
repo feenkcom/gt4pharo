@@ -1159,6 +1159,7 @@ GtPharoMethodCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 
 	addOns
+		addShortcut: GtSourceCoderDiscardChangesShortcut new;
 		addShortcut: GtSourceCoderPlayShortcut new;
 		addShortcut: GtSourceCoderPlayAndInspectShortcut new;
 		addShortcut: GtSourceCoderSaveShortcut new;
