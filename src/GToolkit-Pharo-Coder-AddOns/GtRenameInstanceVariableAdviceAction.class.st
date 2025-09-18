@@ -6,5 +6,5 @@ Class {
 
 { #category : #executing }
 GtRenameInstanceVariableAdviceAction >> renameRefactoringClass [
-	^ RBRenameInstanceVariableRefactoring
+	^ GtRenameInstanceVariableRefactoring
 ]

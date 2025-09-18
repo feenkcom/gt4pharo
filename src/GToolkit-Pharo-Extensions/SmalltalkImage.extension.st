@@ -11,6 +11,22 @@ SmalltalkImage >> classInstaller [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+SmalltalkImage >> commandLineString [
+	"Answer an approximation of the command line used to start the receiver.
+	This will exclude VM specific arguments, `--` and maybe other things."
+
+	^ String streamContents: [ :stream |
+		stream
+			<< self vm binary fullName;
+			space;
+			<< self vm imagePath;
+			space.
+		(self argumentsStartingAtIndex: 0) reversed
+			do: [ :arg | stream << arg asString ]
+			separatedBy: [ stream space ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 SmalltalkImage >> logErrorMessage: errMsg [ 
 
 	self logStdErrorDuring: [ :stderr|
