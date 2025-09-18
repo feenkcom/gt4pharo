@@ -430,7 +430,6 @@ GtPharoSourceCoder >> initializeShortcuts: addOns [
 			GtSourceCoderBrowseImplementorsShortcut.
 			GtSourceCoderBrowseReferencesShortcut.
 			GtSourceCoderBrowseBehaviorShortcut.
-			GtSourceCoderDiscardChangesShortcut.
 			GtSourceCoderFormatShortcut.
 			GtSourceCoderDebugShortcut.
 			GtSourceCoderInlineRenameShortcut.
