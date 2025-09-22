@@ -91,7 +91,7 @@ GtCoderNavigationExamplesWithScripter >> selectSuperclassOfPackageWithExtension 
 	scripter := self selectPackageWithExtension.
 	model := scripter element navigationModel.
 	pkg := 'Refactoring-Changes' asPackage.
-	tag := pkg classTagNamed: 'Changes-Classes'.
+	tag := pkg tagNamed: 'Changes-Classes'.
 	model selectClass: RBRefactoryDefinitionChange.
 	scripter continue.
 	self scripter: scripter hasTextSelection: 'Changes-Classes'.
