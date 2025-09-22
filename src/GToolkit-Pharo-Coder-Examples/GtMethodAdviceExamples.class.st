@@ -8,7 +8,7 @@ Class {
 GtMethodAdviceExamples >> globalActiveMethodAdvices [
 	<gtExample>
 	| all |
-	all := GtMethodAdvice activeCritics.
+	all := GtMethodAdvice activeAdvices.
 	self assert: (all includes: GtMethodNotUsedAdvice) not.
 	self assert: (all includes: GtSendNotUsedAdvice) not.
 	^ all

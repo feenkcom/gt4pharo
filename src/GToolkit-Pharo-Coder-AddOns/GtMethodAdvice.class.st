@@ -2,17 +2,30 @@ Class {
 	#name : #GtMethodAdvice,
 	#superclass : #Object,
 	#classVars : [
-		'ActiveCritics'
+		'ActiveAdvices'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }
-GtMethodAdvice class >> activeCritics [
-	^ ActiveCritics
+GtMethodAdvice class >> activeAdvices [
+	^ ActiveAdvices
 		ifNil: [ (self withAllSubclasses
 				select: [ :each | each isAbstract not and: [ each isDefault ] ])
 				collect: [ :each | each new ] ]
+]
+
+{ #category : #accessing }
+GtMethodAdvice class >> activeAdvices: aCollection [
+	ActiveAdvices := aCollection
+]
+
+{ #category : #accessing }
+GtMethodAdvice class >> activeCritics [
+	self
+		deprecated: 'Use activeAdvices instead'
+		transformWith: '`@receiver activeAdvices' -> '`@receiver activeAdvices'.
+	^ self activeAdvices
 ]
 
 { #category : #accessing }

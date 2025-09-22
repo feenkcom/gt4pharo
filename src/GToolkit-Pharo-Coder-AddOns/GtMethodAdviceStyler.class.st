@@ -79,7 +79,7 @@ GtMethodAdviceStyler >> hasRefactoring [
 { #category : #accessing }
 GtMethodAdviceStyler >> initialize [
 	super initialize.
-	advices := GtMethodAdvice activeCritics.
+	advices := GtMethodAdvice activeAdvices.
 	isDoIt := false.
 	isForWorkspace := false.
 	lastIndex := 0.
