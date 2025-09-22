@@ -24,7 +24,10 @@ GtPharoProtocol class >> protocol: aProtocol class: aClass [
 GtPharoProtocol class >> protocolNamed: aProtocolName class: aClass [
 	| aProtocol |
 	
-	aProtocol := aClass organization protocolNamed: aProtocolName.
+	aProtocol := aClass 
+		protocolNamed: aProtocolName
+		ifAbsent: [ nil ].
+	
 	self
 		assert: [ aProtocol isNotNil ]
 		description: [ 'Protocol should exist' ].

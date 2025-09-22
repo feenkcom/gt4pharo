@@ -795,12 +795,15 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectSlot: aSlot source
 
 { #category : #'private - accessing' }
 GtCoderNavigationPackagesTagsClassesModel >> privateProtocolOfMethod: aCompiledMethod [
-	| aProtocol |
-	aProtocol := aCompiledMethod methodClass organization
-			protocolNamed: aCompiledMethod protocol.
+	| currentProtocol |
+	currentProtocol := aCompiledMethod methodClass
+		protocolNamed: aCompiledMethod protocol
+		ifAbsent: [ nil ].
 
-	^ aProtocol
-		ifNotNil: [ GtPharoProtocol protocol: aProtocol class: aCompiledMethod methodClass ]
+	^ currentProtocol ifNotNil: [ 
+		GtPharoProtocol 
+			protocol: currentProtocol 
+			class: aCompiledMethod methodClass ]
 ]
 
 { #category : #'private - selection' }
@@ -808,14 +811,10 @@ GtCoderNavigationPackagesTagsClassesModel >> privateSelectDefaultProtocolOfClass
 	| aProtocolToSelect thisPackageExtensionProtocol aDefaultProtocol |
 	thisPackageExtensionProtocol := self selectedPackage 
 		ifNotNil: [ :aPackage | 
-			(self 
-				forPharo12AndNewer: [
-					aClass 
-						protocolNamed: '*' , aPackage name
-						ifAbsent: [ nil ] ] 
-				forPharo11: [
-					(aClass organization protocolNamed: '*' , aPackage name)])
-						ifNotNil: [ :aProtocol | 
+			(aClass 
+				protocolNamed: '*' , aPackage name
+				ifAbsent: [ nil ])
+					ifNotNil: [ :aProtocol | 
 							GtPharoProtocol 
 								protocol: aProtocol 
 								class: aClass ] ].
@@ -842,14 +841,14 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 
 	currentClass := self selectedClass.
 
-	classProtocols := currentClass classSide organization protocols
+	classProtocols := currentClass classSide gtProtocols
 			reject: [ :prot |
 				prot isEmpty not and: [
 					(currentClass classSide methods
 						select: [ :meth | (prot includesSelector: meth selector) and: [ meth isFromTrait not ] ])
 						isEmpty ] ].
 	
-	methodProtocols := currentClass organization protocols.
+	methodProtocols := currentClass gtProtocols.
 	extension := false.
 	self
 		selectedPackageDo: [ :pkg | 

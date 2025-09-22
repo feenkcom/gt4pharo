@@ -8,8 +8,8 @@ GtClassMethodsCoder >> categoryFilter: aView [
 		priority: 10;
 		stencil: [
 			|  categories anElement |
-			categories := class organization categories asSet.
-			categories addAll: class class organization categories.
+			categories := class protocolNames asSet.
+			categories addAll: class class protocolNames.
 			categories := categories asSortedCollection.
 			
 			anElement := GtCoderFilterList new.

@@ -235,7 +235,7 @@ GtPharoCodeModifier >> registerPackage: aPackage [
 			forPharo12AndNewer: [	
 				aPackage organizer 
 					ifNil: [
-						self class environment organization 
+						self class packageOrganizer
 							addPackage: aPackage ]
 					ifNotNil: [ :anOrganizer |
 						anOrganizer addPackage: aPackage ] ] 
@@ -322,7 +322,7 @@ GtPharoCodeModifier >> unregisterPackage: aPackage [
 			forPharo12AndNewer: [	
 				aPackage organizer 
 					ifNil: [
-						self class environment organization 
+						self class packageOrganizer
 							unregisterPackage: aPackage ]
 					ifNotNil: [ :anOrganizer |
 						anOrganizer unregisterPackage: aPackage ] ] 

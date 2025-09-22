@@ -46,9 +46,10 @@ GtRBRenameProtocolRefactoring >> gtDescription [
 GtRBRenameProtocolRefactoring >> preconditions [
 	^ RBCondition
 		withBlock: [ (class protocols includes: oldName)
-				or: [ class realClass
-						ifNil: [ false ]
-						ifNotNil: [ :cls | cls organization categories includes: oldName ] ] ]
+			or: [ class realClass
+				ifNil: [ false ]
+				ifNotNil: [ :cls | 
+					cls protocolNames includes: oldName ] ] ]
 ]
 
 { #category : #transforming }

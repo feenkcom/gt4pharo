@@ -38,12 +38,14 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 				aDrodownAction dropdown
 					icon: BrGlamorousVectorIcons filter;
 					tooltip: 'Filter';
+					withDropdownIndicator;
 					preferredExtent: 430 @ 430;
 					content: [ :aButton | aMethodsCoder filterDropDown: aButton ] ];
 			actionDropdownButtonDo: [ :aDrodownAction | 
 				aDrodownAction
 					id: GtPharoAddNewMethodButtonId;
 					icon: BrGlamorousVectorIcons add;
+					withDropdownIndicator;
 					tooltip: 'Add new method';
 					preferredExtent: GtPharoNewMethodCoderElement preferredExtent;
 					content: [ :aButton | 
