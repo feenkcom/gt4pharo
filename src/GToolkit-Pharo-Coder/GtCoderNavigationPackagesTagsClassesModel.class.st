@@ -841,14 +841,14 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 
 	currentClass := self selectedClass.
 
-	classProtocols := currentClass classSide organization protocols
+	classProtocols := currentClass classSide gtProtocols
 			reject: [ :prot |
 				prot isEmpty not and: [
 					(currentClass classSide methods
 						select: [ :meth | (prot includesSelector: meth selector) and: [ meth isFromTrait not ] ])
 						isEmpty ] ].
 	
-	methodProtocols := currentClass organization protocols.
+	methodProtocols := currentClass gtProtocols.
 	extension := false.
 	self
 		selectedPackageDo: [ :pkg | 
