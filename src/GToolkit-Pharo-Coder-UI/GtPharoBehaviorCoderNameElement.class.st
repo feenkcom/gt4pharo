@@ -117,18 +117,27 @@ GtPharoBehaviorCoderNameElement >> buildContent [
 
 { #category : #'building - ui' }
 GtPharoBehaviorCoderNameElement >> buildEditableNameLabel [
-	^ BrEditableLabel new
+	| anEditor |
+	anEditor := BrEditableLabel new
 			aptitude: (BrGlamorousEditableLabelAptitude new
 					defaultBackground: Color transparent;
 					glamorousCodeFont;
 					bold;
-					fontSize: 18)
-					+ (BrGlamorousWithExplicitContextMenuAptitude
-							itemsWithAnchorActions: [ self contextMenuItemsForClass ]);
+					fontSize: 18);
 			inputFilter: BrTextEditorClassNameInputFilter new;
 			text: self coderModel name;
 			margin: (BlInsets all: 0);
-			id: GtBehaviorCoderBehaviorNameId
+			id: GtBehaviorCoderBehaviorNameId.
+
+	GtCoderClassesTreeElement isUsePhlowAction
+		ifFalse: [ anEditor
+				addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+						itemsWithAnchorActions: [ self contextMenuItemsForClass ]) ]
+		ifTrue: [ anEditor
+				addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+						menu: [ self contextMenuItemsFromClassPhlowActionsHostElement: anEditor ]) ].
+
+	^ anEditor
 ]
 
 { #category : #'building - ui' }
@@ -175,6 +184,16 @@ GtPharoBehaviorCoderNameElement >> coderViewModel: aGtBehaviorDefinitionCoderVie
 GtPharoBehaviorCoderNameElement >> contextMenuItemsForClass [
 	^ {'Browse references' -> [ :e | self browseClassReferences ].
 		'Rename' -> [ :e | e switchToEditor ]}
+]
+
+{ #category : #'building - ui' }
+GtPharoBehaviorCoderNameElement >> contextMenuItemsFromClassPhlowActionsHostElement: anEditorElement [
+	<return: #BrMenuItems or: nil>
+	| classCoder aClass |
+	classCoder := behaviorCoderViewModel coder.
+	aClass := classCoder theClass ifNil: [ ^ nil ].
+
+	^ GtCoderClassTarget menuItemsForObject: aClass hostElement: anEditorElement
 ]
 
 { #category : #initialization }
