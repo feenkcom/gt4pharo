@@ -2,9 +2,9 @@ Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*GToolkit-Pharo-StrictSymbolComparison' }
 GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns [
-
-	(aNode isMessage and: [ aNode selector == #= ]) ifFalse: [ ^ self ].
-	coderAddOns
+	<return: #GtCoderContextMenuAction or: nil>
+	(aNode isMessage and: [ aNode selector == #= ]) ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: ('Convert ' asRopedText, 
 					'#=' asRopedText glamorousCodeFontAndSize,
@@ -29,5 +29,6 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsMenuAddOnsAst: anAst to: co
 		ifNotEmpty: [ :theNodes | 
 			| aNode |
 			aNode := theNodes first.
-			self addConvertEqualsToSameContentAsFor: aNode to: coderAddOns ]
+			(self addConvertEqualsToSameContentAsFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 320 ] ]
 ]

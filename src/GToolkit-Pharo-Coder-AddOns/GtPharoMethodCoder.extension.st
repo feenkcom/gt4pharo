@@ -2,6 +2,7 @@ Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| method valueNode label |
 	(aNode isMethod
 		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
@@ -10,13 +11,13 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 				ifFalse: [ aNode isValueNode ifTrue: [ valueNode := aNode ] ].
 			[ valueNode notNil and: [ valueNode parent isKindOf: GtPharoLiteralNode ] ]
 				whileTrue: [ valueNode := valueNode parent ].
-			(valueNode isNil or: [ valueNode isVariableDefinition ]) ifTrue: [ ^ self ] ].
+			(valueNode isNil or: [ valueNode isVariableDefinition ]) ifTrue: [ ^ nil ] ].
 	method := aNode topParent.
-	method selector isBinary ifTrue: [ ^ self ].
+	method selector isBinary ifTrue: [ ^ nil ].
 	label := valueNode
 			ifNil: [ self createLabel: 'Add parameter' description: method selector ]
 			ifNotNil: [ self createLabel: 'Extract as parameter' description: method selector ].
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: label
 		group: BrMenuItemGroupConfiguration refactoring
 		hover: (valueNode ifNotNil: [ self highlightNodeBlock: valueNode ])
@@ -31,11 +32,24 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
-	aNode whoDefines notNil ifTrue: [ ^ self ].
+	self
+		deprecated: 'Please use addClassAccessorRefactoringsFor:to:priority: instead.'
+		transformWith: '`@receiver addClassAccessorRefactoringsFor: `@statements1 to: `@statements2'
+				-> '`@receiver addClassAccessorRefactoringsFor: `@statements1 to: `@statements2 priority: nil'.
+	
+	self
+		addClassAccessorRefactoringsFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns priority: aPriority [
+	aNode isVariable ifFalse: [ ^ nil ].
+	aNode whoDefines notNil ifTrue: [ ^ nil ].
 	(self behavior allClassVarNames includes: aNode variableName)
-		ifFalse: [ ^ self ].
-	coderAddOns
+		ifFalse: [ ^ nil ].
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Abstract variable'
 				description: aNode variableName)
@@ -46,9 +60,10 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 			(GtAbstractClassVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
 				variableNode: aNode) executeIn: element ]
-		id: #'context-menu--abstract-variable'.
+		id: #'context-menu--abstract-variable')
+			ifNotNil: [ :anAction | anAction priority: aPriority + 0.0001 ].
 	(self isAccessorMethodFor: aNode)
-		ifFalse: [ coderAddOns
+		ifFalse: [ (coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Create accessors'
 						description: aNode variableName)
@@ -59,11 +74,27 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns [
 					(GtCreateClassVariableAccessorsRefactoringController new
 						sourceCoderViewModel: aCoderViewModel;
 						variableNode: aNode) executeIn: element ]
-				id: #'context-menu--create-accessors' ]
+				id: #'context-menu--create-accessors')
+					ifNotNil: [ :anAction | anAction priority: aPriority + 0.0002 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addConvertCascadesToStatementsFor:to:priority: instead.'
+		transformWith: '`@receiver addConvertCascadesToStatementsFor: `@statements1 to: `@statements2'
+				-> '`@receiver addConvertCascadesToStatementsFor: `@statements1 to: `@statements2 priority: nil'.
+	
+	^ self
+		addConvertCascadesToStatementsFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns priority: aPriority [
+	<return: #Boolean>
 	aNode isCascade ifFalse: [ ^ false ].
 	coderAddOns
 		addContextMenuItem: (self
@@ -82,16 +113,17 @@ GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| sends |
-	nodes size > 1 ifFalse: [ ^ self ].
+	nodes size > 1 ifFalse: [ ^ nil ].
 	sends := nodes first isAssignment
 			ifTrue: [ nodes allButFirst ]
 			ifFalse: [ nodes ].
 	(sends allSatisfy: [ :each | each isMessageSend or: [ each isCascade ] ])
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ nil ].
 	(sends allSatisfy: [ :each | each receiver = sends first receiver ])
-		ifFalse: [ ^ self ].
-	coderAddOns
+		ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Convert statements to cascade'
 				description: (self nodeDescription: nodes first))
@@ -107,10 +139,11 @@ GtPharoMethodCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
+	<return: #GtCoderContextMenuAction or: nil>
+	aNode isVariable ifFalse: [ ^ nil ].
 	(aNode parent isSequence
-		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ self ].
-	coderAddOns
+		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Convert to instance variable'
 				description: aNode variableName)
@@ -130,27 +163,29 @@ GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns fr
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
-		ifNotEmpty: [ coderAddOns
+		ifNotEmpty: [ (coderAddOns
 				addContextMenuItem: 'Extract method object' asRopedText
 				group: BrMenuItemGroupConfiguration refactoring
 				hover: nil
 				leave: nil
 				action: [ :model :element | 
 					(GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model)
-						executeIn: element ] ]
+						executeIn: element ])
+					ifNotNil: [ :anAction | anAction priority: 215 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
+	<return: #GtCoderContextMenuAction or: nil>
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [ | shortcut |
 			(theNodes
 				anySatisfy: [ :each | each isMethod or: [ (each nodeOfType: GtPharoMethodPatternNode) notNil ] ])
-				ifTrue: [ ^ self ].
+				ifTrue: [ ^ nil ].
 			shortcut := GtSourceCoderExtractMethodShortcut new.
-			coderAddOns
+			^ coderAddOns
 				addContextMenuItem: shortcut name
 				group: BrMenuItemGroupConfiguration refactoring
 				hover: [ :textualCoderViewModel | 
@@ -166,11 +201,27 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 						coderViewModel: aTextualViewModel
 						dueTo: nil ]
 				id: GtMethodCoderExtractMethodContextMenuItemId
-				shortcutKey: shortcut combinationForPlatform gtDisplayString ]
+				shortcutKey: shortcut combinationForPlatform gtDisplayString ].
+				
+	^ nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addExtractTempFor:to:priority: instead.'
+		transformWith: '`@receiver addExtractTempFor: `@statements1 to: `@statements2'
+				-> '`@receiver addExtractTempFor: `@statements1 to: `@statements2 priority: nil'.
+	^ self
+		addExtractTempFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns priority: aPriority [
+	<return: #Boolean>
 	| nodes sequenceNode |
 	(aNode isValueNode
 		and: [ aNode isVariable not
@@ -186,7 +237,7 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 	nodes sort: [ :a :b | a startPosition < b startPosition ].
 	[ nodes first statementNode parent ~= sequenceNode ]
 		whileTrue: [ nodes removeFirst ].
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Extract temporary'
 				description: (self nodeDescription: aNode))
@@ -199,8 +250,8 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns [
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
 		id: #'context-menu--extract-temp'
 		shortcutKey: (self extractToTemporaryShortcut
-			ifNotNil: [ :aShortcut | 
-				 aShortcut combinationForPlatform gtDisplayString]).
+				ifNotNil: [ :aShortcut | aShortcut combinationForPlatform gtDisplayString ]))
+		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
@@ -226,13 +277,14 @@ GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddO
 	
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			self 
+			(self 
 				addLinkMenuAddOnsTo: coderAddOns 
 				group: BrMenuItemGroupConfiguration navigation
 				node: node 
 				selector: #browseHierarchyImplementorsAt:requesterObject: 
 				label: 'Browse hierarchy implementors' 
-				requesterObject: aCoderViewModel ]
+				requesterObject: aCoderViewModel)
+					ifNotNil: [ :anAction | anAction priority: 11 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -241,23 +293,25 @@ GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: code
 	
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			self 
+			(self 
 				addLinkMenuAddOnsTo: coderAddOns 
 				group: BrMenuItemGroupConfiguration navigation
 				node: node 
 				selector: #browseHierarchyReferencesAt:requesterObject: 
 				label: 'Browse hierarchy references' 
-				requesterObject: aCoderViewModel ]
+				requesterObject: aCoderViewModel)
+					ifNotNil: [ :anAction | anAction priority: 16 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| method |
 	(aNode isMethod
 		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ nil ].
 	method := aNode topParent.
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline All self Sends'
 				description: method selector)
@@ -273,9 +327,24 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addInlineMessageFor:to:priority: instead.'
+		transformWith: '`@receiver addInlineMessageFor: `@statements1 to: `@statements2'
+				-> '`@receiver addInlineMessageFor: `@statements1 to: `@statements2 priority: nil'.
+
+	^ self
+		addInlineMessageFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns priority: aPriority [
+	<return: #Boolean>
 	aNode isMessageSend ifFalse: [ ^ false ].
 	(aNode receiver isSelf or: [ aNode receiver isSuper ])
-		ifTrue: [ coderAddOns
+		ifTrue: [ (coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Inline message'
 						description: aNode message selector)
@@ -286,11 +355,12 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 					(GtMethodInlineMessageSendRefactoringController new
 						node: aNode;
 						sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-				id: #'context-menu--inline-message'.
+				id: #'context-menu--inline-message')
+				ifNotNil: [ :anAction | anAction priority: aPriority ].
 			^ true ].
 	(GtPharoIndex current implementersOf: aNode selector) ifEmpty: [ ^ false ].
 
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline message'
 				description: aNode message selector)
@@ -298,7 +368,7 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 		hover: (self highlightNodeBlock: aNode)
 		leave: self removeHighlightBlock
 		action: [ :aSourceCoderViewModel :element | 
-			| classes defaultClass | 
+			| classes defaultClass |
 			classes := GtPharoIndex current implementersOf: aNode selector.
 			defaultClass := classes size = 1
 					ifTrue: [ classes anyOne methodClass ]
@@ -311,14 +381,16 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns [
 				implementor: defaultClass;
 				node: aNode;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-message'.
+		id: #'context-menu--inline-message')
+		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
-	(aNode isVariable and: [ aNode parent isMethodPattern ]) ifFalse: [ ^ self ].
-	coderAddOns
+	<return: #GtCoderContextMenuAction or: nil>
+	(aNode isVariable and: [ aNode parent isMethodPattern ]) ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline parameter'
 				description: aNode variableName)
@@ -334,6 +406,21 @@ GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addInlineTempFor:to:priority: instead.'
+		transformWith: '`@receiver addInlineTempFor: `@statements1 to: `@statements2'
+				-> '`@receiver addInlineTempFor: `@statements1 to: `@statements2 priority: nil'.
+	
+	^ self
+		addInlineTempFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriority [
+	<return: #Boolean>
 	| variable uses definer |
 	aNode isAssignment ifTrue: [ variable := aNode variable ].
 	aNode isVariable
@@ -350,7 +437,7 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 	uses size >= 3
 		ifTrue: [ uses second stopPosition > uses third startPosition ifTrue: [ ^ false ] ].
 
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline assignment'
 				description: variable variableName)
@@ -361,20 +448,34 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns [
 			(GtMethodInlineTemporaryVariableRefactoringController new
 				node: uses second parent;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-temp'.
+		id: #'context-menu--inline-temp')
+			ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
+	self
+		deprecated: 'Please use addInstanceAccessorRefactoringsFor:to:priority: instead.'
+		transformWith: '`@receiver addInstanceAccessorRefactoringsFor: `@statements1 to: `@statements2'
+				-> '`@receiver addInstanceAccessorRefactoringsFor: `@statements1 to: `@statements2 priority: nil'.
 
-	(aNode whoDefines: aNode variableName) notNil ifTrue: [ ^ self ].
+	self
+		addInstanceAccessorRefactoringsFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns priority: aPriority [
+	aNode isVariable ifFalse: [ ^ nil ].
+
+	(aNode whoDefines: aNode variableName) notNil ifTrue: [ ^ nil ].
 
 	(self behavior allInstVarNames includes: aNode variableName)
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ nil ].
 
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Abstract variable'
 				description: aNode variableName)
@@ -385,9 +486,10 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 			(GtAbstractInstanceVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
 				variableNode: aNode) executeIn: element ]
-		id: #'context-menu--abstract-variable'.
+		id: #'context-menu--abstract-variable')
+				ifNotNil: [ :anAction | anAction priority: aPriority + 0.0001 ].
 	(self isAccessorMethodFor: aNode)
-		ifTrue: [ coderAddOns
+		ifTrue: [ (coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Protect variable'
 						description: aNode variableName)
@@ -398,8 +500,9 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 					(GtProtectInstanceVariableRefactoringController new
 						sourceCoderViewModel: aCoderViewModel;
 						variableNode: aNode) executeIn: element ]
-				id: #'context-menu--protect-variable' ].
-	coderAddOns
+				id: #'context-menu--protect-variable')
+					ifNotNil: [ :anAction | anAction priority: aPriority + 0.0002 ] ].
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Create accessors'
 				description: aNode variableName)
@@ -410,17 +513,19 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 			(GtCreateInstanceVariableAccessorsRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
 				variableNode: aNode) executeIn: element ]
-		id: #'context-menu--create-accessors'
+		id: #'context-menu--create-accessors')
+			ifNotNil: [ :anAction | anAction priority: aPriority + 0.0003 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
-	aNode whoDefines ifNotNil: [ :node | node isMethod ifFalse: [ ^ self ] ].
+	<return: #GtCoderContextMenuAction or: nil>
+	aNode isVariable ifFalse: [ ^ nil ].
+	aNode whoDefines ifNotNil: [ :node | node isMethod ifFalse: [ ^ nil ] ].
 	aNode topParent
 		allNodesOfType: GtPharoAssignmentNode
-		do: [ :node | node variable = aNode ifTrue: [ ^ self ] ].
-	coderAddOns
+		do: [ :node | node variable = aNode ifTrue: [ ^ nil ] ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Move method into'
 				description: aNode variableName)
@@ -436,11 +541,12 @@ GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
+	<return: #GtCoderContextMenuAction or: nil>
+	aNode isVariable ifFalse: [ ^ nil ].
 	(aNode parent isSequence
-		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ self ].
-	(aNode parent parentOfType: GtPharoSequenceNode) ifNil: [ ^ self ].
-	coderAddOns
+		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ nil ].
+	(aNode parent parentOfType: GtPharoSequenceNode) ifNil: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Move to outer scope'
 				description: aNode variableName)
@@ -456,15 +562,16 @@ GtPharoMethodCoder >> addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| class |
-	aNode isVariable ifFalse: [ ^ self ].
+	aNode isVariable ifFalse: [ ^ nil ].
 
-	aNode whoDefines notNil ifTrue: [ ^ self ].
+	aNode whoDefines notNil ifTrue: [ ^ nil ].
 
 	class := self behavior whichClassDefinesInstVar: aNode variableName.
-	(class isNil or: [ class = self behavior ]) ifTrue: [ ^ self ].
+	(class isNil or: [ class = self behavior ]) ifTrue: [ ^ nil ].
 
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Pull down variable declaration'
 				description: aNode variableName)
@@ -480,16 +587,17 @@ GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns 
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| method |
 	(aNode isMethod
 		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
-		ifFalse: [ ^ self ].
-	self behavior subclasses isEmpty ifTrue: [ ^ self ].
+		ifFalse: [ ^ nil ].
+	self behavior subclasses isEmpty ifTrue: [ ^ nil ].
 	method := aNode topParent.
 	(self behavior subclasses
 		allSatisfy: [ :each | each includesSelector: method selector ])
-		ifTrue: [ ^ self ].
-	coderAddOns
+		ifTrue: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Push down method'
 				description: method selector)
@@ -505,18 +613,19 @@ GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| method variables |
 	(aNode isMethod
 		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
-		ifFalse: [ ^ self ].
-	self behavior superclass isNil ifTrue: [ ^ self ].
+		ifFalse: [ ^ nil ].
+	self behavior superclass isNil ifTrue: [ ^ nil ].
 	variables := Set withAll: self behavior instVarNames.
 	variables addAll: self behavior classVarNames.
 	method := aNode topParent.
 	method
 		allNodesOfType: GtPharoVariableNode
-		do: [ :each | (variables includes: each variableName) ifTrue: [ ^ self ] ].
-	coderAddOns
+		do: [ :each | (variables includes: each variableName) ifTrue: [ ^ nil ] ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Push up method'
 				description: aNode selector)
@@ -532,17 +641,18 @@ GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
+	<return: #GtCoderContextMenuAction or: nil>
+	aNode isVariable ifFalse: [ ^ nil ].
 
-	aNode whoDefines notNil ifTrue: [ ^ self ].
+	aNode whoDefines notNil ifTrue: [ ^ nil ].
 
 	(self behavior allInstVarNames includes: aNode variableName)
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ nil ].
 
 	(self behavior whichClassDefinesInstVar: aNode variableName) superclass
-		= Object ifTrue: [ ^ self ].
+		= Object ifTrue: [ ^ nil ].
 
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Push up variable declaration'
 				description: aNode variableName)
@@ -559,48 +669,85 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 220>
-	self addExtractMethodTo: coderAddOns from: aCoderViewModel.
+	(self addExtractMethodTo: coderAddOns from: aCoderViewModel)
+		ifNotNil: [ :anAction | anAction priority: 220.01 ].
 
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
 			| aNode allParents |
 			aNode := theNodes first.
 
-			self addPushUpMethodRefactoringFor: aNode to: coderAddOns.
-			self addPushDownMethodRefactoringFor: aNode to: coderAddOns.
-			self addMoveMethodRefactoringFor: aNode to: coderAddOns.
-			self addAddParameterRefactoringFor: aNode to: coderAddOns.
-			self addInlineParameterRefactoringFor: aNode to: coderAddOns.
-			self addInlineAllSelfSendsFor: aNode to: coderAddOns.
-			self addInstanceAccessorRefactoringsFor: aNode to: coderAddOns.
-			self addPushUpVariableRefactoringsFor: aNode to: coderAddOns.
-			self addPullDownVariableRefactoringsFor: aNode to: coderAddOns.
-			self addClassAccessorRefactoringsFor: aNode to: coderAddOns.
-			self addRemoveParameterRefactoringFor: aNode to: coderAddOns.
-			self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns.
-			self addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns.
-			self addVariableScopingFor: aNode to: coderAddOns.
+			(self addPushUpMethodRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.02 ].
+			(self addPushDownMethodRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.03 ].
+			(self addMoveMethodRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.04 ].
+			(self addAddParameterRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.05 ].
+			(self addInlineParameterRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.06 ].
+			(self addInlineAllSelfSendsFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.07 ].
+			self
+				addInstanceAccessorRefactoringsFor: aNode
+				to: coderAddOns
+				priority: 220.08.
+			(self addPushUpVariableRefactoringsFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.08 ].
+			(self addPullDownVariableRefactoringsFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.09 ].
+			self
+				addClassAccessorRefactoringsFor: aNode
+				to: coderAddOns
+				priority: 220.10.
+			(self addRemoveParameterRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.11 ].
+			(self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.12 ].
+			(self addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.13 ].
+			(self addVariableScopingFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.14 ].
 			allParents := aNode withAllParents.
 			allParents
-				detect: [ :node | self addInlineMessageFor: node to: coderAddOns ]
+				detect: [ :node | 
+					self
+						addInlineMessageFor: node
+						to: coderAddOns
+						priority: 220.15 ]
 				ifNone: [  ].
 			allParents
-				detect: [ :node | self addInlineTempFor: node to: coderAddOns ]
+				detect: [ :node | 
+					self
+						addInlineTempFor: node
+						to: coderAddOns
+						priority: 220.16 ]
 				ifNone: [  ].
 			allParents
-				detect: [ :node | self addExtractTempFor: node to: coderAddOns ]
+				detect: [ :node | 
+					self
+						addExtractTempFor: node
+						to: coderAddOns
+						priority: 220.17 ]
 				ifNone: [  ].
 			allParents
-				detect: [ :node | self addConvertCascadesToStatementsFor: node to: coderAddOns ]
+				detect: [ :node | 
+					self
+						addConvertCascadesToStatementsFor: node
+						to: coderAddOns
+						priority: 220.18 ]
 				ifNone: [  ].
-			self addConvertStatementsToCascadesFor: theNodes to: coderAddOns ]
+			(self addConvertStatementsToCascadesFor: theNodes to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.19 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| disabled action |
-	aNode isVariable ifFalse: [ ^ self ].
-	aNode parent isMethodPattern ifFalse: [ ^ self ].
+	aNode isVariable ifFalse: [ ^ nil ].
+	aNode parent isMethodPattern ifFalse: [ ^ nil ].
 	disabled := false.
 	aNode parent parent body
 		allNodesDo: [ :each | each = aNode ifTrue: [ disabled := true ] ].
@@ -616,17 +763,19 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns [
 					sourceCoderViewModel: aCoderViewModel;
 					variableNode: aNode) executeIn: element ]
 			id: #'context-menu--remove-parameter'.
-	disabled ifTrue: [ action disableAction ]
+	disabled ifTrue: [ action disableAction ].
+	^ action
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
-	aNode isVariable ifFalse: [ ^ self ].
+	<return: #GtCoderContextMenuAction or: nil>
+	aNode isVariable ifFalse: [ ^ nil ].
 	Smalltalk globals
 		at: aNode name value asSymbol
 		ifPresent: [ :cls | 
 			(cls isKindOf: Class)
-				ifTrue: [ coderAddOns
+				ifTrue: [ ^ coderAddOns
 						addContextMenuItem: (self
 								createLabel: 'Rename class'
 								description: aNode variableName)
@@ -639,13 +788,16 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns [
 								node: aNode
 								for: element ]
 						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-								gtDisplayString ] ]
+								gtDisplayString ] ].
+
+	^ nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOns [
-	(aNode isVariable and: [ self isClassVariable: aNode ]) ifFalse: [ ^ self ].
-	coderAddOns
+	<return: #GtCoderContextMenuAction or: nil>
+	(aNode isVariable and: [ self isClassVariable: aNode ]) ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Rename class variable'
 				description: aNode variableName)
@@ -664,8 +816,9 @@ GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOn
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns [
-	(aNode isVariable and: [ self isInstanceVariable: aNode ]) ifFalse: [ ^ self ].
-	coderAddOns
+	<return: #GtCoderContextMenuAction or: nil>
+	(aNode isVariable and: [ self isInstanceVariable: aNode ]) ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Rename instance variable'
 				description: aNode variableName)
@@ -691,16 +844,21 @@ GtPharoMethodCoder >> addRenameMenuAddOnsAst: anAst to: coderAddOns from: aCoder
 			| aNode |
 			aNode := theNodes first.
 
-			self addRenameTemporaryRefactoringFor: aNode to: coderAddOns.
-			self addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns.
-			self addRenameClassVariableRefactoringFor: aNode to: coderAddOns.
-			self addRenameClassRefactoringFor: aNode to: coderAddOns. ]
+			(self addRenameTemporaryRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 200.1 ].
+			(self addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 200.2 ].
+			(self addRenameClassVariableRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 200.3 ].
+			(self addRenameClassRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 200.4 ]. ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
-	(aNode isVariable and: [ self isLocalVariable: aNode ]) ifFalse: [ ^ self ].
-	coderAddOns
+	<return: #GtCoderContextMenuAction or: nil>
+	(aNode isVariable and: [ self isLocalVariable: aNode ]) ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Rename local'
 				description: aNode variableName)
@@ -734,7 +892,7 @@ GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns
 								and: [ (node messages at: i - 1) stopPosition < position ] ])
 						ifTrue: [ splitBeforeMessage := each ] ] ].
 	splitBeforeMessage ifNil: [ ^ self ].
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Split cascade'
 				description: splitBeforeMessage source)
@@ -745,15 +903,17 @@ GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns
 			(GtSplitCascadesController new
 				node: splitBeforeMessage;
 				sourceCoderViewModel: cvm) executeIn: element ]
-		id: #'context-menu--split-cascade'
+		id: #'context-menu--split-cascade')
+			ifNotNil: [ :anAction | anAction priority: 221 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
 	| uses groups |
-	aNode isVariable ifFalse: [ ^ self ].
+	aNode isVariable ifFalse: [ ^ nil ].
 	(aNode parent isSequence
-		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ self ].
+		and: [ aNode parent variables identityIncludes: aNode ]) ifFalse: [ ^ nil ].
 	uses := OrderedCollection new.
 	aNode parent statements
 		do: [ :each | 
@@ -762,8 +922,8 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 				do: [ :var | 
 					var = aNode
 						ifTrue: [ (var parentOfType: GtPharoBlockNode)
-								ifNil: [ ^ self ]
-								ifNotNil: [ :block | block == (aNode parentOfType: GtPharoBlockNode) ifTrue: [ ^ self ] ].
+								ifNil: [ ^ nil ]
+								ifNotNil: [ :block | block == (aNode parentOfType: GtPharoBlockNode) ifTrue: [ ^ nil ] ].
 							uses add: var ] ] ].
 	groups := uses
 			groupedBy: [ :each | 
@@ -773,8 +933,8 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns [
 					to: (parents identityIndexOf: aNode parent) - 1
 					do: [ :i | ((parents at: i) isKindOf: GtPharoBlockNode) ifTrue: [ block := parents at: i ] ].
 				block ].
-	groups do: [ :each | each first isAssignedTo ifFalse: [ ^ self ] ].
-	coderAddOns
+	groups do: [ :each | each first isAssignedTo ifFalse: [ ^ nil ] ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Move declaration to inner scope'
 				description: aNode variableName)
