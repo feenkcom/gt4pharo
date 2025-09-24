@@ -65,7 +65,7 @@ Class >> gtCoderSidebarIndexCopyClassOrTraitFor: anAction [
 		icon: BrGlamorousVectorIcons changes;
 		label: (self isTrait ifTrue: [ 'Copy trait' ] ifFalse: [ 'Copy class' ]);
 		menuItemPreview: self name;
-		menuItemGroup: BrMenuItemGroupConfiguration default;
+		menuItemGroup: BrMenuItemGroupConfiguration modification;
 		menuItemPinSubmenu;
 		content: [ :anActionElement :aHostElement :anExplicitMenu | 
 			 self isTrait
