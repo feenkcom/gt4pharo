@@ -144,13 +144,13 @@ GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns fro
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 800>
 	self
-		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
-			group: BrMenuItemGroupConfiguration evaluation
-			withId: nil
-			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
 			group: BrMenuItemGroupConfiguration evaluation
 			withId: GtSourceCoderDoItAndGoActionId
+			to: coderAddOns;
+		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
+			group: BrMenuItemGroupConfiguration evaluation
+			withId: nil
 			to: coderAddOns;
 		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
 			group: BrMenuItemGroupConfiguration evaluation
