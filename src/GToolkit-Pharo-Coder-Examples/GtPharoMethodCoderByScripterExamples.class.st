@@ -14,6 +14,117 @@ GtPharoMethodCoderByScripterExamples class >> dummyMethod: arg [
 	self foo: arg
 ]
 
+{ #category : #'examples - abstract var' }
+GtPharoMethodCoderByScripterExamples >> abstractClassVariableExecute [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class |
+	scripter := self abstractClassVariableStartRefactoring.
+	class := scripter model behavior.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check source updated';
+				// GtSourceCoderEditorId;
+				do: [ :each | 
+					self
+						assert: (RBParser parseMethod: each text asString)
+						equals: (RBParser parseMethod: 'method1 ^ self class classVar isNil') ] ].
+	self assert: (class class includesSelector: #classVar).
+	self assert: (class class includesSelector: #classVar:).
+	^ scripter
+]
+
+{ #category : #'examples - abstract var' }
+GtPharoMethodCoderByScripterExamples >> abstractClassVariableOpenMenu [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self createAccessorsForClassVariableSetup.
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the assignment node';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 13 to: 14;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter := self openContextMenu: scripter.
+
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover abstract';
+				onSpaceRoot;
+				id: #'context-menu--abstract-variable' ].
+
+	^ scripter
+]
+
+{ #category : #'examples - abstract var' }
+GtPharoMethodCoderByScripterExamples >> abstractClassVariableStartRefactoring [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self abstractClassVariableOpenMenu.
+
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click menu item';
+				onSpaceRoot;
+				id: #'context-menu--abstract-variable' ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert there is no selected text';
+				value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+					equals: [ false ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert refactoring changes attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
+						index - 1 to: index - 1 ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	^ scripter
+]
+
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> assertFor: aStep expectedElementIds: expectedElementIds labeled: aLabel [
 	"Create an assertion step that checks that an element has all expected children in its children tree."
@@ -1815,6 +1926,255 @@ GtPharoMethodCoderByScripterExamples >> contextMenuPaste [
 	^ aScripter
 ]
 
+{ #category : #'examples - cascades' }
+GtPharoMethodCoderByScripterExamples >> convertCascadeToStatements [
+	<gtExample>
+	| scripter |
+	scripter := self convertToCascadeStatement.
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Position the cursor';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOf: $O.
+					aSourceEditor selecter
+						from: index to: (aSourceEditor text asString lastIndexOf: $.) - 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover menu item';
+				onSpaceRoot;
+				id: #'context-menu--cascades-to-statements' ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click menu item';
+				onSpaceRoot;
+				id: #'context-menu--cascades-to-statements' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert current source in coder model';
+				value: [ :aCoder | RBParser parseMethod: aCoder currentSourceString ]
+					equals: [ :aCoder | 
+						RBParser
+							parseMethod: 'method1
+								| oc | 
+								oc := OrderedCollection new. oc add: 1. oc add: 2.
+								^oc' ];
+				onModel ].
+	^ scripter
+]
+
+{ #category : #'examples - cascades' }
+GtPharoMethodCoderByScripterExamples >> convertToCascadeStatement [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	| oc |
+	oc := OrderedCollection new.
+	oc add: 1.
+	oc add: 2.
+	^oc' ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Position the cursor';
+				action: [ :aSourceEditor | 
+					| index |
+					index := (aSourceEditor text asString lastIndexOf: $|) + 2.
+					aSourceEditor selecter
+						from: index to: (aSourceEditor text asString lastIndexOf: $.);
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover menu item';
+				onSpaceRoot;
+				id: #'context-menu--statements-to-cascade' ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click menu item';
+				onSpaceRoot;
+				id: #'context-menu--statements-to-cascade' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert current source in coder model';
+				value: [ :aCoder | RBParser parseMethod: aCoder currentSourceString ]
+					equals: [ :aCoder | 
+						RBParser
+							parseMethod: 'method1
+								| oc | 
+								oc := OrderedCollection new add: 1; add: 2; yourself.
+								^oc' ];
+				onModel ].
+	^ scripter
+]
+
+{ #category : #'examples - create accessors' }
+GtPharoMethodCoderByScripterExamples >> createAccessorsForClassVariableExecute [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class |
+	scripter := self createAccessorsForClassVariableStartRefactoring.
+	class := scripter model behavior.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check source updated';
+				// GtSourceCoderEditorId;
+				do: [ :each | 
+					self
+						assert: (RBParser parseMethod: each text asString)
+						equals: (RBParser parseMethod: 'method1 ^ ClassVar isNil') ] ].
+	self assert: (class class includesSelector: #classVar).
+	self assert: (class class includesSelector: #classVar:).
+	^ scripter
+]
+
+{ #category : #'examples - create accessors' }
+GtPharoMethodCoderByScripterExamples >> createAccessorsForClassVariableOpenMenu [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self createAccessorsForClassVariableSetup.
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the assignment node';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 13 to: 14;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter := self openContextMenu: scripter.
+
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover menu item';
+				onSpaceRoot;
+				id: #'context-menu--create-accessors' ].
+
+	^ scripter
+]
+
+{ #category : #'examples - create accessors' }
+GtPharoMethodCoderByScripterExamples >> createAccessorsForClassVariableSetup [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				aCoder behavior addClassVarNamed: 'ClassVar'.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	^ ClassVar isNil' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	^ scripter
+]
+
+{ #category : #'examples - create accessors' }
+GtPharoMethodCoderByScripterExamples >> createAccessorsForClassVariableStartRefactoring [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self createAccessorsForClassVariableOpenMenu.
+
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click menu item';
+				onSpaceRoot;
+				id: #'context-menu--create-accessors' ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert there is no selected text';
+				value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+					equals: [ false ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert refactoring changes attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString indexOfSubCollection: ' isNil'.
+						index - 1 to: index - 1 ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	^ scripter
+]
+
 { #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> createdClassThatDoesntExist [
 	^ 'ClassThatDoesNotExist6561'
@@ -2964,7 +3324,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	^ aScripter
 ]
 
-{ #category : #'examples - abstract inst var' }
+{ #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
 	<gtExample>
 	<after: #cleanUp>
@@ -2995,7 +3355,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
 	^ aScripter
 ]
 
-{ #category : #'examples - abstract inst var' }
+{ #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_02_cursor [
 	<gtExample>
 	| aScripter |
@@ -3013,7 +3373,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_02_cursor [
 	^ aScripter
 ]
 
-{ #category : #'examples - abstract inst var' }
+{ #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_03_hover_abstract_variable [
 	<gtExample>
 	| aScripter |
@@ -3029,7 +3389,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_03_hover_abstract_var
 	^ aScripter
 ]
 
-{ #category : #'examples - abstract inst var' }
+{ #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_variable [
 	<gtExample>
 	| scripter |
@@ -3066,7 +3426,7 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_04_click_abstract_var
 	^ scripter
 ]
 
-{ #category : #'examples - abstract inst var' }
+{ #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_05_execute_abstract_variable [
 	<gtExample>
 	| scripter class |
@@ -5369,6 +5729,7 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_01_setup [
 	aScripter := self
 			scripterForBlock: [ | aCoder |
 				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				aCoder behavior realClass compile: 'foo ^self method1' classified: #testing.
 				environment := aCoder attributeNamed: #dummyEnvironment.
 				aCoder ].
 
@@ -5430,17 +5791,17 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_03_hover_protect_varia
 { #category : #'examples - protect inst var' }
 GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_variable [
 	<gtExample>
-	| aScripter |
-	aScripter := self forProtectInstVar_03_hover_protect_variable.
+	| scripter |
+	scripter := self forProtectInstVar_03_hover_protect_variable.
 
-	aScripter
+	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Click protect variable';
 				onSpaceRoot;
 				id: #'context-menu--protect-variable' ].
 
-	aScripter
+	scripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert there is no selected text';
@@ -5448,7 +5809,7 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 					equals: [ false ];
 				id: GtSourceCoderEditorId ].
 
-	aScripter
+	scripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert refactoring changes attribute';
@@ -5460,8 +5821,41 @@ GtPharoMethodCoderByScripterExamples >> forProtectInstVar_04_click_Protect_varia
 						anInterval ]
 					equals: [ :aCoderEditor | aCoderEditor text size to: aCoderEditor text size ];
 				id: GtSourceCoderEditorId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
 
-	^ aScripter
+	^ scripter
+]
+
+{ #category : #'examples - protect inst var' }
+GtPharoMethodCoderByScripterExamples >> forProtectInstVar_05_execute_Protect_variable [
+	<gtExample>
+	| scripter class |
+	scripter := self forProtectInstVar_04_click_Protect_variable.
+
+	class := scripter model behavior.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self
+		assert: (RBParser parseMethod: (class sourceCodeAt: #foo))
+		equals: (RBParser parseMethod: 'foo ^instVar1').
+	^ scripter
 ]
 
 { #category : #'examples - pull down variable' }
@@ -5539,17 +5933,17 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_03_hover_pull_down [
 { #category : #'examples - pull down variable' }
 GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 	<gtExample>
-	| aScripter |
-	aScripter := self forPullDownVariable_03_hover_pull_down.
+	| scripter |
+	scripter := self forPullDownVariable_03_hover_pull_down.
 
-	aScripter
+	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Click pull down variable';
 				onSpaceRoot;
 				id: #'context-menu--pull-down-variable' ].
 
-	aScripter
+	scripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert refactoring changes attribute';
@@ -5565,7 +5959,42 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 						index to: index ];
 				id: GtSourceCoderEditorId ].
 
-	^ aScripter
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	^ scripter
+]
+
+{ #category : #'examples - pull down variable' }
+GtPharoMethodCoderByScripterExamples >> forPullDownVariable_05_execute_pull_down [
+	<gtExample>
+	| scripter class var |
+	scripter := self forPullDownVariable_04_click_pull_down.
+	class := scripter model behavior.
+	var := class superclass instVarNames last.
+	self assert: (class instVarNames includes: var) not.
+	self assert: (class superclass instVarNames includes: var).
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self assert: (class instVarNames includes: var).
+	self assert: (class superclass instVarNames includes: var) not.
+	^ scripter
 ]
 
 { #category : #'examples - push down method' }
@@ -5917,17 +6346,17 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_03_hover_push_up [
 { #category : #'examples - push up variable' }
 GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 	<gtExample>
-	| aScripter |
-	aScripter := self forPushUpVariable_03_hover_push_up.
+	| scripter |
+	scripter := self forPushUpVariable_03_hover_push_up.
 
-	aScripter
+	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Click push up variable';
 				onSpaceRoot;
 				id: #'context-menu--push-up-variable' ].
 
-	aScripter
+	scripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert refactoring changes attribute';
@@ -5943,7 +6372,43 @@ GtPharoMethodCoderByScripterExamples >> forPushUpVariable_04_click_push_up [
 						index to: index ];
 				id: GtSourceCoderEditorId ].
 
-	^ aScripter
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	^ scripter
+]
+
+{ #category : #'examples - push up variable' }
+GtPharoMethodCoderByScripterExamples >> forPushUpVariable_05_execute_push_up [
+	<gtExample>
+	| scripter class var |
+	scripter := self forPushUpVariable_04_click_push_up.
+
+	class := scripter model behavior.
+	var := class instVarNames last.
+	self assert: (class instVarNames includes: var).
+	self assert: (class superclass instVarNames includes: var) not.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self assert: (class instVarNames includes: var) not.
+	self assert: (class superclass instVarNames includes: var).
+	^ scripter
 ]
 
 { #category : #'examples - remove parameter' }
@@ -5963,7 +6428,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_01_setup [
 				label: 'Type-in a method with argument';
 				action: [ :aCoder | 
 					aCoder
-						appendString: (': unusedArg
+						appendString: ('_Unique: unusedArg
 	{1} := Set new' format: {(aCoder attributeNamed: #dummyMethod) anyInstVarName}) ];
 				onModel ].
 
@@ -5988,7 +6453,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_02_cursor [
 				label: 'Select part of the parameter node';
 				action: [ :aSourceEditor | 
 					aSourceEditor selecter
-						from: 11 to: 12;
+						from: 18 to: 19;
 						select ];
 				id: GtSourceCoderEditorId ].
 
@@ -6021,17 +6486,17 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_03_hover_remove_param
 { #category : #'examples - remove parameter' }
 GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_parameter [
 	<gtExample>
-	| aScripter |
-	aScripter := self forRemoveParameter_03_hover_remove_parameter.
+	| scripter |
+	scripter := self forRemoveParameter_03_hover_remove_parameter.
 
-	aScripter
+	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Click remove parameter';
 				onSpaceRoot;
 				id: #'context-menu--remove-parameter' ].
 
-	aScripter
+	scripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert there is no selected text';
@@ -6039,7 +6504,7 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 					equals: [ false ];
 				id: GtSourceCoderEditorId ].
 
-	aScripter
+	scripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert refactoring changes attribute';
@@ -6056,7 +6521,50 @@ GtPharoMethodCoderByScripterExamples >> forRemoveParameter_04_click_remove_param
 						index to: index ];
 				id: GtSourceCoderEditorId ].
 
-	^ aScripter
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+	scripter
+		assertStep: [ :s | 
+			s
+				onChildFromBlock: [ :element | 
+					element parent
+						allChildrenBreadthFirstDetect: [ :each | each id = GtRefactoringsPreviewAcceptId uniqueInstance ]
+						ifFound: [ :each | each ]
+						ifNone: [ self error: 'Apply button not found' ] ];
+				value: [ :button | button isVisible ] equals: true ].
+
+	^ scripter
+]
+
+{ #category : #'examples - remove parameter' }
+GtPharoMethodCoderByScripterExamples >> forRemoveParameter_05_execute_remove_parameter [
+	<gtExample>
+	| scripter class selector |
+	scripter := self forRemoveParameter_04_click_remove_parameter.
+	selector := 'method1_Unique' asSymbol.
+	class := scripter model behavior.
+	self assert: (class includesSelector: selector) not.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self assert: (class includesSelector: selector).
+	self assert: (class includesSelector: (selector , ':') asSymbol) not.
+	^ scripter
 ]
 
 { #category : #'examples - split cascade' }
