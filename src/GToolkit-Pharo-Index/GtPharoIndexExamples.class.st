@@ -21,7 +21,7 @@ GtPharoIndexExamples >> addInstVarRemovesUndeclaredReferences [
 	<gtExample>
 	[ ((Object << #FooBar)
 		slots: {};
-		package: self class package) install.
+		package: self class package name) install.
 
 	#FooBar asClass
 		compile: 'accessAndWriteSlotA
