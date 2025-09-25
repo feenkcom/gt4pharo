@@ -153,14 +153,14 @@ GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 800>
 	<gtCoderContextMenuAddOns>
 	(self
-		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
-		group: BrMenuItemGroupConfiguration evaluation
-		withId: nil
-		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
-	(self
 		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
 		group: BrMenuItemGroupConfiguration evaluation
 		withId: GtSourceCoderDoItAndGoActionId
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
+	(self
+		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
+		group: BrMenuItemGroupConfiguration evaluation
+		withId: nil
 		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
 	(self
 		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
