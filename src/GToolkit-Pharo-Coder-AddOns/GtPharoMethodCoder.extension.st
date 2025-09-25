@@ -1138,7 +1138,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 		stencil: [ :element | self buildRemoveMethodLabel: element ]
 		id: GtMethodCoderRemoveActionId.
 	addOns
-		addMainAction: 'Inspect Method' translated
+		addMainAction: 'Inspect method' translated
 		icon: BrGlamorousVectorIcons inspect
 		action: [ :aCoderUIModel :anElement | 
 			self 
@@ -1146,7 +1146,7 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 				requesterObject: aCoderUIModel ]
 		id: GtMethodCoderInspectActionId.
 	addOns
-		addMainAction: 'Copy Method Name' translated
+		addMainAction: 'Copy method name' translated
 		icon: BrGlamorousVectorIcons clipboard
 		action: [ :aCoderUIModel :anElement | self copyMethodNameToClipboard ]
 		id: GtMethodCoderCopyActionId.

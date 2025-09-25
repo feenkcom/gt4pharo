@@ -273,7 +273,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns viewModel: aViewModel [
 				aViewModel requestUpdateAddOns ].
 
 	action := GtCoderToggleAction new
-			title: 'Variable Values' translated;
+			title: 'Variable values' translated;
 			icon: BrGlamorousVectorIcons edit;
 			toggleModel: toggleModel;
 			activateBlock: [ :anEvent | toggleModel activate ];
