@@ -25,24 +25,21 @@ GtCopyClassForm >> asElement [
 { #category : #accessing }
 GtCopyClassForm >> copyClass [
 	| class |
-	class := Smalltalk classInstaller make: 
-					[:builder |
-				self 
-					forPharo12AndNewer: [
-						builder fillFor: innerClass ] 
-					forPharo11: [
-						builder gtFillFor: innerClass].
+	class := Smalltalk classInstaller
+			make: [ :builder | 
+				self
+					forPharo12AndNewer: [ builder fillFor: innerClass ]
+					forPharo11: [ builder gtFillFor: innerClass ].
 				builder
 					name: newClassName trim;
 					superclass: superClassName trim asClass;
 					category: (packageAndTag tagName trim
-							ifEmpty: [packageAndTag packageName trim]
-							ifNotEmpty: [packageAndTag fullName])].
+							ifEmpty: [ packageAndTag packageName trim ]
+							ifNotEmpty: [ packageAndTag fullName ]) ].
 	copyMethods
-		ifTrue: 
-			[class copyAllCategoriesFrom: innerClass.
-			class class copyAllCategoriesFrom: innerClass class].
-	^class
+		ifTrue: [ class copyAllMethodsFrom: innerClass.
+			class class copyAllMethodsFrom: innerClass class ].
+	^ class
 ]
 
 { #category : #accessing }

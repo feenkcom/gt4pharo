@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-Index'
 }
 
+{ #category : #initialization }
+GtShiftClassInstaller12 >> initialize [
+
+	super initialize.
+	builder := GtShiftClassBuilder12 new
+]
+
 { #category : #building }
 GtShiftClassInstaller12 >> make [
 	| newClass |
