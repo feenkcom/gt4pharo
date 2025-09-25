@@ -2,8 +2,23 @@ Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addConvertCascadesToStatementsFor:to:priority: instead.'
+		transformWith: '`@receiver addConvertCascadesToStatementsFor: `@statements1 to: `@statements2'
+				-> '`@receiver addConvertCascadesToStatementsFor: `@statements1 to: `@statements2 priority: nil'.
+	
+	^ self
+		addConvertCascadesToStatementsFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns priority: aPriority [
+	<return: #Boolean>
 	aNode isCascade ifFalse: [ ^ false ].
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Convert cascade to statements'
 				description: (self nodeDescription: aNode))
@@ -14,17 +29,19 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 			(GtSnippetConvertCascadesToStatementsController new
 				node: aNode;
 				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
-		id: #'context-menu--cascades-to-statements'.
+		id: #'context-menu--cascades-to-statements')
+		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
-	nodes size > 1 ifFalse: [ ^ self ].
-	(nodes allSatisfy: [ :each | each isMessageSend ]) ifFalse: [ ^ self ].
+	<return: #GtCoderContextMenuAction or: nil>
+	nodes size > 1 ifFalse: [ ^ nil ].
+	(nodes allSatisfy: [ :each | each isMessageSend ]) ifFalse: [ ^ nil ].
 	(nodes allSatisfy: [ :each | each receiver = nodes first receiver ])
-		ifFalse: [ ^ self ].
-	coderAddOns
+		ifFalse: [ ^ nil ].
+	^ coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Convert statements to cascade'
 				description: (self nodeDescription: nodes first))
@@ -78,6 +95,22 @@ GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addInlineMethodFor:to:from:priority: instead.'
+		transformWith: '`@receiver addInlineMethodFor: `@statements1 to: `@statements2 from: `@statements3'
+				-> '`@receiver addInlineMethodFor: `@statements1 to: `@statements2 from: `@statements3 priority: nil'.
+	
+	^ self
+		addInlineMethodFor: aNode
+		to: coderAddOns
+		from: aCoderViewModel
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel priority: aPriority [
+	<return: #Boolean>
 	| class selector |
 	aNode isMessageSend ifFalse: [ ^ false ].
 	selector := aNode selector.
@@ -91,12 +124,13 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 		ifNil: [ ^ self
 				addInlineMethodUnknownReceiverFor: aNode
 				to: coderAddOns
-				from: aCoderViewModel ].
+				from: aCoderViewModel
+				priority: aPriority ].
 	class := class whichClassIncludesSelector: selector.
 	class
 		ifNil: [ (GtPharoIndex current implementersOf: aNode selector) ifEmpty: [ ^ false ] ].
 
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline message'
 				description: aNode message selector)
@@ -109,12 +143,31 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 				implementorClass: class;
 				snippetClass: self behavior;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-send'
+		id: #'context-menu--inline-send')
+		ifNotNil: [ :anAction | anAction priority: aPriority ].
+	
+	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns from: aCoderViewModel [
-	coderAddOns
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addInlineMethodUnknownReceiverFor:to:from:priority: instead.'
+		transformWith: '`@receiver addInlineMethodUnknownReceiverFor: `@statements1 to: `@statements2 from: `@statements3'
+				-> '`@receiver addInlineMethodUnknownReceiverFor: `@statements1 to: `@statements2 from: `@statements3 priority: nil'.
+
+	^ self
+		addInlineMethodUnknownReceiverFor: aNode
+		to: coderAddOns
+		from: aCoderViewModel
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns from: aCoderViewModel priority: aPriority [
+	<return: #Boolean>
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline message'
 				description: aNode message selector)
@@ -129,12 +182,28 @@ GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns 
 				implementor: defaultClass;
 				node: aNode;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-message'.
+		id: #'context-menu--inline-message')
+		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
+	<return: #Boolean>
+	self
+		deprecated: 'Please use addInlineTempFor:to:priority: instead.'
+		transformWith: '`@receiver addInlineTempFor: `@statements1 to: `@statements2'
+				-> '`@receiver addInlineTempFor: `@statements1 to: `@statements2 priority: nil'.
+
+	^ self
+		addInlineTempFor: aNode
+		to: coderAddOns
+		priority: nil
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriority [
+	<return: #Boolean>
 	| variable uses |
 	aNode isAssignment ifTrue: [ variable := aNode variable ].
 	aNode isVariable
@@ -150,7 +219,7 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 	uses size >= 2
 		ifTrue: [ uses first stopPosition > uses second startPosition ifTrue: [ ^ false ] ].
 
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline assignment'
 				description: variable variableName)
@@ -161,17 +230,19 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
 			(GtSnippetInlineVariableRefactoringController new
 				node: uses first parent;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
-		id: #'context-menu--inline-temp'.
+		id: #'context-menu--inline-temp')
+			ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 210>
+	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
 			| node allParents |
-			coderAddOns
+			(coderAddOns
 				addContextMenuItem: 'Extract method'
 				group: BrMenuItemGroupConfiguration refactoring
 				hover: [ :textualCoderViewModel | 
@@ -183,9 +254,10 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 				action: [ :aTextualViewModel :element | 
 					(GtExtractMethodFromSnippetController new
 						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
-				id: GtMethodCoderExtractMethodContextMenuItemId.
+				id: GtMethodCoderExtractMethodContextMenuItemId)
+				ifNotNil: [ :anAction | anAction priority: 210.01 ].
 
-			coderAddOns
+			(coderAddOns
 				addContextMenuItem: 'Extract example'
 				group: BrMenuItemGroupConfiguration refactoring
 				hover: [ :textualCoderViewModel | 
@@ -197,7 +269,8 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 				action: [ :aTextualViewModel :element | 
 					(GtExtractExampleFromSnippetController new
 						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
-				id: #'snippet-extract-example'.
+				id: #'snippet-extract-example')
+				ifNotNil: [ :anAction | anAction priority: 210.02 ].
 
 			node := nodes first.
 			allParents := node withAllParents.
@@ -207,14 +280,24 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 			self
 				addInlineMethodFor: node
 				to: coderAddOns
-				from: aCoderViewModel.
+				from: aCoderViewModel
+				priority: 210.03.
 			allParents
-				detect: [ :n | self addInlineTempFor: n to: coderAddOns ]
+				detect: [ :n | 
+					self
+						addInlineTempFor: n
+						to: coderAddOns
+						priority: 210.04 ]
 				ifNone: [  ].
 			allParents
-				detect: [ :n | self addConvertCascadesToStatementsFor: n to: coderAddOns ]
+				detect: [ :n | 
+					self
+						addConvertCascadesToStatementsFor: n
+						to: coderAddOns
+						priority: 210.05 ]
 				ifNone: [  ].
-			self addConvertStatementsToCascadesFor: nodes to: coderAddOns ]
+			(self addConvertStatementsToCascadesFor: nodes to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 210.06 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

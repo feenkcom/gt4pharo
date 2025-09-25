@@ -4,7 +4,7 @@ Extension { #name : #Behavior }
 Behavior >> recompile: selector from: oldClass [
 	<gtPharoPatch: #Pharo12>
 	"Compile the method associated with selector in the receiver's method dictionary.
-	Only announce the recompilation if the source code has changed."
+	Pharo 11 behaviour is unchanged.  Pharo 12 behaviour is currently also unchanged, under investigation."
 	| method currentSource newSource recompileBlock newMethod |
 
 	self forPharo12AndNewer:
@@ -22,7 +22,7 @@ Behavior >> recompile: selector from: oldClass [
 				logged: false;
 				install.
 			newMethod sourcePointer: method sourcePointer. ].
-		newSource = currentSource ifTrue:
+		"newSource = currentSource" true ifTrue:
 			"Compile without announcing"
 			[ self codeChangeAnnouncer suspendAllWhile: recompileBlock ]
 		ifFalse:
