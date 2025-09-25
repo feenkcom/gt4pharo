@@ -31,8 +31,8 @@ GtShiftClassBuilder12 >> build [
 
 	self installSlotsAndVariables.
 
-	self environment codeChangeAnnouncer announce: 
-		(ClassAdded class: newClass).
+	"self environment codeChangeAnnouncer announce: 
+		(ClassAdded class: newClass)."
 	self oldClass ifNotNil: [ self builderEnhancer compileMethodsFor: self ].
 
 	self builderEnhancer afterMethodsCompiled: self.
