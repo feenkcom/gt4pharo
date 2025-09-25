@@ -2,32 +2,34 @@ Extension { #name : #GtSmalltalkSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel requesterObject: aRequester [
-	self 
-		addLinkMenuAddOnsTo: coderAddOns 
+	<return: #GtCoderContextMenuAction or: nil>
+	^ self
+		addLinkMenuAddOnsTo: coderAddOns
 		group: menuGroup
-		node: node 
-		selector: sel 
+		node: node
+		selector: sel
 		label: aLabel
-		shortcut: nil 
+		shortcut: nil
 		requesterObject: aRequester
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel shortcut: aShortcut requesterObject: aRequester [
+	<return: #GtCoderContextMenuAction or: nil>
 	| highlightNode nodeDescription |
 	
 	(node isMessage or: [ 
 		node isMessageSend or: [ 
 			node isMethodPattern or: [ 
 				node isSymbol ] ] ])
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ nil ].
 	
 	highlightNode := node isMessageSend 
 		ifTrue: [ node message ] ifFalse: [ node ].
 	nodeDescription := node isSymbol
 		ifTrue: [ node literalValue ] ifFalse: [ node selector ].
 	
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: (self 
 			createLabel: aLabel
 			description: nodeDescription)
@@ -45,13 +47,14 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
-	self 
-		addLinkMenuAddOnsTo: coderAddOns 
+	<return: #GtCoderContextMenuAction or: nil>
+	^ self
+		addLinkMenuAddOnsTo: coderAddOns
 		group: menuGroup
-		node: node 
-		selector: sel 
-		label: aShortcut name 
-		shortcut: aShortcut 
+		node: node
+		selector: sel
+		label: aShortcut name
+		shortcut: aShortcut
 		requesterObject: aRequester
 ]
 

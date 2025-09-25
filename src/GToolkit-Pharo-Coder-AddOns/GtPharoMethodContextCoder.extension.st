@@ -8,7 +8,8 @@ GtPharoMethodContextCoder >> actionsForPragmas: aSymbolsCollection [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 10>
-	| theActions classes |
+	<gtCoderContextMenuAddOns>
+	| theActions classes aPriority |
 	classes := {ResumeDebugAction.
 			RestartDebugAction.
 			StepOverDebugAction.
@@ -16,6 +17,7 @@ GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAdd
 			StepThroughDebugAction.
 			GtRunToSelectionDebugAction}.
 
+	aPriority := 10.
 	theActions := ((classes
 			collect: [ :each | each gt2ContextDebuggingActionFor: nil ])
 			select: [ :aDebuggingAction "Quite hacky solutions for only showing StepInto for the top context." | 
@@ -23,6 +25,7 @@ GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAdd
 					or: [ self context = self session interruptedContext ] ])
 			collect: [ :aDebuggingAction | 
 				GtCoderAction new
+					priority: (aPriority := aPriority + 0.001);
 					title: aDebuggingAction label;
 					icon: (aDebuggingAction icon ifNil: [ BlElement new size: 0 @ 0 ]);
 					action: [ :viewModel :element | 

@@ -207,6 +207,19 @@ GtReferencesPrefixTree >> removeReference: aMethod [
 				ifTrue: [ references removeKey: className ifAbsent: [  ] ] ]
 ]
 
+{ #category : #accessing }
+GtReferencesPrefixTree >> removeUninstalledReferences [
+	| refs |
+	refs := self referencesCollection.
+	refs size
+		to: 1
+		by: -1
+		do: [ :i | 
+			| method |
+			method := refs at: i.
+			method gtIsActive ifFalse: [ self removeReference: method ] ]
+]
+
 { #category : #private }
 GtReferencesPrefixTree >> updateReference: aMethod [
 	| refs isDictionary className |

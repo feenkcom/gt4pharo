@@ -297,7 +297,8 @@ GtPharoIndex >> classNameTree [
 
 { #category : #private }
 GtPharoIndex >> classRecompiled: anAnnouncement [
-	self recompileMethodsIn: anAnnouncement classAffected
+	self recompileMethodsIn: anAnnouncement classAffected.
+	self removeOldSlotMessageSends
 ]
 
 { #category : #private }
@@ -626,6 +627,14 @@ GtPharoIndex >> removeMethodFromCache: method [
 ]
 
 { #category : #private }
+GtPharoIndex >> removeOldSlotMessageSends [
+	self slotSends
+		do: [ :each | 
+			(selectorCache nodeFor: each)
+				ifNotNil: [ :node | node removeUninstalledReferences ] ]
+]
+
+{ #category : #private }
 GtPharoIndex >> removeSendsFrom: aMethod [
 	| seen globalBlock selectorBlock method indexMethod |
 	aMethod ifNil: [ ^ self ].
@@ -677,6 +686,23 @@ GtPharoIndex >> selectorWordCacheSpecificSize [
 { #category : #'accessing - senders' }
 GtPharoIndex >> sendersOf: aSelector [
 	^ self installedSendersOf: aSelector
+]
+
+{ #category : #private }
+GtPharoIndex >> slotSends [
+	"List obtained from send: messages:
+	
+	sends := Set new.
+	matcher := RBParseTreeSearcher new.
+	matcher
+		matches: '``@a send: ``@b'
+		do: [ :node :answer | sends add: node arguments first ].
+	#emitValue: gtImplementors | #emitStore: gtImplementors & #send: gtReferences
+		do: [ :each | matcher executeTree: each ast ].
+	sends
+	"
+
+	^ #(#'==' #asBit #at: #at:ifAbsent: #at:put: #bitAt: #bitAt:put: #cull: #definingClass #last #read #read: #runtimeUndeclaredReadInContext: #runtimeUndeclaredWrite:inContext: #signalSyntaxError: #updateOld:new:in: #value #value: #write: #writeSlot:value:)
 ]
 
 { #category : #private }

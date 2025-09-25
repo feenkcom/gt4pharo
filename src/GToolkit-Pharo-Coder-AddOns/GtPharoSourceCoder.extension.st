@@ -3,89 +3,96 @@ Extension { #name : #GtPharoSourceCoder }
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 5>
+	<gtCoderContextMenuAddOns>
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			node isLiteral ifFalse: [ ^ self ].
 			node gtIsBaselinePackageName
-				ifTrue: [ coderAddOns
+				ifTrue: [ (coderAddOns
 						addContextMenuItem: (self
-									createLabel: 'Rename package'
-									description: node literalValue)
-							group: BrMenuItemGroupConfiguration refactoring
-							hover: (self highlightNodeBlock: node)
-							leave: self removeHighlightBlock
-							action: [ :aTextualViewModel :element | 
-								self
-									renamePackage: node
-									in: aTextualViewModel
-									from: element ]
-							shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
-									gtDisplayString;
+								createLabel: 'Rename package'
+								description: node literalValue)
+						group: BrMenuItemGroupConfiguration refactoring
+						hover: (self highlightNodeBlock: node)
+						leave: self removeHighlightBlock
+						action: [ :aTextualViewModel :element | 
+							self
+								renamePackage: node
+								in: aTextualViewModel
+								from: element ]
+						shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
+								gtDisplayString) ifNotNil: [ :anAction | anAction priority: 5 ].
+					(coderAddOns
 						addContextMenuItem: (self
-									createLabel: 'Browse package'
-									description: node literalValue)
-							group: BrMenuItemGroupConfiguration navigation
-							hover: (self highlightNodeBlock: node)
-							leave: self removeHighlightBlock
-							action: [ :model :element | 
-								element phlow
-									spawnTool: (GtPackageCoderTool
-											package: (self packageOrganizer packageNamed: node literalValue)) ] ]
+								createLabel: 'Browse package'
+								description: node literalValue)
+						group: BrMenuItemGroupConfiguration navigation
+						hover: (self highlightNodeBlock: node)
+						leave: self removeHighlightBlock
+						action: [ :model :element | 
+							element phlow
+								spawnTool: (GtPackageCoderTool
+										package: (self packageOrganizer packageNamed: node literalValue)) ])
+						ifNotNil: [ :anAction | anAction priority: 5 ] ]
 				ifFalse: [ node gtIsBaselineName
-						ifTrue: [ coderAddOns
+						ifTrue: [ (coderAddOns
 								addContextMenuItem: (self
-											createLabel: 'Rename baseline class'
-											description: node literalValue)
-									group: BrMenuItemGroupConfiguration refactoring
-									hover: (self highlightNodeBlock: node)
-									leave: self removeHighlightBlock
-									action: [ :aTextualViewModel :element | 
-										self
-											renameBaseline: node
-											in: aTextualViewModel
-											for: element ]
-									shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
-											gtDisplayString;
+										createLabel: 'Rename baseline class'
+										description: node literalValue)
+								group: BrMenuItemGroupConfiguration refactoring
+								hover: (self highlightNodeBlock: node)
+								leave: self removeHighlightBlock
+								action: [ :aTextualViewModel :element | 
+									self
+										renameBaseline: node
+										in: aTextualViewModel
+										for: element ]
+								shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
+										gtDisplayString) ifNotNil: [ :anAction | anAction priority: 5 ].
+							(coderAddOns
 								addContextMenuItem: (self
-											createLabel: 'Browse baseline'
-											description: node literalValue)
-									group: BrMenuItemGroupConfiguration navigation
-									hover: (self highlightNodeBlock: node)
-									leave: self removeHighlightBlock
-									action: [ :model :element | 
-										self class environment
-											at: ('BaselineOf' , node literalValue) asSymbol
-											ifPresent: [ :cls | element phlow spawnTool: (GtClassCoderTool observedClass: cls) ] ] ] ] ]
+										createLabel: 'Browse baseline'
+										description: node literalValue)
+								group: BrMenuItemGroupConfiguration navigation
+								hover: (self highlightNodeBlock: node)
+								leave: self removeHighlightBlock
+								action: [ :model :element | 
+									self class environment
+										at: ('BaselineOf' , node literalValue) asSymbol
+										ifPresent: [ :cls | element phlow spawnTool: (GtClassCoderTool observedClass: cls) ] ])
+								ifNotNil: [ :anAction | anAction priority: 5 ] ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 13>
-	
+	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
-			self 
-				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+			(self
+				addClassNodeLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
-				node: nodes first 
-				selector: #browseBehaviorAt:requesterObject: 
-				shortcut: GtSourceCoderBrowseBehaviorShortcut new 
-				requesterObject: aCoderViewModel ]
+				node: nodes first
+				selector: #browseBehaviorAt:requesterObject:
+				shortcut: GtSourceCoderBrowseBehaviorShortcut new
+				requesterObject: aCoderViewModel)
+				ifNotNil: [ :anAction | anAction priority: 13 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	<return: #GtCoderContextMenuAction or: nil>
 	| foundClass |
 
 
-	node isVariable ifFalse: [ ^ self ].
+	node isVariable ifFalse: [ ^ nil ].
 	self
 		variableNodeToBehavior: node
 		ifFound: [ :aClass | foundClass := aClass ]
-		ifNone: [ ^ self ].
+		ifNone: [ ^ nil ].
 
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: (self
 			createLabel: aShortcut name 
 			description: foundClass name)
@@ -128,62 +135,70 @@ GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns node: node selec
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 13>
-	
+	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
-			self 
-				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+			(self
+				addClassNodeLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
-				node: nodes first 
+				node: nodes first
 				selector: #browseReferencesAt:requesterObject:
-				shortcut: GtSourceCoderBrowseReferencesShortcut new 
-				requesterObject: aCoderViewModel ]
+				shortcut: GtSourceCoderBrowseReferencesShortcut new
+				requesterObject: aCoderViewModel)
+				ifNotNil: [ :anAction | anAction priority: 13 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 800>
-	self
+	<gtCoderContextMenuAddOns>
+	(self
 		addContextMenuItemFrom: GtSourceCoderDoItAndInspectShortcut new
-			group: BrMenuItemGroupConfiguration evaluation
-			withId: GtSourceCoderDoItAndGoActionId
-			to: coderAddOns;
+		group: BrMenuItemGroupConfiguration evaluation
+		withId: GtSourceCoderDoItAndGoActionId
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
+	(self
 		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
-			group: BrMenuItemGroupConfiguration evaluation
-			withId: nil
-			to: coderAddOns;
+		group: BrMenuItemGroupConfiguration evaluation
+		withId: nil
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
+	(self
 		addContextMenuItemFrom: GtSourceCoderPrintItShortcut new
-			group: BrMenuItemGroupConfiguration evaluation
-			withId: nil
-			to: coderAddOns;
+		group: BrMenuItemGroupConfiguration evaluation
+		withId: nil
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
+	(self
 		addContextMenuItemFrom: GtSourceCoderDebugShortcut new
-			group: BrMenuItemGroupConfiguration evaluation
-			withId: nil
-			to: coderAddOns
+		group: BrMenuItemGroupConfiguration evaluation
+		withId: nil
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 250>
-	self
+	<gtCoderContextMenuAddOns>
+	(self
 		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
 		group: BrMenuItemGroupConfiguration refactoring
 		withId: nil
-		to: coderAddOns
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 250 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 10>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			self
+			(self
 				addLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
 				node: node
 				selector: #browseImplementorsAt:requesterObject:
 				shortcut: GtSourceCoderBrowseImplementorsShortcut new
-				requesterObject: aCoderViewModel ]
+				requesterObject: aCoderViewModel)
+				ifNotNil: [ :anAction | anAction priority: 10 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -209,25 +224,26 @@ GtPharoSourceCoder >> addInstanceVariableFilterAddOnsAst: anAst to: coderAddOns 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 12>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
 			(aCoderViewModel behavior whichClassDefinesInstVar: node name value)
 				ifNotNil: [ :definer | 
-					coderAddOns
+					(coderAddOns
 						addContextMenuItem: (self
 								createLabel: 'Browse defined class'
 								description: definer name)
 						group: BrMenuItemGroupConfiguration navigation
 						hover: (self highlightNodeBlock: node)
 						leave: self removeHighlightBlock
-						action: [ :aTextualViewModel |
+						action: [ :aTextualViewModel | 
 							self
 								notifyToolSpawn: (GtClassCoderTool observedClass: definer)
 								withDestination: self spawnDestination
 								requesterObject: aCoderViewModel ]
-						id: nil ].
-			coderAddOns
+						id: nil) ifNotNil: [ :anAction | anAction priority: 12 ] ].
+			(coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Browse references'
 						description: node name value)
@@ -237,21 +253,24 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition requesterObject: aTextualViewModel ]
 				id: nil
 				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
-						combinationForPlatform gtDisplayString ]
+						combinationForPlatform gtDisplayString)
+				ifNotNil: [ :anAction | anAction priority: 12 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 15>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			self
+			(self
 				addLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
 				node: node
 				selector: #browseReferencesAt:requesterObject:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new
-				requesterObject: aCoderViewModel ]
+				requesterObject: aCoderViewModel)
+				ifNotNil: [ :anAction | anAction priority: 15 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -264,6 +283,7 @@ GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 205>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			| highlightNode |
@@ -272,7 +292,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 			highlightNode := node isMessageSend
 					ifTrue: [ node message ]
 					ifFalse: [ node ].
-			coderAddOns
+			(coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Rename message'
 						description: node selector)
@@ -285,7 +305,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 						in: aTextualViewModel
 						for: element ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-						gtDisplayString ]
+						gtDisplayString) ifNotNil: [ :anAction | anAction priority: 205 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
