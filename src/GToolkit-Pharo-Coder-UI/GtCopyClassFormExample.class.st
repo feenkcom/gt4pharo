@@ -23,5 +23,5 @@ GtCopyClassFormExample >> copyClassMethodEvents [
 	epEvent := epEntries first content.
 	self assert: epEvent class equals: EpClassAddition.
 	self assert: epEvent behaviorAffectedName equals: #GtCopyClassFormExampleCopiedClass.
-	self assert: epEntries size >= (Association selectors size + Association class selectors size + 2)
+	self assert: (epEntries select: [ :entry | entry content class = EpMethodAddition ]) size equals: (Association selectors size + Association class selectors size).
 ]
