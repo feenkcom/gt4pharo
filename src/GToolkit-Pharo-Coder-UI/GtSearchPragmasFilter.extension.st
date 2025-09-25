@@ -1,12 +1,6 @@
 Extension { #name : #GtSearchPragmasFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchPragmasFilter >> filterDescriptor2For: aMethodsCoder [
-	^ (super filterDescriptor2For: aMethodsCoder)
-		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self symbol ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchPragmasFilter class >> filterDescriptor2For: aMethodsCoder [
 	^ GtFilterShortListModel new
 		creator: [ :anItem |
@@ -18,6 +12,12 @@ GtSearchPragmasFilter class >> filterDescriptor2For: aMethodsCoder [
 		items: [ aMethodsCoder possiblePragmaNamesOrderedFuture map: [ :aPrefixTree | 
 			GtFilterModelAllItem methodsLabel withAll: aPrefixTree asArray ] ];
 		selectedItem: GtFilterModelAllItem methodsLabel
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchPragmasFilter >> filterDescriptor2For: aMethodsCoder [
+	^ (super filterDescriptor2For: aMethodsCoder)
+		ifNotNil: [ :aFilterModel | aFilterModel selectedItem: self symbol ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
