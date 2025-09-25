@@ -3,6 +3,7 @@ Extension { #name : #GtPharoSourceCoder }
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 5>
+	<gtCoderContextMenuAddOns>
 	(aCoderViewModel behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
@@ -66,17 +67,17 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 13>
-	
+	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
-			(self 
-				addClassNodeLinkMenuAddOnsTo: coderAddOns 
+			(self
+				addClassNodeLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
-				node: nodes first 
-				selector: #browseBehaviorAt:requesterObject: 
-				shortcut: GtSourceCoderBrowseBehaviorShortcut new 
+				node: nodes first
+				selector: #browseBehaviorAt:requesterObject:
+				shortcut: GtSourceCoderBrowseBehaviorShortcut new
 				requesterObject: aCoderViewModel)
-					ifNotNil: [ :anAction | anAction priority: 13 ] ]
+				ifNotNil: [ :anAction | anAction priority: 13 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -134,6 +135,7 @@ GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns node: node selec
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 13>
+	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
 			(self
@@ -149,6 +151,7 @@ GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns fro
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 800>
+	<gtCoderContextMenuAddOns>
 	(self
 		addContextMenuItemFrom: GtSourceCoderDoItShortcut new
 		group: BrMenuItemGroupConfiguration evaluation
@@ -174,6 +177,7 @@ GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns: 250>
+	<gtCoderContextMenuAddOns>
 	(self
 		addContextMenuItemFrom: GtSourceCoderFormatShortcut new
 		group: BrMenuItemGroupConfiguration refactoring
@@ -184,6 +188,7 @@ GtPharoSourceCoder >> addFormatMethodAst: anAst to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 10>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(self
@@ -219,6 +224,7 @@ GtPharoSourceCoder >> addInstanceVariableFilterAddOnsAst: anAst to: coderAddOns 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 12>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
@@ -254,6 +260,7 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 15>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(self
@@ -276,6 +283,7 @@ GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 205>
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			| highlightNode |

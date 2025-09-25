@@ -160,6 +160,7 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 215>
+	<gtCoderContextMenuAddOns>
 	| theNodes |
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
@@ -170,8 +171,7 @@ GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns fr
 				leave: nil
 				action: [ :model :element | 
 					(GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model)
-						executeIn: element ])
-					ifNotNil: [ :anAction | anAction priority: 215 ] ]
+						executeIn: element ]) ifNotNil: [ :anAction | anAction priority: 215 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -274,33 +274,33 @@ GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coder
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 11>
-	
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			(self 
-				addLinkMenuAddOnsTo: coderAddOns 
+			(self
+				addLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
-				node: node 
-				selector: #browseHierarchyImplementorsAt:requesterObject: 
-				label: 'Browse hierarchy implementors' 
+				node: node
+				selector: #browseHierarchyImplementorsAt:requesterObject:
+				label: 'Browse hierarchy implementors'
 				requesterObject: aCoderViewModel)
-					ifNotNil: [ :anAction | anAction priority: 11 ] ]
+				ifNotNil: [ :anAction | anAction priority: 11 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 16>
-	
+	<gtCoderContextMenuAddOns>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
-			(self 
-				addLinkMenuAddOnsTo: coderAddOns 
+			(self
+				addLinkMenuAddOnsTo: coderAddOns
 				group: BrMenuItemGroupConfiguration navigation
-				node: node 
-				selector: #browseHierarchyReferencesAt:requesterObject: 
-				label: 'Browse hierarchy references' 
+				node: node
+				selector: #browseHierarchyReferencesAt:requesterObject:
+				label: 'Browse hierarchy references'
 				requesterObject: aCoderViewModel)
-					ifNotNil: [ :anAction | anAction priority: 16 ] ]
+				ifNotNil: [ :anAction | anAction priority: 16 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -669,6 +669,7 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 220>
+	<gtCoderContextMenuAddOns>
 	(self addExtractMethodTo: coderAddOns from: aCoderViewModel)
 		ifNotNil: [ :anAction | anAction priority: 220.01 ].
 
@@ -838,7 +839,7 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 200>
-
+	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
 			| aNode |
@@ -851,7 +852,7 @@ GtPharoMethodCoder >> addRenameMenuAddOnsAst: anAst to: coderAddOns from: aCoder
 			(self addRenameClassVariableRefactoringFor: aNode to: coderAddOns)
 				ifNotNil: [ :anAction | anAction priority: 200.3 ].
 			(self addRenameClassRefactoringFor: aNode to: coderAddOns)
-				ifNotNil: [ :anAction | anAction priority: 200.4 ]. ]
+				ifNotNil: [ :anAction | anAction priority: 200.4 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -874,6 +875,7 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 221>
+	<gtCoderContextMenuAddOns>
 	| node cursors splitBeforeMessage position |
 	cursors := aCoderViewModel cursors allCursors.
 	cursors size = 1 ifFalse: [ ^ self ].
@@ -904,7 +906,7 @@ GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns
 				node: splitBeforeMessage;
 				sourceCoderViewModel: cvm) executeIn: element ]
 		id: #'context-menu--split-cascade')
-			ifNotNil: [ :anAction | anAction priority: 221 ]
+		ifNotNil: [ :anAction | anAction priority: 221 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
