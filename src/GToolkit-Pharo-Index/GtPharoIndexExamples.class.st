@@ -16,6 +16,32 @@ GtPharoIndexExamples >> addClassVar [
 						with: 'classVariableNames: ''GtMessageSendIterator''') ]
 ]
 
+{ #category : #examples }
+GtPharoIndexExamples >> addInstVarRemovesUndeclaredReferences [
+	<gtExample>
+	[ ((Object << #FooBar)
+		slots: {};
+		package: self class package name) install.
+
+	#FooBar asClass
+		compile: 'accessAndWriteSlotA
+	^ slotA := slotA '
+		classified: 'accessing'.
+
+	#FooBar asClass addSlot: #slotA.
+	self
+		assert: ((GtPharoIndex current allSendersOf: #runtimeUndeclaredReadInContext:)
+				select: [ :each | each gtIsActive not ]) isEmpty.
+	self
+		assert: ((GtPharoIndex current allSendersOf: #runtimeUndeclaredWrite:inContext:)
+				select: [ :each | each gtIsActive not ]) isEmpty.
+
+	self
+		assert: ((GtPharoIndex current allImplementersOf: #accessAndWriteSlotA)
+				select: [ :each | each methodClass isObsolete ]) isEmpty ]
+		ensure: [ #FooBar asClass removeFromSystem ]
+]
+
 { #category : #private }
 GtPharoIndexExamples >> addPoolVar [
 	self
