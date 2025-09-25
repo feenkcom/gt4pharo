@@ -36,9 +36,13 @@ GtCopyClassForm >> copyClass [
 					category: (packageAndTag tagName trim
 							ifEmpty: [ packageAndTag packageName trim ]
 							ifNotEmpty: [ packageAndTag fullName ]) ].
-	copyMethods
-		ifTrue: [ class copyAllMethodsFrom: innerClass.
-			class class copyAllMethodsFrom: innerClass class ].
+	copyMethods ifTrue: 
+		[ self forPharo12AndNewer:
+				[ class copyAllMethodsFrom: innerClass.
+				class class copyAllMethodsFrom: innerClass class ]
+			forPharo11: 
+				[ class copyAllCategoriesFrom: innerClass.
+				class class copyAllCategoriesFrom: innerClass class ] ].
 	^ class
 ]
 

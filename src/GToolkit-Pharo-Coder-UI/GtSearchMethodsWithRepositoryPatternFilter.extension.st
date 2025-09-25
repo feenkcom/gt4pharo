@@ -1,15 +1,15 @@
 Extension { #name : #GtSearchMethodsWithRepositoryPatternFilter }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
-GtSearchMethodsWithRepositoryPatternFilter class >> filterDescriptor2For: aMethodsCoder [
-	^ self globalFilterDescriptor2
-		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder packageNames ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchMethodsWithRepositoryPatternFilter >> filterDescriptor2For: aMethodsCoder [
 	^ (super filterDescriptor2For: aMethodsCoder)
 		ifNotNil: [ :aFilterModel | aFilterModel text: self pattern ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
+GtSearchMethodsWithRepositoryPatternFilter class >> filterDescriptor2For: aMethodsCoder [
+	^ self globalFilterDescriptor2
+		completion: [ GtStringsCompletionStrategy new completions: [ aMethodsCoder packageNames ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
