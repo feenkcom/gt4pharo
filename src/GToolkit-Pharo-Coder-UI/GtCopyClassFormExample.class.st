@@ -8,6 +8,7 @@ Class {
 GtCopyClassFormExample >> copyClassMethodEvents [
 	"Ensure that Epicea events are created for methods when copying a class"
 	<gtExample>
+	<shouldLogWithEpicea>
 	| copyClassForm epEntries epEvent |
 
 	self assert: (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass) isNil
