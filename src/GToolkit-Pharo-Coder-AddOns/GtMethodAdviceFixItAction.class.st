@@ -30,6 +30,15 @@ GtMethodAdviceFixItAction class >> testOriginal: originalSource generates: modif
 ]
 
 { #category : #executing }
+GtMethodAdviceFixItAction >> basicExecuteOn: anEditorElement [
+	| newSource |
+	newSource := sourceCoder currentSourceString.
+	newSource = node topParent completeSource asString ifFalse: [ ^ self ].
+	newSource := self updateSource.
+	sourceCoder currentSourceString: newSource
+]
+
+{ #category : #executing }
 GtMethodAdviceFixItAction >> deleteStartOfLineWhitespace: aSmaCCString before: aNode [
 	| index char |
 	index := aNode startPosition - 1.
@@ -44,15 +53,6 @@ GtMethodAdviceFixItAction >> deleteStartOfLineWhitespace: aSmaCCString before: a
 				ifFalse: [ char = Character cr ifTrue: [ index := index - 1 ] ] ].
 	index + 1 = aNode startPosition ifTrue: [ ^ self ].
 	aSmaCCString deleteFrom: index + 1 to: aNode startPosition - 1
-]
-
-{ #category : #executing }
-GtMethodAdviceFixItAction >> executeOn: anEditorElement [
-	| newSource |
-	newSource := sourceCoder currentSourceString.
-	newSource = node topParent completeSource asString ifFalse: [ ^ self ].
-	newSource := self updateSource.
-	sourceCoder currentSourceString: newSource
 ]
 
 { #category : #'gt - extensions' }

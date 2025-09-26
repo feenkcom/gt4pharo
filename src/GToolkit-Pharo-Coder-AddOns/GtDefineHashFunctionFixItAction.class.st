@@ -20,6 +20,12 @@ GtDefineHashFunctionFixItAction >> allEqualsArguments [
 	^ exprs
 ]
 
+{ #category : #executing }
+GtDefineHashFunctionFixItAction >> basicExecuteOn: anEditorElement [
+	methodClass compile: self updateSource classified: 'comparing'.
+	anEditorElement styleText
+]
+
 { #category : #private }
 GtDefineHashFunctionFixItAction >> combineHashExpressions: hashExpressions [
 	| receiver |
@@ -41,12 +47,6 @@ GtDefineHashFunctionFixItAction >> description [
 { #category : #private }
 GtDefineHashFunctionFixItAction >> equalsMethod [
 	^ methodClass >> #=
-]
-
-{ #category : #'as yet unclassified' }
-GtDefineHashFunctionFixItAction >> executeOn: anEditorElement [
-	methodClass compile: self updateSource classified: 'comparing'.
-	anEditorElement styleText
 ]
 
 { #category : #accessing }
