@@ -8,7 +8,6 @@ Class {
 GtCopyClassFormExample >> copyClassMethodEvents [
 	"Ensure that Epicea events are created for methods when copying a class"
 	<gtExample>
-	<noTest>
 	| copyClassForm epEntries epEvent |
 
 	self assert: (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass) isNil
@@ -16,9 +15,12 @@ GtCopyClassFormExample >> copyClassMethodEvents [
 	copyClassForm := GtCopyClassForm for: Association.
 	copyClassForm newClassName: #GtCopyClassFormExampleCopiedClass.
 
-	epEntries := GtEpiceaEventFactoryExamples epEntriesFrom: 
-		[ copyClassForm copyClass.
-		(self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass) removeFromSystem ].
+	[epEntries := GtEpiceaEventFactoryExamples epEntriesFrom: 
+		[ copyClassForm copyClass ] ]
+		ensure:
+			[ EpMonitor current disableDuring: 
+				[ (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass) ifNotNil:
+					[ :cls | cls removeFromSystem ] ] ].
 	self assert: epEntries isNotEmpty
 		description: 'Failed to get entries'.
 	epEvent := epEntries first content.

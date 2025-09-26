@@ -1,8 +1,21 @@
 Class {
 	#name : #GtShiftClassBuilder12,
 	#superclass : #ShiftClassBuilder,
+	#instVars : [
+		'announcing'
+	],
 	#category : #'GToolkit-Pharo-Index'
 }
+
+{ #category : #accessing }
+GtShiftClassBuilder12 >> announcing [
+	^ announcing
+]
+
+{ #category : #accessing }
+GtShiftClassBuilder12 >> announcing: anObject [
+	announcing := anObject
+]
 
 { #category : #building }
 GtShiftClassBuilder12 >> build [
@@ -31,10 +44,26 @@ GtShiftClassBuilder12 >> build [
 
 	self installSlotsAndVariables.
 
-	"self environment codeChangeAnnouncer announce: 
-		(ClassAdded class: newClass)."
+	announcing ifTrue:
+		[ self environment codeChangeAnnouncer announce: 
+			(ClassAdded class: newClass) ].
 	self oldClass ifNotNil: [ self builderEnhancer compileMethodsFor: self ].
 
 	self builderEnhancer afterMethodsCompiled: self.
 	^ newClass
+]
+
+{ #category : #compiling }
+GtShiftClassBuilder12 >> compileMethods [
+
+	newClass
+		compileAllFrom: self oldClass announcing: announcing;
+		removeNonexistentSelectorsFromProtocols
+]
+
+{ #category : #initialization }
+GtShiftClassBuilder12 >> initialize [
+
+	super initialize.
+	announcing := false.
 ]

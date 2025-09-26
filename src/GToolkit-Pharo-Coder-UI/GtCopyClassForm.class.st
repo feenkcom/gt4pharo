@@ -27,9 +27,12 @@ GtCopyClassForm >> copyClass [
 	| class |
 	class := Smalltalk classInstaller
 			make: [ :builder | 
-				self
-					forPharo12AndNewer: [ builder fillFor: innerClass ]
-					forPharo11: [ builder gtFillFor: innerClass ].
+				self forPharo12AndNewer: 
+					[ builder 
+						announcing: true;
+						fillFor: innerClass ]
+				forPharo11:
+					[ builder gtFillFor: innerClass ].
 				builder
 					name: newClassName trim;
 					superclass: superClassName trim asClass;
