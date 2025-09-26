@@ -7,7 +7,6 @@ GtPharoMethodContextCoder >> actionsForPragmas: aSymbolsCollection [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodContextCoder >> addDebuggerContextMenuAddOnsAst: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 10>
 	<gtCoderContextMenuAddOns>
 	| theActions classes aPriority |
 	classes := {ResumeDebugAction.

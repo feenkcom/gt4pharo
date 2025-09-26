@@ -240,7 +240,6 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriori
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 210>
 	<gtCoderContextMenuAddOns>
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
