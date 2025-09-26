@@ -133,6 +133,33 @@ GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns node: node selec
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addClassPhlowMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns>
+	| nodes node foundClass |
+	nodes := self extractableNodesFrom: aCoderViewModel.
+	nodes ifEmpty: [ ^ self ].
+	node := nodes first.
+
+	node isVariable ifFalse: [ ^ nil ].
+	self
+		variableNodeToBehavior: node
+		ifFound: [ :aClass | foundClass := aClass ]
+		ifNone: [ ^ self ].
+
+	(coderAddOns
+		addContextMenu: (self
+				createLabel: ('{1} actions'
+						format: {foundClass isTrait ifTrue: [ 'Trait' ] ifFalse: [ 'Class' ]})
+				description: foundClass name)
+		icon: BrGlamorousVectorIcons empty
+		submenu: [ :theCoderViewModel :aTextualCoderEditorElement | 
+			GtCoderClassTarget 
+				menuItemsForObject: foundClass 
+				hostElement: aTextualCoderEditorElement ])
+		ifNotNil: [ :anAction | anAction priority: 50 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 13>
 	<gtCoderContextMenuAddOns>
