@@ -4,15 +4,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : #accessing }
-GtDefineClassVariableFixItAction >> description [
-	^ 'Add class variable ' , self nodeName , ' to class ', sourceCoder behavior name
+{ #category : #executing }
+GtDefineClassVariableFixItAction >> basicExecuteOn: anEditorElement [
+	sourceCoder addClassVariable: self nodeName.
+	anEditorElement requestFocus
 ]
 
 { #category : #accessing }
-GtDefineClassVariableFixItAction >> executeOn: anEditorElement [
-	sourceCoder addClassVariable: self nodeName.
-	anEditorElement requestFocus
+GtDefineClassVariableFixItAction >> description [
+	^ 'Add class variable ' , self nodeName , ' to class ', sourceCoder behavior name
 ]
 
 { #category : #accessing }

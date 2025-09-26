@@ -7,6 +7,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
+{ #category : #executing }
+GtInteractiveRenameVariableFixItAction >> basicExecuteOn: anEditorElement [
+	sourceCoder renameTemporaryIn: coderViewModel node: node
+]
+
 { #category : #accessing }
 GtInteractiveRenameVariableFixItAction >> coderViewModel [
 	^ coderViewModel
@@ -20,11 +25,6 @@ GtInteractiveRenameVariableFixItAction >> coderViewModel: anObject [
 { #category : #'api - action' }
 GtInteractiveRenameVariableFixItAction >> description [
 	^ 'Rename ' , self nodeName
-]
-
-{ #category : #executing }
-GtInteractiveRenameVariableFixItAction >> executeOn: anEditorElement [
-	sourceCoder renameTemporaryIn: coderViewModel node: node
 ]
 
 { #category : #'api - action' }

@@ -99,10 +99,11 @@ GtBehaviorUpdateForm >> classSlotsDescription [
 	^ super classSlotsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
+				contextMenuContentBlock: [ :aVariable :anElement :aMemento | 
 					aMemento overallStatus valueOrNil isChanged
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
-						ifFalse: [ self createClassSlotsContextMenuContentFor: aVariable editor: anElement ] ]);
+						ifFalse: [ self createClassSlotsContextMenuContentFor: aVariable editor: anElement ] ]
+				contextMenuBlock: nil);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
@@ -128,7 +129,8 @@ GtBehaviorUpdateForm >> classVarsDescription [
 	^ super classVarsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement :aMemento | self createClassVarsContextMenuContentFor: aVariable editor: anElement ]);
+				contextMenuContentBlock: [ :aVariable :anElement :aMemento | self createClassVarsContextMenuContentFor: aVariable editor: anElement ]
+				contextMenuBlock: nil);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect variable';
 					description: 'Inspect the variable indicated by the editor';
@@ -448,10 +450,11 @@ GtBehaviorUpdateForm >> slotsDescription [
 	^ super slotsDescription
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
-				andContextMenuBlock: [ :aVariable :anElement :aMemento | 
+				contextMenuContentBlock: [ :aVariable :anElement :aMemento | 
 					(aMemento overallStatus valueOrNil ifNotNil: #isChanged ifNil: [ true ])
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
-						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]);
+						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]
+				contextMenuBlock: nil);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';

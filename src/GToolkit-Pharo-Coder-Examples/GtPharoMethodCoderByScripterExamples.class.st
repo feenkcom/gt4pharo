@@ -1829,6 +1829,76 @@ GtPharoMethodCoderByScripterExamples >> compileUndeclaredLocalError [
 	^ aScripter
 ]
 
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> compilerErrorFixItContinuesSave [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | coder |
+				coder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	a := #(1 2).
+	b := a size.
+	^ a sum + b' ];
+				onModel ].
+
+	scripter shortcut
+		combination: BlKeyCombination primaryS;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	scripter shortcut
+		combination: BlKeyCombination enter;
+		onSpaceRoot;
+		// (GtDefineTemporaryVariableFixItActionElementId indexed: 1);
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	scripter shortcut
+		combination: BlKeyCombination enter;
+		onSpaceRoot;
+		// (GtDefineTemporaryVariableFixItActionElementId indexed: 1);
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	self
+		assert: (RBParser
+				parseMethod: (scripter model behavior sourceCodeAt: scripter model selector))
+		equals: (RBParser
+				parseMethod: scripter model selector , '|a b | a := #(1 2). b := a size. ^a sum + b').
+
+	^ scripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoMethodCoderByScripterExamples >> contextMenuCopy [
 	<gtExample>
@@ -2873,10 +2943,10 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 GtPharoMethodCoderByScripterExamples >> fixFromUndeclaredVariable [
 	<gtExample>
 	| scripter source |
-	source := 'foo 
+	source := 'foo12345
 	^arry'.
 
-	scripter := self
+	[ scripter := self
 			scripterForBlock: [ GtPharoMethodCoder forClass: OrderedCollection source: source ].
 
 	scripter shortcut
@@ -2910,7 +2980,8 @@ GtPharoMethodCoderByScripterExamples >> fixFromUndeclaredVariable [
 				hasFocus;
 				value: [ :each | each text asString ]
 					equals: (source copyReplaceAll: 'arry' with: 'array');
-				id: GtSourceCoderEditorId ].
+				id: GtSourceCoderEditorId ] ]
+		ensure: [ OrderedCollection removeSelector: #foo12345 ].
 
 	^ scripter
 ]

@@ -38,23 +38,26 @@ GtBehaviorCreationForm >> classSlotsDescription [
 		priority: 7;
 		accessor: #classSlots;
 		classes: {String};
-		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithExplicitTooltipAptitude text: 'Variables whose values are shared across all instances of a class and that class itself. Subclasses allocate their own memory for the class-side vars of the superclasses and don''t inherit their values.') ];
-		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle
+				+ (BrGlamorousWithExplicitTooltipAptitude
+						text: 'Variables whose values are shared across all instances of a class and that class itself. Subclasses allocate their own memory for the class-side vars of the superclasses and don''t inherit their values.') ];
+		blocListStencil: (self
+				taggerStencilWithCompletion: nil
+				contextMenuContentBlock: nil
+				contextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
 ]
 
 { #category : #accessing }
-GtBehaviorCreationForm >> createTraitsContextMenuContentFor: aTrait editor: anElement [
-	| theContextMenu items |
-	theContextMenu := GtFormContextMenuContent new editorElement: anElement.
-	items := OrderedCollection new.
-	items
-		addAll: {GtCoderContextMenuAction new
-					action: [ :form :elem | elem phlow spawnObject: (Smalltalk at: aTrait asSymbol) users ];
-					title: 'Browse users' asText}.
-	theContextMenu items: items.
-	^ theContextMenu
+GtBehaviorCreationForm >> createTraitsContextMenuFor: aTraitName editor: anEditorElement [
+	<return: #BrMenuItems or: nil>
+	| aTrait |
+	aTrait := Smalltalk at: aTraitName asSymbol ifAbsent: [ ^ nil ].
+
+	^ GtCoderClassTarget
+		menuItemsForObject: aTrait
+		hostElement: anEditorElement
 ]
 
 { #category : #accessing }
@@ -141,9 +144,14 @@ GtBehaviorCreationForm >> slotsDescription [
 		label: 'Instance-side slots';
 		priority: 6;
 		accessor: #slots;
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle +  (BrGlamorousWithExplicitTooltipAptitude text: 'Variables whose value is scoped to an instance of a class.')];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle
+				+ (BrGlamorousWithExplicitTooltipAptitude
+						text: 'Variables whose value is scoped to an instance of a class.') ];
 		classes: {String};
-		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil);
+		blocListStencil: (self
+				taggerStencilWithCompletion: nil
+				contextMenuContentBlock: nil
+				contextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
 			labelled: 'All slot names must be unique'
 ]
@@ -198,10 +206,11 @@ GtBehaviorCreationForm >> traitsDescription [
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtClassesCompletionStrategy new
-				andContextMenuBlock: [ :aTrait :anElement :aMemento | 
+				contextMenuContentBlock: nil
+				contextMenuBlock: [ :aTrait :anElement :aMemento | 
 					aMemento overallStatus valueOrNil isChanged
-						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
-						ifFalse: [ self createTraitsContextMenuContentFor: aTrait editor: anElement ] ]);
+						ifTrue: [ nil ]
+						ifFalse: [ self createTraitsContextMenuFor: aTrait editor: anElement ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Browse trait';
 					description: 'Browses the trait indicated by the editor';

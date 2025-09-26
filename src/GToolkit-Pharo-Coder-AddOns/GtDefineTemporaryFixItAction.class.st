@@ -19,19 +19,19 @@ GtDefineTemporaryFixItAction >> addDefinitionForTempAtOffset: anInteger in: ast 
 	sequenceNode addTemporaryNamed: varNode name
 ]
 
-{ #category : #accessing }
-GtDefineTemporaryFixItAction >> description [
-	^ 'Add temporary variable ' , self nodeName
-]
-
 { #category : #executing }
-GtDefineTemporaryFixItAction >> executeOn: anEditorElement [
+GtDefineTemporaryFixItAction >> basicExecuteOn: anEditorElement [
 	| ast variableNode |
 	ast := sourceCoder rbAST.
 	variableNode := node.
 	self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
 	sourceCoder currentSourceString: ast newSource.
 	anEditorElement requestFocus
+]
+
+{ #category : #accessing }
+GtDefineTemporaryFixItAction >> description [
+	^ 'Add temporary variable ' , self nodeName
 ]
 
 { #category : #accessing }

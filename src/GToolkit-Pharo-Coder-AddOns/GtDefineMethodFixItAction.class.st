@@ -52,6 +52,13 @@ GtDefineMethodFixItAction >> attributePosition [
 		ifFalse: [ node stopPosition ]
 ]
 
+{ #category : #executing }
+GtDefineMethodFixItAction >> basicExecuteOn: anEditorElement [
+	self compileMethod.
+	self clearFixItAttributeInEditor: anEditorElement editor.
+	self addCoderAttributeInEditor: anEditorElement editor.
+]
+
 { #category : #accessing }
 GtDefineMethodFixItAction >> classOrMetaClass: anObject [
 	classOrMetaClass := anObject
@@ -85,13 +92,6 @@ GtDefineMethodFixItAction >> createRefactoring [
 { #category : #accessing }
 GtDefineMethodFixItAction >> description [
 	^ 'Create method ' , self selector , ' in class ' , classOrMetaClass name
-]
-
-{ #category : #executing }
-GtDefineMethodFixItAction >> executeOn: anEditorElement [
-	self compileMethod.
-	self clearFixItAttributeInEditor: anEditorElement editor.
-	self addCoderAttributeInEditor: anEditorElement editor.
 ]
 
 { #category : #'gt - extensions' }

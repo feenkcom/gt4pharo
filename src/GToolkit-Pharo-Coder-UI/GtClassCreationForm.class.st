@@ -55,9 +55,14 @@ GtClassCreationForm >> classVarsDescription [
 		label: 'Class vars';
 		priority: 8;
 		accessor: #classVars;
-		labelAptitude: [ (BrGlamorousLabelAptitude new glamorousFormLabelStyle) + (BrGlamorousWithExplicitTooltipAptitude text: 'Variables whose values (memory) is shared across all instances of a class and its subclasses.') ];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle
+				+ (BrGlamorousWithExplicitTooltipAptitude
+						text: 'Variables whose values (memory) is shared across all instances of a class and its subclasses.') ];
 		classes: {String};
-		blocListStencil: (self taggerStencilWithCompletion: nil andContextMenuBlock: nil)
+		blocListStencil: (self
+				taggerStencilWithCompletion: nil
+				contextMenuContentBlock: nil
+				contextMenuBlock: nil)
 ]
 
 { #category : #accessing }
@@ -119,7 +124,19 @@ GtClassCreationForm >> poolsDescription [
 		classes: {String};
 		blocListStencil: (self
 				taggerStencilWithCompletion: GtPoolsCompletionStrategy new
-				andContextMenuBlock: nil)
+				contextMenuContentBlock: nil
+				contextMenuBlock: nil)
+]
+
+{ #category : #accessing }
+GtClassCreationForm >> superclassContextMenuFor: aClassName editor: anEditorElement [
+	<return: #BrMenuItems or: nil>
+	| aClass |
+	aClass := Smalltalk at: aClassName asSymbol ifAbsent: [ ^ nil ].
+
+	^ GtCoderClassTarget
+		menuItemsForObject: aClass
+		hostElement: anEditorElement
 ]
 
 { #category : #accessing }
@@ -130,7 +147,7 @@ GtClassCreationForm >> superclassDescription [
 		priority: 2;
 		accessor: #superclassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPharoIndex current classNameTree) ];
+				completions: GtPharoIndex current classNameTree ];
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Browse class';
 					description: 'Browses the class indicated by the editor';
@@ -142,9 +159,7 @@ GtClassCreationForm >> superclassDescription [
 					name: 'Inspect class';
 					description: 'Inspects the class indicated by the editor';
 					combination: BlKeyCombination primaryG;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnObject: anEvent target text asString asClass ].
+					action: [ :anEvent | anEvent target phlow spawnObject: anEvent target text asString asClass ].
 				BlShortcutWithAction new
 					name: 'Browse class references';
 					description: 'Browses references to the class indicated by the editor';
@@ -152,20 +167,25 @@ GtClassCreationForm >> superclassDescription [
 					action: [ :anEvent | 
 						anEvent target phlow
 							spawnObject: anEvent target text asString asClass gtReferences ]} ];
-		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize+ (BrGlamorousWithExplicitContextMenuAptitude
-								itemsWithAnchorActions: [ self contextMenuItemsForSuperclass ]) ];
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize
+				+ (BrGlamorousWithExplicitContextMenuAptitude new
+						stencil: [ :aBrMenuInitialContext | 
+							BrMenuExplicitHandle new
+								submenu: [ self
+										superclassContextMenuFor: aBrMenuInitialContext anchorElement text asString
+										editor: aBrMenuInitialContext anchorElement ] ]) ];
 		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
 		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
 			labelled: 'Unknown class';
 		addCondition: [ :aValue | 
-			| aClass |
-			aClass := Smalltalk classNamed: aValue trim.
-			aClass isNil or: [ aClass isClass ] ]
+				| aClass |
+				aClass := Smalltalk classNamed: aValue trim.
+				aClass isNil or: [ aClass isClass ] ]
 			labelled: 'Must be a class';
 		addCondition: [ :aValue | 
-			| aClass |
-			aClass := Smalltalk classNamed: aValue trim.
-			aClass isNil or: [ aClass isInstanceSide ] ]
+				| aClass |
+				aClass := Smalltalk classNamed: aValue trim.
+				aClass isNil or: [ aClass isInstanceSide ] ]
 			labelled: 'Must be an instance-side class';
 		beRequired
 ]

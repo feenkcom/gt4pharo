@@ -123,12 +123,14 @@ GtMethodAdvice >> elementIdUsing: aCriticStyler [
 
 { #category : #styling }
 GtMethodAdvice >> errorAttribute: aNode coderModel: aCoderModel [
-	| fixItAttribute |
+	| fixItAttribute actions |
+	actions := self fixItActionsForNode: aNode coderModel: aCoderModel.
+	actions do: [ :each | each autoSave: true ].
 	fixItAttribute := GtFixItAttribute new
 			label: self name;
 			description: self descriptionBlock;
 			placeholderAlignment: #alignMiddle;
-			fixItActions: (self fixItActionsForNode: aNode coderModel: aCoderModel);
+			fixItActions: actions;
 			yourself.
 	^ (GtSourceCoderErrorFixItAttribute for: 'Undeclared variable')
 		fixItAttribute: fixItAttribute

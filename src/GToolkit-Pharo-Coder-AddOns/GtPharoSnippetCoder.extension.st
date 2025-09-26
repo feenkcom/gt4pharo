@@ -57,6 +57,7 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<return: #GtCoderContextMenuAction or: nil>
 	"<gtCoderContextMenuAddOns: 220>"
 
 	(self extractableNodesFrom: aCoderViewModel)
@@ -72,7 +73,9 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 				action: [ :aTextualViewModel :element | 
 					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
 						executeIn: element ]
-				id: #'snippet-extract-test' ]
+				id: #'snippet-extract-test' ].
+				
+	^ nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
