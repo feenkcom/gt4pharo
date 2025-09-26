@@ -1111,16 +1111,7 @@ GtPharoMethodCoder >> executableMessageAddOnFor: anAST into: coderAddOns viewMod
 		ifNotExecutable: [ ^ self ].
 
 	coderAddOns
-		addContextAction: 'Play' translated
-		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor playAll
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		id: GtPharoMethodPlayAllActionId.
-	coderAddOns
-		addContextAction: 'Play and Inspect' translated
+		addContextAction: 'Inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
 		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor playAllAndInspect
@@ -1128,6 +1119,15 @@ GtPharoMethodCoder >> executableMessageAddOnFor: anAST into: coderAddOns viewMod
 				element: anElement;
 				execute ]
 		id: GtPharoMethodPlayAndInspectActionId.
+	coderAddOns
+		addContextAction: 'Evaluate' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor playAll
+				coderViewModel: aCoderUIModel;
+				element: anElement;
+				execute ]
+		id: GtPharoMethodPlayAllActionId.
 	coderAddOns
 		addContextAction: 'Debug' translated
 		icon: BrGlamorousVectorIcons debug
