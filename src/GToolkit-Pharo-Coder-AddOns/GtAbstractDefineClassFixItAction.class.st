@@ -42,15 +42,19 @@ GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEdit
 		to: self attributePosition
 ]
 
+{ #category : #executing }
+GtAbstractDefineClassFixItAction >> basicExecuteOn: anEditorElement [
+	self clearFixItAttributeInEditor: anEditorElement editor.
+	self addCreateClassAttributeInEditor: anEditorElement editor.
+]
+
 { #category : #accessing }
 GtAbstractDefineClassFixItAction >> description [
 	^self subclassResponsibility
 ]
 
-{ #category : #accessing }
-GtAbstractDefineClassFixItAction >> executeOn: anEditorElement [
-	self clearFixItAttributeInEditor: anEditorElement editor.
-	self addCreateClassAttributeInEditor: anEditorElement editor.
+{ #category : #executing }
+GtAbstractDefineClassFixItAction >> finishExecuteOn: anEditorElement [
 ]
 
 { #category : #private }

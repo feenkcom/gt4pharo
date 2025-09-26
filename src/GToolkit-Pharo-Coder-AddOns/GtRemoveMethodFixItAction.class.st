@@ -7,6 +7,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
+{ #category : #executing }
+GtRemoveMethodFixItAction >> basicExecuteOn: anEditorElement [
+	behavior removeSelector: node selector
+]
+
 { #category : #accessing }
 GtRemoveMethodFixItAction >> behavior: aBehavior [
 	behavior := aBehavior
@@ -15,11 +20,6 @@ GtRemoveMethodFixItAction >> behavior: aBehavior [
 { #category : #'api - action' }
 GtRemoveMethodFixItAction >> description [
 	^ 'Remove ' , node selector
-]
-
-{ #category : #executing }
-GtRemoveMethodFixItAction >> executeOn: anEditorElement [
-	behavior removeSelector: node selector
 ]
 
 { #category : #'api - action' }

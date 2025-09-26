@@ -4,15 +4,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : #accessing }
-GtDefineInstanceVariableFixItAction >> description [
-	^ 'Add slot ' , self nodeName , ' in ', sourceCoder behavior name
+{ #category : #executing }
+GtDefineInstanceVariableFixItAction >> basicExecuteOn: anEditorElement [
+	sourceCoder addInstanceVariable: self nodeName.
+	anEditorElement requestFocus
 ]
 
 { #category : #accessing }
-GtDefineInstanceVariableFixItAction >> executeOn: anEditorElement [
-	sourceCoder addInstanceVariable: self nodeName.
-	anEditorElement requestFocus
+GtDefineInstanceVariableFixItAction >> description [
+	^ 'Add slot ' , self nodeName , ' in ', sourceCoder behavior name
 ]
 
 { #category : #accessing }
