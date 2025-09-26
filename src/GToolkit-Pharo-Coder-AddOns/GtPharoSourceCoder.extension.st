@@ -77,7 +77,7 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 				selector: #browseBehaviorAt:requesterObject:
 				shortcut: GtSourceCoderBrowseBehaviorShortcut new
 				requesterObject: aCoderViewModel)
-				ifNotNil: [ :anAction | anAction priority: 13 ] ]
+				ifNotNil: [ :anAction | anAction priority: 13.01 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -109,16 +109,16 @@ GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+	<return: #GtCoderContextMenuAction or: nil>
 	| foundClass |
 
-
-	node isVariable ifFalse: [ ^ self ].
+	node isVariable ifFalse: [ ^ nil ].
 	self
 		variableNodeToBehavior: node
 		ifFound: [ :aClass | foundClass := aClass ]
 		ifNone: [ ^ self ].
 
-	coderAddOns
+	^ coderAddOns
 		addContextMenuItem: (self
 			createLabel: aShortcut name 
 			description: foundClass name)
@@ -145,7 +145,7 @@ GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns fro
 				selector: #browseReferencesAt:requesterObject:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new
 				requesterObject: aCoderViewModel)
-				ifNotNil: [ :anAction | anAction priority: 13 ] ]
+				ifNotNil: [ :anAction | anAction priority: 13.02 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -204,10 +204,11 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addInstanceVariableFilterAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	"<gtCoderContextMenuAddOns: 11>"
+	<return: #GtCoderContextMenuAction or: nil>
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
-			coderAddOns
+			^ coderAddOns
 				addContextMenuItem: (self
 						createLabel: 'Filter methods by references to'
 						description: node name value)
@@ -218,7 +219,9 @@ GtPharoSourceCoder >> addInstanceVariableFilterAddOnsAst: anAst to: coderAddOns 
 						announce: (GtClassCoderSlotNavigationAnnouncement new
 								source: self;
 								slot: node name value) ]
-				id: nil ]
+				id: nil ].
+				
+	^ nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
