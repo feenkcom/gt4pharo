@@ -2943,10 +2943,10 @@ GtPharoMethodCoderByScripterExamples >> finalCompleterSourceCode [
 GtPharoMethodCoderByScripterExamples >> fixFromUndeclaredVariable [
 	<gtExample>
 	| scripter source |
-	source := 'foo 
+	source := 'foo12345
 	^arry'.
 
-	scripter := self
+	[ scripter := self
 			scripterForBlock: [ GtPharoMethodCoder forClass: OrderedCollection source: source ].
 
 	scripter shortcut
@@ -2980,7 +2980,8 @@ GtPharoMethodCoderByScripterExamples >> fixFromUndeclaredVariable [
 				hasFocus;
 				value: [ :each | each text asString ]
 					equals: (source copyReplaceAll: 'arry' with: 'array');
-				id: GtSourceCoderEditorId ].
+				id: GtSourceCoderEditorId ] ]
+		ensure: [ OrderedCollection removeSelector: #foo12345 ].
 
 	^ scripter
 ]

@@ -222,6 +222,15 @@ GtMethodAdviceExampleRunner >> equalsNotUsedExample [
 		to: [ :ast :block | block value: ast body statements last message ]
 ]
 
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> extraPeriodsExample [
+	<gtExample>
+	^ self
+		compareResultsFrom: GtUnnecessaryPeriodAdvice new
+		source: 'a ^[.#()]'
+		to: [ :ast :block | block value: ast body statements last value body ]
+]
+
 { #category : #accessing }
 GtMethodAdviceExampleRunner >> foundIssue: aCritic in: aNode [
 	nodes add: aNode
