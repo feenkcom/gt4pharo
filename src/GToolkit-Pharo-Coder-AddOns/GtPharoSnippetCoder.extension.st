@@ -308,15 +308,6 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 	addOns addStyler: (GtMethodAdviceStyler new isForWorkspace: true).
 
 	addOns
-		addMainAction: 'Evaluate' translated
-		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anElement | 
-			GtCoderCodeExecutor doIt
-				coderViewModel: aCoderUIModel;
-				element: anElement;
-				execute ]
-		id: GtSourceCoderDoItActionId.
-	addOns
 		addMainAction: 'Inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
 		action: [ :aCoderUIModel :anElement | 
@@ -325,6 +316,15 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 				element: anElement;
 				execute ]
 		id: GtSourceCoderDoItAndGoActionId.
+	addOns
+		addMainAction: 'Evaluate' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anElement | 
+			GtCoderCodeExecutor doIt
+				coderViewModel: aCoderUIModel;
+				element: anElement;
+				execute ]
+		id: GtSourceCoderDoItActionId.
 	addOns
 		addMainAction: 'Debug' translated
 		icon: BrGlamorousVectorIcons debug
