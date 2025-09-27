@@ -108,7 +108,7 @@ GtPharoBehaviorCoder >> gtLiveFor: aView [
 
 { #category : #accessing }
 GtPharoBehaviorCoder >> icon [
-	^ BrGlamorousIcons classicon
+	^ BrGlamorousVectorIcons classicon
 ]
 
 { #category : #initialize }

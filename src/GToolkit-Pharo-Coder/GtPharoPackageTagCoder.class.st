@@ -69,7 +69,7 @@ GtPharoPackageTagCoder >> gtLiveFor: aView [
 
 { #category : #accessing }
 GtPharoPackageTagCoder >> icon [
-	^ BrGlamorousIcons packageicon asElement
+	^ BrGlamorousVectorIcons packageicon asElement
 ]
 
 { #category : #testing }
