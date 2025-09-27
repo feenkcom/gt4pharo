@@ -57,31 +57,41 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFrom: aGtCoderClassesTreeElemen
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 Class >> gtCoderSidebarIndexCopyClassOrTraitFor: anAction [
 	<gtAction>
-	self superclass ifNil: [ ^ anAction noAction ].
-	
-	^ anAction dropdown 
+	(self isTrait not and: [ self superclass isNil ])
+		ifNil: [ ^ anAction noAction ].
+
+	^ anAction dropdown
 		priority: 8;
 		target: GtCoderClassTarget;
 		icon: BrGlamorousVectorIcons changes;
-		label: (self isTrait ifTrue: [ 'Copy trait' ] ifFalse: [ 'Copy class' ]);
+		label: ('Copy {1}' format: {self gtCoderTypeName});
 		menuItemPreview: self name;
 		menuItemGroup: BrMenuItemGroupConfiguration modification;
 		menuItemPinSubmenu;
 		content: [ :anActionElement :aHostElement :anExplicitMenu | 
-			 self isTrait
-				ifTrue: [ ((GtCopyTraitForm for: self)
-						onAccept: [ :newClass | 
-							BlTaskAction 
-								enqueueElement: aHostElement 
-								action:  [ aHostElement phlow spawnTool: (GtClassCoderTool forClass: newClass) ] ])
-						asElement padding: (BlInsets all: 5) ]
-				ifFalse: [ ((GtCopyClassForm for: self)
-						onAccept: [ :newClass | 
-							BlTaskAction 
-								enqueueElement: aHostElement 
-								action:  [ aHostElement phlow spawnTool: (GtClassCoderTool forClass: newClass) ] ])
-						asElement padding: (BlInsets all: 5) ] 
-	 ]
+			| aForm aFormElement |
+			aForm := self isTrait
+					ifTrue: [ GtCopyTraitForm for: self ]
+					ifFalse: [ GtCopyClassForm for: self ].
+			aForm
+				onAccept: [ :newClass | 
+					BlTaskAction
+						enqueueElement: aHostElement
+						action: [ aHostElement phlow spawnTool: (GtClassCoderTool forClass: newClass) ] ].
+			aFormElement := aForm asElement.
+			BrFrame new
+				fitContent;
+				addChild: aFormElement;
+				padding: (BlInsets all: 5);
+				background: aFormElement theme default contentBackground;
+				addAptitude: (BrLayoutResizerAptitude new
+					exactToMatchParent: aFormElement;
+					matchParentToMatchParent: aFormElement;
+					fitContentToFitContent: aFormElement;
+					fitContentLimitedToFitContentLimited: aFormElement);
+				addAptitude: (BrGlamorousPopoverPinnableAptitude new
+						withAllPinActions;
+						menuModel: anExplicitMenu) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
