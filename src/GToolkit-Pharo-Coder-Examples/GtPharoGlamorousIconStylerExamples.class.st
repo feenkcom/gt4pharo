@@ -13,7 +13,7 @@ Class {
 GtPharoGlamorousIconStylerExamples >> glamorousPixelIcon [
 	<gtExample>
 	| anIcon |
-	anIcon := BrGlamorousIcons refresh.
+	anIcon := BrGlamorousVectorIcons refresh.
 	self assert: (anIcon isKindOf: Form).
 	^ anIcon
 ]
@@ -33,7 +33,7 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 	<gtExample>
 	| aCoder anAst aSourceText aRedInterval |
 	aCoder := GtPharoSnippetCoder forSource:
-		          (BrGlamorousIcons name , ' ' , #refresh) asRopedText.
+		          (BrGlamorousVectorIcons name , ' ' , #refresh) asRopedText.
 
 	anAst := aCoder astSync.
 	aSourceText := aCoder currentSourceText copy unstyled.

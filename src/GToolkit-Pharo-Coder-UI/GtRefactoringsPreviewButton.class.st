@@ -269,7 +269,7 @@ GtRefactoringsPreviewButton >> initialize [
 		aptitude: BrGlamorousButtonWithIconAptitude new
 				+ ((BrGlamorousWithExplicitDropdownAptitude
 						handle: [ BrButton new
-								icon: BrGlamorousIcons empty;
+								icon: BrGlamorousVectorIcons empty;
 								beTinySize;
 								aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
 						content: [ | element |

@@ -41,7 +41,7 @@ GtPharoGlamorousIconStyler >> visitMessageSend: aMessageSendNode [
 	super visitMessageSend: aMessageSendNode.
 	aMessageSendNode receiver isVariable ifFalse: [ ^ self ].
 	receiver := aMessageSendNode receiver variableName.
-	(receiver = BrGlamorousIcons name
+	(receiver = BrGlamorousVectorIcons name
 		or: [ receiver = BrGlamorousVectorIcons name ]) ifFalse: [ ^ self ].
 	aMessageSendNode message arguments size isZero ifFalse: [ ^ self ].
 	anIconLibrary := self class environment at: receiver ifAbsent: [ ^ self ].
