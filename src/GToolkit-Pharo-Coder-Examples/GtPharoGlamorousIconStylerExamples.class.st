@@ -13,7 +13,7 @@ Class {
 GtPharoGlamorousIconStylerExamples >> glamorousPixelIcon [
 	<gtExample>
 	| anIcon |
-	anIcon := BrGlamorousVectorIcons refresh.
+	anIcon := BrGlamorousIcons refresh.
 	self assert: (anIcon isKindOf: Form).
 	^ anIcon
 ]
@@ -49,7 +49,7 @@ GtPharoGlamorousIconStylerExamples >> pixelRefreshIcon [
 		indicesDo: [ :aStartPosition :anEndPosition | 
 			aRedInterval := aStartPosition to: anEndPosition ].
 
-	self assert: aRedInterval equals: (24 to: 24).
+	self assert: aRedInterval equals: (30 to: 30).
 
 	^ aSourceText
 ]
