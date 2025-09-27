@@ -100,6 +100,8 @@ Class >> gtCoderSidebarIndexCopyClassOrTraitFrom: aGtCoderClassesTreeElement [
 Class >> gtCoderSidebarIndexExtractSuperclassFor: anAction [
 	<gtAction>
 	
+	self isTrait ifTrue: [ ^ anAction noAction ].
+	
 	^ anAction dropdown 
 		priority: 7;
 		target: GtCoderClassTarget;
