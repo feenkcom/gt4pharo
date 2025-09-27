@@ -29,3 +29,9 @@ GtTraitCreationForm >> commit [
 GtTraitCreationForm >> defaultName [
 	^ 'TNameOfTrait'
 ]
+
+{ #category : #'api - initialization' }
+GtTraitCreationForm >> fillFormWithClass: aClass [
+	super fillFormWithClass: aClass.
+	aClass isTrait ifTrue: [ self traits: {aClass name} ]
+]
