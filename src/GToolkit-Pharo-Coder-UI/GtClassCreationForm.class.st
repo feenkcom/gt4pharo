@@ -91,6 +91,13 @@ GtClassCreationForm >> defineClass [
 		gtExecuteWithUndo
 ]
 
+{ #category : #'api - initialization' }
+GtClassCreationForm >> fillFormWithClass: aClass [
+	super fillFormWithClass: aClass.
+	aClass isClass ifTrue: [ self superclassName: aClass name ].
+	aClass isTrait ifTrue: [ self traits: {aClass name} ]
+]
+
 { #category : #accessing }
 GtClassCreationForm >> initialize [
 	super initialize.

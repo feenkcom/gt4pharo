@@ -72,7 +72,7 @@ GtPharoPackageCoder >> forPackage: aRPackage [
 
 { #category : #accessing }
 GtPharoPackageCoder >> icon [
-	^ BrGlamorousIcons packageicon asElement
+	^ BrGlamorousVectorIcons packageicon asElement
 ]
 
 { #category : #initialization }

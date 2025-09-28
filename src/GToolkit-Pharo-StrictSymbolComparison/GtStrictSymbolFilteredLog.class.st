@@ -59,7 +59,7 @@ GtStrictSymbolFilteredLog >> gtResetActionFor: anAction [
 	signalLogger class = CircularMemoryLogger ifFalse:
 		[ ^ anAction noAction ].
 	^ anAction button
-		icon: BrGlamorousIcons trash;
+		icon: BrGlamorousVectorIcons bin;
 		tooltip: 'Reset Logger';
 		priority: 3;
 		action: [ :aButton | signalLogger reset ]
@@ -72,7 +72,7 @@ GtStrictSymbolFilteredLog >> gtStartActionFor: anAction [
 	signalLogger class = CircularMemoryLogger ifFalse:
 		[ ^ anAction noAction ].
 	^ anAction button
-		icon: BrGlamorousIcons play;
+		icon: BrGlamorousVectorIcons play;
 		tooltip: 'Start Logger';
 		priority: 1;
 		action: [ :aButton | signalLogger start ]
@@ -85,7 +85,7 @@ GtStrictSymbolFilteredLog >> gtStopActionFor: anAction [
 	signalLogger class = CircularMemoryLogger ifFalse:
 		[ ^ anAction noAction ].
 	^ anAction button
-		icon: BrGlamorousIcons cancel;
+		icon: BrGlamorousVectorIcons cancel;
 		tooltip: 'Stop Logger';
 		priority: 2;
 		action: [ :aButton | signalLogger stop ]

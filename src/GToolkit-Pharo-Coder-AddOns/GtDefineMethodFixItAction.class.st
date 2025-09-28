@@ -121,7 +121,7 @@ GtDefineMethodFixItAction >> gtViewDiffFor: aView [
 				toLabelText: 'Change:';
 				change: change;
 				styler: GtCodeDiffRBTextStyler new ];
-		actionButtonIcon: BrGlamorousIcons inspect
+		actionButtonIcon: BrGlamorousVectorIcons inspect
 			label: 'Refactoring'
 			tooltip: 'Inspect the refactoring that is executed by this action'
 			action: [ :aButton | 

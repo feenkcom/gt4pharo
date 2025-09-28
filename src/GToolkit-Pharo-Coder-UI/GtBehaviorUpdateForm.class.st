@@ -292,6 +292,13 @@ GtBehaviorUpdateForm >> executeRefactoring: refactoring [
 			self inform: message ]
 ]
 
+{ #category : #'api - initialization' }
+GtBehaviorUpdateForm >> fillFormWithClass: aClass [
+	"Ignore for the update forms"
+
+	
+]
+
 { #category : #accessing }
 GtBehaviorUpdateForm >> generateAccessorsFor: varName asClassVar: aBoolean [
 	| aModel aClass |

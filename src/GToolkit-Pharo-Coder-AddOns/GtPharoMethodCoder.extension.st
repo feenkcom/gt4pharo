@@ -1039,12 +1039,6 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 
 	anExample := self example.
 
-	coderAddOns
-		addContextAction: 'Evaluate example' translated
-		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anEvent | self playExample ]
-		id: GtMethodCoderPlayExampleActionId.
-	
 	anExample hasAfterInDependencies
 		ifTrue: [
 			coderAddOns
@@ -1066,6 +1060,12 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 				action: [ :aCoderUIModel :button | 
 					self playAndInspectExampleWithRequesterObject: aCoderUIModel ]
 				id: GtMethodCoderPlayAndInspectExampleActionId ].
+	
+	coderAddOns
+		addContextAction: 'Evaluate example' translated
+		icon: BrGlamorousVectorIcons play
+		action: [ :aCoderUIModel :anEvent | self playExample ]
+		id: GtMethodCoderPlayExampleActionId.
 	
 	coderAddOns
 		addContextAction: 'Inspect example object' translated

@@ -949,24 +949,11 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingEscapeKey [
 	| aScripter |
 	aScripter := self displayClassSidebarContextMenu.
 
-	aScripter
-		assertStep: [ :s | 
-			s
-				onSpaceRoot;
-				onDropdown: true;
-				// BrMenuItemsListElement;
-				exists ].
-
-	aScripter shortcut
-		combination: BlKeyCombination escape;
+	aScripter menuStep
+		assertMenuContainerExist;
+		pressEscape;
+		assertClosedMenuContainer;
 		play.
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				onSpaceRoot;
-				// GtCoderNavigationContextMenuContent;
-				notExists ].
 
 	^ aScripter
 ]
@@ -977,24 +964,11 @@ GtPharoCoderByScripterExamples >> closeSidebarContextMenuPressingEscapeKey_first
 	| aScripter |
 	aScripter := self displayClassSidebarContextMenu_firstClickInsideOfMethodCoder.
 
-	aScripter
-		assertStep: [ :s | 
-			s
-				onSpaceRoot;
-				onDropdown: true;
-				// BrMenuItemsListElement;
-				exists ].
-
-	aScripter shortcut
-		combination: BlKeyCombination escape;
+	aScripter menuStep
+		assertMenuContainerExist;
+		pressEscape;
+		assertClosedMenuContainer;
 		play.
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				onSpaceRoot;
-				onDropdown: true;
-				notExists ].
 
 	^ aScripter
 ]
