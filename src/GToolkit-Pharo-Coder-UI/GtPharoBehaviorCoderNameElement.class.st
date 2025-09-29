@@ -129,13 +129,9 @@ GtPharoBehaviorCoderNameElement >> buildEditableNameLabel [
 			margin: (BlInsets all: 0);
 			id: GtBehaviorCoderBehaviorNameId.
 
-	GtCoderClassesTreeElement isUsePhlowAction
-		ifFalse: [ anEditor
-				addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
-						itemsWithAnchorActions: [ self contextMenuItemsForClass ]) ]
-		ifTrue: [ anEditor
-				addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
-						menu: [ self contextMenuItemsFromClassPhlowActionsHostElement: anEditor ]) ].
+	anEditor
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+				menu: [ self contextMenuItemsFromClassPhlowActionsHostElement: anEditor ]).
 
 	^ anEditor
 ]
@@ -178,12 +174,6 @@ GtPharoBehaviorCoderNameElement >> coderViewModel: aGtBehaviorDefinitionCoderVie
 	self subscribeToCoderViewModel.
 	
 	self addChild: self buildContent
-]
-
-{ #category : #'building - ui' }
-GtPharoBehaviorCoderNameElement >> contextMenuItemsForClass [
-	^ {'Browse references' -> [ :e | self browseClassReferences ].
-		'Rename' -> [ :e | e switchToEditor ]}
 ]
 
 { #category : #'building - ui' }
