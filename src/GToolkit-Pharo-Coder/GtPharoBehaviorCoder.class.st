@@ -112,23 +112,6 @@ GtPharoBehaviorCoder >> icon [
 ]
 
 { #category : #initialize }
-GtPharoBehaviorCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
-
-	super
-		initializeAddOns: addOns
-		viewModel: aGtPharoMethodCoderViewModel.
-
-	(addOns
-		addDropDownWithPreviewAction: 'Remove' translated
-		icon: BrGlamorousVectorIcons bin
-		action: [ :aButtonElement :aButtonModel :anEvent | 
-			self removeClass ]
-		stencil: [ :element | 
-			self createRemoveClassPreviewElementWithSource: element ]) 
-				id: GtBehaviorCoderBehaviorDeleteButtonId
-]
-
-{ #category : #initialize }
 GtPharoBehaviorCoder >> initializeClass: aClass [
 	self
 		assert: [ class isNil ]

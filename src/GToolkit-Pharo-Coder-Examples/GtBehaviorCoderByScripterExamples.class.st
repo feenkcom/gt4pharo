@@ -164,9 +164,15 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_deleteClass_01_clickBu
 	| aScripter |
 	aScripter := self classCoderForClassUI.
 
-	aScripter click
+	aScripter menuStep
+		openContextMenu;
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+
+	aScripter menuStep
 		label: 'Click remove class button';
-		id: GtBehaviorCoderBehaviorDeleteButtonId;
+		hoverMenuItemWithId: #'coder--context-menu-remove-class';
+		onPopover;
 		play.
 
 	^ aScripter
@@ -182,9 +188,8 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_deleteClass_02_clickBu
 		clickStep: [ :s | 
 			s
 				label: 'Click the confirmation button';
-				onSpaceRoot;
-				onDropdown: true;
-				// #'change-button-action' ].
+				onPopover;
+				// #'removeButton' ].
 
 	self
 		assert: (Smalltalk globals 
