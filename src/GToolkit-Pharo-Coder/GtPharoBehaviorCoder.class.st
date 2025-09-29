@@ -120,7 +120,7 @@ GtPharoBehaviorCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderV
 
 	(addOns
 		addDropDownWithPreviewAction: 'Remove' translated
-		icon: BrGlamorousVectorIcons remove
+		icon: BrGlamorousVectorIcons bin
 		action: [ :aButtonElement :aButtonModel :anEvent | 
 			self removeClass ]
 		stencil: [ :element | 
