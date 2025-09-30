@@ -1030,12 +1030,16 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnGitButton [
 	aScripter
 		substeps: 'Go to Git'
 		do: [ :aStep | 
-			aStep
-				clickStep: [ :s | 
-					s
-						// GtPharoBehaviorCoderElement;
-						// GtCoderToolbarElement;
-						// GtCoderGitButtonId ].
+			aStep menuStep
+				openDropdownWithId: GtCoderClassActionsDropdownButtonId;
+				assertMenuContainerExist;
+				play.
+
+			aStep menuStep
+				hoverMenuItemWithId: GtCoderGitButtonId;
+				clickMenuItemWithId: GtCoderGitButtonId;
+				onPopover;
+				play.
 
 			aStep
 				assertStep: [ :s | 
