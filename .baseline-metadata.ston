@@ -2,9 +2,9 @@
 	"repositories" : {
 		"github://feenkcom/gtoolkit-examples/src" : "v0.8.118",
 		"github://feenkcom/pharo-futures/src" : "v0.6.149",
-		"github://feenkcom/gtoolkit-coder/src" : "v0.8.2315",
-		"github://feenkcom/gt4magritte/src" : "v0.6.1470",
-		"github://feenkcom/gtoolkit-completer/src" : "v0.8.1747",
+		"github://feenkcom/gtoolkit-coder/src" : "v0.8.2316",
+		"github://feenkcom/gt4magritte/src" : "v0.6.1471",
+		"github://feenkcom/gtoolkit-completer/src" : "v0.8.1748",
 		"github://j-brant/SmaCC" : "v3.0.117"
 	}
 }
