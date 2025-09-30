@@ -1008,15 +1008,15 @@ GtPharoCoderByScripterExamples >> coderInPager_clickOnCopyClassButton [
 	| aScripter |
 	aScripter := self coderInPager.
 
-	aScripter
-		substeps: 'Click on Copy Class'
-		do: [ :aStep | 
-			aStep
-				clickStep: [ :s | 
-					s
-						// GtPharoBehaviorCoderElement;
-						// GtCoderToolbarElement;
-						// GtPharoCopyClassElementId ] ].
+	aScripter menuStep 
+		openContextMenu;
+		// GtBehaviorCoderBehaviorNameId;
+		play.
+		
+	aScripter menuStep
+		hoverMenuItemWithId: GtPharoCopyClassElementId;
+		onPopover;
+		play.
 
 	^ aScripter
 ]

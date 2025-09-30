@@ -45,6 +45,7 @@ Class >> gtCoderSidebarIndexCopyClassOrTraitFor: anAction [
 
 	^ anAction dropdown
 		priority: 8;
+		id: GtPharoCopyClassElementId;
 		target: GtCoderClassTarget;
 		icon: BrGlamorousVectorIcons changes;
 		label: ('Copy {1}' format: {self gtCoderTypeName});
