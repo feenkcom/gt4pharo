@@ -3766,19 +3766,26 @@ GtPharoCoderByScripterExamples >> pushDownSlotInIndex_apply [
 GtPharoCoderByScripterExamples >> pushUpInstanceAndClassMethodsInIndex [
 	<gtExample>
 	<after: #cleanUp>
-	| instanceMethods classMethods |
+	| instanceMethods classMethods rootClass |
 	environment := environment := GtPharoDummiesGenerator new
-		amountOfPackages: 1;
-		amountOfClasses: 2;
-		amountOfMethods: 4;
-		generateHierarchy.
-	instanceMethods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
+				amountOfPackages: 1;
+				amountOfClasses: 2;
+				amountOfMethods: 4;
+				generateHierarchy.
+	rootClass := environment anyDummyRootClass realClass.
+	instanceMethods := environment anyDummyLeafClass dummyMethods
+			collect: #realMethod.
 	instanceMethods sort: [ :a :b | a selector < b selector ].
 	instanceMethods := instanceMethods last: 2.
-	classMethods := environment anyDummyLeafClass dummyClassMethods collect: #realMethod.
+	classMethods := environment anyDummyLeafClass dummyClassMethods
+			collect: #realMethod.
 	classMethods sort: [ :a :b | a selector < b selector ].
 	classMethods := classMethods first: 2.
-	^ self pushUpInIndexMethods: instanceMethods, classMethods
+
+	self removeMethods: instanceMethods fromClass: rootClass.
+	self removeMethods: classMethods fromClass: rootClass.
+
+	^ self pullUpInIndexMethods: instanceMethods , classMethods
 ]
 
 { #category : #'examples - index' }
