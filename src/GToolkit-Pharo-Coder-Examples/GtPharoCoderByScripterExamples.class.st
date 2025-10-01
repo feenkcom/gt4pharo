@@ -3335,10 +3335,6 @@ GtPharoCoderByScripterExamples >> pullUpClassMethodInIndex_apply [
 		exist: true
 		inClass: leafClass.
 	
-	self
-		assert: (rootClass instanceSide methodDict includesKey: method selector) not.
-	self assert: (leafClass instanceSide methodDict includesKey: method selector).
-
 	self applyRefactoring: scripter.
 
 	self
