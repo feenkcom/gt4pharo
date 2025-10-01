@@ -9748,6 +9748,263 @@ GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
 ]
 
 { #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoOnInitialDisplay [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ self coderOnMethod: Object >> #printString ].
+	5
+		timesRepeat: [ scripter shortcut
+				id: GtSourceCoderEditorId;
+				combination: BlKeyCombination primaryZ;
+				play ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate undo did not change text';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ Object sourceCodeAt: #printString ] ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoAfterDiscarding [
+	<gtExample>
+	| scripter source newSource |
+	source := Object sourceCodeAt: #printString.
+	newSource := source , '"a"'.
+	scripter := self undoRedoAfterTyping.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate original string';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ newSource ] ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Cancel';
+				// GtMethodCoderDiscardChangesActionId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate canceled';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate edited';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ newSource ] ].
+
+
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryShiftZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate canceled';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoAfterFormatting [
+	<gtExample>
+	| scripter source formattedSource |
+	source := (Object sourceCodeAt: #printString) , '"a"'.
+	formattedSource := (RBParser parseMethod: source) formattedCode.
+	scripter := self undoRedoAfterTyping.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate original string';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryShiftF;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate formatted';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ formattedSource ] ].
+
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate original string';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+
+
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryShiftZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate formatted';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ formattedSource ] ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoAfterRebuildingCoder [
+	<gtExample>
+	| oldScripter scripter |
+	oldScripter := self undoRedoAfterTyping.
+	scripter := self scripter.
+	scripter
+		substep: 'Open element'
+		do: [ :s | 
+			s set
+				label: 'Initialize Coder UI';
+				element: [ :aCoder | oldScripter element coderViewModel asElement ];
+				play ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate undo';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ Object sourceCodeAt: #printString ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryShiftZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate redo';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ (Object sourceCodeAt: #printString) , '"a"' ] ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoAfterSaving [
+	<gtExample>
+	| scripter source |
+	source := Object sourceCodeAt: #printString.
+	[ scripter := self undoRedoAfterTyping.
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryS;
+		play.
+	self assert: ((Object sourceCodeAt: #printString) endsWith: '"a"').
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate original string';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryS;
+		play.
+	self assert: ((Object sourceCodeAt: #printString) endsWith: '"a"') not.
+
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryShiftZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate edited';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source , '"a"' ] ] ]
+		ensure: [ Object
+				compile: source
+				classified: (Object protocolNameOfSelector: #printString) ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoRedoAfterTyping [
+	<gtExample>
+	| scripter |
+	scripter := self undoOnInitialDisplay.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'focus editor';
+				id: GtSourceCoderEditorId ].
+	20
+		timesRepeat: [ scripter shortcut
+				combination: BlKeyCombination arrowDown;
+				id: GtSourceCoderEditorId;
+				play ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter comment';
+				text: '"a"' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate source changed';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ (Object sourceCodeAt: #printString) , '"a"' ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate undo restored source';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ Object sourceCodeAt: #printString ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryShiftZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate redo updated source';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ (Object sourceCodeAt: #printString) , '"a"' ] ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
 GtPharoMethodCoderByScripterExamples >> undoRedoRecompileMethod [
 	<gtExample>
 	<after: #cleanUp>
