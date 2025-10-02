@@ -200,6 +200,23 @@ GtMergeVariablesRefactoringExamples >> testMethodArgResult: b [
 	^ b
 ]
 
+{ #category : #'sample methods' }
+GtMergeVariablesRefactoringExamples >> testMethodCascade [
+	| a b |
+	a := 42.
+	b := a.
+	b printOn: WriteStream new; printString.
+	^ b
+]
+
+{ #category : #'sample methods' }
+GtMergeVariablesRefactoringExamples >> testMethodCascadeResult [
+	| a |
+	a := 42.
+	a printOn: WriteStream new; printString.
+	^ a
+]
+
 { #category : #examples }
 GtMergeVariablesRefactoringExamples >> testMethodExamples [
 	<gtExample>
@@ -213,6 +230,7 @@ GtMergeVariablesRefactoringExamples >> testMethodExamples [
 		#(testReassignedMethod 'a' 'b')
 		#(testAliasToBlockDefinedInInnerScope 'a' 'i')
 		#(testAssignmentInBlock 'a' 'b')
+		#(testMethodCascade 'b' 'a')
 	)
 		collect: [ :each | 
 			self

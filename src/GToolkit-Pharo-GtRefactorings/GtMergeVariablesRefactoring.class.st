@@ -53,9 +53,10 @@ GtMergeVariablesRefactoring >> ast [
 
 { #category : #transforming }
 GtMergeVariablesRefactoring >> basicTransform [
-	| source definer toDefiner var |
+	| source definer toDefiner var toReplace |
 	source := SmaCCString on: self ast source.
 	definer := self fromNode whoDefines: self fromNode name.
+	toReplace := Set new.
 	isArgVariable
 		ifTrue: [ toDefiner := self toNode whoDefines: self toNode name.
 			toDefiner isSequence
@@ -72,19 +73,19 @@ GtMergeVariablesRefactoring >> basicTransform [
 								ifFalse: [ (each parent isAssignment
 										and: [ each parent variable = self toNode or: [ each parent value = self toNode ] ])
 										ifTrue: [ each parent isUsed
-												ifTrue: [ source
-														replaceFrom: each parent start
-														to: each parent stop
-														with: self toNode name ]
+												ifTrue: [ toReplace add: each parent sourceInterval ]
 												ifFalse: [ source deleteFrom: each parent start to: each parent stop.
 													each parent parent periods
 														detect: [ :p | p > each start ]
 														ifFound: [ :p | source deleteFrom: p to: p ].
 													source deleteWhitespaceAfterIndex: each start ] ]
-										ifFalse: [ source
-												replaceFrom: each start
-												to: each stop
-												with: self toNode name ] ] ] ] ].
+										ifFalse: [ toReplace add: each sourceInterval ] ] ] ] ].
+	toReplace
+		do: [ :each | 
+			source
+				replaceFrom: each first
+				to: each last
+				with: self toNode name ].
 	class compile: source asString
 ]
 
