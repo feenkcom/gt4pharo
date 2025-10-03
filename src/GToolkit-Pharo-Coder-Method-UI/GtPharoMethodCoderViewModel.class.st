@@ -318,9 +318,17 @@ GtPharoMethodCoderViewModel >> printOn: aStream [
 
 { #category : #'api - coder model' }
 GtPharoMethodCoderViewModel >> protocol [
-	<return: #String>
+	"Ideally, it would return a protocol object
+	and #protocolName a protocol name string."
 
+	<return: #String>
 	^ self coderModel protocol
+]
+
+{ #category : #'api - coder model' }
+GtPharoMethodCoderViewModel >> protocolName [
+	<return: #String>
+	^ self coderModel protocolName
 ]
 
 { #category : #private }

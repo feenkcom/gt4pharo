@@ -293,13 +293,17 @@ GtPharoSourceCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSource
 
 { #category : #accessing }
 GtPharoSourceCoder >> protocol [
-	^ #accessing
+	"Ideally, it would return a protocol object
+	and #protocolName a protocol name string."
+
+	<return: #String or: nil>
+	^ self protocolName
 ]
 
 { #category : #accessing }
 GtPharoSourceCoder >> protocolName [
 	"Exists as in Pharo 12 CompiledMethod>>protocol returns a protocol Object"
-	^ self protocol
+	^ #accessing
 ]
 
 { #category : #'private - ast rb' }

@@ -72,8 +72,9 @@ GtExpandableMethodCoderElement >> newModificationIndicator [
 	indicator := super newModificationIndicator.
 	indicator
 		allowMouseEvents;
-		addAptitude: (BrGlamorousWithExplicitTooltipAptitude
-				content: [ self buildModifiedTooltip ]);
+		addAptitude: (BrGlamorousWithExplicitTooltipAptitude  new
+				content: [ self buildModifiedTooltip ];
+				withClickPositionRelocator);
 		when: BlClickEvent
 			do: [ :evt | 
 				self textualCoderViewModel coder compiledMethod

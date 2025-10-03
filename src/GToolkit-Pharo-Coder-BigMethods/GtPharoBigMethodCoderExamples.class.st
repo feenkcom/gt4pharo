@@ -26,10 +26,11 @@ GtPharoBigMethodCoderExamples >> checkActionsPresentForBigMethodCoder [
 				@ [ :each | each text asString = 'reduceTable' ] ];
 		assertStep: [ :s | 
 			s
-				label: 'Check for actions';
+				label: 'Check for main actions';
 				// GtExpandableSourceCoderElement;
 				@ [ :each | each isExpanded ];
 				// GtSourceCoderActionsElement;
+				// 'Main toolbar';
 				satisfies: [ :coder | coder childrenCount = 3 ] ].
 	^ scripter
 ]

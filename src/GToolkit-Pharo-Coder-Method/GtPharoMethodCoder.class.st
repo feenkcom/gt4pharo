@@ -1077,6 +1077,25 @@ GtPharoMethodCoder >> printOn: aStream [
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> protocol [
+	"Ideally, it would return a protocol object
+	and #protocolName a protocol name string."
+
+	<return: #String or: nil>
+	^ self protocolName
+]
+
+{ #category : #'api - accessing' }
+GtPharoMethodCoder >> protocol: aSymbol [
+	self attributeNamed: #category put: aSymbol.
+	self
+		announce: (GtCoderProtocolChanged new
+				newProtocol: aSymbol;
+				coder: self;
+				yourself)
+]
+
+{ #category : #'api - accessing' }
+GtPharoMethodCoder >> protocolName [
 	<return: #String or: nil>
 
 	^ self
@@ -1089,16 +1108,6 @@ GtPharoMethodCoder >> protocol [
 							self behavior protocolNameOfSelector: self selector] 
 						forPharo11: [
 							self behavior whichCategoryIncludesSelector: self selector ] ] ]
-]
-
-{ #category : #'api - accessing' }
-GtPharoMethodCoder >> protocol: aSymbol [
-	self attributeNamed: #category put: aSymbol.
-	self
-		announce: (GtCoderProtocolChanged new
-				newProtocol: aSymbol;
-				coder: self;
-				yourself)
 ]
 
 { #category : #'api - actions' }

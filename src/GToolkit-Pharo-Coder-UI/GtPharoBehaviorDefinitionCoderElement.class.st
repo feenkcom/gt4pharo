@@ -58,9 +58,13 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 		addChildren: {
 			self buildSectionLabel: superclass title.
 			superclass
-				aptitude: [
-					self readonlyLabelLook + (BrGlamorousWithExplicitContextMenuAptitude
-						itemsWithAnchorActions: [ self contextMenuItemsForSuperclass ])];
+				aptitude: [ self readonlyLabelLook
+							+ (BrGlamorousWithExplicitContextMenuAptitude new
+									stencil: [ :aBrMenuInitialContext | 
+										BrMenuExplicitHandle new
+											submenu: [ self
+													superclassContextMenuFor: aBrMenuInitialContext anchorElement text asString
+													editor: aBrMenuInitialContext anchorElement ] ]) ];
 				margin: self buttonMargin;
 				asElement
 		}.
@@ -105,12 +109,6 @@ GtPharoBehaviorDefinitionCoderElement >> coderViewModel: aGtBehaviorDefinitionCo
 		send: #updateDefinition
 		to: self.
 	self initializeElements
-]
-
-{ #category : #'private - instance creation' }
-GtPharoBehaviorDefinitionCoderElement >> contextMenuItemsForSuperclass [
-	^ {'Browse references'
-			-> [ :aBrEditor | aBrEditor phlow spawnObject: aBrEditor text asString asClass gtReferences ]}
 ]
 
 { #category : #'private - ui' }
@@ -188,6 +186,17 @@ GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 					aStyle
 						border: (BlBorder paint: self theme button hoveredBorderColor width: 1) ]);
 		yourself
+]
+
+{ #category : #'private - updating' }
+GtPharoBehaviorDefinitionCoderElement >> superclassContextMenuFor: aClassName editor: anEditorElement [
+	<return: #BrMenuItems or: nil>
+	| aClass |
+	aClass := Smalltalk at: aClassName asSymbol ifAbsent: [ ^ nil ].
+
+	^ GtCoderClassTarget
+		menuItemsForObject: aClass
+		hostElement: anEditorElement
 ]
 
 { #category : #accessing }
