@@ -153,13 +153,13 @@ GtRefactoringsExamples >> confirmationViewModel [
 	| aViewModel aConfirmationLabel aTargetName |
 	aViewModel := self basicConfirmationViewModel.
 	aViewModel optionAt: #dummyEnvironment put: self environment.
-	aConfirmationLabel := 'Pull up {1}' format: {self leafClassInstVarName}.
+	aConfirmationLabel := 'Push up {1}' format: {self leafClassInstVarName}.
 	aTargetName := '{1}''s {2} instance variable'
 			format: {self leafClass name.
 					self leafClassInstVarName}.
 
 	aViewModel
-		refactoringTitle: 'Pull up';
+		refactoringTitle: 'Push up';
 		targetName: aTargetName;
 		confirmationLabel: aConfirmationLabel;
 		refactoringWithConfirmation: [ RBPullUpInstanceVariableRefactoring

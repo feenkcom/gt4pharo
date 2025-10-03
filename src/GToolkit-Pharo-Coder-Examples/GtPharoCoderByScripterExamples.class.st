@@ -3306,287 +3306,6 @@ GtPharoCoderByScripterExamples >> protectForSlotInIndex_apply [
 ]
 
 { #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpClassMethodInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| method rootClass |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	method := environment anyDummyLeafClass anyDummyUnaryClassMethod realMethod.
-	rootClass := environment anyDummyRootClass realClass.
-	self removeMethods: {method} fromClass: rootClass.
-	^ self pullUpInIndexMethod: method
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpClassMethodInIndex_apply [
-	<gtExample>
-	| scripter method rootClass leafClass |
-	scripter := self pullUpClassMethodInIndex.
-	method := scripter userData at: #method.
-
-	rootClass := environment anyDummyRootClass realClass.
-	leafClass := environment anyDummyLeafClass realClass.
-	self
-		assertMethods: { method }
-		exist: false
-		inClass: rootClass.
-	self
-		assertMethods: { method }
-		exist: true
-		inClass: leafClass.
-	
-	self applyRefactoring: scripter.
-
-	self
-		assertMethods: { method }
-		exist: true
-		inClass: rootClass.
-	self
-		assertMethods: { method }
-		exist: false
-		inClass: leafClass.
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpClassMethodsInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| methods rootClass |
-	environment := GtPharoDummiesGenerator new
-			amountOfPackages: 1;
-			amountOfClasses: 2;
-			amountOfMethods: 4;
-			generateHierarchy.
-	methods := environment anyDummyLeafClass dummyClassMethods collect: #realMethod.
-	methods sort: [ :a :b | a selector < b selector ].
-	methods := methods first: 4.
-	rootClass := environment anyDummyRootClass realClass.
-	self removeMethods: methods fromClass: rootClass.
-
-	^ self pullUpInIndexMethods: methods
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpClassMethodsInIndex_apply [
-	<gtExample>
-	| scripter methods rootClass leafClass |
-	scripter := self pullUpClassMethodsInIndex.
-	methods := scripter userData at: #methods.
-
-	rootClass := environment anyDummyRootClass realClass.
-	leafClass := environment anyDummyLeafClass realClass.
-
-	self
-		assertMethods: methods
-		exist: false
-		inClass: rootClass.
-	self
-		assertMethods: methods
-		exist: true
-		inClass: leafClass.
-
-	self applyRefactoring: scripter.
-
-	self
-		assertMethods: methods
-		exist: true
-		inClass: rootClass.
-	self
-		assertMethods: methods
-		exist: false
-		inClass: leafClass.
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpInIndexMethod: method [
-	| selector scripter |
-	selector := method selector.
-	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
-	self setSpaceExtent: scripter.
-	self maximizePagerPane: scripter.
-	self openMethodMenuOn: selector in: scripter.
-	self
-		hoverMenu: 'Pull up method ' , selector
-		labelled: 'Hover pull up method'
-		in: scripter.
-	self confirmAndPreviewRefactoring: scripter.
-	scripter userData at: #method put: method.
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpInIndexMethods: methods [
-	| scripter |
-	scripter := self
-			coderInPager: [ GtCoderElement forClass: methods anyOne methodClass ].
-	self setSpaceExtent: scripter.
-	self maximizePagerPane: scripter.
-	self selectInIndexMethods: methods in: scripter.
-	self openMethodMenuOn: methods anyOne selector in: scripter.
-	self
-		hoverMenu: ('Pull up methods {1} methods' format: {methods size})
-		labelled: 'Hover pull up methods'
-		in: scripter.
-	self confirmAndPreviewRefactoring: scripter.
-	scripter userData at: #methods put: methods.
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpInstanceMethodInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| method rootClass |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
-	rootClass := environment anyDummyRootClass realClass.
-	self removeMethods: {method} fromClass: rootClass.
-	^ self pullUpInIndexMethod: method
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpInstanceMethodInIndex_apply [
-	<gtExample>
-	| scripter method rootClass leafClass |
-	scripter := self pullUpInstanceMethodInIndex.
-	method := scripter userData at: #method.
-
-	rootClass := environment anyDummyRootClass realClass.
-	leafClass := environment anyDummyLeafClass realClass.
-	self
-		assertMethods: { method }
-		exist: false
-		inClass: rootClass.
-	self
-		assertMethods: { method }
-		exist: true
-		inClass: leafClass.
-	
-	self
-		assert: (rootClass instanceSide methodDict includesKey: method selector) not.
-	self assert: (leafClass instanceSide methodDict includesKey: method selector).
-
-	self applyRefactoring: scripter.
-
-	self
-		assertMethods: { method }
-		exist: true
-		inClass: rootClass.
-	self
-		assertMethods: { method }
-		exist: false
-		inClass: leafClass.
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpInstanceMethodsInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| methods rootClass |
-	environment := GtPharoDummiesGenerator new
-			amountOfPackages: 1;
-			amountOfClasses: 2;
-			amountOfMethods: 4;
-			generateHierarchy.
-	methods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
-	methods := methods select: [ :each | each methodClass isInstanceSide ].
-	methods sort: [ :a :b | a selector < b selector ].
-	methods := methods first: 4.
-
-	rootClass := environment anyDummyRootClass realClass.
-	self removeMethods: methods fromClass: rootClass.
-
-	^ self pullUpInIndexMethods: methods
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpInstanceMethodsInIndex_apply [
-	<gtExample>
-	| scripter methods rootClass leafClass |
-	scripter := self pullUpInstanceMethodsInIndex.
-	methods := scripter userData at: #methods.
-
-	rootClass := environment anyDummyRootClass realClass.
-	leafClass := environment anyDummyLeafClass realClass.
-
-	self
-		assertMethods: methods
-		exist: false
-		inClass: rootClass.
-	self
-		assertMethods: methods
-		exist: true
-		inClass: leafClass.
-
-	self applyRefactoring: scripter.
-
-	self
-		assertMethods: methods
-		exist: true
-		inClass: rootClass.
-	self
-		assertMethods: methods
-		exist: false
-		inClass: leafClass.
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpSlotInIndex [
-	<gtExample>
-	<after: #cleanUp>
-	| scripter class |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	class := environment anyDummyLeafClass realClass.
-	scripter := self coderInPager: [ GtCoderElement forClass: class ].
-	self setSpaceExtent: scripter.
-	self maximizePagerPane: scripter.
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Switch to slots';
-				// #slots ].
-	scripter
-		secondaryClickStep: [ :s1 | 
-			s1
-				label: 'Open menu';
-				// GtCoderSlotsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = 'instVar3' ] ].
-
-	self
-		hoverMenu: 'Pull up instVar3'
-		labelled: 'Hover pull up'
-		in: scripter.
-
-	self confirmAndPreviewRefactoring: scripter.
-	^ scripter
-]
-
-{ #category : #'examples - index' }
-GtPharoCoderByScripterExamples >> pullUpSlotInIndex_apply [
-	<gtExample>
-	| scripter aClass |
-	scripter := self pullUpSlotInIndex.
-
-	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar3') not.
-
-	self applyRefactoring: scripter.
-
-	self assert: (aClass instVarNames includes: 'instVar3').
-
-	^ scripter
-]
-
-{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushDownClassMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -3759,6 +3478,137 @@ GtPharoCoderByScripterExamples >> pushDownSlotInIndex_apply [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpClassMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method rootClass |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyLeafClass anyDummyUnaryClassMethod realMethod.
+	rootClass := environment anyDummyRootClass realClass.
+	self removeMethods: {method} fromClass: rootClass.
+	^ self pushUpInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpClassMethodInIndex_apply [
+	<gtExample>
+	| scripter method rootClass leafClass |
+	scripter := self pushUpClassMethodInIndex.
+	method := scripter userData at: #method.
+
+	rootClass := environment anyDummyRootClass realClass.
+	leafClass := environment anyDummyLeafClass realClass.
+	self
+		assertMethods: { method }
+		exist: false
+		inClass: rootClass.
+	self
+		assertMethods: { method }
+		exist: true
+		inClass: leafClass.
+	
+	self applyRefactoring: scripter.
+
+	self
+		assertMethods: { method }
+		exist: true
+		inClass: rootClass.
+	self
+		assertMethods: { method }
+		exist: false
+		inClass: leafClass.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpClassMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| methods rootClass |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	methods := environment anyDummyLeafClass dummyClassMethods collect: #realMethod.
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods first: 4.
+	rootClass := environment anyDummyRootClass realClass.
+	self removeMethods: methods fromClass: rootClass.
+
+	^ self pushUpInIndexMethods: methods
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpClassMethodsInIndex_apply [
+	<gtExample>
+	| scripter methods rootClass leafClass |
+	scripter := self pushUpClassMethodsInIndex.
+	methods := scripter userData at: #methods.
+
+	rootClass := environment anyDummyRootClass realClass.
+	leafClass := environment anyDummyLeafClass realClass.
+
+	self
+		assertMethods: methods
+		exist: false
+		inClass: rootClass.
+	self
+		assertMethods: methods
+		exist: true
+		inClass: leafClass.
+
+	self applyRefactoring: scripter.
+
+	self
+		assertMethods: methods
+		exist: true
+		inClass: rootClass.
+	self
+		assertMethods: methods
+		exist: false
+		inClass: leafClass.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInIndexMethod: method [
+	| selector scripter |
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self openMethodMenuOn: selector in: scripter.
+	self
+		hoverMenu: 'Push up method ' , selector
+		labelled: 'Hover push up method'
+		in: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	scripter userData at: #method put: method.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInIndexMethods: methods [
+	| scripter |
+	scripter := self
+			coderInPager: [ GtCoderElement forClass: methods anyOne methodClass ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: methods in: scripter.
+	self openMethodMenuOn: methods anyOne selector in: scripter.
+	self
+		hoverMenu: ('Push up methods {1} methods' format: {methods size})
+		labelled: 'Hover push up methods'
+		in: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	scripter userData at: #methods put: methods.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushUpInstanceAndClassMethodsInIndex [
 	<gtExample>
 	<after: #cleanUp>
@@ -3781,7 +3631,157 @@ GtPharoCoderByScripterExamples >> pushUpInstanceAndClassMethodsInIndex [
 	self removeMethods: instanceMethods fromClass: rootClass.
 	self removeMethods: classMethods fromClass: rootClass.
 
-	^ self pullUpInIndexMethods: instanceMethods , classMethods
+	^ self pushUpInIndexMethods: instanceMethods , classMethods
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method rootClass |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+	rootClass := environment anyDummyRootClass realClass.
+	self removeMethods: {method} fromClass: rootClass.
+	^ self pushUpInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodInIndex_apply [
+	<gtExample>
+	| scripter method rootClass leafClass |
+	scripter := self pushUpInstanceMethodInIndex.
+	method := scripter userData at: #method.
+
+	rootClass := environment anyDummyRootClass realClass.
+	leafClass := environment anyDummyLeafClass realClass.
+	self
+		assertMethods: { method }
+		exist: false
+		inClass: rootClass.
+	self
+		assertMethods: { method }
+		exist: true
+		inClass: leafClass.
+	
+	self
+		assert: (rootClass instanceSide methodDict includesKey: method selector) not.
+	self assert: (leafClass instanceSide methodDict includesKey: method selector).
+
+	self applyRefactoring: scripter.
+
+	self
+		assertMethods: { method }
+		exist: true
+		inClass: rootClass.
+	self
+		assertMethods: { method }
+		exist: false
+		inClass: leafClass.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodsInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| methods rootClass |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	methods := environment anyDummyLeafClass dummyMethods collect: #realMethod.
+	methods := methods select: [ :each | each methodClass isInstanceSide ].
+	methods sort: [ :a :b | a selector < b selector ].
+	methods := methods first: 4.
+
+	rootClass := environment anyDummyRootClass realClass.
+	self removeMethods: methods fromClass: rootClass.
+
+	^ self pushUpInIndexMethods: methods
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodsInIndex_apply [
+	<gtExample>
+	| scripter methods rootClass leafClass |
+	scripter := self pushUpInstanceMethodsInIndex.
+	methods := scripter userData at: #methods.
+
+	rootClass := environment anyDummyRootClass realClass.
+	leafClass := environment anyDummyLeafClass realClass.
+
+	self
+		assertMethods: methods
+		exist: false
+		inClass: rootClass.
+	self
+		assertMethods: methods
+		exist: true
+		inClass: leafClass.
+
+	self applyRefactoring: scripter.
+
+	self
+		assertMethods: methods
+		exist: true
+		inClass: rootClass.
+	self
+		assertMethods: methods
+		exist: false
+		inClass: leafClass.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpSlotInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter class |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	class := environment anyDummyLeafClass realClass.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Switch to slots';
+				// #slots ].
+	scripter
+		secondaryClickStep: [ :s1 | 
+			s1
+				label: 'Open menu';
+				// GtCoderSlotsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = 'instVar3' ] ].
+
+	self
+		hoverMenu: 'Push up instVar3'
+		labelled: 'Hover push up'
+		in: scripter.
+
+	self confirmAndPreviewRefactoring: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpSlotInIndex_apply [
+	<gtExample>
+	| scripter aClass |
+	scripter := self pushUpSlotInIndex.
+
+	aClass := environment anyDummyRootClass realClass.
+	self assert: (aClass instVarNames includes: 'instVar3') not.
+
+	self applyRefactoring: scripter.
+
+	self assert: (aClass instVarNames includes: 'instVar3').
+
+	^ scripter
 ]
 
 { #category : #'examples - index' }
