@@ -11,6 +11,15 @@ GtPharoBigMethodCoderViewModel >> asEditorState [
 	^BrTextEditorCompositeMemento new
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoBigMethodCoderViewModel >> asExpandedOnlyElement [
+	"Create an element for just the expanded coder without expander"
+
+	^ GtPharoMethodCoderExpandedOnlyElement new
+		textualCoderViewModel: self asCoderViewModel;
+		yourself
+]
+
 { #category : #'api - coder model' }
 GtPharoBigMethodCoderViewModel >> behavior [
 	^ self coderModel behavior
@@ -86,7 +95,7 @@ GtPharoBigMethodCoderViewModel >> isMeta [
 
 { #category : #'api - text' }
 GtPharoBigMethodCoderViewModel >> isTextModifiedPromise [
-	^[ false ] asAsyncPromise
+	^ [ false ] asAsyncFuture await: self class commonExecutionConfiguration
 ]
 
 { #category : #'api - actions' }

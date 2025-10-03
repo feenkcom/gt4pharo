@@ -68,18 +68,7 @@ GtExpandableMethodCoderElement >> initialize [
 
 { #category : #'private - instance creation' }
 GtExpandableMethodCoderElement >> newModificationIndicator [
-	| indicator |
-	indicator := super newModificationIndicator.
-	indicator
-		allowMouseEvents;
-		addAptitude: (BrGlamorousWithExplicitTooltipAptitude  new
-				content: [ self buildModifiedTooltip ];
-				withClickPositionRelocator);
-		when: BlClickEvent
-			do: [ :evt | 
-				self textualCoderViewModel coder compiledMethod
-					ifNotNil: [ :method | self phlow spawnTool: (GtMethodCoderTool compiledMethod: method) ] ].
-	^ indicator
+	^ GtPharoMethodCoderModificationIndicator new withVerticalLeftIgnoredLayout
 ]
 
 { #category : #'private - instance creation' }

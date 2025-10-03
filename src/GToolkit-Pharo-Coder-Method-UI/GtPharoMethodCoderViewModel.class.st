@@ -52,6 +52,15 @@ GtPharoMethodCoderViewModel >> allowSaveDueTo: aSavePreventor [
 	self notifySaveEnabled
 ]
 
+{ #category : #converting }
+GtPharoMethodCoderViewModel >> asExpandedOnlyElement [
+	"Create an element for just the expanded coder without expander"
+
+	^ GtPharoMethodCoderExpandedOnlyElement new
+		textualCoderViewModel: self asCoderViewModel;
+		yourself
+]
+
 { #category : #private }
 GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 	"Return a list of behaviors in which the method can be compiled.
