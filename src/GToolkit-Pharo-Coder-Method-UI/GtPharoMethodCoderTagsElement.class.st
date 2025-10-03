@@ -68,26 +68,6 @@ GtPharoMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 		ifFalse: [ 'instance' ] 
 ]
 
-{ #category : #'private - event handling' }
-GtPharoMethodCoderTagsElement >> handleTraitMethodTagButtonClick: aButton [
-	| aTraitElement aClass aSelector aMethod |
-
-	aTraitElement := pharoMethodCoderViewModel coder traitSource.
-	aTraitElement
-		ifNil: [ ^ self ].
-
-	(aTraitElement isKindOf: TaCompositionElement)
-		ifFalse: [ ^ self ].
-	
-	aClass := aTraitElement innerClass.
-	aSelector := pharoMethodCoderViewModel coder selector.
-	aSelector
-		ifNil: [ aButton phlow spawnTool: (GtClassCoderTool forClass: aClass).
-			^ self ].
-	aMethod := aClass compiledMethodAt: aSelector ifAbsent: [ ^ self ].
-	aButton phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod)
-]
-
 { #category : #initialization }
 GtPharoMethodCoderTagsElement >> initialize [
 	super initialize.
@@ -221,7 +201,7 @@ GtPharoMethodCoderTagsElement >> onViewModelTextChanged: anAnnouncement [
 GtPharoMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 	<return: #String>
 
-	^ aMethodCoderUIModel coder protocol
+	^ aMethodCoderUIModel coder protocolName
 ]
 
 { #category : #'api - pharo method coder view model' }

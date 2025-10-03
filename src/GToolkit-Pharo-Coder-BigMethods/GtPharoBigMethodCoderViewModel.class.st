@@ -31,6 +31,11 @@ GtPharoBigMethodCoderViewModel >> completionStrategy [
 	^GtCompletionStrategy new
 ]
 
+{ #category : #'api - coder model' }
+GtPharoBigMethodCoderViewModel >> compositeStyler [
+	^ nil
+]
+
 { #category : #'private - addons' }
 GtPharoBigMethodCoderViewModel >> computeAddOnsFuture [
 	"Return a future that will be resolved to coder addons"
@@ -97,6 +102,11 @@ GtPharoBigMethodCoderViewModel >> methodOrigin [
 { #category : #accessing }
 GtPharoBigMethodCoderViewModel >> methodReference [
 	^ self coderModel methodReference
+]
+
+{ #category : #'api - coder model' }
+GtPharoBigMethodCoderViewModel >> protocolName [
+	^ self coderModel protocolName
 ]
 
 { #category : #'as yet unclassified' }
