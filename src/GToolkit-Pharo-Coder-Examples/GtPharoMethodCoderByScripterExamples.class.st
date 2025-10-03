@@ -6207,6 +6207,39 @@ GtPharoMethodCoderByScripterExamples >> forPushDownMethod_05_execute_push_down_m
 ]
 
 { #category : #'examples - push up method' }
+GtPharoMethodCoderByScripterExamples >> forPushUpMethodReferencesInstVars [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: OrderedCollection >> #find: ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click push up method';
+				onSpaceRoot;
+				id: #'context-menu--push-up-method' ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has warning message';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// BrEditor;
+				@ [ :each | '*Continuing will push up*' match: each text asString ] ].
+	^ scripter
+]
+
+{ #category : #'examples - push up method' }
 GtPharoMethodCoderByScripterExamples >> forPushUpMethod_01_setup [
 	<gtExample>
 	<after: #cleanUp>

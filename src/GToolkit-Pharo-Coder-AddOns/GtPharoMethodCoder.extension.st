@@ -616,8 +616,7 @@ GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns [
 		or: [ aNode isMethodPattern or: [ aNode parent isMethodPattern ] ])
 		ifFalse: [ ^ nil ].
 	self behavior superclass isNil ifTrue: [ ^ nil ].
-	variables := Set withAll: self behavior instVarNames.
-	variables addAll: self behavior classVarNames.
+	variables := Set withAll: self behavior classVarNames.
 	method := aNode topParent.
 	method
 		allNodesOfType: GtPharoVariableNode
