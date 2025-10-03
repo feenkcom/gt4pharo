@@ -112,8 +112,8 @@ GtInlineAllSelfSendsRefactoring >> basicTransform [
 							inline: each sourceInterval
 							inMethod: selector
 							forClass: class.
-					refactoring copyOptionsFrom: options.
-					[ refactoring primitiveExecute.
+					[ self performCompositeRefactoring: refactoring.
+					refactoring primitiveExecute.
 					self mergeVariables.
 					^ self basicTransform ] on: Error do: [ :ex | ex return ] ] ].
 	self gtCleanupChanges
