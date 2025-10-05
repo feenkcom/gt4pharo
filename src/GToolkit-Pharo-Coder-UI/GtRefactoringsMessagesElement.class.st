@@ -108,7 +108,7 @@ GtRefactoringsMessagesElement >> updateAsComputedRefactoringsWithNotificationMes
 	containerElement
 		removeChildren;
 		addChildren: newChildren;
-		background: BrGlamorousColors newsBackgroundColor;
+		background: BrGlamorousColors failureBackgroundColor;
 		visibility: BlVisibility visible
 ]
 
