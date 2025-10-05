@@ -30,8 +30,8 @@ GtRefactoringsPreviewWithConfirmationElement >> initialize [
 
 	self initializeTitleElement.
 	self initializeConfirmationElement.
-	self initializePreviewElement.
 	self initializeMessagesElement.
+	self initializePreviewElement.
 	self initializeToolbarElement.
 
 	previewElement
@@ -44,8 +44,8 @@ GtRefactoringsPreviewWithConfirmationElement >> initialize [
 
 	self addChild: titleElement as: #refactoringInput.
 	self addChild: confirmationElement as: #refactoringConfirmation.
-	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: messagesElement as: #refactoringMessages.
+	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: toolbarElement as: #refactoringToolbar.
 
 	self
