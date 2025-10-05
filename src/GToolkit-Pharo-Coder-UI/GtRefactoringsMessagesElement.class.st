@@ -20,7 +20,7 @@ GtRefactoringsMessagesElement >> initialize [
 	self addChild: containerElement as: #refactoringMessagesContainer.
 
 	containerElement
-		margin: (BlInsets top: 5);
+		margin: (BlInsets top: 5 bottom: 5);
 		addAptitude: (BrLayoutResizerAptitude new inherit: [ containerElement children ]).
 
 	self addAptitude: (BrLayoutResizerAptitude new hInherit: containerElement).
@@ -108,7 +108,7 @@ GtRefactoringsMessagesElement >> updateAsComputedRefactoringsWithNotificationMes
 	containerElement
 		removeChildren;
 		addChildren: newChildren;
-		background: BlBackground transparent;
+		background: BrGlamorousColors failureBackgroundColor;
 		visibility: BlVisibility visible
 ]
 

@@ -30,8 +30,8 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 
 	self initializeTitleElement.
 	self initializeInputElement.
-	self initializePreviewElement.
 	self initializeMessagesElement.
+	self initializePreviewElement.
 	self initializeToolbarElement.
 
 	previewElement
@@ -44,8 +44,8 @@ GtRefactoringsPreviewWithInputElement >> initialize [
 
 	self addChild: titleElement as: #refactoringTitle.
 	self addChild: inputElement as: #refactoringInput.
-	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: messagesElement as: #refactoringMessages.
+	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: toolbarElement as: #refactoringToolbar.
 
 	self
