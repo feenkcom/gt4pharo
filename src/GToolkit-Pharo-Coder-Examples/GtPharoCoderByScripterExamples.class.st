@@ -3310,8 +3310,8 @@ GtPharoCoderByScripterExamples >> pushDownClassMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
 	| method |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
-	method := environment anyDummyUnaryClassMethod realMethod.
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyRootClass anyDummyUnaryClassMethod realMethod.
 	^ self pushDownInIndexMethod: method
 ]
 
@@ -3406,9 +3406,33 @@ GtPharoCoderByScripterExamples >> pushDownInstanceMethodInIndex [
 	<gtExample>
 	<after: #cleanUp>
 	| method |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
-	method := environment anyDummyUnaryMethod realMethod.
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	method := environment anyDummyRootClass anyDummyUnaryMethod realMethod.
 	^ self pushDownInIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushDownInstanceMethodWithoutSubclassInIndexMenuItemDoesNotShow [
+	<gtExample>
+	<after: #cleanUp>
+	| method selector scripter |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	method := environment anyDummyRootClass anyDummyUnaryMethod realMethod.
+	selector := method selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self openMethodMenuOn: selector in: scripter.
+	scripter
+		checkStep: [ :step | 
+			step
+				label: 'Push down should not be shown';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list';
+				// #'menu--label';
+				@ [ :each | each text asString = ('Push down method ' , selector) ] ].
+	^ scripter
 ]
 
 { #category : #'examples - index' }
