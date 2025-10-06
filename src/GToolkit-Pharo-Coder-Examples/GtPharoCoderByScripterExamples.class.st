@@ -3707,6 +3707,39 @@ GtPharoCoderByScripterExamples >> pushUpInstanceMethodInIndex_apply [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> pushUpInstanceMethodWithVariableReferenceInIndex [
+	<gtExample>
+	<after: #cleanUp>
+	| method class selector scripter |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+	class := environment anyDummyLeafClass realClass.
+	selector := #someMethodName.
+	class
+		compile: selector , ' ^' , class instVarNames first
+		classified: #accessing.
+	method := class >> selector.
+	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self openMethodMenuOn: selector in: scripter.
+	self
+		hoverMenu: 'Push up method ' , selector
+		labelled: 'Hover push up method'
+		in: scripter.
+	self confirmAndPreviewRefactoring: scripter.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has warning message';
+				onSpaceRoot;
+				// BrMenuSteppedElement;
+				// BrEditor;
+				@ [ :each | '*Continuing will push up*' match: each text asString ] ].
+	scripter userData at: #method put: method.
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> pushUpInstanceMethodsInIndex [
 	<gtExample>
 	<after: #cleanUp>
