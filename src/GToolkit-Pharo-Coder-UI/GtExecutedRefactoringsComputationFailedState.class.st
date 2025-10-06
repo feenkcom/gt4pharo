@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'exception'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Rest'
 }
 
 { #category : #visiting }

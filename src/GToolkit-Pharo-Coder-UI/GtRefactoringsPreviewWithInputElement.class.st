@@ -10,7 +10,7 @@ Class {
 		'messagesElement',
 		'titleElement'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Core'
 }
 
 { #category : #initialization }

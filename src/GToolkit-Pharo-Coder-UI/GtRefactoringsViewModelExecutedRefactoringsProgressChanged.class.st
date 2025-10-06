@@ -5,7 +5,7 @@ Class {
 		'executedRefactorings',
 		'fraction'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Rest'
 }
 
 { #category : #accessing }

@@ -8,5 +8,5 @@ I am used:
 Class {
 	#name : #GtRefactoringsViewModelSubmitExecutedRefactoringsRequested,
 	#superclass : #GtRefactoringsViewModelAnnouncement,
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Rest'
 }
