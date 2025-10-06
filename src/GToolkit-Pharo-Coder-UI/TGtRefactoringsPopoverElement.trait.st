@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtRefactoringsPopoverElement,
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Rest'
 }
 
 { #category : #'api - initialization' }

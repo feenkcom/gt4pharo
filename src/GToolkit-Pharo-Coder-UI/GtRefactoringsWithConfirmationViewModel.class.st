@@ -5,7 +5,7 @@ Class {
 		'confirmationLabel',
 		'refactoringsWithConfirmationComputation'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Core'
 }
 
 { #category : #'api - refactorings' }
