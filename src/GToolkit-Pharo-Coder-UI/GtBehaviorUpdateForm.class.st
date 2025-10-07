@@ -38,15 +38,31 @@ GtBehaviorUpdateForm >> abstractVariable: varName [
 
 { #category : #accessing }
 GtBehaviorUpdateForm >> addRefactoringPreviewFor: aRefactoring in: anElement [
-	| button |
-	button := GtRefactoringsPreviewButton new
+	| refactoringsViewModel button |
+	refactoringsViewModel := GtRefactoringsViewModel new.
+	button := GtRefactoringsInDropdownPreviewElement new
 			id: GtBehaviorCoderBehaviorNameApplyPreviewId;
-			margin: (BlInsets right: 5);
-			refactorings: [ {aRefactoring} ];
-			cancelBlock: [  ];
-			when: GtRefactoringsAppliedEvent do: [ :anEvent | button removeFromParent ].
+			beSmallSize;
+			margin: (BlInsets top: 0 right: 5 bottom: 3 left: 0 );
+			constraintsDo: [ :c | 
+				c linear vertical alignCenter.
+				c flow vertical alignCenter ];
+			refactoringsViewModel: refactoringsViewModel;
+			previewContentDo: [ :aPreviewElement :aRefactoringsViewModel | 
+				aRefactoringsViewModel refactorings: [ {aRefactoring} ].
+				aPreviewElement hFitContentLimited ];
+			cancelBlock: [ :theButton :aRefactoringViewModel | 
+				theButton
+					hide;
+					removeFromParent ];
+			when: GtRefactoringsAppliedEvent
+				do: [ :anEvent | 
+					anEvent currentTarget
+						hide;
+						removeFromParent ].
+
 	anElement parent addChild: button after: anElement.
-	button enqueueTask: [ button openPreview ] asBlTask
+	button enqueueTask: [ button showPreview ] asBlTask
 ]
 
 { #category : #accessing }
