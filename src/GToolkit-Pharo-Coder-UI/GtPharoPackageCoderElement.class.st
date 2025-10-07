@@ -57,10 +57,6 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 
 	refactoringsViewModel := GtRefactoringsViewModel new
 			refactoringTitle: 'Rename package';
-			targetName: packageCoder package name;
-			refactorings: [ {GtRBRenamePackageRefactoring
-						from: packageCoder package name
-						to: packageNameEditor text asString} ];
 			yourself.
 
 	previewButton := GtRefactoringsInDropdownPreviewElement new
@@ -68,22 +64,29 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 			refactoringsViewModel: refactoringsViewModel;
 			visibility: BlVisibility gone;
 			margin: (BlInsets left: 5);
-			previewContentDo: [ :anElement | anElement hFitContentLimited ];
+			previewContentDo: [ :anElement :aRefactoringsViewModel | 
+				aRefactoringsViewModel
+					targetName: packageCoder package name;
+					refactorings: [ {GtRBRenamePackageRefactoring
+								from: packageCoder package name
+								to: packageNameEditor text asString} ].
+
+				anElement hFitContentLimited ];
 			cancelBlock: [ packageNameEditor text: packageCoder package name ];
 			when: GtRefactoringsAppliedEvent
-				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility gone ].
+				do: [ :anEvent | anEvent currentTarget hide ].
 
 	packageNameEditor editor
 		when: BrTextEditorModifiedEvent
 			do: [ :anEvent | 
 				anEvent text asString = packageCoder package name
-					ifTrue: [ previewButton visibility: BlVisibility gone ]
-					ifFalse: [ previewButton visibility: BlVisibility visible ] ];
+					ifTrue: [ previewButton hide ]
+					ifFalse: [ previewButton show ] ];
 		when: BrTextEditorTextReplacedEvent
 			do: [ :anEvent | 
 				anEvent text asString = packageCoder package name
-					ifTrue: [ previewButton visibility: BlVisibility gone ]
-					ifFalse: [ previewButton visibility: BlVisibility visible ] ].
+					ifTrue: [ previewButton hide ]
+					ifFalse: [ previewButton show ] ].
 
 	unloadButton := GtPreviewChangeButton new
 			icon: BrGlamorousVectorIcons remove;

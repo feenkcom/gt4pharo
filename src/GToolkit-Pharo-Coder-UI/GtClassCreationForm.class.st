@@ -152,6 +152,7 @@ GtClassCreationForm >> superclassDescription [
 	^ MAStringDescription new
 		label: 'Superclass';
 		priority: 2;
+		default: '';
 		accessor: #superclassName;
 		blocCompletion: [ GtStringsCompletionStrategy new
 				completions: GtPharoIndex current classNameTree ];

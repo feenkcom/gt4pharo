@@ -27,9 +27,13 @@ GtRefactoringsInDropdownPreviewElement >> beSize: aBrSizeAdjustmentState [
 { #category : #'api - initialization' }
 GtRefactoringsInDropdownPreviewElement >> cancelBlock: aBlock [
 	"Set a block that is evaluated on cancel button click.
-	The block can have two arguments: [ :aRefactoringViewModel :anElement | ]."
+	The block can have two arguments: [ :anElement :aRefactoringsViewModel | ]."
 
-	cancelBlock := aBlock
+	cancelBlock := aBlock.
+
+	cancelBlock
+		ifNil: [ cancelButton visibility: BlVisibility gone ]
+		ifNotNil: [ cancelButton visibility: BlVisibility visible ]
 ]
 
 { #category : #initialization }
@@ -43,7 +47,7 @@ GtRefactoringsInDropdownPreviewElement >> createPreviewElementInExplicitMenu: an
 			refactoringsViewModel: self refactoringsViewModel;
 			asElement.
 
-	previewContentDo value: aPreviewElement.
+	previewContentDo cull: aPreviewElement cull: self refactoringsViewModel.
 
 	^ aPreviewElement
 ]
@@ -75,6 +79,12 @@ GtRefactoringsInDropdownPreviewElement >> focusTarget [
 	^ previewButton
 ]
 
+{ #category : #'api - visibility' }
+GtRefactoringsInDropdownPreviewElement >> hide [
+	previewButton dispatchEvent: BrDropdownHideWish new.
+	self visibility: BlVisibility gone
+]
+
 { #category : #initialization }
 GtRefactoringsInDropdownPreviewElement >> initialize [
 	super initialize.
@@ -92,18 +102,20 @@ GtRefactoringsInDropdownPreviewElement >> initialize [
 	self initializePreviewButton.
 	self initializeCancelButton.
 
-	self addChild: previewButton.
-	self addChild: cancelButton
+	self addChild: previewButton as: #'refactoring--previewButton'.
+	self addChild: cancelButton as: #'refactoring--cancelButton'
 ]
 
 { #category : #initialization }
 GtRefactoringsInDropdownPreviewElement >> initializeCancelButton [
 	cancelButton := BrButton new
 			beFocusable;
+			visibility: BlVisibility gone;
 			aptitude: BrGlamorousButtonWithIconAptitude;
 			icon: BrGlamorousVectorIcons cancel;
 			label: 'Cancel';
-			action: [ :aButton :aButtonModel :anEvent | self onCancelClickEvent: anEvent ]
+			action: [ :aButton :aButtonModel :anEvent | 
+				self onCancelClickEvent: anEvent ]
 ]
 
 { #category : #initialization }
@@ -124,7 +136,7 @@ GtRefactoringsInDropdownPreviewElement >> onCancelClickEvent: anEvent [
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
 	
 	cancelBlock ifNotNil: [ :aBlock | 
-		aBlock cull: self refactoringsViewModel cull: cancelButton ]
+		aBlock cull: cancelButton cull: self refactoringsViewModel ]
 ]
 
 { #category : #'private - event handling' }
@@ -151,12 +163,19 @@ GtRefactoringsInDropdownPreviewElement >> previewContent: aBlockOrStencilBuilder
 GtRefactoringsInDropdownPreviewElement >> previewContentDo: aBlock [
 	"Configure a preview element that is displayed in the preview dropdown,
 	e.g., set a width.
-	The block must have one argument."
+	It is also possible to configure refactorings view model right before
+	the dropdown is displayed.
+	The block can have two arguments: [ :anElement :aRefactoringsViewModel | ]."
 
 	self assert: [ aBlock isNotNil ].
-	self assert: [ aBlock numArgs = 1 ].
+	self assert: [ aBlock numArgs between: 1 and: 2 ].
 
 	previewContentDo := aBlock
+]
+
+{ #category : #'api - visibility' }
+GtRefactoringsInDropdownPreviewElement >> show [
+	self visibility: BlVisibility visible
 ]
 
 { #category : #'accessing - refactorings view model' }

@@ -412,6 +412,15 @@ GtRefactoringsViewModel >> privateNotifyPreviewedRefactorings [
 	self announce: anAnnouncement
 ]
 
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyTargetNameChanged [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelTargetNameChanged new
+			refactoringsViewModel: self;
+			targetName: self targetName.
+	self announce: anAnnouncement
+]
+
 { #category : #'api - refactorings' }
 GtRefactoringsViewModel >> refactoring: aBlock [
 	"Set a block that returns a collection of refactorings.
@@ -464,7 +473,11 @@ GtRefactoringsViewModel >> targetName [
 GtRefactoringsViewModel >> targetName: aString [
 	"Set the refactoring target name, e.g., class name"
 
-	targetName := aString
+	targetName = aString ifTrue: [ ^ self ].
+	
+	targetName := aString.
+	
+	self privateNotifyTargetNameChanged
 ]
 
 { #category : #accessing }

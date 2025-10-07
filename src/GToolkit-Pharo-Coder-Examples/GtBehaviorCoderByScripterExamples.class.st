@@ -286,7 +286,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_02_type_ne
 				assertStep: [ :s | 
 					s
 						label: 'Assert apply preview button does not exist yet';
-						notExists;
+						value: [ :anElement | anElement visibility ] equals: BlVisibility gone;
 						id: GtBehaviorCoderBehaviorNameApplyPreviewId ].
 
 			(aStep type: (aScripter model attributeNamed: #dummyClass) className , 'New')
@@ -318,8 +318,8 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_02_type_ne
 			aStep
 				assertStep: [ :s | 
 					s
-						label: 'Assert apply preview button exists not';
-						exists;
+						label: 'Assert apply preview button exists';
+						value: [ :anElement | anElement visibility ] equals: BlVisibility visible;
 						id: GtBehaviorCoderBehaviorNameApplyPreviewId ] ].
 
 	^ aScripter
@@ -338,7 +338,12 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_03_click_r
 				clickStep: [ :s | 
 					s
 						label: 'Click apply preview button';
-						id: GtBehaviorCoderBehaviorNameApplyPreviewId ] ].
+						id: GtBehaviorCoderBehaviorNameApplyPreviewId;
+						/ #'refactoring--previewButton' ] ].
+
+	aScripter menuStep
+		assertMenuContainerExist;
+		play.
 
 	^ aScripter
 ]

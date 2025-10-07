@@ -34,10 +34,33 @@ GtRefactoringsTitleElement >> initializeTitleElement [
 			text: ''
 ]
 
+{ #category : #'private - event handling' }
+GtRefactoringsTitleElement >> onGtRefactoringsViewModelTargetNameChanged: anAnnouncement [
+	anAnnouncement refactoringsViewModel = self refactoringsViewModel
+		ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateElement ]
+]
+
 { #category : #'accessing - refactorings view model' }
 GtRefactoringsTitleElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
 	self updateElement
+]
+
+{ #category : #'accessing - refactorings view model' }
+GtRefactoringsTitleElement >> subscribeToRefactoringsViewModel [
+	super subscribeToRefactoringsViewModel.
+	self refactoringsViewModel weak
+		when: GtRefactoringsViewModelTargetNameChanged
+		send: #onGtRefactoringsViewModelTargetNameChanged:
+		to: self
+]
+
+{ #category : #'accessing - refactorings view model' }
+GtRefactoringsTitleElement >> unsubscribeFromRefactoringsViewModel [
+	super unsubscribeFromRefactoringsViewModel.
+	self refactoringsViewModel unsubscribe: self
 ]
 
 { #category : #'accessing - refactorings view model' }
