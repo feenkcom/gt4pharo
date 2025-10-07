@@ -30,8 +30,9 @@ GtPharoPackageCoderElement >> buildContentTabs [
 
 { #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildPackageLabel [
-	| packageNameEditor container previewButton unloadButton |
+	| packageNameEditor container previewButton unloadButton refactoringsViewModel |
 	container := BrHorizontalPane new
+			id: #'coder--rename-package-reference-in-method-form';
 			hMatchParent;
 			alignCenterLeft;
 			vFitContent.
@@ -54,22 +55,35 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 			whenKey: BlKeyCombination primaryC
 				labelDo: [ :aShortcutEvent | Clipboard clipboardText: self package name asString ].
 
-	previewButton := GtRefactoringsPreviewButton new
-			margin: (BlInsets left: 5);
-			visibility: BlVisibility gone;
+	refactoringsViewModel := GtRefactoringsViewModel new
+			refactoringTitle: 'Rename package';
+			targetName: packageCoder package name;
 			refactorings: [ {GtRBRenamePackageRefactoring
 						from: packageCoder package name
 						to: packageNameEditor text asString} ];
+			yourself.
+
+	previewButton := GtRefactoringsInDropdownPreviewElement new
+			beTinySize;
+			refactoringsViewModel: refactoringsViewModel;
+			visibility: BlVisibility gone;
+			margin: (BlInsets left: 5);
+			previewContentDo: [ :anElement | anElement hFitContentLimited ];
 			cancelBlock: [ packageNameEditor text: packageCoder package name ];
 			when: GtRefactoringsAppliedEvent
 				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility gone ].
 
 	packageNameEditor editor
 		when: BrTextEditorModifiedEvent
-		do: [ :anEvent | 
-			anEvent text asString = packageCoder package name
-				ifTrue: [ previewButton visibility: BlVisibility gone ]
-				ifFalse: [ previewButton visibility: BlVisibility visible ] ].
+			do: [ :anEvent | 
+				anEvent text asString = packageCoder package name
+					ifTrue: [ previewButton visibility: BlVisibility gone ]
+					ifFalse: [ previewButton visibility: BlVisibility visible ] ];
+		when: BrTextEditorTextReplacedEvent
+			do: [ :anEvent | 
+				anEvent text asString = packageCoder package name
+					ifTrue: [ previewButton visibility: BlVisibility gone ]
+					ifFalse: [ previewButton visibility: BlVisibility visible ] ].
 
 	unloadButton := GtPreviewChangeButton new
 			icon: BrGlamorousVectorIcons remove;

@@ -12,6 +12,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Core'
 }
 
+{ #category : #'api - converting' }
+GtRefactoringsWithInputViewModel >> asPreviewElement [
+	^ GtRefactoringsPreviewWithInputElement new refactoringsViewModel: self
+]
+
 { #category : #'api - testing' }
 GtRefactoringsWithInputViewModel >> canEditInput [
 	"Return true if existing executed refactorings can be replaced due to input changes."
