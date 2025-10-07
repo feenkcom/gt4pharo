@@ -172,8 +172,6 @@ GtPharoBehaviorCoderNameElement >> buildRefactoringPreviewButtonForNameEditor: a
 					ifFalse: [ previewButton show ] ].
 
 
-	MyObject999.
-
 	^ previewButton
 ]
 
