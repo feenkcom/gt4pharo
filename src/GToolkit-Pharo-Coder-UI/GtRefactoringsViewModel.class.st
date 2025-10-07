@@ -5,7 +5,6 @@ Class {
 	#classTraits : 'TGtAnnouncer classTrait + TGtOptions classTrait',
 	#instVars : [
 		'beforeApplyBlock',
-		'cancelBlock',
 		'isPreviewButtonFocused',
 		'refactoringTitle',
 		'targetName',
@@ -15,7 +14,7 @@ Class {
 		'announcer',
 		'afterAppliedBlock'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Rest'
+	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Core'
 }
 
 { #category : #'api - refactorings' }
@@ -88,6 +87,11 @@ GtRefactoringsViewModel >> appliedRefactorings: anExecutedRefactorings [
 	self afterAppliedBlock value
 ]
 
+{ #category : #'api - converting' }
+GtRefactoringsViewModel >> asPreviewElement [
+	^ GtRefactoringsPreviewElement new refactoringsViewModel: self
+]
+
 { #category : #accessing }
 GtRefactoringsViewModel >> beforeApplyBlock [
 	"Return a block that is evaluated before refactorings are applied.
@@ -117,17 +121,6 @@ GtRefactoringsViewModel >> canExecutedRefactoringsBeReplaced [
 
 	<return: #Boolean>
 	^ self executedRefactorings canBeReplaced
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> cancelBlock [
-	<return: #BlockClosure>
-	^ cancelBlock
-]
-
-{ #category : #accessing }
-GtRefactoringsViewModel >> cancelBlock: anObject [
-	cancelBlock := anObject
 ]
 
 { #category : #'api - refactorings' }
@@ -193,9 +186,6 @@ GtRefactoringsViewModel >> gtOverview [
 			name: 'After applied block';
 			value: afterAppliedBlock.
 		GtPhlowOverviewItem new
-			name: 'Cancel block';
-			value: cancelBlock.
-		GtPhlowOverviewItem new
 			name: 'Context menu model';
 			value: menuModel.
 		GtPhlowOverviewItem new
@@ -258,7 +248,6 @@ GtRefactoringsViewModel >> initialize [
 	isPreviewButtonFocused := true.
 	beforeApplyBlock := [  ].
 	afterAppliedBlock := [  ].
-	cancelBlock := [  ]
 ]
 
 { #category : #accessing }
@@ -481,4 +470,12 @@ GtRefactoringsViewModel >> targetName: aString [
 { #category : #accessing }
 GtRefactoringsViewModel >> targetNameDo: aBlock [
 	targetName ifNotNil: aBlock
+]
+
+{ #category : #'announcer - subscription' }
+GtRefactoringsViewModel >> whenRefactoringsAppliedSend: aSelector to: aReceiver [
+	^ self weak
+		when: GtRefactoringsViewModelExecutedRefactoringsApplied
+		send: aSelector
+		to: aReceiver
 ]

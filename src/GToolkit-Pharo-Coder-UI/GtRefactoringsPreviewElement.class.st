@@ -1,5 +1,5 @@
 Class {
-	#name : #GtRefactoringsPreviewWithConfirmationElement,
+	#name : #GtRefactoringsPreviewElement,
 	#superclass : #GtRefactoringsBasicElement,
 	#traits : 'TGtRefactoringsPopoverElement',
 	#classTraits : 'TGtRefactoringsPopoverElement classTrait',
@@ -7,29 +7,57 @@ Class {
 		'toolbarElement',
 		'messagesElement',
 		'previewElement',
-		'titleElement',
-		'confirmationElement'
+		'titleElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Core'
 }
 
+{ #category : #'api - initialization' }
+GtRefactoringsPreviewElement >> beContextMenuElement [
+	"The element is part of a popover, e.g., context menu.
+	Make the element defaults."
+	
+	self padding: (BlInsets all: GtRefactoringsConstants contextMenuPadding).
+	self hExact: GtRefactoringsConstants contextMenuWidth.
+	self vFitContentLimited
+]
+
+{ #category : #'api - initialization' }
+GtRefactoringsPreviewElement >> bePinnable: anExplicitMenu [
+	"The element is part of a popover, e.g., context menu.
+	Make the element pinnable."
+
+	self assert: self hasRefactoringsViewModel.
+
+	self
+		addAptitude: (BrGlamorousPopoverPinnableAptitude new
+				withAllPinActions;
+				withResizers;
+				menuModel: anExplicitMenu;
+				withPostEndPinBlock: [
+					self requestFocus.
+					self refactoringsViewModel weak
+						when: GtRefactoringsViewModelExecutedRefactoringsApplied
+						send: #onClosePinnedElement:
+						to: self ])
+]
+
 { #category : #initialization }
-GtRefactoringsPreviewWithConfirmationElement >> defaultLayout [
+GtRefactoringsPreviewElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'focus requesting' }
-GtRefactoringsPreviewWithConfirmationElement >> focusTarget [
+GtRefactoringsPreviewElement >> focusTarget [
 	^ toolbarElement focusTarget
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithConfirmationElement >> initialize [
+GtRefactoringsPreviewElement >> initialize [
 	super initialize.
 	self background: self theme default contentBackground.
 
 	self initializeTitleElement.
-	self initializeConfirmationElement.
 	self initializeMessagesElement.
 	self initializePreviewElement.
 	self initializeToolbarElement.
@@ -43,7 +71,6 @@ GtRefactoringsPreviewWithConfirmationElement >> initialize [
 			c minHeight: GtRefactoringsConstants collapsedPreviewHeight ].
 
 	self addChild: titleElement as: #refactoringInput.
-	self addChild: confirmationElement as: #refactoringConfirmation.
 	self addChild: messagesElement as: #refactoringMessages.
 	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: toolbarElement as: #refactoringToolbar.
@@ -54,10 +81,6 @@ GtRefactoringsPreviewWithConfirmationElement >> initialize [
 				hExactToMatchParent: titleElement;
 				hFitContentToFitContent: titleElement;
 				hFitContentLimitedToFitContentLimited: titleElement;
-				hMatchParentToMatchParent: confirmationElement;
-				hExactToMatchParent: confirmationElement;
-				hFitContentToFitContent: confirmationElement;
-				hFitContentLimitedToFitContentLimited: confirmationElement;
 				inherit: previewElement;
 				hMatchParentToMatchParent: messagesElement;
 				hExactToMatchParent: messagesElement;
@@ -71,36 +94,35 @@ GtRefactoringsPreviewWithConfirmationElement >> initialize [
 	self beContextMenuElement
 ]
 
-{ #category : #'as yet unclassified' }
-GtRefactoringsPreviewWithConfirmationElement >> initializeConfirmationElement [
-	confirmationElement := GtRefactoringsConfirmationElement new
-]
-
 { #category : #initialization }
-GtRefactoringsPreviewWithConfirmationElement >> initializeMessagesElement [
+GtRefactoringsPreviewElement >> initializeMessagesElement [
 	messagesElement := GtRefactoringsMessagesElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithConfirmationElement >> initializePreviewElement [
+GtRefactoringsPreviewElement >> initializePreviewElement [
 	previewElement := GtRefactoringsJustPreviewElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithConfirmationElement >> initializeTitleElement [
+GtRefactoringsPreviewElement >> initializeTitleElement [
 	titleElement := GtRefactoringsTitleElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsPreviewWithConfirmationElement >> initializeToolbarElement [
+GtRefactoringsPreviewElement >> initializeToolbarElement [
 	toolbarElement := GtRefactoringsToolbarElement new
 ]
 
+{ #category : #'private - event handling' }
+GtRefactoringsPreviewElement >> onClosePinnedElement: anAnnouncement [
+	BlTaskAction enqueueElement: self action: [ self removeFromParent ]
+]
+
 { #category : #'accessing - refactorings view model' }
-GtRefactoringsPreviewWithConfirmationElement >> onRefactoringsViewModelChanged [
+GtRefactoringsPreviewElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
 	titleElement refactoringsViewModel: self refactoringsViewModel.
-	confirmationElement refactoringsViewModel: self refactoringsViewModel.
 	previewElement refactoringsViewModel: self refactoringsViewModel.
 	messagesElement refactoringsViewModel: self refactoringsViewModel.
 	toolbarElement refactoringsViewModel: self refactoringsViewModel.

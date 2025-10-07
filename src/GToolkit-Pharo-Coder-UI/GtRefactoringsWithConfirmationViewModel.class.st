@@ -8,6 +8,11 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings New - Core'
 }
 
+{ #category : #'api - converting' }
+GtRefactoringsWithConfirmationViewModel >> asPreviewElement [
+	^ GtRefactoringsPreviewWithConfirmationElement new refactoringsViewModel: self
+]
+
 { #category : #'api - refactorings' }
 GtRefactoringsWithConfirmationViewModel >> confirmRefactorings [
 	"Set new refactorings computation.
