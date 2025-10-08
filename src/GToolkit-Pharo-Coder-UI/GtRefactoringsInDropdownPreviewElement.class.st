@@ -102,7 +102,7 @@ GtRefactoringsInDropdownPreviewElement >> initialize [
 	self initializePreviewButton.
 	self initializeCancelButton.
 
-	self addChild: previewButton as: #'refactoring--previewButton'.
+	self addChild: previewButton as: #previewCheckButton.
 	self addChild: cancelButton as: #'refactoring--cancelButton'
 ]
 
@@ -136,7 +136,7 @@ GtRefactoringsInDropdownPreviewElement >> onCancelClickEvent: anEvent [
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
 	
 	cancelBlock ifNotNil: [ :aBlock | 
-		aBlock cull: cancelButton cull: self refactoringsViewModel ]
+		aBlock cull: self cull: self refactoringsViewModel ]
 ]
 
 { #category : #'private - event handling' }
@@ -147,6 +147,11 @@ GtRefactoringsInDropdownPreviewElement >> onGtRefactoringsViewModelExecutedRefac
 	BlTaskAction
 		enqueueElement: self
 		action: [ self dispatchEvent: GtRefactoringsAppliedEvent new ]
+]
+
+{ #category : #'api - visibility' }
+GtRefactoringsInDropdownPreviewElement >> openPreview [
+	self showPreview
 ]
 
 { #category : #'api - initialization' }
@@ -176,6 +181,12 @@ GtRefactoringsInDropdownPreviewElement >> previewContentDo: aBlock [
 { #category : #'api - visibility' }
 GtRefactoringsInDropdownPreviewElement >> show [
 	self visibility: BlVisibility visible
+]
+
+{ #category : #'api - visibility' }
+GtRefactoringsInDropdownPreviewElement >> showPreview [
+	self show.
+	previewButton dispatchEvent: BrDropdownShowWish new.
 ]
 
 { #category : #'accessing - refactorings view model' }

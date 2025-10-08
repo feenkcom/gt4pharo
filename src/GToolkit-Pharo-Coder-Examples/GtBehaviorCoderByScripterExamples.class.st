@@ -339,7 +339,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_03_click_r
 					s
 						label: 'Click apply preview button';
 						id: GtBehaviorCoderBehaviorNameApplyPreviewId;
-						/ #'refactoring--previewButton' ] ].
+						/ #previewCheckButton ] ].
 
 	aScripter menuStep
 		assertMenuContainerExist;

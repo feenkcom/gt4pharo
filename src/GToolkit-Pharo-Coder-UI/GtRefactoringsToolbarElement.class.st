@@ -170,6 +170,14 @@ GtRefactoringsToolbarElement >> onGtRefactoringsViewModelExecutedRefactoringsSta
 ]
 
 { #category : #'private - event handling' }
+GtRefactoringsToolbarElement >> onGtRefactoringsViewModelPreviewButtonFocusedChanged: anAnnouncement [
+	anAnnouncement refactoringsViewModel == self refactoringsViewModel
+		ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateFocusedElement ]
+]
+
+{ #category : #'private - event handling' }
 GtRefactoringsToolbarElement >> onPreviewButtonClick [
 	self hasRefactoringsViewModel ifFalse: [ ^ self ].
 	
@@ -195,6 +203,9 @@ GtRefactoringsToolbarElement >> subscribeToRefactoringsViewModel [
 			to: self;
 		when: GtRefactoringsViewModelExecutedRefactoringsProgressChanged
 			send: #onGtRefactoringsViewModelExecutedRefactoringsProgressChanged:
+			to: self;
+		when: GtRefactoringsViewModelPreviewButtonFocusedChanged
+			send: #onGtRefactoringsViewModelPreviewButtonFocusedChanged:
 			to: self
 ]
 
@@ -295,6 +306,12 @@ GtRefactoringsToolbarElement >> updateElement [
 	GtExecutedRefactoringsToolbarElementUpdater new
 		forRefactoringsElement: self;
 		update
+]
+
+{ #category : #'private - event handling' }
+GtRefactoringsToolbarElement >> updateFocusedElement [
+	previewButtonElement isEnabled ifTrue: [ ^ previewButtonElement requestFocus ].
+	applyButton isEnabled ifTrue: [ ^ applyButton requestFocus ].
 ]
 
 { #category : #'private - updating' }
