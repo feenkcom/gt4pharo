@@ -257,8 +257,13 @@ GtRefactoringsViewModel >> isPreviewButtonFocused [
 ]
 
 { #category : #accessing }
-GtRefactoringsViewModel >> isPreviewButtonFocused: anObject [
-	isPreviewButtonFocused := anObject
+GtRefactoringsViewModel >> isPreviewButtonFocused: aBoolean [
+	self assert: [ aBoolean isBoolean ].
+	isPreviewButtonFocused = aBoolean ifTrue: [ ^ self ].
+
+	isPreviewButtonFocused := aBoolean.
+	
+	self privateNotifyPreviewButtonFocusedChanged
 ]
 
 { #category : #accessing }
@@ -400,6 +405,15 @@ GtRefactoringsViewModel >> privateNotifyFailedRefactorings [
 	anAnnouncement := GtRefactoringsViewModelExecutedRefactoringsFailed new
 			refactoringsViewModel: self;
 			executedRefactorings: self executedRefactorings.
+	self announce: anAnnouncement
+]
+
+{ #category : #'private - notifying' }
+GtRefactoringsViewModel >> privateNotifyPreviewButtonFocusedChanged [
+	| anAnnouncement |
+	anAnnouncement := GtRefactoringsViewModelPreviewButtonFocusedChanged new
+			refactoringsViewModel: self;
+			isFocused: self isPreviewButtonFocused.
 	self announce: anAnnouncement
 ]
 
