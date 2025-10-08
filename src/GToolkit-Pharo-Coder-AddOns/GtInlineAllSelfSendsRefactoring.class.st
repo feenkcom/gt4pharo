@@ -113,7 +113,6 @@ GtInlineAllSelfSendsRefactoring >> basicTransform [
 							inMethod: selector
 							forClass: class.
 					[ self performCompositeRefactoring: refactoring.
-					refactoring primitiveExecute.
 					self mergeVariables.
 					^ self basicTransform ] on: Error do: [ :ex | ex return ] ] ].
 	self gtCleanupChanges

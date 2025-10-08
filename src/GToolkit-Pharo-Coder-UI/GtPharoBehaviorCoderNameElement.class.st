@@ -94,13 +94,6 @@ GtPharoBehaviorCoderNameElement >> buildContent [
 
 	classNameEditor := self buildEditableNameLabel.
 	self registerShortcutsForNameEditor: classNameEditor.
-	classNameEditor editor
-		when: BrTextEditorModifiedEvent
-		do: [ :anEvent | 
-			anEvent text asString trimBoth asSymbol = self coderModel name
-				ifTrue: [ previewButton removeFromParent ]
-				ifFalse: [ (nameContainer hasChild: previewButton)
-						ifFalse: [ nameContainer addChild: previewButton after: classNameEditor ] ] ].
 	self instalCompletionControllerOnNameEditor: classNameEditor.
 
 	previewButton := self
@@ -108,6 +101,7 @@ GtPharoBehaviorCoderNameElement >> buildContent [
 			inContainer: nameContainer.
 
 	nameContainer addChild: classNameEditor.
+	nameContainer addChild: previewButton.
 
 	self addAddOnsElementIn: nameContainer.
 	self addAdviceDropDownIn: nameContainer.
@@ -138,20 +132,47 @@ GtPharoBehaviorCoderNameElement >> buildEditableNameLabel [
 
 { #category : #'building - ui' }
 GtPharoBehaviorCoderNameElement >> buildRefactoringPreviewButtonForNameEditor: aClassNameEditor inContainer: aContainer [
-	^ GtRefactoringsPreviewButton new
-		id: GtBehaviorCoderBehaviorNameApplyPreviewId;
-		margin: (BlInsets left: 5);
-		refactorings: [ {GtRBRenameClassRefactoring
-					model: (Smalltalk createRbNamespace
-							onEnvironment: RBBrowserEnvironment new)
-					rename: self coderModel theClass name
-					to: aClassNameEditor text asString} ];
-		cancelBlock: [ aClassNameEditor text: self coderModel theClass name ];
-		when: GtRefactoringsAppliedEvent
+	| refactoringsViewModel previewButton |
+	refactoringsViewModel := GtRefactoringsViewModel new
+			refactoringTitle: 'Rename class';
+			targetName: self coderModel theClass name;
+			yourself.
+
+	previewButton := GtRefactoringsInDropdownPreviewElement new
+			id: GtBehaviorCoderBehaviorNameApplyPreviewId;
+			beTinySize;
+			refactoringsViewModel: refactoringsViewModel;
+			visibility: BlVisibility gone;
+			margin: (BlInsets left: 5);
+			previewContentDo: [ :anElement :aRefactoringsViewModel |
+				aRefactoringsViewModel 
+					targetName: self coderModel theClass name;
+					refactorings: [ {GtRBRenameClassRefactoring
+						model: (Smalltalk createRbNamespace
+								onEnvironment: RBBrowserEnvironment new)
+						rename: self coderModel theClass name
+						to: aClassNameEditor text asString} ].
+				anElement hFitContentLimited ];
+			cancelBlock: [ aClassNameEditor text: self coderModel theClass name ];
+			when: GtRefactoringsAppliedEvent
+				do: [ :anEvent | 
+					anEvent currentTarget hide ].
+
+
+	aClassNameEditor editor
+		when: BrTextEditorModifiedEvent
 			do: [ :anEvent | 
-				| element |
-				element := anEvent currentTarget.
-				aContainer enqueueTask: [ aContainer removeChild: element ] asBlTask ]
+				anEvent text asString trimBoth asSymbol = self coderModel theClass name
+					ifTrue: [ previewButton hide ]
+					ifFalse: [ previewButton show ] ];
+		when: BrTextEditorTextReplacedEvent
+			do: [ :anEvent | 
+				anEvent text asString trimBoth asSymbol = self coderModel theClass name
+					ifTrue: [ previewButton hide ]
+					ifFalse: [ previewButton show ] ].
+
+
+	^ previewButton
 ]
 
 { #category : #accessing }

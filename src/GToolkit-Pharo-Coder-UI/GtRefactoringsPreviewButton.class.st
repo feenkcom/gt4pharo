@@ -17,6 +17,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
 
+{ #category : #testing }
+GtRefactoringsPreviewButton class >> isDeprecated [
+	"Use GtRefactoringsInDropdownPreviewElement or GtRefactoringsPreviewElement instead."
+
+	^ true
+]
+
 { #category : #accessing }
 GtRefactoringsPreviewButton >> beMiniSize [
 	self childrenDo: #beMiniSize
