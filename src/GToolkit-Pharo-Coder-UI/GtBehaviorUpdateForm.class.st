@@ -119,7 +119,15 @@ GtBehaviorUpdateForm >> classSlotsDescription [
 					aMemento overallStatus valueOrNil isChanged
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
 						ifFalse: [ self createClassSlotsContextMenuContentFor: aVariable editor: anElement ] ]
-				contextMenuBlock: nil);
+				contextMenuBlock: [ :aSlotName :anElement :aMemento | 
+					self class environment
+						at: self rawClassName asSymbol
+						ifPresent: [ :aClass | 
+							(aClass classSide slotNamed: aSlotName) ifNotNil: [ :aSlot |
+								GtCoderVariableTarget 
+									menuItemsForObject: aSlot 
+									hostElement: anElement ] ]
+						ifAbsent: [ nil ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
@@ -146,7 +154,15 @@ GtBehaviorUpdateForm >> classVarsDescription [
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
 				contextMenuContentBlock: [ :aVariable :anElement :aMemento | self createClassVarsContextMenuContentFor: aVariable editor: anElement ]
-				contextMenuBlock: nil);
+				contextMenuBlock: [ :aSlotName :anElement :aMemento | 
+					self class environment
+						at: self rawClassName asSymbol
+						ifPresent: [ :aClass | 
+							(aClass classVariableNamed: aSlotName ifAbsent: [ nil ]) ifNotNil: [ :aSlot |
+								GtCoderVariableTarget 
+									menuItemsForObject: aSlot 
+									hostElement: anElement ] ]
+						ifAbsent: [ nil ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect variable';
 					description: 'Inspect the variable indicated by the editor';
@@ -477,7 +493,15 @@ GtBehaviorUpdateForm >> slotsDescription [
 					(aMemento overallStatus valueOrNil ifNotNil: #isChanged ifNil: [ true ])
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
 						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]
-				contextMenuBlock: nil);
+				contextMenuBlock: [ :aSlotName :anElement :aMemento | 
+					self class environment
+						at: self rawClassName asSymbol
+						ifPresent: [ :aClass | 
+							(aClass slotNamed: aSlotName) ifNotNil: [ :aSlot |
+								GtCoderVariableTarget 
+									menuItemsForObject: aSlot 
+									hostElement: anElement ] ]
+						ifAbsent: [ nil ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';
 					description: 'Inspect the slot indicated by the editor';
