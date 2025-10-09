@@ -7,5 +7,10 @@ GtSmaCCDiffSplitter class >> forJSON [
 
 { #category : #'*GToolkit-Pharo-Coder' }
 GtSmaCCDiffSplitter class >> forPharo [
+	^ GtPharoDiffSplitter new scannerClass: GtPharoScanner
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
+GtSmaCCDiffSplitter class >> forPharoTokens [
 	^ self new scannerClass: GtPharoScanner
 ]
