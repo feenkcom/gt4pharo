@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoStreamingMethodsCoderViewModel,
 	#superclass : #GtFilteredCodersViewModel,
-	#traits : 'TGtCoderWithSelfObjectHolder',
-	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
+	#traits : 'TGtPhlowWithSelfObjectHolder',
+	#classTraits : 'TGtPhlowWithSelfObjectHolder classTrait',
 	#instVars : [
 		'shouldExpandByDefault',
 		'shouldHaveHeaderByDefault'

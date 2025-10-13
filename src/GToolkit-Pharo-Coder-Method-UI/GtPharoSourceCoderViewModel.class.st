@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoSourceCoderViewModel,
 	#superclass : #GtSourceCoderViewModel,
-	#traits : 'TGtCoderWithSelfObjectHolder',
-	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
+	#traits : 'TGtPhlowWithSelfObjectHolder',
+	#classTraits : 'TGtPhlowWithSelfObjectHolder classTrait',
 	#instVars : [
 		'localBindings',
 		'highlighter'
