@@ -13,8 +13,8 @@ Class {
 
 { #category : #accessing }
 GtPackageAndTagName >> category [
-	^ packageName asString
-		, (tagName isEmpty ifTrue: [ '' ] ifFalse: [ '-' , tagName ])
+	^ self packageName asString
+		, (self tagName isEmpty ifTrue: [ '' ] ifFalse: [ '-' , self tagName ])
 ]
 
 { #category : #accessing }
@@ -39,7 +39,7 @@ GtPackageAndTagName >> defaultTagName [
 
 { #category : #accessing }
 GtPackageAndTagName >> fullName [
-	^ packageName asString, '-', tagName asString
+	^ self packageName asString, '-', self tagName asString
 ]
 
 { #category : #accessing }
@@ -50,13 +50,13 @@ GtPackageAndTagName >> initialize [
 
 { #category : #accessing }
 GtPackageAndTagName >> isEmpty [
-	^ packageName trim isEmpty
+	^ self packageName trim isEmpty
 ]
 
 { #category : #accessing }
 GtPackageAndTagName >> packageName [
 
-	^ packageName
+	^ packageName ifNil: [ packageName := '' ]
 ]
 
 { #category : #accessing }
@@ -83,7 +83,7 @@ GtPackageAndTagName >> printOn: aStream [
 { #category : #accessing }
 GtPackageAndTagName >> tagName [
 
-	^ tagName
+	^ tagName ifNil: [ tagName := '' ]
 ]
 
 { #category : #accessing }

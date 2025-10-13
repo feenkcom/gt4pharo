@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoSourceCoderViewModel,
 	#superclass : #GtSourceCoderViewModel,
-	#traits : 'TGtCoderWithSelfObjectHolder',
-	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait',
+	#traits : 'TGtPhlowWithSelfObjectHolder',
+	#classTraits : 'TGtPhlowWithSelfObjectHolder classTrait',
 	#instVars : [
 		'localBindings',
 		'highlighter'
@@ -125,7 +125,7 @@ GtPharoSourceCoderViewModel >> initialize [
 
 	localBindings := GtLocalVariablesBindings new.
 	highlighter := nil.
-	selfObjectHolder := GtCoderUndefinedObject default.
+	selfObjectHolder := GtPhlowUndefinedObject default.
 ]
 
 { #category : #'api - coder model' }

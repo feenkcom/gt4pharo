@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoBehaviorCoder,
 	#superclass : #GtCoderModel,
-	#traits : 'TGtCoderTrait + TGtCoderWithObjectHolder',
-	#classTraits : 'TGtCoderTrait classTrait + TGtCoderWithObjectHolder classTrait',
+	#traits : 'TGtCoderTrait + TGtPhlowWithObjectHolder',
+	#classTraits : 'TGtCoderTrait classTrait + TGtPhlowWithObjectHolder classTrait',
 	#instVars : [
 		'class',
 		'definitionCoder'
@@ -84,7 +84,7 @@ GtPharoBehaviorCoder >> definitionCoder [
 
 { #category : #initialize }
 GtPharoBehaviorCoder >> forClass: aClass [
-	self objectHolder: GtCoderUndefinedObject default.
+	self objectHolder: GtPhlowUndefinedObject default.
 	self initializeClass: aClass.
 ]
 

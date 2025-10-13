@@ -147,11 +147,11 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildReceiver [
 			parentEvaluationContext
 				variableValueOf: aVariableName
 				ifPresent: [ :aValue | 
-					^ receiverObjectHolder := GtCoderObject forValue: aValue  ]
+					^ receiverObjectHolder := GtPhlowObject forValue: aValue  ]
 				ifAbsent: [  "ignore" ] ].
 				
 	aGtPharoProgramNode isLiteral ifTrue: [ 
-		^ receiverObjectHolder := GtCoderObject forValue: aGtPharoProgramNode literalValue ].
+		^ receiverObjectHolder := GtPhlowObject forValue: aGtPharoProgramNode literalValue ].
 ]
 
 { #category : #building }
@@ -281,7 +281,7 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentMessage: anObject [
 
 { #category : #accessing }
 GtPharoReceiverAndArgumentBindingsBuilder >> parentSelfObjectHolder [
-	^ parentSelfObjectHolder ifNil: [ GtCoderUndefinedObject default ]
+	^ parentSelfObjectHolder ifNil: [ GtPhlowUndefinedObject default ]
 ]
 
 { #category : #accessing }
@@ -306,8 +306,8 @@ GtPharoReceiverAndArgumentBindingsBuilder >> receiverBehavior [
 
 { #category : #'accessing - results' }
 GtPharoReceiverAndArgumentBindingsBuilder >> receiverObjectHolder [
-	<return: #TGtCoderObject>
-	^ receiverObjectHolder ifNil: [ GtCoderUndefinedObject default ]
+	<return: #TGtPhlowObject>
+	^ receiverObjectHolder ifNil: [ GtPhlowUndefinedObject default ]
 ]
 
 { #category : #'accessing - results' }

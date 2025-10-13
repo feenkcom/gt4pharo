@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoBigMethodCoderViewModel,
 	#superclass : #GtExpandableCoderViewModel,
-	#traits : 'TGtCoderWithSelfObjectHolder + TGtCoderViewModelWithParentProperties',
-	#classTraits : 'TGtCoderWithSelfObjectHolder classTrait + TGtCoderViewModelWithParentProperties classTrait',
+	#traits : 'TGtPhlowWithSelfObjectHolder + TGtCoderViewModelWithParentProperties',
+	#classTraits : 'TGtPhlowWithSelfObjectHolder classTrait + TGtCoderViewModelWithParentProperties classTrait',
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 

@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoNewMethodCoderElement,
 	#superclass : #BrFrame,
-	#traits : 'TGtWithPharoMethodCoderViewModel + TGtCoderWithSelfObjectHolder + TGtCoderWithBehaviorHolder',
-	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait + TGtCoderWithSelfObjectHolder classTrait + TGtCoderWithBehaviorHolder classTrait',
+	#traits : 'TGtWithPharoMethodCoderViewModel + TGtPhlowWithSelfObjectHolder + TGtPhlowWithBehaviorHolder',
+	#classTraits : 'TGtWithPharoMethodCoderViewModel classTrait + TGtPhlowWithSelfObjectHolder classTrait + TGtPhlowWithBehaviorHolder classTrait',
 	#instVars : [
 		'sourceCoderElement',
 		'tagsElement',

@@ -9385,6 +9385,96 @@ GtPharoMethodCoderByScripterExamples >> referencedExampleMethodCoderUI_NoExample
 	^ aScripter
 ]
 
+{ #category : #'examples - rename variable' }
+GtPharoMethodCoderByScripterExamples >> renameClassInstanceVariable [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter coder |
+	scripter := self
+			scripterForBlock: [ coder := GtPharoMethodCoderExamples new forUnaryClassMethod.
+				coder behavior addInstVarNamed: '_someVar_'.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	^ _someVar_' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save method';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	scripter do
+		label: 'Position cursor';
+		id: GtSourceCoderEditorId;
+		block: [ :each | each editor moveCursorTo: coder currentSourceString size ];
+		play.
+
+	scripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		play.
+
+	self checkFor: scripter renameEditorExists: true.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter variable name';
+				text: 'someVar' ].
+
+	self checkFor: scripter renameEditorExists: true.
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+	self checkFor: scripter saveButtonEnabled: false.
+
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Perform rename';
+				key: BlKeyboardKey return ].
+
+	(Delay forMilliseconds: 50) wait.
+	scripter pulse.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button exists';
+				onSpaceRoot;
+				exists;
+				id: GtRefactoringsPreviewAcceptId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				label: 'Assert accept button is enabled';
+				satisfies: [ :anElement | anElement isEnabled ]
+					description: [ 'Accept button must be enabled' ];
+				// GtRefactoringsPreviewAcceptId ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+
+	self
+		assert: (coder behavior >> coder selector) ast
+		equals: (RBParser parseMethod: 'classMethod1 ^someVar').
+
+	^ scripter
+]
+
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> renameMessageSend [
 	<gtExample>
