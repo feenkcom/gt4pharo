@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'selector',
 		'recursiveMethods',
-		'ignoreSelectors'
+		'ignoreSelectors',
+		'rewriteThisContextMethod'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -99,6 +100,7 @@ GtInlineAllSelfSendsRefactoring >> ast [
 { #category : #transforming }
 GtInlineAllSelfSendsRefactoring >> basicTransform [
 	| ast |
+	self rewriteThisContextMethodFor: selector.
 	ast := self ast.
 	ast
 		nodesDo: [ :each | 
@@ -107,7 +109,8 @@ GtInlineAllSelfSendsRefactoring >> basicTransform [
 				and: [ each receiver isSelfVariable
 						and: [ (ignoreSelectors includes: each selector) not
 								and: [ (self isRecursiveMethod: each selector in: (Set with: each selector)) not ] ] ])
-				ifTrue: [ refactoring := GtInlineMethodRefactoring
+				ifTrue: [ self rewriteThisContextMethodFor: each selector.
+					refactoring := GtInlineMethodRefactoring
 							model: model
 							inline: each sourceInterval
 							inMethod: selector
@@ -137,7 +140,8 @@ GtInlineAllSelfSendsRefactoring >> ignoreSelectors: aCollection [
 GtInlineAllSelfSendsRefactoring >> initialize [
 	super initialize.
 	recursiveMethods := Dictionary new.
-	ignoreSelectors := Set new
+	ignoreSelectors := Set new.
+	rewriteThisContextMethod := true
 ]
 
 { #category : #testing }
@@ -186,6 +190,32 @@ GtInlineAllSelfSendsRefactoring >> preconditions [
 { #category : #transforming }
 GtInlineAllSelfSendsRefactoring >> privateTransform [
 	self basicTransform
+]
+
+{ #category : #accessing }
+GtInlineAllSelfSendsRefactoring >> rewriteThisContextMethod [
+	^ rewriteThisContextMethod
+]
+
+{ #category : #accessing }
+GtInlineAllSelfSendsRefactoring >> rewriteThisContextMethod: anObject [
+	rewriteThisContextMethod := anObject
+]
+
+{ #category : #transforming }
+GtInlineAllSelfSendsRefactoring >> rewriteThisContextMethodFor: aSymbol [
+	| rewriter method |
+	self rewriteThisContextMethod ifFalse: [ ^ self ].
+	method := class methodFor: selector.
+	method ifNil: [ ^ self ].
+	rewriter := RBParseTreeRewriter new.
+	rewriter
+		replace: 'thisContext method'
+		with: method methodClass name
+				, (method methodClass isMeta ifTrue: [ ' class' ] ifFalse: [ '' ]) , '>>#'
+				, method selector.
+	(rewriter executeTree: method ast)
+		ifTrue: [ method methodClass compileTree: rewriter tree ]
 ]
 
 { #category : #accessing }

@@ -140,7 +140,12 @@ GtCreateSnippetSourceFromMethod >> updateSelfReferencesIn: anAST [
 	| selfNodes newNode |
 	selfNodes := OrderedCollection new.
 	anAST
-		nodesDo: [ :each | (each isVariable and: [ each name = #self ]) ifTrue: [ selfNodes add: each ] ].
+		nodesDo: [ :each | 
+			(each isVariable and: [ each name = #self ])
+				ifTrue: [ (each parent notNil
+						and: [ each parent isMessage
+								and: [ self assertSelectors includes: each parent selector ] ])
+						ifFalse: [ selfNodes add: each ] ] ].
 	selfNodes isEmpty ifTrue: [ ^ anAST ].
 	self isForMetaclass
 		ifTrue: [ newNode := RBVariableNode named: self instanceClassName ]
