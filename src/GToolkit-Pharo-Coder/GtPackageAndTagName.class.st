@@ -56,7 +56,7 @@ GtPackageAndTagName >> isEmpty [
 { #category : #accessing }
 GtPackageAndTagName >> packageName [
 
-	^ packageName
+	^ packageName ifNil: [ packageName := '' ]
 ]
 
 { #category : #accessing }
@@ -83,7 +83,7 @@ GtPackageAndTagName >> printOn: aStream [
 { #category : #accessing }
 GtPackageAndTagName >> tagName [
 
-	^ tagName
+	^ tagName ifNil: [ tagName := '' ]
 ]
 
 { #category : #accessing }
