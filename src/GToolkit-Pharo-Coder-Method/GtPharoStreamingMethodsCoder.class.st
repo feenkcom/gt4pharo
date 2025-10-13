@@ -1,8 +1,8 @@
 Class {
 	#name : #GtPharoStreamingMethodsCoder,
 	#superclass : #GtFilteredCodersModel,
-	#traits : 'TGtCoderWithBehaviorHolder',
-	#classTraits : 'TGtCoderWithBehaviorHolder classTrait',
+	#traits : 'TGtPhlowWithBehaviorHolder',
+	#classTraits : 'TGtPhlowWithBehaviorHolder classTrait',
 	#instVars : [
 		'exampleSuite',
 		'testSuite',

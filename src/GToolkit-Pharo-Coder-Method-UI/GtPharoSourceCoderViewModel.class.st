@@ -125,7 +125,7 @@ GtPharoSourceCoderViewModel >> initialize [
 
 	localBindings := GtLocalVariablesBindings new.
 	highlighter := nil.
-	selfObjectHolder := GtCoderUndefinedObject default.
+	selfObjectHolder := GtPhlowUndefinedObject default.
 ]
 
 { #category : #'api - coder model' }
