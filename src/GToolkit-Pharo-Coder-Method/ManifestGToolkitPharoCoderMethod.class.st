@@ -39,6 +39,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'GToolkit-Pharo-SearchFilters'.
 		'GToolkit-Pharo-System'.
 		'GToolkit-Pharo-TestSuite'.
+		'GToolkit-Phlow-Model'.
 		'GToolkit-Utility-StackOverflow'.
 		'GToolkit-VariableBindings'.
 		'Kernel'.
