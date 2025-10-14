@@ -9674,6 +9674,88 @@ GtPharoMethodCoderByScripterExamples >> scripterForBlock: aBlock [
 	^ aScripter
 ]
 
+{ #category : #'examples - scrolling' }
+GtPharoMethodCoderByScripterExamples >> scrollToUndefinedTemp [
+	<gtExample>
+	| scripter source |
+	scripter := self scripter.
+	scripter
+		substep: 'Initialize Coder Model and UI'
+		do: [ :aStep | 
+			aStep set
+				label: 'Initialize Coder Model';
+				model: [ source := String
+							streamContents: [ :stream | 
+								stream << 'a'.
+								500 timesRepeat: [ stream cr ].
+								stream << '^someVarThatDoesNotExist' ].
+					(GtPharoMethodCoder forNewMethod: self class)
+						currentSourceString: source;
+						yourself ];
+				play.
+			aStep set
+				label: 'Initialize Coder UI';
+				element: [ :aCoder | 
+					aCoder asElement
+						hMatchParent;
+						vFitContentLimited;
+						yourself ];
+				onModel;
+				play ].
+
+	scripter do
+		label: 'Set window extent';
+		block: [ :aSpace | aSpace windowExtent: 600 @ 300 ];
+		onSpace;
+		play.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Focus editor';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the save button';
+				// GtMethodCoderSaveActionId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source coder error attribute';
+				// GtSourceCoderEditorId;
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | (source indexOf: $s) - 1 to: (source indexOf: $s) - 1 ] ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error button exists';
+				// GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: BrButton;
+				value: [ :aButton | aButton background paint color ]
+					equals: [ BrGlamorousColors errorBackgroundColor ] ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error text is correct';
+				onSpaceRoot;
+				onDropdown: true;
+				// BrEditor;
+				value: [ :editor | editor text asString ]
+					equals: [ 'Variable is undeclared.' ] ].
+
+	^ scripter
+]
+
 { #category : #'examples - statement selection/motion' }
 GtPharoMethodCoderByScripterExamples >> selectStatementsDown [
 	<gtExample>
