@@ -34,7 +34,8 @@ GtPharoMethodCoderTagsElement >> behaviorProtocols [
 	self
 		forPharo12AndNewer: [ allSubAndSuperclassProtocols := allSubAndSuperclassProtocols collect: #name ]
 		forPharo11: [  ].
-
+		
+	allSubAndSuperclassProtocols := allSubAndSuperclassProtocols collect: #trimBoth.
 
 	^ allSubAndSuperclassProtocols asArray sorted
 ]
@@ -126,7 +127,7 @@ GtPharoMethodCoderTagsElement >> newProtocolEditor [
 			when: BrEditorAcceptWish
 				do: [ :aWish | 
 					aWish currentTarget fireEvent: BrDropdownHideWish new.
-					pharoMethodCoderViewModel coder renameProtocol: aWish text asString.
+					pharoMethodCoderViewModel coder renameProtocol: aWish text asString trimBoth.
 					self updateProtocolButton ];
 			when: BrEditorCancelWish
 				do: [ :aWish | aWish currentTarget fireEvent: BrDropdownHideWish new ];
@@ -201,7 +202,7 @@ GtPharoMethodCoderTagsElement >> onViewModelTextChanged: anAnnouncement [
 GtPharoMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 	<return: #String>
 
-	^ aMethodCoderUIModel coder protocolName
+	^ aMethodCoderUIModel coder protocolName trimBoth
 ]
 
 { #category : #'api - pharo method coder view model' }
