@@ -1086,7 +1086,9 @@ GtPharoMethodCoder >> protocol [
 
 { #category : #'api - accessing' }
 GtPharoMethodCoder >> protocol: aSymbol [
-	self attributeNamed: #category put: aSymbol.
+	aSymbol
+		ifNil: [ self removeAttributeNamed: #category ]
+		ifNotNil: [ self attributeNamed: #category put: aSymbol ].
 	self
 		announce: (GtCoderProtocolChanged new
 				newProtocol: aSymbol;
