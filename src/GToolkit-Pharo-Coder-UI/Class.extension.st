@@ -61,7 +61,7 @@ Class >> gtCoderSidebarIndexCopyClassOrTraitFor: anAction [
 				onAccept: [ :newClass | 
 					BlTaskAction
 						enqueueElement: aHostElement
-						action: [ aHostElement phlow spawnTool: (GtClassCoderTool forClass: newClass) ] ].
+						action: [ aHostElement phlow spawnObject: newClass ] ].
 			aFormElement := aForm asElement.
 			BrFrame new
 				fitContent;
@@ -69,13 +69,22 @@ Class >> gtCoderSidebarIndexCopyClassOrTraitFor: anAction [
 				padding: (BlInsets all: 5);
 				background: aFormElement theme default contentBackground;
 				addAptitude: (BrLayoutResizerAptitude new
-					exactToMatchParent: aFormElement;
-					matchParentToMatchParent: aFormElement;
-					fitContentToFitContent: aFormElement;
-					fitContentLimitedToFitContentLimited: aFormElement);
+						exactToMatchParent: aFormElement;
+						matchParentToMatchParent: aFormElement;
+						fitContentToFitContent: aFormElement;
+						fitContentLimitedToFitContentLimited: aFormElement);
 				addAptitude: (BrGlamorousPopoverPinnableAptitude new
 						withAllPinActions;
-						menuModel: anExplicitMenu) ]
+						menuModel: anExplicitMenu;
+						withPostEndPinBlock: [ :aContext | 
+							aForm
+								onAccept: [ :newClass | 
+									BlTaskAction
+										enqueueElement: aHostElement
+										action: [ aHostElement phlow spawnObject: newClass.
+											BlTaskAction
+												enqueueElement: aHostElement
+												action: [ aContext menuElement removeFromParent ] ] ] ]) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
