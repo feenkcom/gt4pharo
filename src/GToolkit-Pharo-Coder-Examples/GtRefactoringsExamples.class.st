@@ -762,12 +762,12 @@ object yourself'.
 							aRefactoring := GtExtractExampleFromSnippetToClassRefactoring
 									extract: (1 to: aSource size)
 									from: aSource
-									into: ('{1}Examples' format: {self rootClass name})
+									into: self newClassName asSymbol
 									category: aForm packageAndTagName category asSymbol.
 							aRefactoring
 								setOption: #selfArgumentName toUse: [ :ref | 'myObject' ];
 								setOption: #selectVariableToMoveTo
-									toUse: [ :ref :cls :sel | '{1}Examples' format: {self rootClass name} ];
+									toUse: [ :ref :cls :sel | self newClassName asSymbol ];
 								setOption: #variableTypesForReceiver
 									toUse: [ :ref :block | 
 										{self rootClass.
@@ -777,7 +777,12 @@ object yourself'.
 										{self rootClass.
 											self leafClass} ];
 								setOption: #useExistingMethod toUse: [ :ref1 :sel1 | false ];
-								setOption: #extractAssignment toUse: [ :ref1 :varName1 | true ].
+								setOption: #extractAssignment toUse: [ :ref1 :varName1 | true ];
+								setOption: #methodName
+									toUse: [ :methodName | 
+										methodName selector: #myExample.
+										methodName arguments: #().
+										methodName ].
 							aRefactoring ].
 					theViewModel inputReady ].
 			aMagritteViewModel := aForm asGtMagritteViewModel.
@@ -1004,6 +1009,16 @@ GtRefactoringsExamples >> messagesElementFaultyComputedRefactorings [
 		equals: 1.
 
 	^ anElement
+]
+
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> newClassName [
+	^ '{1}Examples' format: {self rootClass name}
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> newPackageName [
+	^ '{1}NewPackage' format: {self rootClass package name}
 ]
 
 { #category : #'examples - environment' }
@@ -1447,6 +1462,7 @@ GtRefactoringsExamples >> previewWithInputWidgetElementScripter [
 
 	aScripter := BlScripter new element: anElement.
 	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	aScripter userData at: #environment put: self environment.
 	
 	self assert: allAnnouncements size equals: 0.
 
@@ -1456,6 +1472,113 @@ GtRefactoringsExamples >> previewWithInputWidgetElementScripter [
 		assertPreviewButtonIsDisabled;
 		assertAcceptButtonIsNotVisible;
 		assertChangesPreviewIsNotVisible;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementScripter_typePackage [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements aPackageName |
+	aScripter := self previewWithInputWidgetElementScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aPackageName := self newPackageName.
+
+	aScripter editor
+		type: aPackageName;
+		assertTextEqualsTo: aPackageName;
+		// #package;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter click
+		label: 'Accept package name';
+		// (GtMagritteActionElementId new
+				description: GtPackageTagForm new magritteAcceptAction);
+		play.
+
+	self assert: allAnnouncements size equals: 3.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self
+		assert: allAnnouncements third class
+		equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+
+	aScripter refactorings
+		assertRefactoringInputWidgetExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertChangesPreviewIsVisible;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementScripter_typePackage_apply [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements aPackageName aClassName aNewClass aDummyClass |
+	aScripter := self previewWithInputWidgetElementScripter_typePackage.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aPackageName := self newPackageName.
+	aClassName := self newClassName.
+
+	aScripter refactorings
+		pressReturnToApplyChanges;
+		play.
+
+	aNewClass := Smalltalk globals at: aClassName asSymbol.
+
+	self assert: aNewClass isClass.
+	self assert: aNewClass superclass equals: Object.
+	self assert: aNewClass package name equals: aPackageName.
+
+	aDummyClass := self environment ensureRealClass: aNewClass.
+
+	self assert: allAnnouncements size >= 3.
+
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelApplyChangesRequested.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsAboutToApply.
+	self
+		assert: allAnnouncements last class
+		equals: GtRefactoringsViewModelExecutedRefactoringsApplied.
+
+	aScripter refactorings
+		assertRefactoringInputWidgetExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsVisible;
 		play.
 
 	^ aScripter

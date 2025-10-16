@@ -20,7 +20,8 @@ GtPharoDummyPackage >> addRealClass: newClass [
 	newDummyClass := GtPharoDummyClass new
 			realClass: newClass;
 			className: newClass name.
-	self dummyClasses: {newDummyClass}
+	self dummyClasses: {newDummyClass}.
+	^ newDummyClass
 ]
 
 { #category : #'api - classes' }
@@ -79,6 +80,18 @@ GtPharoDummyPackage >> dummyPackageTags [
 { #category : #accessing }
 GtPharoDummyPackage >> dummyPackageTags: anObject [
 	dummyPackageTags := anObject
+]
+
+{ #category : #'api - modifications' }
+GtPharoDummyPackage >> ensureRealClass: aClass [
+	"I register a new class as a dummy class.
+	I can be used when, for example, refactorings add a new class to the system,
+	that should be registered as a dummy class."
+
+	^ self dummyClasses
+		detect: [ :eachDClass | eachDClass realClass name = aClass name ]
+		ifFound: [ :aDClass | aDClass ]
+		ifNone: [ self addRealClass: aClass ]
 ]
 
 { #category : #'gt-extensions' }
