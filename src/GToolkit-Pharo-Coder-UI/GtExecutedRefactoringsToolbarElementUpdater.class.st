@@ -46,6 +46,15 @@ GtExecutedRefactoringsToolbarElementUpdater >> updateAsApplied [
 ]
 
 { #category : #private }
+GtExecutedRefactoringsToolbarElementUpdater >> updateAsDisabled [
+	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
+
+	self updateAsNotApplicable.
+	element updateAsHiddenPreviewButton.
+	element updateAsDisabledPreviewButton.
+]
+
+{ #category : #private }
 GtExecutedRefactoringsToolbarElementUpdater >> updateAsNotApplicable [
 	self ifRefactoringsElementOutOfSyncDo: [ ^ self ].
 
@@ -110,6 +119,11 @@ GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsAppliedS
 { #category : #visiting }
 GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsComputationFailedState: aState [
 	self updateWithComputationFailedException: aState
+]
+
+{ #category : #visiting }
+GtExecutedRefactoringsToolbarElementUpdater >> visitExecutedRefactoringsExplicitlyDisabledState: aState [
+	self updateAsDisabled
 ]
 
 { #category : #visiting }

@@ -32,6 +32,17 @@ GtExecutedRefactorings >> beComputingFailed: anException [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactorings >> beDisabled [
+	"Corresponding refactoring changes should be disabled.
+	
+	Return true if the resulting state is a disabled state."
+
+	<return: #Boolean>
+	state := state disable.
+	^ state isDisabled
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactorings >> beFailed: anException [
 	state := GtExecutedRefactoringsState failed: anException
 ]
@@ -163,7 +174,7 @@ GtExecutedRefactorings >> gtOverviewFor: aView [
 ]
 
 { #category : #'api - state' }
-GtExecutedRefactorings >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock [
+GtExecutedRefactorings >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock ifDisabled: aDisabledBlock [
 	state ifBeforeApplyingDo: [ ^ aBeforeApplyingBlock value ].
 	state ifApplyingDo: [ ^ anApplyingBlock value ].
 	state ifAppliedDo: [ ^ anAppliedBlock value ].
@@ -173,7 +184,8 @@ GtExecutedRefactorings >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anA
 ]
 
 { #category : #'api - state' }
-GtExecutedRefactorings >> ifComputedRefactorings: aComputedBlock ifNotComputed: aNotComputedBlock ifInProgress: aProgressBlock ifFailed: aFailedBlock [
+GtExecutedRefactorings >> ifComputedRefactorings: aComputedBlock ifNotComputed: aNotComputedBlock ifInProgress: aProgressBlock ifFailed: aFailedBlock ifDisabled: aDisabledBlock [
+	state ifDisabledDo: [ ^ aDisabledBlock value ].
 	state ifNotComputedDo: [ ^ aNotComputedBlock value ].
 	state ifComputationInProgressDo: [ ^ aProgressBlock value ].
 	state ifComputationFailedDo: [ :anException | ^ aFailedBlock cull: anException ].

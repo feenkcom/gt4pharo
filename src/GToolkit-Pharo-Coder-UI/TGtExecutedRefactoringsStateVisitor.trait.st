@@ -24,6 +24,11 @@ TGtExecutedRefactoringsStateVisitor >> visitExecutedRefactoringsComputationFaile
 ]
 
 { #category : #visiting }
+TGtExecutedRefactoringsStateVisitor >> visitExecutedRefactoringsExplicitlyDisabledState: aState [
+	^ self visitExecutedRefactoringsState: aState
+]
+
+{ #category : #visiting }
 TGtExecutedRefactoringsStateVisitor >> visitExecutedRefactoringsFailedState: aState [
 	^ self visitExecutedRefactoringsState: aState
 ]

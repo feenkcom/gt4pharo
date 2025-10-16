@@ -40,6 +40,11 @@ GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsComputationFailedS
 ]
 
 { #category : #visiting }
+GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsExplicitlyDisabledState: aState [
+	self updateAsEditable
+]
+
+{ #category : #visiting }
 GtRefactoringsInputElementUpdater >> visitExecutedRefactoringsFailedState: aState [
 	self updateAsReadOnly
 ]

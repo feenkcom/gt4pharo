@@ -1,5 +1,5 @@
 Class {
-	#name : #GtRefactoringsWithInputWidgetElement,
+	#name : #GtRefactoringsPreviewWithInputWidgetElement,
 	#superclass : #GtRefactoringsBasicElement,
 	#traits : 'TGtRefactoringsPopoverElement',
 	#classTraits : 'TGtRefactoringsPopoverElement classTrait',
@@ -14,12 +14,12 @@ Class {
 }
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> defaultLayout [
+GtRefactoringsPreviewWithInputWidgetElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> initialize [
+GtRefactoringsPreviewWithInputWidgetElement >> initialize [
 	super initialize.
 	self background: self theme default contentBackground.
 
@@ -41,7 +41,7 @@ GtRefactoringsWithInputWidgetElement >> initialize [
 		inherit: [ inputElement children ]).
 
 	self addChild: titleElement as: #refactoringTitle.
-	self addChild: inputElement as: #refactoringInput.
+	self addChild: inputElement as: #refactoringInputWidgetContainer.
 	self addChild: messagesElement as: #refactoringMessages.
 	self addChild: previewElement as: #refactoringPreviewContainer.
 	self addChild: toolbarElement as: #refactoringToolbar.
@@ -58,32 +58,32 @@ GtRefactoringsWithInputWidgetElement >> initialize [
 ]
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> initializeInputElement [
+GtRefactoringsPreviewWithInputWidgetElement >> initializeInputElement [
 	inputElement := BrFrame new fitContentLimited
 ]
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> initializeMessagesElement [
+GtRefactoringsPreviewWithInputWidgetElement >> initializeMessagesElement [
 	messagesElement := GtRefactoringsMessagesElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> initializePreviewElement [
+GtRefactoringsPreviewWithInputWidgetElement >> initializePreviewElement [
 	previewElement := GtRefactoringsJustPreviewElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> initializeTitleElement [
+GtRefactoringsPreviewWithInputWidgetElement >> initializeTitleElement [
 	titleElement := GtRefactoringsTitleElement new
 ]
 
 { #category : #initialization }
-GtRefactoringsWithInputWidgetElement >> initializeToolbarElement [
+GtRefactoringsPreviewWithInputWidgetElement >> initializeToolbarElement [
 	toolbarElement := GtRefactoringsToolbarElement new
 ]
 
 { #category : #'private - event handling' }
-GtRefactoringsWithInputWidgetElement >> onGtRefactoringsViewModelInputElementChanged: anAnnouncement [
+GtRefactoringsPreviewWithInputWidgetElement >> onGtRefactoringsViewModelInputElementChanged: anAnnouncement [
 	anAnnouncement refactoringsViewModel = self refactoringsViewModel
 		ifFalse: [ ^ self ].
 
@@ -91,7 +91,7 @@ GtRefactoringsWithInputWidgetElement >> onGtRefactoringsViewModelInputElementCha
 ]
 
 { #category : #'accessing - refactorings view model' }
-GtRefactoringsWithInputWidgetElement >> onRefactoringsViewModelChanged [
+GtRefactoringsPreviewWithInputWidgetElement >> onRefactoringsViewModelChanged [
 	super onRefactoringsViewModelChanged.
 	titleElement refactoringsViewModel: self refactoringsViewModel.
 	previewElement refactoringsViewModel: self refactoringsViewModel.
@@ -101,7 +101,7 @@ GtRefactoringsWithInputWidgetElement >> onRefactoringsViewModelChanged [
 ]
 
 { #category : #'accessing - refactorings view model' }
-GtRefactoringsWithInputWidgetElement >> subscribeToRefactoringsViewModel [
+GtRefactoringsPreviewWithInputWidgetElement >> subscribeToRefactoringsViewModel [
 	super subscribeToRefactoringsViewModel.
 	self refactoringsViewModel weak
 		when: GtRefactoringsViewModelInputElementChanged
@@ -110,13 +110,13 @@ GtRefactoringsWithInputWidgetElement >> subscribeToRefactoringsViewModel [
 ]
 
 { #category : #'accessing - refactorings view model' }
-GtRefactoringsWithInputWidgetElement >> unsubscribeFromRefactoringsViewModel [
+GtRefactoringsPreviewWithInputWidgetElement >> unsubscribeFromRefactoringsViewModel [
 	super unsubscribeFromRefactoringsViewModel.
 	self refactoringsViewModel unsubscribe: self
 ]
 
 { #category : #'accessing - refactorings view model' }
-GtRefactoringsWithInputWidgetElement >> updateElement [
+GtRefactoringsPreviewWithInputWidgetElement >> updateElement [
 	inputElement removeChildren.
 	self refactoringsViewModel inputElement
 		ifNotNil: [ :anElement | 

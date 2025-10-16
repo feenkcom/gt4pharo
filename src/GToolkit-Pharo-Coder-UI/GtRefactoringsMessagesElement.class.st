@@ -122,9 +122,9 @@ GtRefactoringsMessagesElement >> updateAsHiddenMessages [
 { #category : #'private - updating' }
 GtRefactoringsMessagesElement >> updateElement [
 	self refactoringsViewModel
-		ifComputedRefactorings: [ :aComputedRefactorings | 
-			self updateAsComputedRefactorings: aComputedRefactorings  ]
+		ifComputedRefactorings: [ :aComputedRefactorings | self updateAsComputedRefactorings: aComputedRefactorings ]
 		ifNotComputed: [ self updateAsHiddenMessages ]
 		ifInProgress: [ self updateAsHiddenMessages ]
 		ifFailed: [ self updateAsHiddenMessages ]
+		ifDisabled: [ self updateAsHiddenMessages ]
 ]

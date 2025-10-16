@@ -5,6 +5,7 @@ Class {
 		'AboutToApply',
 		'AboutToCompute',
 		'Applied',
+		'Disabled',
 		'NotApplied',
 		'NotComputed',
 		'Previewed'
@@ -30,6 +31,11 @@ GtExecutedRefactoringsState class >> applied [
 { #category : #'api - accessing' }
 GtExecutedRefactoringsState class >> computingFailed: anException [
 	^ GtExecutedRefactoringsComputationFailedState new exception: anException
+]
+
+{ #category : #'api - accessing' }
+GtExecutedRefactoringsState class >> disabled [
+	^ Disabled ifNil: [ Disabled := GtExecutedRefactoringsExplicitlyDisabledState new ]
 ]
 
 { #category : #'api - accessing' }
@@ -93,6 +99,20 @@ GtExecutedRefactoringsState >> canBeReplaced [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsState >> disable [
+	"Disable refactoring, including refactoring computation and preview."
+
+	^ self
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsState >> enable [
+	"Enable previously disabled refactoring."
+
+	^ self
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsState >> ifAppliedDo: aBlock [
 	"Evaluate block if refactorings are successfully applied"
 
@@ -112,7 +132,7 @@ GtExecutedRefactoringsState >> ifBeforeApplyingDo: aBlock [
 	"Evaluate block if refactorings are not:
 	- in a process of application (of saving changes to the system), or
 	- applied (successfully or with a failure).
-	Block receives an exception: [ :anException | ... ]"
+	Block has zero arguments."
 
 	
 ]
@@ -133,6 +153,14 @@ GtExecutedRefactoringsState >> ifComputationInProgressDo: aBlock [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsState >> ifDisabledDo: aBlock [
+	"Evaluate block if refactorings are explicitly disabled (by a user).
+	Block has zero arguments."
+
+	
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsState >> ifFailedStateDo: aBlock [
 	"Evaluate block if anything failed (raised an exception).
 	Block receives an exception: [ :anException | ... ]"
@@ -145,6 +173,14 @@ GtExecutedRefactoringsState >> ifNotComputedDo: aBlock [
 	"Evaluate block if refactorings were not computed yet."
 
 	
+]
+
+{ #category : #'api - state' }
+GtExecutedRefactoringsState >> isDisabled [
+	"Return true if corresponding executed refactorings is disabled"
+
+	<return: #Boolean>
+	^ false
 ]
 
 { #category : #'api - state' }
