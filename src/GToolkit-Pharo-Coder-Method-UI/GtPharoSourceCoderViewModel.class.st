@@ -55,6 +55,13 @@ GtPharoSourceCoderViewModel >> compositeVariableBindingsForStyling [
 	^ self compositeVariableBindings
 ]
 
+{ #category : #converting }
+GtPharoSourceCoderViewModel >> createPhlowContext [
+	^ super createPhlowContext
+		selfObjectHolder: self selfObjectHolder;
+		behavior: self behavior
+]
+
 { #category : #'private - evaluation' }
 GtPharoSourceCoderViewModel >> evaluationContext [
 	^ super evaluationContext

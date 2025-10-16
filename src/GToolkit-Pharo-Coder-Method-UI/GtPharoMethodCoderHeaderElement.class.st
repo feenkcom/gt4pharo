@@ -37,10 +37,24 @@ GtPharoMethodCoderHeaderElement >> buildSeparatorElement [
 ]
 
 { #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> createMethodBehaviorContextMenu [
+	^ headerCoderModel
+		createContextMenuMethodBehaviorFor: self textualCoderViewModel
+		from: self
+		phlowContext: self createPhlowContext
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> createPhlowContext [
+	^ self textualCoderViewModel createPhlowContext
+]
+
+{ #category : #'instance creation' }
 GtPharoMethodCoderHeaderElement >> createProviderContextMenu [
 	^ headerCoderModel
 		createContextMenuProviderBehaviorFor: self textualCoderViewModel
 		from: self
+		phlowContext: self createPhlowContext
 ]
 
 { #category : #initialization }
@@ -91,6 +105,8 @@ GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
 								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 								border: BlBorder empty ];
 						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
+			self createMethodBehaviorContextMenu ]);
 		action: [ self spawnMethodBehavior ]
 ]
 

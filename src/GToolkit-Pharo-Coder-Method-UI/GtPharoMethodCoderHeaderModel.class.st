@@ -5,44 +5,60 @@ Class {
 }
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement [
+GtPharoMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
 	"Create a context menu for a behavior that implements a method."
+
 	<return: #BrMenuItems or: nil>
-	
 	^ aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
-			GtCoderClassTarget menuItemsForObject: aMethodBehavior hostElement: anElement ]
-		ifUnknown: [
-			aCoderViewModel coderModel methodBehavior
-				realBehaviorDo: [ :aBehavior |
-					GtCoderClassTarget menuItemsForObject: aBehavior hostElement: anElement ] 
+			aPhlowContext coderCompiledMethod: aMethod.
+			GtCoderClassTarget
+				menuItemsForObject: aMethodBehavior
+				inContext: aPhlowContext
+				hostElement: anElement ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aBehavior | 
+					GtCoderClassTarget
+						menuItemsForObject: aBehavior
+						inContext: aPhlowContext
+						hostElement: anElement ]
 				ifAbsent: [ nil ] ]
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement [
+GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
 	"Create a context menu for a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
-	<return: #BrMenuItems or: nil>
 
+	<return: #BrMenuItems or: nil>
 	| aProviderBehavior |
-	
-	aProviderBehavior := aCoderViewModel 
-		ifSelfObject: [ :aSelfObject |
-			aSelfObject class instanceSide ]
-		ifNone: [ aCoderViewModel explicitProviderClass 
-			ifNil: [ aCoderViewModel behavior ] ].
-	
+	aProviderBehavior := aCoderViewModel
+			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
+			ifNone: [ aCoderViewModel explicitProviderClass ifNil: [ aCoderViewModel behavior ] ].
+
 	^ aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
 			aMethodBehavior = aProviderBehavior
-				ifTrue: [ self createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement ]
-				ifFalse: [ GtCoderClassTarget menuItemsForObject: aProviderBehavior hostElement: anElement ] ]
-		ifUnknown: [
-			aCoderViewModel coderModel methodBehavior
-				realBehaviorDo: [ :aMethodBehavior |
+				ifTrue: [ self
+						createContextMenuMethodBehaviorFor: aCoderViewModel
+						from: anElement
+						phlowContext: aPhlowContext ]
+				ifFalse: [ 
+					aPhlowContext coderCompiledMethod: aMethod.
+					GtCoderClassTarget
+						menuItemsForObject: aProviderBehavior
+						inContext: aPhlowContext
+						hostElement: anElement ] ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aMethodBehavior | 
 					aMethodBehavior = aProviderBehavior
-						ifTrue: [ self createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement ]
-						ifFalse: [ GtCoderClassTarget menuItemsForObject: aProviderBehavior hostElement: anElement ] ] 
+						ifTrue: [ self
+								createContextMenuMethodBehaviorFor: aCoderViewModel
+								from: anElement
+								phlowContext: aPhlowContext ]
+						ifFalse: [ GtCoderClassTarget
+								menuItemsForObject: aProviderBehavior
+								inContext: aPhlowContext
+								hostElement: anElement ] ]
 				ifAbsent: [ nil ] ]
 ]
 
