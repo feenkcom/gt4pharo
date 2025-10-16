@@ -188,6 +188,17 @@ GtPharoRefactoringsStep >> assertRefactoringInputWidgetExists [
 ]
 
 { #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertRefactoringInputWidgetNotExists [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert input widget does not exist';
+		satisfies: [ :anElement | anElement hasChildren not ]
+			description: [ 'Input widget must not exist' ];
+		// #refactoringInputWidgetContainer
+]
+
+{ #category : #'steps - checks' }
 GtPharoRefactoringsStep >> assertToolbarIsNotVisible [
 	^ self assert
 		referenceSender;

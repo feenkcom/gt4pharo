@@ -100,6 +100,23 @@ GtRefactoringsPreviewWithInputWidgetElement >> onRefactoringsViewModelChanged [
 	self updateElement
 ]
 
+{ #category : #'private - updating' }
+GtRefactoringsPreviewWithInputWidgetElement >> removeExistingInputWidget [
+	| removedChildren |
+	removedChildren := inputElement children asArray.
+	inputElement removeChildren.
+	BrWidgetPermanentlyRemovedEvent notifyElements: removedChildren
+]
+
+{ #category : #'private - updating' }
+GtRefactoringsPreviewWithInputWidgetElement >> replaceInputWidgetBy: anElement [
+	(anElement hasParent and: [ anElement parent == inputElement ])
+		ifTrue: [ ^ self ].
+	self removeExistingInputWidget.
+	inputElement addChild: anElement removeFromParent.
+	inputElement requestStyle
+]
+
 { #category : #'accessing - refactorings view model' }
 GtRefactoringsPreviewWithInputWidgetElement >> subscribeToRefactoringsViewModel [
 	super subscribeToRefactoringsViewModel.
@@ -115,11 +132,14 @@ GtRefactoringsPreviewWithInputWidgetElement >> unsubscribeFromRefactoringsViewMo
 	self refactoringsViewModel unsubscribe: self
 ]
 
-{ #category : #'accessing - refactorings view model' }
+{ #category : #'private - updating' }
 GtRefactoringsPreviewWithInputWidgetElement >> updateElement [
-	inputElement removeChildren.
 	self refactoringsViewModel inputElement
 		ifNotNil: [ :anElement | 
-			inputElement addChild: anElement removeFromParent.
-			inputElement requestStyle ]
+			self replaceInputWidgetBy: anElement ]
+		ifNil: [ 
+			"Since there is no input element, 
+			the refactoring is ready to compute."
+			self removeExistingInputWidget.
+			self refactoringsViewModel inputReady ]
 ]
