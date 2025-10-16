@@ -4,6 +4,48 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Support'
 }
 
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement [
+	"Create a context menu for a behavior that implements a method."
+	<return: #BrMenuItems or: nil>
+	
+	^ aCoderViewModel methodOrigin
+		originalMethodDo: [ :aMethodBehavior :aMethod | 
+			GtCoderClassTarget menuItemsForObject: aMethodBehavior hostElement: anElement ]
+		ifUnknown: [
+			aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aBehavior |
+					GtCoderClassTarget menuItemsForObject: aBehavior hostElement: anElement ] 
+				ifAbsent: [ nil ] ]
+]
+
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement [
+	"Create a context menu for a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
+	<return: #BrMenuItems or: nil>
+
+	| aProviderBehavior |
+	
+	aProviderBehavior := aCoderViewModel 
+		ifSelfObject: [ :aSelfObject |
+			aSelfObject class instanceSide ]
+		ifNone: [ aCoderViewModel explicitProviderClass 
+			ifNil: [ aCoderViewModel behavior ] ].
+	
+	^ aCoderViewModel methodOrigin
+		originalMethodDo: [ :aMethodBehavior :aMethod | 
+			aMethodBehavior = aProviderBehavior
+				ifTrue: [ self createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement ]
+				ifFalse: [ GtCoderClassTarget menuItemsForObject: aProviderBehavior hostElement: anElement ] ]
+		ifUnknown: [
+			aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aMethodBehavior |
+					aMethodBehavior = aProviderBehavior
+						ifTrue: [ self createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement ]
+						ifFalse: [ GtCoderClassTarget menuItemsForObject: aProviderBehavior hostElement: anElement ] ] 
+				ifAbsent: [ nil ] ]
+]
+
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
 	| explicitProviderClass providerBehaviorClass methodBehaviorClass |

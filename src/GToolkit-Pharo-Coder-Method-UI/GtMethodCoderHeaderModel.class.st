@@ -14,6 +14,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Support'
 }
 
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement [
+	<return: #BrMenuItems or: nil>
+	^ nil
+]
+
 { #category : #testing }
 GtMethodCoderHeaderModel >> hasMethodBehaviourData [
 	^ self methodBehaviourName notNil
