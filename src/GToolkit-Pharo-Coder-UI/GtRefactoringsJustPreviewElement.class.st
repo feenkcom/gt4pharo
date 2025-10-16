@@ -184,7 +184,8 @@ GtRefactoringsJustPreviewElement >> updateComputedRefactorings [
 		ifComputedRefactorings: [ :anExecutedRefactorings | ^ self ]
 		ifNotComputed: [  ]
 		ifInProgress: [ ^ self ]
-		ifFailed: [  ].
+		ifFailed: [  ]
+		ifDisabled: [ ^ self ].
 
 	refactoringsElement asyncFuture future: [ self computeExecutedRefactorings ]
 ]
@@ -207,6 +208,7 @@ GtRefactoringsJustPreviewElement >> updateDisplayedRefactorings [
 		ifNotComputed: [ self updateAsHiddenRefactorings ]
 		ifInProgress: [ self updateAsHiddenRefactorings ]
 		ifFailed: [ :anException | self updateAsHiddenRefactorings ]
+		ifDisabled: [ self updateAsHiddenRefactorings ]
 ]
 
 { #category : #'private - updating' }

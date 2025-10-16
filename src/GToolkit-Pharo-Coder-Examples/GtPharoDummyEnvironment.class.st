@@ -12,6 +12,16 @@ GtPharoDummyEnvironment class >> withPackages: anAmountOfPackages classes: anAmo
 	^ GtPharoDummiesGenerator withPackages: anAmountOfPackages classes: anAmountOfClasses
 ]
 
+{ #category : #'api - modifications' }
+GtPharoDummyEnvironment >> addRealPackage: aPackage [
+	| aDummyPackage |
+	aDummyPackage := GtPharoDummyPackage new
+			packageName: aPackage name;
+			realPackage: aPackage.
+	self dummyPackages: {aDummyPackage}.
+	^ aDummyPackage
+]
+
 { #category : #'api - classes' }
 GtPharoDummyEnvironment >> anyDummyClass [
 	^ self anyDummyPackage anyDummyClass
@@ -75,6 +85,23 @@ GtPharoDummyEnvironment >> dummyPackages: anObject [
 	dummyPackages addAll: anObject
 ]
 
+{ #category : #'api - modifications' }
+GtPharoDummyEnvironment >> ensureRealClass: aClass [
+	| aPackage aDummyPackage |
+	aPackage := aClass package.
+	aDummyPackage := self ensureRealPackage: aPackage.
+			
+	^ aDummyPackage ensureRealClass: aClass
+]
+
+{ #category : #'api - modifications' }
+GtPharoDummyEnvironment >> ensureRealPackage: aPackage [
+	^ self dummyPackages
+		detect: [ :eachDPackage | eachDPackage realPackage name = aPackage name ]
+		ifFound: [ :aDPackage | aDPackage ]
+		ifNone: [ self addRealPackage: aPackage ]
+]
+
 { #category : #initialization }
 GtPharoDummyEnvironment >> finalize [
 	self removeFromSystem
@@ -118,6 +145,7 @@ GtPharoDummyEnvironment >> gtPackagesFor: aView [
 	^ aView tree
 		title: 'Packages';
 		priority: 10;
+		actionCollapseAndExpandButtons;
 		items: [ self dummyPackages ];
 		children: #gtPackagesViewChildren;
 		itemText: #gtPackagesViewItemText

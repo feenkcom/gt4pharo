@@ -36,6 +36,13 @@ GtPharoMethodCoderHeaderElement >> buildSeparatorElement [
 			text: '>'.
 ]
 
+{ #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> createProviderContextMenu [
+	^ headerCoderModel
+		createContextMenuProviderBehaviorFor: self textualCoderViewModel
+		from: self
+]
+
 { #category : #initialization }
 GtPharoMethodCoderHeaderElement >> initialize [
 	super initialize.
@@ -114,6 +121,8 @@ GtPharoMethodCoderHeaderElement >> newProviderBehaviorButton [
 								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 								border: BlBorder empty ];
 						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
+			self createProviderContextMenu ]);
 		action: [ self spawnProviderBehavior ]
 ]
 

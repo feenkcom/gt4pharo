@@ -127,24 +127,31 @@ GtRefactoringsViewModel >> canExecutedRefactoringsBeReplaced [
 GtRefactoringsViewModel >> computeRefactoringsFrom: aSource [
 	"Computation of refactorings should be triggered using this method.
 	Users can ask about the execution state calling:
-	- `GtRefactoringsViewModel>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:`,
-	- `GtRefactoringsViewModel>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:`,
-	- `GtExecutedRefactorings>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:`, and
-	- `GtExecutedRefactorings>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:`."
+	- `GtRefactoringsViewModel>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:ifDisabled:`,
+	- `GtRefactoringsViewModel>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:ifDisabled:`,
+	- `GtExecutedRefactorings>>#ifComputedRefactorings:ifNotComputed:ifInProgress:ifFailed:ifDisabled:`, and
+	- `GtExecutedRefactorings>>#ifBeforeApplying:ifApplying:ifApplied:ifFailed:ifDisabled:`."
 
 	| anExecutedRefactorings |
 	anExecutedRefactorings := self executedRefactorings.
 
 	anExecutedRefactorings
 		ifComputedRefactorings: [  ]
-		ifNotComputed: [ anExecutedRefactorings executedRefactorings.
+		ifNotComputed: [ 
+			anExecutedRefactorings executedRefactorings.
 			self
 				privateNotifyComputedRefactorings: anExecutedRefactorings
 				source: aSource ]
 		ifInProgress: [  ]
-		ifFailed: [  ].
+		ifFailed: [  ]
+		ifDisabled: [  ].
 
 	^ anExecutedRefactorings
+]
+
+{ #category : #initialization }
+GtRefactoringsViewModel >> defaultExecutedRefactorings [
+	^ GtExecutedRefactorings new
 ]
 
 { #category : #'api - refactorings' }
@@ -219,21 +226,23 @@ GtRefactoringsViewModel >> hasPreviewedExecutedRefactorings [
 ]
 
 { #category : #'api - refactorings' }
-GtRefactoringsViewModel >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock [
+GtRefactoringsViewModel >> ifBeforeApplying: aBeforeApplyingBlock ifApplying: anApplyingBlock ifApplied: anAppliedBlock ifFailed: aFailedBlock ifDisabled: aDisabledBlock [
 	^ self executedRefactorings
 		ifBeforeApplying: aBeforeApplyingBlock
 		ifApplying: anApplyingBlock
 		ifApplied: anAppliedBlock
 		ifFailed: aFailedBlock
+		ifDisabled: aDisabledBlock
 ]
 
 { #category : #'api - refactorings' }
-GtRefactoringsViewModel >> ifComputedRefactorings: aComputedBlock ifNotComputed: aNotComputedBlock ifInProgress: aProgressBlock ifFailed: aFailedBlock [
+GtRefactoringsViewModel >> ifComputedRefactorings: aComputedBlock ifNotComputed: aNotComputedBlock ifInProgress: aProgressBlock ifFailed: aFailedBlock ifDisabled: aDisabledBlock [
 	^ self executedRefactorings
 		ifComputedRefactorings: aComputedBlock
 		ifNotComputed: aNotComputedBlock
 		ifInProgress: aProgressBlock
 		ifFailed: aFailedBlock
+		ifDisabled: aDisabledBlock
 ]
 
 { #category : #initialization }
@@ -241,13 +250,13 @@ GtRefactoringsViewModel >> initialize [
 	super initialize.
 
 	announcer := Announcer new.
-	executedRefactorings := GtExecutedRefactorings new.
+	executedRefactorings := self defaultExecutedRefactorings.
 
 	refactoringTitle := nil.
 	targetName := nil.
 	isPreviewButtonFocused := true.
 	beforeApplyBlock := [  ].
-	afterAppliedBlock := [  ].
+	afterAppliedBlock := [  ]
 ]
 
 { #category : #accessing }
@@ -288,17 +297,19 @@ GtRefactoringsViewModel >> menuModelDo: aBlock [
 GtRefactoringsViewModel >> notifyApplyChangesRequested [
 	"I notify that executed refactoring changes can be applied.
 	In other words, a user agreed to apply the refactoring changes."
-	
+
 	self executedRefactorings
 		ifComputedRefactorings: [ :anExecutedRefactorings | 
 			anExecutedRefactorings
 				ifBeforeApplying: [ self privateNotifyApplyChangesRequested ]
 				ifApplying: [  ]
 				ifApplied: [  ]
-				ifFailed: [ self privateNotifyApplyChangesRequested ] ]
+				ifFailed: [ self privateNotifyApplyChangesRequested ]
+				ifDisabled: [  ] ]
 		ifNotComputed: [  ]
 		ifInProgress: [  ]
 		ifFailed: [  ]
+		ifDisabled: [  ]
 ]
 
 { #category : #'api - refactorings' }

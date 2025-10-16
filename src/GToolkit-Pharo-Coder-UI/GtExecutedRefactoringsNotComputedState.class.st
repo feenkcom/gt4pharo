@@ -24,6 +24,13 @@ GtExecutedRefactoringsNotComputedState >> canBeReplaced [
 ]
 
 { #category : #'api - state' }
+GtExecutedRefactoringsNotComputedState >> disable [
+	"Disable refactoring, including refactoring computation and preview."
+
+	^ GtExecutedRefactoringsState disabled
+]
+
+{ #category : #'api - state' }
 GtExecutedRefactoringsNotComputedState >> ifBeforeApplyingDo: aBlock [
 	aBlock value
 ]

@@ -177,6 +177,28 @@ GtPharoRefactoringsStep >> assertPreviewButtonIsVisible [
 ]
 
 { #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertRefactoringInputWidgetExists [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert input widget exists';
+		satisfies: [ :anElement | anElement hasChildren ]
+			description: [ 'Input widget is missing' ];
+		// #refactoringInputWidgetContainer
+]
+
+{ #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertRefactoringInputWidgetNotExists [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert input widget does not exist';
+		satisfies: [ :anElement | anElement hasChildren not ]
+			description: [ 'Input widget must not exist' ];
+		// #refactoringInputWidgetContainer
+]
+
+{ #category : #'steps - checks' }
 GtPharoRefactoringsStep >> assertToolbarIsNotVisible [
 	^ self assert
 		referenceSender;

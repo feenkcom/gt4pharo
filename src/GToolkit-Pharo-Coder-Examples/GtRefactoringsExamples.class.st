@@ -62,6 +62,19 @@ GtRefactoringsExamples >> basicInputViewModel [
 	^ aViewModel
 ]
 
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> basicInputWidgetViewModel [
+	<gtExample>
+	| aViewModel |
+	aViewModel := GtRefactoringsWithInputWidgetViewModel new.
+
+	self assert: aViewModel refactoringTitle isNil.
+	self assert: aViewModel targetName isNil.
+	self assert: aViewModel inputElement isNil.
+
+	^ aViewModel
+]
+
 { #category : #'examples - just preview element' }
 GtRefactoringsExamples >> basicJustPreviewElement [
 	<gtExample>
@@ -112,6 +125,15 @@ GtRefactoringsExamples >> basicPreviewWithInputElement [
 		assert: (anElement query / GtRefactoringsToolbarElement) anyOne visibility
 		equals: BlVisibility visible.
 	self assert: (anElement query // #progress) isEmpty.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> basicPreviewWithInputWidgetElement [
+	<gtExample>
+	| anElement |
+	anElement := GtRefactoringsPreviewWithInputWidgetElement new.
 
 	^ anElement
 ]
@@ -717,6 +739,110 @@ GtRefactoringsExamples >> inputViewModelWithException [
 	^ aViewModel
 ]
 
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> inputWidgetViewModelExistingClassAndPackage [
+	<gtExample>
+	| aViewModel aSource |
+	aViewModel := self basicInputWidgetViewModel.
+
+	aViewModel optionAt: #environment put: self environment.
+
+	aSource := 'object := Object new.
+object finalize.
+object yourself'.
+
+	aViewModel
+		refactoringTitle: 'Create example';
+		inputElement: [ :theViewModel | nil ];
+		refactoringWithConfirmation: [ | aRefactoring |
+			aRefactoring := GtExtractExampleFromSnippetToVariableRefactoring
+					extract: (1 to: aSource size)
+					from: aSource.
+			aRefactoring
+				setOption: #selfArgumentName toUse: [ :ref | 'myObject' ];
+				setOption: #selectVariableToMoveTo
+					toUse: [ :ref :cls :sel | sel ];
+				setOption: #variableTypesForReceiver
+					toUse: [ :ref :block | 
+						{ref model classNamed: self rootClass name.} ];
+				setOption: #useExistingMethod toUse: [ :ref1 :sel1 | false ];
+				setOption: #extractAssignment toUse: [ :ref1 :varName1 | true ];
+				setOption: #methodName
+					toUse: [ :methodName | 
+						methodName selector: #myExample.
+						methodName arguments: #().
+						methodName ].
+			aRefactoring ].
+
+	self assert: aViewModel inputElement equals: nil.
+	self
+		assert: aViewModel executedRefactorings state
+		equals: GtExecutedRefactoringsState disabled.
+
+	^ aViewModel
+]
+
+{ #category : #'examples - view model' }
+GtRefactoringsExamples >> inputWidgetViewModelNewClassAndPackage [
+	<gtExample>
+	| aViewModel aSource |
+	aViewModel := self basicInputWidgetViewModel.
+
+	aViewModel optionAt: #environment put: self environment.
+
+	aSource := 'object := Object new.
+object finalize.
+object yourself'.
+
+	aViewModel
+		refactoringTitle: 'Create example';
+		inputElement: [ :theViewModel | 
+			| aForm aMagritteViewModel |
+			aForm := GtPackageTagForm new.
+			aForm
+				onAccept: [ :aFuture :aButton | 
+					theViewModel
+						refactoringWithConfirmation: [ | aRefactoring |
+							aRefactoring := GtExtractExampleFromSnippetToClassRefactoring
+									extract: (1 to: aSource size)
+									from: aSource
+									into: self newClassName asSymbol
+									category: aForm packageAndTagName category asSymbol.
+							aRefactoring
+								setOption: #selfArgumentName toUse: [ :ref | 'myObject' ];
+								setOption: #selectVariableToMoveTo
+									toUse: [ :ref :cls :sel | self newClassName asSymbol ];
+								setOption: #variableTypesForReceiver
+									toUse: [ :ref :block | 
+										{self rootClass.
+											self leafClass} ];
+								setOption: #variableTypes
+									toUse: [ :ref :types :selected | 
+										{self rootClass.
+											self leafClass} ];
+								setOption: #useExistingMethod toUse: [ :ref1 :sel1 | false ];
+								setOption: #extractAssignment toUse: [ :ref1 :varName1 | true ];
+								setOption: #methodName
+									toUse: [ :methodName | 
+										methodName selector: #myExample.
+										methodName arguments: #().
+										methodName ].
+							aRefactoring ].
+					theViewModel inputReady ].
+			aMagritteViewModel := aForm asGtMagritteViewModel.
+			aMagritteViewModel focusFirstInputField.
+			theViewModel optionAt: #packageTagForm put: aForm.
+			theViewModel optionAt: #magritteViewModel put: aMagritteViewModel.
+			aMagritteViewModel asElement ].
+
+	self assert: (aViewModel inputElement isKindOf: BlElement).
+	self
+		assert: aViewModel executedRefactorings state
+		equals: GtExecutedRefactoringsState disabled.
+
+	^ aViewModel
+]
+
 { #category : #'examples - just preview element' }
 GtRefactoringsExamples >> justPreviewElement [
 	<gtExample>
@@ -930,6 +1056,16 @@ GtRefactoringsExamples >> messagesElementFaultyComputedRefactorings [
 ]
 
 { #category : #'examples - environment' }
+GtRefactoringsExamples >> newClassName [
+	^ '{1}Examples' format: {self rootClass name}
+]
+
+{ #category : #'examples - environment' }
+GtRefactoringsExamples >> newPackageName [
+	^ '{1}NewPackage' format: {self rootClass package name}
+]
+
+{ #category : #'examples - environment' }
 GtRefactoringsExamples >> nonRootClass [
 	<gtExample>
 	nonRootClass ifNil: [ 
@@ -945,7 +1081,7 @@ GtRefactoringsExamples >> nonRootClass [
 GtRefactoringsExamples >> previewWithConfirmationElement [
 	<gtExample>
 	| anElement aViewModel |
-	anElement := GtRefactoringsPreviewWithConfirmationElement new.
+	anElement := self basicPreviewWithConfirmationElement.
 	aViewModel := self confirmationViewModel.
 	anElement refactoringsViewModel: aViewModel.
 
@@ -1334,6 +1470,262 @@ GtRefactoringsExamples >> previewWithInputElementSomeComputedRefactoringsScripte
 	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
 	self assert: allAnnouncements size equals: 0.
 	
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementExistingClassAndPackage [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicPreviewWithInputWidgetElement.
+	aViewModel := self inputWidgetViewModelExistingClassAndPackage.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: aViewModel executedRefactorings state
+		equals: GtExecutedRefactoringsState notComputed.
+
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility gone.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementExistingClassAndPackageScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self previewWithInputWidgetElementExistingClassAndPackage.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	aScripter userData at: #environment put: self environment.
+	
+	self assert: allAnnouncements size equals: 2.
+	self assert: allAnnouncements first class equals: GtRefactoringsViewModelExecutedRefactoringsComputed .
+	self assert: allAnnouncements second class equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed .
+
+	aScripter refactorings
+		assertRefactoringInputWidgetNotExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertChangesPreviewIsVisible;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementExistingClassAndPackageScripter_apply [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements anExample anExampleResult |
+	aScripter := self previewWithInputWidgetElementExistingClassAndPackageScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter refactorings
+		pressReturnToApplyChanges;
+		play.
+
+	self assert: (self rootClass methodDict includesKey: #myExample).
+
+	self assert: allAnnouncements size >= 3.
+
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelApplyChangesRequested.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsAboutToApply.
+	self
+		assert: allAnnouncements last class
+		equals: GtRefactoringsViewModelExecutedRefactoringsApplied.
+
+	aScripter refactorings
+		assertRefactoringInputWidgetNotExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsVisible;
+		play.
+
+	anExample := (self rootClass >> #myExample) gtExample.
+	anExampleResult := anExample run.
+	self assert: anExampleResult isSuccess.
+	self assert: anExampleResult returnValue class equals: Object.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementNewClassAndPackage [
+	<gtExample>
+	| anElement aViewModel |
+	anElement := self basicPreviewWithInputWidgetElement.
+	aViewModel := self inputWidgetViewModelNewClassAndPackage.
+	anElement refactoringsViewModel: aViewModel.
+
+	self
+		assert: aViewModel executedRefactorings state
+		equals: GtExecutedRefactoringsState disabled.
+
+	self
+		assert: (anElement query // #refactoringPreviewButton) anyOne visibility
+		equals: BlVisibility gone.
+
+	^ anElement
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementNewClassAndPackageScripter [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements |
+	anElement := self previewWithInputWidgetElementNewClassAndPackage.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	aScripter := BlScripter new element: anElement.
+	aScripter userData at: #refactoringsAnnouncements put: allAnnouncements.
+	aScripter userData at: #environment put: self environment.
+	
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter refactorings
+		assertRefactoringInputWidgetExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsNotVisible;
+		assertChangesPreviewIsNotVisible;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementNewClassAndPackageScripter_typePackage [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements aPackageName |
+	aScripter := self previewWithInputWidgetElementNewClassAndPackageScripter.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aPackageName := self newPackageName.
+
+	aScripter editor
+		type: aPackageName;
+		assertTextEqualsTo: aPackageName;
+		// #package;
+		play.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aScripter click
+		label: 'Accept package name';
+		// (GtMagritteActionElementId new
+				description: GtPackageTagForm new magritteAcceptAction);
+		play.
+
+	self assert: allAnnouncements size equals: 3.
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelExecutedRefactoringsChanged.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsComputed.
+	self
+		assert: allAnnouncements third class
+		equals: GtRefactoringsViewModelExecutedRefactoringsPreviewed.
+
+	aScripter refactorings
+		assertRefactoringInputWidgetExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertChangesPreviewIsVisible;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - preview with input widget element' }
+GtRefactoringsExamples >> previewWithInputWidgetElementNewClassAndPackageScripter_typePackage_apply [
+	<gtExample>
+	| anElement aViewModel aScripter allAnnouncements aPackageName aClassName aNewClass aDummyClass |
+	aScripter := self previewWithInputWidgetElementNewClassAndPackageScripter_typePackage.
+	anElement := aScripter element.
+	aViewModel := anElement refactoringsViewModel.
+	allAnnouncements := OrderedCollection new.
+	aViewModel weak
+		when: Announcement
+		send: #add:
+		to: allAnnouncements.
+
+	self assert: allAnnouncements size equals: 0.
+
+	aPackageName := self newPackageName.
+	aClassName := self newClassName.
+
+	aScripter refactorings
+		pressReturnToApplyChanges;
+		play.
+
+	aNewClass := Smalltalk globals at: aClassName asSymbol.
+
+	self assert: aNewClass isClass.
+	self assert: aNewClass superclass equals: Object.
+	self assert: aNewClass package name equals: aPackageName.
+
+	aDummyClass := self environment ensureRealClass: aNewClass.
+
+	self assert: allAnnouncements size >= 3.
+
+	self
+		assert: allAnnouncements first class
+		equals: GtRefactoringsViewModelApplyChangesRequested.
+	self
+		assert: allAnnouncements second class
+		equals: GtRefactoringsViewModelExecutedRefactoringsAboutToApply.
+	self
+		assert: allAnnouncements last class
+		equals: GtRefactoringsViewModelExecutedRefactoringsApplied.
+
+	aScripter refactorings
+		assertRefactoringInputWidgetExists;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsDisabled;
+		assertChangesPreviewIsVisible;
+		play.
+
 	^ aScripter
 ]
 

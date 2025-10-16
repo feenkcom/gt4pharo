@@ -21,7 +21,7 @@ SmalltalkImage >> commandLineString [
 			space;
 			<< self vm imagePath;
 			space.
-		(self argumentsStartingAtIndex: 0) reversed
+		(self argumentsStartingAtIndex: 0)
 			do: [ :arg | stream << arg asString ]
 			separatedBy: [ stream space ] ]
 ]
