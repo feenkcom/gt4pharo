@@ -4452,6 +4452,86 @@ GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot
 ]
 
 { #category : #'examples - inline all self sends' }
+GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSendsWithReturnsThatCannotBeInlined [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | coder |
+				coder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder behavior compile: 'aaaaa self ' , coder selector classified: #testing.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	true ifTrue: [ ^ self ].
+	true ifTrue: [ true ifTrue: [ ^ self ] ].
+	^ false' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method node';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 1 to: 2;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inline temp';
+				onSpaceRoot;
+				id: #'context-menu--inline-self-sends' ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert refactoring changes attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString lines first size.
+						index to: index ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	^ scripter
+]
+
+{ #category : #'examples - inline all self sends' }
 GtPharoMethodCoderByScripterExamples >> forInlineAllSelfSends_01_setup [
 	<gtExample>
 	<after: #cleanUp>
