@@ -899,7 +899,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep refactoringPre
 
 	aCheck := aScripterOrStep check
 		id: GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: GtRefactoringsPreviewButton.
+		onBreadthFirstChildOfClass: GtRefactoringsInDropdownPreviewElement.
 
 	doesExist
 		ifTrue: [
