@@ -453,6 +453,7 @@ GtRefactoringsViewModel >> refactoring: aBlock [
 	Return true if the new refactorings is (about to be) previewed."
 
 	<return: #Boolean>
+	GtJustContextStackSignal emit.
 	executedRefactorings := GtExecutedRefactorings new refactoring: aBlock.
 
 	^ self privateNotifyExecutedRefactoringsChanged
@@ -483,6 +484,7 @@ GtRefactoringsViewModel >> refactorings: aBlock [
 	Return true if the new refactorings is (about to be) previewed."
 
 	<return: #Boolean>
+	GtJustContextStackSignal emit.
 	executedRefactorings := GtExecutedRefactorings new refactorings: aBlock.
 
 	^ self privateNotifyExecutedRefactoringsChanged

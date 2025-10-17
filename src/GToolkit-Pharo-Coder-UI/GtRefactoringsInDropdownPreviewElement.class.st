@@ -146,7 +146,14 @@ GtRefactoringsInDropdownPreviewElement >> onGtRefactoringsViewModelExecutedRefac
 
 	BlTaskAction
 		enqueueElement: self
-		action: [ self dispatchEvent: GtRefactoringsAppliedEvent new ]
+		action: [ self
+				dispatchEvent: (GtRefactoringsAppliedEvent new
+						refactorings: (anAnnouncement executedRefactorings
+								ifComputedRefactorings: [ :_ :someRefactorings | someRefactorings ]
+								ifNotComputed: [ #() ]
+								ifInProgress: [ #() ]
+								ifFailed: [ #() ]
+								ifDisabled: [ #() ])) ]
 ]
 
 { #category : #'api - visibility' }

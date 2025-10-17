@@ -36,20 +36,22 @@ GtExtractExampleFromSnippetController >> completionStrategy [
 
 { #category : #accessing }
 GtExtractExampleFromSnippetController >> createRefactoringChangesAttributeFor: aRefactoring onCompletion: aBlock [
-	| editorElement viewModel |
-	viewModel := packageForm asGtMagritteViewModel.
-	viewModel focusFirstInputField.
-	editorElement := viewModel asElement.
-	editorElement
-		visibility: (self useExistingClass
-				ifTrue: [ BlVisibility gone ]
-				ifFalse: [ BlVisibility visible ]).
-	^ GtRefactoringWithInputChangesAttribute new
-		refactoring: (self isClassDefined ifTrue: [ aRefactoring ]);
-		focusAction: [ :container :button | 
+	^ GtRefactoringWithInputWidgetChangesAttribute new
+		refactoring: (self isClassDefined ifTrue: [ aRefactoring ] ifFalse: [ nil ]);
+		refactoringsViewModelDo: [ :refactoringsViewModel | 
+			refactoringsViewModel
+				refactoringTitle: 'Extract example';
+				refactoringsWithConfirmation: [ self isClassDefined
+						ifTrue: [ | ref |
+							ref := self refactoring.
+							self setPreviewOptionsOn: ref.
+							{ref} ]
+						ifFalse: [ #() ] ] ];
+		focusAction: [ :container :button :refactoringsViewModel | 
 			self isClassDefined
-				ifTrue: [ button focusAcceptButton: container ]
-				ifFalse: [ container
+				ifTrue: [ refactoringsViewModel isPreviewButtonFocused: true ]
+				ifFalse: [ refactoringsViewModel isPreviewButtonFocused: false.
+					container
 						childWithId: #package
 						ifFound: [ :el | 
 							el
@@ -57,7 +59,15 @@ GtExtractExampleFromSnippetController >> createRefactoringChangesAttributeFor: a
 		completionAction: aBlock;
 		cancelAction: [ self cancelRefactoring ];
 		showWhenCreated: self previewDisplaysImmediately;
-		editorElement: (editorElement padding: (BlInsets all: 10))
+		inputElement: [ :aRefactoringsViewModel | 
+			self useExistingClass
+				ifFalse: [ | editorElement viewModel |
+					viewModel := packageForm asGtMagritteViewModel.
+					viewModel focusFirstInputField.
+					editorElement := viewModel asElement.
+					editorElement padding: (BlInsets all: 10).
+					editorElement ]
+				ifTrue: [ nil ] ]
 ]
 
 { #category : #accessing }
@@ -67,21 +77,12 @@ GtExtractExampleFromSnippetController >> initialize [
 	receiver := exampleClass asString , ' new'.
 	packageForm := GtPackageTagForm new
 			onAccept: [ :model :button | 
-				button
-					allParentsDetect: [ :each | each anchor notNil ]
-					ifFound: [ :el | 
-						el anchor
-							allParentsDetect: [ :each | each isKindOf: GtRefactoringsWithInputPreviewElement ]
-							ifFound: [ :each | 
-								each
-									refactorings: (self isClassDefined
-											ifTrue: [ | ref |
-												ref := self refactoring.
-												self setPreviewOptionsOn: ref.
-												{ref} ]
-											ifFalse: [ #() ]) ]
-							ifNone: [  ] ]
-					ifNone: [  ] ]
+				BlTaskAction enqueueElement: button action: [
+					| anEvent |
+					anEvent := GtRefactoringsViewModelWish new.
+					button fireEvent: anEvent.
+					anEvent refactoringsViewModelDo: [ :aRefactoringsViewModel | 
+						aRefactoringsViewModel inputReady ] ] ]
 ]
 
 { #category : #accessing }

@@ -99,7 +99,7 @@ GtCoderViewModelRenameAction >> processReturnFor: renameEditor in: anEditorEleme
 	lastWasEditor := false.
 	anEditorElement
 		allChildrenBreadthFirstDo: [ :each | 
-			(lastWasEditor and: [ each isKindOf: GtRefactoringsPreviewButton ])
+			(lastWasEditor and: [ ((each isKindOf: GtRefactoringsPreviewButton) or: [ each isKindOf: GtRefactoringsInDropdownPreviewElement ]) ])
 				ifTrue: [ ^ each openPreview ].
 			(each isKindOf: GtRenameEditor)
 				ifTrue: [ first ifNil: [ first := each ].

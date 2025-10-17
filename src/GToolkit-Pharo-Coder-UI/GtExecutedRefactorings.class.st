@@ -190,7 +190,7 @@ GtExecutedRefactorings >> ifComputedRefactorings: aComputedBlock ifNotComputed: 
 	state ifComputationInProgressDo: [ ^ aProgressBlock value ].
 	state ifComputationFailedDo: [ :anException | ^ aFailedBlock cull: anException ].
 
-	^ aComputedBlock cull: self
+	^ aComputedBlock cull: self cull: executedRefactorings
 ]
 
 { #category : #'api - state' }

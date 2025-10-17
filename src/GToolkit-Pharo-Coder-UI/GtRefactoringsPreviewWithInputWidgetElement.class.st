@@ -59,7 +59,10 @@ GtRefactoringsPreviewWithInputWidgetElement >> initialize [
 
 { #category : #initialization }
 GtRefactoringsPreviewWithInputWidgetElement >> initializeInputElement [
-	inputElement := BrFrame new fitContentLimited
+	inputElement := BrFrame new
+			fitContentLimited;
+			when: GtRefactoringsViewModelWish
+				do: [ :aWish | self onGtRefactoringsViewModelWish: aWish ]
 ]
 
 { #category : #initialization }
@@ -88,6 +91,13 @@ GtRefactoringsPreviewWithInputWidgetElement >> onGtRefactoringsViewModelInputEle
 		ifFalse: [ ^ self ].
 
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
+]
+
+{ #category : #initialization }
+GtRefactoringsPreviewWithInputWidgetElement >> onGtRefactoringsViewModelWish: aWish [
+	aWish consumed: true.
+	self hasRefactoringsViewModel ifFalse: [ ^ self ].
+	aWish refactoringsViewModel: self refactoringsViewModel
 ]
 
 { #category : #'accessing - refactorings view model' }
