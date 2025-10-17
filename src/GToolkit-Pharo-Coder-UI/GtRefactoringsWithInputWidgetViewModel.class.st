@@ -96,7 +96,7 @@ GtRefactoringsWithInputWidgetViewModel >> refactoringWithConfirmation: aBlock [
 	self
 		assert: [ aBlock numArgs = 0 ]
 		description: [ 'Block must have zero arguments: {1}' format: {aBlock} ].
-	GtJustContextStackSignal emit.
+	
 	refactoringsWithConfirmationComputation := [ Array with: aBlock value ]
 ]
 
@@ -108,7 +108,7 @@ GtRefactoringsWithInputWidgetViewModel >> refactoringsWithConfirmation: aBlock [
 	self
 		assert: [ aBlock numArgs = 0 ]
 		description: [ 'Block must have zero arguments: {1}' format: {aBlock} ].
-	GtJustContextStackSignal emit.
+	
 	refactoringsWithConfirmationComputation := aBlock
 ]
 
