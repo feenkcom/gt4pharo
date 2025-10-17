@@ -15,7 +15,13 @@ Class {
 }
 
 { #category : #'actions - spawning' }
-GtMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement [
+GtMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+	<return: #BrMenuItems or: nil>
+	^ nil
+]
+
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
 	<return: #BrMenuItems or: nil>
 	^ nil
 ]
