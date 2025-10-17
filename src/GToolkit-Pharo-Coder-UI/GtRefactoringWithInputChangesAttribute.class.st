@@ -16,7 +16,9 @@ GtRefactoringWithInputChangesAttribute class >> isDeprecated [
 
 { #category : #'private - updating' }
 GtRefactoringWithInputChangesAttribute >> createRefactoringsViewModel [
-	^ GtRefactoringsWithInputWidgetViewModel new
+	^ GtRefactoringsWithInputWidgetViewModel new 
+		refactoringsWithConfirmation: [ self refactorings ];
+		yourself
 ]
 
 { #category : #accessing }

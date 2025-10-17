@@ -9,7 +9,9 @@ Class {
 
 { #category : #'private - updating' }
 GtRefactoringWithInputWidgetChangesAttribute >> createRefactoringsViewModel [
-	^ GtRefactoringsWithInputWidgetViewModel new
+	^ GtRefactoringsWithInputWidgetViewModel new 
+		refactoringsWithConfirmation: [ self refactorings ];
+		yourself
 ]
 
 { #category : #accessing }
