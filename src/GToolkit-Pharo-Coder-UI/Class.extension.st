@@ -5,7 +5,7 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFor: anAction [
 	<gtAction>
 	self subclasses notEmpty ifFalse: [ ^ anAction noAction ].
 
-	^ anAction dropdown 
+	^ anAction dropdown
 		priority: 6;
 		target: GtCoderClassTarget;
 		id: #'coder--context-menu-convert-to-sibling';
@@ -17,7 +17,7 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFor: anAction [
 		content: [ :anActionElement :aTargetElement :anExplicitMenu | 
 			| aViewModel |
 			anExplicitMenu id: #'coder--context-menu-convert-to-sibling-form'.
-			
+
 			aViewModel := GtRefactoringsWithInputViewModel new
 					refactoringTitle: 'Convert to sibling';
 					targetName: self name;
@@ -28,7 +28,7 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFor: anAction [
 							name: anInput
 							class: self
 							subclasses: self subclasses ];
-					afterAppliedBlock: [ anExplicitMenu hideAll ];
+					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithInputElement new
@@ -90,10 +90,9 @@ Class >> gtCoderSidebarIndexCopyClassOrTraitFor: anAction [
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 Class >> gtCoderSidebarIndexExtractSuperclassFor: anAction [
 	<gtAction>
-	
 	self isTrait ifTrue: [ ^ anAction noAction ].
-	
-	^ anAction dropdown 
+
+	^ anAction dropdown
 		priority: 7;
 		target: GtCoderClassTarget;
 		icon: BrGlamorousVectorIcons empty;
@@ -104,7 +103,7 @@ Class >> gtCoderSidebarIndexExtractSuperclassFor: anAction [
 		content: [ :anActionElement :aTargetElement :anExplicitMenu | 
 			| aViewModel |
 			anExplicitMenu id: #'coder--context-menu-convert-to-sibling-form'.
-			
+
 			aViewModel := GtRefactoringsWithInputViewModel new
 					refactoringTitle: 'Extract superclass';
 					targetName: self name;
@@ -115,7 +114,7 @@ Class >> gtCoderSidebarIndexExtractSuperclassFor: anAction [
 							name: anInput
 							class: self
 							subclasses: #() ];
-					afterAppliedBlock: [ anExplicitMenu hideAll ];
+					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithInputElement new
