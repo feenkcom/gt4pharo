@@ -29,6 +29,7 @@ GtRefactoringsViewModel >> aboutToApplyRefactorings: anExecutedRefactorings [
 
 	self privateNotifyAboutToApplyRefactorings.
 	
+	GtJustContextStackSignal emit.
 	self beforeApplyBlock value.
 	
 	^ true
@@ -84,6 +85,7 @@ GtRefactoringsViewModel >> appliedRefactorings: anExecutedRefactorings [
 
 	self privateNotifyAppliedRefactorings.
 	
+	GtJustContextStackSignal emit.
 	self afterAppliedBlock value
 ]
 

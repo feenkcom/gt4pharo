@@ -33,6 +33,18 @@ GtRefactoringChangesAttribute >> createRefactoringsViewModel [
 GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| refactoringsViewModel button |
 	refactoringsViewModel := self createRefactoringsViewModel.
+	refactoringsViewModel
+		afterAppliedBlock: [ completionAction notNil
+				ifTrue: [ BlTaskAction
+						enqueueElement: anEditorElement
+						action: [ completionAction
+								cull: (GtRefactoringsAppliedEvent new
+										refactorings: (refactoringsViewModel
+												ifComputedRefactorings: [ :_ :someRefactorings | someRefactorings ]
+												ifNotComputed: [ #() ]
+												ifInProgress: [ #() ]
+												ifFailed: [ #() ]
+												ifDisabled: [ #() ])) ] ] ].
 	refactoringsViewModelDo
 		ifNotNil: [ :aBlock | aBlock value: refactoringsViewModel ].
 	button := self previewButtonClass new.
@@ -56,9 +68,6 @@ GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdit
 				left: 4).
 	button cancelBlock: cancelAction.
 	button beMiniSize.
-	button
-		when: GtRefactoringsAppliedEvent
-		do: [ :event | completionAction notNil ifTrue: [ completionAction cull: event ] ].
 	showWhenCreated
 		ifTrue: [ BlTaskAction enqueueElement: button action: [ button showPreview ] ].
 	^ button

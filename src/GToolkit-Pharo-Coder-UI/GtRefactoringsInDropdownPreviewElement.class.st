@@ -141,6 +141,10 @@ GtRefactoringsInDropdownPreviewElement >> onCancelClickEvent: anEvent [
 
 { #category : #'private - event handling' }
 GtRefactoringsInDropdownPreviewElement >> onGtRefactoringsViewModelExecutedRefactoringsApplied: anAnnouncement [
+	"In some cases, the element might be removed before 
+	being able to dispatch the GtRefactoringsAppliedEvent event. 
+	You may want to use `GtRefactoringsViewModel>>#afterAppliedBlock:` instead."
+
 	anAnnouncement refactoringsViewModel = self refactoringsViewModel
 		ifFalse: [ ^ self ].
 
