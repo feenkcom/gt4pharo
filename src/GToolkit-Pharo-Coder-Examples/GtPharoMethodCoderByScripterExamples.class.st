@@ -7226,6 +7226,10 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 	| aScripter |
 	aScripter := self forUnaryExtraction_08_preview_refactoring.
 
+	aScripter refactorings
+		assertInlinedRefactoringButtonWithDropdownPreviewExists;
+		play.
+
 	aScripter
 		clickStep: [ :s | 
 			s
@@ -7245,11 +7249,9 @@ GtPharoMethodCoderByScripterExamples >> forUnaryExtraction_09_apply_refactoring 
 					equals: [ nil ];
 				id: GtSourceCoderEditorId ].
 
-	aScripter
-		assertStep: [ :s | 
-			s
-				onBreadthFirstChildOfClass: GtRefactoringsPreviewButton;
-				notExists ].
+	aScripter refactorings
+		assertInlinedRefactoringButtonWithDropdownPreviewNotExists;
+		play.
 
 	self checkFor: aScripter sourceCodeIsModified: false.
 	self checkFor: aScripter saveButtonEnabled: true.

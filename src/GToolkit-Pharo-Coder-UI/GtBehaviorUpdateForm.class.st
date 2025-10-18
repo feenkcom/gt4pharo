@@ -38,8 +38,7 @@ GtBehaviorUpdateForm >> abstractVariable: varName [
 
 { #category : #accessing }
 GtBehaviorUpdateForm >> addRefactoringPreviewFor: aRefactoring in: anElement [
-	| refactoringsViewModel button |
-	refactoringsViewModel := GtRefactoringsViewModel new.
+	| button |
 	button := GtRefactoringsInDropdownPreviewElement new
 			id: GtBehaviorCoderBehaviorNameApplyPreviewId;
 			beSmallSize;
@@ -47,7 +46,7 @@ GtBehaviorUpdateForm >> addRefactoringPreviewFor: aRefactoring in: anElement [
 			constraintsDo: [ :c | 
 				c linear vertical alignCenter.
 				c flow vertical alignCenter ];
-			refactoringsViewModel: refactoringsViewModel;
+			refactoringsViewModel: GtRefactoringsViewModel new;
 			previewContentDo: [ :aPreviewElement :aRefactoringsViewModel | 
 				aRefactoringsViewModel refactorings: [ {aRefactoring} ].
 				aPreviewElement hFitContentLimited ];
