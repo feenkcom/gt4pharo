@@ -9,6 +9,15 @@ GtSearchClassFilterExamples >> assertClassResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtAsyncSearchClassGroupStream.
 ]
 
+{ #category : #'as yet unclassified' }
+GtSearchClassFilterExamples >> classFilterIsNotAllGtSearchMethodsFilterKind [
+	<gtExample>
+	| filter |
+	filter := self classesInCurrentPackageFilter select: [:each | true ].
+	self assert: filter gtAreAllGtSearchMethodsFilterKind not.
+	^ filter
+]
+
 { #category : #examples }
 GtSearchClassFilterExamples >> classesInCurrentPackageFilter [
 	<gtExample>
