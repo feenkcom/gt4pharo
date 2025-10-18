@@ -4089,40 +4089,22 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 	<after: #cleanUp>
 	| scripter |
 	scripter := self startRenamingClassInIndex.
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Open refactoring preview';
-				key: BlKeyboardKey return ].
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Perform refactoring';
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-	
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check refactoring apply button does not exists';
-				onSpaceRoot;
-				notExists;
-				id: GtRefactoringsPreviewAcceptId ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor is removed';
-				notExists;
-				onSpaceRoot;
-				id: #renameClassEditor ].
+	scripter refactorings
+		inputEditorDo: [ :aStep | aStep pressReturn ];
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
+
+	scripter menuStep
+		assertClosedMenuContainer;
+		onSpaceRoot;
+		play.
+
 	self
 		checkClassListIn: scripter
 		containsName: environment anyDummyLeafClass realClass name

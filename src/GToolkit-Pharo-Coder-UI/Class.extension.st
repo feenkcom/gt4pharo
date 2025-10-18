@@ -28,9 +28,9 @@ Class >> gtCoderSidebarIndexConvertToSiblingClassFor: anAction [
 							name: anInput
 							class: self
 							subclasses: self subclasses ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction enqueueElement: aTargetElement action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithInputElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
@@ -114,9 +114,9 @@ Class >> gtCoderSidebarIndexExtractSuperclassFor: anAction [
 							name: anInput
 							class: self
 							subclasses: #() ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction enqueueElement: aTargetElement action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithInputElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
