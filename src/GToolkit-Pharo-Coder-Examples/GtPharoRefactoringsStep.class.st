@@ -135,6 +135,26 @@ GtPharoRefactoringsStep >> assertFormIsOpened [
 ]
 
 { #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertInlinedRefactoringButtonWithDropdownPreviewExists [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert inlined refactoring button with dropdown preview exists';
+		exists;
+		// GtRefactoringsInDropdownPreviewElement
+]
+
+{ #category : #'steps - checks' }
+GtPharoRefactoringsStep >> assertInlinedRefactoringButtonWithDropdownPreviewNotExists [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Assert inlined refactoring button with dropdown preview does not exists';
+		notExists;
+		// GtRefactoringsInDropdownPreviewElement
+]
+
+{ #category : #'steps - checks' }
 GtPharoRefactoringsStep >> assertPreviewButtonIsDisabled [
 	^ self assert
 		referenceSender;
@@ -247,6 +267,16 @@ GtPharoRefactoringsStep >> inputEditorDo: aBlock [
 	aBlock value: aStep.
 
 	^ aStep
+]
+
+{ #category : #'steps - substeps' }
+GtPharoRefactoringsStep >> inputEditorExists [
+	^ self assert
+		referenceSender;
+		onParentStepTarget: self;
+		label: 'Refactorings input editor exists';
+		// #refactoringEditor;
+		exists
 ]
 
 { #category : #'steps - interactions' }

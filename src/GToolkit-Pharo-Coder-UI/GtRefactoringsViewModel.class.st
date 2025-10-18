@@ -38,7 +38,7 @@ GtRefactoringsViewModel >> aboutToApplyRefactorings: anExecutedRefactorings [
 GtRefactoringsViewModel >> afterAppliedBlock [
 	"Return a block that is evaluated after refactorings are successfully applied.
 	The block must understands the #value message.
-	Note: the block is currently evaluated in a UI process. See:
+	Note: the block is evaluated in a future process. See:
 		- `GtRefactoringsJustPreviewElement>>#onApplyChangesRequest:`, and
 		- `GtRefactoringsViewModel>>#appliedRefactorings:`"
 
@@ -50,7 +50,7 @@ GtRefactoringsViewModel >> afterAppliedBlock [
 GtRefactoringsViewModel >> afterAppliedBlock: aBlock [
 	"Set a block that is evaluated after refactorings are successfully applied.
 	The block must understands the #value message.
-	Note: the block is currently evaluated in a UI process. See:
+	Note: the block is evaluated in a future process. See:
 		- `GtRefactoringsJustPreviewElement>>#onApplyChangesRequest:`, and
 		- `GtRefactoringsViewModel>>#appliedRefactorings:`"
 

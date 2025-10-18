@@ -1284,79 +1284,36 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 	self maximizePagerPane: scripter.
 	self openClassMenuOn: class in: scripter.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has convert to sibling menu item';
-				exists;
-				onSpaceRoot;
-				// #'menu--list';
-				// #'menu--label';
-				@ [ :each | each text asString = ('Convert to sibling ' , className) ] ].
-
+	scripter menuStep
+		assertMenuItemWithLabelExists: 'Convert to sibling ' , className;
+		onPopover;
+		play.
+	
 	self
 		hoverMenu: 'Convert to sibling ' , className
 		labelled: 'Hover convert to sibling'
 		in: scripter.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check rename editor is visible';
-				onSpaceRoot;
-				exists;
-				// #refactoringEditor ].
-
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click in rename editor';
-				onSpaceRoot;
-				// #refactoringEditor ].
-
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor has focus';
-				onSpaceRoot;
-				// #refactoringEditor;
-				hasFocus ].
-
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Move to end';
-				key: BlKeyboardKey end ].
-	scripter
-		typeStep: [ :s | 
-			s
-				label: 'Enter new class name';
-				text: '1234' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Refactoring preview does not exists';
-				notExists;
-				// #preview;
-				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
-
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Open refactoring preview';
-				key: BlKeyboardKey return ].
-
-	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
-	scripter pulse.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
+	
+	scripter refactorings
+		inputEditorExists;
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				moveToEnd;
+				typeText: '1234' ];
+		assertChangesPreviewIsNotVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertChangesPreviewIsNotVisible;
+		inputEditorDo: [ :anEditorStep | anEditorStep pressReturn ];
+		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		onPopover;
+		play.
 
 	^ scripter
 ]
@@ -2951,78 +2908,36 @@ GtPharoCoderByScripterExamples >> extractSuperclassFrom: aClass [
 	self maximizePagerPane: scripter.
 	self openClassMenuOn: aClass in: scripter.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has extract superclass menu item';
-				exists;
-				onSpaceRoot;
-				// #'menu--list';
-				// #'menu--label';
-				@ [ :each | each text asString = ('Extract superclass ' , className) ] ].
+	scripter menuStep
+		assertMenuItemWithLabelExists: 'Extract superclass ' , className;
+		onPopover;
+		play.
+
 	self
 		hoverMenu: 'Extract superclass ' , className
 		labelled: 'Hover extract superclass'
 		in: scripter.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check rename editor is visible';
-				onSpaceRoot;
-				exists;
-				// #refactoringEditor ].
-
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click in rename editor';
-				onSpaceRoot;
-				// #refactoringEditor ].
-
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor has focus';
-				onSpaceRoot;
-				// #refactoringEditor;
-				hasFocus ].
-
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Move to end';
-				key: BlKeyboardKey end ].
-	scripter
-		typeStep: [ :s | 
-			s
-				label: 'Enter new class name';
-				text: '1234' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Refactoring preview does not exists';
-				notExists;
-				// #preview;
-				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
-
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Open refactoring preview';
-				key: BlKeyboardKey return ].
-
-	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
-	scripter pulse.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
+	scripter refactorings
+		inputEditorExists;
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				moveToEnd;
+				typeText: '1234' ];
+		assertChangesPreviewIsNotVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		assertChangesPreviewIsNotVisible;
+		inputEditorDo: [ :anEditorStep | anEditorStep pressReturn ];
+		assertChangesPreviewIsVisible;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		onPopover;
+		play.
 
 	^ scripter
 ]
@@ -3125,15 +3040,11 @@ GtPharoCoderByScripterExamples >> hierarchySenders [
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> hoverMenu: menuString labelled: stepString in: scripter [
-	| step |
-	step := scripter menuStep.
-	step label: stepString.
-	step hoverMenuItem
+	scripter menuStep
+		hoverMenuItemWithLabel: menuString;
+		label: stepString;
 		onSpaceRoot;
-		// #'menu--list';
-		// #'menu--label';
-		@ [ :each | each text asString = menuString ].
-	step play
+		play
 ]
 
 { #category : #'examples - evaluation context' }
@@ -3231,12 +3142,11 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> openClassMenuOn: class in: scripter [
-	scripter
-		secondaryClickStep: [ :s | 
-			s
-				label: 'Open class menu';
-				// GtCoderClassesTreeItemElement;
-				@ [ :each | each theClass = class ] ]
+	scripter menuStep
+		openContextMenu;
+		// GtCoderClassesTreeItemElement;
+		@ [ :each | each theClass = class ];
+		play
 ]
 
 { #category : #'examples - index' }
@@ -4179,45 +4089,22 @@ GtPharoCoderByScripterExamples >> renameClassInIndex [
 	<after: #cleanUp>
 	| scripter |
 	scripter := self startRenamingClassInIndex.
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Open refactoring preview';
-				key: BlKeyboardKey return ].
 
-	(Delay forMilliseconds: 100) wait.	"Wait for preview to appear"
-	scripter pulse.
+	scripter refactorings
+		inputEditorDo: [ :aStep | aStep pressReturn ];
+		assertAcceptButtonIsVisible;
+		assertAcceptButtonIsEnabled;
+		assertPreviewButtonIsNotVisible;
+		assertPreviewButtonIsDisabled;
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check save button exists';
-				exists;
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Perform refactoring';
-				onSpaceRoot;
-				id: GtRefactoringsPreviewAcceptId ].
-	(Delay forMilliseconds: 500) wait.
-	scripter pulse.
+	scripter menuStep
+		assertClosedMenuContainer;
+		onSpaceRoot;
+		play.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check refactoring apply button does not exists';
-				onSpaceRoot;
-				notExists;
-				id: GtRefactoringsPreviewAcceptId ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor is removed';
-				notExists;
-				onSpaceRoot;
-				id: #renameClassEditor ].
 	self
 		checkClassListIn: scripter
 		containsName: environment anyDummyLeafClass realClass name
@@ -4947,61 +4834,38 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 		checkClassListIn: scripter
 		containsName: class name
 		exists: true.
-	scripter
-		secondaryClickStep: [ :s | 
-			s
-				label: 'Open class menu';
-				// GtCoderNavigationClassesTreeElementId;
-				// BrLabel;
-				@ [ :each | each text asString = class name ] ].
 
-	
+	scripter menuStep
+		openContextMenu;
+		// GtCoderNavigationClassesTreeElementId;
+		// BrLabel;
+		@ [ :each | each text asString = class name ];
+		play.
+
+	scripter menuStep
+		assertMenuContainerExist;
+		onSpaceRoot;
+		play.
+
 	self
-		hoverMenu: ('Rename class ' , class name)
+		hoverMenu: 'Rename class ' , class name
 		labelled: 'Hover rename class'
 		in: scripter.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check rename editor is visible';
-				onSpaceRoot;
-				exists;
-				// #refactoringEditor ].
+	scripter refactorings
+		inputEditorExists;
+		inputEditorDo: [ :anEditorStep | 
+			anEditorStep
+				click;
+				assertHasFocus;
+				moveToEnd;
+				typeText: '1234' ];
+		assertChangesPreviewIsNotVisible;
+		assertPreviewButtonIsVisible;
+		assertPreviewButtonIsEnabled;
+		onPopover;
+		play.
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click in rename editor';
-				onSpaceRoot;
-				// #refactoringEditor ].
-
-
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Check editor has focus';
-				onSpaceRoot;
-				// #refactoringEditor;
-				hasFocus ].
-
-	scripter
-		keyPressStep: [ :s | 
-			s
-				label: 'Move to end';
-				key: BlKeyboardKey end ].
-	scripter
-		typeStep: [ :s | 
-			s
-				label: 'Enter new class name';
-				text: '1234' ].
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Refactoring preview does not exists';
-				notExists;
-				// #preview;
-				@ [ :each | each isKindOf: GtRefactoringsPreviewButton ] ].
 	^ scripter
 ]
 

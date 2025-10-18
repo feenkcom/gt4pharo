@@ -30,7 +30,7 @@ GtPharoPackageCoderElement >> buildContentTabs [
 
 { #category : #'private - ui' }
 GtPharoPackageCoderElement >> buildPackageLabel [
-	| packageNameEditor container previewButton unloadButton refactoringsViewModel |
+	| packageNameEditor container previewButton unloadButton |
 	container := BrHorizontalPane new
 			id: #'coder--rename-package-reference-in-method-form';
 			hMatchParent;
@@ -55,13 +55,11 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 			whenKey: BlKeyCombination primaryC
 				labelDo: [ :aShortcutEvent | Clipboard clipboardText: self package name asString ].
 
-	refactoringsViewModel := GtRefactoringsViewModel new
-			refactoringTitle: 'Rename package';
-			yourself.
-
 	previewButton := GtRefactoringsInDropdownPreviewElement new
 			beTinySize;
-			refactoringsViewModel: refactoringsViewModel;
+			refactoringsViewModel: (GtRefactoringsViewModel new
+					refactoringTitle: 'Rename package';
+					yourself);
 			visibility: BlVisibility gone;
 			margin: (BlInsets left: 5);
 			previewContentDo: [ :anElement :aRefactoringsViewModel | 

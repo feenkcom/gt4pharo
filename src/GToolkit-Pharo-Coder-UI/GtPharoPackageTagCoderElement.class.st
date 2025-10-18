@@ -46,13 +46,20 @@ GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 			text: packageTagCoder packageTag name;
 			margin: (BlInsets all: 0).
 
-	previewButton := GtRefactoringsPreviewButton new
+	previewButton := GtRefactoringsInDropdownPreviewElement new
+			beTinySize;
 			margin: (BlInsets left: 5);
 			visibility: BlVisibility gone;
-			refactorings: [ {GtRBRenamePackageTagRefactoring
-						packageName: packageTagCoder package name
-						from: packageTagCoder packageTag gtTagName
-						to: tagNameEditor text asString} ];
+			refactoringsViewModel: (GtRefactoringsViewModel new refactoringTitle: 'Rename package tag');
+			previewContentDo: [ :anElement :aRefactoringsViewModel | 
+				aRefactoringsViewModel
+					targetName: packageTagCoder packageTag gtTagName;
+					refactorings: [ {GtRBRenamePackageTagRefactoring
+								packageName: packageTagCoder package name
+								from: packageTagCoder packageTag gtTagName
+								to: tagNameEditor text asString} ].
+
+				anElement hFitContentLimited ];
 			cancelBlock: [ tagNameEditor text: packageTagCoder packageTag name ];
 			when: GtRefactoringsAppliedEvent
 				do: [ :anEvent | anEvent currentTarget visibility: BlVisibility gone ].

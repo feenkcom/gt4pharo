@@ -6,7 +6,8 @@ Class {
 		'completionAction',
 		'cancelAction',
 		'showWhenCreated',
-		'focusAction'
+		'focusAction',
+		'refactoringsViewModelDo'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -21,13 +22,44 @@ GtRefactoringChangesAttribute >> completionAction: aBlock [
 	completionAction := aBlock
 ]
 
+{ #category : #'private - updating' }
+GtRefactoringChangesAttribute >> createRefactoringsViewModel [
+	^ GtRefactoringsViewModel new
+		refactorings: [ self refactorings ];
+		yourself
+]
+
 { #category : #accessing }
 GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	| button |
+	| refactoringsViewModel button |
+	refactoringsViewModel := self createRefactoringsViewModel.
+	refactoringsViewModel
+		afterAppliedBlock: [ completionAction notNil
+				ifTrue: [ BlTaskAction
+						enqueueElement: anEditorElement
+						action: [ completionAction
+								cull: (GtRefactoringsAppliedEvent new
+										refactorings: (refactoringsViewModel
+												ifComputedRefactorings: [ :_ :someRefactorings | someRefactorings ]
+												ifNotComputed: [ #() ]
+												ifInProgress: [ #() ]
+												ifFailed: [ #() ]
+												ifDisabled: [ #() ])) ] ] ].
+	refactoringsViewModelDo
+		ifNotNil: [ :aBlock | aBlock value: refactoringsViewModel ].
 	button := self previewButtonClass new.
-	button vMatchParent.
-	focusAction ifNotNil: [ button focusAction: focusAction ].
-	button refactorings: [ self refactorings ].
+
+	button refactoringsViewModel: refactoringsViewModel.
+	button
+		previewContentDo: [ :anElement :aRefactoringsViewModel | 
+			anElement hFitContentLimited.
+			focusAction
+				ifNotNil: [ :anAction | 
+					anAction
+						cull: anElement
+						cull: self
+						cull: aRefactoringsViewModel ] ].
+
 	button
 		padding: (BlInsets
 				top: 1
@@ -36,10 +68,8 @@ GtRefactoringChangesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEdit
 				left: 4).
 	button cancelBlock: cancelAction.
 	button beMiniSize.
-	button
-		when: GtRefactoringsAppliedEvent
-		do: [ :event | completionAction notNil ifTrue: [ completionAction cull: event ] ].
-	showWhenCreated ifTrue: [ button enqueueTask: [ button openPreview ] asBlTask ].
+	showWhenCreated
+		ifTrue: [ BlTaskAction enqueueElement: button action: [ button showPreview ] ].
 	^ button
 ]
 
@@ -63,7 +93,7 @@ GtRefactoringChangesAttribute >> initialize [
 
 { #category : #accessing }
 GtRefactoringChangesAttribute >> previewButtonClass [
-	^ GtRefactoringsPreviewButton
+	^ GtRefactoringsInDropdownPreviewElement
 ]
 
 { #category : #accessing }
@@ -79,6 +109,19 @@ GtRefactoringChangesAttribute >> refactoring: aRBRefactoring [
 { #category : #accessing }
 GtRefactoringChangesAttribute >> refactorings [
 	^ {refactoring}
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> refactoringsViewModelDo [
+	^ refactoringsViewModelDo
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> refactoringsViewModelDo: aBlock [
+	"Configure refactorings view model, e.g., set title.
+	The block receives one argument [ :aRefactoringsViewModelDo | ]."
+
+	refactoringsViewModelDo := aBlock
 ]
 
 { #category : #accessing }

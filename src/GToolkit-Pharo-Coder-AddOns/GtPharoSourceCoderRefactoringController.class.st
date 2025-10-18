@@ -134,7 +134,7 @@ GtPharoSourceCoderRefactoringController >> openRefactoringPreview [
 	element ifNil: [ ^ false ].
 	element
 		allChildrenBreadthFirstDo: [ :each | 
-			(each isKindOf: GtRefactoringsPreviewButton)
+			(each isKindOf: GtRefactoringsInDropdownPreviewElement)
 				ifTrue: [ each openPreview.
 					^ true ] ].
 	^ false

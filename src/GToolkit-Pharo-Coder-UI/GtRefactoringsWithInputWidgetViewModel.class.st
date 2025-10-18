@@ -49,10 +49,14 @@ GtRefactoringsWithInputWidgetViewModel >> inputElement [
 ]
 
 { #category : #accessing }
-GtRefactoringsWithInputWidgetViewModel >> inputElement: aStencil [
-	inputElementStencil = aStencil ifTrue: [ ^ self ].
+GtRefactoringsWithInputWidgetViewModel >> inputElement: aStencilBuilder [
+	"Input element stencil builder creates elements.
+	It can also return `nil` instead of a BlElement instance.
+	The stencil builder can be a block with one argument [ :aRefactoringsViewModel | ]."
 
-	inputElementStencil := aStencil
+	inputElementStencil = aStencilBuilder ifTrue: [ ^ self ].
+
+	inputElementStencil := aStencilBuilder
 			asStencilBuilder: GtRefactoringsInputWidgetStencilBuilder.
 	self notifyInputElementChanged
 ]
@@ -92,7 +96,7 @@ GtRefactoringsWithInputWidgetViewModel >> refactoringWithConfirmation: aBlock [
 	self
 		assert: [ aBlock numArgs = 0 ]
 		description: [ 'Block must have zero arguments: {1}' format: {aBlock} ].
-
+	
 	refactoringsWithConfirmationComputation := [ Array with: aBlock value ]
 ]
 
@@ -104,7 +108,7 @@ GtRefactoringsWithInputWidgetViewModel >> refactoringsWithConfirmation: aBlock [
 	self
 		assert: [ aBlock numArgs = 0 ]
 		description: [ 'Block must have zero arguments: {1}' format: {aBlock} ].
-
+	
 	refactoringsWithConfirmationComputation := aBlock
 ]
 
