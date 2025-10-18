@@ -109,6 +109,15 @@ GtSearchMethodFilterExamples >> implementorsPatternFilter [
 	^ filter.
 ]
 
+{ #category : #'as yet unclassified' }
+GtSearchMethodFilterExamples >> intersectionFilterIsAllGtSearchMethodsFilterKind [
+	<gtExample>
+	| filter |
+	filter := self referencesFilterIsAllGtSearchMethodsFilterKind & BlElement gtMethodsInClass.
+	self assert: filter gtAreAllGtSearchMethodsFilterKind.
+	^ filter
+]
+
 { #category : #'examples - method conditions' }
 GtSearchMethodFilterExamples >> methodConditionsFilter_Default [
 	<gtExample>
@@ -204,6 +213,24 @@ GtSearchMethodFilterExamples >> packagePatternFilter [
 	filter := 'coder-examples' gtPackageMatches.
 	self assert: filter notEmpty.
 	self assert: (filter matches: thisContext method).
+	^ filter
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> referencesFilterIsAllGtSearchMethodsFilterKind [
+	<gtExample>
+	| filter |
+	filter := #childrenDo: gtReferences.
+	self assert: filter gtAreAllGtSearchMethodsFilterKind.
+	^ filter
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> selectFilterIsAllGtSearchMethodsFilterKind [
+	<gtExample>
+	| filter |
+	filter := self referencesFilterIsAllGtSearchMethodsFilterKind select: [:each | each methodClass = BlElement ].
+	self assert: filter gtAreAllGtSearchMethodsFilterKind.
 	^ filter
 ]
 
