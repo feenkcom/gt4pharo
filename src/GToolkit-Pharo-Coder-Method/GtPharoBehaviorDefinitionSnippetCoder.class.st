@@ -69,7 +69,7 @@ GtPharoBehaviorDefinitionSnippetCoder >> initialize [
 
 { #category : #'private - actions' }
 GtPharoBehaviorDefinitionSnippetCoder >> newEvaluationContext [
-	^ GtPharoSnippetCoderEvaluationContext new
+	^ GtPharoMethodCoderCompilationContext new
 ]
 
 { #category : #'private - ast rb' }
@@ -84,6 +84,9 @@ GtPharoBehaviorDefinitionSnippetCoder >> newRbAST: aString [
 
 { #category : #'private - actions' }
 GtPharoBehaviorDefinitionSnippetCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
+	"I compile class definition. If the result is a class builder, I install the given class.
+	I return a defined class."
+
 	| aResult |
 	aResult := super
 			primitiveEvaluate: aSourceString
