@@ -7,6 +7,18 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
+{ #category : #'as yet unclassified' }
+GtPharoDummyEnvironment class >> cleanUp: aggressive [
+	"For better exploration, some examples do not clean up dummy environments.
+	For that reason all dummy environments are cleaned up during this process."
+
+	aggressive ifFalse: [ ^ self ].
+
+	self allInstancesDo: [ :eachEnvironment | 
+		[ eachEnvironment removeFromSystem ] 
+			onErrorDo: [ :anError | anError return ] ]
+]
+
 { #category : #'api - generation' }
 GtPharoDummyEnvironment class >> withPackages: anAmountOfPackages classes: anAmountOfClasses [
 	^ GtPharoDummiesGenerator withPackages: anAmountOfPackages classes: anAmountOfClasses
