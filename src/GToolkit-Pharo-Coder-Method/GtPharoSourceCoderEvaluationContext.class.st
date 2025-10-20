@@ -49,9 +49,10 @@ GtPharoSourceCoderEvaluationContext >> bindings [
 
 { #category : #testing }
 GtPharoSourceCoderEvaluationContext >> canAddBindingOf: aBindingName [
+	"By default, we cannot add new bindings.
+	See `OCRequestorScope>>#canAddBindingOf:` in Pharo 12."
 
-	"Check is a special variable named `name` can be declared but without declaring it."
-	^ aBindingName first isUppercase not.
+	^ false
 ]
 
 { #category : #hack }
@@ -110,7 +111,7 @@ GtPharoSourceCoderEvaluationContext >> interactive [
 
 { #category : #testing }
 GtPharoSourceCoderEvaluationContext >> isForScripting [
-	^true
+	^ false
 ]
 
 { #category : #testing }

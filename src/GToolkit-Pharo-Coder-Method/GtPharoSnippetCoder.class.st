@@ -64,6 +64,11 @@ GtPharoSnippetCoder >> initialize [
 	self forSource: ''
 ]
 
+{ #category : #'private - actions' }
+GtPharoSnippetCoder >> newEvaluationContext [
+	^ GtPharoSnippetCoderEvaluationContext new
+]
+
 { #category : #'private - ast rb' }
 GtPharoSnippetCoder >> newRbAST: aString [
 	| ast |
