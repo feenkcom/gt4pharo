@@ -184,6 +184,16 @@ GtPharoMethodCoderStep >> assertExplicitProviderClassIs: aBehavior [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertFixItPopoverExists [
+	^ self assert
+		label: 'Assert fix-it popover exists';
+		exists;
+		referenceSender;
+		onPopover;
+		// #'error-fix-it'
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIs: aBehavior [
 	| anAssertStep |
 	self assertHeaderProviderIsVisible referenceSender.
