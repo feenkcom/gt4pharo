@@ -535,6 +535,17 @@ GtPharoMethodCoderStep >> coderViewModelDo: aBlock [
 ]
 
 { #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> editorDo: aBlock [
+	^ self do
+		referenceSender;
+		label: 'Access editor';
+		block: aBlock;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> editorTextDo: aBlock [
 	^ self do
 		referenceSender;
@@ -715,13 +726,29 @@ GtPharoMethodCoderStep >> typeText: aString [
 	"The event is eventually handled in {{gtMethod:BrTextEditorInsertionHandler>>#textInputEvent:}}. 
 	Note that all characters must be printable, otherwise the event is ignored."
 
-	^ self type
-		referenceSender;
-		label: ('Type text: {1}' format: { aString });
-		text: aString;
-		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
-		onTopMost
+	^ aString lines size = 1
+		ifTrue: [ self type
+				referenceSender;
+				label: ('Type text: {1}' format: {aString lines first});
+				text: aString;
+				onParentStepTarget: self;
+				onThisOrDeepChildElementId: GtSourceCoderEditorId;
+				onTopMost ]
+		ifFalse: [ self
+				substeps2: 'Type lines'
+				do: [ :eachStep | 
+					aString lines
+						do: [ :eachLine | 
+							eachStep type
+								referenceSender;
+								label: ('Type text: {1}' format: {aString lines first});
+								text: eachLine;
+								onParentStepTarget: eachStep;
+								onThisOrDeepChildElementId: GtSourceCoderEditorId;
+								onTopMost ]
+						separatedBy: [ eachStep keyPress
+								label: 'Press return';
+								key: BlKeyboardKey return ] ] ]
 ]
 
 { #category : #'steps - interactions' }
