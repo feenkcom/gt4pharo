@@ -25,6 +25,20 @@ GtPharoBehaviorDefinitionSnippetCoder >> addRenameMethodAst: anAst to: coderAddO
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoBehaviorDefinitionSnippetCoder >> copyClassDefinitionSnippetFor: anAST into: coderAddOns viewModel: aCoderViewModel [
+	<gtAstCoderAddOns: 2>
+	self isModified
+		ifTrue: [ ^ self ].
+
+	coderAddOns
+		addMainAction: 'Copy class definition snippet' translated
+		icon: BrGlamorousVectorIcons clipboard
+		action: [ :aCoderUIModel :anElement | 
+			self onCopyClassDefinitionSnippetFrom: anElement ]
+		id: GtMethodCoderDiscardChangesActionId
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoBehaviorDefinitionSnippetCoder >> initializeAddOns: addOns [
 
 	super initializeAddOns: addOns.
@@ -70,4 +84,16 @@ GtPharoBehaviorDefinitionSnippetCoder >> modifiedMessageAstFor: anAST into: code
 		icon: BrGlamorousVectorIcons cancel
 		action: [ :aCoderUIModel :anElement | aCoderUIModel discardChanges ]
 		id: GtMethodCoderDiscardChangesActionId
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoBehaviorDefinitionSnippetCoder >> onCopyClassDefinitionSnippetFrom: anElement [
+	| aString |
+	behavior ifNil: [ ^ self ].
+
+	aString := self
+			forPharo12AndNewer: [ '({1}) install' format: {behavior definitionString} ]
+			forPharo11: [ behavior definitionString ].
+			
+	Clipboard clipboardText: aString
 ]
