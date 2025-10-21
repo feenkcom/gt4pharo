@@ -232,6 +232,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 	aScripter := self classCoderForClassUI_displayBehaviorView.
 
 	aScripter click
+		label: 'Click to get editor focus';
 		// GtPhlowCompositeViewElementId;
 		// GtSourceCoderEditorId;
 		play.
@@ -309,11 +310,13 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 
 
 	aScripter do
+		label: 'Store number of existing instance-side slots';
 		block: [ :aCoder | existingSlots := aCoder behavior slots ];
 		onModel;
 		play.
 
 	aScripter click
+		label: 'Click compile class definition button';
 		// GtPhlowCompositeViewElementId;
 		// GtSourceCoderDoItActionId;
 		play.
@@ -326,6 +329,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 		play.
 		
 	aScripter assert
+		label: 'Assert number of new instance-side slots';
 		value: [ :aCoder | aCoder behavior slots size ] equals: existingSlots size + 1;
 		onModel;
 		play.
