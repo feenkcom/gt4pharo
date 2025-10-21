@@ -199,6 +199,141 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_deleteClass_02_clickBu
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView [
+	"See https://github.com/feenkcom/gtoolkit/issues/4722"
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI.
+
+	aScripter click
+		label: 'Display class definition view';
+		// GtPhlowCompositeViewElementId;
+		// BrTab;
+		@ [ :eachTab | eachTab label characters = 'Definition' ];
+		play.
+
+	aScripter assert
+		label: 'Assert definition snippet coder is displayed';
+		value: [ :anElement | anElement textualCoderViewModel coderModel class ]
+			equals: GtPharoBehaviorDefinitionSnippetCoder;
+		// GtPhlowCompositeViewElementId;
+		// GtSourceCoderEditorId;
+		play.
+	
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_addInstVar [
+	"See https://github.com/feenkcom/gtoolkit/issues/4722"
+
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderForClassUI_displayBehaviorView.
+
+	aScripter click
+		// GtPhlowCompositeViewElementId;
+		// GtSourceCoderEditorId;
+		play.
+
+	self
+		forPharo12AndNewer: [ aScripter do
+				label: 'Insert a new instance variable name';
+				block: [ :anEditor | 
+					| anIndex |
+					anIndex := anEditor text finder
+							substring: 'slots:';
+							search.
+					self assert: anIndex isZero not.
+					anEditor editor navigator
+						moveTo: anIndex;
+						apply.
+					anEditor editor navigator
+						moveToLineEnd;
+						apply.
+					anEditor editor navigator
+						moveLeft;
+						apply.
+					anEditor editor navigator
+						moveLeft;
+						apply.
+					anEditor editor inserter
+						atCursor;
+						string: '. #newInstVar';
+						insert ];
+				// GtPhlowCompositeViewElementId;
+				// GtSourceCoderEditorId;
+				play ]
+		forPharo11: [ aScripter do
+				label: 'Insert a new instance variable name';
+				block: [ :anEditor | 
+					| anIndex |
+					anIndex := anEditor text finder
+							substring: 'instanceVariableNames:';
+							search.
+					self assert: anIndex isZero not.
+					anEditor editor navigator
+						moveTo: anIndex;
+						apply.
+					anEditor editor navigator
+						moveToLineEnd;
+						apply.
+					anEditor editor navigator
+						moveLeft;
+						apply.
+					anEditor editor inserter
+						atCursor;
+						string: ' newInstVar';
+						insert ];
+				// GtPhlowCompositeViewElementId;
+				// GtSourceCoderEditorId;
+				play ].
+
+	aScripter assert
+		label: 'Assert coder is modified';
+		satisfies: [ :anEditor | anEditor textualCoderViewModel isModified ];
+		// GtPhlowCompositeViewElementId;
+		// GtSourceCoderEditorId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_addInstVar_compile [
+	"See https://github.com/feenkcom/gtoolkit/issues/4722"
+
+	<gtExample>
+	| aScripter existingSlots |
+	aScripter := self classCoderForClassUI_displayBehaviorView_addInstVar.
+
+
+	aScripter do
+		block: [ :aCoder | existingSlots := aCoder behavior slots ];
+		onModel;
+		play.
+
+	aScripter click
+		// GtPhlowCompositeViewElementId;
+		// GtSourceCoderDoItActionId;
+		play.
+
+	aScripter assert
+		label: 'Assert coder is modified';
+		satisfies: [ :anEditor | anEditor textualCoderViewModel isModified not ];
+		// GtPhlowCompositeViewElementId;
+		// GtSourceCoderEditorId;
+		play.
+		
+	aScripter assert
+		value: [ :aCoder | aCoder behavior slots size ] equals: existingSlots size + 1;
+		onModel;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_doubleClick [
 	<gtExample>
 	| aScripter |
