@@ -158,6 +158,17 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addDiscardChangesAddonsTo: anAst to: coderAddOns [
+	<gtCoderContextMenuAddOns>
+	
+	(self
+		addContextMenuItemFrom: GtSourceCoderDiscardChangesShortcut new
+		group: BrMenuItemGroupConfiguration editing
+		withId: nil
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 1 ].
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
 	| theNodes |
