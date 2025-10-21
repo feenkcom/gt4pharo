@@ -132,7 +132,7 @@ GtPharoSnippetCoderViewModel >> preventSaveDueTo: anObject [
 	"do nothing"
 ]
 
-{ #category : #'api - actions' }
+{ #category : #'as yet unclassified' }
 GtPharoSnippetCoderViewModel >> profileWithMessageTally [
 	<return: #Boolean>
 

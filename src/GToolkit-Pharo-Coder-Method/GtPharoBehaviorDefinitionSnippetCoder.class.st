@@ -11,8 +11,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtPharoBehaviorDefinitionSnippetCoder class >> forSource: aString [
-	^ self new sourceCodeSynchronously: (GtCoderExplicitStringSource new source: aString)
+GtPharoBehaviorDefinitionSnippetCoder class >> forBehavior: aBehavior [
+	^ self new behavior: aBehavior
 ]
 
 { #category : #accessing }
@@ -22,7 +22,10 @@ GtPharoBehaviorDefinitionSnippetCoder >> behavior [
 
 { #category : #accessing }
 GtPharoBehaviorDefinitionSnippetCoder >> behavior: aBehavior [
-	behavior := aBehavior
+	behavior = aBehavior instanceSide ifTrue: [ ^ self ].
+
+	behavior := aBehavior instanceSide.
+	self updateBehaviorSource.
 ]
 
 { #category : #'api - ast' }
@@ -82,6 +85,17 @@ GtPharoBehaviorDefinitionSnippetCoder >> newRbAST: aString [
 	^ ast
 ]
 
+{ #category : #'private - event handling' }
+GtPharoBehaviorDefinitionSnippetCoder >> onClassChanged: anAnnouncement [
+
+	(anAnnouncement classAffected == behavior or: [ 
+		 anAnnouncement classAffected == behavior class ]) ifFalse: [ 
+		^ self ].
+	
+	self updateBehaviorSource.
+	self announce: (GtCoderClassChanged new coder: self)
+]
+
 { #category : #'private - actions' }
 GtPharoBehaviorDefinitionSnippetCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	"I compile class definition. If the result is a class builder, I install the given class.
@@ -98,14 +112,19 @@ GtPharoBehaviorDefinitionSnippetCoder >> primitiveEvaluate: aSourceString inCont
 	^ aResult install
 ]
 
-{ #category : #'api - actions' }
-GtPharoBehaviorDefinitionSnippetCoder >> profileWithMessageTallyInContext: aGtPharoCoderEvaluationContext [
-	^ self
-		evaluate: [ :thisCoder | thisCoder currentSourceString ]
-		decorated: [ :aSourceString | 'MessageTally on: [ ' , aSourceString , ']' ]
-		inContext: aGtPharoCoderEvaluationContext
-		thenDo: [ :anEvaluationResult | 
-			self
-				notifyObjectSpawnFromEvaluationResult: anEvaluationResult
-				requesterObject: aGtPharoCoderEvaluationContext requesterObject ]
+{ #category : #'private - subscriptions' }
+GtPharoBehaviorDefinitionSnippetCoder >> subscribeToSystem [
+	self isSubscribedToSystem ifTrue: [ ^ self ].
+
+	SystemAnnouncer uniqueInstance weak
+		when: ClassAnnouncement
+			send: #onClassChanged:
+			to: self
+]
+
+{ #category : #'private - actions' }
+GtPharoBehaviorDefinitionSnippetCoder >> updateBehaviorSource [
+	behavior ifNil: [ ^ self ].
+	self
+		sourceCodeSynchronously: (GtCoderExplicitStringSource new source: behavior definitionString)
 ]

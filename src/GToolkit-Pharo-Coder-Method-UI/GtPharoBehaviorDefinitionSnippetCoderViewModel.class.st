@@ -138,13 +138,6 @@ GtPharoBehaviorDefinitionSnippetCoderViewModel >> preventSaveDueTo: anObject [
 	"do nothing"
 ]
 
-{ #category : #'api - actions' }
-GtPharoBehaviorDefinitionSnippetCoderViewModel >> profileWithMessageTally [
-	<return: #Boolean>
-
-	^ self coderModel profileWithMessageTallyInContext: self evaluationContext
-]
-
 { #category : #'api - bindings' }
 GtPharoBehaviorDefinitionSnippetCoderViewModel >> sharedBindings [
 	<return: #GtSharedVariablesBindings>
