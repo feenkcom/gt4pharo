@@ -5,9 +5,15 @@ GtPharoBehaviorDefinitionSnippetCoder >> addEvaluateAddonsTo: anAst to: coderAdd
 	<gtCoderContextMenuAddOns>
 	(self
 		addContextMenuItemFrom: GtSourceCoderCompileItShortcut new
-		group: BrMenuItemGroupConfiguration evaluation
+		group: (BrMenuItemGroupConfiguration evaluation priority: 1)
 		withId: GtSourceCoderDoItActionId
-		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 800 ].
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 1 ].
+		
+	(self
+		addContextMenuItemFrom: GtSourceCoderDiscardChangesShortcut new
+		group: BrMenuItemGroupConfiguration editing
+		withId: nil
+		to: coderAddOns) ifNotNil: [ :anAction | anAction priority: 1 ].
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -47,5 +53,21 @@ GtPharoBehaviorDefinitionSnippetCoder >> initializeAddOns: addOns viewModel: aVi
 GtPharoBehaviorDefinitionSnippetCoder >> initializeShortcuts: addOns [
 	super initializeShortcuts: addOns.
 
-	addOns addShortcut: GtSourceCoderCompileItShortcut new
+	addOns
+		addShortcut: GtSourceCoderCompileItShortcut new;
+		addShortcut: GtSourceCoderDiscardChangesShortcut new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoBehaviorDefinitionSnippetCoder >> modifiedMessageAstFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 2>
+
+	self isModified
+		ifFalse: [ ^ self ].
+
+	coderAddOns
+		addMainAction: 'Discard changes' translated
+		icon: BrGlamorousVectorIcons cancel
+		action: [ :aCoderUIModel :anElement | aCoderUIModel discardChanges ]
+		id: GtMethodCoderDiscardChangesActionId
 ]

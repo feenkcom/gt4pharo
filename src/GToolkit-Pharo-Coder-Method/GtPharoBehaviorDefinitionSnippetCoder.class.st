@@ -35,11 +35,6 @@ GtPharoBehaviorDefinitionSnippetCoder >> computeAst: theSourceString [
 		startingAt: GtPharoParser startingStateForMethodSequence
 ]
 
-{ #category : #initialization }
-GtPharoBehaviorDefinitionSnippetCoder >> forSource: aString [
-	self sourceCode: (GtCoderExplicitStringSource new source: aString)
-]
-
 { #category : #accessing }
 GtPharoBehaviorDefinitionSnippetCoder >> implicitVariableNames [
 	| variables |
@@ -61,13 +56,6 @@ GtPharoBehaviorDefinitionSnippetCoder >> implicitVariableReferencesTo: aString d
 			(each isVariable
 				and: [ (aString sameContentAs: each variableName asString)
 						and: [ each whoDefines isNil ] ]) ifTrue: [ aBlock value: each ] ]
-]
-
-{ #category : #initialization }
-GtPharoBehaviorDefinitionSnippetCoder >> initialize [	
-	super initialize.
-
-	self forSource: ''
 ]
 
 { #category : #'private - actions' }
