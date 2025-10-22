@@ -6,8 +6,9 @@ Class {
 
 { #category : #executing }
 GtDefineClassVariableFixItAction >> basicExecuteOn: anEditorElement [
-	sourceCoder addClassVariable: self nodeName.
-	anEditorElement requestFocus
+	BlTaskAction enqueueElement: self action: [
+		sourceCoder addClassVariable: self nodeName.
+		anEditorElement requestFocus ]
 ]
 
 { #category : #accessing }

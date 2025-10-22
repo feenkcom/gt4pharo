@@ -9,12 +9,13 @@ Class {
 
 { #category : #executing }
 GtRenameVariableFixItAction >> basicExecuteOn: anEditorElement [
-	| newSource |
-	newSource := sourceCoder currentSourceString.
-	newSource := (newSource first: self startPosition - 1) , newName
-		, (newSource allButFirst: self stopPosition).
-	sourceCoder currentSourceString: newSource.
-	anEditorElement requestFocus
+	BlTaskAction enqueueElement: self action: [
+		| newSource |
+		newSource := sourceCoder currentSourceString.
+		newSource := (newSource first: self startPosition - 1) , newName
+			, (newSource allButFirst: self stopPosition).
+		sourceCoder currentSourceString: newSource.
+		anEditorElement requestFocus ]
 ]
 
 { #category : #accessing }

@@ -22,8 +22,9 @@ GtDefineHashFunctionFixItAction >> allEqualsArguments [
 
 { #category : #executing }
 GtDefineHashFunctionFixItAction >> basicExecuteOn: anEditorElement [
-	methodClass compile: self updateSource classified: 'comparing'.
-	anEditorElement styleText
+	BlTaskAction enqueueElement: self action: [
+		methodClass compile: self updateSource classified: 'comparing'.
+		anEditorElement styleText ]
 ]
 
 { #category : #private }

@@ -21,12 +21,13 @@ GtDefineTemporaryFixItAction >> addDefinitionForTempAtOffset: anInteger in: ast 
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> basicExecuteOn: anEditorElement [
-	| ast variableNode |
-	ast := sourceCoder rbAST.
-	variableNode := node.
-	self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
-	sourceCoder currentSourceString: ast newSource.
-	anEditorElement requestFocus
+	BlTaskAction enqueueElement: self action: [
+		| ast variableNode |
+		ast := sourceCoder rbAST.
+		variableNode := node.
+		self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
+		sourceCoder currentSourceString: ast newSource.
+		anEditorElement requestFocus ]
 ]
 
 { #category : #accessing }
