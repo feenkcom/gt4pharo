@@ -4416,8 +4416,8 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 	aScripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert source editor is focused';
-				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
+				label: 'Assert source editor has focus';
+				satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 				id: GtSourceCoderEditorId ].
 
 	^ aScripter

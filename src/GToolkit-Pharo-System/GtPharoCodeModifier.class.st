@@ -41,6 +41,11 @@ GtPharoCodeModifier class >> createSubclassOf: anExistingClass named: aSubclassN
 		package: aPackageSymbol
 ]
 
+{ #category : #'mutual exclusion' }
+GtPharoCodeModifier class >> critical: aBlock [ 
+	^ self current critical: aBlock
+]
+
 { #category : #accessing }
 GtPharoCodeModifier class >> current [
 	^ current ifNil: [ current := self new ]
