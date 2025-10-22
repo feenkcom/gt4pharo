@@ -6,7 +6,10 @@ Class {
 
 { #category : #executing }
 GtFixItVariableNodeAction >> finishExecuteOn: anEditorElement [
-	self autoSave ifTrue: [ anEditorElement textualCoderViewModel save ]
+	self autoSave
+		ifTrue: [ BlTaskAction
+				enqueueElement: anEditorElement
+				action: [ anEditorElement textualCoderViewModel save ] ]
 ]
 
 { #category : #'api - node' }
