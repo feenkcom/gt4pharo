@@ -48,7 +48,8 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Refactoring-Core'.
 		'Refactoring-Environment'.
 		'System-Announcements'.
-		'Transcript-NonInteractive'
+		'Transcript-NonInteractive'.
+		'Shift-ClassBuilder'
 	}, (self 
 		forPharo12AndNewer: [ {
 			'Deprecated12' } ] 
