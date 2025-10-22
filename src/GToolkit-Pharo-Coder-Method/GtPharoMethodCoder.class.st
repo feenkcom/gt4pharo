@@ -65,7 +65,7 @@ GtPharoMethodCoder >> addClassVariable: aString [
 	refactoring := RBAddClassVariableRefactoring
 		variable: aString
 		class: self behavior instanceSide.
-	refactoring execute.
+	GtPharoCodeModifier critical: [ refactoring execute ].
 
 	"and restyle the text"
 	self requestStyleSourceText
@@ -77,7 +77,7 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 	refactoring := RBAddInstanceVariableRefactoring
 		variable: aString
 		class: self behavior.
-	refactoring execute.
+	GtPharoCodeModifier critical: [ refactoring execute ].
 
 	self requestStyleSourceText
 ]

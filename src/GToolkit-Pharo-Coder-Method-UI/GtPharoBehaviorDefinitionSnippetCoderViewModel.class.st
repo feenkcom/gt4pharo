@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoSnippetCoderViewModel,
+	#name : #GtPharoBehaviorDefinitionSnippetCoderViewModel,
 	#superclass : #GtPharoSourceCoderViewModel,
 	#instVars : [
 		'context',
@@ -10,17 +10,23 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> allowSaveDueTo: anObject [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> allowSaveDueTo: anObject [
 	"do nothing"
 ]
 
 { #category : #'api - coder model' }
-GtPharoSnippetCoderViewModel >> behavior [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> behavior [
 	^ self ifSelfObject: [ :each | each class ] ifNone: [ UndefinedObject ]
 ]
 
+{ #category : #'api - actions' }
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> compileIt [
+	<return: #GtSourceCoderEvaluationResult>
+	^ self doItAllRequestedBy: self
+]
+
 { #category : #'private - bindings' }
-GtPharoSnippetCoderViewModel >> compositeVariableBindings [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> compositeVariableBindings [
 	| theBindings |
 	theBindings := super compositeVariableBindings.
 	context ifNotNil: [ :aContext | 
@@ -32,23 +38,23 @@ GtPharoSnippetCoderViewModel >> compositeVariableBindings [
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> context [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> context [
 	^ context
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> context: anObject [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> context: anObject [
 	context := anObject
 ]
 
 { #category : #'private - evaluation' }
-GtPharoSnippetCoderViewModel >> evaluationContext [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> evaluationContext [
 	^ super evaluationContext
 		runtimeContext: self context
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> gtBindingsFor: aView [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> gtBindingsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Bindings';
@@ -57,7 +63,7 @@ GtPharoSnippetCoderViewModel >> gtBindingsFor: aView [
 ]
 
 { #category : #'api - coder model' }
-GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 	"Return true if a variable with a given name is declared"
 	<return: #Boolean>
 
@@ -73,21 +79,21 @@ GtPharoSnippetCoderViewModel >> hasDeclaredVariableNamed: aVariableName [
 ]
 
 { #category : #'api - coder model' }
-GtPharoSnippetCoderViewModel >> hasExplicitlyDeclaredVariableNamed: aVariableName [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> hasExplicitlyDeclaredVariableNamed: aVariableName [
 	"Don't return true for implicitly defined variables"
 
 	^ super hasDeclaredVariableNamed: aVariableName
 ]
 
 { #category : #initialization }
-GtPharoSnippetCoderViewModel >> initialize [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> initialize [
 	super initialize.
 	
 	sharedBindings := GtSharedVariablesBindings new
 ]
 
 { #category : #'private - bindings' }
-GtPharoSnippetCoderViewModel >> localSnippetVariableBindings [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> localSnippetVariableBindings [
 	| theBindings |
 	theBindings := GtCompositeVariablesBindings new.
 	theBindings addBindings: localBindings.
@@ -96,7 +102,7 @@ GtPharoSnippetCoderViewModel >> localSnippetVariableBindings [
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> newCompletionStrategy [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> newCompletionStrategy [
 	| strategy |
 	strategy := super newCompletionStrategy
 		isMethod: false;
@@ -106,7 +112,7 @@ GtPharoSnippetCoderViewModel >> newCompletionStrategy [
 ]
 
 { #category : #'api - coder model' }
-GtPharoSnippetCoderViewModel >> onCoderModelChanged [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> onCoderModelChanged [
 	super onCoderModelChanged.
 
 	self localBindings
@@ -121,48 +127,41 @@ GtPharoSnippetCoderViewModel >> onCoderModelChanged [
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> onSelfObjectHolderChanged [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> onSelfObjectHolderChanged [
 	super onSelfObjectHolderChanged.
 
 	coderModel ifNotNil: [ coderModel behavior: self behavior ]
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> preventSaveDueTo: anObject [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> preventSaveDueTo: anObject [
 	"do nothing"
 ]
 
-{ #category : #'as yet unclassified' }
-GtPharoSnippetCoderViewModel >> profileWithMessageTally [
-	<return: #Boolean>
-
-	^ self coderModel profileWithMessageTallyInContext: self evaluationContext
-]
-
 { #category : #'api - bindings' }
-GtPharoSnippetCoderViewModel >> sharedBindings [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> sharedBindings [
 	<return: #GtSharedVariablesBindings>
 
 	^ sharedBindings
 ]
 
 { #category : #'api - bindings' }
-GtPharoSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> sharedBindings: aGtSharedVariablesBindings [
 	sharedBindings := aGtSharedVariablesBindings.
 	self updateCompletionBindings
 ]
 
 { #category : #'api - coder model' }
-GtPharoSnippetCoderViewModel >> updateCompletionBindings [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> updateCompletionBindings [
 	self completionStrategy bindings: self localSnippetVariableBindings
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> variableValueToggleModel [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> variableValueToggleModel [
 	^variableValueToggleModel
 ]
 
 { #category : #accessing }
-GtPharoSnippetCoderViewModel >> variableValueToggleModel: aModel [
+GtPharoBehaviorDefinitionSnippetCoderViewModel >> variableValueToggleModel: aModel [
 	variableValueToggleModel := aModel
 ]

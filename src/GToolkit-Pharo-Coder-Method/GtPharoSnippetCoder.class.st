@@ -7,7 +7,7 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Method-Coder'
 }
 
-{ #category : #'instance creation' }
+{ #category : #'as yet unclassified' }
 GtPharoSnippetCoder class >> forSource: aString [
 	^ self new sourceCodeSynchronously: (GtCoderExplicitStringSource new source: aString)
 ]

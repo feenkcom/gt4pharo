@@ -13,7 +13,38 @@ GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderChangeMethodAndCheckColl
 	aScripter := self collapsedMethodCoderCheckCollapsedText.
 	aCoder := aScripter userData at: #coder.
 
-	aCoder forMethod: aNewMethod.
+	aScripter do
+		label: 'Change compiled method';
+		block: [ aCoder forMethod: aNewMethod ];
+		play.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				id: GtSourceCoderCollapsedTextId;
+				value: [ :aLabel | aLabel text asString ]
+					equals: [ aNewMethod selector asString ] ].
+
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderChangeMethodAndCheckCollapsedText_nonUIProcess [
+	<gtExample>
+	| aScripter aNewMethod aCoder |
+	aNewMethod := GtPharoCoderMockedClass >> #instanceMethodC.
+
+	aScripter := self collapsedMethodCoderCheckCollapsedText.
+	aCoder := aScripter userData at: #coder.
+
+	aScripter do
+		label: 'Change compiled method';
+		block: [ :anElement | 
+			| aPromise |
+			aPromise := [ aCoder forMethod: aNewMethod ] asAsyncFuture
+					await: GtCoderModel commonExecutionConfiguration.
+			anElement enqueueTask: (BlPromiseTask new promise: aPromise) ];
+		play.
 
 	aScripter
 		assertStep: [ :s | 

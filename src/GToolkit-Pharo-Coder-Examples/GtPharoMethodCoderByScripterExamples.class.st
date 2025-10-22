@@ -3972,8 +3972,8 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_06_execute [
 				label: 'Execute refactoring';
 				onSpaceRoot;
 				// GtRefactoringsPreviewAcceptId ].
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
+	"(Delay forMilliseconds: 100) wait.
+	scripter pulse."
 	scripter
 		checkStep: [ :s | 
 			s
@@ -3981,7 +3981,7 @@ GtPharoMethodCoderByScripterExamples >> forAddParameter_06_execute [
 				onSpaceRoot;
 				notExists;
 				id: GtRefactoringsPreviewAcceptId ].
-	self assert: (scripter model behavior includesSelector: #method1Unique) not.
+	self assert: (scripter model behavior includesSelector: ('method1' , 'Unique') asSymbol) not.
 	self assert: (scripter model behavior includesSelector: #someOtherMethodName:).
 	self
 		assert: (RBParser

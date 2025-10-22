@@ -9,7 +9,7 @@ Class {
 
 { #category : #executing }
 GtRemoveMethodFixItAction >> basicExecuteOn: anEditorElement [
-	behavior removeSelector: node selector
+	GtPharoCodeModifier critical: [ behavior removeSelector: node selector ]
 ]
 
 { #category : #accessing }

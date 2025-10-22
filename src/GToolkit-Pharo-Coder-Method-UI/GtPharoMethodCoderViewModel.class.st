@@ -32,6 +32,33 @@ GtPharoMethodCoderViewModel >> addBreakpointAtCursorLocation [
 	self coderModel requestStyleSourceText
 ]
 
+{ #category : #'api - debugging' }
+GtPharoMethodCoderViewModel >> addBreakpointAtCursorLocationForSelfObjectHolder: anObjectHolder [
+	"anObjectHolder is an instance of TGtCoderObject."
+	
+	| node breakpoint |
+	
+	self cursors allCursors ifNotEmpty: 
+			[:currentCursors |
+			| position |
+			position := currentCursors first position.
+			node := self compiledMethod ast
+						bestNodeForPosition: position].
+						
+	node hasBreakpoint ifTrue: [^self].
+	node isMessage | node isVariable | node isLiteralNode ifFalse: [^self].
+	
+	breakpoint := Breakpoint new.
+	breakpoint node: node.
+	breakpoint once: true.
+	anObjectHolder 
+		ifDefined: [ :aSelfObject | breakpoint scopeTo: aSelfObject ] 
+		ifNone: [ ].
+	breakpoint install.
+	
+	self coderModel requestStyleSourceText
+]
+
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> allowSave [
 	"Remove all save prventors and recompute the updated save availability"

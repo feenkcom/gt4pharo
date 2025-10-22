@@ -26,7 +26,9 @@ GtDefineTemporaryFixItAction >> basicExecuteOn: anEditorElement [
 	variableNode := node.
 	self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
 	sourceCoder currentSourceString: ast newSource.
-	anEditorElement requestFocus
+	BlTaskAction
+		enqueueElement: anEditorElement
+		action: [ anEditorElement requestFocus ]
 ]
 
 { #category : #accessing }

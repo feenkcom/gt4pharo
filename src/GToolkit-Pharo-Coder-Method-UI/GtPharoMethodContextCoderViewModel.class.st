@@ -17,6 +17,13 @@ GtPharoMethodContextCoderViewModel >> addBreakpointAtCursorLocation [
 	self coderModel gtUpdateContextWithCurrentMethod.
 ]
 
+{ #category : #'as yet unclassified' }
+GtPharoMethodContextCoderViewModel >> addBreakpointAtCursorLocationForSelfObjectHolder: anObjectHolder [
+	super addBreakpointAtCursorLocationForSelfObjectHolder: anObjectHolder.
+	
+	self coderModel gtUpdateContextWithCurrentMethod.
+]
+
 { #category : #accessing }
 GtPharoMethodContextCoderViewModel >> compositeVariableBindingsForStyling [
 	"The context variable bindings is added for styling purposes,
