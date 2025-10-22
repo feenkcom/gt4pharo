@@ -9,7 +9,7 @@ Class {
 
 { #category : #executing }
 GtInteractiveRenameVariableFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		sourceCoder renameTemporaryIn: coderViewModel node: node ]
 ]
 

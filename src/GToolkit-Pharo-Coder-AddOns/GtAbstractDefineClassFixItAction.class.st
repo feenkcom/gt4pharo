@@ -44,7 +44,7 @@ GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEdit
 
 { #category : #executing }
 GtAbstractDefineClassFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		self clearFixItAttributeInEditor: anEditorElement editor.
 		self addCreateClassAttributeInEditor: anEditorElement editor. ]
 ]

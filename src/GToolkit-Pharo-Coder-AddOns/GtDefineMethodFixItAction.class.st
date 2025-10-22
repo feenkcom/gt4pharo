@@ -54,7 +54,7 @@ GtDefineMethodFixItAction >> attributePosition [
 
 { #category : #executing }
 GtDefineMethodFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		self compileMethod.
 		self clearFixItAttributeInEditor: anEditorElement editor.
 		self addCoderAttributeInEditor: anEditorElement editor ].

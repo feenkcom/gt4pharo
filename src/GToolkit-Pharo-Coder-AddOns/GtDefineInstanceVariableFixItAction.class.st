@@ -6,7 +6,7 @@ Class {
 
 { #category : #executing }
 GtDefineInstanceVariableFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		sourceCoder addInstanceVariable: self nodeName.
 		anEditorElement requestFocus ]
 ]

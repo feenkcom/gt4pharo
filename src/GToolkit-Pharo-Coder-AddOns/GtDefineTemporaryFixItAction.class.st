@@ -21,7 +21,7 @@ GtDefineTemporaryFixItAction >> addDefinitionForTempAtOffset: anInteger in: ast 
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		| ast variableNode |
 		ast := sourceCoder rbAST.
 		variableNode := node.

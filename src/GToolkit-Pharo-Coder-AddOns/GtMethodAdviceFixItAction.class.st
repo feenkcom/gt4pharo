@@ -31,7 +31,7 @@ GtMethodAdviceFixItAction class >> testOriginal: originalSource generates: modif
 
 { #category : #executing }
 GtMethodAdviceFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		| newSource |
 		newSource := sourceCoder currentSourceString.
 		newSource = node topParent completeSource asString ifFalse: [ ^ self ].

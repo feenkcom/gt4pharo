@@ -9,7 +9,7 @@ Class {
 
 { #category : #executing }
 GtRenameVariableFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: self action: [
+	BlTaskAction enqueueElement: anEditorElement action: [
 		| newSource |
 		newSource := sourceCoder currentSourceString.
 		newSource := (newSource first: self startPosition - 1) , newName
