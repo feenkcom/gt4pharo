@@ -125,6 +125,69 @@ GtPharoMethodCoderByScripterExamples >> abstractClassVariableStartRefactoring [
 	^ scripter
 ]
 
+{ #category : #'examples - add parameter' }
+GtPharoMethodCoderByScripterExamples >> add16thParameterError [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: ': a b:b c:c d:d e:e f:f g:g h:h i:i j:j k:k l:l m:m n:n o:o
+	^ self printString' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click add parameter';
+				onSpaceRoot;
+				id: #'context-menu--add-parameter' ].
+
+	(scripter type: 'p') play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #refactoringException;
+				block: [ :each | self assert: each visibility equals: BlVisibility visible ] ].
+	^ scripter
+]
+
 { #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> assertFor: aStep expectedElementIds: expectedElementIds labeled: aLabel [
 	"Create an assertion step that checks that an element has all expected children in its children tree."
