@@ -255,7 +255,7 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 				ifNotNil: [ :definer | 
 					(coderAddOns
 						addContextMenuItem: (self
-								createLabel: 'Browse defined class'
+								createLabel: 'Browse defining class'
 								description: definer name)
 						group: BrMenuItemGroupConfiguration navigation
 						hover: (self highlightNodeBlock: node)

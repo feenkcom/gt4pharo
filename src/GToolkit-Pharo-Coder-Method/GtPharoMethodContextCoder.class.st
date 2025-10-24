@@ -291,8 +291,11 @@ GtPharoMethodContextCoder >> subscribeToSystem [
 
 	SystemAnnouncer uniqueInstance weak
 		when: MethodModified
-		send: #onMethodModified:
-		to: self
+			send: #onMethodModified:
+			to: self;
+		when: BreakpointAnnouncement
+			send: #onBreakpointAnnouncement:
+			to: self
 ]
 
 { #category : #'accessing variables' }

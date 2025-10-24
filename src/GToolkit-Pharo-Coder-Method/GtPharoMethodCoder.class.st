@@ -876,6 +876,16 @@ GtPharoMethodCoder >> object [
 ]
 
 { #category : #'event handling' }
+GtPharoMethodCoder >> onBreakpointAnnouncement: aBreakpointAnnouncement [
+	self existsInTheSystem ifFalse: [ ^ self ].
+
+	(aBreakpointAnnouncement gtAffectsMethod: self compiledMethod) 
+		ifFalse: [ ^ self ]. 
+	
+	self requestStyleSourceText
+]
+
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onClassAdded: aClassAddedAnnouncement [
 	(self methodBehavior affectedByClassAdded: aClassAddedAnnouncement)
 		ifFalse: [ ^ self ].
@@ -1236,7 +1246,8 @@ GtPharoMethodCoder >> subscribeToSystem [
 		when: ClassRemoved send: #onClassRemoved: to: self;
 		when: MethodAdded send: #onMethodAdded: to: self;
 		when: MethodRemoved send: #onMethodRemoved: to: self;
-		when: MethodModified send: #onMethodModified: to: self
+		when: MethodModified send: #onMethodModified: to: self;
+		when: BreakpointAnnouncement send: #onBreakpointAnnouncement: to: self.
 ]
 
 { #category : #'api - accessing' }
