@@ -48,6 +48,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Refactoring-Core'.
 		'Refactoring-Environment'.
 		'System-Announcements'.
+		'Reflectivity'.
 		'Transcript-NonInteractive'.
 		'Shift-ClassBuilder'
 	}, (self 
