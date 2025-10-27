@@ -40,6 +40,12 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 	<gtExample>
 	| scripter |
 	scripter := self checkActionsPresentForBigMethodCoder.
+	
+	scripter mouseMoveOver
+		label: 'Hover coder element';
+		// GtPharoBigMethodExpandedSourceCoderElement;
+		play.
+		
 	scripter
 		clickStep: [ :s | 
 			s

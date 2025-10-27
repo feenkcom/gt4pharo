@@ -10726,6 +10726,11 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	| aScripter |
 	aScripter := self veryLongMethodCoderUI_insertEmptyLines.
 
+	aScripter mouseMoveOver
+		label: 'Hover coder element';
+		// GtSourceCoderEditorId;
+		play.
+	
 	aScripter substeps: 'Small scroll events' do: [ :aStep | 
 		40 timesRepeat: [
 			aStep mouseWheel
@@ -10775,6 +10780,11 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodCoderUI_insertEmptyLines_s
 	| aScripter |
 	aScripter := self veryLongMethodCoderUI_insertEmptyLines.
 
+	aScripter mouseMoveOver
+		label: 'Hover coder element';
+		// GtSourceCoderEditorId;
+		play.
+	
 	aScripter mouseWheel
 		downBy: 100;
 		// GtSourceCoderEditorId;
