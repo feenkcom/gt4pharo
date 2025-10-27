@@ -523,6 +523,11 @@ GtPharoSnippetCoderByScripterExamples >> fixitMessageSendToVariable02execute [
 	| aScripter |
 	aScripter := self fixitMessageSendToVariable01setup.
 
+	aScripter mouseMoveOver
+		label: 'Hover coder element';
+		// GtSourceCoderEditorId;
+		play.
+
 	aScripter clickStep: [:s | 
 		s // GtSourceCoderDoItActionId].
 
@@ -1381,6 +1386,12 @@ GtPharoSnippetCoderByScripterExamples >> syntaxError [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ GtPharoSnippetCoder forSource: '3 + - 4' ].
+	
+	aScripter mouseMoveOver
+		label: 'Hover coder element';
+		// GtSourceCoderEditorId;
+		play.
+		
 	aScripter clickStep: [:s | 
 		s label: 'Click on the play button';
 		// GtSourceCoderDoItActionId].
@@ -1421,6 +1432,11 @@ GtPharoSnippetCoderByScripterExamples >> undefinedClass [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ GtPharoSnippetCoder forSource: 'x := OdoredCollection new.' ].
+
+	aScripter mouseMoveOver
+		label: 'Hover coder element';
+		// GtSourceCoderEditorId;
+		play.
 
 	aScripter clickStep: [ :s | 
 		s label: 'Click on the play button';
