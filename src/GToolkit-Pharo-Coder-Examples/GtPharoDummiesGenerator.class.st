@@ -196,6 +196,7 @@ GtPharoDummiesGenerator >> addDummyPackageTagsToPackage: aDummyPackage [
 GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
 
+	EpMonitor disableDuring: [
 	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
 		| eachPackage eachDummyPackage |
 		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
@@ -208,13 +209,14 @@ GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 			self addDummyPackageTagsToPackage: eachDummyPackage ].
 		eachDummyPackage ].
 	
-	aDummyEnvironment dummyPackages: theDummyPackages
+	aDummyEnvironment dummyPackages: theDummyPackages ]
 ]
 
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
 
+	EpMonitor disableDuring: [
 	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
 		| eachPackage eachDummyPackage |
 		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
@@ -225,13 +227,14 @@ GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDum
 		self addDummyClassHierarchyToPackage: eachDummyPackage.
 		eachDummyPackage ].
 	
-	aDummyEnvironment dummyPackages: theDummyPackages
+	aDummyEnvironment dummyPackages: theDummyPackages ]
 ]
 
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesWithClassSiblingsToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
 
+	EpMonitor disableDuring: [
 	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
 		| eachPackage eachDummyPackage |
 		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
@@ -242,7 +245,7 @@ GtPharoDummiesGenerator >> addDummyPackagesWithClassSiblingsToEnvironment: aDumm
 		self addDummyClassSiblingsToPackage: eachDummyPackage.
 		eachDummyPackage ].
 	
-	aDummyEnvironment dummyPackages: theDummyPackages
+	aDummyEnvironment dummyPackages: theDummyPackages ]
 ]
 
 { #category : #'private - generation' }
