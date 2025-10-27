@@ -17,7 +17,7 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock threshold: aThreshold 
 	^ (GtJob
 		block: [ :job | 
 			GtRefactoryChangeManager instance
-				ignoreChangesWhile: [ | totalCount current undoChange shouldSignalBulkChanges |
+				ignoreChangesWhile: [ [ | totalCount current undoChange shouldSignalBulkChanges |
 					job label: 'Compiling ' , self name.
 					totalCount := self changesSize max: 1.
 					job max: totalCount.
@@ -33,7 +33,11 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock threshold: aThreshold 
 						ensure: [ shouldSignalBulkChanges
 								ifTrue: [ SystemAnnouncer uniqueInstance
 										announce: (GtFinishedBulkChangesAnnouncement new changes: self) ] ].
-					GtRefactoryChangeManager instance addUndo: undoChange ] ])
+					GtRefactoryChangeManager instance addUndo: undoChange ]
+						on: SyntaxErrorNotification
+						do: [ :ex | 
+							  "This error handler is only for P11, and can be removed for P12 and later"
+							  self error: ex messageText ] ] ])
 		announcer: Announcer new
 ]
 
