@@ -20,6 +20,7 @@ Behavior >> compileAllFrom: oldClass announcing: announcing [
 
 { #category : #'*GToolkit-Pharo-Index' }
 Behavior >> recompile: selector from: oldClass announcing: announcing [
+	<gtPharoPatch: #Pharo12>
 	"Compile the method associated with selector in the receiver's method dictionary."
 	| compileBlock method newMethod |
 
@@ -37,7 +38,7 @@ Behavior >> recompile: selector from: oldClass announcing: announcing [
 
 	announcing
 		ifTrue: [ compileBlock value ]
-		ifFalse: [ self codeChangeAnnouncer suspendAllWhile: compileBlock ].
+		ifFalse: [ SystemAnnouncer uniqueInstance localSuspendWhile: compileBlock ].
 
 	newMethod sourcePointer: method sourcePointer.
 	selector == newMethod selector ifFalse: [
