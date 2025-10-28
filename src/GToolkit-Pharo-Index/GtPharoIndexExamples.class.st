@@ -392,6 +392,31 @@ GtPharoIndexExamples >> poolVarShadowsClass [
 ]
 
 { #category : #examples }
+GtPharoIndexExamples >> recompileMethodUpdatesIndex [
+	<gtExample>
+	| processes count time senders |
+	senders := #runtimeUndeclaredReadInContext: gtSenders.
+	count := senders size.
+	processes := OrderedCollection new.
+	GtPharoIndex current selectorCache notInstalledMethods isEmpty
+		ifFalse: [ GtPharoIndex initializeCache ].
+	senders
+		do: [ :each | 
+			processes
+				add: ([ each ast.
+					each ast.
+					count := count - 1 ] newProcess
+						priority: 30;
+						yourself) ].
+	time := Time millisecondClockValue + 5000.
+	[ [ (Delay forMilliseconds: 1) wait.
+	count > 0 and: [ Time millisecondClockValue < time ] ] whileTrue.
+	processes do: #terminate ] fork.
+	processes do: #resume.
+	self assert: GtPharoIndex current selectorCache notInstalledMethods isEmpty
+]
+
+{ #category : #examples }
 GtPharoIndexExamples >> referenceInLiteralArray [
 	<gtExample>
 	| refs array |
