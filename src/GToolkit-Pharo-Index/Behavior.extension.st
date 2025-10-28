@@ -38,7 +38,7 @@ Behavior >> recompile: selector from: oldClass announcing: announcing [
 
 	announcing
 		ifTrue: [ compileBlock value ]
-		ifFalse: [ self codeChangeAnnouncer localSuspendWhile: compileBlock ].
+		ifFalse: [ SystemAnnouncer uniqueInstance localSuspendWhile: compileBlock ].
 
 	newMethod sourcePointer: method sourcePointer.
 	selector == newMethod selector ifFalse: [
