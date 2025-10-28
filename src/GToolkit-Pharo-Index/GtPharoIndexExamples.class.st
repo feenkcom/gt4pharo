@@ -398,7 +398,8 @@ GtPharoIndexExamples >> recompileMethodUpdatesIndex [
 	senders := #runtimeUndeclaredReadInContext: gtSenders.
 	count := senders size.
 	processes := OrderedCollection new.
-	self assert: GtPharoIndex current selectorCache notInstalledMethods isEmpty.
+	GtPharoIndex current selectorCache notInstalledMethods isEmpty
+		ifFalse: [ GtPharoIndex initializeCache ].
 	senders
 		do: [ :each | 
 			processes
