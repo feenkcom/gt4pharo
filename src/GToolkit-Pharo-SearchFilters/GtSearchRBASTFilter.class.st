@@ -44,9 +44,9 @@ GtSearchRBASTFilter >> ast: aRBProgramNode [
 { #category : #private }
 GtSearchRBASTFilter >> computeMessagesFilter [
 	| messages filters |
-	messages := ast sentMessages.
-	messages isEmpty
-		ifTrue: [ ^ sentMessagesFilter := nil ].
+	messages := Set withAll: ast sentMessages.
+	messages addAll: ast gtLiterals.
+	messages isEmpty ifTrue: [ ^ sentMessagesFilter := nil ].
 	filters := messages collect: [ :each | GtSearchReferencesFilter literal: each ].
 	sentMessagesFilter := filters reduce: [ :a :b | a & b ]
 ]
