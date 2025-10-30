@@ -10,7 +10,7 @@ GtSearchDefinedMethodsFilter >> filterDescriptor2For: aMethodsCoder [
 GtSearchDefinedMethodsFilter class >> globalFilterDescriptor [
 	^ GtFilterDescriptor new
 		creator: [ :value | self new ];
-		named: 'Defined methods';
+		named: 'Non abstract methods';
 		order: 18;
 		valueNotRequired;
 		beNotDefault;
