@@ -45,6 +45,10 @@ GtRestorePreviousLocalVersionExamples >> methodWithLocalVersions [
 	self assert: targetMethod gtChangeRecords size equals: 3.
 	self assert: targetMethod gtLocalVersions size equals: 3.
 	
+	targetMethod gtLocalVersions do: [ :each |
+		self assert: each timeStamp notNil.
+		self assert: each timeStamp ~= DateAndTime new. ].
+	
 	self 
 		assert: (targetMethod methodClass >> targetMethod selector) sourceCode
 		equals: (targetMethod selector, '
@@ -77,6 +81,10 @@ GtRestorePreviousLocalVersionExamples >> restoreMethodToOldVersion [
 		assert: (targetMethod methodClass >> targetMethod selector) sourceCode
 		equals: (targetMethod selector, '
 	^ 1').
+	
+	targetMethod gtLocalVersions do: [ :each |
+		self assert: each timeStamp notNil.
+		self assert: each timeStamp ~= DateAndTime new. ].
 
 	^ scripter.
 ]

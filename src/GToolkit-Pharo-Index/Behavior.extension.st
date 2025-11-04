@@ -12,9 +12,12 @@ Behavior >> compileAllAnnouncing: announcing [
 
 { #category : #'*GToolkit-Pharo-Index' }
 Behavior >> compileAllFrom: oldClass announcing: announcing [
+	<gtPharoPatch: #Pharo12>
 	"Compile all the methods in the receiver's method dictionary.
 	This validates sourceCode and variable references and forces
-	all methods to use the current bytecode set"
+	all methods to use the current bytecode set.
+	NOTE: Pharo have implemented a different fix for this in Pharo 14, so this should be reviewed as part of the upgrade to Pharo 14.
+	See https://github.com/pharo-project/pharo/pull/18706"
 	oldClass localSelectors do: [:sel | self recompile: sel from: oldClass announcing: announcing ]
 ]
 
