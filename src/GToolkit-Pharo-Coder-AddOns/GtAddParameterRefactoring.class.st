@@ -62,7 +62,7 @@ GtAddParameterRefactoring >> renameMessageSends [
 { #category : #private }
 GtAddParameterRefactoring >> replaceReference: argumentName in: parseTree [
 	| searchTree |
-	searchTree := RBParser parseExpression: argumentName value1.
+	searchTree := RBParser parseExpression: argumentName argValue.
 	parseTree body
 		nodesDo:
 			[ :each | 

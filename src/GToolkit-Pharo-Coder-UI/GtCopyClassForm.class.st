@@ -23,30 +23,82 @@ GtCopyClassForm >> asElement [
 ]
 
 { #category : #accessing }
-GtCopyClassForm >> copyClass [
-	| class |
-	class := Smalltalk classInstaller
-			make: [ :builder | 
-				self forPharo12AndNewer: 
-					[ builder 
-						announcing: true;
-						fillFor: innerClass ]
-				forPharo11:
-					[ builder gtFillFor: innerClass ].
-				builder
-					name: newClassName trim;
-					superclass: superClassName trim asClass;
-					category: (packageAndTag tagName trim
+GtCopyClassForm >> buildNewDefinitionFrom: oldDefinition [
+	| ast rewriter replacedName category replacedSuper messages receiver |
+	ast := RBParser parseExpression: oldDefinition.
+	replacedName := false.
+	replacedSuper := false.
+	rewriter := RBParseTreeRewriter new.
+	rewriter
+		replace: innerClass name asSymbol printString
+		with: newClassName trim asSymbol printString
+		when: [ :node | 
+			node parent isMessage
+				and: [ node parent arguments first == node
+						and: [ (node parent selector keywords first = '<<'
+								or: [ node parent selector keywords first asLowercase endsWith: 'subclass:' ])
+								and: [ replacedName := true ] ] ] ].
+	rewriter
+		replace: (innerClass superclass ifNil: [ 'nil' ] ifNotNil: [ :spr | spr name ])
+		with: superClassName trim
+		when: [ :node | 
+			node parent isMessage
+				and: [ node parent receiver == node and: [ replacedSuper := true ] ] ].
+	(rewriter executeTree: ast) ifTrue: [ ast := rewriter tree ].
+	(replacedName
+		and: [ replacedSuper and: [ ast isCascade or: [ ast isMessage ] ] ])
+		ifFalse: [ self error: 'Invalid definition string' ].
+	ast isMessage
+		ifTrue: [ (ast receiver isMessage and: [ ast receiver selector = #'<<' ])
+				ifTrue: [ ast := RBCascadeNode messages: {ast copy} ]
+				ifFalse: [ ast arguments isEmpty ifTrue: [ self error: 'Invalid definition string' ].
+					category := packageAndTag tagName trim
 							ifEmpty: [ packageAndTag packageName trim ]
-							ifNotEmpty: [ packageAndTag fullName ]) ].
-	copyMethods ifTrue: 
-		[ self forPharo12AndNewer:
-				[ class copyAllMethodsFrom: innerClass.
-				class class copyAllMethodsFrom: innerClass class ]
-			forPharo11: 
-				[ class copyAllCategoriesFrom: innerClass.
-				class class copyAllCategoriesFrom: innerClass class ] ].
-	^ class
+							ifNotEmpty: [ packageAndTag fullName ].
+					ast selector keywords
+						with: ast arguments
+						do: [ :key :arg | 
+							(#('package:' 'category:') includes: key)
+								ifTrue: [ arg replaceWith: (RBLiteralValueNode value: category) ] ] ] ].
+	ast isCascade
+		ifTrue: [ messages := ast messages
+					reject: [ :e | #(package: tag:) includes: e selector ].
+			receiver := ast messages first receiver ].
+	(ast isMessage and: [ ast selector = #'<<' ])
+		ifTrue: [ messages := OrderedCollection new.
+			receiver := ast ].
+	messages
+		ifNotNil: [ packageAndTag tagName trim
+				ifNotEmpty: [ :tag | 
+					messages
+						add: (RBMessageNode
+								receiver: receiver
+								selector: #tag:
+								arguments: {RBLiteralValueNode value: tag}) ].
+			messages
+				add: (RBMessageNode
+						receiver: receiver
+						selector: #package:
+						arguments: {RBLiteralValueNode value: packageAndTag packageName trim}).
+			ast := RBCascadeNode messages: (messages collect: #copy) ].
+	^ ast formattedCode
+]
+
+{ #category : #accessing }
+GtCopyClassForm >> copyClass [
+	| model oldClass newClass definition |
+	model := GtRBNamespace new.
+	definition := self buildNewDefinitionFrom: innerClass definitionString.
+	model defineClass: definition.
+	copyMethods
+		ifTrue: [ oldClass := model classFor: innerClass.
+			newClass := model classNamed: newClassName trim asSymbol.
+			oldClass allMethods
+				do: [ :method | newClass compile: method source classified: method protocols ].
+			oldClass classSide allMethods
+				do: [ :method | newClass classSide compile: method source classified: method protocols ] ].
+	GtPharoCodeModifier current performRefactoryChange: model changes.
+	^ newClassName trim asSymbol asClass
 ]
 
 { #category : #accessing }
