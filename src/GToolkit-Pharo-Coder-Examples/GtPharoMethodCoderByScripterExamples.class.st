@@ -3806,6 +3806,48 @@ GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_05_enter_method
 ]
 
 { #category : #'examples - add parameter' }
+GtPharoMethodCoderByScripterExamples >> forAddParameterFromValue_06_enter_method_name [
+	<gtExample>
+	| scripter |
+	scripter := self forAddParameterFromValue_05_enter_method_name.
+	(scripter type: 'parameter') play.
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		assertStep: [ :s | 
+			s
+				onChildFromBlock: [ :element | 
+					element parent
+						allChildrenBreadthFirstDetect: [ :each | each id = GtRefactoringsPreviewAcceptId uniqueInstance ]
+						ifFound: [ :each | each ]
+						ifNone: [ self error: 'Apply button not found' ] ];
+				value: [ :button | button isVisible ] equals: true ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self
+		assert: (scripter model behavior includesSelector: ('method1' , 'Unique') asSymbol) not.
+	self assert: (scripter model behavior includesSelector: #someOtherMethodName:).
+	self
+		assert: (RBParser
+				parseMethod: (scripter model behavior sourceCodeAt: #someOtherMethodName:))
+		equals: (RBParser
+				parseMethod: 'someOtherMethodName: parameter 	^ (parameter to: self items size) detect: [:each | (self items at: each) notNil]').
+	^ scripter
+]
+
+{ #category : #'examples - add parameter' }
 GtPharoMethodCoderByScripterExamples >> forAddParameter_01_setup [
 	<gtExample>
 	<after: #cleanUp>
