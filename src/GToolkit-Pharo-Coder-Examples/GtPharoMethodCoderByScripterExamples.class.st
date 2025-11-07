@@ -1842,6 +1842,55 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 ]
 
 { #category : #'examples - compiler errors' }
+GtPharoMethodCoderByScripterExamples >> compileShadowedVariableError [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoder forMethod: thisContext method method.
+				aCoder
+					currentSourceText: 'method: temp
+	^temp collect: [:temp | temp * 2]' asRopedText.
+				aCoder ].
+
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				id: GtSourceCoderEditorId ].
+
+	aScripter shortcut
+		combination: BlKeyCombination primaryS;
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check shadowed error';
+				exists;
+				onSpaceRoot;
+				// GtSourceCoderErrorContentElementId ].
+
+	aScripter shortcut
+		combination: BlKeyCombination escape;
+		onSpaceRoot;
+		// GtSourceCoderErrorContentElementId;
+		play.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check popup dismissed';
+				notExists;
+				onSpaceRoot;
+				// GtSourceCoderErrorContentElementId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - compiler errors' }
 GtPharoMethodCoderByScripterExamples >> compileUndeclaredLocalError [
 	<gtExample>
 	| aScripter |
