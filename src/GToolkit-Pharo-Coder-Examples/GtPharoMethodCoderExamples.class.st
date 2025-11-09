@@ -226,7 +226,11 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSub
 	wasSuccessful := [ aMethodCoder compile ]
 		ensure: [ aMethodCoder unsubscribeFromSystem ].
 	
-	self assert: wasSuccessful.
+	self assert: wasSuccessful not.
+	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder first class equals: GtCoderParseError.
+	self assert: anEventsRecoder first coder equals: aMethodCoder.
+	self assert: anEventsRecoder first errorMessage equals: 'Name already defined'.
 
 	^ aMethodCoder
 ]
