@@ -1842,6 +1842,55 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 ]
 
 { #category : #'examples - compiler errors' }
+GtPharoMethodCoderByScripterExamples >> compileShadowedVariableError [
+	<gtExample>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoder forMethod: thisContext method method.
+				aCoder
+					currentSourceText: 'method: temp
+	^temp collect: [:temp | temp * 2]' asRopedText.
+				aCoder ].
+
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				id: GtSourceCoderEditorId ].
+
+	aScripter shortcut
+		combination: BlKeyCombination primaryS;
+		id: GtSourceCoderEditorId;
+		play.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check shadowed error';
+				exists;
+				onSpaceRoot;
+				// GtSourceCoderErrorContentElementId ].
+
+	aScripter shortcut
+		combination: BlKeyCombination escape;
+		onSpaceRoot;
+		// GtSourceCoderErrorContentElementId;
+		play.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check popup dismissed';
+				notExists;
+				onSpaceRoot;
+				// GtSourceCoderErrorContentElementId ].
+
+	^ aScripter
+]
+
+{ #category : #'examples - compiler errors' }
 GtPharoMethodCoderByScripterExamples >> compileUndeclaredLocalError [
 	<gtExample>
 	| aScripter |
@@ -10137,6 +10186,54 @@ GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
 	aMethod := GtPharoMethodCoderExamples >> #multipleStatementMethod.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
+]
+
+{ #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoAfterCancel [
+	<gtExample>
+	| scripter source |
+	source := Object sourceCodeAt: #printString.
+	[ scripter := self undoRedoAfterTyping.
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryL;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate original string';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				label: 'Cancel button exists';
+				// GtMethodCoderDiscardChangesActionId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate edited';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source , '"a"' ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				label: 'Cancel button exists';
+				// GtMethodCoderDiscardChangesActionId ] ]
+		ensure: [ Object
+				compile: source
+				classified: (Object protocolNameOfSelector: #printString) ].
+	^ scripter
 ]
 
 { #category : #'examples - undo/redo' }

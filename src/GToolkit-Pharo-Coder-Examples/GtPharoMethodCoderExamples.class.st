@@ -226,7 +226,11 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSub
 	wasSuccessful := [ aMethodCoder compile ]
 		ensure: [ aMethodCoder unsubscribeFromSystem ].
 	
-	self assert: wasSuccessful.
+	self assert: wasSuccessful not.
+	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder first class equals: GtCoderParseError.
+	self assert: anEventsRecoder first coder equals: aMethodCoder.
+	self assert: anEventsRecoder first errorMessage equals: 'Name already defined'.
 
 	^ aMethodCoder
 ]
@@ -242,7 +246,9 @@ GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribe
 	aMethodCoder currentSourceString: self methodSourceWithUnknownClass.
 	aMethodCoder subscribeToSystem.
 	
-	self assert: aMethodCoder isModified.
+	self 
+		assert: aMethodCoder isModified
+		description: 'Coder is modified'.
 	
 	aMethodCoder
 		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
@@ -250,7 +256,9 @@ GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribe
 	wasSuccessful := [ aMethodCoder compile ]
 		ensure: [ aMethodCoder unsubscribeFromSystem ].
 	
-	self assert: wasSuccessful not.
+	self 
+		assert: wasSuccessful not
+		description: 'Compilation was not successful'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderParseError.
@@ -260,7 +268,7 @@ GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribe
 		forPharo12AndNewer: [
 			self 
 				assert: anEventsRecoder first errorMessage 
-				equals: 'Undeclared temp: new' ] 
+				equals: 'Undeclared variable' ] 
 		forPharo11: [
 			self 
 				assert: anEventsRecoder first errorMessage 
@@ -1122,7 +1130,8 @@ GtPharoMethodCoderExamples >> methodSourceWithTempAndBlockArgsConflict [
 
 { #category : #'sample methods' }
 GtPharoMethodCoderExamples >> methodSourceWithUnknownClass [
-	^ 'MissingClass new'
+	^ 'm1
+	MissingClass new'
 ]
 
 { #category : #'examples - modification' }

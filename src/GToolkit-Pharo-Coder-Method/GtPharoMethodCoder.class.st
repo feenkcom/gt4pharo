@@ -195,6 +195,25 @@ GtPharoMethodCoder >> changedSourceForCurrentMethod: aRefactoryChange [
 	^ nil
 ]
 
+{ #category : #private }
+GtPharoMethodCoder >> checkForShadowedVariables: aGtPharoSourceCoderEvaluationContext [
+	| ast compiler |
+	self shouldCheckForShadowedVariables ifFalse: [ ^ self ].
+	compiler := aGtPharoSourceCoderEvaluationContext targetBehavior compiler
+			permitFaulty: false;
+			source: self currentSourceString.
+	ast := compiler parse.
+	ast scope ifNil: [ compiler doSemanticAnalysis ].
+	ast
+		nodesDo: [ :each | 
+			each notices
+				do: [ :notice | 
+					(notice isWarning and: [ notice messageText = 'Name already defined' ])
+						ifTrue: [ #CodeError asClass new
+								notice: notice;
+								signal ] ] ]
+]
+
 { #category : #accessing }
 GtPharoMethodCoder >> classOrMetaClass: aBehavior [
 	self
@@ -250,11 +269,11 @@ GtPharoMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluationContext [
 	aGtPharoSourceCoderEvaluationContext hasTargetBehavior
 		ifFalse: [ ^ GtPharoMethodCoderTargetBehaviorNotDefined signal ].
 
-	aChange := self
-			createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
-			inContext: aGtPharoSourceCoderEvaluationContext.
 	(self
-		handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ]
+		handleCompilerErrorsDuring: [ aChange := self
+					createCompileMethodChangeIn: aGtPharoSourceCoderEvaluationContext targetBehavior
+					inContext: aGtPharoSourceCoderEvaluationContext.
+			GtPharoCodeModifier current performRefactoryChange: aChange ]
 		inContext: aGtPharoSourceCoderEvaluationContext) ifFalse: [ ^ false ].
 
 	aChange definedSelector ifNil: [ ^ false ].
@@ -296,7 +315,6 @@ GtPharoMethodCoder >> createCompileMethodChange [
 GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharoSourceCoderEvaluationContext [
 	<return: #RBAddMethodChange>
 	| aSourceString |
-	
 	aSourceString := self currentSourceString.
 
 	aGtPharoSourceCoderEvaluationContext
@@ -304,23 +322,17 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 		evaluatedInterval: (1 to: aSourceString size);
 		evaluatedSourceString: aSourceString.
 
-	^ self 
-		forPharo12AndNewer: [
-			"TODO: check what happends when we get errors during compilation"
+	^ self
+		forPharo12AndNewer: [ self checkForShadowedVariables: aGtPharoSourceCoderEvaluationContext.
 			self protocol
-				ifNil: [
-					RBAddMethodChange
-						compile: aSourceString
-						in: aBehavior ]
+				ifNil: [ RBAddMethodChange compile: aSourceString in: aBehavior ]
 				ifNotNil: [ :aCategory | 
 					RBAddMethodChange
 						compile: aSourceString
 						in: aBehavior
-						classified: aCategory ] ] 
-		forPharo11: [ 
-			self protocol
-				ifNil: [
-					RBAddMethodChange
+						classified: aCategory ] ]
+		forPharo11: [ self protocol
+				ifNil: [ RBAddMethodChange
 						compile: aSourceString
 						in: aBehavior
 						for: aGtPharoSourceCoderEvaluationContext ]
@@ -1213,6 +1225,16 @@ GtPharoMethodCoder >> selector [
 { #category : #accessing }
 GtPharoMethodCoder >> selector: aSymbol [
 	selector := aSymbol
+]
+
+{ #category : #private }
+GtPharoMethodCoder >> shouldCheckForShadowedVariables [
+	^ self attributeNamed: #shouldCheckForShadowedVariables ifAbsent: [ true ]
+]
+
+{ #category : #private }
+GtPharoMethodCoder >> shouldCheckForShadowedVariables: aBoolean [
+	^ self attributeNamed: #shouldCheckForShadowedVariables put: aBoolean
 ]
 
 { #category : #private }
