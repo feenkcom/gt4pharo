@@ -1380,6 +1380,159 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	^ aScripter
 ]
 
+{ #category : #'examples - split cascade' }
+GtPharoSnippetCoderByScripterExamples >> splitCascadeWithTemp [
+	<gtExample>
+	| scripter source |
+	scripter := self
+			scripterForBlock: [ source := 'OrderedCollection new add: 1;
+	add: 2;
+	add: 3;
+	yourself'.
+				GtPharoSnippetCoder forSource: source ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select var to inline';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					| index |
+					index := (source indexOf: $2) + 2.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ] ].
+
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover split cascade';
+				onSpaceRoot;
+				// #'context-menu--split-cascade' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click split cascade';
+				onSpaceRoot;
+				// #'context-menu--split-cascade' ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editor';
+				exists;
+				// GtRenameEditor ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Rename editor has focus';
+				hasFocus;
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new name';
+				text: 'oc' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check text';
+				// GtSourceCoderEditorId;
+				elementSatisfies: [ :aSourceEditor | 
+					| text |
+					text := aSourceEditor text asString.
+					(GtPharoParser
+						parse: text
+						startingAt: GtPharoParser startingStateForMethodSequence)
+						= (GtPharoParser
+								parse: 'oc := OrderedCollection new. oc add: 1; add: 2. oc add: 3; yourself'
+								startingAt: GtPharoParser startingStateForMethodSequence) ] ].
+
+	^ scripter
+]
+
+{ #category : #'examples - split cascade' }
+GtPharoSnippetCoderByScripterExamples >> splitCascadeWithoutTemp [
+	<gtExample>
+	| scripter source |
+	scripter := self
+			scripterForBlock: [ source := 'oc := OrderedCollection new.
+oc add: 1;
+	add: 2;
+	add: 3;
+	yourself'.
+				GtPharoSnippetCoder forSource: source ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select var to inline';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					| index |
+					index := (source indexOf: $2) + 2.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ] ].
+
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+
+	scripter
+		mouseMoveOverStep: [ :s | 
+			s
+				label: 'Hover split cascade';
+				onSpaceRoot;
+				// #'context-menu--split-cascade' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click split cascade';
+				onSpaceRoot;
+				// #'context-menu--split-cascade' ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check text';
+				// GtSourceCoderEditorId;
+				elementSatisfies: [ :aSourceEditor | 
+					| text |
+					text := aSourceEditor text asString.
+					(GtPharoParser
+						parse: text
+						startingAt: GtPharoParser startingStateForMethodSequence)
+						= (GtPharoParser
+								parse: 'oc := OrderedCollection new. oc add: 1; add: 2. oc add: 3; yourself'
+								startingAt: GtPharoParser startingStateForMethodSequence) ] ].
+
+	^ scripter
+]
+
 { #category : #'examples - context menu' }
 GtPharoSnippetCoderByScripterExamples >> syntaxError [
 	<gtExample>
