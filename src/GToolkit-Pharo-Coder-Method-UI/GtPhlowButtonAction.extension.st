@@ -1,6 +1,6 @@
 Extension { #name : #GtPhlowButtonAction }
 
-{ #category : #'*GToolkit-Pharo-Coder-Method' }
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
 GtPhlowButtonAction >> debugBlock: aBlockClosure [
 	"Takes as a parameter a block cloure that should only reference `self` or attributes of the receiver class"
 	
@@ -9,7 +9,7 @@ GtPhlowButtonAction >> debugBlock: aBlockClosure [
 		receiver: aBlockClosure receiver
 ]
 
-{ #category : #'*GToolkit-Pharo-Coder-Method' }
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
 GtPhlowButtonAction >> debugSource: aBlockClosureOrString receiver: anObject [
 	"Takes as a parameter a block cloure or a string with the code to debug.
 	The code should only reference `self` or attributes of the receiver class"
