@@ -50,15 +50,17 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContai
 				aStep
 					click
 						label: 'Focus editor';
-						onChildAt: 4.
+						flag: 'My educated guess is that the cursor is supposed to be inside of the assertion...';
+						onChildAt: 3.
+				aStep
+					do
+						label: 'Move to end of editor';
+						flag: '...and at the end of the assertion line';
+						block: [ :e | e navigator moveToLineEnd; apply ].
 				aStep
 					shortcut
 						label: 'Fold noise';
 						combination: BlKeyCombinationBuilder new primary shift n build.
-				aStep
-					do
-						label: 'Move to end of editor';
-						block: [ :e | e navigator moveToEnd ].
 				aStep
 					type
 						label: 'Modify text';
