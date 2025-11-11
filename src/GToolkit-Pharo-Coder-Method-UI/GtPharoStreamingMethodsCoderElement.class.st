@@ -323,8 +323,6 @@ GtPharoStreamingMethodsCoderElement >> updateScrollTarget: aScrollTarget [
 			aScrollTarget applicableTo: eachItem ]
 		offset: 0.
 	
-	self enqueueTask: (BlPromiseTask new promise: aPromise).
-	
 	GtPharoStreamingMethodsScrollToTargetSignal new 
 		element: self;
 		scrollTarget: aScrollTarget;

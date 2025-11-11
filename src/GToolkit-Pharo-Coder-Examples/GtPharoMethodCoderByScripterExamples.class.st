@@ -10189,6 +10189,54 @@ GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
 ]
 
 { #category : #'examples - undo/redo' }
+GtPharoMethodCoderByScripterExamples >> undoAfterCancel [
+	<gtExample>
+	| scripter source |
+	source := Object sourceCodeAt: #printString.
+	[ scripter := self undoRedoAfterTyping.
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryL;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate original string';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				label: 'Cancel button exists';
+				// GtMethodCoderDiscardChangesActionId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Validate edited';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ] equals: [ source , '"a"' ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		combination: BlKeyCombination primaryZ;
+		play.
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				label: 'Cancel button exists';
+				// GtMethodCoderDiscardChangesActionId ] ]
+		ensure: [ Object
+				compile: source
+				classified: (Object protocolNameOfSelector: #printString) ].
+	^ scripter
+]
+
+{ #category : #'examples - undo/redo' }
 GtPharoMethodCoderByScripterExamples >> undoOnInitialDisplay [
 	<gtExample>
 	| scripter |

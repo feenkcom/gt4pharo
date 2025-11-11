@@ -429,6 +429,28 @@ GtPharoSourceCoder >> browseReferencesIn: aSourceString requesterObject: aReques
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> cascadeMessageToSplitAfter: aCoderViewModel [
+	| node cursors splitBeforeMessage position |
+	cursors := aCoderViewModel cursors allCursors.
+	cursors size = 1 ifFalse: [ ^ nil ].
+	position := cursors first position.
+	node := self nodeAt: position.
+	node ifNil: [ ^ nil ].
+	(node isMessage
+		and: [ node parent isCascade
+				and: [ (node parent messages identityIndexOf: node) > 1 ] ])
+		ifTrue: [ splitBeforeMessage := node ].
+	node isCascade
+		ifTrue: [ node messages
+				doWithIndex: [ :each :i | 
+					(i > 1
+						and: [ each startPosition > position
+								and: [ (node messages at: i - 1) stopPosition < position ] ])
+						ifTrue: [ splitBeforeMessage := each ] ] ].
+	^ splitBeforeMessage
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	coderAddOns addStyler: GtPharoColorStyler new.

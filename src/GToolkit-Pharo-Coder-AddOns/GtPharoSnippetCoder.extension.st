@@ -303,6 +303,27 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSnippetCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns>
+	| splitBeforeMessage |
+	splitBeforeMessage := self cascadeMessageToSplitAfter: aCoderViewModel.
+	splitBeforeMessage ifNil: [ ^ self ].
+	(coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Split cascade'
+				description: splitBeforeMessage source)
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: splitBeforeMessage)
+		leave: self removeHighlightBlock
+		action: [ :cvm :element | 
+			(GtSnippetSplitCascadesController new
+				node: splitBeforeMessage;
+				sourceCoderViewModel: cvm) executeIn: element ]
+		id: #'context-menu--split-cascade')
+		ifNotNil: [ :anAction | anAction priority: 221 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> initializeAddOns: addOns [
 
 	super initializeAddOns: addOns.
