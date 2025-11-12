@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoParserExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Parser-Examples'
+	#category : #'GToolkit-Pharo-Parser-Examples'
 }
 
 { #category : #'examples - nesting level' }
@@ -12,6 +12,23 @@ GtPharoParserExamples >> arrayNestingLevel [
 		parse: '{1}'
 		startingAt: GtPharoParser startingStateForStatement.
 	self assert: ast nestingLevel = 1.
+	^ ast
+]
+
+{ #category : #'examples - nesting level' }
+GtPharoParserExamples >> binarySelectors [
+	<gtExample>
+	| ast |
+	ast := GtPharoParser
+			parse: (String
+					streamContents: [ :stream | 
+						stream nextPut: $1.
+						Character specialCharacters
+							do: [ :each | 
+								stream
+									nextPut: each;
+									nextPut: $1 ] ])
+			startingAt: GtPharoParser startingStateForStatement.
 	^ ast
 ]
 
