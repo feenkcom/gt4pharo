@@ -16,6 +16,23 @@ GtPharoParserExamples >> arrayNestingLevel [
 ]
 
 { #category : #'examples - nesting level' }
+GtPharoParserExamples >> binarySelectors [
+	<gtExample>
+	| ast |
+	ast := GtPharoParser
+			parse: (String
+					streamContents: [ :stream | 
+						stream nextPut: $1.
+						Character specialCharacters
+							do: [ :each | 
+								stream
+									nextPut: each;
+									nextPut: $1 ] ])
+			startingAt: GtPharoParser startingStateForStatement.
+	^ ast
+]
+
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> blockInParensNestingLevel [
 	<gtExample>
 	| ast |
