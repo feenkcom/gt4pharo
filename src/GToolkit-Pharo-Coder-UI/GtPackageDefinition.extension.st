@@ -29,13 +29,9 @@ GtPackageDefinition >> newTabFrom: anEvent [
 	aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
 	aSpace extent: 1200 @ 600.
 	aSpace root background: Color transparent.
-	aSpace
-		addChild: (GtPager
-				createOn: (GtPagerWrapperElement new
-						tool: aPackageCoder;
-						embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
-	aSpace withHalos.
-	anEvent target showSpace: aSpace
+	aSpace inPager: aPackageCoder.
+	aSpace withCommonSettings.
+	aSpace showFrom: anEvent target
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
