@@ -1604,9 +1604,9 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	aScripter
 		doStep: [ :s | 
 			s
-				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: aScrollSpotterBy @ 0 ];
-				// #list ].
+				label: 'Scroll pager';
+				block: [ :aPager | aPager scrollHorizontallyBy: aScrollSpotterBy ];
+				// GtTreePagerFlowPanesElement ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -3100,6 +3100,10 @@ GtPharoCoderByScripterExamples >> isPackageNamed: aString selectedIn: scripter [
 
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
+	aScripter mouseMoveOver
+		// #'tree-pager--maximize-pane-button';
+		play.
+
 	aScripter
 		clickStep: [ :s | 
 			s
