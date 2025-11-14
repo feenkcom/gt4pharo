@@ -169,6 +169,23 @@ GtPharoMethodCoder >> addDiscardChangesAddonsTo: anAst to: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addExtractLiteralRefactoringFor: aNode to: coderAddOns [
+	<return: #GtCoderContextMenuAction or: nil>
+	aNode isLiteral ifFalse: [ ^ nil ].
+	aNode parent isLiteral ifTrue: [ ^ nil ].
+	^ coderAddOns
+		addContextMenuItem: 'Extract literal to class variable' asRopedText
+		group: BrMenuItemGroupConfiguration refactoring
+		hover: (self highlightNodeBlock: aNode)
+		leave: self removeHighlightBlock
+		action: [ :aCoderViewModel :element | 
+			(GtExtractLiteralToClassVariableController new
+				sourceCoderViewModel: aCoderViewModel;
+				literalNode: aNode) executeIn: element ]
+		id: #'context-menu--extract-literal-to-class-variable'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
 	| theNodes |
@@ -710,6 +727,8 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 				priority: 220.10.
 			(self addRemoveParameterRefactoringFor: aNode to: coderAddOns)
 				ifNotNil: [ :anAction | anAction priority: 220.11 ].
+			(self addExtractLiteralRefactoringFor: aNode to: coderAddOns)
+				ifNotNil: [ :anAction | anAction priority: 220.115 ].
 			(self addConvertTemporaryToInstanceVariableFor: aNode to: coderAddOns)
 				ifNotNil: [ :anAction | anAction priority: 220.12 ].
 			(self addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns)

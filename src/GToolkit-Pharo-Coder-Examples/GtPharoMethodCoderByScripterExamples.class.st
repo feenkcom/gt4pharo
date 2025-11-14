@@ -2670,6 +2670,113 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 	^ aScripter
 ]
 
+{ #category : #'examples - extract literal' }
+GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter coder |
+	scripter := self
+			scripterForBlock: [ coder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :each | 
+					each
+						appendString: '
+	^ #(1)' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :each | each save ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOfSubCollection: '#('.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start refactoring';
+				onSpaceRoot;
+				// #'context-menu--extract-literal-to-class-variable' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString indexOfSubCollection: '_'.
+						index to: index ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor is not focused';
+				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert variable name editor has focus';
+				satisfies: [ :aNameEditor | aNameEditor isFocused ];
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+	(scripter type: 'myClassVar') play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Perform refactoring';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				// GtRenameEditor ].
+	self
+		assert: (RBParser parseMethod: coder currentSourceString)
+		equals: (RBParser parseMethod: coder selector , ' ^ self class myClassVar').
+	self assert: (coder behavior classVarNames includes: #MyClassVar).
+	self
+		assert: (coder behavior class >> #myClassVar) ast
+		equals: (RBParser parseMethod: 'myClassVar ^ MyClassVar ifNil: [MyClassVar := #(1)]').
+	self
+		assert: ((coder behavior class >> #myClassVar:) ast
+				equalTo: (RBParser parseMethod: 'myClassVar: anObject MyClassVar := anObject')
+				exceptForVariables: #()).
+	^ scripter
+]
+
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractMethodObjectUpdatesSource [
 	<gtExample>
