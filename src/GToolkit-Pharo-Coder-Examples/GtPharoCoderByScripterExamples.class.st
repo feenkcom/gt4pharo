@@ -910,8 +910,9 @@ GtPharoCoderByScripterExamples >> classSideMethodsShouldHaveSelfAsBehaviorNotAnI
 	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
 	aReferencedMethod := GtPharoDummyOneObject class >> #sum21.
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 
 	aScripter methodsCoder
@@ -1168,8 +1169,9 @@ GtPharoCoderByScripterExamples >> coderWithBigMethod [
 	aScripter := self
 			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 	aScripter methodsCoder
 		// GtPharoStreamingMethodsCoderElement;
@@ -1190,8 +1192,9 @@ GtPharoCoderByScripterExamples >> coderWithBigMethodReference [
 	aScripter := self
 			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 	aScripter methodsCoder
 		// GtPharoStreamingMethodsCoderElement;
@@ -1214,8 +1217,9 @@ GtPharoCoderByScripterExamples >> coderWithVeryLongMethod [
 	aScripter := self
 			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 	aScripter methodsCoder
 		// GtPharoStreamingMethodsCoderElement;
@@ -1604,9 +1608,9 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	aScripter
 		doStep: [ :s | 
 			s
-				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: aScrollSpotterBy @ 0 ];
-				// #list ].
+				label: 'Scroll pager';
+				block: [ :aPager | aPager scrollHorizontallyBy: aScrollSpotterBy ];
+				// GtTreePagerFlowPanesElement ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1811,8 +1815,8 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 		doStep: [ :s | 
 			s
 				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -370 @ 0 ];
-				// #list ].
+				block: [ :aPager | aPager scrollHorizontallyBy: -370 ];
+				// GtTreePagerFlowPanesElement ].
 
 	self assertDropdown: aScripter.
 
@@ -3058,8 +3062,9 @@ GtPharoCoderByScripterExamples >> instanceSideMethodsExpandsInstanceSideMethods 
 	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
 	aReferencedMethod := GtPharoDummyOneObject >> #sum21.
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 
 	aScripter methodsCoder
@@ -3100,6 +3105,10 @@ GtPharoCoderByScripterExamples >> isPackageNamed: aString selectedIn: scripter [
 
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
+	aScripter mouseMoveOver
+		// #'tree-pager--maximize-pane-button';
+		play.
+
 	aScripter
 		clickStep: [ :s | 
 			s

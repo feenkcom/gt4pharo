@@ -143,12 +143,8 @@ GtPharoPackageCoderElement >> buildParentLink [
 										aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
 										aSpace extent: 1200 @ 600.
 										aSpace root background: Color transparent.
-										aSpace
-											addChild: (GtPager
-													createOn: (GtPagerWrapperElement new
-															tool: GtCoderElement forAllPackages;
-															embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
-										aSpace withHalos.
+										aSpace inPager: GtCoderElement forAllPackages.
+										aSpace withCommonSettings.
 										anEvent target showSpace: aSpace ]
 									ifFalse: [ aCoderEvent := GtCoderToSpawn new coder: aCoder.
 										self fireEvent: aCoderEvent.
