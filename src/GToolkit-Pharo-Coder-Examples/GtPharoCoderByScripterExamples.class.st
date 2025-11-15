@@ -103,13 +103,10 @@ GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 		clickStep: [ :s | 
 			s
 				label: 'Click on the add new method button';
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoAddNewMethodButtonId ].
 
-	aScripter
-		typeStep: [ :s | 
-			s
-				text: 'myNewMethod' ].
+	aScripter typeStep: [ :s | s text: 'myNewMethod' ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -125,14 +122,14 @@ GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 		clickStep: [ :s | 
 			s
 				label: 'Close the dropdown';
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtBehaviorCoderBehaviorNameId ].
 
 	aScripter
 		clickStep: [ :s | 
 			s
 				label: 'Reopen the add new method button';
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoAddNewMethodButtonId ].
 
 	aScripter
@@ -205,14 +202,16 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 	anInstanceSideMethod := GtPharoDummyTwoObject >> #sum21Reference.
 	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
 
-	aMethodsCoderQuery := aScripter element query // GtPharoStreamingMethodsCoderElement.
-	anObject := aMethodsCoderQuery anyOne streamingCodersViewModel selfObjectIfNone: [ self error: 'Self object must be defined' ].
-	
+	aMethodsCoderQuery := aScripter element query
+			// GtPharoStreamingMethodsCoderElement.
+	anObject := aMethodsCoderQuery anyOne streamingCodersViewModel
+			selfObjectIfNone: [ self error: 'Self object must be defined' ].
+
 	aScripter
 		clickStep: [ :s | 
 			s
 				label: 'Click on the add new method button';
-				// (GtPagerPageElementId indexed: 1);
+				onPagerPaneWithIndex: 1;
 				// GtPharoAddNewMethodButtonId ].
 
 	aScripter methodCoder
@@ -222,14 +221,15 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 		click;
 		assertHasFocus;
 		selectAll;
-		typeText: 'newMethod self ', #sum21Reference;
+		typeText: 'newMethod self ' , #sum21Reference;
 		assertSelfObjectIs: anObject;
 		assertTargetBehaviorIs: anObject class;
-		clickOnMethodCoderExpander: 1 insideDo: [ :aMethodCoder | 
-			aMethodCoder 
-				assertCompiledMethodIs: anInstanceSideMethod;
-				assertSelfObjectIs: anObject;
-				assertTargetBehaviorIs: anObject class ];
+		clickOnMethodCoderExpander: 1
+			insideDo: [ :aMethodCoder | 
+				aMethodCoder
+					assertCompiledMethodIs: anInstanceSideMethod;
+					assertSelfObjectIs: anObject;
+					assertTargetBehaviorIs: anObject class ];
 		play.
 
 	^ aScripter
@@ -910,8 +910,9 @@ GtPharoCoderByScripterExamples >> classSideMethodsShouldHaveSelfAsBehaviorNotAnI
 	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
 	aReferencedMethod := GtPharoDummyOneObject class >> #sum21.
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 
 	aScripter methodsCoder
@@ -1009,7 +1010,7 @@ GtPharoCoderByScripterExamples >> coderInPager: aCoderOrBlock [
 	<gtExample>
 	| aScripter |
 	aScripter := self
-			scripterForBlock: [ GtPager createWrappedOn: aCoderOrBlock value ].
+			scripterForBlock: [ GtPagerSettings usedPager createWrappedOn: aCoderOrBlock value ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1102,7 +1103,7 @@ GtPharoCoderByScripterExamples >> coderInPager_gitExpanded [
 			aStep
 				clickStep: [ :s | 
 					s
-						// (GtPagerPageElementId indexed: 2);
+						onPagerPaneWithIndex: 2;
 						// GtPagerMaximizeButtonElementId ].
 
 			aStep
@@ -1168,8 +1169,9 @@ GtPharoCoderByScripterExamples >> coderWithBigMethod [
 	aScripter := self
 			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 	aScripter methodsCoder
 		// GtPharoStreamingMethodsCoderElement;
@@ -1190,8 +1192,9 @@ GtPharoCoderByScripterExamples >> coderWithBigMethodReference [
 	aScripter := self
 			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 	aScripter methodsCoder
 		// GtPharoStreamingMethodsCoderElement;
@@ -1214,8 +1217,9 @@ GtPharoCoderByScripterExamples >> coderWithVeryLongMethod [
 	aScripter := self
 			coderInPager: [ GtCoderElement forObject: GtPharoDummyFiveObject new ].
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 	aScripter methodsCoder
 		// GtPharoStreamingMethodsCoderElement;
@@ -1576,7 +1580,7 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
 
 	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
-		// (GtPagerPageElementId indexed: 2);
+		onPagerPaneWithIndex: 2;
 		// GtPharoAddNewMethodButtonId;
 		play.
 
@@ -1584,7 +1588,7 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 		clickStep: [ :s | 
 			s
 				label: 'Click on the add new method button';
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoAddNewMethodButtonId ].
 
 	aScripter
@@ -1598,15 +1602,15 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 					aSpaceBounds := aButton space root bounds inSpace asRectangle.
 					aDistance := aSpaceBounds right - aButtonBounds right.
 					aScrollSpotterBy := aDistance negated ];
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoAddNewMethodButtonId ].
 
 	aScripter
 		doStep: [ :s | 
 			s
-				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: aScrollSpotterBy @ 0 ];
-				// #list ].
+				label: 'Scroll pager';
+				block: [ :aPager | aPager scrollHorizontallyBy: aScrollSpotterBy ];
+				// GtTreePagerFlowPanesElement ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1620,7 +1624,7 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 							format: {aButtonBoundsInSpace left.
 									aButton boundsInSpace left.
 									aScrollSpotterBy} ];
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoAddNewMethodButtonId ].
 
 	aScripter
@@ -1792,7 +1796,7 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 				onSpace ].
 
 	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
-		// (GtPagerPageElementId indexed: 2);
+		onPagerPaneWithIndex: 2;
 		// GtPharoBehaviorCoderElement;
 		// BrTabGroup;
 		// GtPharoSearchCodeButtonId;
@@ -1802,7 +1806,7 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 		clickStep: [ :s | 
 			s
 				label: 'Click on the search code button';
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoBehaviorCoderElement;
 				// BrTabGroup;
 				// GtPharoSearchCodeButtonId ].
@@ -1811,8 +1815,8 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 		doStep: [ :s | 
 			s
 				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -370 @ 0 ];
-				// #list ].
+				block: [ :aPager | aPager scrollHorizontallyBy: -370 ];
+				// GtTreePagerFlowPanesElement ].
 
 	self assertDropdown: aScripter.
 
@@ -1840,7 +1844,7 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown_scrolle
 		clickStep: [ :s | 
 			s
 				label: 'Click on the search code button';
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				// GtPharoBehaviorCoderElement;
 				// BrTabGroup;
 				// GtPharoSearchCodeButtonId ].
@@ -1848,9 +1852,9 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown_scrolle
 	aScripter
 		doStep: [ :s | 
 			s
-				label: 'Scroll GtPager';
-				block: [ :anInfiniteElement | anInfiniteElement smoothScrollBy: -371 @ 0 ];
-				// #list ].
+				label: 'Scroll pager';
+				block: [ :anInfiniteElement | anInfiniteElement scrollHorizontallyBy: -371 ];
+				// GtTreePagerFlowPanesElement ].
 
 	self assertDropdown: aScripter.
 
@@ -1870,13 +1874,13 @@ GtPharoCoderByScripterExamples >> displayThreeClassCodersWithMethodExpanded [
 				clickStep: [ :s | 
 					s
 						label: 'Click on class name';
-						id: GtPagerPageElementId index: 2;
+						onPagerPaneWithIndex: 2;
 						// GtBehaviorCoderBehaviorNameId ].
 
 			aStep shortcut
 				label: 'Spawn class coder';
 				combination: BlKeyCombination primaryB;
-				id: GtPagerPageElementId index: 2;
+				onPagerPaneWithIndex: 2;
 				// GtBehaviorCoderBehaviorNameId;
 				play.
 
@@ -1921,7 +1925,7 @@ GtPharoCoderByScripterExamples >> displayTwoClassCodersWithMethodExpanded [
 			aStep
 				assertStep: [ :s | 
 					s
-						value: [ :anElement | (anElement query // GtPagerPageElementId) result size ]
+						value: [ :anElement | (anElement query // GtTreePagerPaneElement) result size ]
 							equals: [ 2 ] ] ].
 
 	^ aScripter
@@ -3058,8 +3062,9 @@ GtPharoCoderByScripterExamples >> instanceSideMethodsExpandsInstanceSideMethods 
 	aClassSideMethod := GtPharoDummyTwoObject class >> #sum21Reference.
 	aReferencedMethod := GtPharoDummyOneObject >> #sum21.
 
-	aScripter pager
-		setPageAt: 1 widthInSpaceRatio: 1.0;
+	aScripter treePager
+		decreaseNumberOfVisibleColumns;
+		closeConfigurationDropdownMenu;
 		play.
 
 	aScripter methodsCoder
@@ -3100,11 +3105,15 @@ GtPharoCoderByScripterExamples >> isPackageNamed: aString selectedIn: scripter [
 
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
+	aScripter mouseMoveOver
+		// #'tree-pager--maximize-pane-button';
+		play.
+
 	aScripter
 		clickStep: [ :s | 
 			s
 				label: 'Maximize Coder';
-				// GtPagerMaximizeButtonElementId ]
+				// #'tree-pager--maximize-pane-button' ]
 ]
 
 { #category : #'examples - coder' }

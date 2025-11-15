@@ -81,8 +81,8 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView_selectMult
 		and: GtDummyAnnouncingExamplesA name
 		in: scripter.
 				
-	scripter pager
-		assertPageCountIs: 2;
+	scripter treePager
+		assertNumberOfPaneElements: 2;
 		play.
 		
 	self assertSearchFilterInSecondPaneWithItemsCount: 4 in: scripter.
@@ -106,8 +106,8 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView_selectSing
 		selectCellWithLabel: GtDummyAbstractClassWithExamples name 
 		in: scripter.
 				
-	scripter pager
-		assertPageCountIs: 2;
+	scripter treePager
+		assertNumberOfPaneElements: 2;
 		play.
 	
 	self assertSearchFilterInSecondPaneWithItemsCount: 2 in: scripter.
@@ -166,8 +166,8 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectMul
 		and: secondMethod name
 		in: scripter.
 				
-	scripter pager
-		assertPageCountIs: 2;
+	scripter treePager
+		assertNumberOfPaneElements: 2;
 		play.
 		
 	scripter inspectorStep
@@ -210,8 +210,8 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSin
 		selectCellWithLabel: targetMethod name 
 		in: scripter.
 	
-	scripter pager
-		assertPageCountIs: 2;
+	scripter treePager
+		assertNumberOfPaneElements: 2;
 		play.
 		
 	scripter inspectorStep
@@ -274,8 +274,8 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_multiple
 		and: 'GToolkit-Examples-Dummies-Package2' 
 		in: scripter.
 	
-	scripter pager
-		assertPageCountIs: 2;
+	scripter treePager
+		assertNumberOfPaneElements: 2;
 		play.
 	
 	self assertSearchFilterInSecondPaneWithItemsCount: 4 in: scripter.
@@ -300,8 +300,8 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_singlePa
 		selectCellWithLabel: targetPackage name 
 		in: scripter.
 	
-	scripter pager
-		assertPageCountIs: 2;
+	scripter treePager
+		assertNumberOfPaneElements: 2;
 		play.
 		
 	self assertSearchFilterInSecondPaneWithItemsCount: 2 in: scripter.
@@ -341,7 +341,7 @@ GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExam
 		scripter: (self scripter
 			extent: 1000@800) 
 		withModel: [filter] 
-		element: [ GtPager 
+		element: [ GtPagerSettings usedPager 
 			createWrappedOn: filter gtDefaultInspectorTool asElement ].
 			
 	^ scripter

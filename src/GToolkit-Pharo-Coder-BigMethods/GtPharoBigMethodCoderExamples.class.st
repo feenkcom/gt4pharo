@@ -40,12 +40,12 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 	<gtExample>
 	| scripter |
 	scripter := self checkActionsPresentForBigMethodCoder.
-	
+
 	scripter mouseMoveOver
 		label: 'Hover coder element';
 		// GtPharoBigMethodExpandedSourceCoderElement;
 		play.
-		
+
 	scripter
 		clickStep: [ :s | 
 			s
@@ -54,11 +54,11 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 	scripter
 		assertStep: [ :s | 
 			s
-				// (GtPagerPageElementId indexed: 2);
+				onPagerPaneWithIndex: 2;
 				satisfies: [ :element | 
 					element
 						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderEditorElement ]
-						ifFound: [:child | false ]
+						ifFound: [ :child | false ]
 						ifNone: [ true ] ] ].
 	^ scripter
 ]

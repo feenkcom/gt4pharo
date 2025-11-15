@@ -39,12 +39,8 @@ GtTagDefinition >> newTabFrom: anEvent [
 			aSpace icon: BrGlamorousVectorIcons emphasizedBrowse.
 			aSpace extent: 1200 @ 600.
 			aSpace root background: Color transparent.
-			aSpace
-				addChild: (GtPager
-						createOn: (GtPagerWrapperElement new
-								tool: aPackageTagCoder;
-								embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))).
-			aSpace withHalos.
+			aSpace inPager: aPackageTagCoder.
+			aSpace withCommonSettings.
 			anEvent target showSpace: aSpace ]
 ]
 

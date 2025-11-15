@@ -331,7 +331,7 @@ GtPharoSnippetCoder >> initializeAddOns: addOns [
 	addOns addStyler: (GtMethodAdviceStyler new isForWorkspace: true).
 
 	addOns
-		addMainAction: 'Inspect' translated
+		addMainAction: 'Evaluate and inspect' translated
 		icon: BrGlamorousVectorIcons playinspect
 		action: [ :aCoderUIModel :anElement | 
 			GtCoderCodeExecutor doItAndGo
