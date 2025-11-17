@@ -1,7 +1,7 @@
-Extension { #name : #GtPharoCompiledMethods }
+Extension { #name : #GtPharoCompiledMethodGroup }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtBrowseHierarchyImplementorsActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtBrowseHierarchyImplementorsActionFor: anAction [
 	<gtAction>
 	^ anAction button
 		priority: 12;
@@ -20,7 +20,7 @@ GtPharoCompiledMethods >> gtBrowseHierarchyImplementorsActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtBrowseHierarchyReferencesActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtBrowseHierarchyReferencesActionFor: anAction [
 	<gtAction>
 	^ anAction button
 		priority: 16;
@@ -41,7 +41,7 @@ GtPharoCompiledMethods >> gtBrowseHierarchyReferencesActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtBrowseImplementorsActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtBrowseImplementorsActionFor: anAction [
 	<gtAction>
 	^ anAction button
 		priority: 10;
@@ -59,7 +59,7 @@ GtPharoCompiledMethods >> gtBrowseImplementorsActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtBrowseReferencesActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtBrowseReferencesActionFor: anAction [
 	<gtAction>
 	^ anAction button
 		priority: 14;
@@ -78,7 +78,7 @@ GtPharoCompiledMethods >> gtBrowseReferencesActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtCompareMethodsAsFilterActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtCompareMethodsAsFilterActionFor: anAction [
 	<gtAction>
 	self size = 2 ifFalse: [ ^ anAction noAction ].
 	^ anAction button
@@ -92,14 +92,14 @@ GtPharoCompiledMethods >> gtCompareMethodsAsFilterActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtHierarchyFilterFor: aCompiledMethod [
+GtPharoCompiledMethodGroup >> gtHierarchyFilterFor: aCompiledMethod [
 	(GtSearchInheritedMethodsFilter forClass: aCompiledMethod selectedClass)
 		withSuperclasses;
 		withSubclasses
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtInspectMethodsAsFilterActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtInspectMethodsAsFilterActionFor: anAction [
 	<gtAction>
 	^ anAction button
 		priority: 2;
@@ -112,7 +112,7 @@ GtPharoCompiledMethods >> gtInspectMethodsAsFilterActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtPushDownMethodsActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtPushDownMethodsActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
 		priority: 22;
@@ -153,7 +153,7 @@ GtPharoCompiledMethods >> gtPushDownMethodsActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtPushUpMethodsActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtPushUpMethodsActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
 		priority: 20;
@@ -192,7 +192,7 @@ GtPharoCompiledMethods >> gtPushUpMethodsActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> gtRemoveMethodsActionFor: anAction [
+GtPharoCompiledMethodGroup >> gtRemoveMethodsActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
 		priority: 100;
@@ -210,7 +210,7 @@ GtPharoCompiledMethods >> gtRemoveMethodsActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-GtPharoCompiledMethods >> removeSeveralMethodsSubmenuFor: aCollection explicitMenu: anExplicitMenu element: anElement [
+GtPharoCompiledMethodGroup >> removeSeveralMethodsSubmenuFor: aCollection explicitMenu: anExplicitMenu element: anElement [
 	| element changes change button |
 	element := BrVerticalPane new fitContent.
 	element
