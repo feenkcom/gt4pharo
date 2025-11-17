@@ -62,7 +62,15 @@ GtExtractToWrappedMethodObjectRefactoring >> createSetMethod: methodName [
 			toUse: [ :mn :ref | 
 				setSelector := ('set' , methodName selector asString capitalized) asSymbol.
 				mn selector: setSelector.
-				mn arguments: methodName arguments.
+				mn
+					arguments: (mn arguments
+							asSortedCollection: [ :a :b | 
+								(methodName arguments
+									indexOf: a
+									ifAbsent: [ methodName arguments indexOf: 'self' ])
+									< (methodName arguments
+											indexOf: b
+											ifAbsent: [ methodName arguments indexOf: 'self' ]) ]).
 				mn ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | tempName ];
 		setOption: #variableTypes
