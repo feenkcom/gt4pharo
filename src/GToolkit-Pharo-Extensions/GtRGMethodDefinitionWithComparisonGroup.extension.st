@@ -23,23 +23,20 @@ GtRGMethodDefinitionWithComparisonGroup >> gtItemsFor: aView [
 { #category : #'*GToolkit-Pharo-Extensions' }
 GtRGMethodDefinitionWithComparisonGroup >> gtViewComparisonFor: aView [
 	<gtView>
-	
-	^(aView forward)
+	^ aView explicit
 		title: 'Comparison';
 		priority: 3;
-		object: [
-			| change styler compare |
+		stencil: [ | change styler compare |
 			change := GtDiffBuilder
-				computeDifferencesFrom: self penultimateMethod sourceCode
-				to: self lastMethod sourceCode
-				using: GtSmaCCDiffSplitter forPharo.
+					computeDifferencesFrom: self penultimateMethod sourceCode
+					to: self lastMethod sourceCode
+					using: GtSmaCCDiffSplitter forPharo.
 			styler := GtCodeDiffRBTextStyler new.
-			compare := ((GtDiffElementWithLabelStencil new)
-				fromLabelText: self penultimateMethod name;
-				toLabelText: self lastMethod name;
-				change: change;
-				styler: styler) create ];
-		view: #gtLiveFor:
+			compare := GtDiffElementWithLabelStencil new
+					fromLabelText: self penultimateMethod name;
+					toLabelText: self lastMethod name;
+					change: change;
+					styler: styler ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
