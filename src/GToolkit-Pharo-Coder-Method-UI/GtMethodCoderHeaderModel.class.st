@@ -26,6 +26,12 @@ GtMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewMode
 	^ nil
 ]
 
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderModel >> createPackageContextMenuFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+	<return: #BrMenuItems or: nil>
+	^ nil
+]
+
 { #category : #testing }
 GtMethodCoderHeaderModel >> hasMethodBehaviourData [
 	^ self methodBehaviourName notNil

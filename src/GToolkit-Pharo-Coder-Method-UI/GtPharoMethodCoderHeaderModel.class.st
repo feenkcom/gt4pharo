@@ -62,6 +62,64 @@ GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderVie
 				ifAbsent: [ nil ] ]
 ]
 
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> createPackageContextMenuFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+	"Create a context menu for a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
+
+	<return: #BrMenuItems or: nil>
+	| aProviderBehavior |
+	aProviderBehavior := aCoderViewModel
+			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
+			ifNone: [ aCoderViewModel explicitProviderClass ifNil: [ aCoderViewModel behavior ] ].
+
+	^ aCoderViewModel methodOrigin
+		originalMethodDo: [ :aMethodBehavior :aMethod | 
+			aMethodBehavior = aProviderBehavior
+				ifTrue: [ self
+						createPackageContextMenuFromMethodBehaviorFor: aCoderViewModel
+						from: anElement
+						phlowContext: aPhlowContext ]
+				ifFalse: [ 
+					aPhlowContext coderCompiledMethod: aMethod.
+					GtCoderPackageTarget
+						menuItemsForObject: aProviderBehavior package
+						inContext: aPhlowContext
+						hostElement: anElement ] ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aMethodBehavior | 
+					aMethodBehavior = aProviderBehavior
+						ifTrue: [ self
+								createPackageContextMenuFromMethodBehaviorFor: aCoderViewModel
+								from: anElement
+								phlowContext: aPhlowContext ]
+						ifFalse: [ GtCoderPackageTarget
+								menuItemsForObject: aProviderBehavior package
+								inContext: aPhlowContext
+								hostElement: anElement ] ]
+				ifAbsent: [ nil ] ]
+]
+
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> createPackageContextMenuFromMethodBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+	"Create a context menu for a behavior's package that implements a method."
+
+	<return: #BrMenuItems or: nil>
+	^ aCoderViewModel methodOrigin
+		originalMethodDo: [ :aMethodBehavior :aMethod | 
+			aPhlowContext coderCompiledMethod: aMethod.
+			GtCoderPackageTarget
+				menuItemsForObject: aMethodBehavior package
+				inContext: aPhlowContext
+				hostElement: anElement ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aBehavior | 
+					GtCoderPackageTarget
+						menuItemsForObject: aBehavior package
+						inContext: aPhlowContext
+						hostElement: anElement ]
+				ifAbsent: [ nil ] ]
+]
+
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
 	| explicitProviderClass providerBehaviorClass methodBehaviorClass |
