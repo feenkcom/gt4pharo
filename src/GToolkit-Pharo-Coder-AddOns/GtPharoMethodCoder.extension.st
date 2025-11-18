@@ -338,7 +338,7 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 	method := aNode topParent.
 	^ coderAddOns
 		addContextMenuItem: (self
-				createLabel: 'Inline All self Sends'
+				createLabel: 'Inline all self sends'
 				description: method selector)
 		group: BrMenuItemGroupConfiguration refactoring
 		hover: nil

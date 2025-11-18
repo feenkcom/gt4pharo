@@ -14,6 +14,16 @@ GtPharoMethodCoderByScripterExamples class >> dummyMethod: arg [
 	self foo: arg
 ]
 
+{ #category : #'example method' }
+GtPharoMethodCoderByScripterExamples class >> writeOn: aStream with: anObject [
+	"sample method to refactor"
+	aStream print: self superclass name.
+	aStream cr.
+	aStream print: self name.
+	aStream cr.
+	aStream print: anObject
+]
+
 { #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> abstractClassVariableExecute [
 	<gtExample>
@@ -1533,8 +1543,8 @@ GtPharoMethodCoderByScripterExamples >> clickReorderParameter: aScripter variabl
 				label: 'Check selected text';
 				elementSatisfies: [ :aSourceEditor | 
 					text := aSourceEditor text asString.
-					(('*: <1s> *: <2s>' expandMacrosWithArguments: variableNames) match: text)
-						or: [ ('*: <2s> *: <1s>' expandMacrosWithArguments: variableNames) match: text ] ];
+					(('*: <1s> *: <2s>*' expandMacrosWithArguments: variableNames) match: text)
+						or: [ ('*: <2s> *: <1s>*' expandMacrosWithArguments: variableNames) match: text ] ];
 				id: GtSourceCoderEditorId ].
 	aScripter
 		clickStep: [ :s | 
@@ -1550,8 +1560,8 @@ GtPharoMethodCoderByScripterExamples >> clickReorderParameter: aScripter variabl
 					| string |
 					string := aSourceEditor text asString.
 					text ~= string
-						and: [ (('*: <1s> *: <2s>' expandMacrosWithArguments: variableNames) match: text)
-								or: [ ('*: <2s> *: <1s>' expandMacrosWithArguments: variableNames) match: text ] ] ];
+						and: [ (('*: <1s> *: <2s>*' expandMacrosWithArguments: variableNames) match: text)
+								or: [ ('*: <2s> *: <1s>*' expandMacrosWithArguments: variableNames) match: text ] ] ];
 				id: GtSourceCoderEditorId ].
 
 	self checkHasTwoReorderAttributes: aScripter
@@ -3111,6 +3121,126 @@ GtPharoMethodCoderByScripterExamples >> extractToExisting [
 ]
 
 { #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectArgumentsInSameOrder [
+	<gtExample>
+	| scripter method ast changes methodChanges constructorChange setChange constructorArgs setArgs |
+	method := self class class >> #writeOn:with:.
+	ast := method ast.
+	scripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: method ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select all code to extract';
+				action: [ :editor | 
+					editor selecter
+						from: ast body statements first start - 1 to: ast stop;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Start extract wrapped method object';
+				action: [ :each | 
+					(GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: each textualCoderViewModel;
+						infect: 'wrappedMethodSelectorFor: methodName in: aRefactoring ^#write:';
+						infect: 'methodObjectSelectorFor: methodName in: ref ^#doWrite:' yourself)
+						executeIn: each ];
+				// GtSourceCoderExpandedContentElement ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new class name';
+				text: 'MyNewClass' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 2 ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new selector name';
+				text: 'foo' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 3 ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new selector name';
+				text: 'bar' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	self clickReorderParameter: scripter variables: #('anObject' 'self').
+	scripter
+		substep: 'Click preview'
+		do: [ :aStep | 
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click preview button';
+						// #previewCheckButton ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand the refactoring preview dropdown';
+				onSpaceRoot;
+				onDropdown: true;
+				// GtChangesElement;
+				// BrInlineExpanderElement ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	methodChanges := changes gtAllChanges
+			select: [ :each | each isKindOf: RBAddMethodChange ].
+	methodChanges
+		do: [ :each | 
+			each selector = #foo:bar: ifTrue: [ constructorChange := each ].
+			each selector = #setFoo:bar: ifTrue: [ setChange := each ] ].
+	constructorArgs := (RBParser parseMethod: constructorChange source) arguments
+			collect: #name.
+	setArgs := (RBParser parseMethod: setChange source) arguments collect: #name.
+	self
+		assert: (setArgs collect: [ :e | e first = $_ ifTrue: [ e allButFirst ] ifFalse: [ e ] ])
+		equals: constructorArgs.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expanding setFoo:bar: change';
+				onSpaceRoot;
+				// GtUserActivatableChangeWithExpanderElement;
+				@ [ :each | each activatableChange change = setChange ];
+				// GtSourceCoderExpanderToggleId ].
+	^ scripter
+]
+
+{ #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClass [
 	<gtExample>
 	| scripter hasNewClass ast method |
@@ -3144,6 +3274,135 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClas
 				// GtRenameEditor ].
 	self checkFor: scripter refactoringPreviewButtonExists: true ]
 		ensure: [ hasNewClass ifFalse: [ Smalltalk globals removeKey: #NewClass ifAbsent: [  ] ] ].
+	^ scripter
+]
+
+{ #category : #'examples - extract method object' }
+GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenPassingSelf [
+	<gtExample>
+	| scripter method ast changes methodChanges count setChange |
+	method := ArrayedCollection >> #writeOn:.
+	ast := method ast.
+	scripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: method ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select all code to extract';
+				action: [ :editor | 
+					editor selecter
+						from: ast body statements first start - 1 to: ast stop;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Start extract wrapped method object';
+				action: [ :each | 
+					(GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: each textualCoderViewModel;
+						infect: 'wrappedMethodSelectorFor: methodName in: aRefactoring ^#write:';
+						infect: 'methodObjectSelectorFor: methodName in: ref ^#doWrite:' yourself)
+						executeIn: each ];
+				// GtSourceCoderExpandedContentElement ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has rename editors';
+				exists;
+				// GtRenameEditor ].
+	self checkFor: scripter refactoringPreviewButtonExists: true.
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 1 ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new class name';
+				text: 'MyNewClass' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				on: GtRenameEditor index: 2 ].
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Enter new selector name';
+				text: 'foo' ].
+	scripter keyPressStep: [ :s | s key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand the refactoring preview dropdown';
+				onSpaceRoot;
+				onDropdown: true;
+				// GtChangesElement;
+				// BrInlineExpanderElement ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	methodChanges := changes gtAllChanges
+			select: [ :each | each isKindOf: RBAddMethodChange ].
+	count := 0.
+	methodChanges
+		do: [ :each | 
+			each selector = #foo:
+				ifTrue: [ count := count + 1.
+					self
+						assert: (RBParser parseMethod: each source)
+						equals: (RBParser
+								parseMethod: 'foo: anArrayedCollection
+																	^ self new
+																		setFoo: anArrayedCollection;
+																		yourself') ].
+			each selector = #writeOn:
+				ifTrue: [ count := count + 1.
+					self
+						assert: (RBParser parseMethod: each source)
+						equals: (RBParser
+								parseMethod: 'writeOn: aStream
+																	aStream write: (MyNewClass foo: self)') ].
+			each selector = #doWrite:
+				ifTrue: [ count := count + 1.
+					self
+						assert: (RBParser parseMethod: each source)
+						equals: (RBParser
+								parseMethod: 'doWrite: aStream
+																	(arrayedCollection class isPointers or: [ arrayedCollection class isWords not ])
+																		ifTrue: [ ^ arrayedCollection ].
+																	aStream nextInt32Put: arrayedCollection basicSize.
+																	aStream nextWordsPutAll: arrayedCollection.
+																	^ arrayedCollection') ].
+			each selector = #setFoo:
+				ifTrue: [ count := count + 1.
+					setChange := each.
+					self
+						assert: (RBParser parseMethod: each source)
+						equals: (RBParser
+								parseMethod: 'setFoo: anArrayedCollection
+																	arrayedCollection := anArrayedCollection') ] ].
+	self assert: count equals: 4.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expanding setFoo: change';
+				onSpaceRoot;
+				// GtUserActivatableChangeWithExpanderElement;
+				@ [ :each | each activatableChange change = setChange ];
+				// GtSourceCoderExpanderToggleId ].
 	^ scripter
 ]
 

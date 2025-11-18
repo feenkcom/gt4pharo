@@ -6,7 +6,7 @@ I am used for testing purposes, see my {{gtClass:GtFiltersDummyObjectWithAllExam
 Class {
 	#name : #GtFiltersDummyObjectWithAllExampleStates,
 	#superclass : #GtFiltersDummyObjectWithExampleStates,
-	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
 { #category : #accessing }
