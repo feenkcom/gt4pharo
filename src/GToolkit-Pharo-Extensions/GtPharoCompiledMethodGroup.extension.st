@@ -146,7 +146,9 @@ GtPharoCompiledMethodGroup >> gtPushDownMethodsActionFor: anAction [
 								as: Array.
 						aModel name: ('Push down {1} methods' format: {self size}).
 						aCollectionOfRefactorings ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction
+							enqueueElement: anActionElement
+							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithConfirmationElement new
@@ -185,7 +187,9 @@ GtPharoCompiledMethodGroup >> gtPushUpMethodsActionFor: anAction [
 								as: Array.
 						aModel name: ('Push up {1} methods' format: {self size}).
 						aCollectionOfRefactorings ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction
+							enqueueElement: anActionElement
+							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithConfirmationElement new

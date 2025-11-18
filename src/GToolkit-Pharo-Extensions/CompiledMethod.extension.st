@@ -69,7 +69,7 @@ CompiledMethod >> gtHierarchyFilter [
 CompiledMethod >> gtPushDownMethodActionFor: anAction [
 	<gtAction>
 	self methodClass subclasses notEmpty ifFalse: [ ^ anAction noAction ].
-	
+
 	^ anAction dropdown
 		priority: 12;
 		target: GtCoderMethodTarget;
@@ -91,7 +91,9 @@ CompiledMethod >> gtPushDownMethodActionFor: anAction [
 							from: (self
 									forPharo12AndNewer: [ self methodClass name ]
 									forPharo11: [ self methodClass ]) ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction
+							enqueueElement: anActionElement
+							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithConfirmationElement new
@@ -120,7 +122,9 @@ CompiledMethod >> gtPushUpMethodActionFor: anAction [
 									self selector});
 					confirmationLabel: ('Push up {1}' format: {self selector});
 					refactoringWithConfirmation: [ GtPushUpMethodRefactoring pullUp: {self selector} from: self methodClass ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction
+							enqueueElement: anActionElement
+							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithConfirmationElement new
@@ -209,7 +213,9 @@ CompiledMethod >> gtRenameMessageActionFor: anAction [
 							in: self methodClass
 							to: anInput
 							permutation: (1 to: self selector numArgs) ];
-					afterAppliedBlock: [ BlTaskAction enqueueElement: self action: [ anExplicitMenu hideAll ] ];
+					afterAppliedBlock: [ BlTaskAction
+							enqueueElement: anActionElement
+							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: self.
 			GtRefactoringsPreviewWithInputElement new
