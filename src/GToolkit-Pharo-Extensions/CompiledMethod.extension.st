@@ -68,6 +68,8 @@ CompiledMethod >> gtHierarchyFilter [
 { #category : #'*GToolkit-Pharo-Extensions' }
 CompiledMethod >> gtPushDownMethodActionFor: anAction [
 	<gtAction>
+	self methodClass subclasses notEmpty ifFalse: [ ^ anAction noAction ].
+	
 	^ anAction dropdown
 		priority: 12;
 		target: GtCoderMethodTarget;
@@ -185,7 +187,7 @@ CompiledMethod >> gtRemoveMethodActionFor: anAction [
 CompiledMethod >> gtRenameMessageActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
-		priority: 12;
+		priority: 14;
 		target: GtCoderMethodTarget;
 		icon: BrGlamorousVectorIcons empty;
 		label: 'Rename message';

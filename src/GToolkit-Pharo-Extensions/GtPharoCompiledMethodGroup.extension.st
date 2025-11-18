@@ -114,6 +114,9 @@ GtPharoCompiledMethodGroup >> gtInspectMethodsAsFilterActionFor: anAction [
 { #category : #'*GToolkit-Pharo-Extensions' }
 GtPharoCompiledMethodGroup >> gtPushDownMethodsActionFor: anAction [
 	<gtAction>
+	(self allSatisfy: [ :eachMethod | eachMethod methodClass subclasses notEmpty ])
+		ifFalse: [ ^ anAction noAction ].
+
 	^ anAction dropdown
 		priority: 22;
 		target: GtCoderMethodsTarget;
