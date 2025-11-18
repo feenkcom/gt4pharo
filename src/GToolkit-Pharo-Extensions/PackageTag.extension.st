@@ -1,10 +1,10 @@
-Extension { #name : #Package }
+Extension { #name : #PackageTag }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-Package >> gtCreateNewPackageOrPackageTagActionFor: anAction [
+PackageTag >> gtCreateNewPackageOrPackageTagActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
-		target: GtCoderPackageTarget;
+		target: GtCoderPackageTagTarget;
 		icon: BrGlamorousVectorIcons add;
 		label: 'New package / tag';
 		menuItemGroup: BrMenuItemGroupConfiguration modification;
@@ -35,18 +35,18 @@ Package >> gtCreateNewPackageOrPackageTagActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-Package >> gtRemoveActionFor: anAction [
+PackageTag >> gtRemoveActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
-		target: GtCoderPackageTarget;
+		target: GtCoderPackageTagTarget;
 		icon: BrGlamorousVectorIcons bin;
-		label: 'Remove package';
+		label: 'Remove tag';
 		menuItemPreview: [ self name ];
 		menuItemGroup: BrMenuItemGroupConfiguration removal;
 		content: [ :aMenuElement :aHostElement :anExplicitMenu | 
 			| labelText element change button |
 			element := BrVerticalPane new fitContent.
-			labelText := 'Remove package <1s>' expandMacrosWith: self name.
+			labelText := 'Remove package tag <1s>' expandMacrosWith: self name.
 			element
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
@@ -56,32 +56,9 @@ Package >> gtRemoveActionFor: anAction [
 								bottom: 0
 								left: 10
 								right: 10)).
-			element
-				addChild: (BrAsyncWidget new
-						fitContent;
-						stencil: [ | pane definedClasses extendedClasses |
-							pane := BrVerticalPane new.
-							pane fitContent.
-							definedClasses := self definedClassNames size.
-							extendedClasses := self extendedClassNames size.
-							definedClasses > 0
-								ifTrue: [ pane
-										addChild: (BrLabel new
-												margin: (BlInsets left: 10 right: 10);
-												aptitude: BrGlamorousLabelAptitude new glamorousRegularFont thin;
-												text: (definedClasses printString , ' defined class'
-														, (definedClasses > 1 ifTrue: [ 'es' ] ifFalse: [ '' ]))
-														asRopedText) ].
-							extendedClasses > 0
-								ifTrue: [ pane
-										addChild: (BrLabel new
-												margin: (BlInsets left: 10 right: 10);
-												aptitude: BrGlamorousLabelAptitude new glamorousRegularFont thin;
-												text: (extendedClasses printString , ' extended class'
-														, (extendedClasses > 1 ifTrue: [ 'es' ] ifFalse: [ '' ]))
-														asRopedText) ].
-							pane ]).
-			change := RBRemovePackageChange removePackageNamed: self name.
+			change := GtRBRemovePackageTagChange
+					packageName: self package name
+					tagName: self name.
 			button := BrButton new
 					aptitude: BrGlamorousButtonWithIconAptitude;
 					beSmallSize;
@@ -99,50 +76,34 @@ Package >> gtRemoveActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
-Package >> gtRenameActionFor: anAction [
+PackageTag >> gtRenameActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
-		target: GtCoderPackageTarget;
+		target: GtCoderPackageTagTarget;
 		icon: BrGlamorousVectorIcons empty;
-		label: 'Rename package';
+		label: 'Rename tag';
 		menuItemPreview: [ self name ];
 		menuItemPinSubmenu;
 		menuItemGroup: BrMenuItemGroupConfiguration refactoring;
-		content: [ :aMenuElement :aHostElement :anExplicitMenu | 
+		content: [ :aMenuElement :aHostElement  :anExplicitMenu | 
 			| aViewModel |
-			anExplicitMenu id: #'coder--context-menu-rename-package-form'.
+			anExplicitMenu id: #'coder--context-menu-rename-package-tag-form'.
 
 			aViewModel := GtRefactoringsWithInputViewModel new
-					refactoringTitle: 'Rename package';
+					refactoringTitle: 'Rename package tag';
 					targetName: self name;
-					inputLabel: 'New package name:';
+					inputLabel: 'New package tag name:';
 					initialText: self name;
-					refactoringWithInput: [ :anInput | GtRBRenamePackageRefactoring from: self name to: anInput ];
+					refactoringWithInput: [ :anInput | 
+						GtRBRenamePackageTagRefactoring
+							packageName: self packageName
+							from: self name
+							to: anInput ];
 					afterAppliedBlock: [ BlTaskAction enqueueElement: aMenuElement action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
 					anchorElement: aHostElement.
 			GtRefactoringsPreviewWithInputElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
-				bePinnable: anExplicitMenu ]
-]
-
-{ #category : #'*GToolkit-Pharo-Extensions' }
-Package >> packageManifestOrNil [
-	"Avoid using #definedClasses to create a list of classes only to
-	select then the one representing the manifest. The manifest is use 
-	to check if the package is deprecated, which in turn can slow down checking
-	if class is deprecated.
-	Related issue: https://github.com/feenkcom/gtoolkit/issues/4369"
-	<gtPharoPatch: #Pharo>
-	
-	^ self 
-		forPharo12AndNewer: [ 
-			self definedClasses
-				detect: [ :each | each isManifest ]
-				ifNone: [ nil ] ] 
-		forPharo11: [
-			self gtDefinedClassesWithPossibleDuplicatesDo: [:aClass|
-				aClass  isManifest ifTrue: [ ^ aClass ] ].
-			nil]
+				bePinnable: anExplicitMenu  ]
 ]

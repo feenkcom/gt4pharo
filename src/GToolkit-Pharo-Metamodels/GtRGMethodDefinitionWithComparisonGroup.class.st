@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'highlighter'
 	],
-	#category : #'GToolkit-Pharo-Metamodels'
+	#category : #'GToolkit-Pharo-Metamodels-Groups'
 }
 
 { #category : #accessing }

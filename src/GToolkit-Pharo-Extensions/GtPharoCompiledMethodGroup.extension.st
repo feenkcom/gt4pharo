@@ -112,6 +112,27 @@ GtPharoCompiledMethodGroup >> gtInspectMethodsAsFilterActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+GtPharoCompiledMethodGroup >> gtItemsFor: aView [
+	<gtView>
+	items ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Items';
+		items: [ items ];
+		withMultipleSelection;
+		column: 'Class' text: [ :each | each methodClass name ];
+		column: 'Selector' text: [ :each | each selector ];
+		column: 'Package' text: [ :each | each package name ];
+		dynamicContextItems: [ :anElement :aCollection | 
+			aCollection size = 1
+				ifTrue: [ GtCoderMethodTarget
+						menuItemsForObject: aCollection anyOne
+						hostElement: anElement ]
+				ifFalse: [ GtCoderMethodsTarget
+						menuItemsForObject: (GtPharoCompiledMethodGroup withAll: aCollection)
+						hostElement: anElement ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 GtPharoCompiledMethodGroup >> gtPushDownMethodsActionFor: anAction [
 	<gtAction>
 	(self collect: [ :eachMethod | eachMethod methodClass instanceSide ]) asSet size = 1
