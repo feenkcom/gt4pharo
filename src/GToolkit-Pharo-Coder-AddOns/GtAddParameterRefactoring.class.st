@@ -47,6 +47,18 @@ GtAddParameterRefactoring >> initialize [
 ]
 
 { #category : #private }
+GtAddParameterRefactoring >> isDefinition: aVariableNode [
+	| parent |
+	parent := aVariableNode parent.
+	parent ifNil: [ ^ false ].
+	parent isSequence
+		ifTrue: [ ^ parent temporaries identityIncludes: aVariableNode ].
+	(parent isBlock or: [ parent isMethod ])
+		ifTrue: [ ^ parent arguments identityIncludes: aVariableNode ].
+	^ false
+]
+
+{ #category : #private }
 GtAddParameterRefactoring >> modifyImplementorParseTree: parseTree in: aClass [
 	super modifyImplementorParseTree: parseTree in: aClass.
 	shouldReplaceExpressions ifFalse: [ ^ self ].
@@ -55,7 +67,15 @@ GtAddParameterRefactoring >> modifyImplementorParseTree: parseTree in: aClass [
 
 { #category : #transforming }
 GtAddParameterRefactoring >> renameMessageSends [
+	"Pharo 11"
 	super renameMessageSends.
+	self executeRenameExtensions
+]
+
+{ #category : #transforming }
+GtAddParameterRefactoring >> replaceMessageSends [
+	"Pharo 12"
+	super replaceMessageSends.
 	self executeRenameExtensions
 ]
 
@@ -64,9 +84,10 @@ GtAddParameterRefactoring >> replaceReference: argumentName in: parseTree [
 	| searchTree |
 	searchTree := RBParser parseExpression: argumentName argValue.
 	parseTree body
-		nodesDo:
-			[ :each | 
-			((each isVariable and: [ each isDefinition ]) not and: [ searchTree = each ])
+		nodesDo: [ :each | 
+			((each isVariable and: [ self isDefinition: each ]) not
+				and: [ searchTree = each
+						and: [ each parent notNil and: [ each parent isLiteralNode not ] ] ])
 				ifTrue: [ each replaceWith: (RBVariableNode named: argumentName newName) ] ]
 ]
 
