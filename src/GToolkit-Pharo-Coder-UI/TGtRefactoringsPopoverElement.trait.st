@@ -35,5 +35,7 @@ TGtRefactoringsPopoverElement >> bePinnable: anExplicitMenu [
 
 { #category : #'private - event handling' }
 TGtRefactoringsPopoverElement >> onClosePinnedElement: anAnnouncement [
-	BlTaskAction enqueueElement: self action: [ self removeFromParent ]
+	BlTaskAction enqueueElement: self action: [ 
+		self fireEvent: BrPopoverPinnedElementAboutToBeClosed new.
+		self removeFromParent ]
 ]
