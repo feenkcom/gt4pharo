@@ -69,6 +69,22 @@ GtPharoMethodCoderTagsElement >> classTagStringForMeta: aBoolean [
 		ifFalse: [ 'instance' ] 
 ]
 
+{ #category : #'private - instance creation' }
+GtPharoMethodCoderTagsElement >> createProtocolContextMenu [
+	<return: #BrMenuItems or: nil>
+	| aProtocolName aPackage |
+	self hasPharoMethodCoderViewModel ifFalse: [ ^ nil ].
+
+	aProtocolName := self protocolStringFor: pharoMethodCoderViewModel.
+	(Protocol named: aProtocolName) isExtensionProtocol ifFalse: [ ^ nil ].
+
+	aPackage := self class environment organization
+			packageMatchingExtensionName: aProtocolName allButFirst.
+	aPackage ifNil: [ ^ nil ].
+
+	^ GtCoderPackageTarget menuItemsForObject: aPackage hostElement: self
+]
+
 { #category : #initialization }
 GtPharoMethodCoderTagsElement >> initialize [
 	super initialize.
@@ -163,11 +179,13 @@ GtPharoMethodCoderTagsElement >> newProtocolTag [
 	^ BrButton new
 		id: GtPharoProtocolTagId;
 		beTinySize;
-		aptitude: BrGlamorousButtonWithLabelAptitude
-				+ (BrGlamorousWithExplicitDropdownAptitude
-						handle: [ self newProtocolEditor ]
-						content: [ self newProtocolPickerList ]
-						do: [ :theAptitude | theAptitude withContainerDownUpDropdown ])
+		aptitude: BrGlamorousButtonWithLabelAptitude;
+		addAptitude: (BrGlamorousWithExplicitDropdownAptitude
+				handle: [ self newProtocolEditor ]
+				content: [ self newProtocolPickerList ]
+				do: [ :theAptitude | theAptitude withContainerDownUpDropdown ]);
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+				menu: [ self createProtocolContextMenu ])
 ]
 
 { #category : #'private - event handling' }
