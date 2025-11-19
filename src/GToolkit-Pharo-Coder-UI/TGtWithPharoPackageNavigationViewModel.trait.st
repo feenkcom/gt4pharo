@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'pharoPackageNavigationViewModel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
 { #category : #'api - pharo package navigation view model' }

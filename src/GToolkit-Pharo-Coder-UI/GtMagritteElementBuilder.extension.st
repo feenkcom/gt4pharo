@@ -12,6 +12,13 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 	packageEditor
 		inputFilter: BrPackageNameInputFilter new;
 		aptitude: aptitude;
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+				menu: [ | aPackageName  |
+					aPackageName := (aMemento readUsing: aDescription) ifNotNil: #packageName.
+					aPackageName ifNotNil: [ 
+						self class environment organization 
+							packageNamed: aPackageName ifPresent: [ :aPackage | 	
+								GtCoderPackageTarget menuItemsForObject: aPackage hostElement: packageEditor ] ] ]);
 		addAptitude: (BrStyleCommonAptitude new
 				default: [ :aStyle | aStyle border: BlBorder empty ];
 				hovered: [ :aStyle | 
@@ -49,9 +56,9 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 			aValue := aMemento readUsing: aDescription.
 			aNewValue := aValue copyWithNewPackageName: anEvent text asString.
 			GtMagritteBuilderUtility
-				write: aNewValue 
-				using: aDescription 
-				memento: aMemento 
+				write: aNewValue
+				using: aDescription
+				memento: aMemento
 				element: packageEditor ].
 	^ packageEditor
 ]
@@ -68,6 +75,16 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 	tagEditor
 		inputFilter: BrPackageTagNameInputFilter new;
 		aptitude: aptitude;
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+				menu: [ | aPackageName aTagName |
+					aPackageName := (aMemento readUsing: aDescription) ifNotNil: #packageName.
+					aPackageName ifNotNil: [ 
+						self class environment organization 
+							packageNamed: aPackageName ifPresent: [ :aPackage |
+								aTagName := (aMemento readUsing: aDescription) ifNotNil: #tagName.
+								aTagName ifNotNil: [ 
+									aPackage tagNamed: aTagName ifPresent: [ :aPackageTag | 
+										GtCoderPackageTagTarget menuItemsForObject: aPackageTag hostElement: tagEditor ] ] ] ] ]);
 		addAptitude: (BrStyleCommonAptitude new
 				default: [ :aStyle | aStyle border: BlBorder empty ];
 				hovered: [ :aStyle | 
@@ -112,12 +129,12 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 			| aValue aNewValue |
 			aValue := aMemento readUsing: aDescription.
 			aNewValue := aValue copyWithNewTagName: anEvent text asString.
-			
-			GtMagritteBuilderUtility 
-				write: aNewValue 
-				using: aDescription 
-				memento: aMemento 
-				element: tagEditor. ].
+
+			GtMagritteBuilderUtility
+				write: aNewValue
+				using: aDescription
+				memento: aMemento
+				element: tagEditor ].
 	^ tagEditor
 ]
 

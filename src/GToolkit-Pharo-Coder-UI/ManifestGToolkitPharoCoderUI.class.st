@@ -6,7 +6,7 @@ Navigation is generated from {{gtMethod:ManifestGToolkitPharoCoderUI class>>#nav
 Class {
 	#name : #ManifestGToolkitPharoCoderUI,
 	#superclass : #PackageManifest,
-	#category : 'GToolkit-Pharo-Coder-UI-Manifest'
+	#category : #'GToolkit-Pharo-Coder-UI-Manifest'
 }
 
 { #category : #'code generation' }

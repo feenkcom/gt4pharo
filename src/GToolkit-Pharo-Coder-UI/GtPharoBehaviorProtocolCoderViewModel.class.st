@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'methodViewModels'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-! View Models'
+	#category : #'GToolkit-Pharo-Coder-UI-! View Models'
 }
 
 { #category : #accessing }

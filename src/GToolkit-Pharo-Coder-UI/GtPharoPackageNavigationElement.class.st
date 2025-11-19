@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'packageNameLabel'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
 { #category : #initialization }

@@ -96,7 +96,7 @@ GtCopyClassFormExample >> checkConvertedDefinitionsWithTag [
 { #category : #examples }
 GtCopyClassFormExample >> checkMethodsNotCopied [
 	<gtExample>
-	| copyClassForm originalTimestamp newTimestamp |
+	| copyClassForm |
 	self
 		assert: (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass)
 				isNil
@@ -131,6 +131,38 @@ GtCopyClassFormExample >> checkTimestampsAreDifferent [
 	newTimestamp ]
 		ensure: [ EpMonitor current
 				disableDuring: [ (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass)
+						ifNotNil: [ :cls | cls removeFromSystem ] ] ]
+]
+
+{ #category : #examples }
+GtCopyClassFormExample >> checkTraitMethodsNotCopied [
+	<gtExample>
+	| copyClassForm localSelectors newSelectors newClassName |
+	newClassName := #SmaCCParseNodeVisitor1234.
+	self
+		assert: (self class environment classOrTraitNamed: newClassName) isNil
+		description: 'Target class already exists'.
+	copyClassForm := GtCopyClassForm for: SmaCCParseNodeVisitor.
+	copyClassForm newClassName: newClassName.
+	copyClassForm copyMethods: true.
+
+	[ copyClassForm copyClass.
+	localSelectors := (SmaCCParseNodeVisitor methods
+			reject: [ :each | each isFromTrait ]) collect: #selector.
+	newSelectors := (newClassName asClass methods
+			reject: [ :each | each isFromTrait ]) collect: #selector.
+	self
+		assert: newSelectors asSortedCollection
+		equals: localSelectors asSortedCollection.
+	localSelectors := (SmaCCParseNodeVisitor classSide methods
+			reject: [ :each | each isFromTrait ]) collect: #selector.
+	newSelectors := (newClassName asClass classSide methods
+			reject: [ :each | each isFromTrait ]) collect: #selector.
+	self
+		assert: newSelectors asSortedCollection
+		equals: localSelectors asSortedCollection ]
+		ensure: [ EpMonitor current
+				disableDuring: [ (self class environment classOrTraitNamed: newClassName)
 						ifNotNil: [ :cls | cls removeFromSystem ] ] ]
 ]
 

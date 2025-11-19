@@ -93,9 +93,10 @@ GtCopyClassForm >> copyClass [
 	copyMethods
 		ifTrue: [ oldClass := model classFor: innerClass.
 			newClass := model classNamed: newClassName trim asSymbol.
-			oldClass allMethods
+			(oldClass allMethods select: [ :method | method methodClass = oldClass ])
 				do: [ :method | newClass compile: method source classified: method protocols ].
-			oldClass classSide allMethods
+			(oldClass classSide allMethods
+				select: [ :method | method methodClass = oldClass classSide ])
 				do: [ :method | newClass classSide compile: method source classified: method protocols ] ].
 	GtPharoCodeModifier current performRefactoryChange: model changes.
 	^ newClassName trim asSymbol asClass

@@ -5,7 +5,7 @@ Class {
 		'rootClass',
 		'subclassTrees'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Support'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Support'
 }
 
 { #category : #factory }

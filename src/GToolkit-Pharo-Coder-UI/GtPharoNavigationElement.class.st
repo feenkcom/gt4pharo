@@ -9,7 +9,7 @@ Class {
 		'behaivorsNavigationElement',
 		'behaviorsPage'
 	],
-	#category : 'GToolkit-Pharo-Coder-UI-Navigation - Views'
+	#category : #'GToolkit-Pharo-Coder-UI-Navigation - Views'
 }
 
 { #category : #initialization }

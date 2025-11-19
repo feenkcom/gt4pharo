@@ -11,11 +11,11 @@ GtPharoBigMethodCoderViewModel >> asEditorState [
 	^BrTextEditorCompositeMemento new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 GtPharoBigMethodCoderViewModel >> asExpandedOnlyElement [
 	"Create an element for just the expanded coder without expander"
 
-	^ GtPharoMethodCoderExpandedOnlyElement new
+	^ GtPharoBigMethodCoderExpandedOnlyElement new
 		textualCoderViewModel: self asCoderViewModel;
 		yourself
 ]
