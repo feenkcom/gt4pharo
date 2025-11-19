@@ -95,7 +95,7 @@ CompiledMethod >> gtPushDownMethodActionFor: anAction [
 							enqueueElement: anActionElement
 							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithConfirmationElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
@@ -126,7 +126,7 @@ CompiledMethod >> gtPushUpMethodActionFor: anAction [
 							enqueueElement: anActionElement
 							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithConfirmationElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
@@ -217,7 +217,7 @@ CompiledMethod >> gtRenameMessageActionFor: anAction [
 							enqueueElement: anActionElement
 							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithInputElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
