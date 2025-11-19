@@ -543,6 +543,29 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> addMethodPhlowMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns>
+	| compiledMethod nodes node |
+	compiledMethod := aCoderViewModel compiledMethod ifNil: [ ^ self ].
+	nodes := self extractableNodesFrom: aCoderViewModel.
+	nodes ifEmpty: [ ^ self ].
+	node := nodes first.
+
+	node isMethodPattern ifFalse: [ ^ self ].
+	
+	(coderAddOns
+		addContextMenu: (self
+				createLabel: 'Method actions'
+				description: compiledMethod selector)
+		icon: BrGlamorousVectorIcons empty
+		submenu: [ :theCoderViewModel :aTextualCoderEditorElement | 
+			GtCoderMethodTarget
+				menuItemsForObject: compiledMethod
+				hostElement: aTextualCoderEditorElement ])
+		ifNotNil: [ :anAction | anAction priority: 50 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns [
 	<return: #GtCoderContextMenuAction or: nil>
 	aNode isVariable ifFalse: [ ^ nil ].
