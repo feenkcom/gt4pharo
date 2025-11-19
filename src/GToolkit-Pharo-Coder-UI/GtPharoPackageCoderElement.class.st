@@ -46,6 +46,8 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 					fontSize: 18);
 			text: packageCoder package name;
 			margin: (BlInsets all: 0);
+			addAptitude: (BrGlamorousWithExplicitContextMenuAptitude new 
+				handleSubmenu: [ GtCoderPackageTarget menuItemsForObject: self package hostElement: self ]);
 			whenKey: BlKeyCombination primaryB
 				labelDo: [ :aShortcutEvent | self phlow spawnTool: (GtPackageCoderTool package: self package) ];
 			whenKey: BlKeyCombination primaryG

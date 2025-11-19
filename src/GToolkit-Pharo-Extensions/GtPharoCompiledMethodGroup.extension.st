@@ -174,7 +174,7 @@ GtPharoCompiledMethodGroup >> gtPushDownMethodsActionFor: anAction [
 							enqueueElement: anActionElement
 							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithConfirmationElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
@@ -218,7 +218,7 @@ GtPharoCompiledMethodGroup >> gtPushUpMethodsActionFor: anAction [
 							enqueueElement: anActionElement
 							action: [ anExplicitMenu hideAll ] ];
 					menuModel: anExplicitMenu;
-					anchorElement: self.
+					anchorElement: aTargetElement.
 			GtRefactoringsPreviewWithConfirmationElement new
 				refactoringsViewModel: aViewModel;
 				beContextMenuElement;
