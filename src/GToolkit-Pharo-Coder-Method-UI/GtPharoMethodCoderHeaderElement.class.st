@@ -45,6 +45,14 @@ GtPharoMethodCoderHeaderElement >> createMethodBehaviorContextMenu [
 ]
 
 { #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> createPackageContextMenu [
+	^ headerCoderModel
+		createPackageContextMenuFor: self textualCoderViewModel
+		from: self
+		phlowContext: self createPhlowContext
+]
+
+{ #category : #'instance creation' }
 GtPharoMethodCoderHeaderElement >> createPhlowContext [
 	^ self textualCoderViewModel createPhlowContext
 ]
@@ -122,6 +130,8 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 								border: BlBorder empty ];
 						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
+			self createPackageContextMenu ]);
 		action: [ self spawnPackage ]
 ]
 

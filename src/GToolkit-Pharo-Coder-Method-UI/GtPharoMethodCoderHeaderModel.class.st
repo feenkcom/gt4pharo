@@ -62,6 +62,20 @@ GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderVie
 				ifAbsent: [ nil ] ]
 ]
 
+{ #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> createPackageContextMenuFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+	"Create a context menu for a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
+
+	<return: #BrMenuItems or: nil>
+	| aPackage |
+	aPackage := aCoderViewModel compiledMethod ifNotNil: #package ifNil: [ ^ nil ].
+
+	^ GtCoderPackageTarget
+		menuItemsForObject: aPackage
+		inContext: aPhlowContext
+		hostElement: anElement
+]
+
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
 	| explicitProviderClass providerBehaviorClass methodBehaviorClass |

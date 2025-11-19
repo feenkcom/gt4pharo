@@ -35,6 +35,31 @@ Package >> gtCreateNewPackageOrPackageTagActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+Package >> gtGitActionFor: anAction [
+	<gtAction>
+	
+	^ anAction button
+		priority: 7;
+		id: GtCoderGitButtonId;
+		target: GtCoderPackageTarget;
+		icon: BrGlamorousVectorIcons branching;
+		label: 'Browse git repository';
+		menuItemPreview: self name;
+		menuItemGroup: BrMenuItemGroupConfiguration default;
+		action: [ :aButton | 
+			aButton phlow spawnTool: (GtGitPhlowTool new 
+				repository: self repository) ];
+		primaryModifierAction: [ :aButton | 
+			BlSpace new
+				withCommonSettings;
+				inPager: [ GtGitPhlowTool new 
+					repository: self repository ];
+				title: 'Git';
+				icon: BrGlamorousVectorIcons branching;
+				showFrom: aButton ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 Package >> gtRemoveActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
