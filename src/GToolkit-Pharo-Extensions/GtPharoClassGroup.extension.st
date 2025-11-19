@@ -25,7 +25,7 @@ GtPharoClassGroup >> gtCoderRemoveClassesFor: anAction [
 	^ anAction dropdown
 		priority: 5;
 		target: GtCoderClassesTarget;
-		icon: BrGlamorousVectorIcons empty;
+		icon: BrGlamorousVectorIcons bin;
 		label: 'Remove classes';
 		menuItemPreview: ('{1} classes' format: {self size});
 		menuItemGroup: BrMenuItemGroupConfiguration removal;
