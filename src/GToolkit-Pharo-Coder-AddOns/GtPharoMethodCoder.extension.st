@@ -551,8 +551,17 @@ GtPharoMethodCoder >> addMethodPhlowMenuAddOnsAst: anAst to: coderAddOns from: a
 	nodes ifEmpty: [ ^ self ].
 	node := nodes first.
 
-	node isMethodPattern ifFalse: [ ^ self ].
-	
+	(node isMethodPattern
+		or: [ node isMessageSend and: [ node receiver isSelf or: [ node receiver isSuper ] ] ])
+		ifFalse: [ ^ self ].
+
+	node isMessageSend
+		ifTrue: [ (node receiver isSelf
+				ifTrue: [ compiledMethod methodClass lookupSelector: node selector ]
+				ifFalse: [ compiledMethod methodClass superclass lookupSelector: node selector ])
+				ifNil: [ ^ self ]
+				ifNotNil: [ :anotherCompiledMethod | compiledMethod := anotherCompiledMethod ] ].
+
 	(coderAddOns
 		addContextMenu: (self
 				createLabel: 'Method actions'
