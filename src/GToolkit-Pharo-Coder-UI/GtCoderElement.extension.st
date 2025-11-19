@@ -32,6 +32,15 @@ GtCoderElement class >> forObject: anObject [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+GtCoderElement class >> forObject: anObject method: aCompiledMethod [
+	| classCoder coder |
+	classCoder := GtPharoBehaviorCoder forObject: anObject.
+	coder := self forCoder: classCoder.
+	classCoder withSelectedMethod: aCompiledMethod.
+	^ coder
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 GtCoderElement class >> forPackage: anRPackage [
 	^ self forCoder: (GtPharoPackageCoder forPackage: anRPackage)
 ]

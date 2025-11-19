@@ -570,6 +570,7 @@ GtPharoMethodCoder >> addMethodPhlowMenuAddOnsAst: anAst to: coderAddOns from: a
 		submenu: [ :theCoderViewModel :aTextualCoderEditorElement | 
 			GtCoderMethodTarget
 				menuItemsForObject: compiledMethod
+				inContext: (GtPhlowContext new selfObjectHolder: theCoderViewModel selfObjectHolder)
 				hostElement: aTextualCoderEditorElement ])
 		ifNotNil: [ :anAction | anAction priority: 50 ]
 ]

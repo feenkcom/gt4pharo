@@ -7,6 +7,23 @@ CompiledMethod >> gtAllInnerCompiledBlocksDo: aBlock [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+CompiledMethod >> gtBrowseActionFor: anAction context: aPhlowContext [
+	<gtAction>
+	^ anAction button
+		priority: 1;
+		target: GtCoderMethodTarget;
+		icon: BrGlamorousVectorIcons browse;
+		label: 'Browse method';
+		menuItemPreview: self selector;
+		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		action: [ :aButton | 
+			| aTool |
+			aTool := GtMethodCoderTool compiledMethod: self.
+			aTool selfObjectHolder: aPhlowContext selfObjectHolder.
+			aButton phlow spawnTool: aTool ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 CompiledMethod >> gtBrowseHierarchyImplementorsActionFor: anAction [
 	<gtAction>
 	^ anAction button
