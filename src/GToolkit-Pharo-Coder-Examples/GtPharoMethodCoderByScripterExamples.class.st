@@ -2787,6 +2787,113 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 	^ scripter
 ]
 
+{ #category : #'examples - extract literal' }
+GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariableOnClassSide [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter coder |
+	scripter := self
+			scripterForBlock: [ coder := GtPharoMethodCoderExamples new forUnaryClassMethod.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :each | 
+					each
+						appendString: '
+	^ #(1)' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :each | each save ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOfSubCollection: '#('.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start refactoring';
+				onSpaceRoot;
+				// #'context-menu--extract-literal-to-class-variable' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString indexOfSubCollection: '_'.
+						index to: index ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor is not focused';
+				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert variable name editor has focus';
+				satisfies: [ :aNameEditor | aNameEditor isFocused ];
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+	(scripter type: 'myClassVar') play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Perform refactoring';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				// GtRenameEditor ].
+	self
+		assert: (RBParser parseMethod: coder currentSourceString)
+		equals: (RBParser parseMethod: coder selector , ' ^ self myClassVar').
+	self assert: (coder behavior classVarNames includes: #MyClassVar).
+	self
+		assert: (coder behavior >> #myClassVar) ast
+		equals: (RBParser parseMethod: 'myClassVar ^ MyClassVar ifNil: [MyClassVar := #(1)]').
+	self
+		assert: ((coder behavior >> #myClassVar:) ast
+				equalTo: (RBParser parseMethod: 'myClassVar: anObject MyClassVar := anObject')
+				exceptForVariables: #()).
+	^ scripter
+]
+
 { #category : #'examples - extract method object' }
 GtPharoMethodCoderByScripterExamples >> extractMethodObjectUpdatesSource [
 	<gtExample>
@@ -4012,6 +4119,148 @@ GtPharoMethodCoderByScripterExamples >> forAbstractInstVar_05_execute_abstract_v
 	self
 		assert: (class
 				includesSelector: (scripter model attributeNamed: #dummyMethod) anyInstVarName asSymbol).
+	^ scripter
+]
+
+{ #category : #'examples - add parameter' }
+GtPharoMethodCoderByScripterExamples >> forAddAnotherParameterFromLiteral [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: 'Unique: anObject
+	^ OrderedCollection with: anObject with: nil' ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOfSubCollection: 'nil'.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click add parameter';
+				onSpaceRoot;
+				id: #'context-menu--add-parameter' ].
+	(scripter keyPress: BlKeyboardKey return) play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #refactoringException;
+				block: [ :each | self assert: each visibility equals: BlVisibility gone ] ].
+"	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self
+		assert: (scripter model behavior >> ('method1' , 'Unique:') asSymbol) ast
+		equals: (RBParser
+				parseMethod: 'method1Unique: anObject ^ anObject printString , #[1] printString')."
+	^ scripter
+]
+
+{ #category : #'examples - add parameter' }
+GtPharoMethodCoderByScripterExamples >> forAddParameterFromLiteralAlsoInByteArray [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: 'Unique
+	^ 1 printString , #[1] printString' ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOfSubCollection: ' 1'.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click add parameter';
+				onSpaceRoot;
+				id: #'context-menu--add-parameter' ].
+	(scripter keyPress: BlKeyboardKey return) play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #refactoringException;
+				block: [ :each | self assert: each visibility equals: BlVisibility gone ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self
+		assert: (scripter model behavior >> ('method1' , 'Unique:') asSymbol) ast
+		equals: (RBParser
+				parseMethod: 'method1Unique: anObject ^ anObject printString , #[1] printString').
 	^ scripter
 ]
 
