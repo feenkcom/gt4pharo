@@ -140,11 +140,11 @@ GtPharoMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel from: a
 GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
 	aCoderViewModel methodOrigin  
 		behaviorDo: [ :aBehavior |
-			anElement phlow spawnTool: (GtPackageCoderTool package: aBehavior package) ]
+			anElement phlow spawnTool: (GtPackageCoderTool forPackage: aBehavior package) ]
 		ifUnknown: [
 			aCoderViewModel coderModel methodBehavior
 				realBehaviorDo: [ :aBehavior |
-					anElement phlow spawnTool: (GtPackageCoderTool package: aBehavior package) ] 
+					anElement phlow spawnTool: (GtPackageCoderTool forPackage: aBehavior package) ] 
 				ifAbsent: [ "do nothing" ] ]
 ]
 

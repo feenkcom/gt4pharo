@@ -8,5 +8,5 @@ GtPharoPackageCoder >> gtLiveFor: aView [
 		priority: 1;
 		stencil: [ self ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect
-			action: [ :aButton | aButton phlow spawnTool: (GtPackageCoderTool package: self package) ]
+			action: [ :aButton | aButton phlow spawnTool: (GtPackageCoderTool forPackage: self package) ]
 ]
