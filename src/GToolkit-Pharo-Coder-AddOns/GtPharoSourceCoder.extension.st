@@ -32,7 +32,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 						action: [ :model :element | 
 							element phlow
 								spawnTool: (GtPackageCoderTool
-										package: (self packageOrganizer packageNamed: node literalValue)) ])
+										forPackage: (self packageOrganizer packageNamed: node literalValue)) ])
 						ifNotNil: [ :anAction | anAction priority: 5 ] ]
 				ifFalse: [ node gtIsBaselineName
 						ifTrue: [ (coderAddOns
