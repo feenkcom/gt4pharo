@@ -5,25 +5,17 @@ Class {
 		'literalNode',
 		'variableName',
 		'getter',
-		'renameAction'
+		'renameAction',
+		'receiverAttribute',
+		'receiverClassName'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtExtractLiteralToClassVariableController >> addGetterEditor [
 	| message |
-	self sourceAst
-		withAllNodesOfType: GtPharoMessageNode
-		do: [ :each | 
-			(each selector = #_
-				and: [ (sourceCoderViewModel behavior isClassSide
-						and: [ each receiver isVariable and: [ each receiver variableName = 'self' ] ])
-						or: [ each receiver isMessageSend
-								and: [ each receiver selector = #class
-										and: [ each receiver receiver isVariable
-												and: [ each receiver receiver variableName = 'self' ] ] ] ] ])
-				ifTrue: [ message := each ] ].
+	message := self messageNode.
 	renameAction := GtRenameSelectorAction
 			message: message
 			textualCoderViewModel: sourceCoderViewModel.
@@ -39,20 +31,33 @@ GtExtractLiteralToClassVariableController >> addGetterEditor [
 	renameAction install
 ]
 
-{ #category : #'as yet unclassified' }
-GtExtractLiteralToClassVariableController >> callSource [
-	^ 'self '
-		, (sourceCoderViewModel behavior isClassSide ifTrue: [ '' ] ifFalse: [ 'class ' ])
-		, '_'
+{ #category : #adding }
+GtExtractLiteralToClassVariableController >> addReceiverAttribute [
+	| attribute message |
+	self removeReceiverAttribute.
+	attribute := GtExtractLiteralToClassVariableAttribute new
+			refactoringController: self;
+			focusOnFirstShow: true.
+	message := self messageNode.
+	receiverAttribute := self sourceCoderViewModel
+			addTextAttribute: attribute
+			from: message receiver startPosition
+			to: message receiver stopPosition
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
+GtExtractLiteralToClassVariableController >> callSource [
+	^ self getterReceiver , ' _'
+]
+
+{ #category : #executing }
 GtExtractLiteralToClassVariableController >> cancelRefactoring [
 	self removeRenamer.
+	self removeReceiverAttribute.
 	super cancelRefactoring
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtExtractLiteralToClassVariableController >> createRefactoringModel [
 	| aModel aBehavior aProtocol aSourceString aCurrentSelector |
 	
@@ -71,14 +76,20 @@ GtExtractLiteralToClassVariableController >> createRefactoringModel [
 	^ aModel
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #executing }
 GtExtractLiteralToClassVariableController >> finishRefactoring: refactoring [
 	super finishRefactoring: refactoring.
 	self removeRenamer.
 	sourceCoderViewModel discardChanges
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtExtractLiteralToClassVariableController >> getterReceiver [
+	^ 'self'
+		, (sourceCoderViewModel behavior isClassSide ifTrue: [ '' ] ifFalse: [ ' class' ])
+]
+
+{ #category : #initialization }
 GtExtractLiteralToClassVariableController >> initialize [
 	super initialize.
 	getter := #classVar
@@ -89,14 +100,48 @@ GtExtractLiteralToClassVariableController >> literalNode: aNode [
 	literalNode := aNode
 ]
 
+{ #category : #private }
+GtExtractLiteralToClassVariableController >> messageNode [
+	self sourceAst
+		withAllNodesOfType: GtPharoMessageNode
+		do: [ :each | 
+			(each selector = #_
+				and: [ (sourceCoderViewModel behavior isClassSide
+						and: [ each receiver isVariable and: [ each receiver variableName = 'self' ] ])
+						or: [ each receiver isMessageSend
+								and: [ each receiver selector = #class
+										and: [ each receiver receiver isVariable
+												and: [ each receiver receiver variableName = 'self' ] ] ] ] ])
+				ifTrue: [ ^ each ] ].
+	^ nil
+]
+
 { #category : #accessing }
 GtExtractLiteralToClassVariableController >> parserStartingState [
 	^ GtPharoParser startingStateForMethod
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtExtractLiteralToClassVariableController >> potentialReceivers [
+	^ GtPrefixTree with: self getterReceiver
+]
+
+{ #category : #accessing }
 GtExtractLiteralToClassVariableController >> previewPosition [
 	^ literalNode startPosition + self callSource size - 1
+]
+
+{ #category : #accessing }
+GtExtractLiteralToClassVariableController >> receiverClassName [
+	^ receiverClassName
+]
+
+{ #category : #accessing }
+GtExtractLiteralToClassVariableController >> receiverClassName: anObject [
+	anObject = self getterReceiver
+		ifTrue: [ receiverClassName := nil ]
+		ifFalse: [ receiverClassName := anObject ].
+	self addRefactoringPreview
 ]
 
 { #category : #accessing }
@@ -108,6 +153,8 @@ GtExtractLiteralToClassVariableController >> refactoring [
 			extract: literalNode sourceInterval
 			inMethod: sourceCoderViewModel coderModel currentSelector
 			forClass: (model classFor: sourceCoderViewModel behavior).
+	receiverClassName
+		ifNotNil: [ refactoring variableClassName: receiverClassName ].
 	refactoring
 		setOption: #methodName
 		toUse: [ :methodName :ref | 
@@ -116,33 +163,40 @@ GtExtractLiteralToClassVariableController >> refactoring [
 	^ refactoring
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtExtractLiteralToClassVariableController >> refactoringName [
 	^'Extract literal to class variable'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
+GtExtractLiteralToClassVariableController >> removeReceiverAttribute [
+	receiverAttribute ifNil: [ ^ self ].
+	self sourceCoderViewModel removeCoderTextAttributes: receiverAttribute
+]
+
+{ #category : #removing }
 GtExtractLiteralToClassVariableController >> removeRenamer [
 	(renameAction notNil and: [ renameAction isInstalled ])
 		ifTrue: [ renameAction uninstall ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #executing }
 GtExtractLiteralToClassVariableController >> safelyExecute [
 	self preventSave.
 	sourceCoderViewModel selectNone.
 	self updateSource.
 	self addGetterEditor.
+	self addReceiverAttribute.
 	self addRefactoringPreview
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtExtractLiteralToClassVariableController >> updateSelector: aSymbol [
 	getter := aSymbol.
 	self addRefactoringPreview
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtExtractLiteralToClassVariableController >> updateSource [
 	| newSource oldSource |
 	oldSource := sourceCoderViewModel sourceText asString.
