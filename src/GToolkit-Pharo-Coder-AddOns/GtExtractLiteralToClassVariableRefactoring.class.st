@@ -6,7 +6,8 @@ Class {
 		'selector',
 		'variable',
 		'literalNode',
-		'getter'
+		'getter',
+		'variableClassName'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -27,7 +28,7 @@ GtExtractLiteralToClassVariableRefactoring >> addClassVariable [
 		performCompositeRefactoring: (RBAddClassVariableRefactoring
 				model: model
 				variable: variable
-				class: class instanceSide)
+				class: self classForClassVariable instanceSide)
 ]
 
 { #category : #transforming }
@@ -36,6 +37,14 @@ GtExtractLiteralToClassVariableRefactoring >> basicTranform [
 	self addClassVariable.
 	self createAccessors.
 	self replaceLiteral
+]
+
+{ #category : #preconditions }
+GtExtractLiteralToClassVariableRefactoring >> checkClassForVariable [
+	variableClassName ifNil: [ ^ self ].
+	(model classNamed: variableClassName)
+		ifNotNil: [ :cls | cls isMeta ifFalse: [ ^ self ] ].
+	self refactoringError: 'Invalid class for class variable'
 ]
 
 { #category : #preconditions }
@@ -52,6 +61,13 @@ GtExtractLiteralToClassVariableRefactoring >> checkLiteralToExtract [
 	self refactoringError: 'Cannot find literal node'
 ]
 
+{ #category : #preconditions }
+GtExtractLiteralToClassVariableRefactoring >> classForClassVariable [
+	^ (variableClassName
+		ifNil: [ class ]
+		ifNotNil: [ model classNamed: variableClassName ]) instanceSide
+]
+
 { #category : #transforming }
 GtExtractLiteralToClassVariableRefactoring >> createAccessors [
 	self
@@ -60,7 +76,7 @@ GtExtractLiteralToClassVariableRefactoring >> createAccessors [
 				addMethod: (RBParser
 						parseMethod: getter , ' ^ ' , variable , ' ifNil: [' , variable , ' := '
 								, literalNode formattedCode , ']') formattedCode
-				toClass: class classSide
+				toClass: self classForClassVariable classSide
 				inProtocols: #(#accessing)).
 	self
 		performCompositeRefactoring: (RBAddMethodRefactoring
@@ -68,7 +84,7 @@ GtExtractLiteralToClassVariableRefactoring >> createAccessors [
 				addMethod: (RBParser
 						parseMethod: getter , ': anObject ' , variable , ' := anObject')
 						formattedCode
-				toClass: class classSide
+				toClass: self classForClassVariable classSide
 				inProtocols: #(#accessing))
 ]
 
@@ -93,6 +109,7 @@ GtExtractLiteralToClassVariableRefactoring >> preconditions [
 	^ (RBCondition definesSelector: selector in: class)
 		& (RBCondition
 				withBlock: [ self checkLiteralToExtract.
+					self checkClassForVariable.
 					true ])
 ]
 
@@ -106,9 +123,11 @@ GtExtractLiteralToClassVariableRefactoring >> replaceLiteral [
 	| replacementNode method ast receiver |
 	method := class methodFor: selector.
 	ast := method ast.
-	receiver := RBVariableNode named: 'self'.
-	class isMeta
-		ifFalse: [ receiver := RBMessageNode receiver: receiver selector: #class ].
+	variableClassName
+		ifNil: [ receiver := RBVariableNode named: 'self'.
+			class isMeta
+				ifFalse: [ receiver := RBMessageNode receiver: receiver selector: #class ] ]
+		ifNotNil: [ receiver := RBVariableNode named: variableClassName ].
 	replacementNode := RBMessageNode receiver: receiver selector: getter.
 	ast
 		nodesDo: [ :each | 
@@ -121,4 +140,14 @@ GtExtractLiteralToClassVariableRefactoring >> replaceLiteral [
 { #category : #transforming }
 GtExtractLiteralToClassVariableRefactoring >> transform [
 	self basicTranform
+]
+
+{ #category : #accessing }
+GtExtractLiteralToClassVariableRefactoring >> variableClassName [
+	^ variableClassName
+]
+
+{ #category : #accessing }
+GtExtractLiteralToClassVariableRefactoring >> variableClassName: anObject [
+	variableClassName := anObject
 ]

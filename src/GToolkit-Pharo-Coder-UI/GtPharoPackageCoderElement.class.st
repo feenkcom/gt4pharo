@@ -49,7 +49,7 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 			addAptitude: (BrGlamorousWithExplicitContextMenuAptitude new 
 				handleSubmenu: [ GtCoderPackageTarget menuItemsForObject: self package hostElement: self ]);
 			whenKey: BlKeyCombination primaryB
-				labelDo: [ :aShortcutEvent | self phlow spawnTool: (GtPackageCoderTool package: self package) ];
+				labelDo: [ :aShortcutEvent | self phlow spawnTool: (GtPackageCoderTool forPackage: self package) ];
 			whenKey: BlKeyCombination primaryG
 				labelDo: [ :aShortcutEvent | self phlow spawnObject: self package ];
 			whenKey: BlKeyCombination primaryR

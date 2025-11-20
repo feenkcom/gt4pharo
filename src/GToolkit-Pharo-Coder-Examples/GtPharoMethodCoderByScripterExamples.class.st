@@ -2747,9 +2747,16 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 				id: GtSourceCoderEditorId ].
 	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Variable class has focus';
+				hasFocus;
+				// #classEditor ].
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert variable name editor has focus';
+				label: 'Assert getter editor has focus';
 				satisfies: [ :aNameEditor | aNameEditor isFocused ];
 				id: GtSourceCoderEditorId;
 				onBreadthFirstChildOfClass: GtRenameEditor ].
@@ -2782,6 +2789,123 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 		equals: (RBParser parseMethod: 'myClassVar ^ MyClassVar ifNil: [MyClassVar := #(1)]').
 	self
 		assert: ((coder behavior class >> #myClassVar:) ast
+				equalTo: (RBParser parseMethod: 'myClassVar: anObject MyClassVar := anObject')
+				exceptForVariables: #()).
+	^ scripter
+]
+
+{ #category : #'examples - extract literal' }
+GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariableInAnotherClass [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter coder extractToClass |
+	scripter := self
+			scripterForBlock: [ coder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :each | 
+					each
+						appendString: '
+	^ #(1)' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :each | each save ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					| index |
+					index := aSourceEditor text asString indexOfSubCollection: '#('.
+					aSourceEditor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Start refactoring';
+				onSpaceRoot;
+				// #'context-menu--extract-literal-to-class-variable' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert rename editor attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtRenameEditorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString indexOfSubCollection: '_'.
+						index to: index ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source editor is not focused';
+				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
+				id: GtSourceCoderEditorId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Variable class has focus';
+				hasFocus;
+				// #classEditor ].
+	extractToClass := environment dummyPackages last dummyClasses last realClass.
+	(scripter type: extractToClass name) play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert variable name editor has focus';
+				satisfies: [ :aNameEditor | aNameEditor isFocused ];
+				id: GtSourceCoderEditorId;
+				onBreadthFirstChildOfClass: GtRenameEditor ].
+	(scripter type: 'myClassVar') play.
+	(scripter keyPress: BlKeyboardKey return) play.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check save button exists';
+				exists;
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Perform refactoring';
+				onSpaceRoot;
+				id: GtRefactoringsPreviewAcceptId ].
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				// GtRenameEditor ].
+	self
+		assert: (RBParser parseMethod: coder currentSourceString)
+		equals: (RBParser
+				parseMethod: coder selector , ' ^ ' , extractToClass name , ' myClassVar').
+	self assert: (extractToClass classVarNames includes: #MyClassVar).
+	self
+		assert: (extractToClass class >> #myClassVar) ast
+		equals: (RBParser parseMethod: 'myClassVar ^ MyClassVar ifNil: [MyClassVar := #(1)]').
+	self
+		assert: ((extractToClass class >> #myClassVar:) ast
 				equalTo: (RBParser parseMethod: 'myClassVar: anObject MyClassVar := anObject')
 				exceptForVariables: #()).
 	^ scripter
@@ -2853,10 +2977,18 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariableOnClassSide
 				label: 'Assert source editor is not focused';
 				satisfies: [ :aCoderEditor | aCoderEditor isFocused not ];
 				id: GtSourceCoderEditorId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Variable class has focus';
+				hasFocus;
+				// #classEditor ].
+	(scripter keyPress: BlKeyboardKey tab) play.
 	scripter
 		assertStep: [ :s | 
 			s
-				label: 'Assert variable name editor has focus';
+				label: 'Assert getter editor has focus';
 				satisfies: [ :aNameEditor | aNameEditor isFocused ];
 				id: GtSourceCoderEditorId;
 				onBreadthFirstChildOfClass: GtRenameEditor ].
