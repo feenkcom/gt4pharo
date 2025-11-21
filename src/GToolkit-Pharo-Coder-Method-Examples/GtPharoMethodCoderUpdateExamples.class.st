@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : #examples }
+GtPharoMethodCoderUpdateExamples >> collapseAndExpandInSingleFrameDoesNotLoop [
+	"https://github.com/feenkcom/gtoolkit/issues/4849"
+
+	<gtExample>
+	| coder coderViewModel element scripter |
+	coder := GtPharoMethodCoder forMethod: Object >> #printString.
+	coderViewModel := coder asCoderViewModel.
+	element := coderViewModel asElement.
+	scripter := BlScripter new element: element.
+
+	coderViewModel expanded: false.
+	coderViewModel expanded: true.
+
+	scripter wait
+		forEmptySpaceTaskQueueTimeout: 5 seconds;
+		play.
+
+	self assert: scripter shouldPulse not.
+
+	^ scripter
+]
+
+{ #category : #examples }
 GtPharoMethodCoderUpdateExamples >> collapsedMethodCoderChangeMethodAndCheckCollapsedText [
 	<gtExample>
 	| aScripter aNewMethod aCoder |
