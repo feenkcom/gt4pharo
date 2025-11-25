@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'packageTag'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Filters'
+	#category : 'GToolkit-Pharo-TestSuite-Filters'
 }
 
 { #category : #accessing }

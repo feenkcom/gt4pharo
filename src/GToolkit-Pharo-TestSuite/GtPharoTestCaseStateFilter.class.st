@@ -5,7 +5,7 @@ Class {
 		'resultState',
 		'pharoTestSuite'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Filters'
+	#category : 'GToolkit-Pharo-TestSuite-Filters'
 }
 
 { #category : #accessing }

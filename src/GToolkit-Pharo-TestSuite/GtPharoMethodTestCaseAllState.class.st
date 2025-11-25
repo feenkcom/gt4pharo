@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMethodTestCaseAllState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #accessing }

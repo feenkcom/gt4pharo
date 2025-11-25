@@ -4,7 +4,7 @@ I represent a state in which a test case that produced  runtime error.
 Class {
 	#name : #GtPharoMethodTestCaseErrorState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #visiting }
@@ -20,9 +20,4 @@ GtPharoMethodTestCaseErrorState class >> label [
 { #category : #testing }
 GtPharoMethodTestCaseErrorState class >> representsTestResult: aTestResult [
 	^ aTestResult hasErrors
-]
-
-{ #category : #accessing }
-GtPharoMethodTestCaseErrorState >> isUnsuccessful [
-	^ true
 ]

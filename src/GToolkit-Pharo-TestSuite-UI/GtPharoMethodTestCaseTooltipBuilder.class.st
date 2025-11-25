@@ -13,7 +13,7 @@ Class {
 		'element',
 		'testCase'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-Utilities'
+	#category : 'GToolkit-Pharo-TestSuite-UI-Utilities'
 }
 
 { #category : #building }

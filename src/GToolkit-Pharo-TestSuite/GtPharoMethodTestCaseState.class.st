@@ -6,7 +6,7 @@ My subclasses define states like passed, failure, error test case execution resu
 Class {
 	#name : #GtPharoMethodTestCaseState,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #visiting }
@@ -101,9 +101,4 @@ GtPharoMethodTestCaseState class >> stateFromTestResult: aTestResult [
 			^ eachStateClass ] ].
 
 	^ GtPharoMethodNotExecutedState
-]
-
-{ #category : #accessing }
-GtPharoMethodTestCaseState >> isUnsuccessful [
-	^ false
 ]

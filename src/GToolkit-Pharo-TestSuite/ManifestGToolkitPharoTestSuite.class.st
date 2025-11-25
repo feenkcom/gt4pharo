@@ -4,7 +4,7 @@ Please describe the package using the class comment of the included manifest cla
 Class {
 	#name : #ManifestGToolkitPharoTestSuite,
 	#superclass : #PackageManifest,
-	#category : #'GToolkit-Pharo-TestSuite-Manifest'
+	#category : 'GToolkit-Pharo-TestSuite-Manifest'
 }
 
 { #category : #accessing }

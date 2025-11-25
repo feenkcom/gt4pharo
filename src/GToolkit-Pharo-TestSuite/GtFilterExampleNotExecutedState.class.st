@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFilterExampleNotExecutedState,
 	#superclass : #GtExampleState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #'api - testing' }

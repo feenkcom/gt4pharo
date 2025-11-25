@@ -11,7 +11,7 @@ Class {
 		'neutralIconElement',
 		'oneIconElement'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
+	#category : 'GToolkit-Pharo-TestSuite-UI-! Views'
 }
 
 { #category : #initialization }

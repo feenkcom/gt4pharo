@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'selectedState'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-! View Models'
+	#category : 'GToolkit-Pharo-TestSuite-UI-! View Models'
 }
 
 { #category : #'api - suite' }

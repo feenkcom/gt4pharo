@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'suite'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Events'
+	#category : 'GToolkit-Pharo-TestSuite-Events'
 }
 
 { #category : #accessing }

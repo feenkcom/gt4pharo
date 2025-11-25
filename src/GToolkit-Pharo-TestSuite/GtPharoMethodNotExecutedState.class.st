@@ -5,7 +5,7 @@ I represent a state in which a test case was not executed.
 Class {
 	#name : #GtPharoMethodNotExecutedState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #visiting }

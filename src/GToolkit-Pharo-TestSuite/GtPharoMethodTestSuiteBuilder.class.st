@@ -15,7 +15,7 @@ Class {
 		'selector',
 		'testSuite'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #accessing }

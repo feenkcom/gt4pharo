@@ -6,7 +6,7 @@ It may happen when a test case method source code is modified.
 Class {
 	#name : #GtPharoMethodNotExecutableTestCaseState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #accessing }

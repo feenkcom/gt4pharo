@@ -7,7 +7,7 @@ Class {
 		'announcer',
 		'mutex'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #'instance creation' }
@@ -51,18 +51,18 @@ GtPharoTestSuite >> allSkippedTestCases [
 ]
 
 { #category : #'api - accessing' }
-GtPharoTestSuite >> allTestCaseStates [
-	<return: #TAsyncFuture>
-
-	^ (self allTestCases collect: [ :eachTestCase | eachTestCase state ]) to: Set
-]
-
-{ #category : #'api - accessing' }
 GtPharoTestSuite >> allTestCases [
 	"Returns a stream of all executable test cases"
 	<return: #TAsyncStream>
 
 	^ testCasesStream asyncSimilarCopy
+]
+
+{ #category : #'api - accessing' }
+GtPharoTestSuite >> allTestCaseStates [
+	<return: #TAsyncFuture>
+
+	^ (self allTestCases collect: [ :eachTestCase | eachTestCase state ]) to: Set
 ]
 
 { #category : #'api - enumerating' }

@@ -4,7 +4,7 @@ I represent a state in which a test case that was skipped instead of an executio
 Class {
 	#name : #GtPharoMethodTestCaseSkippedState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #visiting }

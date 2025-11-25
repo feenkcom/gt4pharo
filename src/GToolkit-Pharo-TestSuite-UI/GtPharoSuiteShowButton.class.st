@@ -3,7 +3,7 @@ Class {
 	#superclass : #BrButton,
 	#traits : 'TGtWithPharoSuiteViewModel',
 	#classTraits : 'TGtWithPharoSuiteViewModel classTrait',
-	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
+	#category : 'GToolkit-Pharo-TestSuite-UI-! Views'
 }
 
 { #category : #initialization }

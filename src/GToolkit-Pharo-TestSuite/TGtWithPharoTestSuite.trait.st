@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'pharoTestSuite'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #'api - pharo test suite' }

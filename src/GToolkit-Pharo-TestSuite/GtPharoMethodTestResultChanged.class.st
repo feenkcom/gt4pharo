@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'result'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Events'
+	#category : 'GToolkit-Pharo-TestSuite-Events'
 }
 
 { #category : #accessing }

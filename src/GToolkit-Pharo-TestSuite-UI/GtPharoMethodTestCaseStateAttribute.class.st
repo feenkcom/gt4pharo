@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'testCase'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-Styler'
+	#category : 'GToolkit-Pharo-TestSuite-UI-Styler'
 }
 
 { #category : #accessing }

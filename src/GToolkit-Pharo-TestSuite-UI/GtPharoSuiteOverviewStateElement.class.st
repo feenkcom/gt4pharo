@@ -7,7 +7,7 @@ Class {
 		'amount',
 		'state'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
+	#category : 'GToolkit-Pharo-TestSuite-UI-! Views'
 }
 
 { #category : #initialization }

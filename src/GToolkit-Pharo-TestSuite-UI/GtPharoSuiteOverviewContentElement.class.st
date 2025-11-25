@@ -13,7 +13,7 @@ Class {
 		'errorElement',
 		'updater'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
+	#category : 'GToolkit-Pharo-TestSuite-UI-! Views'
 }
 
 { #category : #initialization }

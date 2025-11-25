@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'state'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-Element ID'
+	#category : 'GToolkit-Pharo-TestSuite-UI-Element ID'
 }
 
 { #category : #comparing }

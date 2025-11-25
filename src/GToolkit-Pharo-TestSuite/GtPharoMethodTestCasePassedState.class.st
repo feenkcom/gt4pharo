@@ -4,7 +4,7 @@ I represent a state in which a test case that was executed properly, satisfying 
 Class {
 	#name : #GtPharoMethodTestCasePassedState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #visiting }

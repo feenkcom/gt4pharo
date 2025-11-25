@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoTestCaseStateProvider,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #'api - accessing' }

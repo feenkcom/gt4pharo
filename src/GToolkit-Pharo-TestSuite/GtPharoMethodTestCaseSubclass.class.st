@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'testClassName'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #'instance creation' }

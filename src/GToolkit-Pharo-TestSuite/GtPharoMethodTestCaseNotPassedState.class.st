@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoMethodTestCaseNotPassedState,
 	#superclass : #GtPharoMethodTestCaseState,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #'as yet unclassified' }

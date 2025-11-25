@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRingBehaviourDefinitionConversionTest,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-TestSuite-Utility'
+	#category : 'GToolkit-Pharo-TestSuite-Utility'
 }
 
 { #category : #utils }

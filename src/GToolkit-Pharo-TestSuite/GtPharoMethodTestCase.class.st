@@ -19,7 +19,7 @@ Class {
 		'result',
 		'state'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #'instance creation' }
@@ -33,14 +33,14 @@ GtPharoMethodTestCase >> announce: anAnnouncement [
 	announcer ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
 ]
 
-{ #category : #'api - state' }
-GtPharoMethodTestCase >> beSkipped [
-	self state beSkipped: self
-]
-
 { #category : #'api - accessing' }
 GtPharoMethodTestCase >> behavior [
 	^ method methodClass
+]
+
+{ #category : #'api - state' }
+GtPharoMethodTestCase >> beSkipped [
+	self state beSkipped: self
 ]
 
 { #category : #'api - testing' }
@@ -114,16 +114,16 @@ GtPharoMethodTestCase >> isPassed [
 			  selector: self methodSelector ]
 ]
 
-{ #category : #testing }
-GtPharoMethodTestCase >> isSUnitTestCase [
-
-	^ true
-]
-
 { #category : #'api - testing' }
 GtPharoMethodTestCase >> isSkipped [
 
 	^ self hasResult and: [ self result skippedCount isZero not ]
+]
+
+{ #category : #testing }
+GtPharoMethodTestCase >> isSUnitTestCase [
+
+	^ true
 ]
 
 { #category : #initialization }

@@ -3,7 +3,7 @@ I am a {{gtClass:GtPharoMethodTestCaseState}} visitor.
 "
 Trait {
 	#name : #TGtPharoMethodTestCaseStateVisitor,
-	#category : #'GToolkit-Pharo-TestSuite-States'
+	#category : 'GToolkit-Pharo-TestSuite-States'
 }
 
 { #category : #visiting }
@@ -48,6 +48,11 @@ TGtPharoMethodTestCaseStateVisitor >> visitTestCaseSkippedState: aState [
 
 { #category : #visiting }
 TGtPharoMethodTestCaseStateVisitor >> visitTestCaseState: aState [
+]
+
+{ #category : #visiting }
+TGtPharoMethodTestCaseStateVisitor >> visitTestCaseUnableToCompleteState: aState [ 
+	^self visitTestCaseErrorState: aState
 ]
 
 { #category : #visiting }

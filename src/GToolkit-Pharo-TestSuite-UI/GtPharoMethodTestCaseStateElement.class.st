@@ -17,7 +17,7 @@ Class {
 		'testCase',
 		'styleLook'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
+	#category : 'GToolkit-Pharo-TestSuite-UI-! Views'
 }
 
 { #category : #'private - instance creation' }

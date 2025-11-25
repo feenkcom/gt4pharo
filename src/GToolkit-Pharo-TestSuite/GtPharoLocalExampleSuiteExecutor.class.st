@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtPharoSuiteExecutor',
 	#classTraits : 'TGtPharoSuiteExecutor classTrait',
-	#category : #'GToolkit-Pharo-TestSuite-Executor'
+	#category : 'GToolkit-Pharo-TestSuite-Executor'
 }
 
 { #category : #'api - testing' }

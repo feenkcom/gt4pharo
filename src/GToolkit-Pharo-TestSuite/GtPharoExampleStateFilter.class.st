@@ -5,7 +5,7 @@ Class {
 		'resultState',
 		'pharoExampleSuite'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Filters'
+	#category : 'GToolkit-Pharo-TestSuite-Filters'
 }
 
 { #category : #defaults }

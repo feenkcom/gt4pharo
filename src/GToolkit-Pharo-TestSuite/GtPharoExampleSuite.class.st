@@ -13,7 +13,7 @@ Class {
 		'announcer',
 		'mutex'
 	],
-	#category : #'GToolkit-Pharo-TestSuite-Base'
+	#category : 'GToolkit-Pharo-TestSuite-Base'
 }
 
 { #category : #'api - instance creation' }
@@ -22,17 +22,17 @@ GtPharoExampleSuite class >> forStream: anAsyncStream [
 ]
 
 { #category : #'api - accessing' }
-GtPharoExampleSuite >> allExampleStates [
-	<return: #TAsyncStream>
-
-	^ (self allExamples collect: [ :eachExampleWithResult | self stateOf: eachExampleWithResult ]) withoutDuplicates
-]
-
-{ #category : #'api - accessing' }
 GtPharoExampleSuite >> allExamples [
 	<return: #TAsyncStream>
 
 	^ examplesWithResultStream asyncSimilarCopy
+]
+
+{ #category : #'api - accessing' }
+GtPharoExampleSuite >> allExampleStates [
+	<return: #TAsyncStream>
+
+	^ (self allExamples collect: [ :eachExampleWithResult | self stateOf: eachExampleWithResult ]) withoutDuplicates
 ]
 
 { #category : #'api - enumeration' }

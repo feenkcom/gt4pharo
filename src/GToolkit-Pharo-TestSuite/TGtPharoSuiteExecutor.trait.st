@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtPharoSuiteExecutor,
-	#category : #'GToolkit-Pharo-TestSuite-Executor'
+	#category : 'GToolkit-Pharo-TestSuite-Executor'
 }
 
 { #category : #'api - testing' }
