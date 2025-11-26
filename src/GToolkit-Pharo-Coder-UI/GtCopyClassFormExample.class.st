@@ -1,8 +1,32 @@
 Class {
 	#name : #GtCopyClassFormExample,
 	#superclass : #Object,
+	#classInstVars : [
+		'testClassInstVar'
+	],
 	#category : #'GToolkit-Pharo-Coder-UI-Examples'
 }
+
+{ #category : #examples }
+GtCopyClassFormExample >> checkClassInstVarsCopied [
+	<gtExample>
+	| copyClassForm |
+	self
+		assert: (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass)
+				isNil
+		description: 'Target class already exists'.
+	copyClassForm := GtCopyClassForm for: self class.
+	copyClassForm newClassName: #GtCopyClassFormExampleCopiedClass.
+	copyClassForm copyMethods: false.
+
+	[ copyClassForm copyClass.
+	self
+		assert: #GtCopyClassFormExampleCopiedClass asClass classSide instVarNames asArray
+		equals: #('testClassInstVar') ]
+		ensure: [ EpMonitor current
+				disableDuring: [ (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass)
+						ifNotNil: [ :cls | cls removeFromSystem ] ] ]
+]
 
 { #category : #examples }
 GtCopyClassFormExample >> checkConvertedDefinitions [

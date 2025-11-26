@@ -90,9 +90,11 @@ GtCopyClassForm >> copyClass [
 	model := GtRBNamespace new.
 	definition := self buildNewDefinitionFrom: innerClass definitionString.
 	model defineClass: definition.
+	newClass := model classNamed: newClassName trim asSymbol.
+	innerClass classSide instVarNames
+		do: [ :each | newClass classSide addInstanceVariable: each ].
 	copyMethods
 		ifTrue: [ oldClass := model classFor: innerClass.
-			newClass := model classNamed: newClassName trim asSymbol.
 			(oldClass allMethods select: [ :method | method methodClass = oldClass ])
 				do: [ :method | newClass compile: method source classified: method protocols ].
 			(oldClass classSide allMethods
