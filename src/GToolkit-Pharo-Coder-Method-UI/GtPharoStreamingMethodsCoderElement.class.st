@@ -223,7 +223,6 @@ GtPharoStreamingMethodsCoderElement >> onFocusFiltersShortcutEvent: anEvent [
 { #category : #'private - event handling' }
 GtPharoStreamingMethodsCoderElement >> onFocusedMethodElement: aWidget [
 	| aMethod |
-	true ifTrue: [ ^ self ].
 	aWidget hasTextualCoderViewModel ifFalse: [ ^ self ].
 
 	aWidget id isIndexed ifTrue: [ list selectOne: aWidget id index ].

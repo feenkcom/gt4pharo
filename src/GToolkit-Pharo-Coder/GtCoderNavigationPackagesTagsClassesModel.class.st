@@ -1146,7 +1146,6 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedMethod: aCompiledMethod sou
 			selectedMethod == aCompiledMethod ifTrue: [ ^ self ].
 			(self selectedMethods includes: aCompiledMethod) ifTrue: [ ^ self ].
 			
-			GtJustContextStackSignal emit.
 			"Select method an inform about the change just the navigation UI,
 			do not select it in a coder (since the request comes from the coder)."
 			selectedMethod := aCompiledMethod.
