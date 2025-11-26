@@ -102,8 +102,3 @@ GtPharoMethodTestCaseState class >> stateFromTestResult: aTestResult [
 
 	^ GtPharoMethodNotExecutedState
 ]
-
-{ #category : #accessing }
-GtPharoMethodTestCaseState >> isUnsuccessful [
-	^ false
-]
