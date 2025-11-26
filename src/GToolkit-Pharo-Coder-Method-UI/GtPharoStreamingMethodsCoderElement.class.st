@@ -130,7 +130,10 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 		itemStencil: [ :anElementClass |
 			anElementClass new
 				vFitContentLimited
-				id: GtSourceCoderId ];
+				id: GtSourceCoderId;
+				addAptitude: (BrStyleCommonAptitude new
+					focused: [ :aStyle | aStyle 
+						do: [ :aWidget | self onFocusedMethodElement: aWidget ] ]) ];
 		itemId: [ :eachCoderViewModel | eachCoderViewModel coder id ];
 		itemDataBinder: [ :aCoderElement :aCoderViewModel :anItemIndex | 
 			BlFrameTelemetry
@@ -215,6 +218,22 @@ GtPharoStreamingMethodsCoderElement >> onFocusFiltersShortcutEvent: anEvent [
 				root: aFilterElement;
 				referenceElement: aFilterElement;
 				nextFocusDo: #requestFocus ifNone: [  ] ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoderElement >> onFocusedMethodElement: aWidget [
+	| aMethod |
+	true ifTrue: [ ^ self ].
+	aWidget hasTextualCoderViewModel ifFalse: [ ^ self ].
+
+	aWidget id isIndexed ifTrue: [ list selectOne: aWidget id index ].
+
+	aMethod := aWidget textualCoderViewModel compiledMethod.
+	aMethod ifNil: [ ^ self ].
+
+	self
+		fireEvent: (GtNavigationMethodSelectionWish new
+				method: aMethod)
 ]
 
 { #category : #'private - event handling' }

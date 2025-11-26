@@ -191,22 +191,36 @@ GtPharoBehaviorCoder >> withMethodProtocol: aMethodProtocol source: aSource [
 
 { #category : #'api - navigation' }
 GtPharoBehaviorCoder >> withSelectedMethod: aMethod [
+	self withSelectedMethod: aMethod source: self
+]
+
+{ #category : #'api - navigation' }
+GtPharoBehaviorCoder >> withSelectedMethod: aMethod source: aSource [
 	self
 		assert: [ class instanceSide = aMethod methodClass instanceSide ]
 		description: [ 'Can not select a method from a different class' ].
 
-	self announce: (GtClassCoderMethodNavigationAnnouncement new method: aMethod)
+	self announce: (GtClassCoderMethodNavigationAnnouncement new 
+		method: aMethod; 
+		source: aSource)
 ]
 
 { #category : #'api - navigation' }
 GtPharoBehaviorCoder >> withSelectedMethods: aCollectionOfMethods [
+	self withSelectedMethods: aCollectionOfMethods source: self
+]
+
+{ #category : #'api - navigation' }
+GtPharoBehaviorCoder >> withSelectedMethods: aCollectionOfMethods source: aSource [
 	self
 		assert: [ aCollectionOfMethods
 				allSatisfy: [ :eachMethod | class instanceSide = eachMethod methodClass instanceSide ] ]
 		description: [ 'Can not select a method from a different class' ].
 
 	self
-		announce: (GtClassCoderMethodsNavigationAnnouncement new methods: aCollectionOfMethods)
+		announce: (GtClassCoderMethodsNavigationAnnouncement new 
+			methods: aCollectionOfMethods;
+			source: aSource)
 ]
 
 { #category : #accessing }

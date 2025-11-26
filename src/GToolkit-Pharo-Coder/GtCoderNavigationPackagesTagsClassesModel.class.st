@@ -396,22 +396,38 @@ GtCoderNavigationPackagesTagsClassesModel >> notifyMethodDeselected: aPreviously
 
 { #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyMethodSelected: aMethod [
-	coder withSelectedMethod: aMethod.
+	"Can be removed"
+
+	self notifyMethodSelected: aMethod source: self
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyMethodSelected: aMethod source: aSource [
+	coder withSelectedMethod: aMethod source: aSource.
 	self
 		announce:
 			(GtCoderNavigationMethodSelected new
 				coder: coder;
-				method: aMethod)
+				method: aMethod;
+				source: aSource)
 ]
 
 { #category : #'private - notifying' }
 GtCoderNavigationPackagesTagsClassesModel >> notifyMethodsSelected: aCollectionOfMethods [
-	coder withSelectedMethods: aCollectionOfMethods.
+	"Can be removed"
+
+	self notifyMethodsSelected: aCollectionOfMethods source: self
+]
+
+{ #category : #'private - notifying' }
+GtCoderNavigationPackagesTagsClassesModel >> notifyMethodsSelected: aCollectionOfMethods source: aSource [
+	coder withSelectedMethods: aCollectionOfMethods source: aSource.
 	self
 		announce:
 			(GtCoderNavigationMethodsSelected new
 				coder: coder;
-				methods: aCollectionOfMethods)
+				methods: aCollectionOfMethods;
+				source: aSource)
 ]
 
 { #category : #'private - notifying' }
@@ -967,25 +983,25 @@ GtCoderNavigationPackagesTagsClassesModel >> selectCoder: aCoder [
 ]
 
 { #category : #'api - selection' }
-GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod [
+GtCoderNavigationPackagesTagsClassesModel >> selectMethod: aMethod source: aSource [
 	self selectClass: aMethod methodClass instanceSide.
 
 	selectedMethod := aMethod.
-	self notifyMethodSelected: aMethod
+	self notifyMethodSelected: aMethod source: aSource
 ]
 
 { #category : #'api - selection' }
-GtCoderNavigationPackagesTagsClassesModel >> selectMethods: aCollectionOfMethods [
+GtCoderNavigationPackagesTagsClassesModel >> selectMethods: aCollectionOfMethods source: aSource [
 	aCollectionOfMethods ifEmpty: [ ^ self ].
 	aCollectionOfMethods size = 1 ifTrue: [
-		self selectMethod: aCollectionOfMethods anyOne.
+		self selectMethod: aCollectionOfMethods anyOne source: aSource.
 		^ self ].
 
 	self selectClass: aCollectionOfMethods anyOne methodClass instanceSide.
 
 	selectedMethod := aCollectionOfMethods anyOne.
 	selectedMethods := aCollectionOfMethods.
-	self notifyMethodsSelected: aCollectionOfMethods
+	self notifyMethodsSelected: aCollectionOfMethods source: aSource
 ]
 
 { #category : #'api - selection' }
@@ -1115,6 +1131,29 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedMethod [
 	<return: #CompiledMethod>
 
 	^ selectedMethod
+]
+
+{ #category : #'api - selection' }
+GtCoderNavigationPackagesTagsClassesModel >> selectedMethod: aCompiledMethod source: aSource [
+	"Inform that another method was selected and should be reflected in the navigation model."
+
+	self selectedClassDo: [ :aClass |
+		"If a selected method belongs to another class, e.g., superclass,
+		do not select it (as it is not in the method list anyway)."
+		aClass = aCompiledMethod methodClass ifTrue: [ 
+		
+			"If the method is selected, do nothing."
+			selectedMethod == aCompiledMethod ifTrue: [ ^ self ].
+			(self selectedMethods includes: aCompiledMethod) ifTrue: [ ^ self ].
+			
+			GtJustContextStackSignal emit.
+			"Select method an inform about the change just the navigation UI,
+			do not select it in a coder (since the request comes from the coder)."
+			selectedMethod := aCompiledMethod.
+			self announce: (GtCoderNavigationMethodSelected new
+					coder: coder;
+					method: aCompiledMethod;
+					source: aSource) ] ]
 ]
 
 { #category : #'api - accessing' }
