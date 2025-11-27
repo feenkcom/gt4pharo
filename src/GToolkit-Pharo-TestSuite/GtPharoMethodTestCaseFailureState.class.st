@@ -21,8 +21,3 @@ GtPharoMethodTestCaseFailureState class >> label [
 GtPharoMethodTestCaseFailureState class >> representsTestResult: aTestResult [
 	^ aTestResult hasFailures
 ]
-
-{ #category : #accessing }
-GtPharoMethodTestCaseFailureState >> isUnsuccessful [
-	^ true
-]

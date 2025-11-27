@@ -21,8 +21,3 @@ GtPharoMethodTestCaseErrorState class >> label [
 GtPharoMethodTestCaseErrorState class >> representsTestResult: aTestResult [
 	^ aTestResult hasErrors
 ]
-
-{ #category : #accessing }
-GtPharoMethodTestCaseErrorState >> isUnsuccessful [
-	^ true
-]
