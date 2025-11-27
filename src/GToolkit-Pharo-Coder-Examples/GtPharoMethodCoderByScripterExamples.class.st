@@ -1644,6 +1644,11 @@ GtPharoMethodCoderByScripterExamples >> coderElementWithSelfObject [
 				// GtSourceCoderEditorId;
 				// (GtPharoMethodExpanderId indexed: 1) ].
 	aScripter
+		mouseMoveOverStep: [ :s | 
+			s
+				// GtSourceCoderEditorId;
+				// GtSourceCoderExpandedContentElement].
+	aScripter
 		assertStep: [ :s | 
 			s
 				label: 'Assert embeded method has play and inspect button';
@@ -2601,6 +2606,10 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Play
 	<gtExample>
 	| aScripter |
 	aScripter := self exampleMethodCoderUI_ExpandedFromUI_CheckActionButtons.
+
+	aScripter mouseMoveOver
+		// GtSourceCoderEditorId;
+		play.
 
 	aScripter
 		clickStep: [ :s | 
@@ -8816,6 +8825,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 				aCoder := self methodCoderWithAnotherExampleCallingSuperclassExample. ].
 
 	aScripter methodCoder
+		mouseMoveOver;
 		assertCompiledMethodIs: GtPharoDummyTwoObject>>#anotherExampleCallingSuperclassExample;
 		assertExplicitProviderClassIs: GtPharoDummyTwoObject;
 		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
@@ -8830,6 +8840,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :aStep | 
 				aStep
+					mouseMoveOver;
 					assertCompiledMethodIs: GtPharoDummyOneObject>>#successfulExample;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
@@ -8922,6 +8933,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 	aScripter 
 		unfoldedInitialStylingPlay: [ :aStep |
 			aStep methodCoder
+				mouseMoveOver;
 				assertSelfObjectIs: nil;
 				assertExplicitProviderClassIs: GtPharoDummyTwoObject;
 				assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
@@ -9217,6 +9229,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 			].
 
 	aScripter methodCoder
+		mouseMoveOver;
 		assertCompiledMethodIs: GtPharoDummyTwoObject>>#anotherExampleCallingSuperclassExample;
 		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
 		assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
@@ -9231,6 +9244,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :aStep | 
 				aStep
+					mouseMoveOver;
 					assertCompiledMethodIs: GtPharoDummyOneObject>>#successfulExample;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
@@ -9293,6 +9307,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 				aCoder asCoderViewModel selfObject: (aSelfObject := aCoder behavior new) ].
 
 	aScripter methodCoder
+		mouseMoveOver;
 		assertMethodExpandersCountIs: 1;
 		assertSelfObjectIs: aSelfObject;
 		assertTargetBehaviorIs: aSelfObject class;
@@ -9302,6 +9317,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :stepSelfNumber | 
 				stepSelfNumber
+					mouseMoveOver;
 					assertMethodExpandersCountIs: 7;
 					assertSelfObjectIs: aSelfObject;
 					assertTargetBehaviorIs: aSelfObject class;
@@ -9311,6 +9327,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 					clickOnMethodCoderExpander: 1
 						insideDo: [ :stepSuperNumber | 
 							stepSuperNumber
+								mouseMoveOver;
 								assertMethodExpandersCountIs: 1;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class superclass;
@@ -9320,6 +9337,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :stepSelfOne | 
 										stepSelfOne
+											mouseMoveOver;
 											assertMethodExpandersCountIs: 1;
 											assertSelfObjectIs: aSelfObject;
 											assertTargetBehaviorIs: aSelfObject class;
@@ -9329,6 +9347,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 					clickOnMethodCoderExpander: 2
 						insideDo: [ :stepSelfOne | 
 							stepSelfOne
+								mouseMoveOver;
 								assertMethodExpandersCountIs: 1;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class;
@@ -9636,6 +9655,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithAnotherExampleCallingSupe
 	<gtExample>
 	| aMethod aCoder |
 	aMethod := self methodWithAnotherExampleCallingSuperclassExample.
+	aMethod clearExampleAndTestCaches.
+	(GtPharoDummyOneObject>>#successfulExample) clearExampleAndTestCaches.
+	
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
@@ -9663,6 +9685,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithFailingExample [
 	<gtExample>
 	| aMethod aCoder |
 	aMethod := self methodWithFailingExample.
+	aMethod clearExampleAndTestCaches.
 	aCoder := self coderOnMethod: aMethod.
 	^ aCoder
 ]
@@ -9726,6 +9749,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderWithSubclassBehaviorWithAnoth
 	<gtExample>
 	| aMethod aCoder |
 	aMethod := self methodWithAnotherExampleCallingSuperclassExample.
+	aMethod clearExampleAndTestCaches.
+	(GtPharoDummyOneObject>>#successfulExample) clearExampleAndTestCaches.
+	
 	aCoder := self coderOnMethod: aMethod in: GtPharoDummyThreeObject.
 	^ aCoder
 ]
