@@ -115,6 +115,21 @@ GtReferencesPrefixTree >> gtNoDuplicateReferences: aGtAdvice [
 ]
 
 { #category : #'gt - extensions' }
+GtReferencesPrefixTree >> gtNotInstalledReferencesBySelector [ 
+	| notInstalledMethodsBySelector |
+	notInstalledMethodsBySelector 	:= OrderedDictionary new.
+	((self asyncStreamStartingWith: '')	do: [ :each | 
+		| notInstalledReferences |
+		notInstalledReferences := ((self nodeFor: each) referencesCollection
+				select: [ :method | method gtIsActive not ]).
+		notInstalledReferences ifNotEmpty: [
+			notInstalledMethodsBySelector 
+				at: each 
+				put: notInstalledReferences] ]) wait.
+	^ notInstalledMethodsBySelector
+]
+
+{ #category : #'gt - extensions' }
 GtReferencesPrefixTree >> gtPhlowInspectNodeAction: aString [
 	^ (GtPhlowObjectAdviceAction object: (self nodeFor: aString))
 		title: aString asRopedText;

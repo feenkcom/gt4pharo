@@ -100,6 +100,21 @@ GtReferencesAndImplementersPrefixTree >> gtNoDuplicateImplementers: aGtAdvice [
 		action: [ :each | self gtPhlowInspectNodeAction: each ]
 ]
 
+{ #category : #'gt - extensions' }
+GtReferencesAndImplementersPrefixTree >> gtNotInstalledImplementersBySelector [ 
+	| notInstalledMethodsBySelector |
+	notInstalledMethodsBySelector 	:= OrderedDictionary new.
+	((self asyncStreamStartingWith: '')	do: [ :each | 
+		| notInstalledReferences |
+		notInstalledReferences := ((self nodeFor: each) implementersCollection
+				select: [ :method | method gtIsActive not ]).
+		notInstalledReferences ifNotEmpty: [
+			notInstalledMethodsBySelector 
+				at: each 
+				put: notInstalledReferences] ]) wait.
+	^ notInstalledMethodsBySelector
+]
+
 { #category : #'debugging - testing' }
 GtReferencesAndImplementersPrefixTree >> hasNotInstalledImplementers [
 	implementers ifNil: [ ^ false ].
