@@ -6,7 +6,7 @@ Class {
 
 { #category : #visiting }
 GtPharoMethodTestCaseUncompleteState class >> accept: aVisitor [
-	^ aVisitor visitTestCaseUnableToCompleteState: self
+	^ aVisitor visitTestCaseUncompletedState: self
 ]
 
 { #category : #accessing }
