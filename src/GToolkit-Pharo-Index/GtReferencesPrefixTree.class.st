@@ -200,12 +200,15 @@ GtReferencesPrefixTree >> referencesTo: aString [
 
 { #category : #removing }
 GtReferencesPrefixTree >> removeReference: aMethod [
-	| index refs isDictionary className |
+	| index refs isDictionary className class |
 	references ifNil: [ ^ self ].
 	references == aMethod ifTrue: [ ^ references := nil ].
 	isDictionary := references isDictionary.
 	isDictionary
-		ifTrue: [ className := aMethod methodClass instanceSide name.
+		ifTrue: [ class := aMethod methodClass instanceSide.
+			className := class isObsolete
+					ifTrue: [ (class name removePrefix: 'AnObsolete') asSymbol ]
+					ifFalse: [ class name ].
 			refs := references at: className ifAbsent: [  ].
 			refs == aMethod ifTrue: [ ^ references removeKey: className ifAbsent: [  ] ] ]
 		ifFalse: [ refs := references ].
