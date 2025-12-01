@@ -230,7 +230,7 @@ GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclaredInsideTrait [
 	^ refs
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtPharoIndexExamples >> checkReflectiveMethodReferences [
 	<gtExample>
 	| node reflectiveMethod |
@@ -244,6 +244,60 @@ GtPharoIndexExamples >> checkReflectiveMethodReferences [
 			node addReference: thisContext method.
 			self assert: node referencesCollection size equals: i + 1 ].
 	^ node
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> checkRemovalsFromObsoleteClasses [
+	<gtExample>
+	| index refs method |
+	index := GtPharoIndex current.
+	refs := index selectorCache nodeFor: 'new'.
+	self
+		assert: refs references isDictionary
+		description: 'Test should run on selector with large number of references'.
+	[ ((Object << #FooBar)
+		slots: {};
+		package: self class package name) install.
+
+	#FooBar asClass compile: 'foo ^Object new' classified: 'accessing'.
+	method := #FooBar asClass >> #foo.
+	self assert: (refs referencesCollection includes: method).
+	self assert: (refs references includesKey: #FooBar) ]
+		ensure: [ #FooBar asClass removeFromSystem ].
+	self assert: (refs referencesCollection includes: method) not.
+	self assert: (refs references includesKey: #FooBar) not.
+	^ refs
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> checkRenameClassUpdatesLargeReferences [
+	<gtExample>
+	| index refs method |
+	index := GtPharoIndex current.
+	refs := index selectorCache nodeFor: 'new'.
+	self
+		assert: refs references isDictionary
+		description: 'Test should run on selector with large number of references'.
+	[ ((Object << #FooBar)
+		slots: {};
+		package: self class package name) install.
+
+	#FooBar asClass compile: 'foo ^Object new' classified: 'accessing'.
+	method := #FooBar asClass >> #foo.
+
+	self assert: (refs referencesCollection includes: method).
+	self assert: (refs references includesKey: #FooBar).
+
+	#FooBar asClass rename: #FooBar1.
+
+	self assert: (refs referencesCollection includes: method).
+	self assert: (refs references includesKey: #FooBar) not.
+	self assert: (refs references includesKey: #FooBar1) ]
+		ensure: [ (Smalltalk at: #FooBar1 ifAbsent: [ Smalltalk at: #FooBar ]) removeFromSystem ].
+	self assert: (refs referencesCollection includes: method) not.
+	self assert: (refs references includesKey: #FooBar) not.
+	self assert: (refs references includesKey: #FooBar1) not.
+	^ refs
 ]
 
 { #category : #examples }
