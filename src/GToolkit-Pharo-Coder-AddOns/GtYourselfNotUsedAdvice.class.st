@@ -1,7 +1,7 @@
 Class {
 	#name : #GtYourselfNotUsedAdvice,
 	#superclass : #GtSendNotUsedAdvice,
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }

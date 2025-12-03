@@ -6,7 +6,7 @@ Class {
 		'interval',
 		'variableNode'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
 { #category : #examples }

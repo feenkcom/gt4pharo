@@ -1,6 +1,6 @@
 Trait {
 	#name : #TMethodAdviceRunner,
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }

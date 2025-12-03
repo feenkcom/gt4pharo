@@ -5,7 +5,7 @@ Class {
 		'selected',
 		'items'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
 { #category : #accessing }

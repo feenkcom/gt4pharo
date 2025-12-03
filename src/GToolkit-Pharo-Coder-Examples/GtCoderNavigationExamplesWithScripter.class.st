@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TBlDevScripterExamples',
 	#classTraits : 'TBlDevScripterExamples classTrait',
-	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
+	#category : 'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
 { #category : #accessing }

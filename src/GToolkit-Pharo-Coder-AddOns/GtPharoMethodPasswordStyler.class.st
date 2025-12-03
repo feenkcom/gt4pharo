@@ -18,7 +18,7 @@ Class {
 	#classInstVars : [
 		'pragmaCollector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
 
 { #category : #accessing }

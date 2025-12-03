@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'modelUpdater'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
 { #category : #'private - attributes' }

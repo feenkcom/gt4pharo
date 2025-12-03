@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSnippetConvertStatementsToCascadesController,
 	#superclass : #GtConvertStatementsToCascadesController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #accessing }

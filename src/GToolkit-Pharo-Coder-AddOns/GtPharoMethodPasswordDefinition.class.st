@@ -12,7 +12,7 @@ Class {
 		'selector',
 		'position'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
 
 { #category : #'node - testing' }

@@ -5,7 +5,7 @@ Class {
 		'behavior',
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #'instance creation' }

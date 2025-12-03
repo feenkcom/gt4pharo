@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMethodProtocolChange,
 	#superclass : #RBMethodProtocolChange,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Base'
 }
 
 { #category : #initialization }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFilteredMethodCoderElementExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
 { #category : #'examples - support' }

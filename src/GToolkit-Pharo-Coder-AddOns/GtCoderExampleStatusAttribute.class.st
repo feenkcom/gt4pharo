@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'example'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
 { #category : #'instance creation' }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'methodClass'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #private }

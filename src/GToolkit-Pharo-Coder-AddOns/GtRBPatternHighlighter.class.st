@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'ast'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
 { #category : #accessing }

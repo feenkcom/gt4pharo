@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoDeprecationStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Deprecation'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Deprecation'
 }
 
 { #category : #generated }

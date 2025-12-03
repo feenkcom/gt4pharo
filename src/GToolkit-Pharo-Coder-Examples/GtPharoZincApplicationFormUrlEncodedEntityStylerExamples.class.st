@@ -4,7 +4,7 @@ Exemplify {{gtClass:GtPharoZincApplicationFormUrlEncodedEntityStyler}}.
 Class {
 	#name : #GtPharoZincApplicationFormUrlEncodedEntityStylerExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - source code' }

@@ -6,7 +6,7 @@ Class {
 		'lastIndex',
 		'evaluationContext'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
 { #category : #'as yet unclassified' }

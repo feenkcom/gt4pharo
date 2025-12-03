@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSendNotUsedAdvice,
 	#superclass : #GtMethodAdvice,
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #testing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #transforming }

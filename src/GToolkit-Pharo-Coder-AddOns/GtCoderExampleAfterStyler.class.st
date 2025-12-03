@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'variableBindings'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Examples'
 }
 
 { #category : #visiting }

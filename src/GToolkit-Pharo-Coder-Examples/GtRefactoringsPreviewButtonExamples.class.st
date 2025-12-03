@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TBlDevScripterExamples',
 	#classTraits : 'TBlDevScripterExamples classTrait',
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-Examples-Refactorings'
 }
 
 { #category : #'examples - method coder' }

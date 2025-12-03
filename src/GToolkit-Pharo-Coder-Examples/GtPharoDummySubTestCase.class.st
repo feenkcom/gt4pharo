@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoDummySubTestCase,
 	#superclass : #GtPharoDummyTestCase,
-	#category : #'GToolkit-Pharo-Coder-Examples-Test Case'
+	#category : 'GToolkit-Pharo-Coder-Examples-Test Case'
 }
 
 { #category : #accessing }

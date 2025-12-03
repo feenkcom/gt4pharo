@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMoveMethodRefactoring,
 	#superclass : #RBMoveMethodRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #transforming }
@@ -123,11 +123,6 @@ GtMoveMethodRefactoring >> isExpression [
 	^ (RBScanner isVariable: variable) not
 ]
 
-{ #category : #accessing }
-GtMoveMethodRefactoring >> moveToClasses [
-	^ moveToClasses
-]
-
 { #category : #transforming }
 GtMoveMethodRefactoring >> movedAST [
 	| varNames varsToRename ast |
@@ -155,6 +150,11 @@ GtMoveMethodRefactoring >> movedAST [
 { #category : #accessing }
 GtMoveMethodRefactoring >> movedSelector [
 	^ parseTree selector
+]
+
+{ #category : #accessing }
+GtMoveMethodRefactoring >> moveToClasses [
+	^ moveToClasses
 ]
 
 { #category : #transforming }

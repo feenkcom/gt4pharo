@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenameInstanceVariableController,
 	#superclass : #GtRenameVariableController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #accessing }

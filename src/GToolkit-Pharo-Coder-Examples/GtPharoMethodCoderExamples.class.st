@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coder - Method'
 }
 
 { #category : #'sample methods' }
@@ -175,109 +175,6 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderWhenSubscribedToSystem [
 ]
 
 { #category : #'examples - compile' }
-GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsConflictWhenSubscribedToSystem_pharo11 [
-	<gtExample>
-	| aMethodCoder wasSuccessful anEventsRecoder |
-	
-	self forPharo12AndNewer: [ ^ self ] forPharo11: [ ].
-	
-	anEventsRecoder := self eventsRecorder.
-
-	aMethodCoder := self forNewMethod.
-	aMethodCoder currentSourceString: self methodSourceWithTempAndBlockArgsConflict.
-	aMethodCoder subscribeToSystem.
-	
-	self assert: aMethodCoder isModified.
-	
-	aMethodCoder
-		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
-
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self assert: wasSuccessful not.
-
-	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderParseError.
-	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	self assert: anEventsRecoder first errorMessage equals: 'Temp shadows: each'.
-
-	^ aMethodCoder
-]
-
-{ #category : #'examples - compile' }
-GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSubscribedToSystem [
-	<gtExample>
-	| aMethodCoder wasSuccessful anEventsRecoder |
-	
-	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
-	
-	anEventsRecoder := self eventsRecorder.
-
-	aMethodCoder := self forNewMethod.
-	aMethodCoder currentSourceString: self methodSourceWithTempAndBlockArgsConflict.
-	aMethodCoder subscribeToSystem.
-	
-	self assert: aMethodCoder isModified.
-	
-	aMethodCoder
-		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
-
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self assert: wasSuccessful not.
-	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderParseError.
-	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	self assert: anEventsRecoder first errorMessage equals: 'Name already defined'.
-
-	^ aMethodCoder
-]
-
-{ #category : #'examples - compile' }
-GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribedToSystem [
-	<gtExample>
-	| aMethodCoder wasSuccessful anEventsRecoder |
-	
-	anEventsRecoder := self eventsRecorder.
-
-	aMethodCoder := self forNewMethod.
-	aMethodCoder currentSourceString: self methodSourceWithUnknownClass.
-	aMethodCoder subscribeToSystem.
-	
-	self 
-		assert: aMethodCoder isModified
-		description: 'Coder is modified'.
-	
-	aMethodCoder
-		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
-
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self 
-		assert: wasSuccessful not
-		description: 'Compilation was not successful'.
-
-	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderParseError.
-	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
-	self 
-		forPharo12AndNewer: [
-			self 
-				assert: anEventsRecoder first errorMessage 
-				equals: 'Undeclared variable' ] 
-		forPharo11: [
-			self 
-				assert: anEventsRecoder first errorMessage 
-				equals: nil].
-
-	^ aMethodCoder
-]
-
-{ #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileMethodWithoutCoderModifiedWhenSubscribedToSystem [
 
 	<gtExample>
@@ -395,6 +292,109 @@ GtPharoMethodCoderExamples >> compileMethodWithoutCoderNotModifiedWhenSubscribed
 		assert: anEventsRecoder first class
 		equals: GtCoderMethodModified.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
+
+	^ aMethodCoder
+]
+
+{ #category : #'examples - compile' }
+GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsConflictWhenSubscribedToSystem_pharo11 [
+	<gtExample>
+	| aMethodCoder wasSuccessful anEventsRecoder |
+	
+	self forPharo12AndNewer: [ ^ self ] forPharo11: [ ].
+	
+	anEventsRecoder := self eventsRecorder.
+
+	aMethodCoder := self forNewMethod.
+	aMethodCoder currentSourceString: self methodSourceWithTempAndBlockArgsConflict.
+	aMethodCoder subscribeToSystem.
+	
+	self assert: aMethodCoder isModified.
+	
+	aMethodCoder
+		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
+
+	wasSuccessful := [ aMethodCoder compile ]
+		ensure: [ aMethodCoder unsubscribeFromSystem ].
+	
+	self assert: wasSuccessful not.
+
+	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder first class equals: GtCoderParseError.
+	self assert: anEventsRecoder first coder equals: aMethodCoder.
+	self assert: anEventsRecoder first errorMessage equals: 'Temp shadows: each'.
+
+	^ aMethodCoder
+]
+
+{ #category : #'examples - compile' }
+GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSubscribedToSystem [
+	<gtExample>
+	| aMethodCoder wasSuccessful anEventsRecoder |
+	
+	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
+	
+	anEventsRecoder := self eventsRecorder.
+
+	aMethodCoder := self forNewMethod.
+	aMethodCoder currentSourceString: self methodSourceWithTempAndBlockArgsConflict.
+	aMethodCoder subscribeToSystem.
+	
+	self assert: aMethodCoder isModified.
+	
+	aMethodCoder
+		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
+
+	wasSuccessful := [ aMethodCoder compile ]
+		ensure: [ aMethodCoder unsubscribeFromSystem ].
+	
+	self assert: wasSuccessful not.
+	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder first class equals: GtCoderParseError.
+	self assert: anEventsRecoder first coder equals: aMethodCoder.
+	self assert: anEventsRecoder first errorMessage equals: 'Name already defined'.
+
+	^ aMethodCoder
+]
+
+{ #category : #'examples - compile' }
+GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribedToSystem [
+	<gtExample>
+	| aMethodCoder wasSuccessful anEventsRecoder |
+	
+	anEventsRecoder := self eventsRecorder.
+
+	aMethodCoder := self forNewMethod.
+	aMethodCoder currentSourceString: self methodSourceWithUnknownClass.
+	aMethodCoder subscribeToSystem.
+	
+	self 
+		assert: aMethodCoder isModified
+		description: 'Coder is modified'.
+	
+	aMethodCoder
+		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
+
+	wasSuccessful := [ aMethodCoder compile ]
+		ensure: [ aMethodCoder unsubscribeFromSystem ].
+	
+	self 
+		assert: wasSuccessful not
+		description: 'Compilation was not successful'.
+
+	self assert: anEventsRecoder numberOfEvents equals: 1.
+	self assert: anEventsRecoder first class equals: GtCoderParseError.
+	self assert: anEventsRecoder first coder equals: aMethodCoder.
+	
+	self 
+		forPharo12AndNewer: [
+			self 
+				assert: anEventsRecoder first errorMessage 
+				equals: 'Undeclared variable' ] 
+		forPharo11: [
+			self 
+				assert: anEventsRecoder first errorMessage 
+				equals: nil].
 
 	^ aMethodCoder
 ]

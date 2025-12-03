@@ -5,7 +5,7 @@ Class {
 		'node',
 		'tempName'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
 { #category : #accessing }
@@ -33,21 +33,6 @@ GtExtractTemporaryRefactoringController >> refactoringName [
 	^ 'Create temporary from ' , node source
 ]
 
-{ #category : #private }
-GtExtractTemporaryRefactoringController >> safeTemporaryName [
-	| name index found ast |
-	name := '_'.
-	index := 0.
-	ast := self ast.
-	[ found := false.
-	ast nodesDo: [ :each | (each defines: name) ifTrue: [ found := true ] ].
-	found or: [ (self behavior allInstVarNames includes: name) or: [ self behavior allClassVarNames includes: name asSymbol ] ] ]
-		whileTrue:
-			[ name := 't' , index printString.
-			index := index + 1 ].
-	^ name
-]
-
 { #category : #executing }
 GtExtractTemporaryRefactoringController >> safelyExecute [
 	| refactoring model |
@@ -66,6 +51,21 @@ GtExtractTemporaryRefactoringController >> safelyExecute [
 						do: [ :ann | 
 							ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
 						for: self ] ]
+]
+
+{ #category : #private }
+GtExtractTemporaryRefactoringController >> safeTemporaryName [
+	| name index found ast |
+	name := '_'.
+	index := 0.
+	ast := self ast.
+	[ found := false.
+	ast nodesDo: [ :each | (each defines: name) ifTrue: [ found := true ] ].
+	found or: [ (self behavior allInstVarNames includes: name) or: [ self behavior allClassVarNames includes: name asSymbol ] ] ]
+		whileTrue:
+			[ name := 't' , index printString.
+			index := index + 1 ].
+	^ name
 ]
 
 { #category : #accessing }

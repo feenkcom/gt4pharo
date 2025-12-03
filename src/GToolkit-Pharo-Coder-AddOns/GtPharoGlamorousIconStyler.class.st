@@ -9,7 +9,7 @@ The following example shows how a vector {{gtMethod:BrGlamorousVectorIcons class
 Class {
 	#name : #GtPharoGlamorousIconStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Icon'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Icon'
 }
 
 { #category : #'private - styling' }

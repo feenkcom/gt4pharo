@@ -5,7 +5,7 @@ Class {
 		'semicolonPosition',
 		'splitAfter'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #examples }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'fixItAttribute'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }

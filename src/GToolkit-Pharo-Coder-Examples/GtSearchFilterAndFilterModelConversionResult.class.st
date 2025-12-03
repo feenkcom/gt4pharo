@@ -14,7 +14,7 @@ Class {
 		'filterModelFive',
 		'searchFilterThree'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRemoveParameterRefactoring,
 	#superclass : #RBRemoveParameterRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #transforming }

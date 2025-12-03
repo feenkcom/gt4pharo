@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMoveTemporaryToOuterScopeRefactoringController,
 	#superclass : #GtMoveTemporaryRefactoringController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Variables'
 }
 
 { #category : #'as yet unclassified' }

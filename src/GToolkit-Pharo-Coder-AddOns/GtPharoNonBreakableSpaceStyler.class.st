@@ -8,7 +8,7 @@ The following code includes a string with non-breakable character: {{gtExample:G
 Class {
 	#name : #GtPharoNonBreakableSpaceStyler,
 	#superclass : #GtCoderAstStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-NonBreakable Space'
+	#category : 'GToolkit-Pharo-Coder-AddOns-NonBreakable Space'
 }
 
 { #category : #comparing }

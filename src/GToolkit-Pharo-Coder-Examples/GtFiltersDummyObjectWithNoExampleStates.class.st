@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFiltersDummyObjectWithNoExampleStates,
 	#superclass : #GtFiltersDummyObjectWithExampleStates,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }
 
 { #category : #accessing }

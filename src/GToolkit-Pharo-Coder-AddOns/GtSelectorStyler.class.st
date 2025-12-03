@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'ErrorAttributes'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #accessing }

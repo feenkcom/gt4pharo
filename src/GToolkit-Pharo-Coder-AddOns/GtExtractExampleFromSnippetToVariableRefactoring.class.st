@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExtractExampleFromSnippetToVariableRefactoring,
 	#superclass : #GtExtractMethodFromSnippetRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #transforming }

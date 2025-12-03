@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'newName'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #executing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMethodAdviceFixItAction,
 	#superclass : #GtFixItAction,
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #examples }

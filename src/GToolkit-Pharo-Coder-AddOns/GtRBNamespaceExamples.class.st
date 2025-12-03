@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRBNamespaceExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Examples'
 }
 
 { #category : #accessing }

@@ -11,7 +11,7 @@ Class {
 		'advices',
 		'lastIndex'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #comparing }

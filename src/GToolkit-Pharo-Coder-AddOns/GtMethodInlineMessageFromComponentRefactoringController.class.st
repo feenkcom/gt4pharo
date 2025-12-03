@@ -6,7 +6,7 @@ Class {
 		'node',
 		'receiverTypeAttribute'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #accessing }

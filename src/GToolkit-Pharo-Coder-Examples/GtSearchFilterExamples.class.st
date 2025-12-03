@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchFilterExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #examples }

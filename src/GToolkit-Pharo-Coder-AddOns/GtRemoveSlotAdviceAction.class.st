@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'slot'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #'instace creation' }

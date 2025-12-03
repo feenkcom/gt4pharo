@@ -6,7 +6,7 @@ Class {
 		'subclasses',
 		'category'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #'instance creation' }

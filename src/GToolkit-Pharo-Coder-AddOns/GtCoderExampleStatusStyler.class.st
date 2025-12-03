@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderExampleStatusStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
 { #category : #'method coder styler' }

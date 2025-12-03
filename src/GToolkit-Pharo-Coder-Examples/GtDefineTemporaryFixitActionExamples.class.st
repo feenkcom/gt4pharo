@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDefineTemporaryFixitActionExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Fixit'
+	#category : 'GToolkit-Pharo-Coder-Examples-Fixit'
 }
 
 { #category : #examples }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'title'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #accessing }

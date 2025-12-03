@@ -6,7 +6,7 @@ See {{gtClass: GtRefactoringsPreviewButtonExamples }} for more details.
 Class {
 	#name : #GtRefactoringsDummyClass,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings - Support'
+	#category : 'GToolkit-Pharo-Coder-Examples-Refactorings - Support'
 }
 
 { #category : #testing }

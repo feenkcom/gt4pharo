@@ -5,7 +5,7 @@ Class {
 		'model',
 		'testVar'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Examples'
 }
 
 { #category : #examples }

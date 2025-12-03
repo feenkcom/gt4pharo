@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExtractToTemporaryRefactoring,
 	#superclass : #RBExtractToTemporaryRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #transforming }

@@ -5,7 +5,7 @@ Class {
 		'variableName',
 		'searchSymbols'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
 { #category : #'instance creation' }

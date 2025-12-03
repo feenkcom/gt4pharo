@@ -9,7 +9,7 @@ Class {
 		'dummyClassMethods',
 		'instVarNames'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #accessing }

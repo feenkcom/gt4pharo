@@ -7,5 +7,5 @@
 Class {
 	#name : #GtMethodCoderAstAddOnHowToGuide,
 	#superclass : #GtMethodCoderHowToGuide,
-	#category : #'GToolkit-Pharo-Coder-Examples-! HowTo'
+	#category : 'GToolkit-Pharo-Coder-Examples-! HowTo'
 }

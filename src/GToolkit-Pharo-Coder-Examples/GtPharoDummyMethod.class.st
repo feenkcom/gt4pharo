@@ -7,7 +7,7 @@ Class {
 		'selector',
 		'protocol'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - inst vars' }

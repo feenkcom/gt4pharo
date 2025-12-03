@@ -4,7 +4,7 @@ I have couple of long methods to exemplify scrolling actions.
 Class {
 	#name : #GtPharoDummyFiveObject,
 	#superclass : #GtPharoDummyFourObject,
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #accessing }

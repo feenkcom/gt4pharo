@@ -8,7 +8,7 @@ Class {
 		'sourceCode',
 		'method'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'instance creation' }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'dummyPackages'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'as yet unclassified' }
@@ -141,16 +141,6 @@ GtPharoDummyEnvironment >> gtMethodsFor: aView [
 ]
 
 { #category : #accessing }
-GtPharoDummyEnvironment >> gtPackageTagsFor: aView [
-	<gtView>
-	^ aView list
-		title: 'Package tags';
-		priority: 15;
-		items: [ self dummyPackages flatCollect: #dummyPackageTags ];
-		itemText: #packageTagName
-]
-
-{ #category : #accessing }
 GtPharoDummyEnvironment >> gtPackagesFor: aView [
 	<gtView>
 
@@ -161,6 +151,16 @@ GtPharoDummyEnvironment >> gtPackagesFor: aView [
 		items: [ self dummyPackages ];
 		children: #gtPackagesViewChildren;
 		itemText: #gtPackagesViewItemText
+]
+
+{ #category : #accessing }
+GtPharoDummyEnvironment >> gtPackageTagsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Package tags';
+		priority: 15;
+		items: [ self dummyPackages flatCollect: #dummyPackageTags ];
+		itemText: #packageTagName
 ]
 
 { #category : #initialization }

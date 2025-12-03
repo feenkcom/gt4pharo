@@ -7,7 +7,7 @@ Class {
 		'tag',
 		'superclass'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #'instance creation' }

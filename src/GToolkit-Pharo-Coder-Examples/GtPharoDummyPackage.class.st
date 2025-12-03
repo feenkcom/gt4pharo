@@ -7,7 +7,7 @@ Class {
 		'dummyClasses',
 		'dummyPackageTags'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - modifications' }

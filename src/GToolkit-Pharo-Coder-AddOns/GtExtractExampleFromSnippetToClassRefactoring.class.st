@@ -5,7 +5,7 @@ Class {
 		'category',
 		'className'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #accessing }

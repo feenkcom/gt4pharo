@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'behavior'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #executing }

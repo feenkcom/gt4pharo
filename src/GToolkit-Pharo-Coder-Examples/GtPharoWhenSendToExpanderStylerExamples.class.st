@@ -4,7 +4,7 @@ I exemplify {{gtClass:GtPharoWhenSendToExpanderStyler}}.
 Class {
 	#name : #GtPharoWhenSendToExpanderStylerExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'examples - source code' }

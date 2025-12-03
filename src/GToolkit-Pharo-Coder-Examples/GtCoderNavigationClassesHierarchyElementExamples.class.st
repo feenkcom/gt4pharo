@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderNavigationClassesHierarchyElementExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
+	#category : 'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
 { #category : #examples }

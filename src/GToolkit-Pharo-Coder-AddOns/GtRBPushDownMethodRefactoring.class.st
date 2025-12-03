@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRBPushDownMethodRefactoring,
 	#superclass : #RBPushDownMethodRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #transforming }

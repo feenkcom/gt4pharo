@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderExpandableBaselineStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Expandable baseline'
 }
 
 { #category : #private }

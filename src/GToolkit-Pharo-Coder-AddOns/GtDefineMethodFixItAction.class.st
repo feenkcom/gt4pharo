@@ -5,7 +5,7 @@ Class {
 		'classOrMetaClass',
 		'coderViewModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #executing }

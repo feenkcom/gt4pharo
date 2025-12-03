@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'someVar'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings - Support'
+	#category : 'GToolkit-Pharo-Coder-Examples-Refactorings - Support'
 }
 
 { #category : #'test methods' }

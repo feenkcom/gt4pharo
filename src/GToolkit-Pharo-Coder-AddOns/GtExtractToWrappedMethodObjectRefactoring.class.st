@@ -5,7 +5,7 @@ Class {
 		'methodObjectSelector',
 		'useSetMethod'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #accessing }

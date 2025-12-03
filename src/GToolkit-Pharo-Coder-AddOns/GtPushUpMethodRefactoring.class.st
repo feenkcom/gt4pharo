@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'instVarsToPushUp'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #preconditions }

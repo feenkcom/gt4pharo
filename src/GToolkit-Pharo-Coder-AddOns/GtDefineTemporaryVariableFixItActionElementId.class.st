@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDefineTemporaryVariableFixItActionElementId,
 	#superclass : #GtFixItActionElementId,
-	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
 { #category : #converting }

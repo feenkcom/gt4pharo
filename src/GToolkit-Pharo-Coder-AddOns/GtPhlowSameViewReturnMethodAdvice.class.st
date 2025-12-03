@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'argumentName'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #testing }

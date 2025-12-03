@@ -13,7 +13,7 @@ Class {
 		'leafClass',
 		'leafClassInstVarName'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-Examples-Refactorings'
 }
 
 { #category : #'examples - view model' }

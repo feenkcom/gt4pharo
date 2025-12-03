@@ -1,7 +1,7 @@
 Class {
 	#name : #GtClassPickerAttribute,
 	#superclass : #GtRefactoringDropDownAttribute,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #accessing }

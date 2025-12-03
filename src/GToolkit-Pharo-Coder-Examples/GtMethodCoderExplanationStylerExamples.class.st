@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMethodCoderExplanationStylerExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coder - Method'
 }
 
 { #category : #dummies }

@@ -1,21 +1,12 @@
 Class {
 	#name : #GtSearchClassFilterExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #assertions }
 GtSearchClassFilterExamples >> assertClassResultTypeForFilter: aFilter [
 	self assert: aFilter resultType equals: GtAsyncSearchClassGroupStream.
-]
-
-{ #category : #'as yet unclassified' }
-GtSearchClassFilterExamples >> classFilterIsNotAllGtSearchMethodsFilterKind [
-	<gtExample>
-	| filter |
-	filter := self classesInCurrentPackageFilter select: [:each | true ].
-	self assert: filter gtAreAllGtSearchMethodsFilterKind not.
-	^ filter
 ]
 
 { #category : #examples }
@@ -87,6 +78,15 @@ GtSearchClassFilterExamples >> classesInImageFilterResultType [
 
 	^ filter
 	
+]
+
+{ #category : #'as yet unclassified' }
+GtSearchClassFilterExamples >> classFilterIsNotAllGtSearchMethodsFilterKind [
+	<gtExample>
+	| filter |
+	filter := self classesInCurrentPackageFilter select: [:each | true ].
+	self assert: filter gtAreAllGtSearchMethodsFilterKind not.
+	^ filter
 ]
 
 { #category : #examples }

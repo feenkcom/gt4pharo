@@ -9,7 +9,7 @@ Class {
 		'objectTemp',
 		'ast'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #'instance creation' }

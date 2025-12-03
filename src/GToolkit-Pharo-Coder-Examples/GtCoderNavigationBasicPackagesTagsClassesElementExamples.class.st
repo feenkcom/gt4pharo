@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderNavigationBasicPackagesTagsClassesElementExamples,
 	#superclass : #GtCoderNavigationModelExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
+	#category : 'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
 { #category : #asserting }
@@ -313,6 +313,12 @@ GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageTag [
 ]
 
 { #category : #'examples - system items' }
+GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageWithoutTagsAndExtensions [
+	<gtExample>
+	^ 'GToolkit-Coder-Examples-SystemS1' asPackage 
+]
+
+{ #category : #'examples - system items' }
 GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageWithTagsAndExtensions [
 	<gtExample>
 	^ 'GToolkit-Pharo-Coder-AddOns' asPackage 
@@ -322,12 +328,6 @@ GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageWithTagsAndEx
 GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageWithTagsAndWithoutExtensions [
 	<gtExample>
 	^ 'GToolkit-Pharo-Coder-Examples' asPackage 
-]
-
-{ #category : #'examples - system items' }
-GtCoderNavigationBasicPackagesTagsClassesElementExamples >> packageWithoutTagsAndExtensions [
-	<gtExample>
-	^ 'GToolkit-Coder-Examples-SystemS1' asPackage 
 ]
 
 { #category : #'examples - basic' }

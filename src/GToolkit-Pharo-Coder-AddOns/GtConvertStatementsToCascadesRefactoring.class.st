@@ -5,7 +5,7 @@ Class {
 		'sourceInterval',
 		'selector'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #'instance creation' }

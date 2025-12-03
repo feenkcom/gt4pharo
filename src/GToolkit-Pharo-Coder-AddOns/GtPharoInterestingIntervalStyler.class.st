@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'interval'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
 { #category : #comparing }

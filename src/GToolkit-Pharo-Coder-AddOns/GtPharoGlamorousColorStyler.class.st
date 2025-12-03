@@ -6,7 +6,7 @@ The following example shows how a {{gtMethod:BrGlamorousColors class >> #pressed
 Class {
 	#name : #GtPharoGlamorousColorStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
 { #category : #'private - styling' }

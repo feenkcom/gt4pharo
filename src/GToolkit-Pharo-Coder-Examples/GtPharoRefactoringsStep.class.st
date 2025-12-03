@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoRefactoringsStep,
 	#superclass : #BlDevScripterToolActionStep,
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactorings'
+	#category : 'GToolkit-Pharo-Coder-Examples-Refactorings'
 }
 
 { #category : #'steps - checks' }

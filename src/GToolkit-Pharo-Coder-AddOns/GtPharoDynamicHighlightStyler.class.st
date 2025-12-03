@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'variableMap'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-DynamicHighlight'
+	#category : 'GToolkit-Pharo-Coder-AddOns-DynamicHighlight'
 }
 
 { #category : #comparing }

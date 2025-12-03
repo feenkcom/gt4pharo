@@ -10,7 +10,7 @@ Class {
 	#classInstVars : [
 		'ignore'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Examples'
 }
 
 { #category : #accessing }

@@ -1,5 +1,5 @@
 Class {
 	#name : #GtPharoDummyFourObject,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'filterType'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #examples }

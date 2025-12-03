@@ -1,7 +1,7 @@
 Class {
 	#name : #GtInlineMethodFromComponentRefactoring,
 	#superclass : #RBInlineMethodFromComponentRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #transforming }

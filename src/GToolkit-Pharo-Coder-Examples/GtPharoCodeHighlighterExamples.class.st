@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoCodeHighlighterExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #'ast pattern' }

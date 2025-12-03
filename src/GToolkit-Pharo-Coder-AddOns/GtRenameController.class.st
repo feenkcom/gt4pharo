@@ -8,7 +8,7 @@ Class {
 		'newName',
 		'renameInterval'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #executing }

@@ -9,7 +9,7 @@ Class {
 		'getter',
 		'variableClassName'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #'instance creation' }

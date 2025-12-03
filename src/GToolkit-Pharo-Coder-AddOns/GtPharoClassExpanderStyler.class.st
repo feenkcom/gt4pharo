@@ -4,7 +4,7 @@ I expand direct class references
 Class {
 	#name : #GtPharoClassExpanderStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
 { #category : #'visiting - variables' }

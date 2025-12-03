@@ -5,7 +5,7 @@ Class {
 		'coders',
 		'filtersModel'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Support'
+	#category : 'GToolkit-Pharo-Coder-Examples-Support'
 }
 
 { #category : #accessing }

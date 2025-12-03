@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'behaviorExamples'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
 { #category : #accessing }

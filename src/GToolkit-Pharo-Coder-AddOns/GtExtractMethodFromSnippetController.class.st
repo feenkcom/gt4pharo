@@ -4,7 +4,7 @@ nil
 Class {
 	#name : #GtExtractMethodFromSnippetController,
 	#superclass : #GtExtractMethodToComponentController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #private }

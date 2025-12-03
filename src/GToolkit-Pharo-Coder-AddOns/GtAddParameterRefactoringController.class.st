@@ -10,7 +10,7 @@ Class {
 		'argumentSource',
 		'sourceAction'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #executing }

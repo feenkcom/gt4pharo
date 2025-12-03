@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRemoveTemporaryFixItAction,
 	#superclass : #GtMethodAdviceFixItAction,
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices-FixIt'
 }
 
 { #category : #examples }

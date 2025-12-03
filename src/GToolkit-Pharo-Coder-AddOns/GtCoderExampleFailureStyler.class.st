@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'styleBlock'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
 { #category : #comparing }

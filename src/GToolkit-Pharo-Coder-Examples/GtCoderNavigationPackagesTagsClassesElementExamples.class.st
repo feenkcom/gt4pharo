@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderNavigationPackagesTagsClassesElementExamples,
 	#superclass : #GtCoderNavigationBasicPackagesTagsClassesElementExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples-Navigation'
+	#category : 'GToolkit-Pharo-Coder-Examples-Navigation'
 }
 
 { #category : #'examples - class selection' }

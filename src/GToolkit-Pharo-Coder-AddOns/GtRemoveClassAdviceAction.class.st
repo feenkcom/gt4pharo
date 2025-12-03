@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'behavior'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #'instace creation' }

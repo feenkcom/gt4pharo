@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMethodInlineMessageSendRefactoringController,
 	#superclass : #GtMethodInlineRefactoringController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #accessing }

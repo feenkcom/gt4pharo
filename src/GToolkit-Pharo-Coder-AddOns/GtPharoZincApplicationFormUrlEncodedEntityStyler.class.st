@@ -6,7 +6,7 @@ The following code includes a secret information that should be hidden by defaul
 Class {
 	#name : #GtPharoZincApplicationFormUrlEncodedEntityStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Zinc'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Zinc'
 }
 
 { #category : #accessing }

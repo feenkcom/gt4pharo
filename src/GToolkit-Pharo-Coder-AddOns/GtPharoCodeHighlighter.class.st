@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'stream'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Highlighter'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Highlighter'
 }
 
 { #category : #visiting }

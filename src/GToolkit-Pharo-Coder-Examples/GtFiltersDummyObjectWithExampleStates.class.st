@@ -6,5 +6,5 @@ My {{gtClass:GtFiltersDummyObjectWithExampleStates|label=subclasses|show=#gtSubc
 Class {
 	#name : #GtFiltersDummyObjectWithExampleStates,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters - UI'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters - UI'
 }

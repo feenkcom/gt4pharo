@@ -6,7 +6,7 @@ I insert {{gtClass:GtPharoMethodTestCaseStateAttribute}} into a {{gtClass:BlText
 Class {
 	#name : #GtPharoMethodTestCaseStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Example status'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Example status'
 }
 
 { #category : #generated }

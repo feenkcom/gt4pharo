@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLocalVersionExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-UI'
+	#category : 'GToolkit-Pharo-Coder-Examples-UI'
 }
 
 { #category : #'as yet unclassified' }

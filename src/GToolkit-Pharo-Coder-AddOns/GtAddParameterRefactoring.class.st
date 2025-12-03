@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'shouldReplaceExpressions'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #accessing }

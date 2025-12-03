@@ -1,7 +1,7 @@
 Class {
 	#name : #GtChildrenToSiblingsRefactoring,
 	#superclass : #RBChildrenToSiblingsRefactoring,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
 { #category : #transforming }

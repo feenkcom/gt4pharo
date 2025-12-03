@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDuplicateCodeInConditionalAdvice,
 	#superclass : #GtMethodAdvice,
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #accessing }

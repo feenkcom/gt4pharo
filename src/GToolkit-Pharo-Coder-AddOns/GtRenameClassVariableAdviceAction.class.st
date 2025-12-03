@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenameClassVariableAdviceAction,
 	#superclass : #GtRenameVariableAdviceAction,
-	#category : #'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-ObjectAdvices'
 }
 
 { #category : #executing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtCoderExampleAfterStylerExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Stylers'
+	#category : 'GToolkit-Pharo-Coder-Examples-Stylers'
 }
 
 { #category : #accessing }

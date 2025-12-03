@@ -11,7 +11,7 @@ The following example shows how a {{gtMethod:Color class >> #brickColorRegistry 
 Class {
 	#name : #GtPharoColorStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Color'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Color'
 }
 
 { #category : #'private - styling' }

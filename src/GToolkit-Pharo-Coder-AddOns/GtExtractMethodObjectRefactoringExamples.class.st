@@ -5,7 +5,7 @@ Class {
 		'test1',
 		'test2'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Examples'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Examples'
 }
 
 { #category : #examples }

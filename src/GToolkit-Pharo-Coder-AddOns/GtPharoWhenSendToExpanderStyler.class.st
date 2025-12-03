@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'variableBindings'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Expander'
 }
 
 { #category : #'api - styling' }

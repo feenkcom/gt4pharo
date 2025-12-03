@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtPharoDummyTraitThree,
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #accessing }

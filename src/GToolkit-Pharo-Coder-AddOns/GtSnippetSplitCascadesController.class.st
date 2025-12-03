@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSnippetSplitCascadesController,
 	#superclass : #GtSplitCascadesController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Coder'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Coder'
 }
 
 { #category : #accessing }

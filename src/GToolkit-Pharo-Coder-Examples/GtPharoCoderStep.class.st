@@ -4,7 +4,7 @@ I provide {{gtClass:BlScripter}} steps for {{gtClass:GtCoderElement}}.
 Class {
 	#name : #GtPharoCoderStep,
 	#superclass : #BlDevScripterToolActionStep,
-	#category : #'GToolkit-Pharo-Coder-Examples-Scripter'
+	#category : 'GToolkit-Pharo-Coder-Examples-Scripter'
 }
 
 { #category : #'steps - interactions' }

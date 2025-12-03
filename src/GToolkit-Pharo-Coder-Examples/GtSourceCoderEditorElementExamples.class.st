@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSourceCoderEditorElementExamples,
 	#superclass : #GtCoderByScripterExamples,
-	#category : #'GToolkit-Pharo-Coder-Examples-UI'
+	#category : 'GToolkit-Pharo-Coder-Examples-UI'
 }
 
 { #category : #'example - instance creation' }

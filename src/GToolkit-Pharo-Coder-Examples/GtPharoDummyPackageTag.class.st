@@ -8,7 +8,7 @@ Class {
 		'packageName',
 		'tagName'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
+	#category : 'GToolkit-Pharo-Coder-Examples-Dummies'
 }
 
 { #category : #'api - classes' }

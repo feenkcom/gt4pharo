@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'variableNode'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #private }

@@ -14,7 +14,7 @@ Class {
 	#pools : [
 		'TextConstants'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
+	#category : 'GToolkit-Pharo-Coder-AddOns-MethodAdvices'
 }
 
 { #category : #'example method' }

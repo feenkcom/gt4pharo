@@ -6,7 +6,7 @@ Class {
 		'getterSelectors',
 		'setterSelectors'
 	],
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
 { #category : #'as yet unclassified' }

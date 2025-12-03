@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'results'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Filters'
+	#category : 'GToolkit-Pharo-Coder-Examples-Filters'
 }
 
 { #category : #'gt - extensions' }

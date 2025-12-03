@@ -1,7 +1,7 @@
 Class {
 	#name : #GtRenamePackageInBaselineController,
 	#superclass : #GtRenameLiteralItemController,
-	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
+	#category : 'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : #'GToolkit-Pharo-Coder-Examples-Coder - Method'
+	#category : 'GToolkit-Pharo-Coder-Examples-Coder - Method'
 }
 
 { #category : #accessing }
@@ -897,6 +897,28 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter expectedMainActions:
 ]
 
 { #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
+	aScripterOrStep
+		assertStep: [ :s | 
+			s
+				label: 'Assert Editor Text Attributes Count';
+				value: [ :aText | 
+						| anIterator aCounter |
+						aCounter := 0.
+						anIterator := aText iterator.
+						[ anIterator hasNext ]
+							whileTrue: [ (anIterator attributes
+									anySatisfy: [ :eachAttribute | eachAttribute class = aClass ])
+									ifTrue: [ aCounter := aCounter + 1 ].
+								anIterator next ].
+						aCounter ]
+					equals: aNumber;
+				id: GtSourceCoderEditorId;
+				onBrTextEditor;
+				onBrTextEditorText ]
+]
+
+{ #category : #utilities }
 GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions: aMainActionsCount contextAction: anAddonsActionsCount [
 	<gtExample>
 	aScripter
@@ -941,28 +963,6 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripter numberOfMainActions:
 							description: [ :anElement | 'Element must have at least {1}, but have {2}: {3}' format: { anAddonsActionsCount. anElement childrenCount. anElement } ];
 						onBreadthFirstChildOfClass: GtSourceCoderActionsElement;
 						onChildAt: 3 ] ]
-]
-
-{ #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep numberfOfTextAttributes: aNumber ofType: aClass [
-	aScripterOrStep
-		assertStep: [ :s | 
-			s
-				label: 'Assert Editor Text Attributes Count';
-				value: [ :aText | 
-						| anIterator aCounter |
-						aCounter := 0.
-						anIterator := aText iterator.
-						[ anIterator hasNext ]
-							whileTrue: [ (anIterator attributes
-									anySatisfy: [ :eachAttribute | eachAttribute class = aClass ])
-									ifTrue: [ aCounter := aCounter + 1 ].
-								anIterator next ].
-						aCounter ]
-					equals: aNumber;
-				id: GtSourceCoderEditorId;
-				onBrTextEditor;
-				onBrTextEditorText ]
 ]
 
 { #category : #utilities }
@@ -1731,17 +1731,10 @@ GtPharoMethodCoderByScripterExamples >> coderExpandClickingOnHeader [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
+GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
 	<gtExample>
 	| aScripter |
-	aScripter := self coderCollapseProgrammatically.
-
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Expand view model';
-				action: [ :aCoderViewModel | aCoderViewModel expand ];
-				onModel ].
+	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1768,10 +1761,17 @@ GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 ]
 
 { #category : #'examples - expansion' }
-GtPharoMethodCoderByScripterExamples >> coderExpandedByDefault [
+GtPharoMethodCoderByScripterExamples >> coderExpandProgrammatically [
 	<gtExample>
 	| aScripter |
-	aScripter := self scripterForBlock: [ self binaryMethodCoder asCoderViewModel ].
+	aScripter := self coderCollapseProgrammatically.
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Expand view model';
+				action: [ :aCoderViewModel | aCoderViewModel expand ];
+				onModel ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -1854,6 +1854,76 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 						id: GtSourceCoderCollapsedTextId ] ].
 
 	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> compilerErrorFixItContinuesSave [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ | coder |
+				coder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := coder attributeNamed: #dummyEnvironment.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	a := #(1 2).
+	b := a size.
+	^ a sum + b' ];
+				onModel ].
+
+	scripter shortcut
+		combination: BlKeyCombination primaryS;
+		id: GtSourceCoderEditorId;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	scripter shortcut
+		combination: BlKeyCombination enter;
+		onSpaceRoot;
+		// (GtDefineTemporaryVariableFixItActionElementId indexed: 1);
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	scripter shortcut
+		combination: BlKeyCombination enter;
+		onSpaceRoot;
+		// (GtDefineTemporaryVariableFixItActionElementId indexed: 1);
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				notExists;
+				onSpaceRoot;
+				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
+
+	self
+		assert: (RBParser
+				parseMethod: (scripter model behavior sourceCodeAt: scripter model selector))
+		equals: (RBParser
+				parseMethod: scripter model selector , '|a b | a := #(1 2). b := a size. ^a sum + b').
+
+	^ scripter
 ]
 
 { #category : #'examples - compiler errors' }
@@ -1954,76 +2024,6 @@ GtPharoMethodCoderByScripterExamples >> compileUndeclaredLocalError [
 				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
 
 	^ aScripter
-]
-
-{ #category : #'examples - fixit class' }
-GtPharoMethodCoderByScripterExamples >> compilerErrorFixItContinuesSave [
-	<gtExample>
-	<after: #cleanUp>
-	| scripter |
-	scripter := self
-			scripterForBlock: [ | coder |
-				coder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
-				environment := coder attributeNamed: #dummyEnvironment.
-				coder ].
-
-	scripter
-		doStep: [ :s | 
-			s
-				label: 'Type in a method with argument';
-				action: [ :aCoder | 
-					aCoder
-						appendString: '
-	a := #(1 2).
-	b := a size.
-	^ a sum + b' ];
-				onModel ].
-
-	scripter shortcut
-		combination: BlKeyCombination primaryS;
-		id: GtSourceCoderEditorId;
-		play.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				exists;
-				onSpaceRoot;
-				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
-
-	scripter shortcut
-		combination: BlKeyCombination enter;
-		onSpaceRoot;
-		// (GtDefineTemporaryVariableFixItActionElementId indexed: 1);
-		play.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				exists;
-				onSpaceRoot;
-				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
-
-	scripter shortcut
-		combination: BlKeyCombination enter;
-		onSpaceRoot;
-		// (GtDefineTemporaryVariableFixItActionElementId indexed: 1);
-		play.
-
-	scripter
-		checkStep: [ :s | 
-			s
-				notExists;
-				onSpaceRoot;
-				// (GtDefineTemporaryVariableFixItActionElementId indexed: 1) ].
-
-	self
-		assert: (RBParser
-				parseMethod: (scripter model behavior sourceCodeAt: scripter model selector))
-		equals: (RBParser
-				parseMethod: scripter model selector , '|a b | a := #(1 2). b := a size. ^a sum + b').
-
-	^ scripter
 ]
 
 { #category : #'examples - context menu' }
@@ -2687,6 +2687,11 @@ GtPharoMethodCoderByScripterExamples >> expandFromUI: aScripter method: aMethod 
 						id: GtSourceCoderEditorId ] ].
 
 	^ aScripter
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
+	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
 ]
 
 { #category : #'examples - extract literal' }
@@ -3652,11 +3657,6 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenPassingSel
 				@ [ :each | each activatableChange change = setChange ];
 				// GtSourceCoderExpanderToggleId ].
 	^ scripter
-]
-
-{ #category : #utilities }
-GtPharoMethodCoderByScripterExamples >> extractedUnaryMethodNameFor: aMethodCoder [
-	^ 'sub', (aMethodCoder attributeNamed: #dummyMethod) selector capitalized
 ]
 
 { #category : #'examples - complete method name' }
@@ -5104,6 +5104,34 @@ GtPharoMethodCoderByScripterExamples >> forCreateAccessors_04_click_create_acces
 	^ aScripter
 ]
 
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
+	<gtExample>
+	| aScripter |
+	aScripter := self forUnaryExtraction_01_setup.
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 9 to: 17;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: aScripter.
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert extract method doesn''t exist';
+				onSpaceRoot;
+				notExists;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	^ aScripter
+]
+
 { #category : #'examples - extract temp' }
 GtPharoMethodCoderByScripterExamples >> forExtractTemp_01_setup [
 	<gtExample>
@@ -5329,34 +5357,6 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 				label: 'Assert source editor is focused';
 				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
 				id: GtSourceCoderEditorId ].
-
-	^ aScripter
-]
-
-{ #category : #'examples - extract method' }
-GtPharoMethodCoderByScripterExamples >> forExtraction_02_method_parameter_cannot_be_extracted [
-	<gtExample>
-	| aScripter |
-	aScripter := self forUnaryExtraction_01_setup.
-	aScripter
-		doStep: [ :s | 
-			s
-				label: 'Select part of the method to extract';
-				action: [ :aSourceEditor | 
-					aSourceEditor selecter
-						from: 9 to: 17;
-						select ];
-				id: GtSourceCoderEditorId ].
-
-	self openContextMenu: aScripter.
-
-	aScripter
-		assertStep: [ :s | 
-			s
-				label: 'Assert extract method doesn''t exist';
-				onSpaceRoot;
-				notExists;
-				id: GtMethodCoderExtractMethodContextMenuItemId ].
 
 	^ aScripter
 ]
