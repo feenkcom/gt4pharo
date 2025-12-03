@@ -1527,10 +1527,33 @@ GtPharoMethodCoder >> testCase [
 	^ self
 		attributeNamed: #testCase
 		ifPresent: [ :aTestCase | aTestCase ]
-		ifAbsent: [ | aMethod |
-			aMethod := self compiledMethod.
-			aMethod
-				ifNotNil: [ self attributeNamed: #testCase put: aMethod gtPharoMethodTestCase ] ]
+		ifAbsent: [ 
+			| computedTestCase |
+			computedTestCase := self compiledMethod ifNotNil: [ :aCompiledMethod | 
+				(GtPharoTestCaseUtility canExecuteTestCase: aCompiledMethod) 
+					ifFalse: [ nil ]
+					ifTrue: [ 
+						self methodBehavior 
+							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior |
+								self explicitProviderClass 
+									ifNotNil: [ :aProviderClass |
+										aBehavior = aProviderClass 
+											ifFalse: [ 
+													GtPharoMethodTestCaseSubclass
+														forMethod: aCompiledMethod
+														className: aProviderClass name ]
+											ifTrue: [ aCompiledMethod gtPharoMethodTestCase ] ]
+									ifNil: [ aCompiledMethod gtPharoMethodTestCase ] ]
+							ifDifferentDo: [ :aSubclassBehavior |
+								GtPharoMethodTestCaseSubclass
+										forMethod: aCompiledMethod
+										className: aSubclassBehavior name ]
+						ifAbsent: [ nil ] ] ].
+						
+			computedTestCase ifNil: [ ^ nil ].
+			
+			self attributeNamed: #testCase put: computedTestCase.
+			computedTestCase ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
