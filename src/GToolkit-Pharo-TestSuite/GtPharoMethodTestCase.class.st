@@ -240,6 +240,11 @@ GtPharoMethodTestCase >> testCaseInstance [
 		build
 ]
 
+{ #category : #'api - accessing' }
+GtPharoMethodTestCase >> testClassName [
+	^ method methodClass name
+]
+
 { #category : #'api - announcer' }
 GtPharoMethodTestCase >> unsubscribe: anObject [
 	"Unsubscribe all subscriptions of anObject from the receiver"
