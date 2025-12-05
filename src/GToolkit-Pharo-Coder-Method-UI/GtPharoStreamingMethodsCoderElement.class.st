@@ -131,6 +131,8 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 			anElementClass new
 				vFitContentLimited
 				id: GtSourceCoderId;
+				when: GtPharoSavedAnotherMethodEvent do: [ :anEvent | 
+					self onGtPharoSavedAnotherMethodEvent: anEvent ];
 				addAptitude: (BrStyleCommonAptitude new
 					focused: [ :aStyle | aStyle 
 						do: [ :aWidget | self onFocusedMethodElement: aWidget ] ]) ];
@@ -233,6 +235,24 @@ GtPharoStreamingMethodsCoderElement >> onFocusedMethodElement: aWidget [
 	self
 		fireEvent: (GtNavigationMethodSelectionWish new
 				method: aMethod)
+]
+
+{ #category : #'private - event handling' }
+GtPharoStreamingMethodsCoderElement >> onGtPharoSavedAnotherMethodEvent: anEvent [
+	"A user defined and saved another method compared to previously displayed method by a coder.
+	Let's select this method in the navigation method index."
+
+	| aMethod |
+	anEvent consumed: true.
+
+	anEvent source ifNil: [ ^ self ].
+	(anEvent source isKindOf: BlElement) ifFalse: [ ^ self ].
+	anEvent source hasFocus ifFalse: [ ^ self ].
+
+	aMethod := anEvent method.
+	aMethod ifNil: [ ^ self ].
+
+	self fireEvent: (GtNavigationMethodSelectionWish new method: aMethod)
 ]
 
 { #category : #'private - event handling' }

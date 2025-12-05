@@ -102,10 +102,37 @@ GtExpandableMethodCoderElement >> onExpanded [
 ]
 
 { #category : #'api - textual coder view model' }
+GtExpandableMethodCoderElement >> onGtMethodCoderSaved: anAnnouncement [
+	"My method changed, let's notify my owner, e.g., methods coder element"
+
+	anAnnouncement isSameMethod ifTrue: [ ^ self ].
+
+	BlTaskAction
+		enqueueElement: self
+		action: [ self
+				dispatchEvent: (GtPharoSavedAnotherMethodEvent new
+						method: anAnnouncement method;
+						previousMethod: anAnnouncement previousMethod) ]
+]
+
+{ #category : #'api - textual coder view model' }
 GtExpandableMethodCoderElement >> onTextualCoderViewModelChanged [
 	super onTextualCoderViewModelChanged.
 	
 	BlFrameTelemetry
 		time: [ tagsElement class name, ' #pharoMethodCoderViewModel:' ]
 		during: [ tagsElement pharoMethodCoderViewModel: textualCoderViewModel ]
+]
+
+{ #category : #'api - textual coder view model' }
+GtExpandableMethodCoderElement >> subscribeToTextualCoderViewModel [
+	"Is sent after a new textualCoder view model is assigned to the element.
+	It is required to unsubscribe from the view model or domain model by implementing
+	#unsubscribeFromTextualCoderViewModel if elements subscribe to them"
+
+	super subscribeToTextualCoderViewModel.
+	textualCoderViewModel weak
+		when: GtMethodCoderSaved
+		send: #onGtMethodCoderSaved:
+		to: self
 ]

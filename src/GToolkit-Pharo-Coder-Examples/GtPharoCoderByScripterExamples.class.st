@@ -4955,6 +4955,85 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex_selectMethodWithBreakpoi
 	^ scripter
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectedNewlyCreatedMethodInIndex [
+	"See https://github.com/feenkcom/gtoolkit/issues/4888"
+
+	<gtExample>
+	| scripter leafClass allMethods firstMethod secondMethod |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	leafClass := environment anyDummyLeafClass realClass.
+	allMethods := leafClass methods sort: [ :a :b | a selector < b selector ].
+	firstMethod := allMethods first.
+	secondMethod := allMethods second.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: {firstMethod} in: scripter.
+
+	scripter coderNavigationIndex
+		assertSelectedMethod: firstMethod;
+		play.
+
+	scripter methodsCoder
+		forCompiledMethod: firstMethod
+			do: [ :aMethodCoder | aMethodCoder assertHasFocus ];
+		play.
+
+	scripter
+		substeps: 'Type new method in the focused method'
+		do: [ :aStep | 
+			aStep methodsCoder do
+				block: [ :aCoder | 
+					| someAnnouncements |
+					someAnnouncements := AsyncSharedOrderedCollection new.
+					scripter userData at: #methodsAnnouncements put: someAnnouncements.
+					aCoder streamingCodersViewModel
+						when: Announcement
+						send: #add:
+						to: someAnnouncements ];
+				// GtPharoStreamingMethodsCoderElement;
+				play.
+
+			aStep methodsCoder
+				forCompiledMethod: firstMethod
+					do: [ :aMethodCoder | 
+						aMethodCoder
+							assertHasFocus;
+							typeText: ('method1a{1}^ self ' format: {Character cr});
+							formatCode.
+
+						aMethodCoder do
+							block: [ :aCoder | 
+								| someAnnouncements |
+								someAnnouncements := AsyncSharedOrderedCollection new.
+								scripter userData at: #methodAnnouncements put: someAnnouncements.
+								aCoder textualCoderViewModel weak
+									when: Announcement
+									send: #add:
+									to: someAnnouncements ].
+
+						aMethodCoder clickOnSaveButton ];
+				play.
+
+			aStep methodsCoder
+				forCompiledMethod: firstMethod methodClass >> #method1a
+					do: [ :aMethodCoder | aMethodCoder assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: firstMethod methodClass >> #method1a;
+				play ].
+
+	^ scripter
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> setSpace800x600Extent: aScripter [
 	<gtExample>
