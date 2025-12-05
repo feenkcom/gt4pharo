@@ -1167,7 +1167,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedMethod: aCompiledMethod sou
 	self selectedClassDo: [ :aClass |
 		"If a selected method belongs to another class, e.g., superclass,
 		do not select it (as it is not in the method list anyway)."
-		aClass = aCompiledMethod methodClass ifTrue: [ 
+		aClass instanceSide = aCompiledMethod methodClass instanceSide ifTrue: [ 
 		
 			"If the method is selected, do nothing."
 			selectedMethod == aCompiledMethod ifTrue: [ ^ self ].

@@ -4767,6 +4767,55 @@ GtPharoCoderByScripterExamples >> selectInIndexMethods: methods in: scripter [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectedClassMethodInIndex [
+	"See https://github.com/feenkcom/gtoolkit/issues/4877"
+
+	<gtExample>
+	| scripter leafClass allMethods firstMethod secondMethod |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	leafClass := environment anyDummyLeafClass realClass.
+	allMethods := leafClass classSide methods sort: [ :a :b | a selector < b selector ].
+	firstMethod := allMethods first.
+	secondMethod := allMethods second.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: {firstMethod} in: scripter.
+
+	scripter coderNavigationIndex
+		assertSelectedMethod: firstMethod;
+		play.
+
+	scripter methodsCoder
+		forCompiledMethod: firstMethod
+			do: [ :aMethodCoder | aMethodCoder assertHasFocus ];
+		play.
+
+	scripter
+		substeps: 'Select the second method'
+		do: [ :aStep | 
+			aStep methodsCoder
+				forCompiledMethod: secondMethod
+					do: [ :aMethodCoder | 
+						aMethodCoder
+							click;
+							assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: secondMethod;
+				play ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> selectedMethodInIndex [
 	"See https://github.com/feenkcom/gtoolkit/issues/4877"
 
@@ -4783,6 +4832,7 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex [
 	secondMethod := allMethods second.
 
 	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self selectInIndexMethods: {firstMethod} in: scripter.
@@ -4837,6 +4887,7 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex_selectMethodWithBreakpoi
 	secondMethod := allMethods second.
 
 	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self selectInIndexMethods: {firstMethod} in: scripter.
