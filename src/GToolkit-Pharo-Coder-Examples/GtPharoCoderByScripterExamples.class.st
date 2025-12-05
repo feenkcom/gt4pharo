@@ -4819,7 +4819,7 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex_selectMethodWithBreakpoi
 	"See https://github.com/feenkcom/gtoolkit/issues/4887"
 
 	<gtExample>
-	| scripter leafClass allMethods firstMethod secondMethod newFirstMethod someAnnouncements |
+	| scripter leafClass allMethods firstMethod secondMethod newFirstMethod |
 	environment := GtPharoDummiesGenerator new
 			amountOfPackages: 1;
 			amountOfClasses: 2;
