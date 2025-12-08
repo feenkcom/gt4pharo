@@ -183,6 +183,54 @@ GtPharoCompleterExamples >> completeFullVariableName [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completeInMiddleOfMessage [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ 4 prOn' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			2 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'printOn:' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'printOn:') size = 2 ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeInMiddleOfVariable [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ SmaInt' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			3 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'SmallInteger' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'SmallInteger') size = 1 ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	<gtExample>
 	| aScripter |
