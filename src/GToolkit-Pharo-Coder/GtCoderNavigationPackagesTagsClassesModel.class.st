@@ -888,6 +888,33 @@ GtCoderNavigationPackagesTagsClassesModel >> protocolsToShow [
 	^ { allProtocol } , methodProtocols , classProtocols
 ]
 
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> reflectiveMethodInstalled: aGtReflectiveMethodInstalled [
+	| newSelectedMethods selectedMethodsNeedsUpdate |
+	self hasSelectedClass ifFalse: [ ^ self ].
+	(self selectedClassIsAffectedBy: aGtReflectiveMethodInstalled)
+		ifFalse: [ ^ self ].
+
+	performingBulkChanges
+		ifTrue: [ needsUpdate := true.
+			^ self ].
+
+	self notifyMethodsToShowChanged.
+
+	self selectedMethods ifEmpty: [ ^ self ].
+
+	selectedMethodsNeedsUpdate := false.
+	newSelectedMethods := self selectedMethods
+			collect: [ :eachMethod | 
+				(aGtReflectiveMethodInstalled affectsMethod: eachMethod)
+					ifTrue: [ selectedMethodsNeedsUpdate := true.
+						aGtReflectiveMethodInstalled newMethod ]
+					ifFalse: [ eachMethod ] ].
+
+	selectedMethodsNeedsUpdate ifFalse: [ ^ self ].
+	self selectMethods: newSelectedMethods.
+]
+
 { #category : #'api - refactorings' }
 GtCoderNavigationPackagesTagsClassesModel >> renameProtocol: aPharoProtocol to: aNewName [
 	| refactoring |
@@ -1140,7 +1167,7 @@ GtCoderNavigationPackagesTagsClassesModel >> selectedMethod: aCompiledMethod sou
 	self selectedClassDo: [ :aClass |
 		"If a selected method belongs to another class, e.g., superclass,
 		do not select it (as it is not in the method list anyway)."
-		aClass = aCompiledMethod methodClass ifTrue: [ 
+		aClass instanceSide = aCompiledMethod methodClass instanceSide ifTrue: [ 
 		
 			"If the method is selected, do nothing."
 			selectedMethod == aCompiledMethod ifTrue: [ ^ self ].
@@ -1253,7 +1280,8 @@ GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 		when: ClassReorganized send: #classReorganized: to: self;
 		when: MethodAdded send: #methodChanged: to: self;
 		when: MethodRemoved send: #methodChanged: to: self;
-		when: MethodRecategorized send: #methodRecategorized: to: self;
+		when: MethodRecategorized send: #methodRecategorized: to: self; 
+		when: GtReflectiveMethodInstalled send: #reflectiveMethodInstalled: to: self;
 		when: GtAboutToPerformBulkChangesAnnouncement
 			send: #onAboutToPerformBulkChanges:
 			to: self;

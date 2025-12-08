@@ -380,6 +380,25 @@ GtPharoCompleterExamples >> completeVariableFromBinding [
 	^ aScripter
 ]
 
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeVariableInsideIncompleteBlock [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' self do: [:each | e' in: aScripter.
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'each' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'each') size = 2 ] ].
+
+	^ aScripter
+]
+
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> completeWithTabIn: aScripter [
 	(aScripter keyPress: BlKeyboardKey tab) play

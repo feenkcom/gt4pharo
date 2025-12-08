@@ -6,7 +6,7 @@ Class {
 		'expression',
 		'rightBraces'
 	],
-	#category : 'GToolkit-Pharo-Parser-Parser'
+	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }

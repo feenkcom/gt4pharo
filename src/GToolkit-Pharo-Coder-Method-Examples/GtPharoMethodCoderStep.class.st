@@ -739,7 +739,7 @@ GtPharoMethodCoderStep >> typeText: aString [
 	^ aString lines size = 1
 		ifTrue: [ self type
 				referenceSender;
-				label: ('Type text: {1}' format: {aString lines first});
+				label: ('Type text: {1}' format: {aString lines first printStringLimitedTo: 30});
 				text: aString;
 				onParentStepTarget: self;
 				onThisOrDeepChildElementId: GtSourceCoderEditorId;

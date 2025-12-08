@@ -293,7 +293,17 @@ GtPharoMethodCoderViewModel >> notifySaveEnabled [
 
 { #category : #'private - notifying' }
 GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod [
-	self announce: (GtMethodCoderSaved new method: aCompiledMethod)
+	"Can be removed."
+
+	self notifySaved: aCompiledMethod previous: nil
+]
+
+{ #category : #'private - notifying' }
+GtPharoMethodCoderViewModel >> notifySaved: aCompiledMethod previous: aPreviousMethod [
+	self
+		announce: (GtMethodCoderSaved new
+				method: aCompiledMethod;
+				previousMethod: aPreviousMethod)
 ]
 
 { #category : #'private - evaluation' }
@@ -375,28 +385,29 @@ GtPharoMethodCoderViewModel >> receiverObjectToPlay [
 
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> save [
-	| aSaveResult |
 	<return: #Boolean>
-	
-	self isSaveEnabled
-		ifFalse: [ ^ false ].
+	| aSaveResult aPreviousMethod |
+	self isSaveEnabled ifFalse: [ ^ false ].
 
+	aPreviousMethod := self compiledMethod.
 	aSaveResult := self coderModel saveInContext: self evaluationContext.
-	aSaveResult ifTrue: [ self notifySaved: self compiledMethod ].
+	aSaveResult
+		ifTrue: [ self notifySaved: self compiledMethod previous: aPreviousMethod ].
 
 	^ aSaveResult
 ]
 
 { #category : #'api - actions' }
 GtPharoMethodCoderViewModel >> saveIn: aBehavior [
-	| aSaveResult |
 	<return: #Boolean>
-	
-	self isSaveEnabled
-		ifFalse: [ ^ false ].
+	| aSaveResult aPreviousMethod |
+	self isSaveEnabled ifFalse: [ ^ false ].
 
-	aSaveResult := self coderModel saveInContext: (self evaluationContext targetBehavior: aBehavior).
-	aSaveResult ifTrue: [ self notifySaved: self compiledMethod ].
+	aPreviousMethod := self compiledMethod.
+	aSaveResult := self coderModel
+			saveInContext: (self evaluationContext targetBehavior: aBehavior).
+	aSaveResult
+		ifTrue: [ self notifySaved: self compiledMethod previous: aPreviousMethod ].
 
 	^ aSaveResult
 ]

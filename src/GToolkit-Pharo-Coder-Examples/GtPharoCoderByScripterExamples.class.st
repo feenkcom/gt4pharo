@@ -4759,29 +4759,58 @@ GtPharoCoderByScripterExamples >> selectInIndexClasses: classes in: scripter [
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> selectInIndexMethods: methods in: scripter [
 	<gtExample>
-	scripter
-		clickStep: [ :s1 | 
-			s1
-				label: 'Select first method';
-				// GtCoderMethodsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = methods first selector ] ].
-
-	scripter
-		clickStep: [ :s1 | 
-			s1
-				label: 'Select the other methods';
-				modifiers: (BlKeyModifiers primary shift: true);
-				// GtCoderMethodsGroupedListElement;
-				// BrLabel;
-				@ [ :each | each text asString = methods last selector ] ].
-
-
-	scripter assert
-		label: 'Assert list selection';
-		value: [ :aList | aList selectedItems asArray ] equals: methods asArray;
-		// GtCoderMethodsGroupedListElement;
+	scripter coderNavigationIndex
+		selectMethods: methods;
 		play.
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectedClassMethodInIndex [
+	"See https://github.com/feenkcom/gtoolkit/issues/4877"
+
+	<gtExample>
+	| scripter leafClass allMethods firstMethod secondMethod |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	leafClass := environment anyDummyLeafClass realClass.
+	allMethods := leafClass classSide methods sort: [ :a :b | a selector < b selector ].
+	firstMethod := allMethods first.
+	secondMethod := allMethods second.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: {firstMethod} in: scripter.
+
+	scripter coderNavigationIndex
+		assertSelectedMethod: firstMethod;
+		play.
+
+	scripter methodsCoder
+		forCompiledMethod: firstMethod
+			do: [ :aMethodCoder | aMethodCoder assertHasFocus ];
+		play.
+
+	scripter
+		substeps: 'Select the second method'
+		do: [ :aStep | 
+			aStep methodsCoder
+				forCompiledMethod: secondMethod
+					do: [ :aMethodCoder | 
+						aMethodCoder
+							click;
+							assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: secondMethod;
+				play ].
 
 	^ scripter
 ]
@@ -4789,7 +4818,7 @@ GtPharoCoderByScripterExamples >> selectInIndexMethods: methods in: scripter [
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> selectedMethodInIndex [
 	"See https://github.com/feenkcom/gtoolkit/issues/4877"
-	
+
 	<gtExample>
 	| scripter leafClass allMethods firstMethod secondMethod |
 	environment := GtPharoDummiesGenerator new
@@ -4803,16 +4832,13 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex [
 	secondMethod := allMethods second.
 
 	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
 	self setSpaceExtent: scripter.
 	self maximizePagerPane: scripter.
 	self selectInIndexMethods: {firstMethod} in: scripter.
 
-	scripter assert
-		label: ('Assert method index {1} method is selected' format: { firstMethod selector });
-		satisfies: [ :aLabel | aLabel states isSelected ];
-		// GtCoderMethodsGroupedListElement;
-		// BrLabel;
-		@ [ :eachLabel | eachLabel text asString = firstMethod selector ];
+	scripter coderNavigationIndex
+		assertSelectedMethod: firstMethod;
 		play.
 
 	scripter methodsCoder
@@ -4821,7 +4847,7 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex [
 		play.
 
 	scripter
-		substeps: 'Select second method'
+		substeps: 'Select the second method'
 		do: [ :aStep | 
 			aStep methodsCoder
 				forCompiledMethod: secondMethod
@@ -4829,15 +4855,181 @@ GtPharoCoderByScripterExamples >> selectedMethodInIndex [
 						aMethodCoder
 							click;
 							assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: secondMethod;
 				play ].
 
-	scripter assert
-		label: ('Assert method index {1} method is selected' format: { secondMethod selector });
-		satisfies: [ :aLabel | aLabel states isSelected ];
-		// GtCoderMethodsGroupedListElement;
-		// BrLabel;
-		@ [ :eachLabel | eachLabel text asString = secondMethod selector ];
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectedMethodInIndex_selectMethodWithBreakpoint [
+	"See https://github.com/feenkcom/gtoolkit/issues/4887"
+
+	<gtExample>
+	| scripter leafClass allMethods firstMethod secondMethod newFirstMethod |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	leafClass := environment anyDummyLeafClass realClass.
+	leafClass
+		compile: ('method1{1}{2}^ self yourself'
+				format: {Character cr.
+						Character tab})
+		classified: 'api - method1'.
+
+	allMethods := leafClass methods sort: [ :a :b | a selector < b selector ].
+	firstMethod := allMethods first.
+	secondMethod := allMethods second.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: {firstMethod} in: scripter.
+
+	scripter coderNavigationIndex
+		assertSelectedMethod: firstMethod;
 		play.
+
+	scripter methodsCoder
+		forCompiledMethod: firstMethod
+			do: [ :aMethodCoder | 
+				aMethodCoder assertHasFocus.
+
+				aMethodCoder do
+					block: [ :anEditor | 
+						anEditor navigator
+							moveToEnd;
+							moveLeft;
+							apply ];
+					// GtSourceCoderEditorId.
+
+				aMethodCoder menuStep
+					openContextMenuAtLocalPosition: 135.08203125 @ 31.65386962890625;
+					// GtSourceCoderEditorId.
+
+				aMethodCoder menuStep
+					hoverMenuItemWithId: #'context-menu--breakpoint';
+					clickMenuItemWithId: #'context-menu--breakpoint';
+					onPopover ];
+		play.
+		
+	scripter
+		substeps: 'Select the second method'
+		do: [ :aStep | 
+			aStep methodsCoder
+				forCompiledMethod: secondMethod
+					do: [ :aMethodCoder | 
+						aMethodCoder
+							click;
+							assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: secondMethod;
+				play ].
+
+	newFirstMethod := leafClass lookupSelector: firstMethod selector.
+	self assert: (newFirstMethod == firstMethod) not.
+
+	scripter
+		substeps: 'Select the first method with breakpoint'
+		do: [ :aStep | 
+			aStep methodsCoder
+				forCompiledMethod: newFirstMethod
+					do: [ :aMethodCoder | 
+						aMethodCoder
+							click;
+							assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: newFirstMethod;
+				play ].
+
+	^ scripter
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> selectedNewlyCreatedMethodInIndex [
+	"See https://github.com/feenkcom/gtoolkit/issues/4888"
+
+	<gtExample>
+	| scripter leafClass allMethods firstMethod secondMethod |
+	environment := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfMethods: 4;
+			generateHierarchy.
+	leafClass := environment anyDummyLeafClass realClass.
+	allMethods := leafClass methods sort: [ :a :b | a selector < b selector ].
+	firstMethod := allMethods first.
+	secondMethod := allMethods second.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: leafClass ].
+	scripter userData at: #environment put: environment.
+	self setSpaceExtent: scripter.
+	self maximizePagerPane: scripter.
+	self selectInIndexMethods: {firstMethod} in: scripter.
+
+	scripter coderNavigationIndex
+		assertSelectedMethod: firstMethod;
+		play.
+
+	scripter methodsCoder
+		forCompiledMethod: firstMethod
+			do: [ :aMethodCoder | aMethodCoder assertHasFocus ];
+		play.
+
+	scripter
+		substeps: 'Type new method in the focused method'
+		do: [ :aStep | 
+			aStep methodsCoder do
+				block: [ :aCoder | 
+					| someAnnouncements |
+					someAnnouncements := AsyncSharedOrderedCollection new.
+					scripter userData at: #methodsAnnouncements put: someAnnouncements.
+					aCoder streamingCodersViewModel
+						when: Announcement
+						send: #add:
+						to: someAnnouncements ];
+				// GtPharoStreamingMethodsCoderElement;
+				play.
+
+			aStep methodsCoder
+				forCompiledMethod: firstMethod
+					do: [ :aMethodCoder | 
+						aMethodCoder
+							assertHasFocus;
+							typeText: ('method1a{1}^ self ' format: {Character cr});
+							formatCode.
+
+						aMethodCoder do
+							block: [ :aCoder | 
+								| someAnnouncements |
+								someAnnouncements := AsyncSharedOrderedCollection new.
+								scripter userData at: #methodAnnouncements put: someAnnouncements.
+								aCoder textualCoderViewModel weak
+									when: Announcement
+									send: #add:
+									to: someAnnouncements ].
+
+						aMethodCoder clickOnSaveButton ];
+				play.
+
+			aStep methodsCoder
+				forCompiledMethod: firstMethod methodClass >> #method1a
+					do: [ :aMethodCoder | aMethodCoder assertHasFocus ];
+				play.
+
+			aStep coderNavigationIndex
+				assertSelectedMethod: firstMethod methodClass >> #method1a;
+				play ].
 
 	^ scripter
 ]

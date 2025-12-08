@@ -46,6 +46,29 @@ GtPharoErrorNode >> isErrorNode [
 	^ true
 ]
 
+{ #category : #accessing }
+GtPharoErrorNode >> localVariablesInto: aCollection [
+	| stack vars token var |
+	super localVariablesInto: aCollection.
+	stack := smaccError stackContents.
+	stack size < 2 ifTrue: [ ^ self ].
+	(stack first isKindOf: SmaCCToken)
+		ifTrue: [ stack first value = '[' ifFalse: [ ^ self ] ].
+	vars := stack second.
+	((vars isKindOf: SequenceableCollection) and: [ vars size > 1 ])
+		ifFalse: [ ^ self ].
+	((vars first isKindOf: SequenceableCollection)
+		and: [ vars second isKindOf: SequenceableCollection ]) ifFalse: [ ^ self ].
+	1
+		to: (vars first size min: vars second size)
+		do: [ :i | 
+			token := vars first at: i.
+			var := vars second at: i.
+			((token isKindOf: SmaCCToken) and: [ token value = ':' ]) ifFalse: [ ^ self ].
+			(var isKindOf: GtPharoVariableNode) ifFalse: [ ^ self ].
+			aCollection add: var variableName ]
+]
+
 { #category : #generated }
 GtPharoErrorNode >> nodeVariables [
 	^ #(#smaccError)

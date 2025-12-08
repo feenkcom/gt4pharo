@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoTemplateParserExamples,
 	#superclass : #Object,
-	#category : 'GToolkit-Pharo-Parser-Examples'
+	#category : #'GToolkit-Pharo-Parser-Examples'
 }
 
 { #category : #'examples - variables' }
