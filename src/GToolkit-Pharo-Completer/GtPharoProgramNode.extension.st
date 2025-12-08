@@ -103,7 +103,7 @@ GtPharoProgramNode >> mergeKeywordCompletionsWith: completionsStream from: aMess
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken parentMessage: aMessage for: strategy [
 	| index type name completionsStream replacementsStream wordSelectorStream |
-	index := strategy index.
+	index := aToken stopPosition.
 	type := receiver guessType: strategy.
 	name := aToken source.
 	strategy wasRequested

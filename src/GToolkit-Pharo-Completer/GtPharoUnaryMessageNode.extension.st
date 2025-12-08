@@ -2,7 +2,6 @@ Extension { #name : #GtPharoUnaryMessageNode }
 
 { #category : #'*GToolkit-Pharo-Completer' }
 GtPharoUnaryMessageNode >> completionActionStreamFor: strategy [
-	selectorPart stopPosition = strategy index ifFalse: [ ^ #() asAsyncStream ].
 	^ self
 		messageCompletionsSendTo: self receiver
 		matching: selectorPart

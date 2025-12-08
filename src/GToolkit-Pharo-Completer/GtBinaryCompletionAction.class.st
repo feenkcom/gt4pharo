@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBinaryCompletionAction,
 	#superclass : #GtParenthesizedMessageCompletionAction,
-	#category : 'GToolkit-Pharo-Completer-Completion'
+	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
 { #category : #enumerating }
