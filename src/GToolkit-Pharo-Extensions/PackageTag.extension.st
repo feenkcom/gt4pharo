@@ -1,6 +1,19 @@
 Extension { #name : #PackageTag }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+PackageTag >> gtBrowseActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		target: GtCoderPackageTagTarget;
+		icon: BrGlamorousVectorIcons browse;
+		label: 'Browse package tag';
+		menuItemPreview: [ self name ];
+		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		action: [ :aMenuElement | aMenuElement phlow spawnObject: self ];
+		primaryModifierAction: [ :aMenuElement | self gtBrowseFrom: aMenuElement ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 PackageTag >> gtCreateNewPackageOrPackageTagActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown

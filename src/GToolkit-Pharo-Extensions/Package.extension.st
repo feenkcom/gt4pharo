@@ -5,11 +5,12 @@ Package >> gtBrowseActionFor: anAction [
 	<gtAction>
 	^ anAction button
 		target: GtCoderPackageTarget;
-		icon: BrGlamorousVectorIcons empty;
+		icon: BrGlamorousVectorIcons browse;
 		label: 'Browse package';
 		menuItemPreview: [ self name ];
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
-		action: [ :aMenuElement | aMenuElement phlow spawnObject: self ]
+		action: [ :aMenuElement | aMenuElement phlow spawnObject: self ];
+		primaryModifierAction: [ :aMenuElement | self gtBrowseFrom: aMenuElement ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
