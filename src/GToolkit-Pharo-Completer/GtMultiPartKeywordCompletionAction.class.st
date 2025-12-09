@@ -1,6 +1,9 @@
 Class {
 	#name : #GtMultiPartKeywordCompletionAction,
 	#superclass : #GtCompositeCompletionAction,
+	#instVars : [
+		'searchStartPosition'
+	],
 	#category : #'GToolkit-Pharo-Completer-Completion'
 }
 
@@ -24,4 +27,14 @@ GtMultiPartKeywordCompletionAction >> finishCompletionOn: aCompletionController 
 	first
 		ifNotNil: [ aCompletionController textEditor moveCursorTo: first.
 			aCompletionController moveCursorToNextUncompletedItem: 1 ]
+]
+
+{ #category : #accessing }
+GtMultiPartKeywordCompletionAction >> searchStartPosition [
+	^ searchStartPosition ifNil: [ super searchStartPosition ]
+]
+
+{ #category : #accessing }
+GtMultiPartKeywordCompletionAction >> searchStartPosition: anObject [
+	searchStartPosition := anObject
 ]

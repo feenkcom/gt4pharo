@@ -46,6 +46,7 @@ GtPharoKeywordMessageNode >> completionActionFor: strategy selector: aSymbol wit
 	index <= self selectorParts size ifTrue: [ ^ nil ].
 	composite := GtMultiPartKeywordCompletionAction
 			labeled: (strategy labelFor: aSymbol withWords: words).
+	composite searchStartPosition: strategy index.
 	actions reverseDo: [ :each | composite addAction: each ].
 	^ composite
 ]
