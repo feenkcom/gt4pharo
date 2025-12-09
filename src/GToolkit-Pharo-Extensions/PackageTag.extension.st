@@ -9,7 +9,8 @@ PackageTag >> gtBrowseActionFor: anAction [
 		label: 'Browse package tag';
 		menuItemPreview: [ self name ];
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
-		action: [ :aMenuElement | aMenuElement phlow spawnObject: self ]
+		action: [ :aMenuElement | aMenuElement phlow spawnObject: self ];
+		primaryModifierAction: [ :aMenuElement | self gtBrowseFrom: aMenuElement ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
