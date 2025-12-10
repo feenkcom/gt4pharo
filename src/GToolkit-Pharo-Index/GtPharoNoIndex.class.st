@@ -177,6 +177,11 @@ GtPharoNoIndex >> prefixStringsSizeInMemory [
 ]
 
 { #category : #accessing }
+GtPharoNoIndex >> selectorCache [
+	^ GtPharoNoCacheSelectorCache new
+]
+
+{ #category : #accessing }
 GtPharoNoIndex >> selectorCacheSpecificSize [
 	^ 0
 ]
