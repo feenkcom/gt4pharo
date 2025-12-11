@@ -12,10 +12,7 @@ GtPharoKeywordMessageNode >> completionActionFor: strategy selector: aSymbol wit
 		do: [ :each | 
 			(index <= self selectorParts size
 				and: [ each = (self selectorParts at: index) source
-						or: [ (strategy index
-								between: (self selectorParts at: index) startPosition
-								and: (self selectorParts at: index) stopPosition)
-								and: [ self does: (self selectorParts at: index) source haveWordsIn: each ] ] ])
+						or: [ self does: (self selectorParts at: index) source haveWordsIn: each ] ])
 				ifTrue: [ (each ~= (self selectorParts at: index) source
 						or: [ (self values at: index) isKindOf: GtPharoErrorNode ])
 						ifTrue: [ actions
@@ -23,7 +20,11 @@ GtPharoKeywordMessageNode >> completionActionFor: strategy selector: aSymbol wit
 										labeled: ''
 										completion: each
 												, (((self values at: index) isKindOf: GtPharoErrorNode)
-														ifTrue: [ ' _' ]
+														ifTrue: [ (self selectorParts size > index
+																and: [ (self selectorParts at: index + 1) startPosition - 1
+																		= (self selectorParts at: index) stopPosition ])
+																ifTrue: [ ' _ ' ]
+																ifFalse: [ ' _' ] ]
 														ifFalse: [ '' ])
 										position: (self selectorParts at: index) startPosition - 1).
 							actions
