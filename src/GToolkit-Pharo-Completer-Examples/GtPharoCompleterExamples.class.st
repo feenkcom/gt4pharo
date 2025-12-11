@@ -511,18 +511,9 @@ GtPharoCompleterExamples >> completePartialKeywordWithMultiplePartsAndMissingArg
 GtPharoCompleterExamples >> completePartialKeywordWithMultiplePartsNoMissingArg [
 	<gtExample>
 	| aScripter |
-	aScripter := self completePrintOnMethodSelector.
-
-	self enterText: ' ^ aStream at: 1 ifPrese: [:e | e] ifAbsent: []' in: aScripter.
-	aScripter
-		substep: 'Move cursor'
-		do: [ :aStep | 
-			23 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
-			aStep play ].
-	self openCompletionIn: aScripter.
+	aScripter := self openCompletionForPartialKeywordWithMultiplePartsNoMissingArg.
 	self selectionCompletionItem: 'at:ifPresent:ifAbsent:' in: aScripter.
 	self completeWithTabIn: aScripter.
-
 	aScripter
 		checkStep: [ :s | 
 			s
@@ -573,11 +564,8 @@ GtPharoCompleterExamples >> completePragmaInKeyword [
 GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	<gtExample>
 	| aScripter text |
+	aScripter := self openCompletionForPrinMethodSelector.
 	text := 'printOn:'.
-
-	aScripter := self smalltalkCompletionMethodEditor.
-	self enterText: 'prin' in: aScripter.
-	self openCompletionIn: aScripter.
 	self selectionCompletionItem: text in: aScripter.
 	self completeWithTabIn: aScripter.
 
@@ -795,6 +783,32 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 			strategy: completionStrategy.
 	completionController install.
 	^ editorElement
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> openCompletionForPartialKeywordWithMultiplePartsNoMissingArg [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ aStream at: 1 ifPrese: [:e | e] ifAbsent: []' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			23 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> openCompletionForPrinMethodSelector [
+	<gtExample>
+	| aScripter |
+	aScripter := self smalltalkCompletionMethodEditor.
+	self enterText: 'prin' in: aScripter.
+	self openCompletionIn: aScripter.
+	^ aScripter
 ]
 
 { #category : #'private-scripting' }
