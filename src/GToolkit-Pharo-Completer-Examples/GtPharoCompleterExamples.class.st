@@ -345,6 +345,30 @@ GtPharoCompleterExamples >> completeInMiddleOfVariable [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completeInMiddleOfVariableWithEditAtEnd [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ SmallInt' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			3 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'SmallInteger' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'SmallInteger') size = 1 ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	<gtExample>
 	| aScripter |

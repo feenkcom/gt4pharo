@@ -45,7 +45,7 @@ GtPharoProgramNode >> completeVariable: token for: aStrategy [
 				ifTrue: [ GtInsertTextCompletionAction
 						labeled: (aStrategy labelFor: each withSearch: prefix)
 						completion: (each allButFirst: prefix size)
-						position: aStrategy index ]
+						position: token stopPosition ]
 				ifFalse: [ (GtCompositeCompletionAction
 						labeled: (aStrategy labelFor: each withWords: prefix))
 						addAction: (GtDeleteTextCompletionAction
