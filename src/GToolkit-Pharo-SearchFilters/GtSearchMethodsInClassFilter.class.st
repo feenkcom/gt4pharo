@@ -83,6 +83,7 @@ GtSearchMethodsInClassFilter >> includeSuperclass: aBoolean [
 { #category : #testing }
 GtSearchMethodsInClassFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
+	filterClass ifNil: [ ^ false ].
 	methodClass := aCompiledMethod methodClass.
 	methodClass = filterClass ifTrue: [ ^ true ].
 	^ (includeSubclasses and: [ methodClass includesBehavior: filterClass ])
