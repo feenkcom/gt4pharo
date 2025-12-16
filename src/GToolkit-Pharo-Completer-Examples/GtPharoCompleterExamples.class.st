@@ -345,6 +345,30 @@ GtPharoCompleterExamples >> completeInMiddleOfVariable [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completeInMiddleOfVariableWithEditAtEnd [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ SmallInt' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			3 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'SmallInteger' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'SmallInteger') size = 1 ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 	<gtExample>
 	| aScripter |
@@ -363,6 +387,33 @@ GtPharoCompleterExamples >> completeInstanceVariableReceiver [
 					self
 						assert: element text asString lines
 						equals: self instanceVariableReceiverSource lines ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeKeywordWithMultipleChanges [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ #(1) injec: 1 i:' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			6 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'inject:into:' in: aScripter.
+	self completeWithTabIn: aScripter.
+	self enterText: '[:s :e | s + e]' in: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | 
+					element text asString
+						= 'printOn: aStream ^ #(1) inject: 1 into: [:s :e | s + e]' ] ].
 
 	^ aScripter
 ]
@@ -511,18 +562,9 @@ GtPharoCompleterExamples >> completePartialKeywordWithMultiplePartsAndMissingArg
 GtPharoCompleterExamples >> completePartialKeywordWithMultiplePartsNoMissingArg [
 	<gtExample>
 	| aScripter |
-	aScripter := self completePrintOnMethodSelector.
-
-	self enterText: ' ^ aStream at: 1 ifPrese: [:e | e] ifAbsent: []' in: aScripter.
-	aScripter
-		substep: 'Move cursor'
-		do: [ :aStep | 
-			23 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
-			aStep play ].
-	self openCompletionIn: aScripter.
+	aScripter := self openCompletionForPartialKeywordWithMultiplePartsNoMissingArg.
 	self selectionCompletionItem: 'at:ifPresent:ifAbsent:' in: aScripter.
 	self completeWithTabIn: aScripter.
-
 	aScripter
 		checkStep: [ :s | 
 			s
@@ -573,11 +615,8 @@ GtPharoCompleterExamples >> completePragmaInKeyword [
 GtPharoCompleterExamples >> completePrintOnMethodSelector [
 	<gtExample>
 	| aScripter text |
+	aScripter := self openCompletionForPrinMethodSelector.
 	text := 'printOn:'.
-
-	aScripter := self smalltalkCompletionMethodEditor.
-	self enterText: 'prin' in: aScripter.
-	self openCompletionIn: aScripter.
 	self selectionCompletionItem: text in: aScripter.
 	self completeWithTabIn: aScripter.
 
@@ -671,6 +710,65 @@ GtPharoCompleterExamples >> completeVariableInsideIncompleteBlock [
 { #category : #'private-scripting' }
 GtPharoCompleterExamples >> completeWithTabIn: aScripter [
 	(aScripter keyPress: BlKeyboardKey tab) play
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeWithWithWith [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ OrderedCollection with:w:w:' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			3 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'with:with:with:' in: aScripter.
+	self completeWithTabIn: aScripter.
+	self enterText: '1' in: aScripter.
+	(aScripter keyPress: BlKeyboardKey tab) play.
+	self enterText: '2' in: aScripter.
+	(aScripter keyPress: BlKeyboardKey tab) play.
+	self enterText: '3' in: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | 
+					element text asString
+						= 'printOn: aStream ^ OrderedCollection with: 1 with: 2 with: 3' ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeWithWithWithWith [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ OrderedCollection w:w:w:w:' in: aScripter.
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'with:with:with:with:' in: aScripter.
+	self completeWithTabIn: aScripter.
+	self enterText: '1' in: aScripter.
+	(aScripter keyPress: BlKeyboardKey tab) play.
+	self enterText: '2' in: aScripter.
+	(aScripter keyPress: BlKeyboardKey tab) play.
+	self enterText: '3' in: aScripter.
+	(aScripter keyPress: BlKeyboardKey tab) play.
+	self enterText: '4' in: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | 
+					element text asString
+						= 'printOn: aStream ^ OrderedCollection with: 1 with: 2 with: 3 with: 4' ] ].
+
+	^ aScripter
 ]
 
 { #category : #'private-source' }
@@ -795,6 +893,32 @@ GtPharoCompleterExamples >> methodSourceCompleter [
 			strategy: completionStrategy.
 	completionController install.
 	^ editorElement
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> openCompletionForPartialKeywordWithMultiplePartsNoMissingArg [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ aStream at: 1 ifPrese: [:e | e] ifAbsent: []' in: aScripter.
+	aScripter
+		substep: 'Move cursor'
+		do: [ :aStep | 
+			23 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
+			aStep play ].
+	self openCompletionIn: aScripter.
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> openCompletionForPrinMethodSelector [
+	<gtExample>
+	| aScripter |
+	aScripter := self smalltalkCompletionMethodEditor.
+	self enterText: 'prin' in: aScripter.
+	self openCompletionIn: aScripter.
+	^ aScripter
 ]
 
 { #category : #'private-scripting' }
@@ -960,27 +1084,4 @@ GtPharoCompleterExamples >> subsequenceVariableCompletion [
 		requested: true.
 	self assert: ((items take: 30) toArray wait anySatisfy: [ :each | each label = 'GtPharoCompleterExamples' ]).
 	^ strategy
-]
-
-{ #category : #smalltalk }
-GtPharoCompleterExamples >> tryCompleteOnInvalidKeyword [
-	<gtExample>
-	| aScripter |
-	aScripter := self completePrintOnMethodSelector.
-
-	self enterText: ' ^ aStream at: 1 remove: 2' in: aScripter.
-	aScripter
-		substep: 'Move cursor'
-		do: [ :aStep | 
-			3 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
-			aStep play ].
-	self openCompletionIn: aScripter.
-	aScripter
-		checkStep: [ :s | 
-			s
-				notExists;
-				onSpaceRoot;
-				id: #'completion-list' ].
-
-	^ aScripter
 ]

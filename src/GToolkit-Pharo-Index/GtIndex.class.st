@@ -165,6 +165,36 @@ GtIndex >> isActive [
 ]
 
 { #category : #accessing }
+GtIndex >> map: aSelector toKeywords: anArray [
+	| selector otherKeywords index map |
+	map := OrderedCollection new: anArray size.
+	selector := aSelector asSymbol.
+	index := 0.
+	otherKeywords := selector keywords.
+	anArray
+		do: [ :kw | 
+			kw last = $:
+				ifTrue: [ index := otherKeywords indexOf: kw startingAt: index + 1 ]
+				ifFalse: [ | myWords |
+					myWords := self wordsIn: kw.
+					index := (index + 1 to: otherKeywords size)
+							detect: [ :i | 
+								| otherWords currentIndex |
+								otherWords := self wordsIn: (otherKeywords at: i).
+								currentIndex := 0.
+								myWords
+									allSatisfy: [ :e | 
+										currentIndex := (currentIndex + 1 to: otherWords size)
+												detect: [ :j | (otherWords at: j) beginsWith: e ]
+												ifNone: [ 0 ].
+										currentIndex > 0 ] ]
+							ifNone: [ 0 ] ].
+			index > 0 ifFalse: [ ^ nil ].
+			map add: index ].
+	^ map
+]
+
+{ #category : #accessing }
 GtIndex >> searchWordsFrom: aString [
 	| words |
 	words := OrderedCollection new.
