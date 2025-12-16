@@ -29,6 +29,7 @@ GtSearchInheritedMethodsFilter >> gtDisplayOn: stream [
 { #category : #accessing }
 GtSearchInheritedMethodsFilter >> includesMethod: aCompiledMethod [
 	| methodClass |
+	filterClass ifNil: [ ^ false ].
 	methodClass := aCompiledMethod methodClass.
 	^ (super includesMethod: aCompiledMethod)
 		or: [ (aCompiledMethod origin name sameContentAs:  #TraitedClass) not
