@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
-{ #category : #'as yet unclassified' }
-GtPharoBigMethodExpandableSourceCoderElement >> defaultCollapsedElementStencil [
+{ #category : #initialization }
+GtPharoBigMethodExpandableSourceCoderElement >> defaultExpandedElementStencil [
 	^ GtPharoBigMethodExpandedSourceCoderElementStencil new
 ]
