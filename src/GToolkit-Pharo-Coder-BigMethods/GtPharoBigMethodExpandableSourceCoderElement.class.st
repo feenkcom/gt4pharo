@@ -4,13 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
-{ #category : #'private - instance creation' }
-GtPharoBigMethodExpandableSourceCoderElement >> newExpandedElement [
-	| anExpandedElement |
-	anExpandedElement := GtPharoBigMethodExpandedSourceCoderElement new.
-
-	textualCoderViewModel
-		ifNotNil: [ :aCoder | self assignExpandedCoder: aCoder to: anExpandedElement ].
-
-	^ anExpandedElement
+{ #category : #'as yet unclassified' }
+GtPharoBigMethodExpandableSourceCoderElement >> defaultCollapsedElementStencil [
+	^ GtPharoBigMethodExpandedSourceCoderElementStencil new
 ]
