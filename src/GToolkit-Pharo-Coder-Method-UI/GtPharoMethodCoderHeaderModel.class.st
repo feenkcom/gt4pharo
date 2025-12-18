@@ -162,7 +162,9 @@ GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from:
 	
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
-			self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
+			aMethodBehavior = aProviderBehavior
+				ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
+				ifFalse: [ anElement phlow spawnTool: (GtClassCoderTool forClass: aProviderBehavior) ] ]
 		ifUnknown: [
 			aCoderViewModel coderModel methodBehavior
 				realBehaviorDo: [ :aMethodBehavior |
