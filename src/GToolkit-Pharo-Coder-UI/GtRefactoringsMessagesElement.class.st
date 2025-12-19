@@ -30,7 +30,7 @@ GtRefactoringsMessagesElement >> initialize [
 
 { #category : #initialization }
 GtRefactoringsMessagesElement >> initializeContainerElement [
-	containerElement := BrHorizontalPane new
+	containerElement := BrVerticalPane new
 			fitContentLimited;
 			visibility: BlVisibility gone;
 			alignTopLeft
