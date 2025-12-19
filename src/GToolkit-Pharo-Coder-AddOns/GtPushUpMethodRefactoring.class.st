@@ -31,7 +31,7 @@ GtPushUpMethodRefactoring >> checkInstVarsFor: aSelector [
 
 { #category : #preconditions }
 GtPushUpMethodRefactoring >> checkSuperSendsFromSiblings [
-	| selectorsWithSuperImplementations definer |
+	| selectorsWithSuperImplementations |
 	targetSuperclass subclasses size <= 1 ifTrue: [ ^ self ].
 	selectorsWithSuperImplementations := selectors
 			select: [ :each | class superclass definesMethod: each ].
@@ -43,13 +43,15 @@ GtPushUpMethodRefactoring >> checkSuperSendsFromSiblings [
 				do: [ :method | 
 					((method methodClass includesClass: class) not
 						and: [ (method methodClass includesClass: class superclass)
-								and: [ class superclass
-										includesClass: (definer := method methodClass superclass whoDefinesMethod: impl) ] ])
+								and: [ (class superclass
+										includesClass: (method methodClass superclass whoDefinesMethod: impl))
+										and: [ (method ast equalTo: (class methodFor: impl) ast exceptForVariables: #()) not ] ] ])
 						ifTrue: [ (method ast superMessages includes: impl)
-								ifTrue: [ self
-										refactoringError: ('Cannot push up <1s> since it would override the method defined in <2p>'
-												expandMacrosWith: impl
-												with: definer) ] ] ] ]
+								ifTrue: [ GtRefactoringNotification
+										signal: ('<1s>>><2s> senders super <3s> which will call a different implementation than it is currently calling.'
+												expandMacrosWith: method methodClass name
+												with: method selector
+												with: impl) ] ] ] ]
 ]
 
 { #category : #initialization }
