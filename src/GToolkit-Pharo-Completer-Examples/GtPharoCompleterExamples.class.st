@@ -19,6 +19,24 @@ GtPharoCompleterExamples >> binaryCompletion [
 	^ strategy
 ]
 
+{ #category : #'private-scripting' }
+GtPharoCompleterExamples >> checkCompletionDoesNotContain: text in: aScripter [
+	aScripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				id: #'completion-list';
+				do: [ :element | 
+					| items item i |
+					i := 1.
+					items := element items.
+					[ item isNil and: [ i <= items size ] ]
+						whileTrue: [ (items at: i) label = text
+								ifTrue: [ item := items at: i ]
+								ifFalse: [ i := i + 1 ] ].
+					self assert: item isNil ] ]
+]
+
 { #category : #'private-source' }
 GtPharoCompleterExamples >> checkCompletionsIn: aString areSameAs: selectors [
 	| items |
@@ -624,6 +642,49 @@ GtPharoCompleterExamples >> completePrintOnMethodSelector [
 		checkStep: [ :s | 
 			s
 				satisfies: [ :element | element text asString beginsWith: text ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeUnaryToBinaryMessageWithLiteralArg [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ self = 42 if' in: aScripter.
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'ifTrue:' in: aScripter.
+	self completeWithTabIn: aScripter.
+	self enterText: '[]' in: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | element text asString = 'printOn: aStream ^ self = 42 ifTrue: []' ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeUnaryToLiteral [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' ^ 42 if' in: aScripter.
+	self openCompletionIn: aScripter.
+
+	self checkCompletionDoesNotContain: 'ifTrue:' in: aScripter.
+
+	self selectionCompletionItem: 'ifNil:' in: aScripter.
+	self completeWithTabIn: aScripter.
+	self enterText: '[]' in: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | element text asString = 'printOn: aStream ^ 42 ifNil: []' ] ].
 
 	^ aScripter
 ]
