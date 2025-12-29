@@ -66,6 +66,11 @@ RBAddClassRefactoring >> basicTransform [
 				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
 ]
 
+{ #category : #accessing }
+RBAddClassRefactoring >> gtDescription [
+	^ 'Add class'
+]
+
 { #category : #preconditions }
 RBAddClassRefactoring >> preconditions [
 	| cond |

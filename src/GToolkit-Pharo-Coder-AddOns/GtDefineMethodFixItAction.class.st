@@ -86,7 +86,7 @@ GtDefineMethodFixItAction >> compileMethod [
 
 { #category : #private }
 GtDefineMethodFixItAction >> createRefactoring [
-	^ RBAddMethodRefactoring
+	^ GtRBAddMethodRefactoring
 		addMethod: self methodSource
 		toClass: classOrMetaClass
 		inProtocols: {self targetProtocol}

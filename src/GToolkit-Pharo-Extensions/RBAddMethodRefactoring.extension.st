@@ -1,6 +1,11 @@
 Extension { #name : #RBAddMethodRefactoring }
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+RBAddMethodRefactoring >> gtDescription [
+	^ 'Add method'
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 RBAddMethodRefactoring >> gtSource [
 	^ source
 ]
