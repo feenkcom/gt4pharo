@@ -111,7 +111,13 @@ GtPharoProgramNode >> messageCompletionsSendTo: receiver matching: aToken parent
 				ifNil: [ (GtPharoIndex current implementersOf: name) notEmpty ]
 				ifNotNil: [ type canUnderstand: name asSymbol ])
 				ifTrue: [ ^ #() asAsyncStream ] ].
-	completionsStream := (strategy selectorStreamForReceiver: type matching: name)
+	completionsStream := (strategy
+			selectorStreamForReceiver: type
+			matching: name
+			alphabetical: false
+			includeAllKeywords: (self isMessage
+					and: [ (self parent isKindOf: GtPharoMessageSendNode)
+							and: [ self parent parent isKindOf: GtPharoBinaryMessageNode ] ]))
 			collect: [ :each | 
 				receiver
 					actionForSelector: each

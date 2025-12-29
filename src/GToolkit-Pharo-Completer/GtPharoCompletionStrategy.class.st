@@ -216,17 +216,21 @@ GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aStr
 		selectorStreamForReceiver: aBehavior
 		matching: aString
 		alphabetical: false
+		includeAllKeywords: false
 ]
 
 { #category : #'private-selector' }
-GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aString alphabetical: aBoolean [
-	| tree |
-	tree := aBehavior notNil
-			ifTrue: [ GtPrefixTree withAll: aBehavior allSelectors ]
-			ifFalse: [ GtPharoIndex current selectorCache ].
-	^ aBoolean
-		ifTrue: [ tree asyncStreamStartingWith: aString ]
-		ifFalse: [ tree asyncWeightedStreamStartingWith: aString ]
+GtPharoCompletionStrategy >> selectorStreamForReceiver: aBehavior matching: aString alphabetical: aBoolean includeAllKeywords: keywords [
+	| tree stream selectors |
+	tree := GtPharoIndex current selectorCache.
+	stream := aBoolean
+			ifTrue: [ tree asyncStreamStartingWith: aString ]
+			ifFalse: [ tree asyncWeightedStreamStartingWith: aString ].
+	^ aBehavior
+		ifNil: [ stream ]
+		ifNotNil: [ selectors := GtPrefixTree withAll: aBehavior allSelectors.
+			stream
+				select: [ :each | (keywords and: [ each last = $: ]) or: [ selectors includes: each ] ] ]
 ]
 
 { #category : #'private-selector' }
