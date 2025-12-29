@@ -12,9 +12,9 @@ Class {
 { #category : #transforming }
 GtRBAddClassWithVarsRefactoring >> basicTransform [
 	self model
-		defineClass: ('<1p> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>'
+		defineClass: ('<1s> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>'
 				expandMacrosWithArguments: (Array
-						with: superclass
+						with: superclass name
 						with: className
 						with: self instanceVariableNamesString
 						with: self classVariableNamesString
