@@ -7,7 +7,7 @@ Class {
 { #category : #testing }
 GtUndeclaredVariableAdvice >> canAddInstanceVariable: aString to: aClass [
 	(Object includesBehavior: aClass) ifTrue: [ ^ false ].
-	^ [ (GtRBAddInstanceVariableRefactoring variable: aString class: aClass)
+	^ [ (RBAddInstanceVariableRefactoring variable: aString class: aClass)
 		checkPreconditions.
 	true ] on: RBRefactoringError do: [ :ex | ex return: false ]
 ]

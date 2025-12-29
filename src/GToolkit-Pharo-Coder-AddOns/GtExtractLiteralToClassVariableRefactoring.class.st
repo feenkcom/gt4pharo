@@ -25,7 +25,7 @@ GtExtractLiteralToClassVariableRefactoring class >> model: model extract: anInte
 { #category : #transforming }
 GtExtractLiteralToClassVariableRefactoring >> addClassVariable [
 	self
-		performCompositeRefactoring: (RBAddClassVariableRefactoring
+		performCompositeRefactoring: (GtRBAddClassVariableRefactoring
 				model: model
 				variable: variable
 				class: self classForClassVariable instanceSide)
