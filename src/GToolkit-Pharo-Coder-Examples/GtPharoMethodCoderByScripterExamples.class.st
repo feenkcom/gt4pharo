@@ -10242,13 +10242,14 @@ GtPharoMethodCoderByScripterExamples >> performRefactoringAndCheckSelector: newS
 	scripter clickStep: [ :s | s // #previewCheckButton ].
 	(Delay forMilliseconds: 100) wait.
 	scripter pulse.
-	scripter
+	
+	"scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand preview';
 				onSpaceRoot;
 				// GtChangesElement;
-				// #triangle ].
+				// #triangle ]."
 	scripter
 		doStep: [ :s | 
 			s
