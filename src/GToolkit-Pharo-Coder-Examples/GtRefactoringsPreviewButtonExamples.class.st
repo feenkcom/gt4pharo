@@ -91,14 +91,14 @@ GtRefactoringsPreviewButtonExamples >> switchToMethodNameRefactoringMode [
 						// GtSourceCoderEditorId;
 						// #previewCheckButton ].
 
-			aStep
+		"	aStep
 				clickStep: [ :s | 
 					s
 						label: 'Expand the refactoring preview dropdown';
 						onSpaceRoot;
 						onDropdown: true;
 						// GtChangesElement;
-						// BrInlineExpanderElement ].
+						// BrInlineExpanderElement ]."
 
 			aStep
 				doStep: [ :s | 

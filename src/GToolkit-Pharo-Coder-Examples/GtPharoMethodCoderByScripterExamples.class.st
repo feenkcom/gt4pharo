@@ -3112,13 +3112,13 @@ GtPharoMethodCoderByScripterExamples >> extractMethodObjectUpdatesSource [
 
 	(Delay forMilliseconds: 100) wait.
 	scripter pulse.
-	scripter
+"	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand preview';
 				onSpaceRoot;
 				// GtChangesElement;
-				// #triangle ].
+				// #triangle ]."
 	scripter
 		doStep: [ :s | 
 			s
@@ -3302,13 +3302,13 @@ GtPharoMethodCoderByScripterExamples >> extractToComponent [
 	(scripter keyPress: BlKeyboardKey return) play.
 	(Delay forMilliseconds: 100) wait.
 	scripter pulse.
-	scripter
+	"scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand preview';
 				onSpaceRoot;
 				// GtChangesElement;
-				// #triangle ].
+				// #triangle ]."
 	scripter
 		doStep: [ :s | 
 			s
@@ -3451,14 +3451,14 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectArgumentsInSam
 					s
 						label: 'Click preview button';
 						// #previewCheckButton ] ].
-	scripter
+	"scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand the refactoring preview dropdown';
 				onSpaceRoot;
 				onDropdown: true;
 				// GtChangesElement;
-				// BrInlineExpanderElement ].
+				// BrInlineExpanderElement ]."
 	scripter
 		doStep: [ :s | 
 			s
@@ -3588,14 +3588,14 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenPassingSel
 				exists;
 				onSpaceRoot;
 				id: GtRefactoringsPreviewAcceptId ].
-	scripter
+	"scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand the refactoring preview dropdown';
 				onSpaceRoot;
 				onDropdown: true;
 				// GtChangesElement;
-				// BrInlineExpanderElement ].
+				// BrInlineExpanderElement ]."
 	scripter
 		doStep: [ :s | 
 			s
@@ -8643,13 +8643,13 @@ GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentExecution [
 
 	(Delay forMilliseconds: 100) wait.
 	scripter pulse.
-	scripter
+	"scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand preview';
 				onSpaceRoot;
 				// GtChangesElement;
-				// #triangle ].
+				// #triangle ]."
 	scripter
 		doStep: [ :s | 
 			s
