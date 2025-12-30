@@ -40,7 +40,7 @@ GtExtractMethodObjectRefactoring >> abstractVariablesInExtractedMethod [
 { #category : #transforming }
 GtExtractMethodObjectRefactoring >> addClass [
 	self
-		performCompositeRefactoring: (RBAddClassRefactoring
+		performCompositeRefactoring: (GtRBAddClassWithVarsRefactoring
 				model: self model
 				addClass: className
 				superclass: superclass
