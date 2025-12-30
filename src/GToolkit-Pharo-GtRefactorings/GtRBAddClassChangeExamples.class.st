@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtRBAddClassChangeExamples >> slots [
 	<gtExample>
 	| change |
@@ -18,7 +18,7 @@ GtRBAddClassChangeExamples >> slots [
 	^ change
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtRBAddClassChangeExamples >> verifyChanges [
 	<gtExample>
 	(Object withAllSubclasses reject: #isClassSide)

@@ -4,15 +4,24 @@ Class {
 	#instVars : [
 		'instanceVariableNames',
 		'classVariableNames',
-		'class'
+		'superclassObject',
+		'subclassObjects'
 	],
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #initialization }
+GtRBAddClassWithVarsRefactoring >> addClass: aName superclass: aClass subclasses: aCollection category: aSymbol [
+	self className: aName.
+	superclassObject := aClass.
+	subclassObjects := OrderedCollection withAll: aCollection.
+	category := aSymbol
+]
+
 { #category : #transforming }
 GtRBAddClassWithVarsRefactoring >> basicTransform [
 	self model
-		defineClass: ('<1s> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>'
+		defineClassWithDefinition: ('<1s> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>'
 				expandMacrosWithArguments: (Array
 						with: superclass name
 						with: className
@@ -28,8 +37,8 @@ GtRBAddClassWithVarsRefactoring >> classVariableNames [
 ]
 
 { #category : #accessing }
-GtRBAddClassWithVarsRefactoring >> classVariableNames: anObject [
-	classVariableNames := anObject
+GtRBAddClassWithVarsRefactoring >> classVariableNames: aCollection [
+	classVariableNames := aCollection
 ]
 
 { #category : #accessing }
@@ -50,8 +59,8 @@ GtRBAddClassWithVarsRefactoring >> instanceVariableNames [
 ]
 
 { #category : #accessing }
-GtRBAddClassWithVarsRefactoring >> instanceVariableNames: anObject [
-	instanceVariableNames := anObject
+GtRBAddClassWithVarsRefactoring >> instanceVariableNames: aCollection [
+	instanceVariableNames := aCollection
 ]
 
 { #category : #accessing }
@@ -72,6 +81,13 @@ GtRBAddClassWithVarsRefactoring >> preconditions [
 			"& (RBCondition isValidClassVarName: each for: class ) "
 			& (RBCondition definesClassVariable: each in: superclass ) not 
 			& (RBCondition isGlobal: each in: self model) not	 ]
+]
+
+{ #category : #transforming }
+GtRBAddClassWithVarsRefactoring >> prepareForExecution [
+	superclass := self classObjectFor: superclassObject.
+	subclasses := subclassObjects collect: [ :each | self classObjectFor: each ].
+	super prepareForExecution
 ]
 
 { #category : #transforming }

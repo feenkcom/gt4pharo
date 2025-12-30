@@ -2,7 +2,9 @@ Class {
 	#name : #GtPushUpMethodRefactoring,
 	#superclass : #RBPullUpMethodRefactoring,
 	#instVars : [
-		'instVarsToPushUp'
+		'instVarsToPushUp',
+		'classObject',
+		'targetSuperclassObject'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -60,6 +62,13 @@ GtPushUpMethodRefactoring >> initialize [
 	instVarsToPushUp := Set new
 ]
 
+{ #category : #'as yet unclassified' }
+GtPushUpMethodRefactoring >> prepareForExecution [
+	class := self classObjectFor: classObject.
+	targetSuperclass := self classObjectFor: targetSuperclassObject.
+	super prepareForExecution
+]
+
 { #category : #transforming }
 GtPushUpMethodRefactoring >> privateTransform [
 	"P12"
@@ -69,7 +78,10 @@ GtPushUpMethodRefactoring >> privateTransform [
 
 { #category : #initialization }
 GtPushUpMethodRefactoring >> pullUp: selectorCollection from: aClass to: aSuperClass [
-	super pullUp: selectorCollection from: aClass to: aSuperClass.
+	classObject := aClass.
+	targetSuperclassObject := aSuperClass.
+	selectors := selectorCollection.
+	removeDuplicates := false.
 	removeDuplicates := true
 ]
 

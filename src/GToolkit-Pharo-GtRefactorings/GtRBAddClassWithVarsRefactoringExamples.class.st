@@ -4,7 +4,41 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
+GtRBAddClassWithVarsRefactoringExamples >> checkWithNewClasses [
+	<gtExample>
+	| namespace refactorings |
+	namespace := GtRBNamespace new.
+	refactorings := {GtRBAddClassWithVarsRefactoring
+				model: namespace
+				addClass: #Asdf
+				superclass: #Object
+				subclasses: #()
+				category: #Asdf.
+			GtRBAddClassWithVarsRefactoring
+				model: namespace
+				addClass: #Fdsa
+				superclass: #Asdf
+				subclasses: #()
+				category: #Asdf.
+			GtRBAddClassWithVarsRefactoring
+				model: namespace
+				addClass: #SDAF
+				superclass: #Asdf
+				subclasses: #(Fdsa)
+				category: #Asdf}.
+	refactorings do: #primitiveExecute.
+	self assert: namespace changes changesSize equals: 4.
+	self
+		assert: (namespace classObjectFor: #SDAF) superclass
+		equals: (namespace classObjectFor: #Asdf).
+	self
+		assert: (namespace classObjectFor: #Fdsa) superclass
+		equals: (namespace classObjectFor: #SDAF).
+	^ namespace
+]
+
+{ #category : #examples }
 GtRBAddClassWithVarsRefactoringExamples >> createClassWithInstanceSlots [
 	<gtExample>
 	| ns r |

@@ -48,7 +48,7 @@ GtExtractSuperclassRefactoring >> category: anObject [
 { #category : #accessing }
 GtExtractSuperclassRefactoring >> createNewClass [
 	self
-		performCompositeRefactoring: (RBAddClassRefactoring
+		performCompositeRefactoring: (GtRBAddClassWithVarsRefactoring
 				model: self model
 				addClass: className
 				superclass: superclass
