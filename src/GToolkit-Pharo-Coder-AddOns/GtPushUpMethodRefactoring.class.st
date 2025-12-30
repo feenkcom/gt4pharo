@@ -62,7 +62,12 @@ GtPushUpMethodRefactoring >> initialize [
 	instVarsToPushUp := Set new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtPushUpMethodRefactoring >> methodClassName [
+	^ class ifNil: [ classObject asString ] ifNotNil: [ class name ]
+]
+
+{ #category : #transforming }
 GtPushUpMethodRefactoring >> prepareForExecution [
 	class := self classObjectFor: classObject.
 	targetSuperclass := self classObjectFor: targetSuperclassObject.
