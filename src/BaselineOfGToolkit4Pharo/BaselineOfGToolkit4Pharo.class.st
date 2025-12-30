@@ -53,7 +53,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 		spec package: 'GToolkit-Pharo-Metamodels' with: [
 			spec requires: #(#Futures #'GToolkit-Pharo-GtRefactorings' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Coder-Method' with: [
-			spec requires: #(#GToolkitCoder #GToolkitCompleter #GToolkitExamplesEngine #'GToolkit-Pharo-Completer' #'GToolkit-Pharo-Metamodels' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-SearchFilters' #'GToolkit-Pharo-System' #'GToolkit-Pharo-TestSuite') ].
+			spec requires: #(#GToolkitCoder #GToolkitCompleter #GToolkitExamplesEngine #'GToolkit-Pharo-GtRefactorings' #'GToolkit-Pharo-Completer' #'GToolkit-Pharo-Metamodels' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-SearchFilters' #'GToolkit-Pharo-System' #'GToolkit-Pharo-TestSuite') ].
 		spec package: 'GToolkit-Pharo-Coder' with: [
 			spec requires: #(#GToolkitCoder #GToolkit4Magritte #GToolkitCompleter #'GToolkit-Pharo-Coder-Method' #'GToolkit-Pharo-Metamodels' #'GToolkit-Pharo-Parser' #'GToolkit-Pharo-SearchFilters' #'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-Extensions' with: [
