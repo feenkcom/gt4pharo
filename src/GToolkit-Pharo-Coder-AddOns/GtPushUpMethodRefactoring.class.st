@@ -56,6 +56,11 @@ GtPushUpMethodRefactoring >> checkSuperSendsFromSiblings [
 												with: impl) ] ] ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtPushUpMethodRefactoring >> gtDescription [
+	^ 'Push up method ' , (class ifNil: [ classObject ] ifNotNil: [class name ]) , '>>' , selectors anyOne
+]
+
 { #category : #initialization }
 GtPushUpMethodRefactoring >> initialize [
 	super initialize.
