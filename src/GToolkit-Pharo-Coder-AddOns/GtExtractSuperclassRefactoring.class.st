@@ -82,7 +82,7 @@ GtExtractSuperclassRefactoring >> createSubclassResponsibilityMethods: aClass [
 													receiver: (RBVariableNode named: 'self')
 													selector: #subclassResponsibility)}).
 					self
-						performCompositeRefactoring: (RBAddMethodRefactoring
+						performCompositeRefactoring: (GtRBAddMethodRefactoring
 								model: self model
 								addMethod: ast formattedCode
 								toClass: aClass

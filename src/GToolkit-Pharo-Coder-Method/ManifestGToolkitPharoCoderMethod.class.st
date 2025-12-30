@@ -34,6 +34,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'GToolkit-Completer'.
 		'GToolkit-Examples'.
 		'GToolkit-Inspector'.
+		'GToolkit-Pharo-GtRefactorings'.
 		'GToolkit-Pharo-Metamodels'.
 		'GToolkit-Pharo-Parser'.
 		'GToolkit-Pharo-SearchFilters'.

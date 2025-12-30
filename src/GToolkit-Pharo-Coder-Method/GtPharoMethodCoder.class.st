@@ -62,7 +62,7 @@ GtPharoMethodCoder class >> priority [
 { #category : #'api - refactorings' }
 GtPharoMethodCoder >> addClassVariable: aString [
 	| refactoring |
-	refactoring := RBAddClassVariableRefactoring
+	refactoring := GtRBAddClassVariableRefactoring
 		variable: aString
 		class: self behavior instanceSide.
 	GtPharoCodeModifier critical: [ refactoring execute ].
@@ -74,7 +74,7 @@ GtPharoMethodCoder >> addClassVariable: aString [
 { #category : #'api - refactorings' }
 GtPharoMethodCoder >> addInstanceVariable: aString [
 	| refactoring |
-	refactoring := RBAddInstanceVariableRefactoring
+	refactoring := GtRBAddInstanceVariableRefactoring
 		variable: aString
 		class: self behavior.
 	GtPharoCodeModifier critical: [ refactoring execute ].
