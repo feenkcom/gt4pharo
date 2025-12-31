@@ -2,13 +2,13 @@ Extension { #name : #RBAddClassChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
 RBAddClassChange >> gtDiffChange [
-	| aClass oldSource newSource |
+	| aClass oldSource newSource namespace |
 	aClass := self changeClass.
 
 	oldSource := aClass
 			ifNil: [ '' ]
-			ifNotNil: [ (RBClass existingNamed: aClass name)
-					model: RBNamespace new;
+			ifNotNil: [ namespace := GtRBNamespace new.
+				(namespace classNamed: aClass name)
 					gtRemoveSlotsFromTraits;
 					gtDefinitionString ].
 	newSource := self definition.

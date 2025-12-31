@@ -20,19 +20,17 @@ RBClass >> gtDefinitionString [
 	^ String
 		streamContents: [ :definitionStream | 
 			definitionStream
-				nextPutAll: self superclass printString;
+				nextPutAll: self superclass name;
 				nextPutAll: ' subclass: #';
 				nextPutAll: self name.
 			self traitExpression
 				ifNotNil: [ :exp | 
 					definitionStream
-						nextPutAll:
-							'
+						nextPutAll: '
 	uses: ';
 						nextPutAll: exp ].
 			definitionStream
-				nextPutAll:
-					'
+				nextPutAll: '
 	instanceVariableNames: '''.
 			self instanceVariableNames
 				do: [ :each | 
@@ -40,8 +38,7 @@ RBClass >> gtDefinitionString [
 						nextPutAll: each;
 						nextPut: $  ].
 			definitionStream
-				nextPutAll:
-					'''
+				nextPutAll: '''
 	classVariableNames: '''.
 			self classVariableNames
 				do: [ :each | 
@@ -49,8 +46,7 @@ RBClass >> gtDefinitionString [
 						nextPutAll: each;
 						nextPut: $  ].
 			definitionStream
-				nextPutAll:
-					'''
+				nextPutAll: '''
 	poolDictionaries: '''.
 			self sharedPoolNames
 				do: [ :each | 
@@ -58,8 +54,7 @@ RBClass >> gtDefinitionString [
 						nextPutAll: each;
 						nextPut: $  ].
 			definitionStream
-				nextPutAll:
-					'''
+				nextPutAll: '''
 	category: #'''.
 			definitionStream nextPutAll: self category asString.
 			definitionStream nextPut: $' ]
