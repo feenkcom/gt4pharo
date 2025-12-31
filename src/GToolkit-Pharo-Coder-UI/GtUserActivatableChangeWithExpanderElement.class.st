@@ -75,15 +75,15 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 		aptitude: BrGlamorousLabelAptitude;
 		padding: (BlInsets left: 5 right: 5);
 		hMatchParent;
-		vFitContent;
-		beSmallSize.
+		vFitContent";
+		beSmallSize".
 
 	header addChildren: { 
 		description
 	}.
 
 	checkbox := BrCheckbox new
-		beSmallSize;
+		"beSmallSize;"
 		aptitude: BrGlamorousCheckboxAptitude new;
 		margin: (BlInsets top: 6);
 		whenCheckedDo: [ activatableChange isEnabled: true ];
