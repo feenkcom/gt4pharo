@@ -452,7 +452,7 @@ GtBehaviorUpdateForm >> pushUpClassSlotRefactoringFor: varName [
 	aModel := self createRefactoringModel.
 	aClass := (self modelClassFrom: aModel) classSide.
 
-	^ RBPullUpInstanceVariableRefactoring
+	^ GtRBPullUpInstanceVariableRefactoring
 		model: aModel
 		variable: varName
 		class: aClass superclass
@@ -476,7 +476,7 @@ GtBehaviorUpdateForm >> pushUpSlotRefactoringFor: varName [
 	aModel := self createRefactoringModel.
 	aClass := self modelClassFrom: aModel.
 
-	^ RBPullUpInstanceVariableRefactoring
+	^ GtRBPullUpInstanceVariableRefactoring
 		model: aModel
 		variable: varName
 		class: aClass superclass

@@ -22,7 +22,7 @@ GtPullUpVariableAdviceAction >> defaultTitle [
 
 { #category : #executing }
 GtPullUpVariableAdviceAction >> executeOn: anElement [
-	(RBPullUpInstanceVariableRefactoring variable: variable class: behavior)
+	(GtRBPullUpInstanceVariableRefactoring variable: variable class: behavior)
 		execute
 ]
 

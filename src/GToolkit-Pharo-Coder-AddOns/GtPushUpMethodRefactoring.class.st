@@ -100,7 +100,7 @@ GtPushUpMethodRefactoring >> pushUpVariables [
 	instVarsToPushUp
 		do: [ :each | 
 			self
-				performCompositeRefactoring: (RBPullUpInstanceVariableRefactoring
+				performCompositeRefactoring: (GtRBPullUpInstanceVariableRefactoring
 						model: self model
 						variable: each
 						class: class superclass) ]

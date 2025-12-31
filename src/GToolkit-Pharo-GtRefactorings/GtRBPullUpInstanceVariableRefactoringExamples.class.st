@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBPullUpInstanceVariableRefactoringExamples,
-	#superclass : #GtRBPullUpInstanceVariableRefactoring,
+	#superclass : #Object,
 	#category : #'GToolkit-Pharo-GtRefactorings-Examples'
 }
 

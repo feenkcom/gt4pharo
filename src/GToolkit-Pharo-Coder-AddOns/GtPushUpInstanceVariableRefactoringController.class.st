@@ -11,7 +11,7 @@ GtPushUpInstanceVariableRefactoringController >> refactoring [
 	aModel := self createRefactoringModel.
 	aClass := aModel classFor: sourceCoderViewModel behavior.
 
-	^ RBPullUpInstanceVariableRefactoring 
+	^ GtRBPullUpInstanceVariableRefactoring 
 		model: aModel
 		variable: self variableName
 		class: (aClass whoDefinesInstanceVariable: self variableName) superclass
