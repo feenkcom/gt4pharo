@@ -14,6 +14,11 @@ GtRBAddInstanceVariableRefactoring >> prepareForExecution [
 ]
 
 { #category : #initialization }
+GtRBAddInstanceVariableRefactoring >> refactoredClassName [
+	^ classObject isString ifTrue: [ classObject ] ifFalse: [ classObject name ]
+]
+
+{ #category : #initialization }
 GtRBAddInstanceVariableRefactoring >> variable: aVarName class: aClassName [
 	classObject := aClassName.
 	variableName := aVarName

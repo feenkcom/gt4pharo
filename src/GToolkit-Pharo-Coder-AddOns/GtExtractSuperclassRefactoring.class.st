@@ -115,7 +115,7 @@ GtExtractSuperclassRefactoring >> pullUpCommonInstanceVariables: aClass [
 		doWithOccurrences: [ :each :count | 
 			count = subclasses size
 				ifTrue: [ self
-						performCompositeRefactoring: (RBPullUpInstanceVariableRefactoring
+						performCompositeRefactoring: (GtRBPullUpInstanceVariableRefactoring
 								model: self model
 								variable: each
 								class: aClass) ] ]

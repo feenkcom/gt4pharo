@@ -68,7 +68,7 @@ RBAddClassRefactoring >> basicTransform [
 
 { #category : #accessing }
 RBAddClassRefactoring >> gtDescription [
-	^ 'Add class'
+	^ 'Add class ' , className
 ]
 
 { #category : #preconditions }
