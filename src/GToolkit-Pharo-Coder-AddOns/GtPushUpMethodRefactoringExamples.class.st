@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtPushUpMethodRefactoringExamples >> pushUpDescriptionString [
+	<gtExample>
+	| namespace refactorings |
+	namespace := GtRBNamespace new.
+	refactorings := GtPushUpMethodRefactoring
+			model: namespace
+			pullUp: #(#asdf)
+			from: #Fdsa
+			to: #Asdf.
+	self assert: refactorings gtDescription equals: 'Push up method Fdsa>>asdf'.
+	^ namespace
+]
+
+{ #category : #'as yet unclassified' }
 GtPushUpMethodRefactoringExamples >> pushUpUsingNewClasses [
 	<gtExample>
 	| namespace refactorings |
