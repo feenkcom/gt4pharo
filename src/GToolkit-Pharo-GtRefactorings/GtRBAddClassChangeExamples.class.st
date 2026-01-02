@@ -42,7 +42,7 @@ GtRBAddClassChangeExamples >> verifyChanges [
 				assert: change instanceVariableNames asArray
 				equals: (cls localSlots collect: #name).
 			self assert: change category equals: cls category.
-			self assert: change package equals: cls package.
+			self assert: change package equals: cls package name.
 			self
 				assert: change sharedPoolNames asSortedCollection
 				equals: cls sharedPoolNames asSortedCollection.

@@ -184,7 +184,7 @@ GtRefactoringsExamples >> confirmationViewModel [
 		refactoringTitle: 'Push up';
 		targetName: aTargetName;
 		confirmationLabel: aConfirmationLabel;
-		refactoringWithConfirmation: [ RBPullUpInstanceVariableRefactoring
+		refactoringWithConfirmation: [ GtRBPullUpInstanceVariableRefactoring
 				variable: self leafClassInstVarName
 				class: self leafClass superclass ].
 

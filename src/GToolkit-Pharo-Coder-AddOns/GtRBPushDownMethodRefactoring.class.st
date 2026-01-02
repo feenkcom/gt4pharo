@@ -151,6 +151,11 @@ GtRBPushDownMethodRefactoring >> signalNotAbstractClass [
 						container} ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtRBPushDownMethodRefactoring >> superclassName [
+	^ classObject isString ifTrue: [ classObject ] ifFalse: [ classObject name ]
+]
+
 { #category : #accessing }
 GtRBPushDownMethodRefactoring >> transform [
 	self checkClassIsAbstract.
