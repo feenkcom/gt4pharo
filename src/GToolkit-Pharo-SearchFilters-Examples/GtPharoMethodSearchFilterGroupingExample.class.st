@@ -339,7 +339,7 @@ GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExam
 	filter := self filterOnDummyExamplesPackages & #gtExample gtPragmas.
 	scripter := self 
 		scripter: (self scripter
-			extent: 1000@800) 
+			extent: 1100@800) 
 		withModel: [filter] 
 		element: [ GtPagerSettings usedPager 
 			createWrappedOn: filter gtDefaultInspectorTool asElement ].

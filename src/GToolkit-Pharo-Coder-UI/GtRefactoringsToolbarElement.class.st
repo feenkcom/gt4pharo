@@ -61,7 +61,8 @@ GtRefactoringsToolbarElement >> initialize [
 	self addAptitude: (BrLayoutResizerAptitude new 
 				inherit: containerElement).
 
-	self fitContentLimited
+	self hFitContentLimited.
+	self vFitContent
 ]
 
 { #category : #initialization }

@@ -81,7 +81,7 @@ GtRefactoringsPreviewElement >> initialize [
 				hExactToMatchParent: titleElement;
 				hFitContentToFitContent: titleElement;
 				hFitContentLimitedToFitContentLimited: titleElement;
-				inherit: previewElement;
+				common: previewElement;
 				hMatchParentToMatchParent: messagesElement;
 				hExactToMatchParent: messagesElement;
 				hFitContentToFitContent: messagesElement;
