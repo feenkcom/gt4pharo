@@ -19,7 +19,8 @@ GtRBCompositeTransformation >> gtRefactoringsFor: aView [
 	^ aView columnedList
 		title: 'Refactorings';
 		items: [ refactorings ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Value' text: [ :each | each class ];
+		column: 'Value' text: [ :each | each gtDescription ]
 ]
 
 { #category : #private }
