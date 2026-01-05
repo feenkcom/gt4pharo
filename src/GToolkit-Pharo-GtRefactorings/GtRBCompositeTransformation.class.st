@@ -26,8 +26,9 @@ GtRBCompositeTransformation >> gtRefactoringsFor: aView [
 { #category : #private }
 GtRBCompositeTransformation >> performTransformation: aRefactoring [
 	| changes |
-	changes := RBCompositeRefactoryChange new.
+	changes := GtLinkedCompositeRefactoryChange new.
 	changes name: aRefactoring gtDescription.
+	changes transformation: aRefactoring.
 	model performChange: changes around: [ aRefactoring primitiveExecute ]
 ]
 
