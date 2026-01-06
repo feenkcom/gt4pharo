@@ -18,7 +18,7 @@ Class {
 	#instVars : [
 		'refactorings'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Refactorings'
 }
 
 { #category : #transforming }

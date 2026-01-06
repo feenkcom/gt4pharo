@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'transformation'
 	],
-	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
+	#category : #'GToolkit-Pharo-GtRefactorings-Changes'
 }
 
 { #category : #'as yet unclassified' }

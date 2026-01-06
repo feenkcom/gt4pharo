@@ -35,7 +35,7 @@ Class {
 	#instVars : [
 		'hasPermutedArguments'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Refactorings'
 }
 
 { #category : #'instance creation' }
