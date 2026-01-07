@@ -29,7 +29,8 @@ GtRBCompositeTransformation >> performTransformation: aRefactoring [
 	changes := GtLinkedCompositeRefactoryChange new.
 	changes name: aRefactoring gtDescription.
 	changes transformation: aRefactoring.
-	model performChange: changes around: [ aRefactoring primitiveExecute ]
+	model performChange: changes around: [ aRefactoring primitiveExecute ].
+	changes gtAllChanges do: [ :each | each transformation: aRefactoring ]
 ]
 
 { #category : #preconditions }
