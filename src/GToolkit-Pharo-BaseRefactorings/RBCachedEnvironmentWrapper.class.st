@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'packages'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Environment'
 }
 
 { #category : #accessing }

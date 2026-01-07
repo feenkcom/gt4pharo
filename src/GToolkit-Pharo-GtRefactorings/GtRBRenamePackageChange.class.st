@@ -25,6 +25,11 @@ GtRBRenamePackageChange >> changeString [
 ]
 
 { #category : #accessing }
+GtRBRenamePackageChange >> gtChangeIcon [
+	^ Smalltalk ui icons iconNamed: #changeUpdate
+]
+
+{ #category : #accessing }
 GtRBRenamePackageChange >> newPackageName [
 	^ newPackageName
 ]
