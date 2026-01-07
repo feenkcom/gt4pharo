@@ -1324,6 +1324,15 @@ GtPharoMethodCoder >> highlighterFor: anAST into: coderAddOns viewModel: aGtPhar
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> initializeAddOns: addOns [
+
+	(self compiledMethod isNotNil and:
+	[ self compiledMethod isBigMethod ]) ifTrue:
+		[ ^ self ].
+	^ super initializeAddOns: addOns
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
 	super initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel.
 

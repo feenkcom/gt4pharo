@@ -27,6 +27,11 @@ RBRefactoryChange >> attributes [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtAllChangesDo: aBlock [
+	aBlock value: self
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtBasicChanges [
 	| changes |
 	changes := OrderedCollection new.

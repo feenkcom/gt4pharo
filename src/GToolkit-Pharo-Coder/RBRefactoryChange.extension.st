@@ -26,18 +26,19 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock threshold: aThreshold 
 					shouldSignalBulkChanges
 						ifTrue: [ SystemAnnouncer uniqueInstance
 								announce: (GtAboutToPerformBulkChangesAnnouncement new changes: self) ].
-					[ undoChange := self
+					[ | now |
+					now := DateAndTime now.
+					undoChange := self
 							executeNotifying: [ current := current + 1 min: totalCount.
 								job currentValue: current.
-								aBlock cull: current / totalCount ] ]
+								aBlock cull: current / totalCount ].
+					self gtAllChangesDo: [ :each | each attributeNamed: #timestamp put: now ] ]
 						ensure: [ shouldSignalBulkChanges
 								ifTrue: [ SystemAnnouncer uniqueInstance
 										announce: (GtFinishedBulkChangesAnnouncement new changes: self) ] ].
 					GtRefactoryChangeManager instance addUndo: undoChange ]
 						on: SyntaxErrorNotification
-						do: [ :ex | 
-							  "This error handler is only for P11, and can be removed for P12 and later"
-							  self error: ex messageText ] ] ])
+						do: [ :ex "This error handler is only for P11, and can be removed for P12 and later" | self error: ex messageText ] ] ])
 		announcer: Announcer new
 ]
 

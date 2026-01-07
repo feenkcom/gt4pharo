@@ -2534,6 +2534,20 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments 
 	^ aScripter
 ]
 
+{ #category : #'examples - big method' }
+GtPharoMethodCoderByScripterExamples >> exampleBigMethod [
+	<gtExample>
+	| method coder scripter |
+
+	method := GtBigMethodTestClass >> #reduceTable.
+	self assert: method isBigMethod
+		description: 'Test method is no longer big'.
+	coder := self coderOnMethod: method.
+	scripter := self scripterForBlock: [ coder asCoderViewModel ].
+	coder sourceCode.
+	^ scripter
+]
+
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethod [
 	<gtExample>
