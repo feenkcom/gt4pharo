@@ -50,6 +50,34 @@ RBRefactoryChange >> gtChangeIcon [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtClassFilter [
+	<gtRefactoryChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :stream :className | stream filter: [ :each | each gtIsForClassNamed: className ] ];
+		named: 'In class';
+		order: 15;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: Smalltalk classNames ] ];
+		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtIsForClassNamed: aSymbol [
+	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtUnfilteredFilter [
+	<gtRefactoryChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | aStream ];
+		named: 'All changes';
+		order: 0;
+		valueNotRequired;
+		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> isBasicChange [
 	^ true
 ]

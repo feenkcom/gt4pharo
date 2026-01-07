@@ -3,7 +3,7 @@ Class {
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'changes',
-		'basicChanges'
+		'filteredChanges'
 	],
 	#category : #'GToolkit-Pharo-GtRefactorings-Changes-View'
 }
@@ -28,7 +28,7 @@ GtRefactoryChangeElement >> applyChanges: aCollection [
 				name: (aCollection size = 1
 						ifTrue: [ aCollection first name ]
 						ifFalse: [ changes name ]).
-			basicChanges
+			changes gtBasicChanges
 				do: [ :each | (aCollection identityIncludes: each) ifTrue: [ composite addChange: each ] ] ].
 	composite changesSize > 1 ifTrue: [ progress visibility: BlVisibility visible ].
 	progress fraction: 0.
@@ -49,14 +49,15 @@ GtRefactoryChangeElement >> changes [
 { #category : #accessing }
 GtRefactoryChangeElement >> changes: compositeChanges [
 	changes := compositeChanges.
-	basicChanges := compositeChanges gtBasicChanges.
-	self updateChangesList
+	self updateFilters
 ]
 
 { #category : #initialization }
 GtRefactoryChangeElement >> initialize [
 	super initialize.
+	changes := RBCompositeRefactoryChange new.
 	self matchParent.
+	self initializeFilter.
 	self initializeList.
 	self initializeApplyBar
 ]
@@ -87,7 +88,8 @@ GtRefactoryChangeElement >> initializeApplyBar [
 					left: 10
 					bottom: 10
 					right: 0);
-			action: [ self applyChanges: {changes} ];
+			action: [ filteredChanges asyncSimilarCopy toArray await
+					then: [ :col | self applyChanges: col ] ];
 			yourself.
 	self
 		addChild: (BrHorizontalPane new
@@ -95,6 +97,20 @@ GtRefactoryChangeElement >> initializeApplyBar [
 				hMatchParent;
 				addChild: applyButton as: #applyButton;
 				addChild: progress as: #progress)
+]
+
+{ #category : #initialization }
+GtRefactoryChangeElement >> initializeFilter [
+	| filters |
+	filters := GtFiltersElement new.
+	filters
+		margin: (BlInsets
+				top: 5
+				left: 10
+				bottom: 0
+				right: 10).
+	filters when: GtFiltersChangedEvent do: [ :event | self updateFilteredChanges ].
+	self addChild: filters as: #filters
 ]
 
 { #category : #initialization }
@@ -142,14 +158,23 @@ GtRefactoryChangeElement >> initializeList [
 							ifFound: [ :e | e userData at: #change ifAbsent: [  ] ]
 							ifNone: [  ].
 					contextMenuItems := OrderedCollection new.
-					contextMenuItems add: 'Apply' -> [ :e | self applyChanges: {change} ].
+					contextMenuItems
+						add: ('Apply' asRopedText
+								, ((' ' , change gtDescription) asRopedText
+										glamorousCodeFont;
+										foreground: Color gray;
+										glamorousCodeTinySize)) -> [ :e | self applyChanges: {change} ].
 					selectedChanges := list selectedItems.
 					(selectedChanges notEmpty
-						and: [ selectedChanges size < basicChanges size
+						and: [ selectedChanges size < changes gtBasicChanges size
 								and: [ selectedChanges size > 1 or: [ selectedChanges first ~~ change ] ] ])
 						ifTrue: [ contextMenuItems
 								add: 'Apply selected' -> [ :e | self applyChanges: selectedChanges ] ].
-					contextMenuItems add: 'Apply all' -> [ :e | self applyChanges: {changes} ].
+					contextMenuItems
+						add: 'Apply all'
+								-> [ :e | 
+									filteredChanges asyncSimilarCopy toArray await
+										then: [ :col | self applyChanges: col ] ].
 					BrGlamorousSimpleContextMenuContent new items: contextMenuItems ]).
 	self addChild: list as: #changes.
 	list addAptitude: (BrColumnedListHeaderAptitude new cellSpacing: 10)
@@ -157,5 +182,39 @@ GtRefactoryChangeElement >> initializeList [
 
 { #category : #accessing }
 GtRefactoryChangeElement >> updateChangesList [
-	(self childNamed: #changes) items: basicChanges
+	(self childNamed: #changes) stream: filteredChanges asyncSimilarCopy
+]
+
+{ #category : #accessing }
+GtRefactoryChangeElement >> updateFilteredChanges [
+	| items filters |
+	filters := self childNamed: #filters.
+	items := changes gtBasicChanges asAsyncStream.
+	filters
+		filtersDo: [ :descriptor :value | items := descriptor creationBlock cull: items cull: value ].
+	filteredChanges := items.
+	self updateChangesList
+]
+
+{ #category : #accessing }
+GtRefactoryChangeElement >> updateFilters [
+	| filters classes filterDescriptors |
+	filters := self childNamed: #filters.
+	filterDescriptors := OrderedCollection new.
+	classes := Set new.
+	changes
+		gtAllChangesDo: [ :each | 
+			classes
+				addAll: each class withAllSuperclasses;
+				addAll: each class class withAllSuperclasses ].
+	(Pragma allNamed: #gtRefactoryChangeFilter)
+		do: [ :each | 
+			(each method gtIsActive
+				and: [ each method numArgs = 0 and: [ classes includes: each methodClass ] ])
+				ifTrue: [ filterDescriptors
+						add: (each method methodClass isInstanceSide
+								ifTrue: [ each methodClass basicNew perform: each methodSelector ]
+								ifFalse: [ each methodClass soleInstance perform: each methodSelector ]) ] ].
+	filters descriptors: filterDescriptors.
+	self updateFilteredChanges
 ]
