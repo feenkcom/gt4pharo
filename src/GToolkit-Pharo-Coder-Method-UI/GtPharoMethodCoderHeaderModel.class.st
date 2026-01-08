@@ -125,15 +125,20 @@ GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 { #category : #'actions - spawning' }
 GtPharoMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel from: anElement [
 	"Spawn a behavior that implements a method. Display also the given method."
-	
+
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
-			anElement phlow spawnTool: (GtMethodCoderTool compiledMethod: aMethod) ]
-		ifUnknown: [
-			aCoderViewModel coderModel methodBehavior
-				realBehaviorDo: [ :aBehavior |
-					anElement phlow spawnTool: (GtClassCoderTool forClass: aBehavior) ] 
-				ifAbsent: [ "do nothing" ] ]
+			anElement phlow
+				spawnTool: (GtMethodCoderTool
+						compiledMethod: aMethod
+						selfObjectHolder: aCoderViewModel selfObjectHolder) ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aBehavior | 
+					anElement phlow
+						spawnTool: (GtClassCoderTool
+								forClass: aBehavior
+								selfObjectHolder: aCoderViewModel selfObjectHolder) ]
+				ifAbsent: [  "do nothing" ] ]
 ]
 
 { #category : #'actions - spawning' }
@@ -153,23 +158,25 @@ GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from:
 	"Spawn a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
 
 	| aProviderBehavior |
-	
-	aProviderBehavior := aCoderViewModel 
-		ifSelfObject: [ :aSelfObject |
-			aSelfObject class instanceSide ]
-		ifNone: [ aCoderViewModel explicitProviderClass 
-			ifNil: [ aCoderViewModel behavior ] ].
-	
+	aProviderBehavior := aCoderViewModel
+			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
+			ifNone: [ aCoderViewModel explicitProviderClass ifNil: [ aCoderViewModel behavior ] ].
+
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
 			aMethodBehavior = aProviderBehavior
 				ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
-				ifFalse: [ anElement phlow spawnTool: (GtClassCoderTool forClass: aProviderBehavior) ] ]
-		ifUnknown: [
-			aCoderViewModel coderModel methodBehavior
-				realBehaviorDo: [ :aMethodBehavior |
+				ifFalse: [ anElement phlow
+						spawnTool: (GtClassCoderTool
+								forClass: aProviderBehavior
+								selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aMethodBehavior | 
 					aMethodBehavior = aProviderBehavior
 						ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
-						ifFalse: [ anElement phlow spawnTool: (GtClassCoderTool forClass: aProviderBehavior) ] ] 
-				ifAbsent: [ "do nothing" ] ]
+						ifFalse: [ anElement phlow
+								spawnTool: (GtClassCoderTool
+										forClass: aProviderBehavior
+										selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
+				ifAbsent: [  "do nothing" ] ]
 ]

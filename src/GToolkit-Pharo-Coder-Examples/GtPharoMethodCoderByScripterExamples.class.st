@@ -9098,9 +9098,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFiveObjectSum21Ref
 								AssertionFailure signal: 'Real method behavior must exist' ] ];
 					coderViewModelDo: [ :aCoder | 
 						| someBehaviors |
-						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						someBehaviors := aCoder availableCompilationBehaviorSources toArray wait.
 						self assert: someBehaviors size equals: 1.
-						self assert: someBehaviors first equals: GtPharoDummyTwoObject class ] ];
+						self assert: someBehaviors first behavior equals: GtPharoDummyTwoObject class ] ];
 		play.
 
 	^ aScripter
@@ -9499,10 +9499,10 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodCal
 								AssertionFailure signal: 'Real method behavior must exist' ] ];
 					coderViewModelDo: [ :aCoder | 
 						| someBehaviors |
-						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						someBehaviors := aCoder availableCompilationBehaviorSources toArray wait.
 						self assert: someBehaviors size equals: 2.
-						self assert: someBehaviors first equals: GtPharoDummyTwoObject.
-						self assert: someBehaviors second equals: GtPharoDummyOneObject ] ];
+						self assert: someBehaviors first behavior equals: GtPharoDummyTwoObject.
+						self assert: someBehaviors second behavior equals: GtPharoDummyOneObject ] ];
 		play.
 
 	^ aScripter
@@ -9549,9 +9549,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodNum
 								AssertionFailure signal: 'Real method behavior must exist' ] ];
 					coderViewModelDo: [ :aCoder | 
 						| someBehaviors |
-						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						someBehaviors := aCoder availableCompilationBehaviorSources toArray wait.
 						self assert: someBehaviors size equals: 1.
-						self assert: someBehaviors first equals: GtPharoDummyOneObject ] ];
+						self assert: someBehaviors first behavior equals: GtPharoDummyOneObject ] ];
 		play.
 
 	^ aScripter

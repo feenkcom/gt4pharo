@@ -12,7 +12,7 @@ Class {
 { #category : #initialization }
 GtPharoMethodCoderSaveButton >> initialize [
 	super initialize.
-	
+
 	self
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		icon: BrGlamorousVectorIcons accept;
@@ -20,58 +20,72 @@ GtPharoMethodCoderSaveButton >> initialize [
 		label: 'Save';
 		beTinySize;
 		action: [ self pharoMethodCoderViewModel requestSave ].
-		
-	self addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
-		withVisibleWidgetBoundsRelocator;
-		withContainerPermanentVisibilityUpdater;
-		handle: [ BlElement new size: self extent ]
-		content: [ self newSaveDestinationPickerElement ]) doNotShowOnClick.
-	
+
+	self
+		addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
+				withoutMouseEventHandler;
+				withVisibleWidgetBoundsRelocator;
+				withContainerPermanentVisibilityUpdater;
+				handle: [ BlElement new size: self extent ]
+					content: [ self newSaveDestinationPickerElement ]).
+
 	dropdownIndicatorFuture := (BrAsyncElementFuture on: self)
-		whenError: [ :theElement :anError | NonInteractiveTranscript stdout 
-			show: '[GtPharoMethodCoderSaveButton>>#initialize] ';
-			show: anError; 
-			cr ];
-		whenSuccess: [ :theElement :aCount | 
-			theElement
-				aptitudeDo: [ :anAptitude | 
-					aCount > 1
-						ifTrue: [ (anAptitude hasActorOfKind: BrGlamorousButtonIconDropdownAptitude)
-								ifFalse: [ anAptitude + BrGlamorousButtonIconDropdownAptitude ] ]
-						ifFalse: [ anAptitude - BrGlamorousButtonIconDropdownAptitude ] ] ]
+			whenError: [ :theElement :anError | 
+				NonInteractiveTranscript stdout
+					show: '[GtPharoMethodCoderSaveButton>>#initialize] ';
+					show: anError;
+					cr ];
+			whenSuccess: [ :theElement :someCompilationMethodIndicators | 
+				theElement
+					aptitudeDo: [ :anAptitude | 
+						| aCount isMustDisplay |
+						aCount := someCompilationMethodIndicators isCollection
+								ifTrue: [ someCompilationMethodIndicators size ]
+								ifFalse: [ someCompilationMethodIndicators ].
+						isMustDisplay := someCompilationMethodIndicators isCollection
+								ifTrue: [ someCompilationMethodIndicators allSatisfy: #isChangeIndicationRequired ]
+								ifFalse: [ false ].
+
+						(aCount > 1 or: [ isMustDisplay ])
+							ifTrue: [ (anAptitude hasActorOfKind: BrGlamorousButtonIconDropdownAptitude)
+									ifFalse: [ anAptitude + BrGlamorousButtonIconDropdownAptitude ] ]
+							ifFalse: [ anAptitude - BrGlamorousButtonIconDropdownAptitude ] ] ]
 ]
 
 { #category : #'private - instance creation' }
 GtPharoMethodCoderSaveButton >> newSaveDestinationPickerElement [
+
+	true ifTrue: [ ^ GtPharoMethodSaveConfirmationElement new 
+		pharoMethodCoderViewModel: self pharoMethodCoderViewModel ].
+
 	^ BrVerticalPane new
 		fitContent;
-		padding: (BlInsets top: 5 left: 10 bottom: 5 right: 10);
+		padding: (BlInsets
+				top: 5
+				left: 10
+				bottom: 5
+				right: 10);
 		cellSpacing: 5;
 		addChild: (BrLabel new
-			aptitude: BrGlamorousLabelAptitude new;
-			padding: (BlInsets left: 7);
-			text: 'Where should it be saved?');
+				aptitude: BrGlamorousLabelAptitude new;
+				padding: (BlInsets left: 7);
+				text: 'Where should it be saved?');
 		addChild: (BrSimpleList new
-			fitContent;
-			itemStencil: [
-				BrButton new
-					hMatchParent;
-					alignCenterLeft;
-					aptitude: (BrGlamorousButtonFlatExteriorAptitude + (BrGlamorousLabelAptitude new glamorousCodeFont) + BrGlamorousButtonRectangularAptitude);
-					action: [ :aButton |
-						pharoMethodCoderViewModel saveIn: aButton model.
-						self dispatchEvent: BrDropdownHideWish new ] ];
-			itemDataBinder: [ :eachLabel :eachBehavior |
-				eachLabel
-					model: eachBehavior;
-					label: eachBehavior name ];
-			stream: pharoMethodCoderViewModel availableCompilationBehaviors)
+				fitContent;
+				itemType: [ :anItemTypeFactory :anItemObject :anItemIndex | anItemObject listItemElementClass ];
+				itemStencil: [ :anElementClass :aListWidget | anElementClass new ];
+				itemDataBinder: [ :eachElement :eachMethodIndicator | 
+					eachElement
+						pharoMethodCoderViewModel: pharoMethodCoderViewModel;
+						methodModificationIndicator: eachMethodIndicator ];
+				stream: pharoMethodCoderViewModel
+						availableCompilationMethodIndicatorsWithBehaviorSources)
 ]
 
 { #category : #'api - pharo method coder view model' }
 GtPharoMethodCoderSaveButton >> onPharoMethodCoderViewModelChanged [
 	dropdownIndicatorFuture ifNotNil: [ :aFuture | 
-		aFuture future: self pharoMethodCoderViewModel availableCompilationBehaviors size ]
+		aFuture future: self pharoMethodCoderViewModel availableCompilationMethodIndicatorsWithBehaviorSources toArray ]
 ]
 
 { #category : #'private - event handling' }
@@ -83,16 +97,20 @@ GtPharoMethodCoderSaveButton >> onSaveAbilityChanged: anAnnouncement [
 GtPharoMethodCoderSaveButton >> onSaveRequested: anAnnouncement [
 	| aViewModel aSavePromise |
 	anAnnouncement consumed: true.
-	
+
 	aViewModel := pharoMethodCoderViewModel.
-	aSavePromise := (aViewModel availableCompilationBehaviors toArray map: [ :theBehaviors |
-		self enqueueTask: (BlTaskAction new action: [
-			theBehaviors size = 1
-				ifTrue: [ aViewModel saveIn: theBehaviors first ]
-				ifFalse: [
-					theBehaviors size > 1 
-						ifTrue: [ self showSaveBehaviors: theBehaviors ] ]
-		]) ]) asAsyncPromise.
+	aSavePromise := (aViewModel
+			availableCompilationMethodIndicatorsWithBehaviorSources toArray
+			map: [ :theMethodIndicators | 
+				self
+					enqueueTask: (BlTaskAction new
+							action: [ (theMethodIndicators allSatisfy: #isChangeIndicationRequired)
+									ifFalse: [ theMethodIndicators size = 1
+											ifTrue: [ aViewModel saveIn: theMethodIndicators first behavior ]
+											ifFalse: [ theMethodIndicators size > 1
+													ifTrue: [ self showSaveBehaviors: theMethodIndicators ] ] ]
+									ifTrue: [ self showSaveBehaviors: theMethodIndicators ] ]) ])
+			asAsyncPromise.
 
 	self enqueueTask: (BlPromiseTask new promise: aSavePromise)
 ]
