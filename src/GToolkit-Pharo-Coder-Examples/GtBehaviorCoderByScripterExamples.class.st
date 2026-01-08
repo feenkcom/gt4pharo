@@ -606,14 +606,15 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 	"See https://github.com/feenkcom/gtoolkit/issues/4916"
 
 	<gtExample>
-	| aScripter aBehavior aMethodOne aNewSourceCode |
+	| aScripter aBehavior aNewSourceCode |
 	aScripter := self classCoderInPagerForClassUI.
 
 	aBehavior := aScripter model behavior.
 	aNewSourceCode := 'method1{1}{2}^ self yourself'
 			format: {Character cr.
 					Character tab}.
-
+	aScripter userData at: #newSourceCode put: aNewSourceCode.
+	
 	aScripter click
 		onPagerPaneWithIndex: 1;
 		// GtPharoAddNewMethodButtonId;
@@ -624,6 +625,25 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 		typeText: aNewSourceCode;
 		clickOnSaveButton;
 		assertSaveAlreadyExistingMethodDialogIsOpen;
+		onPopover;
+		// GtPharoNewMethodCoderElement;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingMethodInNewMethodDialog_apply [
+	"See https://github.com/feenkcom/gtoolkit/issues/4916"
+
+	<gtExample>
+	| aScripter aBehavior aMethodOne aNewSourceCode |
+	aScripter := self classCoderInPagerForClassUI_defineExistingMethodInNewMethodDialog.
+
+	aBehavior := aScripter model behavior.
+	aNewSourceCode := aScripter userData at: #newSourceCode.
+
+	aScripter methodCoder
 		clickOnContinueCompilingExistingMethod;
 		assertSaveAlreadyExistingMethodDialogIsClosed;
 		onPopover;
@@ -648,7 +668,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 	"See https://github.com/feenkcom/gtoolkit/issues/4916"
 
 	<gtExample>
-	| aScripter aBehavior aMethodTwo aMethodOne aNewSourceCode aMethodTwoAgain |
+	| aScripter aBehavior aMethodTwo aNewSourceCode |
 	aScripter := self classCoderInPagerForClassUI.
 
 	aBehavior := aScripter model behavior.
@@ -656,6 +676,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 	aNewSourceCode := 'method1{1}{2}^ self yourself'
 			format: {Character cr.
 					Character tab}.
+	aScripter userData at: #newSourceCode put: aNewSourceCode.
 
 	aScripter methodsCoder
 		onPagerPaneWithIndex: 1;
@@ -674,7 +695,30 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 					assertCoderIsModified;
 					clickOnSaveButton;
 					assertCoderIsModified;
-					assertSaveAlreadyExistingMethodDialogIsOpen;
+					assertSaveAlreadyExistingMethodDialogIsOpen ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingMethodInRedefiningAnotherMethod_apply [
+	"See https://github.com/feenkcom/gtoolkit/issues/4916"
+
+	<gtExample>
+	| aScripter aBehavior aMethodTwo aMethodOne aNewSourceCode aMethodTwoAgain |
+	aScripter := self classCoderInPagerForClassUI_defineExistingMethodInRedefiningAnotherMethod.
+
+	aBehavior := aScripter model behavior.
+	aMethodTwo := aBehavior methods detect: [ :e | e selector = #method2: ].
+	aNewSourceCode := aScripter userData at: #newSourceCode.
+
+	aScripter methodsCoder
+		onPagerPaneWithIndex: 1;
+		// GtPharoStreamingMethodsCoderElement;
+		forCompiledMethod: aMethodTwo
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
 					clickOnContinueCompilingExistingMethod;
 					assertSaveAlreadyExistingMethodDialogIsClosed;
 					coderViewModelDo: [ :aViewModel | 
