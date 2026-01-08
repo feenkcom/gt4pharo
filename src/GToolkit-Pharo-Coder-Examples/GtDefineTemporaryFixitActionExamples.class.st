@@ -21,14 +21,16 @@ GtDefineTemporaryFixitActionExamples >> complexInnerScopes [
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> complexInnerScopesFixit [
 	<gtExample>
-	| tree |
-	tree := self complexInnerScopes.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 43 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 43
+			in: self complexInnerScopes.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('a' 'b').
 	self
 		assert: (tree body statements at: 2) receiver body temporaryNames asArray
 		equals: #().
-			self
+	self
 		assert: (tree body statements at: 3) receiver body temporaryNames asArray
 		equals: #().
 	^ tree
@@ -37,14 +39,16 @@ GtDefineTemporaryFixitActionExamples >> complexInnerScopesFixit [
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> complexInnerScopesFixit2 [
 	<gtExample>
-	| tree |
-	tree := self complexInnerScopes.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 24 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 24
+			in: self complexInnerScopes.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('a' 'b').
 	self
 		assert: (tree body statements at: 2) receiver body temporaryNames asArray
 		equals: #().
-			self
+	self
 		assert: (tree body statements at: 3) receiver body temporaryNames asArray
 		equals: #().
 	^ tree
@@ -69,9 +73,11 @@ GtDefineTemporaryFixitActionExamples >> complexNestedInnerScopes [
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> complexNestedInnerScopesFixit [
 	<gtExample>
-	| tree |
-	tree := self complexNestedInnerScopes.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 48 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 48
+			in: self complexNestedInnerScopes.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('a').
 	self
 		assert: (tree body statements at: 2) receiver body temporaryNames asArray
@@ -96,21 +102,25 @@ GtDefineTemporaryFixitActionExamples >> multipleTopLevel [
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> multipleTopLevelFixit [
 	<gtExample>
-	| tree |
-	tree := self multipleTopLevel.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 31 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 31
+			in: self multipleTopLevel.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('b' 'a').
-	^tree
+	^ tree
 ]
 
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> multipleTopLevelFixit2 [
 	<gtExample>
-	| tree |
-	tree := self multipleTopLevel.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 36 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 36
+			in: self multipleTopLevel.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('b' 'a').
-	^tree
+	^ tree
 ]
 
 { #category : #examples }
@@ -129,9 +139,11 @@ GtDefineTemporaryFixitActionExamples >> simpleInnerLevel [
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> simpleInnerLevelFixit [
 	<gtExample>
-	| tree |
-	tree := self simpleInnerLevel.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 24 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 24
+			in: self simpleInnerLevel.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('a').
 	self
 		assert: (tree body statements at: 2) receiver body temporaryNames asArray
@@ -153,9 +165,11 @@ GtDefineTemporaryFixitActionExamples >> simpleTopLevel [
 { #category : #examples }
 GtDefineTemporaryFixitActionExamples >> simpleTopLevelFixit [
 	<gtExample>
-	| tree |
-	tree := self simpleTopLevel.
-	GtDefineTemporaryFixItAction new addDefinitionForTempAtOffset: 6 in: tree.
+	| tree source |
+	source := GtDefineTemporaryFixItAction new
+			addDefinitionForTempAtOffset: 6
+			in: self simpleTopLevel.
+	tree := RBParser parseMethod: source.
 	self assert: tree body temporaryNames asArray equals: #('a').
-	^tree
+	^ tree
 ]
