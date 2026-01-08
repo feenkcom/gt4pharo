@@ -2,13 +2,15 @@ Extension { #name : #RBRemoveInstanceVariableChange }
 
 { #category : #'*GToolkit-Pharo-Coder' }
 RBRemoveInstanceVariableChange >> gtDiffChange [
-	| aClass aDefinition oldSource newSource |
-	aClass := self changeClass.
-	aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
-	oldSource := aDefinition asDefinitionString.
-
-	aDefinition slots removeSlotNamed: variable asSymbol.
-	newSource := aDefinition asDefinitionString.
+	| aDefinition oldSource newSource |
+	self changeClass
+		ifNotNil: [ :aClass | 
+			aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
+			oldSource := aDefinition asDefinitionString.
+			aDefinition slots removeSlotNamed: variable asSymbol.
+			newSource := aDefinition asDefinitionString ]
+		ifNil: [ oldSource := ''.
+			newSource := className , ' removeInstVarNamed: ''' , variable , '''' ].
 
 	^ GtDiffBuilder
 		computeDifferencesFrom: oldSource

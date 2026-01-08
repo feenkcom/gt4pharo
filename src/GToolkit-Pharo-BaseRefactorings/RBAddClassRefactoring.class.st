@@ -16,7 +16,7 @@ Class {
 		'superclass',
 		'subclasses'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Refactorings'
 }
 
 { #category : #'instance creation' }
@@ -64,6 +64,11 @@ RBAddClassRefactoring >> basicTransform [
 						with: className
 						with: category asString);
 				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
+]
+
+{ #category : #accessing }
+RBAddClassRefactoring >> gtDescription [
+	^ 'Add class ' , className
 ]
 
 { #category : #preconditions }

@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'classNames'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Refactorings'
 }
 
 { #category : #'error messages' }

@@ -37,6 +37,7 @@ GtPharoBigMethodCoderExamples >> checkActionsPresentForBigMethodCoder [
 
 { #category : #examples }
 GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
+	"Confirm that inspecting a big method successfully opens the RGMethodDefinition inspector"
 	<gtExample>
 	| scripter |
 	scripter := self checkActionsPresentForBigMethodCoder.
@@ -51,6 +52,8 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 			s
 				label: 'Inspect Big Method';
 				// GtMethodCoderInspectActionId ].
+	"Just confirm the existence of the inspector.
+	The contents are checked in: GtPharoMethodCoderBigMethodExamples>>#exampleBigMethod"
 	scripter
 		assertStep: [ :s | 
 			s
@@ -58,8 +61,8 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 				satisfies: [ :element | 
 					element
 						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderEditorElement ]
-						ifFound: [ :child | false ]
-						ifNone: [ true ] ] ].
+						ifFound: [ :child | true ]
+						ifNone: [ false ] ] ].
 	^ scripter
 ]
 

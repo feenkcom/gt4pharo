@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'classInstanceVariableNames'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Changes'
 }
 
 { #category : #private }

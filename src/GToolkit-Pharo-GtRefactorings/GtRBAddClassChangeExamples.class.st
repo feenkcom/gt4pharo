@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtRBAddClassChangeExamples >> slots [
 	<gtExample>
 	| change |
@@ -18,7 +18,7 @@ GtRBAddClassChangeExamples >> slots [
 	^ change
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtRBAddClassChangeExamples >> verifyChanges [
 	<gtExample>
 	(Object withAllSubclasses reject: #isClassSide)
@@ -42,7 +42,7 @@ GtRBAddClassChangeExamples >> verifyChanges [
 				assert: change instanceVariableNames asArray
 				equals: (cls localSlots collect: #name).
 			self assert: change category equals: cls category.
-			self assert: change package equals: cls package.
+			self assert: change package equals: cls package name.
 			self
 				assert: change sharedPoolNames asSortedCollection
 				equals: cls sharedPoolNames asSortedCollection.

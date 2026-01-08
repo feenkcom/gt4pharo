@@ -31,7 +31,7 @@ Class {
 	#instVars : [
 		'defaultValue'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Refactorings'
 }
 
 { #category : #'instance creation' }

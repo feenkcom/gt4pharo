@@ -40,7 +40,8 @@ GtChangesElement >> changes: aRefactoryChange [
 	changes := aRefactoryChange.
 	changesTree
 		items: {GtUserActivatableChange fromChange: changes}
-		lazy: [ :each | each changes ]
+		lazy: [ :each | each changes ];
+		expandOneLevel
 ]
 
 { #category : #accessing }

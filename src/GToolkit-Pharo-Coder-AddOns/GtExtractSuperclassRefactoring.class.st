@@ -48,7 +48,7 @@ GtExtractSuperclassRefactoring >> category: anObject [
 { #category : #accessing }
 GtExtractSuperclassRefactoring >> createNewClass [
 	self
-		performCompositeRefactoring: (RBAddClassRefactoring
+		performCompositeRefactoring: (GtRBAddClassWithVarsRefactoring
 				model: self model
 				addClass: className
 				superclass: superclass
@@ -82,7 +82,7 @@ GtExtractSuperclassRefactoring >> createSubclassResponsibilityMethods: aClass [
 													receiver: (RBVariableNode named: 'self')
 													selector: #subclassResponsibility)}).
 					self
-						performCompositeRefactoring: (RBAddMethodRefactoring
+						performCompositeRefactoring: (GtRBAddMethodRefactoring
 								model: self model
 								addMethod: ast formattedCode
 								toClass: aClass
@@ -115,7 +115,7 @@ GtExtractSuperclassRefactoring >> pullUpCommonInstanceVariables: aClass [
 		doWithOccurrences: [ :each :count | 
 			count = subclasses size
 				ifTrue: [ self
-						performCompositeRefactoring: (RBPullUpInstanceVariableRefactoring
+						performCompositeRefactoring: (GtRBPullUpInstanceVariableRefactoring
 								model: self model
 								variable: each
 								class: aClass) ] ]

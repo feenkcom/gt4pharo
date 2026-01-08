@@ -1,6 +1,10 @@
 Class {
 	#name : #GtRBPushDownMethodRefactoring,
 	#superclass : #RBPushDownMethodRefactoring,
+	#instVars : [
+		'classObject',
+		'subclassObjects'
+	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
@@ -25,9 +29,29 @@ GtRBPushDownMethodRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
+GtRBPushDownMethodRefactoring >> prepareForExecution [
+	class := self classObjectFor: classObject.
+	subclassObjects ifNotNil: [ self classes: subclassObjects ].
+	super prepareForExecution
+]
+
+{ #category : #transforming }
 GtRBPushDownMethodRefactoring >> privateTransform [
 	self checkClassIsAbstract.
 	super privateTransform
+]
+
+{ #category : #initialization }
+GtRBPushDownMethodRefactoring >> pushDown: selectorCollection from: aClassName [
+	classObject := aClassName.
+	selectors := selectorCollection
+]
+
+{ #category : #initialization }
+GtRBPushDownMethodRefactoring >> pushDown: selectorCollection from: aClass in: aCollection [
+	classObject := aClass.
+	selectors := selectorCollection.
+	subclassObjects := aCollection
 ]
 
 { #category : #transforming }
@@ -125,6 +149,11 @@ GtRBPushDownMethodRefactoring >> signalNotAbstractClass [
 			vertPane
 				addChildren: {label.
 						container} ]
+]
+
+{ #category : #'as yet unclassified' }
+GtRBPushDownMethodRefactoring >> superclassName [
+	^ classObject isString ifTrue: [ classObject ] ifFalse: [ classObject name ]
 ]
 
 { #category : #accessing }

@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'category'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Changes'
 }
 
 { #category : #'instance creation' }

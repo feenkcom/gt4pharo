@@ -68,6 +68,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkitCoder'
 					'GToolkitCompleter'
 					'GToolkitExamplesEngine'
+					'GToolkit-Pharo-GtRefactorings'
 					'GToolkit-Pharo-Completer'
 					'GToolkit-Pharo-Metamodels'
 					'GToolkit-Pharo-Parser'

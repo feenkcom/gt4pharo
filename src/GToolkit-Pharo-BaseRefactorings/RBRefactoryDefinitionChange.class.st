@@ -13,7 +13,7 @@ Class {
 		'definition',
 		'definedClass'
 	],
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Changes'
 }
 
 { #category : #'instance creation' }

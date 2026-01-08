@@ -170,12 +170,13 @@ GtRBAddClassChange >> package [
 	"Pharo 12"
 
 	^ self packageName
-		ifNotNil: [ :packageName | self packageOrganizer packageNamed: packageName ]
 ]
 
 { #category : #accessing }
 GtRBAddClassChange >> packageName [
-	^ (properties at: #category ifPresent: [ :cat | self packageNameFor: cat ])
+	^ (properties
+		at: #category
+		ifPresent: [ :cat | (self packageNameFor: cat) ifNil: [ cat ] ])
 		ifNotNil: [ :packageName | packageName asSymbol ]
 ]
 
@@ -225,9 +226,7 @@ GtRBAddClassChange >> superclassName [
 GtRBAddClassChange >> tag [
 	"Pharo 12"
 
-	^ self package
-		ifNil: [  ]
-		ifNotNil: [ :package | self packageTagName ifNotNil: [ :tag | package tagNamed: tag ifAbsent: [  ] ] ]
+	^ self packageTagName
 ]
 
 { #category : #private }

@@ -2,7 +2,9 @@ Class {
 	#name : #GtPushUpMethodRefactoring,
 	#superclass : #RBPullUpMethodRefactoring,
 	#instVars : [
-		'instVarsToPushUp'
+		'instVarsToPushUp',
+		'classObject',
+		'targetSuperclassObject'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
@@ -31,7 +33,7 @@ GtPushUpMethodRefactoring >> checkInstVarsFor: aSelector [
 
 { #category : #preconditions }
 GtPushUpMethodRefactoring >> checkSuperSendsFromSiblings [
-	| selectorsWithSuperImplementations definer |
+	| selectorsWithSuperImplementations |
 	targetSuperclass subclasses size <= 1 ifTrue: [ ^ self ].
 	selectorsWithSuperImplementations := selectors
 			select: [ :each | class superclass definesMethod: each ].
@@ -43,19 +45,38 @@ GtPushUpMethodRefactoring >> checkSuperSendsFromSiblings [
 				do: [ :method | 
 					((method methodClass includesClass: class) not
 						and: [ (method methodClass includesClass: class superclass)
-								and: [ class superclass
-										includesClass: (definer := method methodClass superclass whoDefinesMethod: impl) ] ])
+								and: [ (class superclass
+										includesClass: (method methodClass superclass whoDefinesMethod: impl))
+										and: [ (method ast equalTo: (class methodFor: impl) ast exceptForVariables: #()) not ] ] ])
 						ifTrue: [ (method ast superMessages includes: impl)
-								ifTrue: [ self
-										refactoringError: ('Cannot push up <1s> since it would override the method defined in <2p>'
-												expandMacrosWith: impl
-												with: definer) ] ] ] ]
+								ifTrue: [ GtRefactoringNotification
+										signal: ('<1s>>><2s> senders super <3s> which will call a different implementation than it is currently calling.'
+												expandMacrosWith: method methodClass name
+												with: method selector
+												with: impl) ] ] ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtPushUpMethodRefactoring >> gtDescription [
+	^ 'Push up method ' , (class ifNil: [ classObject ] ifNotNil: [class name ]) , '>>' , selectors anyOne
 ]
 
 { #category : #initialization }
 GtPushUpMethodRefactoring >> initialize [
 	super initialize.
 	instVarsToPushUp := Set new
+]
+
+{ #category : #accessing }
+GtPushUpMethodRefactoring >> methodClassName [
+	^ class ifNil: [ classObject asString ] ifNotNil: [ class name ]
+]
+
+{ #category : #transforming }
+GtPushUpMethodRefactoring >> prepareForExecution [
+	class := self classObjectFor: classObject.
+	targetSuperclass := self classObjectFor: targetSuperclassObject.
+	super prepareForExecution
 ]
 
 { #category : #transforming }
@@ -67,7 +88,10 @@ GtPushUpMethodRefactoring >> privateTransform [
 
 { #category : #initialization }
 GtPushUpMethodRefactoring >> pullUp: selectorCollection from: aClass to: aSuperClass [
-	super pullUp: selectorCollection from: aClass to: aSuperClass.
+	classObject := aClass.
+	targetSuperclassObject := aSuperClass.
+	selectors := selectorCollection.
+	removeDuplicates := false.
 	removeDuplicates := true
 ]
 
@@ -76,7 +100,7 @@ GtPushUpMethodRefactoring >> pushUpVariables [
 	instVarsToPushUp
 		do: [ :each | 
 			self
-				performCompositeRefactoring: (RBPullUpInstanceVariableRefactoring
+				performCompositeRefactoring: (GtRBPullUpInstanceVariableRefactoring
 						model: self model
 						variable: each
 						class: class superclass) ]

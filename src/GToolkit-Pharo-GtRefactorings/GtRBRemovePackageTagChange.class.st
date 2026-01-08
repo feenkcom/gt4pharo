@@ -19,6 +19,11 @@ GtRBRemovePackageTagChange >> asUndoOperation [
 	^ GtRBAddPackageTagChange packageName: packageName tagName: tagName
 ]
 
+{ #category : #accessing }
+GtRBRemovePackageTagChange >> gtChangeIcon [
+	^ Smalltalk ui icons iconNamed: #changeRemove
+]
+
 { #category : #private }
 GtRBRemovePackageTagChange >> primitiveExecute [
 	self package removeClassTag: tagName

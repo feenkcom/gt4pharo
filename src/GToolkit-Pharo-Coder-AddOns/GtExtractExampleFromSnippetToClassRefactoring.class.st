@@ -65,7 +65,7 @@ GtExtractExampleFromSnippetToClassRefactoring >> createNewClassIfNecessary [
 		ifNil: [ (category isNil or: [ category isEmpty ])
 				ifTrue: [ self refactoringError: 'No package specified for new class' ].
 			self
-				performCompositeRefactoring: (RBAddClassRefactoring
+				performCompositeRefactoring: (GtRBAddClassWithVarsRefactoring
 						model: model
 						addClass: className
 						superclass: self defaultSuperclass

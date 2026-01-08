@@ -25,7 +25,7 @@ GtExtractLiteralToClassVariableRefactoring class >> model: model extract: anInte
 { #category : #transforming }
 GtExtractLiteralToClassVariableRefactoring >> addClassVariable [
 	self
-		performCompositeRefactoring: (RBAddClassVariableRefactoring
+		performCompositeRefactoring: (GtRBAddClassVariableRefactoring
 				model: model
 				variable: variable
 				class: self classForClassVariable instanceSide)
@@ -71,7 +71,7 @@ GtExtractLiteralToClassVariableRefactoring >> classForClassVariable [
 { #category : #transforming }
 GtExtractLiteralToClassVariableRefactoring >> createAccessors [
 	self
-		performCompositeRefactoring: (RBAddMethodRefactoring
+		performCompositeRefactoring: (GtRBAddMethodRefactoring
 				model: model
 				addMethod: (RBParser
 						parseMethod: getter , ' ^ ' , variable , ' ifNil: [' , variable , ' := '
@@ -79,7 +79,7 @@ GtExtractLiteralToClassVariableRefactoring >> createAccessors [
 				toClass: self classForClassVariable classSide
 				inProtocols: #(#accessing)).
 	self
-		performCompositeRefactoring: (RBAddMethodRefactoring
+		performCompositeRefactoring: (GtRBAddMethodRefactoring
 				model: model
 				addMethod: (RBParser
 						parseMethod: getter , ': anObject ' , variable , ' := anObject')
