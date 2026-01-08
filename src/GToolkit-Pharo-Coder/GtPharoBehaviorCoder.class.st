@@ -104,11 +104,12 @@ GtPharoBehaviorCoder >> forObject: anObject [
 GtPharoBehaviorCoder >> forObject: anObject behavior: aBehavior [
 	| aValueHolder |
 	self
-		assert: [ anObject isKindOf: aBehavior instanceSide ]
+		assert: [ anObject class instanceSide == aBehavior instanceSide
+				or: [ anObject class instanceSide inheritsFrom: aBehavior instanceSide ] ]
 		description: [ 'Object {1} must be kind of {2}'
 				format: {anObject.
 						aBehavior} ].
-	
+
 	aValueHolder := GtPhlowObject forValue: anObject.
 	self objectHolder = aValueHolder ifFalse: [ objectHolder := aValueHolder ].
 	self initializeClass: aBehavior instanceSide
