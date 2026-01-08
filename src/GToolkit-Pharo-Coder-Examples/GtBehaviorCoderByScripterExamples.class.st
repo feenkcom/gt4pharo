@@ -12,7 +12,7 @@ Class {
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	<gtExample>
-	<after: #cleanUp>
+	"<after: #cleanUp>"
 	| aDummyClass aBehaviorCoder |
 	
 	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
@@ -529,7 +529,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseClassMeth
 					formatCode;
 					assertCoderIsModified;
 					clickOnSaveButton;
-					assertCoderIsWithouthModifications;
+					assertCoderIsWithoutModifications;
 					editorTextDo: [ :aText | aNewSourceCode := aText asString ] ];
 		play.
 
@@ -581,7 +581,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceM
 					formatCode;
 					assertCoderIsModified;
 					clickOnSaveButton;
-					assertCoderIsWithouthModifications;
+					assertCoderIsWithoutModifications;
 					editorTextDo: [ :aText | aNewSourceCode := aText asString ] ];
 		play.
 
@@ -595,6 +595,104 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_browseInstanceM
 		// GtPharoStreamingMethodsCoderElement;
 		expandAndFocusCompiledMethod: aMethod;
 		forCompiledMethod: aNewMethod
+			do: [ :aMethodCoderStep | aMethodCoderStep assertEditorTextAsStringIs: aNewSourceCode ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingMethodInNewMethodDialog [
+	"See https://github.com/feenkcom/gtoolkit/issues/4916"
+
+	<gtExample>
+	| aScripter aBehavior aMethodOne aNewSourceCode |
+	aScripter := self classCoderInPagerForClassUI.
+
+	aBehavior := aScripter model behavior.
+	aNewSourceCode := 'method1{1}{2}^ self yourself'
+			format: {Character cr.
+					Character tab}.
+
+	aScripter click
+		onPagerPaneWithIndex: 1;
+		// GtPharoAddNewMethodButtonId;
+		play.
+
+	aScripter methodCoder
+		selectAll;
+		typeText: aNewSourceCode;
+		clickOnSaveButton;
+		assertSaveAlreadyExistingMethodDialogIsOpen;
+		clickOnContinueCompilingExistingMethod;
+		assertSaveAlreadyExistingMethodDialogIsClosed;
+		onPopover;
+		// GtPharoNewMethodCoderElement;
+		play.
+
+	aMethodOne := aBehavior methodDict at: #method1.
+	self assert: aMethodOne sourceCode equals: aNewSourceCode.
+
+	aScripter methodsCoder
+		onPagerPaneWithIndex: 1;
+		// GtPharoStreamingMethodsCoderElement;
+		forCompiledMethod: aMethodOne
+			do: [ :aMethodCoderStep | aMethodCoderStep assertEditorTextAsStringIs: aNewSourceCode ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingMethodInRedefiningAnotherMethod [
+	"See https://github.com/feenkcom/gtoolkit/issues/4916"
+
+	<gtExample>
+	| aScripter aBehavior aMethodTwo aMethodOne aNewSourceCode aMethodTwoAgain |
+	aScripter := self classCoderInPagerForClassUI.
+
+	aBehavior := aScripter model behavior.
+	aMethodTwo := aBehavior methods detect: [ :e | e selector = #method2: ].
+	aNewSourceCode := 'method1{1}{2}^ self yourself'
+			format: {Character cr.
+					Character tab}.
+
+	aScripter methodsCoder
+		onPagerPaneWithIndex: 1;
+		// GtPharoStreamingMethodsCoderElement;
+		expandAndFocusCompiledMethod: aMethodTwo;
+		play.
+
+	aScripter methodsCoder
+		onPagerPaneWithIndex: 1;
+		// GtPharoStreamingMethodsCoderElement;
+		forCompiledMethod: aMethodTwo
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
+					selectAll;
+					typeText: aNewSourceCode;
+					assertCoderIsModified;
+					clickOnSaveButton;
+					assertCoderIsModified;
+					assertSaveAlreadyExistingMethodDialogIsOpen;
+					clickOnContinueCompilingExistingMethod;
+					assertSaveAlreadyExistingMethodDialogIsClosed;
+					coderViewModelDo: [ :aViewModel | 
+						self
+							assert: aViewModel isModified not
+							description: [ 'Method coder must not be modified: {1}' format: {aViewModel selector} ].
+						self assert: aViewModel sourceText asString equals: aMethodTwo sourceCode ] ];
+		play.
+
+	aMethodOne := aBehavior methodDict at: #method1.
+	aMethodTwoAgain := aBehavior methodDict at: #method2:.
+	self assert: aMethodOne sourceCode equals: aNewSourceCode.
+	self assert: aMethodTwo == aMethodTwoAgain.
+
+	aScripter methodsCoder
+		onPagerPaneWithIndex: 1;
+		// GtPharoStreamingMethodsCoderElement;
+		forCompiledMethod: aMethodOne
 			do: [ :aMethodCoderStep | aMethodCoderStep assertEditorTextAsStringIs: aNewSourceCode ];
 		play.
 
