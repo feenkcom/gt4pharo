@@ -4,3 +4,8 @@ Extension { #name : #RBAddClassChange }
 RBAddClassChange >> gtChangeIcon [
 	^ Smalltalk ui icons iconNamed: #changeAdd
 ]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBAddClassChange >> gtIncludesSubstring: aString [
+	^ self definition includesSubstring: aString caseSensitive: false
+]

@@ -14,6 +14,16 @@ RBCompositeRefactoryChange >> gtBasicChangesInto: aCollection [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBCompositeRefactoryChange >> gtIncludesSubstring: aString [
+	^ changes anySatisfy: [ :each | each gtIncludesSubstring: aString ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBCompositeRefactoryChange >> gtIsForSelector: aSymbol [
+	^ changes anySatisfy: [ :each | each gtIsForSelector: aSymbol ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBCompositeRefactoryChange >> isBasicChange [
 	^ false
 ]
