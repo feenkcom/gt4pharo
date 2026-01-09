@@ -6,7 +6,8 @@ Class {
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> addDefinitionForTempAtOffset: anInteger in: ast [
-	| bestNode varNode nodeReferences sequenceNode |
+	| bestNode varNode nodeReferences sequenceNode source |
+	source := SmaCCString on: ast methodNode source.
 	varNode := ast nodeForOffset: anInteger.
 	nodeReferences := (ast allChildren select: [ :each | each = varNode ])
 			sort: [ :a :b | a start < b start ].
@@ -16,16 +17,17 @@ GtDefineTemporaryFixItAction >> addDefinitionForTempAtOffset: anInteger in: ast 
 			ifTrue: [ bestNode ]
 			ifFalse: [ bestNode statementNode parent ].
 
-	sequenceNode addTemporaryNamed: varNode name
+	sequenceNode gtAddTemporaryNamed: varNode name toSource: source.
+	^ source asString
 ]
 
 { #category : #executing }
 GtDefineTemporaryFixItAction >> basicExecuteOn: anEditorElement [
-	| ast variableNode |
+	| ast variableNode source |
 	ast := sourceCoder rbAST.
 	variableNode := node.
-	self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
-	sourceCoder currentSourceString: ast newSource.
+	source := self addDefinitionForTempAtOffset: variableNode startPosition in: ast.
+	sourceCoder currentSourceString: source.
 	BlTaskAction
 		enqueueElement: anEditorElement
 		action: [ anEditorElement requestFocus ]

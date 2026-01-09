@@ -89,6 +89,28 @@ GtPharoMethodCoderViewModel >> asExpandedOnlyElement [
 ]
 
 { #category : #private }
+GtPharoMethodCoderViewModel >> availableCompilationBehaviorSources [
+	"Return a list of behaviors in which the method can be compiled.
+	For example, a trait method can be compile in a trait itself, or in a behavior that uses that trait.
+	Superclass methods that are displayed in a methods coder can be compiled in a context of that methods coder
+	or in the origin superclass"
+
+	<return: #TAsyncStream of: #GtPharoMethodBasicBehaviorSource>
+	^ ({(contextualBehavior asAsyncFuture
+			map: [ :aBehavior | GtPharoMethodContextualBehaviorSource new behavior: aBehavior ])
+			asAsyncStream.
+		self coderModel methodBehavior asyncSubclasses
+			map: [ :aBehavior | GtPharoMethodSubclassBehaviorSource new behavior: aBehavior ].
+		self behavior asAsyncFuture asAsyncStream
+			map: [ :aBehavior | GtPharoMethodBehaviorSource new behavior: aBehavior ].
+		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ])
+			asAsyncFuture asAsyncStream
+			map: [ :aBehavior | GtPharoMethodOriginBehaviorSource new behavior: aBehavior ]}
+		asAsyncStream flatten select: [ :eachBehaviorSource | eachBehaviorSource behavior notNil ])
+		withoutDuplicatesBasedOn: [ :eachBehaviorSource | eachBehaviorSource behavior ]
+]
+
+{ #category : #private }
 GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 	"Return a list of behaviors in which the method can be compiled.
 	For example, a trait method can be compile in a trait itself, or in a behavior that uses that trait.
@@ -103,6 +125,78 @@ GtPharoMethodCoderViewModel >> availableCompilationBehaviors [
 		(self coderModel methodOrigin behaviorDo: [ :aBehavior | aBehavior ]) asAsyncFuture asAsyncStream.
 	
 	} asAsyncStream flatten select: [ :eachBehavior | eachBehavior notNil ]) withoutDuplicates
+]
+
+{ #category : #private }
+GtPharoMethodCoderViewModel >> availableCompilationMethodIndicatorsWithBehaviorSources [
+	"Return a list of behaviors in which the method can be compiled.
+	For example, a trait method can be compile in a trait itself, or in a behavior that uses that trait.
+	Superclass methods that are displayed in a methods coder can be compiled in a context of that methods coder
+	or in the origin superclass"
+
+	<return: #TAsyncStream of: #GtPharoMethodModificationIndicator>
+	^ self availableCompilationBehaviorSources
+		map: [ :eachBehaviorSource | 
+			self compiledMethod
+				ifNotNil: [ :aMethod | 
+					self astSync
+						ifNotNil: [ :anAst | 
+							anAst isMethod
+								ifTrue: [ anAst selector
+										ifNotNil: [ :aSelector | 
+											aMethod selector = aSelector
+												ifTrue: [ GtPharoMethodSameSelectorIndicator new
+														behaviorSource: eachBehaviorSource;
+														compiledMethod: aMethod;
+														modifiedAst: anAst;
+														prospectiveSelector: aSelector ]
+												ifFalse: [ GtPharoMethodChangedSelectorIndicator new
+														behaviorSource: eachBehaviorSource;
+														compiledMethod: aMethod;
+														modifiedAst: anAst;
+														originalSelector: aMethod selector;
+														prospectiveSelector: aSelector;
+														compiledMethodThatWillChange: (eachBehaviorSource compiledMethodWithSelector: aSelector) ] ]
+										ifNil: [ GtPharoMethodUnknownAstSelectorIndicator new
+												behaviorSource: eachBehaviorSource;
+												compiledMethod: aMethod;
+												modifiedAst: anAst;
+												prospectiveSelector: aMethod selector ] ]
+								ifFalse: [ GtPharoMethodUnknownAstIndicator new
+										behaviorSource: eachBehaviorSource;
+										compiledMethod: aMethod;
+										modifiedAst: anAst;
+										prospectiveSelector: aMethod selector ] ]
+						ifNil: [ GtPharoMethodMissingAstIndicator new
+								behaviorSource: eachBehaviorSource;
+								compiledMethod: aMethod;
+								prospectiveSelector: aMethod selector ] ]
+				ifNil: [ self astSync
+						ifNotNil: [ :anAst | 
+							anAst isMethod
+								ifTrue: [ anAst selector
+										ifNotNil: [ :aSelector | 
+											(eachBehaviorSource compiledMethodWithSelector: aSelector)
+												ifNotNil: [ :aMethod | 
+													GtPharoMethodChangedSelectorIndicator new
+														behaviorSource: eachBehaviorSource;
+														compiledMethod: aMethod;
+														modifiedAst: anAst;
+														originalSelector: aMethod selector;
+														prospectiveSelector: aSelector;
+														compiledMethodThatWillChange: (eachBehaviorSource compiledMethodWithSelector: aSelector) ]
+												ifNil: [ GtPharoMethodNewMethodIndicator new
+														behaviorSource: eachBehaviorSource;
+														modifiedAst: anAst;
+														prospectiveSelector: aSelector ] ]
+										ifNil: [ GtPharoMethodNewMethodUnknownAstIndicator new
+												behaviorSource: eachBehaviorSource;
+												modifiedAst: anAst ] ]
+								ifFalse: [ GtPharoMethodNewMethodUnknownAstIndicator new
+										behaviorSource: eachBehaviorSource;
+										modifiedAst: anAst ] ]
+						ifNil: [ GtPharoMethodNewMethodUnknownAstIndicator new
+								behaviorSource: eachBehaviorSource ] ] ]
 ]
 
 { #category : #'api - coder model' }
@@ -206,7 +300,8 @@ GtPharoMethodCoderViewModel >> gtInfo [
 		aStream nextPut: #parentCoderViewModel -> self parentCoderViewModel.
 		aStream nextPut: #parentExample -> self parentExample.
 		aStream nextPut: #parentTestCase -> self parentTestCase.
-		aStream nextPut: (#availableCompilationBehaviors -> self availableCompilationBehaviors) ])
+		aStream nextPut: (#availableCompilationBehaviorSources -> self availableCompilationBehaviorSources).
+		aStream nextPut: (#availableCompilationMethodIndicatorsWithBehaviorSources -> self availableCompilationMethodIndicatorsWithBehaviorSources) ])
 ]
 
 { #category : #'api - coder model' }
