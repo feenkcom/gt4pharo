@@ -3,7 +3,8 @@ Class {
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'changes',
-		'filteredChanges'
+		'filteredChanges',
+		'filterModel'
 	],
 	#category : #'GToolkit-Pharo-GtRefactorings-Changes-View'
 }
@@ -102,14 +103,20 @@ GtRefactoryChangeElement >> initializeApplyBar [
 { #category : #initialization }
 GtRefactoryChangeElement >> initializeFilter [
 	| filters |
-	filters := GtFiltersElement new.
+	filterModel := GtFilterItemsModel new.
+	filterModel weak
+		when: GtFiltersModelAnnouncement
+		send: #updateFilteredChanges
+		to: self.
+	filters := filterModel asFiltersElement.
 	filters
+		hMatchParent;
+		constraintsDo: [ :c | c linear vertical alignCenter ];
 		margin: (BlInsets
 				top: 5
 				left: 10
 				bottom: 0
 				right: 10).
-	filters when: GtFiltersChangedEvent do: [ :event | self updateFilteredChanges ].
 	self addChild: filters as: #filters
 ]
 
@@ -187,34 +194,16 @@ GtRefactoryChangeElement >> updateChangesList [
 
 { #category : #accessing }
 GtRefactoryChangeElement >> updateFilteredChanges [
-	| items filters |
-	filters := self childNamed: #filters.
+	| items |
 	items := changes gtBasicChanges asAsyncStream.
-	filters
-		filtersDo: [ :descriptor :value | items := descriptor creationBlock cull: items cull: value ].
+	filterModel items do: [ :each | items := each creator cull: items cull: each ].
 	filteredChanges := items.
 	self updateChangesList
 ]
 
 { #category : #accessing }
 GtRefactoryChangeElement >> updateFilters [
-	| filters classes filterDescriptors |
-	filters := self childNamed: #filters.
-	filterDescriptors := OrderedCollection new.
-	classes := Set new.
-	changes
-		gtAllChangesDo: [ :each | 
-			classes
-				addAll: each class withAllSuperclasses;
-				addAll: each class class withAllSuperclasses ].
-	(Pragma allNamed: #gtRefactoryChangeFilter)
-		do: [ :each | 
-			(each method gtIsActive
-				and: [ each method numArgs = 0 and: [ classes includes: each methodClass ] ])
-				ifTrue: [ filterDescriptors
-						add: (each method methodClass isInstanceSide
-								ifTrue: [ each methodClass basicNew perform: each methodSelector ]
-								ifFalse: [ each methodClass soleInstance perform: each methodSelector ]) ] ].
-	filters descriptors: filterDescriptors.
+	filterModel
+		availableFiltersBuilder: (GtRefactoryChangeFiltersBuilder new changes: changes).
 	self updateFilteredChanges
 ]
