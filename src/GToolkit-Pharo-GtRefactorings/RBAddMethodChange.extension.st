@@ -8,3 +8,14 @@ RBAddMethodChange >> gtChangeIcon [
 				ifTrue: [ #changeUpdate ]
 				ifFalse: [ #changeAdd ])
 ]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBAddMethodChange >> gtIncludesSubstring: aString [
+	^ (super gtIncludesSubstring: aString)
+		or: [ self source includesSubstring: aString caseSensitive: false ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBAddMethodChange >> gtIsForSelector: aSymbol [
+	^ self selector = aSymbol
+]

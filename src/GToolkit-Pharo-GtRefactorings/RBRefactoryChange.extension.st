@@ -86,8 +86,50 @@ RBRefactoryChange >> gtExecutedFilter [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtIncludesSubstring: aString [
+	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtIsForClassNamed: aSymbol [
 	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtIsForSelector: aSymbol [
+	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtSelectorFilter [
+	<gtRefactoryChangeFilter>
+	^ GtFilterTextModel new
+		creator: [ :stream :model | 
+			| value |
+			value := model text asString.
+			value isEmpty
+				ifTrue: [ stream ]
+				ifFalse: [ stream filter: [ :each | each gtIsForSelector: value ] ] ];
+		named: 'Selector';
+		order: 15;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPharoIndex current selectorCache ] ];
+		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtSubstringFilter [
+	<gtRefactoryChangeFilter>
+	^ GtFilterTextModel new
+		creator: [ :stream :model | 
+			| value |
+			value := model text asString.
+			value isEmpty
+				ifTrue: [ stream ]
+				ifFalse: [ stream filter: [ :each | each gtIncludesSubstring: value ] ] ];
+		named: 'Substring';
+		order: 18;
+		beNotDefault
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
