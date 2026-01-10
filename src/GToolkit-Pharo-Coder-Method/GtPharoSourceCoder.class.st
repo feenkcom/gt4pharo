@@ -132,11 +132,6 @@ GtPharoSourceCoder >> hasObjectAttribute [
 	^ false
 ]
 
-{ #category : #testing }
-GtPharoSourceCoder >> isForMethod [
-	^ false
-]
-
 { #category : #'api - accessing' }
 GtPharoSourceCoder >> methodBehavior [
 	"Return an optional method behavior in context of which this coder operates.

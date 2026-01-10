@@ -29,6 +29,13 @@ GtPharoBehaviorCoder class >> forObject: anObject [
 		yourself
 ]
 
+{ #category : #'instance creation' }
+GtPharoBehaviorCoder class >> forObject: anObject behavior: aBehavior [
+	^ self new
+		forObject: anObject behavior: aBehavior;
+		yourself
+]
+
 { #category : #'api - converting' }
 GtPharoBehaviorCoder >> asNewCoderModelWithSameSubject [
 	"Return new coder model with same subject (e.g., package, class, method)"
@@ -91,6 +98,21 @@ GtPharoBehaviorCoder >> forClass: aClass [
 { #category : #initialize }
 GtPharoBehaviorCoder >> forObject: anObject [
 	self object: anObject.
+]
+
+{ #category : #initialize }
+GtPharoBehaviorCoder >> forObject: anObject behavior: aBehavior [
+	| aValueHolder |
+	self
+		assert: [ anObject class instanceSide == aBehavior instanceSide
+				or: [ anObject class instanceSide inheritsFrom: aBehavior instanceSide ] ]
+		description: [ 'Object {1} must be kind of {2}'
+				format: {anObject.
+						aBehavior} ].
+
+	aValueHolder := GtPhlowObject forValue: anObject.
+	self objectHolder = aValueHolder ifFalse: [ objectHolder := aValueHolder ].
+	self initializeClass: aBehavior instanceSide
 ]
 
 { #category : #'gt-extension' }
@@ -197,12 +219,14 @@ GtPharoBehaviorCoder >> withSelectedMethod: aMethod [
 { #category : #'api - navigation' }
 GtPharoBehaviorCoder >> withSelectedMethod: aMethod source: aSource [
 	self
-		assert: [ class instanceSide = aMethod methodClass instanceSide ]
+		assert: [ class instanceSide = aMethod methodClass instanceSide
+				or: [ class instanceSide inheritsFrom: aMethod methodClass instanceSide ] ]
 		description: [ 'Can not select a method from a different class' ].
 
-	self announce: (GtClassCoderMethodNavigationAnnouncement new 
-		method: aMethod; 
-		source: aSource)
+	self
+		announce: (GtClassCoderMethodNavigationAnnouncement new
+				method: aMethod;
+				source: aSource)
 ]
 
 { #category : #'api - navigation' }

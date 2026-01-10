@@ -2540,6 +2540,20 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments 
 	^ aScripter
 ]
 
+{ #category : #'examples - big method' }
+GtPharoMethodCoderByScripterExamples >> exampleBigMethod [
+	<gtExample>
+	| method coder scripter |
+
+	method := GtBigMethodTestClass >> #reduceTable.
+	self assert: method isBigMethod
+		description: 'Test method is no longer big'.
+	coder := self coderOnMethod: method.
+	scripter := self scripterForBlock: [ coder asCoderViewModel ].
+	coder sourceCode.
+	^ scripter
+]
+
 { #category : #'examples - example method' }
 GtPharoMethodCoderByScripterExamples >> exampleMethod [
 	<gtExample>
@@ -4042,6 +4056,90 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateMethodInPlayground_02_click_f
 
 	aScripter := self fixitCreateMethodInPlayground_01_setup.
 	self clickFixItFor: aScripter.
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateTempVarDoesNotReformat [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder asCoderViewModel ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'type in a variable that does not exist';
+				action: [ :aCoderViewModel | 
+					aCoderViewModel coderModel
+						appendString: '\	temporary := 3.\^temporary +\4' withCRs ];
+				onModel ].
+
+	self
+		selectTextFor: aScripter
+		from: 9
+		to: 18
+		andCheck: 'temporary'.
+	self clickFixItFor: aScripter.
+
+	self
+		clickFixItActionFor: aScripter
+		id: (GtDefineTemporaryVariableFixItActionElementId indexed: 1).
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				value: [ :aCoderViewModel | aCoderViewModel coderModel currentSourceString ]
+					equals: [ :aCoderViewModel | 
+						(aCoderViewModel coderModel attributeNamed: #dummyMethod) selector
+							, '\	| temporary |\	temporary := 3.\^temporary +\4' withCRs ];
+				onModel ].
+	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateTempVarDoesNotReformatWithExistingTemps [
+	<gtExample>
+	<after: #cleanUp>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder asCoderViewModel ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'type in a variable that does not exist';
+				action: [ :aCoderViewModel | 
+					aCoderViewModel coderModel
+						appendString: '|a|\	temporary := a := 3.\^temporary +\a' withCRs ];
+				onModel ].
+
+	self
+		selectTextFor: aScripter
+		from: 12
+		to: 21
+		andCheck: 'temporary'.
+	self clickFixItFor: aScripter.
+
+	self
+		clickFixItActionFor: aScripter
+		id: (GtDefineTemporaryVariableFixItActionElementId indexed: 1).
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				value: [ :aCoderViewModel | aCoderViewModel coderModel currentSourceString ]
+					equals: [ :aCoderViewModel | 
+						(aCoderViewModel coderModel attributeNamed: #dummyMethod) selector
+							, '|a temporary|\	temporary := a := 3.\^temporary +\a' withCRs ];
+				onModel ].
 	^ aScripter
 ]
 
@@ -9012,9 +9110,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFiveObjectSum21Ref
 								AssertionFailure signal: 'Real method behavior must exist' ] ];
 					coderViewModelDo: [ :aCoder | 
 						| someBehaviors |
-						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						someBehaviors := aCoder availableCompilationBehaviorSources toArray wait.
 						self assert: someBehaviors size equals: 1.
-						self assert: someBehaviors first equals: GtPharoDummyTwoObject class ] ];
+						self assert: someBehaviors first behavior equals: GtPharoDummyTwoObject class ] ];
 		play.
 
 	^ aScripter
@@ -9413,10 +9511,10 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodCal
 								AssertionFailure signal: 'Real method behavior must exist' ] ];
 					coderViewModelDo: [ :aCoder | 
 						| someBehaviors |
-						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						someBehaviors := aCoder availableCompilationBehaviorSources toArray wait.
 						self assert: someBehaviors size equals: 2.
-						self assert: someBehaviors first equals: GtPharoDummyTwoObject.
-						self assert: someBehaviors second equals: GtPharoDummyOneObject ] ];
+						self assert: someBehaviors first behavior equals: GtPharoDummyTwoObject.
+						self assert: someBehaviors second behavior equals: GtPharoDummyOneObject ] ];
 		play.
 
 	^ aScripter
@@ -9463,9 +9561,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodNum
 								AssertionFailure signal: 'Real method behavior must exist' ] ];
 					coderViewModelDo: [ :aCoder | 
 						| someBehaviors |
-						someBehaviors := aCoder availableCompilationBehaviors toArray wait.
+						someBehaviors := aCoder availableCompilationBehaviorSources toArray wait.
 						self assert: someBehaviors size equals: 1.
-						self assert: someBehaviors first equals: GtPharoDummyOneObject ] ];
+						self assert: someBehaviors first behavior equals: GtPharoDummyOneObject ] ];
 		play.
 
 	^ aScripter

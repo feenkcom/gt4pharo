@@ -1,0 +1,5 @@
+Class {
+	#name : #GtPharoMethodUnknownAstSelectorIndicator,
+	#superclass : #GtPharoMethodModificationIndicator,
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Support - Modification Model'
+}

@@ -62,7 +62,7 @@ GtPharoMethodCoderStep >> assertCoderIsModified [
 ]
 
 { #category : #'steps - checks' }
-GtPharoMethodCoderStep >> assertCoderIsWithouthModifications [
+GtPharoMethodCoderStep >> assertCoderIsWithoutModifications [
 	| anAssertStep |
 	anAssertStep := self assert
 			label: 'Assert method is not modified';
@@ -381,6 +381,24 @@ GtPharoMethodCoderStep >> assertPrintItString: aString [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertSaveAlreadyExistingMethodDialogIsClosed [
+	^ self assert
+		label: 'Assert save already existing method disalog is closed';
+		notExists;
+		onPopover;
+		// GtPharoMethodSaveExistingQuestionElement
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertSaveAlreadyExistingMethodDialogIsOpen [
+	^ self assert
+		label: 'Assert save already existing method disalog is open';
+		exists;
+		onPopover;
+		// GtPharoMethodSaveExistingQuestionElement
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertSelfObjectIs: anObject [
 	| anAssertStep |
 	anAssertStep := self assert
@@ -434,6 +452,15 @@ GtPharoMethodCoderStep >> browseSenders [
 		onParentStepTarget: self;
 		onThisOrDeepChildElementId: GtSourceCoderEditorId;
 		onTopMost
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> clickOnContinueCompilingExistingMethod [
+	^ self click
+		label: 'Click on continue compiling existing method';
+		onPopover;
+		// GtPharoMethodSaveExistingQuestionElement;
+		// #confirm
 ]
 
 { #category : #'steps - interactions' }
@@ -750,13 +777,18 @@ GtPharoMethodCoderStep >> typeText: aString [
 				do: [ :eachStep | 
 					aString lines
 						do: [ :eachLine | 
-							eachStep type
-								referenceSender;
-								label: ('Type text: {1}' format: {aString lines first});
-								text: eachLine;
-								onParentStepTarget: eachStep;
-								onThisOrDeepChildElementId: GtSourceCoderEditorId;
-								onTopMost ]
+							(Character tab split: eachLine)
+								do: [ :eachPart | 
+									eachStep type
+										referenceSender;
+										label: ('Type text: {1}' format: {aString lines first});
+										text: eachPart;
+										onParentStepTarget: eachStep;
+										onThisOrDeepChildElementId: GtSourceCoderEditorId;
+										onTopMost ]
+								separatedBy: [ eachStep keyPress
+										label: 'Press tab';
+										key: BlKeyboardKey tab ] ]
 						separatedBy: [ eachStep keyPress
 								label: 'Press return';
 								key: BlKeyboardKey return ] ] ]

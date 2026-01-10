@@ -6,7 +6,7 @@ My precondition verifies that there is no reference to this instance  variable.
 Class {
 	#name : #RBRemoveInstanceVariableRefactoring,
 	#superclass : #RBVariableRefactoring,
-	#category : #'GToolkit-Pharo-BaseRefactorings'
+	#category : #'GToolkit-Pharo-BaseRefactorings-Refactorings'
 }
 
 { #category : #'instance creation' }
