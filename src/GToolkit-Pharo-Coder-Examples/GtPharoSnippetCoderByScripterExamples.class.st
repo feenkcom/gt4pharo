@@ -1321,6 +1321,7 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	aScripter

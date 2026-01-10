@@ -622,6 +622,7 @@ GtPharoMethodCoderStep >> printIt [
 		combination: BlKeyCombination primaryP;
 		onParentStepTarget: self;
 		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 

@@ -74,7 +74,7 @@ GtRenamerExamples >> smalltalkRenamer [
 
 	text := self methodText asRopedText.
 
-	editorElement := GtSourceCoderEditorElement new
+	editorElement := GtSourceCoderElement new
 		textualCoderViewModel: (GtPharoMethodCoderViewModel new coder: (GtPharoMethodCoder forClass: self class source: text));
 		fitContent.
 
