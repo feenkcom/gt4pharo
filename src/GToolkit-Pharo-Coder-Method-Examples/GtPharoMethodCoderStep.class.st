@@ -638,7 +638,7 @@ GtPharoMethodCoderStep >> playAndInspect [
 		label: 'Play and inspect';
 		combination: BlKeyCombination primaryG;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
