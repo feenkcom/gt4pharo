@@ -2448,6 +2448,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 				label: 'Trigger completer pop-up';
 				combination: BlKeyCombination builder control space build;
 				id: GtSourceCoderEditorId;
+				id: GtSourceCoderEditorInnerId;
 				play.
 
 			aStep wait
@@ -2521,7 +2522,8 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments 
 						typeStep: [ :s | 
 							s
 								text: '''arg' , anIndex asString , '''';
-								id: GtSourceCoderEditorId ] ]
+								id: GtSourceCoderEditorId;
+								// GtSourceCoderEditorInnerId ] ]
 				separatedBy: [ aStep shortcut
 						label: 'Complete with TAB key';
 						combination: BlKeyCombination tab;

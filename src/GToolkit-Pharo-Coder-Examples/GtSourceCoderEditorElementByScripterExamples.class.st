@@ -17,18 +17,19 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnHighlightedS
 				assertStep: [ :s | 
 					s
 						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 6 ].
+						value: [ :editor | editor editorElement children size ] equals: 6 ].
 
 			aStep
 				shortcutStep: [ :s | 
 					s
 						label: 'Reformat';
-						combination: BlKeyCombinationBuilder new primary shift f build ].
+						combination: BlKeyCombinationBuilder new primary shift f build;
+						// GtSourceCoderEditorInnerId ].
 			aStep
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after styling';
-						value: [ :editor | editor children size ] equals: 4 ] ].
+						value: [ :editor | editor editorElement children size ] equals: 4 ] ].
 
 	^ aScripter
 ]
@@ -46,11 +47,12 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContai
 				aStep
 					assert
 						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 6.
+						value: [ :editor | editor editorElement children size ] equals: 6.
 				aStep
 					click
 						label: 'Focus editor';
 						flag: 'My educated guess is that the cursor is supposed to be inside of the assertion...';
+						// GtSourceCoderEditorInnerId;
 						onChildAt: 3.
 				aStep
 					do
@@ -60,7 +62,8 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContai
 				aStep
 					shortcut
 						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build.
+						combination: BlKeyCombinationBuilder new primary shift n build;
+						// GtSourceCoderEditorInnerId.
 				aStep
 					type
 						label: 'Modify text';
@@ -68,19 +71,21 @@ GtSourceCoderEditorElementByScripterExamples >> doNotFoldNoiseTextOnSourceContai
 				aStep
 					assert
 						label: 'Count lines after modification unfolding';
-						value: [ :editor | editor children size ] equals: 6.
+						value: [ :editor | editor editorElement children size ] equals: 6.
 				aStep
 					click
 						label: 'Focus editor';
+						// GtSourceCoderEditorInnerId;
 						onChildAt: 6.
 				aStep
 					shortcut
 						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build.
+						combination: BlKeyCombinationBuilder new primary shift n build;
+						// GtSourceCoderEditorInnerId.
 				aStep
 					assert
 						label: 'Count lines before unfolding';
-						value: [ :editor | editor children size ] equals: 4 ] ].
+						value: [ :editor | editor editorElement children size ] equals: 4 ] ].
 
 	^ aScripter
 ]
@@ -98,27 +103,29 @@ GtSourceCoderEditorElementByScripterExamples >> foldNoiseText [
 				assertStep: [ :s | 
 					s
 						label: 'Count lines before folding';
-						value: [ :editor | editor children size ] equals: 6 ].
+						value: [ :editor | editor editorElement children size ] equals: 6 ].
 			aStep
 				shortcutStep: [ :s | 
 					s
 						label: 'Fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
+						combination: BlKeyCombinationBuilder new primary shift n build;
+						// GtSourceCoderEditorInnerId ].
 			aStep
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after unfolding';
-						value: [ :editor | editor children size ] equals: 4 ].
+						value: [ :editor | editor editorElement children size ] equals: 4 ].
 			aStep
 				shortcutStep: [ :s | 
 					s
 						label: 'fold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build ].
+						combination: BlKeyCombinationBuilder new primary shift n build;
+						// GtSourceCoderEditorInnerId ].
 			aStep
 				assertStep: [ :s | 
 					s
 						label: 'Count lines after folding';
-						value: [ :editor | editor children size ] equals: 6 ] ].
+						value: [ :editor | editor editorElement children size ] equals: 6 ] ].
 
 	^ aScripter
 ]
@@ -186,16 +193,18 @@ GtSourceCoderEditorElementByScripterExamples >> retainFoldedStatusOnTextChange [
 				do: [ :aStep | 
 					aStep assert
 						label: 'Count lines before folding';
-						value: [ :editor | editor children size ] equals: 6.
+						value: [ :editor | editor editorElement children size ] equals: 6.
 					aStep click
 						label: 'Focus editor';
+						// GtSourceCoderEditorInnerId;
 						onChildAt: 1.
 					aStep shortcut
 						label: 'Unfold noise';
-						combination: BlKeyCombinationBuilder new primary shift n build.
+						combination: BlKeyCombinationBuilder new primary shift n build;
+						// GtSourceCoderEditorInnerId.
 					aStep assert
 						label: 'Count lines after unfolding';
-						value: [ :editor | editor children size ] equals: 4.
+						value: [ :editor | editor editorElement children size ] equals: 4.
 					aStep do
 						label: 'Move to end of editor';
 						block: [ :e | e navigator moveToEnd ].
@@ -204,7 +213,7 @@ GtSourceCoderEditorElementByScripterExamples >> retainFoldedStatusOnTextChange [
 						text: '"Comment"'.
 					aStep assert
 						label: 'Count lines after modification unfolding';
-						value: [ :editor | editor children size ] equals: 4 ] ].
+						value: [ :editor | editor editorElement children size ] equals: 4 ] ].
 
 	^ aScripter
 ]
