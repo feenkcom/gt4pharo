@@ -5,7 +5,8 @@ Class {
 		'globalCache',
 		'selectorCache',
 		'selectorWordCache',
-		'classWordCache'
+		'classWordCache',
+		'mutex'
 	],
 	#classInstVars : [
 		'current'
@@ -281,10 +282,11 @@ GtPharoIndex >> cachedSelectorsDo: aBlock [
 
 { #category : #private }
 GtPharoIndex >> classAdded: anAnnouncement [
-	| newName |
-	newName := anAnnouncement classAdded name.
-	globalCache add: newName.
-	self addClassWordsFor: newName
+	self
+		critical: [ | newName |
+			newName := anAnnouncement classAdded name.
+			globalCache add: newName.
+			self addClassWordsFor: newName ]
 ]
 
 { #category : #accessing }
@@ -297,67 +299,68 @@ GtPharoIndex >> classNameTree [
 
 { #category : #private }
 GtPharoIndex >> classRecompiled: anAnnouncement [
-	self recompileMethodsIn: anAnnouncement classAffected.
-	self removeOldSlotMessageSends
+	self
+		critical: [ self recompileMethodsIn: anAnnouncement classAffected.
+			self removeOldSlotMessageSends ]
 ]
 
 { #category : #private }
 GtPharoIndex >> classRemoved: anAnnouncement [
-	| className |
-	className := anAnnouncement classRemoved name
-			copyReplaceAll: 'AnObsolete'
-			with: ''.
-	(globalCache nodeFor: className)
-		ifNotNil: [ :node | globalCache remove: className ].
-	self removeClassWordsFor: className.
-	anAnnouncement classRemoved instanceSide
-		methodsDo: [ :each | self removeMethodFromCache: each ].
-	anAnnouncement classRemoved classSide
-		methodsDo: [ :each | self removeMethodFromCache: each ]
+	self
+		critical: [ | className |
+			className := anAnnouncement classRemoved name
+					copyReplaceAll: 'AnObsolete'
+					with: ''.
+			(globalCache nodeFor: className)
+				ifNotNil: [ :node | globalCache remove: className ].
+			self removeClassWordsFor: className.
+			anAnnouncement classRemoved instanceSide
+				methodsDo: [ :each | self removeMethodFromCache: each ].
+			anAnnouncement classRemoved classSide
+				methodsDo: [ :each | self removeMethodFromCache: each ] ]
 ]
 
 { #category : #private }
 GtPharoIndex >> classRenamed: anAnnouncement [
-	| oldRefs addedRefs newClassName oldClassName |
-	oldClassName := anAnnouncement oldName.
-	newClassName := anAnnouncement newName.
-	
-	"Fix references using dictionaries"
-	selectorCache classRenamedFrom: oldClassName to: newClassName.
-	globalCache classRenamedFrom: oldClassName to: newClassName.
-	
-	"Remove the old entry"
-	(globalCache nodeFor: oldClassName)
-		ifNil: [ oldRefs := #() ]
-		ifNotNil: [ :node | 
-			oldRefs := node referencesCollection.
-			node references: nil.
-			globalCache remove: oldClassName weight: node weight ].
-	self removeClassWordsFor: oldClassName.
-	
-	"Add new entry"
-	globalCache add: newClassName weight: 1.
-	self addClassWordsFor: newClassName.
-	
-	"Any symbol references to the new name should be marked as class references."
-	addedRefs := self addSymbolReferencesTo: newClassName.
-	
-	"Update methods that have the variable reference to point to new variable. 
-	At this point the source of the method and the method itself are out of sync. 
-	The source of the method will have the old name and the method will have the renamed class."
-	oldRefs
-		do: [ :each | 
-			GtMessageSendIterator
-				messageSendsIn: each
-				doReferences: [ :selector :count |  ]
-				andVariables: [ :global | 
-					| node |
-					(self isGlobalVariable: global)
-						ifTrue: [ global name = newClassName
-								ifTrue: [ node := globalCache add: newClassName weight: 1.
-									(addedRefs includes: each)
-										ifFalse: [ addedRefs add: each.
-											node addReference: each ] ] ] ] ]
+	self
+		critical: [ | oldRefs addedRefs newClassName oldClassName |
+			oldClassName := anAnnouncement oldName.
+			newClassName := anAnnouncement newName.
+			
+			"Fix references using dictionaries"
+			selectorCache classRenamedFrom: oldClassName to: newClassName.
+			globalCache classRenamedFrom: oldClassName to: newClassName.	"Remove the old entry"
+			(globalCache nodeFor: oldClassName)
+				ifNil: [ oldRefs := #() ]
+				ifNotNil: [ :node | 
+					oldRefs := node referencesCollection.
+					node references: nil.
+					globalCache remove: oldClassName weight: node weight ].
+			self removeClassWordsFor: oldClassName.
+			
+			"Add new entry"
+			globalCache add: newClassName weight: 1.
+			self addClassWordsFor: newClassName.
+			
+			"Any symbol references to the new name should be marked as class references."
+			addedRefs := self addSymbolReferencesTo: newClassName.
+			
+			"Update methods that have the variable reference to point to new variable. 
+			At this point the source of the method and the method itself are out of sync. 
+			The source of the method will have the old name and the method will have the renamed class."
+			oldRefs
+				do: [ :each | 
+					GtMessageSendIterator
+						messageSendsIn: each
+						doReferences: [ :selector :count |  ]
+						andVariables: [ :global | 
+							| node |
+							(self isGlobalVariable: global)
+								ifTrue: [ global name = newClassName
+										ifTrue: [ node := globalCache add: newClassName weight: 1.
+											(addedRefs includes: each)
+												ifFalse: [ addedRefs add: each.
+													node addReference: each ] ] ] ] ] ]
 ]
 
 { #category : #'accessing - metrics' }
@@ -385,6 +388,11 @@ GtPharoIndex >> computeIndex [
 	globalCache allNodesDo: compressBlock.
 	selectorWordCache allNodesDo: compressBlock.
 	classWordCache allNodesDo: compressBlock
+]
+
+{ #category : #private }
+GtPharoIndex >> critical: aBlock [
+	^ self mutex critical: aBlock
 ]
 
 { #category : #accessing }
@@ -456,33 +464,42 @@ GtPharoIndex >> isGlobalVariable: aVariable [
 
 { #category : #private }
 GtPharoIndex >> methodAdded: anAnnouncement [
-	| node |
 	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
-	node := selectorCache add: anAnnouncement method selector weight: 1.
-	node weight = 1
-		ifTrue: [ self
-				wordsIn: anAnnouncement method selector
-				do: [ :word | (selectorWordCache add: word asLowercase weight: 1) addName: anAnnouncement method selector ] ].
-	node addImplementer: anAnnouncement method gtIndexMethod.
-	self addSendsFrom: anAnnouncement method
+	self
+		critical: [ | node |
+			node := selectorCache add: anAnnouncement method selector weight: 1.
+			node weight = 1
+				ifTrue: [ self
+						wordsIn: anAnnouncement method selector
+						do: [ :word | 
+							(selectorWordCache add: word asLowercase weight: 1)
+								addName: anAnnouncement method selector ] ].
+			node addImplementer: anAnnouncement method gtIndexMethod.
+			self addSendsFrom: anAnnouncement method ]
 ]
 
 { #category : #private }
 GtPharoIndex >> methodModified: anAnnouncement [
 	anAnnouncement newMethod isFromTrait ifTrue: [ ^ self ].
-	(selectorCache nodeFor: anAnnouncement newMethod selector)
-		ifNotNil: [ :node | 
-			node
-				removeImplementer: anAnnouncement oldMethod gtIndexMethod;
-				addImplementer: anAnnouncement newMethod gtIndexMethod ].
-	self removeSendsFrom: anAnnouncement oldMethod.
-	self addSendsFrom: anAnnouncement newMethod
+	self
+		critical: [ (selectorCache nodeFor: anAnnouncement newMethod selector)
+				ifNotNil: [ :node | 
+					node
+						removeImplementer: anAnnouncement oldMethod gtIndexMethod;
+						addImplementer: anAnnouncement newMethod gtIndexMethod ].
+			self removeSendsFrom: anAnnouncement oldMethod.
+			self addSendsFrom: anAnnouncement newMethod ]
 ]
 
 { #category : #private }
 GtPharoIndex >> methodRemoved: anAnnouncement [
 	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
-	self removeMethodFromCache: anAnnouncement method
+	self critical: [ self removeMethodFromCache: anAnnouncement method ]
+]
+
+{ #category : #private }
+GtPharoIndex >> mutex [
+	^ mutex ifNil: [ mutex := Mutex new ]
 ]
 
 { #category : #'accessing - metrics' }
