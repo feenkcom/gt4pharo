@@ -19,3 +19,8 @@ RBAddMethodChange >> gtIncludesSubstring: aString [
 RBAddMethodChange >> gtIsForSelector: aSymbol [
 	^ self selector = aSymbol
 ]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBAddMethodChange >> gtMethodChangeGroup [
+	^ GtRBMethodChangeGroup named: self displayClassName , '>>' , self selector
+]

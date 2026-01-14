@@ -83,7 +83,7 @@ GtRefactoryChangeElement >> initializeApplyBar [
 			icon: BrGlamorousVectorIcons accept;
 			beSmallSize;
 			aptitude: BrGlamorousButtonWithIconAptitude new;
-			label: 'Apply';
+			label: 'Apply all';
 			margin: (BlInsets
 					top: 0
 					left: 10
@@ -149,11 +149,7 @@ GtRefactoryChangeElement >> initializeList [
 		width: 150;
 		title: 'Performed';
 		cellStencil: [ :each | BrLabel new aptitude: BrGlamorousLabelAptitude new ];
-		dataBinder: [ :label :change | 
-			label
-				text: ((change attributeNamed: #timestamp)
-						ifNil: [ '' asRopedText ]
-						ifNotNil: [ :ts | ts printToSeconds ]) ].
+		dataBinder: [ :label :change | label text: change gtAppliedText ].
 	list addEventHandler: GtPhlowListToSelectHandler new.
 	list
 		rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
