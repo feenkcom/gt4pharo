@@ -430,7 +430,7 @@ GtPharoMethodCoderStep >> browseBehavior [
 		label: 'Browse behavior';
 		combination: BlKeyCombination primaryB;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
@@ -440,7 +440,7 @@ GtPharoMethodCoderStep >> browseImplementors [
 		label: 'Browse implementors';
 		combination: BlKeyCombination primaryM;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
@@ -450,7 +450,7 @@ GtPharoMethodCoderStep >> browseSenders [
 		label: 'Browse senders';
 		combination: BlKeyCombination primaryN;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
@@ -599,7 +599,7 @@ GtPharoMethodCoderStep >> formatCode [
 		label: 'Format code';
 		combination: BlKeyCombination primaryShiftF;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
@@ -638,7 +638,7 @@ GtPharoMethodCoderStep >> playAndInspect [
 		label: 'Play and inspect';
 		combination: BlKeyCombination primaryG;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
@@ -648,7 +648,7 @@ GtPharoMethodCoderStep >> printIt [
 		label: 'Print result';
 		combination: BlKeyCombination primaryP;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 
@@ -720,7 +720,7 @@ GtPharoMethodCoderStep >> selectAll [
 		label: 'Select all editor text';
 		combination: BlKeyCombination primaryA;
 		onParentStepTarget: self;
-		onThisOrDeepChildElementId: GtSourceCoderEditorId;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
 		onTopMost
 ]
 

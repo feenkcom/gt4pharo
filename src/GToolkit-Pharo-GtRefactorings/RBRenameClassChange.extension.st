@@ -6,6 +6,11 @@ RBRenameClassChange >> gtChangeIcon [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRenameClassChange >> gtClassChangeGroup [
+	^ GtRBClassChangeGroup named: newName
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRenameClassChange >> gtIsForClassNamed: aSymbol [
 	^ (oldName = aSymbol or: [ newName = aSymbol ])
 		or: [ self changes anySatisfy: [ :each | each gtIsForClassNamed: aSymbol ] ]

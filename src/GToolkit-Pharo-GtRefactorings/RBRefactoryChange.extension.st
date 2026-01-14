@@ -32,6 +32,18 @@ RBRefactoryChange >> gtAllChangesDo: aBlock [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtAllWereApplied [
+	^ (self attributeNamed: #timestamp) notNil
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtAppliedText [
+	^ self gtError
+		ifNotNil: [ :error | error messageText ]
+		ifNil: [ self gtTimestamp ifNotNil: [ :ts | ts printToSeconds ] ifNil: [ '' ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtBasicChanges [
 	| changes |
 	changes := OrderedCollection new.
@@ -50,6 +62,11 @@ RBRefactoryChange >> gtChangeIcon [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtClassChangeGroup [
+	^ nil
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtClassFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
@@ -64,6 +81,11 @@ RBRefactoryChange >> gtClassFilter [
 		completion: [ GtStringsCompletionStrategy new
 				completions: [ GtPharoIndex current classNameTree ] ];
 		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtError [
+	^ self attributeNamed: #error
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
@@ -101,6 +123,16 @@ RBRefactoryChange >> gtIsForSelector: aSymbol [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtMethodChangeGroup [
+	^ nil
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtNumberOfChanges [
+	^ 1
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtSelectorFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
@@ -118,6 +150,11 @@ RBRefactoryChange >> gtSelectorFilter [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtSomeWereApplied [
+	^ (self attributeNamed: #timestamp) notNil
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtSubstringFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
@@ -130,6 +167,11 @@ RBRefactoryChange >> gtSubstringFilter [
 		named: 'Substring';
 		order: 18;
 		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtTimestamp [
+	^ self attributeNamed: #timestamp
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }

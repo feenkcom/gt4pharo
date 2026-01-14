@@ -644,10 +644,10 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 	aNewSourceCode := aScripter userData at: #newSourceCode.
 
 	aScripter methodCoder
-		clickOnContinueCompilingExistingMethod;
-		assertSaveAlreadyExistingMethodDialogIsClosed;
 		onPopover;
 		// GtPharoNewMethodCoderElement;
+		clickOnContinueCompilingExistingMethod;
+		assertSaveAlreadyExistingMethodDialogIsClosed;
 		play.
 
 	aMethodOne := aBehavior methodDict at: #method1.

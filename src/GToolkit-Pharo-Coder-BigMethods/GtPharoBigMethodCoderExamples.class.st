@@ -60,7 +60,7 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 				onPagerPaneWithIndex: 2;
 				satisfies: [ :element | 
 					element
-						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderEditorElement ]
+						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderElement ]
 						ifFound: [ :child | true ]
 						ifNone: [ false ] ] ].
 	^ scripter
