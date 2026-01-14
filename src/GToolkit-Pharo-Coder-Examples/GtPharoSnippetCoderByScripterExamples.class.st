@@ -208,7 +208,8 @@ GtPharoSnippetCoderByScripterExamples >> completionAttributeIsNotPropagated [
 
 	scripter shortcut
 		combination: BlKeyCombination builder control space build;
-		id: GtSourceCoderEditorId;
+		// GtSourceCoderEditorId;
+		// GtSourceCoderEditorInnerId;
 		play.
 
 	(scripter keyPress: BlKeyboardKey tab) play.

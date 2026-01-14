@@ -61,7 +61,7 @@ GtPharoMethodCoderBigMethodExamples >> exampleBigMethod [
 	scripter assertStep: [ :s |
 		s
 			label: 'Confirm read-only editor';
-			// GtSourceCoderElement;
+			// GtSourceCoderEditorId;
 			// GtSourceCoderEditorInnerId;
 			@ [ :each | each viewModel mode class = BrTextEditorReadonlyWithSelectionMode ] ].
 
