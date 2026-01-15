@@ -48,7 +48,10 @@ GtPharoBigMethodExpandedSourceCoderElement >> initialize [
 			text: coderText.
 	self removeChild: editorElement.
 	self addChildFirst: label.
-	self addChildFirst: selectorLabel
+	self addChildFirst: selectorLabel.
+	self
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
+				menu: [ self createHeaderContextMenu ])
 ]
 
 { #category : #'as yet unclassified' }
