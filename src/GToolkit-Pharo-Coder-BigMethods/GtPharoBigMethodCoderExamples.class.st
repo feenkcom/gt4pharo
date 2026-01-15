@@ -60,7 +60,7 @@ GtPharoBigMethodCoderExamples >> checkInspectActionForBigMethodCoder [
 				onPagerPaneWithIndex: 2;
 				satisfies: [ :element | 
 					element
-						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderEditorElement ]
+						allChildrenBreadthFirstDetect: [ :child | child class == GtSourceCoderElement ]
 						ifFound: [ :child | true ]
 						ifNone: [ false ] ] ].
 	^ scripter
@@ -197,4 +197,116 @@ GtPharoBigMethodCoderExamples >> forClassWithUnsearchableMethod [
 	self assert: theMethodCoders fifth class equals: GtPharoMethodCoder.
 	self assert: theMethodCoders fifth selector equals: #testMethod2.
 	^ aMethodsCoder
+]
+
+{ #category : #examples }
+GtPharoBigMethodCoderExamples >> hierarchyImplementersOnExpandedHeader [
+	<gtExample>
+	| scripter |
+	scripter := self checkActionsPresentForBigMethodCoder.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'reduceTable' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #'context-menu--hierarchy-implementers' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				onPagerPaneWithIndex: 2;
+				satisfies: [ :element | 
+					element
+						allChildrenBreadthFirstDetect: [ :child | child class == GtPhlowSearchFilterToolElement ]
+						ifFound: [ :child | true ]
+						ifNone: [ false ] ] ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoBigMethodCoderExamples >> hierarchySendersOnExpandedHeader [
+	<gtExample>
+	| scripter |
+	scripter := self checkActionsPresentForBigMethodCoder.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'reduceTable' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #'context-menu--hierarchy-references' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				onPagerPaneWithIndex: 2;
+				satisfies: [ :element | 
+					element
+						allChildrenBreadthFirstDetect: [ :child | child class == GtPhlowSearchFilterToolElement ]
+						ifFound: [ :child | true ]
+						ifNone: [ false ] ] ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoBigMethodCoderExamples >> implementersOnExpandedHeader [
+	<gtExample>
+	| scripter |
+	scripter := self checkActionsPresentForBigMethodCoder.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'reduceTable' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #'context-menu--implementers' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				onPagerPaneWithIndex: 2;
+				satisfies: [ :element | 
+					element
+						allChildrenBreadthFirstDetect: [ :child | child class == GtPhlowSearchFilterToolElement ]
+						ifFound: [ :child | true ]
+						ifNone: [ false ] ] ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoBigMethodCoderExamples >> sendersOnExpandedHeader [
+	<gtExample>
+	| scripter |
+	scripter := self checkActionsPresentForBigMethodCoder.
+	scripter
+		secondaryClickStep: [ :s | 
+			s
+				label: 'Open context menu';
+				// GtSourceCoderCollapsedTextId;
+				@ [ :each | each text asString = 'reduceTable' ] ].
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #'context-menu--references' ].
+	scripter
+		assertStep: [ :s | 
+			s
+				onPagerPaneWithIndex: 2;
+				satisfies: [ :element | 
+					element
+						allChildrenBreadthFirstDetect: [ :child | child class == GtPhlowSearchFilterToolElement ]
+						ifFound: [ :child | true ]
+						ifNone: [ false ] ] ].
+	^ scripter
 ]

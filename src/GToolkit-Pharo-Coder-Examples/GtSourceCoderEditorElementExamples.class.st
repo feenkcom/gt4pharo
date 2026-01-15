@@ -13,7 +13,7 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
 	scripter := BlScripter new.
 	scripter
-		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
+		element: (GtSourceCoderElement new textualCoderViewModel: aMethodCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
 
 	self assert: anEditorElement hasFocus not.
@@ -35,7 +35,7 @@ GtSourceCoderEditorElementExamples >> editorForInstrumentedMethodCoder [
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
 	scripter := BlScripter new.
 	scripter
-		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
+		element: (GtSourceCoderElement new textualCoderViewModel: aMethodCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
 
 	self assert: anEditorElement hasFocus not.
@@ -57,7 +57,7 @@ GtSourceCoderEditorElementExamples >> editorForInstrumentedMethodCoderWithHighli
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
 	scripter := BlScripter new.
 	scripter
-		element: (GtSourceCoderEditorElement new textualCoderViewModel: aMethodCoderUIModel).
+		element: (GtSourceCoderElement new textualCoderViewModel: aMethodCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
 
 	self assert: anEditorElement hasFocus not.
@@ -80,7 +80,7 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	self assert: aSnippetCoderUIModel shouldAddOnsBeUpdated wait.
 	scripter := BlScripter new.
 	scripter
-		element: (GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel).
+		element: (GtSourceCoderElement new textualCoderViewModel: aSnippetCoderUIModel).
 	anEditorElement := scripter elementWithoutParent.
 
 	self assert: anEditorElement hasFocus not.
@@ -90,5 +90,5 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 		assert: anEditorElement text characters
 		equals: aSnippetCoder currentSourceText characters.
 
-	^ GtSourceCoderEditorElement new textualCoderViewModel: aSnippetCoderUIModel
+	^ GtSourceCoderElement new textualCoderViewModel: aSnippetCoderUIModel
 ]

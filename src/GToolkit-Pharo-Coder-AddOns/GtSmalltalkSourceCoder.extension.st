@@ -1,6 +1,57 @@
 Extension { #name : #GtSmalltalkSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addHierarchyImplementorsHeaderContextMenuAddOnsSelector: aSelector to: coderAddOns requester: aCoderViewModel [
+	<gtCoderHeaderContextMenuAddOns>
+	^ (coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Browse hierarchy implementors'
+				description: aCoderViewModel coder selector)
+		group: BrMenuItemGroupConfiguration navigation
+		action: [ :coderViewModel :anEditorElement | 
+			anEditorElement phlow
+				spawnObject: coderViewModel coder selector gtImplementors
+						& ((GtSearchInheritedMethodsFilter
+								forClass: coderViewModel compiledMethod methodClass instanceSide)
+								withSuperclasses;
+								withSubclasses) ]
+		id: #'context-menu--hierarchy-implementers'
+		shortcutKey: nil) ifNotNil: [ :anAction | anAction priority: 11 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addHierarchyReferencesHeaderContextMenuAddOnsSelector: aSelector to: coderAddOns requester: aCoderViewModel [
+	<gtCoderHeaderContextMenuAddOns>
+	^ (coderAddOns
+		addContextMenuItem: (self
+				createLabel: 'Browse hierarchy references'
+				description: aCoderViewModel coder selector)
+		group: BrMenuItemGroupConfiguration navigation
+		action: [ :coderViewModel :anEditorElement | 
+			anEditorElement phlow
+				spawnObject: coderViewModel coder selector gtReferences
+						& ((GtSearchInheritedMethodsFilter
+								forClass: coderViewModel compiledMethod methodClass instanceSide)
+								withSuperclasses;
+								withSubclasses) ]
+		id: #'context-menu--hierarchy-references'
+		shortcutKey: nil) ifNotNil: [ :anAction | anAction priority: 16 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addImplementorsHeaderContextMenuAddOnsSelector: aSelector to: coderAddOns requester: aCoderViewModel [
+	<gtCoderHeaderContextMenuAddOns>
+	^ (coderAddOns
+		addContextMenuItem: (self
+				createLabel: GtSourceCoderBrowseImplementorsShortcut new name
+				description: aCoderViewModel coder selector)
+		group: BrMenuItemGroupConfiguration navigation
+		action: [ :coderViewModel :anEditorElement | anEditorElement phlow spawnObject: coderViewModel coder selector gtImplementors ]
+		id: #'context-menu--implementers'
+		shortcutKey: nil) ifNotNil: [ :anAction | anAction priority: 10 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel requesterObject: aRequester [
 	<return: #GtCoderContextMenuAction or: nil>
 	^ self
@@ -111,6 +162,19 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: 
 		label: aShortcut name 
 		shortcut: aShortcut 
 		requesterObject: aRequester
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> addReferencesHeaderContextMenuAddOnsSelector: aSelector to: coderAddOns requester: aCoderViewModel [
+	<gtCoderHeaderContextMenuAddOns>
+	^ (coderAddOns
+		addContextMenuItem: (self
+				createLabel: GtSourceCoderBrowseReferencesShortcut new name
+				description: aCoderViewModel coder selector)
+		group: BrMenuItemGroupConfiguration navigation
+		action: [ :coderViewModel :anEditorElement | anEditorElement phlow spawnObject: coderViewModel coder selector gtReferences ]
+		id: #'context-menu--references'
+		shortcutKey: nil) ifNotNil: [ :anAction | anAction priority: 15 ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -289,6 +353,7 @@ GtSmalltalkSourceCoder >> moveStatementNodes: statements downIn: aSourceCoderVie
 	"Expects a collection of sibling statement nodes"
 
 	| editString nextNode |
+	statements isEmpty ifTrue: [ ^ self ].
 	nextNode := (self statementNodeAfter: statements) ifNil: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
 	editString
@@ -307,6 +372,7 @@ GtSmalltalkSourceCoder >> moveStatementNodes: statements upIn: aSourceCoderViewM
 	"Expects a collection of sibling statement nodes"
 
 	| editString prevNode |
+	statements isEmpty ifTrue: [ ^ self ].
 	prevNode := (self statementNodeBefore: statements) ifNil: [ ^ self ].
 	editString := SmaCCString on: self currentSourceText.
 	editString
@@ -400,6 +466,7 @@ GtSmalltalkSourceCoder >> selectStatementOrCascadeAt: anIndex in: aSourceCoderVi
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> statementNodeAfter: aStatementNodeCollection [
 	| siblings index |
+	aStatementNodeCollection isEmpty ifTrue: [ ^ nil ].
 	siblings := aStatementNodeCollection any parent statements.
 	index := siblings indexOf: aStatementNodeCollection last.
 	^ index = siblings size ifTrue: [ nil ] ifFalse: [ siblings at: index + 1 ]

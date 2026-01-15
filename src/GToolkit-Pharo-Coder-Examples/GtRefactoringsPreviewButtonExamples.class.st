@@ -75,6 +75,7 @@ GtRefactoringsPreviewButtonExamples >> switchToMethodNameRefactoringMode [
 				combination: BlKeyCombination primaryR;
 				// (GtSourceCoderId indexed: 3);
 				// GtSourceCoderEditorId;
+				// GtSourceCoderEditorInnerId;
 				play.
 
 			aStep

@@ -1291,6 +1291,7 @@ GtPharoMethodCoderByScripterExamples >> checkRefactoringAttributesForRenamingIns
 	scripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
+		// GtSourceCoderEditorInnerId;
 		play.
 
 
@@ -1878,6 +1879,7 @@ GtPharoMethodCoderByScripterExamples >> compileShadowedVariableError [
 	aScripter shortcut
 		combination: BlKeyCombination primaryS;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	aScripter
@@ -1929,6 +1931,7 @@ GtPharoMethodCoderByScripterExamples >> compileUndeclaredLocalError [
 	aScripter shortcut
 		combination: BlKeyCombination primaryS;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	aScripter
@@ -1982,6 +1985,7 @@ GtPharoMethodCoderByScripterExamples >> compilerErrorFixItContinuesSave [
 	scripter shortcut
 		combination: BlKeyCombination primaryS;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	scripter
@@ -2444,6 +2448,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_ModifySourceCode 
 				label: 'Trigger completer pop-up';
 				combination: BlKeyCombination builder control space build;
 				id: GtSourceCoderEditorId;
+				id: GtSourceCoderEditorInnerId;
 				play.
 
 			aStep wait
@@ -2490,6 +2495,7 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_SelectMethodNameF
 				label: 'Complete with TAB key';
 				combination: BlKeyCombination tab;
 				id: GtSourceCoderEditorId;
+				id: GtSourceCoderEditorInnerId;
 				play ].
 
 	^ aScripter
@@ -2516,11 +2522,13 @@ GtPharoMethodCoderByScripterExamples >> emptyBodyMethodCoderUI_TypeAllArguments 
 						typeStep: [ :s | 
 							s
 								text: '''arg' , anIndex asString , '''';
-								id: GtSourceCoderEditorId ] ]
+								id: GtSourceCoderEditorId;
+								// GtSourceCoderEditorInnerId ] ]
 				separatedBy: [ aStep shortcut
 						label: 'Complete with TAB key';
 						combination: BlKeyCombination tab;
 						id: GtSourceCoderEditorId;
+						id: GtSourceCoderEditorInnerId;
 						play ].
 
 			aStep
@@ -3691,7 +3699,7 @@ GtPharoMethodCoderByScripterExamples >> fixFromUndeclaredVariable [
 
 	scripter shortcut
 		combination: BlKeyCombination primaryS;
-		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	scripter
@@ -5425,7 +5433,7 @@ GtPharoMethodCoderByScripterExamples >> forExtractTemp_07_verify_source [
 		assertStep: [ :s | 
 			s
 				label: 'Assert source editor is focused';
-				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
+				satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 				id: GtSourceCoderEditorId ].
 
 	^ aScripter
@@ -6329,11 +6337,12 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
 	scripter shortcut
 		combination: BlKeyCombination arrowUp;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	scripter assert
 		label: 'Assert editor is focused';
-		satisfies: [ :anEditorElement | anEditorElement isFocused ];
+		satisfies: [ :anEditorElement | anEditorElement hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 
@@ -6348,6 +6357,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
 	scripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
@@ -6389,11 +6399,12 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
 	scripter shortcut
 		combination: BlKeyCombination arrowUp;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	scripter assert
 		label: 'Assert editor is focused';
-		satisfies: [ :anEditorElement | anEditorElement isFocused ];
+		satisfies: [ :anEditorElement | anEditorElement hasFocus ];
 		id: GtSourceCoderEditorId;
 		play.
 
@@ -6408,6 +6419,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameWithReorderArgs [
 	scripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
@@ -6456,7 +6468,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 
 	aScripter shortcut
 		combination: BlKeyCombination arrowUp;
-		id: GtSourceCoderEditorId;
+		// GtSourceCoderEditorId;
+		// GtSourceCoderEditorInnerId;
 		play.
 
 	self checkFor: aScripter saveButtonEnabled: true.
@@ -6466,7 +6479,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_01_setup [
 		assertStep: [ :s | 
 			s
 				label: 'Assert editor is focused';
-				satisfies: [ :anEditorElement | anEditorElement isFocused ];
+				satisfies: [ :anEditorElement | anEditorElement hasFocus ];
 				id: GtSourceCoderEditorId ].
 
 	aScripter
@@ -6551,6 +6564,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_shortcut [
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	self checkFor: aScripter saveButtonEnabled: false.
@@ -7933,7 +7947,7 @@ GtPharoMethodCoderByScripterExamples >> forSplitCascade_04_check_results [
 		assertStep: [ :s | 
 			s
 				label: 'Assert source editor is focused';
-				satisfies: [ :aCoderEditor | aCoderEditor isFocused ];
+				satisfies: [ :aCoderEditor | aCoderEditor hasFocus ];
 				id: GtSourceCoderEditorId ].
 	^ scripter
 ]
@@ -8598,11 +8612,11 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 		clickStep: [ :s | 
 			s
 				label: 'Click on the coder editor to give it focus';
-				id: GtSourceCoderEditorId ].
+				id: GtSourceCoderEditorInnerId ].
 
 	aScripter shortcut
 		combination: BlKeyCombination arrowUp;
-		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	aScripter
@@ -8610,7 +8624,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_01_setup [
 			s
 				label: 'Assert editor is focused';
 				satisfies: [ :anEditorElement | anEditorElement isFocused ];
-				id: GtSourceCoderEditorId ].
+				id: GtSourceCoderEditorInnerId ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -8631,7 +8645,7 @@ GtPharoMethodCoderByScripterExamples >> forUnaryRename_02_shortcut [
 
 	aScripter shortcut
 		combination: BlKeyCombination primaryR;
-		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	aScripter
@@ -10530,6 +10544,7 @@ GtPharoMethodCoderByScripterExamples >> renameClassInstanceVariable [
 	scripter shortcut
 		combination: BlKeyCombination primaryR;
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	self checkFor: scripter renameEditorExists: true.
@@ -10905,6 +10920,7 @@ GtPharoMethodCoderByScripterExamples >> selectStatementsDown [
 			aScripter shortcut
 				combination: BlKeyCombination builder primary shift arrowDown build;
 				id: GtSourceCoderEditorId;
+				id: GtSourceCoderEditorInnerId;
 				play.
 
 			aScripter
@@ -10958,6 +10974,7 @@ GtPharoMethodCoderByScripterExamples >> selectStatementsUp [
 			aScripter shortcut
 				combination: BlKeyCombination builder primary shift arrowUp build;
 				id: GtSourceCoderEditorId;
+				id: GtSourceCoderEditorInnerId;
 				play.
 
 			aScripter
@@ -11068,6 +11085,7 @@ GtPharoMethodCoderByScripterExamples >> undoAfterCancel [
 	[ scripter := self undoRedoAfterTyping.
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryL;
 		play.
 	scripter
@@ -11078,6 +11096,7 @@ GtPharoMethodCoderByScripterExamples >> undoAfterCancel [
 				value: [ :each | each text asString ] equals: [ source ] ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11094,6 +11113,7 @@ GtPharoMethodCoderByScripterExamples >> undoAfterCancel [
 				value: [ :each | each text asString ] equals: [ source , '"a"' ] ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11158,6 +11178,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterDiscarding [
 
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11170,6 +11191,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterDiscarding [
 
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryShiftZ;
 		play.
 	scripter
@@ -11197,6 +11219,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterFormatting [
 
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryShiftF;
 		play.
 
@@ -11209,6 +11232,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterFormatting [
 
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11221,6 +11245,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterFormatting [
 
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryShiftZ;
 		play.
 	scripter
@@ -11247,6 +11272,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterRebuildingCoder [
 				play ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11258,6 +11284,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterRebuildingCoder [
 					equals: [ Object sourceCodeAt: #printString ] ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryShiftZ;
 		play.
 	scripter
@@ -11278,11 +11305,13 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterSaving [
 	[ scripter := self undoRedoAfterTyping.
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryS;
 		play.
 	self assert: ((Object sourceCodeAt: #printString) endsWith: '"a"').
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11293,12 +11322,14 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterSaving [
 				value: [ :each | each text asString ] equals: [ source ] ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryS;
 		play.
 	self assert: ((Object sourceCodeAt: #printString) endsWith: '"a"') not.
 
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryShiftZ;
 		play.
 	scripter
@@ -11327,6 +11358,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterTyping [
 		timesRepeat: [ scripter shortcut
 				combination: BlKeyCombination arrowDown;
 				id: GtSourceCoderEditorId;
+				id: GtSourceCoderEditorInnerId;
 				play ].
 	scripter
 		typeStep: [ :s | 
@@ -11342,6 +11374,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterTyping [
 					equals: [ (Object sourceCodeAt: #printString) , '"a"' ] ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryZ;
 		play.
 	scripter
@@ -11353,6 +11386,7 @@ GtPharoMethodCoderByScripterExamples >> undoRedoAfterTyping [
 					equals: [ Object sourceCodeAt: #printString ] ].
 	scripter shortcut
 		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		combination: BlKeyCombination primaryShiftZ;
 		play.
 	scripter
