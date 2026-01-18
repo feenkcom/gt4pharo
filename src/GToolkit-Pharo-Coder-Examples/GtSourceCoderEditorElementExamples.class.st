@@ -7,23 +7,23 @@ Class {
 { #category : #'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 	<gtExample>
-	| aMethodCoder aMethodCoderUIModel anEditorElement scripter |
+	| aMethodCoder aMethodCoderUIModel sourceCoderElement scripter |
 	aMethodCoder := GtPharoMethodCoderExamples new forExampleMethodCoder.
 	aMethodCoderUIModel := aMethodCoder asCoderViewModel.
 	self assert: aMethodCoderUIModel shouldAddOnsBeUpdated wait.
 	scripter := BlScripter new.
 	scripter
 		element: (GtSourceCoderElement new textualCoderViewModel: aMethodCoderUIModel).
-	anEditorElement := scripter elementWithoutParent.
+	sourceCoderElement := scripter elementWithoutParent.
 
-	self assert: anEditorElement hasFocus not.
-	self assert: anEditorElement padding equals: BlInsets empty.
-	self assert: anEditorElement margin equals: BlInsets empty.
+	self assert: sourceCoderElement hasFocus not.
+	self assert: sourceCoderElement padding equals: BlInsets empty.
+	self assert: sourceCoderElement margin equals: BlInsets empty.
 	self
-		assert: anEditorElement text characters
+		assert: sourceCoderElement text characters
 		equals: aMethodCoder currentSourceText characters.
 
-	^ anEditorElement
+	^ sourceCoderElement editorElement
 ]
 
 { #category : #'example - instance creation' }
@@ -73,7 +73,7 @@ GtSourceCoderEditorElementExamples >> editorForInstrumentedMethodCoderWithHighli
 { #category : #'example - instance creation' }
 GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	<gtExample>
-	| aSnippetCoder aSnippetCoderUIModel scripter anEditorElement |
+	| aSnippetCoder aSnippetCoderUIModel scripter sourceCoderElement |
 	aSnippetCoder := GtPharoSnippetCoder new.
 	aSnippetCoderUIModel := aSnippetCoder asCoderViewModel.
 
@@ -81,14 +81,14 @@ GtSourceCoderEditorElementExamples >> editorForSnippetCoder [
 	scripter := BlScripter new.
 	scripter
 		element: (GtSourceCoderElement new textualCoderViewModel: aSnippetCoderUIModel).
-	anEditorElement := scripter elementWithoutParent.
+	sourceCoderElement := scripter elementWithoutParent.
 
-	self assert: anEditorElement hasFocus not.
-	self assert: anEditorElement padding equals: BlInsets empty.
-	self assert: anEditorElement margin equals: BlInsets empty.
+	self assert: sourceCoderElement hasFocus not.
+	self assert: sourceCoderElement padding equals: BlInsets empty.
+	self assert: sourceCoderElement margin equals: BlInsets empty.
 	self
-		assert: anEditorElement text characters
+		assert: sourceCoderElement text characters
 		equals: aSnippetCoder currentSourceText characters.
 
-	^ GtSourceCoderElement new textualCoderViewModel: aSnippetCoderUIModel
+	^ sourceCoderElement editorElement
 ]
