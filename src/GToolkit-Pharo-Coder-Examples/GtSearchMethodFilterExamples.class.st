@@ -84,7 +84,7 @@ GtSearchMethodFilterExamples >> gtExamplePragmas [
 	| filter |
 	filter := #gtExample gtPragmas.
 	self assert: filter notEmpty.
-	self assert: (filter matches: thisContext method).
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#gtExamplePragmas).
 	^ filter
 ]
 
@@ -94,7 +94,7 @@ GtSearchMethodFilterExamples >> implementorsOfThisMessage [
 	| filter |
 	filter := #implementorsOfThisMessage gtImplementors.
 	self assert: filter notEmpty.
-	self assert: (filter matches: thisContext method).
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#implementorsOfThisMessage).
 	^ filter
 ]
 
@@ -185,13 +185,24 @@ GtSearchMethodFilterExamples >> methodsInCategoryFilter [
 ]
 
 { #category : #examples }
+GtSearchMethodFilterExamples >> methodsInClassFilter [
+	<gtExample>
+	| filter |
+	filter := GtSearchMethodFilterExamples gtMethodsInClass.
+	self assert: filter notEmpty.
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#methodsInClassFilter).
+	
+	^ filter.
+]
+
+{ #category : #examples }
 GtSearchMethodFilterExamples >> methodsInPackageFilter [
 	<gtExample>
 	| filter |
 	
-	filter := GtSearchMethodsInPackageFilter new package: (thisContext method package).
+	filter := 'GToolkit-Pharo-Coder-Examples' asPackage gtMethodsInPackage.
 	self assert: filter notEmpty.
-	self assert: (filter matches: thisContext method).	
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#methodsInPackageFilter).	
 	^ filter.
 ]
 
@@ -199,9 +210,30 @@ GtSearchMethodFilterExamples >> methodsInPackageFilter [
 GtSearchMethodFilterExamples >> methodsWithClassPatternFilter [
 	<gtExample>
 	| filter |
-	filter := GtSearchMethodsWithClassPatternFilter pattern: #FilterExamples.
+	filter := #FilterExamples gtClassMatches.
 	self assert: filter notEmpty.
-	self assert: (filter matches: thisContext method).
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#methodsWithClassPatternFilter).
+	
+	^ filter.
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> methodsWithClassReferencesFilter [
+	<gtExample>
+	| filter |
+	filter := GtSearchMethodFilterExamples gtReferences.
+	self assert: filter notEmpty.
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#methodsWithClassReferencesFilter).
+	^ filter.
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> methodsWithSubstringLiteralFilter [
+	<gtExample>
+	| filter |
+	filter := 'empty' gtSubstringLiteralMatch.
+	self assert: filter notEmpty description: 'it should not be empty'.
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#methodsWithSubstringLiteralFilter).
 	
 	^ filter.
 ]
@@ -222,6 +254,16 @@ GtSearchMethodFilterExamples >> referencesFilterIsAllGtSearchMethodsFilterKind [
 	| filter |
 	filter := #childrenDo: gtReferences.
 	self assert: filter gtAreAllGtSearchMethodsFilterKind.
+	^ filter
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> referencesOfReferences [
+	<gtExample>
+	| filter |
+	filter := #assert: gtReferences.
+	self assert: filter notEmpty.
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#referencesOfReferences).
 	^ filter
 ]
 
@@ -257,4 +299,13 @@ GtSearchMethodFilterExamples >> uncategorizedMethodsilter_matchUncategorizedMeth
 		matches: GtFilterStubSampleA>>#uncategoriedMethodForFilter).
 	
 	^ filter.
+]
+
+{ #category : #'as yet unclassified' }
+GtSearchMethodFilterExamples >> unionFilterIsAllGtSearchMethodsFilterKind [
+	<gtExample>
+	| filter |
+	filter := #childrenDo: gtReferences | #children gtReferences.
+	self assert: filter gtAreAllGtSearchMethodsFilterKind.
+	^ filter
 ]

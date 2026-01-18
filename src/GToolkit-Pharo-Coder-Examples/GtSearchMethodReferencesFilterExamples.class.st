@@ -19,7 +19,7 @@ GtSearchMethodReferencesFilterExamples >> gtExamplePragmasAndReferencesToMethodC
 	<gtExample>
 	| filter |
 	filter := self gtExamplePragmas & GtPharoMethodCoder gtReferences.
-	self assert: (filter matches: thisContext method).
+	self assert: (filter matches: GtSearchMethodReferencesFilterExamples>>#gtExamplePragmasAndReferencesToMethodCoder).
 	self assert: filter notEmpty.
 	^ filter
 ]
