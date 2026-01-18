@@ -218,6 +218,16 @@ GtSearchMethodFilterExamples >> methodsWithClassPatternFilter [
 ]
 
 { #category : #examples }
+GtSearchMethodFilterExamples >> methodsWithClassReferencesFilter [
+	<gtExample>
+	| filter |
+	filter := GtSearchMethodFilterExamples gtReferences.
+	self assert: filter notEmpty.
+	self assert: (filter matches: GtSearchMethodFilterExamples>>#methodsWithClassReferencesFilter).
+	^ filter.
+]
+
+{ #category : #examples }
 GtSearchMethodFilterExamples >> methodsWithSubstringLiteralFilter [
 	<gtExample>
 	| filter |
