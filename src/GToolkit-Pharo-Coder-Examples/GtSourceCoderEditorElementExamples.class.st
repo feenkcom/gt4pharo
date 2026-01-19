@@ -23,7 +23,7 @@ GtSourceCoderEditorElementExamples >> editorForExampleMethodCoder [
 		assert: sourceCoderElement text characters
 		equals: aMethodCoder currentSourceText characters.
 
-	^ sourceCoderElement editorElement
+	^ sourceCoderElement
 ]
 
 { #category : #'example - instance creation' }
