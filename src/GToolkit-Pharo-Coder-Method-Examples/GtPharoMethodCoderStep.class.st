@@ -408,6 +408,15 @@ GtPharoMethodCoderStep >> assertSearchTextCurrentIndexIs: anIndex [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertSearchTextDialogIsClosed [
+	^ self assert
+		label: 'Assert search text dialog is open';
+		notExists;
+		onPopover;
+		// GtTextualCoderSearchTextElement
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertSearchTextDialogIsOpen [
 	^ self assert
 		label: 'Assert search text dialog is open';

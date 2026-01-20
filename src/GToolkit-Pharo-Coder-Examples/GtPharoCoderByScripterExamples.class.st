@@ -4655,7 +4655,7 @@ GtPharoCoderByScripterExamples >> sampleMethodForRefactoringExample [
 	^ stream contents
 ]
 
-{ #category : #'examples - context menu' }
+{ #category : #'examples - search text' }
 GtPharoCoderByScripterExamples >> searchMethodText [
 	<gtExample>
 	| aScripter |
@@ -4670,14 +4670,60 @@ GtPharoCoderByScripterExamples >> searchMethodText [
 					assertSearchTextDialogIsOpen;
 					searchType: 'um';
 					assertSearchTextCurrentIndexIs: 1;
-					assertSearchTextTotalCountIs: 8;
+					assertSearchTextTotalCountIs: 8 ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - search text' }
+GtPharoCoderByScripterExamples >> searchMethodText_close [
+	<gtExample>
+	| aScripter |
+	aScripter := self searchMethodText_previousItem.
+
+	aScripter methodsCoder
+		forCompiledMethod: self addMethod
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
+					searchTextClose;
+					assertSearchTextDialogIsClosed ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - search text' }
+GtPharoCoderByScripterExamples >> searchMethodText_nextItem [
+	<gtExample>
+	| aScripter |
+	aScripter := self searchMethodText.
+
+	aScripter methodsCoder
+		forCompiledMethod: self addMethod
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
 					searchNext;
 					assertSearchTextCurrentIndexIs: 2;
-					assertSearchTextTotalCountIs: 8;
+					assertSearchTextTotalCountIs: 8 ];
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - search text' }
+GtPharoCoderByScripterExamples >> searchMethodText_previousItem [
+	<gtExample>
+	| aScripter |
+	aScripter := self searchMethodText_nextItem.
+
+	aScripter methodsCoder
+		forCompiledMethod: self addMethod
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
 					searchPrevious;
 					assertSearchTextCurrentIndexIs: 1;
-					assertSearchTextTotalCountIs: 8;
-					searchTextClose ];
+					assertSearchTextTotalCountIs: 8 ];
 		play.
 
 	^ aScripter
