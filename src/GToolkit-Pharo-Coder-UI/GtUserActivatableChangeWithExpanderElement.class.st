@@ -5,7 +5,8 @@ Class {
 		'expander',
 		'header',
 		'description',
-		'checkbox'
+		'checkbox',
+		'noDiffLabel'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Refactorings'
 }
@@ -29,18 +30,19 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 					, ((' (' , activatableChange change changesSize printString , ' changes)')
 							asRopedText foreground: BrGlamorousColors disabledHeaderTextColor) ].
 	description text: label.
+	noDiffLabel text: label.
 
-	expander
-		content: [ activatableChange hasDiffChange
-				ifTrue: [ (GtDiffElement onChange: activatableChange change gtDiffChange)
+	activatableChange hasDiffChange
+		ifTrue: [ expander
+				content: [ (GtDiffElement onChange: activatableChange change gtDiffChange)
 						styler: activatableChange change gtDiffStyler;
 						aptitude: GtDiffFlatAptitude;
 						vFitContent;
-						beSmallSize ]
-				ifFalse: [ BrLabel new
-						beSmallSize;
-						aptitude: BrGlamorousLabelAptitude new;
-						text: label ] ].
+						beSmallSize ].
+			expander visibility: BlVisibility visible.
+			noDiffLabel visibility: BlVisibility gone ]
+		ifFalse: [ expander visibility: BlVisibility gone.
+			noDiffLabel visibility: BlVisibility visible ].
 
 	activatableChange isExpanded
 		ifTrue: [ expander expand ]
@@ -50,6 +52,13 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 { #category : #initialization }
 GtUserActivatableChangeWithExpanderElement >> initialize [
 	super initialize.
+	
+	noDiffLabel := BrLabel new
+		aptitude: BrGlamorousLabelAptitude;
+		padding: (BlInsets all: 4);
+		hMatchParent;
+		vFitContent;
+		visibility: BlVisibility gone.
 	
 	expander := BrExpander new.
 	expander
@@ -71,12 +80,18 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 		vFitContent;
 		alignCenterLeft.
 
+	header
+		when: BlClickEvent
+		do: [ :anEvent | 
+			expander toggleExpanded.
+			anEvent consumed: true ].
+
 	description := BrLabel new
 		aptitude: BrGlamorousLabelAptitude;
 		padding: (BlInsets left: 5 right: 5);
 		hMatchParent;
-		vFitContent";
-		beSmallSize".
+		vFitContent;
+		id: #'change-description'.
 
 	header addChildren: { 
 		description
@@ -93,7 +108,8 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 
 	self addChildren: { 
 		checkbox.
-		expander }
+		expander.
+		noDiffLabel }
 ]
 
 { #category : #'event handling' }

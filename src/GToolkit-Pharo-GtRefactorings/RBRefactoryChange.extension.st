@@ -70,12 +70,12 @@ RBRefactoryChange >> gtClassChangeGroup [
 RBRefactoryChange >> gtClassFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
-		creator: [ :stream :model | 
+		creator: [ :block :model | 
 			| value |
 			value := model text asString.
 			value isEmpty
-				ifTrue: [ stream ]
-				ifFalse: [ stream filter: [ :each | each gtIsForClassNamed: value ] ] ];
+				ifTrue: [ block ]
+				ifFalse: [ [ :each | (block cull: each) and: [ each gtIsForClassNamed: value ] ] ] ];
 		named: 'In class';
 		order: 10;
 		completion: [ GtStringsCompletionStrategy new
@@ -92,13 +92,12 @@ RBRefactoryChange >> gtError [
 RBRefactoryChange >> gtExecutedFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterShortListModel new
-		creator: [ :stream :model | 
+		creator: [ :block :model | 
 			| selector |
 			selector := model selectedItem itemValue = 'yes'
 					ifTrue: [ #notNil ]
 					ifFalse: [ #isNil ].
-			stream
-				filter: [ :each | (each attributeNamed: #timestamp) perform: selector ] ];
+			[ :each | (block cull: each) and: [ (each attributeNamed: #timestamp) perform: selector ] ] ];
 		named: 'Executed';
 		order: 20;
 		items: {'no' asFilterModelItem.
@@ -109,6 +108,11 @@ RBRefactoryChange >> gtExecutedFilter [
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtIncludesSubstring: aString [
+	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtIsComposite [
 	^ false
 ]
 
@@ -136,12 +140,12 @@ RBRefactoryChange >> gtNumberOfChanges [
 RBRefactoryChange >> gtSelectorFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
-		creator: [ :stream :model | 
+		creator: [ :block :model | 
 			| value |
 			value := model text asString.
 			value isEmpty
-				ifTrue: [ stream ]
-				ifFalse: [ stream filter: [ :each | each gtIsForSelector: value ] ] ];
+				ifTrue: [ block ]
+				ifFalse: [ [ :each | (block cull: each) and: [ each gtIsForSelector: value ] ] ] ];
 		named: 'Selector';
 		order: 15;
 		completion: [ GtStringsCompletionStrategy new
@@ -158,12 +162,12 @@ RBRefactoryChange >> gtSomeWereApplied [
 RBRefactoryChange >> gtSubstringFilter [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
-		creator: [ :stream :model | 
+		creator: [ :block :model | 
 			| value |
 			value := model text asString.
 			value isEmpty
-				ifTrue: [ stream ]
-				ifFalse: [ stream filter: [ :each | each gtIncludesSubstring: value ] ] ];
+				ifTrue: [ block ]
+				ifFalse: [ [ :each | (block cull: each) and: [ each gtIncludesSubstring: value ] ] ] ];
 		named: 'Substring';
 		order: 18;
 		beNotDefault
@@ -183,6 +187,12 @@ RBRefactoryChange >> isBasicChange [
 RBRefactoryChange >> postCopy [
 	super postCopy.
 	attributes := attributes ifNotNil: [ attributes copy ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> removeAttributeNamed: aSymbol [
+	attributes ifNil: [ ^ self ].
+	attributes removeKey: aSymbol ifAbsent: [  ]
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
