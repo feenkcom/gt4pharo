@@ -399,6 +399,33 @@ GtPharoMethodCoderStep >> assertSaveAlreadyExistingMethodDialogIsOpen [
 ]
 
 { #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertSearchTextCurrentIndexIs: anIndex [
+	^ self assert
+		label: ('Assert found text index is: {1}' format: { anIndex });
+		value: [ :anElement | anElement markerContext selectedIndex ] equals: anIndex;
+		onPopover;
+		// GtTextualCoderSearchTextElement
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertSearchTextDialogIsOpen [
+	^ self assert
+		label: 'Assert search text dialog is open';
+		exists;
+		onPopover;
+		// GtTextualCoderSearchTextElement
+]
+
+{ #category : #'steps - checks' }
+GtPharoMethodCoderStep >> assertSearchTextTotalCountIs: anIndex [
+	^ self assert
+		label: ('Assert found total items is: {1}' format: { anIndex });
+		value: [ :anElement | anElement markerContext totalCount ] equals: anIndex;
+		onPopover;
+		// GtTextualCoderSearchTextElement
+]
+
+{ #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertSelfObjectIs: anObject [
 	| anAssertStep |
 	anAssertStep := self assert
@@ -696,6 +723,60 @@ GtPharoMethodCoderStep >> privateAssertExpandersCount: aNumber coderElement: aCo
 		assert: unexpectedExpander all size = 0
 		description: [ 'There is at least one more expander compared to {1} expected expanders'
 				format: {aNumber} ]
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> searchNext [
+	^ self shortcut
+		label: 'Search next text occurence';
+		combination: BlKeyCombination return;
+		onPopover;
+		// GtTextualCoderSearchTextElement;
+		// #pattern
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> searchPrevious [
+	^ self shortcut
+		label: 'Search previous text occurence';
+		combination: BlKeyCombination primaryReturn;
+		onPopover;
+		// GtTextualCoderSearchTextElement;
+		// #pattern
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> searchText [
+	^ self shortcut
+		label: 'Open search text dialog';
+		combination: BlKeyCombination primaryF;
+		onParentStepTarget: self;
+		onThisOrDeepChildElementId: GtSourceCoderEditorInnerId;
+		onTopMost
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> searchTextClose [
+	^ self shortcut
+		label: 'Close search text dialog';
+		combination: BlKeyCombination escape;
+		onPopover;
+		// GtTextualCoderSearchTextElement;
+		// #pattern
+]
+
+{ #category : #'steps - interactions' }
+GtPharoMethodCoderStep >> searchType: aString [
+	"The event is eventually handled in {{gtMethod:BrTextEditorInsertionHandler>>#textInputEvent:}}. 
+	Note that all characters must be printable, otherwise the event is ignored."
+
+	^ self type
+		referenceSender;
+		label: ('Search text: {1}' format: {aString lines first printStringLimitedTo: 30});
+		text: aString;
+		onPopover;
+		// GtTextualCoderSearchTextElement;
+		// #pattern
 ]
 
 { #category : #'steps - interactions' }

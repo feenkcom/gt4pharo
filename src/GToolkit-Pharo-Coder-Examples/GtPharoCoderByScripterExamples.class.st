@@ -91,6 +91,11 @@ GtPharoCoderByScripterExamples >> addBackNewInstanceSideMethod [
 	^ aScripter
 ]
 
+{ #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> addMethod [
+	^ GtPharoDummyClass >> #addDummyClassMethods:
+]
+
 { #category : #'examples - add new method' }
 GtPharoCoderByScripterExamples >> addMethodDropdownRemembersItsContent [
 	"See [](https://github.com/feenkcom/gtoolkit/issues/3230)"
@@ -1160,7 +1165,7 @@ GtPharoCoderByScripterExamples >> coderRightSideForClass: aClass leftSpaceWeight
 { #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> coderWithAddMethod [
 	<gtExample>
-	^ self coderInPager: [ GtCoderElement forMethod: GtPharoDummyClass >> #addDummyClassMethods: ]
+	^ self coderInPager: [ GtCoderElement forMethod: self addMethod ]
 ]
 
 { #category : #'examples - coder' }
@@ -4648,6 +4653,34 @@ GtPharoCoderByScripterExamples >> sampleMethodForRefactoringExample [
 	stream := WriteStream on: String new.
 	stream nextPutAll: (value printStringBase: 16 nDigits: 2) , ' = ''0F'''.
 	^ stream contents
+]
+
+{ #category : #'examples - context menu' }
+GtPharoCoderByScripterExamples >> searchMethodText [
+	<gtExample>
+	| aScripter |
+	aScripter := self coderWithAddMethod.
+	self setSpace800x600Extent: aScripter.
+
+	aScripter methodsCoder
+		forCompiledMethod: self addMethod
+			do: [ :aMethodCoderStep | 
+				aMethodCoderStep
+					searchText;
+					assertSearchTextDialogIsOpen;
+					searchType: 'um';
+					assertSearchTextCurrentIndexIs: 1;
+					assertSearchTextTotalCountIs: 8;
+					searchNext;
+					assertSearchTextCurrentIndexIs: 2;
+					assertSearchTextTotalCountIs: 8;
+					searchPrevious;
+					assertSearchTextCurrentIndexIs: 1;
+					assertSearchTextTotalCountIs: 8;
+					searchTextClose ];
+		play.
+
+	^ aScripter
 ]
 
 { #category : #'examples - index' }
