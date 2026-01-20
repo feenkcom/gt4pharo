@@ -111,6 +111,16 @@ GtPharoBehaviorDefinitionCoderElement >> coderViewModel: aGtBehaviorDefinitionCo
 	self initializeElements
 ]
 
+{ #category : #acessing }
+GtPharoBehaviorDefinitionCoderElement >> contentElement [
+	| targetId |
+	targetId := #content asBlocElementId.
+	^ self children
+		detect: [ :eachChild | eachChild id = targetId ]
+		ifFound: [ :aChild | {aChild} ]
+		ifNone: [ #() ]
+]
+
 { #category : #'private - ui' }
 GtPharoBehaviorDefinitionCoderElement >> editableLabelLook [
 	^ BrGlamorousEditableLabelAptitude new
@@ -121,19 +131,29 @@ GtPharoBehaviorDefinitionCoderElement >> editableLabelLook [
 
 { #category : #initialization }
 GtPharoBehaviorDefinitionCoderElement >> initialize [
-	super initialize.	
+	super initialize.
 
 	self
 		aptitude: GtCoderExpanderAptitude;
 		hMatchParent;
 		vFitContent.
-	
-	self when: BlClickEvent do: [ :anEvent |
-		anEvent consumed: true.
-		self expand ].
-	
+
+	self
+		when: BlClickEvent
+		do: [ :anEvent | 
+			anEvent consumed: true.
+			self expand ].
+
 	modificationIndicator := self newModificationIndicator.
 	self addChild: modificationIndicator.
+
+	self
+		addAptitude: (BrLayoutResizerAptitude new
+				hCommon: [ self contentElement ];
+				vMatchParentToMatchParent: [ self contentElement ];
+				vFitContentToFitContent: [ self contentElement ];
+				vFitContentLimitedToFitContent: [ self contentElement ];
+				vExactToMatchParent: [ self contentElement ])
 ]
 
 { #category : #'private - ui' }
