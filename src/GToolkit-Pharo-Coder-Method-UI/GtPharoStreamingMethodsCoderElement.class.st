@@ -126,6 +126,7 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 		stream: AsyncEmptyStream new.
 
 	list := BrSimpleList new
+		constraintsDo: [ :c | c minHeight: 50 ];
 		itemType: [ :anItemTypeFactory :anItemObject | anItemObject elementClass ];
 		itemStencil: [ :anElementClass |
 			anElementClass new
@@ -147,6 +148,9 @@ GtPharoStreamingMethodsCoderElement >> initialize [
 					textualCoderViewModel: aCoderViewModel ] ];
 		itemsProvider: listItemsProvider.
 
+	self addAptitude: (BrLayoutResizerAptitude new
+		common: list).
+		
 	self addChild: list as: GtPharoStreamingMethodsCoderListId.
 	showIndicator := false.
 	self initializeShortcuts

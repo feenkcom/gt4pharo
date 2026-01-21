@@ -137,17 +137,24 @@ GtPharoBehaviorCoderElement >> buildClassHeader [
 { #category : #'building ui' }
 GtPharoBehaviorCoderElement >> buildContentPane [
 
+	| labelElement headerElement definitionElement tabGroupElement |
 	contentPane := BlElement new.
 	contentPane layout: BlLinearLayout vertical.
 	contentPane constraintsDo: [ :c | 
 		c horizontal matchParent.
 		c vertical matchParent ].
 	contentPane padding: (BlInsets top: 5 left: 6 bottom: 5 right: 6).
-	contentPane addChild: self makeLabel.
-	contentPane addChild: self buildClassHeader.
-	contentPane addChild: self buildDefinitionElement.
-	contentPane addChild: self buildContentTabs.
+	contentPane addChild: (labelElement := self makeLabel).
+	contentPane addChild: (headerElement := self buildClassHeader).
+	contentPane addChild: (definitionElement := self buildDefinitionElement).
+	contentPane addChild: (tabGroupElement := self buildContentTabs).
 
+	contentPane
+		addAptitude: (BrLayoutResizerAptitude new
+				hCommon: { labelElement. headerElement. definitionElement };
+				vAnyToFitContent: { labelElement. headerElement. definitionElement };
+				common: tabGroupElement).
+	
 	^ contentPane
 ]
 
@@ -271,7 +278,11 @@ GtPharoBehaviorCoderElement >> initialize [
 		addAptitude: (GtPhlowToolDetailAptitude new
 				topDetailed: [ :aStyle | aStyle do: [ self hideDefinitionElements ] ];
 				normal: [ :aStyle | aStyle do: [ self showDefinitionElement ] ];
-				left: [ :aStyle | aStyle do: [ self showDefinitionElement ] ])
+				left: [ :aStyle | aStyle do: [ self showDefinitionElement ] ]).
+				
+	self
+		addAptitude: (BrLayoutResizerAptitude new
+				common: [ container ifNil: [ #() ] ])
 ]
 
 { #category : #'building ui' }
@@ -342,5 +353,7 @@ GtPharoBehaviorCoderElement >> updateContent [
 	container ifNotNil: [ :anElement | anElement removeFromParent].
 	
 	container := self buildContentPane.
-	self addChildFirst: container
+	self addChildFirst: container.
+	
+	self requestStyle
 ]
