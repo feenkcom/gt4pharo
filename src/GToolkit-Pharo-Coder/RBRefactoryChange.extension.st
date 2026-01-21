@@ -27,6 +27,10 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock threshold: aThreshold 
 						ifTrue: [ SystemAnnouncer uniqueInstance
 								announce: (GtAboutToPerformBulkChangesAnnouncement new changes: self) ].
 					[ | now |
+					self
+						gtAllChangesDo: [ :each | 
+							each removeAttributeNamed: #timestamp.
+							each removeAttributeNamed: #error ].
 					now := DateAndTime now.
 					undoChange := self
 							executeNotifying: [ current := current + 1 min: totalCount.

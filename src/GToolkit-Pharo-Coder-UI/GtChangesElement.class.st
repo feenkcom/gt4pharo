@@ -44,6 +44,11 @@ GtChangesElement >> changes: aRefactoryChange [
 		expandOneLevel
 ]
 
+{ #category : #initialization }
+GtChangesElement >> disableChange: activatableChange [
+	activatableChange allChanges do: [ :each | each isEnabled: false ]
+]
+
 { #category : #accessing }
 GtChangesElement >> expandUpTo: anInteger [
 	changesTree expandUpTo: anInteger
@@ -57,7 +62,18 @@ GtChangesElement >> initialize [
 	self padding: (BlInsets all: 10).
 	changesTree := BrSimpleTree new
 			nodeType: [ :aTypeFactory :aTreeNode | aTreeNode value elementClass ];
-			nodeStencil: [ :aNodeType | aNodeType new ];
+			nodeStencil: [ :aNodeType | 
+				aNodeType new
+					addAptitude: (BrGlamorousWithExplicitContextMenuAptitude new
+							menu: [ :each | 
+								| model |
+								model := BrMenuItems new.
+								model
+									addItemId: #'disable-menu'
+									label: 'Disable'
+									action: [ model hide.
+										self disableChange: each anchorElement activatableChange ] ]);
+					yourself ];
 			nodeDataBinder: [ :eachElement :eachUserActivatableChange | eachElement activatableChange: eachUserActivatableChange ];
 			yourself.
 	self addAptitude: (BrLayoutResizerAptitude new inherit: changesTree).

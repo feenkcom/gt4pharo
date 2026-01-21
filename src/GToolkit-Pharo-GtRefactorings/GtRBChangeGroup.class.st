@@ -17,7 +17,9 @@ GtRBChangeGroup class >> buildFrom: aChange [
 			(each perform: self buildSelector)
 				ifNotNil: [ :group | (groups at: group ifAbsentPut: [ group ]) addItem: each ] ].
 	items := groups keys asSortedCollection: [ :a :b | a name < b name ].
-	^ GtRBCompositeChangeGroup named: aChange name items: items
+	^ (GtRBCompositeChangeGroup named: aChange name items: items)
+		changes: aChange;
+		yourself
 ]
 
 { #category : #private }
@@ -50,22 +52,53 @@ GtRBChangeGroup >> addItem: anObject [
 	items add: anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtRBChangeGroup >> allChanges [
+	^ items
+		flatCollectAsSet: [ :each | (each isKindOf: GtRBChangeGroup) ifTrue: [ each allChanges ] ifFalse: [ {each} ] ]
+]
+
+{ #category : #filtering }
+GtRBChangeGroup >> filter: aBlock [
+	| result newItems |
+	result := self copy.
+	newItems := OrderedCollection new.
+	items
+		do: [ :each | 
+			| newItem |
+			(each isKindOf: GtRBChangeGroup)
+				ifTrue: [ newItem := each filter: aBlock.
+					newItem items notEmpty ifTrue: [ newItems add: newItem ] ]
+				ifFalse: [ each gtIsComposite
+						ifTrue: [ newItem := each gtFilter: aBlock.
+							(newItem changes notEmpty or: [ aBlock value: each ])
+								ifTrue: [ newItems add: newItem ] ]
+						ifFalse: [ (aBlock value: each) ifTrue: [ newItems add: each ] ] ] ].
+	result items: newItems.
+	^ result
+]
+
 { #category : #accessing }
 GtRBChangeGroup >> gtAppliedText [
-	| anyApplied allApplied error |
+	| anyApplied allApplied changeWithError |
 	anyApplied := false.
 	allApplied := true.
-	error := nil.
+	changeWithError := nil.
 	items
 		do: [ :each | 
 			allApplied := allApplied and: [ each gtAllWereApplied ].
 			anyApplied := anyApplied or: [ each gtSomeWereApplied ].
-			each gtError ifNotNil: [ :err | error := err ] ].
-	^ error
+			each gtError ifNotNil: [ :err | changeWithError := each ] ].
+	^ changeWithError
 		ifNil: [ allApplied
 				ifTrue: [ self gtTimestamp printToSeconds ]
 				ifFalse: [ anyApplied ifTrue: [ 'Partial' ] ifFalse: [ '' ] ] ]
-		ifNotNil: [ error messageText ]
+		ifNotNil: [ changeWithError gtAppliedText ]
+]
+
+{ #category : #accessing }
+GtRBChangeGroup >> gtChangeIcon [
+	^ nil
 ]
 
 { #category : #accessing }
@@ -77,23 +110,10 @@ GtRBChangeGroup >> gtError [
 { #category : #accessing }
 GtRBChangeGroup >> gtItemsFor: aView [
 	<gtView>
-	^ aView columnedTree
+	^ aView explicit
 		title: 'Items';
 		priority: 10;
-		items: [ items ];
-		children: [ :each | (each isKindOf: RBRefactoryChange) ifTrue: [ #() ] ifFalse: [ each items ] ];
-		column: 'Description'
-			text: [ :each | each name asRopedText ]
-			weight: 0.75;
-		column: '# of changes'
-			text: [ :each | 
-				(each isKindOf: RBRefactoryChange)
-					ifTrue: [ '' ]
-					ifFalse: [ each gtNumberOfChanges printString ] ]
-			weight: 0.12;
-		column: 'Applied'
-			text: [ :each | each gtAppliedText ]
-			weight: 0.13
+		stencil: [ GtRBChangeGroupElement new group: self ]
 ]
 
 { #category : #accessing }
