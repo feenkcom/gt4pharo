@@ -103,6 +103,14 @@ GtPharoParserExamples >> parensNestingLevel [
 ]
 
 { #category : #'examples - nesting level' }
+GtPharoParserExamples >> returnInArray [
+	<gtExample>
+	| ast |
+	ast := GtPharoParser parse: 'foo ^ {1. ^2}'.
+	^ ast
+]
+
+{ #category : #'examples - nesting level' }
 GtPharoParserExamples >> rootNestingLevel [
 	<gtExample>
 	| ast |

@@ -20,7 +20,7 @@ GtPharoParser class >> ambiguousTransitions [
 
 { #category : #'generated-accessing' }
 GtPharoParser class >> cacheId [
-	^'2025-11-12T05:49:50.396109-06:00'
+	^'2026-01-22T06:00:52.340071-06:00'
 ]
 
 { #category : #generated }
@@ -329,7 +329,7 @@ Value
 	| error 'smaccError' {{Error}}
 	;
 Array
-	: <leftBrace> 'leftBrace' (Assignment 'value' (<period> 'period'+ Assignment 'value')*)? <period> 'period'+? <rightBrace> 'rightBrace' {{}}
+	: <leftBrace> 'leftBrace' (Statement 'value' (<period> 'period'+ Statement 'value')*)? <period> 'period'+? <rightBrace> 'rightBrace' {{}}
 	;
 Block
 	: <leftBracket> 'leftBracket' BlockArgs Sequence 'body' <rightBracket> 'rightBracket' {{}}
@@ -416,7 +416,7 @@ GtPharoParser class >> initialize [
 { #category : #generated }
 GtPharoParser class >> reduceTable [
 ^#(
-	#(124 0 #reduceActionForSwitchToLiteralArray1: 10007553 true) 
+	#(124 0 #reduceActionForSwitchToLiteralArray1: 10005505 true) 
 	#(68 0 #reduceActionForSequence1: 5194753 false) 
 	#(39 1 #reduceActionForMethodPattern1: 3034113 false) 
 	#(41 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3348481 false) 
@@ -429,19 +429,19 @@ GtPharoParser class >> reduceTable [
 	#(97 1 #reduceActionForVariable1: 7099393 false) 
 	#(97 1 #reduceActionForVariable2: 7099394 false) 
 	#(97 1 #reduceActionForVariable3: 7099395 false) 
-	#(122 1 #reduceActionForBooleanLiteral1: 9904129 false) 
-	#(122 1 #reduceActionForBooleanLiteral1: 9904130 false) 
-	#(123 1 #reduceActionForNilLiteral1: 9970689 false) 
+	#(122 1 #reduceActionForBooleanLiteral1: 9902081 false) 
+	#(122 1 #reduceActionForBooleanLiteral1: 9902082 false) 
+	#(123 1 #reduceActionForNilLiteral1: 9968641 false) 
 	#(99 1 #reduceActionForNamedVariable1: 7334913 false) 
 	#(98 1 #reduceActionForGemStonePath1: 7287809 false) 
 	#(70 0 #reduceActionForVariable__variable__1: 5294081 false) 
-	#(112 1 #reduceActionForStringLiteral1: 8615937 false) 
-	#(121 1 #reduceActionForSymbolLiteral1: 9861121 false) 
-	#(120 1 #reduceActionForCharacterLiteral1: 9811969 false) 
-	#(113 1 #reduceActionForNumberLiteral1: 8658945 false) 
-	#(113 1 #reduceActionForNumberLiteral1: 8658946 false) 
-	#(110 0 #reduceActionForBlockArgs1: 8389633 false) 
-	#(118 0 #reduceActionForVariable__variable__1: 9668609 false) 
+	#(112 1 #reduceActionForStringLiteral1: 8613889 false) 
+	#(121 1 #reduceActionForSymbolLiteral1: 9859073 false) 
+	#(120 1 #reduceActionForCharacterLiteral1: 9809921 false) 
+	#(113 1 #reduceActionForNumberLiteral1: 8656897 false) 
+	#(113 1 #reduceActionForNumberLiteral1: 8656898 false) 
+	#(110 0 #reduceActionForBlockArgs1: 8387585 false) 
+	#(118 0 #reduceActionForVariable__variable__1: 9666561 false) 
 	#(67 1 #reduceActionFor_period___period__1: 5017601 false) 
 	#(66 1 #reduceActionForMethodSequence9: 4970505 false) 
 	#(53 1 #reduceActionForKeywordPattern1: 4145153 false) 
@@ -469,17 +469,17 @@ GtPharoParser class >> reduceTable [
 	#(103 1 #liftFirstValue: 7729155 false) 
 	#(103 1 #liftFirstValue: 7729156 false) 
 	#(103 1 #liftFirstValue: 7729154 false) 
-	#(111 1 #liftFirstValue: 8462337 false) 
-	#(111 1 #liftFirstValue: 8462338 false) 
-	#(111 1 #liftFirstValue: 8462339 false) 
-	#(111 1 #liftFirstValue: 8462340 false) 
-	#(111 1 #liftFirstValue: 8462341 false) 
-	#(111 1 #liftFirstValue: 8462342 false) 
-	#(111 1 #liftFirstValue: 8462343 false) 
-	#(111 1 #liftFirstValue: 8462344 false) 
+	#(111 1 #liftFirstValue: 8460289 false) 
+	#(111 1 #liftFirstValue: 8460290 false) 
+	#(111 1 #liftFirstValue: 8460291 false) 
+	#(111 1 #liftFirstValue: 8460292 false) 
+	#(111 1 #liftFirstValue: 8460293 false) 
+	#(111 1 #liftFirstValue: 8460294 false) 
+	#(111 1 #liftFirstValue: 8460295 false) 
+	#(111 1 #liftFirstValue: 8460296 false) 
 	#(99 1 #reduceActionForNamedVariable1: 7334914 false) 
 	#(103 1 #reduceActionForValue8: 7729160 false) 
-	#(126 1 #reduceActionForDoItMethod1: 10123265 false) 
+	#(126 1 #reduceActionForDoItMethod1: 10121217 false) 
 	#(64 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4879361 false) 
 	#(40 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 3348481 false) 
 	#(39 2 #reduceActionForMethodPattern7: 3034119 false) 
@@ -499,8 +499,8 @@ GtPharoParser class >> reduceTable [
 	#(57 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4270081 false) 
 	#(55 2 #reduceActionForPragma4: 4176900 false) 
 	#(104 2 #reduceActionForArray1: 8025089 false) 
-	#(106 0 #reduceActionFor__period___period___Assignment__value___1: 8079361 false) 
-	#(109 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 8310785 false) 
+	#(106 0 #reduceActionFor__period___period___Statement__value___1: 8078337 false) 
+	#(109 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 8308737 false) 
 	#(66 2 #reduceActionForMethodSequence11: 4970507 false) 
 	#(66 2 #reduceActionForMethodSequence13: 4970509 false) 
 	#(66 2 #reduceActionForMethodSequence10: 4970506 false) 
@@ -526,7 +526,7 @@ GtPharoParser class >> reduceTable [
 	#(95 1 #liftFirstValue: 6924291 false) 
 	#(95 1 #reduceActionForUnaryMessage1: 6924290 false) 
 	#(75 2 #reduceActionForCascade1: 5672963 false) 
-	#(115 0 #reduceActionForVariable__variable__1: 8807425 false) 
+	#(115 0 #reduceActionForVariable__variable__1: 8805377 false) 
 	#(39 3 #reduceActionForMethodPattern8: 3034120 false) 
 	#(44 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 3551234 false) 
 	#(50 2 #reduceActionForTemplateKeyword2: 3900418 false) 
@@ -549,15 +549,15 @@ GtPharoParser class >> reduceTable [
 	#(57 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4270082 false) 
 	#(55 3 #reduceActionForPragma5: 4176901 false) 
 	#(104 3 #reduceActionForArray2: 8025090 false) 
-	#(108 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 8310785 false) 
-	#(110 2 #reduceActionForBlockArgs2: 8389634 false) 
-	#(107 3 #reduceActionForBlock2: 8178690 false) 
-	#(109 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 8310786 false) 
+	#(108 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 8308737 false) 
+	#(110 2 #reduceActionForBlockArgs2: 8387586 false) 
+	#(107 3 #reduceActionForBlock2: 8176642 false) 
+	#(109 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 8308738 false) 
 	#(103 3 #reduceActionForValue5: 7729157 false) 
-	#(117 3 #reduceActionForByteArrayLiteral1: 9617409 false) 
-	#(119 1 #liftFirstValue: 9736193 false) 
-	#(118 2 #reduceActionForPragma__pragma__2: 9668610 false) 
-	#(119 1 #reduceActionForValue8: 9736194 false) 
+	#(117 3 #reduceActionForByteArrayLiteral1: 9615361 false) 
+	#(119 1 #liftFirstValue: 9734145 false) 
+	#(118 2 #reduceActionForPragma__pragma__2: 9666562 false) 
+	#(119 1 #reduceActionForValue8: 9734146 false) 
 	#(66 3 #reduceActionForMethodSequence12: 4970508 false) 
 	#(66 3 #reduceActionForMethodSequence1: 4970497 false) 
 	#(66 3 #reduceActionForMethodSequence15: 4970511 false) 
@@ -581,15 +581,15 @@ GtPharoParser class >> reduceTable [
 	#(83 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6192130 false) 
 	#(96 2 #reduceActionForTemplateUnaryMessage1: 7035905 false) 
 	#(74 3 #reduceActionForAssignment1: 5571585 false) 
-	#(125 0 #reduceActionForEndLiteralArray1: 10072065 true) 
+	#(125 0 #reduceActionForEndLiteralArray1: 10070017 true) 
 	#(47 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3647490 false) 
 	#(46 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: 3647490 false) 
 	#(48 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3770370 false) 
 	#(45 3 #reduceActionForTemplateWithName3: 3602435 false) 
 	#(102 3 #reduceActionForStartTemplate1: 7601153 false) 
 	#(104 4 #reduceActionForArray3: 8025091 false) 
-	#(106 2 #reduceActionFor__period___period___Assignment__value___2: 8079362 false) 
-	#(107 4 #reduceActionForBlock1: 8178689 false) 
+	#(106 2 #reduceActionFor__period___period___Statement__value___2: 8078338 false) 
+	#(107 4 #reduceActionForBlock1: 8176641 false) 
 	#(66 4 #reduceActionForMethodSequence3: 4970499 false) 
 	#(66 4 #reduceActionForMethodSequence2: 4970498 false) 
 	#(66 4 #reduceActionForMethodSequence16: 4970512 false) 
@@ -603,33 +603,33 @@ GtPharoParser class >> reduceTable [
 	#(87 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 6418434 false) 
 	#(85 3 #reduceActionForTemplateKeywordMessage2: 6322178 false) 
 	#(89 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6462466 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885252 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885250 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885256 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885259 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885261 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885258 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885262 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885260 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885254 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885257 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885255 false) 
-	#(116 1 #liftFirstValue: 8885249 false) 
-	#(115 2 #reduceActionForPragma__pragma__2: 8807426 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885251 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8885253 false) 
-	#(116 1 #reduceActionForValue8: 8885264 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883204 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883202 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883208 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883211 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883213 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883210 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883214 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883212 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883206 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883209 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883207 false) 
+	#(116 1 #liftFirstValue: 8883201 false) 
+	#(115 2 #reduceActionForPragma__pragma__2: 8805378 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883203 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8883205 false) 
+	#(116 1 #reduceActionForValue8: 8883216 false) 
 	#(103 4 #reduceActionForValue6: 7729158 false) 
 	#(101 3 #reduceActionForStartTemplate1: 7480321 false) 
 	#(104 5 #reduceActionForArray4: 8025092 false) 
-	#(105 2 #reduceActionForTemplateKeyword2: 8079361 false) 
+	#(105 2 #reduceActionForTemplateKeyword2: 8078337 false) 
 	#(66 5 #reduceActionForMethodSequence4: 4970500 false) 
 	#(61 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 4753410 false) 
 	#(60 5 #reduceActionForTemplatePragma3: 4585475 false) 
 	#(86 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 6418434 false) 
 	#(103 5 #reduceActionForValue7: 7729159 false) 
-	#(114 5 #reduceActionForArrayLiteral1: 8735745 false) 
-	#(116 3 #reduceActionForArrayLiteralValue15: 8885263 false)
+	#(114 5 #reduceActionForArrayLiteral1: 8733697 false) 
+	#(116 3 #reduceActionForArrayLiteralValue15: 8883215 false)
 	).
 ]
 
@@ -680,7 +680,7 @@ GtPharoParser class >> startingStateForVariable [
 
 { #category : #generated }
 GtPharoParser class >> symbolNames [
-	^ #('"self"' '"super"' '"thisContext"' '<true>' '<false>' '<nil>' '<name>' '<gsPath>' '<nameAssignment>' '<bar>' '<string>' '<symbol>' '<character>' '<number>' '<negativeNumber>' '<literalArrayKeyword>' '<return>' '<lt>' '<gt>' '<leftBrace>' '<leftBracket>' '<colon>' '<leftParen>' '<literalArrayStart>' '<byteArrayStart>' '<rightParen>' '<rightBracket>' '<rightBrace>' '<keyword>' '<binary>' '<semicolon>' '<assign>' '<period>' '<comment>' '<whitespace>' '<patternToken>' 'B e g i n' 'Method' 'MethodPattern' '(<keyword> ''selectorPart'' Variable ''variable'')' '(<keyword> ''selectorPart'' Variable ''variable'')+' 'TemplatePattern' '(TemplateKeywordPattern KeywordPattern?)' '(TemplateKeywordPattern KeywordPattern?)+' 'TemplateWithName' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)+' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)*' 'TemplateKeywordPattern' 'TemplateKeyword' 'TemplateNameContinuationPart' 'TemplateNamePart' 'Pragmas' 'Pragma ''pragma''+' 'Pragma' '(<keyword> ''selectorPart'' PragmaArgument)' '(<keyword> ''selectorPart'' PragmaArgument)+' 'OnlyTemplate' 'PragmaArgument' 'TemplatePragma' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)+' 'KeywordPattern' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'') Variable ''variable'')' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'') Variable ''variable'')+' 'MethodSequence' '<period> ''period''+' 'Sequence' 'Temporaries' 'Variable ''variable''*' 'Statements' 'StatementList' 'Statement' 'Assignment' 'Cascade' 'CascadedMessages' '(<semicolon> ''semicolon'' CascadedMessage ''message'')' '(<semicolon> ''semicolon'' CascadedMessage ''message'')+' 'CascadedMessage' 'KeywordMessageSend' 'KeywordMessageSendVars' 'KeywordMessage' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'')  BinaryMessageSend ''value'')' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'')  BinaryMessageSend ''value'')+' 'TemplateKeywordMessage' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)+' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')+' 'BinaryMessageSend' 'BinaryMessageSendVars' 'BinaryMessage' 'UnaryMessageSend' 'UnaryMessageSendVars' 'UnaryMessage' 'TemplateUnaryMessage' 'Variable' 'GemStonePath' 'NamedVariable' 'TemplateVariable' 'MidTemplate' 'StartTemplate' 'Value' 'Array' '(<period> ''period''+ Assignment ''value'')' '(<period> ''period''+ Assignment ''value'')*' 'Block' '(<colon> ''colon'' Variable ''variable'')' '(<colon> ''colon'' Variable ''variable'')+' 'BlockArgs' 'Literal' 'StringLiteral' 'NumberLiteral' 'ArrayLiteral' 'ArrayLiteralValue ''value''*' 'ArrayLiteralValue' 'ByteArrayLiteral' 'ByteArrayLiteralValue ''value''*' 'ByteArrayLiteralValue' 'CharacterLiteral' 'SymbolLiteral' 'BooleanLiteral' 'NilLiteral' 'SwitchToLiteralArray' 'EndLiteralArray' 'DoItMethod' '<doubleLeftBrace>' '<doubleLeftBraceStart>' '<doubleRightBrace>' '<rbKeywordPattern>' '<rbLiteralArrayKeywordPattern>' '<rbNamePattern>' '<rbPatternBlock>' '<template>' '<templateKeyword>' '<templateNamePart>' 'E O F' 'error')
+	^ #('"self"' '"super"' '"thisContext"' '<true>' '<false>' '<nil>' '<name>' '<gsPath>' '<nameAssignment>' '<bar>' '<string>' '<symbol>' '<character>' '<number>' '<negativeNumber>' '<literalArrayKeyword>' '<return>' '<lt>' '<gt>' '<leftBrace>' '<leftBracket>' '<colon>' '<leftParen>' '<literalArrayStart>' '<byteArrayStart>' '<rightParen>' '<rightBracket>' '<rightBrace>' '<keyword>' '<binary>' '<semicolon>' '<assign>' '<period>' '<comment>' '<whitespace>' '<patternToken>' 'B e g i n' 'Method' 'MethodPattern' '(<keyword> ''selectorPart'' Variable ''variable'')' '(<keyword> ''selectorPart'' Variable ''variable'')+' 'TemplatePattern' '(TemplateKeywordPattern KeywordPattern?)' '(TemplateKeywordPattern KeywordPattern?)+' 'TemplateWithName' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)+' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)*' 'TemplateKeywordPattern' 'TemplateKeyword' 'TemplateNameContinuationPart' 'TemplateNamePart' 'Pragmas' 'Pragma ''pragma''+' 'Pragma' '(<keyword> ''selectorPart'' PragmaArgument)' '(<keyword> ''selectorPart'' PragmaArgument)+' 'OnlyTemplate' 'PragmaArgument' 'TemplatePragma' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)+' 'KeywordPattern' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'') Variable ''variable'')' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'') Variable ''variable'')+' 'MethodSequence' '<period> ''period''+' 'Sequence' 'Temporaries' 'Variable ''variable''*' 'Statements' 'StatementList' 'Statement' 'Assignment' 'Cascade' 'CascadedMessages' '(<semicolon> ''semicolon'' CascadedMessage ''message'')' '(<semicolon> ''semicolon'' CascadedMessage ''message'')+' 'CascadedMessage' 'KeywordMessageSend' 'KeywordMessageSendVars' 'KeywordMessage' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'')  BinaryMessageSend ''value'')' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'')  BinaryMessageSend ''value'')+' 'TemplateKeywordMessage' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)+' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')+' 'BinaryMessageSend' 'BinaryMessageSendVars' 'BinaryMessage' 'UnaryMessageSend' 'UnaryMessageSendVars' 'UnaryMessage' 'TemplateUnaryMessage' 'Variable' 'GemStonePath' 'NamedVariable' 'TemplateVariable' 'MidTemplate' 'StartTemplate' 'Value' 'Array' '(<period> ''period''+ Statement ''value'')' '(<period> ''period''+ Statement ''value'')*' 'Block' '(<colon> ''colon'' Variable ''variable'')' '(<colon> ''colon'' Variable ''variable'')+' 'BlockArgs' 'Literal' 'StringLiteral' 'NumberLiteral' 'ArrayLiteral' 'ArrayLiteralValue ''value''*' 'ArrayLiteralValue' 'ByteArrayLiteral' 'ByteArrayLiteralValue ''value''*' 'ByteArrayLiteralValue' 'CharacterLiteral' 'SymbolLiteral' 'BooleanLiteral' 'NilLiteral' 'SwitchToLiteralArray' 'EndLiteralArray' 'DoItMethod' '<doubleLeftBrace>' '<doubleLeftBraceStart>' '<doubleRightBrace>' '<rbKeywordPattern>' '<rbLiteralArrayKeywordPattern>' '<rbNamePattern>' '<rbPatternBlock>' '<template>' '<templateKeyword>' '<templateNamePart>' 'E O F' 'error')
 ]
 
 { #category : #generated }
@@ -730,7 +730,7 @@ GtPharoParser class >> transitionTable [
 #[0 0 98 0 4 0 5 0 6 0 7 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 33 0 128 0 129 0 130 0 131 0 132 0 133 0 134 0 137 0 138] 
 #[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 1 85 0 58 1 225 0 74 1 225 0 75 1 225 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 1 81 0 138] 
 #[1 1 229 0 7 1 233 0 29 1 237 0 56 1 241 0 57 1 245 0 138] 
-#[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 1 249 0 28 0 177 0 33 1 85 0 58 1 253 0 67 2 1 0 74 2 1 0 75 2 1 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 1 81 0 138] 
+#[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 153 0 17 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 1 249 0 28 0 177 0 33 1 85 0 58 1 253 0 67 2 1 0 73 2 1 0 74 2 1 0 75 2 1 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 1 81 0 138] 
 #[1 0 102 0 1 0 102 0 2 0 102 0 3 0 102 0 4 0 102 0 5 0 102 0 6 0 102 0 7 0 102 0 8 0 102 0 10 0 102 0 11 0 102 0 12 0 102 0 13 0 102 0 14 0 102 0 15 0 102 0 17 0 102 0 20 0 102 0 21 2 5 0 22 0 102 0 23 0 102 0 24 0 102 0 25 0 102 0 27 0 102 0 33 2 9 0 108 2 13 0 109 2 17 0 110 0 102 0 132 0 102 0 133 0 102 0 134 0 102 0 138] 
 #[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 1 85 0 58 2 21 0 74 2 21 0 75 2 21 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 1 81 0 138] 
 #[1 0 106 0 14 0 106 0 15 0 106 0 27 2 25 0 118 0 106 0 138] 
@@ -942,7 +942,7 @@ GtPharoParser class >> transitionTable [
 #[1 2 170 0 1 2 170 0 2 2 170 0 3 2 170 0 4 2 170 0 5 2 170 0 6 2 170 0 7 2 170 0 8 2 170 0 10 2 170 0 11 2 170 0 12 2 170 0 13 2 170 0 14 2 170 0 15 2 170 0 17 2 170 0 18 2 170 0 19 2 170 0 20 2 170 0 21 2 170 0 22 2 170 0 23 2 170 0 24 2 170 0 25 2 170 0 26 2 170 0 27 2 170 0 28 2 170 0 29 2 170 0 30 2 170 0 31 2 170 0 32 2 170 0 33 3 225 0 46 2 221 0 101 2 225 0 127 2 170 0 128 2 170 0 129 2 170 0 130 2 170 0 132 2 170 0 133 2 170 0 134 2 170 0 135 2 170 0 137 2 170 0 138] 
 #[0 2 174 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 10 0 11 0 12 0 13 0 14 0 15 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 33 0 127 0 128 0 129 0 130 0 132 0 133 0 134 0 135 0 136 0 137 0 138] 
 #[0 2 178 0 7 0 26 0 27 0 28 0 29 0 30 0 31 0 33 0 128 0 129 0 130 0 132 0 133 0 134 0 137] 
-#[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 4 141 0 28 2 53 0 33 1 85 0 58 4 145 0 74 4 145 0 75 4 145 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 1 81 0 138] 
+#[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 153 0 17 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 4 141 0 28 2 53 0 33 1 85 0 58 4 145 0 73 4 145 0 74 4 145 0 75 4 145 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 1 81 0 138] 
 #[0 2 182 0 28 0 33] 
 #[0 2 186 0 7 0 26 0 27 0 28 0 29 0 30 0 31 0 33 0 128 0 129 0 130 0 132 0 133 0 134 0 137] 
 #[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 153 0 17 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 2 53 0 33 1 85 0 58 4 149 0 71 0 221 0 72 0 225 0 73 0 225 0 74 0 225 0 75 0 225 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 2 190 0 137 1 81 0 138] 
@@ -2071,7 +2071,7 @@ GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___2
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor__period___period___Assignment__value___1: nodes [
+GtPharoParser >> reduceActionFor__period___period___Statement__value___1: nodes [
 	| result |
 	result := Array new: 2.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -2080,7 +2080,7 @@ GtPharoParser >> reduceActionFor__period___period___Assignment__value___1: nodes
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor__period___period___Assignment__value___2: nodes [
+GtPharoParser >> reduceActionFor__period___period___Statement__value___2: nodes [
 	| result |
 	result := nodes at: 1.
 	self addAll: ((nodes at: 2) at: 1) to: (result at: 1).
