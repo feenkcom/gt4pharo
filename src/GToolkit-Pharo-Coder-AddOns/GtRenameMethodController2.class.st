@@ -232,7 +232,11 @@ GtRenameMethodController2 >> someImplementor [
 	^ someImplementor
 		ifNil: [ (SystemNavigation default allImplementorsOf: selector)
 				ifEmpty: [ nil ]
-				ifNotEmpty: [ :impls | someImplementor := impls anyOne methodClass ] ]
+				ifNotEmpty: [ :impls | 
+					someImplementor := impls
+							detect: [ :each | each isFromTrait not ]
+							ifFound: [ :each | each methodClass ]
+							ifNone: [ nil ] ] ]
 ]
 
 { #category : #executing }
