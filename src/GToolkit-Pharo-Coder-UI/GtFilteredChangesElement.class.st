@@ -63,6 +63,7 @@ GtFilteredChangesElement >> initialize [
 	self addChild: filters as: #filters.
 
 	changesElement := GtChangesElement new.
+	changesElement vFitContentLimited.
 	self addChild: changesElement as: #changes
 ]
 
