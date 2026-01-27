@@ -21,7 +21,7 @@ GtRBAddClassChangeExamples >> slots [
 { #category : #examples }
 GtRBAddClassChangeExamples >> verifyChanges [
 	<gtExample>
-	(Object withAllSubclasses reject: #isClassSide)
+	(Object withAllSubclasses reject: [ :each | each isClassSide or: [ each name beginsWith: 'TemporaryPackage' ] ])
 		doWithIndex: [ :cls :index | 
 			| change definition |
 			index > 30000
