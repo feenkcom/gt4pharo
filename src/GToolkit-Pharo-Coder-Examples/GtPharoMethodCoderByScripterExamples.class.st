@@ -10686,6 +10686,11 @@ GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
 	| scripter |
 	scripter := self
 			scripterForBlock: [ GtPharoMethodCoder forMethod: Collection >> #detect:ifFound:ifNone: ].
+	scripter do
+		label: 'Set window extent';
+		block: [ :aSpace | aSpace windowExtent: 1200 @ 800 ];
+		onSpace;
+		play.
 	scripter
 		doStep: [ :s | 
 			s
