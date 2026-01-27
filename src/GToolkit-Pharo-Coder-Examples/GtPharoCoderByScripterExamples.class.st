@@ -1151,7 +1151,7 @@ GtPharoCoderByScripterExamples >> coderRightSideForClass: aClass leftSpaceWeight
 
 	aScripter do
 		label: 'Set window extent';
-		block: [ :aSpace | aSpace windowExtent: 1200 @ 600 ];
+		block: [ :aSpace | aSpace windowExtent: 1200 @ 800 ];
 		onSpace;
 		play.
 
