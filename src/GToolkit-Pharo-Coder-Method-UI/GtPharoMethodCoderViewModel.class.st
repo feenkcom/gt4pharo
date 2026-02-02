@@ -141,7 +141,7 @@ GtPharoMethodCoderViewModel >> availableCompilationMethodIndicatorsWithBehaviorS
 				ifNotNil: [ :aMethod | 
 					self astSync
 						ifNotNil: [ :anAst | 
-							anAst isMethod
+							(anAst isMethod and: [ anAst respondsTo: #selector ])
 								ifTrue: [ anAst selector
 										ifNotNil: [ :aSelector | 
 											aMethod selector = aSelector
@@ -173,7 +173,7 @@ GtPharoMethodCoderViewModel >> availableCompilationMethodIndicatorsWithBehaviorS
 								prospectiveSelector: aMethod selector ] ]
 				ifNil: [ self astSync
 						ifNotNil: [ :anAst | 
-							anAst isMethod
+							(anAst isMethod and: [ anAst respondsTo: #selector ])
 								ifTrue: [ anAst selector
 										ifNotNil: [ :aSelector | 
 											(eachBehaviorSource compiledMethodWithSelector: aSelector)

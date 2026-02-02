@@ -31,6 +31,7 @@ GtPharoMethodCoderSaveButton >> initialize [
 
 	dropdownIndicatorFuture := (BrAsyncElementFuture on: self)
 			whenError: [ :theElement :anError | 
+				anError emit.
 				NonInteractiveTranscript stdout
 					show: '[GtPharoMethodCoderSaveButton>>#initialize] ';
 					show: anError;
