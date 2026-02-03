@@ -1046,7 +1046,7 @@ GtPharoMethodCoder >> exampleAstFor: anAST into: coderAddOns viewModel: aGtPharo
 	coderAddOns addStyler: GtCoderExampleStatusStyler new.
 	coderAddOns addStyler: GtCoderExampleAfterStyler new.
 
-	(self canExecuteExample or: [ anAST methodNode numArgs isZero ])
+	(self canExecuteExample and: [ anAST methodNode numArgs isZero ])
 		ifFalse: [ ^ self ].
 
 	coderAddOns
