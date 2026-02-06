@@ -3,21 +3,21 @@ Extension { #name : #GtTagDefinition }
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtTagDefinition >> browseFrom: anEvent [
 	| aRealPackage |
-
 	aRealPackage := self packageOrganizer
-		packageNamed: self parent category package name
-		ifAbsent: [ ^ self ].
+			packageNamed: self parent category package name
+			ifAbsent: [ ^ self ].
 
 	aRealPackage
-		classTagNamed: self name
-		ifPresent: [ :aTag |
+		tagNamed: self name
+		ifPresent: [ :aTag | 
 			| aPackageTagCoder aCoderEvent |
 			aPackageTagCoder := (GtPharoPackageTagCoder forPackageTag: aTag)
-				packageCoder: (GtPharoPackageCoder forPackage: aRealPackage).
+					packageCoder: (GtPharoPackageCoder forPackage: aRealPackage).
 			aCoderEvent := GtCoderToSpawn new coder: aPackageTagCoder.
 			anEvent currentTarget fireEvent: aCoderEvent.
 			aCoderEvent isConsumed
-				ifFalse: [ anEvent currentTarget phlow spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
+				ifFalse: [ anEvent currentTarget phlow
+						spawnTool: (GtReadyCoderTool coder: aCoderEvent coder) ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
