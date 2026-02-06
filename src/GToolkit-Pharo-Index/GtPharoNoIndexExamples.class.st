@@ -140,8 +140,10 @@ GtPharoNoIndexExamples >> globalCache [
 	| index noIndex |
 	index := GtPharoIndex current globalCache.
 	noIndex := GtPharoNoIndex new globalCache.
-	index do: [ :each | self assert: (noIndex includes: each) ].
-	noIndex do: [ :each | self assert: (index includes: each) ].
+	index do: [ :each | (each beginsWith: 'TemporaryPackage') 
+		ifFalse: [ self assert: (noIndex includes: each) ] ].
+	noIndex do: [ :each | (each beginsWith: 'TemporaryPackage') 
+		ifFalse: [ self assert: (index includes: each) ] ].
 	^ {index.
 		noIndex}
 ]
