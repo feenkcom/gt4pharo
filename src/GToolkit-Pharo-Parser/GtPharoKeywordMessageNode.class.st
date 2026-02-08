@@ -33,6 +33,17 @@ GtPharoKeywordMessageNode >> compositeTokenVariables [
 	^ #(#selectorParts)
 ]
 
+{ #category : #views }
+GtPharoKeywordMessageNode >> gtSelectorPartsAndValuesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Parts and values';
+		items: [ (1 to: self selectorParts size)
+				collect: [ :i | (self selectorParts at: i) -> (self values at: i) ] ];
+		column: 'Selector' text: [ :each | each key value ];
+		column: 'Value' text: [ :each | each value ]
+]
+
 { #category : #'generated-initialize-release' }
 GtPharoKeywordMessageNode >> initialize [
 	super initialize.
