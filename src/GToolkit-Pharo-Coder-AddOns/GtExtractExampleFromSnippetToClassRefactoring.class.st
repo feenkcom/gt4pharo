@@ -3,17 +3,19 @@ Class {
 	#superclass : #GtExtractMethodFromInspectorRefactoring,
 	#instVars : [
 		'category',
-		'className'
+		'className',
+		'packageName'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
 { #category : #accessing }
-GtExtractExampleFromSnippetToClassRefactoring class >> extract: anInterval from: aString into: exampleClassName category: aSymbol [
+GtExtractExampleFromSnippetToClassRefactoring class >> extract: anInterval from: aString into: exampleClassName category: aSymbol package: packageName [
 	^ self new
 		extract: anInterval from: aString;
 		className: exampleClassName;
 		category: aSymbol;
+		packageName: packageName;
 		yourself
 ]
 
@@ -62,8 +64,10 @@ GtExtractExampleFromSnippetToClassRefactoring >> className: anObject [
 { #category : #transforming }
 GtExtractExampleFromSnippetToClassRefactoring >> createNewClassIfNecessary [
 	(self model classNamed: className)
-		ifNil: [ (category isNil or: [ category isEmpty ])
+		ifNil: [ (packageName isNil or: [ packageName isEmpty ])
 				ifTrue: [ self refactoringError: 'No package specified for new class' ].
+			(model includesPackageNamed: packageName)
+				ifFalse: [ model addPackageNamed: packageName ].
 			self
 				performCompositeRefactoring: (GtRBAddClassWithVarsRefactoring
 						model: model
@@ -102,6 +106,16 @@ GtExtractExampleFromSnippetToClassRefactoring >> gtDescription [
 ]
 
 { #category : #accessing }
+GtExtractExampleFromSnippetToClassRefactoring >> packageName [
+	^ packageName
+]
+
+{ #category : #accessing }
+GtExtractExampleFromSnippetToClassRefactoring >> packageName: aString [
+	packageName := aString asSymbol
+]
+
+{ #category : #accessing }
 GtExtractExampleFromSnippetToClassRefactoring >> preconditions [
 	self createNewClassIfNecessary.
 	class := self model classNamed: className.
@@ -129,7 +143,8 @@ GtExtractExampleFromSnippetToClassRefactoring >> replaceSelfReferences [
 { #category : #testing }
 GtExtractExampleFromSnippetToClassRefactoring >> shouldKeepChange: aRBChangeObject [
 	^ (aRBChangeObject isKindOf: RBAddClassChange)
-		or: [ super shouldKeepChange: aRBChangeObject ]
+		or: [ (aRBChangeObject isKindOf: RBAddPackageChange)
+				or: [ super shouldKeepChange: aRBChangeObject ] ]
 ]
 
 { #category : #transforming }

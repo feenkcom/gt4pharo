@@ -164,7 +164,8 @@ GtExtractExampleFromSnippetController >> refactoring [
 			extract: self extractionInterval
 			from: originalSource
 			into: exampleClass
-			category: packageForm category.
+			category: packageForm category
+			package: packageForm packageAndTagName packageName.
 	refactoring
 		setOption: #selfArgumentName toUse: [ :ref | self selfArgumentName ];
 		setOption: #selectVariableToMoveTo toUse: [ :ref :cls :sel | receiver ];

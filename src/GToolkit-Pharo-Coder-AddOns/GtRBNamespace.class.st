@@ -147,6 +147,17 @@ GtRBNamespace >> defineClassWithDefinition: aString [
 	^ change
 ]
 
+{ #category : #'as yet unclassified' }
+GtRBNamespace >> packageNamed: aSymbol [
+	aSymbol ifNil: [ ^ nil ].
+	(self hasPackageRemoved: aSymbol) ifTrue: [ ^ nil ].
+	(newPackages includesKey: aSymbol) ifTrue: [ ^ newPackages at: aSymbol ].
+	(changedPackages includesKey: aSymbol)
+		ifTrue: [ ^ (changedPackages at: aSymbol) first ].
+	(self class packageOrganizer hasPackage: aSymbol) ifFalse: [ ^ nil ].
+	^ (self createNewPackageFor: aSymbol) first
+]
+
 { #category : #accessing }
 GtRBNamespace >> privateImplementorsOf: aSelector [
 	| implementers |

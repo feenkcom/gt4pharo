@@ -807,7 +807,8 @@ object yourself'.
 									extract: (1 to: aSource size)
 									from: aSource
 									into: self newClassName asSymbol
-									category: aForm packageAndTagName category asSymbol.
+									category: aForm packageAndTagName category asSymbol
+									package: aForm packageAndTagName packageName.
 							aRefactoring
 								setOption: #selfArgumentName toUse: [ :ref | 'myObject' ];
 								setOption: #selectVariableToMoveTo
