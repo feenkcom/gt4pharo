@@ -4,3 +4,8 @@ Extension { #name : #RBAddPackageChange }
 RBAddPackageChange >> gtChangeIcon [
 	^ Smalltalk ui icons iconNamed: #changeAdd
 ]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBAddPackageChange >> packageName [
+	^ packageName
+]

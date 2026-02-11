@@ -295,6 +295,99 @@ GtPharoSnippetCoderByScripterExamples >> contextMenuInspectAClassShouldSpawnComp
 ]
 
 { #category : #'examples - extract method' }
+GtPharoSnippetCoderByScripterExamples >> extractExampleToNewClassAndPackage [
+	<gtExample>
+	| scripter changes |
+	scripter := self
+			scripterForBlock: [ GtPharoSnippetCoder forSource: 'OrderedCollection new addAll: (1 to: 10)' ].
+	scripter
+		clickStep: [ :s2 | 
+			s2
+				label: 'Click on the coder editor to give it focus';
+				// GtSourceCoderEditorId ].
+	scripter
+		doStep: [ :s2 | 
+			s2
+				label: 'Select part of the method to extract';
+				// GtSourceCoderEditorId;
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: aSourceEditor text size;
+						select ] ].
+	scripter
+		secondaryClickStep: [ :s2 | 
+			s2
+				label: 'Open context menu';
+				// GtSourceCoderEditorId ].
+	scripter
+		mouseMoveOverStep: [ :s2 | 
+			s2
+				label: 'Hover extract method';
+				onSpaceRoot;
+				// #'snippet-extract-example' ].
+	scripter
+		clickStep: [ :s1 | 
+			s1
+				label: 'Click extract method';
+				onSpaceRoot;
+				// #'snippet-extract-example' ].
+	scripter
+		assertStep: [ :s1 | 
+			s1
+				label: 'Assert source code modified';
+				onModel;
+				satisfies: #isModified ].
+	scripter typeStep: [ :s | s text: 'SomeNewClass123' ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Complete name';
+				key: BlKeyboardKey tab ].
+	scripter typeStep: [ :s | s text: 'someUniqueMethodName123' ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Complete name';
+				key: BlKeyboardKey return ].
+	scripter
+		checkStep: [ :s | 
+			s
+				onSpaceRoot;
+				hasFocus;
+				// #package ].
+	scripter typeStep: [ :s | s text: 'TemporaryPackage_12345' ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Complete name';
+				key: BlKeyboardKey return ].
+	scripter typeStep: [ :s | s text: 'SomeTag' ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Complete name';
+				key: BlKeyboardKey return ].
+	scripter
+		clickStep: [ :s | 
+			s
+				onSpaceRoot;
+				// (GtMagritteActionElementId new
+						description: GtPackageTagForm new magritteAcceptAction) ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	self
+		assert: (changes gtAllChanges
+				anySatisfy: [ :each | 
+					(each isKindOf: RBAddPackageChange)
+						and: [ each packageName asString = 'TemporaryPackage_12345' ] ]).
+	^ scripter
+]
+
+{ #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> extractExample_01_setup [
 	<gtExample>
 	| aScripter |
