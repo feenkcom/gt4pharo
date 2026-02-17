@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoMethodTestCaseUncompleteState }
 
 { #category : #'*GToolkit-Pharo-TestSuite-UI' }
-GtPharoMethodTestCaseUncompleteState classSide >> color [
+GtPharoMethodTestCaseUncompleteState class >> color [
 	^ BrGlamorousColors disabledButtonTextColor
 ]
