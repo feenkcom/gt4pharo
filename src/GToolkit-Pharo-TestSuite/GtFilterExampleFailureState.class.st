@@ -4,11 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-TestSuite-States'
 }
 
-{ #category : #'as yet unclassified' }
-GtFilterExampleFailureState >> geometry [
-	^ BlTriangleGeometry new beTop
-]
-
 { #category : #'api - testing' }
 GtFilterExampleFailureState >> includesCoder: aCoder [
 	^ aCoder canExecuteExample and: [ 

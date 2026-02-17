@@ -37,14 +37,6 @@ GtExampleState >> allStates [
 	^ allInstances
 ]
 
-{ #category : #'as yet unclassified' }
-GtExampleState >> asElement [
-	^ BlElement new
-		size: 16 @ 16;
-		geometry: self geometry;
-		background: self color
-]
-
 { #category : #views }
 GtExampleState >> gStatesFor: aView [
 	<gtView>
@@ -53,11 +45,6 @@ GtExampleState >> gStatesFor: aView [
 		items: [ self allStates ];
 		column: 'State' text: [ :each | each label ];
 		column: 'Icon' stencil: [ :each | each asElement ]
-]
-
-{ #category : #'as yet unclassified' }
-GtExampleState >> geometry [
-	^ BlRectangleGeometry new
 ]
 
 { #category : #'api - testing' }
