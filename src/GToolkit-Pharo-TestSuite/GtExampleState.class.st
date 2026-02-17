@@ -37,6 +37,29 @@ GtExampleState >> allStates [
 	^ allInstances
 ]
 
+{ #category : #'as yet unclassified' }
+GtExampleState >> asElement [
+	^ BlElement new
+		size: 16 @ 16;
+		geometry: self geometry;
+		background: self color
+]
+
+{ #category : #views }
+GtExampleState >> gStatesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'States';
+		items: [ self allStates ];
+		column: 'State' text: [ :each | each label ];
+		column: 'Icon' stencil: [ :each | each asElement ]
+]
+
+{ #category : #'as yet unclassified' }
+GtExampleState >> geometry [
+	^ BlRectangleGeometry new
+]
+
 { #category : #'api - testing' }
 GtExampleState >> includesCoder: aCoder [
 	"Return true if a method filter should be displayed.
