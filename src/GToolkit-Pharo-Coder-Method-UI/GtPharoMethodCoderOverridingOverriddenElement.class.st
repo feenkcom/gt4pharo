@@ -18,16 +18,13 @@ GtPharoMethodCoderOverridingOverriddenElement >> createOverridenBySummaryElement
 		cellSpacing: 5;
 		alignCenterLeft;
 		addChild: (BrLabel new
-			aptitude: BrGlamorousLabelAptitude;
-			text: 'Overridden by');
+				aptitude: BrGlamorousLabelAptitude;
+				text: 'Overridden by');
 		addChild: (self newMethodsCountButton
-			id: GtMethodCoderOverriddenAmountId;
-			action: [ self phlow
-				spawnObject: (GtPharoMethodsCoderView new
-					filter: (GtSearchOverridingMethodsFilter new 
-						method: aMethodOrigin method)) ];
-			withAsyncSinkDo: [ :anElementSink | 
-				anElementSink forwardStream: aMethodOrigin overridingMethods ])
+				id: GtMethodCoderOverriddenAmountId;
+				action: [ self phlow
+						spawnObject: (GtSearchOverridingMethodsFilter new method: aMethodOrigin method) ];
+				withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overridingMethods ])
 ]
 
 { #category : #'private - insance creation' }
@@ -37,16 +34,13 @@ GtPharoMethodCoderOverridingOverriddenElement >> createOverridesSummaryElementFo
 		cellSpacing: 5;
 		alignCenterLeft;
 		addChild: (BrLabel new
-			aptitude: BrGlamorousLabelAptitude;
-			text: 'Overrides');
+				aptitude: BrGlamorousLabelAptitude;
+				text: 'Overrides');
 		addChild: (self newMethodsCountButton
-			id: GtMethodCoderOverridesAmountId;
-			action: [ self phlow
-				spawnObject: (GtPharoMethodsCoderView new
-					filter: (GtSearchOverriddenMethodsFilter new 
-						method: aMethodOrigin method)) ];
-			withAsyncSinkDo: [ :anElementSink | 
-				anElementSink forwardStream: aMethodOrigin overriddenMethods ])
+				id: GtMethodCoderOverridesAmountId;
+				action: [ self phlow
+						spawnObject: (GtSearchOverriddenMethodsFilter new method: aMethodOrigin method) ];
+				withAsyncSinkDo: [ :anElementSink | anElementSink forwardStream: aMethodOrigin overriddenMethods ])
 ]
 
 { #category : #initialization }
