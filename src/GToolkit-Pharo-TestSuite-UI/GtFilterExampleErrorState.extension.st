@@ -4,3 +4,8 @@ Extension { #name : #GtFilterExampleErrorState }
 GtFilterExampleErrorState >> color [
 	^ BrGlamorousColors errorBackgroundColor
 ]
+
+{ #category : #'*GToolkit-Pharo-TestSuite-UI' }
+GtFilterExampleErrorState >> geometry [
+	^ BlCircleGeometry new
+]

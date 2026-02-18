@@ -4,3 +4,8 @@ Extension { #name : #GtFilterExampleFailureState }
 GtFilterExampleFailureState >> color [
 	^ BrGlamorousColors failureBackgroundColor
 ]
+
+{ #category : #'*GToolkit-Pharo-TestSuite-UI' }
+GtFilterExampleFailureState >> geometry [
+	^ BlTriangleGeometry new beTop
+]

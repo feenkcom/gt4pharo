@@ -4,11 +4,6 @@ Class {
 	#category : #'GToolkit-Pharo-TestSuite-States'
 }
 
-{ #category : #'as yet unclassified' }
-GtFilterExampleErrorState >> geometry [
-	^ BlCircleGeometry new
-]
-
 { #category : #'api - testing' }
 GtFilterExampleErrorState >> includesCoder: aCoder [
 	^ aCoder canExecuteExample and: [ 
