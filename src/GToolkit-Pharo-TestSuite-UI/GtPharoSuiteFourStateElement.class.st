@@ -17,27 +17,26 @@ Class {
 { #category : #initialization }
 GtPharoSuiteFourStateElement >> initialize [
 	super initialize.
-	
+
 	self layout: BlFrameLayout new.
 	self fitContent.
-	
-	passedIconElement := self newPassedIconElement.
-	errorIconElement := self newErrorIconElement.
-	failureIconElement := self newFailureIconElement.
-	neutralIconElement := self newNeutralIconElement.
+
+	passedIconElement := GtPharoMethodTestCasePassedState asElement size: 8@8; margin: (BlInsets all: 1).
+	errorIconElement := GtPharoMethodTestCaseErrorState asElement size: 8@8; margin: (BlInsets all: 1).
+	failureIconElement := GtPharoMethodTestCaseFailureState asElement size: 8@8; margin: (BlInsets all: 1).
+	neutralIconElement := GtPharoMethodNotExecutedState asElement size: 8@8; margin: (BlInsets all: 1).
 
 	oneIconElement := self newOneStateIconElement.
 	fourIconElement := self newFourStateIconElement.
-	
+
 	fourIconElement addChild: passedIconElement.
 	fourIconElement addChild: failureIconElement.
 	fourIconElement addChild: errorIconElement.
 	fourIconElement addChild: neutralIconElement.
-	
-	self addChildren: { 
-		oneIconElement.
-		fourIconElement
-	}
+
+	self
+		addChildren: {oneIconElement.
+				fourIconElement}
 ]
 
 { #category : #'private - instance creation' }

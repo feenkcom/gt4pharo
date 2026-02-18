@@ -1185,6 +1185,19 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> externalEnumerationDeclarationAddOnFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 100>
+	
+	anAST selector = #externalDeclaration
+		ifFalse: [ ^ self ].
+		
+	(self behavior instanceSide inheritsFrom: GtExternalEnumeration)
+		ifFalse: [ ^ self ].
+	
+	coderAddOns addStyler: GtPharoExternalEnumerationStyler new.
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> extractExampleToPlaygroundIn: button event: anEvent requesterObject: aRequester [
 	| page cls varName inlinedSource |
 	cls := self behavior.
