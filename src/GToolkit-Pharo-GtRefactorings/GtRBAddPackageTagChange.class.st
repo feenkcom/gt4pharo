@@ -21,6 +21,11 @@ GtRBAddPackageTagChange >> asUndoOperation [
 		ifFalse: [ GtRBRemovePackageTagChange packageName: packageName tagName: tagName ]
 ]
 
+{ #category : #accessing }
+GtRBAddPackageTagChange >> gtChangedObject [
+	^ self tag
+]
+
 { #category : #private }
 GtRBAddPackageTagChange >> primitiveExecute [
 	self package isNil

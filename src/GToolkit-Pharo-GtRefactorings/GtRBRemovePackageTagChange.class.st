@@ -24,9 +24,20 @@ GtRBRemovePackageTagChange >> gtChangeIcon [
 	^ Smalltalk ui icons iconNamed: #changeRemove
 ]
 
+{ #category : #accessing }
+GtRBRemovePackageTagChange >> gtChangedObject [
+	^ self tag
+]
+
 { #category : #private }
 GtRBRemovePackageTagChange >> primitiveExecute [
 	self package removeClassTag: tagName
+]
+
+{ #category : #accessing }
+GtRBRemovePackageTagChange >> tag [
+	^ self package
+		ifNotNil: [ :pkg | pkg tagNamed: tagName ifAbsent: [  ] ]
 ]
 
 { #category : #accessing }

@@ -6,6 +6,12 @@ RBRemoveMethodChange >> gtChangeIcon [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRemoveMethodChange >> gtChangedObject [
+	^ self changeClass
+		ifNotNil: [ :cls | cls compiledMethodAt: self selector ifAbsent: [  ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRemoveMethodChange >> gtIncludesSubstring: aString [
 	^ (super gtIncludesSubstring: aString)
 		or: [ self selector includesSubstring: aString caseSensitive: false ]

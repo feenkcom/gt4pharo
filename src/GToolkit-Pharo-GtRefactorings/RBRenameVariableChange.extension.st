@@ -6,6 +6,11 @@ RBRenameVariableChange >> gtChangeIcon [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRenameVariableChange >> gtChangedObject [
+	^ self changeClass
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRenameVariableChange >> gtClassChangeGroup [
 	^ GtRBClassChangeGroup named: self changeClassName
 ]

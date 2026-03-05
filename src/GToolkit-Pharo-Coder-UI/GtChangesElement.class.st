@@ -68,6 +68,13 @@ GtChangesElement >> initialize [
 							menu: [ :each | 
 								| model |
 								model := BrMenuItems new.
+								each anchorElement activatableChange change gtChangedObject
+									ifNotNil: [ :obj | 
+										model
+											addItemId: #browse
+											label: 'Browse'
+											action: [ model hide.
+												self phlow spawnObject: obj ] ].
 								model
 									addItemId: #'disable-menu'
 									label: 'Disable'

@@ -62,6 +62,11 @@ RBRefactoryChange >> gtChangeIcon [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtChangedObject [
+	^ nil
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtClassChangeGroup [
 	^ nil
 ]

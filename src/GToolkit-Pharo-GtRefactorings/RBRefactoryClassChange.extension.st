@@ -1,6 +1,11 @@
 Extension { #name : #RBRefactoryClassChange }
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryClassChange >> gtChangedObject [
+	^ self changeClass
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryClassChange >> gtClassChangeGroup [
 	^ GtRBClassChangeGroup named: self changeClassName
 ]
