@@ -41,7 +41,7 @@ GtFilteredChangesElement >> expandUpTo: anInteger [
 
 { #category : #initialization }
 GtFilteredChangesElement >> initialize [
-	| changesElement filters |
+	| changesElement filters pane |
 	super initialize.
 	changes := RBCompositeRefactoryChange new.
 
@@ -51,20 +51,33 @@ GtFilteredChangesElement >> initialize [
 		send: #updateFilteredChanges
 		to: self.
 
+	pane := BrHorizontalPane new.
+	pane hMatchParent.
+	pane vFitContent.
+	self addChild: pane.
+
 	filters := filterModel asFiltersElement.
 	filters
 		hMatchParent;
 		constraintsDo: [ :c | c linear vertical alignCenter ];
-		margin: (BlInsets
-				top: 5
-				left: 10
-				bottom: 0
-				right: 10).
-	self addChild: filters as: #filters.
+		padding: (BlInsets all: 0).
+	pane addChild: filters as: #filters.
 
 	changesElement := GtChangesElement new.
+	changesElement padding: (BlInsets all: 0).
 	changesElement vFitContentLimited.
-	self addChild: changesElement as: #changes
+	self addChild: changesElement as: #changes.
+
+	pane
+		addChild: (BrButton new
+				beTinySize;
+				aptitude: BrGlamorousButtonWithIconAptitude new;
+				icon: BrGlamorousVectorIcons inspect;
+				id: #'inspect-changes';
+				label: 'Inspect changes';
+				padding: (BlInsets left: 5);
+				action: [ :aButton | aButton phlow spawnObject: changesElement changes ];
+				yourself)
 ]
 
 { #category : #accessing }
