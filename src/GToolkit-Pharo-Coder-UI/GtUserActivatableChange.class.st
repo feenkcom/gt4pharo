@@ -79,6 +79,7 @@ GtUserActivatableChange >> gtDisableFor: anAction context: aPhlowContext [
 			ifAbsent: [ ^ anAction noAction ].
 	^ anAction button
 		label: 'Disable';
+		id: #'disable-menu';
 		target: GtChangesTarget;
 		priority: 50;
 		action: [ element disableChange: self ]
