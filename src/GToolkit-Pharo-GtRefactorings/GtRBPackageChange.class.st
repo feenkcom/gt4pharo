@@ -30,6 +30,11 @@ GtRBPackageChange >> executeNotifying: aBlock [
 ]
 
 { #category : #accessing }
+GtRBPackageChange >> gtChangedObject [
+	^ self package
+]
+
+{ #category : #accessing }
 GtRBPackageChange >> package [
 	^ self packageOrganizer packageNamed: packageName ifAbsent: [  ]
 ]

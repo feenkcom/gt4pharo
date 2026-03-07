@@ -32,6 +32,11 @@ GtRBRenamePackageTagChange >> gtChangeIcon [
 	^ Smalltalk ui icons iconNamed: #changeUpdate
 ]
 
+{ #category : #'as yet unclassified' }
+GtRBRenamePackageTagChange >> gtChangedObject [
+	^ self package ifNotNil: [ :pkg | pkg tagNamed: oldName ifAbsent: [  ] ]
+]
+
 { #category : #accessing }
 GtRBRenamePackageTagChange >> newName [
 	^ newName

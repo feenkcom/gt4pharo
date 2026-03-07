@@ -40,7 +40,7 @@ GtRefactoringsElement >> initialize [
 	super initialize.
 	self layout: BlLinearLayout vertical.
 	self matchParent.
-	self padding: (BlInsets all: 10).
+	self padding: (BlInsets all: 5).
 	changesElement := GtFilteredChangesElement new.
 	self addAptitude: (BrLayoutResizerAptitude new inherit: changesElement).
 	self addChild: changesElement
