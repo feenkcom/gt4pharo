@@ -72,7 +72,7 @@ RBRefactoryChange >> gtClassChangeGroup [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
-RBRefactoryChange >> gtClassFilter [
+RBRefactoryChange >> gtClassFilter: changes [
 	<gtRefactoryChangeFilter>
 	^ GtFilterTextModel new
 		creator: [ :block :model | 
@@ -83,9 +83,40 @@ RBRefactoryChange >> gtClassFilter [
 				ifFalse: [ [ :each | (block cull: each) and: [ each gtIsForClassNamed: value ] ] ] ];
 		named: 'In class';
 		order: 10;
+		text: (self gtDefaultClassFilterNameFrom: changes);
 		completion: [ GtStringsCompletionStrategy new
 				completions: [ GtPharoIndex current classNameTree ] ];
 		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtClassHierarchyFilter: changes [
+	<gtRefactoryChangeFilter>
+	^ GtFilterTextModel new
+		creator: [ :block :model | 
+			| value |
+			value := model text asString.
+			value isEmpty
+				ifTrue: [ block ]
+				ifFalse: [ [ :each | (block cull: each) and: [ each gtIsForClassHierarchy: value ] ] ] ];
+		named: 'In hierarchy';
+		order: 11;
+		text: (self gtDefaultClassFilterNameFrom: changes);
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPharoIndex current classNameTree ] ];
+		beNotDefault
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtDefaultClassFilterName [
+	^ self attributeNamed: #defaultClassFilterName
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtDefaultClassFilterNameFrom: changes [
+	changes
+		gtAllChangesDo: [ :each | each gtDefaultClassFilterName ifNotNil: [ :clsName | ^ clsName ] ].
+	^ ''
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
@@ -117,7 +148,21 @@ RBRefactoryChange >> gtIncludesSubstring: aString [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtIs: firstName inSameHierarchyWith: secondName [
+	| class1 class2 |
+	firstName = secondName ifTrue: [ ^ true ].
+	class1 := onSystemDictionary at: firstName asSymbol ifAbsent: [ ^ false ].
+	class2 := onSystemDictionary at: secondName asSymbol ifAbsent: [ ^ false ].
+	^ (class1 includesBehavior: class2) or: [ class2 includesBehavior: class1 ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtIsComposite [
+	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryChange >> gtIsForClassHierarchy: aSymbol [
 	^ false
 ]
 
