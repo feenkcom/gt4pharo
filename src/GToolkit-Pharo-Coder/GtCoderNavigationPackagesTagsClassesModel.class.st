@@ -519,12 +519,19 @@ GtCoderNavigationPackagesTagsClassesModel >> onFinishedBulkChanges: anAnnounceme
 ]
 
 { #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> packageRegistered: aRPackageRegistered [
-	(self packagesToShow includes: aRPackageRegistered package) ifFalse: [ ^ self ].
+GtCoderNavigationPackagesTagsClassesModel >> packageAdded: aPackageAdded [
+	(self packagesToShow includes: aPackageAdded package) ifFalse: [ ^ self ].
 	
 	self announcer announce: (GtCoderNavigationPackageRegistered new 
 		coder: coder;
-		package: aRPackageRegistered package)
+		package: aPackageAdded package)
+]
+
+{ #category : #'event handling' }
+GtCoderNavigationPackagesTagsClassesModel >> packageRemoved: aPackageRemoved [
+	self announcer announce: (GtCoderNavigationPackageUnregistered new 
+		coder: coder;
+		package: aPackageRemoved package)
 ]
 
 { #category : #'event handling' }
@@ -564,13 +571,6 @@ GtCoderNavigationPackagesTagsClassesModel >> packageTagRenamed: aClassTagRenamed
 				package: aClassTagRenamed package;
 				oldName: aClassTagRenamed tag;
 				newName: aClassTagRenamed newName)
-]
-
-{ #category : #'event handling' }
-GtCoderNavigationPackagesTagsClassesModel >> packageUnregistered: aRPackageUnregistered [
-	self announcer announce: (GtCoderNavigationPackageUnregistered new 
-		coder: coder;
-		package: aRPackageUnregistered package)
 ]
 
 { #category : #'api - accessing' }
@@ -1266,18 +1266,18 @@ GtCoderNavigationPackagesTagsClassesModel >> slotsToShow [
 { #category : #'api - subscriptions' }
 GtCoderNavigationPackagesTagsClassesModel >> subscribeToSystem [
 	SystemAnnouncer uniqueInstance weak
-		when: RPackageRegistered send: #packageRegistered: to: self;
-		when: RPackageUnregistered send: #packageUnregistered: to: self;
-		when: RPackageRenamed send: #packageRenamed: to: self;
-		when: ClassTagRenamed send: #packageTagRenamed: to: self;
-		when: ClassTagAdded send: #packageTagAdded: to: self;
-		when: ClassTagRemoved send: #packageTagRemoved: to: self;
+		when: PackageAdded send: #packageAdded: to: self;
+		when: PackageRemoved send: #packageRemoved: to: self;
+		when: PackageRenamed send: #packageRenamed: to: self;
+		when: PackageTagRenamed send: #packageTagRenamed: to: self;
+		when: PackageTagAdded send: #packageTagAdded: to: self;
+		when: PackageTagRemoved send: #packageTagRemoved: to: self;
 		when: ClassAdded send: #classAdded: to: self;
 		when: ClassRepackaged send: #classRepackaged: to: self;
 		when: ClassRenamed send: #classRenamed: to: self;
 		when: ClassRemoved send: #classRemoved: to: self;
 		when: ClassModificationApplied send: #classModificationApplied: to: self;
-		when: ClassReorganized send: #classReorganized: to: self;
+		when: ProtocolAnnouncement send: #classReorganized: to: self;
 		when: MethodAdded send: #methodChanged: to: self;
 		when: MethodRemoved send: #methodChanged: to: self;
 		when: MethodRecategorized send: #methodRecategorized: to: self; 
