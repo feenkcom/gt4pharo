@@ -62,26 +62,15 @@ GtChangesElement >> initialize [
 	self padding: (BlInsets all: 10).
 	changesTree := BrSimpleTree new
 			nodeType: [ :aTypeFactory :aTreeNode | aTreeNode value elementClass ];
-			nodeStencil: [ :aNodeType | 
-				aNodeType new
-					addAptitude: (BrGlamorousWithExplicitContextMenuAptitude new
-							menu: [ :each | 
-								| model |
-								model := BrMenuItems new.
-								each anchorElement activatableChange change gtChangedObject
-									ifNotNil: [ :obj | 
-										model
-											addItemId: #browse
-											label: 'Browse'
-											action: [ model hide.
-												self phlow spawnObject: obj ] ].
-								model
-									addItemId: #'disable-menu'
-									label: 'Disable'
-									action: [ model hide.
-										self disableChange: each anchorElement activatableChange ] ]);
-					yourself ];
-			nodeDataBinder: [ :eachElement :eachUserActivatableChange | eachElement activatableChange: eachUserActivatableChange ];
+			nodeStencil: [ :aNodeType | aNodeType new ];
+			nodeDataBinder: [ :eachElement :eachUserActivatableChange | 
+				eachElement
+					aptitude: (BrGlamorousWithExplicitContextMenuAptitude new
+							handleSubmenu: [ GtChangesTarget
+									menuItemsForObject: eachUserActivatableChange
+									inContext: (GtPhlowContext new optionAt: #changesElement put: self)
+									hostElement: changesTree ]).
+				eachElement activatableChange: eachUserActivatableChange ];
 			yourself.
 	self addAptitude: (BrLayoutResizerAptitude new inherit: changesTree).
 	self addChild: changesTree

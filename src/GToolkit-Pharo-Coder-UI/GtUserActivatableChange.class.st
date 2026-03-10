@@ -56,6 +56,35 @@ GtUserActivatableChange >> fromChange: anRBRefactoryChange [
 	isEnabled := true
 ]
 
+{ #category : #'as yet unclassified' }
+GtUserActivatableChange >> gtBrowseFor: anAction [
+	<gtAction>
+	| obj |
+	obj := self change gtChangedObject.
+	obj ifNil: [ ^ anAction noAction ].
+	^ anAction button
+		label: 'Browse';
+		target: GtChangesTarget;
+		icon: BrGlamorousVectorIcons browse;
+		priority: 10;
+		action: [ :element | element phlow spawnObject: obj ]
+]
+
+{ #category : #'as yet unclassified' }
+GtUserActivatableChange >> gtDisableFor: anAction context: aPhlowContext [
+	<gtAction>
+	| element |
+	element := aPhlowContext
+			optionAt: #changesElement
+			ifAbsent: [ ^ anAction noAction ].
+	^ anAction button
+		label: 'Disable';
+		id: #'disable-menu';
+		target: GtChangesTarget;
+		priority: 50;
+		action: [ element disableChange: self ]
+]
+
 { #category : #testing }
 GtUserActivatableChange >> hasDiffChange [
 	^ self change respondsTo: #gtDiffChange
