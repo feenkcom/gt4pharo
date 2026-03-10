@@ -19,12 +19,20 @@ GtRefactoryChangeFiltersBuilder >> availableFilters [
 				addAll: each class class withAllSuperclasses ].
 	(Pragma allNamed: #gtRefactoryChangeFilter)
 		do: [ :each | 
-			(each method gtIsActive
-				and: [ each method numArgs = 0 and: [ classes includes: each methodClass ] ])
-				ifTrue: [ filterDescriptors
-						add: (each method methodClass isInstanceSide
-								ifTrue: [ each methodClass basicNew perform: each methodSelector ]
-								ifFalse: [ each methodClass soleInstance perform: each methodSelector ]) ] ].
+			(each method gtIsActive and: [ classes includes: each methodClass ])
+				ifTrue: [ each method numArgs = 0
+						ifTrue: [ filterDescriptors
+								add: ((each method methodClass isInstanceSide
+										ifTrue: [ each methodClass basicNew ]
+										ifFalse: [ each methodClass soleInstance ])
+										perform: each methodSelector) ].
+					each method numArgs = 1
+						ifTrue: [ filterDescriptors
+								add: ((each method methodClass isInstanceSide
+										ifTrue: [ each methodClass basicNew ]
+										ifFalse: [ each methodClass soleInstance ])
+										perform: each methodSelector
+										with: changes) ] ] ].
 	^ filterDescriptors sort: [ :a :b | a order < b order ]
 ]
 

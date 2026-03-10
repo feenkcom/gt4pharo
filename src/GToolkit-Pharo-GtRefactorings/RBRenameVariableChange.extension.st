@@ -16,6 +16,18 @@ RBRenameVariableChange >> gtClassChangeGroup [
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRenameVariableChange >> gtDefaultClassFilterName [
+	^ super gtDefaultClassFilterName
+		ifNil: [ self changeClass ifNotNil: [ :cls | cls name ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRenameVariableChange >> gtIsForClassHierarchy: aSymbol [
+	^ (self gtIs: self changeClassName inSameHierarchyWith: aSymbol)
+		or: [ self changes anySatisfy: [ :each | each gtIsForClassHierarchy: aSymbol ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRenameVariableChange >> gtIsForClassNamed: aSymbol [
 	^ self changeClassName = aSymbol
 		or: [ self changes anySatisfy: [ :each | each gtIsForClassNamed: aSymbol ] ]

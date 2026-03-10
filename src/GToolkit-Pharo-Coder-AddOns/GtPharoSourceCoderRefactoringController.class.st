@@ -57,6 +57,9 @@ GtPharoSourceCoderRefactoringController >> createModel [
 	model name: self refactoringName.
 	sourceCoderViewModel coderModel isForMethod
 		ifTrue: [ modelClass := model classFor: sourceCoderViewModel behavior.
+			model changes
+				attributeNamed: #defaultClassFilterName
+				put: modelClass instanceSide name.
 			(modelClass sourceCodeFor: sourceCoderViewModel selector)
 				~= originalSource asString
 				ifTrue: [ modelClass
