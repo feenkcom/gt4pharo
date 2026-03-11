@@ -189,6 +189,8 @@ GtPharoMethodTestCaseStateElement >> updateState [
 
 	self background: self testCaseState color.
 	self geometry: self testCaseState geometry.
+	self border: self testCaseState border.
+	
 	self updateStyleLook
 ]
 
