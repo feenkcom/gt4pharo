@@ -24,9 +24,14 @@ GtPharoSnippetCoder >> behavior: aBehavior [
 
 { #category : #'api - ast' }
 GtPharoSnippetCoder >> computeAst: theSourceString [
-	^ GtPharoParser
-		parseWithErrors: theSourceString
-		startingAt: GtPharoParser startingStateForMethodSequence
+	^ self class useIncrementalParsing
+		ifTrue: [ GtPharoIncrementalParser
+				parseWithErrors: theSourceString
+				startingAt: GtPharoParser startingStateForMethodSequence
+				previous: previousAst ]
+		ifFalse: [ GtPharoParser
+				parseWithErrors: theSourceString
+				startingAt: GtPharoParser startingStateForMethodSequence ]
 ]
 
 { #category : #initialization }

@@ -1,11 +1,11 @@
 Class {
-	#name : #GtPharoParser,
-	#superclass : #SmaCCGLRParser,
+	#name : #GtPharoIncrementalParser,
+	#superclass : #SmaCCIncrementalParser,
 	#category : #'GToolkit-Pharo-Parser-Parser'
 }
 
 { #category : #generated }
-GtPharoParser class >> ambiguousTransitions [
+GtPharoIncrementalParser class >> ambiguousTransitions [
 ^#(
 #[ 0 93 0 118] 
 #[ 0 178 2 133] 
@@ -19,13 +19,13 @@ GtPharoParser class >> ambiguousTransitions [
 ]
 
 { #category : #'generated-accessing' }
-GtPharoParser class >> cacheId [
-	^'2026-03-13T10:11:12.23727-05:00'
+GtPharoIncrementalParser class >> cacheId [
+	^'2026-03-13T10:12:38.052622-05:00'
 ]
 
 { #category : #generated }
-GtPharoParser class >> definitionComment [
-"%glr;
+GtPharoIncrementalParser class >> definitionComment [
+"%incremental;
 %prefix GtPharo;
 %suffix Node;
 %root Program;
@@ -408,288 +408,283 @@ DoItMethod
 	;"
 ]
 
-{ #category : #'class initialization' }
-GtPharoParser class >> initialize [
-	self maxParallelParses: 50
-]
-
 { #category : #generated }
-GtPharoParser class >> reduceTable [
+GtPharoIncrementalParser class >> reduceTable [
 ^#(
-	#(124 0 #reduceActionForSwitchToLiteralArray1: 10005505 true) 
-	#(68 0 #reduceActionForSequence1: 5194753 false) 
-	#(39 1 #reduceActionForMethodPattern1: 3034113 false) 
-	#(41 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3348481 false) 
-	#(39 1 #liftFirstValue: 3034117 false) 
-	#(39 1 #reduceActionForMethodPattern4: 3034116 false) 
-	#(65 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4879361 false) 
-	#(63 1 #reduceActionForKeywordPattern1: 4860929 false) 
-	#(39 1 #reduceActionForMethodPattern1: 3034114 false) 
-	#(58 1 #nil 4490241 false) 
-	#(97 1 #reduceActionForVariable1: 7099393 false) 
-	#(97 1 #reduceActionForVariable2: 7099394 false) 
-	#(97 1 #reduceActionForVariable3: 7099395 false) 
-	#(122 1 #reduceActionForBooleanLiteral1: 9902081 false) 
-	#(122 1 #reduceActionForBooleanLiteral1: 9902082 false) 
-	#(123 1 #reduceActionForNilLiteral1: 9968641 false) 
-	#(99 1 #reduceActionForNamedVariable1: 7334913 false) 
-	#(98 1 #reduceActionForGemStonePath1: 7287809 false) 
-	#(70 0 #reduceActionForVariable__variable__1: 5294081 false) 
-	#(112 1 #reduceActionForStringLiteral1: 8613889 false) 
-	#(121 1 #reduceActionForSymbolLiteral1: 9859073 false) 
-	#(120 1 #reduceActionForCharacterLiteral1: 9809921 false) 
-	#(113 1 #reduceActionForNumberLiteral1: 8656897 false) 
-	#(113 1 #reduceActionForNumberLiteral1: 8656898 false) 
-	#(110 0 #reduceActionForBlockArgs1: 8387585 false) 
-	#(118 0 #reduceActionForVariable__variable__1: 9666561 false) 
-	#(67 1 #reduceActionFor_period___period__1: 5017601 false) 
-	#(66 1 #reduceActionForMethodSequence9: 4970505 false) 
-	#(53 1 #reduceActionForKeywordPattern1: 4145153 false) 
-	#(54 1 #reduceActionFor_period___period__1: 4156417 false) 
-	#(55 1 #liftFirstValue: 4176899 false) 
-	#(68 1 #reduceActionForSequence3: 5194755 false) 
-	#(66 1 #liftFirstValue: 4970513 false) 
-	#(68 1 #reduceActionForSequence5: 5194757 false) 
-	#(68 1 #reduceActionForSequence2: 5194754 false) 
-	#(71 1 #reduceActionForKeywordPattern1: 5336065 false) 
-	#(72 1 #reduceActionForStatementList1: 5388289 false) 
-	#(73 1 #liftFirstValue: 5490690 false) 
-	#(74 1 #liftFirstValue: 5571586 false) 
-	#(75 1 #liftFirstValue: 5672964 false) 
-	#(80 1 #reduceActionForKeywordMessageSend1: 6000641 false) 
-	#(80 1 #liftFirstValue: 6000642 false) 
-	#(90 1 #reduceActionForKeywordMessageSend1: 6529025 false) 
-	#(90 1 #liftFirstValue: 6529026 false) 
-	#(93 1 #reduceActionForKeywordMessageSend1: 6772737 false) 
-	#(103 1 #liftFirstValue: 7729153 false) 
-	#(97 1 #liftFirstValue: 7099398 false) 
-	#(97 1 #liftFirstValue: 7099396 false) 
-	#(97 1 #liftFirstValue: 7099397 false) 
-	#(93 1 #liftFirstValue: 6772738 false) 
-	#(103 1 #liftFirstValue: 7729155 false) 
-	#(103 1 #liftFirstValue: 7729156 false) 
-	#(103 1 #liftFirstValue: 7729154 false) 
-	#(111 1 #liftFirstValue: 8460289 false) 
-	#(111 1 #liftFirstValue: 8460290 false) 
-	#(111 1 #liftFirstValue: 8460291 false) 
-	#(111 1 #liftFirstValue: 8460292 false) 
-	#(111 1 #liftFirstValue: 8460293 false) 
-	#(111 1 #liftFirstValue: 8460294 false) 
-	#(111 1 #liftFirstValue: 8460295 false) 
-	#(111 1 #liftFirstValue: 8460296 false) 
-	#(99 1 #reduceActionForNamedVariable1: 7334914 false) 
-	#(103 1 #reduceActionForValue8: 7729160 false) 
-	#(126 1 #reduceActionForDoItMethod1: 10121217 false) 
-	#(64 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4879361 false) 
-	#(40 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 3348481 false) 
-	#(39 2 #reduceActionForMethodPattern7: 3034119 false) 
-	#(39 2 #reduceActionForMethodPattern3: 3034115 false) 
-	#(39 2 #reduceActionForMethodPattern7: 3034118 false) 
-	#(38 2 #reduceActionForMethod1: 2968577 false) 
-	#(41 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3348482 false) 
-	#(52 1 #reduceActionForTemplateNamePart1: 4085761 false) 
-	#(44 1 #reduceActionForKeywordPattern1: 3551233 false) 
-	#(42 2 #reduceActionForTemplatePattern2: 3463170 false) 
-	#(42 2 #reduceActionForTemplatePattern1: 3463169 false) 
-	#(43 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: 3551233 false) 
-	#(48 0 #reduceActionForVariable__variable__1: 3770369 false) 
-	#(65 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4879362 false) 
-	#(64 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4879362 false) 
-	#(73 2 #reduceActionForStatement1: 5490689 false) 
-	#(57 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4270081 false) 
-	#(55 2 #reduceActionForPragma4: 4176900 false) 
-	#(104 2 #reduceActionForArray1: 8025089 false) 
-	#(106 0 #reduceActionFor__period___period___Statement__value___1: 8078337 false) 
-	#(109 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 8308737 false) 
-	#(66 2 #reduceActionForMethodSequence11: 4970507 false) 
-	#(66 2 #reduceActionForMethodSequence13: 4970509 false) 
-	#(66 2 #reduceActionForMethodSequence10: 4970506 false) 
-	#(54 2 #reduceActionForPragma__pragma__2: 4156418 false) 
-	#(100 2 #reduceActionForTemplateVariable1: 7420929 false) 
-	#(67 2 #reduceActionForPragma__pragma__2: 5017602 false) 
-	#(68 2 #reduceActionForSequence4: 5194756 false) 
-	#(66 2 #reduceActionForMethodSequence5: 4970501 false) 
-	#(68 2 #reduceActionForSequence7: 5194759 false) 
-	#(68 2 #reduceActionForSequence6: 5194758 false) 
-	#(71 2 #reduceActionForStatements2: 5336066 false) 
-	#(75 2 #reduceActionForCascade1: 5672961 false) 
-	#(78 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5871617 false) 
-	#(76 1 #reduceActionForKeywordPattern1: 5851137 false) 
-	#(81 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6087681 false) 
-	#(84 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6192129 false) 
-	#(82 1 #reduceActionForKeywordMessage1: 6173697 false) 
-	#(82 1 #liftFirstValue: 6173698 false) 
-	#(91 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6612993 false) 
-	#(75 2 #reduceActionForCascade1: 5672962 false) 
-	#(95 1 #reduceActionForUnaryMessage1: 6924289 false) 
-	#(94 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6843393 false) 
-	#(95 1 #liftFirstValue: 6924291 false) 
-	#(95 1 #reduceActionForUnaryMessage1: 6924290 false) 
-	#(75 2 #reduceActionForCascade1: 5672963 false) 
-	#(115 0 #reduceActionForVariable__variable__1: 8805377 false) 
-	#(39 3 #reduceActionForMethodPattern8: 3034120 false) 
-	#(44 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 3551234 false) 
-	#(50 2 #reduceActionForTemplateKeyword2: 3900418 false) 
-	#(50 2 #reduceActionForTemplateKeyword2: 3900417 false) 
-	#(43 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: 3551234 false) 
-	#(49 2 #reduceActionForTemplateKeywordPattern1: 3833857 false) 
-	#(47 1 #reduceActionForKeywordPattern1: 3647489 false) 
-	#(45 2 #reduceActionForTemplateWithName1: 3602433 false) 
-	#(46 1 #reduceActionFor_period___period__1: 3647489 false) 
-	#(42 3 #reduceActionForTemplatePattern3: 3463171 false) 
-	#(45 2 #reduceActionForTemplateWithName1: 3602434 false) 
-	#(51 1 #reduceActionForTemplateNamePart1: 4001793 false) 
-	#(69 3 #reduceActionForTemporaries1: 5261313 false) 
-	#(70 2 #reduceActionForPragma__pragma__2: 5294082 false) 
-	#(55 3 #reduceActionForPragma1: 4176897 false) 
-	#(56 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4270081 false) 
-	#(59 1 #liftFirstValue: 4527106 false) 
-	#(59 1 #liftFirstValue: 4527105 false) 
-	#(55 3 #reduceActionForPragma2: 4176898 false) 
-	#(57 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4270082 false) 
-	#(55 3 #reduceActionForPragma5: 4176901 false) 
-	#(104 3 #reduceActionForArray2: 8025090 false) 
-	#(108 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 8308737 false) 
-	#(110 2 #reduceActionForBlockArgs2: 8387586 false) 
-	#(107 3 #reduceActionForBlock2: 8176642 false) 
-	#(109 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 8308738 false) 
-	#(103 3 #reduceActionForValue5: 7729157 false) 
-	#(117 3 #reduceActionForByteArrayLiteral1: 9615361 false) 
-	#(119 1 #liftFirstValue: 9734145 false) 
-	#(118 2 #reduceActionForPragma__pragma__2: 9666562 false) 
-	#(119 1 #reduceActionForValue8: 9734146 false) 
-	#(66 3 #reduceActionForMethodSequence12: 4970508 false) 
-	#(66 3 #reduceActionForMethodSequence1: 4970497 false) 
-	#(66 3 #reduceActionForMethodSequence15: 4970511 false) 
-	#(66 3 #reduceActionForMethodSequence14: 4970510 false) 
-	#(62 1 #reduceActionForKeywordPattern1: 4753409 false) 
-	#(66 3 #reduceActionForMethodSequence7: 4970503 false) 
-	#(66 3 #reduceActionForMethodSequence6: 4970502 false) 
-	#(68 3 #reduceActionForSequence8: 5194760 false) 
-	#(72 3 #reduceActionForStatementList2: 5388290 false) 
-	#(77 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5871617 false) 
-	#(79 1 #liftFirstValue: 5928961 false) 
-	#(79 1 #liftFirstValue: 5928962 false) 
-	#(79 1 #liftFirstValue: 5928963 false) 
-	#(78 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5871618 false) 
-	#(83 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6192129 false) 
-	#(92 2 #reduceActionForBinaryMessage1: 6696961 false) 
-	#(87 1 #reduceActionForKeywordPattern1: 6418433 false) 
-	#(85 2 #reduceActionForTemplateKeywordMessage1: 6322177 false) 
-	#(89 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6462465 false) 
-	#(84 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6192130 false) 
-	#(83 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6192130 false) 
-	#(96 2 #reduceActionForTemplateUnaryMessage1: 7035905 false) 
-	#(74 3 #reduceActionForAssignment1: 5571585 false) 
-	#(125 0 #reduceActionForEndLiteralArray1: 10070017 true) 
-	#(47 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3647490 false) 
-	#(46 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: 3647490 false) 
-	#(48 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3770370 false) 
-	#(45 3 #reduceActionForTemplateWithName3: 3602435 false) 
-	#(102 3 #reduceActionForStartTemplate1: 7601153 false) 
-	#(104 4 #reduceActionForArray3: 8025091 false) 
-	#(106 2 #reduceActionFor__period___period___Statement__value___2: 8078338 false) 
-	#(107 4 #reduceActionForBlock1: 8176641 false) 
-	#(66 4 #reduceActionForMethodSequence3: 4970499 false) 
-	#(66 4 #reduceActionForMethodSequence2: 4970498 false) 
-	#(66 4 #reduceActionForMethodSequence16: 4970512 false) 
-	#(60 4 #reduceActionForTemplatePragma1: 4585473 false) 
-	#(61 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 4753409 false) 
-	#(60 4 #reduceActionForTemplatePragma2: 4585474 false) 
-	#(62 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 4753410 false) 
-	#(66 4 #reduceActionForMethodSequence8: 4970504 false) 
-	#(88 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6462465 false) 
-	#(86 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 6418433 false) 
-	#(87 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 6418434 false) 
-	#(85 3 #reduceActionForTemplateKeywordMessage2: 6322178 false) 
-	#(89 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6462466 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883204 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883202 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883208 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883211 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883213 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883210 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883214 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883212 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883206 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883209 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883207 false) 
-	#(116 1 #liftFirstValue: 8883201 false) 
-	#(115 2 #reduceActionForPragma__pragma__2: 8805378 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883203 false) 
-	#(116 1 #reduceActionForSymbolLiteral1: 8883205 false) 
-	#(116 1 #reduceActionForValue8: 8883216 false) 
-	#(103 4 #reduceActionForValue6: 7729158 false) 
-	#(101 3 #reduceActionForStartTemplate1: 7480321 false) 
-	#(104 5 #reduceActionForArray4: 8025092 false) 
-	#(105 2 #reduceActionForTemplateKeyword2: 8078337 false) 
-	#(66 5 #reduceActionForMethodSequence4: 4970500 false) 
-	#(61 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 4753410 false) 
-	#(60 5 #reduceActionForTemplatePragma3: 4585475 false) 
-	#(86 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 6418434 false) 
-	#(103 5 #reduceActionForValue7: 7729159 false) 
-	#(114 5 #reduceActionForArrayLiteral1: 8733697 false) 
-	#(116 3 #reduceActionForArrayLiteralValue15: 8883215 false)
+	#(124 0 #reduceActionForSwitchToLiteralArray1: 10013697 true) 
+	#(68 0 #reduceActionForSequence1: 5202945 false) 
+	#(39 1 #reduceActionForMethodPattern1: 3042305 false) 
+	#(41 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 3356673 false) 
+	#(39 1 #liftFirstValue: 3042309 false) 
+	#(39 1 #reduceActionForMethodPattern4: 3042308 false) 
+	#(65 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4887553 false) 
+	#(63 1 #reduceActionForKeywordPattern1: 4869121 false) 
+	#(39 1 #reduceActionForMethodPattern1: 3042306 false) 
+	#(58 1 #nil 4498433 false) 
+	#(97 1 #reduceActionForVariable1: 7107585 false) 
+	#(97 1 #reduceActionForVariable2: 7107586 false) 
+	#(97 1 #reduceActionForVariable3: 7107587 false) 
+	#(122 1 #reduceActionForBooleanLiteral1: 9910273 false) 
+	#(122 1 #reduceActionForBooleanLiteral1: 9910274 false) 
+	#(123 1 #reduceActionForNilLiteral1: 9976833 false) 
+	#(99 1 #reduceActionForNamedVariable1: 7343105 false) 
+	#(98 1 #reduceActionForGemStonePath1: 7296001 false) 
+	#(70 0 #reduceActionForVariable__variable__1: 5302273 false) 
+	#(112 1 #reduceActionForStringLiteral1: 8622081 false) 
+	#(121 1 #reduceActionForSymbolLiteral1: 9867265 false) 
+	#(120 1 #reduceActionForCharacterLiteral1: 9818113 false) 
+	#(113 1 #reduceActionForNumberLiteral1: 8665089 false) 
+	#(113 1 #reduceActionForNumberLiteral1: 8665090 false) 
+	#(110 0 #reduceActionForBlockArgs1: 8395777 false) 
+	#(118 0 #reduceActionForVariable__variable__1: 9674753 false) 
+	#(67 1 #reduceActionFor_period___period__1: 5025793 false) 
+	#(66 1 #reduceActionForMethodSequence9: 4978697 false) 
+	#(53 1 #reduceActionForKeywordPattern1: 4153345 false) 
+	#(54 1 #reduceActionFor_period___period__1: 4164609 false) 
+	#(55 1 #liftFirstValue: 4185091 false) 
+	#(68 1 #reduceActionForSequence3: 5202947 false) 
+	#(66 1 #liftFirstValue: 4978705 false) 
+	#(68 1 #reduceActionForSequence5: 5202949 false) 
+	#(68 1 #reduceActionForSequence2: 5202946 false) 
+	#(71 1 #reduceActionForKeywordPattern1: 5344257 false) 
+	#(72 1 #reduceActionForStatementList1: 5396481 false) 
+	#(73 1 #liftFirstValue: 5498882 false) 
+	#(74 1 #liftFirstValue: 5579778 false) 
+	#(75 1 #liftFirstValue: 5681156 false) 
+	#(80 1 #reduceActionForKeywordMessageSend1: 6008833 false) 
+	#(80 1 #liftFirstValue: 6008834 false) 
+	#(90 1 #reduceActionForKeywordMessageSend1: 6537217 false) 
+	#(90 1 #liftFirstValue: 6537218 false) 
+	#(93 1 #reduceActionForKeywordMessageSend1: 6780929 false) 
+	#(103 1 #liftFirstValue: 7737345 false) 
+	#(97 1 #liftFirstValue: 7107590 false) 
+	#(97 1 #liftFirstValue: 7107588 false) 
+	#(97 1 #liftFirstValue: 7107589 false) 
+	#(93 1 #liftFirstValue: 6780930 false) 
+	#(103 1 #liftFirstValue: 7737347 false) 
+	#(103 1 #liftFirstValue: 7737348 false) 
+	#(103 1 #liftFirstValue: 7737346 false) 
+	#(111 1 #liftFirstValue: 8468481 false) 
+	#(111 1 #liftFirstValue: 8468482 false) 
+	#(111 1 #liftFirstValue: 8468483 false) 
+	#(111 1 #liftFirstValue: 8468484 false) 
+	#(111 1 #liftFirstValue: 8468485 false) 
+	#(111 1 #liftFirstValue: 8468486 false) 
+	#(111 1 #liftFirstValue: 8468487 false) 
+	#(111 1 #liftFirstValue: 8468488 false) 
+	#(99 1 #reduceActionForNamedVariable1: 7343106 false) 
+	#(103 1 #reduceActionForValue8: 7737352 false) 
+	#(126 1 #reduceActionForDoItMethod1: 10129409 false) 
+	#(64 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4887553 false) 
+	#(40 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 3356673 false) 
+	#(39 2 #reduceActionForMethodPattern7: 3042311 false) 
+	#(39 2 #reduceActionForMethodPattern3: 3042307 false) 
+	#(39 2 #reduceActionForMethodPattern7: 3042310 false) 
+	#(38 2 #reduceActionForMethod1: 2976769 false) 
+	#(41 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 3356674 false) 
+	#(52 1 #reduceActionForTemplateNamePart1: 4093953 false) 
+	#(44 1 #reduceActionForKeywordPattern1: 3559425 false) 
+	#(42 2 #reduceActionForTemplatePattern2: 3471362 false) 
+	#(42 2 #reduceActionForTemplatePattern1: 3471361 false) 
+	#(43 1 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: 3559425 false) 
+	#(48 0 #reduceActionForVariable__variable__1: 3778561 false) 
+	#(65 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4887554 false) 
+	#(64 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4887554 false) 
+	#(73 2 #reduceActionForStatement1: 5498881 false) 
+	#(57 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 4278273 false) 
+	#(55 2 #reduceActionForPragma4: 4185092 false) 
+	#(104 2 #reduceActionForArray1: 8033281 false) 
+	#(106 0 #reduceActionFor__period___period___Statement__value___1: 8086529 false) 
+	#(109 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 8316929 false) 
+	#(66 2 #reduceActionForMethodSequence11: 4978699 false) 
+	#(66 2 #reduceActionForMethodSequence13: 4978701 false) 
+	#(66 2 #reduceActionForMethodSequence10: 4978698 false) 
+	#(54 2 #reduceActionForPragma__pragma__2: 4164610 false) 
+	#(100 2 #reduceActionForTemplateVariable1: 7429121 false) 
+	#(67 2 #reduceActionForPragma__pragma__2: 5025794 false) 
+	#(68 2 #reduceActionForSequence4: 5202948 false) 
+	#(66 2 #reduceActionForMethodSequence5: 4978693 false) 
+	#(68 2 #reduceActionForSequence7: 5202951 false) 
+	#(68 2 #reduceActionForSequence6: 5202950 false) 
+	#(71 2 #reduceActionForStatements2: 5344258 false) 
+	#(75 2 #reduceActionForCascade1: 5681153 false) 
+	#(78 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 5879809 false) 
+	#(76 1 #reduceActionForKeywordPattern1: 5859329 false) 
+	#(81 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6095873 false) 
+	#(84 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6200321 false) 
+	#(82 1 #reduceActionForKeywordMessage1: 6181889 false) 
+	#(82 1 #liftFirstValue: 6181890 false) 
+	#(91 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6621185 false) 
+	#(75 2 #reduceActionForCascade1: 5681154 false) 
+	#(95 1 #reduceActionForUnaryMessage1: 6932481 false) 
+	#(94 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6851585 false) 
+	#(95 1 #liftFirstValue: 6932483 false) 
+	#(95 1 #reduceActionForUnaryMessage1: 6932482 false) 
+	#(75 2 #reduceActionForCascade1: 5681155 false) 
+	#(115 0 #reduceActionForVariable__variable__1: 8813569 false) 
+	#(39 3 #reduceActionForMethodPattern8: 3042312 false) 
+	#(44 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 3559426 false) 
+	#(50 2 #reduceActionForTemplateKeyword2: 3908610 false) 
+	#(50 2 #reduceActionForTemplateKeyword2: 3908609 false) 
+	#(43 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: 3559426 false) 
+	#(49 2 #reduceActionForTemplateKeywordPattern1: 3842049 false) 
+	#(47 1 #reduceActionForKeywordPattern1: 3655681 false) 
+	#(45 2 #reduceActionForTemplateWithName1: 3610625 false) 
+	#(46 1 #reduceActionFor_period___period__1: 3655681 false) 
+	#(42 3 #reduceActionForTemplatePattern3: 3471363 false) 
+	#(45 2 #reduceActionForTemplateWithName1: 3610626 false) 
+	#(51 1 #reduceActionForTemplateNamePart1: 4009985 false) 
+	#(69 3 #reduceActionForTemporaries1: 5269505 false) 
+	#(70 2 #reduceActionForPragma__pragma__2: 5302274 false) 
+	#(55 3 #reduceActionForPragma1: 4185089 false) 
+	#(56 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 4278273 false) 
+	#(59 1 #liftFirstValue: 4535298 false) 
+	#(59 1 #liftFirstValue: 4535297 false) 
+	#(55 3 #reduceActionForPragma2: 4185090 false) 
+	#(57 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 4278274 false) 
+	#(55 3 #reduceActionForPragma5: 4185093 false) 
+	#(104 3 #reduceActionForArray2: 8033282 false) 
+	#(108 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 8316929 false) 
+	#(110 2 #reduceActionForBlockArgs2: 8395778 false) 
+	#(107 3 #reduceActionForBlock2: 8184834 false) 
+	#(109 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 8316930 false) 
+	#(103 3 #reduceActionForValue5: 7737349 false) 
+	#(117 3 #reduceActionForByteArrayLiteral1: 9623553 false) 
+	#(119 1 #liftFirstValue: 9742337 false) 
+	#(118 2 #reduceActionForPragma__pragma__2: 9674754 false) 
+	#(119 1 #reduceActionForValue8: 9742338 false) 
+	#(66 3 #reduceActionForMethodSequence12: 4978700 false) 
+	#(66 3 #reduceActionForMethodSequence1: 4978689 false) 
+	#(66 3 #reduceActionForMethodSequence15: 4978703 false) 
+	#(66 3 #reduceActionForMethodSequence14: 4978702 false) 
+	#(62 1 #reduceActionForKeywordPattern1: 4761601 false) 
+	#(66 3 #reduceActionForMethodSequence7: 4978695 false) 
+	#(66 3 #reduceActionForMethodSequence6: 4978694 false) 
+	#(68 3 #reduceActionForSequence8: 5202952 false) 
+	#(72 3 #reduceActionForStatementList2: 5396482 false) 
+	#(77 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 5879809 false) 
+	#(79 1 #liftFirstValue: 5937153 false) 
+	#(79 1 #liftFirstValue: 5937154 false) 
+	#(79 1 #liftFirstValue: 5937155 false) 
+	#(78 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 5879810 false) 
+	#(83 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6200321 false) 
+	#(92 2 #reduceActionForBinaryMessage1: 6705153 false) 
+	#(87 1 #reduceActionForKeywordPattern1: 6426625 false) 
+	#(85 2 #reduceActionForTemplateKeywordMessage1: 6330369 false) 
+	#(89 1 #reduceActionFor__keyword___selectorPart__Variable__variable___1: 6470657 false) 
+	#(84 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6200322 false) 
+	#(83 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6200322 false) 
+	#(96 2 #reduceActionForTemplateUnaryMessage1: 7044097 false) 
+	#(74 3 #reduceActionForAssignment1: 5579777 false) 
+	#(125 0 #reduceActionForEndLiteralArray1: 10078209 true) 
+	#(47 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3655682 false) 
+	#(46 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: 3655682 false) 
+	#(48 2 #reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: 3778562 false) 
+	#(45 3 #reduceActionForTemplateWithName3: 3610627 false) 
+	#(102 3 #reduceActionForStartTemplate1: 7609345 false) 
+	#(104 4 #reduceActionForArray3: 8033283 false) 
+	#(106 2 #reduceActionFor__period___period___Statement__value___2: 8086530 false) 
+	#(107 4 #reduceActionForBlock1: 8184833 false) 
+	#(66 4 #reduceActionForMethodSequence3: 4978691 false) 
+	#(66 4 #reduceActionForMethodSequence2: 4978690 false) 
+	#(66 4 #reduceActionForMethodSequence16: 4978704 false) 
+	#(60 4 #reduceActionForTemplatePragma1: 4593665 false) 
+	#(61 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 4761601 false) 
+	#(60 4 #reduceActionForTemplatePragma2: 4593666 false) 
+	#(62 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 4761602 false) 
+	#(66 4 #reduceActionForMethodSequence8: 4978696 false) 
+	#(88 2 #reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: 6470657 false) 
+	#(86 2 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: 6426625 false) 
+	#(87 2 #reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: 6426626 false) 
+	#(85 3 #reduceActionForTemplateKeywordMessage2: 6330370 false) 
+	#(89 2 #reduceActionFor__keyword___selectorPart__Variable__variable___2: 6470658 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891396 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891394 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891400 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891403 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891405 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891402 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891406 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891404 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891398 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891401 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891399 false) 
+	#(116 1 #liftFirstValue: 8891393 false) 
+	#(115 2 #reduceActionForPragma__pragma__2: 8813570 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891395 false) 
+	#(116 1 #reduceActionForSymbolLiteral1: 8891397 false) 
+	#(116 1 #reduceActionForValue8: 8891408 false) 
+	#(103 4 #reduceActionForValue6: 7737350 false) 
+	#(101 3 #reduceActionForStartTemplate1: 7488513 false) 
+	#(104 5 #reduceActionForArray4: 8033284 false) 
+	#(105 2 #reduceActionForTemplateKeyword2: 8086529 false) 
+	#(66 5 #reduceActionForMethodSequence4: 4978692 false) 
+	#(61 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 4761602 false) 
+	#(60 5 #reduceActionForTemplatePragma3: 4593667 false) 
+	#(86 3 #reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: 6426626 false) 
+	#(103 5 #reduceActionForValue7: 7737351 false) 
+	#(114 5 #reduceActionForArrayLiteral1: 8741889 false) 
+	#(116 3 #reduceActionForArrayLiteralValue15: 8891407 false)
 	).
 ]
 
 { #category : #'generated-accessing' }
-GtPharoParser class >> scannerClass [
+GtPharoIncrementalParser class >> scannerClass [
 	^GtPharoScanner
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForDoItMethod [
+GtPharoIncrementalParser class >> startingStateForDoItMethod [
 	^ 8
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForKeywordMessageSend [
+GtPharoIncrementalParser class >> startingStateForKeywordMessageSend [
 	^ 5
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForMethod [
+GtPharoIncrementalParser class >> startingStateForMethod [
 	^ 1
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForMethodPattern [
+GtPharoIncrementalParser class >> startingStateForMethodPattern [
 	^ 4
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForMethodSequence [
+GtPharoIncrementalParser class >> startingStateForMethodSequence [
 	^ 2
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForPragma [
+GtPharoIncrementalParser class >> startingStateForPragma [
 	^ 7
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForStatement [
+GtPharoIncrementalParser class >> startingStateForStatement [
 	^ 3
 ]
 
 { #category : #generated }
-GtPharoParser class >> startingStateForVariable [
+GtPharoIncrementalParser class >> startingStateForVariable [
 	^ 6
 ]
 
 { #category : #generated }
-GtPharoParser class >> symbolNames [
+GtPharoIncrementalParser class >> symbolNames [
 	^ #('"self"' '"super"' '"thisContext"' '<true>' '<false>' '<nil>' '<name>' '<gsPath>' '<nameAssignment>' '<bar>' '<string>' '<symbol>' '<character>' '<number>' '<negativeNumber>' '<literalArrayKeyword>' '<return>' '<lt>' '<gt>' '<leftBrace>' '<leftBracket>' '<colon>' '<leftParen>' '<literalArrayStart>' '<byteArrayStart>' '<rightParen>' '<rightBracket>' '<rightBrace>' '<keyword>' '<binary>' '<semicolon>' '<assign>' '<period>' '<comment>' '<whitespace>' '<patternToken>' 'B e g i n' 'Method' 'MethodPattern' '(<keyword> ''selectorPart'' Variable ''variable'')' '(<keyword> ''selectorPart'' Variable ''variable'')+' 'TemplatePattern' '(TemplateKeywordPattern KeywordPattern?)' '(TemplateKeywordPattern KeywordPattern?)+' 'TemplateWithName' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)+' '(MidTemplate ''part'' TemplateNameContinuationPart ''part''?)*' 'TemplateKeywordPattern' 'TemplateKeyword' 'TemplateNameContinuationPart' 'TemplateNamePart' 'Pragmas' 'Pragma ''pragma''+' 'Pragma' '(<keyword> ''selectorPart'' PragmaArgument)' '(<keyword> ''selectorPart'' PragmaArgument)+' 'OnlyTemplate' 'PragmaArgument' 'TemplatePragma' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)' '(TemplateKeyword PragmaArgument (<keyword> ''selectorPart'' PragmaArgument)+?)+' 'KeywordPattern' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'') Variable ''variable'')' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'') Variable ''variable'')+' 'MethodSequence' '<period> ''period''+' 'Sequence' 'Temporaries' 'Variable ''variable''*' 'Statements' 'StatementList' 'Statement' 'Assignment' 'Cascade' 'CascadedMessages' '(<semicolon> ''semicolon'' CascadedMessage ''message'')' '(<semicolon> ''semicolon'' CascadedMessage ''message'')+' 'CascadedMessage' 'KeywordMessageSend' 'KeywordMessageSendVars' 'KeywordMessage' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'')  BinaryMessageSend ''value'')' '((<keyword> ''selectorPart'' | <rbKeywordPattern> ''selectorPart'')  BinaryMessageSend ''value'')+' 'TemplateKeywordMessage' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)' '(TemplateKeyword BinaryMessageSend ''value'' (<keyword> ''selectorPart'' BinaryMessageSend ''value'')+?)+' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')' '(<keyword> ''selectorPart'' BinaryMessageSend ''value'')+' 'BinaryMessageSend' 'BinaryMessageSendVars' 'BinaryMessage' 'UnaryMessageSend' 'UnaryMessageSendVars' 'UnaryMessage' 'TemplateUnaryMessage' 'Variable' 'GemStonePath' 'NamedVariable' 'TemplateVariable' 'MidTemplate' 'StartTemplate' 'Value' 'Array' '(<period> ''period''+ Statement ''value'')' '(<period> ''period''+ Statement ''value'')*' 'Block' '(<colon> ''colon'' Variable ''variable'')' '(<colon> ''colon'' Variable ''variable'')+' 'BlockArgs' 'Literal' 'StringLiteral' 'NumberLiteral' 'ArrayLiteral' 'ArrayLiteralValue ''value''*' 'ArrayLiteralValue' 'ByteArrayLiteral' 'ByteArrayLiteralValue ''value''*' 'ByteArrayLiteralValue' 'CharacterLiteral' 'SymbolLiteral' 'BooleanLiteral' 'NilLiteral' 'SwitchToLiteralArray' 'EndLiteralArray' 'DoItMethod' '<doubleLeftBrace>' '<doubleLeftBraceStart>' '<doubleRightBrace>' '<rbKeywordPattern>' '<rbLiteralArrayKeywordPattern>' '<rbNamePattern>' '<rbPatternBlock>' '<template>' '<templateKeyword>' '<templateNamePart>' 'E O F' 'error')
 ]
 
 { #category : #generated }
-GtPharoParser class >> symbolTypes [
+GtPharoIncrementalParser class >> symbolTypes [
 	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #GtPharoMethodNode #GtPharoMethodNode #GtPharoMethodPatternNode #OrderedCollection #OrderedCollection #GtPharoTemplatePatternNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoTemplateNamePartNode #GtPharoTemplateNamePartNode #OrderedCollection #OrderedCollection #GtPharoPragmaNode #OrderedCollection #OrderedCollection nil #GtPharoValueNode #GtPharoTemplatePragmaNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoSequenceNode #OrderedCollection #GtPharoSequenceNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoProgramNode #GtPharoValueNode #GtPharoValueNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoMessageNode #GtPharoValueNode #OrderedCollection #GtPharoKeywordMessageNode #OrderedCollection #OrderedCollection #GtPharoTemplateKeywordMessageNode #OrderedCollection #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoValueNode #OrderedCollection #GtPharoBinaryMessageNode #GtPharoValueNode #OrderedCollection #GtPharoUnaryMessageNode #GtPharoTemplateUnaryMessageNode #GtPharoValueNode #GtPharoGSPathNode #GtPharoNamedVariableNode #GtPharoTemplateVariableNode #GtPharoTemplateNode #GtPharoTemplateNode #GtPharoValueNode #GtPharoArrayNode #OrderedCollection #OrderedCollection #GtPharoBlockNode #OrderedCollection #OrderedCollection #OrderedCollection #GtPharoLiteralNode #GtPharoStringLiteralNode #GtPharoNumberLiteralNode #GtPharoArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoByteArrayLiteralNode #OrderedCollection #GtPharoValueNode #GtPharoCharacterLiteralNode #GtPharoSymbolLiteralNode #GtPharoBooleanLiteralNode #GtPharoNilLiteralNode #ByteSymbol nil #GtPharoDoItMethodNode #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCErrorNode)
 ]
 
 { #category : #generated }
-GtPharoParser class >> transitionTable [
+GtPharoIncrementalParser class >> transitionTable [
 ^#(
 #[1 0 37 0 7 0 41 0 29 0 45 0 30 0 49 0 38 0 53 0 39 0 57 0 40 0 61 0 41 0 53 0 42 0 69 0 58 0 73 0 63 0 77 0 64 0 81 0 65 0 85 0 130 0 89 0 132 0 93 0 134] 
 #[1 0 97 0 1 0 101 0 2 0 105 0 3 0 109 0 4 0 113 0 5 0 117 0 6 0 121 0 7 0 125 0 8 0 129 0 10 0 133 0 11 0 137 0 12 0 141 0 13 0 145 0 14 0 149 0 15 0 153 0 17 0 157 0 18 0 161 0 20 0 165 0 21 0 169 0 23 0 6 0 24 0 173 0 25 0 177 0 33 0 181 0 53 0 185 0 54 0 189 0 55 0 193 0 58 0 189 0 60 0 201 0 66 0 205 0 67 0 201 0 68 0 213 0 69 0 217 0 71 0 221 0 72 0 225 0 73 0 225 0 74 0 225 0 75 0 225 0 80 0 241 0 81 0 245 0 90 0 249 0 91 0 253 0 93 1 1 0 94 1 5 0 97 1 5 0 98 1 5 0 99 1 5 0 100 0 253 0 103 0 253 0 104 0 253 0 107 0 253 0 111 0 253 0 112 0 253 0 113 0 253 0 114 0 253 0 117 0 253 0 120 0 253 0 121 0 253 0 122 0 253 0 123 1 69 0 124 1 73 0 132 1 77 0 133 0 93 0 134 0 10 0 137 1 81 0 138] 
@@ -994,49 +989,8 @@ GtPharoParser class >> transitionTable [
 	).
 ]
 
-{ #category : #private }
-GtPharoParser >> actionsForCurrentToken [
-	| actions |
-	actions := super actionsForCurrentToken.
-	actions isEmpty
-		ifTrue: [ (currentToken ids includes: scanner binaryId)
-				ifTrue: [ (#('|' '<' '>') includes: currentToken value)
-						ifTrue: [ self addActionsFor: scanner binaryId to: actions ]
-						ifFalse: [ (#('||' '|||') includes: currentToken value)
-								ifTrue: [ currentToken := currentToken class value: '|' start: currentToken startPosition ids: (Array with: scanner barId).
-									self position: currentToken startPosition.
-									actions := super actionsForCurrentToken ] ] ].
-			(currentToken ids includes: scanner negativeNumberId)
-				ifTrue: [ self addActionsFor: scanner binaryId to: actions.
-					actions notEmpty
-						ifTrue: [ currentToken := currentToken class value: '-' start: currentToken startPosition ids: (Array with: scanner binaryId).
-							self position: currentToken startPosition ] ].
-			(currentToken ids includes: scanner nameId)
-				ifTrue: [ self addActionsFor: scanner nameId to: actions ].
-			(currentToken ids includes: scanner nameAssignmentId)
-				ifTrue: [ self addActionsFor: scanner nameId to: actions.
-					actions notEmpty
-						ifTrue:
-							[ currentToken := currentToken class value: (currentToken value copyFrom: 1 to: currentToken value size - 2) start: currentToken startPosition ids: (Array with: scanner nameId).
-							self position: scanner position - 2 ] ] ].
-	^ actions
-]
-
-{ #category : #private }
-GtPharoParser >> defaultScope [
-	^ #default
-]
-
-{ #category : #private }
-GtPharoParser >> endLiteralArray [
-	(nodeStack
-		inject: 0
-		into: [ :sum :each | sum + (each == #array ifTrue: [ 1 ] ifFalse: [ 0 ]) ])
-		= 1 ifTrue: [ self scope: self defaultScope ]
-]
-
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArray1: nodes [
+GtPharoIncrementalParser >> reduceActionForArray1: nodes [
 	| result |
 	result := GtPharoArrayNode new.
 	result leftBrace: (nodes at: 1).
@@ -1045,7 +999,7 @@ GtPharoParser >> reduceActionForArray1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArray2: nodes [
+GtPharoIncrementalParser >> reduceActionForArray2: nodes [
 	| result |
 	result := GtPharoArrayNode new.
 	result leftBrace: (nodes at: 1).
@@ -1055,7 +1009,7 @@ GtPharoParser >> reduceActionForArray2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArray3: nodes [
+GtPharoIncrementalParser >> reduceActionForArray3: nodes [
 	| result |
 	result := GtPharoArrayNode new.
 	result leftBrace: (nodes at: 1).
@@ -1067,7 +1021,7 @@ GtPharoParser >> reduceActionForArray3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArray4: nodes [
+GtPharoIncrementalParser >> reduceActionForArray4: nodes [
 	| result |
 	result := GtPharoArrayNode new.
 	result leftBrace: (nodes at: 1).
@@ -1080,7 +1034,7 @@ GtPharoParser >> reduceActionForArray4: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArrayLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForArrayLiteral1: nodes [
 	| result |
 	result := GtPharoArrayLiteralNode new.
 	result arrayStart: (nodes at: 2).
@@ -1090,7 +1044,7 @@ GtPharoParser >> reduceActionForArrayLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForArrayLiteralValue15: nodes [
+GtPharoIncrementalParser >> reduceActionForArrayLiteralValue15: nodes [
 	| result |
 	result := GtPharoArrayLiteralNode new.
 	result arrayStart: (nodes at: 1).
@@ -1100,7 +1054,7 @@ GtPharoParser >> reduceActionForArrayLiteralValue15: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForAssignment1: nodes [
+GtPharoIncrementalParser >> reduceActionForAssignment1: nodes [
 	| result |
 	result := GtPharoAssignmentNode new.
 	result variable: (nodes at: 1).
@@ -1110,7 +1064,7 @@ GtPharoParser >> reduceActionForAssignment1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForBinaryMessage1: nodes [
+GtPharoIncrementalParser >> reduceActionForBinaryMessage1: nodes [
 	| result |
 	result := GtPharoBinaryMessageNode new.
 	result selectorPart: (nodes at: 1).
@@ -1119,7 +1073,7 @@ GtPharoParser >> reduceActionForBinaryMessage1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForBlock1: nodes [
+GtPharoIncrementalParser >> reduceActionForBlock1: nodes [
 	| result |
 	result := GtPharoBlockNode new.
 	result leftBracket: (nodes at: 1).
@@ -1132,7 +1086,7 @@ GtPharoParser >> reduceActionForBlock1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForBlock2: nodes [
+GtPharoIncrementalParser >> reduceActionForBlock2: nodes [
 	| result |
 	result := GtPharoBlockNode new.
 	result leftBracket: (nodes at: 1).
@@ -1143,7 +1097,7 @@ GtPharoParser >> reduceActionForBlock2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForBlockArgs1: nodes [
+GtPharoIncrementalParser >> reduceActionForBlockArgs1: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -1152,7 +1106,7 @@ GtPharoParser >> reduceActionForBlockArgs1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForBlockArgs2: nodes [
+GtPharoIncrementalParser >> reduceActionForBlockArgs2: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -1164,7 +1118,7 @@ GtPharoParser >> reduceActionForBlockArgs2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForBooleanLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForBooleanLiteral1: nodes [
 	| result |
 	result := GtPharoBooleanLiteralNode new.
 	result value: (nodes at: 1).
@@ -1172,7 +1126,7 @@ GtPharoParser >> reduceActionForBooleanLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForByteArrayLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForByteArrayLiteral1: nodes [
 	| result |
 	result := GtPharoByteArrayLiteralNode new.
 	result arrayStart: (nodes at: 1).
@@ -1182,7 +1136,7 @@ GtPharoParser >> reduceActionForByteArrayLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForCascade1: nodes [
+GtPharoIncrementalParser >> reduceActionForCascade1: nodes [
 	| result |
 	result := GtPharoCascadeNode new.
 	result receiver: ((nodes at: 1) at: 1).
@@ -1193,7 +1147,7 @@ GtPharoParser >> reduceActionForCascade1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForCharacterLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForCharacterLiteral1: nodes [
 	| result |
 	result := GtPharoCharacterLiteralNode new.
 	result value: (nodes at: 1).
@@ -1201,7 +1155,7 @@ GtPharoParser >> reduceActionForCharacterLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForDoItMethod1: nodes [
+GtPharoIncrementalParser >> reduceActionForDoItMethod1: nodes [
 	| result |
 	result := GtPharoDoItMethodNode new.
 	result body: (nodes at: 1).
@@ -1209,13 +1163,13 @@ GtPharoParser >> reduceActionForDoItMethod1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForEndLiteralArray1: nodes [
+GtPharoIncrementalParser >> reduceActionForEndLiteralArray1: nodes [
 	self endLiteralArray.
 	^ nil
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForGemStonePath1: nodes [
+GtPharoIncrementalParser >> reduceActionForGemStonePath1: nodes [
 	| result |
 	result := GtPharoGSPathNode new.
 	result name: (nodes at: 1).
@@ -1223,7 +1177,7 @@ GtPharoParser >> reduceActionForGemStonePath1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForKeywordMessage1: nodes [
+GtPharoIncrementalParser >> reduceActionForKeywordMessage1: nodes [
 	| result |
 	result := GtPharoKeywordMessageNode new.
 	result addTokens: ((nodes at: 1) at: 1) to: result selectorParts.
@@ -1232,7 +1186,7 @@ GtPharoParser >> reduceActionForKeywordMessage1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForKeywordMessageSend1: nodes [
+GtPharoIncrementalParser >> reduceActionForKeywordMessageSend1: nodes [
 	| result |
 	result := GtPharoMessageSendNode new.
 	result receiver: ((nodes at: 1) at: 1).
@@ -1241,14 +1195,14 @@ GtPharoParser >> reduceActionForKeywordMessageSend1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForKeywordPattern1: nodes [
+GtPharoIncrementalParser >> reduceActionForKeywordPattern1: nodes [
 	| result |
 	result := nodes at: 1.
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethod1: nodes [
+GtPharoIncrementalParser >> reduceActionForMethod1: nodes [
 	| result |
 	result := GtPharoMethodNode new.
 	result pattern: (nodes at: 1).
@@ -1257,7 +1211,7 @@ GtPharoParser >> reduceActionForMethod1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodPattern1: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodPattern1: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
 	result addToken: (nodes at: 1) to: result selectorParts.
@@ -1265,7 +1219,7 @@ GtPharoParser >> reduceActionForMethodPattern1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodPattern3: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodPattern3: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
 	result addToken: (nodes at: 1) to: result selectorParts.
@@ -1274,7 +1228,7 @@ GtPharoParser >> reduceActionForMethodPattern3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodPattern4: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodPattern4: nodes [
 	| result |
 	result := GtPharoMethodPatternNode new.
 	result addTokens: ((nodes at: 1) at: 1) to: result selectorParts.
@@ -1283,7 +1237,7 @@ GtPharoParser >> reduceActionForMethodPattern4: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodPattern7: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodPattern7: nodes [
 	| result |
 	result := GtPharoErrorPatternNode new.
 	result addToken: (nodes at: 1) to: result selectorParts.
@@ -1292,7 +1246,7 @@ GtPharoParser >> reduceActionForMethodPattern7: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodPattern8: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodPattern8: nodes [
 	| result |
 	result := GtPharoErrorPatternNode new.
 	result addTokens: ((nodes at: 1) at: 1) to: result selectorParts.
@@ -1303,7 +1257,7 @@ GtPharoParser >> reduceActionForMethodPattern8: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence10: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence10: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1313,7 +1267,7 @@ GtPharoParser >> reduceActionForMethodSequence10: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence11: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence11: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1322,7 +1276,7 @@ GtPharoParser >> reduceActionForMethodSequence11: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence12: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence12: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1333,7 +1287,7 @@ GtPharoParser >> reduceActionForMethodSequence12: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence13: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence13: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1344,7 +1298,7 @@ GtPharoParser >> reduceActionForMethodSequence13: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence14: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence14: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1357,7 +1311,7 @@ GtPharoParser >> reduceActionForMethodSequence14: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence15: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence15: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1369,7 +1323,7 @@ GtPharoParser >> reduceActionForMethodSequence15: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence16: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence16: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1383,7 +1337,7 @@ GtPharoParser >> reduceActionForMethodSequence16: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence1: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence1: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1395,7 +1349,7 @@ GtPharoParser >> reduceActionForMethodSequence1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence2: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence2: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1409,7 +1363,7 @@ GtPharoParser >> reduceActionForMethodSequence2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence3: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence3: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1422,7 +1376,7 @@ GtPharoParser >> reduceActionForMethodSequence3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence4: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence4: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1437,7 +1391,7 @@ GtPharoParser >> reduceActionForMethodSequence4: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence5: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence5: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1448,7 +1402,7 @@ GtPharoParser >> reduceActionForMethodSequence5: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence6: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence6: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1461,7 +1415,7 @@ GtPharoParser >> reduceActionForMethodSequence6: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence7: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence7: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1473,7 +1427,7 @@ GtPharoParser >> reduceActionForMethodSequence7: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence8: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence8: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1487,7 +1441,7 @@ GtPharoParser >> reduceActionForMethodSequence8: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForMethodSequence9: nodes [
+GtPharoIncrementalParser >> reduceActionForMethodSequence9: nodes [
 	| result |
 	result := GtPharoMethodSequenceNode new.
 	result addNodes: (nodes at: 1) to: result pragmas.
@@ -1495,7 +1449,7 @@ GtPharoParser >> reduceActionForMethodSequence9: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForNamedVariable1: nodes [
+GtPharoIncrementalParser >> reduceActionForNamedVariable1: nodes [
 	| result |
 	result := GtPharoNamedVariableNode new.
 	result name: (nodes at: 1).
@@ -1503,7 +1457,7 @@ GtPharoParser >> reduceActionForNamedVariable1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForNilLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForNilLiteral1: nodes [
 	| result |
 	result := GtPharoNilLiteralNode new.
 	result value: (nodes at: 1).
@@ -1511,7 +1465,7 @@ GtPharoParser >> reduceActionForNilLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForNumberLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForNumberLiteral1: nodes [
 	| result |
 	result := GtPharoNumberLiteralNode new.
 	result value: (nodes at: 1).
@@ -1519,7 +1473,7 @@ GtPharoParser >> reduceActionForNumberLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForPragma1: nodes [
+GtPharoIncrementalParser >> reduceActionForPragma1: nodes [
 	| result |
 	result := GtPharoPragmaNode new.
 	result lessThan: (nodes at: 1).
@@ -1529,7 +1483,7 @@ GtPharoParser >> reduceActionForPragma1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForPragma2: nodes [
+GtPharoIncrementalParser >> reduceActionForPragma2: nodes [
 	| result |
 	result := GtPharoPragmaNode new.
 	result lessThan: (nodes at: 1).
@@ -1540,7 +1494,7 @@ GtPharoParser >> reduceActionForPragma2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForPragma4: nodes [
+GtPharoIncrementalParser >> reduceActionForPragma4: nodes [
 	| result |
 	result := GtPharoPragmaErrorNode new.
 	result lessThan: (nodes at: 1).
@@ -1549,7 +1503,7 @@ GtPharoParser >> reduceActionForPragma4: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForPragma5: nodes [
+GtPharoIncrementalParser >> reduceActionForPragma5: nodes [
 	| result |
 	result := GtPharoPragmaErrorNode new.
 	result lessThan: (nodes at: 1).
@@ -1559,7 +1513,7 @@ GtPharoParser >> reduceActionForPragma5: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForPragma__pragma__2: nodes [
+GtPharoIncrementalParser >> reduceActionForPragma__pragma__2: nodes [
 	| result |
 	result := nodes at: 1.
 	self add: (nodes at: 2) to: result.
@@ -1567,14 +1521,14 @@ GtPharoParser >> reduceActionForPragma__pragma__2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence1: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence1: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence2: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence2: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result addNodes: ((nodes at: 1) at: 1) to: result statements.
@@ -1583,7 +1537,7 @@ GtPharoParser >> reduceActionForSequence2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence3: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence3: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result addTokens: (nodes at: 1) to: result periods.
@@ -1591,7 +1545,7 @@ GtPharoParser >> reduceActionForSequence3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence4: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence4: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result addTokens: (nodes at: 1) to: result periods.
@@ -1601,7 +1555,7 @@ GtPharoParser >> reduceActionForSequence4: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence5: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence5: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1611,7 +1565,7 @@ GtPharoParser >> reduceActionForSequence5: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence6: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence6: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1623,7 +1577,7 @@ GtPharoParser >> reduceActionForSequence6: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence7: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence7: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1634,7 +1588,7 @@ GtPharoParser >> reduceActionForSequence7: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSequence8: nodes [
+GtPharoIncrementalParser >> reduceActionForSequence8: nodes [
 	| result |
 	result := GtPharoSequenceNode new.
 	result leftBar: ((nodes at: 1) at: 1).
@@ -1647,7 +1601,7 @@ GtPharoParser >> reduceActionForSequence8: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForStartTemplate1: nodes [
+GtPharoIncrementalParser >> reduceActionForStartTemplate1: nodes [
 	| result |
 	result := GtPharoTemplateNode new.
 	result leftBraces: (nodes at: 1).
@@ -1657,7 +1611,7 @@ GtPharoParser >> reduceActionForStartTemplate1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForStatement1: nodes [
+GtPharoIncrementalParser >> reduceActionForStatement1: nodes [
 	| result |
 	result := GtPharoReturnNode new.
 	result upArrow: (nodes at: 1).
@@ -1666,7 +1620,7 @@ GtPharoParser >> reduceActionForStatement1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForStatementList1: nodes [
+GtPharoIncrementalParser >> reduceActionForStatementList1: nodes [
 	| result |
 	result := Array new: 2.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -1676,7 +1630,7 @@ GtPharoParser >> reduceActionForStatementList1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForStatementList2: nodes [
+GtPharoIncrementalParser >> reduceActionForStatementList2: nodes [
 	| result |
 	result := nodes at: 1.
 	self addAll: (nodes at: 2) to: (result at: 2).
@@ -1685,7 +1639,7 @@ GtPharoParser >> reduceActionForStatementList2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForStatements2: nodes [
+GtPharoIncrementalParser >> reduceActionForStatements2: nodes [
 	| result |
 	result := nodes at: 1.
 	self addAll: (nodes at: 2) to: (result at: 2).
@@ -1693,7 +1647,7 @@ GtPharoParser >> reduceActionForStatements2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForStringLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForStringLiteral1: nodes [
 	| result |
 	result := GtPharoStringLiteralNode new.
 	result value: (nodes at: 1).
@@ -1701,13 +1655,13 @@ GtPharoParser >> reduceActionForStringLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSwitchToLiteralArray1: nodes [
+GtPharoIncrementalParser >> reduceActionForSwitchToLiteralArray1: nodes [
 	self scope: #literalArray.
 	^ #array
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForSymbolLiteral1: nodes [
+GtPharoIncrementalParser >> reduceActionForSymbolLiteral1: nodes [
 	| result |
 	result := GtPharoSymbolLiteralNode new.
 	result value: (nodes at: 1).
@@ -1715,7 +1669,7 @@ GtPharoParser >> reduceActionForSymbolLiteral1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateKeyword2: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateKeyword2: nodes [
 	| result |
 	result := Array new: 2.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -1725,7 +1679,7 @@ GtPharoParser >> reduceActionForTemplateKeyword2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateKeywordMessage1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateKeywordMessage1: nodes [
 	| result |
 	result := GtPharoTemplateKeywordMessageNode new.
 	result addNodes: ((nodes at: 2) at: 1) to: result parts.
@@ -1735,7 +1689,7 @@ GtPharoParser >> reduceActionForTemplateKeywordMessage1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateKeywordMessage2: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateKeywordMessage2: nodes [
 	| result |
 	result := GtPharoTemplateKeywordMessageNode new.
 	result addTokens: ((nodes at: 2) at: 1) to: result selectorParts.
@@ -1747,7 +1701,7 @@ GtPharoParser >> reduceActionForTemplateKeywordMessage2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateKeywordPattern1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateKeywordPattern1: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -1758,7 +1712,7 @@ GtPharoParser >> reduceActionForTemplateKeywordPattern1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateNamePart1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateNamePart1: nodes [
 	| result |
 	result := GtPharoTemplateNamePartNode new.
 	result name: (nodes at: 1).
@@ -1766,7 +1720,7 @@ GtPharoParser >> reduceActionForTemplateNamePart1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplatePattern1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplatePattern1: nodes [
 	| result |
 	result := GtPharoTemplatePatternNode new.
 	result addNodes: (nodes at: 2) to: result parts.
@@ -1774,7 +1728,7 @@ GtPharoParser >> reduceActionForTemplatePattern1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplatePattern2: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplatePattern2: nodes [
 	| result |
 	result := GtPharoTemplatePatternNode new.
 	result addNodes: ((nodes at: 2) at: 1) to: result parts.
@@ -1784,7 +1738,7 @@ GtPharoParser >> reduceActionForTemplatePattern2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplatePattern3: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplatePattern3: nodes [
 	| result |
 	result := GtPharoTemplatePatternNode new.
 	result addTokens: ((nodes at: 2) at: 1) to: result selectorParts.
@@ -1796,7 +1750,7 @@ GtPharoParser >> reduceActionForTemplatePattern3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplatePragma1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplatePragma1: nodes [
 	| result |
 	result := GtPharoTemplatePragmaNode new.
 	result lessThan: (nodes at: 2).
@@ -1806,7 +1760,7 @@ GtPharoParser >> reduceActionForTemplatePragma1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplatePragma2: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplatePragma2: nodes [
 	| result |
 	result := GtPharoTemplatePragmaNode new.
 	result lessThan: (nodes at: 2).
@@ -1818,7 +1772,7 @@ GtPharoParser >> reduceActionForTemplatePragma2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplatePragma3: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplatePragma3: nodes [
 	| result |
 	result := GtPharoTemplatePragmaNode new.
 	result lessThan: (nodes at: 2).
@@ -1832,7 +1786,7 @@ GtPharoParser >> reduceActionForTemplatePragma3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateUnaryMessage1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateUnaryMessage1: nodes [
 	| result |
 	result := GtPharoTemplateUnaryMessageNode new.
 	result addNodes: (nodes at: 2) to: result parts.
@@ -1840,7 +1794,7 @@ GtPharoParser >> reduceActionForTemplateUnaryMessage1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateVariable1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateVariable1: nodes [
 	| result |
 	result := GtPharoTemplateVariableNode new.
 	result addNodes: (nodes at: 2) to: result parts.
@@ -1848,7 +1802,7 @@ GtPharoParser >> reduceActionForTemplateVariable1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateWithName1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateWithName1: nodes [
 	| result |
 	result := nodes at: 2.
 	self addFirst: (nodes at: 1) to: result.
@@ -1856,7 +1810,7 @@ GtPharoParser >> reduceActionForTemplateWithName1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemplateWithName3: nodes [
+GtPharoIncrementalParser >> reduceActionForTemplateWithName3: nodes [
 	| result |
 	result := nodes at: 3.
 	self addFirst: (nodes at: 1) to: result.
@@ -1865,7 +1819,7 @@ GtPharoParser >> reduceActionForTemplateWithName3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForTemporaries1: nodes [
+GtPharoIncrementalParser >> reduceActionForTemporaries1: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 2 put: (OrderedCollection new: 2).
@@ -1876,7 +1830,7 @@ GtPharoParser >> reduceActionForTemporaries1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForUnaryMessage1: nodes [
+GtPharoIncrementalParser >> reduceActionForUnaryMessage1: nodes [
 	| result |
 	result := GtPharoUnaryMessageNode new.
 	result selectorPart: (nodes at: 1).
@@ -1884,7 +1838,7 @@ GtPharoParser >> reduceActionForUnaryMessage1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForValue5: nodes [
+GtPharoIncrementalParser >> reduceActionForValue5: nodes [
 	| result |
 	result := nodes at: 2.
 	result addFirstToken: (nodes at: 1) to: result leftParens.
@@ -1893,7 +1847,7 @@ GtPharoParser >> reduceActionForValue5: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForValue6: nodes [
+GtPharoIncrementalParser >> reduceActionForValue6: nodes [
 	| result |
 	result := GtPharoPatternMessageBlockNode new.
 	result leftBrace: (nodes at: 1).
@@ -1906,7 +1860,7 @@ GtPharoParser >> reduceActionForValue6: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForValue7: nodes [
+GtPharoIncrementalParser >> reduceActionForValue7: nodes [
 	| result |
 	result := GtPharoPatternMessageBlockNode new.
 	result node: (nodes at: 1).
@@ -1920,7 +1874,7 @@ GtPharoParser >> reduceActionForValue7: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForValue8: nodes [
+GtPharoIncrementalParser >> reduceActionForValue8: nodes [
 	| result |
 	result := GtPharoErrorNode new.
 	result smaccError: (nodes at: 1).
@@ -1928,7 +1882,7 @@ GtPharoParser >> reduceActionForValue8: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForVariable1: nodes [
+GtPharoIncrementalParser >> reduceActionForVariable1: nodes [
 	| result |
 	result := GtPharoSelfVariableNode new.
 	result name: (nodes at: 1).
@@ -1936,7 +1890,7 @@ GtPharoParser >> reduceActionForVariable1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForVariable2: nodes [
+GtPharoIncrementalParser >> reduceActionForVariable2: nodes [
 	| result |
 	result := GtPharoSuperVariableNode new.
 	result name: (nodes at: 1).
@@ -1944,7 +1898,7 @@ GtPharoParser >> reduceActionForVariable2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForVariable3: nodes [
+GtPharoIncrementalParser >> reduceActionForVariable3: nodes [
 	| result |
 	result := GtPharoThisContextVariableNode new.
 	result name: (nodes at: 1).
@@ -1952,14 +1906,14 @@ GtPharoParser >> reduceActionForVariable3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionForVariable__variable__1: nodes [
+GtPharoIncrementalParser >> reduceActionForVariable__variable__1: nodes [
 	| result |
 	result := OrderedCollection new: 2.
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: nodes [
+GtPharoIncrementalParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part___2: nodes [
 	| result |
 	result := OrderedCollection new: 2.
 	self add: (nodes at: 1) to: result.
@@ -1968,7 +1922,7 @@ GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: nodes [
+GtPharoIncrementalParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart__part____2: nodes [
 	| result |
 	result := nodes at: 1.
 	self addAll: (nodes at: 2) to: result.
@@ -1976,7 +1930,7 @@ GtPharoParser >> reduceActionFor_MidTemplate__part__TemplateNameContinuationPart
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: nodes [
+GtPharoIncrementalParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -1989,7 +1943,7 @@ GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__1: nodes
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: nodes [
+GtPharoIncrementalParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -2004,7 +1958,7 @@ GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern__2: nodes
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: nodes [
+GtPharoIncrementalParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: nodes [
 	| result |
 	result := nodes at: 2.
 	self addAllFirst: ((nodes at: 1) at: 1) to: (result at: 1).
@@ -2014,7 +1968,7 @@ GtPharoParser >> reduceActionFor_TemplateKeywordPattern_KeywordPattern___2: node
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: nodes [
+GtPharoIncrementalParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____1: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -2027,7 +1981,7 @@ GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___sele
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: nodes [
+GtPharoIncrementalParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___selectorPart__PragmaArgument____2: nodes [
 	| result |
 	result := Array new: 3.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -2042,7 +1996,7 @@ GtPharoParser >> reduceActionFor_TemplateKeyword_PragmaArgument___keyword___sele
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: nodes [
+GtPharoIncrementalParser >> reduceActionFor___keyword___selectorPart_____rbKeywordPattern___selectorPart___Variable__variable__1: nodes [
 	| result |
 	result := Array new: 2.
 	result at: 1 put: (nodes at: 1).
@@ -2051,7 +2005,7 @@ GtPharoParser >> reduceActionFor___keyword___selectorPart_____rbKeywordPattern__
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___1: nodes [
+GtPharoIncrementalParser >> reduceActionFor__keyword___selectorPart__Variable__variable___1: nodes [
 	| result |
 	result := Array new: 2.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -2062,7 +2016,7 @@ GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___1
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___2: nodes [
+GtPharoIncrementalParser >> reduceActionFor__keyword___selectorPart__Variable__variable___2: nodes [
 	| result |
 	result := nodes at: 1.
 	self add: ((nodes at: 2) at: 1) to: (result at: 1).
@@ -2071,7 +2025,7 @@ GtPharoParser >> reduceActionFor__keyword___selectorPart__Variable__variable___2
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor__period___period___Statement__value___1: nodes [
+GtPharoIncrementalParser >> reduceActionFor__period___period___Statement__value___1: nodes [
 	| result |
 	result := Array new: 2.
 	result at: 1 put: (OrderedCollection new: 2).
@@ -2080,7 +2034,7 @@ GtPharoParser >> reduceActionFor__period___period___Statement__value___1: nodes 
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor__period___period___Statement__value___2: nodes [
+GtPharoIncrementalParser >> reduceActionFor__period___period___Statement__value___2: nodes [
 	| result |
 	result := nodes at: 1.
 	self addAll: ((nodes at: 2) at: 1) to: (result at: 1).
@@ -2089,7 +2043,7 @@ GtPharoParser >> reduceActionFor__period___period___Statement__value___2: nodes 
 ]
 
 { #category : #'generated-reduction actions' }
-GtPharoParser >> reduceActionFor_period___period__1: nodes [
+GtPharoIncrementalParser >> reduceActionFor_period___period__1: nodes [
 	| result |
 	result := OrderedCollection new: 2.
 	self add: (nodes at: 1) to: result.

@@ -297,9 +297,14 @@ GtPharoMethodCoder >> compiledMethod [
 
 { #category : #'api - ast' }
 GtPharoMethodCoder >> computeAst: theSourceString [
-	^ GtPharoParser
-		parseWithErrors: theSourceString
-		startingAt: self startingStateForAstComputation
+	^ self class useIncrementalParsing
+		ifTrue: [ GtPharoIncrementalParser
+				parseWithErrors: theSourceString
+				startingAt: self startingStateForAstComputation
+				previous: previousAst ]
+		ifFalse: [ GtPharoParser
+				parseWithErrors: theSourceString
+				startingAt: self startingStateForAstComputation ]
 ]
 
 { #category : #private }
