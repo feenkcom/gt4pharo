@@ -24,12 +24,12 @@ GtRBChangeGroupElement >> applyChanges: aCollection [
 	applyButton := self childNamed: #applyButton.
 	progress := self childNamed: #progress.
 	applyButton disable.
-	(aCollection size = 1 and: [ aCollection first == group changes ])
+	(aCollection size = 1 and: [ aCollection anyOne == group changes ])
 		ifTrue: [ composite := group changes ]
 		ifFalse: [ composite := RBCompositeRefactoryChange new.
 			composite
 				name: (aCollection size = 1
-						ifTrue: [ aCollection first name ]
+						ifTrue: [ aCollection anyOne name ]
 						ifFalse: [ group changes name ]).
 			group changes gtBasicChanges
 				do: [ :each | (aCollection identityIncludes: each) ifTrue: [ composite addChange: each ] ] ].
