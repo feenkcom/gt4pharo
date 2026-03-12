@@ -541,6 +541,12 @@ GtPharoSourceCoder >> nodeAfter: aStatementNodeCollection [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
+	"It is disabled for now due to ongoing text editor implementation.
+	We will look at it later, how to support it.
+	Currently, users can detect nbsp characters by compile error dialog position."
+	
+	true ifTrue: [ ^ self ].
+	
 	coderAddOns addStyler: GtPharoNonBreakableSpaceStyler new.
 ]
 

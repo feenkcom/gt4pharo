@@ -26,11 +26,6 @@ GtPharoNonBreakableSpaceStyler >> style: aText ast: anAst [
 	<return: #BlText>
 	| allIndexes |
 	
-	"It is disabled for now due to ongoing text editor implementation.
-	We will look at it later, how to support it.
-	Currently, users can detect nbsp characters by compile error dialog position."
-	true ifTrue: [ ^ self ].
-	
 	allIndexes := aText finder
 		              character: Character nbsp;
 		              searchAll.
