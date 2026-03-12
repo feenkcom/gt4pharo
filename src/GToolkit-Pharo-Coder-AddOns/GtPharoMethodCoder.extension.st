@@ -1600,7 +1600,7 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 		id: GtMethodCoderPlayExampleActionId."
 	coderAddOns
 		addContextAction: (GtCoderRunTestAction new
-				title: 'Play Unit Test 2' ;
+				title: 'Play Unit Test' ;
 				icon: BrGlamorousVectorIcons play;
 				action: [ :aCoderUIModel :aButton | self testCase 
 					executeAsyncFrom: aButton];
