@@ -1591,46 +1591,25 @@ GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 		addPreview: 'Test Case'
 		stencil: [ GtPharoMethodTestCaseStateElement new ]
 		dataBinder: [ :anElement :aCoderViewModel | 
-			| aHandler aCoder |
-			anElement userData
-				at: #unitTestAstFor_into_testcase_handler
-				ifPresent: [ :anOldHandler | 
-					anElement userData
-						at: #unitTestAstFor_into_testcase_coder
-						ifPresent: [ :anOldCoder | anOldCoder unsubscribe: anOldHandler ]
-						ifAbsent: [  "ignore" ] ]
-				ifAbsent: [  "ignore" ].
+			anElement bindToCoderViewModel: aCoderViewModel ].
 
-			aCoder := aCoderViewModel coderModel.
-
-			aHandler := [ :anAnnouncement | 
-				aCoder testCase
-					ifNotNil: [ :aNewTestCase | 
-						anElement
-							testCase: aNewTestCase;
-							visibility: BlVisibility visible ]
-					ifNil: [ anElement visibility: BlVisibility hidden ] ].
-			anElement userData
-				at: #unitTestAstFor_into_testcase_handler put: aHandler;
-				at: #unitTestAstFor_into_testcase_coder put: aCoder.
-
-			aCoder weak
-				when: GtCoderMethodAdded , GtCoderMethodRemoved , GtCoderMethodModified
-						, GtPharoMethodCoderCompiled
-				send: #value:
-				to: aHandler.
-
-			anElement testCase: self testCase ].
-
-	coderAddOns
-		addContextAction: 'Play Unit Test' translated
+	"coderAddOns
+		addContextAction: 'Play Unit Test' 
 		icon: BrGlamorousVectorIcons play
-		action: [ :aCoderUIModel :anEvent | self testCase play ]
-		id: GtMethodCoderPlayExampleActionId.
+		action: [ :aCoderUIModel :aButton | self testCase executeAsyncFrom: aButton]
+		id: GtMethodCoderPlayExampleActionId."
+	coderAddOns
+		addContextAction: (GtCoderRunTestAction new
+				title: 'Play Unit Test 2' ;
+				icon: BrGlamorousVectorIcons play;
+				action: [ :aCoderUIModel :aButton | self testCase 
+					executeAsyncFrom: aButton];
+				id: GtMethodCoderPlayExampleActionId).
+	
 	coderAddOns
 		addContextAction: 'Debug Unit Test' translated
 		icon: BrGlamorousVectorIcons debug
-		action: [ :aCoderUIModel :anEvent | self testCase debug ]
+		action: [ :aCoderUIModel :aButton | self testCase debug ]
 		id: GtMethodCoderDebugExampleActionId.
 	coderAddOns
 		addContextAction: 'Extract to playground' translated

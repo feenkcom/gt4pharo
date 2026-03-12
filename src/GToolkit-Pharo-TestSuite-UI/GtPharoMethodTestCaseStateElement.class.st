@@ -20,6 +20,40 @@ Class {
 	#category : #'GToolkit-Pharo-TestSuite-UI-! Views'
 }
 
+{ #category : #bindings }
+GtPharoMethodTestCaseStateElement >> bindToCoderViewModel: aCoderViewModel [
+	| aHandler aCoder |
+	self userData
+				at: #unitTestAstFor_into_testcase_handler
+				ifPresent: [ :anOldHandler | 
+					self userData
+						at: #unitTestAstFor_into_testcase_coder
+						ifPresent: [ :anOldCoder | anOldCoder unsubscribe: anOldHandler ]
+						ifAbsent: [  "ignore" ] ]
+				ifAbsent: [  "ignore" ].
+
+	aCoder := aCoderViewModel coderModel.
+
+	aHandler := [ :anAnnouncement | 
+				aCoder testCase
+					ifNotNil: [ :aNewTestCase | 
+						self
+							testCase: aNewTestCase;
+							visibility: BlVisibility visible ]
+					ifNil: [ self visibility: BlVisibility hidden ] ].
+	self userData
+				at: #unitTestAstFor_into_testcase_handler put: aHandler;
+				at: #unitTestAstFor_into_testcase_coder put: aCoder.
+
+			aCoder weak
+				when: GtCoderMethodAdded , GtCoderMethodRemoved , GtCoderMethodModified
+						, GtPharoMethodCoderCompiled
+				send: #value:
+				to: aHandler.
+
+		self testCase: aCoder testCase 
+]
+
 { #category : #'private - instance creation' }
 GtPharoMethodTestCaseStateElement >> hasResult [
 	self testResultDo: [ :aTestResult | ^ true ].
