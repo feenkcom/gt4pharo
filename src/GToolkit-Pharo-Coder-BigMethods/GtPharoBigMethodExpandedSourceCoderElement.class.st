@@ -10,7 +10,7 @@ Class {
 
 { #category : #initialization }
 GtPharoBigMethodExpandedSourceCoderElement >> initialize [
-	| coderText inspectIt |
+	| coderText |
 	super initialize.
 	selectorLabel := BlAttributedTextElement new
 			id: GtSourceCoderCollapsedTextId;
@@ -19,7 +19,6 @@ GtPharoBigMethodExpandedSourceCoderElement >> initialize [
 			glamorousCodeFont;
 			foreground: self theme label defaultTextForeground;
 			text: 'selector' asRopedText.
-	inspectIt := 'Inspect it' asRopedText bold.
 	coderText := 'This is a large method. ' asRopedText.
 	coderText
 		attribute: (GtButtonAttribute new
@@ -38,7 +37,19 @@ GtPharoBigMethodExpandedSourceCoderElement >> initialize [
 								bottom: 3
 								right: 5);
 						label: 'Inspect it';
-						action: [ :aButton | aButton phlow spawnObject: self textualCoderViewModel methodReference ] ]).
+						action: [ :aButton | 
+							| method methodCoder expanded |
+							method := self textualCoderViewModel coder methodReference method.
+							methodCoder := GtPharoMethodCoder
+									forClass: method methodClass
+									source: method sourceCode.
+							expanded := GtSourceCoderExpandedContentElement new
+									coderViewModel: methodCoder asCoderViewModel;
+									showScrollbars;
+									hMatchParent;
+									vFitContentLimited;
+									yourself.
+							aButton phlow spawnObject: expanded ] ]).
 	coderText := coderText , ' to see source' asRopedText.
 	label := BrEditor new
 			aptitude: (BrGlamorousRegularEditorAptitude new
