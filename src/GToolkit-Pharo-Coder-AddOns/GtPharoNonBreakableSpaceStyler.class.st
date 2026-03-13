@@ -25,6 +25,7 @@ GtPharoNonBreakableSpaceStyler >> hash [
 GtPharoNonBreakableSpaceStyler >> style: aText ast: anAst [
 	<return: #BlText>
 	| allIndexes |
+	
 	allIndexes := aText finder
 		              character: Character nbsp;
 		              searchAll.
