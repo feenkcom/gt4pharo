@@ -15,6 +15,7 @@ ManifestGToolkitPharoParser class >> mustOnlyDependOn [
 		'Collections-Strings'.
 		'Collections-Unordered'.
 		'Kernel'.
+		'SmaCC_Incremental_Runtime'.
 		'SmaCC_GLR_Runtime'.
 		'SmaCC_Runtime'
 	}, (self  
@@ -26,6 +27,7 @@ ManifestGToolkitPharoParser class >> mustOnlyDependOn [
 { #category : #accessing }
 ManifestGToolkitPharoParser class >> shouldDependOn [
 	^ { 
+		'SmaCC_Incremental_Runtime'.
 		'SmaCC_GLR_Runtime'.
 		'SmaCC_Runtime'
 	}
