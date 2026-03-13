@@ -108,7 +108,7 @@ GtPharoProcessCoderElement >> variablesListElement [
 			| icon |
 			icon := [ each last gtInspectorIcon ifNil: [ each last class systemIcon ] ]
 				on: Error
-				do: [ :error | self iconNamed: #smallWarningIcon ].
+				do: [ :error | self iconNamed: #smallWarning ].
 			icon asElement
 				margin:
 					(BlInsets
