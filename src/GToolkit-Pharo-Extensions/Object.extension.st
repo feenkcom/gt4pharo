@@ -22,5 +22,5 @@ Object >> gtSafeIconNamed: anIconName [
 	^ [ self iconNamed: anIconName ] 
 		on: Error
 		do: [ :error | 
-			Smalltalk ui icons iconNamed: #smallWarningIcon ]
+			Smalltalk ui icons iconNamed: #smallWarning ]
 ]
