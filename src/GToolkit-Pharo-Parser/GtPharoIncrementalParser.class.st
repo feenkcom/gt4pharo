@@ -408,6 +408,11 @@ DoItMethod
 	;"
 ]
 
+{ #category : #'class initialization' }
+GtPharoIncrementalParser class >> initialize [
+	self maxParallelParses: 50
+]
+
 { #category : #generated }
 GtPharoIncrementalParser class >> reduceTable [
 ^#(
@@ -987,6 +992,47 @@ GtPharoIncrementalParser class >> transitionTable [
 #[0 3 86 0 4 0 5 0 6 0 7 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 33 0 128 0 129 0 130 0 131 0 132 0 133 0 134 0 137 0 138] 
 #[0 3 90 0 4 0 5 0 6 0 7 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 30 0 31 0 33 0 131 0 132 0 138]
 	).
+]
+
+{ #category : #private }
+GtPharoIncrementalParser >> actionsForCurrentToken [
+	| actions |
+	actions := super actionsForCurrentToken.
+	actions isEmpty
+		ifTrue: [ (currentToken ids includes: scanner binaryId)
+				ifTrue: [ (#('|' '<' '>') includes: currentToken value)
+						ifTrue: [ self addActionsFor: scanner binaryId to: actions ]
+						ifFalse: [ (#('||' '|||') includes: currentToken value)
+								ifTrue: [ currentToken := currentToken class value: '|' start: currentToken startPosition ids: (Array with: scanner barId).
+									self position: currentToken startPosition.
+									actions := super actionsForCurrentToken ] ] ].
+			(currentToken ids includes: scanner negativeNumberId)
+				ifTrue: [ self addActionsFor: scanner binaryId to: actions.
+					actions notEmpty
+						ifTrue: [ currentToken := currentToken class value: '-' start: currentToken startPosition ids: (Array with: scanner binaryId).
+							self position: currentToken startPosition ] ].
+			(currentToken ids includes: scanner nameId)
+				ifTrue: [ self addActionsFor: scanner nameId to: actions ].
+			(currentToken ids includes: scanner nameAssignmentId)
+				ifTrue: [ self addActionsFor: scanner nameId to: actions.
+					actions notEmpty
+						ifTrue:
+							[ currentToken := currentToken class value: (currentToken value copyFrom: 1 to: currentToken value size - 2) start: currentToken startPosition ids: (Array with: scanner nameId).
+							self position: scanner position - 2 ] ] ].
+	^ actions
+]
+
+{ #category : #private }
+GtPharoIncrementalParser >> defaultScope [
+	^ #default
+]
+
+{ #category : #private }
+GtPharoIncrementalParser >> endLiteralArray [
+	(nodeStack
+		inject: 0
+		into: [ :sum :each | sum + (each == #array ifTrue: [ 1 ] ifFalse: [ 0 ]) ])
+		= 1 ifTrue: [ self scope: self defaultScope ]
 ]
 
 { #category : #'generated-reduction actions' }
