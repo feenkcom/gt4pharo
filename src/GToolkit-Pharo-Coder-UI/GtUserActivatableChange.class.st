@@ -85,6 +85,17 @@ GtUserActivatableChange >> gtDisableFor: anAction context: aPhlowContext [
 		action: [ element disableChange: self ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtUserActivatableChange >> gtInspectFor: anAction [
+	<gtAction>
+	^ anAction button
+		label: 'Inspect';
+		target: GtChangesTarget;
+		icon: BrGlamorousVectorIcons inspect;
+		priority: 15;
+		action: [ :element | element phlow spawnObject: self change ]
+]
+
 { #category : #testing }
 GtUserActivatableChange >> hasDiffChange [
 	^ self change respondsTo: #gtDiffChange

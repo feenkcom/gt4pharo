@@ -16,6 +16,12 @@ GtRenameController >> allRenameIntervals [
 	^ {renameInterval}
 ]
 
+{ #category : #'as yet unclassified' }
+GtRenameController >> cleanUp [
+	renameAction ifNotNil: [ renameAction uninstall ].
+	super cleanUp
+]
+
 { #category : #private }
 GtRenameController >> currentRenameInterval [
 	| end offsetCount start |
