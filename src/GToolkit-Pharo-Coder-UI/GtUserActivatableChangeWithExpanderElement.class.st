@@ -50,11 +50,14 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 ]
 
 { #category : #private }
-GtUserActivatableChangeWithExpanderElement >> hideBrowseButton [
+GtUserActivatableChangeWithExpanderElement >> hideButtons [
 	expander isExpanded ifTrue: [ ^ self ].
 	self
+		childNamed: #inspect
+		ifFound: [ :button | button visibility: BlVisibility gone ].
+	self
 		childNamed: #browse
-		ifFound: [ :button | button visibility: BlVisibility hidden ]
+		ifFound: [ :button | button visibility: BlVisibility gone ]
 ]
 
 { #category : #initialization }
@@ -92,8 +95,10 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 										right: 5) ]);
 		hMatchParent;
 		vFitContent;
-		whenExpandedDo: [ activatableChange isExpanded: true ];
-		whenCollapsedDo: [ activatableChange isExpanded: false ].
+		whenExpandedDo: [ activatableChange isExpanded: true.
+			self showButtons ];
+		whenCollapsedDo: [ activatableChange isExpanded: false.
+			self hideButtons ].
 
 	header := BrVerticalPane new
 			hMatchParent;
@@ -104,9 +109,6 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 		when: BlClickEvent
 		do: [ :anEvent | 
 			expander toggleExpanded.
-			expander isExpanded
-				ifTrue: [ self showBrowseButton ]
-				ifFalse: [ self hideBrowseButton ].
 			anEvent consumed: true ].
 
 	description := BrLabel new
@@ -123,7 +125,7 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 
 	pane
 		addChild: (BrButton new
-				visibility: BlVisibility hidden;
+				visibility: BlVisibility gone;
 				beTinySize;
 				margin: (BlInsets top: 2);
 				aptitude: BrGlamorousButtonWithIconAptitude new;
@@ -134,9 +136,22 @@ GtUserActivatableChangeWithExpanderElement >> initialize [
 				action: [ :aButton | aButton phlow spawnObject: self activatableChange change gtChangedObject ];
 				yourself).
 
+	pane
+		addChild: (BrButton new
+				visibility: BlVisibility gone;
+				beTinySize;
+				margin: (BlInsets top: 2);
+				aptitude: BrGlamorousButtonWithIconAptitude new;
+				icon: BrGlamorousVectorIcons inspect;
+				id: #inspect;
+				label: 'Inspect';
+				padding: (BlInsets left: 5);
+				action: [ :aButton | aButton phlow spawnObject: self activatableChange change ];
+				yourself).
+
 	header
-		when: BlMouseEnterEvent do: [ :event | self showBrowseButton ];
-		when: BlMouseLeaveEvent do: [ :event | self hideBrowseButton ].
+		when: BlMouseEnterEvent do: [ :event | self showButtons ];
+		when: BlMouseLeaveEvent do: [ :event | self hideButtons ].
 
 	header addChildren: {pane}.
 
@@ -163,7 +178,10 @@ GtUserActivatableChangeWithExpanderElement >> onEnablementChanged [
 ]
 
 { #category : #private }
-GtUserActivatableChangeWithExpanderElement >> showBrowseButton [
+GtUserActivatableChangeWithExpanderElement >> showButtons [
+	self
+		childNamed: #inspect
+		ifFound: [ :button | button visibility: BlVisibility visible ].
 	self activatableChange change gtChangedObject ifNil: [ ^ self ].
 	self
 		childNamed: #browse
