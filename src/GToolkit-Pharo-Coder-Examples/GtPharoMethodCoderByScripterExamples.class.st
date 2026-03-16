@@ -6684,6 +6684,47 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_apply [
 	^ aScripter
 ]
 
+{ #category : #'examples - rename method' }
+GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_cancel [
+	<gtExample>
+	| scripter source method |
+	scripter := self forKeywordRename_05_click_preview.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click cancel button';
+				id: #'refactoring--cancelButton' ].
+
+	self checkFor: scripter renameEditorExists: false.
+	self checkFor: scripter refactoringPreviewButtonExists: false.
+	self checkFor: scripter sourceCodeIsModified: false.
+	self checkFor: scripter saveButtonEnabled: true.
+	self checkFor: scripter discardButtonExists: false.
+
+	scripter
+		doStep: [ :s | 
+			s
+				id: GtSourceCoderEditorId;
+				block: [ :each | 
+					method := each textualCoderViewModel compiledMethod.
+					source := each textualCoderViewModel sourceText asString.
+					each scrollToPosition: source size ] ].
+	4
+		timesRepeat: [ scripter keyPress
+				key: BlKeyboardKey arrowDown;
+				play ].
+	(scripter type: '""') play.
+
+	scripter clickStep: [ :s | s id: GtMethodCoderSaveActionId ].
+
+	self
+		assert: (method methodClass >> method selector) sourceCode
+		equals: source , '""'.
+
+	^ scripter
+]
+
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 	<gtExample>
