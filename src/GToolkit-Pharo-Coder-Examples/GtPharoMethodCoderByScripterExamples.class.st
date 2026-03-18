@@ -10425,6 +10425,77 @@ GtPharoMethodCoderByScripterExamples >> performRefactoringAndCheckSelector: newS
 		do: [ :new :i | self assert: new name asString equals: (ast pattern variables at: i) name source ]
 ]
 
+{ #category : #'examples - push down method' }
+GtPharoMethodCoderByScripterExamples >> pushDownClassMethod [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter selector class |
+	scripter := self
+			scripterForBlock: [ | rootClass method coder |
+				environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+				rootClass := environment anyDummyRootClass.
+				method := rootClass anyDummyUnaryClassMethod realMethod.
+
+				coder := GtPharoMethodCoder forMethod: method.
+				coder attributeNamed: #dummyEnvironment put: environment.
+				coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
+				coder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: 'Unique
+	^ self printString' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method pattern';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: 0 to: 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click push up method';
+				onSpaceRoot;
+				id: #'context-menu--push-down-method' ].
+
+	selector := scripter model selector.
+	class := scripter model behavior.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Execute refactoring';
+				onSpaceRoot;
+				// GtRefactoringsPreviewAcceptId ].
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check refactoring apply button does not exists';
+				onSpaceRoot;
+				notExists;
+				id: GtRefactoringsPreviewAcceptId ].
+	self assert: (class includesSelector: selector) not.
+	self assert: (class subclasses first includesSelector: selector).
+	^ scripter
+]
+
 { #category : #'examples - referenced example' }
 GtPharoMethodCoderByScripterExamples >> referencedExampleMethod [
 	<gtExample>
