@@ -22,13 +22,15 @@ GtChildrenToSiblingsRefactoring >> addSuperclass [
 				parent poolDictionaryNames
 					do: [ :each | stream << '#' << each ]
 					separatedBy: [ stream << '. ' ].
-				stream << '}; package: ' << parent category printString ].
+				stream << '}; package: ' << parent packageName printString.
+				parent tagName ifNotNil: [ :tag | stream << '; tag: ' << tag printString ] ].
 	self model defineClass: definition.
 	definition := String
 			streamContents: [ :stream | 
 				stream << className << ' << ' << parent name printString
 					<< ' slots: {}; sharedVariables: {}; sharedPools: {}; package: '
-					<< parent category printString ].
+					<< parent packageName printString.
+				parent tagName ifNotNil: [ :tag | stream << '; tag: ' << tag printString ] ].
 	self model defineClass: definition
 ]
 
