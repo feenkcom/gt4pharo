@@ -2956,8 +2956,38 @@ GtPharoCoderByScripterExamples >> extractSuperclassFrom: aClass [
 GtPharoCoderByScripterExamples >> extractSuperclassInIndex [
 	<gtExample>
 	<after: #cleanUp>
+	| class scripter changes classChanges packageName |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
-	^ self extractSuperclassFrom: environment anyDummyLeafClass realClass
+	class := environment anyDummyLeafClass realClass.
+	packageName := class packageName.
+	class packageTag: #'Some-Tag'.
+	
+	scripter := self extractSuperclassFrom: class.
+	
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	classChanges := changes gtAllChanges
+			select: [ :each | each isKindOf: RBAddClassChange ].
+	self assert: classChanges size equals: 2.
+	self assert: classChanges first packageName equals: packageName.
+	self assert: classChanges first packageTagName equals: #'Some-Tag'.
+	self assert: classChanges last packageName equals: packageName.
+	self assert: classChanges last packageTagName equals: #'Some-Tag'.
+	
+	scripter refactorings
+		pressReturnToApplyChanges;
+		onPopover;
+		play.
+	self assert: class superclass packageName equals: packageName.
+	self assert: class superclass packageTagName equals: #'Some-Tag'.
+	self assert: class packageName equals: packageName.
+	self assert: class packageTagName equals: #'Some-Tag'.
+	
+	^ scripter
 ]
 
 { #category : #'examples - index' }
