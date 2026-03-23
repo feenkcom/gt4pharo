@@ -13,7 +13,9 @@ RBAbstractTransformation >> primitiveExecute [
 RBAbstractTransformation >> refactoringError: aString with: aBlock [
 	<gtPharoPatch: #Pharo>
 	
-	^ RBRefactoringError signal: aString with: aBlock
+	^ RBRefactoringError new 
+			messageText: aString;
+			signal	
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
