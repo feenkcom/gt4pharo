@@ -18,7 +18,7 @@ GtMethodContextsCoder class >> forDebugSession: aDebugSession [
 { #category : #accessing }
 GtMethodContextsCoder class >> forProcess: aProcess [
 
-	^ self forDebugSession: (DebugSession
+	^ self forDebugSession: (GtDebugSession
 			   named: 'Debug ' , aProcess name
 			   on: aProcess
 			   startedAt: aProcess suspendedContext)

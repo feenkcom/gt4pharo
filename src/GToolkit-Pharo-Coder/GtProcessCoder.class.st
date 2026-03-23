@@ -29,7 +29,7 @@ GtProcessCoder >> forDebugSession: aDebugSession [
 
 { #category : #'initialize-release' }
 GtProcessCoder >> forProcess: aProcess [
-	self forDebugSession: (DebugSession 
+	self forDebugSession: (GtDebugSession 
 		named: 'Debug ' , aProcess name 
 		on: aProcess 
 		startedAt: aProcess suspendedContext)
