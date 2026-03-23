@@ -14,6 +14,18 @@ PackageTag >> gtBrowseActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+PackageTag >> gtCopyPackageTagNameActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		target: GtCoderPackageTagTarget;
+		icon: BrGlamorousVectorIcons browse;
+		label: 'Copy package tag name';
+		menuItemPreview: [ self name ];
+		menuItemGroup: BrMenuItemGroupConfiguration default;
+		action: [ :aMenuElement | Clipboard clipboardText: self name ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 PackageTag >> gtCreateNewPackageOrPackageTagActionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
