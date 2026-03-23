@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPushUpMethodRefactoring,
-	#superclass : #RBPullUpMethodRefactoring,
+	#superclass : #RePullUpMethodRefactoring,
 	#instVars : [
 		'instVarsToPushUp',
 		'classObject',
