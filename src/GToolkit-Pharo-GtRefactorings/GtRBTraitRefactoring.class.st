@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBTraitRefactoring,
-	#superclass : #RBRefactoring,
+	#superclass : #ReRefactoring,
 	#instVars : [
 		'class',
 		'traitName'

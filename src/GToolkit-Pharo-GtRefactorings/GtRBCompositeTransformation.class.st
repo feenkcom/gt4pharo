@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBCompositeTransformation,
-	#superclass : #RBRefactoring,
+	#superclass : #ReRefactoring,
 	#instVars : [
 		'refactorings'
 	],

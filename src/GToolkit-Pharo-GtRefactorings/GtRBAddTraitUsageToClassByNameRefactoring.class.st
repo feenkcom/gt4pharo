@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBAddTraitUsageToClassByNameRefactoring,
-	#superclass : #RBRefactoring,
+	#superclass : #ReRefactoring,
 	#instVars : [
 		'className',
 		'traitName'

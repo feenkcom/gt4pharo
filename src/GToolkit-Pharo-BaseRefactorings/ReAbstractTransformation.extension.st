@@ -1,7 +1,7 @@
-Extension { #name : #RBAbstractTransformation }
+Extension { #name : #ReAbstractTransformation }
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
-RBAbstractTransformation >> primitiveExecute [
+ReAbstractTransformation >> primitiveExecute [
 	<gtPharoPatch: #Pharo>
 	
 	^ self 
@@ -10,7 +10,7 @@ RBAbstractTransformation >> primitiveExecute [
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
-RBAbstractTransformation >> refactoringError: aString with: aBlock [
+ReAbstractTransformation >> refactoringError: aString with: aBlock [
 	<gtPharoPatch: #Pharo>
 	
 	^ RBRefactoringError new 
@@ -19,7 +19,7 @@ RBAbstractTransformation >> refactoringError: aString with: aBlock [
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
-RBAbstractTransformation >> refactoringFailure: aString [
+ReAbstractTransformation >> refactoringFailure: aString [
 	<gtPharoPatch: #Pharo>
 	
 	^ self 

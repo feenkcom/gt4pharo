@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBRenamePackageTagRefactoring,
-	#superclass : #RBRefactoring,
+	#superclass : #ReRefactoring,
 	#instVars : [
 		'packageName',
 		'oldName',
