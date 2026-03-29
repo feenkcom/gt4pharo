@@ -126,7 +126,9 @@ GtRefactoringsInDropdownPreviewElement >> initializePreviewButton [
 			icon: BrGlamorousVectorIcons downwards;
 			label: 'Preview';
 			addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
+					preferredChildWeight: 0.7;
 					withGainFocusOnShow;
+					withContainerDownUpDropdown;
 					handle: [ self createPreviewHandleElement ]
 						content: [ :anExplicitMenu | self createPreviewElementInExplicitMenu: anExplicitMenu ])
 ]
