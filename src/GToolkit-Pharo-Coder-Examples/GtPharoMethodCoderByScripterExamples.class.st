@@ -10393,9 +10393,7 @@ GtPharoMethodCoderByScripterExamples >> performRefactoringAndCheckSelector: newS
 	| changes ast change |
 	ast := GtPharoParser parse: (Collection sourceCodeAt: #detect:ifFound:ifNone:).
 	scripter clickStep: [ :s | s // #previewCheckButton ].
-	(Delay forMilliseconds: 100) wait.
-	scripter pulse.
-	
+
 	"scripter
 		clickStep: [ :s | 
 			s
@@ -10411,6 +10409,16 @@ GtPharoMethodCoderByScripterExamples >> performRefactoringAndCheckSelector: newS
 				block: [ :each | changes := each changes ] ].
 	change := changes gtAllChanges
 			detect: [ :each | (each isKindOf: RBAddMethodChange) and: [ each changeClassName = #Collection ] ].
+			
+	scripter do 
+		label: ('Scroll to change: {1}' format: { change });
+		block: [ :aTree | 
+			aTree scrollToItemSuchThat:  [ :each | 
+				each change = change] ];
+		onPopover;
+		// BrSimpleTree;
+		play.
+			
 	scripter
 		clickStep: [ :s | 
 			s
