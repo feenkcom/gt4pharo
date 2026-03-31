@@ -46,7 +46,7 @@ GtUserActivatableChange >> changes [
 
 { #category : #converting }
 GtUserActivatableChange >> elementClass [
-	^ GtUserActivatableChangeWithExpanderElement
+	^ change gtDiffElementClass
 ]
 
 { #category : #'instance creation' }

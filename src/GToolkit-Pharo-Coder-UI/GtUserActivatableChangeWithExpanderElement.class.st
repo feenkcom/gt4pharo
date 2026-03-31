@@ -31,14 +31,8 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 							asRopedText foreground: BrGlamorousColors disabledHeaderTextColor) ].
 	description text: label.
 	noDiffLabel text: label.
-
-	activatableChange hasDiffChange
-		ifTrue: [ expander
-				content: [ (GtDiffElement onChange: activatableChange change gtDiffChange)
-						styler: activatableChange change gtDiffStyler;
-						aptitude: GtDiffFlatAptitude;
-						vFitContent;
-						beSmallSize ].
+	self showChangeDiff
+		ifTrue: [ expander content: [ self contentElement ].
 			expander visibility: BlVisibility visible.
 			noDiffLabel visibility: BlVisibility gone ]
 		ifFalse: [ expander visibility: BlVisibility gone.
@@ -47,6 +41,15 @@ GtUserActivatableChangeWithExpanderElement >> activatableChange: aGtUserActivata
 	activatableChange isExpanded
 		ifTrue: [ expander expand ]
 		ifFalse: [ expander collapse ]
+]
+
+{ #category : #'instance creation' }
+GtUserActivatableChangeWithExpanderElement >> contentElement [
+	^ (GtDiffElement onChange: activatableChange change gtDiffChange)
+		styler: activatableChange change gtDiffStyler;
+		aptitude: GtDiffFlatAptitude;
+		vFitContent;
+		beSmallSize
 ]
 
 { #category : #private }
@@ -186,4 +189,9 @@ GtUserActivatableChangeWithExpanderElement >> showButtons [
 	self
 		childNamed: #browse
 		ifFound: [ :button | button visibility: BlVisibility visible ]
+]
+
+{ #category : #'instance creation' }
+GtUserActivatableChangeWithExpanderElement >> showChangeDiff [
+	^ activatableChange hasDiffChange
 ]
