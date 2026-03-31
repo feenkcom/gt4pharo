@@ -326,7 +326,9 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 						in: aTextualViewModel
 						for: element ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-						gtDisplayString) ifNotNil: [ :anAction | anAction priority: 205 ] ]
+						gtDisplayString) ifNotNil: [ :anAction | 
+							anAction priority: 205;
+							id: #'coder--refactoring-rename-message' ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
