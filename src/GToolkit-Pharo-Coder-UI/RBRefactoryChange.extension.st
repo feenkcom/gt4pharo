@@ -1,6 +1,11 @@
 Extension { #name : #RBRefactoryChange }
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
+RBRefactoryChange >> gtDiffElementClass [
+	^ GtUserActivatableChangeWithExpanderElement
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-UI' }
 RBRefactoryChange >> gtExecuteWithNotification [
 	<return: #TAsyncPromise>
 	^ self gtExecuteWithNotificationThreshold: self gtDefaultBulkExecutionThreshold
