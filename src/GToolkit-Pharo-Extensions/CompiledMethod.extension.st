@@ -20,7 +20,8 @@ CompiledMethod >> gtBrowseActionFor: anAction context: aPhlowContext [
 			| aTool |
 			aTool := GtMethodCoderTool compiledMethod: self.
 			aTool selfObjectHolder: aPhlowContext selfObjectHolder.
-			aButton phlow spawnTool: aTool ]
+			aButton phlow spawnTool: aTool ];
+		primaryModifierAction: [ :aButton | self gtBrowseFrom: aButton ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
@@ -33,7 +34,14 @@ CompiledMethod >> gtBrowseHierarchyImplementorsActionFor: anAction [
 		label: 'Browse hierarchy implementors';
 		menuItemPreview: self selector;
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
-		action: [ :aButton | aButton phlow spawnObject: (self selector gtImplementors & self gtHierarchyFilter) ]
+		action: [ :aButton | aButton phlow spawnObject: self selector gtImplementors & self gtHierarchyFilter ];
+		primaryModifierAction: [ :aButton | 
+			BlSpace new
+				withCommonSettings;
+				inPager: self selector gtImplementors & self gtHierarchyFilter;
+				title: self selector;
+				icon: BrGlamorousVectorIcons search;
+				showFrom: aButton ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
@@ -46,7 +54,14 @@ CompiledMethod >> gtBrowseHierarchyReferencesActionFor: anAction [
 		label: 'Browse hierarchy references';
 		menuItemPreview: self selector;
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
-		action: [ :aButton | aButton phlow spawnObject: (self selector gtSenders & self gtHierarchyFilter) ]
+		action: [ :aButton | aButton phlow spawnObject: self selector gtSenders & self gtHierarchyFilter ];
+		primaryModifierAction: [ :aButton | 
+			BlSpace new
+				withCommonSettings;
+				inPager: self selector gtSenders & self gtHierarchyFilter;
+				title: self selector;
+				icon: BrGlamorousVectorIcons search;
+				showFrom: aButton ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
@@ -59,7 +74,14 @@ CompiledMethod >> gtBrowseImplementorsActionFor: anAction [
 		label: 'Browse implementors';
 		menuItemPreview: self selector;
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
-		action: [ :aButton | aButton phlow spawnObject: (GtSearchImplementorsFilter selector: self selector) ]
+		action: [ :aButton | aButton phlow spawnObject: self selector gtImplementors ];
+		primaryModifierAction: [ :aButton | 
+			BlSpace new
+				withCommonSettings;
+				inPager: self selector gtImplementors;
+				title: self selector;
+				icon: BrGlamorousVectorIcons search;
+				showFrom: aButton ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
@@ -72,7 +94,14 @@ CompiledMethod >> gtBrowseReferencesActionFor: anAction [
 		label: 'Browse references';
 		menuItemPreview: self selector;
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
-		action: [ :aButton | aButton phlow spawnObject: (GtSearchReferencesFilter literal: self selector) ]
+		action: [ :aButton | aButton phlow spawnObject: self selector gtSenders ];
+		primaryModifierAction: [ :aButton | 
+			BlSpace new
+				withCommonSettings;
+				inPager: self selector gtSenders;
+				title: self selector;
+				icon: BrGlamorousVectorIcons search;
+				showFrom: aButton ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
