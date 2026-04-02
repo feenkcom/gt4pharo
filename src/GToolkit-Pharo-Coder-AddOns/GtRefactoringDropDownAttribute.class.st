@@ -24,53 +24,7 @@ GtRefactoringDropDownAttribute >> createDropDown [
 	button := self createDropDownButton.
 	dropDownLook := BrGlamorousWithExplicitDropdownAptitude
 			handle: [ self createDropDownButton ]
-			content: [ | list selection |
-				list := BrSimpleList new.
-				list id: self listId.
-				list fitContent.
-				list
-					stencil: [ :each | 
-						BrHorizontalPane new
-							hMatchParent;
-							vFitContent;
-							padding: (BlInsets all: 5);
-							aptitude: (BrStyleCommonAptitude new
-									default: [ :s | s background: Color transparent ];
-									hovered: [ :s | s background: button theme button defaultBorderColor ];
-									selected: [ :s | s background: BrGlamorousColors selectedListItemColor ];
-									yourself);
-							when: BlClickEvent
-								do: [ :anEvent | 
-									anEvent consumed: true.
-									button label: each.
-									anEvent currentTarget fireEvent: BrDropdownHideWish new.
-									self select: each ];
-							addChild: (BrLabel new
-									aptitude: BrGlamorousLabelAptitude new glamorousCodeFont glamorousCodeSmallSize;
-									text: each;
-									yourself);
-							yourself ].
-				list items: items.
-				selection := (items indexOf: self currentSelection) max: 1.
-				list selectOne: selection.
-				list
-					addShortcut: (BlShortcutWithAction new
-							combination: BlKeyCombination return;
-							action: [ :anEvent :aShortcut | 
-								list selectedItems
-									ifNotEmpty: [ :selections | 
-										| cls |
-										cls := selections anyOne.
-										anEvent consumed: true.
-										button label: cls.
-										anEvent currentTarget fireEvent: BrDropdownHideWish new.
-										self select: cls ] ]).
-				list asScrollableElement
-					when: BrPopoverGainFocusWish
-						do: [ :anEvent | 
-							anEvent consumed: true.
-							list requestFocus ];
-					yourself ].
+			content: [ self createDropDownContent: button ].
 	dropDownLook withGainFocusOnShow.
 	button addAptitude: dropDownLook.
 	button
@@ -113,6 +67,58 @@ GtRefactoringDropDownAttribute >> createDropDownButton [
 	button icon: BrGlamorousVectorIcons downwards.
 	button beSmallSize.
 	^ button
+]
+
+{ #category : #accessing }
+GtRefactoringDropDownAttribute >> createDropDownContent: button [
+	| selection list |
+	list := BrSimpleList new.
+	list id: self listId.
+	list hFitContentLimited.
+	list vFitContentLimited.
+	list
+		stencil: [ :each | 
+			BrHorizontalPane new
+				hMatchParent;
+				vFitContent;
+				padding: (BlInsets all: 5);
+				aptitude: (BrStyleCommonAptitude new
+						default: [ :s | s background: Color transparent ];
+						hovered: [ :s | s background: button theme button defaultBorderColor ];
+						selected: [ :s | s background: BrGlamorousColors selectedListItemColor ];
+						yourself);
+				when: BlClickEvent
+					do: [ :anEvent | 
+						anEvent consumed: true.
+						button label: each.
+						anEvent currentTarget fireEvent: BrDropdownHideWish new.
+						self select: each ];
+				addChild: (BrLabel new
+						aptitude: BrGlamorousLabelAptitude new glamorousCodeFont glamorousCodeSmallSize;
+						text: each;
+						yourself);
+				yourself ].
+	list items: items.
+	selection := (items indexOf: self currentSelection) max: 1.
+	list selectOne: selection.
+	list
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination return;
+				action: [ :anEvent :aShortcut | 
+					list selectedItems
+						ifNotEmpty: [ :selections | 
+							| cls |
+							cls := selections anyOne.
+							anEvent consumed: true.
+							button label: cls.
+							anEvent currentTarget fireEvent: BrDropdownHideWish new.
+							self select: cls ] ]).
+	^ list
+		when: BrPopoverGainFocusWish
+			do: [ :anEvent | 
+				anEvent consumed: true.
+				list requestFocus ];
+		yourself
 ]
 
 { #category : #accessing }
