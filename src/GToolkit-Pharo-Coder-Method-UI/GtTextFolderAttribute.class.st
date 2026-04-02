@@ -91,6 +91,14 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 	^ aToggle
 ]
 
+{ #category : #initialization }
+GtTextFolderAttribute >> gtExternalTextConfigureAppendingAttribute: anAttribute [
+	super gtExternalTextConfigureAppendingAttribute: anAttribute.
+	
+	anAttribute beExactWidth: 15.
+	anAttribute beExactHeight: 15.
+]
+
 { #category : #accessing }
 GtTextFolderAttribute >> highlightFoldableTextOn: aTBrTextEditorTextualPiece in: aTextEditor [
 	| text hilight |
