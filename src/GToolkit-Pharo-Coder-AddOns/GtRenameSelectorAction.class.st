@@ -185,7 +185,7 @@ GtRenameSelectorAction >> newVariableName [
 
 { #category : #accessing }
 GtRenameSelectorAction >> removeHighlightFrom: aText [
-	^ aText asRopedText copy
+	^ aText
 		clearAttributes: [ :each | each class = BlTextHighlightAttribute ]
 ]
 
