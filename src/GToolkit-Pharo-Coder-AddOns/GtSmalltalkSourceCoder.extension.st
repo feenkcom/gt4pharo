@@ -250,10 +250,11 @@ GtSmalltalkSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSo
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> highlightNodeBlock: aNode [
 	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel
-		  addTextAttribute: self class nodeHighlight
-		  from: aNode startPosition
-		  to: aNode stopPosition ]
+	textualCoderViewModel
+		addTextAttribute: self class nodeHighlight
+		from: aNode startPosition
+		to: aNode stopPosition
+		documentId: textualCoderViewModel documentId ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

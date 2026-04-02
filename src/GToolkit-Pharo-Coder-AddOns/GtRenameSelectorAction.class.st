@@ -57,11 +57,11 @@ GtRenameSelectorAction >> addRenameAttributes [
 						styler: styler;
 						completionStrategy: completionStrategy.
 				index := index + 1.
-
 				self pharoSourceCoderViewModel
 					addTextAttribute: attribute
 					from: each first
-					to: each last ].
+					to: each last
+					documentId: documentId ].
 
 	renameAttributes := coderAttributes
 			flatCollect: [ :eachCoderAttribute | eachCoderAttribute textAttributes ].

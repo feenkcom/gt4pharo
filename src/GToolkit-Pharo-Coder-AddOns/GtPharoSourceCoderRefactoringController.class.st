@@ -16,6 +16,7 @@ GtPharoSourceCoderRefactoringController >> addRefactoringChangesPreview: aRefact
 					onCompletion: aBlock)
 			from: aTextPosition
 			to: aTextPosition
+			documentId: documentId
 ]
 
 { #category : #accessing }
