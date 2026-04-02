@@ -305,6 +305,9 @@ GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
+	
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			| highlightNode |
@@ -324,11 +327,14 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 					self
 						renameNode: node
 						in: aTextualViewModel
+						documentId: aDocumentId
 						for: element ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-						gtDisplayString) ifNotNil: [ :anAction | 
-							anAction priority: 205;
-							id: #'coder--refactoring-rename-message' ] ]
+						gtDisplayString)
+				ifNotNil: [ :anAction | 
+					anAction
+						priority: 205;
+						id: #'coder--refactoring-rename-message' ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -565,15 +571,27 @@ GtPharoSourceCoder >> removeRefactoringAttribute [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel for: anElement [
+GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
 	self
 		nodeAt: aTextPosition
 		ifFound: [ :aNode | 
 			self
 				renameNode: aNode
 				in: aSourceCoderViewModel
+				documentId: aDocumentId
 				for: anElement ]
 		ifNone: [  ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel for: anElement [
+	self deprecated: 'Use #renameAt:in:documentId:for: instead'.
+
+	self
+		renameAt: aTextPosition
+		in: aSourceCoderViewModel
+		documentId: aSourceCoderViewModel documentId
+		for: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -633,10 +651,23 @@ GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVar
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel node: aMessageOrMethodOrMethodPatternNode for: anElement [
+GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel documentId: aDocumentId node: aMessageOrMethodOrMethodPatternNode for: anElement [
 	(self
 		renameMethodControllerIn: aSourceCoderViewModel
-		for: aMessageOrMethodOrMethodPatternNode) executeIn: anElement
+		for: aMessageOrMethodOrMethodPatternNode) 
+			documentId: aDocumentId; 
+			executeIn: anElement
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameMethod: aSourceCoderViewModel node: aMessageOrMethodOrMethodPatternNode for: anElement [
+	self deprecated: 'Use renameMethod:documentId:node:for: instead'.
+
+	^ self
+		renameMethod: aSourceCoderViewModel
+		documentId: aSourceCoderViewModel documentId
+		node: aMessageOrMethodOrMethodPatternNode
+		for: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -655,10 +686,11 @@ GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMess
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel for: anElement [
+GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ ^ self
 				renameMethod: aSourceCoderViewModel
+				documentId: aDocumentId
 				node: aNode
 				for: anElement ].
 	aNode isVariable
@@ -682,6 +714,17 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel for: anElement
 								renameClassIn: aSourceCoderViewModel
 								node: aNode
 								for: anElement ] ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel for: anElement [
+	self deprecated: 'Use #renameNode:in:documentId:for: instead'.
+
+	^ self
+		renameNode: aNode
+		in: aSourceCoderViewModel
+		documentId: aSourceCoderViewModel documentId
+		for: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

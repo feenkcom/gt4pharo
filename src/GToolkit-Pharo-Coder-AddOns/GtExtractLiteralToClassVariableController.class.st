@@ -43,6 +43,7 @@ GtExtractLiteralToClassVariableController >> addReceiverAttribute [
 			addTextAttribute: attribute
 			from: message receiver startPosition
 			to: message receiver stopPosition
+			documentId: documentId
 ]
 
 { #category : #private }

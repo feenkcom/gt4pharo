@@ -34,28 +34,27 @@ GtExtractMethodToComponentController >> addReorderParametersAttributesOn: messag
 	extractedSelectorKeywords size > 1 ifFalse: [ ^ self ].
 	moveAttributes := OrderedCollection new.
 	message values
-		keysAndValuesDo:
-			[ :i :each | 
+		keysAndValuesDo: [ :i :each | 
 			i > 1
-				ifTrue:
-					[ attribute := GtReorderParametersAttribute
-						action: [ self swapParameterWithNext: i - 1 ]
-						icon: BrGlamorousVectorIcons left.
+				ifTrue: [ attribute := GtReorderParametersAttribute
+							action: [ self swapParameterWithNext: i - 1 ]
+							icon: BrGlamorousVectorIcons left.
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each startPosition - 1
-						to: each startPosition - 1 ].
+						to: each startPosition - 1
+						documentId: documentId ].
 			i < message values size
-				ifTrue:
-					[ attribute := GtReorderParametersAttribute
-						action: [ self swapParameterWithNext: i ]
-						icon: BrGlamorousVectorIcons right.
+				ifTrue: [ attribute := GtReorderParametersAttribute
+							action: [ self swapParameterWithNext: i ]
+							icon: BrGlamorousVectorIcons right.
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
-						to: each stopPosition ] ]
+						to: each stopPosition
+						documentId: documentId ] ]
 ]
 
 { #category : #executing }
@@ -173,6 +172,7 @@ GtExtractMethodToComponentController >> installReceiverSelector [
 			addTextAttribute: attribute
 			from: send parent receiver startPosition
 			to: send parent receiver stopPosition
+			documentId: documentId
 ]
 
 { #category : #accessing }

@@ -43,6 +43,7 @@ GtRenameMethodController2 >> installRenamer [
 	renameAction := GtRenameSelectorAction
 			message: message
 			textualCoderViewModel: sourceCoderViewModel.
+	renameAction documentId: documentId.
 	oldAction
 		ifNil: [ renameAction newSelector: message selector ]
 		ifNotNil: [ renameAction newSelector: oldAction newSelector.
@@ -93,7 +94,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 							self sourceCoderViewModel
 								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
 								from: (message selectorParts at: i) startPosition
-								to: each stopPosition ];
+								to: each stopPosition
+								documentId: documentId ];
 						onLeave: [ renameAction highlighted: 0.
 							self sourceCoderViewModel
 								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
@@ -101,7 +103,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: (message selectorParts at: i) startPosition - 1
-						to: (message selectorParts at: i) startPosition - 1.
+						to: (message selectorParts at: i) startPosition - 1
+						documentId: documentId.
 					attribute := GtRefactoringButtonAttribute
 							action: [ renameAction focusedIndex: i - 1.
 								self swapParameterWithNext: i - 1 ]
@@ -112,14 +115,16 @@ GtRenameMethodController2 >> installReorderAttributes [
 						onEnter: [ self sourceCoderViewModel
 								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
 								from: each startPosition
-								to: each stopPosition ];
+								to: each stopPosition
+								documentId: documentId ];
 						onLeave: [ self sourceCoderViewModel
 								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each startPosition - 1
-						to: each startPosition - 1 ].
+						to: each startPosition - 1
+						documentId: documentId ].
 			i < message arguments size
 				ifTrue: [ attribute := GtRefactoringButtonAttribute
 							action: [ renameAction focusedIndex: i + 1.
@@ -131,14 +136,16 @@ GtRenameMethodController2 >> installReorderAttributes [
 						onEnter: [ self sourceCoderViewModel
 								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
 								from: each startPosition
-								to: each stopPosition ];
+								to: each stopPosition
+								documentId: documentId ];
 						onLeave: [ self sourceCoderViewModel
 								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
-						to: each stopPosition.
+						to: each stopPosition
+						documentId: documentId.
 					attribute := GtRefactoringButtonAttribute
 							action: [ renameAction focusedIndex: i + 1.
 								self swapKeywordAndParameterWithNext: i ]
@@ -150,7 +157,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 							self sourceCoderViewModel
 								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
 								from: (message selectorParts at: i) startPosition
-								to: each stopPosition ];
+								to: each stopPosition
+								documentId: documentId ];
 						onLeave: [ renameAction highlighted: 0.
 							self sourceCoderViewModel
 								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
@@ -158,7 +166,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
-						to: each stopPosition ].
+						to: each stopPosition
+						documentId: documentId ].
 			attribute := BrTextHoverAttribute new
 					beNotOverwritableByStyler;
 					enterAction: [ :evt | self updateHovered: i ];
@@ -167,7 +176,8 @@ GtRenameMethodController2 >> installReorderAttributes [
 			self sourceCoderViewModel
 				addTextAttribute: attribute
 				from: (message selectorParts at: i) startPosition - 1
-				to: each stopPosition ]
+				to: each stopPosition
+				documentId: documentId ]
 ]
 
 { #category : #accessing }

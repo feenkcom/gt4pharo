@@ -43,7 +43,8 @@ GtExtractMethodObjectRefactoringController >> addReorderParametersAttributesOn: 
 						add: (self sourceCoderViewModel
 								addTextAttribute: attribute
 								from: node stopPosition
-								to: node stopPosition) ] ].
+								to: node stopPosition
+								documentId: documentId) ] ].
 	message arguments
 		do: [ :each | 
 			attribute := GtReorderParametersAttribute
@@ -54,7 +55,8 @@ GtExtractMethodObjectRefactoringController >> addReorderParametersAttributesOn: 
 				add: (self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
-						to: each stopPosition) ]
+						to: each stopPosition
+						documentId: documentId) ]
 ]
 
 { #category : #private }

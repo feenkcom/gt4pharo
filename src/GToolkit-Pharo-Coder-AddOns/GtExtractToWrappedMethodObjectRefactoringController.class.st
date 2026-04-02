@@ -29,7 +29,8 @@ GtExtractToWrappedMethodObjectRefactoringController >> addReorderConstructorPara
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each startPosition - 1
-						to: each startPosition - 1 ].
+						to: each startPosition - 1
+						documentId: documentId ].
 			i < message values size
 				ifTrue: [ attribute := GtReorderParametersAttribute
 							action: [ self swapConstructorParameterWithNext: i ]
@@ -38,7 +39,8 @@ GtExtractToWrappedMethodObjectRefactoringController >> addReorderConstructorPara
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
-						to: each stopPosition ] ]
+						to: each stopPosition
+						documentId: documentId ] ]
 ]
 
 { #category : #private }

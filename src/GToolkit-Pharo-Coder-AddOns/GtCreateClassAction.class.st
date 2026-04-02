@@ -36,11 +36,11 @@ GtCreateClassAction >> addRenameAttributes [
 						requestInitialFocus: requestInitialFocus;
 						coordinateFocus: true.
 				index := index + 1.
-
 				self pharoSourceCoderViewModel
 					addTextAttribute: attribute
 					from: each first
-					to: each last ]) asOrderedCollection.
+					to: each last
+					documentId: documentId ]) asOrderedCollection.
 
 	renameAttributes := coderAttributes
 			flatCollect: [ :eachCoderAttribute | eachCoderAttribute textAttributes ].
@@ -53,7 +53,8 @@ GtCreateClassAction >> addRenameAttributes [
 								setPackage: package andTag: tag;
 								yourself)
 						from: originalLocations first last
-						to: originalLocations first last) ]
+						to: originalLocations first last
+						documentId: documentId) ]
 ]
 
 { #category : #accessing }

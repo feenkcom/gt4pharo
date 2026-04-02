@@ -204,7 +204,8 @@ GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns fr
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 	<return: #GtCoderContextMenuAction or: nil>
-	| theNodes |
+	| theNodes aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [ | shortcut |
@@ -219,7 +220,8 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
 						from: theNodes first startPosition
-						to: theNodes last stopPosition ]
+						to: theNodes last stopPosition
+						documentId: aDocumentId ]
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel :element | 
 					shortcut
@@ -229,7 +231,7 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel [
 						dueTo: nil ]
 				id: GtMethodCoderExtractMethodContextMenuItemId
 				shortcutKey: shortcut combinationForPlatform gtDisplayString ].
-				
+
 	^ nil
 ]
 

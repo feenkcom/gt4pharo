@@ -20,6 +20,7 @@ GtMethodInlineMessageFromComponentRefactoringController >> addReceiverTypeAttrib
 					yourself)
 			from: self receiverAttributePosition
 			to: self receiverAttributePosition
+			documentId: documentId
 ]
 
 { #category : #accessing }

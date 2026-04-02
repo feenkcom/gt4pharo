@@ -60,28 +60,27 @@ GtRenameMethodController >> installReorderAttributes [
 	message arguments size > 1 ifFalse: [ ^ self ].
 	moveAttributes := OrderedCollection new.
 	message arguments
-		keysAndValuesDo:
-			[ :i :each | 
+		keysAndValuesDo: [ :i :each | 
 			i > 1
-				ifTrue:
-					[ attribute := GtReorderParametersAttribute
-						action: [ self swapParameterWithNext: i - 1 ]
-						icon: BrGlamorousVectorIcons left.
+				ifTrue: [ attribute := GtReorderParametersAttribute
+							action: [ self swapParameterWithNext: i - 1 ]
+							icon: BrGlamorousVectorIcons left.
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each startPosition - 1
-						to: each startPosition - 1 ].
+						to: each startPosition - 1
+						documentId: documentId ].
 			i < message arguments size
-				ifTrue:
-					[ attribute := GtReorderParametersAttribute
-						action: [ self swapParameterWithNext: i ]
-						icon: BrGlamorousVectorIcons right.
+				ifTrue: [ attribute := GtReorderParametersAttribute
+							action: [ self swapParameterWithNext: i ]
+							icon: BrGlamorousVectorIcons right.
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
-						to: each stopPosition ] ]
+						to: each stopPosition
+						documentId: documentId ] ]
 ]
 
 { #category : #accessing }

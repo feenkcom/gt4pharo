@@ -59,7 +59,8 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<return: #GtCoderContextMenuAction or: nil>
 	"<gtCoderContextMenuAddOns: 220>"
-
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
 			coderAddOns
@@ -68,13 +69,14 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
 						from: nodes first startPosition
-						to: nodes last stopPosition ]
+						to: nodes last stopPosition
+						documentId: aDocumentId ]
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
 						executeIn: element ]
 				id: #'snippet-extract-test' ].
-				
+
 	^ nil
 ]
 
@@ -241,6 +243,8 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriori
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
 			| node allParents |
@@ -251,7 +255,8 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
 						from: nodes first startPosition
-						to: nodes last stopPosition ]
+						to: nodes last stopPosition
+						documentId: aDocumentId ]
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractMethodFromSnippetController new
@@ -266,7 +271,8 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 					textualCoderViewModel
 						addTextAttribute: self class nodeHighlight
 						from: nodes first startPosition
-						to: nodes last stopPosition ]
+						to: nodes last stopPosition
+						documentId: aDocumentId ]
 				leave: self removeHighlightBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractExampleFromSnippetController new
