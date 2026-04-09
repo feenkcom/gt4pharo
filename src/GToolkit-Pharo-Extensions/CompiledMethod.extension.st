@@ -105,6 +105,19 @@ CompiledMethod >> gtBrowseReferencesActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+CompiledMethod >> gtCopyMethodNameActionFor: anAction context: aPhlowContext [
+	<gtAction>
+	^ anAction button
+		priority: 50;
+		target: GtCoderMethodTarget;
+		icon: BrGlamorousVectorIcons clipboard;
+		label: 'Copy method name';
+		menuItemPreview: self printString;
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		action: [ :aButton | Clipboard clipboardText: self printString ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 CompiledMethod >> gtHierarchyFilter [
 	^ (GtSearchInheritedMethodsFilter forClass: self methodClass)
 		withSuperclasses;
