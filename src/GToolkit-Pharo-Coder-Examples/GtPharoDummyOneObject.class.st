@@ -173,6 +173,11 @@ GtPharoDummyOneObject >> sumA: valueA b: valueB [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject >> sumA: valueA valueB: valueB valueC: valueC [
+	^ (self sumA: valueA b: valueB) + valueC
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject >> sumC: tempA d: tempB [
 	^ self sumA: tempA b: tempB
 ]
