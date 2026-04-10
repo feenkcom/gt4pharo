@@ -21,8 +21,21 @@ Package >> gtCopyPackageNameActionFor: anAction [
 		icon: BrGlamorousVectorIcons browse;
 		label: 'Copy package name';
 		menuItemPreview: [ self name ];
-		menuItemGroup: BrMenuItemGroupConfiguration default;
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
 		action: [ :aMenuElement | Clipboard clipboardText: self name ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
+Package >> gtCopyPackageNameForLepiterActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		target: GtCoderPackageTarget;
+		icon: BrGlamorousVectorIcons browse;
+		priority: 60;
+		label: 'Copy lepiter link';
+		menuItemPreview: [ '\{\{gtPackage:{1}\}\}' format: {self name} ];
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		action: [ :aMenuElement | Clipboard clipboardText: ('\{\{gtPackage:{1}\}\}' format: {self name}) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
