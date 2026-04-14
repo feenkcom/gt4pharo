@@ -53,6 +53,7 @@ Package >> gtCreateNewPackageOrPackageTagActionFor: anAction [
 						(GtCoderNavigationTabsStencil new
 							pragmaName: #gtCoderDropdownNavigation;
 							navigationModel: aNavigationModel;
+							packageOfInterest: self;
 							gtCreationInterface: aMenuElement)
 							ifNotNil: [ :aTabGroup | aTabGroup selectTabWithLabelString: GtPackageCreationForm componentName ] ]
 					ifAbsent: [ BrLabel new
