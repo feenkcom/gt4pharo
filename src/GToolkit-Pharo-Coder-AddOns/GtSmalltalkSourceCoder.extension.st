@@ -249,12 +249,31 @@ GtSmalltalkSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSo
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> highlightNodeBlock: aNode [
+	"self deprecated: 'Use #highlightNodeBlock:documentId: instead'."
+
+	self flag: #TODO.
+
 	^ [ :textualCoderViewModel | 
 	textualCoderViewModel
-		addTextAttribute: self class nodeHighlight
-		from: aNode startPosition
-		to: aNode stopPosition
-		documentId: textualCoderViewModel documentId ]
+		addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
+		overRange: (BrTextCharacterRange
+				start: aNode startPosition
+				end: aNode stopPosition
+				documentId: textualCoderViewModel documentId) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> highlightNodeBlock: aNode documentId: aDocumentId [
+	"We assume there is just one highlight node. 
+	For that reason, we use one ID for all of them."
+
+	^ [ :textualCoderViewModel | 
+	textualCoderViewModel
+		addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
+		overRange: (BrTextCharacterRange
+				start: aNode startPosition
+				end: aNode stopPosition
+				documentId: aDocumentId) ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -438,15 +457,30 @@ GtSmalltalkSourceCoder >> newFilterContext [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder class >> nodeHighlight [
+	"deprecated, to be removed"
+	self flag: #TODO.
+
 	^ NodeHighlight
-		ifNil: [ NodeHighlight := BlTextHighlightAttribute new
-				paint: BrGlamorousColors textHighlightColor ]
+		ifNil: [ NodeHighlight := BlTextHighlightAttribute new paint: self nodeHighlightColor ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder class >> nodeHighlightColor [
+	^ BrGlamorousColors textHighlightColor
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> removeHighlightBlock [
+	"self deprecated: 'Use #removeHighlightsBlock instead'."
+
+	self flag: #TODO.
+	^ [ :textualCoderViewModel | textualCoderViewModel removeHighlightsWithId: #highlightNode ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> removeHighlightsBlock [
 	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel removeAttribute: self class nodeHighlight ]
+	  textualCoderViewModel removeHighlightsWithId: #highlightNode ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

@@ -24,6 +24,8 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns 
 { #category : #'*GToolkit-Pharo-StrictSymbolComparison' }
 GtPharoMethodCoder >> addConvertEqualsToSameContentAsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
 			| aNode |

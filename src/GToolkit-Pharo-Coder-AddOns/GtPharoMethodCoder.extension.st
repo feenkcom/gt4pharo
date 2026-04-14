@@ -188,7 +188,8 @@ GtPharoMethodCoder >> addExtractLiteralRefactoringFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
-	| theNodes |
+	| theNodes aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	theNodes := self extractableNodesFrom: aCoderViewModel.
 	theNodes
 		ifNotEmpty: [ (coderAddOns
@@ -303,6 +304,8 @@ GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coder
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(self
@@ -318,6 +321,8 @@ GtPharoMethodCoder >> addHierarchyImplementorsMenuAddOnsAst: anAst to: coderAddO
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addHierarchyMessageReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(self
@@ -547,23 +552,21 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addMethodPhlowMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
-	| compiledMethod nodes node |
+	| compiledMethod nodes node aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	compiledMethod := aCoderViewModel compiledMethod ifNil: [ ^ self ].
 	nodes := self extractableNodesFrom: aCoderViewModel.
 	nodes ifEmpty: [ ^ self ].
 	node := nodes first.
-
 	(node isMethodPattern
 		or: [ node isMessageSend and: [ node receiver isSelf or: [ node receiver isSuper ] ] ])
 		ifFalse: [ ^ self ].
-
 	node isMessageSend
 		ifTrue: [ (node receiver isSelf
 				ifTrue: [ compiledMethod methodClass lookupSelector: node selector ]
 				ifFalse: [ compiledMethod methodClass superclass lookupSelector: node selector ])
 				ifNil: [ ^ self ]
 				ifNotNil: [ :anotherCompiledMethod | compiledMethod := anotherCompiledMethod ] ].
-
 	(coderAddOns
 		addContextMenu: (self
 				createLabel: 'Method actions'
@@ -572,7 +575,8 @@ GtPharoMethodCoder >> addMethodPhlowMenuAddOnsAst: anAst to: coderAddOns from: a
 		submenu: [ :theCoderViewModel :aTextualCoderEditorElement | 
 			GtCoderMethodTarget
 				menuItemsForObject: compiledMethod
-				inContext: (GtPhlowContext new selfObjectHolder: theCoderViewModel selfObjectHolder)
+				inContext: (GtPhlowContext new
+						selfObjectHolder: theCoderViewModel selfObjectHolder)
 				hostElement: aTextualCoderEditorElement ])
 		ifNotNil: [ :anAction | anAction priority: 50 ]
 ]
@@ -728,14 +732,14 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self addExtractMethodTo: coderAddOns from: aCoderViewModel)
 		ifNotNil: [ :anAction | anAction priority: 220.01 ].
-
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
 			| aNode allParents |
 			aNode := theNodes first.
-
 			(self addPushUpMethodRefactoringFor: aNode to: coderAddOns)
 				ifNotNil: [ :anAction | anAction priority: 220.02 ].
 			(self addPushDownMethodRefactoringFor: aNode to: coderAddOns)
@@ -759,7 +763,7 @@ GtPharoMethodCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns 
 			self
 				addClassAccessorRefactoringsFor: aNode
 				to: coderAddOns
-				priority: 220.10.
+				priority: 220.1.
 			(self addRemoveParameterRefactoringFor: aNode to: coderAddOns)
 				ifNotNil: [ :anAction | anAction priority: 220.11 ].
 			(self addExtractLiteralRefactoringFor: aNode to: coderAddOns)
@@ -899,11 +903,12 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addRenameMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :theNodes | 
 			| aNode |
 			aNode := theNodes first.
-
 			(self addRenameTemporaryRefactoringFor: aNode to: coderAddOns)
 				ifNotNil: [ :anAction | anAction priority: 200.1 ].
 			(self addRenameInstanceVariableRefactoringFor: aNode to: coderAddOns)
@@ -934,7 +939,8 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
-	| splitBeforeMessage |
+	| splitBeforeMessage aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	splitBeforeMessage := self cascadeMessageToSplitAfter: aCoderViewModel.
 	splitBeforeMessage ifNil: [ ^ self ].
 	(coderAddOns

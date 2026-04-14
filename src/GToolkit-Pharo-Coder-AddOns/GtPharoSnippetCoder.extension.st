@@ -243,7 +243,8 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriori
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
-	| aDocumentId |
+	| aDocumentId aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	aDocumentId := aCoderViewModel documentId.
 	(self extractableNodesFrom: aCoderViewModel)
 		ifNotEmpty: [ :nodes | 
@@ -263,7 +264,6 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
 				id: GtMethodCoderExtractMethodContextMenuItemId)
 				ifNotNil: [ :anAction | anAction priority: 210.01 ].
-
 			(coderAddOns
 				addContextMenuItem: 'Extract example'
 				group: BrMenuItemGroupConfiguration refactoring
@@ -279,7 +279,6 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
 				id: #'snippet-extract-example')
 				ifNotNil: [ :anAction | anAction priority: 210.02 ].
-
 			node := nodes first.
 			allParents := node withAllParents.
 			allParents
@@ -311,7 +310,8 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
-	| splitBeforeMessage |
+	| splitBeforeMessage aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	splitBeforeMessage := self cascadeMessageToSplitAfter: aCoderViewModel.
 	splitBeforeMessage ifNil: [ ^ self ].
 	(coderAddOns
