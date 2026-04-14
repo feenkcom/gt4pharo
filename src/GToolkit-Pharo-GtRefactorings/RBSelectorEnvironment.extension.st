@@ -3,13 +3,22 @@ Extension { #name : #RBSelectorEnvironment }
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBSelectorEnvironment >> gtSelectorsFor: aView [
 	<gtView>
-
-	^ aView list
+	^(aView list)
 		title: 'Selectors';
 		priority: 10;
-		items: [ Array streamContents: [ :stream | 
-			classSelectors keysAndValuesDo: [ :cls :selectors | 
-				selectors do: [ :selector | 
-					stream nextPut: ((self class environment 
-						at: cls) >> selector) methodReference ] ] ] ]
+		items: 
+				[Array streamContents: 
+						[:stream |
+						classSelectors keysAndValuesDo: 
+								[:cls :selectors |
+								selectors do: 
+										[:selector |
+										stream
+											nextPut: ((self class environment at: cls) >> selector) methodReference]].
+						metaClassSelectors keysAndValuesDo: 
+								[:cls :selectors |
+								selectors do: 
+										[:selector |
+										stream nextPut: ((self class environment at: cls) class >> selector)
+													methodReference]]]]
 ]
