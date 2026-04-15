@@ -190,7 +190,10 @@ GtPharoMethodCoderTagsElement >> newProtocolTag [
 
 { #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> onCoderMethodModified: anAnnouncement [
-	self enqueueTask: (BlTaskAction new action: [ self updateProtocolButtonLabel ])
+	self
+		enqueueTask: (BlTaskAction new
+				action: [ self updateProtocolButtonLabel.
+					self updateBehaviorSideButtonEnabledState ])
 ]
 
 { #category : #'api - pharo method coder view model' }
@@ -213,7 +216,9 @@ GtPharoMethodCoderTagsElement >> onProtocolChanged: anAnnouncement [
 
 { #category : #'private - event handling' }
 GtPharoMethodCoderTagsElement >> onViewModelTextChanged: anAnnouncement [
-	self updateBehaviorSideButtonActivation
+	BlTaskAction
+		enqueueElement: self
+		action: [ self updateBehaviorSideButtonActivation. ]
 ]
 
 { #category : #private }
@@ -268,12 +273,19 @@ GtPharoMethodCoderTagsElement >> unsubscribeFromPharoMethodCoderViewModel [
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButton [
-	classTag label: (self classTagStringFor: pharoMethodCoderViewModel)
+	classTag label: (self classTagStringFor: pharoMethodCoderViewModel).
+	self updateBehaviorSideButtonEnabledState
 ]
 
 { #category : #'private - update' }
 GtPharoMethodCoderTagsElement >> updateBehaviorSideButtonActivation [
 	"classTag asyncPromise promise: pharoMethodCoderViewModel isTextModified"
+]
+
+{ #category : #'private - update' }
+GtPharoMethodCoderTagsElement >> updateBehaviorSideButtonEnabledState [
+	classTag
+		enabled: self pharoMethodCoderViewModel coder canMoveMethodToInstanceOrClass
 ]
 
 { #category : #'private - update' }
