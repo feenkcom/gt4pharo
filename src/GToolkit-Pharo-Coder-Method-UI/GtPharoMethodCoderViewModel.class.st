@@ -21,6 +21,8 @@ GtPharoMethodCoderViewModel >> addBreakpointAtCursorLocation [
 			node := self compiledMethod ast
 						bestNodeForPosition: position].
 						
+	node ifNil: [ ^ self ].
+						
 	node hasBreakpoint ifTrue: [^self].
 	node isMessage | node isVariable | node isLiteralNode ifFalse: [^self].
 	
