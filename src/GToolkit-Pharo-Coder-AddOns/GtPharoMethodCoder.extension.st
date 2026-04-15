@@ -190,13 +190,9 @@ GtPharoMethodCoder >> addExtractMethodTo: coderAddOns from: aCoderViewModel cont
 			^ coderAddOns
 				addContextMenuItem: shortcut name
 				group: BrMenuItemGroupConfiguration refactoring
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
-						overRange: (BrTextCharacterRange
-								start: theNodes first startPosition
-								end: theNodes last stopPosition
-								documentId: aBuildContext documentId) ]
+				hover: (self
+						highlightNodesFromFirstToLastBlock: theNodes
+						documentId: aBuildContext documentId)
 				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
 					shortcut
