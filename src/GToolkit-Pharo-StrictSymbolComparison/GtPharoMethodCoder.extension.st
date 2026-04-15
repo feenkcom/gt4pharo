@@ -1,7 +1,7 @@
 Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*GToolkit-Pharo-StrictSymbolComparison' }
-GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns [
+GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns context: aBuildContext [
 	<return: #GtCoderContextMenuAction or: nil>
 	(aNode isMessage and: [ aNode selector == #= ]) ifFalse: [ ^ nil ].
 	^ coderAddOns
@@ -12,8 +12,8 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns 
 					'#sameContentAs:' asRopedText glamorousCodeFontAndSize)
 				description: (self nodeDescription: aNode))
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element |
 			(GtConvertEqualsToSameContentAsController new
 				nodes: aNode;
@@ -30,6 +30,9 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsMenuAddOnsAst: anAst to: co
 		ifNotEmpty: [ :theNodes | 
 			| aNode |
 			aNode := theNodes first.
-			(self addConvertEqualsToSameContentAsFor: aNode to: coderAddOns)
+			(self
+				addConvertEqualsToSameContentAsFor: aNode
+				to: coderAddOns
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId))
 				ifNotNil: [ :anAction | anAction priority: 320 ] ]
 ]

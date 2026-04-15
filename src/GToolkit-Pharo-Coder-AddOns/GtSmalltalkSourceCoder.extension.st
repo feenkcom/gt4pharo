@@ -52,7 +52,7 @@ GtSmalltalkSourceCoder >> addImplementorsHeaderContextMenuAddOnsSelector: aSelec
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel requesterObject: aRequester [
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel requesterObject: aRequester context: aBuildContext [
 	<return: #GtCoderContextMenuAction or: nil>
 	^ self
 		addLinkMenuAddOnsTo: coderAddOns
@@ -62,10 +62,11 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node
 		label: aLabel
 		shortcut: nil
 		requesterObject: aRequester
+		context: aBuildContext
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel shortcut: aShortcut requesterObject: aRequester [
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel label: aLabel shortcut: aShortcut requesterObject: aRequester context: aBuildContext [
 	<return: #GtCoderContextMenuAction or: nil>
 	| highlightNode nodeDescription |
 	
@@ -85,8 +86,8 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node
 			createLabel: aLabel
 			description: nodeDescription)
 		group: menuGroup
-		hover: (self highlightNodeBlock: highlightNode)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: highlightNode documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aTextualViewModel | 
 			self
 				perform: sel
@@ -97,7 +98,7 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester context: aBuildContext [
 	<return: #GtCoderContextMenuAction or: nil>
 	^ self
 		addLinkMenuAddOnsTo: coderAddOns
@@ -107,6 +108,7 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node
 		label: aShortcut name
 		shortcut: aShortcut
 		requesterObject: aRequester
+		context: aBuildContext
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -273,6 +275,20 @@ GtSmalltalkSourceCoder >> highlightNodeBlock: aNode documentId: aDocumentId [
 		overRange: (BrTextCharacterRange
 				start: aNode startPosition
 				end: aNode stopPosition
+				documentId: aDocumentId) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> highlightNodesFromFirstToLastBlock: aCollection documentId: aDocumentId [
+	"We assume there is just one highlight node. 
+	For that reason, we use one ID for all of them."
+
+	^ [ :textualCoderViewModel | 
+	textualCoderViewModel
+		addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
+		overRange: (BrTextCharacterRange
+				start: aCollection first startPosition
+				end: aCollection last stopPosition
 				documentId: aDocumentId) ]
 ]
 

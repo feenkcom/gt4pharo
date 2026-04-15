@@ -29,8 +29,8 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 								createLabel: 'Browse package'
 								description: node literalValue)
 						group: BrMenuItemGroupConfiguration navigation
-						hover: (self highlightNodeBlock: node)
-						leave: self removeHighlightBlock
+						hover: (self highlightNodeBlock: node documentId: aDocumentId)
+						leave: self removeHighlightsBlock
 						action: [ :model :element | 
 							element phlow
 								spawnTool: (GtPackageCoderTool
@@ -56,8 +56,8 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 										createLabel: 'Browse baseline'
 										description: node literalValue)
 								group: BrMenuItemGroupConfiguration navigation
-								hover: (self highlightNodeBlock: node)
-								leave: self removeHighlightBlock
+								hover: (self highlightNodeBlock: node documentId: aDocumentId)
+								leave: self removeHighlightsBlock
 								action: [ :model :element | 
 									self class environment
 										at: ('BaselineOf' , node literalValue) asSymbol
@@ -78,12 +78,13 @@ GtPharoSourceCoder >> addClassMenuAddOnsAst: anAst to: coderAddOns from: aCoderV
 				node: nodes first
 				selector: #browseBehaviorAt:requesterObject:
 				shortcut: GtSourceCoderBrowseBehaviorShortcut new
-				requesterObject: aCoderViewModel)
+				requesterObject: aCoderViewModel
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId))
 				ifNotNil: [ :anAction | anAction priority: 13.01 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
+GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup node: node selector: sel shortcut: aShortcut requesterObject: aRequester context: aBuildContext [
 	<return: #GtCoderContextMenuAction or: nil>
 	| foundClass |
 
@@ -99,8 +100,8 @@ GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup
 			createLabel: aShortcut name 
 			description: foundClass name)
 		group: menuGroup
-		hover: (self highlightNodeBlock: node)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: node documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 			action: [ :aTextualViewModel | 
 				self
 					perform: sel
@@ -173,7 +174,8 @@ GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns fro
 				node: nodes first
 				selector: #browseReferencesAt:requesterObject:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new
-				requesterObject: aCoderViewModel)
+				requesterObject: aCoderViewModel
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId))
 				ifNotNil: [ :anAction | anAction priority: 13.02 ] ]
 ]
 
@@ -225,7 +227,8 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 				node: node
 				selector: #browseImplementorsAt:requesterObject:
 				shortcut: GtSourceCoderBrowseImplementorsShortcut new
-				requesterObject: aCoderViewModel)
+				requesterObject: aCoderViewModel
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId))
 				ifNotNil: [ :anAction | anAction priority: 10 ] ]
 ]
 
@@ -267,8 +270,8 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 								createLabel: 'Browse defining class'
 								description: definer name)
 						group: BrMenuItemGroupConfiguration navigation
-						hover: (self highlightNodeBlock: node)
-						leave: self removeHighlightBlock
+						hover: (self highlightNodeBlock: node documentId: aDocumentId)
+						leave: self removeHighlightsBlock
 						action: [ :aTextualViewModel | 
 							self
 								notifyToolSpawn: (GtClassCoderTool observedClass: definer)
@@ -280,8 +283,8 @@ GtPharoSourceCoder >> addInstanceVariableReferencesMenuAddOnsAst: anAst to: code
 						createLabel: 'Browse references'
 						description: node name value)
 				group: BrMenuItemGroupConfiguration navigation
-				hover: (self highlightNodeBlock: node)
-				leave: self removeHighlightBlock
+				hover: (self highlightNodeBlock: node documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition requesterObject: aTextualViewModel ]
 				id: nil
 				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
@@ -302,7 +305,8 @@ GtPharoSourceCoder >> addMessageReferencesMenuAddOnsAst: anAst to: coderAddOns f
 				node: node
 				selector: #browseReferencesAt:requesterObject:
 				shortcut: GtSourceCoderBrowseReferencesShortcut new
-				requesterObject: aCoderViewModel)
+				requesterObject: aCoderViewModel
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId))
 				ifNotNil: [ :anAction | anAction priority: 15 ] ]
 ]
 
@@ -483,9 +487,22 @@ GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> highlightNodesBlock: aCollection [
+	"self deprecated: 'Use #highlightNodesBlock:documentId: instead'."
+
+	self flag: #TODO.
+	^ [ :textualCoderViewModel | 
+	(self
+		highlightNodesBlock: aCollection
+		documentId: textualCoderViewModel documentId) value: textualCoderViewModel ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> highlightNodesBlock: aCollection documentId: aDocumentId [
 	^ [ :textualCoderViewModel | 
 	aCollection
-		do: [ :each | (self highlightNodeBlock: each) value: textualCoderViewModel ] ]
+		do: [ :each | 
+			(self highlightNodeBlock: each documentId: aDocumentId)
+				value: textualCoderViewModel ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
