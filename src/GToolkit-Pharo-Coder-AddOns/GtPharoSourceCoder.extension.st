@@ -111,31 +111,6 @@ GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns group: menuGroup
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> addClassNodeLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
-	<return: #GtCoderContextMenuAction or: nil>
-	| foundClass |
-
-	node isVariable ifFalse: [ ^ nil ].
-	self
-		variableNodeToBehavior: node
-		ifFound: [ :aClass | foundClass := aClass ]
-		ifNone: [ ^ self ].
-
-	^ coderAddOns
-		addContextMenuItem: (self
-			createLabel: aShortcut name 
-			description: foundClass name)
-		hover: (self highlightNodeBlock: node)
-		leave: self removeHighlightBlock
-			action: [ :aTextualViewModel | 
-				self
-					perform: sel
-					with: node startPosition
-					with: aRequester  ]
-		shortcutKey: aShortcut  combinationForPlatform gtDisplayString 
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addClassPhlowMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
 	| nodes node foundClass aDocumentId |
@@ -236,6 +211,8 @@ GtPharoSourceCoder >> addImplementorsMenuAddOnsAst: anAst to: coderAddOns from: 
 GtPharoSourceCoder >> addInstanceVariableFilterAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	"<gtCoderContextMenuAddOns: 11>"
 	<return: #GtCoderContextMenuAction or: nil>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			(node isVariable and: [ self isInstanceVariable: node ]) ifFalse: [ ^ self ].
@@ -243,8 +220,8 @@ GtPharoSourceCoder >> addInstanceVariableFilterAddOnsAst: anAst to: coderAddOns 
 				addContextMenuItem: (self
 						createLabel: 'Filter methods by references to'
 						description: node name value)
-				hover: (self highlightNodeBlock: node)
-				leave: self removeHighlightBlock
+				hover: (self highlightNodeBlock: node documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel | 
 					self 
 						announce: (GtClassCoderSlotNavigationAnnouncement new
@@ -494,15 +471,6 @@ GtPharoSourceCoder >> highlightNodesBlock: aCollection [
 	(self
 		highlightNodesBlock: aCollection
 		documentId: textualCoderViewModel documentId) value: textualCoderViewModel ]
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> highlightNodesBlock: aCollection documentId: aDocumentId [
-	^ [ :textualCoderViewModel | 
-	aCollection
-		do: [ :each | 
-			(self highlightNodeBlock: each documentId: aDocumentId)
-				value: textualCoderViewModel ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

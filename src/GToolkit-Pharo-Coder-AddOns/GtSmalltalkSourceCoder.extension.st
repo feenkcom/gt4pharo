@@ -112,61 +112,6 @@ GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns group: menuGroup node
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel label: aLabel requesterObject: aRequester [
-	<return: #GtCoderContextMenuAction or: nil>
-	^ self
-		addLinkMenuAddOnsTo: coderAddOns
-		node: node
-		selector: sel
-		label: aLabel
-		shortcut: nil
-		requesterObject: aRequester
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel label: aLabel shortcut: aShortcut requesterObject: aRequester [
-	<return: #GtCoderContextMenuAction or: nil>
-	| highlightNode nodeDescription |
-	
-	(node isMessage or: [ 
-		node isMessageSend or: [ 
-			node isMethodPattern or: [ 
-				node isSymbol ] ] ])
-		ifFalse: [ ^ nil ].
-	
-	highlightNode := node isMessageSend 
-		ifTrue: [ node message ] ifFalse: [ node ].
-	nodeDescription := node isSymbol
-		ifTrue: [ node literalValue ] ifFalse: [ node selector ].
-	
-	^ coderAddOns
-		addContextMenuItem: (self 
-			createLabel: aLabel
-			description: nodeDescription)
-		hover: (self highlightNodeBlock: highlightNode)
-		leave: self removeHighlightBlock
-		action: [ :aTextualViewModel | 
-			self
-				perform: sel
-				with: highlightNode startPosition
-				with: aRequester ]
-		shortcutKey: (aShortcut ifNotNil: [
-			aShortcut combinationForPlatform gtDisplayString ])
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> addLinkMenuAddOnsTo: coderAddOns node: node selector: sel shortcut: aShortcut requesterObject: aRequester [
-	<return: #GtCoderContextMenuAction or: nil>
-	^ self 
-		addLinkMenuAddOnsTo: coderAddOns 
-		node: node 
-		selector: sel 
-		label: aShortcut name 
-		shortcut: aShortcut 
-		requesterObject: aRequester
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> addReferencesHeaderContextMenuAddOnsSelector: aSelector to: coderAddOns requester: aCoderViewModel [
 	<gtCoderHeaderContextMenuAddOns>
 	^ (coderAddOns
@@ -250,18 +195,25 @@ GtSmalltalkSourceCoder >> expandStatementSelection: aSelectionInterval upIn: aSo
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtSmalltalkSourceCoder >> highlightNodeBlock: aNode [
-	"self deprecated: 'Use #highlightNodeBlock:documentId: instead'."
+GtSmalltalkSourceCoder class >> highlight: aTextualCoderViewModel from: aStartPosition to: aStopPosition documentId: aDocumentId [
+	"We assume there is just one highlight node. 
+	For that reason, we use one ID for all of them."
 
-	self flag: #TODO.
+	aTextualCoderViewModel
+		addHighlight: (BrTextHighlight id: #highlightNode color: self nodeHighlightColor)
+		overRange: (BrTextCharacterRange
+				start: aStartPosition
+				end: aStopPosition
+				documentId: aDocumentId)
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> highlightNodeBlock: aNode [
+	self deprecated: 'Use #highlightNodeBlock:documentId: instead'.
 
 	^ [ :textualCoderViewModel | 
-	textualCoderViewModel
-		addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
-		overRange: (BrTextCharacterRange
-				start: aNode startPosition
-				end: aNode stopPosition
-				documentId: textualCoderViewModel documentId) ]
+	(self highlightNodeBlock: aNode documentId: textualCoderViewModel documentId)
+		value: textualCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -270,12 +222,20 @@ GtSmalltalkSourceCoder >> highlightNodeBlock: aNode documentId: aDocumentId [
 	For that reason, we use one ID for all of them."
 
 	^ [ :textualCoderViewModel | 
-	textualCoderViewModel
-		addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
-		overRange: (BrTextCharacterRange
-				start: aNode startPosition
-				end: aNode stopPosition
-				documentId: aDocumentId) ]
+	self class
+		highlight: textualCoderViewModel
+		from: aNode startPosition
+		to: aNode stopPosition
+		documentId: aDocumentId ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder >> highlightNodesBlock: aCollection documentId: aDocumentId [
+	^ [ :textualCoderViewModel | 
+	aCollection
+		do: [ :each | 
+			(self highlightNodeBlock: each documentId: aDocumentId)
+				value: textualCoderViewModel ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -284,12 +244,11 @@ GtSmalltalkSourceCoder >> highlightNodesFromFirstToLastBlock: aCollection docume
 	For that reason, we use one ID for all of them."
 
 	^ [ :textualCoderViewModel | 
-	textualCoderViewModel
-		addHighlight: (BrTextHighlight id: #highlightNode color: self class nodeHighlightColor)
-		overRange: (BrTextCharacterRange
-				start: aCollection first startPosition
-				end: aCollection last stopPosition
-				documentId: aDocumentId) ]
+	self class
+		highlight: textualCoderViewModel
+		from: aCollection first startPosition
+		to: aCollection last stopPosition
+		documentId: aDocumentId ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -473,8 +432,8 @@ GtSmalltalkSourceCoder >> newFilterContext [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder class >> nodeHighlight [
-	"deprecated, to be removed"
-	self flag: #TODO.
+	self
+		deprecated: 'Use #highlight:from:to:documentId: and #removeHighlights: instead'.
 
 	^ NodeHighlight
 		ifNil: [ NodeHighlight := BlTextHighlightAttribute new paint: self nodeHighlightColor ]
@@ -487,16 +446,25 @@ GtSmalltalkSourceCoder class >> nodeHighlightColor [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> removeHighlightBlock [
-	"self deprecated: 'Use #removeHighlightsBlock instead'."
+	self
+		deprecated: 'Please use #removeHighlightsBlock instead.'
+		transformWith: '`@receiver removeHighlightBlock' -> '`@receiver removeHighlightsBlock'.
 
-	self flag: #TODO.
-	^ [ :textualCoderViewModel | textualCoderViewModel removeHighlightsWithId: #highlightNode ]
+	^ self removeHighlightsBlock
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtSmalltalkSourceCoder class >> removeHighlights: aTextualCoderViewModel [
+	"It removes all highlights with the given id."
+
+	aTextualCoderViewModel removeHighlightsWithId: #highlightNode
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtSmalltalkSourceCoder >> removeHighlightsBlock [
-	^ [ :textualCoderViewModel | 
-	  textualCoderViewModel removeHighlightsWithId: #highlightNode ]
+	"It removes all highlights with the given id."
+
+	^ [ :textualCoderViewModel | self class removeHighlights: textualCoderViewModel ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

@@ -51,13 +51,8 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 		ifNotEmpty: [ :nodes | 
 			coderAddOns
 				addContextMenuItem: 'Extract test'
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: nodes first startPosition
-						to: nodes last stopPosition
-						documentId: aDocumentId ]
-				leave: self removeHighlightBlock
+				hover: (self highlightNodesFromFirstToLastBlock: nodes documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
 						executeIn: element ]

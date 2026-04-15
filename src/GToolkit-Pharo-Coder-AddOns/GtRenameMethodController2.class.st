@@ -91,14 +91,13 @@ GtRenameMethodController2 >> installReorderAttributes [
 							id: 'move-keyword-and-parameter-left-' , i printString.
 					attribute
 						onEnter: [ renameAction highlighted: i.
-							self sourceCoderViewModel
-								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+							GtSmalltalkSourceCoder
+								highlight: self sourceCoderViewModel
 								from: (message selectorParts at: i) startPosition
 								to: each stopPosition
 								documentId: documentId ];
 						onLeave: [ renameAction highlighted: 0.
-							self sourceCoderViewModel
-								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
+							GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
@@ -112,13 +111,12 @@ GtRenameMethodController2 >> installReorderAttributes [
 							label: 'Swap parameter with previous'
 							id: 'move-parameter-left-' , i printString.
 					attribute
-						onEnter: [ self sourceCoderViewModel
-								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+						onEnter: [ GtSmalltalkSourceCoder
+								highlight: self sourceCoderViewModel
 								from: each startPosition
 								to: each stopPosition
 								documentId: documentId ];
-						onLeave: [ self sourceCoderViewModel
-								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
+						onLeave: [ GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
@@ -133,13 +131,12 @@ GtRenameMethodController2 >> installReorderAttributes [
 							label: 'Swap parameter with next'
 							id: 'move-parameter-right-' , i printString.
 					attribute
-						onEnter: [ self sourceCoderViewModel
-								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+						onEnter: [ GtSmalltalkSourceCoder
+								highlight: self sourceCoderViewModel
 								from: each startPosition
 								to: each stopPosition
 								documentId: documentId ];
-						onLeave: [ self sourceCoderViewModel
-								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
+						onLeave: [ GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
@@ -154,14 +151,13 @@ GtRenameMethodController2 >> installReorderAttributes [
 							id: 'move-keyword-and-parameter-right-' , i printString.
 					attribute
 						onEnter: [ renameAction highlighted: i.
-							self sourceCoderViewModel
-								addTextAttribute: GtSmalltalkSourceCoder nodeHighlight
+							GtSmalltalkSourceCoder
+								highlight: self sourceCoderViewModel
 								from: (message selectorParts at: i) startPosition
 								to: each stopPosition
 								documentId: documentId ];
 						onLeave: [ renameAction highlighted: 0.
-							self sourceCoderViewModel
-								removeAttribute: GtSmalltalkSourceCoder nodeHighlight ].
+							GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
 					self sourceCoderViewModel
 						addTextAttribute: attribute
