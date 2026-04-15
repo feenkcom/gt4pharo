@@ -171,7 +171,7 @@ GtRenameMethodController2 >> installReorderAttributes [
 			hoverAttributes add: attribute.
 			self sourceCoderViewModel
 				addTextAttribute: attribute
-				from: (message selectorParts at: i) startPosition - 1
+				from: (message selectorParts at: i) startPosition
 				to: each stopPosition
 				documentId: documentId ]
 ]
