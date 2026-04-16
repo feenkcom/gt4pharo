@@ -1,6 +1,6 @@
 Extension { #name : #ClassRenamed }
 
-{ #category : #'*GToolkit-Pharo-System' }
+{ #category : #'*GToolkit-Pharo-System-DoneCalls' }
 ClassRenamed >> gtDoneAnnouncementIn: anAnnouncer [
 	#GtClassRenamedDone
 		asClassIfPresent: [ :anAnnouncementClass | 

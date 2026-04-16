@@ -1,6 +1,6 @@
 Extension { #name : #ClassCommented }
 
-{ #category : #'*GToolkit-Pharo-System' }
+{ #category : #'*GToolkit-Pharo-System-DoneCalls' }
 ClassCommented >> gtDoneAnnouncementIn: anAnnouncer [
 	#GtClassCommentedDone
 		asClassIfPresent: [ :anAnnouncementClass |

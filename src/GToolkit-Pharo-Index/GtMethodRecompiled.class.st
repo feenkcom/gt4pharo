@@ -15,13 +15,6 @@ GtMethodRecompiled class >> methodChangedFrom: oldMethod to: newMethod [
 		yourself
 ]
 
-{ #category : #'done announcements' }
-GtMethodRecompiled >> gtDoneAnnouncementIn: anAnnouncer [
-	#GtMethodRecompiledDone
-		asClassIfPresent: [ :anAnnouncementClass | 
-			anAnnouncer announce: (anAnnouncementClass methodChangedFrom: self oldMethod to: self newMethod) ]
-]
-
 { #category : #accessing }
 GtMethodRecompiled >> newMethod [
 	^ self method

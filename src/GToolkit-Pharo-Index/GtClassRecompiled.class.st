@@ -16,10 +16,3 @@ GtClassRecompiled >> classAffected [
 GtClassRecompiled >> classAffected: aClass [
 	classAffected := aClass
 ]
-
-{ #category : #'done announcements' }
-GtClassRecompiled >> gtDoneAnnouncementIn: anAnnouncer [
-	#GtClassRecompiledDone
-		asClassIfPresent: [ :anAnnouncementClass |
-			anAnnouncer announce: (anAnnouncementClass new classAffected: self classAffected; yourself) ]
-]

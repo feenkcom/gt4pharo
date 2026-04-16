@@ -1,6 +1,6 @@
 Extension { #name : #MethodRepackaged }
 
-{ #category : #'*GToolkit-Pharo-System' }
+{ #category : #'*GToolkit-Pharo-System-DoneCalls' }
 MethodRepackaged >> gtDoneAnnouncementIn: anAnnouncer [
 	#GtMethodRepackagedDone
 		asClassIfPresent: [ :anAnnouncementClass | 

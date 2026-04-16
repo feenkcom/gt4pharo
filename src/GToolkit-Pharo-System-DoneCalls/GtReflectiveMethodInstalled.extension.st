@@ -1,6 +1,6 @@
 Extension { #name : #GtReflectiveMethodInstalled }
 
-{ #category : #'*GToolkit-Pharo-System' }
+{ #category : #'*GToolkit-Pharo-System-DoneCalls' }
 GtReflectiveMethodInstalled >> gtDoneAnnouncementIn: anAnnouncer [
 	#GtReflectiveMethodInstalledDone
 		asClassIfPresent: [ :anAnnouncementClass | 
