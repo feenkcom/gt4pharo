@@ -290,7 +290,7 @@ GtPharoMethodContextCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 
 	SystemAnnouncer uniqueInstance weak
-		when: MethodModified
+		when: GtMethodModifiedDone
 			send: #onMethodModified:
 			to: self;
 		when: BreakpointAnnouncement

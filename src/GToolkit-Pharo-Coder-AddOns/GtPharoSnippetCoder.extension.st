@@ -1,21 +1,7 @@
 Extension { #name : #GtPharoSnippetCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns [
-	<return: #Boolean>
-	self
-		deprecated: 'Please use addConvertCascadesToStatementsFor:to:priority: instead.'
-		transformWith: '`@receiver addConvertCascadesToStatementsFor: `@statements1 to: `@statements2'
-				-> '`@receiver addConvertCascadesToStatementsFor: `@statements1 to: `@statements2 priority: nil'.
-	
-	^ self
-		addConvertCascadesToStatementsFor: aNode
-		to: coderAddOns
-		priority: nil
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns priority: aPriority [
+GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns priority: aPriority context: aBuildContext [
 	<return: #Boolean>
 	aNode isCascade ifFalse: [ ^ false ].
 	(coderAddOns
@@ -23,8 +9,8 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 				createLabel: 'Convert cascade to statements'
 				description: (self nodeDescription: aNode))
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
 			(GtSnippetConvertCascadesToStatementsController new
 				node: aNode;
@@ -35,7 +21,7 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns [
+GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns context: aBuildContext [
 	<return: #GtCoderContextMenuAction or: nil>
 	nodes size > 1 ifFalse: [ ^ nil ].
 	(nodes allSatisfy: [ :each | each isMessageSend ]) ifFalse: [ ^ nil ].
@@ -46,8 +32,8 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 				createLabel: 'Convert statements to cascade'
 				description: (self nodeDescription: nodes first))
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodesBlock: nodes)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodesBlock: nodes documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
 			(GtSnippetConvertStatementsToCascadesController new
 				nodes: nodes;
@@ -65,13 +51,8 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 		ifNotEmpty: [ :nodes | 
 			coderAddOns
 				addContextMenuItem: 'Extract test'
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: nodes first startPosition
-						to: nodes last stopPosition
-						documentId: aDocumentId ]
-				leave: self removeHighlightBlock
+				hover: (self highlightNodesFromFirstToLastBlock: nodes documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
 						executeIn: element ]
@@ -81,15 +62,15 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
+GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns context: aBuildContext [
 	(aNode isValueNode and: [ aNode isVariable not ]) ifFalse: [ ^ false ].
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Extract variable'
 				description: (self nodeDescription: aNode))
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
 			(GtSnippetExtractTemporaryRefactoringController new
 				node: aNode;
@@ -102,19 +83,20 @@ GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns [
 GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel [
 	<return: #Boolean>
 	self
-		deprecated: 'Please use addInlineMethodFor:to:from:priority: instead.'
+		deprecated: 'Please use addInlineMethodFor:to:from:priority:context: instead.'
 		transformWith: '`@receiver addInlineMethodFor: `@statements1 to: `@statements2 from: `@statements3'
-				-> '`@receiver addInlineMethodFor: `@statements1 to: `@statements2 from: `@statements3 priority: nil'.
-	
+				-> '`@receiver addInlineMethodFor: `@statements1 to: `@statements2 from: `@statements3 priority: nil context: GtCoderAddOnsBuildContext new'.
+
 	^ self
 		addInlineMethodFor: aNode
 		to: coderAddOns
 		from: aCoderViewModel
 		priority: nil
+		context: GtCoderAddOnsBuildContext new
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel priority: aPriority [
+GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderViewModel priority: aPriority context: aBuildContext [
 	<return: #Boolean>
 	| class selector |
 	aNode isMessageSend ifFalse: [ ^ false ].
@@ -130,7 +112,8 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 				addInlineMethodUnknownReceiverFor: aNode
 				to: coderAddOns
 				from: aCoderViewModel
-				priority: aPriority ].
+				priority: aPriority
+				context: aBuildContext ].
 	class := class whichClassIncludesSelector: selector.
 	class
 		ifNil: [ (GtPharoIndex current implementersOf: aNode selector) ifEmpty: [ ^ false ] ].
@@ -140,8 +123,8 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 				createLabel: 'Inline message'
 				description: aNode message selector)
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aSourceCoderViewModel :element | 
 			(GtSnippetInlineMessageRefactoringController new
 				messageNode: aNode;
@@ -150,35 +133,20 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
 		id: #'context-menu--inline-send')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
-	
+
 	^ true
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns from: aCoderViewModel [
-	<return: #Boolean>
-	self
-		deprecated: 'Please use addInlineMethodUnknownReceiverFor:to:from:priority: instead.'
-		transformWith: '`@receiver addInlineMethodUnknownReceiverFor: `@statements1 to: `@statements2 from: `@statements3'
-				-> '`@receiver addInlineMethodUnknownReceiverFor: `@statements1 to: `@statements2 from: `@statements3 priority: nil'.
-
-	^ self
-		addInlineMethodUnknownReceiverFor: aNode
-		to: coderAddOns
-		from: aCoderViewModel
-		priority: nil
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns from: aCoderViewModel priority: aPriority [
+GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns from: aCoderViewModel priority: aPriority context: aBuildContext [
 	<return: #Boolean>
 	(coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Inline message'
 				description: aNode message selector)
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: aNode documentId: aBuildContext)
+		leave: self removeHighlightsBlock
 		action: [ :aSourceCoderViewModel :element | 
 			| classes defaultClass |
 			classes := GtPharoIndex current implementersOf: aNode selector.
@@ -193,21 +161,7 @@ GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns [
-	<return: #Boolean>
-	self
-		deprecated: 'Please use addInlineTempFor:to:priority: instead.'
-		transformWith: '`@receiver addInlineTempFor: `@statements1 to: `@statements2'
-				-> '`@receiver addInlineTempFor: `@statements1 to: `@statements2 priority: nil'.
-
-	^ self
-		addInlineTempFor: aNode
-		to: coderAddOns
-		priority: nil
-]
-
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriority [
+GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriority context: aBuildContext [
 	<return: #Boolean>
 	| variable uses |
 	aNode isAssignment ifTrue: [ variable := aNode variable ].
@@ -229,14 +183,16 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriori
 				createLabel: 'Inline assignment'
 				description: variable variableName)
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodesBlock: {uses first parent} , uses)
-		leave: self removeHighlightBlock
+		hover: (self
+				highlightNodesBlock: {uses first parent} , uses
+				documentId: aBuildContext documentId)
+		leave: self removeHighlightsBlock
 		action: [ :aSourceCoderViewModel :element | 
 			(GtSnippetInlineVariableRefactoringController new
 				node: uses first parent;
 				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
 		id: #'context-menu--inline-temp')
-			ifNotNil: [ :anAction | anAction priority: aPriority ].
+		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
 ]
 
@@ -251,67 +207,70 @@ GtPharoSnippetCoder >> addRefactoringContextMenuAddOnsAst: anAst to: coderAddOns
 			(coderAddOns
 				addContextMenuItem: 'Extract method'
 				group: BrMenuItemGroupConfiguration refactoring
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: nodes first startPosition
-						to: nodes last stopPosition
-						documentId: aDocumentId ]
-				leave: self removeHighlightBlock
+				hover: (self
+						highlightNodesFromFirstToLastBlock: nodes
+						documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractMethodFromSnippetController new
 						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
 				id: GtMethodCoderExtractMethodContextMenuItemId)
 				ifNotNil: [ :anAction | anAction priority: 210.01 ].
-
 			(coderAddOns
 				addContextMenuItem: 'Extract example'
 				group: BrMenuItemGroupConfiguration refactoring
-				hover: [ :textualCoderViewModel | 
-					textualCoderViewModel
-						addTextAttribute: self class nodeHighlight
-						from: nodes first startPosition
-						to: nodes last stopPosition
-						documentId: aDocumentId ]
-				leave: self removeHighlightBlock
+				hover: (self
+						highlightNodesFromFirstToLastBlock: nodes
+						documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
 					(GtExtractExampleFromSnippetController new
 						sourceCoderViewModel: aTextualViewModel) executeIn: element ]
 				id: #'snippet-extract-example')
 				ifNotNil: [ :anAction | anAction priority: 210.02 ].
-
 			node := nodes first.
 			allParents := node withAllParents.
 			allParents
-				detect: [ :aNode | self addExtractVariableFor: aNode to: coderAddOns ]
+				detect: [ :aNode | 
+					self
+						addExtractVariableFor: aNode
+						to: coderAddOns
+						context: (GtCoderAddOnsBuildContext new documentId: aDocumentId) ]
 				ifNone: [  ].
 			self
 				addInlineMethodFor: node
 				to: coderAddOns
 				from: aCoderViewModel
-				priority: 210.03.
+				priority: 210.03
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId).
 			allParents
 				detect: [ :n | 
 					self
 						addInlineTempFor: n
 						to: coderAddOns
-						priority: 210.04 ]
+						priority: 210.04
+						context: (GtCoderAddOnsBuildContext new documentId: aDocumentId) ]
 				ifNone: [  ].
 			allParents
 				detect: [ :n | 
 					self
 						addConvertCascadesToStatementsFor: n
 						to: coderAddOns
-						priority: 210.05 ]
+						priority: 210.05
+						context: (GtCoderAddOnsBuildContext new documentId: aDocumentId) ]
 				ifNone: [  ].
-			(self addConvertStatementsToCascadesFor: nodes to: coderAddOns)
+			(self
+				addConvertStatementsToCascadesFor: nodes
+				to: coderAddOns
+				context: (GtCoderAddOnsBuildContext new documentId: aDocumentId))
 				ifNotNil: [ :anAction | anAction priority: 210.06 ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSnippetCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
-	| splitBeforeMessage |
+	| splitBeforeMessage aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	splitBeforeMessage := self cascadeMessageToSplitAfter: aCoderViewModel.
 	splitBeforeMessage ifNil: [ ^ self ].
 	(coderAddOns
@@ -319,8 +278,8 @@ GtPharoSnippetCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOn
 				createLabel: 'Split cascade'
 				description: splitBeforeMessage source)
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: splitBeforeMessage)
-		leave: self removeHighlightBlock
+		hover: (self highlightNodeBlock: splitBeforeMessage documentId: aDocumentId)
+		leave: self removeHighlightsBlock
 		action: [ :cvm :element | 
 			(GtSnippetSplitCascadesController new
 				node: splitBeforeMessage;

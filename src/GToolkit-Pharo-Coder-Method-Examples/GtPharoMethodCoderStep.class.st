@@ -115,7 +115,7 @@ GtPharoMethodCoderStep >> assertExampleAssertionHighlightFrom: aStartIndex to: a
 					isStartIndexValid := false.
 					isStopIndexValid := false.
 					aCoderElement text attributesFinder
-						findAttributesSuchThat: [ :anAttribute | anAttribute isKindOf: BlTextHighlightAttribute]
+						findAttributesSuchThat: [ :anAttribute | anAttribute isKindOf: BlTextUnderlayAttribute]
 						indicesDo: [ :aStart :aStop :anAttribute |
 							isStartIndexValid := isStartIndexValid | (aStart = aStartIndex).
 							isStopIndexValid := isStopIndexValid | (aStop = aStopIndex) ].
@@ -132,7 +132,7 @@ GtPharoMethodCoderStep >> assertExampleAssertionHighlightFrom: aStartIndex to: a
 							nextPutAll: ', but is: '.
 						aCoderElement text attributesFinder
 							findAttributesSuchThat: [ :anAttribute | 
-								anAttribute isKindOf: BlTextHighlightAttribute]
+								anAttribute isKindOf: BlTextUnderlayAttribute]
 							indicesDo: [ :aStart :aStop :anAttribute |
 								isRepeated ifTrue: [ aStream nextPutAll: ', ' ].
 								isRepeated := true.

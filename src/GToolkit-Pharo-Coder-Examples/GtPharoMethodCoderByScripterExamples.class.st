@@ -1140,7 +1140,9 @@ GtPharoMethodCoderByScripterExamples >> checkHighlighted: anInteger includeKeywo
 					ast := GtPharoParser parse: text asString.
 					found := false.
 					text
-						findAttributesSuchThat: [ :attr | attr == GtSmalltalkSourceCoder nodeHighlight ]
+						findAttributesSuchThat: [ :attr | 
+							attr class = BlTextHighlightAttribute
+								and: [ attr paint = GtSmalltalkSourceCoder nodeHighlightColor ] ]
 						indicesDo: [ :start :end :attr | 
 							| interval |
 							interval := ((aBoolean

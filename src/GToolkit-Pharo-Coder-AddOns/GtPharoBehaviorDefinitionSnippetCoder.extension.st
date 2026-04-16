@@ -21,6 +21,8 @@ GtPharoBehaviorDefinitionSnippetCoder >> addRenameMethodAst: anAst to: coderAddO
 	"Disable addOns"
 
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	^ self
 ]
 
