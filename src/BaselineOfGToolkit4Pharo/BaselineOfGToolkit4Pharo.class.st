@@ -16,23 +16,25 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-examples:v0.8.130/src' ].
 		spec
 			baseline: 'GToolkitCoder' with: [
-				spec repository: 'github://feenkcom/gtoolkit-coder:v0.9.112/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-coder:v0.9.113/src' ].
 		spec
 			baseline: 'GToolkitCompleter' with: [
-				spec repository: 'github://feenkcom/gtoolkit-completer:v0.9.80/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-completer:v0.9.81/src' ].
 		spec
 			baseline: 'GToolkit4Magritte' with: [
-				spec repository: 'github://feenkcom/gt4magritte:v0.7.81/src' ].
+				spec repository: 'github://feenkcom/gt4magritte:v0.7.82/src' ].
 		spec
 			baseline: 'SmaCCRuntime' with: [
-				spec repository: 'github://j-brant/SmaCC:v3.0.155' ].
+				spec repository: 'github://j-brant/SmaCC:v3.0.156' ].
 
 		spec package: 'GToolkit-Pharo-System' with: [
 			spec requires: #(#GToolkitExamplesEngine) ].
 		spec package: 'GToolkit-Pharo-Parser' with: [
 			spec requires: #(#SmaCCRuntime) ].
 		spec package: 'GToolkit-Pharo-Index' with: [
-			spec requires: #(#GToolkitCompleter) ].
+			spec requires: #(#GToolkitCompleter #'GToolkit-Pharo-System') ].
+		spec package: 'GToolkit-Pharo-System-DoneCalls' with: [
+			spec requires: #(#'GToolkit-Pharo-System' #'GToolkit-Pharo-Index') ].
 		spec package: 'GToolkit-Pharo-SearchFilters' with: [
 			spec requires: #(#Futures #GToolkitCoder #'GToolkit-Pharo-System' #'GToolkit-Pharo-Index') ].
 		spec package: 'GToolkit-Pharo-SearchFilters-Examples' with: [
