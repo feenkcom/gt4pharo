@@ -1268,12 +1268,12 @@ GtPharoMethodCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 
 	SystemAnnouncer uniqueInstance weak
-		when: ClassAdded send: #onClassAdded: to: self;
-		when: ClassRenamed send: #onClassRenamed: to: self;
-		when: ClassRemoved send: #onClassRemoved: to: self;
-		when: MethodAdded send: #onMethodAdded: to: self;
-		when: MethodRemoved send: #onMethodRemoved: to: self;
-		when: MethodModified send: #onMethodModified: to: self;
+		when: GtClassAddedDone send: #onClassAdded: to: self;
+		when: GtClassRenamedDone send: #onClassRenamed: to: self;
+		when: GtClassRemovedDone send: #onClassRemoved: to: self;
+		when: GtMethodAddedDone send: #onMethodAdded: to: self;
+		when: GtMethodRemovedDone send: #onMethodRemoved: to: self;
+		when: GtMethodModifiedDone send: #onMethodModified: to: self;
 		when: BreakpointAnnouncement send: #onBreakpointAnnouncement: to: self.
 ]
 

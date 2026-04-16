@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'names'
 	],
-	#category : #'GToolkit-Pharo-Index-GToolkit-Pharo-Index'
+	#category : #'GToolkit-Pharo-Index'
 }
 
 { #category : #accessing }

@@ -71,5 +71,5 @@ GtPharoBehaviorDefinitionCoder >> onClassChanged: anAnnouncement [
 GtPharoBehaviorDefinitionCoder >> subscribeToSystem [
 
 	SystemAnnouncer uniqueInstance weak
-		when: ClassAnnouncement send: #onClassChanged: to: self
+		when: GtClassOperationDoneAnnouncement send: #onClassChanged: to: self
 ]

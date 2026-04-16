@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classAffected'
 	],
-	#category : #'GToolkit-Pharo-Index'
+	#category : #'GToolkit-Pharo-Index-Announcements'
 }
 
 { #category : #accessing }
@@ -15,4 +15,11 @@ GtClassRecompiled >> classAffected [
 { #category : #accessing }
 GtClassRecompiled >> classAffected: aClass [
 	classAffected := aClass
+]
+
+{ #category : #'done announcements' }
+GtClassRecompiled >> gtDoneAnnouncementIn: anAnnouncer [
+	#GtClassRecompiledDone
+		asClassIfPresent: [ :anAnnouncementClass |
+			anAnnouncer announce: (anAnnouncementClass new classAffected: self classAffected; yourself) ]
 ]
