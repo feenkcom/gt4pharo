@@ -971,6 +971,11 @@ GtPharoMethodCoder >> onMethodModified: aMethodModified [
 ]
 
 { #category : #'event handling' }
+GtPharoMethodCoder >> onMethodRecatorized: anAnnouncement [
+	self protocol: anAnnouncement newProtocol name
+]
+
+{ #category : #'event handling' }
 GtPharoMethodCoder >> onMethodRemoved: aMethodRemovedAnnouncement [
 
 	(aMethodRemovedAnnouncement methodRemoved methodClass = self behavior
@@ -1274,6 +1279,7 @@ GtPharoMethodCoder >> subscribeToSystem [
 		when: GtMethodAddedDone send: #onMethodAdded: to: self;
 		when: GtMethodRemovedDone send: #onMethodRemoved: to: self;
 		when: GtMethodModifiedDone send: #onMethodModified: to: self;
+		when: GtMethodRecategorizedDone send: #onMethodRecatorized: to: self;
 		when: BreakpointAnnouncement send: #onBreakpointAnnouncement: to: self.
 ]
 
