@@ -61,10 +61,10 @@ GtPharoStreamingMethodsCoder >> initialize [
 	needsUpdate := false.
 
 	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded
+		when: GtMethodAddedDone
 			send: #onMethodAdded:
 			to: self;
-		when: MethodRemoved
+		when: GtMethodRemovedDone
 			send: #onMethodRemoved:
 			to: self;
 		when: GtAboutToPerformBulkChangesAnnouncement

@@ -6,7 +6,7 @@ Class {
 		'newName',
 		'oldName'
 	],
-	#category : #'GToolkit-Pharo-System'
+	#category : #'GToolkit-Pharo-System-Announcements'
 }
 
 { #category : #'instance creation' }

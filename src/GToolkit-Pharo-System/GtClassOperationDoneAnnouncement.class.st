@@ -1,7 +1,7 @@
 Class {
 	#name : #GtClassOperationDoneAnnouncement,
 	#superclass : #SystemAnnouncement,
-	#category : #'GToolkit-Pharo-System'
+	#category : #'GToolkit-Pharo-System-Announcements'
 }
 
 { #category : #accessing }

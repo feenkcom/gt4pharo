@@ -194,11 +194,11 @@ GtPharoBehaviorProtocolCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 
 	SystemAnnouncer uniqueInstance weak
-		when: ClassAdded send: #onClassAdded: to: self;
-		when: ClassRenamed send: #onClassRenamed: to: self;
-		when: ClassRemoved send: #onClassRemoved: to: self;
-		when: MethodAdded send: #onSystemMethodAdded: to: self;
-		when: MethodRemoved send: #onSystemMethodRemoved: to: self;
-		when: MethodModified send: #onSystemMethodModified: to: self;
-		when: MethodRecategorized send: #onSystemMethodRecategorized: to: self
+		when: GtClassAddedDone send: #onClassAdded: to: self;
+		when: GtClassRenamedDone send: #onClassRenamed: to: self;
+		when: GtClassRemovedDone send: #onClassRemoved: to: self;
+		when: GtMethodAddedDone send: #onSystemMethodAdded: to: self;
+		when: GtMethodRemovedDone send: #onSystemMethodRemoved: to: self;
+		when: GtMethodModifiedDone send: #onSystemMethodModified: to: self;
+		when: GtMethodRecategorizedDone send: #onSystemMethodRecategorized: to: self
 ]

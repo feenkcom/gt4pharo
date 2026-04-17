@@ -105,7 +105,7 @@ GtPharoBehaviorDefinitionSnippetCoder >> subscribeToSystem [
 	self isSubscribedToSystem ifTrue: [ ^ self ].
 
 	SystemAnnouncer uniqueInstance weak
-		when: ClassAnnouncement
+		when: GtClassOperationDoneAnnouncement
 			send: #onClassChanged:
 			to: self
 ]

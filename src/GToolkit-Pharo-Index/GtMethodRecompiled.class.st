@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'oldMethod'
 	],
-	#category : #'GToolkit-Pharo-Index'
+	#category : #'GToolkit-Pharo-Index-Announcements'
 }
 
 { #category : #'instance creation' }

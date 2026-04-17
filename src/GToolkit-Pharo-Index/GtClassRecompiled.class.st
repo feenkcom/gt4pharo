@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classAffected'
 	],
-	#category : #'GToolkit-Pharo-Index'
+	#category : #'GToolkit-Pharo-Index-Announcements'
 }
 
 { #category : #accessing }
