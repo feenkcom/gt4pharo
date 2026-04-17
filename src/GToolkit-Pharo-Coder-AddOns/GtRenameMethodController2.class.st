@@ -164,7 +164,7 @@ GtRenameMethodController2 >> installReorderAttributes [
 						from: each stopPosition
 						to: each stopPosition
 						documentId: documentId ].
-			attribute := BrTextHoverAttribute new
+			attribute := BrTextHoverDynamicAttribute new
 					beNotOverwritableByStyler;
 					enterAction: [ :evt | self updateHovered: i ];
 					leaveAction: [ :evt | self updateHovered: -1 ].
