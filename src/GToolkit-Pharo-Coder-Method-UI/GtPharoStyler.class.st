@@ -72,7 +72,7 @@ GtPharoStyler >> definitionTooltipAttributeFor: aNamedVariable [
 				BrMenuExplicitHandle new
 					menu: (BrMenuLabelItem new
 							label: 'Defined in ' asRopedText , definer asRopedText glamorousCodeDefaultFont) ].
-	^ BrTextHoverAttribute new
+	^ BrTextHoverDynamicAttribute new
 		enterAction: [ :aText :aTextElement :aTextEditor :anEvent | 
 			| bounds offset |
 			offset := aText textOffset - aTextElement text textOffset + (aText size / 2).
