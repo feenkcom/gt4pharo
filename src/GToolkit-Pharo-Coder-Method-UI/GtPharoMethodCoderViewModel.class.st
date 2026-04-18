@@ -279,6 +279,40 @@ GtPharoMethodCoderViewModel >> explicitProviderClass [
 ]
 
 { #category : #'gt-extension' }
+GtPharoMethodCoderViewModel >> gtExtraTextAttributesFor: aView [
+	<gtView>
+	extraTextAttributes ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Extra Text Attributes';
+		items: [ extraTextAttributes ];
+		column: 'Document'
+			text: [ :each | 
+				'{1}.{2}'
+					format: {each documentId ifNotNil: #textId ifNil: [ '-' ].
+							each documentId ifNotNil: #textId ifNil: [ '-' ]} ]
+			width: 70;
+		column: 'Range'
+			text: [ :each | 
+				'{1}..{2}'
+					format: {each startPosition ifNil: [ '-' ].
+							each stopPosition ifNil: [ '-' ]} ]
+			width: 50;
+		column: 'Count'
+			text: [ :each | each textAttributes ifNotNil: #size ifNil: [ 0 ] ]
+			width: 50;
+		column: 'Attributes'
+			text: [ :each | 
+				each textAttributes
+					ifNotNil: [ :aCollection | 
+						String
+							streamContents: [ :aStream | 
+								aCollection
+									do: [ :eachAttribute | eachAttribute gtDisplayOn: aStream ]
+									separatedBy: [ aStream nextPut: ', ' ] ] ]
+					ifNil: [ '' ] ]
+]
+
+{ #category : #'gt-extension' }
 GtPharoMethodCoderViewModel >> gtInfo [
 	^ super gtInfo, (Array streamContents: [ :aStream |
 		aStream nextPut: #behavior -> self behavior.
