@@ -65,3 +65,10 @@ GtPharoDummyTwoObject >> printString [
 GtPharoDummyTwoObject >> sum21Reference [
 	^ self sum21
 ]
+
+{ #category : #accessing }
+GtPharoDummyTwoObject >> sumA: valueA valueB: valueB valueC: valueC [
+	super sumA: valueA valueB: valueB valueC: valueC.
+
+	^ (self sumA: valueA b: valueB) + valueC
+]

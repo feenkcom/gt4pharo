@@ -10,7 +10,8 @@ Class {
 		'permutations',
 		'hovered',
 		'focused',
-		'hoverAttributes'
+		'hoverAttributes',
+		'coderAttributes'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
@@ -24,7 +25,8 @@ GtRenameMethodController2 >> currentNode [
 GtRenameMethodController2 >> initialize [
 	super initialize.
 	moveAttributes := #().
-	hoverAttributes := #()
+	hoverAttributes := #().
+	coderAttributes := #().
 ]
 
 { #category : #executing }
@@ -78,6 +80,7 @@ GtRenameMethodController2 >> installReorderAttributes [
 	| attribute message |
 	message := self currentNode.
 	message arguments size > 1 ifFalse: [ ^ self ].
+	coderAttributes := OrderedCollection new.
 	moveAttributes := OrderedCollection new.
 	hoverAttributes := OrderedCollection new.
 	message arguments
@@ -99,11 +102,11 @@ GtRenameMethodController2 >> installReorderAttributes [
 						onLeave: [ renameAction highlighted: 0.
 							GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
-					self sourceCoderViewModel
+					coderAttributes add: (self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: (message selectorParts at: i) startPosition - 1
 						to: (message selectorParts at: i) startPosition - 1
-						documentId: documentId.
+						documentId: documentId).
 					attribute := GtRefactoringButtonAttribute
 							action: [ renameAction focusedIndex: i - 1.
 								self swapParameterWithNext: i - 1 ]
@@ -118,11 +121,11 @@ GtRenameMethodController2 >> installReorderAttributes [
 								documentId: documentId ];
 						onLeave: [ GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
-					self sourceCoderViewModel
+					coderAttributes add: (self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each startPosition - 1
 						to: each startPosition - 1
-						documentId: documentId ].
+						documentId: documentId) ].
 			i < message arguments size
 				ifTrue: [ attribute := GtRefactoringButtonAttribute
 							action: [ renameAction focusedIndex: i + 1.
@@ -138,11 +141,11 @@ GtRenameMethodController2 >> installReorderAttributes [
 								documentId: documentId ];
 						onLeave: [ GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
-					self sourceCoderViewModel
+					coderAttributes add: (self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
 						to: each stopPosition
-						documentId: documentId.
+						documentId: documentId).
 					attribute := GtRefactoringButtonAttribute
 							action: [ renameAction focusedIndex: i + 1.
 								self swapKeywordAndParameterWithNext: i ]
@@ -159,21 +162,26 @@ GtRenameMethodController2 >> installReorderAttributes [
 						onLeave: [ renameAction highlighted: 0.
 							GtSmalltalkSourceCoder removeHighlights: self sourceCoderViewModel ].
 					moveAttributes add: attribute.
-					self sourceCoderViewModel
+					coderAttributes add: (self sourceCoderViewModel
 						addTextAttribute: attribute
 						from: each stopPosition
 						to: each stopPosition
-						documentId: documentId ].
+						documentId: documentId) ].
 			attribute := BrTextHoverDynamicAttribute new
 					beNotOverwritableByStyler;
 					enterAction: [ :evt | self updateHovered: i ];
 					leaveAction: [ :evt | self updateHovered: -1 ].
 			hoverAttributes add: attribute.
-			self sourceCoderViewModel
+			coderAttributes add: (self sourceCoderViewModel
 				addTextAttribute: attribute
 				from: (message selectorParts at: i) startPosition
 				to: each stopPosition
-				documentId: documentId ]
+				documentId: documentId) ].
+				
+	GtCoderRenameControllerAddAttributesSignal new
+		controller: self;
+		coderAttributes: coderAttributes;
+		emit.
 ]
 
 { #category : #accessing }
@@ -224,8 +232,12 @@ GtRenameMethodController2 >> refactoringName [
 
 { #category : #executing }
 GtRenameMethodController2 >> removeReorderParametersAttributes [
-	moveAttributes do: [ :each | self sourceCoderViewModel removeAttribute: each ].
-	hoverAttributes do: [ :each | self sourceCoderViewModel removeAttribute: each ]
+	GtCoderRenameControllerRemoveAttributesSignal new
+		controller: self;
+		coderAttributes: coderAttributes;
+		emit.
+
+	self sourceCoderViewModel removeAllCoderTextAttributes: coderAttributes
 ]
 
 { #category : #accessing }

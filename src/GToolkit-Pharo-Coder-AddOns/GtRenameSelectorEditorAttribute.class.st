@@ -62,6 +62,16 @@ GtRenameSelectorEditorAttribute >> initialize [
 	highlighted := false
 ]
 
+{ #category : #printing }
+GtRenameSelectorEditorAttribute >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		print: self identityHash;
+		nextPut: $)
+]
+
 { #category : #accessing }
 GtRenameSelectorEditorAttribute >> resetText: aString [
 	self text: aString.
