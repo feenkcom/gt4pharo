@@ -144,6 +144,16 @@ GtRefactoringButtonAttribute >> onLeave: aBlock [
 	leaveBlock := aBlock
 ]
 
+{ #category : #printing }
+GtRefactoringButtonAttribute >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		print: self identityHash;
+		nextPut: $)
+]
+
 { #category : #private }
 GtRefactoringButtonAttribute >> updateButton: aButton [
 	aButton

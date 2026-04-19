@@ -41,7 +41,7 @@ GtRenameSelectorAction >> addRenameAttributes [
 	| text index |
 	text := self pharoSourceCoderViewModel styledText
 			ifNil: [ self pharoSourceCoderViewModel sourceText ].
-
+			
 	index := 1.
 	coderAttributes := originalLocations
 			collect: [ :each | 
@@ -62,6 +62,11 @@ GtRenameSelectorAction >> addRenameAttributes [
 					from: each first
 					to: each last
 					documentId: documentId ].
+					
+	GtCoderRenameActionAddAttributesSignal new
+		action: self;
+		coderAttributes: coderAttributes;
+		emit.
 
 	renameAttributes := coderAttributes
 			flatCollect: [ :eachCoderAttribute | eachCoderAttribute textAttributes ].
@@ -186,7 +191,7 @@ GtRenameSelectorAction >> newVariableName [
 { #category : #accessing }
 GtRenameSelectorAction >> removeHighlightFrom: aText [
 	^ aText
-		clearAttributes: [ :each | each class = BlTextHighlightAttribute ]
+		clearAttributes: [ :each | each class = BlTextHighlightAttribute or: [ each class = GtRenameSelectorEditorAttribute ] ]
 ]
 
 { #category : #accessing }
