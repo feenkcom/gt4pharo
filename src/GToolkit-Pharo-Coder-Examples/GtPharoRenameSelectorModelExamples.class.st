@@ -26,21 +26,25 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> editorWithKeywordMethod [
 	<gtExample>
-	| aMethod anEditor someAttributes aStencil |
+	| aMethod anEditor aDocumentId someAttributes aStencil |
 	aMethod := self keywordMethod.
 	aStencil := self attributesStencil.
 	someAttributes := aStencil create.
 	anEditor := BrEditor new
 			aptitude: BrGlamorousRegularEditorAptitude;
-			text: aMethod sourceCode;
-			styler: BrRBTextStyler new.
+			styler: BrRBTextStyler new;
+			when: BrTextEditorTextReplacedEvent
+				do: [ :anEvent | aDocumentId := anEvent documentId ].
+	anEditor := anEditor text: aMethod sourceCode.
 
 	someAttributes
 		do: [ :eachCol | 
-			anEditor text
-				attributes: {eachCol at: 3}
-				from: (eachCol at: 1)
-				to: (eachCol at: 2) ].
+			anEditor
+				addAttribute: (eachCol at: 3)
+				overRange: (BrTextCharacterRange
+						start: (eachCol at: 1)
+						end: (eachCol at: 2)
+						documentId: aDocumentId) ].
 
 	anEditor userData at: #electorModel put: aStencil selectorModel.
 
