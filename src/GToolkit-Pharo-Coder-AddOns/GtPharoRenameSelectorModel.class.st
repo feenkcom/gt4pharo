@@ -65,7 +65,10 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 			withIndexCollect: [ :eachArgument :anIndex | 
 				GtPharoRenameSelectorParameterModel
 					forAstVariableNodeArgument: eachArgument
-					index: anIndex ]) asArray
+					index: anIndex ]) asArray.
+
+	selectorParameters
+		ifEmpty: [ selectorParameters := Array new: selectorKeywords size withAll: nil ]
 ]
 
 { #category : #accessing }
@@ -75,9 +78,8 @@ GtPharoRenameSelectorModel >> keywordsAndParametersCurrentOrder [
 			selectorKeywords
 				with: selectorParameters
 				do: [ :eachKeyword :eachParamter | 
-					aStream
-						nextPut: eachKeyword;
-						nextPut: eachParamter ] ]
+					aStream nextPut: eachKeyword.
+					eachParamter ifNotNil: [ aStream nextPut: eachParamter ] ] ]
 ]
 
 { #category : #'api - accessing' }

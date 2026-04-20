@@ -26,6 +26,17 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethod [
 	^ aStencil
 ]
 
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithUnaryMethod [
+	<gtExample>
+	| aStencil aModel |
+	aModel := self renameSelectorModelWithUnaryMethod.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+
+	^ aStencil
+]
+
 { #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 	<gtExample>
@@ -75,6 +86,16 @@ GtPharoRenameSelectorModelExamples >> editorWithThreeKeywordsMethod [
 	| aMethod anEditor aStencil |
 	aMethod := self threeKeywordsMethod.
 	aStencil := self attributesStencilWithThreeKeywordsMethod.
+	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
+	^ anEditor
+]
+
+{ #category : #'examples - demo' }
+GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
+	<gtExample>
+	| aMethod anEditor aStencil |
+	aMethod := self unaryMethod.
+	aStencil := self attributesStencilWithUnaryMethod.
 	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
 	^ anEditor
 ]
@@ -142,9 +163,26 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 ]
 
 { #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod [
+	<gtExample>
+	| aModel aMethod |
+	aMethod := self unaryMethod.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
+	^ aModel
+]
+
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	<gtExample>
 	| aMethod |
 	aMethod := GtPharoDummyTwoObject >> #sumA:valueB:valueC:.
+	^ aMethod
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> unaryMethod [
+	<gtExample>
+	| aMethod |
+	aMethod := GtPharoDummyOneObject >> #instAReceiver.
 	^ aMethod
 ]
