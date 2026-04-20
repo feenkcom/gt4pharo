@@ -146,7 +146,7 @@ GtRefactoringsPreviewButton >> buildRefactoringsPreviewForButton: aButton [
 	theRefactoringsElement := GtRefactoringsElement new
 			hExact: self previewWidth * 1.25;
 			vFitContentLimited.
-	(refactoringsOrChanges allSatisfy: [ :each | each isKindOf: RBRefactoring ])
+	(refactoringsOrChanges allSatisfy: [ :each | each isPharoRefactoringModel ])
 		ifTrue: [ theRefactoringsElement refactorings: refactoringsOrChanges ]
 		ifFalse: [ | change |
 			change := RBCompositeRefactoryChange named: 'Changes'.
@@ -216,7 +216,7 @@ GtRefactoringsPreviewButton >> executeRefactorings [
 	executedRefactorings := self refactorings.
 	executedRefactorings
 		do: [ :each | 
-			(each isKindOf: RBRefactoring)
+			(each isPharoRefactoringModel)
 				ifTrue: [ each model
 						name: ([ each gtDescription asString ]
 								on: Error

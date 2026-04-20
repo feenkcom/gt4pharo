@@ -21,7 +21,7 @@ RBRefactoring class >> gtComponentRefactoringClassIn: node do: aBlock [
 				ifTrue: [ node receiver isVariable
 						ifTrue: [ (self class bindingOf: node receiver name) value
 								ifNotNil: [ :obj | 
-									(obj isBehavior and: [ obj inheritsFrom: RBRefactoring ])
+									(obj isBehavior and: [ obj isPharoRefactoringModelClass ])
 										ifTrue: [ aBlock value: obj ] ] ]
 						ifFalse: [ self gtComponentRefactoringClassIn: node receiver do: aBlock ] ] ]
 ]

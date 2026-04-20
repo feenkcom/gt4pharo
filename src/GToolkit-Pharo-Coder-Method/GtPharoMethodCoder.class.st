@@ -972,6 +972,8 @@ GtPharoMethodCoder >> onMethodModified: aMethodModified [
 
 { #category : #'event handling' }
 GtPharoMethodCoder >> onMethodRecatorized: anAnnouncement [
+	anAnnouncement methodRecategorized = self compiledMethod ifFalse: [ ^ self ].
+
 	self protocol: anAnnouncement newProtocol name
 ]
 
