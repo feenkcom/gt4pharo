@@ -100,7 +100,7 @@ GtExecutedRefactorings >> executeRefactorings [
 	executedRefactorings := self refactorings.
 	executedRefactorings
 		do: [ :each | 
-			(each isKindOf: RBRefactoring)
+			(each isPharoRefactoringModel)
 				ifTrue: [ each model
 						name: ([ each gtDescription asString ]
 								on: Error
@@ -257,11 +257,11 @@ GtExecutedRefactorings >> refactoringsComputation [
 { #category : #'api - compute' }
 GtExecutedRefactorings >> refactoringsDo: aRefactoringsBlock changesDo: aChangesBlock emptyDo: anEmptyBlock errorMessagesDo: anErrorsBlock [
 	self errorMessages ifNotEmpty: [ :aCollection | 
-		^ anErrorsBlock cull: aCollection  ].
+		^ anErrorsBlock cull: aCollection ].
 	self executedRefactorings ifEmpty: [ ^ anEmptyBlock value ].
 
 	^ (self executedRefactorings
-		allSatisfy: [ :each | each isKindOf: RBRefactoring ])
+		allSatisfy: [ :each | each isPharoRefactoringModel ])
 		ifTrue: [ aRefactoringsBlock cull: self executedRefactorings ]
 		ifFalse: [ | change |
 			change := RBCompositeRefactoryChange named: 'Changes'.
