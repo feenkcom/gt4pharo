@@ -5,10 +5,21 @@ Class {
 }
 
 { #category : #'examples - attributes' }
-GtPharoRenameSelectorModelExamples >> attributesStencil [
+GtPharoRenameSelectorModelExamples >> attributesStencilWithOneKeywordMethod [
 	<gtExample>
 	| aStencil aModel |
-	aModel := self renameSelectorModelWithKeywordMethod.
+	aModel := self renameSelectorModelWithOneKeywordMethod.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+
+	^ aStencil
+]
+
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethod [
+	<gtExample>
+	| aStencil aModel |
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
 
@@ -24,18 +35,16 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 ]
 
 { #category : #'examples - demo' }
-GtPharoRenameSelectorModelExamples >> editorWithKeywordMethod [
-	<gtExample>
-	| aMethod anEditor aDocumentId someAttributes aStencil |
-	aMethod := self keywordMethod.
-	aStencil := self attributesStencil.
+GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod attributesStencil: aStencil [
+	| someAttributes anEditor aDocumentId |
+	aDocumentId := nil.
 	someAttributes := aStencil create.
 	anEditor := BrEditor new
 			aptitude: BrGlamorousRegularEditorAptitude;
 			styler: BrRBTextStyler new;
 			when: BrTextEditorTextReplacedEvent
 				do: [ :anEvent | aDocumentId := anEvent documentId ].
-	anEditor := anEditor text: aMethod sourceCode.
+	anEditor text: aMethod sourceCode.
 
 	someAttributes
 		do: [ :eachCol | 
@@ -47,59 +56,95 @@ GtPharoRenameSelectorModelExamples >> editorWithKeywordMethod [
 						documentId: aDocumentId) ].
 
 	anEditor userData at: #electorModel put: aStencil selectorModel.
+	^ anEditor
+]
 
+{ #category : #'examples - demo' }
+GtPharoRenameSelectorModelExamples >> editorWithOneKeywordMethod [
+	<gtExample>
+	| aMethod anEditor aStencil |
+	aMethod := self oneKeywordMethod.
+	aStencil := self attributesStencilWithOneKeywordMethod.
+	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
+	^ anEditor
+]
+
+{ #category : #'examples - demo' }
+GtPharoRenameSelectorModelExamples >> editorWithThreeKeywordsMethod [
+	<gtExample>
+	| aMethod anEditor aStencil |
+	aMethod := self threeKeywordsMethod.
+	aStencil := self attributesStencilWithThreeKeywordsMethod.
+	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
 	^ anEditor
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> keywordMethod [
+GtPharoRenameSelectorModelExamples >> oneKeywordMethod [
 	<gtExample>
 	| aMethod |
-	aMethod := GtPharoDummyTwoObject >> #sumA:valueB:valueC:.
+	aMethod := GtPharoDummyOneObject >> #instA:.
 	^ aMethod
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithOneKeywordMethod [
 	<gtExample>
 	| aModel aMethod |
-	aMethod := self keywordMethod.
+	aMethod := self oneKeywordMethod.
 	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
 	^ aModel
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapKeywordAndParameterWithNext [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod [
+	<gtExample>
+	| aModel aMethod |
+	aMethod := self threeKeywordsMethod.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod_swapKeywordAndParameterWithNext [
 	<gtExample>
 	| aModel |
-	aModel := self renameSelectorModelWithKeywordMethod.
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aModel swapKeywordAndParameterWithNext: 1.
 	^ aModel
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapKeywordAndParameterWithPrevious [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod_swapKeywordAndParameterWithPrevious [
 	<gtExample>
 	| aModel |
-	aModel := self renameSelectorModelWithKeywordMethod.
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aModel swapKeywordAndParameterWithPrevious: 3.
 	^ aModel
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapParameterWithNext [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod_swapParameterWithNext [
 	<gtExample>
 	| aModel |
-	aModel := self renameSelectorModelWithKeywordMethod.
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aModel swapParameterWithNext: 1.
 	^ aModel
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapParameterWithPrevious [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod_swapParameterWithPrevious [
 	<gtExample>
 	| aModel |
-	aModel := self renameSelectorModelWithKeywordMethod.
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aModel swapParameterWithPrevious: 2.
 	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
+	<gtExample>
+	| aMethod |
+	aMethod := GtPharoDummyTwoObject >> #sumA:valueB:valueC:.
+	^ aMethod
 ]

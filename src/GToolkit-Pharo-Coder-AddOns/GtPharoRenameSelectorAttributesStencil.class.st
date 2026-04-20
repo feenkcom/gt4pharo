@@ -45,6 +45,8 @@ GtPharoRenameSelectorAttributesStencil >> createKeywordAttributeFor: aSelectorKe
 { #category : #private }
 GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelectorParameter into: aStream [
 	| anAttribute |
+	selectorModel numberOfParameters <= 1 ifTrue: [ ^ self ].
+	
 	aSelectorParameter originalIndex > 1
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 					icon: BrGlamorousVectorIcons left;
