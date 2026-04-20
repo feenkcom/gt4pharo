@@ -20,6 +20,19 @@ GtPharoRenameSelectorAttributesStencil >> create [
 { #category : #private }
 GtPharoRenameSelectorAttributesStencil >> createKeywordAttributeFor: aSelectorKeyword into: aStream [
 	| anAttribute |
+	aSelectorKeyword originalIndex > 1
+		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+					icon: BrGlamorousVectorIcons left;
+					tooltip: 'Swap keyword and parameter with previous';
+					action: [ selectorModel
+							swapKeywordAndParameterWithPrevious: aSelectorKeyword originalIndex ];
+					id: 'move-keyword-and-parameter-left-' , aSelectorKeyword originalIndex printString.
+
+			aStream
+				nextPut: {aSelectorKeyword originalInterval first - 1.
+						aSelectorKeyword originalInterval first - 1.
+						anAttribute} ].
+
 	anAttribute := GtPharoRenameSelectorKeywordEditorAttribute new
 			keywordModel: aSelectorKeyword.
 
@@ -32,11 +45,50 @@ GtPharoRenameSelectorAttributesStencil >> createKeywordAttributeFor: aSelectorKe
 { #category : #private }
 GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelectorParameter into: aStream [
 	| anAttribute |
+	aSelectorParameter originalIndex > 1
+		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+					icon: BrGlamorousVectorIcons left;
+					tooltip: 'Swap parameter with previous';
+					action: [ selectorModel swapParameterWithPrevious: aSelectorParameter originalIndex ];
+					id: 'move-parameter-left-' , aSelectorParameter originalIndex printString.
+
+			aStream
+				nextPut: {aSelectorParameter originalInterval first - 1.
+						aSelectorParameter originalInterval first - 1.
+						anAttribute} ].
+
 	anAttribute := GtPharoRenameSelectorParameterLabelAttribute new
 			parameterModel: aSelectorParameter.
 
 	aStream
 		nextPut: {aSelectorParameter originalInterval first.
+				aSelectorParameter originalInterval last.
+				anAttribute}.
+
+	aSelectorParameter originalIndex < selectorModel numberOfParameters
+		ifFalse: [ ^ self ].
+
+	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+			icon: BrGlamorousVectorIcons right;
+			tooltip: 'Swap parameter with next';
+			action: [ selectorModel swapParameterWithNext: aSelectorParameter originalIndex ];
+			id: 'move-parameter-right-' , aSelectorParameter originalIndex printString.
+
+	aStream
+		nextPut: {aSelectorParameter originalInterval last.
+				aSelectorParameter originalInterval last.
+				anAttribute}.
+
+	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+			icon: BrGlamorousVectorIcons right;
+			tooltip: 'Swap keyword and parameter with next';
+			action: [ selectorModel
+					swapKeywordAndParameterWithNext: aSelectorParameter originalIndex ];
+			id: 'move-keyword-and-parameter-right-'
+					, aSelectorParameter originalIndex printString.
+
+	aStream
+		nextPut: {aSelectorParameter originalInterval last.
 				aSelectorParameter originalInterval last.
 				anAttribute}
 ]

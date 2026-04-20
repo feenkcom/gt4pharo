@@ -85,6 +85,11 @@ GtPharoRenameSelectorModel >> keywordsAndParametersDo: aBlock [
 	selectorKeywords with: selectorParameters do: aBlock
 ]
 
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> numberOfParameters [
+	^ selectorParameters size
+]
+
 { #category : #private }
 GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo [
 	| aNameOne anIndexOne aNameTwo anIndexTwo |
