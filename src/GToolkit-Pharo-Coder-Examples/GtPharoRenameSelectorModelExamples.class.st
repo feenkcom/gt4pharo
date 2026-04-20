@@ -5,6 +5,17 @@ Class {
 }
 
 { #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
+	<gtExample>
+	| aStencil aModel |
+	aModel := self renameSelectorModelWithBinaryMethod.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+
+	^ aStencil
+]
+
+{ #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithOneKeywordMethod [
 	<gtExample>
 	| aStencil aModel |
@@ -45,6 +56,14 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 	^ aModel
 ]
 
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> binaryMethod [
+	<gtExample>
+	| aMethod |
+	aMethod := GtPharoDummyOneObject >> #*.
+	^ aMethod
+]
+
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod attributesStencil: aStencil [
 	| someAttributes anEditor aDocumentId |
@@ -67,6 +86,16 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod attributes
 						documentId: aDocumentId) ].
 
 	anEditor userData at: #electorModel put: aStencil selectorModel.
+	^ anEditor
+]
+
+{ #category : #'examples - demo' }
+GtPharoRenameSelectorModelExamples >> editorWithBinaryMethod [
+	<gtExample>
+	| aMethod anEditor aStencil |
+	aMethod := self binaryMethod.
+	aStencil := self attributesStencilWithBinaryMethod.
+	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
 	^ anEditor
 ]
 
@@ -106,6 +135,15 @@ GtPharoRenameSelectorModelExamples >> oneKeywordMethod [
 	| aMethod |
 	aMethod := GtPharoDummyOneObject >> #instA:.
 	^ aMethod
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod [
+	<gtExample>
+	| aModel aMethod |
+	aMethod := self binaryMethod.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
+	^ aModel
 ]
 
 { #category : #'examples - model' }
