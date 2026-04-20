@@ -23,8 +23,21 @@ GtPharoRenameSelectorKeywordEditorAttribute >> doAffect: aTBrTextEditorTextualPi
 					bottom: 0
 					right: -2);
 			text: keywordModel currentName.
+			
+	GtPharoRenameSelectorKeywordEditorAnnouncementHandler new
+		editor: renameEditor;
+		keywordModel: keywordModel;
+		install.
 
 	^ renameEditor
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorKeywordEditorAttribute >> initialize [
+	super initialize.
+
+	self beReplace.
+	self beNotOverwritableByStyler
 ]
 
 { #category : #accessing }

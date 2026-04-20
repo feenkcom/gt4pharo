@@ -6,7 +6,8 @@ Class {
 		'originalInterval',
 		'originalIndex',
 		'currentKeyword',
-		'currentIndex'
+		'currentIndex',
+		'announcer'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -17,6 +18,11 @@ GtPharoRenameSelectorKeywordModel class >> forSelectorPart: aSynbol interval: an
 		initializeForSelectorPart: aSynbol
 		interval: anInterval
 		index: anIndex
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorKeywordModel >> announcer [
+	^ announcer
 ]
 
 { #category : #accessing }
@@ -32,6 +38,12 @@ GtPharoRenameSelectorKeywordModel >> currentKeyword [
 { #category : #accessing }
 GtPharoRenameSelectorKeywordModel >> currentName [
 	^ self currentKeyword
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorKeywordModel >> initialize [
+	super initialize.
+	announcer := Announcer new
 ]
 
 { #category : #initialization }
@@ -90,5 +102,10 @@ GtPharoRenameSelectorKeywordModel >> updateCurrentIndex: anInteger [
 
 { #category : #'api - updating' }
 GtPharoRenameSelectorKeywordModel >> updateCurrentName: aString [
-	currentKeyword := aString
+	currentKeyword = aString ifTrue: [ ^ self ].
+
+	currentKeyword := aString.
+
+	self announcer
+		announce: (GtPharoRenameSelectorKeywordNameChanged new currentName: aString)
 ]

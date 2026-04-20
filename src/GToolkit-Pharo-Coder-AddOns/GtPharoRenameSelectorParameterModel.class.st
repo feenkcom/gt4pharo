@@ -6,7 +6,8 @@ Class {
 		'originalInterval',
 		'originalIndex',
 		'currentIndex',
-		'currentName'
+		'currentName',
+		'announcer'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -17,6 +18,11 @@ GtPharoRenameSelectorParameterModel class >> forAstVariableNodeArgument: anAstVa
 ]
 
 { #category : #accessing }
+GtPharoRenameSelectorParameterModel >> announcer [
+	^ announcer
+]
+
+{ #category : #accessing }
 GtPharoRenameSelectorParameterModel >> currentIndex [
 	^ currentIndex
 ]
@@ -24,6 +30,12 @@ GtPharoRenameSelectorParameterModel >> currentIndex [
 { #category : #accessing }
 GtPharoRenameSelectorParameterModel >> currentName [
 	^ currentName
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorParameterModel >> initialize [
+	super initialize.
+	announcer := Announcer new
 ]
 
 { #category : #initialization }
@@ -70,12 +82,17 @@ GtPharoRenameSelectorParameterModel >> typeName [
 	^ 'parameter'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - updating' }
 GtPharoRenameSelectorParameterModel >> updateCurrentIndex: anInteger [
 	currentIndex := anInteger
 ]
 
 { #category : #'api - updating' }
 GtPharoRenameSelectorParameterModel >> updateCurrentName: aString [
-	currentName := aString
+	currentName = aString ifTrue: [ ^ self ].
+
+	currentName := aString.
+
+	self announcer
+		announce: (GtPharoRenameSelectorParameterNameChanged new currentName: aString)
 ]

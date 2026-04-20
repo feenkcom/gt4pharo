@@ -4,8 +4,8 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Refactoring - Method New'
 }
 
-{ #category : #'as yet unclassified' }
-GtPharoRenameSelectorModelExamples >> attributes [
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencil [
 	<gtExample>
 	| aStencil aModel |
 	aModel := self renameSelectorModelWithKeywordMethod.
@@ -15,7 +15,7 @@ GtPharoRenameSelectorModelExamples >> attributes [
 	^ aStencil
 ]
 
-{ #category : #examples }
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 	<gtExample>
 	| aModel |
@@ -23,7 +23,31 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 	^ aModel
 ]
 
-{ #category : #examples }
+{ #category : #'examples - demo' }
+GtPharoRenameSelectorModelExamples >> editorWithKeywordMethod [
+	<gtExample>
+	| aMethod anEditor someAttributes aStencil |
+	aMethod := self keywordMethod.
+	aStencil := self attributesStencil.
+	someAttributes := aStencil create.
+	anEditor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			text: aMethod sourceCode;
+			styler: BrRBTextStyler new.
+
+	someAttributes
+		do: [ :eachCol | 
+			anEditor text
+				attributes: {eachCol at: 3}
+				from: (eachCol at: 1)
+				to: (eachCol at: 2) ].
+
+	anEditor userData at: #electorModel put: aStencil selectorModel.
+
+	^ anEditor
+]
+
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> keywordMethod [
 	<gtExample>
 	| aMethod |
@@ -31,7 +55,7 @@ GtPharoRenameSelectorModelExamples >> keywordMethod [
 	^ aMethod
 ]
 
-{ #category : #examples }
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod [
 	<gtExample>
 	| aModel aMethod |
@@ -40,7 +64,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod [
 	^ aModel
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapKeywordAndParameterWithNext [
 	<gtExample>
 	| aModel |
@@ -49,7 +73,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapK
 	^ aModel
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapKeywordAndParameterWithPrevious [
 	<gtExample>
 	| aModel |
@@ -58,7 +82,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapK
 	^ aModel
 ]
 
-{ #category : #'api - updating' }
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapParameterWithNext [
 	<gtExample>
 	| aModel |
@@ -67,7 +91,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapP
 	^ aModel
 ]
 
-{ #category : #'api - updating' }
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMethod_swapParameterWithPrevious [
 	<gtExample>
 	| aModel |
