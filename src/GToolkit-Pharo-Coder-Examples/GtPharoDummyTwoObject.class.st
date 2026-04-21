@@ -72,3 +72,10 @@ GtPharoDummyTwoObject >> sumA: valueA valueB: valueB valueC: valueC [
 
 	^ (self sumA: valueA b: valueB) + valueC
 ]
+
+{ #category : #accessing }
+GtPharoDummyTwoObject >> sumA: valueA valueB: valueB valueC: valueC valueD: D [
+	super sumA: valueA valueB: valueB valueC: valueC.
+
+	^ self brokenCall: valueA valueB: valueC
+]

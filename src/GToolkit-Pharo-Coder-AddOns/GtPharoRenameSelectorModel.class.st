@@ -3,7 +3,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'selectorParameters',
-		'selectorKeywords'
+		'selectorKeywords',
+		'originalAstNode',
+		'originalSelector'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -13,12 +15,25 @@ GtPharoRenameSelectorModel class >> forAstMethodNode: anAstNode [
 	^ self new initializeForAstMethodNode: anAstNode
 ]
 
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> currentParameterPermutations [
+	^ self parameters collect: #currentIndex
+]
+
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> currentSelector [
+	^ Symbol
+		streamContents: [ :aStream | 
+			self keywords
+				do: [ :eachKeyword | aStream nextPutAll: eachKeyword currentKeyword ] ]
+]
+
 { #category : #'gt - extensions' }
 GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Selector';
-		items: [ self keywordsAndParametersCurrentOrder ];
+		items: [ self keywordsAndParameters ];
 		column: 'Index'
 			text: [ :anItem | 
 				anItem currentIndex = anItem originalIndex
@@ -41,9 +56,10 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 
 { #category : #initialization }
 GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
-	| aSelector aSelectorParts aSelectorPartRanges aSelectorArguments |
-	aSelector := anAstNode selector.
-	aSelectorParts := aSelector keywords.
+	| aSelectorParts aSelectorPartRanges aSelectorArguments |
+	originalAstNode := anAstNode.
+	originalSelector := anAstNode selector.
+	aSelectorParts := originalSelector keywords.
 	aSelectorPartRanges := anAstNode keywordsIntervals.
 	aSelectorArguments := anAstNode arguments.
 
@@ -71,13 +87,19 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 		ifEmpty: [ selectorParameters := Array new: selectorKeywords size withAll: nil ]
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+GtPharoRenameSelectorModel >> isModified [
+	^ (self keywords anySatisfy: #isModified)
+		or: [ self parameters anySatisfy: #isModified ]
+]
+
+{ #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> keywords [
 	^ selectorKeywords
 ]
 
-{ #category : #accessing }
-GtPharoRenameSelectorModel >> keywordsAndParametersCurrentOrder [
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> keywordsAndParameters [
 	^ Array
 		streamContents: [ :aStream | 
 			selectorKeywords
@@ -89,12 +111,24 @@ GtPharoRenameSelectorModel >> keywordsAndParametersCurrentOrder [
 
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> keywordsAndParametersDo: aBlock [
+	"Note that parameter may be nil if it does not exist."
+
 	selectorKeywords with: selectorParameters do: aBlock
 ]
 
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> numberOfParameters [
 	^ selectorParameters size
+]
+
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> originalSelector [
+	^ originalSelector
+]
+
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> parameters [
+	^ selectorParameters reject: #isNil
 ]
 
 { #category : #private }

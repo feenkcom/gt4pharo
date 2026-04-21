@@ -48,6 +48,12 @@ GtPharoRenameSelectorParameterModel >> initializeForAstVariableNode: anAstVariab
 	currentIndex := originalIndex.
 ]
 
+{ #category : #testing }
+GtPharoRenameSelectorParameterModel >> isModified [
+	^ self originalName ~= self currentName
+		or: [ self originalIndex ~= self currentIndex ]
+]
+
 { #category : #accessing }
 GtPharoRenameSelectorParameterModel >> originalIndex [
 	^ originalIndex

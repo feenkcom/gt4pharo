@@ -2,10 +2,34 @@ Class {
 	#name : #GtPharoRenameSelectorAttributesStencil,
 	#superclass : #BrStencil,
 	#instVars : [
-		'selectorModel'
+		'selectorModel',
+		'refactoringsBlock',
+		'completionAction',
+		'cancelAction',
+		'showWhenCreated'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> cancelAction [
+	^ cancelAction ifNil: [ [  ] ]
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> cancelAction: anObject [
+	cancelAction := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> completionAction [
+	^ completionAction ifNil: [ [  ] ]
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> completionAction: anObject [
+	completionAction := anObject
+]
 
 { #category : #'api - updating' }
 GtPharoRenameSelectorAttributesStencil >> create [
@@ -100,14 +124,14 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 GtPharoRenameSelectorAttributesStencil >> createRefactoringPreviewAttributeInto: aStream [
 	| anAttribute aModel |
 	anAttribute := GtRefactoringChangesAttribute new
-			refactoringsBlock: [ {} ];
-			completionAction: [  ];
-			cancelAction: [  ];
-			showWhenCreated: false.
+			refactoringsBlock: self refactoringsBlock;
+			completionAction: self completionAction;
+			cancelAction: self cancelAction;
+			showWhenCreated: self showWhenCreated.
 
 	aModel := selectorModel numberOfParameters < 2
 			ifTrue: [ selectorModel keywords last ]
-			ifFalse: [ selectorModel keywordsAndParametersCurrentOrder last ].
+			ifFalse: [ selectorModel keywordsAndParameters last ].
 
 	aStream
 		nextPut: {aModel originalInterval last.
@@ -136,6 +160,16 @@ GtPharoRenameSelectorAttributesStencil >> gtLiveFor: aView [
 ]
 
 { #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> refactoringsBlock [
+	^ refactoringsBlock ifNil: [ [ {} ] ]
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> refactoringsBlock: anObject [
+	refactoringsBlock := anObject
+]
+
+{ #category : #accessing }
 GtPharoRenameSelectorAttributesStencil >> selectorModel [
 	^ selectorModel
 ]
@@ -143,4 +177,14 @@ GtPharoRenameSelectorAttributesStencil >> selectorModel [
 { #category : #accessing }
 GtPharoRenameSelectorAttributesStencil >> selectorModel: anObject [
 	selectorModel := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> showWhenCreated [
+	^ showWhenCreated ifNil: [ false ]
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorAttributesStencil >> showWhenCreated: anObject [
+	showWhenCreated := anObject
 ]

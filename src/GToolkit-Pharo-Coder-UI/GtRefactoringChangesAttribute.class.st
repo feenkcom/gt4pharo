@@ -19,6 +19,8 @@ GtRefactoringChangesAttribute >> cancelAction: aBlock [
 
 { #category : #initialization }
 GtRefactoringChangesAttribute >> completionAction: aBlock [
+	"Action that is called when refactoring is complete"
+
 	completionAction := aBlock
 ]
 

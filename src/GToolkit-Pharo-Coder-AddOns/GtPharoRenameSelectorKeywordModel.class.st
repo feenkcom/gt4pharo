@@ -56,6 +56,12 @@ GtPharoRenameSelectorKeywordModel >> initializeForSelectorPart: aSymbol interval
 	currentIndex := anIndex.
 ]
 
+{ #category : #testing }
+GtPharoRenameSelectorKeywordModel >> isModified [
+	^ self originalName ~= self currentName
+		or: [ self originalIndex ~= self currentIndex ]
+]
+
 { #category : #accessing }
 GtPharoRenameSelectorKeywordModel >> originalIndex [
 	^ originalIndex
