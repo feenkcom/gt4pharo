@@ -37,8 +37,3 @@ GtRefactoringWithInputWidgetChangesAttribute >> inputElement: aStencil [
 GtRefactoringWithInputWidgetChangesAttribute >> inputElementStencil [
 	^ inputElementStencil
 ]
-
-{ #category : #accessing }
-GtRefactoringWithInputWidgetChangesAttribute >> refactorings [
-	^ refactoring ifNil: [ #() ] ifNotNil: [ {refactoring} ]
-]
