@@ -29,7 +29,16 @@ GtRBCompositeTransformation >> performTransformation: aRefactoring [
 	changes := GtLinkedCompositeRefactoryChange new.
 	changes name: aRefactoring gtDescription.
 	changes transformation: aRefactoring.
-	model performChange: changes around: [ aRefactoring primitiveExecute ].
+	self 
+		forPharo13AndNewer: [
+			model 
+				perform: [ aRefactoring primitiveExecute ]
+				onlyWithChange: changes.] 
+		forOlder: [
+			model 
+				performChange: changes 
+				around: [ aRefactoring primitiveExecute ]. ].
+	
 	changes gtAllChanges do: [ :each | each transformation: aRefactoring ]
 ]
 
