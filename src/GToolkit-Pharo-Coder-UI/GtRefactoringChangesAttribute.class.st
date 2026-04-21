@@ -2,7 +2,7 @@ Class {
 	#name : #GtRefactoringChangesAttribute,
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
-		'refactoring',
+		'refactoringsBlock',
 		'completionAction',
 		'cancelAction',
 		'showWhenCreated',
@@ -25,7 +25,7 @@ GtRefactoringChangesAttribute >> completionAction: aBlock [
 { #category : #'private - updating' }
 GtRefactoringChangesAttribute >> createRefactoringsViewModel [
 	^ GtRefactoringsViewModel new
-		refactorings: [ self refactorings ];
+		refactorings: (refactoringsBlock ifNil: [ [ {} ] ]);
 		yourself
 ]
 
@@ -97,18 +97,27 @@ GtRefactoringChangesAttribute >> previewButtonClass [
 ]
 
 { #category : #accessing }
-GtRefactoringChangesAttribute >> refactoring [
-	^ refactoring
-]
-
-{ #category : #accessing }
 GtRefactoringChangesAttribute >> refactoring: aRBRefactoring [
-	refactoring := aRBRefactoring
+	refactoringsBlock := [ { aRBRefactoring } ]
 ]
 
 { #category : #accessing }
-GtRefactoringChangesAttribute >> refactorings [
-	^ {refactoring}
+GtRefactoringChangesAttribute >> refactoringBlock: aBlock [
+	"Block returns one refactoring"
+
+	refactoringsBlock := [ {aBlock value} ]
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> refactorings: aCollectionOfRBRefactoring [
+	refactoringsBlock := [ aCollectionOfRBRefactoring ]
+]
+
+{ #category : #accessing }
+GtRefactoringChangesAttribute >> refactoringsBlock: aBlock [
+	"Block returns a collection of refactorings"
+
+	refactoringsBlock := aBlock
 ]
 
 { #category : #accessing }

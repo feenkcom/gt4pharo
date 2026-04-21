@@ -14,7 +14,8 @@ GtPharoRenameSelectorAttributesStencil >> create [
 			selectorModel
 				keywordsAndParametersDo: [ :eachKeyword :eachParameter | 
 					self createKeywordAttributeFor: eachKeyword into: aStream.
-					self createParameterAttributeFor: eachParameter into: aStream ] ]
+					self createParameterAttributeFor: eachParameter into: aStream ].
+			self createRefactoringPreviewAttributeInto: aStream ]
 ]
 
 { #category : #private }
@@ -92,6 +93,25 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 	aStream
 		nextPut: {aSelectorParameter originalInterval last.
 				aSelectorParameter originalInterval last.
+				anAttribute}
+]
+
+{ #category : #'api - updating' }
+GtPharoRenameSelectorAttributesStencil >> createRefactoringPreviewAttributeInto: aStream [
+	| anAttribute aModel |
+	anAttribute := GtRefactoringChangesAttribute new
+			refactoringsBlock: [ {} ];
+			completionAction: [  ];
+			cancelAction: [  ];
+			showWhenCreated: false.
+
+	aModel := selectorModel numberOfParameters < 2
+			ifTrue: [ selectorModel keywords last ]
+			ifFalse: [ selectorModel keywordsAndParametersCurrentOrder last ].
+
+	aStream
+		nextPut: {aModel originalInterval last.
+				aModel originalInterval last.
 				anAttribute}
 ]
 

@@ -56,7 +56,7 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 	^ aModel
 ]
 
-{ #category : #'examples - model' }
+{ #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> binaryMethod [
 	<gtExample>
 	| aMethod |
@@ -129,7 +129,7 @@ GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 	^ anEditor
 ]
 
-{ #category : #'examples - model' }
+{ #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> oneKeywordMethod [
 	<gtExample>
 	| aMethod |
@@ -209,7 +209,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod [
 	^ aModel
 ]
 
-{ #category : #'examples - model' }
+{ #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	<gtExample>
 	| aMethod |
@@ -217,7 +217,7 @@ GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	^ aMethod
 ]
 
-{ #category : #'examples - model' }
+{ #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> unaryMethod [
 	<gtExample>
 	| aMethod |

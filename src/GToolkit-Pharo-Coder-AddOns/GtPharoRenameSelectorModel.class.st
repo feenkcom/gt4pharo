@@ -72,6 +72,11 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 ]
 
 { #category : #accessing }
+GtPharoRenameSelectorModel >> keywords [
+	^ selectorKeywords
+]
+
+{ #category : #accessing }
 GtPharoRenameSelectorModel >> keywordsAndParametersCurrentOrder [
 	^ Array
 		streamContents: [ :aStream | 
