@@ -114,6 +114,13 @@ GtRefactoringChangesAttribute >> refactorings: aCollectionOfRBRefactoring [
 ]
 
 { #category : #accessing }
+GtRefactoringChangesAttribute >> refactoringsBlock [
+	"Block returns one refactoring"
+
+	^ refactoringsBlock
+]
+
+{ #category : #accessing }
 GtRefactoringChangesAttribute >> refactoringsBlock: aBlock [
 	"Block returns a collection of refactorings"
 

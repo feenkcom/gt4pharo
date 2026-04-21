@@ -995,7 +995,7 @@ GtPharoSnippetCoderByScripterExamples >> forMethodExtractionToClassMethod [
 						| model |
 						aCoderEditor text
 							findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
-							indicesDo: [ :aStart :anEnd :attr | model := attr refactoring model ].
+							indicesDo: [ :aStart :anEnd :attr | model := attr refactoringsBlock value first model ].
 						((model classFor: Object class) methodFor: selector asSymbol) ast ]
 					equals: [ :aCoderEditor | RBParser parseMethod: modelResult ] ].
 	aScripter
