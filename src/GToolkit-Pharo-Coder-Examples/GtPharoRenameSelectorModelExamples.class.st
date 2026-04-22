@@ -65,10 +65,9 @@ GtPharoRenameSelectorModelExamples >> binaryMethod [
 ]
 
 { #category : #'examples - demo' }
-GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod attributesStencil: aStencil [
-	| someAttributes anEditor aDocumentId aController |
+GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
+	| anEditor aDocumentId aController |
 	aDocumentId := nil.
-	someAttributes := aStencil create.
 	anEditor := BrEditor new
 			aptitude: BrGlamorousRegularEditorAptitude;
 			styler: BrRBTextStyler new;
@@ -82,7 +81,6 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod attributes
 			sourceCoderViewModel: (GtPharoMethodCoder forMethod: aMethod) asCoderViewModel;
 			install.
 
-	anEditor userData at: #selectorModel put: aStencil selectorModel.
 	anEditor userData at: #selectorController put: aController.
 
 	^ anEditor
@@ -91,40 +89,36 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod attributes
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> editorWithBinaryMethod [
 	<gtExample>
-	| aMethod anEditor aStencil |
+	| aMethod anEditor |
 	aMethod := self binaryMethod.
-	aStencil := self attributesStencilWithBinaryMethod.
-	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
+	anEditor := self createEditorWithMethod: aMethod.
 	^ anEditor
 ]
 
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> editorWithOneKeywordMethod [
 	<gtExample>
-	| aMethod anEditor aStencil |
+	| aMethod anEditor |
 	aMethod := self oneKeywordMethod.
-	aStencil := self attributesStencilWithOneKeywordMethod.
-	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
+	anEditor := self createEditorWithMethod: aMethod.
 	^ anEditor
 ]
 
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> editorWithThreeKeywordsMethod [
 	<gtExample>
-	| aMethod anEditor aStencil |
+	| aMethod anEditor |
 	aMethod := self threeKeywordsMethod.
-	aStencil := self attributesStencilWithThreeKeywordsMethod.
-	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
+	anEditor := self createEditorWithMethod: aMethod.
 	^ anEditor
 ]
 
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 	<gtExample>
-	| aMethod anEditor aStencil |
+	| aMethod anEditor |
 	aMethod := self unaryMethod.
-	aStencil := self attributesStencilWithUnaryMethod.
-	anEditor := self createEditorWithMethod: aMethod attributesStencil: aStencil.
+	anEditor := self createEditorWithMethod: aMethod.
 	^ anEditor
 ]
 
@@ -187,7 +181,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aMethod aModel |
 	aMethod := self threeKeywordsMethod.
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-	aModel swapKeywordAndParameterWithNext: 1.
+	aModel swapSelectorPartAndParameterWithNext: 1.
 
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -203,7 +197,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aMethod aModel |
 	aMethod := self threeKeywordsMethod.
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-	aModel swapKeywordAndParameterWithPrevious: 3.
+	aModel swapSelectorPartAndParameterWithPrevious: 3.
 
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.

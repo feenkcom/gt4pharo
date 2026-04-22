@@ -43,6 +43,16 @@ GtPharoRenameSelectorCoderController >> editorElement: anObject [
 	editorElement := anObject
 ]
 
+{ #category : #views }
+GtPharoRenameSelectorCoderController >> gtSelectorModelFor: aView [
+	<gtView>
+	selectorModel ifNil: [ ^ aView empty ].
+	^ aView forward
+		title: 'Selector';
+		object: [ selectorModel ];
+		view: #gtSelectorViewFor:
+]
+
 { #category : #initialization }
 GtPharoRenameSelectorCoderController >> install [
 	self preventSave.
@@ -94,6 +104,11 @@ GtPharoRenameSelectorCoderController >> removeAttributes [
 	attributeTags ifNil: [ ^ self ].
 
 	attributeTags do: [ :eachTag | editorElement removeAttributeTagged: eachTag ]
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorCoderController >> selectorModel [
+	^ selectorModel
 ]
 
 { #category : #accessing }

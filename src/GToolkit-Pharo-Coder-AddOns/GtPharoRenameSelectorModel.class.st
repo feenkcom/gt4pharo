@@ -3,9 +3,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'selectorParameters',
-		'selectorKeywords',
 		'originalAstNode',
-		'originalSelector'
+		'originalSelector',
+		'selectorParts'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -24,8 +24,8 @@ GtPharoRenameSelectorModel >> currentParameterPermutations [
 GtPharoRenameSelectorModel >> currentSelector [
 	^ Symbol
 		streamContents: [ :aStream | 
-			self keywords
-				do: [ :eachKeyword | aStream nextPutAll: eachKeyword currentKeyword ] ]
+			self selectorParts
+				do: [ :eachPart | aStream nextPutAll: eachPart currentName ] ]
 ]
 
 { #category : #'gt - extensions' }
@@ -33,7 +33,7 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Selector';
-		items: [ self keywordsAndParameters ];
+		items: [ self selectorPartsAndParameters ];
 		column: 'Index'
 			text: [ :anItem | 
 				anItem currentIndex = anItem originalIndex
@@ -63,7 +63,7 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 	aSelectorPartRanges := anAstNode keywordsIntervals.
 	aSelectorArguments := anAstNode arguments.
 
-	selectorKeywords := Array
+	selectorParts := Array
 			streamContents: [ :aStream | 
 				| anIndex |
 				anIndex := 1.
@@ -71,7 +71,7 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 					with: aSelectorPartRanges
 					do: [ :aPart :aRange | 
 						aStream
-							nextPut: (GtPharoRenameSelectorKeywordModel
+							nextPut: (GtPharoRenameSelectorPartModel
 									forSelectorPart: aPart
 									interval: aRange
 									index: anIndex).
@@ -84,36 +84,13 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 					index: anIndex ]) asArray.
 
 	selectorParameters
-		ifEmpty: [ selectorParameters := Array new: selectorKeywords size withAll: nil ]
+		ifEmpty: [ selectorParameters := Array new: selectorParts size withAll: nil ]
 ]
 
 { #category : #testing }
 GtPharoRenameSelectorModel >> isModified [
-	^ (self keywords anySatisfy: #isModified)
+	^ (self selectorParts anySatisfy: #isModified)
 		or: [ self parameters anySatisfy: #isModified ]
-]
-
-{ #category : #'api - accessing' }
-GtPharoRenameSelectorModel >> keywords [
-	^ selectorKeywords
-]
-
-{ #category : #'api - accessing' }
-GtPharoRenameSelectorModel >> keywordsAndParameters [
-	^ Array
-		streamContents: [ :aStream | 
-			selectorKeywords
-				with: selectorParameters
-				do: [ :eachKeyword :eachParamter | 
-					aStream nextPut: eachKeyword.
-					eachParamter ifNotNil: [ aStream nextPut: eachParamter ] ] ]
-]
-
-{ #category : #'api - accessing' }
-GtPharoRenameSelectorModel >> keywordsAndParametersDo: aBlock [
-	"Note that parameter may be nil if it does not exist."
-
-	selectorKeywords with: selectorParameters do: aBlock
 ]
 
 { #category : #'api - accessing' }
@@ -145,41 +122,34 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo [
 	anItemTwo updateCurrentIndex: anIndexOne
 ]
 
-{ #category : #'api - updating' }
-GtPharoRenameSelectorModel >> swapKeywordAndParameterWithNext: anInteger [
-	| aKeywordOne aKeywordTwo aParameterOne aParameterTwo |
-	self assert: [ anInteger > 0 ].
-	self assert: [ anInteger < selectorKeywords size ].
-
-	aKeywordOne := selectorKeywords at: anInteger.
-	aKeywordTwo := selectorKeywords at: anInteger + 1.
-	self privateSwapItem: aKeywordOne with: aKeywordTwo.
-	
-	aParameterOne := selectorParameters at: anInteger.
-	aParameterTwo := selectorParameters at: anInteger + 1.
-	self privateSwapItem: aParameterOne with: aParameterTwo
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> selectorParts [
+	^ selectorParts
 ]
 
-{ #category : #'api - updating' }
-GtPharoRenameSelectorModel >> swapKeywordAndParameterWithPrevious: anInteger [
-	| aKeywordOne aKeywordTwo aParameterOne aParameterTwo |
-	self assert: [ anInteger > 1 ].
-	self assert: [ anInteger <= selectorKeywords size ].
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> selectorPartsAndParameters [
+	^ Array
+		streamContents: [ :aStream | 
+			selectorParts
+				with: selectorParameters
+				do: [ :eachPart :eachParamter | 
+					aStream nextPut: eachPart.
+					eachParamter ifNotNil: [ aStream nextPut: eachParamter ] ] ]
+]
 
-	aKeywordOne := selectorKeywords at: anInteger.
-	aKeywordTwo := selectorKeywords at: anInteger - 1.
-	self privateSwapItem: aKeywordOne with: aKeywordTwo.
-	
-	aParameterOne := selectorParameters at: anInteger.
-	aParameterTwo := selectorParameters at: anInteger - 1.
-	self privateSwapItem: aParameterOne with: aParameterTwo
+{ #category : #'api - accessing' }
+GtPharoRenameSelectorModel >> selectorPartsAndParametersDo: aBlock [
+	"Note that parameter may be nil if it does not exist."
+
+	selectorParts with: selectorParameters do: aBlock
 ]
 
 { #category : #'api - updating' }
 GtPharoRenameSelectorModel >> swapParameterWithNext: anInteger [
 	| aParameterOne aParameterTwo |
 	self assert: [ anInteger > 0 ].
-	self assert: [ anInteger < selectorKeywords size ].
+	self assert: [ anInteger < selectorParts size ].
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger + 1.
 	self privateSwapItem: aParameterOne with: aParameterTwo
@@ -189,8 +159,38 @@ GtPharoRenameSelectorModel >> swapParameterWithNext: anInteger [
 GtPharoRenameSelectorModel >> swapParameterWithPrevious: anInteger [
 	| aParameterOne aParameterTwo |
 	self assert: [ anInteger > 1 ].
-	self assert: [ anInteger <= selectorKeywords size ].
+	self assert: [ anInteger <= selectorParts size ].
 
+	aParameterOne := selectorParameters at: anInteger.
+	aParameterTwo := selectorParameters at: anInteger - 1.
+	self privateSwapItem: aParameterOne with: aParameterTwo
+]
+
+{ #category : #'api - updating' }
+GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithNext: anInteger [
+	| aPartOne aPartTwo aParameterOne aParameterTwo |
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger < selectorParts size ].
+
+	aPartOne := selectorParts at: anInteger.
+	aPartTwo := selectorParts at: anInteger + 1.
+	self privateSwapItem: aPartOne with: aPartTwo.
+	
+	aParameterOne := selectorParameters at: anInteger.
+	aParameterTwo := selectorParameters at: anInteger + 1.
+	self privateSwapItem: aParameterOne with: aParameterTwo
+]
+
+{ #category : #'api - updating' }
+GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithPrevious: anInteger [
+	| aKeywordOne aKeywordTwo aParameterOne aParameterTwo |
+	self assert: [ anInteger > 1 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	aKeywordOne := selectorParts at: anInteger.
+	aKeywordTwo := selectorParts at: anInteger - 1.
+	self privateSwapItem: aKeywordOne with: aKeywordTwo.
+	
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger - 1.
 	self privateSwapItem: aParameterOne with: aParameterTwo
