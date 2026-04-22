@@ -6,7 +6,8 @@ Class {
 		'refactoringsBlock',
 		'completionAction',
 		'cancelAction',
-		'showWhenCreated'
+		'showWhenCreated',
+		'keywordAttributeStencilBuilder'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -58,8 +59,10 @@ GtPharoRenameSelectorAttributesStencil >> createKeywordAttributeFor: aSelectorKe
 						aSelectorKeyword originalInterval first - 1.
 						anAttribute} ].
 
-	anAttribute := GtPharoRenameSelectorKeywordEditorAttribute new
-			keywordModel: aSelectorKeyword.
+	anAttribute := keywordAttributeStencilBuilder
+			keywordModel: aSelectorKeyword;
+			selectorModel: selectorModel;
+			build.
 
 	aStream
 		nextPut: {aSelectorKeyword originalInterval first.
@@ -157,6 +160,13 @@ GtPharoRenameSelectorAttributesStencil >> gtAttributesFor: aView [
 { #category : #'gt - extensions' }
 GtPharoRenameSelectorAttributesStencil >> gtLiveFor: aView [
 	^ aView empty
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorAttributesStencil >> initialize [
+	super initialize.
+	keywordAttributeStencilBuilder := GtPharoRenameSelectorKeywordEditorAttributeStencilBuilder
+			new
 ]
 
 { #category : #accessing }
