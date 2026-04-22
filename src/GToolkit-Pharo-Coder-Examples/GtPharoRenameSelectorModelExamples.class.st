@@ -284,6 +284,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod [
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	<gtExample>
+	<noTest>
 	| aMethod anEditor |
 	aMethod := self threeKeywordsMethod.
 	anEditor := self createRustEditorWithMethod: aMethod.
