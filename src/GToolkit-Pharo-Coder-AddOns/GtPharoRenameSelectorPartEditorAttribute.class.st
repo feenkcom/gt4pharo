@@ -1,14 +1,14 @@
 Class {
-	#name : #GtPharoRenameSelectorKeywordEditorAttribute,
+	#name : #GtPharoRenameSelectorPartEditorAttribute,
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
-		'keywordModel'
+		'selectorPartModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
 
 { #category : #accessing }
-GtPharoRenameSelectorKeywordEditorAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
+GtPharoRenameSelectorPartEditorAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| renameEditor |
 	renameEditor := GtRenameEditor new
 			fitContent;
@@ -22,18 +22,18 @@ GtPharoRenameSelectorKeywordEditorAttribute >> doAffect: aTBrTextEditorTextualPi
 					left: -2
 					bottom: 0
 					right: -2);
-			text: keywordModel currentName.
+			text: selectorPartModel currentName.
 			
-	GtPharoRenameSelectorKeywordEditorAnnouncementHandler new
+	GtPharoRenameSelectorPartEditorAnnouncementHandler new
 		editor: renameEditor;
-		keywordModel: keywordModel;
+		selectorPartModel: selectorPartModel;
 		install.
 
 	^ renameEditor
 ]
 
 { #category : #initialization }
-GtPharoRenameSelectorKeywordEditorAttribute >> initialize [
+GtPharoRenameSelectorPartEditorAttribute >> initialize [
 	super initialize.
 
 	self beReplace.
@@ -41,11 +41,11 @@ GtPharoRenameSelectorKeywordEditorAttribute >> initialize [
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorKeywordEditorAttribute >> keywordModel [
-	^ keywordModel
+GtPharoRenameSelectorPartEditorAttribute >> selectorPartModel [
+	^ selectorPartModel
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorKeywordEditorAttribute >> keywordModel: anObject [
-	keywordModel := anObject
+GtPharoRenameSelectorPartEditorAttribute >> selectorPartModel: anObject [
+	selectorPartModel := anObject
 ]

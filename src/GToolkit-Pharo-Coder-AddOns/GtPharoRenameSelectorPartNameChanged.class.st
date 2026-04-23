@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoRenameSelectorKeywordNameChanged,
+	#name : #GtPharoRenameSelectorPartNameChanged,
 	#superclass : #Announcement,
 	#instVars : [
 		'currentName'
@@ -8,11 +8,11 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoRenameSelectorKeywordNameChanged >> currentName [
+GtPharoRenameSelectorPartNameChanged >> currentName [
 	^ currentName
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorKeywordNameChanged >> currentName: anObject [
+GtPharoRenameSelectorPartNameChanged >> currentName: anObject [
 	currentName := anObject
 ]

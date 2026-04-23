@@ -38,8 +38,3 @@ GtRefactoringWithInputChangesAttribute >> editorElement [
 GtRefactoringWithInputChangesAttribute >> editorElement: anObject [
 	editorElement := anObject
 ]
-
-{ #category : #accessing }
-GtRefactoringWithInputChangesAttribute >> refactorings [
-	^ refactoring ifNil: [ #() ] ifNotNil: [ {refactoring} ]
-]
