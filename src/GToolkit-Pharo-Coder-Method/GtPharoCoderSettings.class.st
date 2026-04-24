@@ -1,18 +1,18 @@
 Class {
-	#name : #GtPharoCoderUISettings,
+	#name : #GtPharoCoderSettings,
 	#superclass : #Object,
 	#classVars : [
 		'IsTraitMethodsFilterDefault'
 	],
-	#category : #'GToolkit-Pharo-Coder-UI-Settings'
+	#category : #'GToolkit-Pharo-Coder-Method-Settings'
 }
 
 { #category : #testing }
-GtPharoCoderUISettings class >> isTraitMethodsFilterDefault [
+GtPharoCoderSettings class >> isTraitMethodsFilterDefault [
 	^ IsTraitMethodsFilterDefault == true
 ]
 
 { #category : #testing }
-GtPharoCoderUISettings class >> isTraitMethodsFilterDefault: aBoolean [
+GtPharoCoderSettings class >> isTraitMethodsFilterDefault: aBoolean [
 	IsTraitMethodsFilterDefault := aBoolean
 ]

@@ -23,7 +23,7 @@ GtPharoStreamingMethodsCoder class >> forBehavior: aBehavior [
 				aStream
 					nextPut: (GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName).
 
-				GtPharoCoderUISettings isTraitMethodsFilterDefault
+				GtPharoCoderSettings isTraitMethodsFilterDefault
 					ifTrue: [ aStream nextPut: GtSearchNonTraitMethodsFilter new ] ].
 	^ (self
 		forFilter: ((GtSearchInheritedMethodsFilter forClass: aBehavior)
