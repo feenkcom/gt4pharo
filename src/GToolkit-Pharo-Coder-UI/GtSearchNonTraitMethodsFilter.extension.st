@@ -19,14 +19,23 @@ GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor [
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchNonTraitMethodsFilter class >> globalFilterDescriptor2 [
-	^ GtFilterShortListModel new
-		creator: [ :anItem | anItem isTraitOrigin
-			ifTrue: [ GtSearchTraitMethodsFilter new ]
-			ifFalse: [ self new ] ];
-		named: 'Non/Trait methods';
-		suffixLabel: 'methods';
-		order: 20;
-		items: { GtFilterModelTraitOriginItem default. GtFilterModelClassOriginItem default };
-		selectLastItem;
-		yourself
+	| aDescriptor |
+	aDescriptor := GtFilterShortListModel new
+			creator: [ :anItem | 
+				anItem isTraitOrigin
+					ifTrue: [ GtSearchTraitMethodsFilter new ]
+					ifFalse: [ self new ] ];
+			named: 'Non/Trait methods';
+			suffixLabel: 'methods';
+			order: 20;
+			items: {GtFilterModelTraitOriginItem default.
+					GtFilterModelClassOriginItem default};
+			selectLastItem;
+			yourself.
+
+	GtPharoCoderUISettings isTraitMethodsFilterDefault
+		ifTrue: [ aDescriptor beDefault ]
+		ifFalse: [ aDescriptor beNotDefault ].
+
+	^ aDescriptor
 ]
