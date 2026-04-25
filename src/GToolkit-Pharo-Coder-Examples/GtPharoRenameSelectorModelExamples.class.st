@@ -33,6 +33,19 @@ GtPharoRenameSelectorModelExamples >> assert: aScripter onlyOneEditorMode: anEle
 						play ] ]
 ]
 
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> assert: aScripter refactoringsPreviewIsVisible: aBoolean [
+	aScripter assert
+		label: ('Assert refactorings preview is {1}'
+				format: {aBoolean ifTrue: [ 'visible' ] ifFalse: [ 'hidden' ]});
+		satisfies: [ :anElement | 
+			aBoolean
+				ifTrue: [ anElement visibility isVisible ]
+				ifFalse: [ anElement visibility isHidden ] ];
+		/ #'selector-refactorings-preview';
+		play
+]
+
 { #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
 	<gtExample>
@@ -90,6 +103,15 @@ GtPharoRenameSelectorModelExamples >> basicSelectorPartElement [
 	<gtExample>
 	| anElement |
 	anElement := GtPharoRenameSelectorPartElement new.
+
+	^ anElement
+]
+
+{ #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> basicSelectorRefactoringsPreviewElement [
+	<gtExample>
+	| anElement |
+	anElement := GtPharoRenameSelectorRefactoringsPreviewElement new.
 
 	^ anElement
 ]
@@ -343,6 +365,39 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 ]
 
 { #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_refactoringsPreview [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	aScripter click
+		label: 'Activate first selector part';
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	aScripter editor
+		label: 'Type character "_"';
+		deselectAll;
+		typeText: '_';
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+
+	aScripter editor
+		label: 'Delete previously typed character';
+		pressBackspace;
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
 	<gtExample>
 	| aScripter |
@@ -426,21 +481,29 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementWithFirstThreeKeywordsM
 { #category : #'examples - elements' }
 GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
-	| anElement aModel aContainer |
+	| anElement aModel aContainer anIndex |
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 
 	aContainer := BrHorizontalPane new
 			cellSpacing: 10;
 			padding: (BlInsets all: 10);
+			alignCenterLeft;
 			fitContent.
 
-	aModel selectorParts
-		withIndexDo: [ :eachPart :eachIndex | 
+	anIndex := 1.
+	aModel
+		selectorPartsAndParametersDo: [ :eachPart :eachParameter | 
 			anElement := self basicSelectorPartElement.
 			anElement selectorModel: aModel selectorPartModel: eachPart.
 			aContainer
 				addChild: anElement
-				as: (#'selector-part' asBlocElementId indexed: eachIndex) ].
+				as: (#'selector-part' asBlocElementId indexed: anIndex).
+
+			anIndex := anIndex + 1 ].
+
+	anElement := self basicSelectorRefactoringsPreviewElement.
+	anElement selectorModel: aModel.
+	aContainer addChild: anElement as: #'selector-refactorings-preview'.
 
 	aContainer userData at: #selectorModel put: aModel.
 

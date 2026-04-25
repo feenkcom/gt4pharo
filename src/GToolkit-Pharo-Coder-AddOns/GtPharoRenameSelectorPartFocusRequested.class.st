@@ -1,5 +1,5 @@
 Class {
 	#name : #GtPharoRenameSelectorPartFocusRequested,
-	#superclass : #GtPharoRenameSelectorPartAnnouncement,
+	#superclass : #GtPharoRenameSelectorPartModelAnnouncement,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }

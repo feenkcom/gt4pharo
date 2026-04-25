@@ -1,5 +1,5 @@
 Class {
-	#name : #GtPharoRenameSelectorPartAnnouncement,
+	#name : #GtPharoRenameSelectorPartModelAnnouncement,
 	#superclass : #Announcement,
 	#instVars : [
 		'selectorPartModel',
@@ -9,21 +9,21 @@ Class {
 }
 
 { #category : #accessing }
-GtPharoRenameSelectorPartAnnouncement >> selectorPartModel [
+GtPharoRenameSelectorPartModelAnnouncement >> selectorPartModel [
 	^ selectorPartModel
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorPartAnnouncement >> selectorPartModel: anObject [
+GtPharoRenameSelectorPartModelAnnouncement >> selectorPartModel: anObject [
 	selectorPartModel := anObject
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorPartAnnouncement >> source [
+GtPharoRenameSelectorPartModelAnnouncement >> source [
 	^ source
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorPartAnnouncement >> source: anObject [
+GtPharoRenameSelectorPartModelAnnouncement >> source: anObject [
 	source := anObject
 ]

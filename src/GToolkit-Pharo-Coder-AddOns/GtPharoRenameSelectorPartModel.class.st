@@ -139,6 +139,7 @@ GtPharoRenameSelectorPartModel >> updateCurrentName: aString source: aSource [
 		announce: (GtPharoRenameSelectorPartNameChanged new
 				selectorPartModel: self;
 				currentName: aString;
+				isModified: self isModified;
 				source: aSource)
 ]
 

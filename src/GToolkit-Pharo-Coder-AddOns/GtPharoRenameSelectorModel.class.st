@@ -2,10 +2,12 @@ Class {
 	#name : #GtPharoRenameSelectorModel,
 	#superclass : #Object,
 	#instVars : [
-		'selectorParameters',
+		'announcer',
 		'originalAstNode',
 		'originalSelector',
-		'selectorParts'
+		'selectorParameters',
+		'selectorParts',
+		'isModified'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -13,6 +15,17 @@ Class {
 { #category : #'instance creation' }
 GtPharoRenameSelectorModel class >> forAstMethodNode: anAstNode [
 	^ self new initializeForAstMethodNode: anAstNode
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorModel >> announcer [
+	^ announcer
+]
+
+{ #category : #'private - updating' }
+GtPharoRenameSelectorModel >> computeIsModified [
+	^ (self selectorParts anySatisfy: #isModified)
+		or: [ self parameters anySatisfy: #isModified ]
 ]
 
 { #category : #'api - accessing' }
@@ -84,6 +97,13 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 ]
 
 { #category : #initialization }
+GtPharoRenameSelectorModel >> initialize [
+	super initialize.
+	announcer := Announcer new.
+	isModified := false.
+]
+
+{ #category : #initialization }
 GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 	| aSelectorParts aSelectorPartRanges aSelectorArguments aComponentsBuilder |
 	originalAstNode := anAstNode.
@@ -92,8 +112,8 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 	aSelectorPartRanges := anAstNode keywordsIntervals.
 	aSelectorArguments := anAstNode arguments.
 	aComponentsBuilder := GtPharoRenameSelectorPartComponentsBuilder new
-		astNode: anAstNode;
-		build.
+			astNode: anAstNode;
+			build.
 
 	selectorParts := Array
 			streamContents: [ :aStream | 
@@ -104,21 +124,32 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 					do: [ :aPart :aRange | 
 						| aPartModel |
 						aPartModel := GtPharoRenameSelectorPartModel
-									forSelectorPart: aPart
-									interval: aRange
-									index: anIndex.
+								forSelectorPart: aPart
+								interval: aRange
+								index: anIndex.
 						aPartModel validator: aComponentsBuilder validator.
 						aPartModel styler: aComponentsBuilder styler.
 						aPartModel filter: aComponentsBuilder filter.
-						aStream
-							nextPut: aPartModel.
+						aPartModel announcer
+							when: GtPharoRenameSelectorPartNameChanged
+							send: #onGtPharoRenameSelectorPartNameChanged:
+							to: self.
+						aStream nextPut: aPartModel.
 						anIndex := anIndex + 1 ] ].
 
 	selectorParameters := (aSelectorArguments
 			withIndexCollect: [ :eachArgument :anIndex | 
-				GtPharoRenameSelectorParameterModel
-					forAstVariableNodeArgument: eachArgument
-					index: anIndex ]) asArray.
+				| aParameterModel |
+				aParameterModel := GtPharoRenameSelectorParameterModel
+						forAstVariableNodeArgument: eachArgument
+						index: anIndex.
+
+				aParameterModel announcer
+					when: GtPharoRenameSelectorParameterNameChanged
+					send: #onGtPharoRenameSelectorParameterNameChanged:
+					to: self.
+
+				aParameterModel ]) asArray.
 
 	selectorParameters
 		ifEmpty: [ selectorParameters := Array new: selectorParts size withAll: nil ]
@@ -126,13 +157,22 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 
 { #category : #testing }
 GtPharoRenameSelectorModel >> isModified [
-	^ (self selectorParts anySatisfy: #isModified)
-		or: [ self parameters anySatisfy: #isModified ]
+	^ self computeIsModified
 ]
 
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> numberOfParameters [
 	^ selectorParameters size
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorModel >> onGtPharoRenameSelectorParameterNameChanged: anAnnouncement [
+	self updateModificationStatus
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorModel >> onGtPharoRenameSelectorPartNameChanged: anAnnouncement [
+	self updateModificationStatus
 ]
 
 { #category : #'api - accessing' }
@@ -231,4 +271,17 @@ GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithPrevious: anIntege
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger - 1.
 	self privateSwapItem: aParameterOne with: aParameterTwo
+]
+
+{ #category : #'private - updating' }
+GtPharoRenameSelectorModel >> updateModificationStatus [
+	| oldModified |
+	oldModified := isModified.
+	isModified := self computeIsModified.
+	isModified = oldModified ifTrue: [ ^ self ].
+
+	self announcer
+		announce: (GtPharoRenameSelectorModificationChanged new
+				selectorModel: self;
+				isModified: isModified)
 ]

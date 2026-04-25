@@ -1,8 +1,9 @@
 Class {
 	#name : #GtPharoRenameSelectorPartNameChanged,
-	#superclass : #GtPharoRenameSelectorPartAnnouncement,
+	#superclass : #GtPharoRenameSelectorPartModelAnnouncement,
 	#instVars : [
-		'currentName'
+		'currentName',
+		'isModified'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -15,4 +16,14 @@ GtPharoRenameSelectorPartNameChanged >> currentName [
 { #category : #accessing }
 GtPharoRenameSelectorPartNameChanged >> currentName: anObject [
 	currentName := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartNameChanged >> isModified [
+	^ isModified
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartNameChanged >> isModified: anObject [
+	isModified := anObject
 ]
