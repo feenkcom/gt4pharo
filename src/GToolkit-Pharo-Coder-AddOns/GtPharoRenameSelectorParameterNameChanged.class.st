@@ -2,7 +2,9 @@ Class {
 	#name : #GtPharoRenameSelectorParameterNameChanged,
 	#superclass : #Announcement,
 	#instVars : [
-		'currentName'
+		'parameterModel',
+		'currentName',
+		'source'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -15,4 +17,24 @@ GtPharoRenameSelectorParameterNameChanged >> currentName [
 { #category : #accessing }
 GtPharoRenameSelectorParameterNameChanged >> currentName: anObject [
 	currentName := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterNameChanged >> parameterModel [
+	^ parameterModel
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterNameChanged >> parameterModel: anObject [
+	parameterModel := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterNameChanged >> source [
+	^ source
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterNameChanged >> source: anObject [
+	source := anObject
 ]

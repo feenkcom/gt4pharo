@@ -14,13 +14,21 @@ Class {
 
 { #category : #'instance creation' }
 GtPharoStreamingMethodsCoder class >> forBehavior: aBehavior [
+	| someAdditionalFilters |
+	someAdditionalFilters := Array
+			streamContents: [ :aStream | 
+				aStream
+					nextPut: ((GtSearchInheritedMethodsFilter forClass: aBehavior)
+							withSuperclassesUpTo: aBehavior).
+				aStream
+					nextPut: (GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName).
+
+				GtPharoCoderSettings isTraitMethodsFilterDefault
+					ifTrue: [ aStream nextPut: GtSearchNonTraitMethodsFilter new ] ].
 	^ (self
 		forFilter: ((GtSearchInheritedMethodsFilter forClass: aBehavior)
 				withSuperclassesUpTo: ProtoObject))
-		additionalFilters: {
-			(GtSearchInheritedMethodsFilter forClass: aBehavior)
-				withSuperclassesUpTo: aBehavior.
-			GtSearchMethodCategoryFilter forCategory: GtAllProtocol defaultName};
+		additionalFilters: someAdditionalFilters;
 		behavior: aBehavior
 ]
 

@@ -29,6 +29,13 @@ GtPharoRenameSelectorParameterLabelAttribute >> doAffect: aTBrTextEditorTextualP
 	^ aLabel
 ]
 
+{ #category : #printing }
+GtPharoRenameSelectorParameterLabelAttribute >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Parameter: ';
+		nextPutAll: (self parameterModel ifNotNil: #currentName) asString
+]
+
 { #category : #initialization }
 GtPharoRenameSelectorParameterLabelAttribute >> initialize [
 	super initialize.

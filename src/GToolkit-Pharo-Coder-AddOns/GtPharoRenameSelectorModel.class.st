@@ -28,6 +28,35 @@ GtPharoRenameSelectorModel >> currentSelector [
 				do: [ :eachPart | aStream nextPutAll: eachPart currentName ] ]
 ]
 
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> focusNextSelectorPart: anInteger [
+	| aNextPart |
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger <= selectorParts size ].
+	selectorParts size = 1 ifTrue: [ ^ self ].
+
+	aNextPart := anInteger = selectorParts size
+			ifTrue: [ selectorParts at: 1 ]
+			ifFalse: [ selectorParts at: anInteger + 1 ].
+
+	aNextPart notifyFocusRequested
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> focusPreviousSelectorPart: anInteger [
+	| aPreviousPart |
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	selectorParts size = 1 ifTrue: [ ^ self ].
+
+	aPreviousPart := anInteger = 1
+			ifTrue: [ selectorParts at: selectorParts size ]
+			ifFalse: [ selectorParts at: anInteger - 1 ].
+
+	aPreviousPart notifyFocusRequested
+]
+
 { #category : #'gt - extensions' }
 GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 	<gtView>
@@ -56,12 +85,15 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 
 { #category : #initialization }
 GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
-	| aSelectorParts aSelectorPartRanges aSelectorArguments |
+	| aSelectorParts aSelectorPartRanges aSelectorArguments aComponentsBuilder |
 	originalAstNode := anAstNode.
 	originalSelector := anAstNode selector.
 	aSelectorParts := originalSelector keywords.
 	aSelectorPartRanges := anAstNode keywordsIntervals.
 	aSelectorArguments := anAstNode arguments.
+	aComponentsBuilder := GtPharoRenameSelectorPartComponentsBuilder new
+		astNode: anAstNode;
+		build.
 
 	selectorParts := Array
 			streamContents: [ :aStream | 
@@ -70,11 +102,16 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 				aSelectorParts
 					with: aSelectorPartRanges
 					do: [ :aPart :aRange | 
-						aStream
-							nextPut: (GtPharoRenameSelectorPartModel
+						| aPartModel |
+						aPartModel := GtPharoRenameSelectorPartModel
 									forSelectorPart: aPart
 									interval: aRange
-									index: anIndex).
+									index: anIndex.
+						aPartModel validator: aComponentsBuilder validator.
+						aPartModel styler: aComponentsBuilder styler.
+						aPartModel filter: aComponentsBuilder filter.
+						aStream
+							nextPut: aPartModel.
 						anIndex := anIndex + 1 ] ].
 
 	selectorParameters := (aSelectorArguments
@@ -116,9 +153,9 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo [
 	aNameTwo := anItemTwo currentName.
 	anIndexTwo := anItemTwo currentIndex.
 
-	anItemOne updateCurrentName: aNameTwo.
+	anItemOne updateCurrentName: aNameTwo source: self.
 	anItemOne updateCurrentIndex: anIndexTwo.
-	anItemTwo updateCurrentName: aNameOne.
+	anItemTwo updateCurrentName: aNameOne source: self.
 	anItemTwo updateCurrentIndex: anIndexOne
 ]
 

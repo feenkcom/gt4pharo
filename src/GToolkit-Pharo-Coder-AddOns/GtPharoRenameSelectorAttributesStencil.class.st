@@ -131,10 +131,11 @@ GtPharoRenameSelectorAttributesStencil >> createSelectorPartAttributeFor: aSelec
 						aSelectorPart originalInterval first - 1.
 						anAttribute} ].
 
-	anAttribute := selectorPartAttributeStencilBuilder
-			selectorPartModel: aSelectorPart;
+	anAttribute := GtPharoRenameSelectorPartEditorAttribute new
 			selectorModel: selectorModel;
-			build.
+			selectorPartModel: aSelectorPart.
+
+	anAttribute shouldStartWithFocus: aSelectorPart originalIndex = 1.
 
 	aStream
 		nextPut: {aSelectorPart originalInterval first.

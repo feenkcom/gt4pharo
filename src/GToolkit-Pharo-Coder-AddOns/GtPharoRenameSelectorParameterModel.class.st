@@ -94,11 +94,14 @@ GtPharoRenameSelectorParameterModel >> updateCurrentIndex: anInteger [
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorParameterModel >> updateCurrentName: aString [
+GtPharoRenameSelectorParameterModel >> updateCurrentName: aString source: aSource [
 	currentName = aString ifTrue: [ ^ self ].
 
 	currentName := aString.
 
 	self announcer
-		announce: (GtPharoRenameSelectorParameterNameChanged new currentName: aString)
+		announce: (GtPharoRenameSelectorParameterNameChanged new
+				parameterModel: self;
+				currentName: aString;
+				source: aSource)
 ]

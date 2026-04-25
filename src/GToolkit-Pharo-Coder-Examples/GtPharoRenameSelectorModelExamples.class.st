@@ -4,6 +4,35 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Refactoring - Method New'
 }
 
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> assert: aScripter onlyOneEditorMode: anElementId [
+	| aModel aBasicId anEditorModeIndex |
+	self assert: [ anElementId isIndexed ].
+	aModel := aScripter model.
+	aBasicId := anElementId prefixId.
+	anEditorModeIndex := anElementId index.
+
+	aScripter
+		substeps: ('Assert only editor at index {1} is in editable mode'
+				format: {anEditorModeIndex})
+		do: [ :aStep | 
+			aModel selectorParts
+				withIndexDo: [ :eachPart :eachIndex | 
+					aStep assert
+						label: ('Assert selector part editor is {1} at index {2}'
+								format: {eachIndex = anEditorModeIndex
+											ifTrue: [ 'in editable mode' ]
+											ifFalse: [ 'in label mode' ].
+										eachIndex});
+						satisfies: [ :anEditor | 
+							eachIndex = anEditorModeIndex
+								ifTrue: [ anEditor viewModel mode isEditable ]
+								ifFalse: [ anEditor viewModel mode isEditable not ] ];
+						// (aBasicId asBlocElementId indexed: eachIndex);
+						/ #editorElement;
+						play ] ]
+]
+
 { #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
 	<gtExample>
@@ -54,6 +83,15 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 	| aModel |
 	aModel := GtPharoRenameSelectorModel new.
 	^ aModel
+]
+
+{ #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> basicSelectorPartElement [
+	<gtExample>
+	| anElement |
+	anElement := GtPharoRenameSelectorPartElement new.
+
+	^ anElement
 ]
 
 { #category : #'examples - method' }
@@ -289,6 +327,124 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	aMethod := self threeKeywordsMethod.
 	anEditor := self createRustEditorWithMethod: aMethod.
 	^ anEditor
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod [
+	<gtExample>
+	| anElement aScripter aModel |
+	anElement := self selectorPartElementsWithFirstThreeKeywordsMethod.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	aScripter click
+		label: 'Activate first selector part';
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey tab;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey tab;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey tab;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	(aScripter keyWithShiftPress: BlKeyboardKey tab)
+		label: 'Jump to the previous selector part';
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	(aScripter keyWithShiftPress: BlKeyboardKey tab)
+		label: 'Jump to the previous selector part';
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	(aScripter keyWithShiftPress: BlKeyboardKey tab)
+		label: 'Jump to the previous selector part';
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> selectorPartElementWithFirstThreeKeywordsMethod [
+	<gtExample>
+	| anElement aModel aPartModel |
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
+	aPartModel := aModel selectorParts at: 1.
+	anElement := self basicSelectorPartElement.
+	anElement selectorModel: aModel selectorPartModel: aPartModel.
+
+	^ anElement
+]
+
+{ #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywordsMethod [
+	<gtExample>
+	| anElement aModel aContainer |
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
+
+	aContainer := BrHorizontalPane new
+			cellSpacing: 10;
+			padding: (BlInsets all: 10);
+			fitContent.
+
+	aModel selectorParts
+		withIndexDo: [ :eachPart :eachIndex | 
+			anElement := self basicSelectorPartElement.
+			anElement selectorModel: aModel selectorPartModel: eachPart.
+			aContainer
+				addChild: anElement
+				as: (#'selector-part' asBlocElementId indexed: eachIndex) ].
+
+	aContainer userData at: #selectorModel put: aModel.
+
+	^ aContainer
 ]
 
 { #category : #'examples - method' }

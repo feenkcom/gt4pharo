@@ -44,6 +44,13 @@ GtPharoRenameSelectorSwapButtonAttribute >> doAffect: aTBrTextEditorTextualPiece
 	^ button
 ]
 
+{ #category : #printing }
+GtPharoRenameSelectorSwapButtonAttribute >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Swap button: ';
+		nextPutAll: self tooltip asString
+]
+
 { #category : #accessing }
 GtPharoRenameSelectorSwapButtonAttribute >> icon [
 	^ icon

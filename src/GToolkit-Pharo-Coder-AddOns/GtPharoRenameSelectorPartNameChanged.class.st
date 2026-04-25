@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoRenameSelectorPartNameChanged,
-	#superclass : #Announcement,
+	#superclass : #GtPharoRenameSelectorPartAnnouncement,
 	#instVars : [
 		'currentName'
 	],
