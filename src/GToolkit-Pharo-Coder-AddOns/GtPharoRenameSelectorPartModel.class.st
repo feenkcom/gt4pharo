@@ -7,7 +7,10 @@ Class {
 		'currentIndex',
 		'announcer',
 		'originalName',
-		'currentName'
+		'currentName',
+		'validator',
+		'styler',
+		'filter'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -40,6 +43,16 @@ GtPharoRenameSelectorPartModel >> currentName [
 	^ currentName
 ]
 
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> filter [
+	^ filter
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> filter: anObject [
+	filter := anObject
+]
+
 { #category : #initialization }
 GtPharoRenameSelectorPartModel >> initialize [
 	super initialize.
@@ -59,7 +72,12 @@ GtPharoRenameSelectorPartModel >> initializeForSelectorPart: aSymbol interval: a
 { #category : #testing }
 GtPharoRenameSelectorPartModel >> isModified [
 	^ self originalName ~= self currentName
-		or: [ self originalIndex ~= self currentIndex ]
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorPartModel >> notifyFocusRequested [
+	self announcer
+		announce: (GtPharoRenameSelectorPartFocusRequested new selectorPartModel: self)
 ]
 
 { #category : #accessing }
@@ -82,13 +100,23 @@ GtPharoRenameSelectorPartModel >> printOn: aStream [
 	super printOn: aStream.
 	aStream
 		nextPut: $(;
-		nextPutAll: originalName asString;
+		nextPutAll: currentName asString;
 		nextPutAll: ' [';
 		print: (originalInterval ifNotNil: #first);
 		nextPutAll: '..';
 		print: (originalInterval ifNotNil: #last);
 		nextPut: $];
 		nextPut: $)
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> styler [
+	^ styler
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> styler: anObject [
+	styler := anObject
 ]
 
 { #category : #accessing }
@@ -102,11 +130,24 @@ GtPharoRenameSelectorPartModel >> updateCurrentIndex: anInteger [
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorPartModel >> updateCurrentName: aString [
+GtPharoRenameSelectorPartModel >> updateCurrentName: aString source: aSource [
 	currentName = aString ifTrue: [ ^ self ].
 
 	currentName := aString.
 
 	self announcer
-		announce: (GtPharoRenameSelectorPartNameChanged new currentName: aString)
+		announce: (GtPharoRenameSelectorPartNameChanged new
+				selectorPartModel: self;
+				currentName: aString;
+				source: aSource)
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> validator [
+	^ validator
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> validator: anObject [
+	validator := anObject
 ]

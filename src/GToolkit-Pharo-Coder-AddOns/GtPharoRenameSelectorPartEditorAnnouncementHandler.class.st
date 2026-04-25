@@ -22,10 +22,18 @@ GtPharoRenameSelectorPartEditorAnnouncementHandler >> editor: anObject [
 GtPharoRenameSelectorPartEditorAnnouncementHandler >> install [
 	selectorPartModel announcer weak
 		when: GtPharoRenameSelectorPartNameChanged
-		send: #onRenameSelectorPartNameChanged:
-		to: self.
+			send: #onRenameSelectorPartNameChanged:
+			to: self;
+		when: GtPharoRenameSelectorPartFocusRequested
+			send: #onRenameSelectorPartFocusRequested:
+			to: self.
 
 	editor userData at: self class put: self
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorPartEditorAnnouncementHandler >> onRenameSelectorPartFocusRequested: anAnnouncement [
+	editor requestFocus
 ]
 
 { #category : #'private - event handling' }
