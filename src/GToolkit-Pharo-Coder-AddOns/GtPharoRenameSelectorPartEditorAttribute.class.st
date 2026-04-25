@@ -3,7 +3,8 @@ Class {
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
 		'selectorModel',
-		'selectorPartModel'
+		'selectorPartModel',
+		'shouldStartWithFocus'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -13,43 +14,16 @@ GtPharoRenameSelectorPartEditorAttribute >> doAffect: aTBrTextEditorTextualPiece
 	"GtRenameSelectorEditorAttribute"
 
 	| renameEditor |
-	renameEditor := GtRenameEditor new
+	renameEditor := GtPharoRenameSelectorPartElement new
+			selectorModel: selectorModel selectorPartModel: selectorPartModel;
 			fitContent;
-			aptitude: (BrGlamorousEditableLabelAptitude new
-					defaultBackground: Color transparent;
-					defaultBorder: (BlBorder paint: BrGlamorousColors editorBorderColor);
-					minWidth: 0);
-			padding: (BlInsets left: 2 right: 2);
 			margin: (BlInsets
 					top: 0
 					left: -2
 					bottom: 0
-					right: -2);
-			text: selectorPartModel currentName.
+					right: -2).
 
-
-	selectorPartModel originalIndex = 1
-		ifTrue: [ renameEditor
-				switchToEditor;
-				requestFocus ]
-		ifFalse: [ renameEditor switchToLabel ].
-
-	selectorPartModel styler ifNotNil: [ :aStyler | renameEditor styler: aStyler ].
-
-	renameEditor
-		whenKey: BlKeyCombination escape
-			editorDo: [ :aShortcutEvent | self onEscapeShortcut: aShortcutEvent editorElement: anEditorElement ];
-		whenKey: BlKeyCombination tab
-			editorDo: [ :aShortcutEvent | self onTabShortcut: aShortcutEvent editorElement: anEditorElement ];
-		whenKey: BlKeyCombination builder shift tab build
-			editorDo: [ :aShortcutEvent | self onShiftTabShortcut: aShortcutEvent editorElement: anEditorElement ];
-		whenKey: BlKeyCombination enter
-			editorDo: [ :aShortcutEvent | self onEnterShortcut: aShortcutEvent editorElement: anEditorElement ].
-
-	GtPharoRenameSelectorPartEditorAnnouncementHandler new
-		editor: renameEditor;
-		selectorPartModel: selectorPartModel;
-		install.
+	shouldStartWithFocus ifTrue: [ renameEditor requestFocus ].
 
 	^ renameEditor
 ]
@@ -66,25 +40,9 @@ GtPharoRenameSelectorPartEditorAttribute >> initialize [
 	super initialize.
 
 	self beReplace.
-	self beNotOverwritableByStyler
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorPartEditorAttribute >> onEnterShortcut: aShortcutEvent editorElement: anEditorElement [ 
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorPartEditorAttribute >> onEscapeShortcut: aShortcutEvent editorElement: anEditorElement [ 
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorPartEditorAttribute >> onShiftTabShortcut: aShortcutEvent editorElement: anEditorElement [
-	selectorModel focusPreviousSelectorPart: selectorPartModel originalIndex
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorPartEditorAttribute >> onTabShortcut: aShortcutEvent editorElement: anEditorElement [
-	selectorModel focusNextSelectorPart: selectorPartModel originalIndex
+	self beNotOverwritableByStyler.
+	
+	shouldStartWithFocus := false.
 ]
 
 { #category : #accessing }
@@ -105,4 +63,14 @@ GtPharoRenameSelectorPartEditorAttribute >> selectorPartModel [
 { #category : #accessing }
 GtPharoRenameSelectorPartEditorAttribute >> selectorPartModel: anObject [
 	selectorPartModel := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartEditorAttribute >> shouldStartWithFocus [
+	^ shouldStartWithFocus
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartEditorAttribute >> shouldStartWithFocus: anObject [
+	shouldStartWithFocus := anObject
 ]
