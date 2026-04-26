@@ -83,6 +83,12 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 					ifFalse: [ '{1} (previously {2})'
 							format: {anItem originalIndex.
 									anItem currentIndex} ] ];
+		column: 'Is modified'
+			text: [ :anItem :aRowIndex :aCellIndex :aTheme | 
+				anItem isModified
+					ifTrue: [ 'yes']
+					ifFalse: [ 'no' asRopedText foreground: aTheme button disabledTextColor ] ]
+			width: 80;
 		column: 'Type'
 			text: #typeName
 			width: 70;
@@ -132,8 +138,11 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 						aPartModel filter: aComponentsBuilder filter.
 						aPartModel announcer
 							when: GtPharoRenameSelectorPartNameChanged
-							send: #onGtPharoRenameSelectorPartNameChanged:
-							to: self.
+								send: #onGtPharoRenameSelectorPartNameChanged:
+								to: self;
+							when: GtPharoRenameSelectorParameterIndexChanged
+								send: #onGtPharoRenameSelectorParameterIndexChanged:
+								to: self.
 						aStream nextPut: aPartModel.
 						anIndex := anIndex + 1 ] ].
 
@@ -166,6 +175,11 @@ GtPharoRenameSelectorModel >> numberOfParameters [
 ]
 
 { #category : #'private - event handling' }
+GtPharoRenameSelectorModel >> onGtPharoRenameSelectorParameterIndexChanged: anAnnouncement [
+	self updateModificationStatus
+]
+
+{ #category : #'private - event handling' }
 GtPharoRenameSelectorModel >> onGtPharoRenameSelectorParameterNameChanged: anAnnouncement [
 	self updateModificationStatus
 ]
@@ -186,7 +200,7 @@ GtPharoRenameSelectorModel >> parameters [
 ]
 
 { #category : #private }
-GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo [
+GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo source: aSource [
 	| aNameOne anIndexOne aNameTwo anIndexTwo |
 	aNameOne := anItemOne currentName.
 	anIndexOne := anItemOne currentIndex.
@@ -194,9 +208,9 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo [
 	anIndexTwo := anItemTwo currentIndex.
 
 	anItemOne updateCurrentName: aNameTwo source: self.
-	anItemOne updateCurrentIndex: anIndexTwo.
+	anItemOne updateCurrentIndex: anIndexTwo source: self.
 	anItemTwo updateCurrentName: aNameOne source: self.
-	anItemTwo updateCurrentIndex: anIndexOne
+	anItemTwo updateCurrentIndex: anIndexOne source: self
 ]
 
 { #category : #'api - accessing' }
@@ -223,54 +237,72 @@ GtPharoRenameSelectorModel >> selectorPartsAndParametersDo: aBlock [
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorModel >> swapParameterWithNext: anInteger [
+GtPharoRenameSelectorModel >> swapParameterWithNext: anInteger source: aSource [
 	| aParameterOne aParameterTwo |
 	self assert: [ anInteger > 0 ].
 	self assert: [ anInteger < selectorParts size ].
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger + 1.
-	self privateSwapItem: aParameterOne with: aParameterTwo
+	self
+		privateSwapItem: aParameterOne
+		with: aParameterTwo
+		source: aSource
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorModel >> swapParameterWithPrevious: anInteger [
+GtPharoRenameSelectorModel >> swapParameterWithPrevious: anInteger source: aSource [
 	| aParameterOne aParameterTwo |
 	self assert: [ anInteger > 1 ].
 	self assert: [ anInteger <= selectorParts size ].
 
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger - 1.
-	self privateSwapItem: aParameterOne with: aParameterTwo
+	self
+		privateSwapItem: aParameterOne
+		with: aParameterTwo
+		source: aSource
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithNext: anInteger [
+GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithNext: anInteger  source: aSource [
 	| aPartOne aPartTwo aParameterOne aParameterTwo |
 	self assert: [ anInteger > 0 ].
 	self assert: [ anInteger < selectorParts size ].
 
 	aPartOne := selectorParts at: anInteger.
 	aPartTwo := selectorParts at: anInteger + 1.
-	self privateSwapItem: aPartOne with: aPartTwo.
-	
+	self
+		privateSwapItem: aPartOne
+		with: aPartTwo
+		source: aSource.
+
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger + 1.
-	self privateSwapItem: aParameterOne with: aParameterTwo
+	self
+		privateSwapItem: aParameterOne
+		with: aParameterTwo
+		source: aSource
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithPrevious: anInteger [
+GtPharoRenameSelectorModel >> swapSelectorPartAndParameterWithPrevious: anInteger source: aSource [
 	| aKeywordOne aKeywordTwo aParameterOne aParameterTwo |
 	self assert: [ anInteger > 1 ].
 	self assert: [ anInteger <= selectorParts size ].
 
 	aKeywordOne := selectorParts at: anInteger.
 	aKeywordTwo := selectorParts at: anInteger - 1.
-	self privateSwapItem: aKeywordOne with: aKeywordTwo.
-	
+	self
+		privateSwapItem: aKeywordOne
+		with: aKeywordTwo
+		source: aSource.
+
 	aParameterOne := selectorParameters at: anInteger.
 	aParameterTwo := selectorParameters at: anInteger - 1.
-	self privateSwapItem: aParameterOne with: aParameterTwo
+	self
+		privateSwapItem: aParameterOne
+		with: aParameterTwo
+		source: aSource
 ]
 
 { #category : #'private - updating' }
@@ -278,7 +310,7 @@ GtPharoRenameSelectorModel >> updateModificationStatus [
 	| oldModified |
 	oldModified := isModified.
 	isModified := self computeIsModified.
-	isModified = oldModified ifTrue: [ ^ self ].
+	"isModified = oldModified ifTrue: [ ^ self ]."
 
 	self announcer
 		announce: (GtPharoRenameSelectorModificationChanged new

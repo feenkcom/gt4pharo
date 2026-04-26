@@ -17,6 +17,26 @@ GtPharoRenameSelectorRefactoringsPreviewElement >> beSize: aBrSizeAdjustmentStat
 ]
 
 { #category : #initialization }
+GtPharoRenameSelectorRefactoringsPreviewElement >> configureWith: aRefactoringsConfiguration [
+	aRefactoringsConfiguration cancelAction
+		ifNotNil: [ :aBlock | previewElement cancelBlock: aBlock ].
+	aRefactoringsConfiguration focusAction
+		ifNotNil: [ :aBlock | previewElement previewContentDo: aBlock ].
+
+	aRefactoringsConfiguration completionAction
+		ifNotNil: [ :aBlock | refactoringsViewModel afterAppliedBlock: aBlock ].
+	aRefactoringsConfiguration refactoringsBlock
+		ifNotNil: [ :aBlock | refactoringsViewModel refactorings: aBlock ].
+	aRefactoringsConfiguration refactoringsViewModelDo
+		ifNotNil: [ :aBlock | aBlock value: refactoringsViewModel ].
+
+	aRefactoringsConfiguration showWhenCreated
+		ifNotNil: [ :aBoolean | 
+			aBoolean
+				ifTrue: [ BlTaskAction enqueueElement: self action: [ self showPreview ] ] ]
+]
+
+{ #category : #initialization }
 GtPharoRenameSelectorRefactoringsPreviewElement >> defaultLayout [
 	^ BlFrameLayout new
 ]
@@ -76,6 +96,12 @@ GtPharoRenameSelectorRefactoringsPreviewElement >> selectorModel: aSelectorModel
 	
 	self onSelectorModelChanged.
 	self subscribeToSelectorModel.
+]
+
+{ #category : #'api - visibility' }
+GtPharoRenameSelectorRefactoringsPreviewElement >> showPreview [
+	self visibility: BlVisibility visible.
+	previewElement showPreview
 ]
 
 { #category : #'private - hooks' }

@@ -268,7 +268,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aMethod aModel |
 	aMethod := self threeKeywordsMethod.
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-	aModel swapSelectorPartAndParameterWithNext: 1.
+	aModel swapSelectorPartAndParameterWithNext: 1 source: self.
 
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -284,7 +284,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aMethod aModel |
 	aMethod := self threeKeywordsMethod.
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-	aModel swapSelectorPartAndParameterWithPrevious: 3.
+	aModel swapSelectorPartAndParameterWithPrevious: 3 source: self.
 
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -300,13 +300,13 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aMethod aModel |
 	aMethod := self threeKeywordsMethod.
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-	aModel swapParameterWithNext: 1.
-	
+	aModel swapParameterWithNext: 1 source: self.
+
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
 	self assert: aModel currentSelector equals: aMethod selector.
 	self assert: aModel currentParameterPermutations equals: #(2 1 3).
-	
+
 	^ aModel
 ]
 
@@ -316,13 +316,13 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aMethod aModel |
 	aMethod := self threeKeywordsMethod.
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-	aModel swapParameterWithPrevious: 2.
-	
+	aModel swapParameterWithPrevious: 2 source: self.
+
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
 	self assert: aModel currentSelector equals: aMethod selector.
 	self assert: aModel currentParameterPermutations equals: #(2 1 3).
-	
+
 	^ aModel
 ]
 

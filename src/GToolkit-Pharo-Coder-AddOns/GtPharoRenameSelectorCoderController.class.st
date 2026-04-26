@@ -67,10 +67,11 @@ GtPharoRenameSelectorCoderController >> install [
 GtPharoRenameSelectorCoderController >> installAttributes [
 	| aStencil someAttributes |
 	aStencil := GtPharoRenameSelectorAttributesStencil new
-			refactoringsBlock: [ self computeRefactorings ];
-			completionAction: [ self uninstall ];
-			cancelAction: [ self uninstall ];
-			showWhenCreated: false.
+			refactoringsConfiguration: (GtRefactoringsConfiguration new
+					refactoringsBlock: [ self computeRefactorings ];
+					completionAction: [ self uninstall ];
+					cancelAction: [ self uninstall ];
+					showWhenCreated: false).
 	aStencil selectorModel: selectorModel.
 	someAttributes := aStencil create.
 

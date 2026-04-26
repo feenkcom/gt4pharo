@@ -3,34 +3,11 @@ Class {
 	#superclass : #BrStencil,
 	#instVars : [
 		'selectorModel',
-		'refactoringsBlock',
-		'completionAction',
-		'cancelAction',
-		'showWhenCreated',
-		'selectorPartAttributeStencilBuilder'
+		'selectorPartAttributeStencilBuilder',
+		'refactoringsConfiguration'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
-
-{ #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> cancelAction [
-	^ cancelAction ifNil: [ [  ] ]
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> cancelAction: anObject [
-	cancelAction := anObject
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> completionAction [
-	^ completionAction ifNil: [ [  ] ]
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> completionAction: anObject [
-	completionAction := anObject
-]
 
 { #category : #'api - updating' }
 GtPharoRenameSelectorAttributesStencil >> create [
@@ -40,19 +17,22 @@ GtPharoRenameSelectorAttributesStencil >> create [
 				selectorPartsAndParametersDo: [ :eachKeyword :eachParameter | 
 					self createSelectorPartAttributeFor: eachKeyword into: aStream.
 					self createParameterAttributeFor: eachParameter into: aStream ].
-			self createRefactoringPreviewAttributeInto: aStream ]
+			self createRefactoringsPreviewAttributeInto: aStream ]
 ]
 
 { #category : #private }
 GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelectorParameter into: aStream [
 	| anAttribute |
 	selectorModel numberOfParameters <= 1 ifTrue: [ ^ self ].
-	
+
 	aSelectorParameter originalIndex > 1
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 					icon: BrGlamorousVectorIcons left;
 					tooltip: 'Swap parameter with previous';
-					action: [ selectorModel swapParameterWithPrevious: aSelectorParameter originalIndex ];
+					action: [ :aButton | 
+						selectorModel
+							swapParameterWithPrevious: aSelectorParameter originalIndex
+							source: aButton ];
 					id: 'move-parameter-left-' , aSelectorParameter originalIndex printString.
 
 			aStream
@@ -74,7 +54,10 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 			icon: BrGlamorousVectorIcons right;
 			tooltip: 'Swap parameter with next';
-			action: [ selectorModel swapParameterWithNext: aSelectorParameter originalIndex ];
+			action: [ :aButton | 
+				selectorModel
+					swapParameterWithNext: aSelectorParameter originalIndex
+					source: aButton ];
 			id: 'move-parameter-right-' , aSelectorParameter originalIndex printString.
 
 	aStream
@@ -85,8 +68,10 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 			icon: BrGlamorousVectorIcons right;
 			tooltip: 'Swap keyword and parameter with next';
-			action: [ selectorModel
-					swapSelectorPartAndParameterWithNext: aSelectorParameter originalIndex ];
+			action: [ :aButton | 
+				selectorModel
+					swapSelectorPartAndParameterWithNext: aSelectorParameter originalIndex
+					source: aButton ];
 			id: 'move-keyword-and-parameter-right-'
 					, aSelectorParameter originalIndex printString.
 
@@ -97,13 +82,11 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorAttributesStencil >> createRefactoringPreviewAttributeInto: aStream [
+GtPharoRenameSelectorAttributesStencil >> createRefactoringsPreviewAttributeInto: aStream [
 	| anAttribute aModel |
-	anAttribute := GtRefactoringChangesAttribute new
-			refactoringsBlock: self refactoringsBlock;
-			completionAction: self completionAction;
-			cancelAction: self cancelAction;
-			showWhenCreated: self showWhenCreated.
+	anAttribute := GtPharoRenameSelectorRefactoringsPreviewAttribute new
+			selectorModel: selectorModel;
+			refactoringsConfiguration: refactoringsConfiguration.
 
 	aModel := selectorModel numberOfParameters < 2
 			ifTrue: [ selectorModel selectorParts last ]
@@ -122,8 +105,10 @@ GtPharoRenameSelectorAttributesStencil >> createSelectorPartAttributeFor: aSelec
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 					icon: BrGlamorousVectorIcons left;
 					tooltip: 'Swap keyword and parameter with previous';
-					action: [ selectorModel
-							swapSelectorPartAndParameterWithPrevious: aSelectorPart originalIndex ];
+					action: [ :aButton | 
+						selectorModel
+							swapSelectorPartAndParameterWithPrevious: aSelectorPart originalIndex
+							source: aButton ];
 					id: 'move-keyword-and-parameter-left-' , aSelectorPart originalIndex printString.
 
 			aStream
@@ -171,13 +156,13 @@ GtPharoRenameSelectorAttributesStencil >> initialize [
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> refactoringsBlock [
-	^ refactoringsBlock ifNil: [ [ {} ] ]
+GtPharoRenameSelectorAttributesStencil >> refactoringsConfiguration [
+	^ refactoringsConfiguration
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> refactoringsBlock: anObject [
-	refactoringsBlock := anObject
+GtPharoRenameSelectorAttributesStencil >> refactoringsConfiguration: anObject [
+	refactoringsConfiguration := anObject
 ]
 
 { #category : #accessing }
@@ -188,14 +173,4 @@ GtPharoRenameSelectorAttributesStencil >> selectorModel [
 { #category : #accessing }
 GtPharoRenameSelectorAttributesStencil >> selectorModel: anObject [
 	selectorModel := anObject
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> showWhenCreated [
-	^ showWhenCreated ifNil: [ false ]
-]
-
-{ #category : #accessing }
-GtPharoRenameSelectorAttributesStencil >> showWhenCreated: anObject [
-	showWhenCreated := anObject
 ]
