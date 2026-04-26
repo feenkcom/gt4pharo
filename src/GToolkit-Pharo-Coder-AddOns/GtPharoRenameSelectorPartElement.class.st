@@ -190,11 +190,23 @@ GtPharoRenameSelectorPartElement >> subscribeToSelectorModels [
 ]
 
 { #category : #'private - updating' }
+GtPharoRenameSelectorPartElement >> updateEditorElementFilter [
+	selectorPartModel filter ifNotNil: [ :aFilter | editorElement inputFilter: aFilter ]
+]
+
+{ #category : #'private - updating' }
+GtPharoRenameSelectorPartElement >> updateEditorElementStyler [
+	selectorPartModel styler ifNotNil: [ :aStyler | editorElement styler: aStyler ]
+]
+
+{ #category : #'private - updating' }
 GtPharoRenameSelectorPartElement >> updateEditorElementText [
 	editorElement text: selectorPartModel currentName
 ]
 
 { #category : #'private - updating' }
 GtPharoRenameSelectorPartElement >> updateElement [
-	self updateEditorElementText
+	self updateEditorElementText.
+	self updateEditorElementStyler.
+	self updateEditorElementFilter.
 ]

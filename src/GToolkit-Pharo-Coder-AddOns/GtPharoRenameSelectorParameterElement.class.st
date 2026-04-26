@@ -1,0 +1,108 @@
+Class {
+	#name : #GtPharoRenameSelectorParameterElement,
+	#superclass : #BlElement,
+	#traits : 'TBrLayoutResizable + TBrSizeAdjustable',
+	#classTraits : 'TBrLayoutResizable classTrait + TBrSizeAdjustable classTrait',
+	#instVars : [
+		'parameterModel',
+		'labelElement'
+	],
+	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
+}
+
+{ #category : #'api - size adjustable' }
+GtPharoRenameSelectorParameterElement >> beSize: aBrSizeAdjustmentState [
+	labelElement beSize: aBrSizeAdjustmentState
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorParameterElement >> defaultLayout [
+	^ BlFrameLayout new
+]
+
+{ #category : #'gt-actions' }
+GtPharoRenameSelectorParameterElement >> gtActionInspectParameterModelFor: anAction [
+	<gtAction>
+	parameterModel ifNil: [ ^ anAction noAction ].
+
+	^ anAction button
+		priority: 91;
+		target: GtPhlowObjectContextMenuTarget;
+		icon: BrGlamorousVectorIcons inspect;
+		tooltip: 'Inspect parameter model';
+		id: GtInspectorInspectButtonId;
+		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		menuItemPreview: [ parameterModel gtDisplayText ];
+		action: [ :aButton | aButton phlow spawnObject: parameterModel ];
+		primaryModifierAction: [ :aButton |
+			BlSpace new
+				withCommonSettings;
+				objectInPager: parameterModel;
+				showFrom: aButton ];
+		mouseCursor: BlCopyCursor new
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorParameterElement >> initialize [
+	super initialize.
+
+	self initializeLabelElement.
+
+	self addChild: labelElement as: #labelElement.
+
+	self fitContent
+]
+
+{ #category : #initialization }
+GtPharoRenameSelectorParameterElement >> initializeLabelElement [
+	labelElement := BrLabel new
+		fitContent;
+		aptitude: BrGlamorousLabelAptitude new;
+		padding: (BlInsets left: 2 right: 2)
+]
+
+{ #category : #updating }
+GtPharoRenameSelectorParameterElement >> onParameterModelChanged [
+	self updateElement
+]
+
+{ #category : #updating }
+GtPharoRenameSelectorParameterElement >> onRenameSelectorParameterNameChanged: anAnnouncement [
+	anAnnouncement parameterModel = parameterModel ifFalse: [ ^ self ].
+
+	BlTaskAction
+		enqueueElement: labelElement
+		action: [ labelElement text: anAnnouncement currentName ]
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterElement >> parameterModel: aParameterModel [
+	"Let's assume model is assigned only once.
+	If it change, we change this part."
+
+	self assert: [ aParameterModel isNotNil ].
+	self assert: [ parameterModel isNil ].
+
+	parameterModel := aParameterModel.
+
+	self onParameterModelChanged.
+	self subscribeToParameterModel
+]
+
+{ #category : #updating }
+GtPharoRenameSelectorParameterElement >> subscribeToParameterModel [
+	parameterModel announcer weak
+		when: GtPharoRenameSelectorParameterNameChanged
+			send: #onRenameSelectorParameterNameChanged:
+			to: self
+]
+
+{ #category : #updating }
+GtPharoRenameSelectorParameterElement >> updateElement [
+	self updateLabelElementText
+]
+
+{ #category : #updating }
+GtPharoRenameSelectorParameterElement >> updateLabelElementText [
+	labelElement text: parameterModel currentName
+]
