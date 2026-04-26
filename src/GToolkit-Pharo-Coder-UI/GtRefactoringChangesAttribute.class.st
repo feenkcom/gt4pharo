@@ -24,6 +24,22 @@ GtRefactoringChangesAttribute >> completionAction: aBlock [
 	completionAction := aBlock
 ]
 
+{ #category : #initialization }
+GtRefactoringChangesAttribute >> configureWith: aRefactoringsConfiguration [
+	aRefactoringsConfiguration cancelAction
+		ifNotNil: [ :aBlock | self cancelAction: aBlock ].
+	aRefactoringsConfiguration completionAction
+		ifNotNil: [ :aBlock | self completionAction: aBlock ].
+	aRefactoringsConfiguration focusAction
+		ifNotNil: [ :aBlock | self focusAction: aBlock ].
+	aRefactoringsConfiguration refactoringsBlock
+		ifNotNil: [ :aBlock | self refactoringsBlock: aBlock ].
+	aRefactoringsConfiguration refactoringsViewModelDo
+		ifNotNil: [ :aBlock | self refactoringsViewModelDo: aBlock ].
+	aRefactoringsConfiguration showWhenCreated
+		ifNotNil: [ :aBoolean | self showWhenCreated: aBoolean ]
+]
+
 { #category : #'private - updating' }
 GtRefactoringChangesAttribute >> createRefactoringsViewModel [
 	^ GtRefactoringsViewModel new

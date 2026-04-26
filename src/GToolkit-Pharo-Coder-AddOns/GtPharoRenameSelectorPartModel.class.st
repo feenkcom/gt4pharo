@@ -125,7 +125,7 @@ GtPharoRenameSelectorPartModel >> typeName [
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorPartModel >> updateCurrentIndex: anInteger [
+GtPharoRenameSelectorPartModel >> updateCurrentIndex: anInteger source: aSource [
 	currentIndex := anInteger
 ]
 
