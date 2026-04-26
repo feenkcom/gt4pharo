@@ -99,6 +99,15 @@ GtPharoRenameSelectorModelExamples >> basicRenameSelectorModel [
 ]
 
 { #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> basicSelectorParameterElement [
+	<gtExample>
+	| anElement |
+	anElement := GtPharoRenameSelectorParameterElement new.
+
+	^ anElement
+]
+
+{ #category : #'examples - elements' }
 GtPharoRenameSelectorModelExamples >> basicSelectorPartElement [
 	<gtExample>
 	| anElement |
@@ -478,7 +487,7 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementWithFirstThreeKeywordsM
 	^ anElement
 ]
 
-{ #category : #'examples - elements' }
+{ #category : #examples }
 GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
 	| anElement aModel aContainer anIndex |
@@ -492,12 +501,19 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywords
 
 	anIndex := 1.
 	aModel
-		selectorPartsAndParametersDo: [ :eachPart :eachParameter | 
+		selectorPartsAndParametersDo: [ :eachPart :eachParameter |
 			anElement := self basicSelectorPartElement.
 			anElement selectorModel: aModel selectorPartModel: eachPart.
 			aContainer
 				addChild: anElement
 				as: (#'selector-part' asBlocElementId indexed: anIndex).
+
+			eachParameter ifNotNil: [
+				anElement := self basicSelectorParameterElement.
+				anElement parameterModel: eachParameter.
+				aContainer
+					addChild: anElement
+					as: (#'selector-parameter' asBlocElementId indexed: anIndex) ].
 
 			anIndex := anIndex + 1 ].
 

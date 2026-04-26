@@ -7,26 +7,15 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
 
-{ #category : #accessing }
+{ #category : #private }
 GtPharoRenameSelectorParameterLabelAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	| aLabel |
-	aLabel := BrLabel new
-			fitContent;
-			aptitude: BrGlamorousLabelAptitude new;
-			padding: (BlInsets left: 2 right: 2);
-			margin: (BlInsets
-					top: 0
-					left: -2
-					bottom: 0
-					right: -2);
-			text: parameterModel currentName.
-
-	GtPharoRenameSelectorParameterLabelAnnouncementHandler new
-		label: aLabel;
+	^ GtPharoRenameSelectorParameterElement new
 		parameterModel: parameterModel;
-		install.
-
-	^ aLabel
+		margin: (BlInsets
+				top: 0
+				left: -2
+				bottom: 0
+				right: -2)
 ]
 
 { #category : #printing }
