@@ -91,8 +91,8 @@ GtPushUpMethodRefactoring >> pullUp: selectorCollection from: aClass to: aSuperC
 	classObject := aClass.
 	targetSuperclassObject := aSuperClass.
 	selectors := selectorCollection.
-	removeDuplicates := false.
-	removeDuplicates := true
+
+	self gtDefaultToRemoveDuplicates
 ]
 
 { #category : #transforming }
