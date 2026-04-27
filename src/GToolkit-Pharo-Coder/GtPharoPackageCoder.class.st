@@ -233,7 +233,7 @@ GtPharoPackageCoder >> printOn: aStream [
 { #category : #subscriptions }
 GtPharoPackageCoder >> subscribeToSystem [	
 	SystemAnnouncer uniqueInstance weak
-		when: RPackageRegistered send: #onSystemPackageRegistered: to: self;
-		when: RPackageRenamed send: #onSystemPackageRenamed: to: self;
-		when: RPackageUnregistered send: #onSystemPackageUnregistered: to: self
+		when: PackageAdded send: #onSystemPackageRegistered: to: self;
+		when: PackageRenamed send: #onSystemPackageRenamed: to: self;
+		when: PackageRemoved send: #onSystemPackageUnregistered: to: self
 ]
