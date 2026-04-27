@@ -137,13 +137,10 @@ GtPharoSourceCoderEvaluationContext >> notify: message at: anIndex in: aString [
 		print: aCompleteTextIndex;
 		cr.
 
-	self coder
-		ifNil: [ ^ SyntaxErrorNotification
-				inClass: UndefinedObject
-				withCode: aString
-				doitFlag: false
-				errorMessage: aString
-				location: anIndex ].
+	self coder ifNil: [
+			Error new
+				messageText: message;
+				signal.].
 
 	self coder
 		notifyParseError: message
