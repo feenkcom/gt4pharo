@@ -29,17 +29,17 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 					icon: BrGlamorousVectorIcons left;
 					tooltip: 'Swap parameter with previous';
-					action: [ :aButton | 
+					action: [ :aButton :aSelectorModel :aTextEditorElement | 
 						selectorModel
 							swapParameterWithPrevious: aSelectorParameter originalIndex
 							source: aButton ];
 					id: 'move-parameter-left-' , aSelectorParameter originalIndex printString;
-					hovered: [ :aButton :aTextEditorElement | 
+					hovered: [ :aButton :aSelectorModel :aTextEditorElement | 
 							selectorModel
 								highlight: true
 								selectorParameterWithPrevious: aSelectorParameter originalIndex
 								source: aButton ]
-						after: [ :aButton :aTextEditorElement | 
+						after: [ :aButton :aSelectorModel :aTextEditorElement | 
 							selectorModel
 								highlight: false
 								selectorParameterWithPrevious: aSelectorParameter originalIndex
@@ -64,17 +64,17 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 			icon: BrGlamorousVectorIcons right;
 			tooltip: 'Swap parameter with next';
-			action: [ :aButton | 
+			action: [ :aButton :aSelectorModel :aTextEditorElement | 
 				selectorModel
 					swapParameterWithNext: aSelectorParameter originalIndex
 					source: aButton ];
 			id: 'move-parameter-right-' , aSelectorParameter originalIndex printString;
-			hovered: [ :aButton :aTextEditorElement | 
+			hovered: [ :aButton :aSelectorModel :aTextEditorElement | 
 					selectorModel
 						highlight: true
 						selectorParameterWithNext: aSelectorParameter originalIndex
 						source: aButton ]
-				after: [ :aButton :aTextEditorElement | 
+				after: [ :aButton :aSelectorModel :aTextEditorElement | 
 					selectorModel
 						highlight: false
 						selectorParameterWithNext: aSelectorParameter originalIndex
@@ -88,18 +88,18 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 			icon: BrGlamorousVectorIcons right;
 			tooltip: 'Swap keyword and parameter with next';
-			action: [ :aButton | 
+			action: [ :aButton :aSelectorModel :aTextEditorElement | 
 				selectorModel
 					swapSelectorPartAndParameterWithNext: aSelectorParameter originalIndex
 					source: aButton ];
 			id: 'move-keyword-and-parameter-right-'
 					, aSelectorParameter originalIndex printString;
-			hovered: [ :aButton :aTextEditorElement | 
+			hovered: [ :aButton :aSelectorModel :aTextEditorElement | 
 					selectorModel
 						highlight: true
 						selectorPartAndParameterWithNext: aSelectorParameter originalIndex
 						source: aButton ]
-				after: [ :aButton :aTextEditorElement | 
+				after: [ :aButton :aSelectorModel :aTextEditorElement | 
 					selectorModel
 						highlight: false
 						selectorPartAndParameterWithNext: aSelectorParameter originalIndex
@@ -135,17 +135,17 @@ GtPharoRenameSelectorAttributesStencil >> createSelectorPartAttributeFor: aSelec
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
 					icon: BrGlamorousVectorIcons left;
 					tooltip: 'Swap keyword and parameter with previous';
-					action: [ :aButton | 
+					action: [ :aButton :aSelectorModel :aTextEditorElement | 
 						selectorModel
 							swapSelectorPartAndParameterWithPrevious: aSelectorPart originalIndex
 							source: aButton ];
 					id: 'move-keyword-and-parameter-left-' , aSelectorPart originalIndex printString;
-					hovered: [ :aButton :aTextEditorElement | 
+					hovered: [ :aButton :aSelectorModel :aTextEditorElement | 
 							selectorModel
 								highlight: true
 								selectorPartAndParameterWithPrevious: aSelectorPart originalIndex
 								source: aButton ]
-						after: [ :aButton :aTextEditorElement | 
+						after: [ :aButton :aSelectorModel :aTextEditorElement | 
 							selectorModel
 								highlight: false
 								selectorPartAndParameterWithPrevious: aSelectorPart originalIndex

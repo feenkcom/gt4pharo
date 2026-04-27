@@ -7,7 +7,8 @@ Class {
 		'actionBlock',
 		'id',
 		'hoveredBlock',
-		'unhoveredBlock'
+		'unhoveredBlock',
+		'selectorModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -25,14 +26,9 @@ GtPharoRenameSelectorSwapButtonAttribute >> action: anObject [
 { #category : #accessing }
 GtPharoRenameSelectorSwapButtonAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| button |
-	button := BrButton new.
+	button := GtPharoRenameSelectorSwapButtonElement new.
 	button icon: icon.
-	button label: tooltip.
-	button
-		aptitude: BrGlamorousButtonExteriorAptitude
-				+ ((BrGlamorousButtonRectangularAptitude paddingScale: 2 / 3)
-						+ BrGlamorousButtonIconAptitude
-						+ BrGlamorousButtonWithLabelTooltipAptitude2).
+	button tooltip: tooltip.
 	button beMiniSize.
 	button
 		margin: (BlInsets
@@ -40,18 +36,29 @@ GtPharoRenameSelectorSwapButtonAttribute >> doAffect: aTBrTextEditorTextualPiece
 				right: 4
 				bottom: 0
 				left: 4).
-	button action: [ :anEvent | actionBlock cull: anEvent cull: anEditorElement ].
+	button
+		action: [ :aButton | 
+			actionBlock
+				cull: aButton
+				cull: selectorModel
+				cull: anEditorElement ].
 	button id: id.
 
-	(hoveredBlock isNotNil and: [ unhoveredBlock isNotNil ])
-		ifTrue: [ button
-				addAptitude: (BrLazyStyleCommonAptitude new
-						hovered: [ :aStyle | 
-							aStyle
-								do: [ :aWidget | 
-									hoveredBlock cull: aWidget cull: anEditorElement ]
-								after: [ :aWidget | 
-									unhoveredBlock cull: aWidget cull: anEditorElement ] ]) ].
+	button
+		hovered: (hoveredBlock
+				ifNotNil: [ :aBlock | 
+					[ :aButton :aSelectorModel | 
+					aBlock
+						cull: aButton
+						cull: aSelectorModel
+						cull: anEditorElement ] ])
+		after: (unhoveredBlock
+				ifNotNil: [ :aBlock | 
+					[ :aButton :aSelectorModel | 
+					aBlock
+						cull: aButton
+						cull: aSelectorModel
+						cull: anEditorElement ] ]).
 
 	^ button
 ]
@@ -95,6 +102,16 @@ GtPharoRenameSelectorSwapButtonAttribute >> initialize [
 
 	self beAppend.
 	self beNotOverwritableByStyler
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorSwapButtonAttribute >> selectorModel [
+	^ selectorModel
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorSwapButtonAttribute >> selectorModel: anObject [
+	selectorModel := anObject
 ]
 
 { #category : #accessing }
