@@ -42,6 +42,16 @@ GtPharoRenameSelectorModel >> currentSelector [
 ]
 
 { #category : #'api - ui' }
+GtPharoRenameSelectorModel >> displayRefactoringsPreviewOrFocusNextSelectorPart: anInteger [
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	(anInteger = selectorParts size and: [ self isModified ])
+		ifTrue: [ self notifyShowPreviewRequested ]
+		ifFalse: [ self focusNextSelectorPart: anInteger ]
+]
+
+{ #category : #'api - ui' }
 GtPharoRenameSelectorModel >> focusNextSelectorPart: anInteger [
 	| aNextPart |
 	self assert: [ anInteger > 0 ].
@@ -167,6 +177,12 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 { #category : #testing }
 GtPharoRenameSelectorModel >> isModified [
 	^ self computeIsModified
+]
+
+{ #category : #private }
+GtPharoRenameSelectorModel >> notifyShowPreviewRequested [
+	self announcer
+		announce: (GtPharoRenameSelectorModelRefactoringsPreviewRequested new selectorModel: self)
 ]
 
 { #category : #'api - accessing' }
