@@ -34,12 +34,12 @@ GtPharoRenameSelectorParameterElement >> gtActionInspectParameterModelFor: anAct
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
 		menuItemPreview: [ parameterModel gtDisplayText ];
 		action: [ :aButton | aButton phlow spawnObject: parameterModel ];
-		primaryModifierAction: [ :aButton |
-			BlSpace new
-				withCommonSettings;
-				objectInPager: parameterModel;
-				showFrom: aButton ];
-		mouseCursor: BlCopyCursor new
+		primaryModifierAction: [ :aButton | 
+				BlSpace new
+					withCommonSettings;
+					objectInPager: parameterModel;
+					showFrom: aButton ]
+			mouseCursor: BlCopyCursor new
 ]
 
 { #category : #initialization }
@@ -56,17 +56,46 @@ GtPharoRenameSelectorParameterElement >> initialize [
 { #category : #initialization }
 GtPharoRenameSelectorParameterElement >> initializeLabelElement [
 	labelElement := BrLabel new
-		fitContent;
-		aptitude: BrGlamorousLabelAptitude new;
-		padding: (BlInsets left: 2 right: 2)
+			fitContent;
+			aptitude: BrGlamorousLabelAptitude new;
+			padding: (BlInsets left: 2 right: 2);
+			addAptitude: (BrLazyStyleCommonAptitude new
+					when: GtPharoRenameSelectorHiglightState uniqueInstance
+					style: [ :aStyle :aTheme | 
+						aStyle
+							do: [ :aWidget | 
+								GtPharoRenameSelectorHighlightElementStyleSignal new
+									element: aWidget;
+									emit.
+								aWidget
+									border: (BlBorder paint: GtSmalltalkSourceCoder nodeHighlightColor width: 1) ]
+							after: [ :aWidget | 
+								GtPharoRenameSelectorUnhighlightElementStyleSignal new
+									element: aWidget;
+									emit.
+								aWidget border: BlBorder empty ] ])
 ]
 
-{ #category : #updating }
+{ #category : #'private - hooks' }
 GtPharoRenameSelectorParameterElement >> onParameterModelChanged [
 	self updateElement
 ]
 
-{ #category : #updating }
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorParameterElement >> onRenameSelectorParameterHighlightChangeRequested: anAnnouncement [
+	anAnnouncement parameterModel = parameterModel ifFalse: [ ^ self ].
+	
+	GtPharoRenameSelectorHighlightElementStateRequestSignal new
+		element: labelElement;
+		isHighlighted: anAnnouncement isHighlighted;
+		emit.
+
+	BlTaskAction
+		enqueueElement: labelElement
+		action: [ self updateLabelElementHighlight: anAnnouncement isHighlighted ]
+]
+
+{ #category : #'private - event handling' }
 GtPharoRenameSelectorParameterElement >> onRenameSelectorParameterNameChanged: anAnnouncement [
 	anAnnouncement parameterModel = parameterModel ifFalse: [ ^ self ].
 
@@ -89,20 +118,42 @@ GtPharoRenameSelectorParameterElement >> parameterModel: aParameterModel [
 	self subscribeToParameterModel
 ]
 
-{ #category : #updating }
+{ #category : #'private - hooks' }
 GtPharoRenameSelectorParameterElement >> subscribeToParameterModel [
 	parameterModel announcer weak
 		when: GtPharoRenameSelectorParameterNameChanged
 			send: #onRenameSelectorParameterNameChanged:
+			to: self;
+		when: GtPharoRenameSelectorParameterHighlightChangeRequested
+			send: #onRenameSelectorParameterHighlightChangeRequested:
 			to: self
 ]
 
-{ #category : #updating }
+{ #category : #'private - updating' }
 GtPharoRenameSelectorParameterElement >> updateElement [
 	self updateLabelElementText
 ]
 
-{ #category : #updating }
+{ #category : #'private - updating' }
+GtPharoRenameSelectorParameterElement >> updateLabelElementHighlight: aBoolean [
+	aBoolean
+		ifTrue: [ GtPharoRenameSelectorHighlightElementStateSignal new
+				element: labelElement;
+				emit.
+
+			labelElement states
+				addState: GtPharoRenameSelectorHiglightState uniqueInstance ]
+		ifFalse: [ GtPharoRenameSelectorUnhighlightElementStateSignal new
+				element: labelElement;
+				emit.
+
+			labelElement states
+				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ].
+
+	labelElement requestStyle
+]
+
+{ #category : #'private - updating' }
 GtPharoRenameSelectorParameterElement >> updateLabelElementText [
 	labelElement text: parameterModel currentName
 ]

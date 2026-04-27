@@ -33,7 +33,17 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 						selectorModel
 							swapParameterWithPrevious: aSelectorParameter originalIndex
 							source: aButton ];
-					id: 'move-parameter-left-' , aSelectorParameter originalIndex printString.
+					id: 'move-parameter-left-' , aSelectorParameter originalIndex printString;
+					hovered: [ :aButton :aTextEditorElement | 
+							selectorModel
+								highlight: true
+								selectorParameterWithPrevious: aSelectorParameter originalIndex
+								source: aButton ]
+						after: [ :aButton :aTextEditorElement | 
+							selectorModel
+								highlight: false
+								selectorParameterWithPrevious: aSelectorParameter originalIndex
+								source: aButton ].
 
 			aStream
 				nextPut: {aSelectorParameter originalInterval first - 1.
@@ -58,7 +68,17 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 				selectorModel
 					swapParameterWithNext: aSelectorParameter originalIndex
 					source: aButton ];
-			id: 'move-parameter-right-' , aSelectorParameter originalIndex printString.
+			id: 'move-parameter-right-' , aSelectorParameter originalIndex printString;
+			hovered: [ :aButton :aTextEditorElement | 
+					selectorModel
+						highlight: true
+						selectorParameterWithNext: aSelectorParameter originalIndex
+						source: aButton ]
+				after: [ :aButton :aTextEditorElement | 
+					selectorModel
+						highlight: false
+						selectorParameterWithNext: aSelectorParameter originalIndex
+						source: aButton ].
 
 	aStream
 		nextPut: {aSelectorParameter originalInterval last.
@@ -73,7 +93,17 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 					swapSelectorPartAndParameterWithNext: aSelectorParameter originalIndex
 					source: aButton ];
 			id: 'move-keyword-and-parameter-right-'
-					, aSelectorParameter originalIndex printString.
+					, aSelectorParameter originalIndex printString;
+			hovered: [ :aButton :aTextEditorElement | 
+					selectorModel
+						highlight: true
+						selectorPartAndParameterWithNext: aSelectorParameter originalIndex
+						source: aButton ]
+				after: [ :aButton :aTextEditorElement | 
+					selectorModel
+						highlight: false
+						selectorPartAndParameterWithNext: aSelectorParameter originalIndex
+						source: aButton ].
 
 	aStream
 		nextPut: {aSelectorParameter originalInterval last.
@@ -109,7 +139,17 @@ GtPharoRenameSelectorAttributesStencil >> createSelectorPartAttributeFor: aSelec
 						selectorModel
 							swapSelectorPartAndParameterWithPrevious: aSelectorPart originalIndex
 							source: aButton ];
-					id: 'move-keyword-and-parameter-left-' , aSelectorPart originalIndex printString.
+					id: 'move-keyword-and-parameter-left-' , aSelectorPart originalIndex printString;
+					hovered: [ :aButton :aTextEditorElement | 
+							selectorModel
+								highlight: true
+								selectorPartAndParameterWithPrevious: aSelectorPart originalIndex
+								source: aButton ]
+						after: [ :aButton :aTextEditorElement | 
+							selectorModel
+								highlight: false
+								selectorPartAndParameterWithPrevious: aSelectorPart originalIndex
+								source: aButton ].
 
 			aStream
 				nextPut: {aSelectorPart originalInterval first - 1.

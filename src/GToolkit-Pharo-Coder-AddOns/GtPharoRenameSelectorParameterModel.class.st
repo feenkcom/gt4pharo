@@ -83,6 +83,15 @@ GtPharoRenameSelectorParameterModel >> printOn: aStream [
 		nextPut: $)
 ]
 
+{ #category : #'api - ui' }
+GtPharoRenameSelectorParameterModel >> requestHighlightChange: isHighlighted source: aSource [
+	self announcer
+		announce: (GtPharoRenameSelectorParameterHighlightChangeRequested new
+				parameterModel: self;
+				isHighlighted: isHighlighted;
+				source: aSource)
+]
+
 { #category : #accessing }
 GtPharoRenameSelectorParameterModel >> typeName [
 	^ 'parameter'

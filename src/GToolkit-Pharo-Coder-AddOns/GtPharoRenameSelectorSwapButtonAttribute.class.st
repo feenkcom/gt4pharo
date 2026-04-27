@@ -5,7 +5,9 @@ Class {
 		'icon',
 		'tooltip',
 		'actionBlock',
-		'id'
+		'id',
+		'hoveredBlock',
+		'unhoveredBlock'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -41,6 +43,16 @@ GtPharoRenameSelectorSwapButtonAttribute >> doAffect: aTBrTextEditorTextualPiece
 	button action: [ :anEvent | actionBlock cull: anEvent cull: anEditorElement ].
 	button id: id.
 
+	(hoveredBlock isNotNil and: [ unhoveredBlock isNotNil ])
+		ifTrue: [ button
+				addAptitude: (BrLazyStyleCommonAptitude new
+						hovered: [ :aStyle | 
+							aStyle
+								do: [ :aWidget | 
+									hoveredBlock cull: aWidget cull: anEditorElement ]
+								after: [ :aWidget | 
+									unhoveredBlock cull: aWidget cull: anEditorElement ] ]) ].
+
 	^ button
 ]
 
@@ -49,6 +61,12 @@ GtPharoRenameSelectorSwapButtonAttribute >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Swap button: ';
 		nextPutAll: self tooltip asString
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorSwapButtonAttribute >> hovered: aHoveredBlock after: anAfterBlock [
+	hoveredBlock := aHoveredBlock.
+	unhoveredBlock := anAfterBlock
 ]
 
 { #category : #accessing }
