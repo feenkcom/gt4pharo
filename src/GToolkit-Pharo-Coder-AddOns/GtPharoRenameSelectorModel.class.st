@@ -229,6 +229,12 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo source:
 	anItemTwo updateCurrentIndex: anIndexOne source: self
 ]
 
+{ #category : #'api - updating' }
+GtPharoRenameSelectorModel >> requestCancelRenameSelector [
+	self announcer
+		announce: (GtPharoRenameSelectorModelRefactoringsCancelRequested new selectorModel: self)
+]
+
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> selectorParts [
 	^ selectorParts

@@ -167,7 +167,9 @@ GtPharoRenameSelectorPartElement >> onEnterShortcut: aShortcutEvent [
 
 { #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onEscapeShortcut: aShortcutEvent [
-	aShortcutEvent consumed: true
+	aShortcutEvent consumed: true.
+	
+	selectorModel requestCancelRenameSelector
 ]
 
 { #category : #'private - event handling' }
