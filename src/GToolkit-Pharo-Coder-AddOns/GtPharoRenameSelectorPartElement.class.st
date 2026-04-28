@@ -120,6 +120,10 @@ GtPharoRenameSelectorPartElement >> initializeEditorElementStyling [
 		addAptitude: (BrLazyStyleCommonAptitude new
 				focused: [ :aStyle | aStyle do: [ :aWidget | aWidget switchToEditor ] ];
 				unfocused: [ :aStyle | aStyle do: [ :aWidget | aWidget switchToLabel ] ];
+				when: BlElementState hovered & BlElementState focused
+					style: [ :aStyle | 
+						aStyle
+							do: [ :aWidget | self onEditorElementHoveredAndFocused ] ];
 				when: BlElementState hovered | BlElementState focused
 					style: [ :aStyle | 
 						aStyle
@@ -173,6 +177,20 @@ GtPharoRenameSelectorPartElement >> onBrTextEditorModifiedEvent: anEvent [
 	selectorPartModel ifNil: [ ^ self ].
 
 	selectorPartModel updateCurrentName: anEvent text asString source: self
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onEditorElementHoveredAndFocused [
+	"If there is any permanently visible swap button that does not belong to me,
+	remove the permanently visible state from those swap buttons."
+
+	selectorModel ifNil: [ ^ self ].
+	selectorPartModel ifNil: [ ^ self ].
+
+	selectorModel
+		show: true
+		switchButtonsForSelectorPart: selectorPartModel
+		source: self
 ]
 
 { #category : #'private - event handling' }
