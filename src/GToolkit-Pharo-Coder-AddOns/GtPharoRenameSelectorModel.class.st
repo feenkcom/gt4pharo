@@ -258,7 +258,7 @@ GtPharoRenameSelectorModel >> notifyShowPreviewRequested [
 
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> numberOfParameters [
-	^ selectorParameters size
+	^ self parameters size
 ]
 
 { #category : #'private - event handling' }
@@ -301,9 +301,11 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo source:
 ]
 
 { #category : #'api - updating' }
-GtPharoRenameSelectorModel >> requestCancelRenameSelector [
+GtPharoRenameSelectorModel >> requestCancelRenameSelectorSource: aSource [
 	self announcer
-		announce: (GtPharoRenameSelectorModelRefactoringsCancelRequested new selectorModel: self)
+		announce: (GtPharoRenameSelectorModelRefactoringsCancelRequested new
+				selectorModel: self;
+				source: aSource)
 ]
 
 { #category : #'api - accessing' }
@@ -327,6 +329,29 @@ GtPharoRenameSelectorModel >> selectorPartsAndParametersDo: aBlock [
 	"Note that parameter may be nil if it does not exist."
 
 	selectorParts with: selectorParameters do: aBlock
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> show: isDisplayed switchButtonsForSelectorPart: aSelectorPart source: aSource [
+	| aRelevantModels |
+	self assert: [ aSelectorPart originalIndex <= selectorParts size ].
+	self assert: [ aSelectorPart originalIndex > 0 ].
+	self
+		assert: (selectorParts at: aSelectorPart originalIndex)
+		equals: aSelectorPart.
+
+	aRelevantModels := (selectorParameters at: aSelectorPart originalIndex)
+			ifNil: [ {aSelectorPart} ]
+			ifNotNil: [ :aParameter | 
+				{aSelectorPart.
+					aParameter} ].
+
+	self announcer
+		announce: (GtPharoRenameSelectorSwapVisibilityChanged new
+				selectorModel: self;
+				correspondingModels: aRelevantModels;
+				isVisible: isDisplayed;
+				source: aSource)
 ]
 
 { #category : #'api - updating' }

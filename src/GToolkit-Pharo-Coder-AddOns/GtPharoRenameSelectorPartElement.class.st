@@ -115,6 +115,11 @@ GtPharoRenameSelectorPartElement >> initializeEditorElementStyling [
 		addAptitude: (BrLazyStyleCommonAptitude new
 				focused: [ :aStyle | aStyle do: [ :aWidget | aWidget switchToEditor ] ];
 				unfocused: [ :aStyle | aStyle do: [ :aWidget | aWidget switchToLabel ] ];
+				when: BlElementState hovered | BlElementState focused
+					style: [ :aStyle | 
+						aStyle
+							do: [ :aWidget | self onEditorElementHoveredOrFocused ]
+							after: [ :aWidget | self onEditorElementUnhoveredAndUnfocused ] ];
 				when: GtPharoRenameSelectorHighlightState uniqueInstance
 					style: [ :aStyle :aTheme | 
 						aStyle
@@ -166,6 +171,28 @@ GtPharoRenameSelectorPartElement >> onBrTextEditorModifiedEvent: anEvent [
 ]
 
 { #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onEditorElementHoveredOrFocused [
+	selectorModel ifNil: [ ^ self ].
+	selectorPartModel ifNil: [ ^ self ].
+
+	selectorModel
+		show: true
+		switchButtonsForSelectorPart: selectorPartModel
+		source: self
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onEditorElementUnhoveredAndUnfocused [
+	selectorModel ifNil: [ ^ self ].
+	selectorPartModel ifNil: [ ^ self ].
+
+	selectorModel
+		show: false
+		switchButtonsForSelectorPart: selectorPartModel
+		source: self
+]
+
+{ #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onEnterShortcut: aShortcutEvent [
 	aShortcutEvent consumed: true.
 	selectorModel
@@ -175,8 +202,8 @@ GtPharoRenameSelectorPartElement >> onEnterShortcut: aShortcutEvent [
 { #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onEscapeShortcut: aShortcutEvent [
 	aShortcutEvent consumed: true.
-	
-	selectorModel requestCancelRenameSelector
+
+	selectorModel requestCancelRenameSelectorSource: self
 ]
 
 { #category : #'private - event handling' }

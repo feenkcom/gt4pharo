@@ -8,7 +8,8 @@ Class {
 		'id',
 		'hoveredBlock',
 		'unhoveredBlock',
-		'selectorModel'
+		'selectorModel',
+		'relevantModels'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -26,7 +27,10 @@ GtPharoRenameSelectorSwapButtonAttribute >> action: anObject [
 { #category : #accessing }
 GtPharoRenameSelectorSwapButtonAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| button |
-	button := GtPharoRenameSelectorSwapButtonElement new.
+	button := GtPharoRenameSelectorSwapButtonElement new
+			selectorModel: selectorModel
+			partAndParameterModels: (relevantModels ifNil: [ #() ]).
+	button hide.
 	button icon: icon.
 	button tooltip: tooltip.
 	button beMiniSize.
@@ -102,6 +106,16 @@ GtPharoRenameSelectorSwapButtonAttribute >> initialize [
 
 	self beAppend.
 	self beNotOverwritableByStyler
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorSwapButtonAttribute >> relevantModels [
+	^ relevantModels
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorSwapButtonAttribute >> relevantModels: anObject [
+	relevantModels := anObject
 ]
 
 { #category : #accessing }
