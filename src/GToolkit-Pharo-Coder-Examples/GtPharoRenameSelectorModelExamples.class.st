@@ -141,22 +141,24 @@ GtPharoRenameSelectorModelExamples >> binaryMethodAst [
 
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
-	| anEditor aDocumentId aController aCoder anAst |
+	| anEditor aDocumentId aController aCoder anAst aCoderViewModel |
 	aDocumentId := nil.
+	aCoder := GtPharoMethodCoder forMethod: aMethod.
+	anAst := aCoder astSync.
+	aCoderViewModel := aCoder asCoderViewModel.
+
 	anEditor := BrEditor new
 			aptitude: BrGlamorousRegularEditorAptitude;
-			styler: BrRBTextStyler new;
+			styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
 			when: BrTextEditorTextReplacedEvent
 				do: [ :anEvent | aDocumentId := anEvent documentId ].
 	anEditor text: aMethod sourceCode.
 
-	aCoder := GtPharoMethodCoder forMethod: aMethod.
-	anAst := aCoder astSync.
 	aController := GtPharoRenameSelectorCoderController new
 			originalNode: anAst;
 			editorElement: anEditor;
 			documentId: aDocumentId;
-			sourceCoderViewModel: aCoder asCoderViewModel;
+			sourceCoderViewModel: aCoderViewModel;
 			install.
 
 	^ anEditor
@@ -164,8 +166,12 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
 
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
-	| anEditor aDocumentId aController aCoder anAst |
+	| anEditor aDocumentId aController aCoder anAst aCoderViewModel |
 	aDocumentId := nil.
+	aCoder := GtPharoMethodCoder forMethod: aMethod.
+	anAst := aCoder astSync.
+	aCoderViewModel := aCoder asCoderViewModel.
+
 	anEditor := GtTextEditorElement new
 			defaultFontName: 'Source Code Pro';
 			defaultFontSize: 14;
@@ -173,18 +179,18 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			in: [ :theEditor | theEditor privateEditorHandle enableInMemoryCommandsRecorder ];
 			when: BrTextEditorModifiedEvent
 				do: [ :anEvent | aDocumentId := anEvent documentId ];
+			styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
+			when: BrTextStyledEvent
+				doOnce: [ :anEvent | 
+					aController := GtPharoRenameSelectorCoderController new
+							originalNode: anAst;
+							editorElement: anEditor;
+							sourceCoderViewModel: aCoderViewModel;
+							install ];
 			matchParent;
 			yourself.
-	
+
 	anEditor text: aMethod sourceCode.
-	
-	aCoder := GtPharoMethodCoder forMethod: aMethod.
-	anAst := aCoder astSync.
-	aController := GtPharoRenameSelectorCoderController new
-			originalNode: anAst;
-			editorElement: anEditor;
-			sourceCoderViewModel: aCoder asCoderViewModel;
-			install.
 
 	anEditor userData at: #selectorController put: aController.
 
