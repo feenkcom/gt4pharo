@@ -60,7 +60,7 @@ GtPharoRenameSelectorParameterElement >> initializeLabelElement [
 			aptitude: BrGlamorousLabelAptitude new;
 			padding: (BlInsets left: 2 right: 2);
 			addAptitude: (BrLazyStyleCommonAptitude new
-					when: GtPharoRenameSelectorHiglightState uniqueInstance
+					when: GtPharoRenameSelectorHighlightState uniqueInstance
 					style: [ :aStyle :aTheme | 
 						aStyle
 							do: [ :aWidget | 
@@ -126,9 +126,9 @@ GtPharoRenameSelectorParameterElement >> updateElement [
 GtPharoRenameSelectorParameterElement >> updateLabelElementHighlight: aBoolean [
 	aBoolean
 		ifTrue: [ labelElement states
-				addState: GtPharoRenameSelectorHiglightState uniqueInstance ]
+				addState: GtPharoRenameSelectorHighlightState uniqueInstance ]
 		ifFalse: [ labelElement states
-				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ]
+				removeState: GtPharoRenameSelectorHighlightState uniqueInstance ]
 ]
 
 { #category : #'private - updating' }

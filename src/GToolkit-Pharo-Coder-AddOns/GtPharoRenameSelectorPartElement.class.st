@@ -115,7 +115,7 @@ GtPharoRenameSelectorPartElement >> initializeEditorElementStyling [
 		addAptitude: (BrLazyStyleCommonAptitude new
 				focused: [ :aStyle | aStyle do: [ :aWidget | aWidget switchToEditor ] ];
 				unfocused: [ :aStyle | aStyle do: [ :aWidget | aWidget switchToLabel ] ];
-				when: GtPharoRenameSelectorHiglightState uniqueInstance
+				when: GtPharoRenameSelectorHighlightState uniqueInstance
 					style: [ :aStyle :aTheme | 
 						aStyle
 							do: [ :aWidget | 
@@ -280,7 +280,7 @@ GtPharoRenameSelectorPartElement >> updateElement [
 GtPharoRenameSelectorPartElement >> updateLabelElementHighlight: aBoolean [
 	aBoolean
 		ifTrue: [ editorElement states
-				addState: GtPharoRenameSelectorHiglightState uniqueInstance ]
+				addState: GtPharoRenameSelectorHighlightState uniqueInstance ]
 		ifFalse: [ editorElement states
-				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ]
+				removeState: GtPharoRenameSelectorHighlightState uniqueInstance ]
 ]

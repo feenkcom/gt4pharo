@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoRenameSelectorHiglightState,
+	#name : #GtPharoRenameSelectorHighlightState,
 	#superclass : #BlElementUniqueState,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
 
 { #category : #accessing }
-GtPharoRenameSelectorHiglightState >> priority [
+GtPharoRenameSelectorHighlightState >> priority [
 	^ 50
 ]
