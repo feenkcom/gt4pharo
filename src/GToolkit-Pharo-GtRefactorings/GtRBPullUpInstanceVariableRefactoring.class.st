@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBPullUpInstanceVariableRefactoring,
-	#superclass : #RBPullUpInstanceVariableRefactoring,
+	#superclass : #RePullUpInstanceVariableRefactoring,
 	#instVars : [
 		'classObject'
 	],
