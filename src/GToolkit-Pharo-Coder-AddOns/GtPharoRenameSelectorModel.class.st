@@ -42,6 +42,16 @@ GtPharoRenameSelectorModel >> currentSelector [
 ]
 
 { #category : #'api - ui' }
+GtPharoRenameSelectorModel >> displayRefactoringsPreviewOrFocusNextSelectorPart: anInteger [
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	(anInteger = selectorParts size and: [ self isModified ])
+		ifTrue: [ self notifyShowPreviewRequested ]
+		ifFalse: [ self focusNextSelectorPart: anInteger ]
+]
+
+{ #category : #'api - ui' }
 GtPharoRenameSelectorModel >> focusNextSelectorPart: anInteger [
 	| aNextPart |
 	self assert: [ anInteger > 0 ].
@@ -100,6 +110,77 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 							format: {anItem currentName.
 									anItem originalName} ] ]
 			weight: 3
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> highlight: isHighligthed selectorParameterWithNext: anInteger source: aSource [
+	| aParameterOne aParameterTwo |
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger < selectorParts size ].
+	aParameterOne := selectorParameters at: anInteger.
+	aParameterTwo := selectorParameters at: anInteger + 1.
+
+	self
+		selectorPartsAndParametersDo: [ :eachPart :eachParameter | 
+			eachParameter
+				ifNotNil: [ eachParameter = aParameterOne
+						ifTrue: [ eachParameter requestHighlightChange: isHighligthed source: aSource ] ] ]
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> highlight: isHighligthed selectorParameterWithPrevious: anInteger source: aSource [
+	| aParameterOne aParameterTwo |
+	self assert: [ anInteger > 1 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	aParameterOne := selectorParameters at: anInteger.
+	aParameterTwo := selectorParameters at: anInteger - 1.
+	
+	self
+		selectorPartsAndParametersDo: [ :eachPart :eachParameter | 
+			eachParameter
+				ifNotNil: [ eachParameter = aParameterOne
+						ifTrue: [ eachParameter requestHighlightChange: isHighligthed source: aSource ] ] ]
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> highlight: isHighligthed selectorPartAndParameterWithNext: anInteger source: aSource [
+	| aPartOne aPartTwo aParameterOne aParameterTwo |
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger < selectorParts size ].
+
+	aPartOne := selectorParts at: anInteger.
+	aPartTwo := selectorParts at: anInteger + 1.
+	aParameterOne := selectorParameters at: anInteger.
+	aParameterTwo := selectorParameters at: anInteger + 1.
+
+	self
+		selectorPartsAndParametersDo: [ :eachPart :eachParameter | 
+			eachPart = aPartOne
+				ifTrue: [ eachPart requestHighlightChange: isHighligthed source: aSource ].
+			eachParameter
+				ifNotNil: [ eachParameter = aParameterOne
+						ifTrue: [ eachParameter requestHighlightChange: isHighligthed source: aSource ] ] ]
+]
+
+{ #category : #'api - ui' }
+GtPharoRenameSelectorModel >> highlight: isHighligthed selectorPartAndParameterWithPrevious: anInteger source: aSource [
+	| aKeywordOne aKeywordTwo aParameterOne aParameterTwo |
+	self assert: [ anInteger > 1 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	aKeywordOne := selectorParts at: anInteger.
+	aKeywordTwo := selectorParts at: anInteger - 1.
+	aParameterOne := selectorParameters at: anInteger.
+	aParameterTwo := selectorParameters at: anInteger - 1.
+
+	self
+		selectorPartsAndParametersDo: [ :eachPart :eachParameter | 
+			eachPart = aKeywordOne
+				ifTrue: [ eachPart requestHighlightChange: isHighligthed source: aSource ].
+			eachParameter
+				ifNotNil: [ eachParameter = aParameterOne
+						ifTrue: [ eachParameter requestHighlightChange: isHighligthed source: aSource ] ] ]
 ]
 
 { #category : #initialization }
@@ -169,6 +250,12 @@ GtPharoRenameSelectorModel >> isModified [
 	^ self computeIsModified
 ]
 
+{ #category : #private }
+GtPharoRenameSelectorModel >> notifyShowPreviewRequested [
+	self announcer
+		announce: (GtPharoRenameSelectorModelRefactoringsPreviewRequested new selectorModel: self)
+]
+
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> numberOfParameters [
 	^ selectorParameters size
@@ -211,6 +298,12 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo source:
 	anItemOne updateCurrentIndex: anIndexTwo source: self.
 	anItemTwo updateCurrentName: aNameOne source: self.
 	anItemTwo updateCurrentIndex: anIndexOne source: self
+]
+
+{ #category : #'api - updating' }
+GtPharoRenameSelectorModel >> requestCancelRenameSelector [
+	self announcer
+		announce: (GtPharoRenameSelectorModelRefactoringsCancelRequested new selectorModel: self)
 ]
 
 { #category : #'api - accessing' }

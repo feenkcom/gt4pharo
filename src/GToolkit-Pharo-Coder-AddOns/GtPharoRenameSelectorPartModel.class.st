@@ -109,6 +109,15 @@ GtPharoRenameSelectorPartModel >> printOn: aStream [
 		nextPut: $)
 ]
 
+{ #category : #'api - ui' }
+GtPharoRenameSelectorPartModel >> requestHighlightChange: isHighlighted source: aSource [
+	self announcer
+		announce: (GtPharoRenameSelectorPartHighlightChangeRequested new
+				selectorPartModel: self;
+				isHighlighted: isHighlighted;
+				source: aSource)
+]
+
 { #category : #accessing }
 GtPharoRenameSelectorPartModel >> styler [
 	^ styler

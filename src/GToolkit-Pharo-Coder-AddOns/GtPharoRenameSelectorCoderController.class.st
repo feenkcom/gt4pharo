@@ -56,11 +56,16 @@ GtPharoRenameSelectorCoderController >> gtSelectorModelFor: aView [
 { #category : #initialization }
 GtPharoRenameSelectorCoderController >> install [
 	self preventSave.
-	selectorModel := GtPharoRenameSelectorModel  forAstMethodNode: originalNode.
+	selectorModel := GtPharoRenameSelectorModel forAstMethodNode: originalNode.
 	refactoringsStencil := GtPharoRenameSelectorCoderRefactoringsStencil new
-		selectorModel: selectorModel;
-		sourceCoderViewModel: sourceCoderViewModel.
-	self installAttributes
+			selectorModel: selectorModel;
+			sourceCoderViewModel: sourceCoderViewModel.
+	self installAttributes.
+
+	selectorModel announcer
+		when: GtPharoRenameSelectorModelRefactoringsCancelRequested
+		send: #onGtPharoRenameSelectorModelRefactoringsCancelRequested:
+		to: self
 ]
 
 { #category : #initialization }
@@ -83,6 +88,13 @@ GtPharoRenameSelectorCoderController >> installAttributes [
 							start: (eachCol at: 1)
 							end: (eachCol at: 2)
 							documentId: documentId) ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorCoderController >> onGtPharoRenameSelectorModelRefactoringsCancelRequested: anAnnouncement [
+	anAnnouncement selectorModel = selectorModel ifFalse: [ ^ self ].
+
+	self uninstall
 ]
 
 { #category : #accessing }

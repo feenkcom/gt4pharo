@@ -67,6 +67,13 @@ GtPharoRenameSelectorRefactoringsPreviewElement >> initializePreviewElement [
 ]
 
 { #category : #'private - event handling' }
+GtPharoRenameSelectorRefactoringsPreviewElement >> onGtPharoRenameSelectorModelRefactoringsPreviewRequested: anAnnouncement [
+	anAnnouncement selectorModel = selectorModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self showPreview ]
+]
+
+{ #category : #'private - event handling' }
 GtPharoRenameSelectorRefactoringsPreviewElement >> onGtPharoRenameSelectorModificationChanged: anAnnouncement [
 	anAnnouncement selectorModel = selectorModel ifFalse: [ ^ self ].
 	BlTaskAction
@@ -108,8 +115,11 @@ GtPharoRenameSelectorRefactoringsPreviewElement >> showPreview [
 GtPharoRenameSelectorRefactoringsPreviewElement >> subscribeToSelectorModel [
 	selectorModel announcer weak
 		when: GtPharoRenameSelectorModificationChanged
-		send: #onGtPharoRenameSelectorModificationChanged:
-		to: self
+			send: #onGtPharoRenameSelectorModificationChanged:
+			to: self;
+		when: GtPharoRenameSelectorModelRefactoringsPreviewRequested
+			send: #onGtPharoRenameSelectorModelRefactoringsPreviewRequested:
+			to: self
 ]
 
 { #category : #'private - updating' }
