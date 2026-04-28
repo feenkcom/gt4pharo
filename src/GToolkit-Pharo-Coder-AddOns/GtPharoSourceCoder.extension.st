@@ -341,8 +341,7 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 							in: aTextualViewModel
 							documentId: aDocumentId
 							for: element ]
-					shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
-							gtDisplayString)
+					shortcutKey: nil)
 					ifNotNil: [ :anAction | 
 						anAction
 							priority: 205.5;
