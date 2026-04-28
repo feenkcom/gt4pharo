@@ -325,7 +325,28 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 				ifNotNil: [ :anAction | 
 					anAction
 						priority: 205;
-						id: #'coder--refactoring-rename-message' ] ]
+						id: #'coder--refactoring-rename-message' ].
+
+			GtPharoCoderSettings displayNewRenameImplementationContextMenuItem ifTrue: [
+				(coderAddOns
+					addContextMenuItem: (self
+							createLabel: 'Rename message (new)'
+							description: node selector)
+					group: BrMenuItemGroupConfiguration refactoring
+					hover: (self highlightNodeBlock: highlightNode documentId: aDocumentId)
+					leave: self removeHighlightsBlock
+					action: [ :aTextualViewModel :element | 
+						self
+							renameNewNode: node
+							in: aTextualViewModel
+							documentId: aDocumentId
+							for: element ]
+					shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
+							gtDisplayString)
+					ifNotNil: [ :anAction | 
+						anAction
+							priority: 205.5;
+							id: #'coder--refactoring-rename-message-new' ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -678,6 +699,46 @@ GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMess
 	^ GtRenameMethodController2 new
 		sourceCoderViewModel: aSourceCoderViewModel;
 		originalNode: aMessageOrMethodOrMethodPatternNode
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
+	"New implementation of rename method.
+	
+	Is the `anElement editorElement` ok?"
+
+	self flag: #TODO.
+	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
+		ifTrue: [ | aController |
+			aController := GtPharoRenameSelectorCoderController new
+					originalNode: aNode;
+					editorElement: anElement editorElement;
+					documentId: aDocumentId;
+					sourceCoderViewModel: aSourceCoderViewModel;
+					install.
+			^ self ].
+	
+	aNode isVariable
+		ifTrue: [ (self isLocalVariable: aNode)
+				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
+			(self isInstanceVariable: aNode)
+				ifTrue: [ ^ self
+						renameInstanceVariableIn: aSourceCoderViewModel
+						node: aNode
+						for: anElement ].
+			(self isClassVariable: aNode)
+				ifTrue: [ ^ self
+						renameClassVariableIn: aSourceCoderViewModel
+						node: aNode
+						for: anElement ].
+			Smalltalk globals
+				at: aNode name value asSymbol
+				ifPresent: [ :cls | 
+					(cls isKindOf: Class)
+						ifTrue: [ ^ self
+								renameClassIn: aSourceCoderViewModel
+								node: aNode
+								for: anElement ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

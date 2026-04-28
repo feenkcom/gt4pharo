@@ -133,9 +133,15 @@ GtPharoRenameSelectorModelExamples >> binaryMethod [
 	^ aMethod
 ]
 
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> binaryMethodAst [
+	<gtExample>
+	^ self parseMethod: self binaryMethod
+]
+
 { #category : #'examples - demo' }
 GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
-	| anEditor aDocumentId aController |
+	| anEditor aDocumentId aController aCoder anAst |
 	aDocumentId := nil.
 	anEditor := BrEditor new
 			aptitude: BrGlamorousRegularEditorAptitude;
@@ -144,20 +150,21 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
 				do: [ :anEvent | aDocumentId := anEvent documentId ].
 	anEditor text: aMethod sourceCode.
 
+	aCoder := GtPharoMethodCoder forMethod: aMethod.
+	anAst := aCoder astSync.
 	aController := GtPharoRenameSelectorCoderController new
-			originalNode: aMethod ast;
+			originalNode: anAst;
 			editorElement: anEditor;
-			sourceCoderViewModel: (GtPharoMethodCoder forMethod: aMethod) asCoderViewModel;
+			documentId: aDocumentId;
+			sourceCoderViewModel: aCoder asCoderViewModel;
 			install.
-
-	anEditor userData at: #selectorController put: aController.
 
 	^ anEditor
 ]
 
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
-	| anEditor aDocumentId aController |
+	| anEditor aDocumentId aController aCoder anAst |
 	aDocumentId := nil.
 	anEditor := GtTextEditorElement new
 			defaultFontName: 'Source Code Pro';
@@ -170,11 +177,13 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			yourself.
 	
 	anEditor text: aMethod sourceCode.
-
+	
+	aCoder := GtPharoMethodCoder forMethod: aMethod.
+	anAst := aCoder astSync.
 	aController := GtPharoRenameSelectorCoderController new
-			originalNode: aMethod ast;
+			originalNode: anAst;
 			editorElement: anEditor;
-			sourceCoderViewModel: (GtPharoMethodCoder forMethod: aMethod) asCoderViewModel;
+			sourceCoderViewModel: aCoder asCoderViewModel;
 			install.
 
 	anEditor userData at: #selectorController put: aController.
@@ -226,47 +235,77 @@ GtPharoRenameSelectorModelExamples >> oneKeywordMethod [
 	^ aMethod
 ]
 
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> oneKeywordMethodAst [
+	<gtExample>
+	^ self parseMethod: self oneKeywordMethod
+]
+
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> parseMethod: aMethod [
+	<gtExample>
+	| anAst |
+	anAst := GtPharoIncrementalParser parse: aMethod sourceCode.
+	^ anAst
+]
+
 { #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod [
 	<gtExample>
-	| aModel aMethod |
+	| aModel aMethod anAst |
 	aMethod := self binaryMethod.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
-	
+	anAst := self binaryMethodAst.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
 	self assert: aModel currentSelector equals: aMethod selector.
 	self assert: aModel currentParameterPermutations equals: #(1).
-	
+
+	self assert: (aModel selectorParts at: 1) currentName equals: '*'.
+	self assert: (aModel parameters at: 1) currentName equals: 'anObject'.
+
 	^ aModel
 ]
 
 { #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithOneKeywordMethod [
 	<gtExample>
-	| aModel aMethod |
+	| aModel aMethod anAst |
 	aMethod := self oneKeywordMethod.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
-	
+	anAst := self oneKeywordMethodAst.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
 	self assert: aModel currentSelector equals: aMethod selector.
 	self assert: aModel currentParameterPermutations equals: #(1).
-	
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'instA:'.
+	self assert: (aModel parameters at: 1) currentName equals: 'anObject'.
+
 	^ aModel
 ]
 
 { #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod [
 	<gtExample>
-	| aModel aMethod |
+	| aModel aMethod anAst |
 	aMethod := self threeKeywordsMethod.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
+	anAst := self threeKeywordsMethodAst.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
 
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
 	self assert: aModel currentSelector equals: aMethod selector.
 	self assert: aModel currentParameterPermutations equals: (1 to: 3).
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+	self assert: (aModel selectorParts at: 2) currentName equals: 'valueB:'.
+	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
+	self assert: (aModel selectorParts at: 3) currentName equals: 'valueC:'.
+	self assert: (aModel parameters at: 3) currentName equals: 'valueC'.
 
 	^ aModel
 ]
@@ -281,7 +320,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
-	self assert: aModel currentSelector equals: #valueB:sumA:valueC:.
+	self assert: aModel currentSelector equals: #valueB:valueC:sumA:.
 	self assert: aModel currentParameterPermutations equals: #(2 1 3).
 
 	^ aModel
@@ -338,15 +377,18 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 { #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod [
 	<gtExample>
-	| aModel aMethod |
+	| aModel aMethod anAst |
 	aMethod := self unaryMethod.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: aMethod ast.
-	
+	anAst := self unaryMethodAst.
+	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
 	self assert: aModel currentSelector equals: aMethod selector.
 	self assert: aModel currentParameterPermutations equals: #().
-	
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'instAReceiver'.
+
 	^ aModel
 ]
 
@@ -530,8 +572,14 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywords
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	<gtExample>
 	| aMethod |
-	aMethod := GtPharoDummyTwoObject >> #sumA:valueB:valueC:.
+	aMethod := GtPharoDummyTwoObject >> #valueB:valueC:sumA:.
 	^ aMethod
+]
+
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> threeKeywordsMethodAst [
+	<gtExample>
+	^ self parseMethod: self threeKeywordsMethod
 ]
 
 { #category : #'examples - method' }
@@ -540,4 +588,10 @@ GtPharoRenameSelectorModelExamples >> unaryMethod [
 	| aMethod |
 	aMethod := GtPharoDummyOneObject >> #instAReceiver.
 	^ aMethod
+]
+
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> unaryMethodAst [
+	<gtExample>
+	^ self parseMethod: self unaryMethod
 ]
