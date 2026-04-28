@@ -16,6 +16,11 @@ GtPharoRenameSelectorPartElement >> defaultLayout [
 	^ BlFrameLayout new
 ]
 
+{ #category : #'focus requesting' }
+GtPharoRenameSelectorPartElement >> focusTarget [
+	^ editorElement
+]
+
 { #category : #'gt - extensions' }
 GtPharoRenameSelectorPartElement >> gtActionInspectSelectorModelFor: anAction [
 	<gtAction>
