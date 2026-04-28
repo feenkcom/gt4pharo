@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoRenameSelectorElementSignal,
-	#superclass : #GtPharoRenameSelectorSignal,
+	#superclass : #AnObsoleteGtPharoRenameSelectorSignal,
 	#instVars : [
 		'element'
 	],

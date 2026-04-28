@@ -64,16 +64,9 @@ GtPharoRenameSelectorParameterElement >> initializeLabelElement [
 					style: [ :aStyle :aTheme | 
 						aStyle
 							do: [ :aWidget | 
-								GtPharoRenameSelectorHighlightElementStyleSignal new
-									element: aWidget;
-									emit.
 								aWidget
 									border: (BlBorder paint: GtSmalltalkSourceCoder nodeHighlightColor width: 1) ]
-							after: [ :aWidget | 
-								GtPharoRenameSelectorUnhighlightElementStyleSignal new
-									element: aWidget;
-									emit.
-								aWidget border: BlBorder empty ] ])
+							after: [ :aWidget | aWidget border: BlBorder empty ] ])
 ]
 
 { #category : #'private - hooks' }
@@ -84,11 +77,6 @@ GtPharoRenameSelectorParameterElement >> onParameterModelChanged [
 { #category : #'private - event handling' }
 GtPharoRenameSelectorParameterElement >> onRenameSelectorParameterHighlightChangeRequested: anAnnouncement [
 	anAnnouncement parameterModel = parameterModel ifFalse: [ ^ self ].
-	
-	GtPharoRenameSelectorHighlightElementStateRequestSignal new
-		element: labelElement;
-		isHighlighted: anAnnouncement isHighlighted;
-		emit.
 
 	BlTaskAction
 		enqueueElement: labelElement
@@ -137,20 +125,10 @@ GtPharoRenameSelectorParameterElement >> updateElement [
 { #category : #'private - updating' }
 GtPharoRenameSelectorParameterElement >> updateLabelElementHighlight: aBoolean [
 	aBoolean
-		ifTrue: [ GtPharoRenameSelectorHighlightElementStateSignal new
-				element: labelElement;
-				emit.
-
-			labelElement states
+		ifTrue: [ labelElement states
 				addState: GtPharoRenameSelectorHiglightState uniqueInstance ]
-		ifFalse: [ GtPharoRenameSelectorUnhighlightElementStateSignal new
-				element: labelElement;
-				emit.
-
-			labelElement states
-				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ].
-
-	labelElement requestStyle
+		ifFalse: [ labelElement states
+				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ]
 ]
 
 { #category : #'private - updating' }

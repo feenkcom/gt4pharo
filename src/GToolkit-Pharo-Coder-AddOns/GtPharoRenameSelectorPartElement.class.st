@@ -119,16 +119,9 @@ GtPharoRenameSelectorPartElement >> initializeEditorElementStyling [
 					style: [ :aStyle :aTheme | 
 						aStyle
 							do: [ :aWidget | 
-								GtPharoRenameSelectorHighlightElementStyleSignal new
-									element: aWidget;
-									emit.
 								aWidget
 									border: (BlBorder paint: GtSmalltalkSourceCoder nodeHighlightColor width: 1) ]
-							after: [ :aWidget | 
-								GtPharoRenameSelectorUnhighlightElementStyleSignal new
-									element: aWidget;
-									emit.
-								aWidget border: BlBorder empty ] ])
+							after: [ :aWidget | aWidget border: BlBorder empty ] ])
 ]
 
 { #category : #'private - event handling' }
@@ -198,11 +191,6 @@ GtPharoRenameSelectorPartElement >> onRenameSelectorPartFocusRequested: anAnnoun
 { #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onRenameSelectorPartHighlightChangeRequested: anAnnouncement [
 	anAnnouncement selectorPartModel = selectorPartModel ifFalse: [ ^ self ].
-
-	GtPharoRenameSelectorHighlightElementStateRequestSignal new
-		element: editorElement;
-		isHighlighted: anAnnouncement isHighlighted;
-		emit.
 
 	BlTaskAction
 		enqueueElement: editorElement
@@ -291,18 +279,8 @@ GtPharoRenameSelectorPartElement >> updateElement [
 { #category : #'private - updating' }
 GtPharoRenameSelectorPartElement >> updateLabelElementHighlight: aBoolean [
 	aBoolean
-		ifTrue: [ GtPharoRenameSelectorHighlightElementStateSignal new
-				element: editorElement;
-				emit.
-
-			editorElement states
+		ifTrue: [ editorElement states
 				addState: GtPharoRenameSelectorHiglightState uniqueInstance ]
-		ifFalse: [ GtPharoRenameSelectorUnhighlightElementStateSignal new
-				element: editorElement;
-				emit.
-
-			editorElement states
-				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ].
-
-	editorElement requestStyle
+		ifFalse: [ editorElement states
+				removeState: GtPharoRenameSelectorHiglightState uniqueInstance ]
 ]

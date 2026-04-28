@@ -71,6 +71,6 @@ GtPharoRenameSelectorPartEditorAttribute >> shouldStartWithFocus [
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorPartEditorAttribute >> shouldStartWithFocus: anObject [
-	shouldStartWithFocus := anObject
+GtPharoRenameSelectorPartEditorAttribute >> shouldStartWithFocus: aBoolean [
+	shouldStartWithFocus := aBoolean
 ]
