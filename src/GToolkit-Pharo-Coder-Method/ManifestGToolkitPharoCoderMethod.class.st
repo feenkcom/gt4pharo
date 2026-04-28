@@ -52,10 +52,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'Reflectivity'.
 		'Transcript-NonInteractive'.
 		'Shift-ClassBuilder'
-	}, (self 
-		forPharo12AndNewer: [ {
-			'Deprecated12' } ] 
-		forPharo11: [ { } ])
+	}
 ]
 
 { #category : #asserting }

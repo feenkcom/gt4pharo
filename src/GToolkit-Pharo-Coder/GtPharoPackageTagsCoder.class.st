@@ -78,9 +78,9 @@ GtPharoPackageTagsCoder >> subscribeToSystem [
 	self unsubscribeFromSystem.
 	
 	SystemAnnouncer uniqueInstance weak
-		when: RPackageRegistered send: #onSystemPackageRegistered: to: self;
-		when: RPackageRenamed send: #onSystemPackageRenamed: to: self;
-		when: RPackageUnregistered send: #onSystemPackageUnregistered: to: self;
-		when: ClassTagAdded send: #onSystemPackageTagAdded: to: self;
-		when: ClassTagRemoved send: #onSystemPackageTagRemoved: to: self
+		when: PackageAdded send: #onSystemPackageRegistered: to: self;
+		when: PackageRenamed send: #onSystemPackageRenamed: to: self;
+		when: PackageRemoved send: #onSystemPackageUnregistered: to: self;
+		when: PackageTagAdded send: #onSystemPackageTagAdded: to: self;
+		when: PackageTagRemoved send: #onSystemPackageTagRemoved: to: self
 ]

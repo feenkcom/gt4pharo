@@ -93,12 +93,20 @@ GtPharoRenameSelectorPartElement >> initializeEditorElementShortcuts [
 	editorElement
 		whenKey: BlKeyCombination escape
 			editorDo: [ :aShortcutEvent | self onEscapeShortcut: aShortcutEvent ];
+		whenKey: BlKeyCombination enter
+			editorDo: [ :aShortcutEvent | self onEnterShortcut: aShortcutEvent ];
 		whenKey: BlKeyCombination tab
 			editorDo: [ :aShortcutEvent | self onTabShortcut: aShortcutEvent ];
 		whenKey: BlKeyCombination builder shift tab build
 			editorDo: [ :aShortcutEvent | self onShiftTabShortcut: aShortcutEvent ];
-		whenKey: BlKeyCombination enter
-			editorDo: [ :aShortcutEvent | self onEnterShortcut: aShortcutEvent ]
+		whenKey: BlKeyCombination arrowRight
+			editorDo: [ :aShortcutEvent | self onArrowRightShortcut: aShortcutEvent ];
+		whenKey: BlKeyCombination arrowLeft
+			editorDo: [ :aShortcutEvent | self onArrowLeftShortcut: aShortcutEvent ];
+		whenKey: BlKeyCombination arrowDown
+			editorDo: [ :aShortcutEvent | self onArrowDownShortcut: aShortcutEvent ];
+		whenKey: BlKeyCombination arrowUp
+			editorDo: [ :aShortcutEvent | self onArrowUpShortcut: aShortcutEvent ]
 ]
 
 { #category : #initialization }
@@ -124,6 +132,40 @@ GtPharoRenameSelectorPartElement >> initializeEditorElementStyling [
 ]
 
 { #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onArrowDownShortcut: aShortcutEvent [
+	self onArrowRightShortcut: aShortcutEvent
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onArrowLeftShortcut: aShortcutEvent [
+	| cursors |
+	aShortcutEvent consumed: true.
+	cursors := editorElement cursors positions.
+	(cursors includes: 0)
+		ifTrue: [ selectorModel focusPreviousSelectorPart: selectorPartModel originalIndex ]
+		ifFalse: [ cursors notEmpty
+				ifTrue: [ editorElement editor selectNone.
+					editorElement editor moveCursorTo: cursors first - 1 ] ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onArrowRightShortcut: aShortcutEvent [
+	| cursors |
+	aShortcutEvent consumed: true.
+	cursors := editorElement cursors positions.
+	(cursors includes: editorElement text size)
+		ifTrue: [ selectorModel focusNextSelectorPart: selectorPartModel originalIndex ]
+		ifFalse: [ cursors notEmpty
+				ifTrue: [ editorElement editor selectNone.
+					editorElement editor moveCursorTo: cursors first + 1 ] ]
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorPartElement >> onArrowUpShortcut: aShortcutEvent [
+	self onArrowLeftShortcut: aShortcutEvent
+]
+
+{ #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onBrTextEditorModifiedEvent: anEvent [
 	selectorPartModel ifNil: [ ^ self ].
 
@@ -131,13 +173,17 @@ GtPharoRenameSelectorPartElement >> onBrTextEditorModifiedEvent: anEvent [
 ]
 
 { #category : #'private - event handling' }
-GtPharoRenameSelectorPartElement >> onEnterShortcut: aShortcutEvent [ 
-	aShortcutEvent consumed: true
+GtPharoRenameSelectorPartElement >> onEnterShortcut: aShortcutEvent [
+	aShortcutEvent consumed: true.
+	selectorModel
+		displayRefactoringsPreviewOrFocusNextSelectorPart: selectorPartModel originalIndex
 ]
 
 { #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onEscapeShortcut: aShortcutEvent [
-	aShortcutEvent consumed: true
+	aShortcutEvent consumed: true.
+	
+	selectorModel requestCancelRenameSelector
 ]
 
 { #category : #'private - event handling' }

@@ -26,9 +26,7 @@ GtBlockCoderExamples >> syntaxError [
 
 	wasSignalled := false.
 	[ aBlockClosureCoder block ]
-		on: (self
-				forPharo12AndNewer: [ #CodeError asClass ]
-				forPharo11: [ SyntaxErrorNotification ])
+		on: CodeError
 		do: [ :e | wasSignalled := true ].
 
 	self assert: wasSignalled.

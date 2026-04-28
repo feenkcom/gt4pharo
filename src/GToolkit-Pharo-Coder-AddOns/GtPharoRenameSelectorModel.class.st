@@ -42,6 +42,16 @@ GtPharoRenameSelectorModel >> currentSelector [
 ]
 
 { #category : #'api - ui' }
+GtPharoRenameSelectorModel >> displayRefactoringsPreviewOrFocusNextSelectorPart: anInteger [
+	self assert: [ anInteger > 0 ].
+	self assert: [ anInteger <= selectorParts size ].
+
+	(anInteger = selectorParts size and: [ self isModified ])
+		ifTrue: [ self notifyShowPreviewRequested ]
+		ifFalse: [ self focusNextSelectorPart: anInteger ]
+]
+
+{ #category : #'api - ui' }
 GtPharoRenameSelectorModel >> focusNextSelectorPart: anInteger [
 	| aNextPart |
 	self assert: [ anInteger > 0 ].
@@ -240,6 +250,12 @@ GtPharoRenameSelectorModel >> isModified [
 	^ self computeIsModified
 ]
 
+{ #category : #private }
+GtPharoRenameSelectorModel >> notifyShowPreviewRequested [
+	self announcer
+		announce: (GtPharoRenameSelectorModelRefactoringsPreviewRequested new selectorModel: self)
+]
+
 { #category : #'api - accessing' }
 GtPharoRenameSelectorModel >> numberOfParameters [
 	^ selectorParameters size
@@ -282,6 +298,12 @@ GtPharoRenameSelectorModel >> privateSwapItem: anItemOne with: anItemTwo source:
 	anItemOne updateCurrentIndex: anIndexTwo source: self.
 	anItemTwo updateCurrentName: aNameOne source: self.
 	anItemTwo updateCurrentIndex: anIndexOne source: self
+]
+
+{ #category : #'api - updating' }
+GtPharoRenameSelectorModel >> requestCancelRenameSelector [
+	self announcer
+		announce: (GtPharoRenameSelectorModelRefactoringsCancelRequested new selectorModel: self)
 ]
 
 { #category : #'api - accessing' }
