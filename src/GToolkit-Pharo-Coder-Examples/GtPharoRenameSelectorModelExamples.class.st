@@ -320,7 +320,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 
 	self assert: aModel isModified.
 	self assert: aModel originalSelector equals: aMethod selector.
-	self assert: aModel currentSelector equals: #valueB:valueC:sumA:.
+	self assert: aModel currentSelector equals: #valueB:sumA:valueC:.
 	self assert: aModel currentParameterPermutations equals: #(2 1 3).
 
 	^ aModel
@@ -572,7 +572,7 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywords
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	<gtExample>
 	| aMethod |
-	aMethod := GtPharoDummyTwoObject >> #valueB:valueC:sumA:.
+	aMethod := GtPharoDummyTwoObject >> #sumA:valueB:valueC:.
 	^ aMethod
 ]
 
