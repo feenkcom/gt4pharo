@@ -27,6 +27,8 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 
 	aSelectorParameter originalIndex > 1
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+					selectorModel: selectorModel;
+					relevantModels: {aSelectorParameter};
 					icon: BrGlamorousVectorIcons left;
 					tooltip: 'Swap parameter with previous';
 					action: [ :aButton :aSelectorModel :aTextEditorElement | 
@@ -62,6 +64,8 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 		ifFalse: [ ^ self ].
 
 	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+			selectorModel: selectorModel;
+			relevantModels: {aSelectorParameter};
 			icon: BrGlamorousVectorIcons right;
 			tooltip: 'Swap parameter with next';
 			action: [ :aButton :aSelectorModel :aTextEditorElement | 
@@ -86,6 +90,8 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 				anAttribute}.
 
 	anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+			selectorModel: selectorModel;
+			relevantModels: {aSelectorParameter};
 			icon: BrGlamorousVectorIcons right;
 			tooltip: 'Swap keyword and parameter with next';
 			action: [ :aButton :aSelectorModel :aTextEditorElement | 
@@ -133,6 +139,8 @@ GtPharoRenameSelectorAttributesStencil >> createSelectorPartAttributeFor: aSelec
 	| anAttribute |
 	aSelectorPart originalIndex > 1
 		ifTrue: [ anAttribute := GtPharoRenameSelectorSwapButtonAttribute new
+					selectorModel: selectorModel;
+					relevantModels: {aSelectorPart};
 					icon: BrGlamorousVectorIcons left;
 					tooltip: 'Swap keyword and parameter with previous';
 					action: [ :aButton :aSelectorModel :aTextEditorElement | 
@@ -158,7 +166,8 @@ GtPharoRenameSelectorAttributesStencil >> createSelectorPartAttributeFor: aSelec
 
 	anAttribute := GtPharoRenameSelectorPartEditorAttribute new
 			selectorModel: selectorModel;
-			selectorPartModel: aSelectorPart.
+			selectorPartModel: aSelectorPart;
+			shouldStartWithFocus: aSelectorPart originalIndex = 1.
 
 	anAttribute shouldStartWithFocus: aSelectorPart originalIndex = 1.
 
