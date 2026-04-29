@@ -13,7 +13,7 @@ Class {
 GtPharoRenameSelectorPartEditorAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	"GtRenameSelectorEditorAttribute"
 
-	| renameEditor |
+	| renameEditor anId |
 	renameEditor := GtPharoRenameSelectorPartElement new
 			selectorModel: selectorModel selectorPartModel: selectorPartModel;
 			fitContent;
@@ -22,6 +22,10 @@ GtPharoRenameSelectorPartEditorAttribute >> doAffect: aTBrTextEditorTextualPiece
 					left: -2
 					bottom: 0
 					right: -2).
+
+	anId := #'selector-part' asBlocElementId
+			indexed: selectorPartModel originalIndex.
+	renameEditor id: anId.
 
 	shouldStartWithFocus ifTrue: [ renameEditor requestFocus ].
 

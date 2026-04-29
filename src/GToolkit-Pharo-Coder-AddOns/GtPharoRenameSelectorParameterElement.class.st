@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait + TBrSizeAdjustable classTrait',
 	#instVars : [
 		'parameterModel',
-		'labelElement'
+		'labelElement',
+		'selectorModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -58,15 +59,58 @@ GtPharoRenameSelectorParameterElement >> initializeLabelElement [
 	labelElement := BrLabel new
 			fitContent;
 			aptitude: BrGlamorousLabelAptitude new;
+			geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 			padding: (BlInsets left: 2 right: 2);
 			addAptitude: (BrLazyStyleCommonAptitude new
-					when: GtPharoRenameSelectorHighlightState uniqueInstance
+					when: BlElementState hovered & BlElementState focused
+					style: [ :aStyle | 
+						aStyle
+							do: [ :aWidget | self onLabelElementHoveredAndFocused ] ];
+				when: BlElementState hovered | BlElementState focused
+					style: [ :aStyle | 
+						aStyle
+							do: [ :aWidget | self onLabelElementHoveredOrFocused ]
+							after: [ :aWidget | self onLabelElementUnhoveredAndUnfocused ] ];
+				when: GtPharoRenameSelectorHighlightState uniqueInstance
 					style: [ :aStyle :aTheme | 
 						aStyle
 							do: [ :aWidget | 
 								aWidget
 									border: (BlBorder paint: GtSmalltalkSourceCoder nodeHighlightColor width: 1) ]
 							after: [ :aWidget | aWidget border: BlBorder empty ] ])
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorParameterElement >> onLabelElementHoveredAndFocused [
+	selectorModel ifNil: [ ^ self ].
+	parameterModel ifNil: [ ^ self ].
+
+	selectorModel
+		show: false
+		switchButtonsForSelectorParameter: parameterModel
+		source: self
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorParameterElement >> onLabelElementHoveredOrFocused [
+	selectorModel ifNil: [ ^ self ].
+	parameterModel ifNil: [ ^ self ].
+
+	selectorModel
+		show: true
+		switchButtonsForSelectorParameter: parameterModel
+		source: self
+]
+
+{ #category : #'private - event handling' }
+GtPharoRenameSelectorParameterElement >> onLabelElementUnhoveredAndUnfocused [
+	selectorModel ifNil: [ ^ self ].
+	parameterModel ifNil: [ ^ self ].
+
+	selectorModel
+		show: false
+		switchButtonsForSelectorParameter: parameterModel
+		source: self
 ]
 
 { #category : #'private - hooks' }
@@ -93,13 +137,16 @@ GtPharoRenameSelectorParameterElement >> onRenameSelectorParameterNameChanged: a
 ]
 
 { #category : #accessing }
-GtPharoRenameSelectorParameterElement >> parameterModel: aParameterModel [
+GtPharoRenameSelectorParameterElement >> selectorModel: aSelectorModel parameterModel: aParameterModel [
 	"Let's assume model is assigned only once.
 	If it change, we change this part."
 
 	self assert: [ aParameterModel isNotNil ].
+	self assert: [ aSelectorModel isNotNil ].
 	self assert: [ parameterModel isNil ].
+	self assert: [ selectorModel isNil ].
 
+	selectorModel := aSelectorModel.
 	parameterModel := aParameterModel.
 
 	self onParameterModelChanged.
