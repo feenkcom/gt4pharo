@@ -146,7 +146,7 @@ GtInlineAllSelfSendsRefactoring >> initialize [
 
 { #category : #testing }
 GtInlineAllSelfSendsRefactoring >> isRecursiveMethod: aSymbol in: aSet [
-	((class whoDefinesMethod: aSymbol) ifNotNil: [ :cls | cls methodFor: aSymbol ])
+	((class whichClassIncludesSelector: aSymbol) ifNotNil: [ :cls | cls methodFor: aSymbol ])
 		ifNotNil: [ :method | 
 			method ast
 				nodesDo: [ :each | 
