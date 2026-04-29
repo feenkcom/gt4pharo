@@ -169,7 +169,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #(
 					'GToolkitCoder'
 					'GToolkit-Pharo-Coder-Method'
-					'GToolkit-Pharo-Coder-Method-UI'
+					'GToolkit-Pharo-Coder-Method-UI'.
 				 ).
 				 
 			self 
