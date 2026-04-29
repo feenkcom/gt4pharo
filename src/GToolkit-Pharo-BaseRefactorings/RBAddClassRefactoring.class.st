@@ -47,6 +47,30 @@ RBAddClassRefactoring >> addClass: aName superclass: aClass subclasses: aCollect
 	category := aSymbol
 ]
 
+{ #category : #preconditions }
+RBAddClassRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds
+		add: ((RBCondition isMetaclass: superclass)
+				errorMacro: 'Superclass must not be a metaclass') not.
+	subclasses
+		do: [ :each | 
+			conds
+				add: ((RBCondition isMetaclass: each)
+						errorMacro: 'Subclass must <1?not :>be a metaclass') not.
+			conds add: (RBCondition isImmediateSubclass: each of: superclass) ].
+	conds add: (RBCondition isValidClassName: className).
+	conds add: (RBCondition isGlobal: className in: self model) not.
+	conds add: (RBCondition isSymbol: category).
+	conds
+		add: ((RBCondition withBlock: [ category isNotEmpty ])
+				errorMacro: 'Invalid category name').
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #transforming }
 RBAddClassRefactoring >> basicTransform [
 	<gtPharoPatch: #Pharo>
@@ -69,25 +93,6 @@ RBAddClassRefactoring >> basicTransform [
 { #category : #accessing }
 RBAddClassRefactoring >> gtDescription [
 	^ 'Add class ' , className
-]
-
-{ #category : #preconditions }
-RBAddClassRefactoring >> preconditions [
-	| cond |
-	cond := ((RBCondition isMetaclass: superclass) 
-				errorMacro: 'Superclass must not be a metaclass') not.
-	cond := subclasses inject: cond
-				into: 
-					[:sub :each | 
-					sub 
-						& ((RBCondition isMetaclass: each) 
-								errorMacro: 'Subclass must <1?not :>be a metaclass') not 
-							& (RBCondition isImmediateSubclass: each of: superclass)].
-	^cond & (RBCondition isValidClassName: className) 
-		& (RBCondition isGlobal: className in: self model) not 
-			& (RBCondition isSymbol: category) 
-			& ((RBCondition withBlock: [category isNotEmpty ]) 
-					errorMacro: 'Invalid category name')
 ]
 
 { #category : #transforming }
