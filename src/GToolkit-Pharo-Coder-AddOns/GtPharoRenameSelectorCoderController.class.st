@@ -55,17 +55,24 @@ GtPharoRenameSelectorCoderController >> gtSelectorModelFor: aView [
 
 { #category : #initialization }
 GtPharoRenameSelectorCoderController >> install [
-	self preventSave.
+	"The originalNode can be isMessage, isMethod, isMethodPattern.
+	See GtPharoSourceCoder>>#renameNewNode:in:documentId:for:."
+
+	self flag: #TODO.
 	selectorModel := GtPharoRenameSelectorModel forAstMethodNode: originalNode.
 	refactoringsStencil := GtPharoRenameSelectorCoderRefactoringsStencil new
 			selectorModel: selectorModel;
 			sourceCoderViewModel: sourceCoderViewModel.
+
+	self preventSave.
 	self installAttributes.
 
 	selectorModel announcer
 		when: GtPharoRenameSelectorModelRefactoringsCancelRequested
 		send: #onGtPharoRenameSelectorModelRefactoringsCancelRequested:
-		to: self
+		to: self.
+
+	editorElement userData at: self class put: self
 ]
 
 { #category : #initialization }
@@ -137,5 +144,7 @@ GtPharoRenameSelectorCoderController >> sourceCoderViewModel: anObject [
 { #category : #initialization }
 GtPharoRenameSelectorCoderController >> uninstall [
 	self removeAttributes.
-	self allowSave
+	self allowSave.
+
+	editorElement userData removeKey: self class ifAbsent: [  "ignore" ]
 ]

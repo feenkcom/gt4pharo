@@ -22,7 +22,7 @@ GtPharoRenameSelectorPartComponentsBuilder >> astNode: anObject [
 
 { #category : #'as yet unclassified' }
 GtPharoRenameSelectorPartComponentsBuilder >> build [
-	astNode arguments
+	astNode variables
 		ifNotEmpty: [ :aCollection | 
 			aCollection size = 1
 				ifTrue: [ self buildBinaryOrKeywordComponents ]

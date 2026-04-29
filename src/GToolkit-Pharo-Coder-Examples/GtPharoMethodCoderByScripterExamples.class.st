@@ -6333,7 +6333,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
 
 	scripter click
 		label: 'Click on the coder editor to give it focus';
-		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	scripter shortcut
@@ -6345,12 +6345,12 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRenameLocalVariableParens [
 	scripter assert
 		label: 'Assert editor is focused';
 		satisfies: [ :anEditorElement | anEditorElement hasFocus ];
-		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		play.
 
 	scripter do
 		label: 'Position cursor';
-		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
 		block: [ :each | 
 			each editor
 				moveCursorTo: (thisContext method method sourceCode indexOfSubCollection: 'scripter') + 1 ];
@@ -6506,14 +6506,11 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_menu [
 			s
 				label: 'Open menu';
 				id: GtSourceCoderEditorId ].
-	aScripter
-		mouseMoveOverStep: [ :s | 
-			s
-				label: 'Hover rename';
-				onSpaceRoot;
-				// GtCoderMenuActionItemElement;
-				// BrLabel;
-				@ [ :each | each text asString beginsWith: 'Rename message' ] ].
+	aScripter menuStep 
+		hoverMenuItemWithId: #'coder--refactoring-rename-message';
+		onPopover;
+		play.
+				
 	aScripter
 		checkStep: [ :s | 
 			s
@@ -6523,14 +6520,12 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_menu [
 					self
 						assert: ((each editor text attributesAt: 1)
 								includes: GtSmalltalkSourceCoder nodeHighlight) ] ].
-	aScripter
-		clickStep: [ :s | 
-			s
-				label: 'Click rename';
-				onSpaceRoot;
-				// GtCoderMenuActionItemElement;
-				// BrLabel;
-				@ [ :each | each text asString beginsWith: 'Rename message' ] ].
+								
+	aScripter menuStep 
+		clickMenuItemWithId: #'coder--refactoring-rename-message';
+		onPopover;
+		play.
+		
 	aScripter
 		checkStep: [ :s | 
 			s

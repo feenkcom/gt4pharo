@@ -22,6 +22,11 @@ GtPharoRenameSelectorSwapButtonElement >> action: aBlock [
 	buttonElement action: aBlock
 ]
 
+{ #category : #'private - updating' }
+GtPharoRenameSelectorSwapButtonElement >> addKeepVisibilityState [
+	self states addState: GtPharoRenameSelectorKeepVisibilityState uniqueInstance
+]
+
 { #category : #'api - size adjustable' }
 GtPharoRenameSelectorSwapButtonElement >> beSize: aBrSizeAdjustmentState [
 	buttonElement beSize: aBrSizeAdjustmentState
@@ -105,6 +110,7 @@ GtPharoRenameSelectorSwapButtonElement >> initializeElementStyling [
 	self
 		addAptitude: (BrLazyStyleCommonAptitude new
 				when: GtPharoRenameSelectorVisibilityState uniqueInstance
+						| GtPharoRenameSelectorKeepVisibilityState uniqueInstance
 				style: [ :aStyle | aStyle do: [ :aWidget | self show ] after: [ :aWidget | self hide ] ])
 ]
 
@@ -120,7 +126,8 @@ GtPharoRenameSelectorSwapButtonElement >> onRenameSelectorSwapVisibilityChanged:
 
 	(anAnnouncement correspondingModels
 		anySatisfy: [ :eachModel | correspondingModels includes: eachModel ])
-		ifFalse: [ ^ self ].
+		ifFalse: [ self removeKeepVisibilityState.
+			^ self ].
 
 	BlTaskAction
 		enqueueElement: self
@@ -136,6 +143,12 @@ GtPharoRenameSelectorSwapButtonElement >> onSelectorModelChanged [
 GtPharoRenameSelectorSwapButtonElement >> onUnhovered [
 	unhoveredBlock
 		ifNotNil: [ :aBlock | aBlock cull: buttonElement cull: selectorModel ]
+]
+
+{ #category : #'private - updating' }
+GtPharoRenameSelectorSwapButtonElement >> removeKeepVisibilityState [
+	self states
+		removeState: GtPharoRenameSelectorKeepVisibilityState uniqueInstance
 ]
 
 { #category : #accessing }
@@ -178,8 +191,8 @@ GtPharoRenameSelectorSwapButtonElement >> updateElement [
 { #category : #'private - updating' }
 GtPharoRenameSelectorSwapButtonElement >> updateVisibility: aBoolean [
 	aBoolean
-		ifTrue: [ self states
-				addState: GtPharoRenameSelectorVisibilityState uniqueInstance ]
+		ifTrue: [ self addKeepVisibilityState.
+			self states addState: GtPharoRenameSelectorVisibilityState uniqueInstance ]
 		ifFalse: [ self states
 				removeState: GtPharoRenameSelectorVisibilityState uniqueInstance ]
 ]
