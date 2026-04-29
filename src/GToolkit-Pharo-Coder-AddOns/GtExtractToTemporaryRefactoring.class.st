@@ -79,13 +79,19 @@ GtExtractToTemporaryRefactoring >> insertTemporary [
 			index := index + 1 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtExtractToTemporaryRefactoring >> parseTree [
 	parseTree
 		ifNil: [ parseTree := class parseTreeForSelector: selector.
 			parseTree ifNil: [ self refactoringError: 'Could not parse method' ].
 			source := SmaCCString on: parseTree source ].
 	^ parseTree doSemanticAnalysis
+]
+
+{ #category : #transforming }
+GtExtractToTemporaryRefactoring >> prepareForExecution [
+	super prepareForExecution.
+	source := SmaCCString on: self parseTree source
 ]
 
 { #category : #transforming }

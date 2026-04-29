@@ -1,6 +1,6 @@
 Extension { #name : #RBSelectorNode }
 
-{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+{ #category : #'*GToolkit-Pharo-Coder-Pharo12Extensions' }
 RBSelectorNode >> gtInterestingHighlightingIntervals [
 	| all |
 	all := OrderedCollection new.

@@ -1,6 +1,6 @@
 Extension { #name : #RBLiteralValueNode }
 
-{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+{ #category : #'*GToolkit-Pharo-Coder-Pharo12Extensions' }
 RBLiteralValueNode >> gtIsBaselineName [
 	self value isString ifFalse: [ ^ false ].
 	self class environment
@@ -17,7 +17,7 @@ RBLiteralValueNode >> gtIsBaselineName [
 	^ true
 ]
 
-{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+{ #category : #'*GToolkit-Pharo-Coder-Pharo12Extensions' }
 RBLiteralValueNode >> gtIsBaselinePackageName [
 	self value isString ifFalse: [ ^ false ].
 	self packageOrganizer packageNamed: self value ifAbsent: [ ^ false ].

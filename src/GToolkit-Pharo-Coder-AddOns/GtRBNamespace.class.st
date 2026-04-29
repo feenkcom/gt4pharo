@@ -158,6 +158,16 @@ GtRBNamespace >> packageNamed: aSymbol [
 	^ (self createNewPackageFor: aSymbol) first
 ]
 
+{ #category : #changes }
+GtRBNamespace >> performChange: aCompositeRefactoryChange around: aBlock [
+	| oldChanges |
+	changes addChange: aCompositeRefactoryChange.
+	oldChanges := changes.
+	changes := aCompositeRefactoryChange.
+	aBlock ensure: [ changes := oldChanges ].
+	^ aCompositeRefactoryChange
+]
+
 { #category : #accessing }
 GtRBNamespace >> privateImplementorsOf: aSelector [
 	| implementers |
