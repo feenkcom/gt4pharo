@@ -59,7 +59,7 @@ GtPharoRenameSelectorCoderController >> install [
 	See GtPharoSourceCoder>>#renameNewNode:in:documentId:for:."
 
 	self flag: #TODO.
-	selectorModel := GtPharoRenameSelectorModel forAstMethodNode: originalNode.
+	selectorModel := GtPharoRenameSelectorModel forAstNode: originalNode.
 	refactoringsStencil := GtPharoRenameSelectorCoderRefactoringsStencil new
 			selectorModel: selectorModel;
 			sourceCoderViewModel: sourceCoderViewModel.

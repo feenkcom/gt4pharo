@@ -13,6 +13,11 @@ GtPharoMethodNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitMethod: self
 ]
 
+{ #category : #accessing }
+GtPharoMethodNode >> arguments [
+	^ self variables
+]
+
 { #category : #generated }
 GtPharoMethodNode >> body [
 	^ body

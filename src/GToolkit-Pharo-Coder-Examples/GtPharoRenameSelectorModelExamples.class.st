@@ -261,7 +261,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod [
 	| aModel aMethod anAst |
 	aMethod := self binaryMethod.
 	anAst := self binaryMethodAst.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
 
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -280,7 +280,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithOneKeywordMethod [
 	| aModel aMethod anAst |
 	aMethod := self oneKeywordMethod.
 	anAst := self oneKeywordMethodAst.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
 
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -299,7 +299,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	| aModel aMethod anAst |
 	aMethod := self threeKeywordsMethod.
 	anAst := self threeKeywordsMethodAst.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
 
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -381,12 +381,56 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 ]
 
 { #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordMessageNode [
+	<gtExample>
+	| aModel aMethod anAst |
+	aMethod := self threeKeywordsMethod.
+	anAst := self threeKeywordsKeywordMessageAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
+
+	self assert: aModel isModified not.
+	self assert: aModel originalSelector equals: anAst selector.
+	self assert: aModel currentSelector equals: anAst selector.
+	self assert: aModel currentParameterPermutations equals: (1 to: 2).
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+	self assert: (aModel selectorParts at: 2) currentName equals: 'b:'.
+	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordMethodPatternNode [
+	<gtExample>
+	| aModel aMethod anAst |
+	aMethod := self threeKeywordsMethod.
+	anAst := self threeKeywordsMethodPatternAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
+
+	self assert: aModel isModified not.
+	self assert: aModel originalSelector equals: aMethod selector.
+	self assert: aModel currentSelector equals: aMethod selector.
+	self assert: aModel currentParameterPermutations equals: (1 to: 3).
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+	self assert: (aModel selectorParts at: 2) currentName equals: 'valueB:'.
+	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
+	self assert: (aModel selectorParts at: 3) currentName equals: 'valueC:'.
+	self assert: (aModel parameters at: 3) currentName equals: 'valueC'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod [
 	<gtExample>
 	| aModel aMethod anAst |
 	aMethod := self unaryMethod.
 	anAst := self unaryMethodAst.
-	aModel := GtPharoRenameSelectorModel forAstMethodNode: anAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
 
 	self assert: aModel isModified not.
 	self assert: aModel originalSelector equals: aMethod selector.
@@ -575,6 +619,21 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywords
 ]
 
 { #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> threeKeywordsKeywordMessageAst [
+	<gtExample>
+	| anAst aKeywordNode |
+	anAst := self threeKeywordsMethodAst.
+	aKeywordNode := nil.
+	anAst
+		allNodesOfType: GtPharoKeywordMessageNode
+		do: [ :eachNode | eachNode selector = #sumA:b: ifTrue: [ aKeywordNode := eachNode ] ].
+
+	self assert: aKeywordNode isNotNil.
+
+	^ aKeywordNode
+]
+
+{ #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	<gtExample>
 	| aMethod |
@@ -586,6 +645,21 @@ GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethodAst [
 	<gtExample>
 	^ self parseMethod: self threeKeywordsMethod
+]
+
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> threeKeywordsMethodPatternAst [
+	<gtExample>
+	| anAst aKeywordNode |
+	anAst := self threeKeywordsMethodAst.
+	aKeywordNode := nil.
+	anAst
+		allNodesOfType: GtPharoMethodPatternNode
+		do: [ :eachNode | aKeywordNode := eachNode ].
+
+	self assert: aKeywordNode isNotNil.
+
+	^ aKeywordNode
 ]
 
 { #category : #'examples - method' }
