@@ -53,6 +53,7 @@ GtPharoRenameSelectorAttributesStencil >> createParameterAttributeFor: aSelector
 						anAttribute} ].
 
 	anAttribute := GtPharoRenameSelectorParameterLabelAttribute new
+			selectorModel: selectorModel;
 			parameterModel: aSelectorParameter.
 
 	aStream

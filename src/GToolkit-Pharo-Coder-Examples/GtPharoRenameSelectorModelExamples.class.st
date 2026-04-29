@@ -611,6 +611,89 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	aScripter := BlScripter new
 			model: aModel;
 			element: anElement.
+			
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_downAndUpArrowShortcuts [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			6
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
 
 	^ aScripter
 ]
@@ -649,15 +732,89 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 ]
 
 { #category : #'examples - scripter' }
-GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_rightAndLeftArrowShortcuts [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
 
-	aScripter click
-		label: 'Activate first selector part';
-		// (#'selector-part' asBlocElementId indexed: 1);
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
 		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			6
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
 
 	self
 		assert: aScripter

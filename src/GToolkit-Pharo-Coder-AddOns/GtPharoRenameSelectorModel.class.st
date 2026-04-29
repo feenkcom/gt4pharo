@@ -332,6 +332,29 @@ GtPharoRenameSelectorModel >> selectorPartsAndParametersDo: aBlock [
 ]
 
 { #category : #'api - ui' }
+GtPharoRenameSelectorModel >> show: isDisplayed switchButtonsForSelectorParameter: aSelectorParameter source: aSource [
+	| aRelevantModels |
+	self assert: [ aSelectorParameter originalIndex <= selectorParts size ].
+	self assert: [ aSelectorParameter originalIndex > 0 ].
+	self
+		assert: (selectorParameters at: aSelectorParameter originalIndex)
+		equals: aSelectorParameter.
+
+	aRelevantModels := (selectorParts at: aSelectorParameter originalIndex)
+			ifNil: [ {aSelectorParameter} ]
+			ifNotNil: [ :aSelectorPart | 
+				{aSelectorParameter.
+					aSelectorPart} ].
+
+	self announcer
+		announce: (GtPharoRenameSelectorSwapVisibilityChanged new
+				selectorModel: self;
+				correspondingModels: aRelevantModels;
+				isVisible: isDisplayed;
+				source: aSource)
+]
+
+{ #category : #'api - ui' }
 GtPharoRenameSelectorModel >> show: isDisplayed switchButtonsForSelectorPart: aSelectorPart source: aSource [
 	| aRelevantModels |
 	self assert: [ aSelectorPart originalIndex <= selectorParts size ].
