@@ -13,8 +13,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtPharoRenameSelectorModel class >> forAstMethodNode: anAstNode [
-	^ self new initializeForAstMethodNode: anAstNode
+GtPharoRenameSelectorModel class >> forAstNode: anAstNode [
+	^ self new initializeForAstNode: anAstNode
 ]
 
 { #category : #accessing }
@@ -191,13 +191,13 @@ GtPharoRenameSelectorModel >> initialize [
 ]
 
 { #category : #initialization }
-GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
+GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
 	| aSelectorParts aSelectorPartIntervals aSelectorVariableNodes aComponentsBuilder |
 	originalAstNode := anAstNode.
 	originalSelector := anAstNode selector.
 	aSelectorParts := originalSelector keywords.
 	aSelectorPartIntervals := anAstNode selectorParts collect: #sourceInterval.
-	aSelectorVariableNodes := anAstNode variables.
+	aSelectorVariableNodes := anAstNode arguments.
 	aComponentsBuilder := GtPharoRenameSelectorPartComponentsBuilder new
 			astNode: anAstNode;
 			build.
