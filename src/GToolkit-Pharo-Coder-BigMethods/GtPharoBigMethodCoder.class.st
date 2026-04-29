@@ -4,14 +4,19 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-BigMethods-Coder'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 GtPharoBigMethodCoder >> asCoderViewModel [
 	^ GtPharoBigMethodCoderViewModel new
 		coder: self;
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
+GtPharoBigMethodCoder >> canMoveMethodToInstanceOrClass [
+	^ true
+]
+
+{ #category : #initialization }
 GtPharoBigMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderViewModel [
 	addOns
 		addDropDownWithPreviewAction: 'Remove' translated

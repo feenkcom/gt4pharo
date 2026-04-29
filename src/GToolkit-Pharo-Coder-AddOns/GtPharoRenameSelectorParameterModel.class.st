@@ -40,8 +40,8 @@ GtPharoRenameSelectorParameterModel >> initialize [
 
 { #category : #initialization }
 GtPharoRenameSelectorParameterModel >> initializeForAstVariableNode: anAstVariableNode index: anIndex [
-	originalName := anAstVariableNode name.
-	originalInterval := anAstVariableNode start to: anAstVariableNode stop.
+	originalName := anAstVariableNode variableName. 
+	originalInterval := anAstVariableNode sourceInterval.
 	originalIndex := anIndex.
 	
 	currentName := originalName.

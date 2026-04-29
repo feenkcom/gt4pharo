@@ -13,8 +13,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtPharoRenameSelectorModel class >> forAstMethodNode: anAstNode [
-	^ self new initializeForAstMethodNode: anAstNode
+GtPharoRenameSelectorModel class >> forAstNode: anAstNode [
+	^ self new initializeForAstNode: anAstNode
 ]
 
 { #category : #accessing }
@@ -191,13 +191,13 @@ GtPharoRenameSelectorModel >> initialize [
 ]
 
 { #category : #initialization }
-GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
-	| aSelectorParts aSelectorPartRanges aSelectorArguments aComponentsBuilder |
+GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
+	| aSelectorParts aSelectorPartIntervals aSelectorVariableNodes aComponentsBuilder |
 	originalAstNode := anAstNode.
 	originalSelector := anAstNode selector.
 	aSelectorParts := originalSelector keywords.
-	aSelectorPartRanges := anAstNode keywordsIntervals.
-	aSelectorArguments := anAstNode arguments.
+	aSelectorPartIntervals := anAstNode selectorParts collect: #sourceInterval.
+	aSelectorVariableNodes := anAstNode arguments.
 	aComponentsBuilder := GtPharoRenameSelectorPartComponentsBuilder new
 			astNode: anAstNode;
 			build.
@@ -207,12 +207,12 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 				| anIndex |
 				anIndex := 1.
 				aSelectorParts
-					with: aSelectorPartRanges
-					do: [ :aPart :aRange | 
+					with: aSelectorPartIntervals
+					do: [ :aPart :anInterval | 
 						| aPartModel |
 						aPartModel := GtPharoRenameSelectorPartModel
 								forSelectorPart: aPart
-								interval: aRange
+								interval: anInterval
 								index: anIndex.
 						aPartModel validator: aComponentsBuilder validator.
 						aPartModel styler: aComponentsBuilder styler.
@@ -227,7 +227,7 @@ GtPharoRenameSelectorModel >> initializeForAstMethodNode: anAstNode [
 						aStream nextPut: aPartModel.
 						anIndex := anIndex + 1 ] ].
 
-	selectorParameters := (aSelectorArguments
+	selectorParameters := (aSelectorVariableNodes
 			withIndexCollect: [ :eachArgument :anIndex | 
 				| aParameterModel |
 				aParameterModel := GtPharoRenameSelectorParameterModel
