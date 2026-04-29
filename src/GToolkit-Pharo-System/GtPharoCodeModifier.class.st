@@ -117,7 +117,7 @@ GtPharoCodeModifier >> createPackageNamed: aPackageName [
 { #category : #'api - package' }
 GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
 	<return: #PackageTag>
-	<exception: #RPackageConflictError>
+	<exception: #PackageConflictError>
 	^ self critical: [ aPackage addClassTag: aTagName ]
 ]
 
