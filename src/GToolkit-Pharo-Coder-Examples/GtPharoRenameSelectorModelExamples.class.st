@@ -47,12 +47,110 @@ GtPharoRenameSelectorModelExamples >> assert: aScripter refactoringsPreviewIsVis
 ]
 
 { #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> assertThreeKeywordsSelectorForStencil: aStencil [
+	| allAttributes |
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 15.
+	self
+		assert: (allAttributes at: 1) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 2) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 3) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 4) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 5) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 6) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 7) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 8) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 9) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 10) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 11) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 12) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 13) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 14) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 15) third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute
+]
+
+{ #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
 	<gtExample>
-	| aStencil aModel |
+	| aStencil aModel allAttributes |
 	aModel := self renameSelectorModelWithBinaryMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+	
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 2.
+	self assert: allAttributes first third class equals: GtPharoRenameSelectorPartEditorAttribute.
+	self assert: allAttributes second third class equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
+
+	^ aStencil
+]
+
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithKeywordMessageNode [
+	<gtExample>
+	| aStencil aModel allAttributes |
+	aModel := self renameSelectorModelWithKeywordMessageNode.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 9.
+	self
+		assert: (allAttributes at: 1) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 2) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 3) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 4) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 5) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 6) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 7) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 8) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 9) third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
 
 	^ aStencil
 ]
@@ -60,10 +158,19 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
 { #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithOneKeywordMethod [
 	<gtExample>
-	| aStencil aModel |
+	| aStencil aModel allAttributes |
 	aModel := self renameSelectorModelWithOneKeywordMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 2.
+	self
+		assert: allAttributes first third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: allAttributes second third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
 
 	^ aStencil
 ]
@@ -75,6 +182,18 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethod [
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+	self assertThreeKeywordsSelectorForStencil: aStencil.
+	^ aStencil
+]
+
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethodPatternNode [
+	<gtExample>
+	| aStencil aModel |
+	aModel := self renameSelectorModelWithThreeMessageKeywordsMethodPatternNode.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+	self assertThreeKeywordsSelectorForStencil: aStencil.
 
 	^ aStencil
 ]
@@ -82,10 +201,19 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethod [
 { #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithUnaryMethod [
 	<gtExample>
-	| aStencil aModel |
+	| aStencil aModel allAttributes |
 	aModel := self renameSelectorModelWithUnaryMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 2.
+	self
+		assert: allAttributes first third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: allAttributes second third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
 
 	^ aStencil
 ]
@@ -164,6 +292,28 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
 	^ anEditor
 ]
 
+{ #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> createElementsFromAttributesStencil: aStencil [
+	| aContainer aModel allAttributes |
+	aModel := aStencil selectorModel.
+	allAttributes := aStencil create.
+
+	aContainer := BrHorizontalPane new
+			cellSpacing: 5;
+			padding: (BlInsets all: 10);
+			alignCenterLeft;
+			fitContent.
+
+	allAttributes
+		withIndexDo: [ :eachAttribute :eachIndex | 
+			| someElements |
+			someElements := (eachAttribute third doAffect: nil in: nil) asCollection.
+			aContainer addChildren: someElements ].
+
+	aContainer userData at: #selectorModel put: aModel.
+	^ aContainer
+]
+
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 	| anEditor aDocumentId aController aCoder anAst aCoderViewModel |
@@ -182,11 +332,13 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
 			when: BrTextStyledEvent
 				doOnce: [ :anEvent | 
-					aController := GtPharoRenameSelectorCoderController new
-							originalNode: anAst;
-							editorElement: anEditor;
-							sourceCoderViewModel: aCoderViewModel;
-							install ];
+					BlTaskAction
+						enqueueElement: anEditor
+						action: [ aController := GtPharoRenameSelectorCoderController new
+									originalNode: anAst;
+									editorElement: anEditor;
+									sourceCoderViewModel: aCoderViewModel;
+									install ] ];
 			matchParent;
 			yourself.
 
@@ -270,6 +422,27 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod [
 
 	self assert: (aModel selectorParts at: 1) currentName equals: '*'.
 	self assert: (aModel parameters at: 1) currentName equals: 'anObject'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMessageNode [
+	<gtExample>
+	| aModel aMethod anAst |
+	aMethod := self threeKeywordsMethod.
+	anAst := self threeKeywordsMethodKeywordMessageAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
+
+	self assert: aModel isModified not.
+	self assert: aModel originalSelector equals: anAst selector.
+	self assert: aModel currentSelector equals: anAst selector.
+	self assert: aModel currentParameterPermutations equals: (1 to: 2).
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+	self assert: (aModel selectorParts at: 2) currentName equals: 'b:'.
+	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
 
 	^ aModel
 ]
@@ -381,28 +554,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordMessageNode [
-	<gtExample>
-	| aModel aMethod anAst |
-	aMethod := self threeKeywordsMethod.
-	anAst := self threeKeywordsKeywordMessageAst.
-	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
-
-	self assert: aModel isModified not.
-	self assert: aModel originalSelector equals: anAst selector.
-	self assert: aModel currentSelector equals: anAst selector.
-	self assert: aModel currentParameterPermutations equals: (1 to: 2).
-
-	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
-	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
-	self assert: (aModel selectorParts at: 2) currentName equals: 'b:'.
-	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
-
-	^ aModel
-]
-
-{ #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordMethodPatternNode [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordsMethodPatternNode [
 	<gtExample>
 	| aModel aMethod anAst |
 	aMethod := self threeKeywordsMethod.
@@ -453,6 +605,24 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 ]
 
 { #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterEditorWithThreeKeywordsMethod [
+	<gtExample>
+	| anElement aScripter aModel |
+	anElement := self editorWithThreeKeywordsMethod.
+	aScripter := BlScripter new element: anElement.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+			
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
 	| anElement aScripter aModel |
@@ -461,6 +631,89 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	aScripter := BlScripter new
 			model: aModel;
 			element: anElement.
+			
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_downAndUpArrowShortcuts [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			6
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
 
 	^ aScripter
 ]
@@ -499,15 +752,89 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 ]
 
 { #category : #'examples - scripter' }
-GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_rightAndLeftArrowShortcuts [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
 
-	aScripter click
-		label: 'Activate first selector part';
-		// (#'selector-part' asBlocElementId indexed: 1);
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
 		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			6
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
+	<gtExample>
+	| aScripter |
+	aScripter := self scripterSelectorPartElementsWithFirstThreeKeywordsMethod.
 
 	self
 		assert: aScripter
@@ -579,58 +906,13 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementWithFirstThreeKeywordsM
 	^ anElement
 ]
 
-{ #category : #examples }
+{ #category : #'examples - elements' }
 GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
-	| anElement aModel aContainer anIndex |
-	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-
-	aContainer := BrHorizontalPane new
-			cellSpacing: 10;
-			padding: (BlInsets all: 10);
-			alignCenterLeft;
-			fitContent.
-
-	anIndex := 1.
-	aModel
-		selectorPartsAndParametersDo: [ :eachPart :eachParameter |
-			anElement := self basicSelectorPartElement.
-			anElement selectorModel: aModel selectorPartModel: eachPart.
-			aContainer
-				addChild: anElement
-				as: (#'selector-part' asBlocElementId indexed: anIndex).
-
-			eachParameter ifNotNil: [
-				anElement := self basicSelectorParameterElement.
-				anElement parameterModel: eachParameter.
-				aContainer
-					addChild: anElement
-					as: (#'selector-parameter' asBlocElementId indexed: anIndex) ].
-
-			anIndex := anIndex + 1 ].
-
-	anElement := self basicSelectorRefactoringsPreviewElement.
-	anElement selectorModel: aModel.
-	aContainer addChild: anElement as: #'selector-refactorings-preview'.
-
-	aContainer userData at: #selectorModel put: aModel.
-
+	| aContainer aStencil |
+	aStencil := self attributesStencilWithThreeKeywordsMethod.
+	aContainer := self createElementsFromAttributesStencil: aStencil.
 	^ aContainer
-]
-
-{ #category : #'examples - method' }
-GtPharoRenameSelectorModelExamples >> threeKeywordsKeywordMessageAst [
-	<gtExample>
-	| anAst aKeywordNode |
-	anAst := self threeKeywordsMethodAst.
-	aKeywordNode := nil.
-	anAst
-		allNodesOfType: GtPharoKeywordMessageNode
-		do: [ :eachNode | eachNode selector = #sumA:b: ifTrue: [ aKeywordNode := eachNode ] ].
-
-	self assert: aKeywordNode isNotNil.
-
-	^ aKeywordNode
 ]
 
 { #category : #'examples - method' }
@@ -645,6 +927,21 @@ GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethodAst [
 	<gtExample>
 	^ self parseMethod: self threeKeywordsMethod
+]
+
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> threeKeywordsMethodKeywordMessageAst [
+	<gtExample>
+	| anAst aKeywordNode |
+	anAst := self threeKeywordsMethodAst.
+	aKeywordNode := nil.
+	anAst
+		allNodesOfType: GtPharoKeywordMessageNode
+		do: [ :eachNode | eachNode selector = #sumA:b: ifTrue: [ aKeywordNode := eachNode ] ].
+
+	self assert: aKeywordNode isNotNil.
+
+	^ aKeywordNode
 ]
 
 { #category : #'examples - method' }

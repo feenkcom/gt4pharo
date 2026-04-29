@@ -1,5 +1,5 @@
 Extension { #name : #RBPatternBlockNode }
 
-{ #category : #'*GToolkit-Pharo-Coder' }
+{ #category : #'*GToolkit-Pharo-Coder-Pharo12Extensions' }
 RBPatternBlockNode >> gtLiteralsInto: aSet [
 ]

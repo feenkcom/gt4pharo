@@ -27,14 +27,9 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'Metacello-Base'.
 		'Refactoring-Changes'.
 		'Ring-Core'.
-		'Ring-Definitions-Core'
-	}, (self  
-		forPharo12AndNewer: [{
-			'Kernel-CodeModel'.
-			'GToolkit-Pharo11Stubs'}] 
-		forPharo11: [{
-			'RPackage-Core'.
-			'GToolkit-Pharo12Stubs'}])
+		'Ring-Definitions-Core'.
+		'Kernel-CodeModel'
+	}
 ]
 
 { #category : #accessing }
@@ -46,9 +41,5 @@ ManifestGToolkitPharoMetamodels class >> shouldDependOn [
 		'GToolkit-Pharo-BaseRefactorings'.
 		'Refactoring-Changes'.
 		'Ring-Core'.
-	}, (self  
-		forPharo12AndNewer: [{
-			'GToolkit-Pharo11Stubs'}] 
-		forPharo11: [{
-			'GToolkit-Pharo12Stubs'}])
+	}
 ]

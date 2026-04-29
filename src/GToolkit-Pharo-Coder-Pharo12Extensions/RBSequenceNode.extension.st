@@ -1,6 +1,6 @@
 Extension { #name : #RBSequenceNode }
 
-{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+{ #category : #'*GToolkit-Pharo-Coder-Pharo12Extensions' }
 RBSequenceNode >> gtAddTemporaryNamed: newVariableName toSource: source [
 	self temporaries isEmpty
 		ifTrue: [ self rightBar
@@ -21,7 +21,7 @@ RBSequenceNode >> gtAddTemporaryNamed: newVariableName toSource: source [
 				at: self temporaries last stop + 1 ]
 ]
 
-{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+{ #category : #'*GToolkit-Pharo-Coder-Pharo12Extensions' }
 RBSequenceNode >> gtStartOfLineWhitespace [
 	| methodSource |
 	methodSource := self methodNode source.

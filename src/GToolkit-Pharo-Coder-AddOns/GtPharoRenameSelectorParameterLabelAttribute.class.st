@@ -2,6 +2,7 @@ Class {
 	#name : #GtPharoRenameSelectorParameterLabelAttribute,
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
+		'selectorModel',
 		'parameterModel'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
@@ -9,13 +10,20 @@ Class {
 
 { #category : #private }
 GtPharoRenameSelectorParameterLabelAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	^ GtPharoRenameSelectorParameterElement new
-		parameterModel: parameterModel;
-		margin: (BlInsets
-				top: 0
-				left: -2
-				bottom: 0
-				right: -2)
+	| anElement anId |
+	anElement := GtPharoRenameSelectorParameterElement new
+			selectorModel: selectorModel parameterModel: parameterModel;
+			margin: (BlInsets
+					top: 0
+					left: -2
+					bottom: 0
+					right: -2).
+
+	anId := #'selector-parameter' asBlocElementId
+			indexed: parameterModel originalIndex.
+	anElement id: anId.
+
+	^ anElement
 ]
 
 { #category : #printing }
@@ -41,4 +49,14 @@ GtPharoRenameSelectorParameterLabelAttribute >> parameterModel [
 { #category : #accessing }
 GtPharoRenameSelectorParameterLabelAttribute >> parameterModel: anObject [
 	parameterModel := anObject
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterLabelAttribute >> selectorModel [
+	^ selectorModel
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorParameterLabelAttribute >> selectorModel: anObject [
+	selectorModel := anObject
 ]

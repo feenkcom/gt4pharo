@@ -12,7 +12,8 @@ Class {
 GtPharoRenameSelectorRefactoringsPreviewAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| anElement |
 	anElement := GtPharoRenameSelectorRefactoringsPreviewElement new
-			selectorModel: selectorModel.
+			selectorModel: selectorModel;
+			id: #'selector-refactorings-preview'.
 
 	refactoringsConfiguration
 		ifNotNil: [ :aConfiguration | anElement configureWith: aConfiguration ].
