@@ -9,13 +9,20 @@ Class {
 
 { #category : #private }
 GtPharoRenameSelectorParameterLabelAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
-	^ GtPharoRenameSelectorParameterElement new
-		parameterModel: parameterModel;
-		margin: (BlInsets
-				top: 0
-				left: -2
-				bottom: 0
-				right: -2)
+	| anElement anId |
+	anElement := GtPharoRenameSelectorParameterElement new
+			parameterModel: parameterModel;
+			margin: (BlInsets
+					top: 0
+					left: -2
+					bottom: 0
+					right: -2).
+
+	anId := #'selector-parameter' asBlocElementId
+			indexed: parameterModel originalIndex.
+	anElement id: anId.
+
+	^ anElement
 ]
 
 { #category : #printing }

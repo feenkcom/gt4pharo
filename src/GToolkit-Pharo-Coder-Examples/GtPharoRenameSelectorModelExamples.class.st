@@ -292,6 +292,28 @@ GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
 	^ anEditor
 ]
 
+{ #category : #'examples - elements' }
+GtPharoRenameSelectorModelExamples >> createElementsFromAttributesStencil: aStencil [
+	| aContainer aModel allAttributes |
+	aModel := aStencil selectorModel.
+	allAttributes := aStencil create.
+
+	aContainer := BrHorizontalPane new
+			cellSpacing: 5;
+			padding: (BlInsets all: 10);
+			alignCenterLeft;
+			fitContent.
+
+	allAttributes
+		withIndexDo: [ :eachAttribute :eachIndex | 
+			| someElements |
+			someElements := (eachAttribute third doAffect: nil in: nil) asCollection.
+			aContainer addChildren: someElements ].
+
+	aContainer userData at: #selectorModel put: aModel.
+	^ aContainer
+]
+
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 	| anEditor aDocumentId aController aCoder anAst aCoderViewModel |
@@ -707,42 +729,12 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementWithFirstThreeKeywordsM
 	^ anElement
 ]
 
-{ #category : #examples }
+{ #category : #'examples - elements' }
 GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
-	| anElement aModel aContainer anIndex |
-	aModel := self renameSelectorModelWithThreeKeywordsMethod.
-
-	aContainer := BrHorizontalPane new
-			cellSpacing: 10;
-			padding: (BlInsets all: 10);
-			alignCenterLeft;
-			fitContent.
-
-	anIndex := 1.
-	aModel
-		selectorPartsAndParametersDo: [ :eachPart :eachParameter |
-			anElement := self basicSelectorPartElement.
-			anElement selectorModel: aModel selectorPartModel: eachPart.
-			aContainer
-				addChild: anElement
-				as: (#'selector-part' asBlocElementId indexed: anIndex).
-
-			eachParameter ifNotNil: [
-				anElement := self basicSelectorParameterElement.
-				anElement parameterModel: eachParameter.
-				aContainer
-					addChild: anElement
-					as: (#'selector-parameter' asBlocElementId indexed: anIndex) ].
-
-			anIndex := anIndex + 1 ].
-
-	anElement := self basicSelectorRefactoringsPreviewElement.
-	anElement selectorModel: aModel.
-	aContainer addChild: anElement as: #'selector-refactorings-preview'.
-
-	aContainer userData at: #selectorModel put: aModel.
-
+	| aContainer aStencil |
+	aStencil := self attributesStencilWithThreeKeywordsMethod.
+	aContainer := self createElementsFromAttributesStencil: aStencil.
 	^ aContainer
 ]
 
