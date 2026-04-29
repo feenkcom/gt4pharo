@@ -151,8 +151,12 @@ RBRefactoryChange >> gtIncludesSubstring: aString [
 RBRefactoryChange >> gtIs: firstName inSameHierarchyWith: secondName [
 	| class1 class2 |
 	firstName = secondName ifTrue: [ ^ true ].
-	class1 := onSystemDictionary at: firstName asSymbol ifAbsent: [ ^ false ].
-	class2 := onSystemDictionary at: secondName asSymbol ifAbsent: [ ^ false ].
+	class1 := (self 
+		forPharo13AndNewer: [self onSystemEnvironment] 
+		forOlder: [self onSystemDictionary]) at: firstName asSymbol ifAbsent: [ ^ false ].
+	class2 := (self 
+		forPharo13AndNewer: [self onSystemEnvironment] 
+		forOlder: [self onSystemDictionary]) at: secondName asSymbol ifAbsent: [ ^ false ].
 	^ (class1 includesBehavior: class2) or: [ class2 includesBehavior: class1 ]
 ]
 
