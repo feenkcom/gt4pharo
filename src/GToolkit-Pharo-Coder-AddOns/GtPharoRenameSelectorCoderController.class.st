@@ -53,26 +53,41 @@ GtPharoRenameSelectorCoderController >> gtSelectorModelFor: aView [
 		view: #gtSelectorViewFor:
 ]
 
+{ #category : #private }
+GtPharoRenameSelectorCoderController >> informException: anException [
+	editorElement ifNil: [ ^ self ].
+	editorElement
+		showNotification: (GtObjectNotificationMessage new
+				message: ('[{1}] {2}'
+						format: {anException class name.
+								anException messageText});
+				object: anException copy freeze;
+				showNotifications)
+]
+
 { #category : #initialization }
 GtPharoRenameSelectorCoderController >> install [
-	"The originalNode can be isMessage, isMethod, isMethodPattern.
-	See GtPharoSourceCoder>>#renameNewNode:in:documentId:for:."
+	"Taken from `GtSourceCoderRefactoringController>>#execute`"
 
-	self flag: #TODO.
-	selectorModel := GtPharoRenameSelectorModel forAstNode: originalNode.
-	refactoringsStencil := GtPharoRenameSelectorCoderRefactoringsStencil new
-			selectorModel: selectorModel;
-			sourceCoderViewModel: sourceCoderViewModel.
+	[ self safelyInstall ]
+		on: Error
+		do: [ :anException | 
+			(anException isKindOf: RBRefactoringError)
+				ifTrue: [ self inform: self refactoringName , ': ' , anException messageText ]
+				ifFalse: [ self informException: anException.
+					NonInteractiveTranscript stderr
+						nextPutAll: ('[{1}] {2}'
+								format: {self class name.
+										anException asString});
+						cr.
 
-	self preventSave.
-	self installAttributes.
-
-	selectorModel announcer
-		when: GtPharoRenameSelectorModelRefactoringsCancelRequested
-		send: #onGtPharoRenameSelectorModelRefactoringsCancelRequested:
-		to: self.
-
-	editorElement userData at: self class put: self
+					(anException signalerContext stack first: 20)
+						do: [ :eachStackEntry | 
+							NonInteractiveTranscript stderr
+								nextPutAll: eachStackEntry printString;
+								cr ] ].
+			self uninstall.
+			anException return ]
 ]
 
 { #category : #initialization }
@@ -119,11 +134,37 @@ GtPharoRenameSelectorCoderController >> preventSave [
 	sourceCoderViewModel preventSaveDueTo: self
 ]
 
+{ #category : #accessing }
+GtPharoRenameSelectorCoderController >> refactoringName [
+	"Same in `GtPharoRenameSelectorRefactoringsStencil>>#refactoringName`."
+
+	^ 'Rename method'
+]
+
 { #category : #initialization }
 GtPharoRenameSelectorCoderController >> removeAttributes [
 	attributeTags ifNil: [ ^ self ].
 
 	attributeTags do: [ :eachTag | editorElement removeAttributeTagged: eachTag ]
+]
+
+{ #category : #private }
+GtPharoRenameSelectorCoderController >> safelyInstall [
+	selectorModel := GtPharoRenameSelectorModel forAstNode: originalNode.
+	refactoringsStencil := GtPharoRenameSelectorCoderRefactoringsStencil new
+			selectorModel: selectorModel;
+			sourceCoderViewModel: sourceCoderViewModel.
+
+	self preventSave.
+	self installAttributes.
+
+	selectorModel announcer
+		when: GtPharoRenameSelectorModelRefactoringsCancelRequested
+		send: #onGtPharoRenameSelectorModelRefactoringsCancelRequested:
+		to: self.
+
+	editorElement userData at: self class put: self.
+	editorElement userData at: #selectorModel put: selectorModel
 ]
 
 { #category : #accessing }

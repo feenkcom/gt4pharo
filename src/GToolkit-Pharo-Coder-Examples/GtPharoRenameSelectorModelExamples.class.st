@@ -332,11 +332,13 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
 			when: BrTextStyledEvent
 				doOnce: [ :anEvent | 
-					aController := GtPharoRenameSelectorCoderController new
-							originalNode: anAst;
-							editorElement: anEditor;
-							sourceCoderViewModel: aCoderViewModel;
-							install ];
+					BlTaskAction
+						enqueueElement: anEditor
+						action: [ aController := GtPharoRenameSelectorCoderController new
+									originalNode: anAst;
+									editorElement: anEditor;
+									sourceCoderViewModel: aCoderViewModel;
+									install ] ];
 			matchParent;
 			yourself.
 
@@ -600,6 +602,24 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	aMethod := self threeKeywordsMethod.
 	anEditor := self createRustEditorWithMethod: aMethod.
 	^ anEditor
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterEditorWithThreeKeywordsMethod [
+	<gtExample>
+	| anElement aScripter aModel |
+	anElement := self editorWithThreeKeywordsMethod.
+	aScripter := BlScripter new element: anElement.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+			
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
 ]
 
 { #category : #'examples - scripter' }
