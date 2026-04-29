@@ -47,12 +47,110 @@ GtPharoRenameSelectorModelExamples >> assert: aScripter refactoringsPreviewIsVis
 ]
 
 { #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> assertThreeKeywordsSelectorForStencil: aStencil [
+	| allAttributes |
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 15.
+	self
+		assert: (allAttributes at: 1) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 2) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 3) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 4) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 5) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 6) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 7) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 8) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 9) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 10) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 11) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 12) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 13) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 14) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 15) third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute
+]
+
+{ #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
 	<gtExample>
-	| aStencil aModel |
+	| aStencil aModel allAttributes |
 	aModel := self renameSelectorModelWithBinaryMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+	
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 2.
+	self assert: allAttributes first third class equals: GtPharoRenameSelectorPartEditorAttribute.
+	self assert: allAttributes second third class equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
+
+	^ aStencil
+]
+
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithKeywordMessageNode [
+	<gtExample>
+	| aStencil aModel allAttributes |
+	aModel := self renameSelectorModelWithKeywordMessageNode.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 9.
+	self
+		assert: (allAttributes at: 1) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 2) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 3) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 4) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 5) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 6) third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: (allAttributes at: 7) third class
+		equals: GtPharoRenameSelectorSwapButtonAttribute.
+	self
+		assert: (allAttributes at: 8) third class
+		equals: GtPharoRenameSelectorParameterLabelAttribute.
+	self
+		assert: (allAttributes at: 9) third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
 
 	^ aStencil
 ]
@@ -60,10 +158,19 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithBinaryMethod [
 { #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithOneKeywordMethod [
 	<gtExample>
-	| aStencil aModel |
+	| aStencil aModel allAttributes |
 	aModel := self renameSelectorModelWithOneKeywordMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 2.
+	self
+		assert: allAttributes first third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: allAttributes second third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
 
 	^ aStencil
 ]
@@ -75,6 +182,18 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethod [
 	aModel := self renameSelectorModelWithThreeKeywordsMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+	self assertThreeKeywordsSelectorForStencil: aStencil.
+	^ aStencil
+]
+
+{ #category : #'examples - attributes' }
+GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethodPatternNode [
+	<gtExample>
+	| aStencil aModel |
+	aModel := self renameSelectorModelWithThreeMessageKeywordsMethodPatternNode.
+	aStencil := GtPharoRenameSelectorAttributesStencil new.
+	aStencil selectorModel: aModel.
+	self assertThreeKeywordsSelectorForStencil: aStencil.
 
 	^ aStencil
 ]
@@ -82,10 +201,19 @@ GtPharoRenameSelectorModelExamples >> attributesStencilWithThreeKeywordsMethod [
 { #category : #'examples - attributes' }
 GtPharoRenameSelectorModelExamples >> attributesStencilWithUnaryMethod [
 	<gtExample>
-	| aStencil aModel |
+	| aStencil aModel allAttributes |
 	aModel := self renameSelectorModelWithUnaryMethod.
 	aStencil := GtPharoRenameSelectorAttributesStencil new.
 	aStencil selectorModel: aModel.
+
+	allAttributes := aStencil create.
+	self assert: allAttributes size equals: 2.
+	self
+		assert: allAttributes first third class
+		equals: GtPharoRenameSelectorPartEditorAttribute.
+	self
+		assert: allAttributes second third class
+		equals: GtPharoRenameSelectorRefactoringsPreviewAttribute.
 
 	^ aStencil
 ]
@@ -275,6 +403,27 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod [
 ]
 
 { #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMessageNode [
+	<gtExample>
+	| aModel aMethod anAst |
+	aMethod := self threeKeywordsMethod.
+	anAst := self threeKeywordsMethodKeywordMessageAst.
+	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
+
+	self assert: aModel isModified not.
+	self assert: aModel originalSelector equals: anAst selector.
+	self assert: aModel currentSelector equals: anAst selector.
+	self assert: aModel currentParameterPermutations equals: (1 to: 2).
+
+	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+	self assert: (aModel selectorParts at: 2) currentName equals: 'b:'.
+	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithOneKeywordMethod [
 	<gtExample>
 	| aModel aMethod anAst |
@@ -381,28 +530,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 ]
 
 { #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordMessageNode [
-	<gtExample>
-	| aModel aMethod anAst |
-	aMethod := self threeKeywordsMethod.
-	anAst := self threeKeywordsKeywordMessageAst.
-	aModel := GtPharoRenameSelectorModel forAstNode: anAst.
-
-	self assert: aModel isModified not.
-	self assert: aModel originalSelector equals: anAst selector.
-	self assert: aModel currentSelector equals: anAst selector.
-	self assert: aModel currentParameterPermutations equals: (1 to: 2).
-
-	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
-	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
-	self assert: (aModel selectorParts at: 2) currentName equals: 'b:'.
-	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
-
-	^ aModel
-]
-
-{ #category : #'examples - model' }
-GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordMethodPatternNode [
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordsMethodPatternNode [
 	<gtExample>
 	| aModel aMethod anAst |
 	aMethod := self threeKeywordsMethod.
@@ -619,21 +747,6 @@ GtPharoRenameSelectorModelExamples >> selectorPartElementsWithFirstThreeKeywords
 ]
 
 { #category : #'examples - method' }
-GtPharoRenameSelectorModelExamples >> threeKeywordsKeywordMessageAst [
-	<gtExample>
-	| anAst aKeywordNode |
-	anAst := self threeKeywordsMethodAst.
-	aKeywordNode := nil.
-	anAst
-		allNodesOfType: GtPharoKeywordMessageNode
-		do: [ :eachNode | eachNode selector = #sumA:b: ifTrue: [ aKeywordNode := eachNode ] ].
-
-	self assert: aKeywordNode isNotNil.
-
-	^ aKeywordNode
-]
-
-{ #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 	<gtExample>
 	| aMethod |
@@ -645,6 +758,21 @@ GtPharoRenameSelectorModelExamples >> threeKeywordsMethod [
 GtPharoRenameSelectorModelExamples >> threeKeywordsMethodAst [
 	<gtExample>
 	^ self parseMethod: self threeKeywordsMethod
+]
+
+{ #category : #'examples - method' }
+GtPharoRenameSelectorModelExamples >> threeKeywordsMethodKeywordMessageAst [
+	<gtExample>
+	| anAst aKeywordNode |
+	anAst := self threeKeywordsMethodAst.
+	aKeywordNode := nil.
+	anAst
+		allNodesOfType: GtPharoKeywordMessageNode
+		do: [ :eachNode | eachNode selector = #sumA:b: ifTrue: [ aKeywordNode := eachNode ] ].
+
+	self assert: aKeywordNode isNotNil.
+
+	^ aKeywordNode
 ]
 
 { #category : #'examples - method' }

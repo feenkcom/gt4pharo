@@ -183,11 +183,15 @@ GtPharoRenameSelectorAttributesStencil >> gtAttributesFor: aView [
 	^ aView columnedList
 		title: 'Attributes';
 		items: [ self create ];
+		column: 'Index'
+			text: [ :_ :anIndex | anIndex ]
+			width: 50;
 		column: 'Range'
 			text: [ :aCol | 
 				'{1}..{2}'
 					format: {aCol at: 1.
-							aCol at: 2} ] width: 70;
+							aCol at: 2} ]
+			width: 70;
 		column: 'Attribute' text: [ :aCol | aCol at: 3 ];
 		send: [ :aCol | aCol at: 3 ]
 ]
