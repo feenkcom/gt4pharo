@@ -170,6 +170,12 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GToolkitCoder'
 					'GToolkit-Pharo-Coder-Method'
 					'GToolkit-Pharo-Coder-Method-UI'
-				 )
+				 ).
+				 
+			self 
+				forPharo13AndNewer: [] 
+				forOlder: [
+					spec package: 'GToolkit-Pharo-Coder-Pharo12Extensions' with: [ 
+						spec requires: #('GToolkit-Pharo-Coder' 'GToolkit-Pharo-Coder-AddOns' 'GToolkit-Pharo-GtRefactorings') ] ]
 			].
 ]
