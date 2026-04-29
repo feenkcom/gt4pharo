@@ -11,5 +11,5 @@ Class {
 GtPharoRenameSelectorBinaryOrKeywordPartValidator >> validateSelectorPart: aString [
 	aString isEmpty ifTrue: [ ^ false ].
 	^ (self validateKeyword: aString)
-		or: [ (self validateBinary: aString) or: [ self validateVariable: aString ] ]
+		or: [ (self validateBinary: aString) "or: [ self validateVariable: aString ]" ]
 ]
