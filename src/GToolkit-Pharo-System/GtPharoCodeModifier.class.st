@@ -117,7 +117,7 @@ GtPharoCodeModifier >> createPackageNamed: aPackageName [
 { #category : #'api - package' }
 GtPharoCodeModifier >> createPackageTagOf: aPackage named: aTagName [
 	<return: #PackageTag>
-	<exception: #RPackageConflictError>
+	<exception: #PackageConflictError>
 	^ self critical: [ aPackage addClassTag: aTagName ]
 ]
 
@@ -152,37 +152,15 @@ GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName sl
 		tag: aPackageTag
 ]
 
-{ #category : #'api - class' }
+{ #category : #api }
 GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName slots: slotNameList sharedVariables: sharedVariablesList package: aPackageSymbol tag: aPackageTag [
 	^ self
-		critical: [ self
-				forPharo12AndNewer: [ ((anExistingClass << aSubclassName)
-						slots: slotNameList;
-						sharedVariables: sharedVariablesList;
-						package: aPackageSymbol;
-						tag: aPackageTag) install ]
-				forPharo11: [ | slotsString classVarsString |
-					slotsString := String
-							streamContents: [ :aStream | 
-								slotNameList
-									do: [ :each | aStream nextPutAll: each ]
-									separatedBy: [ aStream space ] ].
-					classVarsString := String
-							streamContents: [ :aStream | 
-								sharedVariablesList
-									do: [ :each | aStream nextPutAll: each ]
-									separatedBy: [ aStream space ] ].
-					aPackageTag
-						ifNil: [ anExistingClass
-								subclass: aSubclassName
-								instanceVariableNames: slotsString
-								classVariableNames: classVarsString
-								package: aPackageSymbol ]
-						ifNotNil: [ anExistingClass
-								subclass: aSubclassName
-								instanceVariableNames: slotsString
-								classVariableNames: classVarsString
-								package: aPackageSymbol , '-' , aPackageTag ] ] ]
+		critical: [
+			((anExistingClass << aSubclassName)
+					slots: slotNameList;
+					sharedVariables: sharedVariablesList;
+					package: aPackageSymbol;
+					tag: aPackageTag) install]
 ]
 
 { #category : #'mutual exclusion' }

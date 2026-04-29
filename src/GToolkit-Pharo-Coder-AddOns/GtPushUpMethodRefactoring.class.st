@@ -46,7 +46,7 @@ GtPushUpMethodRefactoring >> checkSuperSendsFromSiblings [
 					((method methodClass includesClass: class) not
 						and: [ (method methodClass includesClass: class superclass)
 								and: [ (class superclass
-										includesClass: (method methodClass superclass whoDefinesMethod: impl))
+										includesClass: (method methodClass superclass whichClassIncludesSelector: impl))
 										and: [ (method ast equalTo: (class methodFor: impl) ast exceptForVariables: #()) not ] ] ])
 						ifTrue: [ (method ast superMessages includes: impl)
 								ifTrue: [ GtRefactoringNotification
