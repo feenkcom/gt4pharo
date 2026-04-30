@@ -126,6 +126,25 @@ GtMoveTemporaryToOuterScopeRefactoring class >> tempIsAlsoBlockVarExample [
 	^ refactoring
 ]
 
+{ #category : #preconditions }
+GtMoveTemporaryToOuterScopeRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition definesSelector: selector in: class).
+	conds
+		add: (RBCondition
+				withBlock: [ self variableNode notNil
+						and: [ self variableNode parent isSequence
+								and: [ self variableNode parent temporaries identityIncludes: self variableNode ] ] ]
+				errorString: 'Selection is not a variable declaration')
+				& (RBCondition
+						withBlock: [ self variableNode parent parent isMethod not ]
+						errorString: 'Variable is already at outermost scope').
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #transforming }
 GtMoveTemporaryToOuterScopeRefactoring >> basicTransform [
 	| definers definer newDefiner name |
@@ -155,19 +174,6 @@ GtMoveTemporaryToOuterScopeRefactoring >> moveVariableAt: anInterval in: aSelect
 	interval := anInterval.
 	selector := aSelector.
 	class := self model classFor: aClass
-]
-
-{ #category : #preconditions }
-GtMoveTemporaryToOuterScopeRefactoring >> preconditions [
-	^ (RBCondition definesSelector: selector in: class)
-		& (RBCondition
-				withBlock: [ self variableNode notNil
-						and: [ self variableNode parent isSequence
-								and: [ self variableNode parent temporaries identityIncludes: self variableNode ] ] ]
-				errorString: 'Selection is not a variable declaration')
-		& (RBCondition
-				withBlock: [ self variableNode parent parent isMethod not ]
-				errorString: 'Variable is already at outermost scope')
 ]
 
 { #category : #transforming }

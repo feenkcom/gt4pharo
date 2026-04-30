@@ -421,7 +421,115 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod [
 	self assert: aModel currentParameterPermutations equals: #(1).
 
 	self assert: (aModel selectorParts at: 1) currentName equals: '*'.
+	self assert: (aModel selectorParts at: 1) currentDisplayName equals: '*'.
+	self assert: (aModel selectorParts at: 1) isMustBeKeyword not.
+
 	self assert: (aModel parameters at: 1) currentName equals: 'anObject'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod_updateToBinary [
+	<gtExample>
+	| aModel aSelectorPart |
+	aModel := self renameSelectorModelWithBinaryMethod.
+
+	aSelectorPart := aModel selectorParts at: 1.
+	aSelectorPart updateCurrentName: '**' source: self.
+	self assert: aSelectorPart currentName equals: '**'.
+	self assert: aSelectorPart currentDisplayName equals: '**'.
+	self assert: aSelectorPart isValid.
+	self assert: aSelectorPart isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid.
+	self assert: aModel currentSelector equals: #**.
+	self assert: aModel currentParameterPermutations equals: #(1).
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod_updateToEmpty [
+	<gtExample>
+	| aModel aSelectorPart |
+	aModel := self renameSelectorModelWithBinaryMethod.
+
+	aSelectorPart := aModel selectorParts at: 1.
+	aSelectorPart updateCurrentName: '' source: self.
+	self assert: aSelectorPart currentName equals: ''.
+	self assert: aSelectorPart currentDisplayName equals: ''.
+	self assert: aSelectorPart isValid not.
+	self assert: aSelectorPart isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #''.
+	self assert: aModel currentParameterPermutations equals: #(1).
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod_updateToInvalid [
+	<gtExample>
+	| aModel aSelectorPart |
+	aModel := self renameSelectorModelWithBinaryMethod.
+
+	aSelectorPart := aModel selectorParts at: 1.
+	aSelectorPart updateCurrentName: '*a' source: self.
+	self assert: aSelectorPart currentName equals: '*a'.
+	self assert: aSelectorPart currentDisplayName equals: '*a'.
+	self assert: aSelectorPart isValid not.
+	self assert: aSelectorPart isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #'*a'.
+	self assert: aModel currentParameterPermutations equals: #(1).
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod_updateToKeyword [
+	<gtExample>
+	| aModel aSelectorPart |
+	aModel := self renameSelectorModelWithBinaryMethod.
+
+	aSelectorPart := aModel selectorParts at: 1.
+	aSelectorPart updateCurrentName: 'a' source: self.
+	self assert: aSelectorPart currentName equals: 'a:'.
+	self assert: aSelectorPart currentDisplayName equals: 'a'.
+	self assert: aSelectorPart isValid.
+	self assert: aSelectorPart isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid.
+	self assert: aModel currentSelector equals: #a:.
+	self assert: aModel currentParameterPermutations equals: #(1).
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithBinaryMethod_updateToKeyword_toBinary [
+	<gtExample>
+	| aModel aSelectorPart |
+	aModel := self renameSelectorModelWithBinaryMethod_updateToKeyword.
+
+	aSelectorPart := aModel selectorParts at: 1.
+	aSelectorPart updateCurrentName: '**' source: self.
+	self assert: aSelectorPart currentName equals: '**'.
+	self assert: aSelectorPart currentDisplayName equals: '**'.
+	self assert: aSelectorPart isValid.
+	self assert: aSelectorPart isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid.
+	self assert: aModel currentSelector equals: #**.
+	self assert: aModel currentParameterPermutations equals: #(1).
 
 	^ aModel
 ]
@@ -440,9 +548,64 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMessageNode 
 	self assert: aModel currentParameterPermutations equals: (1 to: 2).
 
 	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel selectorParts at: 1) currentDisplayName equals: 'sumA'.
+	self assert: (aModel selectorParts at: 1) isMustBeKeyword.
+
 	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+
 	self assert: (aModel selectorParts at: 2) currentName equals: 'b:'.
+	self assert: (aModel selectorParts at: 2) currentDisplayName equals: 'b'.
+	self assert: (aModel selectorParts at: 2) isMustBeKeyword.
+
 	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMessageNode_updateToEmpty [
+	<gtExample>
+	| aModel aPartOne |
+	aModel := self renameSelectorModelWithKeywordMessageNode.
+
+	aPartOne := aModel selectorParts at: 1.
+	aPartOne updateCurrentName: '' source: self.
+
+	self assert: aPartOne isValid not.
+	self assert: aPartOne isModified.
+	self assert: aPartOne currentName equals: ''.
+	self assert: aPartOne currentDisplayName equals: ''.
+	self assert: aPartOne isModified.
+	self assert: aPartOne isValid not.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #'b:'.
+	self assert: aModel currentParameterPermutations equals: (1 to: 2).
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithKeywordMessageNode_updateToInvalid [
+	<gtExample>
+	| aModel aPartOne |
+	aModel := self renameSelectorModelWithKeywordMessageNode.
+
+	aPartOne := aModel selectorParts at: 1.
+	aPartOne updateCurrentName: '*' source: self.
+
+	self assert: aPartOne isValid not.
+	self assert: aPartOne isModified.
+	self assert: aPartOne currentName equals: '*'.
+	self assert: aPartOne currentDisplayName equals: '*'.
+	self assert: aPartOne isModified.
+	self assert: aPartOne isValid not.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #'*b:'.
+	self assert: aModel currentParameterPermutations equals: (1 to: 2).
 
 	^ aModel
 ]
@@ -461,7 +624,32 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithOneKeywordMethod [
 	self assert: aModel currentParameterPermutations equals: #(1).
 
 	self assert: (aModel selectorParts at: 1) currentName equals: 'instA:'.
+	self assert: (aModel selectorParts at: 1) currentDisplayName equals: 'instA'.
+	self assert: (aModel selectorParts at: 1) isMustBeKeyword not.
+
 	self assert: (aModel parameters at: 1) currentName equals: 'anObject'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithOneKeywordMethod_updateToBinary [
+	<gtExample>
+	| aModel aPartOne |
+	aModel := self renameSelectorModelWithOneKeywordMethod.
+
+	aPartOne := aModel selectorParts at: 1.
+	aPartOne updateCurrentName: '*' source: self.
+
+	self assert: aPartOne currentName equals: '*'.
+	self assert: aPartOne currentDisplayName equals: '*'.
+	self assert: aPartOne isValid.
+	self assert: aPartOne isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid.
+	self assert: aModel currentSelector equals: #*.
+	self assert: aModel currentParameterPermutations equals: #(1).
 
 	^ aModel
 ]
@@ -480,10 +668,21 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 	self assert: aModel currentParameterPermutations equals: (1 to: 3).
 
 	self assert: (aModel selectorParts at: 1) currentName equals: 'sumA:'.
+	self assert: (aModel selectorParts at: 1) currentDisplayName equals: 'sumA'.
+	self assert: (aModel selectorParts at: 1) isMustBeKeyword.
+
 	self assert: (aModel parameters at: 1) currentName equals: 'valueA'.
+
 	self assert: (aModel selectorParts at: 2) currentName equals: 'valueB:'.
+	self assert: (aModel selectorParts at: 2) currentDisplayName equals: 'valueB'.
+	self assert: (aModel selectorParts at: 2) isMustBeKeyword.
+
 	self assert: (aModel parameters at: 2) currentName equals: 'valueB'.
+
 	self assert: (aModel selectorParts at: 3) currentName equals: 'valueC:'.
+	self assert: (aModel selectorParts at: 3) currentDisplayName equals: 'valueC'.
+	self assert: (aModel selectorParts at: 3) isMustBeKeyword.
+
 	self assert: (aModel parameters at: 3) currentName equals: 'valueC'.
 
 	^ aModel
@@ -554,6 +753,48 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod
 ]
 
 { #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod_updateToEmpty [
+	<gtExample>
+	| aModel aPartTwo |
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
+
+	aPartTwo := aModel selectorParts at: 2.
+	aPartTwo updateCurrentName: '' source: self.
+
+	self assert: aPartTwo currentName equals: ''.
+	self assert: aPartTwo currentDisplayName equals: ''.
+	self assert: aPartTwo isValid not.
+	self assert: aPartTwo isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #'sumA:valueC:'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeKeywordsMethod_updateToInvalid [
+	<gtExample>
+	| aModel aPartTwo |
+	aModel := self renameSelectorModelWithThreeKeywordsMethod.
+
+	aPartTwo := aModel selectorParts at: 2.
+	aPartTwo updateCurrentName: '**' source: self.
+
+	self assert: aPartTwo currentName equals: '**'.
+	self assert: aPartTwo currentDisplayName equals: '**'.
+	self assert: aPartTwo isValid not.
+	self assert: aPartTwo isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #'sumA:**valueC:'.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
 GtPharoRenameSelectorModelExamples >> renameSelectorModelWithThreeMessageKeywordsMethodPatternNode [
 	<gtExample>
 	| aModel aMethod anAst |
@@ -590,6 +831,50 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod [
 	self assert: aModel currentParameterPermutations equals: #().
 
 	self assert: (aModel selectorParts at: 1) currentName equals: 'instAReceiver'.
+	self assert: (aModel selectorParts at: 1) currentDisplayName equals: 'instAReceiver'.
+	self assert: (aModel selectorParts at: 1) isMustBeKeyword not.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod_updateToEmpty [
+	<gtExample>
+	| aModel aPartOne |
+	aModel := self renameSelectorModelWithUnaryMethod.
+
+	aPartOne := aModel selectorParts at: 1.
+	aPartOne updateCurrentName: '' source: self.
+
+	self assert: aPartOne currentName equals: ''.
+	self assert: aPartOne currentDisplayName equals: ''.
+	self assert: aPartOne isValid not.
+	self assert: aPartOne isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #''.
+
+	^ aModel
+]
+
+{ #category : #'examples - model' }
+GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod_updateToInvalid [
+	<gtExample>
+	| aModel aPartOne |
+	aModel := self renameSelectorModelWithUnaryMethod.
+
+	aPartOne := aModel selectorParts at: 1.
+	aPartOne updateCurrentName: '*a' source: self.
+
+	self assert: aPartOne currentName equals: '*a'.
+	self assert: aPartOne currentDisplayName equals: '*a'.
+	self assert: aPartOne isValid not.
+	self assert: aPartOne isModified.
+
+	self assert: aModel isModified.
+	self assert: aModel isValid not.
+	self assert: aModel currentSelector equals: #'*a'.
 
 	^ aModel
 ]
@@ -890,6 +1175,38 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	self
 		assert: aScripter
 		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - scripter' }
+GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_typeAThenB [
+	<gtExample>
+	| anElement aScripter aModel aPartOneId |
+	anElement := self selectorPartElementsWithFirstThreeKeywordsMethod.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+
+	aPartOneId := #'selector-part' asBlocElementId indexed: 1.
+	self
+		assert: aScripter
+		onlyOneEditorMode: aPartOneId.
+
+	aScripter editor
+		typeText: 'a';
+		assertTextEqualsTo: 'a';
+		assertCursorPosition: 1;
+		// aPartOneId;
+		play.
+
+	aScripter editor
+		typeText: 'b';
+		assertTextEqualsTo: 'ab';
+		assertCursorPosition: 2;
+		// aPartOneId;
+		play.
 
 	^ aScripter
 ]

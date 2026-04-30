@@ -135,22 +135,18 @@ GtPharoIndexExamples >> checkGtMessageSendIteratorRefs: aBoolean [
 	self assert: (refs allSatisfy: [ :each | each gtIsActive ])
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
 	<gtExample>
 	| refs var |
-	[ Object
-		subclass: #GtFoo1
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Foo'.
+	[ ((Object << #GtFoo1)
+		slots: {};
+		package: 'Foo') install.
 	#GtFoo1 asClass compile: 'm1 
 	^ GtFoo2'.
-	Object
-		subclass: #GtFoo2
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Foo'.
+	((Object << #GtFoo2)
+		slots: {};
+		package: 'Foo') install.
 	var := Smalltalk globals associationAt: #GtFoo2.
 	refs := GtPharoIndex current globalVariableReferencesTo: var.
 	self assert: (refs includes: thisContext method method).

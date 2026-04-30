@@ -250,10 +250,11 @@ GtPharoRenameSelectorPartElement >> onRenameSelectorPartHighlightChangeRequested
 { #category : #'private - event handling' }
 GtPharoRenameSelectorPartElement >> onRenameSelectorPartNameChanged: anAnnouncement [
 	anAnnouncement selectorPartModel = selectorPartModel ifFalse: [ ^ self ].
+	anAnnouncement source = self ifTrue: [ ^ self ].
 
 	BlTaskAction
 		enqueueElement: editorElement
-		action: [ editorElement text: anAnnouncement currentName ]
+		action: [ editorElement text: anAnnouncement displayName ]
 ]
 
 { #category : #'private - hooks' }
@@ -316,7 +317,7 @@ GtPharoRenameSelectorPartElement >> updateEditorElementStyler [
 
 { #category : #'private - updating' }
 GtPharoRenameSelectorPartElement >> updateEditorElementText [
-	editorElement text: selectorPartModel currentName
+	editorElement text: selectorPartModel currentDisplayName
 ]
 
 { #category : #'private - updating' }

@@ -46,7 +46,7 @@ GtPharoRenameSelectorModel >> displayRefactoringsPreviewOrFocusNextSelectorPart:
 	self assert: [ anInteger > 0 ].
 	self assert: [ anInteger <= selectorParts size ].
 
-	(anInteger = selectorParts size and: [ self isModified ])
+	(anInteger = selectorParts size and: [ self isModified and: [ self isValid ] ])
 		ifTrue: [ self notifyShowPreviewRequested ]
 		ifFalse: [ self focusNextSelectorPart: anInteger ]
 ]
@@ -93,23 +93,47 @@ GtPharoRenameSelectorModel >> gtSelectorViewFor: aView [
 					ifFalse: [ '{1} (previously {2})'
 							format: {anItem originalIndex.
 									anItem currentIndex} ] ];
-		column: 'Is modified'
-			text: [ :anItem :aRowIndex :aCellIndex :aTheme | 
-				anItem isModified
-					ifTrue: [ 'yes']
-					ifFalse: [ 'no' asRopedText foreground: aTheme button disabledTextColor ] ]
-			width: 80;
 		column: 'Type'
 			text: #typeName
 			width: 70;
-		column: 'Value'
+		column: 'Current name'
 			text: [ :anItem | 
 				anItem currentName = anItem originalName
 					ifTrue: [ anItem currentName ]
 					ifFalse: [ '{1} (previously {2})'
 							format: {anItem currentName.
 									anItem originalName} ] ]
-			weight: 3
+			weight: 3;
+		column: 'Display name'
+			text: [ :anItem | 
+				(anItem isKindOf: GtPharoRenameSelectorPartModel)
+					ifTrue: [ anItem currentName = anItem currentDisplayName
+							ifTrue: [ '' ]
+							ifFalse: [ anItem currentDisplayName ] ]
+					ifFalse: [ '' ] ]
+			weight: 3;
+		column: 'Is modified'
+			text: [ :anItem :aRowIndex :aCellIndex :aTheme | 
+				anItem isModified
+					ifTrue: [ 'yes' ]
+					ifFalse: [ 'no' asRopedText foreground: aTheme button disabledTextColor ] ]
+			width: 80;
+		column: 'Is valid'
+			text: [ :anItem :aRowIndex :aCellIndex :aTheme | 
+				(anItem isKindOf: GtPharoRenameSelectorPartModel)
+					ifTrue: [ anItem isValid
+							ifTrue: [ 'yes' asRopedText foreground: aTheme button disabledTextColor ]
+							ifFalse: [ 'no' ] ]
+					ifFalse: [ '' ] ]
+			width: 80;
+		column: 'Must be keyword'
+			text: [ :anItem :aRowIndex :aCellIndex :aTheme | 
+				(anItem isKindOf: GtPharoRenameSelectorPartModel)
+					ifTrue: [ anItem isMustBeKeyword
+							ifTrue: [ 'yes' ]
+							ifFalse: [ 'no' asRopedText foreground: aTheme button disabledTextColor ] ]
+					ifFalse: [ '' ] ]
+			width: 130
 ]
 
 { #category : #'api - ui' }
@@ -192,12 +216,13 @@ GtPharoRenameSelectorModel >> initialize [
 
 { #category : #initialization }
 GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
-	| aSelectorParts aSelectorPartIntervals aSelectorVariableNodes aComponentsBuilder |
+	| aSelectorParts aSelectorPartIntervals aSelectorVariableNodes aComponentsBuilder isMustBeKeywordPart |
 	originalAstNode := anAstNode.
 	originalSelector := anAstNode selector.
 	aSelectorParts := originalSelector keywords.
 	aSelectorPartIntervals := anAstNode selectorParts collect: #sourceInterval.
 	aSelectorVariableNodes := anAstNode arguments.
+	isMustBeKeywordPart := aSelectorVariableNodes size > 1.
 	aComponentsBuilder := GtPharoRenameSelectorPartComponentsBuilder new
 			astNode: anAstNode;
 			build.
@@ -214,6 +239,7 @@ GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
 								forSelectorPart: aPart
 								interval: anInterval
 								index: anIndex.
+						aPartModel isMustBeKeyword: isMustBeKeywordPart.
 						aPartModel validator: aComponentsBuilder validator.
 						aPartModel styler: aComponentsBuilder styler.
 						aPartModel filter: aComponentsBuilder filter.
@@ -248,6 +274,11 @@ GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
 { #category : #testing }
 GtPharoRenameSelectorModel >> isModified [
 	^ self computeIsModified
+]
+
+{ #category : #testing }
+GtPharoRenameSelectorModel >> isValid [
+	^ self selectorParts allSatisfy: #isValid
 ]
 
 { #category : #private }

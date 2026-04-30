@@ -129,7 +129,7 @@ GtPharoRenameSelectorRefactoringsPreviewElement >> updateElement [
 
 { #category : #'private - updating' }
 GtPharoRenameSelectorRefactoringsPreviewElement >> updatePreviewElementVisibility [
-	selectorModel isModified
+	(selectorModel isModified and: [ selectorModel isValid ])
 		ifTrue: [ self visibility: BlVisibility visible ]
 		ifFalse: [ self visibility: BlVisibility hidden ]
 ]

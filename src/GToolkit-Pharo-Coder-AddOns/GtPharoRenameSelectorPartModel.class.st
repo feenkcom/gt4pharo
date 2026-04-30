@@ -10,7 +10,8 @@ Class {
 		'currentName',
 		'validator',
 		'styler',
-		'filter'
+		'filter',
+		'isMustBeKeyword'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -23,9 +24,27 @@ GtPharoRenameSelectorPartModel class >> forSelectorPart: aSymbol interval: anInt
 		index: anIndex
 ]
 
+{ #category : #private }
+GtPharoRenameSelectorPartModel >> adoptIncomingCurrentName: aString [
+	| aNewString |
+	aString ifEmpty: [ ^ aString ].
+	
+	isMustBeKeyword ifFalse: [ (self isValid: aString) ifTrue: [ ^ aString ] ].
+
+	aString last = $: ifTrue: [ ^ aString ].
+
+	aNewString := aString , ':'.
+	^ (self isValid: aNewString) ifTrue: [ aNewString ] ifFalse: [ aString ]
+]
+
 { #category : #accessing }
 GtPharoRenameSelectorPartModel >> announcer [
 	^ announcer
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> currentDisplayName [
+	^ self currentName withoutSuffix: ':'
 ]
 
 { #category : #accessing }
@@ -56,7 +75,8 @@ GtPharoRenameSelectorPartModel >> filter: anObject [
 { #category : #initialization }
 GtPharoRenameSelectorPartModel >> initialize [
 	super initialize.
-	announcer := Announcer new
+	announcer := Announcer new.
+	isMustBeKeyword := false.
 ]
 
 { #category : #initialization }
@@ -72,6 +92,30 @@ GtPharoRenameSelectorPartModel >> initializeForSelectorPart: aSymbol interval: a
 { #category : #testing }
 GtPharoRenameSelectorPartModel >> isModified [
 	^ self originalName ~= self currentName
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> isMustBeKeyword [
+
+	^ isMustBeKeyword
+]
+
+{ #category : #accessing }
+GtPharoRenameSelectorPartModel >> isMustBeKeyword: aBoolean [
+
+	isMustBeKeyword := aBoolean
+]
+
+{ #category : #testing }
+GtPharoRenameSelectorPartModel >> isValid [
+	^ self isValid: self currentName
+]
+
+{ #category : #private }
+GtPharoRenameSelectorPartModel >> isValid: aString [
+	^ validator
+		ifNotNil: [ :aValidator | aValidator validateSelectorPart: aString ]
+		ifNil: [ true ]
 ]
 
 { #category : #'api - ui' }
@@ -140,14 +184,17 @@ GtPharoRenameSelectorPartModel >> updateCurrentIndex: anInteger source: aSource 
 
 { #category : #'api - updating' }
 GtPharoRenameSelectorPartModel >> updateCurrentName: aString source: aSource [
-	currentName = aString ifTrue: [ ^ self ].
+	| aNewString |
+	aNewString := self adoptIncomingCurrentName: aString.
+	currentName = aNewString ifTrue: [ ^ self ].
 
-	currentName := aString.
+	currentName := aNewString.
 
 	self announcer
 		announce: (GtPharoRenameSelectorPartNameChanged new
 				selectorPartModel: self;
-				currentName: aString;
+				currentName: currentName;
+				displayName: self currentDisplayName;
 				isModified: self isModified;
 				source: aSource)
 ]
