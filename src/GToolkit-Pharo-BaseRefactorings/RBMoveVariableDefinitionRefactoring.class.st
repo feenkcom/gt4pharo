@@ -35,6 +35,30 @@ RBMoveVariableDefinitionRefactoring class >> model: aRBSmalltalk bindTight: anIn
 		yourself
 ]
 
+{ #category : #preconditions }
+RBMoveVariableDefinitionRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition definesSelector: selector in: class).
+	conds
+		add: (RBCondition
+				withBlock: [ | methodSource |
+					interval first <= interval last
+						ifFalse: [ self refactoringFailure: 'You must select a variable name' ].
+					methodSource := class sourceCodeFor: selector.
+					methodSource size >= interval last
+						ifFalse: [ self refactoringFailure: 'Invalid range for variable' ].
+					name := methodSource copyFrom: interval first to: interval last.
+					(self checkInstanceVariableName: name in: class)
+						ifFalse: [ self refactoringFailure: name , ' does not seem to be a valid variable name.' ].
+					parseTree := class parseTreeForSelector: selector.
+					self checkParseTree.
+					true ]).
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #transforming }
 RBMoveVariableDefinitionRefactoring >> basicTransform [
 	definingNode removeTemporaryNamed: name.
@@ -85,24 +109,6 @@ RBMoveVariableDefinitionRefactoring >> class: aClass selector: aSelector interva
 { #category : #accessing }
 RBMoveVariableDefinitionRefactoring >> gtDescription [
 	^ 'Move variable declaration of ' , name , ' to inner scope'
-]
-
-{ #category : #preconditions }
-RBMoveVariableDefinitionRefactoring >> preconditions [
-	^ (RBCondition definesSelector: selector in: class)
-		& (RBCondition
-				withBlock: [ | methodSource |
-					interval first <= interval last
-						ifFalse: [ self refactoringFailure: 'You must select a variable name' ].
-					methodSource := class sourceCodeFor: selector.
-					methodSource size >= interval last
-						ifFalse: [ self refactoringFailure: 'Invalid range for variable' ].
-					name := methodSource copyFrom: interval first to: interval last.
-					(self checkInstanceVariableName: name in: class)
-						ifFalse: [ self refactoringFailure: name , ' does not seem to be a valid variable name.' ].
-					parseTree := class parseTreeForSelector: selector.
-					self checkParseTree.
-					true ])
 ]
 
 { #category : #transforming }

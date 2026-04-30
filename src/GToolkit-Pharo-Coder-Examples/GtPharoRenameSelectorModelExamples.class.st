@@ -387,7 +387,8 @@ GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> ifLibEditorIsMissingDo: aBlock [
-	^ GtTextEditorLibrary uniqueInstance hasModule
+	GtTextEditorLibrary uniqueInstance hasModule ifFalse: [ ^ aBlock value ].
+	^ nil
 ]
 
 { #category : #'examples - method' }
