@@ -73,7 +73,7 @@ GtExtractMethodFromInspectorRefactoring >> gtDescription [
 ]
 
 { #category : #accessing }
-GtExtractMethodFromInspectorRefactoring >> preconditions [
+GtExtractMethodFromInspectorRefactoring >> prepareForExecution [
 	self buildSnippetMethod.
 	extractionInterval := originalInterval first + offset
 			+ ((returnPosition notNil and: [ originalInterval first >= returnPosition ])
@@ -84,7 +84,7 @@ GtExtractMethodFromInspectorRefactoring >> preconditions [
 							ifTrue: [ 1 ]
 							ifFalse: [ 0 ]).
 	selector := snippetSelector.
-	^ super preconditions
+	^ super prepareForExecution
 ]
 
 { #category : #transforming }

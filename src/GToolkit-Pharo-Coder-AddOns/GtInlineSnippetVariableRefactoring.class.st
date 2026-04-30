@@ -23,6 +23,14 @@ GtInlineSnippetVariableRefactoring >> checkSelectedInterval [
 ]
 
 { #category : #transforming }
+GtInlineSnippetVariableRefactoring >> prepareForExecution [
+	super prepareForExecution.
+	self
+		forPharo13AndNewer: [ definingNode ifNil: [ definingNode := sourceTree ] ]
+		forOlder: [  ]
+]
+
+{ #category : #transforming }
 GtInlineSnippetVariableRefactoring >> replaceReferences [
 	| rewriter |
 	rewriter := self parseTreeRewriter.

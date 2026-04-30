@@ -77,6 +77,23 @@ GtPushUpMethodRefactoring >> preconditionNoReferencesToInstVars [
 			true ]
 ]
 
+{ #category : #preconditions }
+GtPushUpMethodRefactoring >> preconditionNoSupersendsReceived [
+	"P13"
+	| condition |
+	condition := super preconditionNoSupersendsReceived.
+	^ RBCondition
+		withBlock: [ condition check.
+			condition violators
+				do: [ :each | 
+					GtRefactoringNotification
+						signal: ('<1s>>><2s> senders super <3s> which will call a different implementation than it is currently calling.'
+								expandMacrosWith: each second name
+								with: each third
+								with: each first) ].
+			true ]
+]
+
 { #category : #transforming }
 GtPushUpMethodRefactoring >> prepareForExecution [
 	class := self classObjectFor: classObject.
