@@ -31,6 +31,21 @@ GtExtractLiteralToClassVariableRefactoring >> addClassVariable [
 				class: self classForClassVariable instanceSide)
 ]
 
+{ #category : #preconditions }
+GtExtractLiteralToClassVariableRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition definesSelector: selector in: class).
+	conds
+		add: (RBCondition
+				withBlock: [ self checkLiteralToExtract.
+					self checkClassForVariable.
+					true ]).
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #transforming }
 GtExtractLiteralToClassVariableRefactoring >> basicTranform [
 	self getVariableName.
@@ -102,15 +117,6 @@ GtExtractLiteralToClassVariableRefactoring >> getVariableName [
 			ifNil: [ self refactoringError: 'Invalid variable name' ]
 			ifNotNil: [ :mn | mn selector ].
 	variable := getter asString capitalized
-]
-
-{ #category : #preconditions }
-GtExtractLiteralToClassVariableRefactoring >> preconditions [
-	^ (RBCondition definesSelector: selector in: class)
-		& (RBCondition
-				withBlock: [ self checkLiteralToExtract.
-					self checkClassForVariable.
-					true ])
 ]
 
 { #category : #transforming }

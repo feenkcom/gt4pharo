@@ -116,10 +116,10 @@ GtExtractExampleFromSnippetToClassRefactoring >> packageName: aString [
 ]
 
 { #category : #accessing }
-GtExtractExampleFromSnippetToClassRefactoring >> preconditions [
+GtExtractExampleFromSnippetToClassRefactoring >> prepareForExecution [
 	self createNewClassIfNecessary.
 	class := self model classNamed: className.
-	^ super preconditions
+	super prepareForExecution
 ]
 
 { #category : #transforming }
