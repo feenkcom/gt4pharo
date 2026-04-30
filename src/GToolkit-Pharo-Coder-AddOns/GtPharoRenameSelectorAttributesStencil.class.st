@@ -194,6 +194,14 @@ GtPharoRenameSelectorAttributesStencil >> gtAttributesFor: aView [
 							aCol at: 2} ]
 			width: 70;
 		column: 'Attribute' text: [ :aCol | aCol at: 3 ];
+		column: 'Rendering mode'
+			text: [ :aCol | 
+				| anAttribute |
+				anAttribute := aCol at: 3.
+				anAttribute shouldAppend
+					ifTrue: [ 'appending' ]
+					ifFalse: [ anAttribute shouldReplace ifTrue: [ 'replacing' ] ifFalse: [ '?' ] ] ]
+			width: 110;
 		send: [ :aCol | aCol at: 3 ]
 ]
 

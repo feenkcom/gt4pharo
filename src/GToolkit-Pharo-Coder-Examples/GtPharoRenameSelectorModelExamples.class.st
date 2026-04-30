@@ -333,9 +333,13 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			when: BrTextStyledEvent
 				doOnce: [ :anEvent | 
 					BlTaskAction
-						enqueueElement: anEditor
-						action: [ aController := GtPharoRenameSelectorCoderController new
+						enqueueElement: anEvent currentTarget
+						action: [ anEvent currentTarget
+								assert: [ aDocumentId isNotNil ]
+								description: [ 'Document ID must be non-nil.' ].
+							aController := GtPharoRenameSelectorCoderController new
 									originalNode: anAst;
+									documentId: aDocumentId;
 									editorElement: anEditor;
 									sourceCoderViewModel: aCoderViewModel;
 									install ] ];
