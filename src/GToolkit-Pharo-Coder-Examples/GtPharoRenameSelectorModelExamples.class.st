@@ -385,6 +385,13 @@ GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 	^ anEditor
 ]
 
+{ #category : #'examples - rust editor' }
+GtPharoRenameSelectorModelExamples >> ifLibEditorIsMissingDo: aBlock [
+	GtTextEditorLibrary uniqueInstance libraryName asFileReference exists
+		ifFalse: [ ^ aBlock value ].
+	^ nil
+]
+
 { #category : #'examples - method' }
 GtPharoRenameSelectorModelExamples >> oneKeywordMethod [
 	<gtExample>
@@ -882,8 +889,9 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod_updateT
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	<gtExample>
-	<noTest>
 	| aMethod anEditor |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	
 	aMethod := self threeKeywordsMethod.
 	anEditor := self createRustEditorWithMethod: aMethod.
 	^ anEditor
