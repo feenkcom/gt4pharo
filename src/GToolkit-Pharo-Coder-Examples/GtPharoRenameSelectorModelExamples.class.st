@@ -899,7 +899,7 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod [
 	<gtExample>
 	<noTest>
-	| anElement aScripter aModel |
+	| anElement aScripter aModel aSemaphore |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	anElement := self rustEditorWithThreeKeywordsMethod.
 	aScripter := BlScripter new element: anElement.
@@ -907,6 +907,15 @@ GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod 
 	aScripter := BlScripter new
 			model: aModel;
 			element: anElement.
+
+	aSemaphore := Semaphore new.
+	anElement privateRequestEditorAction: [ :aMessage | aSemaphore signal ].
+
+	aScripter wait
+		forSemaphore: aSemaphore pulseDuring: 5 seconds;
+		play.
+
+	self assert: aSemaphore isSignaled.
 
 	self
 		assert: aScripter
