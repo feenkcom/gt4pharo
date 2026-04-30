@@ -11,16 +11,9 @@ Class {
 
 { #category : #preconditions }
 GtPushUpMethodRefactoring >> checkInstVars [
+	"P12"
 	super checkInstVars.
-	instVarsToPushUp notEmpty
-		ifTrue: [ GtRefactoringNotification
-				signal: (String
-						streamContents: [ :stream | 
-							instVarsToPushUp size = 1
-								ifTrue: [ stream << 'Instance variable, ' << instVarsToPushUp any
-										<< ', is referenced in the method to push up. Continuing will push up the instance variable too.' ]
-								ifFalse: [ stream << instVarsToPushUp size printString
-										<< ' instance variables are referenced in the method to push up. Continuing will push up the instance variables too.' ] ]) ]
+	self signalWarningIfInstVarsToPushUp
 ]
 
 { #category : #preconditions }
@@ -72,6 +65,18 @@ GtPushUpMethodRefactoring >> methodClassName [
 	^ class ifNil: [ classObject asString ] ifNotNil: [ class name ]
 ]
 
+{ #category : #preconditions }
+GtPushUpMethodRefactoring >> preconditionNoReferencesToInstVars [
+	"P13"
+	| condition |
+	condition := super preconditionNoReferencesToInstVars.
+	^ RBCondition
+		withBlock: [ condition check.
+			instVarsToPushUp := condition violators collectAsSet: #second.
+			self signalWarningIfInstVarsToPushUp.
+			true ]
+]
+
 { #category : #transforming }
 GtPushUpMethodRefactoring >> prepareForExecution [
 	class := self classObjectFor: classObject.
@@ -104,6 +109,19 @@ GtPushUpMethodRefactoring >> pushUpVariables [
 						model: self model
 						variable: each
 						class: class superclass) ]
+]
+
+{ #category : #preconditions }
+GtPushUpMethodRefactoring >> signalWarningIfInstVarsToPushUp [
+	instVarsToPushUp notEmpty
+		ifTrue: [ GtRefactoringNotification
+				signal: (String
+						streamContents: [ :stream | 
+							instVarsToPushUp size = 1
+								ifTrue: [ stream << 'Instance variable, ' << instVarsToPushUp any
+										<< ', is referenced in the method to push up. Continuing will push up the instance variable too.' ]
+								ifFalse: [ stream << instVarsToPushUp size printString
+										<< ' instance variables are referenced in the method to push up. Continuing will push up the instance variables too.' ] ]) ]
 ]
 
 { #category : #transforming }
