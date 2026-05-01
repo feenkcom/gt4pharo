@@ -202,9 +202,7 @@ GtPharoMethodCoder >> checkForShadowedVariables: aGtPharoSourceCoderEvaluationCo
 	compiler := aGtPharoSourceCoderEvaluationContext targetBehavior compiler
 			permitFaulty: false;
 			source: self currentSourceString.
-	ast := self
-			forPharo13AndNewer: [ [ compiler parse ] on: #OCCodeError asClass do: [ :ex | ex resume ] ]
-			forOlder: [ compiler parse ].
+	ast := compiler parse.
 	ast scope ifNil: [ compiler doSemanticAnalysis ].
 	ast
 		nodesDo: [ :each | 
