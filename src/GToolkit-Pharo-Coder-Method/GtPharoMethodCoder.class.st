@@ -211,7 +211,7 @@ GtPharoMethodCoder >> checkForShadowedVariables: aGtPharoSourceCoderEvaluationCo
 			each notices
 				do: [ :notice | 
 					(notice isWarning and: [ notice messageText = 'Name already defined' ])
-						ifTrue: [ #CodeError asClass new
+						ifTrue: [ RBParser gtParseErrorClass new
 								notice: notice;
 								signal ] ] ]
 ]
