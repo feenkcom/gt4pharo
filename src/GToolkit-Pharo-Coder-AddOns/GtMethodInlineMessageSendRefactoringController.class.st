@@ -21,6 +21,9 @@ GtMethodInlineMessageSendRefactoringController >> refactoring [
 			forClass: (model classFor: sourceCoderViewModel behavior).
 
 	refactoring setOption: #inlineExpression toUse: [ :ref :string | true ].
+	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | true ].
 
 	^ refactoring
 ]

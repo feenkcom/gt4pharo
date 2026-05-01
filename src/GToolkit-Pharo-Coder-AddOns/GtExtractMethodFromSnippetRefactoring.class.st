@@ -70,11 +70,14 @@ GtExtractMethodFromSnippetRefactoring >> gtDescription [
 GtExtractMethodFromSnippetRefactoring >> inlineForwarder [
 	| refactoring |
 	refactoring := GtInlineMethodRefactoring
-		model: self model
-		inline: self inlineInterval
-		inMethod: snippetSelector
-		forClass: (model classFor: nil class).
+			model: self model
+			inline: self inlineInterval
+			inMethod: snippetSelector
+			forClass: (model classFor: nil class).
 	refactoring setOption: #inlineExpression toUse: [ :ref :string | true ].
+	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | true ].
 	self performCompositeRefactoring: refactoring
 ]
 
