@@ -41,7 +41,7 @@ RBRefactoryChange >> gtCompilationJobWithProgress: aBlock threshold: aThreshold 
 								ifTrue: [ SystemAnnouncer uniqueInstance
 										announce: (GtFinishedBulkChangesAnnouncement new changes: self) ] ].
 					GtRefactoryChangeManager instance addUndo: undoChange ]
-						on: CodeError
+						on: RBParser gtParseErrorClass
 						do: [ :ex "This error handler is only for P11, and can be removed for P12 and later" | self error: ex messageText ] ] ])
 		announcer: Announcer new
 ]

@@ -102,6 +102,9 @@ GtMethodInlineMessageFromComponentRefactoringController >> refactoring [
 
 	refactoring setOption: #inlineExpression toUse: [ :ref :string | true ].
 	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | true ].
+	refactoring
 		setOption: #implementorToInline
 		toUse: [ :ref :classes | classes detect: [ :each | each realClass = self implementor ] ifNone: [ nil ] ].
 	^ refactoring

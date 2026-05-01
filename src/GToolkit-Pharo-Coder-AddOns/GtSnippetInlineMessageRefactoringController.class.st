@@ -81,7 +81,8 @@ GtSnippetInlineMessageRefactoringController >> refactoring [
 	refactoring
 		setOption: #implementorToInline
 			toUse: [ :ref :classes | classes detect: [ :each | each realClass = implementorClass ] ifNone: [ nil ] ];
-		setOption: #inlineExpression toUse: [ :ref :msg | false ].
+		setOption: #inlineExpression toUse: [ :ref :msg | false ];
+		setOption: #shouldNotCreateExtraBindings toUse: [ :ref :string | false ].
 	^ refactoring
 ]
 

@@ -75,9 +75,7 @@ GtPharoSourceCoder >> classOrMetaClass [
 
 { #category : #'private - actions' }
 GtPharoSourceCoder >> compilerErrorsToHandle [
-	^ self 
-		forPharo12AndNewer: [OCUndeclaredVariableWarning, #CodeError asClass] 
-		forPharo11: [OCSemanticWarning]
+	^ OCUndeclaredVariableWarning, RBParser gtParseErrorClass
 ]
 
 { #category : #'private - ast' }

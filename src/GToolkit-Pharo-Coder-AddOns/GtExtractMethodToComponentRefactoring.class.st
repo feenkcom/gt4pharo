@@ -20,12 +20,16 @@ GtExtractMethodToComponentRefactoring >> extractMethod [
 { #category : #transforming }
 GtExtractMethodToComponentRefactoring >> inlineForwarder [
 	"Changing to use Gt inline all variant"
+
 	| refactoring |
-	refactoring := GtInlineAllSendersRefactoring 
-				model: self model
-				sendersOf: extractedMethodSelector
-				in: class.
-	refactoring setOption: #inlineExpression toUse: [:ref :string | true].
+	refactoring := GtInlineAllSendersRefactoring
+			model: self model
+			sendersOf: extractedMethodSelector
+			in: class.
+	refactoring setOption: #inlineExpression toUse: [ :ref :string | true ].
+	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | true ].
 	self performCompositeRefactoring: refactoring
 ]
 

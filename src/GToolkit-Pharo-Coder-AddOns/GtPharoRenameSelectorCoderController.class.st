@@ -163,7 +163,7 @@ GtPharoRenameSelectorCoderController >> safelyInstall [
 		send: #onGtPharoRenameSelectorModelRefactoringsCancelRequested:
 		to: self.
 
-	editorElement userData at: self class put: self.
+	editorElement userData at: #selectorController put: self.
 	editorElement userData at: #selectorModel put: selectorModel
 ]
 

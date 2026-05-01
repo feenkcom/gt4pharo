@@ -28,6 +28,9 @@ GtCreateSnippetSourceFromMethod >> astWithInlinedSelfSends [
 			selector: method selector
 			class: method methodClass.
 	refactoring setOption: #inlineExpression toUse: [ :ref :string | false ].
+	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | false ].
 	ignoredSelectors := Set withAll: assertSelectors.
 	ignoredSelectors addAll: selectorsNotToInline.
 	refactoring ignoreSelectors: ignoredSelectors.

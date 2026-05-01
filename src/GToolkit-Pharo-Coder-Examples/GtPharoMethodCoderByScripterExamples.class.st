@@ -8730,6 +8730,109 @@ GtPharoMethodCoderByScripterExamples >> initializeDummyOneObject [
 	GtPharoDummyOneObject varA: 144
 ]
 
+{ #category : #'examples - inline forward view' }
+GtPharoMethodCoderByScripterExamples >> inlineForwardView [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter count found changes |
+	scripter := self
+			scripterForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method with argument';
+				action: [ :aCoder | 
+					aCoder
+						appendString: 'For: aView
+	<gtView>
+	^ aView forward
+		title: ''Contents'';
+		priority: 15;
+		object: [ GtPharoParser parse: ''seven ^ 3 + 4'' ];
+		view: #gtParentsFor:' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save a method with argument';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the assignment node';
+				action: [ :aSourceEditor | 
+					| size |
+					size := aSourceEditor text size.
+					aSourceEditor selecter
+						from: size - 1 to: size;
+						select ];
+				id: GtSourceCoderEditorId ].
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click inline temp';
+				onSpaceRoot;
+				id: #'context-menu--inline-gtView' ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				hasFocus;
+				// #classPicker ].
+
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+
+	count := 0.
+	found := false.
+
+	[ found or: [ count > 20 ] ]
+		whileFalse: [ scripter
+				doStep: [ :s | 
+					s
+						onSpaceRoot;
+						// #classList;
+						block: [ :list | found := list selectedItems first = SmaCCParseNode ] ].
+			found ifFalse: [ (scripter keyPress: BlKeyboardKey arrowDown) play ].
+			count := count + 1 ].
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open refactoring';
+				// #previewCheckButton ].
+
+	(Delay forMilliseconds: 100) wait.
+	scripter pulse.
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// #refactoringException;
+				block: [ :each | self assert: each visibility equals: BlVisibility gone ] ].
+	scripter
+		doStep: [ :s | 
+			s
+				onSpaceRoot;
+				// GtChangesElement;
+				block: [ :each | changes := each changes ] ].
+	changes gtAllChanges
+		detect: [ :each | each isKindOf: RBAddMethodChange ]
+		ifNone: [ self error: 'change not found' ].
+
+	^ scripter
+]
+
 { #category : #'examples - inline message send' }
 GtPharoMethodCoderByScripterExamples >> inlineMessageFromComponentEnterOpensPreview [
 	<gtExample>
