@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Refactoring - Method New'
 }
 
-{ #category : #'examples - scripter' }
+{ #category : #asserting }
 GtPharoRenameSelectorModelExamples >> assert: aScripter onlyOneEditorMode: anElementId [
 	| aModel aBasicId anEditorModeIndex |
 	self assert: [ anElementId isIndexed ].
@@ -33,7 +33,7 @@ GtPharoRenameSelectorModelExamples >> assert: aScripter onlyOneEditorMode: anEle
 						play ] ]
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #asserting }
 GtPharoRenameSelectorModelExamples >> assert: aScripter refactoringsPreviewIsVisible: aBoolean [
 	aScripter assert
 		label: ('Assert refactorings preview is {1}'
@@ -267,7 +267,7 @@ GtPharoRenameSelectorModelExamples >> binaryMethodAst [
 	^ self parseMethod: self binaryMethod
 ]
 
-{ #category : #'examples - demo' }
+{ #category : #'examples - brick editor' }
 GtPharoRenameSelectorModelExamples >> createEditorWithMethod: aMethod [
 	| anEditor aDocumentId aController aCoder anAst aCoderViewModel |
 	aDocumentId := nil.
@@ -333,9 +333,13 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			when: BrTextStyledEvent
 				doOnce: [ :anEvent | 
 					BlTaskAction
-						enqueueElement: anEditor
-						action: [ aController := GtPharoRenameSelectorCoderController new
+						enqueueElement: anEvent currentTarget
+						action: [ anEvent currentTarget
+								assert: [ aDocumentId isNotNil ]
+								description: [ 'Document ID must be non-nil.' ].
+							aController := GtPharoRenameSelectorCoderController new
 									originalNode: anAst;
+									documentId: aDocumentId;
 									editorElement: anEditor;
 									sourceCoderViewModel: aCoderViewModel;
 									install ] ];
@@ -349,7 +353,7 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 	^ anEditor
 ]
 
-{ #category : #'examples - demo' }
+{ #category : #'examples - brick editor' }
 GtPharoRenameSelectorModelExamples >> editorWithBinaryMethod [
 	<gtExample>
 	| aMethod anEditor |
@@ -358,7 +362,7 @@ GtPharoRenameSelectorModelExamples >> editorWithBinaryMethod [
 	^ anEditor
 ]
 
-{ #category : #'examples - demo' }
+{ #category : #'examples - brick editor' }
 GtPharoRenameSelectorModelExamples >> editorWithOneKeywordMethod [
 	<gtExample>
 	| aMethod anEditor |
@@ -367,7 +371,7 @@ GtPharoRenameSelectorModelExamples >> editorWithOneKeywordMethod [
 	^ anEditor
 ]
 
-{ #category : #'examples - demo' }
+{ #category : #'examples - brick editor' }
 GtPharoRenameSelectorModelExamples >> editorWithThreeKeywordsMethod [
 	<gtExample>
 	| aMethod anEditor |
@@ -376,13 +380,19 @@ GtPharoRenameSelectorModelExamples >> editorWithThreeKeywordsMethod [
 	^ anEditor
 ]
 
-{ #category : #'examples - demo' }
+{ #category : #'examples - brick editor' }
 GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 	<gtExample>
 	| aMethod anEditor |
 	aMethod := self unaryMethod.
 	anEditor := self createEditorWithMethod: aMethod.
 	^ anEditor
+]
+
+{ #category : #'examples - rust editor' }
+GtPharoRenameSelectorModelExamples >> ifLibEditorIsMissingDo: aBlock [
+	GtTextEditorLibrary uniqueInstance hasModule ifFalse: [ ^ aBlock value ].
+	^ nil
 ]
 
 { #category : #'examples - method' }
@@ -882,14 +892,358 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod_updateT
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	<gtExample>
-	<noTest>
 	| aMethod anEditor |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	
 	aMethod := self threeKeywordsMethod.
 	anEditor := self createRustEditorWithMethod: aMethod.
 	^ anEditor
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod [
+	<gtExample>
+	<noTest>
+	| anElement aScripter aModel aSemaphore |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	anElement := self rustEditorWithThreeKeywordsMethod.
+	aScripter := BlScripter new element: anElement.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+
+	aSemaphore := Semaphore new.
+	anElement privateRequestEditorAction: [ :aMessage | aSemaphore signal ].
+
+	aScripter wait
+		forSemaphore: aSemaphore pulseDuring: 5 seconds;
+		play.
+
+	self assert: aSemaphore isSignaled.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod [
+	<gtExample>
+	<noTest>
+	| anElement aScripter aModel |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	anElement := self selectorPartElementsWithFirstThreeKeywordsMethod.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_downAndUpArrowShortcuts [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowDown;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			6
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowUp;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_refactoringsPreview [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	aScripter click
+		label: 'Activate first selector part';
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	aScripter editor
+		label: 'Type character "_"';
+		deselectAll;
+		typeText: '_';
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+
+	aScripter editor
+		label: 'Delete previously typed character';
+		pressBackspace;
+		// (#'selector-part' asBlocElementId indexed: 1);
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_rightAndLeftArrowShortcuts [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey arrowRight;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			6
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter
+		substeps: 'Jump to the previous selector part'
+		do: [ :aStep | 
+			8
+				timesRepeat: [ aStep keyPress
+						label: 'Move cursor to the left';
+						key: BlKeyboardKey arrowLeft;
+						play ] ].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
+	<gtExample>
+	<noTest>
+	| aScripter |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey tab;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey tab;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	aScripter keyPress
+		label: 'Jump to the next selector part';
+		key: BlKeyboardKey tab;
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	(aScripter keyWithShiftPress: BlKeyboardKey tab)
+		label: 'Jump to the previous selector part';
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 3).
+
+	(aScripter keyWithShiftPress: BlKeyboardKey tab)
+		label: 'Jump to the previous selector part';
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 2).
+
+	(aScripter keyWithShiftPress: BlKeyboardKey tab)
+		label: 'Jump to the previous selector part';
+		play.
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_typeAThenB [
+	<gtExample>
+	<noTest>
+	| anElement aScripter aModel aPartOneId |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	anElement := self selectorPartElementsWithFirstThreeKeywordsMethod.
+	aModel := anElement userData at: #selectorModel.
+	aScripter := BlScripter new
+			model: aModel;
+			element: anElement.
+
+	aPartOneId := #'selector-part' asBlocElementId indexed: 1.
+	self assert: aScripter onlyOneEditorMode: aPartOneId.
+
+	aScripter editor
+		typeText: 'a';
+		assertTextEqualsTo: 'a';
+		assertCursorPosition: 1;
+		// aPartOneId;
+		play.
+
+	aScripter editor
+		typeText: 'b';
+		assertTextEqualsTo: 'ab';
+		assertCursorPosition: 2;
+		// aPartOneId;
+		play.
+
+	^ aScripter
+]
+
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterEditorWithThreeKeywordsMethod [
 	<gtExample>
 	| anElement aScripter aModel |
@@ -907,7 +1261,7 @@ GtPharoRenameSelectorModelExamples >> scripterEditorWithThreeKeywordsMethod [
 	^ aScripter
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
 	| anElement aScripter aModel |
@@ -924,7 +1278,7 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	^ aScripter
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_downAndUpArrowShortcuts [
 	<gtExample>
 	| aScripter |
@@ -1003,7 +1357,7 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	^ aScripter
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_refactoringsPreview [
 	<gtExample>
 	| aScripter |
@@ -1036,7 +1390,7 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	^ aScripter
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_rightAndLeftArrowShortcuts [
 	<gtExample>
 	| aScripter |
@@ -1115,7 +1469,7 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	^ aScripter
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
 	<gtExample>
 	| aScripter |
@@ -1179,7 +1533,7 @@ GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThree
 	^ aScripter
 ]
 
-{ #category : #'examples - scripter' }
+{ #category : #'examples - brick editor scripter' }
 GtPharoRenameSelectorModelExamples >> scripterSelectorPartElementsWithFirstThreeKeywordsMethod_typeAThenB [
 	<gtExample>
 	| anElement aScripter aModel aPartOneId |

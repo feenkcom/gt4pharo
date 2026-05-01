@@ -36,6 +36,20 @@ GtMergeVariablesRefactoring class >> model: aModel mergeVariableFrom: fromInterv
 ]
 
 { #category : #preconditions }
+GtMergeVariablesRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition definesSelector: selector in: class).
+	conds
+		add: (RBCondition
+				withBlock: [ self verifyVariables.
+					true ]).
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
+{ #category : #preconditions }
 GtMergeVariablesRefactoring >> assignmentsFor: aNode [
 	| assignments |
 	assignments := IdentitySet new.
@@ -183,14 +197,6 @@ GtMergeVariablesRefactoring >> fromNode [
 					(each isVariable and: [ each sourceInterval = fromInterval ])
 						ifTrue: [ fromNode := each ] ].
 			fromNode ]
-]
-
-{ #category : #preconditions }
-GtMergeVariablesRefactoring >> preconditions [
-	^ (RBCondition definesSelector: selector in: class)
-		& (RBCondition
-				withBlock: [ self verifyVariables.
-					true ])
 ]
 
 { #category : #transforming }

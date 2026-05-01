@@ -239,40 +239,36 @@ GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSub
 GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribedToSystem [
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder |
-	
 	anEventsRecoder := self eventsRecorder.
 
 	aMethodCoder := self forNewMethod.
 	aMethodCoder currentSourceString: self methodSourceWithUnknownClass.
 	aMethodCoder subscribeToSystem.
-	
-	self 
-		assert: aMethodCoder isModified
-		description: 'Coder is modified'.
-	
+
+	self assert: aMethodCoder isModified description: 'Coder is modified'.
+
 	aMethodCoder
-		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
+		when: GtCoderAnnouncement
+		send: #record:
+		to: anEventsRecoder.
 
 	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self 
-		assert: wasSuccessful not
-		description: 'Compilation was not successful'.
+			ensure: [ aMethodCoder unsubscribeFromSystem ].
+
+	self assert: wasSuccessful not description: 'Compilation was not successful'.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderParseError.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	
-	self 
-		forPharo12AndNewer: [
-			self 
-				assert: anEventsRecoder first errorMessage 
-				equals: 'Undeclared variable' ] 
-		forPharo11: [
-			self 
-				assert: anEventsRecoder first errorMessage 
-				equals: nil].
+
+	self
+		forPharo13AndNewer: [ self
+				assert: anEventsRecoder first errorMessage
+				equals: 'Undeclared temp: MissingClass' ]
+		forPharo12: [ self
+				assert: anEventsRecoder first errorMessage
+				equals: 'Undeclared variable' ]
+		forPharo11: [ self assert: anEventsRecoder first errorMessage equals: nil ].
 
 	^ aMethodCoder
 ]
