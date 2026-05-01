@@ -72,3 +72,32 @@ GtRBPushDownMethodRefactoringExamples >> pushDownUsingNewClassesAndDestinationCl
 	self assert: namespace changes changesSize equals: 5.
 	^ namespace
 ]
+
+{ #category : #'as yet unclassified' }
+GtRBPushDownMethodRefactoringExamples >> pushDownWithoutSubclass [
+	<gtExample>
+	| namespace error |
+	namespace := GtRBNamespace new.
+	(GtRBAddClassWithVarsRefactoring
+		model: namespace
+		addClass: #Asdf
+		superclass: #Object
+		subclasses: #()
+		category: #Asdf) primitiveExecute.
+	(GtRBAddMethodRefactoring
+		model: namespace
+		sourceCode: 'asdf ^ 42'
+		in: #Asdf
+		withProtocol: #access) primitiveExecute.
+	[ (GtRBPushDownMethodRefactoring
+		model: namespace
+		pushDown: #(#asdf)
+		from: #Asdf) primitiveExecute.
+	self error: 'Exception was not thrown' ]
+		on: RBRefactoringError
+		do: [ :ex | 
+			error := ex.
+			ex return ].
+	self assert: ((namespace classObjectFor: #Asdf) directlyDefinesMethod: #asdf).
+	^ error
+]

@@ -7075,13 +7075,13 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_01_setup [
 	<after: #cleanUp>
 	| aScripter rootClass |
 	aScripter := self
-			scripterForBlock: [ | env method coder |
-				env := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
-				rootClass := env anyDummyLeafClass.
+			scripterForBlock: [ | method coder |
+				environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+				rootClass := environment anyDummyLeafClass.
 				method := rootClass anyDummyUnaryMethod realMethod.
 
 				coder := GtPharoMethodCoder forMethod: method.
-				coder attributeNamed: #dummyEnvironment put: env.
+				coder attributeNamed: #dummyEnvironment put: environment.
 				coder attributeNamed: #dummyMethod put: rootClass anyDummyUnaryMethod.
 				coder ].
 
@@ -7175,6 +7175,62 @@ GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down [
 			s
 				label: 'Open preview';
 				// #previewCheckButton ].
+
+	^ scripter
+]
+
+{ #category : #'examples - pull down variable' }
+GtPharoMethodCoderByScripterExamples >> forPullDownVariable_04_click_pull_down_when_another_method_has_reference [
+	<gtExample>
+	| scripter |
+	scripter := self forPullDownVariable_03_hover_pull_down.
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save another method';
+				action: [ :aCoder | 
+					aCoder behavior superclass
+						compile: 'asdf ^ ' , aCoder behavior superclass allInstVarNames last
+						classified: #accessing ];
+				onModel ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click pull down variable';
+				onSpaceRoot;
+				id: #'context-menu--pull-down-variable' ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert refactoring changes attribute';
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute class = GtRefactoringChangesAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 
+						| index |
+						index := aCoderEditor text asString size.
+						index to: index ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	"Check error message exists"
+	scripter
+		checkStep: [ :s | 
+			s
+				exists;
+				onSpaceRoot;
+				// #refactoringMessages ].
 
 	^ scripter
 ]

@@ -8,24 +8,26 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method'
 }
 
+{ #category : #preconditions }
+GtRBPushDownMethodRefactoring >> applicabilityPreconditions [
+	| conditions |
+	conditions := OrderedCollection new.
+	selectors
+		do: [ :each | 
+			conditions add: (RBCondition definesSelector: each in: class).
+			conditions add: (RBCondition hasSubclasses: class excluding: #()).
+			conditions
+				add: (self
+						forPharo12AndNewer: [ RBCondition subclassesOf: class isDoingASuperSendFor: each ]
+						forPharo11: [ RBCondition subclassesOf: class referToSelector: each ]) not ].
+	^ self
+		forPharo13AndNewer: [ conditions ]
+		forOlder: [ conditions inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #transforming }
 GtRBPushDownMethodRefactoring >> checkClassIsAbstract [
 	class isAbstract ifFalse: [ self signalNotAbstractClass ]
-]
-
-{ #category : #accessing }
-GtRBPushDownMethodRefactoring >> preconditions [
-	| condition |
-	condition := selectors
-			inject: self trueCondition
-			into: [ :cond :each | 
-				cond & (RBCondition definesSelector: each in: class)
-					& (RBCondition hasSubclasses: class excluding: #())
-					& (self
-							forPharo12AndNewer: [ RBCondition subclassesOf: class isDoingASuperSendFor: each ]
-							forPharo11: [ RBCondition subclassesOf: class referToSelector: each ])
-							not ].
-	^ condition
 ]
 
 { #category : #transforming }

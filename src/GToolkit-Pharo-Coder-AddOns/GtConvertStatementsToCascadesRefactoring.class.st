@@ -18,6 +18,13 @@ GtConvertStatementsToCascadesRefactoring class >> model: model convert: anInterv
 		yourself
 ]
 
+{ #category : #accessing }
+GtConvertStatementsToCascadesRefactoring >> applicabilityPreconditions [
+	| cond |
+	cond := RBCondition definesSelector: selector in: class.
+	^ self forPharo13AndNewer: [ {cond} ] forOlder: [ cond ]
+]
+
 { #category : #transforming }
 GtConvertStatementsToCascadesRefactoring >> basicTransform [
 	| nodes cascade |
@@ -112,11 +119,6 @@ GtConvertStatementsToCascadesRefactoring >> findNodes [
 { #category : #accessing }
 GtConvertStatementsToCascadesRefactoring >> gtDescription [
 	^ 'Convert statements to cascades'
-]
-
-{ #category : #accessing }
-GtConvertStatementsToCascadesRefactoring >> preconditions [
-	^ RBCondition definesSelector: selector in: class
 ]
 
 { #category : #transforming }
