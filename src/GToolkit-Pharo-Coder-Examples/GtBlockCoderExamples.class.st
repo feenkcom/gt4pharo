@@ -26,7 +26,7 @@ GtBlockCoderExamples >> syntaxError [
 
 	wasSignalled := false.
 	[ aBlockClosureCoder block ]
-		on: CodeError
+		on: RBParser gtParseErrorClass
 		do: [ :e | wasSignalled := true ].
 
 	self assert: wasSignalled.
