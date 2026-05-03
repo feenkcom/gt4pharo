@@ -44,11 +44,11 @@ GtConvertCascadesToStatementsController >> node: aCascadeNode [
 { #category : #accessing }
 GtConvertCascadesToStatementsController >> refactoring [
 	| refactoring model |
-	model := self createRefactoringModel.
+	model := self createModel.
 	refactoring := GtConvertCascadesToStatementsRefactoring
 			model: model
 			convert: node sourceInterval
-			inMethod: sourceCoderViewModel coderModel currentSelector
+			inMethod: sourceCoderViewModel selector
 			forClass: (model classFor: sourceCoderViewModel behavior).
 	temporaryCreated := false.
 	refactoring
