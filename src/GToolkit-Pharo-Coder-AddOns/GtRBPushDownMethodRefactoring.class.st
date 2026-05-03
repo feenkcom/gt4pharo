@@ -20,9 +20,7 @@ GtRBPushDownMethodRefactoring >> applicabilityPreconditions [
 				add: (self
 						forPharo12AndNewer: [ RBCondition subclassesOf: class isDoingASuperSendFor: each ]
 						forPharo11: [ RBCondition subclassesOf: class referToSelector: each ]) not ].
-	^ self
-		forPharo13AndNewer: [ conditions ]
-		forOlder: [ conditions inject: RBCondition true into: [ :sum :each | sum & each ] ]
+	^ conditions
 ]
 
 { #category : #transforming }
