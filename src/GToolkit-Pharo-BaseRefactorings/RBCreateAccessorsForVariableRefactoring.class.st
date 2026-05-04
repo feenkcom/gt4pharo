@@ -56,6 +56,15 @@ RBCreateAccessorsForVariableRefactoring class >> variable: aVarName class: aClas
 		classVariable: aBoolean; yourself
 ]
 
+{ #category : #preconditions }
+RBCreateAccessorsForVariableRefactoring >> applicabilityPreconditions [
+	| cond |
+	cond := classVariable
+			ifTrue: [ RBCondition definesClassVariable: variableName asSymbol in: class ]
+			ifFalse: [ RBCondition definesInstanceVariable: variableName in: class ].
+	^ self forPharo13AndNewer: [ {cond} ] forOlder: [ cond ]
+]
+
 { #category : #transforming }
 RBCreateAccessorsForVariableRefactoring >> basicTransform [
 	self
@@ -154,13 +163,6 @@ RBCreateAccessorsForVariableRefactoring >> possibleGetterSelectors [
 { #category : #'private - accessing' }
 RBCreateAccessorsForVariableRefactoring >> possibleSetterSelectors [
 	^self methodsReferencingVariable select: [:each | each numArgs == 1]
-]
-
-{ #category : #preconditions }
-RBCreateAccessorsForVariableRefactoring >> preconditions [
-	^classVariable 
-		ifTrue: [RBCondition definesClassVariable: variableName asSymbol in: class]
-		ifFalse: [RBCondition definesInstanceVariable: variableName in: class]
 ]
 
 { #category : #transforming }

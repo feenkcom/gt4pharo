@@ -35,11 +35,33 @@ RBRemoveClassRefactoring class >> model: aRBSmalltalk classNames: aClassNameColl
 		yourself
 ]
 
+{ #category : #preconditions }
+RBRemoveClassRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	classNames
+		do: [ :each | 
+			| aClassOrTrait |
+			aClassOrTrait := self model classNamed: each asSymbol.
+			aClassOrTrait ifNil: [ self refactoringFailure: 'No such class or trait' ].
+			conds add: (self preconditionIsNotMetaclass: aClassOrTrait).
+			conds add: (self preconditionHasNoReferences: each).
+			self checkSubclasses
+				ifTrue: [ conds add: (self preconditionEmptyOrHasNoSubclasses: aClassOrTrait) ].
+			conds add: (self preconditionHasNoUsers: aClassOrTrait) ].
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 RBRemoveClassRefactoring >> basicTransform [
 	self
 		reparentSubclasses;
 		removeClasses
+]
+
+{ #category : #preconditions }
+RBRemoveClassRefactoring >> checkSubclasses [
+	^ true
 ]
 
 { #category : #initialization }
@@ -100,20 +122,6 @@ RBRemoveClassRefactoring >> preconditionHasNoUsers: aClassOrTrait [
 { #category : #preconditions }
 RBRemoveClassRefactoring >> preconditionIsNotMetaclass: aClass [
 	^ ((RBCondition isMetaclass: aClass) errorMacro: 'Cannot remove just the metaclass') not
-]
-
-{ #category : #preconditions }
-RBRemoveClassRefactoring >> preconditions [
-
-	^ classNames inject: self trueCondition into: [ :sum :each |
-		  | aClassOrTrait |
-		  aClassOrTrait := self model classNamed: each asSymbol.
-		  aClassOrTrait ifNil: [
-			  self refactoringFailure: 'No such class or trait' ].
-		  sum & ((self preconditionIsNotMetaclass: aClassOrTrait)
-		   & (self preconditionHasNoReferences: each)
-		   & (self preconditionEmptyOrHasNoSubclasses: aClassOrTrait)
-		   & (self preconditionHasNoUsers: aClassOrTrait)) ]
 ]
 
 { #category : #transforming }

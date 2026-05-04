@@ -231,9 +231,9 @@ GtPharoNoIndexExamples >> implementersOfTraitMethods [
 GtPharoNoIndexExamples >> selectorCache [
 	<gtExample>
 	| index noIndex diff |
-	index := (GtPharoIndex current selectorCache asyncStreamStartingWith: 'add:')
+	index := (GtPharoIndex current selectorCache asyncStreamStartingWith: 'remove:')
 			toArray wait.
-	noIndex := (GtPharoNoIndex new selectorCache asyncStreamStartingWith: 'add:')
+	noIndex := (GtPharoNoIndex new selectorCache asyncStreamStartingWith: 'remove:')
 			toArray wait.
 	self assert: index size = noIndex size.
 	diff := (Set withAll: index)

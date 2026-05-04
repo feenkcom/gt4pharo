@@ -43,9 +43,7 @@ GtPushDownInstanceVariableRefactoring >> applicabilityPreconditions [
 									container addChild: label.
 									container ] ].
 					true ]).
-	^ self
-		forPharo13AndNewer: [ conds ]
-		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+	^ self applicabilityPreconditionsFor: conds
 ]
 
 { #category : #transforming }

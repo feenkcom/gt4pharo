@@ -58,6 +58,20 @@ RBAbstractClassVariableRefactoring >> accessorsRefactoring [
 		ifNotNil: [ accessorsRefactoring ]
 ]
 
+{ #category : #preconditions }
+RBAbstractClassVariableRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition isMetaclass: class) not.
+	conds
+		add: (RBCondition directlyDefinesClassVariable: variableName asSymbol in: class).
+	conds
+		add: ((RBCondition
+				withBlock: [ (#(#Object #Behavior #ClassDescription #Class) includes: class name) not ])
+				errorMacro: 'This refactoring does not work for Object, Behavior, ClassDescription, or Class').
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 RBAbstractClassVariableRefactoring >> basicTransform [
 	self createAccessors.
@@ -73,15 +87,6 @@ RBAbstractClassVariableRefactoring >> createAccessors [
 { #category : #accessing }
 RBAbstractClassVariableRefactoring >> gtDescription [
 	^ 'Abstract class variable ' , variableName
-]
-
-{ #category : #preconditions }
-RBAbstractClassVariableRefactoring >> preconditions [
-	^(RBCondition isMetaclass: class) not 
-		& (RBCondition directlyDefinesClassVariable: variableName asSymbol in: class) 
-			& ((RBCondition withBlock: 
-						[(#(#Object #Behavior #ClassDescription #Class) includes: class name) not]) 
-					errorMacro: 'This refactoring does not work for Object, Behavior, ClassDescription, or Class')
 ]
 
 { #category : #transforming }

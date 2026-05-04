@@ -2388,6 +2388,51 @@ GtPharoMethodCoderByScripterExamples >> createdMethodThatIsNotImplemented [
 	^ 'messageThatIsNotImplmented6561'
 ]
 
+{ #category : #'examples - abstract var' }
+GtPharoMethodCoderByScripterExamples >> doNotAbstractClassVariablesInSuperclassLoop [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: Behavior >> #ensureProperties ].
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the assignment node';
+				action: [ :editor | 
+					| index |
+					index := editor text asString indexOfSubCollection: 'ClassProperties'.
+					editor selecter
+						from: index to: index + 1;
+						select ];
+				id: GtSourceCoderEditorId ].
+	scripter := self openContextMenu: scripter.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click menu item';
+				onSpaceRoot;
+				id: #'context-menu--abstract-variable' ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert there is no selected text';
+				value: [ :aSourceEditor | aSourceEditor editor hasSelection ]
+					equals: [ false ];
+				id: GtSourceCoderEditorId ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open preview';
+				// #previewCheckButton ].
+
+	scripter refactorings assertErrorMessagesAreVisible.
+
+	^ scripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> dummyOneObject [
 	^ GtPharoDummyOneObject new instA: 12
