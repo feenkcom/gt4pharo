@@ -19,6 +19,25 @@ RBRemoveInstanceVariableRefactoring class >> remove: variable from: class [
 	^ self variable: variable class: class
 ]
 
+{ #category : #preconditions }
+RBRemoveInstanceVariableRefactoring >> applicabilityPreconditions [
+	| references conds |
+	conds := OrderedCollection new.
+	references := RBCondition
+			hierarchyOf: class
+			referencesInstanceVariable: variableName.
+	class realClass
+		ifNil: [ references errorMacro: ('<1s> is referenced.' expandMacrosWith: variableName) ]
+		ifNotNil: [ references
+				errorMacro: ('<1s> is referenced.<n>Browse references?' expandMacrosWith: variableName);
+				errorBlock: [ self
+						openBrowserOn: (RBBrowserEnvironment new instVarRefsTo: variableName in: class realClass) ] ].
+	conds
+		add: (RBCondition definesInstanceVariable: variableName asString in: class).
+	conds add: references not.
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 RBRemoveInstanceVariableRefactoring >> basicTransform [
 	class removeInstanceVariable: variableName
@@ -42,22 +61,6 @@ RBRemoveInstanceVariableRefactoring >> gtPreconditions [
 	references := RBCondition hierarchyOf: class referencesInstanceVariable: variableName.
 	references errorMacro: ( '<1s> is referenced.' expandMacrosWith: variableName).
 
-	^ ( RBCondition definesInstanceVariable: variableName asString in: class ) & references not
-]
-
-{ #category : #preconditions }
-RBRemoveInstanceVariableRefactoring >> preconditions [
-
-	| references |
-
-	references := RBCondition hierarchyOf: class referencesInstanceVariable: variableName.
-	class realClass
-		ifNil: [ references errorMacro: ( '<1s> is referenced.' expandMacrosWith: variableName ) ]
-		ifNotNil: [ references
-				errorMacro: ( '<1s> is referenced.<n>Browse references?' expandMacrosWith: variableName );
-				errorBlock:
-						[ self openBrowserOn: ( RBBrowserEnvironment new instVarRefsTo: variableName in: class realClass ) ]
-			].
 	^ ( RBCondition definesInstanceVariable: variableName asString in: class ) & references not
 ]
 
