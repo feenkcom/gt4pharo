@@ -262,13 +262,8 @@ GtPharoMethodCoderExamples >> compileMethodWithUnknownClassConflictWhenSubscribe
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
 
 	self
-		forPharo13AndNewer: [ self
-				assert: anEventsRecoder first errorMessage
-				equals: 'Undeclared temp: MissingClass' ]
-		forPharo12: [ self
-				assert: anEventsRecoder first errorMessage
-				equals: 'Undeclared variable' ]
-		forPharo11: [ self assert: anEventsRecoder first errorMessage equals: nil ].
+		assert: anEventsRecoder first errorMessage
+		equals: 'Undeclared variable'.
 
 	^ aMethodCoder
 ]
