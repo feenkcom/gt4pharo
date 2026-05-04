@@ -12,7 +12,7 @@ Class {
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	<gtExample>
-	"<after: #cleanUp>"
+	<after: #cleanUp>
 	| aDummyClass aBehaviorCoder |
 	
 	environment := GtPharoDummyEnvironment withPackages: 2 classes: 2.
