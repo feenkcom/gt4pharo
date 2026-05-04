@@ -77,7 +77,8 @@ GtSnippetUnknownReceiverInlineMessageRefactoringController >> refactoring [
 
 	refactoring := self refactoringClass
 			model: model
-			inline: (self snippetIntervalFor: node sourceInterval)+ ((returnLocation notNil
+			inline: (self snippetIntervalFor: node sourceInterval)
+					+ ((returnLocation notNil
 							and: [ returnLocation < (self snippetIntervalFor: node sourceInterval) first ])
 							ifTrue: [ 1 ]
 							ifFalse: [ 0 ])
@@ -85,6 +86,9 @@ GtSnippetUnknownReceiverInlineMessageRefactoringController >> refactoring [
 			forClass: self snippetClass.
 
 	refactoring setOption: #inlineExpression toUse: [ :ref :string | false ].
+	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | false ].
 	refactoring
 		setOption: #implementorToInline
 		toUse: [ :ref :classes | classes detect: [ :each | each realClass = self implementor ] ifNone: [ nil ] ].

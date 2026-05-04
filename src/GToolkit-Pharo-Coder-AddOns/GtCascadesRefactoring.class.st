@@ -7,11 +7,18 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring'
 }
 
+{ #category : #preconditions }
+GtCascadesRefactoring >> applicabilityPreconditions [
+	| cond |
+	cond := RBCondition definesSelector: selector in: class.
+	^ self forPharo13AndNewer: [ {cond} ] forOlder: [ cond ]
+]
+
 { #category : #transforming }
 GtCascadesRefactoring >> basicTransform [
 	| node |
 	node := self findNode.
-	node isCascade
+	(node notNil and: [ node isCascade ])
 		ifFalse: [ ^ self refactoringError: 'Node is not a cascade message send' ].
 	node receiver isVariable
 		ifFalse: [ node := self extractReceiverIntoVariable: node ].
@@ -66,11 +73,6 @@ GtCascadesRefactoring >> extractTempForReceiver: aNode [
 { #category : #private }
 GtCascadesRefactoring >> findNode [
 	^ self subclassResponsibility
-]
-
-{ #category : #preconditions }
-GtCascadesRefactoring >> preconditions [
-	^ RBCondition definesSelector: selector in: class
 ]
 
 { #category : #transforming }

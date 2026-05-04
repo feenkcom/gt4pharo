@@ -922,6 +922,11 @@ GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod 
 
 	self assert: aSemaphore isSignaled.
 
+	aScripter wait
+		forCondition: [ :aSpace | anElement childrenCount = 15 ]
+			pulseDuring: 5 seconds;
+		play.
+
 	self
 		assert: aScripter
 		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).

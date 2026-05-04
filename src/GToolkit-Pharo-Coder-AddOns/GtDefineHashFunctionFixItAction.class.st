@@ -25,7 +25,7 @@ GtDefineHashFunctionFixItAction >> basicExecuteOn: anEditorElement [
 	methodClass compile: self updateSource classified: 'comparing'.
 	BlTaskAction
 		enqueueElement: anEditorElement
-		action: [ anEditorElement styleText ]
+		action: [ anEditorElement requestManualStyling ]
 ]
 
 { #category : #private }

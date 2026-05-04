@@ -207,6 +207,9 @@ GtExtractToWrappedMethodObjectRefactoring >> removeNewClassAccessors [
 									sendersOf: sel
 									in: cls.
 							refactoring setOption: #inlineExpression toUse: [ :ref :str | true ].
+							refactoring
+								setOption: #shouldNotCreateExtraBindings
+								toUse: [ :ref :string | true ].
 							self performCompositeRefactoring: refactoring.
 							(cls directlyDefinesMethod: sel) ifTrue: [ cls removeMethod: sel ] ] ] ]
 ]

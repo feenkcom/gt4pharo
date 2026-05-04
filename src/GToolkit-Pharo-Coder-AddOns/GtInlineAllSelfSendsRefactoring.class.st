@@ -92,6 +92,13 @@ GtInlineAllSelfSendsRefactoring class >> selector: aSymbol class: aClass [
 		yourself
 ]
 
+{ #category : #preconditions }
+GtInlineAllSelfSendsRefactoring >> applicabilityPreconditions [
+	| cond |
+	cond := RBCondition definesSelector: selector in: class.
+	^ self forPharo13AndNewer: [ {cond} ] forOlder: [ cond ]
+]
+
 { #category : #transforming }
 GtInlineAllSelfSendsRefactoring >> ast [
 	^ (class methodFor: selector) ast
@@ -180,11 +187,6 @@ GtInlineAllSelfSendsRefactoring >> mergeVariables [
 					refactoring copyOptionsFrom: self.
 					[ refactoring primitiveExecute.
 					^ self mergeVariables ] on: Error do: [ :ex | ex return ] ] ]
-]
-
-{ #category : #preconditions }
-GtInlineAllSelfSendsRefactoring >> preconditions [
-	^ RBCondition definesSelector: selector in: class
 ]
 
 { #category : #transforming }

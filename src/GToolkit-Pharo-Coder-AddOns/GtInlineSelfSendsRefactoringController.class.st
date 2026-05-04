@@ -9,10 +9,13 @@ GtInlineSelfSendsRefactoringController >> refactoring [
 	| model refactoring |
 	model := self createRefactoringModel.
 	refactoring := GtInlineAllSendersRefactoring
-		               model: model
-		               sendersOf: methodNode selector
-		               in: (model classFor: self methodClass).
+			model: model
+			sendersOf: methodNode selector
+			in: (model classFor: self methodClass).
 	refactoring setOption: #inlineExpression toUse: [ :ref :msg | false ].
+	refactoring
+		setOption: #shouldNotCreateExtraBindings
+		toUse: [ :ref :string | false ].
 	^ refactoring
 ]
 
