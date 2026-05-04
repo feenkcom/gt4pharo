@@ -1,13 +1,6 @@
 Extension { #name : #ReAbstractTransformation }
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
-ReAbstractTransformation >> applicabilityPreconditionsFor: aCollection [
-	^ self
-		forPharo13AndNewer: [ aCollection ]
-		forOlder: [ aCollection inject: RBCondition true into: [ :sum :each | sum & each ] ]
-]
-
-{ #category : #'*GToolkit-Pharo-BaseRefactorings' }
 ReAbstractTransformation >> primitiveExecute [
 	<gtPharoPatch: #Pharo>
 	
