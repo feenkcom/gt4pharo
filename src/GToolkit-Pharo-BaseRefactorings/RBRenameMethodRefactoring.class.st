@@ -78,6 +78,11 @@ RBRenameMethodRefactoring >> applicabilityPreconditions [
 						& self doesNotOverrideExistingMethodPrecondition) ]
 ]
 
+{ #category : #preconditions }
+RBRenameMethodRefactoring >> breakingChangePreconditions [
+	^ self forPharo13AndNewer: [ #() ] forOlder: [ RBCondition true ]
+]
+
 { #category : #'gt - extensions' }
 RBRenameMethodRefactoring >> gtDescription [
 	^ 'Rename method ' , oldSelector , ' to ' , newSelector
