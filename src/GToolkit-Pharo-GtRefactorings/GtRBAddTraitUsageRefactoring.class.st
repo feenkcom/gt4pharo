@@ -4,6 +4,20 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #preconditions }
+GtRBAddTraitUsageRefactoring >> applicabilityPreconditions [
+	| condition |
+	condition := (RBCondition
+			withBlock: [ self checkClassDoesNotIncludeTrait.
+				true ])
+			& (RBCondition
+					withBlock: [ self checkClassDoesNotHaveSameSlotsAsTrait ]
+					errorString: 'Class (superclasses or subclasses) already has slot from the ' , traitName).
+	^ self
+		forPharo13AndNewer: [ {super applicabilityPreconditions first & condition} ]
+		forOlder: [ super applicabilityPreconditions & condition ]
+]
+
 { #category : #transforming }
 GtRBAddTraitUsageRefactoring >> basicTransform [
 	| newExpression |
@@ -11,7 +25,7 @@ GtRBAddTraitUsageRefactoring >> basicTransform [
 			ifNil: [ traitName ]
 			ifNotNil: [ :exp | exp , ' + ' , traitName ].
 	class traitExpression: newExpression.
-	self model changes defineClass: class gtDefinitionString
+	self model defineClass: class gtDefinitionString
 ]
 
 { #category : #private }
@@ -55,19 +69,6 @@ GtRBAddTraitUsageRefactoring >> gtDescription [
 		append: traitName asRopedText glamorousRoundedBackground;
 		append: ' to ' asRopedText;
 		append: class name asRopedText
-]
-
-{ #category : #preconditions }
-GtRBAddTraitUsageRefactoring >> preconditions [
-	^ (super preconditions
-		&
-			(RBCondition
-				withBlock: [ self checkClassDoesNotIncludeTrait.
-					true ]))
-				&
-			(RBCondition
-				withBlock: [ self checkClassDoesNotHaveSameSlotsAsTrait ]
-				errorString: 'Class (superclasses or subclasses) already has slot from the ', traitName)
 ]
 
 { #category : #transforming }

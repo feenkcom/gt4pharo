@@ -18,6 +18,23 @@ GtRBAddClassWithVarsRefactoring >> addClass: aName superclass: aClass subclasses
 	category := aSymbol
 ]
 
+{ #category : #preconditions }
+GtRBAddClassWithVarsRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection withAll: super applicabilityPreconditions.
+	self instanceVariableNames
+		do: [ :each | 
+			conds add: (RBCondition isValidInstanceVariableName: each for: superclass).
+			conds add: (RBCondition definesInstanceVariable: each in: superclass) not.
+			conds add: (RBCondition isGlobal: each in: self model) not ].
+	self classVariableNames
+		do: [ :each | 
+			conds add: (RBCondition definesClassVariable: each in: superclass) not.
+			conds add: (RBCondition isGlobal: each in: self model) not.
+			conds add: (RBCondition isValidClassVarName: each for: superclass) ].
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 GtRBAddClassWithVarsRefactoring >> basicTransform [
 	self model
@@ -66,21 +83,6 @@ GtRBAddClassWithVarsRefactoring >> instanceVariableNames: aCollection [
 { #category : #accessing }
 GtRBAddClassWithVarsRefactoring >> instanceVariableNamesString [
 	^ String space join: self instanceVariableNames
-]
-
-{ #category : #preconditions }
-GtRBAddClassWithVarsRefactoring >> preconditions [
-	| preconditions |
-	preconditions := self instanceVariableNames inject: super preconditions into: [ :pre :each | 
-		pre 
-			& (RBCondition isValidInstanceVariableName: each for: superclass) 
-			& (RBCondition definesInstanceVariable: each in: superclass ) not 
-			& (RBCondition isGlobal: each in: self model) not ].
-	^ self classVariableNames inject: preconditions into: [ :pre :each | 
-		pre 
-			"& (RBCondition isValidClassVarName: each for: class ) "
-			& (RBCondition definesClassVariable: each in: superclass ) not 
-			& (RBCondition isGlobal: each in: self model) not	 ]
 ]
 
 { #category : #transforming }

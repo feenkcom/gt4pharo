@@ -24,6 +24,22 @@ GtRBChangeSuperclassRefactoring class >> model: aNamespace changeSuperclassOf: a
 		yourself
 ]
 
+{ #category : #preconditions }
+GtRBChangeSuperclassRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition isMetaclass: class) not.
+	conds add: (RBCondition isMetaclass: newSuperclass) not.
+	conds
+		add: (RBCondition
+				withBlock: [ (newSuperclass withAllSuperclasses includes: class)
+						ifTrue: [ ^ self
+								refactoringError: 'Assigning superclass ' , newSuperclass name , ' to ' , className
+										, ' would create a cycle in the hierarchy' ].
+					true ]).
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 GtRBChangeSuperclassRefactoring >> basicTransform [
 	class superclass: newSuperclass.
@@ -50,18 +66,6 @@ GtRBChangeSuperclassRefactoring >> gtDescription [
 { #category : #private }
 GtRBChangeSuperclassRefactoring >> nameOf: anObject [
 	^ anObject isString ifTrue: [ anObject ] ifFalse: [ anObject name ]
-]
-
-{ #category : #preconditions }
-GtRBChangeSuperclassRefactoring >> preconditions [
-	^ (RBCondition isMetaclass: class) not
-		& (RBCondition isMetaclass: newSuperclass) not
-		& (RBCondition
-				withBlock: [ (newSuperclass withAllSuperclasses includes: class)
-						ifTrue: [ ^ self
-								refactoringError: 'Assigning superclass ' , newSuperclass name , ' to ' , className
-										, ' would create a cycle in the hierarchy' ].
-					true ])
 ]
 
 { #category : #transforming }

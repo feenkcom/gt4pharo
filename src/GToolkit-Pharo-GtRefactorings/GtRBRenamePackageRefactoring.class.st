@@ -15,6 +15,21 @@ GtRBRenamePackageRefactoring class >> from: oldName to: newName [
 		yourself
 ]
 
+{ #category : #accessing }
+GtRBRenamePackageRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds
+		add: ((RBCondition
+				withBlock: [ (self packageOrganizer packageNamed: oldName asSymbol ifAbsent: [  ]) notNil ])
+				errorMacro: 'Package ' , oldName , ' does not exist').
+	conds
+		add: ((RBCondition
+				withBlock: [ (self packageOrganizer packageNamed: newName asSymbol ifAbsent: [  ]) isNil ])
+				errorMacro: 'Package ' , newName , ' already exists').
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 GtRBRenamePackageRefactoring >> basicTransform [
 	self renamePackage.
@@ -38,17 +53,6 @@ GtRBRenamePackageRefactoring >> manifestClassNameFor: aPackageName [
 	"Returns a symbol representing a suitable name for a Manifest class for the given package"
 	
 	^('Manifest', (aPackageName select: [:each | each isAlphaNumeric ])) asSymbol
-]
-
-{ #category : #accessing }
-GtRBRenamePackageRefactoring >> preconditions [
-	^ ((RBCondition
-		withBlock: [ (self packageOrganizer packageNamed: oldName asSymbol ifAbsent: [  ])
-				notNil ]) errorMacro: 'Package ' , oldName , ' does not exist')
-		&
-			((RBCondition
-				withBlock: [ (self packageOrganizer packageNamed: newName asSymbol ifAbsent: [  ])
-						isNil ]) errorMacro: 'Package ' , newName , ' already exists')
 ]
 
 { #category : #transforming }

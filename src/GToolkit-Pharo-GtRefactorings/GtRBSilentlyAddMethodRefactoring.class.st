@@ -5,14 +5,12 @@ Class {
 }
 
 { #category : #preconditions }
-GtRBSilentlyAddMethodRefactoring >> preconditions [
+GtRBSilentlyAddMethodRefactoring >> prepareForExecution [
 	| selector method |
-	method := RBParser parseMethod: source
-				onError: 
-					[:string :position | 
-					^RBCondition 
-						withBlock: [self refactoringFailure: 'The sources could not be parsed']].
+	method := RBParser
+			parseMethod: source
+			onError: [ :string :position | ^ self refactoringFailure: 'The sources could not be parsed' ].
 	selector := method selector.
-	selector isNil ifTrue: [self refactoringFailure: 'Invalid source.'].
-	^ RBCondition withBlock: [ true ]
+	selector isNil ifTrue: [ self refactoringFailure: 'Invalid source.' ].
+	super prepareForExecution
 ]
