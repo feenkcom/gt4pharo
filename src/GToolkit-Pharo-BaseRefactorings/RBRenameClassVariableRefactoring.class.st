@@ -32,6 +32,19 @@ RBRenameClassVariableRefactoring class >> rename: aVarName to: aName in: aClass 
 		in: aClass
 ]
 
+{ #category : #preconditions }
+RBRenameClassVariableRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition isMetaclass: class) not.
+	conds add: (RBCondition isValidClassVarName: newName asString for: class).
+	conds add: (RBCondition definesClassVariable: variableName asString in: class).
+	conds
+		add: (RBCondition hierarchyOf: class definesVariable: newName asString) not.
+	conds add: (RBCondition isGlobal: newName asString in: self model) not.
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 RBRenameClassVariableRefactoring >> basicTransform [
 	class
@@ -61,15 +74,6 @@ RBRenameClassVariableRefactoring >> newName [
 { #category : #accessing }
 RBRenameClassVariableRefactoring >> newName: anObject [
 	newName := anObject
-]
-
-{ #category : #preconditions }
-RBRenameClassVariableRefactoring >> preconditions [
-	^(RBCondition isMetaclass: class) not
-		& (RBCondition isValidClassVarName: newName asString for: class)
-			& (RBCondition definesClassVariable: variableName asString in: class)
-			& (RBCondition hierarchyOf: class definesVariable: newName asString) not
-			& (RBCondition isGlobal: newName asString in: self model) not
 ]
 
 { #category : #transforming }

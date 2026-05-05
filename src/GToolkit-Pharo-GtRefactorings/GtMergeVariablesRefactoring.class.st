@@ -44,9 +44,7 @@ GtMergeVariablesRefactoring >> applicabilityPreconditions [
 		add: (RBCondition
 				withBlock: [ self verifyVariables.
 					true ]).
-	^ self
-		forPharo13AndNewer: [ conds ]
-		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+	^ self applicabilityPreconditionsFor: conds
 ]
 
 { #category : #preconditions }

@@ -35,6 +35,19 @@ RBRenameClassRefactoring class >> rename: aClassName to: aNewName [
 		newName: aNewName
 ]
 
+{ #category : #preconditions }
+RBRenameClassRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds
+		add: (RBCondition withBlock: [ class notNil and: [ class isMeta not ] ])
+				& (RBCondition isValidClassName: newName)
+				& (RBCondition isGlobal: newName in: self model) not
+				| (RBCondition
+						withBlock: [ self refactoringFailure: newName , ' is not a valid class name' ]).
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 RBRenameClassRefactoring >> basicTransform [
 	self model
@@ -59,14 +72,6 @@ RBRenameClassRefactoring >> gtDescription [
 		append: className asRopedText;
 		append: ' to ' asRopedText;
 		append: newName asRopedText glamorousRoundedBackground
-]
-
-{ #category : #preconditions }
-RBRenameClassRefactoring >> preconditions [
-	^((RBCondition withBlock: [class notNil and: [class isMeta not]])
-			& (RBCondition isValidClassName: newName)
-			& (RBCondition isGlobal: newName in: self model) not) |
-			(RBCondition withBlock: [ self refactoringFailure: newName , ' is not a valid class name'])
 ]
 
 { #category : #transforming }

@@ -140,9 +140,7 @@ GtMoveTemporaryToOuterScopeRefactoring >> applicabilityPreconditions [
 				& (RBCondition
 						withBlock: [ self variableNode parent parent isMethod not ]
 						errorString: 'Variable is already at outermost scope').
-	^ self
-		forPharo13AndNewer: [ conds ]
-		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+	^ self applicabilityPreconditionsFor: conds
 ]
 
 { #category : #transforming }

@@ -58,6 +58,31 @@ RBRenameMethodRefactoring class >> renameMethod: aSelector in: aClass to: newSel
 		permutation: aMap
 ]
 
+{ #category : #preconditions }
+RBRenameMethodRefactoring >> applicabilityPreconditions [
+	| newCondition |
+	newCondition := (RBCondition
+			withBlock: [ newSelector = oldSelector ]
+			errorString: 'The selector name has <1?not:> changed <1?:to #' , newSelector , '>')
+			& (RBCondition
+					withBlock: [ permutation asArray ~= (1 to: oldSelector numArgs) asArray ]
+					errorString: 'The arguments are <1?:not >permuted').
+	^ self
+		forPharo13AndNewer: [ {newCondition
+					| ((super applicabilityPreconditions
+							inject: RBCondition true
+							into: [ :sum :each | sum & each ])
+							& self doesNotOverrideExistingMethodPrecondition)} ]
+		forOlder: [ newCondition
+				| (super applicabilityPreconditions
+						& self doesNotOverrideExistingMethodPrecondition) ]
+]
+
+{ #category : #preconditions }
+RBRenameMethodRefactoring >> breakingChangePreconditions [
+	^ self forPharo13AndNewer: [ #() ] forOlder: [ RBCondition true ]
+]
+
 { #category : #'gt - extensions' }
 RBRenameMethodRefactoring >> gtDescription [
 	^ 'Rename method ' , oldSelector , ' to ' , newSelector
@@ -101,18 +126,6 @@ RBRenameMethodRefactoring >> parseTreeRewriter [
 	rewriteRule replace: '``@object ' , oldString
 		with: '``@object ' , newString.
 	^rewriteRule
-]
-
-{ #category : #preconditions }
-RBRenameMethodRefactoring >> preconditions [
-	| newCondition |
-	newCondition := (RBCondition
-							withBlock: [ newSelector = oldSelector ]
-							errorString: 'The selector name has <1?not:> changed <1?:to #', newSelector, '>')
-						& (RBCondition
-							withBlock: [permutation asArray ~= (1 to: oldSelector numArgs) asArray]
-							errorString: 'The arguments are <1?:not >permuted').
-	^newCondition | super preconditions
 ]
 
 { #category : #printing }

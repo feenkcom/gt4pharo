@@ -30,6 +30,11 @@ RBRemoveClassKeepingSubclassesRefactoring >> basicTransform [
 ]
 
 { #category : #preconditions }
+RBRemoveClassKeepingSubclassesRefactoring >> checkSubclasses [
+	^ false
+]
+
+{ #category : #preconditions }
 RBRemoveClassKeepingSubclassesRefactoring >> initalizeRefactorings [
 
 	classNames do:
@@ -44,20 +49,6 @@ RBRemoveClassKeepingSubclassesRefactoring >> initalizeRefactorings [
 { #category : #initialization }
 RBRemoveClassKeepingSubclassesRefactoring >> initialize [
 	refactorings := OrderedCollection new
-]
-
-{ #category : #preconditions }
-RBRemoveClassKeepingSubclassesRefactoring >> preconditions [
-
-	^ classNames inject: self trueCondition into: [ :sum :each |
-		  | aClassOrTrait |
-		  aClassOrTrait := self model classNamed: each asSymbol.
-		  aClassOrTrait ifNil: [
-			  self refactoringFailure: 'No such class or trait' ].
-		  sum & ((self preconditionIsNotMetaclass: aClassOrTrait)
-		   & (self preconditionHasNoReferences: each)
-		   & (self preconditionHasNoUsers: aClassOrTrait))
-		  "& ( self preconditionEmptyOrHasNoSubclasses: aClassOrTrait )" ]
 ]
 
 { #category : #transforming }

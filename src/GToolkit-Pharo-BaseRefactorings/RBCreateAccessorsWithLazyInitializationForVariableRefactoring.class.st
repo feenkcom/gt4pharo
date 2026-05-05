@@ -55,6 +55,19 @@ RBCreateAccessorsWithLazyInitializationForVariableRefactoring class >> variable:
 ]
 
 { #category : #preconditions }
+RBCreateAccessorsWithLazyInitializationForVariableRefactoring >> applicabilityPreconditions [
+	^ self
+		forPharo13AndNewer: [ super applicabilityPreconditions
+				, {RBCondition
+							withBlock: [ self verifyInitializationExpressionOf: self defaultValue.
+								true ]} ]
+		forOlder: [ super applicabilityPreconditions
+				& (RBCondition
+						withBlock: [ self verifyInitializationExpressionOf: self defaultValue.
+							true ]) ]
+]
+
+{ #category : #preconditions }
 RBCreateAccessorsWithLazyInitializationForVariableRefactoring >> checkVariableReferencesIn: aParseTree [
 
 	| searcher |
@@ -93,14 +106,6 @@ RBCreateAccessorsWithLazyInitializationForVariableRefactoring >> defaultValue [
 { #category : #accessing }
 RBCreateAccessorsWithLazyInitializationForVariableRefactoring >> defaultValue: aString [
 	defaultValue := aString
-]
-
-{ #category : #preconditions }
-RBCreateAccessorsWithLazyInitializationForVariableRefactoring >> preconditions [
-	^ super preconditions & 
-	(RBCondition withBlock: [ 
-		self verifyInitializationExpressionOf: self defaultValue.
-		true ])
 ]
 
 { #category : #preconditions }

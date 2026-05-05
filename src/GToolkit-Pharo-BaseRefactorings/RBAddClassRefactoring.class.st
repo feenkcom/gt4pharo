@@ -66,9 +66,7 @@ RBAddClassRefactoring >> applicabilityPreconditions [
 	conds
 		add: ((RBCondition withBlock: [ category isNotEmpty ])
 				errorMacro: 'Invalid category name').
-	^ self
-		forPharo13AndNewer: [ conds ]
-		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+	^ self applicabilityPreconditionsFor: conds
 ]
 
 { #category : #transforming }
