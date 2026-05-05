@@ -21,7 +21,10 @@ GtRBAddClassWithVarsRefactoring >> addClass: aName superclass: aClass subclasses
 { #category : #preconditions }
 GtRBAddClassWithVarsRefactoring >> applicabilityPreconditions [
 	| conds |
-	conds := OrderedCollection withAll: super applicabilityPreconditions.
+	conds := OrderedCollection new.
+	self
+		forPharo13AndNewer: [ conds addAll: super applicabilityPreconditions ]
+		forOlder: [ conds add: super applicabilityPreconditions ].
 	self instanceVariableNames
 		do: [ :each | 
 			conds add: (RBCondition isValidInstanceVariableName: each for: superclass).
