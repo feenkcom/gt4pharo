@@ -17,6 +17,16 @@ GtRBRenameProtocolRefactoring class >> renameProtocol: oldName in: aClass to: ne
 		to: newName
 ]
 
+{ #category : #preconditions }
+GtRBRenameProtocolRefactoring >> applicabilityPreconditions [
+	^ self
+		applicabilityPreconditionsFor: {RBCondition
+					withBlock: [ (class protocols includes: oldName)
+							or: [ class realClass
+									ifNil: [ false ]
+									ifNotNil: [ :cls | cls protocolNames includes: oldName ] ] ]}
+]
+
 { #category : #transforming }
 GtRBRenameProtocolRefactoring >> basicTransform [
 	| hasMethod |
@@ -40,16 +50,6 @@ GtRBRenameProtocolRefactoring >> basicTransform [
 { #category : #accessing }
 GtRBRenameProtocolRefactoring >> gtDescription [
 	^ 'Rename protocol ' , oldName , ' to ' , newName
-]
-
-{ #category : #preconditions }
-GtRBRenameProtocolRefactoring >> preconditions [
-	^ RBCondition
-		withBlock: [ (class protocols includes: oldName)
-			or: [ class realClass
-				ifNil: [ false ]
-				ifNotNil: [ :cls | 
-					cls protocolNames includes: oldName ] ] ]
 ]
 
 { #category : #transforming }

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBChangeSuperclassRefactoringExamples,
-	#superclass : #Object,
+	#superclass : #GtBaseRefactoringExamples,
 	#category : #'GToolkit-Pharo-GtRefactorings-Examples'
 }
 
@@ -66,4 +66,14 @@ GtRBChangeSuperclassRefactoringExamples >> changeSuperclassToNewClass [
 		equals: (namespace classObjectFor: #Asdf).
 	self assert: namespace changes changesSize equals: 2.
 	^ namespace
+]
+
+{ #category : #'as yet unclassified' }
+GtRBChangeSuperclassRefactoringExamples >> failOnCycle [
+	<gtExample>
+	| refactoring |
+	refactoring := GtRBChangeSuperclassRefactoring
+			changeSuperclassOf: #Collection
+			to: #Array.
+	^ self shouldThrowError: refactoring
 ]

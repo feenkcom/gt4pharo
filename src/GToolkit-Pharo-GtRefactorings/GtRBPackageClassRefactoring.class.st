@@ -16,6 +16,20 @@ GtRBPackageClassRefactoring class >> class: aClass packageName: packageString ta
 		yourself
 ]
 
+{ #category : #preconditions }
+GtRBPackageClassRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition isMetaclass: class) not.
+	conds
+		add: (RBCondition
+				withBlock: [ packageName notNil and: [ packageName notEmpty ] ]
+				errorString: 'Not a valid package name').
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #transforming }
 GtRBPackageClassRefactoring >> basicTransform [
 	self packageOrganizer
@@ -26,7 +40,7 @@ GtRBPackageClassRefactoring >> basicTransform [
 				, ((tagName isNil or: [ tagName isEmpty ])
 						ifTrue: [ '' ]
 						ifFalse: [ '-' , tagName ]).
-	self model changes defineClass: class gtDefinitionString
+	self model defineClass: class gtDefinitionString
 ]
 
 { #category : #'initialize-release' }
@@ -35,11 +49,6 @@ GtRBPackageClassRefactoring >> class: aClass packageName: packageString tagName:
 	className := class name.
 	packageName := packageString.
 	tagName := tagString
-]
-
-{ #category : #preconditions }
-GtRBPackageClassRefactoring >> preconditions [
-	^ (RBCondition isMetaclass: class) not
 ]
 
 { #category : #transforming }

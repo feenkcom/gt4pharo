@@ -16,6 +16,25 @@ GtRBRenamePackageTagRefactoring class >> packageName: aPackageName from: oldTagN
 		yourself
 ]
 
+{ #category : #preconditions }
+GtRBRenamePackageTagRefactoring >> applicabilityPreconditions [
+	| package conds |
+	conds := OrderedCollection new.
+	package := self packageOrganizer
+			packageNamed: packageName asSymbol
+			ifAbsent: [  ].
+	conds
+		add: ((RBCondition withBlock: [ package notNil ])
+				errorMacro: 'Package ' , packageName , ' does not exist')
+				& ((RBCondition
+						withBlock: [ (package tagNamed: oldName asSymbol ifAbsent: [  ]) notNil ])
+						errorMacro: 'Package tag ' , oldName , ' does not exist')
+				& ((RBCondition
+						withBlock: [ (package tagNamed: newName asSymbol ifAbsent: [  ]) isNil ])
+						errorMacro: 'Package tag ' , newName , ' already exists').
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 GtRBRenamePackageTagRefactoring >> basicTransform [
 	self model changes
@@ -35,26 +54,6 @@ GtRBRenamePackageTagRefactoring >> packageName: aPackageName from: oldTagName to
 	packageName := aPackageName.
 	oldName := oldTagName.
 	newName := newTagName
-]
-
-{ #category : #preconditions }
-GtRBRenamePackageTagRefactoring >> preconditions [
-	| package |
-	package := self packageOrganizer
-		packageNamed: packageName asSymbol
-		ifAbsent: [  ].
-	^ ((RBCondition withBlock: [ package notNil ])
-		errorMacro: 'Package ' , packageName , ' does not exist')
-		&
-			((RBCondition
-				withBlock:
-					[ (package tagNamed: oldName asSymbol ifAbsent: [  ]) notNil ])
-				errorMacro: 'Package tag ' , oldName , ' does not exist')
-		&
-			((RBCondition
-				withBlock:
-					[ (package tagNamed: newName asSymbol ifAbsent: [  ]) isNil ])
-				errorMacro: 'Package tag ' , newName , ' already exists')
 ]
 
 { #category : #transforming }
