@@ -19,17 +19,26 @@ GtConvertEqualsToSameContentAsRefactoring class >> model: model convert: node in
 		yourself
 ]
 
+{ #category : #accessing }
+GtConvertEqualsToSameContentAsRefactoring >> applicabilityPreconditions [
+	^ self
+		applicabilityPreconditionsFor: {RBCondition
+					withBlock: [ comparisonNode selector == #= ]
+					errorString: 'Message is not #='}
+]
+
 { #category : #transforming }
 GtConvertEqualsToSameContentAsRefactoring >> basicTransform [
 	| startPosition rbComparisonNode methodAst |
 	methodAst := RBParser parseMethod: comparisonNode methodNode source.
-	startPosition := comparisonNode message startPosition.
+	startPosition := comparisonNode startPosition.
 	rbComparisonNode := methodAst allChildren
 			detect: [ :node | node isMessage and: [ node keywordsIntervals first first = startPosition ] ].
 	rbComparisonNode
 		selector: GtStrictSymbolEqualityArgumentSignal sameContentSelector.
 
-	newSource := methodAst newSource
+	newSource := methodAst newSource.
+	class compileTree: methodAst
 ]
 
 { #category : #initialization }
@@ -47,12 +56,6 @@ GtConvertEqualsToSameContentAsRefactoring >> gtDescription [
 { #category : #accessing }
 GtConvertEqualsToSameContentAsRefactoring >> newSource [
 	^ newSource
-]
-
-{ #category : #accessing }
-GtConvertEqualsToSameContentAsRefactoring >> preconditions [
-	^ RBCondition withBlock:
-		[ comparisonNode selector == #= ].
 ]
 
 { #category : #transforming }
