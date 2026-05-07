@@ -36,6 +36,15 @@ GtPharoClassExpanderAttribute >> buildBehaviorCoder [
 ]
 
 { #category : #accessing }
+GtPharoClassExpanderAttribute >> createdAttributesInto: aWriteStream [
+	"Add existing attributes to a text that is currently styled by stylers.
+	At this moment, it is assumend, that attributes are appending and added after the expand attribute."
+
+	createdAttributes
+		ifNotNil: [ :aCollection | aWriteStream nextPutAll: aCollection ]
+]
+
+{ #category : #accessing }
 GtPharoClassExpanderAttribute >> expandedClass [
 	^classToExpand
 ]
