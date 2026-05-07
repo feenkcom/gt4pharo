@@ -22,6 +22,23 @@ GtRBMoveClassToPackageRefactoring class >> move: aClassName to: aPackageName [
 		yourself
 ]
 
+{ #category : #preconditions }
+GtRBMoveClassToPackageRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds
+		add: (RBCondition
+				withBlock: [ self definingClass isNotNil ]
+				errorString: 'Class named ' , className , ' does not exist').
+	conds
+		add: (RBCondition
+				withBlock: [ packageName notNil and: [ packageName notEmpty ] ]
+				errorString: 'Not a valid package name').
+	^ self
+		forPharo13AndNewer: [ conds ]
+		forOlder: [ conds inject: RBCondition true into: [ :sum :each | sum & each ] ]
+]
+
 { #category : #executing }
 GtRBMoveClassToPackageRefactoring >> ensurePackageCreated [
 	(self isPackage: packageName)
@@ -45,17 +62,6 @@ GtRBMoveClassToPackageRefactoring >> isPackage: aSymbol [
 GtRBMoveClassToPackageRefactoring >> move: aClassName to: aPackageName [
 	self className: aClassName.
 	packageName := aPackageName
-]
-
-{ #category : #preconditions }
-GtRBMoveClassToPackageRefactoring >> preconditions [
-	^ (RBCondition
-		withBlock: [ self definingClass isNotNil ]
-		errorString: 'Class named ' , className , ' does not exist')
-		&
-			(RBCondition
-				withBlock: [ packageName notNil and: [ packageName notEmpty ] ]
-				errorString: 'Not a valid package name')
 ]
 
 { #category : #executing }

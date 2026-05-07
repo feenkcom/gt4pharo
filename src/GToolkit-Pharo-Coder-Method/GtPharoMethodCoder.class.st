@@ -133,15 +133,15 @@ GtPharoMethodCoder >> canCompileMethodIn: newClass [
 	variables := Set new.
 	ast
 		nodesDo: [ :node | 
-			(node isSelfOrSuper not
-				and: [ node isVariable and: [ node gtIsLocal not ] ])
+			(node isSelfOrSuper not and: [ node isVariable and: [ node gtIsLocal not ] ])
 				ifTrue: [ variables add: node name ] ].
 	model := RBNamespace new.
 	modelClass := model classFor: newClass.
-	pools := {Smalltalk} , modelClass instanceSide sharedPools.
+	pools := {Smalltalk}
+			, (modelClass ifNil: [ #() ] ifNotNil: [ modelClass instanceSide sharedPools ]).
 	^ variables
 		allSatisfy: [ :each | 
-			(modelClass definesVariable: each)
+			(modelClass ifNil: [ false ] ifNotNil: [ modelClass definesVariable: each ])
 				or: [ pools anySatisfy: [ :pool | pool includesKey: each asSymbol ] ] ]
 ]
 

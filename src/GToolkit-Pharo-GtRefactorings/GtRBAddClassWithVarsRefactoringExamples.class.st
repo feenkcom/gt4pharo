@@ -1,6 +1,6 @@
 Class {
 	#name : #GtRBAddClassWithVarsRefactoringExamples,
-	#superclass : #Object,
+	#superclass : #GtBaseRefactoringExamples,
 	#category : #'GToolkit-Pharo-GtRefactorings-Examples'
 }
 
@@ -54,4 +54,19 @@ GtRBAddClassWithVarsRefactoringExamples >> createClassWithInstanceSlots [
 	r primitiveExecute.
 	self assert: ns changes changesSize equals: 1.
 	^ ns
+]
+
+{ #category : #examples }
+GtRBAddClassWithVarsRefactoringExamples >> invalidInstanceVariableName [
+	<gtExample>
+	| ns r |
+	ns := GtRBNamespace new.
+	r := (GtRBAddClassWithVarsRefactoring
+			model: ns
+			addClass: #Something
+			superclass: #Object
+			subclasses: {}
+			category: 'Somewhere' asSymbol) instanceVariableNames: {'fir st'}.
+	self shouldThrowError: r.
+	^ r
 ]

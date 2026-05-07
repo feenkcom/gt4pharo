@@ -4,6 +4,17 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #preconditions }
+GtRBRemoveTraitUsageRefactoring >> applicabilityPreconditions [
+	| condition |
+	condition := RBCondition
+			withBlock: [ self checkClassIncludesTrait.
+				true ].
+	^ self
+		forPharo13AndNewer: [ {super applicabilityPreconditions first & condition} ]
+		forOlder: [ super applicabilityPreconditions & condition ]
+]
+
 { #category : #transforming }
 GtRBRemoveTraitUsageRefactoring >> basicTransform [
 	class traitExpression: self traitExpressionAfterRemoval.
@@ -27,15 +38,6 @@ GtRBRemoveTraitUsageRefactoring >> gtDescription [
 		append: traitName asRopedText glamorousRoundedBackground;
 		append: ' from ' asRopedText;
 		append: class name asRopedText
-]
-
-{ #category : #preconditions }
-GtRBRemoveTraitUsageRefactoring >> preconditions [
-	^ super preconditions
-		&
-			(RBCondition
-				withBlock: [ self checkClassIncludesTrait.
-					true ])
 ]
 
 { #category : #transforming }

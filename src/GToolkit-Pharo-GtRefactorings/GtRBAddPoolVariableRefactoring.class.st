@@ -4,6 +4,20 @@ Class {
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
 
+{ #category : #preconditions }
+GtRBAddPoolVariableRefactoring >> applicabilityPreconditions [
+	| conds |
+	conds := OrderedCollection new.
+	conds add: (RBCondition isMetaclass: class) not.
+	conds
+		add: (RBCondition isPoolDictionary: variableName in: self model)
+				& (RBCondition includesPoolDictionary: variableName in: class) not
+				& (RBCondition
+						withBlock: [ self checkConflictingPoolVariableNames.
+							true ]).
+	^ self applicabilityPreconditionsFor: conds
+]
+
 { #category : #transforming }
 GtRBAddPoolVariableRefactoring >> basicTransform [
 	class addPoolDictionary: variableName asSymbol
@@ -52,17 +66,6 @@ GtRBAddPoolVariableRefactoring >> gtDescription [
 		append: variableName asRopedText glamorousRoundedBackground;
 		append: ' to ' asRopedText;
 		append: class name asRopedText
-]
-
-{ #category : #preconditions }
-GtRBAddPoolVariableRefactoring >> preconditions [
-	^ (RBCondition isMetaclass: class) not
-		& (RBCondition isPoolDictionary: variableName in: self model)
-		& (RBCondition includesPoolDictionary: variableName in: class) not
-		&
-			(RBCondition
-				withBlock: [ self checkConflictingPoolVariableNames.
-					true ])
 ]
 
 { #category : #transforming }
