@@ -301,7 +301,7 @@ GtPharoClassExpanderStyler >> visitDeclaredGlobalVariable_06_extraCache: aNamedV
 						aCollection ]
 					ifAbsentPut: [ | newIndex |
 						newMarker := BrTextInvisibleMarkerAttribute new beNotOverwritableByStyler.
-						newAttribute := GtPharoClassExpanderWithMarkerHidingElementAttribute
+						newAttribute := GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute
 								forClass: aBehavior.
 						newIndex := self nextIndex.
 						newAttribute id: (GtPharoBehaviorExpanderId indexed: newIndex).

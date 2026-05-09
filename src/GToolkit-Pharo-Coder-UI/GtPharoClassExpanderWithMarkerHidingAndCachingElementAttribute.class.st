@@ -1,18 +1,19 @@
 Class {
-	#name : #GtPharoClassExpanderWithMarkerHidingElementAttribute,
+	#name : #GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute,
 	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
 	#instVars : [
 		'classToExpand',
 		'markerAttribute',
 		'createdAttributeTags',
 		'expanderModel',
-		'expandedId'
+		'expandedId',
+		'expandedElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
 }
 
 { #category : #'initialize-release' }
-GtPharoClassExpanderWithMarkerHidingElementAttribute class >> forClass: aClass [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute class >> forClass: aClass [
 	^ self new
 		forClass: aClass;
 		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect;
@@ -20,7 +21,7 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute class >> forClass: aClass [
 ]
 
 { #category : #private }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> applyExpandedOrCollapsedAttributesInTextEditorElement: anEditorElement [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> applyExpandedOrCollapsedAttributesInTextEditorElement: anEditorElement [
 	markerAttribute ifNil: [ ^ self ].
 
 	isExpanded
@@ -38,7 +39,7 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> applyExpandedOrCollapsed
 ]
 
 { #category : #private }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> buildBehaviorCoder [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> buildBehaviorCoder [
 	| editorElement |
 	editorElement := GtCoderElement forClass: classToExpand.
 	editorElement id: self expandedId.
@@ -65,19 +66,19 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> buildBehaviorCoder [
 ]
 
 { #category : #private }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> createAttributes [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> createAttributes [
 	createdAttributes := attributesCreatingBlock value asOrderedCollection.
 	createdAttributeTags := #().
 	^ createdAttributes
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> createdAttributeTags [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> createdAttributeTags [
 	^ createdAttributeTags ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> createdAttributesInto: aWriteStream [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> createdAttributesInto: aWriteStream [
 	"Add existing attributes to a text that is currently styled by stylers.
 	At this moment, it is assumend, that attributes are appending and added after the expand attribute."
 
@@ -86,7 +87,7 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> createdAttributesInto: a
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| aToggle |
 	aToggle := BrInlineExpanderElement new
 			id: self id;
@@ -109,54 +110,56 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> doAffect: aTBrTextEditor
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> expandedClass [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> expandedClass [
 	^classToExpand
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> expandedId [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> expandedId [
 	^ expandedId ifNil: [ expandedId := BlElementId noId ]
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> expandedId: anObject [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> expandedId: anObject [
 	expandedId := anObject
 ]
 
 { #category : #'initialize-release' }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> forClass: aClass [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> forClass: aClass [
 	classToExpand := aClass
 ]
 
 { #category : #'initialize-release' }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> initialize [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> initialize [
 	super initialize.
 	expandedId := BlElementId noId.
 	expanderModel := BrTextExpanderModel new.
+	expandedElement := ValueHolder new.
 	self
 		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
+				withCache: expandedElement selector: #contents;
 				beAppend;
 				stencil: [ self buildBehaviorCoder ] ]
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> isExpanded: aBoolean [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> isExpanded: aBoolean [
 	super isExpanded: aBoolean.
 	self notifyExpansionStatus
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> markerAttribute [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> markerAttribute [
 	^ markerAttribute
 ]
 
 { #category : #accessing }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> markerAttribute: anObject [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> markerAttribute: anObject [
 	markerAttribute := anObject
 ]
 
 { #category : #'private - notifying' }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> notifyExpansionStatus [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> notifyExpansionStatus [
 	expanderModel announcer
 		announce: (BrTextExpanderModelExpansionChangedAnnouncement new
 				expanderModel: expanderModel;
@@ -164,7 +167,7 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> notifyExpansionStatus [
 ]
 
 { #category : #private }
-GtPharoClassExpanderWithMarkerHidingElementAttribute >> toggleExpandedOrCollapsedAttributesInTextEditorElement: anEditorElement [
+GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute >> toggleExpandedOrCollapsedAttributesInTextEditorElement: anEditorElement [
 	self isExpanded: isExpanded not.
 	self applyExpandedOrCollapsedAttributesInTextEditorElement: anEditorElement
 ]

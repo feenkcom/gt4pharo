@@ -52,7 +52,7 @@ GtPharoClassExpanderStylerExamples >> astAndClassCache [
 					coderViewModel: coderViewModel;
 					style: text ast: coder astSync ].
 
-	someAttributes := self classExpanderWithMarkerHiddingElementAttributesIn: text.
+	someAttributes := self classExpanderWithMarkerHiddingAndCachingElementAttributesIn: text.
 	expanderAttributes := someAttributes
 			select: [ :each | each expandedClass = OrderedCollection ].
 	self assert: expanderAttributes size equals: 1.
@@ -154,6 +154,18 @@ GtPharoClassExpanderStylerExamples >> classExpanderAttributesIn: ropedText [
 		(ropedText attributesAt: i)
 			do: [ :attr | 
 				(attr isKindOf: GtPharoClassExpanderAttribute)
+					ifTrue: [ attributes add: attr ] ] ].
+	^ attributes
+]
+
+{ #category : #accessing }
+GtPharoClassExpanderStylerExamples >> classExpanderWithMarkerHiddingAndCachingElementAttributesIn: ropedText [
+	| attributes |
+	attributes := OrderedCollection new.
+	1 to: ropedText size do: [ :i | 
+		(ropedText attributesAt: i)
+			do: [ :attr | 
+				(attr isKindOf: GtPharoClassExpanderWithMarkerHidingAndCachingElementAttribute)
 					ifTrue: [ attributes add: attr ] ] ].
 	^ attributes
 ]
