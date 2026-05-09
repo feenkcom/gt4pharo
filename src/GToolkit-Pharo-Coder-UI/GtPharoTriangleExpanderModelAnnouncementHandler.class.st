@@ -24,7 +24,7 @@ GtPharoTriangleExpanderModelAnnouncementHandler >> install [
 	self assert: [ model isNotNil ].
 
 	model announcer weak
-		when: GtPharoTriangleExpansionChangedAnnouncement
+		when: BrTextExpanderModelExpansionChangedAnnouncement
 		send: #onGtPharoTriangleExpansionChangedAnnouncement:
 		to: self.
 

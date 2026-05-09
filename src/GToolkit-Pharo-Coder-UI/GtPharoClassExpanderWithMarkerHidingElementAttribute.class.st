@@ -5,7 +5,9 @@ Class {
 		'classToExpand',
 		'markerAttribute',
 		'createdAttributeTags',
-		'expanderModel'
+		'expanderModel',
+		'expandedId',
+		'expandedElement'
 	],
 	#category : #'GToolkit-Pharo-Coder-UI-Attributes'
 }
@@ -40,6 +42,7 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> applyExpandedOrCollapsed
 GtPharoClassExpanderWithMarkerHidingElementAttribute >> buildBehaviorCoder [
 	| editorElement |
 	editorElement := GtCoderElement forClass: classToExpand.
+	editorElement id: self expandedId.
 	editorElement background: Color white.
 	editorElement
 		aptitude: BrShadowAptitude
@@ -100,6 +103,8 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> doAffect: aTBrTextEditor
 						ifTrue: [ anEvent consumed: true.
 							anEvent target phlow
 								spawnObject: (self definingMethod ifNil: [ self ] ifNotNil: [ :meth | meth ]) ] ].
+								
+	aToggle userData at: #tmpElementId put: aToggle id.
 
 	self applyExpandedOrCollapsedAttributesInTextEditorElement: anEditorElement.
 
@@ -111,6 +116,16 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> expandedClass [
 	^classToExpand
 ]
 
+{ #category : #accessing }
+GtPharoClassExpanderWithMarkerHidingElementAttribute >> expandedId [
+	^ expandedId ifNil: [ expandedId := BlElementId noId ]
+]
+
+{ #category : #accessing }
+GtPharoClassExpanderWithMarkerHidingElementAttribute >> expandedId: anObject [
+	expandedId := anObject
+]
+
 { #category : #'initialize-release' }
 GtPharoClassExpanderWithMarkerHidingElementAttribute >> forClass: aClass [
 	classToExpand := aClass
@@ -119,9 +134,12 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> forClass: aClass [
 { #category : #'initialize-release' }
 GtPharoClassExpanderWithMarkerHidingElementAttribute >> initialize [
 	super initialize.
-	expanderModel := GtPharoTriangleExpanderModel new.
+	expandedId := BlElementId noId.
+	expanderModel := BrTextExpanderModel new.
+	expandedElement := ValueHolder new.
 	self
 		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
+				withCache: expandedElement selector: #contents;
 				beAppend;
 				stencil: [ self buildBehaviorCoder ] ]
 ]
@@ -145,7 +163,9 @@ GtPharoClassExpanderWithMarkerHidingElementAttribute >> markerAttribute: anObjec
 { #category : #'private - notifying' }
 GtPharoClassExpanderWithMarkerHidingElementAttribute >> notifyExpansionStatus [
 	expanderModel announcer
-		announce: (GtPharoTriangleExpansionChangedAnnouncement new isExpanded: self isExpanded)
+		announce: (BrTextExpanderModelExpansionChangedAnnouncement new
+				expanderModel: expanderModel;
+				isExpanded: self isExpanded)
 ]
 
 { #category : #private }
