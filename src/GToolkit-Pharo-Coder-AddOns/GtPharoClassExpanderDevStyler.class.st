@@ -6,6 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtPharoClassExpanderDevStyler >> visitDeclaredGlobalVariable: aNamedVariable [
-	self halt.
 	^ self visitDeclaredGlobalVariable_06_extraCache: aNamedVariable
 ]

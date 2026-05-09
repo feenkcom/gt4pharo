@@ -12,11 +12,12 @@ GtPharoClassExpanderStylerExamples >> assert: aStep behaviorExpandersCount: anIn
 				notExists;
 				// BrInlineExpanderElement;
 				play ]
-		ifFalse: [ self halt.
+		ifFalse: [ self flag: #TODO.
 			aStep assert
 				label: ('Assert expanded behaviors count is {1}' format: {anInteger});
-				value: [ :anElement | anElement isExpanded ] equals: anInteger;
+				value: [ :aCollection | aCollection size ] equals: anInteger;
 				// BrInlineExpanderElement;
+				@ [ :each | each isExpanded ];
 				play ]
 ]
 
