@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoMethodExpanderId,
+	#name : #GtPharoBehaviorExpanderId,
 	#superclass : #GtPharoCoderElementId,
 	#category : #'GToolkit-Pharo-Coder-AddOns-Coder - Ids'
 }
 
 { #category : #converting }
-GtPharoMethodExpanderId >> asSymbol [
-	^ #'pharo-coder--method-expander'
+GtPharoBehaviorExpanderId >> asSymbol [
+	^ #'pharo-coder--behavior-expander'
 ]
