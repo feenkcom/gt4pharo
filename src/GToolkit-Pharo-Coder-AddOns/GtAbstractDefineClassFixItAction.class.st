@@ -6,7 +6,7 @@ Class {
 
 { #category : #private }
 GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
-	| text stencilBlock attribute adornmentAttribute |
+	| text stencilBlock attribute |
 	text := aBrTextEditor text.
 	stencilBlock := [ | element |
 		element := self formCreationElement.
@@ -23,21 +23,17 @@ GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEdit
 				c textFlow pushLine.
 				c horizontal matchParent ].
 		element ].
-	adornmentAttribute := BrTextAdornmentDynamicAttribute new
-			beAppend;
-			stencil: stencilBlock.
-	attribute := BrGlamorousTriangleExpanderTextAttribute new
-			isExpanded: true;
-			createdAttributes: {adornmentAttribute};
-			attributesCreatingBlock: [ adornmentAttribute ];
+
+	attribute := BrGlamorousTriangleExpanderTextAttributeV2 new
+			beExpandedByDefault;
+			stencil: stencilBlock;
 			yourself.
 
 	(text from: node name startPosition to: node name stopPosition)
 		highlight: (BrGlamorousColors errorBackgroundColor alpha: 0.5).
 
 	text
-		attributes: {attribute.
-				adornmentAttribute}
+		attributes: {attribute. attribute expandedAppendingAttribute }
 		from: self attributePosition
 		to: self attributePosition
 ]

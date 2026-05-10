@@ -1,6 +1,6 @@
 Class {
 	#name : #GtCreateClassExpanderAttribute,
-	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
+	#superclass : #BrGlamorousTriangleExpanderTextAttributeV2,
 	#instVars : [
 		'action',
 		'definition',
@@ -95,10 +95,7 @@ GtCreateClassExpanderAttribute >> initialize [
 	definition := GtClassDefinition forNew.
 	definition superclass name: #Object.
 	self beNotOverwritableByStyler.
-	self
-		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: [ self buildClassDefinition ] ]
+	self stencil: [ self buildClassDefinition ]
 ]
 
 { #category : #accessing }

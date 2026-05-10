@@ -156,7 +156,7 @@ GtMethodCoderExplanationStylerExamples >> hasAttributeOfType: aClass in: aTextEd
 
 { #category : #accessing }
 GtMethodCoderExplanationStylerExamples >> hasExampleExpandAttributeIn: coder [
-	^ self hasAttributeOfType: BrGlamorousTriangleExpanderTextAttribute in: coder sourceEditor
+	^ self hasAttributeOfType: BrGlamorousTriangleExpanderTextAttributeV2 in: coder sourceEditor
 ]
 
 { #category : #accessing }
