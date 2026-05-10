@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'astNode',
 		'attributes',
-		'isUsed'
+		'isUsed',
+		'reservedAstNode'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
 }
@@ -54,14 +55,30 @@ GtPharoClassExpanderCacheItemAttributes >> initialize [
 	isUsed := false
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+GtPharoClassExpanderCacheItemAttributes >> isReserved [
+	^ reservedAstNode isNotNil
+]
+
+{ #category : #testing }
 GtPharoClassExpanderCacheItemAttributes >> isUsed [
 	^ isUsed ifNil: [ false ]
 ]
 
+{ #category : #accessing }
+GtPharoClassExpanderCacheItemAttributes >> reservedAstNode [
+	^ reservedAstNode
+]
+
+{ #category : #accessing }
+GtPharoClassExpanderCacheItemAttributes >> reservedAstNode: anAstNode [
+	reservedAstNode := anAstNode
+]
+
 { #category : #'api - cache' }
 GtPharoClassExpanderCacheItemAttributes >> reset [
-	^ isUsed := false
+	isUsed := false.
+	reservedAstNode := nil.
 ]
 
 { #category : #'api - cache' }

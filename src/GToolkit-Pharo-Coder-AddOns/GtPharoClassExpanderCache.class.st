@@ -60,6 +60,12 @@ GtPharoClassExpanderCache >> initialize [
 	dictionary := WeakKeyDictionary new
 ]
 
+{ #category : #accessing }
+GtPharoClassExpanderCache >> numberOfItemAttributes [
+	^ monitor
+		critical: [ dictionary sum: [ :eachItem | eachItem numberOfItemAttributes ] ]
+]
+
 { #category : #'api - cache' }
 GtPharoClassExpanderCache >> resetIndexing [
 	monitor

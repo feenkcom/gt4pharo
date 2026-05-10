@@ -110,7 +110,9 @@ GtPharoClassExpanderStyler >> privateBehaviorCache [
 { #category : #'api - styling' }
 GtPharoClassExpanderStyler >> style: aText ast: theAst [
 	behaviorCache ifNotNil: [ :aCache | aCache resetIndexing ].
-	lastIndex := 0.
+	behaviorCache
+		ifNotNil: [ :aCache | lastIndex := aCache numberOfItemAttributes ]
+		ifNil: [ lastIndex := 0 ].
 
 	self usedVersion = 6
 		ifFalse: [ super style: aText ast: theAst ]

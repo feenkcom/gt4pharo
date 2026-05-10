@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'behavior',
-		'attributes'
+		'attributes',
+		'areItemsReserved'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Expander'
 }
@@ -16,17 +17,32 @@ GtPharoClassExpanderCacheItem >> astNode: anAstNode attributes: aCollectionOfAtt
 { #category : #'api - cache' }
 GtPharoClassExpanderCacheItem >> attributesForAstNode: anAstNode ifPresent: aPresentBlock ifAbsentPut: anAbsentBlock [
 	<return: #GtPharoClassExpanderCacheItemAttributes>
-	| firstUnused |
-	firstUnused := nil.
+	| firstAvailable |
+	firstAvailable := nil.
+
+	(areItemsReserved isNil or: [ areItemsReserved not ])
+		ifTrue: [ anAstNode topParent
+				allNodesOfType: anAstNode class
+				do: [ :eachNode | 
+					attributes
+						detect: [ :eachItem | eachItem astNode == eachNode ]
+						ifFound: [ :existingItem | existingItem reservedAstNode: eachNode ]
+						ifNone: [  ] ].
+			areItemsReserved := true ].
+
 	^ attributes
 		detect: [ :eachItem | 
-			(firstUnused isNil and: [ eachItem isUsed not ]) ifTrue: [ firstUnused := eachItem ].
-			eachItem isUsed not and: [ eachItem astNode = anAstNode ] ]
+			(firstAvailable isNil
+				and: [ eachItem isUsed not and: [ eachItem isReserved not ] ])
+				ifTrue: [ firstAvailable := eachItem ].
+			eachItem isReserved
+				ifTrue: [ eachItem reservedAstNode == anAstNode ]
+				ifFalse: [ eachItem isUsed not and: [ eachItem astNode = anAstNode ] ] ]
 		ifFound: [ :existingItem | 
 			existingItem astNode: anAstNode.
 			existingItem skip.
 			aPresentBlock value: existingItem ]
-		ifNone: [ firstUnused
+		ifNone: [ firstAvailable
 				ifNotNil: [ :existingItem | 
 					existingItem astNode: anAstNode.
 					existingItem skip.
@@ -51,7 +67,18 @@ GtPharoClassExpanderCacheItem >> gtAttributesFor: aView [
 	^ aView columnedList
 		title: 'Attributes';
 		items: [ attributes ];
-		column: 'Used' text: [  :each | each isUsed gtDisplayString ] width: 60;
+		column: 'Used'
+			text: [ :each | 
+				each isUsed
+					ifTrue: [ 'yes' ]
+					ifFalse: [ 'no' asRopedText foreground: BlTheme default button disabledTextColor ] ]
+			width: 60;
+		column: 'Reserved'
+			text: [ :each | 
+				each isReserved
+					ifTrue: [ 'yes' ]
+					ifFalse: [ 'no' asRopedText foreground: BlTheme default button disabledTextColor ] ]
+			width: 60;
 		column: 'AST Node' text: [ :each | each astNode gtDisplayString ];
 		column: 'Attributes' text: [ :each | each attributes gtDisplayString ]
 ]
@@ -60,7 +87,13 @@ GtPharoClassExpanderCacheItem >> gtAttributesFor: aView [
 GtPharoClassExpanderCacheItem >> initialize [
 	super initialize.
 
-	attributes := OrderedCollection new
+	attributes := OrderedCollection new.
+	areItemsReserved := false.
+]
+
+{ #category : #'api - cache' }
+GtPharoClassExpanderCacheItem >> numberOfItemAttributes [
+	^ attributes size
 ]
 
 { #category : #printing }
@@ -89,5 +122,6 @@ GtPharoClassExpanderCacheItem >> privateAstNode: anAstNode attributes: aCollecti
 
 { #category : #'api - cache' }
 GtPharoClassExpanderCacheItem >> resetIndex [
+	areItemsReserved := false.
 	attributes do: #reset
 ]
