@@ -375,6 +375,48 @@ GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferencesFirstThirdE
 ]
 
 { #category : #development }
+GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferencesFirstThirdExpandedScripter_pasteFourthReferenceInvalidateFirst [
+	"I have an impression that the issue should be fixed in the
+	BrTextAdornmentAttributePooledCache>>#ifAbsentPut: method."
+
+	<gtExample>
+	<noTest>
+	| result scripter |
+	self flag: #TODO.
+	scripter := self astAndClassCacheThreeReferencesFirstThirdExpandedScripter.
+	result := scripter model.
+
+	self
+		useIncrementalParsingDuring: [ scripter do
+				block: [ :anEditor | anEditor editor useSyncStylerStrategy ];
+				// GtSourceCoderEditorInnerId;
+				play.
+
+			scripter editor
+				moveToHome;
+				moveDown;
+				moveDown;
+				typeText: 'oc := OrderedCollection new. 1/';
+				// GtSourceCoderEditorInnerId;
+				play.
+
+			self assert: scripter numberOfBehaviorExpanders: 3.
+			self assert: scripter neverExpandedBehaviorAt: 4.
+			self
+				assert: scripter
+				expandedBehaviorAt: 1
+				withElement: (scripter userData at: #originalExpandedBehaviorElement1).
+			self assert: scripter neverExpandedBehaviorAt: 2.
+
+			self
+				assert: scripter
+				expandedBehaviorAt: 3
+				withElement: (scripter userData at: #originalExpandedBehaviorElement3) ].
+
+	^ scripter
+]
+
+{ #category : #development }
 GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferencesSameLine [
 	<gtExample>
 	| coder coderViewModel text styler someAttributes astCache behaviorCache astCacheValues behaviorCacheValues expanderAttributes |
