@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoMethodExpanderAttribute,
-	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
+	#superclass : #BrGlamorousTriangleExpanderTextAttributeV2,
 	#instVars : [
 		'classOrMetaClass',
 		'selector',
@@ -106,10 +106,8 @@ GtPharoMethodExpanderAttribute >> forClass: aClass andSelector: aSymbol [
 { #category : #'initialize-release' }
 GtPharoMethodExpanderAttribute >> initialize [
 	super initialize.
-	self
-		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: [ self buildMethodCoder ] ]
+
+	self stencil: [ self buildMethodCoder ]
 ]
 
 { #category : #private }
