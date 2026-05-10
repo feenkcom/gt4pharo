@@ -23,11 +23,14 @@ GtPharoClassExpanderCache >> attributesForAstNode: anAstNode class: aClass ifPre
 	^ monitor
 		critical: [ dictionary
 				at: aClass
-				ifPresent: [ :anExistingItem | 
-					anExistingItem
-						attributesForAstNode: anAstNode
-						ifPresent: [ :anItemAttributes | aPresentBlock value: anItemAttributes attributes ]
-						ifAbsentPut: anAbsentBlock ]
+				ifPresent: [ :existingItem | 
+					| itemAttributes |
+					itemAttributes := existingItem
+							attributesForAstNode: anAstNode
+							ifPresent: [ :anItemAttributes | 
+								aPresentBlock value: anItemAttributes ]
+							ifAbsentPut: anAbsentBlock.
+					itemAttributes attributes ]
 				ifAbsent: [ | newAttributes newItem |
 					newAttributes := anAbsentBlock value.
 					newItem := GtPharoClassExpanderCacheItem new

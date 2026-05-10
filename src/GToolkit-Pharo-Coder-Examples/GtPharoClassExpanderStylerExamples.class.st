@@ -39,7 +39,7 @@ GtPharoClassExpanderStylerExamples >> assert: aStep expandedBehaviorAt: anIntege
 { #category : #development }
 GtPharoClassExpanderStylerExamples >> astAndClassCache [
 	<gtExample>
-	| coder coderViewModel text styler someAttributes astCache behaviorCache astCacheValues behaviorCacheValues expanderAttributes expanderElement |
+	| coder coderViewModel text styler someAttributes astCache behaviorCache astCacheValues behaviorCacheValues expanderAttributes |
 	self
 		expanderStylerVersion: 6
 		during: [ coder := GtPharoMethodCoder
@@ -145,6 +145,45 @@ GtPharoClassExpanderStylerExamples >> astAndClassCacheScripter_typeBefore [
 			self assert: scripter expandedBehaviorAt: 1 ].
 
 	^ scripter
+]
+
+{ #category : #development }
+GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferences [
+	<gtExample>
+	| coder coderViewModel text styler someAttributes astCache behaviorCache astCacheValues behaviorCacheValues expanderAttributes |
+	self
+		expanderStylerVersion: 6
+		during: [ coder := GtPharoMethodCoder
+					forClass: Object
+					source: ('foo{1}{2}|oc|{1}{2}{1}{2}oc := OrderedCollection new.{1}{2}{1}{2}oc := OrderedCollection new.{1}{2}{1}{2}oc := OrderedCollection new.{1}{2}' format: { String cr. String tab }).
+			coderViewModel := coder asCoderViewModel.
+			coderViewModel stylers.
+
+			text := coder currentSourceText copy.
+			styler := GtPharoClassExpanderStyler new
+					coderViewModel: coderViewModel;
+					style: text ast: coder astSync ].
+
+	someAttributes := self classExpanderWithMarkerHiddingAndCachingElementAttributesIn: text.
+	expanderAttributes := someAttributes
+			select: [ :each | each expandedClass = OrderedCollection ].
+	self assert: expanderAttributes size equals: 3.
+	
+	astCache := styler privateAttributesCache.
+	behaviorCache := styler privateBehaviorCache.
+
+	astCacheValues := astCache associations.
+	behaviorCacheValues := behaviorCache associations.
+	self assert: astCacheValues size equals: 3.
+	self assert: behaviorCacheValues size equals: 1.
+	self assert: astCacheValues first value size equals: 2.
+	self assert: behaviorCacheValues first key equals: OrderedCollection.
+
+	^ GtPharoClassExpanderStylerExampleResult new
+		coderViewModel: coderViewModel;
+		text: text;
+		styler: styler;
+		attributes: someAttributes
 ]
 
 { #category : #accessing }

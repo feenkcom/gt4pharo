@@ -69,9 +69,9 @@ GtPharoClassExpanderCacheItem >> printOn: aStream [
 	attributes ifNil: [ ^ self ].
 
 	aStream
-		nextPutAll: '(unused ';
+		nextPutAll: '(';
 		print: (attributes count: [ :each | each isUsed not ]);
-		nextPutAll: ' out of ';
+		nextPutAll: ' unused out of ';
 		print: attributes size;
 		nextPut: $)
 ]
