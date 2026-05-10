@@ -29,17 +29,14 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 		includesKey: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol)
 		ifFalse: [ ^ self ].
 
-	anExpanderAttribute := (BrGlamorousTriangleExpanderTextAttribute new
+	anExpanderAttribute := (BrGlamorousTriangleExpanderTextAttributeV2 new
 		id: GtSourceCoderEmbeddedExpanderToggleId;
-		attributesCreatingBlock: [
-			BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: [ | aBaselineMethod aBaselineMethodCoder |
-					aBaselineMethod := (self class environment
-						at: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol) >> #baseline:.
-					aBaselineMethodCoder := GtPharoMethodCoder forMethod: aBaselineMethod.
-					aBaselineMethodCoder subscribeToSystem.
-					(aBaselineMethodCoder asCoderViewModel expanded: true) asElement. ] ]).
+		stencil: [ | aBaselineMethod aBaselineMethodCoder |
+				aBaselineMethod := (self class environment
+					at: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol) >> #baseline:.
+				aBaselineMethodCoder := GtPharoMethodCoder forMethod: aBaselineMethod.
+				aBaselineMethodCoder subscribeToSystem.
+				(aBaselineMethodCoder asCoderViewModel expanded: true) asElement. ]).
 
 	self
 		attribute: anExpanderAttribute
@@ -64,24 +61,22 @@ GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 			packageNamed: aPackageName
 			ifAbsent: [ ^ self ].
 
-	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
+	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttributeV2 new
 			id: GtSourceCoderEmbeddedExpanderToggleId;
-			attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-					beAppend;
-					stencil: [ | aModel aViewModel anElement |
-						aModel := GtPharoPackageCoder forPackage: aPackage.
-						aViewModel := aModel asCoderViewModel.
-						anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
-						anElement
-							height: 400;
-							background: Color white;
-							margin: (BlInsets
-									top: 3
-									right: 10
-									bottom: 10
-									left: 10);
-							addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom.
-						anElement ] ].
+			stencil: [ | aModel aViewModel anElement |
+				aModel := GtPharoPackageCoder forPackage: aPackage.
+				aViewModel := aModel asCoderViewModel.
+				anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
+				anElement
+					height: 400;
+					background: Color white;
+					margin: (BlInsets
+							top: 3
+							right: 10
+							bottom: 10
+							left: 10);
+					addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom.
+				anElement ].
 	self
 		attribute: anExpanderAttribute
 		from: aPackageNameNode value stopPosition
