@@ -359,6 +359,7 @@ GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferencesFirstThirdE
 				play.
 
 			self assert: scripter numberOfBehaviorExpanders: 4.
+			self assert: scripter neverExpandedBehaviorAt: 4.
 			self
 				assert: scripter
 				expandedBehaviorAt: 1
@@ -501,45 +502,30 @@ GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferencesSameLineFir
 GtPharoClassExpanderStylerExamples >> astAndClassCacheThreeReferencesSameLineFirstThirdExpandedScripter_pasteFourthReference [
 	<gtExample>
 	| result scripter |
-	scripter := self astAndClassCacheThreeReferencesSameLineFirstThirdExpandedScripter.
+	scripter := self
+			astAndClassCacheThreeReferencesSameLineFirstThirdExpandedScripter.
 	result := scripter model.
 
 	self
-		useIncrementalParsingDuring: [ 
-		
-			scripter do
-				block: [ :anEditor | anEditor editor useSyncStylerStrategy ];
-				// GtSourceCoderEditorInnerId;
-				play.
-		
-			scripter editor
+		useIncrementalParsingDuring: [ scripter editor
 				moveToHome;
 				in: [ :aStep | 8 timesRepeat: [ aStep moveRight ] ];
 				typeText: 'oc := OrderedCollection new.';
 				// GtSourceCoderEditorInnerId;
 				play.
 
-			"self assert: scripter numberOfBehaviorExpanders: 2.
-			self assert: scripter neverExpandedBehaviorAt: 2.
-			self
-				assert: scripter
-				expandedBehaviorAt: 3
-				withElement: (scripter userData at: #originalExpandedBehaviorElement3).
-
-			scripter editor
-				typeText: '2.';
-				// GtSourceCoderEditorInnerId;
-				play.
-			self assert: scripter numberOfBehaviorExpanders: 3.
+			self assert: scripter numberOfBehaviorExpanders: 4.
+			self assert: scripter neverExpandedBehaviorAt: 4.
 			self
 				assert: scripter
 				expandedBehaviorAt: 1
 				withElement: (scripter userData at: #originalExpandedBehaviorElement1).
 			self assert: scripter neverExpandedBehaviorAt: 2.
+
 			self
 				assert: scripter
 				expandedBehaviorAt: 3
-				withElement: (scripter userData at: #originalExpandedBehaviorElement3)" ].
+				withElement: (scripter userData at: #originalExpandedBehaviorElement3) ].
 
 	^ scripter
 ]
