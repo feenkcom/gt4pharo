@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoClassExpanderAttribute,
-	#superclass : #BrGlamorousTriangleExpanderTextAttribute,
+	#superclass : #BrGlamorousTriangleExpanderTextAttributeV2,
 	#instVars : [
 		'classToExpand'
 	],
@@ -40,8 +40,7 @@ GtPharoClassExpanderAttribute >> createdAttributesInto: aWriteStream [
 	"Add existing attributes to a text that is currently styled by stylers.
 	At this moment, it is assumend, that attributes are appending and added after the expand attribute."
 
-	createdAttributes
-		ifNotNil: [ :aCollection | aWriteStream nextPutAll: aCollection ]
+	aWriteStream nextPut: self expandedAppendingAttribute
 ]
 
 { #category : #accessing }
@@ -57,8 +56,5 @@ GtPharoClassExpanderAttribute >> forClass: aClass [
 { #category : #'initialize-release' }
 GtPharoClassExpanderAttribute >> initialize [
 	super initialize.
-	self
-		attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: [ self buildBehaviorCoder ] ]
+	self stencil: [ self buildBehaviorCoder ]
 ]

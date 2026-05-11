@@ -13,15 +13,14 @@ GtCoderExpandableBaselineStyler >> isNonEmptyLiteralStringNode: nameNode [
 
 { #category : #private }
 GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
-	| aBaselineNameNode anExpanderAttribute |
-
+	| aBaselineNameNode |
 	aBaselineNameNode := aMessageNode arguments first.
 
-	(self isNonEmptyLiteralStringNode: aBaselineNameNode)
-		ifFalse: [ ^ self ].
+	(self isNonEmptyLiteralStringNode: aBaselineNameNode) ifFalse: [ ^ self ].
 
 	self
-		attribute: (GtCompletionStrategyAttribute new strategy: GtBaselineOfClassCompletionStrategy new)
+		attribute: (GtCompletionStrategyAttribute new
+				strategy: GtBaselineOfClassCompletionStrategy new)
 		from: aBaselineNameNode value startPosition
 		to: aBaselineNameNode value stopPosition.
 
@@ -29,27 +28,23 @@ GtCoderExpandableBaselineStyler >> styleBaselineMessage: aMessageNode [
 		includesKey: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol)
 		ifFalse: [ ^ self ].
 
-	anExpanderAttribute := (BrGlamorousTriangleExpanderTextAttribute new
-		id: GtSourceCoderEmbeddedExpanderToggleId;
-		attributesCreatingBlock: [
-			BrTextAdornmentDynamicAttribute new
-				beAppend;
-				stencil: [ | aBaselineMethod aBaselineMethodCoder |
-					aBaselineMethod := (self class environment
-						at: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol) >> #baseline:.
-					aBaselineMethodCoder := GtPharoMethodCoder forMethod: aBaselineMethod.
-					aBaselineMethodCoder subscribeToSystem.
-					(aBaselineMethodCoder asCoderViewModel expanded: true) asElement. ] ]).
-
-	self
-		attribute: anExpanderAttribute
+	(self
 		from: aBaselineNameNode value stopPosition
-		to: aBaselineNameNode value stopPosition.
+		to: aBaselineNameNode value stopPosition)
+		expanded: false
+		adornment: [ | aBaselineMethod aBaselineMethodCoder |
+			aBaselineMethod := (self class environment
+					at: ('BaselineOf' , aBaselineNameNode literalValue asString) asSymbol)
+					>> #baseline:.
+			aBaselineMethodCoder := GtPharoMethodCoder forMethod: aBaselineMethod.
+			aBaselineMethodCoder subscribeToSystem.
+			(aBaselineMethodCoder asCoderViewModel expanded: true) asElement ]
+		id: GtSourceCoderEmbeddedExpanderToggleId
 ]
 
 { #category : #private }
 GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
-	| aPackageNameNode aPackageName aPackage anExpanderAttribute |
+	| aPackageNameNode aPackageName aPackage |
 	aPackageNameNode := aMessageNode arguments first.
 
 	(self isNonEmptyLiteralStringNode: aPackageNameNode) ifFalse: [ ^ self ].
@@ -64,28 +59,25 @@ GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 			packageNamed: aPackageName
 			ifAbsent: [ ^ self ].
 
-	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
-			id: GtSourceCoderEmbeddedExpanderToggleId;
-			attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-					beAppend;
-					stencil: [ | aModel aViewModel anElement |
-						aModel := GtPharoPackageCoder forPackage: aPackage.
-						aViewModel := aModel asCoderViewModel.
-						anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
-						anElement
-							height: 400;
-							background: Color white;
-							margin: (BlInsets
-									top: 3
-									right: 10
-									bottom: 10
-									left: 10);
-							addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom.
-						anElement ] ].
-	self
-		attribute: anExpanderAttribute
+	(self
 		from: aPackageNameNode value stopPosition
-		to: aPackageNameNode value stopPosition
+		to: aPackageNameNode value stopPosition)
+		expanded: false
+		adornment: [ | aModel aViewModel anElement |
+			aModel := GtPharoPackageCoder forPackage: aPackage.
+			aViewModel := aModel asCoderViewModel.
+			anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
+			anElement
+				height: 400;
+				background: Color white;
+				margin: (BlInsets
+						top: 3
+						right: 10
+						bottom: 10
+						left: 10);
+				addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom.
+			anElement ]
+		id: GtSourceCoderEmbeddedExpanderToggleId
 ]
 
 { #category : #private }

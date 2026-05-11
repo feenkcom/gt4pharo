@@ -1090,7 +1090,7 @@ GtPharoMethodCoderByScripterExamples >> checkFor: aScripterOrStep textExpandAttr
 	self 
 		checkFor: aScripterOrStep 
 		textAttributesAt: anIndex 
-		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTriangleExpanderTextAttribute ]
+		anySatisfies: [ :aTextAttribute | aTextAttribute isKindOf: BrGlamorousTriangleExpanderTextAttributeV2 ]
 ]
 
 { #category : #'examples - extract method' }
