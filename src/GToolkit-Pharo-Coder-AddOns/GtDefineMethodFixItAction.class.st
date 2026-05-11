@@ -26,7 +26,7 @@ GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
 					forClass: classOrMetaClass
 					andSelector: self selector.
 	anAttribute 
-		isExpanded: true;
+		beExpandedByDefault;
 		id: (GtPharoMethodExpanderId indexed: aLastIndex + 1).
 	coderViewModel ifNotNil: [ 
 		| aBuilder |
@@ -42,7 +42,7 @@ GtDefineMethodFixItAction >> addCoderAttributeInEditor: aBrTextEditor [
 		anAttribute argumentBindingsBuilder: aBuilder ].
 	
 	(aBrTextEditor text from: position to: position)
-		attributes: { anAttribute }
+		attributes: { anAttribute . anAttribute expandedAppendingAttribute }
 ]
 
 { #category : #accessing }
