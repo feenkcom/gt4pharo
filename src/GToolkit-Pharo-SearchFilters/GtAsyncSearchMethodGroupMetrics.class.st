@@ -24,20 +24,23 @@ GtAsyncSearchMethodGroupMetrics >> amountOfMethods [
 
 { #category : #'gt - extensions' }
 GtAsyncSearchMethodGroupMetrics >> gtMetricsFor: aView [
-
 	<gtView>
 	^ aView columnedList
 		  title: 'Metrics';
 		  items: [ 
 			  { 
-				  ('Number of methods' -> self amountOfMethods).
-				  ('Lines of code' -> self linesOfCode).
-				  ('Lines per method' -> (self amountOfMethods isZero
+				  ('Number of methods' -> [self amountOfMethods]).
+				  ('Lines of code' -> [self linesOfCode]).
+				  ('Lines per method' -> [(self amountOfMethods isZero
 						    ifFalse: [ 
 							    (self linesOfCode / self amountOfMethods) asFloat ]
-						    ifTrue: [ '0' ])) } ];
+						    ifTrue: [ '0' ])]) } ];
 		  column: 'Metric' text: #key;
-		  column: 'Value' text: [ :assoc | assoc value asString ];
+		  
+		  column: 'Value'
+				textFuture: [ :assoc :aRowIndex :aContext | assoc value value ]
+				pending: [ :aRepo :aRowIndex :aContext | '...' asRopedText foreground: aContext theme button disabledTextColor ]
+				success: [ :aCount :aContext | aCount asString ];
 		  updateWhen: GtAsyncSearchMethodMetricsUpdate in: [ announcer ];
 		  actionUpdateButton
 ]
