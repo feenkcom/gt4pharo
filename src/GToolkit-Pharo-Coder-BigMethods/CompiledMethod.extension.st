@@ -17,3 +17,8 @@ CompiledMethod >> gtBigMethodCoder [
 CompiledMethod >> isBigMethod [
 	^ self isSourceSearchable not or: [ self sourceCode size > self class bigMethodSize ]
 ]
+
+{ #category : #'*GToolkit-Pharo-Coder-BigMethods' }
+CompiledMethod >> limitedSourceCode [
+	^ self sourceCode first: 10000
+]
