@@ -139,17 +139,27 @@ GtPharoNoIndexExamples >> globalCache [
 	<gtExample>
 	| index noIndex |
 	index := GtPharoIndex current globalCache.
-	self 
-		forPharo13AndNewer: [
-			index := index copyWithout: 'StackSignal' ] 
-		forOlder: [].
-		
+	self
+		forPharo13AndNewer: [ index := index copyWithout: 'StackSignal' ]
+		forOlder: [  ].
+
 	noIndex := GtPharoNoIndex new globalCache.
-	index do: [ :each | (each beginsWith: 'TemporaryPackage') 
-		ifFalse: [ self assert: (noIndex includes: each) ] ].
-	noIndex do: [ :each | (each beginsWith: 'TemporaryPackage') 
-		ifFalse: [ self assert: (index includes: each) ] ].
-	^ {index. noIndex}
+	index
+		do: [ :each | 
+			(each beginsWith: 'TemporaryPackage')
+				ifFalse: [ self
+						assert: (noIndex includes: each)
+						description: [ 'Index global cache includes {1}, but NoIndex globalCache does not.'
+								format: {each} ] ] ].
+	noIndex
+		do: [ :each | 
+			(each beginsWith: 'TemporaryPackage')
+				ifFalse: [ self
+						assert: (index includes: each)
+						description: [ 'NoIndex global cache includes {1}, but Index globalCache does not.'
+								format: {each} ] ] ].
+	^ {index.
+		noIndex}
 ]
 
 { #category : #examples }
