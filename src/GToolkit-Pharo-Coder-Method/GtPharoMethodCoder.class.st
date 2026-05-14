@@ -27,6 +27,9 @@ GtPharoMethodCoder class >> forExample: anExample [
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forMethod: aCompiledMethod [
+	"Select and instantiate a coder model with higher priority for the given compiled method.
+	Note: In some cases we need to use this logic in gtoolkit-coder packages (which is not ideal). We can use `GtSourceCoder forPharoMethod: aCompiledMethod` instead."
+
 	| coderClass |
 	self = GtPharoMethodCoder
 		ifFalse: [ ^ self withThisCoderForMethod: aCompiledMethod ].
@@ -55,6 +58,9 @@ GtPharoMethodCoder class >> forMethod: aCompiledMethod [
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forMethod: aCompiledMethod in: aBehavior [
+	"Select and instantiate a coder model with higher priority for the given compiled method.
+	Note: In some cases we need to use this logic in gtoolkit-coder packages (which is not ideal). We can use `GtSourceCoder forPharoMethod: aCompiledMethod in: aBehavior` instead."
+
 	| coderClass |
 	self = GtPharoMethodCoder
 		ifFalse: [ ^ self withThisCoderForMethod: aCompiledMethod in: aBehavior ].
@@ -77,7 +83,8 @@ GtPharoMethodCoder class >> forMethod: aCompiledMethod in: aBehavior [
 				onErrorDo: [ :anException | 
 					GtSystemUtility
 						reportCatchedException: anException
-						named: ('GtPharoMethodCoder class>>#forMethod:in: instantiating {1}' format: {coderClass}).
+						named: ('GtPharoMethodCoder class>>#forMethod:in: instantiating {1}'
+								format: {coderClass}).
 					anException return: (self forSmallMethod: aCompiledMethod in: aBehavior) ] ]
 ]
 
