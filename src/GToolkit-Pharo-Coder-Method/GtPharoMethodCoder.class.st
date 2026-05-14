@@ -27,16 +27,58 @@ GtPharoMethodCoder class >> forExample: anExample [
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forMethod: aCompiledMethod [
-	^ self new
-		forMethod: aCompiledMethod;
-		yourself
+	| coderClass |
+	self = GtPharoMethodCoder
+		ifFalse: [ ^ self withThisCoderForMethod: aCompiledMethod ].
+
+	coderClass := [ aCompiledMethod gtSelectCoderClass ]
+			onErrorDo: [ :anException | 
+				GtSystemUtility
+					reportCatchedException: anException
+					named: ('GtPharoMethodCoder class>>#forMethod: calling ({1}) {2}'
+							format: {aCompiledMethod printString.
+									#gtSelectCoderClass}).
+				^ self forSmallMethod: aCompiledMethod ].
+
+	^ (coderClass class lookupSelector: #forMethod:)
+		ifNil: [ self forSmallMethod: aCompiledMethod ]
+		ifNotNil: [ :anotherCompiledMethod | 
+			[ anotherCompiledMethod = (GtPharoMethodCoder class >> #forMethod:)
+				ifTrue: [ self withThisCoderForMethod: aCompiledMethod ]
+				ifFalse: [ coderClass forMethod: aCompiledMethod ] ]
+				onErrorDo: [ :anException | 
+					GtSystemUtility
+						reportCatchedException: anException
+						named: ('GtPharoMethodCoder class>>#forMethod: instantiating {1}' format: {coderClass}).
+					anException return: (self forSmallMethod: aCompiledMethod) ] ]
 ]
 
 { #category : #'instance creation' }
 GtPharoMethodCoder class >> forMethod: aCompiledMethod in: aBehavior [
-	^ self new
-		forMethod: aCompiledMethod in: aBehavior;
-		yourself
+	| coderClass |
+	self = GtPharoMethodCoder
+		ifFalse: [ ^ self withThisCoderForMethod: aCompiledMethod in: aBehavior ].
+
+	coderClass := [ aCompiledMethod gtSelectCoderClass ]
+			onErrorDo: [ :anException | 
+				GtSystemUtility
+					reportCatchedException: anException
+					named: ('GtPharoMethodCoder class>>#forMethod:in: calling ({1}) {2}'
+							format: {aCompiledMethod printString.
+									#gtSelectCoderClass}).
+				^ self forSmallMethod: aCompiledMethod in: aBehavior ].
+
+	^ (coderClass class lookupSelector: #forMethod:in:)
+		ifNil: [ self forSmallMethod: aCompiledMethod in: aBehavior ]
+		ifNotNil: [ :anotherCompiledMethod | 
+			[ anotherCompiledMethod = (GtPharoMethodCoder class >> #forMethod:in:)
+				ifTrue: [ self withThisCoderForMethod: aCompiledMethod in: aBehavior ]
+				ifFalse: [ coderClass forMethod: aCompiledMethod in: aBehavior ] ]
+				onErrorDo: [ :anException | 
+					GtSystemUtility
+						reportCatchedException: anException
+						named: ('GtPharoMethodCoder class>>#forMethod:in: instantiating {1}' format: {coderClass}).
+					anException return: (self forSmallMethod: aCompiledMethod in: aBehavior) ] ]
 ]
 
 { #category : #'instance creation' }
@@ -49,6 +91,20 @@ GtPharoMethodCoder class >> forObject: anObject andSelector: aSymbol [
 	^ self forMethod: anObject class >> aSymbol
 ]
 
+{ #category : #'instance creation' }
+GtPharoMethodCoder class >> forSmallMethod: aCompiledMethod [
+	^ GtPharoMethodCoder new
+		forMethod: aCompiledMethod;
+		yourself
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoder class >> forSmallMethod: aCompiledMethod in: aBehavior [
+	^ GtPharoMethodCoder new
+		forMethod: aCompiledMethod in: aBehavior;
+		yourself
+]
+
 { #category : #'coder selection' }
 GtPharoMethodCoder class >> isCoderValidFor: aCompiledMethod [
 	^true
@@ -57,6 +113,28 @@ GtPharoMethodCoder class >> isCoderValidFor: aCompiledMethod [
 { #category : #'coder selection' }
 GtPharoMethodCoder class >> priority [
 	^1000
+]
+
+{ #category : #private }
+GtPharoMethodCoder class >> withThisCoderForMethod: aCompiledMethod [
+	"I am a helper method that instantiates coder of the specific class.
+	Since `GtPharoMethodCoder class>>#forMethod:` includes a coder model class selection,
+	we need a way to instantiate an explicitly defined coder model class."
+
+	^ self new
+		forMethod: aCompiledMethod;
+		yourself
+]
+
+{ #category : #private }
+GtPharoMethodCoder class >> withThisCoderForMethod: aCompiledMethod in: aBehavior [
+	"I am a helper method that instantiates coder of the specific class.
+	Since `GtPharoMethodCoder class>>#forMethod:in:` includes a coder model class selection,
+	we need a way to instantiate an explicitly defined coder model class."
+
+	^ self new
+		forMethod: aCompiledMethod in: aBehavior;
+		yourself
 ]
 
 { #category : #'api - refactorings' }
