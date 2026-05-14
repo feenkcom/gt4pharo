@@ -157,12 +157,20 @@ GtPharoMethodCoder >> canExecuteExample [
 { #category : #testing }
 GtPharoMethodCoder >> canMoveMethodToInstanceOrClass [
 	| oldClass newClass |
+	
 	oldClass := self behavior.
 	newClass := oldClass isMeta
 		ifTrue: [ oldClass soleInstance ]
 		ifFalse: [ oldClass class ].
 	(newClass includesSelector: self currentSelector)
 		ifTrue: [ ^ false ].
+	(oldClass 
+		compiledMethodAt: self currentSelector 
+		ifPresent: [ :aCompiledMethod |
+			aCompiledMethod isBigMethod ifTrue: [ 
+				"Skip this check for big methods"
+				^ true]]).
+	
 	^ self canCompileMethodIn: newClass
 ]
 

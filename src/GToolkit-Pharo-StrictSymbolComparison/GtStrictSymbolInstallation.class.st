@@ -214,7 +214,7 @@ GtStrictSymbolInstallation >> replaceLepiterDatabase [
 	LeDatabasesRegistry default stopMonitoring.
 	LeDatabasesRegistry default 
 		defaultLogicalDatabase: databaseProperties logicalDatabase.
-	GtWorld allInstances do: [:each | each knowledgeBase: LeDatabasesRegistry defaultLogicalDatabase ].
+	GtWorld allOpenWorldsDo: [:each | each knowledgeBase: LeDatabasesRegistry defaultLogicalDatabase ].
 ]
 
 { #category : #'managing - steps' }
