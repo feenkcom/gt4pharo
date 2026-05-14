@@ -44,7 +44,7 @@ GtPharoMethodCoder class >> forMethod: aCompiledMethod [
 		ifNil: [ self forSmallMethod: aCompiledMethod ]
 		ifNotNil: [ :anotherCompiledMethod | 
 			[ anotherCompiledMethod = (GtPharoMethodCoder class >> #forMethod:)
-				ifTrue: [ self withThisCoderForMethod: aCompiledMethod ]
+				ifTrue: [ coderClass withThisCoderForMethod: aCompiledMethod ]
 				ifFalse: [ coderClass forMethod: aCompiledMethod ] ]
 				onErrorDo: [ :anException | 
 					GtSystemUtility
@@ -72,7 +72,7 @@ GtPharoMethodCoder class >> forMethod: aCompiledMethod in: aBehavior [
 		ifNil: [ self forSmallMethod: aCompiledMethod in: aBehavior ]
 		ifNotNil: [ :anotherCompiledMethod | 
 			[ anotherCompiledMethod = (GtPharoMethodCoder class >> #forMethod:in:)
-				ifTrue: [ self withThisCoderForMethod: aCompiledMethod in: aBehavior ]
+				ifTrue: [ coderClass withThisCoderForMethod: aCompiledMethod in: aBehavior ]
 				ifFalse: [ coderClass forMethod: aCompiledMethod in: aBehavior ] ]
 				onErrorDo: [ :anException | 
 					GtSystemUtility
