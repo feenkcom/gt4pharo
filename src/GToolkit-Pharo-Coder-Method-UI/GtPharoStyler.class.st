@@ -384,8 +384,7 @@ GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 	(self
 		from: aSymbolLiteral value startPosition
 		to: aSymbolLiteral value stopPosition)
-			foreground: self theme editor pharoSymbolLiteralForeground;
-			doublePressToSelect
+			foreground: self theme editor pharoSymbolLiteralForeground
 ]
 
 { #category : #'visiting - variables' }
