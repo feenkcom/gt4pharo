@@ -20,6 +20,13 @@ CompiledMethod >> gtSelectCoderClass [
 	| coderPragmas |
 	coderPragmas := self class gtMethodCoderPragmas.
 	coderPragmas
-		reverseDo: [ :each | (each method valueWithReceiver: self arguments: #()) ifNotNil: [ :cls | ^ cls ] ].
+		reverseDo: [ :eachPragma | 
+			[ (eachPragma method valueWithReceiver: self arguments: #())
+				ifNotNil: [ :cls | ^ cls ] ]
+				onErrorDo: [ :anException | 
+					GtSystemUtility
+						reportCatchedException: anException
+						named: ('CompiledMethod>>#gtSelectCoderClass calling {1}' format: {eachPragma}).
+					anException return: nil ] ].
 	^ self gtMethodCoder
 ]
