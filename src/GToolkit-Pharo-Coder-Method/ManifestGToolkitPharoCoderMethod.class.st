@@ -10,6 +10,9 @@ Class {
 { #category : #asserting }
 ManifestGToolkitPharoCoderMethod class >> mustNotDependOn [
 	^ { 
+		'Bloc'.
+		'Brick'.
+		'GToolkit-Utility-System-UI'.
 		'GToolkit-Coder-UI'.
 		'GToolkit-Pharo-Coder-Method-UI'.
 		'GToolkit-Pharo-Coder'.
@@ -42,6 +45,7 @@ ManifestGToolkitPharoCoderMethod class >> mustOnlyDependOn [
 		'GToolkit-Pharo-TestSuite'.
 		'GToolkit-Phlow-Model'.
 		'GToolkit-Utility-StackOverflow'.
+		'GToolkit-Utility-System'.
 		'GToolkit-VariableBindings'.
 		'Kernel'.
 		'OpalCompiler-Core'.
