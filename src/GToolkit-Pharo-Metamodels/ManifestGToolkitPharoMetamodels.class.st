@@ -22,7 +22,7 @@ ManifestGToolkitPharoMetamodels class >> mustOnlyDependOn [
 		'GToolkit-Pharo-System'.
 		'GToolkit-Pharo-GtRefactorings'.
 		'GToolkit-Pharo-BaseRefactorings'.
-		'GToolkit-Utility-System'.
+		'GToolkit-Utility-System-UI'.
 		'Kernel'.
 		'Metacello-Base'.
 		'Refactoring-Changes'.

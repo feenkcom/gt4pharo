@@ -11,6 +11,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 		spec 
 			baseline: 'Futures' with: [
 				spec repository: 'github://feenkcom/pharo-futures:main/src' ];
+			baseline: 'GToolkitFileUtility'
+					with: [ spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitExamplesEngine' with: [
 				spec repository: 'github://feenkcom/gtoolkit-examples:main/src' ];
 			baseline: 'GToolkitCoder' with: [
@@ -31,6 +33,7 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			package: 'GToolkit-Pharo-Metamodels' with: [
 				spec requires: #(
 					'Futures'
+					'GToolkitFileUtility'
 					'GToolkit-Pharo-GtRefactorings'
 					'GToolkit-Pharo-Parser'
 					'GToolkit-Pharo-System'). ];
