@@ -1585,7 +1585,7 @@ GtPharoCoderByScripterExamples >> displayAddMethodDropdown [
 	| aScripter aScrollSpotterBy aButtonBoundsInSpace |
 	aScripter := self displayThreeClassCodersWithMethodExpanded.
 
-	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
+	aScripter menuStep prepareSteppedLayoutDropdownLastStateAnalyzer
 		onPagerPaneWithIndex: 2;
 		// GtPharoAddNewMethodButtonId;
 		play.
@@ -1801,7 +1801,7 @@ GtPharoCoderByScripterExamples >> displaySecondPaneMethodSpotterDropdown [
 				block: [ :aSpace | aSpace extent: 1000 @ 600 ];
 				onSpace ].
 
-	aScripter menuStep prepareSteppedLayoutDropdownAnalyzer
+	aScripter menuStep prepareSteppedLayoutDropdownLastStateAnalyzer
 		onPagerPaneWithIndex: 2;
 		// GtPharoBehaviorCoderElement;
 		// BrTabGroup;
