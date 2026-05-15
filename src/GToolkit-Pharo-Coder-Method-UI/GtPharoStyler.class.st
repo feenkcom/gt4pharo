@@ -380,10 +380,12 @@ GtPharoStyler >> visitSuperVariable: aSuperVariable [
 { #category : #visiting }
 GtPharoStyler >> visitSymbolLiteral: aSymbolLiteral [
 	super visitSymbolLiteral: aSymbolLiteral.
-	self
-		attributes: { BlTextForegroundAttribute color: self theme editor pharoSymbolLiteralForeground }
+	
+	(self
 		from: aSymbolLiteral value startPosition
-		to: aSymbolLiteral value stopPosition
+		to: aSymbolLiteral value stopPosition)
+			foreground: self theme editor pharoSymbolLiteralForeground;
+			doublePressToSelect
 ]
 
 { #category : #'visiting - variables' }
