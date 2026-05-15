@@ -295,7 +295,7 @@ GtSmalltalkSourceCoder >> isIntervalCompleteStatements: aSelectionInterval [
 GtSmalltalkSourceCoder >> messageNodeAfter: aMessageNodeCollection [
 	| siblings index |
 	siblings := aMessageNodeCollection any parent messages.
-	index := siblings indexOf: aMessageNodeCollection last.
+	index := siblings identityIndexOf: aMessageNodeCollection last.
 	^ index = siblings size ifTrue: [ nil ] ifFalse: [ siblings at: index + 1 ]
 ]
 
@@ -303,7 +303,7 @@ GtSmalltalkSourceCoder >> messageNodeAfter: aMessageNodeCollection [
 GtSmalltalkSourceCoder >> messageNodeBefore: aMessageNodeCollection [
 	| siblings index |
 	siblings := aMessageNodeCollection any parent messages.
-	index := siblings indexOf: aMessageNodeCollection first.
+	index := siblings identityIndexOf: aMessageNodeCollection first.
 	^ index = 1 ifTrue: [ nil ] ifFalse: [ siblings at: index - 1 ]
 ]
 
@@ -487,7 +487,7 @@ GtSmalltalkSourceCoder >> statementNodeAfter: aStatementNodeCollection [
 	| siblings index |
 	aStatementNodeCollection isEmpty ifTrue: [ ^ nil ].
 	siblings := aStatementNodeCollection any parent statements.
-	index := siblings indexOf: aStatementNodeCollection last.
+	index := siblings identityIndexOf: aStatementNodeCollection last.
 	^ index = siblings size ifTrue: [ nil ] ifFalse: [ siblings at: index + 1 ]
 ]
 
@@ -495,7 +495,7 @@ GtSmalltalkSourceCoder >> statementNodeAfter: aStatementNodeCollection [
 GtSmalltalkSourceCoder >> statementNodeBefore: aStatementNodeCollection [
 	| siblings index |
 	siblings := aStatementNodeCollection any parent statements.
-	index := siblings indexOf: aStatementNodeCollection first.
+	index := siblings identityIndexOf: aStatementNodeCollection first.
 	^ index = 1 ifTrue: [ nil ] ifFalse: [ siblings at: index - 1 ]
 ]
 
