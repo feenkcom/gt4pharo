@@ -102,7 +102,9 @@ GtPharoMethodContextCoderViewModel >> programCounterRange [
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> programCounterTextAttribute [
 	^ ProgramCounterTextAttribute
-		ifNil: [ ProgramCounterTextAttribute := (BlTextHighlightAttribute paint: BrGlamorousColors debuggerTextHighlightColor) beNotOverwritableByStyler ]
+		ifNil: [ ProgramCounterTextAttribute := (BlTextUnderlayAttribute
+					paint: BrGlamorousColors debuggerTextHighlightColor)
+					beNotOverwritableByStyler ]
 ]
 
 { #category : #accessing }
