@@ -23,6 +23,15 @@ GtSourceCoderFixItShortcut >> name [
 { #category : #evaluation }
 GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coder: aGtSourceCoder dueTo: aShortcutEvent requesterObject: aRequester [
 	| text |
+	self flag: #TODO.
+	(aBrEditorElement isKindOf: GtTextEditorElement) 
+		ifTrue: [ 
+			aShortcutEvent beNotConsumed.
+			"aBrEditorElement 
+		selectedStringDo: [ :aSelectedString :aSelectedInterval |  ] 
+		orCursorStringPositionDo: [ :aStringPosition | ]."
+			^ self ].
+	
 	text := aBrTextEditor text.
 	aBrTextEditor cursors
 		do: [ :cursor | 
