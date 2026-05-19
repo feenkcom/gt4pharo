@@ -503,6 +503,7 @@ GtPharoSourceCoder >> initializeAddOns: addOns [
 		GtPharoDeprecationStyler.
 		GtPharoMethodExpanderStyler.
 		GtPharoClassExpanderStyler.
+		GtPharoDoublePressToSelectStyler.
 		GtPharoHidingStyler} collect: #new.
 	addOns addStylers: stylers
 ]
