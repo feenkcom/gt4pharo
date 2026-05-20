@@ -20,6 +20,13 @@ GtPharoIndex class >> cacheSizeInMemory [
 ]
 
 { #category : #accessing }
+GtPharoIndex class >> clearCurrent [
+	current ifNotNil: [ :anIndex |
+		anIndex unsubscribeFromModel ].
+	current := nil
+]
+
+{ #category : #accessing }
 GtPharoIndex class >> current [
 	^ current ifNil: [ current := self new ]
 ]
@@ -42,6 +49,12 @@ GtPharoIndex class >> initializeCache [
 { #category : #testing }
 GtPharoIndex class >> isActive [
 	^ current ifNil: [ false ] ifNotNil: [ current isActive ]
+]
+
+{ #category : #accessing }
+GtPharoIndex class >> replaceCurrentWithNoCacheIndex [
+	self clearCurrent.
+	current :=  GtPharoNoIndex new
 ]
 
 { #category : #private }
