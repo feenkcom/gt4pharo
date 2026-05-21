@@ -45,6 +45,18 @@ GtPharoDoublePressToSelectStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 ]
 
 { #category : #'as yet unclassified' }
+GtPharoDoublePressToSelectStyler >> visitStringLiteral: aStringLiteral [
+	| start end |
+	super visitStringLiteral: aStringLiteral.
+	
+	start := aStringLiteral value startPosition + 1.
+	end := aStringLiteral value stopPosition - 1.
+	
+	(self from: start to: end)
+		doublePressToSelectAtBoundary
+]
+
+{ #category : #'as yet unclassified' }
 GtPharoDoublePressToSelectStyler >> visitSymbolLiteral: aSymbolLiteral [
 	super visitSymbolLiteral: aSymbolLiteral.
 	
