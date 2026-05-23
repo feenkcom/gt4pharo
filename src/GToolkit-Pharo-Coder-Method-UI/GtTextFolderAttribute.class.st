@@ -14,6 +14,11 @@ GtTextFolderAttribute class >> forAttribute: anAttribute [
 	^self new attribute: anAttribute
 ]
 
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> applyExpandedAttributesOnStyledText: aText [
+	self applyExpandedOrCollapsedAttributesOnText: aText
+]
+
 { #category : #accessing }
 GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOnText: text [
 	text
@@ -132,4 +137,19 @@ GtTextFolderAttribute >> initialize [
 	super initialize.
 	isExpanded := true.
 	hideAttribute := BrTextFoldAttribute new
+]
+
+{ #category : #accessing }
+GtTextFolderAttribute >> markerAttribute [
+	^ self attribute
+]
+
+{ #category : #accessing }
+GtTextFolderAttribute >> markerAttribute: anAttribute [
+	self attribute: anAttribute
+]
+
+{ #category : #'as yet unclassified' }
+GtTextFolderAttribute >> tooltipText: aString [
+	self hoverText: aString
 ]
