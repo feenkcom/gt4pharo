@@ -52,7 +52,7 @@ GtTextFolderAttributeV2 >> applyExpandedOrCollapsedAttributesOnText: aText [
 	self applyExpandedAttributesOnStyledText: aText
 ]
 
-{ #category : #private }
+{ #category : #'api - styling' }
 GtTextFolderAttributeV2 >> applyExpandedOrCollapsedIn: aTextEditor [
 	self isExpanded
 		ifFalse: [ self collapseAttributeIn: aTextEditor ]

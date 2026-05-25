@@ -54,7 +54,7 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 					((self anyCursorsInRange: (start to: end))
 						or: [ self anyDecorationsInRange: (start to: end) ofText: aText ])
 						ifTrue: [ each isExpanded: true.
-							each applyExpandedOrCollapsedAttributesOnText: aText ] ] ]
+							each applyExpandedAttributesOnStyledText: aText ] ] ]
 ]
 
 { #category : #private }
