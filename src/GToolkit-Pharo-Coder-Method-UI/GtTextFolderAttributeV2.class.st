@@ -163,6 +163,14 @@ GtTextFolderAttributeV2 >> folderAttributeModel: aModel [
 	folderAttributeModel := aModel.
 ]
 
+{ #category : #initialization }
+GtTextFolderAttributeV2 >> gtExternalTextConfigureAppendingAttribute: anAttribute [
+	super gtExternalTextConfigureAppendingAttribute: anAttribute.
+	
+	anAttribute beExactWidth: 15.
+	anAttribute beExactHeight: 15.
+]
+
 { #category : #'private - event handling' }
 GtTextFolderAttributeV2 >> highlightFoldableTextInTextEditor: aTextEditor [
 	markerAttribute ifNil: [ ^ self ].
