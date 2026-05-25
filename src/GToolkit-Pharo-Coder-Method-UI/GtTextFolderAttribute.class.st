@@ -35,6 +35,11 @@ GtTextFolderAttribute >> applyExpandedOrCollapsedAttributesOnText: text [
 						to: end ] ]
 ]
 
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> applyExpandedOrCollapsedIn: aTextEditorElement [
+	self applyExpandedOrCollapsedAttributesOnText: aTextEditorElement text
+]
+
 { #category : #accessing }
 GtTextFolderAttribute >> attribute [
 	^ attribute

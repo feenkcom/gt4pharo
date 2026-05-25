@@ -67,7 +67,7 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 				attributes: {messageMarker}
 				from: foldedRange first
 				to: foldedRange last ].
-	folder := GtTextFolderAttributeV2 new
+	folder := GtTextFolderAttribute new
 			markerAttribute: messageMarker;
 			tooltipText: aString;
 			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect.
