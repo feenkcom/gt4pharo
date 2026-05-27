@@ -49,12 +49,12 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 	folders
 		do: [ :each | 
 			aText
-				findAttribute: each attribute
+				findAttribute: each markerAttribute
 				indicesDo: [ :start :end | 
 					((self anyCursorsInRange: (start to: end))
 						or: [ self anyDecorationsInRange: (start to: end) ofText: aText ])
 						ifTrue: [ each isExpanded: true.
-							each applyExpandedOrCollapsedAttributesOnText: aText ] ] ]
+							each applyExpandedAttributesOnStyledText: aText ] ] ]
 ]
 
 { #category : #private }
@@ -68,9 +68,9 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 				from: foldedRange first
 				to: foldedRange last ].
 	folder := GtTextFolderAttribute new
-			attribute: messageMarker;
-			hoverText: aString;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext ) collect.
+			markerAttribute: messageMarker;
+			tooltipText: aString;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect.
 	coderViewModel
 		saveAttribute: folder
 		forNode: aNode
@@ -83,10 +83,10 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 		at: aNode
 		ifPresent: [ :oldFolder | 
 			folder isExpanded: oldFolder isExpanded.
-			folder applyExpandedOrCollapsedAttributesOnText: text ]
+			folder applyExpandedAttributesOnStyledText: text ]
 		ifAbsent: [ InitiallyFolded
 				ifTrue: [ folder isExpanded: false.
-					folder applyExpandedOrCollapsedAttributesOnText: text ] ]
+					folder applyExpandedAttributesOnStyledText: text ] ]
 ]
 
 { #category : #'as yet unclassified' }
