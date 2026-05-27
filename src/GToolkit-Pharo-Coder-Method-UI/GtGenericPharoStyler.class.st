@@ -21,6 +21,11 @@ GtGenericPharoStyler >> acceptNode: aSmaCCParseNode [
 GtGenericPharoStyler >> style: aText ast: theAst [
 	text := aText.
 	[ self accept: theAst ]
-		on: Error do: [ :e | (GtStylerErrorSignal new signaledError: e) emit ].
+		on: Error
+		do: [ :anException | 
+			GtSystemUtility reportCatchedException: anException named: 'Styler'.
+			GtStylerErrorSignal new 
+				signaledError: anException; 
+				emit ].
 	text := nil.
 ]

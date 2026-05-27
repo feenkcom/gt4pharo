@@ -17,7 +17,7 @@ GtPharoHidingStyler class >> initialize [
 
 { #category : #accessing }
 GtPharoHidingStyler class >> initiallyFolded [
-	^ InitiallyFolded
+	^ InitiallyFolded ifNil: [ false ]
 ]
 
 { #category : #accessing }

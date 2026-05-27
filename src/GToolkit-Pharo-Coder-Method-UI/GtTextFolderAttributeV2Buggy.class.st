@@ -1,5 +1,5 @@
 Class {
-	#name : #GtTextFolderAttributeV2,
+	#name : #GtTextFolderAttributeV2Buggy,
 	#superclass : #BrTextExpanderTextAttributeV2,
 	#instVars : [
 		'folderAttributeModel',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtTextFolderAttributeV2 class >> forAttribute: anAttribute [
+GtTextFolderAttributeV2Buggy class >> forAttribute: anAttribute [
 	self
 		deprecated: 'Please use forMarkerAttribute: instead.'
 		transformWith: '`@receiver forAttribute: `@statements1'
@@ -22,12 +22,12 @@ GtTextFolderAttributeV2 class >> forAttribute: anAttribute [
 ]
 
 { #category : #'instance creation' }
-GtTextFolderAttributeV2 class >> forMarkerAttribute: anAttribute [
+GtTextFolderAttributeV2Buggy class >> forMarkerAttribute: anAttribute [
 	^self new markerAttribute: anAttribute
 ]
 
 { #category : #'api - styling' }
-GtTextFolderAttributeV2 >> applyExpandedAttributesOnStyledText: aText [
+GtTextFolderAttributeV2Buggy >> applyExpandedAttributesOnStyledText: aText [
 	"This method can be called only by text stylers to add expanded attributes to a new styled text."
 	
 	self isExpanded ifFalse: [ ^ self ].
@@ -43,7 +43,7 @@ GtTextFolderAttributeV2 >> applyExpandedAttributesOnStyledText: aText [
 ]
 
 { #category : #'api - styling' }
-GtTextFolderAttributeV2 >> applyExpandedOrCollapsedAttributesOnText: aText [
+GtTextFolderAttributeV2Buggy >> applyExpandedOrCollapsedAttributesOnText: aText [
 	self
 		deprecated: 'Please use applyExpandedAttributesOnStyledText: instead.'
 		transformWith: '`@receiver applyExpandedOrCollapsedAttributesOnText: `@statements1'
@@ -53,14 +53,14 @@ GtTextFolderAttributeV2 >> applyExpandedOrCollapsedAttributesOnText: aText [
 ]
 
 { #category : #'api - styling' }
-GtTextFolderAttributeV2 >> applyExpandedOrCollapsedIn: aTextEditor [
+GtTextFolderAttributeV2Buggy >> applyExpandedOrCollapsedIn: aTextEditor [
 	self isExpanded
 		ifTrue: [ self expandAttributeIn: aTextEditor ]
 		ifFalse: [ self collapseAttributeIn: aTextEditor ]
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> attribute [
+GtTextFolderAttributeV2Buggy >> attribute [
 	self
 		deprecated: 'Please use #markerAttribute instead.'
 		transformWith: '`@receiver attribute' -> '`@receiver markerAttribute'.
@@ -69,7 +69,7 @@ GtTextFolderAttributeV2 >> attribute [
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> attribute: anAttribute [
+GtTextFolderAttributeV2Buggy >> attribute: anAttribute [
 	self
 		deprecated: 'Please use markerAttribute: instead.'
 		transformWith: '`@receiver attribute: `@statements1' -> '`@receiver markerAttribute: `@statements1'.
@@ -78,7 +78,7 @@ GtTextFolderAttributeV2 >> attribute: anAttribute [
 ]
 
 { #category : #'private - event handling' }
-GtTextFolderAttributeV2 >> clearHighlightInTextEditor: aTextEditor [
+GtTextFolderAttributeV2Buggy >> clearHighlightInTextEditor: aTextEditor [
 	markerAttribute ifNil: [ ^ self ].
 	highlightTag ifNil: [ ^ self ].
 
@@ -88,7 +88,7 @@ GtTextFolderAttributeV2 >> clearHighlightInTextEditor: aTextEditor [
 ]
 
 { #category : #private }
-GtTextFolderAttributeV2 >> collapseAttributeIn: aTextEditor [
+GtTextFolderAttributeV2Buggy >> collapseAttributeIn: aTextEditor [
 	markerAttribute ifNil: [ ^ self ].
 
 	isExpanded := false.
@@ -98,7 +98,7 @@ GtTextFolderAttributeV2 >> collapseAttributeIn: aTextEditor [
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
+GtTextFolderAttributeV2Buggy >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	| aToggle |
 	aToggle := BrInlineExpanderElement new
 			id: self id;
@@ -135,36 +135,36 @@ GtTextFolderAttributeV2 >> doAffect: aTBrTextEditorTextualPiece in: anEditorElem
 				editorElement: anEditorElement;
 				install ]."
 
-	self applyExpandedOrCollapsedIn: anEditorElement.
+	"self applyExpandedOrCollapsedIn: anEditorElement."
 
 	^ aToggle
 ]
 
 { #category : #private }
-GtTextFolderAttributeV2 >> expandAttributeIn: aTextEditor [
+GtTextFolderAttributeV2Buggy >> expandAttributeIn: aTextEditor [
 	isExpanded := true.
 	aTextEditor removeAdornmentAttribute: self expandedAppendingAttribute
 ]
 
 { #category : #private }
-GtTextFolderAttributeV2 >> expandedAppendingAttribute [
+GtTextFolderAttributeV2Buggy >> expandedAppendingAttribute [
 	^ hideAttribute
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> folderAttributeModel [
+GtTextFolderAttributeV2Buggy >> folderAttributeModel [
 	^ folderAttributeModel
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> folderAttributeModel: aModel [
+GtTextFolderAttributeV2Buggy >> folderAttributeModel: aModel [
 	folderAttributeModel = aModel ifTrue: [ ^ self ].
 
 	folderAttributeModel := aModel.
 ]
 
 { #category : #initialization }
-GtTextFolderAttributeV2 >> gtExternalTextConfigureAppendingAttribute: anAttribute [
+GtTextFolderAttributeV2Buggy >> gtExternalTextConfigureAppendingAttribute: anAttribute [
 	super gtExternalTextConfigureAppendingAttribute: anAttribute.
 	
 	anAttribute beExactWidth: 15.
@@ -172,7 +172,7 @@ GtTextFolderAttributeV2 >> gtExternalTextConfigureAppendingAttribute: anAttribut
 ]
 
 { #category : #'private - event handling' }
-GtTextFolderAttributeV2 >> highlightFoldableTextInTextEditor: aTextEditor [
+GtTextFolderAttributeV2Buggy >> highlightFoldableTextInTextEditor: aTextEditor [
 	markerAttribute ifNil: [ ^ self ].
 
 	self flag: #TODO.
@@ -190,7 +190,7 @@ GtTextFolderAttributeV2 >> highlightFoldableTextInTextEditor: aTextEditor [
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> hoverText: aString [
+GtTextFolderAttributeV2Buggy >> hoverText: aString [
 	self
 		deprecated: 'Please use tooltipText: instead.'
 		transformWith: '`@receiver hoverText: `@statements1'
@@ -200,35 +200,35 @@ GtTextFolderAttributeV2 >> hoverText: aString [
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> initialize [
+GtTextFolderAttributeV2Buggy >> initialize [
 	super initialize.
 	isExpanded := true.
 	hideAttribute := BrTextFoldAttribute new
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> isExpanded: aBoolean [
+GtTextFolderAttributeV2Buggy >> isExpanded: aBoolean [
 	self assert: [ aBoolean isBoolean ].
 	
 	isExpanded := aBoolean
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> markerAttribute [
+GtTextFolderAttributeV2Buggy >> markerAttribute [
 	^ markerAttribute
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> markerAttribute: aMarkerAttribute [
+GtTextFolderAttributeV2Buggy >> markerAttribute: aMarkerAttribute [
 	markerAttribute := aMarkerAttribute
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> tooltipText [
+GtTextFolderAttributeV2Buggy >> tooltipText [
 	^ tooltipText
 ]
 
 { #category : #accessing }
-GtTextFolderAttributeV2 >> tooltipText: aString [
+GtTextFolderAttributeV2Buggy >> tooltipText: aString [
 	tooltipText := aString 
 ]
