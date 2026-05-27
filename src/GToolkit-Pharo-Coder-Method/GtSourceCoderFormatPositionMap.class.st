@@ -2,27 +2,33 @@ Class {
 	#name : #GtSourceCoderFormatPositionMap,
 	#superclass : #Object,
 	#instVars : [
-		'tokenMappings'
+		'tokenMappings',
+		'originalSource',
+		'formattedSource'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method'
 }
 
 { #category : #'instance creation' }
-GtSourceCoderFormatPositionMap class >> tokenMappings: aCollection [
-	^self new setTokenMappings: aCollection
+GtSourceCoderFormatPositionMap class >> tokenMappings: aCollection originalSource: anOriginalString formattedSource: aFormattedString [
+	^ self new
+		setTokenMappings: aCollection
+		originalSource: anOriginalString
+		formattedSource: aFormattedString
 ]
 
 { #category : #mapping }
 GtSourceCoderFormatPositionMap >> mapPosition: anOriginalPosition [
-	tokenMappings reverseDo: 
-			[:mapping |
+	tokenMappings
+		reverseDo: [ :mapping | 
 			(mapping includesOriginalPosition: anOriginalPosition)
-				ifTrue: [^mapping mapPosition: anOriginalPosition]].
-	tokenMappings reverseDo: 
-			[:mapping |
-			mapping originalStop < anOriginalPosition
-				ifTrue: [^anOriginalPosition + mapping offset]].
-	^anOriginalPosition
+				ifTrue: [ ^ mapping
+						mapPosition: anOriginalPosition
+						inOriginalSource: originalSource
+						formattedSource: formattedSource ] ].
+	tokenMappings
+		reverseDo: [ :mapping | mapping originalStop < anOriginalPosition ifTrue: [ ^ mapping formattedStop ] ].
+	^ anOriginalPosition
 ]
 
 { #category : #mapping }
@@ -34,8 +40,10 @@ GtSourceCoderFormatPositionMap >> mapRange: anInterval [
 ]
 
 { #category : #private }
-GtSourceCoderFormatPositionMap >> setTokenMappings: aCollection [
-	tokenMappings := aCollection
+GtSourceCoderFormatPositionMap >> setTokenMappings: aCollection originalSource: anOriginalString formattedSource: aFormattedString [
+	tokenMappings := aCollection.
+	originalSource := anOriginalString.
+	formattedSource := aFormattedString
 ]
 
 { #category : #accessing }
