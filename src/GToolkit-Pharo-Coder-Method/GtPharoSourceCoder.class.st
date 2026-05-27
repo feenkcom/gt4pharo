@@ -78,6 +78,30 @@ GtPharoSourceCoder >> compilerErrorsToHandle [
 	^ OCUndeclaredVariableWarning, RBParser gtParseErrorClass
 ]
 
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> computePositionMappingsFrom: originalAst to: formattedAst [
+	| origScanner origTokens fmtScanner fmtTokens mappings |
+	origScanner := RBScanner on: originalAst source readStream.
+	origTokens := OrderedCollection new.
+	[origScanner atEnd] whileFalse: [origTokens add: origScanner next].
+	fmtScanner := RBScanner on: formattedAst source readStream.
+	fmtTokens := OrderedCollection new.
+	[fmtScanner atEnd] whileFalse: [fmtTokens add: fmtScanner next].
+	mappings := OrderedCollection new: origTokens size.
+	1 to: (origTokens size min: fmtTokens size)
+		do: 
+			[:i |
+			| orig fmt |
+			orig := origTokens at: i.
+			fmt := fmtTokens at: i.
+			mappings add: (GtSourceCoderFormatTokenMapping
+						originalStart: orig start
+						originalStop: orig stop
+						formattedStart: fmt start
+						formattedStop: fmt stop)].
+	^GtSourceCoderFormatPositionMap tokenMappings: mappings
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> detectReferencesFilterAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	^ self 
@@ -103,12 +127,19 @@ GtPharoSourceCoder >> format [
 
 { #category : #'api - actions' }
 GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
-	| ast |
-	ast := [ RBParser parseExpression: self currentSourceString ]
-			on: RBParser gtParseErrorClass
-			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
-
-	self currentSourceString: ast formattedCode
+	| ast originalSource formatted |
+	originalSource := self currentSourceString.
+	ast := [RBParser parseExpression: originalSource]
+				on: RBParser gtParseErrorClass
+				do: [:ex | ^self notifyParseError: ex requesterObject: aRequester].
+	formatted := ast formattedCode.
+	self currentSourceString: formatted.
+	self
+		updateSelectionAfterFormatOf: aRequester
+		from: ast
+		to: (RBParser parseExpression: formatted)
+		originalSource: originalSource
+		formattedSource: formatted
 ]
 
 { #category : #'private - actions' }
@@ -331,4 +362,21 @@ GtPharoSourceCoder >> source [
 { #category : #accessing }
 GtPharoSourceCoder >> targetAstParserClass [
 	^ GtPharoParser
+]
+
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> updateSelectionAfterFormatOf: aRequester from: originalAst to: formattedAst originalSource: anOriginalString formattedSource: aFormattedString [
+	| positionMap event mapped |
+	positionMap := self computePositionMappingsFrom: originalAst
+				to: formattedAst.
+	event := GtSourceCoderFormattedEvent
+				originalSource: anOriginalString
+				formattedSource: aFormattedString
+				positionMap: positionMap.
+	self announce: event.
+	(aRequester isNil or: [aRequester hasSelection not]) ifTrue: [^self].
+	mapped := positionMap
+				mapRange: (aRequester selection from + 1 to: aRequester selection to).
+	aRequester selectNone.
+	aRequester select: mapped first - 1 to: mapped last
 ]

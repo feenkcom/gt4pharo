@@ -6767,6 +6767,196 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_06_click_cancel [
 	^ scripter
 ]
 
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_01_setup [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder
+					forClass: Object
+					source: 'exampleMethod
+	| x |
+	x:=1+2.
+	^x' ].
+	scripter
+		checkStep: [ :s |
+			s
+				label: 'Check initial source';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: [ 'exampleMethod
+	| x |
+	x:=1+2.
+	^x' ] ].
+	^ scripter
+]
+
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_02_select [
+	<gtExample>
+	| scripter |
+	scripter := self formatMethodCoder_01_setup.
+	scripter
+		doStep: [ :s |
+			s
+				label: 'Select x:=1+2';
+				id: GtSourceCoderEditorId;
+				action: [ :aSourceEditor | aSourceEditor editor select: 22 to: 28 ] ].
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selected text is x:=1+2';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: 'x:=1+2' ].
+	^ scripter
+]
+
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_03_format [
+	<gtExample>
+	| scripter |
+	scripter := self formatMethodCoder_02_select.
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		combination: BlKeyCombination primaryShiftF;
+		play.
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selection adapted to formatted text';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: 'x := 1 + 2' ].
+	^ scripter
+]
+
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_04_formatWithoutSelection [
+	<gtExample>
+	| scripter |
+	scripter := self formatMethodCoder_01_setup.
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		combination: BlKeyCombination primaryShiftF;
+		play.
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert no selection after format without selection';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor hasSelection ] equals: false ].
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert source is formatted';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each text asString ]
+					equals: 'exampleMethod
+	| x |
+	x := 1 + 2.
+	^ x' ].
+	^ scripter
+]
+
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_05_formatAlreadyFormatted [
+	<gtExample>
+	| scripter formattedSource |
+	formattedSource := (RBParser
+			parseMethod: 'exampleMethod
+	| x |
+	x:=1+2.
+	^x') formattedCode.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forClass: Object source: formattedSource ].
+	scripter
+		doStep: [ :s |
+			s
+				label: 'Select x := 1 + 2';
+				id: GtSourceCoderEditorId;
+				action: [ :aSourceEditor | aSourceEditor editor select: 22 to: 32 ] ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		combination: BlKeyCombination primaryShiftF;
+		play.
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selection unchanged after formatting already-formatted code';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: 'x := 1 + 2' ].
+	^ scripter
+]
+
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_06_formatWithPartialSelection [
+	<gtExample>
+	| scripter |
+	scripter := self formatMethodCoder_01_setup.
+	scripter
+		doStep: [ :s |
+			s
+				label: 'Select +2';
+				id: GtSourceCoderEditorId;
+				action: [ :aSourceEditor | aSourceEditor editor select: 26 to: 28 ] ].
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selected text before format';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: '+2' ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		combination: BlKeyCombination primaryShiftF;
+		play.
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selection snaps to message node after format';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: '+ 2' ].
+	^ scripter
+]
+
+{ #category : #'examples - format selection' }
+GtPharoMethodCoderByScripterExamples >> formatMethodCoder_07_formatWithMidTokenSelection [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder
+					forClass: Object
+					source: 'exampleMethod
+    | test1 test2 test3 test4 test5a test6 |
+    test1 := 1. test2 := 2.  test3 := 3.   test4 := 4.    test5a := 5.    test6 := 6' ].
+	scripter
+		doStep: [ :s |
+			s
+				label: 'Select est5 (5th)';
+				id: GtSourceCoderEditorId;
+				action: [ :aSourceEditor | aSourceEditor editor select: 118 to: 122 ] ].
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selected text before format';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: 'est5' ].
+	scripter shortcut
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		combination: BlKeyCombination primaryShiftF;
+		play.
+	scripter
+		assertStep: [ :s |
+			s
+				label: 'Assert selection snaps to same "est5" after format';
+				id: GtSourceCoderEditorId;
+				value: [ :each | each editor selectedText asString ] equals: 'est5' ].
+	^ scripter
+]
+
 { #category : #'examples - move variable scope' }
 GtPharoMethodCoderByScripterExamples >> forMoveVariableScope_01_setup [
 	<gtExample>

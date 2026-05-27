@@ -730,12 +730,19 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
 
 { #category : #accessing }
 GtPharoMethodCoder >> formatWithRequesterObject: aRequester [
-	| ast |
-	ast := [ RBParser parseMethod: self currentSourceString ]
-			on: RBParser gtParseErrorClass
-			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
-
-	self currentSourceString: ast formattedCode
+	| ast originalSource formatted |
+	originalSource := self currentSourceString.
+	ast := [RBParser parseMethod: originalSource]
+				on: RBParser gtParseErrorClass
+				do: [:ex | ^self notifyParseError: ex requesterObject: aRequester].
+	formatted := ast formattedCode.
+	self currentSourceString: formatted.
+	self
+		updateSelectionAfterFormatOf: aRequester
+		from: ast
+		to: (RBParser parseMethod: formatted)
+		originalSource: originalSource
+		formattedSource: formatted
 ]
 
 { #category : #'gt-extensions' }
