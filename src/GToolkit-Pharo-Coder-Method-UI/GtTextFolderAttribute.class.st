@@ -1,3 +1,6 @@
+"
+To be replaced by {{gtClass:BrGlamorousFolderTextAttributeV2}}.  
+"
 Class {
 	#name : #GtTextFolderAttribute,
 	#superclass : #BrTextExpandButtonAttribute,
@@ -50,6 +53,11 @@ GtTextFolderAttribute >> attribute: anAttribute [
 	attribute := anAttribute
 ]
 
+{ #category : #accessing }
+GtTextFolderAttribute >> beFoldedByDefault [
+	self isExpanded: false
+]
+
 { #category : #'as yet unclassified' }
 GtTextFolderAttribute >> clearHighlightOn: aTBrTextEditorTextualPiece in: aTextEditor [
 	| text |
@@ -96,9 +104,19 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 					anEvent target phlow
 						spawnObject: (self definingMethod ifNil: [ self ] ifNotNil: [ :meth | meth ]) ] ].
 
-	self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text.
-
+	"self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text.
+"
 	^ aToggle
+]
+
+{ #category : #accessing }
+GtTextFolderAttribute >> foldableMarkerAttribute [
+	^ self attribute
+]
+
+{ #category : #accessing }
+GtTextFolderAttribute >> foldableMarkerAttribute: anAttribute [
+	self attribute: anAttribute
 ]
 
 { #category : #initialization }
@@ -142,6 +160,18 @@ GtTextFolderAttribute >> initialize [
 	super initialize.
 	isExpanded := true.
 	hideAttribute := BrTextFoldAttribute new
+]
+
+{ #category : #'as yet unclassified' }
+GtTextFolderAttribute >> isFolded [ 
+	^ self isExpanded not
+]
+
+{ #category : #'as yet unclassified' }
+GtTextFolderAttribute >> isFolded: aBoolean fromTextEditorElement: aTextEditorElement [
+	self isExpanded: aBoolean not.
+	self flag: #TODO.
+	"We need to add or remove the hidding attribute."
 ]
 
 { #category : #accessing }

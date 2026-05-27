@@ -59,34 +59,37 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 
 { #category : #private }
 GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString forNode: aNode [
-	| folder messageMarker |
-	messageMarker := BrTextInvisibleMarkerAttribute new.
+	| foldableMarker isFolded textPart folder definingMethod |
+	foldableMarker := BrTextInvisibleMarkerAttribute new.
 	aCollectionOfRanges
 		do: [ :foldedRange | 
 			self
-				attributes: {messageMarker}
+				attributes: {foldableMarker}
 				from: foldedRange first
 				to: foldedRange last ].
-	folder := GtTextFolderAttribute new
-			markerAttribute: messageMarker;
-			tooltipText: aString;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect.
+
+	isFolded := oldNodeMap
+			at: aNode
+			ifPresent: [ :oldFolder | oldFolder isFolded ]
+			ifAbsent: [ self class initiallyFolded ].
+	textPart := self
+			from: aCollectionOfRanges first first - 1
+			to: aCollectionOfRanges first first - 1.
+
+	definingMethod := (GtPhlowDefiningMethodsCollector forContext: thisContext)
+			dontSkipCount;
+			collect.
+
+	folder := textPart
+			folded: isFolded
+			foldableMarkerAttribute: foldableMarker
+			tooltipText: aString
+			id: BlElementId noId
+			definingMethod: definingMethod.
 	coderViewModel
 		saveAttribute: folder
 		forNode: aNode
-		andStyler: self.
-	self
-		attribute: folder
-		from: aCollectionOfRanges first first - 1
-		to: aCollectionOfRanges first first - 1.
-	oldNodeMap
-		at: aNode
-		ifPresent: [ :oldFolder | 
-			folder isExpanded: oldFolder isExpanded.
-			folder applyExpandedAttributesOnStyledText: text ]
-		ifAbsent: [ InitiallyFolded
-				ifTrue: [ folder isExpanded: false.
-					folder applyExpandedAttributesOnStyledText: text ] ]
+		andStyler: self
 ]
 
 { #category : #'as yet unclassified' }
