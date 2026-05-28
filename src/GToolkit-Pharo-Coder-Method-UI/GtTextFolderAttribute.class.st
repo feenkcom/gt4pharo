@@ -17,6 +17,14 @@ GtTextFolderAttribute class >> forAttribute: anAttribute [
 	^self new attribute: anAttribute
 ]
 
+{ #category : #testing }
+GtTextFolderAttribute class >> isDeprecated [
+	"Use `TBlTextStyleable>>#folded:foldableSubTexts:tooltipText:id:definingMethod:` fluent API instead.
+	The new text attribute implementation: BrGlamorousFolderTextAttributeV2."
+
+	^ true
+]
+
 { #category : #'api - styling' }
 GtTextFolderAttribute >> applyExpandedAttributesOnStyledText: aText [
 	self applyExpandedOrCollapsedAttributesOnText: aText
