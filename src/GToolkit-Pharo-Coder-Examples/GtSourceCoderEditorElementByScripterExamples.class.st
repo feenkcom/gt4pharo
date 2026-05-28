@@ -199,20 +199,20 @@ GtSourceCoderEditorElementByScripterExamples >> retainFoldedStatusOnTextChange [
 						// GtSourceCoderEditorInnerId;
 						onChildAt: 1.
 					aStep shortcut
-						label: 'Unfold noise';
+						label: 'Fold noise';
 						combination: BlKeyCombinationBuilder new primary shift n build;
 						// GtSourceCoderEditorInnerId.
 					aStep assert
-						label: 'Count lines after unfolding';
+						label: 'Count lines after folding';
 						value: [ :editor | editor editorElement children size ] equals: 4.
 					aStep do
-						label: 'Move to end of editor';
+						label: 'Move to end of editor line';
 						block: [ :e | e navigator moveToEnd ].
 					aStep type
 						label: 'Modify text';
 						text: '"Comment"'.
 					aStep assert
-						label: 'Count lines after modification unfolding';
+						label: 'Count lines after modification';
 						value: [ :editor | editor editorElement children size ] equals: 4 ] ].
 
 	^ aScripter

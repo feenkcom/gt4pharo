@@ -43,6 +43,11 @@ GtTextFolderAttribute >> applyExpandedOrCollapsedIn: aTextEditorElement [
 	self applyExpandedOrCollapsedAttributesOnText: aTextEditorElement text
 ]
 
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> applyFoldedOrUnfoledInEditorElement: aTextEditorElement [
+	self applyExpandedOrCollapsedAttributesOnText: aTextEditorElement text
+]
+
 { #category : #accessing }
 GtTextFolderAttribute >> attribute [
 	^ attribute
@@ -111,12 +116,8 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 
 { #category : #accessing }
 GtTextFolderAttribute >> foldableMarkerAttribute [
+	self attribute ifNil: [ self attribute: BrTextInvisibleMarkerAttribute new ].
 	^ self attribute
-]
-
-{ #category : #accessing }
-GtTextFolderAttribute >> foldableMarkerAttribute: anAttribute [
-	self attribute: anAttribute
 ]
 
 { #category : #initialization }
@@ -167,11 +168,28 @@ GtTextFolderAttribute >> isFolded [
 	^ self isExpanded not
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - styling' }
 GtTextFolderAttribute >> isFolded: aBoolean fromTextEditorElement: aTextEditorElement [
+	self
+		assert: [ aBoolean isBoolean ]
+		description: [ 'The isFolded argument must be a boolean value: {1}' format: {aBoolean} ].
+
+	self isFolded = aBoolean ifTrue: [ ^ self ].
+
 	self isExpanded: aBoolean not.
-	self flag: #TODO.
-	"We need to add or remove the hidding attribute."
+	self applyFoldedOrUnfoledInEditorElement: aTextEditorElement
+]
+
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> isFolded: aBoolean inStyledText: aText [
+	self
+		assert: [ aBoolean isBoolean ]
+		description: [ 'The isFolded argument must be a boolean value: {1}' format: {aBoolean} ].
+
+	self isFolded = aBoolean ifTrue: [ ^ self ].
+
+	self isExpanded: aBoolean not.
+	self applyExpandedOrCollapsedAttributesOnText: aText
 ]
 
 { #category : #accessing }

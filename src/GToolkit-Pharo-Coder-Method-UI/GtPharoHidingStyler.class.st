@@ -49,29 +49,28 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 	folders
 		do: [ :each | 
 			aText
-				findAttribute: each markerAttribute
+				findAttribute: each foldableMarkerAttribute
 				indicesDo: [ :start :end | 
 					((self anyCursorsInRange: (start to: end))
 						or: [ self anyDecorationsInRange: (start to: end) ofText: aText ])
-						ifTrue: [ each isExpanded: true.
-							each applyExpandedAttributesOnStyledText: aText ] ] ]
+						ifTrue: [ 
+							each isFolded: false inStyledText: aText ] ] ]
 ]
 
 { #category : #private }
 GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString forNode: aNode [
-	| foldableMarker isFolded textPart folder definingMethod |
-	foldableMarker := BrTextInvisibleMarkerAttribute new.
-	aCollectionOfRanges
-		do: [ :foldedRange | 
-			self
-				attributes: {foldableMarker}
-				from: foldedRange first
-				to: foldedRange last ].
+	| subTexts isFolded textPart folder definingMethod |
+	false ifTrue: [ ^ self ].
+
+	subTexts := aCollectionOfRanges
+			collect: [ :foldedRange | self from: foldedRange first to: foldedRange last ]
+			as: Array.
 
 	isFolded := oldNodeMap
 			at: aNode
 			ifPresent: [ :oldFolder | oldFolder isFolded ]
 			ifAbsent: [ self class initiallyFolded ].
+
 	textPart := self
 			from: aCollectionOfRanges first first - 1
 			to: aCollectionOfRanges first first - 1.
@@ -82,10 +81,11 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 
 	folder := textPart
 			folded: isFolded
-			foldableMarkerAttribute: foldableMarker
+			foldableSubTexts: subTexts
 			tooltipText: aString
 			id: BlElementId noId
 			definingMethod: definingMethod.
+			
 	coderViewModel
 		saveAttribute: folder
 		forNode: aNode
