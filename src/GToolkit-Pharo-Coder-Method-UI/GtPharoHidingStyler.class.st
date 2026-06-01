@@ -92,7 +92,7 @@ GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString fo
 		andStyler: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #comparing }
 GtPharoHidingStyler >> hash [
 	"To satisfy advices about implementing along with ="
 	^ super hash
