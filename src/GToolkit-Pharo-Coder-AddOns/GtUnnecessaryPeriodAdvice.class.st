@@ -35,7 +35,7 @@ GtUnnecessaryPeriodAdvice >> highlightPositionsFor: aSmaCCNode [
 
 { #category : #testing }
 GtUnnecessaryPeriodAdvice >> matches: aNode from: aCriticRunner [
-	aNode isSequence ifFalse: [ ^ false ].
+	(aNode isErrorNode not and: [ aNode isSequence ]) ifFalse: [ ^ false ].
 	^ (self findExtraPeriodIn: aNode) notNil
 ]
 

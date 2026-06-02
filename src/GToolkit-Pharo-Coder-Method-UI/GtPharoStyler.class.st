@@ -6,6 +6,8 @@ Class {
 
 { #category : #private }
 GtPharoStyler >> collapserForParenthesesLeft: aLeftIndex right: aRightIndex [
+	"It is not used at this moment."
+
 	| theParenthesesMarker folder |
 	theParenthesesMarker := BrTextInvisibleMarkerAttribute new.
 	text
