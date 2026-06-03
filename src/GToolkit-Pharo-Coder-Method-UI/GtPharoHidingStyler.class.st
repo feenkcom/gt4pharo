@@ -17,7 +17,7 @@ GtPharoHidingStyler class >> initialize [
 
 { #category : #accessing }
 GtPharoHidingStyler class >> initiallyFolded [
-	^ InitiallyFolded
+	^ InitiallyFolded ifNil: [ false ]
 ]
 
 { #category : #accessing }
@@ -49,47 +49,50 @@ GtPharoHidingStyler >> extraStyle: aText ast: theAst [
 	folders
 		do: [ :each | 
 			aText
-				findAttribute: each markerAttribute
+				findAttribute: each foldableMarkerAttribute
 				indicesDo: [ :start :end | 
 					((self anyCursorsInRange: (start to: end))
 						or: [ self anyDecorationsInRange: (start to: end) ofText: aText ])
-						ifTrue: [ each isExpanded: true.
-							each applyExpandedAttributesOnStyledText: aText ] ] ]
+						ifTrue: [ 
+							each isFolded: false inStyledText: aText ] ] ]
 ]
 
 { #category : #private }
 GtPharoHidingStyler >> foldRanges: aCollectionOfRanges withHoverText: aString forNode: aNode [
-	| folder messageMarker |
-	messageMarker := BrTextInvisibleMarkerAttribute new.
-	aCollectionOfRanges
-		do: [ :foldedRange | 
-			self
-				attributes: {messageMarker}
-				from: foldedRange first
-				to: foldedRange last ].
-	folder := GtTextFolderAttribute new
-			markerAttribute: messageMarker;
-			tooltipText: aString;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect.
+	| subTexts isFolded textPart folder definingMethod |
+	false ifTrue: [ ^ self ].
+
+	subTexts := aCollectionOfRanges
+			collect: [ :foldedRange | self from: foldedRange first to: foldedRange last ]
+			as: Array.
+
+	isFolded := oldNodeMap
+			at: aNode
+			ifPresent: [ :oldFolder | oldFolder isFolded ]
+			ifAbsent: [ self class initiallyFolded ].
+
+	textPart := self
+			from: aCollectionOfRanges first first - 1
+			to: aCollectionOfRanges first first - 1.
+
+	definingMethod := (GtPhlowDefiningMethodsCollector forContext: thisContext)
+			dontSkipCount;
+			collect.
+
+	folder := textPart
+			folded: isFolded
+			foldableSubTexts: subTexts
+			tooltipText: aString
+			id: BlElementId noId
+			definingMethod: definingMethod.
+			
 	coderViewModel
 		saveAttribute: folder
 		forNode: aNode
-		andStyler: self.
-	self
-		attribute: folder
-		from: aCollectionOfRanges first first - 1
-		to: aCollectionOfRanges first first - 1.
-	oldNodeMap
-		at: aNode
-		ifPresent: [ :oldFolder | 
-			folder isExpanded: oldFolder isExpanded.
-			folder applyExpandedAttributesOnStyledText: text ]
-		ifAbsent: [ InitiallyFolded
-				ifTrue: [ folder isExpanded: false.
-					folder applyExpandedAttributesOnStyledText: text ] ]
+		andStyler: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #comparing }
 GtPharoHidingStyler >> hash [
 	"To satisfy advices about implementing along with ="
 	^ super hash

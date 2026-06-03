@@ -129,7 +129,7 @@ GtMethodAdviceExampleRunner >> compareResultsFrom: aCritic source: aString to: a
 	critic := aCritic.
 	method := thisContext method.
 	source := aString.
-	ast := GtPharoParser parse: source.
+	ast := GtPharoParser parseWithErrors: source.
 	self processNode: ast.
 	foundNodes := nodes copy.
 	aBlock
@@ -228,6 +228,15 @@ GtMethodAdviceExampleRunner >> extraPeriodsExample [
 	^ self
 		compareResultsFrom: GtUnnecessaryPeriodAdvice new
 		source: 'a ^[.#()]'
+		to: [ :ast :block | block value: ast body statements last value body ]
+]
+
+{ #category : #examples }
+GtMethodAdviceExampleRunner >> extraPeriodsInErrorExample [
+	<gtExample>
+	^ self
+		compareResultsFrom: GtUnnecessaryPeriodAdvice new
+		source: 'a foo bar := 1. ^[.#()]'
 		to: [ :ast :block | block value: ast body statements last value body ]
 ]
 

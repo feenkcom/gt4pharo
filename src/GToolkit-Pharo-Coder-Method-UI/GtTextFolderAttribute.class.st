@@ -1,3 +1,6 @@
+"
+To be replaced by {{gtClass:BrGlamorousFolderTextAttributeV2}}.  
+"
 Class {
 	#name : #GtTextFolderAttribute,
 	#superclass : #BrTextExpandButtonAttribute,
@@ -12,6 +15,14 @@ Class {
 { #category : #accessing }
 GtTextFolderAttribute class >> forAttribute: anAttribute [
 	^self new attribute: anAttribute
+]
+
+{ #category : #testing }
+GtTextFolderAttribute class >> isDeprecated [
+	"Use `TBlTextStyleable>>#folded:foldableSubTexts:tooltipText:id:definingMethod:` fluent API instead.
+	The new text attribute implementation: BrGlamorousFolderTextAttributeV2."
+
+	^ true
 ]
 
 { #category : #'api - styling' }
@@ -40,6 +51,11 @@ GtTextFolderAttribute >> applyExpandedOrCollapsedIn: aTextEditorElement [
 	self applyExpandedOrCollapsedAttributesOnText: aTextEditorElement text
 ]
 
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> applyFoldedOrUnfoledInEditorElement: aTextEditorElement [
+	self applyExpandedOrCollapsedAttributesOnText: aTextEditorElement text
+]
+
 { #category : #accessing }
 GtTextFolderAttribute >> attribute [
 	^ attribute
@@ -48,6 +64,11 @@ GtTextFolderAttribute >> attribute [
 { #category : #accessing }
 GtTextFolderAttribute >> attribute: anAttribute [
 	attribute := anAttribute
+]
+
+{ #category : #accessing }
+GtTextFolderAttribute >> beFoldedByDefault [
+	self isExpanded: false
 ]
 
 { #category : #'as yet unclassified' }
@@ -96,9 +117,15 @@ GtTextFolderAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElemen
 					anEvent target phlow
 						spawnObject: (self definingMethod ifNil: [ self ] ifNotNil: [ :meth | meth ]) ] ].
 
-	self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text.
-
+	"self applyExpandedOrCollapsedAttributesOnText: anEditorElement editor text.
+"
 	^ aToggle
+]
+
+{ #category : #accessing }
+GtTextFolderAttribute >> foldableMarkerAttribute [
+	self attribute ifNil: [ self attribute: BrTextInvisibleMarkerAttribute new ].
+	^ self attribute
 ]
 
 { #category : #initialization }
@@ -142,6 +169,35 @@ GtTextFolderAttribute >> initialize [
 	super initialize.
 	isExpanded := true.
 	hideAttribute := BrTextFoldAttribute new
+]
+
+{ #category : #'as yet unclassified' }
+GtTextFolderAttribute >> isFolded [ 
+	^ self isExpanded not
+]
+
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> isFolded: aBoolean fromTextEditorElement: aTextEditorElement [
+	self
+		assert: [ aBoolean isBoolean ]
+		description: [ 'The isFolded argument must be a boolean value: {1}' format: {aBoolean} ].
+
+	self isFolded = aBoolean ifTrue: [ ^ self ].
+
+	self isExpanded: aBoolean not.
+	self applyFoldedOrUnfoledInEditorElement: aTextEditorElement
+]
+
+{ #category : #'api - styling' }
+GtTextFolderAttribute >> isFolded: aBoolean inStyledText: aText [
+	self
+		assert: [ aBoolean isBoolean ]
+		description: [ 'The isFolded argument must be a boolean value: {1}' format: {aBoolean} ].
+
+	self isFolded = aBoolean ifTrue: [ ^ self ].
+
+	self isExpanded: aBoolean not.
+	self applyExpandedOrCollapsedAttributesOnText: aText
 ]
 
 { #category : #accessing }
