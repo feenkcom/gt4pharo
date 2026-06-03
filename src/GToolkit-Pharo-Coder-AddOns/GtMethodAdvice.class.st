@@ -137,8 +137,16 @@ GtMethodAdvice >> errorAttribute: aNode coderModel: aCoderModel [
 ]
 
 { #category : #styling }
+GtMethodAdvice >> errorHighlight [
+	^ BrTextHighlight
+		id: #'advice--error'
+		color: BrGlamorousColors paleErrorBackgroundColor
+]
+
+{ #category : #styling }
 GtMethodAdvice >> errorHighlightAttribute [
-	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor
+	"^ BrTextHighlight id: #'advice--error' color: BrGlamorousColors paleErrorBackgroundColor."
+	^ BlTextUnderlayAttribute paint: BrGlamorousColors successBackgroundColor 
 ]
 
 { #category : #accessing }
@@ -214,21 +222,26 @@ GtMethodAdvice >> potentialFilter [
 
 { #category : #styling }
 GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
-	| location hoverMarker hoverAttribute fixItAttribute |
-	self includeFixIt ifFalse: [ ^ self ].
+	| location hoverMarker hoverHighlight fixItAttribute |
+	self includeFixIt ifFalse: [ ^ self ] ifTrue: [ aCriticStyler ].
 	location := self fixItLocationFor: aNode.
 	hoverMarker := GtFixItMarkerAttribute new.
-	hoverAttribute := self errorHighlightAttribute.
+	hoverHighlight := self errorHighlight.
 	fixItAttribute := GtFixItAttribute new
 			label: self name;
 			elementId: (self elementIdUsing: aCriticStyler);
 			hoverMarker: hoverMarker;
-			hoverAttribute: hoverAttribute;
+			hoverAttribute: hoverHighlight;
 			description: self descriptionBlock;
 			placeholderAlignment: #alignMiddle;
 			fixItActions: (self fixItActionsForNode: aNode styler: aCriticStyler);
 			yourself.
 	hoverMarker fixItAttribute: fixItAttribute.
+	GtMethodAdviceStyleFixItSignal new
+		advice: self;
+		node: aNode;
+		styler: aCriticStyler;
+		emit.
 	aCriticStyler
 		attributes: {fixItAttribute}
 		from: location
@@ -239,12 +252,9 @@ GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 			(aCriticStyler text from: each first to: each last)
 				attribute: hoverMarker;
 				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-						aTextEditor text
-							findAttribute: hoverMarker
-							indicesDo: [ :aHighlightStart :aHighlightEnd | 
-								(aTextEditor text from: aHighlightStart to: aHighlightEnd)
-									attribute: hoverAttribute ] ]
-					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | aTextEditor text clearAttributes: [ :e | e == hoverAttribute ] ] ]
+						aTextEditor addHighlight: hoverHighlight overMarker: hoverMarker ]
+					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+						aTextEditor removeHighlightsWithId: hoverHighlight id ] ]
 ]
 
 { #category : #styling }
