@@ -146,7 +146,7 @@ GtMethodAdvice >> errorHighlight [
 { #category : #styling }
 GtMethodAdvice >> errorHighlightAttribute [
 	"^ BrTextHighlight id: #'advice--error' color: BrGlamorousColors paleErrorBackgroundColor."
-	^ BlTextUnderlayAttribute paint: BrGlamorousColors successBackgroundColor 
+	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor 
 ]
 
 { #category : #accessing }
