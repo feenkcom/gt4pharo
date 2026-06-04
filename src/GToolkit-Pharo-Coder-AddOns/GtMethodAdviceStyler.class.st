@@ -26,8 +26,17 @@ GtMethodAdviceStyler >> = anObject [
 GtMethodAdviceStyler >> acceptNode: aSmaCCParseNode [
 	advices
 		do: [ :each | 
+			| aSignal | 
+			aSignal := GtMethodAdviceConsideringSignal new
+				advice: each;
+				styler: self;
+				node: aSmaCCParseNode;
+				text: text;
+				emit.
 			(each matches: aSmaCCParseNode from: self)
-				ifTrue: [ each styleIssue: aSmaCCParseNode using: self ] ].
+				ifTrue: [ 
+					aSignal isStyled: true.
+					each styleIssue: aSmaCCParseNode using: self ] ].
 	super acceptNode: aSmaCCParseNode.
 	advices do: [ :each | each finish: aSmaCCParseNode from: self ]
 ]
