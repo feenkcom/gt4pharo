@@ -32,7 +32,7 @@ GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorE
 				selectedStringAndIntervalDo: [ :aSelectedString :aSelectedInterval :aTextSize :aDocumentId | 
 					| someAttributes |
 					someAttributes := aBrEditorElement
-							appendingAttributesKindOf: GtFixItMarkerAttribute
+							attributesKindOf: GtFixItMarkerAttribute
 							atRange: (BrTextCharacterRange
 									start: aSelectedInterval first
 									end: aSelectedInterval last
@@ -48,7 +48,7 @@ GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorE
 				orCursorPositionDo: [ :aStringPosition :aTextSize :aDocumentId | 
 					| someAttributes |
 					someAttributes := aBrEditorElement
-							appendingAttributesKindOf: GtFixItMarkerAttribute
+							attributesKindOf: GtFixItMarkerAttribute
 							atRange: (BrTextCharacterRange
 									start: aStringPosition
 									end: aStringPosition
