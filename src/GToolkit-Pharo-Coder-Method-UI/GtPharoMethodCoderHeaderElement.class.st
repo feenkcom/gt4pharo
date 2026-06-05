@@ -82,14 +82,14 @@ GtPharoMethodCoderHeaderElement >> initializeWidget [
 	self
 		addChild: (self buildSeparatorElement margin: (BlInsets left: 5 right: 5))
 		as: #separatorElement.
-	self addChild: providerBehaviorButton as: GtPharoHeaderMethodBehaviorId.
+	self addChild: providerBehaviorButton as: GtPharoHeaderProviderBehaviorId.
 	self addChild: providerBehaviorIconContainer as: #iconContainer.
 	self addChild: (methodBehaviourContainer := (BrHorizontalPane new)
 						fitContent;
 						alignCenterLeft;
 						addChild: (self buildSeparatorElement text: '(');
 						addChild: (methodBehaviourButton := self newMethodBehaviorButton)
-							as: GtPharoHeaderProviderBehaviorId;
+							as: GtPharoHeaderMethodBehaviorId;
 						addChild: (methodBehaviourIconContainer := self newIconContainer);
 						addChild: (self buildSeparatorElement text: ')'))
 ]
