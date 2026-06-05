@@ -11,6 +11,8 @@ GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInSecondPaneWithIt
 
 	aScripter phlowCompositeToolStep
 		onPagerPaneWithIndex: 2;
+		assertPhlowToolTabsCount: 2;
+		assertPhlowToolTabsHaveOnlyIcons;
 		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
 			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
 		assertPhlowToolValue: [ :aCompositePhlowTool |
@@ -343,6 +345,14 @@ GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExam
 		withModel: [filter] 
 		element: [ GtPagerSettings usedPager 
 			createWrappedOn: filter gtDefaultInspectorTool asElement ].
+			
+	scripter phlowCompositeToolStep
+		assertPhlowToolTabsCount: 2;
+		assertPhlowToolTabsHaveOnlyIcons;
+		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
+			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
+		assertPhlowToolValueSatisfies: [ :aCompositePhlowTool |
+				aCompositePhlowTool tools first searchFilter contents size > 0 ].
 			
 	^ scripter
 ]
