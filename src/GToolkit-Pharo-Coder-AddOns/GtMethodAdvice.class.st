@@ -222,12 +222,16 @@ GtMethodAdvice >> potentialFilter [
 
 { #category : #styling }
 GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
-	| location hoverMarker hoverHighlight fixItAttribute |
+	| location hoverMarker hoverHighlight fixItAttribute model |
 	self includeFixIt ifFalse: [ ^ self ] ifTrue: [ aCriticStyler ].
 	location := self fixItLocationFor: aNode.
-	hoverMarker := GtFixItMarkerAttribute new.
+	hoverMarker := GtFixItMarkerAttribute new
+			purpose: #'fix-it';
+			model: (model := GtFixItAdviceModel new).
+
 	hoverHighlight := self errorHighlight.
 	fixItAttribute := GtFixItAttribute new
+			model: model;
 			label: self name;
 			elementId: (self elementIdUsing: aCriticStyler);
 			hoverMarker: hoverMarker;
@@ -251,10 +255,8 @@ GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 		do: [ :each | 
 			(aCriticStyler text from: each first to: each last)
 				attribute: hoverMarker;
-				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-						aTextEditor addHighlight: hoverHighlight overMarker: hoverMarker ]
-					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-						aTextEditor removeHighlightsWithId: hoverHighlight id ] ]
+				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | aTextEditor addHighlight: hoverHighlight overMarker: hoverMarker ]
+					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | aTextEditor removeHighlightsWithId: hoverHighlight id ] ]
 ]
 
 { #category : #styling }
