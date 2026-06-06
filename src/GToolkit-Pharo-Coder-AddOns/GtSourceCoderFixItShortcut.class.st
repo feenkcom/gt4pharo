@@ -25,10 +25,42 @@ GtSourceCoderFixItShortcut >> performOnEditor: aBrTextEditor element: aBrEditorE
 	| text |
 	self flag: #TODO.
 	(aBrEditorElement isKindOf: GtTextEditorElement)
-		ifTrue: [ aShortcutEvent beNotConsumed.
+		ifTrue: [ | aShortcutEventCopy |
+			aShortcutEventCopy := aShortcutEvent copy beNotConsumed.
+
 			aBrEditorElement
-				selectedStringAndIntervalDo: [ :aSelectedString :aSelectedInterval |  ]
-				orCursorPositionDo: [ :aStringPosition |  ].
+				selectedStringAndIntervalDo: [ :aSelectedString :aSelectedInterval :aTextSize :aDocumentId | 
+					| someAttributes |
+					someAttributes := aBrEditorElement
+							attributesKindOf: GtFixItMarkerAttribute
+							atRange: (BrTextCharacterRange
+									start: aSelectedInterval first
+									end: aSelectedInterval last
+									documentId: aDocumentId).
+					someAttributes
+						do: [ :eachAttribute | 
+							eachAttribute
+								modelIfPresent: [ :aModel | aModel notifyShowFixItDropdown ]
+								ifAbsent: [ aShortcutEvent beNotConsumed ] ].
+					someAttributes
+						ifEmpty: [ aBrEditorElement parent
+								ifNotNil: [ :aParent | aParent fireEvent: aShortcutEventCopy ] ] ]
+				orCursorPositionDo: [ :aStringPosition :aTextSize :aDocumentId | 
+					| someAttributes |
+					someAttributes := aBrEditorElement
+							attributesKindOf: GtFixItMarkerAttribute
+							atRange: (BrTextCharacterRange
+									start: aStringPosition
+									end: aStringPosition
+									documentId: aDocumentId).
+					someAttributes
+						do: [ :eachAttribute | 
+							eachAttribute
+								modelIfPresent: [ :aModel | aModel notifyShowFixItDropdown ]
+								ifAbsent: [  ] ].
+					someAttributes
+						ifEmpty: [ aBrEditorElement parent
+								ifNotNil: [ :aParent | aParent fireEvent: aShortcutEventCopy ] ] ].
 			^ self ].
 
 	text := aBrTextEditor text.
