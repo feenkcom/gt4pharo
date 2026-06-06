@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'methodDefinition'
 	],
-	#category : #'GToolkit-Pharo-Coder-Method-Tool'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Tool'
 }
 
 { #category : #'instance creation' }
@@ -13,7 +13,7 @@ GtMethodDefinitionPhlowTool class >> forMethodDefinition: aMethodDefinition [
 			methodDefinition: aMethodDefinition
 ]
 
-{ #category : #converting }
+{ #category : #'api - converting' }
 GtMethodDefinitionPhlowTool >> asElementDo: aBlock [
 	| toolContentModel contentElement |
 	
