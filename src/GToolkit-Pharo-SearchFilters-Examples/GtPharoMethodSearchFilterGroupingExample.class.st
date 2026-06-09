@@ -216,6 +216,34 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSin
 		assertNumberOfPaneElements: 2;
 		play.
 		
+	scripter phlowCompositeToolStep
+		label: 'Second pane has the expected tools';
+		onPagerPaneWithIndex: 2;
+		assertPhlowToolTabsCount: 2;
+		assertPhlowToolTabsHaveOnlyIcons;
+		assertPhlowToolLabels: {'Method' . 'inspector'}  
+			andTypes: {GtMethodDefinitionPhlowTool . GtInspectorTool};
+		assertSelectedToolAtIndex: 1 withPhlowName: 'Method';
+		play.
+		
+	scripter multipleViewsToolStep
+		onPagerPaneWithIndex: 2;
+		onMultipleViewsToolElement;
+		assertSelectedTabWithName: 'Source';
+		assertToolObjectValueFor: [ :aMethod | aMethod ] 
+			equals: targetMethod methodReference;
+		assertToolObjectValueFor: [ :aMethodGroup | 
+				aMethodGroup gtHighlighter symbol ] 
+			equals: #gtExample;
+		play.
+		
+	scripter phlowCompositeToolStep
+		label: 'Select inspector tool';
+		onPagerPaneWithIndex: 2;
+		clickOnToolAtIndex: 2;
+		assertSelectedToolAtIndex: 2 withPhlowName: 'inspector';
+		play.
+		
 	scripter inspectorStep
 		onPagerPaneWithIndex: 2;
 		assertSelectedTabWithName: 'Source';
@@ -344,15 +372,17 @@ GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExam
 			extent: 1100@800) 
 		withModel: [filter] 
 		element: [ GtPagerSettings usedPager 
-			createWrappedOn: filter gtDefaultInspectorTool asElement ].
+			createWrappedOn: filter gtDefaultInspectorTool ].
 			
 	scripter phlowCompositeToolStep
+		onPagerPaneWithIndex: 1;
 		assertPhlowToolTabsCount: 2;
 		assertPhlowToolTabsHaveOnlyIcons;
 		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
 			andTypes: {GtPhlowSearchFilterTool . GtInspectorTool};
 		assertPhlowToolValueSatisfies: [ :aCompositePhlowTool |
-				aCompositePhlowTool tools first searchFilter contents size > 0 ].
+				aCompositePhlowTool tools first searchFilter contents size > 0 ];
+		play.
 			
 	^ scripter
 ]
