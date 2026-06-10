@@ -214,6 +214,7 @@ GtPharoMethodCoder >> browseHierarchyReferencesAt: aTextPosition requesterObject
 { #category : #testing }
 GtPharoMethodCoder >> canCompileMethodIn: newClass [
 	| ast modelClass pools variables model |
+
 	ast := self rbAST.
 	variables := Set new.
 	ast
@@ -222,12 +223,14 @@ GtPharoMethodCoder >> canCompileMethodIn: newClass [
 				ifTrue: [ variables add: node name ] ].
 	model := RBNamespace new.
 	modelClass := model classFor: newClass.
-	pools := {Smalltalk}
-			, (modelClass ifNil: [ #() ] ifNotNil: [ modelClass instanceSide sharedPools ]).
-	^ variables
-		allSatisfy: [ :each | 
+	pools := modelClass
+		ifNil: [ #() ]
+		ifNotNil: [ modelClass instanceSide sharedPools collect: #classVarNames ].
+	^ variables allSatisfy: [ :each | | eachSymbol |
+			eachSymbol := each asSymbol.
 			(modelClass ifNil: [ false ] ifNotNil: [ modelClass definesVariable: each ])
-				or: [ pools anySatisfy: [ :pool | pool includesKey: each asSymbol ] ] ]
+			or: [ (Smalltalk includesKey: eachSymbol) 
+			or: [ pools anySatisfy: [ :pool | pool includes: eachSymbol ] ] ]]
 ]
 
 { #category : #'api - actions examples' }
