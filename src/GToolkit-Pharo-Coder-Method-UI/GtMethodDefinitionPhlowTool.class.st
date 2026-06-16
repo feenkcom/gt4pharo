@@ -56,6 +56,12 @@ GtMethodDefinitionPhlowTool >> object: aMethodDefinition [
 	self methodDefinition: aMethodDefinition
 ]
 
+{ #category : #'testing ' }
+GtMethodDefinitionPhlowTool >> supportsSelectionHandling [
+	"Composite tools know how to extract and restore the selected tool"
+	^ true
+]
+
 { #category : #accessing }
 GtMethodDefinitionPhlowTool >> tabLook [
 	^ BrGlamorousTabSwitcherWithIconAptitude
