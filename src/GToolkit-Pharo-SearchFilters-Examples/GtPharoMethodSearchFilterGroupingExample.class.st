@@ -10,7 +10,7 @@ Class {
 GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInSecondPaneWithItemsCount: anInteger in: aScripter [
 
 	aScripter phlowCompositeToolStep
-		onPagerPaneWithIndex: 2;
+		onPagerToolInPaneWithIndex: 2;
 		assertPhlowToolTabsCount: 2;
 		assertPhlowToolTabsHaveOnlyIcons;
 		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
@@ -218,7 +218,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSin
 		
 	scripter phlowCompositeToolStep
 		label: 'Second pane has the expected tools';
-		onPagerPaneWithIndex: 2;
+		onPagerToolInPaneWithIndex: 2;
 		assertPhlowToolTabsCount: 2;
 		assertPhlowToolTabsHaveOnlyIcons;
 		assertPhlowToolLabels: {'Method' . 'inspector'}  
@@ -239,7 +239,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byMethodView_selectSin
 		
 	scripter phlowCompositeToolStep
 		label: 'Select inspector tool';
-		onPagerPaneWithIndex: 2;
+		onPagerToolInPaneWithIndex: 2;
 		clickOnToolAtIndex: 2;
 		assertSelectedToolAtIndex: 2 withPhlowName: 'inspector';
 		play.
@@ -375,7 +375,7 @@ GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExam
 			createWrappedOn: filter gtDefaultInspectorTool ].
 			
 	scripter phlowCompositeToolStep
-		onPagerPaneWithIndex: 1;
+		onPagerToolInPaneWithIndex: 1;
 		assertPhlowToolTabsCount: 2;
 		assertPhlowToolTabsHaveOnlyIcons;
 		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  

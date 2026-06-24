@@ -224,7 +224,7 @@ GtMethodDefinitionPhlowToolExamples >> worldTabWithPaneWithTool [
 
 	scripter phlowCompositeToolStep
 		label: 'Second pane has the expected tool';
-		onPagerPaneWithIndex: 2;
+		onPagerToolInPaneWithIndex: 2;
 		assertPhlowToolTabsCount: 2;
 		assertPhlowToolLabels: {'Method' . 'inspector'}
 			andTypes: {GtMethodDefinitionPhlowTool . GtInspectorTool};
@@ -244,7 +244,7 @@ GtMethodDefinitionPhlowToolExamples >> worldTabWithPaneWithTool_selectInspectorS
 
 	scripter phlowCompositeToolStep
 		label: 'Select inspector tool';
-		onPagerPaneWithIndex: 2;
+		onPagerToolInPaneWithIndex: 2;
 		clickOnToolAtIndex: 2;
 		assertSelectedToolAtIndex: 2 withPhlowName: 'inspector';
 		play.
