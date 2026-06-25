@@ -78,6 +78,43 @@ GtPharoSourceCoder >> compilerErrorsToHandle [
 	^ OCUndeclaredVariableWarning, RBParser gtParseErrorClass
 ]
 
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> computePositionMappingsFrom: originalAst to: formattedAst [
+	| origTokens fmtTokens mappings scanner origIdx fmtIdx |
+	scanner := RBScanner on: originalAst source readStream.
+	origTokens := OrderedCollection new.
+	[ scanner atEnd ] whileFalse: [ origTokens add: scanner next ].
+	scanner := RBScanner on: formattedAst source readStream.
+	fmtTokens := OrderedCollection new.
+	[ scanner atEnd ] whileFalse: [ fmtTokens add: scanner next ].
+	mappings := OrderedCollection new: origTokens size.
+	origIdx := 1.
+	fmtIdx := 1.
+	[ origIdx <= origTokens size and: [ fmtIdx <= fmtTokens size ] ]
+		whileTrue: [ | orig fmt |
+			orig := origTokens at: origIdx.
+			fmt := fmtTokens at: fmtIdx.
+			orig value = fmt value
+				ifTrue: [ mappings
+						add: (GtSourceCoderFormatTokenMapping
+								originalStart: orig start
+								originalStop: orig stop
+								formattedStart: fmt start
+								formattedStop: fmt stop).
+					origIdx := origIdx + 1.
+					fmtIdx := fmtIdx + 1 ]
+				ifFalse: [ | origFoundInFmt |
+					origFoundInFmt := (fmtIdx + 1 to: fmtTokens size)
+							anySatisfy: [ :j | (fmtTokens at: j) value = orig value ].
+					origFoundInFmt
+						ifTrue: [ fmtIdx := fmtIdx + 1 ]
+						ifFalse: [ origIdx := origIdx + 1 ] ] ].
+	^ GtSourceCoderFormatPositionMap
+		tokenMappings: mappings
+		originalSource: originalAst source
+		formattedSource: formattedAst source
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> detectReferencesFilterAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	^ self 
@@ -103,12 +140,19 @@ GtPharoSourceCoder >> format [
 
 { #category : #'api - actions' }
 GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
-	| ast |
-	ast := [ RBParser parseExpression: self currentSourceString ]
-			on: RBParser gtParseErrorClass
-			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
-
-	self currentSourceString: ast formattedCode
+	| ast originalSource formatted |
+	originalSource := self currentSourceString.
+	ast := [RBParser parseExpression: originalSource]
+				on: RBParser gtParseErrorClass
+				do: [:ex | ^self notifyParseError: ex requesterObject: aRequester].
+	formatted := ast formattedCode.
+	self currentSourceString: formatted.
+	self
+		updateSelectionAfterFormatOf: aRequester
+		from: ast
+		to: (RBParser parseExpression: formatted)
+		originalSource: originalSource
+		formattedSource: formatted
 ]
 
 { #category : #'private - actions' }
@@ -331,4 +375,20 @@ GtPharoSourceCoder >> source [
 { #category : #accessing }
 GtPharoSourceCoder >> targetAstParserClass [
 	^ GtPharoParser
+]
+
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> updateSelectionAfterFormatOf: aRequester from: originalAst to: formattedAst originalSource: anOriginalString formattedSource: aFormattedString [
+	| positionMap event mapped |
+	positionMap := self computePositionMappingsFrom: originalAst to: formattedAst.
+	event := GtSourceCoderFormattedEvent
+			originalSource: anOriginalString
+			formattedSource: aFormattedString
+			positionMap: positionMap.
+	self announce: event.
+	(aRequester isNil or: [ aRequester hasSelection not ]) ifTrue: [ ^ self ].
+	mapped := positionMap
+			mapRange: (aRequester selection from + 1 to: aRequester selection to).
+	aRequester selectNone.
+	aRequester select: mapped first - 1 to: mapped last
 ]
