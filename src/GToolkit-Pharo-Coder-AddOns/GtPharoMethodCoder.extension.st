@@ -1195,6 +1195,8 @@ GtPharoMethodCoder >> explanationFor: anAST into: coderAddOns [
 GtPharoMethodCoder >> externalEnumerationDeclarationAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
 	
+	(anAST isMethod and: [
+		anAST methodNode  notNil]) ifFalse: [ ^self ].
 	anAST selector = #externalDeclaration
 		ifFalse: [ ^ self ].
 		
