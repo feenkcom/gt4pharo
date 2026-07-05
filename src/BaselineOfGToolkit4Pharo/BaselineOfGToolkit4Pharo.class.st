@@ -28,6 +28,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #('GToolkitExamplesEngine') ];
 			package: 'GToolkit-Pharo-Parser' with: [
 				spec requires: #('SmaCCRuntime'). ];
+			package: 'GToolkit-Pharo-Parser-Examples' with: [
+				spec requires: #('GToolkit-Pharo-Parser'). ];
 			package: 'GToolkit-Pharo-GtRefactorings' with: [
 				spec requires: #('GToolkit-Pharo-BaseRefactorings'). ];
 			package: 'GToolkit-Pharo-Metamodels' with: [

@@ -1,15 +1,14 @@
 Class {
-	#name : #GtIncrementalParserFullUpdateAstComparisonExamples,
+	#name : #GtPharoIncrementalParserFullUpdateAstComparisonExamples,
 	#superclass : #Object,
 	#category : #'GToolkit-Pharo-Parser-Examples'
 }
 
 { #category : #examples }
-GtIncrementalParserFullUpdateAstComparisonExamples >> comparisonFromIncrementalParsingPage [
+GtPharoIncrementalParserFullUpdateAstComparisonExamples >> comparisonFromIncrementalParsingPage [
 	<gtExample>
 	| initialSource modifiedSource initialAst updatedAst comparison |
-	GtTextualCoder useIncrementalParsing.
-	GtPharoClassExpanderStyler usedVersion: 6.
+
 	initialSource := 'with: a with: b
 	^ OrderedCollection new
 		add: a;
@@ -31,5 +30,6 @@ GtIncrementalParserFullUpdateAstComparisonExamples >> comparisonFromIncrementalP
 	comparison := GtIncrementalParserFullUpdateAstComparison from: initialAst to: updatedAst.
 	self assert: comparison rootComparison notNil.
 	self assert: comparison rootComparison newAstNode equals: updatedAst.
+	
 	^ comparison
 ]
