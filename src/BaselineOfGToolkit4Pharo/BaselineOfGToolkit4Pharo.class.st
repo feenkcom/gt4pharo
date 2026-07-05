@@ -34,6 +34,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 			spec requires: #(#GToolkitExamplesEngine) ].
 		spec package: 'GToolkit-Pharo-Parser' with: [
 			spec requires: #(#SmaCCRuntime) ].
+		spec package: 'GToolkit-Pharo-Parser-Examples' with: [
+			spec requires: #(#'GToolkit-Pharo-Parser') ].
 		spec package: 'GToolkit-Pharo-Index' with: [
 			spec requires: #(#GToolkitCompleter #'GToolkit-Pharo-System') ].
 		spec package: 'GToolkit-Pharo-System-DoneCalls' with: [
