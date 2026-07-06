@@ -14,22 +14,35 @@ GtPharoIncrementalParserFullUpdateAstComparisonExamples >> comparisonFromIncreme
 		add: a;
 		add: b;
 		yourself'.
+		
 	modifiedSource := 'with: a with: b with: c
 	^ OrderedCollection new
 		add: a;
 		add: b;
 		add: c;
 		yourself'.
-	initialAst := GtPharoIncrementalParser
-		parse: initialSource.
-	initialAst invalidateFrom: 64 to: 63 inserting: 10.
-	initialAst invalidateFrom: 16 to: 15 inserting: 8. 
+		
+	initialAst := self creatreInitialAstFor: initialSource. 
 	updatedAst := GtPharoIncrementalParser
 		parse: modifiedSource
 		previous: initialAst.
+		
 	comparison := GtIncrementalParserFullUpdateAstComparison from: initialAst to: updatedAst.
 	self assert: comparison rootComparison notNil.
 	self assert: comparison rootComparison newAstNode equals: updatedAst.
 	
 	^ comparison
+]
+
+{ #category : #utils }
+GtPharoIncrementalParserFullUpdateAstComparisonExamples >> creatreInitialAstFor: initialSource [
+	| initialAst |
+	
+	initialAst := GtPharoIncrementalParser
+		parse: initialSource.
+		
+	initialAst invalidateFrom: 64 to: 63 inserting: 10.
+	initialAst invalidateFrom: 16 to: 15 inserting: 8.
+	
+	^ initialAst
 ]
