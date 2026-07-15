@@ -86,6 +86,41 @@ GtVmMemoryManagementExamples >> testActiveDuring [
 	self assert: GtVmMemoryManagement minOldSpaceForGc equals: old minOldSpaceForGc.
 ]
 
+{ #category : #'tests - writing to the VM' }
+GtVmMemoryManagementExamples >> testEquality [
+	<gtExample>
+	| new old vm |
+
+	vm := Smalltalk vm.
+	new := GtVmMemoryManagement readFromVm.
+	old := new copy.
+
+	self assert: new  equals: new.
+	self assert: new equals: old.
+
+	new growthHeadroom: new growthHeadroom * 4.
+	self deny: new  equals: old.
+
+	new := old copy.
+	new shrinkThreshhold: new shrinkThreshhold * 4.
+	self deny: new  equals: old.
+	new := old copy.
+	new fullGcRatio: new fullGcRatio * 4.
+	self deny: new  equals: old.
+	
+	new := old copy.
+	new newSpaceSize: new newSpaceSize * 2.
+	self deny: new  equals: old.
+	
+	new := old copy.
+	new maxOldSpaceSize: Smalltalk vm oldSpace * 3.
+	self deny: new  equals: old.
+	
+	new := old copy.
+	new minOldSpaceForGc: new minOldSpaceForGc + 100000.
+	self deny: new  equals: old.
+]
+
 { #category : #'tests - reading from VM' }
 GtVmMemoryManagementExamples >> testReadingFromVmFullGcRatioIsAFloat [
 	<gtExample>

@@ -23,9 +23,10 @@ GtVmMemoryConfigurationInstaller class >> default [
 GtVmMemoryConfigurationInstaller >> apply: aMemoryConfiguration during: aComputationBlock when: aBoolean [
 	self isEnabled ifFalse: [ ^ aComputationBlock value ].
 	aBoolean ifFalse: [ ^ aComputationBlock value ].
-	
-	activeConfiguration ifNotNil: [
-		self inform: 'Memory configuration already active!'.
+
+	(activeConfiguration notNil and:
+	[ activeConfiguration ~= aMemoryConfiguration ]) ifTrue: [
+		self inform: 'Using existing memory configuration!'.
 		^ aComputationBlock value ].
 	
 	^ [
