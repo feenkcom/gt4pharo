@@ -346,7 +346,7 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 			matchParent;
 			yourself.
 
-	anEditor text: aMethod sourceCode.
+	anEditor text: aMethod sourceCode asRopedText.
 
 	anEditor userData at: #selectorController put: aController.
 
