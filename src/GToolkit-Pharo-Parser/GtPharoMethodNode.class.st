@@ -14,6 +14,11 @@ GtPharoMethodNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
+GtPharoMethodNode >> argumentNames [
+	^ self arguments collect: [ :each | each name value ]
+]
+
+{ #category : #accessing }
 GtPharoMethodNode >> arguments [
 	^ self variables
 ]
