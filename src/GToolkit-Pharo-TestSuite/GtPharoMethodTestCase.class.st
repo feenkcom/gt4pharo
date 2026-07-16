@@ -17,7 +17,8 @@ Class {
 		'announcer',
 		'method',
 		'result',
-		'state'
+		'state',
+		'properties'
 	],
 	#category : #'GToolkit-Pharo-TestSuite-Base'
 }
@@ -79,6 +80,7 @@ GtPharoMethodTestCase >> initialize [
 	super initialize.
 
 	state := GtPharoMethodNotExecutedState.
+	properties := SmallDictionary new.
 ]
 
 { #category : #'api - testing' }
@@ -162,6 +164,31 @@ GtPharoMethodTestCase >> onMethodModified: aMethodModifedAnnouncement [
 { #category : #'api - execution' }
 GtPharoMethodTestCase >> play [
 	self rawPlay
+]
+
+{ #category : #'accessing - properties' }
+GtPharoMethodTestCase >> properties [
+	^ properties
+]
+
+{ #category : #'accessing - properties' }
+GtPharoMethodTestCase >> propertyAt: aName [
+	^ self properties at: aName
+]
+
+{ #category : #'accessing - properties' }
+GtPharoMethodTestCase >> propertyAt: aName ifAbsent: aBlock [
+	^ self properties at: aName ifAbsent: aBlock
+]
+
+{ #category : #'accessing - properties' }
+GtPharoMethodTestCase >> propertyAt: aKey ifAbsentPut: aBlock [
+	^ self propertyAt: aKey ifAbsent: [ self propertyAt: aKey put: aBlock value ]
+]
+
+{ #category : #'accessing - properties' }
+GtPharoMethodTestCase >> propertyAt: aName put: aBlock [
+	^ self properties at: aName put: aBlock
 ]
 
 { #category : #'private - execution' }
