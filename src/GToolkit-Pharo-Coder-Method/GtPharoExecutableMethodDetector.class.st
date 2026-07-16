@@ -46,7 +46,13 @@ GtPharoExecutableMethodDetector >> ifNotExecutable: aBlock [
 GtPharoExecutableMethodDetector >> isMethodWithArgumentBindings [
 	| aContext argumentNames |
 	aContext := methodCoderViewModel evaluationContext.
-	argumentNames := methodCoder compiledMethod argumentNames.
+	
+	"Use the method ast if possible, as otherwise getting the arguments from the compiled method 
+	can end up parsing the ast"
+	argumentNames := methodAst 
+		ifNil: [ methodCoder compiledMethod argumentNames ] 
+		ifNotNil: [ :aMethodAst | aMethodAst argumentNames ]. 
+		
 	argumentNames ifEmpty: [ ^ false ].
 	^ argumentNames
 		allSatisfy: [ :aName | 
