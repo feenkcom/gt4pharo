@@ -95,6 +95,19 @@ GtVmMemoryManagement class >> validateMinOldSpaceForGc: anInteger [
 		ifTrue: [ self error: 'MinOldSpaceForGc must be less than maxOldSpace' ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtVmMemoryManagement >> = anObject [
+
+	self == anObject ifTrue: [ ^ true ].
+	self class == anObject class ifFalse: [ ^ false ].
+	^ growthHeadroom = anObject growthHeadroom and:
+		[ shrinkThreadshold = anObject shrinkThreshhold and:
+		[ fullGCRatio = anObject fullGcRatio and:
+		[ newSpaceSize = anObject newSpaceSize and:
+		[ maxOldSpaceSize = anObject maxOldSpaceSize and:
+		[ minOldSpaceForGc = anObject minOldSpaceForGc ] ] ] ] ]
+]
+
 { #category : #'from-to-the-vm' }
 GtVmMemoryManagement >> activeDuring: aBlock [ 
 	| old |
@@ -121,6 +134,16 @@ GtVmMemoryManagement >> growthHeadroom [
 { #category : #accessing }
 GtVmMemoryManagement >> growthHeadroom: anInteger [ 
 	growthHeadroom := anInteger
+]
+
+{ #category : #comparing }
+GtVmMemoryManagement >> hash [
+	^((((growthHeadroom hash hashMultiply
+		bitXor: shrinkThreadshold hash hashMultiply)
+			bitXor: fullGCRatio hash hashMultiply)
+			bitXor: newSpaceSize hash hashMultiply)
+			bitXor: maxOldSpaceSize hash hashMultiply)
+			bitXor: minOldSpaceForGc hash hashMultiply
 ]
 
 { #category : #accessing }
