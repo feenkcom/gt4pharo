@@ -95,7 +95,9 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 						anActOnEvent beActed.
 						handled ifFalse: [
 							aButton phlow spawnTool: anActOnEvent toolToSend ] ];
-					asElement ]
+					categoryActOn: [ :anAnnouncement :aRawObject :anotherButton |
+						anAnnouncement beActed.
+						anotherButton phlow spawnTool: anAnnouncement toolToSend ] ]
 			tooltip: 'Search code'
 ]
 
