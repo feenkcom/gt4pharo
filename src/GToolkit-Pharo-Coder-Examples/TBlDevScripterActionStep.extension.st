@@ -16,6 +16,8 @@ TBlDevScripterActionStep >> methodCodersStep: aBlock [
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 TBlDevScripterActionStep >> methodsCoder [
+	<scripterActionStep>
+	
 	^ self
 		addStep: (GtPharoMethodsCoderStep new
 				label: 'Pharo methods coder';
@@ -24,6 +26,8 @@ TBlDevScripterActionStep >> methodsCoder [
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 TBlDevScripterActionStep >> pharoCoder [
+	<scripterActionStep>
+	
 	^ self
 		addStep: (GtPharoCoderStep new
 				label: 'Pharo coder';
@@ -32,6 +36,8 @@ TBlDevScripterActionStep >> pharoCoder [
 
 { #category : #'*GToolkit-Pharo-Coder-Examples' }
 TBlDevScripterActionStep >> refactorings [
+	<scripterActionStep>
+	
 	^ self
 		addStep: (GtPharoRefactoringsStep new
 				label: 'Pharo refactorings';
