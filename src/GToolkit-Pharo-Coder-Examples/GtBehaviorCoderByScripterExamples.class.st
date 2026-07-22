@@ -743,6 +743,88 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_defineExistingM
 	^ aScripter
 ]
 
+{ #category : #'examples - spotter' }
+GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_spotterCategoryActOnSpawnsSearchFilter [
+	"Verify that clicking the category act-on button in the spotter dropdown
+	of the search code button spawns a GtPhlowSearchFilterToolElement in a new pane.
+	This tests the sendCategory: behaviour of Class>>gtSpotterMethodsFor:"
+
+	<gtExample>
+	| aScripter |
+	aScripter := self classCoderInPagerForClassUI.
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Set space extent';
+				block: [ :aSpace | aSpace extent: 1200 @ 800 ];
+				onSpace ].
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Open spotter dropdown';
+				onPagerPaneWithIndex: 1;
+				// GtPharoBehaviorCoderElement;
+				// BrTabGroup;
+				// GtPharoSearchCodeButtonId ].
+
+	aScripter typeStep: [ :s |
+		s
+			label: 'Type search query';
+			text: 'method' ].
+
+	aScripter mouseMoveOverStep: [ :s | 
+		s
+			label: 'Hover over first category';
+			onSpaceRoot;
+			// BrMenuSteppedElement;
+			// GtStreamingSpotterElement;
+			id: GtSpotterCategoryElementId index: 1 ].
+
+	aScripter mouseMoveOverStep: [ :s | 
+		s
+			label: 'Hover over category act-on button';
+			onSpaceRoot;
+			// BrMenuSteppedElement;
+			// GtStreamingSpotterElement;
+			id: GtSpotterCategoryElementId index: 1;
+			id: GtSpotterCategoryActOnButtonId ].
+
+	aScripter clickStep: [ :s | 
+		s
+			label: 'Click category act-on button';
+			onSpaceRoot;
+			// BrMenuSteppedElement;
+			// GtStreamingSpotterElement;
+			id: GtSpotterCategoryElementId index: 1;
+			id: GtSpotterCategoryActOnButtonId ].
+
+	aScripter treePager
+		assertNumberOfPaneElements: 2;
+		play.
+
+	aScripter phlowCompositeToolStep
+		onPagerToolInPaneWithIndex: 2;
+		assertPhlowToolTabsCount: 2;
+		assertPhlowToolLabels: {
+				'Search Filter'.
+				'inspector'}
+			andTypes: {
+					GtPhlowSearchFilterTool.
+					GtInspectorTool};
+		assertPhlowToolValueSatisfies: [ :aCompositePhlowTool | 
+			| searchFilterTool |
+			searchFilterTool := aCompositePhlowTool tools first.
+			(searchFilterTool isKindOf: GtPhlowSearchFilterTool)
+				and: [ (searchFilterTool searchFilter isKindOf: GtSearchCustomScopedMethodsFilter)
+						and: [ searchFilterTool searchFilter filterLabel
+								includesSubstring: 'instance methods' ] ] ];
+		play.
+
+	^ aScripter
+]
+
 { #category : #utilities }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
