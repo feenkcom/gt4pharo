@@ -12,7 +12,8 @@ GtSourceCoderFixItShortcut >> description [
 { #category : #initialization }
 GtSourceCoderFixItShortcut >> initialize [
 	super initialize.
-	combination := BlKeyCombination primaryT
+	combination := BlKeyCombination primaryT.
+	self coderShortcutId: GtCoderShortcutIds default fixItShortcutId
 ]
 
 { #category : #accessing }

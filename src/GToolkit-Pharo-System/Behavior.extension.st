@@ -86,33 +86,55 @@ Behavior >> minOldSpaceForGc [
 { #category : #'*GToolkit-Pharo-System' }
 Behavior >> recompile: selector from: oldClass [
 	"Compile the method associated with selector in the receiver's method dictionary."
-	<gtPharoPatch: #Pharo12>
 
-	self
-		forPharo12AndNewer: [ | method newMethod |
-			"Recompilation should be done silently, to avoid putting noise in the system"
-			GtPharoCodeModifier current critical:
-			[ SystemAnnouncer uniqueInstance
-				localSuspendWhile: [ method := oldClass compiledMethodAt: selector.
-					newMethod := oldClass compiler
-							source: (oldClass sourceCodeAt: selector);
-							priorMethod: method;
-							class: self;
-							permitFaulty: true;
-							logged: false;
-							install	"No need to log recompilation in the sources,
-						 	 We are going to reuse the original source pointer." ].
+	"Recompilation should be done silently, to avoid putting noise in the system"
+	GtPharoCodeModifier current critical:
+	[ | method newMethod source debugging |
+	debugging := Dictionary new.
+	SystemAnnouncer uniqueInstance localSuspendWhile: 
+		[ method := oldClass compiledMethodAt: selector.
+		newMethod := oldClass compiler
+			source: (oldClass sourceCodeAt: selector);
+			priorMethod: method;
+			class: self;
+			permitFaulty: true;
+			logged: false;
+			install	"No need to log recompilation in the sources,
+				 	 We are going to reuse the original source pointer." ].
 
-			newMethod sourcePointer: method sourcePointer.
-			selector == newMethod selector ifFalse: [ self error: 'selector changed!' ] ] ]
-		forPharo11: [ | method newMethod |
-			method := oldClass compiledMethodAt: selector.
-			newMethod := oldClass compiler
-					source: (oldClass sourceCodeAt: selector);
-					class: self;
-					failBlock: [ ^ self ];
-					compiledMethodTrailer: method trailer;
-					compile.	"Assume OK after proceed from SyntaxError"
-			selector == newMethod selector ifFalse: [ self error: 'selector changed!' ].
-			self addSelector: selector withRecompiledMethod: newMethod ]
+	source := newMethod sourceCodeOrNil.
+	source ifNotNil:
+		[ source := source first: (200 min: source size) ].
+	debugging 
+		at: #newSource put: source;
+		at: #newSelector put: newMethod selector.
+	newMethod sourcePointer: method sourcePointer.
+	selector == newMethod selector ifFalse: 
+		[ source := method sourceCodeOrNil.
+		source ifNotNil:
+			[ source := source first: (200 min: source size) ].
+		debugging 
+			at: #selector put: selector;
+			at: #oldMethod put: method;
+			at: #newMethod put: newMethod;
+			at: #oldSource put: source;
+			at: #sourcePointer put: method sourcePointer.
+		self signalSelectorChanged: debugging ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-System' }
+Behavior >> signalSelectorChanged: debuggingInfo [
+	| associations message |
+
+	associations := debuggingInfo associations sorted: #key ascending.
+	message := String streamContents: [ :stream |
+		stream
+			<< 'Selector changed during compilation'; cr.
+		associations do: [ :assoc |
+			stream
+				<< assoc key asString; cr;
+				<< assoc value asString; cr;
+				cr. ].
+		].
+	self error: message.
 ]
