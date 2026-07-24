@@ -4,6 +4,12 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Extract method'
 }
 
+{ #category : #initialization }
+GtSnippetCoderExtractMethodShortcut >> initialize [
+	super initialize.
+	self coderShortcutId: GtCoderShortcutIds default snippetCoderExtractMethodShortcutId
+]
+
 { #category : #evaluation }
 GtSnippetCoderExtractMethodShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	(GtExtractMethodFromSnippetController new

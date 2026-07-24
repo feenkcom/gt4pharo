@@ -9,6 +9,12 @@ GtRenameInBaselineShortcut >> description [
 	^ 'Performs the rename refactoring of the selected variable/class/method/package.'
 ]
 
+{ #category : #initialization }
+GtRenameInBaselineShortcut >> initialize [
+	super initialize.
+	self coderShortcutId: GtCoderShortcutIds default renameInBaselineShortcutId
+]
+
 { #category : #accessing }
 GtRenameInBaselineShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	| position |
