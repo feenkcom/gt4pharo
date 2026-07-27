@@ -39,11 +39,13 @@ Behavior >> recompile: selector from: oldClass announcing: announcing [
 			             logged: false;
 			             install ].
 
-	announcing
-		ifTrue: [ compileBlock value ]
-		ifFalse: [ SystemAnnouncer uniqueInstance localSuspendWhile: compileBlock ].
+	GtPharoCodeModifier current critical:
+		[ announcing
+			ifTrue: [ compileBlock value ]
+			ifFalse: [ SystemAnnouncer uniqueInstance localSuspendWhile: compileBlock ].
+	
+		newMethod sourcePointer: method sourcePointer. ].
 
-	newMethod sourcePointer: method sourcePointer.
 	selector == newMethod selector ifFalse: [
 		self error: 'selector changed!' ]
 ]
