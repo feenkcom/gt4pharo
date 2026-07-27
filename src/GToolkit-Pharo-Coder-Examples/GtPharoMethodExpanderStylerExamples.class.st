@@ -227,6 +227,24 @@ GtPharoMethodExpanderStylerExamples >> messageToSymbolLiteral [
 	^ text
 ]
 
+{ #category : #examples }
+GtPharoMethodExpanderStylerExamples >> messageToThisProcess [
+	<gtExample>
+	| coder text |
+	coder := GtPharoMethodCoder forClass: Object source: 'foo thisProcess suspend'.
+	text := coder currentSourceText copy.
+
+	GtPharoMethodExpanderStyler new
+		coderViewModel: coder asCoderViewModel;
+		style: text ast: coder astSync.
+
+	self
+		assert: ((self methodExpanderAttributesIn: text)
+				anySatisfy: [ :each | each selector = #suspend ]).
+
+	^ text
+]
+
 { #category : #'examples - literals' }
 GtPharoMethodExpanderStylerExamples >> messageToTrueLiteral [
 

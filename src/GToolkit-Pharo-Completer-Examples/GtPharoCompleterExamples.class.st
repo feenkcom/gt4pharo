@@ -647,6 +647,44 @@ GtPharoCompleterExamples >> completePrintOnMethodSelector [
 ]
 
 { #category : #smalltalk }
+GtPharoCompleterExamples >> completeThisProcess [
+	<gtExample>
+	| aScripter |
+	aScripter := self completePrintOnMethodSelector.
+
+	self enterText: ' thisP' in: aScripter.
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'thisProcess' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'thisProcess') size = 1 ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
+GtPharoCompleterExamples >> completeThisProcessSuspend [
+	<gtExample>
+	| aScripter |
+	aScripter := self completeThisProcess.
+
+	self enterText: ' sus' in: aScripter.
+	self openCompletionIn: aScripter.
+	self selectionCompletionItem: 'suspend' in: aScripter.
+	self completeWithTabIn: aScripter.
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				satisfies: [ :element | (element text asString allRangesOfSubstring: 'suspend') size = 1 ] ].
+
+	^ aScripter
+]
+
+{ #category : #smalltalk }
 GtPharoCompleterExamples >> completeUnaryToBinaryMessageWithLiteralArg [
 	<gtExample>
 	| aScripter |

@@ -142,7 +142,7 @@ GtPharoCompletionStrategy >> initialize [
 	isMethod := true.
 	hasImplicitVariables := false.
 	localVariables := GtPrefixTree
-		withAll: #('self' 'true' 'false' 'nil' 'thisContext').
+		withAll: #('self' 'true' 'false' 'nil' 'thisContext' 'thisProcess').
 	variables := GtCompositePrefixTree
 		trees:
 			{GtPharoIndex current globalCache.
@@ -272,6 +272,8 @@ GtPharoCompletionStrategy >> typeOfVariable: aNode [
 	name := aNode name value.
 	name = 'self' ifTrue: [ ^ self classOrMetaClass ].
 	name = 'super' ifTrue: [ ^ self classOrMetaClass superclass ].
+	aNode isThisContext ifTrue: [ ^ Context ].
+	aNode isThisProcess ifTrue: [ ^ Process ].
 	self classOrMetaClass notNil
 		ifTrue: [ (self classOrMetaClass bindingOf: name asSymbol)
 				ifNotNil: [ :binding | binding value ifNotNil: [ :value | ^ value class ] ] ].

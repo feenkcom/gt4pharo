@@ -17,6 +17,9 @@ GtPharoProgramNode class >> typeOf: aGtPharoProgramNode in: aClass bindings: the
 	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisContext ])
 		ifTrue: [ ^ Context ].
 
+	(aGtPharoProgramNode isVariable and: [ aGtPharoProgramNode isThisProcess ])
+		ifTrue: [ ^ Process ].
+
 	aGtPharoProgramNode isVariable
 		ifTrue: [ | aVariableName |
 			aVariableName := aGtPharoProgramNode name value asSymbol.
