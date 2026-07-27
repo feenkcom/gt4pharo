@@ -73,10 +73,16 @@ GtPharoVariableNode >> isThisContext [
 ]
 
 { #category : #testing }
+GtPharoVariableNode >> isThisProcess [
+	^ self variableName = ThisProcessVariable variableName
+]
+
+{ #category : #testing }
 GtPharoVariableNode >> isUndeclared [
 	self isSelf ifTrue: [ ^ false ].
 	self isSuper ifTrue: [ ^ false ].
 	self isThisContext ifTrue: [ ^ false ].
+	self isThisProcess ifTrue: [ ^ false ].
 	^ self whoDefines isNil
 ]
 
