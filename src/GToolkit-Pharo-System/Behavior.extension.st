@@ -86,7 +86,8 @@ Behavior >> minOldSpaceForGc [
 { #category : #'*GToolkit-Pharo-System' }
 Behavior >> recompile: selector from: oldClass [
 	"Compile the method associated with selector in the receiver's method dictionary."
-
+	<gtPharoPatch: #Pharo12>
+	
 	"Recompilation should be done silently, to avoid putting noise in the system"
 	GtPharoCodeModifier current critical:
 	[ | method newMethod source debugging |
