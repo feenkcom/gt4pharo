@@ -160,7 +160,10 @@ GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from:
 	| aProviderBehavior |
 	aProviderBehavior := aCoderViewModel
 			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
-			ifNone: [ aCoderViewModel explicitProviderClass ifNil: [ aCoderViewModel behavior ] ].
+			ifNone: [ aCoderViewModel explicitProviderClass
+					ifNil: [ aCoderViewModel methodOrigin isTraitOrigin
+							ifTrue: [ aCoderViewModel methodOrigin trait ]
+							ifFalse: [ aCoderViewModel behavior ] ] ].
 
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
