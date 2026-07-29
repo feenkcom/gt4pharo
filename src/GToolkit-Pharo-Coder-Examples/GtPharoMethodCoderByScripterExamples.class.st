@@ -11403,6 +11403,34 @@ GtPharoMethodCoderByScripterExamples >> statementMethodCoder [
 	^ aCoder
 ]
 
+{ #category : #'examples - expansion' }
+GtPharoMethodCoderByScripterExamples >> traitMethodCoderSpawnsTrait [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPagerSettings usedPager
+					createWrappedOn: (self coderOnMethod: GtPharoProgramNodeVisitor >> #visitSmaCCParseNode:)
+							asCoderViewModel asElement ].
+
+	scripter methodCoder
+		mouseMoveOver;
+		assertHeaderProviderBehaviorIs: TSmaCCParseNodeVisitor;
+		play.
+
+	scripter clickStep: [ :s | s // GtPharoHeaderProviderBehaviorId ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert class name';
+				value: [ :anEditor | anEditor text asString ]
+					equals: #TSmaCCParseNodeVisitor;
+				onPagerPaneWithIndex: 2;
+				// GtBehaviorCoderBehaviorNameId ].
+
+	^ scripter
+]
+
 { #category : #'examples - undo/redo' }
 GtPharoMethodCoderByScripterExamples >> undoAfterCancel [
 	<gtExample>
