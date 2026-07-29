@@ -6180,6 +6180,8 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 	<gtExample>
 	| aScripter |
 	aScripter := self forKeywordExtraction_04_hover_extract_method.
+	
+	self checkFor: aScripter saveButtonEnabled: true.
 
 	aScripter
 		clickStep: [ :s | 
@@ -6198,8 +6200,27 @@ GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_05_click_extract_me
 	self checkHasReceiverAttribute: aScripter.
 	self checkHasTwoReorderAttributes: aScripter.
 	self checkKeywordRenameEditor: aScripter.
+	
+	self checkFor: aScripter saveButtonEnabled: false.
 
 	^ aScripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> forKeywordExtraction_06_cancel_enables_save [
+	<gtExample>
+	| scripter |
+	scripter := self forKeywordExtraction_05_click_extract_method.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click cancel button';
+				id: #'refactoring--cancelButton' ].
+
+	self checkFor: scripter saveButtonEnabled: true.
+
+	^ scripter
 ]
 
 { #category : #'examples - extract method' }
