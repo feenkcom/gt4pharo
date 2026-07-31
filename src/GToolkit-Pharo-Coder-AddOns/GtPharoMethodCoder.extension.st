@@ -1364,7 +1364,8 @@ GtPharoMethodCoder >> initializeAddOns: addOns viewModel: aGtPharoMethodCoderVie
 		addMainAction: (GtCoderCustomAction new
 				title: 'Save';
 				stencil: [ GtPharoMethodCoderSaveButton new
-						pharoMethodCoderViewModel: aGtPharoMethodCoderViewModel ]).
+						pharoMethodCoderViewModel: aGtPharoMethodCoderViewModel;
+						enabled: aGtPharoMethodCoderViewModel isSaveEnabled ]).
 	addOns
 		addDropDownWithPreviewAction: 'Remove' translated
 		icon: BrGlamorousVectorIcons bin
