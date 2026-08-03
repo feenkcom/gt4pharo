@@ -50,13 +50,13 @@ GtSearchLiteralExactStringFilter >> hash [
 
 { #category : #testing }
 GtSearchLiteralExactStringFilter >> includesMethod: aCompiledMethod [
-
-	^ aCompiledMethod hasLiteralSuchThat: [ :aLiteral | 
-		  aLiteral isString and: [ 
-			  aLiteral isSymbol not and: [ 
-				  aLiteral = self string or: [ 
-					  self caseSensitive not and: [ 
-						  aLiteral asLowercase = self lowercase ] ] ] ] ]
+	^ aCompiledMethod
+		hasLiteralSuchThat: [ :each | 
+			each isLiteral
+				and: [ each isString
+						and: [ each isSymbol not
+								and: [ each = self string
+										or: [ self caseSensitive not and: [ each asLowercase = self lowercase ] ] ] ] ] ]
 ]
 
 { #category : #accessing }
