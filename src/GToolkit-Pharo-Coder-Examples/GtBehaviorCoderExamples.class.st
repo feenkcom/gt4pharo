@@ -37,3 +37,20 @@ GtBehaviorCoderExamples >> forObject [
 
 	^ aCoder
 ]
+
+{ #category : #'instance creation' }
+GtBehaviorCoderExamples >> forObjectBehavior [
+	<gtExample>
+	| anObject aCoder |
+	anObject := GtBehaviorCoderDummyClass new.
+
+	aCoder := GtPharoBehaviorCoder forObject: self class behavior: Behavior.
+
+	self assert: aCoder theClass equals: Behavior.
+	self assert: aCoder hasObject.
+	self assert: aCoder object equals: self class.
+
+	self assert: aCoder definitionCoder behavior equals: Behavior.
+
+	^ aCoder
+]
