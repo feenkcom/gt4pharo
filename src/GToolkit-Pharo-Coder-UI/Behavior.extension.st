@@ -9,13 +9,15 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 			streamingCodersModel: aMethodsCoder;
 			shouldExpandByDefault: false;
 			shouldHaveHeaderByDefault: false.
-			
+
 	aPhlowContext
 		optionAt: #behaviorCoder
 		ifPresent: [ :aBehaviorCoderUIModel | 
-			aBehaviorCoderUIModel coderModel 
-				ifObject: [ :anObject | aMethodsCoderViewModel selfObject: anObject ] 
-				ifNone: [ ] ]
+			aBehaviorCoderUIModel coderModel
+				ifObject: [ :anObject | 
+					(anObject isKindOf: self)
+						ifTrue: [ aMethodsCoderViewModel selfObject: anObject ] ]
+				ifNone: [  ] ]
 		ifAbsent: [ nil ].
 
 	aTestSuiteViewModel := self
@@ -26,7 +28,7 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 			exampleViewModelCachedAs: #exampleViewModelHandler_gtCoderStreamingMethodsForContext
 			inPhlowContext: aPhlowContext
 			forMethodsCoder: aMethodsCoder.
-			
+
 	aValueHolder := ValueHolder new.
 
 
@@ -34,7 +36,7 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 			priority: 9;
 			title: 'Methods';
 			disableAsync;
-			actionDropdownButtonDo: [ :aDrodownAction |
+			actionDropdownButtonDo: [ :aDrodownAction | 
 				aDrodownAction dropdown
 					icon: BrGlamorousVectorIcons filter;
 					tooltip: 'Filter';
@@ -49,8 +51,8 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 					tooltip: 'Add new method';
 					preferredExtent: GtPharoNewMethodCoderElement preferredExtent;
 					content: [ :aButton | 
-						self 
-							gtNewMethodDropdownOn: aButton 
+						self
+							gtNewMethodDropdownOn: aButton
 							withViewModel: aMethodsCoderViewModel
 							withNewMethodHolder: aValueHolder ] ].
 
@@ -60,11 +62,6 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 				tooltip: 'Generate'
 				content: [ :anElement | aMethodsCoder codeGeneratorsDropDown: anElement for: aMethodsCoderViewModel ] ].
 	^ view
-		"actionButtonDo: [ :aButtonAction | 
-			aButtonAction
-				icon: BrGlamorousVectorIcons inspect;
-				tooltip: 'Inspect view model';
-				action: [ :aButton | aButton phlow spawnObject: aMethodsCoderViewModel ] ];"
 		actionStencil: [ :aBrTab | GtPharoCoderUIUtility newExamplesDropdownButtonForViewModel: anExampleViewModel ];
 		actionStencil: [ :aBrTab | GtPharoCoderUIUtility newTestsDropdownButtonForViewModel: aTestSuiteViewModel ];
 		stencil: [ GtPharoStreamingMethodsCoderElement new
@@ -77,25 +74,21 @@ Behavior >> gtCoderStreamingMethodsFor: aView context: aPhlowContext [
 					objectActOn: [ :anActOnEvent :anItem :theButton | 
 						| handled navigationModel |
 						handled := false.
-						
+
 						navigationModel := theButton phlow firstParentWithViewContent phlow
 								firstParentWithViewContent navigationModel.
-						(anItem isPharoPackageModel)
-							ifTrue: [ 
-								navigationModel selectPackage: anItem.
+						anItem isPharoPackageModel
+							ifTrue: [ navigationModel selectPackage: anItem.
 								handled := true ].
 						(anItem isKindOf: ClassDescription)
-							ifTrue: [ 
-								navigationModel selectClass: anItem.
+							ifTrue: [ navigationModel selectClass: anItem.
 								handled := true ].
 						(anItem isKindOf: CompiledMethod)
-							ifTrue: [ 
-								navigationModel selectMethod: anItem.
+							ifTrue: [ navigationModel selectMethod: anItem.
 								handled := true ].
 						anActOnEvent beActed.
-						handled ifFalse: [
-							aButton phlow spawnTool: anActOnEvent toolToSend ] ];
-					categoryActOn: [ :anAnnouncement :aRawObject :anotherButton |
+						handled ifFalse: [ aButton phlow spawnTool: anActOnEvent toolToSend ] ];
+					categoryActOn: [ :anAnnouncement :aRawObject :anotherButton | 
 						anAnnouncement beActed.
 						anotherButton phlow spawnTool: anAnnouncement toolToSend ] ]
 			tooltip: 'Search code'

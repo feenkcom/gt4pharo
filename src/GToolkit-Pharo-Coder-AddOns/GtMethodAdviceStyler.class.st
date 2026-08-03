@@ -54,7 +54,10 @@ GtMethodAdviceStyler >> advices: aCollection [
 { #category : #accessing }
 GtMethodAdviceStyler >> behavior [
 	^ self coderViewModel
-		ifSelfObject: [ :obj | obj class ]
+		ifSelfObject: [ :obj | 
+			(obj isKindOf: self coderModel behavior)
+				ifTrue: [ obj class ]
+				ifFalse: [ self coderModel behavior ] ]
 		ifNone: [ self coderModel behavior ]
 ]
 

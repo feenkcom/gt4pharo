@@ -9,6 +9,23 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #accessing }
+GtPharoMethodsCoderByScripterExamples >> checkSelfObject [
+	<gtExample>
+	| scripter |
+	scripter := self
+			scripterForBlock: [ GtPharoBehaviorCoder forObject: self class behavior: self class class ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Cannot set selfObject to class object on instance side';
+				// (GtSourceCoderId indexed: 1);
+				value: [ :each | each coderViewModel selfObject ] equals: nil ].
+
+	^ scripter
+]
+
 { #category : #examples }
 GtPharoMethodsCoderByScripterExamples >> classGtMethodsForInTreePager_clickMethodHeaderClassName_addsPaneForActualMethod [
 	<gtExample>
