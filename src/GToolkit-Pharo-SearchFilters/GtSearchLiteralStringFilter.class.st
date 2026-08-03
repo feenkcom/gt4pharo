@@ -67,12 +67,12 @@ GtSearchLiteralStringFilter >> hash [
 
 { #category : #testing }
 GtSearchLiteralStringFilter >> includesMethod: aCompiledMethod [
-	^ aCompiledMethod hasLiteralSuchThat: [ :aLiteralNode |
-		aLiteralNode isString 
-		and: [ aLiteralNode isSymbol not 
-		and: [ aLiteralNode 
-			includesSubstring: self substring 
-			caseSensitive: self caseSensitive] ] ]
+	^ aCompiledMethod
+		hasLiteralSuchThat: [ :each | 
+			each isLiteral
+				and: [ each isString
+						and: [ each isSymbol not
+								and: [ each includesSubstring: self substring caseSensitive: self caseSensitive ] ] ] ]
 ]
 
 { #category : #initialization }

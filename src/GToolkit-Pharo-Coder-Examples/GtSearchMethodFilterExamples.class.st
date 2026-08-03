@@ -118,6 +118,21 @@ GtSearchMethodFilterExamples >> intersectionFilterIsAllGtSearchMethodsFilterKind
 	^ filter
 ]
 
+{ #category : #examples }
+GtSearchMethodFilterExamples >> literalSearchWithNodeInCompiledMethod [
+	<gtExample>
+	| filter method array node |
+	array := #('Dummy entry in method for AST node').
+	node := RBParser parseExpression: '''entry'''.
+	filter := 'empty' gtStringLiteralMatch.
+	method := thisContext method copy.
+	1
+		to: method numLiterals
+		do: [ :i | (method literalAt: i) = array ifTrue: [ method literalAt: i put: node ] ].
+	self assert: (filter matches: method).
+	^ filter
+]
+
 { #category : #'examples - method conditions' }
 GtSearchMethodFilterExamples >> methodConditionsFilter_Default [
 	<gtExample>
@@ -273,6 +288,21 @@ GtSearchMethodFilterExamples >> selectFilterIsAllGtSearchMethodsFilterKind [
 	| filter |
 	filter := self referencesFilterIsAllGtSearchMethodsFilterKind select: [:each | each methodClass = BlElement ].
 	self assert: filter gtAreAllGtSearchMethodsFilterKind.
+	^ filter
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> substringLiteralSearchWithNodeInCompiledMethod [
+	<gtExample>
+	| filter method array node |
+	array := #('Dummy entry in method for AST node').
+	node := RBParser parseExpression: '''entry'''.
+	filter := 'empty' gtSubstringLiteralMatch.
+	method := thisContext method copy.
+	1
+		to: method numLiterals
+		do: [ :i | (method literalAt: i) = array ifTrue: [ method literalAt: i put: node ] ].
+	self assert: (filter matches: method).
 	^ filter
 ]
 
