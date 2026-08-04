@@ -76,7 +76,16 @@ GtPharoBigMethodCoderViewModel >> elementClass [
 
 { #category : #accessing }
 GtPharoBigMethodCoderViewModel >> explicitProviderClass [
+	self
+		deprecated: 'Use explicitReceiverClass instead of current one'
+		on: '4 August 2026'
+		in: 'Pharo-12.0.0+SNAPSHOT.build.1596.sha.e35513ca606c743cebd99b7db598cfa2a6f4db48 (64 Bit)'.
 	^ self coderModel explicitProviderClass
+]
+
+{ #category : #accessing }
+GtPharoBigMethodCoderViewModel >> explicitReceiverClass [
+	^ self coderModel explicitReceiverClass
 ]
 
 { #category : #'as yet unclassified' }

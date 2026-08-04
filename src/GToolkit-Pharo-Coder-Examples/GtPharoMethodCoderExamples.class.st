@@ -949,7 +949,7 @@ GtPharoMethodCoderExamples >> forSameClassCallingSuperclassExample [
 	exampleWithResult := methodCoder example.
 	example := exampleWithResult example.
 
-	self assert: exampleWithResult providerClass equals: GtPharoDummyTwoObject.
+	self assert: exampleWithResult receiverClass equals: GtPharoDummyTwoObject.
 	self assert: exampleWithResult methodClass equals: GtPharoDummyTwoObject.
 	self assert: example run returnValue equals: 4.4.
 
@@ -966,7 +966,7 @@ GtPharoMethodCoderExamples >> forSameClassExample [
 	exampleWithResult := methodCoder example.
 	example := exampleWithResult example.
 
-	self assert: exampleWithResult providerClass equals: GtPharoDummyOneObject.
+	self assert: exampleWithResult receiverClass equals: GtPharoDummyOneObject.
 	self assert: exampleWithResult methodClass equals: GtPharoDummyOneObject.
 	self assert: example run returnValue equals: 4.
 
@@ -996,7 +996,7 @@ GtPharoMethodCoderExamples >> forSuperclassExample [
 	exampleWithResult := methodCoder example.
 	example := exampleWithResult example.
 
-	self assert: exampleWithResult providerClass equals: GtPharoDummyTwoObject.
+	self assert: exampleWithResult receiverClass equals: GtPharoDummyTwoObject.
 	self assert: exampleWithResult methodClass equals: GtPharoDummyOneObject.
 	self assert: example run returnValue equals: 4.4.
 

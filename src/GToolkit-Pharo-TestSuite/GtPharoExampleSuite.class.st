@@ -207,21 +207,22 @@ GtPharoExampleSuite >> stateOf: aGtExampleWithResult [
 
 { #category : #'api - stream' }
 GtPharoExampleSuite >> stream: anAsyncStream [
-	mutex critical: [ 
-		examplesWithResultCache := AsyncSharedDictionary new.
-		examplesWithResultStream := ((((((anAsyncStream
-				filter: [ :eachItem | eachItem notNil ])
-				map: [ :eachItem | eachItem gtExample ])
-				filter: [ :eachExample | eachExample notNil ])
-				map: [ :eachExample | 
-					| aMethod |
-					eachExample methodDo: [ :theMethod | aMethod := theMethod ].
-					aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
-				filter: [ :anAssoc | anAssoc notNil ])
-				map: [ :anAssoc | anAssoc value ]
-				key: [ :anAssoc | { anAssoc value providerClass. anAssoc key } ]
-				cache: examplesWithResultCache) 
-				cached ].
+	mutex
+		critical: [ examplesWithResultCache := AsyncSharedDictionary new.
+			examplesWithResultStream := ((((((anAsyncStream
+					filter: [ :eachItem | eachItem notNil ])
+					map: [ :eachItem | eachItem gtExample ])
+					filter: [ :eachExample | eachExample notNil ])
+					map: [ :eachExample | 
+						| aMethod |
+						eachExample methodDo: [ :theMethod | aMethod := theMethod ].
+						aMethod ifNotNil: [ aMethod -> eachExample asExampleWithResult ] ])
+					filter: [ :anAssoc | anAssoc notNil ])
+					map: [ :anAssoc | anAssoc value ]
+					key: [ :anAssoc | 
+						{anAssoc value receiverClass.
+							anAssoc key} ]
+					cache: examplesWithResultCache) cached ].
 	self notifyStreamChanged
 ]
 
