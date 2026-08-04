@@ -9192,16 +9192,16 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCallingSuperclassExample [
 	"See https://github.com/feenkcom/gtoolkit/issues/4306.
 	Ensure expanded embedded example is executable."
-	
+
 	<gtExample>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithAnotherExampleCallingSuperclassExample. ].
+				aCoder := self methodCoderWithAnotherExampleCallingSuperclassExample ].
 
 	aScripter methodCoder
 		mouseMoveOver;
-		assertCompiledMethodIs: GtPharoDummyTwoObject>>#anotherExampleCallingSuperclassExample;
+		assertCompiledMethodIs: GtPharoDummyTwoObject >> #anotherExampleCallingSuperclassExample;
 		assertExplicitProviderClassIs: GtPharoDummyTwoObject;
 		assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
 		assertHeaderMethodBehaviorIsNotVisible;
@@ -9210,13 +9210,13 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 		coderModelDo: [ :aCoder | 
 			| anExample |
 			anExample := aCoder example.
-			self assert: anExample providerClass equals: GtPharoDummyTwoObject.
-			self assert: anExample methodClass equals: GtPharoDummyTwoObject.  ];
+			self assert: anExample receiverClass equals: GtPharoDummyTwoObject.
+			self assert: anExample methodClass equals: GtPharoDummyTwoObject ];
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :aStep | 
 				aStep
 					mouseMoveOver;
-					assertCompiledMethodIs: GtPharoDummyOneObject>>#successfulExample;
+					assertCompiledMethodIs: GtPharoDummyOneObject >> #successfulExample;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
 					assertHeaderProviderBehaviorIs: GtPharoDummyTwoObject;
@@ -9224,23 +9224,24 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 					assertMethodExpandersCountIs: 2;
 					coderModelDo: [ :aCoder | 
 						| anExample |
-						aCoder methodBehavior 
-							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | 
-								self assert: aSubclassBehavior equals: GtPharoDummyOneObject ]
-							ifDifferentDo: [ :aSubclassBehavior :aMethodBehavior |
-								AssertionFailure signal: (
-									'Subclass behavior must not be different from the method behavior: {1} ~= {2}' 
-										format: { aSubclassBehavior. aMethodBehavior } ) ]
-							ifAbsent: [ 
-								AssertionFailure signal: 'Real method behavior must exist' ].
-						
+						aCoder methodBehavior
+							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | self assert: aSubclassBehavior equals: GtPharoDummyOneObject ]
+							ifDifferentDo: [ :aSubclassBehavior :aMethodBehavior | 
+								AssertionFailure
+									signal: ('Subclass behavior must not be different from the method behavior: {1} ~= {2}'
+											format: {aSubclassBehavior.
+													aMethodBehavior}) ]
+							ifAbsent: [ AssertionFailure signal: 'Real method behavior must exist' ].
+
 						anExample := aCoder example.
 						self assert: anExample providerClass equals: GtPharoDummyTwoObject.
 						self assert: anExample methodClass equals: GtPharoDummyOneObject.
-						self assert: anExample run returnValue equals: 4.4.  ];
+						self assert: anExample run returnValue equals: 4.4 ];
 					clickOnPlayAndInspectExampleButton;
 					coderModelDo: [ :aCoder | 
-						self assert: aCoder example hasResult description: [ 'Coder example must have result' ].
+						self
+							assert: aCoder example hasResult
+							description: [ 'Coder example must have result' ].
 						self assert: aCoder example result returnValue equals: 4.4 ] ];
 		play.
 
@@ -9595,17 +9596,17 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSum
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWithAnotherExampleCallingSuperclassExample [
 	"See https://github.com/feenkcom/gtoolkit/issues/4306.
 	Ensure expanded embedded example is executable."
-	
+
 	<gtExample>
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ | aCoder |
-				aCoder := self methodCoderWithSubclassBehaviorWithAnotherExampleCallingSuperclassExample.
-			].
+				aCoder := self
+						methodCoderWithSubclassBehaviorWithAnotherExampleCallingSuperclassExample ].
 
 	aScripter methodCoder
 		mouseMoveOver;
-		assertCompiledMethodIs: GtPharoDummyTwoObject>>#anotherExampleCallingSuperclassExample;
+		assertCompiledMethodIs: GtPharoDummyTwoObject >> #anotherExampleCallingSuperclassExample;
 		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
 		assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
 		assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
@@ -9614,13 +9615,13 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 		coderModelDo: [ :aCoder | 
 			| anExample |
 			anExample := aCoder example.
-			self assert: anExample providerClass equals: GtPharoDummyThreeObject.
-			self assert: anExample methodClass equals: GtPharoDummyTwoObject.  ];
+			self assert: anExample receiverClass equals: GtPharoDummyThreeObject.
+			self assert: anExample methodClass equals: GtPharoDummyTwoObject ];
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :aStep | 
 				aStep
 					mouseMoveOver;
-					assertCompiledMethodIs: GtPharoDummyOneObject>>#successfulExample;
+					assertCompiledMethodIs: GtPharoDummyOneObject >> #successfulExample;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
 					assertHeaderProviderBehaviorIs: GtPharoDummyThreeObject;
@@ -9628,23 +9629,24 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 					assertMethodExpandersCountIs: 2;
 					coderModelDo: [ :aCoder | 
 						| anExample |
-						aCoder methodBehavior 
+						aCoder methodBehavior
 							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aSubclassBehavior :aMethodBehavior | 
-								AssertionFailure signal: (
-									'Subclass behavior must be different from the method behavior: {1} ~= {2}' 
-										format: { aSubclassBehavior. aMethodBehavior } ) ]
-							ifDifferentDo: [ :aSubclassBehavior |
-								self assert: aSubclassBehavior equals: GtPharoDummyThreeObject ]
-							ifAbsent: [ 
-								AssertionFailure signal: 'Real method behavior must exist' ].
-						
+								AssertionFailure
+									signal: ('Subclass behavior must be different from the method behavior: {1} ~= {2}'
+											format: {aSubclassBehavior.
+													aMethodBehavior}) ]
+							ifDifferentDo: [ :aSubclassBehavior | self assert: aSubclassBehavior equals: GtPharoDummyThreeObject ]
+							ifAbsent: [ AssertionFailure signal: 'Real method behavior must exist' ].
+
 						anExample := aCoder example.
 						self assert: anExample providerClass equals: GtPharoDummyThreeObject.
 						self assert: anExample methodClass equals: GtPharoDummyOneObject.
-						self assert: anExample run returnValue equals: 4.4. ];
+						self assert: anExample run returnValue equals: 4.4 ];
 					clickOnPlayAndInspectExampleButton;
 					coderModelDo: [ :aCoder | 
-						self assert: aCoder example hasResult description: [ 'Coder example must have result' ].
+						self
+							assert: aCoder example hasResult
+							description: [ 'Coder example must have result' ].
 						self assert: aCoder example result returnValue equals: 4.4 ] ];
 		play.
 

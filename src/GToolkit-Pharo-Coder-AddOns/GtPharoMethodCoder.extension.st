@@ -1567,13 +1567,13 @@ GtPharoMethodCoder >> testCase [
 					ifTrue: [ 
 						self methodBehavior 
 							ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior |
-								self explicitProviderClass 
-									ifNotNil: [ :aProviderClass |
-										aBehavior = aProviderClass 
+								self explicitReceiverClass 
+									ifNotNil: [ :aReceiverClass |
+										aBehavior = aReceiverClass 
 											ifFalse: [ 
 													GtPharoMethodTestCaseSubclass
 														forMethod: aCompiledMethod
-														className: aProviderClass name ]
+														className: aReceiverClass name ]
 											ifTrue: [ aCompiledMethod gtPharoMethodTestCase ] ]
 									ifNil: [ aCompiledMethod gtPharoMethodTestCase ] ]
 							ifDifferentDo: [ :aSubclassBehavior |

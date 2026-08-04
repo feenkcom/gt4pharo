@@ -6,15 +6,15 @@ Class {
 		'parentMessage',
 		'localBindings',
 		'receiverBehavior',
-		'explicitProviderClass',
-		'parentExplicitProviderClass',
 		'parentEvaluationContext',
 		'parentExample',
 		'parentTestCase',
 		'parentCoderViewModel',
 		'parentSelfObjectHolder',
 		'receiverObjectHolder',
-		'receiverSubclassBehavior'
+		'receiverSubclassBehavior',
+		'parentExplicitReceiverClass',
+		'explicitReceiverClass'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-Utilities'
 }
@@ -62,31 +62,31 @@ GtPharoReceiverAndArgumentBindingsBuilder >> build [
 	self buildLocalBindings.
 	self buildReceiver.
 	self buildReceiverBehavior.
-	self buildExplicitProviderClass.
+	self buildExplicitReceiverClass.
 	self buildMethodBehavior.
 ]
 
 { #category : #building }
-GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitProviderClass [
+GtPharoReceiverAndArgumentBindingsBuilder >> buildExplicitReceiverClass [
 	compiledMethod ifNil: [ ^ self ].
 	parentMessage ifNil: [ ^ self ].
 	self isSelfOrSuperReceiver ifFalse: [ 
-		explicitProviderClass := receiverBehavior.
+		explicitReceiverClass := receiverBehavior.
 		^ self ].
 
-	explicitProviderClass := parentExplicitProviderClass.
-	explicitProviderClass ifNil: [ 
-		explicitProviderClass := parentEvaluationContext targetBehavior ].
-	explicitProviderClass ifNil: [
+	explicitReceiverClass := parentExplicitReceiverClass.
+	explicitReceiverClass ifNil: [ 
+		explicitReceiverClass := parentEvaluationContext targetBehavior ].
+	explicitReceiverClass ifNil: [
 		parentCoderViewModel ifNotNil: [
 			parentCoderViewModel coderModel methodBehavior
 				ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior | "ignore" ]
 				ifDifferentDo: [ :aSubclassBehavior | 
 					(aSubclassBehavior inheritsFrom: compiledMethod methodClass)
-						ifTrue: [ explicitProviderClass := aSubclassBehavior ] ]
+						ifTrue: [ explicitReceiverClass := aSubclassBehavior ] ]
 				ifAbsent: [ "ignore" ] ] ].
-	explicitProviderClass ifNil: [
-		explicitProviderClass := receiverBehavior ].
+	explicitReceiverClass ifNil: [
+		explicitReceiverClass := receiverBehavior ].
 ]
 
 { #category : #building }
@@ -114,8 +114,8 @@ GtPharoReceiverAndArgumentBindingsBuilder >> buildMethodBehavior [
 		ifAbsent: [ aSelectedBehavior := nil ].
 		
 	aSelectedBehavior ifNil: [
-		(compiledMethod isSubclassResponsibility and: [ explicitProviderClass ~= compiledMethod methodClass ])
-			ifTrue: [ aSelectedBehavior := explicitProviderClass ] ].
+		(compiledMethod isSubclassResponsibility and: [ explicitReceiverClass ~= compiledMethod methodClass ])
+			ifTrue: [ aSelectedBehavior := explicitReceiverClass ] ].
 
 	aSelectedBehavior ifNil: [ ^ self ].
 
@@ -195,7 +195,16 @@ GtPharoReceiverAndArgumentBindingsBuilder >> evaluationContext: anObject [
 
 { #category : #'accessing - results' }
 GtPharoReceiverAndArgumentBindingsBuilder >> explicitProviderClass [
-	^ explicitProviderClass
+	self
+		deprecated: 'Use explicitReceiverClass instead of current one'
+		on: '4 August 2026'
+		in: 'Pharo-12.0.0+SNAPSHOT.build.1596.sha.e35513ca606c743cebd99b7db598cfa2a6f4db48 (64 Bit)'.
+	^ explicitReceiverClass
+]
+
+{ #category : #'accessing - results' }
+GtPharoReceiverAndArgumentBindingsBuilder >> explicitReceiverClass [
+	^ explicitReceiverClass
 ]
 
 { #category : #'private - testing' }
@@ -260,13 +269,13 @@ GtPharoReceiverAndArgumentBindingsBuilder >> parentExample: anExample [
 ]
 
 { #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> parentExplicitProviderClass [
-	^ parentExplicitProviderClass
+GtPharoReceiverAndArgumentBindingsBuilder >> parentExplicitReceiverClass [
+	^ parentExplicitReceiverClass
 ]
 
 { #category : #accessing }
-GtPharoReceiverAndArgumentBindingsBuilder >> parentExplicitProviderClass: anObject [
-	parentExplicitProviderClass := anObject
+GtPharoReceiverAndArgumentBindingsBuilder >> parentExplicitReceiverClass: anObject [
+	parentExplicitReceiverClass := anObject
 ]
 
 { #category : #accessing }

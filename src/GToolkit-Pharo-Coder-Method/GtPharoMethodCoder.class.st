@@ -575,7 +575,7 @@ GtPharoMethodCoder >> example [
 		anExampleWithResult := self compiledMethod ifNotNil: [ :aCompiledMethod | 
 			self methodBehavior 
 				ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aBehavior |
-					self explicitProviderClass 
+					self explicitReceiverClass 
 						ifNotNil: [ :aProviderClass |
 							aBehavior = aProviderClass 
 								ifFalse: [ 
@@ -612,16 +612,16 @@ GtPharoMethodCoder >> example [
 GtPharoMethodCoder >> example: anExampleWithResult [
 	| aCompiledMethod |
 	self unsubscribeFromExample.
-	self
-		attributeNamed: #example
-		put: anExampleWithResult asExampleWithResult.
-	self explicitProviderClass: anExampleWithResult providerClass.
+	self attributeNamed: #example put: anExampleWithResult asExampleWithResult.
+	self explicitProviderClass: anExampleWithResult receiverClass.
 	aCompiledMethod := anExampleWithResult method.
 	(aCompiledMethod selector = self selector
 		and: [ aCompiledMethod methodClass = self behavior ])
 		ifFalse: [ self error: 'Can not assign example of the wrong method' ].
 	self example announcer weak
-		when: GtExampleExecuted send: #handleExampleExecuted: to: self;
+		when: GtExampleExecuted
+			send: #handleExampleExecuted:
+			to: self;
 		when: GtExampleArgumentsChanged
 			send: #handleExampleArgumentsChanged:
 			to: self
@@ -668,12 +668,30 @@ GtPharoMethodCoder >> explanationLink: anExplanation [
 
 { #category : #'api - header' }
 GtPharoMethodCoder >> explicitProviderClass [
-	^ self attributeNamed: #providerClass.
+	self
+		deprecated: 'Use explicitReceiverClass instead of current one'
+		on: '4 August 2026'
+		in: 'Pharo-12.0.0+SNAPSHOT.build.1596.sha.e35513ca606c743cebd99b7db598cfa2a6f4db48 (64 Bit)'.
+	^ self explicitReceiverClass
 ]
 
 { #category : #'api - actions examples' }
 GtPharoMethodCoder >> explicitProviderClass: aClass [
-	self attributeNamed: #providerClass put: aClass 
+	self
+		deprecated: 'Use explicitReceiverClass: instead of current one'
+		on: '4 August 2026'
+		in: 'Pharo-12.0.0+SNAPSHOT.build.1596.sha.e35513ca606c743cebd99b7db598cfa2a6f4db48 (64 Bit)'.
+	self explicitReceiverClass: aClass
+]
+
+{ #category : #'api - header' }
+GtPharoMethodCoder >> explicitReceiverClass [
+	^ self attributeNamed: #explicitReceiverClass.
+]
+
+{ #category : #'api - actions examples' }
+GtPharoMethodCoder >> explicitReceiverClass: aClass [
+	self attributeNamed: #explicitReceiverClass put: aClass 
 ]
 
 { #category : #private }
@@ -694,13 +712,11 @@ GtPharoMethodCoder >> forClass: aBehavior source: aString [
 
 { #category : #initialize }
 GtPharoMethodCoder >> forExample: anExampleWithResult [
-	anExampleWithResult methodClass = anExampleWithResult providerClass
-		ifTrue: [ 
-			self forMethod: anExampleWithResult method ]
-		ifFalse: [ 
-			self
+	anExampleWithResult methodClass = anExampleWithResult receiverClass
+		ifTrue: [ self forMethod: anExampleWithResult method ]
+		ifFalse: [ self
 				forMethod: anExampleWithResult method
-				in: anExampleWithResult providerClass ].
+				in: anExampleWithResult receiverClass ].
 	self example: anExampleWithResult
 ]
 
@@ -713,12 +729,12 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod [
 ]
 
 { #category : #initialize }
-GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
+GtPharoMethodCoder >> forMethod: aCompiledMethod in: aReceiverBehavior [
 	self
 		methodBehavior: (GtPharoCoderBehavior
 				from: (aCompiledMethod methodClass isClassSide
-						ifTrue: [ aBehavior classSide ]
-						ifFalse: [ aBehavior instanceSide ])
+						ifTrue: [ aReceiverBehavior classSide ]
+						ifFalse: [ aReceiverBehavior instanceSide ])
 				to: aCompiledMethod methodClass).
 	self selector: aCompiledMethod selector.
 	self
@@ -727,7 +743,7 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod in: aBehavior [
 
 	self methodBehavior
 		ifRealSubclassBehaviorSameAsRealBehaviorDo: [ :aRealBehavior |  ]
-		ifDifferentDo: [ :aRealBehavior | self explicitProviderClass: aRealBehavior ]
+		ifDifferentDo: [ :aRealBehavior | self explicitReceiverClass: aRealBehavior ]
 		ifAbsent: [ nil ]
 ]
 
