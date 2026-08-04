@@ -51,7 +51,7 @@ GtPharoSequenceNode >> isSequence [
 
 { #category : #testing }
 GtPharoSequenceNode >> lastIsReturn [
-	^ statements notEmpty and: [ statements last isReturn ]
+	^ statements notEmpty and: [ statements last lastIsReturn ]
 ]
 
 { #category : #generated }
