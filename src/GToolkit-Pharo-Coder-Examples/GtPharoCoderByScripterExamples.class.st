@@ -3176,7 +3176,7 @@ GtPharoCoderByScripterExamples >> methodsCoderOnClassMethodSpawn [
 	aScripter wait forEmptySpaceTaskQueueTimeout: 1 second; play.
 			
 	aScripter click
-		// GtPharoHeaderProviderBehaviorId;
+		// GtPharoHeaderReceiverBehaviorId;
 		play.
 
 	self assert: events size equals: 1.

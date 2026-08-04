@@ -53,7 +53,7 @@ GtPharoMethodsCoderByScripterExamples >> classGtMethodsForInTreePager_clickMetho
 	aScripter clickStep: [ :s |
 		s
 			label: 'Click class name in method header';
-			id: GtPharoHeaderProviderBehaviorId;
+			id: GtPharoHeaderReceiverBehaviorId;
 			onChildAt: 1 ].
 	
 	aScripter treePager

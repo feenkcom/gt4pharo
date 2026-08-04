@@ -196,7 +196,7 @@ GtPharoMethodCoderStep >> assertFixItPopoverExists [
 { #category : #'steps - checks' }
 GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIs: aBehavior [
 	| anAssertStep |
-	self assertHeaderProviderIsVisible referenceSender.
+	self assertHeaderReceiverBehaviorIsVisible referenceSender.
 
 	anAssertStep := self assert
 			label: ('Assert header provider class is {1}' format: {aBehavior});
@@ -237,20 +237,20 @@ GtPharoMethodCoderStep >> assertHeaderMethodBehaviorIsVisible [
 ]
 
 { #category : #'steps - checks' }
-GtPharoMethodCoderStep >> assertHeaderProviderBehaviorIs: aBehavior [
+GtPharoMethodCoderStep >> assertHeaderReceiverBehaviorIs: aBehavior [
 	| anAssertStep |
 	anAssertStep := self assert
 			label: ('Assert header receiver class is {1}' format: {aBehavior});
 			value: [ :aButton | aButton label asString ] equals: aBehavior name asString;
 			referenceSender;
 			onParentStepTarget: self;
-			// GtPharoHeaderProviderBehaviorId.
+			// GtPharoHeaderReceiverBehaviorId.
 
 	^ anAssertStep
 ]
 
 { #category : #'steps - checks' }
-GtPharoMethodCoderStep >> assertHeaderProviderIsNotVisible [
+GtPharoMethodCoderStep >> assertHeaderReceiverBehaviorIsNotVisible [
 	| anAssertStep |
 	anAssertStep := self assert
 			label: 'Assert header provider class is not visible';
@@ -258,21 +258,21 @@ GtPharoMethodCoderStep >> assertHeaderProviderIsNotVisible [
 				description: [ :aButton | 'Provider class header must be hidden: {1}' format: {aButton parent} ];
 			referenceSender;
 			onParentStepTarget: self;
-			// GtPharoHeaderProviderBehaviorId.
+			// GtPharoHeaderReceiverBehaviorId.
 
 	^ anAssertStep
 ]
 
 { #category : #'steps - checks' }
-GtPharoMethodCoderStep >> assertHeaderProviderIsVisible [
+GtPharoMethodCoderStep >> assertHeaderReceiverBehaviorIsVisible [
 	| anAssertStep |
 	anAssertStep := self assert
-			label: 'Assert header provider class is visible';
+			label: 'Assert header receiver behavior is visible';
 			satisfies: [ :aButton | aButton parent visibility = BlVisibility visible ]
-				description: [ :aButton | 'Provider class header must be visible: {1}' format: {aButton parent} ];
+				description: [ :aButton | 'Receiver behavior header must be visible: {1}' format: {aButton parent} ];
 			referenceSender;
 			onParentStepTarget: self;
-			// GtPharoHeaderProviderBehaviorId.
+			// GtPharoHeaderReceiverBehaviorId.
 
 	^ anAssertStep
 ]
@@ -511,12 +511,12 @@ GtPharoMethodCoderStep >> clickOnHeaderMethodBehavior [
 ]
 
 { #category : #'steps - interactions' }
-GtPharoMethodCoderStep >> clickOnHeaderProviderBehavior [
+GtPharoMethodCoderStep >> clickOnHeaderReceiverBehavior [
 	| aClickStep |
 	aClickStep := self click
-			label: 'Click on header provider behavior';
+			label: 'Click on header receiver behavior';
 			referenceSender;
-			// GtPharoHeaderProviderBehaviorId.
+			// GtPharoHeaderReceiverBehaviorId.
 
 	^ aClickStep
 ]

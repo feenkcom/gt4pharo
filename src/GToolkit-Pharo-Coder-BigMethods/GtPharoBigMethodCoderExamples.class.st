@@ -82,7 +82,7 @@ GtPharoBigMethodCoderExamples >> coderOnExampleMethodWithSelfLargeMethodCall [
 					assertCompiledMethodIs: GtBigMethodTestClass>>#reduceTable;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtBigMethodTestClass;
-					assertHeaderProviderBehaviorIs: GtBigMethodTestClass;
+					assertHeaderReceiverBehaviorIs: GtBigMethodTestClass;
 					assertMethodExpandersCountIs: 0;
 					coderViewModelDo: [ :aCoderViewModel | 
 						self assert: aCoderViewModel parentCoderViewModel notNil .
@@ -114,7 +114,7 @@ GtPharoBigMethodCoderExamples >> coderOnMethodWithSelfLargeMethodCall [
 					assertCompiledMethodIs: GtBigMethodTestClass>>#reduceTable;
 					assertSelfObjectIs: nil;
 					assertExplicitProviderClassIs: GtBigMethodTestClass;
-					assertHeaderProviderBehaviorIs: GtBigMethodTestClass;
+					assertHeaderReceiverBehaviorIs: GtBigMethodTestClass;
 					assertMethodExpandersCountIs: 0;
 					coderViewModelDo: [ :aCoderViewModel | 
 						self assert: aCoderViewModel parentCoderViewModel notNil .
