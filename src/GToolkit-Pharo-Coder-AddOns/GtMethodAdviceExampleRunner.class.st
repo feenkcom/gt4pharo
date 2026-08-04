@@ -401,6 +401,17 @@ GtMethodAdviceExampleRunner >> undeclaredVariable [
 ]
 
 { #category : #examples }
+GtMethodAdviceExampleRunner >> unreachableCode [
+	<gtExample>
+	^ self
+		compareResultsFrom: GtUnreachableCodeAdvice new
+		source: 'a self something ifTrue: [self somethingElse ifTrue: [^1] ifFalse: [^2]. ^3]. ^4. ^5'
+		to: [ :ast :block | 
+			block value: ast body statements first arguments first body statements first.
+			block value: ast body statements second ]
+]
+
+{ #category : #examples }
 GtMethodAdviceExampleRunner >> valueNotUsedExample [
 	<gtExample>
 	^ self

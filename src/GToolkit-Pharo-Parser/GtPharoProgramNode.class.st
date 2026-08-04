@@ -249,6 +249,11 @@ GtPharoProgramNode >> isVariableDefinition [
 	^ false
 ]
 
+{ #category : #testing }
+GtPharoProgramNode >> lastIsReturn [
+	^ false
+]
+
 { #category : #accessing }
 GtPharoProgramNode >> localVariablesInto: aCollection [
 	| ancestor |
