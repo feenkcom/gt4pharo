@@ -18,6 +18,11 @@ GtPharoReturnNode >> isReturn [
 	^ true
 ]
 
+{ #category : #testing }
+GtPharoReturnNode >> lastIsReturn [
+	^ true
+]
+
 { #category : #accessing }
 GtPharoReturnNode >> messageReceiver [
 	^ value messageReceiver

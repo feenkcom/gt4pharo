@@ -39,6 +39,14 @@ GtPharoMessageSendNode >> isMessageSend [
 	^ true
 ]
 
+{ #category : #testing }
+GtPharoMessageSendNode >> lastIsReturn [
+	^ (#(ifTrue:ifFalse: ifFalse:ifTrue: ifNil:ifNotNil: ifNotNil:ifNil:)
+		includes: self selector)
+		and: [ self arguments
+				allSatisfy: [ :each | each isBlock and: [ each body lastIsReturn ] ] ]
+]
+
 { #category : #generated }
 GtPharoMessageSendNode >> message [
 	^ message
