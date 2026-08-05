@@ -26,14 +26,14 @@ GtPharoMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewM
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+GtPharoMethodCoderHeaderModel >> createContextMenuMethodReceiverBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
 	"Create a context menu for a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
 
 	<return: #BrMenuItems or: nil>
 	| aProviderBehavior |
 	aProviderBehavior := aCoderViewModel
 			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
-			ifNone: [ aCoderViewModel explicitProviderClass ifNil: [ aCoderViewModel behavior ] ].
+			ifNone: [ aCoderViewModel explicitReceiverClass ifNil: [ aCoderViewModel behavior ] ].
 
 	^ aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 

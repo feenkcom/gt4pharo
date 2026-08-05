@@ -47,7 +47,7 @@ GtPharoMethodCoderHeaderElement >> createMethodBehaviorContextMenu [
 { #category : #'instance creation' }
 GtPharoMethodCoderHeaderElement >> createMethodReceiverBehaviorContextMenu [
 	^ headerCoderModel
-		createContextMenuProviderBehaviorFor: self textualCoderViewModel
+		createContextMenuMethodReceiverBehaviorFor: self textualCoderViewModel
 		from: self
 		phlowContext: self createPhlowContext
 ]
@@ -76,20 +76,20 @@ GtPharoMethodCoderHeaderElement >> initializeWidget [
 	self fitContent.
 	self alignCenterLeft.
 	packageButton := self newPackageButton.
-	methodReceiverBehaviorButton := self newReceiverBehaviorButton.
+	methodReceiverBehaviorButton := self newMethodReceiverBehaviorButton.
 	methodReceiverBehaviorIconContainer := self newMethodBehaviorIconContainer.
 	self addChild: packageButton as: GtPharoHeaderPackageId.
 	self
 		addChild: (self buildSeparatorElement margin: (BlInsets left: 5 right: 5))
 		as: #separatorElement.
-	self addChild: methodReceiverBehaviorButton as: GtPharoHeaderReceiverBehaviorId.
+	self addChild: methodReceiverBehaviorButton as: GtPharoHeaderMethodReceiverBehaviorId.
 	self addChild: methodReceiverBehaviorIconContainer as: #iconContainer.
 	self addChild: (methodDefiningBehaviorContainer := (BrHorizontalPane new)
 						fitContent;
 						alignCenterLeft;
 						addChild: (self buildSeparatorElement text: '(');
 						addChild: (methodDefiningBehaviorButton := self newMethodDefiningBehaviorButton)
-							as: GtPharoHeaderMethodBehaviorId;
+							as: GtPharoHeaderMethodDefiningBehaviorId;
 						addChild: (methodDefiningBehaviorIconContainer := self newMethodBehaviorIconContainer);
 						addChild: (self buildSeparatorElement text: ')'))
 ]
@@ -119,6 +119,23 @@ GtPharoMethodCoderHeaderElement >> newMethodDefiningBehaviorButton [
 ]
 
 { #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> newMethodReceiverBehaviorButton [
+	^ BrButton new
+		fitContent;
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
+				+ (BrStyleCommonAptitude new
+						default: [ :aStyle | 
+							aStyle
+								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+								border: BlBorder empty ];
+						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
+			self createMethodReceiverBehaviorContextMenu ]);
+		action: [ self spawnMethodReceiverBehavior ]
+]
+
+{ #category : #'instance creation' }
 GtPharoMethodCoderHeaderElement >> newPackageButton [
 	^ BrButton new
 		fitContent;
@@ -133,23 +150,6 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
 			self createPackageContextMenu ]);
 		action: [ self spawnPackage ]
-]
-
-{ #category : #'instance creation' }
-GtPharoMethodCoderHeaderElement >> newReceiverBehaviorButton [
-	^ BrButton new
-		fitContent;
-		beSmallSize;
-		aptitude: BrGlamorousMetadataLabelAptitude new
-				+ (BrStyleCommonAptitude new
-						default: [ :aStyle | 
-							aStyle
-								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-								border: BlBorder empty ];
-						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
-		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
-			self createMethodReceiverBehaviorContextMenu ]);
-		action: [ self spawnMethodReceiverBehavior ]
 ]
 
 { #category : #'event handling' }

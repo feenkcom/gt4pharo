@@ -21,7 +21,7 @@ GtMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewModel 
 ]
 
 { #category : #'actions - spawning' }
-GtMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+GtMethodCoderHeaderModel >> createContextMenuMethodReceiverBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
 	<return: #BrMenuItems or: nil>
 	^ nil
 ]

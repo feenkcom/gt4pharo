@@ -9202,9 +9202,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 	aScripter methodCoder
 		mouseMoveOver;
 		assertCompiledMethodIs: GtPharoDummyTwoObject >> #anotherExampleCallingSuperclassExample;
-		assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertSelfObjectIs: nil;
 		assertMethodExpandersCountIs: 1;
 		coderModelDo: [ :aCoder | 
@@ -9218,9 +9218,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCall
 					mouseMoveOver;
 					assertCompiledMethodIs: GtPharoDummyOneObject >> #successfulExample;
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 2;
 					coderModelDo: [ :aCoder | 
 						| anExample |
@@ -9260,9 +9260,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodIns
 
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject class;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject class;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionExists;
 		assertPlayAndInspectExampleActionNotExists;
 		select: 'instA' from: 9 to: 14;
@@ -9286,9 +9286,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodVar
 
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject class;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject class;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionExists;
 		assertPlayAndInspectExampleActionNotExists;
 		select: 'VarA' from: 8 to: 12;
@@ -9311,9 +9311,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 			aStep methodCoder
 				mouseMoveOver;
 				assertSelfObjectIs: nil;
-				assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-				assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-				assertHeaderMethodBehaviorIsNotVisible;
+				assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+				assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+				assertHeaderMethodDefiningBehaviorIsNotVisible;
 				assertPlayAndInspectActionNotExists;
 				assertPlayAndInspectExampleActionExists;
 				assertMethodExpandersCountIs: 1;
@@ -9324,9 +9324,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFailingExample [
 					insideDo: [ :stepA | 
 						stepA
 							assertSelfObjectIs: nil;
-							assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-							assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-							assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+							assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+							assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+							assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 							assertParentExampleValueIsKindOf: AssertionFailure;
 							assertExampleAssertionHighlightFrom: 174 to: 238;
 							assertMethodExpandersCountIs: 4;
@@ -9350,9 +9350,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFiveObjectSum21Ref
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyFiveObject class>>#sum21Reference;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyFiveObject class;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyFiveObject class;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertSelfObjectIs: nil;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
@@ -9360,9 +9360,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithFiveObjectSum21Ref
 				aStep
 					assertCompiledMethodIs: GtPharoDummyTwoObject class>>#sum21Reference;
 					assertSelfObjectIs: GtPharoDummyTwoObject;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject class;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject class;
-					assertHeaderMethodBehaviorIsNotVisible;
+					assertExplicitReceiverClassIs: GtPharoDummyTwoObject class;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject class;
+					assertHeaderMethodDefiningBehaviorIsNotVisible;
 					assertMethodExpandersCountIs: 1;
 					coderModelDo: [ :aCoder | 
 						aCoder methodBehavior 
@@ -9399,9 +9399,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethod
 				
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionNotExists;
 		assertPlayAndInspectExampleActionNotExists;
 		select: 'instA' from: 9 to: 14;
@@ -9429,9 +9429,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethod
 				
 	aScripter methodCoder
 		assertSelfObjectIs: anObject;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionExists;
 		assertPlayAndInspectExampleActionNotExists;
 		select: 'instA'
@@ -9459,9 +9459,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethod
 				
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionNotExists;
 		assertPlayAndInspectExampleActionNotExists;
 		select: 'VarA' from: 8 to: 12;
@@ -9489,9 +9489,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithInstanceSideMethod
 				
 	aScripter methodCoder
 		assertSelfObjectIs: anObject;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionExists;
 		assertPlayAndInspectExampleActionNotExists;
 		select: 'VarA' from: 8 to: 12;
@@ -9511,18 +9511,18 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSum
 
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionNotExists;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :stepA | 
 				stepA
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyOneObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-					assertHeaderMethodBehaviorIsNotVisible;
+					assertExplicitReceiverClassIs: GtPharoDummyOneObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+					assertHeaderMethodDefiningBehaviorIsNotVisible;
 					assertMethodExpandersCountIs: 1;
 					assertBindingIsNotDefined: #anObject;
 					assertPlayAndInspectActionNotExists ];
@@ -9543,18 +9543,18 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSum
 
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-		assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+		assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 		assertPlayAndInspectActionNotExists;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :stepA | 
 				stepA
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 1;
 					assertBindingIsNotDefined: #anObject;
 					assertPlayAndInspectActionNotExists ];
@@ -9572,18 +9572,18 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSum
 
 	aScripter methodCoder
 		assertSelfObjectIs: nil;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertPlayAndInspectActionNotExists;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
 			insideDo: [ :stepA | 
 				stepA
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyOneObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyOneObject;
-					assertHeaderMethodBehaviorIsNotVisible;
+					assertExplicitReceiverClassIs: GtPharoDummyOneObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyOneObject;
+					assertHeaderMethodDefiningBehaviorIsNotVisible;
 					assertMethodExpandersCountIs: 1;
 					assertBindingIsNotDefined: #anObject;
 					assertPlayAndInspectActionNotExists ];
@@ -9607,9 +9607,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 	aScripter methodCoder
 		mouseMoveOver;
 		assertCompiledMethodIs: GtPharoDummyTwoObject >> #anotherExampleCallingSuperclassExample;
-		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-		assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+		assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodDefiningBehaviorIs: GtPharoDummyTwoObject;
 		assertSelfObjectIs: nil;
 		assertMethodExpandersCountIs: 1;
 		coderModelDo: [ :aCoder | 
@@ -9623,9 +9623,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 					mouseMoveOver;
 					assertCompiledMethodIs: GtPharoDummyOneObject >> #successfulExample;
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 2;
 					coderModelDo: [ :aCoder | 
 						| anExample |
@@ -9688,7 +9688,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 		assertMethodExpandersCountIs: 1;
 		assertSelfObjectIs: aSelfObject;
 		assertTargetBehaviorIs: aSelfObject class;
-		assertExplicitProviderClassIs: nil;
+		assertExplicitReceiverClassIs: nil;
 		assertPlayAndInspectActionExists;
 		clickOnPlayAndInspectButton;
 		clickOnMethodCoderExpander: 1
@@ -9698,7 +9698,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 					assertMethodExpandersCountIs: 7;
 					assertSelfObjectIs: aSelfObject;
 					assertTargetBehaviorIs: aSelfObject class;
-					assertExplicitProviderClassIs: aSelfObject class;
+					assertExplicitReceiverClassIs: aSelfObject class;
 					assertPlayAndInspectActionExists;
 					clickOnPlayAndInspectButton;
 					clickOnMethodCoderExpander: 1
@@ -9708,7 +9708,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 								assertMethodExpandersCountIs: 1;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class superclass;
-								assertExplicitProviderClassIs: aSelfObject class;
+								assertExplicitReceiverClassIs: aSelfObject class;
 								assertPlayAndInspectActionExists;
 								clickOnPlayAndInspectButton;
 								clickOnMethodCoderExpander: 1
@@ -9718,7 +9718,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 											assertMethodExpandersCountIs: 1;
 											assertSelfObjectIs: aSelfObject;
 											assertTargetBehaviorIs: aSelfObject class;
-											assertExplicitProviderClassIs: aSelfObject class;
+											assertExplicitReceiverClassIs: aSelfObject class;
 											assertPlayAndInspectActionExists;
 											clickOnPlayAndInspectButton ] ];
 					clickOnMethodCoderExpander: 2
@@ -9728,7 +9728,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectAndMethod
 								assertMethodExpandersCountIs: 1;
 								assertSelfObjectIs: aSelfObject;
 								assertTargetBehaviorIs: aSelfObject class;
-								assertExplicitProviderClassIs: aSelfObject class;
+								assertExplicitReceiverClassIs: aSelfObject class;
 								assertPlayAndInspectActionExists;
 								clickOnPlayAndInspectButton ] ];
 		play.
@@ -9750,10 +9750,10 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodCal
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyTwoObject>>#callMethodWithSubclassResponsibility;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-		assertHeaderReceiverBehaviorIsVisible;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodReceiverBehaviorIsVisible;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertSelfObjectIs: nil;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
@@ -9761,10 +9761,10 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodCal
 				aStep
 					assertCompiledMethodIs: GtPharoDummyOneObject>>#methodWithSubclassResponsibility;
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-					assertHeaderMethodBehaviorIsVisible;
-					assertHeaderReceiverBehaviorIsVisible;
+					assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodDefiningBehaviorIsVisible;
+					assertHeaderMethodReceiverBehaviorIsVisible;
 					assertMethodExpandersCountIs: 1;
 					coderModelDo: [ :aCoder | 
 						aCoder methodBehavior 
@@ -9800,10 +9800,10 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodNum
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyTwoObject >>#number;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-		assertHeaderReceiverBehaviorIsVisible;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodReceiverBehaviorIsVisible;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertSelfObjectIs: nil;
 		assertMethodExpandersCountIs: 7;
 		clickOnMethodCoderExpander: 3
@@ -9811,10 +9811,10 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodNum
 				aStep
 					assertCompiledMethodIs: GtPharoDummyOneObject>>#three;
 					assertSelfObjectIs: nil;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-					assertHeaderMethodBehaviorIsVisible;
-					assertHeaderReceiverBehaviorIsVisible;
+					assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodDefiningBehaviorIsVisible;
+					assertHeaderMethodReceiverBehaviorIsVisible;
 					assertMethodExpandersCountIs: 2;
 					coderModelDo: [ :aCoder | 
 						aCoder methodBehavior 
@@ -9847,9 +9847,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertSelfObjectIs: aSelfObject;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
@@ -9857,24 +9857,24 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 				s
 					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
 					assertSelfObjectIs: aSelfObject;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 1;
 					clickOnMethodCoderExpander: 1
 						insideDo: [ :printStringStep | 
 							printStringStep
 								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
-								assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-								assertHeaderMethodBehaviorIsNotVisible;
+								assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+								assertHeaderMethodDefiningBehaviorIsNotVisible;
 								assertSelfObjectIs: aSelfObject;
 								assertMethodExpandersCountIs: 1;
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :objectPrintStringStep | 
 										objectPrintStringStep
 											assertCompiledMethodIs: Object >> #printString;
-											assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-											assertHeaderMethodBehaviorIs: Object;
+											assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+											assertHeaderMethodDefiningBehaviorIs: Object;
 											assertSelfObjectIs: aSelfObject;
 											assertMethodExpandersCountIs: 1 ] ] ];
 		play.
@@ -9894,9 +9894,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
-		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-		assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+		assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodDefiningBehaviorIs: GtPharoDummyTwoObject;
 		assertSelfObjectIs: aSelfObject;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
@@ -9904,26 +9904,26 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 				s
 					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
 					assertSelfObjectIs: aSelfObject;
-					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 1;
 					clickOnMethodCoderExpander: 1
 						insideDo: [ :printStringStep | 
 							printStringStep
 								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
-								assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-								assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-								assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+								assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+								assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+								assertHeaderMethodDefiningBehaviorIs: GtPharoDummyTwoObject;
 								assertSelfObjectIs: aSelfObject;
 								assertMethodExpandersCountIs: 1;
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :objectPrintStringStep | 
 										objectPrintStringStep
 											assertCompiledMethodIs: Object >> #printString;
-											assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-											assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-											assertHeaderMethodBehaviorIs: Object;
+											assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+											assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+											assertHeaderMethodDefiningBehaviorIs: Object;
 											assertSelfObjectIs: aSelfObject;
 											assertMethodExpandersCountIs: 1 ] ] ];
 		play.
@@ -9942,9 +9942,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
-		assertExplicitProviderClassIs: nil;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-		assertHeaderMethodBehaviorIsNotVisible;
+		assertExplicitReceiverClassIs: nil;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+		assertHeaderMethodDefiningBehaviorIsNotVisible;
 		assertSelfObjectIs: aSelfObject;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
@@ -9952,24 +9952,24 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 				s
 					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
 					assertSelfObjectIs: aSelfObject;
-					assertExplicitProviderClassIs: GtPharoDummyTwoObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyTwoObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 1;
 					clickOnMethodCoderExpander: 1
 						insideDo: [ :printStringStep | 
 							printStringStep
 								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
-								assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-								assertHeaderMethodBehaviorIsNotVisible;
+								assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+								assertHeaderMethodDefiningBehaviorIsNotVisible;
 								assertSelfObjectIs: aSelfObject;
 								assertMethodExpandersCountIs: 1;
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :objectPrintStringStep | 
 										objectPrintStringStep
 											assertCompiledMethodIs: Object >> #printString;
-											assertHeaderReceiverBehaviorIs: GtPharoDummyTwoObject;
-											assertHeaderMethodBehaviorIs: Object;
+											assertHeaderMethodReceiverBehaviorIs: GtPharoDummyTwoObject;
+											assertHeaderMethodDefiningBehaviorIs: Object;
 											assertSelfObjectIs: aSelfObject;
 											assertMethodExpandersCountIs: 1;
 											assertPlayAndInspectActionExists ] ] ];
@@ -9990,9 +9990,9 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 
 	aScripter methodCoder
 		assertCompiledMethodIs: GtPharoDummyTwoObject >> #one;
-		assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-		assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-		assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+		assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+		assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+		assertHeaderMethodDefiningBehaviorIs: GtPharoDummyTwoObject;
 		assertSelfObjectIs: aSelfObject;
 		assertMethodExpandersCountIs: 1;
 		clickOnMethodCoderExpander: 1
@@ -10000,26 +10000,26 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 				s
 					assertCompiledMethodIs: GtPharoDummyOneObject >> #one;
 					assertSelfObjectIs: aSelfObject;
-					assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-					assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-					assertHeaderMethodBehaviorIs: GtPharoDummyOneObject;
+					assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+					assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+					assertHeaderMethodDefiningBehaviorIs: GtPharoDummyOneObject;
 					assertMethodExpandersCountIs: 1;
 					clickOnMethodCoderExpander: 1
 						insideDo: [ :printStringStep | 
 							printStringStep
 								assertCompiledMethodIs: GtPharoDummyTwoObject >> #printString;
-								assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-								assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-								assertHeaderMethodBehaviorIs: GtPharoDummyTwoObject;
+								assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+								assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+								assertHeaderMethodDefiningBehaviorIs: GtPharoDummyTwoObject;
 								assertSelfObjectIs: aSelfObject;
 								assertMethodExpandersCountIs: 1;
 								clickOnMethodCoderExpander: 1
 									insideDo: [ :objectPrintStringStep | 
 										objectPrintStringStep
 											assertCompiledMethodIs: Object >> #printString;
-											assertExplicitProviderClassIs: GtPharoDummyThreeObject;
-											assertHeaderReceiverBehaviorIs: GtPharoDummyThreeObject;
-											assertHeaderMethodBehaviorIs: Object;
+											assertExplicitReceiverClassIs: GtPharoDummyThreeObject;
+											assertHeaderMethodReceiverBehaviorIs: GtPharoDummyThreeObject;
+											assertHeaderMethodDefiningBehaviorIs: Object;
 											assertSelfObjectIs: aSelfObject;
 											assertMethodExpandersCountIs: 1 ] ] ];
 		play.
@@ -11437,10 +11437,10 @@ GtPharoMethodCoderByScripterExamples >> traitMethodCoderSpawnsTrait [
 
 	scripter methodCoder
 		mouseMoveOver;
-		assertHeaderReceiverBehaviorIs: TSmaCCParseNodeVisitor;
+		assertHeaderMethodReceiverBehaviorIs: TSmaCCParseNodeVisitor;
 		play.
 
-	scripter clickStep: [ :s | s // GtPharoHeaderReceiverBehaviorId ].
+	scripter clickStep: [ :s | s // GtPharoHeaderMethodReceiverBehaviorId ].
 
 	scripter
 		assertStep: [ :s | 
