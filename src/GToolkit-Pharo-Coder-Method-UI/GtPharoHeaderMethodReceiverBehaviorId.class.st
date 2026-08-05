@@ -1,10 +1,10 @@
 Class {
-	#name : #GtPharoHeaderReceiverBehaviorId,
+	#name : #GtPharoHeaderMethodReceiverBehaviorId,
 	#superclass : #BlElementUniqueId,
 	#category : #'GToolkit-Pharo-Coder-Method-UI-IDs'
 }
 
 { #category : #accessing }
-GtPharoHeaderReceiverBehaviorId >> asSymbol [
+GtPharoHeaderMethodReceiverBehaviorId >> asSymbol [
 	^ #'coder--header-receiver-behavior'
 ]

@@ -104,7 +104,8 @@ GtPharoBehaviorCoder >> forObject: anObject [
 GtPharoBehaviorCoder >> forObject: anObject behavior: aBehavior [
 	| aValueHolder |
 	self
-		assert: [ anObject isKindOf: aBehavior ]
+		assert: [ (anObject isKindOf: aBehavior instanceSide)
+				or: [ anObject isKindOf: aBehavior classSide ] ]
 		description: [ 'Object {1} must be kind of {2}'
 				format: {anObject.
 						aBehavior} ].

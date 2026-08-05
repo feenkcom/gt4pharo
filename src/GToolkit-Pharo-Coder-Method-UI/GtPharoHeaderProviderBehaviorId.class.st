@@ -1,6 +1,6 @@
 Class {
 	#name : #GtPharoHeaderProviderBehaviorId,
-	#superclass : #GtPharoHeaderReceiverBehaviorId,
+	#superclass : #GtPharoHeaderMethodReceiverBehaviorId,
 	#category : #'GToolkit-Pharo-Coder-Method-UI-IDs'
 }
 

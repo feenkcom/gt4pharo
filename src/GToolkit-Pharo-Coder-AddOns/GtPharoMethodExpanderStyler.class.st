@@ -49,7 +49,7 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 	aMessage parent isNil ifTrue: [ ^ self ].
 	aSelfObject := self coderViewModel selfObject.
 	aClass := aSelfObject
-			ifNil: [ self coderViewModel explicitProviderClass
+			ifNil: [ self coderViewModel explicitReceiverClass
 					ifNil: [ self coderViewModel coderModel behavior ] ]
 			ifNotNil: [ :theSelfObject | theSelfObject class ].
 	aLookupStartClass := (aMessage parent receiver isVariable
@@ -74,7 +74,7 @@ GtPharoMethodExpanderStyler >> visitMessage: aMessage [
 			parentEvaluationContext: evaluationContext;
 			parentSelfObjectHolder: coderViewModel selfObjectHolder;
 			parentMessage: aMessage;
-			parentExplicitReceiverClass: self coderViewModel explicitProviderClass;
+			parentExplicitReceiverClass: self coderViewModel explicitReceiverClass;
 			parentExample: (coderViewModel example ifNil: [ coderViewModel parentExample ]);
 			parentTestCase: (coderViewModel testCase ifNil: [ coderViewModel parentTestCase ]).
 	anAttribute argumentBindingsBuilder: aBuilder.

@@ -13,18 +13,18 @@ Class {
 	#instVars : [
 		'packageButton',
 		'headerCoderModel',
-		'methodBehaviourButton',
-		'providerBehaviorButton',
-		'methodBehaviourIconContainer',
-		'methodBehaviourContainer',
-		'providerBehaviorIconContainer'
+		'methodDefiningBehaviorContainer',
+		'methodDefiningBehaviorButton',
+		'methodDefiningBehaviorIconContainer',
+		'methodReceiverBehaviorButton',
+		'methodReceiverBehaviorIconContainer'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-! Views'
 }
 
 { #category : #accessing }
 GtPharoMethodCoderHeaderElement >> behaviorButton [
-	^ providerBehaviorButton
+	^ methodReceiverBehaviorButton
 ]
 
 { #category : #initialization }
@@ -45,6 +45,14 @@ GtPharoMethodCoderHeaderElement >> createMethodBehaviorContextMenu [
 ]
 
 { #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> createMethodReceiverBehaviorContextMenu [
+	^ headerCoderModel
+		createContextMenuMethodReceiverBehaviorFor: self textualCoderViewModel
+		from: self
+		phlowContext: self createPhlowContext
+]
+
+{ #category : #'instance creation' }
 GtPharoMethodCoderHeaderElement >> createPackageContextMenu [
 	^ headerCoderModel
 		createPackageContextMenuFor: self textualCoderViewModel
@@ -57,12 +65,23 @@ GtPharoMethodCoderHeaderElement >> createPhlowContext [
 	^ self textualCoderViewModel createPhlowContext
 ]
 
-{ #category : #'instance creation' }
-GtPharoMethodCoderHeaderElement >> createProviderContextMenu [
-	^ headerCoderModel
-		createContextMenuProviderBehaviorFor: self textualCoderViewModel
-		from: self
-		phlowContext: self createPhlowContext
+{ #category : #'gt - extensions' }
+GtPharoMethodCoderHeaderElement >> gtActionInspectHeaderCoderModelFor: anAction [
+	<gtAction>
+	^ anAction button
+		priority: 85;
+		target: GtPhlowObjectContextMenuTarget;
+		icon: BrGlamorousVectorIcons inspect;
+		tooltip: 'Inspect header coder model';
+		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		menuItemPreview: [ headerCoderModel gtDisplayText ];
+		action: [ :aButton | aButton phlow spawnObject: headerCoderModel ];
+		primaryModifierAction: [ :aButton | 
+				BlSpace new
+					withCommonSettings;
+					objectInPager: headerCoderModel;
+					showFrom: aButton ]
+			mouseCursor: BlCopyCursor new
 ]
 
 { #category : #initialization }
@@ -76,33 +95,33 @@ GtPharoMethodCoderHeaderElement >> initializeWidget [
 	self fitContent.
 	self alignCenterLeft.
 	packageButton := self newPackageButton.
-	providerBehaviorButton := self newProviderBehaviorButton.
-	providerBehaviorIconContainer := self newIconContainer.
+	methodReceiverBehaviorButton := self newMethodReceiverBehaviorButton.
+	methodReceiverBehaviorIconContainer := self newMethodBehaviorIconContainer.
 	self addChild: packageButton as: GtPharoHeaderPackageId.
 	self
 		addChild: (self buildSeparatorElement margin: (BlInsets left: 5 right: 5))
 		as: #separatorElement.
-	self addChild: providerBehaviorButton as: GtPharoHeaderReceiverBehaviorId.
-	self addChild: providerBehaviorIconContainer as: #iconContainer.
-	self addChild: (methodBehaviourContainer := (BrHorizontalPane new)
+	self addChild: methodReceiverBehaviorButton as: GtPharoHeaderMethodReceiverBehaviorId.
+	self addChild: methodReceiverBehaviorIconContainer as: #iconContainer.
+	self addChild: (methodDefiningBehaviorContainer := (BrHorizontalPane new)
 						fitContent;
 						alignCenterLeft;
 						addChild: (self buildSeparatorElement text: '(');
-						addChild: (methodBehaviourButton := self newMethodBehaviorButton)
-							as: GtPharoHeaderMethodBehaviorId;
-						addChild: (methodBehaviourIconContainer := self newIconContainer);
+						addChild: (methodDefiningBehaviorButton := self newMethodDefiningBehaviorButton)
+							as: GtPharoHeaderMethodDefiningBehaviorId;
+						addChild: (methodDefiningBehaviorIconContainer := self newMethodBehaviorIconContainer);
 						addChild: (self buildSeparatorElement text: ')'))
 ]
 
 { #category : #initialization }
-GtPharoMethodCoderHeaderElement >> newIconContainer [
+GtPharoMethodCoderHeaderElement >> newMethodBehaviorIconContainer [
 	^ BrFrame new
 		fitContent;
 		layout: BlFrameLayout new
 ]
 
 { #category : #'instance creation' }
-GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
+GtPharoMethodCoderHeaderElement >> newMethodDefiningBehaviorButton [
 	^ BrButton new
 		fitContent;
 		beSmallSize;
@@ -115,7 +134,24 @@ GtPharoMethodCoderHeaderElement >> newMethodBehaviorButton [
 						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
 		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
 			self createMethodBehaviorContextMenu ]);
-		action: [ self spawnMethodBehavior ]
+		action: [ self spawnMethodDefiningBehavior ]
+]
+
+{ #category : #'instance creation' }
+GtPharoMethodCoderHeaderElement >> newMethodReceiverBehaviorButton [
+	^ BrButton new
+		fitContent;
+		beSmallSize;
+		aptitude: BrGlamorousMetadataLabelAptitude new
+				+ (BrStyleCommonAptitude new
+						default: [ :aStyle | 
+							aStyle
+								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+								border: BlBorder empty ];
+						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
+			self createMethodReceiverBehaviorContextMenu ]);
+		action: [ self spawnMethodReceiverBehavior ]
 ]
 
 { #category : #'instance creation' }
@@ -133,23 +169,6 @@ GtPharoMethodCoderHeaderElement >> newPackageButton [
 		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
 			self createPackageContextMenu ]);
 		action: [ self spawnPackage ]
-]
-
-{ #category : #'instance creation' }
-GtPharoMethodCoderHeaderElement >> newProviderBehaviorButton [
-	^ BrButton new
-		fitContent;
-		beSmallSize;
-		aptitude: BrGlamorousMetadataLabelAptitude new
-				+ (BrStyleCommonAptitude new
-						default: [ :aStyle | 
-							aStyle
-								geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-								border: BlBorder empty ];
-						hovered: [ :aStyle | aStyle border: self theme button hoveredBorderColor ]);
-		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ 
-			self createProviderContextMenu ]);
-		action: [ self spawnProviderBehavior ]
 ]
 
 { #category : #'event handling' }
@@ -182,9 +201,9 @@ GtPharoMethodCoderHeaderElement >> packageButton [
 
 { #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> resetBreadcrumbElements [
-	methodBehaviourContainer visibility: BlVisibility gone.
-	providerBehaviorIconContainer removeChildren.
-	methodBehaviourIconContainer removeChildren
+	methodDefiningBehaviorContainer visibility: BlVisibility gone.
+	methodReceiverBehaviorIconContainer removeChildren.
+	methodDefiningBehaviorIconContainer removeChildren
 ]
 
 { #category : #accessing }
@@ -200,10 +219,17 @@ GtPharoMethodCoderHeaderElement >> showIconNamed: anIconName in: anIconContainer
 		gtSafeIconNamed: anIconName) asElement 
 ]
 
-{ #category : #'instance creation' }
-GtPharoMethodCoderHeaderElement >> spawnMethodBehavior [	
+{ #category : #'private - actions' }
+GtPharoMethodCoderHeaderElement >> spawnMethodDefiningBehavior [	
 	headerCoderModel
-		spawnMethodBehaviorFor: self textualCoderViewModel 
+		spawnMethodDefiningBehaviorFor: self textualCoderViewModel 
+		from: self.
+]
+
+{ #category : #'private - actions' }
+GtPharoMethodCoderHeaderElement >> spawnMethodReceiverBehavior [	
+	headerCoderModel
+		spawnMethodReceiverBehaviorFor: self textualCoderViewModel 
 		from: self.
 ]
 
@@ -212,13 +238,6 @@ GtPharoMethodCoderHeaderElement >> spawnPackage [
 	headerCoderModel
 		spawnPackageFor: self textualCoderViewModel 
 		from: self
-]
-
-{ #category : #'private - actions' }
-GtPharoMethodCoderHeaderElement >> spawnProviderBehavior [	
-	headerCoderModel
-		spawnProviderBehaviorFor: self textualCoderViewModel 
-		from: self.
 ]
 
 { #category : #'api - textual coder view model' }
@@ -246,42 +265,42 @@ GtPharoMethodCoderHeaderElement >> unsubscribeFromTextualCoderViewModel [
 ]
 
 { #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> updateBehaviorElements [
-	self updateProviderBehaviorContent.
-
-	headerCoderModel hasMethodBehaviourData 
-		ifTrue: [ self updateMethodBehaviorContent ]
-]
-
-{ #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> updateBreadcrumbElements [
 	headerCoderModel := textualCoderViewModel computeHeaderBreadcrumbModel.
 	
 	self resetBreadcrumbElements.
 	
 	self updatePackageLabel.
-	self updateBehaviorElements
+	self updateMethodBehaviorElements
 ]
 
 { #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> updateMethodBehaviorContent [
-	methodBehaviourContainer visibility: BlVisibility visible.
+GtPharoMethodCoderHeaderElement >> updateMethodBehaviorElements [
+	self updateMethodReceiverBehaviorContent.
+
+	headerCoderModel hasMethodDefiningBehaviourData 
+		ifTrue: [ self updateMethodDefiningBehaviorContent ]
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> updateMethodDefiningBehaviorContent [
+	methodDefiningBehaviorContainer visibility: BlVisibility visible.
 	
-	methodBehaviourButton label: headerCoderModel methodBehaviourName.
-	headerCoderModel methodBehaviourIconName
+	methodDefiningBehaviorButton label: headerCoderModel methodDefiningBehaviourName.
+	headerCoderModel methodDefiningBehaviourIconName
 		ifNotNil: [ :anIconName | 
-			self showIconNamed: anIconName in: methodBehaviourIconContainer ]
+			self showIconNamed: anIconName in: methodDefiningBehaviorIconContainer ]
+]
+
+{ #category : #'event handling' }
+GtPharoMethodCoderHeaderElement >> updateMethodReceiverBehaviorContent [
+	methodReceiverBehaviorButton label: headerCoderModel providerBehaviourName.
+	headerCoderModel methodReceiverBehaviourIconName
+		ifNotNil: [ :anIconName | 
+			self showIconNamed: anIconName in: methodReceiverBehaviorIconContainer ]
 ]
 
 { #category : #'event handling' }
 GtPharoMethodCoderHeaderElement >> updatePackageLabel [
 	packageButton label: headerCoderModel packageName
-]
-
-{ #category : #'event handling' }
-GtPharoMethodCoderHeaderElement >> updateProviderBehaviorContent [
-	providerBehaviorButton label: headerCoderModel providerBehaviourName.
-	headerCoderModel providerBehaviourIconName
-		ifNotNil: [ :anIconName | 
-			self showIconNamed: anIconName in: providerBehaviorIconContainer ]
 ]

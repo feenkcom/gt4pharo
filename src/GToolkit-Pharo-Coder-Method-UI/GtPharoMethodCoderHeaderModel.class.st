@@ -26,14 +26,14 @@ GtPharoMethodCoderHeaderModel >> createContextMenuMethodBehaviorFor: aCoderViewM
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> createContextMenuProviderBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
+GtPharoMethodCoderHeaderModel >> createContextMenuMethodReceiverBehaviorFor: aCoderViewModel from: anElement phlowContext: aPhlowContext [
 	"Create a context menu for a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
 
 	<return: #BrMenuItems or: nil>
 	| aProviderBehavior |
 	aProviderBehavior := aCoderViewModel
 			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
-			ifNone: [ aCoderViewModel explicitProviderClass ifNil: [ aCoderViewModel behavior ] ].
+			ifNone: [ aCoderViewModel explicitReceiverClass ifNil: [ aCoderViewModel behavior ] ].
 
 	^ aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodBehavior :aMethod | 
@@ -78,25 +78,25 @@ GtPharoMethodCoderHeaderModel >> createPackageContextMenuFor: aCoderViewModel fr
 
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForBehaviour: aBehavior fromCoderViewModel: aCoderViewModel [
-	| explicitProviderClass providerBehaviorClass methodBehaviorClass |
+	| explicitReceiverClass methodReceiverBehaviorClass methodDefiningBehaviorClass |
 	
 	packageName := aBehavior package name.
 	
-	explicitProviderClass := aCoderViewModel explicitProviderClass.
-	(explicitProviderClass isNil or: [ explicitProviderClass = aBehavior ])
+	explicitReceiverClass := aCoderViewModel explicitReceiverClass.
+	(explicitReceiverClass isNil or: [ explicitReceiverClass = aBehavior ])
 		ifTrue: [ 
-			providerBehaviorClass := aBehavior.
-			methodBehaviorClass := nil. ]
+			methodReceiverBehaviorClass := aBehavior.
+			methodDefiningBehaviorClass := nil. ]
 		ifFalse: [ 
-			providerBehaviorClass := explicitProviderClass.
-			methodBehaviorClass := aBehavior ].
+			methodReceiverBehaviorClass := explicitReceiverClass.
+			methodDefiningBehaviorClass := aBehavior ].
 	
-	providerBehaviourName := providerBehaviorClass name.
-	providerBehaviourIconName := providerBehaviorClass systemIconName.
+	methodReceiverBehaviorName := methodReceiverBehaviorClass name.
+	methodReceiverBehaviourIconName := methodReceiverBehaviorClass systemIconName.
 	
-	methodBehaviorClass ifNotNil: [
-		methodBehaviourName := methodBehaviorClass name.
-		methodBehaviourIconName := methodBehaviorClass systemIconName. ]
+	methodDefiningBehaviorClass ifNotNil: [
+		methodDefiningBehaviourName := methodDefiningBehaviorClass name.
+		methodDefiningBehaviourIconName := methodDefiningBehaviorClass systemIconName. ]
 ]
 
 { #category : #initialization }
@@ -119,15 +119,16 @@ GtPharoMethodCoderHeaderModel >> initializeForCoderViewModel: aCoderViewModel [
 { #category : #initialization }
 GtPharoMethodCoderHeaderModel >> initializeForUnknownBehaviour [
 	packageName := 'Unknown'.
-	providerBehaviourName := 'Unknown'.
+	methodReceiverBehaviorName := 'Unknown'.
 ]
 
 { #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel from: anElement [
-	"Spawn a behavior that implements a method. Display also the given method."
+GtPharoMethodCoderHeaderModel >> spawnMethodDefiningBehaviorFor: aCoderViewModel from: anElement [
+	"Spawn a behavior that implements a method. It can be Class or Trait. 
+	Display also the given method."
 
 	aCoderViewModel methodOrigin
-		originalMethodDo: [ :aMethodBehavior :aMethod | 
+		originalMethodDo: [ :aMethodDefiningBehavior :aMethod | 
 			anElement phlow
 				spawnTool: (GtMethodCoderTool
 						compiledMethod: aMethod
@@ -142,6 +143,37 @@ GtPharoMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel from: a
 ]
 
 { #category : #'actions - spawning' }
+GtPharoMethodCoderHeaderModel >> spawnMethodReceiverBehaviorFor: aCoderViewModel from: anElement [
+	"Spawn a method receiver behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
+
+	| aReceiverBehavior |
+	aReceiverBehavior := aCoderViewModel
+			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
+			ifNone: [ aCoderViewModel explicitProviderClass
+					ifNil: [ aCoderViewModel methodOrigin isTraitOrigin
+							ifTrue: [ aCoderViewModel methodOrigin trait ]
+							ifFalse: [ aCoderViewModel behavior ] ] ].
+
+	aCoderViewModel methodOrigin
+		originalMethodDo: [ :aMethodDefiningBehavior :aMethod | 
+			aMethodDefiningBehavior = aReceiverBehavior
+				ifTrue: [ self spawnMethodDefiningBehaviorFor: aCoderViewModel from: anElement ]
+				ifFalse: [ anElement phlow
+						spawnTool: (GtClassCoderTool
+								forClass: aReceiverBehavior
+								selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
+		ifUnknown: [ aCoderViewModel coderModel methodBehavior
+				realBehaviorDo: [ :aMethodBehavior | 
+					aMethodBehavior = aReceiverBehavior
+						ifTrue: [ self spawnMethodDefiningBehaviorFor: aCoderViewModel from: anElement ]
+						ifFalse: [ anElement phlow
+								spawnTool: (GtClassCoderTool
+										forClass: aReceiverBehavior
+										selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
+				ifAbsent: [  "do nothing" ] ]
+]
+
+{ #category : #'actions - spawning' }
 GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
 	aCoderViewModel methodOrigin  
 		behaviorDo: [ :aBehavior |
@@ -151,35 +183,4 @@ GtPharoMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElemen
 				realBehaviorDo: [ :aBehavior |
 					anElement phlow spawnTool: (GtPackageCoderTool forPackage: aBehavior package) ] 
 				ifAbsent: [ "do nothing" ] ]
-]
-
-{ #category : #'actions - spawning' }
-GtPharoMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel from: anElement [
-	"Spawn a provider behavior, which is either aCoderViewModel selfObject class or aCoderViewModel behavior."
-
-	| aProviderBehavior |
-	aProviderBehavior := aCoderViewModel
-			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
-			ifNone: [ aCoderViewModel explicitProviderClass
-					ifNil: [ aCoderViewModel methodOrigin isTraitOrigin
-							ifTrue: [ aCoderViewModel methodOrigin trait ]
-							ifFalse: [ aCoderViewModel behavior ] ] ].
-
-	aCoderViewModel methodOrigin
-		originalMethodDo: [ :aMethodBehavior :aMethod | 
-			aMethodBehavior = aProviderBehavior
-				ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
-				ifFalse: [ anElement phlow
-						spawnTool: (GtClassCoderTool
-								forClass: aProviderBehavior
-								selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
-		ifUnknown: [ aCoderViewModel coderModel methodBehavior
-				realBehaviorDo: [ :aMethodBehavior | 
-					aMethodBehavior = aProviderBehavior
-						ifTrue: [ self spawnMethodBehaviorFor: aCoderViewModel from: anElement ]
-						ifFalse: [ anElement phlow
-								spawnTool: (GtClassCoderTool
-										forClass: aProviderBehavior
-										selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
-				ifAbsent: [  "do nothing" ] ]
 ]
