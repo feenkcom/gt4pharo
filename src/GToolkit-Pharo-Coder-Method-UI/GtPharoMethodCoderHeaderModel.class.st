@@ -128,7 +128,7 @@ GtPharoMethodCoderHeaderModel >> spawnMethodDefiningBehaviorFor: aCoderViewModel
 	Display also the given method."
 
 	aCoderViewModel methodOrigin
-		originalMethodDo: [ :aMethodBehavior :aMethod | 
+		originalMethodDo: [ :aMethodDefiningBehavior :aMethod | 
 			anElement phlow
 				spawnTool: (GtMethodCoderTool
 						compiledMethod: aMethod

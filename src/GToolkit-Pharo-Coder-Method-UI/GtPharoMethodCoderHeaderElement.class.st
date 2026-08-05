@@ -65,6 +65,25 @@ GtPharoMethodCoderHeaderElement >> createPhlowContext [
 	^ self textualCoderViewModel createPhlowContext
 ]
 
+{ #category : #'gt - extensions' }
+GtPharoMethodCoderHeaderElement >> gtActionInspectHeaderCoderModelFor: anAction [
+	<gtAction>
+	^ anAction button
+		priority: 85;
+		target: GtPhlowObjectContextMenuTarget;
+		icon: BrGlamorousVectorIcons inspect;
+		tooltip: 'Inspect header coder model';
+		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		menuItemPreview: [ headerCoderModel gtDisplayText ];
+		action: [ :aButton | aButton phlow spawnObject: headerCoderModel ];
+		primaryModifierAction: [ :aButton | 
+				BlSpace new
+					withCommonSettings;
+					objectInPager: headerCoderModel;
+					showFrom: aButton ]
+			mouseCursor: BlCopyCursor new
+]
+
 { #category : #initialization }
 GtPharoMethodCoderHeaderElement >> initialize [
 	super initialize.
@@ -200,7 +219,7 @@ GtPharoMethodCoderHeaderElement >> showIconNamed: anIconName in: anIconContainer
 		gtSafeIconNamed: anIconName) asElement 
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'private - actions' }
 GtPharoMethodCoderHeaderElement >> spawnMethodDefiningBehavior [	
 	headerCoderModel
 		spawnMethodDefiningBehaviorFor: self textualCoderViewModel 
