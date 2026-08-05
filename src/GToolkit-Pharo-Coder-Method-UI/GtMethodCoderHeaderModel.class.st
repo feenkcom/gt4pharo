@@ -6,10 +6,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'packageName',
-		'methodBehaviourName',
-		'methodBehaviourIconName',
-		'providerBehaviourName',
-		'providerBehaviourIconName'
+		'methodReceiverBehaviorName',
+		'methodReceiverBehaviourIconName',
+		'methodDefiningBehaviourName',
+		'methodDefiningBehaviourIconName'
 	],
 	#category : #'GToolkit-Pharo-Coder-Method-UI-Support'
 }
@@ -33,8 +33,8 @@ GtMethodCoderHeaderModel >> createPackageContextMenuFor: aCoderViewModel from: a
 ]
 
 { #category : #testing }
-GtMethodCoderHeaderModel >> hasMethodBehaviourData [
-	^ self methodBehaviourName notNil
+GtMethodCoderHeaderModel >> hasMethodDefiningBehaviourData [
+	^ self methodDefiningBehaviourName notNil
 ]
 
 { #category : #initialization }
@@ -43,13 +43,18 @@ GtMethodCoderHeaderModel >> initializeForCoderViewModel: aCoderViewModel [
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderModel >> methodBehaviourIconName [
-	^ methodBehaviourIconName
+GtMethodCoderHeaderModel >> methodDefiningBehaviourIconName [
+	^ methodDefiningBehaviourIconName
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderModel >> methodBehaviourName [
-	^ methodBehaviourName
+GtMethodCoderHeaderModel >> methodDefiningBehaviourName [
+	^ methodDefiningBehaviourName
+]
+
+{ #category : #accessing }
+GtMethodCoderHeaderModel >> methodReceiverBehaviourIconName [
+	^ methodReceiverBehaviourIconName
 ]
 
 { #category : #accessing }
@@ -58,26 +63,21 @@ GtMethodCoderHeaderModel >> packageName [
 ]
 
 { #category : #accessing }
-GtMethodCoderHeaderModel >> providerBehaviourIconName [
-	^ providerBehaviourIconName
-]
-
-{ #category : #accessing }
 GtMethodCoderHeaderModel >> providerBehaviourName [
-	^ providerBehaviourName
+	^ methodReceiverBehaviorName
 ]
 
 { #category : #'actions - spawning' }
-GtMethodCoderHeaderModel >> spawnMethodBehaviorFor: aCoderViewModel  from: anElement [
+GtMethodCoderHeaderModel >> spawnMethodDefiningBehaviorFor: aCoderViewModel from: anElement [
+	self subclassResponsibility
+]
+
+{ #category : #'actions - spawning' }
+GtMethodCoderHeaderModel >> spawnMethodReceiverBehaviorFor: aCoderViewModel from: anElement [
 	self subclassResponsibility
 ]
 
 { #category : #'actions - spawning' }
 GtMethodCoderHeaderModel >> spawnPackageFor: aCoderViewModel from: anElement [
-	self subclassResponsibility
-]
-
-{ #category : #'actions - spawning' }
-GtMethodCoderHeaderModel >> spawnProviderBehaviorFor: aCoderViewModel  from: anElement [
 	self subclassResponsibility
 ]
