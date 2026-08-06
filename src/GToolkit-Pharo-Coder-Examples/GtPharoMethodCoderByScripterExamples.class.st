@@ -9673,7 +9673,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithSubclassBehaviorWi
 							ifAbsent: [ AssertionFailure signal: 'Real method behavior must exist' ].
 
 						anExample := aCoder example.
-						self assert: anExample providerClass equals: GtPharoDummyThreeObject.
+						self assert: anExample receiverClass equals: GtPharoDummyThreeObject.
 						self assert: anExample methodClass equals: GtPharoDummyOneObject.
 						self assert: anExample run returnValue equals: 4.4 ];
 					clickOnPlayAndInspectExampleButton;

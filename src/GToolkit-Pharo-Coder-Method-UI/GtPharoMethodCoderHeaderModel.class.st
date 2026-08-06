@@ -149,10 +149,10 @@ GtPharoMethodCoderHeaderModel >> spawnMethodReceiverBehaviorFor: aCoderViewModel
 	| aReceiverBehavior |
 	aReceiverBehavior := aCoderViewModel
 			ifSelfObject: [ :aSelfObject | aSelfObject class instanceSide ]
-			ifNone: [ aCoderViewModel explicitProviderClass
+			ifNone: [ aCoderViewModel explicitReceiverClass
 					ifNil: [ aCoderViewModel methodOrigin isTraitOrigin
-							ifTrue: [ aCoderViewModel methodOrigin trait ]
-							ifFalse: [ aCoderViewModel behavior ] ] ].
+							ifTrue: [ aCoderViewModel methodOrigin trait instanceSide ]
+							ifFalse: [ aCoderViewModel behavior instanceSide ] ] ].
 
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodDefiningBehavior :aMethod | 
