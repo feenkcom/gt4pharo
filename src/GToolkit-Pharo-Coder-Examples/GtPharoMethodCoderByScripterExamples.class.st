@@ -9273,6 +9273,40 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodIns
 	^ aScripter
 ]
 
+{ #category : #'coder - method' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodInstA_SelfObjectSpawnReceiverBehavior [
+	<gtExample>
+	| aScripter anObject |
+	anObject := GtPharoDummyOneObject new.
+	aScripter := self methodCoderElementWithClassSideMethodInstA.
+
+	aScripter doStep: [ :s |
+		s
+			label: 'Add self object to coder view model';
+			action: [ :aCoderViewModel | aCoderViewModel selfObject: anObject ];
+			onModel ].
+
+	aScripter methodCoder
+		assertSelfObjectIs: anObject;
+		clickOnHeaderMethodReceiverBehavior;
+		play.
+
+	aScripter assertStep: [ :s |
+			s
+				label: 'Assert spawn event contained method coder tool';
+				satisfies: [ :theScripter |
+					| expectedMethod |
+					expectedMethod := self methodWithClassSideMethodInstA.
+					theScripter events reversed
+						detectEventOfClass: GtPhlowObjectToSpawn
+						ifFound: [ :theEvent |
+							(theEvent object == expectedMethod) and: [ theEvent tool isKindOf: GtMethodCoderTool ] ]
+						ifNone: [ false ] ];
+				onScripter ].
+
+	^ aScripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithClassSideMethodVarA [
 	<gtExample>

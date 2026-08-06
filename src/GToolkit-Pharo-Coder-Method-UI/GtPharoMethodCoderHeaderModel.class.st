@@ -156,7 +156,7 @@ GtPharoMethodCoderHeaderModel >> spawnMethodReceiverBehaviorFor: aCoderViewModel
 
 	aCoderViewModel methodOrigin
 		originalMethodDo: [ :aMethodDefiningBehavior :aMethod | 
-			aMethodDefiningBehavior = aReceiverBehavior
+			aMethodDefiningBehavior instanceSide = aReceiverBehavior
 				ifTrue: [ self spawnMethodDefiningBehaviorFor: aCoderViewModel from: anElement ]
 				ifFalse: [ anElement phlow
 						spawnTool: (GtClassCoderTool
@@ -164,7 +164,7 @@ GtPharoMethodCoderHeaderModel >> spawnMethodReceiverBehaviorFor: aCoderViewModel
 								selfObjectHolder: aCoderViewModel selfObjectHolder) ] ]
 		ifUnknown: [ aCoderViewModel coderModel methodBehavior
 				realBehaviorDo: [ :aMethodBehavior | 
-					aMethodBehavior = aReceiverBehavior
+					aMethodBehavior instanceSide = aReceiverBehavior
 						ifTrue: [ self spawnMethodDefiningBehaviorFor: aCoderViewModel from: anElement ]
 						ifFalse: [ anElement phlow
 								spawnTool: (GtClassCoderTool

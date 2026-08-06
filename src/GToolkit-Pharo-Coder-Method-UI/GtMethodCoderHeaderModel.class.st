@@ -62,6 +62,19 @@ GtMethodCoderHeaderModel >> packageName [
 	^ packageName
 ]
 
+{ #category : #printing }
+GtMethodCoderHeaderModel >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		nextPutAll: '(package: ';
+		print: packageName;
+		nextPutAll: ', receiver: ';
+		print: methodReceiverBehaviorName;
+		nextPutAll: ', defining: ';
+		print: methodDefiningBehaviourName;
+		nextPutAll: ')'
+]
+
 { #category : #accessing }
 GtMethodCoderHeaderModel >> providerBehaviourName [
 	^ methodReceiverBehaviorName
