@@ -9572,7 +9572,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithOneObjectMethodSum
 	aScripter := self
 			scripterForBlock: [ | aCoder | 
 				aCoder := self methodCoderWithOneObjectMethodSumOneTwoOnSelfArgument.
-				aCoder explicitProviderClass: GtPharoDummyThreeObject.
+				aCoder explicitReceiverClass: GtPharoDummyThreeObject.
 				aCoder asCoderViewModel ].
 
 	aScripter methodCoder
@@ -9923,7 +9923,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 	aScripter := self
 			scripterForBlock: [ | aCoder |
 				aCoder := self methodCoderWithTwoObjectMethodOne.
-				aCoder explicitProviderClass: GtPharoDummyThreeObject ].
+				aCoder explicitReceiverClass: GtPharoDummyThreeObject ].
 	aSelfObject := nil.
 
 	aScripter methodCoder
@@ -10019,7 +10019,7 @@ GtPharoMethodCoderByScripterExamples >> methodCoderElementWithTwoObjectMethodOne
 	aScripter := self
 			scripterForBlock: [ | aCoder |
 				aCoder := self methodCoderWithTwoObjectMethodOne.
-				aCoder explicitProviderClass: GtPharoDummyThreeObject.
+				aCoder explicitReceiverClass: GtPharoDummyThreeObject.
 				aCoder asCoderViewModel selfObject: (aSelfObject := GtPharoDummyThreeObject new) ].
 
 	aScripter methodCoder
