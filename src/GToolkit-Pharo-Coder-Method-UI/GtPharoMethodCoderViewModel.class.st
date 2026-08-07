@@ -331,6 +331,7 @@ GtPharoMethodCoderViewModel >> gtInfo [
 		aStream nextPut: #protocol -> self protocol.
 		aStream nextPut: #methodOrigin -> self methodOrigin.
 		aStream nextPut: #explicitReceiverClass -> self explicitReceiverClass.
+		aStream nextPut: #computeHeaderBreadcrumbModel -> self computeHeaderBreadcrumbModel.
 	
 		aStream nextPut: #isMeta -> self isMeta.
 		aStream nextPut: #isFromTrait -> self isFromTrait.
