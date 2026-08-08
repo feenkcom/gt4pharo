@@ -69,7 +69,7 @@ GtPharoMethodExpanderAttribute >> configureViewModel: viewModel andCoder: coder 
 	argumentBindingsBuilder compiledMethod ifNil: [ ^ self ].
 
 	argumentBindingsBuilder explicitReceiverClass
-		ifNotNil: [ :aClass | coder explicitProviderClass: aClass ].
+		ifNotNil: [ :aClass | coder explicitReceiverClass: aClass ].
 	argumentBindingsBuilder localBindings
 		ifNotNil: [ :aLocalBindings | viewModel addLocalBindings: aLocalBindings ].
 	argumentBindingsBuilder receiverObjectHolder

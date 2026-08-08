@@ -613,7 +613,7 @@ GtPharoMethodCoder >> example: anExampleWithResult [
 	| aCompiledMethod |
 	self unsubscribeFromExample.
 	self attributeNamed: #example put: anExampleWithResult asExampleWithResult.
-	self explicitProviderClass: anExampleWithResult receiverClass.
+	self explicitReceiverClass: anExampleWithResult receiverClass.
 	aCompiledMethod := anExampleWithResult method.
 	(aCompiledMethod selector = self selector
 		and: [ aCompiledMethod methodClass = self behavior ])
