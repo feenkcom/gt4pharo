@@ -132,5 +132,5 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
 					overRange: (BrTextCharacterRange
 							start: (anInterval first min: aSourceText text size)
 							end: (anInterval last min: aSourceText text size)
-							documentId: documentId) ]
+							documentId: aSourceText documentId) ]
 ]
