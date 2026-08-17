@@ -16,14 +16,15 @@ Class {
 { #category : #'examples - support' }
 GtScripterCoderAdviceHighlightOverMarkerStylerExamples >> assertAttribute: anAttributeClass presentAt: aPosition in: aBrText [
 	<return: #Boolean>
-	^ (aBrText attributesAt: aPosition) anySatisfy: [ :each | each isKindOf: anAttributeClass ]
+	^ (aBrText attributesAt: aPosition)
+		anySatisfy: [ :each | each isKindOf: anAttributeClass ]
 ]
 
 { #category : #'examples - support' }
 GtScripterCoderAdviceHighlightOverMarkerStylerExamples >> assertHighlightAttribute: anId presentAt: aPosition in: aBrText [
 	<return: #Boolean>
-	^ (aBrText attributesAt: aPosition) anySatisfy: [ :each |
-		(each isKindOf: BlTextHighlightAttribute) and: [ each id = anId ] ]
+	^ (aBrText attributesAt: aPosition)
+		anySatisfy: [ :each | (each isKindOf: BlTextHighlightAttribute) and: [ each id = anId ] ]
 ]
 
 { #category : #examples }
