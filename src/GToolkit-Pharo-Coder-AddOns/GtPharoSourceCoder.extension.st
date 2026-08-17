@@ -743,6 +743,12 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
+	| aBuildContext |
+	aBuildContext := GtCoderAddOnsBuildContext new 
+		documentId: aDocumentId;
+		astNode: aNode;
+		editorElement: anElement;
+		sourceCoderViewModel: aSourceCoderViewModel.
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ ^ self
 				renameMethod: aSourceCoderViewModel
@@ -751,7 +757,7 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel documentId: aD
 				for: anElement ].
 	aNode isVariable
 		ifTrue: [ (self isLocalVariable: aNode)
-				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
+				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode context: aBuildContext ].
 			(self isInstanceVariable: aNode)
 				ifTrue: [ ^ self
 						renameInstanceVariableIn: aSourceCoderViewModel
@@ -823,6 +829,63 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 	action := GtCoderViewModelRenameAction
 			locations: locations
 			textualCoderViewModel: aSourceCoderViewModel.
+	action selectAll: true.
+	action forVariableOrUnaryMessage.
+	renameAttributes := OrderedCollection new.
+	otherCoders
+		do: [ :each | 
+			each
+				implicitVariableReferencesTo: aVariableNode variableName
+				do: [ :node | 
+					| attribute |
+					attribute := GtRenamePreviewAttribute new text: originalSource.
+					(each currentSourceText from: node startPosition to: node stopPosition)
+						attributes: {attribute}.
+					renameAttributes add: attribute ].
+			each sourceChangedTo: each currentSourceText ].
+	action
+		when: GtRenameActionAnnouncement
+		do: [ :ann | 
+			ann eventType = #textUpdated
+				ifTrue: [ renameAttributes
+						do: [ :each | each updateText: ann renameAction newName asRopedText ] ].
+			ann eventType = #uninstall
+				ifTrue: [ otherCoders
+						do: [ :each | 
+							each currentSourceText
+								clearAttributes: [ :attr | attr isKindOf: GtRenamePreviewAttribute ].
+							each sourceChangedTo: each currentSourceText ] ].
+			ann eventType = #accept
+				ifTrue: [ otherCoders
+						do: [ :each | each renameImplicitTemporary: aVariableNode variableName to: action newName ] ] ]
+		for: self.
+	action install.
+	^ action
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNode context: aBuildContext [
+	| action locations announcement definer otherCoders renameAttributes originalSource |
+	originalSource := (aSourceCoderViewModel styledText
+			ifNil: [ aSourceCoderViewModel sourceText ])
+			from: aVariableNode startPosition
+			to: aVariableNode stopPosition.
+	originalSource documentId = aBuildContext documentId 
+		ifFalse: [ ^ self ]. 
+	
+	locations := OrderedCollection new.
+	definer := aVariableNode whoDefines.
+	announcement := GtCoderRenameTemporaryRequestedAnnouncement new.
+	definer isNil
+		ifTrue: [ announcement variableName: aVariableNode name source.
+			self announce: announcement ].
+	otherCoders := announcement interestedCoders reject: [ :each | each == self ].
+	(definer ifNil: [ aVariableNode topParent ])
+		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ locations add: each name sourceInterval ] ].
+	action := GtCoderViewModelRenameAction
+			locations: locations
+			textualCoderViewModel: aSourceCoderViewModel.
+	action documentId: aBuildContext documentId.
 	action selectAll: true.
 	action forVariableOrUnaryMessage.
 	renameAttributes := OrderedCollection new.
