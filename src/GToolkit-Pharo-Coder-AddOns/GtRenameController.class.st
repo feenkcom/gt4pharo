@@ -107,12 +107,13 @@ GtRenameController >> previewPosition [
 	^ self renamePosition
 ]
 
-{ #category : #executing }
+{ #category : #actions }
 GtRenameController >> renameAction [
 	^ (GtCoderViewModelRenameAction
 		locations: self allRenameIntervals
 		textualCoderViewModel: sourceCoderViewModel)
 		hasRefactoringPreview: true;
+		documentId: self documentId;
 		yourself
 ]
 
