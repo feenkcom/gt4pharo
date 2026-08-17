@@ -929,7 +929,7 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns co
 				highlightNodesBlock: (self allReferencesTo: aNode)
 				documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
-		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
+		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode context: aBuildContext ]
 		id: #'context-menu--rename-temp'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 				gtDisplayString

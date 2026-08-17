@@ -7,10 +7,17 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-FixIt'
 }
 
-{ #category : #executing }
+{ #category : #actions }
 GtInteractiveRenameVariableFixItAction >> basicExecuteOn: anEditorElement [
 	BlTaskAction enqueueElement: anEditorElement action: [
-		sourceCoder renameTemporaryIn: coderViewModel node: node ]
+		sourceCoder
+			renameTemporaryIn: coderViewModel
+			node: node
+			context: (GtCoderAddOnsBuildContext new
+				documentId: coderViewModel documentId;
+				astNode: node;
+				editorElement: anEditorElement;
+				sourceCoderViewModel: coderViewModel) ]
 ]
 
 { #category : #accessing }
