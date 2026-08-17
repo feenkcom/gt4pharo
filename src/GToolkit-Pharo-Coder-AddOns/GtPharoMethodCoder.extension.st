@@ -831,6 +831,7 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns contex
 							self
 								renameClassIn: aCoderViewModel
 								node: aNode
+								context: aBuildContext
 								for: element ]
 						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 								gtDisplayString ] ].
@@ -855,6 +856,7 @@ GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOn
 			self
 				renameClassVariableIn: aCoderViewModel
 				node: aNode
+				context: aBuildContext
 				for: element ]
 		id: #'context-menu--rename-class-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
@@ -872,12 +874,13 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self
 				highlightNodesBlock: (self allReferencesTo: aNode)
-				documentId: aBuildContext)
+				documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
 			self
 				renameInstanceVariableIn: aCoderViewModel
 				node: aNode
+				context: aBuildContext
 				for: element ]
 		id: #'context-menu--rename-inst-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
