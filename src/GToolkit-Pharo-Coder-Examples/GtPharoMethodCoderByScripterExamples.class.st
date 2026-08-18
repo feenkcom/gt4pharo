@@ -11001,6 +11001,7 @@ GtPharoMethodCoderByScripterExamples >> renameMessageSend [
 				action: [ :each | 
 					(GtRenameMethodController2 new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						originalNode: node) executeIn: each ];
 				id: GtSourceCoderEditorId ].
 	self checkButtonVisibility: #(1) in: scripter.
@@ -11077,6 +11078,7 @@ GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
 					ast := GtPharoParser parse: each editor text asString.
 					(GtRenameMethodController2 new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						originalNode: ast pattern) executeIn: each ];
 				id: GtSourceCoderEditorId ].
 	self checkButtonVisibility: #(1) in: scripter.
