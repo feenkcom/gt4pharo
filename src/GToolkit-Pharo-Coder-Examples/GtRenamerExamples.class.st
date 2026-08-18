@@ -18,12 +18,34 @@ GtRenamerExamples >> applyInstanceVariableRename [
 	newName := originalName copyFrom: 1 to: originalName size - 1.
 
 	scripter keyPressStep: [ :s | s key: BlKeyboardKey arrowLeft ].
-	scripter keyPressStep: [ :s | s label: 'Delete char'; key: BlKeyboardKey backspace ].
-	scripter keyPressStep: [ :s | s label: 'Open preview'; key: BlKeyboardKey return ].
-	scripter keyPressStep: [ :s | s label: 'Apply rename'; key: BlKeyboardKey return ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Delete char';
+				key: BlKeyboardKey backspace ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Open preview';
+				key: BlKeyboardKey return ].
+	scripter
+		keyPressStep: [ :s | 
+			s
+				label: 'Apply rename';
+				key: BlKeyboardKey return ].
 
-	self assert: (realClass instVarNames includes: newName).
-	self assert: (realClass instVarNames includes: originalName) not.
+	self
+		assert: (realClass instVarNames includes: newName)
+		description: [ 'Expected {2}''s {1} instance variable name: {3}'
+				format: {newName.
+						realClass.
+						realClass instVarNames} ].
+	self
+		assert: (realClass instVarNames includes: originalName) not
+		description: [ 'Unexpected {2}''s {1} instance variable: {3}'
+				format: {originalName.
+						realClass.
+						realClass instVarNames} ].
 	^ scripter
 ]
 
