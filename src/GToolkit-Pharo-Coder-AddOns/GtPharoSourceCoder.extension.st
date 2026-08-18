@@ -614,7 +614,8 @@ GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel for: anE
 GtPharoSourceCoder >> renameBaseline: node in: aTextualViewModel for: anElement [
 	(GtRenameBaselineInMethodController new
 		sourceCoderViewModel: aTextualViewModel;
-		originalNode: node) executeIn: anElement
+		originalNode: node;
+		documentId: aTextualViewModel documentId) executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -850,7 +851,8 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel for: anElement
 GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel from: anElement [
 	(GtRenamePackageInBaselineController new
 		sourceCoderViewModel: aTextualViewModel;
-		originalNode: node) execute
+		originalNode: node;
+		documentId: aTextualViewModel documentId) execute
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
