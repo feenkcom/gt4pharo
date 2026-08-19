@@ -19,6 +19,7 @@ GtExtractLiteralToClassVariableController >> addGetterEditor [
 	renameAction := GtRenameSelectorAction
 			message: message
 			textualCoderViewModel: sourceCoderViewModel.
+	renameAction documentId: documentId.
 	renameAction newSelector: getter.
 	renameAction selectAll: true.
 	renameAction

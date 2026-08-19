@@ -61,6 +61,7 @@ GtExtractTemporaryRefactoringController >> safelyExecute [
 			sourceCoderViewModel moveCursorTo: var stopPosition.
 			(sourceCoderViewModel renameLocalVariableAt: var stopPosition)
 				ifNotNil: [ :action | 
+					action documentId: documentId.
 					action
 						when: GtRenameActionAnnouncement
 						do: [ :ann | 

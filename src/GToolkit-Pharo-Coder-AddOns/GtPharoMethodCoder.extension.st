@@ -159,10 +159,11 @@ GtPharoMethodCoder >> addExtractLiteralRefactoringFor: aNode to: coderAddOns con
 		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
-			(GtExtractLiteralToClassVariableController new
+			GtExtractLiteralToClassVariableController new
 				sourceCoderViewModel: aCoderViewModel;
 				literalNode: aNode;
-				documentId: aBuildContext documentId) executeIn: element ]
+				documentId: aBuildContext documentId; 
+				executeIn: element ]
 		id: #'context-menu--extract-literal-to-class-variable'
 ]
 

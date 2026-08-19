@@ -189,6 +189,7 @@ GtExtractMethodToComponentController >> installRenamer [
 	renameAction := GtRenameSelectorAction
 			message: message
 			textualCoderViewModel: sourceCoderViewModel.
+	renameAction documentId: documentId.
 	(self potentialReceivers size > 1 and: [ self showReceiverType ])
 		ifTrue: [ renameAction focusedIndex: 0 ].
 	renameAction newSelector: self newExtractedSelector.
