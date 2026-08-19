@@ -22,7 +22,13 @@ GtRenamerExamples >> applyInstanceVariableRename [
 		keyPressStep: [ :s | 
 			s
 				label: 'Delete char';
-				key: BlKeyboardKey backspace ].
+				key: BlKeyboardKey delete ].
+	scripter assert
+		label: 'Assert rename editor text';
+		value: [ :anEditor | anEditor text asString ] equals: newName;
+		// GtRenameEditor;
+		play.
+
 	scripter
 		keyPressStep: [ :s | 
 			s
@@ -46,6 +52,17 @@ GtRenamerExamples >> applyInstanceVariableRename [
 				format: {originalName.
 						realClass.
 						realClass instVarNames} ].
+
+	scripter assert
+		label: 'Assert coder editor source text';
+		satisfies: [ :anEditor | anEditor text asString endsWith: newName ]
+			description: [ :anEditor | 
+				'Editor text should ends with `{1}`: {2}'
+					format: {newName.
+							anEditor text asString} ];
+		// GtSourceCoderEditorInnerId;
+		play.
+
 	^ scripter
 ]
 
@@ -219,6 +236,12 @@ GtRenamerExamples >> startInstanceVariableRename [
 		combination: BlKeyCombination primaryR;
 		// GtSourceCoderEditorInnerId;
 		play.
+	scripter assert
+		label: 'Rename editor exists';
+		exists;
+		// GtRenameEditor;
+		play.
+		
 	^ scripter
 ]
 

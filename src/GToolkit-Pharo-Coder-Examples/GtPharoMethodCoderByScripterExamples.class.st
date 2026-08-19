@@ -2771,7 +2771,7 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 	scripter
 		doStep: [ :s | 
 			s
-				label: 'Type in a method with argument';
+				label: 'Type in a method';
 				action: [ :each | 
 					each
 						appendString: '
@@ -2781,7 +2781,7 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 	scripter
 		doStep: [ :s | 
 			s
-				label: 'Save a method with argument';
+				label: 'Save changed method';
 				action: [ :each | each save ];
 				onModel ].
 
