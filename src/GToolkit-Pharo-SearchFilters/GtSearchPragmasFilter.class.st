@@ -28,7 +28,7 @@ GtSearchPragmasFilter >> filterValueString [
 GtSearchPragmasFilter >> gtDisplayOn: stream [
 	stream 
 		nextPutAll: self symbol printString;
-		nextPutAll: ' pragmas'
+		nextPutAll: ' gtPragmas'
 ]
 
 { #category : #comparing }
@@ -49,6 +49,13 @@ GtSearchPragmasFilter >> isMethodPragmaFilter [
 
 { #category : #printing }
 GtSearchPragmasFilter >> printOn: aStream [
+	aStream 
+		nextPutAll: self symbol printString;
+		nextPutAll: ' gtPragmas'
+]
+
+{ #category : #storing }
+GtSearchPragmasFilter >> storeCreationCodeOn: aStream [
 	aStream 
 		nextPutAll: self symbol printString;
 		nextPutAll: ' gtPragmas'

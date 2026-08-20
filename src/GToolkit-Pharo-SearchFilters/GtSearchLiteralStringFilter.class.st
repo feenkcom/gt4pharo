@@ -81,6 +81,16 @@ GtSearchLiteralStringFilter >> initialize [
 	caseSensitive := false.
 ]
 
+{ #category : #storing }
+GtSearchLiteralStringFilter >> storeCreationCodeOn: aStream [
+	aStream
+		print: self substring.
+		
+	self caseSensitive 
+		ifTrue: [ aStream nextPutAll: ' gtSubstringLiteralCaseSensitiveMatch' ]
+		ifFalse: [  aStream nextPutAll: ' gtSubstringLiteralMatch'  ]
+]
+
 { #category : #'api - accessing' }
 GtSearchLiteralStringFilter >> substring [
 	^ substring

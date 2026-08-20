@@ -113,6 +113,13 @@ GtSearchCommentsFilter >> matchingIntervalsInString: aString do: aBlock [
 			index := index + searchString size ]
 ]
 
+{ #category : #storing }
+GtSearchCommentsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]
+
 { #category : #accessing }
 GtSearchCommentsFilter >> text [
 	^ text

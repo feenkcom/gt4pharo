@@ -23,3 +23,10 @@ GtSearchClassMethodsFilter >> hash [
 GtSearchClassMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod methodClass isClassSide
 ]
+
+{ #category : #printing }
+GtSearchClassMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

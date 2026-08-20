@@ -74,6 +74,17 @@ GtSubstringFilter >> shouldIncludeNotSearchableMethods [
 	^ includesNotSearchableMethods ifNil: [ false ]
 ]
 
+{ #category : #printing }
+GtSubstringFilter >> storeCreationCodeOn: aStream [
+	aStream
+		print: self substring.
+	aStream nextPutAll: ' gtSubstringMatch'.
+		
+	self shouldIncludeNotSearchableMethods 
+		ifTrue: [ aStream nextPutAll: '
+		includeNotSearchableMethods' ]
+]
+
 { #category : #accessing }
 GtSubstringFilter >> substring [
 	^ substring
