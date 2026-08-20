@@ -279,9 +279,10 @@ GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coder
 				hover: nil
 				leave: nil
 				action: [ :model :element | 
-					(GtExtractToWrappedMethodObjectRefactoringController new
+					GtExtractToWrappedMethodObjectRefactoringController new
 						sourceCoderViewModel: model;
-						documentId: model documentId) executeIn: element ] ]
+						documentId: model documentId;
+						executeIn: element ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

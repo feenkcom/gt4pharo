@@ -3460,6 +3460,7 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectArgumentsInSam
 				action: [ :each | 
 					(GtExtractToWrappedMethodObjectRefactoringController new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						infect: 'wrappedMethodSelectorFor: methodName in: aRefactoring ^#write:';
 						infect: 'methodObjectSelectorFor: methodName in: ref ^#doWrite:' yourself)
 						executeIn: each ];
@@ -3580,8 +3581,10 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClas
 			s
 				label: 'Start extract wrapped method object';
 				action: [ :each | 
-					(GtExtractToWrappedMethodObjectRefactoringController new
-						sourceCoderViewModel: each textualCoderViewModel) executeIn: each ];
+					GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
+						executeIn: each ];
 				// GtSourceCoderExpandedContentElement ].
 	scripter
 		checkStep: [ :s | 
@@ -3617,6 +3620,7 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenPassingSel
 				action: [ :each | 
 					(GtExtractToWrappedMethodObjectRefactoringController new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						infect: 'wrappedMethodSelectorFor: methodName in: aRefactoring ^#write:';
 						infect: 'methodObjectSelectorFor: methodName in: ref ^#doWrite:' yourself)
 						executeIn: each ];
