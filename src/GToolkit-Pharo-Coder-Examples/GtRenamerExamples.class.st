@@ -174,7 +174,7 @@ GtRenamerExamples >> instanceVariableRenamerScripter [
 		protocol: 'accessing'.
 
 	editorElement := GtSourceCoderElement new
-		textualCoderViewModel: (GtPharoMethodCoderViewModel new coder: (GtPharoMethodCoder forClass: realClass source: text asRopedText));
+		textualCoderViewModel: (GtPharoMethodCoderViewModel new coder: (GtPharoMethodCoder forMethod: (realClass >> #readInstanceVariable)));
 		fitContent.
 
 	scripter := BlScripter new.
