@@ -30,3 +30,10 @@ GtSearchImagePackagesFilter >> itemsDo: aBlock [
 GtSearchImagePackagesFilter >> packagesDo: aBlock [
 	self packageOrganizer packages do: aBlock
 ]
+
+{ #category : #storing }
+GtSearchImagePackagesFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

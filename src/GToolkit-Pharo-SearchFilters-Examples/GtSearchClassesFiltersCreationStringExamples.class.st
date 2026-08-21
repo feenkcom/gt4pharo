@@ -31,6 +31,17 @@ GtSearchClassesFiltersCreationStringExamples >> deprecatedClassesFilterCreationC
 	^ self wrappedCreationCodeFor: filter
 ]
 
+{ #category : #'examples - packages' }
+GtSearchClassesFiltersCreationStringExamples >> deprecatedPackagesFilterCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchDeprecatedPackagesFilter new.
+	self
+		assertCreatioCodeFor: filter
+		equals: 'GtSearchDeprecatedPackagesFilter new'.
+	^ self wrappedCreationCodeFor: filter
+]
+
 { #category : #'examples - stateless' }
 GtSearchClassesFiltersCreationStringExamples >> imageClassesFilterCreationCode [
 	<gtExample>
@@ -39,6 +50,17 @@ GtSearchClassesFiltersCreationStringExamples >> imageClassesFilterCreationCode [
 	self
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchImageClassesFilter new'.
+	^ self wrappedCreationCodeFor: filter
+]
+
+{ #category : #'examples - packages' }
+GtSearchClassesFiltersCreationStringExamples >> imagePackagesFilterCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchImagePackagesFilter new.
+	self
+		assertCreatioCodeFor: filter
+		equals: 'GtSearchImagePackagesFilter new'.
 	^ self wrappedCreationCodeFor: filter
 ]
 

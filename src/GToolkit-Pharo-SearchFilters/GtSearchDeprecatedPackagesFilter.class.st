@@ -8,3 +8,10 @@ Class {
 GtSearchDeprecatedPackagesFilter >> includesPackage: aPackage [
 	^ aPackage isDeprecated
 ]
+
+{ #category : #storing }
+GtSearchDeprecatedPackagesFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]
