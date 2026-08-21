@@ -189,6 +189,26 @@ GtSearchMethodsFiltersCreationStringExamples >> pragmasFiltersCreationCode [
 ]
 
 { #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> rbASTExpressionFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: (GtSearchRBASTFilter sourceExpression: '`@receiver at: `@argument')
+		equals: '''`@receiver at: `@argument'' gtASTMatches'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> rbASTMethodFilterCreationCode [
+	<gtExample>
+	| source |
+	source := 'example: anObject
+	^ anObject at: 1'.
+	^ self
+		assertCreatioCodeFor: (GtSearchRBASTFilter sourceMethod: source)
+		equals: '''example: anObject
+	^ anObject at: 1'' gtASTMethodMatches'.
+]
+
+{ #category : #'examples - parameterized' }
 GtSearchMethodsFiltersCreationStringExamples >> rbPatternFilterCreationCode [
 	<gtExample>
 	^ self
