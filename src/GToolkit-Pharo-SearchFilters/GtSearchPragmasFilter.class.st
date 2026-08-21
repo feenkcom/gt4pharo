@@ -57,7 +57,7 @@ GtSearchPragmasFilter >> printOn: aStream [
 { #category : #storing }
 GtSearchPragmasFilter >> storeCreationCodeOn: aStream [
 	aStream 
-		nextPutAll: self symbol printString;
+		print: self symbol asSymbol;
 		nextPutAll: ' gtPragmas'
 ]
 

@@ -66,3 +66,13 @@ GtSearchScopedMethodsPackageScope >> package: aPackage [
 	package := aPackage.
 	filter package: aPackage
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsPackageScope >> storeCreationCodeOn: aStream [
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		nextPutAll: ' new) package: '.
+	aStream print: self package name asString.
+	aStream nextPutAll: ' asPackage'
+]

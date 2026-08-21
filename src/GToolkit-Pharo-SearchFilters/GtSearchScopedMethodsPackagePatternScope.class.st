@@ -98,3 +98,16 @@ GtSearchScopedMethodsPackagePatternScope >> pattern: aString [
 	pattern := aString.
 	filter pattern: aString.
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsPackagePatternScope >> storeCreationCodeOn: aStream [
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		nextPutAll: ' new) pattern: '.
+	aStream print: self pattern.
+	order ifNotNil: [
+		aStream
+			nextPutAll: '; order: ';
+			print: order ]
+]

@@ -59,3 +59,12 @@ GtSearchScopedMethodsClassHierarchyScope >> itemValue [
 GtSearchScopedMethodsClassHierarchyScope >> label [
 	^ 'Hierarchy: ' , (self itemClass ifNotNil: #name ifNil: [ 'none' ])
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsClassHierarchyScope >> storeCreationCodeOn: aStream [
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		nextPutAll: ' new) itemClass: ';
+		nextPutAll: self itemClass name
+]

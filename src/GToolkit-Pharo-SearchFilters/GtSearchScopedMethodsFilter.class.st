@@ -39,3 +39,11 @@ GtSearchScopedMethodsFilter >> scope [
 GtSearchScopedMethodsFilter >> scope: anObject [
 	scope := anObject
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new scope: '.
+	aStream parenthesize: [ self scope storeCreationCodeOn: aStream ]
+]

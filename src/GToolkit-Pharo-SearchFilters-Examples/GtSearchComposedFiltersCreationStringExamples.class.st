@@ -55,3 +55,20 @@ GtSearchComposedFiltersCreationStringExamples >> referencesImplementorsAndClassP
 		assertCreatioCodeFor: filter
 		equals: '(((#runGitWithArgs: gtReferences) | (#runGitWithArgsAsync: gtReferences)) & ((#gtViewGitCallsIn: gtImplementors) not)) & (''PureGitCommandLineInterface'' gtClassMatches)'
 ]
+
+{ #category : #examples }
+GtSearchComposedFiltersCreationStringExamples >> referencesScopedMethodsAndMethodFiltersCreationCode [
+	<gtExample>
+	| filter |
+	filter := BlElement gtReferences
+		& ((GtSearchScopedMethodsFilter new scope: GtSearchScopedMethodsAllScope default)
+			& 'Bloc-Examples' gtPackageMatches
+			& 'return:' gtPragmas
+			& '``@any background: ``@any1' gtASTMatches
+			& 'BlChildrenWrappingGeometryExamples' gtClassMatches
+			& GtSearchDefinedMethodsFilter new
+			& '50 @ 50' gtSubstringMatch).
+	^ self
+		assertCreatioCodeFor: filter
+		equals: 'BlElement gtReferences & ((GtSearchScopedMethodsFilter new scope: GtSearchScopedMethodsAllScope default) & ''Bloc-Examples'' gtPackageMatches & #return: gtPragmas & ''``@any background: ``@any1'' gtASTMatches & ''BlChildrenWrappingGeometryExamples'' gtClassMatches & GtSearchDefinedMethodsFilter new & ''50 @ 50'' gtSubstringMatch)'
+]
