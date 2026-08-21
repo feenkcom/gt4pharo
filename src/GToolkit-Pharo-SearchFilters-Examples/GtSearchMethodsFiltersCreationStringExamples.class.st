@@ -173,6 +173,22 @@ GtSearchMethodsFiltersCreationStringExamples >> nonTraitMethodsFilterCreationCod
 ]
 
 { #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> overriddenMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: (GtSearchOverriddenMethodsFilter new method: (Object >> #yourself))
+		equals: 'GtSearchOverriddenMethodsFilter new method: (Object >> #yourself)'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> overridingMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: (GtSearchOverridingMethodsFilter new method: (Object >> #yourself))
+		equals: 'GtSearchOverridingMethodsFilter new method: (Object >> #yourself)'.
+]
+
+{ #category : #'examples - parameterized' }
 GtSearchMethodsFiltersCreationStringExamples >> packagePatternFilterCreationCode [
 	<gtExample>
 	^ self
