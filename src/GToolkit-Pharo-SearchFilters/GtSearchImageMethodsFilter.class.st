@@ -43,3 +43,10 @@ GtSearchImageMethodsFilter >> methodsDo: aBlock [
 		aClass instanceSide methods do: aBlock.
 		aClass classSide methods do: aBlock. ]
 ]
+
+{ #category : #storing }
+GtSearchImageMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

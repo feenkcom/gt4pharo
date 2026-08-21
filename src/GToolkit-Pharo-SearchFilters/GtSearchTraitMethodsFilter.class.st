@@ -23,3 +23,10 @@ GtSearchTraitMethodsFilter >> hash [
 GtSearchTraitMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod isFromTrait
 ]
+
+{ #category : #storing }
+GtSearchTraitMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

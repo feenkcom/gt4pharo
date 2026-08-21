@@ -62,3 +62,9 @@ GtSearchMethodsWithPackagePatternFilter >> pattern [
 GtSearchMethodsWithPackagePatternFilter >> pattern: aString [
 	pattern := aString
 ]
+
+{ #category : #storing }
+GtSearchMethodsWithPackagePatternFilter >> storeCreationCodeOn: aStream [
+	aStream print: self pattern.
+	aStream nextPutAll: ' gtPackageMatches'.
+]

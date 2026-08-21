@@ -62,3 +62,9 @@ GtSearchMethodsWithRepositoryPatternFilter >> pattern [
 GtSearchMethodsWithRepositoryPatternFilter >> pattern: aString [
 	pattern := aString
 ]
+
+{ #category : #storing }
+GtSearchMethodsWithRepositoryPatternFilter >> storeCreationCodeOn: aStream [
+	aStream print: self pattern.
+	aStream nextPutAll: ' gtRepositoryMatches'.
+]

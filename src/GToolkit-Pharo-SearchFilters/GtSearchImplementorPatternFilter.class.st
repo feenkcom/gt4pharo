@@ -51,3 +51,11 @@ GtSearchImplementorPatternFilter >> pattern [
 GtSearchImplementorPatternFilter >> pattern: aString [
 	pattern := aString
 ]
+
+{ #category : #storing }
+GtSearchImplementorPatternFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' pattern: ';
+		print: self pattern.
+]

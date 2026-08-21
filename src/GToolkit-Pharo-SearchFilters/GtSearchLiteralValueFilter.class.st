@@ -47,3 +47,16 @@ GtSearchLiteralValueFilter >> initializeForLiteralValue: aLiteralValue [
 GtSearchLiteralValueFilter >> literalValue [
 	^ literalValue
 ]
+
+{ #category : #storing }
+GtSearchLiteralValueFilter >> storeCreationCodeOn: aStream [
+	self literalValue isNumber
+		ifTrue: [
+			aStream print: self literalValue.
+			aStream nextPutAll: ' gtLiteralValueMatch' ]
+		ifFalse: [
+			aStream
+				nextPutAll: self class name;
+				nextPutAll: ' forValue: ';
+				print: self literalValue ].
+]

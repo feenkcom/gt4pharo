@@ -13,3 +13,10 @@ GtSearchDefinedMethodsFilter >> filterType [
 GtSearchDefinedMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod isAbstract not
 ]
+
+{ #category : #storing }
+GtSearchDefinedMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

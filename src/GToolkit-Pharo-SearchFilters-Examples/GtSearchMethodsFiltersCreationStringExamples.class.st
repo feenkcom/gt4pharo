@@ -1,24 +1,75 @@
 Class {
 	#name : #GtSearchMethodsFiltersCreationStringExamples,
-	#superclass : #Object,
-	#category : #'GToolkit-Pharo-SearchFilters-Examples'
+	#superclass : #GtSearchFiltersCreationStringExamples,
+	#category : #'GToolkit-Pharo-SearchFilters-Examples-Examples'
 }
 
-{ #category : #assertions }
-GtSearchMethodsFiltersCreationStringExamples >> assertCreatioCodeFor: aFilter equals: aString [
-	| creationCode|
-	creationCode := aFilter creationCode.
-	self assert: (RBParser parseExpression: creationCode) formattedCode
-		equals: (RBParser parseExpression: aString) formattedCode.
-	^ self wrappedCreationCodeFor: aFilter 
-]
-
-{ #category : #examples }
+{ #category : #'examples - stateless' }
 GtSearchMethodsFiltersCreationStringExamples >> classMethodsFilterCreationCode [
 	<gtExample>
 	^ self
 			assertCreatioCodeFor: GtSearchClassMethodsFilter new
 			equals: 'GtSearchClassMethodsFilter new'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> classPatternFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: 'GtSearch*' gtClassMatches
+		equals: '''GtSearch*'' gtClassMatches'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> commentsFilterWithDefaultOptionsCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchCommentsFilter new
+		text: 'search text';
+		yourself.
+	^ self
+		assertCreatioCodeFor: filter
+		equals: '(GtSearchCommentsFilter new text: ''search text'')'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> commentsFilterWithNonDefaultCaseSensitiveCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchCommentsFilter new
+		text: 'search text';
+		caseSensitive: false;
+		yourself.
+	^ self
+		assertCreatioCodeFor: filter
+		equals: '(GtSearchCommentsFilter new text: ''search text''; caseSensitive: false)'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> commentsFilterWithNonDefaultOptionsCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchCommentsFilter new
+		text: 'search text';
+		wholeWord: false;
+		caseSensitive: false;
+		yourself.
+	^ self
+		assertCreatioCodeFor: filter
+		equals: '(GtSearchCommentsFilter new text: ''search text''; wholeWord: false; caseSensitive: false)'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> commentsFilterWithNonDefaultWholeWordCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchCommentsFilter new
+		text: 'search text';
+		wholeWord: false;
+		yourself.
+	^ self
+		assertCreatioCodeFor: filter
+		equals: '(GtSearchCommentsFilter new text: ''search text''; wholeWord: false)'.
 ]
 
 { #category : #'examples - composed filters' }
@@ -30,12 +81,116 @@ GtSearchMethodsFiltersCreationStringExamples >> composedAndFilterSubstringAndExa
 		equals: ('''home'' gtSubstringLiteralMatch & #gtExample gtPragmas')
 ]
 
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> definedMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchDefinedMethodsFilter new
+		equals: 'GtSearchDefinedMethodsFilter new'.
+]
+
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> deprecatedMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchDeprecatedMethodsFilter new
+		equals: 'GtSearchDeprecatedMethodsFilter new'.
+]
+
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> imageMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchImageMethodsFilter new
+		equals: 'GtSearchImageMethodsFilter new'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> implementorPatternFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: (GtSearchImplementorPatternFilter pattern: 'at:')
+		equals: 'GtSearchImplementorPatternFilter pattern: ''at:'''.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> implementorsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: #at: gtImplementors
+		equals: '#at: gtImplementors'.
+]
+
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> instanceMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchInstanceMethodsFilter new
+		equals: 'GtSearchInstanceMethodsFilter new'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> literalNumberValueFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: 42 gtLiteralValueMatch
+		equals: '42 gtLiteralValueMatch'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> literalValueFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: (GtSearchLiteralValueFilter forValue: 'a literal')
+		equals: 'GtSearchLiteralValueFilter forValue: ''a literal''.'
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> methodCategoryFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: (GtSearchMethodCategoryFilter forCategory: #accessing)
+		equals: 'GtSearchMethodCategoryFilter forCategory: #accessing'.
+]
+
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> nonTraitMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchNonTraitMethodsFilter new
+		equals: 'GtSearchNonTraitMethodsFilter new'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> packagePatternFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: 'GToolkit-Pharo*' gtPackageMatches
+		equals: '''GToolkit-Pharo*'' gtPackageMatches'.
+]
+
 { #category : #'examples - textual' }
 GtSearchMethodsFiltersCreationStringExamples >> pragmasFiltersCreationCode [
 	<gtExample>
 	^ self 
 			assertCreatioCodeFor: #gtExample gtPragmas
 			equals: '#gtExample gtPragmas'
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> rbPatternFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: '`@receiver at: `@argument' gtRBPatternMatches
+		equals: '''`@receiver at: `@argument'' gtRBPatternMatches'.
+]
+
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> repositoryPatternFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: 'gtoolkit' gtRepositoryMatches
+		equals: '''gtoolkit'' gtRepositoryMatches'.
 ]
 
 { #category : #'examples - textual' }
@@ -52,6 +207,14 @@ GtSearchMethodsFiltersCreationStringExamples >> stringLiteralMatchDefaultCreatio
 	^ self
 			assertCreatioCodeFor: 'home' gtStringLiteralMatch
 			equals: '''home'' gtStringLiteralMatch'.
+]
+
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> subclassResponsibilityMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchSubclassResponsibilityMethodsFilter new
+		equals: 'GtSearchSubclassResponsibilityMethodsFilter new'.
 ]
 
 { #category : #'examples - textual' }
@@ -86,7 +249,10 @@ GtSearchMethodsFiltersCreationStringExamples >> substringMatchIncludingNotSearch
 			equals: '''home'' gtSubstringMatch includeNotSearchableMethods'.
 ]
 
-{ #category : #utils }
-GtSearchMethodsFiltersCreationStringExamples >> wrappedCreationCodeFor: aFilter [
-	^ LePharoSnippet code: aFilter creationCode
+{ #category : #'examples - stateless' }
+GtSearchMethodsFiltersCreationStringExamples >> traitMethodsFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: GtSearchTraitMethodsFilter new
+		equals: 'GtSearchTraitMethodsFilter new'.
 ]

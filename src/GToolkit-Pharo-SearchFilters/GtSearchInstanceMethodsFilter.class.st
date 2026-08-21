@@ -28,3 +28,10 @@ GtSearchInstanceMethodsFilter >> hash [
 GtSearchInstanceMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod methodClass isInstanceSide
 ]
+
+{ #category : #storing }
+GtSearchInstanceMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

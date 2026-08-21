@@ -47,3 +47,9 @@ GtSearchRBPatternFilter >> pattern [
 GtSearchRBPatternFilter >> pattern: anObject [
 	pattern := anObject
 ]
+
+{ #category : #storing }
+GtSearchRBPatternFilter >> storeCreationCodeOn: aStream [
+	aStream print: self pattern.
+	aStream nextPutAll: ' gtRBPatternMatches'.
+]

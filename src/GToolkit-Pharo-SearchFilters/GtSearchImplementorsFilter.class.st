@@ -79,3 +79,9 @@ GtSearchImplementorsFilter >> selector: aSymbol [
 GtSearchImplementorsFilter >> shouldFilterOutTraitMethods [
 	^ true
 ]
+
+{ #category : #storing }
+GtSearchImplementorsFilter >> storeCreationCodeOn: aStream [
+	aStream print: self selector.
+	aStream nextPutAll: ' gtImplementors'.
+]

@@ -18,3 +18,10 @@ GtSearchDeprecatedMethodsFilter >> hash [
 GtSearchDeprecatedMethodsFilter >> includesMethod: aMethod [
 	^ aMethod isFromTrait not and: [ aMethod isDeprecated ]
 ]
+
+{ #category : #storing }
+GtSearchDeprecatedMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]
