@@ -9,15 +9,15 @@ Class {
 
 { #category : #asserting }
 GtSearchFiltersCreationStringExamples >> assertCreatioCodeFor: aFilter equals: aString [
-	| creationCode |
-	creationCode := aFilter creationCode.
-	self assert: (RBParser parseExpression: creationCode) formattedCode
+	|creationCode  codeString |
+	creationCode := self creationCodeForFilter:aFilter.
+	codeString := creationCode codeString.
+	self assert: (RBParser parseExpression: codeString) formattedCode
 		equals: (RBParser parseExpression: aString) formattedCode.
-	^ self wrappedCreationCodeFor: aFilter
+	^ creationCode
 ]
 
 { #category : #asserting }
-GtSearchFiltersCreationStringExamples >> wrappedCreationCodeFor: aFilter [
-	^ LePharoSnippet code: (RBParser 
-			parseExpression: aFilter creationCode) formattedCode
+GtSearchFiltersCreationStringExamples >> creationCodeForFilter: aFilter [
+	^ aFilter creationCode
 ]

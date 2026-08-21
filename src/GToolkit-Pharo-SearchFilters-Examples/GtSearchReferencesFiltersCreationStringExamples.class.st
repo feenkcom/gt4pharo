@@ -16,7 +16,7 @@ GtSearchReferencesFiltersCreationStringExamples >> cachedReferencesFilterCreatio
 		assertCreatioCodeFor: filter
 		equals: '#at: gtReferences'.
 	self assert: filter object equals: #at:.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - specialized' }
@@ -28,7 +28,7 @@ GtSearchReferencesFiltersCreationStringExamples >> classReferencesFilterCreation
 		assertCreatioCodeFor: filter
 		equals: 'Object gtReferences'.
 	self assert: filter object equals: Object binding.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - class variable' }
@@ -40,7 +40,7 @@ GtSearchReferencesFiltersCreationStringExamples >> classVariableReferenceFilterC
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchClassVariableReferenceFilter forClass: Object andVariable: #'''''.
 	self assert: filter variableName equals: #''.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - class variable' }
@@ -62,7 +62,7 @@ GtSearchReferencesFiltersCreationStringExamples >> classVariableReferenceFilterF
 				nextPutAll: ' andVariable: ';
 				print: variable name ]).
 	self assert: filter object equals: variable.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - class variable' }
@@ -76,7 +76,7 @@ GtSearchReferencesFiltersCreationStringExamples >> classVariableReferenceFilterW
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchClassVariableReferenceFilter forClass: Object andVariable: #MissingClassVariable'.
 	self assert: filter variableName equals: #MissingClassVariable.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - specialized' }
@@ -89,7 +89,7 @@ GtSearchReferencesFiltersCreationStringExamples >> globalVariableReferencesFilte
 		assertCreatioCodeFor: filter
 		equals: '(Smalltalk globals associationAt: #Undeclared) gtReferences'.
 	self assert: filter object equals: binding.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - literals' }
@@ -101,7 +101,7 @@ GtSearchReferencesFiltersCreationStringExamples >> literalArrayFilterCreationCod
 		assertCreatioCodeFor: filter
 		equals: '#(#one 2) gtReferences'.
 	self assert: filter object equals: #(one 2).
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - literals' }
@@ -113,7 +113,7 @@ GtSearchReferencesFiltersCreationStringExamples >> literalNumberFilterCreationCo
 		assertCreatioCodeFor: filter
 		equals: '42 gtReferences'.
 	self assert: filter object equals: 42.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - literals' }
@@ -125,5 +125,5 @@ GtSearchReferencesFiltersCreationStringExamples >> literalStringFilterCreationCo
 		assertCreatioCodeFor: filter
 		equals: '''a reference'' gtReferences'.
 	self assert: filter object equals: 'a reference'.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]

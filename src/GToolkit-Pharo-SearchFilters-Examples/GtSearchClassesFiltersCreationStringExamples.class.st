@@ -17,7 +17,7 @@ GtSearchClassesFiltersCreationStringExamples >> classesInPackageFilterCreationCo
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchClassesInPackageFilter forPackageNamed: ''GToolkit-Pharo-SearchFilters'''.
 	self assert: filter package equals: package.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - stateless' }
@@ -28,7 +28,7 @@ GtSearchClassesFiltersCreationStringExamples >> deprecatedClassesFilterCreationC
 	self
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchDeprecatedClassesFilter new'.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - packages' }
@@ -39,7 +39,7 @@ GtSearchClassesFiltersCreationStringExamples >> deprecatedPackagesFilterCreation
 	self
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchDeprecatedPackagesFilter new'.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - stateless' }
@@ -50,7 +50,7 @@ GtSearchClassesFiltersCreationStringExamples >> imageClassesFilterCreationCode [
 	self
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchImageClassesFilter new'.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - packages' }
@@ -61,7 +61,7 @@ GtSearchClassesFiltersCreationStringExamples >> imagePackagesFilterCreationCode 
 	self
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchImagePackagesFilter new'.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - parameterized' }
@@ -73,7 +73,7 @@ GtSearchClassesFiltersCreationStringExamples >> subclassesFilterCreationCode [
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchSubclassesFilter forClass: Object'.
 	self assert: filter searchClass equals: Object.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
 
 { #category : #'examples - stateless' }
@@ -84,5 +84,5 @@ GtSearchClassesFiltersCreationStringExamples >> testClassesFilterCreationCode [
 	self
 		assertCreatioCodeFor: filter
 		equals: 'GtSearchTestClassesFilter new'.
-	^ self wrappedCreationCodeFor: filter
+	^ self creationCodeForFilter: filter
 ]
