@@ -30,3 +30,10 @@ GtSearchImageClassesFilter >> includesClass: aClass [
 GtSearchImageClassesFilter >> itemsDo: aBlock [
 	^ self classesDo: aBlock
 ]
+
+{ #category : #storing }
+GtSearchImageClassesFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

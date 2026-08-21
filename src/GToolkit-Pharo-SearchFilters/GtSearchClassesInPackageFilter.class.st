@@ -60,3 +60,11 @@ GtSearchClassesInPackageFilter >> package [
 GtSearchClassesInPackageFilter >> package: aPackage [
 	package := aPackage
 ]
+
+{ #category : #storing }
+GtSearchClassesInPackageFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' forPackageNamed: ';
+		print: self package name asString.
+]

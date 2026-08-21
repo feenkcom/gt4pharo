@@ -20,3 +20,10 @@ GtSearchDeprecatedClassesFilter >> hash [
 GtSearchDeprecatedClassesFilter >> includesClass: aClass [
 	^ aClass isDeprecated
 ]
+
+{ #category : #storing }
+GtSearchDeprecatedClassesFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

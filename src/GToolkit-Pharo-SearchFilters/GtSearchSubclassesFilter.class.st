@@ -55,3 +55,11 @@ GtSearchSubclassesFilter >> searchClass [
 GtSearchSubclassesFilter >> searchClass: anObject [
 	searchClass := anObject
 ]
+
+{ #category : #storing }
+GtSearchSubclassesFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' forClass: ';
+		nextPutAll: self searchClass name.
+]
