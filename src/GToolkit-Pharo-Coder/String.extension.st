@@ -1,6 +1,11 @@
 Extension { #name : #String }
 
 { #category : #'*GToolkit-Pharo-Coder' }
+String >> createReferencesFilterStoreStringFor: aFilter on: aStream [
+	aFilter storeReferencesFilterCreationCodeForLiteral: self on: aStream
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
 String >> gtASTMatches [
 	^ GtSearchRBASTFilter sourceExpression: self
 ]
