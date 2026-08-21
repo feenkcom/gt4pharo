@@ -18,5 +18,6 @@ GtSearchFiltersCreationStringExamples >> assertCreatioCodeFor: aFilter equals: a
 
 { #category : #asserting }
 GtSearchFiltersCreationStringExamples >> wrappedCreationCodeFor: aFilter [
-	^ LePharoSnippet code: aFilter creationCode
+	^ LePharoSnippet code: (RBParser 
+			parseExpression: aFilter creationCode) formattedCode
 ]

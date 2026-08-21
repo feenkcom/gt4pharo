@@ -26,3 +26,11 @@ GtSearchMethodsInInstanceAndClassSideFilter >> methodsDo: aBlock [
 	"#methods includes ones from TraitedClass"
 	filterClass classSide visibleMethods do: aBlock
 ]
+
+{ #category : #storing }
+GtSearchMethodsInInstanceAndClassSideFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' forClass: ';
+		nextPutAll: self filterClass name.
+]
