@@ -4,7 +4,7 @@ Creation-code examples for class search filters.
 Class {
 	#name : #GtSearchClassesFiltersCreationStringExamples,
 	#superclass : #GtSearchFiltersCreationStringExamples,
-	#category : #'GToolkit-Pharo-SearchFilters-Examples-Examples'
+	#category : #'GToolkit-Pharo-SearchFilters-Examples'
 }
 
 { #category : #'examples - parameterized' }

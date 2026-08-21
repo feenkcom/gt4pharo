@@ -4,7 +4,7 @@ Creation-code examples for reference search filters.
 Class {
 	#name : #GtSearchReferencesFiltersCreationStringExamples,
 	#superclass : #GtSearchFiltersCreationStringExamples,
-	#category : #'GToolkit-Pharo-SearchFilters-Examples-Examples'
+	#category : #'GToolkit-Pharo-SearchFilters-Examples'
 }
 
 { #category : #'examples - specialized' }

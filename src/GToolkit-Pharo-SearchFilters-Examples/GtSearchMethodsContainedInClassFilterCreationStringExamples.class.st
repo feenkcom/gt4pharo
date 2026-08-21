@@ -4,7 +4,7 @@ Creation-code examples for concrete subclasses of GtSearchMethodsContainedInClas
 Class {
 	#name : #GtSearchMethodsContainedInClassFilterCreationStringExamples,
 	#superclass : #GtSearchFiltersCreationStringExamples,
-	#category : #'GToolkit-Pharo-SearchFilters-Examples-Examples'
+	#category : #'GToolkit-Pharo-SearchFilters-Examples'
 }
 
 { #category : #examples }

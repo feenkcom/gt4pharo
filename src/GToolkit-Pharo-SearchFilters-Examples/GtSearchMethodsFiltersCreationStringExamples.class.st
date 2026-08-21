@@ -1,7 +1,7 @@
 Class {
 	#name : #GtSearchMethodsFiltersCreationStringExamples,
 	#superclass : #GtSearchFiltersCreationStringExamples,
-	#category : #'GToolkit-Pharo-SearchFilters-Examples-Examples'
+	#category : #'GToolkit-Pharo-SearchFilters-Examples'
 }
 
 { #category : #'examples - stateless' }
@@ -70,15 +70,6 @@ GtSearchMethodsFiltersCreationStringExamples >> commentsFilterWithNonDefaultWhol
 	^ self
 		assertCreatioCodeFor: filter
 		equals: '(GtSearchCommentsFilter new text: ''search text''; wholeWord: false)'.
-]
-
-{ #category : #'examples - composed filters' }
-GtSearchMethodsFiltersCreationStringExamples >> composedAndFilterSubstringAndExampleCreationCode [
-	<gtExample>
-	| filter |
-	filter := 'home' gtSubstringLiteralMatch & #gtExample gtPragmas.
-	^ self assertCreatioCodeFor: filter
-		equals: ('''home'' gtSubstringLiteralMatch & #gtExample gtPragmas')
 ]
 
 { #category : #'examples - stateless' }

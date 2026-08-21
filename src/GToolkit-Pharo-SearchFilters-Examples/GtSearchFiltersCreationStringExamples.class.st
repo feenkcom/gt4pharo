@@ -4,7 +4,7 @@ Common creation-code assertions for search filter examples.
 Class {
 	#name : #GtSearchFiltersCreationStringExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-SearchFilters-Examples-Examples'
+	#category : #'GToolkit-Pharo-SearchFilters-Examples'
 }
 
 { #category : #asserting }
