@@ -8,6 +8,14 @@ Class {
 }
 
 { #category : #examples }
+GtSearchTestSuiteFiltersCreationStringExamples >> classTestSuiteFilterCreationCode [
+	<gtExample>
+	^ self
+		assertCreatioCodeFor: TestCase gtTestCaseMethods
+		equals: 'TestCase gtTestCaseMethods'.
+]
+
+{ #category : #examples }
 GtSearchTestSuiteFiltersCreationStringExamples >> packageTagTestSuiteFilterCreationCode [
 	<gtExample>
 	| filter packageTag |
