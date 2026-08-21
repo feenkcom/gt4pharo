@@ -73,6 +73,7 @@ GtAddParameterRefactoringController >> installArgumentSource [
 	sourceAction := GtCoderViewModelRenameAction
 			locations: {ast pattern variables last sourceInterval}
 			textualCoderViewModel: sourceCoderViewModel.
+	sourceAction documentId: documentId.
 	sourceAction selectAll: true.
 	sourceAction allowAccept: false.
 	sourceAction hasRefactoringPreview: true.
@@ -95,6 +96,7 @@ GtAddParameterRefactoringController >> installParameterRenamer [
 	renameParamAction := GtCoderViewModelRenameAction
 			locations: {ast pattern variables last sourceInterval}
 			textualCoderViewModel: sourceCoderViewModel.
+	renameParamAction documentId: documentId.
 	renameParamAction selectAll: true.
 	renameParamAction allowAccept: false.
 	renameParamAction hasRefactoringPreview: true.
@@ -116,6 +118,7 @@ GtAddParameterRefactoringController >> installSelectorRenamer [
 	renameSelectorAction := GtRenameSelectorAction
 			message: ast pattern
 			textualCoderViewModel: sourceCoderViewModel.
+	renameSelectorAction documentId: documentId.
 	renameSelectorAction selectAll: true.
 	renameSelectorAction focusedIndex: ast numArgs.
 	renameSelectorAction

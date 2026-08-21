@@ -612,9 +612,11 @@ GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel for: anE
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameBaseline: node in: aTextualViewModel for: anElement [
-	(GtRenameBaselineInMethodController new
+	GtRenameBaselineInMethodController new
 		sourceCoderViewModel: aTextualViewModel;
-		originalNode: node) executeIn: anElement
+		originalNode: node;
+		documentId: aTextualViewModel documentId;
+		executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -632,17 +634,47 @@ GtPharoSourceCoder >> renameBaselineAt: anIndex in: aCoderViewModel for: anEleme
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameClassIn: aSourceCoderViewModel node: aVariableNode for: anElement [
-	(GtRenameClassController new
+GtPharoSourceCoder >> renameClassIn: aSourceCoderViewModel node: aVariableNode context: aBuildContext for: anElement [
+	GtRenameClassController new
 		sourceCoderViewModel: aSourceCoderViewModel;
-		originalNode: aVariableNode) executeIn: anElement
+		originalNode: aVariableNode;
+		documentId: aBuildContext documentId;
+		executeIn: anElement
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameClassIn: aSourceCoderViewModel node: aVariableNode for: anElement [
+	self deprecated: 'Use #renameClassIn:node:context:for: instead'.
+	^ self
+		renameClassIn: aSourceCoderViewModel
+		node: aVariableNode
+		context: (GtCoderAddOnsBuildContext new
+			documentId: aSourceCoderViewModel documentId;
+			astNode: aVariableNode;
+			sourceCoderViewModel: aSourceCoderViewModel)
+		for: anElement
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameClassVariableIn: aSourceCoderViewModel node: aVariableNode context: aBuildContext for: anElement [
+	GtRenameClassVariableController new
+		sourceCoderViewModel: aSourceCoderViewModel;
+		originalNode: aVariableNode;
+		documentId: aBuildContext documentId;
+		executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameClassVariableIn: aSourceCoderViewModel node: aVariableNode for: anElement [
-	(GtRenameClassVariableController new
-		sourceCoderViewModel: aSourceCoderViewModel;
-		originalNode: aVariableNode) executeIn: anElement
+	self deprecated: 'Use #renameClassVariableIn:node:context:for: instead'.
+	^ self
+		renameClassVariableIn: aSourceCoderViewModel
+		node: aVariableNode
+		context: (GtCoderAddOnsBuildContext new
+			documentId: aSourceCoderViewModel documentId;
+			astNode: aVariableNode;
+			sourceCoderViewModel: aSourceCoderViewModel)
+		for: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -660,10 +692,25 @@ GtPharoSourceCoder >> renameInstanceVariableControllerIn: aSourceCoderViewModel 
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
-GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode for: anElement [
+GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode context: aBuildContext for: anElement [
 	(self
 		renameInstanceVariableControllerIn: aSourceCoderViewModel
-		for: aVariableNode) executeIn: anElement
+		for: aVariableNode)
+		documentId: aBuildContext documentId;
+		executeIn: anElement
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameInstanceVariableIn: aSourceCoderViewModel node: aVariableNode for: anElement [
+	self deprecated: 'Use #renameInstanceVariableIn:node:context:for: instead'.
+	^ self
+		renameInstanceVariableIn: aSourceCoderViewModel
+		node: aVariableNode
+		context: (GtCoderAddOnsBuildContext new
+			documentId: aSourceCoderViewModel documentId;
+			astNode: aVariableNode;
+			sourceCoderViewModel: aSourceCoderViewModel)
+		for: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -707,7 +754,13 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 	
 	Is the `anElement editorElement` ok?"
 
+	| aBuildContext |
 	self flag: #TODO.
+	aBuildContext := GtCoderAddOnsBuildContext new
+		documentId: aDocumentId;
+		astNode: aNode;
+		editorElement: anElement;
+		sourceCoderViewModel: aSourceCoderViewModel.
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ | aController |
 			aController := GtPharoRenameSelectorCoderController new
@@ -720,16 +773,18 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 	
 	aNode isVariable
 		ifTrue: [ (self isLocalVariable: aNode)
-				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
+				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode context: aBuildContext ].
 			(self isInstanceVariable: aNode)
 				ifTrue: [ ^ self
 						renameInstanceVariableIn: aSourceCoderViewModel
 						node: aNode
+						context: aBuildContext
 						for: anElement ].
 			(self isClassVariable: aNode)
 				ifTrue: [ ^ self
 						renameClassVariableIn: aSourceCoderViewModel
 						node: aNode
+						context: aBuildContext
 						for: anElement ].
 			Smalltalk globals
 				at: aNode name value asSymbol
@@ -738,11 +793,18 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 						ifTrue: [ ^ self
 								renameClassIn: aSourceCoderViewModel
 								node: aNode
+								context: aBuildContext
 								for: anElement ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
+	| aBuildContext |
+	aBuildContext := GtCoderAddOnsBuildContext new 
+		documentId: aDocumentId;
+		astNode: aNode;
+		editorElement: anElement;
+		sourceCoderViewModel: aSourceCoderViewModel.
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ ^ self
 				renameMethod: aSourceCoderViewModel
@@ -751,16 +813,18 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel documentId: aD
 				for: anElement ].
 	aNode isVariable
 		ifTrue: [ (self isLocalVariable: aNode)
-				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode ].
+				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode context: aBuildContext ].
 			(self isInstanceVariable: aNode)
 				ifTrue: [ ^ self
 						renameInstanceVariableIn: aSourceCoderViewModel
 						node: aNode
+						context: aBuildContext
 						for: anElement ].
 			(self isClassVariable: aNode)
 				ifTrue: [ ^ self
 						renameClassVariableIn: aSourceCoderViewModel
 						node: aNode
+						context: aBuildContext
 						for: anElement ].
 			Smalltalk globals
 				at: aNode name value asSymbol
@@ -769,6 +833,7 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel documentId: aD
 						ifTrue: [ ^ self
 								renameClassIn: aSourceCoderViewModel
 								node: aNode
+								context: aBuildContext
 								for: anElement ] ] ]
 ]
 
@@ -785,9 +850,11 @@ GtPharoSourceCoder >> renameNode: aNode in: aSourceCoderViewModel for: anElement
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renamePackage: node in: aTextualViewModel from: anElement [
-	(GtRenamePackageInBaselineController new
+	GtRenamePackageInBaselineController new
 		sourceCoderViewModel: aTextualViewModel;
-		originalNode: node) execute
+		originalNode: node;
+		documentId: aTextualViewModel documentId;
+		executeIn: anElement
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -806,11 +873,29 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anEleme
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNode [
+	self deprecated: 'Use #renameTemporaryIn:node:context: instead'.
+	^ self
+		renameTemporaryIn: aSourceCoderViewModel
+		node: aVariableNode
+		context: (GtCoderAddOnsBuildContext new
+			documentId: aSourceCoderViewModel documentId;
+			astNode: aVariableNode;
+			sourceCoderViewModel: aSourceCoderViewModel)
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNode context: aBuildContext [
 	| action locations announcement definer otherCoders renameAttributes originalSource |
 	originalSource := (aSourceCoderViewModel styledText
 			ifNil: [ aSourceCoderViewModel sourceText ])
 			from: aVariableNode startPosition
 			to: aVariableNode stopPosition.
+			
+	"We are not ready to use this check yet"
+	self flag: #TODO.
+	false ifTrue: [ originalSource documentId = aBuildContext documentId 
+		ifFalse: [ ^ self ] ]. 
+	
 	locations := OrderedCollection new.
 	definer := aVariableNode whoDefines.
 	announcement := GtCoderRenameTemporaryRequestedAnnouncement new.
@@ -823,6 +908,7 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 	action := GtCoderViewModelRenameAction
 			locations: locations
 			textualCoderViewModel: aSourceCoderViewModel.
+	action documentId: aBuildContext documentId.
 	action selectAll: true.
 	action forVariableOrUnaryMessage.
 	renameAttributes := OrderedCollection new.

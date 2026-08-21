@@ -68,7 +68,11 @@ GtPharoKeywordMessageNode >> messageReceiver [
 
 { #category : #accessing }
 GtPharoKeywordMessageNode >> selector [
-	^ (String streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each source ] ]) asSymbol
+	^ self
+		attributeNamed: #selector
+		ifAbsentPut: [ (String
+				streamContents: [ :stream | self selectorParts do: [ :each | stream nextPutAll: each source ] ])
+				asSymbol ]
 ]
 
 { #category : #generated }

@@ -40,7 +40,9 @@ GtPharoBinaryMessageNode >> nodeVariables [
 
 { #category : #accessing }
 GtPharoBinaryMessageNode >> selector [
-	^ self selectorPart value asSymbol
+	^ self
+		attributeNamed: #selector
+		ifAbsentPut: [ self selectorPart value asSymbol ]
 ]
 
 { #category : #generated }

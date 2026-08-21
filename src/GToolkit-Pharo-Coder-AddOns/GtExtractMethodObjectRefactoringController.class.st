@@ -169,6 +169,7 @@ GtExtractMethodObjectRefactoringController >> receiverRenamerOn: aVariable [
 	action := GtCreateClassAction
 			variable: aVariable
 			textualCoderViewModel: sourceCoderViewModel.
+	action documentId: documentId.
 	action package: sourceCoderViewModel behavior package name.
 	sourceCoderViewModel behavior packageTag isRoot 
 		ifFalse: [ action tag: sourceCoderViewModel behavior packageTag name ].
@@ -252,6 +253,7 @@ GtExtractMethodObjectRefactoringController >> renameActionForSetter: node [
 	action := GtRenameSelectorAction
 			message: node
 			textualCoderViewModel: sourceCoderViewModel.
+	action documentId: documentId.
 	action selectAll: true.
 	action
 		when: GtRenameActionAnnouncement

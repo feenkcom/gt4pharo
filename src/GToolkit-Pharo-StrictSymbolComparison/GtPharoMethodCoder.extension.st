@@ -17,7 +17,8 @@ GtPharoMethodCoder >> addConvertEqualsToSameContentAsFor: aNode to: coderAddOns 
 		action: [ :aCoderViewModel :element |
 			(GtConvertEqualsToSameContentAsController new
 				nodes: aNode;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--equals-to-samecontentas'
 ]
 

@@ -2,7 +2,7 @@ Class {
 	#name : #GtPharoMethodContextCoderViewModel,
 	#superclass : #GtPharoMethodCoderViewModel,
 	#instVars : [
-		'programCounterAttributes'
+		'programCounterHighlight'
 	],
 	#classVars : [
 		'ProgramCounterTextAttribute'
@@ -120,17 +120,24 @@ GtPharoMethodContextCoderViewModel >> updateProgramCounterRange [
 
 { #category : #'private - updating' }
 GtPharoMethodContextCoderViewModel >> updateProgramCounterRange: aSourceCode [
+	"Record the program counter highlight on myself rather than firing a one-off request.
+	The range is clamped against, and stamped with, the very same source text, so an editor
+	showing another document ignores it and re-applies it once it catches up."
+
 	| aSourceText |
 	aSourceText := aSourceCode currentSourceText.
+
+	self removeTextHighlight: programCounterHighlight.
+	programCounterHighlight := nil.
+
 	self programCounterRange
-		ifNotNil: [ :anInterval | 
-			self
-				removeHighlightsWithId: #'debugger--program-counter';
-				addHighlight: (BrTextHighlight
-							id: #'debugger--program-counter'
+		ifNotNil: [ :anInterval |
+			programCounterHighlight := self
+					addTextHighlight: (BrTextHighlight
+							id: self class debuggerTextHighlightId
 							color: BrGlamorousColors debuggerTextHighlightColor)
 					overRange: (BrTextCharacterRange
 							start: (anInterval first min: aSourceText text size)
 							end: (anInterval last min: aSourceText text size)
-							documentId: documentId) ]
+							documentId: aSourceText documentId) ]
 ]

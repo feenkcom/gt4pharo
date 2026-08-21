@@ -14,7 +14,8 @@ GtPharoSnippetCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns 
 		action: [ :aCoderViewModel :element | 
 			(GtSnippetConvertCascadesToStatementsController new
 				node: aNode;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--cascades-to-statements')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
@@ -37,7 +38,8 @@ GtPharoSnippetCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns 
 		action: [ :aCoderViewModel :element | 
 			(GtSnippetConvertStatementsToCascadesController new
 				nodes: nodes;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--statements-to-cascade'
 ]
 
@@ -54,8 +56,9 @@ GtPharoSnippetCoder >> addExtractTestContextMenuAddOnsAst: anAst to: coderAddOns
 				hover: (self highlightNodesFromFirstToLastBlock: nodes documentId: aDocumentId)
 				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
-					(GtExtractTestFromSnippetController new sourceCoderViewModel: aTextualViewModel)
-						executeIn: element ]
+					(GtExtractTestFromSnippetController new
+						sourceCoderViewModel: aTextualViewModel;
+						documentId: aDocumentId) executeIn: element ]
 				id: #'snippet-extract-test' ].
 
 	^ nil
@@ -74,7 +77,8 @@ GtPharoSnippetCoder >> addExtractVariableFor: aNode to: coderAddOns context: aBu
 		action: [ :aCoderViewModel :element | 
 			(GtSnippetExtractTemporaryRefactoringController new
 				node: aNode;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--extract-variable'.
 	^ true
 ]
@@ -130,7 +134,8 @@ GtPharoSnippetCoder >> addInlineMethodFor: aNode to: coderAddOns from: aCoderVie
 				messageNode: aNode;
 				implementorClass: class;
 				snippetClass: self behavior;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--inline-send')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
 
@@ -145,7 +150,7 @@ GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns 
 				createLabel: 'Inline message'
 				description: aNode message selector)
 		group: BrMenuItemGroupConfiguration refactoring
-		hover: (self highlightNodeBlock: aNode documentId: aBuildContext)
+		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
 		action: [ :aSourceCoderViewModel :element | 
 			| classes defaultClass |
@@ -154,7 +159,8 @@ GtPharoSnippetCoder >> addInlineMethodUnknownReceiverFor: aNode to: coderAddOns 
 			(GtSnippetUnknownReceiverInlineMessageRefactoringController new
 				implementor: defaultClass;
 				node: aNode;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--inline-message')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
@@ -190,7 +196,8 @@ GtPharoSnippetCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriori
 		action: [ :aSourceCoderViewModel :element | 
 			(GtSnippetInlineVariableRefactoringController new
 				node: uses first parent;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--inline-temp')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
@@ -283,7 +290,8 @@ GtPharoSnippetCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOn
 		action: [ :cvm :element | 
 			(GtSnippetSplitCascadesController new
 				node: splitBeforeMessage;
-				sourceCoderViewModel: cvm) executeIn: element ]
+				sourceCoderViewModel: cvm;
+				documentId: aDocumentId) executeIn: element ]
 		id: #'context-menu--split-cascade')
 		ifNotNil: [ :anAction | anAction priority: 221 ]
 ]

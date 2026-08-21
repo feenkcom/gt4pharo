@@ -2771,7 +2771,7 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 	scripter
 		doStep: [ :s | 
 			s
-				label: 'Type in a method with argument';
+				label: 'Type in a method';
 				action: [ :each | 
 					each
 						appendString: '
@@ -2781,7 +2781,7 @@ GtPharoMethodCoderByScripterExamples >> extractLiteralToClassVariable [
 	scripter
 		doStep: [ :s | 
 			s
-				label: 'Save a method with argument';
+				label: 'Save changed method';
 				action: [ :each | each save ];
 				onModel ].
 
@@ -3460,6 +3460,7 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectArgumentsInSam
 				action: [ :each | 
 					(GtExtractToWrappedMethodObjectRefactoringController new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						infect: 'wrappedMethodSelectorFor: methodName in: aRefactoring ^#write:';
 						infect: 'methodObjectSelectorFor: methodName in: ref ^#doWrite:' yourself)
 						executeIn: each ];
@@ -3580,8 +3581,10 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenHasNewClas
 			s
 				label: 'Start extract wrapped method object';
 				action: [ :each | 
-					(GtExtractToWrappedMethodObjectRefactoringController new
-						sourceCoderViewModel: each textualCoderViewModel) executeIn: each ];
+					GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
+						executeIn: each ];
 				// GtSourceCoderExpandedContentElement ].
 	scripter
 		checkStep: [ :s | 
@@ -3617,6 +3620,7 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectWhenPassingSel
 				action: [ :each | 
 					(GtExtractToWrappedMethodObjectRefactoringController new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						infect: 'wrappedMethodSelectorFor: methodName in: aRefactoring ^#write:';
 						infect: 'methodObjectSelectorFor: methodName in: ref ^#doWrite:' yourself)
 						executeIn: each ];
@@ -11001,6 +11005,7 @@ GtPharoMethodCoderByScripterExamples >> renameMessageSend [
 				action: [ :each | 
 					(GtRenameMethodController2 new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						originalNode: node) executeIn: each ];
 				id: GtSourceCoderEditorId ].
 	self checkButtonVisibility: #(1) in: scripter.
@@ -11077,6 +11082,7 @@ GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
 					ast := GtPharoParser parse: each editor text asString.
 					(GtRenameMethodController2 new
 						sourceCoderViewModel: each textualCoderViewModel;
+						documentId: each textualCoderViewModel documentId;
 						originalNode: ast pattern) executeIn: each ];
 				id: GtSourceCoderEditorId ].
 	self checkButtonVisibility: #(1) in: scripter.

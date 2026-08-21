@@ -27,7 +27,8 @@ GtPharoMethodCoder >> addAddParameterRefactoringFor: aNode to: coderAddOns conte
 			(GtAddParameterRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
 				parameterNode: valueNode;
-				methodNode: method) executeIn: element ]
+				methodNode: method;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--add-parameter'
 ]
 
@@ -47,7 +48,8 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns pri
 		action: [ :aCoderViewModel :element | 
 			(GtAbstractClassVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--abstract-variable')
 		ifNotNil: [ :anAction | anAction priority: aPriority + 0.0001 ].
 	(self isAccessorMethodFor: aNode)
@@ -61,7 +63,8 @@ GtPharoMethodCoder >> addClassAccessorRefactoringsFor: aNode to: coderAddOns pri
 				action: [ :aCoderViewModel :element | 
 					(GtCreateClassVariableAccessorsRefactoringController new
 						sourceCoderViewModel: aCoderViewModel;
-						variableNode: aNode) executeIn: element ]
+						variableNode: aNode;
+						documentId: aBuildContext documentId) executeIn: element ]
 				id: #'context-menu--create-accessors')
 				ifNotNil: [ :anAction | anAction priority: aPriority + 0.0002 ] ]
 ]
@@ -80,7 +83,8 @@ GtPharoMethodCoder >> addConvertCascadesToStatementsFor: aNode to: coderAddOns p
 		action: [ :aCoderViewModel :element | 
 			(GtConvertCascadesToStatementsController new
 				node: aNode;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--cascades-to-statements'.
 	^ true
 ]
@@ -107,7 +111,8 @@ GtPharoMethodCoder >> addConvertStatementsToCascadesFor: nodes to: coderAddOns c
 		action: [ :aCoderViewModel :element | 
 			(GtConvertStatementsToCascadesController new
 				nodes: nodes;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--statements-to-cascade'
 ]
 
@@ -127,7 +132,8 @@ GtPharoMethodCoder >> addConvertTemporaryToInstanceVariableFor: aNode to: coderA
 		action: [ :aCoderViewModel :element | 
 			(GtConvertToInstanceVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--convert-temp-to-inst-var'
 ]
 
@@ -153,9 +159,11 @@ GtPharoMethodCoder >> addExtractLiteralRefactoringFor: aNode to: coderAddOns con
 		hover: (self highlightNodeBlock: aNode documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
-			(GtExtractLiteralToClassVariableController new
+			GtExtractLiteralToClassVariableController new
 				sourceCoderViewModel: aCoderViewModel;
-				literalNode: aNode) executeIn: element ]
+				literalNode: aNode;
+				documentId: aBuildContext documentId; 
+				executeIn: element ]
 		id: #'context-menu--extract-literal-to-class-variable'
 ]
 
@@ -172,7 +180,9 @@ GtPharoMethodCoder >> addExtractMethodObjectMenuForAst: anAst to: coderAddOns fr
 				hover: nil
 				leave: nil
 				action: [ :model :element | 
-					(GtExtractMethodObjectRefactoringController new sourceCoderViewModel: model)
+					(GtExtractMethodObjectRefactoringController new
+						sourceCoderViewModel: model;
+						documentId: aDocumentId)
 						executeIn: element ]) ifNotNil: [ :anAction | anAction priority: 215 ] ]
 ]
 
@@ -248,7 +258,8 @@ GtPharoMethodCoder >> addExtractTempFor: aNode to: coderAddOns priority: aPriori
 		action: [ :aCoderViewModel :element | 
 			(GtExtractTemporaryRefactoringController new
 				node: nodes first;
-				sourceCoderViewModel: aCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--extract-temp'
 		shortcutKey: (self extractToTemporaryShortcut
 				ifNotNil: [ :aShortcut | aShortcut combinationForPlatform gtDisplayString ]))
@@ -268,8 +279,10 @@ GtPharoMethodCoder >> addExtractToWrappedMethodObjectMenuForAst: anAst to: coder
 				hover: nil
 				leave: nil
 				action: [ :model :element | 
-					(GtExtractToWrappedMethodObjectRefactoringController new
-						sourceCoderViewModel: model) executeIn: element ] ]
+					GtExtractToWrappedMethodObjectRefactoringController new
+						sourceCoderViewModel: model;
+						documentId: model documentId;
+						executeIn: element ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -326,7 +339,8 @@ GtPharoMethodCoder >> addInlineAllSelfSendsFor: aNode to: coderAddOns [
 		action: [ :aSourceCoderViewModel :element | 
 			(GtInlineSelfSendsRefactoringController new
 				methodNode: method;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aSourceCoderViewModel documentId) executeIn: element ]
 		id: #'context-menu--inline-self-sends'
 ]
 
@@ -345,7 +359,8 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns priority: aPrio
 				action: [ :aSourceCoderViewModel :element | 
 					(GtMethodInlineMessageSendRefactoringController new
 						node: aNode;
-						sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+						sourceCoderViewModel: aSourceCoderViewModel;
+						documentId: aBuildContext documentId) executeIn: element ]
 				id: #'context-menu--inline-message')
 				ifNotNil: [ :anAction | anAction priority: aPriority ].
 			^ true ].
@@ -371,7 +386,8 @@ GtPharoMethodCoder >> addInlineMessageFor: aNode to: coderAddOns priority: aPrio
 			(GtMethodInlineMessageFromComponentRefactoringController new
 				implementor: defaultClass;
 				node: aNode;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--inline-message')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
@@ -391,7 +407,8 @@ GtPharoMethodCoder >> addInlineParameterRefactoringFor: aNode to: coderAddOns co
 		action: [ :aCoderViewModel :element | 
 			(GtInlineParameterRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--inline-parameter'
 ]
 
@@ -426,7 +443,8 @@ GtPharoMethodCoder >> addInlineTempFor: aNode to: coderAddOns priority: aPriorit
 		action: [ :aSourceCoderViewModel :element | 
 			(GtMethodInlineTemporaryVariableRefactoringController new
 				node: uses second parent;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--inline-temp')
 		ifNotNil: [ :anAction | anAction priority: aPriority ].
 	^ true
@@ -450,7 +468,8 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 		action: [ :aCoderViewModel :element | 
 			(GtAbstractInstanceVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--abstract-variable')
 		ifNotNil: [ :anAction | anAction priority: aPriority + 0.0001 ].
 	(self isAccessorMethodFor: aNode)
@@ -464,7 +483,8 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 				action: [ :aCoderViewModel :element | 
 					(GtProtectInstanceVariableRefactoringController new
 						sourceCoderViewModel: aCoderViewModel;
-						variableNode: aNode) executeIn: element ]
+						variableNode: aNode;
+						documentId: aBuildContext documentId) executeIn: element ]
 				id: #'context-menu--protect-variable')
 				ifNotNil: [ :anAction | anAction priority: aPriority + 0.0002 ] ].
 	(coderAddOns
@@ -477,7 +497,8 @@ GtPharoMethodCoder >> addInstanceAccessorRefactoringsFor: aNode to: coderAddOns 
 		action: [ :aCoderViewModel :element | 
 			(GtCreateInstanceVariableAccessorsRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--create-accessors')
 		ifNotNil: [ :anAction | anAction priority: aPriority + 0.0003 ]
 ]
@@ -532,7 +553,8 @@ GtPharoMethodCoder >> addMoveMethodRefactoringFor: aNode to: coderAddOns context
 		action: [ :aCoderViewModel :element | 
 			(GtMoveMethodRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--move-method'
 ]
 
@@ -553,7 +575,8 @@ GtPharoMethodCoder >> addMoveTemporaryToOuterScopeFor: aNode to: coderAddOns con
 		action: [ :aCoderViewModel :element | 
 			(GtMoveTemporaryToOuterScopeRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--move-to-outer-scope'
 ]
 
@@ -578,7 +601,8 @@ GtPharoMethodCoder >> addPullDownVariableRefactoringsFor: aNode to: coderAddOns 
 		action: [ :aCoderViewModel :element | 
 			(GtPushDownInstanceVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--pull-down-variable'
 ]
 
@@ -604,7 +628,8 @@ GtPharoMethodCoder >> addPushDownMethodRefactoringFor: aNode to: coderAddOns [
 		action: [ :aCoderViewModel :element | 
 			(GtPushDownMethodRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				methodNode: method) executeIn: element ]
+				methodNode: method;
+				documentId: aCoderViewModel documentId) executeIn: element ]
 		id: #'context-menu--push-down-method'
 ]
 
@@ -631,7 +656,8 @@ GtPharoMethodCoder >> addPushUpMethodRefactoringFor: aNode to: coderAddOns conte
 		action: [ :aCoderViewModel :element | 
 			(GtPushUpMethodRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				methodNode: method) executeIn: element ]
+				methodNode: method;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--push-up-method'
 ]
 
@@ -657,7 +683,8 @@ GtPharoMethodCoder >> addPushUpVariableRefactoringsFor: aNode to: coderAddOns co
 		action: [ :aCoderViewModel :element | 
 			(GtPushUpInstanceVariableRefactoringController new
 				sourceCoderViewModel: aCoderViewModel;
-				variableNode: aNode) executeIn: element ]
+				variableNode: aNode;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--push-up-variable'
 ]
 
@@ -804,7 +831,8 @@ GtPharoMethodCoder >> addRemoveParameterRefactoringFor: aNode to: coderAddOns co
 			action: [ :aCoderViewModel :element | 
 				(GtRemoveParameterRefactoringController new
 					sourceCoderViewModel: aCoderViewModel;
-					variableNode: aNode) executeIn: element ]
+					variableNode: aNode;
+					documentId: aBuildContext documentId) executeIn: element ]
 			id: #'context-menu--remove-parameter'.
 	disabled ifTrue: [ action disableAction ].
 	^ action
@@ -831,6 +859,7 @@ GtPharoMethodCoder >> addRenameClassRefactoringFor: aNode to: coderAddOns contex
 							self
 								renameClassIn: aCoderViewModel
 								node: aNode
+								context: aBuildContext
 								for: element ]
 						shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 								gtDisplayString ] ].
@@ -855,6 +884,7 @@ GtPharoMethodCoder >> addRenameClassVariableRefactoringFor: aNode to: coderAddOn
 			self
 				renameClassVariableIn: aCoderViewModel
 				node: aNode
+				context: aBuildContext
 				for: element ]
 		id: #'context-menu--rename-class-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
@@ -872,12 +902,13 @@ GtPharoMethodCoder >> addRenameInstanceVariableRefactoringFor: aNode to: coderAd
 		group: BrMenuItemGroupConfiguration refactoring
 		hover: (self
 				highlightNodesBlock: (self allReferencesTo: aNode)
-				documentId: aBuildContext)
+				documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
 		action: [ :aCoderViewModel :element | 
 			self
 				renameInstanceVariableIn: aCoderViewModel
 				node: aNode
+				context: aBuildContext
 				for: element ]
 		id: #'context-menu--rename-inst-var'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
@@ -929,7 +960,7 @@ GtPharoMethodCoder >> addRenameTemporaryRefactoringFor: aNode to: coderAddOns co
 				highlightNodesBlock: (self allReferencesTo: aNode)
 				documentId: aBuildContext documentId)
 		leave: self removeHighlightsBlock
-		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode ]
+		action: [ :aCoderViewModel | self renameTemporaryIn: aCoderViewModel node: aNode context: aBuildContext ]
 		id: #'context-menu--rename-temp'
 		shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 				gtDisplayString
@@ -952,7 +983,8 @@ GtPharoMethodCoder >> addSplitCascadeContextMenuAddOnsAst: anAst to: coderAddOns
 		action: [ :cvm :element | 
 			(GtSplitCascadesController new
 				node: splitBeforeMessage;
-				sourceCoderViewModel: cvm) executeIn: element ]
+				sourceCoderViewModel: cvm;
+				documentId: aDocumentId) executeIn: element ]
 		id: #'context-menu--split-cascade')
 		ifNotNil: [ :anAction | anAction priority: 221 ]
 ]
@@ -994,7 +1026,8 @@ GtPharoMethodCoder >> addVariableScopingFor: aNode to: coderAddOns context: aBui
 		action: [ :aSourceCoderViewModel :element | 
 			(GtMoveVariableRefactoringController new
 				variableNode: aNode;
-				sourceCoderViewModel: aSourceCoderViewModel) executeIn: element ]
+				sourceCoderViewModel: aSourceCoderViewModel;
+				documentId: aBuildContext documentId) executeIn: element ]
 		id: #'context-menu--move-variable-declaration'
 ]
 
@@ -1419,7 +1452,8 @@ GtPharoMethodCoder >> inlinedPlaygroundSourceForReceiver: varName for: anElement
 				ifTrue: [ (model classFor: self behavior)
 						compile: self currentSourceText asString
 						classified: #accessing ] ];
-		sourceCoderViewModel: coder asCoderViewModel) executeIn: anElement.
+		sourceCoderViewModel: coder asCoderViewModel;
+		documentId: coder asCoderViewModel documentId) executeIn: anElement.
 	source := coder currentSourceString.
 	editable := SmaCCString on: source.
 	tree := GtPharoParser

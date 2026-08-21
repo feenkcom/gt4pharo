@@ -95,6 +95,7 @@ GtExtractExampleFromSnippetController >> installReceiverSelector [
 	receiverRenamer := GtRenameSelectorAction
 			variable: (self receiverInSend: send)
 			textualCoderViewModel: sourceCoderViewModel.
+	receiverRenamer documentId: documentId.
 	receiverRenamer completionStrategy: self completionStrategy.
 	receiverRenamer newSelector: self newExtractedSelector.
 	receiverRenamer selectAll: true.

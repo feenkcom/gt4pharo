@@ -214,6 +214,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> renameActionForConstructo
 	action := GtRenameSelectorAction
 			message: node
 			textualCoderViewModel: sourceCoderViewModel.
+	action documentId: documentId.
 	action newSelector: constructorSelector.
 	action selectAll: true.
 	action focusedIndex: 0.
@@ -236,6 +237,7 @@ GtExtractToWrappedMethodObjectRefactoringController >> renameActionForReceiver: 
 	action := GtCreateClassAction
 			variable: aVariable
 			textualCoderViewModel: sourceCoderViewModel.
+	action documentId: documentId.
 	action requestInitialFocus: true.
 	action package: sourceCoderViewModel behavior package name.
 	

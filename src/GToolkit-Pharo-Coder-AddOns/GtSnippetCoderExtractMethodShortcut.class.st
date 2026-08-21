@@ -13,5 +13,6 @@ GtSnippetCoderExtractMethodShortcut >> initialize [
 { #category : #evaluation }
 GtSnippetCoderExtractMethodShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	(GtExtractMethodFromSnippetController new
-		sourceCoderViewModel: aSourceCoderViewModel) executeIn: aBrEditorElement
+		sourceCoderViewModel: aSourceCoderViewModel;
+		documentId: aSourceCoderViewModel documentId) executeIn: aBrEditorElement
 ]
