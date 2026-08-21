@@ -36,3 +36,14 @@ GtSearchPackageTagTestSuiteFilter >> packageTag: aPackageTag [
 
 	packageTag := aPackageTag
 ]
+
+{ #category : #storing }
+GtSearchPackageTagTestSuiteFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new packageTag: ((';
+		print: self packageTag package name asString;
+		nextPutAll: ' asPackage) tagNamed: ';
+		print: self packageTag name;
+		nextPutAll: ')'.
+]

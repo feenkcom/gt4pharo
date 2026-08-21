@@ -153,6 +153,17 @@ GtSearchMethodsFiltersCreationStringExamples >> methodCategoryFilterCreationCode
 		equals: 'GtSearchMethodCategoryFilter forCategory: #accessing'.
 ]
 
+{ #category : #'examples - parameterized' }
+GtSearchMethodsFiltersCreationStringExamples >> methodsInPackageFilterCreationCode [
+	<gtExample>
+	| filter |
+	filter := GtSearchMethodsInPackageFilter new.
+	filter package: 'GToolkit-Pharo-SearchFilters' asPackage.
+	^ self
+		assertCreatioCodeFor: filter
+		equals: 'GtSearchMethodsInPackageFilter new package: ''GToolkit-Pharo-SearchFilters'' asPackage'.
+]
+
 { #category : #'examples - stateless' }
 GtSearchMethodsFiltersCreationStringExamples >> nonTraitMethodsFilterCreationCode [
 	<gtExample>

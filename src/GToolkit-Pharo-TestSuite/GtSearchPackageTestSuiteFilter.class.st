@@ -33,3 +33,12 @@ GtSearchPackageTestSuiteFilter >> package: aPackage [
 
 	package := aPackage
 ]
+
+{ #category : #storing }
+GtSearchPackageTestSuiteFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new package: ';
+		print: self package name asString;
+		nextPutAll: ' asPackage'.
+]
