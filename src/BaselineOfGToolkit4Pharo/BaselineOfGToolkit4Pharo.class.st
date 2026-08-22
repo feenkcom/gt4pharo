@@ -45,6 +45,8 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 				spec requires: #('GToolkit-Pharo-System' 'GToolkit-Pharo-Index') ];
 			package: 'GToolkit-Pharo-SearchFilters' with: [
 				spec requires: #('Futures' 'GToolkitCoder' 'GToolkit-Pharo-System' 'GToolkit-Pharo-Index') ];
+			package: 'GToolkit-Pharo-SearchFilters-UI' with: [ 
+				spec requires: #('GToolkit-Pharo-SearchFilters') ];
 			package: 'GToolkit-Pharo-SearchFilters-Examples' with: [ 
 				spec requires: #('GToolkit-Pharo-SearchFilters') ];
 			package: 'GToolkit-Pharo-Completer' with: [
