@@ -18,3 +18,10 @@ GtSearchNonTraitMethodsFilter >> hash [
 GtSearchNonTraitMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod isFromTrait not
 ]
+
+{ #category : #storing }
+GtSearchNonTraitMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

@@ -25,6 +25,13 @@ GtSearchClassTestSuiteFilter >> initialize [
 	testCaseClass := TestCase
 ]
 
+{ #category : #storing }
+GtSearchClassTestSuiteFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self testCaseClass name;
+		nextPutAll: ' gtTestCaseMethods'.
+]
+
 { #category : #accessing }
 GtSearchClassTestSuiteFilter >> testCaseClass [
 	^ testCaseClass

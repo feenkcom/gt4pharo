@@ -1,6 +1,13 @@
 Extension { #name : #Class }
 
 { #category : #'*GToolkit-Pharo-Coder' }
+Class >> createReferencesFilterStoreStringFor: aFilter on: aStream [
+	aStream
+		nextPutAll: self name;
+		nextPutAll: ' gtReferences'
+]
+
+{ #category : #'*GToolkit-Pharo-Coder' }
 Class >> gtIsOrInheritsFrom [
 	^ GtSearchMethodsInClassFilter new
 		forClass: self;

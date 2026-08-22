@@ -115,3 +115,22 @@ GtSearchReferencesFilter >> printOn: stream [
 GtSearchReferencesFilter >> shouldFilterOutTraitMethods [
 	^ true
 ]
+
+{ #category : #storing }
+GtSearchReferencesFilter >> storeCreationCodeOn: aStream [
+	self object createReferencesFilterStoreStringFor: self on: aStream
+]
+
+{ #category : #storing }
+GtSearchReferencesFilter >> storeDefaultReferencesFilterCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' literal: ';
+		print: self object
+]
+
+{ #category : #storing }
+GtSearchReferencesFilter >> storeReferencesFilterCreationCodeForLiteral: aLiteral on: aStream [
+	aStream print: aLiteral.
+	aStream nextPutAll: ' gtReferences'
+]

@@ -19,6 +19,11 @@ GtSearchMethodsInClassFilter >> = anObject [
 		and: [ self upToSuperclass = anObject upToSuperclass ] ] ] ]
 ]
 
+{ #category : #storing }
+GtSearchMethodsInClassFilter >> addStoreCreationCodeConfigurationMessagesTo: aCollection [
+	"Subclasses can add configuration messages required to recreate their state."
+]
+
 { #category : #accessing }
 GtSearchMethodsInClassFilter >> defaultFilterScope [
 	| theStreams isClassSide subclassesBlock |
@@ -108,6 +113,46 @@ GtSearchMethodsInClassFilter >> methodsDo: aBlock [
 		ifTrue: [ filterClass superclass methods do: aBlock ].
 	includeSubclasses
 		ifTrue: [ (filterClass allSubclasses flatCollect: #methods) do: aBlock ]
+]
+
+{ #category : #storing }
+GtSearchMethodsInClassFilter >> storeCreationCodeConfigurationMessages [
+	| configurationMessages |
+	configurationMessages := OrderedCollection new.
+	self includeSubclasses ifTrue: [ configurationMessages add: 'withSubclasses' ].
+	self upToSuperclass
+		ifNotNil: [ :aClass |
+			configurationMessages add: 'withSuperclassesUpTo: ', aClass name ]
+		ifNil: [
+			self includeSuperclass ifTrue: [
+				configurationMessages add: 'withSuperclasses' ] ].
+	self addStoreCreationCodeConfigurationMessagesTo: configurationMessages.
+	^ configurationMessages
+]
+
+{ #category : #storing }
+GtSearchMethodsInClassFilter >> storeCreationCodeInitialCode [
+	^ String streamContents: [ :aStream |
+		aStream
+			nextPutAll: self class name;
+			nextPutAll: ' forClass: ';
+			nextPutAll: self filterClass name ]
+]
+
+{ #category : #storing }
+GtSearchMethodsInClassFilter >> storeCreationCodeOn: aStream [
+	| configurationMessages |
+	configurationMessages := self storeCreationCodeConfigurationMessages.
+	configurationMessages
+		ifEmpty: [ aStream nextPutAll: self storeCreationCodeInitialCode ]
+		ifNotEmpty: [
+			aStream
+				nextPut: $(;
+				nextPutAll: self storeCreationCodeInitialCode;
+				nextPutAll: ') '.
+			configurationMessages
+				do: [ :each | aStream nextPutAll: each ]
+				separatedBy: [ aStream nextPutAll: '; ' ] ].
 ]
 
 { #category : #accessing }

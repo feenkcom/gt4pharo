@@ -53,3 +53,9 @@ GtSearchMethodsWithClassPatternFilter >> pattern [
 GtSearchMethodsWithClassPatternFilter >> pattern: aString [
 	pattern := aString
 ]
+
+{ #category : #storing }
+GtSearchMethodsWithClassPatternFilter >> storeCreationCodeOn: aStream [
+	aStream print: self pattern.
+	aStream nextPutAll: ' gtClassMatches'.
+]

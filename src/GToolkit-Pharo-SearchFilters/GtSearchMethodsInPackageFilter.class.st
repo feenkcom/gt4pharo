@@ -50,3 +50,12 @@ GtSearchMethodsInPackageFilter >> package [
 GtSearchMethodsInPackageFilter >> package: aPackage [
 	package := aPackage
 ]
+
+{ #category : #storing }
+GtSearchMethodsInPackageFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new package: ';
+		print: self package name asString;
+		nextPutAll: ' asPackage'.
+]

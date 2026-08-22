@@ -57,3 +57,12 @@ GtSearchScopedMethodsClassScope >> itemValue [
 GtSearchScopedMethodsClassScope >> label [
 	^ 'Class: ' , (self itemClass ifNotNil: #name ifNil: [ 'none' ])
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsClassScope >> storeCreationCodeOn: aStream [
+	aStream
+		nextPut: $(;
+		nextPutAll: self class name;
+		nextPutAll: ' new) itemClass: ';
+		nextPutAll: self itemClass name
+]

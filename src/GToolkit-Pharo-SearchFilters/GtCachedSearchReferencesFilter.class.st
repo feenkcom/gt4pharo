@@ -31,3 +31,8 @@ GtCachedSearchReferencesFilter >> defaultFilterScope [
 	references size < 50000 ifTrue: [ references sort: GtMethodsSortFunction new ].
 	^ references asAsyncStream
 ]
+
+{ #category : #storing }
+GtCachedSearchReferencesFilter >> storeCreationCodeOn: aStream [
+	self object createReferencesFilterStoreStringFor: self on: aStream
+]

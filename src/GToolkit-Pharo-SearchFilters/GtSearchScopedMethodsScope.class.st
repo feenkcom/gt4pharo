@@ -61,3 +61,8 @@ GtSearchScopedMethodsScope >> label [
 GtSearchScopedMethodsScope >> order [
 	^ self class order
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsScope >> storeCreationCodeOn: aStream [
+	aStream nextPutAll: 'self notYetImplemented'
+]

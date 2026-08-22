@@ -93,3 +93,11 @@ GtSearchRBASTFilter >> sourceExpression: aString [
 GtSearchRBASTFilter >> sourceMethod: aString [
 	self ast: (RBParser parseRewriteMethod: aString)
 ]
+
+{ #category : #storing }
+GtSearchRBASTFilter >> storeCreationCodeOn: aStream [
+	aStream print: self source.
+	aStream nextPutAll: (self ast isMethod
+		ifTrue: [ ' gtASTMethodMatches' ]
+		ifFalse: [ ' gtASTMatches' ]).
+]

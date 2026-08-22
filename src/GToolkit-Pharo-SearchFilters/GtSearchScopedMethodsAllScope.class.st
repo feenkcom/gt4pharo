@@ -31,3 +31,10 @@ GtSearchScopedMethodsAllScope >> includesMethod: aCompiledMethod [
 GtSearchScopedMethodsAllScope >> label [
 	^ 'Current image'
 ]
+
+{ #category : #storing }
+GtSearchScopedMethodsAllScope >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' default'
+]

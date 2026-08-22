@@ -73,6 +73,16 @@ GtSearchLiteralExactStringFilter >> lowercase [
 	^ lowercase
 ]
 
+{ #category : #storing }
+GtSearchLiteralExactStringFilter >> storeCreationCodeOn: aStream [
+	aStream
+		print: self string.
+		
+	self caseSensitive 
+		ifTrue: [ aStream nextPutAll: ' gtStringLiteralCaseSensitiveMatch' ]
+		ifFalse: [  aStream nextPutAll: ' gtStringLiteralMatch'  ]
+]
+
 { #category : #accessing }
 GtSearchLiteralExactStringFilter >> string [
 

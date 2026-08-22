@@ -27,6 +27,16 @@ GtSearchCommentsFilter >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean
 ]
 
+{ #category : #initialization }
+GtSearchCommentsFilter >> defaultCaseSensitive [
+	^ true
+]
+
+{ #category : #initialization }
+GtSearchCommentsFilter >> defaultWholeWord [
+	^ true
+]
+
 { #category : #comparing }
 GtSearchCommentsFilter >> hash [
 	^ self class hash bitXor: self text hash
@@ -43,11 +53,11 @@ GtSearchCommentsFilter >> includesMethod: aCompiledMethod [
 	^ false
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 GtSearchCommentsFilter >> initialize [
 	super initialize.
-	wholeWord := true.
-	caseSensitive := true
+	wholeWord := self defaultWholeWord.
+	caseSensitive := self defaultCaseSensitive.
 ]
 
 { #category : #'private - testing' }
@@ -111,6 +121,27 @@ GtSearchCommentsFilter >> matchingIntervalsInString: aString do: aBlock [
 								isWordBoundaryCharacter: (sourceString at: index + searchString size ifAbsent: [ nil ]) ] ])
 				ifTrue: [ aBlock value: (index to: index + searchString size - 1) ].
 			index := index + searchString size ]
+]
+
+{ #category : #storing }
+GtSearchCommentsFilter >> storeCreationCodeOn: aStream [
+	aStream nextPut: $(.
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new';
+		nextPutAll: ' text: ';
+		print: self text.
+	self wholeWord = self defaultWholeWord
+		ifFalse: [
+			aStream
+				nextPutAll: '; wholeWord: ';
+				print: self wholeWord ].
+	self caseSensitive = self defaultCaseSensitive
+		ifFalse: [
+			aStream
+				nextPutAll: '; caseSensitive: ';
+				print: self caseSensitive ].
+	aStream nextPut: $).
 ]
 
 { #category : #accessing }

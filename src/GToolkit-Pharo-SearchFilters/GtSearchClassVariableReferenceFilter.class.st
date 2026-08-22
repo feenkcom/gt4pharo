@@ -66,6 +66,16 @@ GtSearchClassVariableReferenceFilter >> object [
 	^ object
 ]
 
+{ #category : #storing }
+GtSearchClassVariableReferenceFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' forClass: ';
+		nextPutAll: class name;
+		nextPutAll: ' andVariable: ';
+		print: variableName
+]
+
 { #category : #accessing }
 GtSearchClassVariableReferenceFilter >> variableName [
 	^ variableName

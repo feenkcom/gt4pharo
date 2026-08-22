@@ -41,6 +41,12 @@ GtSearchInstanceSlotReferenceFilter >> = anObject [
 		and: [ self includeWriters = anObject includeWriters ] ] ]
 ]
 
+{ #category : #storing }
+GtSearchInstanceSlotReferenceFilter >> addStoreCreationCodeConfigurationMessagesTo: aCollection [
+	self includeReaders ifFalse: [ aCollection add: 'includeReaders: false' ].
+	self includeWriters ifFalse: [ aCollection add: 'includeWriters: false' ].
+]
+
 { #category : #accessing }
 GtSearchInstanceSlotReferenceFilter >> filterValueString [
 	^ self variableName
@@ -167,6 +173,17 @@ GtSearchInstanceSlotReferenceFilter >> initialize [
 	includeSubclasses := true.
 	includeReaders := true.
 	includeWriters := true
+]
+
+{ #category : #storing }
+GtSearchInstanceSlotReferenceFilter >> storeCreationCodeInitialCode [
+	^ String streamContents: [ :aStream |
+		aStream
+			nextPutAll: self class name;
+			nextPutAll: ' forClass: ';
+			nextPutAll: self filterClass name;
+			nextPutAll: ' andVariable: ';
+			print: self variableName ]
 ]
 
 { #category : #accessing }

@@ -46,3 +46,12 @@ GtSearchOverriddenMethodsFilter >> method: anObject [
 
 	method := anObject
 ]
+
+{ #category : #storing }
+GtSearchOverriddenMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new method: (';
+		nextPutAll: self method printString;
+		nextPutAll: ')'.
+]

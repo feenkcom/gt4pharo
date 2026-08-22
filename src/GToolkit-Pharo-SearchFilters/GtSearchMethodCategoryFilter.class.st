@@ -70,3 +70,11 @@ GtSearchMethodCategoryFilter >> includesMethod: aCompiledMethod [
 GtSearchMethodCategoryFilter >> isMethodProtocolFilter [
 	^ true
 ]
+
+{ #category : #storing }
+GtSearchMethodCategoryFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' forCategory: ';
+		print: self category.
+]

@@ -20,3 +20,10 @@ GtSearchTestClassesFilter >> hash [
 GtSearchTestClassesFilter >> includesClass: aClass [
 	^ aClass isTestCase
 ]
+
+{ #category : #storing }
+GtSearchTestClassesFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]

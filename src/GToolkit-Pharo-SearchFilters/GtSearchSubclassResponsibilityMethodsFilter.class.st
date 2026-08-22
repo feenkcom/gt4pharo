@@ -8,3 +8,10 @@ Class {
 GtSearchSubclassResponsibilityMethodsFilter >> includesMethod: aCompiledMethod [
 	^ aCompiledMethod isAbstract
 ]
+
+{ #category : #storing }
+GtSearchSubclassResponsibilityMethodsFilter >> storeCreationCodeOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: ' new'.
+]
