@@ -7,6 +7,12 @@ Class {
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
 
+{ #category : #'instance creation' }
+GtSearchMethodsInPackageFilter class >> forPackageOrUndefined: aPackageOrNil [
+	^ self new package: (aPackageOrNil
+			ifNil: [ self class packageOrganizer undefinedPackage ])
+]
+
 { #category : #comparing }
 GtSearchMethodsInPackageFilter >> = anObject [
 	self == anObject ifTrue: [ ^ true ].

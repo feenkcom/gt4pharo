@@ -12,6 +12,15 @@ GtSearchScopedMethodsFilter >> = anObject [
 	^ super = anObject and: [ self scope = anObject scope ]
 ]
 
+{ #category : #printing }
+GtSearchScopedMethodsFilter >> gtDisplayOn: aStream [
+	aStream nextPutAll: 'methodsFilter'.
+	self scope ifNotNil: [ :aScope | 
+		aStream
+			nextPutAll: ' scope';
+			nextPutAll: self scope label ] 
+]
+
 { #category : #comparing }
 GtSearchScopedMethodsFilter >> hash [
 	^ super hash bitXor: self scope hash
