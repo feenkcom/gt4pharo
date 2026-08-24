@@ -318,3 +318,12 @@ GtRBNamespaceExamples >> referencesToQQQZZZFromObsoleteClass [
 	self assert: (model privateReferencesTo: 'QQQZZZ' asSymbol) isEmpty.
 	^ references
 ]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> validateAllSubclassesHaveSuperclass [
+	<gtExample>
+	| ns |
+	ns := GtRBNamespace new.
+	(ns classFor: ProtoObject) withAllSubclasses
+		do: [ :each | each subclasses do: [ :sub | self assert: sub superclass equals: each ] ]
+]
