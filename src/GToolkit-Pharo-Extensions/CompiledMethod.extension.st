@@ -118,6 +118,19 @@ CompiledMethod >> gtCopyMethodNameActionFor: anAction context: aPhlowContext [
 ]
 
 { #category : #'*GToolkit-Pharo-Extensions' }
+CompiledMethod >> gtCopyMethodNameForLepiterFor: anAction context: aPhlowContext [
+	<gtAction>
+	^ anAction button
+		priority: 70;
+		target: GtCoderMethodTarget;
+		icon: BrGlamorousVectorIcons clipboard;
+		label: 'Copy lepiter link';
+		menuItemPreview: [ '\{\{gtMethod:{1}\}\}' format: {self name} ];
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		action: [ Clipboard clipboardText: ('\{\{gtMethod:{1}\}\}' format: {self name}) ]
+]
+
+{ #category : #'*GToolkit-Pharo-Extensions' }
 CompiledMethod >> gtCopySelectorNameActionFor: anAction context: aPhlowContext [
 	<gtAction>
 	^ anAction button
