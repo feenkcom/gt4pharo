@@ -80,7 +80,13 @@ GtPushUpMethodRefactoring >> preconditionNoReferencesToInstVars [
 { #category : #preconditions }
 GtPushUpMethodRefactoring >> preconditionNoSupersendsReceived [
 	"P13"
-	| condition |
+	
+	^ RBCondition withBlock: [ 
+			self checkSuperSendsFromSiblings.
+			true ]
+	
+	"Old slow version"
+	"| condition |
 	condition := super preconditionNoSupersendsReceived.
 	^ RBCondition
 		withBlock: [ condition check.
@@ -91,7 +97,7 @@ GtPushUpMethodRefactoring >> preconditionNoSupersendsReceived [
 								expandMacrosWith: each second name
 								with: each third
 								with: each first) ].
-			true ]
+			true ]"
 ]
 
 { #category : #transforming }
