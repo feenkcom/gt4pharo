@@ -4,10 +4,21 @@ Class {
 	#instVars : [
 		'methods',
 		'label',
-		'highlighter'
+		'highlighter',
+		'associatedSearchFilter'
 	],
 	#category : #'GToolkit-Pharo-SearchFilters-Filters'
 }
+
+{ #category : #accessing }
+GtSearchFixedMethodsFilter >> associatedSearchFilter [
+	^ associatedSearchFilter
+]
+
+{ #category : #accessing }
+GtSearchFixedMethodsFilter >> associatedSearchFilter: anObject [
+	associatedSearchFilter := anObject
+]
 
 { #category : #accessing }
 GtSearchFixedMethodsFilter >> defaultFilterScope [
@@ -61,6 +72,13 @@ GtSearchFixedMethodsFilter >> methods: anOrderedCollection [
 { #category : #enumerating }
 GtSearchFixedMethodsFilter >> methodsDo: aBlock [
 	self methods do: aBlock.
+]
+
+{ #category : #storing }
+GtSearchFixedMethodsFilter >> storeCreationCodeOn: aStream [
+	^ associatedSearchFilter 
+		ifNil: [ super storeCreationCodeOn: aStream ]
+		ifNotNil: [ :aFilter | aFilter storeCreationCodeOn: aStream ]
 ]
 
 { #category : #accessing }

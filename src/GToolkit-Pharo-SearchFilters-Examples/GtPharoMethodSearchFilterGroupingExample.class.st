@@ -7,10 +7,22 @@ Class {
 }
 
 { #category : #assertions }
-GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInSecondPaneWithItemsCount: anInteger in: aScripter [
+GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInPaneIndex: aPaneIndex withCreationCode: aString in: aScripter [
+	aScripter phlowCompositeToolStep
+		onPagerToolInPaneWithIndex: aPaneIndex;
+		assertPhlowToolValue: [ :aCompositePhlowTool |
+				| creationCode |
+				creationCode := aCompositePhlowTool tools first searchFilter creationCode.
+				(RBParser parseExpression: creationCode codeString) formattedCode ]
+			equals: [ (RBParser parseExpression: aString) formattedCode ];
+		play
+]
+
+{ #category : #assertions }
+GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInPaneIndex: aPaneIndex withItemsCount: anInteger in: aScripter [
 
 	aScripter phlowCompositeToolStep
-		onPagerToolInPaneWithIndex: 2;
+		onPagerToolInPaneWithIndex: aPaneIndex;
 		assertPhlowToolTabsCount: 2;
 		assertPhlowToolTabsHaveOnlyIcons;
 		assertPhlowToolLabels: {'Search Filter' . 'inspector'}  
@@ -19,6 +31,68 @@ GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInSecondPaneWithIt
 				aCompositePhlowTool tools first searchFilter contents size ] 
 			equals: [ anInteger ];
 		play.
+]
+
+{ #category : #assertions }
+GtPharoMethodSearchFilterGroupingExample >> assertSearchFilterInSecondPaneWithItemsCount: anInteger in: aScripter [
+
+	self assertSearchFilterInPaneIndex: 2 withItemsCount: anInteger in: aScripter
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> expectedFilterCreationCodeForMultipleMethodsSelection [
+	^ '''GToolkit-Examples-Dummies-Package'' gtPackageMatches 
+		& #gtExample gtPragmas
+		& GtSearchImageMethodsFilter new
+		& ((GtSearchMethodsInClassFilter forClass: GtDummyAbstractClassWithExamples)
+			| (GtSearchMethodsInClassFilter forClass: GtDummyAnnouncingExamplesA))'
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> expectedFilterCreationCodeForNavigationWithMultiplePackagesAndClasses [
+	^ '''GToolkit-Examples-Dummies-Package'' gtPackageMatches & #gtExample gtPragmas
+	& GtSearchImageMethodsFilter new
+	& ((GtSearchMethodsInPackageFilter new
+			package: ''GToolkit-Examples-Dummies-Package1'' asPackage)
+			| (GtSearchMethodsInPackageFilter new
+					package: ''GToolkit-Examples-Dummies-Package2'' asPackage))
+	& GtSearchImageMethodsFilter new
+	& ((GtSearchMethodsInClassFilter forClass: GtDummyExamplesClassAPackage2)
+			| (GtSearchMethodsInClassFilter forClass: GtDummyExamplesClassBPackage1))'
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> expectedFilterCreationCodeForNavigationWithSingeAndClass [
+	^ '''GToolkit-Examples-Dummies-Package'' gtPackageMatches & #gtExample gtPragmas
+	& GtSearchImageMethodsFilter new
+	& (GtSearchMethodsInPackageFilter new
+			package: ''GToolkit-Examples-Dummies-Package1'' asPackage)'
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> expectedFilterCreationCodeForSingleMethodSelection [
+	^ '''GToolkit-Examples-Dummies-Package'' gtPackageMatches
+		& #gtExample gtPragmas
+		& GtSearchImageMethodsFilter new
+		& (GtSearchMethodsInClassFilter forClass: GtDummyAbstractClassWithExamples)' 
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> expectedFilterCreationCodeForSinglePackageSelection [
+	^ '''GToolkit-Examples-Dummies-Package'' gtPackageMatches & #gtExample gtPragmas
+	& GtSearchImageMethodsFilter new
+	& (GtSearchMethodsInPackageFilter new
+			package: ''GToolkit-Examples-Dummies-Package1'' asPackage)'
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> expectedFilterCreationCodeForultiplePackagesSelection [
+	^ '''GToolkit-Examples-Dummies-Package'' gtPackageMatches & #gtExample gtPragmas
+	& GtSearchImageMethodsFilter new
+	& ((GtSearchMethodsInPackageFilter new
+			package: ''GToolkit-Examples-Dummies-Package1'' asPackage)
+			| (GtSearchMethodsInPackageFilter new
+					package: ''GToolkit-Examples-Dummies-Package2'' asPackage))'
 ]
 
 { #category : #'examples - setup' }
@@ -89,6 +163,12 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView_selectMult
 		
 	self assertSearchFilterInSecondPaneWithItemsCount: 4 in: scripter.
 	
+	self 
+		assertSearchFilterInPaneIndex: 2 
+		withCreationCode:  
+			self expectedFilterCreationCodeForMultipleMethodsSelection
+		in: scripter.
+	
 	^ scripter
 ]
 
@@ -113,6 +193,12 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byClassView_selectSing
 		play.
 	
 	self assertSearchFilterInSecondPaneWithItemsCount: 2 in: scripter.
+	
+	self 
+		assertSearchFilterInPaneIndex: 2
+		withCreationCode:  
+			self expectedFilterCreationCodeForSingleMethodSelection
+		in: scripter.
 	
 	^ scripter
 ]
@@ -310,6 +396,12 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_multiple
 	
 	self assertSearchFilterInSecondPaneWithItemsCount: 4 in: scripter.
 	
+	self 
+		assertSearchFilterInPaneIndex: 2 
+		withCreationCode:  
+			self expectedFilterCreationCodeForultiplePackagesSelection
+		in: scripter.
+	
 	^ scripter
 ]
 
@@ -336,15 +428,99 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_singlePa
 		
 	self assertSearchFilterInSecondPaneWithItemsCount: 2 in: scripter.
 	
+	self 
+		assertSearchFilterInPaneIndex: 2 
+		withCreationCode:  
+			self expectedFilterCreationCodeForSinglePackageSelection
+		in: scripter.
+	
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoMethodSearchFilterGroupingExample >> methodsFilter_navigationByPackageMultiple_byClassMultiple [
+	<gtExample>
+	| scripter |
+	
+	scripter := self methodsFilter_byPackageView_multiplePackages.
+		
+	scripter inspectorStep
+		onPagerToolInPaneWithIndex: 2;
+		clickOnTabWithName: 'By Class';
+		assertSelectedTabWithName: 'By Class';
+		play.
+	
+	self 
+		multipleSelectCellWithLabel: GtDummyExamplesClassAPackage2 name 
+		and: GtDummyExamplesClassBPackage1 name
+		paneIndex: 2
+		in: scripter.
+				
+	scripter treePager
+		assertNumberOfPaneElements: 3;
+		play.
+		
+	self assertSearchFilterInPaneIndex: 3 withItemsCount: 2 in: scripter.
+	
+	self 
+		assertSearchFilterInPaneIndex: 3 
+		withCreationCode:  
+			self expectedFilterCreationCodeForNavigationWithMultiplePackagesAndClasses
+		in: scripter.
+	
+	^ scripter
+]
+
+{ #category : #examples }
+GtPharoMethodSearchFilterGroupingExample >> methodsFilter_navigationByPackageSingle_byClassSingle [
+	<gtExample>
+	| scripter |
+	
+	scripter := self methodsFilter_byPackageView_singlePackage.
+		
+	scripter inspectorStep
+		onPagerToolInPaneWithIndex: 2;
+		clickOnTabWithName: 'By Class';
+		assertSelectedTabWithName: 'By Class';
+		play.
+		
+	self 
+		selectCellWithLabel: GtDummyExamplesClassBPackage1 name 
+		paneIndex: 2
+		in: scripter.
+				
+	scripter treePager
+		assertNumberOfPaneElements: 3;
+		play.
+	
+	self assertSearchFilterInPaneIndex: 3 withItemsCount: 1 in: scripter.
+	
+	self 
+		assertSearchFilterInPaneIndex: 2
+		withCreationCode:  
+			self expectedFilterCreationCodeForNavigationWithSingeAndClass
+		in: scripter. 
+	
 	^ scripter
 ]
 
 { #category : #utils }
 GtPharoMethodSearchFilterGroupingExample >> multipleSelectCellWithLabel: aFirstLabel and: aSecondLabel in: aScripter [
 
+	self 
+		multipleSelectCellWithLabel: aFirstLabel 
+		and: aSecondLabel 
+		paneIndex: 1 
+		in: aScripter
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> multipleSelectCellWithLabel: aFirstLabel and: aSecondLabel paneIndex: aPaneIndex in: aScripter [
+
 	aScripter
 		doubleClickStep: [ :s | 
 			s
+				onPagerToolInPaneWithIndex: aPaneIndex;
 				//GtPhlowColumnedListId;
 				id: #scrollable;
 				// GtPhlowCellElement;
@@ -353,6 +529,7 @@ GtPharoMethodSearchFilterGroupingExample >> multipleSelectCellWithLabel: aFirstL
 	aScripter
 		clickStep: [ :s | 
 			s
+				onPagerToolInPaneWithIndex: aPaneIndex;
 				//GtPhlowColumnedListId;
 				id: #scrollable;
 				// GtPhlowCellElement;
@@ -389,11 +566,16 @@ GtPharoMethodSearchFilterGroupingExample >> pagerWithFilterInScripterOnDummyExam
 
 { #category : #utils }
 GtPharoMethodSearchFilterGroupingExample >> selectCellWithLabel: aLabel in: aScripter [
-	<gtExample>
+	self selectCellWithLabel: aLabel paneIndex: 1 in: aScripter
+]
+
+{ #category : #utils }
+GtPharoMethodSearchFilterGroupingExample >> selectCellWithLabel: aLabel paneIndex: aPaneIndex in: aScripter [
 	
 	aScripter
 		doubleClickStep: [ :s | 
 			s
+				onPagerToolInPaneWithIndex: aPaneIndex;
 				//GtPhlowColumnedListId;
 				id: #scrollable;
 				// GtPhlowCellElement;
