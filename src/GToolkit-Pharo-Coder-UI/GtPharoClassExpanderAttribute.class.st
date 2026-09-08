@@ -15,6 +15,15 @@ GtPharoClassExpanderAttribute class >> forClass: aClass [
 		yourself
 ]
 
+{ #category : #'initialize-release' }
+GtPharoClassExpanderAttribute class >> forClass: aClass id: anElementId [
+	^ self new
+		forClass: aClass;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect;
+		id: anElementId;
+		yourself
+]
+
 { #category : #private }
 GtPharoClassExpanderAttribute >> buildBehaviorCoder [
 	| editorElement |
