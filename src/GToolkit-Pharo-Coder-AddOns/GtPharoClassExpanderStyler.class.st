@@ -147,7 +147,8 @@ GtPharoClassExpanderStyler >> visitDeclaredGlobalVariable_01_originalVersion: aN
 		ifFalse: [ ^ self ].
 	text
 		attribute: (GtPharoClassExpanderAttribute
-				forClass: (self class environment at: aNamedVariable variableName))
+				forClass: (self class environment at: aNamedVariable variableName)
+				id: (GtPharoBehaviorExpanderId indexed: self nextIndex))
 		from: aNamedVariable stopPosition
 		to: aNamedVariable stopPosition
 ]
@@ -164,7 +165,8 @@ GtPharoClassExpanderStyler >> visitDeclaredGlobalVariable_02_cacheVersion: aName
 			at: aNamedVariable
 			ifPresent: [ :existingAttribute | existingAttribute ]
 			ifAbsentPut: [ GtPharoClassExpanderAttribute
-					forClass: (self class environment at: aNamedVariable variableName) ].
+					forClass: (self class environment at: aNamedVariable variableName)
+					id: (GtPharoBehaviorExpanderId indexed: self nextIndex) ].
 
 	text
 		attribute: anAttribute
@@ -188,7 +190,8 @@ GtPharoClassExpanderStyler >> visitDeclaredGlobalVariable_03_cacheVersion: aName
 						aStream nextPut: existingAttribute.
 						existingAttribute createdAttributesInto: aStream ] ]
 			ifAbsentPut: [ GtPharoClassExpanderAttribute
-					forClass: (self class environment at: aNamedVariable variableName) ].
+					forClass: (self class environment at: aNamedVariable variableName)
+					id: (GtPharoBehaviorExpanderId indexed: self nextIndex) ].
 
 	attributeOrAttributes asCollection
 		do: [ :eachAttribute | 
