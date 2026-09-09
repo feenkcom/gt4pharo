@@ -12,6 +12,11 @@ GtPharoDoItMethodNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitDoItMethod: self
 ]
 
+{ #category : #accessing }
+GtPharoDoItMethodNode >> argumentNames [
+	^ #()
+]
+
 { #category : #generated }
 GtPharoDoItMethodNode >> body [
 	^ body

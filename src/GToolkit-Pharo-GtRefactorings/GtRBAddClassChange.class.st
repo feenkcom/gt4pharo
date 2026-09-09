@@ -73,6 +73,81 @@ GtRBAddClassChange >> comment [
 	^ properties at: #comment ifAbsent: [  ]
 ]
 
+{ #category : #actions }
+GtRBAddClassChange >> convertDefinitionString [
+	| ast |
+	self forPharo13AndNewer: [  ] forOlder: [ ^ definitionString ].
+	ast := RBParser
+			parseExpression: self definitionString
+			onError: [ :msg :pos | ^ definitionString ].
+	(ast isMessage and: [ '*subclass:' match: ast keywords first ])
+		ifFalse: [ ^ definitionString ].
+	^ String
+		streamContents: [ :stream | 
+			| keywordMap |
+			keywordMap := Dictionary new
+					at: 'subclass:'
+						put: [ :arg | stream << 'builder name: (' << arg formattedCode << ').' ];
+					at: 'ephemeronSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode
+								<< '); layoutClass: EphemeronLayout.' ];
+					at: 'immediateSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode
+								<< '); layoutClass: ImmediateLayout.' ];
+					at: 'variableByteSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode << '); layoutClass: (('
+								<< ast receiver formattedCode << ') checkForCompiledMethodLayout: ('
+								<< arg formattedCode << ')).' ];
+					at: 'variableDoubleWordSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode
+								<< '); layoutClass: DoubleWordLayout.' ];
+					at: 'variableSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode
+								<< '); layoutClass: VariableLayout.' ];
+					at: 'variableWordSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode
+								<< '); layoutClass: WordLayout.' ];
+					at: 'weakSubclass:'
+						put: [ :arg | 
+							stream << 'builder name: (' << arg formattedCode
+								<< '); layoutClass: WeakLayout.' ];
+					at: 'uses:'
+						put: [ :arg | stream << 'builder traitComposition: (' << arg formattedCode << ').' ];
+					at: 'instanceVariableNames:'
+						put: [ :arg | stream << 'builder slotsFromString: (' << arg formattedCode << ').' ];
+					at: 'classVariableNames:'
+						put: [ :arg | stream << 'builder sharedVariablesFromString: (' << arg formattedCode << ').' ];
+					at: 'poolDictionaries:'
+						put: [ :arg | stream << 'builder sharedPoolsFromString: (' << arg formattedCode << ').' ];
+					at: 'category:'
+						put: [ :arg | stream << 'builder category: (' << arg formattedCode << ').' ];
+					at: 'package:'
+						put: [ :arg | stream << 'builder package: (' << arg formattedCode << ').' ];
+					at: 'layout:'
+						put: [ :arg | stream << 'builder layoutClass: (' << arg formattedCode << ').' ];
+					at: 'slots:'
+						put: [ :arg | stream << 'builder slots: (' << arg formattedCode << ').' ];
+					at: 'classVariables:'
+						put: [ :arg | stream << 'builder sharedVariables: (' << arg formattedCode << ').' ];
+					yourself.
+			stream << '(' << ast receiver formattedCode
+				<< ') classInstaller make: [ :builder | builder superclass: ('
+				<< ast receiver formattedCode << '); environment: ('
+				<< ast receiver formattedCode << ') environment.'.
+			ast keywords
+				with: ast arguments
+				do: [ :keyword :arg | 
+					stream cr.
+					(keywordMap at: keyword ifAbsent: [ ^ definitionString ]) cull: arg ].
+			stream << ']' ]
+]
+
 { #category : #accessing }
 GtRBAddClassChange >> definition [
 	^ definitionString ifNil: [ super definition ]
@@ -108,7 +183,7 @@ GtRBAddClassChange >> generateChanges [
 
 	^ definitionString
 		ifNotNil: [ (self class compiler
-				source: definitionString;
+				source: self convertDefinitionString;
 				logged: true;
 				evaluate) fluidInstall ]
 		ifNil: [ super generateChanges ]
