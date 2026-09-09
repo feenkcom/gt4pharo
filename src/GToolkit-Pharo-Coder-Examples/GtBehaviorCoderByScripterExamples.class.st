@@ -35,6 +35,42 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI [
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_add_trait [
+	<gtExample>
+	| scripter |
+	scripter := self classCoderForClassUI_click_expand_definition.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				// (GtMagritteFieldElementId new
+						description: GtBehaviorCreationForm new traitsDescription) ].
+
+	scripter
+		typeStep: [ :s | 
+			s
+				text: 'TGtAssert';
+				label: 'Enter trait name' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Save changes';
+				id: (GtMagritteActionElementId new
+						description: (MAActionDescription new label: 'Create')) ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert class has trait';
+				value: [ TGtAssert ]
+					equals: [ :aCoder | (aCoder attributeNamed: #dummyClass) realClass traits anyOne ];
+				onModel ].
+
+	^ scripter
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_advices_removeClass_01_showAdvices [
 	<gtExample>
 	| aScripter |
