@@ -894,7 +894,7 @@ GtBehaviorCoderByScripterExamples >> cleanUp [
 GtBehaviorCoderByScripterExamples >> isRustTextEditorLibrarySupported [
 	"The libEditor library may be present by it would not work in headless image anyway"
 
-	^ GtTextEditorLibrary isSupported
+	^ GtTextEditorLibrary canRunExamples
 ]
 
 { #category : #utilities }
