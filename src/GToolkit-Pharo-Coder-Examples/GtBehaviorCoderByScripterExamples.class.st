@@ -871,7 +871,7 @@ GtBehaviorCoderByScripterExamples >> classCoderWithMethodRustTextEditor [
 	<after: #resetToDefaultTextEditor>
 	| aScripter anElement |
 	self setRustTextEditorAsDefault.
-	self isRustTextEditorLibraryInstalled ifFalse: [ ^ nil ].
+	self isRustTextEditorLibrarySupported ifFalse: [ ^ nil ].
 	aScripter := BlScripter new.
 	anElement := GtCoder forMethod: GtPharoDummyOneObject >> #dummyThree.
 	aScripter element: anElement.
@@ -891,8 +891,10 @@ GtBehaviorCoderByScripterExamples >> cleanUp [
 ]
 
 { #category : #'examples - rust editor' }
-GtBehaviorCoderByScripterExamples >> isRustTextEditorLibraryInstalled [
-	^ GtTextEditorLibrary uniqueInstance hasModule
+GtBehaviorCoderByScripterExamples >> isRustTextEditorLibrarySupported [
+	"The libEditor library may be present by it would not work in headless image anyway"
+
+	^ GtTextEditorLibrary isSupported
 ]
 
 { #category : #utilities }
