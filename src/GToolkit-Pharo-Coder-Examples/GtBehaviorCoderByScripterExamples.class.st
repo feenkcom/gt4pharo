@@ -871,6 +871,7 @@ GtBehaviorCoderByScripterExamples >> classCoderWithMethodRustTextEditor [
 	<after: #resetToDefaultTextEditor>
 	| aScripter anElement |
 	self setRustTextEditorAsDefault.
+	self isRustTextEditorLibraryInstalled ifFalse: [ ^ nil ].
 	aScripter := BlScripter new.
 	anElement := GtCoder forMethod: GtPharoDummyOneObject >> #dummyThree.
 	aScripter element: anElement.
@@ -887,6 +888,11 @@ GtBehaviorCoderByScripterExamples >> classCoderWithMethodRustTextEditor [
 { #category : #utilities }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
+]
+
+{ #category : #'examples - rust editor' }
+GtBehaviorCoderByScripterExamples >> isRustTextEditorLibraryInstalled [
+	^ GtTextEditorLibrary uniqueInstance hasModule
 ]
 
 { #category : #utilities }
