@@ -479,29 +479,37 @@ GtPharoIndex >> isGlobalVariable: aVariable [
 GtPharoIndex >> methodAdded: anAnnouncement [
 	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
 	self
-		critical: [ | node |
-			node := selectorCache add: anAnnouncement method selector weight: 1.
+		critical: [ | node addedMethod |
+			addedMethod := anAnnouncement method methodClass
+					compiledMethodAt: anAnnouncement method selector
+					ifAbsent: [ anAnnouncement method ].
+			node := selectorCache add: addedMethod selector weight: 1.
 			node weight = 1
 				ifTrue: [ self
-						wordsIn: anAnnouncement method selector
+						wordsIn: addedMethod selector
 						do: [ :word | 
 							(selectorWordCache add: word asLowercase weight: 1)
-								addName: anAnnouncement method selector ] ].
-			node addImplementer: anAnnouncement method gtIndexMethod.
-			self addSendsFrom: anAnnouncement method ]
+								addName: addedMethod selector ] ].
+			node addImplementer: addedMethod gtIndexMethod.
+			self addSendsFrom: addedMethod ]
 ]
 
 { #category : #private }
 GtPharoIndex >> methodModified: anAnnouncement [
 	anAnnouncement newMethod isFromTrait ifTrue: [ ^ self ].
 	self
-		critical: [ (selectorCache nodeFor: anAnnouncement newMethod selector)
+		critical: [ | newMethod selector |
+			selector := anAnnouncement newMethod selector.
+			newMethod := anAnnouncement newMethod methodClass
+					compiledMethodAt: selector
+					ifAbsent: [ anAnnouncement newMethod ].
+			(selectorCache nodeFor: selector)
 				ifNotNil: [ :node | 
 					node
 						removeImplementer: anAnnouncement oldMethod gtIndexMethod;
-						addImplementer: anAnnouncement newMethod gtIndexMethod ].
+						addImplementer: newMethod gtIndexMethod ].
 			self removeSendsFrom: anAnnouncement oldMethod.
-			self addSendsFrom: anAnnouncement newMethod ]
+			self addSendsFrom: newMethod ]
 ]
 
 { #category : #private }

@@ -135,6 +135,28 @@ GtPharoIndexExamples >> checkGtMessageSendIteratorRefs: aBoolean [
 	self assert: (refs allSatisfy: [ :each | each gtIsActive ])
 ]
 
+{ #category : #accessing }
+GtPharoIndexExamples >> checkInstalledMethod [
+	<gtExample>
+	| index event symbol originalMethod recompiledMethod |
+	symbol := #runtimeUndeclaredReadInContext:.	"Having this causes the method to be recompiled when asking for the ast"
+	originalMethod := thisContext method.
+	index := GtPharoIndex new.
+	event := MethodAdded method: originalMethod.
+	originalMethod ast.
+	index methodAdded: event.
+	self assert: index selectorCache notInstalledMethods isEmpty.
+	recompiledMethod := self class compiledMethodAt: originalMethod selector.
+	event := MethodModified
+			methodChangedFrom: recompiledMethod
+			to: recompiledMethod
+			oldProtocol: #accessing.
+	recompiledMethod ast.
+	index methodModified: event.
+	self assert: index selectorCache notInstalledMethods isEmpty.
+	^ index
+]
+
 { #category : #examples }
 GtPharoIndexExamples >> checkReferencesToClassCreatedFromUndeclared [
 	<gtExample>
