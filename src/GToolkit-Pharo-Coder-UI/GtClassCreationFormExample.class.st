@@ -529,5 +529,6 @@ GtClassCreationFormExample >> scripterWithClassNamePackageFilledAndTagFilledWith
 
 { #category : #accessing }
 GtClassCreationFormExample >> simpleForm [
+	<gtExample>
 	^ self formClass new
 ]
