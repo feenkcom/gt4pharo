@@ -391,7 +391,7 @@ GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> ifLibEditorIsMissingDo: aBlock [
-	GtTextEditorLibrary uniqueInstance hasModule ifFalse: [ ^ aBlock value ].
+	GtTextEditorLibrary canRunExamples ifFalse: [ ^ aBlock value ].
 	^ nil
 ]
 
@@ -892,10 +892,7 @@ GtPharoRenameSelectorModelExamples >> renameSelectorModelWithUnaryMethod_updateT
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	<gtExample>
-	<noTest>
 	| aMethod anEditor |
-	"For some reason it fails on CI."
-	self flag: #TODO.
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	
 	aMethod := self threeKeywordsMethod.
@@ -906,24 +903,27 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod [
 	<gtExample>
-	<noTest>
-	| anElement aScripter aModel aSemaphore |
+	| anElement aScripter aModel |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	anElement := self rustEditorWithThreeKeywordsMethod.
 	aScripter := BlScripter new element: anElement.
-	aModel := anElement userData at: #selectorModel.
-	aScripter := BlScripter new
-			model: aModel;
-			element: anElement.
-
-	aSemaphore := Semaphore new.
-	anElement privateRequestEditorAction: [ :aMessage | aSemaphore signal ].
 
 	aScripter wait
-		forSemaphore: aSemaphore pulseDuring: 5 seconds;
+		forCondition: [ :aSpace :theScripter | 
+				anElement userData
+					at: #selectorModel
+					ifPresent: [ :theModel | 
+						theModel ifNotNil: [ aModel := theModel ].
+						theModel isNotNil ]
+					ifAbsent: [ false ] ]
+			pulseDuring: 5 seconds;
 		play.
+	self assert: aModel isNotNil.
+	aScripter model: aModel.
 
-	self assert: aSemaphore isSignaled.
+	aScripter wait
+		waitRustEditorRendered: anElement pulseDuring: 5 seconds;
+		play.
 
 	aScripter wait
 		forCondition: [ :aSpace | anElement childrenCount = 15 ]
@@ -940,7 +940,6 @@ GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod 
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod [
 	<gtExample>
-	<noTest>
 	| anElement aScripter aModel |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	anElement := self selectorPartElementsWithFirstThreeKeywordsMethod.
@@ -959,7 +958,6 @@ GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstT
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_downAndUpArrowShortcuts [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
@@ -1040,7 +1038,6 @@ GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstT
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_refactoringsPreview [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
@@ -1075,7 +1072,6 @@ GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstT
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_rightAndLeftArrowShortcuts [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
@@ -1156,7 +1152,6 @@ GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstT
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_tabShortcuts [
 	<gtExample>
-	<noTest>
 	| aScripter |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	aScripter := self rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod.
@@ -1222,7 +1217,6 @@ GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstT
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterSelectorPartElementsWithFirstThreeKeywordsMethod_typeAThenB [
 	<gtExample>
-	<noTest>
 	| anElement aScripter aModel aPartOneId |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	anElement := self selectorPartElementsWithFirstThreeKeywordsMethod.
