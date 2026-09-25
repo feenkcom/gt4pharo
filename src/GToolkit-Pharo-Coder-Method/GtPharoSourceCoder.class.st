@@ -78,6 +78,43 @@ GtPharoSourceCoder >> compilerErrorsToHandle [
 	^ OCUndeclaredVariableWarning, RBParser gtParseErrorClass
 ]
 
+{ #category : #'private - actions' }
+GtPharoSourceCoder >> computePositionMappingsFrom: originalAst to: formattedAst [
+	| origTokens fmtTokens mappings scanner origIdx fmtIdx |
+	scanner := RBScanner on: originalAst source readStream.
+	origTokens := OrderedCollection new.
+	[ scanner atEnd ] whileFalse: [ origTokens add: scanner next ].
+	scanner := RBScanner on: formattedAst source readStream.
+	fmtTokens := OrderedCollection new.
+	[ scanner atEnd ] whileFalse: [ fmtTokens add: scanner next ].
+	mappings := OrderedCollection new: origTokens size.
+	origIdx := 1.
+	fmtIdx := 1.
+	[ origIdx <= origTokens size and: [ fmtIdx <= fmtTokens size ] ]
+		whileTrue: [ | orig fmt |
+			orig := origTokens at: origIdx.
+			fmt := fmtTokens at: fmtIdx.
+			orig value = fmt value
+				ifTrue: [ mappings
+						add: (GtSourceCoderFormatTokenMapping
+								originalStart: orig start
+								originalStop: orig stop
+								formattedStart: fmt start
+								formattedStop: fmt stop).
+					origIdx := origIdx + 1.
+					fmtIdx := fmtIdx + 1 ]
+				ifFalse: [ | origFoundInFmt |
+					origFoundInFmt := (fmtIdx + 1 to: fmtTokens size)
+							anySatisfy: [ :j | (fmtTokens at: j) value = orig value ].
+					origFoundInFmt
+						ifTrue: [ fmtIdx := fmtIdx + 1 ]
+						ifFalse: [ origIdx := origIdx + 1 ] ] ].
+	^ GtSourceCoderFormatPositionMap
+		tokenMappings: mappings
+		originalSource: originalAst source
+		formattedSource: formattedAst source
+]
+
 { #category : #'private - ast' }
 GtPharoSourceCoder >> detectReferencesFilterAt: aTextPosition ifFound: aFoundBlock ifNone: aNoneBlock [
 	^ self 
@@ -99,16 +136,6 @@ GtPharoSourceCoder >> detectReferencesFilterIn: aSourceString ifFound: aFoundBlo
 { #category : #'api - actions' }
 GtPharoSourceCoder >> format [
 	self formatWithRequesterObject: nil
-]
-
-{ #category : #'api - actions' }
-GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
-	| ast |
-	ast := [ RBParser parseExpression: self currentSourceString ]
-			on: RBParser gtParseErrorClass
-			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
-
-	self currentSourceString: ast formattedCode
 ]
 
 { #category : #'private - actions' }

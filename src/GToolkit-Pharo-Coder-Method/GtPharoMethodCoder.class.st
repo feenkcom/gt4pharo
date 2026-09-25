@@ -747,16 +747,6 @@ GtPharoMethodCoder >> forMethod: aCompiledMethod in: aReceiverBehavior [
 		ifAbsent: [ nil ]
 ]
 
-{ #category : #accessing }
-GtPharoMethodCoder >> formatWithRequesterObject: aRequester [
-	| ast |
-	ast := [ RBParser parseMethod: self currentSourceString ]
-			on: RBParser gtParseErrorClass
-			do: [ :ex | ^ self notifyParseError: ex requesterObject: aRequester ].
-
-	self currentSourceString: ast formattedCode
-]
-
 { #category : #'gt-extensions' }
 GtPharoMethodCoder >> gtDiffViewFor: aView [
 	"<gtView>
