@@ -6,7 +6,7 @@ Class {
 		'formattedSource',
 		'positionMap'
 	],
-	#category : #'GToolkit-Pharo-Coder-Method'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Events'
 }
 
 { #category : #'instance creation' }
