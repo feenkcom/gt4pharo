@@ -212,12 +212,20 @@ GtPharoCoderByScripterExamples >> addNewInstanceSideMethod [
 	anObject := aMethodsCoderQuery anyOne streamingCodersViewModel
 			selfObjectIfNone: [ self error: 'Self object must be defined' ].
 
-	aScripter
-		clickStep: [ :s | 
-			s
-				label: 'Click on the add new method button';
-				onPagerPaneWithIndex: 1;
-				// GtPharoAddNewMethodButtonId ].
+	aScripter memoryLogger 
+		runFor: ExceptionSignal 
+		during: [ :aStep | 
+			aStep
+				clickStep: [ :s | 
+					s
+						label: 'Click on the add new method button';
+						onPagerPaneWithIndex: 1;
+						// GtPharoAddNewMethodButtonId ].
+			aStep assert
+				label: 'Assert no exception signals';
+				satisfies: [ :anElement | 
+					aStep recordings isEmpty ];
+				play ].
 
 	aScripter methodCoder
 		onSpaceRoot;
