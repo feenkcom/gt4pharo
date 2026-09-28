@@ -68,5 +68,5 @@ GtSearchPragmasFilter >> symbol [
 
 { #category : #accessing }
 GtSearchPragmasFilter >> symbol: aSymbol [
-	symbol := aSymbol
+	symbol := aSymbol asSymbol
 ]
