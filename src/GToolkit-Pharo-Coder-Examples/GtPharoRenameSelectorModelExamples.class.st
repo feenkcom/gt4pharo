@@ -348,8 +348,6 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 
 	anEditor text: aMethod sourceCode asRopedText.
 
-	anEditor userData at: #selectorController put: aController.
-
 	^ anEditor
 ]
 
