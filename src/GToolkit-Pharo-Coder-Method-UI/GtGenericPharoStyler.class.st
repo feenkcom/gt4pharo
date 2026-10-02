@@ -23,9 +23,13 @@ GtGenericPharoStyler >> style: aText ast: theAst [
 	[ self accept: theAst ]
 		on: Error
 		do: [ :anException | 
-			GtSystemUtility reportCatchedException: anException named: 'Styler'.
-			GtStylerErrorSignal new 
-				signaledError: anException; 
+			GtSystemUtility reportCatchedException: anException named: self class name.
+			NonInteractiveTranscript stdout
+				nextPutAll: '  text documentID: ';
+				print: aText documentId;
+				newLine.
+			GtStylerErrorSignal new
+				signaledError: anException;
 				emit ].
-	text := nil.
+	text := nil
 ]
