@@ -316,37 +316,51 @@ GtPharoRenameSelectorModelExamples >> createElementsFromAttributesStencil: aSten
 
 { #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
-	| anEditor aDocumentId aController aCoder anAst aCoderViewModel |
+	| anEditor aDocumentId aController aCoder anAst aCoderViewModel aRecorder |
 	aDocumentId := nil.
 	aCoder := GtPharoMethodCoder forMethod: aMethod.
 	anAst := aCoder astSync.
 	aCoderViewModel := aCoder asCoderViewModel.
+	aRecorder := GtTextEditorTimelineRecorder new.
+	aRecorder
+		observeAnnouncer: aCoderViewModel announcer
+		labeled: 'coder view model'.
 
-	anEditor := GtTextEditorElement new
-			defaultFontName: 'Source Code Pro';
-			defaultFontSize: 14;
-			defaultForeground: Color black;
-			in: [ :theEditor | theEditor privateEditorHandle enableInMemoryCommandsRecorder ];
-			when: BrTextEditorModifiedEvent
-				do: [ :anEvent | aDocumentId := anEvent documentId ];
-			styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
-			when: BrTextStyledEvent
-				doOnce: [ :anEvent | 
-					BlTaskAction
-						enqueueElement: anEvent currentTarget
-						action: [ anEvent currentTarget
-								assert: [ aDocumentId isNotNil ]
-								description: [ 'Document ID must be non-nil.' ].
-							aController := GtPharoRenameSelectorCoderController new
-									originalNode: anAst;
-									documentId: aDocumentId;
-									editorElement: anEditor;
-									sourceCoderViewModel: aCoderViewModel;
-									install ] ];
-			matchParent;
-			yourself.
-
-	anEditor text: aMethod sourceCode asRopedText.
+	aRecorder runDuring: [
+		
+		anEditor := GtTextEditorElement new
+				defaultFontName: 'Source Code Pro';
+				defaultFontSize: 14;
+				defaultForeground: Color black;
+				in: [ :theEditor | theEditor privateEditorHandle enableInMemoryCommandsRecorder ];
+				when: BrTextEditorModifiedEvent
+					do: [ :anEvent | aDocumentId := anEvent documentId ];
+				styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
+				when: BrTextStyledEvent
+					doOnce: [ :anEvent | 
+						BlTaskAction
+							enqueueElement: anEvent currentTarget
+							action: [ anEvent currentTarget
+									assert: [ aDocumentId isNotNil ]
+									description: [ 'Document ID must be non-nil.' ].
+								aController := GtPharoRenameSelectorCoderController new
+										originalNode: anAst;
+										documentId: aDocumentId;
+										editorElement: anEditor;
+										sourceCoderViewModel: aCoderViewModel;
+										install.
+								aController selectorModel ifNotNil: [ :aSelectorModel |
+									aRecorder
+										observeAnnouncer: aSelectorModel announcer labeled: 'rename selector model' ] ] ];
+				matchParent;
+				yourself.
+	
+		anEditor text: aMethod sourceCode asRopedText.
+		
+	].
+	
+	anEditor userData at: #coderViewModel put: aCoderViewModel.
+	anEditor userData at: #timelineRecorder put: aRecorder.
 
 	^ anEditor
 ]
@@ -901,32 +915,39 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod [
 	<gtExample>
-	| anElement aScripter aModel |
+	| anElement aScripter aSelectorModel aCoderViewModel aRecorder |
 	self ifLibEditorIsMissingDo: [ ^ nil ].
 	anElement := self rustEditorWithThreeKeywordsMethod.
-	aScripter := BlScripter new element: anElement.
+	aCoderViewModel := anElement userData at: #coderViewModel.
+	aRecorder := anElement userData at: #timelineRecorder.
+	aScripter := BlScripter new.
+	aScripter userData at: #timelineRecorder put: aRecorder.
 
-	aScripter wait
-		forCondition: [ :aSpace :theScripter | 
-				anElement userData
-					at: #selectorModel
-					ifPresent: [ :theModel | 
-						theModel ifNotNil: [ aModel := theModel ].
-						theModel isNotNil ]
-					ifAbsent: [ false ] ]
-			pulseDuring: 5 seconds;
-		play.
-	self assert: aModel isNotNil.
-	aScripter model: aModel.
+	aRecorder runDuring: [ aScripter element: anElement.
 
-	aScripter wait
-		waitRustEditorRendered: anElement pulseDuring: 5 seconds;
-		play.
-
-	aScripter wait
-		forCondition: [ :aSpace | anElement childrenCount = 15 ]
-			pulseDuring: 5 seconds;
-		play.
+		aScripter wait
+			forCondition: [ :aSpace :theScripter | 
+					anElement userData
+						at: #selectorModel
+						ifPresent: [ :theModel | 
+							theModel ifNotNil: [ aSelectorModel := theModel ].
+							theModel isNotNil ]
+						ifAbsent: [ false ] ]
+				pulseDuring: 5 seconds;
+			play.
+		self assert: aSelectorModel isNotNil.
+		aScripter model: aSelectorModel.
+	
+		aScripter wait
+			waitRustEditorRendered: anElement pulseDuring: 5 seconds;
+			play.
+	
+		aScripter wait
+			forCondition: [ :aSpace | anElement childrenCount = 15 ]
+				pulseDuring: 5 seconds;
+			play.
+			
+	].
 
 	self
 		assert: aScripter
