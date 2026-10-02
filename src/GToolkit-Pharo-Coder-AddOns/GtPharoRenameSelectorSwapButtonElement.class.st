@@ -51,12 +51,12 @@ GtPharoRenameSelectorSwapButtonElement >> gtActionInspectSelectorModelFor: anAct
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
 		menuItemPreview: [ selectorModel gtDisplayText ];
 		action: [ :aButton | aButton phlow spawnObject: selectorModel ];
-		primaryModifierAction: [ :aButton |
-			BlSpace new
-				withCommonSettings;
-				objectInPager: selectorModel;
-				showFrom: aButton ];
-		mouseCursor: BlCopyCursor new
+		primaryModifierAction: [ :aButton | 
+				BlSpace new
+					withCommonSettings;
+					objectInPager: selectorModel;
+					showFrom: aButton ]
+			mouseCursor: BlCopyCursor new
 ]
 
 { #category : #visibility }
