@@ -315,6 +315,68 @@ GtPharoRenameSelectorModelExamples >> createElementsFromAttributesStencil: aSten
 ]
 
 { #category : #'examples - rust editor' }
+GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod2: aMethod [
+	| aCoderElement aTextEditorElement aDocumentId aController aCoder aCoderViewModel aRecorder |
+	aDocumentId := nil.
+	aCoder := GtPharoMethodCoder forMethod: aMethod.
+	aCoderViewModel := aCoder asCoderViewModel.
+	aRecorder := GtTextEditorTimelineRecorder new.
+	aRecorder
+		addSignalClass: GtTextEditorSignal;
+		observeAnnouncer: aCoderViewModel announcer labeled: 'coder view model'.
+
+	aRecorder
+		runDuring: [ aCoderElement := GtExpandableSourceCoderElement new
+					expandedElementStencil: GtExpandedCoderElementWithRustTextEditorStencil new;
+					textualCoderViewModel: aCoderViewModel;
+					expand.
+
+			BlTaskAction
+				enqueueElement: aCoderElement
+				action: [ aTextEditorElement := (aCoderElement query // GtTextEditorElement) anyOne.
+					self
+						assert: [ aTextEditorElement isNotNil ]
+						description: [ 'Text editor element must exist.' ].
+					aTextEditorElement privateEditorHandle enableInMemoryCommandsRecorder.
+					aTextEditorElement
+						when: BrTextEditorModifiedEvent
+							do: [ :anEvent | aDocumentId := anEvent documentId ];
+						styler: (GtPharoStyler new coderViewModel: aCoderViewModel);
+						when: BrTextStyledEvent
+							doOnce: [ :anEvent | 
+								| anAstFuture |
+								anAstFuture := aCoderViewModel coderAstFuture
+										map: [ :aCoderAst | 
+											BlTaskAction
+												enqueueElement: anEvent currentTarget
+												action: [ anEvent currentTarget
+														assert: [ aDocumentId isNotNil ]
+														description: [ 'Document ID must be non-nil.' ].
+													aController := GtPharoRenameSelectorCoderController new
+															originalNode: aCoderAst ast;
+															documentId: aDocumentId;
+															editorElement: aTextEditorElement;
+															sourceCoderViewModel: aCoderViewModel;
+															install.
+													aController selectorModel
+														ifNotNil: [ :aSelectorModel | 
+															aRecorder
+																observeAnnouncer: aSelectorModel announcer
+																labeled: 'rename selector model' ] ] ].
+								anAstFuture await: aCoderViewModel class commonExecutionConfiguration ].
+
+					aTextEditorElement text: aMethod sourceCode asRopedText.
+
+					aTextEditorElement userData at: #coderViewModel put: aCoderViewModel.
+					aTextEditorElement userData at: #timelineRecorder put: aRecorder ] ].
+
+	aCoderElement userData at: #coderViewModel put: aCoderViewModel.
+	aCoderElement userData at: #timelineRecorder put: aRecorder.
+
+	^ aCoderElement
+]
+
+{ #category : #'examples - rust editor' }
 GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 	| anEditor aDocumentId aController aCoder anAst aCoderViewModel aRecorder |
 	aDocumentId := nil.
@@ -406,6 +468,20 @@ GtPharoRenameSelectorModelExamples >> editorWithUnaryMethod [
 GtPharoRenameSelectorModelExamples >> ifLibEditorIsMissingDo: aBlock [
 	GtTextEditorLibrary canRunExamples ifFalse: [ ^ aBlock value ].
 	^ nil
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> numberOfRenameRefactoringElementsIn: anEditorElement [
+	^ anEditorElement children
+		count: [ :eachChild | 
+			eachChild id
+				ifNotNil: [ :anId | 
+					anId asSymbol
+						ifNotNil: [ :aSymbol | 
+							#('selector-' 'move-')
+								anySatisfy: [ :eachPrefix | aSymbol beginsWith: eachPrefix ] ]
+						ifNil: [ false ] ]
+				ifNil: [ false ] ]
 ]
 
 { #category : #'examples - method' }
@@ -913,6 +989,17 @@ GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod [
 	^ anEditor
 ]
 
+{ #category : #'examples - rust editor' }
+GtPharoRenameSelectorModelExamples >> rustEditorWithThreeKeywordsMethod2 [
+	<gtExample>
+	| aMethod aCoderElement |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	
+	aMethod := self threeKeywordsMethod.
+	aCoderElement := self createRustEditorWithMethod2: aMethod.
+	^ aCoderElement
+]
+
 { #category : #'examples - rust editor scripter' }
 GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod [
 	<gtExample>
@@ -944,11 +1031,59 @@ GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod 
 			play.
 	
 		aScripter wait
-			forCondition: [ :aSpace | anElement childrenCount = 15 ]
+			forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anElement) = 15 ]
 				pulseDuring: 5 seconds;
 			play.
 			
 	].
+
+	self
+		assert: aScripter
+		onlyOneEditorMode: (#'selector-part' asBlocElementId indexed: 1).
+
+	^ aScripter
+]
+
+{ #category : #'examples - rust editor scripter' }
+GtPharoRenameSelectorModelExamples >> rustScripterEditorWithThreeKeywordsMethod2 [
+	<gtExample>
+	| aCoderElement aScripter anEditorElement aSelectorModel aCoderViewModel aRecorder |
+	self ifLibEditorIsMissingDo: [ ^ nil ].
+	aCoderElement := self rustEditorWithThreeKeywordsMethod2.
+	aCoderViewModel := aCoderElement userData at: #coderViewModel.
+	aRecorder := aCoderElement userData at: #timelineRecorder.
+	aScripter := BlScripter new.
+	aScripter userData at: #timelineRecorder put: aRecorder.
+
+	aRecorder
+		runDuring: [ aScripter element: aCoderElement.
+			anEditorElement := (aScripter element query // GtTextEditorElement) anyOne.
+			self
+				assert: anEditorElement isNotNil
+				description: [ 'Text editor element must exist' ].
+
+			aScripter wait
+				forCondition: [ :aSpace :theScripter | 
+						anEditorElement userData
+							at: #selectorModel
+							ifPresent: [ :theModel | 
+								theModel ifNotNil: [ aSelectorModel := theModel ].
+								theModel isNotNil ]
+							ifAbsent: [ false ] ]
+					pulseDuring: 5 seconds;
+				play.
+			self assert: aSelectorModel isNotNil.
+			aScripter model: aSelectorModel.
+
+			aScripter wait
+				waitRustEditorRendered: anEditorElement pulseDuring: 5 seconds;
+				play.
+
+			aScripter wait
+				label: 'Assert there are 15 ';
+				forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 15 ]
+					pulseDuring: 5 seconds;
+				play ].
 
 	self
 		assert: aScripter
