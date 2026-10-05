@@ -915,6 +915,7 @@ GtBehaviorCoderByScripterExamples >> resetToDefaultTextEditor [
 
 { #category : #'examples - rust editor' }
 GtBehaviorCoderByScripterExamples >> setRustTextEditorAsDefault [
+	self recordDefaultTextEditorSetup.
 	GtExpandableSourceCoderElement
 		defaultExpandedElementStencilClass: GtExpandedCoderElementWithRustTextEditorStencil.
 	LeSnippetStylerVisitor useNewFluentStylableAPI

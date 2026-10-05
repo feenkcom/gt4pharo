@@ -27,6 +27,8 @@ GtGenericPharoStyler >> style: aText ast: theAst [
 			NonInteractiveTranscript stdout
 				nextPutAll: '  text documentID: ';
 				print: aText documentId;
+				nextPutAll: '  AST documentID: ';
+				print: (theAst attributeNamed: #documentId ifAbsent: [ nil ]);
 				newLine.
 			GtStylerErrorSignal new
 				signaledError: anException;
