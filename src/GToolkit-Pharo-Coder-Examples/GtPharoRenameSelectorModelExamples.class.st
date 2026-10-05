@@ -323,6 +323,7 @@ GtPharoRenameSelectorModelExamples >> createRustEditorWithMethod: aMethod [
 	aCoderViewModel := aCoder asCoderViewModel.
 	aRecorder := GtTextEditorTimelineRecorder new.
 	aRecorder
+		addSignalClass: GtTextEditorSignal;
 		observeAnnouncer: aCoderViewModel announcer
 		labeled: 'coder view model'.
 
