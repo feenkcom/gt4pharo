@@ -27,3 +27,12 @@ GtPharoRenameSelectorSwapVisibilityChanged >> isVisible [
 GtPharoRenameSelectorSwapVisibilityChanged >> isVisible: aBoolean [
 	isVisible := aBoolean
 ]
+
+{ #category : #printing }
+GtPharoRenameSelectorSwapVisibilityChanged >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		nextPut: $(;
+		print: self isVisible;
+		nextPut: $)
+]
