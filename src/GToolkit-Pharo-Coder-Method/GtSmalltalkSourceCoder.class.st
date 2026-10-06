@@ -51,3 +51,8 @@ GtSmalltalkSourceCoder >> cascadedMessagesWithin: anInterval [
 				ifFalse: [ #() ] ]
 		ifNone: [ #() ]
 ]
+
+{ #category : #testing }
+GtSmalltalkSourceCoder >> isForSmalltalkCode [
+	^ true
+]
