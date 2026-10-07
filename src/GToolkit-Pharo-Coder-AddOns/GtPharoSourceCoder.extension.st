@@ -472,6 +472,7 @@ GtPharoSourceCoder >> cascadeMessageToSplitAfter: aCoderViewModel [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
+	self isForSmalltalkCode ifFalse: [ ^ self ].
 	coderAddOns addStyler: GtPharoColorStyler new.
 	coderAddOns addStyler: GtPharoGlamorousColorStyler new.
 ]
@@ -479,6 +480,7 @@ GtPharoSourceCoder >> colorAddOnFor: anAST into: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> glamorousIconsAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
+	self isForSmalltalkCode ifFalse: [ ^ self ].
 	coderAddOns addStyler: GtPharoGlamorousIconStyler new.
 ]
 
@@ -577,6 +579,7 @@ GtPharoSourceCoder >> nonBreakableSpaceAddOnFor: anAST into: coderAddOns [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> passwordHiddingAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
+	self isForSmalltalkCode ifFalse: [ ^ self ].
 	coderAddOns addStyler: GtPharoMethodPasswordStyler new.
 ]
 
@@ -946,11 +949,13 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> whenSendToAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
+	self isForSmalltalkCode ifFalse: [ ^ self ].
 	coderAddOns addStyler: GtPharoWhenSendToExpanderStyler new.
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> zincFormSecretsHiddingAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 100>
-	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new.
+	self isForSmalltalkCode ifFalse: [ ^ self ].
+	coderAddOns addStyler: GtPharoZincApplicationFormUrlEncodedEntityStyler new
 ]
