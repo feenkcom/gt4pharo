@@ -4,9 +4,7 @@ Class {
 	#traits : 'TCoderByScripterExamples',
 	#classTraits : 'TCoderByScripterExamples classTrait',
 	#instVars : [
-		'environment',
-		'defaultExpandedElementStencilClass',
-		'isNewFluentStylableAPI'
+		'environment'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
@@ -863,60 +861,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_spotterCategory
 	^ aScripter
 ]
 
-{ #category : #'examples - rust editor' }
-GtBehaviorCoderByScripterExamples >> classCoderWithMethodRustTextEditor [
-	"See https://github.com/feenkcom/gtoolkit-editor/issues/25"
-
-	<gtExample>
-	<after: #resetToDefaultTextEditor>
-	| aScripter anElement |
-	self setRustTextEditorAsDefault.
-	self isRustTextEditorLibrarySupported ifFalse: [ ^ nil ].
-	aScripter := BlScripter new.
-	anElement := GtCoder forMethod: GtPharoDummyOneObject >> #dummyThree.
-	aScripter element: anElement.
-	aScripter memoryLogger
-		runFor: GtTextEditorMeasureSignal , GtTextEditorHandleMeasureSignal
-				, GtTextEditorRequestLayoutSignal , GtTextEditorLayoutReadySignal
-		during: [ :aStep | 
-			aStep click
-				// (GtPharoBehaviorExpanderId indexed: 1);
-				play ].
-	^ aScripter
-]
-
 { #category : #utilities }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
-]
-
-{ #category : #'examples - rust editor' }
-GtBehaviorCoderByScripterExamples >> isRustTextEditorLibrarySupported [
-	"The libEditor library may be present by it would not work in headless image anyway"
-
-	^ GtTextEditorLibrary canRunExamples
-]
-
-{ #category : #utilities }
-GtBehaviorCoderByScripterExamples >> recordDefaultTextEditorSetup [
-	defaultExpandedElementStencilClass := GtExpandableSourceCoderElement
-			defaultExpandedElementStencilClass.
-	isNewFluentStylableAPI := LeSnippetStylerVisitor isNewFluentStylableAPI
-]
-
-{ #category : #utilities }
-GtBehaviorCoderByScripterExamples >> resetToDefaultTextEditor [
-	GtExpandableSourceCoderElement
-		defaultExpandedElementStencilClass: defaultExpandedElementStencilClass.
-	isNewFluentStylableAPI == true
-		ifTrue: [ LeSnippetStylerVisitor useNewFluentStylableAPI ]
-		ifFalse: [ LeSnippetStylerVisitor dontUseNewFluentStylableAPI ]
-]
-
-{ #category : #'examples - rust editor' }
-GtBehaviorCoderByScripterExamples >> setRustTextEditorAsDefault [
-	self recordDefaultTextEditorSetup.
-	GtExpandableSourceCoderElement
-		defaultExpandedElementStencilClass: GtExpandedCoderElementWithRustTextEditorStencil.
-	LeSnippetStylerVisitor useNewFluentStylableAPI
 ]

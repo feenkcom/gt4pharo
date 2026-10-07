@@ -144,6 +144,9 @@ BaselineOfGToolkit4Pharo >> baseline: spec [
 					'GT-PackageWithSubclasses'
 					'GT-PackageWithExtensions'
 					 ). ];
+					 
+			package: 'GToolkit-Pharo-Coder-Examples-RustEditor' with: [
+				spec requires: #('GToolkit-Pharo-Coder-Examples') ];
 
 			package: 'GToolkit-Pharo-TestSuite-Examples' with: [
 				spec requires: #(
