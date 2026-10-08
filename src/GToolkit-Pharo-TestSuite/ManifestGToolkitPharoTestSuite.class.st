@@ -21,11 +21,9 @@ ManifestGToolkitPharoTestSuite class >> mustOnlyDependOn [
 		'GToolkit-Utility-StackOverflow'.
 		'Kernel'.
 		'SUnit-Core'.
-		'Ring-Core'
-	}, (self  
-		forPharo12AndNewer: [{
-			'Kernel-CodeModel'.}] 
-		forPharo11: [{}])
+		'Ring-Core'.
+		'Kernel-CodeModel'.
+	}
 ]
 
 { #category : #accessing }

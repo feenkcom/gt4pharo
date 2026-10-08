@@ -17,9 +17,7 @@ GtRBPushDownMethodRefactoring >> applicabilityPreconditions [
 			conditions add: (RBCondition definesSelector: each in: class).
 			conditions add: (RBCondition hasSubclasses: class excluding: #()).
 			conditions
-				add: (self
-						forPharo12AndNewer: [ RBCondition subclassesOf: class isDoingASuperSendFor: each ]
-						forPharo11: [ RBCondition subclassesOf: class referToSelector: each ]) not ].
+				add: (RBCondition subclassesOf: class isDoingASuperSendFor: each) not ].
 	^ conditions
 ]
 

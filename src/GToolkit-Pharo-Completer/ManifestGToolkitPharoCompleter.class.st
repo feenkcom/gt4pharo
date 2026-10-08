@@ -19,11 +19,8 @@ ManifestGToolkitPharoCompleter class >> mustOnlyDependOn [
 		'GToolkit-Pharo-Parser'.
 		'Kernel'.
 		'SmaCC_Runtime'.
-	}, (self  
-		forPharo12AndNewer: [{
-			'Kernel-CodeModel'.}] 
-		forPharo11: [{
-			'Collections-Abstract'.}])
+		'Kernel-CodeModel'.
+	}
 ]
 
 { #category : #accessing }

@@ -24,12 +24,10 @@ GtRBAddClassChange class >> definitionPatterns [
 
 { #category : #'instance creation' }
 GtRBAddClassChange class >> definitionString: aString [
-	^ self
-		forPharo12AndNewer: [ self new
+	^ self new
 				definitionString: aString;
 				fillOutDefinition;
-				yourself ]
-		forPharo11: [ super definitionString: aString ]
+				yourself
 ]
 
 { #category : #accessing }

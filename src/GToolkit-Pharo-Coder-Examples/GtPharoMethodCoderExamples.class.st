@@ -175,42 +175,9 @@ GtPharoMethodCoderExamples >> compileMethodWithCoderWhenSubscribedToSystem [
 ]
 
 { #category : #'examples - compile' }
-GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsConflictWhenSubscribedToSystem_pharo11 [
-	<gtExample>
-	| aMethodCoder wasSuccessful anEventsRecoder |
-	
-	self forPharo12AndNewer: [ ^ self ] forPharo11: [ ].
-	
-	anEventsRecoder := self eventsRecorder.
-
-	aMethodCoder := self forNewMethod.
-	aMethodCoder currentSourceString: self methodSourceWithTempAndBlockArgsConflict.
-	aMethodCoder subscribeToSystem.
-	
-	self assert: aMethodCoder isModified.
-	
-	aMethodCoder
-		when: GtCoderAnnouncement send: #record: to: anEventsRecoder.
-
-	wasSuccessful := [ aMethodCoder compile ]
-		ensure: [ aMethodCoder unsubscribeFromSystem ].
-	
-	self assert: wasSuccessful not.
-
-	self assert: anEventsRecoder numberOfEvents equals: 1.
-	self assert: anEventsRecoder first class equals: GtCoderParseError.
-	self assert: anEventsRecoder first coder equals: aMethodCoder.
-	self assert: anEventsRecoder first errorMessage equals: 'Temp shadows: each'.
-
-	^ aMethodCoder
-]
-
-{ #category : #'examples - compile' }
 GtPharoMethodCoderExamples >> compileMethodWithTempAndBlockArgsNoConflictWhenSubscribedToSystem [
 	<gtExample>
 	| aMethodCoder wasSuccessful anEventsRecoder |
-	
-	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
 	
 	anEventsRecoder := self eventsRecorder.
 

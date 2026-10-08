@@ -93,9 +93,7 @@ GtPharoBehaviorDefinitionSnippetCoder >> onCopyClassDefinitionSnippetFrom: anEle
 	| aString |
 	behavior ifNil: [ ^ self ].
 
-	aString := self
-			forPharo12AndNewer: [ '({1}) install' format: {behavior definitionString} ]
-			forPharo11: [ behavior definitionString ].
+	aString := '({1}) install' format: {behavior definitionString}.
 			
 	Clipboard clipboardText: aString
 ]

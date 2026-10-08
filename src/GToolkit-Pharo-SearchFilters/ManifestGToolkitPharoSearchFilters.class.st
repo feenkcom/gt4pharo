@@ -35,10 +35,8 @@ ManifestGToolkitPharoSearchFilters class >> mustOnlyDependOn [
 		'GToolkit-SearchFilters'.
 		'GToolkit-Utility-Basic'.
 		'Kernel'.
-	}, (self  
-		forPharo12AndNewer: [{
-			'Kernel-CodeModel'.}] 
-		forPharo11: [{}])
+		'Kernel-CodeModel'.
+	}
 ]
 
 { #category : #accessing }

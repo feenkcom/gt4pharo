@@ -164,9 +164,7 @@ GtPharoCompiledMethodGroup >> gtPushDownMethodsActionFor: anAction [
 									GtRBPushDownMethodRefactoring new
 										model: aModel;
 										pushDown: (someMethods collect: #selector)
-											from: (self
-													forPharo12AndNewer: [ someMethods anyOne methodClass name ]
-													forPharo11: [ someMethods anyOne methodClass ]) ]
+											from: (someMethods anyOne methodClass name ) ]
 								as: Array.
 						aModel name: ('Push down {1} methods' format: {self size}).
 						aCollectionOfRefactorings ];
