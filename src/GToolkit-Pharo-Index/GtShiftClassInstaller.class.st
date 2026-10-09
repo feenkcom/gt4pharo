@@ -4,43 +4,53 @@ Class {
 	#category : #'GToolkit-Pharo-Index'
 }
 
-{ #category : #accessing }
+{ #category : #initialization }
+GtShiftClassInstaller >> initialize [
+
+	super initialize.
+	builder := GtShiftClassBuilder12 new
+]
+
+{ #category : #building }
 GtShiftClassInstaller >> make [
 	| newClass |
 
-	self lookupOldClass.
-
-	[	
-		builder oldClass: oldClass.
-		self copyClassSlotsFromExistingClass.
-		newClass := builder build.
-
-		self installInEnvironment: newClass.
-
-		self installSubclassInSuperclass: newClass.
+	GtPharoCodeModifier current critical: [
+		[
+			newClass := builder build.
 	
-		builder builderEnhancer beforeMigratingClass: builder installer: self.
-
-		builder builderEnhancer migrateToClass: newClass installer: self.
-
-		builder builderEnhancer afterMigratingClass: builder installer: self.	
-
-		builder builderEnhancer propagateChangesToRelatedClasses: newClass installer: self.
-		"Add this to the superclass implementation"
-		SystemAnnouncer uniqueInstance
-			announce: (GtClassRecompiled new classAffected: newClass) .
-	] on: ShNoChangesInClass do:[
-		"If there are no changes in the building, I am not building or replacing nothing"
-		newClass := oldClass.
+			self installInEnvironment: newClass.
+	
+			self installSubclassInSuperclass: newClass.
+	
+			builder builderEnhancer beforeMigratingClass: builder installer: self.
+	
+			builder builderEnhancer migrateToClass: newClass installer: self.
+	
+			builder builderEnhancer afterMigratingClass: builder installer: self.
+	
+			builder builderEnhancer propagateChangesToRelatedClasses: newClass builder: builder.
+			
+			"Add this to the superclass implementation"
+			SystemAnnouncer uniqueInstance
+				announce: (GtClassRecompiled new classAffected: newClass)
+		] on: ShNoChangesInClass do:[
+			"If there are no changes in the building, I am not building or replacing nothing"
+			newClass := self oldClass.
+		].
+	
+		self updatePackage: newClass.
+		self comment: newClass.
 	].
-
-	self fixSlotScope: newClass.
-	self fixSlotScope: newClass class.
-
-	self recategorize: newClass to: builder category.
-	self comment: newClass.
 
 	self notifyChanges.
 
 	^ newClass
+]
+
+{ #category : #building }
+GtShiftClassInstaller >> make: aBlock [
+
+	^ GtPharoCodeModifier current critical:
+		[ super make: aBlock ]
 ]

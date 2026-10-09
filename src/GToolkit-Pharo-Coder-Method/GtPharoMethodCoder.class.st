@@ -423,26 +423,15 @@ GtPharoMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: aGtPharo
 		evaluatedInterval: (1 to: aSourceString size);
 		evaluatedSourceString: aSourceString.
 
-	^ self
-		forPharo12AndNewer: [ self checkForShadowedVariables: aGtPharoSourceCoderEvaluationContext.
-			self protocol
-				ifNil: [ RBAddMethodChange compile: aSourceString in: aBehavior ]
-				ifNotNil: [ :aCategory | 
-					RBAddMethodChange
-						compile: aSourceString
-						in: aBehavior
-						classified: aCategory ] ]
-		forPharo11: [ self protocol
-				ifNil: [ RBAddMethodChange
-						compile: aSourceString
-						in: aBehavior
-						for: aGtPharoSourceCoderEvaluationContext ]
-				ifNotNil: [ :aCategory | 
-					RBAddMethodChange
-						compile: aSourceString
-						in: aBehavior
-						classified: aCategory
-						for: aGtPharoSourceCoderEvaluationContext ] ]
+	self checkForShadowedVariables: aGtPharoSourceCoderEvaluationContext.
+	^self protocol
+		ifNil: [ 
+				RBAddMethodChange compile: aSourceString in: aBehavior ]
+		ifNotNil: [ :aCategory | 
+				RBAddMethodChange
+					compile: aSourceString
+					in: aBehavior
+					classified: aCategory ] 
 ]
 
 { #category : #private }

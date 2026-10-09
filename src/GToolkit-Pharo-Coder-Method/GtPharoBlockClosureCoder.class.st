@@ -22,11 +22,9 @@ GtPharoBlockClosureCoder >> block [
 	^ (class ifNil: [ Object ]) compiler
 		source: self blockSource;
 		logged: false;
-		failBlock: (self
-				forPharo12AndNewer: [ [ :notice | 
-					notice signalError.
-					^ nil ] ]
-				forPharo11: [ [ ^ nil ] ]);
+		failBlock: ([ :notice | 
+				notice signalError.
+				^ nil ]);
 		evaluate
 ]
 

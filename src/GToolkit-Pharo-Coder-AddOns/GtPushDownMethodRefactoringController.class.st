@@ -16,10 +16,8 @@ GtPushDownMethodRefactoringController >> refactoring [
 	^ GtRBPushDownMethodRefactoring
 		model: model
 		pushDown: {self methodSelector}
-		from: (self
-				forPharo12AndNewer: [ (model classFor: self methodClass) name
-						, (self methodClass isInstanceSide ifTrue: [ '' ] ifFalse: [ ' class' ]) ]
-				forPharo11: [ model classFor: self methodClass ])
+		from: ((model classFor: self methodClass) name
+				, (self methodClass isInstanceSide ifTrue: [ '' ] ifFalse: [ ' class' ]))
 ]
 
 { #category : #accessing }
