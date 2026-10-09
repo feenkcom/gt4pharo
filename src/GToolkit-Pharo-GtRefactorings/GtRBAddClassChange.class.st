@@ -57,8 +57,8 @@ GtRBAddClassChange >> classInstanceVariableNames [
 GtRBAddClassChange >> classVariableNames [
 	^ (properties
 		at: #classVariableNames
-		ifAbsent: [ self forPharo12AndNewer: [  ] forPharo11: [ super classVariableNames ] ])
-		ifNil: [ #() ]
+		ifAbsent: [ nil ])
+			ifNil: [ #() ]
 ]
 
 { #category : #accessing }
@@ -281,8 +281,8 @@ GtRBAddClassChange >> printOn: aStream [
 GtRBAddClassChange >> sharedPoolNames [
 	^ (properties
 		at: #sharedPoolNames
-		ifAbsent: [ self forPharo12AndNewer: [  ] forPharo11: [ super sharedPoolNames ] ])
-		ifNil: [ #() ]
+		ifAbsent: [ nil ])
+			ifNil: [ #() ]
 ]
 
 { #category : #accessing }
