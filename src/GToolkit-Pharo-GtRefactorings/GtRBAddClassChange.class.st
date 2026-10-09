@@ -41,8 +41,7 @@ GtRBAddClassChange >> category [
 				ifAbsent: [ cat ] ]
 		ifAbsent: [ (self packageTagName
 				ifNil: [ self packageName ]
-				ifNotNil: [ :tag | self packageName , '-' , tag ])
-				ifNil: [ self forPharo12AndNewer: [  ] forPharo11: [ super category ] ] ]
+				ifNotNil: [ :tag | self packageName , '-' , tag ]) ]
 ]
 
 { #category : #accessing }
@@ -51,9 +50,7 @@ GtRBAddClassChange >> classInstanceVariableNames [
 
 	^ properties
 		at: #classInstanceVariableNames
-		ifAbsent: [ self
-				forPharo12AndNewer: [ super classInstanceVariableNames ]
-				forPharo11: [ #() ] ]
+		ifAbsent: [ super classInstanceVariableNames ]
 ]
 
 { #category : #accessing }
@@ -214,7 +211,7 @@ GtRBAddClassChange >> initialize [
 GtRBAddClassChange >> instanceVariableNames [
 	^ properties
 		at: #instanceVariableNames
-		ifAbsent: [ self forPharo12AndNewer: [ #() ] forPharo11: [ super instanceVariableNames ] ]
+		ifAbsent: [ #() ]
 ]
 
 { #category : #private }
@@ -292,7 +289,7 @@ GtRBAddClassChange >> sharedPoolNames [
 GtRBAddClassChange >> superclassName [
 	^ properties
 		at: #superclassName
-		ifAbsent: [ self forPharo12AndNewer: [  ] forPharo11: [ super superclassName ] ]
+		ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
