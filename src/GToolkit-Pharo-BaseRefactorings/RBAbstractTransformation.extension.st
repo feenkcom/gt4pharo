@@ -33,7 +33,5 @@ RBAbstractTransformation >> refactoringError: aString with: aBlock [
 RBAbstractTransformation >> refactoringFailure: aString [
 	<gtPharoPatch: #Pharo>
 	
-	^ self 
-		forPharo12AndNewer: [self refactoringError: aString] 
-		forPharo11: [Error signal] 
+	^ self refactoringError: aString
 ]

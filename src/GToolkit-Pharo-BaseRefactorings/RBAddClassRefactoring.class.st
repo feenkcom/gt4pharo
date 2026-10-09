@@ -72,20 +72,14 @@ RBAddClassRefactoring >> applicabilityPreconditions [
 { #category : #transforming }
 RBAddClassRefactoring >> basicTransform [
 	<gtPharoPatch: #Pharo>
-	self
-		forPharo12AndNewer: [ self model
+	
+	self model
 			defineClass: [ :aBuilder |
 				aBuilder
 					superclassName: superclass name;
 					name: className;
 					category: category asString ];
-				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
-		forPharo11: [ self model
-				defineClass: ('<1p> subclass: #<2s> instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: <3p>'
-						expandMacrosWith: superclass
-						with: className
-						with: category asString);
-				reparentClasses: subclasses to: (self model classNamed: className asSymbol) ]
+				reparentClasses: subclasses to: (self model classNamed: className asSymbol) 
 ]
 
 { #category : #accessing }
