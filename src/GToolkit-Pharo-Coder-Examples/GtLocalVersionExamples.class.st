@@ -14,11 +14,7 @@ GtLocalVersionExamples >> testGtBaseMethodHasTimestamp [
 	timeStamp := method gtLocalVersions first timeStamp.
 	
 	self assert: timeStamp notNil.
-	self 
-		forPharo12AndNewer: [
-			self assert: timeStamp ~= DateAndTime new ] 
-		forPharo11: [	
-			self assert: timeStamp = DateAndTime new ].
+	self assert: timeStamp ~= DateAndTime new.
 	
 	^ localVersion
 ]
@@ -33,11 +29,7 @@ GtLocalVersionExamples >> testPharoBaseMethodHasTimestamp [
 	timeStamp := method gtLocalVersions first timeStamp.
 	
 	self assert: timeStamp notNil.
-	self 
-		forPharo12AndNewer: [
-			self assert: timeStamp ~= DateAndTime new ] 
-		forPharo11: [	
-			self assert: timeStamp = DateAndTime new ].
+	self assert: timeStamp ~= DateAndTime new.
 	
 	^ localVersion
 ]

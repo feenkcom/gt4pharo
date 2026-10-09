@@ -17,9 +17,7 @@ RBAbstractTransformation >> isValidSelector: aString [
 RBAbstractTransformation >> primitiveExecute [
 	<gtPharoPatch: #Pharo>
 	
-	^ self 
-		forPharo12AndNewer: [self generateChanges] 
-		forPharo11: [Error signal] 
+	^ self generateChanges
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }

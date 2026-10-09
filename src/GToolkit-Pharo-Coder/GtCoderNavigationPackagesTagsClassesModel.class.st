@@ -71,9 +71,7 @@ GtCoderNavigationPackagesTagsClassesModel >> classModificationApplied: aClassMod
 	self announcer announce: (GtCoderNavigationClassModified new 
 		coder: coder;
 		package: aClassModificationApplied packageAffected;
-		tag: (self 
-			forPharo12AndNewer: [aClassModificationApplied packageTagAffected name] 
-			forPharo11:  [ aClassModificationApplied classTagAffected]);
+		tag: aClassModificationApplied packageTagAffected name;
 		theClass: aClassModificationApplied classAffected)
 ]
 
@@ -119,9 +117,7 @@ GtCoderNavigationPackagesTagsClassesModel >> classRenamed: aClassRenamed [
 	self announcer announce: (GtCoderNavigationClassRenamed new 
 		coder: coder;
 		package: aClassRenamed packageAffected;
-		tag: (self 
-			forPharo12AndNewer: [aClassRenamed packageTagAffected name] 
-			forPharo11:  [ aClassRenamed classTagAffected]);
+		tag: aClassRenamed packageTagAffected name;
 		theClass: aClassRenamed classRenamed;
 		oldName: aClassRenamed oldName;
 		newName: aClassRenamed newName)
@@ -726,13 +722,9 @@ GtCoderNavigationPackagesTagsClassesModel >> privateJustSelectClass: aClass outO
 
 	shouldSelectTag
 		ifTrue: [
-			aTagToSelect := self 
-				forPharo12AndNewer: [ 
-					aPackageToSelect tags
-		  			detect: [ :tag | tag includesClass: aClass ]
-		  			ifNone: [ nil ] ]
-				forPharo11: [ 
-					aPackageToSelect tagOrNilOf: aClass ].
+			aTagToSelect := aPackageToSelect tags
+		  		detect: [ :tag | tag includesClass: aClass ]
+		  		ifNone: [ nil ].
 					
 			"pharo issue: the root tag has the same name as the package in Pharo 11
 			and Uncategoried in Pharo 12."

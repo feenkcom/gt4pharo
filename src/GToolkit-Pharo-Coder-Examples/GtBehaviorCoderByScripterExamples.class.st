@@ -273,8 +273,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 		// GtSourceCoderEditorId;
 		play.
 
-	self
-		forPharo12AndNewer: [ aScripter do
+	 aScripter do
 				label: 'Insert a new instance variable name';
 				block: [ :anEditor | 
 					| anIndex |
@@ -300,31 +299,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 						insert ];
 				// GtPhlowCompositeViewElementId;
 				// GtSourceCoderEditorId;
-				play ]
-		forPharo11: [ aScripter do
-				label: 'Insert a new instance variable name';
-				block: [ :anEditor | 
-					| anIndex |
-					anIndex := anEditor text finder
-							substring: 'instanceVariableNames:';
-							search.
-					self assert: anIndex isZero not.
-					anEditor editor navigator
-						moveTo: anIndex;
-						apply.
-					anEditor editor navigator
-						moveToLineEnd;
-						apply.
-					anEditor editor navigator
-						moveLeft;
-						apply.
-					anEditor editor inserter
-						atCursor;
-						string: ' newInstVar';
-						insert ];
-				// GtPhlowCompositeViewElementId;
-				// GtSourceCoderEditorId;
-				play ].
+				play .
 
 	aScripter assert
 		label: 'Assert coder is modified';

@@ -399,21 +399,10 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWhenSubscribedToSystem
 				collect: [ :each | (self class packageOrganizer packageOf: each) name ])
 		equals: {#_UnpackagedPackage} asSet.
 
-	self 
-		forPharo12AndNewer: [
-			"In Pharo 12 asking the class for a package returns its stored package."
-			self
-				assert: (aPackageCoder classes 
-					collect: [ :each | each package name ]) asSet
-				equals: {aPackageCoder packageName} asSet.]
-		forPharo11: [	
-			"In Pharo 11 asking the class for a package goes through the global
-			package organizer, and the package is the unpackaged package."
-			self
-				assert: (aPackageCoder classes 
-					collect: [ :each | each package name ]) asSet
-				equals: {#_UnpackagedPackage} asSet].
-
+	self
+		assert: (aPackageCoder classes 
+			collect: [ :each | each package name ]) asSet
+		equals: {aPackageCoder packageName} asSet.
 
 	self assert: anEventsRecoder numberOfEvents equals: 1.
 	self assert: anEventsRecoder first class equals: GtCoderPackageUnregistered.
@@ -475,11 +464,7 @@ GtPharoPackageCoderExamples >> unregisterRegisteredPackageWithoutCoderWhenUnsubs
 	aPackageCoder := self coderOnRegisteredPackage.
 	aPackageCoder when: GtCoderPackageUnregistered send: #record: to: anEventsRecoder.
 
-	self 
-		forPharo12AndNewer: [
-			aPackageCoder package organizer unregisterPackage: aPackageCoder package ] 
-		forPharo11: [
-			aPackageCoder package unregister ].
+	aPackageCoder package organizer unregisterPackage: aPackageCoder package.
 
 	self assert: aPackageCoder isRegistered not.
 	self assert: anEventsRecoder numberOfEvents equals: 0.

@@ -4,9 +4,7 @@ Extension { #name : #ReAbstractTransformation }
 ReAbstractTransformation >> primitiveExecute [
 	<gtPharoPatch: #Pharo>
 	
-	^ self 
-		forPharo12AndNewer: [self generateChanges] 
-		forPharo11: [Error signal] 
+	^ self generateChanges
 ]
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
@@ -22,7 +20,5 @@ ReAbstractTransformation >> refactoringError: aString with: aBlock [
 ReAbstractTransformation >> refactoringFailure: aString [
 	<gtPharoPatch: #Pharo>
 	
-	^ self 
-		forPharo12AndNewer: [self refactoringError: aString] 
-		forPharo11: [Error signal] 
+	^ self refactoringError: aString
 ]

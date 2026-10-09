@@ -16,9 +16,7 @@ GtExtractMethodRefactoring >> initialize [
 GtExtractMethodRefactoring >> isParseTreeEquivalentTo: aSelector [
 	| result |
 	result := super isParseTreeEquivalentTo: aSelector.
-	^ self
-		forPharo12AndNewer: [ result and: [ self shouldUseExistingMethod: aSelector ] ]
-		forPharo11: [ result ]
+	^ result and: [ self shouldUseExistingMethod: aSelector ]
 ]
 
 { #category : #transforming }

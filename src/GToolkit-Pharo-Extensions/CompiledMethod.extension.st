@@ -173,9 +173,7 @@ CompiledMethod >> gtPushDownMethodActionFor: anAction [
 					confirmationLabel: ('Push down {1}' format: {self selector});
 					refactoringWithConfirmation: [ GtRBPushDownMethodRefactoring
 							pushDown: {self selector}
-							from: (self
-									forPharo12AndNewer: [ self methodClass name ]
-									forPharo11: [ self methodClass ]) ];
+							from: (self methodClass name) ];
 					afterAppliedBlock: [ BlTaskAction
 							enqueueElement: anActionElement
 							action: [ anExplicitMenu hideAll ] ];

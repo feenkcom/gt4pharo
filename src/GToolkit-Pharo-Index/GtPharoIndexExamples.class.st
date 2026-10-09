@@ -44,14 +44,9 @@ GtPharoIndexExamples >> addInstVarRemovesUndeclaredReferences [
 
 { #category : #private }
 GtPharoIndexExamples >> addPoolVar [
-	self
-		forPharo12AndNewer: [ self class classInstaller new
-				makeWithBuilder: (Smalltalk compiler
-						evaluate: self class definitionString , '; sharedPools: {GtPharoIndexExamplesPool}') ]
-		forPharo11: [ Smalltalk compiler
-				evaluate: (self class definitionString
-						copyReplaceAll: 'package: '
-						with: 'poolDictionaries: ''GtPharoIndexExamplesPool'' package: ') ]
+	 self class classInstaller new
+			makeWithBuilder: (Smalltalk compiler
+					evaluate: self class definitionString , '; sharedPools: {GtPharoIndexExamplesPool}') 
 ]
 
 { #category : #examples }
@@ -62,18 +57,14 @@ GtPharoIndexExamples >> addingAndRemovingClassWords [
 	Collection
 		withAllSubclassesDo: [ :each | 
 			index
-				classAdded: (self
-						forPharo12AndNewer: [ ClassAdded class: each ]
-						forPharo11: [ ClassAdded class: each category: nil ]) ].
+				classAdded: (ClassAdded class: each) ].
 	names := (index asyncClassNamesForWord: '') toArray wait.
 	self assert: (names includes: #OrderedCollection).
 	self assert: (names includes: #Array).
 	Collection
 		withAllSubclassesDo: [ :each | 
 			index
-				classRemoved: (self
-						forPharo12AndNewer: [ ClassRemoved class: each ]
-						forPharo11: [ ClassRemoved class: each category: nil ]) ].
+				classRemoved: (ClassRemoved class: each ) ].
 	self assert: (index asyncClassNamesForWord: '') toArray wait isEmpty.
 	^ index
 ]
@@ -89,14 +80,9 @@ GtPharoIndexExamples >> addingAndRemovingDuplicateWords [
 	self assert: selectors size equals: 1.
 	self assert: (selectors includes: #with:with:with:with:).
 	index
-		methodRemoved: (self
-				forPharo12AndNewer: [ MethodRemoved
-						methodRemoved: Collection class >> #with:with:with:with:
-						origin: Collection class ]
-				forPharo11: [ MethodRemoved
-						methodRemoved: Collection class >> #with:with:with:with:
-						protocol: #private
-						origin: Collection class ]).
+		methodRemoved: (MethodRemoved
+				methodRemoved: Collection class >> #with:with:with:with:
+				origin: Collection class ).
 	selectors := (index asyncSelectorsForWord: '') toArray wait.
 	self assert: selectors isEmpty.
 	^ index
@@ -501,16 +487,11 @@ GtPharoIndexExamples >> referenceInLiteralArray [
 { #category : #private }
 GtPharoIndexExamples >> removeClassVar [
 	| definition |
-	self
-		forPharo12AndNewer: [ definition := self class definitionString
-					copyReplaceAll: '#GtMessageSendIterator'
-					with: ''.
-			self class classInstaller new
-				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
-		forPharo11: [ definition := self class definitionString
-					copyReplaceAll: 'GtMessageSendIterator'
-					with: ''.
-			Smalltalk compiler evaluate: definition ]
+	definition := self class definitionString
+			copyReplaceAll: '#GtMessageSendIterator'
+			with: ''.
+	self class classInstaller new
+		makeWithBuilder: (Smalltalk compiler evaluate: definition) 
 ]
 
 { #category : #private }
@@ -519,10 +500,8 @@ GtPharoIndexExamples >> removePoolVar [
 	definition := self class definitionString
 			copyReplaceAll: 'GtPharoIndexExamplesPool'
 			with: ''.
-	self
-		forPharo12AndNewer: [ self class classInstaller new
-				makeWithBuilder: (Smalltalk compiler evaluate: definition) ]
-		forPharo11: [ Smalltalk compiler evaluate: definition ]
+	self class classInstaller new
+			makeWithBuilder: (Smalltalk compiler evaluate: definition) 
 ]
 
 { #category : #examples }
@@ -531,12 +510,9 @@ GtPharoIndexExamples >> removingWords [
 	| index selectors |
 	index := self addingWords.
 	index
-		methodRemoved: (self
-				forPharo12AndNewer: [ MethodRemoved methodRemoved: self class >> #dummyMethod origin: self class ]
-				forPharo11: [ MethodRemoved
-						methodRemoved: self class >> #dummyMethod
-						protocol: #private
-						origin: self class ]).
+		methodRemoved: ( MethodRemoved 
+			methodRemoved: self class >> #dummyMethod 
+			origin: self class ).
 	selectors := (index asyncSelectorsForWord: '') toArray wait.
 	self assert: selectors size equals: 0.
 	^ index

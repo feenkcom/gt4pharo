@@ -205,16 +205,12 @@ GtPharoCodeModifier >> performRefactoryChange: aRefactoryChange [
 { #category : #'api - package' }
 GtPharoCodeModifier >> registerPackage: aPackage [
 	^ self critical: [ 
-		self 
-			forPharo12AndNewer: [	
 				aPackage organizer 
 					ifNil: [
 						self class packageOrganizer
 							addPackage: aPackage ]
 					ifNotNil: [ :anOrganizer |
-						anOrganizer addPackage: aPackage ] ] 
-			forPharo11: [ 
-				aPackage register ] ]
+						anOrganizer addPackage: aPackage ]  ]
 ]
 
 { #category : #'api - class' }
@@ -292,14 +288,10 @@ GtPharoCodeModifier >> renamePackage: aPackage to: aNewPackageName [
 { #category : #'api - package' }
 GtPharoCodeModifier >> unregisterPackage: aPackage [
 	^ self critical: [ 
-		self 
-			forPharo12AndNewer: [	
-				aPackage organizer 
-					ifNil: [
-						self class packageOrganizer
-							unregisterPackage: aPackage ]
-					ifNotNil: [ :anOrganizer |
-						anOrganizer unregisterPackage: aPackage ] ] 
-			forPharo11: [ 
-				aPackage unregister ] ]
+			aPackage organizer 
+				ifNil: [
+					self class packageOrganizer
+						unregisterPackage: aPackage ]
+				ifNotNil: [ :anOrganizer |
+					anOrganizer unregisterPackage: aPackage ]  ]
 ]
