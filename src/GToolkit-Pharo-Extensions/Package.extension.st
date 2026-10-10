@@ -200,13 +200,10 @@ Package >> packageManifestOrNil [
 	Related issue: https://github.com/feenkcom/gtoolkit/issues/4369"
 	<gtPharoPatch: #Pharo>
 	
-	^ self 
-		forPharo12AndNewer: [ 
-			self definedClasses
+	self tags do: [ :aTag | 
+			aTag classes
 				detect: [ :each | each isManifest ]
-				ifNone: [ nil ] ] 
-		forPharo11: [
-			self gtDefinedClassesWithPossibleDuplicatesDo: [:aClass|
-				aClass  isManifest ifTrue: [ ^ aClass ] ].
-			nil]
+				ifFound: [ :aClass | ^ aClass ] 
+				ifNone: [] ].
+	^ nil
 ]

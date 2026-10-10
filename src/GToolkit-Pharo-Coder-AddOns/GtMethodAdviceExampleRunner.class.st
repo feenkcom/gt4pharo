@@ -180,12 +180,8 @@ GtMethodAdviceExampleRunner >> contextCoderUndeclaredVariableExample [
 			receiver: receiver;
 			isScripting: true.
 			
-	self 
-		forPharo12AndNewer: [
-			"Undeclared in scripting mode are permited by default in Pharo 11,
-			but not in Pharo 12"
-			compiler permitUndeclared: true] 
-		forPharo11: [].
+	"Undeclared in scripting mode not permited by default since Pharo 12"
+	compiler permitUndeclared: true.
 		
 	method := compiler compile.
 	context := Context

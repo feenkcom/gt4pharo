@@ -6,14 +6,9 @@ Class {
 
 { #category : #private }
 GtPharoIndexExamples >> addClassVar [
-	self
-		forPharo12AndNewer: [ self class classInstaller new
-				makeWithBuilder: (Smalltalk compiler
-						evaluate: self class definitionString , '; sharedVariables: { #GtMessageSendIterator }') ]
-		forPharo11: [ Smalltalk compiler
-				evaluate: (self class definitionString
-						copyReplaceAll: 'classVariableNames: '''''
-						with: 'classVariableNames: ''GtMessageSendIterator''') ]
+	self class classInstaller new
+		makeWithBuilder: (Smalltalk compiler
+				evaluate: self class definitionString , '; sharedVariables: { #GtMessageSendIterator }')
 ]
 
 { #category : #examples }

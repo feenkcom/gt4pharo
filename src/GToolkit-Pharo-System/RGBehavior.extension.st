@@ -6,17 +6,10 @@ RGBehavior >> asRingDefinition [
 	| ringDefinition |
 
 	ringDefinition := (RGClassDefinition named: self name).
-	self 
-		forPharo12AndNewer: [
-			ringDefinition
-				package: (RGPackageDefinition 
-					named: self package name asSymbol);
-				packageTag: self packageTag ] 
-		forPharo11: [
-			ringDefinition
-				category: self category;
-				package: (RGPackageDefinition 
-					named: self category asSymbol) ].
+	ringDefinition
+		package: (RGPackageDefinition 
+			named: self package name asSymbol);
+		packageTag: self packageTag .
 	ringDefinition
 		superclassName: (self superclass
 			ifNil: [ nil printString ]
