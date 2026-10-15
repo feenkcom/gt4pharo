@@ -780,11 +780,13 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 		ifTrue: [ (self isLocalVariable: aNode)
 				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode context: aBuildContext ].
 			(self isInstanceVariable: aNode)
-				ifTrue: [ ^ self
-						renameInstanceVariableIn: aSourceCoderViewModel
-						node: aNode
-						context: aBuildContext
-						for: anElement ].
+				ifTrue: [ GtPharoRenameInstanceVariableCoderController new
+						originalNode: aNode;
+						editorElement: anElement;
+						documentId: aDocumentId;
+						sourceCoderViewModel: aSourceCoderViewModel;
+						install.
+					^ self ].
 			(self isClassVariable: aNode)
 				ifTrue: [ ^ self
 						renameClassVariableIn: aSourceCoderViewModel

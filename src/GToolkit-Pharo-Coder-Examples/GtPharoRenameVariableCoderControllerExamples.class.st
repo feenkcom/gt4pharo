@@ -1,5 +1,5 @@
 "
-I contain examples of {{gtClass:GtPharoRenameVariableCoderController}} that use {{gtClass:GtPharoRenameVariableTestCoderController}} on {{gtMethod:GtPharoDummyOneObject>>#instAPlusOne}}.
+I contain examples of {{gtClass:GtPharoRenameVariableCoderController}} that use {{gtClass:GtPharoRenameInstanceVariableCoderController}} on {{gtMethod:GtPharoDummyOneObject>>#instAPlusOne}}.
 "
 Class {
 	#name : #GtPharoRenameVariableCoderControllerExamples,
@@ -45,7 +45,7 @@ GtPharoRenameVariableCoderControllerExamples >> instAVariableNode [
 { #category : #examples }
 GtPharoRenameVariableCoderControllerExamples >> installedController [
 	<gtExample>
-	<return: #GtPharoRenameVariableTestCoderController>
+	<return: #GtPharoRenameInstanceVariableCoderController>
 	| aController aModel aSourceString aLog |
 	aLog := OrderedCollection new.
 	aController := self newInstalledControllerLogging: aLog.
@@ -76,7 +76,7 @@ GtPharoRenameVariableCoderControllerExamples >> installedController [
 { #category : #examples }
 GtPharoRenameVariableCoderControllerExamples >> installedController_cancel [
 	<gtExample>
-	<return: #GtPharoRenameVariableTestCoderController>
+	<return: #GtPharoRenameInstanceVariableCoderController>
 	| aController anEditor aLog |
 	aLog := OrderedCollection new.
 	aController := self newInstalledControllerLogging: aLog.
@@ -95,7 +95,7 @@ GtPharoRenameVariableCoderControllerExamples >> installedController_cancel [
 { #category : #examples }
 GtPharoRenameVariableCoderControllerExamples >> installedController_forbiddenName [
 	<gtExample>
-	<return: #GtPharoRenameVariableTestCoderController>
+	<return: #GtPharoRenameInstanceVariableCoderController>
 	| aController aModel |
 	aController := self newInstalledController.
 	aModel := aController variableModel.
@@ -117,7 +117,7 @@ GtPharoRenameVariableCoderControllerExamples >> installedController_forbiddenNam
 { #category : #examples }
 GtPharoRenameVariableCoderControllerExamples >> installedController_refactorings [
 	<gtExample>
-	<return: #GtPharoRenameVariableTestCoderController>
+	<return: #GtPharoRenameInstanceVariableCoderController>
 	| aController aModel someRefactorings |
 	aController := self newInstalledController.
 	aModel := aController variableModel.
@@ -142,7 +142,7 @@ GtPharoRenameVariableCoderControllerExamples >> newInstalledController [
 	"The document id is only known to an editor attached to a space. Attributes can be added without it."
 
 	<gtExample>
-	<return: #GtPharoRenameVariableTestCoderController>
+	<return: #GtPharoRenameInstanceVariableCoderController>
 	^ self newInstalledControllerLogging: OrderedCollection new
 ]
 
@@ -157,7 +157,7 @@ GtPharoRenameVariableCoderControllerExamples >> newInstalledControllerLogging: a
 		when: GtMethodCoderSaveDisabled, GtMethodCoderSaveEnabled
 		do: [ :each | aLogCollection add: each ]
 		for: aLogCollection.
-	^ GtPharoRenameVariableTestCoderController new
+	^ GtPharoRenameInstanceVariableCoderController new
 		originalNode: self instAVariableNode;
 		documentId: nil;
 		editorElement: self editorWithInstAPlusOneMethod;

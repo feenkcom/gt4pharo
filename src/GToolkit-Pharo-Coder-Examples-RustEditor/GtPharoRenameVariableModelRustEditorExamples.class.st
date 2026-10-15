@@ -1,5 +1,5 @@
 "
-I contain examples that use {{gtClass:BlScripter}} to simulate user interactions with {{gtClass:GtPharoRenameVariableCoderController}} in a coder with a Rust text editor, see {{gtMethod:GtPharoDummyOneObject>>#instAPlusOne}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorModelRustEditorExamples}}.
+I contain examples that use {{gtClass:BlScripter}} to simulate user interactions with {{gtClass:GtPharoRenameInstanceVariableCoderController}} in a coder with a Rust text editor, see {{gtMethod:GtPharoDummyOneObject>>#instAPlusOne}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorModelRustEditorExamples}}.
 "
 Class {
 	#name : #GtPharoRenameVariableModelRustEditorExamples,
@@ -80,7 +80,7 @@ GtPharoRenameVariableModelRustEditorExamples >> createRustEditorWithMethod: aMet
 												action: [ anEvent currentTarget
 														assert: [ aDocumentId isNotNil ]
 														description: [ 'Document ID must be non-nil.' ].
-													aController := GtPharoRenameVariableTestCoderController new
+													aController := GtPharoRenameInstanceVariableCoderController new
 															originalNode: (self variableNodeNamed: aVariableName in: aCoderAst ast);
 															documentId: aDocumentId;
 															editorElement: aTextEditorElement;
