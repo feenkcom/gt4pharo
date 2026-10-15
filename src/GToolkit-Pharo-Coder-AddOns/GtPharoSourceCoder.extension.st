@@ -764,15 +764,16 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 		astNode: aNode;
 		editorElement: anElement;
 		sourceCoderViewModel: aSourceCoderViewModel.
+
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
-		ifTrue: [ | aController |
-			aController := GtPharoRenameSelectorCoderController new
-					originalNode: aNode;
-					editorElement: anElement editorElement;
-					documentId: aDocumentId;
-					sourceCoderViewModel: aSourceCoderViewModel;
-					install.
-			^ self ].
+		ifTrue: [
+			(self renamePharoControllerIn: aSourceCoderViewModel for: aNode)
+				ifNotNil: [ :aController | 
+					aController
+						editorElement: anElement editorElement;
+						documentId: aDocumentId;
+						install.
+					^ self ] ].
 	
 	aNode isVariable
 		ifTrue: [ (self isLocalVariable: aNode)
@@ -872,6 +873,23 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anEleme
 				from: anElement.
 			^ true ].
 	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renamePharoControllerIn: aSourceCoderViewModel for: aNode [
+	"Return a not installed controller of the new refactoring implementation (see `${class:GtPharoRenameVariableCoderController}$`) that is provided by a class-side method with the pragma `<gtPharoRenameController>`. Such a method receives the source coder view model and the node, and returns either a controller or nil if it is not applicable."
+
+	(Pragma allNamed: #gtPharoRenameController)
+		do: [ :each | 
+			each method methodClass isClassSide
+				ifTrue: [ (each method methodClass instanceSide
+						perform: each method selector
+						withArguments: {aSourceCoderViewModel.
+								aNode}) ifNotNil: [ :aController | ^ aController ] ] ].
+
+	^ GtPharoRenameSelectorCoderController new
+		originalNode: aNode;
+		sourceCoderViewModel: aSourceCoderViewModel
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
