@@ -31,7 +31,7 @@ GtPharoRenameVariableCoderController >> attributeTags [
 
 { #category : #refactorings }
 GtPharoRenameVariableCoderController >> computeRefactorings [
-	^ refactoringsStencil create
+	^ refactoringsStencil ifNil: [ #() ] ifNotNil: [ :aStencil | aStencil create ]
 ]
 
 { #category : #hooks }
@@ -98,6 +98,13 @@ GtPharoRenameVariableCoderController >> gtVariableModelFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #hooks }
+GtPharoRenameVariableCoderController >> includesRefactoringsPreview [
+	"Return false if the rename has no refactorings, see {{gtClass:GtPharoRenameTemporaryCoderController}}."
+
+	^ true
+]
+
 { #category : #'event handling' }
 GtPharoRenameVariableCoderController >> informException: anException [
 	editorElement ifNil: [ ^ self ].
@@ -140,6 +147,7 @@ GtPharoRenameVariableCoderController >> installAttributes [
 	| aStencil someAttributes |
 	aStencil := GtPharoRenameVariableAttributesStencil new
 			variableModel: variableModel;
+			includesRefactoringsPreview: self includesRefactoringsPreview;
 			refactoringsConfiguration: (GtRefactoringsConfiguration new
 					refactoringsBlock: [ self computeRefactorings ];
 					completionAction: [ self uninstall ];
@@ -222,10 +230,12 @@ GtPharoRenameVariableCoderController >> removeAttributes [
 { #category : #installation }
 GtPharoRenameVariableCoderController >> safelyInstall [
 	variableModel := self createVariableModel.
-	refactoringsStencil := self createRefactoringsStencil
-			variableModel: variableModel;
-			sourceCoderViewModel: sourceCoderViewModel;
-			yourself.
+	refactoringsStencil := self createRefactoringsStencil.
+	refactoringsStencil
+		ifNotNil: [ :aStencil | 
+			aStencil
+				variableModel: variableModel;
+				sourceCoderViewModel: sourceCoderViewModel ].
 
 	self preventSave.
 	self installAttributes.

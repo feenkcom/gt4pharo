@@ -156,6 +156,16 @@ GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithInstAPlusOneMethod
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithTempReceiverMethod [
+	<gtExample>
+	<return: #GtExpandableSourceCoderElement>
+	^ self
+		createRustEditorWithMethod: self tempReceiverMethod
+		variableNamed: 'a'
+		controllerClass: GtPharoRenameTemporaryCoderController
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithVarAMethod [
 	<gtExample>
 	<return: #GtExpandableSourceCoderElement>
@@ -171,9 +181,12 @@ GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithDummyThree
 	<return: #BlScripter>
 	"The class is referenced once, there are the editor and the refactorings preview."
 
-	^ self
-		rustScripterFor: self rustEditorWithDummyThreeMethod
-		numberOfRenameElements: 2
+	| aScripter |
+	aScripter := self
+			rustScripterFor: self rustEditorWithDummyThreeMethod
+			numberOfRenameElements: 2.
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
 ]
 
 { #category : #examples }
@@ -279,6 +292,7 @@ GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithInstAPlusO
 	aScripter := self
 			rustScripterFor: self rustEditorWithInstAPlusOneMethod
 			numberOfRenameElements: 3.
+	self assert: aScripter refactoringsPreviewIsVisible: false.
 	self assert: aScripter occurrenceLabelsEqual: 'instA'.
 	^ aScripter
 ]
@@ -507,12 +521,173 @@ GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithInstAPlusO
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithTempReceiverMethod [
+	<gtExample>
+	<return: #BlScripter>
+	"The variable is referenced three times, there are the editor and two occurrences, there is no refactorings preview."
+
+	| aScripter |
+	aScripter := self
+			rustScripterFor: self rustEditorWithTempReceiverMethod
+			numberOfRenameElements: 3.
+	self assert: aScripter occurrenceLabelsEqual: 'a'.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithTempReceiverMethod_enterAppliesRename [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter anEditorElement aViewModel anExpectedSource |
+	aScripter := self rustScripterEditorWithTempReceiverMethod.
+	anEditorElement := aScripter userData at: #editorElement.
+	aViewModel := anEditorElement userData at: #coderViewModel.
+	anExpectedSource := aViewModel sourceText asString.
+	anExpectedSource := anExpectedSource copyReplaceAll: '| a b |' with: '| count b |'.
+	anExpectedSource := anExpectedSource copyReplaceAll: 'a := 3' with: 'count := 3'.
+	anExpectedSource := anExpectedSource copyReplaceAll: '^ a raisedTo' with: '^ count raisedTo'.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with "count"';
+		selectAll;
+		typeText: 'count';
+		// #'variable-editor';
+		play.
+
+	aScripter keyPress
+		label: 'Press Enter';
+		key: BlKeyboardKey return;
+		play.
+
+	aScripter wait
+		label: 'Wait until all rename elements are removed';
+		forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 0 ]
+			pulseDuring: 5 seconds;
+		play.
+
+	self assert: aViewModel sourceText asString equals: anExpectedSource.
+	self assert: (anEditorElement userData includesKey: #variableModel) not.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithTempReceiverMethod_escapeUninstalls [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter anEditorElement aViewModel anOriginalSource |
+	aScripter := self rustScripterEditorWithTempReceiverMethod.
+	anEditorElement := aScripter userData at: #editorElement.
+	aViewModel := anEditorElement userData at: #coderViewModel.
+	anOriginalSource := aViewModel sourceText asString.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with "count"';
+		selectAll;
+		typeText: 'count';
+		// #'variable-editor';
+		play.
+
+	aScripter keyPress
+		label: 'Press Escape';
+		key: BlKeyboardKey escape;
+		play.
+
+	aScripter wait
+		label: 'Wait until all rename elements are removed';
+		forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 0 ]
+			pulseDuring: 5 seconds;
+		play.
+
+	self assert: aViewModel sourceText asString equals: anOriginalSource.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithTempReceiverMethod_invalidNameIsNotApplied [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter anEditorElement aViewModel anOriginalSource |
+	aScripter := self rustScripterEditorWithTempReceiverMethod.
+	anEditorElement := aScripter userData at: #editorElement.
+	aViewModel := anEditorElement userData at: #coderViewModel.
+	anOriginalSource := aViewModel sourceText asString.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with the name of another temporary variable "b"';
+		selectAll;
+		typeText: 'b';
+		// #'variable-editor';
+		play.
+
+	aScripter keyPress
+		label: 'Press Enter';
+		key: BlKeyboardKey return;
+		play.
+
+	self assert: aViewModel sourceText asString equals: anOriginalSource.
+	self
+		assert: (self numberOfRenameRefactoringElementsIn: anEditorElement)
+		equals: 3.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithTempReceiverMethod_occurrencesFollowTyping [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithTempReceiverMethod.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with "count"';
+		selectAll;
+		typeText: 'count';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter occurrenceLabelsEqual: 'count'.
+
+	aScripter editor
+		label: 'Delete previously typed character';
+		pressBackspace;
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter occurrenceLabelsEqual: 'coun'.
+
+	^ aScripter
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithVarAMethod [
 	<gtExample>
 	<return: #BlScripter>
 	"The class variable is referenced once, there are the editor and the refactorings preview."
 
-	^ self rustScripterFor: self rustEditorWithVarAMethod numberOfRenameElements: 2
+	| aScripter |
+	aScripter := self rustScripterFor: self rustEditorWithVarAMethod numberOfRenameElements: 2.
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
 ]
 
 { #category : #examples }
@@ -649,9 +824,15 @@ GtPharoRenameVariableModelRustEditorExamples >> rustScripterFor: aCoderElement n
 
 	aScripter userData at: #editorElement put: anEditorElement.
 	self assert: aScripter editorMode: true.
-	self assert: aScripter refactoringsPreviewIsVisible: false.
 
 	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> tempReceiverMethod [
+	<gtExample>
+	<return: #CompiledMethod>
+	^ GtPharoDummyOneObject >> #tempReceiver
 ]
 
 { #category : #examples }

@@ -1,5 +1,5 @@
 "
-I create text attributes that display a rename of a {{gtClass:GtPharoRenameVariableModel}} in a text editor without changing the text: {{gtClass:GtPharoRenameVariableEditorElement}} replaces the renamed occurrence, {{gtClass:GtPharoRenameVariableOccurrenceElement}} replaces the other occurrences and {{gtClass:GtPharoRenameVariableRefactoringsPreviewElement}} is appended. See {{gtMethod:GtPharoRenameVariableAttributesStencil>>#create}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorAttributesStencil}}.
+I create text attributes that display a rename of a {{gtClass:GtPharoRenameVariableModel}} in a text editor without changing the text: {{gtClass:GtPharoRenameVariableEditorElement}} replaces the renamed occurrence, {{gtClass:GtPharoRenameVariableOccurrenceElement}} replaces the other occurrences and {{gtClass:GtPharoRenameVariableRefactoringsPreviewElement}} is appended, unless the rename has no refactorings, see {{gtMethod:GtPharoRenameVariableAttributesStencil>>#includesRefactoringsPreview}}. See {{gtMethod:GtPharoRenameVariableAttributesStencil>>#create}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorAttributesStencil}}.
 
 # Example
 {{gtExample:GtPharoRenameVariableModelRustEditorExamples>>#rustScripterEditorWithInstAPlusOneMethod_refactoringsPreview | codeExpanded=false | previewExpanded | previewHeight=400}}
@@ -9,7 +9,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'variableModel',
-		'refactoringsConfiguration'
+		'refactoringsConfiguration',
+		'includesRefactoringsPreview'
 	],
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Method New'
 }
@@ -22,7 +23,8 @@ GtPharoRenameVariableAttributesStencil >> create [
 		streamContents: [ :aStream | 
 			self createEditorAttributeInto: aStream.
 			self createOccurrenceAttributesInto: aStream.
-			self createRefactoringsPreviewAttributeInto: aStream ]
+			includesRefactoringsPreview
+				ifTrue: [ self createRefactoringsPreviewAttributeInto: aStream ] ]
 ]
 
 { #category : #creation }
@@ -71,6 +73,24 @@ GtPharoRenameVariableAttributesStencil >> createRefactoringsPreviewAttributeInto
 					ifNotNil: [ :aConfiguration | anElement configureWith: aConfiguration ].
 				anElement ].
 	aStream nextPut: {anInterval last. anInterval last. anAttribute}
+]
+
+{ #category : #accessing }
+GtPharoRenameVariableAttributesStencil >> includesRefactoringsPreview [
+	"Renames that have no refactorings, e.g., {{gtClass:GtPharoRenameTemporaryCoderController}}, do not display the refactorings preview."
+
+	^ includesRefactoringsPreview
+]
+
+{ #category : #accessing }
+GtPharoRenameVariableAttributesStencil >> includesRefactoringsPreview: aBoolean [
+	includesRefactoringsPreview := aBoolean
+]
+
+{ #category : #initialization }
+GtPharoRenameVariableAttributesStencil >> initialize [
+	super initialize.
+	includesRefactoringsPreview := true
 ]
 
 { #category : #accessing }
