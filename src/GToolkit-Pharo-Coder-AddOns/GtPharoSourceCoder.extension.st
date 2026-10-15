@@ -307,45 +307,34 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 			highlightNode := node isMessageSend
 					ifTrue: [ node message ]
 					ifFalse: [ node ].
+
 			(coderAddOns
 				addContextMenuItem: (self
-						createLabel: 'Rename message'
+						createLabel: (GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+								ifFalse: [ 'Rename message' ]
+								ifTrue: [ 'Rename message (new)' ])
 						description: node selector)
 				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: highlightNode documentId: aDocumentId)
 				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
-					self
-						renameNode: node
-						in: aTextualViewModel
-						documentId: aDocumentId
-						for: element ]
+					GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+						ifFalse: [ self
+								renameNode: node
+								in: aTextualViewModel
+								documentId: aDocumentId
+								for: element ]
+						ifTrue: [ self
+								renameNewNode: node
+								in: aTextualViewModel
+								documentId: aDocumentId
+								for: element ] ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 						gtDisplayString)
 				ifNotNil: [ :anAction | 
 					anAction
 						priority: 205;
-						id: #'coder--refactoring-rename-message' ].
-
-			GtPharoCoderSettings displayNewRenameImplementationContextMenuItem ifTrue: [
-				(coderAddOns
-					addContextMenuItem: (self
-							createLabel: 'Rename message (new)'
-							description: node selector)
-					group: BrMenuItemGroupConfiguration refactoring
-					hover: (self highlightNodeBlock: highlightNode documentId: aDocumentId)
-					leave: self removeHighlightsBlock
-					action: [ :aTextualViewModel :element | 
-						self
-							renameNewNode: node
-							in: aTextualViewModel
-							documentId: aDocumentId
-							for: element ]
-					shortcutKey: nil)
-					ifNotNil: [ :anAction | 
-						anAction
-							priority: 205.5;
-							id: #'coder--refactoring-rename-message-new' ] ] ]
+						id: #'coder--refactoring-rename-message' ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -594,11 +583,17 @@ GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel document
 	self
 		nodeAt: aTextPosition
 		ifFound: [ :aNode | 
-			self
-				renameNode: aNode
-				in: aSourceCoderViewModel
-				documentId: aDocumentId
-				for: anElement ]
+			GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+				ifFalse: [ self
+						renameNode: aNode
+						in: aSourceCoderViewModel
+						documentId: aDocumentId
+						for: anElement ]
+				ifTrue: [ self
+						renameNewNode: aNode
+						in: aSourceCoderViewModel
+						documentId: aDocumentId
+						for: anElement ] ]
 		ifNone: [  ]
 ]
 
