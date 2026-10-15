@@ -7,14 +7,14 @@ GtMagritteElementBuilder >> newPackageNameWidget: aDescription [
 	packageEditor := BrEditor new.
 	aptitude := aDescription editorAptitude
 			ifNil: [ BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize ]
-			ifNotNil: #value.
+			ifNotNil: [ :anAptitude | anAptitude value ].
 
 	packageEditor
 		inputFilter: BrPackageNameInputFilter new;
 		aptitude: aptitude;
 		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
 				menu: [ | aPackageName  |
-					aPackageName := (aMemento readUsing: aDescription) ifNotNil: #packageName.
+					aPackageName := (aMemento readUsing: aDescription) ifNotNil: [ :aValue | aValue packageName ].
 					aPackageName ifNotNil: [ 
 						self class environment organization 
 							packageNamed: aPackageName ifPresent: [ :aPackage | 	
@@ -70,18 +70,18 @@ GtMagritteElementBuilder >> newTagNameWidget: aDescription [
 	tagEditor := BrEditor new.
 	aptitude := aDescription editorAptitude
 			ifNil: [ BrGlamorousRegularEditorAptitude new glamorousRegularFontAndSize ]
-			ifNotNil: #value.
+			ifNotNil: [ :anAptitude | anAptitude value ].
 
 	tagEditor
 		inputFilter: BrPackageTagNameInputFilter new;
 		aptitude: aptitude;
 		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude
 				menu: [ | aPackageName aTagName |
-					aPackageName := (aMemento readUsing: aDescription) ifNotNil: #packageName.
+					aPackageName := (aMemento readUsing: aDescription) ifNotNil: [ :aValue | aValue packageName ].
 					aPackageName ifNotNil: [ 
 						self class environment organization 
 							packageNamed: aPackageName ifPresent: [ :aPackage |
-								aTagName := (aMemento readUsing: aDescription) ifNotNil: #tagName.
+								aTagName := (aMemento readUsing: aDescription) ifNotNil: [ :aValue | aValue tagName ].
 								aTagName ifNotNil: [ 
 									aPackage tagNamed: aTagName ifPresent: [ :aPackageTag | 
 										GtCoderPackageTagTarget menuItemsForObject: aPackageTag hostElement: tagEditor ] ] ] ] ]);
