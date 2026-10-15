@@ -748,9 +748,7 @@ GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMess
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
-	"New implementation of rename method.
-	
-	Is the `anElement editorElement` ok?"
+	"New implementation of rename method."
 
 	| aBuildContext |
 	self flag: #TODO.
@@ -760,15 +758,23 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 		editorElement: anElement;
 		sourceCoderViewModel: aSourceCoderViewModel.
 
+	(self renamePharoControllerIn: aSourceCoderViewModel for: aNode)
+		ifNotNil: [ :aController | 
+			aController
+				editorElement: anElement;
+				documentId: aDocumentId;
+				install.
+			^ self ].
+
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
-		ifTrue: [
-			(self renamePharoControllerIn: aSourceCoderViewModel for: aNode)
-				ifNotNil: [ :aController | 
-					aController
-						editorElement: anElement editorElement;
-						documentId: aDocumentId;
-						install.
-					^ self ] ].
+		ifTrue: [ | aController |
+			aController := GtPharoRenameSelectorCoderController new
+					originalNode: aNode;
+					editorElement: anElement;
+					documentId: aDocumentId;
+					sourceCoderViewModel: aSourceCoderViewModel;
+					install.
+			^ self ].
 	
 	aNode isVariable
 		ifTrue: [ (self isLocalVariable: aNode)
@@ -872,7 +878,7 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anEleme
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renamePharoControllerIn: aSourceCoderViewModel for: aNode [
-	"Return a not installed controller that renames the given message, method or method pattern node. Controllers of the new refactoring implementation, see {{gtClass:GtPharoRenameVariableCoderController}}, are provided by class-side methods with the pragma {{gtSymbol:gtPharoRenameController}}. Such a method receives the source coder view model and the node, and returns either a controller or nil if it is not applicable. If no method returns a controller, I return {{gtClass:GtPharoRenameSelectorCoderController}}."
+	"Return a not installed controller of the new refactoring implementation, see {{gtClass:GtPharoRenameVariableCoderController}}, or nil. Controllers are provided by class-side methods with the pragma {{gtSymbol:gtPharoRenameController}}. Such a method receives the source coder view model and the node, and returns either a controller or nil if it is not applicable."
 
 	(Pragma allNamed: #gtPharoRenameController)
 		do: [ :each | 
@@ -881,10 +887,7 @@ GtPharoSourceCoder >> renamePharoControllerIn: aSourceCoderViewModel for: aNode 
 						perform: each method selector
 						withArguments: {aSourceCoderViewModel.
 								aNode}) ifNotNil: [ :aController | ^ aController ] ] ].
-
-	^ GtPharoRenameSelectorCoderController new
-		originalNode: aNode;
-		sourceCoderViewModel: aSourceCoderViewModel
+	^ nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
