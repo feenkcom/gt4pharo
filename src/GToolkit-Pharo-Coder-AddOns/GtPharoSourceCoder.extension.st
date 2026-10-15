@@ -872,7 +872,7 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anEleme
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renamePharoControllerIn: aSourceCoderViewModel for: aNode [
-	"Return a not installed controller of the new refactoring implementation (see `${class:GtPharoRenameVariableCoderController}$`) that is provided by a class-side method with the pragma `<gtPharoRenameController>`. Such a method receives the source coder view model and the node, and returns either a controller or nil if it is not applicable."
+	"Return a not installed controller that renames the given message, method or method pattern node. Controllers of the new refactoring implementation, see {{gtClass:GtPharoRenameVariableCoderController}}, are provided by class-side methods with the pragma {{gtSymbol:gtPharoRenameController}}. Such a method receives the source coder view model and the node, and returns either a controller or nil if it is not applicable. If no method returns a controller, I return {{gtClass:GtPharoRenameSelectorCoderController}}."
 
 	(Pragma allNamed: #gtPharoRenameController)
 		do: [ :each | 

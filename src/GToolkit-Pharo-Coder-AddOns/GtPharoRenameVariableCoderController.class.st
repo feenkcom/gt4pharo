@@ -1,3 +1,9 @@
+"
+I am a controller of a rename of a variable in a coder. I install attributes created by {{gtClass:GtPharoRenameVariableAttributesStencil}} to a text editor and I prevent saving the coder, but I do not change the source text. The source is changed only when the refactorings of {{gtClass:GtPharoRenameVariableRefactoringsStencil}} are applied. My subclasses define the occurrences, forbidden names and refactorings, see {{gtClass:GtPharoRenamePP2ProductionCoderController}}. Controllers are found through the pragma {{gtSymbol:gtPharoRenameController}}, see {{gtMethod:GtPharoSourceCoder>>#renamePharoControllerIn:for:}}. I replace {{gtClass:GtRenameController}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorCoderController}}.
+
+# Example
+{{gtExample:GtPharoRenameVariableModelRustEditorExamples>>#rustScripterEditorWithInstAPlusOneMethod_enterShowsPreview | codeExpanded=false | previewExpanded | previewHeight=400}}
+"
 Class {
 	#name : #GtPharoRenameVariableCoderController,
 	#superclass : #Object,
@@ -30,7 +36,7 @@ GtPharoRenameVariableCoderController >> computeRefactorings [
 
 { #category : #hooks }
 GtPharoRenameVariableCoderController >> createRefactoringsStencil [
-	"Return a ${class:GtPharoRenameVariableRefactoringsStencil}$ that computes the refactorings from the variable model."
+	"Return a {{gtClass:GtPharoRenameVariableRefactoringsStencil}} that computes the refactorings from the variable model."
 
 	^ self subclassResponsibility
 ]
@@ -96,7 +102,7 @@ GtPharoRenameVariableCoderController >> informException: anException [
 
 { #category : #installation }
 GtPharoRenameVariableCoderController >> install [
-	"Taken from `GtSourceCoderRefactoringController>>#execute`"
+	"Taken from {{gtMethod:GtSourceCoderRefactoringController>>#execute}}"
 
 	[ self safelyInstall ]
 		on: Error
@@ -190,7 +196,7 @@ GtPharoRenameVariableCoderController >> primaryRenameInterval [
 
 { #category : #hooks }
 GtPharoRenameVariableCoderController >> refactoringName [
-	"Same in the refactorings stencil, see `${class:GtPharoRenameVariableRefactoringsStencil}$>>#refactoringName`."
+	"Same in the refactorings stencil, see {{gtMethod:GtPharoRenameVariableRefactoringsStencil>>#refactoringName}}."
 
 	^ self subclassResponsibility
 ]

@@ -1,3 +1,9 @@
+"
+I replace an occurrence of the renamed variable that the user does not edit. I display the current name of a {{gtClass:GtPharoRenameVariableModel}} and follow its changes.
+
+# Example
+{{gtExample:GtPharoRenameVariableElementsExamples>>#occurrenceElement | codeExpanded=false | previewExpanded | previewHeight=100}}
+"
 Class {
 	#name : #GtPharoRenameVariableOccurrenceElement,
 	#superclass : #BlElement,

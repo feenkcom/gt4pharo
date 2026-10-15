@@ -1,3 +1,9 @@
+"
+I create text attributes that display a rename of a {{gtClass:GtPharoRenameVariableModel}} in a text editor without changing the text: {{gtClass:GtPharoRenameVariableEditorElement}} replaces the renamed occurrence, {{gtClass:GtPharoRenameVariableOccurrenceElement}} replaces the other occurrences and {{gtClass:GtPharoRenameVariableRefactoringsPreviewElement}} is appended. See {{gtMethod:GtPharoRenameVariableAttributesStencil>>#create}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorAttributesStencil}}.
+
+# Example
+{{gtExample:GtPharoRenameVariableModelRustEditorExamples>>#rustScripterEditorWithInstAPlusOneMethod_refactoringsPreview | codeExpanded=false | previewExpanded | previewHeight=400}}
+"
 Class {
 	#name : #GtPharoRenameVariableAttributesStencil,
 	#superclass : #Object,

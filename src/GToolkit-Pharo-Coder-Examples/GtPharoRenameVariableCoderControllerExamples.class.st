@@ -1,3 +1,6 @@
+"
+I contain examples of {{gtClass:GtPharoRenameVariableCoderController}} that use {{gtClass:GtPharoRenameVariableTestCoderController}} on {{gtMethod:GtPharoDummyOneObject>>#instAPlusOne}}.
+"
 Class {
 	#name : #GtPharoRenameVariableCoderControllerExamples,
 	#superclass : #Object,

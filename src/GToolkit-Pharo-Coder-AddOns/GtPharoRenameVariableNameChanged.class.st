@@ -1,3 +1,6 @@
+"
+I am announced by {{gtClass:GtPharoRenameVariableModel}} when its current name changes. I carry the new name and whether it differs from the original name.
+"
 Class {
 	#name : #GtPharoRenameVariableNameChanged,
 	#superclass : #GtPharoRenameVariableModelAnnouncement,

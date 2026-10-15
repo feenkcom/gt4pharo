@@ -1,3 +1,6 @@
+"
+I compute {{gtClass:GtRenameInstanceVariableRefactoring}}. I exist only to exercise {{gtClass:GtPharoRenameVariableCoderController}} in examples, see {{gtClass:GtPharoRenameVariableTestCoderController}}.
+"
 Class {
 	#name : #GtPharoRenameVariableTestRefactoringsStencil,
 	#superclass : #GtPharoRenameVariableRefactoringsStencil,

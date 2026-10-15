@@ -1,3 +1,6 @@
+"
+I contain examples of {{gtClass:GtPharoRenameVariableModel}} and {{gtClass:GtPharoRenameVariableValidator}}.
+"
 Class {
 	#name : #GtPharoRenameVariableModelExamples,
 	#superclass : #Object,

@@ -1,3 +1,9 @@
+"
+I let a user edit the new name of a {{gtClass:GtPharoRenameVariableModel}}. I am an editable label that replaces the renamed occurrence in a text editor. Enter requests the refactorings preview and Escape requests cancelling the rename. I request focus when I am created by {{gtClass:GtPharoRenameVariableAttributesStencil}}.
+
+# Example
+{{gtExample:GtPharoRenameVariableElementsExamples>>#editorElement | codeExpanded=false | previewExpanded | previewHeight=100}}
+"
 Class {
 	#name : #GtPharoRenameVariableEditorElement,
 	#superclass : #BlElement,

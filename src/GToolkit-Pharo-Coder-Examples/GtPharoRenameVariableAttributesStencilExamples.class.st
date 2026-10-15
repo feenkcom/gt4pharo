@@ -1,3 +1,6 @@
+"
+I contain examples of {{gtClass:GtPharoRenameVariableAttributesStencil}}.
+"
 Class {
 	#name : #GtPharoRenameVariableAttributesStencilExamples,
 	#superclass : #Object,

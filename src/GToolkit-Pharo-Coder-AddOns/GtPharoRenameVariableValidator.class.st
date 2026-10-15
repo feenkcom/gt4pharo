@@ -1,3 +1,6 @@
+"
+I decide whether a name can be used as a new variable name. A name must be a valid variable name and it must not be one of the forbidden names, e.g., names of existing variables. See {{gtMethod:GtPharoRenameVariableValidator>>#validateVariableName:}}.
+"
 Class {
 	#name : #GtPharoRenameVariableValidator,
 	#superclass : #Object,

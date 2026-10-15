@@ -1,3 +1,6 @@
+"
+I contain examples of {{gtClass:GtPharoRenameVariableEditorElement}}, {{gtClass:GtPharoRenameVariableOccurrenceElement}} and {{gtClass:GtPharoRenameVariableRefactoringsPreviewElement}}.
+"
 Class {
 	#name : #GtPharoRenameVariableElementsExamples,
 	#superclass : #Object,

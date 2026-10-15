@@ -1,3 +1,6 @@
+"
+I compute refactorings that apply a rename of a {{gtClass:GtPharoRenameVariableModel}}. I return no refactoring if the name is not modified or not valid. My subclasses create the refactoring, see {{gtMethod:GtPharoRenameVariableRefactoringsStencil>>#computeRefactoring}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorRefactoringsStencil}}.
+"
 Class {
 	#name : #GtPharoRenameVariableRefactoringsStencil,
 	#superclass : #Object,
@@ -32,7 +35,7 @@ GtPharoRenameVariableRefactoringsStencil >> create [
 
 { #category : #creation }
 GtPharoRenameVariableRefactoringsStencil >> createModel [
-	"Same idea as `GtPharoSourceCoderRefactoringController>>#createModel`, but the source of the coder is never modified before accepting, so it is compiled into the model only if it differs from the class source."
+	"Same idea as {{gtMethod:GtPharoSourceCoderRefactoringController>>#createModel}}, but the source of the coder is never modified before accepting, so it is compiled into the model only if it differs from the class source."
 
 	| aModel aModelClass |
 	aModel := GtRBNamespace onEnvironment: RBBrowserEnvironment new.

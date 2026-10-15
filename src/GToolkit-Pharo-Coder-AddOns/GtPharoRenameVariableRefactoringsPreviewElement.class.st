@@ -1,3 +1,9 @@
+"
+I display the preview of refactorings that apply the rename. I am visible only if the name of a {{gtClass:GtPharoRenameVariableModel}} is modified and valid. I am configured by a {{gtClass:GtRefactoringsConfiguration}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorRefactoringsPreviewElement}}.
+
+# Example
+{{gtExample:GtPharoRenameVariableElementsExamples>>#previewElementVisibility | codeExpanded=false | previewExpanded | previewHeight=100}}
+"
 Class {
 	#name : #GtPharoRenameVariableRefactoringsPreviewElement,
 	#superclass : #BlElement,

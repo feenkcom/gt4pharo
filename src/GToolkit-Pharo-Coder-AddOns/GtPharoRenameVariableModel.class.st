@@ -1,3 +1,9 @@
+"
+I hold the state of a rename of a variable (or another named entity): the original name, the current name, the source intervals of all occurrences (the first one is renamed by the user), and a {{gtClass:GtPharoRenameVariableValidator}}. I never change a source text. I announce {{gtClass:GtPharoRenameVariableNameChanged}} when the name changes and requests such as {{gtClass:GtPharoRenameVariableRefactoringsPreviewRequested}} and {{gtClass:GtPharoRenameVariableCancelRequested}}. Elements, such as {{gtClass:GtPharoRenameVariableEditorElement}}, and {{gtClass:GtPharoRenameVariableCoderController}} subscribe to my announcer. I am the counterpart of {{gtClass:GtPharoRenameSelectorModel}}.
+
+# Example
+{{gtExample:GtPharoRenameVariableModelExamples>>#modelWithChangedName | codeExpanded=false | previewExpanded | previewHeight=200}}
+"
 Class {
 	#name : #GtPharoRenameVariableModel,
 	#superclass : #Object,
@@ -103,7 +109,7 @@ GtPharoRenameVariableModel >> requestRefactoringsPreviewSource: aSource [
 
 { #category : #updating }
 GtPharoRenameVariableModel >> updateCurrentName: aString source: aSource [
-	"The name is accepted even if invalid so that a user can type freely, see `${class:GtPharoRenameVariableModel}$>>#isValid`."
+	"The name is accepted even if invalid so that a user can type freely, see {{gtMethod:GtPharoRenameVariableModel>>#isValid}}."
 
 	currentName = aString ifTrue: [ ^ self ].
 	currentName := aString.

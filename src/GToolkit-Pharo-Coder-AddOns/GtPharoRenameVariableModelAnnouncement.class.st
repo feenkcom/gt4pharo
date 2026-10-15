@@ -1,3 +1,6 @@
+"
+I am the superclass of announcements of {{gtClass:GtPharoRenameVariableModel}}. I know the model and the source of the change or the request.
+"
 Class {
 	#name : #GtPharoRenameVariableModelAnnouncement,
 	#superclass : #Announcement,

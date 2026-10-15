@@ -1,3 +1,6 @@
+"
+I contain examples that use {{gtClass:BlScripter}} to simulate user interactions with {{gtClass:GtPharoRenameVariableCoderController}} in a coder with a Rust text editor, see {{gtMethod:GtPharoDummyOneObject>>#instAPlusOne}}. I am the counterpart of {{gtClass:GtPharoRenameSelectorModelRustEditorExamples}}.
+"
 Class {
 	#name : #GtPharoRenameVariableModelRustEditorExamples,
 	#superclass : #Object,
