@@ -42,6 +42,14 @@ GtPharoRenameVariableModelRustEditorExamples >> assert: aScripter refactoringsPr
 
 { #category : #utilities }
 GtPharoRenameVariableModelRustEditorExamples >> createRustEditorWithMethod: aMethod variableNamed: aVariableName [
+	^ self
+		createRustEditorWithMethod: aMethod
+		variableNamed: aVariableName
+		controllerClass: GtPharoRenameInstanceVariableCoderController
+]
+
+{ #category : #utilities }
+GtPharoRenameVariableModelRustEditorExamples >> createRustEditorWithMethod: aMethod variableNamed: aVariableName controllerClass: aControllerClass [
 	"Create a coder element with a Rust text editor. When the editor is styled, a variable rename controller is installed on the first variable with the given name."
 
 	| aCoderElement aTextEditorElement aDocumentId aController aCoder aCoderViewModel aRecorder |
@@ -80,7 +88,7 @@ GtPharoRenameVariableModelRustEditorExamples >> createRustEditorWithMethod: aMet
 												action: [ anEvent currentTarget
 														assert: [ aDocumentId isNotNil ]
 														description: [ 'Document ID must be non-nil.' ].
-													aController := GtPharoRenameInstanceVariableCoderController new
+													aController := aControllerClass new
 															originalNode: (self variableNodeNamed: aVariableName in: aCoderAst ast);
 															documentId: aDocumentId;
 															editorElement: aTextEditorElement;
@@ -131,50 +139,24 @@ GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithInstAPlusOneMethod
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithVarAMethod [
+	<gtExample>
+	<return: #GtExpandableSourceCoderElement>
+	^ self
+		createRustEditorWithMethod: self varAMethod
+		variableNamed: 'VarA'
+		controllerClass: GtPharoRenameClassVariableCoderController
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithInstAPlusOneMethod [
 	<gtExample>
 	<return: #BlScripter>
-	| aCoderElement aScripter anEditorElement aVariableModel aRecorder |
-	aCoderElement := self rustEditorWithInstAPlusOneMethod.
-	aRecorder := aCoderElement userData at: #timelineRecorder.
-	aScripter := BlScripter new.
-	aScripter userData at: #timelineRecorder put: aRecorder.
-
-	aRecorder
-		runDuring: [ aScripter element: aCoderElement.
-			anEditorElement := (aScripter element query // GtTextEditorElement) anyOne.
-			self
-				assert: anEditorElement isNotNil
-				description: [ 'Text editor element must exist' ].
-
-			aScripter wait
-				forCondition: [ :aSpace :theScripter | 
-						anEditorElement userData
-							at: #variableModel
-							ifPresent: [ :theModel | 
-								theModel ifNotNil: [ aVariableModel := theModel ].
-								theModel isNotNil ]
-							ifAbsent: [ false ] ]
-					pulseDuring: 5 seconds;
-				play.
-			self assert: aVariableModel isNotNil.
-			aScripter model: aVariableModel.
-
-			aScripter wait
-				waitRustEditorRendered: anEditorElement pulseDuring: 5 seconds;
-				play.
-
-			aScripter wait
-				label: 'Wait for the editor, one other occurrence, and the refactorings preview';
-				forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 3 ]
-					pulseDuring: 5 seconds;
-				play ].
-
-	aScripter userData at: #editorElement put: anEditorElement.
-	self assert: aScripter editorMode: true.
-	self assert: aScripter refactoringsPreviewIsVisible: false.
+	| aScripter |
+	aScripter := self
+			rustScripterFor: self rustEditorWithInstAPlusOneMethod
+			numberOfRenameElements: 3.
 	self assert: aScripter occurrenceLabelsEqual: 'instA'.
-
 	^ aScripter
 ]
 
@@ -399,6 +381,161 @@ GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithInstAPlusO
 	self assert: aScripter refactoringsPreviewIsVisible: false.
 
 	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithVarAMethod [
+	<gtExample>
+	<return: #BlScripter>
+	"The class variable is referenced once, there are the editor and the refactorings preview."
+
+	^ self rustScripterFor: self rustEditorWithVarAMethod numberOfRenameElements: 2
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithVarAMethod_escapeUninstalls [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter anEditorElement |
+	aScripter := self rustScripterEditorWithVarAMethod.
+	anEditorElement := aScripter userData at: #editorElement.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter keyPress
+		label: 'Press Escape';
+		key: BlKeyboardKey escape;
+		play.
+
+	aScripter wait
+		label: 'Wait until all rename elements are removed';
+		forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 0 ]
+			pulseDuring: 5 seconds;
+		play.
+
+	self assert: (anEditorElement userData includesKey: #variableModel) not.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithVarAMethod_lowercaseName [
+	"A class variable name starts with an uppercase letter."
+
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithVarAMethod.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with "varB"';
+		selectAll;
+		typeText: 'varB';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	aScripter editor
+		label: 'Replace the name with "VarB"';
+		selectAll;
+		typeText: 'VarB';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithVarAMethod_refactoringsPreview [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithVarAMethod.
+
+	aScripter click
+		label: 'Activate the variable editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Type character "_"';
+		deselectAll;
+		typeText: '_';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+
+	aScripter editor
+		label: 'Delete previously typed character';
+		pressBackspace;
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterFor: aCoderElement numberOfRenameElements: aNumber [
+	| aScripter anEditorElement aVariableModel aRecorder |
+	aRecorder := aCoderElement userData at: #timelineRecorder.
+	aScripter := BlScripter new.
+	aScripter userData at: #timelineRecorder put: aRecorder.
+
+	aRecorder
+		runDuring: [ aScripter element: aCoderElement.
+			anEditorElement := (aScripter element query // GtTextEditorElement) anyOne.
+			self
+				assert: anEditorElement isNotNil
+				description: [ 'Text editor element must exist' ].
+
+			aScripter wait
+				forCondition: [ :aSpace :theScripter | 
+						anEditorElement userData
+							at: #variableModel
+							ifPresent: [ :theModel | 
+								theModel ifNotNil: [ aVariableModel := theModel ].
+								theModel isNotNil ]
+							ifAbsent: [ false ] ]
+					pulseDuring: 5 seconds;
+				play.
+			self assert: aVariableModel isNotNil.
+			aScripter model: aVariableModel.
+
+			aScripter wait
+				waitRustEditorRendered: anEditorElement pulseDuring: 5 seconds;
+				play.
+
+			aScripter wait
+				label: 'Wait for all rename elements';
+				forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = aNumber ]
+					pulseDuring: 5 seconds;
+				play ].
+
+	aScripter userData at: #editorElement put: anEditorElement.
+	self assert: aScripter editorMode: true.
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> varAMethod [
+	<gtExample>
+	<return: #CompiledMethod>
+	^ GtPharoDummyOneObject >> #varA
 ]
 
 { #category : #utilities }

@@ -41,13 +41,23 @@ GtPharoRenameVariableCoderController >> createRefactoringsStencil [
 	^ self subclassResponsibility
 ]
 
+{ #category : #hooks }
+GtPharoRenameVariableCoderController >> createValidator [
+	"Return a {{gtClass:GtPharoRenameVariableValidator}} that validates the new name."
+
+	^ GtPharoRenameVariableValidator new
+]
+
 { #category : #model }
 GtPharoRenameVariableCoderController >> createVariableModel [
 	| aModel |
 	aModel := GtPharoRenameVariableModel
 			originalName: self originalName
 			intervals: {self primaryRenameInterval} , self otherRenameIntervals.
-	aModel validator forbiddenNames: (self forbiddenNames copyWithout: self originalName).
+	aModel
+		validator: (self createValidator
+				forbiddenNames: (self forbiddenNames copyWithout: self originalName);
+				yourself).
 	^ aModel
 ]
 

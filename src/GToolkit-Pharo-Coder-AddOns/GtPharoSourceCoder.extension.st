@@ -788,11 +788,13 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 						install.
 					^ self ].
 			(self isClassVariable: aNode)
-				ifTrue: [ ^ self
-						renameClassVariableIn: aSourceCoderViewModel
-						node: aNode
-						context: aBuildContext
-						for: anElement ].
+				ifTrue: [ GtPharoRenameClassVariableCoderController new
+						originalNode: aNode;
+						editorElement: anElement;
+						documentId: aDocumentId;
+						sourceCoderViewModel: aSourceCoderViewModel;
+						install.
+					^ self ].
 			Smalltalk globals
 				at: aNode name value asSymbol
 				ifPresent: [ :cls | 
