@@ -19,7 +19,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 						leave: self removeHighlightsBlock
 						action: [ :aTextualViewModel :element | 
 							self
-								renamePackage: node
+								renamePackageChoosingImplementation: node
 								in: aTextualViewModel
 								from: element ]
 						shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
@@ -46,7 +46,7 @@ GtPharoSourceCoder >> addBaselinePackageMenuItemsFor: anAst to: coderAddOns from
 								leave: self removeHighlightsBlock
 								action: [ :aTextualViewModel :element | 
 									self
-										renameBaseline: node
+										renameBaselineChoosingImplementation: node
 										in: aTextualViewModel
 										for: element ]
 								shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
@@ -624,11 +624,25 @@ GtPharoSourceCoder >> renameBaselineAt: anIndex in: aCoderViewModel for: anEleme
 		ifNotNil: [ :node | 
 			(node isLiteral and: [ node gtIsBaselineName ]) ifFalse: [ ^ false ].
 			self
-				renameBaseline: node
+				renameBaselineChoosingImplementation: node
 				in: aCoderViewModel
 				for: anElement.
 			^ true ].
 	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renameBaselineChoosingImplementation: aNode in: aSourceCoderViewModel for: anElement [
+	"Use the attribute based controller {{gtClass:GtPharoRenameBaselineCoderController}} if the new rename implementation is enabled, otherwise the old one."
+
+	GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+		ifFalse: [ ^ self renameBaseline: aNode in: aSourceCoderViewModel for: anElement ].
+	GtPharoRenameBaselineCoderController new
+		originalNode: aNode;
+		editorElement: anElement;
+		documentId: aSourceCoderViewModel documentId;
+		sourceCoderViewModel: aSourceCoderViewModel;
+		install
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -874,11 +888,25 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anEleme
 		ifNotNil: [ :node | 
 			(node isLiteral and: [ node gtIsBaselinePackageName ]) ifFalse: [ ^ false ].
 			self
-				renamePackage: node
+				renamePackageChoosingImplementation: node
 				in: aCoderViewModel
 				from: anElement.
 			^ true ].
 	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renamePackageChoosingImplementation: aNode in: aSourceCoderViewModel from: anElement [
+	"Use the attribute based controller {{gtClass:GtPharoRenamePackageCoderController}} if the new rename implementation is enabled, otherwise the old one."
+
+	GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+		ifFalse: [ ^ self renamePackage: aNode in: aSourceCoderViewModel from: anElement ].
+	GtPharoRenamePackageCoderController new
+		originalNode: aNode;
+		editorElement: anElement;
+		documentId: aSourceCoderViewModel documentId;
+		sourceCoderViewModel: aSourceCoderViewModel;
+		install
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }

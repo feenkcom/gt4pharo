@@ -40,6 +40,13 @@ GtPharoRenameVariableModelRustEditorExamples >> assert: aScripter refactoringsPr
 		play
 ]
 
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> baselineMethod [
+	<gtExample>
+	<return: #CompiledMethod>
+	^ GtPharoDummyBaseline >> #baseline:
+]
+
 { #category : #utilities }
 GtPharoRenameVariableModelRustEditorExamples >> createRustEditorWithMethod: aMethod variableNamed: aVariableName [
 	^ self
@@ -139,6 +146,16 @@ GtPharoRenameVariableModelRustEditorExamples >> numberOfRenameRefactoringElement
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithBaselineNameMethod [
+	<gtExample>
+	<return: #GtExpandableSourceCoderElement>
+	^ self
+		createRustEditorWithMethod: self baselineMethod
+		variableNamed: 'GtPharoDummyBaselineTarget'
+		controllerClass: GtPharoRenameBaselineCoderController
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithDummyThreeMethod [
 	<gtExample>
 	<return: #GtExpandableSourceCoderElement>
@@ -153,6 +170,16 @@ GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithInstAPlusOneMethod
 	<gtExample>
 	<return: #GtExpandableSourceCoderElement>
 	^ self createRustEditorWithMethod: self instAPlusOneMethod variableNamed: 'instA'
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithPackageNameMethod [
+	<gtExample>
+	<return: #GtExpandableSourceCoderElement>
+	^ self
+		createRustEditorWithMethod: self baselineMethod
+		variableNamed: 'GToolkit-Pharo-Coder-Examples'
+		controllerClass: GtPharoRenamePackageCoderController
 ]
 
 { #category : #examples }
@@ -173,6 +200,78 @@ GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithVarAMethod [
 		createRustEditorWithMethod: self varAMethod
 		variableNamed: 'VarA'
 		controllerClass: GtPharoRenameClassVariableCoderController
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithBaselineNameMethod [
+	"The baseline name is in the method twice, there are the editor, one other occurrence, and the refactorings preview."
+
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self
+			rustScripterFor: self rustEditorWithBaselineNameMethod
+			numberOfRenameElements: 3.
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithBaselineNameMethod_existingBaseline [
+	"A baseline whose class already exists cannot be used."
+
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithBaselineNameMethod.
+
+	aScripter click
+		label: 'Activate the baseline name editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with the existing baseline "GToolkitExamplesEngine"';
+		selectAll;
+		typeText: 'GToolkitExamplesEngine';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithBaselineNameMethod_refactoringsPreview [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithBaselineNameMethod.
+
+	aScripter click
+		label: 'Activate the baseline name editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with "GtPharoDummyBaselineOther"';
+		selectAll;
+		typeText: 'GtPharoDummyBaselineOther';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+	self assert: aScripter occurrenceLabelsEqual: 'GtPharoDummyBaselineOther'.
+
+	aScripter editor
+		label: 'Replace the name with the original one';
+		selectAll;
+		typeText: 'GtPharoDummyBaselineTarget';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
 ]
 
 { #category : #examples }
@@ -521,6 +620,79 @@ GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithInstAPlusO
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithPackageNameMethod [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self
+			rustScripterFor: self rustEditorWithPackageNameMethod
+			numberOfRenameElements: 3.
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithPackageNameMethod_escapeUninstalls [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter anEditorElement |
+	aScripter := self rustScripterEditorWithPackageNameMethod.
+	anEditorElement := aScripter userData at: #editorElement.
+
+	aScripter click
+		label: 'Activate the package name editor';
+		// #'variable-editor';
+		play.
+
+	aScripter keyPress
+		label: 'Press Escape';
+		key: BlKeyboardKey escape;
+		play.
+
+	aScripter wait
+		label: 'Wait until all rename elements are removed';
+		forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 0 ]
+			pulseDuring: 5 seconds;
+		play.
+
+	self assert: (anEditorElement userData includesKey: #variableModel) not.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithPackageNameMethod_refactoringsPreview [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithPackageNameMethod.
+
+	aScripter click
+		label: 'Activate the package name editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with "GToolkit-Pharo-Coder-Examples-Other"';
+		selectAll;
+		typeText: 'GToolkit-Pharo-Coder-Examples-Other';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+	self assert: aScripter occurrenceLabelsEqual: 'GToolkit-Pharo-Coder-Examples-Other'.
+
+	aScripter editor
+		label: 'Replace the name with the existing package "GToolkit-Pharo-Coder"';
+		selectAll;
+		typeText: 'GToolkit-Pharo-Coder';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+	^ aScripter
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithTempReceiverMethod [
 	<gtExample>
 	<return: #BlScripter>
@@ -842,9 +1014,14 @@ GtPharoRenameVariableModelRustEditorExamples >> varAMethod [
 	^ GtPharoDummyOneObject >> #varA
 ]
 
-{ #category : #utilities }
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> variableNodeNamed: aString in: anAst [
+	"The first variable with the given name or the first literal with the given value."
+
 	anAst allNodesDo: [ :each | 
-		(each isVariable and: [ each source = aString ]) ifTrue: [ ^ each ] ].
+		((each isVariable and: [ each source = aString ])
+			or: [ each isLiteral
+					and: [ each isErrorNode not and: [ each literalValue = aString ] ] ])
+			ifTrue: [ ^ each ] ].
 	^ self error: 'Variable ' , aString , ' must exist'
 ]
