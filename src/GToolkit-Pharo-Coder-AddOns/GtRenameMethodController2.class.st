@@ -16,6 +16,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
+{ #category : #testing }
+GtRenameMethodController2 class >> isDeprecated [
+	"Replaced by {{gtClass:GtPharoRenameSelectorCoderController}}, this implementation stays for clients that still depend on it."
+
+	^ true
+]
+
 { #category : #accessing }
 GtRenameMethodController2 >> currentNode [
 	^ currentNode ifNil: [ self originalNode ]

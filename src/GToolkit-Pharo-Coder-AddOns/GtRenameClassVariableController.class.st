@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
+{ #category : #testing }
+GtRenameClassVariableController class >> isDeprecated [
+	"Replaced by {{gtClass:GtPharoRenameClassVariableCoderController}}, this implementation stays for clients that still depend on it."
+
+	^ true
+]
+
 { #category : #accessing }
 GtRenameClassVariableController >> refactoringName [
 	^ 'Rename class variable'
