@@ -4,7 +4,7 @@ I exemplify {{gtClass:GtPharoRenameBaselineCoderController}} and {{gtClass:GtPha
 Class {
 	#name : #GtPharoRenameLiteralCoderControllerExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactoring - Method New'
+	#category : #'GToolkit-Pharo-Coder-Examples-RustEditor-Refactoring - Method New'
 }
 
 { #category : #examples }

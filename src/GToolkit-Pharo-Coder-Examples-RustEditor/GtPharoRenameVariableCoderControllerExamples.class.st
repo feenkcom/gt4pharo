@@ -4,7 +4,7 @@ I contain examples of {{gtClass:GtPharoRenameVariableCoderController}} that use 
 Class {
 	#name : #GtPharoRenameVariableCoderControllerExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Pharo-Coder-Examples-Refactoring - Method New'
+	#category : #'GToolkit-Pharo-Coder-Examples-RustEditor-Refactoring - Method New'
 }
 
 { #category : #examples }
