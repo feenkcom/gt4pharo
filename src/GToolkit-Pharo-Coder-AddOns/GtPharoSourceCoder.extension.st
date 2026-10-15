@@ -307,45 +307,34 @@ GtPharoSourceCoder >> addRenameMethodAst: anAst to: coderAddOns from: aCoderView
 			highlightNode := node isMessageSend
 					ifTrue: [ node message ]
 					ifFalse: [ node ].
+
 			(coderAddOns
 				addContextMenuItem: (self
-						createLabel: 'Rename message'
+						createLabel: (GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+								ifFalse: [ 'Rename message' ]
+								ifTrue: [ 'Rename message (new)' ])
 						description: node selector)
 				group: BrMenuItemGroupConfiguration refactoring
 				hover: (self highlightNodeBlock: highlightNode documentId: aDocumentId)
 				leave: self removeHighlightsBlock
 				action: [ :aTextualViewModel :element | 
-					self
-						renameNode: node
-						in: aTextualViewModel
-						documentId: aDocumentId
-						for: element ]
+					GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+						ifFalse: [ self
+								renameNode: node
+								in: aTextualViewModel
+								documentId: aDocumentId
+								for: element ]
+						ifTrue: [ self
+								renameNewNode: node
+								in: aTextualViewModel
+								documentId: aDocumentId
+								for: element ] ]
 				shortcutKey: GtSourceCoderInlineRenameShortcut new combinationForPlatform
 						gtDisplayString)
 				ifNotNil: [ :anAction | 
 					anAction
 						priority: 205;
-						id: #'coder--refactoring-rename-message' ].
-
-			GtPharoCoderSettings displayNewRenameImplementationContextMenuItem ifTrue: [
-				(coderAddOns
-					addContextMenuItem: (self
-							createLabel: 'Rename message (new)'
-							description: node selector)
-					group: BrMenuItemGroupConfiguration refactoring
-					hover: (self highlightNodeBlock: highlightNode documentId: aDocumentId)
-					leave: self removeHighlightsBlock
-					action: [ :aTextualViewModel :element | 
-						self
-							renameNewNode: node
-							in: aTextualViewModel
-							documentId: aDocumentId
-							for: element ]
-					shortcutKey: nil)
-					ifNotNil: [ :anAction | 
-						anAction
-							priority: 205.5;
-							id: #'coder--refactoring-rename-message-new' ] ] ]
+						id: #'coder--refactoring-rename-message' ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -594,11 +583,17 @@ GtPharoSourceCoder >> renameAt: aTextPosition in: aSourceCoderViewModel document
 	self
 		nodeAt: aTextPosition
 		ifFound: [ :aNode | 
-			self
-				renameNode: aNode
-				in: aSourceCoderViewModel
-				documentId: aDocumentId
-				for: anElement ]
+			GtPharoCoderSettings displayNewRenameImplementationContextMenuItem
+				ifFalse: [ self
+						renameNode: aNode
+						in: aSourceCoderViewModel
+						documentId: aDocumentId
+						for: anElement ]
+				ifTrue: [ self
+						renameNewNode: aNode
+						in: aSourceCoderViewModel
+						documentId: aDocumentId
+						for: anElement ] ]
 		ifNone: [  ]
 ]
 
@@ -753,9 +748,7 @@ GtPharoSourceCoder >> renameMethodControllerIn: aSourceCoderViewModel for: aMess
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId: aDocumentId for: anElement [
-	"New implementation of rename method.
-	
-	Is the `anElement editorElement` ok?"
+	"New implementation of rename method."
 
 	| aBuildContext |
 	self flag: #TODO.
@@ -764,11 +757,20 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 		astNode: aNode;
 		editorElement: anElement;
 		sourceCoderViewModel: aSourceCoderViewModel.
+
+	(self renamePharoControllerIn: aSourceCoderViewModel for: aNode)
+		ifNotNil: [ :aController | 
+			aController
+				editorElement: anElement;
+				documentId: aDocumentId;
+				install.
+			^ self ].
+
 	(aNode isMessage or: [ aNode isMethod or: [ aNode isMethodPattern ] ])
 		ifTrue: [ | aController |
 			aController := GtPharoRenameSelectorCoderController new
 					originalNode: aNode;
-					editorElement: anElement editorElement;
+					editorElement: anElement;
 					documentId: aDocumentId;
 					sourceCoderViewModel: aSourceCoderViewModel;
 					install.
@@ -778,26 +780,32 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 		ifTrue: [ (self isLocalVariable: aNode)
 				ifTrue: [ ^ self renameTemporaryIn: aSourceCoderViewModel node: aNode context: aBuildContext ].
 			(self isInstanceVariable: aNode)
-				ifTrue: [ ^ self
-						renameInstanceVariableIn: aSourceCoderViewModel
-						node: aNode
-						context: aBuildContext
-						for: anElement ].
+				ifTrue: [ GtPharoRenameInstanceVariableCoderController new
+						originalNode: aNode;
+						editorElement: anElement;
+						documentId: aDocumentId;
+						sourceCoderViewModel: aSourceCoderViewModel;
+						install.
+					^ self ].
 			(self isClassVariable: aNode)
-				ifTrue: [ ^ self
-						renameClassVariableIn: aSourceCoderViewModel
-						node: aNode
-						context: aBuildContext
-						for: anElement ].
+				ifTrue: [ GtPharoRenameClassVariableCoderController new
+						originalNode: aNode;
+						editorElement: anElement;
+						documentId: aDocumentId;
+						sourceCoderViewModel: aSourceCoderViewModel;
+						install.
+					^ self ].
 			Smalltalk globals
 				at: aNode name value asSymbol
 				ifPresent: [ :cls | 
 					(cls isKindOf: Class)
-						ifTrue: [ ^ self
-								renameClassIn: aSourceCoderViewModel
-								node: aNode
-								context: aBuildContext
-								for: anElement ] ] ]
+						ifTrue: [ GtPharoRenameClassCoderController new
+									originalNode: aNode;
+									editorElement: anElement;
+									documentId: aDocumentId;
+									sourceCoderViewModel: aSourceCoderViewModel;
+									install.
+								^ self ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
@@ -872,6 +880,20 @@ GtPharoSourceCoder >> renamePackageAt: anIndex in: aCoderViewModel from: anEleme
 				from: anElement.
 			^ true ].
 	^ false
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> renamePharoControllerIn: aSourceCoderViewModel for: aNode [
+	"Return a not installed controller of the new refactoring implementation, see {{gtClass:GtPharoRenameVariableCoderController}}, or nil. Controllers are provided by class-side methods with the pragma {{gtSymbol:gtPharoRenameController}}. Such a method receives the source coder view model and the node, and returns either a controller or nil if it is not applicable."
+
+	(Pragma allNamed: #gtPharoRenameController)
+		do: [ :each | 
+			each method methodClass isClassSide
+				ifTrue: [ (each method methodClass instanceSide
+						perform: each method selector
+						withArguments: {aSourceCoderViewModel.
+								aNode}) ifNotNil: [ :aController | ^ aController ] ] ].
+	^ nil
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
