@@ -113,6 +113,13 @@ GtPharoRenameVariableModelRustEditorExamples >> createRustEditorWithMethod: aMet
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> dummyThreeMethod [
+	<gtExample>
+	<return: #CompiledMethod>
+	^ GtPharoDummyOneObject >> #dummyThree
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> instAPlusOneMethod [
 	<gtExample>
 	<return: #CompiledMethod>
@@ -132,6 +139,16 @@ GtPharoRenameVariableModelRustEditorExamples >> numberOfRenameRefactoringElement
 ]
 
 { #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithDummyThreeMethod [
+	<gtExample>
+	<return: #GtExpandableSourceCoderElement>
+	^ self
+		createRustEditorWithMethod: self dummyThreeMethod
+		variableNamed: 'GtPharoDummyThreeObject'
+		controllerClass: GtPharoRenameClassCoderController
+]
+
+{ #category : #examples }
 GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithInstAPlusOneMethod [
 	<gtExample>
 	<return: #GtExpandableSourceCoderElement>
@@ -146,6 +163,112 @@ GtPharoRenameVariableModelRustEditorExamples >> rustEditorWithVarAMethod [
 		createRustEditorWithMethod: self varAMethod
 		variableNamed: 'VarA'
 		controllerClass: GtPharoRenameClassVariableCoderController
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithDummyThreeMethod [
+	<gtExample>
+	<return: #BlScripter>
+	"The class is referenced once, there are the editor and the refactorings preview."
+
+	^ self
+		rustScripterFor: self rustEditorWithDummyThreeMethod
+		numberOfRenameElements: 2
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithDummyThreeMethod_escapeUninstalls [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter anEditorElement |
+	aScripter := self rustScripterEditorWithDummyThreeMethod.
+	anEditorElement := aScripter userData at: #editorElement.
+
+	aScripter click
+		label: 'Activate the class editor';
+		// #'variable-editor';
+		play.
+
+	aScripter keyPress
+		label: 'Press Escape';
+		key: BlKeyboardKey escape;
+		play.
+
+	aScripter wait
+		label: 'Wait until all rename elements are removed';
+		forCondition: [ :aSpace | (self numberOfRenameRefactoringElementsIn: anEditorElement) = 0 ]
+			pulseDuring: 5 seconds;
+		play.
+
+	self assert: (anEditorElement userData includesKey: #variableModel) not.
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithDummyThreeMethod_existingClass [
+	"The name of an existing class cannot be used."
+
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithDummyThreeMethod.
+
+	aScripter click
+		label: 'Activate the class editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Replace the name with the existing class "Object"';
+		selectAll;
+		typeText: 'Object';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	aScripter editor
+		label: 'Replace the name with the free name "GtPharoDummyFourObjectX"';
+		selectAll;
+		typeText: 'GtPharoDummyFourObjectX';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+
+	^ aScripter
+]
+
+{ #category : #examples }
+GtPharoRenameVariableModelRustEditorExamples >> rustScripterEditorWithDummyThreeMethod_refactoringsPreview [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self rustScripterEditorWithDummyThreeMethod.
+
+	aScripter click
+		label: 'Activate the class editor';
+		// #'variable-editor';
+		play.
+
+	aScripter editor
+		label: 'Type character "_"';
+		deselectAll;
+		typeText: '_';
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: true.
+
+	aScripter editor
+		label: 'Delete previously typed character';
+		pressBackspace;
+		// #'variable-editor';
+		play.
+
+	self assert: aScripter refactoringsPreviewIsVisible: false.
+
+	^ aScripter
 ]
 
 { #category : #examples }

@@ -799,11 +799,13 @@ GtPharoSourceCoder >> renameNewNode: aNode in: aSourceCoderViewModel documentId:
 				at: aNode name value asSymbol
 				ifPresent: [ :cls | 
 					(cls isKindOf: Class)
-						ifTrue: [ ^ self
-								renameClassIn: aSourceCoderViewModel
-								node: aNode
-								context: aBuildContext
-								for: anElement ] ] ]
+						ifTrue: [ GtPharoRenameClassCoderController new
+									originalNode: aNode;
+									editorElement: anElement;
+									documentId: aDocumentId;
+									sourceCoderViewModel: aSourceCoderViewModel;
+									install.
+								^ self ] ] ]
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
