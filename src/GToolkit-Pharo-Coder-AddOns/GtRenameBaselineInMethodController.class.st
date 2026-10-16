@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
+{ #category : #testing }
+GtRenameBaselineInMethodController class >> isDeprecated [
+	"Replaced by {{gtClass:GtPharoRenameBaselineCoderController}}, this implementation stays for clients that still depend on it."
+
+	^ true
+]
+
 { #category : #accessing }
 GtRenameBaselineInMethodController >> refactoringName [
 	^ 'Rename class'

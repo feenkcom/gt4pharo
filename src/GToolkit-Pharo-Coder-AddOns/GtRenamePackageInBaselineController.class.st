@@ -4,6 +4,13 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-AddOns-Refactoring - Rename'
 }
 
+{ #category : #testing }
+GtRenamePackageInBaselineController class >> isDeprecated [
+	"Replaced by {{gtClass:GtPharoRenamePackageCoderController}}, this implementation stays for clients that still depend on it."
+
+	^ true
+]
+
 { #category : #accessing }
 GtRenamePackageInBaselineController >> installValidation [
 	renameAction forText
