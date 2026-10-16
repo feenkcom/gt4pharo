@@ -24,7 +24,7 @@ GtPharoRenameLiteralCoderControllerExamples >> baselineMethod [
 { #category : #examples }
 GtPharoRenameLiteralCoderControllerExamples >> baselineNode [
 	<gtExample>
-	<return: #GtPharoStringNode>
+	<return: #GtPharoStringLiteralNode>
 	^ self literalNodeNamed: 'GtPharoDummyBaselineTarget'
 ]
 
@@ -193,7 +193,7 @@ GtPharoRenameLiteralCoderControllerExamples >> installedPackageController_valida
 GtPharoRenameLiteralCoderControllerExamples >> literalNodeNamed: aString [
 	"The first literal with the given value."
 
-	<return: #GtPharoStringNode>
+	<return: #GtPharoStringLiteralNode>
 	self baselineCoderViewModel coderModel astSync
 		allNodesDo: [ :each | 
 			(each isLiteral and: [ each isErrorNode not and: [ each literalValue = aString ] ])
@@ -228,6 +228,6 @@ GtPharoRenameLiteralCoderControllerExamples >> newInstalledPackageController [
 { #category : #examples }
 GtPharoRenameLiteralCoderControllerExamples >> packageNode [
 	<gtExample>
-	<return: #GtPharoStringNode>
+	<return: #GtPharoStringLiteralNode>
 	^ self literalNodeNamed: 'GToolkit-Pharo-Coder-Examples'
 ]
