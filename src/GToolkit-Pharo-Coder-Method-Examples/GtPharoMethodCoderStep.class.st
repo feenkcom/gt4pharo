@@ -521,6 +521,17 @@ GtPharoMethodCoderStep >> clickOnHeaderMethodReceiverBehavior [
 	^ aClickStep
 ]
 
+{ #category : #steps }
+GtPharoMethodCoderStep >> clickOnInspectMethodButton [
+	| aClickStep |
+
+	aClickStep := self click
+			referenceSender;
+			label: 'Click on inspect method button';
+			// GtMethodCoderInspectActionId.
+	^ aClickStep
+]
+
 { #category : #'steps - interactions' }
 GtPharoMethodCoderStep >> clickOnMethodCoderExpander: anExpanderIndex insideDo: anInsideBlock [
 	| aRootStep |
