@@ -165,6 +165,66 @@ GtPharoSnippetCoderByScripterExamples >> checkRenameEditor: aScripter keyword: a
 	^aScripter
 ]
 
+{ #category : #'examples - context menu' }
+GtPharoSnippetCoderByScripterExamples >> classTreeContextMenuBrowseClassInMaximizedPaneShouldNotOpenNewTab [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+
+	aScripter := BlScripter new.
+	aScripter extent: 1600 @ 1000.
+	aScripter element: GtWorldElement new.
+
+	aScripter doStep: [ :s | 
+		s
+			label: 'Open class coder in a pager in a new tab';
+			block: [ :aWorld | 
+				BlSpace new
+					title: 'Coder';
+					addChild: (GtPagerSettings usedPager createWrappedOn: (GtCoderElement forClass: Character));
+					showFrom: aWorld ] ].
+
+	aScripter checkStep: [ :s | 
+		s
+			label: 'Assert two tabs';
+			value: [ :aWorld | aWorld tabs tabs size ] equals: 2 ].
+
+	aScripter mouseMoveOverStep: [ :s | 
+		s
+			label: 'Hover maximize button';
+			// #'tree-pager--maximize-pane-button' ].
+
+	aScripter clickStep: [ :s | 
+		s
+			label: 'Maximize pane';
+			// #'tree-pager--maximize-pane-button' ].
+
+	aScripter secondaryClickStep: [ :s | 
+		s
+			label: 'Open class tree item context menu';
+			// GtCoderClassesTreeItemElement;
+			@ [ :each | each theClass = Character ] ].
+
+	aScripter clickStep: [ :s | 
+		s
+			label: 'Click Browse class';
+			onSpaceRoot;
+			// #'menu--label';
+			@ [ :each | each text asString beginsWith: 'Browse class' ] ].
+
+	aScripter checkStep: [ :s | 
+		s
+			label: 'Assert class is spawned as a new pane';
+			value: [ :aWorld | (aWorld query // GtTreePagerPaneElement) all size ] equals: 2 ].
+
+	aScripter checkStep: [ :s | 
+		s
+			label: 'Assert no new tab was opened';
+			value: [ :aWorld | aWorld tabs tabs size ] equals: 2 ].
+
+	^ aScripter
+]
+
 { #category : #'examples - extract method' }
 GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 	| text |
