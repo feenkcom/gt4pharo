@@ -43,6 +43,21 @@ GtPhlowSearchFilterToolExamples >> defaultObjectToolShowsSearchFilterTool [
 	^ scripter
 ]
 
+{ #category : #'examples - title' }
+GtPhlowSearchFilterToolExamples >> defaultObjectToolTitle [
+	<gtExample>
+	<return: #GtPhlowCompositeTool>
+	| aFilter aTool |
+
+	aFilter := self searchFilter.
+	aTool := aFilter gtDefaultInspectorTool.
+
+	self assert: aTool title equals: 'Filter: ' , aFilter gtDisplayString.
+	self assert: aTool title equals: aTool tools first title.
+
+	^ aTool
+]
+
 { #category : #'examples - world' }
 GtPhlowSearchFilterToolExamples >> pageToolWithSearchFilterSnippet [
 	<gtExample>
@@ -64,6 +79,19 @@ GtPhlowSearchFilterToolExamples >> phlowTool [
 	self assert: tool name equals: 'Search Filter'.
 	self assert: tool icon notNil.
 	^ tool
+]
+
+{ #category : #'examples - title' }
+GtPhlowSearchFilterToolExamples >> phlowToolTitle [
+	<gtExample>
+	<return: #GtPhlowSearchFilterTool>
+	| aTool |
+
+	aTool := self phlowTool.
+
+	self assert: aTool title equals: 'Filter: ' , aTool searchFilter gtDisplayString.
+
+	^ aTool
 ]
 
 { #category : #'examples - support' }
