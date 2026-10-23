@@ -141,7 +141,10 @@ GtCoderNavigationPackagesTagsClassesModel >> classRepackaged: aClassRepackaged [
 
 	performingBulkChanges ifTrue: [^needsUpdate := true].
 	
-	self selectedClass = aClassRepackaged classAffected
+	"Follow the selected class to its new package. If it is moved into the selected package
+	(for example when undoing a move), the selection stays and the classes to show change"
+	(self selectedClass = aClassRepackaged classAffected
+		and: [ self selectedPackage ~= aClassRepackaged newPackage ])
 		ifTrue: [ self privateJustSelectPackage: aClassRepackaged newPackage ]
 		ifFalse: [ self notifyClassesToShowChanged ]
 ]

@@ -2308,6 +2308,46 @@ GtPharoCoderByScripterExamples >> dragClassInIndexToPackage [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassInIndexToPackageAndUndo [
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| oneClass className originalPackage targetPackage scripter |
+			environment := GtPharoDummiesGenerator new
+					amountOfPackages: 2;
+					amountOfClasses: 3;
+					amountOfMethods: 1;
+					generate.
+
+			oneClass := environment anyDummyLeafClass realClass.
+			className := oneClass name.
+			originalPackage := oneClass package.
+			targetPackage := (environment dummyPackages
+					detect: [ :each | each packageName ~= originalPackage name ]) realPackage.
+
+			scripter := self dragInIndexClasses: {oneClass} toPackage: targetPackage.
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo moving the class';
+						action: [ :anElement | aChangeManager undoChange ] ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: ('Assert class is back in {1}' format: {originalPackage name});
+						satisfies: [ :anElement | (Smalltalk at: className) package = originalPackage ] ].
+
+			self
+				checkClassListIn: scripter
+				containsName: className
+				exists: true.
+
+			scripter ]
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragClassesInIndexToPackage [
 	<gtExample>
 	<after: #cleanUp>
@@ -2380,6 +2420,57 @@ GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageTag [
 			detect: [ :each | each packageTagName ~= dummyPackageTag packageTagName ]) realPackageTag.
 
 	^ self dragInIndexClasses: classes toPackageTag: targetPackageTag
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragClassesInIndexToPackageTagAndUndo [
+	"Moving several classes is one change, so one undo moves all of them back"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| classes classNames dummyPackage dummyPackageTag originalPackageTagName targetPackageTag scripter |
+			environment := GtPharoDummiesGenerator new
+					amountOfPackages: 1;
+					amountOfPackageTags: 2;
+					amountOfClasses: 6;
+					amountOfMethods: 1;
+					generate.
+
+			dummyPackage := environment anyDummyPackage.
+			dummyPackageTag := dummyPackage anyDummyPackageTag.
+			classes := dummyPackageTag dummyClasses collect: #realClass.
+			classes sort: [ :a :b | a name < b name ].
+			classes := classes first: 4.
+			classNames := classes collect: #name.
+			originalPackageTagName := classes first packageTag name.
+			targetPackageTag := (dummyPackage dummyPackageTags
+					detect: [ :each | each packageTagName ~= dummyPackageTag packageTagName ]) realPackageTag.
+
+			scripter := self dragInIndexClasses: classes toPackageTag: targetPackageTag.
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo moving the classes';
+						action: [ :anElement | aChangeManager undoChange ] ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: ('Assert all classes are back in tag {1} with one undo'
+								format: {originalPackageTagName});
+						satisfies: [ :anElement | 
+							classNames
+								allSatisfy: [ :each | (Smalltalk at: each) packageTag name = originalPackageTagName ] ] ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert nothing is left to undo';
+						satisfies: [ :anElement | aChangeManager hasUndoableOperations not ] ].
+
+			scripter ]
 ]
 
 { #category : #'examples - index' }
