@@ -1535,6 +1535,67 @@ GtPharoSnippetCoderByScripterExamples >> renameLocalVariable [
 	^ aScripter
 ]
 
+{ #category : #'examples - context menu' }
+GtPharoSnippetCoderByScripterExamples >> searchCodeDropdownCategoryActOnInMaximizedPaneShouldNotOpenNewTab [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+
+	aScripter := BlScripter new.
+	aScripter extent: 1600 @ 1000.
+	aScripter element: GtWorldElement new.
+
+	aScripter worldStep
+		label: 'Open the Character class coder in a new tab';
+		showInNewTabObject: Character;
+		assertTabAtIndex: 2 hasLabel: 'Character';
+		assertTabKeepsLabelAndIconAfterFocusAtIndex: 2;
+		play.
+
+	aScripter checkStep: [ :s | 
+		s
+			label: 'Assert the pane opened maximized';
+			value: [ :aWorld | (aWorld query // BlOverlayElement // GtTreePagerPaneContentElement) all size ]
+			equals: 1 ].
+
+	aScripter clickStep: [ :s | 
+		s
+			label: 'Open the search code dropdown';
+			// GtPharoSearchCodeButtonId ].
+
+	aScripter typeStep: [ :s | 
+		s
+			label: 'Type search query';
+			text: 'value' ].
+
+	aScripter mouseMoveOverStep: [ :s | 
+		s
+			label: 'Hover over first category';
+			onSpaceRoot;
+			// GtStreamingSpotterElement;
+			id: GtSpotterCategoryElementId index: 1 ].
+
+	aScripter clickStep: [ :s | 
+		s
+			label: 'Click category act-on button';
+			onSpaceRoot;
+			// GtStreamingSpotterElement;
+			id: GtSpotterCategoryElementId index: 1;
+			id: GtSpotterCategoryActOnButtonId ].
+
+	aScripter checkStep: [ :s | 
+		s
+			label: 'Assert no new tab was opened';
+			value: [ :aWorld | aWorld tabs tabs size ] equals: 2 ].
+
+	aScripter checkStep: [ :s | 
+		s
+			label: 'Assert the search result is spawned as a new pane';
+			value: [ :aWorld | (aWorld query // GtTreePagerPaneElement) all size ] equals: 2 ].
+
+	^ aScripter
+]
+
 { #category : #'examples - split cascade' }
 GtPharoSnippetCoderByScripterExamples >> splitCascadeWithTemp [
 	<gtExample>
