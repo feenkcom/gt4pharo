@@ -303,6 +303,92 @@ GtPharoCoderByScripterExamples >> assertMethods: methods exist: aBoolean inClass
 ]
 
 { #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> basicRemoveClassHierarchyInIndex [
+	"A hierarchy of three classes. A class in another package references the root class and the last subclass"
+
+	| rootClass anotherClass classNames scripter menuLabel |
+	environment := GtPharoDummiesGenerator withPackages: 2 classHierarchy: 3.
+	rootClass := self firstDummyPackageRootClass.
+	anotherClass := (environment dummyPackages asArray last dummyClasses
+			detect: [ :each | each realClass superclass == Object ]) realClass.
+	anotherClass
+		compile: 'referenceToRemovedClass ^ ' , rootClass name
+		classified: 'examples'.
+	anotherClass
+		compile: 'referenceToRemovedSubclass ^ ' , rootClass allSubclasses last name
+		classified: 'examples'.
+	classNames := rootClass withAllSubclasses collect: #name as: Array.
+	menuLabel := 'Remove class ' , rootClass name.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: rootClass ].
+	self maximizePagerPane: scripter.
+	self openClassMenuOn: rootClass in: scripter.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove class menu item';
+				exists;
+				onMenuContainer;
+				onMenuItemWithLabel: menuLabel ].
+
+	scripter menuStep
+		hoverMenuItemWithLabel: menuLabel;
+		onMenuContainer;
+		play.
+
+	self checkMenuContainerIn: scripter hasLabel: '1 reference'.
+	self checkMenuContainerIn: scripter hasLabel: '2 subclasses with 1 reference'.
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert remove class button is disabled';
+				onMenuContainer;
+				// #removeButton;
+				satisfies: [ :aButton | aButton isEnabled not ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove hierarchy button';
+				exists;
+				onMenuContainer;
+				// #removeHierarchyButton ].
+	self assert: (classNames allSatisfy: [ :each | Smalltalk includesKey: each ]).
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove hierarchy';
+				onMenuContainer;
+				// #removeHierarchyButton ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert class and subclasses are removed';
+				satisfies: [ :anElement | classNames noneSatisfy: [ :each | Smalltalk includesKey: each ] ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	classNames
+		do: [ :each | 
+			self
+				checkClassListIn: scripter
+				containsName: each
+				exists: false ].
+
+	^ scripter
+]
+
+{ #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> basicRemoveClassInIndex [
 	| rootClass class scripter className menuLabel |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
@@ -407,6 +493,86 @@ GtPharoCoderByScripterExamples >> basicRemoveClassesInIndex [
 		assertStep: [ :s | 
 			s
 				label: 'Assert classes are removed';
+				satisfies: [ :anElement | classNames noneSatisfy: [ :each | Smalltalk includesKey: each ] ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	classNames
+		do: [ :each | 
+			self
+				checkClassListIn: scripter
+				containsName: each
+				exists: false ].
+
+	^ scripter
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> basicRemoveClassesWithSubclassesInIndex [
+	"Select the first two classes of a hierarchy of three classes, leaving the last subclass unselected"
+
+	| rootClass selectedClasses classNames scripter menuLabel |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
+	rootClass := environment anyDummyRootClass realClass.
+	selectedClasses := {rootClass. rootClass subclasses first}.
+	classNames := rootClass withAllSubclasses collect: #name as: Array.
+	menuLabel := 'Remove classes {1} classes' format: {selectedClasses size}.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: rootClass ].
+	self maximizePagerPane: scripter.
+	self selectInIndexClasses: selectedClasses in: scripter.
+	self openClassMenuOn: rootClass in: scripter.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove classes menu item';
+				exists;
+				onMenuContainer;
+				onMenuItemWithLabel: menuLabel ].
+
+	scripter menuStep
+		hoverMenuItemWithLabel: menuLabel;
+		onMenuContainer;
+		play.
+
+	self checkMenuContainerIn: scripter hasLabel: 'Remove 2 classes'.
+	self checkMenuContainerIn: scripter hasLabel: '1 subclass with 0 references'.
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert remove classes button is disabled';
+				onMenuContainer;
+				// #removeButton;
+				satisfies: [ :aButton | aButton isEnabled not ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove with subclasses button';
+				exists;
+				onMenuContainer;
+				// #removeWithSubclassesButton ].
+	self assert: (classNames allSatisfy: [ :each | Smalltalk includesKey: each ]).
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove with subclasses';
+				onMenuContainer;
+				// #removeWithSubclassesButton ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert selected classes and their subclass are removed';
 				satisfies: [ :anElement | classNames noneSatisfy: [ :each | Smalltalk includesKey: each ] ] ].
 
 	scripter
@@ -780,6 +946,18 @@ GtPharoCoderByScripterExamples >> checkCompletionUpdatesForNewInstanceVariables 
 								ifFalse: [ i := i + 1 ] ].
 					self assert: item isNil ] ].
 	^ scripter
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> checkMenuContainerIn: aScripter hasLabel: aString [
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: ('Has label: {1}' format: {aString});
+				exists;
+				onMenuContainer;
+				// BrLabel;
+				@ [ :each | each text asString = aString ] ]
 ]
 
 { #category : #'examples - index' }
@@ -3131,6 +3309,17 @@ GtPharoCoderByScripterExamples >> extractSuperclassWithSubclassesInIndex [
 	^ self extractSuperclassFrom: environment anyDummyRootClass realClass
 ]
 
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> firstDummyPackageClassNames [
+	^ environment dummyPackages asArray first dummyClasses collect: #className
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> firstDummyPackageRootClass [
+	^ (environment dummyPackages asArray first dummyClasses
+		detect: [ :each | each realClass superclass == Object ]) realClass
+]
+
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> hierarchyImplementors [
 	<gtExample>
@@ -3943,6 +4132,48 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex_apply [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassHierarchyInIndex [
+	<gtExample>
+	^ self isolatedChangeManagerDuring: [ self basicRemoveClassHierarchyInIndex ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassHierarchyInIndexAndUndo [
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| scripter classNames |
+			scripter := self basicRemoveClassHierarchyInIndex.
+			classNames := self firstDummyPackageClassNames.
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo hierarchy removal';
+						action: [ :anElement | aChangeManager undoChange ] ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert hierarchy is restored by one undo';
+						satisfies: [ :anElement | 
+							classNames
+								allSatisfy: [ :each | 
+									(Smalltalk at: each ifAbsent: [ nil ])
+										ifNil: [ false ]
+										ifNotNil: [ :aClass | aClass superclass isObsolete not ] ] ] ].
+
+			classNames
+				do: [ :each | 
+					self
+						checkClassListIn: scripter
+						containsName: each
+						exists: true ].
+
+			scripter ]
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> removeClassInIndex [
 	<gtExample>
 	^ self isolatedChangeManagerDuring: [ self basicRemoveClassInIndex ]
@@ -4018,6 +4249,48 @@ GtPharoCoderByScripterExamples >> removeClassesInIndexAndUndo [
 					s
 						label: 'Assert all classes are restored by one undo';
 						satisfies: [ :anElement | classNames allSatisfy: [ :each | Smalltalk includesKey: each ] ] ].
+
+			classNames
+				do: [ :each | 
+					self
+						checkClassListIn: scripter
+						containsName: each
+						exists: true ].
+
+			scripter ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassesWithSubclassesInIndex [
+	<gtExample>
+	^ self isolatedChangeManagerDuring: [ self basicRemoveClassesWithSubclassesInIndex ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassesWithSubclassesInIndexAndUndo [
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| scripter classNames |
+			scripter := self basicRemoveClassesWithSubclassesInIndex.
+			classNames := environment anyDummyPackage dummyClasses collect: #className.
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo classes removal';
+						action: [ :anElement | aChangeManager undoChange ] ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert all classes are restored by one undo';
+						satisfies: [ :anElement | 
+							classNames
+								allSatisfy: [ :each | 
+									(Smalltalk at: each ifAbsent: [ nil ])
+										ifNil: [ false ]
+										ifNotNil: [ :aClass | aClass superclass isObsolete not ] ] ] ].
 
 			classNames
 				do: [ :each | 
