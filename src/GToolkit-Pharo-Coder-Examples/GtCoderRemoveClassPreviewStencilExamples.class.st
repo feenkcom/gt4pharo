@@ -56,7 +56,7 @@ GtCoderRemoveClassPreviewStencilExamples >> newRemoveClassStencil [
 	aStencil := GtCoderRemoveClassPreviewStencil new classToRemove: aClass.
 	aChange := aStencil removeChange.
 
-	self assert: (aChange isKindOf: RBRemoveClassChange).
+	self assert: (aChange isKindOf: GtRBRemoveClassChange).
 	self assert: aChange changeClassName equals: aClass name.
 	self assert: aStencil hasSubclasses not.
 	self assert: (Smalltalk includesKey: aClass name).
@@ -77,6 +77,7 @@ GtCoderRemoveClassPreviewStencilExamples >> newRemoveClassesStencil [
 
 	self assert: (aChange isKindOf: RBCompositeRefactoryChange).
 	self assert: aChange changes size equals: 3.
+	self assert: (aChange changes allSatisfy: [ :each | each isKindOf: GtRBRemoveClassChange ]).
 	self
 		assert: (aChange changes collect: #changeClassName) asSet
 		equals: (someClasses collect: #name) asSet.

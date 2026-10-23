@@ -1,0 +1,51 @@
+"
+I remove a class from the system.
+My undo restores the class and the subclasses it still has, using their definitions as strings (${class:GtRBAddClassChange}$), followed by their class-side slots, comments and local methods:
+- superclasses are restored before their subclasses and referenced by name, so restored subclasses are attached to the restored superclasses,
+- the undo keeps no reference to the removed class objects.
+"
+Class {
+	#name : #GtRBRemoveClassChange,
+	#superclass : #RBRemoveClassChange,
+	#category : #'GToolkit-Pharo-GtRefactorings-Changes'
+}
+
+{ #category : #private }
+GtRBRemoveClassChange >> addUndoChangesFor: aClass to: aCompositeChange [
+	"The definition string does not include the class-side slots, so they are added separately.
+	Only local methods are compiled, methods from traits come back with the trait composition"
+
+	aCompositeChange addChange: (GtRBAddClassChange 
+		definitionString: aClass definitionString).
+		
+	aClass class instVarNames
+		do: [ :eachName | aCompositeChange addInstanceVariable: eachName to: aClass class ].
+	aClass comment ifNotNil: [ :aComment | aCompositeChange comment: aComment in: aClass ].
+	
+	{ aClass. aClass class }
+		do: [ :eachBehavior | 
+			eachBehavior localSelectors
+				do: [ :eachSelector | 
+					aCompositeChange
+						compile: (eachBehavior sourceCodeAt: eachSelector)
+						in: eachBehavior
+						classified: (eachBehavior >> eachSelector) protocolName ] ]
+]
+
+{ #category : #converting }
+GtRBRemoveClassChange >> asUndoOperation [
+	"Restore the class and the subclasses it still has from their definitions.
+	Superclasses are restored before their subclasses and found by name,
+	and the undo keeps no reference to the removed class objects"
+
+	| classChanges |
+	
+	classChanges := changeFactory compositeRefactoryChange.
+	(self changeClass allSubclasses
+		addFirst: self changeClass;
+		yourself)
+			do: [ :eachClass | 
+				self addUndoChangesFor: eachClass to: classChanges ].
+		
+	^ classChanges
+]
