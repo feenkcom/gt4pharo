@@ -302,6 +302,131 @@ GtPharoCoderByScripterExamples >> assertMethods: methods exist: aBoolean inClass
 										aClass classSide} ] ] ]
 ]
 
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> basicRemoveClassInIndex [
+	| rootClass class scripter className menuLabel |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	rootClass := environment anyDummyLeafClass.
+	class := rootClass realClass.
+	className := class name.
+	menuLabel := 'Remove class ' , className.
+	scripter := self coderInPager: [ GtCoderElement forClass: class ].
+	self maximizePagerPane: scripter.
+	self openClassMenuOn: class in: scripter.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove class menu item';
+				exists;
+				onMenuContainer;
+				onMenuItemWithLabel: menuLabel ].
+
+	scripter menuStep
+		hoverMenuItemWithLabel: menuLabel;
+		onMenuContainer;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove class button';
+				exists;
+				onMenuContainer;
+				// #removeButton ].
+	self assert: (Smalltalk includesKey: className) equals: true.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove class';
+				onMenuContainer;
+				// #removeButton ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert class is removed';
+				satisfies: [ :anElement | (Smalltalk includesKey: className) not ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	^ scripter
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> basicRemoveClassesInIndex [
+	| classes classNames scripter menuLabel |
+	environment := GtPharoDummiesGenerator withPackages: 1 classes: 3.
+	classes := environment anyDummyPackage realPackage definedClasses asArray
+			sorted: [ :a :b | a name < b name ].
+	classNames := classes collect: #name.
+	menuLabel := 'Remove classes {1} classes' format: {classes size}.
+
+	scripter := self coderInPager: [ GtCoderElement forClass: classes first ].
+	self maximizePagerPane: scripter.
+	self selectInIndexClasses: classes in: scripter.
+	self openClassMenuOn: classes first in: scripter.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove classes menu item';
+				exists;
+				onMenuContainer;
+				onMenuItemWithLabel: menuLabel ].
+
+	scripter menuStep
+		hoverMenuItemWithLabel: menuLabel;
+		onMenuContainer;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has remove classes button';
+				exists;
+				onMenuContainer;
+				// #removeButton ].
+	self assert: (classNames allSatisfy: [ :each | Smalltalk includesKey: each ]).
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Remove classes';
+				onMenuContainer;
+				// #removeButton ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert classes are removed';
+				satisfies: [ :anElement | classNames noneSatisfy: [ :each | Smalltalk includesKey: each ] ] ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Has removed context menu';
+				notExists;
+				onSpaceRoot;
+				// #'menu--list' ].
+
+	classNames
+		do: [ :each | 
+			self
+				checkClassListIn: scripter
+				containsName: each
+				exists: false ].
+
+	^ scripter
+]
+
 { #category : #'examples - scrolling' }
 GtPharoCoderByScripterExamples >> bigMethod [
 	<gtExample>
@@ -3148,6 +3273,19 @@ GtPharoCoderByScripterExamples >> isPackageNamed: aString selectedIn: scripter [
 ]
 
 { #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> isolatedChangeManagerDuring: aBlock [
+	"Evaluate aBlock with an isolated change manager.
+	The dummy environment is removed before the global change manager is restored,
+	so that neither the example nor its clean up affects the global undo/redo history"
+
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager | 
+			[ aBlock cull: aChangeManager ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
+
+{ #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> maximizePagerPane: aScripter [
 	aScripter mouseMoveOver
 		// #'tree-pager--maximize-pane-button';
@@ -3807,62 +3945,41 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex_apply [
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> removeClassInIndex [
 	<gtExample>
-	<after: #cleanUp>
-	| rootClass class scripter className |
-	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
-	rootClass := environment anyDummyLeafClass.
-	class := rootClass realClass.
-	className := class name.
-	scripter := self coderInPager: [ GtCoderElement forClass: class ].
-	self maximizePagerPane: scripter.
-	self openClassMenuOn: class in: scripter.
+	^ self isolatedChangeManagerDuring: [ self basicRemoveClassInIndex ]
+]
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has remove class menu item';
-				exists;
-				onSpaceRoot;
-				// #'menu--list';
-				// #'menu--label';
-				@ [ :each | each text asString = ('Remove class ' , className) ] ].
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassInIndexAndUndo [
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| scripter className |
+			scripter := self basicRemoveClassInIndex.
+			className := environment anyDummyLeafClass className.
 
-	self
-		hoverMenu: 'Remove class ' , className
-		labelled: 'Hover remove class'
-		in: scripter.
+			self
+				checkClassListIn: scripter
+				containsName: className
+				exists: false.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has remove class button';
-				exists;
-				onSpaceRoot;
-				// BrMenuSteppedElement;
-				// #removeButton ].
-	self assert: (Smalltalk includesKey: className) equals: true.
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo class removal';
+						action: [ :anElement | aChangeManager undoChange ] ].
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Remove class';
-				onSpaceRoot;
-				// BrMenuSteppedElement;
-				// #removeButton ].
-	(Delay forMilliseconds: 500) wait.
-	scripter pulse.
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert class is restored';
+						satisfies: [ :anElement | Smalltalk includesKey: className ] ].
 
-	self assert: (Smalltalk includesKey: className) equals: false.
+			self
+				checkClassListIn: scripter
+				containsName: className
+				exists: true.
 
-	scripter
-		checkStep: [ :s | 
-			s
-				label: 'Has removed context menu';
-				notExists;
-				onSpaceRoot;
-				// #'menu--list' ].
-
-	^ scripter
+			scripter ]
 ]
 
 { #category : #'examples - index' }
@@ -3873,6 +3990,43 @@ GtPharoCoderByScripterExamples >> removeClassSelectorInIndex [
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	method := environment anyDummyUnaryClassMethod realMethod.
 	^ self removeFromIndexMethod: method
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassesInIndex [
+	<gtExample>
+	^ self isolatedChangeManagerDuring: [ self basicRemoveClassesInIndex ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeClassesInIndexAndUndo [
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| scripter classNames |
+			scripter := self basicRemoveClassesInIndex.
+			classNames := environment anyDummyPackage dummyClasses collect: #className.
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo classes removal';
+						action: [ :anElement | aChangeManager undoChange ] ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert all classes are restored by one undo';
+						satisfies: [ :anElement | classNames allSatisfy: [ :each | Smalltalk includesKey: each ] ] ].
+
+			classNames
+				do: [ :each | 
+					self
+						checkClassListIn: scripter
+						containsName: each
+						exists: true ].
+
+			scripter ]
 ]
 
 { #category : #'examples - index' }
