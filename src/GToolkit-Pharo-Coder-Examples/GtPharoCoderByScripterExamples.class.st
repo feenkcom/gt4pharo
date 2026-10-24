@@ -795,6 +795,63 @@ GtPharoCoderByScripterExamples >> changeMethodProtocol [
 ]
 
 { #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> changeMethodProtocolAndUndo [
+	"Changing the protocol in the method coder header is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| scripter aClass originalProtocol |
+			scripter := self dummyClassWithMethod1Expanded.
+			aClass := environment anyDummyClass realClass.
+			originalProtocol := (aClass >> #method1) protocolName.
+
+			scripter
+				clickStep: [ :s |
+					s
+						label: 'Click protocol button';
+						// GtExpandableSourceCoderElement;
+						@ [ :each | each isExpanded ];
+						// GtPharoProtocolTagId ].
+			scripter
+				typeStep: [ :s |
+					s
+						label: 'Fill new protocol';
+						text: 'foo' ].
+			scripter
+				keyPressStep: [ :s |
+					s
+						label: 'Complete name';
+						key: BlKeyboardKey return ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the protocol is changed';
+						satisfies: [ :anElement | (aClass >> #method1) protocolName = #foo ] ].
+
+			scripter
+				doStep: [ :s |
+					s
+						label: 'Undo changing the protocol';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the protocol is restored';
+						satisfies: [ :anElement | (aClass >> #method1) protocolName = originalProtocol ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the method coder shows the restored protocol';
+						// GtExpandableSourceCoderElement;
+						@ [ :each | each textualCoderViewModel coder selector = #method1 ];
+						// GtPharoProtocolTagId;
+						value: [ :aButton | aButton label asString ] equals: originalProtocol asString ].
+
+			scripter ]
+]
+
+{ #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> changeMethodToClassSide [
 	<gtExample>
 	<after: #cleanUp>
@@ -1039,6 +1096,18 @@ GtPharoCoderByScripterExamples >> checkMenuContainerIn: aScripter hasLabel: aStr
 				@ [ :each | each text asString = aString ] ]
 ]
 
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> checkMethodListIn: scripter containsSelector: aSelector exists: aBoolean [
+	scripter
+		checkStep: [ :s |
+			aBoolean ifTrue: [ s exists ] ifFalse: [ s notExists ].
+			s
+				label: 'Check method list has ' , aSelector;
+				// GtCoderMethodsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = aSelector asString ] ]
+]
+
 { #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> checkPackageListIn: scripter containsName: aSymbol [
 	scripter
@@ -1049,6 +1118,18 @@ GtPharoCoderByScripterExamples >> checkPackageListIn: scripter containsName: aSy
 				// GtCoderPackagesTreeElement;
 				// BrLabel;
 				@ [ :each | each text asString = aSymbol asString ] ]
+]
+
+{ #category : #'examples - support' }
+GtPharoCoderByScripterExamples >> checkProtocolListIn: scripter containsLabel: aString exists: aBoolean [
+	scripter
+		checkStep: [ :s |
+			aBoolean ifTrue: [ s exists ] ifFalse: [ s notExists ].
+			s
+				label: 'Check protocol list has ' , aString;
+				// GtCoderProtocolsGroupedListElement;
+				// BrLabel;
+				@ [ :each | each text asString = aString ] ]
 ]
 
 { #category : #'examples - refactoring' }
@@ -3048,6 +3129,43 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClassAndUndo [
+	"Dragging a method onto another class is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| method originalClass selector targetClass targetSource scripter |
+			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+			method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+			originalClass := method methodClass.
+			selector := method selector.
+			targetClass := environment anyDummyRootClass realClass.
+			targetSource := targetClass sourceCodeAt: selector ifAbsent: [ nil ].
+
+			scripter := self dragInIndexMethod: method toClass: targetClass.
+
+			scripter
+				doStep: [ :s |
+					s
+						label: 'Undo moving the method to ' , targetClass name;
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the method is back in ' , originalClass name;
+						satisfies: [ :anElement |
+							(originalClass includesSelector: selector)
+								and: [ (targetClass sourceCodeAt: selector ifAbsent: [ nil ]) = targetSource ] ] ].
+			self
+				checkMethodListIn: scripter
+				containsSelector: selector
+				exists: true.
+
+			scripter ]
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass_clickOnTargetClass [
 	<gtExample>
 	| scripter sourceClass targetClass |
@@ -3087,6 +3205,46 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocol [
 	protocol := (environment anyDummyLeafClass dummyMethods
 			detect: [ :each | each protocolName ~= method protocolName ]) protocolName.
 	^ self dragInIndexMethod: method toProtocol: protocol
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToProtocolAndUndo [
+	"Dragging a method onto another protocol is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| method methodClass selector originalProtocol targetProtocol scripter |
+			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+			method := environment anyDummyLeafClass anyDummyUnaryMethod realMethod.
+			methodClass := method methodClass.
+			selector := method selector.
+			originalProtocol := method protocolName.
+			targetProtocol := (environment anyDummyLeafClass dummyMethods
+					detect: [ :each | each protocolName ~= originalProtocol ]) protocolName.
+
+			scripter := self dragInIndexMethod: method toProtocol: targetProtocol.
+
+			scripter
+				doStep: [ :s |
+					s
+						label: 'Undo moving the method to ' , targetProtocol;
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the method is back in ' , originalProtocol;
+						satisfies: [ :anElement | (methodClass >> selector) protocolName = originalProtocol ] ].
+			self
+				checkProtocolListIn: scripter
+				containsLabel: originalProtocol , ' 1'
+				exists: true.
+			self
+				checkProtocolListIn: scripter
+				containsLabel: targetProtocol , ' 1'
+				exists: true.
+
+			scripter ]
 ]
 
 { #category : #'examples - index' }
@@ -4583,6 +4741,43 @@ GtPharoCoderByScripterExamples >> removeInstanceSelectorInIndex [
 	^ self removeFromIndexMethod: method
 ]
 
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeInstanceSelectorInIndexAndUndo [
+	"Removing a method from the methods list context menu is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| method methodClass selector scripter |
+			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+			method := environment anyDummyUnaryMethod realMethod.
+			methodClass := method methodClass.
+			selector := method selector.
+
+			scripter := self removeFromIndexMethod: method.
+			self
+				checkMethodListIn: scripter
+				containsSelector: selector
+				exists: false.
+
+			scripter
+				doStep: [ :s |
+					s
+						label: 'Undo removing the method';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the method is restored';
+						satisfies: [ :anElement | methodClass includesSelector: selector ] ].
+			self
+				checkMethodListIn: scripter
+				containsSelector: selector
+				exists: true.
+
+			scripter ]
+]
+
 { #category : #'examples - support' }
 GtPharoCoderByScripterExamples >> removeMethods: methods fromClass: aClass [
 	methods
@@ -4596,6 +4791,72 @@ GtPharoCoderByScripterExamples >> removeMethods: methods fromClass: aClass [
 						at: eachMethod selector
 						ifPresent: [ :aMethod | aMethod removeFromSystem ]
 						ifAbsent: [  ] ] ]
+]
+
+{ #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> removeMethodsInIndexAndUndo [
+	"Removing several selected methods from the methods list context menu is one undoable change"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| methods methodClass selectors scripter |
+			environment := GtPharoDummiesGenerator new
+					amountOfPackages: 1;
+					amountOfClasses: 1;
+					amountOfMethods: 3;
+					generate.
+			methods := ((environment anyDummyClass dummyMethods collect: #realMethod) asArray
+					sort: [ :a :b | a selector < b selector ]) first: 2.
+			methodClass := methods first methodClass.
+			selectors := methods collect: #selector.
+
+			scripter := self coderInPager: [ GtCoderElement forClass: methodClass ].
+			self setSpaceExtent: scripter.
+			self maximizePagerPane: scripter.
+			self selectInIndexMethods: methods in: scripter.
+			self openMethodMenuOn: selectors first asString in: scripter.
+			self
+				hoverMenu: 'Remove methods 2 methods'
+				labelled: 'Hover remove methods'
+				in: scripter.
+			scripter
+				clickStep: [ :s |
+					s
+						label: 'Remove the methods';
+						onSpaceRoot;
+						// BrMenuSteppedElement;
+						// #removeButton ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the methods are removed';
+						satisfies: [ :anElement | selectors noneSatisfy: [ :each | methodClass includesSelector: each ] ] ].
+			selectors
+				do: [ :each |
+					self
+						checkMethodListIn: scripter
+						containsSelector: each
+						exists: false ].
+
+			scripter
+				doStep: [ :s |
+					s
+						label: 'Undo removing the methods';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the methods are restored';
+						satisfies: [ :anElement | selectors allSatisfy: [ :each | methodClass includesSelector: each ] ] ].
+			selectors
+				do: [ :each |
+					self
+						checkMethodListIn: scripter
+						containsSelector: each
+						exists: true ].
+
+			scripter ]
 ]
 
 { #category : #'examples - index' }

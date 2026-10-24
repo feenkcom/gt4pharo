@@ -81,7 +81,7 @@ GtDefineMethodFixItAction >> coderViewModel: anObject [
 GtDefineMethodFixItAction >> compileMethod [
 	| refactoring |
 	refactoring := self createRefactoring.
-	refactoring execute
+	refactoring gtExecuteWithUndo
 ]
 
 { #category : #private }
