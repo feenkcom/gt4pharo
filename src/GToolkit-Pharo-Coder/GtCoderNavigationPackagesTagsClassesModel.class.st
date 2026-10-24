@@ -918,7 +918,7 @@ GtCoderNavigationPackagesTagsClassesModel >> renameProtocol: aPharoProtocol to: 
 		renameProtocol: aPharoProtocol name
 		in: aPharoProtocol protocolClass
 		to: aNewName.
-	refactoring execute.
+	refactoring gtExecuteWithUndo.
 
 	self selectProtocol: (GtPharoProtocol 
 		protocolNamed: aNewName

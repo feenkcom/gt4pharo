@@ -22,7 +22,11 @@ GtDefineHashFunctionFixItAction >> allEqualsArguments [
 
 { #category : #executing }
 GtDefineHashFunctionFixItAction >> basicExecuteOn: anEditorElement [
-	methodClass compile: self updateSource classified: 'comparing'.
+	GtPharoCodeModifier current
+		performRefactoryChange: (RBAddMethodChange
+				compile: self updateSource
+				in: methodClass
+				classified: 'comparing').
 	BlTaskAction
 		enqueueElement: anEditorElement
 		action: [ anEditorElement requestManualStyling ]

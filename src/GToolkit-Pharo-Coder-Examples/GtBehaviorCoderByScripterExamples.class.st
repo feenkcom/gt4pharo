@@ -9,6 +9,86 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
+{ #category : #'examples - support' }
+GtBehaviorCoderByScripterExamples >> adviceClasses [
+	"Answer a leaf class for which the class coder advises to remove the class, an unreferenced slot
+	and an abstract method, and to rename badly named variables, and a root class whose subclasses
+	all define the same slot"
+
+	| aPackageName aPrefix aLeafClass aRootClass |
+	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	aPackageName := environment anyDummyPackage realPackage name.
+	aPrefix := aPackageName copyReplaceAll: '-' with: ''.
+	aLeafClass := (Object << (aPrefix , 'AdviceLeaf') asSymbol
+			slots: {#Upper};
+			sharedVariables: {#lower};
+			package: aPackageName) install.
+	aLeafClass compile: 'abstractOne ^ self subclassResponsibility' classified: 'accessing'.
+	aRootClass := (Object << (aPrefix , 'AdviceRoot') asSymbol package: aPackageName) install.
+	#('AdviceSubOne' 'AdviceSubTwo')
+		do: [ :each |
+			(aRootClass << (aPrefix , each) asSymbol
+				slots: {#common};
+				package: aPackageName) install ].
+	^ {aLeafClass.
+		aRootClass}
+]
+
+{ #category : #'examples - support' }
+GtBehaviorCoderByScripterExamples >> applyAdviceLabelled: aString on: aClass undoIn: aChangeManager applied: anAppliedBlock restored: aRestoredBlock [
+	"Apply the advice from the class coder and undo it"
+
+	| aScripter |
+	aScripter := self scripterForBlock: [ GtPharoBehaviorCoder forClass: aClass ].
+	aScripter
+		clickStep: [ :s |
+			s
+				label: 'Click advice button';
+				// GtFixItButton ].
+	aScripter
+		clickStep: [ :s |
+			s
+				label: 'Click advice ' , aString;
+				onSpaceRoot;
+				// BrLabel;
+				@ [ :aLabel | aLabel text asString = aString ] ].
+	aScripter
+		assertStep: [ :s |
+			s
+				label: 'Assert the advice is applied';
+				satisfies: [ :anElement | anAppliedBlock value ] ].
+
+	aScripter
+		doStep: [ :s |
+			s
+				label: 'Undo the advice';
+				action: [ :anElement | aChangeManager undoChange ] ].
+	aScripter
+		assertStep: [ :s |
+			s
+				label: 'Assert the advice is undone';
+				satisfies: [ :anElement | aRestoredBlock value ] ].
+	^ aScripter
+]
+
+{ #category : #'examples - support' }
+GtBehaviorCoderByScripterExamples >> checkAdviceLabelled: aString isOfferedIn: aScripter [
+	aScripter
+		clickStep: [ :s |
+			s
+				label: 'Click advice button';
+				// GtFixItButton ].
+	aScripter
+		checkStep: [ :s |
+			s
+				label: 'Check the advice is offered: ' , aString;
+				onSpaceRoot;
+				// BrLabel;
+				@ [ :aLabel | aLabel text asString = aString ];
+				exists ].
+	^ aScripter
+]
+
 { #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClass [
 	<gtExample>
@@ -839,4 +919,137 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_spotterCategory
 { #category : #utilities }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
+]
+
+{ #category : #'examples - support' }
+GtBehaviorCoderByScripterExamples >> isolatedChangeManagerDuring: aBlock [
+	"Evaluate aBlock with an isolated change manager.
+	The dummy environment is removed before the global change manager is restored,
+	so that neither the example nor its clean up affects the global undo/redo history"
+
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			[ aBlock cull: aChangeManager ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> pullUpVariableAdviceAndUndo [
+	"Pulling up a slot that all subclasses define with the class coder advice is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aRootClass anAdvice aScripter |
+			aRootClass := self adviceClasses second.
+			anAdvice := 'Pull up common'.
+			aScripter := self
+					applyAdviceLabelled: anAdvice
+					on: aRootClass
+					undoIn: aChangeManager
+					applied: [ (aRootClass instVarNames includes: #common)
+							and: [ aRootClass subclasses noneSatisfy: [ :each | each instVarNames includes: #common ] ] ]
+					restored: [ (aRootClass instVarNames includes: #common) not
+							and: [ aRootClass subclasses allSatisfy: [ :each | each instVarNames includes: #common ] ] ].
+			self checkAdviceLabelled: anAdvice isOfferedIn: aScripter ]
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> removeClassAdviceAndUndo [
+	"Removing an unreferenced class with the class coder advice is undoable.
+	After the undo the class coder still refers to the removed class,
+	so only the restored class is checked"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aClass aClassName |
+			aClass := self adviceClasses first.
+			aClassName := aClass name.
+			self
+				applyAdviceLabelled: 'Remove ' , aClassName
+				on: aClass
+				undoIn: aChangeManager
+				applied: [ (Smalltalk includesKey: aClassName) not ]
+				restored: [ (Smalltalk includesKey: aClassName)
+						and: [ (Smalltalk at: aClassName) includesSelector: #abstractOne ] ] ]
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> removeMethodAdviceAndUndo [
+	"Removing an abstract method of a non-abstract class with the class coder advice is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aClass anAdvice aScripter |
+			aClass := self adviceClasses first.
+			anAdvice := 'Remove #abstractOne'.
+			aScripter := self
+					applyAdviceLabelled: anAdvice
+					on: aClass
+					undoIn: aChangeManager
+					applied: [ (aClass includesSelector: #abstractOne) not ]
+					restored: [ aClass includesSelector: #abstractOne ].
+			self checkAdviceLabelled: anAdvice isOfferedIn: aScripter ]
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> removeSlotAdviceAndUndo [
+	"Removing an unreferenced slot with the class coder advice is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aClass anAdvice aScripter |
+			aClass := self adviceClasses first.
+			anAdvice := 'Remove Upper in ' , aClass name.
+			aScripter := self
+					applyAdviceLabelled: anAdvice
+					on: aClass
+					undoIn: aChangeManager
+					applied: [ (aClass hasSlotNamed: #Upper) not ]
+					restored: [ aClass hasSlotNamed: #Upper ].
+			self checkAdviceLabelled: anAdvice isOfferedIn: aScripter ]
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> renameClassVariableAdviceAndUndo [
+	"Renaming a class variable that starts with a lowercase letter with the class coder advice is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aClass anAdvice aScripter |
+			aClass := self adviceClasses first.
+			anAdvice := 'Rename lower to Lower'.
+			aScripter := self
+					applyAdviceLabelled: anAdvice
+					on: aClass
+					undoIn: aChangeManager
+					applied: [ (aClass classVarNames includes: #Lower)
+							and: [ (aClass classVarNames includes: #lower) not ] ]
+					restored: [ (aClass classVarNames includes: #lower)
+							and: [ (aClass classVarNames includes: #Lower) not ] ].
+			self checkAdviceLabelled: anAdvice isOfferedIn: aScripter ]
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> renameInstanceVariableAdviceAndUndo [
+	"Renaming an instance variable that starts with an uppercase letter with the class coder advice is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aClass anAdvice aScripter |
+			aClass := self adviceClasses first.
+			anAdvice := 'Rename Upper to upper'.
+			aScripter := self
+					applyAdviceLabelled: anAdvice
+					on: aClass
+					undoIn: aChangeManager
+					applied: [ (aClass hasSlotNamed: #upper) and: [ (aClass hasSlotNamed: #Upper) not ] ]
+					restored: [ (aClass hasSlotNamed: #Upper) and: [ (aClass hasSlotNamed: #upper) not ] ].
+			self checkAdviceLabelled: anAdvice isOfferedIn: aScripter ]
 ]

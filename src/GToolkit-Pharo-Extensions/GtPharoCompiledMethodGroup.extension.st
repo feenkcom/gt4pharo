@@ -287,7 +287,7 @@ GtPharoCompiledMethodGroup >> removeSeveralMethodsSubmenuFor: aCollection explic
 					right: 10);
 			icon: BrGlamorousVectorIcons remove;
 			label: 'Remove';
-			action: [ change execute.
+			action: [ change gtExecuteWithUndo.
 				anExplicitMenu hideAll ].
 	element addChild: button as: #removeButton.
 	^ element

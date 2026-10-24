@@ -22,7 +22,7 @@ GtRemoveSlotAdviceAction >> defaultTitle [
 { #category : #executing }
 GtRemoveSlotAdviceAction >> executeOn: anElement [
 	(RBRemoveInstanceVariableRefactoring remove: slot name from: slot owningClass)
-		execute
+		gtExecuteWithUndo
 ]
 
 { #category : #initialization }

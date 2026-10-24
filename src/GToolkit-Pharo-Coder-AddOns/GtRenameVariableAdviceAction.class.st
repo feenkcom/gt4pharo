@@ -28,7 +28,7 @@ GtRenameVariableAdviceAction >> executeOn: anElement [
 	(self renameRefactoringClass
 		rename: oldName
 		to: newName
-		in: behavior) execute
+		in: behavior) gtExecuteWithUndo
 ]
 
 { #category : #initialization }

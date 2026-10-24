@@ -3916,6 +3916,55 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClassInPlayground_03_click_de
 ]
 
 { #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateClassVarAndUndo [
+	"Adding a class variable with the fix-it is undoable. After the undo the variable is undeclared again"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aScripter aClass |
+			aScripter := self
+					scripterForBlock: [ | aCoder |
+						aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+						environment := aCoder attributeNamed: #dummyEnvironment.
+						aClass := (aCoder attributeNamed: #dummyMethod) realClass.
+						aCoder asCoderViewModel ].
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Type in a class variable that does not exist';
+						action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: String cr , String tab , 'SharedValue' ];
+						onModel ].
+			self clickFixItFor: aScripter.
+			self
+				clickFixItActionFor: aScripter
+				id: (GtDefineClassVariableFixItActionElementId indexed: 1).
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the class variable is added';
+						satisfies: [ :anElement | aClass classVarNames includes: #SharedValue ] ].
+			aScripter
+				checkStep: [ :s |
+					s
+						label: 'Check the fix-it is gone';
+						onBreadthFirstChildOfClass: GtFixItButton;
+						notExists ].
+
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Undo adding the class variable';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the class variable is removed';
+						satisfies: [ :anElement | (aClass classVarNames includes: #SharedValue) not ] ].
+			aScripter ]
+]
+
+{ #category : #'examples - fixit class' }
 GtPharoMethodCoderByScripterExamples >> fixitCreateClass_01_setup [
 	<gtExample>
 	| aScripter |
@@ -3996,6 +4045,56 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 					equals: (self class packageTag name) ].
 
 	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateInstVarAndUndo [
+	"Adding a slot with the fix-it is undoable. After the undo the variable is undeclared again"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aScripter |
+			aScripter := self fixitCreateInstVar_01_setup.
+			self
+				clickFixItActionFor: aScripter
+				id: (GtDefineInstanceVariableFixItActionElementId indexed: 1).
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the slot is added';
+						satisfies: [ :aCoderViewModel |
+							(aCoderViewModel coderModel attributeNamed: #dummyMethod) realClass
+								hasSlotNamed: #instance ];
+						onModel ].
+			aScripter
+				checkStep: [ :s |
+					s
+						label: 'Check the fix-it is gone';
+						onBreadthFirstChildOfClass: GtFixItButton;
+						notExists ].
+
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Undo adding the slot';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the slot is removed';
+						satisfies: [ :aCoderViewModel |
+							((aCoderViewModel coderModel attributeNamed: #dummyMethod) realClass
+								hasSlotNamed: #instance) not ];
+						onModel ].
+			aScripter
+				checkStep: [ :s |
+					s
+						label: 'Check the fix-it is shown again';
+						onBreadthFirstChildOfClass: GtFixItButton;
+						exists ].
+
+			aScripter ]
 ]
 
 { #category : #'examples - fixit class' }
@@ -4084,6 +4183,49 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateInstVar_02_add [
 				onModel ].
 
 	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitCreateMethodAndUndo [
+	"Defining a missing method with the fix-it is undoable. After the undo the method is missing again"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aScripter aClass |
+			aScripter := self
+					scripterForBlock: [ | aCoder |
+						aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+						environment := aCoder attributeNamed: #dummyEnvironment.
+						aClass := (aCoder attributeNamed: #dummyMethod) realClass.
+						aCoder asCoderViewModel ].
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Type in a message that is not implemented';
+						action: [ :aCoderViewModel | aCoderViewModel coderModel appendString: String cr , String tab , 'self definedByFixIt' ];
+						onModel ].
+			self clickFixItFor: aScripter.
+			self
+				clickFixItActionFor: aScripter
+				id: (GtDefineMethodFixItActionElementId indexed: 1).
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the method is defined';
+						satisfies: [ :anElement | aClass includesSelector: #definedByFixIt ] ].
+
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Undo defining the method';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the method is removed';
+						satisfies: [ :anElement | (aClass includesSelector: #definedByFixIt) not ] ].
+			aScripter ]
 ]
 
 { #category : #'examples - fixit class' }
@@ -4276,6 +4418,109 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 				onModel ].
 
 	^ aScripter
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitDefineHashAndUndo [
+	"Defining #hash from #= with the fix-it is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aScripter aClass |
+			aScripter := self
+					scripterForBlock: [ environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+						aClass := environment anyDummyRootClass realClass.
+						aClass addInstVarNamed: 'hashedValue'.
+						aClass compile: 'hashedValue ^ hashedValue' classified: 'accessing'.
+						aClass
+							compile: '= anObject
+	^ self class = anObject class and: [ hashedValue = anObject hashedValue ]'
+							classified: 'comparing'.
+						(GtPharoMethodCoder forMethod: aClass >> #=) asCoderViewModel ].
+			self clickFixItFor: aScripter.
+			self
+				clickFixItActionFor: aScripter
+				id: (GtDefineHashFunctionFixItActionElementId indexed: 1).
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert #hash is defined';
+						satisfies: [ :anElement |
+							(aClass includesSelector: #hash)
+								and: [ (aClass >> #hash) protocolName = #comparing ] ] ].
+			aScripter
+				checkStep: [ :s |
+					s
+						label: 'Check the fix-it is gone';
+						onBreadthFirstChildOfClass: GtFixItButton;
+						notExists ].
+
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Undo defining #hash';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert #hash is removed';
+						satisfies: [ :anElement | (aClass includesSelector: #hash) not ] ].
+
+			aScripter ]
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitRemoveUnusedMethodAndUndo [
+	"Removing a method that has no senders with the fix-it is undoable.
+	The advice that offers the fix-it is not active by default"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			self
+				withActiveMethodAdvice: GtMethodNotUsedAdvice new
+				during: [ | aScripter aClass aSelector aSource |
+					aSource := 'notSentByAnyoneForUndo
+	^ 42'.
+					"Not a literal symbol, so that this example is not a sender"
+					aSelector := aSource lines first asSymbol.
+					aScripter := self
+							scripterForBlock: [ environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+								aClass := environment anyDummyRootClass realClass.
+								aClass compile: aSource classified: 'accessing'.
+								(GtPharoMethodCoder forMethod: aClass >> aSelector) asCoderViewModel ].
+					self clickFixItFor: aScripter.
+					self
+						clickFixItActionFor: aScripter
+						id: (GtRemoveMessageFixItActionElementId indexed: 1).
+					aScripter
+						assertStep: [ :s |
+							s
+								label: 'Assert the method is removed';
+								satisfies: [ :anElement | (aClass includesSelector: aSelector) not ] ].
+
+					aScripter
+						doStep: [ :s |
+							s
+								label: 'Undo removing the method';
+								action: [ :anElement | aChangeManager undoChange ] ].
+					aScripter
+						assertStep: [ :s |
+							s
+								label: 'Assert the method is restored';
+								satisfies: [ :anElement |
+									(aClass includesSelector: aSelector)
+										and: [ (aClass sourceCodeAt: aSelector) asString = aSource
+												and: [ (aClass >> aSelector) protocolName = #accessing ] ] ] ].
+					aScripter
+						checkStep: [ :s |
+							s
+								label: 'Check the fix-it is shown again';
+								onBreadthFirstChildOfClass: GtFixItButton;
+								exists ].
+
+					aScripter ] ]
 ]
 
 { #category : #'examples - abstract var' }
@@ -9457,6 +9702,19 @@ GtPharoMethodCoderByScripterExamples >> insertedText [
 						nextPutAll: '.' ] ]
 ]
 
+{ #category : #'examples - support' }
+GtPharoMethodCoderByScripterExamples >> isolatedChangeManagerDuring: aBlock [
+	"Evaluate aBlock with an isolated change manager.
+	The dummy environment is removed before the global change manager is restored,
+	so that neither the example nor its clean up affects the global undo/redo history"
+
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			[ aBlock cull: aChangeManager ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
+
 { #category : #'examples - basic' }
 GtPharoMethodCoderByScripterExamples >> methodCoder [
 	<gtExample>
@@ -12595,4 +12853,14 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodLastLineString [
 	aLine := self veryLongMethod sourceCode lines last.
 	self assert: (aLine includesSubstring: '^').
 	^ aLine
+]
+
+{ #category : #'examples - support' }
+GtPharoMethodCoderByScripterExamples >> withActiveMethodAdvice: anAdvice during: aBlock [
+	"Evaluate aBlock with anAdvice active in addition to the active method advices"
+
+	| previousAdvices |
+	previousAdvices := GtMethodAdvice classPool at: #ActiveAdvices.
+	GtMethodAdvice activeAdvices: (GtMethodAdvice activeAdvices copyWith: anAdvice).
+	^ aBlock ensure: [ GtMethodAdvice activeAdvices: previousAdvices ]
 ]

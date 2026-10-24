@@ -265,7 +265,7 @@ CompiledMethod >> gtRemoveMethodActionFor: anAction [
 					icon: BrGlamorousVectorIcons remove;
 					label: 'Remove';
 					action: [ 
-						change execute.
+						change gtExecuteWithUndo.
 						anExplicitMenu hideAll ].
 			element addChild: button as: #removeButton.
 			element ]

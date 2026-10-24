@@ -150,7 +150,7 @@ GtPharoMethodCoder >> addClassVariable: aString [
 	refactoring := GtRBAddClassVariableRefactoring
 		variable: aString
 		class: self behavior instanceSide.
-	GtPharoCodeModifier critical: [ refactoring execute ].
+	GtPharoCodeModifier critical: [ refactoring gtExecuteWithUndo ].
 
 	"and restyle the text"
 	self requestStyleSourceText
@@ -162,7 +162,7 @@ GtPharoMethodCoder >> addInstanceVariable: aString [
 	refactoring := GtRBAddInstanceVariableRefactoring
 		variable: aString
 		class: self behavior.
-	GtPharoCodeModifier critical: [ refactoring execute ].
+	GtPharoCodeModifier critical: [ refactoring gtExecuteWithUndo ].
 
 	self requestStyleSourceText
 ]
@@ -1254,11 +1254,12 @@ GtPharoMethodCoder >> renameProtocol: aString [
 	| change |
 	self protocol: aString asSymbol.
 	selector notNil
-		ifTrue: [ change := RBMethodProtocolChange
+		ifTrue: [ 
+			change := RBMethodProtocolChange
 				selector: selector
 				in: self behavior
 				classified: self protocol.
-			change execute ]
+			change gtExecuteWithUndo ]
 ]
 
 { #category : #initialize }
