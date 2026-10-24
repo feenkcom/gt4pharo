@@ -22,7 +22,7 @@ RBClassCategoryChange class >> category: aString for: aClass [
 { #category : #converting }
 RBClassCategoryChange >> asUndoOperation [
 
-	self copy
+	^ self copy
 		category: self changeClass category;
 		yourself
 ]

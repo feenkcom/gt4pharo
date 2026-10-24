@@ -97,6 +97,98 @@ GtPharoIndexExamples >> addingWords [
 ]
 
 { #category : #examples }
+GtPharoIndexExamples >> anonymousClassMethodAddedIsIgnored [
+	<gtExample>
+	| index anonymousClass |
+
+	index := GtPharoIndex new.
+	anonymousClass := self class newAnonymousSubclass.
+	anonymousClass compile: 'dummyMethod ^ self printString'.
+	index methodAdded: (MethodAdded method: anonymousClass >> #dummyMethod).
+	
+	self assert: (index allImplementersOf: #dummyMethod) isEmpty.
+	self assert: (index allSendersOf: #printString) isEmpty.
+	
+	^ index
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> anonymousClassMethodRecompiledIsIgnored [
+	<gtExample>
+	| index anonymousClass |
+
+	index := GtPharoIndex new.
+	index methodAdded: (MethodAdded method: self class >> #dummyMethod).
+	anonymousClass := self class newAnonymousSubclass.
+	anonymousClass compile: 'dummyMethod ^ self printString'.
+	index recompiledMethod: anonymousClass >> #dummyMethod.
+	
+	self 
+		assert: (index allImplementersOf: #dummyMethod) asArray 
+		equals: { self class >> #dummyMethod }.
+	self 
+		assert: (index allSendersOf: #printString) asArray 
+		equals: { self class >> #dummyMethod }.
+		
+	^ index
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> anonymousClassMethodRemovedKeepsIndexedMethod [
+	"If Pharo announces methods removed from anonymous classes, but not methods added to them.
+	The removal must not remove the indexed method that has the same selector."
+	<gtExample>
+	| index anonymousClass |
+
+	index := GtPharoIndex new.
+	index methodAdded: (MethodAdded method: self class >> #dummyMethod).
+	anonymousClass := self class newAnonymousSubclass.
+	anonymousClass compile: 'dummyMethod ^ self printString'.
+	
+	index
+		methodRemoved: (MethodRemoved
+				methodRemoved: anonymousClass >> #dummyMethod
+				origin: anonymousClass).
+				
+	self 
+		assert: (index allImplementersOf: #dummyMethod) asArray 
+		equals: { self class >> #dummyMethod }.
+	self 
+		assert: (index allSendersOf: #printString) asArray 
+		equals: { self class >> #dummyMethod }.
+		
+	^ index
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> anonymousClassReflectiveMethodInstalledIsIgnored [
+	<gtExample>
+	| index anonymousClass oldMethod newMethod |
+
+	index := GtPharoIndex new.
+	index methodAdded: (MethodAdded method: self class >> #dummyMethod).
+	anonymousClass := self class newAnonymousSubclass.
+	anonymousClass compile: 'dummyMethod ^ self printString'.
+	oldMethod := anonymousClass >> #dummyMethod.
+	anonymousClass compile: 'dummyMethod ^ self printString size'.
+	newMethod := anonymousClass >> #dummyMethod.
+	index
+		methodModified: (GtReflectiveMethodInstalled new
+				oldMethod: oldMethod;
+				newMethod: newMethod).
+				
+	self 
+		assert: (index allImplementersOf: #dummyMethod) asArray 
+		equals: { self class >> #dummyMethod }.
+	self 
+		assert: (index allSendersOf: #printString) asArray 
+		equals: { self class >> #dummyMethod }.
+	self assert: (index allSendersOf: #size) isEmpty.
+	
+	^ index
+]
+
+{ #category : #examples }
 GtPharoIndexExamples >> checkGlobalAndClasses [
 	<gtExample>
 	self assert: (GtPharoIndex current globalCache includes: 'Transcript').
@@ -414,6 +506,48 @@ GtPharoIndexExamples >> notAClassReference [
 	refs := index globalVariableReferencesTo: self class binding.
 	self assert: (refs includes: thisContext method) not.
 	^ refs
+]
+
+{ #category : #private }
+GtPharoIndexExamples >> objectCentricLinkTarget [
+	^ self printString
+]
+
+{ #category : #examples }
+GtPharoIndexExamples >> objectCentricMetaLinkKeepsIndexConsistent [
+	"A MetaLink installed for a single object compiles the method into an anonymous subclass,
+	and uninstalling it removes the method from that subclass.
+	The index must keep the original method and must not keep methods of the anonymous subclass."
+	<gtExample>
+	| index originalMethod weight object link |
+
+	index := GtPharoIndex current.
+	originalMethod := self class >> #objectCentricLinkTarget.
+	weight := (index selectorCache nodeFor: #objectCentricLinkTarget) weight.
+	object := self class new.
+	link := MetaLink new
+			metaObject: [ :aReceiver | 42 ];
+			selector: #value:;
+			arguments: #(receiver);
+			control: #instead.
+	[ originalMethod ast link: link forObject: object.
+	self assert: object objectCentricLinkTarget equals: 42.
+	self assert: self objectCentricLinkTarget equals: self printString ]
+		ensure: [ link uninstall ].
+
+	self assert: object class equals: self class.
+	self
+		assert: ((index selectorCache nodeFor: #objectCentricLinkTarget) ifNotNil: [ :aNode | aNode weight ])
+		equals: weight.
+	self assert: (index implementersOf: #objectCentricLinkTarget) asArray equals: { originalMethod }.
+	self assert: ((index sendersOf: #printString) includes: originalMethod).
+	self
+		assert: ((index allSendersOf: #printString) anySatisfy: [ :each | each methodClass isAnonymous ])
+		equals: false.
+	self
+		assert: ((index allSendersOf: #value:) anySatisfy: [ :each | each methodClass isAnonymous ])
+		equals: false.
+	^ index
 ]
 
 { #category : #examples }

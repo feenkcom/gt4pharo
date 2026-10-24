@@ -193,7 +193,7 @@ GtPharoBehaviorCoder >> printOn: aStream [
 
 { #category : #actions }
 GtPharoBehaviorCoder >> removeClass [
-	(RBRemoveClassChange removeClassName: self theClass name) gtExecuteWithUndo
+	(GtRBRemoveClassChange removeClassName: self theClass name) gtExecuteWithUndo
 ]
 
 { #category : #accessing }

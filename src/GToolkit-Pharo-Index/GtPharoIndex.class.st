@@ -475,9 +475,17 @@ GtPharoIndex >> isGlobalVariable: aVariable [
 		(aVariable isKindOf: UndeclaredVariable) ]
 ]
 
+{ #category : #testing }
+GtPharoIndex >> isIgnoredMethod: aMethod [
+	"Methods of anonymous classes are not indexed: Pharo announces when they are removed but not when they are added,
+	and nothing is announced when an anonymous class is garbage collected."
+
+	^ aMethod isFromTrait or: [ aMethod methodClass isAnonymous ]
+]
+
 { #category : #private }
 GtPharoIndex >> methodAdded: anAnnouncement [
-	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
+	(self isIgnoredMethod: anAnnouncement method) ifTrue: [ ^ self ].
 	self
 		critical: [ | node addedMethod |
 			addedMethod := anAnnouncement method methodClass
@@ -496,7 +504,7 @@ GtPharoIndex >> methodAdded: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> methodModified: anAnnouncement [
-	anAnnouncement newMethod isFromTrait ifTrue: [ ^ self ].
+	(self isIgnoredMethod: anAnnouncement newMethod) ifTrue: [ ^ self ].
 	self
 		critical: [ | newMethod selector |
 			selector := anAnnouncement newMethod selector.
@@ -514,7 +522,7 @@ GtPharoIndex >> methodModified: anAnnouncement [
 
 { #category : #private }
 GtPharoIndex >> methodRemoved: anAnnouncement [
-	anAnnouncement method isFromTrait ifTrue: [ ^ self ].
+	(self isIgnoredMethod: anAnnouncement method) ifTrue: [ ^ self ].
 	self critical: [ self removeMethodFromCache: anAnnouncement method ]
 ]
 
@@ -564,7 +572,7 @@ GtPharoIndex >> recompileMethodsIn: aBehavior [
 { #category : #accessing }
 GtPharoIndex >> recompiledMethod: aMethod [
 	| seen selectorBlock globalBlock method convertedToClasses convertedFromClasses indexMethod |
-	aMethod isFromTrait ifTrue: [ ^ self ].
+	(self isIgnoredMethod: aMethod) ifTrue: [ ^ self ].
 	method := aMethod gtOriginalMethod.
 	indexMethod := aMethod gtIndexMethod.
 	(selectorCache nodeFor: method selector)
@@ -621,7 +629,7 @@ GtPharoIndex >> removeClassWordsFor: className [
 
 { #category : #private }
 GtPharoIndex >> removeMethodFromCache: method [
-	method isFromTrait ifTrue: [ ^ self ].
+	(self isIgnoredMethod: method) ifTrue: [ ^ self ].
 	(selectorCache remove: method selector weight: 1)
 		ifNotNil: [ :node | 
 			node removeImplementer: method gtIndexMethod.
