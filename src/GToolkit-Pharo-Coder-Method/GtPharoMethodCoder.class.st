@@ -908,7 +908,7 @@ GtPharoMethodCoder >> moveMethodToInstanceOrClass [
 	(oldModelClass directlyDefinesMethod: self currentSelector)
 		ifTrue: [ oldModelClass removeMethod: self currentSelector ].
 	self behavior: newClass.
-	[ model changes execute ] ifCurtailed: [ self behavior: oldClass ].
+	[ model changes gtExecuteWithUndo ] ifCurtailed: [ self behavior: oldClass ].
 	^ true
 ]
 
