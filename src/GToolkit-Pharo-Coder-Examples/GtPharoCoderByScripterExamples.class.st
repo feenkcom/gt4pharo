@@ -822,6 +822,85 @@ GtPharoCoderByScripterExamples >> changeMethodToClassSide [
 ]
 
 { #category : #'examples - coder' }
+GtPharoCoderByScripterExamples >> changeMethodToClassSideAndUndo [
+	"Moving a method to the class side with the side button is recorded as one change
+	and keeps the earlier undo history. Undoing it moves the method back"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager | 
+			| scripter aClass |
+			scripter := self dummyClassWithMethod1Expanded.
+			aClass := environment anyDummyClass realClass.
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Record an earlier change';
+						action: [ :anElement | 
+							(RBAddMethodChange
+								compile: 'earlierChange ^ 1'
+								in: aClass class
+								classified: 'accessing') gtExecuteWithUndo ] ].
+
+			scripter
+				clickStep: [ :s | 
+					s
+						label: 'Click side button';
+						// GtExpandableSourceCoderElement;
+						@ [ :each | each isExpanded ];
+						// GtPharoSideTagId ].
+			scripter
+				clickStep: [ :s | 
+					s
+						label: 'Move the method to the class side';
+						onSpaceRoot;
+						onDropdown: true;
+						onBrButtonName: 'class' ].
+
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert the method is on the class side';
+						satisfies: [ :anElement | 
+							(aClass class includesSelector: #method1)
+								and: [ (aClass includesSelector: #method1) not ] ] ].
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo moving the method';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert the method is back on the instance side';
+						satisfies: [ :anElement | 
+							(aClass includesSelector: #method1)
+								and: [ (aClass class includesSelector: #method1) not ] ] ].
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert the methods list shows the method on the instance side';
+						// GtExpandableSourceCoderElement;
+						@ [ :each | each textualCoderViewModel coder selector = #method1 ];
+						satisfies: [ :anElement | anElement textualCoderViewModel coder behavior = aClass ] ].
+
+			scripter
+				doStep: [ :s | 
+					s
+						label: 'Undo the earlier change';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s | 
+					s
+						label: 'Assert the earlier change was kept in the history';
+						satisfies: [ :anElement | (aClass class includesSelector: #earlierChange) not ] ].
+
+			scripter ]
+]
+
+{ #category : #'examples - coder' }
 GtPharoCoderByScripterExamples >> changeMethodToInstanceSide [
 	<gtExample>
 	<after: #cleanUp>
