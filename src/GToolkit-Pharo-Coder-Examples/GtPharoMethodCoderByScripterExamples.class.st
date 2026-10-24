@@ -4420,6 +4420,109 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVar_02_add [
 	^ aScripter
 ]
 
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitDefineHashAndUndo [
+	"Defining #hash from #= with the fix-it is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aScripter aClass |
+			aScripter := self
+					scripterForBlock: [ environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+						aClass := environment anyDummyRootClass realClass.
+						aClass addInstVarNamed: 'hashedValue'.
+						aClass compile: 'hashedValue ^ hashedValue' classified: 'accessing'.
+						aClass
+							compile: '= anObject
+	^ self class = anObject class and: [ hashedValue = anObject hashedValue ]'
+							classified: 'comparing'.
+						(GtPharoMethodCoder forMethod: aClass >> #=) asCoderViewModel ].
+			self clickFixItFor: aScripter.
+			self
+				clickFixItActionFor: aScripter
+				id: (GtDefineHashFunctionFixItActionElementId indexed: 1).
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert #hash is defined';
+						satisfies: [ :anElement |
+							(aClass includesSelector: #hash)
+								and: [ (aClass >> #hash) protocolName = #comparing ] ] ].
+			aScripter
+				checkStep: [ :s |
+					s
+						label: 'Check the fix-it is gone';
+						onBreadthFirstChildOfClass: GtFixItButton;
+						notExists ].
+
+			aScripter
+				doStep: [ :s |
+					s
+						label: 'Undo defining #hash';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			aScripter
+				assertStep: [ :s |
+					s
+						label: 'Assert #hash is removed';
+						satisfies: [ :anElement | (aClass includesSelector: #hash) not ] ].
+
+			aScripter ]
+]
+
+{ #category : #'examples - fixit class' }
+GtPharoMethodCoderByScripterExamples >> fixitRemoveUnusedMethodAndUndo [
+	"Removing a method that has no senders with the fix-it is undoable.
+	The advice that offers the fix-it is not active by default"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			self
+				withActiveMethodAdvice: GtMethodNotUsedAdvice new
+				during: [ | aScripter aClass aSelector aSource |
+					aSource := 'notSentByAnyoneForUndo
+	^ 42'.
+					"Not a literal symbol, so that this example is not a sender"
+					aSelector := aSource lines first asSymbol.
+					aScripter := self
+							scripterForBlock: [ environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+								aClass := environment anyDummyRootClass realClass.
+								aClass compile: aSource classified: 'accessing'.
+								(GtPharoMethodCoder forMethod: aClass >> aSelector) asCoderViewModel ].
+					self clickFixItFor: aScripter.
+					self
+						clickFixItActionFor: aScripter
+						id: (GtRemoveMessageFixItActionElementId indexed: 1).
+					aScripter
+						assertStep: [ :s |
+							s
+								label: 'Assert the method is removed';
+								satisfies: [ :anElement | (aClass includesSelector: aSelector) not ] ].
+
+					aScripter
+						doStep: [ :s |
+							s
+								label: 'Undo removing the method';
+								action: [ :anElement | aChangeManager undoChange ] ].
+					aScripter
+						assertStep: [ :s |
+							s
+								label: 'Assert the method is restored';
+								satisfies: [ :anElement |
+									(aClass includesSelector: aSelector)
+										and: [ (aClass sourceCodeAt: aSelector) asString = aSource
+												and: [ (aClass >> aSelector) protocolName = #accessing ] ] ] ].
+					aScripter
+						checkStep: [ :s |
+							s
+								label: 'Check the fix-it is shown again';
+								onBreadthFirstChildOfClass: GtFixItButton;
+								exists ].
+
+					aScripter ] ]
+]
+
 { #category : #'examples - abstract var' }
 GtPharoMethodCoderByScripterExamples >> forAbstactInstVar_01_setup [
 	<gtExample>
@@ -12750,4 +12853,14 @@ GtPharoMethodCoderByScripterExamples >> veryLongMethodLastLineString [
 	aLine := self veryLongMethod sourceCode lines last.
 	self assert: (aLine includesSubstring: '^').
 	^ aLine
+]
+
+{ #category : #'examples - support' }
+GtPharoMethodCoderByScripterExamples >> withActiveMethodAdvice: anAdvice during: aBlock [
+	"Evaluate aBlock with anAdvice active in addition to the active method advices"
+
+	| previousAdvices |
+	previousAdvices := GtMethodAdvice classPool at: #ActiveAdvices.
+	GtMethodAdvice activeAdvices: (GtMethodAdvice activeAdvices copyWith: anAdvice).
+	^ aBlock ensure: [ GtMethodAdvice activeAdvices: previousAdvices ]
 ]
