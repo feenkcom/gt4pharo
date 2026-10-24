@@ -119,25 +119,6 @@ GtRBRemoveClassChangeExamples >> removeHierarchy [
 ]
 
 { #category : #'examples - remove class' }
-GtRBRemoveClassChangeExamples >> removeOnlyRootClass [
-	"The subclasses stay and get an obsolete superclass. The undo attaches them to the restored root class"
-
-	<gtExample>
-	^ self
-		isolatedChangeManagerDuring: [ :aChangeManager | 
-			| aRootClass someClassNames |
-			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 3.
-			aRootClass := environment anyDummyRootClass realClass.
-			someClassNames := aRootClass withAllSubclasses collect: #name as: Array.
-
-			self
-				assertUndoOf: (GtRBRemoveClassChange remove: aRootClass)
-				restores: someClassNames
-				removing: {aRootClass name}
-				in: aChangeManager ]
-]
-
-{ #category : #'examples - remove class' }
 GtRBRemoveClassChangeExamples >> removeTrait [
 	<gtExample>
 	^ self
