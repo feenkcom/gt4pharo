@@ -23,7 +23,7 @@ GtPullUpVariableAdviceAction >> defaultTitle [
 { #category : #executing }
 GtPullUpVariableAdviceAction >> executeOn: anElement [
 	(GtRBPullUpInstanceVariableRefactoring variable: variable class: behavior)
-		execute
+		gtExecuteWithUndo
 ]
 
 { #category : #initialization }

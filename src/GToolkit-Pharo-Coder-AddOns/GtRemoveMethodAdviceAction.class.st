@@ -22,7 +22,7 @@ GtRemoveMethodAdviceAction >> defaultTitle [
 
 { #category : #executing }
 GtRemoveMethodAdviceAction >> executeOn: anElement [
-	(RBRemoveMethodChange remove: selector from: behavior) execute
+	(RBRemoveMethodChange remove: selector from: behavior) gtExecuteWithUndo
 ]
 
 { #category : #initialization }

@@ -26,5 +26,5 @@ GtRemoveClassAdviceAction >> defaultTitle [
 
 { #category : #executing }
 GtRemoveClassAdviceAction >> executeOn: anElement [
-	(RBRemoveClassRefactoring classNames: {behavior name}) execute
+	(RBRemoveClassRefactoring classNames: {behavior name}) gtExecuteWithUndo
 ]
