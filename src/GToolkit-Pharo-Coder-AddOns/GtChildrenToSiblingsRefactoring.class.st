@@ -22,13 +22,17 @@ GtChildrenToSiblingsRefactoring >> addSuperclass [
 				parent poolDictionaryNames
 					do: [ :each | stream << '#' << each ]
 					separatedBy: [ stream << '. ' ].
+				stream << '}; classSlots: {'.
+				parent classSide instanceVariableNames
+					do: [ :each | stream << '#' << each ]
+					separatedBy: [ stream << '. ' ].
 				stream << '}; package: ' << parent packageName printString.
 				parent tagName ifNotNil: [ :tag | stream << '; tag: ' << tag printString ] ].
 	self model defineClass: definition.
 	definition := String
 			streamContents: [ :stream | 
 				stream << className << ' << ' << parent name printString
-					<< ' slots: {}; sharedVariables: {}; sharedPools: {}; package: '
+					<< ' slots: {}; sharedVariables: {}; sharedPools: {}; classSlots: {}; package: '
 					<< parent packageName printString.
 				parent tagName ifNotNil: [ :tag | stream << '; tag: ' << tag printString ] ].
 	self model defineClass: definition
@@ -36,8 +40,7 @@ GtChildrenToSiblingsRefactoring >> addSuperclass [
 
 { #category : #transforming }
 GtChildrenToSiblingsRefactoring >> pushUpVariables [
-	"Instance side is handled when the new class is added."
-	self pullUpClassInstanceVariables
+	"Variables are handled when the new class is added."
 ]
 
 { #category : #'private - methods' }

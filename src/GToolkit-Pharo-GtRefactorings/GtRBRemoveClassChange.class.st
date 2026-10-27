@@ -20,15 +20,15 @@ GtRBRemoveClassChange >> addUndoChangesFor: aClass to: aCompositeChange [
 	The definition string does not include the class-side slots, so they are added separately.
 	Only local methods are compiled, methods from traits come back with the trait composition"
 
-	aCompositeChange addChange: (GtRBAddClassChange 
-		definitionString: aClass definitionString).
-	
-	aClass class instVarNames	do: [ :eachName | 
-		aCompositeChange addInstanceVariable: eachName to: aClass class ].
-	aClass comment ifNotNil: [ :aComment | 
-		aCompositeChange comment: aComment in: aClass ].
-	
-	{ aClass. aClass class } do: [ :eachBehavior | 
+	aCompositeChange
+		addChange: (GtRBAddClassChange definitionString: (self undoClassDefinitionFor: aClass)).
+
+	aClass comment
+		ifNotNil: [ :aComment | aCompositeChange comment: aComment in: aClass ].
+
+	{aClass.
+		aClass class}
+		do: [ :eachBehavior | 
 			eachBehavior localSelectors
 				do: [ :eachSelector | 
 					aCompositeChange
