@@ -30,6 +30,19 @@ GtRBAddClassChange class >> definitionString: aString [
 				yourself
 ]
 
+{ #category : #'as yet unclassified' }
+GtRBAddClassChange >> asUndoOperation [
+	| aClass aCompositeChange |
+	aClass := onSystemEnvironment classNamed: self changeClassName.
+	aClass isBehavior
+		ifFalse: [ ^ GtRBRemoveClassChange removeClassName: self changeClassName ].
+
+	aCompositeChange := changeFactory compositeRefactoryChange.
+	aCompositeChange
+		addChange: (GtRBAddClassChange definitionString: (self undoClassDefinitionFor: aClass)).
+	^ aCompositeChange
+]
+
 { #category : #accessing }
 GtRBAddClassChange >> category [
 	^ properties

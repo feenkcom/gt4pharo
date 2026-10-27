@@ -31,3 +31,14 @@ RBRefactoryClassChange >> gtIsForClassHierarchy: aSymbol [
 RBRefactoryClassChange >> gtIsForClassNamed: aSymbol [
 	^ self changeClassName = aSymbol
 ]
+
+{ #category : #'*GToolkit-Pharo-GtRefactorings' }
+RBRefactoryClassChange >> undoClassDefinitionFor: aClass [
+	^ String
+		streamContents: [ :stream | 
+			stream << aClass definitionString << ';' << String cr << '	classSlots: {'.
+			aClass classSide slots
+				do: [ :each | stream << each definitionString ]
+				separatedBy: [ stream << '. ' ].
+			stream << '}' ]
+]
