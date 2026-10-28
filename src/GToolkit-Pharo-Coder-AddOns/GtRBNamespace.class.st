@@ -121,7 +121,7 @@ GtRBNamespace >> defineClassWithDefinition: aString [
 	^ change
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - classes' }
 GtRBNamespace >> packageNamed: aSymbol [
 	aSymbol ifNil: [ ^ nil ].
 	(self hasPackageRemoved: aSymbol) ifTrue: [ ^ nil ].
@@ -193,6 +193,20 @@ GtRBNamespace >> privateReferencesTo: aSelector [
 										or: [ cls newMethods includesKey: each selector ] ] ] ])
 				ifFalse: [ refs add: (cls methodFor: each selector) ] ].
 	^ refs
+]
+
+{ #category : #changes }
+GtRBNamespace >> reparentClasses: aRBClassCollection to: newClass [
+	| superClass |
+	superClass := self classFor: newClass.
+	aRBClassCollection
+		do: [ :each | 
+			each superclass: superClass.
+			each classSide superclass: (superClass ifNotNil: [ superClass classSide ]).
+			changes
+				addChange: (GtRBChangeSuperclassChange
+						change: each name
+						toBeUnder: (newClass ifNil: [ nil ] ifNotNil: [ newClass name ])) ]
 ]
 
 { #category : #accessing }
