@@ -24,6 +24,19 @@ GtRBNamespaceExamples >> convertToSiblingRefactoring [
 ]
 
 { #category : #accessing }
+GtRBNamespaceExamples >> defineClassWithClassSlotsUpdatesMetaclassVariables [
+	<gtExample>
+	| model class |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'Object << #AAA123 slots: {#a. #b}; classSlots: {#c. #d}; package: #Foo'.
+	class := model classNamed: #AAA123.
+	self assert: class instanceVariableNames asArray equals: #(#a #b).
+	self assert: class classSide instanceVariableNames asArray equals: #(#c #d).
+	^ class
+]
+
+{ #category : #accessing }
 GtRBNamespaceExamples >> implementersOfPrintOn [
 	<gtExample>
 	| model implementers |
@@ -128,6 +141,31 @@ GtRBNamespaceExamples >> rbClassesCategoriesMatchThoseInTheSystem [
 			self
 				assert: (rb category = each category
 						or: [ (rb category , '-' , rb category) = each category ]) ]
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> recompileClassWithClassSlotsUpdatesMetaclassVariables [
+	<gtExample>
+	| model class |
+	model := self defineClassWithClassSlotsUpdatesMetaclassVariables model.
+	model
+		defineClass: 'Object << #AAA123 slots: {#e}; classSlots: {#f}; package: #Foo'.
+	class := model classNamed: #AAA123.
+	self assert: class instanceVariableNames asArray equals: #(#e).
+	self assert: class classSide instanceVariableNames asArray equals: #(#f).
+	^ class
+]
+
+{ #category : #accessing }
+GtRBNamespaceExamples >> recompileClassWithoutClassSlotsDoesNotUpdateMetaclassVariables [
+	<gtExample>
+	| model class |
+	model := self defineClassWithClassSlotsUpdatesMetaclassVariables model.
+	model defineClass: 'Object << #AAA123 slots: {#e}; package: #Foo'.
+	class := model classNamed: #AAA123.
+	self assert: class instanceVariableNames asArray equals: #(#e).
+	self assert: class classSide instanceVariableNames asArray equals: #(#c #d).
+	^ class
 ]
 
 { #category : #accessing }

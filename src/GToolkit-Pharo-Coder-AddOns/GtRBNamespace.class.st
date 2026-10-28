@@ -112,9 +112,12 @@ GtRBNamespace >> defineClassWithDefinition: aString [
 		ifNil: [ self rootClasses add: newClass.
 			newClass classSide superclass: (self classFor: Object class superclass) ]
 		ifNotNil: [ newClass classSide superclass: newClass superclass classSide ].
-	newClass instanceVariableNames: (change instanceVariableNames ifNil: [ '' ]).
-	newClass classVariableNames: (change classVariableNames ifNil: [ '' ]).
-	newClass poolDictionaryNames: (change sharedPoolNames ifNil: [ '' ]).
+	newClass instanceVariableNames: (change instanceVariableNames ifNil: [ #() ]).
+	newClass classVariableNames: (change classVariableNames ifNil: [ #() ]).
+	newClass poolDictionaryNames: (change sharedPoolNames ifNil: [ #() ]).
+	change hasClassSlots
+		ifTrue: [ newClass classSide
+				instanceVariableNames: (change classInstanceVariableNames ifNil: [ #() ]) ].
 	change comment ifNotNil: [ :comment | newClass comment: comment ].
 	newClass packageName: change package.
 	newClass tagName: change tag.

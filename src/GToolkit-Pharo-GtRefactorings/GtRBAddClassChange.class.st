@@ -209,6 +209,11 @@ GtRBAddClassChange >> gtPropertiesFor: aView [
 		send: [ :each | each value ]
 ]
 
+{ #category : #testing }
+GtRBAddClassChange >> hasClassSlots [
+	^ properties includesKey: #classInstanceVariableNames
+]
+
 { #category : #comparing }
 GtRBAddClassChange >> hash [
 	^ definitionString ifNil: [ super hash ] ifNotNil: [ definitionString hash ]
