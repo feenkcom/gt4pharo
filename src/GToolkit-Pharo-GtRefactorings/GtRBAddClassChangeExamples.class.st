@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #examples }
+GtRBAddClassChangeExamples >> classSlots [
+	<gtExample>
+	| change |
+	change := GtRBAddClassChange new
+			definitionString: 'A123 << #B321 classSlots: {#foo => ObservableSlot . #bar => ToManyRelationSlot inverse: #first inClass: #OrderedCollection. #baz }';
+			fillOutDefinition;
+			yourself.
+	self assert: change changeClassName equals: #B321.
+	self assert: change superclassName equals: #A123.
+	self assert: change classInstanceVariableNames asArray equals: #(foo bar baz).
+	^ change
+]
+
+{ #category : #examples }
 GtRBAddClassChangeExamples >> slots [
 	<gtExample>
 	| change |
