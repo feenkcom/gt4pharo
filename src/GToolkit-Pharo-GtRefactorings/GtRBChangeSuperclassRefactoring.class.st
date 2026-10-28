@@ -42,9 +42,7 @@ GtRBChangeSuperclassRefactoring >> applicabilityPreconditions [
 
 { #category : #transforming }
 GtRBChangeSuperclassRefactoring >> basicTransform [
-	class superclass: newSuperclass.
-	class classSide superclass: newSuperclass classSide.
-	self model defineClassWithDefinition: class gtDefinitionString
+	self model reparentClasses: {class} to: newSuperclass
 ]
 
 { #category : #'initialize-release' }

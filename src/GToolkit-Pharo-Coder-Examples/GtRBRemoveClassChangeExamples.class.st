@@ -13,6 +13,8 @@ Class {
 
 { #category : #support }
 GtRBRemoveClassChangeExamples >> assertUndoOf: aChange restores: someClassNames removing: someRemovedClassNames in: aChangeManager [
+	"Undo and redo twice: the redo must also work after classes were removed and restored"
+
 	| before |
 	before := self snapshotOf: someClassNames.
 	self assert: (someRemovedClassNames allSatisfy: [ :each | Smalltalk includesKey: each ]).
@@ -21,12 +23,14 @@ GtRBRemoveClassChangeExamples >> assertUndoOf: aChange restores: someClassNames 
 	self assert: (someRemovedClassNames noneSatisfy: [ :each | Smalltalk includesKey: each ]).
 	self assert: aChangeManager hasUndoableOperations.
 
-	aChangeManager undoChange.
-	self assert: (self snapshotOf: someClassNames) equals: before.
-	self assert: aChangeManager hasUndoableOperations not.
+	2
+		timesRepeat: [ 
+			aChangeManager undoChange.
+			self assert: (self snapshotOf: someClassNames) equals: before.
+			self assert: aChangeManager hasUndoableOperations not.
 
-	aChangeManager redoChange.
-	self assert: (someRemovedClassNames noneSatisfy: [ :each | Smalltalk includesKey: each ]).
+			aChangeManager redoChange.
+			self assert: (someRemovedClassNames noneSatisfy: [ :each | Smalltalk includesKey: each ]) ].
 
 	^ aChange
 ]
@@ -45,6 +49,29 @@ GtRBRemoveClassChangeExamples >> isolatedChangeManagerDuring: aBlock [
 
 	^ GtRefactoryChangeManager
 		isolatedInstanceDuring: [ :aChangeManager | [ aBlock cull: aChangeManager ] ensure: [ self cleanUp ] ]
+]
+
+{ #category : #'examples - remove class' }
+GtRBRemoveClassChangeExamples >> removeClassWithClassSideSlotKinds [
+	"The undo defines the class together with its class-side slots,
+	instead of adding them one by one by name, so their kinds are restored too"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aClass |
+			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+			aClass := environment anyDummyLeafClass realClass.
+			aClass classSide slots: {#count. #cache => WeakSlot}.
+			self
+				assert: ((GtRBRemoveClassChange remove: aClass) asUndoOperation gtAllChanges
+						noneSatisfy: [ :each | each isKindOf: RBAddInstanceVariableChange ]).
+
+			self
+				assertUndoOf: (GtRBRemoveClassChange remove: aClass)
+				restores: {aClass name}
+				removing: {aClass name}
+				in: aChangeManager ]
 ]
 
 { #category : #'examples - remove class' }
@@ -140,10 +167,10 @@ GtRBRemoveClassChangeExamples >> removeTrait [
 
 { #category : #support }
 GtRBRemoveClassChangeExamples >> snapshotOf: someClassNames [
-	"Answer what the undo must restore: the definitions, comments, class-side slots and local methods"
+	"Answer what the undo must restore: the definitions, comments, class-side slots with their kinds and local methods"
 
 	^ someClassNames
-		collect: [ :eachName | 
+		collect: [ :eachName |
 			| aClass |
 			aClass := Smalltalk at: eachName ifAbsent: [ nil ].
 			eachName
@@ -153,11 +180,11 @@ GtRBRemoveClassChangeExamples >> snapshotOf: someClassNames [
 								aClass superclass ifNil: [ false ] ifNotNil: [ :aSuperclass | aSuperclass isObsolete ].
 								aClass definitionString.
 								aClass comment.
-								aClass class instVarNames.
+								aClass classSide slots collect: #definitionString as: Array.
 								({aClass. aClass class}
-									collect: [ :eachBehavior | 
+									collect: [ :eachBehavior |
 										(eachBehavior localSelectors asSortedCollection asArray
-											collect: [ :eachSelector | 
+											collect: [ :eachSelector |
 												eachSelector
 													-> {eachBehavior sourceCodeAt: eachSelector.
 															(eachBehavior >> eachSelector) protocolName} ]) ])} ]) ]

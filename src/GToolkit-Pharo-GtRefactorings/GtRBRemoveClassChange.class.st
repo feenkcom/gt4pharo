@@ -12,14 +12,6 @@ Class {
 
 { #category : #private }
 GtRBRemoveClassChange >> addUndoChangesFor: aClass to: aCompositeChange [
-	"Unlike RBRemoveClassChange>>#asUndoOperation, do not define the class with a builder 
-	filled by #fillFor:. Such a builder keeps the class and its superclass as objects: 
-	when the superclass is removed andrestored too, the class is restored under the obsolete
-	superclass, and the removed class stays referenced by the undo. #fillFor: also copies the
-	class-side slots, which the superclass adds a second time.
-	The definition string does not include the class-side slots, so they are added separately.
-	Only local methods are compiled, methods from traits come back with the trait composition"
-
 	aCompositeChange
 		addChange: (GtRBAddClassChange definitionString: (self undoClassDefinitionFor: aClass)).
 

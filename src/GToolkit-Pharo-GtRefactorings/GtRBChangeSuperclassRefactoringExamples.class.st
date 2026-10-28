@@ -41,7 +41,10 @@ GtRBChangeSuperclassRefactoringExamples >> changeSuperclassOnNewClass [
 		assert: (namespace classObjectFor: #Asdf) superclass
 		equals: (namespace classObjectFor: #Association).
 	self assert: namespace changes changesSize equals: 2.
-	self assert: namespace changes gtAllChanges last packageName equals: #Asdf.
+	self assert: namespace changes gtAllChanges first packageName equals: #Asdf.
+	self
+		assert: namespace changes gtAllChanges last
+		equals: (GtRBChangeSuperclassChange change: #Asdf toBeUnder: #Association).
 	^ namespace
 ]
 

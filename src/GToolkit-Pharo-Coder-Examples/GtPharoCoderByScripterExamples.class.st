@@ -1875,6 +1875,89 @@ GtPharoCoderByScripterExamples >> convertToSiblingInIndex [
 ]
 
 { #category : #'examples - index' }
+GtPharoCoderByScripterExamples >> convertToSiblingInIndexKeepsSubclassShapeAndUndo [
+	"Convert to sibling only changes the superclass of the subclasses, so they keep their layout,
+	the kinds of their slots and the values of their class-side slots. The refactoring is undoable"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| scripter aClass aSubclass aSiblingName aShape shapeOfSubclass |
+			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+			aClass := environment anyDummyRootClass realClass.
+			aSubclass := (aClass << (aClass name , 'Shaped') asSymbol
+					layout: VariableLayout;
+					slots: {#a. #w => WeakSlot};
+					package: aClass package name) install.
+			aSubclass classSide slots: {#count}.
+			(aSubclass classSide slotNamed: #count) write: 7 to: aSubclass.
+			aSiblingName := (aClass name , 'Sibling') asSymbol.
+			shapeOfSubclass := [ {aSubclass classLayout class name.
+					aSubclass slots collect: #definitionString as: Array.
+					aSubclass classSide slots collect: #definitionString as: Array.
+					(aSubclass classSide slotNamed: #count) read: aSubclass} ].
+			aShape := shapeOfSubclass value.
+
+			scripter := self coderInPager: [ GtCoderElement forClass: aClass ].
+			self maximizePagerPane: scripter.
+			self openClassMenuOn: aClass in: scripter.
+			self
+				hoverMenu: 'Convert to sibling ' , aClass name
+				labelled: 'Hover convert to sibling'
+				in: scripter.
+			scripter refactorings
+				inputEditorDo: [ :anEditorStep |
+					anEditorStep
+						click;
+						selectAll;
+						typeText: aSiblingName ];
+				inputEditorDo: [ :anEditorStep | anEditorStep pressReturn ];
+				assertAcceptButtonIsVisible;
+				onPopover;
+				play.
+			scripter refactorings
+				pressReturnToApplyChanges;
+				onPopover;
+				play.
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the subclass is under the new class and keeps its shape';
+						satisfies: [ :anElement |
+							aSubclass superclass == (Smalltalk at: aSiblingName ifAbsent: [ nil ])
+								and: [ shapeOfSubclass value = aShape ] ] ].
+			scripter
+				checkStep: [ :s |
+					s
+						label: 'Check the new class is in the classes list';
+						// GtCoderClassesTreeItemElement;
+						@ [ :each | each theClass name = aSiblingName ];
+						exists ].
+
+			scripter
+				doStep: [ :s |
+					s
+						label: 'Undo the convert to sibling';
+						action: [ :anElement | aChangeManager undoChange ] ].
+			scripter
+				assertStep: [ :s |
+					s
+						label: 'Assert the new class is removed and the subclass is back with its shape';
+						satisfies: [ :anElement |
+							(Smalltalk includesKey: aSiblingName) not
+								and: [ aSubclass superclass == aClass and: [ shapeOfSubclass value = aShape ] ] ] ].
+			scripter
+				checkStep: [ :s |
+					s
+						label: 'Check the new class is not in the classes list';
+						// GtCoderClassesTreeItemElement;
+						@ [ :each | each theClass name = aSiblingName or: [ each theClass isObsolete ] ];
+						notExists ].
+
+			scripter ]
+]
+
+{ #category : #'examples - index' }
 GtPharoCoderByScripterExamples >> convertToSiblingInIndex_preserveContextMenuElementPosition [
 	"See https://github.com/feenkcom/gtoolkit/issues/4689"
 
