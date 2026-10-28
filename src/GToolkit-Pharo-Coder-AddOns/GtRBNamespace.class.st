@@ -197,8 +197,12 @@ GtRBNamespace >> privateReferencesTo: aSelector [
 
 { #category : #changes }
 GtRBNamespace >> reparentClasses: aRBClassCollection to: newClass [
+	| superClass |
+	superClass := self classFor: newClass.
 	aRBClassCollection
 		do: [ :each | 
+			each superclass: superClass.
+			each classSide superclass: (superClass ifNotNil: [ superClass classSide ]).
 			changes
 				addChange: (GtRBChangeSuperclassChange
 						change: each name
