@@ -6,7 +6,13 @@ Class {
 
 { #category : #accessing }
 GtClassCreationFormExample >> classWithTwoTraitsDefinitionString [
-	^ 'Object subclass: #ExampleClass uses: TGtPharoDummyTraitOne + TGtPharoDummyTraitTwo instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''ExamplePackage'''
+	^ 'Object << #ExampleClass
+	traits: TGtPharoDummyTraitOne + TGtPharoDummyTraitTwo;
+	slots: { };
+	sharedVariables: { };
+	sharedPools: { };
+	classSlots: { };
+	package: ''ExamplePackage'''
 ]
 
 { #category : #accessing }

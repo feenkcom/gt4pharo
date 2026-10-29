@@ -11,15 +11,8 @@ GtClassUpdateForm class >> onClass: aClass [
 
 { #category : #accessing }
 GtClassUpdateForm >> commit [
-	| aClass |
-	aClass := newClassName asClass.
-	
 	self defineClass.
-	aClass := Smalltalk classNamed: self rawClassName.
-	
-	self updateClassSlotsOn: aClass.
-
-	^ aClass
+	^ Smalltalk classNamed: self rawClassName
 ]
 
 { #category : #accessing }

@@ -89,26 +89,6 @@ GtBehaviorUpdateForm >> browseReferencesToSlot: aSlotName in: anElement [
 ]
 
 { #category : #accessing }
-GtBehaviorUpdateForm >> changesForUpdatingClassSlotsOn: aClass [
-	| changes slotsToAdd slotsToRemove |
-	slotsToAdd := classSlots difference: aClass classSide slotNames.
-	slotsToRemove := aClass classSide slotNames difference: classSlots.
-	
-	changes := (slotsToAdd
-		collect: [ :aSlotName | 
-			RBAddInstanceVariableChange 
-				add: aSlotName 
-				to: aClass classSide ]),
-		(slotsToRemove
-			collect: [ :aSlotName | 
-				RBRemoveInstanceVariableChange 
-					remove: aSlotName 
-					from: aClass classSide ]).
-		
-	^ changes
-]
-
-{ #category : #accessing }
 GtBehaviorUpdateForm >> classSlotsDescription [
 	<magritteDescription>
 	^ super classSlotsDescription
@@ -298,17 +278,6 @@ GtBehaviorUpdateForm >> createSlotsContextMenuContentFor: aSlotName editor: anEl
 					title: (self createLabelTextFor: 'Protect' description: aSlotName)}.
 	theContextMenu items: items.
 	^ theContextMenu
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> createUpdateClassSlotsRefactoringOn: aClass [
-	| changes |
-	changes := self changesForUpdatingClassSlotsOn: aClass.
-			
-	^ RBCompositeRefactoryChange new
-		name: 'Update class slots';
-		changes: changes;
-		yourself
 ]
 
 { #category : #accessing }
@@ -535,13 +504,4 @@ GtBehaviorUpdateForm >> superSlots: anObject [
 GtBehaviorUpdateForm >> textualCoderViewModel [
 	"Hack to use context menus"
 	^self
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> updateClassSlotsOn: aClass [
-	| updateRefactoring |
-	updateRefactoring := self createUpdateClassSlotsRefactoringOn: aClass.
-	updateRefactoring changes isEmpty ifTrue: [ ^ self ].
-	
-	^ updateRefactoring gtExecuteWithUndo
 ]

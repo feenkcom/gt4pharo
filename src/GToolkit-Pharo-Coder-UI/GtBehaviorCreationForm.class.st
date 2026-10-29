@@ -65,6 +65,30 @@ GtBehaviorCreationForm >> defaultName [
 	^ ''
 ]
 
+{ #category : #accessing }
+GtBehaviorCreationForm >> defineTrait [
+	(GtRBAddClassChange definitionString: self traitDefinitionString) gtExecuteWithUndo
+]
+
+{ #category : #private }
+GtBehaviorCreationForm >> definitionStringBuilder [
+	"Answer a builder of the fluid definition of the class or trait of the form.
+	For an existing class or trait it keeps what the form does not describe"
+
+	| aBuilder |
+	aBuilder := GtFluidDefinitionStringBuilder new
+			className: self rawClassName;
+			traitNames: self traits;
+			slotNames: self slots;
+			classSlotNames: self classSlots;
+			tagName: packageAndTagName tagName;
+			packageName: packageAndTagName packageName;
+			yourself.
+	(self class environment classOrTraitNamed: self rawClassName)
+		ifNotNil: [ :aBehavior | aBuilder fillFromBehavior: aBehavior ].
+	^ aBuilder
+]
+
 { #category : #initialization }
 GtBehaviorCreationForm >> initialize [
 	super initialize.
@@ -73,18 +97,6 @@ GtBehaviorCreationForm >> initialize [
 	traits := OrderedCollection new.
 	slots := OrderedCollection new.
 	classSlots := OrderedCollection new
-]
-
-{ #category : #accessing }
-GtBehaviorCreationForm >> installClassSlotsOn: aClass [
-	| changes |
-	classSlots isEmpty ifTrue: [ ^ self ].
-	changes := classSlots
-			collect: [ :aSlot | RBAddInstanceVariableChange add: aSlot to: aClass classSide ].
-	(RBCompositeRefactoryChange new
-		name: 'Add class slots';
-		changes: changes;
-		yourself) gtExecuteWithUndo
 ]
 
 { #category : #magritte }
@@ -181,6 +193,13 @@ GtBehaviorCreationForm >> traitComposition [
 { #category : #accessing }
 GtBehaviorCreationForm >> traitCompositionFor: aCollectionOfTraits [
 	^ (aCollectionOfTraits reject: #isNil) asArray asTraitComposition
+]
+
+{ #category : #accessing }
+GtBehaviorCreationForm >> traitDefinitionString [
+	^ self definitionStringBuilder
+		beTrait;
+		definitionString
 ]
 
 { #category : #accessing }

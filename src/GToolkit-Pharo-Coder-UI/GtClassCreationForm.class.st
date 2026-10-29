@@ -21,19 +21,11 @@ GtClassCreationForm class >> priority [
 
 { #category : #accessing }
 GtClassCreationForm >> classDefinitionString [
-	^ String
-		streamContents: [ :stream | 
-			stream << self superclassName << ' subclass: '
-				<< self rawClassName asSymbol storeString.
-
-			self traits ifNotEmpty: [ 
-				stream << ' uses: ' << (' + ' join: self traits) ].
-
-			stream 
-				<< ' instanceVariableNames: ' << (' ' join: self slots) storeString
-				<< ' classVariableNames: ' << (' ' join: self classVars) storeString
-				<< ' poolDictionaries: ' << (' ' join: self pools) storeString
-				<< ' category: ' << self commitPackage categoryName asString storeString ]
+	^ self definitionStringBuilder
+		superclassName: self superclassName;
+		sharedVariableNames: self classVars;
+		sharedPoolNames: self pools;
+		definitionString
 ]
 
 { #category : #accessing }
@@ -67,11 +59,8 @@ GtClassCreationForm >> classVarsDescription [
 
 { #category : #accessing }
 GtClassCreationForm >> commit [
-	| aClass |
 	self defineClass.
-	aClass := Smalltalk classNamed: self rawClassName.
-	self installClassSlotsOn: aClass.
-	^ aClass
+	^ Smalltalk classNamed: self rawClassName
 ]
 
 { #category : #accessing }
@@ -87,8 +76,7 @@ GtClassCreationForm >> defaultName [
 
 { #category : #accessing }
 GtClassCreationForm >> defineClass [
-	(GtRBAddClassChange definitionString: self classDefinitionString)
-		gtExecuteWithUndo
+	(GtRBAddClassChange definitionString: self classDefinitionString) gtExecuteWithUndo
 ]
 
 { #category : #'api - initialization' }
