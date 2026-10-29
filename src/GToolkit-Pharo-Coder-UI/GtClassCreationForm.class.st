@@ -86,6 +86,24 @@ GtClassCreationForm >> fillFormWithClass: aClass [
 	aClass isTrait ifTrue: [ self traits: {aClass name} ]
 ]
 
+{ #category : #private }
+GtClassCreationForm >> inheritedClassSlotNames [
+	"Answer the names of the class-side slots of the superclass, which include those that every class side has"
+
+	^ self superclassOrNil
+		ifNil: [ super inheritedClassSlotNames ]
+		ifNotNil: [ :aClass | aClass classSide allSlots collect: #name ]
+]
+
+{ #category : #private }
+GtClassCreationForm >> inheritedSlotNames [
+	"Answer the names of the slots of the superclass"
+
+	^ self superclassOrNil 
+		ifNil: [ #() ] 
+		ifNotNil: [ :aClass | aClass allSlots collect: #name ]
+]
+
 { #category : #accessing }
 GtClassCreationForm >> initialize [
 	super initialize.
@@ -196,4 +214,9 @@ GtClassCreationForm >> superclassName [
 GtClassCreationForm >> superclassName: anObject [
 
 	superclassName := anObject
+]
+
+{ #category : #private }
+GtClassCreationForm >> superclassOrNil [
+	^ Smalltalk classNamed: self superclassName asString trim
 ]

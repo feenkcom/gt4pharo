@@ -46,7 +46,9 @@ GtBehaviorCreationForm >> classSlotsDescription [
 				contextMenuContentBlock: nil
 				contextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
-			labelled: 'All slot names must be unique'
+			labelled: 'All slot names must be unique';
+		addCondition: [ :aValue | aValue noneSatisfy: [ :aName | self inheritedClassSlotNames includes: aName asSymbol ] ]
+			labelled: 'Class-side slot names are already taken in the superclass or by every class side'
 ]
 
 { #category : #accessing }
@@ -87,6 +89,21 @@ GtBehaviorCreationForm >> definitionStringBuilder [
 	(self class environment classOrTraitNamed: self rawClassName)
 		ifNotNil: [ :aBehavior | aBuilder fillFromBehavior: aBehavior ].
 	^ aBuilder
+]
+
+{ #category : #private }
+GtBehaviorCreationForm >> inheritedClassSlotNames [
+	"Answer the names of the class-side slots that the form cannot define: those that every class side has"
+
+	^ Object class allSlots collect: #name
+]
+
+{ #category : #private }
+GtBehaviorCreationForm >> inheritedSlotNames [
+	"Answer the names of the slots that the form cannot define.
+	The slots of the traits can be defined: an own slot replaces the slot of a trait with the same name"
+
+	^ #()
 ]
 
 { #category : #initialization }
@@ -165,7 +182,9 @@ GtBehaviorCreationForm >> slotsDescription [
 				contextMenuContentBlock: nil
 				contextMenuBlock: nil);
 		addCondition: [ :aValue | aValue asSet size = aValue size ]
-			labelled: 'All slot names must be unique'
+			labelled: 'All slot names must be unique';
+		addCondition: [ :aValue | aValue noneSatisfy: [ :aName | self inheritedSlotNames includes: aName asSymbol ] ]
+			labelled: 'Slot names are already taken in the superclass'
 ]
 
 { #category : #accessing }
