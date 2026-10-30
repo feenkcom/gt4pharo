@@ -1,9 +1,6 @@
 Class {
 	#name : #GtBehaviorUpdateForm,
 	#superclass : #GtClassCreationForm,
-	#instVars : [
-		'superSlots'
-	],
 	#category : #'GToolkit-Pharo-Coder-UI-Forms - Models'
 }
 
@@ -86,26 +83,6 @@ GtBehaviorUpdateForm >> browseReferencesToSlot: aSlotName in: anElement [
 		spawnObject: (GtSearchInstanceSlotReferenceFilter
 				forClassAndSubclasses: (Smalltalk at: self rawClassName asSymbol)
 				andVariable: aSlotName)
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> changesForUpdatingClassSlotsOn: aClass [
-	| changes slotsToAdd slotsToRemove |
-	slotsToAdd := classSlots difference: aClass classSide slotNames.
-	slotsToRemove := aClass classSide slotNames difference: classSlots.
-	
-	changes := (slotsToAdd
-		collect: [ :aSlotName | 
-			RBAddInstanceVariableChange 
-				add: aSlotName 
-				to: aClass classSide ]),
-		(slotsToRemove
-			collect: [ :aSlotName | 
-				RBRemoveInstanceVariableChange 
-					remove: aSlotName 
-					from: aClass classSide ]).
-		
-	^ changes
 ]
 
 { #category : #accessing }
@@ -298,17 +275,6 @@ GtBehaviorUpdateForm >> createSlotsContextMenuContentFor: aSlotName editor: anEl
 					title: (self createLabelTextFor: 'Protect' description: aSlotName)}.
 	theContextMenu items: items.
 	^ theContextMenu
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> createUpdateClassSlotsRefactoringOn: aClass [
-	| changes |
-	changes := self changesForUpdatingClassSlotsOn: aClass.
-			
-	^ RBCompositeRefactoryChange new
-		name: 'Update class slots';
-		changes: changes;
-		yourself
 ]
 
 { #category : #accessing }
@@ -516,32 +482,11 @@ GtBehaviorUpdateForm >> slotsDescription [
 						anEvent currentTarget phlow
 							spawnObject: (GtSearchInstanceSlotReferenceFilter
 									forClassAndSubclasses: self newClassName asString asClass
-									andVariable: anEvent target text asString) ]} ];
-		addCondition: [ :aValue | aValue noneSatisfy: [ :aSlot | superSlots includes: aSlot ] ]
-			labelled: 'Slot names are already taken in superclass'
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> superSlots [
-	^ superSlots
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> superSlots: anObject [
-	superSlots := anObject
+									andVariable: anEvent target text asString) ]} ]
 ]
 
 { #category : #accessing }
 GtBehaviorUpdateForm >> textualCoderViewModel [
 	"Hack to use context menus"
 	^self
-]
-
-{ #category : #accessing }
-GtBehaviorUpdateForm >> updateClassSlotsOn: aClass [
-	| updateRefactoring |
-	updateRefactoring := self createUpdateClassSlotsRefactoringOn: aClass.
-	updateRefactoring changes isEmpty ifTrue: [ ^ self ].
-	
-	^ updateRefactoring gtExecuteWithUndo
 ]

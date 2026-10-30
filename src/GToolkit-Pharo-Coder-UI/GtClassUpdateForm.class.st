@@ -11,15 +11,8 @@ GtClassUpdateForm class >> onClass: aClass [
 
 { #category : #accessing }
 GtClassUpdateForm >> commit [
-	| aClass |
-	aClass := newClassName asClass.
-	
 	self defineClass.
-	aClass := Smalltalk classNamed: self rawClassName.
-	
-	self updateClassSlotsOn: aClass.
-
-	^ aClass
+	^ Smalltalk classNamed: self rawClassName
 ]
 
 { #category : #accessing }
@@ -38,8 +31,7 @@ GtClassUpdateForm >> onClass: aClass [
 				tagName: (tagName = packageName ifTrue: [ '' ] ifFalse: [ tagName ])).
 	self pools: (aClass sharedPools collect: #name).
 	self classVars: (aClass classVarNames collect: #asString).
-	self classSlots: (aClass classSide slots collect: #name).
 	self
-		superSlots: ((aClass allSlots collect: #name) asSet
-				difference: (aClass slots collect: #name) asSet)
+		classSlots: ((aClass classSide slots select: [ :aSlot | aSlot definingClass = aClass classSide ])
+				collect: #name)
 ]

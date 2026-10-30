@@ -29,6 +29,12 @@ GtRBChangeSuperclassChange >> asUndoOperation [
 		newSuperclassName: (class superclass ifNil: [ nil ] ifNotNil: [ :superClass | superClass name ])
 ]
 
+{ #category : #printing }
+GtRBChangeSuperclassChange >> changeString [
+	^ 'Change superclass of ' , self displayClassName , ' to '
+		, (newSuperclassName ifNil: [ 'nil' ])
+]
+
 { #category : #private }
 GtRBChangeSuperclassChange >> generateChanges [
 	| class superclass |
@@ -37,6 +43,35 @@ GtRBChangeSuperclassChange >> generateChanges [
 			ifNil: [ nil ]
 			ifNotNil: [ onSystemEnvironment classNamed: newSuperclassName ].
 	class superclass: superclass
+]
+
+{ #category : #views }
+GtRBChangeSuperclassChange >> gtChangeIcon [
+	^ Smalltalk ui icons iconNamed: #changeUpdate
+]
+
+{ #category : #views }
+GtRBChangeSuperclassChange >> gtDiffChange [
+	"Show the definition of the class before and after the change.
+	The class does not exist yet if it is defined by a previous change"
+
+	| aClass aDefinition oldSource newSource |
+	aClass := onSystemEnvironment classNamed: self changeClassName.
+	aClass isBehavior
+		ifFalse: [ ^ GtDiffBuilder
+				computeDifferencesFrom: ''
+				to: self changeString
+				using: GtSmaCCDiffSplitter forPharo ].
+
+	aDefinition := GtBehaviorDefinition targetDefinitionForBehavior: aClass.
+	oldSource := aDefinition asDefinitionString.
+	aDefinition superclass name: (newSuperclassName ifNil: [ 'nil' ]).
+	newSource := aDefinition asDefinitionString.
+
+	^ GtDiffBuilder
+		computeDifferencesFrom: oldSource
+		to: newSource
+		using: GtSmaCCDiffSplitter forPharo
 ]
 
 { #category : #comparing }

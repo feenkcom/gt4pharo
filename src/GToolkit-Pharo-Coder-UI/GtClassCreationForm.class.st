@@ -21,19 +21,11 @@ GtClassCreationForm class >> priority [
 
 { #category : #accessing }
 GtClassCreationForm >> classDefinitionString [
-	^ String
-		streamContents: [ :stream | 
-			stream << self superclassName << ' subclass: '
-				<< self rawClassName asSymbol storeString.
-
-			self traits ifNotEmpty: [ 
-				stream << ' uses: ' << (' + ' join: self traits) ].
-
-			stream 
-				<< ' instanceVariableNames: ' << (' ' join: self slots) storeString
-				<< ' classVariableNames: ' << (' ' join: self classVars) storeString
-				<< ' poolDictionaries: ' << (' ' join: self pools) storeString
-				<< ' category: ' << self commitPackage categoryName asString storeString ]
+	^ self definitionStringBuilder
+		superclassName: self superclassName;
+		sharedVariableNames: self classVars;
+		sharedPoolNames: self pools;
+		definitionString
 ]
 
 { #category : #accessing }
@@ -67,11 +59,8 @@ GtClassCreationForm >> classVarsDescription [
 
 { #category : #accessing }
 GtClassCreationForm >> commit [
-	| aClass |
 	self defineClass.
-	aClass := Smalltalk classNamed: self rawClassName.
-	self installClassSlotsOn: aClass.
-	^ aClass
+	^ Smalltalk classNamed: self rawClassName
 ]
 
 { #category : #accessing }
@@ -87,8 +76,7 @@ GtClassCreationForm >> defaultName [
 
 { #category : #accessing }
 GtClassCreationForm >> defineClass [
-	(GtRBAddClassChange definitionString: self classDefinitionString)
-		gtExecuteWithUndo
+	(GtRBAddClassChange definitionString: self classDefinitionString) gtExecuteWithUndo
 ]
 
 { #category : #'api - initialization' }
@@ -96,6 +84,24 @@ GtClassCreationForm >> fillFormWithClass: aClass [
 	super fillFormWithClass: aClass.
 	aClass isClass ifTrue: [ self superclassName: aClass name ].
 	aClass isTrait ifTrue: [ self traits: {aClass name} ]
+]
+
+{ #category : #private }
+GtClassCreationForm >> inheritedClassSlotNames [
+	"Answer the names of the class-side slots of the superclass, which include those that every class side has"
+
+	^ self superclassOrNil
+		ifNil: [ super inheritedClassSlotNames ]
+		ifNotNil: [ :aClass | aClass classSide allSlots collect: #name ]
+]
+
+{ #category : #private }
+GtClassCreationForm >> inheritedSlotNames [
+	"Answer the names of the slots of the superclass"
+
+	^ self superclassOrNil 
+		ifNil: [ #() ] 
+		ifNotNil: [ :aClass | aClass allSlots collect: #name ]
 ]
 
 { #category : #accessing }
@@ -208,4 +214,9 @@ GtClassCreationForm >> superclassName [
 GtClassCreationForm >> superclassName: anObject [
 
 	superclassName := anObject
+]
+
+{ #category : #private }
+GtClassCreationForm >> superclassOrNil [
+	^ Smalltalk classNamed: self superclassName asString trim
 ]
