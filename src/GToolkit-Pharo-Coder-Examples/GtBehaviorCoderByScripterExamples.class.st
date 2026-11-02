@@ -429,6 +429,46 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_addInstVar_compileCanBeUndone [
+	"Compiling the class definition snippet defines the class through a recorded change:
+	one undo restores the previous definition and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| aScripter aName existingSlotNames |
+			[ aScripter := self classCoderForClassUI_displayBehaviorView_addInstVar.
+			aName := aScripter model behavior name.
+			existingSlotNames := (Smalltalk at: aName) slotNames.
+			(RBAddMethodChange
+				compile: 'recordedBeforeDefining ^ 1'
+				in: (Smalltalk at: aName)
+				classified: 'accessing') gtExecuteWithUndo.
+
+			aScripter click
+				label: 'Click compile class definition button';
+				// GtPhlowCompositeViewElementId;
+				// GtSourceCoderDoItActionId;
+				play.
+			aScripter assert
+				label: 'Assert the class has the new slot';
+				satisfies: [ :anElement | (Smalltalk at: aName) slotNames = (existingSlotNames copyWith: #newInstVar) ];
+				play.
+
+			aChangeManager undoChange.
+			aScripter assert
+				label: 'Assert one undo restores the slots and keeps the change before it';
+				satisfies: [ :anElement |
+					(Smalltalk at: aName) slotNames = existingSlotNames
+						and: [ ((Smalltalk at: aName) includesSelector: #recordedBeforeDefining)
+								and: [ aChangeManager hasUndoableOperations ] ] ];
+				play.
+			aScripter ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_doubleClick [
 	<gtExample>
 	| aScripter |
