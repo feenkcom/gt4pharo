@@ -956,6 +956,36 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_spotterCategory
 	^ aScripter
 ]
 
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCommentSaveCanBeUndone [
+	"Saving a class comment from the Comment tab records the change:
+	one undo restores the previous comment, also in the page of the comment,
+	and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| aClass aDatabase aPage |
+			environment := GtPharoDummiesGenerator withPackages: 1 classes: 1.
+			[ aClass := environment anyDummyClass realClass.
+			(RBCommentChange comment: 'The previous comment' in: aClass) gtExecuteWithUndo.
+			aDatabase := LePharoClassDatabase uniqueInstance.
+			aPage := aDatabase pageNamed: aClass name.
+			aPage children first updateString: 'The saved comment'.
+			aDatabase savePage: aPage.
+			self assert: aClass comment equals: 'The saved comment'.
+
+			aChangeManager undoChange.
+			self assert: aClass comment equals: 'The previous comment'.
+			self
+				assert: (aDatabase pageNamed: aClass name) children first string
+				equals: 'The previous comment'.
+			self assert: aChangeManager hasUndoableOperations.
+			aClass ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
+
 { #category : #utilities }
 GtBehaviorCoderByScripterExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]

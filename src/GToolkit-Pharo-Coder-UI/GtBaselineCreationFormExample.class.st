@@ -73,6 +73,36 @@ GtBaselineCreationFormExample >> simpleFormWithBaselineAccepted [
 ]
 
 { #category : #accessing }
+GtBaselineCreationFormExample >> simpleFormWithBaselineAcceptedCanBeUndone [
+	"Saving the form defines the baseline through a recorded change:
+	one undo removes it and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| scripter |
+			[ (GtRBAddClassChange
+				definitionString: 'Object << #GtBaselineFormExampleRecordedBefore
+	package: ' , self exampleBaselineName printString) gtExecuteWithUndo.
+			scripter := self simpleFormWithBaselineFilled.
+			scripter
+				clickStep: [ :s |
+					s
+						label: 'Click save button';
+						id: #toolbar;
+						onChildAt: 1 ].
+			self
+				assert: (Smalltalk classNamed: self exampleBaselineName) superclass
+				equals: BaselineOf.
+
+			aChangeManager undoChange.
+			self assert: (Smalltalk classNamed: self exampleBaselineName) isNil.
+			self assert: (Smalltalk classNamed: #GtBaselineFormExampleRecordedBefore) notNil.
+			self assert: aChangeManager hasUndoableOperations.
+			scripter ] ensure: [ [ self removeBaseline ] on: Error do: [ :anError | anError return ] ] ]
+]
+
+{ #category : #accessing }
 GtBaselineCreationFormExample >> simpleFormWithBaselineFilled [
 	<gtExample>
 	| scripter |
