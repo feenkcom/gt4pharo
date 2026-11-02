@@ -69,6 +69,47 @@ GtParserCreationFormExample >> scripterWithParserAccepted [
 ]
 
 { #category : #accessing }
+GtParserCreationFormExample >> scripterWithParserAcceptedCanBeUndone [
+	"Saving the form defines the scanner, the parser and its class-side methods through one recorded change:
+	one undo removes them and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| scripter |
+			[ (GtRBAddClassChange
+				definitionString: 'Object << #GtParserFormExampleRecordedBefore
+	package: ' , self examplePackageName printString) gtExecuteWithUndo.
+			scripter := self scripterWithParserAndScannerNameAndPackageFilled.
+			scripter
+				clickStep: [ :s |
+					s
+						label: 'Click save button';
+						// #toolbar;
+						onChildAt: 1 ].
+			self
+				assert: (Smalltalk classNamed: self exampleScannerName) superclass
+				equals: SmaCCScanner.
+			self
+				assert: (Smalltalk classNamed: self exampleParserName) superclass
+				equals: SmaCCParser.
+			self
+				assert: (Smalltalk classNamed: self exampleParserName) scannerClass
+				equals: (Smalltalk classNamed: self exampleScannerName).
+			self
+				assert: ((Smalltalk classNamed: self exampleParserName) class
+						includesSelector: #definitionComment).
+
+			aChangeManager undoChange.
+			self assert: (Smalltalk classNamed: self exampleParserName) isNil.
+			self assert: (Smalltalk classNamed: self exampleScannerName) isNil.
+			self assert: (Smalltalk classNamed: #GtParserFormExampleRecordedBefore) notNil.
+			self assert: aChangeManager hasUndoableOperations.
+			scripter ]
+				ensure: [ [ self removeParserAndPackage ] on: Error do: [ :anError | anError return ] ] ]
+]
+
+{ #category : #accessing }
 GtParserCreationFormExample >> scripterWithParserAndScannerNameAndPackageFilled [
 	<gtExample>
 	| scripter aDescription anElementId |

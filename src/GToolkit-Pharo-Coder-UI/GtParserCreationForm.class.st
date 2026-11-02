@@ -20,35 +20,32 @@ GtParserCreationForm class >> priority [
 
 { #category : #callbacks }
 GtParserCreationForm >> commit [
-	| category scannerClass parserClass |
-	category := self commitPackage categoryName.
-	scannerClass := Smalltalk classInstaller
-			make: [ :builder | 
-				builder
-					name: scanner trim;
-					superclass: SmaCCScanner;
-					category: category ].
-	parserClass := Smalltalk classInstaller
-			make: [ :builder | 
-				builder
-					name: parser trim;
-					superclass: SmaCCParser;
-					category: category ].
-	(RBAddMethodChange
+	"Define the scanner, the parser and the class-side methods of the parser through one recorded change,
+	so that they can be undone together and keep the undo history"
+
+	| model aDefinition |
+	model := GtRBNamespace new.
+	aDefinition := [ :aName :aSuperclassName |
+		GtFluidDefinitionStringBuilder new
+			className: aName;
+			superclassName: aSuperclassName;
+			tagName: packageAndTagName tagName;
+			packageName: packageAndTagName packageName;
+			definitionString ].
+	model defineClass: (aDefinition value: scanner trim value: 'SmaCCScanner').
+	model defineClass: (aDefinition value: parser trim value: 'SmaCCParser').
+	(model classNamed: parser trim asSymbol) classSide
 		compile: 'scannerClass
 	^' , scanner
-		in: parserClass class
-		classified: #generated) execute.
-
-	(RBAddMethodChange
+			classified: #generated;
 		compile: 'definitionComment
 	"Start 
 	:
 	;"'
-		in: parserClass class
-		classified: #generated) execute.
+			classified: #generated.
+	GtPharoCodeModifier current performRefactoryChange: model changes.
 
-	^ parserClass
+	^ self class environment classNamed: parser trim
 ]
 
 { #category : #accessing }
