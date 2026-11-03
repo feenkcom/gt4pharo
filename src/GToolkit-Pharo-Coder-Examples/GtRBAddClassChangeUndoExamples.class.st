@@ -18,6 +18,19 @@ GtRBAddClassChangeUndoExamples >> classNamed: aString [
 	^ ((self packageName copyReplaceAll: '-' with: '') , aString) asSymbol
 ]
 
+{ #category : #support }
+GtRBAddClassChangeUndoExamples >> classSideSlotDefinersOf: aName [
+	"Answer the class-side slots of the class, except those of every class side,
+	with the name of the class or trait that defines each of them"
+
+	| aClass |
+	aClass := aName asClass.
+	^ (aClass classSide allSlots
+		reject: [ :each | Object class allSlots includes: each ])
+		collect: [ :each | each name -> each definingClass name asString ]
+		as: Array
+]
+
 { #category : #cleanup }
 GtRBAddClassChangeUndoExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ].
@@ -233,6 +246,50 @@ GtRBAddClassChangeUndoExamples >> undoOfNewClassRemovesIt [
 			self assert: anUndoChange changeClassName equals: aClassName.
 
 			anUndoChange ]
+]
+
+{ #category : #'examples - undo and redo' }
+GtRBAddClassChangeUndoExamples >> undoOfRedefinitionKeepsClassSideSlotsOfTraits [
+	"The undo restores the class-side slot of the trait as a slot of the trait, not of the class.
+	The class has no class-side slots of its own: then its class side answers the slots of the trait
+	among its #slots, which the undo definition must not list"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aTraitName aName before |
+			self newEnvironment.
+			aTraitName := self classNamed: 'TWithClassSideSlot'.
+			aName := self classNamed: 'UsesTraitWithClassSideSlot'.
+			(Trait << aTraitName
+				classSlots: {#traitClassSideSlot};
+				package: self packageName) install.
+			(Object << aName
+				traits: aTraitName asClass;
+				slots: {#a};
+				package: self packageName) install.
+			before := self classSideSlotDefinersOf: aName.
+			self
+				assert: before
+				equals: {#traitClassSideSlot -> (aTraitName , ' classTrait')}.
+
+			(GtRBAddClassChange
+				definitionString: 'Object << #' , aName , '
+	traits: {' , aTraitName , '};
+	slots: { #a . #b };
+	package: ' , self packageName storeString) gtExecuteWithUndo.
+			self assert: aName asClass slotNames equals: #(#a #b).
+
+			aChangeManager undoChange.
+			self assert: aName asClass slotNames equals: #(#a).
+			self assert: (self classSideSlotDefinersOf: aName) equals: before.
+			self assert: aName asClass classSide localSlots isEmpty.
+
+			aChangeManager redoChange.
+			self assert: aName asClass slotNames equals: #(#a #b).
+			self assert: (self classSideSlotDefinersOf: aName) equals: before.
+
+			before ]
 ]
 
 { #category : #'examples - undo and redo' }

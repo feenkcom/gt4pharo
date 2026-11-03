@@ -429,6 +429,46 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_ad
 ]
 
 { #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCoderForClassUI_displayBehaviorView_addInstVar_compileCanBeUndone [
+	"Compiling the class definition snippet defines the class through a recorded change:
+	one undo restores the previous definition and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| aScripter aName existingSlotNames |
+			[ aScripter := self classCoderForClassUI_displayBehaviorView_addInstVar.
+			aName := aScripter model behavior name.
+			existingSlotNames := (Smalltalk at: aName) slotNames.
+			(RBAddMethodChange
+				compile: 'recordedBeforeDefining ^ 1'
+				in: (Smalltalk at: aName)
+				classified: 'accessing') gtExecuteWithUndo.
+
+			aScripter click
+				label: 'Click compile class definition button';
+				// GtPhlowCompositeViewElementId;
+				// GtSourceCoderDoItActionId;
+				play.
+			aScripter assert
+				label: 'Assert the class has the new slot';
+				satisfies: [ :anElement | (Smalltalk at: aName) slotNames = (existingSlotNames copyWith: #newInstVar) ];
+				play.
+
+			aChangeManager undoChange.
+			aScripter assert
+				label: 'Assert one undo restores the slots and keeps the change before it';
+				satisfies: [ :anElement |
+					(Smalltalk at: aName) slotNames = existingSlotNames
+						and: [ ((Smalltalk at: aName) includesSelector: #recordedBeforeDefining)
+								and: [ aChangeManager hasUndoableOperations ] ] ];
+				play.
+			aScripter ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
+
+{ #category : #'examples - for class' }
 GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_01_doubleClick [
 	<gtExample>
 	| aScripter |
@@ -914,6 +954,36 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_spotterCategory
 		play.
 
 	^ aScripter
+]
+
+{ #category : #'examples - for class' }
+GtBehaviorCoderByScripterExamples >> classCommentSaveCanBeUndone [
+	"Saving a class comment from the Comment tab records the change:
+	one undo restores the previous comment, also in the page of the comment,
+	and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| aClass aDatabase aPage |
+			environment := GtPharoDummiesGenerator withPackages: 1 classes: 1.
+			[ aClass := environment anyDummyClass realClass.
+			(RBCommentChange comment: 'The previous comment' in: aClass) gtExecuteWithUndo.
+			aDatabase := LePharoClassDatabase uniqueInstance.
+			aPage := aDatabase pageNamed: aClass name.
+			aPage children first updateString: 'The saved comment'.
+			aDatabase savePage: aPage.
+			self assert: aClass comment equals: 'The saved comment'.
+
+			aChangeManager undoChange.
+			self assert: aClass comment equals: 'The previous comment'.
+			self
+				assert: (aDatabase pageNamed: aClass name) children first string
+				equals: 'The previous comment'.
+			self assert: aChangeManager hasUndoableOperations.
+			aClass ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
 ]
 
 { #category : #utilities }

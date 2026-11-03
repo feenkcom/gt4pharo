@@ -34,10 +34,14 @@ RBRefactoryClassChange >> gtIsForClassNamed: aSymbol [
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryClassChange >> undoClassDefinitionFor: aClass [
+	"Answer the definition of aClass, followed by its class-side slots.
+	Only the class-side slots that aClass defines itself: those of its traits come back
+	with the trait composition of the definition"
+
 	^ String
-		streamContents: [ :stream | 
+		streamContents: [ :stream |
 			stream << aClass definitionString << ';' << String cr << '	classSlots: {'.
-			aClass classSide slots
+			aClass classSide localSlots
 				do: [ :each | stream << each definitionString ]
 				separatedBy: [ stream << '. ' ].
 			stream << '}' ]

@@ -23,19 +23,36 @@ GtCopyTraitForm >> asElement [
 
 { #category : #accessing }
 GtCopyTraitForm >> copyTrait [
-	| class |
-	class := Smalltalk classInstaller
-			make: [ :builder | 
-				builder
-					fillFor: innerClass;
-					beTrait;
-					name: newClassName trim;
-					category: (packageAndTag tagName trim
-							ifEmpty: [ packageAndTag packageName trim ]
-							ifNotEmpty: [ packageAndTag fullName ]) ].
-	class copyAllMethodsFrom: innerClass.
-	class class copyAllMethodsFrom: innerClass class .
-	^ class
+	"Copy the trait through one recorded change, so that it can be undone and keeps the undo history.
+	The definition keeps the slots, the class-side slots and the trait composition of the copied trait.
+	Only its own methods are copied: those of its traits come with the trait composition"
+
+	| aName model newTrait |
+	aName := newClassName trim asSymbol.
+	model := GtRBNamespace new.
+	model
+		defineClass: (GtFluidDefinitionStringBuilder new
+				beTrait;
+				className: aName;
+				traitNames: (innerClass traits collect: [ :each | each name ] as: Array);
+				slotNames: (innerClass localSlots collect: [ :each | each name ] as: Array);
+				classSlotNames: (innerClass classSide localSlots collect: [ :each | each name ] as: Array);
+				tagName: packageAndTag tagName trim;
+				packageName: packageAndTag packageName trim;
+				fillFromBehavior: innerClass;
+				definitionString).
+	newTrait := model classNamed: aName.
+	{innerClass -> newTrait.
+		innerClass classSide -> newTrait classSide}
+		do: [ :each |
+			each key localSelectors
+				do: [ :aSelector |
+					each value
+						compile: (each key sourceCodeAt: aSelector)
+						classified: (each key >> aSelector) protocolName ] ].
+	GtPharoCodeModifier current performRefactoryChange: model changes.
+
+	^ self class environment classOrTraitNamed: aName
 ]
 
 { #category : #accessing }

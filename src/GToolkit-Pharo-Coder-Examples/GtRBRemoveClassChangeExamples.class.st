@@ -52,6 +52,43 @@ GtRBRemoveClassChangeExamples >> isolatedChangeManagerDuring: aBlock [
 ]
 
 { #category : #'examples - remove class' }
+GtRBRemoveClassChangeExamples >> removeClassUsingTraitWithClassSideSlot [
+	"The undo restores the class-side slot of the trait as a slot of the trait, not of the class,
+	as for the users of TGtUniqueInstance"
+
+	<gtExample>
+	^ self
+		isolatedChangeManagerDuring: [ :aChangeManager |
+			| aPackageName aTraitName aName definers |
+			environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+			aPackageName := environment anyDummyPackage realPackage name.
+			aTraitName := ((aPackageName copyReplaceAll: '-' with: '') , 'TWithClassSideSlot') asSymbol.
+			aName := ((aPackageName copyReplaceAll: '-' with: '') , 'UsesTraitWithClassSideSlot') asSymbol.
+			(Trait << aTraitName
+				classSlots: {#uniqueInstance};
+				package: aPackageName) install.
+			(Object << aName
+				traits: aTraitName asClass;
+				package: aPackageName) install.
+			definers := [ (aName asClass classSide allSlots
+					select: [ :each | each name = #uniqueInstance ])
+					collect: [ :each | each definingClass name asString ]
+					as: Array ].
+			self assert: definers value equals: {aTraitName , ' classTrait'}.
+
+			self
+				assertUndoOf: (GtRBRemoveClassChange remove: aName asClass)
+				restores: {aName}
+				removing: {aName}
+				in: aChangeManager.
+			aChangeManager undoChange.
+			self assert: definers value equals: {aTraitName , ' classTrait'}.
+			self assert: aName asClass classSide localSlots isEmpty.
+
+			aName asClass ]
+]
+
+{ #category : #'examples - remove class' }
 GtRBRemoveClassChangeExamples >> removeClassWithClassSideSlotKinds [
 	"The undo defines the class together with its class-side slots,
 	instead of adding them one by one by name, so their kinds are restored too"

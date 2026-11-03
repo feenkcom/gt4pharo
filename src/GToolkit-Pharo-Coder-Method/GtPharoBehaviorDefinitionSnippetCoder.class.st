@@ -86,10 +86,11 @@ GtPharoBehaviorDefinitionSnippetCoder >> onClassChanged: anAnnouncement [
 
 { #category : #'private - actions' }
 GtPharoBehaviorDefinitionSnippetCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
-	"I compile class definition. If the result is a class builder, I install the given class.
-	I return a defined class."
+	"I compile class definition. If the result is a class builder, I define the class through
+	a recorded change, so that it can be undone and keeps the undo history. I return a defined class.
+	A definition that is not a single expression cannot be read by the change: I install it directly."
 
-	| aResult |
+	| aResult aChange |
 	aResult := super
 			primitiveEvaluate: aSourceString
 			inContext: aGtPharoSourceCoderEvaluationContext
@@ -97,7 +98,13 @@ GtPharoBehaviorDefinitionSnippetCoder >> primitiveEvaluate: aSourceString inCont
 			
 	(aResult isKindOf: ShiftClassBuilder) ifFalse: [ ^ aResult ].
 	
-	^ aResult install
+	aChange := [ GtRBAddClassChange definitionString: aSourceString ]
+			on: Error
+			do: [ :anError | anError return: nil ].
+	aChange ifNil: [ ^ aResult install ].
+
+	GtPharoCodeModifier current performRefactoryChange: aChange.
+	^ Smalltalk globals classOrTraitNamed: aResult name
 ]
 
 { #category : #'private - subscriptions' }

@@ -66,12 +66,17 @@ GtBaselineCreationForm >> baselineRope: aRope [
 
 { #category : #callbacks }
 GtBaselineCreationForm >> commit [
-	^ Smalltalk classInstaller
-		make: [ :builder | 
-			builder
-				name: baseline trim;
-				superclass: BaselineOf;
-				category: baseline trim ]
+	"Define the baseline through a recorded change, so that it can be undone and keeps the undo history"
+
+	| aName |
+	aName := baseline trim.
+	(GtRBAddClassChange
+		definitionString: (GtFluidDefinitionStringBuilder new
+				className: aName;
+				superclassName: 'BaselineOf';
+				packageName: aName;
+				definitionString)) gtExecuteWithUndo.
+	^ self class environment classNamed: aName
 ]
 
 { #category : #accessing }

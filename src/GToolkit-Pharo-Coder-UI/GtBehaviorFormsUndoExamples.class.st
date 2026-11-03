@@ -176,9 +176,8 @@ GtBehaviorFormsUndoExamples >> classUpdateKeepsTraitExclusions [
 
 { #category : #examples }
 GtBehaviorFormsUndoExamples >> classUpdateUsingTraitWithSlotsKeepsTraitSlots [
-	"Adding a slot to a class that uses a trait with slots leaves the slots of the trait to the trait.
-	After the undo only the instance side is compared: the undo definition makes the class-side slot
-	of the trait a slot of the class (F5, RBRefactoryClassChange>>#undoClassDefinitionFor:)"
+	"Adding a slot to a class that uses a trait with slots leaves the slots of the trait to the trait,
+	also after the undo"
 
 	<gtExample>
 	^ self
@@ -195,7 +194,7 @@ GtBehaviorFormsUndoExamples >> classUpdateUsingTraitWithSlotsKeepsTraitSlots [
 				thenAssert: [ (self slotDefinersOf: aName)
 						= {{#extra -> aName. #own -> aName. #x -> aTraitName}.
 								{#cx -> (aTraitName , ' classTrait')}} ]
-				afterUndo: [ (self slotDefinersOf: aName) first = aShape first ]
+				afterUndo: [ (self slotDefinersOf: aName) = aShape ]
 				in: aChangeManager ]
 ]
 
@@ -503,8 +502,8 @@ GtBehaviorFormsUndoExamples >> traitUpdateFormShowsOnlyOwnSlots [
 
 { #category : #examples }
 GtBehaviorFormsUndoExamples >> traitUpdateUsingTraitWithSlotsKeepsTraitSlots [
-	"Adding a slot to a trait that uses a trait with slots leaves the slots of the used trait to it.
-	After the undo only the instance side is compared, as in classUpdateUsingTraitWithSlotsKeepsTraitSlots"
+	"Adding a slot to a trait that uses a trait with slots leaves the slots of the used trait to it,
+	also after the undo"
 
 	<gtExample>
 	^ self
@@ -521,7 +520,7 @@ GtBehaviorFormsUndoExamples >> traitUpdateUsingTraitWithSlotsKeepsTraitSlots [
 				thenAssert: [ (self slotDefinersOf: aName)
 						= {{#x -> aTraitName. #y -> aName. #z -> aName}.
 								{#cx -> (aTraitName , ' classTrait'). #cy -> (aName , ' classTrait')}} ]
-				afterUndo: [ (self slotDefinersOf: aName) first = aShape first ]
+				afterUndo: [ (self slotDefinersOf: aName) = aShape ]
 				in: aChangeManager ]
 ]
 

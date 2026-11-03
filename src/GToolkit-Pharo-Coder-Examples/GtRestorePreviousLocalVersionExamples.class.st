@@ -88,3 +88,49 @@ GtRestorePreviousLocalVersionExamples >> restoreMethodToOldVersion [
 
 	^ scripter.
 ]
+
+{ #category : #examples }
+GtRestorePreviousLocalVersionExamples >> restoreMethodToOldVersionCanBeUndone [
+	"Using a previous local version of a method compiles it through a recorded change:
+	one undo restores the current version and keeps the changes recorded before it"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| targetMethod targetClass scripter |
+			[ targetMethod := self methodWithLocalVersions.
+			targetClass := targetMethod methodClass.
+			(RBAddMethodChange
+				compile: 'recordedBeforeRestoring ^ 1'
+				in: targetClass
+				classified: 'accessing') gtExecuteWithUndo.
+
+			scripter := self
+					scripterWithElement: [ (targetMethod gtLocalVersionsFor: GtPhlowView empty) asElement ].
+			scripter
+				clickStep: [ :aStep |
+					aStep
+						label: 'Expand second version';
+						id: (BlElementId named: #sidebar) index: 2 ].
+			self
+				disableEpiceaDuring: [ scripter
+						clickStep: [ :aStep |
+							aStep
+								label: 'Accept version';
+								id: BlLocalVersionAcceptVersionButtonId ] ].
+			self
+				assert: (targetClass >> targetMethod selector) sourceCode
+				equals: targetMethod selector , '
+	^ 1'.
+
+			aChangeManager undoChange.
+			self
+				assert: (targetClass >> targetMethod selector) sourceCode
+				equals: targetMethod selector , '
+	^ 2'.
+			self assert: (targetClass includesSelector: #recordedBeforeRestoring).
+			self assert: aChangeManager hasUndoableOperations.
+			scripter ]
+				ensure: [ self cleanUp.
+					environment := nil ] ]
+]
