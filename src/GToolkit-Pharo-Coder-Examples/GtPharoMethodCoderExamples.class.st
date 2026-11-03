@@ -31,6 +31,78 @@ GtPharoMethodCoderExamples >> b [
 	^ self a * self notAnExample
 ]
 
+{ #category : #'examples - references menu' }
+GtPharoMethodCoderExamples >> classVariableReferencesMenuActionsFor: aCoder cursorAt: aTextPosition in: aViewModel [
+	"Return the context menu actions added by the class variable references add-on for the node at the cursor position."
+
+	| someAddOns |
+	someAddOns := aCoder addOns class new.
+	aViewModel moveCursorTo: aTextPosition.
+	aCoder
+		addClassVariableReferencesMenuAddOnsAst: aCoder astSync
+		to: someAddOns
+		from: aViewModel.
+	^ someAddOns contextMenuActions
+]
+
+{ #category : #'examples - references menu' }
+GtPharoMethodCoderExamples >> classVariableReferencesMenuItem [
+	<gtExample>
+	<after: #cleanUp>
+	| aCoder aViewModel aPosition someActions anAction aSpawnedFilter |
+	aCoder := self forUnaryInstanceMethodWithClassVariableReference.
+	aViewModel := aCoder asCoderViewModel.
+	aPosition := (aCoder currentSourceString indexOfSubCollection: '^ ClassVar')
+			+ 3.
+
+	someActions := self
+			classVariableReferencesMenuActionsFor: aCoder
+			cursorAt: aPosition
+			in: aViewModel.
+	self assert: someActions size equals: 1.
+
+	anAction := someActions first.
+	self assert: anAction title asString equals: 'Browse references ClassVar'.
+	self assert: anAction priority equals: 12.
+	self
+		assert: anAction shortcutKey
+		equals: GtSourceCoderBrowseReferencesShortcut new combinationForPlatform gtDisplayString.	"the menu item must spawn the same references filter as the browse references shortcut"
+	aCoder announcer
+		when: GtCoderObjectSpawnRequest
+		do: [ :anAnnouncement | aSpawnedFilter := anAnnouncement object ]
+		for: self.
+	[ anAction action cull: aViewModel cull: nil ]
+		ensure: [ aCoder announcer unsubscribe: self ].
+
+	self assert: aSpawnedFilter notNil.
+	self
+		assert: aSpawnedFilter
+		equals: (aCoder
+				detectReferencesFilterAt: aPosition
+				ifFound: [ :aFilter :aNode | aFilter ]
+				ifNone: [ nil ]).
+
+	^ aSpawnedFilter
+]
+
+{ #category : #'examples - references menu' }
+GtPharoMethodCoderExamples >> classVariableReferencesMenuItemIsNotAddedForMessage [
+	<gtExample>
+	<after: #cleanUp>
+	| aCoder aViewModel aPosition |
+	aCoder := self forUnaryInstanceMethodWithClassVariableReference.
+	aViewModel := aCoder asCoderViewModel.
+	aPosition := (aCoder currentSourceString indexOfSubCollection: 'isNil') + 1.
+
+	self
+		assert: (self
+				classVariableReferencesMenuActionsFor: aCoder
+				cursorAt: aPosition
+				in: aViewModel) isEmpty.
+
+	^ aCoder
+]
+
 { #category : #'private - set up' }
 GtPharoMethodCoderExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
@@ -1057,6 +1129,23 @@ GtPharoMethodCoderExamples >> forUnaryInstanceMethod [
 	self assert: aMethodCoder sourceCode compiledMethod equals: aMethod.
 
 	^ aMethodCoder
+]
+
+{ #category : #'examples - references menu' }
+GtPharoMethodCoderExamples >> forUnaryInstanceMethodWithClassVariableReference [
+	<gtExample>
+	<after: #cleanUp>
+	| aCoder |
+	aCoder := self forUnaryInstanceMethod.
+	aCoder behavior addClassVarNamed: 'ClassVar'.
+	aCoder
+		appendString: '
+	^ ClassVar isNil'.
+
+	self assert: (aCoder currentSourceString includesSubstring: '^ ClassVar isNil').
+	self assert: (aCoder behavior classVarNames includes: #ClassVar).
+
+	^ aCoder
 ]
 
 { #category : #'sample methods' }

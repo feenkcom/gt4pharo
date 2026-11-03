@@ -1485,6 +1485,135 @@ GtPharoMethodCoderByScripterExamples >> classSideExtractToComponent [
 	^ aScripter
 ]
 
+{ #category : #'examples - browse references' }
+GtPharoMethodCoderByScripterExamples >> classVariableBrowseReferencesClickMenu [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter aCoder aPosition anExpectedFilter |
+	scripter := self classVariableBrowseReferencesOpenMenu.	"the menu item must spawn the same filter as the browse references shortcut"
+	aCoder := scripter model.
+	aPosition := (aCoder currentSourceString indexOfSubCollection: 'ClassVar isNil')
+			+ 1.
+	anExpectedFilter := aCoder
+			detectReferencesFilterAt: aPosition
+			ifFound: [ :aFilter :aNode | aFilter ]
+			ifNone: [ nil ].
+	self assert: anExpectedFilter notNil.
+	self assert: anExpectedFilter class equals: GtSearchReferencesFilter.
+	self
+		assert: anExpectedFilter object
+		equals: (aCoder behavior classVariableNamed: #ClassVar).
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click Browse references';
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString beginsWith: 'Browse references' ] ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert a second pager pane was spawned';
+				value: [ :aPager | aPager pages size ] equals: 2;
+				onSelf ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert the second pane shows the class variable references filter';
+				value: [ :aToolElement | aToolElement searchFilter ]
+					equals: anExpectedFilter;
+				onPagerPaneWithIndex: 2;
+				// GtPhlowSearchFilterToolElement ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert the references include the method using the class variable';
+				satisfies: [ :aToolElement | 
+					aToolElement searchFilter contents
+						anySatisfy: [ :aMethod | 
+							aMethod methodClass = aCoder behavior
+								and: [ aMethod selector = aCoder selector ] ] ];
+				onPagerPaneWithIndex: 2;
+				// GtPhlowSearchFilterToolElement ].
+
+	^ scripter
+]
+
+{ #category : #'examples - browse references' }
+GtPharoMethodCoderByScripterExamples >> classVariableBrowseReferencesOpenMenu [
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self classVariableBrowseReferencesSetup.
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Move cursor inside the class variable';
+				action: [ :aSourceEditor | 
+					aSourceEditor navigator
+						moveTo: (aSourceEditor text asString indexOfSubCollection: 'ClassVar isNil') + 1;
+						apply ];
+				id: GtSourceCoderEditorId ].
+	scripter := self openContextMenu: scripter.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Check Browse references menu item exists';
+				exists;
+				onSpaceRoot;
+				// #'menu--label';
+				@ [ :each | each text asString beginsWith: 'Browse references' ] ].
+
+	^ scripter
+]
+
+{ #category : #'examples - browse references' }
+GtPharoMethodCoderByScripterExamples >> classVariableBrowseReferencesSetup [
+	"Same as #createAccessorsForClassVariableSetup, but the coder is wrapped in a pager
+	so that browsing references can spawn a new pane"
+
+	<gtExample>
+	<after: #cleanUp>
+	| scripter |
+	scripter := self
+			scripterInPagerForBlock: [ | aCoder |
+				aCoder := GtPharoMethodCoderExamples new forUnaryInstanceMethod.
+				aCoder behavior addClassVarNamed: 'ClassVar'.
+				environment := aCoder attributeNamed: #dummyEnvironment.
+				aCoder ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Type in a method referencing a class variable';
+				action: [ :aCoder | 
+					aCoder
+						appendString: '
+	^ ClassVar isNil' ];
+				onModel ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Save the method';
+				action: [ :aCoder | aCoder save ];
+				onModel ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert one pager pane';
+				satisfies: [ :aPager | aPager pages size = 1 ];
+				onSelf ].
+
+	^ scripter
+]
+
 { #category : #'examples - evaluation context' }
 GtPharoMethodCoderByScripterExamples >> cleanDummyOneObject [
 	GtPharoDummyOneObject instA: nil.

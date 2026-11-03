@@ -155,6 +155,28 @@ GtPharoSourceCoder >> addClassReferencesMenuAddOnsAst: anAst to: coderAddOns fro
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoSourceCoder >> addClassVariableReferencesMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
+	(self nodeFrom: aCoderViewModel)
+		ifNotNil: [ :node | 
+			(node isVariable and: [ self isClassVariable: node ]) ifFalse: [ ^ self ].
+			(coderAddOns
+				addContextMenuItem: (self
+						createLabel: GtSourceCoderBrowseReferencesShortcut new name
+						description: node name value)
+				group: BrMenuItemGroupConfiguration navigation
+				hover: (self highlightNodeBlock: node documentId: aDocumentId)
+				leave: self removeHighlightsBlock
+				action: [ :aTextualViewModel | self browseReferencesAt: node startPosition requesterObject: aTextualViewModel ]
+				id: nil
+				shortcutKey: GtSourceCoderBrowseReferencesShortcut new
+						combinationForPlatform gtDisplayString)
+				ifNotNil: [ :anAction | anAction priority: 12 ] ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> addEvaluateAddonsTo: anAst to: coderAddOns [
 	<gtCoderContextMenuAddOns>
 	(self
