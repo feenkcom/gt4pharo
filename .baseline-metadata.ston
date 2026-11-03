@@ -3,7 +3,7 @@
 		"github://feenkcom/gtoolkit-utility/src" : "v0.9.61",
 		"github://feenkcom/gtoolkit-examples/src" : "v0.8.146",
 		"github://feenkcom/pharo-futures/src" : "v0.6.167",
-		"github://j-brant/SmaCC/src" : "32c77dcf280f907c54085217b072ade35076165e",
+		"github://j-brant/SmaCC/src" : "6ee6d3ebe1ede1011ca51290d8f828b2b1ddee79",
 		"github://feenkcom/gtoolkit-coder/src" : "v0.9.260",
 		"github://feenkcom/gt4magritte/src" : "v0.7.172",
 		"github://feenkcom/gtoolkit-completer/src" : "v0.9.170"
