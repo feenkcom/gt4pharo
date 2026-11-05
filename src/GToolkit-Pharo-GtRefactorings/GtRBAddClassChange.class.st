@@ -317,6 +317,13 @@ GtRBAddClassChange >> tag [
 	^ self packageTagName
 ]
 
+{ #category : #accessing }
+GtRBAddClassChange >> textToDisplay [
+	^builder 
+		ifNil: [self definition] 
+		ifNotNil: [super textToDisplay]
+]
+
 { #category : #private }
 GtRBAddClassChange >> updateDefinitionFromMessage: aMessageSend [
 	| keywords args |
