@@ -171,6 +171,8 @@ GtPharoStreamingMethodsCoderElement >> initializeShortcuts [
 
 	self
 		addShortcut: (BlShortcutWithAction new
+				name: 'Open methods Spoter';
+				description: 'Open Spotter for the Coder Methods view';
 				combination: (BlKeyCombination builder
 						shift;
 						primary;
