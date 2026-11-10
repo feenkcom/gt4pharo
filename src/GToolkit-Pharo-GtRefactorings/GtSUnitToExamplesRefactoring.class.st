@@ -1,11 +1,12 @@
 "
-Converts direct TestCase subclasses with assignment-only setUp into Object-based Examples classes using TAssertable for SUnit assertion support. Uses the standard class refactoring lifecycle: primitiveExecute builds a preview in the supplied model, while execute applies the changes through the refactoring framework. Setup normalization occurs in a private namespace, leaving the SUnit source unchanged. Reads become lazy getter sends; writes remain assignments. Unsupported lifecycle behavior is rejected rather than discarded.
+Converts SUnit classes using the standard class refactoring lifecycle. model:from:to: defaults to an Object-based target using TAssertable. model:from:to:superclass: supplies an already converted superclass for inherited sources. Local fixture initialization and selector conversion follow the same policy in both cases; inherited fixture specialization is not inferred. Slot-read rewriting includes slots available through the target superclass. Private setup workspaces copy pending test ancestors so the existing inliner can resolve inherited behavior. Sources remain unchanged. primitiveExecute builds a preview in the supplied model; inherited execute applies changes. Converted tests use <after: #tearDown>. Cleanup slot reads use the generated the-prefixed getters; assignments remain slot writes. Inherited cleanup dispatch is preserved. Object-based roots supply an empty tearDown hook when the source has none, and calls to TestCase's empty super hook become no-ops.
 "
 Class {
 	#name : #GtSUnitToExamplesRefactoring,
 	#superclass : #RBClassRefactoring,
 	#instVars : [
-		'targetClassName'
+		'targetClassName',
+		'targetSuperclassName'
 	],
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
 }
@@ -16,6 +17,16 @@ GtSUnitToExamplesRefactoring class >> model: aModel from: aClassName to: anExamp
 		initializeModel: aModel
 		from: aClassName
 		to: anExamplesClassName
+]
+
+{ #category : #'instance creation' }
+GtSUnitToExamplesRefactoring class >> model: aModel from: sourceName to: targetName superclass: superclassName [
+	^ (self
+		model: aModel
+		from: sourceName
+		to: targetName)
+		targetSuperclassName: superclassName;
+		yourself
 ]
 
 { #category : #preconditions }
@@ -33,11 +44,14 @@ GtSUnitToExamplesRefactoring >> applicabilityPreconditions [
 	source
 		ifNotNil: [ conditions
 				add: ((RBCondition
-						withBlock: [ source superclass notNil and: [ source superclass name = #TestCase ] ])
-						errorMacro: 'Only direct TestCase subclasses are supported').
-			conditions
-				add: ((RBCondition withBlock: [ (source directlyDefinesMethod: #tearDown) not ])
-						errorMacro: 'tearDown requires manual conversion').
+						withBlock: [ source superclass notNil
+								and: [ source superclass name = #TestCase
+										ifTrue: [ self targetSuperclassName = #Object ]
+										ifFalse: [ self targetSuperclassName ~= #Object
+												and: [ (source allSuperclasses anySatisfy: [ :each | each name = #TestCase ])
+														and: [ (self model classNamed: self targetSuperclassName) notNil ] ] ] ] ])
+						errorMacro: 'Specify the converted superclass for inherited test classes').
+
 			conditions
 				add: ((RBCondition withBlock: [ source classVariableNames isEmpty ])
 						errorMacro: 'Class variables require manual conversion').
@@ -45,6 +59,33 @@ GtSUnitToExamplesRefactoring >> applicabilityPreconditions [
 				add: ((RBCondition withBlock: [ source classSide localSelectors isEmpty ])
 						errorMacro: 'Class-side behavior requires manual conversion') ].
 	^ self applicabilityPreconditionsFor: conditions
+]
+
+{ #category : #private }
+GtSUnitToExamplesRefactoring >> collectSetupStatement: statement slots: slots initializers: initializers configurations: configurations [
+	| assignment expression receiver |
+	(statement isMessage
+		and: [ statement receiver isVariable
+				and: [ statement receiver isSuper and: [ statement selector = #setUp ] ] ])
+		ifTrue: [ ^ self ].
+	assignment := statement isAssignment
+			and: [ slots includes: statement variable name ].
+	receiver := self firstReceiverOf: statement.
+	(assignment or: [ receiver isVariable and: [ slots includes: receiver name ] ])
+		ifFalse: [ ^ self
+				error: 'Expanded setUp must contain only direct slot assignments and super setUp' ].
+	(assignment not and: [ (initializers includesKey: receiver name) not ])
+		ifTrue: [ ^ self
+				error: 'Setup configures a slot before its assignment: ' , receiver name ].
+	expression := assignment ifTrue: [ statement value ] ifFalse: [ statement ].
+	(expression containsReturn or: [ expression assignmentNodes notEmpty ])
+		ifTrue: [ ^ self error: 'Setup returns and nested assignments require manual conversion' ].
+	assignment
+		ifTrue: [ ^ initializers
+				at: statement variable name
+				ifAbsentPut: [ statement value copy ] ].
+	^ (configurations at: receiver name ifAbsentPut: [ OrderedCollection new ])
+		add: statement copy
 ]
 
 { #category : #private }
@@ -80,6 +121,20 @@ GtSUnitToExamplesRefactoring >> expandedSetupTreeFor: source slots: slots [
 	^ setup
 ]
 
+{ #category : #private }
+GtSUnitToExamplesRefactoring >> firstReceiverOf: statement [
+	| receiver |
+	receiver := statement.
+	[ receiver isMessage or: [ receiver isCascade ] ]
+		whileTrue: [ receiver := receiver receiver ].
+	^ receiver
+]
+
+{ #category : #private }
+GtSUnitToExamplesRefactoring >> getterSelectorForSlot: slot [
+	^ ('the' , slot asString capitalized) asSymbol
+]
+
 { #category : #printing }
 GtSUnitToExamplesRefactoring >> gtDescription [
 	^ 'Convert SUnit class ' , className , ' to examples class ' , targetClassName
@@ -95,25 +150,40 @@ GtSUnitToExamplesRefactoring >> initializeModel: aModel from: aClassName to: anE
 
 { #category : #private }
 GtSUnitToExamplesRefactoring >> initializersFor: source slots: slots [
-	| initializers setup |
+	| initializers setup configurations |
 	initializers := Dictionary new.
+	configurations := Dictionary new.
 	(source directlyDefinesMethod: #setUp) ifFalse: [ ^ initializers ].
 	setup := self
 			expandedSetupTreeFor: (self setupWorkingCopyOf: source)
 			slots: slots.
 	setup body statements
 		do: [ :statement | 
-			(statement isMessage
-				and: [ statement receiver isSuper and: [ statement selector = #setUp ] ])
-				ifFalse: [ (statement isAssignment and: [ slots includes: statement variable name ])
-						ifFalse: [ self
-								error: 'Expanded setUp must contain only direct slot assignments and super setUp' ].
-					(statement value containsReturn
-						or: [ statement value assignmentNodes notEmpty ])
-						ifTrue: [ self error: 'Setup returns and nested assignments require manual conversion' ].
-					initializers
-						at: statement variable name
-						ifAbsentPut: [ statement value copy ] ] ].
+			self
+				collectSetupStatement: statement
+				slots: slots
+				initializers: initializers
+				configurations: configurations ].
+	configurations
+		keysAndValuesDo: [ :slot :statements | 
+			| code |
+			code := String
+					streamContents: [ :stream | 
+						stream
+							nextPutAll: '[ ';
+							nextPutAll: slot;
+							nextPutAll: ' := (';
+							nextPutAll: (initializers at: slot) formattedCode;
+							nextPutAll: '). '.
+						statements
+							do: [ :statement | 
+								stream
+									nextPutAll: statement formattedCode;
+									nextPutAll: '. ' ].
+						stream
+							nextPutAll: slot;
+							nextPutAll: ' ]' ].
+			initializers at: slot put: (RBParser parseExpression: code) body ].
 	^ initializers
 ]
 
@@ -126,34 +196,49 @@ GtSUnitToExamplesRefactoring >> isSlotRead: node slots: slots [
 
 { #category : #private }
 GtSUnitToExamplesRefactoring >> methodSourcesFor: source slots: slots initializers: initializers [
-	| sources |
+	| sources readSlots |
 	sources := Dictionary new.
+	readSlots := slots
+			, (model classNamed: self targetSuperclassName) allInstanceVariableNames.
 	slots
 		do: [ :slot | 
 			| expression tree |
 			expression := initializers
 					at: slot
 					ifAbsent: [ RBParser parseExpression: 'nil' ].
-			self rewriteReadsIn: expression slots: slots.	"Include the root variable read as well as nested reads."
-			(self isSlotRead: expression slots: slots)
-				ifTrue: [ expression := RBParser parseExpression: 'self ' , expression name ].
+			self rewriteReadsIn: expression slots: readSlots.	"Include the root variable read as well as nested reads."
+			(self isSlotRead: expression slots: readSlots)
+				ifTrue: [ expression := RBParser
+							parseExpression: 'self ' , (self getterSelectorForSlot: expression name) ].
+			expression isSequence
+				ifFalse: [ expression := RBParser
+							parseExpression: slot , ' := (' , expression formattedCode , ')' ].
 			tree := RBParser
-					parseMethod: slot , ' ^ ' , slot , ' ifNil: [ ' , slot , ' := (' , expression formattedCode
-							, ') ]'.
-			sources at: slot asSymbol put: tree formattedCode ].
+					parseMethod: (self getterSelectorForSlot: slot) asString , ' ^ ' , slot , ' ifNil: [ '
+							, expression formattedCode , ' ]'.
+			sources at: (self getterSelectorForSlot: slot) put: tree formattedCode ].
 	source localSelectors
 		do: [ :selector | 
-			(#(setUp tearDown) includes: selector)
+			selector = #setUp
 				ifFalse: [ | tree newSelector |
-					tree := RBParser parseMethod: (source sourceCodeFor: selector).
+					tree := selector = #tearDown
+							ifTrue: [ self tearDownTreeFor: source ]
+							ifFalse: [ RBParser parseMethod: (source sourceCodeFor: selector) ].
 					newSelector := self exampleSelectorFor: selector.
+					newSelector = #class
+						ifTrue: [ self error: 'Cannot generate the class selector' ].
 					(sources includesKey: newSelector)
 						ifTrue: [ self error: 'Getter or example selector collision: ' , newSelector ].
-					self rewriteReadsIn: tree slots: slots.
+					self rewriteReadsIn: tree slots: readSlots.
 					tree selector: newSelector.
 					newSelector ~= selector
-						ifTrue: [ tree addPragma: (RBParser parseMethod: 'example <gtExample>') pragmas first ].
+						ifTrue: [ tree addPragma: (RBParser parseMethod: 'example <gtExample>') pragmas first.
+							tree
+								addPragma: (RBParser parseMethod: 'example <after: #tearDown>') pragmas first ].
 					sources at: newSelector put: tree formattedCode ] ].
+	(self targetSuperclassName = #Object
+		and: [ (source directlyDefinesMethod: #tearDown) not ])
+		ifTrue: [ sources at: #tearDown put: 'tearDown' ].
 	^ sources
 ]
 
@@ -168,8 +253,10 @@ GtSUnitToExamplesRefactoring >> privateTransform [
 			slots: slots
 			initializers: initializers.
 	model
-		defineClass: 'Object subclass: #' , targetClassName
-				, ' uses: TAssertable instanceVariableNames: '
+		defineClass: self targetSuperclassName , ' subclass: #' , targetClassName
+				, (self targetSuperclassName = #Object
+						ifTrue: [ ' uses: TAssertable' ]
+						ifFalse: [ '' ]) , ' instanceVariableNames: '
 				, (' ' join: slots) printString
 				, ' classVariableNames: '''' package: ''SUnit-Converted-Examples'''.
 	target := model classNamed: targetClassName.
@@ -177,7 +264,7 @@ GtSUnitToExamplesRefactoring >> privateTransform [
 		keysAndValuesDo: [ :selector :code | 
 			target
 				compile: code
-				classified: ((slots includes: selector asString)
+				classified: ((slots anySatisfy: [ :slot | (self getterSelectorForSlot: slot) = selector ])
 						ifTrue: [ #accessing ]
 						ifFalse: [ #examples ]) ].
 	^ model
@@ -186,7 +273,9 @@ GtSUnitToExamplesRefactoring >> privateTransform [
 { #category : #private }
 GtSUnitToExamplesRefactoring >> rewriteReadsIn: tree slots: slots [
 	(tree allChildren select: [ :node | self isSlotRead: node slots: slots ])
-		do: [ :node | node replaceWith: (RBParser parseExpression: 'self ' , node name) ].
+		do: [ :node | 
+			node
+				replaceWith: (RBParser parseExpression: 'self ' , (self getterSelectorForSlot: node name)) ].
 	^ tree
 ]
 
@@ -214,16 +303,49 @@ GtSUnitToExamplesRefactoring >> setupTreeFor: source slots: slots [
 
 { #category : #private }
 GtSUnitToExamplesRefactoring >> setupWorkingCopyOf: source [
-	"Snapshot pending source edits so setup normalization cannot change the caller's model."
+	"Snapshot the source and its pending test ancestors for the existing setup inliner."
 
-	| workingModel workingSource |
+	| workingModel hierarchy current |
 	workingModel := GtRBNamespace onEnvironment: model environment.
-	workingModel defineClass: source gtDefinitionString.
-	workingSource := workingModel classNamed: source name.
-	source localSelectors
-		do: [ :selector | 
-			workingSource
-				compile: (source sourceCodeFor: selector)
-				classified: (source protocolsFor: selector) ].
-	^ workingSource
+	hierarchy := OrderedCollection new.
+	current := source.
+	[ current name = #TestCase ]
+		whileFalse: [ hierarchy addFirst: current.
+			current := current superclass ].
+	hierarchy
+		do: [ :each | 
+			| copy |
+			workingModel defineClass: each gtDefinitionString.
+			copy := workingModel classNamed: each name.
+			each localSelectors
+				do: [ :selector | 
+					copy
+						compile: (each sourceCodeFor: selector)
+						classified: (each protocolsFor: selector) ] ].
+	^ workingModel classNamed: source name
+]
+
+{ #category : #accessing }
+GtSUnitToExamplesRefactoring >> targetSuperclassName [
+	^ targetSuperclassName ifNil: [ #Object ]
+]
+
+{ #category : #accessing }
+GtSUnitToExamplesRefactoring >> targetSuperclassName: aName [
+	targetSuperclassName := aName asSymbol
+]
+
+{ #category : #private }
+GtSUnitToExamplesRefactoring >> tearDownTreeFor: source [
+	| tree |
+	tree := RBParser parseMethod: (source sourceCodeFor: #tearDown).
+	self targetSuperclassName = #Object
+		ifTrue: [  "TestCase's empty hook has no counterpart above the target root."(tree
+				allChildren
+				select: [ :node | 
+					node isMessage
+						and: [ node receiver isVariable
+								and: [ node receiver isSuper and: [ node selector = #tearDown ] ] ] ])
+				do: [ :node | node replaceWith: (RBParser parseExpression: 'self') ] ].
+	^ tree
 ]

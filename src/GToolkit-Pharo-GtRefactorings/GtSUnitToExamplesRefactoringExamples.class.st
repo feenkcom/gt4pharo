@@ -26,17 +26,17 @@ GtSUnitToExamplesRefactoringExamples >> basicConversion [
 	target := model classNamed: #GtConversionTargetExamples.
 	self assert: target superclass name equals: #Object.
 	self
-		assert: (target parseTreeForSelector: #a)
-		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 42 ]').
+		assert: (target parseTreeForSelector: #theA)
+		equals: (RBParser parseMethod: 'theA ^ a ifNil: [ a := 42 ]').
 	self
-		assert: (target parseTreeForSelector: #b)
-		equals: (RBParser parseMethod: 'b ^ b ifNil: [ b := self a + 1 ]').
+		assert: (target parseTreeForSelector: #theB)
+		equals: (RBParser parseMethod: 'theB ^ b ifNil: [ b := self theA + 1 ]').
 	tree := target parseTreeForSelector: #something.
 	self assert: (tree hasPragmaNamed: #gtExample).
 	self
 		assert: tree
 		equals: (RBParser
-				parseMethod: 'something <gtExample> self assert: self a equals: 42. self assert: self b equals: 43').
+				parseMethod: 'something <gtExample> <after: #tearDown> self assert: self theA equals: 42. self assert: self theB equals: 43').
 	self assert: (source directlyDefinesMethod: #testSomething).
 	^ model
 ]
@@ -69,7 +69,7 @@ GtSUnitToExamplesRefactoringExamples >> convertedExamplesUseTAssertable [
 	self
 		assert: (target parseTreeForSelector: #raises)
 		equals: (RBParser
-				parseMethod: 'raises <gtExample> self should: [ Error signal: ''expected'' ] raise: Error').
+				parseMethod: 'raises <gtExample> <after: #tearDown> self should: [ Error signal: ''expected'' ] raise: Error').
 	self assert: (source directlyDefinesMethod: #testRaises).
 	^ model
 ]
@@ -113,14 +113,14 @@ GtSUnitToExamplesRefactoringExamples >> firstAssignmentAndUninitializedSlot [
 		to: #GtConversionFirstExamples) primitiveExecute.
 	target := model classNamed: #GtConversionFirstExamples.
 	self
-		assert: (target parseTreeForSelector: #a)
-		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 42 ]').
+		assert: (target parseTreeForSelector: #theA)
+		equals: (RBParser parseMethod: 'theA ^ a ifNil: [ a := 42 ]').
 	self
-		assert: (target parseTreeForSelector: #b)
-		equals: (RBParser parseMethod: 'b ^ b ifNil: [ b := self a ]').
+		assert: (target parseTreeForSelector: #theB)
+		equals: (RBParser parseMethod: 'theB ^ b ifNil: [ b := self theA ]').
 	self
-		assert: (target parseTreeForSelector: #c)
-		equals: (RBParser parseMethod: 'c ^ c ifNil: [ c := nil ]').
+		assert: (target parseTreeForSelector: #theC)
+		equals: (RBParser parseMethod: 'theC ^ c ifNil: [ c := nil ]').
 	^ model
 ]
 
@@ -179,8 +179,8 @@ GtSUnitToExamplesRefactoringExamples >> rejectionAfterExpansionPreservesModel [
 		to: #GtConversionExpansionUnsafeExamples) primitiveExecute.
 	target := model classNamed: #GtConversionExpansionUnsafeExamples.
 	self
-		assert: (target parseTreeForSelector: #a)
-		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 42 ]').
+		assert: (target parseTreeForSelector: #theA)
+		equals: (RBParser parseMethod: 'theA ^ a ifNil: [ a := 42 ]').
 	self
 		assert: (source sourceCodeFor: #setUp)
 		equals: 'setUp self initializeValue'.
@@ -211,6 +211,55 @@ GtSUnitToExamplesRefactoringExamples >> rejectsUnsupportedSetup [
 ]
 
 { #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> setupConfiguresNestedReceiver [
+	<gtExample>
+	| model source target original |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtNestedFixtureTest instanceVariableNames: ''store'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtNestedFixtureTest.
+	original := 'setUp store := Dictionary new. store at: #items put: OrderedCollection new. (store at: #items) add: 42'.
+	source compile: original classified: #running.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtNestedFixtureExamples) primitiveExecute.
+	target := model classNamed: #GtNestedFixtureExamples.
+	self
+		assert: (target parseTreeForSelector: #theStore)
+		equals: (RBParser
+				parseMethod: 'theStore ^ store ifNil: [ store := Dictionary new. self theStore at: #items put: OrderedCollection new. (self theStore at: #items) add: 42. store ]').
+	self assert: (source sourceCodeFor: #setUp) equals: original.
+	^ model
+]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> setupConfiguresSlotThroughSelfSend [
+	<gtExample>
+	| model source target original |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtConfiguredFixtureTest instanceVariableNames: ''store value'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtConfiguredFixtureTest.
+	original := 'setUp store := Dictionary new. value := 43. self configureStore'.
+	source compile: original classified: #running.
+	source
+		compile: 'configureStore store at: #answer put: 1; at: #answer put: 42. store at: #other put: value'
+		classified: #helpers.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtConfiguredFixtureExamples) primitiveExecute.
+	target := model classNamed: #GtConfiguredFixtureExamples.
+	self
+		assert: (target parseTreeForSelector: #theStore)
+		equals: (RBParser
+				parseMethod: 'theStore ^ store ifNil: [ store := Dictionary new. self theStore at: #answer put: 1; at: #answer put: 42. self theStore at: #other put: self theValue. store ]').
+	self assert: (source sourceCodeFor: #setUp) equals: original.
+	^ model
+]
+
+{ #category : #examples }
 GtSUnitToExamplesRefactoringExamples >> setupExpansionUsesPendingHelperEdits [
 	<gtExample>
 	| model source target before |
@@ -231,8 +280,8 @@ GtSUnitToExamplesRefactoringExamples >> setupExpansionUsesPendingHelperEdits [
 		to: #GtConversionPendingHelperExamples) primitiveExecute.
 	target := model classNamed: #GtConversionPendingHelperExamples.
 	self
-		assert: (target parseTreeForSelector: #a)
-		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 40 + 2 ]').
+		assert: (target parseTreeForSelector: #theA)
+		equals: (RBParser parseMethod: 'theA ^ a ifNil: [ a := 40 + 2 ]').
 	self
 		assert: (source sourceCodeFor: #setUp)
 		equals: 'setUp self initializeValue'.
@@ -273,14 +322,14 @@ GtSUnitToExamplesRefactoringExamples >> setupSelfSends [
 		to: #GtConversionHelperExamples) primitiveExecute.
 	target := model classNamed: #GtConversionHelperExamples.
 	self
-		assert: (target parseTreeForSelector: #a)
-		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 40 + 2 ]').
+		assert: (target parseTreeForSelector: #theA)
+		equals: (RBParser parseMethod: 'theA ^ a ifNil: [ a := 40 + 2 ]').
 	self
-		assert: (target parseTreeForSelector: #b)
-		equals: (RBParser parseMethod: 'b ^ b ifNil: [ b := self valueForB ]').
+		assert: (target parseTreeForSelector: #theB)
+		equals: (RBParser parseMethod: 'theB ^ b ifNil: [ b := self valueForB ]').
 	self
 		assert: (target parseTreeForSelector: #valueForB)
-		equals: (RBParser parseMethod: 'valueForB ^ self a + 1').
+		equals: (RBParser parseMethod: 'valueForB ^ self theA + 1').
 	originals
 		keysAndValuesDo: [ :selector :code | self assert: (source sourceCodeFor: selector) equals: code ].
 	self assert: (model changes changes asArray first: before size) equals: before.
@@ -308,11 +357,11 @@ GtSUnitToExamplesRefactoringExamples >> setupTemporariesAreInlined [
 		to: #GtConversionTemporaryExamples) primitiveExecute.
 	target := model classNamed: #GtConversionTemporaryExamples.
 	self
-		assert: (target parseTreeForSelector: #a)
-		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 40 + 2 ]').
+		assert: (target parseTreeForSelector: #theA)
+		equals: (RBParser parseMethod: 'theA ^ a ifNil: [ a := 40 + 2 ]').
 	self
-		assert: (target parseTreeForSelector: #b)
-		equals: (RBParser parseMethod: 'b ^ b ifNil: [ b := self a + (40 + 2) ]').
+		assert: (target parseTreeForSelector: #theB)
+		equals: (RBParser parseMethod: 'theB ^ b ifNil: [ b := self theA + (40 + 2) ]').
 	self assert: (source sourceCodeFor: #setUp) equals: original.
 	self assert: (model changes changes asArray first: before size) equals: before.
 	self
@@ -345,10 +394,52 @@ GtSUnitToExamplesRefactoringExamples >> shadowingAndWrites [
 	self
 		assert: (target parseTreeForSelector: #write)
 		equals: (RBParser
-				parseMethod: 'write <gtExample> a := self a + 1. self assert: self a equals: 43').
+				parseMethod: 'write <gtExample> <after: #tearDown> a := self theA + 1. self assert: self theA equals: 43').
 	self
 		assert: (target parseTreeForSelector: #shadow)
 		equals: (RBParser
-				parseMethod: 'shadow <gtExample> | a | a := 7. self assert: a equals: 7. #(1) do: [ :a | self assert: a equals: 1 ]').
+				parseMethod: 'shadow <gtExample> <after: #tearDown> | a | a := 7. self assert: a equals: 7. #(1) do: [ :a | self assert: a equals: 1 ]').
+	^ model
+]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> slotGettersUseThePrefix [
+	<gtExample>
+	| model source target |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtPrefixedFixtureTest instanceVariableNames: ''class anotherSlot'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtPrefixedFixtureTest.
+	source
+		compile: 'setUp class := 42. anotherSlot := class + 1'
+		classified: #running.
+	source
+		compile: 'testValue self assert: anotherSlot equals: 43'
+		classified: #tests.
+	source
+		compile: 'tearDown class ifNotNil: [ class := nil ]. anotherSlot := nil. super tearDown'
+		classified: #running.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtPrefixedFixtureExamples) primitiveExecute.
+	target := model classNamed: #GtPrefixedFixtureExamples.
+	self assert: (target directlyDefinesMethod: #class) not.
+	self
+		assert: (target parseTreeForSelector: #theClass)
+		equals: (RBParser parseMethod: 'theClass ^ class ifNil: [ class := 42 ]').
+	self
+		assert: (target parseTreeForSelector: #theAnotherSlot)
+		equals: (RBParser
+				parseMethod: 'theAnotherSlot ^ anotherSlot ifNil: [ anotherSlot := self theClass + 1 ]').
+	self
+		assert: (target parseTreeForSelector: #value)
+		equals: (RBParser
+				parseMethod: 'value <gtExample> <after: #tearDown> self assert: self theAnotherSlot equals: 43').
+	self assert: (target protocolsFor: #theClass) first equals: #accessing.
+	self
+		assert: (target parseTreeForSelector: #tearDown)
+		equals: (RBParser
+				parseMethod: 'tearDown self theClass ifNotNil: [ class := nil ]. anotherSlot := nil. self').
 	^ model
 ]
