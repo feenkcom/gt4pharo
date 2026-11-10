@@ -247,7 +247,7 @@ GtPharoSnippetCoderByScripterExamples >> clickReorderParameter: aScripter [
 	self check: aScripter hasReorderAttributes: 2
 ]
 
-{ #category : #'examples - completion' }
+{ #category : #examples }
 GtPharoSnippetCoderByScripterExamples >> completionAttributeIsNotPropagated [
 	<gtExample>
 	| scripter source |
@@ -258,51 +258,63 @@ GtPharoSnippetCoderByScripterExamples >> completionAttributeIsNotPropagated [
 			s
 				label: 'Click on the coder editor to give it focus';
 				id: GtSourceCoderEditorId ].
-
 	scripter
 		doStep: [ :s | 
 			s
 				label: 'Move cursor to end';
-				action: [ :aSourceEditor | aSourceEditor editor moveCursorTo: source size ];
+				action: [ :editor | editor editor moveCursorTo: source size ];
 				id: GtSourceCoderEditorId ].
-
 	scripter shortcut
 		combination: BlKeyCombination builder control space build;
 		// GtSourceCoderEditorId;
 		// GtSourceCoderEditorInnerId;
+		play.	"Completion is asynchronous and its ordering depends on the loaded selectors."
+	scripter wait
+		onSpaceRoot;
+		forElementCondition: [ :aRoot | 
+				(aRoot query // #'completion-list') all
+					anySatisfy: [ :aList | 
+						aList items asArray
+							anySatisfy: [ :each | each displayText asString = 'ifTrue:ifFalse:' ] ] ]
+			timeout: 5 seconds;
 		play.
-
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select ifTrue:ifFalse: completion';
+				onSpaceRoot;
+				// #'completion-list';
+				action: [ :aList | 
+					| anIndex |
+					anIndex := aList items asArray
+							detectIndex: [ :each | each displayText asString = 'ifTrue:ifFalse:' ].
+					self assert: anIndex > 0.
+					aList selectOne: anIndex ] ].
 	(scripter keyPress: BlKeyboardKey tab) play.
-
 	scripter
 		doStep: [ :s | 
 			s
 				label: 'Verify first arg is selected';
 				// GtSourceCoderEditorId;
 				action: [ :editor | self assert: (editor selection containsIndex: 38) ] ].
-
 	(scripter type: '[') play.
 	(scripter type: '1') play.
 	(scripter keyPress: BlKeyboardKey tab) play.
-
 	scripter
 		doStep: [ :s | 
 			s
 				label: 'Verify second arg is selected';
 				// GtSourceCoderEditorId;
 				action: [ :editor | self assert: (editor selection containsIndex: 51) ] ].
-
 	(scripter type: '[') play.
-	(scripter type: '2') play.
-	(scripter keyPress: BlKeyboardKey tab) play.	"No more args to complete so it should enter a tab instead of moving the cursor"
-
+	(scripter type: '2') play.	"No more args to complete so Tab should insert a tab instead of moving the cursor."
+	(scripter keyPress: BlKeyboardKey tab) play.
 	scripter
 		doStep: [ :s | 
 			s
 				label: 'Verify no selection';
 				// GtSourceCoderEditorId;
 				action: [ :editor | self assert: editor selection isEmpty ] ].
-
 	scripter
 		assertStep: [ :s | 
 			s
@@ -310,7 +322,6 @@ GtPharoSnippetCoderByScripterExamples >> completionAttributeIsNotPropagated [
 				// GtSourceCoderEditorId;
 				value: [ :each | each text asString ]
 					equals: [ '({} = OrderedCollection new) ifTrue: [1] ifFalse: [2	]' ] ].
-
 	^ scripter
 ]
 
