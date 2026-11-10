@@ -22,7 +22,7 @@ GtSUnitToExamplesRefactoringExamples >> basicConversion [
 	(GtSUnitToExamplesRefactoring
 		model: model
 		from: source name
-		to: #GtConversionTargetExamples) execute.
+		to: #GtConversionTargetExamples) primitiveExecute.
 	target := model classNamed: #GtConversionTargetExamples.
 	self assert: target superclass name equals: #Object.
 	self
@@ -42,6 +42,29 @@ GtSUnitToExamplesRefactoringExamples >> basicConversion [
 ]
 
 { #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> existingTargetFailsPreconditions [
+	<gtExample>
+	| model refactoring before rejected |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtConversionExistingTargetTest instanceVariableNames: '''' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	model
+		defineClass: 'Object subclass: #GtConversionExistingTargetExamples instanceVariableNames: '''' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	refactoring := GtSUnitToExamplesRefactoring
+			model: model
+			from: #GtConversionExistingTargetTest
+			to: #GtConversionExistingTargetExamples.
+	before := model changes changes asArray.
+	rejected := false.
+	[ refactoring primitiveExecute ]
+		on: RBRefactoringError
+		do: [ :error | rejected := true ].
+	self assert: rejected.
+	self assert: model changes changes asArray equals: before.
+	^ refactoring
+]
+
+{ #category : #examples }
 GtSUnitToExamplesRefactoringExamples >> firstAssignmentAndUninitializedSlot [
 	<gtExample>
 	| model source target |
@@ -54,7 +77,7 @@ GtSUnitToExamplesRefactoringExamples >> firstAssignmentAndUninitializedSlot [
 	(GtSUnitToExamplesRefactoring
 		model: model
 		from: source name
-		to: #GtConversionFirstExamples) execute.
+		to: #GtConversionFirstExamples) primitiveExecute.
 	target := model classNamed: #GtConversionFirstExamples.
 	self
 		assert: (target parseTreeForSelector: #a)
@@ -65,6 +88,69 @@ GtSUnitToExamplesRefactoringExamples >> firstAssignmentAndUninitializedSlot [
 	self
 		assert: (target parseTreeForSelector: #c)
 		equals: (RBParser parseMethod: 'c ^ c ifNil: [ c := nil ]').
+	^ model
+]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> missingSourceFailsPreconditions [
+	<gtExample>
+	| model refactoring before rejected |
+	model := GtRBNamespace new.
+	refactoring := GtSUnitToExamplesRefactoring
+			model: model
+			from: #GtConversionMissingSourceTest
+			to: #GtConversionMissingSourceExamples.
+	before := model changes changes asArray.
+	rejected := false.
+	[ refactoring primitiveExecute ]
+		on: RBRefactoringError
+		do: [ :error | rejected := true ].
+	self assert: rejected.
+	self assert: model changes changes asArray equals: before.
+	self assert: (model classNamed: #GtConversionMissingSourceExamples) isNil.
+	^ refactoring
+]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> rejectionAfterExpansionPreservesModel [
+	<gtExample>
+	| model source original helper before message target |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtConversionExpansionUnsafeTest instanceVariableNames: ''a'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtConversionExpansionUnsafeTest.
+	original := 'setUp | value | value := 40. a := value. self initializeValue. Transcript cr'.
+	helper := 'initializeValue a := 42'.
+	source compile: original classified: #running.
+	source compile: helper classified: #helpers.
+	source compile: 'testValue self assert: a equals: 42' classified: #tests.
+	before := model changes changes asArray.
+	message := nil.
+	[ (GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtConversionExpansionUnsafeExamples) primitiveExecute ]
+		on: Error
+		do: [ :error | message := error messageText ].
+	self
+		assert: message
+		equals: 'Expanded setUp must contain only direct slot assignments and super setUp'.
+	self assert: (source sourceCodeFor: #setUp) equals: original.
+	self assert: (source sourceCodeFor: #initializeValue) equals: helper.
+	self assert: model changes changes asArray equals: before.
+	self assert: (model classNamed: #GtConversionExpansionUnsafeExamples) isNil.	"Correct the setup and retry in the same model."
+	source compile: 'setUp self initializeValue' classified: #running.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtConversionExpansionUnsafeExamples) primitiveExecute.
+	target := model classNamed: #GtConversionExpansionUnsafeExamples.
+	self
+		assert: (target parseTreeForSelector: #a)
+		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 42 ]').
+	self
+		assert: (source sourceCodeFor: #setUp)
+		equals: 'setUp self initializeValue'.
 	^ model
 ]
 
@@ -82,7 +168,7 @@ GtSUnitToExamplesRefactoringExamples >> rejectsUnsupportedSetup [
 	[ (GtSUnitToExamplesRefactoring
 		model: model
 		from: source name
-		to: #GtConversionUnsafeExamples) execute ]
+		to: #GtConversionUnsafeExamples) primitiveExecute ]
 		on: Error
 		do: [ :error | rejected := true ].
 	self assert: rejected.
@@ -92,9 +178,45 @@ GtSUnitToExamplesRefactoringExamples >> rejectsUnsupportedSetup [
 ]
 
 { #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> setupExpansionUsesPendingHelperEdits [
+	<gtExample>
+	| model source target before |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtConversionPendingHelperTest instanceVariableNames: ''a'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtConversionPendingHelperTest.
+	source compile: 'setUp self initializeValue' classified: #running.
+	source compile: 'initializeValue a := 1' classified: #helpers.
+	source compile: 'testValue self assert: a equals: 42' classified: #tests.
+	source
+		compile: 'initializeValue | value | value := 40 + 2. a := value'
+		classified: #helpers.
+	before := model changes changes asArray.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtConversionPendingHelperExamples) primitiveExecute.
+	target := model classNamed: #GtConversionPendingHelperExamples.
+	self
+		assert: (target parseTreeForSelector: #a)
+		equals: (RBParser parseMethod: 'a ^ a ifNil: [ a := 40 + 2 ]').
+	self
+		assert: (source sourceCodeFor: #setUp)
+		equals: 'setUp self initializeValue'.
+	self
+		assert: (source sourceCodeFor: #initializeValue)
+		equals: 'initializeValue | value | value := 40 + 2. a := value'.
+	self assert: (model changes changes asArray first: before size) equals: before.
+	self
+		assert: model changes changes size
+		equals: before size + target localSelectors size + 1.
+	^ model
+]
+
+{ #category : #examples }
 GtSUnitToExamplesRefactoringExamples >> setupSelfSends [
 	<gtExample>
-	| model source target |
+	| model source target originals before |
 	model := GtRBNamespace new.
 	model
 		defineClass: 'TestCase subclass: #GtConversionHelperTest instanceVariableNames: ''a b'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
@@ -108,10 +230,14 @@ GtSUnitToExamplesRefactoringExamples >> setupSelfSends [
 		classified: #helpers.
 	source compile: 'valueForB ^ a + 1' classified: #helpers.
 	source compile: 'testValue self assert: b equals: 43' classified: #tests.
+	originals := Dictionary new.
+	source localSelectors
+		do: [ :selector | originals at: selector put: (source sourceCodeFor: selector) ].
+	before := model changes changes asArray.
 	(GtSUnitToExamplesRefactoring
 		model: model
 		from: source name
-		to: #GtConversionHelperExamples) execute.
+		to: #GtConversionHelperExamples) primitiveExecute.
 	target := model classNamed: #GtConversionHelperExamples.
 	self
 		assert: (target parseTreeForSelector: #a)
@@ -122,13 +248,19 @@ GtSUnitToExamplesRefactoringExamples >> setupSelfSends [
 	self
 		assert: (target parseTreeForSelector: #valueForB)
 		equals: (RBParser parseMethod: 'valueForB ^ self a + 1').
+	originals
+		keysAndValuesDo: [ :selector :code | self assert: (source sourceCodeFor: selector) equals: code ].
+	self assert: (model changes changes asArray first: before size) equals: before.
+	self
+		assert: model changes changes size
+		equals: before size + target localSelectors size + 1.
 	^ model
 ]
 
 { #category : #examples }
 GtSUnitToExamplesRefactoringExamples >> setupTemporariesAreInlined [
 	<gtExample>
-	| model source target original |
+	| model source target original before |
 	model := GtRBNamespace new.
 	model
 		defineClass: 'TestCase subclass: #GtConversionTemporaryTest instanceVariableNames: ''a b'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
@@ -136,10 +268,11 @@ GtSUnitToExamplesRefactoringExamples >> setupTemporariesAreInlined [
 	original := 'setUp | first second | super setUp. first := 40. second := first + 2. a := second. b := a + second'.
 	source compile: original classified: #running.
 	source compile: 'testValue self assert: a equals: 42' classified: #tests.
+	before := model changes changes asArray.
 	(GtSUnitToExamplesRefactoring
 		model: model
 		from: source name
-		to: #GtConversionTemporaryExamples) execute.
+		to: #GtConversionTemporaryExamples) primitiveExecute.
 	target := model classNamed: #GtConversionTemporaryExamples.
 	self
 		assert: (target parseTreeForSelector: #a)
@@ -147,9 +280,11 @@ GtSUnitToExamplesRefactoringExamples >> setupTemporariesAreInlined [
 	self
 		assert: (target parseTreeForSelector: #b)
 		equals: (RBParser parseMethod: 'b ^ b ifNil: [ b := self a + (40 + 2) ]').
+	self assert: (source sourceCodeFor: #setUp) equals: original.
+	self assert: (model changes changes asArray first: before size) equals: before.
 	self
-		assert: (source parseTreeForSelector: #setUp)
-		equals: (RBParser parseMethod: 'setUp super setUp. a := 40 + 2. b := a + (40 + 2)').
+		assert: model changes changes size
+		equals: before size + target localSelectors size + 1.
 	self assert: (model classNamed: #GtSUnitSetupInliningScratch) isNil.
 	^ model
 ]
@@ -172,7 +307,7 @@ GtSUnitToExamplesRefactoringExamples >> shadowingAndWrites [
 	(GtSUnitToExamplesRefactoring
 		model: model
 		from: source name
-		to: #GtConversionScopeExamples) execute.
+		to: #GtConversionScopeExamples) primitiveExecute.
 	target := model classNamed: #GtConversionScopeExamples.
 	self
 		assert: (target parseTreeForSelector: #write)

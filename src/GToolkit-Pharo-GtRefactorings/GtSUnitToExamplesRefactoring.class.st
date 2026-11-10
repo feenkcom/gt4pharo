@@ -1,12 +1,10 @@
 "
-Builds a preview in a GtRBNamespace, leaving the SUnit source unchanged. Converts direct TestCase subclasses with assignment-only setUp into Object-based Examples classes. Reads become lazy getter sends; writes remain assignments. Unsupported lifecycle behavior is rejected rather than discarded.
+Converts direct TestCase subclasses with assignment-only setUp into Object-based Examples classes. Uses the standard class refactoring lifecycle: primitiveExecute builds a preview in the supplied model, while execute applies the changes through the refactoring framework. Setup normalization occurs in a private namespace, leaving the SUnit source unchanged. Reads become lazy getter sends; writes remain assignments. Unsupported lifecycle behavior is rejected rather than discarded.
 "
 Class {
 	#name : #GtSUnitToExamplesRefactoring,
-	#superclass : #Object,
+	#superclass : #RBClassRefactoring,
 	#instVars : [
-		'model',
-		'sourceClassName',
 		'targetClassName'
 	],
 	#category : #'GToolkit-Pharo-GtRefactorings-Refactorings'
@@ -20,48 +18,41 @@ GtSUnitToExamplesRefactoring class >> model: aModel from: aClassName to: anExamp
 		to: anExamplesClassName
 ]
 
+{ #category : #preconditions }
+GtSUnitToExamplesRefactoring >> applicabilityPreconditions [
+	| source conditions |
+	source := self model classNamed: className.
+	conditions := OrderedCollection new.
+	conditions
+		add: ((RBCondition withBlock: [ source notNil ])
+				errorMacro: 'Source class does not exist').
+	conditions add: (RBCondition isValidClassName: targetClassName).
+	conditions
+		add: ((RBCondition withBlock: [ (self model classNamed: targetClassName) isNil ])
+				errorMacro: 'Target class already exists').
+	source
+		ifNotNil: [ conditions
+				add: ((RBCondition
+						withBlock: [ source superclass notNil and: [ source superclass name = #TestCase ] ])
+						errorMacro: 'Only direct TestCase subclasses are supported').
+			conditions
+				add: ((RBCondition withBlock: [ (source directlyDefinesMethod: #tearDown) not ])
+						errorMacro: 'tearDown requires manual conversion').
+			conditions
+				add: ((RBCondition withBlock: [ source classVariableNames isEmpty ])
+						errorMacro: 'Class variables require manual conversion').
+			conditions
+				add: ((RBCondition withBlock: [ source classSide localSelectors isEmpty ])
+						errorMacro: 'Class-side behavior requires manual conversion') ].
+	^ self applicabilityPreconditionsFor: conditions
+]
+
 { #category : #private }
 GtSUnitToExamplesRefactoring >> exampleSelectorFor: selector [
 	^ ((selector beginsWith: 'test')
 		and: [ selector size > 4 and: [ selector numArgs = 0 ] ])
 		ifTrue: [ (selector allButFirst: 4) uncapitalized asSymbol ]
 		ifFalse: [ selector ]
-]
-
-{ #category : #executing }
-GtSUnitToExamplesRefactoring >> execute [
-	| source slots initializers sources target |
-	source := model classNamed: sourceClassName.
-	source ifNil: [ self error: 'Source class does not exist' ].
-	(model classNamed: targetClassName)
-		ifNotNil: [ self error: 'Target class already exists' ].
-	source superclass name = #TestCase
-		ifFalse: [ self error: 'Only direct TestCase subclasses are supported' ].
-	(source directlyDefinesMethod: #tearDown)
-		ifTrue: [ self error: 'tearDown requires manual conversion' ].
-	source classVariableNames isEmpty
-		ifFalse: [ self error: 'Class variables require manual conversion' ].
-	source classSide localSelectors isEmpty
-		ifFalse: [ self error: 'Class-side behavior requires manual conversion' ].
-	slots := source instanceVariableNames.
-	initializers := self initializersFor: source slots: slots.
-	sources := self
-			methodSourcesFor: source
-			slots: slots
-			initializers: initializers.
-	model
-		defineClass: 'Object subclass: #' , targetClassName , ' instanceVariableNames: '
-				, (' ' join: slots) printString
-				, ' classVariableNames: '''' package: ''SUnit-Converted-Examples'''.
-	target := model classNamed: targetClassName.
-	sources
-		keysAndValuesDo: [ :selector :code | 
-			target
-				compile: code
-				classified: ((slots includes: selector asString)
-						ifTrue: [ #accessing ]
-						ifFalse: [ #examples ]) ].
-	^ model
 ]
 
 { #category : #private }
@@ -81,7 +72,7 @@ GtSUnitToExamplesRefactoring >> expandedSetupTreeFor: source slots: slots [
 			expansions > 100
 				ifTrue: [ self error: 'Setup helper expansion limit exceeded; check for recursion' ].
 			(RBInlineMethodRefactoring
-				model: model
+				model: source model
 				inline: send sourceInterval
 				inMethod: #setUp
 				forClass: source) primitiveExecute.
@@ -89,10 +80,15 @@ GtSUnitToExamplesRefactoring >> expandedSetupTreeFor: source slots: slots [
 	^ setup
 ]
 
+{ #category : #printing }
+GtSUnitToExamplesRefactoring >> gtDescription [
+	^ 'Convert SUnit class ' , className , ' to examples class ' , targetClassName
+]
+
 { #category : #initialization }
 GtSUnitToExamplesRefactoring >> initializeModel: aModel from: aClassName to: anExamplesClassName [
-	model := aModel.
-	sourceClassName := aClassName asSymbol.
+	self model: aModel.
+	self className: aClassName asSymbol.
 	targetClassName := anExamplesClassName asSymbol.
 	^ self
 ]
@@ -102,7 +98,9 @@ GtSUnitToExamplesRefactoring >> initializersFor: source slots: slots [
 	| initializers setup |
 	initializers := Dictionary new.
 	(source directlyDefinesMethod: #setUp) ifFalse: [ ^ initializers ].
-	setup := self expandedSetupTreeFor: source slots: slots.
+	setup := self
+			expandedSetupTreeFor: (self setupWorkingCopyOf: source)
+			slots: slots.
 	setup body statements
 		do: [ :statement | 
 			(statement isMessage
@@ -159,8 +157,28 @@ GtSUnitToExamplesRefactoring >> methodSourcesFor: source slots: slots initialize
 	^ sources
 ]
 
-{ #category : #accessing }
-GtSUnitToExamplesRefactoring >> model [
+{ #category : #transforming }
+GtSUnitToExamplesRefactoring >> privateTransform [
+	| source slots initializers sources target |
+	source := model classNamed: className.
+	slots := source instanceVariableNames.
+	initializers := self initializersFor: source slots: slots.
+	sources := self
+			methodSourcesFor: source
+			slots: slots
+			initializers: initializers.
+	model
+		defineClass: 'Object subclass: #' , targetClassName , ' instanceVariableNames: '
+				, (' ' join: slots) printString
+				, ' classVariableNames: '''' package: ''SUnit-Converted-Examples'''.
+	target := model classNamed: targetClassName.
+	sources
+		keysAndValuesDo: [ :selector :code | 
+			target
+				compile: code
+				classified: ((slots includes: selector asString)
+						ifTrue: [ #accessing ]
+						ifFalse: [ #examples ]) ].
 	^ model
 ]
 
@@ -173,7 +191,7 @@ GtSUnitToExamplesRefactoring >> rewriteReadsIn: tree slots: slots [
 
 { #category : #private }
 GtSUnitToExamplesRefactoring >> setupTreeFor: source slots: slots [
-	"Inline directly in the existing refactoring model, not in the live image.
+	"Inline in the private namespace owning the working source.
 	Reparse after each inline to keep selection intervals current."
 
 	| setup assignment |
@@ -185,10 +203,26 @@ GtSUnitToExamplesRefactoring >> setupTreeFor: source slots: slots [
 							and: [ (node whoDefines: node variable name) == setup body ] ]
 					ifNone: [ self error: 'setUp temporary has no assignment to inline' ].
 			(RBInlineTemporaryRefactoring
-				model: model
+				model: source model
 				inline: assignment sourceInterval
 				from: #setUp
 				in: source) primitiveExecute.
 			setup := RBParser parseMethod: (source sourceCodeFor: #setUp) ].
 	^ setup
+]
+
+{ #category : #private }
+GtSUnitToExamplesRefactoring >> setupWorkingCopyOf: source [
+	"Snapshot pending source edits so setup normalization cannot change the caller's model."
+
+	| workingModel workingSource |
+	workingModel := GtRBNamespace onEnvironment: model environment.
+	workingModel defineClass: source gtDefinitionString.
+	workingSource := workingModel classNamed: source name.
+	source localSelectors
+		do: [ :selector | 
+			workingSource
+				compile: (source sourceCodeFor: selector)
+				classified: (source protocolsFor: selector) ].
+	^ workingSource
 ]
