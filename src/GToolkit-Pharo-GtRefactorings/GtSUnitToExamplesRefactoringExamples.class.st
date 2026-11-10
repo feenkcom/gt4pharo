@@ -42,6 +42,39 @@ GtSUnitToExamplesRefactoringExamples >> basicConversion [
 ]
 
 { #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> convertedExamplesUseTAssertable [
+	<gtExample>
+	| model source target definitionChange definitionTree |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtConversionAssertionsTest instanceVariableNames: '''' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtConversionAssertionsTest.
+	source
+		compile: 'testRaises self should: [ Error signal: ''expected'' ] raise: Error'
+		classified: #tests.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: source name
+		to: #GtConversionAssertionsExamples) primitiveExecute.
+	target := model classNamed: #GtConversionAssertionsExamples.
+	definitionChange := model changes changes
+			detect: [ :change | 
+				(change isKindOf: GtRBAddClassChange)
+					and: [ change changeClassName = target name ] ].	"Check the emitted class definition: the namespace does not model trait methods."
+	definitionTree := RBParser parseExpression: definitionChange definitionString.
+	self assert: (definitionTree keywords includes: 'uses:').
+	self
+		assert: (definitionTree arguments at: (definitionTree keywords indexOf: 'uses:')) name
+		equals: 'TAssertable'.
+	self
+		assert: (target parseTreeForSelector: #raises)
+		equals: (RBParser
+				parseMethod: 'raises <gtExample> self should: [ Error signal: ''expected'' ] raise: Error').
+	self assert: (source directlyDefinesMethod: #testRaises).
+	^ model
+]
+
+{ #category : #examples }
 GtSUnitToExamplesRefactoringExamples >> existingTargetFailsPreconditions [
 	<gtExample>
 	| model refactoring before rejected |

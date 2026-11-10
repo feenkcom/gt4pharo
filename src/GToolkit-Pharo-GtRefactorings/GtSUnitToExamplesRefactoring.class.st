@@ -1,5 +1,5 @@
 "
-Converts direct TestCase subclasses with assignment-only setUp into Object-based Examples classes. Uses the standard class refactoring lifecycle: primitiveExecute builds a preview in the supplied model, while execute applies the changes through the refactoring framework. Setup normalization occurs in a private namespace, leaving the SUnit source unchanged. Reads become lazy getter sends; writes remain assignments. Unsupported lifecycle behavior is rejected rather than discarded.
+Converts direct TestCase subclasses with assignment-only setUp into Object-based Examples classes using TAssertable for SUnit assertion support. Uses the standard class refactoring lifecycle: primitiveExecute builds a preview in the supplied model, while execute applies the changes through the refactoring framework. Setup normalization occurs in a private namespace, leaving the SUnit source unchanged. Reads become lazy getter sends; writes remain assignments. Unsupported lifecycle behavior is rejected rather than discarded.
 "
 Class {
 	#name : #GtSUnitToExamplesRefactoring,
@@ -168,7 +168,8 @@ GtSUnitToExamplesRefactoring >> privateTransform [
 			slots: slots
 			initializers: initializers.
 	model
-		defineClass: 'Object subclass: #' , targetClassName , ' instanceVariableNames: '
+		defineClass: 'Object subclass: #' , targetClassName
+				, ' uses: TAssertable instanceVariableNames: '
 				, (' ' join: slots) printString
 				, ' classVariableNames: '''' package: ''SUnit-Converted-Examples'''.
 	target := model classNamed: targetClassName.
