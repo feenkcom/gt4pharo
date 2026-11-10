@@ -8,6 +8,43 @@ Class {
 }
 
 { #category : #examples }
+GtSUnitToExamplesHierarchyRefactoringExamples >> classSideMethodsSurviveHierarchyConversion [
+	<gtExample>
+	| model base child targetBase targetChild targetLeaf |
+	model := self hierarchyModel.
+	base := model classNamed: #GtHierarchyBaseTest.
+	child := model classNamed: #GtHierarchyChildTest.
+	base classSide
+		compile: 'isAbstract ^ self = GtHierarchyBaseTest'
+		classified: #testing.
+	base classSide compile: 'answer ^ 42' classified: #accessing.
+	child classSide compile: 'answer ^ super answer + 1' classified: #accessing.
+	(GtSUnitToExamplesHierarchyRefactoring
+		model: model
+		classMapping: self hierarchyMapping) primitiveExecute.
+	targetBase := model classNamed: #GtHierarchyBaseExamples.
+	targetChild := model classNamed: #GtHierarchyChildExamples.
+	targetLeaf := model classNamed: #GtHierarchyLeafExamples.
+	self assert: (targetBase classSide directlyDefinesMethod: #isAbstract) not.
+	self
+		assert: (targetBase classSide sourceCodeFor: #answer)
+		equals: (base classSide sourceCodeFor: #answer).
+	self
+		assert: (targetChild classSide sourceCodeFor: #answer)
+		equals: (child classSide sourceCodeFor: #answer).
+	self
+		assert: (targetChild classSide protocolsFor: #answer)
+		equals: (child classSide protocolsFor: #answer).
+	self
+		assert: (targetLeaf classSide whichClassIncludesSelector: #answer)
+				== targetChild classSide.
+	self
+		assert: (base classSide sourceCodeFor: #isAbstract)
+		equals: 'isAbstract ^ self = GtHierarchyBaseTest'.
+	^ model
+]
+
+{ #category : #examples }
 GtSUnitToExamplesHierarchyRefactoringExamples >> classesConstructorAcceptsTestsOrOtherNames [
 	<gtExample>
 	| model classes refactoring |

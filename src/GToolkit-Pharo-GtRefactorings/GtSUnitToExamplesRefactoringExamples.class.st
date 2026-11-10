@@ -8,6 +8,22 @@ Class {
 }
 
 { #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> abstractEnvironmentClassSideIsIgnored [
+	<gtExample>
+	| model target |
+	model := GtRBNamespace new.
+	(GtSUnitToExamplesRefactoring
+		model: model
+		from: #AbstractEnvironmentTestCase
+		to: #GtAbstractEnvironmentExamples) primitiveExecute.
+	target := model classNamed: #GtAbstractEnvironmentExamples.
+	self assert: (target classSide directlyDefinesMethod: #isAbstract) not.
+	self assert: target classSide localSelectors isEmpty.
+	self assert: (target directlyDefinesMethod: #theTestingEnvironment).
+	^ model
+]
+
+{ #category : #examples }
 GtSUnitToExamplesRefactoringExamples >> basicConversion [
 	<gtExample>
 	| model source target tree |

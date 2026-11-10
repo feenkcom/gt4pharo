@@ -29,7 +29,7 @@ GtSUnitToExamplesHierarchyRefactoring class >> model: aModel classes: classes [
 			| n baseName |
 			n := each name asString.
 			baseName := (n removeSuffix: 'Tests') removeSuffix: 'Test'.
-			mapping at: n asSymbol put: (baseName , 'Examples') asSymbol ].
+			mapping at: n asSymbol put: ('XYZ', baseName , 'Examples') asSymbol ].
 	^ self model: aModel classMapping: mapping
 ]
 
@@ -124,7 +124,12 @@ GtSUnitToExamplesHierarchyRefactoring >> privateTransform [
 						do: [ :selector | 
 							copy
 								compile: (target sourceCodeFor: selector)
-								classified: (target protocolsFor: selector) ] ] ]
+								classified: (target protocolsFor: selector) ].
+					target classSide localSelectors
+						do: [ :selector | 
+							copy classSide
+								compile: (target classSide sourceCodeFor: selector)
+								classified: (target classSide protocolsFor: selector) ] ] ]
 ]
 
 { #category : #private }

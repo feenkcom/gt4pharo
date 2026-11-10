@@ -1,5 +1,5 @@
 "
-Converts SUnit classes using the standard class refactoring lifecycle. model:from:to: defaults to an Object-based target using TAssertable. model:from:to:superclass: supplies an already converted superclass for inherited sources. Local fixture initialization and selector conversion follow the same policy in both cases; inherited fixture specialization is not inferred. Slot-read rewriting includes slots available through the target superclass. Private setup workspaces copy pending test ancestors so the existing inliner can resolve inherited behavior. Sources remain unchanged. primitiveExecute builds a preview in the supplied model; inherited execute applies changes. Converted tests use <after: #tearDown>. Cleanup slot reads use the generated the-prefixed getters; assignments remain slot writes. Inherited cleanup dispatch is preserved. Object-based roots supply an empty tearDown hook when the source has none, and calls to TestCase's empty super hook become no-ops.
+Converts SUnit classes using the standard class refactoring lifecycle. model:from:to: defaults to an Object-based target using TAssertable. model:from:to:superclass: supplies an already converted superclass for inherited sources. Local fixture initialization and selector conversion follow the same policy in both cases; inherited fixture specialization is not inferred. Slot-read rewriting includes slots available through the target superclass. Private setup workspaces copy pending test ancestors so the existing inliner can resolve inherited behavior. Sources remain unchanged. primitiveExecute builds a preview in the supplied model; inherited execute applies changes. Converted tests use <after: #tearDown>. Cleanup slot reads use the generated the-prefixed getters; assignments remain slot writes. Inherited cleanup dispatch is preserved. Object-based roots supply an empty tearDown hook when the source has none, and calls to TestCase's empty super hook become no-ops. Local class-side methods are copied unchanged with their protocols, except isAbstract, which is omitted as SUnit-specific behavior.
 "
 Class {
 	#name : #GtSUnitToExamplesRefactoring,
@@ -54,10 +54,7 @@ GtSUnitToExamplesRefactoring >> applicabilityPreconditions [
 
 			conditions
 				add: ((RBCondition withBlock: [ source classVariableNames isEmpty ])
-						errorMacro: 'Class variables require manual conversion').
-			conditions
-				add: ((RBCondition withBlock: [ source classSide localSelectors isEmpty ])
-						errorMacro: 'Class-side behavior requires manual conversion') ].
+						errorMacro: 'Class variables require manual conversion') ].
 	^ self applicabilityPreconditionsFor: conditions
 ]
 
@@ -267,6 +264,11 @@ GtSUnitToExamplesRefactoring >> privateTransform [
 				classified: ((slots anySatisfy: [ :slot | (self getterSelectorForSlot: slot) = selector ])
 						ifTrue: [ #accessing ]
 						ifFalse: [ #examples ]) ].
+	(source classSide localSelectors reject: [ :selector | selector = #isAbstract ])
+		do: [ :selector | 
+			target classSide
+				compile: (source classSide sourceCodeFor: selector)
+				classified: (source classSide protocolsFor: selector) ].
 	^ model
 ]
 
