@@ -29,7 +29,7 @@ GtSUnitToExamplesHierarchyRefactoring class >> model: aModel classes: classes [
 			| n baseName |
 			n := each name asString.
 			baseName := (n removeSuffix: 'Tests') removeSuffix: 'Test'.
-			mapping at: n asSymbol put: ('XYZ', baseName , 'Examples') asSymbol ].
+			mapping at: n asSymbol put: (baseName , 'Examples') asSymbol ].
 	^ self model: aModel classMapping: mapping
 ]
 
