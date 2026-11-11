@@ -21,6 +21,11 @@ GtRBAddPackageTagChange >> asUndoOperation [
 		ifFalse: [ GtRBRemovePackageTagChange packageName: packageName tagName: tagName ]
 ]
 
+{ #category : #printing }
+GtRBAddPackageTagChange >> changeString [
+	^ 'Add package tag ' , tagName asString , ' in ' , packageName asString
+]
+
 { #category : #accessing }
 GtRBAddPackageTagChange >> gtChangedObject [
 	^ self tag
