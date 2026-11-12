@@ -1625,7 +1625,6 @@ GtPharoMethodCoder >> testCase [
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> timeLimitPragmaAst: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
 	<gtAstCoderAddOns: 10>
-	self compiledMethod ifNil: [ ^ self ].
 	anAST methodNode ifNil: [ ^ self ].
 
 	(anAST methodNode pragmas
