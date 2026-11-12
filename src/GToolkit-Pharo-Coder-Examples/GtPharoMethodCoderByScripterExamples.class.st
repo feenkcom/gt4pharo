@@ -2850,12 +2850,87 @@ GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_ExpandedFromUI_Remo
 	^ aScripter
 ]
 
+{ #category : #'examples - example method' }
+GtPharoMethodCoderByScripterExamples >> exampleMethodCoderUI_PlayExampleKeepsPromiseAlive [
+	"Playing an example in a method coder runs it without the clean up of managed example runs (GtExample>>#runUnmanaged):
+	a promise it started is still pending after the play, so the user can keep working with the returned object"
+
+	<gtExample>
+	| aScripter aMethod |
+	aMethod := self class >> #examplePendingPromise.
+	aScripter := self
+			scripterForBlock: [ (self coderOnMethod: aMethod) asCoderViewModel ].
+	self collapseFromUI: aScripter method: aMethod.
+	self expandFromUI: aScripter method: aMethod.
+
+	aScripter mouseMoveOver
+		// GtSourceCoderEditorId;
+		play.
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click evaluate example';
+				id: GtMethodCoderPlayExampleActionId ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert the promise of the example is still pending';
+				satisfies: [ :aCoderViewModel | 
+					aCoderViewModel coderModel exampleResult isSuccess
+						and: [ (aCoderViewModel coderModel exampleResult returnValue at: #promise) isSettled
+								not ] ];
+				onModel ].
+
+	aScripter
+		doStep: [ :s | 
+			s
+				label: 'Release the promise';
+				block: [ :aCoderViewModel | (aCoderViewModel coderModel exampleResult returnValue at: #release) signal ];
+				onModel ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert the promise is fulfilled';
+				satisfies: [ :aCoderViewModel | 
+					| aPromise aSemaphore |
+					aPromise := aCoderViewModel coderModel exampleResult returnValue
+							at: #promise.
+					aSemaphore := Semaphore new.
+					aPromise
+						then: [ :aValue | aSemaphore signal ]
+						otherwise: [ :anError | aSemaphore signal ].
+					(aSemaphore waitTimeoutSeconds: 30) not and: [ aPromise isFulfilled ] ];
+				onModel ].
+
+	^ aScripter
+]
+
 { #category : #accessing }
 GtPharoMethodCoderByScripterExamples >> exampleMethodContextActions [
 	^ {GtMethodCoderPlayExampleActionId.
 		GtMethodCoderPlayAndInspectExampleActionId.
 		GtMethodCoderDebugExampleActionId.
 		GtMethodCoderExtractPlaygroundActionId}
+]
+
+{ #category : #'examples - example method' }
+GtPharoMethodCoderByScripterExamples >> examplePendingPromise [
+	"This example is a noTest as it is only played from #exampleMethodCoderUI_PlayExampleKeepsPromiseAlive.
+	It answers a promise that stays pending until its release semaphore is signalled"
+
+	<gtExample>
+	<noTest>
+	| aReleaseSemaphore |
+	aReleaseSemaphore := Semaphore new.
+	^ Dictionary new
+		at: #promise
+			put: [ aReleaseSemaphore wait.
+				42 ] asAsyncPromise;
+		at: #release put: aReleaseSemaphore;
+		yourself
 ]
 
 { #category : #utilities }

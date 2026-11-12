@@ -1156,12 +1156,12 @@ GtPharoMethodCoder >> playAndInspectSlideWithRequesterObject: aRequester [
 
 { #category : #'api - actions examples' }
 GtPharoMethodCoder >> playExample [
-	self isModified
-		ifTrue: [
-			self save
-				ifFalse: [ ^ self ] ].
+	"Run the example without the clean up of managed runs, so that promises and processes it started
+	keep running while the user works with the returned object (see GtExample>>#runUnmanaged)"
 
-	self example run
+	self isModified ifTrue: [ self save ifFalse: [ ^ self ] ].
+
+	self example runUnmanaged
 ]
 
 { #category : #'gt-extensions' }
