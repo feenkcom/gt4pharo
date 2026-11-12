@@ -87,6 +87,26 @@ GtCoderExampleTimeLimitStylerExamples >> methodCoderEditorShowsTimeLimitDecorati
 ]
 
 { #category : #'sample methods' }
+GtCoderExampleTimeLimitStylerExamples >> methodWithManyTimeLimits [
+	"Several time limits to show their decorations at once, see #timeLimitsOverview"
+
+	<timeLimit: 500>
+	<timeLimit: 1000>
+	<timeLimit: 1500.5>
+	<timeLimit: 30000>
+	<timeLimit: 61500>
+	<timeLimit: 90000>
+	<timeLimit: 120000>
+	<timeLimit: 150000>
+	<timeLimit: 180000>
+	<timeLimit: 3600000>
+	<timeLimit: 5400000>
+	<timeLimit: 7200000>
+	<timeLimit: 10000000>
+	^ 42
+]
+
+{ #category : #'sample methods' }
 GtCoderExampleTimeLimitStylerExamples >> methodWithTimeLimit [
 	<gtExample>
 	<timeLimit: 120000>
@@ -189,6 +209,24 @@ GtCoderExampleTimeLimitStylerExamples >> styleSourceCode: aSourceString [
 ]
 
 { #category : #'examples - styling' }
+GtCoderExampleTimeLimitStylerExamples >> timeLimitApproximatedInMinutes [
+	<gtExample>
+	<return: #BlRunRopedText>
+	^ self
+		assertSourceCode: 'foo <gtExample> <timeLimit: 150000> ^ 42'
+		decoratedWith: {'150000' -> ' ms (~3 minutes)'}
+]
+
+{ #category : #'examples - styling' }
+GtCoderExampleTimeLimitStylerExamples >> timeLimitApproximatedInSeconds [
+	<gtExample>
+	<return: #BlRunRopedText>
+	^ self
+		assertSourceCode: 'foo <gtExample> <timeLimit: 61500> ^ 42'
+		decoratedWith: {'61500' -> ' ms (~62 seconds)'}
+]
+
+{ #category : #'examples - styling' }
 GtCoderExampleTimeLimitStylerExamples >> timeLimitBelowOneSecond [
 	<gtExample>
 	<return: #BlRunRopedText>
@@ -217,21 +255,21 @@ GtCoderExampleTimeLimitStylerExamples >> timeLimitDecorationsIn: aText [
 ]
 
 { #category : #'examples - styling' }
-GtCoderExampleTimeLimitStylerExamples >> timeLimitOfHourAndMinutes [
+GtCoderExampleTimeLimitStylerExamples >> timeLimitOfNinetyMinutes [
 	<gtExample>
 	<return: #BlRunRopedText>
 	^ self
 		assertSourceCode: 'foo <gtExample> <timeLimit: 5400000> ^ 42'
-		decoratedWith: {'5400000' -> ' ms (1 hour 30 minutes)'}
+		decoratedWith: {'5400000' -> ' ms (90 minutes)'}
 ]
 
 { #category : #'examples - styling' }
-GtCoderExampleTimeLimitStylerExamples >> timeLimitOfMinuteAndSeconds [
+GtCoderExampleTimeLimitStylerExamples >> timeLimitOfNinetySeconds [
 	<gtExample>
 	<return: #BlRunRopedText>
 	^ self
 		assertSourceCode: 'foo <gtExample> <timeLimit: 90000> ^ 42'
-		decoratedWith: {'90000' -> ' ms (1 minute 30 seconds)'}
+		decoratedWith: {'90000' -> ' ms (90 seconds)'}
 ]
 
 { #category : #'examples - styling' }
@@ -253,10 +291,40 @@ GtCoderExampleTimeLimitStylerExamples >> timeLimitOfTwoMinutes [
 ]
 
 { #category : #'examples - styling' }
+GtCoderExampleTimeLimitStylerExamples >> timeLimitWithFraction [
+	<gtExample>
+	<return: #BlRunRopedText>
+	^ self
+		assertSourceCode: 'foo <gtExample> <timeLimit: 1500.5> ^ 42'
+		decoratedWith: {'1500.5' -> ' ms (~2 seconds)'}
+]
+
+{ #category : #'examples - styling' }
 GtCoderExampleTimeLimitStylerExamples >> timeLimitWithSymbolIsNotDecorated [
 	<gtExample>
 	<return: #BlRunRopedText>
 	^ self
 		assertSourceCode: 'foo <gtExample> <timeLimit: #oneMinute> ^ 42'
 		decoratedWith: #()
+]
+
+{ #category : #'examples - scripter' }
+GtCoderExampleTimeLimitStylerExamples >> timeLimitsOverview [
+	<gtExample>
+	<return: #BlScripter>
+	| aScripter |
+	aScripter := self
+			scripterForBlock: [ (GtPharoMethodCoder forMethod: self class >> #methodWithManyTimeLimits)
+					asCoderViewModel ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert time limit decorations';
+				satisfies: [ :aCoderEditor | 
+					((self timeLimitDecorationsIn: aCoderEditor text) collect: #value)
+						= #(' ms' ' ms (1 second)' ' ms (~2 seconds)' ' ms (30 seconds)' ' ms (~62 seconds)' ' ms (90 seconds)' ' ms (2 minutes)' ' ms (~3 minutes)' ' ms (3 minutes)' ' ms (1 hour)' ' ms (90 minutes)' ' ms (2 hours)' ' ms (~3 hours)') ];
+				id: GtSourceCoderEditorId ].
+
+	^ aScripter
 ]
