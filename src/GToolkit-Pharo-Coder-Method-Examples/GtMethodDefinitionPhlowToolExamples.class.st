@@ -301,6 +301,7 @@ GtMethodDefinitionPhlowToolExamples >> worldTabWithPaneWithTool_selectInspectorS
 { #category : #examples }
 GtMethodDefinitionPhlowToolExamples >> worldTabWithPaneWithTool_selectToolSourceView [
 	<gtExample>
+	<timeLimit: 120000>
 	<return: #BlScripter>
 	| scripter |
 

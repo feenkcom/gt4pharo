@@ -581,6 +581,7 @@ GtPharoIndexExamples >> poolVarShadowsClass [
 { #category : #examples }
 GtPharoIndexExamples >> recompileMethodUpdatesIndex [
 	<gtExample>
+	<timeLimit: 180000>
 	| processes count time senders |
 	senders := #runtimeUndeclaredReadInContext: gtSenders.
 	count := senders size.

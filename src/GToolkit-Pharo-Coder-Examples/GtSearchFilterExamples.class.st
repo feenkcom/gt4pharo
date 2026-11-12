@@ -7,6 +7,7 @@ Class {
 { #category : #examples }
 GtSearchFilterExamples >> repositoryPatternFilter [
 	<gtExample>
+	<timeLimit: 120000>
 	| filter repository |
 
 	"This example is only valid if the repository actually exists"

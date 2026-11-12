@@ -2220,6 +2220,7 @@ GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_pre
 { #category : #'examples - toolbar element' }
 GtRefactoringsExamples >> toolbarElementWithSomeComputedRefactoringsScripter_previewed_requestRefactorings [
 	<gtExample>
+	<timeLimit: 120000>
 	| anElement aViewModel aScripter allAnnouncements |
 	aScripter := self toolbarElementWithSomeComputedRefactoringsScripter_previewed.
 	anElement := aScripter element.
