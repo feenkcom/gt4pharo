@@ -1623,6 +1623,19 @@ GtPharoMethodCoder >> testCase [
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
+GtPharoMethodCoder >> timeLimitPragmaAst: anAST into: coderAddOns viewModel: aGtPharoMethodCoderViewModel [
+	<gtAstCoderAddOns: 10>
+	self compiledMethod ifNil: [ ^ self ].
+	anAST methodNode ifNil: [ ^ self ].
+
+	(anAST methodNode pragmas
+		anySatisfy: [ :each | each isErrorNode not and: [ each selector = #timeLimit: ] ])
+		ifFalse: [ ^ self ].
+
+	coderAddOns addStyler: GtCoderExampleTimeLimitStyler new
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoMethodCoder >> unitTestAstFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 9>
 	anAST methodNode ifNil: [ ^ self ].
