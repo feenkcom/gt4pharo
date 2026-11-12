@@ -881,6 +881,7 @@ GtBehaviorCoderByScripterExamples >> classCoderInPagerForClassUI_spotterCategory
 	This tests the sendCategory: behaviour of Class>>gtSpotterMethodsFor:"
 
 	<gtExample>
+	<timeLimit: 120000>
 	| aScripter |
 	aScripter := self classCoderInPagerForClassUI.
 
