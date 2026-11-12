@@ -151,6 +151,30 @@ GtCoderExampleTimeLimitStylerExamples >> negativeTimeLimitIsNotDecorated [
 ]
 
 { #category : #'examples - add-ons' }
+GtCoderExampleTimeLimitStylerExamples >> newMethodCoderHasTimeLimitStyler [
+	<gtExample>
+	<return: #GtTextualCoderAddOns>
+	| aCoder someAddOns |
+	aCoder := GtPharoMethodCoder
+			forClass: self class
+			source: ('newMethodWithTimeLimit {1}<timeLimit: 120000>{1}^ 42' format: { String cr, String tab}).
+	self assert: aCoder compiledMethod isNil.
+
+	someAddOns := aCoder addOns class new.
+	aCoder
+		timeLimitPragmaAst: aCoder astSync
+		into: someAddOns
+		viewModel: aCoder asCoderViewModel.
+
+	self
+		assert: (someAddOns stylers
+				count: [ :each | each class = GtCoderExampleTimeLimitStyler ])
+		equals: 1.
+
+	^ aCoder
+]
+
+{ #category : #'examples - add-ons' }
 GtCoderExampleTimeLimitStylerExamples >> nonExampleMethodCoderHasTimeLimitStyler [
 	<gtExample>
 	<return: #GtTextualCoderAddOns>
