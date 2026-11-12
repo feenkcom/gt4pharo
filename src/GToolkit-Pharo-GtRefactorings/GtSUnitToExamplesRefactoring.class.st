@@ -33,10 +33,7 @@ GtSUnitToExamplesRefactoring class >> model: aModel from: sourceName to: targetN
 GtSUnitToExamplesRefactoring >> applicabilityPreconditions [
 	| source conditions |
 	source := self model classNamed: className.
-	conditions := OrderedCollection new.
-	conditions
-		add: ((RBCondition withBlock: [ source notNil ])
-				errorMacro: 'Source class does not exist').
+	conditions := self sourcePreconditions.
 	conditions add: (RBCondition isValidClassName: targetClassName).
 	conditions
 		add: ((RBCondition withBlock: [ (self model classNamed: targetClassName) isNil ])
@@ -50,11 +47,7 @@ GtSUnitToExamplesRefactoring >> applicabilityPreconditions [
 										ifFalse: [ self targetSuperclassName ~= #Object
 												and: [ (source allSuperclasses anySatisfy: [ :each | each name = #TestCase ])
 														and: [ (self model classNamed: self targetSuperclassName) notNil ] ] ] ] ])
-						errorMacro: 'Specify the converted superclass for inherited test classes').
-
-			conditions
-				add: ((RBCondition withBlock: [ source classVariableNames isEmpty ])
-						errorMacro: 'Class variables require manual conversion') ].
+						errorMacro: 'Specify the converted superclass for inherited test classes') ].
 	^ self applicabilityPreconditionsFor: conditions
 ]
 
@@ -70,13 +63,14 @@ GtSUnitToExamplesRefactoring >> collectSetupStatement: statement slots: slots in
 	receiver := self firstReceiverOf: statement.
 	(assignment or: [ receiver isVariable and: [ slots includes: receiver name ] ])
 		ifFalse: [ ^ self
-				error: 'Expanded setUp must contain only direct slot assignments and super setUp' ].
+				refactoringError: 'Expanded setUp must contain only direct slot assignments and super setUp' ].
 	(assignment not and: [ (initializers includesKey: receiver name) not ])
 		ifTrue: [ ^ self
-				error: 'Setup configures a slot before its assignment: ' , receiver name ].
+				refactoringError: 'Setup configures a slot before its assignment: ' , receiver name ].
 	expression := assignment ifTrue: [ statement value ] ifFalse: [ statement ].
 	(expression containsReturn or: [ expression assignmentNodes notEmpty ])
-		ifTrue: [ ^ self error: 'Setup returns and nested assignments require manual conversion' ].
+		ifTrue: [ ^ self
+				refactoringError: 'Setup returns and nested assignments require manual conversion' ].
 	assignment
 		ifTrue: [ ^ initializers
 				at: statement variable name
@@ -108,7 +102,8 @@ GtSUnitToExamplesRefactoring >> expandedSetupTreeFor: source slots: slots [
 	send notNil ]
 		whileTrue: [ expansions := expansions + 1.
 			expansions > 100
-				ifTrue: [ self error: 'Setup helper expansion limit exceeded; check for recursion' ].
+				ifTrue: [ self
+						refactoringError: 'Setup helper expansion limit exceeded; check for recursion' ].
 			(RBInlineMethodRefactoring
 				model: source model
 				inline: send sourceInterval
@@ -281,6 +276,41 @@ GtSUnitToExamplesRefactoring >> rewriteReadsIn: tree slots: slots [
 	^ tree
 ]
 
+{ #category : #preconditions }
+GtSUnitToExamplesRefactoring >> selectorPreconditionsFor: source [
+	| selectors conditions |
+	selectors := (source instanceVariableNames
+			collect: [ :slot | self getterSelectorForSlot: slot ]) asOrderedCollection.
+	(source localSelectors reject: [ :selector | selector = #setUp ])
+		do: [ :selector | selectors add: (self exampleSelectorFor: selector) ].
+	conditions := OrderedCollection new.
+	conditions
+		add: ((RBCondition withBlock: [ (selectors includes: #class) not ])
+				errorMacro: 'Cannot generate the class selector').
+	selectors asSet
+		do: [ :selector | 
+			conditions
+				add: ((RBCondition withBlock: [ (selectors occurrencesOf: selector) = 1 ])
+						errorMacro: 'Getter or example selector collision: ' , selector) ].
+	^ conditions
+]
+
+{ #category : #preconditions }
+GtSUnitToExamplesRefactoring >> setupPreconditionFor: source [
+	"Reuse setup normalization in its existing private workspace."
+
+	| condition |
+	condition := RBCondition
+			withBlock: [ [ self initializersFor: source slots: source instanceVariableNames.
+				true ]
+					on: RBRefactoringError , RBRefactoringWarning
+					do: [ :error | 
+						condition errorMacro: error messageText.
+						false ] ].
+	condition errorMacro: 'Unsupported setUp'.
+	^ condition
+]
+
 { #category : #private }
 GtSUnitToExamplesRefactoring >> setupTreeFor: source slots: slots [
 	"Inline in the private namespace owning the working source.
@@ -293,7 +323,8 @@ GtSUnitToExamplesRefactoring >> setupTreeFor: source slots: slots [
 					detect: [ :node | 
 						(setup body temporaryNames includes: node variable name)
 							and: [ (node whoDefines: node variable name) == setup body ] ]
-					ifNone: [ self error: 'setUp temporary has no assignment to inline' ].
+					ifNone: [ self
+							refactoringError: 'setUp temporary has no assignment to inline' ].
 			(RBInlineTemporaryRefactoring
 				model: source model
 				inline: assignment sourceInterval
@@ -325,6 +356,30 @@ GtSUnitToExamplesRefactoring >> setupWorkingCopyOf: source [
 						compile: (each sourceCodeFor: selector)
 						classified: (each protocolsFor: selector) ] ].
 	^ workingModel classNamed: source name
+]
+
+{ #category : #preconditions }
+GtSUnitToExamplesRefactoring >> sourcePreconditions [
+	"Check source support independently of target names and converted parents."
+
+	| source conditions |
+	source := self model classNamed: className.
+	conditions := OrderedCollection new.
+	conditions
+		add: ((RBCondition withBlock: [ source notNil ])
+				errorMacro: 'Source class does not exist').
+	source
+		ifNotNil: [ conditions
+				add: ((RBCondition
+						withBlock: [ source allSuperclasses anySatisfy: [ :each | each name = #TestCase ] ])
+						errorMacro: 'Source must inherit from TestCase').
+			conditions
+				add: ((RBCondition withBlock: [ source classVariableNames isEmpty ])
+						errorMacro: 'Class variables require manual conversion').
+			(source allSuperclasses anySatisfy: [ :each | each name = #TestCase ])
+				ifTrue: [ conditions add: (self setupPreconditionFor: source).
+					conditions addAll: (self selectorPreconditionsFor: source) ] ].
+	^ conditions
 ]
 
 { #category : #accessing }
