@@ -105,3 +105,54 @@ GtRefactoryChangeManagerExamples >> isolatedInstanceKeepsOuterHistory [
 				description: 'Creating and removing classes in the inner instance must not clear the outer history'.
 			anOuterInstance ]
 ]
+
+{ #category : #'examples - undo' }
+GtRefactoryChangeManagerExamples >> performChangeAnswersTheManager [
+	"performChange: keeps answering the change manager"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aManager | 
+			| anEnvironment aClass aResult |
+			anEnvironment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+			[ aClass := anEnvironment anyDummyLeafClass realClass.
+			aResult := aManager
+					performChange: (RBAddMethodChange
+							compile: 'undoExampleMethod ^ 42'
+							in: aClass
+							classified: #examples).
+			self assert: aResult == aManager.
+			self assert: (aClass includesSelector: #undoExampleMethod).
+			self assert: aManager hasUndoableOperations.
+			aManager ] ensure: [ anEnvironment removeFromSystem ] ]
+]
+
+{ #category : #'examples - undo' }
+GtRefactoryChangeManagerExamples >> performChangeReturningUndoAnswersRecordedUndo [
+	"performChangeReturningUndo: executes a change and answers its undo change,
+	which is also the change recorded in the undo history"
+
+	<gtExample>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aManager | 
+			| anEnvironment aClass anUndoChange |
+			anEnvironment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+			[ aClass := anEnvironment anyDummyLeafClass realClass.
+			anUndoChange := aManager
+					performChangeReturningUndo: (RBAddMethodChange
+							compile: 'undoExampleMethod ^ 42'
+							in: aClass
+							classified: #examples).
+			self assert: (aClass includesSelector: #undoExampleMethod).
+			self assert: (anUndoChange isKindOf: RBRemoveMethodChange).
+			self assert: anUndoChange selector equals: #undoExampleMethod.
+			self assert: aManager hasUndoableOperations.
+			self
+				assert: (aManager instVarNamed: #undo) last change == anUndoChange
+				description: 'The answered undo change must be the one recorded in the undo history'.
+
+			aManager undoChange.
+			self assert: (aClass includesSelector: #undoExampleMethod) not.
+			self assert: aManager hasRedoableOperations.
+			anUndoChange ] ensure: [ anEnvironment removeFromSystem ] ]
+]

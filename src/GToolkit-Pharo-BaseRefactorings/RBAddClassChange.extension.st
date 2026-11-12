@@ -1,6 +1,14 @@
 Extension { #name : #RBAddClassChange }
 
 { #category : #'*GToolkit-Pharo-BaseRefactorings' }
+RBAddClassChange >> changeString [
+	"Describe the change as an action, consistent with RBRefactoryDefinitionChange>>#changeString.
+	Without it, the change is described only by the class name (RBRefactoryClassChange>>#changeString)"
+
+	^ 'Define ' , self displayClassName
+]
+
+{ #category : #'*GToolkit-Pharo-BaseRefactorings' }
 RBAddClassChange class >> definitionBlockFrom: aString [
 	^ [ :builder | 
 	| ast |

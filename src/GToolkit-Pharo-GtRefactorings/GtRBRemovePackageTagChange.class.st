@@ -19,6 +19,11 @@ GtRBRemovePackageTagChange >> asUndoOperation [
 	^ GtRBAddPackageTagChange packageName: packageName tagName: tagName
 ]
 
+{ #category : #printing }
+GtRBRemovePackageTagChange >> changeString [
+	^ 'Remove package tag ' , tagName asString , ' in ' , packageName asString
+]
+
 { #category : #accessing }
 GtRBRemovePackageTagChange >> gtChangeIcon [
 	^ Smalltalk ui icons iconNamed: #changeRemove

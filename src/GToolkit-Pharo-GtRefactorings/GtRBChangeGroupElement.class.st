@@ -185,7 +185,7 @@ GtRBChangeGroupElement >> initializeGroupTree [
 			column: 'Type'
 				do: [ :column | 
 					column
-						width: 32;
+						width: 64;
 						cellStencil: [ BrHorizontalPane new
 								id: #type;
 								fitContent ];
