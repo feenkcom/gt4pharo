@@ -459,3 +459,81 @@ GtSUnitToExamplesRefactoringExamples >> slotGettersUseThePrefix [
 				parseMethod: 'tearDown self theClass ifNotNil: [ class := nil ]. anotherSlot := nil. self').
 	^ model
 ]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> sourcePreconditionsCheckSelectorsAndClassVariables [
+	<gtExample>
+	| model source before refactoring failed |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtSourcePrerequisiteConflictsTest instanceVariableNames: ''a'' classVariableNames: ''SharedValue'' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtSourcePrerequisiteConflictsTest.
+	source compile: 'testTheA ^ a' classified: #tests.
+	source compile: 'testClass ^ a' classified: #tests.
+	before := model changes changes asArray.
+	refactoring := GtSUnitToExamplesRefactoring
+			model: model
+			from: source name
+			to: #GtSourcePrerequisiteConflictsExamples.
+	failed := refactoring sourcePreconditions
+			reject: [ :condition | condition check ].
+	self
+		assert: (failed collect: #errorString) asSet
+		equals: #('Class variables require manual conversion' 'Cannot generate the class selector' 'Getter or example selector collision: theA')
+				asSet.
+	self
+		assert: (refactoring failedApplicabilityPreconditions collect: #errorString) asSet
+		equals: (failed collect: #errorString) asSet.
+	self assert: model changes changes asArray equals: before.
+	self assert: (model classNamed: #GtSourcePrerequisiteConflictsExamples) isNil.
+	^ failed
+]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> sourcePreconditionsRejectKeymappingSetup [
+	<gtExample>
+	| model refactoring before repository failed |
+	model := GtRBNamespace new.
+	before := model changes changes asArray.
+	repository := KMRepository classPool at: #Singleton.
+	refactoring := GtSUnitToExamplesRefactoring
+			model: model
+			className: #AbstractKeymappingTest.
+	failed := refactoring sourcePreconditions
+			reject: [ :condition | condition check ].
+	self assert: failed size equals: 1.
+	self
+		assert: failed first errorString
+		equals: 'Expanded setUp must contain only direct slot assignments and super setUp'.
+	self assert: model changes changes asArray equals: before.
+	self assert: (KMRepository classPool at: #Singleton) == repository.
+	^ failed
+]
+
+{ #category : #examples }
+GtSUnitToExamplesRefactoringExamples >> sourcePreconditionsWorkWithoutConvertedParents [
+	<gtExample>
+	| model source original before refactoring conditions |
+	model := GtRBNamespace new.
+	model
+		defineClass: 'TestCase subclass: #GtSourcePrerequisiteParentTest instanceVariableNames: ''a'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	model
+		defineClass: 'GtSourcePrerequisiteParentTest subclass: #GtSourcePrerequisiteChildTest instanceVariableNames: ''b'' classVariableNames: '''' package: ''SUnit-Conversion-Fixtures'''.
+	source := model classNamed: #GtSourcePrerequisiteChildTest.
+	original := 'setUp | value | super setUp. value := a + 1. b := value'.
+	source compile: original classified: #running.
+	before := model changes changes asArray.
+	refactoring := GtSUnitToExamplesRefactoring model: model className: source name.
+	conditions := refactoring sourcePreconditions.
+	self assert: (conditions allSatisfy: [ :condition | condition check ]).
+	self assert: (conditions allSatisfy: [ :condition | condition check ]).
+	self assert: model changes changes asArray equals: before.
+	self assert: (source sourceCodeFor: #setUp) equals: original.	"A new query must observe pending edits without cached analysis."
+	source compile: 'setUp b := 1. Transcript cr' classified: #running.
+	before := model changes changes asArray.
+	self
+		assert: ((refactoring sourcePreconditions reject: [ :condition | condition check ])
+				anySatisfy: [ :condition | condition errorString includesSubstring: 'Expanded setUp' ]).
+	self assert: model changes changes asArray equals: before.
+	^ refactoring
+]
