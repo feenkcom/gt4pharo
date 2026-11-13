@@ -440,6 +440,7 @@ GtPharoMethodSearchFilterGroupingExample >> methodsFilter_byPackageView_singlePa
 { #category : #examples }
 GtPharoMethodSearchFilterGroupingExample >> methodsFilter_navigationByPackageMultiple_byClassMultiple [
 	<gtExample>
+	<timeLimit: 120000>
 	| scripter |
 	
 	scripter := self methodsFilter_byPackageView_multiplePackages.
