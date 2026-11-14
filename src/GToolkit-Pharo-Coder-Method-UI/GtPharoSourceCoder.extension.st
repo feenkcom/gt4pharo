@@ -1,6 +1,29 @@
 Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*GToolkit-Pharo-Coder-Method-UI' }
+GtPharoSourceCoder >> addSelectionSearchMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
+	"Add a Search submenu with search actions for the selected text.
+	The actions are defined in GtCoderSelectionSearch"
+
+	<gtCoderContextMenuAddOns>
+	aCoderViewModel hasSelection ifFalse: [ ^ self ].
+	(GtCoderSelectionSearch coderViewModel: aCoderViewModel) hasSearchableSelection
+		ifFalse: [ ^ self ].
+
+	(coderAddOns
+		addContextMenu: 'Search'
+		icon: BrGlamorousVectorIcons search
+		submenu: [ :theCoderViewModel :aTextualCoderEditorElement | 
+			GtCoderSelectionSearchTarget
+				menuItemsForObject: (GtCoderSelectionSearch coderViewModel: theCoderViewModel)
+				hostElement: aTextualCoderEditorElement ])
+		ifNotNil: [ :anAction | 
+			anAction
+				group: BrMenuItemGroupConfiguration navigation;
+				priority: 55 ]
+]
+
+{ #category : #'*GToolkit-Pharo-Coder-Method-UI' }
 GtPharoSourceCoder >> formatWithRequesterObject: aRequester [
 	| ast originalSource formatted |
 	originalSource := self currentSourceString.

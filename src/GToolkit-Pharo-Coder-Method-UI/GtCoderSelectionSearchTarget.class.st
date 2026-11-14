@@ -5,5 +5,5 @@ Actions defined on {{gtClass:GtCoderSelectionSearch}} with me as target are show
 Class {
 	#name : #GtCoderSelectionSearchTarget,
 	#superclass : #GtPhlowActionUniqueTarget,
-	#category : #'GToolkit-Pharo-Coder-Method-Search'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Search'
 }

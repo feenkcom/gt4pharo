@@ -20,7 +20,7 @@ Class {
 	#classVars : [
 		'SubstringSearchEnabled'
 	],
-	#category : #'GToolkit-Pharo-Coder-Method-Search'
+	#category : #'GToolkit-Pharo-Coder-Method-UI-Search'
 }
 
 { #category : #'instance creation' }
