@@ -86,6 +86,11 @@ GtPharoDummyOneObject >> instAPlusOne [
 ]
 
 { #category : #accessing }
+GtPharoDummyOneObject >> instAPlusOneWithExpression [
+	^ self sumA: instA + 0 b: instA
+]
+
+{ #category : #accessing }
 GtPharoDummyOneObject >> instAReceiver [
 	| a |
 	a := 3.

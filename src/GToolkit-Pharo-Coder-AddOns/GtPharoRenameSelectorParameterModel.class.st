@@ -13,8 +13,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtPharoRenameSelectorParameterModel class >> forAstVariableNodeArgument: anAstVariableNode index: anIndex [
-	^ self new initializeForAstVariableNode: anAstVariableNode index: anIndex
+GtPharoRenameSelectorParameterModel class >> forAstNodeArgument: anAstNode index: anIndex [
+	^ self new initializeForAstNode: anAstNode index: anIndex
 ]
 
 { #category : #accessing }
@@ -39,13 +39,12 @@ GtPharoRenameSelectorParameterModel >> initialize [
 ]
 
 { #category : #initialization }
-GtPharoRenameSelectorParameterModel >> initializeForAstVariableNode: anAstVariableNode index: anIndex [
-	originalName := anAstVariableNode variableName. 
-	originalInterval := anAstVariableNode sourceInterval.
+GtPharoRenameSelectorParameterModel >> initializeForAstNode: anAstNode index: anIndex [
+	originalName := anAstNode source.
+	originalInterval := anAstNode sourceInterval.
 	originalIndex := anIndex.
-	
 	currentName := originalName.
-	currentIndex := originalIndex.
+	currentIndex := originalIndex
 ]
 
 { #category : #testing }

@@ -216,13 +216,13 @@ GtPharoRenameSelectorModel >> initialize [
 
 { #category : #initialization }
 GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
-	| aSelectorParts aSelectorPartIntervals aSelectorVariableNodes aComponentsBuilder isMustBeKeywordPart |
+	| aSelectorParts aSelectorPartIntervals aSelectorArgumentNodes aComponentsBuilder isMustBeKeywordPart |
 	originalAstNode := anAstNode.
 	originalSelector := anAstNode selector.
 	aSelectorParts := originalSelector keywords.
 	aSelectorPartIntervals := anAstNode selectorParts collect: #sourceInterval.
-	aSelectorVariableNodes := anAstNode arguments.
-	isMustBeKeywordPart := aSelectorVariableNodes size > 1.
+	aSelectorArgumentNodes := anAstNode arguments.
+	isMustBeKeywordPart := aSelectorArgumentNodes size > 1.
 	aComponentsBuilder := GtPharoRenameSelectorPartComponentsBuilder new
 			astNode: anAstNode;
 			build.
@@ -253,18 +253,16 @@ GtPharoRenameSelectorModel >> initializeForAstNode: anAstNode [
 						aStream nextPut: aPartModel.
 						anIndex := anIndex + 1 ] ].
 
-	selectorParameters := (aSelectorVariableNodes
+	selectorParameters := (aSelectorArgumentNodes
 			withIndexCollect: [ :eachArgument :anIndex | 
 				| aParameterModel |
 				aParameterModel := GtPharoRenameSelectorParameterModel
-						forAstVariableNodeArgument: eachArgument
+						forAstNodeArgument: eachArgument
 						index: anIndex.
-
 				aParameterModel announcer
 					when: GtPharoRenameSelectorParameterNameChanged
 					send: #onGtPharoRenameSelectorParameterNameChanged:
 					to: self.
-
 				aParameterModel ]) asArray.
 
 	selectorParameters
