@@ -11801,6 +11801,137 @@ GtPharoMethodCoderByScripterExamples >> renameMessageSendChangeSelectorAndOrder 
 	^ self changeSelectorAndOrderIn: self renameMessageSend
 ]
 
+{ #category : #'examples - rename' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendWithExpressionNewSwap [
+	<gtExample>
+	| aScripter aChanges |
+	aScripter := self renameMessageSendWithExpressionShortcut.
+	aScripter click
+		id: #'move-parameter-right-1';
+		play.
+	aScripter assert
+		label: 'Expression and variable arguments are swapped';
+		satisfies: [ :anEditor | 
+			anEditor userData
+				at: #selectorModel
+				ifPresent: [ :aModel | 
+					aModel currentParameterPermutations = #(2 1)
+						and: [ aModel parameters first currentName = 'instA'
+								and: [ aModel parameters second currentName = 'instA + 0' ] ] ]
+				ifAbsent: [ false ] ];
+		id: GtSourceCoderEditorInnerId;
+		play.
+	aScripter assert
+		label: 'Rename refactoring can be computed after swapping';
+		satisfies: [ :anEditor | (anEditor userData at: #selectorController) computeRefactorings size = 1 ];
+		id: GtSourceCoderEditorInnerId;
+		play.
+	aScripter click
+		id: #previewCheckButton;
+		play.
+	aScripter do
+		onSpaceRoot;
+		// GtChangesElement;
+		block: [ :each | aChanges := each changes ];
+		play.
+	self
+		assert: (aChanges gtAllChanges
+				anySatisfy: [ :each | 
+					(each isKindOf: RBAddMethodChange)
+						and: [ each changeClassName = #GtPharoDummyOneObject
+								and: [ each source includesSubstring: 'sumA: instA b: instA + 0' ] ] ]).
+	^ aScripter
+]
+
+{ #category : #'examples - rename' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendWithExpressionOldShortcut [
+	<gtExample>
+	| aScripter aMethod aPreviousSetting |
+	aMethod := GtPharoDummyOneObject >> #instAPlusOneWithExpression.
+	aScripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: aMethod ].
+	aScripter assert
+		label: 'Coder uses BrEditor';
+		satisfies: [ :anEditor | anEditor isKindOf: BrEditor ];
+		id: GtSourceCoderEditorInnerId;
+		play.
+	aScripter click
+		label: 'Focus the method editor';
+		id: GtSourceCoderEditorInnerId;
+		play.
+	aScripter do
+		label: 'Put the cursor in sumA:';
+		id: GtSourceCoderEditorId;
+		block: [ :each | each editor moveCursorTo: (aMethod sourceCode indexOfSubCollection: 'sumA:') + 1 ];
+		play.
+	aPreviousSetting := GtPharoCoderSettings
+			displayNewRenameImplementationContextMenuItem.
+	[ GtPharoCoderSettings displayNewRenameImplementationContextMenuItem: false.
+	aScripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		play.
+	self checkFor: aScripter renameEditorExists: true.
+	aScripter click
+		id: #'move-parameter-right-1';
+		play.
+	aScripter assert
+		label: 'Expression and variable arguments are swapped in the source';
+		satisfies: [ :aCoderElement | aCoderElement editor text asString includesSubstring: 'sumA: instA b: instA + 0' ];
+		id: GtSourceCoderEditorId;
+		play.
+	self checkFor: aScripter refactoringPreviewButtonExists: true ]
+		ensure: [ GtPharoCoderSettings
+				displayNewRenameImplementationContextMenuItem: aPreviousSetting ].
+	^ aScripter
+]
+
+{ #category : #'examples - rename' }
+GtPharoMethodCoderByScripterExamples >> renameMessageSendWithExpressionShortcut [
+	<gtExample>
+	| aScripter aMethod aPreviousSetting |
+	aMethod := GtPharoDummyOneObject >> #instAPlusOneWithExpression.
+	aScripter := self scripterForBlock: [ GtPharoMethodCoder forMethod: aMethod ].
+	aScripter assert
+		label: 'Coder uses BrEditor';
+		satisfies: [ :anEditor | anEditor isKindOf: BrEditor ];
+		id: GtSourceCoderEditorInnerId;
+		play.
+	aScripter click
+		label: 'Focus the method editor';
+		id: GtSourceCoderEditorInnerId;
+		play.
+	aScripter do
+		label: 'Put the cursor in sumA:';
+		id: GtSourceCoderEditorInnerId;
+		block: [ :each | each editor moveCursorTo: (aMethod sourceCode indexOfSubCollection: 'sumA:') + 1 ];
+		play.
+	aPreviousSetting := GtPharoCoderSettings
+			displayNewRenameImplementationContextMenuItem.
+	[ GtPharoCoderSettings displayNewRenameImplementationContextMenuItem: true.
+	aScripter shortcut
+		combination: BlKeyCombination primaryR;
+		id: GtSourceCoderEditorId;
+		id: GtSourceCoderEditorInnerId;
+		play ]
+		ensure: [ GtPharoCoderSettings
+				displayNewRenameImplementationContextMenuItem: aPreviousSetting ].
+	aScripter assert
+		label: 'Rename selector model is installed';
+		satisfies: [ :anEditor | 
+			anEditor userData
+				at: #selectorModel
+				ifPresent: [ :aModel | 
+					aModel currentSelector = #sumA:b:
+						and: [ aModel numberOfParameters = 2
+								and: [ aModel parameters first currentName = 'instA + 0'
+										and: [ aModel currentParameterPermutations = #(1 2) ] ] ] ]
+				ifAbsent: [ false ] ];
+		id: GtSourceCoderEditorInnerId;
+		play.
+	^ aScripter
+]
+
 { #category : #'examples - rename method' }
 GtPharoMethodCoderByScripterExamples >> renameMethodPattern [
 	<gtExample>
