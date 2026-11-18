@@ -124,8 +124,8 @@ GtTraitCreationFormExample >> scripterWithTraitAccepted [
 	self assert: createdTrait isNotNil.
 	self
 		assert: (createdTrait slots collect: #name)
-		equals: {'abc'.
-				'bcd'}.
+		equals: {#abc.
+				#bcd}.
 
 	^ scripter
 ]

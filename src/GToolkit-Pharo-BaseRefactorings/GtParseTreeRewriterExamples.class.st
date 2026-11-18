@@ -14,7 +14,7 @@ GtParseTreeRewriterExamples >> allCascadeReceiversChange [
 			to: '``@obj printOn: ``@rcvr'.
 	self
 		assert: (result body statements first messages
-				allSatisfy: [ :each | each receiver name = 'object' and: [ each selector = #printOn: ] ]).
+				allSatisfy: [ :each | each receiver name = #object and: [ each selector = #printOn: ] ]).
 	^ result
 ]
 
@@ -180,13 +180,13 @@ GtParseTreeRewriterExamples >> declarationRules [
 	rewriter replaceArgument: 'temporary' with: 'renamedTemporary'.
 	rewriter replaceArgument: 'blockArgument' with: 'renamedBlockArgument'.
 	self assert: (rewriter executeTree: ast).
-	self assert: rewriter tree arguments first name equals: 'renamedArgument'.
+	self assert: rewriter tree arguments first name equals: #renamedArgument.
 	self
 		assert: rewriter tree body temporaries first name
-		equals: 'renamedTemporary'.
+		equals: #renamedTemporary.
 	self
 		assert: rewriter tree body statements first value arguments first name
-		equals: 'renamedBlockArgument'.
+		equals: #renamedBlockArgument.
 	^ rewriter tree
 ]
 

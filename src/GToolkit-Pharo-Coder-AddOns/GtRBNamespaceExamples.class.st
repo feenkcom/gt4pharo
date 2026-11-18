@@ -31,8 +31,8 @@ GtRBNamespaceExamples >> defineClassWithClassSlotsUpdatesMetaclassVariables [
 	model
 		defineClass: 'Object << #AAA123 slots: {#a. #b}; classSlots: {#c. #d}; package: #Foo'.
 	class := model classNamed: #AAA123.
-	self assert: class instanceVariableNames asArray equals: #(#a #b).
-	self assert: class classSide instanceVariableNames asArray equals: #(#c #d).
+	self assert: class instanceVariableNames asArray equals: #('a' 'b').
+	self assert: class classSide instanceVariableNames asArray equals: #('c' 'd').
 	^ class
 ]
 
@@ -151,8 +151,8 @@ GtRBNamespaceExamples >> recompileClassWithClassSlotsUpdatesMetaclassVariables [
 	model
 		defineClass: 'Object << #AAA123 slots: {#e}; classSlots: {#f}; package: #Foo'.
 	class := model classNamed: #AAA123.
-	self assert: class instanceVariableNames asArray equals: #(#e).
-	self assert: class classSide instanceVariableNames asArray equals: #(#f).
+	self assert: class instanceVariableNames asArray equals: #('e').
+	self assert: class classSide instanceVariableNames asArray equals: #('f').
 	^ class
 ]
 
@@ -163,8 +163,8 @@ GtRBNamespaceExamples >> recompileClassWithoutClassSlotsDoesNotUpdateMetaclassVa
 	model := self defineClassWithClassSlotsUpdatesMetaclassVariables model.
 	model defineClass: 'Object << #AAA123 slots: {#e}; package: #Foo'.
 	class := model classNamed: #AAA123.
-	self assert: class instanceVariableNames asArray equals: #(#e).
-	self assert: class classSide instanceVariableNames asArray equals: #(#c #d).
+	self assert: class instanceVariableNames asArray equals: #('e').
+	self assert: class classSide instanceVariableNames asArray equals: #('c' 'd').
 	^ class
 ]
 

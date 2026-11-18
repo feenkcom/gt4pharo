@@ -92,9 +92,9 @@ GtClassCreationFormExample >> scripterWithClassAccepted [
 
 	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
-	self assert: createdClass package name equals: self examplePackageName.
+	self assert: createdClass package name equals: self examplePackageName asSymbol.
 	self assert: createdClass packageTag isRoot.
-	self assert: createdClass category equals: self examplePackageName.
+	self assert: createdClass category equals: self examplePackageName asSymbol.
 
 	^ scripter
 ]
@@ -129,8 +129,8 @@ self
 
 	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
-	self assert: createdClass package name equals: self examplePackageName.
-	self assert: createdClass packageTag name equals: self examplePackageTagName.
+	self assert: createdClass package name equals: self examplePackageName asSymbol.
+	self assert: createdClass packageTag name equals: self examplePackageTagName asSymbol.
 	self 
 		assert: createdClass category 
 		equals: (self examplePackageName, '-',self examplePackageTagName) asSymbol.
@@ -167,8 +167,8 @@ self
 
 	createdClass := Smalltalk classNamed: self exampleClassName.
 	self assert: createdClass isNotNil.
-	self assert: createdClass package name equals: self examplePackageNameWithDash.
-	self assert: createdClass packageTag name equals: self examplePackageTagNameWithDash.
+	self assert: createdClass package name equals: self examplePackageNameWithDash asSymbol.
+	self assert: createdClass packageTag name equals: self examplePackageTagNameWithDash asSymbol.
 	self 
 		assert: createdClass category 
 		equals: (self examplePackageNameWithDash, '-',self examplePackageTagNameWithDash) asSymbol.

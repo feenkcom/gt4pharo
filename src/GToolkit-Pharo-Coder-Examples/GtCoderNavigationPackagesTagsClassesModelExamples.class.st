@@ -203,7 +203,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 	self assert: (protocolsToShow includes: 'instance creation').
 	
 	self assert: aModel hasSelectedProtocol.
-	self assert: aModel selectedProtocol name equals: 'All'.
+	self assert: aModel selectedProtocol name equals: #All.
 	
 	self assert: aModel hasSelectedSlot not.
 	

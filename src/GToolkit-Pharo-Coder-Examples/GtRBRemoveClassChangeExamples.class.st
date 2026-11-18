@@ -74,7 +74,7 @@ GtRBRemoveClassChangeExamples >> removeClassUsingTraitWithClassSideSlot [
 					select: [ :each | each name = #uniqueInstance ])
 					collect: [ :each | each definingClass name asString ]
 					as: Array ].
-			self assert: definers value equals: {aTraitName , ' classTrait'}.
+			self assert: definers value equals: {(aTraitName , ' classTrait') asString}.
 
 			self
 				assertUndoOf: (GtRBRemoveClassChange remove: aName asClass)
@@ -82,7 +82,7 @@ GtRBRemoveClassChangeExamples >> removeClassUsingTraitWithClassSideSlot [
 				removing: {aName}
 				in: aChangeManager.
 			aChangeManager undoChange.
-			self assert: definers value equals: {aTraitName , ' classTrait'}.
+			self assert: definers value equals: {(aTraitName , ' classTrait') asString}.
 			self assert: aName asClass classSide localSlots isEmpty.
 
 			aName asClass ]

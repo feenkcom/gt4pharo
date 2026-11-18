@@ -170,7 +170,7 @@ GtPharoMethodsCoderByScripterExamples >> referencesMenuWhenCollapsed [
 			s
 				// GtExpandableSourceCoderElement;
 				// BlAttributedTextElement;
-				@ [ :each | each text asString = #referencesMenuWhenCollapsed ] ].
+				@ [ :each | each text asString = 'referencesMenuWhenCollapsed' ] ].
 	scripter
 		clickStep: [ :s | 
 			s

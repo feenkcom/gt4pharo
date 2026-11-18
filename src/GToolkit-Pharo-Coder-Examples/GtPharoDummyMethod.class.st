@@ -77,7 +77,8 @@ GtPharoDummyMethod >> protocol: anObject [
 
 { #category : #accessing }
 GtPharoDummyMethod >> protocolName [
-	^ self protocol
+	"Protocol names are Symbols, as for compiled methods"
+	^ self protocol ifNotNil: [ :aProtocol | aProtocol asSymbol ]
 ]
 
 { #category : #'api - class' }

@@ -14,7 +14,7 @@ GtRBAddClassChangeExamples >> classSlots [
 			yourself.
 	self assert: change changeClassName equals: #B321.
 	self assert: change superclassName equals: #A123.
-	self assert: change classInstanceVariableNames asArray equals: #(foo bar baz).
+	self assert: change classInstanceVariableNames asArray equals: #('foo' 'bar' 'baz').
 	^ change
 ]
 
@@ -28,7 +28,7 @@ GtRBAddClassChangeExamples >> slots [
 			yourself.
 	self assert: change changeClassName equals: #B321.
 	self assert: change superclassName equals: #A123.
-	self assert: change instanceVariableNames asArray equals: #(foo bar baz).
+	self assert: change instanceVariableNames asArray equals: #('foo' 'bar' 'baz').
 	^ change
 ]
 
@@ -51,11 +51,11 @@ GtRBAddClassChangeExamples >> verifyChanges [
 				equals: (cls superclass ifNotNil: [ :c | c name ]).
 			self
 				assert: change classVariableNames asSortedCollection
-				equals: (cls classVariables collect: #key) asSortedCollection.
+				equals: (cls classVariables collect: [ :each | each key asString ]) asSortedCollection.
 			self
 				assert: change instanceVariableNames asArray
-				equals: (cls localSlots collect: #name).
-			self assert: change category equals: cls category.
+				equals: (cls localSlots collect: [ :each | each name asString ]).
+			self assert: change category equals: cls category asString.
 			self assert: change package equals: cls package name.
 			self
 				assert: change sharedPoolNames asSortedCollection

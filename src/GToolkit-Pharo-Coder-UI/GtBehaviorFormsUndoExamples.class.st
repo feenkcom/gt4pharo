@@ -166,7 +166,7 @@ GtBehaviorFormsUndoExamples >> classUpdateKeepsTraitExclusions [
 	traits: ' , aTraitName , ' - {#m};
 	package: ' , self packageName printString.
 			aShape := self shapeOf: aName.
-			self assert: (aShape at: 4) equals: aTraitName , ' - {#m}'.
+			self assert: (aShape at: 4) equals: (aTraitName , ' - {#m}') asString.
 			self
 				scripterSaving: (GtClassUpdateForm new onClass: aName asClass)
 				thenAssert: [ (self shapeOf: aName) = aShape ]
