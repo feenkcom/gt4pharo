@@ -9,5 +9,5 @@ GtSearchScopedMethodsScope >> asFilterModelItem [
 
 { #category : #'*GToolkit-Pharo-Coder-UI' }
 GtSearchScopedMethodsScope >> icon [
-	^ (self gtSafeIconNamed: self gtIconName) ifNotNil: #asElement
+	^ (self gtSafeIconNamed: self gtIconName) ifNotNil: [ :v | v asElement ]
 ]

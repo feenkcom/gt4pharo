@@ -455,17 +455,17 @@ GtBehaviorUpdateForm >> slotsDescription [
 		blocListStencil: (self
 				taggerStencilWithCompletion: nil
 				contextMenuContentBlock: [ :aVariable :anElement :aMemento | 
-					(aMemento overallStatus valueOrNil ifNotNil: #isChanged ifNil: [ true ])
+					(aMemento overallStatus valueOrNil
+						ifNotNil: [ :v | v isChanged ]
+						ifNil: [ true ])
 						ifTrue: [ GtCoderContextMenuContent new editorElement: anElement ]
 						ifFalse: [ self createSlotsContextMenuContentFor: aVariable editor: anElement ] ]
 				contextMenuBlock: [ :aSlotName :anElement :aMemento | 
 					self class environment
 						at: self rawClassName asSymbol
 						ifPresent: [ :aClass | 
-							(aClass slotNamed: aSlotName) ifNotNil: [ :aSlot |
-								GtCoderVariableTarget 
-									menuItemsForObject: aSlot 
-									hostElement: anElement ] ]
+							(aClass slotNamed: aSlotName)
+								ifNotNil: [ :aSlot | GtCoderVariableTarget menuItemsForObject: aSlot hostElement: anElement ] ]
 						ifAbsent: [ nil ] ]);
 		blocShortcuts: [ {BlShortcutWithAction new
 					name: 'Inspect slot';

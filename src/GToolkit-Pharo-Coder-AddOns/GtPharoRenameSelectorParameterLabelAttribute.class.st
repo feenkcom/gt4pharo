@@ -30,7 +30,7 @@ GtPharoRenameSelectorParameterLabelAttribute >> doAffect: aTBrTextEditorTextualP
 GtPharoRenameSelectorParameterLabelAttribute >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Parameter: ';
-		nextPutAll: (self parameterModel ifNotNil: #currentName) asString
+		nextPutAll: (self parameterModel ifNotNil: [ :v | v currentName ]) asString
 ]
 
 { #category : #initialization }

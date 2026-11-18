@@ -87,12 +87,11 @@ GtStrictSymbolInstallation >> loadEqualityStatsFromFile: aFileReference [
 { #category : #'managing - steps' }
 GtStrictSymbolInstallation >> patchIcebergPackageNames [
 	| packagesToPatch |
-	packagesToPatch := IceRepository registry flatCollect: [ :aRepository | 
-		((aRepository packages) select: [:aPackage | 
-			aPackage name class = ByteString ]) ].
-		
-	packagesToPatch do: [ :aPackage |
-		aPackage package: (aPackage package ifNotNil: #asSymbol) ]
+	packagesToPatch := IceRepository registry
+			flatCollect: [ :aRepository | aRepository packages select: [ :aPackage | aPackage name class = ByteString ] ].
+
+	packagesToPatch
+		do: [ :aPackage | aPackage package: (aPackage package ifNotNil: [ :v | v asSymbol ]) ]
 ]
 
 { #category : #'managing - steps' }

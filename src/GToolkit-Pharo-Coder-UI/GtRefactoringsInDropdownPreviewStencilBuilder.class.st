@@ -11,7 +11,7 @@ Class {
 GtRefactoringsInDropdownPreviewStencilBuilder >> buildDefault [
 	<return: #BrStencil or: #BlElement>
 	^ self refactoringsViewModel
-		ifNotNil: #asPreviewElement
+		ifNotNil: [ :v | v asPreviewElement ]
 		ifNil: [ GtRefactoringsPreviewElement new ]
 ]
 

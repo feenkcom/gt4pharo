@@ -54,8 +54,10 @@ GtMethodAdviceConsideringSignal >> printOneLineContentsOn: aStream [
 	self isStyled
 		ifTrue: [ aStream nextPutAll: '+ ' ]
 		ifFalse: [ aStream nextPutAll: '- ' ].
-	aStream print: (self advice ifNotNil: #class).
-	aStream nextPut: $:; space.
+	aStream print: (self advice ifNotNil: [ :v | v class ]).
+	aStream
+		nextPut: $:;
+		space.
 	aStream print: node
 ]
 

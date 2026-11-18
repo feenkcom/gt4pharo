@@ -48,5 +48,5 @@ GtCoderExampleStatusAttribute >> printOn: aStream [
 
 { #category : #accessing }
 GtCoderExampleStatusAttribute >> result [
-	^ self example ifNotNil: #result
+	^ self example ifNotNil: [ :v | v result ]
 ]

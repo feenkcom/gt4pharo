@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtPharoMethodCoderCompiledSignal >> methodCoder [
-	^ self announcement ifNotNil: #methodCoder
+	^ self announcement ifNotNil: [ :v | v methodCoder ]
 ]
 
 { #category : #accessing }

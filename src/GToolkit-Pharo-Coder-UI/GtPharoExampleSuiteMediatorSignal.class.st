@@ -17,7 +17,7 @@ GtPharoExampleSuiteMediatorSignal class >> gtNormalOperationSignal [
 
 { #category : #accessing }
 GtPharoExampleSuiteMediatorSignal >> id [
-	^ self mediator ifNotNil: #identityHash
+	^ self mediator ifNotNil: [ :v | v identityHash ]
 ]
 
 { #category : #accessing }
