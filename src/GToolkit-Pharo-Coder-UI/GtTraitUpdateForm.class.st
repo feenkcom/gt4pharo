@@ -29,10 +29,10 @@ GtTraitUpdateForm >> onTrait: aTrait [
 	self
 		packageAndTagName: (GtPackageAndTagName new
 				packageName: aTrait package name;
-				tagName: ((aTrait package tagOrNilOf: aTrait) ifNotNil: #name)).
+				tagName: ((aTrait package tagOrNilOf: aTrait) ifNotNil: [ :v | v name ])).
 	self
-		classSlots: ((aTrait classSide slots select: [ :aSlot | aSlot definingClass = aTrait classSide ])
-				collect: #name)
+		classSlots: ((aTrait classSide slots
+				select: [ :aSlot | aSlot definingClass = aTrait classSide ]) collect: #name)
 ]
 
 { #category : #accessing }

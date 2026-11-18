@@ -12,12 +12,12 @@ Class {
 
 { #category : #accessing }
 GtPharoMethodModificationIndicator >> behavior [
-	^ behaviorSource ifNotNil: #behavior
+	^ behaviorSource ifNotNil: [ :v | v behavior ]
 ]
 
 { #category : #accessing }
 GtPharoMethodModificationIndicator >> behaviorName [
-	^ self behavior ifNotNil: #name
+	^ self behavior ifNotNil: [ :v | v name ]
 ]
 
 { #category : #accessing }

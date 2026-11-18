@@ -39,7 +39,7 @@ GtSearchFilterAndFilterModelConversionResult >> filterModelFour: anObject [
 
 { #category : #'as yet unclassified' }
 GtSearchFilterAndFilterModelConversionResult >> filterModelName [
-	^ self filterModelOne ifNotNil: #name ifNil: [ '' ]
+	^ self filterModelOne ifNotNil: [ :v | v name ] ifNil: [ '' ]
 ]
 
 { #category : #accessing }
@@ -54,7 +54,7 @@ GtSearchFilterAndFilterModelConversionResult >> filterModelOne: anObject [
 
 { #category : #'as yet unclassified' }
 GtSearchFilterAndFilterModelConversionResult >> filterModelOrder [
-	^ self filterModelOne ifNotNil: #order ifNil: [ '' ]
+	^ self filterModelOne ifNotNil: [ :v | v order ] ifNil: [ '' ]
 ]
 
 { #category : #accessing }
@@ -84,10 +84,10 @@ GtSearchFilterAndFilterModelConversionResult >> gtOverview [
 			value: self methodsCoder.
 		GtPhlowOverviewItem new
 			name: 'Methods coder behavior';
-			value: (self methodsCoder ifNotNil: #behavior).
+			value: (self methodsCoder ifNotNil: [ :v | v behavior ]).
 		GtPhlowOverviewItem new
 			name: 'Is for class';
-			boolean: (self methodsCoder ifNotNil: #isForClass).
+			boolean: (self methodsCoder ifNotNil: [ :v | v isForClass ]).
 		GtPhlowOverviewItem new
 			name: 'Search filter class SF';
 			value: self searchFilterClass.

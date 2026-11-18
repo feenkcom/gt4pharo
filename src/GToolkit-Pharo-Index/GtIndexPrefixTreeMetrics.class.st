@@ -18,25 +18,25 @@ GtIndexPrefixTreeMetrics class >> forDefaultSelectorCache [
 
 { #category : #initialization }
 GtIndexPrefixTreeMetrics >> computeForPrefixTree: aPrefixTree [
+	"Classify every node by its target data (see #targetDataForNode:): 
+	nil, a single method, or a collection of methods, whose sizes we track."
+
 	| sizeValues |
 	self resetValues.
-	
+
 	sizeValues := OrderedDictionary new.
-	aPrefixTree allNodesDo: [ :aNode | 
-	totalNodesCount := totalNodesCount + 1.
-	aNode references 
-		ifNil: [ nilReferencesCount := nilReferencesCount + 1 ]
-		ifNotNil: [
-			(self targetDataForNode: aNode) gtIsIndexMethod
-				ifTrue: [ compiledMethodsCount := compiledMethodsCount + 1]
-				ifFalse: [
-					| currentCount|
-					currentCount := sizeValues 
-						at: aNode references size ifAbsent: [ 0 ].
-					sizeValues 
-						at: aNode references size put: currentCount + 1 ] ] ].
+	aPrefixTree
+		allNodesDo: [ :aNode | 
+			| aData |
+			totalNodesCount := totalNodesCount + 1.
+			aData := self targetDataForNode: aNode.
+			aData
+				ifNil: [ nilReferencesCount := nilReferencesCount + 1 ]
+				ifNotNil: [ aData gtIsIndexMethod
+						ifTrue: [ compiledMethodsCount := compiledMethodsCount + 1 ]
+						ifFalse: [ sizeValues at: aData size put: (sizeValues at: aData size ifAbsent: [ 0 ]) + 1 ] ] ].
 	sizeDistribution := GtIndexReferencesSizeDistribution new
-		sizesWithCount: sizeValues
+			sizesWithCount: sizeValues
 ]
 
 { #category : #'gt - extensions' }
@@ -53,16 +53,14 @@ GtIndexPrefixTreeMetrics >> gtViewNodesSizeIntervalFor: aView [
 { #category : #'gt - extensions' }
 GtIndexPrefixTreeMetrics >> gtViewSummaryFor: aView [
 	<gtView>
-	
 	^ aView columnedList
 		title: 'Summary';
 		priority: 10;
-		items: [ {
-			'Total nodes count' -> totalNodesCount.
-			'Nodes with nil references' -> nilReferencesCount.
-			'Nodes with compiled method' -> compiledMethodsCount.
-			'Nodes with references array' -> (totalNodesCount
-				-compiledMethodsCount - nilReferencesCount)} ];
+		items: [ {'Total nodes count' -> totalNodesCount.
+				'Nodes without data' -> nilReferencesCount.
+				'Nodes with a single method' -> compiledMethodsCount.
+				'Nodes with a collection of methods'
+					-> (totalNodesCount - compiledMethodsCount - nilReferencesCount)} ];
 		column: 'Description' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ]
 ]
