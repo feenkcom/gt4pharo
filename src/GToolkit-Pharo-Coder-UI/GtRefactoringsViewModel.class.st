@@ -182,7 +182,7 @@ GtRefactoringsViewModel >> gtOverview [
 		GtPhlowOverviewItem new
 			name: 'Executed refactorings';
 			value: executedRefactorings;
-			childrenItems: (executedRefactorings ifNotNil: #gtOverview).
+			childrenItems: (executedRefactorings ifNotNil: [ :v | v gtOverview ]).
 		GtPhlowOverviewItem new
 			name: 'Is preview button focused';
 			boolean: isPreviewButtonFocused.

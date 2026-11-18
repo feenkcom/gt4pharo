@@ -969,7 +969,7 @@ GtPharoMethodCoderExamples >> forNewMethod [
 	aMethodCoder attributeNamed: #dummyMethod put: aDummyMethod.
 
 	self assert: aMethodCoder behavior equals: aClass.
-	self assert: aMethodCoder collapsedText asString equals: #faulty.
+	self assert: aMethodCoder collapsedText asString equals: 'faulty'.
 	self assert: aMethodCoder currentSourceString equals: ''.
 	self assert: aMethodCoder selector equals: nil.
 	self assert: aMethodCoder currentSelector equals: #faulty.
@@ -1260,7 +1260,7 @@ GtPharoMethodCoderExamples >> modifyNewMethod [
 	self assert: anEventsRecoder first class equals: GtCoderSourceCodeChanged.
 	self assert: anEventsRecoder first coder equals: aMethodCoder.
 	self assert: anEventsRecoder first isSynchronous not.
-	self assert: anEventsRecoder first newText asString equals: aMethodName.
+	self assert: anEventsRecoder first newText asString equals: aMethodName asString.
 	
 	self assert: anEventsRecoder second class equals: GtCoderAddOnsUpdateRequest.
 	self assert: anEventsRecoder second coder equals: aMethodCoder.
@@ -1269,10 +1269,10 @@ GtPharoMethodCoderExamples >> modifyNewMethod [
 	self assert: aMethodCoder selector equals: nil.
 	self assert: aMethodCoder currentSelector equals: aMethodName.
 
-	self assert: aMethodCoder currentSourceString equals: aMethodName.
+	self assert: aMethodCoder currentSourceString equals: aMethodName asString.
 	self assert: aMethodCoder sourceCode class equals: GtCoderExplicitStringSource.
 	self assert: aMethodCoder sourceCode source equals: ''.
-	self assert: aMethodCoder sourceCode currentSourceString string equals: aMethodName.
+	self assert: aMethodCoder sourceCode currentSourceString string equals: aMethodName asString.
 	self assert: aMethodCoder sourceCode originalSourceText text asString equals: ''.
 
 	^ aMethodCoder

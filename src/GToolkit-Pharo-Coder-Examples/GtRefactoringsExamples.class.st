@@ -376,7 +376,7 @@ GtRefactoringsExamples >> inputElementFaultyComputedRefactorings [
 		equals: BrTextEditorEditableSingleLineMode.
 	self
 		assert: (anElement childWithId: #refactoringEditor) text asString
-		equals: self nonRootClass name.
+		equals: self nonRootClass name asString.
 	self
 		assert: (anElement childWithId: #refactoringInputLabel) text asString
 		equals: 'Superclass:'.
@@ -1702,7 +1702,7 @@ GtRefactoringsExamples >> previewWithInputWidgetElementNewClassAndPackageScripte
 
 	self assert: aNewClass isClass.
 	self assert: aNewClass superclass equals: Object.
-	self assert: aNewClass package name equals: aPackageName.
+	self assert: aNewClass package name equals: aPackageName asSymbol.
 
 	aDummyClass := self environment ensureRealClass: aNewClass.
 

@@ -12,7 +12,7 @@ GtMergeVariablesRefactoringExamples >> intervalFor: from in: selector [
 	| ast |
 	ast := (self class >> selector) ast.
 	ast
-		nodesDo: [ :each | (each isVariable and: [ each name = from ]) ifTrue: [ ^ each sourceInterval ] ].
+		nodesDo: [ :each | (each isVariable and: [ each name = from asSymbol ]) ifTrue: [ ^ each sourceInterval ] ].
 	self error: 'Variable not found'
 ]
 

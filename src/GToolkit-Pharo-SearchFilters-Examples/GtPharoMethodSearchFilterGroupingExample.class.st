@@ -526,7 +526,7 @@ GtPharoMethodSearchFilterGroupingExample >> multipleSelectCellWithLabel: aFirstL
 				id: #scrollable;
 				// GtPhlowCellElement;
 				@ [ :aCellElement | 
-					aCellElement content nameLabelText asString = aFirstLabel ] ].
+					aCellElement content nameLabelText asString sameContentAs: aFirstLabel ] ].
 	aScripter
 		clickStep: [ :s | 
 			s
@@ -535,7 +535,7 @@ GtPharoMethodSearchFilterGroupingExample >> multipleSelectCellWithLabel: aFirstL
 				id: #scrollable;
 				// GtPhlowCellElement;
 				@ [ :aCellElement | 
-					aCellElement content nameLabelText asString = aSecondLabel ];
+					aCellElement content nameLabelText asString sameContentAs: aSecondLabel ];
 				modifiers: BlKeyModifiers primary ]
 ]
 
@@ -581,5 +581,5 @@ GtPharoMethodSearchFilterGroupingExample >> selectCellWithLabel: aLabel paneInde
 				id: #scrollable;
 				// GtPhlowCellElement;
 				@ [ :aCellElement | 
-					aCellElement content nameLabelText asString = aLabel ] ].
+					aCellElement content nameLabelText asString sameContentAs: aLabel ] ].
 ]

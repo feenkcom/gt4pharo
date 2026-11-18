@@ -81,7 +81,7 @@ GtSUnitToExamplesRefactoringExamples >> convertedExamplesUseTAssertable [
 	self assert: (definitionTree keywords includes: 'uses:').
 	self
 		assert: (definitionTree arguments at: (definitionTree keywords indexOf: 'uses:')) name
-		equals: 'TAssertable'.
+		equals: #TAssertable.
 	self
 		assert: (target parseTreeForSelector: #raises)
 		equals: (RBParser

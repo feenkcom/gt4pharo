@@ -29,7 +29,7 @@ GtPharoTestCaseStateFilter >> filterValueString [
 
 { #category : #printing }
 GtPharoTestCaseStateFilter >> gtDisplayOn: stream [
-	stream nextPutAll: (self resultState ifNotNil: #label)
+	stream nextPutAll: (self resultState ifNotNil: [ :v | v label ])
 ]
 
 { #category : #comparing }

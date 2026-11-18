@@ -90,12 +90,12 @@ GtPharoFilterUIBlockingIssue4327Demo >> uninstall [
 
 { #category : #'api - demo' }
 GtPharoFilterUIBlockingIssue4327Demo >> uninstallFilterElementMetaLink [
-	elementLink ifNotNil: #uninstall.
-	elementLink := nil.
+	elementLink ifNotNil: [ :v | v uninstall ].
+	elementLink := nil
 ]
 
 { #category : #'api - demo' }
 GtPharoFilterUIBlockingIssue4327Demo >> uninstallPragmaFilterMetaLink [
-	pragmaFilterLink ifNotNil: #uninstall.
-	pragmaFilterLink := nil.
+	pragmaFilterLink ifNotNil: [ :v | v uninstall ].
+	pragmaFilterLink := nil
 ]

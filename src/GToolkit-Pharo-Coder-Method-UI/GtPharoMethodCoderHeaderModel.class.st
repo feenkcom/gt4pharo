@@ -68,7 +68,9 @@ GtPharoMethodCoderHeaderModel >> createPackageContextMenuFor: aCoderViewModel fr
 
 	<return: #BrMenuItems or: nil>
 	| aPackage |
-	aPackage := aCoderViewModel compiledMethod ifNotNil: #package ifNil: [ ^ nil ].
+	aPackage := aCoderViewModel compiledMethod
+			ifNotNil: [ :v | v package ]
+			ifNil: [ ^ nil ].
 
 	^ GtCoderPackageTarget
 		menuItemsForObject: aPackage

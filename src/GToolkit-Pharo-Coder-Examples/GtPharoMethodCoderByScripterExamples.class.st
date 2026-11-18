@@ -3749,7 +3749,7 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectArgumentsInSam
 			collect: #name.
 	setArgs := (RBParser parseMethod: setChange source) arguments collect: #name.
 	self
-		assert: (setArgs collect: [ :e | e first = $_ ifTrue: [ e allButFirst ] ifFalse: [ e ] ])
+		assert: (setArgs collect: [ :e | (e first = $_ ifTrue: [ e allButFirst ] ifFalse: [ e ]) asSymbol ])
 		equals: constructorArgs.
 	scripter
 		clickStep: [ :s | 

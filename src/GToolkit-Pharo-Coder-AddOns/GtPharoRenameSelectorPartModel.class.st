@@ -146,9 +146,9 @@ GtPharoRenameSelectorPartModel >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: currentName asString;
 		nextPutAll: ' [';
-		print: (originalInterval ifNotNil: #first);
+		print: (originalInterval ifNotNil: [ :v | v first ]);
 		nextPutAll: '..';
-		print: (originalInterval ifNotNil: #last);
+		print: (originalInterval ifNotNil: [ :v | v last ]);
 		nextPut: $];
 		nextPut: $)
 ]

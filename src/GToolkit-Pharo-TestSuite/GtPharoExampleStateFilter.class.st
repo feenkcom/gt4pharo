@@ -28,9 +28,9 @@ GtPharoExampleStateFilter >> filterValueString [
 { #category : #printing }
 GtPharoExampleStateFilter >> gtDisplayOn: aStream [
 	| aLabel |
-	aLabel := (self resultState ifNotNil: #label).
+	aLabel := self resultState ifNotNil: [ :v | v label ].
 	aLabel gtDisplayOn: aStream.
-	(aLabel includesSubstring: 'examples') 
+	(aLabel includesSubstring: 'examples')
 		ifFalse: [ aStream nextPutAll: ' examples' ]
 ]
 

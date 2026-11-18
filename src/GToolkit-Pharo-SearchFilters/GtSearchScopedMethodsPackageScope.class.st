@@ -53,7 +53,7 @@ GtSearchScopedMethodsPackageScope >> itemValue [
 
 { #category : #accessing }
 GtSearchScopedMethodsPackageScope >> label [
-	^ 'Package: ', (self package ifNotNil: #name ifNil: [ 'none' ])
+	^ 'Package: ' , (self package ifNotNil: [ :v | v name ] ifNil: [ 'none' ])
 ]
 
 { #category : #accessing }

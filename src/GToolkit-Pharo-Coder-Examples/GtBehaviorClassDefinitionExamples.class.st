@@ -11,7 +11,7 @@ GtBehaviorClassDefinitionExamples >> definitionWithEmptyNameIsInvalid [
 	definition := self fromClass.
 	definition name: ''.
 	
-	self assert: definition name equals: ''.
+	self assert: definition name equals: #''.
 	self assert: definition isValidForCreation not.
 ]
 

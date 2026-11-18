@@ -19,12 +19,12 @@ GtClassUpdateForm >> commit [
 GtClassUpdateForm >> onClass: aClass [
 	| packageName tagName |
 	self newClassName: aClass name.
-	self superclassName: (aClass superclass ifNotNil: #name).
+	self superclassName: (aClass superclass ifNotNil: [ :v | v name ]).
 	self
 		slots: ((aClass slots select: [ :aSlot | aSlot definingClass = aClass ]) collect: #name).
 	self traits: (aClass traits collect: #name).
 	packageName := aClass package name.
-	tagName := (aClass package tagOrNilOf: aClass) ifNotNil: #name.
+	tagName := (aClass package tagOrNilOf: aClass) ifNotNil: [ :v | v name ].
 	self
 		packageAndTagName: (GtPackageAndTagName new
 				packageName: packageName;
@@ -32,6 +32,6 @@ GtClassUpdateForm >> onClass: aClass [
 	self pools: (aClass sharedPools collect: #name).
 	self classVars: (aClass classVarNames collect: #asString).
 	self
-		classSlots: ((aClass classSide slots select: [ :aSlot | aSlot definingClass = aClass classSide ])
-				collect: #name)
+		classSlots: ((aClass classSide slots
+				select: [ :aSlot | aSlot definingClass = aClass classSide ]) collect: #name)
 ]

@@ -221,8 +221,7 @@ GtPharoMethodCoderTagsElement >> onViewModelTextChanged: anAnnouncement [
 { #category : #private }
 GtPharoMethodCoderTagsElement >> protocolStringFor: aMethodCoderUIModel [
 	<return: #String>
-
-	^ aMethodCoderUIModel coder protocolName ifNotNil: #trimBoth
+	^ aMethodCoderUIModel coder protocolName ifNotNil: [ :v | v trimBoth ]
 ]
 
 { #category : #'api - pharo method coder view model' }

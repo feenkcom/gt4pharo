@@ -75,9 +75,9 @@ GtPharoRenameSelectorParameterModel >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: originalName asString;
 		nextPutAll: ' [';
-		print: (originalInterval ifNotNil: #first);
+		print: (originalInterval ifNotNil: [ :v | v first ]);
 		nextPutAll: '..';
-		print: (originalInterval ifNotNil: #last);
+		print: (originalInterval ifNotNil: [ :v | v last ]);
 		nextPut: $];
 		nextPut: $)
 ]

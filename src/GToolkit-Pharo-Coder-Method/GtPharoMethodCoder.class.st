@@ -620,7 +620,7 @@ GtPharoMethodCoder >> example: anExampleWithResult [
 { #category : #'api - actions examples' }
 GtPharoMethodCoder >> exampleResult [
 	<return: #GtExampleResult or: nil>
-	^ self example ifNotNil: #result
+	^ self example ifNotNil: [ :v | v result ]
 ]
 
 { #category : #testing }
