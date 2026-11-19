@@ -57,7 +57,7 @@ GtPharoExecutableMethodDetector >> isMethodWithArgumentBindings [
 	^ argumentNames
 		allSatisfy: [ :aName | 
 			aContext bindingStrategy
-				bindingValueOf: aName
+				bindingValueOf: aName asSymbol
 				ifPresent: [ :aValue | true ]
 				ifAbsent: [ false ] ]
 ]

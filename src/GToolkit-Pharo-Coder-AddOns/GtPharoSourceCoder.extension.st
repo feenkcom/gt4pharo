@@ -552,7 +552,7 @@ GtPharoSourceCoder >> isClassVariable: aNode [
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
 GtPharoSourceCoder >> isInstanceVariable: aNode [
-	^ self behavior allInstVarNames includes: aNode name value
+	^ self behavior allInstVarNames includes: aNode name value asSymbol
 ]
 
 { #category : #'*GToolkit-Pharo-Coder-AddOns' }
