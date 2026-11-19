@@ -5650,7 +5650,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_05_execute_convert 
 					self
 						assert: (RBParser parseMethod: each text asString)
 						equals: (RBParser parseMethod: 'method1 cache := IdentityDictionary new. ^ cache') ] ].
-	self assert: (class instVarNames includes: 'cache').
+	self assert: (class instVarNames includes: #cache).
 	^ scripter
 ]
 
