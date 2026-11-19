@@ -97,7 +97,7 @@ GtSUnitToExamplesRefactoring >> expandedSetupTreeFor: source slots: slots [
 	[ send := setup body statements
 			detect: [ :statement | 
 				statement isMessage
-					and: [ statement receiver isVariable and: [ statement receiver name = 'self' ] ] ]
+					and: [ statement receiver isVariable and: [ statement receiver name = #self ] ] ]
 			ifNone: [ nil ].
 	send notNil ]
 		whileTrue: [ expansions := expansions + 1.
