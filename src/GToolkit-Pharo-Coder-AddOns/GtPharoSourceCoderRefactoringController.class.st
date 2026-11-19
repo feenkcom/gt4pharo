@@ -179,7 +179,7 @@ GtPharoSourceCoderRefactoringController >> safeMethodName: methodName in: modelC
 								part := '_:'.
 								ast variables
 									doWithIndex: [ :var :index | 
-										var variableName asString = each
+										var variableName = each
 											ifTrue: [ part := (ast selectorParts at: index) source ] ].
 								stream nextPutAll: part ] ] ].
 	[ selector := name asSymbol.
