@@ -329,7 +329,7 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoConflictingTrait
 				label: 'Assert that Trait is set';
 				satisfies: [ :aFrame | 
 					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-						currentValue = {TGtPharoDummyTraitOne name} ] ].
+						currentValue = {TGtPharoDummyTraitOne name asString} ] ].
 
 	scripter
 		shortcutStep: [ :s | 
@@ -356,8 +356,8 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoConflictingTrait
 				satisfies: [ :aFrame | 
 					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
 						currentValue
-						= {TGtPharoDummyTraitOne name.
-								TGtPharoDummyTraitThree name} ] ].
+						= {TGtPharoDummyTraitOne name asString.
+								TGtPharoDummyTraitThree name asString} ] ].
 
 	scripter
 		assertStep: [ :s | 
@@ -398,7 +398,7 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 				label: 'Assert that Trait is set';
 				satisfies: [ :aFrame | 
 					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
-						currentValue = {TGtPharoDummyTraitOne name} ] ].
+						currentValue = {TGtPharoDummyTraitOne name asString} ] ].
 
 	scripter
 		shortcutStep: [ :s | 
@@ -425,8 +425,8 @@ GtClassCreationFormExample >> scripterWithClassNamePackageAndTwoTraitsFilled [
 				satisfies: [ :aFrame | 
 					((aFrame userData at: #gtmemento) cache at: aDescription) valueOrNil
 						currentValue
-						= {TGtPharoDummyTraitOne name.
-								TGtPharoDummyTraitTwo name} ] ].
+						= {TGtPharoDummyTraitOne name asString.
+								TGtPharoDummyTraitTwo name asString} ] ].
 
 	scripter
 		doStep: [ :s | 

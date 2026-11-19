@@ -4267,12 +4267,12 @@ GtPharoCoderByScripterExamples >> pushDownSlotInIndex_apply [
 
 	aClass := environment anyDummyLeafClass realClass.
 	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
-	self assert: (aClass instVarNames includes: 'instVar1') not.
+	self assert: (aClass instVarNames includes: #instVar1) not.
 
 	self applyRefactoring: scripter.
 
 	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
-	self assert: (aClass instVarNames includes: 'instVar1').
+	self assert: (aClass instVarNames includes: #instVar1).
 
 	^ scripter
 ]
@@ -4608,11 +4608,11 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex_apply [
 	scripter := self pushUpSlotInIndex.
 
 	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar3') not.
+	self assert: (aClass instVarNames includes: #instVar3) not.
 
 	self applyRefactoring: scripter.
 
-	self assert: (aClass instVarNames includes: 'instVar3').
+	self assert: (aClass instVarNames includes: #instVar3).
 
 	^ scripter
 ]
@@ -5690,8 +5690,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_apply [
 
 
 	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar1').
-	self assert: (aClass instVarNames includes: 'a1234') not.
+	self assert: (aClass instVarNames includes: #instVar1).
+	self assert: (aClass instVarNames includes: #a1234) not.
 
 	scripter refactorings
 		assertAcceptButtonHasFocus;
@@ -5699,8 +5699,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_apply [
 		onPopover;
 		play.
 		
-	self assert: (aClass instVarNames includes: 'instVar1') not.
-	self assert: (aClass instVarNames includes: 'a1234').
+	self assert: (aClass instVarNames includes: #instVar1) not.
+	self assert: (aClass instVarNames includes: #a1234).
 
 	scripter menuStep
 		assertClosedMenuContainer;
@@ -5789,8 +5789,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput_fixInput_apply [
 
 
 	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar1').
-	self assert: (aClass instVarNames includes: 'a1234') not.
+	self assert: (aClass instVarNames includes: #instVar1).
+	self assert: (aClass instVarNames includes: #a1234) not.
 
 	scripter refactorings
 		assertAcceptButtonHasFocus;
@@ -5798,8 +5798,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput_fixInput_apply [
 		onPopover;
 		play.
 		
-	self assert: (aClass instVarNames includes: 'instVar1') not.
-	self assert: (aClass instVarNames includes: 'a1234').
+	self assert: (aClass instVarNames includes: #instVar1) not.
+	self assert: (aClass instVarNames includes: #a1234).
 
 	scripter menuStep
 		assertClosedMenuContainer;

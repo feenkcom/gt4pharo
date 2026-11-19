@@ -63,7 +63,7 @@ GtCascadesRefactoring >> extractTempForReceiver: aNode [
 		nodesDo: [ :each | 
 			(each isCascade
 				and: [ each receiver isVariable
-						and: [ each receiver name = tempName
+						and: [ (each receiver name sameContentAs: tempName)
 								and: [ each messages size = aNode messages size ] ] ])
 				ifTrue: [ ^ each ] ].
 	self

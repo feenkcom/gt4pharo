@@ -217,7 +217,7 @@ GtPharoNoIndexExamples >> implementersDo [
 	GtPharoNoIndex new implementersDo: [ :e | noIndex add: e ].
 	self assert: index size equals: noIndex size.
 	self
-		assert: ((Set withAll: index)
+		assert: ((GtStringContentSet withAll: index)
 				removeAll: noIndex;
 				size)
 		equals: 0.
@@ -250,7 +250,7 @@ GtPharoNoIndexExamples >> selectorCache [
 	noIndex := (GtPharoNoIndex new selectorCache asyncStreamStartingWith: 'remove:')
 			toArray wait.
 	self assert: index size = noIndex size.
-	diff := (Set withAll: index)
+	diff := (GtStringContentSet withAll: index)
 			removeAll: noIndex;
 			yourself.
 	^ {index.

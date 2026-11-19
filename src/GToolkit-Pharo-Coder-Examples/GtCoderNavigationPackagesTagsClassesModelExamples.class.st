@@ -14,7 +14,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> addNewClassSideProtocol [
 	
 	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
 	
-	newProtocolName := 'new class side protocol'.
+	newProtocolName := #'new class side protocol'.
 	
 	self assert: (protocolsToShow includes: newProtocolName) not.
 	
@@ -48,7 +48,7 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> addNewInstanceSideProtocol 
 	
 	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
 	
-	newProtocolName := 'new instance side protocol'.
+	newProtocolName := #'new instance side protocol'.
 	
 	self assert: (protocolsToShow includes: newProtocolName) not.
 	
@@ -197,10 +197,10 @@ GtCoderNavigationPackagesTagsClassesModelExamples >> navigateToClass_03_selectCl
 
 	protocolsToShow := aModel protocolsToShow collect: [ :each | each name ].
 
-	self assert: (protocolsToShow includes: 'All').
-	self assert: (protocolsToShow includes: 'api').
-	self assert: (protocolsToShow includes: 'as yet unclassified').
-	self assert: (protocolsToShow includes: 'instance creation').
+	self assert: (protocolsToShow includes: #All).
+	self assert: (protocolsToShow includes: #api).
+	self assert: (protocolsToShow includes: #'as yet unclassified').
+	self assert: (protocolsToShow includes: #'instance creation').
 	
 	self assert: aModel hasSelectedProtocol.
 	self assert: aModel selectedProtocol name equals: #All.

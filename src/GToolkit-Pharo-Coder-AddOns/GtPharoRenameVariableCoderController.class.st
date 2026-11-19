@@ -56,7 +56,7 @@ GtPharoRenameVariableCoderController >> createVariableModel [
 			intervals: {self primaryRenameInterval} , self otherRenameIntervals.
 	aModel
 		validator: (self createValidator
-				forbiddenNames: (self forbiddenNames copyWithout: self originalName);
+				forbiddenNames: (self forbiddenNames reject: [ :each | each sameContentAs: self originalName ]);
 				yourself).
 	^ aModel
 ]
