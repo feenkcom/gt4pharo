@@ -150,7 +150,7 @@ RBRefactoryChange >> gtIncludesSubstring: aString [
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryChange >> gtIs: firstName inSameHierarchyWith: secondName [
 	| class1 class2 |
-	firstName = secondName ifTrue: [ ^ true ].
+	(firstName sameContentAs: secondName) ifTrue: [ ^ true ].
 	class1 := (self 
 		forPharo13AndNewer: [self onSystemEnvironment] 
 		forOlder: [self onSystemDictionary]) at: firstName asSymbol ifAbsent: [ ^ false ].

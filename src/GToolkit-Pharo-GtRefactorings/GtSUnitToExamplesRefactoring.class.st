@@ -191,7 +191,7 @@ GtSUnitToExamplesRefactoring >> methodSourcesFor: source slots: slots initialize
 	| sources readSlots |
 	sources := Dictionary new.
 	readSlots := slots
-			, (model classNamed: self targetSuperclassName) allInstanceVariableNames.
+			, ((model classNamed: self targetSuperclassName) allInstanceVariableNames collect: [ :each | each asSymbol ]).
 	slots
 		do: [ :slot | 
 			| expression tree |
@@ -204,7 +204,7 @@ GtSUnitToExamplesRefactoring >> methodSourcesFor: source slots: slots initialize
 							parseExpression: 'self ' , (self getterSelectorForSlot: expression name) ].
 			expression isSequence
 				ifFalse: [ expression := RBParser
-							parseExpression: slot , ' := (' , expression formattedCode , ')' ].
+							parseExpression: slot asString , ' := (' , expression formattedCode , ')' ].
 			tree := RBParser
 					parseMethod: (self getterSelectorForSlot: slot) asString , ' ^ ' , slot , ' ifNil: [ '
 							, expression formattedCode , ' ]'.
@@ -238,7 +238,7 @@ GtSUnitToExamplesRefactoring >> methodSourcesFor: source slots: slots initialize
 GtSUnitToExamplesRefactoring >> privateTransform [
 	| source slots initializers sources target |
 	source := model classNamed: className.
-	slots := source instanceVariableNames.
+	slots := source instanceVariableNames collect: [ :each | each asSymbol ].
 	initializers := self initializersFor: source slots: slots.
 	sources := self
 			methodSourcesFor: source
@@ -301,7 +301,7 @@ GtSUnitToExamplesRefactoring >> setupPreconditionFor: source [
 
 	| condition |
 	condition := RBCondition
-			withBlock: [ [ self initializersFor: source slots: source instanceVariableNames.
+			withBlock: [ [ self initializersFor: source slots: (source instanceVariableNames collect: [ :each | each asSymbol ]).
 				true ]
 					on: RBRefactoringError , RBRefactoringWarning
 					do: [ :error | 

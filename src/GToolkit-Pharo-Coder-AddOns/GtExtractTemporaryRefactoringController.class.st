@@ -41,7 +41,7 @@ GtExtractTemporaryRefactoringController >> safeTemporaryName [
 	ast := self ast.
 	[ found := false.
 	ast nodesDo: [ :each | (each defines: name) ifTrue: [ found := true ] ].
-	found or: [ (self behavior allInstVarNames includes: name) or: [ self behavior allClassVarNames includes: name asSymbol ] ] ]
+	found or: [ (self behavior allInstVarNames includes: name asSymbol) or: [ self behavior allClassVarNames includes: name asSymbol ] ] ]
 		whileTrue:
 			[ name := 't' , index printString.
 			index := index + 1 ].

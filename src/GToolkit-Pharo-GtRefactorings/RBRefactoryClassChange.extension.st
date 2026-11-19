@@ -29,7 +29,7 @@ RBRefactoryClassChange >> gtIsForClassHierarchy: aSymbol [
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRefactoryClassChange >> gtIsForClassNamed: aSymbol [
-	^ self changeClassName = aSymbol
+	^ self changeClassName sameContentAs: aSymbol
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
