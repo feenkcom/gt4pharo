@@ -963,19 +963,17 @@ GtPharoSourceCoder >> renameTemporaryIn: aSourceCoderViewModel node: aVariableNo
 	originalSource := (aSourceCoderViewModel styledText
 			ifNil: [ aSourceCoderViewModel sourceText ])
 			from: aVariableNode startPosition
-			to: aVariableNode stopPosition.
-			
-	"We are not ready to use this check yet"
+			to: aVariableNode stopPosition.	"We are not ready to use this check yet"
 	self flag: #TODO.
-	false ifTrue: [ originalSource documentId = aBuildContext documentId 
-		ifFalse: [ ^ self ] ]. 
-	
+	false
+		ifTrue: [ originalSource documentId = aBuildContext documentId ifFalse: [ ^ self ] ].
+
 	locations := OrderedCollection new.
 	definer := aVariableNode whoDefines.
 	announcement := GtCoderRenameTemporaryRequestedAnnouncement new.
 	definer isNil
 		ifTrue: [ announcement variableName: aVariableNode name source.
-			self announce: announcement ].
+			self notifyAndAnnounce: announcement ].
 	otherCoders := announcement interestedCoders reject: [ :each | each == self ].
 	(definer ifNil: [ aVariableNode topParent ])
 		withAllNodesDo: [ :each | each = aVariableNode ifTrue: [ locations add: each name sourceInterval ] ].
