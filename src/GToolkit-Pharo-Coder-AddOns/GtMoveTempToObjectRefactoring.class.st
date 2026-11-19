@@ -107,10 +107,10 @@ GtMoveTempToObjectRefactoring >> findVariable: aString [
 	ast
 		nodesDo: [ :each | 
 			(each isBlock or: [ each isMethod ])
-				ifTrue: [ (each arguments detect: [ :arg | arg name = aString ] ifNone: [  ])
+				ifTrue: [ (each arguments detect: [ :arg | arg name sameContentAs: aString ] ifNone: [  ])
 						ifNotNil: [ :arg | ^ arg ] ].
 			each isSequence
-				ifTrue: [ (each temporaries detect: [ :arg | arg name = aString ] ifNone: [  ])
+				ifTrue: [ (each temporaries detect: [ :arg | arg name sameContentAs: aString ] ifNone: [  ])
 						ifNotNil: [ :arg | ^ arg ] ] ].
 	self canSplitLifetimes ifTrue: [ ^ nil ].
 	self refactoringError: 'Could not find ' , aString , ' in the method'
@@ -138,7 +138,7 @@ GtMoveTempToObjectRefactoring >> findVariableToMove [
 
 { #category : #transforming }
 GtMoveTempToObjectRefactoring >> isForSelf [
-	^ temp = 'self'
+	^ temp sameContentAs: 'self'
 ]
 
 { #category : #preconditions }

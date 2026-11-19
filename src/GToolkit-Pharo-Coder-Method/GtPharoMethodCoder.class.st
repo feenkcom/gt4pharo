@@ -1047,7 +1047,7 @@ GtPharoMethodCoder >> onMethodModified: aMethodModified [
 		ifAbsent: [
 			self methodBehavior
 				behaviorNameDo: [ :aBehaviorName |
-					aMethodModified classAffected name = aBehaviorName
+					(aMethodModified classAffected name sameContentAs: aBehaviorName)
 						and: [ aMethodModified oldMethod selector = self selector
 							or: [ aMethodModified newMethod selector = self selector ] ] ]
 			ifAbsent: [ false ] ].

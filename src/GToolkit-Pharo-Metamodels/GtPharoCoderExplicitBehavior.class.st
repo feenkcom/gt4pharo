@@ -44,7 +44,7 @@ GtPharoCoderExplicitBehavior >> affectByClassRenamed: aClassRenamedAnnouncement 
 { #category : #testing }
 GtPharoCoderExplicitBehavior >> affectedByClassAdded: aClassRemovedAnnouncement [
 	^ self behavior = aClassRemovedAnnouncement classAdded
-		or: [ self behaviorName = aClassRemovedAnnouncement classAdded name ]
+		or: [ self behaviorName sameContentAs: aClassRemovedAnnouncement classAdded name ]
 ]
 
 { #category : #testing }
