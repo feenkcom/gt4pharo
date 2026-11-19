@@ -54,8 +54,8 @@ GtPharoIndexExamples >> addingAndRemovingClassWords [
 			index
 				classAdded: (ClassAdded class: each) ].
 	names := (index asyncClassNamesForWord: '') toArray wait.
-	self assert: (names includes: #OrderedCollection).
-	self assert: (names includes: #Array).
+	self assert: (names includes: 'OrderedCollection').
+	self assert: (names includes: 'Array').
 	Collection
 		withAllSubclassesDo: [ :each | 
 			index
@@ -91,8 +91,8 @@ GtPharoIndexExamples >> addingWords [
 	index methodAdded: (MethodAdded method: self class >> #dummyMethod).
 	selectors := (index asyncSelectorsForWord: '') toArray wait.
 	self assert: selectors size equals: 2.
-	self assert: (selectors includes: #dummyMethod).
-	self assert: (selectors includes: #printString).
+	self assert: (selectors includes: 'dummyMethod').
+	self assert: (selectors includes: 'printString').
 	^ index
 ]
 

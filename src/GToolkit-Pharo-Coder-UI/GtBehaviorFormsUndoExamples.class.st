@@ -431,7 +431,7 @@ GtBehaviorFormsUndoExamples >> slotDefinersOf: aName [
 	| aBehavior sorted |
 	aBehavior := aName asClass.
 	sorted := [ :someSlots |
-		(someSlots collect: [ :each | each name -> each definingClass name ])
+		(someSlots collect: [ :each | each name -> each definingClass name asSymbol ])
 			asSortedCollection: [ :a :b | a key <= b key ] ].
 	^ {(sorted value: aBehavior slots) asArray.
 		(sorted value: (aBehavior classSide allSlots select: [ :each | each definingClass isClassSide ])) asArray}

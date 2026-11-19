@@ -51,7 +51,7 @@ GtRestorePreviousLocalVersionExamples >> methodWithLocalVersions [
 	
 	self 
 		assert: (targetMethod methodClass >> targetMethod selector) sourceCode
-		equals: (targetMethod selector, '
+		equals: (targetMethod selector asString , '
 	^ 2').
 
 	^ targetMethod
@@ -79,7 +79,7 @@ GtRestorePreviousLocalVersionExamples >> restoreMethodToOldVersion [
 			
 	self 
 		assert: (targetMethod methodClass >> targetMethod selector) sourceCode
-		equals: (targetMethod selector, '
+		equals: (targetMethod selector asString , '
 	^ 1').
 	
 	targetMethod gtLocalVersions do: [ :each |
@@ -120,13 +120,13 @@ GtRestorePreviousLocalVersionExamples >> restoreMethodToOldVersionCanBeUndone [
 								id: BlLocalVersionAcceptVersionButtonId ] ].
 			self
 				assert: (targetClass >> targetMethod selector) sourceCode
-				equals: targetMethod selector , '
+				equals: targetMethod selector asString , '
 	^ 1'.
 
 			aChangeManager undoChange.
 			self
 				assert: (targetClass >> targetMethod selector) sourceCode
-				equals: targetMethod selector , '
+				equals: targetMethod selector asString , '
 	^ 2'.
 			self assert: (targetClass includesSelector: #recordedBeforeRestoring).
 			self assert: aChangeManager hasUndoableOperations.
