@@ -381,7 +381,7 @@ GtPharoSnippetCoder >> initializeShortcuts: addOns [
 GtPharoSnippetCoder >> isLocalVariable: aNode [
 	^ aNode isLocallyDefined
 		or:
-			[ (self behavior allInstVarNames includes: aNode name source)
+			[ (self behavior allInstVarNames includes: aNode variableName)
 				or:
 					[ (self behavior classVariables anySatisfy: [ :assoc | assoc key asString = aNode name source ])
 						or: [ (Smalltalk globals includesKey: aNode name source asSymbol) not ] ] ]
