@@ -44,6 +44,45 @@ GtStrictSymbolComparisonPatchExamples >> collectionSameContent [
 	^ self
 ]
 
+{ #category : #examples }
+GtStrictSymbolComparisonPatchExamples >> collectionSameContentCountsOccurrences [
+	"Each element must occur as often in both collections, comparing strings and symbols based on their content"
+
+	<gtExample>
+	<return: #GtStrictSymbolComparisonPatchExamples>
+	self assert: ((Bag withAll: #(#a #a #b)) sameContentAs: (Bag withAll: #('a' #b 'a'))).
+	self assert: ((Bag withAll: #(#a #a #b)) sameContentAs: (Bag withAll: #(#a #b #b))) not.
+	self assert: ((Bag withAll: #(#a #b)) sameContentAs: (Bag withAll: #('a' 'a'))) not.
+	self assert: ((Set with: #a) sameContentAs: (Bag withAll: #(#a #a))) not.
+	^ self
+]
+
+{ #category : #examples }
+GtStrictSymbolComparisonPatchExamples >> collectionSameContentWithNil [
+	"nil elements are counted like the other elements"
+
+	<gtExample>
+	<return: #GtStrictSymbolComparisonPatchExamples>
+	self assert: ((Bag withAll: #(nil #a)) sameContentAs: #('a' nil)).
+	self assert: ((Bag withAll: #(nil nil #a)) sameContentAs: #(nil #a #a)) not.
+	self assert: ((Bag withAll: #(nil)) sameContentAs: #(#a)) not.
+	^ self
+]
+
+{ #category : #examples }
+GtStrictSymbolComparisonPatchExamples >> collectionSameContentWithOtherArguments [
+	"The argument can be any collection, its order does not matter; anything else does not have the same content"
+
+	<gtExample>
+	<return: #GtStrictSymbolComparisonPatchExamples>
+	self assert: ((Set with: #a with: #b) sameContentAs: #('b' 'a')).
+	self assert: ((Set with: #a with: #b) sameContentAs: (OrderedCollection with: #b with: 'a')).
+	self assert: (Set new sameContentAs: #()).
+	self assert: ((Set with: #a) sameContentAs: nil) not.
+	self assert: ((Set with: 1) sameContentAs: 1) not.
+	^ self
+]
+
 { #category : #private }
 GtStrictSymbolComparisonPatchExamples >> compare: aReceiver to: anArgument with: aCompiledMethod [
 	^ aCompiledMethod valueWithReceiver: aReceiver arguments: { anArgument }
