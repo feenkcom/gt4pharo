@@ -3749,7 +3749,7 @@ GtPharoMethodCoderByScripterExamples >> extractWrappedMethodObjectArgumentsInSam
 			collect: #name.
 	setArgs := (RBParser parseMethod: setChange source) arguments collect: #name.
 	self
-		assert: (setArgs collect: [ :e | e first = $_ ifTrue: [ e allButFirst ] ifFalse: [ e ] ])
+		assert: (setArgs collect: [ :e | (e first = $_ ifTrue: [ e allButFirst ] ifFalse: [ e ]) asSymbol ])
 		equals: constructorArgs.
 	scripter
 		clickStep: [ :s | 
@@ -5650,7 +5650,7 @@ GtPharoMethodCoderByScripterExamples >> forConvertTempToInst_05_execute_convert 
 					self
 						assert: (RBParser parseMethod: each text asString)
 						equals: (RBParser parseMethod: 'method1 cache := IdentityDictionary new. ^ cache') ] ].
-	self assert: (class instVarNames includes: 'cache').
+	self assert: (class instVarNames includes: #cache).
 	^ scripter
 ]
 

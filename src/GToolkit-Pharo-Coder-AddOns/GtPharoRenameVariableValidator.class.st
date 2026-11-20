@@ -19,7 +19,7 @@ GtPharoRenameVariableValidator >> forbiddenNames [
 
 { #category : #accessing }
 GtPharoRenameVariableValidator >> forbiddenNames: aCollectionOfStrings [
-	forbiddenNames := aCollectionOfStrings
+	forbiddenNames := aCollectionOfStrings collect: [ :each | each asString ]
 ]
 
 { #category : #initialization }

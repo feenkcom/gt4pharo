@@ -853,7 +853,7 @@ GtPharoCoderByScripterExamples >> changeMethodProtocol [
 				key: BlKeyboardKey return ].
 	self
 		assert: (environment anyDummyClass realClass >> #method1) protocolName
-		equals: 'foo'.
+		equals: #foo.
 	^ scripter
 ]
 
@@ -1192,7 +1192,7 @@ GtPharoCoderByScripterExamples >> checkProtocolListIn: scripter containsLabel: a
 				label: 'Check protocol list has ' , aString;
 				// GtCoderProtocolsGroupedListElement;
 				// BrLabel;
-				@ [ :each | each text asString = aString ] ]
+				@ [ :each | each text asString sameContentAs: aString ] ]
 ]
 
 { #category : #'examples - refactoring' }
@@ -3163,14 +3163,14 @@ GtPharoCoderByScripterExamples >> dragInIndexMethod: method toProtocol: targetPr
 		label: 'Drag ' , selector asString , ' to ' , targetProtocol;
 		// GtCoderProtocolsGroupedListElement;
 		// BrLabel;
-		@ [ :aLabel | aLabel text asString = (targetProtocol , ' 1') ];
+		@ [ :aLabel | aLabel text asString sameContentAs: targetProtocol , ' 1' ];
 		play.
 
 	scripter mouseUp
 		label: 'Drop ' , selector asString , ' in ' , targetProtocol;
 		play.
 
-	self assert: (originalClass >> selector) protocolName equals: targetProtocol.
+	self assert: (originalClass >> selector) protocolName equals: targetProtocol asSymbol.
 
 	^ scripter
 ]
@@ -3260,7 +3260,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toProtocol: target
 						targetProtocol});
 		// GtCoderProtocolsGroupedListElement;
 		// BrLabel;
-		@ [ :aLabel | aLabel text asString = (targetProtocol , ' 1') ];
+		@ [ :aLabel | aLabel text asString sameContentAs: targetProtocol , ' 1' ];
 		play.
 
 	scripter mouseUp
@@ -3270,7 +3270,7 @@ GtPharoCoderByScripterExamples >> dragInIndexMethods: methods toProtocol: target
 		play.
 
 	originalMethods
-		do: [ :eachArray | self assert: (eachArray first >> eachArray second) protocolName equals: targetProtocol ].
+		do: [ :eachArray | self assert: (eachArray first >> eachArray second) protocolName equals: targetProtocol asSymbol ].
 
 	^ scripter
 ]
@@ -3575,7 +3575,7 @@ GtPharoCoderByScripterExamples >> dummyClassWithMethod1Expanded [
 	| scripter method |
 	environment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
 	method := environment anyDummyClass realClass >> #method1.
-	self assert: method protocolName equals: 'api - method1'.
+	self assert: method protocolName equals: #'api - method1'.
 
 	scripter := self
 			scripterInPagerForBlock: [ GtCoderElement forClass: environment anyDummyRootClass realClass ].
@@ -4023,7 +4023,7 @@ GtPharoCoderByScripterExamples >> openMethodMenuOn: selector in: scripter [
 				label: 'Open method menu';
 				// GtCoderMethodsGroupedListElement;
 				// BrLabel;
-				@ [ :each | each text asString = selector ] ]
+				@ [ :each | each text asString sameContentAs: selector ] ]
 ]
 
 { #category : #'examples - index' }
@@ -4267,12 +4267,12 @@ GtPharoCoderByScripterExamples >> pushDownSlotInIndex_apply [
 
 	aClass := environment anyDummyLeafClass realClass.
 	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
-	self assert: (aClass instVarNames includes: 'instVar1') not.
+	self assert: (aClass instVarNames includes: #instVar1) not.
 
 	self applyRefactoring: scripter.
 
 	self assert: (aClass lookupSelector: #sumInstVars) isNotNil.
-	self assert: (aClass instVarNames includes: 'instVar1').
+	self assert: (aClass instVarNames includes: #instVar1).
 
 	^ scripter
 ]
@@ -4608,11 +4608,11 @@ GtPharoCoderByScripterExamples >> pushUpSlotInIndex_apply [
 	scripter := self pushUpSlotInIndex.
 
 	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar3') not.
+	self assert: (aClass instVarNames includes: #instVar3) not.
 
 	self applyRefactoring: scripter.
 
-	self assert: (aClass instVarNames includes: 'instVar3').
+	self assert: (aClass instVarNames includes: #instVar3).
 
 	^ scripter
 ]
@@ -5426,7 +5426,7 @@ GtPharoCoderByScripterExamples >> renamePackageInIndex [
 				label: 'Open package menu';
 				// GtCoderPackagesTreeElement;
 				// BrLabel;
-				@ [ :each | each text asString = packageName ] ].
+				@ [ :each | each text asString sameContentAs: packageName ] ].
 
 	self
 		hoverMenu: ('Rename package ' , packageName)
@@ -5690,8 +5690,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_apply [
 
 
 	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar1').
-	self assert: (aClass instVarNames includes: 'a1234') not.
+	self assert: (aClass instVarNames includes: #instVar1).
+	self assert: (aClass instVarNames includes: #a1234) not.
 
 	scripter refactorings
 		assertAcceptButtonHasFocus;
@@ -5699,8 +5699,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_apply [
 		onPopover;
 		play.
 		
-	self assert: (aClass instVarNames includes: 'instVar1') not.
-	self assert: (aClass instVarNames includes: 'a1234').
+	self assert: (aClass instVarNames includes: #instVar1) not.
+	self assert: (aClass instVarNames includes: #a1234).
 
 	scripter menuStep
 		assertClosedMenuContainer;
@@ -5789,8 +5789,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput_fixInput_apply [
 
 
 	aClass := environment anyDummyRootClass realClass.
-	self assert: (aClass instVarNames includes: 'instVar1').
-	self assert: (aClass instVarNames includes: 'a1234') not.
+	self assert: (aClass instVarNames includes: #instVar1).
+	self assert: (aClass instVarNames includes: #a1234) not.
 
 	scripter refactorings
 		assertAcceptButtonHasFocus;
@@ -5798,8 +5798,8 @@ GtPharoCoderByScripterExamples >> renameSlotInIndex_wrongInput_fixInput_apply [
 		onPopover;
 		play.
 		
-	self assert: (aClass instVarNames includes: 'instVar1') not.
-	self assert: (aClass instVarNames includes: 'a1234').
+	self assert: (aClass instVarNames includes: #instVar1) not.
+	self assert: (aClass instVarNames includes: #a1234).
 
 	scripter menuStep
 		assertClosedMenuContainer;
@@ -6412,7 +6412,7 @@ GtPharoCoderByScripterExamples >> startRenamingClassInIndex [
 		openContextMenu;
 		// GtCoderNavigationClassesTreeElementId;
 		// BrLabel;
-		@ [ :each | each text asString = class name ];
+		@ [ :each | each text asString sameContentAs: class name ];
 		play.
 
 	scripter menuStep

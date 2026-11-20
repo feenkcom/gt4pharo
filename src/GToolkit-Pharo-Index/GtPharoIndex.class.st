@@ -321,9 +321,9 @@ GtPharoIndex >> classRecompiled: anAnnouncement [
 GtPharoIndex >> classRemoved: anAnnouncement [
 	self
 		critical: [ | className |
-			className := anAnnouncement classRemoved name
+			className := (anAnnouncement classRemoved name
 					copyReplaceAll: 'AnObsolete'
-					with: ''.
+					with: '') asSymbol.
 			(globalCache nodeFor: className)
 				ifNotNil: [ :node | globalCache remove: className ].
 			self removeClassWordsFor: className.

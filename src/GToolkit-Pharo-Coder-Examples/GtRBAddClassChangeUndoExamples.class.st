@@ -271,7 +271,7 @@ GtRBAddClassChangeUndoExamples >> undoOfRedefinitionKeepsClassSideSlotsOfTraits 
 			before := self classSideSlotDefinersOf: aName.
 			self
 				assert: before
-				equals: {#traitClassSideSlot -> (aTraitName , ' classTrait')}.
+				equals: {#traitClassSideSlot -> (aTraitName , ' classTrait') asString}.
 
 			(GtRBAddClassChange
 				definitionString: 'Object << #' , aName , '

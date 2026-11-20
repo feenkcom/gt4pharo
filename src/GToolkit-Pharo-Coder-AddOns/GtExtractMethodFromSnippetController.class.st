@@ -101,13 +101,13 @@ GtExtractMethodFromSnippetController >> potentialReceivers [
 	| names |
 	potentialReceivers ifNotNil: [ ^ potentialReceivers ].
 	names := super potentialReceivers.
-	receiver ~= 'self'
-		ifTrue: [ (names includes: receiver)
+	(receiver isString and: [ receiver sameContentAs: 'self' ]) not
+		ifTrue: [ (names anySatisfy: [ :each | each sameContentAs: receiver ])
 				ifTrue: [ names remove: 'self' ]
 				ifFalse: [ names at: (names indexOf: 'self') put: receiver ] ].
 	self isForInspector
 		ifFalse: [ sourceCoderViewModel behavior allClassVarNames
-				do: [ :each | names remove: each ifAbsent: [  ] ] ].
+				do: [ :each | (names detect: [ :aName | aName sameContentAs: each ] ifNone: [ nil ]) ifNotNil: [ :aName | names remove: aName ] ] ].
 	^ names
 ]
 

@@ -51,31 +51,11 @@ GtStrictSymbolInstallation >> installFromFile: aFileReference [
 
 { #category : #refactoring }
 GtStrictSymbolInstallation >> installStringAndSymbolEquals [
+	"Install String>>#= and Symbol>>#= that log the comparisons (GtStrictSymbolEqualityArgumentSignal)
+	and that do not consider a String and a Symbol equal when Symbol strictComparison is true"
 
-	String compile:
-'= aString
-	"Answer whether the receiver sorts equally as aString.
-	The collation order is simple ascii (with case differences)."
-	" ''abc'' = ''def'' >>> false"
-	" ''abc'' = ''abc'' >>> true"
-	" ''def'' = ''abc'' >>> false"
-
-	GtStrictSymbolEqualityArgumentSignal left: self right: aString.
-	(Symbol strictComparison and: [ aString isSymbol ]) ifTrue: [ ^ false ].
-	(aString isString and: [self size = aString size]) ifFalse: [^false].
-	^ (self compare: self with: aString collated: AsciiOrder) = 2'
-		classified: 'gt-stringsymbol-patch'.
-
-	Symbol compile:
-'= aSymbol
-	"Compare the receiver and aSymbol."
-
-	Symbol strictComparison ifTrue: [ ^ self == aSymbol ].
-	self == aSymbol ifTrue: [^ true].
-	self class == aSymbol class ifTrue: [^ false].
-	"Use String comparison otherwise"
-	^ super = aSymbol'
-		classified: 'gt-stringsymbol-patch'.
+	String compile: self stringEqualsSource classified: 'gt-stringsymbol-patch'.
+	Symbol compile: self symbolEqualsSource classified: 'gt-stringsymbol-patch'
 ]
 
 { #category : #refactoring }
@@ -87,12 +67,11 @@ GtStrictSymbolInstallation >> loadEqualityStatsFromFile: aFileReference [
 { #category : #'managing - steps' }
 GtStrictSymbolInstallation >> patchIcebergPackageNames [
 	| packagesToPatch |
-	packagesToPatch := IceRepository registry flatCollect: [ :aRepository | 
-		((aRepository packages) select: [:aPackage | 
-			aPackage name class = ByteString ]) ].
-		
-	packagesToPatch do: [ :aPackage |
-		aPackage package: (aPackage package ifNotNil: #asSymbol) ]
+	packagesToPatch := IceRepository registry
+			flatCollect: [ :aRepository | aRepository packages select: [ :aPackage | aPackage name class = ByteString ] ].
+
+	packagesToPatch
+		do: [ :aPackage | aPackage package: (aPackage package ifNotNil: [ :v | v asSymbol ]) ]
 ]
 
 { #category : #'managing - steps' }
@@ -217,6 +196,30 @@ GtStrictSymbolInstallation >> replaceLepiterDatabase [
 	GtWorld allOpenWorldsDo: [:each | each knowledgeBase: LeDatabasesRegistry defaultLogicalDatabase ].
 ]
 
+{ #category : #refactoring }
+GtStrictSymbolInstallation >> stringEqualsSource [
+	"The source of the String>>#= installed by #installStringAndSymbolEquals: the Pharo 13 method,
+	plus the comparison logging and the strict comparison check"
+
+	<return: #String>
+	^ '= aString
+	"Answer whether the receiver sorts equally as aString.
+	The collation order is simple ascii (with case differences).
+	Installed by GtStrictSymbolInstallation>>#installStringAndSymbolEquals:
+	when Symbol strictComparison is true, a Symbol is not equal to a String."
+
+	" ''abc'' = ''def'' >>> false"
+
+	" ''abc'' = ''abc'' >>> true"
+
+	" ''def'' = ''abc'' >>> false"
+
+	GtStrictSymbolEqualityArgumentSignal left: self right: aString.
+	(aString isSymbol and: [ Symbol strictComparison ]) ifTrue: [ ^ false ].
+	(aString isString and: [ self size = aString size ]) ifFalse: [ ^ false ].
+	^ (self compare: self with: aString) = 0'
+]
+
 { #category : #'managing - steps' }
 GtStrictSymbolInstallation >> switchSymbolTables [
 	"Switch the existing Symbol tables to use the StringContent version"
@@ -224,4 +227,22 @@ GtStrictSymbolInstallation >> switchSymbolTables [
 	GtStringContentWeakSet 
 		adoptInstance: (Symbol classVarNamed: #NewSymbols);
 		adoptInstance: (Symbol classVarNamed: #SymbolTable).
+]
+
+{ #category : #refactoring }
+GtStrictSymbolInstallation >> symbolEqualsSource [
+	"The source of the Symbol>>#= installed by #installStringAndSymbolEquals: the Pharo 13 method,
+	plus the strict comparison check"
+
+	<return: #String>
+	^ '= aSymbol
+	"Compare the receiver and aSymbol.
+	Installed by GtStrictSymbolInstallation>>#installStringAndSymbolEquals:
+	when Symbol strictComparison is true, a Symbol is only equal to itself."
+
+	self == aSymbol ifTrue: [ ^ true ].
+	Symbol strictComparison ifTrue: [ ^ false ].
+	self class == aSymbol class ifTrue: [ ^ false ].
+	"Use String comparison otherwise"
+	^ super = aSymbol'
 ]

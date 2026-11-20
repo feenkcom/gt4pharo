@@ -57,7 +57,7 @@ GtSearchScopedMethodsClassHierarchyScope >> itemValue [
 
 { #category : #accessing }
 GtSearchScopedMethodsClassHierarchyScope >> label [
-	^ 'Hierarchy: ' , (self itemClass ifNotNil: #name ifNil: [ 'none' ])
+	^ 'Hierarchy: ' , (self itemClass ifNotNil: [ :v | v name ] ifNil: [ 'none' ])
 ]
 
 { #category : #storing }

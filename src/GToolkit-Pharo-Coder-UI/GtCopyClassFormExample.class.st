@@ -22,7 +22,7 @@ GtCopyClassFormExample >> checkClassInstVarsCopied [
 	[ copyClassForm copyClass.
 	self
 		assert: #GtCopyClassFormExampleCopiedClass asClass classSide instVarNames asArray
-		equals: #('testClassInstVar') ]
+		equals: #(#testClassInstVar) ]
 		ensure: [ EpMonitor current
 				disableDuring: [ (self class environment classOrTraitNamed: #GtCopyClassFormExampleCopiedClass)
 						ifNotNil: [ :cls | cls removeFromSystem ] ] ]

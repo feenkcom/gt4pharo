@@ -35,31 +35,30 @@ GtPharoNewMethodCoderElement class >> preferredExtent: anExtent [
 GtPharoNewMethodCoderElement >> ensureMethodCoderViewModel [
 	| aNewMethodCoderViewModel aNewMethodCoder newMethodText |
 	aNewMethodCoderViewModel := methodCoderViewModelValueHolder
-				ifNotNil: #contents.
-	aNewMethodCoderViewModel ifNotNil: [
-		self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
-		^ self ].
-	
-	newMethodText := ('' asRopedText)
-		glamorousCodeFontAndSize;
-		attribute: (BrGhostTextAttribute
-			for: ('newMethod' asRopedText glamorousCodeFontAndSize
-				foreground: Color lightGray))
-			beNotOverwritableByStyler.
+			ifNotNil: [ :v | v contents ].
+	aNewMethodCoderViewModel
+		ifNotNil: [ self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
+			^ self ].
+
+	newMethodText := '' asRopedText
+			glamorousCodeFontAndSize;
+			attribute: (BrGhostTextAttribute
+					for: ('newMethod' asRopedText glamorousCodeFontAndSize foreground: Color lightGray))
+					beNotOverwritableByStyler.
 	aNewMethodCoder := (GtPharoMethodCoder
-		forNewMethod: (self behaviorIfNone: [ Object ]))
-		currentSourceText: newMethodText;
-		protocol: Protocol unclassified;
-		yourself.
+			forNewMethod: (self behaviorIfNone: [ Object ]))
+			currentSourceText: newMethodText;
+			protocol: Protocol unclassified;
+			yourself.
 	aNewMethodCoderViewModel := aNewMethodCoder asCoderViewModel
-		selfObjectHolder: self selfObjectHolder;
-		withoutHeader;
-		expanded: true;
-		focused: true;
-		moveCursorAtEnd.
+			selfObjectHolder: self selfObjectHolder;
+			withoutHeader;
+			expanded: true;
+			focused: true;
+			moveCursorAtEnd.
 	self pharoMethodCoderViewModel: aNewMethodCoderViewModel.
 	methodCoderViewModelValueHolder
-		ifNotNil: [:aValueHolder | aValueHolder contents: aNewMethodCoderViewModel]
+		ifNotNil: [ :aValueHolder | aValueHolder contents: aNewMethodCoderViewModel ]
 ]
 
 { #category : #'private - event handling' }

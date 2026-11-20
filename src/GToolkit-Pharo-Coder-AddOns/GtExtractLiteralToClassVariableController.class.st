@@ -109,11 +109,11 @@ GtExtractLiteralToClassVariableController >> messageNode [
 		do: [ :each | 
 			(each selector = #_
 				and: [ (sourceCoderViewModel behavior isClassSide
-						and: [ each receiver isVariable and: [ each receiver variableName = 'self' ] ])
+						and: [ each receiver isVariable and: [ each receiver variableName = #self ] ])
 						or: [ each receiver isMessageSend
 								and: [ each receiver selector = #class
 										and: [ each receiver receiver isVariable
-												and: [ each receiver receiver variableName = 'self' ] ] ] ] ])
+												and: [ each receiver receiver variableName = #self ] ] ] ] ])
 				ifTrue: [ ^ each ] ].
 	^ nil
 ]

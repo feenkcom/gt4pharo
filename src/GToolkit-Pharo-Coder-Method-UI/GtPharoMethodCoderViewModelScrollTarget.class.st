@@ -10,7 +10,7 @@ Class {
 
 { #category : #'api - testing' }
 GtPharoMethodCoderViewModelScrollTarget >> applicableTo: aCoderViewModel [
-	^ (aCoderViewModel behavior name = behaviorName
+	^ ((aCoderViewModel behavior name sameContentAs: behaviorName)
 		and: [ aCoderViewModel selector = selector ])
 ]
 

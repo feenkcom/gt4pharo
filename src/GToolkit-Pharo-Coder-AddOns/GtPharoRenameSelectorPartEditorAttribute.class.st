@@ -36,7 +36,7 @@ GtPharoRenameSelectorPartEditorAttribute >> doAffect: aTBrTextEditorTextualPiece
 GtPharoRenameSelectorPartEditorAttribute >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Selector part: ';
-		nextPutAll: (self selectorPartModel ifNotNil: #currentName) asString
+		nextPutAll: (self selectorPartModel ifNotNil: [ :v | v currentName ]) asString
 ]
 
 { #category : #initialization }

@@ -55,7 +55,7 @@ GtSearchScopedMethodsClassScope >> itemValue [
 
 { #category : #accessing }
 GtSearchScopedMethodsClassScope >> label [
-	^ 'Class: ' , (self itemClass ifNotNil: #name ifNil: [ 'none' ])
+	^ 'Class: ' , (self itemClass ifNotNil: [ :v | v name ] ifNil: [ 'none' ])
 ]
 
 { #category : #storing }

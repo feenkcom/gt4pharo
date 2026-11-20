@@ -126,7 +126,7 @@ GtExtractMethodToComponentController >> findExtractedSend [
 			(each selector = self extractedSelector
 				and: [ ((1 to: methodArguments size)
 						allSatisfy: [ :i | 
-							(each arguments at: i) source = (methodArguments at: i)
+							((each arguments at: i) source sameContentAs: (methodArguments at: i))
 								or: [ (each arguments at: i) source = 'self'
 										and: [ ((methodArguments at: i)
 												indexOfSubCollection: sourceCoderViewModel behavior instanceSide name)

@@ -212,10 +212,10 @@ GtExtractToWrappedMethodObjectRefactoringExamples >> refactoringFor: aSelector [
 				methodName selector: #writeOn:.
 				methodName ];
 		setOption: #variablesToMove
-			toUse: [ :potential :ref | potential copyWithout: 'aStream' ];
+			toUse: [ :potential :ref | potential copyWithout: #aStream ];
 		setOption: #newVariableName toUse: [ :oldName :ref | oldName ];
 		setOption: #wrappedReceiver
-			toUse: [ :receivers :ref | receivers detect: [ :each | each = 'aStream' ] ];
+			toUse: [ :receivers :ref | receivers detect: [ :each | each = #aStream ] ];
 		setOption: #wrappedMethodName
 			toUse: [ :methodName :ref | 
 				methodName selector: #writeOn:.
