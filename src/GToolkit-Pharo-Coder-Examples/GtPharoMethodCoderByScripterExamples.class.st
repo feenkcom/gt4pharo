@@ -418,7 +418,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 					s
 						label: 'Assert Breadcrumb Package Name';
 						value: [ :aButton | aButton label asString ]
-							equals: [ GtPharoMethodCoderExamples package name ];
+							equals: [ GtPharoMethodCoderExamples package name asString ];
 						onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 						onChildAt: 1 ].
 
@@ -427,7 +427,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Collapsed_Breadcrumb
 					s
 						label: 'Assert Breadcrumb Class Name';
 						value: [ :aButton | aButton label asString ]
-							equals: [ GtPharoMethodCoderExamples name ];
+							equals: [ GtPharoMethodCoderExamples name asString ];
 						onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 						onChildAt: 3 ] ].
 
@@ -566,7 +566,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbC
 					s
 						label: 'Assert Breadcrumb Package Name';
 						value: [ :aButton | aButton label asString ]
-							equals: [ GtPharoMethodCoderExamples package name ];
+							equals: [ GtPharoMethodCoderExamples package name asString ];
 						onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 						onChildAt: 1 ].
 
@@ -575,7 +575,7 @@ GtPharoMethodCoderByScripterExamples >> binaryMethodCoderUI_Expanded_BreadcrumbC
 					s
 						label: 'Assert Breadcrumb Class Name';
 						value: [ :aButton | aButton label asString ]
-							equals: [ GtPharoMethodCoderExamples name ];
+							equals: [ GtPharoMethodCoderExamples name asString ];
 						onBreadthFirstChildOfClass: GtPharoMethodCoderHeaderElement;
 						onChildAt: 3 ] ].
 
@@ -1982,7 +1982,7 @@ GtPharoMethodCoderByScripterExamples >> collapseFromUI: aScripter method: aMetho
 					s
 						label: 'Assert Coder Collapsed Label Text';
 						value: [ :aLabelElement | aLabelElement text asString ]
-							equals: [ aMethod selector ];
+							equals: [ aMethod selector asString ];
 						id: GtSourceCoderCollapsedTextId ] ].
 
 	^ aScripter
@@ -4028,7 +4028,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClassInInspectorPlayground_cl
 			s
 				label: 'Check package name';
 				// #package;
-				value: [ :e | e text asString ] equals: self class package name ].
+				value: [ :e | e text asString ] equals: self class package name asString ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -4036,7 +4036,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClassInInspectorPlayground_cl
 				label: 'Check tag name';
 				// #tag;
 				value: [ :e | e text asString ]
-					equals: (self class packageTag name) ].
+					equals: self class packageTag name asString ].
 
 	^ aScripter
 ]
@@ -4238,7 +4238,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 			s
 				label: 'Check package name';
 				// #package;
-				value: [ :e | e text asString ] equals: self class package name ].
+				value: [ :e | e text asString ] equals: self class package name asString ].
 
 	aScripter
 		assertStep: [ :s | 
@@ -4246,7 +4246,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateClass_03_click_define_class [
 				label: 'Check tag name';
 				// #tag;
 				value: [ :e | e text asString ]
-					equals: (self class packageTag name) ].
+					equals: self class packageTag name asString ].
 
 	^ aScripter
 ]
@@ -4494,7 +4494,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVarDoesNotReformat [
 			s
 				value: [ :aCoderViewModel | aCoderViewModel coderModel currentSourceString ]
 					equals: [ :aCoderViewModel | 
-						(aCoderViewModel coderModel attributeNamed: #dummyMethod) selector
+						(aCoderViewModel coderModel attributeNamed: #dummyMethod) selector asString
 							, '\	| temporary |\	temporary := 3.\^temporary +\4' withCRs ];
 				onModel ].
 	^ aScripter
@@ -4536,7 +4536,7 @@ GtPharoMethodCoderByScripterExamples >> fixitCreateTempVarDoesNotReformatWithExi
 			s
 				value: [ :aCoderViewModel | aCoderViewModel coderModel currentSourceString ]
 					equals: [ :aCoderViewModel | 
-						(aCoderViewModel coderModel attributeNamed: #dummyMethod) selector
+						(aCoderViewModel coderModel attributeNamed: #dummyMethod) selector asString
 							, '|a temporary|\	temporary := a := 3.\^temporary +\a' withCRs ];
 				onModel ].
 	^ aScripter
@@ -12356,7 +12356,7 @@ GtPharoMethodCoderByScripterExamples >> traitMethodCoderSpawnsTrait [
 			s
 				label: 'Assert class name';
 				value: [ :anEditor | anEditor text asString ]
-					equals: #TSmaCCParseNodeVisitor;
+					equals: 'TSmaCCParseNodeVisitor';
 				onPagerPaneWithIndex: 2;
 				// GtBehaviorCoderBehaviorNameId ].
 
