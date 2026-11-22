@@ -12,11 +12,11 @@ Class {
 { #category : #'private - styling' }
 GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode [
 	| color |
-	color := [ BrGlamorousColors perform: aMessageSendNode message selector ]
+	color := [ aMessageSendNode receiver variableName asClass perform: aMessageSendNode message selector ]
 			on: Error
 			do: [ :anException | anException return: nil ].
 	(color isKindOf: Color) ifFalse: [ ^ self ].
-	self styleNode: aMessageSendNode withColor: color
+	self styleNode: aMessageSendNode withColor: color.
 ]
 
 { #category : #'private - styling' }
@@ -38,13 +38,11 @@ GtPharoGlamorousColorStyler >> styleNode: aMessageSendNode withColor: color [
 GtPharoGlamorousColorStyler >> visitMessageSend: aMessageSendNode [
 	| receiver |
 	super visitMessageSend: aMessageSendNode.
-	aMessageSendNode receiver isVariable
-		ifFalse: [ ^ self ].
+	aMessageSendNode receiver isVariable ifFalse: [ ^ self ].
 	receiver := aMessageSendNode receiver variableName.
-	receiver = BrGlamorousColors name
-		ifFalse: [ ^ self ].
-	(aMessageSendNode message arguments size isZero)
-		ifFalse: [ ^ self ].
-	(aMessageSendNode message selector endsWith: 'Color')
+	aMessageSendNode message isUnary ifFalse: [ ^ self ].
+	(receiver = BrGlamorousColors name
+		and: [ aMessageSendNode message selector endsWith: 'Color' ])
 		ifTrue: [ self styleNode: aMessageSendNode ].
+	receiver = BrAntColors name ifTrue: [ self styleNode: aMessageSendNode ]
 ]
