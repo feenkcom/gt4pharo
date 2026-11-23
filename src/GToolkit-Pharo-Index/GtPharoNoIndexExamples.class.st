@@ -53,15 +53,17 @@ GtPharoNoIndexExamples >> asyncClassNamesForWord [
 { #category : #examples }
 GtPharoNoIndexExamples >> asyncImplementersForWord [
 	<gtExample>
-	| index noIndex |
+	| index noIndex indexOnly noIndexOnly |
 	index := (GtPharoIndex current asyncImplementersForWord: 'adAl') toArray wait.
 	noIndex := (GtPharoNoIndex new asyncImplementersForWord: 'adAl') toArray wait.
-	self assert: noIndex size equals: index size.
+	indexOnly := (Set withAll: index) difference: noIndex.
+	noIndexOnly := (Set withAll: noIndex) difference: index.
 	self
-		assert: ((Set withAll: index)
-				removeAll: noIndex;
-				size)
-		equals: 0.
+		assert: (indexOnly isEmpty
+				and: [ noIndexOnly isEmpty and: [ index size = noIndex size ] ])
+		description: [ 'Index count: ' , index size printString , '; NoIndex count: '
+				, noIndex size printString , '; Index only: ' , indexOnly printString
+				, '; NoIndex only: ' , noIndexOnly printString ].
 	^ {index.
 		noIndex}
 ]
@@ -110,14 +112,17 @@ GtPharoNoIndexExamples >> asyncKeywordImplementors [
 { #category : #examples }
 GtPharoNoIndexExamples >> asyncSelectorsForWord [
 	<gtExample>
-	| index noIndex |
+	| index noIndex indexOnly noIndexOnly |
 	index := (GtPharoIndex current asyncSelectorsForWord: 'adAl') toArray wait.
 	noIndex := (GtPharoNoIndex new asyncSelectorsForWord: 'adAl') toArray wait.
-	self assert: noIndex size equals: index size.
+	indexOnly := (Set withAll: index) difference: noIndex.
+	noIndexOnly := (Set withAll: noIndex) difference: index.
 	self
-		assert: ((Set withAll: index)
-				removeAll: noIndex;
-				yourself) isEmpty.
+		assert: (indexOnly isEmpty
+				and: [ noIndexOnly isEmpty and: [ index size = noIndex size ] ])
+		description: [ 'Index count: ' , index size printString , '; NoIndex count: '
+				, noIndex size printString , '; Index only: ' , indexOnly printString
+				, '; NoIndex only: ' , noIndexOnly printString ].
 	^ {index.
 		noIndex}
 ]
@@ -137,27 +142,21 @@ GtPharoNoIndexExamples >> classNameTree [
 { #category : #examples }
 GtPharoNoIndexExamples >> globalCache [
 	<gtExample>
-	| index noIndex |
+	| index noIndex indexOnly noIndexOnly |
 	index := GtPharoIndex current globalCache.
 	self
 		forPharo13AndNewer: [ index := index copyWithout: 'StackSignal' ]
 		forOlder: [  ].
-
 	noIndex := GtPharoNoIndex new globalCache.
-	index
-		do: [ :each | 
-			(each beginsWith: 'TemporaryPackage')
-				ifFalse: [ self
-						assert: (noIndex includes: each)
-						description: [ 'Index global cache includes {1}, but NoIndex globalCache does not.'
-								format: {each} ] ] ].
-	noIndex
-		do: [ :each | 
-			(each beginsWith: 'TemporaryPackage')
-				ifFalse: [ self
-						assert: (index includes: each)
-						description: [ 'NoIndex global cache includes {1}, but Index globalCache does not.'
-								format: {each} ] ] ].
+	indexOnly := ((Set withAll: index) difference: noIndex)
+			reject: [ :each | each beginsWith: 'TemporaryPackage' ].
+	noIndexOnly := ((Set withAll: noIndex) difference: index)
+			reject: [ :each | each beginsWith: 'TemporaryPackage' ].
+	self
+		assert: (indexOnly isEmpty and: [ noIndexOnly isEmpty ])
+		description: [ 'Index count: ' , index size printString , '; NoIndex count: '
+				, noIndex size printString , '; Index only: ' , indexOnly printString
+				, '; NoIndex only: ' , noIndexOnly printString ].
 	^ {index.
 		noIndex}
 ]
