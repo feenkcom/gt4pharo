@@ -268,7 +268,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_copyClassName [
 					s
 						label: 'Assert clipboard has class name';
 						value: [ Clipboard clipboardText ]
-							equals: [ :aCoder | (aCoder attributeNamed: #dummyClass) className ];
+							equals: [ :aCoder | (aCoder attributeNamed: #dummyClass) className asString ];
 						onModel ] ].
 
 	^ aScripter
@@ -582,7 +582,7 @@ GtBehaviorCoderByScripterExamples >> classCoderForClassUI_renameClass_02_type_ne
 					s
 						label: 'Assert entered name';
 						value: [ :aClassNameEditor | aClassNameEditor text asString ]
-							equals: [ (aScripter model attributeNamed: #dummyClass) className , 'New' ];
+							equals: [ (aScripter model attributeNamed: #dummyClass) className asString , 'New' ];
 						id: GtBehaviorCoderBehaviorNameId ].
 
 			aStep

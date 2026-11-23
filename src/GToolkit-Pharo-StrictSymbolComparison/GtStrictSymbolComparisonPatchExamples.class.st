@@ -31,6 +31,22 @@ GtStrictSymbolComparisonPatchExamples >> assertIsStringWhenStrict [
 ]
 
 { #category : #examples }
+GtStrictSymbolComparisonPatchExamples >> collectionIncludesSameContent [
+	"A String and a Symbol with the same characters are the same element for #includesSameContentAs:"
+
+	<gtExample>
+	<return: #GtStrictSymbolComparisonPatchExamples>
+	self assert: (#(#a #b) includesSameContentAs: 'a').
+	self assert: (#('a' 'b') includesSameContentAs: #b).
+	self assert: ((OrderedCollection with: #a with: 'b') includesSameContentAs: 'b').
+	self assert: ((Bag withAll: #(#a #a)) includesSameContentAs: 'a').
+	self assert: (#(#a #b) includesSameContentAs: 'c') not.
+	self assert: (#(1 2) includesSameContentAs: 2).
+	self assert: (#() includesSameContentAs: #a) not.
+	^ self
+]
+
+{ #category : #examples }
 GtStrictSymbolComparisonPatchExamples >> collectionSameContent [
 	"Sets and Bags have the same content when each element occurs as often in both,
 	comparing strings and symbols based on their content"
@@ -86,6 +102,19 @@ GtStrictSymbolComparisonPatchExamples >> collectionSameContentWithOtherArguments
 { #category : #private }
 GtStrictSymbolComparisonPatchExamples >> compare: aReceiver to: anArgument with: aCompiledMethod [
 	^ aCompiledMethod valueWithReceiver: aReceiver arguments: { anArgument }
+]
+
+{ #category : #examples }
+GtStrictSymbolComparisonPatchExamples >> dictionaryIncludesSameContentLooksAtValues [
+	"As #includes:, #includesSameContentAs: looks at the values of a Dictionary"
+
+	<gtExample>
+	<return: #GtStrictSymbolComparisonPatchExamples>
+	| aDictionary |
+	aDictionary := Dictionary new at: #key put: #value; yourself.
+	self assert: (aDictionary includesSameContentAs: 'value').
+	self assert: (aDictionary includesSameContentAs: 'key') not.
+	^ self
 ]
 
 { #category : #examples }
