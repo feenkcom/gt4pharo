@@ -3333,7 +3333,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass_clickOnTarget
 
 	scripter assert
 		label: 'Assert selected source class: ' , sourceClass name;
-		value: [ :aLabel | aLabel text asString ] equals: sourceClass name;
+		value: [ :aLabel | aLabel text asString ] equals: sourceClass name asString;
 		// GtBehaviorCoderBehaviorNameId;
 		play.
 
@@ -3346,7 +3346,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodInIndexToClass_clickOnTarget
 
 	scripter assert
 		label: 'Assert selected target class: ' , targetClass name;
-		value: [ :aLabel | aLabel text asString ] equals: targetClass name;
+		value: [ :aLabel | aLabel text asString ] equals: targetClass name asString;
 		// GtBehaviorCoderBehaviorNameId;
 		play.
 
@@ -3508,7 +3508,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass_clickOnTarge
 
 	scripter assert
 		label: 'Assert selected source class: ' , sourceClass name;
-		value: [ :aLabel | aLabel text asString ] equals: sourceClass name;
+		value: [ :aLabel | aLabel text asString ] equals: sourceClass name asString;
 		// GtBehaviorCoderBehaviorNameId;
 		play.
 
@@ -3521,7 +3521,7 @@ GtPharoCoderByScripterExamples >> dragInstanceMethodsInIndexToClass_clickOnTarge
 
 	scripter assert
 		label: 'Assert selected target class: ' , targetClass name;
-		value: [ :aLabel | aLabel text asString ] equals: targetClass name;
+		value: [ :aLabel | aLabel text asString ] equals: targetClass name asString;
 		// GtBehaviorCoderBehaviorNameId;
 		play.
 
