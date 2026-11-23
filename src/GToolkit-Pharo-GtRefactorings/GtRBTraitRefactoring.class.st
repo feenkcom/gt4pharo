@@ -44,7 +44,7 @@ GtRBTraitRefactoring >> includesTrait: aString in: aRBClass [
 	expression := RBParser parseExpression: aRBClass traitExpression.
 	expression
 		nodesDo: [ :node | 
-			(node isVariable and: [ node name = aString ])
+			(node isVariable and: [ node name = aString asSymbol ])
 				ifTrue: [ ^ true ] ].
 	^ false
 ]
