@@ -12,7 +12,7 @@ GtRenameLiteralItemController >> allRenameIntervals [
 	self originalNode topParent
 		withAllNodesDo: [ :each | 
 			(each ~~ self originalNode
-				and: [ each isLiteral and: [ each literalValue = self originalNode literalValue ] ])
+				and: [ each isLiteral and: [ (each literalValue sameContentAs: self originalNode literalValue) ] ])
 				ifTrue: [ intervals add: (self intervalForNode: each) ] ].
 	^ intervals
 ]
