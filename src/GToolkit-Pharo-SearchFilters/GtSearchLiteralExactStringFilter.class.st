@@ -92,6 +92,7 @@ GtSearchLiteralExactStringFilter >> string [
 { #category : #accessing }
 GtSearchLiteralExactStringFilter >> string: aString [
 
-	string := aString.
-	lowercase := aString asLowercase
+	"The filter matches String literals: a Symbol, such as a package name, is kept as a String"
+	string := aString asString.
+	lowercase := string asLowercase
 ]

@@ -81,12 +81,17 @@ GtPharoBehaviorDefinitionCoderElement >> buildDefinitionReader [
 
 { #category : #'private - instance creation' }
 GtPharoBehaviorDefinitionCoderElement >> buildSectionLabel: aSectionName [
-	
 	^ BrLabel new
-		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize foreground: Color gray; fontSize: 12);
-		text: aSectionName, ':';
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: self theme label metadataTextForeground;
+				fontSize: 12);
+		text: aSectionName , ':';
 		focusability: BlFocusability none;
-		margin: (BlInsets top: 5 right: 5 bottom: 0 left: 5);
+		margin: (BlInsets
+				top: 5
+				right: 5
+				bottom: 0
+				left: 5);
 		constraintsDo: [ :c | c grid horizontal alignLeft ]
 ]
 
@@ -195,16 +200,13 @@ GtPharoBehaviorDefinitionCoderElement >> readonlyLabelLook [
 	^ BrGlamorousEditorAptitude new
 		glamorousCodeFont;
 		fontSize: 10;
-		foreground: Color black;
-		add:
-			(BrStyleCommonAptitude new
+		foreground: self theme editor defaultTextForeground;
+		add: (BrStyleCommonAptitude new
 				default: [ :aStyle | 
 					aStyle
 						geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 						border: BlBorder empty ];
-				hovered: [ :aStyle | 
-					aStyle
-						border: (BlBorder paint: self theme button hoveredBorderColor width: 1) ]);
+				hovered: [ :aStyle | aStyle border: (BlBorder paint: self theme button hoveredBorderColor width: 1) ]);
 		yourself
 ]
 

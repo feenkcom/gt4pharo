@@ -149,7 +149,7 @@ GtExtractMethodObjectRefactoringController >> isReceiver: receiverNode [
 	^ (aNode isKindOf: GtPharoMessageSendNode)
 		and: [ (aNode receiver isKindOf: GtPharoVariableNode)
 				and: [ ({self className.
-						self initialClassName} anySatisfy: [ :each | each sameContentAs: aNode receiver name value ])
+						self initialClassName} includesSameContentAs: aNode receiver name value)
 						and: [ aNode selector = #new ] ] ]
 ]
 
