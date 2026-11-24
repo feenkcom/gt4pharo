@@ -235,8 +235,9 @@ GtExtractMethodToComponentController >> potentialReceivers [
 	| names extractedAst variablesRead variablesWritten allInstVarNames allClassVarNames temps extractedSend |
 	potentialReceivers ifNotNil: [ ^ potentialReceivers ].
 	
-	allInstVarNames := sourceCoderViewModel behavior allInstVarNames.
-	allClassVarNames := sourceCoderViewModel behavior allClassVarNames.
+	"The receivers are source code: the variable names are Strings, as the sources of the nodes"
+	allInstVarNames := sourceCoderViewModel behavior allInstVarNames collect: [ :each | each asString ].
+	allClassVarNames := sourceCoderViewModel behavior allClassVarNames collect: [ :each | each asString ].
 	extractedAst := self extractedAst.
 	extractedSend := self findExtractedSend.
 
