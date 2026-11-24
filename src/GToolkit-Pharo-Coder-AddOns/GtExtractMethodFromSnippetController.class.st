@@ -102,7 +102,7 @@ GtExtractMethodFromSnippetController >> potentialReceivers [
 	potentialReceivers ifNotNil: [ ^ potentialReceivers ].
 	names := super potentialReceivers.
 	(receiver isString and: [ receiver sameContentAs: 'self' ]) not
-		ifTrue: [ (names anySatisfy: [ :each | each sameContentAs: receiver ])
+		ifTrue: [ (names includesSameContentAs: receiver)
 				ifTrue: [ names remove: 'self' ]
 				ifFalse: [ names at: (names indexOf: 'self') put: receiver ] ].
 	self isForInspector
