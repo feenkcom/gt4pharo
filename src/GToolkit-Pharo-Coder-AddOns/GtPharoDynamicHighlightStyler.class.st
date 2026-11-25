@@ -14,7 +14,6 @@ GtPharoDynamicHighlightStyler >> = anObject [
 
 { #category : #'api - styling' }
 GtPharoDynamicHighlightStyler >> extraStyle: aText ast: theAst [
-
 	super extraStyle: aText ast: theAst.
 
 	variableMap
@@ -24,21 +23,21 @@ GtPharoDynamicHighlightStyler >> extraStyle: aText ast: theAst [
 					| aVariableMarker aVariableHighlightAttribute |
 					aVariableMarker := BrTextInvisibleMarkerAttribute new.
 					aVariableHighlightAttribute := GtPharoDynamicHighlightAttribute
-							paint: BrGlamorousColors neutralBackgroundColor.
+							paint: self theme editor occurrenceHighlight.
 					nodes
 						do: [ :each | 
 							(aText from: each startPosition to: each stopPosition)
-									attribute: aVariableMarker;
-									onCursorEnter: [ :aTextEditor :anEvent | 
-											aTextEditor text
-												findAttribute: aVariableMarker
-												indicesDo: [ :aVariableStart :aVariableEnd | 
-													aTextEditor text
-														attribute: aVariableHighlightAttribute
-														from: aVariableStart
-														to: aVariableEnd ] ]
-										leave: [ :aTextEditor :anEvent | aTextEditor text removeAttribute: aVariableHighlightAttribute ];
-									yourself ] ] ]
+								attribute: aVariableMarker;
+								onCursorEnter: [ :aTextEditor :anEvent | 
+										aTextEditor text
+											findAttribute: aVariableMarker
+											indicesDo: [ :aVariableStart :aVariableEnd | 
+												aTextEditor text
+													attribute: aVariableHighlightAttribute
+													from: aVariableStart
+													to: aVariableEnd ] ]
+									leave: [ :aTextEditor :anEvent | aTextEditor text removeAttribute: aVariableHighlightAttribute ];
+								yourself ] ] ]
 ]
 
 { #category : #comparing }
@@ -62,36 +61,28 @@ GtPharoDynamicHighlightStyler >> style: aText ast: theAst [
 GtPharoDynamicHighlightStyler >> visitKeywordMessage: aKeywordMessage [
 	| theMarkers |
 	super visitKeywordMessage: aKeywordMessage.
-	
-	aKeywordMessage selectorParts size <= 1
-		ifTrue: [ ^ self].
-	
+
+	aKeywordMessage selectorParts size <= 1 ifTrue: [ ^ self ].
 	theMarkers := OrderedCollection new.
-	aKeywordMessage selectorParts do: [ :eachPart |
-		| eachMarker |
-		
-		eachMarker := BrTextInvisibleMarkerAttribute new.
-		theMarkers add: eachMarker. 
-		
-		(text 
-			from: eachPart startPosition
-			to: eachPart stopPosition)
+	aKeywordMessage selectorParts
+		do: [ :eachPart | 
+			| eachMarker |
+			eachMarker := BrTextInvisibleMarkerAttribute new.
+			theMarkers add: eachMarker.
+
+			(text from: eachPart startPosition to: eachPart stopPosition)
 				attribute: eachMarker;
 				onCursorEnter: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
-					aTextEditor text
-						findAttributes: theMarkers
-						indicesDo: [ :aHighlightStart :aHighlightEnd |
-							(aTextEditor text
-								from: aHighlightStart
-								to: aHighlightEnd)
-									attribute: (GtPharoDynamicHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor) ] ]
-				leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex |
-					aTextEditor text
-						findAttributes: theMarkers
-						indicesDo: [ :aHighlightStart :aHighlightEnd |
-							(aTextEditor text
-								from: aHighlightStart
-								to: aHighlightEnd)
+						aTextEditor text
+							findAttributes: theMarkers
+							indicesDo: [ :aHighlightStart :aHighlightEnd | 
+								(aTextEditor text from: aHighlightStart to: aHighlightEnd)
+									attribute: (GtPharoDynamicHighlightAttribute paint: self theme editor occurrenceHighlight) ] ]
+					leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | 
+						aTextEditor text
+							findAttributes: theMarkers
+							indicesDo: [ :aHighlightStart :aHighlightEnd | 
+								(aTextEditor text from: aHighlightStart to: aHighlightEnd)
 									clearAttributesOfClass: GtPharoDynamicHighlightAttribute ] ] ]
 ]
 
