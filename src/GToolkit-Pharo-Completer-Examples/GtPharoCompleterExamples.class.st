@@ -438,6 +438,9 @@ GtPharoCompleterExamples >> completeKeywordWithMultipleChanges [
 
 { #category : #smalltalk }
 GtPharoCompleterExamples >> completeKeywordWithMultipleParts [
+	"The completion list loads its items lazily, and the keyword candidates come in hash order:
+	select a candidate that is among the first loaded items (#closingFor:ifPresent:ifAbsent:, see BrTextEditorSurroundMap)"
+
 	<gtExample>
 	| aScripter |
 	aScripter := self completePrintOnMethodSelector.
@@ -445,20 +448,20 @@ GtPharoCompleterExamples >> completeKeywordWithMultipleParts [
 	self enterText: ' ^ aStream ifPresent: [:e | e] ifAbsent: []' in: aScripter.
 	aScripter
 		substep: 'Move cursor'
-		do: [ :aStep | 
+		do: [ :aStep |
 			5 timesRepeat: [ aStep keyPress: BlKeyboardKey arrowLeft ].
 			aStep play ].
 	self openCompletionIn: aScripter.
-	self selectionCompletionItem: 'at:ifPresent:ifAbsent:' in: aScripter.
+	self selectionCompletionItem: 'closingFor:ifPresent:ifAbsent:' in: aScripter.
 	self completeWithTabIn: aScripter.
 	self enterText: '1' in: aScripter.
 
 	aScripter
-		checkStep: [ :s | 
+		checkStep: [ :s |
 			s
-				satisfies: [ :element | 
+				satisfies: [ :element |
 					element text asString
-						= 'printOn: aStream ^ aStream at: 1 ifPresent: [:e | e] ifAbsent: []' ] ].
+						= 'printOn: aStream ^ aStream closingFor: 1 ifPresent: [:e | e] ifAbsent: []' ] ].
 
 	^ aScripter
 ]
