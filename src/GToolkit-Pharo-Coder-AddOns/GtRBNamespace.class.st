@@ -199,6 +199,21 @@ GtRBNamespace >> privateReferencesTo: aSelector [
 ]
 
 { #category : #changes }
+GtRBNamespace >> removeClassNamed: aSymbol [
+	"Like the superclass, but the undo of a GtRBRemoveClassChange keeps no reference to the removed class"
+
+	(self classNamed: aSymbol) subclasses
+		do: [ :each | self removeClassNamed: each name ].
+	removedClasses
+		add: aSymbol;
+		add: aSymbol , ' class'.
+	newClasses removeKey: aSymbol ifAbsent: [  ].
+	changedClasses removeKey: aSymbol ifAbsent: [  ].
+	self flushCaches.
+	^ changes addChange: (GtRBRemoveClassChange removeClassName: aSymbol)
+]
+
+{ #category : #changes }
 GtRBNamespace >> reparentClasses: aRBClassCollection to: newClass [
 	| superClass |
 	superClass := self classFor: newClass.

@@ -136,19 +136,6 @@ GtMethodAdvice >> errorAttribute: aNode coderModel: aCoderModel [
 		fixItAttribute: fixItAttribute
 ]
 
-{ #category : #styling }
-GtMethodAdvice >> errorHighlight [
-	^ BrTextHighlight
-		id: #'advice--error'
-		color: BrGlamorousColors paleErrorBackgroundColor
-]
-
-{ #category : #styling }
-GtMethodAdvice >> errorHighlightAttribute [
-	"^ BrTextHighlight id: #'advice--error' color: BrGlamorousColors paleErrorBackgroundColor."
-	^ BlTextHighlightAttribute paint: BrGlamorousColors paleErrorBackgroundColor 
-]
-
 { #category : #accessing }
 GtMethodAdvice >> finish: aNode from: criticRunner [
 ]
@@ -229,7 +216,9 @@ GtMethodAdvice >> styleFixIt: aNode using: aCriticStyler [
 			purpose: #'fix-it';
 			model: (model := GtFixItAdviceModel new).
 
-	hoverHighlight := self errorHighlight.
+	hoverHighlight := BrTextHighlight
+			id: #'advice--error'
+			color: aCriticStyler theme status paleErrorBackgroundColor.
 	fixItAttribute := GtFixItAttribute new
 			model: model;
 			label: self name;
@@ -265,7 +254,8 @@ GtMethodAdvice >> styleHighlight: aNode using: aCriticStyler [
 	(self highlightPositionsFor: aNode)
 		do: [ :each | 
 			aCriticStyler
-				attributes: {self errorHighlightAttribute}
+				attributes: {BlTextHighlightAttribute
+							paint: aCriticStyler theme status paleErrorBackgroundColor}
 				from: each first
 				to: each last ]
 ]
