@@ -264,6 +264,35 @@ GtSearchMethodFilterExamples >> packagePatternFilter [
 ]
 
 { #category : #examples }
+GtSearchMethodFilterExamples >> possiblePragmaNamesWithPragmaFilter [
+	"With a pragma filter, the coder still offers the other pragmas of its methods to the filter:
+	with the views of a class selected, also its actions"
+
+	<gtExample>
+	<return: #GtPharoStreamingMethodsCoder>
+	| coder names |
+	coder := GtPharoStreamingMethodsCoder forBehavior: GtSearchFilter.
+	coder additionalFilters: {GtSearchPragmasFilter forPragma: #gtView}.
+	names := coder possiblePragmaNamesUnorderedStream toArray wait.
+	self assert: (names includes: #gtView).
+	self assert: (names includes: #gtAction).
+	^ coder
+]
+
+{ #category : #examples }
+GtSearchMethodFilterExamples >> pragmaFilterIsMethodPragmaFilter [
+	"The coder leaves out its method pragma filter when it lists the pragmas that the filter can choose from"
+
+	<gtExample>
+	<return: #GtSearchPragmasFilter>
+	| filter |
+	filter := GtSearchPragmasFilter forPragma: #gtExample.
+	self assert: filter isMethodPragmaFilter.
+	self assert: GtSearchPragmasWithArgumentsFilter new isMethodPragmaFilter not.
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchMethodFilterExamples >> referencesFilterIsAllGtSearchMethodsFilterKind [
 	<gtExample>
 	| filter |

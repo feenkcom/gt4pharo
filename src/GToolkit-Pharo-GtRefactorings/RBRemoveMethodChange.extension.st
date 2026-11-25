@@ -19,7 +19,9 @@ RBRemoveMethodChange >> gtIncludesSubstring: aString [
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRemoveMethodChange >> gtIsForSelector: aSymbol [
-	^ self selector = aSymbol
+	"aSymbol can be the text typed in the Selector filter"
+
+	^ self selector sameContentAs: aSymbol
 ]
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }

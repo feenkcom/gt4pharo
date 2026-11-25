@@ -44,7 +44,9 @@ GtSearchPragmasFilter >> includesMethod: aCompiledMethod [
 
 { #category : #testing }
 GtSearchPragmasFilter >> isMethodPragmaFilter [
-	^ self className = #GtSearchPragmasFilter
+	"The filter of the Pragma drop-down"
+
+	^ true
 ]
 
 { #category : #printing }
