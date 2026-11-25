@@ -20,9 +20,13 @@ GtPharoMethodsCoderViewModel >> addNewCoder [
 
 { #category : #updating }
 GtPharoMethodsCoderViewModel >> coderUIModelFor: aCoder [
-	^ aCoder asCoderViewModel
-		expanded: false;
-		selfObject: self coder object
+	"Give the method coder a self object only when I have an object. Without one, its self object stays undefined, because a self object that holds nil makes the header and the tools it spawns treat nil as the receiver."
+
+	| aCoderViewModel |
+	aCoderViewModel := aCoder asCoderViewModel.
+	aCoderViewModel expanded: false.
+	self coder object ifNotNil: [ :anObject | aCoderViewModel selfObject: anObject ].
+	^ aCoderViewModel
 ]
 
 { #category : #accessing }
