@@ -7,12 +7,13 @@ Class {
 { #category : #generated }
 GtPharoDeprecationStyler >> visitNamedVariable: aNamedVariable [
 	super visitNamedVariable: aNamedVariable.
-	
+
 	(self coderViewModel isDeprecatedGlobalNamed: aNamedVariable variableName)
 		ifFalse: [ ^ self ].
-	
+
 	self
-		attribute: (BlTextDecorationAttribute new lineThrough color: Color blue muchDarker)
+		attribute: (BlTextDecorationAttribute new lineThrough
+				color: self theme editor pharoDeclaredVariableForeground)
 		from: aNamedVariable name startPosition
 		to: aNamedVariable name stopPosition
 ]
