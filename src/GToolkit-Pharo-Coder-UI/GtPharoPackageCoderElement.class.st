@@ -79,12 +79,12 @@ GtPharoPackageCoderElement >> buildPackageLabel [
 	packageNameEditor editor
 		when: BrTextEditorModifiedEvent
 			do: [ :anEvent | 
-				anEvent text asString = packageCoder package name
+				(anEvent text asString sameContentAs: packageCoder package name)
 					ifTrue: [ previewButton hide ]
 					ifFalse: [ previewButton show ] ];
 		when: BrTextEditorTextReplacedEvent
 			do: [ :anEvent | 
-				anEvent text asString = packageCoder package name
+				(anEvent text asString sameContentAs: packageCoder package name)
 					ifTrue: [ previewButton hide ]
 					ifFalse: [ previewButton show ] ].
 
