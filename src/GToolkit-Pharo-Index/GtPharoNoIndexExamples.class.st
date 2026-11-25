@@ -93,6 +93,22 @@ GtPharoNoIndexExamples >> asyncImplementersForWordConvertUsing [
 ]
 
 { #category : #examples }
+GtPharoNoIndexExamples >> asyncImplementersForWordUsesOriginalFFIMethod [
+	<gtExample>
+	^ self
+		withGeneratedFFIMethodDo: [ :index :installed :original | 
+			| indexed scanned |
+			indexed := (index asyncImplementersForWord: 'noIndexExampleGeneratedFFI')
+					toArray wait.
+			scanned := (GtPharoNoIndex new
+					asyncImplementersForWord: 'noIndexExampleGeneratedFFI') toArray wait.
+			self assert: (indexed anySatisfy: [ :method | method == original ]).
+			self assert: (scanned anySatisfy: [ :method | method == original ]).
+			self assert: (scanned includes: installed) not.
+			original ]
+]
+
+{ #category : #examples }
 GtPharoNoIndexExamples >> asyncKeywordImplementors [
 	<gtExample>
 	| index noIndex |
@@ -125,6 +141,22 @@ GtPharoNoIndexExamples >> asyncSelectorsForWord [
 				, '; NoIndex only: ' , noIndexOnly printString ].
 	^ {index.
 		noIndex}
+]
+
+{ #category : #examples }
+GtPharoNoIndexExamples >> asyncSelectorsForWordUsesOriginalFFILiterals [
+	<gtExample>
+	^ self
+		withGeneratedFFIMethodDo: [ :index :installed :original | 
+			| symbol indexed scanned |
+			symbol := 'noIndexExampleOriginalFFILiteral' asSymbol.
+			self assert: (installed allLiterals includes: symbol) not.
+			self assert: (original allLiterals includes: symbol).
+			indexed := (index asyncSelectorsForWord: symbol) toArray wait.
+			scanned := (GtPharoNoIndex new asyncSelectorsForWord: symbol) toArray wait.
+			self assert: (indexed includes: symbol).
+			self assert: (scanned includes: symbol).
+			original ]
 ]
 
 { #category : #examples }
@@ -188,6 +220,33 @@ GtPharoNoIndexExamples >> hasImplementersOf [
 	self assert: noIndex equals: index.
 	^ {index.
 		noIndex}
+]
+
+{ #category : #examples }
+GtPharoNoIndexExamples >> ignoredMethodsMatchMainIndex [
+	<gtExample>
+	| index noIndex anonymousClass methods |
+	index := GtPharoIndex new.
+	noIndex := GtPharoNoIndex new.
+	anonymousClass := Object newAnonymousSubclass.
+	anonymousClass compile: 'noIndexExampleAnonymousMethod ^ self'.
+	anonymousClass class compile: 'noIndexExampleAnonymousClassMethod ^ self'.
+	methods := {GtPharoNoIndexExampleTraitUser >> #noIndexExampleAliasedTraitMethod.
+			TGtPharoNoIndexExampleTrait >> #noIndexExampleTraitMethod.
+			GtPharoNoIndexExampleFFI >> #noIndexExampleGeneratedFFI.
+			anonymousClass >> #noIndexExampleAnonymousMethod.
+			anonymousClass class >> #noIndexExampleAnonymousClassMethod}.
+	methods
+		do: [ :method | 
+			self
+				assert: (noIndex isIgnoredMethod: method)
+				equals: (index isIgnoredMethod: method) ].
+	self assert: (noIndex isIgnoredMethod: methods first).
+	self assert: (noIndex isIgnoredMethod: methods second) not.
+	self assert: (noIndex isIgnoredMethod: methods third) not.
+	self assert: (noIndex isIgnoredMethod: methods fourth).
+	self assert: (noIndex isIgnoredMethod: methods fifth).
+	^ methods
 ]
 
 { #category : #examples }
@@ -288,4 +347,23 @@ GtPharoNoIndexExamples >> senders [
 		equals: 0.
 	^ {index.
 		noIndex}
+]
+
+{ #category : #private }
+GtPharoNoIndexExamples >> withGeneratedFFIMethodDo: aBlock [
+	| installed original index |
+	installed := GtPharoNoIndexExampleFFI >> #noIndexExampleGeneratedFFI.
+	original := installed copy.
+	original literalAt: 1 put: 'noIndexExampleOriginalFFILiteral' asSymbol.
+	original propertyAt: #isFFIMethod put: true.
+	[ installed propertyAt: #isFFIMethod put: true.
+	installed propertyAt: #ffiNonCompiledMethod put: original.
+	index := GtPharoIndex new.
+	index methodAdded: (MethodAdded method: installed).
+	^ aBlock
+		value: index
+		value: installed
+		value: original ]
+		ensure: [ installed removeProperty: #ffiNonCompiledMethod.
+			installed removeProperty: #isFFIMethod ]
 ]
