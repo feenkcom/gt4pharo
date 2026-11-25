@@ -214,20 +214,14 @@ GtPharoNoIndexExamples >> implementersDo [
 	noIndex := OrderedCollection new.
 	GtPharoIndex current implementersDo: [ :e | index add: e ].
 	GtPharoNoIndex new implementersDo: [ :e | noIndex add: e ].
-	indexOnly := ((Set withAll: index) difference: noIndex)
-			reject: [ :each | each beginsWith: 'TemporaryPackage' ].
-	noIndexOnly := ((Set withAll: noIndex) difference: index)
-			reject: [ :each | each beginsWith: 'TemporaryPackage' ].
+	indexOnly := (GtStringContentSet withAll: index) difference: noIndex.
+	noIndexOnly := (GtStringContentSet withAll: noIndex) difference: index.
 	self
-		assert: (indexOnly isEmpty and: [ noIndexOnly isEmpty ])
+		assert: (indexOnly isEmpty
+				and: [ noIndexOnly isEmpty and: [ index size = noIndex size ] ])
 		description: [ 'Index count: ' , index size printString , '; NoIndex count: '
 				, noIndex size printString , '; Index only: ' , indexOnly printString
 				, '; NoIndex only: ' , noIndexOnly printString ].
-	self
-		assert: ((GtStringContentSet withAll: index)
-				removeAll: noIndex;
-				size)
-		equals: 0.
 	^ {index.
 		noIndex}
 ]
