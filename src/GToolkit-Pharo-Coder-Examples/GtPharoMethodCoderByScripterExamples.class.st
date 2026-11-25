@@ -9932,6 +9932,36 @@ GtPharoMethodCoderByScripterExamples >> methodCoder [
 	^ aScripter
 ]
 
+{ #category : #'coder - method' }
+GtPharoMethodCoderByScripterExamples >> methodCoderElementInMethodsCoderSpawnReceiverBehavior [
+	"A methods coder over explicit methods has no object. Clicking the receiver behavior in one of its method coders should spawn the method, not UndefinedObject, and the spawned tool should build."
+
+	<gtExample>
+	| aScripter aMethod |
+	aMethod := self methodWithTwoObjectMethodOne.
+	aScripter := self
+			scripterForBlock: [ (GtPharoMethodsCoder forItems: { aMethod }) asCoderViewModel coderUIModels first ].
+
+	aScripter methodCoder
+		clickOnHeaderMethodReceiverBehavior;
+		play.
+
+	aScripter assertStep: [ :s |
+		s
+			label: 'Assert spawn event contained a method coder tool on the method, and the tool builds';
+			satisfies: [ :theScripter |
+				theScripter events reversed
+					detectEventOfClass: GtPhlowObjectToSpawn
+					ifFound: [ :theEvent |
+						theEvent object == aMethod
+							and: [ (theEvent tool isKindOf: GtMethodCoderTool)
+								and: [ theEvent tool asElement notNil ] ] ]
+					ifNone: [ false ] ];
+			onScripter ].
+
+	^ aScripter
+]
+
 { #category : #'examples - expansion' }
 GtPharoMethodCoderByScripterExamples >> methodCoderElementWithAnotherExampleCallingSuperclassExample [
 	"See https://github.com/feenkcom/gtoolkit/issues/4306.

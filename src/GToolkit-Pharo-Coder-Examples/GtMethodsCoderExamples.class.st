@@ -129,6 +129,19 @@ GtMethodsCoderExamples >> methodsCoderWithExplicitMethods [
 	^ GtPharoMethodsCoder forItems: { Object>>#printString . Object >>#printOn: }
 ]
 
+{ #category : #'examples - coder' }
+GtMethodsCoderExamples >> methodsCoderWithExplicitMethodsHasNoSelfObject [
+	"A methods coder over explicit methods has no object, so its method coders should have no self object either. A self object that holds nil makes the class name in a method coder's header open UndefinedObject."
+
+	<gtExample>
+	| aViewModel |
+	aViewModel := self methodsCoderWithExplicitMethods asCoderViewModel.
+	self assert: aViewModel coderUIModels notEmpty.
+	aViewModel coderUIModels do: [ :eachCoderViewModel |
+		self assert: eachCoderViewModel hasSelfObject not ].
+	^ aViewModel
+]
+
 { #category : #'examples - filters' }
 GtMethodsCoderExamples >> printStringFilter [
 	<gtExample>
