@@ -227,6 +227,22 @@ GtPharoNoIndexExamples >> implementersDo [
 ]
 
 { #category : #examples }
+GtPharoNoIndexExamples >> implementersDoExcludesTraitAliases [
+	<gtExample>
+	| selectors aliasSelector originalSelector |
+	aliasSelector := #noIndexExampleAliasedTraitMethod.
+	originalSelector := #noIndexExampleTraitMethod.
+	self assert: (GtPharoNoIndexExampleTraitUser >> aliasSelector) isFromTrait.
+	selectors := Set new.
+	GtPharoNoIndex new implementersDo: [ :selector | selectors add: selector ].
+	self assert: (selectors includes: aliasSelector) not.
+	self assert: (selectors includes: originalSelector).
+	self assert: (GtPharoNoIndex new implementersOf: aliasSelector) isEmpty.
+	self assert: (GtPharoIndex current hasImplementersOf: aliasSelector) not.
+	^ selectors
+]
+
+{ #category : #examples }
 GtPharoNoIndexExamples >> implementersOfTraitMethods [
 	<gtExample>
 	| index noIndex |

@@ -146,11 +146,14 @@ GtPharoNoIndex >> implementersDo: aBlock [
 	implementers := IdentitySet new.
 	self class environment allBehaviors
 		do: [ :class | 
-			class selectors
-				do: [ :sel | 
-					(implementers includes: sel)
-						ifFalse: [ implementers add: sel.
-							aBlock value: sel ] ] ]
+			class
+				methodsDo: [ :method | 
+					method isFromTrait
+						ifFalse: [ | selector |
+							selector := method selector.
+							(implementers includes: selector)
+								ifFalse: [ implementers add: selector.
+									aBlock value: selector ] ] ] ]
 ]
 
 { #category : #'accessing - implementers' }
