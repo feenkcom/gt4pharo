@@ -69,7 +69,7 @@ GtCoderExpandableBaselineStyler >> stylePackageMessage: aMessageNode [
 			anElement := GtPharoPackageCoderElement new coderViewModel: aViewModel.
 			anElement
 				height: 400;
-				background: Color white;
+				background: anElement theme default contentBackground;
 				margin: (BlInsets
 						top: 3
 						right: 10
