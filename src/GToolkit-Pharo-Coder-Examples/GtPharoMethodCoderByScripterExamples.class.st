@@ -12198,9 +12198,9 @@ GtPharoMethodCoderByScripterExamples >> scrollToUndefinedTemp [
 			s
 				label: 'Assert error button exists';
 				// GtSourceCoderEditorId;
-				onBreadthFirstChildOfClass: BrButton;
-				value: [ :aButton | aButton background paint color ]
-					equals: [ BrGlamorousColors errorBackgroundColor ] ].
+				// GtSourceCoderErrorButtonElementId;
+				value: [ :aButton | aButton background paint color blocResolveColorForTheme: aButton theme ]
+					equals: [ :aButton | aButton theme status errorBackgroundColor rawColor ] ].
 
 	scripter
 		assertStep: [ :s | 
