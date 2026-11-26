@@ -5,12 +5,12 @@ Class {
 }
 
 { #category : #private }
-GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEditor [
+GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: anEditorElement [
 	| text |
-	text := aBrTextEditor text.
+	text := anEditorElement editor text.
 
 	(text from: node name startPosition to: node name stopPosition)
-		highlight: (BrGlamorousColors errorBackgroundColor alpha: 0.5).
+		highlight: anEditorElement theme status paleErrorBackgroundColor.
 
 	(text from: self attributePosition to: self attributePosition)
 		expanded: true
@@ -22,7 +22,7 @@ GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEdit
 				ifNotNil: [ :tag | element form packageAndTagName tagName: tag name ].
 			element
 				addAptitude: BrShadowAptitude;
-				background: Color white;
+				background: element theme default contentBackground;
 				margin: (BlInsets all: 10);
 				padding: (BlInsets all: 8);
 				constraintsDo: [ :c | 
@@ -33,9 +33,10 @@ GtAbstractDefineClassFixItAction >> addCreateClassAttributeInEditor: aBrTextEdit
 
 { #category : #executing }
 GtAbstractDefineClassFixItAction >> basicExecuteOn: anEditorElement [
-	BlTaskAction enqueueElement: anEditorElement action: [
-		self clearFixItAttributeInEditor: anEditorElement editor.
-		self addCreateClassAttributeInEditor: anEditorElement editor. ]
+	BlTaskAction
+		enqueueElement: anEditorElement
+		action: [ self clearFixItAttributeInEditor: anEditorElement editor.
+			self addCreateClassAttributeInEditor: anEditorElement ]
 ]
 
 { #category : #accessing }
