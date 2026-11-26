@@ -5,7 +5,10 @@ Class {
 		'amountOfPackages',
 		'amountOfClasses',
 		'amountOfMethods',
-		'amountOfPackageTags'
+		'amountOfPackageTags',
+		'amountOfClassVariables',
+		'amountOfClassSlots',
+		'amountOfTraits'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
@@ -26,36 +29,52 @@ GtPharoDummiesGenerator class >> withPackages: anAmountOfPackages classes: anAmo
 		generate
 ]
 
+{ #category : #generation }
+GtPharoDummiesGenerator >> addDummyAccessorsToClass: aDummyClass [
+	"Add a getter and a setter of each variable of aDummyClass, a generated class or trait: of its instance variables on the instance side, of its class variables and class slots on the class side. The generated methods do not refer to the variables; the accessors do"
+
+	EpMonitor
+		disableDuring: [ GtPharoCodeModifier current
+				deferFlushDuring: [ aDummyClass
+						addDummyMethods: (aDummyClass instVarNames
+								flatCollect: [ :each | self compileDummyAccessorsOf: each in: aDummyClass realClass ]).
+					aDummyClass
+						addDummyClassMethods: (aDummyClass classVariableNames , aDummyClass classSlotNames
+								flatCollect: [ :each | self compileDummyAccessorsOf: each in: aDummyClass realClass classSide ]) ] ]
+]
+
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyClassHierarchyToPackage: aDummyPackage [
 	| theDummyClasses currentClass index |
 	currentClass := Object.
 	index := 0.
-	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackage packageName) collect: [ :eachClassName |
-		| aNewClass aDummyClass ivars |
+	theDummyClasses := (self
+			dummyClassNamesForPackageName: aDummyPackage packageName)
+			collect: [ :eachClassName | 
+				| aDummyClass ivars |
+				ivars := (1 to: self fakeInstVarCount)
+						collect: [ :i | 'instVar' , (index + i) printString ].
+				index := index + self fakeInstVarCount.
 
-		ivars := (1 to: self fakeInstVarCount) collect: [ :i | 'instVar' , (index + i) printString ].
-		index := index + self fakeInstVarCount.
+				aDummyClass := GtPharoDummyClass new
+						instVarNames: ivars;
+						className: eachClassName;
+						yourself.
+				self
+					createDummyClass: aDummyClass
+					superclass: currentClass
+					package: aDummyPackage packageName
+					tag: nil
+					traits: (self dummyTraitsOf: aDummyPackage forSuperclass: currentClass).
 
-		aNewClass := GtPharoCodeModifier current
-			createSubclassOf: currentClass
-			named: eachClassName
-			slots: ivars
-			package: aDummyPackage packageName.
+				self addDummyUnaryMethodsToClass: aDummyClass.
+				self addDummyUnaryClassMethodsToClass: aDummyClass.
+				self addDummyKeywordMethodsToClass: aDummyClass.
 
-		aDummyClass := GtPharoDummyClass new
-			instVarNames: ivars;
-			realClass: aNewClass;
-			className: eachClassName.
-		
-		self addDummyUnaryMethodsToClass: aDummyClass.
-		self addDummyUnaryClassMethodsToClass: aDummyClass.
-		self addDummyKeywordMethodsToClass: aDummyClass.
-		
-		currentClass := aNewClass.
-		
-		aDummyClass ].
-	
+				currentClass := aDummyClass realClass.
+
+				aDummyClass ].
+
 	aDummyPackage dummyClasses: theDummyClasses
 ]
 
@@ -64,84 +83,87 @@ GtPharoDummiesGenerator >> addDummyClassSiblingsToPackage: aDummyPackage [
 	| theDummyClasses currentClass index |
 	currentClass := Object.
 	index := 0.
-	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackage packageName) collect: [ :eachClassName |
-		| aNewClass aDummyClass ivars |
+	theDummyClasses := (self
+			dummyClassNamesForPackageName: aDummyPackage packageName)
+			collect: [ :eachClassName | 
+				| aDummyClass ivars |
+				ivars := (1 to: self fakeInstVarCount)
+						collect: [ :i | 'instVar' , (index + i) printString ].
+				index := index + self fakeInstVarCount.
 
-		ivars := (1 to: self fakeInstVarCount) collect: [ :i | 'instVar' , (index + i) printString ].
-		index := index + self fakeInstVarCount.
+				aDummyClass := GtPharoDummyClass new
+						instVarNames: ivars;
+						className: eachClassName;
+						yourself.
+				self
+					createDummyClass: aDummyClass
+					superclass: currentClass
+					package: aDummyPackage packageName
+					tag: nil
+					traits: (self dummyTraitsOf: aDummyPackage forSuperclass: currentClass).
 
-		aNewClass := GtPharoCodeModifier current
-			createSubclassOf: currentClass
-			named: eachClassName
-			slots: ivars
-			package: aDummyPackage packageName.
+				self addDummyUnaryMethodsToClass: aDummyClass.
+				self addDummyUnaryClassMethodsToClass: aDummyClass.
+				self addDummyKeywordMethodsToClass: aDummyClass.
 
-		aDummyClass := GtPharoDummyClass new
-			instVarNames: ivars;
-			realClass: aNewClass;
-			className: eachClassName.
-		
-		self addDummyUnaryMethodsToClass: aDummyClass.
-		self addDummyUnaryClassMethodsToClass: aDummyClass.
-		self addDummyKeywordMethodsToClass: aDummyClass.
-		
-		currentClass = Object ifTrue: [ currentClass := aNewClass ].
-		
-		aDummyClass ].
-	
+				currentClass = Object ifTrue: [ currentClass := aDummyClass realClass ].
+
+				aDummyClass ].
+
 	aDummyPackage dummyClasses: theDummyClasses
 ]
 
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyClassesToPackage: aDummyPackage [
 	| theDummyClasses |
-	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackage packageName) collect: [ :eachClassName |
-		| aNewClass aDummyClass |
+	theDummyClasses := (self
+			dummyClassNamesForPackageName: aDummyPackage packageName)
+			collect: [ :eachClassName | 
+				| aDummyClass |
+				aDummyClass := GtPharoDummyClass new
+						instVarNames: self fakeInstVarNames;
+						className: eachClassName;
+						yourself.
+				self
+					createDummyClass: aDummyClass
+					superclass: Object
+					package: aDummyPackage packageName
+					tag: nil
+					traits: (self dummyTraitsOf: aDummyPackage forSuperclass: Object).
 
-		aNewClass := GtPharoCodeModifier current
-			createSubclassOf: Object
-			named: eachClassName
-			slots: self fakeInstVarNames
-			package: aDummyPackage packageName.
+				self addDummyUnaryMethodsToClass: aDummyClass.
+				self addDummyUnaryClassMethodsToClass: aDummyClass.
+				self addDummyKeywordMethodsToClass: aDummyClass.
 
-		aDummyClass := GtPharoDummyClass new
-			instVarNames: self fakeInstVarNames;
-			realClass: aNewClass;
-			className: eachClassName.
-		
-		self addDummyUnaryMethodsToClass: aDummyClass.
-		self addDummyUnaryClassMethodsToClass: aDummyClass.
-		self addDummyKeywordMethodsToClass: aDummyClass.
+				aDummyClass ].
 
-		aDummyClass ].
-	
 	aDummyPackage dummyClasses: theDummyClasses
 ]
 
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyClassesToPackageTag: aDummyPackageTag [
 	| theDummyClasses |
-	theDummyClasses := (self dummyClassNamesForPackageName: aDummyPackageTag packageTagName) collect: [ :eachClassName |
-		| aNewClass aDummyClass |
+	theDummyClasses := (self
+			dummyClassNamesForPackageName: aDummyPackageTag packageTagName)
+			collect: [ :eachClassName | 
+				| aDummyClass |
+				aDummyClass := GtPharoDummyClass new
+						instVarNames: self fakeInstVarNames;
+						className: eachClassName;
+						yourself.
+				self
+					createDummyClass: aDummyClass
+					superclass: Object
+					package: aDummyPackageTag packageName
+					tag: aDummyPackageTag tagName
+					traits: #().
 
-		aNewClass := GtPharoCodeModifier current
-			createSubclassOf: Object
-			named: eachClassName
-			slots: self fakeInstVarNames
-			package: aDummyPackageTag packageName
-			tag: aDummyPackageTag tagName.
+				self addDummyUnaryMethodsToClass: aDummyClass.
+				self addDummyUnaryClassMethodsToClass: aDummyClass.
+				self addDummyKeywordMethodsToClass: aDummyClass.
 
-		aDummyClass := GtPharoDummyClass new
-			instVarNames: self fakeInstVarNames;
-			realClass: aNewClass;
-			className: eachClassName.
-		
-		self addDummyUnaryMethodsToClass: aDummyClass.
-		self addDummyUnaryClassMethodsToClass: aDummyClass.
-		self addDummyKeywordMethodsToClass: aDummyClass.
+				aDummyClass ].
 
-		aDummyClass ].
-	
 	aDummyPackageTag dummyClasses: theDummyClasses
 ]
 
@@ -195,57 +217,90 @@ GtPharoDummiesGenerator >> addDummyPackageTagsToPackage: aDummyPackage [
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
+	EpMonitor
+		disableDuring: [ theDummyPackages := self dummyPackageNames
+					collect: [ :eachPackageName | 
+						| eachPackage eachDummyPackage |
+						self
+							assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
+						eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
+						eachDummyPackage := GtPharoDummyPackage new
+								packageName: eachPackageName;
+								realPackage: eachPackage.
+						self amountOfTraits isZero
+							ifFalse: [ self addDummyTraitsToPackage: eachDummyPackage ].
+						self addDummyClassesToPackage: eachDummyPackage.
+						self amountOfPackageTags isZero
+							ifFalse: [ self addDummyPackageTagsToPackage: eachDummyPackage ].
+						eachDummyPackage ].
 
-	EpMonitor disableDuring: [
-	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
-		| eachPackage eachDummyPackage |
-		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
-		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
-		eachDummyPackage := GtPharoDummyPackage new
-			packageName: eachPackageName;
-			realPackage: eachPackage.
-		self addDummyClassesToPackage: eachDummyPackage.
-		self amountOfPackageTags isZero ifFalse: [ 
-			self addDummyPackageTagsToPackage: eachDummyPackage ].
-		eachDummyPackage ].
-	
-	aDummyEnvironment dummyPackages: theDummyPackages ]
+			aDummyEnvironment dummyPackages: theDummyPackages ]
 ]
 
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesWithClassHierarchyToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
+	EpMonitor
+		disableDuring: [ theDummyPackages := self dummyPackageNames
+					collect: [ :eachPackageName | 
+						| eachPackage eachDummyPackage |
+						self
+							assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
+						eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
+						eachDummyPackage := GtPharoDummyPackage new
+								packageName: eachPackageName;
+								realPackage: eachPackage.
+						self amountOfTraits isZero
+							ifFalse: [ self addDummyTraitsToPackage: eachDummyPackage ].
+						self addDummyClassHierarchyToPackage: eachDummyPackage.
+						eachDummyPackage ].
 
-	EpMonitor disableDuring: [
-	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
-		| eachPackage eachDummyPackage |
-		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
-		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
-		eachDummyPackage := GtPharoDummyPackage new
-			packageName: eachPackageName;
-			realPackage: eachPackage.
-		self addDummyClassHierarchyToPackage: eachDummyPackage.
-		eachDummyPackage ].
-	
-	aDummyEnvironment dummyPackages: theDummyPackages ]
+			aDummyEnvironment dummyPackages: theDummyPackages ]
 ]
 
 { #category : #'private - generation' }
 GtPharoDummiesGenerator >> addDummyPackagesWithClassSiblingsToEnvironment: aDummyEnvironment [
 	| theDummyPackages |
+	EpMonitor
+		disableDuring: [ theDummyPackages := self dummyPackageNames
+					collect: [ :eachPackageName | 
+						| eachPackage eachDummyPackage |
+						self
+							assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
+						eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
+						eachDummyPackage := GtPharoDummyPackage new
+								packageName: eachPackageName;
+								realPackage: eachPackage.
+						self amountOfTraits isZero
+							ifFalse: [ self addDummyTraitsToPackage: eachDummyPackage ].
+						self addDummyClassSiblingsToPackage: eachDummyPackage.
+						eachDummyPackage ].
 
-	EpMonitor disableDuring: [
-	theDummyPackages := self dummyPackageNames collect: [ :eachPackageName |
-		| eachPackage eachDummyPackage |
-		self assert: (self packageOrganizer includesPackageNamed: eachPackageName) not.
-		eachPackage := GtPharoCodeModifier createPackageNamed: eachPackageName.
-		eachDummyPackage := GtPharoDummyPackage new
-			packageName: eachPackageName;
-			realPackage: eachPackage.
-		self addDummyClassSiblingsToPackage: eachDummyPackage.
-		eachDummyPackage ].
-	
-	aDummyEnvironment dummyPackages: theDummyPackages ]
+			aDummyEnvironment dummyPackages: theDummyPackages ]
+]
+
+{ #category : #'private - generation' }
+GtPharoDummiesGenerator >> addDummyTraitsToPackage: aDummyPackage [
+	"Add amountOfTraits traits, each with one slot, before the classes of the package that use them"
+
+	| theDummyTraits |
+	theDummyTraits := (1 to: self amountOfTraits)
+			collect: [ :index | 
+				| aTraitName aSlotName |
+				aTraitName := ('T'
+						, aDummyPackage packageName asCamelCase asValidSelector capitalized
+						, 'Trait' , index printString) asSymbol.
+				aSlotName := ('traitSlot' , index printString) asSymbol.
+				GtPharoDummyClass new
+					className: aTraitName;
+					instVarNames: {aSlotName};
+					realClass: (GtPharoCodeModifier current
+							createTraitNamed: aTraitName
+							slots: {aSlotName}
+							package: aDummyPackage packageName
+							tag: nil);
+					yourself ].
+	aDummyPackage dummyTraits: theDummyTraits
 ]
 
 { #category : #'private - generation' }
@@ -295,6 +350,30 @@ GtPharoDummiesGenerator >> addDummyUnaryMethodsToClass: aDummyClass [
 ]
 
 { #category : #accessing }
+GtPharoDummiesGenerator >> amountOfClassSlots [
+	"The number of class-side instance variables of each generated class, 0 by default"
+
+	^ amountOfClassSlots
+]
+
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfClassSlots: aNumber [
+	amountOfClassSlots := aNumber
+]
+
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfClassVariables [
+	"The number of class variables of each generated class, 0 by default"
+
+	^ amountOfClassVariables
+]
+
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfClassVariables: aNumber [
+	amountOfClassVariables := aNumber
+]
+
+{ #category : #accessing }
 GtPharoDummiesGenerator >> amountOfClasses [
 	^ amountOfClasses
 ]
@@ -334,6 +413,77 @@ GtPharoDummiesGenerator >> amountOfPackages: anObject [
 	amountOfPackages := anObject
 ]
 
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfTraits [
+	"The number of traits of each generated package, 0 by default. Each trait has one slot, and the classes of the package whose superclass is Object use all of them"
+
+	^ amountOfTraits
+]
+
+{ #category : #accessing }
+GtPharoDummiesGenerator >> amountOfTraits: aNumber [
+	amountOfTraits := aNumber
+]
+
+{ #category : #'private - generation' }
+GtPharoDummiesGenerator >> compileDummyAccessorsOf: aVariableName in: aBehavior [
+	| aGetter aSetter |
+	aGetter := aVariableName asString uncapitalized.
+	aSetter := aGetter , ':'.
+	^ {aGetter -> (aGetter , String cr , String tab , '^ ' , aVariableName).
+		aSetter
+			-> (aSetter , ' anObject' , String cr , String tab , aVariableName , ' := anObject')}
+		collect: [ :each | 
+			GtPharoCodeModifier current
+				compileMethodSource: each value
+				in: aBehavior
+				protocol: 'accessing'.
+			GtPharoDummyMethod new
+				realMethod: aBehavior >> each key asSymbol;
+				selector: each key asSymbol;
+				protocol: 'accessing';
+				yourself ]
+]
+
+{ #category : #'private - generation' }
+GtPharoDummiesGenerator >> createDummyClass: aDummyClass superclass: aClass package: aPackageName tag: aTagName traits: someTraits [
+	"Create the real class of aDummyClass, with its class variables and class slots. Without class variables, class slots and traits, the class is created as before these options existed"
+
+	| classVariables classSlots aNewClass |
+	classVariables := (1 to: amountOfClassVariables)
+			collect: [ :index | (aDummyClass className , 'ClassVar' , index printString) asSymbol ].
+	classSlots := (1 to: amountOfClassSlots)
+			collect: [ :index | (aDummyClass className uncapitalized , 'ClassSlot' , index printString) asSymbol ].
+	aNewClass := (classVariables isEmpty
+			and: [ classSlots isEmpty and: [ someTraits isEmpty ] ])
+			ifTrue: [ aTagName
+					ifNil: [ GtPharoCodeModifier current
+							createSubclassOf: aClass
+							named: aDummyClass className
+							slots: aDummyClass instVarNames
+							package: aPackageName ]
+					ifNotNil: [ GtPharoCodeModifier current
+							createSubclassOf: aClass
+							named: aDummyClass className
+							slots: aDummyClass instVarNames
+							package: aPackageName
+							tag: aTagName ] ]
+			ifFalse: [ GtPharoCodeModifier current
+					createSubclassOf: aClass
+					named: aDummyClass className
+					slots: aDummyClass instVarNames
+					sharedVariables: classVariables
+					classSlots: classSlots
+					traits: someTraits
+					package: aPackageName
+					tag: aTagName ].
+	aDummyClass
+		realClass: aNewClass;
+		classVariableNames: classVariables;
+		classSlotNames: classSlots.
+	^ aNewClass
+]
+
 { #category : #'private - names' }
 GtPharoDummiesGenerator >> dummyClassNamesForPackageName: aPackageName [	
 	^ (1 to: amountOfClasses) collect: [ :index | (aPackageName asCamelCase asValidSelector capitalized, 'Class', index asString) asSymbol ]
@@ -365,6 +515,16 @@ GtPharoDummiesGenerator >> dummyPackageNames [
 GtPharoDummiesGenerator >> dummyPackageTagNames [
 	amountOfPackageTags isZero ifTrue: [ ^ #() ].
 	^ (1 to: amountOfPackageTags) collect: [ :index | ('Tag', index asString) asSymbol ]
+]
+
+{ #category : #'private - generation' }
+GtPharoDummiesGenerator >> dummyTraitsOf: aDummyPackage forSuperclass: aClass [
+	"The classes whose superclass is Object use the traits of their package; their subclasses inherit them"
+
+	aClass = Object ifFalse: [ ^ #() ].
+	^ (aDummyPackage ifNil: [ #() ] ifNotNil: [ :aPackage | aPackage dummyTraits ])
+		collect: [ :each | each realClass ]
+		as: Array
 ]
 
 { #category : #'private - set up' }
@@ -558,11 +718,14 @@ GtPharoDummiesGenerator >> generateSiblings [
 { #category : #initialization }
 GtPharoDummiesGenerator >> initialize [
 	super initialize.
-	
+
 	amountOfPackages := 2.
 	amountOfPackageTags := 0.
 	amountOfClasses := 2.
 	amountOfMethods := 2.
+	amountOfClassVariables := 0.
+	amountOfClassSlots := 0.
+	amountOfTraits := 0
 ]
 
 { #category : #'private - set up' }

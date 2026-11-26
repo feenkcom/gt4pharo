@@ -5,7 +5,8 @@ Class {
 		'packageName',
 		'realPackage',
 		'dummyClasses',
-		'dummyPackageTags'
+		'dummyPackageTags',
+		'dummyTraits'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
@@ -82,6 +83,20 @@ GtPharoDummyPackage >> dummyPackageTags: anObject [
 	dummyPackageTags := anObject
 ]
 
+{ #category : #accessing }
+GtPharoDummyPackage >> dummyTraits [
+	"The traits of the package, see GtPharoDummiesGenerator>>#amountOfTraits"
+
+	^ dummyTraits
+]
+
+{ #category : #accessing }
+GtPharoDummyPackage >> dummyTraits: aCollectionOfDummyClasses [
+	dummyTraits addAll: aCollectionOfDummyClasses.
+	aCollectionOfDummyClasses
+		do: [ :eachDummyTrait | eachDummyTrait dummyPackage: self ]
+]
+
 { #category : #'api - modifications' }
 GtPharoDummyPackage >> ensureRealClass: aClass [
 	"I register a new class as a dummy class.
@@ -131,9 +146,10 @@ GtPharoDummyPackage >> gtPackagesViewItemText [
 { #category : #initialization }
 GtPharoDummyPackage >> initialize [
 	super initialize.
-	
+
 	dummyClasses := OrderedCollection new.
 	dummyPackageTags := OrderedCollection new.
+	dummyTraits := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -166,10 +182,10 @@ GtPharoDummyPackage >> realPackage: anObject [
 
 { #category : #removing }
 GtPharoDummyPackage >> removeFromSystem [
-	realPackage
-		ifNil: [ ^ self ].
-		
+	realPackage ifNil: [ ^ self ].
+
 	dummyClasses do: [ :eachClass | eachClass removeFromSystem ].
+	dummyTraits do: [ :eachTrait | eachTrait removeFromSystem ].
 	dummyPackageTags do: [ :eachPackageTag | eachPackageTag removeFromSystem ].
 	GtPharoCodeModifier removePackage: realPackage.
 	realPackage := nil
