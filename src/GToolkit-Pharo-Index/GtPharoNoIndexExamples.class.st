@@ -186,9 +186,19 @@ GtPharoNoIndexExamples >> globalCache [
 			reject: [ :each | each beginsWith: 'TemporaryPackage' ].
 	self
 		assert: (indexOnly isEmpty and: [ noIndexOnly isEmpty ])
-		description: [ 'Index count: ' , index size printString , '; NoIndex count: '
+		description: [ | index2 index2Only |
+			index2 := GtPharoIndex current globalCache.
+			self
+				forPharo13AndNewer: [ index2 := index2 copyWithout: 'StackSignal' ]
+				forOlder: [  ].
+			index2Only := ((Set withAll: index2) difference: noIndex)
+					reject: [ :each | each beginsWith: 'TemporaryPackage' ].
+			'Index count: ' , index size printString , '; NoIndex count: '
 				, noIndex size printString , '; Index only: ' , indexOnly printString
-				, '; NoIndex only: ' , noIndexOnly printString ].
+				, '; NoIndex only: ' , noIndexOnly printString , '; Index2 count: '
+				, index2 size printString
+				, '; Index2 only (same as Index only means a stale index, empty means a race): '
+				, index2Only printString ].
 	^ {index.
 		noIndex}
 ]
