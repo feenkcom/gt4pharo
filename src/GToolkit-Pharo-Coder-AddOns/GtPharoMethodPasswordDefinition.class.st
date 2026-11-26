@@ -39,6 +39,16 @@ GtPharoMethodPasswordDefinition >> position: anInteger [
 	position := anInteger
 ]
 
+{ #category : #printing }
+GtPharoMethodPasswordDefinition >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self selector;
+		nextPut: $)
+]
+
 { #category : #accessing }
 GtPharoMethodPasswordDefinition >> selector [
 

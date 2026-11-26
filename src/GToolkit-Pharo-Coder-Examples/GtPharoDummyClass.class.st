@@ -7,7 +7,9 @@ Class {
 		'className',
 		'dummyMethods',
 		'dummyClassMethods',
-		'instVarNames'
+		'instVarNames',
+		'classVariableNames',
+		'classSlotNames'
 	],
 	#category : #'GToolkit-Pharo-Coder-Examples-Dummies'
 }
@@ -60,6 +62,28 @@ GtPharoDummyClass >> className [
 { #category : #accessing }
 GtPharoDummyClass >> className: anObject [
 	className := anObject
+]
+
+{ #category : #accessing }
+GtPharoDummyClass >> classSlotNames [
+	"The names of the instance variables of the class side"
+
+	^ classSlotNames ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtPharoDummyClass >> classSlotNames: aCollectionOfSymbols [
+	classSlotNames := aCollectionOfSymbols
+]
+
+{ #category : #accessing }
+GtPharoDummyClass >> classVariableNames [
+	^ classVariableNames ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtPharoDummyClass >> classVariableNames: aCollectionOfSymbols [
+	classVariableNames := aCollectionOfSymbols
 ]
 
 { #category : #'api - methods' }
