@@ -73,6 +73,15 @@ GtPharoMethodPasswordStylerExamples >> styleSourceCode: aSourceString attributeI
 	^ aSourceText
 ]
 
+{ #category : #'examples - styling' }
+GtPharoMethodPasswordStylerExamples >> styleToken [
+
+	<gtExample>
+	| aCode |
+	aCode := ZnClient name , ' new ' , 'token: ''a secret password'''.
+	^ self styleSourceCode: aCode attributeInterval: (22 to: 38)
+]
+
 { #category : #accessing }
 GtPharoMethodPasswordStylerExamples >> styleUsenamePassword [
 

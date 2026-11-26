@@ -12,7 +12,7 @@ GtSearchMethodsContainedInClassFilterCreationStringExamples >> classSlotReferenc
 	<gtExample>
 	^ self
 		assertCreatioCodeFor: (GtSearchClassSlotReferenceFilter forClass: Object andVariable: 'name')
-		equals: '(GtSearchClassSlotReferenceFilter forClass: Object andVariable: ''name'') withSubclasses'.
+		equals: '(GtSearchClassSlotReferenceFilter forClass: Object andVariable: #name) withSubclasses'.
 ]
 
 { #category : #examples }
@@ -27,7 +27,7 @@ GtSearchMethodsContainedInClassFilterCreationStringExamples >> classSlotReferenc
 		includeWriters: false.
 	^ self
 		assertCreatioCodeFor: filter
-		equals: '(GtSearchClassSlotReferenceFilter forClass: Object andVariable: ''name'') withSuperclasses; includeReaders: false; includeWriters: false'.
+		equals: '(GtSearchClassSlotReferenceFilter forClass: Object andVariable: #name) withSuperclasses; includeReaders: false; includeWriters: false'.
 ]
 
 { #category : #examples }
@@ -54,7 +54,7 @@ GtSearchMethodsContainedInClassFilterCreationStringExamples >> instanceSlotRefer
 	<gtExample>
 	^ self
 		assertCreatioCodeFor: (GtSearchInstanceSlotReferenceFilter forClass: Object andVariable: 'name')
-		equals: '(GtSearchInstanceSlotReferenceFilter forClass: Object andVariable: ''name'') withSubclasses'.
+		equals: '(GtSearchInstanceSlotReferenceFilter forClass: Object andVariable: #name) withSubclasses'.
 ]
 
 { #category : #examples }
@@ -69,7 +69,7 @@ GtSearchMethodsContainedInClassFilterCreationStringExamples >> instanceSlotRefer
 		includeWriters: false.
 	^ self
 		assertCreatioCodeFor: filter
-		equals: '(GtSearchInstanceSlotReferenceFilter forClass: Object andVariable: ''name'') withSuperclasses; includeReaders: false; includeWriters: false'.
+		equals: '(GtSearchInstanceSlotReferenceFilter forClass: Object andVariable: #name) withSuperclasses; includeReaders: false; includeWriters: false'.
 ]
 
 { #category : #examples }

@@ -143,6 +143,13 @@ GtPharoMethodPasswordStyler >> setBearerAuthentication [
 ]
 
 { #category : #selectors }
+GtPharoMethodPasswordStyler >> token [
+
+	<gtMethodPassword>
+	^ self registerSelector: #token: position: 1
+]
+
+{ #category : #selectors }
 GtPharoMethodPasswordStyler >> usernamePassword [
 
 	<gtMethodPassword>

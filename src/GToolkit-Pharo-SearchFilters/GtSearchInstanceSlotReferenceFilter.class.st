@@ -55,7 +55,7 @@ GtSearchInstanceSlotReferenceFilter >> filterValueString [
 { #category : #'initialize-release' }
 GtSearchInstanceSlotReferenceFilter >> forClass: aClass andVariable: aString [
 	self forClass: aClass.
-	variableName := aString
+	self variableName: aString
 ]
 
 { #category : #printing }

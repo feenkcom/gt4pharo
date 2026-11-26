@@ -470,7 +470,7 @@ GtExtractMethodToComponentController >> setPreviewOptionsOn: aRefactoring [
 GtExtractMethodToComponentController >> showReceiverType [
 	(receiver sameContentAs: 'self') ifTrue: [ ^ false ].
 	^ (sourceCoderViewModel behavior bindingOf: receiver asSymbol) value
-		ifNotNil: [ :value | (value isBehavior and: [ value name = receiver ]) not ]
+		ifNotNil: [ :value | (value isBehavior and: [ value name sameContentAs: receiver ]) not ]
 		ifNil: [ true ]
 ]
 

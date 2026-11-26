@@ -153,6 +153,18 @@ GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName sl
 ]
 
 { #category : #api }
+GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName slots: slotNameList sharedVariables: sharedVariablesList classSlots: classSlotNameList traits: aTraitCollection package: aPackageSymbol tag: aPackageTag [
+	^ self
+		critical: [ ((anExistingClass << aSubclassName)
+				slots: slotNameList;
+				sharedVariables: sharedVariablesList;
+				classSlots: classSlotNameList;
+				traits: aTraitCollection;
+				package: aPackageSymbol;
+				tag: aPackageTag) install ]
+]
+
+{ #category : #api }
 GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName slots: slotNameList sharedVariables: sharedVariablesList package: aPackageSymbol tag: aPackageTag [
 	^ self
 		critical: [
@@ -161,6 +173,15 @@ GtPharoCodeModifier >> createSubclassOf: anExistingClass named: aSubclassName sl
 					sharedVariables: sharedVariablesList;
 					package: aPackageSymbol;
 					tag: aPackageTag) install]
+]
+
+{ #category : #api }
+GtPharoCodeModifier >> createTraitNamed: aTraitName slots: slotNameList package: aPackageSymbol tag: aPackageTag [
+	^ self
+		critical: [ ((Trait << aTraitName)
+				slots: slotNameList;
+				package: aPackageSymbol;
+				tag: aPackageTag) install ]
 ]
 
 { #category : #'mutual exclusion' }

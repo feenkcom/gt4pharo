@@ -54,6 +54,13 @@ GtPharoExampleStateFilter >> initialize [
 	resultState := self class defaultState
 ]
 
+{ #category : #testing }
+GtPharoExampleStateFilter >> isMethodPragmaFilter [
+	"Not the filter of the Pragma drop-down: it filters examples by their result state"
+
+	^ false
+]
+
 { #category : #accessing }
 GtPharoExampleStateFilter >> pharoExampleSuite [
 

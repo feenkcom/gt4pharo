@@ -17,17 +17,13 @@ GtCoderExampleFailureStyler >> extraStyle: aText ast: theAst [
 	| usedExample exampleStackFrame pcRangeInterval highlightColor subText |
 	super extraStyle: aText ast: theAst.
 
-	self coderViewModel ifNil: [ ^ self ].
-	
-	"It is preferable not to highlight example errors if code is modified,
+	self coderViewModel ifNil: [ ^ self ].	"It is preferable not to highlight example errors if code is modified,
 	since the text range does not corresponds to the PC range interval."
-	self coderViewModel isModified ifTrue: [ ^ self ].
-
-	"We want to highlight preferable current coder example.
+	self coderViewModel isModified ifTrue: [ ^ self ].	"We want to highlight preferable current coder example.
 	In case it does not exist, we highlight coder example or our parent coder
 	(which is a case of expanded method coders)."
-	usedExample := self coderViewModel example 
-		ifNil: [ self coderViewModel parentExample ].
+	usedExample := self coderViewModel example
+			ifNil: [ self coderViewModel parentExample ].
 	usedExample ifNil: [ ^ self ].
 
 	(self hasFailureOrErrorResultInExample: usedExample) ifFalse: [ ^ self ].
@@ -36,15 +32,15 @@ GtCoderExampleFailureStyler >> extraStyle: aText ast: theAst [
 	(exampleStackFrame isNil or: [ exampleStackFrame isDead ]) ifTrue: [ ^ self ].
 
 	pcRangeInterval := exampleStackFrame pcRangeContextIsActive: false.
-	highlightColor :=  (usedExample returnValue isKindOf: AssertionFailure)
-		ifTrue: [ BrGlamorousColors debuggerTextHighlightColor ]
-		ifFalse: [ BrGlamorousColors errorBackgroundColor ].
-		
-	subText := aText 
-		from: (pcRangeInterval first min: aText text size)
-		to: (pcRangeInterval last min: aText text size).
-		
-	self styleBlock cull: subText cull: highlightColor.
+	highlightColor := (usedExample returnValue isKindOf: AssertionFailure)
+			ifTrue: [ self theme status failureBackgroundColor ]
+			ifFalse: [ self theme status errorBackgroundColor ].
+
+	subText := aText
+			from: (pcRangeInterval first min: aText text size)
+			to: (pcRangeInterval last min: aText text size).
+
+	self styleBlock cull: subText cull: highlightColor
 ]
 
 { #category : #accessing }
