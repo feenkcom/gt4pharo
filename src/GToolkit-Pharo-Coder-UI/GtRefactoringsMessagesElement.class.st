@@ -80,10 +80,12 @@ GtRefactoringsMessagesElement >> unsubscribeFromRefactoringsViewModel [
 
 { #category : #'private - updating' }
 GtRefactoringsMessagesElement >> updateAsComputedRefactorings: aComputedRefactorings [
-	aComputedRefactorings errorMessages ifNotEmpty: [ 
-		^ self updateAsComputedRefactoringsWithErrorMessages: aComputedRefactorings ].
-	aComputedRefactorings notificationMessages ifNotEmpty: [ 
-		^ self updateAsComputedRefactoringsWithNotificationMessages: aComputedRefactorings ]
+	aComputedRefactorings errorMessages
+		ifNotEmpty: [ ^ self updateAsComputedRefactoringsWithErrorMessages: aComputedRefactorings ].
+	aComputedRefactorings notificationMessages
+		ifNotEmpty: [ ^ self
+				updateAsComputedRefactoringsWithNotificationMessages: aComputedRefactorings ].
+	self updateAsHiddenMessages
 ]
 
 { #category : #'private - updating' }
