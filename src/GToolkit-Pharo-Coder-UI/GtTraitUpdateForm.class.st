@@ -22,17 +22,21 @@ GtTraitUpdateForm >> commit [
 
 { #category : #accessing }
 GtTraitUpdateForm >> onTrait: aTrait [
+	"The form edits the names as text: hold them as Strings, as its editors write them"
+
 	self newClassName: aTrait name.
 	self
-		slots: ((aTrait slots select: [ :aSlot | aSlot definingClass = aTrait ]) collect: #name).
-	self traits: (aTrait traits collect: #name).
+		slots: ((aTrait slots select: [ :aSlot | aSlot definingClass = aTrait ])
+				collect: [ :each | each name asString ]).
+	self traits: (aTrait traits collect: [ :each | each name asString ]).
 	self
 		packageAndTagName: (GtPackageAndTagName new
-				packageName: aTrait package name;
-				tagName: ((aTrait package tagOrNilOf: aTrait) ifNotNil: [ :v | v name ])).
+				packageName: aTrait package name asString;
+				tagName: ((aTrait package tagOrNilOf: aTrait) ifNotNil: [ :v | v name asString ])).
 	self
 		classSlots: ((aTrait classSide slots
-				select: [ :aSlot | aSlot definingClass = aTrait classSide ]) collect: #name)
+				select: [ :aSlot | aSlot definingClass = aTrait classSide ])
+				collect: [ :each | each name asString ])
 ]
 
 { #category : #accessing }

@@ -184,6 +184,27 @@ GtBaseRefactoringExamples >> failRenameProtocol [
 	^ self shouldThrowError: refactoring
 ]
 
+{ #category : #examples }
+GtBaseRefactoringExamples >> removeTraitGivenByTypedName [
+	"A trait name typed by the user (a String) is removed from a trait composition, as the precondition finds it"
+
+	<gtExample>
+	<return: #GtRBRemoveTraitUsageRefactoring>
+	| refactoring |
+	refactoring := GtRBRemoveTraitUsageRefactoring
+			traitName: 'TSmaCCParseNodeVisitor'
+			class: self class.
+	self
+		assert: (refactoring
+				removeTraitFromExpression: (RBParser parseExpression: 'TSmaCCParseNodeVisitor')) isNil.
+	self
+		assert: (refactoring
+				removeTraitFromExpression: (RBParser parseExpression: 'TSmaCCParseNodeVisitor + TGtExampleAssertable'))
+				formattedCode
+		equals: 'TGtExampleAssertable'.
+	^ refactoring
+]
+
 { #category : #private }
 GtBaseRefactoringExamples >> shouldThrowError: refactoring [
 	[ refactoring primitiveExecute ]
