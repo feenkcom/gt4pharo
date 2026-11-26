@@ -1164,10 +1164,11 @@ GtPharoMethodCoderByScripterExamples >> checkHighlighted: anInteger includeKeywo
 						label: 'Check editor border - ' , i printString;
 						on: GtRenameEditor index: i;
 						value: [ :each | each border paint color ]
-							equals: [ i = anInteger
+							equals: [ :each | 
+								i = anInteger
 									ifTrue: [ BrGlamorousColors textHighlightColor ]
 									ifFalse: [ i = 1
-											ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
+											ifTrue: [ each theme editor focusedBorderColor ]
 											ifFalse: [ BrGlamorousColors editorBorderColor ] ] ] ].
 			scripter
 				checkStep: [ :s | 
@@ -1175,10 +1176,11 @@ GtPharoMethodCoderByScripterExamples >> checkHighlighted: anInteger includeKeywo
 						label: 'Check editor border - ' , i printString;
 						on: GtRenameEditor index: i;
 						value: [ :each | each border paint color ]
-							equals: [ i = anInteger
+							equals: [ :each | 
+								i = anInteger
 									ifTrue: [ BrGlamorousColors textHighlightColor ]
 									ifFalse: [ i = 1
-											ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
+											ifTrue: [ each theme editor focusedBorderColor ]
 											ifFalse: [ BrGlamorousColors editorBorderColor ] ] ] ] ]
 ]
 
@@ -3597,6 +3599,82 @@ GtPharoMethodCoderByScripterExamples >> extractToComponent [
 		equals: (RBParser
 				parseMethod: 'someNewMethodName: aGtPharoMethodCoderByScripterExamples self add: aGtPharoMethodCoderByScripterExamples. self add: Object. ^self')
 				formattedCode.
+
+	^ scripter
+]
+
+{ #category : #'examples - extract method' }
+GtPharoMethodCoderByScripterExamples >> extractToComponentWithClassReceiver [
+	"Extract code that reads a class and choose the class as the receiver: the receiver is the class, there is no receiver type to edit"
+
+	<gtExample>
+	| scripter source count found |
+	source := self class sourceCodeAt: #sampleMethod.
+	scripter := self
+			scripterForBlock: [ GtPharoMethodCoder forMethod: self class >> #sampleMethod ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Select part of the method to extract';
+				action: [ :aSourceEditor | 
+					aSourceEditor selecter
+						from: (source indexOf: $.) + 1 to: source size;
+						select ];
+				id: GtSourceCoderEditorId ].
+
+	self openContextMenu: scripter.
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click extract method';
+				onSpaceRoot;
+				id: GtMethodCoderExtractMethodContextMenuItemId ].
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Selector has focus';
+				hasFocus;
+				// GtRenameEditor ].
+
+	scripter keyDown
+		key: BlKeyboardKey shiftLeft;
+		play.
+	(scripter keyPress: BlKeyboardKey tab) play.
+	scripter keyUp
+		key: BlKeyboardKey shiftLeft;
+		play.
+
+	scripter
+		checkStep: [ :s | 
+			s
+				label: 'Receiver has focus';
+				hasFocus;
+				// #receiverDropDown ].
+
+	(scripter keyPress: BlKeyboardKey arrowDown) play.
+
+	count := 0.
+	found := false.
+	[ found or: [ count > 20 ] ]
+		whileFalse: [ scripter
+				doStep: [ :s | 
+					s
+						onSpaceRoot;
+						// #receiverList;
+						block: [ :list | found := list selectedItems first sameContentAs: 'Object' ] ].
+			found ifFalse: [ (scripter keyPress: BlKeyboardKey arrowDown) play ].
+			count := count + 1 ].
+	self assert: found.
+
+	(scripter keyPress: BlKeyboardKey return) play.
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'No receiver type to edit';
+				value: [ :anElement | (anElement query // #editableLabel) all size ] equals: 0 ].
 
 	^ scripter
 ]

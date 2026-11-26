@@ -23,7 +23,8 @@ GtPharoInterestingIntervalStyler >> extraStyle: aText ast: theAst [
 
 	super extraStyle: aText ast: theAst.
 	(aText from: interval first to: interval last)
-		highlight: BrGlamorousColors debuggerTextHighlightColor
+		underlineColor: self theme editor sourceReferenceHighlight
+		thickness: GtSourceReferenceHighlighter highlightAttribute thickness
 ]
 
 { #category : #comparing }

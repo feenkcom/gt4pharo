@@ -67,7 +67,7 @@ GtPharoPackageTagCoderElement >> buildPackageTagLabel [
 	tagNameEditor editor
 		when: BrTextEditorModifiedEvent
 		do: [ :anEvent | 
-			anEvent text asString = packageTagCoder packageTag name
+			(anEvent text asString sameContentAs: packageTagCoder packageTag name)
 				ifTrue: [ previewButton visibility: BlVisibility gone ]
 				ifFalse: [ previewButton visibility: BlVisibility visible ] ].
 

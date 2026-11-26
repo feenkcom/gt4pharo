@@ -35,3 +35,10 @@ GtSearchPragmasWithArgumentsFilter >> includesMethod: aCompiledMethod [
 GtSearchPragmasWithArgumentsFilter >> initialize [
 	arguments := {}
 ]
+
+{ #category : #testing }
+GtSearchPragmasWithArgumentsFilter >> isMethodPragmaFilter [
+	"Not the filter of the Pragma drop-down"
+
+	^ false
+]

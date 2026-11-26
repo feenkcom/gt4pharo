@@ -217,6 +217,35 @@ GtPharoPackageCoderExamples >> registerUnregisteredPackageWithoutCoderWhenUnsubs
 	^ aPackageCoder
 ]
 
+{ #category : #'examples - rename' }
+GtPharoPackageCoderExamples >> renamePreviewHiddenForTheSameName [
+	"The rename preview of the package coder is shown while the typed name differs from the package name,
+	and hidden again when the typed name is the package name (the text is a String, the package name a Symbol)"
+
+	<gtExample>
+	<return: #GtRefactoringsInDropdownPreviewElement>
+	| element editor preview packageName |
+	packageName := self class package name.
+	element := (GtPharoPackageCoder forPackage: self class package) asCoderViewModel asElement.
+	element
+		allChildrenBreadthFirstDo: [ :each | 
+			(editor isNil and: [ each isKindOf: BrEditableLabel ]) ifTrue: [ editor := each ].
+			(preview isNil and: [ each isKindOf: GtRefactoringsInDropdownPreviewElement ])
+				ifTrue: [ preview := each ] ].
+	self assert: editor text asString equals: packageName asString.
+	self assert: preview visibility class equals: BlVisibilityGone.
+
+	editor text: (packageName , 'X') asRopedText.
+	self assert: preview visibility class equals: BlVisibilityVisible.
+
+	editor editor deleter
+		from: editor text size - 1 to: editor text size;
+		delete.
+	self assert: editor text asString equals: packageName asString.
+	self assert: preview visibility class equals: BlVisibilityGone.
+	^ preview
+]
+
 { #category : #'examples - package rename' }
 GtPharoPackageCoderExamples >> renameRegisteredPackageWhenSubscribedToSystem [
 	<gtExample>

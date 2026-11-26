@@ -175,3 +175,18 @@ GtClassUpdateFormExamples >> simpleForm [
 GtClassUpdateFormExamples >> simpleFormOnObject [
 	^ self formClass onClass: Object
 ]
+
+{ #category : #examples }
+GtClassUpdateFormExamples >> simpleFormOnObjectHoldsNamesAsStrings [
+	"The form edits the names of a class as text and its editors write Strings:
+	it holds the names as Strings, so that a name typed back does not change the form"
+
+	<gtExample>
+	<return: #GtClassUpdateForm>
+	| form |
+	form := self simpleFormOnObject.
+	self assert: form superclassName equals: 'ProtoObject'.
+	self assert: form packageAndTagName packageName equals: 'Kernel'.
+	self assert: form packageAndTagName tagName equals: 'Objects'.
+	^ form
+]

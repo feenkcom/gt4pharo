@@ -30,7 +30,9 @@ RBRenameClassChange >> gtIsForClassHierarchy: aSymbol [
 
 { #category : #'*GToolkit-Pharo-GtRefactorings' }
 RBRenameClassChange >> gtIsForClassNamed: aSymbol [
-	^ (oldName = aSymbol or: [ newName = aSymbol ])
+	"aSymbol can be the text typed in the In class filter"
+
+	^ ((oldName sameContentAs: aSymbol) or: [ newName sameContentAs: aSymbol ])
 		or: [ self changes anySatisfy: [ :each | each gtIsForClassNamed: aSymbol ] ]
 ]
 

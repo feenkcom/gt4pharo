@@ -20,7 +20,7 @@ RBAddClassChange class >> definitionBlockFrom: aString [
 						with: node arguments
 						do: [ :key :arg | 
 							(#(subclass: variableByteSubclass: variableSubclass: variableWordSubclass: weakSubclass: #'<<')
-								includes: key)
+								includes: key asSymbol)
 								ifTrue: [ builder superclass: (Smalltalk at: node receiver name asSymbol).
 									builder name: arg value.
 									key = 'variableByteSubclass:'
