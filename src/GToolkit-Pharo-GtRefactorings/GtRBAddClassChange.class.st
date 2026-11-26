@@ -192,7 +192,6 @@ GtRBAddClassChange >> generateChanges [
 	^ definitionString
 		ifNotNil: [ (self class compiler
 				source: self convertDefinitionString;
-				logged: true;
 				evaluate) fluidInstall ]
 		ifNil: [ super generateChanges ]
 ]

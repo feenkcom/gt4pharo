@@ -43,7 +43,7 @@ GtVariableDefinition >> name [
 
 { #category : #accessing }
 GtVariableDefinition >> name: anObject [
-	name := anObject
+	name := anObject ifNotNil: [ :aName | aName asSymbol ]
 ]
 
 { #category : #initialization }

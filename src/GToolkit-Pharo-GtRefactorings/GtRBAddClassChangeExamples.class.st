@@ -5,6 +5,23 @@ Class {
 }
 
 { #category : #examples }
+GtRBAddClassChangeExamples >> addClassChangeFromSubclassDefinitionString [
+	"A class definition string with the subclass: message: the keywords of the parsed message are Strings"
+
+	<gtExample>
+	<return: #RBAddClassChange>
+	| change |
+	change := RBAddClassChange
+			definitionString: 'Object subclass: #GtRBAddClassChangeExamplesUndefinedClass
+	instanceVariableNames: ''a''
+	classVariableNames: ''''
+	package: ''GToolkit-Pharo-GtRefactorings'''.
+	self assert: change changeClassName equals: #GtRBAddClassChangeExamplesUndefinedClass.
+	self assert: (Smalltalk includesKey: #GtRBAddClassChangeExamplesUndefinedClass) not.
+	^ change
+]
+
+{ #category : #examples }
 GtRBAddClassChangeExamples >> classSlots [
 	<gtExample>
 	| change |

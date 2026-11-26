@@ -11,7 +11,7 @@ GtStackContextVariableValueStyler >> valueForVariableNamed: aVariableName ifPres
 	value := coderViewModel context readVariableNamed: aVariableName.
 	^ value
 		ifNotNil: [ :val | 
-			(val isBehavior and: [ val name = aVariableName ])
+			(val isBehavior and: [ val name sameContentAs: aVariableName ])
 				ifTrue: [ absentBlock value ]
 				ifFalse: [ presentBlock value: val ] ]
 		ifNil: absentBlock

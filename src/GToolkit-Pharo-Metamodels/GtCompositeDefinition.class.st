@@ -61,7 +61,7 @@ GtCompositeDefinition >> hasDefinitionNamed: aSymbol [
 	<return: #Boolean>
 
 	^ definitions
-		detect: [ :eachDefinition | eachDefinition name = aSymbol ]
+		detect: [ :eachDefinition | eachDefinition name = aSymbol asSymbol ]
 		ifFound: [ true ]
 		ifNone: [ false ]
 ]

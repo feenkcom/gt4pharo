@@ -60,8 +60,8 @@ GtTagDefinition >> fromBehavior: aBehavior [
 		
 	aTagString := aTagString trimBoth: [ :aChar | (aChar = $-) or: [ aChar isSeparator ] ].
 
-	name := aTagString.
-	originalName := aTagString
+	name := aTagString asSymbol.
+	originalName := name
 ]
 
 { #category : #initialization }

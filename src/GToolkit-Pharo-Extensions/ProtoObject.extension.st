@@ -7,14 +7,15 @@ ProtoObject >> gtMetaFor: aView [
 		title: 'Meta';
 		priority: 200;
 		stencil: [ | container |
-			container := BrVerticalPane new
-					matchParent;
-					background: BrGlamorousColors backdropColor.
+			container := BrVerticalPane new.
+			container
+				matchParent;
+				background: container theme default backdropBackground.
 			container
 				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
 				addChild: ((GtCoderElement forObject: self)
 						disablePlayPage;
 						margin: (BlInsets all: 10);
-						background: Color white;
+						background: container theme default contentBackground;
 						addAptitude: BrShadowAptitude) ]
 ]

@@ -107,6 +107,26 @@ GtExtractToTemporaryRefactoringExamples >> extractTemp [
 	^ model changes gtAllChanges last
 ]
 
+{ #category : #'examples - names' }
+GtExtractToTemporaryRefactoringExamples >> safeTemporaryNameSkipsInstanceVariables [
+	"The name of an extracted temporary does not shadow an instance variable"
+
+	<gtExample>
+	<return: #GtPharoMethodCoder>
+	| behavior coder |
+	behavior := Smalltalk anonymousClassInstaller
+			make: [ :aBuilder | 
+				aBuilder
+					superclass: Object;
+					slots: #(#_ #t0) ].
+	coder := GtPharoMethodCoder forNewMethod: behavior.
+	coder currentSourceString: 'three ^ 3 + 4'.
+
+	self assert: coder safeTemporaryName equals: 't1'.
+
+	^ coder
+]
+
 { #category : #'as yet unclassified' }
 GtExtractToTemporaryRefactoringExamples >> variableIsAssigned [
 	<gtExample>

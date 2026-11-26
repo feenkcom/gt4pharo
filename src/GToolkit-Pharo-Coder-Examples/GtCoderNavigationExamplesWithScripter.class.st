@@ -25,7 +25,7 @@ GtCoderNavigationExamplesWithScripter >> elementHasSelectionBackground: anElemen
 	^ anElement withAllParents
 		anySatisfy: [ :p | 
 			p background class = BlPaintBackground
-				and: [ p background paint color = BrGlamorousColors selectedListItemColor ] ]
+				and: [ p background paint color = p theme item selectedColor ] ]
 ]
 
 { #category : #accessing }

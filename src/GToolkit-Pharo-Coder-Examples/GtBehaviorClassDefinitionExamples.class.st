@@ -58,6 +58,91 @@ GtBehaviorClassDefinitionExamples >> fromClass [
 	^ aDefinition
 ]
 
+{ #category : #'examples - differences' }
+GtBehaviorClassDefinitionExamples >> renameClassVariableWithStrings [
+	"The editor passes the names as Strings"
+
+	<gtExample>
+	<return: #GtClassDefinition>
+	| definition |
+	definition := self fromClass.
+	definition classVariables renameClassVariableNamed: 'ClassVarA' to: 'ClassVarX'.
+
+	self assert: (definition classVariables hasDefinitionNamed: #ClassVarX).
+	self assert: (definition classVariables hasDefinitionNamed: #ClassVarA) not.
+	self assert: (definition classVariables classVariableNamed: #ClassVarX) name isSymbol.
+	self
+		assert: (definition differenceWith: (GtClassDefinition fromClass: self targetClass)) hasDifference.
+
+	^ definition
+]
+
+{ #category : #'examples - differences' }
+GtBehaviorClassDefinitionExamples >> renameSlotWithStrings [
+	"The editor passes the names as Strings"
+
+	<gtExample>
+	<return: #GtClassDefinition>
+	| definition |
+	definition := self fromClass.
+	definition slots renameSlotNamed: 'instVarA' to: 'instVarX'.
+
+	self assert: (definition slots hasDefinitionNamed: #instVarX).
+	self assert: (definition slots hasDefinitionNamed: #instVarA) not.
+	self
+		assert: (definition differenceWith: (GtClassDefinition fromClass: self targetClass)) hasDifference.
+
+	^ definition
+]
+
+{ #category : #'examples - differences' }
+GtBehaviorClassDefinitionExamples >> sameClassVariableIsNoDifference [
+	"Setting a class variable name to the text it already has changes nothing"
+
+	<gtExample>
+	<return: #GtClassDefinition>
+	| definition |
+	definition := self fromClass.
+	(definition classVariables classVariableNamed: #ClassVarA) name: 'ClassVarA'.
+
+	self assert: (definition classVariables classVariableNamed: #ClassVarA) name isSymbol.
+	self
+		assert: (definition differenceWith: (GtClassDefinition fromClass: self targetClass)) hasDifference not.
+
+	^ definition
+]
+
+{ #category : #'examples - differences' }
+GtBehaviorClassDefinitionExamples >> sameTagIsNoDifference [
+	"Setting the tag to the text it already has changes nothing"
+
+	<gtExample>
+	<return: #GtClassDefinition>
+	| definition |
+	definition := self fromClass.
+	definition category tag name: 'Dummies'.
+
+	self
+		assert: (definition differenceWith: (GtClassDefinition fromClass: self targetClass)) hasDifference not.
+
+	^ definition
+]
+
+{ #category : #'examples - differences' }
+GtBehaviorClassDefinitionExamples >> tagFromClassIsSymbol [
+	"The tag read from a class is a Symbol, as the tag the editor sets"
+
+	<gtExample>
+	<return: #GtClassDefinition>
+	| definition |
+	definition := self fromClass.
+
+	self assert: definition category tag name equals: #Dummies.
+	self assert: definition category tag name isSymbol.
+
+	^ definition
+]
+
 { #category : #access }
 GtBehaviorClassDefinitionExamples >> targetClass [
 	^ GtBehaviorCoderDummyClass

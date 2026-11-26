@@ -29,9 +29,12 @@ GtPharoNoIndex >> asyncImplementersForWord: aString [
 	words := self searchWordsFrom: aString.
 	^ (self class environment allBehaviors asAsyncStream
 		collect: [ :each | 
-			(each methods
-				select: [ :method | method isFromTrait not and: [ self does: method selector matchWords: words ] ])
-				asOrderedCollection asAsyncStream ]) flatten
+			((each methods
+				select: [ :method | 
+					(self isIgnoredMethod: method) not
+						and: [ self does: method selector matchWords: words ] ])
+				collect: [ :method | method gtIndexMethod ]) asOrderedCollection
+				asAsyncStream ]) flatten
 ]
 
 { #category : #'accessing - implementers' }
@@ -58,9 +61,10 @@ GtPharoNoIndex >> asyncSelectorsForWord: aString [
 			| selectors |
 			selectors := OrderedCollection new.
 			each
-				methodsDo: [ :method | 
-					method isFromTrait
-						ifFalse: [ | literalBlock |
+				methodsDo: [ :installedMethod | 
+					(self isIgnoredMethod: installedMethod)
+						ifFalse: [ | method literalBlock |
+							method := installedMethod gtOriginalMethod.
 							(self does: method selector matchWords: words)
 								ifTrue: [ selectors add: method selector ].
 							literalBlock := [ :literal | 
@@ -128,7 +132,7 @@ GtPharoNoIndex >> globalVariableReferencesTo: aVariable [
 		do: [ :class | 
 			class
 				methodsDo: [ :each | 
-					(each isFromTrait not
+					((self isIgnoredMethod: each) not
 						and: [ (each refersToLiteral: aVariable)
 								or: [ each hasSelector: aVariable name specialSelectorIndex: special ] ])
 						ifTrue: [ references add: each ] ] ].
@@ -146,11 +150,14 @@ GtPharoNoIndex >> implementersDo: aBlock [
 	implementers := IdentitySet new.
 	self class environment allBehaviors
 		do: [ :class | 
-			class selectors
-				do: [ :sel | 
-					(implementers includes: sel)
-						ifFalse: [ implementers add: sel.
-							aBlock value: sel ] ] ]
+			class
+				methodsDo: [ :method | 
+					(self isIgnoredMethod: method)
+						ifFalse: [ | selector |
+							selector := method selector.
+							(implementers includes: selector)
+								ifFalse: [ implementers add: selector.
+									aBlock value: selector ] ] ] ]
 ]
 
 { #category : #'accessing - implementers' }
@@ -162,13 +169,18 @@ GtPharoNoIndex >> implementersOf: aSymbol [
 			(class includesSelector: aSymbol)
 				ifTrue: [ | method |
 					method := class >> aSymbol.
-					method isFromTrait ifFalse: [ implementers add: method ] ] ].
+					(self isIgnoredMethod: method) ifFalse: [ implementers add: method ] ] ].
 	^ implementers
 ]
 
 { #category : #testing }
 GtPharoNoIndex >> isActive [
 	^ true
+]
+
+{ #category : #private }
+GtPharoNoIndex >> isIgnoredMethod: aMethod [
+	^ aMethod isFromTrait or: [ aMethod methodClass isAnonymous ]
 ]
 
 { #category : #accessing }
@@ -200,7 +212,7 @@ GtPharoNoIndex >> sendersOf: aSymbol [
 		do: [ :class | 
 			class
 				methodsDo: [ :each | 
-					(each isFromTrait not
+					((self isIgnoredMethod: each) not
 						and: [ each hasSelector: aSymbol specialSelectorIndex: special ])
 						ifTrue: [ senders add: each ] ] ].
 	^ senders

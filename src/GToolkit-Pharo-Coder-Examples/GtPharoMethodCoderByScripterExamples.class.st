@@ -1164,10 +1164,11 @@ GtPharoMethodCoderByScripterExamples >> checkHighlighted: anInteger includeKeywo
 						label: 'Check editor border - ' , i printString;
 						on: GtRenameEditor index: i;
 						value: [ :each | each border paint color ]
-							equals: [ i = anInteger
+							equals: [ :each | 
+								i = anInteger
 									ifTrue: [ BrGlamorousColors textHighlightColor ]
 									ifFalse: [ i = 1
-											ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
+											ifTrue: [ each theme editor focusedBorderColor ]
 											ifFalse: [ BrGlamorousColors editorBorderColor ] ] ] ].
 			scripter
 				checkStep: [ :s | 
@@ -1175,10 +1176,11 @@ GtPharoMethodCoderByScripterExamples >> checkHighlighted: anInteger includeKeywo
 						label: 'Check editor border - ' , i printString;
 						on: GtRenameEditor index: i;
 						value: [ :each | each border paint color ]
-							equals: [ i = anInteger
+							equals: [ :each | 
+								i = anInteger
 									ifTrue: [ BrGlamorousColors textHighlightColor ]
 									ifFalse: [ i = 1
-											ifTrue: [ BrGlamorousColors focusedEditorBorderColor ]
+											ifTrue: [ each theme editor focusedBorderColor ]
 											ifFalse: [ BrGlamorousColors editorBorderColor ] ] ] ] ]
 ]
 

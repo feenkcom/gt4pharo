@@ -138,10 +138,8 @@ GtPharoStyler >> parenthesesColorAt: anIndex [
 
 { #category : #private }
 GtPharoStyler >> parenthesesColors [
-	| colors |
-	colors := BrGlamorousColors distinctTenStrongColors allButFirst
-		collect: [ :each | each twiceDarker ].
-	^ colors
+	^ self theme default distinctTenStrongColors allButFirst
+		collect: [ :aColor | aColor transformColor: [ :aConcreteColor | aConcreteColor ] ]
 ]
 
 { #category : #accessing }

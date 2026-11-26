@@ -53,19 +53,16 @@ GtPharoBehaviorCoder >> behavior [
 ]
 
 { #category : #accessing }
-GtPharoBehaviorCoder >> classIconAddOnsInto: coderAddOns for: aViewModel [ 
+GtPharoBehaviorCoder >> classIconAddOnsInto: coderAddOns for: aViewModel [
 	<gtAstCoderAddOns: 10>
 	| iconName |
-	
 	iconName := self behavior gtCustomSystemIconNameOrNil.
-	iconName ifNil: [ 
-		"We only show the icon in case it is a custom one"
-		^ self ].
-	
+	iconName ifNil: [  "We only show the icon in case it is a custom one"^ self ].
+
 	coderAddOns
 		addPreview: 'Class Icon'
-		stencil: [ 
-			(aViewModel behavior gtSafeIconNamed: iconName) asElement ]
+		stencil: [ (aViewModel behavior gtThemedClassIconNamed: iconName)
+				ifNil: [ (aViewModel behavior gtSafeIconNamed: iconName) asElement ] ]
 ]
 
 { #category : #accessing }

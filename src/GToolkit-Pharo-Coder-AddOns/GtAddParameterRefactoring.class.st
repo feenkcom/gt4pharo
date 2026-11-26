@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 GtAddParameterRefactoring >> checkSendersAccessTo: name [
 	| classes |
-	(#('self' 'super') includes: name) ifTrue: [ ^ self ].
+	(#('self' 'super') includes: name asString) ifTrue: [ ^ self ].
 	classes := Dictionary new.
 	self model
 		allReferencesTo: oldSelector

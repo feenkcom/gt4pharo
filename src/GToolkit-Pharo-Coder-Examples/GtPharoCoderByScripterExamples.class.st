@@ -1200,7 +1200,7 @@ GtPharoCoderByScripterExamples >> checkSelectionForExtractTemporary [
 	<gtExample>
 	| scripter source method from to |
 	method := self class >> #sampleMethodForRefactoringExample.
-	scripter := self coderInPager: [ GtCoderElement forMethod: method ].
+	scripter := self coderWithSampleMethodForRefactoringExample.
 	source := method sourceCode.
 	from := source indexOfSubCollection: 'e:'.
 	to := source indexOf: $n startingAt: from.
@@ -1760,6 +1760,27 @@ GtPharoCoderByScripterExamples >> coderWithBigMethodReference [
 GtPharoCoderByScripterExamples >> coderWithDummyTwoObjectInstanceInPager [
 	<gtExample>
 	^ self coderInPager: [ GtCoderElement forObject: GtPharoDummyTwoObject new ]
+]
+
+{ #category : #examples }
+GtPharoCoderByScripterExamples >> coderWithSampleMethodForRefactoringExample [
+	<gtExample>
+	| method scripter |
+	method := self class >> #sampleMethodForRefactoringExample.
+	scripter := self
+			coderInPager: [ GtPharoStreamingMethodsCoderElement new
+					streamingCodersViewModel: (GtPharoStreamingMethodsCoderViewModel new
+							shouldExpandByDefault: true;
+							streamingCodersModel: (GtPharoStreamingMethodsCoder
+									forFilter: (GtSearchFixedMethodsFilter new methods: {method}));
+							yourself) ].
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'Assert the sample method editor is expanded';
+				// GtSourceCoderEditorId;
+				value: [ :editor | editor text asString ] equals: method sourceCode ].
+	^ scripter
 ]
 
 { #category : #'examples - scrolling' }
