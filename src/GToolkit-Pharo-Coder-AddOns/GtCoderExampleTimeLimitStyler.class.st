@@ -35,7 +35,7 @@ GtCoderExampleTimeLimitStyler >> timeLimitDecorationTextFor: aNumberOfMillisecon
 		ifNotNil: [ :aString | 
 			aString asRopedText
 				glamorousCodeFontAndSize;
-				foreground: BrGlamorousColors disabledButtonTextColor;
+				foreground: self theme button disabledTextColor;
 				yourself ]
 ]
 
