@@ -233,6 +233,19 @@ GtPharoExampleSuiteExamples >> closeDropdownWithRemoteToggleSelected [
 	^ aScripter
 ]
 
+{ #category : #'examples - example suite' }
+GtPharoExampleSuiteExamples >> exampleStateFilterIsNotMethodPragmaFilter [
+	"The example state filter selects examples (methods with the gtExample pragma) by their result state:
+	the coder keeps it when it lists the pragmas that its Pragma filter can choose from"
+
+	<gtExample>
+	<return: #GtPharoExampleStateFilter>
+	| filter |
+	filter := GtPharoExampleStateFilter new.
+	self assert: filter isMethodPragmaFilter not.
+	^ filter
+]
+
 { #category : #'examples - dummy examples' }
 GtPharoExampleSuiteExamples >> numberOfExamples [
 	<gtExample>

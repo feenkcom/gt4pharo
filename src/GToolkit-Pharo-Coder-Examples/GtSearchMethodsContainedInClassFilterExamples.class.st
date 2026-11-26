@@ -23,6 +23,26 @@ GtSearchMethodsContainedInClassFilterExamples >> inheritedMethodsWithTraits [
 ]
 
 { #category : #examples }
+GtSearchMethodsContainedInClassFilterExamples >> instanceSlotReferenceFilterForTypedVariableName [
+	"A slot reference filter for a variable name given as a String (typed, or the source of a variable node)
+	is the filter for the slot name"
+
+	<gtExample>
+	<return: #GtSearchInstanceSlotReferenceFilter>
+	| filter |
+	filter := GtSearchInstanceSlotReferenceFilter
+			forClass: OrderedCollection
+			andVariable: 'array'.
+	self assert: filter variableName equals: #array.
+	self
+		assert: filter
+		equals: (GtSearchInstanceSlotReferenceFilter
+				forClass: OrderedCollection
+				andVariable: #array).
+	^ filter
+]
+
+{ #category : #examples }
 GtSearchMethodsContainedInClassFilterExamples >> methodOnlyIncludedOnceInFilter [
 	<gtExample>
 	| filter |

@@ -48,7 +48,7 @@ GtRBRemoveTraitUsageRefactoring >> privateTransform [
 { #category : #transforming }
 GtRBRemoveTraitUsageRefactoring >> removeTraitFromExpression: anAST [
 	anAST isVariable
-		ifTrue: [ ^ anAST name = traitName
+		ifTrue: [ ^ anAST name = traitName asSymbol
 				ifTrue: [ nil ]
 				ifFalse: [ anAST ] ].
 	(anAST isMessage and: [ anAST isBinary ])

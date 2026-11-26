@@ -105,8 +105,8 @@ GtBehaviorFormsUndoExamples >> classUpdateFormAcceptsExistingSlotsNamedLikeTrait
 	classSlots: { #cx };
 	package: ' , self packageName printString.
 			aForm := GtClassUpdateForm new onClass: aName asClass.
-			self assert: aForm slots asArray equals: #(#x).
-			self assert: aForm classSlots asArray equals: #(#cx).
+			self assert: aForm slots asArray equals: #('x').
+			self assert: aForm classSlots asArray equals: #('cx').
 			self assert: (self is: aForm slots validFor: aForm slotsDescription).
 			self assert: (self is: aForm classSlots validFor: aForm classSlotsDescription).
 			aForm superclassName: self newSuperclassWithSlots.
@@ -143,7 +143,7 @@ GtBehaviorFormsUndoExamples >> classUpdateFormShowsOnlyOwnSlots [
 			self createPackage.
 			aName := self newClassUsingTraitWithSlots.
 			aForm := GtClassUpdateForm new onClass: aName asClass.
-			self assert: aForm slots asArray equals: #(#own).
+			self assert: aForm slots asArray equals: #('own').
 			self assert: aForm classSlots asArray equals: #().
 			self assert: (self is: #('own' 'x') validFor: aForm slotsDescription).
 			self assert: (self is: #('cx') validFor: aForm classSlotsDescription).
@@ -493,8 +493,8 @@ GtBehaviorFormsUndoExamples >> traitUpdateFormShowsOnlyOwnSlots [
 			self createPackage.
 			aName := self newTraitUsingTraitWithSlots.
 			aForm := GtTraitUpdateForm new onTrait: aName asClass.
-			self assert: aForm slots asArray equals: #(#y).
-			self assert: aForm classSlots asArray equals: #(#cy).
+			self assert: aForm slots asArray equals: #('y').
+			self assert: aForm classSlots asArray equals: #('cy').
 			self assert: (self is: #('y' 'x') validFor: aForm slotsDescription).
 			self assert: (self is: #('cy' 'cx') validFor: aForm classSlotsDescription).
 			aForm ]
