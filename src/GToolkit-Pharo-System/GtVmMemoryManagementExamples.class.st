@@ -169,26 +169,25 @@ GtVmMemoryManagementExamples >> testReadingFromVmShrinkThreadsholdMatchesValue [
 { #category : #'tests - writing to the VM' }
 GtVmMemoryManagementExamples >> testWritingReturnsTheOldConfigurationWithFullGCRatio [
 	<gtExample>
-	| conf old oldValue|
+	| conf old oldValue |
 	conf := GtVmMemoryManagement readFromVm.
 	oldValue := Smalltalk vm parameterAt: 55.
-	
+
 	conf fullGcRatio: conf fullGcRatio * 4.
 	old := conf writeToVm.
-	self assert: old fullGcRatio equals: oldValue. 
+	[ self assert: old fullGcRatio equals: oldValue ] ensure: [ old writeToVm ]
 ]
 
 { #category : #'tests - writing to the VM' }
 GtVmMemoryManagementExamples >> testWritingReturnsTheOldConfigurationWithNewSpaceSize [
 	<gtExample>
-	| conf old oldValue|
-
+	| conf old oldValue |
 	conf := GtVmMemoryManagement readFromVm.
 	oldValue := Smalltalk vm parameterAt: 45.
 
 	conf newSpaceSize: conf newSpaceSize * 4.
 	old := conf writeToVm.
-	self assert: old newSpaceSize equals: oldValue. 
+	[ self assert: old newSpaceSize equals: oldValue ] ensure: [ old writeToVm ]
 ]
 
 { #category : #'tests - writing to the VM' }
@@ -196,20 +195,21 @@ GtVmMemoryManagementExamples >> testWritingUpdatesFullGcRatio [
 	<gtExample>
 	| conf old |
 	conf := GtVmMemoryManagement readFromVm.
-	
+
 	conf fullGcRatio: conf fullGcRatio * 4.
 	old := conf writeToVm.
-	self assert: conf fullGcRatio equals: (Smalltalk vm parameterAt: 55). 
+	[ self assert: conf fullGcRatio equals: (Smalltalk vm parameterAt: 55) ]
+		ensure: [ old writeToVm ]
 ]
 
 { #category : #'tests - writing to the VM' }
 GtVmMemoryManagementExamples >> testWritingUpdatesNewSpaceSize [
 	<gtExample>
-	| conf old oldValue|
-
+	| conf old oldValue |
 	conf := GtVmMemoryManagement readFromVm.
 	oldValue := Smalltalk vm parameterAt: 45.
 	conf newSpaceSize: conf newSpaceSize * 4.
 	old := conf writeToVm.
-	self assert: conf newSpaceSize equals: (Smalltalk vm parameterAt: 45). 
+	[ self assert: conf newSpaceSize equals: (Smalltalk vm parameterAt: 45) ]
+		ensure: [ old writeToVm ]
 ]

@@ -27,7 +27,7 @@ GtChangesElement >> applyChangesWithProgress: aBlock [
 				asOrderedCollection.
 	disabledChanges
 		do: [ :each | changesToCompile recursivelyRemoveChange: each change ].
-	^ changesToCompile gtExecuteWithNotificationWithProgress: aBlock
+	^ changesToCompile gtExecuteWithNotificationWithProgress: aBlock in: self
 ]
 
 { #category : #accessing }

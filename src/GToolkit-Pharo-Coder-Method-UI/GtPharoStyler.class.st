@@ -91,40 +91,33 @@ GtPharoStyler >> definitionTooltipAttributeFor: aNamedVariable [
 { #category : #private }
 GtPharoStyler >> highlightParenthesesLeft: aLeftIndex right: aRightIndex [
 	| theParenthesesMarker cursorEnterAction cursorLeaveAction |
-	
 	theParenthesesMarker := BrTextInvisibleMarkerAttribute new.
 	text
 		attribute: theParenthesesMarker
 		from: aLeftIndex + 1
 		to: aRightIndex - 1.
-
-	cursorEnterAction := [ :aTextEditor |
+	cursorEnterAction := [ :aTextEditor | 
 		aTextEditor text
 			findAttribute: theParenthesesMarker
-			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
+			indicesDo: [ :aParanthesesStart :aParanthesesEnd | 
 				aTextEditor text
-					attribute: (GtPharoParenthesesHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor)
+					attribute: (GtPharoParenthesesHighlightAttribute
+							paint: self theme editor occurrenceHighlight)
 					from: aParanthesesStart
 					to: aParanthesesEnd ] ].
 
 	cursorLeaveAction := [ :aTextEditor | 
 		aTextEditor text
 			findAttribute: theParenthesesMarker
-			indicesDo: [ :aParanthesesStart :aParanthesesEnd |
-				(aTextEditor text
-					from: aParanthesesStart
-					to: aParanthesesEnd)
-						clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ] ].
+			indicesDo: [ :aParanthesesStart :aParanthesesEnd | 
+				(aTextEditor text from: aParanthesesStart to: aParanthesesEnd)
+					clearAttributesOfClass: GtPharoParenthesesHighlightAttribute ] ].
 
-	(text
-		from: aLeftIndex
-		to: aLeftIndex)
+	(text from: aLeftIndex to: aLeftIndex)
 		onCursorEnter: cursorEnterAction
 		leave: cursorLeaveAction.
 
-	(text
-		from: aRightIndex - 1
-		to: aRightIndex - 1)
+	(text from: aRightIndex - 1 to: aRightIndex - 1)
 		onCursorEnter: cursorEnterAction
 		leave: cursorLeaveAction
 ]

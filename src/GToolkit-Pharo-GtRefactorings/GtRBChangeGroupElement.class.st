@@ -36,7 +36,8 @@ GtRBChangeGroupElement >> applyChanges: aCollection [
 	composite changesSize > 1 ifTrue: [ progress visibility: BlVisibility visible ].
 	progress fraction: 0.
 	(composite
-		gtExecuteWithNotificationWithProgress: [ :fraction | progress enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ])
+		gtExecuteWithNotificationWithProgress: [ :fraction | progress enqueueTask: (BlTaskAction new action: [ progress fraction: fraction ]) ]
+		in: self)
 		then: [ :undo | 
 			self
 				enqueueTask: [ self updateGroupTreeItems.
