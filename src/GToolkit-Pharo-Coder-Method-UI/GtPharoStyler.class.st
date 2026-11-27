@@ -131,8 +131,12 @@ GtPharoStyler >> parenthesesColorAt: anIndex [
 
 { #category : #private }
 GtPharoStyler >> parenthesesColors [
+	"Use a symbol, not a block, as the transformation: a block would capture the styler,
+	and these colors end up in text attributes that can outlive the UI
+	(e.g. in the source text of a Lepiter snippet), retaining the styler and its view model."
+
 	^ self theme default distinctTenStrongColors allButFirst
-		collect: [ :aColor | aColor transformColor: [ :aConcreteColor | aConcreteColor ] ]
+		collect: [ :aColor | aColor transformColor: #yourself ]
 ]
 
 { #category : #accessing }
