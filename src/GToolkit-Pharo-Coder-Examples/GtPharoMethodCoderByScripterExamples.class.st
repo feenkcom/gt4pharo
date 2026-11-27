@@ -6560,7 +6560,7 @@ GtPharoMethodCoderByScripterExamples >> forInlineTemp_03_hover_inline_temp [
 						| intervals |
 						intervals := OrderedCollection new.
 						editor text
-							findAttributesSuchThat: [ :each | each = GtPharoMethodCoder nodeHighlight ]
+							findAttributesSuchThat: [ :each | self isNodeHighlight: each ]
 							indicesDo: [ :start :end | 
 								(intervals notEmpty and: [ intervals last last + 1 = start ])
 									ifTrue: [ intervals at: intervals size put: (intervals last first to: end) ]
@@ -7103,11 +7103,11 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_menu [
 			s
 				label: 'Open menu';
 				id: GtSourceCoderEditorId ].
-	aScripter menuStep 
+	aScripter menuStep
 		hoverMenuItemWithId: #'coder--refactoring-rename-message';
 		onPopover;
 		play.
-				
+
 	aScripter
 		checkStep: [ :s | 
 			s
@@ -7116,13 +7116,13 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_menu [
 				do: [ :each | 
 					self
 						assert: ((each editor text attributesAt: 1)
-								includes: GtSmalltalkSourceCoder nodeHighlight) ] ].
-								
-	aScripter menuStep 
+								anySatisfy: [ :attr | self isNodeHighlight: attr ]) ] ].
+
+	aScripter menuStep
 		clickMenuItemWithId: #'coder--refactoring-rename-message';
 		onPopover;
 		play.
-		
+
 	aScripter
 		checkStep: [ :s | 
 			s
@@ -7131,7 +7131,7 @@ GtPharoMethodCoderByScripterExamples >> forKeywordRename_02_menu [
 				do: [ :each | 
 					self
 						assert: ((each editor text attributesAt: 1)
-								includes: GtSmalltalkSourceCoder nodeHighlight) not ] ].
+								noneSatisfy: [ :attr | self isNodeHighlight: attr ]) ] ].
 
 	self checkFor: aScripter saveButtonEnabled: false.
 	self checkFor: aScripter renameEditorExists: true.
@@ -9982,6 +9982,14 @@ GtPharoMethodCoderByScripterExamples >> insertedText [
 						nextPutAll: OSPlatform current lineEnding;
 						print: anIndex;
 						nextPutAll: '.' ] ]
+]
+
+{ #category : #utilities }
+GtPharoMethodCoderByScripterExamples >> isNodeHighlight: anAttribute [
+	"Answer whether anAttribute is the highlight that coders add to the selected AST node"
+
+	^ anAttribute class = BlTextHighlightAttribute
+		and: [ anAttribute paint = GtSmalltalkSourceCoder nodeHighlightColor ]
 ]
 
 { #category : #'examples - support' }
