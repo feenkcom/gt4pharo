@@ -19,6 +19,20 @@ GtPharoDummyEnvironment class >> cleanUp: aggressive [
 			onErrorDo: [ :anError | anError return ] ]
 ]
 
+{ #category : #registration }
+GtPharoDummyEnvironment class >> registerInCurrentExecutionEnvironment: aDummyEnvironment [
+	"Managed test or example runs remove dummy environments at their end.
+	Unmanaged runs and runs outside of a test environment keep them for exploration."
+
+	| anEnvironment aService |
+	anEnvironment := CurrentExecutionEnvironment value.
+	(anEnvironment isKindOf: TestExecutionEnvironment) ifFalse: [ ^ self ].
+	aService := anEnvironment
+			findService: GtPharoDummyEnvironmentTestService
+			ifAbsent: [ ^ self ].
+	aService register: aDummyEnvironment
+]
+
 { #category : #'api - generation' }
 GtPharoDummyEnvironment class >> withPackages: anAmountOfPackages classes: anAmountOfClasses [
 	^ GtPharoDummiesGenerator withPackages: anAmountOfPackages classes: anAmountOfClasses
@@ -166,11 +180,13 @@ GtPharoDummyEnvironment >> gtPackagesFor: aView [
 { #category : #initialization }
 GtPharoDummyEnvironment >> initialize [
 	super initialize.
-	
+
 	dummyPackages := OrderedCollection new.
-	
+
 	"the copy of myself will be used as a finalization executor"
-	self class finalizationRegistry add: self
+	self class finalizationRegistry add: self.
+	
+	self class registerInCurrentExecutionEnvironment: self
 ]
 
 { #category : #'api - packages' }

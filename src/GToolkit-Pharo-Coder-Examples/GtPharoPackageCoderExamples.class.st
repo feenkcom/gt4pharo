@@ -7,15 +7,9 @@ Class {
 	#category : #'GToolkit-Pharo-Coder-Examples-Coders'
 }
 
-{ #category : #'private - set up' }
-GtPharoPackageCoderExamples >> cleanUp [
-	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
-]
-
 { #category : #'examples - instance creation' }
 GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	<gtExample>
-	<after: #cleanUp>
 	| aDummyPackage aPackage aPackageCoder |
 	environment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
 	aDummyPackage := environment anyDummyPackage.
@@ -26,18 +20,14 @@ GtPharoPackageCoderExamples >> coderOnRegisteredPackage [
 	self assert: aPackageCoder package equals: aPackage.
 	self assert: aPackageCoder packageName equals: aPackage name.
 	self assert: aPackageCoder isRegistered.
-	self
-		assert: aPackageCoder classes size
-		equals: aDummyPackage amountOfClasses.
+	self assert: aPackageCoder classes size equals: aDummyPackage amountOfClasses.
 	^ aPackageCoder
 ]
 
 { #category : #'examples - instance creation' }
 GtPharoPackageCoderExamples >> coderOnUnregisteredPackage [
 	<gtExample>
-	<after: #cleanUp>
 	| aDummyPackage aPackage aPackageCoder |
-
 	environment := GtPharoDummyEnvironment withPackages: 1 classes: 0.
 	aDummyPackage := environment anyDummyPackage.
 	aPackage := aDummyPackage realPackage.
