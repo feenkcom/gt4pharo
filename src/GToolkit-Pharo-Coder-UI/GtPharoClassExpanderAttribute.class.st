@@ -28,7 +28,7 @@ GtPharoClassExpanderAttribute class >> forClass: aClass id: anElementId [
 GtPharoClassExpanderAttribute >> buildBehaviorCoder [
 	| editorElement |
 	editorElement := GtCoderElement forClass: classToExpand.
-	editorElement background: Color white.
+	editorElement background: editorElement theme default contentBackground.
 	editorElement
 		aptitude: BrShadowAptitude
 				+ (BrGlamorousWithVerticalResizerAptitude new

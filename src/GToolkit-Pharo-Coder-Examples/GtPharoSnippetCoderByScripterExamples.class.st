@@ -1766,42 +1766,49 @@ GtPharoSnippetCoderByScripterExamples >> syntaxError [
 	| aScripter |
 	aScripter := self
 			scripterForBlock: [ GtPharoSnippetCoder forSource: '3 + - 4' ].
-	
+
 	aScripter mouseMoveOver
 		label: 'Hover coder element';
 		// GtSourceCoderEditorId;
 		play.
-		
-	aScripter clickStep: [:s | 
-		s label: 'Click on the play button';
-		// GtSourceCoderDoItActionId].
 
-	aScripter assertStep: [:s | 
-		s label: 'Assert source coder error attribute';
-		// GtSourceCoderEditorId;
-		value: [ :aCoderEditor | 
-				| anInterval |
-				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
-					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-				anInterval ]
-		equals: [ :aCoderEditor | 4 to: 4 ]
-		].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the play button';
+				// GtSourceCoderDoItActionId ].
 
-	aScripter assertStep: [:s | 
-		s label: 'Assert syntax error button exists';
-		// GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: BrButton;
-		value: [ :aButton | aButton background paint color ]
-			equals: [ BrGlamorousColors errorBackgroundColor ]].
-			
-	aScripter assertStep: [ :s | 
-		s label: 'Assert error text is correct';
-		onSpaceRoot;
-		onDropdown: true;
-		// BlTextElement;
-		value: [ :editor | editor text asString ]
-		equals: [ 'Variable or expression expected ' ] ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source coder error attribute';
+				// GtSourceCoderEditorId;
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 4 to: 4 ] ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert syntax error button exists';
+				// GtSourceCoderEditorId;
+				// GtSourceCoderErrorButtonElementId;
+				value: [ :aButton | aButton background paint color blocResolveColorForTheme: aButton theme ]
+					equals: [ :aButton | aButton theme status errorBackgroundColor rawColor ] ].
+
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error text is correct';
+				onSpaceRoot;
+				onDropdown: true;
+				// BlTextElement;
+				value: [ :editor | editor text asString ]
+					equals: [ 'Variable or expression expected ' ] ].
 
 	^ aScripter
 ]
@@ -1818,35 +1825,43 @@ GtPharoSnippetCoderByScripterExamples >> undefinedClass [
 		// GtSourceCoderEditorId;
 		play.
 
-	aScripter clickStep: [ :s | 
-		s label: 'Click on the play button';
-		// GtSourceCoderDoItActionId ].
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on the play button';
+				// GtSourceCoderDoItActionId ].
 
-	aScripter assertStep: [ :s | 
-		s label: 'Assert source coder error attribute';
-		// GtSourceCoderEditorId;
-		value: [ :aCoderEditor | 
-				| anInterval |
-				aCoderEditor text
-					findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
-					indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
-				anInterval ]
-		equals: [ :aCoderEditor | 5 to: 5 ] ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert source coder error attribute';
+				// GtSourceCoderEditorId;
+				value: [ :aCoderEditor | 
+						| anInterval |
+						aCoderEditor text
+							findAttributesSuchThat: [ :eachAttribute | eachAttribute isKindOf: GtSourceCoderErrorAttribute ]
+							indicesDo: [ :aStart :anEnd | anInterval := aStart to: anEnd ].
+						anInterval ]
+					equals: [ :aCoderEditor | 5 to: 5 ] ].
 
-	aScripter assertStep: [ :s | 
-		s label: 'Assert error button exists';
-		// GtSourceCoderEditorId;
-		onBreadthFirstChildOfClass: BrButton;
-		value: [ :aButton | aButton background paint color ]
-		equals: [ BrGlamorousColors errorBackgroundColor ] ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error button exists';
+				// GtSourceCoderEditorId;
+				// GtSourceCoderErrorButtonElementId;
+				value: [ :aButton | aButton background paint color blocResolveColorForTheme: aButton theme ]
+					equals: [ :aButton | aButton theme status errorBackgroundColor rawColor ] ].
 
-	aScripter assertStep: [ :s | 
-		s label: 'Assert error text is correct';
-		onSpaceRoot;
-		onDropdown: true;
-		// BrEditor;
-		value: [ :editor | editor text asString ]
-		equals: [ 'Variable is undeclared.' ] ].
+	aScripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert error text is correct';
+				onSpaceRoot;
+				onDropdown: true;
+				// BrEditor;
+				value: [ :editor | editor text asString ]
+					equals: [ 'Variable is undeclared.' ] ].
 
 	^ aScripter
 ]
@@ -1890,9 +1905,9 @@ GtPharoSnippetCoderByScripterExamples >> undefinedTemp [
 			s
 				label: 'Assert error button exists';
 				// GtSourceCoderEditorId;
-				onBreadthFirstChildOfClass: BrButton;
-				value: [ :aButton | aButton background paint color ]
-					equals: [ BrGlamorousColors errorBackgroundColor ] ].
+				// GtSourceCoderErrorButtonElementId;
+				value: [ :aButton | aButton background paint color blocResolveColorForTheme: aButton theme ]
+					equals: [ :aButton | aButton theme status errorBackgroundColor rawColor ] ].
 
 	aScripter
 		assertStep: [ :s | 
